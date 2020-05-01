@@ -21,7 +21,7 @@ const createPcrSpendProfileEntity = (update?: Partial<PcrSpendProfileEntity>): P
     id: undefined,
     pcrItemId: "pcr_id",
     costCategoryId: "cost_cat_id",
-    costOfRole: 0,
+    value: 0,
     ...update
   });
 };
@@ -39,7 +39,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
     const mapped = new SalesforcePcrSpendProfileMapper(PCR_SPEND_PROFILE_TYPE).map(pcrSpendProfile);
     expect(mapped.id).toEqual(update.Id);
     expect(mapped.costCategoryId).toEqual(update.Acc_CostCategoryID__c);
-    expect(mapped.costOfRole).toEqual(update.Acc_CostOfRole__c);
+    expect(mapped.value).toEqual(update.Acc_CostOfRole__c);
     expect(mapped.pcrItemId).toEqual(update.Acc_ProjectChangeRequest__c);
   });
   it("Maps spend profile entity correctly to sf record", () => {
@@ -47,13 +47,13 @@ describe("SalesforcePcrSpendProfileMapper", () => {
       id: "1234",
       costCategoryId: "Expected Partner Id",
       pcrItemId: "Expected PCR Id",
-      costOfRole: 10
+      value: 10
     };
     const pcrSpendProfile = createPcrSpendProfileEntity(update);
     const mapped = new SalesforcePcrSpendProfileMapper(PCR_SPEND_PROFILE_TYPE).mapToSalesforce(pcrSpendProfile);
     expect(mapped.Id).toEqual(update.id);
     expect(mapped.Acc_CostCategoryID__c).toEqual(update.costCategoryId);
-    expect(mapped.Acc_CostOfRole__c).toEqual(update.costOfRole);
+    expect(mapped.Acc_CostOfRole__c).toEqual(update.value);
     expect(mapped.Acc_ProjectChangeRequest__c).toEqual(update.pcrItemId);
     expect(mapped.RecordTypeId).toEqual(PCR_SPEND_PROFILE_TYPE);
   });
@@ -61,13 +61,13 @@ describe("SalesforcePcrSpendProfileMapper", () => {
     const update: Partial<PcrSpendProfileEntity> = {
       costCategoryId: "Expected Partner Id",
       pcrItemId: "Expected PCR Id",
-      costOfRole: 10
+      value: 10
     };
     const pcrSpendProfile = createPcrSpendProfileEntity(update);
     const mapped = new SalesforcePcrSpendProfileMapper(PCR_SPEND_PROFILE_TYPE).mapToSalesforceForCreate(pcrSpendProfile);
     expect((mapped as any).Id).toBe(undefined);
     expect(mapped.Acc_CostCategoryID__c).toEqual(update.costCategoryId);
-    expect(mapped.Acc_CostOfRole__c).toEqual(update.costOfRole);
+    expect(mapped.Acc_CostOfRole__c).toEqual(update.value);
     expect(mapped.Acc_ProjectChangeRequest__c).toEqual(update.pcrItemId);
     expect(mapped.RecordTypeId).toEqual(PCR_SPEND_PROFILE_TYPE);
   });

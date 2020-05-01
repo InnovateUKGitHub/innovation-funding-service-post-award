@@ -3,7 +3,7 @@ import * as Validation from "./common";
 import {
   PCRSpendProfileCostDto,
   PcrSpendProfileDto,
-  PCRSpendProfileLabourCostDto, PCRSpendProfileUnknownCostDto
+  PCRSpendProfileLabourCostDto, PCRSpendProfileMaterialsCostDto, PCRSpendProfileUnknownCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryType } from "@framework/entities";
 
@@ -17,12 +17,10 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
   }
 
   private getCostValidator(cost: PCRSpendProfileCostDto) {
-    // tslint:disable-next-line:no-small-switch
     switch(cost.costCategory) {
-      case CostCategoryType.Labour:
-        return new PCRLabourCostDtoValidator(cost, this.showValidationErrors);
-      default:
-        return new PCRUnknownCostDtoValidator(cost, this.showValidationErrors);
+      case CostCategoryType.Labour: return new PCRLabourCostDtoValidator(cost, this.showValidationErrors);
+      case CostCategoryType.Materials: return new PCRMaterialsCostDtoValidator(cost, this.showValidationErrors);
+      default: return new PCRUnknownCostDtoValidator(cost, this.showValidationErrors);
     }
   }
 
@@ -41,7 +39,7 @@ export class PCRBaseCostDtoValidator<T extends PCRSpendProfileCostDto> extends R
     () => Validation.isCurrency(this, this.model.value, "Value must be a number")
   );
 }
-export type PCRSpendProfileCostDtoValidator = PCRLabourCostDtoValidator | PCRUnknownCostDtoValidator;
+export type PCRSpendProfileCostDtoValidator = PCRLabourCostDtoValidator | PCRMaterialsCostDtoValidator | PCRUnknownCostDtoValidator;
 
 export class PCRLabourCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileLabourCostDto> {
   public role = Validation.required(this, this.model.role, "Role is required");
@@ -56,6 +54,18 @@ export class PCRLabourCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendP
   public ratePerDay = Validation.all(this,
     () => Validation.required(this, this.model.ratePerDay, "Rate per day is required"),
     () => Validation.isCurrency(this, this.model.ratePerDay, "Rate per day must be a number")
+  );
+}
+
+export class PCRMaterialsCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileMaterialsCostDto> {
+  public item = Validation.required(this, this.model.item, "Item is required");
+  public quantity = Validation.all(this,
+    () => Validation.required(this, this.model.quantity, "Quantity is required"),
+    () => Validation.integer(this, this.model.quantity, "Quantity must be a number")
+  );
+  public costPerItem = Validation.all(this,
+    () => Validation.required(this, this.model.costPerItem, "Cost per item is required"),
+    () => Validation.isCurrency(this, this.model.costPerItem, "Cost per item must be a number")
   );
 }
 

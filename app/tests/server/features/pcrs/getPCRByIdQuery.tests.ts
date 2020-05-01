@@ -257,7 +257,7 @@ describe("GetPCRByIdQuery", () => {
         costCategory: costCategoryLabour,
         pcrItem: item,
         update: {
-          costOfRole: 50
+          value: 50
         }
       });
 
