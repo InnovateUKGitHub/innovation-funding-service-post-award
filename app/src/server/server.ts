@@ -20,6 +20,8 @@ import { initInternationalisation, internationalisationRouter } from "./internat
 import { InitialiseContentCommand } from "./features/general/initialiseContentCommand";
 import { GetPcrProjectRolesQuery } from "@server/features/pcrs/getPcrProjectRolesQuery";
 import { GetPcrPartnerTypesQuery } from "@server/features/pcrs/getPcrPartnerTypesQuery";
+import { GetPcrParticipantSizesQuery } from "@server/features/pcrs/getPcrParticipantSizesQuery";
+import { GetPcrProjectLocationsQuery } from "@server/features/pcrs/getPcrProjectLocationsQuery";
 
 export class Server {
   private readonly app: express.Express;
@@ -123,6 +125,8 @@ export class Server {
       this.primeCache(context, "Project Change Request Status cache", () => context.runQuery(new GetPcrStatusesQuery()));
       this.primeCache(context, "Project Change Request Project Roles cache", () => context.runQuery(new GetPcrProjectRolesQuery()));
       this.primeCache(context, "Project Change Request Partner Types cache", () => context.runQuery(new GetPcrPartnerTypesQuery()));
+      this.primeCache(context, "Project Change Request Participant Sizes cache", () => context.runQuery(new GetPcrParticipantSizesQuery()));
+      this.primeCache(context, "Project Change Request Project Locations cache", () => context.runQuery(new GetPcrProjectLocationsQuery()));
     }
   }
 
