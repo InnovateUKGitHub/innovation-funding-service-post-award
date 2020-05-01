@@ -681,7 +681,7 @@ export class TestData {
     const pcrItem = options.pcrItem ? options.pcrItem : this.createPCRItem();
     const costCategory = options.costCategory ? options.costCategory : this.createCostCategory();
     const newItem: Entities.PcrSpendProfileEntityForCreate = {
-      costOfRole: 0,
+      value: 0,
       pcrItemId: pcrItem.id,
       costCategoryId: costCategory.id,
       ...options.update

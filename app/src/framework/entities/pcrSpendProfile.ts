@@ -1,11 +1,18 @@
 export interface PcrSpendProfileEntityForCreate {
   pcrItemId: string;
   costCategoryId: string;
-  costOfRole?: number;
+  value?: number;
+
+  // labour
   role?: string;
   grossCostOfRole?: number;
   ratePerDay?: number;
   daysSpentOnProject?: number;
+
+  // materials
+  item?: string;
+  costPerItem?: number;
+  quantity?: number;
 }
 
 export interface PcrSpendProfileEntity extends PcrSpendProfileEntityForCreate {

@@ -4,7 +4,11 @@ import { Authorisation, IContext } from "@framework/types";
 import { CostCategoryType, PcrSpendProfileEntity, PcrSpendProfileEntityForCreate, } from "@framework/entities";
 import { isNumber } from "@framework/util";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
-import { PCRSpendProfileCostDto, PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
+import {
+  PCRSpendProfileCostDto,
+  PcrSpendProfileDto,
+  PCRSpendProfileLabourCostDto, PCRSpendProfileMaterialsCostDto
+} from "@framework/dtos/pcrSpendProfileDto";
 import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 
 export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
@@ -18,20 +22,32 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
 
   private mapPcrSpendProfileDtoToCreateEntity(costsDto: PCRSpendProfileCostDto): PcrSpendProfileEntityForCreate {
     const init = { pcrItemId: this.pcrItemId, costCategoryId: costsDto.costCategoryId, costCategory: costsDto.costCategory };
-    // tslint:disable-next-line:no-small-switch
     switch (costsDto.costCategory) {
-      case CostCategoryType.Labour:
-        return {
-          ...init,
-          costOfRole: isNumber(costsDto.ratePerDay) && isNumber(costsDto.daysSpentOnProject) ? costsDto.ratePerDay * costsDto.daysSpentOnProject : undefined,
-          ratePerDay: isNumber(costsDto.ratePerDay) ? costsDto.ratePerDay : undefined,
-          daysSpentOnProject: isNumber(costsDto.daysSpentOnProject) ? costsDto.daysSpentOnProject : undefined,
-          grossCostOfRole: isNumber(costsDto.grossCostOfRole) ? costsDto.grossCostOfRole : undefined,
-          role: costsDto.role || undefined
-        };
-      default:
-        return init;
+      case CostCategoryType.Labour: return this.mapLabour(costsDto, init);
+      case CostCategoryType.Materials: return this.mapMaterials(costsDto, init);
+      default: return init;
     }
+  }
+
+  private mapLabour(costsDto: PCRSpendProfileLabourCostDto, init: { pcrItemId: string, costCategoryId: string, costCategory: CostCategoryType }) {
+    return {
+      ...init,
+      value: isNumber(costsDto.ratePerDay) && isNumber(costsDto.daysSpentOnProject) ? costsDto.ratePerDay * costsDto.daysSpentOnProject : undefined,
+      ratePerDay: isNumber(costsDto.ratePerDay) ? costsDto.ratePerDay : undefined,
+      daysSpentOnProject: isNumber(costsDto.daysSpentOnProject) ? costsDto.daysSpentOnProject : undefined,
+      grossCostOfRole: isNumber(costsDto.grossCostOfRole) ? costsDto.grossCostOfRole : undefined,
+      role: costsDto.role || undefined
+    };
+  }
+
+  private mapMaterials(costsDto: PCRSpendProfileMaterialsCostDto, init: { pcrItemId: string, costCategoryId: string, costCategory: CostCategoryType }) {
+    return {
+      ...init,
+      value: isNumber(costsDto.costPerItem) && isNumber(costsDto.quantity) ? costsDto.costPerItem * costsDto.quantity : undefined,
+      costPerItem: isNumber(costsDto.costPerItem) ? costsDto.costPerItem : undefined,
+      quantity: isNumber(costsDto.quantity) ? costsDto.quantity : undefined,
+      item: costsDto.item || undefined
+    };
   }
 
   private mapPcrSpendProfileDtoToEntity(costsDto: PCRSpendProfileCostDto): PcrSpendProfileEntity {
