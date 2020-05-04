@@ -381,7 +381,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
         costCategory: CostCategoryType.Labour,
         ratePerDay: 20,
         daysSpentOnProject: 10,
-        role: "Queen",
+        description: "Queen",
         grossCostOfRole: 200
       });
       const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
@@ -395,7 +395,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
       expect(insertedSpendProfileCost.grossCostOfRole).toBe(200);
       expect(insertedSpendProfileCost.daysSpentOnProject).toBe(10);
       expect(insertedSpendProfileCost.ratePerDay).toBe(20);
-      expect(insertedSpendProfileCost.role).toBe("Queen");
+      expect(insertedSpendProfileCost.description).toBe("Queen");
     });
   });
 });

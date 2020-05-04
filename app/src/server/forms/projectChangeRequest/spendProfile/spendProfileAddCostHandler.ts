@@ -5,8 +5,8 @@ import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import {
   PcrAddSpendProfileCostParams,
-  PCRPrepareSpendProfileCostsRoute,
-  PCRSpendProfileAddCostRoute
+  PCRSpendProfileAddCostRoute,
+  PCRSpendProfileCostsSummaryRoute
 } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus } from "@framework/constants";
@@ -66,7 +66,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
     return {
       ...baseCostDto,
       costCategory: CostCategoryType.Labour,
-      role: body.role,
+      description: body.description,
       grossCostOfRole: body.grossCostOfRole ? Number(body.grossCostOfRole) : null,
       daysSpentOnProject,
       ratePerDay,
@@ -77,7 +77,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
   protected async run(context: IContext, params: PcrAddSpendProfileCostParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
 
-    return PCRPrepareSpendProfileCostsRoute.getLink({
+    return PCRSpendProfileCostsSummaryRoute.getLink({
       projectId: params.projectId,
       pcrId: params.pcrId,
       itemId: params.itemId,

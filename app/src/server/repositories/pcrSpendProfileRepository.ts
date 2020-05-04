@@ -58,7 +58,6 @@ export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesfo
     "Acc_Rate__c",
     "Acc_DaysSpentOnProject__c",
     // Materials
-    "Acc_Item__c",
     "Acc_Quantity__c",
     "Acc_CostPerItem__c",
   ];
