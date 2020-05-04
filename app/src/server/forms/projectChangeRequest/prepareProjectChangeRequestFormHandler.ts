@@ -19,7 +19,7 @@ export class ProjectChangeRequestPrepareFormHandler extends StandardFormHandlerB
     dto.comments = body.comments;
 
     if(button.name === "default") {
-      dto.status = dto.status === PCRStatus.QueriedByInnovateUK ? PCRStatus.SubmittedToInnovationLead : PCRStatus.SubmittedToMonitoringOfficer;
+      dto.status = PCRStatus.SubmittedToMonitoringOfficer;
     }
 
     return dto;

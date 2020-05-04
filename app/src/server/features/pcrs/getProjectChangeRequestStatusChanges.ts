@@ -40,7 +40,7 @@ export class GetProjectChangeRequestStatusChanges extends QueryBase<ProjectChang
       previousStatusLabel: previousStatusLookup && previousStatusLookup.label || "Unknown",
       createdBy: entity.createdBy,
       createdDate: entity.createdDate,
-      comments: isMo || (isPm && entity.externalComments) ? entity.externalComments : null,
+      comments: isMo || (isPm && entity.participantVisibility) ? entity.externalComments : null,
       participantVisibility: entity.participantVisibility
     };
   }
