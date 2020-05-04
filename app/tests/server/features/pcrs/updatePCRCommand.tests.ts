@@ -62,7 +62,7 @@ describe("UpdatePCRCommand", () => {
     const validStatusChanges = [
       { from: PCRStatus.Draft, to: PCRStatus.SubmittedToMonitoringOfficer },
       { from: PCRStatus.QueriedByMonitoringOfficer, to: PCRStatus.SubmittedToMonitoringOfficer },
-      { from: PCRStatus.QueriedByInnovateUK, to: PCRStatus.SubmittedToInnovationLead },
+      { from: PCRStatus.QueriedByInnovateUK, to: PCRStatus.SubmittedToMonitoringOfficer },
     ];
 
     test.each(validStatusChanges.map<[string, string, PCRStatus, PCRStatus]>(x => [PCRStatus[x.from], PCRStatus[x.to], x.from, x.to]))("can update from %s to %s", async (fromString, toString, from: PCRStatus, to: PCRStatus) => {
@@ -253,7 +253,7 @@ describe("UpdatePCRCommand", () => {
       expect(pcr.comments).toBe("");
     });
 
-    it("status change record comments not participant visible if submitting to innovate", async () => {
+    it("status change record comments not participant visible if submitting to innovate uk", async () => {
       const context = new TestContext();
 
       const project = context.testData.createProject();
@@ -266,7 +266,7 @@ describe("UpdatePCRCommand", () => {
       expect(context.repositories.projectChangeRequestStatusChange.Items.length).toBe(0);
 
       const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
-      dto.status = PCRStatus.SubmittedToInnovationLead;
+      dto.status = PCRStatus.SubmittedToInnovateUK;
       dto.comments = "Expected Comments"
 
       await context.runCommand(new UpdatePCRCommand(pcr.projectId, pcr.id, dto));
@@ -281,7 +281,7 @@ describe("UpdatePCRCommand", () => {
   describe("mo updates", () => {
     const statusChanges = [
       { from: PCRStatus.SubmittedToMonitoringOfficer, to: PCRStatus.QueriedByMonitoringOfficer },
-      { from: PCRStatus.SubmittedToMonitoringOfficer, to: PCRStatus.SubmittedToInnovationLead },
+      { from: PCRStatus.SubmittedToMonitoringOfficer, to: PCRStatus.SubmittedToInnovateUK },
     ];
 
     test.each(statusChanges.map<[string, string, PCRStatus, PCRStatus]>(x => [PCRStatus[x.from], PCRStatus[x.to], x.from, x.to]))("can update from %s to %s", async (fromString, toString, from: PCRStatus, to: PCRStatus) => {
@@ -952,7 +952,7 @@ describe("UpdatePCRCommand", () => {
     expect(pcr.status).toBe(PCRStatus.SubmittedToMonitoringOfficer);
   });
 
-  test("if user is PM can update status from Quried by Innovate to Submitted to Innovate", async () => {
+  test("if user is PM can update status from Queried by Innovate to Submitted to MO", async () => {
     const context = new TestContext();
 
     const project = context.testData.createProject();
@@ -968,11 +968,11 @@ describe("UpdatePCRCommand", () => {
 
     const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
 
-    dto.status = PCRStatus.SubmittedToInnovationLead;
+    dto.status = PCRStatus.SubmittedToMonitoringOfficer;
 
     await context.runCommand(new UpdatePCRCommand(pcr.projectId, pcr.id, dto));
 
-    expect(pcr.status).toBe(PCRStatus.SubmittedToInnovationLead);
+    expect(pcr.status).toBe(PCRStatus.SubmittedToMonitoringOfficer);
   });
 
   test("if user is MO can update status to QueriedByMonitoringOfficer ", async () => {

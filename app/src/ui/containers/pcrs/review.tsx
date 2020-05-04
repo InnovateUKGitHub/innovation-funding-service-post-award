@@ -80,7 +80,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
 
     const options: ACC.SelectOption[] = [
       { id: PCRStatus.QueriedByMonitoringOfficer.toString(), value: "Query the request" },
-      { id: PCRStatus.SubmittedToInnovationLead.toString(), value: "Send for approval" },
+      { id: PCRStatus.SubmittedToInnovateUK.toString(), value: "Send for approval" },
     ];
 
     const selected = options.find(x => x.id === editor.data.status.toString());
