@@ -310,6 +310,8 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
         return "Queried by Monitoring Officer";
       case PCRStatus.SubmittedToInnovationLead:
         return "Submitted to Innovation Lead";
+      case PCRStatus.SubmittedToInnovateUK:
+        return "Submitted to Innovate UK";
       case PCRStatus.QueriedByInnovateUK:
         return "Queried by Innovate UK";
       case PCRStatus.InExternalReview:

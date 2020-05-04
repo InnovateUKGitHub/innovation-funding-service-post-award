@@ -22,6 +22,8 @@ export const mapToPCRStatus = ((status: string) => {
       return PCRStatus.SubmittedToMonitoringOfficer;
     case "Queried by Monitoring Officer":
       return PCRStatus.QueriedByMonitoringOfficer;
+    case "Submitted to Innovate UK":
+      return PCRStatus.SubmittedToInnovateUK;
     case "Submitted to Innovation Lead":
       return PCRStatus.SubmittedToInnovationLead;
     case "Queried by Innovate UK":
