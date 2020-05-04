@@ -54,19 +54,20 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
     const addPartnerWorkflow = this.getWorkflow(addPartnerItem);
     const spendProfileStep = addPartnerWorkflow && addPartnerWorkflow.getCurrentStepInfo();
     const stepRoute = this.props.routes.pcrPrepareItem.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, step: spendProfileStep && spendProfileStep.stepNumber || undefined});
+    const costs = addPartnerItem.spendProfile.costs.filter(x => x.costCategoryId === this.props.costCategoryId);
     const Form = ACC.TypedForm<PCRDto>();
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={stepRoute}>Back to project costs</ACC.BackLink>}
+        backLink={<ACC.BackLink route={stepRoute}><ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.backLink()} /></ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         validator={editor.validator}
         error={editor.error}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        <ACC.Section title={`${costCategory.name} costs`}>
+        <ACC.Section titleContent={x => x.pcrSpendProfileCostsSummaryContent.costsSectionTitle(costCategory.name)}>
           {this.renderGuidance(costCategory)}
-          {this.renderTable(addPartnerItem.spendProfile.costs, costCategory)}
+          {this.renderTable(costs, costCategory)}
           <Form.Form
             qa="submit-costs"
             data={editor.data}
@@ -75,7 +76,7 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
             onChange={dto => this.props.onChange(dto)}
           >
             <Form.Fieldset>
-              <Form.Submit>Save and return to summary</Form.Submit>
+              <Form.Submit><ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.submitButton()}/></Form.Submit>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
@@ -84,7 +85,11 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
   }
 
   private renderGuidance(costCategory: CostCategoryDto) {
-    return <ACC.Info summary={`${costCategory.name} costs guidance`}><ACC.Renderers.Markdown value={this.labourGuidance}/></ACC.Info>;
+    return (
+      <ACC.Info summary={<ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.guidanceTitle(costCategory.name)}/>}>
+        <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.guidance(costCategory.type)}/>
+      </ACC.Info>
+    );
   }
 
   private renderFooterRow(row: { key: string, title: string, value: React.ReactNode, qa: string, isBold?: boolean }) {
@@ -104,7 +109,9 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
       (
         <tr key={1} className="govuk-table__row">
           <td className="govuk-table__cell" colSpan={3}>
-            <ACC.Link route={this.props.routes.pcrPrepareSpendProfileAddCost.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, costCategoryId: this.props.costCategoryId})}>Add a cost</ACC.Link>
+            <ACC.Link route={this.props.routes.pcrPrepareSpendProfileAddCost.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, costCategoryId: this.props.costCategoryId})}>
+              <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.addCostButton()}/>
+            </ACC.Link>
           </td>
         </tr>
       ),
@@ -116,7 +123,7 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
       <Table.Table qa="costs" data={costs} footers={footers}>
         <Table.String header="Description" value={x => x.description} qa={"role"}/>
         <Table.Currency header="Cost (£)" value={x => x.value} qa={"cost"}/>
-        <Table.Link content="Edit" value={x => this.props.routes.pcrPrepareSpendProfileEditCost.getLink({itemId: this.props.itemId, costId: x.id, costCategoryId: this.props.costCategoryId, projectId: this.props.projectId, pcrId: this.props.pcrId})} qa={"edit"}/>
+        <Table.Link content={<ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.editCostButton()}/>} value={x => this.props.routes.pcrPrepareSpendProfileEditCost.getLink({itemId: this.props.itemId, costId: x.id, costCategoryId: this.props.costCategoryId, projectId: this.props.projectId, pcrId: this.props.pcrId})} qa={"edit"}/>
       </Table.Table>
     );
   }
@@ -131,33 +138,6 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
     const spendProfileStep = summaryWorkflow.findStepNumberByName(stepName);
     return PcrWorkflow.getWorkflow(addPartnerItem, spendProfileStep, this.props.config.features);
   }
-
-  // TODO put this somewhere sensible
-  private labourGuidance = `
-The new partner will need to account for all labour costs as they occur. For example, there must be timesheets and payroll records. These must show the actual hours worked by individuals and paid by the organisation.
-They can include the following labour costs, based on PAYE records:
-
-* gross salary
-* National Insurance
-* company pension contribution
-* life insurance
-* other non-discretionary package costs
-
-You cannot include:
-
-* discretionary bonuses
-* performance related payments of any kind
-
-You may include the total number of working days for staff but do not include:
-
-* sick days
-* waiting time
-* training days
-* non-productive time
-
-List the total days worked by all categories of staff on the project. Describe their roles.
-
-We will review the total amount of time and cost of labour before we approve this request. The terms and conditions of the grant include compliance with these points.`;
 }
 
 const Container = (props: PcrSpendProfileCostSummaryParams & BaseProps) => (
@@ -195,6 +175,6 @@ export const PCRSpendProfileCostsSummaryRoute = defineRoute<PcrSpendProfileCostS
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,
   }),
-  getTitle: ({ params, stores }) => ({displayTitle: "Add partner", htmlTitle: "Add partner"}),
+  getTitle: ({ content }) => (content.pcrSpendProfileCostsSummaryContent.title()),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });
