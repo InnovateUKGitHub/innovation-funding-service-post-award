@@ -56,7 +56,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
       PCRStatus.QueriedByInnovateUK,
       [
         PCRStatus.QueriedByInnovateUK,
-        PCRStatus.SubmittedToInnovationLead,
+        PCRStatus.SubmittedToMonitoringOfficer,
       ]
     ]
   ]);
@@ -68,7 +68,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
       PCRStatus.SubmittedToMonitoringOfficer, [
         PCRStatus.SubmittedToMonitoringOfficer,
         PCRStatus.QueriedByMonitoringOfficer,
-        PCRStatus.SubmittedToInnovationLead,
+        PCRStatus.SubmittedToInnovateUK,
       ]
     ]
   ]);
@@ -81,7 +81,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
     const isPM = !!(this.role & ProjectRole.ProjectManager);
     const isMO = !!(this.role & ProjectRole.MonitoringOfficer);
     if ((isPM && this.projectManagerCanEdit) || (isMO && this.monitoringOfficerCanEdit)) {
-      const statusRequiringComments = isMO && this.monitoringOfficerCanEdit ? [PCRStatus.SubmittedToInnovationLead, PCRStatus.QueriedByMonitoringOfficer] : [];
+      const statusRequiringComments = isMO && this.monitoringOfficerCanEdit ? [PCRStatus.SubmittedToInnovateUK, PCRStatus.QueriedByMonitoringOfficer] : [];
       return Validation.all(this,
         () => statusRequiringComments.indexOf(this.model.status) >= 0 ? Validation.required(this, this.model.comments, "Comments are required") : Validation.valid(this),
         () => Validation.maxLength(this, this.model.comments, this.maxCommentsLength, `Comments can be a maximum of ${this.maxCommentsLength} characters`),

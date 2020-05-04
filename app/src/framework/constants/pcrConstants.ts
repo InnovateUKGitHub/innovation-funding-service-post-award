@@ -3,8 +3,10 @@ export enum PCRStatus {
   Draft = 1,
   SubmittedToMonitoringOfficer = 2,
   QueriedByMonitoringOfficer = 3,
-  SubmittedToInnovationLead = 4,
+  SubmittedToInnovateUK = 12,
   QueriedByInnovateUK = 5,
+
+  SubmittedToInnovationLead = 4,
   InExternalReview = 6,
   InReviewWithInnovateUK = 7,
   Rejected = 8,
