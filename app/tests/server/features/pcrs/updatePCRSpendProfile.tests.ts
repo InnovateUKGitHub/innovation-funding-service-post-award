@@ -44,7 +44,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         costCategory: CostCategoryType.Labour,
         ratePerDay: 20,
         daysSpentOnProject: 10,
-        role: "Queen",
+        description: "Queen",
         grossCostOfRole: 200
       };
       spendProfileDto.costs = [cost];
@@ -58,7 +58,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       await expect(context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).rejects.toThrow(ValidationError);
       spendProfileDto.costs[0] = { ...cost, value: null };
       await expect(context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).rejects.toThrow(ValidationError);
-      spendProfileDto.costs[0] = { ...cost, role: null };
+      spendProfileDto.costs[0] = { ...cost, description: null };
       await expect(context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).rejects.toThrow(ValidationError);
     });
     it("should save new spend profile costs for labour", async () => {
@@ -73,7 +73,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         costCategory: CostCategoryType.Labour,
         ratePerDay: 20,
         daysSpentOnProject: 10,
-        role: "Queen",
+        description: "Queen",
         grossCostOfRole: 200
       } as PCRSpendProfileLabourCostDto);
       const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
@@ -87,7 +87,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       expect(insertedSpendProfileCost.grossCostOfRole).toBe(200);
       expect(insertedSpendProfileCost.daysSpentOnProject).toBe(10);
       expect(insertedSpendProfileCost.ratePerDay).toBe(20);
-      expect(insertedSpendProfileCost.role).toBe("Queen");
+      expect(insertedSpendProfileCost.description).toBe("Queen");
     });
     it("should update spend profile costs for labour", async () => {
       const {context, projectChangeRequest, recordType, project} = setup();
@@ -101,7 +101,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         costCategory: CostCategoryType.Labour,
         ratePerDay: 10,
         daysSpentOnProject: 10,
-        role: "Queen",
+        description: "Queen",
         grossCostOfRole: 100
       } as PCRSpendProfileLabourCostDto);
       await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
@@ -110,14 +110,14 @@ describe("UpdatePCRSpendProfileCommand", () => {
       cost.id = insertedSpendProfileCost.id;
       cost.value = 30;
       cost.grossCostOfRole = 35;
-      cost.role = "Queenie";
+      cost.description = "Queenie";
       cost.daysSpentOnProject = 5;
       cost.ratePerDay = 6;
       await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
       expect(insertedSpendProfileCost.value).toBe(30);
       expect(insertedSpendProfileCost.ratePerDay).toBe(6);
       expect(insertedSpendProfileCost.daysSpentOnProject).toBe(5);
-      expect(insertedSpendProfileCost.role).toBe("Queenie");
+      expect(insertedSpendProfileCost.description).toBe("Queenie");
       expect(insertedSpendProfileCost.grossCostOfRole).toBe(35);
     });
   });
@@ -134,12 +134,12 @@ describe("UpdatePCRSpendProfileCommand", () => {
         costCategory: CostCategoryType.Materials,
         quantity: 20,
         costPerItem: 10,
-        item: "Spade",
+        description: "Spade",
       };
       spendProfileDto.costs = [cost];
       const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
       await expect(context.runCommand(command)).resolves.toBe(true);
-      spendProfileDto.costs[0] = { ...cost, item: null };
+      spendProfileDto.costs[0] = { ...cost, description: null };
       await expect(context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).rejects.toThrow(ValidationError);
       spendProfileDto.costs[0] = { ...cost, costPerItem: null };
       await expect(context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).rejects.toThrow(ValidationError);
@@ -160,7 +160,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         costCategory: CostCategoryType.Materials,
         quantity: 200,
         costPerItem: 10,
-        item: "Hammer",
+        description: "Hammer",
       } as PCRSpendProfileMaterialsCostDto);
       const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
       await expect(await context.runCommand(command)).toBe(true);
@@ -170,7 +170,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       expect(insertedSpendProfileCost.value).toBe(insertedSpendProfileCost.quantity! * insertedSpendProfileCost.costPerItem!);
       expect(insertedSpendProfileCost.quantity).toBe(200);
       expect(insertedSpendProfileCost.costPerItem).toBe(10);
-      expect(insertedSpendProfileCost.item).toBe("Hammer");
+      expect(insertedSpendProfileCost.description).toBe("Hammer");
     });
     it("should update spend profile costs for materials", async () => {
       const {context, projectChangeRequest, recordType, project} = setup();
@@ -184,7 +184,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         costCategory: CostCategoryType.Materials,
         quantity: 3,
         costPerItem: 4,
-        item: "Wrench",
+        description: "Wrench",
       } as PCRSpendProfileMaterialsCostDto);
       await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
@@ -192,11 +192,11 @@ describe("UpdatePCRSpendProfileCommand", () => {
       cost.id = insertedSpendProfileCost.id;
       cost.value = 30;
       cost.costPerItem = 5;
-      cost.item = "Spanner";
+      cost.description = "Spanner";
       cost.quantity = 6;
       await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
       expect(insertedSpendProfileCost.value).toBe(5*6);
-      expect(insertedSpendProfileCost.item).toBe("Spanner");
+      expect(insertedSpendProfileCost.description).toBe("Spanner");
       expect(insertedSpendProfileCost.costPerItem).toBe(5);
       expect(insertedSpendProfileCost.quantity).toBe(6);
     });
@@ -213,7 +213,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       costCategory: CostCategoryType.Labour,
       ratePerDay: 10,
       daysSpentOnProject: 10,
-      role: "Queen",
+      description: "Queen",
       grossCostOfRole: 100
     });
     const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);

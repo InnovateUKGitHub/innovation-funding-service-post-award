@@ -11,6 +11,13 @@ import {
 } from "@framework/dtos/pcrSpendProfileDto";
 import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 
+interface BaseCostFields {
+  pcrItemId: string;
+  costCategoryId: string;
+  costCategory: CostCategoryType;
+  description: string | undefined;
+}
+
 export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   constructor(private projectId: string, private pcrItemId: string, private spendProfileDto: PcrSpendProfileDto) {
     super();
@@ -21,7 +28,12 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   }
 
   private mapPcrSpendProfileDtoToCreateEntity(costsDto: PCRSpendProfileCostDto): PcrSpendProfileEntityForCreate {
-    const init = { pcrItemId: this.pcrItemId, costCategoryId: costsDto.costCategoryId, costCategory: costsDto.costCategory };
+    const init = {
+      pcrItemId: this.pcrItemId,
+      costCategoryId: costsDto.costCategoryId,
+      costCategory: costsDto.costCategory,
+      description: costsDto.description || undefined,
+    };
     switch (costsDto.costCategory) {
       case CostCategoryType.Labour: return this.mapLabour(costsDto, init);
       case CostCategoryType.Materials: return this.mapMaterials(costsDto, init);
@@ -29,24 +41,22 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     }
   }
 
-  private mapLabour(costsDto: PCRSpendProfileLabourCostDto, init: { pcrItemId: string, costCategoryId: string, costCategory: CostCategoryType }) {
+  private mapLabour(costsDto: PCRSpendProfileLabourCostDto, init: BaseCostFields) {
     return {
       ...init,
       value: isNumber(costsDto.ratePerDay) && isNumber(costsDto.daysSpentOnProject) ? costsDto.ratePerDay * costsDto.daysSpentOnProject : undefined,
       ratePerDay: isNumber(costsDto.ratePerDay) ? costsDto.ratePerDay : undefined,
       daysSpentOnProject: isNumber(costsDto.daysSpentOnProject) ? costsDto.daysSpentOnProject : undefined,
       grossCostOfRole: isNumber(costsDto.grossCostOfRole) ? costsDto.grossCostOfRole : undefined,
-      role: costsDto.role || undefined
     };
   }
 
-  private mapMaterials(costsDto: PCRSpendProfileMaterialsCostDto, init: { pcrItemId: string, costCategoryId: string, costCategory: CostCategoryType }) {
+  private mapMaterials(costsDto: PCRSpendProfileMaterialsCostDto, init: BaseCostFields) {
     return {
       ...init,
       value: isNumber(costsDto.costPerItem) && isNumber(costsDto.quantity) ? costsDto.costPerItem * costsDto.quantity : undefined,
       costPerItem: isNumber(costsDto.costPerItem) ? costsDto.costPerItem : undefined,
       quantity: isNumber(costsDto.quantity) ? costsDto.quantity : undefined,
-      item: costsDto.item || undefined
     };
   }
 

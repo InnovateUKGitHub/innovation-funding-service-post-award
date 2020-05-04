@@ -5,7 +5,7 @@ export * from "./details";
 export * from "./delete";
 export * from "./prepare";
 export * from "./pcrItemWorkflow";
-export * from "./addPartner/spendProfile/spendProfileCosts";
+export * from "./addPartner/spendProfile/spendProfileCostsSummary";
 export * from "./addPartner/spendProfile/spendProfilePrepareCost";
 export * from "./reasoning";
 export * from "./review";

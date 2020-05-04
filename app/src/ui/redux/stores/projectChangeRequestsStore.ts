@@ -192,7 +192,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     // tslint:disable-next-line:no-small-switch
    switch (costCategory.type) {
      case CostCategoryType.Labour: return this.getInitialLabourCost(costCategory.id);
-     default: return {id: "", value: null, costCategory: CostCategoryType.Unknown, costCategoryId: costCategory.id};
+     default: return {id: "", description: "", value: null, costCategory: CostCategoryType.Unknown, costCategoryId: costCategory.id};
    }
   }
 
@@ -202,7 +202,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       value: null,
       ratePerDay: null,
       daysSpentOnProject: null,
-      role: null,
+      description: null,
       grossCostOfRole: null,
       costCategory: CostCategoryType.Labour,
       costCategoryId

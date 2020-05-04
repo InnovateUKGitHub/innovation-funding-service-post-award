@@ -62,7 +62,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, costCategory: CostCategoryDto, validator: PCRSpendProfileCostDtoValidator, cost: PCRSpendProfileCostDto) {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.pcrPrepareSpendProfileCosts.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, costCategoryId: this.props.costCategoryId})}>Back to costs</ACC.BackLink>} // TODO customise for cost category
+        backLink={<ACC.BackLink route={this.props.routes.pcrSpendProfileCostsSummary.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, costCategoryId: this.props.costCategoryId})}>Back to costs</ACC.BackLink>} // TODO customise for cost category
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         validator={validator}
@@ -78,7 +78,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
     const item = dto.items.find(x => x.id === this.props.itemId)!;
     // If submitting from a step set the status to incomplete
     item.status = PCRItemStatus.Incomplete;
-    return this.props.onSave(dto, this.props.routes.pcrPrepareSpendProfileCosts.getLink({
+    return this.props.onSave(dto, this.props.routes.pcrSpendProfileCostsSummary.getLink({
       projectId: this.props.projectId,
       pcrId: this.props.pcrId,
       itemId: this.props.itemId,
