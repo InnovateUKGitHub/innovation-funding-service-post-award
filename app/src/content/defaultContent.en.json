@@ -229,6 +229,20 @@
       "hint-new-postcode": "Enter the postcode, postal code or zip code. If the location does not have one of these, enter the town or city.",
       "save-and-return-partner-details-button": "Save and return to partner information"
     },
+    "pcr-spend-profile-costs-summary": {
+      "title": "Add partner",
+      "guidance-labour": "The new partner will need to account for all labour costs as they occur. For example, there must be timesheets and payroll records. These must show the actual hours worked by individuals and paid by the organisation.\nThey can include the following labour costs, based on PAYE records:\n\n* gross salary\n* National Insurance\n* company pension contribution\n* life insurance\n* other non-discretionary package costs\n\nYou cannot include:\n\n* discretionary bonuses\n* performance related payments of any kind\n\nYou may include the total number of working days for staff but do not include:\n\n* sick days\n* waiting time\n* training days\n* non-productive time\n\nList the total days worked by all categories of staff on the project. Describe their roles.\n\nWe will review the total amount of time and cost of labour before we approve this request. The terms and conditions of the grant include compliance with these points.",
+      "guidance-materials": "You can claim the costs of materials used on your project providing:\n\n*  they are not already purchased or included in the overheads\n*  they are purchased from third parties\n*  they won’t have a residual/resale value at the end of your project. If they do you can claim the costs minus this value\n\nMaterials supplied by associated companies or project partners should be charged at cost.\n\nSoftware that you have purchased specifically for use during your project may be included. If you already own the software then only additional costs which are incurred and paid during your project, will be eligible. For example, installation, training or customisation.\n\nMaterial costs must be itemised to justify that they are eligible.",
+      "guidance-default": "",
+      "section-title-costs": "{{costCategoryName}} costs",
+      "guidance-title": "{{costCategoryName}} costs guidance",
+      "back-link": "Back to project costs",
+      "button-submit": "Save and return to summary",
+      "button-add-cost": "Add a cost",
+      "button-edit-cost": "Edit",
+      "label-description": "Description",
+      "label-cost": "Cost (£)"
+    },
     "pcr-create":{
       "title": "Start a new request",
       "guidance-message": "Before you submit, you must:\n* ask all project partners to approve the changes\n* discuss this request with your monitoring officer",
