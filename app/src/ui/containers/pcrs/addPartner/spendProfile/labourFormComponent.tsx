@@ -5,6 +5,7 @@ import { PCRDtoValidator } from "@ui/validators";
 import { PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { PCRLabourCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 import React, { Component } from "react";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 interface Props {
   editor: IEditorStore<PCRDto, PCRDtoValidator>;
@@ -13,75 +14,74 @@ interface Props {
   onChange: (dto: PCRDto) => void;
   onSave: (dto: PCRDto) => void;
   data: PCRSpendProfileLabourCostDto;
+  costCategory: CostCategoryDto;
 }
 
 export class LabourFormComponent extends Component<Props> {
   render() {
-    const { editor, validator, data } = this.props;
+    const { editor, validator, data, costCategory } = this.props;
     const Form = ACC.TypedForm<PCRSpendProfileLabourCostDto>();
 
     return (
-      <ACC.Section title={"New labour cost"}>
-        <Form.Form
-          qa="addPartnerForm"
-          data={data}
-          isSaving={editor.status === EditorStatus.Saving}
-          onSubmit={() => this.props.onSave(editor.data)}
-          onChange={dto => this.onChange(dto)}
-        >
-          <Form.Fieldset qa="labour-costs">
-            <Form.Hidden
-              name="id"
-              value={dto => dto.id}
-            />
-            <Form.String
-              label="Role within project"
-              width={"one-third"}
-              name="description"
-              value={dto => dto.description}
-              update={(x, val) => x.description = val}
-              validation={validator && validator.description}
-            />
-            <Form.Numeric
-              label={"Gross employee cost"}
-              name="grossCostOfRole"
-              width={"one-third"}
-              value={dto => dto.grossCostOfRole}
-              update={(dto, val) => dto.grossCostOfRole = val}
-              validation={validator && validator.grossCostOfRole}
-            />
-            <Form.Numeric
-              label={"Rate (£/day)"}
-              hint={"This should be calculated from the number of working days for this role per year."}
-              name="ratePerDay"
-              width={"one-third"}
-              value={dto => dto.ratePerDay}
-              update={(dto, val) => dto.ratePerDay = val}
-              validation={validator && validator.ratePerDay}
-            />
-            <Form.Numeric
-              label={"Days to be spent by all staff with this role"}
-              name="daysSpentOnProject"
-              width={"one-third"}
-              value={dto => dto.daysSpentOnProject}
-              update={(dto, val) => dto.daysSpentOnProject = val}
-              validation={validator && validator.daysSpentOnProject}
-            />
-            {this.props.isClient && <Form.Custom
-              label={"Total cost:"}
-              labelBold={true}
-              hint={"Total cost will update when saved."}
-              name="totalCost"
-              validation={validator && validator.value}
-              value={dto => <ACC.Renderers.SimpleString><ACC.Renderers.Currency value={dto.value}/></ACC.Renderers.SimpleString>}
-              update={() => null}
-            />}
-          </Form.Fieldset>
-          <Form.Fieldset qa="save">
-            <Form.Submit>Save and return to labour costs</Form.Submit>
-          </Form.Fieldset>
-        </Form.Form>
-      </ACC.Section>
+      <Form.Form
+        qa="addPartnerForm"
+        data={data}
+        isSaving={editor.status === EditorStatus.Saving}
+        onSubmit={() => this.props.onSave(editor.data)}
+        onChange={dto => this.onChange(dto)}
+      >
+        <Form.Fieldset qa="labour-costs">
+          <Form.Hidden
+            name="id"
+            value={dto => dto.id}
+          />
+          <Form.String
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.role()}
+            width={"one-third"}
+            name="description"
+            value={dto => dto.description}
+            update={(x, val) => x.description = val}
+            validation={validator && validator.description}
+          />
+          <Form.Numeric
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.grossCost()}
+            name="grossCostOfRole"
+            width={"one-third"}
+            value={dto => dto.grossCostOfRole}
+            update={(dto, val) => dto.grossCostOfRole = val}
+            validation={validator && validator.grossCostOfRole}
+          />
+          <Form.Numeric
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.rate()}
+            hintContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.rateHint()}
+            name="ratePerDay"
+            width={"one-third"}
+            value={dto => dto.ratePerDay}
+            update={(dto, val) => dto.ratePerDay = val}
+            validation={validator && validator.ratePerDay}
+          />
+          <Form.Numeric
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.daysOnProject()}
+            name="daysSpentOnProject"
+            width={"one-third"}
+            value={dto => dto.daysSpentOnProject}
+            update={(dto, val) => dto.daysSpentOnProject = val}
+            validation={validator && validator.daysSpentOnProject}
+          />
+          {this.props.isClient && <Form.Custom
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.totalCost()}
+            hintContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.totalCostHint()}
+            labelBold={true}
+            name="totalCost"
+            validation={validator && validator.value}
+            value={dto => <ACC.Renderers.SimpleString><ACC.Renderers.Currency value={dto.value}/></ACC.Renderers.SimpleString>}
+            update={() => null}
+          />}
+        </Form.Fieldset>
+        <Form.Fieldset qa="save">
+          <Form.Submit><ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.submitButton(costCategory.name)}/></Form.Submit>
+        </Form.Fieldset>
+      </Form.Form>
     );
   }
 
