@@ -69,6 +69,12 @@ Polyfill()
     lng: "en",
     fallbackLng: "en",
     defaultNS: "default",
+    interpolation: {
+      format: (value: string, format, lng) => {
+        if (format === "lowercase") return value.toLocaleLowerCase();
+        return value;
+      }
+    }
   }))
   // temporarily add it globally to help debugging...
   .then(() => (window as any).i18n = i18next)

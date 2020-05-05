@@ -39,7 +39,7 @@ interface Data {
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
   validator: Pending<PCRSpendProfileCostDtoValidator>;
   cost: Pending<PCRSpendProfileCostDto>;
- }
+}
 
 interface Callbacks {
   onChange: (dto: PCRDto) => void;
@@ -56,20 +56,33 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
       cost: this.props.cost,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.costCategory, x.validator, x.cost)} />;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.costCategory, x.validator, x.cost)}/>;
   }
 
   private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, costCategory: CostCategoryDto, validator: PCRSpendProfileCostDtoValidator, cost: PCRSpendProfileCostDto) {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.pcrSpendProfileCostsSummary.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, costCategoryId: this.props.costCategoryId})}>Back to costs</ACC.BackLink>} // TODO customise for cost category
-        pageTitle={<ACC.Projects.Title project={project} />}
+        backLink={(
+          <ACC.BackLink
+            route={this.props.routes.pcrSpendProfileCostsSummary.getLink({
+              itemId: this.props.itemId,
+              pcrId: this.props.pcrId,
+              projectId: this.props.projectId,
+              costCategoryId: this.props.costCategoryId
+            })}
+          >
+            <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.backLink(costCategory.name)}/>
+          </ACC.BackLink>
+        )}
+        pageTitle={<ACC.Projects.Title project={project}/>}
         project={project}
         validator={validator}
         error={editor.error}
       >
-        <ACC.Renderers.Messages messages={this.props.messages} />
-        {this.renderForm(costCategory, editor, validator, cost)}
+        <ACC.Renderers.Messages messages={this.props.messages}/>
+        <ACC.Section titleContent={x => x.pcrSpendProfilePrepareCostContent.costSectionTitle(costCategory.name)}>
+          {this.renderForm(costCategory, editor, validator, cost)}
+        </ACC.Section>
       </ACC.Page>
     );
   }
@@ -88,13 +101,15 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
 
   private renderForm(costCategory: CostCategoryDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, validator: PCRSpendProfileCostDtoValidator, cost: PCRSpendProfileCostDto) {
     // tslint:disable-next-line:no-small-switch
-    switch(costCategory.type) {
-      case CostCategoryType.Labour: return this.renderLabourForm(editor, validator as PCRLabourCostDtoValidator, cost as PCRSpendProfileLabourCostDto);
-      default: return null;
+    switch (costCategory.type) {
+      case CostCategoryType.Labour:
+        return this.renderLabourForm(editor, validator as PCRLabourCostDtoValidator, cost as PCRSpendProfileLabourCostDto, costCategory);
+      default:
+        return null;
     }
   }
 
-  private renderLabourForm(editor: IEditorStore<PCRDto, PCRDtoValidator>, validator: PCRLabourCostDtoValidator, cost: PCRSpendProfileLabourCostDto) {
+  private renderLabourForm(editor: IEditorStore<PCRDto, PCRDtoValidator>, validator: PCRLabourCostDtoValidator, cost: PCRSpendProfileLabourCostDto, costCategory: CostCategoryDto) {
     return (
       <LabourFormComponent
         editor={editor}
@@ -103,6 +118,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
         onSave={x => this.onSave(x)}
         onChange={x => this.props.onChange(x)}
         data={cost}
+        costCategory={costCategory}
       />
     );
   }
@@ -185,7 +201,7 @@ export const PCRSpendProfileAddCostRoute = defineRoute<PcrAddSpendProfileCostPar
     costCategoryId: route.params.costCategoryId,
   }),
   // tslint:disable-next-line:no-duplicate-string
-  getTitle: ({ params, stores }) => ({displayTitle: "Add partner", htmlTitle: "Add partner"}),
+  getTitle: ({ params, stores, content }) => content.pcrSpendProfilePrepareCostContent.title(),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });
 
@@ -200,6 +216,6 @@ export const PCRSpendProfileEditCostRoute = defineRoute<PcrEditSpendProfileCostP
     costCategoryId: route.params.costCategoryId,
     costId: route.params.costId
   }),
-  getTitle: ({ params, stores }) => ({displayTitle: "Add partner", htmlTitle: "Add partner"}),
+  getTitle: ({ params, stores, content }) => content.pcrSpendProfilePrepareCostContent.title(),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });
