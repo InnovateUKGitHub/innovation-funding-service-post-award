@@ -34,7 +34,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
         <Form.Fieldset heading="Size">
           <React.Fragment>
             <SimpleString>This definition must include organisations that are part of the new partner organisation. That is, where the new partner organisation owns shares in another organisation or has shares owned by another organisation.</SimpleString>
-            <SimpleString>Use the European Commission (EC) <a href="https://ec.europa.eu/growth/smes/business-friendly-environment/sme-definition_en"> small to medium enterprise (SME) definition</a> (opens in new window) for guidance.</SimpleString>
+            <SimpleString>Use the European Commission (EC) <a href="https://ec.europa.eu/growth/smes/business-friendly-environment/sme-definition_en" rel="noopener noreferrer" target="_blank"> small to medium enterprise (SME) definition (opens in new window)</a> for guidance.</SimpleString>
           </React.Fragment>
           <Form.Radio
             name="participantSize"
