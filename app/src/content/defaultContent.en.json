@@ -240,6 +240,7 @@
       "button-submit": "Save and return to summary",
       "button-add-cost": "Add a cost",
       "button-edit-cost": "Edit",
+      "button-remove-cost": "Remove",
       "label-description": "Description",
       "label-cost": "Cost (£)"
     },

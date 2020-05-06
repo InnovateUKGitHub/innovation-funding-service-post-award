@@ -36,6 +36,7 @@ export const routeConfig = {
   pcrPrepareItem: Containers.PCRPrepareItemRoute,
   pcrSpendProfileCostsSummary: Containers.PCRSpendProfileCostsSummaryRoute,
   pcrPrepareSpendProfileAddCost: Containers.PCRSpendProfileAddCostRoute,
+  pcrPrepareSpendProfileDeleteCost: Containers.PCRSpendProfileDeleteCostRoute,
   pcrPrepareSpendProfileEditCost: Containers.PCRSpendProfileEditCostRoute,
   pcrPrepareReasoning: Containers.PCRPrepareReasoningRoute,
   pcrReview: Containers.PCRReviewRoute,
