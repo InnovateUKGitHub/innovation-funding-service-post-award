@@ -7,6 +7,12 @@ export const initInternationalisation = async () => {
     lng: "en",
     fallbackLng: "en",
     defaultNS: "default",
+    interpolation: {
+      format: (value: string, format, lng) => {
+        if (format === "lowercase") return value.toLocaleLowerCase();
+        return value;
+      }
+    }
   });
 };
 

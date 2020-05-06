@@ -240,9 +240,13 @@
       "button-submit": "Save and return to summary",
       "button-add-cost": "Add a cost",
       "button-edit-cost": "Edit",
-      "button-remove-cost": "Remove",
-      "label-description": "Description",
-      "label-cost": "Cost (£)"
+      "button-remove-cost": "Remove"
+    },
+    "pcr-spend-profile-prepare-cost": {
+      "title": "Add partner",
+      "section-title-cost": "{{costCategoryName}} cost",
+      "back-link": "Back to {{costCategoryName, lowercase}} costs",
+      "button-submit": "Save and return to {{costCategoryName, lowercase}} costs"
     },
     "pcr-create":{
       "title": "Start a new request",
@@ -291,6 +295,20 @@
     "costs-approved": "Costs approved",
     "costs-deferred": "Costs deferred",
     "total-grant-paid": "Total grant paid"
+  },
+  "pcr-spend-profile-labels": {
+    "cost": "Cost (£)",
+    "total-costs": "Total {{costCategoryName, lowercase}} costs",
+    "description": "Description",
+    "labour": {
+      "role": "Role within project",
+      "gross-cost": "Gross employee cost",
+      "rate": "Rate (£/day)",
+      "rate-hint": "This should be calculated from the number of working days for this role per year.",
+      "days-spent-on-project": "Days to be spent by all staff with this role",
+      "total-cost": "Total cost",
+      "total-cost-hint": "Total cost will update when saved."
+    }
   },
   "project-messages": {
     "noClaimDueMessage": "No claim due",

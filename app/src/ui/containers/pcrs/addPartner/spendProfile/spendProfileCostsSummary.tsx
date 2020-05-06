@@ -57,7 +57,7 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
     const Form = ACC.TypedForm<PCRDto>();
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={stepRoute}><ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.backLink()} /></ACC.BackLink>}
+        backLink={<ACC.BackLink route={stepRoute}><ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.backLink()}/></ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         validator={editor.validator}
@@ -91,7 +91,7 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
     );
   }
 
-  private renderFooterRow(row: { key: string, title: string, value: React.ReactNode, qa: string, isBold?: boolean }) {
+  private renderFooterRow(row: { key: string, title: React.ReactNode, value: React.ReactNode, qa: string, isBold?: boolean }) {
     return (
       <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
         <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{row.title}</th>
@@ -115,13 +115,13 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
         </tr>
       ),
       this.renderFooterRow({
-        key: "2", title: `Total ${costCategory.name.toLocaleLowerCase()} costs`, qa: "total-costs", isBold: false, value: <ACC.Renderers.Currency value={total} />
+        key: "2", title: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.labels().totalCosts(costCategory.name)}/>, qa: "total-costs", isBold: false, value: <ACC.Renderers.Currency value={total} />
       }),
     ];
     return (
       <Table.Table qa="costs" data={costs} footers={footers}>
-        <Table.String header="Description" value={x => x.description} qa={"description"}/>
-        <Table.Currency header="Cost (£)" value={x => x.value} qa={"cost"}/>
+        <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().description()} value={x => x.description} qa={"description"}/>
+        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().cost()} value={x => x.value} qa={"cost"}/>
         <Table.Custom qa="links" header="Links" hideHeader={true} value={x => this.renderLinks(this.props.itemId, x.id, this.props.costCategoryId, this.props.projectId, this.props.pcrId)} />
       </Table.Table>
     );
