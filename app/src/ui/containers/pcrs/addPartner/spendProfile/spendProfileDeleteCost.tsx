@@ -1,7 +1,6 @@
 import React from "react";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import {
-  ILinkInfo,
   PCRItemForPartnerAdditionDto,
   PCRItemStatus,
   PCRItemType,
@@ -11,7 +10,7 @@ import {
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore, IStores, StoresConsumer } from "@ui/redux";
+import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import {
   PCRSpendProfileCostDto,
@@ -50,7 +49,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   }
 
   private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, costCategory: CostCategoryDto, cost: PCRSpendProfileCostDto) {
-    const DeleteForm = ACC.TypedForm<PCRDto>();
+    const DeleteForm = ACC.TypedForm<PCRSpendProfileCostDto>();
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={this.props.routes.pcrSpendProfileCostsSummary.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, costCategoryId: this.props.costCategoryId})}>{`Back to ${costCategory.name.toLowerCase()} costs`}</ACC.BackLink>}
@@ -60,7 +59,11 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
         <ACC.Section>
-          <DeleteForm.Form editor={editor} qa="pcrDelete">
+          <DeleteForm.Form data={cost} qa="pcrDelete">
+            <DeleteForm.Hidden
+              name="id"
+              value={dto => dto ? dto.id : ""}
+            />
             {cost && this.renderComponent(costCategory, cost)}
             <DeleteForm.Button name="delete" styling="Warning" onClick={() => this.props.onDelete(editor.data, this.props.projectId)}>Delete cost</DeleteForm.Button>
           </DeleteForm.Form>
@@ -100,7 +103,10 @@ const Container = (props: PcrDeleteSpendProfileCostParams & BaseProps) => (
           })}
           onDelete={(dto, projectId) => {
             const item = dto.items.find(x => x.id === props.itemId && x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
-            item.spendProfile.costs = item.spendProfile.costs.filter(x => x.id !== props.costId);
+            const costIndex = item.spendProfile.costs.findIndex(x => x.id === props.costId);
+            if (costIndex > -1) {
+              item.spendProfile.costs.splice(costIndex, 1);
+            }
             // If submitting from a step set the status to incomplete
             item.status = PCRItemStatus.Incomplete;
             stores.messages.clearMessages();
