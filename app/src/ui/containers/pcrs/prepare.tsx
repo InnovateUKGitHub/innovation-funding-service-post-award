@@ -34,7 +34,10 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
 
   private onSave(editor: IEditorStore<PCRDto, PCRDtoValidator>, original: PCRDto, submit: boolean) {
     const dto = editor.data;
-    if (submit) {
+    if (submit && original.status === PCRStatus.QueriedByInnovateUK) {
+      dto.status = PCRStatus.SubmittedToInnovateUK;
+    }
+    else if (submit) {
       dto.status = PCRStatus.SubmittedToMonitoringOfficer;
     }
     else {

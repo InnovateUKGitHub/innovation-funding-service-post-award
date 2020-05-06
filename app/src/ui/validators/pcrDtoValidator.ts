@@ -56,7 +56,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
       PCRStatus.QueriedByInnovateUK,
       [
         PCRStatus.QueriedByInnovateUK,
-        PCRStatus.SubmittedToMonitoringOfficer,
+        PCRStatus.SubmittedToInnovateUK,
       ]
     ]
   ]);
