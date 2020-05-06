@@ -15,12 +15,17 @@ import { IEditorStore, IStores, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import {
   PCRSpendProfileCostDto,
-  PCRSpendProfileLabourCostDto
+  PCRSpendProfileLabourCostDto, PCRSpendProfileMaterialsCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryType } from "@framework/entities";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { PCRLabourCostDtoValidator, PCRSpendProfileCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
+import {
+  PCRBaseCostDtoValidator,
+  PCRLabourCostDtoValidator, PCRMaterialsCostDtoValidator,
+  PCRSpendProfileCostDtoValidator
+} from "@ui/validators/pcrSpendProfileDtoValidator";
 import { LabourFormComponent } from "@ui/containers/pcrs/addPartner/spendProfile/labourFormComponent";
+import { MaterialsFormComponent } from "@ui/containers/pcrs/addPartner/spendProfile/materialsFormComponent";
 
 export interface PcrAddSpendProfileCostParams {
   projectId: string;
@@ -37,13 +42,23 @@ interface Data {
   project: Pending<ProjectDto>;
   costCategory: Pending<CostCategoryDto>;
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
-  validator: Pending<PCRSpendProfileCostDtoValidator>;
+  validator: Pending<PCRSpendProfileCostDtoValidator | undefined>;
   cost: Pending<PCRSpendProfileCostDto>;
 }
 
 interface Callbacks {
   onChange: (dto: PCRDto) => void;
   onSave: (dto: PCRDto, link: ILinkInfo) => void;
+}
+
+export interface SpendProfileCostFormProps<T extends PCRSpendProfileCostDto, V extends PCRBaseCostDtoValidator<T>> {
+  editor: IEditorStore<PCRDto, PCRDtoValidator>;
+  validator: V;
+  isClient: boolean;
+  onChange: (dto: PCRDto) => void;
+  onSave: (dto: PCRDto) => void;
+  data: T;
+  costCategory: CostCategoryDto;
 }
 
 class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callbacks> {
@@ -59,7 +74,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.costCategory, x.validator, x.cost)}/>;
   }
 
-  private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, costCategory: CostCategoryDto, validator: PCRSpendProfileCostDtoValidator, cost: PCRSpendProfileCostDto) {
+  private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, costCategory: CostCategoryDto, validator: PCRSpendProfileCostDtoValidator | undefined, cost: PCRSpendProfileCostDto) {
     return (
       <ACC.Page
         backLink={(
@@ -99,28 +114,19 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
     }));
   }
 
-  private renderForm(costCategory: CostCategoryDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, validator: PCRSpendProfileCostDtoValidator, cost: PCRSpendProfileCostDto) {
-    // tslint:disable-next-line:no-small-switch
+  private renderForm(costCategory: CostCategoryDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, validator: PCRSpendProfileCostDtoValidator | undefined, cost: PCRSpendProfileCostDto) {
+    const props = {
+      editor,
+      isClient: this.props.isClient,
+      onSave: (x: PCRDto) => this.onSave(x),
+      onChange: (x: PCRDto) => this.props.onChange(x),
+      costCategory,
+    };
     switch (costCategory.type) {
-      case CostCategoryType.Labour:
-        return this.renderLabourForm(editor, validator as PCRLabourCostDtoValidator, cost as PCRSpendProfileLabourCostDto, costCategory);
-      default:
-        return null;
+      case CostCategoryType.Labour: return <LabourFormComponent {...props} data={cost as PCRSpendProfileLabourCostDto} validator={validator as PCRLabourCostDtoValidator}/>;
+      case CostCategoryType.Materials: return <MaterialsFormComponent {...props} data={cost as PCRSpendProfileMaterialsCostDto} validator={validator as PCRMaterialsCostDtoValidator}/>;
+      default: return null;
     }
-  }
-
-  private renderLabourForm(editor: IEditorStore<PCRDto, PCRDtoValidator>, validator: PCRLabourCostDtoValidator, cost: PCRSpendProfileLabourCostDto, costCategory: CostCategoryDto) {
-    return (
-      <LabourFormComponent
-        editor={editor}
-        validator={validator}
-        isClient={this.props.isClient}
-        onSave={x => this.onSave(x)}
-        onChange={x => this.props.onChange(x)}
-        data={cost}
-        costCategory={costCategory}
-      />
-    );
   }
 }
 
@@ -200,7 +206,6 @@ export const PCRSpendProfileAddCostRoute = defineRoute<PcrAddSpendProfileCostPar
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,
   }),
-  // tslint:disable-next-line:no-duplicate-string
   getTitle: ({ params, stores, content }) => content.pcrSpendProfilePrepareCostContent.title(),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });

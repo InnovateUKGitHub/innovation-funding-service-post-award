@@ -21,13 +21,9 @@ import {
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ConfigStore } from "@ui/redux/stores/configStore";
 import { CostCategoryType } from "@framework/entities";
-import { PCRSpendProfileCostDto, PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import { PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import {
-  PCRBaseCostDtoValidator,
-  PCRLabourCostDtoValidator,
-  PCRSpendProfileCostDtoValidator
-} from "@ui/validators/pcrSpendProfileDtoValidator";
+import { PCRSpendProfileCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 
 export class ProjectChangeRequestStore extends StoreBase {
   constructor(private projectStore: ProjectsStore, private readonly configStore: ConfigStore, getState: () => RootState, queue: (action: any) => void) {
@@ -167,17 +163,11 @@ export class ProjectChangeRequestStore extends StoreBase {
     );
   }
 
-  public getNewSpendProfileCostValidator(editorPending: Pending<IEditorStore<PCRDto, PCRDtoValidator>>, pcrItemId: string, costCategoryPending: Pending<CostCategoryDto>): Pending<PCRSpendProfileCostDtoValidator>  {
+  public getNewSpendProfileCostValidator(editorPending: Pending<IEditorStore<PCRDto, PCRDtoValidator>>, pcrItemId: string, costCategoryPending: Pending<CostCategoryDto>): Pending<PCRSpendProfileCostDtoValidator | undefined>  {
     const data = Pending.combine({editor: editorPending, costCategory: costCategoryPending});
     return data.then(({editor, costCategory}) => {
       const partnerAdditionValidator = editor.validator.items.results.find(x => x.model.id === pcrItemId) as PCRPartnerAdditionItemDtoValidator;
-      const validator = partnerAdditionValidator.spendProfile.results[0].costs.results.find(x => !x.model.id && x.model.costCategoryId === costCategory.id);
-      // tslint:disable-next-line:no-small-switch
-      switch(costCategory.type) {
-        case CostCategoryType.Labour: return validator as PCRLabourCostDtoValidator;
-      }
-      // Todo remove once all others in place
-      return validator as PCRLabourCostDtoValidator;
+      return partnerAdditionValidator.spendProfile.results[0].costs.results.find(x => !x.model.id && x.model.costCategoryId === costCategory.id);
     });
   }
 
@@ -189,24 +179,7 @@ export class ProjectChangeRequestStore extends StoreBase {
   }
 
   public getInitialSpendProfileCost(costCategory: CostCategoryDto): PCRSpendProfileCostDto {
-    // tslint:disable-next-line:no-small-switch
-   switch (costCategory.type) {
-     case CostCategoryType.Labour: return this.getInitialLabourCost(costCategory.id);
-     default: return {id: "", description: "", value: null, costCategory: CostCategoryType.Unknown, costCategoryId: costCategory.id};
-   }
-  }
-
-  private getInitialLabourCost(costCategoryId: string): PCRSpendProfileLabourCostDto {
-   return {
-      id: "",
-      value: null,
-      ratePerDay: null,
-      daysSpentOnProject: null,
-      description: null,
-      grossCostOfRole: null,
-      costCategory: CostCategoryType.Labour,
-      costCategoryId
-    };
+    return {id: "", description: "", value: null, costCategory: costCategory.type as CostCategoryType.Unknown, costCategoryId: costCategory.id};
   }
 
   public updatePcrEditor(saving: boolean, projectId: string, dto: PCRDto, message?: string, onComplete?: (result: PCRDto) => void) {

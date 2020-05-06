@@ -1,23 +1,11 @@
 import * as ACC from "@ui/components";
-import { PCRDto } from "@framework/dtos";
-import { EditorStatus, IEditorStore } from "@ui/redux";
-import { PCRDtoValidator } from "@ui/validators";
+import { EditorStatus } from "@ui/redux";
 import { PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { PCRLabourCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 import React, { Component } from "react";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { SpendProfileCostFormProps } from "@ui/containers";
 
-interface Props {
-  editor: IEditorStore<PCRDto, PCRDtoValidator>;
-  validator: PCRLabourCostDtoValidator;
-  isClient: boolean;
-  onChange: (dto: PCRDto) => void;
-  onSave: (dto: PCRDto) => void;
-  data: PCRSpendProfileLabourCostDto;
-  costCategory: CostCategoryDto;
-}
-
-export class LabourFormComponent extends Component<Props> {
+export class LabourFormComponent extends Component<SpendProfileCostFormProps<PCRSpendProfileLabourCostDto, PCRLabourCostDtoValidator>> {
   render() {
     const { editor, validator, data, costCategory } = this.props;
     const Form = ACC.TypedForm<PCRSpendProfileLabourCostDto>();
