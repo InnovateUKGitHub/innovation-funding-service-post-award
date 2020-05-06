@@ -25,7 +25,10 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
   }
 
   private async insertStatusChange(context: IContext, projectChangeRequestId: string, comments: string, originalStatus: PCRStatus, newStatus: PCRStatus): Promise<void> {
-    const shouldPmSee = newStatus === PCRStatus.SubmittedToMonitoringOfficer || newStatus === PCRStatus.QueriedByMonitoringOfficer;
+    const shouldPmSee =
+      newStatus === PCRStatus.SubmittedToMonitoringOfficer
+      || newStatus === PCRStatus.QueriedByMonitoringOfficer
+      || (newStatus === PCRStatus.SubmittedToInnovateUK && originalStatus === PCRStatus.QueriedByInnovateUK);
 
     await context.repositories.projectChangeRequestStatusChange.createStatusChange({
       Acc_ProjectChangeRequest__c: projectChangeRequestId,
