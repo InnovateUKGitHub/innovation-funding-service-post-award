@@ -14,6 +14,7 @@ export class PcrSpendProfileCostsSummaryContent extends ContentPageBase {
   public readonly submitButton = () => this.getContent("button-submit");
   public readonly addCostButton = () => this.getContent("button-add-cost");
   public readonly editCostButton = () => this.getContent("button-edit-cost");
+  public readonly removeCostButton = () => this.getContent("button-remove-cost");
   public readonly descriptionLabel = () => this.getContent("label-description");
   public readonly costLabel = () => this.getContent("label-cost");
   public readonly guidance = (costCategory: CostCategoryType) => {
