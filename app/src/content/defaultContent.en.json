@@ -242,6 +242,13 @@
       "button-edit-cost": "Edit",
       "button-remove-cost": "Remove"
     },
+    "pcr-spend-profile-delete-cost": {
+      "title": "Add partner",
+      "section-title-cost": "Delete {{costCategoryName, lowercase}} cost",
+      "back-link": "Back to {{costCategoryName, lowercase}} costs",
+      "button-delete": "Delete cost",
+      "guidance-delete": "All the information will be permanently deleted."
+    },
     "pcr-spend-profile-prepare-cost": {
       "title": "Add partner",
       "section-title-cost": "{{costCategoryName}} cost",

@@ -36,6 +36,11 @@ interface Callbacks {
   onDelete: (dto: PCRDto, projectId: string) => void;
 }
 
+export interface SpendProfileDeleteFormProps<T extends PCRSpendProfileCostDto> {
+  data: T;
+  costCategory: CostCategoryDto;
+}
+
 class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
@@ -52,7 +57,17 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
     const DeleteForm = ACC.TypedForm<PCRSpendProfileCostDto>();
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.pcrSpendProfileCostsSummary.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, costCategoryId: this.props.costCategoryId})}>{`Back to ${costCategory.name.toLowerCase()} costs`}</ACC.BackLink>}
+        backLink={
+          <ACC.BackLink
+            route={this.props.routes.pcrSpendProfileCostsSummary.getLink({
+                itemId: this.props.itemId,
+                pcrId: this.props.pcrId,
+                projectId: this.props.projectId,
+                costCategoryId: this.props.costCategoryId
+              })}
+          >
+            <ACC.Content value={x => x.pcrSpendProfileDeleteCostContent.backLink(costCategory.name)}/>
+          </ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         error={editor.error}
@@ -65,7 +80,13 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
               value={dto => dto ? dto.id : ""}
             />
             {cost && this.renderComponent(costCategory, cost)}
-            <DeleteForm.Button name="delete" styling="Warning" onClick={() => this.props.onDelete(editor.data, this.props.projectId)}>Delete cost</DeleteForm.Button>
+            <DeleteForm.Button
+              name="delete"
+              styling="Warning"
+              onClick={() => this.props.onDelete(editor.data, this.props.projectId)}
+            >
+              <ACC.Content value={x => x.pcrSpendProfileDeleteCostContent.deleteButton()}/>
+            </DeleteForm.Button>
           </DeleteForm.Form>
         </ACC.Section>
       </ACC.Page>
@@ -75,7 +96,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   private renderComponent(costCategory: CostCategoryDto, cost: PCRSpendProfileCostDto) {
     // tslint:disable-next-line:no-small-switch
     switch(costCategory.type) {
-      case CostCategoryType.Labour: return <DeleteLabourCostFormComponent data={cost as PCRSpendProfileLabourCostDto} />;
+      case CostCategoryType.Labour: return <DeleteLabourCostFormComponent data={cost as PCRSpendProfileLabourCostDto} costCategory={costCategory} />;
       default: return null;
     }
   }
@@ -131,6 +152,6 @@ export const PCRSpendProfileDeleteCostRoute = defineRoute<PcrDeleteSpendProfileC
     costCategoryId: route.params.costCategoryId,
     costId: route.params.costId
   }),
-  getTitle: ({ params, stores }) => ({displayTitle: "Add partner", htmlTitle: "Add partner"}),
+  getTitle: ({ params, stores, content }) => content.pcrSpendProfileDeleteCostContent.title(),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });
