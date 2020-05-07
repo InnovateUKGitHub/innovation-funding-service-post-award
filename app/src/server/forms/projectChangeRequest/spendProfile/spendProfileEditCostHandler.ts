@@ -13,8 +13,13 @@ import { PCRItemStatus } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { GetCostCategoriesQuery } from "@server/features/claims";
 import { CostCategoryType } from "@framework/entities";
-import { PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import {
+  PCRSpendProfileCostDto,
+  PCRSpendProfileLabourCostDto,
+  PCRSpendProfileMaterialsCostDto
+} from "@framework/dtos/pcrSpendProfileDto";
 import { isNumber } from "@framework/util";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFormHandlerBase<PcrEditSpendProfileCostParams, "pcr"> {
   constructor() {
@@ -47,13 +52,17 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
     if (!cost) {
       throw new BadRequestError("Cost not found");
     }
-    // tslint:disable-next-line:no-small-switch
-    switch (costCategory.type) {
-      case CostCategoryType.Labour:
-        this.updateLabourCost(cost as PCRSpendProfileLabourCostDto, body);
-        break;
-    }
+
+    this.updateCost(cost, costCategory, body);
+
     return dto;
+  }
+
+  private updateCost(cost: PCRSpendProfileCostDto,  costCategoryDto: CostCategoryDto, body: IFormBody) {
+    switch (costCategoryDto.type) {
+      case CostCategoryType.Labour: return this.updateLabourCost(cost as PCRSpendProfileLabourCostDto, body);
+      case CostCategoryType.Materials: return this.updateMaterialsCost(cost as PCRSpendProfileMaterialsCostDto, body);
+    }
   }
 
   private updateLabourCost(cost: PCRSpendProfileLabourCostDto,  body: IFormBody) {
@@ -65,6 +74,16 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
     cost.value = isNumber(daysSpentOnProject) && isNumber(ratePerDay) ? daysSpentOnProject * ratePerDay : null;
     cost.description = body.description;
     cost.grossCostOfRole = body.grossCostOfRole ? Number(body.grossCostOfRole) : null;
+  }
+
+  private updateMaterialsCost(cost: PCRSpendProfileMaterialsCostDto,  body: IFormBody) {
+    const costPerItem = body.costPerItem ? Number(body.costPerItem) : null;
+    const quantity = body.quantity ? Number(body.quantity) : null;
+
+    cost.costPerItem = costPerItem;
+    cost.quantity = quantity;
+    cost.value = isNumber(costPerItem) && isNumber(quantity) ? costPerItem * quantity : null;
+    cost.description = body.description;
   }
 
   protected async run(context: IContext, params: PcrEditSpendProfileCostParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
