@@ -13,8 +13,9 @@ import { PCRItemStatus } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { GetCostCategoriesQuery } from "@server/features/claims";
 import { CostCategoryType } from "@framework/entities";
-import { PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import { PCRSpendProfileLabourCostDto, PCRSpendProfileMaterialsCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { isNumber } from "@framework/util";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardFormHandlerBase<PcrAddSpendProfileCostParams, "pcr"> {
   constructor() {
@@ -39,37 +40,50 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
       throw new BadRequestError("Unknown cost category");
     }
 
-    const baseCostDto = this.mapBaseItem(params);
-
-    // tslint:disable-next-line:no-small-switch
-    switch (costCategory.type) {
-      case CostCategoryType.Labour:
-        item.spendProfile.costs.push(this.getLabourCost(baseCostDto, body));
-        break;
-    }
+    const cost = this.getCost(costCategory, params, body);
+    if (cost) item.spendProfile.costs.push(cost);
 
     return dto;
   }
 
-  private mapBaseItem(params: PcrAddSpendProfileCostParams) {
-    return {
+  private getCost(costCategory: CostCategoryDto, params: PcrAddSpendProfileCostParams, body: IFormBody) {
+    const baseCostDto = {
       id: "",
-      costCategoryId: params.costCategoryId,
+      costCategoryId: params.costCategoryId
     };
+    switch (costCategory.type) {
+      case CostCategoryType.Labour: return this.getLabourCost(baseCostDto, costCategory.type, body);
+      case CostCategoryType.Materials: return this.getMaterialsCost(baseCostDto, costCategory.type, body);
+    }
   }
 
-  private getLabourCost(baseCostDto: {id: string, costCategoryId: string},  body: IFormBody): PCRSpendProfileLabourCostDto {
+  private getLabourCost(baseCostDto: {id: string, costCategoryId: string}, costCategory: CostCategoryType.Labour, body: IFormBody): PCRSpendProfileLabourCostDto {
     const daysSpentOnProject = body.daysSpentOnProject ? Number(body.daysSpentOnProject) : null;
     const ratePerDay = body.ratePerDay ? Number(body.ratePerDay) : null;
     const value = isNumber(daysSpentOnProject) && isNumber(ratePerDay) ? daysSpentOnProject * ratePerDay : null;
 
     return {
       ...baseCostDto,
-      costCategory: CostCategoryType.Labour,
+      costCategory,
       description: body.description,
       grossCostOfRole: body.grossCostOfRole ? Number(body.grossCostOfRole) : null,
       daysSpentOnProject,
       ratePerDay,
+      value,
+    };
+  }
+
+  private getMaterialsCost(baseCostDto: { id: string, costCategoryId: string }, costCategory: CostCategoryType.Materials, body: IFormBody): PCRSpendProfileMaterialsCostDto {
+    const costPerItem = body.costPerItem ? Number(body.costPerItem) : null;
+    const quantity = body.quantity ? Number(body.quantity) : null;
+    const value = isNumber(costPerItem) && isNumber(quantity) ? costPerItem * quantity : null;
+
+    return {
+      ...baseCostDto,
+      costCategory,
+      description: body.description,
+      costPerItem,
+      quantity,
       value,
     };
   }
