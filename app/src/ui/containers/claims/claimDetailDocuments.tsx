@@ -2,7 +2,7 @@ import React from "react";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
-import { ProjectDto, ProjectRole } from "@framework/types";
+import { DocumentDescription, ProjectDto, ProjectRole } from "@framework/types";
 import { IEditorStore } from "@ui/redux/reducers";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
 import { StoresConsumer } from "@ui/redux";
@@ -32,7 +32,7 @@ interface CombinedData {
 }
 
 interface Callbacks {
-  onChange: (saveing: boolean, dto: MultipleDocumentUploadDto) => void;
+  onChange: (saving: boolean, dto: MultipleDocumentUploadDto) => void;
   onDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
@@ -91,6 +91,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
           >
             <UploadForm.Fieldset>
               <ACC.DocumentGuidance/>
+              <UploadForm.Hidden name="description" value={dto => dto.description}/>
               <UploadForm.MulipleFileUpload
                 label="Upload documents"
                 labelHidden={true}
@@ -116,7 +117,7 @@ const ClaimDetailDocumentsContainer = (props: ClaimDetailDocumentsPageParams & B
           project={stores.projects.getById(props.projectId)}
           costCategories={stores.costCategories.getAll()}
           documents={stores.claimDetailDocuments.getClaimDetailDocuments(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
-          editor={stores.claimDetailDocuments.getClaimDetailDocumentsEditor(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
+          editor={stores.claimDetailDocuments.getClaimDetailDocumentsEditor(props.projectId, props.partnerId, props.periodId, props.costCategoryId, (dto) => dto.description = DocumentDescription.Evidence)}
           onChange={(saving, dto) => {
             stores.messages.clearMessages();
             const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
