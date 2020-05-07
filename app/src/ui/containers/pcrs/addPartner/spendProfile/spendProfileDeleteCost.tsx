@@ -14,12 +14,14 @@ import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import {
   PCRSpendProfileCostDto,
-  PCRSpendProfileLabourCostDto
+  PCRSpendProfileLabourCostDto,
+  PCRSpendProfileMaterialsCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryType } from "@framework/entities";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PcrAddSpendProfileCostParams } from "./spendProfilePrepareCost";
 import { DeleteLabourCostFormComponent } from "./deleteLabourCostFormComponent";
+import { DeleteMaterialsCostFormComponent } from "./deleteMaterialCostFormComponent";
 
 export interface PcrDeleteSpendProfileCostParams extends PcrAddSpendProfileCostParams {
   costId: string;
@@ -94,9 +96,9 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   }
 
   private renderComponent(costCategory: CostCategoryDto, cost: PCRSpendProfileCostDto) {
-    // tslint:disable-next-line:no-small-switch
     switch(costCategory.type) {
       case CostCategoryType.Labour: return <DeleteLabourCostFormComponent data={cost as PCRSpendProfileLabourCostDto} costCategory={costCategory} />;
+      case CostCategoryType.Materials: return <DeleteMaterialsCostFormComponent data={cost as PCRSpendProfileMaterialsCostDto} costCategory={costCategory} />;
       default: return null;
     }
   }
