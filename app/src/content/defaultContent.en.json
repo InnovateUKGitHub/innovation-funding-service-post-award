@@ -308,6 +308,12 @@
       "days-spent-on-project": "Days to be spent by all staff with this role",
       "total-cost": "Total cost",
       "total-cost-hint": "Total cost will update when saved."
+    },
+    "materials": {
+      "item": "Item",
+      "quantity": "Quantity",
+      "cost-per-item": "Cost per item (£)",
+      "total-cost": "Total cost"
     }
   },
   "project-messages": {
