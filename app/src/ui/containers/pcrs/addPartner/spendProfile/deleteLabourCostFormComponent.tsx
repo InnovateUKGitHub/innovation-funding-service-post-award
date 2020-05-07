@@ -8,7 +8,7 @@ export const DeleteLabourCostFormComponent = (props: SpendProfileDeleteFormProps
   return (
     <ACC.Section titleContent={x => x.pcrSpendProfileDeleteCostContent.costSectionTitle(costCategory.name)}>
       <ACC.ValidationMessage messageType="alert" messageContent={x => x.pcrSpendProfileDeleteCostContent.deleteGuidance()} />
-      <ACC.SummaryList qa="pcr_viewItem">
+      <ACC.SummaryList qa="deleteLabourCost">
         <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.labour.role()} content={data.description} qa="roleWithinProject" />
         <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.labour.grossCost()} content={<ACC.Renderers.Currency value={data.grossCostOfRole} />} qa="grossCostOfRole" />
         <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.labour.rate()} content={<ACC.Renderers.Currency value={data.ratePerDay} />} qa="ratePerDay" />
