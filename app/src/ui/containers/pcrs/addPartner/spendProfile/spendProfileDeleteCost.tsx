@@ -75,15 +75,9 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   private renderComponent(costCategory: CostCategoryDto, cost: PCRSpendProfileCostDto) {
     // tslint:disable-next-line:no-small-switch
     switch(costCategory.type) {
-      case CostCategoryType.Labour: return this.renderDeleteLabourComponent(cost as PCRSpendProfileLabourCostDto);
+      case CostCategoryType.Labour: return <DeleteLabourCostFormComponent data={cost as PCRSpendProfileLabourCostDto} />;
       default: return null;
     }
-  }
-
-  private renderDeleteLabourComponent(cost: PCRSpendProfileLabourCostDto) {
-    return (
-      <DeleteLabourCostFormComponent data={cost} />
-    );
   }
 }
 
