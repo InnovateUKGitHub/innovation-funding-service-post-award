@@ -1,22 +1,19 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import { SpendProfileDeleteFormProps } from "@ui/containers";
 
-interface Props {
-  data: PCRSpendProfileLabourCostDto;
-}
-
-export const DeleteLabourCostFormComponent = (props: Props) => {
-  const { data } = props;
+export const DeleteLabourCostFormComponent = (props: SpendProfileDeleteFormProps<PCRSpendProfileLabourCostDto>) => {
+  const { data, costCategory } = props;
   return (
-    <ACC.Section title="Delete labour cost">
-      <ACC.ValidationMessage messageType="alert" message="All the information will be permanently deleted." />
+    <ACC.Section titleContent={x => x.pcrSpendProfileDeleteCostContent.costSectionTitle(costCategory.name)}>
+      <ACC.ValidationMessage messageType="alert" messageContent={x => x.pcrSpendProfileDeleteCostContent.deleteGuidance()} />
       <ACC.SummaryList qa="pcr_viewItem">
-        <ACC.SummaryListItem label="Role within project" content={data.description} qa="roleWithinProject" />
-        <ACC.SummaryListItem label="Gross employee cost" content={<ACC.Renderers.Currency value={data.grossCostOfRole} />} qa="grossCostOfRole" />
-        <ACC.SummaryListItem label="Rate (£/day)" content={<ACC.Renderers.Currency value={data.ratePerDay} />} qa="ratePerDay" />
-        <ACC.SummaryListItem label="Days to be spent by all staff with this role" content={data.daysSpentOnProject} qa="daysSpentOnProject" />
-        <ACC.SummaryListItem label="Total cost" content={<ACC.Renderers.Currency value={data.value} />} qa="totalCost" />
+        <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.labour.role()} content={data.description} qa="roleWithinProject" />
+        <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.labour.grossCost()} content={<ACC.Renderers.Currency value={data.grossCostOfRole} />} qa="grossCostOfRole" />
+        <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.labour.rate()} content={<ACC.Renderers.Currency value={data.ratePerDay} />} qa="ratePerDay" />
+        <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.labour.daysOnProject()} content={data.daysSpentOnProject} qa="daysSpentOnProject" />
+        <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.labour.totalCost()} content={<ACC.Renderers.Currency value={data.value} />} qa="totalCost" />
       </ACC.SummaryList>
     </ACC.Section>
   );

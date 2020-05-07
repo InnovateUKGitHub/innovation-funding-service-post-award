@@ -31,6 +31,7 @@ import { PCRAddPartnerRoleAndOrganisationContent } from "./pages/pcrs/addPartner
 import { DocumentsContent } from "@content/components/documentsContent";
 import { PcrSpendProfileCostsSummaryContent } from "@content/pages/pcrSpendProfiles/spendProfileCostsSummaryContent";
 import { PcrSpendProfilePrepareCostContent } from "@content/pages/pcrSpendProfiles/spendProfilePrepareCostContent";
+import { PcrSpendProfileDeleteCostContent } from "./pages/pcrSpendProfiles/spendProfileDeleteCostContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -77,6 +78,7 @@ export class Content extends ContentBase {
   public readonly pcrAddPartnerRoleAndOrganisation = new PCRAddPartnerRoleAndOrganisationContent(this);
   public readonly pcrSpendProfileCostsSummaryContent = new PcrSpendProfileCostsSummaryContent(this);
   public readonly pcrSpendProfilePrepareCostContent = new PcrSpendProfilePrepareCostContent(this);
+  public readonly pcrSpendProfileDeleteCostContent = new PcrSpendProfileDeleteCostContent(this);
 
   public readonly errors = {
     notfound: new NotFoundContent(this),
