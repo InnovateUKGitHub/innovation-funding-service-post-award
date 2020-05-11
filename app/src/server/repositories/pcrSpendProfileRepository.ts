@@ -1,4 +1,4 @@
-import { Connection } from "jsforce";
+import { Connection, PicklistEntry } from "jsforce";
 import SalesforceRepositoryBase, {
   Insertable,
   SalesforceRepositoryBaseWithMapping,
@@ -38,6 +38,7 @@ export interface IPcrSpendProfileRepository {
   insertSpendProfiles(items: PcrSpendProfileEntityForCreate[]): Promise<string[]>;
   updateSpendProfiles(items: PcrSpendProfileEntity[]): Promise<boolean>;
   deleteSpendProfiles(items: string[]): Promise<void>;
+  getCapitalUsageTypes(): Promise<PicklistEntry[]>;
 }
 
 export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesforcePcrSpendProfile> implements IPcrSpendProfileRepository {
@@ -90,5 +91,9 @@ export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesfo
 
   public async deleteSpendProfiles(ids: string[]) {
     return super.deleteAll(ids);
+  }
+
+  getCapitalUsageTypes(): Promise<PicklistEntry[]> {
+    return super.getPicklist("Acc_NewOrExisting__c");
   }
 }
