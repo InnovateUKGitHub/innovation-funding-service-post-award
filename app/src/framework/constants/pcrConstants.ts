@@ -68,3 +68,9 @@ export enum PCRProjectLocation {
   InsideTheUnitedKingdom = 10,
   OutsideTheUnitedKingdom = 20,
 }
+
+export enum PCRSpendProfileCapitalUsageType {
+  Unknown = 0,
+  New = 0,
+  Existing = 20,
+}
