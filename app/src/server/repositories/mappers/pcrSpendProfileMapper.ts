@@ -2,6 +2,7 @@ import { SalesforceBaseMapper } from "./saleforceMapperBase";
 import { ISalesforcePcrSpendProfile } from "@server/repositories";
 import { PcrSpendProfileEntity, PcrSpendProfileEntityForCreate } from "@framework/entities/pcrSpendProfile";
 import { Insertable } from "@server/repositories/salesforceRepositoryBase";
+import { PCRSpendProfileCapitalUsageType } from "@framework/constants";
 
 export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISalesforcePcrSpendProfile, PcrSpendProfileEntity> {
   public constructor(private recordTypeId: string) {
@@ -53,4 +54,27 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       Acc_Quantity__c: x.quantity,
     };
   }
+}
+
+export class PcrSpendProfileCapitalUsageTypeMapper {
+  private types = {
+    new: "New",
+    existing: "Existing",
+  };
+
+  public mapFromSalesforcePcrSpendProfileCapitalUsageType = ((types: string | null): PCRSpendProfileCapitalUsageType => {
+    switch (types) {
+      case this.types.new: return PCRSpendProfileCapitalUsageType.New;
+      case this.types.existing: return PCRSpendProfileCapitalUsageType.Existing;
+      default: return PCRSpendProfileCapitalUsageType.Unknown;
+    }
+  });
+
+  public mapToSalesforcePcrSpendProfileCapitalUsageType = ((types: PCRSpendProfileCapitalUsageType | undefined) => {
+    switch (types) {
+      case PCRSpendProfileCapitalUsageType.New: return this.types.new;
+      case PCRSpendProfileCapitalUsageType.Existing: return this.types.existing;
+      default: return null;
+    }
+  });
 }
