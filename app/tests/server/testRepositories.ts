@@ -20,6 +20,7 @@ import { ISalesforceDocument } from "@server/repositories/contentVersionReposito
 import { PcrSpendProfileEntity } from "@framework/entities/pcrSpendProfile";
 import { PcrSpendProfileEntityForCreate } from "@framework/entities";
 import { PCRProjectLocationPicklist } from "./features/pcrs/pcrProjectLocationPicklist";
+import { PCRSpendProfileCapitalUsageTypePicklist } from "./features/pcrs/pcrSpendProfileCapitalUsageTypesPicklist";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
@@ -595,6 +596,12 @@ class PcrSpendProfileTestRepository extends TestRepository<PcrSpendProfileEntity
   deleteSpendProfiles(ids: string[]) {
     ids.forEach(x => this.Items = this.Items.filter(element => element.id !== x));
     return Promise.resolve();
+  }
+
+  getCapitalUsageTypes(): Promise<PicklistEntry[]> {
+    const picklistEntry: PicklistEntry[] = new Array();
+    PCRSpendProfileCapitalUsageTypePicklist.forEach(x => picklistEntry.push(x));
+    return Promise.resolve(picklistEntry);
   }
 }
 
