@@ -61,7 +61,6 @@ export class LabourFormComponent extends Component<SpendProfileCostFormProps<PCR
             hintContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.totalCostHint()}
             labelBold={true}
             name="totalCost"
-            validation={validator && validator.value}
             value={dto => <ACC.Renderers.SimpleString><ACC.Renderers.Currency value={dto.value}/></ACC.Renderers.SimpleString>}
             update={() => null}
           />}

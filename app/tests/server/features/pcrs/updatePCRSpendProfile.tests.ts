@@ -51,8 +51,6 @@ describe("UpdatePCRSpendProfileCommand", () => {
       await expect(context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).rejects.toThrow(ValidationError);
       spendProfileDto.costs[0] = { ...cost, grossCostOfRole: null };
       await expect(context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).rejects.toThrow(ValidationError);
-      spendProfileDto.costs[0] = { ...cost, value: null };
-      await expect(context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).rejects.toThrow(ValidationError);
       spendProfileDto.costs[0] = { ...cost, description: null };
       await expect(context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).rejects.toThrow(ValidationError);
     });
@@ -140,8 +138,6 @@ describe("UpdatePCRSpendProfileCommand", () => {
       await expect(context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).rejects.toThrow(ValidationError);
       spendProfileDto.costs[0] = { ...cost, quantity: null };
       await expect(context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).rejects.toThrow(ValidationError);
-      spendProfileDto.costs[0] = { ...cost, value: null };
-      await expect(context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).rejects.toThrow(ValidationError);
     });
     it("should save new spend profile costs for materials", async () => {
       const {context, projectChangeRequest, recordType, project} = setup();
@@ -228,8 +224,6 @@ describe("UpdatePCRSpendProfileCommand", () => {
       spendProfileDto.costs[0] = { ...cost, utilisation: 101 };
       await expect(context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).rejects.toThrow(ValidationError);
       spendProfileDto.costs[0] = { ...cost, utilisation: 99.111 };
-      await expect(context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).rejects.toThrow(ValidationError);
-      spendProfileDto.costs[0] = { ...cost, value: null };
       await expect(context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).rejects.toThrow(ValidationError);
     });
     it("should save new spend profile costs for capital usage", async () => {
