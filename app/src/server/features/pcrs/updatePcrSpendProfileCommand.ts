@@ -1,13 +1,14 @@
 import { BadRequestError, CommandBase, ValidationError } from "../common";
 import { ProjectRole } from "@framework/dtos";
-import { Authorisation, IContext } from "@framework/types";
+import { Authorisation, IContext, PCRSpendProfileCapitalUsageType } from "@framework/types";
 import { CostCategoryType, PcrSpendProfileEntity, PcrSpendProfileEntityForCreate, } from "@framework/entities";
 import { isNumber } from "@framework/util";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import {
+  PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
   PcrSpendProfileDto,
-  PCRSpendProfileLabourCostDto, PCRSpendProfileMaterialsCostDto
+  PCRSpendProfileLabourCostDto, PCRSpendProfileMaterialsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 
@@ -37,6 +38,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     switch (costsDto.costCategory) {
       case CostCategoryType.Labour: return this.mapLabour(costsDto, init);
       case CostCategoryType.Materials: return this.mapMaterials(costsDto, init);
+      case CostCategoryType.Capital_Usage: return this.mapCapitalUsage(costsDto, init);
       default: return init;
     }
   }
@@ -57,6 +59,18 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
       value: isNumber(costsDto.costPerItem) && isNumber(costsDto.quantity) ? costsDto.costPerItem * costsDto.quantity : undefined,
       costPerItem: isNumber(costsDto.costPerItem) ? costsDto.costPerItem : undefined,
       quantity: isNumber(costsDto.quantity) ? costsDto.quantity : undefined,
+    };
+  }
+
+  private mapCapitalUsage(costsDto: PCRSpendProfileCapitalUsageCostDto, init: BaseCostFields) {
+    return {
+      ...init,
+      value: isNumber(costsDto.utilisation) && isNumber(costsDto.netPresentValue) && isNumber(costsDto.residualValue) ? costsDto.utilisation * (costsDto.netPresentValue - costsDto.residualValue) : undefined,
+      type: costsDto.type,
+      depreciationPeriod: isNumber(costsDto.depreciationPeriod) ? costsDto.depreciationPeriod : undefined,
+      netPresentValue: isNumber(costsDto.netPresentValue) ? costsDto.netPresentValue : undefined,
+      residualValue: isNumber(costsDto.residualValue) ? costsDto.residualValue : undefined,
+      utilisation: isNumber(costsDto.utilisation) ? costsDto.utilisation : undefined,
     };
   }
 

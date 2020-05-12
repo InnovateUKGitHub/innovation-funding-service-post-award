@@ -27,6 +27,14 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       // Can remove Number() wrapper when SF fix Acc_Quantity__c to be a number
       quantity: Number(x.Acc_Quantity__c) || undefined,
       costPerItem: x.Acc_CostPerItem__c,
+
+      // Capital Usage
+      type: new PcrSpendProfileCapitalUsageTypeMapper().mapFromSalesforcePcrSpendProfileCapitalUsageType(x.Acc_NewOrExisting__c),
+      // Can remove Number() wrapper when SF fix Acc_DepreciationPeriod__c to be a number
+      depreciationPeriod: Number(x.Acc_DepreciationPeriod__c) || undefined,
+      netPresentValue: x.Acc_NetPresentValue__c,
+      residualValue: x.Acc_ResidualValue__c,
+      utilisation: x.Acc_Utilisation__c,
     };
   }
   public mapToSalesforce(x: PcrSpendProfileEntity): ISalesforcePcrSpendProfile {
@@ -52,6 +60,13 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       // Materials
       Acc_CostPerItem__c: x.costPerItem,
       Acc_Quantity__c: x.quantity,
+
+      // Capital Usage
+      Acc_NewOrExisting__c: new PcrSpendProfileCapitalUsageTypeMapper().mapToSalesforcePcrSpendProfileCapitalUsageType(x.type),
+      Acc_DepreciationPeriod__c: x.depreciationPeriod,
+      Acc_NetPresentValue__c: x.netPresentValue,
+      Acc_ResidualValue__c: x.residualValue,
+      Acc_Utilisation__c: x.utilisation,
     };
   }
 }
