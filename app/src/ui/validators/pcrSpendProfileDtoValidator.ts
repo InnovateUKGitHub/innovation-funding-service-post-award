@@ -1,9 +1,10 @@
 import { Results } from "../validation";
 import * as Validation from "./common";
 import {
+  PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
   PcrSpendProfileDto,
-  PCRSpendProfileLabourCostDto, PCRSpendProfileMaterialsCostDto, PCRSpendProfileUnknownCostDto
+  PCRSpendProfileLabourCostDto, PCRSpendProfileMaterialsCostDto, PCRSpendProfileUnknownCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryType } from "@framework/entities";
 
@@ -20,6 +21,7 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
     switch(cost.costCategory) {
       case CostCategoryType.Labour: return new PCRLabourCostDtoValidator(cost, this.showValidationErrors);
       case CostCategoryType.Materials: return new PCRMaterialsCostDtoValidator(cost, this.showValidationErrors);
+      case CostCategoryType.Capital_Usage: return new PCRCapitalUsageCostDtoValidator(cost, this.showValidationErrors);
       default: return new PCRUnknownCostDtoValidator(cost, this.showValidationErrors);
     }
   }
@@ -40,7 +42,7 @@ export class PCRBaseCostDtoValidator<T extends PCRSpendProfileCostDto> extends R
     () => Validation.isCurrency(this, this.model.value, "Value must be a number")
   );
 }
-export type PCRSpendProfileCostDtoValidator = PCRLabourCostDtoValidator | PCRMaterialsCostDtoValidator | PCRUnknownCostDtoValidator;
+export type PCRSpendProfileCostDtoValidator = PCRLabourCostDtoValidator | PCRMaterialsCostDtoValidator | PCRCapitalUsageCostDtoValidator | PCRUnknownCostDtoValidator;
 
 export class PCRLabourCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileLabourCostDto> {
   public grossCostOfRole = Validation.all(this,
@@ -65,6 +67,29 @@ export class PCRMaterialsCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpe
   public costPerItem = Validation.all(this,
     () => Validation.required(this, this.model.costPerItem, "Cost per item is required"),
     () => Validation.isCurrency(this, this.model.costPerItem, "Cost per item must be a number")
+  );
+}
+
+export class PCRCapitalUsageCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileCapitalUsageCostDto> {
+  public type = Validation.all(this,
+    () => Validation.required(this, this.model.type, "Type is required"),
+  );
+  public depreciationPeriod = Validation.all(this,
+    () => Validation.required(this, this.model.depreciationPeriod, "Depreciation period is required"),
+    () => Validation.integer(this, this.model.depreciationPeriod, "Depreciation period must be a number")
+  );
+  public netPresentValue = Validation.all(this,
+    () => Validation.required(this, this.model.netPresentValue, "Net present value is required"),
+    () => Validation.isCurrency(this, this.model.netPresentValue, "Net present value must be a number")
+  );
+  public residualValue = Validation.all(this,
+    () => Validation.required(this, this.model.residualValue, "Residual value is required"),
+    () => Validation.isCurrency(this, this.model.residualValue, "Residual value must be a number")
+  );
+  public utilisation = Validation.all(this,
+    () => Validation.required(this, this.model.utilisation, "Utilisation is required"),
+    () => Validation.isTrue(this, this.model.utilisation === undefined || this.model.utilisation === null || this.model.utilisation < 100, "Utilisation must be a value under 100"),
+    () => Validation.isPercentage(this, this.model.utilisation, "You must enter a number with up to 2 decimal places")
   );
 }
 

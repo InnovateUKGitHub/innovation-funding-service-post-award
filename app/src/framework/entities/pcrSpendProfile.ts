@@ -1,3 +1,5 @@
+import { PCRSpendProfileCapitalUsageType } from "@framework/constants";
+
 export interface PcrSpendProfileEntityForCreate {
   pcrItemId: string;
   costCategoryId: string;
@@ -12,6 +14,13 @@ export interface PcrSpendProfileEntityForCreate {
   // materials
   costPerItem?: number;
   quantity?: number;
+
+  // capital usage
+  type?: PCRSpendProfileCapitalUsageType;
+  depreciationPeriod?: number;
+  netPresentValue?: number;
+  residualValue?: number;
+  utilisation?: number;
 }
 
 export interface PcrSpendProfileEntity extends PcrSpendProfileEntityForCreate {
