@@ -37,10 +37,6 @@ export class PCRBaseCostDtoValidator<T extends PCRSpendProfileCostDto> extends R
     super(model, showValidationErrors);
   }
   public description = Validation.required(this, this.model.description, "Description is required");
-  public value = Validation.all(this,
-    () => Validation.required(this, this.model.value, "Value is required"),
-    () => Validation.isCurrency(this, this.model.value, "Value must be a number")
-  );
 }
 export type PCRSpendProfileCostDtoValidator = PCRLabourCostDtoValidator | PCRMaterialsCostDtoValidator | PCRCapitalUsageCostDtoValidator | PCRUnknownCostDtoValidator;
 

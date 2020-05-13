@@ -1,4 +1,12 @@
-import { IContext, ILinkInfo, PCRDto, PCRItemForPartnerAdditionDto, ProjectDto, ProjectRole } from "@framework/types";
+import {
+  IContext,
+  ILinkInfo,
+  PCRDto,
+  PCRItemForPartnerAdditionDto,
+  PCRSpendProfileCapitalUsageType,
+  ProjectDto,
+  ProjectRole
+} from "@framework/types";
 import { BadRequestError, Configuration } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
@@ -13,9 +21,20 @@ import { PCRItemStatus } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { GetCostCategoriesQuery } from "@server/features/claims";
 import { CostCategoryType } from "@framework/entities";
-import { PCRSpendProfileLabourCostDto, PCRSpendProfileMaterialsCostDto } from "@framework/dtos/pcrSpendProfileDto";
-import { isNumber } from "@framework/util";
+import {
+  PCRSpendProfileCapitalUsageCostDto,
+  PCRSpendProfileLabourCostDto,
+  PCRSpendProfileMaterialsCostDto
+} from "@framework/dtos/pcrSpendProfileDto";
+import { parseNumber } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+
+interface IBaseCost {
+  id: string;
+  costCategoryId: string;
+  description: string;
+  value: number | null;
+}
 
 export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardFormHandlerBase<PcrAddSpendProfileCostParams, "pcr"> {
   constructor() {
@@ -49,42 +68,45 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
   private getCost(costCategory: CostCategoryDto, params: PcrAddSpendProfileCostParams, body: IFormBody) {
     const baseCostDto = {
       id: "",
-      costCategoryId: params.costCategoryId
+      costCategoryId: params.costCategoryId,
+      description: body.description,
+      value: parseNumber(body.value),
     };
     switch (costCategory.type) {
       case CostCategoryType.Labour: return this.getLabourCost(baseCostDto, costCategory.type, body);
       case CostCategoryType.Materials: return this.getMaterialsCost(baseCostDto, costCategory.type, body);
+      case CostCategoryType.Capital_Usage: return this.getCapitalUsageCost(baseCostDto, costCategory.type, body);
     }
   }
 
-  private getLabourCost(baseCostDto: {id: string, costCategoryId: string}, costCategory: CostCategoryType.Labour, body: IFormBody): PCRSpendProfileLabourCostDto {
-    const daysSpentOnProject = body.daysSpentOnProject ? Number(body.daysSpentOnProject) : null;
-    const ratePerDay = body.ratePerDay ? Number(body.ratePerDay) : null;
-    const value = isNumber(daysSpentOnProject) && isNumber(ratePerDay) ? daysSpentOnProject * ratePerDay : null;
-
+  private getLabourCost(baseCostDto: IBaseCost, costCategory: CostCategoryType.Labour, body: IFormBody): PCRSpendProfileLabourCostDto {
     return {
       ...baseCostDto,
       costCategory,
-      description: body.description,
-      grossCostOfRole: body.grossCostOfRole ? Number(body.grossCostOfRole) : null,
-      daysSpentOnProject,
-      ratePerDay,
-      value,
+      grossCostOfRole: parseNumber(body.grossCostOfRole),
+      daysSpentOnProject: parseNumber(body.daysSpentOnProject),
+      ratePerDay: parseNumber(body.ratePerDay),
     };
   }
 
-  private getMaterialsCost(baseCostDto: { id: string, costCategoryId: string }, costCategory: CostCategoryType.Materials, body: IFormBody): PCRSpendProfileMaterialsCostDto {
-    const costPerItem = body.costPerItem ? Number(body.costPerItem) : null;
-    const quantity = body.quantity ? Number(body.quantity) : null;
-    const value = isNumber(costPerItem) && isNumber(quantity) ? costPerItem * quantity : null;
-
+  private getMaterialsCost(baseCostDto: IBaseCost, costCategory: CostCategoryType.Materials, body: IFormBody): PCRSpendProfileMaterialsCostDto {
     return {
       ...baseCostDto,
       costCategory,
-      description: body.description,
-      costPerItem,
-      quantity,
-      value,
+      costPerItem: parseNumber(body.costPerItem),
+      quantity: parseNumber(body.quantity),
+    };
+  }
+
+  private getCapitalUsageCost(baseCostDto: IBaseCost, costCategory: CostCategoryType.Capital_Usage, body: IFormBody): PCRSpendProfileCapitalUsageCostDto {
+    return {
+      ...baseCostDto,
+      costCategory,
+      type: parseNumber(body.type) || PCRSpendProfileCapitalUsageType.Unknown,
+      residualValue: parseNumber(body.residualValue),
+      netPresentValue: parseNumber(body.netPresentValue),
+      depreciationPeriod: parseNumber(body.depreciationPeriod),
+      utilisation: parseNumber(body.utilisation),
     };
   }
 
