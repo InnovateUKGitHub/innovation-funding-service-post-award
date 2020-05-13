@@ -14,6 +14,7 @@ import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, IStores, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import {
+  PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
   PCRSpendProfileLabourCostDto, PCRSpendProfileMaterialsCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
@@ -21,11 +22,13 @@ import { CostCategoryType } from "@framework/entities";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import {
   PCRBaseCostDtoValidator,
+  PCRCapitalUsageCostDtoValidator,
   PCRLabourCostDtoValidator, PCRMaterialsCostDtoValidator,
   PCRSpendProfileCostDtoValidator
 } from "@ui/validators/pcrSpendProfileDtoValidator";
 import { LabourFormComponent } from "@ui/containers/pcrs/addPartner/spendProfile/labourFormComponent";
 import { MaterialsFormComponent } from "@ui/containers/pcrs/addPartner/spendProfile/materialsFormComponent";
+import { CapitalUsageFormComponent } from "./capitalUsageFormComponent";
 
 export interface PcrAddSpendProfileCostParams {
   projectId: string;
@@ -125,6 +128,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
     switch (costCategory.type) {
       case CostCategoryType.Labour: return <LabourFormComponent {...props} data={cost as PCRSpendProfileLabourCostDto} validator={validator as PCRLabourCostDtoValidator}/>;
       case CostCategoryType.Materials: return <MaterialsFormComponent {...props} data={cost as PCRSpendProfileMaterialsCostDto} validator={validator as PCRMaterialsCostDtoValidator}/>;
+      case CostCategoryType.Capital_Usage: return <CapitalUsageFormComponent {...props} data={cost as PCRSpendProfileCapitalUsageCostDto} validator={validator as PCRCapitalUsageCostDtoValidator}/>;
       default: return null;
     }
   }
