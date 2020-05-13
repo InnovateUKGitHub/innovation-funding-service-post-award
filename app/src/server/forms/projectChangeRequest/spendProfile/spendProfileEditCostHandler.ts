@@ -9,16 +9,17 @@ import {
   PCRSpendProfileEditCostRoute
 } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators";
-import { PCRItemStatus } from "@framework/constants";
+import { PCRItemStatus, PCRSpendProfileCapitalUsageType } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { GetCostCategoriesQuery } from "@server/features/claims";
 import { CostCategoryType } from "@framework/entities";
 import {
+  PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
-import { isNumber } from "@framework/util";
+import { parseNumber } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFormHandlerBase<PcrEditSpendProfileCostParams, "pcr"> {
@@ -62,28 +63,30 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
     switch (costCategoryDto.type) {
       case CostCategoryType.Labour: return this.updateLabourCost(cost as PCRSpendProfileLabourCostDto, body);
       case CostCategoryType.Materials: return this.updateMaterialsCost(cost as PCRSpendProfileMaterialsCostDto, body);
+      case CostCategoryType.Capital_Usage: return this.updateCapitalUsagecost(cost as PCRSpendProfileCapitalUsageCostDto, body);
     }
   }
 
   private updateLabourCost(cost: PCRSpendProfileLabourCostDto,  body: IFormBody) {
-    const daysSpentOnProject = body.daysSpentOnProject ? Number(body.daysSpentOnProject) : null;
-    const ratePerDay = body.ratePerDay ? Number(body.ratePerDay) : null;
-
-    cost.daysSpentOnProject = daysSpentOnProject;
-    cost.ratePerDay = ratePerDay;
-    cost.value = isNumber(daysSpentOnProject) && isNumber(ratePerDay) ? daysSpentOnProject * ratePerDay : null;
+    cost.daysSpentOnProject = parseNumber(body.daysSpentOnProject);
+    cost.ratePerDay = parseNumber(body.ratePerDay);
     cost.description = body.description;
-    cost.grossCostOfRole = body.grossCostOfRole ? Number(body.grossCostOfRole) : null;
+    cost.grossCostOfRole = parseNumber(body.grossCostOfRole);
   }
 
   private updateMaterialsCost(cost: PCRSpendProfileMaterialsCostDto,  body: IFormBody) {
-    const costPerItem = body.costPerItem ? Number(body.costPerItem) : null;
-    const quantity = body.quantity ? Number(body.quantity) : null;
-
-    cost.costPerItem = costPerItem;
-    cost.quantity = quantity;
-    cost.value = isNumber(costPerItem) && isNumber(quantity) ? costPerItem * quantity : null;
+    cost.costPerItem = parseNumber(body.costPerItem);
+    cost.quantity = parseNumber(body.quantity);
     cost.description = body.description;
+  }
+
+  private updateCapitalUsagecost(cost: PCRSpendProfileCapitalUsageCostDto, body: IFormBody) {
+    cost.description = body.description;
+    cost.type = parseNumber(body.type) || PCRSpendProfileCapitalUsageType.Unknown;
+    cost.depreciationPeriod = parseNumber(body.depreciationPeriod);
+    cost.netPresentValue = parseNumber(body.netPresentValue);
+    cost.residualValue = parseNumber(body.residualValue);
+    cost.utilisation = parseNumber(body.utilisation);
   }
 
   protected async run(context: IContext, params: PcrEditSpendProfileCostParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
