@@ -51,7 +51,6 @@ export class MaterialsFormComponent extends Component<SpendProfileCostFormProps<
             labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.materials.totalCost()}
             labelBold={true}
             name="totalCost"
-            validation={validator && validator.value}
             value={dto => <ACC.Renderers.SimpleString><ACC.Renderers.Currency value={dto.value}/></ACC.Renderers.SimpleString>}
             update={() => null}
           />}
