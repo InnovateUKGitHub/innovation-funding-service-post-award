@@ -102,6 +102,13 @@ export function isPositiveCurrency(results: Results<{}>, value: number | null, m
   return isTrue(results, !isNaN(value) && regex.test(value.toString()), message || "Invalid amount");
 }
 
+// tslint:disable-next-line: no-identical-functions
+export function isPercentage(results: Results<{}>, value: number | null, message?: string) {
+  const regex = /^[0-9]+(\.[0-9]{1,2})?$/i;
+  if (value === null || value === undefined || value === 0) { return valid(results); }
+  return isTrue(results, !isNaN(value) && regex.test(value.toString()), message || "You must enter a number with up to 2 decimal places");
+}
+
 // Accepts an array of delegates. Runs until it finds a failure. EG, Not empty, length < 100, no spaces. Will fail fast.
 export function all(resultSet: Results<{}>, ...results: (() => Result)[]): Result {
   let isRequired = false;

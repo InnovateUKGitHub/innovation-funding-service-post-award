@@ -71,6 +71,6 @@ export enum PCRProjectLocation {
 
 export enum PCRSpendProfileCapitalUsageType {
   Unknown = 0,
-  New = 0,
+  New = 10,
   Existing = 20,
 }
