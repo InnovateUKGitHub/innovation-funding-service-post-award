@@ -23,4 +23,14 @@ export class PcrSpendProfileLabels extends ContentBase {
     costPerItem: () => this.getContent("materials.cost-per-item"),
     totalCost: () => this.getContent("materials.total-cost"),
   };
+  public readonly capitalUsage = {
+    description: () => this.getContent("capital-usage.description"),
+    type: () => this.getContent("capital-usage.type"),
+    depreciationPeriod: () => this.getContent("capital-usage.depreciation-period"),
+    netPresentValue: () => this.getContent("capital-usage.net-present-value"),
+    netPresentValueHint: () => this.getContent("capital-usage.net-present-value-hint"),
+    residualValue: () => this.getContent("capital-usage.residual-value"),
+    utilisation: () => this.getContent("capital-usage.utilisation"),
+    netCost: () => this.getContent("capital-usage.net-cost"),
+  };
 }
