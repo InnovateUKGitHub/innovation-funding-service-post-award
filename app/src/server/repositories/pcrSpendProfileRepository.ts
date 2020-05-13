@@ -31,6 +31,13 @@ export interface ISalesforcePcrSpendProfile {
   Acc_Quantity__c?: number;
   Acc_CostPerItem__c?: number;
 
+  // Capital Usage
+  Acc_NewOrExisting__c: string|null;
+  // Coming back as a string but should be a number. Handled in the entity mapper.
+  Acc_DepreciationPeriod__c?: number;
+  Acc_NetPresentValue__c?: number;
+  Acc_ResidualValue__c?: number;
+  Acc_Utilisation__c?: number;
 }
 
 export interface IPcrSpendProfileRepository {
@@ -61,6 +68,12 @@ export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesfo
     // Materials
     "Acc_Quantity__c",
     "Acc_CostPerItem__c",
+    // Capital Usage
+    "Acc_NewOrExisting__c",
+    "Acc_DepreciationPeriod__c",
+    "Acc_NetPresentValue__c",
+    "Acc_ResidualValue__c",
+    "Acc_Utilisation__c",
   ];
 
   private recordType = "PCR Spend Profile";
