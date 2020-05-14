@@ -2,7 +2,7 @@ import { BadRequestError, CommandBase, ValidationError } from "../common";
 import { ProjectRole } from "@framework/dtos";
 import { Authorisation, IContext, PCRSpendProfileCapitalUsageType } from "@framework/types";
 import { CostCategoryType, PcrSpendProfileEntity, PcrSpendProfileEntityForCreate, } from "@framework/entities";
-import { isNumber } from "@framework/util";
+import { isNumber, roundCurrency } from "@framework/util";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import {
   PCRSpendProfileCapitalUsageCostDto,
@@ -65,7 +65,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   private mapCapitalUsage(costsDto: PCRSpendProfileCapitalUsageCostDto, init: BaseCostFields) {
     return {
       ...init,
-      value: isNumber(costsDto.utilisation) && isNumber(costsDto.netPresentValue) && isNumber(costsDto.residualValue) ? costsDto.utilisation * (costsDto.netPresentValue - costsDto.residualValue) : undefined,
+      value: isNumber(costsDto.utilisation) && isNumber(costsDto.netPresentValue) && isNumber(costsDto.residualValue) ? (costsDto.utilisation / 100) * (costsDto.netPresentValue - costsDto.residualValue) : undefined,
       type: costsDto.type,
       depreciationPeriod: isNumber(costsDto.depreciationPeriod) ? costsDto.depreciationPeriod : undefined,
       netPresentValue: isNumber(costsDto.netPresentValue) ? costsDto.netPresentValue : undefined,
