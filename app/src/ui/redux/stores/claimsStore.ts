@@ -9,6 +9,7 @@ import { CostCategoriesStore } from "./costCategoriesStore";
 import { Pending } from "@shared/pending";
 import { ClaimDocumentsStore } from "@ui/redux/stores/claimDocumentsStore";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { ClaimStatus } from "@framework/constants";
 
 export class ClaimsStore extends StoreBase {
   constructor(private costsSummariesStore: CostSummariesStore, private costCategoriesStore: CostCategoriesStore, private claimDocumentsStore: ClaimDocumentsStore, getState: () => RootState, queue: (action: RootActionsOrThunk) => void) {
@@ -36,6 +37,10 @@ export class ClaimsStore extends StoreBase {
     return this.getAllClaimsForProject(projectId).then(x => x.filter(claim => !claim.isApproved));
   }
 
+  public getDraftClaimsForProject(projectId: string) {
+    return this.getAllClaimsForProject(projectId).then(x => x.filter(claim => claim.status === ClaimStatus.DRAFT));
+  }
+
   public getAllClaimsForPartner(partnerId: string) {
     return this.getData("claims", storeKeys.getPartnerKey(partnerId), p => ApiClient.claims.getAllByPartnerId({ partnerId, ...p }))
       .then(data => data, () => []);
@@ -43,6 +48,10 @@ export class ClaimsStore extends StoreBase {
 
   public getActiveClaimForPartner(partnerId: string) {
     return this.getAllClaimsForPartner(partnerId).then(x => x.find(y => !y.isApproved) || null);
+  }
+
+  public getDraftClaimForPartner(partnerId: string) {
+    return this.getAllClaimsForPartner(partnerId).then(x => x.find(claim => claim.status === ClaimStatus.DRAFT) || null);
   }
 
   public getInactiveClaimsForPartner(partnerId: string) {
