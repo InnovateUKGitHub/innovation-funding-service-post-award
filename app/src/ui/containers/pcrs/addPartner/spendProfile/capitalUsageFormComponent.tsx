@@ -111,7 +111,7 @@ class Component extends React.Component<SpendProfileCostFormProps<PCRSpendProfil
   }
 
   private onChange(dto: PCRSpendProfileCapitalUsageCostDto) {
-    dto.value = dto.utilisation && dto.netPresentValue && dto.residualValue ? roundCurrency(dto.utilisation * (dto.netPresentValue - dto.residualValue)) : 0;
+    dto.value = dto.utilisation && dto.netPresentValue && dto.residualValue ? roundCurrency((dto.utilisation / 100) * (dto.netPresentValue - dto.residualValue)) : 0;
     this.props.onChange(this.props.editor.data);
   }
 }
