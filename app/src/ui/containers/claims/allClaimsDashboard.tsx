@@ -100,15 +100,6 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
     return groupedClaims.map((x, i) => this.renderCurrentClaims(x.periodId, x.start, x.end, x.claims, project, partners, i));
   }
 
-  private claimHasNotBeenSubmittedToInnovate(x: ClaimDto) {
-    return [
-      ClaimStatus.INNOVATE_QUERIED,
-      ClaimStatus.AWAITING_IUK_APPROVAL,
-      ClaimStatus.APPROVED,
-      ClaimStatus.PAID
-    ].indexOf(x.status) < 0;
-  }
-
   private renderCurrentClaims(periodId: number, start: Date, end: Date, claims: ClaimDto[], project: ProjectDto, partners: PartnerDto[], index: number) {
     const title = <React.Fragment>Period {periodId}: <Acc.Renderers.ShortDateRange start={start} end={end} /></React.Fragment>;
     const ClaimTable = Acc.TypedTable<ClaimDto>();
@@ -118,11 +109,8 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
       return null;
     };
 
-    const hasClaimNotYetSubmittedToInnovate = claims.find(this.claimHasNotBeenSubmittedToInnovate);
-    const badge = hasClaimNotYetSubmittedToInnovate && <Acc.Claims.ClaimWindow periodEnd={end} />;
-
     return (
-      <Acc.Section title={title} qa="current-claims-section" badge={badge} key={index} >
+      <Acc.Section title={title} qa="current-claims-section" key={index} >
         <ClaimTable.Table
           data={claims}
           bodyRowFlag={x => this.getBodyRowFlag(x, project, partners) ? "edit" : null}

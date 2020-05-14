@@ -1,7 +1,7 @@
 import React from "react";
 import * as Acc from "../../components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import { ClaimDto, ClaimStatus, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "../../../shared/pending";
 import { DateTime } from "luxon";
 import { getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
@@ -33,7 +33,6 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
   }
 
   private renderContents(project: ProjectDto, partner: PartnerDto, currentClaim: ClaimDto | null, previousClaims: ClaimDto[], ) {
-    const claimsWindow = !!currentClaim && currentClaim.status === ClaimStatus.DRAFT ? <Acc.Claims.ClaimWindow periodEnd={currentClaim.periodEndDate} /> : null;
 
     return (
       <Acc.Page
@@ -43,7 +42,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
       >
         {this.renderGuidanceMessage()}
         <Acc.Renderers.Messages messages={this.props.messages} />
-        <Acc.Section qa="current-claims-section" titleContent={x => x.claimsDashboard.labels.openSectionTitle()} badge={claimsWindow}>
+        <Acc.Section qa="current-claims-section" titleContent={x => x.claimsDashboard.labels.openSectionTitle()}>
           {this.renderCurrentClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project, partner, previousClaims)}
         </Acc.Section>
         <Acc.Section qa="previous-claims-section" titleContent={x => x.claimsDashboard.labels.closedSectionTitle()}>
