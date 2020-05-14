@@ -12,6 +12,8 @@ export class DocumentLabels extends ContentBase {
       case DocumentDescription.Evidence: return this.getContent("document-description-Evidence");
       case DocumentDescription.IAR: return this.getContent("document-description-IAR");
       case DocumentDescription.DeMinimisDeclarationForm: return this.getContent("document-description-DeMinimisDeclarationForm");
+      case DocumentDescription.EndOfProjectSurvey: return this.getContent("document-description-EndOfProjectSurvey");
+      case DocumentDescription.StatementOfExpenditure: return this.getContent("document-description-StatementOfExpenditure");
       default: return this.getContent("document-description-Unknown");
     }
   }
