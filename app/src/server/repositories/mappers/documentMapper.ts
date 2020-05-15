@@ -24,11 +24,14 @@ export class SalesforceDocumentMapper extends SalesforceBaseMapper<ISalesforceDo
 }
 
 export class DocumentDescriptionMapper {
+  // These are what the documents get saved as in Salesforce so these names must not change
   private types = {
     IAR: "IAR",
     Evidence: "Evidence",
     ClaimValidationForm: "ClaimValidationForm",
-    DeMinimisDeclartionForm: "DeMinimisDeclartionForm"
+    DeMinimisDeclartionForm: "DeMinimisDeclartionForm",
+    StatementOfExpenditure: "StatementOfExpenditure",
+    EndOfProjectSurvey: "EndOfProjectSurvey",
   };
 
   public mapFromSalesforceDocumentDescription = ((documentType: string | null | undefined): DocumentDescription | null => {
@@ -37,6 +40,8 @@ export class DocumentDescriptionMapper {
       case this.types.Evidence: return DocumentDescription.Evidence;
       case this.types.ClaimValidationForm: return DocumentDescription.ClaimValidationForm;
       case this.types.DeMinimisDeclartionForm: return DocumentDescription.DeMinimisDeclarationForm;
+      case this.types.StatementOfExpenditure: return DocumentDescription.StatementOfExpenditure;
+      case this.types.EndOfProjectSurvey: return DocumentDescription.EndOfProjectSurvey;
       default: return null;
     }
   });
@@ -47,6 +52,8 @@ export class DocumentDescriptionMapper {
       case DocumentDescription.Evidence: return this.types.Evidence;
       case DocumentDescription.ClaimValidationForm: return this.types.ClaimValidationForm;
       case DocumentDescription.DeMinimisDeclarationForm: return this.types.DeMinimisDeclartionForm;
+      case DocumentDescription.EndOfProjectSurvey: return this.types.EndOfProjectSurvey;
+      case DocumentDescription.StatementOfExpenditure: return this.types.StatementOfExpenditure;
       default: return null;
     }
   });
