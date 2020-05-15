@@ -43,10 +43,19 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.documents, x.claim, x.documentDescriptions)} />;
   }
 
+  private allowedDocuments = [
+    DocumentDescription.IAR,
+    DocumentDescription.StatementOfExpenditure,
+    DocumentDescription.EndOfProjectSurvey,
+    DocumentDescription.Evidence
+  ];
+
   renderContents(project: ProjectDto, editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[], claim: ClaimDto, documentDescriptions: DocumentDescriptionDto[]) {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
-    const documentTypeOptions: DropdownOption[] = documentDescriptions.map(x => ({ id: x.id.toString(), value: x.label }));
+    const documentTypeOptions: DropdownOption[] = documentDescriptions
+      .filter(x => this.allowedDocuments.indexOf(x.id) >= 0 )
+      .map(x => ({ id: x.id.toString(), value: x.label }));
 
     return (
       <ACC.Page
@@ -155,7 +164,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
 
     return (
       <ACC.Section subtitle="All documents open in a new window">
-        {documents.length ? <ACC.DocumentTable hideRemove={x => x.description === DocumentDescription.ClaimValidationForm} onRemove={(document) => this.props.onDelete(editor.data, document)} documents={documents} qa="claim-supporting-documents"/> : null}
+        {documents.length ? <ACC.DocumentTable hideRemove={x => this.allowedDocuments.indexOf(x.description!) < 0} onRemove={(document) => this.props.onDelete(editor.data, document)} documents={documents} qa="claim-supporting-documents"/> : null}
       </ACC.Section>
     );
   }

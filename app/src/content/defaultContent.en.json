@@ -391,8 +391,10 @@
     "contactEmail": "Email"
   },
   "document-labels" : {
-    "document-description-IAR": "IAR",
-    "document-description-Evidence": "Evidence",
+    "document-description-IAR": "Independent accountant’s report",
+    "document-description-Evidence": "Claim evidence",
+    "document-description-EndOfProjectSurvey": "End-of-project survey",
+    "document-description-StatementOfExpenditure": "Statement of expenditure",
     "document-description-ClaimValidationForm": "Claim Validation Form",
     "document-description-DeMinimisDeclarationForm": "De Minimis Declaration Form",
     "document-description-Unknown": "Unknown",
