@@ -4,7 +4,7 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
-import { ClaimDto, ClaimStatusChangeDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { ClaimDto, ClaimStatus, ClaimStatusChangeDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { StoresConsumer } from "@ui/redux";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
@@ -56,15 +56,24 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.getBackLink(data)}><ACC.Content value={x => x.claimPrepare.backLink()} /></ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.getBackLink(data.project, data.partner)}><ACC.Content value={x => x.claimPrepare.backLink()} /></ACC.BackLink>}
         error={data.editor.error}
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
         {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" messageContent={x => x.claimPrepare.messages.finalClaim()}/>}
+        {this.isInterimClaim(data.claim, data.project) && <ACC.ValidationMessage messageType="info" qa="interim-claim-guidance-FC" messageContent={x => x.claimPrepare.messages.interimClaimGuidanceFC()}/>}
         {this.renderDetailsSection(data)}
       </ACC.Page>
     );
+  }
+
+  // TODO: Interim solution for monthly claims. Remove once permament solution in place.
+  private isInterimClaim(claim: ClaimDto, project: ProjectDto) {
+    if (claim.status !== ClaimStatus.DRAFT || claim.periodId !== project.periodId) {
+      return false;
+    }
+    return true;
   }
 
   private renderDetailsSection(data: CombinedData) {
@@ -85,17 +94,17 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
         >
           {this.renderLogsSection()}
           <Form.Fieldset qa="save-and-continue">
-            <Form.Submit><ACC.Content value={x => x.claimPrepare.saveAndContinueButton()} /></Form.Submit>
-            <Form.Button name="save" onClick={() => this.props.onUpdate(true, data.editor.data, this.getBackLink(data))}><ACC.Content value={x => x.claimPrepare.saveAndReturnButton()} /></Form.Button>
+            {!this.isInterimClaim(data.claim, data.project) && <Form.Submit><ACC.Content value={x => x.claimPrepare.saveAndContinueButton()} /></Form.Submit>}
+            <Form.Button name="save" onClick={() => this.props.onUpdate(true, data.editor.data, this.getBackLink(data.project, data.partner))}><ACC.Content value={x => x.claimPrepare.saveAndReturnButton()} /></Form.Button>
           </Form.Fieldset>
         </Form.Form>
       </ACC.Section>
     );
   }
 
-  private getBackLink(data: CombinedData) {
-    const isPmOrMo = (data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
-    return isPmOrMo ? this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id }) : this.props.routes.claimsDashboard.getLink({ projectId: data.project.id, partnerId: data.partner.id });
+  private getBackLink(project: ProjectDto, partner: PartnerDto) {
+    const isPm = (project.roles & ProjectRole.ProjectManager) !== ProjectRole.Unknown;
+    return isPm ? this.props.routes.allClaimsDashboard.getLink({ projectId: project.id }) : this.props.routes.claimsDashboard.getLink({ projectId: project.id, partnerId: partner.id });
   }
 
   private renderLogsSection() {
