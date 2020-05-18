@@ -51,7 +51,7 @@ export const mapToPCRStatus = ((status: string) => {
 export class PcrProjectRoleMapper {
   private roles = {
     collaborator: "Collaborator",
-    projectLead: "Project Lead",
+    projectLead: "Lead",
   };
 
   public mapFromSalesforcePCRProjectRole = ((role: string | null): PCRProjectRole => {
