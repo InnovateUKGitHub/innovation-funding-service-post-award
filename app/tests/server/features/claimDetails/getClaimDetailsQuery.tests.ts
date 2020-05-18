@@ -75,7 +75,12 @@ describe("GetClaimDetailsQuery", () => {
       const costCat = testData.createCostCategory();
       testData.createClaimDetail(project, costCat, partner);
 
-      testData.createClaimLineItem(costCat, partner, period);
+      const lastModified = new Date();
+      testData.createClaimLineItem(costCat, partner, period, x => {
+        x.LastModifiedDate = lastModified.toISOString();
+        x.Acc_LineItemCost__c = 5;
+        x.Acc_LineItemDescription__c = "A cost";
+      });
 
       const query = new GetClaimDetailsQuery(project.Id, partner.id, period, costCat.id);
       const result = await context.runQuery(query);
@@ -84,6 +89,9 @@ describe("GetClaimDetailsQuery", () => {
       expect(result.lineItems.length).toBe(1);
       expect(item.partnerId).toBe(partner.id);
       expect(item.periodId).toBe(period);
+      expect(item.lastModifiedDate).toEqual(lastModified);
+      expect(item.description).toEqual("A cost");
+      expect(item.value).toEqual(5);
     });
 
     it("returns an array of objects", async () => {

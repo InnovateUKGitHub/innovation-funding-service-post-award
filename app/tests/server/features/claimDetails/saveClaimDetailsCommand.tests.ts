@@ -3,7 +3,7 @@ import { BadRequestError, ValidationError } from "@server/features/common/appErr
 import { Authorisation, ProjectRole } from "@framework/types";
 import { mapClaimDetails } from "@server/features/claimDetails/mapClaimDetails";
 import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetailsCommand";
-import { ISalesforceClaimDetails, ISalesforcePartner } from "@server/repositories";
+import { ISalesforceClaimDetails } from "@server/repositories";
 import { CostCategory, Partner } from "@framework/entities";
 
 const createNewLineItemDto = (detail: ClaimDetailsDto, value?: number, description?: string): ClaimLineItemDto => {
@@ -13,7 +13,8 @@ const createNewLineItemDto = (detail: ClaimDetailsDto, value?: number, descripti
     partnerId: detail.partnerId,
     periodId: detail.periodId,
     value: value || 100,
-    description: description || "A desciption"
+    description: description || "A desciption",
+    lastModifiedDate: new Date(),
   });
 };
 
