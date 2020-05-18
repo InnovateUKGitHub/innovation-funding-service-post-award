@@ -5,4 +5,5 @@ interface ClaimLineItemDto {
   partnerId: string;
   periodId: number;
   costCategoryId: string;
+  lastModifiedDate: Date;
 }
