@@ -2,7 +2,7 @@ import React from "react";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
-import { DocumentDescription, ProjectDto, ProjectRole } from "@framework/types";
+import { ClaimDto, DocumentDescription, ProjectDto, ProjectRole } from "@framework/types";
 import { IEditorStore } from "@ui/redux/reducers";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
 import { StoresConsumer } from "@ui/redux";
@@ -22,6 +22,7 @@ interface Data {
   costCategories: Pending<CostCategoryDto[]>;
   documents: Pending<DocumentSummaryDto[]>;
   editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
+  draftClaim: Pending<ClaimDto | null>;
 }
 
 interface CombinedData {
@@ -29,6 +30,7 @@ interface CombinedData {
   costCategories: CostCategoryDto[];
   documents: DocumentSummaryDto[];
   editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
+  draftClaim: ClaimDto | null;
 }
 
 interface Callbacks {
@@ -44,24 +46,29 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
       costCategories: this.props.costCategories,
       documents: this.props.documents,
       editor: this.props.editor,
+      draftClaim: this.props.draftClaim,
     });
 
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
   private renderDocuments(editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
-    return documents.length > 0 ? (
-      <ACC.Section subtitle="All documents open in a new window.">
-        <ACC.DocumentListWithDelete onRemove={(document) => this.props.onDelete(editor.data, document)} documents={documents} qa="supporting-documents" />
-      </ACC.Section>
-    ) : (
+    if (!documents.length) {
+      return (
         <ACC.Section>
           <ACC.ValidationMessage message="No documents uploaded." messageType="info" />
         </ACC.Section>
       );
+    }
+
+    return (
+      <ACC.Section subtitle="All documents open in a new window">
+        <ACC.DocumentTable onRemove={(document) => this.props.onDelete(editor.data, document)} documents={documents} qa="supporting-documents"/>
+      </ACC.Section>
+    );
   }
 
-  private renderContents({ project, costCategories, documents, editor }: CombinedData) {
+  private renderContents({ project, costCategories, documents, editor, draftClaim }: CombinedData) {
     const back = this.props.routes.prepareClaimLineItems.getLink({
       projectId: project.id,
       partnerId: this.props.partnerId,
@@ -78,6 +85,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={project} />}
       >
+        {this.renderInterimClaimDisclaimer(project, draftClaim)}
         <ACC.Renderers.SimpleString qa="guidanceText">Evidence for each expenditure might include, but is not limited to, invoices, timesheets, receipts and spreadsheets for capital usage.</ACC.Renderers.SimpleString>
         <ACC.Renderers.Messages messages={this.props.messages} />
         {this.renderDocuments(editor, documents)}
@@ -107,6 +115,11 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
       </ACC.Page>
     );
   }
+
+  private renderInterimClaimDisclaimer(project: ProjectDto, draftClaim: ClaimDto | null) {
+    if (!draftClaim || draftClaim.periodId !== project.periodId) return null;
+    return <ACC.ValidationMessage messageType="alert" qa="interim-document-detail-warning-FC" message="Do not remove evidence for costs that have already been paid." />;
+  }
 }
 
 const ClaimDetailDocumentsContainer = (props: ClaimDetailDocumentsPageParams & BaseProps) => (
@@ -127,6 +140,8 @@ const ClaimDetailDocumentsContainer = (props: ClaimDetailDocumentsPageParams & B
             stores.messages.clearMessages();
             stores.claimDetailDocuments.deleteClaimDetailDocumentsEditor(props.projectId, props.partnerId, props.periodId, props.costCategoryId, dto, document);
           }}
+          // TODO Used for interim solution to claim monthly. Can be removed once full solution is in place.
+          draftClaim={stores.claims.getDraftClaimForPartner(props.partnerId)}
           {...props}
         />
       )
