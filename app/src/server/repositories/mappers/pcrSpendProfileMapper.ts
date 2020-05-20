@@ -28,6 +28,10 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       quantity: Number(x.Acc_Quantity__c) || undefined,
       costPerItem: x.Acc_CostPerItem__c,
 
+      // Subcontracting
+      subcontractorCountry: x.Acc_Country__c || undefined,
+      subcontractorRoleAndDescription: x.Acc_RoleAndDescription__c || undefined,
+
       // Capital Usage
       type: new PcrSpendProfileCapitalUsageTypeMapper().mapFromSalesforcePcrSpendProfileCapitalUsageType(x.Acc_NewOrExisting__c),
       // Can remove Number() wrapper when SF fix Acc_DepreciationPeriod__c to be a number
@@ -60,6 +64,10 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       // Materials
       Acc_CostPerItem__c: x.costPerItem,
       Acc_Quantity__c: x.quantity,
+
+      // Subcontracting
+      Acc_Country__c: x.subcontractorCountry,
+      Acc_RoleAndDescription__c: x.subcontractorRoleAndDescription,
 
       // Capital Usage
       Acc_NewOrExisting__c: new PcrSpendProfileCapitalUsageTypeMapper().mapToSalesforcePcrSpendProfileCapitalUsageType(x.type),
