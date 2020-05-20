@@ -8,7 +8,9 @@ import {
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
   PcrSpendProfileDto,
-  PCRSpendProfileLabourCostDto, PCRSpendProfileMaterialsCostDto,
+  PCRSpendProfileLabourCostDto,
+  PCRSpendProfileMaterialsCostDto,
+  PCRSpendProfileSubcontractingCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 
@@ -38,6 +40,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     switch (costsDto.costCategory) {
       case CostCategoryType.Labour: return this.mapLabour(costsDto, init);
       case CostCategoryType.Materials: return this.mapMaterials(costsDto, init);
+      case CostCategoryType.Subcontracting: return this.mapSubcontracting(costsDto, init);
       case CostCategoryType.Capital_Usage: return this.mapCapitalUsage(costsDto, init);
       default: return init;
     }
@@ -59,6 +62,15 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
       value: isNumber(costsDto.costPerItem) && isNumber(costsDto.quantity) ? costsDto.costPerItem * costsDto.quantity : undefined,
       costPerItem: isNumber(costsDto.costPerItem) ? costsDto.costPerItem : undefined,
       quantity: isNumber(costsDto.quantity) ? costsDto.quantity : undefined,
+    };
+  }
+
+  private mapSubcontracting(costsDto: PCRSpendProfileSubcontractingCostDto, init: BaseCostFields) {
+    return {
+      ...init,
+      value: isNumber(costsDto.value) ? costsDto.value : undefined,
+      subcontractorCountry: costsDto.subcontractorCountry || undefined,
+      subcontractorRoleAndDescription: costsDto.subcontractorRoleAndDescription || undefined,
     };
   }
 
