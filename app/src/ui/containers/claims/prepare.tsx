@@ -91,6 +91,7 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
           editor={data.editor}
           onChange={(dto) => this.props.onUpdate(false, dto)}
           onSubmit={() => this.props.onUpdate(true, data.editor.data, this.props.routes.claimDocuments.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId }))}
+          qa="prepareClaimForm"
         >
           {this.renderLogsSection()}
           <Form.Fieldset qa="save-and-continue">
