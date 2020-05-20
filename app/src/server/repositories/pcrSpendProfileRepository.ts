@@ -31,6 +31,10 @@ export interface ISalesforcePcrSpendProfile {
   Acc_Quantity__c?: number;
   Acc_CostPerItem__c?: number;
 
+  // Subcontracting
+  Acc_Country__c?: string;
+  Acc_RoleAndDescription__c?: string;
+
   // Capital Usage
   Acc_NewOrExisting__c: string|null;
   // Coming back as a string but should be a number. Handled in the entity mapper.
@@ -68,6 +72,9 @@ export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesfo
     // Materials
     "Acc_Quantity__c",
     "Acc_CostPerItem__c",
+    // Subcontracting
+    "Acc_Country__c",
+    "Acc_RoleAndDescription__c",
     // Capital Usage
     "Acc_NewOrExisting__c",
     "Acc_DepreciationPeriod__c",
