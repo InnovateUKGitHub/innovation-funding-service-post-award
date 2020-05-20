@@ -6,7 +6,12 @@ export interface PcrSpendProfileDto {
   pcrItemId: string;
 }
 
-export type PCRSpendProfileCostDto = PCRSpendProfileLabourCostDto | PCRSpendProfileMaterialsCostDto | PCRSpendProfileCapitalUsageCostDto | PCRSpendProfileUnknownCostDto;
+export type PCRSpendProfileCostDto =
+    PCRSpendProfileLabourCostDto
+    | PCRSpendProfileMaterialsCostDto
+    | PCRSpendProfileSubcontractingCostDto
+    | PCRSpendProfileCapitalUsageCostDto
+    | PCRSpendProfileUnknownCostDto;
 
 interface PCRSpendProfileBaseCostDto<T extends CostCategoryType> {
   id: string;
@@ -27,6 +32,12 @@ export interface PCRSpendProfileMaterialsCostDto extends PCRSpendProfileBaseCost
   costCategory: CostCategoryType.Materials;
   quantity: number | null;
   costPerItem: number | null;
+}
+
+export interface PCRSpendProfileSubcontractingCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Subcontracting> {
+  costCategory: CostCategoryType.Subcontracting;
+  subcontractorCountry: string | null;
+  subcontractorRoleAndDescription: string | null;
 }
 
 export interface PCRSpendProfileCapitalUsageCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Capital_Usage> {
