@@ -4,7 +4,10 @@ import {
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
   PcrSpendProfileDto,
-  PCRSpendProfileLabourCostDto, PCRSpendProfileMaterialsCostDto, PCRSpendProfileUnknownCostDto,
+  PCRSpendProfileLabourCostDto,
+  PCRSpendProfileMaterialsCostDto,
+  PCRSpendProfileSubcontractingCostDto,
+  PCRSpendProfileUnknownCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryType } from "@framework/entities";
 
@@ -21,6 +24,7 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
     switch(cost.costCategory) {
       case CostCategoryType.Labour: return new PCRLabourCostDtoValidator(cost, this.showValidationErrors);
       case CostCategoryType.Materials: return new PCRMaterialsCostDtoValidator(cost, this.showValidationErrors);
+      case CostCategoryType.Subcontracting: return new PCRSubcontractingCostDtoValidator(cost, this.showValidationErrors);
       case CostCategoryType.Capital_Usage: return new PCRCapitalUsageCostDtoValidator(cost, this.showValidationErrors);
       default: return new PCRUnknownCostDtoValidator(cost, this.showValidationErrors);
     }
@@ -38,7 +42,13 @@ export class PCRBaseCostDtoValidator<T extends PCRSpendProfileCostDto> extends R
   }
   public description = Validation.required(this, this.model.description, "Description is required");
 }
-export type PCRSpendProfileCostDtoValidator = PCRLabourCostDtoValidator | PCRMaterialsCostDtoValidator | PCRCapitalUsageCostDtoValidator | PCRUnknownCostDtoValidator;
+
+export type PCRSpendProfileCostDtoValidator =
+    PCRLabourCostDtoValidator
+    | PCRMaterialsCostDtoValidator
+    | PCRSubcontractingCostDtoValidator
+    | PCRCapitalUsageCostDtoValidator
+    | PCRUnknownCostDtoValidator;
 
 export class PCRLabourCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileLabourCostDto> {
   public grossCostOfRole = Validation.all(this,
@@ -64,6 +74,11 @@ export class PCRMaterialsCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpe
     () => Validation.required(this, this.model.costPerItem, "Cost per item is required"),
     () => Validation.isCurrency(this, this.model.costPerItem, "Cost per item must be a number")
   );
+}
+
+export class PCRSubcontractingCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileSubcontractingCostDto> {
+  public subcontractorCountry = Validation.required(this, this.model.subcontractorCountry, "Country is required");
+  public subcontractorRoleAndDescription = Validation.required(this, this.model.subcontractorRoleAndDescription, "Role is required");
 }
 
 export class PCRCapitalUsageCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileCapitalUsageCostDto> {

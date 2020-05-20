@@ -15,6 +15,10 @@ export interface PcrSpendProfileEntityForCreate {
   costPerItem?: number;
   quantity?: number;
 
+  // subcontracting
+  subcontractorCountry?: string;
+  subcontractorRoleAndDescription?: string;
+
   // capital usage
   type?: PCRSpendProfileCapitalUsageType;
   depreciationPeriod?: number;
