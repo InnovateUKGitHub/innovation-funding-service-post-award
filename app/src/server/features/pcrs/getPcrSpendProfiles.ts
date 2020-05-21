@@ -6,7 +6,11 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import {
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
-  PcrSpendProfileDto, PCRSpendProfileLabourCostDto, PCRSpendProfileMaterialsCostDto, PCRSpendProfileUnknownCostDto,
+  PcrSpendProfileDto,
+  PCRSpendProfileLabourCostDto,
+  PCRSpendProfileMaterialsCostDto,
+  PCRSpendProfileSubcontractingCostDto,
+  PCRSpendProfileUnknownCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 
 export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
@@ -31,6 +35,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     switch (costCategory.type) {
       case CostCategoryType.Labour: return this.mapLabourCosts(spendProfiles, costCategory.type);
       case CostCategoryType.Materials: return this.mapMaterialsCosts(spendProfiles, costCategory.type);
+      case CostCategoryType.Subcontracting: return this.mapSubcontractingCosts(spendProfiles, costCategory.type);
       case CostCategoryType.Capital_Usage: return this.mapCapitalUsageCosts(spendProfiles, costCategory.type);
       default: return this.mapUnknownCosts(spendProfiles, CostCategoryType.Unknown);
     }
@@ -59,6 +64,15 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
       grossCostOfRole: !!x.grossCostOfRole || x.grossCostOfRole === 0 ? x.grossCostOfRole : null,
       daysSpentOnProject: !!x.daysSpentOnProject || x.daysSpentOnProject === 0 ? x.daysSpentOnProject : null,
       ratePerDay: !!x.ratePerDay || x.ratePerDay === 0 ? x.ratePerDay : null,
+    }));
+  }
+
+  private mapSubcontractingCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Subcontracting): PCRSpendProfileSubcontractingCostDto[] {
+    return spendProfiles.map(x => ({
+      ...this.mapBaseCostFields(x),
+      costCategory,
+      subcontractorCountry: x.subcontractorCountry || null,
+      subcontractorRoleAndDescription: x.subcontractorRoleAndDescription || null,
     }));
   }
 

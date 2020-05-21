@@ -33,21 +33,26 @@ describe("SalesforcePcrSpendProfileMapper", () => {
       RecordTypeId: "xxx",
       Acc_CostCategoryID__c: "Expected Partner",
       Acc_ProjectChangeRequest__c: "Expected PCR",
-      Acc_CostOfRole__c: 10
+      Acc_CostOfRole__c: 10,
+      Acc_Country__c: "Spain",
+      Acc_RoleAndDescription__c: "Developer",
     };
     const pcrSpendProfile = createPcrSpendProfileSalesforceRecord(update);
     const mapped = new SalesforcePcrSpendProfileMapper(PCR_SPEND_PROFILE_TYPE).map(pcrSpendProfile);
     expect(mapped.id).toEqual(update.Id);
     expect(mapped.costCategoryId).toEqual(update.Acc_CostCategoryID__c);
     expect(mapped.value).toEqual(update.Acc_CostOfRole__c);
-    expect(mapped.pcrItemId).toEqual(update.Acc_ProjectChangeRequest__c);
+    expect(mapped.subcontractorCountry).toEqual(update.Acc_Country__c);
+    expect(mapped.subcontractorRoleAndDescription).toEqual(update.Acc_RoleAndDescription__c);
   });
   it("Maps spend profile entity correctly to sf record", () => {
     const update: Partial<PcrSpendProfileEntity> = {
       id: "1234",
       costCategoryId: "Expected Partner Id",
       pcrItemId: "Expected PCR Id",
-      value: 10
+      value: 10,
+      subcontractorCountry: "Spain",
+      subcontractorRoleAndDescription: "Developer"
     };
     const pcrSpendProfile = createPcrSpendProfileEntity(update);
     const mapped = new SalesforcePcrSpendProfileMapper(PCR_SPEND_PROFILE_TYPE).mapToSalesforce(pcrSpendProfile);
@@ -55,6 +60,8 @@ describe("SalesforcePcrSpendProfileMapper", () => {
     expect(mapped.Acc_CostCategoryID__c).toEqual(update.costCategoryId);
     expect(mapped.Acc_CostOfRole__c).toEqual(update.value);
     expect(mapped.Acc_ProjectChangeRequest__c).toEqual(update.pcrItemId);
+    expect(mapped.Acc_Country__c).toEqual(update.subcontractorCountry);
+    expect(mapped.Acc_RoleAndDescription__c).toEqual(update.subcontractorRoleAndDescription);
     expect(mapped.RecordTypeId).toEqual(PCR_SPEND_PROFILE_TYPE);
   });
   it("Maps spend profile entity for create correctly to sf record", () => {
