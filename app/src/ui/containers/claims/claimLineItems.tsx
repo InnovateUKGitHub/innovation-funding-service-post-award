@@ -1,8 +1,7 @@
 import React from "react";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { Pending } from "../../../shared/pending";
-import * as ACC from "../../components";
-import { DocumentList, NavigationArrows } from "../../components";
+import * as ACC from "@ui/components";
 import { State } from "router5";
 import { ClaimDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import classNames from "classnames";
@@ -83,7 +82,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
 
   private renderDocumentList(documents: DocumentSummaryDto[]) {
     return documents.length > 0
-      ? <DocumentList documents={documents} qa="supporting-documents"/>
+      ? <ACC.DocumentTable documents={documents} qa="supporting-documents"/>
       : <ACC.ValidationMessage message="No documents uploaded." messageType="info" />;
   }
 
@@ -139,7 +138,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     const arrowLinks = this.getLinks(costCategories, project, partner, claim, route);
     if (arrowLinks === null) return null;
 
-    return <NavigationArrows nextLink={arrowLinks.nextLink} previousLink={arrowLinks.previousLink} />;
+    return <ACC.NavigationArrows nextLink={arrowLinks.nextLink} previousLink={arrowLinks.previousLink} />;
   }
 
   private renderAdditionalInformation = (claimDetail: ClaimDetailsDto) => {
@@ -158,6 +157,7 @@ const ClaimLineItemsTable: React.FunctionComponent<{ lineItems: ClaimLineItemDto
   const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
   const renderFooterRow = (row: { key: string, title: string, value: React.ReactNode, qa: string, isBold?: boolean }) => (
     <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
+      <th className="govuk-table__cell"/>
       <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{row.title}</th>
       <td className={classNames("govuk-table__cell", "govuk-table__cell--numeric", { "govuk-!-font-weight-bold": row.isBold })}>{row.value}</td>
     </tr>
@@ -165,8 +165,6 @@ const ClaimLineItemsTable: React.FunctionComponent<{ lineItems: ClaimLineItemDto
 
   const total = lineItems.reduce((count, item) => count + (item.value || 0), 0);
   const forecast = forecastDetail.value;
-
-  // @TODO remove multiply by 100
   const diff = 100 * (forecast - total) / forecast;
 
   return (
@@ -189,6 +187,7 @@ const ClaimLineItemsTable: React.FunctionComponent<{ lineItems: ClaimLineItemDto
       ]}
     >
       <LineItemTable.String header="Description" qa="cost-description" value={(x) => x.description} />
+      <LineItemTable.ShortDate header="Last updated" qa="cost-last-updated" value={x => x.lastModifiedDate} />
       <LineItemTable.Currency header="Cost (£)" qa="cost-value" value={(x) => x.value} />
     </LineItemTable.Table>
   );
