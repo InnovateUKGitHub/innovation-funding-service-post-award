@@ -4,7 +4,6 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import * as Acc from "@ui/components";
 import { Pending } from "@shared/pending";
 import { DateTime } from "luxon";
-import { ClaimStatus } from "@framework/types";
 import { StoresConsumer } from "@ui/redux";
 import { getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
 
@@ -39,7 +38,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
         backLink={<Acc.Projects.ProjectBackLink project={projectDetails} routes={this.props.routes} />}
         project={projectDetails}
       >
-        {this.renderGuidanceMessage(projectDetails)}
+        {this.renderGuidanceMessages(projectDetails, currentClaims)}
         <Acc.Renderers.Messages messages={this.props.messages} />
         <Acc.Section qa="current-claims-section" titleContent={x => x.allClaimsDashboard.labels.openSectionTitle()}>
           {this.renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)}
@@ -51,17 +50,19 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
     );
   }
 
-  private renderGuidanceMessage(projectDetails: ProjectDto) {
+  private renderGuidanceMessages(projectDetails: ProjectDto, currentClaims: ClaimDto[]) {
     const isFC = projectDetails.roles & ProjectRole.FinancialContact;
-    if (!isFC) return null;
+    if (isFC) {
+      return <Acc.ValidationMessage qa="guidance-message" messageType="info" messageContent={x => x.allClaimsDashboard.messages.guidanceMessage()}/>;
+    }
 
-    return (
-      <Acc.ValidationMessage
-        qa="guidance-message"
-        messageType="info"
-        messageContent={x => x.allClaimsDashboard.messages.guidanceMessage()}
-      />
-    );
+    const isMO = projectDetails.roles & ProjectRole.MonitoringOfficer;
+    const hasInterimClaim = !!currentClaims.find(x => x.periodId === projectDetails.periodId);
+    if (isMO && hasInterimClaim) {
+      return <Acc.ValidationMessage qa="interim-claim-guidance-MO" messageType="info" messageContent={x => x.allClaimsDashboard.messages.interimClaimGuidanceMO()}/>;
+    }
+
+    return null;
   }
 
   groupClaimsByPeriod(claims: ClaimDto[]) {
