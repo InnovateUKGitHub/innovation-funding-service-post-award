@@ -9,6 +9,7 @@ export interface ISalesforceClaimLineItem {
   Acc_CostCategory__c: string;
   Acc_ProjectPeriodNumber__c: number;
   Acc_ProjectParticipant__c: string;
+  LastModifiedDate: string;
   RecordTypeId: string;
 }
 
@@ -42,7 +43,8 @@ export class ClaimLineItemRepository extends SalesforceRepositoryBase<ISalesforc
     "Acc_LineItemCost__c",
     "Acc_CostCategory__c",
     "Acc_ProjectPeriodNumber__c",
-    "Acc_ProjectParticipant__c"
+    "Acc_ProjectParticipant__c",
+    "LastModifiedDate"
   ];
 
   getAllForCategory(partnerId: string, categoryId: string, periodId: number): Promise<ISalesforceClaimLineItem[]> {
