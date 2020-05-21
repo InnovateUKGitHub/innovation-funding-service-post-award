@@ -1,10 +1,10 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
-import { ProjectDto, ProjectRole } from "@framework/types";
+import { ClaimDto, ProjectDto, ProjectRole } from "@framework/types";
 import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
-import { DocumentList, ValidationMessage } from "@ui/components";
+import { ValidationMessage } from "@ui/components";
 import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators/claimDetailsValidator";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
@@ -23,6 +23,7 @@ interface Data {
   editor: Pending<IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>>;
   forecastDetail: Pending<ForecastDetailsDTO>;
   documents: Pending<DocumentSummaryDto[]>;
+  draftClaim: Pending<ClaimDto | null>;
 }
 
 interface CombinedData {
@@ -32,6 +33,7 @@ interface CombinedData {
   forecastDetail: ForecastDetailsDTO;
   documents: DocumentSummaryDto[];
   editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>;
+  draftClaim: ClaimDto | null;
 }
 
 interface Callbacks {
@@ -56,13 +58,14 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
       forecastDetail: this.props.forecastDetail,
       documents: this.props.documents,
       editor: this.props.editor,
+      draftClaim: this.props.draftClaim,
     });
 
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
   // @TODO fix back link
-  private renderContents({ project, costCategories, documents, forecastDetail, claimDetails, editor }: CombinedData) {
+  private renderContents({ project, costCategories, documents, forecastDetail, claimDetails, editor, draftClaim }: CombinedData) {
     const back = this.props.routes.prepareClaim.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
 
@@ -73,6 +76,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={project} />}
       >
+        {this.isInterimClaim(draftClaim, project) && <ACC.ValidationMessage messageType="alert" qa="interim-claim-guidance-FC" message={"Do not change any information for costs you have already been paid. Add the month for which the cost is being claimed in the description, using different costs for the same expenditure across different months."}/>}
         {this.renderGuidanceMessage()}
         <ACC.Section>
           <ACC.TextHint text={costCategory.hintText} />
@@ -83,13 +87,14 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
   }
 
   private renderCalculated(costCategory: CostCategoryDto, claimDetails: ClaimDetailsDto, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[], editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator> ) {
-    const mockItems = [{
+    const mockItems: ClaimLineItemDto[] = [{
       costCategoryId: costCategory.id,
       description: costCategory.name,
       partnerId: this.props.partnerId,
       periodId: this.props.periodId,
       id: "",
-      value: claimDetails.value
+      value: claimDetails.value,
+      lastModifiedDate: new Date()
     }];
 
     const LineItemForm = ACC.TypedForm<ClaimDetailsDto>();
@@ -108,6 +113,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             qa="current-claim-summary-table"
           >
             <LineItemTable.String header="Description" qa="cost-description" value={(x, i) => x.description} />
+            <LineItemTable.ShortDate header="Last updated" qa="cost-last-updated" value={(x, i) => x.lastModifiedDate} />
             <LineItemTable.Currency header="Cost (£)" qa="cost-value" value={(x, i) => x.value} width={30} />
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
@@ -154,6 +160,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             qa="current-claim-summary-table"
           >
             <LineItemTable.Custom header="Description" qa="cost-description" value={(x, i) => this.renderDescription(x, i, validationResults[i.row], editor)} />
+            <LineItemTable.ShortDate header="Last updated" qa="cost-last-updated" value={x => x.lastModifiedDate} />
             <LineItemTable.Custom header="Cost (£)" qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, validationResults[i.row], editor)} width={30} />
             {this.state.showAddRemove ?
               <LineItemTable.Custom header="Action" hideHeader={true} qa="remove" value={(x, i) => <a href="" className="govuk-link" role="button" onClick={e => this.removeItem(x, i, e, editor)}>Remove</a>} width={1}/>
@@ -194,7 +201,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     return (
       <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "All documents open in a new window." : ""} qa="supporting-documents-section">
         <ACC.Renderers.SimpleString>Upload evidence of the costs for your monitoring officer to review. If you do not upload documents your monitoring officer is unlikely to accept your claim. Contact them for advice on which documents to provide.</ACC.Renderers.SimpleString>
-        {documents.length > 0 ? <DocumentList documents={documents} qa="supporting-documents" /> : <ValidationMessage message="No documents uploaded." messageType="info" />}
+        {documents.length > 0 ? <ACC.DocumentTable documents={documents} qa="supporting-documents"/> : <ValidationMessage message="No documents uploaded." messageType="info" />}
       </ACC.Section>
     );
   }
@@ -264,13 +271,14 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     if (showAddRemove) {
       footers.push(
         <tr key={1} className="govuk-table__row">
-          <td className="govuk-table__cell" colSpan={3}><a href="" className="govuk-link" role="button" onClick={(e) => this.addItem(e, editor)} data-qa="add-cost">Add a cost</a></td>
+          <td className="govuk-table__cell" colSpan={4}><a href="" className="govuk-link" role="button" onClick={(e) => this.addItem(e, editor)} data-qa="add-cost">Add a cost</a></td>
         </tr>
       );
     }
 
     footers.push(
       <tr key={2} className="govuk-table__row">
+        <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"/>
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Total costs</td>
         <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={total} /></td>
         {showAddRemove ? <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td> : null}
@@ -279,6 +287,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
 
     footers.push(
       <tr key={3} className="govuk-table__row">
+        <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"/>
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Forecast costs</td>
         <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={forecast} /></td>
         {showAddRemove ? <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td> : null}
@@ -288,6 +297,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     if (forecast > 0) {
       footers.push(
         <tr key={4} className="govuk-table__row">
+          <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"/>
           <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Difference</td>
           <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Percentage value={diff} /></td>
           {showAddRemove ? <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td> : null}
@@ -296,6 +306,11 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     }
 
     return footers;
+  }
+
+  // TODO: Interim solution for monthly claims. Remove once permanent solution in place.
+  private isInterimClaim(draftClaim: ClaimDto | null, project: ProjectDto) {
+    return !!draftClaim && draftClaim.periodId === project.periodId;
   }
 
 }
@@ -321,6 +336,8 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
           documents={stores.claimDetailDocuments.getClaimDetailDocuments(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
           editor={stores.claimDetails.getClaimDetailsEditor(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
           onUpdate={(saving, dto, goToUpload) => stores.claimDetails.updateClaimDetailsEditor(saving, props.projectId, props.partnerId, props.periodId, props.costCategoryId, dto, () => stores.navigation.navigateTo(getDestination(props, goToUpload)))}
+          // TODO Used for interim solution to claim monthly. Can be removed once full solution is in place.
+          draftClaim={stores.claims.getDraftClaimForPartner(props.partnerId)}
           {...props}
         />
       )

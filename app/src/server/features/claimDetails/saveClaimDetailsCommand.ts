@@ -59,13 +59,23 @@ export class SaveClaimDetails extends CommandBase<boolean> {
     const filtered = lineItems.filter(x => !!x.description || isNumber(x.value));
 
     const updateDtos = filtered.filter(item => !!item.id);
+
     const insertDtos = filtered.filter(item => !item.id);
 
-    const updateItems: Updatable<ISalesforceClaimLineItem>[] = updateDtos.map(x => ({
-      Id: x.id,
-      Acc_LineItemDescription__c: x.description,
-      Acc_LineItemCost__c: x.value
-    }));
+    const updateItems: Updatable<ISalesforceClaimLineItem>[] = updateDtos
+      .filter(x => {
+        const originalItem = existingLineItems.find(original => original.Id === x.id);
+
+        if (!originalItem) throw new BadRequestError("Line item not found");
+
+        // If line item is unchanged then don't include it in the updates
+        return originalItem.Acc_LineItemCost__c !== x.value || originalItem.Acc_LineItemDescription__c !== x.description;
+      })
+      .map(x => ({
+        Id: x.id,
+        Acc_LineItemDescription__c: x.description,
+        Acc_LineItemCost__c: x.value
+      }));
 
     const insertItems: Partial<ISalesforceClaimLineItem>[] = insertDtos.map(x => ({
       Acc_LineItemDescription__c: x.description,

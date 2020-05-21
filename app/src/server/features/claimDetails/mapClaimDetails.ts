@@ -18,6 +18,6 @@ export function mapClaimDetailsSummary(salesforceClaimDetails: ISalesforceClaimD
 export function mapClaimDetails(salesforceClaimDetails: ISalesforceClaimDetails, salesforceLineItems: ISalesforceClaimLineItem[], context: IContext): ClaimDetailsDto {
   return ({
     ...mapClaimDetailsSummary(salesforceClaimDetails, context),
-    lineItems: salesforceLineItems.map(mapClaimLineItem())
+    lineItems: salesforceLineItems.map(mapClaimLineItem(context))
   });
 }
