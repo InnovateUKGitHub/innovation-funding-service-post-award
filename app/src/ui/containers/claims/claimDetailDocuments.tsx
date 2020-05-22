@@ -118,7 +118,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
 
   private renderInterimClaimDisclaimer(project: ProjectDto, draftClaim: ClaimDto | null) {
     if (!draftClaim || draftClaim.periodId !== project.periodId) return null;
-    return <ACC.ValidationMessage messageType="alert" qa="interim-document-detail-warning-FC" message="Do not remove evidence for costs that have already been paid." />;
+    return <ACC.ValidationMessage messageType="alert" qa="interim-document-detail-warning-FC" message="Do not remove any documents for previous months' costs." />;
   }
 }
 
