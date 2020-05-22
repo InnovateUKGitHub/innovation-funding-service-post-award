@@ -157,9 +157,9 @@ const ClaimLineItemsTable: React.FunctionComponent<{ lineItems: ClaimLineItemDto
   const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
   const renderFooterRow = (row: { key: string, title: string, value: React.ReactNode, qa: string, isBold?: boolean }) => (
     <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
-      <th className="govuk-table__cell"/>
       <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{row.title}</th>
       <td className={classNames("govuk-table__cell", "govuk-table__cell--numeric", { "govuk-!-font-weight-bold": row.isBold })}>{row.value}</td>
+      <th className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></th>
     </tr>
   );
 
@@ -187,8 +187,8 @@ const ClaimLineItemsTable: React.FunctionComponent<{ lineItems: ClaimLineItemDto
       ]}
     >
       <LineItemTable.String header="Description" qa="cost-description" value={(x) => x.description} />
-      <LineItemTable.ShortDate header="Last updated" qa="cost-last-updated" value={x => x.lastModifiedDate} />
       <LineItemTable.Currency header="Cost (£)" qa="cost-value" value={(x) => x.value} />
+      <LineItemTable.ShortDate colClassName={x => "govuk-table__header--numeric"} header="Last updated" qa="cost-last-updated" value={x => x.lastModifiedDate} />
     </LineItemTable.Table>
   );
 };
