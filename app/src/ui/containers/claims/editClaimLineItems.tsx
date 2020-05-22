@@ -64,7 +64,6 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
-  // @TODO fix back link
   private renderContents({ project, costCategories, documents, forecastDetail, claimDetails, editor, draftClaim }: CombinedData) {
     const back = this.props.routes.prepareClaim.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
@@ -76,13 +75,33 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={project} />}
       >
-        {this.isInterimClaim(draftClaim, project) && <ACC.ValidationMessage messageType="alert" qa="interim-claim-guidance-FC" message={"Do not change any information for costs you have already been paid. Add the month for which the cost is being claimed in the description, using different costs for the same expenditure across different months."}/>}
+        {/*TODO Used for interim solution to claim monthly. Can be removed once full solution is in place.*/}
+        {this.renderInterimClaimMessage(draftClaim, project)}
         {this.renderGuidanceMessage()}
         <ACC.Section>
           <ACC.TextHint text={costCategory.hintText} />
           {costCategory.isCalculated ? this.renderCalculated(costCategory, claimDetails, forecastDetail, documents, editor) : this.renderTable(editor, forecastDetail, documents)}
         </ACC.Section>
       </ACC.Page>
+    );
+  }
+
+  private renderInterimClaimMessage(draftClaim: ClaimDto | null, project: ProjectDto) {
+    if (!draftClaim || draftClaim.periodId !== project.periodId) return null;
+    return (
+      <ACC.ValidationMessage
+        messageType="alert"
+        qa="interim-claim-guidance-FC"
+        message={
+          <div>When adding costs for last month, you must:
+            <ul>
+              <li>use a new line for every cost each month</li>
+              <li>name the month in the description</li>
+              <li>not alter any information for previous months' costs</li>
+            </ul>
+          </div>
+        }
+      />
     );
   }
 
@@ -306,11 +325,6 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     }
 
     return footers;
-  }
-
-  // TODO: Interim solution for monthly claims. Remove once permanent solution in place.
-  private isInterimClaim(draftClaim: ClaimDto | null, project: ProjectDto) {
-    return !!draftClaim && draftClaim.periodId === project.periodId;
   }
 
 }
