@@ -8,20 +8,23 @@ import { Section } from "@ui/components/layout";
 import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
 import { ModalLink } from "@ui/components/links";
 import { ContentResult } from "@content/contentBase";
+import { MessageStyle } from "@ui/components/validationMessage";
 
 interface Props {
   value: ContentSelector;
+  messageStyle?: MessageStyle;
 }
 
 interface InnerProps {
   result: ContentResult;
   config: IFeatureFlags;
+  messageStyle?: MessageStyle;
 }
 
-export const Content = ({ value }: Props) => (
+export const Content = ({ value, messageStyle }: Props) => (
   <StoresConsumer>{stores =>
     <ContentConsumer>{content =>
-      <ContentComponent config={stores.config.getConfig().features} result={value(content)}/>}
+      <ContentComponent config={stores.config.getConfig().features} result={value(content)} messageStyle={messageStyle}/>}
     </ContentConsumer>}
   </StoresConsumer>
 );
@@ -60,7 +63,8 @@ class ContentComponent extends Component<InnerProps> {
   }
 
   public render() {
-    const displayValue = this.props.result.markdown ? <Markdown value={this.props.result.content}/> : this.props.result.content;
+    const style = this.props.messageStyle && { color: this.props.messageStyle.colour };
+    const displayValue = this.props.result.markdown ? <Markdown style={style} value={this.props.result.content}/> : this.props.result.content;
     return (
       <React.Fragment>
         {displayValue}

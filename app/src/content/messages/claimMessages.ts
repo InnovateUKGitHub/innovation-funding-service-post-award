@@ -19,4 +19,5 @@ export class ClaimMessages extends ContentBase {
   public readonly uploadClaimValidationFormInstructions = () => this.getContent("upload-instruction-claim-validation-form", { markdown: true });
   public readonly interimClaimGuidanceFC = () => this.getContent("interim-claim-guidance-fc");
   public readonly interimClaimGuidanceMO = () => this.getContent("interim-claim-guidance-mo");
+  public readonly interimClaimReviewGuidanceMO = () => this.getContent("interim-claim-review-guidance-mo", {markdown: true});
 }

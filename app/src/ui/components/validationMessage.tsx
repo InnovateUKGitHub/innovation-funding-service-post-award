@@ -13,7 +13,7 @@ interface Props {
     qa?: string;
 }
 
-interface MessageStyle {
+export interface MessageStyle {
   colour?: string;
   validationColour: string;
   validationClass: string;
@@ -52,34 +52,11 @@ const getMessageStyle = (messageType: MessageType): MessageStyle => {
   }
 };
 
-const prepareMessage = (overrideMessage: string | null | undefined, errorMessage: string | null | undefined): React.ReactNode => {
-  if (overrideMessage) {
-    return overrideMessage;
-  }
-
-  if (errorMessage && errorMessage.indexOf("\n") === 0) {
-    return errorMessage;
-  }
-
-  if (errorMessage) {
-    return errorMessage.split("\n").reduce<React.ReactNode[]>((result, current, index) => {
-      if (index > 0) {
-        result.push(<br />);
-      }
-      result.push(current);
-      return result;
-    },
-      []
-    );
-  }
-
-  return null;
-};
-
 export const ValidationMessage: React.FunctionComponent<Props> = ({ message, messageContent, messageType, qa = "validation-message" }) => {
     if (!message && !messageContent) return null;
 
-    const {colour, validationColour, validationClass, validationText} = getMessageStyle(messageType);
+    const messageStyle = getMessageStyle(messageType);
+    const {colour, validationColour, validationClass, validationText} = messageStyle;
     const msgClasses = classnames("govuk-warning-text-background", "govuk-warning-text", "acc-message", validationClass);
     const style = {
       borderColor: validationColour,
@@ -89,7 +66,7 @@ export const ValidationMessage: React.FunctionComponent<Props> = ({ message, mes
     return (
       <div className={msgClasses} style={style} data-qa={qa} data-qa-type={messageType}>
         <span className="govuk-warning-text__assistive">{validationText}</span>
-        <span>{messageContent ? <Content value={messageContent}/> : message}</span>
+        <span>{messageContent ? <Content messageStyle={messageStyle} value={messageContent}/> : message}</span>
       </div>
     );
 };
