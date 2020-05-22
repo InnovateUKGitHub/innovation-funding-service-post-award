@@ -160,8 +160,8 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             qa="current-claim-summary-table"
           >
             <LineItemTable.Custom header="Description" qa="cost-description" value={(x, i) => this.renderDescription(x, i, validationResults[i.row], editor)} />
-            <LineItemTable.ShortDate header="Last updated" qa="cost-last-updated" value={x => x.lastModifiedDate} />
             <LineItemTable.Custom header="Cost (£)" qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, validationResults[i.row], editor)} width={30} />
+            <LineItemTable.ShortDate header="Last updated" qa="cost-last-updated" value={x => x.lastModifiedDate} />
             {this.state.showAddRemove ?
               <LineItemTable.Custom header="Action" hideHeader={true} qa="remove" value={(x, i) => <a href="" className="govuk-link" role="button" onClick={e => this.removeItem(x, i, e, editor)}>Remove</a>} width={1}/>
               : null}
@@ -278,18 +278,18 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
 
     footers.push(
       <tr key={2} className="govuk-table__row">
-        <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"/>
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Total costs</td>
         <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={total} /></td>
+        <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td>
         {showAddRemove ? <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td> : null}
       </tr>
     );
 
     footers.push(
       <tr key={3} className="govuk-table__row">
-        <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"/>
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Forecast costs</td>
         <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={forecast} /></td>
+        <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td>
         {showAddRemove ? <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td> : null}
       </tr>
     );
@@ -297,9 +297,9 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     if (forecast > 0) {
       footers.push(
         <tr key={4} className="govuk-table__row">
-          <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"/>
           <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Difference</td>
           <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Percentage value={diff} /></td>
+          <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td>
           {showAddRemove ? <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td> : null}
         </tr>
       );
