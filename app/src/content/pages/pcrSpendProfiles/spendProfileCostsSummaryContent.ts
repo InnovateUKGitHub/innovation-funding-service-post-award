@@ -1,7 +1,7 @@
-import { ContentPageBase } from "@content/contentPageBase";
-import { Content } from "@content/content";
-import { CostCategoryType } from "@framework/entities";
-import { PcrSpendProfileLabels } from "@content/labels/pcrSpendProfileLabels";
+import {ContentPageBase} from "@content/contentPageBase";
+import {Content} from "@content/content";
+import {CostCategoryType} from "@framework/entities";
+import {PcrSpendProfileLabels} from "@content/labels/pcrSpendProfileLabels";
 
 export class PcrSpendProfileCostsSummaryContent extends ContentPageBase {
 
@@ -21,6 +21,7 @@ export class PcrSpendProfileCostsSummaryContent extends ContentPageBase {
     switch (costCategory) {
       case CostCategoryType.Labour: return this.getContent(`guidance-labour`, {markdown: true});
       case CostCategoryType.Materials: return this.getContent(`guidance-materials`, {markdown: true});
+      case CostCategoryType.Subcontracting: return this.getContent(`guidance-subcontracting`, {markdown: true});
       case CostCategoryType.Capital_Usage: return this.getContent(`guidance-capital-usage`, {markdown: true});
       default: return this.getContent(`guidance-default`, {markdown: true});
     }

@@ -77,8 +77,10 @@ export class PCRMaterialsCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpe
 }
 
 export class PCRSubcontractingCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileSubcontractingCostDto> {
+  public description = Validation.required(this, this.model.description, "Subcontractor name is required");
   public subcontractorCountry = Validation.required(this, this.model.subcontractorCountry, "Country is required");
   public subcontractorRoleAndDescription = Validation.required(this, this.model.subcontractorRoleAndDescription, "Role is required");
+  public value = Validation.required(this, this.model.value, "Cost is required");
 }
 
 export class PCRCapitalUsageCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileCapitalUsageCostDto> {
