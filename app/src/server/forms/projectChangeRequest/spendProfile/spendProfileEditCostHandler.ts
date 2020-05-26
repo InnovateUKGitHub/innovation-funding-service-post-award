@@ -17,7 +17,8 @@ import {
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
   PCRSpendProfileLabourCostDto,
-  PCRSpendProfileMaterialsCostDto
+  PCRSpendProfileMaterialsCostDto,
+  PCRSpendProfileSubcontractingCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
 import { parseNumber } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
@@ -63,6 +64,7 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
     switch (costCategoryDto.type) {
       case CostCategoryType.Labour: return this.updateLabourCost(cost as PCRSpendProfileLabourCostDto, body);
       case CostCategoryType.Materials: return this.updateMaterialsCost(cost as PCRSpendProfileMaterialsCostDto, body);
+      case CostCategoryType.Subcontracting: return this.updateSubcontractingCost(cost as PCRSpendProfileSubcontractingCostDto, body);
       case CostCategoryType.Capital_Usage: return this.updateCapitalUsagecost(cost as PCRSpendProfileCapitalUsageCostDto, body);
     }
   }
@@ -78,6 +80,13 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
     cost.costPerItem = parseNumber(body.costPerItem);
     cost.quantity = parseNumber(body.quantity);
     cost.description = body.description;
+  }
+
+  private updateSubcontractingCost(cost: PCRSpendProfileSubcontractingCostDto,  body: IFormBody) {
+    cost.subcontractorCountry = body.subcontractorCountry;
+    cost.subcontractorRoleAndDescription = body.subcontractorRoleAndDescription;
+    cost.description = body.description;
+    cost.value = parseNumber(body.value);
   }
 
   private updateCapitalUsagecost(cost: PCRSpendProfileCapitalUsageCostDto, body: IFormBody) {
