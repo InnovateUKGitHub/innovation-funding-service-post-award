@@ -31,7 +31,7 @@ import {
 import { LabourFormComponent } from "@ui/containers/pcrs/addPartner/spendProfile/labourFormComponent";
 import { MaterialsFormComponent } from "@ui/containers/pcrs/addPartner/spendProfile/materialsFormComponent";
 import { CapitalUsageFormComponent } from "./capitalUsageFormComponent";
-import {SubcontractingFormComponent} from "@ui/containers/pcrs/addPartner/spendProfile/subcontractingFormComponent";
+import { SubcontractingFormComponent } from "@ui/containers/pcrs/addPartner/spendProfile/subcontractingFormComponent";
 
 export interface PcrAddSpendProfileCostParams {
   projectId: string;
