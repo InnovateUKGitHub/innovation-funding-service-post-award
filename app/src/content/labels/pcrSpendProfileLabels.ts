@@ -23,6 +23,12 @@ export class PcrSpendProfileLabels extends ContentBase {
     costPerItem: () => this.getContent("materials.cost-per-item"),
     totalCost: () => this.getContent("materials.total-cost"),
   };
+  public readonly subcontracting = {
+    subcontractorName: () => this.getContent("subcontracting.subcontractor-name"),
+    subcontractorCountry: () => this.getContent("subcontracting.subcontractor-country"),
+    subcontractorRoleAndDescription: () => this.getContent("subcontracting.subcontractor-role-and-description"),
+    cost: () => this.getContent("subcontracting.cost"),
+  };
   public readonly capitalUsage = {
     description: () => this.getContent("capital-usage.description"),
     type: () => this.getContent("capital-usage.type"),

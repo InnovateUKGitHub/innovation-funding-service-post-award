@@ -233,6 +233,7 @@
       "title": "Add partner",
       "guidance-labour": "The new partner will need to account for all labour costs as they occur. For example, there must be timesheets and payroll records. These must show the actual hours worked by individuals and paid by the organisation.\nThey can include the following labour costs, based on PAYE records:\n\n* gross salary\n* National Insurance\n* company pension contribution\n* life insurance\n* other non-discretionary package costs\n\nYou cannot include:\n\n* discretionary bonuses\n* performance related payments of any kind\n\nYou may include the total number of working days for staff but do not include:\n\n* sick days\n* waiting time\n* training days\n* non-productive time\n\nList the total days worked by all categories of staff on the project. Describe their roles.\n\nWe will review the total amount of time and cost of labour before we approve this request. The terms and conditions of the grant include compliance with these points.",
       "guidance-materials": "You can claim the costs of materials used on your project providing:\n\n*  they are not already purchased or included in the overheads\n*  they are purchased from third parties\n*  they won’t have a residual/resale value at the end of your project. If they do you can claim the costs minus this value\n\nMaterials supplied by associated companies or project partners should be charged at cost.\n\nSoftware that you have purchased specifically for use during your project may be included. If you already own the software then only additional costs which are incurred and paid during your project, will be eligible. For example, installation, training or customisation.\n\nMaterial costs must be itemised to justify that they are eligible.",
+      "guidance-subcontracting": "You can subcontract work if you don’t have the expertise in your project team. You can also subcontract if it is cheaper than developing your skills in-house.\n\nSubcontracting costs relate to work carried out by third party organisations. These organisations are not part of your project.\n\nSubcontracting is eligible providing it is justified as to why the work cannot be performed by a project partner.\n\nSubcontracting associate companies should be charged at cost.\n\nWhere possible you should select a UK based contractor. You should name the subcontractor (where known) and describe what they will be doing. You should also state where the work will be undertaken. We will look at the size of this contribution when assessing your eligibility and level of support.",
       "guidance-capital-usage": "You can claim the usage costs of capital assets you will buy for, or use on, your project.\n\nYou will need to calculate a ‘usage’ value for each item. You can do this by deducting its expected value from its original price at the end of your project. If you owned the equipment before the project started then you should use its net present value.\n\nThis value is then multiplied by the amount, in percentages, that is used during the project. This final value represents the eligible cost to your project.",
       "guidance-default": "",
       "section-title-costs": "{{costCategoryName}} costs",
@@ -325,6 +326,12 @@
       "quantity": "Quantity",
       "cost-per-item": "Cost per item (£)",
       "total-cost": "Total cost"
+    },
+    "subcontracting": {
+      "subcontractor-name": "Subcontractor name",
+      "subcontractor-country": "Country where the subcontractor will work",
+      "subcontractor-role-and-description": "Role of the the subcontractor in the project and description of the work they will do",
+      "cost": "Cost (£)"
     },
     "capital-usage": {
       "description": "Item description",
