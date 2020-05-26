@@ -52,7 +52,7 @@ export class SubcontractingFormComponent extends Component<SpendProfileCostFormP
           />
           <Form.Numeric
               labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.subcontracting.cost()}
-              name="cost"
+              name="value"
               width={"one-quarter"}
               value={dto => dto.value}
               update={(dto, val) => dto.value = val}

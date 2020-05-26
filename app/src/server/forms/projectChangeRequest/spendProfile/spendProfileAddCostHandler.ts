@@ -24,7 +24,8 @@ import { CostCategoryType } from "@framework/entities";
 import {
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileLabourCostDto,
-  PCRSpendProfileMaterialsCostDto
+  PCRSpendProfileMaterialsCostDto,
+  PCRSpendProfileSubcontractingCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
 import { parseNumber } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
@@ -75,6 +76,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
     switch (costCategory.type) {
       case CostCategoryType.Labour: return this.getLabourCost(baseCostDto, costCategory.type, body);
       case CostCategoryType.Materials: return this.getMaterialsCost(baseCostDto, costCategory.type, body);
+      case CostCategoryType.Subcontracting: return this.getSubcontractingCost(baseCostDto, costCategory.type, body);
       case CostCategoryType.Capital_Usage: return this.getCapitalUsageCost(baseCostDto, costCategory.type, body);
     }
   }
@@ -95,6 +97,16 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
       costCategory,
       costPerItem: parseNumber(body.costPerItem),
       quantity: parseNumber(body.quantity),
+    };
+  }
+
+  private getSubcontractingCost(baseCostDto: IBaseCost, costCategory: CostCategoryType.Subcontracting, body: IFormBody): PCRSpendProfileSubcontractingCostDto {
+    return {
+      ...baseCostDto,
+      costCategory,
+      value: parseNumber(body.value),
+      subcontractorCountry: body.subcontractorCountry,
+      subcontractorRoleAndDescription: body.subcontractorRoleAndDescription,
     };
   }
 
