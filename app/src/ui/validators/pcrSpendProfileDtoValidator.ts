@@ -7,6 +7,7 @@ import {
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
   PCRSpendProfileSubcontractingCostDto,
+  PCRSpendProfileTravelAndSubsCostDto,
   PCRSpendProfileUnknownCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryType } from "@framework/entities";
@@ -26,6 +27,7 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
       case CostCategoryType.Materials: return new PCRMaterialsCostDtoValidator(cost, this.showValidationErrors);
       case CostCategoryType.Subcontracting: return new PCRSubcontractingCostDtoValidator(cost, this.showValidationErrors);
       case CostCategoryType.Capital_Usage: return new PCRCapitalUsageCostDtoValidator(cost, this.showValidationErrors);
+      case CostCategoryType.Travel_And_Subsistence: return new PCRTravelAndSubsCostDtovalidator(cost, this.showValidationErrors);
       default: return new PCRUnknownCostDtoValidator(cost, this.showValidationErrors);
     }
   }
@@ -48,6 +50,7 @@ export type PCRSpendProfileCostDtoValidator =
     | PCRMaterialsCostDtoValidator
     | PCRSubcontractingCostDtoValidator
     | PCRCapitalUsageCostDtoValidator
+    | PCRTravelAndSubsCostDtovalidator
     | PCRUnknownCostDtoValidator;
 
 export class PCRLabourCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileLabourCostDto> {
@@ -106,6 +109,17 @@ export class PCRCapitalUsageCostDtoValidator extends PCRBaseCostDtoValidator<PCR
     () => Validation.required(this, this.model.utilisation, "Utilisation is required"),
     () => Validation.isTrue(this, this.model.utilisation === undefined || this.model.utilisation === null || this.model.utilisation < 100, "Utilisation must be a value under 100"),
     () => Validation.isPercentage(this, this.model.utilisation, "You must enter a number with up to 2 decimal places")
+  );
+}
+
+export class PCRTravelAndSubsCostDtovalidator extends PCRBaseCostDtoValidator<PCRSpendProfileTravelAndSubsCostDto> {
+  public numberOfEach = Validation.all(this,
+    () => Validation.required(this, this.model.numberOfTimes, "Number of times is required"),
+    () => Validation.integer(this, this.model.numberOfTimes, "Number of times must be a number")
+  );
+  public costOfEach = Validation.all(this,
+    () => Validation.required(this, this.model.costOfEach, "Cost of each is required"),
+    () => Validation.isCurrency(this, this.model.costOfEach, "Cost of each must be a number")
   );
 }
 
