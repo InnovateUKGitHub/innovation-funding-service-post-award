@@ -11,6 +11,7 @@ export type PCRSpendProfileCostDto =
     | PCRSpendProfileMaterialsCostDto
     | PCRSpendProfileSubcontractingCostDto
     | PCRSpendProfileCapitalUsageCostDto
+    | PCRSpendProfileTravelAndSubsCostDto
     | PCRSpendProfileUnknownCostDto;
 
 interface PCRSpendProfileBaseCostDto<T extends CostCategoryType> {
@@ -47,6 +48,11 @@ export interface PCRSpendProfileCapitalUsageCostDto extends PCRSpendProfileBaseC
   netPresentValue: number | null;
   residualValue: number | null;
   utilisation: number | null;
+}
+
+export interface PCRSpendProfileTravelAndSubsCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Travel_And_Subsistence> {
+  numberOfTimes: number | null;
+  costOfEach: number | null;
 }
 
 // TODO remove this once all are mapped

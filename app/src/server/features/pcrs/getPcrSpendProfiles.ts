@@ -10,8 +10,10 @@ import {
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
   PCRSpendProfileSubcontractingCostDto,
+  PCRSpendProfileTravelAndSubsCostDto,
   PCRSpendProfileUnknownCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
+import { isNumber } from "@framework/util";
 
 export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
   constructor(private readonly pcrItemId: string) {
@@ -37,6 +39,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
       case CostCategoryType.Materials: return this.mapMaterialsCosts(spendProfiles, costCategory.type);
       case CostCategoryType.Subcontracting: return this.mapSubcontractingCosts(spendProfiles, costCategory.type);
       case CostCategoryType.Capital_Usage: return this.mapCapitalUsageCosts(spendProfiles, costCategory.type);
+      case CostCategoryType.Travel_And_Subsistence: return this.mapTravelAndSubsCosts(spendProfiles, costCategory.type);
       default: return this.mapUnknownCosts(spendProfiles, CostCategoryType.Unknown);
     }
   }
@@ -45,7 +48,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     return {
       id: spendProfile.id,
       costCategoryId: spendProfile.costCategoryId,
-      value: !!spendProfile.value || spendProfile.value === 0 ? spendProfile.value : null,
+      value: isNumber(spendProfile.value) ? spendProfile.value : null,
       description: spendProfile.description || null,
     };
   }
@@ -61,9 +64,9 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
       costCategory,
-      grossCostOfRole: !!x.grossCostOfRole || x.grossCostOfRole === 0 ? x.grossCostOfRole : null,
-      daysSpentOnProject: !!x.daysSpentOnProject || x.daysSpentOnProject === 0 ? x.daysSpentOnProject : null,
-      ratePerDay: !!x.ratePerDay || x.ratePerDay === 0 ? x.ratePerDay : null,
+      grossCostOfRole: isNumber(x.grossCostOfRole) ? x.grossCostOfRole : null,
+      daysSpentOnProject: isNumber(x.daysSpentOnProject) ? x.daysSpentOnProject : null,
+      ratePerDay: isNumber(x.ratePerDay) ? x.ratePerDay : null,
     }));
   }
 
@@ -80,8 +83,8 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
       costCategory,
-      costPerItem: !!x.costPerItem || x.costPerItem === 0 ? x.costPerItem : null,
-      quantity: !!x.quantity || x.quantity === 0 ? x.quantity : null,
+      costPerItem: isNumber(x.costPerItem) ? x.costPerItem : null,
+      quantity: isNumber(x.quantity) ? x.quantity : null,
     }));
   }
 
@@ -90,10 +93,19 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
       ...this.mapBaseCostFields(x),
       costCategory,
       type: x.type || PCRSpendProfileCapitalUsageType.Unknown,
-      depreciationPeriod: !!x.depreciationPeriod || x.depreciationPeriod === 0 ? x.depreciationPeriod : null,
-      netPresentValue: !!x.netPresentValue || x.netPresentValue === 0 ? x.netPresentValue : null,
-      residualValue: !!x.residualValue || x.residualValue === 0 ? x.residualValue : null,
-      utilisation: !!x.utilisation || x.utilisation === 0 ? x.utilisation : null
+      depreciationPeriod: isNumber(x.depreciationPeriod) ? x.depreciationPeriod : null,
+      netPresentValue: isNumber(x.netPresentValue) ? x.netPresentValue : null,
+      residualValue: isNumber(x.residualValue) ? x.residualValue : null,
+      utilisation: isNumber(x.utilisation) ? x.utilisation : null
+    }));
+  }
+
+  private mapTravelAndSubsCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Travel_And_Subsistence): PCRSpendProfileTravelAndSubsCostDto[] {
+    return spendProfiles.map(x => ({
+      ...this.mapBaseCostFields(x),
+      costCategory,
+      numberOfTimes: isNumber(x.numberOfTimes) ? x.numberOfTimes : null,
+      costOfEach: isNumber(x.costOfEach) ? x.costOfEach : null,
     }));
   }
 }

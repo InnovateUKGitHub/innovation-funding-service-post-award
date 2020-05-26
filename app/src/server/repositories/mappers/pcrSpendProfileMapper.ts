@@ -39,6 +39,11 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       netPresentValue: x.Acc_NetPresentValue__c,
       residualValue: x.Acc_ResidualValue__c,
       utilisation: x.Acc_Utilisation__c,
+
+      // Travel and Subsitance
+      // Can remove Number() wrapper when SF fix Acc_NumberOfTimes__c to be a number
+      numberOfTimes: Number(x.Acc_NumberOfTimes__c) || undefined,
+      costOfEach: x.Acc_CostEach__c,
     };
   }
   public mapToSalesforce(x: PcrSpendProfileEntity): ISalesforcePcrSpendProfile {
@@ -75,6 +80,10 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       Acc_NetPresentValue__c: x.netPresentValue,
       Acc_ResidualValue__c: x.residualValue,
       Acc_Utilisation__c: x.utilisation,
+
+      // Travel and Subsistance
+      Acc_NumberOfTimes__c: x.numberOfTimes,
+      Acc_CostEach__c: x.costOfEach,
     };
   }
 }
