@@ -23,6 +23,7 @@ export class PcrSpendProfileCostsSummaryContent extends ContentPageBase {
       case CostCategoryType.Materials: return this.getContent(`guidance-materials`, {markdown: true});
       case CostCategoryType.Subcontracting: return this.getContent(`guidance-subcontracting`, {markdown: true});
       case CostCategoryType.Capital_Usage: return this.getContent(`guidance-capital-usage`, {markdown: true});
+      case CostCategoryType.Travel_And_Subsistence: return this.getContent(`guidance-travel-and-subs`, {markdown: true});
       default: return this.getContent(`guidance-default`, {markdown: true});
     }
   }

@@ -27,7 +27,7 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
       case CostCategoryType.Materials: return new PCRMaterialsCostDtoValidator(cost, this.showValidationErrors);
       case CostCategoryType.Subcontracting: return new PCRSubcontractingCostDtoValidator(cost, this.showValidationErrors);
       case CostCategoryType.Capital_Usage: return new PCRCapitalUsageCostDtoValidator(cost, this.showValidationErrors);
-      case CostCategoryType.Travel_And_Subsistence: return new PCRTravelAndSubsCostDtovalidator(cost, this.showValidationErrors);
+      case CostCategoryType.Travel_And_Subsistence: return new PCRTravelAndSubsCostDtoValidator(cost, this.showValidationErrors);
       default: return new PCRUnknownCostDtoValidator(cost, this.showValidationErrors);
     }
   }
@@ -50,7 +50,7 @@ export type PCRSpendProfileCostDtoValidator =
     | PCRMaterialsCostDtoValidator
     | PCRSubcontractingCostDtoValidator
     | PCRCapitalUsageCostDtoValidator
-    | PCRTravelAndSubsCostDtovalidator
+    | PCRTravelAndSubsCostDtoValidator
     | PCRUnknownCostDtoValidator;
 
 export class PCRLabourCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileLabourCostDto> {
@@ -112,8 +112,8 @@ export class PCRCapitalUsageCostDtoValidator extends PCRBaseCostDtoValidator<PCR
   );
 }
 
-export class PCRTravelAndSubsCostDtovalidator extends PCRBaseCostDtoValidator<PCRSpendProfileTravelAndSubsCostDto> {
-  public numberOfEach = Validation.all(this,
+export class PCRTravelAndSubsCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileTravelAndSubsCostDto> {
+  public numberOfTimes = Validation.all(this,
     () => Validation.required(this, this.model.numberOfTimes, "Number of times is required"),
     () => Validation.integer(this, this.model.numberOfTimes, "Number of times must be a number")
   );
