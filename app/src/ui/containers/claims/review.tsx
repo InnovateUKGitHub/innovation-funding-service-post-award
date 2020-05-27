@@ -88,7 +88,6 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
         {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" messageContent={x => x.claimReview.messages.finalClaim()}/>}
-        {this.renderInterimClaimMessage(data.claim, data.project)}
         {this.renderClaimReviewSection(data)}
         <ACC.Section>
           <ACC.Accordion>
@@ -100,13 +99,6 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         {this.renderForm(data)}
       </ACC.Page>
     );
-  }
-
-  private renderInterimClaimMessage(claim: ClaimDto, project: ProjectDto) {
-    if (claim.status === ClaimStatus.DRAFT && claim.periodId === project.periodId) {
-      return <ACC.ValidationMessage messageType="alert" qa="interim-claim-guidance-MO" messageContent={x => x.claimReview.messages.interimClaimReviewGuidanceMO()}/>;
-    }
-    return null;
   }
 
   private renderClaimReviewSection(data: CombinedData) {
