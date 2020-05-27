@@ -25,6 +25,10 @@ export interface PcrSpendProfileEntityForCreate {
   netPresentValue?: number;
   residualValue?: number;
   utilisation?: number;
+
+  // Travel and subsistance
+  numberOfTimes?: number;
+  costOfEach?: number;
 }
 
 export interface PcrSpendProfileEntity extends PcrSpendProfileEntityForCreate {

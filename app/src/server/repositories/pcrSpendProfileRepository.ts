@@ -42,6 +42,11 @@ export interface ISalesforcePcrSpendProfile {
   Acc_NetPresentValue__c?: number;
   Acc_ResidualValue__c?: number;
   Acc_Utilisation__c?: number;
+
+  // Travel and Subsistance
+  // Coming back as a string but should be a number. Handled in the entity mapper.
+  Acc_NumberOfTimes__c?: number;
+  Acc_CostEach__c?: number;
 }
 
 export interface IPcrSpendProfileRepository {
@@ -81,6 +86,9 @@ export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesfo
     "Acc_NetPresentValue__c",
     "Acc_ResidualValue__c",
     "Acc_Utilisation__c",
+    // Travel and Subsistance
+    "Acc_NumberOfTimes__c",
+    "Acc_CostEach__c",
   ];
 
   private recordType = "PCR Spend Profile";
