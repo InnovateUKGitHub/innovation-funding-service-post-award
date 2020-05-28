@@ -18,7 +18,8 @@ import {
   PCRSpendProfileCostDto,
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
-  PCRSpendProfileSubcontractingCostDto
+  PCRSpendProfileSubcontractingCostDto,
+  PCRSpendProfileTravelAndSubsCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
 import { parseNumber } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
@@ -66,6 +67,7 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
       case CostCategoryType.Materials: return this.updateMaterialsCost(cost as PCRSpendProfileMaterialsCostDto, body);
       case CostCategoryType.Subcontracting: return this.updateSubcontractingCost(cost as PCRSpendProfileSubcontractingCostDto, body);
       case CostCategoryType.Capital_Usage: return this.updateCapitalUsagecost(cost as PCRSpendProfileCapitalUsageCostDto, body);
+      case CostCategoryType.Travel_And_Subsistence: return this.updateTravelAndSubsCost(cost as PCRSpendProfileTravelAndSubsCostDto, body);
     }
   }
 
@@ -96,6 +98,12 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
     cost.netPresentValue = parseNumber(body.netPresentValue);
     cost.residualValue = parseNumber(body.residualValue);
     cost.utilisation = parseNumber(body.utilisation);
+  }
+
+  private updateTravelAndSubsCost(cost: PCRSpendProfileTravelAndSubsCostDto, body: IFormBody) {
+    cost.description = body.description;
+    cost.numberOfTimes = parseNumber(body.numberOfTimes);
+    cost.costOfEach = parseNumber(body.costOfEach);
   }
 
   protected async run(context: IContext, params: PcrEditSpendProfileCostParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
