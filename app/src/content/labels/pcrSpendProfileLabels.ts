@@ -39,4 +39,10 @@ export class PcrSpendProfileLabels extends ContentBase {
     utilisation: () => this.getContent("capital-usage.utilisation"),
     netCost: () => this.getContent("capital-usage.net-cost"),
   };
+  public readonly travelAndSubs = {
+    description: () => this.getContent("travel-and-subs.description"),
+    numberOfTimes: () => this.getContent("travel-and-subs.number-of-times"),
+    costOfEach: () => this.getContent("travel-and-subs.cost-of-each"),
+    totalCost: () => this.getContent("travel-and-subs.total-cost"),
+  };
 }
