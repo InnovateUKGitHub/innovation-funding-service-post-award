@@ -10,9 +10,9 @@ export const DeleteMaterialsCostFormComponent = (props: SpendProfileDeleteFormPr
       <ACC.ValidationMessage messageType="alert" messageContent={x => x.pcrSpendProfileDeleteCostContent.deleteGuidance()} />
       <ACC.SummaryList qa="deleteMaterialsCost">
         <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.materials.item()} content={data.description} qa="item" />
-        <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.materials.quantity()} content={<ACC.Renderers.Currency value={data.quantity} />} qa="quantity" />
+        <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.materials.quantity()} content={data.quantity} qa="quantity" />
         <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.materials.costPerItem()} content={<ACC.Renderers.Currency value={data.costPerItem} />} qa="costPerItem" />
-        <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.labour.totalCost()} content={<ACC.Renderers.Currency value={data.value} />} qa="totalCost" />
+        <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.materials.totalCost()} content={<ACC.Renderers.Currency value={data.value} />} qa="totalCost" />
       </ACC.SummaryList>
     </ACC.Section>
   );
