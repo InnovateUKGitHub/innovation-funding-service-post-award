@@ -1,7 +1,5 @@
-import { DateTime } from "luxon";
 import {
   Authorisation,
-  ClaimFrequency,
   IContext,
   MonitoringReportDto,
   ProjectDto,
@@ -28,16 +26,20 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
 
   private async updateHeader(context: IContext, project: ProjectDto) {
     const periodId = this.monitoringReportDto.periodId;
-    const periodLength = project.claimFrequency === ClaimFrequency.Quarterly ? 3 : 1;
-
-    const startDate = DateTime.fromJSDate(project.startDate).setZone("Europe/London").plus({ months: (periodId - 1) * periodLength });
-    const endDate = DateTime.fromJSDate(project.startDate).setZone("Europe/London").plus({ months: (periodId) * periodLength }).minus({ days: 1 });
+    const partner = await context.repositories.partners.getAllByProjectId(project.id).then(partners => partners.find(x => x.projectId === this.monitoringReportDto.projectId));
+    if (!partner) {
+      throw new BadRequestError("Invalid partner specified");
+    }
+    const profile = await context.repositories.profileDetails.getAllByPartner(partner.id).then(profiles => profiles.find(x => x.Acc_ProjectPeriodNumber__c === periodId));
+    if (!profile) {
+      throw new BadRequestError("Invalid profile specified");
+    }
 
     const update: Updatable<ISalesforceMonitoringReportHeader> = {
       Id: this.monitoringReportDto.headerId,
       Acc_ProjectPeriodNumber__c: periodId,
-      Acc_PeriodStartDate__c: startDate.toFormat("yyyy-MM-dd"),
-      Acc_PeriodEndDate__c: endDate.toFormat("yyyy-MM-dd")
+      Acc_PeriodStartDate__c: profile.Acc_ProjectPeriodStartDate__c,
+      Acc_PeriodEndDate__c: profile.Acc_ProjectPeriodEndDate__c
     };
 
     if (this.submit) {

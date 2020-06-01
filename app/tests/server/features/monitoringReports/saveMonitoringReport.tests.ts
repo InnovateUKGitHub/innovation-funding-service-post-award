@@ -269,5 +269,10 @@ describe("saveMonitoringReports validation", () => {
 });
 
 function getDto(context: TestContext, report: ISalesforceMonitoringReportHeader): Promise<MonitoringReportDto> {
+  const project = context.testData.createProject((x) => {
+    x.Id = "Project1";
+  });
+  const partner = context.testData.createPartner(project);
+  context.testData.createProfileDetail(undefined, partner, 1);
   return context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 }

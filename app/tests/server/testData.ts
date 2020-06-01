@@ -252,8 +252,6 @@ export class TestData {
       x.Acc_EndDate__c = "2019-12-31";
     });
 
-    const startDate = project.Acc_StartDate__c || "2000-01-01";
-    const frequency = project.Acc_ClaimFrequency__c === "Quarterly" ? 3 : 1;
     const format = "yyyy-MM-dd";
 
     const newHeader: Repositories.ISalesforceMonitoringReportHeader = {
@@ -262,8 +260,8 @@ export class TestData {
       MonitoringReportStatusName: "Draft",
       Acc_Project__c: project.Id,
       Acc_ProjectPeriodNumber__c: periodId,
-      Acc_PeriodStartDate__c: DateTime.fromFormat(startDate, format).plus({ months: (periodId - 1) * frequency }).toFormat(format),
-      Acc_PeriodEndDate__c: DateTime.fromFormat(startDate, format).plus({ months: periodId * frequency, days: -1 }).toFormat(format),
+      Acc_PeriodStartDate__c: DateTime.fromFormat("2020-01-01", format).toFormat(format),
+      Acc_PeriodEndDate__c: DateTime.fromFormat("2020-04-01", format).toFormat(format),
       LastModifiedDate: DateTime.local().toISO()
     };
 
