@@ -24,7 +24,7 @@ class Component extends ContainerBase<MonitoringReportCreateParams, Data, Callba
   render() {
     const combined = Pending.combine({
       editor: this.props.editor,
-      project: this.props.project
+      project: this.props.project,
     });
 
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data.project, data.editor)} />;

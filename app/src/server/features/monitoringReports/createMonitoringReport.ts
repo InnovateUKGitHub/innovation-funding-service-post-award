@@ -1,10 +1,9 @@
-import { DateTime } from "luxon";
 import { ISalesforceMonitoringReportHeader, ISalesforceMonitoringReportResponse } from "@server/repositories";
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
 import { GetByIdQuery } from "@server/features/projects";
 import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQuestions";
 import { MonitoringReportDtoValidator } from "@ui/validators";
-import { Authorisation, ClaimFrequency, IContext } from "@framework/types";
+import { Authorisation, IContext } from "@framework/types";
 import { MonitoringReportDto, ProjectDto, ProjectRole } from "@framework/dtos";
 
 export class CreateMonitoringReportCommand extends CommandBase<string> {
@@ -27,16 +26,20 @@ export class CreateMonitoringReportCommand extends CommandBase<string> {
 
   private async insertMonitoringReportHeader(context: IContext, project: ProjectDto): Promise<string> {
     const periodId = this.monitoringReportDto.periodId;
-    const periodLength = project.claimFrequency === ClaimFrequency.Quarterly ? 3 : 1;
-
-    const startDate = DateTime.fromJSDate(project.startDate).setZone("Europe/London").plus({months : (periodId - 1) * periodLength });
-    const endDate = DateTime.fromJSDate(project.startDate).setZone("Europe/London").plus({months : (periodId) * periodLength}).minus({days:1});
+    const partner = await context.repositories.partners.getAllByProjectId(project.id).then(partners => partners.find(x => x.projectId === this.monitoringReportDto.projectId));
+    if (!partner) {
+      throw new BadRequestError("Invalid partner specified");
+    }
+    const profile = await context.repositories.profileDetails.getAllByPartner(partner.id).then(profiles => profiles.find(x => x.Acc_ProjectPeriodNumber__c === periodId));
+    if (!profile) {
+      throw new BadRequestError("Invalid profile specified");
+    }
 
     const createRequest: Partial<ISalesforceMonitoringReportHeader> = {
       Acc_Project__c: this.monitoringReportDto.projectId,
       Acc_ProjectPeriodNumber__c: periodId,
-      Acc_PeriodStartDate__c: startDate.toFormat("yyyy-MM-dd"),
-      Acc_PeriodEndDate__c: endDate.toFormat("yyyy-MM-dd"),
+      Acc_PeriodStartDate__c: profile.Acc_ProjectPeriodStartDate__c,
+      Acc_PeriodEndDate__c: profile.Acc_ProjectPeriodEndDate__c,
       Acc_MonitoringReportStatus__c: "Draft"
     };
 
