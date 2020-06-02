@@ -37,6 +37,7 @@ export interface ISalesforcePcrSpendProfile {
 
   // Capital Usage
   Acc_NewOrExisting__c: string|null;
+  NewOrExistingLabel?: string;
   // Coming back as a string but should be a number. Handled in the entity mapper.
   Acc_DepreciationPeriod__c?: number;
   Acc_NetPresentValue__c?: number;
@@ -82,6 +83,7 @@ export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesfo
     "Acc_RoleAndDescription__c",
     // Capital Usage
     "Acc_NewOrExisting__c",
+    "toLabel(Acc_NewOrExisting__c) NewOrExistingLabel",
     "Acc_DepreciationPeriod__c",
     "Acc_NetPresentValue__c",
     "Acc_ResidualValue__c",

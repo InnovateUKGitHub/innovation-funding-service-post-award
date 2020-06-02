@@ -21,6 +21,7 @@ export interface PcrSpendProfileEntityForCreate {
 
   // capital usage
   type?: PCRSpendProfileCapitalUsageType;
+  typeLabel?: string;
   depreciationPeriod?: number;
   netPresentValue?: number;
   residualValue?: number;
