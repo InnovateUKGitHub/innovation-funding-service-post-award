@@ -44,6 +44,7 @@ export interface PCRSpendProfileSubcontractingCostDto extends PCRSpendProfileBas
 export interface PCRSpendProfileCapitalUsageCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Capital_Usage> {
   costCategory: CostCategoryType.Capital_Usage;
   type: PCRSpendProfileCapitalUsageType;
+  typeLabel: string | null;
   depreciationPeriod: number | null;
   netPresentValue: number | null;
   residualValue: number | null;
