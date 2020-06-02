@@ -289,6 +289,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         costCategory: CostCategoryType.Capital_Usage,
         description: "ABC",
         type: PCRSpendProfileCapitalUsageType.New,
+        typeLabel: "New",
         depreciationPeriod: 8,
         netPresentValue: 200,
         residualValue: 100,

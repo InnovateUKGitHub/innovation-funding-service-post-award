@@ -34,6 +34,7 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
 
       // Capital Usage
       type: new PcrSpendProfileCapitalUsageTypeMapper().mapFromSalesforcePcrSpendProfileCapitalUsageType(x.Acc_NewOrExisting__c),
+      typeLabel: x.NewOrExistingLabel || undefined,
       // Can remove Number() wrapper when SF fix Acc_DepreciationPeriod__c to be a number
       depreciationPeriod: Number(x.Acc_DepreciationPeriod__c) || undefined,
       netPresentValue: x.Acc_NetPresentValue__c,
