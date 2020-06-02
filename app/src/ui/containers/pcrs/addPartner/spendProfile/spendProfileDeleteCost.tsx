@@ -13,16 +13,21 @@ import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import {
+  PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
   PCRSpendProfileLabourCostDto,
-  PCRSpendProfileMaterialsCostDto, PCRSpendProfileTravelAndSubsCostDto
+  PCRSpendProfileMaterialsCostDto,
+  PCRSpendProfileTravelAndSubsCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryType } from "@framework/entities";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PcrAddSpendProfileCostParams } from "./spendProfilePrepareCost";
-import { DeleteLabourCostFormComponent } from "./deleteLabourCostFormComponent";
-import { DeleteMaterialsCostFormComponent } from "./deleteMaterialCostFormComponent";
-import { DeleteTravelAndSubsCostFormComponent } from "@ui/containers/pcrs/addPartner/spendProfile/deleteTravelAndSubsCostFormComponent";
+import {
+  DeleteCapitalUsageCostFormComponent,
+  DeleteLabourCostFormComponent,
+  DeleteMaterialsCostFormComponent,
+  DeleteTravelAndSubsCostFormComponent
+} from "@ui/containers/pcrs/addPartner/spendProfile";
 
 export interface PcrDeleteSpendProfileCostParams extends PcrAddSpendProfileCostParams {
   costId: string;
@@ -100,6 +105,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
     switch(costCategory.type) {
       case CostCategoryType.Labour: return <DeleteLabourCostFormComponent data={cost as PCRSpendProfileLabourCostDto} costCategory={costCategory} />;
       case CostCategoryType.Materials: return <DeleteMaterialsCostFormComponent data={cost as PCRSpendProfileMaterialsCostDto} costCategory={costCategory} />;
+      case CostCategoryType.Capital_Usage: return <DeleteCapitalUsageCostFormComponent data={cost as PCRSpendProfileCapitalUsageCostDto} costCategory={costCategory} />;
       case CostCategoryType.Travel_And_Subsistence: return <DeleteTravelAndSubsCostFormComponent data={cost as PCRSpendProfileTravelAndSubsCostDto} costCategory={costCategory} />;
       default: return null;
     }

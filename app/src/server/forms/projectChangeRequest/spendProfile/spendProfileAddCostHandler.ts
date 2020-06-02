@@ -117,6 +117,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
       ...baseCostDto,
       costCategory,
       type: parseNumber(body.type) || PCRSpendProfileCapitalUsageType.Unknown,
+      typeLabel: null,
       residualValue: parseNumber(body.residualValue),
       netPresentValue: parseNumber(body.netPresentValue),
       depreciationPeriod: parseNumber(body.depreciationPeriod),

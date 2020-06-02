@@ -93,6 +93,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
       ...this.mapBaseCostFields(x),
       costCategory,
       type: x.type || PCRSpendProfileCapitalUsageType.Unknown,
+      typeLabel: x.typeLabel || null,
       depreciationPeriod: isNumber(x.depreciationPeriod) ? x.depreciationPeriod : null,
       netPresentValue: isNumber(x.netPresentValue) ? x.netPresentValue : null,
       residualValue: isNumber(x.residualValue) ? x.residualValue : null,
