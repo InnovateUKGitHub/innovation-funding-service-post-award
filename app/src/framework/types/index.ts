@@ -5,5 +5,6 @@ export * from "./IAppError";
 export * from "./IContext";
 export * from "./IContext";
 export * from "./ILinkInfo";
+export * from "./IPicklistEntry";
 export * from "./IUser";
 export * from "./permisionGroupIndentifier";

@@ -1,6 +1,6 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 import { NotFoundError } from "../features/common/appError";
-import { PicklistEntry } from "jsforce";
+import { IPicklistEntry } from "@framework/types";
 
 export interface ISalesforceClaim {
   Id: string;
@@ -37,7 +37,7 @@ export interface IClaimRepository {
   getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]>;
   get(partnerId: string, periodId: number): Promise<ISalesforceClaim>;
   getByProjectId(projectId: string, partnerId: string, periodId: number): Promise<ISalesforceClaim>;
-  getClaimStatuses(): Promise<PicklistEntry[]>;
+  getClaimStatuses(): Promise<IPicklistEntry[]>;
   update(updatedClaim: Partial<ISalesforceClaim> & { Id: string }): Promise<boolean>;
 }
 

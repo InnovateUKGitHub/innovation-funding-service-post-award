@@ -17,10 +17,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
     .filter(x => x.active && x.value !== PCRParticipantSize.Academic)
     .map(x => ({ id: x.value.toString(), value: x.label }));
 
-  const defaultSize = props.pcrParticipantSize.find(x => x.defaultValue === true);
-  const selectedSizeOption =
-    props.pcrItem.participantSize && sizeOptions.find(x => parseInt(x.id, 10) === props.pcrItem.participantSize)
-    || defaultSize && sizeOptions.find(x => x.id === defaultSize.value.toString());
+  const selectedSizeOption = props.pcrItem.participantSize && sizeOptions.find(x => parseInt(x.id, 10) === props.pcrItem.participantSize);
 
   return (
     <ACC.Section title={"Organisation details"}>
@@ -40,7 +37,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
             name="participantSize"
             options={sizeOptions}
             inline={false}
-            value={() => selectedSizeOption}
+            value={() => selectedSizeOption || undefined}
             update={(x, option) => {
               if (!option) return x.participantSize === PCRParticipantSize.Unknown;
               x.participantSize = parseInt(option.id, 10);

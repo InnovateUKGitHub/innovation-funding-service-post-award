@@ -1,6 +1,7 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 import { ILogger } from "../features/common";
-import { Connection, PicklistEntry } from "jsforce";
+import { Connection } from "jsforce";
+import { IPicklistEntry } from "@framework/types";
 
 export type ISalesforceMonitoringReportStatus = "New" | "Draft" | "Awaiting IUK Approval" | "Approved" | "IUK Queried";
 export interface ISalesforceMonitoringReportHeader {
@@ -21,7 +22,7 @@ export interface IMonitoringReportHeaderRepository {
   create(updateDto: Partial<ISalesforceMonitoringReportHeader>): Promise<string>;
   getAllForProject(projectId: string): Promise<ISalesforceMonitoringReportHeader[]>;
   delete(reportId: string): Promise<void>;
-  getMonitoringReportStatuses(): Promise<PicklistEntry[]>;
+  getMonitoringReportStatuses(): Promise<IPicklistEntry[]>;
 }
 
 /**
