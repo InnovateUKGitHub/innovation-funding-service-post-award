@@ -103,9 +103,7 @@ class Component extends React.Component<SpendProfileCostFormProps<PCRSpendProfil
       .filter(x => x.active)
       .map(x => ({ id: x.value.toString(), value: x.label }));
 
-    const defaultSelection = options.find(x => x.defaultValue === true);
-    const selectedOption = selected && filteredOptions.find(x => parseInt(x.id, 10) === selected)
-      || defaultSelection && filteredOptions.find(x => x.id === defaultSelection.value.toString());
+    const selectedOption = selected && filteredOptions.find(x => parseInt(x.id, 10) === selected);
 
     return {options: filteredOptions, selected: selectedOption};
   }

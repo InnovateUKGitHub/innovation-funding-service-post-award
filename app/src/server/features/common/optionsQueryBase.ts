@@ -1,7 +1,6 @@
 import { QueryBase } from "./queryBase";
-import { IContext, PCRStatus } from "@framework/types";
+import { IContext, IPicklistEntry } from "@framework/types";
 import { Option } from "@framework/dtos/option";
-import { PicklistEntry } from "jsforce";
 
 export abstract class OptionsQueryBase<T extends (string | number)> extends QueryBase<Option<T>[]> {
   protected constructor(private key: string) {
@@ -22,14 +21,13 @@ export abstract class OptionsQueryBase<T extends (string | number)> extends Quer
       return acc.set(enumValue, {
         value: enumValue,
         label: curr.label || curr.value,
-        defaultValue: curr.defaultValue,
         active: curr.active,
       });
     }, new Map());
     return [...map.values()];
   }
 
-  protected abstract getPickListValues(context: IContext): Promise<PicklistEntry[]>;
+  protected abstract getPickListValues(context: IContext): Promise<IPicklistEntry[]>;
 
   protected abstract mapToEnumValue(value: string): T;
 }
