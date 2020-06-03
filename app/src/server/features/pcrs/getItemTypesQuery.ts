@@ -65,6 +65,7 @@ export const PCRRecordTypeMetaValues: IMetaValue[] = [
   { type: PCRItemType.PartnerAddition, typeName: "Add a partner", files: ["partner_addition.xlsx"], guidance: partnerAdditionGuidance },
   { type: PCRItemType.ScopeChange, typeName: "Change project scope", guidance: scopeChangeGuidance },
   { type: PCRItemType.TimeExtension, typeName: "Change project duration" },
+  { type: PCRItemType.PeriodLengthChange, typeName: "Change period length" },
   { type: PCRItemType.AccountNameChange, typeName: "Change a partner's name", guidance: nameChangeGuidance },
   { type: PCRItemType.ProjectSuspension, typeName: "Put project on hold" },
   { type: PCRItemType.ProjectTermination, typeName: "End the project early" },
