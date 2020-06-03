@@ -39,7 +39,6 @@ export interface ProjectChangeRequestItemForCreateEntity {
   suspensionStartDate?: Date | null;
   suspensionEndDate?: Date | null;
   partnerId?: string | null;
-  withdrawalDate?: Date | null;
   removalPeriod?: number | null;
   // add partner
   projectRole?: PCRProjectRole;

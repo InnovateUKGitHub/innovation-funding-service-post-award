@@ -11,7 +11,6 @@ import {
 } from "@framework/entities";
 import { GetAllForProjectQuery } from "@server/features/partners";
 import { PCRStatus } from "@framework/constants";
-import { periodInProject } from "@framework/util";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
 
@@ -134,8 +133,8 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
         }
         break;
       case PCRItemType.PartnerWithdrawal:
-        if (item.withdrawalDate !== dto.withdrawalDate || item.partnerId !== dto.partnerId) {
-          return { ...init, withdrawalDate: dto.withdrawalDate, partnerId: dto.partnerId, removalPeriod: periodInProject(dto.withdrawalDate, project) };
+        if (item.removalPeriod !== dto.removalPeriod || item.partnerId !== dto.partnerId) {
+          return { ...init, partnerId: dto.partnerId, removalPeriod: dto.removalPeriod };
         }
         break;
       case PCRItemType.PartnerAddition:
