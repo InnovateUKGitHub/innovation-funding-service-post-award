@@ -1,13 +1,11 @@
-import { Connection, PicklistEntry } from "jsforce";
+import { Connection } from "jsforce";
 import SalesforceRepositoryBase, {
-  Insertable,
-  SalesforceRepositoryBaseWithMapping,
-  Updatable
+  Insertable
 } from "./salesforceRepositoryBase";
 import { ILogger } from "@server/features/common/logger";
 import { PcrSpendProfileEntity, PcrSpendProfileEntityForCreate } from "@framework/entities/pcrSpendProfile";
 import { SalesforcePcrSpendProfileMapper } from "@server/repositories/mappers/pcrSpendProfileMapper";
-import { ISalesforceFinancialVirement } from "@server/repositories/financialVirementRepository";
+import { IPicklistEntry } from "@framework/types";
 
 export interface ISalesforcePcrSpendProfile {
   Id: string;
@@ -55,7 +53,7 @@ export interface IPcrSpendProfileRepository {
   insertSpendProfiles(items: PcrSpendProfileEntityForCreate[]): Promise<string[]>;
   updateSpendProfiles(items: PcrSpendProfileEntity[]): Promise<boolean>;
   deleteSpendProfiles(items: string[]): Promise<void>;
-  getCapitalUsageTypes(): Promise<PicklistEntry[]>;
+  getCapitalUsageTypes(): Promise<IPicklistEntry[]>;
 }
 
 export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesforcePcrSpendProfile> implements IPcrSpendProfileRepository {
@@ -123,7 +121,7 @@ export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesfo
     return super.deleteAll(ids);
   }
 
-  getCapitalUsageTypes(): Promise<PicklistEntry[]> {
+  getCapitalUsageTypes(): Promise<IPicklistEntry[]> {
     return super.getPicklist("Acc_NewOrExisting__c");
   }
 }

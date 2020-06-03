@@ -1,4 +1,4 @@
-import { Connection, PicklistEntry } from "jsforce";
+import { Connection } from "jsforce";
 import { DateTime } from "luxon";
 import {
   ProjectChangeRequestEntity,
@@ -18,6 +18,7 @@ import {
 } from "./mappers/projectChangeRequestMapper";
 import { NotFoundError } from "@server/features/common";
 import { PCRItemStatus, PCRStatus } from "@framework/constants";
+import { IPicklistEntry } from "@framework/types";
 
 export interface IProjectChangeRequestRepository {
   createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity): Promise<string>;
@@ -28,11 +29,11 @@ export interface IProjectChangeRequestRepository {
   insertItems(headerId: string, items: ProjectChangeRequestItemForCreateEntity[]): Promise<void>;
   isExisting(projectId: string, projectChangeRequestId: string): Promise<boolean>;
   delete(pcr: ProjectChangeRequestEntity): Promise<void>;
-  getPcrChangeStatuses(): Promise<PicklistEntry[]>;
-  getProjectRoles(): Promise<PicklistEntry[]>;
-  getPartnerTypes(): Promise<PicklistEntry[]>;
-  getParticipantSizes(): Promise<PicklistEntry[]>;
-  getProjectLocations(): Promise<PicklistEntry[]>;
+  getPcrChangeStatuses(): Promise<IPicklistEntry[]>;
+  getProjectRoles(): Promise<IPicklistEntry[]>;
+  getPartnerTypes(): Promise<IPicklistEntry[]>;
+  getParticipantSizes(): Promise<IPicklistEntry[]>;
+  getProjectLocations(): Promise<IPicklistEntry[]>;
 }
 
 export interface ISalesforcePCR {
@@ -286,23 +287,23 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     return super.deleteAll([item.id, ... item.items.map(x => x.id)]);
   }
 
-  getPcrChangeStatuses(): Promise<PicklistEntry[]> {
+  getPcrChangeStatuses(): Promise<IPicklistEntry[]> {
     return super.getPicklist("Acc_Status__c");
   }
 
-  getProjectRoles(): Promise<PicklistEntry[]> {
+  getProjectRoles(): Promise<IPicklistEntry[]> {
     return super.getPicklist("Acc_ProjectRole__c");
   }
 
-  async getPartnerTypes(): Promise<PicklistEntry[]> {
+  async getPartnerTypes(): Promise<IPicklistEntry[]> {
     return super.getPicklist("Acc_ParticipantType__c");
   }
 
-  getParticipantSizes(): Promise<PicklistEntry[]> {
+  getParticipantSizes(): Promise<IPicklistEntry[]> {
     return super.getPicklist("Acc_ParticipantSize__c");
   }
 
-  getProjectLocations(): Promise<PicklistEntry[]> {
+  getProjectLocations(): Promise<IPicklistEntry[]> {
     return super.getPicklist("Acc_Location__c");
   }
 

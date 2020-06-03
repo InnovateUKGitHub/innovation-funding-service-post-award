@@ -1,8 +1,9 @@
-import { Connection, DescribeSObjectResult, Field, PicklistEntry, Query, RecordResult } from "jsforce";
+import { Connection, DescribeSObjectResult, Field, Query, RecordResult } from "jsforce";
 import { Stream } from "stream";
 import * as Errors from "@server/repositories/errors";
 import { BadRequestError, ILogger } from "@server/features/common";
 import { ISalesforceMapper } from "./mappers/saleforceMapperBase";
+import { IPicklistEntry } from "@framework/types";
 
 export type Updatable<T> = Partial<T> & {
   Id: string
@@ -118,7 +119,9 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
     return fieldDescription;
   }
 
-  protected async getPicklist(field: string): Promise<PicklistEntry[]> {
+  // Using own return type and not jsforce PicklistEntry so we can omit unwanted fields like "defaultValue".
+  // "defaultValue" is ignored because it is used internally in SF and not intended to drive the UI
+  protected async getPicklist(field: string): Promise<IPicklistEntry[]> {
     const fieldMetadata = await this.getFieldMetadata(field);
     if (!fieldMetadata.picklistValues) {
       throw new BadRequestError(`Field is not a pick-list: ${field}`);

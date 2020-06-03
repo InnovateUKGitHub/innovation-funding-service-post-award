@@ -15,10 +15,8 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
   const projectLocationOptions: ACC.SelectOption[] = props.pcrProjectLocation
     .filter(x => x.active)
     .map(x => ({ id: x.value.toString(), value: x.label }));
-  const defaultOption = props.pcrProjectLocation.find(x => x.defaultValue === true);
-  const selectedProjectLocationOption =
-    props.pcrItem.projectLocation && projectLocationOptions.find(x => parseInt(x.id, 10) === props.pcrItem.projectLocation)
-    || defaultOption && projectLocationOptions.find(x => x.id === defaultOption.value.toString());
+
+  const selectedProjectLocationOption = props.pcrItem.projectLocation && projectLocationOptions.find(x => parseInt(x.id, 10) === props.pcrItem.projectLocation);
 
   return (
     <ACC.Section title="Project location">
@@ -35,7 +33,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
             hint="Indicate where the majority of the work being done by this partner will take place."
             options={projectLocationOptions}
             inline={false}
-            value={() => selectedProjectLocationOption}
+            value={() => selectedProjectLocationOption || undefined}
             update={(x, option) => {
               if (!option) return x.projectLocation === PCRProjectLocation.Unknown;
               x.projectLocation = parseInt(option.id, 10);
