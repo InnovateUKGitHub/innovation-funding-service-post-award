@@ -99,8 +99,8 @@ export interface PCRItemForAccountNameChangeDto extends PCRItemBaseDto {
 export interface PCRItemForPartnerWithdrawalDto extends PCRItemBaseDto {
   type: PCRItemType.PartnerWithdrawal;
   partnerNameSnapshot: string | null;
-  withdrawalDate: Date | null;
   partnerId: string | null;
+  removalPeriod: number | null;
 }
 
 export interface PCRItemForProjectTerminationDto extends PCRItemBaseDto {

@@ -6,7 +6,6 @@ import { ProjectChangeRequestItemForCreateEntity } from "@framework/entities";
 import { PCRDtoValidator } from "@ui/validators";
 import { GetAllProjectRolesForUser, GetByIdQuery } from "@server/features/projects";
 import { PCRItemType } from "@framework/constants";
-import { periodInProject } from "@framework/util";
 
 export class CreateProjectChangeRequestCommand extends CommandBase<string> {
   constructor(
@@ -78,7 +77,7 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
       case PCRItemType.AccountNameChange:
           return { ...init, accountName: itemDto.accountName, partnerId: itemDto.partnerId };
       case PCRItemType.PartnerWithdrawal:
-        return { ...init, removalPeriod: periodInProject(itemDto.withdrawalDate, project), partnerId: itemDto.partnerId, withdrawalDate: itemDto.withdrawalDate };
+        return { ...init, removalPeriod: itemDto.removalPeriod, partnerId: itemDto.partnerId };
       case PCRItemType.PartnerAddition:
         return {
           ...init,

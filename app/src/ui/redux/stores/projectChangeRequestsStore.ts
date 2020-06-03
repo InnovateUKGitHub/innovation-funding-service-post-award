@@ -271,8 +271,8 @@ export class ProjectChangeRequestStore extends StoreBase {
           ...baseFields,
           type: itemType.type,
           partnerId: null,
-          withdrawalDate: null,
           partnerNameSnapshot: null,
+          removalPeriod: null,
         };
       case PCRItemType.AccountNameChange:
         return {

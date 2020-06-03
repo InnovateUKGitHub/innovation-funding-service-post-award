@@ -710,7 +710,7 @@ describe("UpdatePCRCommand", () => {
   });
 
   describe("Partner withdrawal", () => {
-    test("returns a bad request if partnerId and withdrawal date are not sent", async () => {
+    test("returns a bad request if partnerId and removal period are not sent", async () => {
       const context = new TestContext();
 
       const project = context.testData.createProject();
@@ -727,15 +727,15 @@ describe("UpdatePCRCommand", () => {
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerWithdrawalDto;
 
-      item.withdrawalDate = null;
+      item.removalPeriod = null;
       item.partnerId = partner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
-      item.withdrawalDate = new Date();
+      item.removalPeriod = 1;
       item.partnerId = null;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
-      item.withdrawalDate = new Date();
+      item.removalPeriod = 1;
       item.partnerId = partner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
     });
@@ -758,16 +758,16 @@ describe("UpdatePCRCommand", () => {
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerWithdrawalDto;
 
-      item.withdrawalDate = new Date();
+      item.removalPeriod = 1;
       item.partnerId = otherPartner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
-      item.withdrawalDate = new Date();
+      item.removalPeriod = 1;
       item.partnerId = projectPartner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
     });
 
-    test("returns a bad request if an invalid withdrawal date is sent", async () => {
+    test("returns a bad request if an invalid removal period is sent", async () => {
       const context = new TestContext();
 
       const project = context.testData.createProject();
@@ -784,16 +784,16 @@ describe("UpdatePCRCommand", () => {
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerWithdrawalDto;
 
-      item.withdrawalDate = new Date("58rd Augcember √-1992");
+      item.removalPeriod = 1.5;
       item.partnerId = partner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
-      item.withdrawalDate = new Date();
+      item.removalPeriod = 1;
       item.partnerId = partner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
     });
 
-    test("returns a bad request if withdrawal date before project start date", async () => {
+    test("returns a bad request if removal period greater than project periods", async () => {
       const context = new TestContext();
 
       const project = context.testData.createProject(x => {x.Acc_StartDate__c = "2020-01-01"; x.Acc_ClaimFrequency__c = "Monthly"});
@@ -810,43 +810,16 @@ describe("UpdatePCRCommand", () => {
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerWithdrawalDto;
 
-      item.withdrawalDate = new Date("01/01/2019");
+      item.removalPeriod = 6;
       item.partnerId = partner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
 
-      item.withdrawalDate = new Date("01/12/2019");
-      item.partnerId = partner.id;
-      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
-
-      item.withdrawalDate = new Date("01/05/2020");
+      item.removalPeriod = 1;
       item.partnerId = partner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
     });
 
-    test("returns a bad request if withdrawal date after project end date", async () => {
-      const context = new TestContext();
-
-      const project = context.testData.createProject(x => {x.Acc_EndDate__c = "2020-01-01"; x.Acc_ClaimFrequency__c = "Monthly"});
-      const partner = context.testData.createPartner(project);
-      context.testData.createCurrentUserAsProjectManager(project);
-      const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
-      const recordTypes = context.testData.createPCRRecordTypes();
-
-      const partnerWithdrawalType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal)!;
-
-      const recordType = recordTypes.find(x => x.type === partnerWithdrawalType.typeName);
-      context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Complete, partnerId: partner.id });
-
-      const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
-      const item = dto.items[0] as PCRItemForPartnerWithdrawalDto;
-
-      item.withdrawalDate = new Date("01/05/2020");
-      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
-      item.withdrawalDate = new Date("01/01/2019");
-      await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
-    });
-
-    test("updates withdrawal date and partner", async () => {
+    test("updates removal period and partner", async () => {
       const context = new TestContext();
 
       const project = context.testData.createProject();
@@ -863,15 +836,13 @@ describe("UpdatePCRCommand", () => {
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerWithdrawalDto;
 
-      const date = new Date();
-
-      item.withdrawalDate = date;
+      item.removalPeriod = 1;
       item.partnerId = partner.id;
       await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(true);
 
       const update = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const updateItem = update.items[0] as PCRItemForPartnerWithdrawalDto;
-      await expect(updateItem.withdrawalDate).toEqual(date);
+      await expect(updateItem.removalPeriod).toEqual(1);
       await expect(updateItem.partnerId).toBe(partner.id);
     });
 
@@ -890,7 +861,7 @@ describe("UpdatePCRCommand", () => {
 
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerWithdrawalDto;
-      item.withdrawalDate = new Date();
+      item.removalPeriod = 1;
       item.partnerId = partner.id;
       item.status = PCRItemStatus.Complete;
 
