@@ -1,7 +1,6 @@
 // tslint:disable
 import { TestContext } from "../../testContextProvider";
 import { CreateMonitoringReportCommand } from "@server/features/monitoringReports/createMonitoringReport";
-import { ISalesforceProject } from "@server/repositories";
 import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
 import { MonitoringReportDto } from "@framework/types";
 import { MonitoringReportStatus } from "@framework/constants";
@@ -11,32 +10,22 @@ describe("createMonitoringReports", () => {
   it("should create new", async () => {
     const context = new TestContext();
 
-    const project = context.testData.createProject((x) => {
-      x.Acc_StartDate__c = "2018-01-01";
-      x.Acc_EndDate__c = "2030-01-01";
-      x.Acc_ClaimFrequency__c = "Monthly";
-    });
-
-    const dto = await getCreateDto(context, project);
+    const dto = await getCreateDto(context);
 
     expect(context.repositories.monitoringReportHeader.Items.length).toBe(0);
 
     const result = await context.runCommand(new CreateMonitoringReportCommand(dto, false));
 
     expect(context.repositories.monitoringReportHeader.Items.length).toBe(1);
+    expect(context.repositories.monitoringReportHeader.Items[0].Acc_PeriodStartDate__c).toBe("2018-01-02");
+    expect(context.repositories.monitoringReportHeader.Items[0].Acc_PeriodEndDate__c).toBe("2018-03-04");
     expect(result).toEqual(context.repositories.monitoringReportHeader.Items[0].Id);
   });
 
   it("should create Draft report if specified", async () => {
     const context = new TestContext();
 
-    const project = context.testData.createProject((x) => {
-      x.Acc_StartDate__c = "2018-01-01";
-      x.Acc_EndDate__c = "2030-01-01";
-      x.Acc_ClaimFrequency__c = "Monthly";
-    });
-
-    const dto = await getCreateDto(context, project);
+    const dto = await getCreateDto(context);
 
     await context.runCommand(new CreateMonitoringReportCommand(dto, false));
 
@@ -46,15 +35,9 @@ describe("createMonitoringReports", () => {
   it("should create new with all answered questions", async () => {
     const context = new TestContext();
 
-    const project = context.testData.createProject((x) => {
-      x.Acc_StartDate__c = "2018-01-01";
-      x.Acc_EndDate__c = "2030-01-01";
-      x.Acc_ClaimFrequency__c = "Monthly";
-    });
-
     const questionOptions = context.testData.range(3, seed => context.testData.createMonitoringReportQuestionSet(seed, 3));
 
-    const dto = await getCreateDto(context, project);
+    const dto = await getCreateDto(context);
 
     dto.questions[0].optionId = questionOptions[0][0].Id;
     dto.questions[0].comments = "Question 1 Comments";
@@ -75,13 +58,7 @@ describe("createMonitoringReports", () => {
   it("should create Submitted report if specified", async () => {
     const context = new TestContext();
 
-    const project = context.testData.createProject((x) => {
-      x.Acc_StartDate__c = "2018-01-01";
-      x.Acc_EndDate__c = "2030-01-01";
-      x.Acc_ClaimFrequency__c = "Monthly";
-    });
-
-    const dto = await getCreateDto(context, project);
+    const dto = await getCreateDto(context);
 
     await context.runCommand(new CreateMonitoringReportCommand(dto, true));
 
@@ -90,33 +67,28 @@ describe("createMonitoringReports", () => {
 
   it("should create a status change for draft if the report is created", async () => {
     const context = new TestContext();
-    const project = context.testData.createProject((x) => {
-      x.Acc_StartDate__c = "2018-01-01";
-      x.Acc_EndDate__c = "2030-01-01";
-      x.Acc_ClaimFrequency__c = "Monthly";
-    });
 
-    const dto = await getCreateDto(context, project);
+    const dto = await getCreateDto(context);
     const headerId = await context.runCommand(new CreateMonitoringReportCommand(dto, false));
     expect(context.repositories.monitoringReportStatusChange.Items.filter(x => x.Acc_MonitoringReport__c === headerId)).toHaveLength(1);
   });
 
   it("should create a status change for awaiting approval if the report is submitted", async () => {
     const context = new TestContext();
-    const project = context.testData.createProject((x) => {
-      x.Acc_StartDate__c = "2018-01-01";
-      x.Acc_EndDate__c = "2030-01-01";
-      x.Acc_ClaimFrequency__c = "Monthly";
-    });
 
-    const dto = await getCreateDto(context, project);
+    const dto = await getCreateDto(context);
     const headerId = await context.runCommand(new CreateMonitoringReportCommand(dto, true));
     expect(context.repositories.monitoringReportStatusChange.Items.filter(x => x.Acc_MonitoringReport__c === headerId)).toHaveLength(2);
   });
 });
 
-async function getCreateDto(context: TestContext, project: ISalesforceProject): Promise<MonitoringReportDto> {
+async function getCreateDto(context: TestContext): Promise<MonitoringReportDto> {
   const questions = await context.runQuery(new GetMonitoringReportActiveQuestions());
+  const project = context.testData.createProject((x) => {
+    x.Acc_StartDate__c = "2018-01-01";
+  });
+  const partner = context.testData.createPartner(project);
+  context.testData.createProfileDetail(undefined, partner, 1);
 
   return {
     projectId: project.Id,
