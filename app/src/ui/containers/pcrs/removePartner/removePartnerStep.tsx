@@ -40,15 +40,16 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRP
             validation={props.validator.partnerId}
           />
         </Form.Fieldset>
-        <Form.Fieldset heading="Removal date">
-          <Form.Date
-            label="Removal date"
-            hint={props.getRequiredToCompleteMessage()}
+        <Form.Fieldset heading="When is their last period?">
+          <Form.Numeric
+            label="Removal period"
+            hint="The partner can make a claim for this period before being removed. If they have a claim in progress, they will be removed once that claim has been paid."
             labelHidden={true}
-            name="withdrawalDate"
-            value={x => x.withdrawalDate}
-            update={(x, value) => x.withdrawalDate = value}
-            validation={props.validator.withdrawalDate}
+            width="one-quarter"
+            name="removalPeriod"
+            value={x => x.removalPeriod}
+            update={(x, value) => x.removalPeriod = value}
+            validation={props.validator.removalPeriod}
           />
         </Form.Fieldset>
         <Form.Submit>Save and continue</Form.Submit>

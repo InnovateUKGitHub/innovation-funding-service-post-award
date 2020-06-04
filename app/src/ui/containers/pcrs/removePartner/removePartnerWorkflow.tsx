@@ -6,12 +6,12 @@ import { RemovePartnerStep } from "@ui/containers/pcrs/removePartner/removePartn
 import { PCRPrepareItemFilesForPartnerWithdrawalStep } from "@ui/containers/pcrs/removePartner/prepareItemFilesForPartnerWithdrawalStep";
 import { RemovePartnerSummary } from "@ui/containers/pcrs/removePartner/removePartnerSummary";
 
-export type removePartnerStepNames = "withdrawalDateStep" | "filesStep";
+export type removePartnerStepNames = "removalPeriodStep" | "filesStep";
 
 export const removePartnerWorkflow: IPCRWorkflow<PCRItemForPartnerWithdrawalDto, PCRPartnerWithdrawalItemDtoValidator> = {
   steps: [
     {
-      stepName: "withdrawalDateStep",
+      stepName: "removalPeriodStep",
       displayName: "Partner withdrawal",
       stepNumber: 1,
       validation: val => val.pcr,
