@@ -38,7 +38,7 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data, Callbacks> {
         project={project}
       >
         <ACC.Section
-          title={<ACC.Content value={x => x.financeSummary.projectMessages.currentPeriodInfo(project.periodId, project.totalPeriods!)} />}
+          title={<ACC.Content value={x => x.financeSummary.projectMessages.currentPeriodInfo(project.periodId, project.numberOfPeriods)} />}
           subtitle={<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />}
           qa="financeSummarySection"
         >

@@ -50,7 +50,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
                 <ACC.Section
                     qa="period-information"
-                    titleContent={x => x.projectDetails.projectMessages.currentPeriodInfo(project.periodId, project.totalPeriods!)}
+                    titleContent={x => x.projectDetails.projectMessages.currentPeriodInfo(project.periodId, project.numberOfPeriods)}
                     subtitle={<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />}
                 />
 

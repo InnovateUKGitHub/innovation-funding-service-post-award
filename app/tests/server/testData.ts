@@ -13,6 +13,7 @@ import { ITestRepositories } from "./testRepositories";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 import { PCRItemStatus, PCRParticipantSize, PCRStatus } from "@framework/constants";
 import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
+import { ISalesforceProfileTotalPeriod } from "@server/repositories";
 
 export class TestData {
   constructor(private repositories: ITestRepositories, private getCurrentUser: () => IClientUser) {
@@ -75,6 +76,7 @@ export class TestData {
       ClaimStatusName: "",
       Acc_LeadParticipantName__c: "",
       Acc_NumberofPeriods__c: 5,
+      Acc_CurrentPeriodNumber__c: 0,
       Acc_Duration__c: 15,
     };
 
@@ -220,7 +222,7 @@ export class TestData {
   }
 
   public createMonitoringReportQuestionSet(displayOrder: number, noOptions: number = 3, isActive: boolean = true): Repositories.ISalesforceMonitoringReportQuestions[] {
-    return range(noOptions).map(x => this.createMonitoringReportQuestion(displayOrder, isActive, true));
+    return range(noOptions).map(() => this.createMonitoringReportQuestion(displayOrder, isActive, true));
   }
 
   public createMonitoringReportQuestion(displayOrder: number, isActive: boolean = true, isScored: boolean = true): Repositories.ISalesforceMonitoringReportQuestions {
@@ -247,10 +249,13 @@ export class TestData {
   public createMonitoringReportHeader(project?: Repositories.ISalesforceProject, periodId: number = 1, update?: Partial<Repositories.ISalesforceMonitoringReportHeader>): Repositories.ISalesforceMonitoringReportHeader {
     const seed = this.repositories.monitoringReportHeader.Items.length + 1;
 
-    project = project || this.createProject(x => {
-      x.Acc_StartDate__c = "2000-01-01";
-      x.Acc_EndDate__c = "2019-12-31";
-    });
+    if (!project) {
+      project = this.createProject(x => {
+        x.Acc_CurrentPeriodNumber__c = periodId;
+        x.Acc_StartDate__c = "2000-01-01";
+        x.Acc_EndDate__c = "2019-12-31";
+      });
+    }
 
     const format = "yyyy-MM-dd";
 
@@ -295,7 +300,7 @@ export class TestData {
     return response;
   }
 
-  public createMonitoringReportStatusChange(header?: Repositories.ISalesforceMonitoringReportHeader, partner?: Entities.Partner): Repositories.ISalesforceMonitoringReportStatusChange {
+  public createMonitoringReportStatusChange(header?: Repositories.ISalesforceMonitoringReportHeader): Repositories.ISalesforceMonitoringReportStatusChange {
     header = header || this.createMonitoringReportHeader();
 
     const seed = this.repositories.monitoringReportStatusChange.Items.length + 1;
@@ -552,6 +557,8 @@ export class TestData {
       Acc_PeriodLatestForecastCost__c: 100,
       Acc_ProjectParticipant__c: partner.id,
       Acc_ProjectPeriodNumber__c: periodId || 1,
+      Acc_ProjectPeriodStartDate__c: "2020-08-01",
+      Acc_ProjectPeriodEndDate__c: "2020-08-31",
       LastModifiedDate: new Date().toISOString()
     };
 

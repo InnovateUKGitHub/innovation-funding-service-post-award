@@ -59,7 +59,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
 
     const title = isProjectClosed || project.isPastEndDate || this.isPartnerWithdrawn(project, partners)
       ? <ACC.Content value={x => x.projectOverview.messages.projectEnded()}/>
-      : <ACC.Content value={x => x.projectOverview.messages.currentPeriodInfo(project.periodId, project.totalPeriods!)}/>;
+      : <ACC.Content value={x => x.projectOverview.messages.currentPeriodInfo(project.periodId, project.numberOfPeriods)}/>;
 
     const subtitle = isProjectClosed ? null :
       project.isPastEndDate || this.isPartnerWithdrawn(project, partners)
