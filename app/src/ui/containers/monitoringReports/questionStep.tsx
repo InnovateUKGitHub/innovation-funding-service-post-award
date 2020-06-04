@@ -18,7 +18,7 @@ export class MonitoringReportQuestionStep extends React.Component<Props> {
     const title = <ACC.PeriodTitle periodId={editor.data.periodId} periodStartDate={editor.data.startDate} periodEndDate={editor.data.endDate} />;
 
     return (
-      <ACC.Section title={title}>
+      <ACC.Section title={title}  qa="period-information">
         <ACC.Section>
           <ReportForm.Form editor={editor} onChange={(dto) => onChange(dto)} qa="monitoringReportQuestionForm" >
             {this.renderFormItem(editor, questionNumber)}
