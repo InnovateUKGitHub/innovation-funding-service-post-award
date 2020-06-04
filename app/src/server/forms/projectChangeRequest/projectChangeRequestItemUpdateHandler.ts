@@ -145,12 +145,8 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   }
 
   private updatePartnerWithdrawal(item: Dtos.PCRItemForPartnerWithdrawalDto, body: IFormBody, stepName: removePartnerStepNames | null) {
-    if (stepName === "withdrawalDateStep") {
-      if (body.withdrawalDate_day || body.withdrawalDate_month || body.withdrawalDate_year) {
-        const withdrawalDate = DateTime.fromFormat(`${body.withdrawalDate_day}/${body.withdrawalDate_month}/${body.withdrawalDate_year}`, "d/M/yyyy");
-        item.withdrawalDate = withdrawalDate.toJSDate();
-      }
-
+    if (stepName === "removalPeriodStep") {
+      item.removalPeriod = Number(body.removalPeriod);
       item.partnerId = body.partnerId;
     }
   }

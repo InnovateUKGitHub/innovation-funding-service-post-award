@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { Nested, Result, Results } from "../validation";
+import { Result, Results } from "../validation";
 import * as Validation from "./common";
 import {
   PartnerDto,
@@ -19,7 +19,6 @@ import {
   ProjectRole
 } from "@framework/dtos";
 import { PCRItemStatus, PCRItemType, PCRPartnerType, PCRProjectRole, PCRStatus } from "@framework/constants";
-import { isNumber, periodInProject } from "@framework/util";
 import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 
 export class PCRDtoValidator extends Results<PCRDto> {
@@ -557,17 +556,15 @@ export class PCRPartnerWithdrawalItemDtoValidator extends PCRBaseItemDtoValidato
     super(model, canEdit, role, pcrStatus, recordTypes, showValidationErrors, original);
   }
 
-  private validateWithdrawalDate() {
+  private validateRemovalPeriod() {
     if (!this.canEdit) {
-      return Validation.isUnchanged(this, this.model.withdrawalDate, this.original && this.original.withdrawalDate, "Withdrawal date cannot be changed.");
+      return Validation.isUnchanged(this, this.model.removalPeriod, this.original && this.original.removalPeriod, "Period cannot be changed.");
     }
     const isComplete = this.model.status === PCRItemStatus.Complete;
-    const removalPeriod = periodInProject(this.model.withdrawalDate, this.project);
     return Validation.all(this,
-      () => isComplete ? Validation.required(this, this.model.withdrawalDate, "Enter a removal date") : Validation.valid(this),
-      () => Validation.isDate(this, this.model.withdrawalDate, "Enter a real removal date"),
-      () => Validation.isBeforeOrSameDay(this, this.model.withdrawalDate, this.project.endDate, `Withdrawal date must be before project is due to finish.`),
-      () => isNumber(removalPeriod) ? Validation.isTrue(this, removalPeriod > 0, "Withdrawal date must be after the project started") : Validation.valid(this)
+      () => isComplete ? Validation.required(this, this.model.removalPeriod, "Enter a removal period") : Validation.valid(this),
+      () => Validation.integer(this, this.model.removalPeriod, "Period must be a whole number, like 3"),
+      () => this.model.removalPeriod ? Validation.isTrue(this, (this.model.removalPeriod > 0 && this.model.removalPeriod <= this.project.numberOfPeriods), `Period must be ${this.project.numberOfPeriods} or fewer`): Validation.valid(this),
     );
   }
 
@@ -583,6 +580,6 @@ export class PCRPartnerWithdrawalItemDtoValidator extends PCRBaseItemDtoValidato
     );
   }
 
-  withdrawalDate = this.validateWithdrawalDate();
+  removalPeriod = this.validateRemovalPeriod();
   partnerId = this.validatePartnerId();
 }

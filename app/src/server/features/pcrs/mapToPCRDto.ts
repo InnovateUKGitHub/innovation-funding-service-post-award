@@ -120,9 +120,9 @@ const mapItemForAccountNameChange = (pcr: ProjectChangeRequestItemEntity, typeNa
 
 const mapItemForPartnerWithdrawal = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.PartnerWithdrawal): PCRItemForPartnerWithdrawalDto => ({
   ...mapBaseItem(pcr, typeName, type),
-  withdrawalDate: pcr.withdrawalDate || null,
   partnerId: pcr.partnerId || null,
   partnerNameSnapshot: pcr.partnerNameSnapshot || null,
+  removalPeriod: pcr.removalPeriod || null,
   type
 });
 
