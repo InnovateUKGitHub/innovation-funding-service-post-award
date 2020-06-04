@@ -394,11 +394,16 @@ class ProfileTotalPeriodTestRepository extends TestRepository<Repositories.ISale
       .getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
   }
 
+  getByProjectIdAndPeriodId(projectId: string, periodId: number) {
+    const partnerIds = this.partnerRepository.Items.filter(x => x.projectId === projectId).map(x => x.id);
+    return super.getWhere(
+      x => partnerIds.indexOf(x.Acc_ProjectParticipant__c) !== -1 && x.Acc_ProjectPeriodNumber__c === periodId);
+  }
+
   getAllByProjectId(projectId: string): Promise<Repositories.ISalesforceProfileTotalPeriod[]> {
     const partnerIds = this.partnerRepository.Items.filter(x => x.projectId === projectId).map(x => x.id);
     return super.getWhere(x => partnerIds.indexOf(x.Acc_ProjectParticipant__c) !== -1);
   }
-
 }
 
 class ProfileTotalCostCategoryTestRepository extends TestRepository<Repositories.ISalesforceProfileTotalCostCategory> implements Repositories.IProfileTotalCostCategoryRepository {

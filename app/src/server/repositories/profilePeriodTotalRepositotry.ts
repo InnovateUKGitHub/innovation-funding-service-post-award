@@ -4,12 +4,15 @@ export interface ISalesforceProfileTotalPeriod {
   LastModifiedDate: string;
   Acc_ProjectParticipant__c: string;
   Acc_ProjectPeriodNumber__c: number;
+  Acc_ProjectPeriodStartDate__c: string;
+  Acc_ProjectPeriodEndDate__c: string;
   Acc_PeriodLatestForecastCost__c: number;
 }
 
 export interface IProfileTotalPeriodRepository {
   getAllByProjectId(projectId: string): Promise<ISalesforceProfileTotalPeriod[]>;
   getAllByPartnerId(partnerId: string): Promise<ISalesforceProfileTotalPeriod[]>;
+  getByProjectIdAndPeriodId(projectId: string, periodId: number): Promise<ISalesforceProfileTotalPeriod[]>;
   get(partnerId: string, periodId: number): Promise<ISalesforceProfileTotalPeriod>;
 }
 
@@ -30,6 +33,8 @@ export class ProfileTotalPeriodRepository extends SalesforceRepositoryBase<ISale
     "LastModifiedDate",
     "Acc_ProjectParticipant__c",
     "Acc_ProjectPeriodNumber__c",
+    "Acc_ProjectPeriodStartDate__c",
+    "Acc_ProjectPeriodEndDate__c",
     "Acc_PeriodLatestForecastCost__c"
   ];
 
@@ -43,6 +48,15 @@ export class ProfileTotalPeriodRepository extends SalesforceRepositoryBase<ISale
 
   getAllByPartnerId(partnerId: string): Promise<ISalesforceProfileTotalPeriod[]> {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}'`;
+    return super.where(filter);
+  }
+
+  getByProjectIdAndPeriodId(projectId: string, periodId: number): Promise<ISalesforceProfileTotalPeriod[]> {
+    const filter = `
+      Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'
+      AND RecordType.Name = '${this.recordType}'
+      AND Acc_ProjectPeriodNumber__c = ${periodId}
+    `;
     return super.where(filter);
   }
 

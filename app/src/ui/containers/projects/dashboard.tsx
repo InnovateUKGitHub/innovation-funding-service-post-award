@@ -243,7 +243,7 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
       const endedMessage = <ACC.Content value={x => x.projectsDashboard.messages.projectEnded()} />;
       const openMessage = (
         <React.Fragment>
-          Period {project.periodId} of {project.totalPeriods}&nbsp;(<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />)
+          Period {project.periodId} of {project.numberOfPeriods}&nbsp;(<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />)
         </React.Fragment>
       );
       messages.push(project.isPastEndDate || (partner && partner.isWithdrawn) ? endedMessage : openMessage);

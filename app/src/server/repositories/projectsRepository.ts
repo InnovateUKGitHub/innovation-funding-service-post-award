@@ -27,6 +27,7 @@ export interface ISalesforceProject {
   Acc_LeadParticipantName__c: string;
   Acc_Duration__c: number;
   Acc_NumberofPeriods__c: number;
+  Acc_CurrentPeriodNumber__c: number;
 }
 
 export interface IProjectRepository {
@@ -65,6 +66,7 @@ export class ProjectRepository extends SalesforceRepositoryBase<ISalesforceProje
     "Acc_LeadParticipantName__c",
     "Acc_Duration__c",
     "Acc_NumberofPeriods__c",
+    "Acc_CurrentPeriodNumber__c",
   ];
 
   getById(id: string) {

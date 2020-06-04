@@ -85,7 +85,7 @@ describe("createMonitoringReports", () => {
 async function getCreateDto(context: TestContext): Promise<MonitoringReportDto> {
   const questions = await context.runQuery(new GetMonitoringReportActiveQuestions());
   const project = context.testData.createProject((x) => {
-    x.Acc_StartDate__c = "2018-01-01";
+    x.Acc_CurrentPeriodNumber__c = 1;
   });
   const partner = context.testData.createPartner(project);
   context.testData.createProfileDetail(undefined, partner, 1);

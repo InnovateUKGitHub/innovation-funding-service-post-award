@@ -80,7 +80,7 @@ export class ForecastTable extends React.Component<Props> {
   public render() {
     const { data, hideValidation, isSubmitting, editor } = this.props;
     const periodId = this.getPeriodId(data.project, data.claims, data.claim);
-    const parsed = this.parseClaimData(data, editor, periodId, data.project.totalPeriods);
+    const parsed = this.parseClaimData(data, editor, periodId, data.project.numberOfPeriods);
     const Table = TypedTable<typeof parsed[0]>();
     const intervals = this.calculateClaimPeriods(data);
     const claims = Object.keys(parsed[0].claims);
@@ -135,7 +135,7 @@ export class ForecastTable extends React.Component<Props> {
     );
   }
 
-  private parseClaimData(data: ForecastData, editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>|undefined, periodId: number, totalPeriods: number | null) {
+  private parseClaimData(data: ForecastData, editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>|undefined, periodId: number, numberOfPeriods: number | null) {
     const tableRows: TableRow[] = [];
     const forecasts = !!editor ? editor.data : data.forecastDetails;
     const costCategories = data.costCategories.filter(x => x.competitionType === data.project.competitionType && x.organisationType === data.partner.organisationType);
@@ -163,8 +163,8 @@ export class ForecastTable extends React.Component<Props> {
         currentPeriodId++;
       }
 
-      if (totalPeriods) {
-        while (currentPeriodId <= totalPeriods) {
+      if (numberOfPeriods) {
+        while (currentPeriodId <= numberOfPeriods) {
           this.addForecastInfoToRow(currentPeriodId, category, forecasts, row);
           currentPeriodId++;
         }
