@@ -17,6 +17,7 @@ import { PCRWorkflowValidator } from "@ui/validators/pcrWorkflowValidator";
 import { getAddPartnerWorkflow } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IRoutes } from "@ui/routing";
+import { periodLengthChangeWorkflow } from "@ui/containers/pcrs/periodLengthChange/periodLengthChangeWorkflow";
 
 export interface PcrStepProps<TDto, TVal> extends IStepProps {
   project: ProjectDto;
@@ -66,6 +67,8 @@ export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<string
         return new PcrWorkflow(financialVirementWorkflow, step);
       case PCRItemType.PartnerWithdrawal:
         return new PcrWorkflow(removePartnerWorkflow, step);
+      case PCRItemType.PeriodLengthChange:
+        return new PcrWorkflow(periodLengthChangeWorkflow, step);
       case PCRItemType.PartnerAddition:
         // If feature not turned on let it fall through to standard workflow
         if (features.addPartnerWorkflow) return new PcrWorkflow(getAddPartnerWorkflow(pcrItem, step), step);

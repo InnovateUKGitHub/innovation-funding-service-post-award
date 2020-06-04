@@ -9,6 +9,7 @@ import {
   PCRItemForMultiplePartnerFinancialVirementDto,
   PCRItemForPartnerAdditionDto,
   PCRItemForPartnerWithdrawalDto,
+  PCRItemForPeriodLengthChangeDto,
   PCRItemForProjectSuspensionDto,
   PCRItemForProjectTerminationDto,
   PCRItemForScopeChangeDto,
@@ -169,6 +170,8 @@ export class PCRDtoValidator extends Results<PCRDto> {
       }
       case PCRItemType.MultiplePartnerFinancialVirement:
         return new MultiplePartnerFinancialVirementDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRItemForMultiplePartnerFinancialVirementDto);
+      case PCRItemType.PeriodLengthChange:
+        return new PCRPeriodLengthChangeItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRItemForPeriodLengthChangeDto);
       case PCRItemType.SinglePartnerFinancialVirement:
         return new PCRStandardItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRStandardItemDto);
       default:
@@ -299,6 +302,9 @@ export class PCRTimeExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
 }
 
 export class PCRProjectTerminationItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForProjectTerminationDto> {
+
+}
+export class PCRPeriodLengthChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForPeriodLengthChangeDto> {
 
 }
 

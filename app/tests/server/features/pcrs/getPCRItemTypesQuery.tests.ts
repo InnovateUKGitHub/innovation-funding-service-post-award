@@ -14,6 +14,7 @@ describe("GetPCRItemTypesQuery", () => {
       PCRItemType.PartnerAddition,
       PCRItemType.ScopeChange,
       PCRItemType.TimeExtension,
+      PCRItemType.PeriodLengthChange,
       PCRItemType.AccountNameChange,
       PCRItemType.ProjectSuspension,
       PCRItemType.ProjectTermination,
