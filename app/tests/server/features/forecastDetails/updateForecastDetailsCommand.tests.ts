@@ -271,27 +271,25 @@ describe("UpdateForecastDetailsCommand", () => {
     const context = new TestContext();
     const testData = context.testData;
 
-    const periodId = 1;
-    const startDate = DateTime.local().minus({ months: 6 });
-    const endDate = DateTime.local().plus({ months: 6 });
+    const projectPeriodId = 5;
+    const forecastPeriodId = 4;
 
     const project = testData.createProject(x => {
-      x.Acc_ClaimFrequency__c = "Monthly";
-      x.Acc_StartDate__c = startDate.toFormat("yyyy-MM-dd");
-      x.Acc_EndDate__c = endDate.toFormat("yyyy-MM-dd");
+      x.Acc_CurrentPeriodNumber__c = projectPeriodId;
     });
     const partner = testData.createPartner(project);
     const costCat = testData.createCostCategory();
-    const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => x.Acc_LatestForecastCost__c = 123);
+    const profileDetail = testData.createProfileDetail(costCat, partner, projectPeriodId, x => x.Acc_LatestForecastCost__c = 123);
+    context.testData.createProfileTotalPeriod(partner, projectPeriodId);
     const dto: ForecastDetailsDTO[] = [{
-      periodId,
+      periodId: forecastPeriodId,
       id: profileDetail.Id,
       costCategoryId: costCat.id,
       periodStart: new Date(),
       periodEnd: new Date(),
       value: 500
     }];
-    testData.createClaimDetail(project, costCat, partner, periodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
+    testData.createClaimDetail(project, costCat, partner, projectPeriodId - 1, x => x.Acc_PeriodCostCategoryTotal__c = 1000);
     testData.createProfileTotalCostCategory(costCat, partner, 1500);
 
     const command = new UpdateForecastDetailsCommand(project.Id, partner.id, dto, false);
@@ -371,10 +369,12 @@ describe("UpdateForecastDetailsCommand", () => {
 
     const context = new TestContext();
 
+    const periodId = 2;
     const projectStart = DateTime.local().minus({ months: 1 }).set({ day: 1 });
     const projectEnd = projectStart.plus({ months: 2 }).minus({ days: 1 });
 
     const project = context.testData.createProject(x => {
+      x.Acc_CurrentPeriodNumber__c = periodId;
       x.Acc_StartDate__c = projectStart.toFormat("yyyy-MM-dd");
       x.Acc_EndDate__c = projectEnd.toFormat("yyyy-MM-dd");
       x.Acc_ClaimFrequency__c = "Monthly";
@@ -382,6 +382,9 @@ describe("UpdateForecastDetailsCommand", () => {
 
     const partner = context.testData.createPartner(project);
     const costCat = context.testData.createCostCategory();
+
+    context.testData.createProfileTotalPeriod(partner, 1);
+    context.testData.createProfileTotalPeriod(partner, 2);
 
     context.testData.createProfileTotalCostCategory(costCat, partner, 1000000);
 

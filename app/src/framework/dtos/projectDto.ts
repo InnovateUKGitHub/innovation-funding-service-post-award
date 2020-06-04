@@ -29,15 +29,11 @@ export interface ProjectDto {
 
     isPastEndDate: boolean;
     periodId: number;
-    totalPeriods: number | null;
     periodStartDate: Date | null;
     periodEndDate: Date | null;
 
     pcrsQueried: number;
     pcrsToReview: number;
-
-    claimWindowStart: Date|null;
-    claimWindowEnd: Date|null;
 
     grantOfferLetterCosts: number;
     costsClaimedToDate: number;

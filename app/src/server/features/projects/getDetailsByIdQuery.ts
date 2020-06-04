@@ -12,6 +12,10 @@ export class GetByIdQuery extends QueryBase<ProjectDto> {
     const item = await context.repositories.projects.getById(this.projectId);
     const roles = await context.runQuery(new GetAllProjectRolesForUser());
     const roleInfo = roles.forProject(this.projectId).getRoles();
-    return mapToProjectDto(context, item, roleInfo);
+    const periods = await context.repositories.profileTotalPeriod.getByProjectIdAndPeriodId(
+      item.Id,
+      item.Acc_CurrentPeriodNumber__c
+    );
+    return mapToProjectDto(context, item, roleInfo, periods[0]);
   }
 }

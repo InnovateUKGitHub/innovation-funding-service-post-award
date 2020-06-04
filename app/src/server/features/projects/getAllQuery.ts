@@ -4,12 +4,20 @@ import { IContext, ProjectDto } from "@framework/types";
 
 export class GetAllQuery extends QueryBase<ProjectDto[]> {
   protected async Run(context: IContext) {
-    const items = await context.repositories.projects.getAll();
     const allRoles = await context.runQuery(new GetAllProjectRolesForUser());
-    return items.map(x => {
-      const roles = allRoles.forProject(x.Id).getRoles();
-      return mapToProjectDto(context, x, roles);
-    });
+    const items = await context.repositories.projects.getAll();
+    return Promise.all (
+      items.map(
+        async (item) => {
+          const roles = allRoles.forProject(item.Id).getRoles();
+          const periods = await context.repositories.profileTotalPeriod.getByProjectIdAndPeriodId(
+            item.Id,
+            item.Acc_CurrentPeriodNumber__c
+          );
+          return mapToProjectDto(context, item, roles, periods[0]);
+        }
+      )
+    );
   }
 
   protected LogMessage() {
