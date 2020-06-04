@@ -62,36 +62,6 @@ export class ProjectChangeRequestStore extends StoreBase {
       .then(x => x.filter(y => nonEditableTypes.indexOf(y) === -1));
   }
 
-  public getStandardItemById(projectId: string, pcrId: string, itemId: string) {
-    return this.getItemById(projectId, pcrId, itemId).chain(item => {
-      if (
-        item.type === PCRItemType.AccountNameChange ||
-        item.type === PCRItemType.MultiplePartnerFinancialVirement ||
-        item.type === PCRItemType.PartnerAddition ||
-        item.type === PCRItemType.PartnerWithdrawal ||
-        item.type === PCRItemType.ProjectSuspension ||
-        item.type === PCRItemType.ProjectTermination ||
-        item.type === PCRItemType.SinglePartnerFinancialVirement
-      ) {
-        return Pending.done(item);
-      }
-      else {
-        return new Pending<PCRStandardItemDto>(LoadingStatus.Failed, null, new NotFoundError("Item is incorrect type"));
-      }
-    });
-  }
-
-  public getTimeExtensionItemById(projectId: string, pcrId: string, itemId: string) {
-    return this.getItemById(projectId, pcrId, itemId).chain(item => {
-      if (item.type === PCRItemType.TimeExtension) {
-        return Pending.done(item);
-      }
-      else {
-        return new Pending<PCRItemForTimeExtensionDto>(LoadingStatus.Failed, null, new NotFoundError("Item is incorrect type"));
-      }
-    });
-  }
-
   public getAllForProject(projectId: string) {
     return this.getData("pcrs", storeKeys.getProjectKey(projectId), p => ApiClient.pcrs.getAll({ projectId, ...p }));
   }
@@ -310,6 +280,11 @@ export class ProjectChangeRequestStore extends StoreBase {
           ...baseFields,
           type: itemType.type,
           status: PCRItemStatus.Complete,
+        };
+      case PCRItemType.PeriodLengthChange:
+        return {
+          ...baseFields,
+          type: itemType.type,
         };
       default:
         throw new Error("Item type not handled");

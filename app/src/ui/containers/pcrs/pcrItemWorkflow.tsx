@@ -170,7 +170,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     const PCRForm = ACC.TypedForm<PCRItemDto>();
 
     const options: ACC.SelectOption[] = [
-      { id: "true", value: "I have finished making changes." }
+      { id: "true", value: "I agree with this change." }
     ];
 
     const pcrItem = editor.data.items.find(x => x.id === this.props.itemId)!;

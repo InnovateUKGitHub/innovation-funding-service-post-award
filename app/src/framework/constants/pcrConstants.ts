@@ -53,6 +53,7 @@ export enum PCRItemType {
   SinglePartnerFinancialVirement = 70,
   ScopeChange = 80,
   TimeExtension = 90,
+  PeriodLengthChange = 100,
 }
 
 export enum PCRParticipantSize {

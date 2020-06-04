@@ -15,7 +15,6 @@ interface Data {
   project: Pending<Dtos.ProjectDto>;
   itemTypes: Pending<Dtos.PCRItemTypeDto[]>;
   editor: Pending<IEditorStore<Dtos.PCRDto, PCRDtoValidator>>;
-  editableItemTypes: Pending<PCRItemType[]>;
 }
 
 interface Callbacks {
@@ -91,7 +90,6 @@ const PCRCreateContainer = (props: CreateProjectChangeRequestParams & BaseProps)
           itemTypes={stores.projectChangeRequests.getAllPcrTypes()}
           editor={stores.projectChangeRequests.getPcrCreateEditor(props.projectId)}
           onChange={(saving, dto) => stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, (created) => stores.navigation.navigateTo(props.routes.pcrPrepare.getLink({ projectId: dto.projectId, pcrId: created.id })))}
-          editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, null)}
           createNewChangeRequestItem={(itemType: Dtos.PCRItemTypeDto) => stores.projectChangeRequests.createNewChangeRequestItem(itemType)}
           {...props}
         />
