@@ -365,7 +365,7 @@
     "claimRequiresRequiresIARMessage": "You need to submit your IAR.",
     "projectEndedMessage": "Project ended",
     "finalClaimPeriodMessage" : "Final claim period",
-    "currentPeriodInfo": "Project period {{currentPeriod}} of {{totalPeriods}}",
+    "currentPeriodInfo": "Project period {{currentPeriod}} of {{numberOfPeriods}}",
     "pcrQueried": "Project change request queried",
     "pcrToReview": "Project change requests to review: {{numberOfPcrs}}",
     "projectOnHold" : "On hold"

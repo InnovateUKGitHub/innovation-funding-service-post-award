@@ -252,8 +252,8 @@ describe("saveMonitoringReports validation", () => {
   it("should return a bad request if submitted with a different project id", async () => {
     const context = new TestContext();
 
-    const project1 = context.testData.createProject(x => x.Acc_StartDate__c = "2012-01-01");
-    const project2 = context.testData.createProject(x => x.Acc_StartDate__c = "2012-01-01");
+    const project1 = context.testData.createProject(x => x.Acc_CurrentPeriodNumber__c = 1);
+    const project2 = context.testData.createProject(x => x.Acc_CurrentPeriodNumber__c = 1);
 
     const report = context.testData.createMonitoringReportHeader(project1);
 

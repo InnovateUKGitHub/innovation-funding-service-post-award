@@ -1,16 +1,19 @@
 // tslint:disable:no-bitwise
-import { GetPeriodInfoQuery } from "./";
-import { ISalesforceProject } from "../../repositories/projectsRepository";
-import { ClaimFrequency, IContext, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
-import { dayComparator } from "@framework/util";
+import {ISalesforceProject} from "../../repositories/projectsRepository";
+import {ClaimFrequency, IContext, ProjectDto, ProjectRole, ProjectStatus} from "@framework/types";
+import {dayComparator} from "@framework/util";
+import {ISalesforceProfileTotalPeriod} from "@server/repositories";
 
-export const mapToProjectDto = (context: IContext, item: ISalesforceProject, roles: ProjectRole): ProjectDto => {
+export const mapToProjectDto = (
+  context: IContext,
+  item: ISalesforceProject,
+  roles: ProjectRole,
+  period: ISalesforceProfileTotalPeriod | undefined
+): ProjectDto => {
   const claimFrequency = mapFrequencyToEnum(item.Acc_ClaimFrequency__c);
   // TODO change this to parseRequiredSalesforceDate and update tests to pass
   const startDate = context.clock.parseOptionalSalesforceDate(item.Acc_StartDate__c)!;
   const endDate = context.clock.parseOptionalSalesforceDate(item.Acc_EndDate__c)!;
-  const periodInfo = context.runSyncQuery(new GetPeriodInfoQuery(startDate, endDate, claimFrequency));
-
   return {
     id: item.Id,
     title: item.Acc_ProjectTitle__c,
@@ -29,15 +32,11 @@ export const mapToProjectDto = (context: IContext, item: ISalesforceProject, rol
     claimedPercentage: item.Acc_GOLTotalCostAwarded__c ? 100 * item.Acc_TotalProjectCosts__c / item.Acc_GOLTotalCostAwarded__c : null,
     startDate,
     endDate,
-    periodId: periodInfo.current,
-    periodStartDate: periodInfo.startDate,
-    periodEndDate: periodInfo.endDate,
+    periodId: item.Acc_CurrentPeriodNumber__c,
+    periodStartDate: period ? context.clock.parseOptionalSalesforceDate(period.Acc_ProjectPeriodStartDate__c) : null,
+    periodEndDate: period ? context.clock.parseOptionalSalesforceDate(period.Acc_ProjectPeriodEndDate__c) : null,
     pcrsToReview: item.Acc_PCRsForReview__c || 0,
     pcrsQueried: item.Acc_PCRsUnderQuery__c || 0,
-    // TODO use either totalPeriods OR numberOfPeriods
-    totalPeriods: periodInfo.total,
-    claimWindowStart: periodInfo.currentClaimWindowStart,
-    claimWindowEnd: periodInfo.currentClaimWindowEnd,
     roles: roles || ProjectRole.Unknown,
     roleTitles: getRoleTitles(roles || ProjectRole.Unknown),
     status: getProjectStatus(item.Acc_ProjectStatus__c),
