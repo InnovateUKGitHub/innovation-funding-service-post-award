@@ -6,9 +6,9 @@ import {
   PcrSpendProfileDto,
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
+  PCRSpendProfileOtherCostsDto,
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto,
-  PCRSpendProfileUnknownCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryType } from "@framework/entities";
 
@@ -28,7 +28,7 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
       case CostCategoryType.Subcontracting: return new PCRSubcontractingCostDtoValidator(cost, this.showValidationErrors);
       case CostCategoryType.Capital_Usage: return new PCRCapitalUsageCostDtoValidator(cost, this.showValidationErrors);
       case CostCategoryType.Travel_And_Subsistence: return new PCRTravelAndSubsCostDtoValidator(cost, this.showValidationErrors);
-      default: return new PCRUnknownCostDtoValidator(cost, this.showValidationErrors);
+      default: return new PCROtherCostsDtoValidator(cost, this.showValidationErrors);
     }
   }
 
@@ -51,7 +51,7 @@ export type PCRSpendProfileCostDtoValidator =
     | PCRSubcontractingCostDtoValidator
     | PCRCapitalUsageCostDtoValidator
     | PCRTravelAndSubsCostDtoValidator
-    | PCRUnknownCostDtoValidator;
+    | PCROtherCostsDtoValidator;
 
 export class PCRLabourCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileLabourCostDto> {
   public grossCostOfRole = Validation.all(this,
@@ -123,5 +123,9 @@ export class PCRTravelAndSubsCostDtoValidator extends PCRBaseCostDtoValidator<PC
   );
 }
 
-export class PCRUnknownCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileUnknownCostDto> {
+export class PCROtherCostsDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileOtherCostsDto> {
+  public value = Validation.all(this,
+    () => Validation.required(this, this.model.value, "Estiamted cost is required"),
+    () => Validation.isCurrency(this, this.model.value, "Estimated cost must be a number")
+  );
 }

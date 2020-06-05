@@ -9,9 +9,9 @@ import {
   PcrSpendProfileDto,
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
+  PCRSpendProfileOtherCostsDto,
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto,
-  PCRSpendProfileUnknownCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { isNumber } from "@framework/util";
 
@@ -40,7 +40,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
       case CostCategoryType.Subcontracting: return this.mapSubcontractingCosts(spendProfiles, costCategory.type);
       case CostCategoryType.Capital_Usage: return this.mapCapitalUsageCosts(spendProfiles, costCategory.type);
       case CostCategoryType.Travel_And_Subsistence: return this.mapTravelAndSubsCosts(spendProfiles, costCategory.type);
-      default: return this.mapUnknownCosts(spendProfiles, CostCategoryType.Unknown);
+      default: return this.mapOtherCosts(spendProfiles, CostCategoryType.Other_Costs);
     }
   }
 
@@ -51,13 +51,6 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
       value: isNumber(spendProfile.value) ? spendProfile.value : null,
       description: spendProfile.description || null,
     };
-  }
-
-  private mapUnknownCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Unknown): PCRSpendProfileUnknownCostDto[] {
-    return spendProfiles.map(x => ({
-      ...this.mapBaseCostFields(x),
-      costCategory,
-    }));
   }
 
   private mapLabourCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Labour): PCRSpendProfileLabourCostDto[] {
@@ -107,6 +100,13 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
       costCategory,
       numberOfTimes: isNumber(x.numberOfTimes) ? x.numberOfTimes : null,
       costOfEach: isNumber(x.costOfEach) ? x.costOfEach : null,
+    }));
+  }
+
+  private mapOtherCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Other_Costs): PCRSpendProfileOtherCostsDto[] {
+    return spendProfiles.map(x => ({
+      ...this.mapBaseCostFields(x),
+      costCategory,
     }));
   }
 }

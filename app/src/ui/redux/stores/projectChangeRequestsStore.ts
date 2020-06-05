@@ -153,7 +153,7 @@ export class ProjectChangeRequestStore extends StoreBase {
   }
 
   public getInitialSpendProfileCost(costCategory: CostCategoryDto): PCRSpendProfileCostDto {
-    return {id: "", description: "", value: null, costCategory: costCategory.type as CostCategoryType.Unknown, costCategoryId: costCategory.id};
+    return {id: "", description: "", value: null, costCategory: costCategory.type as CostCategoryType.Other_Costs, costCategoryId: costCategory.id};
   }
 
   public updatePcrEditor(saving: boolean, projectId: string, dto: PCRDto, message?: string, onComplete?: (result: PCRDto) => void) {
