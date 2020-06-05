@@ -11,5 +11,6 @@ export * from "./section";
 export * from "./sectionPanel";
 export * from "./textHint";
 export * from "./listSection";
+export * from "./readonlyLabel";
 export * from "./tabs";
 export * from "./unorderedList";
