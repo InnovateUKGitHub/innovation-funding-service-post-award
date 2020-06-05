@@ -273,6 +273,11 @@
       "info-summary": "What are the different types?",
       "organisation-type-info": "**Business** - a business based in the UK or overseas.\n\n **Research** - higher education and organisations registered with Je-S.\n\n **Research and technology organisation (RTO)** - organisations which solely promote and conduct collaborative research and innovation.\n\n **Public sector, charity or non Je-S registered research organisation** - a not-for-profit public sector body or charity working on innovation, not registered with Je-S.",
       "organisation-type-hint": "If the new partner's organisation type is not listed, contact your monitoring officer."
+    },
+    "pcr-period-length-change":{
+      "guidance": "This request is to change the length of a period for the remainder of the project. The frequency of how often you submit a claim and the project forecasts will be affected as a result. This will apply to all partners.\n\nIt will be rejected if submitted with any other request type.",
+      "period-length-quarterly": "3 months",
+      "period-length-monthly": "1 month"
     }
   },
   "claims-messages": {
@@ -471,5 +476,9 @@
   "pcr-add-partner-labels":{
     "role-heading": "Project role",
     "organisation-heading": "Organisation type"
+  },
+  "pcr-period-length-change-labels":{
+    "current-period-length": "Current period length",
+    "previous-period-length": "New period length"
   }
 }
