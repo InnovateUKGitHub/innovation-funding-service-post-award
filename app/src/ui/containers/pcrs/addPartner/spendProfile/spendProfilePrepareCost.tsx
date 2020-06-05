@@ -18,6 +18,7 @@ import {
   PCRSpendProfileCostDto,
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
+  PCRSpendProfileOtherCostsDto,
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
@@ -28,6 +29,7 @@ import {
   PCRCapitalUsageCostDtoValidator,
   PCRLabourCostDtoValidator,
   PCRMaterialsCostDtoValidator,
+  PCROtherCostsDtoValidator,
   PCRSpendProfileCostDtoValidator,
   PCRSubcontractingCostDtoValidator,
   PCRTravelAndSubsCostDtoValidator
@@ -37,6 +39,7 @@ import { MaterialsFormComponent } from "@ui/containers/pcrs/addPartner/spendProf
 import { CapitalUsageFormComponent } from "./capitalUsageFormComponent";
 import { SubcontractingFormComponent } from "@ui/containers/pcrs/addPartner/spendProfile/subcontractingFormComponent";
 import { TravelAndSubsFormComponent } from "./travelAndSubsFormComponent";
+import { OtherCostsFormComponent } from "./otherCostsFormComponent";
 
 export interface PcrAddSpendProfileCostParams {
   projectId: string;
@@ -139,6 +142,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
       case CostCategoryType.Subcontracting: return <SubcontractingFormComponent {...props} data={cost as PCRSpendProfileSubcontractingCostDto} validator={validator as PCRSubcontractingCostDtoValidator}/>;
       case CostCategoryType.Capital_Usage: return <CapitalUsageFormComponent {...props} data={cost as PCRSpendProfileCapitalUsageCostDto} validator={validator as PCRCapitalUsageCostDtoValidator}/>;
       case CostCategoryType.Travel_And_Subsistence: return <TravelAndSubsFormComponent {...props} data={cost as PCRSpendProfileTravelAndSubsCostDto} validator={validator as PCRTravelAndSubsCostDtoValidator}/>;
+      case CostCategoryType.Other_Costs: return <OtherCostsFormComponent {...props} data={cost as PCRSpendProfileOtherCostsDto} validator={validator as PCROtherCostsDtoValidator}/>;
       default: return null;
     }
   }
