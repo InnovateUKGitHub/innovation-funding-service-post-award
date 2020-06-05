@@ -10,6 +10,7 @@ import {
   PcrSpendProfileDto,
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
+  PCRSpendProfileOtherCostsDto,
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
@@ -44,6 +45,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
       case CostCategoryType.Subcontracting: return this.mapSubcontracting(costsDto, init);
       case CostCategoryType.Capital_Usage: return this.mapCapitalUsage(costsDto, init);
       case CostCategoryType.Travel_And_Subsistence: return this.mapTravelAndSubs(costsDto, init);
+      case CostCategoryType.Other_Costs: return this.mapOtherCosts(costsDto, init);
       default: return init;
     }
   }
@@ -94,6 +96,13 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
       value: isNumber(costsDto.numberOfTimes) && isNumber(costsDto.costOfEach) ? costsDto.numberOfTimes * costsDto.costOfEach : undefined,
       numberOfTimes: isNumber(costsDto.numberOfTimes) ? costsDto.numberOfTimes : undefined,
       costOfEach: isNumber(costsDto.costOfEach) ? costsDto.costOfEach : undefined,
+    };
+  }
+
+  private mapOtherCosts(costsDto: PCRSpendProfileOtherCostsDto, init: BaseCostFields) {
+    return {
+      ...init,
+      value: isNumber(costsDto.value) ? costsDto.value : undefined,
     };
   }
 
