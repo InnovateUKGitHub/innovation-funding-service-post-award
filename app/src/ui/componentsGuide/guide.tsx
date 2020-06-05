@@ -37,6 +37,7 @@ import { percentageGuide } from "@ui/componentsGuide/percentageGuide";
 import { breadcrumbsGuide } from "@ui/componentsGuide/breadcrumbsGuide";
 import { modalGuide } from "@ui/componentsGuide/modalGuide";
 import { listGuide } from "@ui/componentsGuide/listGuide";
+import { readonlyLabel } from "@ui/componentsGuide/readonlyLabelGuide";
 
 const guides: IGuide[] = [
     accordionGuide,
@@ -62,6 +63,7 @@ const guides: IGuide[] = [
     projectContactGuide,
     pageTitleGuide,
     percentageGuide,
+    readonlyLabel,
     renderersGuide,
     sectionGuide,
     sectionPanelGuide,
