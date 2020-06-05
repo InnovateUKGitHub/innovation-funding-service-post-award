@@ -45,4 +45,8 @@ export class PcrSpendProfileLabels extends ContentBase {
     costOfEach: () => this.getContent("travel-and-subs.cost-of-each"),
     totalCost: () => this.getContent("travel-and-subs.total-cost"),
   };
+  public readonly otherCosts = {
+    description: () => this.getContent("other-costs.description"),
+    totalCost: () => this.getContent("other-costs.total-cost"),
+  };
 }
