@@ -3,6 +3,7 @@ import { TestContext } from "../../testContextProvider";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { DateTime } from "luxon";
 import { PCRItemType, PCRStatus } from "@framework/constants";
+import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 
 describe("GetAllPCRsQuery", () => {
   test("when project has no pcrs then empty list returned", async () => {
@@ -134,5 +135,27 @@ describe("GetAllPCRsQuery", () => {
 
     expect(result.items.map(x => x.type)).toEqual(expectedTypes);
     expect(result.items.map(x => x.typeName)).toEqual(expectedNames);
+  });
+
+  it("returns the item short name if available", async () => {
+    const context = new TestContext();
+    const pcrItemType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal)!;
+    const recordType = context.testData.createRecordType({type: pcrItemType.typeName, parent: "Acc_ProjectChangeRequest__c"});
+    const pcr = context.testData.createPCR();
+    context.testData.createPCRItem(pcr, recordType, { shortName: "Get rid" });
+    const query = new GetAllPCRsQuery(pcr.projectId);
+    const result = await context.runQuery(query).then(x => x[0]);
+    expect(result.items[0].shortName).toEqual("Get rid");
+  });
+
+  it("returns the item type name if short name is not available", async () => {
+    const context = new TestContext();
+    const pcrItemType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal)!;
+    const recordType = context.testData.createRecordType({type: pcrItemType.typeName, parent: "Acc_ProjectChangeRequest__c"});
+    const pcr = context.testData.createPCR();
+    context.testData.createPCRItem(pcr, recordType, { shortName: undefined });
+    const query = new GetAllPCRsQuery(pcr.projectId);
+    const result = await context.runQuery(query).then(x => x[0]);
+    expect(result.items[0].shortName).toEqual(recordType.type);
   });
 });
