@@ -335,7 +335,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       expect(insertedSpendProfileCost).toBeDefined();
       expect(insertedSpendProfileCost.id).toBeTruthy();
       expect(insertedSpendProfileCost.value).toBe((insertedSpendProfileCost.utilisation! / 100) * (insertedSpendProfileCost.netPresentValue! - insertedSpendProfileCost.residualValue!));
-      expect(insertedSpendProfileCost.type).toBe(PCRSpendProfileCapitalUsageType.New);
+      expect(insertedSpendProfileCost.capitalUsageType).toBe(PCRSpendProfileCapitalUsageType.New);
       expect(insertedSpendProfileCost.depreciationPeriod).toBe(8);
       expect(insertedSpendProfileCost.netPresentValue).toBe(300);
       expect(insertedSpendProfileCost.residualValue).toBe(100);
@@ -372,7 +372,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       cost.utilisation = 5;
       await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
       expect(insertedSpendProfileCost.value).toBe((5/100)*(350-100));
-      expect(insertedSpendProfileCost.type).toBe(PCRSpendProfileCapitalUsageType.Existing);
+      expect(insertedSpendProfileCost.capitalUsageType).toBe(PCRSpendProfileCapitalUsageType.Existing);
       expect(insertedSpendProfileCost.description).toBe("CBA");
       expect(insertedSpendProfileCost.depreciationPeriod).toBe(5);
       expect(insertedSpendProfileCost.netPresentValue).toBe(350);

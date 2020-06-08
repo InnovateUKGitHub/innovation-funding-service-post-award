@@ -688,6 +688,7 @@ export class TestData {
     const costCategory = options.costCategory ? options.costCategory : this.createCostCategory();
     const newItem: Entities.PcrSpendProfileEntityForCreate = {
       value: 0,
+      description: "",
       pcrItemId: pcrItem.id,
       costCategoryId: costCategory.id,
       ...options.update

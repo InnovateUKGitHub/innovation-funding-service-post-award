@@ -20,7 +20,7 @@ interface BaseCostFields {
   pcrItemId: string;
   costCategoryId: string;
   costCategory: CostCategoryType;
-  description: string | undefined;
+  description: string | null;
 }
 
 export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
@@ -37,7 +37,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
       pcrItemId: this.pcrItemId,
       costCategoryId: costsDto.costCategoryId,
       costCategory: costsDto.costCategory,
-      description: costsDto.description || undefined,
+      description: costsDto.description || null,
     };
     switch (costsDto.costCategory) {
       case CostCategoryType.Labour: return this.mapLabour(costsDto, init);
@@ -46,14 +46,14 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
       case CostCategoryType.Capital_Usage: return this.mapCapitalUsage(costsDto, init);
       case CostCategoryType.Travel_And_Subsistence: return this.mapTravelAndSubs(costsDto, init);
       case CostCategoryType.Other_Costs: return this.mapOtherCosts(costsDto, init);
-      default: return init;
+      default: throw new BadRequestError("Cost category type not supported");
     }
   }
 
   private mapLabour(costsDto: PCRSpendProfileLabourCostDto, init: BaseCostFields) {
     return {
       ...init,
-      value: isNumber(costsDto.ratePerDay) && isNumber(costsDto.daysSpentOnProject) ? costsDto.ratePerDay * costsDto.daysSpentOnProject : undefined,
+      value: isNumber(costsDto.ratePerDay) && isNumber(costsDto.daysSpentOnProject) ? costsDto.ratePerDay * costsDto.daysSpentOnProject : null,
       ratePerDay: isNumber(costsDto.ratePerDay) ? costsDto.ratePerDay : undefined,
       daysSpentOnProject: isNumber(costsDto.daysSpentOnProject) ? costsDto.daysSpentOnProject : undefined,
       grossCostOfRole: isNumber(costsDto.grossCostOfRole) ? costsDto.grossCostOfRole : undefined,
@@ -63,7 +63,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   private mapMaterials(costsDto: PCRSpendProfileMaterialsCostDto, init: BaseCostFields) {
     return {
       ...init,
-      value: isNumber(costsDto.costPerItem) && isNumber(costsDto.quantity) ? costsDto.costPerItem * costsDto.quantity : undefined,
+      value: isNumber(costsDto.costPerItem) && isNumber(costsDto.quantity) ? costsDto.costPerItem * costsDto.quantity : null,
       costPerItem: isNumber(costsDto.costPerItem) ? costsDto.costPerItem : undefined,
       quantity: isNumber(costsDto.quantity) ? costsDto.quantity : undefined,
     };
@@ -72,7 +72,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   private mapSubcontracting(costsDto: PCRSpendProfileSubcontractingCostDto, init: BaseCostFields) {
     return {
       ...init,
-      value: isNumber(costsDto.value) ? costsDto.value : undefined,
+      value: isNumber(costsDto.value) ? costsDto.value : null,
       subcontractorCountry: costsDto.subcontractorCountry || undefined,
       subcontractorRoleAndDescription: costsDto.subcontractorRoleAndDescription || undefined,
     };
@@ -81,8 +81,8 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   private mapCapitalUsage(costsDto: PCRSpendProfileCapitalUsageCostDto, init: BaseCostFields) {
     return {
       ...init,
-      value: isNumber(costsDto.utilisation) && isNumber(costsDto.netPresentValue) && isNumber(costsDto.residualValue) ? (costsDto.utilisation / 100) * (costsDto.netPresentValue - costsDto.residualValue) : undefined,
-      type: costsDto.type,
+      value: isNumber(costsDto.utilisation) && isNumber(costsDto.netPresentValue) && isNumber(costsDto.residualValue) ? (costsDto.utilisation / 100) * (costsDto.netPresentValue - costsDto.residualValue) : null,
+      capitalUsageType: costsDto.type,
       depreciationPeriod: isNumber(costsDto.depreciationPeriod) ? costsDto.depreciationPeriod : undefined,
       netPresentValue: isNumber(costsDto.netPresentValue) ? costsDto.netPresentValue : undefined,
       residualValue: isNumber(costsDto.residualValue) ? costsDto.residualValue : undefined,
@@ -93,7 +93,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   private mapTravelAndSubs(costsDto: PCRSpendProfileTravelAndSubsCostDto, init: BaseCostFields) {
     return {
       ...init,
-      value: isNumber(costsDto.numberOfTimes) && isNumber(costsDto.costOfEach) ? costsDto.numberOfTimes * costsDto.costOfEach : undefined,
+      value: isNumber(costsDto.numberOfTimes) && isNumber(costsDto.costOfEach) ? costsDto.numberOfTimes * costsDto.costOfEach : null,
       numberOfTimes: isNumber(costsDto.numberOfTimes) ? costsDto.numberOfTimes : undefined,
       costOfEach: isNumber(costsDto.costOfEach) ? costsDto.costOfEach : undefined,
     };
@@ -102,7 +102,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   private mapOtherCosts(costsDto: PCRSpendProfileOtherCostsDto, init: BaseCostFields) {
     return {
       ...init,
-      value: isNumber(costsDto.value) ? costsDto.value : undefined,
+      value: isNumber(costsDto.value) ? costsDto.value : null,
     };
   }
 
