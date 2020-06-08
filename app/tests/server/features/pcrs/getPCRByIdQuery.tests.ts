@@ -13,6 +13,7 @@ import {
 import { PCRItemType, PCRPartnerType, PCRProjectRole } from "@framework/constants";
 import { CostCategoryType } from "@framework/entities";
 import { PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 
 describe("GetPCRByIdQuery", () => {
   test("when id not found then exception is thrown", async () => {
@@ -107,6 +108,28 @@ describe("GetPCRByIdQuery", () => {
     expect(result.status).toBe(98);
     expect(result.statusName).toBe("Expected Status");
     expect(result.shortName).toBe("If a nickname is what people call you for short, then your full name is your nicholas name");
+  });
+
+  it("returns the item short name if available", async () => {
+    const context = new TestContext();
+    const pcrItemType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal)!;
+    const recordType = context.testData.createRecordType({type: pcrItemType.typeName, parent: "Acc_ProjectChangeRequest__c"});
+    const pcr = context.testData.createPCR();
+    context.testData.createPCRItem(pcr, recordType, { shortName: "Get rid" });
+    const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
+    const result = await context.runQuery(query);
+    expect(result.items[0].shortName).toEqual("Get rid");
+  });
+
+  it("returns the item type name if short name is not available", async () => {
+    const context = new TestContext();
+    const pcrItemType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal)!;
+    const recordType = context.testData.createRecordType({type: pcrItemType.typeName, parent: "Acc_ProjectChangeRequest__c"});
+    const pcr = context.testData.createPCR();
+    context.testData.createPCRItem(pcr, recordType, { shortName: undefined });
+    const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
+    const result = await context.runQuery(query);
+    expect(result.items[0].shortName).toEqual(recordType.type);
   });
 
   test("maps fields for time extension", async () => {

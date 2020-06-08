@@ -40,7 +40,7 @@ export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
       items: filteredItemTypes.map(x => ({
         type: x.itemType.type,
         typeName: x.itemType.displayName,
-        shortName: x.item.shortName
+        shortName: x.item.shortName || x.itemType.displayName
       }))
     };
   }
