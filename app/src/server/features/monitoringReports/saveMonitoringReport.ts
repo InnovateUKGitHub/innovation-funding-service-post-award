@@ -26,11 +26,12 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
 
   private async updateHeader(context: IContext, project: ProjectDto) {
     const periodId = this.monitoringReportDto.periodId;
-    const partner = await context.repositories.partners.getAllByProjectId(project.id).then(partners => partners.find(x => x.projectId === this.monitoringReportDto.projectId));
-    if (!partner) {
-      throw new BadRequestError("Invalid partner specified");
-    }
-    const profile = await context.repositories.profileDetails.getAllByPartner(partner.id).then(profiles => profiles.find(x => x.Acc_ProjectPeriodNumber__c === periodId));
+
+    const profile = await context.repositories.profileTotalPeriod
+      .getByProjectIdAndPeriodId(this.monitoringReportDto.projectId, periodId)
+      // all the profiles for this period will have the same start and end dates so it doesn't matter which one we use
+      .then(profiles => profiles[0]);
+
     if (!profile) {
       throw new BadRequestError("Invalid profile specified");
     }
