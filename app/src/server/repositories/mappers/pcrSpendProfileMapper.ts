@@ -3,6 +3,7 @@ import { ISalesforcePcrSpendProfile } from "@server/repositories";
 import { PcrSpendProfileEntity, PcrSpendProfileEntityForCreate } from "@framework/entities/pcrSpendProfile";
 import { Insertable } from "@server/repositories/salesforceRepositoryBase";
 import { PCRSpendProfileCapitalUsageType } from "@framework/constants";
+import { isNumber } from "@framework/util";
 
 export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISalesforcePcrSpendProfile, PcrSpendProfileEntity> {
   public constructor(private recordTypeId: string) {
@@ -14,8 +15,8 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       id: x.Id,
       costCategoryId: x.Acc_CostCategoryID__c,
       pcrItemId:  x.Acc_ProjectChangeRequest__c,
-      value: x.Acc_CostOfRole__c,
-      description: x.Acc_Role__c,
+      value: x.Acc_TotalCost__c,
+      description: x.Acc_ItemDescription__c,
 
       // Labour
       grossCostOfRole: x.Acc_GrossCostOfRole__c,
@@ -33,7 +34,7 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       subcontractorRoleAndDescription: x.Acc_RoleAndDescription__c || undefined,
 
       // Capital Usage
-      type: new PcrSpendProfileCapitalUsageTypeMapper().mapFromSalesforcePcrSpendProfileCapitalUsageType(x.Acc_NewOrExisting__c),
+      capitalUsageType: new PcrSpendProfileCapitalUsageTypeMapper().mapFromSalesforcePcrSpendProfileCapitalUsageType(x.Acc_NewOrExisting__c),
       typeLabel: x.NewOrExistingLabel || undefined,
       // Can remove Number() wrapper when SF fix Acc_DepreciationPeriod__c to be a number
       depreciationPeriod: Number(x.Acc_DepreciationPeriod__c) || undefined,
@@ -59,8 +60,8 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       Acc_CostCategoryID__c: x.costCategoryId,
       Acc_ProjectChangeRequest__c:  x.pcrItemId,
 
-      Acc_CostOfRole__c: x.value,
-      Acc_Role__c: x.description,
+      Acc_TotalCost__c: isNumber(x.value) ? x.value : null,
+      Acc_ItemDescription__c: x.description || null,
 
       // Labour
       Acc_DaysSpentOnProject__c: x.daysSpentOnProject,
@@ -76,7 +77,7 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       Acc_RoleAndDescription__c: x.subcontractorRoleAndDescription,
 
       // Capital Usage
-      Acc_NewOrExisting__c: new PcrSpendProfileCapitalUsageTypeMapper().mapToSalesforcePcrSpendProfileCapitalUsageType(x.type),
+      Acc_NewOrExisting__c: new PcrSpendProfileCapitalUsageTypeMapper().mapToSalesforcePcrSpendProfileCapitalUsageType(x.capitalUsageType),
       Acc_DepreciationPeriod__c: x.depreciationPeriod,
       Acc_NetPresentValue__c: x.netPresentValue,
       Acc_ResidualValue__c: x.residualValue,
