@@ -125,7 +125,7 @@ export class PCRTravelAndSubsCostDtoValidator extends PCRBaseCostDtoValidator<PC
 
 export class PCROtherCostsDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileOtherCostsDto> {
   public value = Validation.all(this,
-    () => Validation.required(this, this.model.value, "Estiamted cost is required"),
+    () => Validation.required(this, this.model.value, "Estimated cost is required"),
     () => Validation.isCurrency(this, this.model.value, "Estimated cost must be a number")
   );
 }

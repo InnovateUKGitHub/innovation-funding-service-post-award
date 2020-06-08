@@ -33,7 +33,7 @@ export class OtherCostsFormComponent extends Component<SpendProfileCostFormProps
           <Form.Numeric
             labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.otherCosts.totalCost()}
             width="one-quarter"
-            name="totalCost"
+            name="value"
             value={dto => dto.value}
             update={(dto, val) => dto.value = val}
             validation={validator && validator.value}
