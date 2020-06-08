@@ -18,6 +18,7 @@ import {
   PCRSpendProfileCostDto,
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
+  PCRSpendProfileOtherCostsDto,
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
@@ -68,6 +69,7 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
       case CostCategoryType.Subcontracting: return this.updateSubcontractingCost(cost as PCRSpendProfileSubcontractingCostDto, body);
       case CostCategoryType.Capital_Usage: return this.updateCapitalUsagecost(cost as PCRSpendProfileCapitalUsageCostDto, body);
       case CostCategoryType.Travel_And_Subsistence: return this.updateTravelAndSubsCost(cost as PCRSpendProfileTravelAndSubsCostDto, body);
+      case CostCategoryType.Other_Costs: return this.updateOtherCost(cost as PCRSpendProfileOtherCostsDto, body);
     }
   }
 
@@ -104,6 +106,11 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
     cost.description = body.description;
     cost.numberOfTimes = parseNumber(body.numberOfTimes);
     cost.costOfEach = parseNumber(body.costOfEach);
+  }
+
+  private updateOtherCost(cost: PCRSpendProfileOtherCostsDto,  body: IFormBody) {
+    cost.description = body.description;
+    cost.value = parseNumber(body.value);
   }
 
   protected async run(context: IContext, params: PcrEditSpendProfileCostParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
