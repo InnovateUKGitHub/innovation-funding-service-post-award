@@ -17,6 +17,7 @@ import {
   PCRSpendProfileCostDto,
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
+  PCRSpendProfileOtherCostsDto,
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
@@ -27,6 +28,7 @@ import {
   DeleteCapitalUsageCostFormComponent,
   DeleteLabourCostFormComponent,
   DeleteMaterialsCostFormComponent,
+  DeleteOtherCostFormComponent,
   DeleteSubcontractingCostFormComponent,
   DeleteTravelAndSubsCostFormComponent
 } from "@ui/containers/pcrs/addPartner/spendProfile";
@@ -110,6 +112,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
       case CostCategoryType.Capital_Usage: return <DeleteCapitalUsageCostFormComponent data={cost as PCRSpendProfileCapitalUsageCostDto} costCategory={costCategory} />;
       case CostCategoryType.Subcontracting: return <DeleteSubcontractingCostFormComponent data={cost as PCRSpendProfileSubcontractingCostDto} costCategory={costCategory} />;
       case CostCategoryType.Travel_And_Subsistence: return <DeleteTravelAndSubsCostFormComponent data={cost as PCRSpendProfileTravelAndSubsCostDto} costCategory={costCategory} />;
+      case CostCategoryType.Other_Costs: return <DeleteOtherCostFormComponent data={cost as PCRSpendProfileOtherCostsDto} costCategory={costCategory} />;
       default: return null;
     }
   }
