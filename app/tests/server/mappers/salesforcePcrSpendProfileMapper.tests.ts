@@ -1,31 +1,9 @@
-import { createDto } from "@framework/util/dtoHelpers";
 import { ISalesforcePcrSpendProfile } from "@server/repositories";
 import { SalesforcePcrSpendProfileMapper } from "@server/repositories/mappers/pcrSpendProfileMapper";
-import { PcrSpendProfileEntity, PcrSpendProfileEntityForCreate } from "@framework/entities";
+import { PcrSpendProfileEntity } from "@framework/entities";
 import { PCRSpendProfileCapitalUsageType } from "@framework/constants";
 
 const PCR_SPEND_PROFILE_TYPE = "PCR_SPEND_PROFILE_TYPE";
-
-const createPcrSpendProfileSalesforceRecord = (update?: Partial<ISalesforcePcrSpendProfile>): ISalesforcePcrSpendProfile => {
-  return createDto<ISalesforcePcrSpendProfile>({
-    Id: "Test_Id",
-    RecordTypeId: PCR_SPEND_PROFILE_TYPE,
-    Acc_ProjectChangeRequest__c: "pcr_id",
-    Acc_CostCategoryID__c: "cost_cat_id",
-    Acc_CostOfRole__c: 0,
-    ...update
-  });
-};
-
-const createPcrSpendProfileEntity = (update?: Partial<PcrSpendProfileEntity>): PcrSpendProfileEntity => {
-  return createDto<PcrSpendProfileEntity>({
-    id: undefined,
-    pcrItemId: "pcr_id",
-    costCategoryId: "cost_cat_id",
-    value: 0,
-    ...update
-  });
-};
 
 describe("SalesforcePcrSpendProfileMapper", () => {
   it("Maps spend profile correctly to entity", () => {
@@ -42,8 +20,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
       costPerItem: 14,
       subcontractorCountry: "Brazil",
       subcontractorRoleAndDescription: "Works on it",
-      // TODO rename type
-      type: PCRSpendProfileCapitalUsageType.Existing,
+      capitalUsageType: PCRSpendProfileCapitalUsageType.Existing,
       typeLabel: "Existing",
       depreciationPeriod: 6,
       netPresentValue: 120,
@@ -53,17 +30,17 @@ describe("SalesforcePcrSpendProfileMapper", () => {
       costOfEach: 7,
     };
 
-    const update: ISalesforcePcrSpendProfile = {
+    const pcrSpendProfile: ISalesforcePcrSpendProfile = {
       Id: expectedEntity.id,
       RecordTypeId: PCR_SPEND_PROFILE_TYPE,
       Acc_CostCategoryID__c: expectedEntity.costCategoryId,
       Acc_ProjectChangeRequest__c: expectedEntity.pcrItemId,
-      Acc_CostOfRole__c: expectedEntity.value,
+      Acc_ItemDescription__c: expectedEntity.description,
+      Acc_TotalCost__c: expectedEntity.value,
       Acc_Country__c: expectedEntity.subcontractorCountry,
       Acc_RoleAndDescription__c: expectedEntity.subcontractorRoleAndDescription,
       Acc_CostPerItem__c: expectedEntity.costPerItem,
       Acc_Quantity__c: expectedEntity.quantity,
-      Acc_Role__c: expectedEntity.description,
       Acc_Rate__c: expectedEntity.ratePerDay,
       Acc_GrossCostOfRole__c: expectedEntity.grossCostOfRole,
       Acc_DaysSpentOnProject__c: expectedEntity.daysSpentOnProject,
@@ -76,7 +53,6 @@ describe("SalesforcePcrSpendProfileMapper", () => {
       Acc_Utilisation__c: expectedEntity.utilisation,
       NewOrExistingLabel: expectedEntity.typeLabel,
     };
-    const pcrSpendProfile = createPcrSpendProfileSalesforceRecord(update);
     const mapped = new SalesforcePcrSpendProfileMapper(PCR_SPEND_PROFILE_TYPE).map(pcrSpendProfile);
     expect(mapped).toStrictEqual(expectedEntity);
   });
@@ -94,8 +70,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
       costPerItem: 14,
       subcontractorCountry: "Brazil",
       subcontractorRoleAndDescription: "Works on it",
-      // TODO rename type
-      type: PCRSpendProfileCapitalUsageType.Existing,
+      capitalUsageType: PCRSpendProfileCapitalUsageType.Existing,
       typeLabel: "Existing",
       depreciationPeriod: 6,
       netPresentValue: 120,
@@ -109,12 +84,12 @@ describe("SalesforcePcrSpendProfileMapper", () => {
       RecordTypeId: PCR_SPEND_PROFILE_TYPE,
       Acc_CostCategoryID__c: entity.costCategoryId,
       Acc_ProjectChangeRequest__c: entity.pcrItemId,
-      Acc_CostOfRole__c: entity.value,
+      Acc_TotalCost__c: entity.value,
+      Acc_ItemDescription__c: entity.description,
       Acc_Country__c: entity.subcontractorCountry,
       Acc_RoleAndDescription__c: entity.subcontractorRoleAndDescription,
       Acc_CostPerItem__c: entity.costPerItem,
       Acc_Quantity__c: entity.quantity,
-      Acc_Role__c: entity.description,
       Acc_Rate__c: entity.ratePerDay,
       Acc_GrossCostOfRole__c: entity.grossCostOfRole,
       Acc_DaysSpentOnProject__c: entity.daysSpentOnProject,
@@ -126,8 +101,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
       Acc_ResidualValue__c: entity.residualValue,
       Acc_Utilisation__c: entity.utilisation,
     };
-    const pcrSpendProfile = createPcrSpendProfileEntity(entity);
-    const mapped = new SalesforcePcrSpendProfileMapper(PCR_SPEND_PROFILE_TYPE).mapToSalesforce(pcrSpendProfile);
+    const mapped = new SalesforcePcrSpendProfileMapper(PCR_SPEND_PROFILE_TYPE).mapToSalesforce(entity);
     expect(mapped).toStrictEqual(sfRecord);
   });
 });

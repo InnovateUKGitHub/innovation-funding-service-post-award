@@ -85,7 +85,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
       costCategory,
-      type: x.type || PCRSpendProfileCapitalUsageType.Unknown,
+      type: x.capitalUsageType || PCRSpendProfileCapitalUsageType.Unknown,
       typeLabel: x.typeLabel || null,
       depreciationPeriod: isNumber(x.depreciationPeriod) ? x.depreciationPeriod : null,
       netPresentValue: isNumber(x.netPresentValue) ? x.netPresentValue : null,
