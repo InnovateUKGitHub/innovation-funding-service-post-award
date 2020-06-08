@@ -24,7 +24,6 @@ export interface ISalesforcePcrSpendProfile {
   Acc_DaysSpentOnProject__c?: number;
 
   // Materials
-  Acc_Item__c?: string;
   // Coming back as a string but should be a number. Handled in the entity mapper.
   Acc_Quantity__c?: number;
   Acc_CostPerItem__c?: number;
