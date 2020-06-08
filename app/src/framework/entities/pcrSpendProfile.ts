@@ -3,8 +3,8 @@ import { PCRSpendProfileCapitalUsageType } from "@framework/constants";
 export interface PcrSpendProfileEntityForCreate {
   pcrItemId: string;
   costCategoryId: string;
-  value?: number;
-  description?: string;
+  value: number | null;
+  description: string | null;
 
   // labour
   grossCostOfRole?: number;
@@ -20,7 +20,7 @@ export interface PcrSpendProfileEntityForCreate {
   subcontractorRoleAndDescription?: string;
 
   // capital usage
-  type?: PCRSpendProfileCapitalUsageType;
+  capitalUsageType?: PCRSpendProfileCapitalUsageType;
   typeLabel?: string;
   depreciationPeriod?: number;
   netPresentValue?: number;

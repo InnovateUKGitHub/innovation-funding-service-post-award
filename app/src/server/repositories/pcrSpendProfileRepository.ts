@@ -13,12 +13,12 @@ export interface ISalesforcePcrSpendProfile {
   Acc_CostCategoryID__c: string;
   RecordTypeId: string;
 
-  // Temporarily used to hold value for all cost categories. Will be changed next sprint.
-  Acc_CostOfRole__c?: number;
+  // Description and total cost apply to all cost categories
+  Acc_TotalCost__c: number | null;
+  Acc_ItemDescription__c: string | null;
 
   // Labour fields
   Acc_GrossCostOfRole__c?: number;
-  Acc_Role__c?: string;
   Acc_Rate__c?: number;
   // Coming back as a string but should be a number. Handled in the entity mapper.
   Acc_DaysSpentOnProject__c?: number;
@@ -66,10 +66,10 @@ export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesfo
     "Acc_ProjectChangeRequest__c",
     "Acc_CostCategoryID__c",
     "RecordTypeId",
-    "Acc_CostOfRole__c",
+    "Acc_TotalCost__c",
+    "Acc_ItemDescription__c",
     // Labour
     "Acc_GrossCostOfRole__c",
-    "Acc_Role__c",
     "Acc_Rate__c",
     "Acc_DaysSpentOnProject__c",
     // Materials

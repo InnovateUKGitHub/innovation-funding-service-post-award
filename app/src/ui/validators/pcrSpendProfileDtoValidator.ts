@@ -91,7 +91,7 @@ export class PCRSubcontractingCostDtoValidator extends PCRBaseCostDtoValidator<P
 
 export class PCRCapitalUsageCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileCapitalUsageCostDto> {
   public type = Validation.all(this,
-    () => Validation.required(this, this.model.type, "Type is required"),
+    () => Validation.required(this, this.model.type || null, "Type is required"),
   );
   public depreciationPeriod = Validation.all(this,
     () => Validation.required(this, this.model.depreciationPeriod, "Depreciation period is required"),
