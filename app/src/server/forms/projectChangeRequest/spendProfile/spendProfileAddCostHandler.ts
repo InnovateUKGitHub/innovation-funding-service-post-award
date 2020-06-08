@@ -25,6 +25,7 @@ import {
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
+  PCRSpendProfileOtherCostsDto,
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
@@ -80,6 +81,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
       case CostCategoryType.Subcontracting: return this.getSubcontractingCost(baseCostDto, costCategory.type, body);
       case CostCategoryType.Capital_Usage: return this.getCapitalUsageCost(baseCostDto, costCategory.type, body);
       case CostCategoryType.Travel_And_Subsistence: return this.getTravelAndSubsCost(baseCostDto, costCategory.type, body);
+      case CostCategoryType.Other_Costs: return this.getOtherCost(baseCostDto, costCategory.type, body);
     }
   }
 
@@ -131,6 +133,13 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
       costCategory,
       numberOfTimes: parseNumber(body.numberOfTimes),
       costOfEach: parseNumber(body.costOfEach),
+    };
+  }
+
+  private getOtherCost(baseCostDto: IBaseCost, costCategory: CostCategoryType.Other_Costs, body: IFormBody): PCRSpendProfileOtherCostsDto {
+    return {
+      ...baseCostDto,
+      costCategory,
     };
   }
 
