@@ -276,7 +276,7 @@
       "organisation-type-hint": "If the new partner's organisation type is not listed, contact your monitoring officer."
     },
     "pcr-period-length-change":{
-      "guidance": "This request is to change the length of a period for the remainder of the project. The frequency of how often you submit a claim and the project forecasts will be affected as a result. This will apply to all partners.\n\nIt will be rejected if submitted with any other request type.",
+      "guidance": "The period length can be 3 months or 1 month. This request will affect all remaining periods of the project for all partners. It will also change:\n* how your project's forecast is divided\n* how often your project submits a claim.\n\n\n\nWe will reject this if you submit it with any other request type.",
       "period-length-quarterly": "3 months",
       "period-length-monthly": "1 month"
     }
@@ -484,6 +484,6 @@
   },
   "pcr-period-length-change-labels":{
     "current-period-length": "Current period length",
-    "previous-period-length": "New period length"
+    "new-period-length": "New period length"
   }
 }
