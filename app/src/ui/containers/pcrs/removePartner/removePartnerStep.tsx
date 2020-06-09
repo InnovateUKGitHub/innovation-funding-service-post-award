@@ -45,7 +45,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRP
             label="Removal period"
             hint="The partner can make a claim for this period before being removed. If they have a claim in progress, they will be removed once that claim has been paid."
             labelHidden={true}
-            width="one-quarter"
+            width={3}
             name="removalPeriod"
             value={x => x.removalPeriod}
             update={(x, value) => x.removalPeriod = value}
