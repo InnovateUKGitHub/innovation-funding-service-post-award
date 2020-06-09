@@ -1,7 +1,7 @@
 // tslint:disable:no-bitwise
 import {ISalesforceProject} from "../../repositories/projectsRepository";
 import {ClaimFrequency, IContext, ProjectDto, ProjectRole, ProjectStatus} from "@framework/types";
-import {dayComparator} from "@framework/util";
+import {dayComparator, isNumber} from "@framework/util";
 import {ISalesforceProfileTotalPeriod} from "@server/repositories";
 
 export const mapToProjectDto = (
@@ -46,7 +46,7 @@ export const mapToProjectDto = (
     claimsWithParticipant: item.Acc_ClaimsUnderQuery__c,
     numberOfOpenClaims: item.Acc_NumberOfOpenClaims__c,
     durationInMonths: item.Acc_Duration__c,
-    numberOfPeriods: item.Acc_NumberofPeriods__c,
+    numberOfPeriods: isNumber(item.Acc_NumberofPeriods__c) ? item.Acc_NumberofPeriods__c : 0,
   };
 };
 
