@@ -2,9 +2,15 @@
 import { TestContext } from "../../testContextProvider";
 import { SaveMonitoringReport } from "@server/features/monitoringReports/saveMonitoringReport";
 import { BadRequestError, ValidationError } from "@server/features/common";
-import { ISalesforceMonitoringReportHeader } from "@server/repositories";
+import { default as Repositories } from "@server/repositories";
 import { GetMonitoringReportById } from "@server/features/monitoringReports/getMonitoringReport";
-import { MonitoringReportDto } from "@framework/dtos";
+
+const createMonitoringReportTestData = (context: TestContext, periodId: number, update?: Partial<Repositories.ISalesforceMonitoringReportHeader>): Repositories.ISalesforceMonitoringReportHeader => {
+  const project = context.testData.createProject(x => x.Acc_CurrentPeriodNumber__c = 10);
+  const partner = context.testData.createPartner(project);
+  context.testData.createProfileTotalPeriod(partner, periodId);
+  return context.testData.createMonitoringReportHeader(project, periodId, update);
+};
 
 describe("saveMonitoringReports", () => {
   it("should not save responses without an option id", async () => {
@@ -13,9 +19,9 @@ describe("saveMonitoringReports", () => {
     // create a question
     context.testData.createMonitoringReportQuestionSet(1, 3);
 
-    const report = context.testData.createMonitoringReportHeader();
+    const report = createMonitoringReportTestData(context, 1);
 
-    const dto = await getDto(context, report);
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 
     const command = new SaveMonitoringReport(dto, false);
     await context.runCommand(command);
@@ -31,9 +37,9 @@ describe("saveMonitoringReports", () => {
     const question2Options = context.testData.createMonitoringReportQuestionSet(2, 3);
     const question2Answer = question2Options[1];
 
-    const report = context.testData.createMonitoringReportHeader();
+    const report = createMonitoringReportTestData(context, 1);
 
-    const dto = await getDto(context, report);
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 
     dto.questions[0].optionId = question1Answer.Id;
     dto.questions[0].comments = "Question 1 comments";
@@ -61,12 +67,12 @@ describe("saveMonitoringReports", () => {
     const question2Options = context.testData.createMonitoringReportQuestionSet(2, 3);
     const question2Answer = question2Options[1];
 
-    const report = context.testData.createMonitoringReportHeader();
+    const report = createMonitoringReportTestData(context, 1);
 
     const responseQuestion1 = context.testData.createMonitoringReportResponse(report, question1Options[0], { Acc_QuestionComments__c: "Question 1 - old answer" });
     const responseQuestion2 = context.testData.createMonitoringReportResponse(report, question2Answer, { Acc_QuestionComments__c: "Question 2 comments" });
 
-    const dto = await getDto(context, report);
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 
     dto.questions[0].optionId = question1NewAnswer.Id;
     dto.questions[0].comments = "Question 1 new comments";
@@ -89,11 +95,11 @@ describe("saveMonitoringReports", () => {
     const question1Options = context.testData.createMonitoringReportQuestionSet(1, 3);
     const question2Options = context.testData.createMonitoringReportQuestionSet(2, 3);
 
-    const report = context.testData.createMonitoringReportHeader();
+    const report = createMonitoringReportTestData(context, 1);
     const responseQuestion1 = context.testData.createMonitoringReportResponse(report, question1Options[0], { Acc_QuestionComments__c: "Question 1 - old answer" });
     const responseQuestion2 = context.testData.createMonitoringReportResponse(report, question2Options[0], { Acc_QuestionComments__c: "Question 2 - old answer" });
 
-    const dto = await getDto(context, report);
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 
     dto.questions[0].responseId = null;
     dto.questions[0].optionId = null;
@@ -110,9 +116,9 @@ describe("saveMonitoringReports", () => {
   it("should not change the report status from draft if it has not been submitted", async () => {
     const context = new TestContext();
 
-    const report = context.testData.createMonitoringReportHeader(undefined, 1, { Acc_MonitoringReportStatus__c: "Draft" });
+    const report = createMonitoringReportTestData(context, 1, { Acc_MonitoringReportStatus__c: "Draft" });
 
-    const dto = await getDto(context, report);
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 
     await context.runCommand(new SaveMonitoringReport(dto, false));
 
@@ -123,9 +129,9 @@ describe("saveMonitoringReports", () => {
   it("should save the report with submitted status if it is submitted", async () => {
     const context = new TestContext();
 
-    const report = context.testData.createMonitoringReportHeader(undefined, 1, { Acc_MonitoringReportStatus__c: "Draft" });
+    const report = createMonitoringReportTestData(context, 1, { Acc_MonitoringReportStatus__c: "Draft" });
 
-    const dto = await getDto(context, report);
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 
     await context.runCommand(new SaveMonitoringReport(dto, true));
 
@@ -134,9 +140,9 @@ describe("saveMonitoringReports", () => {
 
   it("should create a status change if the report is submitted", async () => {
     const context = new TestContext();
-    const report = context.testData.createMonitoringReportHeader(undefined, 1, { Acc_MonitoringReportStatus__c: "Draft" });
+    const report = createMonitoringReportTestData(context, 1, { Acc_MonitoringReportStatus__c: "Draft" });
 
-    const dto = await getDto(context, report);
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 
     await context.runCommand(new SaveMonitoringReport(dto, true));
     expect(context.repositories.monitoringReportStatusChange.Items.find(x => x.Acc_MonitoringReport__c === dto.headerId)).toBeDefined();
@@ -144,9 +150,8 @@ describe("saveMonitoringReports", () => {
 
   it("should not create a status change if the report is not submitted", async () => {
     const context = new TestContext();
-    const report = context.testData.createMonitoringReportHeader(undefined, 1, { Acc_MonitoringReportStatus__c: "Draft" });
-
-    const dto = await getDto(context, report);
+    const report = createMonitoringReportTestData(context, 1, { Acc_MonitoringReportStatus__c: "Draft" });
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 
     await context.runCommand(new SaveMonitoringReport(dto, false));
     expect(context.repositories.monitoringReportStatusChange.Items).toHaveLength(0);
@@ -157,9 +162,9 @@ describe("saveMonitoringReports validation", () => {
   it("should throw an error if the report has already been submitted", async () => {
     const context = new TestContext();
 
-    const report = context.testData.createMonitoringReportHeader(undefined, 1, { Acc_MonitoringReportStatus__c: "Awaiting IUK Approval" });
+    const report = createMonitoringReportTestData(context, 1, { Acc_MonitoringReportStatus__c: "Awaiting IUK Approval" });
 
-    const dto = await getDto(context, report);
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 
     await expect(context.runCommand(new SaveMonitoringReport(dto, true))).rejects.toThrow(BadRequestError);
   });
@@ -167,9 +172,10 @@ describe("saveMonitoringReports validation", () => {
   it("should return a validation error when trying to save responses without a periodId", async () => {
     const context = new TestContext();
 
-    const report = context.testData.createMonitoringReportHeader();
+    const report = createMonitoringReportTestData(context, 1);
+
     report.Acc_ProjectPeriodNumber__c = null as any;
-    const dto = await getDto(context, report);
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 
     const command = new SaveMonitoringReport(dto, false);
 
@@ -182,9 +188,9 @@ describe("saveMonitoringReports validation", () => {
     const question1Options = context.testData.createMonitoringReportQuestionSet(1, 3);
     const question2Options = context.testData.createMonitoringReportQuestionSet(2, 3);
 
-    const report = context.testData.createMonitoringReportHeader();
+    const report = createMonitoringReportTestData(context, 1);
 
-    const dto = await getDto(context, report);
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 
     // save 2nd question with option from first question
     dto.questions[0].optionId = question1Options[1].Id;
@@ -206,9 +212,9 @@ describe("saveMonitoringReports validation", () => {
     const question1Options = context.testData.createMonitoringReportQuestionSet(1, 3);
     const question2Options = context.testData.createMonitoringReportQuestionSet(2, 3);
 
-    const report = context.testData.createMonitoringReportHeader();
+    const report = createMonitoringReportTestData(context, 1);
 
-    const dto = await getDto(context, report);
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 
     dto.questions[0].optionId = question1Options[1].Id;
     dto.questions[0].comments = "Comment 1";
@@ -232,9 +238,9 @@ describe("saveMonitoringReports validation", () => {
     const question1Options = context.testData.createMonitoringReportQuestionSet(1, 3);
     const question2Options = context.testData.createMonitoringReportQuestionSet(2, 3);
 
-    const report = context.testData.createMonitoringReportHeader();
+    const report = createMonitoringReportTestData(context, 1);
 
-    const dto = await getDto(context, report);
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 
     dto.questions[0].comments = "Comment 1";
     dto.questions[1].optionId = question2Options[2].Id;
@@ -252,27 +258,17 @@ describe("saveMonitoringReports validation", () => {
   it("should return a bad request if submitted with a different project id", async () => {
     const context = new TestContext();
 
-    const project1 = context.testData.createProject(x => x.Acc_CurrentPeriodNumber__c = 1);
     const project2 = context.testData.createProject(x => x.Acc_CurrentPeriodNumber__c = 1);
 
-    const report = context.testData.createMonitoringReportHeader(project1);
+    const report = createMonitoringReportTestData(context, 1);
 
-    const dto = await getDto(context, report);
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
     dto.projectId = project2.Id;
 
     await expect(context.runCommand(new SaveMonitoringReport(dto, false))).rejects.toThrow(BadRequestError);
 
-    dto.projectId = project1.Id;
+    dto.projectId = report.Acc_Project__c;
 
     await expect(context.runCommand(new SaveMonitoringReport(dto, false))).resolves.toBe(true);
   });
 });
-
-function getDto(context: TestContext, report: ISalesforceMonitoringReportHeader): Promise<MonitoringReportDto> {
-  const project = context.testData.createProject((x) => {
-    x.Id = "Project1";
-  });
-  const partner = context.testData.createPartner(project);
-  context.testData.createProfileDetail(undefined, partner, 1);
-  return context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
-}
