@@ -10,7 +10,7 @@ describe("createMonitoringReports", () => {
   it("should create new", async () => {
     const context = new TestContext();
 
-    const dto = await getCreateDto(context);
+    const dto = await getCreateDto(context, "2018-01-02", "2018-03-04");
 
     expect(context.repositories.monitoringReportHeader.Items.length).toBe(0);
 
@@ -82,13 +82,16 @@ describe("createMonitoringReports", () => {
   });
 });
 
-async function getCreateDto(context: TestContext): Promise<MonitoringReportDto> {
+async function getCreateDto(context: TestContext, startDate?: string, endDate?: string): Promise<MonitoringReportDto> {
   const questions = await context.runQuery(new GetMonitoringReportActiveQuestions());
   const project = context.testData.createProject((x) => {
     x.Acc_CurrentPeriodNumber__c = 1;
   });
   const partner = context.testData.createPartner(project);
-  context.testData.createProfileDetail(undefined, partner, 1);
+  context.testData.createProfileTotalPeriod(partner, 1, x => {
+    startDate && (x.Acc_ProjectPeriodStartDate__c = startDate);
+    endDate && (x.Acc_ProjectPeriodEndDate__c = endDate);
+  });
 
   return {
     projectId: project.Id,
