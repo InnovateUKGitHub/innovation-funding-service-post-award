@@ -26,7 +26,7 @@ export interface ISalesforceProject {
   Acc_NumberOfOpenClaims__c: number;
   Acc_LeadParticipantName__c: string;
   Acc_Duration__c: number;
-  Acc_NumberofPeriods__c: number;
+  Acc_NumberofPeriods__c: number | null;
   Acc_CurrentPeriodNumber__c: number;
 }
 
