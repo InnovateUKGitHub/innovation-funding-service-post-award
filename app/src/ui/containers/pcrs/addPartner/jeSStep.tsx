@@ -3,7 +3,7 @@ import * as ACC from "@ui/components";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator, PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRItemForPartnerAdditionDto, PCRItemTypeDto } from "@framework/dtos";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { DocumentDescription } from "@framework/constants";
@@ -33,18 +33,6 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     );
   }
 
-  private renderTemplateLinks(itemType: PCRItemTypeDto) {
-    if (!itemType.files || !itemType.files.length) {
-      return null;
-    }
-    return (
-      <ACC.Section>
-        {/* TODO: Currently we do not have access to the correct form so this is a placeholder */}
-        <ACC.LinksList links={itemType.files.map(x => ({ text: "De minimis declaration form", url: x.relativeUrl }))} />
-      </ACC.Section>
-    );
-  }
-
   private renderForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>): React.ReactNode {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
     return (
@@ -56,16 +44,16 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           onChange={(dto) => this.props.onFileChange(false, dto)}
           qa="projectChangeRequestItemUpload"
         >
-          <UploadForm.Fieldset heading="De minimis aid eligibility">
-            <ACC.Renderers.SimpleString>The funding will be made as a de minimis grant. All organisations for a de minimis award must complete and upload a de minimis declaration. This states any and all de minimis awards (from any source of public funding) during the current and previous 2 fiscal years.</ACC.Renderers.SimpleString>
-            <ACC.Renderers.SimpleString>In order to minimise distortion of competition, the European Commission sets limits on how much assistance can be given without its prior approval, to organisations operating in a competitive market. There is a ceiling of €200,000 for all de minimis aid provided to any one organisation over a 3 fiscal year period.</ACC.Renderers.SimpleString>
-            <ACC.Renderers.SimpleString>The new organisation needs to declare any de minimis aid awarded to any other public funding body which requests it. They must also keep all documentation associated with the award for 10 years from the date the award is granted.</ACC.Renderers.SimpleString>
+          <UploadForm.Fieldset heading="Je-S form">
+            <ACC.Renderers.SimpleString>Your new academic partner must apply for funding through the Je-S system. To find out more about the Je-S requirements and processes please go to:</ACC.Renderers.SimpleString>
+            <ACC.UnorderedList>
+              <li><a href="https://www.gov.uk/government/publications/innovate-uk-completing-your-application-project-costs-guidance/guidance-for-academics-applying-via-the-je-s-system" rel="noopener noreferrer" target="_blank">guidance from Innovate UK for academics applying via the Je-S system (opens in a new window)</a></li>
+              <li> the <a href="https://je-s.rcuk.ac.uk/" rel="noopener noreferrer" target="_blank">Je-S website (opens in a new window)</a>.</li>
+            </ACC.UnorderedList>
+            <ACC.Renderers.SimpleString>Upload a pdf copy of the completed Je-S output form, once the new partner has a status of 'With Council'. If there is information outstanding or the partner is not at this status, your request will be rejected.</ACC.Renderers.SimpleString>
           </UploadForm.Fieldset>
-          <UploadForm.Fieldset heading="Template" qa="template">
-            {this.renderTemplateLinks(this.props.pcrItemType)}
-          </UploadForm.Fieldset>
-          <UploadForm.Fieldset heading="Upload declaration form" qa="documentGuidance">
-            <UploadForm.Hidden name="description" value={x => DocumentDescription.DeMinimisDeclarationForm} />
+          <UploadForm.Fieldset qa="documentUpload">
+            <UploadForm.Hidden name="description" value={x => DocumentDescription.JeSForm} />
             <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
               label="Upload files"
@@ -74,7 +62,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
               value={data => data.files}
               update={(dto, files) => {
                 dto.files = files || [];
-                dto.description = DocumentDescription.DeMinimisDeclarationForm;
+                dto.description = DocumentDescription.JeSForm;
               }}
               validation={documentsEditor.validator.files}
             />
@@ -91,7 +79,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     if (documents.length) {
       return (
         <ACC.Section title="Files uploaded" subtitle="All documents uploaded during this request will be shown here. All documents open in a new window.">
-          {documents.length ? <ACC.DocumentTable onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="de-minimis-document"/> : null}
+          {documents.length ? <ACC.DocumentTable onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="je-s-document"/> : null}
         </ACC.Section>
       );
     }
@@ -103,7 +91,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
   }
 }
 
-export const AidEligibilityStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => (
+export const JeSStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => (
   <StoresConsumer>
     {
       stores => {
