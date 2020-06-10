@@ -2,7 +2,7 @@ import { SalesforceBaseMapper } from "./saleforceMapperBase";
 import { ISalesforcePcrSpendProfile } from "@server/repositories";
 import { PcrSpendProfileEntity, PcrSpendProfileEntityForCreate } from "@framework/entities/pcrSpendProfile";
 import { Insertable } from "@server/repositories/salesforceRepositoryBase";
-import { PCRSpendProfileCapitalUsageType } from "@framework/constants";
+import { PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/constants";
 import { isNumber } from "@framework/util";
 
 export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISalesforcePcrSpendProfile, PcrSpendProfileEntity> {
@@ -109,6 +109,33 @@ export class PcrSpendProfileCapitalUsageTypeMapper {
       case PCRSpendProfileCapitalUsageType.New: return this.types.new;
       case PCRSpendProfileCapitalUsageType.Existing: return this.types.existing;
       default: return null;
+    }
+  });
+}
+
+// Unlike other picklist types which are enums, overhead rate can be a number to allow it to be used to calculate overhead cost
+export class PcrSpendProfileOverheadRateMapper {
+  private options = {
+    zero: "0%",
+    twenty: "20%",
+    calculated: "Calculated",
+  };
+
+  public mapFromSalesforcePcrSpendProfileOverheadRateOption = ((option: string | undefined): PCRSpendProfileOverheadRate => {
+    switch (option) {
+      case this.options.zero: return 0;
+      case this.options.twenty: return 20;
+      case this.options.calculated: return "calculated";
+      default: return "unknown";
+    }
+  });
+
+  public mapToSalesforcePcrSpendProfileOverheadRateOption = ((types: PCRSpendProfileOverheadRate | undefined) => {
+    switch (types) {
+      case 0: return this.options.zero;
+      case 20: return this.options.twenty;
+      case "calculated": return this.options.calculated;
+      default: return undefined;
     }
   });
 }

@@ -23,6 +23,7 @@ import { GetPcrPartnerTypesQuery } from "@server/features/pcrs/getPcrPartnerType
 import { GetPcrParticipantSizesQuery } from "@server/features/pcrs/getPcrParticipantSizesQuery";
 import { GetPcrProjectLocationsQuery } from "@server/features/pcrs/getPcrProjectLocationsQuery";
 import { GetPcrSpendProfileCapitalUsageTypesQuery } from "./features/pcrs/getPcrSpendProfileCapitalUsageTypesQuery";
+import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
 
 export class Server {
   private readonly app: express.Express;
@@ -129,6 +130,7 @@ export class Server {
       this.primeCache(context, "Project Change Request Participant Sizes cache", () => context.runQuery(new GetPcrParticipantSizesQuery()));
       this.primeCache(context, "Project Change Request Project Locations cache", () => context.runQuery(new GetPcrProjectLocationsQuery()));
       this.primeCache(context, "Project Change Request Spend Profile Capital Usage Types cache", () => context.runQuery(new GetPcrSpendProfileCapitalUsageTypesQuery()));
+      this.primeCache(context, "Project Change Request Spend Profile Overhead Rate Options cache", () => context.runQuery(new GetPcrSpendProfileOverheadRateOptionsQuery()));
     }
   }
 

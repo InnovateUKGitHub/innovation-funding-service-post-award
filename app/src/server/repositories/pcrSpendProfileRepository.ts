@@ -53,6 +53,7 @@ export interface IPcrSpendProfileRepository {
   updateSpendProfiles(items: PcrSpendProfileEntity[]): Promise<boolean>;
   deleteSpendProfiles(items: string[]): Promise<void>;
   getCapitalUsageTypes(): Promise<IPicklistEntry[]>;
+  getOverheadRateOptions(): Promise<IPicklistEntry[]>;
 }
 
 export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesforcePcrSpendProfile> implements IPcrSpendProfileRepository {
@@ -122,5 +123,9 @@ export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesfo
 
   getCapitalUsageTypes(): Promise<IPicklistEntry[]> {
     return super.getPicklist("Acc_NewOrExisting__c");
+  }
+
+  getOverheadRateOptions(): Promise<IPicklistEntry[]> {
+    return super.getPicklist("Acc_OverheadRate__c");
   }
 }

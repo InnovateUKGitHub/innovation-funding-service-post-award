@@ -27,7 +27,7 @@ export interface PcrSpendProfileEntityForCreate {
   residualValue?: number;
   utilisation?: number;
 
-  // Travel and subsistance
+  // Travel and subsistence
   numberOfTimes?: number;
   costOfEach?: number;
 }
