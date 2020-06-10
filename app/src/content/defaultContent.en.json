@@ -424,6 +424,7 @@
     "document-description-StatementOfExpenditure": "Statement of expenditure",
     "document-description-ClaimValidationForm": "Claim Validation Form",
     "document-description-DeMinimisDeclarationForm": "De Minimis Declaration Form",
+    "document-description-JeSForm": "Je-S Form",
     "document-description-Unknown": "Unknown",
     "uploadButtonLabel" : "Upload",
     "uploadInputLabel": "Upload files",
