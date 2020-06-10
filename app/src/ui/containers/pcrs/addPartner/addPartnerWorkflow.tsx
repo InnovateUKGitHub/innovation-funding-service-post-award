@@ -10,6 +10,7 @@ import {
   CompaniesHouseStep,
   FinanceContactStep,
   FinanceDetailsStep,
+  JeSStep,
   OrganisationDetailsStep,
   ProjectLocationStep,
   ProjectManagerDetailsStep,
@@ -28,7 +29,7 @@ export type addPartnerStepNames =
   | "financeContactStep"
   | "projectManagerDetailsStep"
   | "spendProfileStep"
-  ;
+  | "jeSStep";
 
 export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: number | undefined): IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> => {
   const workflow: IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> = {
@@ -71,13 +72,20 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
     });
   }
 
-  if (item.partnerType === PCRPartnerType.Research) {
+  if (item.partnerType !== PCRPartnerType.Business) {
     workflow.steps.push({
       stepName: "academicOrganisationStep",
       displayName: "Organisation name",
       stepNumber: 3,
       validation: val => val.pcr,
       stepRender: AcademicOrganisationStep
+    });
+    workflow.steps.push({
+      stepName: "jeSStep",
+      displayName: "Je-S form",
+      stepNumber: 9,
+      validation: val => val.files,
+      stepRender: JeSStep
     });
   } else {
     workflow.steps.push({
