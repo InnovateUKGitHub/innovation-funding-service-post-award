@@ -15,7 +15,7 @@ export abstract class OptionsQueryBase<T extends (string | number)> extends Quer
     const options = await this.getPickListValues(context);
     const map =  options.reduce<Map<T, Option<T>>>((acc, curr) => {
       const enumValue = this.mapToEnumValue(curr.value);
-      if(!enumValue) {
+      if(!enumValue && enumValue !== 0) {
         return acc;
       }
       return acc.set(enumValue, {
