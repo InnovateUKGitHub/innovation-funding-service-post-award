@@ -10,13 +10,21 @@ import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
 import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteProjectChangeRequestCommand";
 import { GetProjectChangeRequestStatusChanges } from "@server/features/pcrs/getProjectChangeRequestStatusChanges";
-import { PCRParticipantSize, PCRPartnerType, PCRProjectLocation, PCRProjectRole, PCRSpendProfileCapitalUsageType } from "@framework/constants";
+import {
+  PCRParticipantSize,
+  PCRPartnerType,
+  PCRProjectLocation,
+  PCRProjectRole,
+  PCRSpendProfileCapitalUsageType,
+  PCRSpendProfileOverheadRate
+} from "@framework/constants";
 import { GetPcrProjectRolesQuery } from "@server/features/pcrs/getPcrProjectRolesQuery";
 import { Option } from "@framework/dtos";
 import { GetPcrPartnerTypesQuery } from "@server/features/pcrs/getPcrPartnerTypesQuery";
 import { GetPcrParticipantSizesQuery } from "@server/features/pcrs/getPcrParticipantSizesQuery";
 import { GetPcrProjectLocationsQuery } from "@server/features/pcrs/getPcrProjectLocationsQuery";
 import { GetPcrSpendProfileCapitalUsageTypesQuery } from "@server/features/pcrs/getPcrSpendProfileCapitalUsageTypesQuery";
+import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
 
 export interface IPCRsApi {
   create: (params: ApiParams<{ projectId: string, projectChangeRequestDto: PCRDto }>) => Promise<PCRDto>;
@@ -31,6 +39,7 @@ export interface IPCRsApi {
   getParticipantSizes: (params: ApiParams<{}>) => Promise<Option<PCRParticipantSize>[]>;
   getProjectLocations: (params: ApiParams<{}>) => Promise<Option<PCRProjectLocation>[]>;
   getCapitalUsageTypes: (params: ApiParams<{}>) => Promise<Option<PCRSpendProfileCapitalUsageType>[]>;
+  getOverheadRateOptions: (params: ApiParams<{}>) => Promise<Option<PCRSpendProfileOverheadRate>[]>;
 }
 
 class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implements IPCRsApi {
@@ -49,6 +58,7 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
     this.getCustom("/participant-sizes", () => ({}), (p) => this.getParticipantSizes(p));
     this.getCustom("/project-locations", () => ({}), (p) => this.getProjectLocations(p));
     this.getCustom("/capital-usage-types", () => ({}), (p) => this.getCapitalUsageTypes(p));
+    this.getCustom("/overhead-rate-options", () => ({}), (p) => this.getOverheadRateOptions(p));
   }
 
   getAll(params: ApiParams<{ projectId: string }>): Promise<PCRSummaryDto[]> {
@@ -110,6 +120,11 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
 
   public async getCapitalUsageTypes(params: ApiParams<{}>) {
     const query = new GetPcrSpendProfileCapitalUsageTypesQuery();
+    return contextProvider.start(params).runQuery(query);
+  }
+
+  public async getOverheadRateOptions(params: ApiParams<{}>) {
+    const query = new GetPcrSpendProfileOverheadRateOptionsQuery();
     return contextProvider.start(params).runQuery(query);
   }
 }
