@@ -5,7 +5,7 @@ import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
-import { PCRPartnerType, PCRProjectRole } from "@framework/constants";
+import { DocumentDescription, PCRPartnerType, PCRProjectRole } from "@framework/constants";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 interface InnerProps {
@@ -21,21 +21,21 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
           <ACC.SummaryList qa="add-partner-summary-list-organisation">
             <ACC.SummaryListItem label="Project role" content={pcrItem.projectRoleLabel} validation={validator.projectRole} qa="projectRole" />
             <ACC.SummaryListItem label="Type" content={pcrItem.partnerTypeLabel} validation={validator.partnerType} qa="partnerType" />
-            <ACC.SummaryListItem label="Documents" content={this.renderDocuments(documents)} qa="supportingDocuments" action={this.props.getEditLink("aidEligibilityStep", null)} />
-            { pcrItem.partnerType === PCRPartnerType.Research && <ACC.SummaryListItem label="Name" content={pcrItem.organisationName} validation={validator.organisationName} qa="organisationName" action={this.props.getEditLink("academicOrganisationStep", validator.organisationName)}/> }
-            { pcrItem.partnerType !== PCRPartnerType.Research && <ACC.SummaryListItem label="Name" content={pcrItem.organisationName} validation={validator.companyHouseOrganisationName} qa="organisationName" action={this.props.getEditLink("companiesHouseStep", validator.companyHouseOrganisationName)}/> }
-            { pcrItem.partnerType !== PCRPartnerType.Research && <ACC.SummaryListItem label="Registration number" content={pcrItem.registrationNumber} validation={validator.registrationNumber} qa="registrationNumber" action={this.props.getEditLink("companiesHouseStep", validator.registrationNumber)}/> }
-            { pcrItem.partnerType !== PCRPartnerType.Research && <ACC.SummaryListItem label="Registered address" content={pcrItem.registeredAddress} validation={validator.registeredAddress} qa="registeredAddress" action={this.props.getEditLink("companiesHouseStep", validator.registeredAddress)}/> }
-            <ACC.SummaryListItem label="Size" content={pcrItem.participantSizeLabel} validation={validator.participantSize} qa="participantSize" action={ pcrItem.partnerType === PCRPartnerType.Research ? null : this.props.getEditLink("organisationDetailsStep", validator.participantSize)}/>
-            { pcrItem.partnerType !== PCRPartnerType.Research && <ACC.SummaryListItem label="Number of employees" content={pcrItem.numberOfEmployees} validation={validator.numberOfEmployees} qa="numberOfEmployees" action={this.props.getEditLink("organisationDetailsStep", validator.numberOfEmployees)}/> }
-            { pcrItem.partnerType !== PCRPartnerType.Research && <ACC.SummaryListItem
+            <ACC.SummaryListItem label="Documents" content={this.renderDocuments(documents, DocumentDescription.DeMinimisDeclarationForm)} qa="supportingDocuments" action={this.props.getEditLink("aidEligibilityStep", null)} />
+            { pcrItem.partnerType !== PCRPartnerType.Business && <ACC.SummaryListItem label="Name" content={pcrItem.organisationName} validation={validator.organisationName} qa="organisationName" action={this.props.getEditLink("academicOrganisationStep", validator.organisationName)}/> }
+            { pcrItem.partnerType === PCRPartnerType.Business && <ACC.SummaryListItem label="Name" content={pcrItem.organisationName} validation={validator.companyHouseOrganisationName} qa="organisationName" action={this.props.getEditLink("companiesHouseStep", validator.companyHouseOrganisationName)}/> }
+            { pcrItem.partnerType === PCRPartnerType.Business && <ACC.SummaryListItem label="Registration number" content={pcrItem.registrationNumber} validation={validator.registrationNumber} qa="registrationNumber" action={this.props.getEditLink("companiesHouseStep", validator.registrationNumber)}/> }
+            { pcrItem.partnerType === PCRPartnerType.Business && <ACC.SummaryListItem label="Registered address" content={pcrItem.registeredAddress} validation={validator.registeredAddress} qa="registeredAddress" action={this.props.getEditLink("companiesHouseStep", validator.registeredAddress)}/> }
+            <ACC.SummaryListItem label="Size" content={pcrItem.participantSizeLabel} validation={validator.participantSize} qa="participantSize" action={ pcrItem.partnerType !== PCRPartnerType.Business ? null : this.props.getEditLink("organisationDetailsStep", validator.participantSize)}/>
+            { pcrItem.partnerType === PCRPartnerType.Business && <ACC.SummaryListItem label="Number of employees" content={pcrItem.numberOfEmployees} validation={validator.numberOfEmployees} qa="numberOfEmployees" action={this.props.getEditLink("organisationDetailsStep", validator.numberOfEmployees)}/> }
+            { pcrItem.partnerType === PCRPartnerType.Business && <ACC.SummaryListItem
               label="End of financial year"
               content={<ACC.Renderers.MonthYear value={pcrItem.financialYearEndDate}/>}
               validation={validator.financialYearEndDate}
               qa="financialYearEndDate"
               action={this.props.getEditLink("financeDetailsStep", validator.financialYearEndDate)}
             /> }
-            { pcrItem.partnerType !== PCRPartnerType.Research && <ACC.SummaryListItem
+            { pcrItem.partnerType === PCRPartnerType.Business && <ACC.SummaryListItem
               label="Turnover"
               content={<ACC.Renderers.Currency value={pcrItem.financialYearEndTurnover}/>}
               validation={validator.financialYearEndTurnover}
@@ -69,9 +69,10 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
     );
   }
 
-  private renderDocuments(documents: DocumentSummaryDto[]) {
-    return documents.length > 0
-      ? <ACC.DocumentList documents={documents} qa="documentsList" />
+  private renderDocuments(documents: DocumentSummaryDto[], description: DocumentDescription) {
+    const docs = documents.filter(x => x.description === description);
+    return docs.length > 0
+      ? <ACC.DocumentList documents={docs} qa="documents" />
       : "No documents uploaded.";
   }
 }
