@@ -95,6 +95,9 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
     if (metaInfo.type === PCRItemType.MultiplePartnerFinancialVirement) {
       return config.features.financialVirements;
     }
+    if (metaInfo.type === PCRItemType.PeriodLengthChange) {
+      return config.features.changePeriodLengthWorkflow;
+    }
     return true;
   }
 
