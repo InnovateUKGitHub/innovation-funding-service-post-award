@@ -16,6 +16,7 @@ export enum PartnerStatus {
   OnHold = 2,
   InvoluntaryWithdrawal = 3,
   VoluntaryWithdrawal = 4,
+  Pending = 5,
 }
 
 export interface PartnerDto {
