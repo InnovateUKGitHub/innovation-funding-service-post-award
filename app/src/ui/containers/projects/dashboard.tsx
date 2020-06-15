@@ -3,6 +3,7 @@ import * as ACC from "../../components";
 import {
   PartnerClaimStatus,
   PartnerDto,
+  PartnerStatus,
   ProjectDto,
   ProjectRole,
   ProjectStatus
@@ -33,7 +34,7 @@ interface ProjectData {
   projectSection: Section;
 }
 
-type Section = "archived" | "open" | "awaiting" | "upcoming";
+type Section = "archived" | "open" | "awaiting" | "upcoming" | "pending";
 
 class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
 
@@ -67,11 +68,12 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     return <ACC.BackLink route={this.props.routes.home.getLink({})}>Back to home page</ACC.BackLink>;
   }
 
-  private renderProjectCount(live: ProjectData[], upcoming: ProjectData[], archived: ProjectData[]) {
-    const count = live.length + upcoming.length + archived.length;
+  private renderProjectCount(live: ProjectData[], upcoming: ProjectData[], archived: ProjectData[], pending: ProjectData[]) {
+    const count = live.length + upcoming.length + archived.length + pending.length;
     if (!count) return null;
 
     const results = [];
+    if (pending.length) results.push(`${pending.length} in project setup`);
     if (live.length) results.push(`${live.length} live`);
     if (upcoming.length) results.push(`${upcoming.length} upcoming`);
     if (archived.length) results.push(`${archived.length} archived`);
@@ -93,14 +95,16 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
         };
       });
 
+    const pendingProjects = combinedData.filter(x => x.projectSection === "pending");
     const openProjects = combinedData.filter(x => x.projectSection === "open" || x.projectSection === "awaiting");
     const upcomingProjects = combinedData.filter(x => x.projectSection === "upcoming");
     const archivedProjects = combinedData.filter(x => x.projectSection === "archived");
 
     return (
       <React.Fragment>
-        {this.renderProjectCount(openProjects, upcomingProjects, archivedProjects)}
-        <ACC.Section qa="open-projects" key="section-open">
+        {this.renderProjectCount(openProjects, upcomingProjects, archivedProjects, pendingProjects)}
+        <ACC.Section qa="pending-and-open-projects" key="section-pending-and-open">
+          {this.renderProjectList(pendingProjects)}
           {this.renderProjectList(openProjects, x => x.projectsDashboard.live)}
         </ACC.Section>
         <ACC.Accordion>
@@ -115,13 +119,13 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderProjectList(projects: ProjectData[], messages: (x: Content) => { noProjects: () => ContentResult, noMatchingProjects: () => ContentResult }) {
+  private renderProjectList(projects: ProjectData[], messages?: (x: Content) => { noProjects: () => ContentResult, noMatchingProjects: () => ContentResult }) {
 
-    if (!projects.length && this.props.search) {
+    if (!projects.length && this.props.search && messages) {
       return <ACC.Renderers.SimpleString><ACC.Content value={x => messages(x).noMatchingProjects()} /></ACC.Renderers.SimpleString>;
     }
 
-    if (!projects.length) {
+    if (!projects.length && messages) {
       return <ACC.Renderers.SimpleString><ACC.Content value={x => messages(x).noProjects()} /></ACC.Renderers.SimpleString>;
     }
 
@@ -130,7 +134,12 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
+  // tslint:disable-next-line: cognitive-complexity
   private getProjectSection(project: ProjectDto, partner: PartnerDto | null): Section {
+    // A pending participant status should override any project status, so check that first
+    if (partner && (partner.roles & (ProjectRole.FinancialContact)) && partner.partnerStatus === PartnerStatus.Pending) {
+      return "pending";
+    }
     switch (project.status) {
       case ProjectStatus.Live:
       case ProjectStatus.FinalClaim:
@@ -153,9 +162,14 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     }
   }
 
-  private isActionRequired(project: ProjectDto, partner: PartnerDto | null, section: Section): boolean {
+  private isActionRequired(project: ProjectDto, partner: PartnerDto | null, section: Section) {
     if (section === "archived" || section === "upcoming") {
       return false;
+    }
+
+    // If the project is pending and requires setup
+    if (section === "pending") {
+      return true;
     }
 
     // if fc return warning if overdue or iar required
@@ -199,6 +213,10 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
 
   private getRightHandMessages(project: ProjectDto, partner: PartnerDto | null, section: Section): React.ReactNode[] {
     const messages: React.ReactNode[] = [];
+
+    if (section === "pending") {
+      messages.push(<ACC.Content value={x => x.projectsDashboard.messages.pendingProject()} />);
+    }
 
     if (section === "archived") messages.push(project.statusName);
 
@@ -264,8 +282,13 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderProjectTitle(project: ProjectDto, links: boolean) {
+  private renderProjectTitle(project: ProjectDto, links: boolean, isPending: boolean) {
     const text = `${project.projectNumber}: ${project.title}`;
+
+    if (isPending) {
+      // TODO: Link to project setup page when route exists
+      return <ACC.Link route={this.props.routes.projectOverview.getLink({ projectId: project.id })}>{text}</ACC.Link>;
+    }
 
     if (!links) {
       return <p className="govuk-heading-s govuk-!-margin-bottom-2">{text}</p>;
@@ -284,7 +307,7 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
         <div className="govuk-grid-column-two-thirds" style={{ display: "inline-flex", alignItems: "center" }}>
           <div>
             <h3 className="govuk-heading-s govuk-!-margin-bottom-2">
-              {this.renderProjectTitle(project, section !== "upcoming")}
+              {this.renderProjectTitle(project, section !== "upcoming", section === "pending")}
             </h3>
             {leftHandMessages.map((content, i) => <div key={`leftMessage${i}`} className="govuk-body-s govuk-!-margin-bottom-0">{content}</div>)}
           </div>
