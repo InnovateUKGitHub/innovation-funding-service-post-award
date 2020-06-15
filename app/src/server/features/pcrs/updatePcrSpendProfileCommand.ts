@@ -1,7 +1,7 @@
 import { BadRequestError, CommandBase, ValidationError } from "../common";
 import { ProjectRole } from "@framework/dtos";
-import { Authorisation, IContext } from "@framework/types";
-import { CostCategoryType, PcrSpendProfileEntity, PcrSpendProfileEntityForCreate, } from "@framework/entities";
+import { Authorisation, IContext, PCRSpendProfileOverheadRate } from "@framework/types";
+import { CostCategoryType, PcrSpendProfileEntity } from "@framework/entities";
 import { isNumber, roundCurrency } from "@framework/util";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import {
@@ -129,15 +129,22 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   }
 
   private getOverheadsCostValue(overheadsCostDto: PCRSpendProfileOverheadsCostDto, costCategories: CostCategoryDto[], costDtos: PcrSpendProfileEntity[]) {
-    if (!overheadsCostDto || overheadsCostDto.overheadRate === "unknown") return null;
-    if (overheadsCostDto.overheadRate === "calculated") return overheadsCostDto.value;
-
-    const labourCostCategory = costCategories.find(x => x.type === CostCategoryType.Labour)!;
-    const labourCosts = costDtos
-      .filter(x => x.costCategoryId === labourCostCategory.id)
-      .reduce((acc, item) => acc + (item.value || 0), 0);
-
-    return roundCurrency( labourCosts * overheadsCostDto.overheadRate / 100 );
+    switch (overheadsCostDto.overheadRate) {
+      case PCRSpendProfileOverheadRate.Unknown:
+        return null;
+      case PCRSpendProfileOverheadRate.Calculated:
+        return overheadsCostDto.value;
+      case PCRSpendProfileOverheadRate.Zero:
+        return 0;
+      case PCRSpendProfileOverheadRate.Twenty:
+        const labourCostCategory = costCategories.find(x => x.type === CostCategoryType.Labour)!;
+        const labourCosts = costDtos
+          .filter(x => x.costCategoryId === labourCostCategory.id)
+          .reduce((acc, item) => acc + (item.value || 0), 0);
+        return roundCurrency(labourCosts * 20 / 100);
+      default:
+        return null;
+    }
   }
 
   protected async Run(context: IContext): Promise<boolean> {

@@ -3,7 +3,15 @@ import { ActionTransitionSuccess, actionTypes } from "redux-router5";
 import { DataLoadAction } from "../actions/common";
 import { LoadingStatus } from "../../../shared/pending";
 import * as Dtos from "@framework/dtos";
-import { IAppError, PCRParticipantSize, PCRPartnerType, PCRProjectLocation, PCRProjectRole, PCRSpendProfileCapitalUsageType } from "@framework/types";
+import {
+  IAppError,
+  PCRParticipantSize,
+  PCRPartnerType,
+  PCRProjectLocation,
+  PCRProjectRole,
+  PCRSpendProfileCapitalUsageType,
+  PCRSpendProfileOverheadRate
+} from "@framework/types";
 import { State } from "router5";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
@@ -87,6 +95,7 @@ export const dataReducer = combineReducers({
   pcrProjectRoles: dataStoreReducer<Dtos.Option<PCRProjectRole>[]>("pcrProjectRoles"),
   pcrPartnerTypes: dataStoreReducer<Dtos.Option<PCRPartnerType>[]>("pcrPartnerTypes"),
   pcrSpendProfileCapitalUsageTypes: dataStoreReducer<Dtos.Option<PCRSpendProfileCapitalUsageType>[]>("pcrSpendProfileCapitalUsageTypes"),
+  pcrSpendProfileOverheadRateOptions: dataStoreReducer<Dtos.Option<PCRSpendProfileOverheadRate>[]>("pcrSpendProfileOverheadRateOptions"),
   project: dataStoreReducer<Dtos.ProjectDto>("project"),
   projects: dataStoreReducer<Dtos.ProjectDto[]>("projects"),
   projectChangeRequestStatusChanges: dataStoreReducer<Dtos.ProjectChangeRequestStatusChangeDto[]>("projectChangeRequestStatusChanges"),

@@ -90,6 +90,10 @@ export class ProjectChangeRequestStore extends StoreBase {
     return this.getData("pcrSpendProfileCapitalUsageTypes", storeKeys.getPcrSpendProfileCapitalUsageTypesKey(), p => ApiClient.pcrs.getCapitalUsageTypes({ ...p }));
   }
 
+  public getPcrSpendProfileOverheadRateOptions() {
+    return this.getData("pcrSpendProfileOverheadRateOptions", storeKeys.getPcrSpendProfileOverheadRateOptionsKey(), p => ApiClient.pcrs.getOverheadRateOptions({ ...p }));
+  }
+
   public getPcrTypeForItem(projectId: string, pcrId: string, itemId: string) {
     const data = Pending.combine({
       itemTypes: this.getAllPcrTypes(),
