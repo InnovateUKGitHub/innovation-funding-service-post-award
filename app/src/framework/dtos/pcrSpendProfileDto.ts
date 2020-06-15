@@ -1,5 +1,5 @@
 import { CostCategoryType } from "@framework/entities";
-import { PCRSpendProfileCapitalUsageType } from "@framework/types";
+import { PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/types";
 
 export interface PcrSpendProfileDto {
   costs: PCRSpendProfileCostDto[];
@@ -9,6 +9,7 @@ export interface PcrSpendProfileDto {
 export type PCRSpendProfileCostDto =
     PCRSpendProfileLabourCostDto
     | PCRSpendProfileMaterialsCostDto
+    | PCRSpendProfileOverheadsCostDto
     | PCRSpendProfileSubcontractingCostDto
     | PCRSpendProfileCapitalUsageCostDto
     | PCRSpendProfileTravelAndSubsCostDto
@@ -27,6 +28,11 @@ export interface PCRSpendProfileLabourCostDto extends PCRSpendProfileBaseCostDto
   grossCostOfRole: number | null;
   ratePerDay: number | null;
   daysSpentOnProject: number | null;
+}
+
+export interface PCRSpendProfileOverheadsCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Overheads> {
+  costCategory: CostCategoryType.Overheads;
+  overheadRate: PCRSpendProfileOverheadRate;
 }
 
 export interface PCRSpendProfileMaterialsCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Materials> {

@@ -2,7 +2,7 @@ import { BadRequestError, CommandBase, ValidationError } from "../common";
 import { ProjectRole } from "@framework/dtos";
 import { Authorisation, IContext } from "@framework/types";
 import { CostCategoryType, PcrSpendProfileEntity, PcrSpendProfileEntityForCreate, } from "@framework/entities";
-import { isNumber } from "@framework/util";
+import { isNumber, roundCurrency } from "@framework/util";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import {
   PCRSpendProfileCapitalUsageCostDto,
@@ -11,12 +11,16 @@ import {
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
   PCRSpendProfileOtherCostsDto,
+  PCRSpendProfileOverheadsCostDto,
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
+import { GetCostCategoriesQuery } from "@server/features/claims";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 interface BaseCostFields {
+  id: string;
   pcrItemId: string;
   costCategoryId: string;
   costCategory: CostCategoryType;
@@ -32,13 +36,18 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer);
   }
 
-  private mapPcrSpendProfileDtoToCreateEntity(costsDto: PCRSpendProfileCostDto): PcrSpendProfileEntityForCreate {
-    const init = {
+  private getBaseCostEntity(costsDto: PCRSpendProfileCostDto): BaseCostFields {
+    return {
+      id: costsDto.id,
       pcrItemId: this.pcrItemId,
       costCategoryId: costsDto.costCategoryId,
       costCategory: costsDto.costCategory,
       description: costsDto.description || null,
     };
+  }
+
+  private mapPcrSpendProfileDtoToEntity(costsDto: PCRSpendProfileCostDto): PcrSpendProfileEntity {
+    const init = this.getBaseCostEntity(costsDto);
     switch (costsDto.costCategory) {
       case CostCategoryType.Labour: return this.mapLabour(costsDto, init);
       case CostCategoryType.Materials: return this.mapMaterials(costsDto, init);
@@ -106,8 +115,29 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     };
   }
 
-  private mapPcrSpendProfileDtoToEntity(costsDto: PCRSpendProfileCostDto): PcrSpendProfileEntity {
-    return { ...this.mapPcrSpendProfileDtoToCreateEntity(costsDto), id: costsDto.id };
+  private addOverheads(costCategories: CostCategoryDto[], costs: PcrSpendProfileEntity[]) {
+    // Validation has already ensured there is at most one overheads cost
+    const overheadsCostDto = this.spendProfileDto.costs.find(x => x.costCategory === CostCategoryType.Overheads) as PCRSpendProfileOverheadsCostDto;
+
+    if (!overheadsCostDto) return;
+
+    costs.push({
+      ...this.getBaseCostEntity(overheadsCostDto),
+      overheadRate: overheadsCostDto.overheadRate,
+      value: this.getOverheadsCostValue(overheadsCostDto, costCategories, costs)
+    });
+  }
+
+  private getOverheadsCostValue(overheadsCostDto: PCRSpendProfileOverheadsCostDto, costCategories: CostCategoryDto[], costDtos: PcrSpendProfileEntity[]) {
+    if (!overheadsCostDto || overheadsCostDto.overheadRate === "unknown") return null;
+    if (overheadsCostDto.overheadRate === "calculated") return overheadsCostDto.value;
+
+    const labourCostCategory = costCategories.find(x => x.type === CostCategoryType.Labour)!;
+    const labourCosts = costDtos
+      .filter(x => x.costCategoryId === labourCostCategory.id)
+      .reduce((acc, item) => acc + (item.value || 0), 0);
+
+    return roundCurrency( labourCosts * overheadsCostDto.overheadRate / 100 );
   }
 
   protected async Run(context: IContext): Promise<boolean> {
@@ -122,27 +152,27 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     }
 
     const originalSpendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(this.pcrItemId));
+    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
 
-    const newCostItems = this.spendProfileDto.costs.filter(x => !x.id);
-    const persistedCostItems = this.spendProfileDto.costs.filter(x => x.id);
-    const deletedCostItems = originalSpendProfileDto.costs
+    // Filter out overheads as they are a special case handled separately
+    const mappedCostItems = this.spendProfileDto.costs
+      .filter(x => x.costCategory !== CostCategoryType.Overheads)
+      .map(x => this.mapPcrSpendProfileDtoToEntity(x));
+
+    this.addOverheads(costCategories, mappedCostItems);
+
+    const newCostItems = mappedCostItems.filter(x => !x.id);
+    const persistedCostItems = mappedCostItems.filter(x => !!x.id);
+
     // Cross-match repository values with dto values
+    const deletedCostItems = originalSpendProfileDto.costs
       .filter(x => persistedCostItems.every(p => p.id !== x.id))
-      // Can assume ID is present because values are from repository
       .map(x => x.id);
 
     // Chose not to make following requests in parallel as SF has struggled in the past (esp if roll-ups become involved)
-    if (newCostItems.length > 0) {
-      await context.repositories.pcrSpendProfile.insertSpendProfiles(newCostItems.map(x => this.mapPcrSpendProfileDtoToCreateEntity(x)));
-    }
-
-    if (persistedCostItems.length > 0) {
-      await context.repositories.pcrSpendProfile.updateSpendProfiles(persistedCostItems.map(x => this.mapPcrSpendProfileDtoToEntity(x)));
-    }
-
-    if (deletedCostItems.length > 0) {
-      await context.repositories.pcrSpendProfile.deleteSpendProfiles(deletedCostItems);
-    }
+    await context.repositories.pcrSpendProfile.insertSpendProfiles(newCostItems);
+    await context.repositories.pcrSpendProfile.updateSpendProfiles(persistedCostItems);
+    await context.repositories.pcrSpendProfile.deleteSpendProfiles(deletedCostItems);
 
     return true;
   }
