@@ -1,5 +1,5 @@
-import { BadRequestError, QueryBase } from "@server/features/common";
-import { IContext, PCRSpendProfileCapitalUsageType } from "@framework/types";
+import { QueryBase } from "@server/features/common";
+import { IContext, PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/types";
 import { CostCategoryType, PcrSpendProfileEntity } from "@framework/entities";
 import { GetCostCategoriesQuery } from "@server/features/claims";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
@@ -69,7 +69,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
       costCategory,
-      overheadRate: x.overheadRate || "unknown"
+      overheadRate: x.overheadRate || PCRSpendProfileOverheadRate.Unknown
     }));
   }
 

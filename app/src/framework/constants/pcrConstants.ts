@@ -70,7 +70,12 @@ export enum PCRProjectLocation {
   OutsideTheUnitedKingdom = 20,
 }
 
-export type PCRSpendProfileOverheadRate = number | "calculated" | "unknown";
+export enum PCRSpendProfileOverheadRate {
+  Unknown = 0,
+  Calculated = 10,
+  Zero = 20,
+  Twenty = 30,
+}
 
 export enum PCRSpendProfileCapitalUsageType {
   Unknown = 0,

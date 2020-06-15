@@ -6,12 +6,12 @@ import {
   PcrSpendProfileDto,
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
-  PCRSpendProfileOtherCostsDto, PCRSpendProfileOverheadsCostDto,
+  PCRSpendProfileOtherCostsDto,
+  PCRSpendProfileOverheadsCostDto,
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryType } from "@framework/entities";
-import { isNumber } from "@framework/util";
 import { PCRSpendProfileOverheadRate } from "@framework/constants";
 
 export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
@@ -77,13 +77,10 @@ export class PCRLabourCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendP
 }
 
 export class PCROverheadsCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileOverheadsCostDto> {
-  // use private variables so the strings are typed
-  private unknown: PCRSpendProfileOverheadRate = "unknown";
-  private calculated: PCRSpendProfileOverheadRate = "calculated";
-  public overheadRate = Validation.all(this,
-    () => Validation.isTrue(this, this.model.overheadRate !== this.unknown, "Overhead rate is required"),
-    () => Validation.isTrue(this, this.model.overheadRate === this.calculated || isNumber(this.model.overheadRate as number), "Overhead rate is not valid"),
-  );
+  public overheadRate = Validation.required(this, this.model.overheadRate || null, "Overhead rate is required");
+  public value = this.model.overheadRate === PCRSpendProfileOverheadRate.Calculated
+    ? Validation.required(this, this.model.value, "Total cost is required")
+    : Validation.valid(this);
 }
 
 export class PCRMaterialsCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileMaterialsCostDto> {
