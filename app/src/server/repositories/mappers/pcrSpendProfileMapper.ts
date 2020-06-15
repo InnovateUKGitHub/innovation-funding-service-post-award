@@ -24,6 +24,9 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       daysSpentOnProject: Number(x.Acc_DaysSpentOnProject__c) || undefined,
       ratePerDay: x.Acc_Rate__c,
 
+      // Overheads
+      overheadRate: new PcrSpendProfileOverheadRateMapper().mapFromSalesforcePcrSpendProfileOverheadRateOption(x.Acc_OverheadRate__c),
+
       // Materials
       // Can remove Number() wrapper when SF fix Acc_Quantity__c to be a number
       quantity: Number(x.Acc_Quantity__c) || undefined,
@@ -42,7 +45,7 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       residualValue: x.Acc_ResidualValue__c,
       utilisation: x.Acc_Utilisation__c,
 
-      // Travel and Subsitance
+      // Travel and Subsistence
       // Can remove Number() wrapper when SF fix Acc_NumberOfTimes__c to be a number
       numberOfTimes: Number(x.Acc_NumberOfTimes__c) || undefined,
       costOfEach: x.Acc_CostEach__c,
@@ -67,6 +70,9 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       Acc_DaysSpentOnProject__c: x.daysSpentOnProject,
       Acc_GrossCostOfRole__c: x.grossCostOfRole,
       Acc_Rate__c: x.ratePerDay,
+
+      // Overheads
+      Acc_OverheadRate__c: new PcrSpendProfileOverheadRateMapper().mapToSalesforcePcrSpendProfileOverheadRateOption(x.overheadRate),
 
       // Materials
       Acc_CostPerItem__c: x.costPerItem,
@@ -130,8 +136,8 @@ export class PcrSpendProfileOverheadRateMapper {
     }
   });
 
-  public mapToSalesforcePcrSpendProfileOverheadRateOption = ((types: PCRSpendProfileOverheadRate | undefined) => {
-    switch (types) {
+  public mapToSalesforcePcrSpendProfileOverheadRateOption = ((option: PCRSpendProfileOverheadRate | undefined) => {
+    switch (option) {
       case 0: return this.options.zero;
       case 20: return this.options.twenty;
       case "calculated": return this.options.calculated;

@@ -6,11 +6,13 @@ import {
   PcrSpendProfileDto,
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
-  PCRSpendProfileOtherCostsDto,
+  PCRSpendProfileOtherCostsDto, PCRSpendProfileOverheadsCostDto,
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryType } from "@framework/entities";
+import { isNumber } from "@framework/util";
+import { PCRSpendProfileOverheadRate } from "@framework/constants";
 
 export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
 
@@ -24,6 +26,7 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
   private getCostValidator(cost: PCRSpendProfileCostDto) {
     switch(cost.costCategory) {
       case CostCategoryType.Labour: return new PCRLabourCostDtoValidator(cost, this.showValidationErrors);
+      case CostCategoryType.Overheads: return new PCROverheadsCostDtoValidator(cost, this.showValidationErrors);
       case CostCategoryType.Materials: return new PCRMaterialsCostDtoValidator(cost, this.showValidationErrors);
       case CostCategoryType.Subcontracting: return new PCRSubcontractingCostDtoValidator(cost, this.showValidationErrors);
       case CostCategoryType.Capital_Usage: return new PCRCapitalUsageCostDtoValidator(cost, this.showValidationErrors);
@@ -32,7 +35,11 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
     }
   }
 
-  public costs = Validation.optionalChild(this, this.model.costs, cost => this.getCostValidator(cost));
+  public costs = Validation.child(this, this.model.costs,
+    cost => this.getCostValidator(cost),
+    // Overhead costs is the only cost category that should have only one cost representing the overheads to the total labour costs
+    val => val.isTrue(list => list.filter(x => x.costCategory === CostCategoryType.Overheads).length <= 1)
+  );
 }
 
 export class PCRBaseCostDtoValidator<T extends PCRSpendProfileCostDto> extends Results<T> {
@@ -47,6 +54,7 @@ export class PCRBaseCostDtoValidator<T extends PCRSpendProfileCostDto> extends R
 
 export type PCRSpendProfileCostDtoValidator =
     PCRLabourCostDtoValidator
+    | PCROverheadsCostDtoValidator
     | PCRMaterialsCostDtoValidator
     | PCRSubcontractingCostDtoValidator
     | PCRCapitalUsageCostDtoValidator
@@ -65,6 +73,16 @@ export class PCRLabourCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendP
   public ratePerDay = Validation.all(this,
     () => Validation.required(this, this.model.ratePerDay, "Rate per day is required"),
     () => Validation.isCurrency(this, this.model.ratePerDay, "Rate per day must be a number")
+  );
+}
+
+export class PCROverheadsCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileOverheadsCostDto> {
+  // use private variables so the strings are typed
+  private unknown: PCRSpendProfileOverheadRate = "unknown";
+  private calculated: PCRSpendProfileOverheadRate = "calculated";
+  public overheadRate = Validation.all(this,
+    () => Validation.isTrue(this, this.model.overheadRate !== this.unknown, "Overhead rate is required"),
+    () => Validation.isTrue(this, this.model.overheadRate === this.calculated || isNumber(this.model.overheadRate as number), "Overhead rate is not valid"),
   );
 }
 

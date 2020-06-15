@@ -23,6 +23,9 @@ export interface ISalesforcePcrSpendProfile {
   // Coming back as a string but should be a number. Handled in the entity mapper.
   Acc_DaysSpentOnProject__c?: number;
 
+  // Overheads
+  Acc_OverheadRate__c?: string;
+
   // Materials
   // Coming back as a string but should be a number. Handled in the entity mapper.
   Acc_Quantity__c?: number;
@@ -41,7 +44,7 @@ export interface ISalesforcePcrSpendProfile {
   Acc_ResidualValue__c?: number;
   Acc_Utilisation__c?: number;
 
-  // Travel and Subsistance
+  // Travel and Subsistence
   // Coming back as a string but should be a number. Handled in the entity mapper.
   Acc_NumberOfTimes__c?: number;
   Acc_CostEach__c?: number;
@@ -73,6 +76,8 @@ export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesfo
     "Acc_GrossCostOfRole__c",
     "Acc_Rate__c",
     "Acc_DaysSpentOnProject__c",
+    // Overheads
+    "Acc_OverheadRate__c",
     // Materials
     "Acc_Quantity__c",
     "Acc_CostPerItem__c",
@@ -86,7 +91,7 @@ export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesfo
     "Acc_NetPresentValue__c",
     "Acc_ResidualValue__c",
     "Acc_Utilisation__c",
-    // Travel and Subsistance
+    // Travel and Subsistence
     "Acc_NumberOfTimes__c",
     "Acc_CostEach__c",
   ];
