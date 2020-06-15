@@ -19,6 +19,7 @@ import {
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
   PCRSpendProfileOtherCostsDto,
+  PCRSpendProfileOverheadsCostDto,
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
@@ -30,16 +31,22 @@ import {
   PCRLabourCostDtoValidator,
   PCRMaterialsCostDtoValidator,
   PCROtherCostsDtoValidator,
+  PCROverheadsCostDtoValidator,
   PCRSpendProfileCostDtoValidator,
   PCRSubcontractingCostDtoValidator,
   PCRTravelAndSubsCostDtoValidator
 } from "@ui/validators/pcrSpendProfileDtoValidator";
-import { LabourFormComponent } from "@ui/containers/pcrs/addPartner/spendProfile/labourFormComponent";
-import { MaterialsFormComponent } from "@ui/containers/pcrs/addPartner/spendProfile/materialsFormComponent";
-import { CapitalUsageFormComponent } from "./capitalUsageFormComponent";
-import { SubcontractingFormComponent } from "@ui/containers/pcrs/addPartner/spendProfile/subcontractingFormComponent";
-import { TravelAndSubsFormComponent } from "./travelAndSubsFormComponent";
-import { OtherCostsFormComponent } from "./otherCostsFormComponent";
+import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
+import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
+import {
+  CapitalUsageFormComponent,
+  LabourFormComponent,
+  MaterialsFormComponent,
+  OtherCostsFormComponent,
+  OverheadsFormComponent,
+  SubcontractingFormComponent,
+  TravelAndSubsFormComponent
+} from "@ui/containers/pcrs/addPartner/spendProfile";
 
 export interface PcrAddSpendProfileCostParams {
   projectId: string;
@@ -92,14 +99,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
     return (
       <ACC.Page
         backLink={(
-          <ACC.BackLink
-            route={this.props.routes.pcrSpendProfileCostsSummary.getLink({
-              itemId: this.props.itemId,
-              pcrId: this.props.pcrId,
-              projectId: this.props.projectId,
-              costCategoryId: this.props.costCategoryId
-            })}
-          >
+          <ACC.BackLink route={this.getBackLink(cost, editor.data)}>
             <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.backLink(costCategory.name)}/>
           </ACC.BackLink>
         )}
@@ -116,28 +116,52 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
     );
   }
 
-  private onSave(dto: PCRDto) {
+  private getBackLink(cost: PCRSpendProfileCostDto, pcrDto: PCRDto) {
+    // If on the overheads costs page then jump straight back to the add partner spend profile step
+    if (cost.costCategory === CostCategoryType.Overheads) {
+      const pcrItem = pcrDto.items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
+      return this.props.routes.pcrPrepareItem.getLink({
+        itemId: pcrItem.id,
+        pcrId: pcrDto.id,
+        projectId: pcrDto.projectId,
+        step: this.getSpendProfileStep(pcrItem) || undefined
+      });
+    }
+
+    // For all other cost categories go to the summary page
+    return this.props.routes.pcrSpendProfileCostsSummary.getLink({
+      itemId: this.props.itemId,
+      pcrId: this.props.pcrId,
+      projectId: this.props.projectId,
+      costCategoryId: this.props.costCategoryId
+    });
+  }
+
+  private getSpendProfileStep(addPartnerItem: PCRItemForPartnerAdditionDto) {
+    const workflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined, this.props.config.features);
+    if (!workflow) return null;
+    const stepName: addPartnerStepNames = "spendProfileStep";
+    return workflow.findStepNumberByName(stepName);
+  }
+
+  private onSave(dto: PCRDto, cost: PCRSpendProfileCostDto) {
     const item = dto.items.find(x => x.id === this.props.itemId)!;
     // If submitting from a step set the status to incomplete
     item.status = PCRItemStatus.Incomplete;
-    return this.props.onSave(dto, this.props.routes.pcrSpendProfileCostsSummary.getLink({
-      projectId: this.props.projectId,
-      pcrId: this.props.pcrId,
-      itemId: this.props.itemId,
-      costCategoryId: this.props.costCategoryId
-    }));
+    return this.props.onSave(dto, this.getBackLink(cost, dto));
   }
 
   private renderForm(costCategory: CostCategoryDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, validator: PCRSpendProfileCostDtoValidator | undefined, cost: PCRSpendProfileCostDto) {
     const props = {
       editor,
       isClient: this.props.isClient,
-      onSave: (x: PCRDto) => this.onSave(x),
+      onSave: (x: PCRDto) => this.onSave(x, cost),
       onChange: (x: PCRDto) => this.props.onChange(x),
       costCategory,
     };
     switch (costCategory.type) {
       case CostCategoryType.Labour: return <LabourFormComponent {...props} data={cost as PCRSpendProfileLabourCostDto} validator={validator as PCRLabourCostDtoValidator}/>;
+      case CostCategoryType.Overheads: return <OverheadsFormComponent {...props} data={cost as PCRSpendProfileOverheadsCostDto} validator={validator as PCROverheadsCostDtoValidator}/>;
       case CostCategoryType.Materials: return <MaterialsFormComponent {...props} data={cost as PCRSpendProfileMaterialsCostDto} validator={validator as PCRMaterialsCostDtoValidator}/>;
       case CostCategoryType.Subcontracting: return <SubcontractingFormComponent {...props} data={cost as PCRSpendProfileSubcontractingCostDto} validator={validator as PCRSubcontractingCostDtoValidator}/>;
       case CostCategoryType.Capital_Usage: return <CapitalUsageFormComponent {...props} data={cost as PCRSpendProfileCapitalUsageCostDto} validator={validator as PCRCapitalUsageCostDtoValidator}/>;
