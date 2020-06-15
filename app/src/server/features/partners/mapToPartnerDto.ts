@@ -82,6 +82,8 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
                 return PartnerStatus.InvoluntaryWithdrawal;
             case "Voluntary Withdrawal":
                 return PartnerStatus.VoluntaryWithdrawal;
+            case "Pending":
+                return PartnerStatus.Pending;
             default:
                 return PartnerStatus.Unknown;
         }
