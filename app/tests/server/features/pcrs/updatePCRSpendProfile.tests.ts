@@ -1,11 +1,7 @@
 // tslint:disable:no-duplicate-string
 import { TestContext } from "../../testContextProvider";
 import { ValidationError } from "@server/features/common";
-import {
-  PCRItemType,
-  PCRPartnerType,
-  PCRProjectRole,
-} from "@framework/types";
+import { PCRItemType, PCRPartnerType, PCRProjectRole, PCRSpendProfileOverheadRate, } from "@framework/types";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 import { PCRItemStatus, PCRSpendProfileCapitalUsageType, PCRStatus } from "@framework/constants";
 import { CostCategoryType } from "@framework/entities";
@@ -13,7 +9,8 @@ import {
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
-  PCRSpendProfileOtherCostsDto, PCRSpendProfileOverheadsCostDto,
+  PCRSpendProfileOtherCostsDto,
+  PCRSpendProfileOverheadsCostDto,
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
@@ -539,7 +536,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         costCategoryId: costCategory.id,
         costCategory: CostCategoryType.Overheads,
         description: "Labour Overheads cost lots",
-        overheadRate: 0,
+        overheadRate: PCRSpendProfileOverheadRate.Zero,
       };
       spendProfileDto.costs.push(cost);
       const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
@@ -552,6 +549,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       const item = context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Business });
       const costCategoryOverheads = context.testData.createCostCategory({name: "Overheads", type: CostCategoryType.Overheads});
       const costCategoryLabour = context.testData.createCostCategory({name: "Labour", type: CostCategoryType.Labour});
+      const costCategoryOther = context.testData.createCostCategory({name: "Other", type: CostCategoryType.Other_Costs});
       const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
       const cost: PCRSpendProfileOverheadsCostDto = {
         id: "",
@@ -559,7 +557,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         costCategoryId: costCategoryOverheads.id,
         costCategory: CostCategoryType.Overheads,
         description: "Labour Overheads cost lots",
-        overheadRate: 20,
+        overheadRate: PCRSpendProfileOverheadRate.Twenty,
       };
       const labourCosts: PCRSpendProfileLabourCostDto[] = [{
         id: "",
@@ -580,7 +578,17 @@ describe("UpdatePCRSpendProfileCommand", () => {
         daysSpentOnProject: 7,
         grossCostOfRole: 24,
       }];
+
+      const otherCost: PCRSpendProfileOtherCostsDto = {
+        id: "",
+        value: 100022,
+        costCategoryId: costCategoryOther.id,
+        costCategory: CostCategoryType.Other_Costs,
+        description: "Some other costs",
+      };
+
       spendProfileDto.costs.push(cost);
+      spendProfileDto.costs.push(otherCost);
       spendProfileDto.costs.push(...labourCosts);
       const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
       await expect(await context.runCommand(command)).toBe(true);
@@ -598,7 +606,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         costCategoryId: costCategoryOverheads.id,
         costCategory: CostCategoryType.Overheads,
         description: "Labour Overheads cost lots",
-        overheadRate: "calculated",
+        overheadRate: PCRSpendProfileOverheadRate.Calculated,
       };
       spendProfileDto.costs.push(cost);
       const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
@@ -617,14 +625,14 @@ describe("UpdatePCRSpendProfileCommand", () => {
         costCategoryId: costCategoryOverheads.id,
         costCategory: CostCategoryType.Overheads,
         description: "Labour Overheads cost lots",
-        overheadRate: "calculated",
+        overheadRate: PCRSpendProfileOverheadRate.Calculated,
       }, {
         id: "",
         value: 40,
         costCategoryId: costCategoryOverheads.id,
         costCategory: CostCategoryType.Overheads,
         description: "Labour Overheads cost lots and lots",
-        overheadRate: "calculated",
+        overheadRate: PCRSpendProfileOverheadRate.Calculated,
       }];
       spendProfileDto.costs = costs;
       const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
@@ -645,11 +653,11 @@ describe("UpdatePCRSpendProfileCommand", () => {
         costCategoryId: costCategory.id,
         costCategory: CostCategoryType.Overheads,
         description: "Labour Overheads cost lots",
-        overheadRate: "calculated",
+        overheadRate: PCRSpendProfileOverheadRate.Calculated,
       } as PCRSpendProfileOverheadsCostDto);
       await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
-      const cost = spendProfileDto.costs[0] as PCRSpendProfileOtherCostsDto;
+      const cost = spendProfileDto.costs[0] as PCRSpendProfileOverheadsCostDto;
       cost.id = insertedSpendProfileCost.id;
       cost.value = 60;
       cost.description = "Labour Overheads cost little";
@@ -671,7 +679,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         costCategoryId: costCategoryOverheads.id,
         costCategory: CostCategoryType.Overheads,
         description: "Labour Overheads cost lots",
-        overheadRate: 20,
+        overheadRate: PCRSpendProfileOverheadRate.Twenty,
       };
       const labourCosts: PCRSpendProfileLabourCostDto[] = [{
         id: "",

@@ -1,7 +1,7 @@
 import { ISalesforcePcrSpendProfile } from "@server/repositories";
 import { SalesforcePcrSpendProfileMapper } from "@server/repositories/mappers/pcrSpendProfileMapper";
 import { PcrSpendProfileEntity } from "@framework/entities";
-import { PCRSpendProfileCapitalUsageType } from "@framework/constants";
+import { PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/constants";
 
 const PCR_SPEND_PROFILE_TYPE = "PCR_SPEND_PROFILE_TYPE";
 
@@ -16,7 +16,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
       grossCostOfRole: 10,
       daysSpentOnProject: 11,
       ratePerDay: 12,
-      overheadRate: 20,
+      overheadRate: PCRSpendProfileOverheadRate.Twenty,
       quantity: 13,
       costPerItem: 14,
       subcontractorCountry: "Brazil",
@@ -68,7 +68,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
       grossCostOfRole: 10,
       daysSpentOnProject: 11,
       ratePerDay: 12,
-      overheadRate: "calculated",
+      overheadRate: PCRSpendProfileOverheadRate.Calculated,
       quantity: 13,
       costPerItem: 14,
       subcontractorCountry: "Brazil",
