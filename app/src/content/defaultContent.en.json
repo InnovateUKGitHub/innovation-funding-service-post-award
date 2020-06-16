@@ -378,7 +378,8 @@
     "currentPeriodInfo": "Project period {{currentPeriod}} of {{numberOfPeriods}}",
     "pcrQueried": "Project change request queried",
     "pcrToReview": "Project change requests to review: {{numberOfPcrs}}",
-    "projectOnHold" : "On hold"
+    "projectOnHold": "On hold",
+    "pendingProject": "You need to complete project setup" 
   },
   "monitoring-reports-messages": {
     "reportsSubmissionGuidance": "You should submit reports for this project according to the schedule agreed with Innovate UK.",
