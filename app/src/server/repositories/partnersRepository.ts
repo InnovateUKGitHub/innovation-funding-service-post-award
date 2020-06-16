@@ -40,6 +40,7 @@ export interface ISalesforcePartner {
   AuditReportFrequencyName: string;
   Acc_TotalPrepayment__c: number;
   Acc_Postcode__c: string;
+  Acc_NewForecastNeeded__c: boolean;
 }
 
 export interface IPartnerRepository {
@@ -92,6 +93,7 @@ export class PartnerRepository extends SalesforceRepositoryBaseWithMapping<ISale
     "toLabel(Acc_AuditReportFrequency__c) AuditReportFrequencyName",
     "Acc_TotalPrepayment__c",
     "Acc_Postcode__c",
+    "Acc_NewForecastNeeded__c",
   ];
 
   mapper = new SalesforcePartnerMapper();
