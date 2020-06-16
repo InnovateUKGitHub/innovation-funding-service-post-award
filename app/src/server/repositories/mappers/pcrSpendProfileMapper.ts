@@ -119,7 +119,6 @@ export class PcrSpendProfileCapitalUsageTypeMapper {
   });
 }
 
-// Unlike other picklist types which are enums, overhead rate can be a number to allow it to be used to calculate overhead cost
 export class PcrSpendProfileOverheadRateMapper {
   private options = {
     zero: "0%",
@@ -129,18 +128,18 @@ export class PcrSpendProfileOverheadRateMapper {
 
   public mapFromSalesforcePcrSpendProfileOverheadRateOption = ((option: string | undefined): PCRSpendProfileOverheadRate => {
     switch (option) {
-      case this.options.zero: return 0;
-      case this.options.twenty: return 20;
-      case this.options.calculated: return "calculated";
-      default: return "unknown";
+      case this.options.zero: return PCRSpendProfileOverheadRate.Zero;
+      case this.options.twenty: return PCRSpendProfileOverheadRate.Twenty;
+      case this.options.calculated: return PCRSpendProfileOverheadRate.Calculated;
+      default: return PCRSpendProfileOverheadRate.Unknown;
     }
   });
 
   public mapToSalesforcePcrSpendProfileOverheadRateOption = ((option: PCRSpendProfileOverheadRate | undefined) => {
     switch (option) {
-      case 0: return this.options.zero;
-      case 20: return this.options.twenty;
-      case "calculated": return this.options.calculated;
+      case PCRSpendProfileOverheadRate.Zero: return this.options.zero;
+      case PCRSpendProfileOverheadRate.Twenty: return this.options.twenty;
+      case PCRSpendProfileOverheadRate.Calculated: return this.options.calculated;
       default: return undefined;
     }
   });
