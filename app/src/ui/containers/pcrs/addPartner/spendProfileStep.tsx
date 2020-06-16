@@ -5,6 +5,7 @@ import { EditorStatus, StoresConsumer } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { CostCategoryType } from "@framework/entities";
 
 interface ContainerProps {
   costCategories: CostCategoryDto[];
@@ -54,10 +55,42 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
         <Table.Table qa="costsTable" data={data}>
           <Table.Custom header="Category" qa="category" value={x => x.costCategory.name} footer={<ACC.Renderers.SimpleString className={"govuk-!-font-weight-bold"}>Total costs (£)</ACC.Renderers.SimpleString>} />
           <Table.Currency header="Cost (£)" qa="cost" value={x => x.cost} footer={<ACC.Renderers.Currency value={total} />} />
-          <Table.Link value={x => this.props.routes.pcrSpendProfileCostsSummary.getLink({ itemId: this.props.pcrItem.id, pcrId: this.props.pcr.id, projectId: this.props.project.id, costCategoryId: x.costCategory.id })} content="Edit" qa="edit-cost" />
+          <Table.Link value={x => this.getLinkToCostSummary(x)} content="Edit" qa="edit-cost" />
         </Table.Table>
       </ACC.Section>
     );
+  }
+
+  private getLinkToCostSummary(data: TableData) {
+    // For all other cost categories go to the summary page
+    if (data.costCategory.type !== CostCategoryType.Overheads) {
+      return this.props.routes.pcrSpendProfileCostsSummary.getLink({
+        itemId: this.props.pcrItem.id,
+        pcrId: this.props.pcr.id,
+        projectId: this.props.project.id,
+        costCategoryId: data.costCategory.id
+      });
+    }
+    // Validation ensures only one overheads cost
+    const overheadsCost = this.props.pcrItem.spendProfile.costs.find(x => x.costCategory === CostCategoryType.Overheads);
+
+    // For overheads as there is only one cost, go straight to the cost form
+    if (overheadsCost) {
+      return this.props.routes.pcrPrepareSpendProfileEditCost.getLink({
+        itemId: this.props.pcrItem.id,
+        pcrId: this.props.pcr.id,
+        projectId: this.props.project.id,
+        costCategoryId: data.costCategory.id,
+        costId: overheadsCost.id
+      });
+    }
+
+    return this.props.routes.pcrPrepareSpendProfileAddCost.getLink({
+      itemId: this.props.pcrItem.id,
+      pcrId: this.props.pcr.id,
+      projectId: this.props.project.id,
+      costCategoryId: data.costCategory.id
+    });
   }
 }
 

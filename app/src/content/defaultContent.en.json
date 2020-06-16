@@ -328,6 +328,10 @@
       "total-cost": "Total cost",
       "total-cost-hint": "Total cost will update when saved."
     },
+    "overheads": {
+      "total-cost": "Total cost",
+      "calculated-cost": "Total cost of overheads as calculated in the spreadsheet (£)"
+    },
     "materials": {
       "item": "Item",
       "quantity": "Quantity",
