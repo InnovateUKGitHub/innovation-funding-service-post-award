@@ -53,4 +53,5 @@ export interface PartnerDto {
   totalFundingDueToReceive: number | null;
 
   overheadRate: number | null;
+  newForecastNeeded: boolean | null;
 }

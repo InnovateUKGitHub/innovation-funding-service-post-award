@@ -128,6 +128,7 @@ export class TestData {
       totalCostsAwarded: 100000,
       totalPrepayment: 500,
       postcode: "BS1 1AA",
+      newForecastNeeded: false,
     };
 
     if (!!update) update(newItem);
