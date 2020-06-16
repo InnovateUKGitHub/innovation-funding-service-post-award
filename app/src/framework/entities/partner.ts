@@ -28,4 +28,5 @@ export interface Partner {
   auditReportFrequencyName: string;
   totalPrepayment: number;
   postcode: string;
+  newForecastNeeded: boolean;
 }

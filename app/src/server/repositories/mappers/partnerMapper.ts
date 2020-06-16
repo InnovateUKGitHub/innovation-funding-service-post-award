@@ -34,6 +34,7 @@ export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePar
       auditReportFrequencyName: item.AuditReportFrequencyName,
       totalPrepayment: item.Acc_TotalPrepayment__c,
       postcode: item.Acc_Postcode__c,
+      newForecastNeeded: item.Acc_NewForecastNeeded__c,
     };
   }
 }

@@ -71,7 +71,8 @@ describe("getAllForProjectQuery", () => {
       totalCostsAwarded: 100000,
       totalPrepayment: 500,
       totalFundingDueToReceive: 62500,
-      percentageParticipantCostsSubmitted: 0.08
+      percentageParticipantCostsSubmitted: 0.08,
+      newForecastNeeded: false,
     };
 
     expect(result).toEqual(expected);
