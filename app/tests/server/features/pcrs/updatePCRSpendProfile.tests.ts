@@ -10,15 +10,16 @@ import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery
 import { PCRItemStatus, PCRSpendProfileCapitalUsageType, PCRStatus } from "@framework/constants";
 import { CostCategoryType } from "@framework/entities";
 import {
-    PCRSpendProfileCapitalUsageCostDto,
-    PCRSpendProfileLabourCostDto,
-    PCRSpendProfileMaterialsCostDto,
-    PCRSpendProfileOtherCostsDto,
-    PCRSpendProfileSubcontractingCostDto,
-    PCRSpendProfileTravelAndSubsCostDto,
+  PCRSpendProfileCapitalUsageCostDto,
+  PCRSpendProfileLabourCostDto,
+  PCRSpendProfileMaterialsCostDto,
+  PCRSpendProfileOtherCostsDto, PCRSpendProfileOverheadsCostDto,
+  PCRSpendProfileSubcontractingCostDto,
+  PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
+import { roundCurrency } from "@framework/util";
 
 // tslint:disable-next-line:no-big-function
 describe("UpdatePCRSpendProfileCommand", () => {
@@ -522,6 +523,195 @@ describe("UpdatePCRSpendProfileCommand", () => {
       await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
       expect(insertedSpendProfileCost.value).toBe(2500);
       expect(insertedSpendProfileCost.description).toBe("Whale watching in Tadoussac");
+    });
+  });
+  // tslint:disable-next-line:no-big-function
+  describe("Overheads", () => {
+    it("should save new overheads spend profile costs when rate is 0", async () => {
+      const {context, projectChangeRequest, recordType, project} = setup();
+      const item = context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Business });
+      const costCategory = context.testData.createCostCategory({name: "Overheads", type: CostCategoryType.Overheads});
+      context.testData.createCostCategory({name: "Labour", type: CostCategoryType.Labour});
+      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      const cost: PCRSpendProfileOverheadsCostDto = {
+        id: "",
+        value: null,
+        costCategoryId: costCategory.id,
+        costCategory: CostCategoryType.Overheads,
+        description: "Labour Overheads cost lots",
+        overheadRate: 0,
+      };
+      spendProfileDto.costs.push(cost);
+      const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
+      await expect(await context.runCommand(command)).toBe(true);
+      const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
+      expect(insertedSpendProfileCost).toMatchObject({ ...cost, value: 0, id: insertedSpendProfileCost.id });
+    });
+    it("should save new overheads spend profile costs based on labour costs", async () => {
+      const {context, projectChangeRequest, recordType, project} = setup();
+      const item = context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Business });
+      const costCategoryOverheads = context.testData.createCostCategory({name: "Overheads", type: CostCategoryType.Overheads});
+      const costCategoryLabour = context.testData.createCostCategory({name: "Labour", type: CostCategoryType.Labour});
+      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      const cost: PCRSpendProfileOverheadsCostDto = {
+        id: "",
+        value: null,
+        costCategoryId: costCategoryOverheads.id,
+        costCategory: CostCategoryType.Overheads,
+        description: "Labour Overheads cost lots",
+        overheadRate: 20,
+      };
+      const labourCosts: PCRSpendProfileLabourCostDto[] = [{
+        id: "",
+        value: null,
+        costCategoryId: costCategoryLabour.id,
+        costCategory: CostCategoryType.Labour,
+        description: "Labour Overheads cost lots",
+        ratePerDay: 20,
+        daysSpentOnProject: 6,
+        grossCostOfRole: 21,
+      }, {
+        id: "",
+        value: null,
+        costCategoryId: costCategoryLabour.id,
+        costCategory: CostCategoryType.Labour,
+        description: "Labour Overheads cost lots",
+        ratePerDay: 21,
+        daysSpentOnProject: 7,
+        grossCostOfRole: 24,
+      }];
+      spendProfileDto.costs.push(cost);
+      spendProfileDto.costs.push(...labourCosts);
+      const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
+      await expect(await context.runCommand(command)).toBe(true);
+      const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items.find(x => x.costCategoryId === costCategoryOverheads.id)!;
+      expect(insertedSpendProfileCost).toMatchObject({ ...cost, value: roundCurrency((20/100)*(20*6 + 21*7)), id: insertedSpendProfileCost.id });
+    });
+    it("should save new overheads spend profile costs with calculated value", async () => {
+      const {context, projectChangeRequest, recordType, project} = setup();
+      const item = context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Business });
+      const costCategoryOverheads = context.testData.createCostCategory({name: "Overheads", type: CostCategoryType.Overheads});
+      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      const cost: PCRSpendProfileOverheadsCostDto = {
+        id: "",
+        value: 30,
+        costCategoryId: costCategoryOverheads.id,
+        costCategory: CostCategoryType.Overheads,
+        description: "Labour Overheads cost lots",
+        overheadRate: "calculated",
+      };
+      spendProfileDto.costs.push(cost);
+      const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
+      await expect(await context.runCommand(command)).toBe(true);
+      const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items.find(x => x.costCategoryId === costCategoryOverheads.id)!;
+      expect(insertedSpendProfileCost).toMatchObject({ ...cost, id: insertedSpendProfileCost.id });
+    });
+    it("should return a validation error if there is more than one overheads cost", async () => {
+      const {context, projectChangeRequest, recordType, project} = setup();
+      const item = context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Business });
+      const costCategoryOverheads = context.testData.createCostCategory({name: "Overheads", type: CostCategoryType.Overheads});
+      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      const costs: PCRSpendProfileOverheadsCostDto[] = [{
+        id: "",
+        value: 30,
+        costCategoryId: costCategoryOverheads.id,
+        costCategory: CostCategoryType.Overheads,
+        description: "Labour Overheads cost lots",
+        overheadRate: "calculated",
+      }, {
+        id: "",
+        value: 40,
+        costCategoryId: costCategoryOverheads.id,
+        costCategory: CostCategoryType.Overheads,
+        description: "Labour Overheads cost lots and lots",
+        overheadRate: "calculated",
+      }];
+      spendProfileDto.costs = costs;
+      const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
+      await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    });
+    it("should update overheads spend profile costs", async () => {
+      const {context, projectChangeRequest, recordType, project} = setup();
+      const item = context.testData.createPCRItem(projectChangeRequest, recordType, {
+        status: PCRItemStatus.Incomplete,
+        projectRole: PCRProjectRole.Collaborator,
+        partnerType: PCRPartnerType.Business
+      });
+      const costCategory = context.testData.createCostCategory({name: "Overheads", type: CostCategoryType.Overheads});
+      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      spendProfileDto.costs.push({
+        id: "",
+        value: 50,
+        costCategoryId: costCategory.id,
+        costCategory: CostCategoryType.Overheads,
+        description: "Labour Overheads cost lots",
+        overheadRate: "calculated",
+      } as PCRSpendProfileOverheadsCostDto);
+      await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
+      const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
+      const cost = spendProfileDto.costs[0] as PCRSpendProfileOtherCostsDto;
+      cost.id = insertedSpendProfileCost.id;
+      cost.value = 60;
+      cost.description = "Labour Overheads cost little";
+      await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
+      expect(context.repositories.pcrSpendProfile.Items).toHaveLength(1);
+      const updatedCost = context.repositories.pcrSpendProfile.Items[0];
+      expect(updatedCost.value).toBe(60);
+      expect(updatedCost.description).toBe("Labour Overheads cost little");
+    });
+    it("should update overheads spend profile costs when a labour cost is added", async () => {
+      const {context, projectChangeRequest, recordType, project} = setup();
+      const item = context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Business });
+      const costCategoryOverheads = context.testData.createCostCategory({name: "Overheads", type: CostCategoryType.Overheads});
+      const costCategoryLabour = context.testData.createCostCategory({name: "Labour", type: CostCategoryType.Labour});
+      const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      const cost: PCRSpendProfileOverheadsCostDto = {
+        id: "",
+        value: null,
+        costCategoryId: costCategoryOverheads.id,
+        costCategory: CostCategoryType.Overheads,
+        description: "Labour Overheads cost lots",
+        overheadRate: 20,
+      };
+      const labourCosts: PCRSpendProfileLabourCostDto[] = [{
+        id: "",
+        value: null,
+        costCategoryId: costCategoryLabour.id,
+        costCategory: CostCategoryType.Labour,
+        description: "Labour Overheads cost lots",
+        ratePerDay: 20,
+        daysSpentOnProject: 6,
+        grossCostOfRole: 21,
+      }, {
+        id: "",
+        value: null,
+        costCategoryId: costCategoryLabour.id,
+        costCategory: CostCategoryType.Labour,
+        description: "Labour Overheads cost lots",
+        ratePerDay: 21,
+        daysSpentOnProject: 7,
+        grossCostOfRole: 24,
+      }];
+      spendProfileDto.costs.push(cost);
+      spendProfileDto.costs.push(...labourCosts);
+      const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
+      await expect(await context.runCommand(command)).toBe(true);
+
+      const inserted = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
+      inserted.costs.push({
+        id: "",
+        value: null,
+        costCategoryId: costCategoryLabour.id,
+        costCategory: CostCategoryType.Labour,
+        description: "Labour Overheads cost lots",
+        ratePerDay: 25,
+        daysSpentOnProject: 10,
+        grossCostOfRole: 24,
+      });
+      await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, inserted))).toBe(true);
+      const updatedSpendProfileCosts = context.repositories.pcrSpendProfile.Items.filter(x => x.costCategoryId === costCategoryOverheads.id);
+      expect(updatedSpendProfileCosts).toHaveLength(1);
+      expect(updatedSpendProfileCosts[0]).toMatchObject({ ...cost, value: roundCurrency((20/100)*(20*6 + 21*7 + 25*10)), id: updatedSpendProfileCosts[0].id });
     });
   });
   it("should delete spend profile costs", async () => {

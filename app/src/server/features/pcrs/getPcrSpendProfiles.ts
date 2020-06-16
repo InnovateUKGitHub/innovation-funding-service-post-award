@@ -1,4 +1,4 @@
-import { QueryBase } from "@server/features/common";
+import { BadRequestError, QueryBase } from "@server/features/common";
 import { IContext, PCRSpendProfileCapitalUsageType } from "@framework/types";
 import { CostCategoryType, PcrSpendProfileEntity } from "@framework/entities";
 import { GetCostCategoriesQuery } from "@server/features/claims";
@@ -10,6 +10,7 @@ import {
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
   PCRSpendProfileOtherCostsDto,
+  PCRSpendProfileOverheadsCostDto,
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
@@ -36,6 +37,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
   private mapCosts(costCategory: CostCategoryDto, spendProfiles: PcrSpendProfileEntity[]): PCRSpendProfileCostDto[] {
     switch (costCategory.type) {
       case CostCategoryType.Labour: return this.mapLabourCosts(spendProfiles, costCategory.type);
+      case CostCategoryType.Overheads: return this.mapOverheadsCosts(spendProfiles, costCategory.type);
       case CostCategoryType.Materials: return this.mapMaterialsCosts(spendProfiles, costCategory.type);
       case CostCategoryType.Subcontracting: return this.mapSubcontractingCosts(spendProfiles, costCategory.type);
       case CostCategoryType.Capital_Usage: return this.mapCapitalUsageCosts(spendProfiles, costCategory.type);
@@ -60,6 +62,14 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
       grossCostOfRole: isNumber(x.grossCostOfRole) ? x.grossCostOfRole : null,
       daysSpentOnProject: isNumber(x.daysSpentOnProject) ? x.daysSpentOnProject : null,
       ratePerDay: isNumber(x.ratePerDay) ? x.ratePerDay : null,
+    }));
+  }
+
+  private mapOverheadsCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Overheads): PCRSpendProfileOverheadsCostDto[] {
+    return spendProfiles.map(x => ({
+      ...this.mapBaseCostFields(x),
+      costCategory,
+      overheadRate: x.overheadRate || "unknown"
     }));
   }
 
