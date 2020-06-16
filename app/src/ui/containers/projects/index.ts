@@ -6,3 +6,4 @@ export * from "./projectDocuments";
 export * from "./overview";
 export * from "./partnerDetails";
 export * from "./partnerDetailsEdit";
+export * from "./setup";
