@@ -1,4 +1,4 @@
-import { PCRSpendProfileCapitalUsageType } from "@framework/constants";
+import { PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/constants";
 
 export interface PcrSpendProfileEntityForCreate {
   pcrItemId: string;
@@ -10,6 +10,9 @@ export interface PcrSpendProfileEntityForCreate {
   grossCostOfRole?: number;
   ratePerDay?: number;
   daysSpentOnProject?: number;
+
+  // Overheads
+  overheadRate?: PCRSpendProfileOverheadRate;
 
   // materials
   costPerItem?: number;
