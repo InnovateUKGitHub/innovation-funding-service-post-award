@@ -17,6 +17,10 @@ export class PcrSpendProfileLabels extends ContentBase {
     totalCost: () => this.getContent("labour.total-cost"),
     totalCostHint: () => this.getContent("labour.total-cost-hint"),
   };
+  public readonly overheads = {
+    totalCost: () => this.getContent("overheads.total-cost"),
+    calculatedCost: () => this.getContent("overheads.calculated-cost"),
+  };
   public readonly materials = {
     item: () => this.getContent("materials.item"),
     quantity: () => this.getContent("materials.quantity"),
