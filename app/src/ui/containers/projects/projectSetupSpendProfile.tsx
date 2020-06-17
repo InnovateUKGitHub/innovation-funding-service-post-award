@@ -2,18 +2,18 @@ import React from "react";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { ProjectRole } from "@framework/types";
-import { isNumber } from "@framework/util";
 import { Pending } from "@shared/pending";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { IForecastDetailsDtosValidator } from "@ui/validators";
 
-export interface UpdateInitialForecastParams {
+export interface ProjectSetupSpendProfileParams {
   projectId: string;
   partnerId: string;
 }
 
 interface Data {
   data: Pending<ACC.Claims.ForecastData>;
+  // TODO: Validation will be handled as part of ACC-5850 so the validator here is a placeholder
   editor: Pending<IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>>;
 }
 
@@ -21,7 +21,7 @@ interface Callbacks {
   onChange: (saving: boolean, dto: ForecastDetailsDTO[]) => void;
 }
 
-class UpdateInitialForecastComponent extends ContainerBase<UpdateInitialForecastParams, Data, Callbacks> {
+class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendProfileParams, Data, Callbacks> {
 
   public render() {
     const combined = Pending.combine({ data: this.props.data, editor: this.props.editor });
@@ -33,22 +33,22 @@ class UpdateInitialForecastComponent extends ContainerBase<UpdateInitialForecast
 
     return (
       <ACC.Page
-        backLink={<ACC.Projects.ProjectBackLink project={combined.project} routes={this.props.routes}/>}
+        backLink={<ACC.BackLink route={this.props.routes.projectSetup.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}><ACC.Content value={(x) => x.projectSetupSpendProfile.backLink()} /></ACC.BackLink>}
         error={editor.error}
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={combined.project} />}
       >
-        <ACC.Section title="" qa="partner-forecast" >
-          {this.renderOverheadsRate(combined.partner.overheadRate)}
+        <ACC.Section qa="project-setup-spend-profile" >
+          {this.renderGuidance()}
           <Form.Form
             editor={editor}
             onChange={data => this.props.onChange(false, data)}
             onSubmit={() => this.props.onChange(true, editor.data)}
-            qa="partner-forecast-form"
+            qa="project-setup-spend-profile-form"
           >
             <ACC.Claims.ForecastTable data={combined} editor={editor} />
             <Form.Fieldset>
-              <Form.Submit>Submit</Form.Submit>
+              <Form.Submit><ACC.Content value={x => x.projectSetupSpendProfile.submitButton()}/></Form.Submit>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
@@ -56,16 +56,15 @@ class UpdateInitialForecastComponent extends ContainerBase<UpdateInitialForecast
     );
   }
 
-  private renderOverheadsRate(overheadRate: number | null) {
-    if (!isNumber(overheadRate)) return null;
-    return <ACC.Renderers.SimpleString qa="overhead-costs">Overhead costs: <ACC.Renderers.Percentage value={overheadRate} /></ACC.Renderers.SimpleString>;
+  private renderGuidance() {
+    return <ACC.Renderers.SimpleString qa="guidance"><ACC.Content value={x => x.projectSetupSpendProfile.guidanceMessage()}/></ACC.Renderers.SimpleString>;
   }
 }
 
-const UpdateForecastContainer = (props: UpdateInitialForecastParams & BaseProps) => (
+const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams & BaseProps) => (
   <StoresConsumer>
     {stores => (
-      <UpdateInitialForecastComponent
+      <ProjectSetupSpendProfileComponent
         data={Pending.combine({
           project: stores.projects.getById(props.projectId),
           partner: stores.partners.getById(props.partnerId),
@@ -79,8 +78,8 @@ const UpdateForecastContainer = (props: UpdateInitialForecastParams & BaseProps)
         })}
         editor={stores.forecastDetails.getInitialForecastEditor(props.partnerId)}
         onChange={(saving, dto) => {
-          stores.forecastDetails.updateInitialForcastEditor(saving, props.projectId, props.partnerId, dto, "Your forecast has been updated.", () => {
-            stores.navigation.navigateTo(props.routes.projectOverview.getLink({ projectId: props.projectId }));
+          stores.forecastDetails.updateInitialForcastEditor(saving, props.projectId, props.partnerId, dto, "Your spend profile has been updated.", () => {
+            stores.navigation.navigateTo(props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }));
           });
         }}
         {...props}
@@ -89,17 +88,14 @@ const UpdateForecastContainer = (props: UpdateInitialForecastParams & BaseProps)
   </StoresConsumer>
 );
 
-export const UpdateInitialForecastRoute = defineRoute({
-  routeName: "updateInitialForecast",
-  routePath: "/projects/:projectId/claims/:partnerId/updateInitialForecast",
-  container: UpdateForecastContainer,
+export const ProjectSetupSpendProfileRoute = defineRoute({
+  routeName: "projectSetupSpendProfile",
+  routePath: "/projects/:projectId/setup/:partnerId/projectSetupSpendProfile",
+  container: ProjectSetupSpendProfileContainer,
   getParams: (route) => ({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,
   }),
-  getTitle: () => ({
-    htmlTitle: "Update initial forecast",
-    displayTitle: "Update initial forecast"
-  }),
-  accessControl: (auth, { projectId, partnerId }, config) => config.features.initialForecast && auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+  getTitle: ({ content }) => content.projectSetupSpendProfile.title(),
+  accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
 });
