@@ -46,7 +46,6 @@
       "claimsLink": "Claims",
       "forecastLink": "Forecast",
       "forecastsLink": "Forecasts",
-      "initialForecastsLink": "Initial Forecast",
       "projectChangeRequestsLink": "Project change requests",
       "documentsLink": "Documents",
       "detailsLink": "Project details",
@@ -65,6 +64,12 @@
       "uploadInstruction": "You can upload and store any documents relevant for this project. Any documents added to the project by Innovate UK will also be visible here.",
       "noDocumentsMessage": "No documents uploaded.",
       "noMatchingDocumentsMessage": "No documents match."
+    },
+    "project-setup-spend-profile": {
+      "title": "Spend Profile",
+      "guidance-message": "You must provide a forecast of all eligible project costs to reflect your spend throughout the project.",
+      "submit-button": "Save and return to project setup",
+      "back-link": "Back to project setup"
     },
     "finance-summary": {
       "title": "Finance summary",
