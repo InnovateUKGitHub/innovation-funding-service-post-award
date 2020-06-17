@@ -33,6 +33,8 @@ import { PcrSpendProfileCostsSummaryContent } from "@content/pages/pcrSpendProfi
 import { PcrSpendProfilePrepareCostContent } from "@content/pages/pcrSpendProfiles/spendProfilePrepareCostContent";
 import { PcrSpendProfileDeleteCostContent } from "./pages/pcrSpendProfiles/spendProfileDeleteCostContent";
 import { PCRPeriodLengthChangeContent } from "@content/pages/pcrs/periodLengthChangeContent";
+import { ProjectSetupContent } from "@content/pages/projectSetupContent";
+import { TaskListContent } from "@content/components/taskListContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -44,6 +46,7 @@ export class Content extends ContentBase {
   public readonly home = new HomePageContent(this);
 
   public readonly projectsDashboard = new ProjectDashboardContent(this);
+  public readonly projectSetup = new ProjectSetupContent(this);
   public readonly projectOverview = new ProjectOverviewContent(this);
   public readonly projectDetails = new ProjectDetailsContent(this);
   public readonly projectDocuments = new ProjectDocumentsContent(this);
@@ -89,5 +92,6 @@ export class Content extends ContentBase {
 
   public readonly components = {
     documents: new DocumentsContent(this),
+    taskList: new TaskListContent(this),
   };
 }

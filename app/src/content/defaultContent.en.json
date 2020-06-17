@@ -33,6 +33,13 @@
         "projectEndedMessage": "Project ended (final claim period)"
       }
     },
+    "project-setup": {
+      "title": "Project setup",
+      "back-link": "Back to projects",
+      "set-spend-profile": "Set spend profile",
+      "provide-bank-details": "Provide your bank details",
+      "complete": "Complete project setup"
+    },
     "project-overview": {
       "title": "Project overview",
       "monitoringReportLink": "Monitoring reports",
@@ -366,6 +373,7 @@
     }
   },
   "project-messages": {
+    "setup-guidance": "You need to give us some information so that we can complete project setup.  You will then be able to view your project and begin making claims.",
     "noClaimDueMessage": "No claim due",
     "claimDueMessage": "Claim due",
     "claimOverdueMessage": "Claim overdue",
@@ -491,5 +499,8 @@
   "pcr-period-length-change-labels":{
     "current-period-length": "Current period length",
     "new-period-length": "New period length"
+  },
+  "task-list": {
+    "section-title-enter-info": "Give us information"
   }
 }
