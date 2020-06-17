@@ -49,7 +49,9 @@ class ProjectSetupComponent extends ContainerBase<Params, Data, Callbacks> {
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.projectDashboard.getLink({})}>Back to projects</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.projectDashboard.getLink({})}>
+          <ACC.Content value={x => x.projectSetup.backLink()} />
+        </ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         error={editor.error}
         validator={editor.validator}

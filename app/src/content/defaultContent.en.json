@@ -35,6 +35,7 @@
     },
     "project-setup": {
       "title": "Project setup",
+      "back-link": "Back to projects",
       "set-spend-profile": "Set spend profile",
       "provide-bank-details": "Provide your bank details",
       "complete": "Complete project setup"
