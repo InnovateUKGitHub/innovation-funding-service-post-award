@@ -282,12 +282,11 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderProjectTitle(project: ProjectDto, links: boolean, isPending: boolean) {
+  private renderProjectTitle(project: ProjectDto, partner: PartnerDto | null, links: boolean, isPending: boolean) {
     const text = `${project.projectNumber}: ${project.title}`;
 
-    if (isPending) {
-      // TODO: Link to project setup page when route exists
-      return <ACC.Link route={this.props.routes.projectOverview.getLink({ projectId: project.id })}>{text}</ACC.Link>;
+    if (isPending && partner) {
+      return <ACC.Link route={this.props.routes.projectSetup.getLink({ projectId: project.id, partnerId: partner.id })}>{text}</ACC.Link>;
     }
 
     if (!links) {
@@ -307,7 +306,7 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
         <div className="govuk-grid-column-two-thirds" style={{ display: "inline-flex", alignItems: "center" }}>
           <div>
             <h3 className="govuk-heading-s govuk-!-margin-bottom-2">
-              {this.renderProjectTitle(project, section !== "upcoming", section === "pending")}
+              {this.renderProjectTitle(project, partner, section !== "upcoming", section === "pending")}
             </h3>
             {leftHandMessages.map((content, i) => <div key={`leftMessage${i}`} className="govuk-body-s govuk-!-margin-bottom-0">{content}</div>)}
           </div>

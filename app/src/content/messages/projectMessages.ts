@@ -23,4 +23,5 @@ export class ProjectMessages extends ContentBase {
   public readonly pcrsToReview = (numberOfPcrs: number) => this.getContent("pcrToReview", { numberOfPcrs });
   public readonly projectOnHold = () => this.getContent("projectOnHold");
   public readonly pendingProject = () => this.getContent("pendingProject");
+  public readonly setupGuidance = () => this.getContent("setup-guidance");
 }
