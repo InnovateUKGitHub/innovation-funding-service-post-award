@@ -107,9 +107,7 @@ class Component extends React.Component<SpendProfileCostFormProps<PCRSpendProfil
   private onChange(dto: PCRSpendProfileOverheadsCostDto) {
     const pcrItem = this.props.editor.data.items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
     const value = this.getOverheadsCostValue(dto, pcrItem.spendProfile.costs);
-    const selectedOption = this.props.rateOptions.find(x => x.value === dto.overheadRate);
     dto.value = value;
-    dto.description = selectedOption ? selectedOption.label : null;
     this.props.onChange(this.props.editor.data);
   }
 }

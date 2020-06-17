@@ -1,5 +1,5 @@
 import { BadRequestError, CommandBase, ValidationError } from "../common";
-import { ProjectRole } from "@framework/dtos";
+import { Option, ProjectRole } from "@framework/dtos";
 import { Authorisation, IContext, PCRSpendProfileOverheadRate } from "@framework/types";
 import { CostCategoryType, PcrSpendProfileEntity } from "@framework/entities";
 import { isNumber, roundCurrency } from "@framework/util";
@@ -18,6 +18,7 @@ import {
 import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 import { GetCostCategoriesQuery } from "@server/features/claims";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
 
 interface BaseCostFields {
   id: string;
@@ -115,15 +116,20 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     };
   }
 
-  private addOverheads(costCategories: CostCategoryDto[], costs: PcrSpendProfileEntity[]) {
+  private addOverheads(costCategories: CostCategoryDto[], costs: PcrSpendProfileEntity[], overheadsRates: Option<PCRSpendProfileOverheadRate>[]) {
     // Validation has already ensured there is at most one overheads cost
     const overheadsCostDto = this.spendProfileDto.costs.find(x => x.costCategory === CostCategoryType.Overheads) as PCRSpendProfileOverheadsCostDto;
 
     if (!overheadsCostDto) return;
 
+    const overheadRateOption = overheadsRates.find(x => x.value === overheadsCostDto.overheadRate);
+
+    if (overheadsCostDto.overheadRate && !overheadRateOption) throw new BadRequestError("Overhead rate not allowed");
+
     costs.push({
       ...this.getBaseCostEntity(overheadsCostDto),
       overheadRate: overheadsCostDto.overheadRate,
+      description: overheadsCostDto.overheadRate ? overheadRateOption!.label : null,
       value: this.getOverheadsCostValue(overheadsCostDto, costCategories, costs)
     });
   }
@@ -160,13 +166,14 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
 
     const originalSpendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(this.pcrItemId));
     const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const overheadsRates = await context.runQuery(new GetPcrSpendProfileOverheadRateOptionsQuery());
 
     // Filter out overheads as they are a special case handled separately
     const mappedCostItems = this.spendProfileDto.costs
       .filter(x => x.costCategory !== CostCategoryType.Overheads)
       .map(x => this.mapPcrSpendProfileDtoToEntity(x));
 
-    this.addOverheads(costCategories, mappedCostItems);
+    this.addOverheads(costCategories, mappedCostItems, overheadsRates);
 
     const newCostItems = mappedCostItems.filter(x => !x.id);
     const persistedCostItems = mappedCostItems.filter(x => !!x.id);
