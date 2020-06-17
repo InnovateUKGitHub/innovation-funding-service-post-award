@@ -50,10 +50,10 @@ export const routeConfig = {
   projectDocuments: Containers.ProjectDocumentsRoute,
   projectOverview: Containers.ProjectOverviewRoute,
   projectSetup: Containers.ProjectSetupRoute,
+  projectSetupSpendProfile: Containers.ProjectSetupSpendProfileRoute,
   reviewClaim: Containers.ReviewClaimRoute,
   reviewClaimLineItems: Containers.ReviewClaimLineItemsRoute,
   forecastDashboard: Containers.ForecastDashboardRoute,
   forecastDetails: Containers.ForecastDetailsRoute,
-  forecastUpdateInitial: Containers.UpdateInitialForecastRoute,
   forecastUpdate: Containers.UpdateForecastRoute,
 };
