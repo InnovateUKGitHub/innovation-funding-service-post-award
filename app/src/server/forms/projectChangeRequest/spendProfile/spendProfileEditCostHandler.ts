@@ -1,10 +1,18 @@
-import { IContext, ILinkInfo, PCRDto, PCRItemForPartnerAdditionDto, ProjectDto, ProjectRole } from "@framework/types";
+import {
+  IContext,
+  ILinkInfo, Option,
+  PCRDto,
+  PCRItemForPartnerAdditionDto, PCRItemType,
+  PCRSpendProfileOverheadRate,
+  ProjectDto,
+  ProjectRole
+} from "@framework/types";
 import { BadRequestError, Configuration } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import {
-  PcrEditSpendProfileCostParams,
+  PcrEditSpendProfileCostParams, PCRPrepareItemRoute,
   PCRSpendProfileCostsSummaryRoute,
   PCRSpendProfileEditCostRoute
 } from "@ui/containers";
@@ -19,11 +27,15 @@ import {
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
   PCRSpendProfileOtherCostsDto,
+  PCRSpendProfileOverheadsCostDto,
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
 import { parseNumber } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
+import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
+import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
 
 export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFormHandlerBase<PcrEditSpendProfileCostParams, "pcr"> {
   constructor() {
@@ -52,7 +64,6 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
     }
 
     const cost = item.spendProfile.costs.find(x => x.id === body.id && x.costCategoryId === params.costCategoryId);
-
     if (!cost) {
       throw new BadRequestError("Cost not found");
     }
@@ -65,6 +76,7 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
   private updateCost(cost: PCRSpendProfileCostDto,  costCategoryDto: CostCategoryDto, body: IFormBody) {
     switch (costCategoryDto.type) {
       case CostCategoryType.Labour: return this.updateLabourCost(cost as PCRSpendProfileLabourCostDto, body);
+      case CostCategoryType.Overheads: return this.updateOverheadsCost(cost as PCRSpendProfileOverheadsCostDto, body);
       case CostCategoryType.Materials: return this.updateMaterialsCost(cost as PCRSpendProfileMaterialsCostDto, body);
       case CostCategoryType.Subcontracting: return this.updateSubcontractingCost(cost as PCRSpendProfileSubcontractingCostDto, body);
       case CostCategoryType.Capital_Usage: return this.updateCapitalUsagecost(cost as PCRSpendProfileCapitalUsageCostDto, body);
@@ -78,6 +90,12 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
     cost.ratePerDay = parseNumber(body.ratePerDay);
     cost.description = body.description;
     cost.grossCostOfRole = parseNumber(body.grossCostOfRole);
+  }
+
+  private updateOverheadsCost(cost: PCRSpendProfileOverheadsCostDto,  body: IFormBody) {
+    const overheadRate = parseNumber(body.overheadRate) || PCRSpendProfileOverheadRate.Unknown;
+    cost.value = parseNumber(body.value);
+    cost.overheadRate = overheadRate;
   }
 
   private updateMaterialsCost(cost: PCRSpendProfileMaterialsCostDto,  body: IFormBody) {
@@ -113,8 +131,28 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
     cost.value = parseNumber(body.value);
   }
 
+  private getSpendProfileStep(context: IContext, pcrItem: PCRItemForPartnerAdditionDto) {
+    const workflow = PcrWorkflow.getWorkflow(pcrItem, undefined, context.config.features);
+    if (!workflow) return null;
+    const stepName: addPartnerStepNames = "spendProfileStep";
+    return workflow.findStepNumberByName(stepName);
+  }
+
   protected async run(context: IContext, params: PcrEditSpendProfileCostParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
+
+    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const costCategoryDto = costCategories.find(x => x.id === params.costCategoryId)!;
+
+    if (costCategoryDto.type === CostCategoryType.Overheads) {
+      const pcrItem = dto.items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
+      return PCRPrepareItemRoute.getLink({
+        itemId: pcrItem.id,
+        pcrId: dto.id,
+        projectId: dto.projectId,
+        step: this.getSpendProfileStep(context, pcrItem) || undefined
+      });
+    }
 
     return PCRSpendProfileCostsSummaryRoute.getLink({
       projectId: params.projectId,

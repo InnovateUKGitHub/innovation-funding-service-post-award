@@ -49,7 +49,6 @@ export class PCRBaseCostDtoValidator<T extends PCRSpendProfileCostDto> extends R
   ) {
     super(model, showValidationErrors);
   }
-  public description = Validation.required(this, this.model.description, "Description is required");
 }
 
 export type PCRSpendProfileCostDtoValidator =
@@ -62,6 +61,7 @@ export type PCRSpendProfileCostDtoValidator =
     | PCROtherCostsDtoValidator;
 
 export class PCRLabourCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileLabourCostDto> {
+  public description = Validation.required(this, this.model.description, "Description of role is required");
   public grossCostOfRole = Validation.all(this,
     () => Validation.required(this, this.model.grossCostOfRole, "Gross cost of role is required"),
     () => Validation.isCurrency(this, this.model.grossCostOfRole, "Gross cost of role must be a number")
@@ -84,6 +84,7 @@ export class PCROverheadsCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpe
 }
 
 export class PCRMaterialsCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileMaterialsCostDto> {
+  public description = Validation.required(this, this.model.description, "Item description is required");
   public quantity = Validation.all(this,
     () => Validation.required(this, this.model.quantity, "Quantity is required"),
     () => Validation.integer(this, this.model.quantity, "Quantity must be a number")
@@ -105,6 +106,7 @@ export class PCRSubcontractingCostDtoValidator extends PCRBaseCostDtoValidator<P
 }
 
 export class PCRCapitalUsageCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileCapitalUsageCostDto> {
+  public description = Validation.required(this, this.model.description, "Item description is required");
   public type = Validation.all(this,
     () => Validation.required(this, this.model.type || null, "Type is required"),
   );
@@ -128,6 +130,7 @@ export class PCRCapitalUsageCostDtoValidator extends PCRBaseCostDtoValidator<PCR
 }
 
 export class PCRTravelAndSubsCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileTravelAndSubsCostDto> {
+  public description = Validation.required(this, this.model.description, "Description of cost is required");
   public numberOfTimes = Validation.all(this,
     () => Validation.required(this, this.model.numberOfTimes, "Number of times is required"),
     () => Validation.integer(this, this.model.numberOfTimes, "Number of times must be a number")
@@ -139,6 +142,7 @@ export class PCRTravelAndSubsCostDtoValidator extends PCRBaseCostDtoValidator<PC
 }
 
 export class PCROtherCostsDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileOtherCostsDto> {
+  public description = Validation.required(this, this.model.description, "Description of cost is required");
   public value = Validation.all(this,
     () => Validation.required(this, this.model.value, "Estimated cost is required"),
     () => Validation.isCurrency(this, this.model.value, "Estimated cost must be a number")
