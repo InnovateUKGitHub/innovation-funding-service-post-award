@@ -67,7 +67,7 @@ class ProjectSetupComponent extends ContainerBase<Params, Data, Callbacks> {
             <ACC.Task
               nameContent={x => x.projectSetup.setSpendProfile()}
               status={placeholderStatus}
-              route={this.props.routes.forecastUpdateInitial.getLink({partnerId: partner.id, projectId: project.id})}
+              route={this.props.routes.projectSetupSpendProfile.getLink({partnerId: partner.id, projectId: project.id})}
             />
             {/* TODO: replace placeholder (->dashboard) with link to bank details page */}
             <ACC.Task

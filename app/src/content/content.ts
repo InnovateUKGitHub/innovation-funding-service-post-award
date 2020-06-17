@@ -3,6 +3,8 @@ import { HomePageContent } from "./pages/homePageContent";
 import { ProjectDashboardContent } from "./pages/projectDashboardContent";
 import { ProjectOverviewContent } from "./pages/projectOverviewContent";
 import { ProjectDetailsContent } from "./pages/projectDetailsContent";
+import { ProjectSetupContent } from "@content/pages/projectSetupContent";
+import { ProjectSetupSpendProfileContent } from "./pages/projectSetupSpendProfileContent";
 import { FinanceSummaryContent } from "./pages/financeSummaryContent";
 import { ProjectDocumentsContent } from "./pages/projectDocumentsContent";
 import { NotFoundContent, UnexpectedErrorContent } from "./pages/errorsContent";
@@ -33,7 +35,6 @@ import { PcrSpendProfileCostsSummaryContent } from "@content/pages/pcrSpendProfi
 import { PcrSpendProfilePrepareCostContent } from "@content/pages/pcrSpendProfiles/spendProfilePrepareCostContent";
 import { PcrSpendProfileDeleteCostContent } from "./pages/pcrSpendProfiles/spendProfileDeleteCostContent";
 import { PCRPeriodLengthChangeContent } from "@content/pages/pcrs/periodLengthChangeContent";
-import { ProjectSetupContent } from "@content/pages/projectSetupContent";
 import { TaskListContent } from "@content/components/taskListContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
@@ -50,6 +51,7 @@ export class Content extends ContentBase {
   public readonly projectOverview = new ProjectOverviewContent(this);
   public readonly projectDetails = new ProjectDetailsContent(this);
   public readonly projectDocuments = new ProjectDocumentsContent(this);
+  public readonly projectSetupSpendProfile = new ProjectSetupSpendProfileContent(this);
 
   public readonly financeSummary = new FinanceSummaryContent(this);
 
