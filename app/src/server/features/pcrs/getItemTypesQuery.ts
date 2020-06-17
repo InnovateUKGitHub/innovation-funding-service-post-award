@@ -62,7 +62,7 @@ export const PCRRecordTypeMetaValues: IMetaValue[] = [
   { type: PCRItemType.SinglePartnerFinancialVirement, typeName: "Reallocate one partner's project costs", files: ["reallocate-project-costs.xlsx"], displayName: "Reallocate project costs", guidance: singlePartnerFinancialVirementGuidance },
   { type: PCRItemType.MultiplePartnerFinancialVirement, typeName: "Reallocate several partners' project cost", files: ["reallocate-project-costs.xlsx"], displayName: "Reallocate project costs", guidance: multiplePartnerFinancialVirementGuidance },
   { type: PCRItemType.PartnerWithdrawal, typeName: "Remove a partner" },
-  { type: PCRItemType.PartnerAddition, typeName: "Add a partner", files: ["partner_addition.xlsx"], guidance: partnerAdditionGuidance },
+  { type: PCRItemType.PartnerAddition, typeName: "Add a partner", files: ["de-minimis-declaration.odt"], guidance: partnerAdditionGuidance },
   { type: PCRItemType.ScopeChange, typeName: "Change project scope", guidance: scopeChangeGuidance },
   { type: PCRItemType.TimeExtension, typeName: "Change project duration" },
   { type: PCRItemType.PeriodLengthChange, typeName: "Change period length" },
@@ -73,7 +73,6 @@ export const PCRRecordTypeMetaValues: IMetaValue[] = [
 
 export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
   protected async Run(context: IContext) {
-
     const recordTypes = (await context.runQuery(new GetAllRecordTypesQuery()))
       .filter(x => x.parent === "Acc_ProjectChangeRequest__c");
 
