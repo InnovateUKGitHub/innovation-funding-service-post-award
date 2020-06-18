@@ -662,7 +662,8 @@ class FinancialVirementsTestRepository extends TestRepository<Entities.PartnerFi
   private updateVirement(item: Updatable<Repositories.ISalesforceFinancialVirement>) {
     this.Items.forEach(partnerVirement => {
       if (partnerVirement.id === item.Id) {
-        // nothing to update yet
+        partnerVirement.newEligibleCosts = item.Acc_NewTotalEligibleCosts__c;
+        partnerVirement.newRemainingGrant = item.Acc_NewRemainingGrant__c;
       }
       partnerVirement.virements.forEach(costCategoryVirement => {
         if (costCategoryVirement.id === item.Id) {

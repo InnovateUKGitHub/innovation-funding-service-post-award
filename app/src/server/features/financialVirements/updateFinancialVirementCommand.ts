@@ -1,4 +1,3 @@
-// tslint:disable:complexity
 import { CommandBase, ValidationError } from "@server/features/common";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { flatten } from "@framework/util/arrayHelpers";
@@ -6,6 +5,11 @@ import { ISalesforceFinancialVirement } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { CostCategoryFinancialVirement, PartnerFinancialVirement } from "@framework/entities";
 import { FinancialVirementDtoValidator } from "@ui/validators/financialVirementDtoValidator";
+import { roundCurrency } from "@framework/util";
+import {
+  calculateNewEligibleCosts,
+  calculateNewRemainingGrant
+} from "@server/features/financialVirements/financialVirementsCalculations";
 
 export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
   constructor(private readonly projectId: string, private readonly pcrId: string, private readonly pcrItemId: string, private readonly data: FinancialVirementDto, private readonly submit: boolean) {
@@ -82,6 +86,18 @@ export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
     if (original.newFundingLevel !== dto.newFundingLevel) {
       isUpdated = true;
       update.Acc_NewAwardRate__c = dto.newFundingLevel;
+    }
+
+    const newEligibleCosts = calculateNewEligibleCosts(dto.virements);
+    if (original.newEligibleCosts !== newEligibleCosts) {
+      update.Acc_NewTotalEligibleCosts__c = newEligibleCosts;
+      isUpdated = true;
+    }
+
+    const newRemainingGrant = calculateNewRemainingGrant(dto.virements, dto.newFundingLevel);
+    if (original.newRemainingGrant !== newRemainingGrant) {
+      update.Acc_NewRemainingGrant__c = roundCurrency(newRemainingGrant);
+      isUpdated = true;
     }
 
     return isUpdated ? update : null;

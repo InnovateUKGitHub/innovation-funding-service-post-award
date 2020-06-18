@@ -12,3 +12,7 @@ export const parseNumber = (x: string | null | undefined) => {
   if (x === null || x === undefined || x === "") return null;
   return Number(x);
 };
+
+export const sum = <T>(items: T[], value: (item: T) => number) => {
+  return items.reduce((total, item) => total + value(item), 0);
+};
