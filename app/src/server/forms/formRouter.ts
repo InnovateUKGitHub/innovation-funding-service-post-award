@@ -40,6 +40,7 @@ import { ProjectChangeRequestSpendProfileAddCostHandler } from "@server/forms/pr
 import { ProjectChangeRequestSpendProfileCostsSummaryHandler } from "@server/forms/projectChangeRequest/spendProfile/spendProfileCostsHandler";
 import { ProjectChangeRequestSpendProfileDeleteCostHandler } from "@server/forms/projectChangeRequest/spendProfile/spendProfileDeleteCostHandler";
 import { ProjectChangeRequestSpendProfileEditCostHandler } from "@server/forms/projectChangeRequest/spendProfile/spendProfileEditCostHandler";
+import { ProjectSetupSpendProfileFormHandler } from "./projectSetupSpendProfileFormHandler";
 
 export const standardFormHandlers: (StandardFormHandlerBase<{}, EditorStateKeys>)[] = [
   new ClaimForecastFormHandler(),
@@ -71,6 +72,7 @@ export const standardFormHandlers: (StandardFormHandlerBase<{}, EditorStateKeys>
   new ProjectChangeRequestItemDocumentDeleteHandler(),
   new VirementCostsUpdateHandler(),
   new VirementPartnerCostsUpdateHandler(),
+  new ProjectSetupSpendProfileFormHandler(),
 ];
 
 export const singleFileFormHandlers: (SingleFileFormHandlerBase<{}, EditorStateKeys>)[] = [
