@@ -2,6 +2,7 @@ import {
   PCRContactRole,
   PCRItemStatus,
   PCRItemType,
+  PCROrganisationType,
   PCRParticipantSize,
   PCRPartnerType,
   PCRProjectLocation,
@@ -116,7 +117,7 @@ export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   isProjectRoleAndPartnerTypeRequired?: boolean;
   projectRole: PCRProjectRole;
   partnerType: PCRPartnerType;
-  organisationType: string | null;
+  organisationType: PCROrganisationType;
   spendProfile: PcrSpendProfileDto;
   projectRoleLabel: string | null;
   partnerTypeLabel: string | null;

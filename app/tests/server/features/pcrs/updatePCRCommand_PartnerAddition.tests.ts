@@ -13,7 +13,7 @@ import {
   PCRProjectRole,
 } from "@framework/types";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
-import { PCRItemStatus, PCRStatus } from "@framework/constants";
+import { PCRItemStatus, PCROrganisationType, PCRStatus } from "@framework/constants";
 import { CostCategoryType } from "@framework/entities";
 
 // tslint:disable-next-line:no-big-function
@@ -49,12 +49,13 @@ describe("UpdatePCRCommand - Partner addition", () => {
     const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
-  it("should require organisation name to be set when the partner type is Research", async () => {
+  it("should require organisation name to be set when the organisation type is Academic", async () => {
     const {context, projectChangeRequest, recordType, project} = setup();
     context.testData.createPCRItem(projectChangeRequest, recordType, {
       status: PCRItemStatus.Incomplete,
       partnerType: PCRPartnerType.Research,
       projectRole: PCRProjectRole.Collaborator,
+      organisationType: PCROrganisationType.Academic,
       projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
       projectCity: "Coventry",
       financialYearEndTurnover: 33,
@@ -75,12 +76,13 @@ describe("UpdatePCRCommand - Partner addition", () => {
     item.organisationName = "Coventry University";
     await expect(context.runCommand(command)).resolves.toBe(true);
   });
-  it("should require company house details to be set when the partner type is not Research", async () => {
+  it("should require company house details to be set when the organisation type is Industrial", async () => {
     const {context, projectChangeRequest, recordType, project} = setup();
     context.testData.createPCRItem(projectChangeRequest, recordType, {
       status: PCRItemStatus.Incomplete,
       partnerType: PCRPartnerType.Business,
       projectRole: PCRProjectRole.Collaborator,
+      organisationType: PCROrganisationType.Industrial,
       projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
       projectCity: "Coventry",
       financialYearEndTurnover: 33,
@@ -109,6 +111,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
       status: PCRItemStatus.Incomplete,
       partnerType: PCRPartnerType.Research,
       projectRole: PCRProjectRole.Collaborator,
+      organisationType: PCROrganisationType.Academic,
       organisationName: "Coventry University",
       projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
       projectCity: "Coventry",
@@ -135,6 +138,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
       status: PCRItemStatus.Incomplete,
       partnerType: PCRPartnerType.Research,
       projectRole: PCRProjectRole.Collaborator,
+      organisationType: PCROrganisationType.Academic,
       organisationName: "Coventry University",
       projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
       projectCity: "Coventry",
@@ -155,12 +159,13 @@ describe("UpdatePCRCommand - Partner addition", () => {
     item.numberOfEmployees = 15;
     await expect(context.runCommand(command)).resolves.toBe(true);
   });
-  it("should require financial details to be set when the partner type is not research", async () => {
+  it("should require financial details to be set when the organisaiton type is Industrial", async () => {
     const {context, projectChangeRequest, recordType, project} = setup();
     context.testData.createPCRItem(projectChangeRequest, recordType, {
       status: PCRItemStatus.Incomplete,
       partnerType: PCRPartnerType.Business,
       projectRole: PCRProjectRole.Collaborator,
+      organisationType: PCROrganisationType.Industrial,
       organisationName: "Coventry University",
       projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
       projectCity: "Coventry",
@@ -183,12 +188,13 @@ describe("UpdatePCRCommand - Partner addition", () => {
     item.financialYearEndTurnover = 20;
     await expect(context.runCommand(command)).resolves.toBe(true);
   });
-  it("should not require financial details to be set when the partner type is research", async () => {
+  it("should not require financial details to be set when the organisation type is Academic", async () => {
     const {context, projectChangeRequest, recordType, project} = setup();
     context.testData.createPCRItem(projectChangeRequest, recordType, {
       status: PCRItemStatus.Incomplete,
       partnerType: PCRPartnerType.Research,
       projectRole: PCRProjectRole.Collaborator,
+      organisationType: PCROrganisationType.Academic,
       organisationName: "Coventry University",
       projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
       projectCity: "Coventry",

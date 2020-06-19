@@ -5,7 +5,7 @@ import { EditorStatus, StoresConsumer } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { Pending } from "@shared/pending";
-import { PCRParticipantSize, PCRPartnerType, PCRProjectRole } from "@framework/constants";
+import { getPCROrganisationType, PCROrganisationType, PCRParticipantSize, PCRPartnerType, PCRProjectRole } from "@framework/constants";
 
 interface InnerProps {
   pcrProjectRoles: Option<PCRProjectRole>[];
@@ -63,7 +63,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
                 }
                 const selectedOption = parseInt(option.id, 10);
                 // If the partner type is academic then the organisation step is skipped and the participant size is set to "Academic"
-                if (selectedOption === PCRPartnerType.Research) {
+                const organistionType = getPCROrganisationType(selectedOption);
+                if (organistionType === PCROrganisationType.Academic) {
                   x.participantSize = PCRParticipantSize.Academic;
                 }
                 x.partnerType = selectedOption;

@@ -12,11 +12,12 @@ import {
   PCRContactRole,
   PCRItemStatus,
   PCRItemType,
+  PCROrganisationType,
   PCRParticipantSize,
   PCRPartnerType,
   PCRProjectLocation,
   PCRProjectRole,
-  PCRStatus,
+  PCRStatus
 } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ConfigStore } from "@ui/redux/stores/configStore";
@@ -219,7 +220,7 @@ export class ProjectChangeRequestStore extends StoreBase {
           registrationNumber: null,
           projectRole: PCRProjectRole.Unknown,
           partnerType: PCRPartnerType.Unknown,
-          organisationType: null,
+          organisationType: PCROrganisationType.Unknown,
           projectRoleLabel: null,
           partnerTypeLabel: null,
           spendProfile: {
