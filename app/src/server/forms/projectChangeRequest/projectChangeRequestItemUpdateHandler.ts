@@ -11,7 +11,7 @@ import {
 import { PCRDtoValidator } from "@ui/validators";
 import { DateTime } from "luxon";
 import * as Dtos from "@framework/dtos";
-import { PCRItemStatus, PCRItemType } from "@framework/constants";
+import { getPCROrganisationType,PCRItemStatus, PCRItemType, PCROrganisationType } from "@framework/constants";
 import { accountNameChangeStepNames } from "@ui/containers/pcrs/nameChange/accountNameChangeWorkflow";
 import { suspendProjectSteps } from "@ui/containers/pcrs/suspendProject/workflow";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
@@ -155,7 +155,8 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     if (stepName === "roleAndOrganisationStep") {
       item.projectRole = parseInt(body.projectRole, 10);
       item.partnerType = parseInt(body.partnerType, 10);
-      if (item.partnerType === PCRPartnerType.Research) {
+      const organisationType = getPCROrganisationType(item.partnerType);
+      if (organisationType === PCROrganisationType.Academic) {
         item.participantSize = PCRParticipantSize.Academic;
       }
       item.isProjectRoleAndPartnerTypeRequired = true;

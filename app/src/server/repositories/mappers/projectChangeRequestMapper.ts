@@ -5,6 +5,7 @@ import {
 } from "@framework/entities";
 import { ISalesforcePCR } from "../projectChangeRequestRepository";
 import {
+  getPCROrganisationType,
   PCRContactRole,
   PCRItemStatus,
   PCRParticipantSize,
@@ -226,7 +227,7 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       projectRole: new PcrProjectRoleMapper().mapFromSalesforcePCRProjectRole(pcrItem.Acc_ProjectRole__c),
       projectRoleLabel: pcrItem.ProjectRoleLabel,
       partnerType,
-      organisationType: partnerType === PCRPartnerType.Research ? "Academic" : "Industrial",
+      organisationType: getPCROrganisationType(partnerType),
       partnerTypeLabel: pcrItem.ParticipantTypeLabel,
       organisationName: pcrItem.Acc_OrganisationName__c,
       registeredAddress: pcrItem.Acc_RegisteredAddress__c,

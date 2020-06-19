@@ -19,7 +19,7 @@ import {
   ProjectDto,
   ProjectRole
 } from "@framework/dtos";
-import { PCRItemStatus, PCRItemType, PCRPartnerType, PCRProjectRole, PCRStatus } from "@framework/constants";
+import { PCRItemStatus, PCRItemType, PCROrganisationType, PCRProjectRole, PCRStatus } from "@framework/constants";
 import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 
 export class PCRDtoValidator extends Results<PCRDto> {
@@ -374,7 +374,7 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     return Validation.required(this, this.model.partnerType || null, "Select a partner type");
   }
   private validateOrganisationNameRequired() {
-    if (this.model.partnerType !== PCRPartnerType.Research) return Validation.valid(this);
+    if (this.model.organisationType === PCROrganisationType.Industrial) return Validation.valid(this);
     return this.requiredIfComplete(this.model.organisationName, "Enter an organisation name");
   }
 
@@ -384,7 +384,7 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
   }
 
   private validateCompanyHouseDetailsRequired(value: any, message: string) {
-    if (this.model.partnerType === PCRPartnerType.Research) return Validation.valid(this);
+    if (this.model.organisationType === PCROrganisationType.Academic) return Validation.valid(this);
     return this.requiredIfComplete(value, message);
   }
 
@@ -421,13 +421,13 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
   );
 
   financialYearEndDate = Validation.all(this,
-    () => this.model.partnerType !== PCRPartnerType.Research ? this.requiredIfComplete(this.model.financialYearEndDate, "Enter a financial year end") : Validation.valid(this),
+    () => this.model.organisationType === PCROrganisationType.Industrial ? this.requiredIfComplete(this.model.financialYearEndDate, "Enter a financial year end") : Validation.valid(this),
     () => Validation.isDate(this, this.model.financialYearEndDate, "Enter a real financial year end date"),
     () => this.hasPermissionToEdit(this.model.financialYearEndDate, this.original && this.original.financialYearEndDate, "Turnover year end cannot be changed"),
   );
 
   financialYearEndTurnover = Validation.all(this,
-    () => this.model.partnerType !== PCRPartnerType.Research ? this.requiredIfComplete(this.model.financialYearEndTurnover, "Enter a financial year end turnover") : Validation.valid(this),
+    () => this.model.organisationType === PCROrganisationType.Industrial ? this.requiredIfComplete(this.model.financialYearEndTurnover, "Enter a financial year end turnover") : Validation.valid(this),
     () => Validation.isPositiveCurrency(this, this.model.financialYearEndTurnover, "Enter a financial year end turnover amount equal to or greater than 0"),
     () => this.hasPermissionToEdit(this.model.financialYearEndTurnover, this.original && this.original.financialYearEndTurnover, "Turnover cannot be changed"),
   );
@@ -500,7 +500,7 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
   );
 
   numberOfEmployees = Validation.all(this,
-    () => this.model.partnerType !== PCRPartnerType.Research ? this.requiredIfComplete(this.model.numberOfEmployees, "Enter the number of employees") : Validation.valid(this),
+    () => this.model.organisationType === PCROrganisationType.Industrial ? this.requiredIfComplete(this.model.numberOfEmployees, "Enter the number of employees") : Validation.valid(this),
     () => Validation.isPositiveInteger(this, this.model.numberOfEmployees, "Please enter a valid number of employees"),
     () => this.hasPermissionToEdit(this.model.numberOfEmployees, this.original && this.original.numberOfEmployees, "Number of employees cannot be changed"),
   );

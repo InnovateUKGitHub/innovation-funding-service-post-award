@@ -17,6 +17,7 @@ import {
 import {
   PCRContactRole,
   PCRItemType,
+  PCROrganisationType,
   PCRParticipantSize,
   PCRPartnerType,
   PCRProjectLocation,
@@ -149,7 +150,7 @@ const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName
   registrationNumber: pcr.registrationNumber || null,
   projectRole: pcr.projectRole || PCRProjectRole.Unknown,
   partnerType: pcr.partnerType || PCRPartnerType.Unknown,
-  organisationType: pcr.organisationType || null,
+  organisationType: pcr.organisationType || PCROrganisationType.Unknown,
   projectRoleLabel: pcr.projectRoleLabel || null,
   partnerTypeLabel: pcr.partnerTypeLabel || null,
   spendProfile: { costs: [], pcrItemId: pcr.id },

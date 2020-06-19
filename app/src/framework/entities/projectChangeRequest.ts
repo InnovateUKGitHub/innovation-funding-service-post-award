@@ -1,6 +1,7 @@
 import {
   PCRContactRole,
   PCRItemStatus,
+  PCROrganisationType,
   PCRParticipantSize,
   PCRPartnerType,
   PCRProjectLocation,
@@ -44,7 +45,7 @@ export interface ProjectChangeRequestItemForCreateEntity {
   projectRole?: PCRProjectRole;
   projectRoleLabel?: string | null;
   partnerType?: PCRPartnerType;
-  organisationType?: string | null;
+  organisationType?: PCROrganisationType;
   partnerTypeLabel?: string | null;
   organisationName?: string | null;
   registeredAddress?: string | null;
