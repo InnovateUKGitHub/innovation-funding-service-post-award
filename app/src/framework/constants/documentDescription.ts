@@ -6,4 +6,5 @@ export enum DocumentDescription {
   EndOfProjectSurvey = 50,
   StatementOfExpenditure = 60,
   JeSForm = 70,
+  OverheadCalculationSpreadsheet = 80,
 }
