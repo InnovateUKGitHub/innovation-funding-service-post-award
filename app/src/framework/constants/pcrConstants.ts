@@ -82,3 +82,18 @@ export enum PCRSpendProfileCapitalUsageType {
   New = 10,
   Existing = 20,
 }
+
+export enum PCROrganisationType {
+  Unknown = "",
+  Academic = "Academic",
+  Industrial = "Industrial",
+}
+
+export const getPCROrganisationType = (partnerType: PCRPartnerType): PCROrganisationType => {
+  if (partnerType === PCRPartnerType.Research || partnerType === PCRPartnerType.ResearchAndTechnology) {
+    return PCROrganisationType.Academic;
+  } else if (partnerType === PCRPartnerType.Business || partnerType === PCRPartnerType.Other) {
+    return PCROrganisationType.Industrial;
+  }
+  return PCROrganisationType.Unknown;
+};
