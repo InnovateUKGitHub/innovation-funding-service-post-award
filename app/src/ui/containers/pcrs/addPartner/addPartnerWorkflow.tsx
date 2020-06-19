@@ -2,7 +2,7 @@ import React from "react";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRPartnerType, PCRProjectRole } from "@framework/constants";
+import { PCROrganisationType, PCRProjectRole } from "@framework/constants";
 import {
   AcademicOrganisationStep,
   AddPartnerSummary,
@@ -72,7 +72,7 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
     });
   }
 
-  if (item.partnerType !== PCRPartnerType.Business) {
+  if (item.organisationType === PCROrganisationType.Academic) {
     workflow.steps.push({
       stepName: "academicOrganisationStep",
       displayName: "Organisation name",
