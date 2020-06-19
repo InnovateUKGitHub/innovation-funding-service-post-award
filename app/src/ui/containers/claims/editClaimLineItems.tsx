@@ -8,6 +8,7 @@ import { ValidationMessage } from "@ui/components";
 import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators/claimDetailsValidator";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { range } from "@shared/range";
 
 export interface EditClaimDetailsParams {
   projectId: string;
@@ -80,7 +81,9 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         {this.renderGuidanceMessage()}
         <ACC.Section>
           <ACC.TextHint text={costCategory.hintText} />
-          {costCategory.isCalculated ? this.renderCalculated(costCategory, claimDetails, forecastDetail, documents, editor) : this.renderTable(editor, forecastDetail, documents)}
+          {costCategory.isCalculated
+            ? this.renderCalculated(costCategory, claimDetails, forecastDetail, documents, editor)
+            : this.renderTable(editor, forecastDetail, documents)}
         </ACC.Section>
       </ACC.Page>
     );
@@ -348,7 +351,22 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
           costCategories={stores.costCategories.getAll()}
           forecastDetail={stores.forecastDetails.get(props.partnerId, props.periodId, props.costCategoryId)}
           documents={stores.claimDetailDocuments.getClaimDetailDocuments(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
-          editor={stores.claimDetails.getClaimDetailsEditor(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
+          editor={stores.claimDetails.getClaimDetailsEditor(props.projectId, props.partnerId, props.periodId, props.costCategoryId, (dto: ClaimDetailsDto) => {
+            if (props.isClient) return;
+            const itemsNumber = dto.lineItems.length;
+            // Add extra rows. If existing items are less than 7 then add up to ten rows in total otherwise add extra 3.
+            const extraRows = itemsNumber <= 7 ? 10 - itemsNumber : 3;
+            const extraLineItems: ClaimLineItemDto[] = range(extraRows).map(() => ({
+              costCategoryId: props.costCategoryId,
+              partnerId: props.partnerId,
+              periodId: props.periodId,
+              id: "",
+              description: "",
+              value: null as any,
+              lastModifiedDate: null as any
+            }));
+            dto.lineItems.push(...extraLineItems);
+          })}
           onUpdate={(saving, dto, goToUpload) => stores.claimDetails.updateClaimDetailsEditor(saving, props.projectId, props.partnerId, props.periodId, props.costCategoryId, dto, () => stores.navigation.navigateTo(getDestination(props, goToUpload)))}
           // TODO Used for interim solution to claim monthly. Can be removed once full solution is in place.
           draftClaim={stores.claims.getDraftClaimForPartner(props.partnerId)}
