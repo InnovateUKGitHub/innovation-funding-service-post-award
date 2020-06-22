@@ -15,6 +15,7 @@ export class DocumentLabels extends ContentBase {
       case DocumentDescription.EndOfProjectSurvey: return this.getContent("document-description-EndOfProjectSurvey");
       case DocumentDescription.StatementOfExpenditure: return this.getContent("document-description-StatementOfExpenditure");
       case DocumentDescription.JeSForm: return this.getContent("document-description-JeSForm");
+      case DocumentDescription.OverheadCalculationSpreadsheet: return this.getContent("document-description-OverheadCalculationSpreadsheet");
       default: return this.getContent("document-description-Unknown");
     }
   }
