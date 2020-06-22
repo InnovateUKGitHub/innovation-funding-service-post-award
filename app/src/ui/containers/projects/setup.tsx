@@ -7,7 +7,7 @@ import {IEditorStore, StoresConsumer} from "@ui/redux";
 import * as Dtos from "@framework/dtos";
 import {PartnerDtoValidator} from "@ui/validators/partnerValidator";
 
-interface Params {
+export interface ProjectSetupParams {
   projectId: string;
   partnerId: string;
 }
@@ -28,7 +28,7 @@ interface CombinedData {
   editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
 }
 
-class ProjectSetupComponent extends ContainerBase<Params, Data, Callbacks> {
+class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Callbacks> {
 
   render() {
     const combined = Pending.combine({
@@ -92,7 +92,7 @@ class ProjectSetupComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const ProjectSetupContainer = (props: Params & BaseProps) => (
+const ProjectSetupContainer = (props: ProjectSetupParams & BaseProps) => (
   <StoresConsumer>
     {
       stores => (
@@ -110,7 +110,7 @@ const ProjectSetupContainer = (props: Params & BaseProps) => (
   </StoresConsumer>
 );
 
-export const ProjectSetupRoute = defineRoute<Params>({
+export const ProjectSetupRoute = defineRoute<ProjectSetupParams>({
   routeName: "projectSetup",
   routePath: "/projects/:projectId/setup/:partnerId",
   getParams: (r) => ({ projectId: r.params.projectId, partnerId: r.params.partnerId }),
