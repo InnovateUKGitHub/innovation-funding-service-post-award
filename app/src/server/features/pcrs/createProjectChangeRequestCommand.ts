@@ -104,6 +104,7 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
           contact2Phone: itemDto.contact2Phone,
           contact2Email: itemDto.contact2Email,
           awardRate: itemDto.awardRate,
+          hasOtherFunding: itemDto.hasOtherFunding,
          };
       case PCRItemType.MultiplePartnerFinancialVirement:
         return { ...init, grantMovingOverFinancialYear: itemDto.grantMovingOverFinancialYear };
