@@ -287,6 +287,10 @@
       "organisation-type-info": "**Business** - a business based in the UK or overseas.\n\n **Research** - higher education and organisations registered with Je-S.\n\n **Research and technology organisation (RTO)** - organisations which solely promote and conduct collaborative research and innovation.\n\n **Public sector, charity or non Je-S registered research organisation** - a not-for-profit public sector body or charity working on innovation, not registered with Je-S.",
       "organisation-type-hint": "If the new partner's organisation type is not listed, contact your monitoring officer."
     },
+    "pcr-add-partner-award-rate":{
+      "form-section-title": "Funding level",
+      "guidance": "The maximum the new organisation can enter is based on their size, type of organisation and research category of the project, based on the <a href=\"https://www.gov.uk/guidance/innovate-uk-funding-general-guidance-for-applicants#funding-rules\" rel=\"noopener noreferrer\" target=\"_blank\" >Innovate UK general guidance for grant applicants</a> (opens in new window). This will be reviewed by Innovate UK to ensure the project stays within the funding rules.\n\n\n\nThe percentage applied for must reflect other funding received."
+    },
     "pcr-period-length-change":{
       "guidance": "The period length can be 3 months or 1 month. This request will affect all remaining periods of the project for all partners. It will also change:\n* how your project's forecast is divided\n* how often your project submits a claim.\n\n\n\nWe will reject this if you submit it with any other request type.",
       "period-length-quarterly": "3 months",
