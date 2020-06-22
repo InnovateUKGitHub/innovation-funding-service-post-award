@@ -1,7 +1,7 @@
 import {ContentPageBase} from "@content/contentPageBase";
 import {Content} from "@content/content";
-import {CostCategoryType} from "@framework/entities";
 import {PcrSpendProfileLabels} from "@content/labels/pcrSpendProfileLabels";
+import {PcrSpendProfileMessages} from "@content/messages/pcrSpendProfileMessages";
 
 export class PcrSpendProfileCostsSummaryContent extends ContentPageBase {
 
@@ -10,6 +10,7 @@ export class PcrSpendProfileCostsSummaryContent extends ContentPageBase {
   }
 
   public readonly labels = () => new PcrSpendProfileLabels(this);
+  public readonly messages = () => new PcrSpendProfileMessages(this);
   public readonly costsSectionTitle = (costCategoryName: string) => this.getContent("section-title-costs", {costCategoryName});
   public readonly guidanceTitle = (costCategoryName: string) => this.getContent("guidance-title", {costCategoryName});
   public readonly backLink = () => this.getContent("back-link");
@@ -17,15 +18,4 @@ export class PcrSpendProfileCostsSummaryContent extends ContentPageBase {
   public readonly addCostButton = () => this.getContent("button-add-cost");
   public readonly editCostButton = () => this.getContent("button-edit-cost");
   public readonly removeCostButton = () => this.getContent("button-remove-cost");
-  public readonly guidance = (costCategory: CostCategoryType) => {
-    switch (costCategory) {
-      case CostCategoryType.Labour: return this.getContent(`guidance-labour`, {markdown: true});
-      case CostCategoryType.Materials: return this.getContent(`guidance-materials`, {markdown: true});
-      case CostCategoryType.Subcontracting: return this.getContent(`guidance-subcontracting`, {markdown: true});
-      case CostCategoryType.Capital_Usage: return this.getContent(`guidance-capital-usage`, {markdown: true});
-      case CostCategoryType.Travel_And_Subsistence: return this.getContent(`guidance-travel-and-subs`, {markdown: true});
-      case CostCategoryType.Other_Costs: return this.getContent("guidance-other-costs", {markdown: true});
-      default: return this.getContent(`guidance-default`, {markdown: true});
-    }
-  }
 }
