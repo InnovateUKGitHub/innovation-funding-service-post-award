@@ -253,6 +253,7 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       contact2Surname: pcrItem.Acc_Contact2Surname__c,
       contact2Phone: pcrItem.Acc_Contact2Phone__c,
       contact2Email: pcrItem.Acc_Contact2EmailAddress__c,
+      awardRate: pcrItem.Acc_AwardRate__c,
       // virements
       grantMovingOverFinancialYear: pcrItem.Acc_GrantMovingOverFinancialYear__c,
     };

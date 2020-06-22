@@ -14,7 +14,51 @@ import {
 } from "@framework/types";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 import { PCRItemStatus, PCROrganisationType, PCRStatus } from "@framework/constants";
-import { CostCategoryType } from "@framework/entities";
+import { CostCategoryType, ProjectChangeRequestItemEntity } from "@framework/entities";
+
+const createCompleteIndustrialPcrItem: () => Partial<ProjectChangeRequestItemEntity> = () => ({
+  status: PCRItemStatus.Incomplete,
+  partnerType: PCRPartnerType.Business,
+  projectRole: PCRProjectRole.ProjectLead,
+  organisationType: PCROrganisationType.Industrial,
+  projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
+  projectCity: "Coventry",
+  financialYearEndTurnover: 33,
+  financialYearEndDate: new Date(),
+  contact1ProjectRole: PCRContactRole.FinanceContact,
+  contact1Forename: "Homer",
+  contact1Surname: "Of Iliad fame",
+  contact1Phone: "112233",
+  contact1Email: "helen@troy.com",
+  participantSize: PCRParticipantSize.Medium,
+  numberOfEmployees: 15,
+  organisationName: "Coventry University",
+  registrationNumber: "3333",
+  registeredAddress: "1 Victoria Street",
+  awardRate: 39,
+  contact2Forename: "Jon",
+  contact2Surname: "Doe",
+  contact2Phone: "332211",
+  contact2Email: "e@mail.com",
+});
+
+const createCompleteAcademicPcrItem: () => Partial<ProjectChangeRequestItemEntity> = () => ({
+  status: PCRItemStatus.Incomplete,
+  partnerType: PCRPartnerType.Research,
+  projectRole: PCRProjectRole.Collaborator,
+  organisationType: PCROrganisationType.Academic,
+  projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
+  projectCity: "Coventry",
+  contact1ProjectRole: PCRContactRole.FinanceContact,
+  contact1Forename: "Homer",
+  contact1Surname: "Of Iliad fame",
+  contact1Phone: "112233",
+  contact1Email: "helen@troy.com",
+  participantSize: PCRParticipantSize.Medium,
+  numberOfEmployees: 15,
+  organisationName: "Coventry University",
+  awardRate: 39,
+});
 
 // tslint:disable-next-line:no-big-function
 describe("UpdatePCRCommand - Partner addition", () => {
@@ -28,7 +72,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     const recordType = recordTypes.find(x => x.type === projectSuspensionType.typeName);
     return {context, recordType, projectChangeRequest, project};
   };
-  it("should require project role and partner type to be set", async () => {
+  it("should require project role and partner type to be set on complete", async () => {
     const {context, projectChangeRequest, recordType, project} = setup();
     context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Complete });
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
@@ -49,231 +93,118 @@ describe("UpdatePCRCommand - Partner addition", () => {
     const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
-  it("should require organisation name to be set when the organisation type is Academic", async () => {
+  it("should require fields to be set when the organisation type is Academic", async () => {
     const {context, projectChangeRequest, recordType, project} = setup();
-    context.testData.createPCRItem(projectChangeRequest, recordType, {
-      status: PCRItemStatus.Incomplete,
-      partnerType: PCRPartnerType.Research,
-      projectRole: PCRProjectRole.Collaborator,
-      organisationType: PCROrganisationType.Academic,
-      projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
-      projectCity: "Coventry",
-      financialYearEndTurnover: 33,
-      financialYearEndDate: new Date(),
-      contact1ProjectRole: PCRContactRole.FinanceContact,
-      contact1Forename: "Homer",
-      contact1Surname: "Of Iliad fame",
-      contact1Phone: "112233",
-      contact1Email: "helen@troy.com",
-      participantSize: PCRParticipantSize.Medium,
-      numberOfEmployees: 15,
-    });
+    const completeItem = createCompleteAcademicPcrItem();
+    context.testData.createPCRItem(projectChangeRequest, recordType, completeItem);
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
     const item = dto.items[0] as PCRItemForPartnerAdditionDto;
     item.status = PCRItemStatus.Complete;
     const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+
+    delete item.organisationName;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.organisationName = "Coventry University";
     await expect(context.runCommand(command)).resolves.toBe(true);
   });
-  it("should require company house details to be set when the organisation type is Industrial", async () => {
+
+  it("should require fields to be set when the organisation type is Industrial", async () => {
     const {context, projectChangeRequest, recordType, project} = setup();
-    context.testData.createPCRItem(projectChangeRequest, recordType, {
-      status: PCRItemStatus.Incomplete,
-      partnerType: PCRPartnerType.Business,
-      projectRole: PCRProjectRole.Collaborator,
-      organisationType: PCROrganisationType.Industrial,
-      projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
-      projectCity: "Coventry",
-      financialYearEndTurnover: 33,
-      financialYearEndDate: new Date(),
-      contact1ProjectRole: PCRContactRole.FinanceContact,
-      contact1Forename: "Homer",
-      contact1Surname: "Of Iliad fame",
-      contact1Phone: "112233",
-      contact1Email: "helen@troy.com",
-      participantSize: PCRParticipantSize.Medium,
-      numberOfEmployees: 15,
-    });
+    const completeItem = createCompleteIndustrialPcrItem();
+    context.testData.createPCRItem(projectChangeRequest, recordType, completeItem);
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
     const item = dto.items[0] as PCRItemForPartnerAdditionDto;
     item.status = PCRItemStatus.Complete;
     const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+
+    delete item.organisationName;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
-    item.organisationName = "Business name";
+    item.organisationName = "Coventry University";
+    await expect(context.runCommand(command)).resolves.toBe(true);
+
+    delete item.registrationNumber;
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.registrationNumber = "12345";
+    await expect(context.runCommand(command)).resolves.toBe(true);
+
+    delete item.registeredAddress;
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.registeredAddress = "1 Bristol Street, Bristol";
     await expect(context.runCommand(command)).resolves.toBe(true);
-  });
-  it("should require finance contact details to be set", async () => {
-    const {context, projectChangeRequest, recordType, project} = setup();
-    context.testData.createPCRItem(projectChangeRequest, recordType, {
-      status: PCRItemStatus.Incomplete,
-      partnerType: PCRPartnerType.Research,
-      projectRole: PCRProjectRole.Collaborator,
-      organisationType: PCROrganisationType.Academic,
-      organisationName: "Coventry University",
-      projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
-      projectCity: "Coventry",
-      participantSize: PCRParticipantSize.Medium,
-      numberOfEmployees: 15,
-      financialYearEndDate: new Date(),
-      financialYearEndTurnover: 20,
-    });
-    const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
-    const item = dto.items[0] as PCRItemForPartnerAdditionDto;
-    item.status = PCRItemStatus.Complete;
-    const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+
+    delete item.contact1ProjectRole;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.contact1ProjectRole = PCRContactRole.FinanceContact;
+    await expect(context.runCommand(command)).resolves.toBe(true);
+
+    delete item.contact1Forename;
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.contact1Forename = "Homer";
+    await expect(context.runCommand(command)).resolves.toBe(true);
+
+    delete item.contact1Surname;
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.contact1Surname = "Of Iliad fame";
+    await expect(context.runCommand(command)).resolves.toBe(true);
+
+    delete item.contact1Phone;
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.contact1Phone = "112233";
+    await expect(context.runCommand(command)).resolves.toBe(true);
+
+    delete item.contact1Email;
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.contact1Email = "helen@troy.com";
     await expect(context.runCommand(command)).resolves.toBe(true);
-  });
-  it("should require organisation details to be set", async () => {
-    const {context, projectChangeRequest, recordType, project} = setup();
-    context.testData.createPCRItem(projectChangeRequest, recordType, {
-      status: PCRItemStatus.Incomplete,
-      partnerType: PCRPartnerType.Research,
-      projectRole: PCRProjectRole.Collaborator,
-      organisationType: PCROrganisationType.Academic,
-      organisationName: "Coventry University",
-      projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
-      projectCity: "Coventry",
-      contact1ProjectRole: PCRContactRole.FinanceContact,
-      contact1Forename: "Homer",
-      contact1Surname: "Of Iliad fame",
-      contact1Phone: "112233",
-      contact1Email: "helen@troy.com",
-      financialYearEndTurnover: 20,
-      financialYearEndDate: new Date(),
-    });
-    const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
-    const item = dto.items[0] as PCRItemForPartnerAdditionDto;
-    item.status = PCRItemStatus.Complete;
-    const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+
+    delete item.participantSize;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.participantSize = PCRParticipantSize.Medium;
-    item.numberOfEmployees = 15;
     await expect(context.runCommand(command)).resolves.toBe(true);
-  });
-  it("should require financial details to be set when the organisaiton type is Industrial", async () => {
-    const {context, projectChangeRequest, recordType, project} = setup();
-    context.testData.createPCRItem(projectChangeRequest, recordType, {
-      status: PCRItemStatus.Incomplete,
-      partnerType: PCRPartnerType.Business,
-      projectRole: PCRProjectRole.Collaborator,
-      organisationType: PCROrganisationType.Industrial,
-      organisationName: "Coventry University",
-      projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
-      projectCity: "Coventry",
-      registeredAddress: "Landaaan",
-      registrationNumber: "1234",
-      contact1ProjectRole: PCRContactRole.FinanceContact,
-      contact1Forename: "Homer",
-      contact1Surname: "Of Iliad fame",
-      contact1Phone: "112233",
-      contact1Email: "helen@troy.com",
-      participantSize: PCRParticipantSize.Large,
-      numberOfEmployees: 150,
-    });
-    const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
-    const item = dto.items[0] as PCRItemForPartnerAdditionDto;
-    item.status = PCRItemStatus.Complete;
-    const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+
+    delete item.numberOfEmployees;
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    item.numberOfEmployees = 5;
+    await expect(context.runCommand(command)).resolves.toBe(true);
+
+    delete item.financialYearEndDate;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.financialYearEndDate = new Date();
+    await expect(context.runCommand(command)).resolves.toBe(true);
+
+    delete item.financialYearEndTurnover;
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.financialYearEndTurnover = 20;
     await expect(context.runCommand(command)).resolves.toBe(true);
-  });
-  it("should not require financial details to be set when the organisation type is Academic", async () => {
-    const {context, projectChangeRequest, recordType, project} = setup();
-    context.testData.createPCRItem(projectChangeRequest, recordType, {
-      status: PCRItemStatus.Incomplete,
-      partnerType: PCRPartnerType.Research,
-      projectRole: PCRProjectRole.Collaborator,
-      organisationType: PCROrganisationType.Academic,
-      organisationName: "Coventry University",
-      projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
-      projectCity: "Coventry",
-      contact1ProjectRole: PCRContactRole.FinanceContact,
-      contact1Forename: "Homer",
-      contact1Surname: "Of Iliad fame",
-      contact1Phone: "112233",
-      contact1Email: "helen@troy.com",
-      participantSize: PCRParticipantSize.Large,
-      numberOfEmployees: 150,
-    });
-    const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
-    const item = dto.items[0] as PCRItemForPartnerAdditionDto;
-    item.status = PCRItemStatus.Complete;
-    const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
-    await expect(context.runCommand(command)).resolves.toBe(true);
-  });
-  it("should require project manager details to be set when the project role is Project Lead", async () => {
-    const {context, projectChangeRequest, recordType, project} = setup();
-    context.testData.createPCRItem(projectChangeRequest, recordType, {
-      status: PCRItemStatus.Incomplete,
-      partnerType: PCRPartnerType.Business,
-      projectRole: PCRProjectRole.ProjectLead,
-      organisationName: "Coventry business",
-      registrationNumber: "123345",
-      registeredAddress: "Coventry Street",
-      projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
-      projectCity: "Coventry",
-      financialYearEndTurnover: 33,
-      financialYearEndDate: new Date(),
-      contact1ProjectRole: PCRContactRole.FinanceContact,
-      contact1Forename: "Homer",
-      contact1Surname: "Of Iliad fame",
-      contact1Phone: "112233",
-      contact1Email: "helen@troy.com",
-      participantSize: PCRParticipantSize.Medium,
-      numberOfEmployees: 15,
-    });
-    const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
-    const item = dto.items[0] as PCRItemForPartnerAdditionDto;
-    item.status = PCRItemStatus.Complete;
-    const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+
+    delete item.contact2Forename;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.contact2Forename = "Jon";
-    item.contact2Surname = "Doe";
-    item.contact2Phone = "332211";
-    item.contact2Email = "e@mail.com";
     await expect(context.runCommand(command)).resolves.toBe(true);
-  });
-  it("should require project location to be set", async () => {
-    const {context, projectChangeRequest, recordType, project} = setup();
-    context.testData.createPCRItem(projectChangeRequest, recordType, {
-      status: PCRItemStatus.Incomplete,
-      partnerType: PCRPartnerType.Business,
-      projectRole: PCRProjectRole.ProjectLead,
-      organisationName: "Coventry business",
-      registrationNumber: "123345",
-      registeredAddress: "Coventry Street",
-      projectCity: "Coventry",
-      financialYearEndTurnover: 33,
-      financialYearEndDate: new Date(),
-      contact1ProjectRole: PCRContactRole.FinanceContact,
-      contact1Forename: "Homer",
-      contact1Surname: "Of Iliad fame",
-      contact1Phone: "112233",
-      contact1Email: "helen@troy.com",
-      contact2Forename: "Jon",
-      contact2Surname: "Doe",
-      contact2Phone: "332211",
-      contact2Email: "e@mail.com",
-      participantSize: PCRParticipantSize.Medium,
-      numberOfEmployees: 15,
-    });
-    const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
-    const item = dto.items[0] as PCRItemForPartnerAdditionDto;
-    item.status = PCRItemStatus.Complete;
-    const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
+
+    delete item.contact2Surname;
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    item.contact2Surname = "Doe";
+    await expect(context.runCommand(command)).resolves.toBe(true);
+
+    delete item.contact2Phone;
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    item.contact2Phone = "12309833";
+    await expect(context.runCommand(command)).resolves.toBe(true);
+
+    delete item.contact2Email;
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    item.contact2Email = "12309833@blah.com";
+    await expect(context.runCommand(command)).resolves.toBe(true);
+
+    delete item.projectLocation;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.projectLocation = PCRProjectLocation.InsideTheUnitedKingdom;
+    await expect(context.runCommand(command)).resolves.toBe(true);
+
+    delete item.awardRate;
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    item.awardRate = 12;
     await expect(context.runCommand(command)).resolves.toBe(true);
   });
   it("should not allow updates to project role & partner type fields once they are set", async () => {
@@ -289,26 +220,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
   });
   it("should update item status", async () => {
     const {context, projectChangeRequest, recordType, project} = setup();
-    context.testData.createPCRItem(projectChangeRequest, recordType, {
-      status: PCRItemStatus.Incomplete,
-      projectRole: PCRProjectRole.Collaborator,
-      partnerType: PCRPartnerType.Business,
-      organisationName: "Coventry business",
-      registrationNumber: "123345",
-      registeredAddress: "Coventry Street",
-      projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
-      projectCity: "Bristol",
-      projectPostcode: "BS1 5UW",
-      financialYearEndTurnover: 20,
-      financialYearEndDate: new Date(),
-      contact1ProjectRole: PCRContactRole.FinanceContact,
-      contact1Forename: "Marjorie",
-      contact1Surname: "Evans",
-      contact1Phone: "020000111",
-      contact1Email: "marj@evans.com",
-      participantSize: PCRParticipantSize.Large,
-      numberOfEmployees: 150,
-    });
+    context.testData.createPCRItem(projectChangeRequest, recordType, createCompleteIndustrialPcrItem());
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
     const item = dto.items[0] as PCRItemForPartnerAdditionDto;
     item.status = PCRItemStatus.Complete;
@@ -345,6 +257,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     item.contact2Surname = "Doe";
     item.contact2Phone = "18005552368";
     item.contact2Email = "jon@doe.com";
+    item.awardRate = 62;
 
     const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
     await expect(await context.runCommand(command)).toBe(true);
@@ -372,6 +285,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     expect(updatedItem.contact2Surname).toEqual("Doe");
     expect(updatedItem.contact2Phone).toEqual("18005552368");
     expect(updatedItem.contact2Email).toEqual("jon@doe.com");
+    expect(updatedItem.awardRate).toEqual(62);
   });
   describe("Spend Profile", () => {
     it("should update pcr spend profiles", async () => {
