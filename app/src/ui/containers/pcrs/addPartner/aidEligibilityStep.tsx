@@ -39,7 +39,6 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     }
     return (
       <ACC.Section>
-        {/* TODO: Currently we do not have access to the correct form so this is a placeholder */}
         <ACC.LinksList links={itemType.files.map(x => ({ text: "De minimis declaration form", url: x.relativeUrl }))} />
       </ACC.Section>
     );

@@ -8,6 +8,7 @@ export * from "./pcrItemWorkflow";
 export * from "./addPartner/spendProfile/spendProfileCostsSummary";
 export * from "./addPartner/spendProfile/spendProfilePrepareCost";
 export * from "./addPartner/spendProfile/spendProfileDeleteCost";
+export * from "./addPartner/spendProfile/overheadDocumentContainer";
 export * from "./reasoning";
 export * from "./review";
 export * from "./financialVirements/detailsPage";

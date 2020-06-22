@@ -47,6 +47,7 @@ import {
   SubcontractingFormComponent,
   TravelAndSubsFormComponent
 } from "@ui/containers/pcrs/addPartner/spendProfile";
+import { IRoutes } from "@ui/routing";
 
 export interface PcrAddSpendProfileCostParams {
   projectId: string;
@@ -77,9 +78,11 @@ export interface SpendProfileCostFormProps<T extends PCRSpendProfileCostDto, V e
   validator: V;
   isClient: boolean;
   onChange: (dto: PCRDto) => void;
-  onSave: (dto: PCRDto) => void;
+  onSave: (dto: PCRDto, redirectLink?: ILinkInfo) => void;
   data: T;
   costCategory: CostCategoryDto;
+  routes: IRoutes;
+  params: PcrAddSpendProfileCostParams;
 }
 
 class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callbacks> {
@@ -92,10 +95,10 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
       cost: this.props.cost,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.costCategory, x.validator, x.cost)}/>;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.costCategory, x.validator, x.cost, this.props.routes, { projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: this.props.itemId, costCategoryId: this.props.costCategoryId })}/>;
   }
 
-  private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, costCategory: CostCategoryDto, validator: PCRSpendProfileCostDtoValidator | undefined, cost: PCRSpendProfileCostDto) {
+  private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, costCategory: CostCategoryDto, validator: PCRSpendProfileCostDtoValidator | undefined, cost: PCRSpendProfileCostDto, routes: IRoutes, params: PcrAddSpendProfileCostParams) {
     return (
       <ACC.Page
         backLink={(
@@ -111,7 +114,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
         <ACC.Renderers.Messages messages={this.props.messages}/>
         <ACC.Section titleContent={x => x.pcrSpendProfilePrepareCostContent.costSectionTitle(costCategory.name)}>
           {this.renderGuidance(costCategory)}
-          {this.renderForm(costCategory, editor, validator, cost)}
+          {this.renderForm(costCategory, editor, validator, cost, routes, params)}
         </ACC.Section>
       </ACC.Page>
     );
@@ -156,20 +159,22 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
     return workflow.findStepNumberByName(stepName);
   }
 
-  private onSave(dto: PCRDto, cost: PCRSpendProfileCostDto) {
+  private onSave(dto: PCRDto, cost: PCRSpendProfileCostDto, redirectLink?: ILinkInfo) {
     const item = dto.items.find(x => x.id === this.props.itemId)!;
     // If submitting from a step set the status to incomplete
     item.status = PCRItemStatus.Incomplete;
-    return this.props.onSave(dto, this.getBackLink(cost, dto));
+    return !redirectLink ? this.props.onSave(dto, this.getBackLink(cost, dto)) : this.props.onSave(dto, redirectLink);
   }
 
-  private renderForm(costCategory: CostCategoryDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, validator: PCRSpendProfileCostDtoValidator | undefined, cost: PCRSpendProfileCostDto) {
+  private renderForm(costCategory: CostCategoryDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, validator: PCRSpendProfileCostDtoValidator | undefined, cost: PCRSpendProfileCostDto, routes: IRoutes, params: PcrAddSpendProfileCostParams) {
     const props = {
       editor,
       isClient: this.props.isClient,
-      onSave: (x: PCRDto) => this.onSave(x, cost),
+      onSave: (x: PCRDto, redirectLink?: ILinkInfo) => this.onSave(x, cost, redirectLink || undefined),
       onChange: (x: PCRDto) => this.props.onChange(x),
       costCategory,
+      routes,
+      params,
     };
     switch (costCategory.type) {
       case CostCategoryType.Labour: return <LabourFormComponent {...props} data={cost as PCRSpendProfileLabourCostDto} validator={validator as PCRLabourCostDtoValidator}/>;
