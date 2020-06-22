@@ -71,6 +71,7 @@ export interface ProjectChangeRequestItemForCreateEntity {
   contact2Surname?: string | null;
   contact2Phone?: string | null;
   contact2Email?: string | null;
+  awardRate?: number | null;
   // virements
   grantMovingOverFinancialYear?: number | null;
 }
