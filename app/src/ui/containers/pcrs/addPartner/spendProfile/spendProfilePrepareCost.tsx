@@ -110,10 +110,22 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
       >
         <ACC.Renderers.Messages messages={this.props.messages}/>
         <ACC.Section titleContent={x => x.pcrSpendProfilePrepareCostContent.costSectionTitle(costCategory.name)}>
+          {this.renderGuidance(costCategory)}
           {this.renderForm(costCategory, editor, validator, cost)}
         </ACC.Section>
       </ACC.Page>
     );
+  }
+
+  private renderGuidance(costCategory: CostCategoryDto) {
+    if (costCategory.type === CostCategoryType.Overheads) {
+      return (
+          <ACC.Info summary={<ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.guidanceTitle(costCategory.name)}/>}>
+            <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.messages.costGuidance(costCategory.type)}/>
+          </ACC.Info>
+      );
+    }
+    return null;
   }
 
   private getBackLink(cost: PCRSpendProfileCostDto, pcrDto: PCRDto) {

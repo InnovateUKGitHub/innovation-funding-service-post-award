@@ -86,7 +86,7 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
   private renderGuidance(costCategory: CostCategoryDto) {
     return (
       <ACC.Info summary={<ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.guidanceTitle(costCategory.name)}/>}>
-        <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.guidance(costCategory.type)}/>
+        <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.messages().costGuidance(costCategory.type)}/>
       </ACC.Info>
     );
   }
