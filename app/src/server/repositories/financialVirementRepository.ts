@@ -18,6 +18,8 @@ export interface ISalesforceFinancialVirement {
   Acc_NewCosts__c: number;
   Acc_CurrentAwardRate__c: number;
   Acc_NewAwardRate__c: number;
+  Acc_NewRemainingGrant__c: number;
+  Acc_NewTotalEligibleCosts__c: number;
   RecordTypeId: string;
 }
 
@@ -44,6 +46,8 @@ export class FinancialVirementRepository extends SalesforceRepositoryBase<ISales
     "Acc_NewCosts__c",
     "Acc_CurrentAwardRate__c",
     "Acc_NewAwardRate__c",
+    "Acc_NewRemainingGrant__c",
+    "Acc_NewTotalEligibleCosts__c",
     "RecordTypeId",
   ];
 

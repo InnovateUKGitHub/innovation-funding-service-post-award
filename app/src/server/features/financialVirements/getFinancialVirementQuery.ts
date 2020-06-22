@@ -3,6 +3,11 @@ import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { CostCategoryFinancialVirement, PartnerFinancialVirement } from "@framework/entities";
 import { GetCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import {
+  calculateNewEligibleCosts,
+  calculateNewRemainingGrant
+} from "@server/features/financialVirements/financialVirementsCalculations";
+import { sum } from "@framework/util";
 
 export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
   constructor(private projectId: string, private pcrId: string, private pcrItemId: string) {
@@ -13,10 +18,6 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
   }
 
-  private sum<T>(items: T[], value: (item: T) => number) {
-    return items.reduce((total, item) => total + value(item), 0);
-  }
-
   protected async Run(context: IContext): Promise<FinancialVirementDto> {
 
     const costCategories = await context.runQuery(new GetCostCategoriesQuery());
@@ -25,13 +26,13 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
 
     const partners = data.map(x => this.mapPartner(x, costCategories));
 
-    const costsClaimedToDate = this.sum(partners, v => v.costsClaimedToDate);
-    const originalEligibleCosts = this.sum(partners, v => v.originalEligibleCosts);
-    const originalRemainingCosts = this.sum(partners, v => v.originalRemainingCosts);
-    const originalRemainingGrant = this.sum(partners, v => v.originalRemainingGrant);
-    const newEligibleCosts = this.sum(partners, v => v.newEligibleCosts);
-    const newRemainingCosts = this.sum(partners, v => v.newRemainingCosts);
-    const newRemainingGrant = this.sum(partners, v => v.newRemainingGrant);
+    const costsClaimedToDate = sum(partners, v => v.costsClaimedToDate);
+    const originalEligibleCosts = sum(partners, v => v.originalEligibleCosts);
+    const originalRemainingCosts = sum(partners, v => v.originalRemainingCosts);
+    const originalRemainingGrant = sum(partners, v => v.originalRemainingGrant);
+    const newEligibleCosts = sum(partners, v => v.newEligibleCosts);
+    const newRemainingCosts = sum(partners, v => v.newRemainingCosts);
+    const newRemainingGrant = sum(partners, v => v.newRemainingGrant);
 
     const originalFundingLevel = originalRemainingCosts ? 100 * originalRemainingGrant / originalRemainingCosts : 0;
     const newFundingLevel = newRemainingCosts ? 100 * newRemainingGrant / newRemainingCosts : 0;
@@ -53,24 +54,27 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
 
   private mapPartner(partner: PartnerFinancialVirement, costCategories: CostCategoryDto[]): PartnerVirementsDto {
     const originalFundingPercentage = partner.originalFundingLevel / 100;
-    const newFundingPercentage = partner.newFundingLevel / 100;
 
     const virements = partner.virements.map(x => this.mapCostCategory(x, costCategories));
 
-    const costsClaimedToDate = this.sum(virements, v => v.costsClaimedToDate);
+    const costsClaimedToDate = sum(virements, v => v.costsClaimedToDate);
 
-    const originalEligibleCosts = this.sum(virements, v => v.originalEligibleCosts);
+    const originalEligibleCosts = sum(virements, v => v.originalEligibleCosts);
     const originalRemainingCosts = originalEligibleCosts - costsClaimedToDate;
 
-    const newEligibleCosts = this.sum(virements, v => v.newEligibleCosts);
+    // Salesforce are not calculating partner.newEligibleCosts on creation or on save. We can save it on the first update command but
+    // before the first update as the value from salesforce is undefined, we need to calculate it here.
+    const newEligibleCosts = partner.newEligibleCosts !== undefined ? partner.newEligibleCosts : calculateNewEligibleCosts(virements);
     const newRemainingCosts = newEligibleCosts - costsClaimedToDate;
-
     const originalRemainingGrant = originalRemainingCosts * originalFundingPercentage;
-    const newRemainingGrant = newRemainingCosts * newFundingPercentage;
+
+    // Salesforce are not calculating partner.newRemainingGrant on creation or on save. We can save it on the first update command but
+    // before the first update as the value from salesforce is undefined, we need to calculate it here.
+    const newRemainingGrant = partner.newRemainingGrant !== undefined ? partner.newRemainingGrant : calculateNewRemainingGrant(virements, partner.newFundingLevel);
 
     return {
       partnerId: partner.partnerId,
-      costsClaimedToDate: this.sum(virements, v => v.costsClaimedToDate),
+      costsClaimedToDate: sum(virements, v => v.costsClaimedToDate),
       originalEligibleCosts,
       originalRemainingCosts,
       originalFundingLevel: partner.originalFundingLevel,

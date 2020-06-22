@@ -13,7 +13,6 @@ import { ITestRepositories } from "./testRepositories";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 import { PCRItemStatus, PCRParticipantSize, PCRStatus } from "@framework/constants";
 import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
-import { ISalesforceProfileTotalPeriod } from "@server/repositories";
 
 export class TestData {
   constructor(private repositories: ITestRepositories, private getCurrentUser: () => IClientUser) {
@@ -718,13 +717,15 @@ export class TestData {
 
   public createFinancialVirement(pcrItem: Entities.ProjectChangeRequestItemEntity, partner: Entities.Partner, update?: Partial<PartnerFinancialVirement>): PartnerFinancialVirement {
     const seed = this.repositories.financialVirements.Items.length + 1;
-    const response = {
+    const response: PartnerFinancialVirement = {
       id: `FinancialVirement: ${seed}`,
       pcrItemId: pcrItem.id,
       partnerId: partner.id,
       originalFundingLevel: 100,
       newFundingLevel: 100,
       virements:[],
+      newRemainingGrant: undefined,
+      newEligibleCosts: undefined,
       ...update
     };
 

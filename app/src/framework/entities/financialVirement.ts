@@ -4,6 +4,8 @@ export interface PartnerFinancialVirement {
   partnerId: string;
   originalFundingLevel: number;
   newFundingLevel: number;
+  newEligibleCosts?: number;
+  newRemainingGrant?: number;
   virements: CostCategoryFinancialVirement[];
 }
 
