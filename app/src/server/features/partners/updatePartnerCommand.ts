@@ -7,7 +7,6 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     super();
   }
 
-  /// @TODO: Identify who should be able to modify the partner's postcode and under what circumstances;
   protected async accessControl(auth: Authorisation, context: IContext) {
     return auth.forPartner(this.partner.projectId, this.partner.id).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.FinancialContact);
   }
