@@ -145,6 +145,7 @@ export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   contact2Surname: string | null;
   contact2Phone: string | null;
   contact2Email: string | null;
+  awardRate: number | null;
 }
 
 export interface PCRItemTypeDto {

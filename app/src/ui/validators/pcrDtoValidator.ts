@@ -504,6 +504,13 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     () => Validation.isPositiveInteger(this, this.model.numberOfEmployees, "Please enter a valid number of employees"),
     () => this.hasPermissionToEdit(this.model.numberOfEmployees, this.original && this.original.numberOfEmployees, "Number of employees cannot be changed"),
   );
+
+  awardRate = Validation.all(this,
+    () => this.requiredIfComplete(this.model.awardRate, "Enter the funding level"),
+    () => this.hasPermissionToEdit(this.model.awardRate, this.original && this.original.awardRate, "Funding level cannot be changed"),
+    () => Validation.isPercentage(this, this.model.awardRate, "Please enter a valid funding level"),
+    () => Validation.isTrue(this, !this.model.awardRate || this.model.awardRate <= 100, "Please enter a funding level up to 100%"),
+  );
 }
 
 export class PCROldPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForPartnerAdditionDto> {

@@ -251,8 +251,9 @@ describe("GetPCRByIdQuery", () => {
       const partnerType = PCRPartnerType.ResearchAndTechnology;
       const projectCity = "Bristol";
       const projectPostcode = "BS! 5UW";
+      const awardRate = 35;
 
-      const item = context.testData.createPCRItem(pcr, recordType, { projectRole, partnerType, projectCity, projectPostcode });
+      const item = context.testData.createPCRItem(pcr, recordType, { projectRole, partnerType, projectCity, projectPostcode, awardRate });
 
       const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
       const result = await context.runQuery(query).then(x => x.items[0] as PCRItemForPartnerAdditionDto);
@@ -262,6 +263,7 @@ describe("GetPCRByIdQuery", () => {
       expect(result.partnerType).toBe(partnerType);
       expect(result.projectCity).toBe(projectCity);
       expect(result.projectPostcode).toBe(projectPostcode);
+      expect(result.awardRate).toBe(awardRate);
     });
 
     test("maps fields for partner addition pcr spend profile for Labour", async () => {

@@ -11,7 +11,6 @@ import {
 } from "@framework/entities";
 import { GetAllForProjectQuery } from "@server/features/partners";
 import { PCRStatus } from "@framework/constants";
-import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
@@ -161,6 +160,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
           || item.contact2Surname !== dto.contact2Surname
           || item.contact2Phone !== dto.contact2Phone
           || item.contact2Email !== dto.contact2Email
+          || item.awardRate !== dto.awardRate
         ) {
           return {
             ...init,
@@ -186,6 +186,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
             contact2Surname: dto.contact2Surname,
             contact2Phone: dto.contact2Phone,
             contact2Email: dto.contact2Email,
+            awardRate: dto.awardRate,
           };
         }
         break;
