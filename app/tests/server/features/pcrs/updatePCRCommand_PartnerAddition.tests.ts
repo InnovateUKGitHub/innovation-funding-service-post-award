@@ -36,6 +36,7 @@ const createCompleteIndustrialPcrItem: () => Partial<ProjectChangeRequestItemEnt
   registrationNumber: "3333",
   registeredAddress: "1 Victoria Street",
   awardRate: 39,
+  hasOtherFunding: true,
   contact2Forename: "Jon",
   contact2Surname: "Doe",
   contact2Phone: "332211",
@@ -58,6 +59,7 @@ const createCompleteAcademicPcrItem: () => Partial<ProjectChangeRequestItemEntit
   numberOfEmployees: 15,
   organisationName: "Coventry University",
   awardRate: 39,
+  hasOtherFunding: true,
 });
 
 // tslint:disable-next-line:no-big-function
@@ -206,6 +208,11 @@ describe("UpdatePCRCommand - Partner addition", () => {
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.awardRate = 12;
     await expect(context.runCommand(command)).resolves.toBe(true);
+
+    delete item.hasOtherFunding;
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    item.hasOtherFunding = false;
+    await expect(context.runCommand(command)).resolves.toBe(true);
   });
   it("should not allow updates to project role & partner type fields once they are set", async () => {
     const {context, projectChangeRequest, recordType, project} = setup();
@@ -258,6 +265,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     item.contact2Phone = "18005552368";
     item.contact2Email = "jon@doe.com";
     item.awardRate = 62;
+    item.hasOtherFunding = true;
 
     const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
     await expect(await context.runCommand(command)).toBe(true);
@@ -286,6 +294,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     expect(updatedItem.contact2Phone).toEqual("18005552368");
     expect(updatedItem.contact2Email).toEqual("jon@doe.com");
     expect(updatedItem.awardRate).toEqual(62);
+    expect(updatedItem.hasOtherFunding).toEqual(true);
   });
   describe("Spend Profile", () => {
     it("should update pcr spend profiles", async () => {

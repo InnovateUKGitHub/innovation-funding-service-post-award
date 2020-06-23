@@ -161,6 +161,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
           || item.contact2Phone !== dto.contact2Phone
           || item.contact2Email !== dto.contact2Email
           || item.awardRate !== dto.awardRate
+          || item.hasOtherFunding !== dto.hasOtherFunding
         ) {
           return {
             ...init,
@@ -187,6 +188,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
             contact2Phone: dto.contact2Phone,
             contact2Email: dto.contact2Email,
             awardRate: dto.awardRate,
+            hasOtherFunding: dto.hasOtherFunding,
           };
         }
         break;
