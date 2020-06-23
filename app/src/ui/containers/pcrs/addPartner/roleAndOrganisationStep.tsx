@@ -37,7 +37,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
               inline={false}
               value={() => roleOptions.selected}
               update={(x, option) => {
-                if (!option) return x.projectRole === PCRProjectRole.Unknown;
+                if (!option) return x.projectRole = PCRProjectRole.Unknown;
                 x.projectRole = parseInt(option.id, 10);
               }}
               validation={this.props.validator.projectRole}
@@ -59,7 +59,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
                 // and it's safe for us to reset it
                 x.participantSize = PCRParticipantSize.Unknown;
                 if (!option) {
-                  return x.partnerType === PCRPartnerType.Unknown;
+                  return x.partnerType = PCRPartnerType.Unknown;
                 }
                 const selectedOption = parseInt(option.id, 10);
                 // If the partner type is academic then the organisation step is skipped and the participant size is set to "Academic"
