@@ -39,7 +39,7 @@ class Component extends React.Component<SpendProfileCostFormProps<PCRSpendProfil
               value={() => rateOptions.selected}
               update={(x, option) => {
                 if (!option) {
-                  return x.overheadRate === PCRSpendProfileOverheadRate.Unknown;
+                  return x.overheadRate = PCRSpendProfileOverheadRate.Unknown;
                 }
                 x.overheadRate = parseInt(option.id, 10);
               }}

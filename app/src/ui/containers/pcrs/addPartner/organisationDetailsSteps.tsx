@@ -39,7 +39,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
             inline={false}
             value={() => selectedSizeOption || undefined}
             update={(x, option) => {
-              if (!option) return x.participantSize === PCRParticipantSize.Unknown;
+              if (!option) return x.participantSize = PCRParticipantSize.Unknown;
               x.participantSize = parseInt(option.id, 10);
             }}
             validation={props.validator.participantSize}
