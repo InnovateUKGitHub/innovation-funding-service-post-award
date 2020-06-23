@@ -167,7 +167,7 @@ const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName
   contact2Surname: pcr.contact2Surname || null,
   contact2Phone: pcr.contact2Phone || null,
   contact2Email: pcr.contact2Email || null,
-  awardRate: pcr.awardRate || null,
+  awardRate: (!!pcr.awardRate || pcr.awardRate === 0) ? pcr.awardRate : null,
   type
 });
 
