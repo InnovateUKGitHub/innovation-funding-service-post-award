@@ -19,6 +19,7 @@ import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { removePartnerStepNames } from "@ui/containers/pcrs/removePartner";
 import { scopeChangeStepNames } from "@ui/containers/pcrs/scopeChange/scopeChangeWorkflow";
 import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
+import { parseNumber } from "@framework/util";
 
 export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, "pcr"> {
   constructor() {
@@ -196,6 +197,9 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       item.contact2Surname = body.contact2Surname;
       item.contact2Phone = body.contact2Phone;
       item.contact2Email = body.contact2Email;
+    }
+    if (stepName === "awardRateStep") {
+      item.awardRate = parseNumber(body.awardRate);
     }
   }
 
