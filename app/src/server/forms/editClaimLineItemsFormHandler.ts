@@ -24,7 +24,7 @@ export class EditClaimLineItemsFormHandler extends StandardFormHandlerBase<EditC
     const originalClaimDetails = await context.runQuery(new GetClaimDetailsQuery(params.projectId, params.partnerId, params.periodId, params.costCategoryId));
 
     const lineItems = range(itemCount).map((x,i) => ({
-      id: "",
+      id: body["id" + i] || undefined,
       partnerId: params.partnerId,
       periodId: params.periodId,
       costCategoryId: params.costCategoryId,
