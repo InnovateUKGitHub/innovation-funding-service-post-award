@@ -241,6 +241,7 @@ export class ProjectChangeRequestStore extends StoreBase {
           contact2Phone: null,
           contact2Email: null,
           awardRate: null,
+          hasOtherFunding: null,
         };
       case PCRItemType.PartnerWithdrawal:
         return {
