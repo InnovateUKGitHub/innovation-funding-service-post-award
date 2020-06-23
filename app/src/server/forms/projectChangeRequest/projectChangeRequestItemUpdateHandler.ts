@@ -152,6 +152,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     }
   }
 
+  // tslint:disable-next-line:cognitive-complexity
   private updatePartnerAddition(item: Dtos.PCRItemForPartnerAdditionDto, body: IFormBody, stepName: addPartnerStepNames | null) {
     if (stepName === "roleAndOrganisationStep") {
       item.projectRole = parseInt(body.projectRole, 10);
@@ -200,6 +201,11 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     }
     if (stepName === "awardRateStep") {
       item.awardRate = parseNumber(body.awardRate);
+    }
+    if (stepName === "otherFundingStep") {
+      item.hasOtherFunding = body.hasOtherFunding === "true"
+        ? true
+        : body.hasOtherFunding === "false"? false : null;
     }
   }
 
