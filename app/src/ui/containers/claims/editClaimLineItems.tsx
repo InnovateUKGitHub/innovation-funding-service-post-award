@@ -247,6 +247,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     return (
       <span>
         <ACC.ValidationError error={validation.description} />
+        <input type="hidden" name={`id${index.row}`} value={item.id} />
         <ACC.Inputs.TextInput
           name={`description${index.row}`}
           value={item.description}
