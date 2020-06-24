@@ -45,7 +45,7 @@ class Component extends React.Component<SpendProfileCostFormProps<PCRSpendProfil
               inline={false}
               value={() => typeOptions.selected}
               update={(x, option) => {
-                if (!option) return x.type === PCRSpendProfileCapitalUsageType.Unknown;
+                if (!option) return x.type = PCRSpendProfileCapitalUsageType.Unknown;
                 x.type = parseInt(option.id, 10);
               }}
               validation={this.props.validator.type}

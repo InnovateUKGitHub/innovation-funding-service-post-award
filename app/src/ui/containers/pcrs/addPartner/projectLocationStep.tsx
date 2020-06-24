@@ -35,7 +35,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
             inline={false}
             value={() => selectedProjectLocationOption || undefined}
             update={(x, option) => {
-              if (!option) return x.projectLocation === PCRProjectLocation.Unknown;
+              if (!option) return x.projectLocation = PCRProjectLocation.Unknown;
               x.projectLocation = parseInt(option.id, 10);
             }}
             validation={props.validator.projectLocation}
