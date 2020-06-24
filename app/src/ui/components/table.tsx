@@ -49,7 +49,7 @@ interface ExternalColumnProps<T, TResult> {
   hideHeader?: boolean;
 }
 
-type TableChild<T> = React.ReactElement<ExternalColumnProps<T, {}>> | null;
+export type TableChild<T> = React.ReactElement<ExternalColumnProps<T, {}>> | null;
 
 interface TableProps<T> {
   children: TableChild<T> | (TableChild<T> | TableChild<T>[])[];
@@ -243,7 +243,21 @@ const LinkColumn = <T extends {}>(props: LinkColumnProps<T>) => {
   return <TypedColumn renderCell={(data, index) => <Link route={props.value(data, index)} >{props.content}</Link>} {...props} />;
 };
 
-export const TypedTable = <T extends {}>() => ({
+export interface ITypedTable<T extends {}> {
+  Table: React.FunctionComponent<TableProps<T>>;
+  Custom: React.FunctionComponent<ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }>;
+  String: React.FunctionComponent<ExternalColumnProps<T, string | null>>;
+  Number: React.FunctionComponent<ExternalColumnProps<T, number | null>>;
+  Currency: React.FunctionComponent<ExternalColumnProps<T, number | null> & { fractionDigits?: number }>;
+  Percentage: React.FunctionComponent<ExternalColumnProps<T, number | null> & { fractionDigits?: number }>;
+  FullDate: React.FunctionComponent<ExternalColumnProps<T, Date | null>>;
+  ShortDate: React.FunctionComponent<ExternalColumnProps<T, Date | null>>;
+  ShortDateTime: React.FunctionComponent<ExternalColumnProps<T, Date | null>>;
+  Email: React.FunctionComponent<ExternalColumnProps<T, string | null>>;
+  Link: React.FunctionComponent<LinkColumnProps<T>>;
+}
+
+export const TypedTable = <T extends {}>(): ITypedTable<T> => ({
   Table: TableComponent as React.FunctionComponent<TableProps<T>>,
   Custom: CustomColumn as React.FunctionComponent<ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }>,
   String: StringColumn as React.FunctionComponent<ExternalColumnProps<T, string | null>>,
