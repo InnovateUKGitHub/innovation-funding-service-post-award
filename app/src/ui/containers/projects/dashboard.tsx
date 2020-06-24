@@ -197,6 +197,11 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
 
   private getRightHandMessagesForFC(partner: PartnerDto | null) {
     const messages: React.ReactNode[] = [];
+
+    if (partner && partner.newForecastNeeded) {
+      messages.push(<ACC.Content value={x => x.projectsDashboard.messages.checkForecast()} />);
+    }
+
     switch (partner && partner.claimStatus) {
       case PartnerClaimStatus.ClaimDue:
         messages.push(<ACC.Content value={x => x.projectsDashboard.messages.claimToSubmit()} />);

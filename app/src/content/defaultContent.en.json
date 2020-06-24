@@ -400,7 +400,8 @@
     "pcrQueried": "Project change request queried",
     "pcrToReview": "Project change requests to review: {{numberOfPcrs}}",
     "projectOnHold": "On hold",
-    "pendingProject": "You need to set up your project" 
+    "pendingProject": "You need to set up your project",
+    "checkForecast": "Check your forecast"
   },
   "spend-profile-messages": {
     "cost-guidance-labour": "The new partner will need to account for all labour costs as they occur. For example, there must be timesheets and payroll records. These must show the actual hours worked by individuals and paid by the organisation.\nThey can include the following labour costs, based on PAYE records:\n\n* gross salary\n* National Insurance\n* company pension contribution\n* life insurance\n* other non-discretionary package costs\n\nYou cannot include:\n\n* discretionary bonuses\n* performance related payments of any kind\n\nYou may include the total number of working days for staff but do not include:\n\n* sick days\n* waiting time\n* training days\n* non-productive time\n\nList the total days worked by all categories of staff on the project. Describe their roles.\n\nWe will review the total amount of time and cost of labour before we approve this request. The terms and conditions of the grant include compliance with these points.",
