@@ -162,6 +162,9 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
         item.participantSize = PCRParticipantSize.Academic;
       }
       item.isProjectRoleAndPartnerTypeRequired = true;
+      item.isCommercialWork = body.isCommercialWork === "true"
+        ? true
+        : body.isCommercialWork === "false"? false : null;
     }
     if (stepName === "academicOrganisationStep") {
       item.organisationName = body.organisationName;

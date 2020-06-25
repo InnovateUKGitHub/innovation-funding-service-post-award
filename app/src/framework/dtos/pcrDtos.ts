@@ -117,6 +117,7 @@ export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   isProjectRoleAndPartnerTypeRequired?: boolean;
   projectRole: PCRProjectRole;
   partnerType: PCRPartnerType;
+  isCommercialWork: boolean | null;
   organisationType: PCROrganisationType;
   spendProfile: PcrSpendProfileDto;
   projectRoleLabel: string | null;

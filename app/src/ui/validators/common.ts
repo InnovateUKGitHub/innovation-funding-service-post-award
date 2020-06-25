@@ -31,12 +31,12 @@ export const required = rule<any>((value) => {
   return true;
 }, "Required", true);
 
-export function isUnchanged(results: Results<{}>, value: number | string | Date | null | undefined, originalValue: number | string | Date | null | undefined, message?: string) {
+export function isUnchanged(results: Results<{}>, value: number | string | Date | null | boolean | undefined, originalValue: number | string | Date | boolean | null |undefined, message?: string) {
   if (!originalValue) return isTrue(results, !value, message || "Value can not be changed");
   if (typeof value === "number" && typeof originalValue === "number") return isTrue(results, value === originalValue, message || "Value can not be changed");
   if (value instanceof Date && originalValue instanceof Date) return isTrue(results, value.getTime() === originalValue.getTime(), message || "Value can not be changed");
   if (typeof value !== typeof originalValue) return inValid(results, message || "Value can not be changed");
-  if (typeof value === "string") return isTrue(results, value === originalValue, message || "Value can not be changed");
+  if (typeof value === "string" || typeof value === "boolean") return isTrue(results, value === originalValue, message || "Value can not be changed");
   return inValid(results, message || "Value can not be changed");
 }
 
