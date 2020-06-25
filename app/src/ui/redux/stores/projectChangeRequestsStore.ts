@@ -220,6 +220,7 @@ export class ProjectChangeRequestStore extends StoreBase {
           registrationNumber: null,
           projectRole: PCRProjectRole.Unknown,
           partnerType: PCRPartnerType.Unknown,
+          isCommercialWork: null,
           organisationType: PCROrganisationType.Unknown,
           projectRoleLabel: null,
           partnerTypeLabel: null,

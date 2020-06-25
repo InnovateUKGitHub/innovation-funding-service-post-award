@@ -100,6 +100,7 @@ export interface ISalesforcePCR {
   Acc_Contact2EmailAddress__c: string|null;
   Acc_AwardRate__c: number|null;
   Acc_OtherFunding__c: boolean|null;
+  Acc_CommercialWork__c: boolean|null;
 
   // Virements related field
   Acc_GrantMovingOverFinancialYear__c: number| null;
@@ -180,6 +181,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_Contact2EmailAddress__c",
     "Acc_AwardRate__c",
     "Acc_OtherFunding__c",
+    "Acc_CommercialWork__c",
     "Acc_GrantMovingOverFinancialYear__c",
   ];
 
@@ -237,6 +239,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Acc_Project_Participant__c: x.partnerId,
       Acc_ProjectRole__c: new PcrProjectRoleMapper().mapToSalesforcePCRProjectRole(x.projectRole),
       Acc_ParticipantType__c: new PcrPartnerTypeMapper().mapToSalesforcePCRPartnerType(x.partnerType),
+      Acc_CommercialWork__c: x.isCommercialWork,
       Acc_OrganisationName__c: x.organisationName,
       Acc_RegisteredAddress__c: x.registeredAddress,
       Acc_RegistrationNumber__c: x.registrationNumber,

@@ -19,7 +19,11 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
 
     const roleOptions = this.getOptions(this.props.pcrItem.projectRole, this.props.pcrProjectRoles);
     const typeOptions = this.getOptions(this.props.pcrItem.partnerType, this.props.pcrPartnerTypes);
-
+    const commercialWorkOptions: ACC.SelectOption[] = [{
+      id: "true", value: <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkYes()}/>
+    }, {
+      id: "false", value: <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkNo()}/>
+    }];
     return (
       <ACC.Section qa="role-and-partner-type" titleContent={x => x.pcrAddPartnerRoleAndOrganisation.formSectionTitle()}>
         <Form.Form
@@ -41,6 +45,24 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
                 x.projectRole = parseInt(option.id, 10);
               }}
               validation={this.props.validator.projectRole}
+            />
+          </Form.Fieldset>
+          <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkHeading()}>
+            <Form.Radio
+              name="isCommercialWork"
+              labelContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkLabel()}
+              hintContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkHint()}
+              options={commercialWorkOptions}
+              inline={false}
+              value={(dto) => {
+                if (dto.isCommercialWork === null || dto.isCommercialWork === undefined) return null;
+                return commercialWorkOptions.find(x => x.id === dto.isCommercialWork!.toString());
+              }}
+              update={(dto, option) => {
+                if (!option) return dto.isCommercialWork = null;
+                dto.isCommercialWork = option.id === "true";
+              }}
+              validation={this.props.validator.isCommercialWork}
             />
           </Form.Fieldset>
           <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.organisationHeading()}>
