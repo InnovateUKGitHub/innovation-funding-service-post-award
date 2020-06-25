@@ -21,6 +21,7 @@ export class ProjectMessages extends ContentBase {
   public readonly currentPeriodInfo = (currentPeriod: number, numberOfPeriods: number) => this.getContent("currentPeriodInfo", { currentPeriod, numberOfPeriods });
   public readonly pcrQueried = () => this.getContent("pcrQueried");
   public readonly pcrsToReview = (numberOfPcrs: number) => this.getContent("pcrToReview", { numberOfPcrs });
+  public readonly checkForecast = () => this.getContent("checkForecast");
   public readonly projectOnHold = () => this.getContent("projectOnHold");
   public readonly pendingProject = () => this.getContent("pendingProject");
   public readonly setupGuidance = () => this.getContent("setup-guidance");
