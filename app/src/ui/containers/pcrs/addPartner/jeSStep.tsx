@@ -79,7 +79,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     if (documents.length) {
       return (
         <ACC.Section title="Files uploaded" subtitle="All documents uploaded during this request will be shown here. All documents open in a new window.">
-          {documents.length ? <ACC.DocumentTable onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="je-s-document"/> : null}
+          {documents.length ? <ACC.DocumentTableWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="je-s-document"/> : null}
         </ACC.Section>
       );
     }

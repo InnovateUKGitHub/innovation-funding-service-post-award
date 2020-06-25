@@ -63,7 +63,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
 
     return (
       <ACC.Section subtitle="All documents open in a new window">
-        <ACC.DocumentTable onRemove={(document) => this.props.onDelete(editor.data, document)} documents={documents} qa="supporting-documents"/>
+        <ACC.DocumentTableWithDelete onRemove={(document) => this.props.onDelete(editor.data, document)} documents={documents} qa="supporting-documents"/>
       </ACC.Section>
     );
   }
