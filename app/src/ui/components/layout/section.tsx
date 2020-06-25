@@ -9,6 +9,7 @@ interface Props {
   title?: React.ReactNode;
   titleContent?: ContentSelector;
   subtitle?: React.ReactNode;
+  subtitleContent?: ContentSelector;
   qa?: string;
   badge?: React.ReactNode;
   className?: string;
@@ -26,9 +27,9 @@ const getNextHeader = (header: headerOptions) => {
   }
 };
 
-const renderTitles = ({ title, titleContent, subtitle, badge }: Props, isEmpty: boolean, header: headerOptions) => {
+const renderTitles = ({ title, titleContent, subtitle, subtitleContent, badge }: Props, isEmpty: boolean, header: headerOptions) => {
   // if nothing to render at top then we return null if there is a badge but no titles we still need to render the div with three quarters
-  if (!title && !titleContent && !subtitle && !badge) return null;
+  if (!title && !titleContent && !subtitle && !subtitleContent && !badge) return null;
 
   const Header = header;
   const headerClasses = classNames({
@@ -46,7 +47,7 @@ const renderTitles = ({ title, titleContent, subtitle, badge }: Props, isEmpty: 
   return (
     <div className={classes}>
       {!!title || !!titleContent ? <Header className={headerClasses}>{titleContent ? <Content value={titleContent}/> : title}</Header> : null}
-      {!!subtitle ? <SimpleString className="acc-section-subtitle">{subtitle}</SimpleString> : null}
+      {!!subtitle || subtitleContent ? <SimpleString className="acc-section-subtitle">{subtitleContent ? <Content value={subtitleContent}/> : subtitle}</SimpleString> : null}
     </div>
   );
 };

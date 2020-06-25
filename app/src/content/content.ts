@@ -38,6 +38,7 @@ import { PCRPeriodLengthChangeContent } from "@content/pages/pcrs/periodLengthCh
 import { TaskListContent } from "@content/components/taskListContent";
 import { PCRAddPartnerAwardRateContent } from "@content/pages/pcrs/addPartner/awardRateStepContent";
 import { PCRAddPartnerOtherFundingContent } from "@content/pages/pcrs/addPartner/otherFundingStepContent";
+import { PcrSpendProfileOverheadDocumentContent } from "./pages/pcrSpendProfiles/overheadDocumentContainerContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -90,6 +91,7 @@ export class Content extends ContentBase {
   public readonly pcrSpendProfileCostsSummaryContent = new PcrSpendProfileCostsSummaryContent(this);
   public readonly pcrSpendProfilePrepareCostContent = new PcrSpendProfilePrepareCostContent(this);
   public readonly pcrSpendProfileDeleteCostContent = new PcrSpendProfileDeleteCostContent(this);
+  public readonly pcrSpendProfileOverheadDocumentContent = new PcrSpendProfileOverheadDocumentContent(this);
 
   public readonly errors = {
     notfound: new NotFoundContent(this),
