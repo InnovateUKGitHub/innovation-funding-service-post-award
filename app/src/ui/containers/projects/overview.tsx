@@ -158,8 +158,8 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
       { textContent: (x: Content) => x.projectOverview.links.claims(), link: routes.allClaimsDashboard.getLink({ projectId }), messages: () => this.getClaimMessages(project, partner) },
       { textContent: (x: Content) => x.projectOverview.links.claims(), link: routes.claimsDashboard.getLink({ projectId, partnerId }), messages: () => this.getClaimMessages(project, partner) },
       { textContent: (x: Content) => x.projectOverview.links.monitoringReport(), link: routes.monitoringReportDashboard.getLink({ projectId }) },
-      { textContent: (x: Content) => x.projectOverview.links.forecast(), link: routes.forecastDashboard.getLink({ projectId }) },
-      { textContent: (x: Content) => x.projectOverview.links.forecasts(), link: routes.forecastDetails.getLink({ projectId, partnerId }) },
+      { textContent: (x: Content) => x.projectOverview.links.forecast(), link: routes.forecastDashboard.getLink({ projectId }), messages: () => this.getForecastMessages(partner) },
+      { textContent: (x: Content) => x.projectOverview.links.forecasts(), link: routes.forecastDetails.getLink({ projectId, partnerId }), messages: () => this.getForecastMessages(partner) },
       { textContent: (x: Content) => x.projectOverview.links.projectChangeRequests(), link: routes.projectChangeRequests.getLink({ projectId }), messages: () => this.getPcrMessages(project) },
       { textContent: (x: Content) => x.projectOverview.links.projectChangeRequests(), link: routes.pcrsDashboard.getLink({ projectId }), messages: () => this.getPcrMessages(project) },
       { textContent: (x: Content) => x.projectOverview.links.documents(), link: routes.projectDocuments.getLink({ projectId }) },
@@ -199,6 +199,18 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     if (project.roles & ProjectRole.MonitoringOfficer) {
       result.push({ message: <ACC.Content value={x => x.projectOverview.messages.pcrsToReview(project.pcrsToReview)} /> });
     }
+    return result;
+  }
+
+  private getForecastMessages(partner: PartnerDto) {
+    const result: ACC.NavigationCardMessage[] = [];
+
+    if (partner && (partner.roles & ProjectRole.FinancialContact)) {
+      if (partner.newForecastNeeded) {
+        result.push({ message: <ACC.Content value={x => x.projectOverview.messages.checkForecast()} />});
+      }
+    }
+
     return result;
   }
 
