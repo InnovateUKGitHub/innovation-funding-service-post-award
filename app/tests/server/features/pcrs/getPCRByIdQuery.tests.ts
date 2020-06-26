@@ -278,7 +278,7 @@ describe("GetPCRByIdQuery", () => {
       const partnerType = PCRPartnerType.ResearchAndTechnology;
 
       const item = context.testData.createPCRItem(pcr, recordType, { projectRole, partnerType });
-      context.testData.createPcrSpendProfile({
+      await context.testData.createPcrSpendProfile({
         costCategory: costCategoryLabour,
         pcrItem: item,
         update: {

@@ -1,6 +1,7 @@
 import { Results } from "../validation";
 import * as Validation from "./common";
 import {
+  PCRSpendProfileAcademicCostDto,
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
   PcrSpendProfileDto,
@@ -25,6 +26,7 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
 
   private getCostValidator(cost: PCRSpendProfileCostDto) {
     switch(cost.costCategory) {
+      case CostCategoryType.Academic: return new PCRAcademicCostDtoValidator(cost, this.showValidationErrors);
       case CostCategoryType.Labour: return new PCRLabourCostDtoValidator(cost, this.showValidationErrors);
       case CostCategoryType.Overheads: return new PCROverheadsCostDtoValidator(cost, this.showValidationErrors);
       case CostCategoryType.Materials: return new PCRMaterialsCostDtoValidator(cost, this.showValidationErrors);
@@ -52,13 +54,17 @@ export class PCRBaseCostDtoValidator<T extends PCRSpendProfileCostDto> extends R
 }
 
 export type PCRSpendProfileCostDtoValidator =
-    PCRLabourCostDtoValidator
+    PCRAcademicCostDtoValidator
+    | PCRLabourCostDtoValidator
     | PCROverheadsCostDtoValidator
     | PCRMaterialsCostDtoValidator
     | PCRSubcontractingCostDtoValidator
     | PCRCapitalUsageCostDtoValidator
     | PCRTravelAndSubsCostDtoValidator
     | PCROtherCostsDtoValidator;
+
+export class PCRAcademicCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileAcademicCostDto> {
+}
 
 export class PCRLabourCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileLabourCostDto> {
   public description = Validation.required(this, this.model.description, "Description of role is required");
