@@ -1,8 +1,9 @@
 import {
   IContext,
-  ILinkInfo, Option,
+  ILinkInfo,
   PCRDto,
-  PCRItemForPartnerAdditionDto, PCRItemType,
+  PCRItemForPartnerAdditionDto,
+  PCRItemType,
   PCRSpendProfileOverheadRate,
   ProjectDto,
   ProjectRole
@@ -12,9 +13,11 @@ import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import {
-  PcrEditSpendProfileCostParams, PCRPrepareItemRoute,
+  PcrEditSpendProfileCostParams,
+  PCRPrepareItemRoute,
   PCRSpendProfileCostsSummaryRoute,
-  PCRSpendProfileEditCostRoute
+  PCRSpendProfileEditCostRoute,
+  PCRSpendProfileOverheadDocumentRoute
 } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus, PCRSpendProfileCapitalUsageType } from "@framework/constants";
@@ -35,11 +38,10 @@ import { parseNumber } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
-import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
 
 export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFormHandlerBase<PcrEditSpendProfileCostParams, "pcr"> {
   constructor() {
-    super(PCRSpendProfileEditCostRoute, ["default"], "pcr");
+    super(PCRSpendProfileEditCostRoute, ["default", "calculateOverheadsDocuments"], "pcr");
   }
 
   protected async getDto(context: IContext, params: PcrEditSpendProfileCostParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
@@ -68,15 +70,15 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
       throw new BadRequestError("Cost not found");
     }
 
-    this.updateCost(cost, costCategory, body);
+    this.updateCost(cost, costCategory, body, button);
 
     return dto;
   }
 
-  private updateCost(cost: PCRSpendProfileCostDto,  costCategoryDto: CostCategoryDto, body: IFormBody) {
+  private updateCost(cost: PCRSpendProfileCostDto,  costCategoryDto: CostCategoryDto, body: IFormBody, button: IFormButton) {
     switch (costCategoryDto.type) {
       case CostCategoryType.Labour: return this.updateLabourCost(cost as PCRSpendProfileLabourCostDto, body);
-      case CostCategoryType.Overheads: return this.updateOverheadsCost(cost as PCRSpendProfileOverheadsCostDto, body);
+      case CostCategoryType.Overheads: return this.updateOverheadsCost(cost as PCRSpendProfileOverheadsCostDto, body, button);
       case CostCategoryType.Materials: return this.updateMaterialsCost(cost as PCRSpendProfileMaterialsCostDto, body);
       case CostCategoryType.Subcontracting: return this.updateSubcontractingCost(cost as PCRSpendProfileSubcontractingCostDto, body);
       case CostCategoryType.Capital_Usage: return this.updateCapitalUsagecost(cost as PCRSpendProfileCapitalUsageCostDto, body);
@@ -92,10 +94,13 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
     cost.grossCostOfRole = parseNumber(body.grossCostOfRole);
   }
 
-  private updateOverheadsCost(cost: PCRSpendProfileOverheadsCostDto,  body: IFormBody) {
-    const overheadRate = parseNumber(body.overheadRate) || PCRSpendProfileOverheadRate.Unknown;
+  private updateOverheadsCost(cost: PCRSpendProfileOverheadsCostDto,  body: IFormBody, button: IFormButton) {
     cost.value = parseNumber(body.value);
-    cost.overheadRate = overheadRate;
+    cost.overheadRate = parseNumber(body.overheadRate) || PCRSpendProfileOverheadRate.Unknown;
+
+    if (button.name === "calculateOverheadsDocuments" && !cost.value) {
+      cost.value = 0;
+    }
   }
 
   private updateMaterialsCost(cost: PCRSpendProfileMaterialsCostDto,  body: IFormBody) {
@@ -146,6 +151,15 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
 
     if (costCategoryDto.type === CostCategoryType.Overheads) {
       const pcrItem = dto.items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
+
+      if (button.name === "calculateOverheadsDocuments") {
+        return PCRSpendProfileOverheadDocumentRoute.getLink({
+          itemId: pcrItem.id,
+          pcrId: dto.id,
+          projectId: dto.projectId,
+          costCategoryId: params.costCategoryId,
+        });
+      }
       return PCRPrepareItemRoute.getLink({
         itemId: pcrItem.id,
         pcrId: dto.id,

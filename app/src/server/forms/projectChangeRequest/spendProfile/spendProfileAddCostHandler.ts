@@ -16,7 +16,8 @@ import {
   PcrAddSpendProfileCostParams,
   PCRPrepareItemRoute,
   PCRSpendProfileAddCostRoute,
-  PCRSpendProfileCostsSummaryRoute
+  PCRSpendProfileCostsSummaryRoute,
+  PCRSpendProfileOverheadDocumentRoute
 } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus } from "@framework/constants";
@@ -36,7 +37,6 @@ import { parseNumber } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
-import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
 
 interface IBaseCost {
   id: string;
@@ -47,7 +47,7 @@ interface IBaseCost {
 
 export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardFormHandlerBase<PcrAddSpendProfileCostParams, "pcr"> {
   constructor() {
-    super(PCRSpendProfileAddCostRoute, ["default"], "pcr");
+    super(PCRSpendProfileAddCostRoute, ["default", "calculateOverheadsDocuments"], "pcr");
   }
 
   protected async getDto(context: IContext, params: PcrAddSpendProfileCostParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
@@ -68,13 +68,13 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
       throw new BadRequestError("Unknown cost category");
     }
 
-    const cost = this.getCost(costCategory, params, body);
+    const cost = this.getCost(costCategory, params, body, button);
     if (cost) item.spendProfile.costs.push(cost);
 
     return dto;
   }
 
-  private getCost(costCategory: CostCategoryDto, params: PcrAddSpendProfileCostParams, body: IFormBody) {
+  private getCost(costCategory: CostCategoryDto, params: PcrAddSpendProfileCostParams, body: IFormBody, button: IFormButton) {
     const baseCostDto = {
       id: "",
       costCategoryId: params.costCategoryId,
@@ -83,7 +83,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
     };
     switch (costCategory.type) {
       case CostCategoryType.Labour: return this.getLabourCost(baseCostDto, costCategory.type, body);
-      case CostCategoryType.Overheads: return this.getOverheadsCost(baseCostDto, costCategory.type, body);
+      case CostCategoryType.Overheads: return this.getOverheadsCost(baseCostDto, costCategory.type, body, button);
       case CostCategoryType.Materials: return this.getMaterialsCost(baseCostDto, costCategory.type, body);
       case CostCategoryType.Subcontracting: return this.getSubcontractingCost(baseCostDto, costCategory.type, body);
       case CostCategoryType.Capital_Usage: return this.getCapitalUsageCost(baseCostDto, costCategory.type, body);
@@ -102,12 +102,12 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
     };
   }
 
-  private getOverheadsCost(baseCostDto: IBaseCost, costCategory: CostCategoryType.Overheads, body: IFormBody): PCRSpendProfileOverheadsCostDto {
-    const overheadRate = parseNumber(body.overheadRate) || PCRSpendProfileOverheadRate.Unknown;
+  private getOverheadsCost(baseCostDto: IBaseCost, costCategory: CostCategoryType.Overheads, body: IFormBody, button: IFormButton): PCRSpendProfileOverheadsCostDto {
     return {
       ...baseCostDto,
       costCategory,
-      overheadRate
+      overheadRate: parseNumber(body.overheadRate) || PCRSpendProfileOverheadRate.Unknown,
+      value: button.name === "calculateOverheadsDocuments" ? baseCostDto.value || 0 : baseCostDto.value
     };
   }
 
@@ -174,6 +174,15 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
 
     if (costCategoryDto.type === CostCategoryType.Overheads) {
       const pcrItem = dto.items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
+
+      if (button.name === "calculateOverheadsDocuments") {
+        return PCRSpendProfileOverheadDocumentRoute.getLink({
+          itemId: pcrItem.id,
+          pcrId: dto.id,
+          projectId: dto.projectId,
+          costCategoryId: params.costCategoryId,
+        });
+      }
       return PCRPrepareItemRoute.getLink({
         itemId: pcrItem.id,
         pcrId: dto.id,
