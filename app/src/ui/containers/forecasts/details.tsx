@@ -22,6 +22,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
   }
 
   public renderContents(data: ACC.Claims.ForecastData) {
+    const isFc = !!(data.partner.roles & ProjectRole.FinancialContact);
     // MO, PM & FC/PM should see partner name
     const isMoPm = !!(data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
     const partnerName = isMoPm ? <PartnerName partner={data.partner}/> : null;
@@ -34,10 +35,11 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
         backLink={<ACC.BackLink route={backLink}>{backText}</ACC.BackLink>}
         project={data.project}
       >
-        {this.renderFinalClaimMessage(data)}
+        {this.renderFinalClaimMessage(data, isFc)}
         <ACC.Section title={partnerName} qa="partner-name" className="govuk-!-padding-bottom-3">
           <ACC.Renderers.Messages messages={this.props.messages} />
           <ACC.Forecasts.Warning {...data}/>
+          {(isFc && data.partner.newForecastNeeded) && <ACC.ValidationMessage qa="period-change-warning" messageType="info" message="Your project asked us to change the length of the remaining periods. Make sure your forecast is correct before submitting your next claim."/>}
           {this.renderOverheadsRate(data.partner.overheadRate)}
           <ACC.Claims.ForecastTable data={data} hideValidation={isMoPm} />
         </ACC.Section>
@@ -49,7 +51,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
     );
   }
 
-  private renderFinalClaimMessage(data: ACC.Claims.ForecastData) {
+  private renderFinalClaimMessage(data: ACC.Claims.ForecastData, isFc: boolean) {
     const finalClaim = data.claims.find(x => x.isFinalClaim);
     // Checks that the data exists in either past or present
 
@@ -57,8 +59,6 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
 
     const claimPageLink = PrepareClaimRoute.getLink({projectId: data.project.id, partnerId: data.partner.id, periodId: data.project.periodId});
     const isClaimApprovedOrPaid = finalClaim.isApproved || finalClaim.paidDate;
-
-    const isFc = data.partner.roles & (ProjectRole.FinancialContact);
 
     if (isFc) {
       return (isClaimApprovedOrPaid || data.partner.isWithdrawn)
