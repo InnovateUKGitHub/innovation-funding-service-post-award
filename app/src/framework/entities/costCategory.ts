@@ -14,6 +14,7 @@ export interface CostCategory {
 // This is not a complete list, just the ones we need to know about (e.g. to show certain fields for adding a partner pcr)
 export enum CostCategoryType {
   Unknown = 0,
+  Academic = 5,
   Labour = 10,
   Overheads = 20,
   Materials = 30,

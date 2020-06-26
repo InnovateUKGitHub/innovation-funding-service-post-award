@@ -5,6 +5,9 @@ import { CostCategory, CostCategoryType } from "@framework/entities";
 export class SalesforceCostCategoryMapper extends SalesforceBaseMapper<ISalesforceCostCategory, CostCategory> {
 
   private typeMapper(costCategory: ISalesforceCostCategory): CostCategoryType {
+    if (costCategory.Acc_OrganisationType__c === "Academic") {
+      return CostCategoryType.Academic;
+    }
     // @TODO: get from SF -- this is nasty but no solution provided as yet from salesforce
     switch(costCategory.Acc_CostCategoryName__c) {
       case "Labour": return CostCategoryType.Labour;
