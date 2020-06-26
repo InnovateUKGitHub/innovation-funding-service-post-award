@@ -8,6 +8,7 @@ import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtos
 import { Authorisation, ClaimDto, ClaimStatus, IContext, PartnerDto, ProjectRole } from "@framework/types";
 import { GetAllForecastsForPartnerQuery } from "./getAllForecastsForPartnerQuery";
 import { GetByIdQuery } from "@server/features/partners";
+import { UpdatePartnerCommand } from "../partners/updatePartnerCommand";
 
 export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
@@ -36,6 +37,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     await this.testValidation(claims, claimDetails, golCosts, partner);
     await this.testPastForecastPeriodsHaveNotBeenUpdated(project.periodId, preparedForecasts, existing);
     await this.updateProfileDetails(context, preparedForecasts, existing);
+    await this.updatePartner(context, partner);
 
     if (this.submit) {
       await this.updateClaim(context);
@@ -100,6 +102,15 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     claim.status = this.nextClaimStatus(claim);
     const updateClaimCommand = new UpdateClaimCommand(this.projectId, claim);
     await context.runCommand(updateClaimCommand);
+  }
+
+  private async updatePartner(context: IContext, partner: PartnerDto) {
+    if (!partner.newForecastNeeded) {
+      return;
+    }
+    partner.newForecastNeeded = false;
+    const updatePartnerCommand = new UpdatePartnerCommand(partner);
+    await context.runCommand(updatePartnerCommand);
   }
 
   private nextClaimStatus(claim: ClaimDto) {
