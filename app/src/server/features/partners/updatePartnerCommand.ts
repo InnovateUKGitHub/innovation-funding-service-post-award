@@ -16,7 +16,8 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
 
     await context.repositories.partners.update({
       Id: this.partner.id,
-      Acc_Postcode__c: this.partner.postcode
+      Acc_Postcode__c: this.partner.postcode,
+      Acc_NewForecastNeeded__c: this.partner.newForecastNeeded === false || this.partner.newForecastNeeded === true ? this.partner.newForecastNeeded : undefined
     });
 
     return true;
