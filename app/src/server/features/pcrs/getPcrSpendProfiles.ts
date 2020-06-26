@@ -4,6 +4,7 @@ import { CostCategoryType, PcrSpendProfileEntity } from "@framework/entities";
 import { GetCostCategoriesQuery } from "@server/features/claims";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import {
+  PCRSpendProfileAcademicCostDto,
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
   PcrSpendProfileDto,
@@ -36,6 +37,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
 
   private mapCosts(costCategory: CostCategoryDto, spendProfiles: PcrSpendProfileEntity[]): PCRSpendProfileCostDto[] {
     switch (costCategory.type) {
+      case CostCategoryType.Academic: return this.mapAcademicCosts(spendProfiles, costCategory.type);
       case CostCategoryType.Labour: return this.mapLabourCosts(spendProfiles, costCategory.type);
       case CostCategoryType.Overheads: return this.mapOverheadsCosts(spendProfiles, costCategory.type);
       case CostCategoryType.Materials: return this.mapMaterialsCosts(spendProfiles, costCategory.type);
@@ -53,6 +55,13 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
       value: isNumber(spendProfile.value) ? spendProfile.value : null,
       description: spendProfile.description || null,
     };
+  }
+
+  private mapAcademicCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Academic): PCRSpendProfileAcademicCostDto[] {
+    return spendProfiles.map(x => ({
+      ...this.mapBaseCostFields(x),
+      costCategory,
+    }));
   }
 
   private mapLabourCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Labour): PCRSpendProfileLabourCostDto[] {
@@ -113,6 +122,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     }));
   }
 
+  /* tslint:disable-next-line:no-identical-functions */
   private mapOtherCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Other_Costs): PCRSpendProfileOtherCostsDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),

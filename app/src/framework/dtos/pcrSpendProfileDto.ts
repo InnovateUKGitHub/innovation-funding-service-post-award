@@ -7,7 +7,8 @@ export interface PcrSpendProfileDto {
 }
 
 export type PCRSpendProfileCostDto =
-    PCRSpendProfileLabourCostDto
+    PCRSpendProfileAcademicCostDto
+    | PCRSpendProfileLabourCostDto
     | PCRSpendProfileMaterialsCostDto
     | PCRSpendProfileOverheadsCostDto
     | PCRSpendProfileSubcontractingCostDto
@@ -21,6 +22,10 @@ interface PCRSpendProfileBaseCostDto<T extends CostCategoryType> {
   costCategoryId: string;
   description: string | null;
   value: number | null;
+}
+
+export interface PCRSpendProfileAcademicCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Academic> {
+  costCategory: CostCategoryType.Academic;
 }
 
 export interface PCRSpendProfileLabourCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Labour> {
