@@ -42,6 +42,8 @@ import { ProjectChangeRequestSpendProfileDeleteCostHandler } from "@server/forms
 import { ProjectChangeRequestSpendProfileEditCostHandler } from "@server/forms/projectChangeRequest/spendProfile/spendProfileEditCostHandler";
 import { ProjectSetupSpendProfileFormHandler } from "./projectSetupSpendProfileFormHandler";
 import { ProjectSetupFormHandler } from "@server/forms/projectSetupFormHandler";
+import { OverheadDocumentsUploadHandler } from "@server/forms/projectChangeRequest/spendProfile/overheadDocuments/overheadDocumentsUploadHandler";
+import { OverheadDocumentsDeleteHandler } from "@server/forms/projectChangeRequest/spendProfile/overheadDocuments/overheadDocumentsDeleteHandler";
 
 export const standardFormHandlers: (StandardFormHandlerBase<{}, EditorStateKeys>)[] = [
   new ClaimForecastFormHandler(),
@@ -57,6 +59,7 @@ export const standardFormHandlers: (StandardFormHandlerBase<{}, EditorStateKeys>
   new MonitoringReportPrepareFormHandler(),
   new MonitoringReportPreparePeriodFormHandler(),
   new MonitoringReportSummaryFormHandler(),
+  new OverheadDocumentsDeleteHandler(),
   new ProjectChangeRequestAddTypeFormHandler(),
   new ProjectChangeRequestCreateFormHandler(),
   new ProjectChangeRequestDeleteFormHandler(),
@@ -83,6 +86,7 @@ export const singleFileFormHandlers: (SingleFileFormHandlerBase<{}, EditorStateK
 export const multiFileFormHandlers: (MultipleFileFormHandlerBase<{}, EditorStateKeys>)[] = [
   new ClaimDetailDocumentUploadHandler(),
   new ClaimDocumentsUploadHandler(),
+  new OverheadDocumentsUploadHandler(),
   new ProjectChangeRequestReasoningDocumentUploadHandler(),
   new ProjectChangeRequestItemDocumentUploadHandler(),
   new ProjectDocumentUploadHandler(),

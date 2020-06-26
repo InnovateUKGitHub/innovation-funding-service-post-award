@@ -10,7 +10,7 @@ import { Pending } from "@shared/pending";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 
-interface OverheadDocumentsPageParams {
+export interface OverheadDocumentsPageParams {
   projectId: string;
   pcrId: string;
   costCategoryId: string;
