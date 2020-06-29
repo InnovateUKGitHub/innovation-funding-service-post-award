@@ -47,6 +47,7 @@ export interface ProjectChangeRequestItemForCreateEntity {
   partnerType?: PCRPartnerType;
   organisationType?: PCROrganisationType;
   partnerTypeLabel?: string | null;
+  isCommercialWork?: boolean | null;
   organisationName?: string | null;
   registeredAddress?: string | null;
   registrationNumber?: string | null;

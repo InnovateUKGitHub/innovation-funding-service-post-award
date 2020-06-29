@@ -20,6 +20,7 @@ const createCompleteIndustrialPcrItem: () => Partial<ProjectChangeRequestItemEnt
   status: PCRItemStatus.Incomplete,
   partnerType: PCRPartnerType.Business,
   projectRole: PCRProjectRole.ProjectLead,
+  isCommercialWork: true,
   organisationType: PCROrganisationType.Industrial,
   projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
   projectCity: "Coventry",
@@ -47,6 +48,7 @@ const createCompleteAcademicPcrItem: () => Partial<ProjectChangeRequestItemEntit
   status: PCRItemStatus.Incomplete,
   partnerType: PCRPartnerType.Research,
   projectRole: PCRProjectRole.Collaborator,
+  isCommercialWork: true,
   organisationType: PCROrganisationType.Academic,
   projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
   projectCity: "Coventry",
@@ -87,13 +89,21 @@ describe("UpdatePCRCommand - Partner addition", () => {
   it("should require project role and partner type to be set if the flag is set to required", async () => {
     const {context, projectChangeRequest, recordType, project} = setup();
     context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete });
-    const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
-    const item = dto.items[0] as PCRItemForPartnerAdditionDto;
+    let dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+    let item = dto.items[0] as PCRItemForPartnerAdditionDto;
     item.projectRole = PCRProjectRole.Unknown;
     item.partnerType = PCRPartnerType.Unknown;
     item.isProjectRoleAndPartnerTypeRequired = true;
     const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+
+    // get fresh dto to test commercial work
+    dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+    item = dto.items[0] as PCRItemForPartnerAdditionDto;
+    item.isProjectRoleAndPartnerTypeRequired = true;
+    item.isCommercialWork = null;
+    await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+
   });
   it("should require fields to be set when the organisation type is Academic", async () => {
     const {context, projectChangeRequest, recordType, project} = setup();
@@ -216,7 +226,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
   });
   it("should not allow updates to project role & partner type fields once they are set", async () => {
     const {context, projectChangeRequest, recordType, project} = setup();
-    context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Research });
+    context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Research, isCommercialWork: false });
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
     const item = dto.items[0] as PCRItemForPartnerAdditionDto;
     item.projectRole = PCRProjectRole.ProjectLead;
@@ -266,6 +276,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     item.contact2Email = "jon@doe.com";
     item.awardRate = 62;
     item.hasOtherFunding = true;
+    item.isCommercialWork = true;
 
     const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
     await expect(await context.runCommand(command)).toBe(true);
@@ -295,6 +306,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     expect(updatedItem.contact2Email).toEqual("jon@doe.com");
     expect(updatedItem.awardRate).toEqual(62);
     expect(updatedItem.hasOtherFunding).toEqual(true);
+    expect(updatedItem.isCommercialWork).toEqual(true);
   });
   describe("Spend Profile", () => {
     it("should update pcr spend profiles", async () => {
