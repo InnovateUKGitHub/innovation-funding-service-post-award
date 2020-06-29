@@ -1,6 +1,6 @@
 import { StoreBase } from "./storeBase";
 import * as Dtos from "@framework/dtos";
-import { PCRDto, PCRItemForTimeExtensionDto, PCRStandardItemDto } from "@framework/dtos";
+import { PCRDto, TypeOfAid } from "@framework/dtos";
 import { PCRDtoValidator, PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { ProjectsStore } from "./projectsStore";
 import { IEditorStore, RootState } from "../reducers";
@@ -221,6 +221,7 @@ export class ProjectChangeRequestStore extends StoreBase {
           projectRole: PCRProjectRole.Unknown,
           partnerType: PCRPartnerType.Unknown,
           isCommercialWork: null,
+          typeOfAid: TypeOfAid.Unknown,
           organisationType: PCROrganisationType.Unknown,
           projectRoleLabel: null,
           partnerTypeLabel: null,

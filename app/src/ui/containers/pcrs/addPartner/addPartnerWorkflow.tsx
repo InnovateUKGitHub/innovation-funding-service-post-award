@@ -1,12 +1,11 @@
 import React from "react";
-import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
+import { PCRItemForPartnerAdditionDto, TypeOfAid } from "@framework/dtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCROrganisationType, PCRProjectRole } from "@framework/constants";
 import {
   AcademicOrganisationStep,
   AddPartnerSummary,
-  AidEligibilityStep,
   CompaniesHouseStep,
   FinanceContactStep,
   FinanceDetailsStep,
@@ -14,11 +13,13 @@ import {
   OrganisationDetailsStep,
   ProjectLocationStep,
   ProjectManagerDetailsStep,
-  RoleAndOrganisationStep
+  RoleAndOrganisationStep, StateAidEligibilityStep
 } from "@ui/containers/pcrs/addPartner";
 import { SpendProfileStep } from "@ui/containers/pcrs/addPartner/spendProfileStep";
 import { AwardRateStep } from "@ui/containers/pcrs/addPartner/awardRateStep";
 import { OtherFundingStep } from "@ui/containers/pcrs/addPartner/otherFundingStep";
+import { NonAidFundingStep } from "@ui/containers/pcrs/addPartner/nonAidFundingStep";
+import { DeMinimisStep } from "@ui/containers/pcrs/addPartner/deMinimisStep";
 
 export type addPartnerStepNames =
   "roleAndOrganisationStep"
@@ -39,13 +40,6 @@ export type addPartnerStepNames =
 export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: number | undefined): IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> => {
   const workflow: IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> = {
     steps: [
-      {
-        stepName: "aidEligibilityStep",
-        displayName: "Aid eligibility",
-        stepNumber: 2,
-        validation: val => val.files,
-        stepRender: AidEligibilityStep,
-      },
       {
         stepName: "projectLocationStep",
         displayName: "Project location",
@@ -88,6 +82,32 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
       stepNumber: 1,
       validation: val => val.pcr,
       stepRender: RoleAndOrganisationStep
+    });
+  }
+
+  if (!item.isCommercialWork) {
+    workflow.steps.push({
+      stepName: "aidEligibilityStep",
+      displayName: "Non aid eligibility",
+      stepNumber: 2,
+      validation: val => val.pcr,
+      stepRender: NonAidFundingStep,
+    });
+  } else if (item.typeOfAid === TypeOfAid.DeMinimisAid) {
+    workflow.steps.push({
+      stepName: "aidEligibilityStep",
+      displayName: "De minimis funding",
+      stepNumber: 2,
+      validation: val => val,
+      stepRender: DeMinimisStep,
+    });
+  } else {
+    workflow.steps.push({
+      stepName: "aidEligibilityStep",
+      displayName: "State aid funding",
+      stepNumber: 2,
+      validation: val => val.pcr,
+      stepRender: StateAidEligibilityStep,
     });
   }
 

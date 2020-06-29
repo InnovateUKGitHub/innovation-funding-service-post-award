@@ -17,7 +17,6 @@ export const mapToProjectDto = (
   return {
     id: item.Id,
     title: item.Acc_ProjectTitle__c,
-    typeOfAid: mapTypeOfAidToEnum(item.Acc_CompetitionId__r.Acc_TypeofAid__c),
     summary: item.Acc_ProjectSummary__c,
     description: item.Acc_PublicDescription__c,
     projectNumber: item.Acc_ProjectNumber__c,
@@ -92,17 +91,6 @@ const mapFrequencyToEnum = (freq: string): ClaimFrequency => {
       return ClaimFrequency.Monthly;
     default:
       return ClaimFrequency.Unknown;
-  }
-};
-
-const mapTypeOfAidToEnum = (typeOfAid: string): TypeOfAid => {
-  switch (typeOfAid) {
-    case "State aid":
-      return TypeOfAid.StateAid;
-    case "De minimis aid":
-      return TypeOfAid.DeMinimisAid;
-    default:
-      return TypeOfAid.Unknown;
   }
 };
 

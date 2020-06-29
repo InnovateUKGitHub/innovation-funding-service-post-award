@@ -26,7 +26,6 @@ export interface ProjectDto {
     claimFrequency: ClaimFrequency;
     claimFrequencyName: string;
     competitionType: string;
-    typeOfAid: TypeOfAid;
 
     isPastEndDate: boolean;
     periodId: number;
