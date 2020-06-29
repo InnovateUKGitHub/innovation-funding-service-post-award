@@ -14,6 +14,7 @@ interface NavigationCardProps {
 export interface NavigationCardMessage {
   message: React.ReactNode;
   isAlert?: boolean;
+  qa?: string;
 }
 
 export class NavigationCard extends React.Component<NavigationCardProps> {
@@ -31,7 +32,7 @@ export class NavigationCard extends React.Component<NavigationCardProps> {
   private renderMessages() {
     return (
       this.props.messages ?
-        <div className="card-link__messages"> {this.props.messages.map((x,i) => ( <SimpleString key={i} className={classNames( "card-link__message", { "card-link__message--alert": x.isAlert } )}> {x.message} </SimpleString> ) )} </div>
+        <div className="card-link__messages"> {this.props.messages.map((x,i) => ( <SimpleString key={i} className={classNames( "card-link__message", { "card-link__message--alert": x.isAlert } )} qa={x.qa}> {x.message} </SimpleString> ) )} </div>
         : null
     );
   }
