@@ -10,6 +10,7 @@ import {
   PCRStatus
 } from "@framework/constants";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
+import { TypeOfAid } from "@framework/dtos/projectDto";
 
 interface PCRBaseDto {
   id: string;
@@ -118,6 +119,7 @@ export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   projectRole: PCRProjectRole;
   partnerType: PCRPartnerType;
   isCommercialWork: boolean | null;
+  typeOfAid: TypeOfAid;
   organisationType: PCROrganisationType;
   spendProfile: PcrSpendProfileDto;
   projectRoleLabel: string | null;

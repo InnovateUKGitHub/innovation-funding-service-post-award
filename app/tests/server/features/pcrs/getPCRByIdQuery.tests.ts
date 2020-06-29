@@ -8,7 +8,7 @@ import {
   PCRItemForPartnerAdditionDto,
   PCRItemForProjectSuspensionDto,
   PCRItemForScopeChangeDto,
-  PCRItemForTimeExtensionDto
+  PCRItemForTimeExtensionDto, TypeOfAid
 } from "@framework/dtos";
 import { PCRItemType, PCRPartnerType, PCRProjectRole } from "@framework/constants";
 import { CostCategoryType } from "@framework/entities";
@@ -95,7 +95,7 @@ describe("GetPCRByIdQuery", () => {
     const item = context.testData.createPCRItem(pcr, recordType, {
       status: 98,
       statusName: "Expected Status",
-      shortName: "If a nickname is what people call you for short, then your full name is your nicholas name"
+      shortName: "If a nickname is what people call you for short, then your full name is your nicholas name",
     });
 
     const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
@@ -252,8 +252,9 @@ describe("GetPCRByIdQuery", () => {
       const projectCity = "Bristol";
       const projectPostcode = "BS! 5UW";
       const awardRate = 35;
+      const typeOfAid = TypeOfAid.DeMinimisAid;
 
-      const item = context.testData.createPCRItem(pcr, recordType, { projectRole, partnerType, projectCity, projectPostcode, awardRate });
+      const item = context.testData.createPCRItem(pcr, recordType, { projectRole, partnerType, projectCity, projectPostcode, awardRate, typeOfAid });
 
       const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
       const result = await context.runQuery(query).then(x => x.items[0] as PCRItemForPartnerAdditionDto);
@@ -264,6 +265,7 @@ describe("GetPCRByIdQuery", () => {
       expect(result.projectCity).toBe(projectCity);
       expect(result.projectPostcode).toBe(projectPostcode);
       expect(result.awardRate).toBe(awardRate);
+      expect(result.typeOfAid).toBe(typeOfAid);
     });
 
     test("maps fields for partner addition pcr spend profile for Labour", async () => {

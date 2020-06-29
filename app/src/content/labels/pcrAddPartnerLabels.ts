@@ -12,4 +12,5 @@ export class PCRAddPartnerLabels extends ContentBase {
   public readonly commercialWorkHint = () => this.getContent("commercial-work-label-hint");
   public readonly commercialWorkYes = () => this.getContent("commercial-work-yes");
   public readonly commercialWorkNo = () => this.getContent("commercial-work-no");
+  public readonly deMinimisDeclarationForm = () => this.getContent("de-minimis-declaration-form");
 }
