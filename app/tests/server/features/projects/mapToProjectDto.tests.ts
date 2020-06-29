@@ -1,10 +1,10 @@
 // tslint:disable:no-identical-functions no-duplicate-string
 import "jest";
 import { TestContext } from "../../testContextProvider";
-import { ClaimFrequency, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
+import { ClaimFrequency, ProjectDto, ProjectRole, ProjectStatus, TypeOfAid } from "@framework/types";
 import { mapToProjectDto } from "@server/features/projects";
 import { DateTime } from "luxon";
-import {ISalesforceProject} from "@server/repositories";
+import { ISalesforceProject } from "@server/repositories";
 
 // tslint:disable:no-big-function
 describe("mapToProjectDto", () => {
@@ -38,6 +38,7 @@ describe("mapToProjectDto", () => {
       description: "Expected description",
       projectNumber: "Expected project number",
       competitionType: "SBRI",
+      typeOfAid: TypeOfAid.DeMinimisAid,
       claimFrequency: ClaimFrequency.Quarterly,
       claimFrequencyName: ClaimFrequency[ClaimFrequency.Quarterly],
       periodId: 3,
@@ -84,6 +85,7 @@ describe("mapToProjectDto", () => {
       x.Acc_CurrentPeriodNumber__c = expected.periodId;
       x.Acc_Duration__c = expected.durationInMonths;
       x.Acc_LeadParticipantName__c = expected.leadPartnerName;
+      x.Acc_CompetitionId__r = { Acc_TypeofAid__c: "De minimis aid" };
     });
 
     const period = createPeriod(context, project, periodStartDate, periodEndDate);

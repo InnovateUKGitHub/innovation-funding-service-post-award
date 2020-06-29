@@ -26,6 +26,7 @@ export interface ProjectDto {
     claimFrequency: ClaimFrequency;
     claimFrequencyName: string;
     competitionType: string;
+    typeOfAid: TypeOfAid;
 
     isPastEndDate: boolean;
     periodId: number;
@@ -57,4 +58,10 @@ export enum ProjectRole {
     MonitoringOfficer = 1 << 0,
     ProjectManager = 1 << 1,
     FinancialContact = 1 << 2,
+}
+
+export enum TypeOfAid {
+    Unknown = 0,
+    StateAid = 10,
+    DeMinimisAid = 20,
 }
