@@ -373,6 +373,12 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     }
     return Validation.required(this, this.model.partnerType || null, "Select a partner type");
   }
+  private validateIsCommercialWorkRequired() {
+    if (!this.model.isProjectRoleAndPartnerTypeRequired) {
+      return this.requiredIfComplete(this.model.isCommercialWork, "State if work is commercial");
+    }
+    return Validation.required(this, this.model.isCommercialWork, "State if work is commercial");
+  }
   private validateOrganisationNameRequired() {
     if (this.model.organisationType === PCROrganisationType.Industrial) return Validation.valid(this);
     return this.requiredIfComplete(this.model.organisationName, "Enter an organisation name");
@@ -393,11 +399,16 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
   projectRole = Validation.all(this,
     () => this.validateProjectRoleRequired(),
     () => !this.canEdit || this.original && this.original.projectRole ? Validation.isUnchanged(this, this.model.projectRole, this.original && this.original.projectRole, "Project role cannot be changed") : Validation.valid(this),
-    );
+  );
 
   partnerType = Validation.all(this,
     () => this.validatePartnerTypeRequired(),
     () => !this.canEdit || this.original && this.original.partnerType ? Validation.isUnchanged(this, this.model.partnerType, this.original && this.original.partnerType, "Partner type cannot be changed") : Validation.valid(this),
+  );
+
+  isCommercialWork = Validation.all(this,
+    () => this.validateIsCommercialWorkRequired(),
+    () => this.hasPermissionToEdit(this.model.isCommercialWork, this.original && this.original.isCommercialWork, "Commercial cannot be changed"),
   );
 
   organisationName = Validation.all(this,
