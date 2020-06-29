@@ -14,6 +14,7 @@ import {
 } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryType } from "@framework/entities";
 import { PCRSpendProfileOverheadRate } from "@framework/constants";
+import { hasNoDuplicates } from "@framework/util/arrayHelpers";
 
 export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
 
@@ -39,9 +40,20 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
 
   public costs = Validation.child(this, this.model.costs,
     cost => this.getCostValidator(cost),
-    // Overhead costs is the only cost category that should have only one cost representing the overheads to the total labour costs
-    val => val.isTrue(list => list.filter(x => x.costCategory === CostCategoryType.Overheads).length <= 1)
-  );
+    // There should be at most one overhead cost item (representing the overheads to the total labour costs)
+    val => {
+      const ofOverheadType = (x: PCRSpendProfileCostDto) => x.costCategory === CostCategoryType.Overheads;
+      const ofAcademicType = (x: PCRSpendProfileCostDto) => x.costCategory === CostCategoryType.Academic;
+      return val.all(
+          () => {
+            return val.isTrue(items => items.filter(ofOverheadType).length <= 1,
+                "Cannot have more than one overhead cost item");
+          },
+          () => {
+            return val.isTrue(items => hasNoDuplicates(items.filter(ofAcademicType).map(x => x.costCategoryId)),
+                "Cannot have more than academic cost item of a given category");
+          });
+    });
 }
 
 export class PCRBaseCostDtoValidator<T extends PCRSpendProfileCostDto> extends Results<T> {
@@ -64,6 +76,7 @@ export type PCRSpendProfileCostDtoValidator =
     | PCROtherCostsDtoValidator;
 
 export class PCRAcademicCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileAcademicCostDto> {
+  public value = Validation.isCurrency(this, this.model.value, "Value must be a number");
 }
 
 export class PCRLabourCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileLabourCostDto> {

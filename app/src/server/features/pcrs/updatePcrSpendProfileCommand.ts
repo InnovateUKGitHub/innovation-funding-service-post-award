@@ -1,3 +1,4 @@
+/* tslint:disable:no-identical-functions */
 import { BadRequestError, CommandBase, ValidationError } from "../common";
 import { Option, ProjectRole } from "@framework/dtos";
 import { Authorisation, IContext, PCRSpendProfileOverheadRate } from "@framework/types";
@@ -5,6 +6,7 @@ import { CostCategoryType, PcrSpendProfileEntity } from "@framework/entities";
 import { isNumber, roundCurrency } from "@framework/util";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import {
+  PCRSpendProfileAcademicCostDto,
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
   PcrSpendProfileDto,
@@ -50,6 +52,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   private mapPcrSpendProfileDtoToEntity(costsDto: PCRSpendProfileCostDto): PcrSpendProfileEntity {
     const init = this.getBaseCostEntity(costsDto);
     switch (costsDto.costCategory) {
+      case CostCategoryType.Academic: return this.mapAcademic(costsDto, init);
       case CostCategoryType.Labour: return this.mapLabour(costsDto, init);
       case CostCategoryType.Materials: return this.mapMaterials(costsDto, init);
       case CostCategoryType.Subcontracting: return this.mapSubcontracting(costsDto, init);
@@ -58,6 +61,13 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
       case CostCategoryType.Other_Costs: return this.mapOtherCosts(costsDto, init);
       default: throw new BadRequestError("Cost category type not supported");
     }
+  }
+
+  private mapAcademic(costsDto: PCRSpendProfileAcademicCostDto, init: BaseCostFields) {
+    return {
+      ...init,
+      value: isNumber(costsDto.value) ? costsDto.value : 0,
+    };
   }
 
   private mapLabour(costsDto: PCRSpendProfileLabourCostDto, init: BaseCostFields) {
