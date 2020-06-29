@@ -39,6 +39,7 @@ import { TaskListContent } from "@content/components/taskListContent";
 import { PCRAddPartnerAwardRateContent } from "@content/pages/pcrs/addPartner/awardRateStepContent";
 import { PCRAddPartnerOtherFundingContent } from "@content/pages/pcrs/addPartner/otherFundingStepContent";
 import { PcrSpendProfileOverheadDocumentContent } from "./pages/pcrSpendProfiles/overheadDocumentContainerContent";
+import { ClaimForecastContent } from "./pages/claims/claimForecastContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -62,6 +63,7 @@ export class Content extends ContentBase {
   public readonly claimsDashboard = new ClaimsDashboardContent(this);
   public readonly claimDocuments = new ClaimDocumentsContent(this);
   public readonly claimDetails = new ClaimDetailsContent(this);
+  public readonly claimForecast = new ClaimForecastContent(this);
   public readonly claimPrepare = new ClaimPrepareContent(this);
   public readonly claimPrepareSummary = new ClaimPrepareSummaryContent(this);
   public readonly claimReview = new ClaimReviewContent(this);

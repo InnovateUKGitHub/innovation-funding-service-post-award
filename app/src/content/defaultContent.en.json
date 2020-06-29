@@ -110,6 +110,12 @@
       "back-link": "Back to claims",
       "costs-and-grant-summary-title": "Summary"
     },
+    "claim-forecast": {
+      "back-link": "Back to claims documents",
+      "button-save-and-return": "Save and return to claims",
+      "button-continue-to-summary": "Continue to summary",
+      "overheads-costs": "Overheads costs: "
+    },
     "claim-prepare": {
       "title": "Costs to be claimed",
       "back-link": "Back to claims",
@@ -320,7 +326,9 @@
     "upload-instruction-claim-validation-form": "You can upload and store any documents relevant for this project. Any documents added to the project by Innovate UK will also be visible here.",
     "interim-claim-guidance-fc": "This project is claiming monthly. Add all costs and evidence for last month, then contact your monitoring officer. They will review it and send to Innovate UK so that you will be paid.",
     "interim-claim-guidance-mo": "You will be contacted by each partner when their monthly claim is ready for you to review.",
-    "interim-claim-review-guidance-mo": "Once you have reviewed all costs and evidence for last month, email grants_service@innovateuk.ukri.org to start the final review of the monthly claim.\n\nContact the partner directly to query the claim."
+    "interim-claim-review-guidance-mo": "Once you have reviewed all costs and evidence for last month, email grants_service@innovateuk.ukri.org to start the final review of the monthly claim.\n\nContact the partner directly to query the claim.",
+    "frequency-change-message": "Your project asked us to change the length of the remaining periods. You must make sure your forecast reflects your expected spend or your monitoring officer will not approve your claim.",
+    "last-chance-to-change-forecast": "This is your last chance to change the forecast for period {{periodId}}"
   },
   "claims-labels": {
     "open-section-title": "Open",
