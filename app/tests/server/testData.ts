@@ -53,6 +53,7 @@ export class TestData {
       Id: "Project" + seed,
       Acc_ProjectTitle__c: "Project " + seed,
       Acc_CompetitionType__c: "SBRI",
+      Acc_CompetitionId__r: { Acc_TypeofAid__c: "De minimis aid" },
       Acc_StartDate__c: "",
       Acc_EndDate__c: "",
       Acc_ClaimFrequency__c: "Quarterly",
