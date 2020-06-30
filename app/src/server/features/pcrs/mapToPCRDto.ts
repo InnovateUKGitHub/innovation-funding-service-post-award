@@ -12,7 +12,8 @@ import {
   PCRItemForTimeExtensionDto,
   PCRItemTypeDto,
   PCRStandardItemDto,
-  ProjectChangeRequestStandardItemTypes
+  ProjectChangeRequestStandardItemTypes,
+  TypeOfAid
 } from "@framework/dtos";
 import {
   PCRContactRole,
@@ -154,6 +155,7 @@ const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName
   projectRoleLabel: pcr.projectRoleLabel || null,
   partnerTypeLabel: pcr.partnerTypeLabel || null,
   isCommercialWork: pcr.isCommercialWork === false || pcr.isCommercialWork === true ? pcr.isCommercialWork : null,
+  typeOfAid: pcr.typeOfAid,
   spendProfile: { costs: [], pcrItemId: pcr.id },
   projectLocation: pcr.projectLocation || PCRProjectLocation.Unknown,
   projectLocationLabel: pcr.projectLocationLabel || null,

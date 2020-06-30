@@ -9,7 +9,7 @@ import {
   IPicklistEntry,
   IRepositories,
   MonitoringReportStatus,
-  PCRStatus
+  PCRStatus, TypeOfAid
 } from "@framework/types";
 import { TestFileWrapper } from "./testData";
 import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
@@ -516,6 +516,7 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
         id: itemId,
         pcrId: headerId,
         partnerId: "",
+        typeOfAid: TypeOfAid.Unknown,
         accountName: "",
         statusName: "",
         projectEndDate: new Date(),

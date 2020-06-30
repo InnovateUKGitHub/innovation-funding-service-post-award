@@ -8,6 +8,7 @@ import {
   PCRProjectRole,
   PCRStatus
 } from "@framework/constants";
+import { TypeOfAid } from "@framework/dtos";
 
 export interface ProjectChangeRequestForCreateEntity {
   projectId: string;
@@ -80,6 +81,7 @@ export interface ProjectChangeRequestItemForCreateEntity {
 
 export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItemForCreateEntity {
   id: string;
+  typeOfAid: TypeOfAid;
   statusName: string;
   pcrId: string;
   shortName: string;

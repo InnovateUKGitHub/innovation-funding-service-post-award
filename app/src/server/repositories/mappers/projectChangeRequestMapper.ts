@@ -14,6 +14,7 @@ import {
   PCRProjectRole,
   PCRStatus
 } from "@framework/constants";
+import { TypeOfAid } from "@framework/dtos";
 
 export const mapToPCRStatus = ((status: string) => {
   switch (status) {
@@ -94,6 +95,17 @@ export class PcrContactRoleMapper {
     }
   });
 }
+
+const mapTypeOfAidToEnum = (typeOfAid: string): TypeOfAid => {
+  switch (typeOfAid) {
+    case "State aid":
+      return TypeOfAid.StateAid;
+    case "De minimis aid":
+      return TypeOfAid.DeMinimisAid;
+    default:
+      return TypeOfAid.Unknown;
+  }
+};
 
 export class PcrPartnerTypeMapper {
   private partnerTypes = {
@@ -210,6 +222,7 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       recordTypeId: pcrItem.RecordTypeId,
       status: this.mapItemStatus(pcrItem.Acc_MarkedasComplete__c),
       statusName: pcrItem.MarkedAsCompleteName,
+      typeOfAid: mapTypeOfAidToEnum(pcrItem.Acc_RequestHeader__r.Acc_Project__r.Acc_CompetitionId__r.Acc_TypeofAid__c),
       publicDescription: pcrItem.Acc_NewPublicDescription__c,
       accountName: pcrItem.Acc_NewOrganisationName__c,
       projectDuration: pcrItem.Acc_NewProjectDuration__c,

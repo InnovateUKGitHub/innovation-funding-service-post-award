@@ -38,7 +38,6 @@ describe("mapToProjectDto", () => {
       description: "Expected description",
       projectNumber: "Expected project number",
       competitionType: "SBRI",
-      typeOfAid: TypeOfAid.DeMinimisAid,
       claimFrequency: ClaimFrequency.Quarterly,
       claimFrequencyName: ClaimFrequency[ClaimFrequency.Quarterly],
       periodId: 3,
@@ -85,7 +84,6 @@ describe("mapToProjectDto", () => {
       x.Acc_CurrentPeriodNumber__c = expected.periodId;
       x.Acc_Duration__c = expected.durationInMonths;
       x.Acc_LeadParticipantName__c = expected.leadPartnerName;
-      x.Acc_CompetitionId__r = { Acc_TypeofAid__c: "De minimis aid" };
     });
 
     const period = createPeriod(context, project, periodStartDate, periodEndDate);
