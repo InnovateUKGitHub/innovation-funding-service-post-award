@@ -193,11 +193,11 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     const result: ACC.NavigationCardMessage[] = [];
     if (project.roles & ProjectRole.ProjectManager) {
       if (project.pcrsQueried > 0) {
-        result.push({ message: <ACC.Content value={x => x.projectOverview.messages.pcrQueried()} /> });
+        result.push({ message: <ACC.Content value={x => x.projectOverview.messages.pcrQueried()} />, qa:"message-pcrQueried"});
       }
     }
     if (project.roles & ProjectRole.MonitoringOfficer) {
-      result.push({ message: <ACC.Content value={x => x.projectOverview.messages.pcrsToReview(project.pcrsToReview)} /> });
+      result.push({ message: <ACC.Content value={x => x.projectOverview.messages.pcrsToReview(project.pcrsToReview)} />, qa:"message-pcrsToReview" });
     }
     return result;
   }
@@ -207,7 +207,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
 
     if (partner && (partner.roles & ProjectRole.FinancialContact)) {
       if (partner.newForecastNeeded) {
-        result.push({ message: <ACC.Content value={x => x.projectOverview.messages.checkForecast()} />});
+        result.push({ message: <ACC.Content value={x => x.projectOverview.messages.checkForecast()} />, qa: "message-newForecastNeeded"});
       }
     }
 
@@ -220,27 +220,27 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     if (project.roles & ProjectRole.FinancialContact) {
       switch (partner.claimStatus) {
         case PartnerClaimStatus.NoClaimsDue:
-          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.noClaimDue()} /> });
+          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.noClaimDue()} />, qa: "message-NoClaimsDue"});
           break;
         case PartnerClaimStatus.ClaimDue:
-          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimDue()} /> });
+          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimDue()} />, qa: "message-ClaimDue"});
           break;
         case PartnerClaimStatus.ClaimsOverdue:
-          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimOverdue()} /> });
+          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimOverdue()} />, qa: "message-ClaimsOverdue"});
           break;
         case PartnerClaimStatus.ClaimQueried:
-          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimQueried()} /> });
+          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimQueried()} />, qa: "message-ClaimQueried"});
           break;
         case PartnerClaimStatus.ClaimSubmitted:
-          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimSubmitted()} /> });
+          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimSubmitted()} />, qa: "message-ClaimSubmitted"});
           break;
         case PartnerClaimStatus.IARRequired:
-          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.iarRequired()} /> });
+          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.iarRequired()} />, qa: "message-IARRequired"});
       }
     }
 
     if (project.roles & ProjectRole.MonitoringOfficer) {
-      result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimsToReview(project.claimsToReview)} /> });
+      result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimsToReview(project.claimsToReview)} />, qa: "message-claimsToReview"});
     }
 
     return result;
