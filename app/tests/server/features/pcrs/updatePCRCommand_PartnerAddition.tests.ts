@@ -62,6 +62,7 @@ const createCompleteAcademicPcrItem: () => Partial<ProjectChangeRequestItemEntit
   organisationName: "Coventry University",
   awardRate: 39,
   hasOtherFunding: true,
+  tsbReference: "12345ABCDE",
 });
 
 // tslint:disable-next-line:no-big-function
@@ -117,6 +118,10 @@ describe("UpdatePCRCommand - Partner addition", () => {
     delete item.organisationName;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.organisationName = "Coventry University";
+    await expect(context.runCommand(command)).resolves.toBe(true);
+    delete item.tsbReference;
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    item.tsbReference = "12345ABCDE";
     await expect(context.runCommand(command)).resolves.toBe(true);
   });
 
@@ -277,6 +282,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     item.awardRate = 62;
     item.hasOtherFunding = true;
     item.isCommercialWork = true;
+    item.tsbReference = "54321EDCBA";
 
     const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
     await expect(await context.runCommand(command)).toBe(true);
@@ -307,6 +313,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     expect(updatedItem.awardRate).toEqual(62);
     expect(updatedItem.hasOtherFunding).toEqual(true);
     expect(updatedItem.isCommercialWork).toEqual(true);
+    expect(updatedItem.tsbReference).toEqual("54321EDCBA");
   });
   describe("Spend Profile", () => {
     it("should update pcr spend profiles", async () => {

@@ -108,6 +108,7 @@ export interface ISalesforcePCR {
   Acc_AwardRate__c: number|null;
   Acc_OtherFunding__c: boolean|null;
   Acc_CommercialWork__c: boolean|null;
+  Acc_TSBReference__c: string|null;
 
   // Virements related field
   Acc_GrantMovingOverFinancialYear__c: number| null;
@@ -190,6 +191,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "Acc_AwardRate__c",
     "Acc_OtherFunding__c",
     "Acc_CommercialWork__c",
+    "Acc_TSBReference__c",
     "Acc_GrantMovingOverFinancialYear__c",
   ];
 
@@ -270,6 +272,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Acc_Contact2EmailAddress__c: x.contact2Email,
       Acc_AwardRate__c: x.awardRate,
       Acc_OtherFunding__c: x.hasOtherFunding,
+      Acc_TSBReference__c: x.tsbReference,
       Acc_GrantMovingOverFinancialYear__c: x.grantMovingOverFinancialYear,
     })));
   }
