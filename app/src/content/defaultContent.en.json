@@ -296,6 +296,16 @@
       "organisation-type-info": "**Business** - a business based in the UK or overseas.\n\n **Research** - higher education and organisations registered with Je-S.\n\n **Research and technology organisation (RTO)** - organisations which solely promote and conduct collaborative research and innovation.\n\n **Public sector, charity or non Je-S registered research organisation** - a not-for-profit public sector body or charity working on innovation, not registered with Je-S.",
       "organisation-type-hint": "If the new partner's organisation type is not listed, contact your monitoring officer."
     },
+    "pcr-add-partner-state-aid-eligibility":{
+      "form-section-title-state-aid": "State aid eligibility",
+      "form-section-title-de-minimis": "De minimis aid eligibility",
+      "form-section-title-non-aid-funding": "Non-aid funding",
+      "section-title-template": "Template",
+      "section-title-upload-declaration": "Upload declaration form",
+      "guidance-state-aid": "If we decide to award this organisation funding they must be eligible to receive State aid at the point of the award. If they are found to be ineligible, we will withdraw our offer.",
+      "guidance-de-minimis": "The funding will be made as a de minimis grant. All organisations for a de minimis award must complete and upload a de minimis declaration. This states any and all de minimis awards (from any source of public funding) during the current and previous 2 fiscal years.\n\nIn order to minimise distortion of competition, the European Commission sets limits on how much assistance can be given without its prior approval, to organisations operating in a competitive market. There is a ceiling of €200,000 for all de minimis aid provided to any one organisation over a 3 fiscal year period.\n\nThe new organisation needs to declare any de minimis aid awarded to any other public funding body which requests it. They must also keep all documentation associated with the award for 10 years from the date the award is granted.",
+      "guidance-non-aid-funding": "This competition provides funding that is classed as non-aid. The new organisation should seek independent legal advice on what this means for them, before you complete this project change request.\n\n\n\nNon-aid is only granted to organisations which declare that they will not use the funding:\n\n\n\n*  in any way which gives them selective economic or commercial advantage\n\n*  in any other way which would <a href=\"https://ec.europa.eu/regional_policy/sources/conferences/state-aid/01_rdi2017_spatharis.pdf\" rel=\"noopener noreferrer\" target=\"_blank\" >determine the funding as State aid (opens in new window)</a> as defined by the European Commission \n\n\n\nIt is important to note that it is the activity they intend to perform in the project, which is assessed as eligible for non-aid, and not their organisation as an entity.\n\n\n\nIf they are found to be exploiting the outputs from this project commercially or economically to gain a selective advantage in the market, we will withdraw our offer."
+    },
     "pcr-add-partner-award-rate":{
       "form-section-title": "Funding level",
       "guidance": "The maximum the new organisation can enter is based on their size, type of organisation and research category of the project, based on the <a href=\"https://www.gov.uk/guidance/innovate-uk-funding-general-guidance-for-applicants#funding-rules\" rel=\"noopener noreferrer\" target=\"_blank\" >Innovate UK general guidance for grant applicants</a> (opens in new window). This will be reviewed by Innovate UK to ensure the project stays within the funding rules.\n\n\n\nThe percentage applied for must reflect other funding received."
@@ -541,7 +551,8 @@
     "commercial-work-label": "Will the new partner's work on the project be mostly commercial or economic?",
     "commercial-work-label-hint": "This question applies to all organisations, including research organisations that normally act non-economically.",
     "commercial-work-yes": "Yes",
-    "commercial-work-no": "No"
+    "commercial-work-no": "No",
+    "de-minimis-declaration-form": "De minimis declaration form"
   },
   "pcr-period-length-change-labels":{
     "current-period-length": "Current period length",

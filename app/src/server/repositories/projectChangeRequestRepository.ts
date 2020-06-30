@@ -48,6 +48,13 @@ export interface ISalesforcePCR {
   Acc_Reasoning__c: string;
   Acc_Project_Participant__c: string | null;
   Acc_Project__c: string;
+  Acc_RequestHeader__r: {
+    Acc_Project__r: {
+      Acc_CompetitionId__r: {
+        Acc_TypeofAid__c: string;
+      }
+    }
+  };
   // careful there is a typo in the salesforce setup
   // will probably change to Acc_MarkedAsComplete__c in the future!!
   Acc_MarkedasComplete__c: string;
@@ -134,6 +141,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
     "RecordTypeId",
     "Acc_Project_Participant__c",
     "Acc_Project__c",
+    "Acc_RequestHeader__r.Acc_Project__r.Acc_CompetitionId__r.Acc_TypeofAid__c",
     "Acc_NewOrganisationName__c",
     "Acc_NewProjectSummary__c",
     "Acc_NewPublicDescription__c",
