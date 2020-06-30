@@ -172,6 +172,7 @@ const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName
   contact2Email: pcr.contact2Email || null,
   awardRate: (!!pcr.awardRate || pcr.awardRate === 0) ? pcr.awardRate : null,
   hasOtherFunding: pcr.hasOtherFunding === false || pcr.hasOtherFunding === true ? pcr.hasOtherFunding : null,
+  tsbReference: pcr.tsbReference || null,
   type
 });
 
