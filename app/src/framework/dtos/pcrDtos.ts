@@ -150,6 +150,7 @@ export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   contact2Email: string | null;
   awardRate: number | null;
   hasOtherFunding: boolean | null;
+  tsbReference: string | null;
 }
 
 export interface PCRItemTypeDto {
