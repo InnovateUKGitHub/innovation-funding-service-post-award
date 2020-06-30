@@ -229,6 +229,7 @@ export class ProjectChangeRequestStore extends StoreBase {
             pcrItemId: baseFields.id,
             costs: []
           },
+          tsbReference: null,
           projectLocation: PCRProjectLocation.Unknown,
           projectLocationLabel: null,
           projectCity: "",

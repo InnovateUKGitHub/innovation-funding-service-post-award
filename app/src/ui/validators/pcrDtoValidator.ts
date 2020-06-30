@@ -527,6 +527,11 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     () => this.requiredIfComplete(this.model.hasOtherFunding, "Select other funding option"),
     () => this.hasPermissionToEdit(this.model.awardRate, this.original && this.original.awardRate, "Other funding cannot be changed"),
   );
+
+  tsbReference = Validation.all(this,
+    () => this.model.organisationType === PCROrganisationType.Academic ? this.requiredIfComplete(this.model.tsbReference, "Enter the TSB reference") : Validation.valid(this),
+    () => this.hasPermissionToEdit(this.model.tsbReference, this.original && this.original.tsbReference, "TSB reference cannot be changed"),
+  );
 }
 
 export class PCROldPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForPartnerAdditionDto> {
