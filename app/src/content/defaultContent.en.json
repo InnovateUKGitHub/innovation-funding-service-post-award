@@ -269,7 +269,10 @@
       "section-title-cost": "{{costCategoryName}} cost",
       "guidance-title": "{{costCategoryName}} costs guidance",
       "back-link": "Back to {{costCategoryName, lowercase}} costs",
-      "button-submit": "Save and return to {{costCategoryName, lowercase}} costs"
+      "button-submit": "Save and return to {{costCategoryName, lowercase}} costs",
+      "overheads": {
+        "button-submit": "Save and return to summary"
+      }
     },
     "pcr-spend-profile-overhead-documents": {
       "title": "Add partner",
