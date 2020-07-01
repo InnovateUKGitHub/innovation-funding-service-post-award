@@ -66,8 +66,8 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
       >
         <ACC.Section qa="partner-name">
           <ACC.Renderers.AriaLive>
-            <ACC.ValidationMessage messageType="info" messageContent={x => x.claimForecast.messages.lastChanceToChangeForecast(combined.project.periodId)} />
             {combined.partner.newForecastNeeded && <ACC.ValidationMessage messageType="info" messageContent={x => x.claimForecast.messages.frequencyChangeMessage()} qa="period-change-warning" />}
+            <ACC.ValidationMessage messageType="info" messageContent={x => x.claimForecast.messages.lastChanceToChangeForecast(combined.project.periodId)} />
           </ACC.Renderers.AriaLive>
           <ACC.Forecasts.Warning {...combined} editor={editor} />
           {this.renderOverheadsRate(combined.partner.overheadRate)}
