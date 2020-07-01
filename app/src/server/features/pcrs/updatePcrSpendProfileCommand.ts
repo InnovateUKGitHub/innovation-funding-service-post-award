@@ -9,7 +9,7 @@ import {
   PCRSpendProfileAcademicCostDto,
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
-  PcrSpendProfileDto,
+  PcrSpendProfileDto, PCRSpendProfileFundingDto,
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
   PCRSpendProfileOtherCostsDto,
@@ -39,7 +39,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer);
   }
 
-  private getBaseCostEntity(costsDto: PCRSpendProfileCostDto): BaseCostFields {
+  private getBaseCostEntity(costsDto: PCRSpendProfileCostDto | PCRSpendProfileFundingDto): BaseCostFields {
     return {
       id: costsDto.id,
       pcrItemId: this.pcrItemId,
