@@ -2,8 +2,9 @@ import React from "react";
 import { PCRItemForPartnerAdditionDto, TypeOfAid } from "@framework/dtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCROrganisationType, PCRProjectRole } from "@framework/constants";
+import { PCRItemType, PCROrganisationType, PCRProjectRole } from "@framework/constants";
 import {
+  AcademicCostsStep,
   AcademicOrganisationStep,
   AddPartnerSummary,
   CompaniesHouseStep,
@@ -13,7 +14,8 @@ import {
   OrganisationDetailsStep,
   ProjectLocationStep,
   ProjectManagerDetailsStep,
-  RoleAndOrganisationStep, StateAidEligibilityStep
+  RoleAndOrganisationStep,
+  StateAidEligibilityStep
 } from "@ui/containers/pcrs/addPartner";
 import { SpendProfileStep } from "@ui/containers/pcrs/addPartner/spendProfileStep";
 import { AwardRateStep } from "@ui/containers/pcrs/addPartner/awardRateStep";
@@ -24,6 +26,7 @@ import { DeMinimisStep } from "@ui/containers/pcrs/addPartner/deMinimisStep";
 export type addPartnerStepNames =
   "roleAndOrganisationStep"
   | "aidEligibilityStep"
+  | "academicCostsStep"
   | "academicOrganisationStep"
   | "companiesHouseStep"
   | "organisationDetailsStep"
@@ -125,6 +128,17 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
       stepNumber: 9,
       validation: val => val.files,
       stepRender: JeSStep
+    });
+    workflow.steps.push({
+      stepName: "academicCostsStep",
+      displayName: "Academic costs",
+      stepNumber: 10,
+      validation: val => {
+        const addPartnerValidation = val.pcr.items.results.find(x =>
+          x.model.type === PCRItemType.PartnerAddition) as PCRPartnerAdditionItemDtoValidator;
+        return addPartnerValidation.spendProfile.results[0];
+      },
+      stepRender: AcademicCostsStep
     });
   } else {
     workflow.steps.push({
