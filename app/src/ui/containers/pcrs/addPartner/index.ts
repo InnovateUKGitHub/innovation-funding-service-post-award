@@ -1,3 +1,4 @@
+export * from "./academicCostsStep";
 export * from "./academicOrganisationStep";
 export * from "./addPartnerSummary";
 export * from "./aidEligibilityStep";
