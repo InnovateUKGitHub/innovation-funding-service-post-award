@@ -3,6 +3,7 @@ import { PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@f
 
 export interface PcrSpendProfileDto {
   costs: PCRSpendProfileCostDto[];
+  funds: PCRSpendProfileFundingDto[];
   pcrItemId: string;
 }
 
@@ -16,12 +17,19 @@ export type PCRSpendProfileCostDto =
     | PCRSpendProfileTravelAndSubsCostDto
     | PCRSpendProfileOtherCostsDto;
 
+export type PCRSpendProfileFundingDto = PCRSpendProfileOtherFundingDto;
+
 interface PCRSpendProfileBaseCostDto<T extends CostCategoryType> {
   id: string;
   costCategory: T;
   costCategoryId: string;
   description: string | null;
   value: number | null;
+}
+
+export interface PCRSpendProfileOtherFundingDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Other_Funding> {
+  costCategory: CostCategoryType.Other_Funding;
+  dateSecured: Date | null;
 }
 
 export interface PCRSpendProfileAcademicCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Academic> {

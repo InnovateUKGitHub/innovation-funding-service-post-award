@@ -156,7 +156,7 @@ const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName
   partnerTypeLabel: pcr.partnerTypeLabel || null,
   isCommercialWork: pcr.isCommercialWork === false || pcr.isCommercialWork === true ? pcr.isCommercialWork : null,
   typeOfAid: pcr.typeOfAid,
-  spendProfile: { costs: [], pcrItemId: pcr.id },
+  spendProfile: { costs: [], funds: [], pcrItemId: pcr.id },
   projectLocation: pcr.projectLocation || PCRProjectLocation.Unknown,
   projectLocationLabel: pcr.projectLocationLabel || null,
   projectCity: pcr.projectCity || null,

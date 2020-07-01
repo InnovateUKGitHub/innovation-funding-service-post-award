@@ -25,8 +25,7 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { GetCostCategoriesQuery } from "@server/features/claims";
 import { CostCategoryType } from "@framework/entities";
 import {
-  PCRSpendProfileCapitalUsageCostDto,
-  PCRSpendProfileCostDto,
+  PCRSpendProfileCapitalUsageCostDto, PCRSpendProfileCostDto,
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
   PCRSpendProfileOtherCostsDto,
@@ -75,7 +74,7 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
     return dto;
   }
 
-  private updateCost(cost: PCRSpendProfileCostDto,  costCategoryDto: CostCategoryDto, body: IFormBody, button: IFormButton) {
+  private updateCost(cost: PCRSpendProfileCostDto, costCategoryDto: CostCategoryDto, body: IFormBody, button: IFormButton) {
     switch (costCategoryDto.type) {
       case CostCategoryType.Labour: return this.updateLabourCost(cost as PCRSpendProfileLabourCostDto, body);
       case CostCategoryType.Overheads: return this.updateOverheadsCost(cost as PCRSpendProfileOverheadsCostDto, body, button);
