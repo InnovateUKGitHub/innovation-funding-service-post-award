@@ -313,6 +313,13 @@
       "form-section-title": "Funding level",
       "guidance": "The maximum the new organisation can enter is based on their size, type of organisation and research category of the project, based on the <a href=\"https://www.gov.uk/guidance/innovate-uk-funding-general-guidance-for-applicants#funding-rules\" rel=\"noopener noreferrer\" target=\"_blank\" >Innovate UK general guidance for grant applicants</a> (opens in new window). This will be reviewed by Innovate UK to ensure the project stays within the funding rules.\n\n\n\nThe percentage applied for must reflect other funding received."
     },
+    "pcr-add-partner-academic-costs":{
+      "form-section-title": "Project costs for new partner",
+      "guidance": "Enter the figures from the summary of resources section of the Je-S form.",
+      "category-heading": "Category",
+      "total-costs": "Total costs (£)",
+      "cost-heading": "Cost (£)"
+    },
     "pcr-add-partner-other-funding":{
       "form-section-title": "Other public sector funding?",
       "guidance": "Is the new partner receiving any other public sector funding for this project? This is important as other public sector support counts as part of the funding they can receive.",
@@ -548,14 +555,14 @@
     "return-to-summary-button": "Save and return to summary"
   },
   "pcr-add-partner-labels":{
-    "role-heading": "Project role",
-    "organisation-heading": "Organisation type",
     "commercial-work-heading": "Project outputs",
     "commercial-work-label": "Will the new partner's work on the project be mostly commercial or economic?",
     "commercial-work-label-hint": "This question applies to all organisations, including research organisations that normally act non-economically.",
-    "commercial-work-yes": "Yes",
     "commercial-work-no": "No",
-    "de-minimis-declaration-form": "De minimis declaration form"
+    "commercial-work-yes": "Yes",
+    "de-minimis-declaration-form": "De minimis declaration form",
+    "organisation-heading": "Organisation type",
+    "role-heading": "Project role"
   },
   "pcr-period-length-change-labels":{
     "current-period-length": "Current period length",
