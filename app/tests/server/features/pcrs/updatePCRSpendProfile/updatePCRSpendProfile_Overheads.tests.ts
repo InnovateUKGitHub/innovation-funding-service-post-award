@@ -135,6 +135,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       const item = context.testData.createPCRItem(projectChangeRequest, recordType, {
         status: PCRItemStatus.Incomplete,
         projectRole: PCRProjectRole.Collaborator,
+        isCommercialWork: true,
         partnerType: PCRPartnerType.Business
       });
       const costCategory = context.testData.createCostCategory({name: "Overheads", type: CostCategoryType.Overheads});
