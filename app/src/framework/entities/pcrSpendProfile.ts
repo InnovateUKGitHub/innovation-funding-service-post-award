@@ -6,6 +6,8 @@ export interface PcrSpendProfileEntityForCreate {
   value: number | null;
   description: string | null;
 
+  dateOtherFundingSecured?: string;
+
   // labour
   grossCostOfRole?: number;
   ratePerDay?: number;

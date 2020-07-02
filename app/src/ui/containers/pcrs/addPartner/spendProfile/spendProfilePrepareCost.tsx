@@ -14,8 +14,7 @@ import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, IStores, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import {
-  PCRSpendProfileCapitalUsageCostDto,
-  PCRSpendProfileCostDto,
+  PCRSpendProfileCapitalUsageCostDto, PCRSpendProfileCostDto,
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
   PCRSpendProfileOtherCostsDto,

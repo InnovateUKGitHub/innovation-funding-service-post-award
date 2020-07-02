@@ -7,7 +7,7 @@ export interface IClock {
   parse(value: string | null | undefined, format: string): Date | null;
   dateTime(value: Date): DateTime;
   dateTime(value: string, format: string): DateTime;
-  parseOptionalSalesforceDate(value: string): Date | null;
+  parseOptionalSalesforceDate(value: string | null): Date | null;
   parseRequiredSalesforceDate(value: string): Date;
   parseOptionalSalesforceDateTime(value: string): Date | null;
   parseRequiredSalesforceDateTime(value: string): Date;

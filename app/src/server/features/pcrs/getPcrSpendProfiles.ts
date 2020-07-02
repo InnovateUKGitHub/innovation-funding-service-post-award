@@ -3,19 +3,19 @@ import { IContext, PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate 
 import { CostCategoryType, PcrSpendProfileEntity } from "@framework/entities";
 import { GetCostCategoriesQuery } from "@server/features/claims";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { isNumber } from "@framework/util";
 import {
   PCRSpendProfileAcademicCostDto,
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
-  PcrSpendProfileDto,
+  PcrSpendProfileDto, PCRSpendProfileFundingDto,
   PCRSpendProfileLabourCostDto,
-  PCRSpendProfileMaterialsCostDto,
-  PCRSpendProfileOtherCostsDto,
+  PCRSpendProfileMaterialsCostDto, PCRSpendProfileOtherCostsDto,
+  PCRSpendProfileOtherFundingDto,
   PCRSpendProfileOverheadsCostDto,
   PCRSpendProfileSubcontractingCostDto,
-  PCRSpendProfileTravelAndSubsCostDto,
+  PCRSpendProfileTravelAndSubsCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
-import { isNumber } from "@framework/util";
 
 export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
   constructor(private readonly pcrItemId: string) {
@@ -31,7 +31,12 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
         // For each cost category filter and map costs
         .map(x => this.mapCosts(x, spendProfiles.filter(s => s.costCategoryId === x.id)))
         // Flatten array
-        .reduce((acc, x) => acc.concat(x), [])
+        .reduce((acc, x) => acc.concat(x), []),
+      funds: costCategories
+        // For each cost category filter and map funds
+        .map(x => this.mapFunds(context, x, spendProfiles.filter(s => s.costCategoryId === x.id)))
+        // Flatten array
+        .reduce((acc, x) => acc.concat(x), []),
     };
   }
 
@@ -44,8 +49,16 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
       case CostCategoryType.Subcontracting: return this.mapSubcontractingCosts(spendProfiles, costCategory.type);
       case CostCategoryType.Capital_Usage: return this.mapCapitalUsageCosts(spendProfiles, costCategory.type);
       case CostCategoryType.Travel_And_Subsistence: return this.mapTravelAndSubsCosts(spendProfiles, costCategory.type);
-      default: return this.mapOtherCosts(spendProfiles, CostCategoryType.Other_Costs);
+      case CostCategoryType.Other_Costs: return this.mapOtherCosts(spendProfiles, costCategory.type);
+      default: return [];
     }
+  }
+
+  private mapFunds(context: IContext, costCategory: CostCategoryDto, spendProfiles: PcrSpendProfileEntity[]): PCRSpendProfileFundingDto[] {
+    if (costCategory.type === CostCategoryType.Other_Funding) {
+      return this.mapOtherFunding(context, spendProfiles, costCategory.type);
+    }
+    return [];
   }
 
   private mapBaseCostFields(spendProfile: PcrSpendProfileEntity) {
@@ -55,6 +68,14 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
       value: isNumber(spendProfile.value) ? spendProfile.value : null,
       description: spendProfile.description || null,
     };
+  }
+
+  private mapOtherFunding(context: IContext, spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Other_Funding): PCRSpendProfileOtherFundingDto[] {
+    return spendProfiles.map(x => ({
+      ...this.mapBaseCostFields(x),
+      costCategory,
+      dateSecured: context.clock.parseOptionalSalesforceDate(x.dateOtherFundingSecured || null)
+    }));
   }
 
   private mapAcademicCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Academic): PCRSpendProfileAcademicCostDto[] {

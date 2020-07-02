@@ -31,7 +31,7 @@ export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBa
 
     const addPartnerItem = items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
     if (!!addPartnerItem) {
-      addPartnerItem.spendProfile = { costs: [], pcrItemId: addPartnerItem.id };
+      addPartnerItem.spendProfile = { costs: [], funds: [], pcrItemId: addPartnerItem.id };
     }
 
     const dto: Partial<PCRDto> = {

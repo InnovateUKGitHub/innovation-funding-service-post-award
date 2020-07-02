@@ -15,9 +15,9 @@ import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
-import { PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import classNames from "classnames";
+import { PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
 
 export interface PcrSpendProfileCostSummaryParams {
   projectId: string;

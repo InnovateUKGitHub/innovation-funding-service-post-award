@@ -4,10 +4,10 @@ import {
   PCRSpendProfileAcademicCostDto,
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
-  PcrSpendProfileDto,
+  PcrSpendProfileDto, PCRSpendProfileFundingDto,
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
-  PCRSpendProfileOtherCostsDto,
+  PCRSpendProfileOtherCostsDto, PCRSpendProfileOtherFundingDto,
   PCRSpendProfileOverheadsCostDto,
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto,
@@ -38,6 +38,13 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
     }
   }
 
+  private getFundsValidator(fund: PCRSpendProfileFundingDto) {
+    if (fund.costCategory === CostCategoryType.Other_Funding) {
+      return new PCROtherFundingDtoValidator(fund, this.showValidationErrors);
+    }
+    return new Results(fund, this.showValidationErrors);
+  }
+
   public costs = Validation.child(this, this.model.costs,
     cost => this.getCostValidator(cost),
     // There should be at most one overhead cost item (representing the overheads to the total labour costs)
@@ -54,9 +61,11 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
                 "Cannot have more than academic cost item of a given category");
           });
     });
+
+  public funds = Validation.optionalChild(this, this.model.funds, fund => this.getFundsValidator(fund));
 }
 
-export class PCRBaseCostDtoValidator<T extends PCRSpendProfileCostDto> extends Results<T> {
+export class PCRBaseCostDtoValidator<T extends PCRSpendProfileCostDto | PCRSpendProfileFundingDto> extends Results<T> {
   constructor(
     model: T,
     showValidationErrors: boolean,
@@ -74,6 +83,10 @@ export type PCRSpendProfileCostDtoValidator =
     | PCRCapitalUsageCostDtoValidator
     | PCRTravelAndSubsCostDtoValidator
     | PCROtherCostsDtoValidator;
+
+export class PCROtherFundingDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileOtherFundingDto> {
+  // TODO
+}
 
 export class PCRAcademicCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileAcademicCostDto> {
   public value = Validation.isCurrency(this, this.model.value, "Value must be a number");
