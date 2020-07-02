@@ -25,7 +25,7 @@ export class SalesforceDocumentMapper extends SalesforceBaseMapper<ISalesforceDo
 
 export class DocumentDescriptionMapper {
   // These are what the documents get saved as in Salesforce so these names must not change
-  private types = {
+  private readonly types = {
     IAR: "IAR",
     Evidence: "Evidence",
     ClaimValidationForm: "ClaimValidationForm",

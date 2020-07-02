@@ -13,10 +13,10 @@ import { Results } from "@ui/validation";
 
 export class ForecastDetailsStore extends StoreBase {
   constructor(
-    private claimsStore: ClaimsStore,
-    private claimDetailsStore: ClaimsDetailsStore,
-    private golCostsStore: ForecastGolCostsStore,
-    private partnersStore: PartnersStore,
+    private readonly claimsStore: ClaimsStore,
+    private readonly claimDetailsStore: ClaimsDetailsStore,
+    private readonly golCostsStore: ForecastGolCostsStore,
+    private readonly partnersStore: PartnersStore,
     getState: () => RootState, queue: (action: RootActionsOrThunk) => void
   ) {
     super(getState, queue);

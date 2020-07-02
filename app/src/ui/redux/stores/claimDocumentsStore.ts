@@ -10,7 +10,7 @@ import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 export class ClaimDocumentsStore extends DocumentsStoreBase {
 
-  constructor(private partnerStore: PartnersStore, getState: () => RootState, queue: (action: RootActionsOrThunk) => void) {
+  constructor(private readonly partnerStore: PartnersStore, getState: () => RootState, queue: (action: RootActionsOrThunk) => void) {
     super(getState, queue);
   }
 

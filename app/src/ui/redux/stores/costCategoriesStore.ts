@@ -7,7 +7,7 @@ import { RootActionsOrThunk } from "../actions/root";
 import { PartnersStore } from "./partnersStore";
 
 export class CostCategoriesStore extends StoreBase {
-  constructor(private partnerStore: PartnersStore, getState: () => RootState, queue: (action: RootActionsOrThunk) => void) {
+  constructor(private readonly partnerStore: PartnersStore, getState: () => RootState, queue: (action: RootActionsOrThunk) => void) {
     super(getState, queue);
   }
 

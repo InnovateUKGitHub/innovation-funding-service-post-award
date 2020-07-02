@@ -330,7 +330,7 @@ export class ForecastTable extends React.Component<Props> {
     return [<tr id={warningId} key="footer1" className={classNames("govuk-table__row", "govuk-body-s", { "table__row--error": warning })}>{cells}</tr>];
   }
 
-  private renderTableFooterCell = (total: number, key: number, className?: string) => (
+  private readonly renderTableFooterCell = (total: number, key: number, className?: string) => (
     <td key={key} className={`govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular ${className}`}>
       <Currency value={total} />
     </td>

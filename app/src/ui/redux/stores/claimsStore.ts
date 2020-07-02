@@ -12,7 +12,7 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ClaimStatus } from "@framework/constants";
 
 export class ClaimsStore extends StoreBase {
-  constructor(private costsSummariesStore: CostSummariesStore, private costCategoriesStore: CostCategoriesStore, private claimDocumentsStore: ClaimDocumentsStore, getState: () => RootState, queue: (action: RootActionsOrThunk) => void) {
+  constructor(private readonly costsSummariesStore: CostSummariesStore, private readonly  costCategoriesStore: CostCategoriesStore, private readonly claimDocumentsStore: ClaimDocumentsStore, getState: () => RootState, queue: (action: RootActionsOrThunk) => void) {
     super(getState, queue);
   }
 

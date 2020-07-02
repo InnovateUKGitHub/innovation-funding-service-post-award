@@ -53,7 +53,7 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
     return true;
   }
 
-  private participantVisibleStatus: ClaimStatus[] = [
+  private readonly participantVisibleStatus: ClaimStatus[] = [
     ClaimStatus.DRAFT,
     ClaimStatus.MO_QUERIED,
     ClaimStatus.SUBMITTED,

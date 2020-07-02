@@ -22,7 +22,7 @@ import { PCRItemStatus, PCRParticipantSize, PCRStatus } from "@framework/constan
 import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
 
 export class TestData {
-  constructor(private repositories: ITestRepositories, private getCurrentUser: () => IClientUser) {
+  constructor(private readonly repositories: ITestRepositories, private readonly getCurrentUser: () => IClientUser) {
 
   }
 

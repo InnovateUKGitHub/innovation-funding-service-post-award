@@ -3,7 +3,7 @@ import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { PCRStatus } from "@framework/constants";
 
 export class DeleteProjectChangeRequestCommand extends CommandBase<boolean> {
-  constructor(private projectId: string, private pcrId: string) {
+  constructor(private readonly projectId: string, private readonly pcrId: string) {
     super();
   }
 

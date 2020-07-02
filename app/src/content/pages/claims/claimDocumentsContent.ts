@@ -6,7 +6,7 @@ import { DocumentMessages } from "@content/messages/documentMessages";
 import { DocumentsContent } from "@content/components/documentsContent";
 
 export class ClaimDocumentsContent extends ContentPageBase {
-  constructor(private content: Content) {
+  constructor(private readonly content: Content) {
     super(content, "claim-documents");
   }
   public readonly backLink = () => this.getContent("back-link");

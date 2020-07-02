@@ -3,7 +3,7 @@ import { Content } from "../../../content";
 import { PCRItem } from "../pcrItem";
 
 export class PCRAddPartnerAcademicCostsContent extends ContentPageBase {
-  constructor(private content: Content) {
+  constructor(private readonly content: Content) {
     super(content, "pcr-add-partner-academic-costs");
   }
 

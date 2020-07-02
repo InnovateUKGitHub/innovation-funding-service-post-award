@@ -43,7 +43,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.documents, x.claim, x.documentDescriptions)} />;
   }
 
-  private allowedDocuments = [
+  private readonly allowedDocuments = [
     DocumentDescription.IAR,
     DocumentDescription.StatementOfExpenditure,
     DocumentDescription.EndOfProjectSurvey,

@@ -6,7 +6,7 @@ import { ProjectChangeRequestEntity } from "@framework/entities";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
 
 export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
-  constructor(private projectId: string) {
+  constructor(private readonly projectId: string) {
     super();
   }
 

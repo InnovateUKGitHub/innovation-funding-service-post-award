@@ -6,7 +6,7 @@ import { DocumentLabels } from "@content/labels/documentLabels";
 import { DocumentMessages } from "@content/messages/documentMessages";
 
 export class PCRAddPartnerStateAidEligibilityContent extends ContentPageBase {
-  constructor(private content: Content) {
+  constructor(private readonly content: Content) {
     super(content, "pcr-add-partner-state-aid-eligibility");
   }
 

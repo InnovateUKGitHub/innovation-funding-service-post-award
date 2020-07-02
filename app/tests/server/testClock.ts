@@ -4,7 +4,7 @@ import { DateTime } from "luxon";
 export class TestClock implements IClock {
 
     private _now: Date | null;
-    private _inner: Clock;
+    private readonly _inner: Clock;
 
     constructor() {
         this._now = null;

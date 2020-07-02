@@ -10,7 +10,7 @@ export interface MarkdownOption { markdown?: boolean; }
 export interface DataOption { [key: string]: any; }
 
 export abstract class ContentBase {
-  constructor(private parent: ContentBase | null, private name: string | null) {
+  constructor(private readonly parent: ContentBase | null, private readonly name: string | null) {
   }
 
   protected getNameParts(): string[] {
