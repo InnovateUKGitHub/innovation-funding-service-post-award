@@ -37,11 +37,9 @@ export function conditionalLoad<T>(
       return load({user: state.user})
         .then((result) => {
           dispatch(dataLoadAction(id, store, LoadingStatus.Done, result));
-          return;
         })
         .catch(err => {
           dispatch(dataLoadAction(id, store, LoadingStatus.Failed, null, err));
-          return;
         });
     }
     else {
