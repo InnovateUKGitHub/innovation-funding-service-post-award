@@ -22,6 +22,7 @@ import { AwardRateStep } from "@ui/containers/pcrs/addPartner/awardRateStep";
 import { OtherFundingStep } from "@ui/containers/pcrs/addPartner/otherFundingStep";
 import { NonAidFundingStep } from "@ui/containers/pcrs/addPartner/nonAidFundingStep";
 import { DeMinimisStep } from "@ui/containers/pcrs/addPartner/deMinimisStep";
+import { CombinedResultValidator } from "@ui/validation";
 
 export type addPartnerStepNames =
   "roleAndOrganisationStep"
@@ -134,9 +135,13 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
       displayName: "Academic costs",
       stepNumber: 10,
       validation: val => {
-        const addPartnerValidation = val.pcr.items.results.find(x =>
+        const addPartnerValidator = val.pcr.items.results.find(x =>
           x.model.type === PCRItemType.PartnerAddition) as PCRPartnerAdditionItemDtoValidator;
-        return addPartnerValidation.spendProfile.results[0];
+
+        return new CombinedResultValidator(
+          addPartnerValidator.tsbReference,
+          ...addPartnerValidator.spendProfile.results[0].errors
+        );
       },
       stepRender: AcademicCostsStep
     });
