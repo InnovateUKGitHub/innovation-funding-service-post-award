@@ -43,9 +43,9 @@ interface ISimpleEditorDto {
 }
 
 class SimpleForm extends React.Component<{}, { original: ISimpleEditorDto, editor: ISimpleEditorDto }> {
-    private options: { value: React.ReactNode; id: string; }[];
-    private multiOptions: { value: React.ReactNode; id: string; }[];
-    private dropdownOptions: { value: string | number; id: string; }[];
+    private readonly options: { value: React.ReactNode; id: string; }[];
+    private readonly multiOptions: { value: React.ReactNode; id: string; }[];
+    private readonly dropdownOptions: { value: string | number; id: string; }[];
 
     constructor(props: {}) {
         super(props);

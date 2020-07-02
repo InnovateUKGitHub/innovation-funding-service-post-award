@@ -3,7 +3,7 @@ import { ISalesforceFinancialVirement } from "../financialVirementRepository";
 import { CostCategoryFinancialVirement, PartnerFinancialVirement } from "@framework/entities";
 
 export class SalesforceFinancialVirementMapper extends SalesforceBaseMapper<ISalesforceFinancialVirement[], PartnerFinancialVirement[]> {
-  constructor(private partnerLevelRecordType: string, private costCategoryLevelRecordType: string) {
+  constructor(private readonly partnerLevelRecordType: string, private readonly costCategoryLevelRecordType: string) {
     super();
   }
 

@@ -5,7 +5,7 @@ import { ClaimsLabels } from "@content/labels/claimsLabels";
 import { DocumentMessages } from "@content/messages/documentMessages";
 
 export class ClaimReviewContent extends ContentPageBase {
-  constructor(private content: Content) {
+  constructor(private readonly content: Content) {
     super(content, "claim-review");
   }
   public readonly messages = new ClaimMessages(this);

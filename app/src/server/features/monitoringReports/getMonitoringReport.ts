@@ -9,7 +9,7 @@ import { mapMonitoringReportStatus } from "./mapMonitoringReportStatus";
 export class GetMonitoringReportById extends QueryBase<MonitoringReportDto> {
   private readonly updatableStatuses: ISalesforceMonitoringReportStatus[] = ["New", "Draft", "IUK Queried"];
 
-  constructor(private projectId: string, private readonly id: string) {
+  constructor(private readonly projectId: string, private readonly id: string) {
     super();
   }
 

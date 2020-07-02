@@ -23,9 +23,9 @@ export interface IDocumentsRepository {
 
 export class DocumentsRepository implements IDocumentsRepository {
 
-  private contentVersionRepository: ContentVersionRepository;
-  private contentDocumentLinkRepository: ContentDocumentLinkRepository;
-  private contentDocumentRepository: ContentDocumentRepository;
+  private readonly contentVersionRepository: ContentVersionRepository;
+  private readonly contentDocumentLinkRepository: ContentDocumentLinkRepository;
+  private readonly contentDocumentRepository: ContentDocumentRepository;
 
   public constructor(
     getSalesforceConnection: () => Promise<Connection>,

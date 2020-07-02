@@ -11,7 +11,7 @@ import { MonitoringReportDtoValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class MonitoringReportsStore extends StoreBase {
-  constructor(private projectStore: ProjectsStore, protected getState: () => RootState, protected queue: (action: any) => void) {
+  constructor(private readonly projectStore: ProjectsStore, protected getState: () => RootState, protected queue: (action: any) => void) {
     super(getState, queue);
   }
 

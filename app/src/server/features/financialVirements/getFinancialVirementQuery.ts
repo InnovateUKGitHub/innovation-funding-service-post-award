@@ -10,7 +10,7 @@ import {
 import { sum } from "@framework/util";
 
 export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
-  constructor(private projectId: string, private pcrId: string, private pcrItemId: string) {
+  constructor(private readonly projectId: string, private readonly pcrId: string, private readonly pcrItemId: string) {
     super();
   }
 

@@ -2,7 +2,7 @@ import { ContentPageBase } from "../../contentPageBase";
 import { Content } from "../../content";
 
 export class PCRCreateContent extends ContentPageBase {
-  constructor(private content: Content) {
+  constructor(private readonly content: Content) {
     super(content, "pcr-create");
   }
 

@@ -3,7 +3,7 @@ import { IContext, IPicklistEntry } from "@framework/types";
 import { Option } from "@framework/dtos/option";
 
 export abstract class OptionsQueryBase<T extends (string | number)> extends QueryBase<Option<T>[]> {
-  protected constructor(private key: string) {
+  protected constructor(private readonly key: string) {
     super();
   }
 

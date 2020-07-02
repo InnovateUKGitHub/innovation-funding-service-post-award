@@ -14,7 +14,7 @@ import { PCRStatus } from "@framework/constants";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
-  constructor(private projectId: string, private projectChangeRequestId: string, private pcr: PCRDto) {
+  constructor(private readonly projectId: string, private readonly projectChangeRequestId: string, private readonly pcr: PCRDto) {
     super();
   }
 

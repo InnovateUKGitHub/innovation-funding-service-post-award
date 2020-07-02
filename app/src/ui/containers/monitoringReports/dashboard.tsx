@@ -29,8 +29,8 @@ interface Callbacks {
 }
 
 class DashboardComponent extends ContainerBase<Params&Props, Data, Callbacks> {
-  private editStatuses = [MonitoringReportStatus.New, MonitoringReportStatus.Draft, MonitoringReportStatus.Queried];
-  private currentStatuses = [MonitoringReportStatus.New, MonitoringReportStatus.Draft, MonitoringReportStatus.Queried, MonitoringReportStatus.AwaitingApproval];
+  private readonly editStatuses = [MonitoringReportStatus.New, MonitoringReportStatus.Draft, MonitoringReportStatus.Queried];
+  private readonly currentStatuses = [MonitoringReportStatus.New, MonitoringReportStatus.Draft, MonitoringReportStatus.Queried, MonitoringReportStatus.AwaitingApproval];
 
   render() {
     const combined = Pending.combine({

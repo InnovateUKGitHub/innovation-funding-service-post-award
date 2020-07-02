@@ -23,7 +23,7 @@ export class ClaimDtoValidator extends Results<ClaimDto>  {
         this.status = Validation.isTrue(this, !this.model.status || permittedStatus.indexOf(this.model.status) !== -1, `Set a valid status`);
     }
 
-    private iarRequiredStatus = new Map<ClaimStatus, ClaimStatus[]>([
+    private readonly iarRequiredStatus = new Map<ClaimStatus, ClaimStatus[]>([
       [
         ClaimStatus.DRAFT,
         [

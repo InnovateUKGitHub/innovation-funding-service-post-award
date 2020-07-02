@@ -4,7 +4,7 @@ import { IContext } from "@framework/types";
 const defaultContentMarker = new Date("1970/01/01");
 
 export class InitialiseContentCommand extends NonAuthorisedCommandBase<boolean> {
-  constructor(private loadCustom: boolean) {
+  constructor(private readonly loadCustom: boolean) {
     super();
   }
 
