@@ -29,9 +29,9 @@ export class ForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> 
 
     // infer period id from all the claim details we have
     const periodId = claims.reduce((prev, item) => item.periodId > prev ? item.periodId : prev, 0);
-    const totalGolCosts = golCosts.reduce((total, current) => total += current.value, 0);
-    const totalClaimCosts = claimDetails.filter(x => x.periodId <= periodId).reduce((total, current) => total += current.value, 0);
-    const totalForecastCosts = forecasts.filter(x => x.periodId > periodId).reduce((total, current) => total += current.value, 0);
+    const totalGolCosts = golCosts.reduce((total, current) => total + current.value, 0);
+    const totalClaimCosts = claimDetails.filter(x => x.periodId <= periodId).reduce((total, current) => total + current.value, 0);
+    const totalForecastCosts = forecasts.filter(x => x.periodId > periodId).reduce((total, current) => total + current.value, 0);
     const currentClaim = claims.find(x => x.periodId === periodId) || null;
     const finalClaim = claims.find(x => x.isFinalClaim) || null;
 
@@ -73,8 +73,8 @@ export class InitialForecastDetailsDtosValidator extends Results<ForecastDetails
     super(forecasts, showErrors);
 
     // infer period id from all the claim details we have
-    const totalGolCosts = golCosts.reduce((total, current) => total += current.value, 0);
-    const totalForecastCosts = forecasts.reduce((total, current) => total += current.value, 0);
+    const totalGolCosts = golCosts.reduce((total, current) => total + current.value, 0);
+    const totalForecastCosts = forecasts.reduce((total, current) => total + current.value, 0);
 
     if (this.items.isValid) {
       this.totalCosts = Validation.all(this,
