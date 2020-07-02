@@ -31,7 +31,7 @@ interface BaseCostFields {
 }
 
 export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
-  constructor(private projectId: string, private pcrItemId: string, private spendProfileDto: PcrSpendProfileDto) {
+  constructor(private readonly projectId: string, private readonly pcrItemId: string, private readonly spendProfileDto: PcrSpendProfileDto) {
     super();
   }
 

@@ -39,7 +39,7 @@ export abstract class WorkflowBase<TStepNames extends string, TStepProps extends
   private readonly steps: IStep<TStepNames, TStepProps, TVal>[];
   private readonly summary: ISummary<TSummaryProps, TVal>;
 
-  protected constructor(definition: IWorkflow<TStepNames, TStepProps, TSummaryProps, TVal>, private stepNumber: number | undefined) {
+  protected constructor(definition: IWorkflow<TStepNames, TStepProps, TSummaryProps, TVal>, private readonly stepNumber: number | undefined) {
     this.steps = definition.steps;
     this.steps.sort((a, b) => numberComparator(a.stepNumber, b.stepNumber));
     this.summary = definition.summary;

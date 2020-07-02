@@ -24,7 +24,7 @@ const fileEmptyErrorMessage = (file: IFileWrapper) => {
 export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
   public readonly description: Result;
   public readonly file: Result;
-  constructor(model: DocumentUploadDto, config: { maxFileSize: number, permittedFileTypes: string[] }, showValidationErrors: boolean, private error: FileTypeNotAllowedError | null) {
+  constructor(model: DocumentUploadDto, config: { maxFileSize: number, permittedFileTypes: string[] }, showValidationErrors: boolean, private readonly error: FileTypeNotAllowedError | null) {
     // file is deliberately not a private field so it isn't logged....
     // model is empty object for this reason
     super(null as any, showValidationErrors);
@@ -41,7 +41,7 @@ export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
 
 export class MultipleDocumentUpdloadDtoValidator extends Results<MultipleDocumentUploadDto> {
   public readonly description: Result;
-  constructor(model: MultipleDocumentUploadDto, config: { maxFileSize: number, maxUploadFileCount: number, permittedFileTypes: string[] }, filesRequired: boolean, showValidationErrors: boolean, private error: FileTypeNotAllowedError | null) {
+  constructor(model: MultipleDocumentUploadDto, config: { maxFileSize: number, maxUploadFileCount: number, permittedFileTypes: string[] }, filesRequired: boolean, showValidationErrors: boolean, private readonly error: FileTypeNotAllowedError | null) {
     // file is deliberately not a private field so it isn't logged....
     // model is empty object for this reason
     super(null as any, showValidationErrors);

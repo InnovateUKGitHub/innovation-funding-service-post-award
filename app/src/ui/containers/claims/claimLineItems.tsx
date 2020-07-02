@@ -133,7 +133,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     };
   }
 
-  private renderNavigationArrows = (costCategories: CostCategoryDto[], project: ProjectDto, partner: PartnerDto, claim: ClaimDto) => {
+  private readonly renderNavigationArrows = (costCategories: CostCategoryDto[], project: ProjectDto, partner: PartnerDto, claim: ClaimDto) => {
     const route = this.props.route.name === ReviewClaimLineItemsRoute.routeName ? ReviewClaimLineItemsRoute : ClaimLineItemsRoute;
     const arrowLinks = this.getLinks(costCategories, project, partner, claim, route);
     if (arrowLinks === null) return null;
@@ -141,7 +141,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     return <ACC.NavigationArrows nextLink={arrowLinks.nextLink} previousLink={arrowLinks.previousLink} />;
   }
 
-  private renderAdditionalInformation = (claimDetail: ClaimDetailsDto) => {
+  private readonly renderAdditionalInformation = (claimDetail: ClaimDetailsDto) => {
     if (!claimDetail.comments) return null;
     return (
       <ACC.Section title="Additional information" qa="additional-information">

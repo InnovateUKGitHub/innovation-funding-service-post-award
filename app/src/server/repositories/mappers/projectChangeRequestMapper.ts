@@ -51,7 +51,7 @@ export const mapToPCRStatus = ((status: string) => {
 });
 
 export class PcrProjectRoleMapper {
-  private roles = {
+  private readonly roles = {
     collaborator: "Collaborator",
     projectLead: "Lead",
   };
@@ -74,7 +74,7 @@ export class PcrProjectRoleMapper {
 }
 
 export class PcrContactRoleMapper {
-  private roles = {
+  private readonly roles = {
     projectManager: "Project Manager",
     financeContact: "Finance Contact",
   };
@@ -108,7 +108,7 @@ const mapTypeOfAidToEnum = (typeOfAid: string): TypeOfAid => {
 };
 
 export class PcrPartnerTypeMapper {
-  private partnerTypes = {
+  private readonly partnerTypes = {
     business: "Business",
     research: "Research",
     researchAndTechnology: "Research and Technology Organisation (RTO)",
@@ -137,7 +137,7 @@ export class PcrPartnerTypeMapper {
 }
 
 export class PcrParticipantSizeMapper {
-  private participantSizes = {
+  private readonly participantSizes = {
     academic: "Academic",
     small: "Small",
     medium: "Medium",
@@ -166,7 +166,7 @@ export class PcrParticipantSizeMapper {
 }
 
 export class PCRProjectLocationMapper {
-  private projectLocations = {
+  private readonly projectLocations = {
     insideTheUnitedKingdom: "Inside the United Kingdom",
     outsideTheUnitedKingdom: "Outside the United Kingdom",
   };

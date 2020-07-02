@@ -27,7 +27,7 @@ import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcr
 
 export class Server {
   private readonly app: express.Express;
-  private log: Logger;
+  private readonly log: Logger;
 
   constructor(private readonly port: number) {
     this.app = express();
@@ -89,12 +89,12 @@ export class Server {
     ]);
   }
 
-  private requestLogger = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  private readonly requestLogger = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     this.log.debug("request", req.url, req.method);
     next();
   }
 
-  private handleGetWithPlus = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  private readonly handleGetWithPlus = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     /// pluses don't get handled by router 5 when round tripped
     /// with js disabled form submits values with + rather then %20
     /// when js is enabled router 5 handles it

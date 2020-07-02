@@ -4,7 +4,7 @@ import { MonitoringReportsMessages } from "@content/messages/monitoringReportsMe
 import { MonitoringReportsLabels } from "@content/labels/monitoringReportsLabels";
 
 export class MonitoringReportsPeriodStepContent extends ContentPageBase {
-  constructor(private content: Content) {
+  constructor(private readonly content: Content) {
     super(content, "monitoring-reports-period-step");
   }
 

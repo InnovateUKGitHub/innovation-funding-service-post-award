@@ -3,7 +3,7 @@ import { Content } from "../../content";
 import { ClaimMessages } from "@content/messages/claimMessages";
 
 export class ClaimForecastContent extends ContentPageBase {
-  constructor(private content: Content) {
+  constructor(private readonly content: Content) {
     super(content, "claim-forecast");
   }
   public readonly messages = new ClaimMessages(this);

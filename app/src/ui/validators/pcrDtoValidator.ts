@@ -26,18 +26,18 @@ export class PCRDtoValidator extends Results<PCRDto> {
 
   constructor(
     model: PCRDto,
-    private role: ProjectRole,
+    private readonly role: ProjectRole,
     private readonly recordTypes: PCRItemTypeDto[],
     showValidationErrors: boolean,
     private readonly project: ProjectDto,
-    private featureFlags: IFeatureFlags,
-    private original?: PCRDto,
-    private partners?: PartnerDto[]
+    private readonly featureFlags: IFeatureFlags,
+    private readonly original?: PCRDto,
+    private readonly partners?: PartnerDto[]
   ) {
     super(model, showValidationErrors);
   }
 
-  private projectManagerPermittedStatus = new Map<PCRStatus, PCRStatus[]>([
+  private readonly projectManagerPermittedStatus = new Map<PCRStatus, PCRStatus[]>([
     [
       PCRStatus.Draft,
       [
@@ -61,9 +61,9 @@ export class PCRDtoValidator extends Results<PCRDto> {
     ]
   ]);
 
-  private projectManagerCanEdit = !this.original || !!this.projectManagerPermittedStatus.get(this.original.status);
+  private readonly projectManagerCanEdit = !this.original || !!this.projectManagerPermittedStatus.get(this.original.status);
 
-  private monitoringOfficerPermittedStatus = new Map<PCRStatus, PCRStatus[]>([
+  private readonly monitoringOfficerPermittedStatus = new Map<PCRStatus, PCRStatus[]>([
     [
       PCRStatus.SubmittedToMonitoringOfficer, [
         PCRStatus.SubmittedToMonitoringOfficer,
@@ -73,9 +73,9 @@ export class PCRDtoValidator extends Results<PCRDto> {
     ]
   ]);
 
-  private monitoringOfficerCanEdit = this.original && !!this.monitoringOfficerPermittedStatus.get(this.original.status);
+  private readonly monitoringOfficerCanEdit = this.original && !!this.monitoringOfficerPermittedStatus.get(this.original.status);
 
-  private maxCommentsLength = 1000;
+  private readonly maxCommentsLength = 1000;
 
   private validateComments(): Result {
     const isPM = !!(this.role & ProjectRole.ProjectManager);
@@ -310,7 +310,7 @@ export class PCRPeriodLengthChangeItemDtoValidator extends PCRBaseItemDtoValidat
 
 export class PCRProjectSuspensionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForProjectSuspensionDto> {
 
-  private isComplete = this.model.status === PCRItemStatus.Complete;
+  private readonly isComplete = this.model.status === PCRItemStatus.Complete;
 
   private validateSuspensionStartDate() {
     if (!this.canEdit) {

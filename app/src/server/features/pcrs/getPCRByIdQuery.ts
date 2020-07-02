@@ -6,7 +6,7 @@ import { mapToPcrDto } from "./mapToPCRDto";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 
 export class GetPCRByIdQuery extends QueryBase<PCRDto> {
-  constructor(private projectId: string, private id: string) {
+  constructor(private readonly projectId: string, private readonly id: string) {
     super();
   }
 

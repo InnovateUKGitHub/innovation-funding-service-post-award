@@ -9,6 +9,7 @@
   "jsRules": {},
   "rules": {
     // override rules here
+    "prefer-readonly": true,
     "no-bitwise": false,
     "arrow-parens": false,
     "whitespace": true,

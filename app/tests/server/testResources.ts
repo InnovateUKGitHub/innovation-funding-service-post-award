@@ -28,7 +28,7 @@ class TestCustomContent {
 }
 
 class TestCompaniesHouse implements ICompaniesHouse {
-  private results = [
+  private readonly results = [
     {
       title: "BJSS LIMITED",
       companyNumber: "02777575",

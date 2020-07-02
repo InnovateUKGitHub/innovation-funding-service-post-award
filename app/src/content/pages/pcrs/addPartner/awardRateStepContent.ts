@@ -4,7 +4,7 @@ import { PCRItem } from "../pcrItem";
 import { PCRAddPartnerLabels } from "@content/labels/pcrAddPartnerLabels";
 
 export class PCRAddPartnerAwardRateContent extends ContentPageBase {
-  constructor(private content: Content) {
+  constructor(private readonly content: Content) {
     super(content, "pcr-add-partner-award-rate");
   }
 
