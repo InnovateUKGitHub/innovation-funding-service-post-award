@@ -154,7 +154,7 @@ export function permitedValues<T>(results: Results<{}>, value: T, permitted: T[]
 }
 
 export class ChildValidators<T> {
-  constructor(private parent: Results<{}>, private items: T[]) {
+  constructor(private readonly parent: Results<{}>, private readonly items: T[]) {
   }
 
   private expected<TValue>(test: (items: T[]) => TValue, expected: TValue, message: string, isRequired?: boolean) {

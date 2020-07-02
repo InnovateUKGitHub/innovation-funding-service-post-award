@@ -6,8 +6,8 @@ interface IModal {
 }
 
 export class ModalRegister {
-  private modals: Map<string, IModal> = new Map();
-  private listeners: Map<string, () => void> = new Map();
+  private readonly modals: Map<string, IModal> = new Map();
+  private readonly listeners: Map<string, () => void> = new Map();
   public registerModal(modal: IModal) {
     this.modals.set(modal.id, modal);
     this.alertSubscribers();

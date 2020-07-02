@@ -81,7 +81,7 @@ class CostCategoriesTestRepository extends TestRepository<Entities.CostCategory>
 }
 
 class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim> implements Repositories.IClaimRepository {
-  constructor(private partnerRepository: PartnerTestRepository) {
+  constructor(private readonly partnerRepository: PartnerTestRepository) {
     super();
   }
 
@@ -388,7 +388,7 @@ class ProfileDetailsTestRepository extends TestRepository<Repositories.ISalesfor
 }
 
 class ProfileTotalPeriodTestRepository extends TestRepository<Repositories.ISalesforceProfileTotalPeriod> implements Repositories.IProfileTotalPeriodRepository {
-  constructor(private partnerRepository: PartnerTestRepository) {
+  constructor(private readonly partnerRepository: PartnerTestRepository) {
     super();
   }
 
@@ -445,7 +445,7 @@ class MonitoringReportStatusChangeTestRepository extends TestRepository<Reposito
 
 class ClaimStatusChangeTestRepository extends TestRepository<Repositories.ISalesforceClaimStatusChange> implements Repositories.IClaimStatusChangeRepository {
 
-  constructor(private claimsRepository: ClaimsTestRepository) {
+  constructor(private readonly claimsRepository: ClaimsTestRepository) {
     super();
   }
 
@@ -626,7 +626,7 @@ class PcrSpendProfileTestRepository extends TestRepository<PcrSpendProfileEntity
 }
 
 class ProjectChangeRequestStatusChangeTestRepository extends TestRepository<Entities.ProjectChangeRequestStatusChangeEntity> implements Repositories.IProjectChangeRequestStatusChangeRepository {
-  constructor(private pcrRepository: PCRTestRepository) {
+  constructor(private readonly pcrRepository: PCRTestRepository) {
     super();
   }
 

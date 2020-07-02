@@ -124,12 +124,12 @@ export interface ISalesforcePCR {
  *
  */
 export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISalesforcePCR> implements IProjectChangeRequestRepository {
-  constructor(private getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+  constructor(private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
     super(getSalesforceConnection, logger);
   }
 
   protected salesforceObjectName = "Acc_ProjectChangeRequest__c";
-  private recordType = "Request Header";
+  private readonly recordType = "Request Header";
 
   protected salesforceFieldNames: string[] = [
     "Id",
@@ -232,7 +232,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
   }
 
   // TODO maybe put in base class
-  private toOptionalSFDate = (jsDate?: Date | null) => jsDate && DateTime.fromJSDate(jsDate).toFormat("yyyy-MM-dd");
+  private readonly toOptionalSFDate = (jsDate?: Date | null) => jsDate && DateTime.fromJSDate(jsDate).toFormat("yyyy-MM-dd");
 
   async updateItems(pcr: ProjectChangeRequestEntity, items: ProjectChangeRequestItemEntity[]) {
     await super.updateAll(items.map(x => ({

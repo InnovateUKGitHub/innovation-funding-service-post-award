@@ -60,7 +60,7 @@ export interface IPcrSpendProfileRepository {
 }
 
 export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesforcePcrSpendProfile> implements IPcrSpendProfileRepository {
-  constructor(private getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+  constructor(private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
     super(getSalesforceConnection, logger);
   }
 
@@ -96,7 +96,7 @@ export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesfo
     "Acc_CostEach__c",
   ];
 
-  private recordType = "PCR Spend Profile";
+  private readonly recordType = "PCR Spend Profile";
 
   public async getAllForPcr(pcrItemId: string): Promise<PcrSpendProfileEntity[]> {
     const pcrRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);

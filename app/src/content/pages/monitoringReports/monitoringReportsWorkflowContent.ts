@@ -5,7 +5,7 @@ import { MonitoringReportsLabels } from "@content/labels/monitoringReportsLabels
 import { ContentBase } from "@content/contentBase";
 
 export class MonitoringReportsWorkflowContent extends ContentPageBase {
-  constructor(private content: Content) {
+  constructor(private readonly content: Content) {
     super(content, "monitoring-reports-workflow");
   }
 

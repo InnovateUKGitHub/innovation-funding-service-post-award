@@ -2,7 +2,7 @@ import { ILogger, Logger } from "../../src/server/features/common/logger";
 import { LogLevel } from "@framework/types/logLevel";
 
 export class TestLogger implements ILogger {
-  private innerLogger = new Logger(undefined, LogLevel.DEBUG, true);
+  private readonly innerLogger = new Logger(undefined, LogLevel.DEBUG, true);
   public outputToConsole = false;
 
   info(message: string, params: any[]): void {

@@ -10,7 +10,7 @@ export interface StyledButtonProps extends React.ButtonHTMLAttributes<{}> {
 export class Button extends React.PureComponent<StyledButtonProps, {}> {
 
   private elem: HTMLElement | null = null;
-  private govukButton = "govuk-button govuk-!-margin-right-1";
+  private readonly govukButton = "govuk-button govuk-!-margin-right-1";
 
   componentDidMount() {
     const govFrontend = window && (window as any).GOVUKFrontend;

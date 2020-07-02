@@ -17,7 +17,7 @@ export class TestStore {
   public getState: () => RootState;
   public dispatch: (action: RootActionsOrThunk) => void;
 
-  constructor(private context: TestContext) {
+  constructor(private readonly context: TestContext) {
     const initialState = getRootState();
     const middleware = applyMiddleware(thunk);
     const store = createStore(rootReducer, initialState, middleware);

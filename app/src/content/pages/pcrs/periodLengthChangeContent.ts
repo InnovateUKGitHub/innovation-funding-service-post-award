@@ -4,7 +4,7 @@ import { Content } from "@content/content";
 import { PCRItem } from "@content/pages/pcrs/pcrItem";
 
 export class PCRPeriodLengthChangeContent extends ContentPageBase {
-  constructor(private content: Content) {
+  constructor(private readonly content: Content) {
     super(content, "pcr-period-length-change");
   }
 

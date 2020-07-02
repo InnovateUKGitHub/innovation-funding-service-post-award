@@ -6,7 +6,7 @@ import { PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@f
 import { isNumber } from "@framework/util";
 
 export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISalesforcePcrSpendProfile, PcrSpendProfileEntity> {
-  public constructor(private recordTypeId: string) {
+  public constructor(private readonly recordTypeId: string) {
     super();
   }
 
@@ -97,7 +97,7 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
 }
 
 export class PcrSpendProfileCapitalUsageTypeMapper {
-  private types = {
+  private readonly types = {
     new: "New",
     existing: "Existing",
   };
@@ -120,7 +120,7 @@ export class PcrSpendProfileCapitalUsageTypeMapper {
 }
 
 export class PcrSpendProfileOverheadRateMapper {
-  private options = {
+  private readonly options = {
     zero: "0%",
     twenty: "20%",
     calculated: "Calculated",

@@ -7,7 +7,7 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class CompaniesStore extends StoreBase {
 
-  constructor(private partnerStore: PartnersStore, getState: () => RootState, queue: (action: RootActionsOrThunk) => void) {
+  constructor(private readonly partnerStore: PartnersStore, getState: () => RootState, queue: (action: RootActionsOrThunk) => void) {
     super(getState, queue);
   }
 
