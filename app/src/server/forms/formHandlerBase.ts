@@ -92,7 +92,6 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
     const router = configureRouter(routeConfig);
     const url = router.buildPath(link.routeName, link.routeParams);
     res.redirect(url);
-    return;
   }
 }
 
