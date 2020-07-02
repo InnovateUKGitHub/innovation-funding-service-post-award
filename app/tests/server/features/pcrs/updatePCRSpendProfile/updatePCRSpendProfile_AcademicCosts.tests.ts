@@ -18,6 +18,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
             {
                 status: PCRItemStatus.Incomplete,
                 projectRole: PCRProjectRole.Collaborator,
+                isCommercialWork: true,
                 partnerType: PCRPartnerType.Research
             });
         const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(pcrItem.id));
