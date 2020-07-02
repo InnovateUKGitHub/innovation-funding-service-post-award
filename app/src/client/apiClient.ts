@@ -156,7 +156,9 @@ const ajaxDelete = <T>(url: string, opts?: RequestInit): Promise<T> => {
 const ajaxPostFile = <T>(url: string, document: DocumentUploadDto) => {
   const formData = new FormData();
   formData.append("attachment", (document.file as ClientFileWrapper).file);
-  if (document.description) { formData.append("description", document.description.toString()); }
+  if (document.description) {
+    formData.append("description", document.description.toString());
+  }
   return ajaxPostFormData<T>(url, formData);
 };
 
@@ -165,7 +167,9 @@ const ajaxPostFiles = <T>(url: string, documents: MultipleDocumentUploadDto) => 
   documents.files.forEach(file => {
     formData.append("attachment", (file as ClientFileWrapper).file);
   });
-  if (documents.description) { formData.append("description", documents.description.toString()); }
+  if (documents.description) {
+    formData.append("description", documents.description.toString());
+  }
   return ajaxPostFormData<T>(url, formData);
 };
 

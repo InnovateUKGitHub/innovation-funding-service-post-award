@@ -25,9 +25,15 @@ export function inValid(resultSet: Results<{}>, message: string, isRequired?: bo
 }
 
 export const required = rule<any>((value) => {
-  if (value === null || value === undefined) { return false; }
-  if (value.__proto__ === ("" as any).__proto__) { return value.trim().length > 0; }
-  if (value instanceof Array) { return value.length > 0; }
+  if (value === null || value === undefined) {
+    return false;
+  }
+  if (value.__proto__ === ("" as any).__proto__) {
+    return value.trim().length > 0;
+  }
+  if (value instanceof Array) {
+    return value.length > 0;
+  }
   return true;
 }, "Required", true);
 
@@ -92,13 +98,17 @@ export function email(results: Results<{}>, value: string, message?: string) {
 
 export function isCurrency(results: Results<{}>, value: number | null, message?: string) {
   const regex = /^-?[0-9]+(\.[0-9]{1,2})?$/i;
-  if (value === null || value === undefined || value === 0) { return valid(results); }
+  if (value === null || value === undefined || value === 0) {
+    return valid(results);
+  }
   return isTrue(results, !isNaN(value) && regex.test(value.toString()), message || "Invalid amount");
 }
 
 export function isPositiveCurrency(results: Results<{}>, value: number | null, message?: string) {
   const regex = /^[0-9]+(\.[0-9]{1,2})?$/i;
-  if (value === null || value === undefined || value === 0) { return valid(results); }
+  if (value === null || value === undefined || value === 0) {
+    return valid(results);
+  }
   return isTrue(results, !isNaN(value) && regex.test(value.toString()), message || "Invalid amount");
 }
 
