@@ -27,6 +27,5 @@ export class HomeFormHandler implements IFormHandler {
     const router = configureRouter(routeConfig);
     const url = router.buildPath(HomeRoute.routeName, {});
     res.redirect(url);
-    return;
   }
 }
