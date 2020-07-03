@@ -10,6 +10,7 @@ export class SalesforceCostCategoryMapper extends SalesforceBaseMapper<ISalesfor
     }
     // @TODO: get from SF -- this is nasty but no solution provided as yet from salesforce
     switch(costCategory.Acc_CostCategoryName__c) {
+      case "Other public sector funding": return CostCategoryType.Other_Funding;
       case "Labour": return CostCategoryType.Labour;
       case "Overheads": return CostCategoryType.Overheads;
       case "Materials": return CostCategoryType.Materials;
