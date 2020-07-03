@@ -5,7 +5,7 @@ import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import * as ACC from "@ui/components";
 import { sum } from "@framework/util";
-import { StoresConsumer } from "@ui/redux";
+import { EditorStatus, StoresConsumer } from "@ui/redux";
 import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryType } from "@framework/entities";
 import { PCROrganisationType } from "@framework/constants";
@@ -31,6 +31,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
         <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.stepGuidance()}/></ACC.Renderers.SimpleString>
         <Form.Form
           data={this.props.pcrItem}
+          isSaving={this.props.status === EditorStatus.Saving}
           onSubmit={() => this.props.onSave()}
           onChange={dto => this.props.onChange(dto)}
           qa="academic-costs-form"
@@ -51,10 +52,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           width={"one-third"}
           name="tsbReference"
           value={dto => dto.tsbReference}
-          update={(x, val) => {
-             x.tsbReference = val;
-             this.props.onChange(this.props.pcrItem);
-          }}
+          update={(x, val) => x.tsbReference = val}
           validation={this.props.validator.tsbReference}
         />
       </Form.Fieldset>
@@ -115,7 +113,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
       <span>
         <ACC.ValidationError error={error}/>
         <ACC.Inputs.NumberInput
-          name={`value${item.costCategory.id}`}
+          name={`value_${item.costCategory.id}`}
           value={item.costDto.value}
           onChange={val => this.updateCostValue(item, val)}
           ariaLabel={`value of academic cost item ${item.costCategory.name}`}
