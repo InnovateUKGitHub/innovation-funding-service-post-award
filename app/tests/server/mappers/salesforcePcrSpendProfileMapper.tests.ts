@@ -2,6 +2,8 @@ import { ISalesforcePcrSpendProfile } from "@server/repositories";
 import { SalesforcePcrSpendProfileMapper } from "@server/repositories/mappers/pcrSpendProfileMapper";
 import { PcrSpendProfileEntity } from "@framework/entities";
 import { PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/constants";
+import { DateTime } from "luxon";
+import { SALESFORCE_DATE_FORMAT } from "@server/features/common";
 
 const PCR_SPEND_PROFILE_TYPE = "PCR_SPEND_PROFILE_TYPE";
 
@@ -13,6 +15,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
       pcrItemId: "pcrItemId1",
       value: 50,
       description: "A description",
+      dateOtherFundingSecured: DateTime.local(2010, 10, 28).toFormat(SALESFORCE_DATE_FORMAT),
       grossCostOfRole: 10,
       daysSpentOnProject: 11,
       ratePerDay: 12,
@@ -36,6 +39,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
       RecordTypeId: PCR_SPEND_PROFILE_TYPE,
       Acc_CostCategoryID__c: expectedEntity.costCategoryId,
       Acc_ProjectChangeRequest__c: expectedEntity.pcrItemId,
+      Acc_DateSecured__c: expectedEntity.dateOtherFundingSecured,
       Acc_OverheadRate__c: "20%",
       Acc_ItemDescription__c: expectedEntity.description,
       Acc_TotalCost__c: expectedEntity.value,
@@ -65,6 +69,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
       pcrItemId: "pcrItemId1",
       value: 50,
       description: "A description",
+      dateOtherFundingSecured: DateTime.local(2010, 10, 28).toFormat(SALESFORCE_DATE_FORMAT),
       grossCostOfRole: 10,
       daysSpentOnProject: 11,
       ratePerDay: 12,
@@ -89,6 +94,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
       Acc_ProjectChangeRequest__c: entity.pcrItemId,
       Acc_TotalCost__c: entity.value,
       Acc_ItemDescription__c: entity.description,
+      Acc_DateSecured__c: entity.dateOtherFundingSecured,
       Acc_OverheadRate__c: "Calculated",
       Acc_Country__c: entity.subcontractorCountry,
       Acc_RoleAndDescription__c: entity.subcontractorRoleAndDescription,

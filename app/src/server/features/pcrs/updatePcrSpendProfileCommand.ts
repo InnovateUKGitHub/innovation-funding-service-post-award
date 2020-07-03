@@ -12,6 +12,7 @@ import {
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
   PCRSpendProfileOtherCostsDto,
+  PCRSpendProfileOtherFundingDto,
   PCRSpendProfileOverheadsCostDto,
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto,
@@ -21,7 +22,7 @@ import { GetCostCategoriesQuery } from "@server/features/claims";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
 
-interface BaseCostFields {
+interface BaseEntityFields {
   id: string;
   pcrItemId: string;
   costCategoryId: string;
@@ -38,38 +39,47 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer);
   }
 
-  private getBaseCostEntity(costsDto: PCRSpendProfileCostDto | PCRSpendProfileFundingDto): BaseCostFields {
+  private getBaseSpendProfileEntity(dto: PCRSpendProfileCostDto | PCRSpendProfileFundingDto): BaseEntityFields {
     return {
-      id: costsDto.id,
+      id: dto.id,
       pcrItemId: this.pcrItemId,
-      costCategoryId: costsDto.costCategoryId,
-      costCategory: costsDto.costCategory,
-      description: costsDto.description || null,
+      costCategoryId: dto.costCategoryId,
+      costCategory: dto.costCategory,
+      description: dto.description || null,
     };
   }
 
-  private mapPcrSpendProfileDtoToEntity(costsDto: PCRSpendProfileCostDto): PcrSpendProfileEntity {
-    const init = this.getBaseCostEntity(costsDto);
-    switch (costsDto.costCategory) {
-      case CostCategoryType.Academic: return this.mapAcademic(costsDto, init);
-      case CostCategoryType.Labour: return this.mapLabour(costsDto, init);
-      case CostCategoryType.Materials: return this.mapMaterials(costsDto, init);
-      case CostCategoryType.Subcontracting: return this.mapSubcontracting(costsDto, init);
-      case CostCategoryType.Capital_Usage: return this.mapCapitalUsage(costsDto, init);
-      case CostCategoryType.Travel_And_Subsistence: return this.mapTravelAndSubs(costsDto, init);
-      case CostCategoryType.Other_Costs: return this.mapOtherCosts(costsDto, init);
+  private mapPcrSpendProfileDtoToEntity(context: IContext, dto: PCRSpendProfileCostDto | PCRSpendProfileFundingDto): PcrSpendProfileEntity {
+    const init = this.getBaseSpendProfileEntity(dto);
+    switch (dto.costCategory) {
+      case CostCategoryType.Other_Funding: return this.mapOtherFunding(context, dto, init);
+      case CostCategoryType.Academic: return this.mapAcademic(dto, init);
+      case CostCategoryType.Labour: return this.mapLabour(dto, init);
+      case CostCategoryType.Materials: return this.mapMaterials(dto, init);
+      case CostCategoryType.Subcontracting: return this.mapSubcontracting(dto, init);
+      case CostCategoryType.Capital_Usage: return this.mapCapitalUsage(dto, init);
+      case CostCategoryType.Travel_And_Subsistence: return this.mapTravelAndSubs(dto, init);
+      case CostCategoryType.Other_Costs: return this.mapOtherCosts(dto, init);
       default: throw new BadRequestError("Cost category type not supported");
     }
   }
 
-  private mapAcademic(costsDto: PCRSpendProfileAcademicCostDto, init: BaseCostFields) {
+  private mapOtherFunding(context: IContext, dto: PCRSpendProfileOtherFundingDto, init: BaseEntityFields): PcrSpendProfileEntity {
+    return {
+      ...init,
+      value: isNumber(dto.value) ? dto.value : 0,
+      dateOtherFundingSecured: context.clock.formatOptionalSalesforceDate(dto.dateSecured) || undefined
+    };
+  }
+
+  private mapAcademic(costsDto: PCRSpendProfileAcademicCostDto, init: BaseEntityFields) {
     return {
       ...init,
       value: isNumber(costsDto.value) ? costsDto.value : 0,
     };
   }
 
-  private mapLabour(costsDto: PCRSpendProfileLabourCostDto, init: BaseCostFields) {
+  private mapLabour(costsDto: PCRSpendProfileLabourCostDto, init: BaseEntityFields) {
     return {
       ...init,
       value: isNumber(costsDto.ratePerDay) && isNumber(costsDto.daysSpentOnProject) ? costsDto.ratePerDay * costsDto.daysSpentOnProject : null,
@@ -79,7 +89,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     };
   }
 
-  private mapMaterials(costsDto: PCRSpendProfileMaterialsCostDto, init: BaseCostFields) {
+  private mapMaterials(costsDto: PCRSpendProfileMaterialsCostDto, init: BaseEntityFields) {
     return {
       ...init,
       value: isNumber(costsDto.costPerItem) && isNumber(costsDto.quantity) ? costsDto.costPerItem * costsDto.quantity : null,
@@ -88,7 +98,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     };
   }
 
-  private mapSubcontracting(costsDto: PCRSpendProfileSubcontractingCostDto, init: BaseCostFields) {
+  private mapSubcontracting(costsDto: PCRSpendProfileSubcontractingCostDto, init: BaseEntityFields) {
     return {
       ...init,
       value: isNumber(costsDto.value) ? costsDto.value : null,
@@ -97,7 +107,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     };
   }
 
-  private mapCapitalUsage(costsDto: PCRSpendProfileCapitalUsageCostDto, init: BaseCostFields) {
+  private mapCapitalUsage(costsDto: PCRSpendProfileCapitalUsageCostDto, init: BaseEntityFields) {
     return {
       ...init,
       value: isNumber(costsDto.utilisation) && isNumber(costsDto.netPresentValue) && isNumber(costsDto.residualValue) ? (costsDto.utilisation / 100) * (costsDto.netPresentValue - costsDto.residualValue) : null,
@@ -109,7 +119,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     };
   }
 
-  private mapTravelAndSubs(costsDto: PCRSpendProfileTravelAndSubsCostDto, init: BaseCostFields) {
+  private mapTravelAndSubs(costsDto: PCRSpendProfileTravelAndSubsCostDto, init: BaseEntityFields) {
     return {
       ...init,
       value: isNumber(costsDto.numberOfTimes) && isNumber(costsDto.costOfEach) ? costsDto.numberOfTimes * costsDto.costOfEach : null,
@@ -118,14 +128,14 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     };
   }
 
-  private mapOtherCosts(costsDto: PCRSpendProfileOtherCostsDto, init: BaseCostFields) {
+  private mapOtherCosts(costsDto: PCRSpendProfileOtherCostsDto, init: BaseEntityFields) {
     return {
       ...init,
       value: isNumber(costsDto.value) ? costsDto.value : null,
     };
   }
 
-  private addOverheads(costCategories: CostCategoryDto[], costs: PcrSpendProfileEntity[], overheadsRates: Option<PCRSpendProfileOverheadRate>[]) {
+  private addOverheads(costCategories: CostCategoryDto[], entities: PcrSpendProfileEntity[], overheadsRates: Option<PCRSpendProfileOverheadRate>[]) {
     // Validation has already ensured there is at most one overheads cost
     const overheadsCostDto = this.spendProfileDto.costs.find(x => x.costCategory === CostCategoryType.Overheads) as PCRSpendProfileOverheadsCostDto;
 
@@ -135,15 +145,15 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
 
     if (overheadsCostDto.overheadRate && !overheadRateOption) throw new BadRequestError("Overhead rate not allowed");
 
-    costs.push({
-      ...this.getBaseCostEntity(overheadsCostDto),
+    entities.push({
+      ...this.getBaseSpendProfileEntity(overheadsCostDto),
       overheadRate: overheadsCostDto.overheadRate,
       description: overheadsCostDto.overheadRate ? overheadRateOption!.label : null,
-      value: this.getOverheadsCostValue(overheadsCostDto, costCategories, costs)
+      value: this.getOverheadsCostValue(overheadsCostDto, costCategories, entities)
     });
   }
 
-  private getOverheadsCostValue(overheadsCostDto: PCRSpendProfileOverheadsCostDto, costCategories: CostCategoryDto[], costDtos: PcrSpendProfileEntity[]) {
+  private getOverheadsCostValue(overheadsCostDto: PCRSpendProfileOverheadsCostDto, costCategories: CostCategoryDto[], items: PcrSpendProfileEntity[]) {
     switch (overheadsCostDto.overheadRate) {
       case PCRSpendProfileOverheadRate.Unknown:
         return null;
@@ -153,7 +163,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
         return 0;
       case PCRSpendProfileOverheadRate.Twenty:
         const labourCostCategory = costCategories.find(x => x.type === CostCategoryType.Labour)!;
-        const labourCosts = costDtos
+        const labourCosts = items
           .filter(x => x.costCategoryId === labourCostCategory.id)
           .reduce((acc, item) => acc + (item.value || 0), 0);
         return roundCurrency(labourCosts * 20 / 100);
@@ -175,6 +185,10 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     switch (costCategoryDto.type) {
       case CostCategoryType.Academic:
         if (originalCost.value !== cost.value) {
+          return cost;
+        }
+      case CostCategoryType.Other_Funding:
+        if (originalCost.value !== cost.value || originalCost.description !== cost.description || originalCost.dateOtherFundingSecured !== cost.dateOtherFundingSecured) {
           return cost;
         }
       case CostCategoryType.Capital_Usage:
@@ -220,12 +234,13 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     const costCategories = await context.runQuery(new GetCostCategoriesQuery());
     const overheadsRates = await context.runQuery(new GetPcrSpendProfileOverheadRateOptionsQuery());
 
-    const mappedEntities = this.spendProfileDto.costs.filter(x => x.costCategory !== CostCategoryType.Overheads)
-      .map(x => this.mapPcrSpendProfileDtoToEntity(x));
+    const mappedEntities = [...this.spendProfileDto.costs, ...this.spendProfileDto.funds]
+      .filter(x => x.costCategory !== CostCategoryType.Overheads)
+      .map(x => this.mapPcrSpendProfileDtoToEntity(context, x));
 
     this.addOverheads(costCategories, mappedEntities, overheadsRates);
 
-    const paired = this.spendProfileDto.costs
+    const paired = [...this.spendProfileDto.costs, ...this.spendProfileDto.funds]
       .map(cost => ({
         // This cannot be undefined as both map over the spend profile costs.
         cost: mappedEntities.find(x => x.id === cost.id)!,

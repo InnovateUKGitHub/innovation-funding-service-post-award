@@ -43,6 +43,10 @@ export class TestClock implements IClock {
         return this._inner.parseOptionalSalesforceDate(value);
     }
 
+    formatOptionalSalesforceDate(jsDate?: Date | null): string | null {
+        return this._inner.formatOptionalSalesforceDate(jsDate);
+    }
+
     parseRequiredSalesforceDate(value: string): Date {
         return this._inner.parseRequiredSalesforceDate(value);
     }

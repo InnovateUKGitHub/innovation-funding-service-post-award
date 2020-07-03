@@ -85,7 +85,15 @@ export type PCRSpendProfileCostDtoValidator =
     | PCROtherCostsDtoValidator;
 
 export class PCROtherFundingDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileOtherFundingDto> {
-  // TODO
+  public description = Validation.required(this, this.model.description, "Source of funding is required");
+  public dateSecured = Validation.all(this,
+    () => Validation.required(this, this.model.dateSecured, "Date secured is required"),
+    () => Validation.isDate(this, this.model.dateSecured, "Date secured must be a date")
+  );
+  public value = Validation.all(this,
+    () => Validation.required(this, this.model.value, "Funding amount is required"),
+    () => Validation.isCurrency(this, this.model.value, "Funding amount must be a number")
+  );
 }
 
 export class PCRAcademicCostDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileAcademicCostDto> {

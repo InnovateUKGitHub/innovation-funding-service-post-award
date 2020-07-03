@@ -18,6 +18,7 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       value: x.Acc_TotalCost__c,
       description: x.Acc_ItemDescription__c,
 
+      dateOtherFundingSecured: x.Acc_DateSecured__c,
       // Labour
       grossCostOfRole: x.Acc_GrossCostOfRole__c,
       // Can remove Number() wrapper when SF fix Acc_DaysSpentOnProject__c to be a number
@@ -65,6 +66,9 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
 
       Acc_TotalCost__c: isNumber(x.value) ? x.value : null,
       Acc_ItemDescription__c: x.description || null,
+
+      // Other funding
+      Acc_DateSecured__c: x.dateOtherFundingSecured,
 
       // Labour
       Acc_DaysSpentOnProject__c: x.daysSpentOnProject,

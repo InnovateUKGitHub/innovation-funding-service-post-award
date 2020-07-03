@@ -8,6 +8,7 @@ export interface IClock {
   dateTime(value: Date): DateTime;
   dateTime(value: string, format: string): DateTime;
   parseOptionalSalesforceDate(value: string | null): Date | null;
+  formatOptionalSalesforceDate(jsDate?: Date | null): string | null;
   parseRequiredSalesforceDate(value: string): Date;
   parseOptionalSalesforceDateTime(value: string): Date | null;
   parseRequiredSalesforceDateTime(value: string): Date;
@@ -25,6 +26,10 @@ export class Clock implements IClock {
       throw new Error("Invalid Date: " + value);
     }
     return result.toJSDate();
+  }
+
+  formatOptionalSalesforceDate(jsDate?: Date | null): string | null {
+    return jsDate ? DateTime.fromJSDate(jsDate).toFormat(SALESFORCE_DATE_FORMAT) : null;
   }
 
   parseRequiredSalesforceDate(value: string): Date {
