@@ -1,17 +1,13 @@
-import { IContext, ILinkInfo, PCRParticipantSize, PCRPartnerType, ProjectDto, ProjectRole } from "@framework/types";
+import { IContext, ILinkInfo, PCRItemForPartnerAdditionDto, PCRParticipantSize, ProjectDto, ProjectRole } from "@framework/types";
 import { BadRequestError, Configuration } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import {
-  PCRPrepareItemRoute,
-  ProjectChangeRequestPrepareItemParams,
-  ProjectChangeRequestPrepareRoute
-} from "@ui/containers";
+import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams, ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators";
 import { DateTime } from "luxon";
 import * as Dtos from "@framework/dtos";
-import { getPCROrganisationType,PCRItemStatus, PCRItemType, PCROrganisationType } from "@framework/constants";
+import { getPCROrganisationType, PCRItemStatus, PCRItemType, PCROrganisationType } from "@framework/constants";
 import { accountNameChangeStepNames } from "@ui/containers/pcrs/nameChange/accountNameChangeWorkflow";
 import { suspendProjectSteps } from "@ui/containers/pcrs/suspendProject/workflow";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
@@ -20,6 +16,11 @@ import { removePartnerStepNames } from "@ui/containers/pcrs/removePartner";
 import { scopeChangeStepNames } from "@ui/containers/pcrs/scopeChange/scopeChangeWorkflow";
 import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { parseNumber } from "@framework/util";
+import { CostCategoryType } from "@framework/entities";
+import { GetCostCategoriesQuery } from "@server/features/claims";
+import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { GetByIdQuery } from "@server/features/projects";
 
 export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareItemParams, "pcr"> {
   constructor() {
@@ -34,6 +35,9 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     if (!item) {
       throw new BadRequestError();
     }
+
+    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const projectDto = await context.runQuery(new GetByIdQuery(params.projectId));
 
     item.status = body.itemStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
     const workflow = PcrWorkflow.getWorkflow(item, params.step, Configuration.features);
@@ -56,7 +60,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
         break;
       case PCRItemType.PartnerAddition:
         if (context.config.features.addPartnerWorkflow) {
-          this.updatePartnerAddition(item, body, stepName as addPartnerStepNames);
+          this.updatePartnerAddition(projectDto, costCategories, item, body, stepName as addPartnerStepNames);
         }
         // nothing to update as only files
         break;
@@ -153,7 +157,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   }
 
   // tslint:disable-next-line:cognitive-complexity
-  private updatePartnerAddition(item: Dtos.PCRItemForPartnerAdditionDto, body: IFormBody, stepName: addPartnerStepNames | null) {
+  private updatePartnerAddition(project: ProjectDto, costCategories: CostCategoryDto[], item: PCRItemForPartnerAdditionDto, body: IFormBody, stepName: addPartnerStepNames | null) {
     if (stepName === "roleAndOrganisationStep") {
       item.projectRole = parseInt(body.projectRole, 10);
       item.partnerType = parseInt(body.partnerType, 10);
@@ -174,13 +178,12 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       item.numberOfEmployees = parseInt(body.numberOfEmployees, 10);
     }
     if (stepName === "financeDetailsStep") {
-      const financialYearEndDate = body.financialYearEndDate_month && body.financialYearEndDate_year
+      item.financialYearEndDate = body.financialYearEndDate_month && body.financialYearEndDate_year
         ? DateTime.fromFormat(`${body.financialYearEndDate_month}/${body.financialYearEndDate_year}`, "M/yyyy")
           .endOf("month")
           .startOf("day")
           .toJSDate()
         : null;
-      item.financialYearEndDate = financialYearEndDate;
       item.financialYearEndTurnover = Number(body.financialYearEndTurnover);
     }
     if (stepName === "projectLocationStep") {
@@ -204,6 +207,28 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     }
     if (stepName === "awardRateStep") {
       item.awardRate = parseNumber(body.awardRate);
+    }
+    if (stepName === "academicCostsStep") {
+      item.tsbReference = body.tsbReference;
+
+      const relevantCostCategories = costCategories.filter(x =>
+        x.organisationType === PCROrganisationType.Academic && x.competitionType === project.competitionType);
+
+      relevantCostCategories.forEach(costCategory => {
+        const cost = item.spendProfile.costs.find(x => x.costCategoryId === costCategory.id) as PCRSpendProfileAcademicCostDto;
+        const value = parseFloat(body[`value_${costCategory.id}`]) || 0;
+        if (cost) {
+          cost.value = value;
+        } else {
+          item.spendProfile.costs.push({
+            id: "",
+            costCategory: CostCategoryType.Academic,
+            costCategoryId: costCategory.id,
+            description: costCategory.description,
+            value,
+          });
+        }
+      });
     }
     if (stepName === "otherFundingStep") {
       item.hasOtherFunding = body.hasOtherFunding === "true"
