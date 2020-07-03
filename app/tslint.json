@@ -9,6 +9,7 @@
   "jsRules": {},
   "rules": {
     // override rules here
+    "no-multi-assign": true,
     "prefer-readonly": true,
     "no-bitwise": false,
     "arrow-parens": false,
