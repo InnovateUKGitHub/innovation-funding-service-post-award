@@ -17,6 +17,9 @@ export interface ISalesforcePcrSpendProfile {
   Acc_TotalCost__c: number | null;
   Acc_ItemDescription__c: string | null;
 
+  // Other Funding fields
+  Acc_DateSecured__c?: string;
+
   // Labour fields
   Acc_GrossCostOfRole__c?: number;
   Acc_Rate__c?: number;
@@ -72,6 +75,8 @@ export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesfo
     "RecordTypeId",
     "Acc_TotalCost__c",
     "Acc_ItemDescription__c",
+    // Other funding
+    "Acc_DateSecured__c",
     // Labour
     "Acc_GrossCostOfRole__c",
     "Acc_Rate__c",
