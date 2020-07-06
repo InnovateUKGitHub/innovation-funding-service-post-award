@@ -39,6 +39,7 @@ export type addPartnerStepNames =
   | "jeSStep"
   | "awardRateStep"
   | "otherFundingStep"
+  | "otherFundingSourcesStep"
 ;
 
 export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: number | undefined): IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> => {
