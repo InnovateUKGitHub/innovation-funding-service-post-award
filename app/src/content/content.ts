@@ -42,6 +42,7 @@ import { PcrSpendProfileOverheadDocumentContent } from "./pages/pcrSpendProfiles
 import { ClaimForecastContent } from "./pages/claims/claimForecastContent";
 import { PCRAddPartnerAcademicCostsContent } from "@content/pages/pcrs/addPartner/academicCostsStepContent";
 import { PCRAddPartnerStateAidEligibilityContent } from "@content/pages/pcrs/addPartner/stateAidEligibilityStepContent";
+import { PCRAddPartnerSummaryContent } from "./pages/pcrs/addPartner/addPartnerSummaryContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -94,6 +95,7 @@ export class Content extends ContentBase {
   public readonly pcrAddPartnerOtherFunding = new PCRAddPartnerOtherFundingContent(this);
   public readonly pcrAddPartnerAwardRate = new PCRAddPartnerAwardRateContent(this);
   public readonly pcrAddPartnerAcademicCosts = new PCRAddPartnerAcademicCostsContent(this);
+  public readonly pcrAddPartnerSummary = new PCRAddPartnerSummaryContent(this);
   public readonly pcrSpendProfileCostsSummaryContent = new PcrSpendProfileCostsSummaryContent(this);
   public readonly pcrSpendProfilePrepareCostContent = new PcrSpendProfilePrepareCostContent(this);
   public readonly pcrSpendProfileDeleteCostContent = new PcrSpendProfileDeleteCostContent(this);

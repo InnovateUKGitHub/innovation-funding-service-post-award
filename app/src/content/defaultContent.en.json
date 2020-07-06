@@ -520,7 +520,8 @@
     "uploaded-documents": "{{filesLength}} documents have been uploaded.",
     "no-documents-uploaded": "No documents uploaded.",
     "document-uploaded-success": "Your document has been uploaded.",
-    "documents-uploaded-success": "{{documentsNumber}} documents have been uploaded."
+    "documents-uploaded-success": "{{documentsNumber}} documents have been uploaded.",
+    "documents-not-applicable": "Not applicable"
   },
   "financial-virement-labels":{
     "partner-name":"Partner",
@@ -559,14 +560,34 @@
     "return-to-summary-button": "Save and return to summary"
   },
   "pcr-add-partner-labels":{
+    "role-heading": "Project role",
     "commercial-work-heading": "Project outputs",
     "commercial-work-label": "Will the new partner's work on the project be mostly commercial or economic?",
     "commercial-work-label-hint": "This question applies to all organisations, including research organisations that normally act non-economically.",
     "commercial-work-no": "No",
     "commercial-work-yes": "Yes",
-    "de-minimis-declaration-form": "De minimis declaration form",
     "organisation-heading": "Organisation type",
-    "role-heading": "Project role"
+    "de-minimis-declaration-form": "De minimis declaration form",
+    "organisation-name-heading": "Organisation name",
+    "registration-number-heading": "Registration number",
+    "registered-address-heading": "Registered address",
+    "organisation-size-heading": "Size",
+    "employee-count-heading": "Number of full time employees",
+    "financial-year-end-heading": "End of financial year",
+    "project-location-heading": "Project location",
+    "town-or-city-heading": "Name of town or city",
+    "postcode-heading": "Postcode, postal code or zip code",
+    "contact-first-name-heading": "First name",
+    "contact-last-name-heading": "Last name",
+    "contact-phone-number-heading": "Phone number",
+    "contact-email-heading": "Email",
+    "organisation-section-title": "Organisation",
+    "commercial-work-summary-heading": "Commercial or economic project outputs?",
+    "aid-eligibility-declaration": "Eligibility of aid declaration",
+    "turnover-summary-heading": "Turnover",
+    "contacts-section-title": "Contacts",
+    "finance-contact-heading": "Finance contact",
+    "project-lead-contact-heading": "Project manager"
   },
   "pcr-period-length-change-labels":{
     "current-period-length": "Current period length",
