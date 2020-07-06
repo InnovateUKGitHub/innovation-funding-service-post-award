@@ -235,6 +235,29 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
         ? true
         : body.hasOtherFunding === "false"? false : null;
     }
+    if (stepName === "otherFundingSourcesStep") {
+      const otherFundingCostCategory = costCategories.find(x => x.type === CostCategoryType.Other_Funding);
+      const itemsLength = parseNumber(body.itemsLength);
+      item.spendProfile.funds = item.spendProfile.funds.filter(x => x.costCategory !== CostCategoryType.Other_Funding);
+      if (itemsLength !== null && otherFundingCostCategory) {
+        for (let i = 0; i < itemsLength; ++i) {
+          const id = body[`item_${i}_id`];
+          const description = body[`item_${i}_description`];
+          const value = body[`item_${i}_value`];
+          const date = body[`item_${i}_date`];
+          if (description || date || value) {
+            item.spendProfile.funds.push({
+              id: id || "",
+              costCategory: CostCategoryType.Other_Funding,
+              costCategoryId: otherFundingCostCategory.id,
+              description: description || "",
+              value: parseFloat(value) || 0,
+              dateSecured: DateTime.fromFormat(date, "M-yyyy").startOf("month").startOf("day").toJSDate(),
+            });
+          }
+        }
+      }
+    }
   }
 
   protected getStoreKey(params: ProjectChangeRequestPrepareItemParams) {
