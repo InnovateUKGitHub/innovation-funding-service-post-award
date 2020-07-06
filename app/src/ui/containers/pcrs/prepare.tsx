@@ -92,6 +92,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
         editor={editor}
         onChange={dto => this.props.onChange(false, dto)}
         onSubmit={() => this.onSave(editor, projectChangeRequest, true)}
+        qa="prepare-form"
       >
         <Form.Fieldset heading="Add comments">
           <Form.MultilineString
