@@ -4,12 +4,39 @@ export class PCRAddPartnerLabels extends ContentBase {
   constructor(parent: ContentBase) {
     super(parent, "pcr-add-partner-labels");
   }
+  public readonly roleHeading = () => this.getContent("role-heading");
   public readonly commercialWorkHeading = () => this.getContent("commercial-work-heading");
   public readonly commercialWorkHint = () => this.getContent("commercial-work-label-hint");
   public readonly commercialWorkLabel = () => this.getContent("commercial-work-label");
   public readonly commercialWorkNo = () => this.getContent("commercial-work-no");
   public readonly commercialWorkYes = () => this.getContent("commercial-work-yes");
-  public readonly deMinimisDeclarationForm = () => this.getContent("de-minimis-declaration-form");
   public readonly organisationHeading = () => this.getContent("organisation-heading");
-  public readonly roleHeading = () => this.getContent("role-heading");
+
+  public readonly contactFirstNameHeading = () => this.getContent("contact-first-name-heading");
+  public readonly contactLastNameHeading = () => this.getContent("contact-last-name-heading");
+  public readonly contactPhoneNumberHeading = () => this.getContent("contact-phone-number-heading");
+  public readonly contactEmailHeading = () => this.getContent("contact-email-heading");
+
+  public readonly deMinimisDeclarationForm = () => this.getContent("de-minimis-declaration-form");
+
+  public readonly organisationNameHeading = () => this.getContent("organisation-name-heading");
+  public readonly registrationNumberHeading = () => this.getContent("registration-number-heading");
+  public readonly registeredAddressHeading = () => this.getContent("registered-address-heading");
+
+  public readonly organisationSizeHeading = () => this.getContent("organisation-size-heading");
+  public readonly employeeCountHeading = () => this.getContent("employee-count-heading");
+
+  public readonly financialYearEndHeading = () => this.getContent("financial-year-end-heading");
+
+  public readonly projectLocationHeading = () => this.getContent("project-location-heading");
+  public readonly townOrCityHeading = () => this.getContent("town-or-city-heading");
+  public readonly postcodeHeading = () => this.getContent("postcode-heading");
+
+  public readonly organisationSectionTitle = () => this.getContent("organisation-section-title");
+  public readonly commercialWorkSummaryHeading = () => this.getContent("commercial-work-summary-heading");
+  public readonly aidEligibilityDeclaration = () => this.getContent("aid-eligibility-declaration");
+  public readonly turnoverHeading = () => this.getContent("turnover-summary-heading");
+  public readonly contactsSectiontitle = () => this.getContent("contacts-section-title");
+  public readonly financeContactHeading = () => this.getContent("finance-contact-heading");
+  public readonly projectLeadContactHeading = () => this.getContent("project-lead-contact-heading");
 }

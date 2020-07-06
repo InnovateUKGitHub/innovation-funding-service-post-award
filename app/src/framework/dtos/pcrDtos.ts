@@ -136,13 +136,11 @@ export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {
   projectLocationLabel: string | null;
   projectCity: string | null;
   projectPostcode: string | null;
-  contact1ProjectRoleLabel: string | null;
   contact1ProjectRole: PCRContactRole;
   contact1Forename: string | null;
   contact1Surname: string | null;
   contact1Phone: string | null;
   contact1Email: string | null;
-  contact2ProjectRoleLabel: string | null;
   contact2ProjectRole: PCRContactRole;
   contact2Forename: string | null;
   contact2Surname: string | null;
