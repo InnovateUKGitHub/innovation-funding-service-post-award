@@ -24,6 +24,7 @@ const createCompleteIndustrialPcrItem: () => Partial<ProjectChangeRequestItemEnt
   organisationType: PCROrganisationType.Industrial,
   projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
   projectCity: "Coventry",
+  projectPostcode: "CV1 5FB",
   financialYearEndTurnover: 33,
   financialYearEndDate: new Date(),
   contact1ProjectRole: PCRContactRole.FinanceContact,
@@ -52,6 +53,7 @@ const createCompleteAcademicPcrItem: () => Partial<ProjectChangeRequestItemEntit
   organisationType: PCROrganisationType.Academic,
   projectLocation: PCRProjectLocation.InsideTheUnitedKingdom,
   projectCity: "Coventry",
+  projectPostcode: "CV1 5FB",
   contact1ProjectRole: PCRContactRole.FinanceContact,
   contact1Forename: "Homer",
   contact1Surname: "Of Iliad fame",
@@ -217,6 +219,11 @@ describe("UpdatePCRCommand - Partner addition", () => {
     delete item.projectLocation;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.projectLocation = PCRProjectLocation.InsideTheUnitedKingdom;
+    await expect(context.runCommand(command)).resolves.toBe(true);
+
+    delete item.projectPostcode;
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    item.projectPostcode = "CF10 1AA";
     await expect(context.runCommand(command)).resolves.toBe(true);
 
     delete item.awardRate;

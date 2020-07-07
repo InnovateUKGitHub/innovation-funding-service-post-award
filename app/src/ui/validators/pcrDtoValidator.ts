@@ -503,7 +503,10 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     () => this.hasPermissionToEdit(this.model.projectCity, this.original && this.original.projectCity, "Project city cannot be changed"),
   );
 
-  projectPostcode = this.hasPermissionToEdit(this.model.projectPostcode, this.original && this.original.projectPostcode, "Project postcode cannot be changed");
+  projectPostcode = Validation.all(this,
+    () => this.requiredIfComplete(this.model.projectPostcode, "Enter a postcode, postal code or zip code"),
+    () => this.hasPermissionToEdit(this.model.projectPostcode, this.original && this.original.projectPostcode, "Project postcode cannot be changed"),
+  );
 
   participantSize = Validation.all(this,
     () => this.requiredIfComplete(this.model.participantSize || null, "Select a participant size"),
