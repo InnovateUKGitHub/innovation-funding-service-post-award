@@ -244,15 +244,16 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
           const id = body[`item_${i}_id`];
           const description = body[`item_${i}_description`];
           const value = body[`item_${i}_value`];
-          const date = body[`item_${i}_date`];
-          if (description || date || value) {
+          const month = body[`item_${i}_date_month`];
+          const year = body[`item_${i}_date_year`];
+          if (description || month || year || value) {
             item.spendProfile.funds.push({
               id: id || "",
               costCategory: CostCategoryType.Other_Funding,
               costCategoryId: otherFundingCostCategory.id,
               description: description || "",
               value: parseFloat(value) || 0,
-              dateSecured: DateTime.fromFormat(date, "M-yyyy").startOf("month").startOf("day").toJSDate(),
+              dateSecured: DateTime.fromFormat(`${month}-${year}`, "M-yyyy").startOf("month").startOf("day").toJSDate(),
             });
           }
         }

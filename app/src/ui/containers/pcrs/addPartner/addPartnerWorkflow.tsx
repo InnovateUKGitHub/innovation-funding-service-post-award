@@ -23,6 +23,7 @@ import { OtherFundingStep } from "@ui/containers/pcrs/addPartner/otherFundingSte
 import { NonAidFundingStep } from "@ui/containers/pcrs/addPartner/nonAidFundingStep";
 import { DeMinimisStep } from "@ui/containers/pcrs/addPartner/deMinimisStep";
 import { CombinedResultValidator } from "@ui/validation";
+import { OtherSourcesOfFundingStep } from "@ui/containers/pcrs/addPartner/otherSourcesOfFundingStep";
 
 export type addPartnerStepNames =
   "roleAndOrganisationStep"
@@ -184,6 +185,20 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
       stepNumber: 8,
       validation: val => val.pcr,
       stepRender: ProjectManagerDetailsStep
+    });
+  }
+
+  if (item.hasOtherFunding) {
+    workflow.steps.push({
+      stepName: "otherFundingSourcesStep",
+      displayName: "Other public sector funding",
+      stepNumber: 12,
+      validation: val => {
+        const addPartnerValidator = val.pcr.items.results.find(x =>
+          x.model.type === PCRItemType.PartnerAddition) as PCRPartnerAdditionItemDtoValidator;
+        return addPartnerValidator.spendProfile.results[0];
+      },
+      stepRender: OtherSourcesOfFundingStep,
     });
   }
 

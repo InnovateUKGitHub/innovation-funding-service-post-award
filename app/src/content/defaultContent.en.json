@@ -330,6 +330,16 @@
       "label-yes": "Yes",
       "label-no": "No"
     },
+    "pcr-add-partner-other-funding-sources":{
+      "form-section-title": "Other public sector funding?",
+      "guidance": "Include all sources of funding the new partner is receiving on top of the funding they are claiming from Innovate UK. These will be taken into account when calculating the funding they will receive.",
+      "column-header-description": "Source of funding",
+      "column-header-date": "Date secured (MM YYYY)",
+      "column-header-value": "Funding amount (£)",
+      "button-remove": "Remove",
+      "button-add": "Add another source of funding",
+      "footer-label-total": "Total other funding"
+    },
     "pcr-period-length-change":{
       "guidance": "The period length can be 3 months or 1 month. This request will affect all remaining periods of the project for all partners. It will also change:\n* how your project's forecast is divided\n* how often your project submits a claim.\n\n\n\nWe will reject this if you submit it with any other request type.",
       "period-length-quarterly": "3 months",
