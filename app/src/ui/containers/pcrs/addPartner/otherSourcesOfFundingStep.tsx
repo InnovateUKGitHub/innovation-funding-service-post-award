@@ -58,17 +58,20 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           headerContent={x => x.pcrAddPartnerOtherFundingSources.columnHeaderDescription()}
           qa="cost-description"
           value={(x, i) => (
-            <Form.String
-              name={`item_${i.row}_description`}
-              // the dto "_dontUse" should not be used here because the form as is doesn't support deeply nested form child elements
-              value={_dontUse => funds[i.row].description}
-              update={(_dontUse, val) => {
-                funds[i.row].description = val;
-                // onChange needs to be called here because the form as is doesn't support deeply nested form child elements
-                this.props.onChange(pcrItem);
-              }}
-              validation={this.getCostValidation(i.row, "description")}
-            />
+            <React.Fragment>
+              <Form.Hidden value={_dontUse => funds[i.row].id} name={`item_${i.row}_id`} />
+              <Form.String
+                name={`item_${i.row}_description`}
+                // the dto "_dontUse" should not be used here because the form as is doesn't support deeply nested form child elements
+                value={_dontUse => funds[i.row].description}
+                update={(_dontUse, val) => {
+                  funds[i.row].description = val;
+                  // onChange needs to be called here because the form as is doesn't support deeply nested form child elements
+                  this.props.onChange(pcrItem);
+                }}
+                validation={this.getCostValidation(i.row, "description")}
+              />
+            </React.Fragment>
           )}
         />
         <Table.Custom

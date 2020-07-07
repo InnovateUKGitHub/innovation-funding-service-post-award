@@ -241,11 +241,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       item.spendProfile.funds = item.spendProfile.funds.filter(x => x.costCategory !== CostCategoryType.Other_Funding);
       if (itemsLength !== null && otherFundingCostCategory) {
         for (let i = 0; i < itemsLength; ++i) {
-          const id = body[`item_${i}_id`];
-          const description = body[`item_${i}_description`];
-          const value = body[`item_${i}_value`];
-          const month = body[`item_${i}_date_month`];
-          const year = body[`item_${i}_date_year`];
+          const [id, month, year, description, value] = ["id", "date_month", "date_year", "description", "value"].map(k => body[`item_${i}_${k}`]);
           if (description || month || year || value) {
             item.spendProfile.funds.push({
               id: id || "",
