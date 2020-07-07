@@ -134,6 +134,7 @@ export class FullDateInput extends BaseInput<FullDateInputProps, FullDateState> 
 
 interface MonthYearInputProps extends InputProps<Date> {
   startOrEnd: "start" | "end";
+  hideLabel?: boolean;
 }
 
 interface MonthYearState {
@@ -174,9 +175,7 @@ export class MonthYearInput extends BaseInput<MonthYearInputProps, MonthYearStat
       <div className="govuk-date-input">
         <div className="govuk-date-input__item">
           <div className="govuk-form-group">
-            <label className="govuk-label govuk-date-input__label" htmlFor={monthName}>
-              Month
-            </label>
+            { !this.props.hideLabel && <label className="govuk-label govuk-date-input__label" htmlFor={monthName}>Month</label> }
             <input
               className={classNames(inputClass, "govuk-input--width-2")}
               name={monthName}
@@ -192,9 +191,7 @@ export class MonthYearInput extends BaseInput<MonthYearInputProps, MonthYearStat
         </div>
         <div className="govuk-date-input__item">
           <div className="govuk-form-group">
-            <label className="govuk-label govuk-date-input__label" htmlFor={yearName}>
-              Year
-            </label>
+            { !this.props.hideLabel && <label className="govuk-label govuk-date-input__label" htmlFor={yearName}>Year</label> }
             <input
               className={classNames(inputClass, "govuk-input--width-4")}
               name={yearName}
