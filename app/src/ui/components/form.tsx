@@ -391,6 +391,7 @@ const FullDateComponent = <T extends {}>(props: ExternalFieldProps<T, Date> & In
 
 interface MonthYearProps<TDto, TValue> extends ExternalFieldProps<TDto, TValue> {
   startOrEnd: "start" | "end";
+  hideLabel?: boolean;
 }
 
 const MonthYearComponent = <T extends {}>(props: MonthYearProps<T, Date> & InternalFieldProps<T>) => {
@@ -405,6 +406,7 @@ const MonthYearComponent = <T extends {}>(props: MonthYearProps<T, Date> & Inter
           ariaDescribedBy={props.hint ? createFieldHintId(props) : undefined}
           hasError={hasError}
           startOrEnd={props.startOrEnd}
+          hideLabel={props.hideLabel}
         />
       )}
       {...props}
