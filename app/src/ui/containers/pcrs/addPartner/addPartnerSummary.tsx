@@ -17,55 +17,57 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
     const { pcrItem, validator, documents } = this.props;
     return (
       <React.Fragment>
-        <ACC.Section title="Organisation" qa="add-partner-summary-organisation">
+        { this.renderOrganisationSection(pcrItem, validator, documents) }
+        { this.renderProjectContacts(pcrItem, validator) }
+      </React.Fragment>
+    );
+  }
+
+  private renderOrganisationSection(pcrItem: PCRItemForPartnerAdditionDto, validator: PCRPartnerAdditionItemDtoValidator, documents: DocumentSummaryDto[]) {
+    const isIndustrial = pcrItem.organisationType === PCROrganisationType.Industrial;
+    return (
+        <ACC.Section titleContent={x => x.pcrAddPartnerSummary.labels.organisationSectionTitle()} qa="add-partner-summary-organisation">
           <ACC.SummaryList qa="add-partner-summary-list-organisation">
-            <ACC.SummaryListItem label="Project role" content={pcrItem.projectRoleLabel} validation={validator.projectRole} qa="projectRole" />
-            <ACC.SummaryListItem label="Type" content={pcrItem.partnerTypeLabel} validation={validator.partnerType} qa="partnerType" />
-            <ACC.SummaryListItem label="Documents" content={this.renderDocuments(documents, DocumentDescription.DeMinimisDeclarationForm)} qa="supportingDocuments" action={this.props.getEditLink("aidEligibilityStep", null)} />
-            { pcrItem.organisationType === PCROrganisationType.Academic && <ACC.SummaryListItem label="Name" content={pcrItem.organisationName} validation={validator.organisationName} qa="organisationName" action={this.props.getEditLink("academicOrganisationStep", validator.organisationName)}/> }
-            { pcrItem.organisationType === PCROrganisationType.Industrial && <ACC.SummaryListItem label="Name" content={pcrItem.organisationName} validation={validator.companyHouseOrganisationName} qa="organisationName" action={this.props.getEditLink("companiesHouseStep", validator.companyHouseOrganisationName)}/> }
-            { pcrItem.organisationType === PCROrganisationType.Industrial && <ACC.SummaryListItem label="Registration number" content={pcrItem.registrationNumber} validation={validator.registrationNumber} qa="registrationNumber" action={this.props.getEditLink("companiesHouseStep", validator.registrationNumber)}/> }
-            { pcrItem.organisationType === PCROrganisationType.Industrial && <ACC.SummaryListItem label="Registered address" content={pcrItem.registeredAddress} validation={validator.registeredAddress} qa="registeredAddress" action={this.props.getEditLink("companiesHouseStep", validator.registeredAddress)}/> }
-            <ACC.SummaryListItem label="Size" content={pcrItem.participantSizeLabel} validation={validator.participantSize} qa="participantSize" action={ pcrItem.organisationType === PCROrganisationType.Academic ? null : this.props.getEditLink("organisationDetailsStep", validator.participantSize)}/>
-            { pcrItem.organisationType === PCROrganisationType.Industrial && <ACC.SummaryListItem label="Number of employees" content={pcrItem.numberOfEmployees} validation={validator.numberOfEmployees} qa="numberOfEmployees" action={this.props.getEditLink("organisationDetailsStep", validator.numberOfEmployees)}/> }
-            { pcrItem.organisationType === PCROrganisationType.Industrial && <ACC.SummaryListItem
-              label="End of financial year"
-              content={<ACC.Renderers.MonthYear value={pcrItem.financialYearEndDate}/>}
-              validation={validator.financialYearEndDate}
-              qa="financialYearEndDate"
-              action={this.props.getEditLink("financeDetailsStep", validator.financialYearEndDate)}
-            /> }
-            { pcrItem.organisationType === PCROrganisationType.Industrial && <ACC.SummaryListItem
-              label="Turnover"
-              content={<ACC.Renderers.Currency value={pcrItem.financialYearEndTurnover}/>}
-              validation={validator.financialYearEndTurnover}
-              qa="financialYearEndTurnover"
-              action={this.props.getEditLink("financeDetailsStep", validator.financialYearEndTurnover)}
-            /> }
-            <ACC.SummaryListItem label="Project location" content={pcrItem.projectLocationLabel} validation={validator.projectLocation} qa="projectLocation" action={this.props.getEditLink("projectLocationStep", validator.projectLocation)}/>
-            <ACC.SummaryListItem label="Town or city" content={pcrItem.projectCity} validation={validator.projectCity} qa="projectCity" action={this.props.getEditLink("projectLocationStep", validator.projectCity)}/>
-            <ACC.SummaryListItem label="Postcode, postal code or zipcode" content={pcrItem.projectPostcode} validation={validator.projectPostcode} qa="projectPostcode" action={this.props.getEditLink("projectLocationStep", validator.projectPostcode)}/>
+            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.roleHeading()} content={pcrItem.projectRoleLabel} validation={validator.projectRole} qa="projectRole" />
+            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.commercialWorkSummaryHeading()} content={<ACC.Content value={x => pcrItem.isCommercialWork ? x.pcrAddPartnerSummary.labels.commercialWorkYes() : x.pcrAddPartnerSummary.labels.commercialWorkNo()}/>} validation={validator.isCommercialWork} qa="isCommercialWork" />
+            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.organisationHeading()} content={pcrItem.partnerTypeLabel} validation={validator.partnerType} qa="partnerType" />
+            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.aidEligibilityDeclaration()} content={this.renderDocuments(documents, DocumentDescription.DeMinimisDeclarationForm)} qa="supportingDocuments" action={this.props.getEditLink("aidEligibilityStep", null)} />
+            { !isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.organisationNameHeading()} content={pcrItem.organisationName} validation={validator.organisationName} qa="organisationName" action={this.props.getEditLink("academicOrganisationStep", validator.organisationName)}/> }
+            { isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.organisationNameHeading()} content={pcrItem.organisationName} validation={validator.companyHouseOrganisationName} qa="organisationName" action={this.props.getEditLink("companiesHouseStep", validator.companyHouseOrganisationName)}/> }
+            { isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.registrationNumberHeading()} content={pcrItem.registrationNumber} validation={validator.registrationNumber} qa="registrationNumber" action={this.props.getEditLink("companiesHouseStep", validator.registrationNumber)}/> }
+            { isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.registeredAddressHeading()} content={pcrItem.registeredAddress} validation={validator.registeredAddress} qa="registeredAddress" action={this.props.getEditLink("companiesHouseStep", validator.registeredAddress)}/> }
+            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.organisationSizeHeading()} content={pcrItem.participantSizeLabel} validation={validator.participantSize} qa="participantSize" action={isIndustrial ? this.props.getEditLink("organisationDetailsStep", validator.participantSize) : null }/>
+            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.employeeCountHeading()} content={pcrItem.numberOfEmployees} validation={validator.numberOfEmployees} qa="numberOfEmployees" action={this.props.getEditLink("organisationDetailsStep", validator.numberOfEmployees)}/>
+            { isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.financialYearEndHeading()} content={<ACC.Renderers.MonthYear value={pcrItem.financialYearEndDate}/>} validation={validator.financialYearEndDate} qa="financialYearEndDate" action={this.props.getEditLink("financeDetailsStep", validator.financialYearEndDate)}/> }
+            { isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.turnoverHeading()} content={<ACC.Renderers.Currency value={pcrItem.financialYearEndTurnover}/>} validation={validator.financialYearEndTurnover} qa="financialYearEndTurnover" action={this.props.getEditLink("financeDetailsStep", validator.financialYearEndTurnover)}/> }
+            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.projectLocationHeading()} content={pcrItem.projectLocationLabel} validation={validator.projectLocation} qa="projectLocation" action={this.props.getEditLink("projectLocationStep", validator.projectLocation)}/>
+            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.townOrCityHeading()} content={pcrItem.projectCity} validation={validator.projectCity} qa="projectCity" action={this.props.getEditLink("projectLocationStep", validator.projectCity)}/>
+            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.postcodeHeading()} content={pcrItem.projectPostcode} validation={validator.projectPostcode} qa="projectPostcode" action={this.props.getEditLink("projectLocationStep", validator.projectPostcode)}/>
           </ACC.SummaryList>
         </ACC.Section>
-        <ACC.Section title="Contacts" qa="add-partner-summary-contacts">
-          <ACC.Section title={pcrItem.contact1ProjectRoleLabel}>
-            <ACC.SummaryList qa="add-partner-summary-list-contacts-finance-contact">
-              <ACC.SummaryListItem label="First name" content={pcrItem.contact1Forename} validation={validator.contact1Forename} qa="contact1Forename" action={this.props.getEditLink("financeContactStep", validator.contact1Forename)}/>
-              <ACC.SummaryListItem label="Last name" content={pcrItem.contact1Surname} validation={validator.contact1Surname} qa="contact1Surname" action={this.props.getEditLink("financeContactStep", validator.contact1Surname)}/>
-              <ACC.SummaryListItem label="Phone number" content={pcrItem.contact1Phone} validation={validator.contact1Phone} qa="contact1Phone" action={this.props.getEditLink("financeContactStep", validator.contact1Phone)}/>
-              <ACC.SummaryListItem label="Email" content={pcrItem.contact1Email} validation={validator.contact1Email} qa="contact1Email" action={this.props.getEditLink("financeContactStep", validator.contact1Email)}/>
-            </ACC.SummaryList>
-          </ACC.Section>
-          { pcrItem.projectRole === PCRProjectRole.ProjectLead && <ACC.Section title={pcrItem.contact2ProjectRoleLabel}>
-            <ACC.SummaryList qa="add-partner-summary-list-contacts-project-manager">
-              <ACC.SummaryListItem label="First name" content={pcrItem.contact2Forename} validation={validator.contact2Forename} qa="contact2Forename" action={this.props.getEditLink("projectManagerDetailsStep", validator.contact2Forename)}/>
-              <ACC.SummaryListItem label="Last name" content={pcrItem.contact2Surname} validation={validator.contact2Surname} qa="contact2Surname" action={this.props.getEditLink("projectManagerDetailsStep", validator.contact2Surname)}/>
-              <ACC.SummaryListItem label="Phone number" content={pcrItem.contact2Phone} validation={validator.contact2Phone} qa="contact2Phone" action={this.props.getEditLink("projectManagerDetailsStep", validator.contact2Phone)}/>
-              <ACC.SummaryListItem label="Email" content={pcrItem.contact2Email} validation={validator.contact2Email} qa="contact2Email" action={this.props.getEditLink("projectManagerDetailsStep", validator.contact2Email)}/>
-            </ACC.SummaryList>
-          </ACC.Section> }
+    );
+  }
+
+  private renderProjectContacts(pcrItem: PCRItemForPartnerAdditionDto, validator: PCRPartnerAdditionItemDtoValidator) {
+    return (
+      <ACC.Section titleContent={x => x.pcrAddPartnerSummary.labels.contactsSectiontitle()} qa="add-partner-summary-contacts">
+        <ACC.Section titleContent={x => x.pcrAddPartnerSummary.labels.financeContactHeading()}>
+          <ACC.SummaryList qa="add-partner-summary-list-contacts-finance-contact">
+            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.contactFirstNameHeading()} content={pcrItem.contact1Forename} validation={validator.contact1Forename} qa="contact1Forename" action={this.props.getEditLink("financeContactStep", validator.contact1Forename)}/>
+            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.contactLastNameHeading()} content={pcrItem.contact1Surname} validation={validator.contact1Surname} qa="contact1Surname" action={this.props.getEditLink("financeContactStep", validator.contact1Surname)}/>
+            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.contactPhoneNumberHeading()} content={pcrItem.contact1Phone} validation={validator.contact1Phone} qa="contact1Phone" action={this.props.getEditLink("financeContactStep", validator.contact1Phone)}/>
+            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.contactEmailHeading()} content={pcrItem.contact1Email} validation={validator.contact1Email} qa="contact1Email" action={this.props.getEditLink("financeContactStep", validator.contact1Email)}/>
+          </ACC.SummaryList>
         </ACC.Section>
-      </React.Fragment>
+        { pcrItem.projectRole === PCRProjectRole.ProjectLead && <ACC.Section titleContent={x => x.pcrAddPartnerSummary.labels.projectLeadContactHeading()}>
+          <ACC.SummaryList qa="add-partner-summary-list-contacts-project-manager">
+            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.contactFirstNameHeading()} content={pcrItem.contact2Forename} validation={validator.contact2Forename} qa="contact2Forename" action={this.props.getEditLink("projectManagerDetailsStep", validator.contact2Forename)}/>
+            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.contactLastNameHeading()} content={pcrItem.contact2Surname} validation={validator.contact2Surname} qa="contact2Surname" action={this.props.getEditLink("projectManagerDetailsStep", validator.contact2Surname)}/>
+            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.contactPhoneNumberHeading()} content={pcrItem.contact2Phone} validation={validator.contact2Phone} qa="contact2Phone" action={this.props.getEditLink("projectManagerDetailsStep", validator.contact2Phone)}/>
+            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.contactEmailHeading()} content={pcrItem.contact2Email} validation={validator.contact2Email} qa="contact2Email" action={this.props.getEditLink("projectManagerDetailsStep", validator.contact2Email)}/>
+          </ACC.SummaryList>
+        </ACC.Section> }
+      </ACC.Section>
     );
   }
 
@@ -73,7 +75,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
     const docs = documents.filter(x => x.description === description);
     return docs.length > 0
       ? <ACC.DocumentList documents={docs} qa="documents" />
-      : "No documents uploaded.";
+      : <ACC.Content value={x => x.pcrAddPartnerSummary.documentMessages.documentsNotApplicable()}/>;
   }
 }
 
