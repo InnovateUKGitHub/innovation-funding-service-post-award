@@ -314,9 +314,7 @@
       "guidance": "The maximum the new organisation can enter is based on their size, type of organisation and research category of the project, based on the <a href=\"https://www.gov.uk/guidance/innovate-uk-funding-general-guidance-for-applicants#funding-rules\" rel=\"noopener noreferrer\" target=\"_blank\" >Innovate UK general guidance for grant applicants</a> (opens in new window). This will be reviewed by Innovate UK to ensure the project stays within the funding rules.\n\n\n\nThe percentage applied for must reflect other funding received."
     },
     "pcr-add-partner-academic-costs":{
-      "step-title": "Project costs for new partner",
       "step-guidance": "Enter this information from the completed Je-S form.",
-      "tsb-section-title": "TSB reference",
       "tsb-label": "This number is found at the top of the Je-S form",
       "costs-section-title": "Project costs",
       "costs-guidance": "Enter the figures from the summary of resources section of the Je-S form.",
@@ -591,13 +589,24 @@
     "contact-last-name-heading": "Last name",
     "contact-phone-number-heading": "Phone number",
     "contact-email-heading": "Email",
+    "jes-form-heading": "Je-S form",
+    "tsb-reference-heading": "TSB reference",
+    "project-costs-heading": "Project costs for new partner",
+    "other-funding-sources-heading": "Other sources of funding?",
+    "other-funds-yes": "Yes",
+    "other-funds-no": "No",
+    "amount-of-other-funding-heading": "Funding from other sources",
+    "funding-level-heading": "Funding level",
+    "funding-sought-heading": "Funding sought",
+    "partner-contributions-heading": "Partner contribution to project",
     "organisation-section-title": "Organisation",
     "commercial-work-summary-heading": "Commercial or economic project outputs?",
     "aid-eligibility-declaration": "Eligibility of aid declaration",
     "turnover-summary-heading": "Turnover",
     "contacts-section-title": "Contacts",
     "finance-contact-heading": "Finance contact",
-    "project-lead-contact-heading": "Project manager"
+    "project-lead-contact-heading": "Project manager",
+    "funding-section-title": "Funding"
   },
   "pcr-period-length-change-labels":{
     "current-period-length": "Current period length",

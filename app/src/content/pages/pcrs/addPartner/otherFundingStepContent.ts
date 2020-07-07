@@ -13,6 +13,4 @@ export class PCRAddPartnerOtherFundingContent extends ContentPageBase {
 
   public readonly formSectionTitle = () => this.getContent("form-section-title");
   public readonly guidance = () => this.getContent("guidance", {markdown: true});
-  public readonly yesLabel = () => this.getContent("label-yes");
-  public readonly noLabel = () => this.getContent("label-no");
 }
