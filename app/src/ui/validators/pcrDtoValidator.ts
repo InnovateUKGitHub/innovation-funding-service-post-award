@@ -528,7 +528,7 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
 
   hasOtherFunding = Validation.all(this,
     () => this.requiredIfComplete(this.model.hasOtherFunding, "Select other funding option"),
-    () => this.hasPermissionToEdit(this.model.awardRate, this.original && this.original.awardRate, "Other funding cannot be changed"),
+    () => this.hasPermissionToEdit(this.model.hasOtherFunding, this.original && this.original.hasOtherFunding, "Other funding cannot be changed"),
   );
 
   // No validator for `totalOtherFunding` as it is updated automatically rather than via a form
