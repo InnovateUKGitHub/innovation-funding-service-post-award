@@ -75,7 +75,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
 
   private renderFundingSection(pcrItem: PCRItemForPartnerAdditionDto, validator: PCRPartnerAdditionItemDtoValidator, documents: DocumentSummaryDto[], isIndustrial: boolean) {
     const totalProjectCosts = pcrItem.spendProfile.costs.reduce((t, v) => t + (v.value || 0), 0);
-    const fundingSought = pcrItem.awardRate ? (pcrItem.awardRate / 100) * totalProjectCosts : 0;
+    const fundingSought = pcrItem.awardRate && pcrItem.totalOtherFunding ? (totalProjectCosts - pcrItem.totalOtherFunding) * (pcrItem.awardRate / 100) : 0;
 
     return (
       <ACC.Section titleContent={x => x.pcrAddPartnerSummary.labels.fundingSectionTitle()} qa="add-partner-summary-funding">
@@ -85,7 +85,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
           <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.projectCostsHeading()} content={<ACC.Renderers.Currency value={totalProjectCosts}/>} qa="projectCosts" action={isIndustrial ? this.props.getEditLink("spendProfileStep", null) : this.props.getEditLink("academicCostsStep", null) }/>
           <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.otherFundingSourcesHeading()} content={<ACC.Content value={x => pcrItem.hasOtherFunding ? x.pcrAddPartnerSummary.labels.otherFundsYes() : x.pcrAddPartnerSummary.labels.otherFundsNo()}/>} validation={validator.hasOtherFunding} qa="hasOtherFunding" action={this.props.getEditLink("otherFundingStep", validator.hasOtherFunding)} />
           { pcrItem.hasOtherFunding && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.amountOfOtherFundingHeading()} content={<ACC.Renderers.Currency value={pcrItem.totalOtherFunding}/>} qa="amountOfOtherFunding" action={this.props.getEditLink("otherFundingSourcesStep", null)} /> }
-          <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.fundingLevelHeading()} content={pcrItem.awardRate} validation={validator.awardRate} qa="fundingLevel"  action={this.props.getEditLink("awardRateStep", validator.awardRate)} />
+          <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.fundingLevelHeading()} content={<ACC.Renderers.Percentage value={pcrItem.awardRate}/>} validation={validator.awardRate} qa="fundingLevel"  action={this.props.getEditLink("awardRateStep", validator.awardRate)} />
           <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.fundingSoughtHeading()} content={<ACC.Renderers.Currency value={fundingSought}/>} qa="fundingSought" />
           <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.partnerContributionsHeading()} content={<ACC.Renderers.Currency value={totalProjectCosts - fundingSought}/>} qa="partnerContribution" />
         </ACC.SummaryList>
