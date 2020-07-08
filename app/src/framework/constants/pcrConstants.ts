@@ -90,9 +90,9 @@ export enum PCROrganisationType {
 }
 
 export const getPCROrganisationType = (partnerType: PCRPartnerType): PCROrganisationType => {
-  if (partnerType === PCRPartnerType.Research || partnerType === PCRPartnerType.ResearchAndTechnology) {
+  if (partnerType === PCRPartnerType.Research) {
     return PCROrganisationType.Academic;
-  } else if (partnerType === PCRPartnerType.Business || partnerType === PCRPartnerType.Other) {
+  } else if (partnerType === PCRPartnerType.Business || partnerType === PCRPartnerType.Other || partnerType === PCRPartnerType.ResearchAndTechnology) {
     return PCROrganisationType.Industrial;
   }
   return PCROrganisationType.Unknown;
