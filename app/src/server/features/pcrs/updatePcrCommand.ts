@@ -42,7 +42,8 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       throw new BadRequestError();
     }
 
-    const projectRoles = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.forProject(this.projectId).getRoles());
+    const auth = await context.runQuery(new GetAllProjectRolesForUser());
+    const projectRoles = auth.forProject(this.projectId).getRoles();
     const itemTypes = await context.runQuery(new GetPCRItemTypesQuery());
 
     const entityToUpdate = await context.repositories.projectChangeRequests.getById(this.pcr.projectId, this.pcr.id);
@@ -100,9 +101,11 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       await context.repositories.projectChangeRequests.insertItems(this.projectChangeRequestId, itemsToInsert);
     }
 
-    const partnerAdditionItemDto = this.pcr.items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
-    if (!!partnerAdditionItemDto) {
-      await context.runCommand(new UpdatePCRSpendProfileCommand(this.projectId, partnerAdditionItemDto.id, partnerAdditionItemDto.spendProfile));
+    if (auth.forProject(this.projectId).hasRole(ProjectRole.ProjectManager)) {
+      const partnerAdditionItemDto = this.pcr.items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
+      if (!!partnerAdditionItemDto) {
+        await context.runCommand(new UpdatePCRSpendProfileCommand(this.projectId, partnerAdditionItemDto.id, partnerAdditionItemDto.spendProfile));
+      }
     }
 
     return true;
