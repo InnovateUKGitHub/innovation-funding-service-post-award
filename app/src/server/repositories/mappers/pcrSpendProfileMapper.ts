@@ -21,16 +21,14 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       dateOtherFundingSecured: x.Acc_DateSecured__c,
       // Labour
       grossCostOfRole: x.Acc_GrossCostOfRole__c,
-      // Can remove Number() wrapper when SF fix Acc_DaysSpentOnProject__c to be a number
-      daysSpentOnProject: Number(x.Acc_DaysSpentOnProject__c) || undefined,
+      daysSpentOnProject: x.Acc_DaysSpentOnProject__c,
       ratePerDay: x.Acc_Rate__c,
 
       // Overheads
       overheadRate: new PcrSpendProfileOverheadRateMapper().mapFromSalesforcePcrSpendProfileOverheadRateOption(x.Acc_OverheadRate__c),
 
       // Materials
-      // Can remove Number() wrapper when SF fix Acc_Quantity__c to be a number
-      quantity: Number(x.Acc_Quantity__c) || undefined,
+      quantity: x.Acc_Quantity__c,
       costPerItem: x.Acc_CostPerItem__c,
 
       // Subcontracting
@@ -40,15 +38,13 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       // Capital Usage
       capitalUsageType: new PcrSpendProfileCapitalUsageTypeMapper().mapFromSalesforcePcrSpendProfileCapitalUsageType(x.Acc_NewOrExisting__c),
       typeLabel: x.NewOrExistingLabel || undefined,
-      // Can remove Number() wrapper when SF fix Acc_DepreciationPeriod__c to be a number
-      depreciationPeriod: Number(x.Acc_DepreciationPeriod__c) || undefined,
+      depreciationPeriod: x.Acc_DepreciationPeriod__c,
       netPresentValue: x.Acc_NetPresentValue__c,
       residualValue: x.Acc_ResidualValue__c,
       utilisation: x.Acc_Utilisation__c,
 
       // Travel and Subsistence
-      // Can remove Number() wrapper when SF fix Acc_NumberOfTimes__c to be a number
-      numberOfTimes: Number(x.Acc_NumberOfTimes__c) || undefined,
+      numberOfTimes: x.Acc_NumberOfTimes__c,
       costOfEach: x.Acc_CostEach__c,
     };
   }
