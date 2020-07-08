@@ -12,8 +12,7 @@ import {
   PCRItemForTimeExtensionDto,
   PCRItemTypeDto,
   PCRStandardItemDto,
-  ProjectChangeRequestStandardItemTypes,
-  TypeOfAid
+  ProjectChangeRequestStandardItemTypes
 } from "@framework/dtos";
 import {
   PCRContactRole,
@@ -25,6 +24,7 @@ import {
   PCRProjectRole
 } from "@framework/constants";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
+import { isBoolean, isNumber } from "@framework/util";
 
 export const mapToPcrDto = (pcr: ProjectChangeRequestEntity, itemTypes: PCRItemTypeDto[]): PCRDto => ({
   id: pcr.id,
@@ -144,7 +144,7 @@ const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName
   contact1Phone: pcr.contact1Phone || null,
   contact1Email: pcr.contact1Email || null,
   financialYearEndDate: pcr.financialYearEndDate || null,
-  financialYearEndTurnover: (!!pcr.financialYearEndTurnover || pcr.financialYearEndTurnover === 0) ? pcr.financialYearEndTurnover : null,
+  financialYearEndTurnover: isNumber(pcr.financialYearEndTurnover) ? pcr.financialYearEndTurnover : null,
   organisationName: pcr.organisationName || null,
   registeredAddress: pcr.registeredAddress || null,
   registrationNumber: pcr.registrationNumber || null,
@@ -153,7 +153,7 @@ const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName
   organisationType: pcr.organisationType || PCROrganisationType.Unknown,
   projectRoleLabel: pcr.projectRoleLabel || null,
   partnerTypeLabel: pcr.partnerTypeLabel || null,
-  isCommercialWork: pcr.isCommercialWork === false || pcr.isCommercialWork === true ? pcr.isCommercialWork : null,
+  isCommercialWork: isBoolean(pcr.isCommercialWork) ? pcr.isCommercialWork : null,
   typeOfAid: pcr.typeOfAid,
   spendProfile: { costs: [], funds: [], pcrItemId: pcr.id },
   projectLocation: pcr.projectLocation || PCRProjectLocation.Unknown,
@@ -162,14 +162,15 @@ const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName
   projectPostcode: pcr.projectPostcode || null,
   participantSize: pcr.participantSize || PCRParticipantSize.Unknown,
   participantSizeLabel: pcr.participantSizeLabel || null,
-  numberOfEmployees: (!!pcr.numberOfEmployees || pcr.numberOfEmployees === 0) ? pcr.numberOfEmployees : null,
+  numberOfEmployees: isNumber(pcr.numberOfEmployees) ? pcr.numberOfEmployees : null,
   contact2ProjectRole: pcr.contact2ProjectRole || PCRContactRole.Unknown,
   contact2Forename: pcr.contact2Forename || null,
   contact2Surname: pcr.contact2Surname || null,
   contact2Phone: pcr.contact2Phone || null,
   contact2Email: pcr.contact2Email || null,
-  awardRate: (!!pcr.awardRate || pcr.awardRate === 0) ? pcr.awardRate : null,
-  hasOtherFunding: pcr.hasOtherFunding === false || pcr.hasOtherFunding === true ? pcr.hasOtherFunding : null,
+  awardRate: isNumber(pcr.awardRate) ? pcr.awardRate : null,
+  hasOtherFunding: isBoolean(pcr.hasOtherFunding) ? pcr.hasOtherFunding : null,
+  totalOtherFunding: isNumber(pcr.totalOtherFunding) ? pcr.totalOtherFunding : null,
   tsbReference: pcr.tsbReference || null,
   type
 });

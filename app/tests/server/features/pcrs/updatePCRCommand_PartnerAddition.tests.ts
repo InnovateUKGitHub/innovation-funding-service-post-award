@@ -15,6 +15,7 @@ import {
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 import { PCRItemStatus, PCROrganisationType, PCRStatus } from "@framework/constants";
 import { CostCategoryType, ProjectChangeRequestItemEntity } from "@framework/entities";
+import { DateTime } from "luxon";
 
 const createCompleteIndustrialPcrItem: () => Partial<ProjectChangeRequestItemEntity> = () => ({
   status: PCRItemStatus.Incomplete,
@@ -288,8 +289,30 @@ describe("UpdatePCRCommand - Partner addition", () => {
     item.contact2Email = "jon@doe.com";
     item.awardRate = 62;
     item.hasOtherFunding = true;
+    item.totalOtherFunding = null;
     item.isCommercialWork = true;
     item.tsbReference = "54321EDCBA";
+
+    const costCategoryOtherFunding = context.testData.createCostCategory({name: "Other Funding", type: CostCategoryType.Other_Funding});
+    const dummyDate = DateTime.local().toJSDate();
+    item.spendProfile.funds = [
+      {
+        id: "",
+        costCategory: CostCategoryType.Other_Funding,
+        costCategoryId: costCategoryOtherFunding.id,
+        value: 101.02,
+        description: "Moo lah",
+        dateSecured: dummyDate,
+      },
+      {
+        id: "",
+        costCategory: CostCategoryType.Other_Funding,
+        costCategoryId: costCategoryOtherFunding.id,
+        value: 120.99,
+        description: "Dosh",
+        dateSecured: dummyDate,
+      }
+    ];
 
     const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
     await expect(await context.runCommand(command)).toBe(true);
@@ -319,6 +342,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     expect(updatedItem.contact2Email).toEqual("jon@doe.com");
     expect(updatedItem.awardRate).toEqual(62);
     expect(updatedItem.hasOtherFunding).toEqual(true);
+    expect(updatedItem.totalOtherFunding).toEqual(101.02 + 120.99);
     expect(updatedItem.isCommercialWork).toEqual(true);
     expect(updatedItem.tsbReference).toEqual("54321EDCBA");
   });

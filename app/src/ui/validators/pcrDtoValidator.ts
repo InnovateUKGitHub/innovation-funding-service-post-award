@@ -531,6 +531,8 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     () => this.hasPermissionToEdit(this.model.awardRate, this.original && this.original.awardRate, "Other funding cannot be changed"),
   );
 
+  // No validator for `totalOtherFunding` as it is updated automatically rather than via a form
+
   tsbReference = Validation.all(this,
     () => this.model.organisationType === PCROrganisationType.Academic ? this.requiredIfComplete(this.model.tsbReference, "Enter the TSB reference") : Validation.valid(this),
     () => this.hasPermissionToEdit(this.model.tsbReference, this.original && this.original.tsbReference, "TSB reference cannot be changed"),
