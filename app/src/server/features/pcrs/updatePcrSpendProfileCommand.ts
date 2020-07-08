@@ -36,7 +36,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   }
 
   protected async accessControl(auth: Authorisation, context: IContext) {
-    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer);
+    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager);
   }
 
   private getBaseSpendProfileEntity(dto: PCRSpendProfileCostDto | PCRSpendProfileFundingDto): BaseEntityFields {
