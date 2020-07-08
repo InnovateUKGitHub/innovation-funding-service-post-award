@@ -75,7 +75,8 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
 
   private renderFundingSection(pcrItem: PCRItemForPartnerAdditionDto, validator: PCRPartnerAdditionItemDtoValidator, documents: DocumentSummaryDto[], isIndustrial: boolean) {
     const totalProjectCosts = pcrItem.spendProfile.costs.reduce((t, v) => t + (v.value || 0), 0);
-    const fundingSought = pcrItem.awardRate && pcrItem.totalOtherFunding ? (totalProjectCosts - pcrItem.totalOtherFunding) * (pcrItem.awardRate / 100) : 0;
+    const costsRemaining = totalProjectCosts - (pcrItem.totalOtherFunding || 0);
+    const fundingSought = costsRemaining * (pcrItem.awardRate || 0) / 100;
 
     return (
       <ACC.Section titleContent={x => x.pcrAddPartnerSummary.labels.fundingSectionTitle()} qa="add-partner-summary-funding">
