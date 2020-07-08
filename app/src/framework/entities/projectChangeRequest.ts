@@ -88,6 +88,7 @@ export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItem
   projectSummarySnapshot?: string | null;
   partnerNameSnapshot?: string | null;
   projectDurationSnapshot?: number | null;
+  totalOtherFunding?: number | null;
 }
 
 export interface ProjectChangeRequestStatusChangeEntity {
