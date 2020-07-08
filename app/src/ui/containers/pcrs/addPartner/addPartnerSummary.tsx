@@ -15,29 +15,31 @@ interface InnerProps {
 class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator, addPartnerStepNames> & InnerProps> {
   render() {
     const { pcrItem, validator, documents } = this.props;
+    // Used to determine items displayed for industrial org vs academic org
+    const isIndustrial = pcrItem.organisationType === PCROrganisationType.Industrial;
     return (
       <React.Fragment>
-        { this.renderOrganisationSection(pcrItem, validator, documents) }
+        { this.renderOrganisationSection(pcrItem, validator, documents, isIndustrial) }
         { this.renderProjectContacts(pcrItem, validator) }
+        { this.renderFundingSection(pcrItem, validator, documents, isIndustrial) }
       </React.Fragment>
     );
   }
 
-  private renderOrganisationSection(pcrItem: PCRItemForPartnerAdditionDto, validator: PCRPartnerAdditionItemDtoValidator, documents: DocumentSummaryDto[]) {
-    const isIndustrial = pcrItem.organisationType === PCROrganisationType.Industrial;
+  private renderOrganisationSection(pcrItem: PCRItemForPartnerAdditionDto, validator: PCRPartnerAdditionItemDtoValidator, documents: DocumentSummaryDto[], isIndustrial: boolean) {
     return (
         <ACC.Section titleContent={x => x.pcrAddPartnerSummary.labels.organisationSectionTitle()} qa="add-partner-summary-organisation">
           <ACC.SummaryList qa="add-partner-summary-list-organisation">
             <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.roleHeading()} content={pcrItem.projectRoleLabel} validation={validator.projectRole} qa="projectRole" />
             <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.commercialWorkSummaryHeading()} content={<ACC.Content value={x => pcrItem.isCommercialWork ? x.pcrAddPartnerSummary.labels.commercialWorkYes() : x.pcrAddPartnerSummary.labels.commercialWorkNo()}/>} validation={validator.isCommercialWork} qa="isCommercialWork" />
             <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.organisationHeading()} content={pcrItem.partnerTypeLabel} validation={validator.partnerType} qa="partnerType" />
-            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.aidEligibilityDeclaration()} content={this.renderDocuments(documents, DocumentDescription.DeMinimisDeclarationForm)} qa="supportingDocuments" action={this.props.getEditLink("aidEligibilityStep", null)} />
+            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.aidEligibilityDeclaration()} content={this.renderDocuments(documents, DocumentDescription.DeMinimisDeclarationForm)} qa="supportingDocumentsAidEligibility" action={this.props.getEditLink("aidEligibilityStep", null)} />
             { !isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.organisationNameHeading()} content={pcrItem.organisationName} validation={validator.organisationName} qa="organisationName" action={this.props.getEditLink("academicOrganisationStep", validator.organisationName)}/> }
             { isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.organisationNameHeading()} content={pcrItem.organisationName} validation={validator.companyHouseOrganisationName} qa="organisationName" action={this.props.getEditLink("companiesHouseStep", validator.companyHouseOrganisationName)}/> }
             { isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.registrationNumberHeading()} content={pcrItem.registrationNumber} validation={validator.registrationNumber} qa="registrationNumber" action={this.props.getEditLink("companiesHouseStep", validator.registrationNumber)}/> }
             { isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.registeredAddressHeading()} content={pcrItem.registeredAddress} validation={validator.registeredAddress} qa="registeredAddress" action={this.props.getEditLink("companiesHouseStep", validator.registeredAddress)}/> }
             <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.organisationSizeHeading()} content={pcrItem.participantSizeLabel} validation={validator.participantSize} qa="participantSize" action={isIndustrial ? this.props.getEditLink("organisationDetailsStep", validator.participantSize) : null }/>
-            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.employeeCountHeading()} content={pcrItem.numberOfEmployees} validation={validator.numberOfEmployees} qa="numberOfEmployees" action={this.props.getEditLink("organisationDetailsStep", validator.numberOfEmployees)}/>
+            { isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.employeeCountHeading()} content={pcrItem.numberOfEmployees} validation={validator.numberOfEmployees} qa="numberOfEmployees" action={this.props.getEditLink("organisationDetailsStep", validator.numberOfEmployees)}/> }
             { isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.financialYearEndHeading()} content={<ACC.Renderers.MonthYear value={pcrItem.financialYearEndDate}/>} validation={validator.financialYearEndDate} qa="financialYearEndDate" action={this.props.getEditLink("financeDetailsStep", validator.financialYearEndDate)}/> }
             { isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.turnoverHeading()} content={<ACC.Renderers.Currency value={pcrItem.financialYearEndTurnover}/>} validation={validator.financialYearEndTurnover} qa="financialYearEndTurnover" action={this.props.getEditLink("financeDetailsStep", validator.financialYearEndTurnover)}/> }
             <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.projectLocationHeading()} content={pcrItem.projectLocationLabel} validation={validator.projectLocation} qa="projectLocation" action={this.props.getEditLink("projectLocationStep", validator.projectLocation)}/>
@@ -67,6 +69,26 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
             <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.contactEmailHeading()} content={pcrItem.contact2Email} validation={validator.contact2Email} qa="contact2Email" action={this.props.getEditLink("projectManagerDetailsStep", validator.contact2Email)}/>
           </ACC.SummaryList>
         </ACC.Section> }
+      </ACC.Section>
+    );
+  }
+
+  private renderFundingSection(pcrItem: PCRItemForPartnerAdditionDto, validator: PCRPartnerAdditionItemDtoValidator, documents: DocumentSummaryDto[], isIndustrial: boolean) {
+    const totalProjectCosts = pcrItem.spendProfile.costs.reduce((t, v) => t + (v.value || 0), 0);
+    const fundingSought = pcrItem.awardRate ? (pcrItem.awardRate / 100) * totalProjectCosts : 0;
+
+    return (
+      <ACC.Section titleContent={x => x.pcrAddPartnerSummary.labels.fundingSectionTitle()} qa="add-partner-summary-funding">
+        <ACC.SummaryList qa="add-partner-summary-list-funding">
+          { !isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.jesFormHeading()} content={this.renderDocuments(documents, DocumentDescription.JeSForm)} qa="supportingDocumentsJes" action={this.props.getEditLink("jeSStep", null)} /> }
+          { !isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.tsbReferenceHeading()} content={pcrItem.tsbReference} validation={validator.tsbReference} qa="tsbReference" action={this.props.getEditLink("academicCostsStep", validator.tsbReference)} /> }
+          <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.projectCostsHeading()} content={<ACC.Renderers.Currency value={totalProjectCosts}/>} qa="projectCosts" action={isIndustrial ? this.props.getEditLink("spendProfileStep", null) : this.props.getEditLink("academicCostsStep", null) }/>
+          <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.otherFundingSourcesHeading()} content={<ACC.Content value={x => pcrItem.hasOtherFunding ? x.pcrAddPartnerSummary.labels.otherFundsYes() : x.pcrAddPartnerSummary.labels.otherFundsNo()}/>} validation={validator.hasOtherFunding} qa="hasOtherFunding" action={this.props.getEditLink("otherFundingStep", validator.hasOtherFunding)} />
+          { pcrItem.hasOtherFunding && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.amountOfOtherFundingHeading()} content={<ACC.Renderers.Currency value={pcrItem.totalOtherFunding}/>} qa="amountOfOtherFunding" action={this.props.getEditLink("otherFundingSourcesStep", null)} /> }
+          <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.fundingLevelHeading()} content={pcrItem.awardRate} validation={validator.awardRate} qa="fundingLevel"  action={this.props.getEditLink("awardRateStep", validator.awardRate)} />
+          <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.fundingSoughtHeading()} content={<ACC.Renderers.Currency value={fundingSought}/>} qa="fundingSought" />
+          <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.partnerContributionsHeading()} content={<ACC.Renderers.Currency value={totalProjectCosts - fundingSought}/>} qa="partnerContribution" />
+        </ACC.SummaryList>
       </ACC.Section>
     );
   }
