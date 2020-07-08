@@ -1,17 +1,19 @@
 import { BadRequestError, CommandBase, ValidationError } from "../common";
-import { PCRDto, PCRItemDto, PCRItemForPartnerAdditionDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { PCRDto, PCRItemDto, PCRItemForPartnerAdditionDto, ProjectRole } from "@framework/dtos";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { Authorisation, IContext, PCRItemType } from "@framework/types";
 import { GetAllProjectRolesForUser, GetByIdQuery } from "../projects";
 import { mapToPcrDto } from "./mapToPCRDto";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
 import {
+  CostCategoryType,
   ProjectChangeRequestItemEntity,
   ProjectChangeRequestItemForCreateEntity
 } from "@framework/entities";
 import { GetAllForProjectQuery } from "@server/features/partners";
 import { PCRStatus } from "@framework/constants";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
+import { sum } from "@framework/util";
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
   constructor(private readonly projectId: string, private readonly projectChangeRequestId: string, private readonly pcr: PCRDto) {
@@ -75,7 +77,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       .filter(x => !!x.originalItem)
       // get any updates
       .map(x => {
-        const updates = this.getItemUpdates(x.originalItem!, x.item, project);
+        const updates = this.getItemUpdates(x.originalItem!, x.item);
         return updates ? { ...x.originalItem!, ...updates } : null;
       })
       // filter those that need updating
@@ -107,7 +109,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
   }
 
   // tslint:disable-next-line:cognitive-complexity
-  private getItemUpdates(item: ProjectChangeRequestItemEntity, dto: PCRItemDto, project: ProjectDto): Partial<ProjectChangeRequestItemEntity> | null {
+  private getItemUpdates(item: ProjectChangeRequestItemEntity, dto: PCRItemDto): Partial<ProjectChangeRequestItemEntity> | null {
     const init = item.status !== dto.status ? { status: dto.status } : null;
 
     switch (dto.type) {
@@ -163,6 +165,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
           || item.contact2Email !== dto.contact2Email
           || item.awardRate !== dto.awardRate
           || item.hasOtherFunding !== dto.hasOtherFunding
+          || item.totalOtherFunding !== this.calculateTotalOtherFunding(dto)
           || item.tsbReference !== dto.tsbReference
         ) {
           return {
@@ -192,6 +195,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
             contact2Email: dto.contact2Email,
             awardRate: dto.awardRate,
             hasOtherFunding: dto.hasOtherFunding,
+            totalOtherFunding: this.calculateTotalOtherFunding(dto),
             tsbReference: dto.tsbReference,
           };
         }
@@ -203,5 +207,9 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     }
 
     return init;
+  }
+
+  private calculateTotalOtherFunding(dto: PCRItemForPartnerAdditionDto) {
+    return sum(dto.spendProfile.funds.filter(x => x.costCategory === CostCategoryType.Other_Funding), fund => fund.value || 0);
   }
 }
