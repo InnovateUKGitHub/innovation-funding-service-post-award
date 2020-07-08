@@ -1,6 +1,7 @@
 import { ContentPageBase } from "../../../contentPageBase";
 import { Content } from "../../../content";
 import { PCRItem } from "../pcrItem";
+import { PCRAddPartnerLabels } from "@content/labels/pcrAddPartnerLabels";
 
 export class PCRAddPartnerAcademicCostsContent extends ContentPageBase {
   constructor(private readonly content: Content) {
@@ -8,11 +9,10 @@ export class PCRAddPartnerAcademicCostsContent extends ContentPageBase {
   }
 
   public readonly pcrItem = new PCRItem(this);
+  public readonly labels = new PCRAddPartnerLabels(this);
 
-  public readonly stepTitle = () => this.getContent("step-title");
   public readonly stepGuidance = () => this.getContent("step-guidance");
 
-  public readonly tsbSectionTitle = () => this.getContent("tsb-section-title");
   public readonly tsbLabel = () => this.getContent("tsb-label");
 
   public readonly costsSectionTitle = () => this.getContent("costs-section-title");

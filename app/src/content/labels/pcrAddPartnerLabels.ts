@@ -32,6 +32,21 @@ export class PCRAddPartnerLabels extends ContentBase {
   public readonly townOrCityHeading = () => this.getContent("town-or-city-heading");
   public readonly postcodeHeading = () => this.getContent("postcode-heading");
 
+  public readonly jesFormHeading = () => this.getContent("jes-form-heading");
+
+  public readonly tsbReferenceHeading = () => this.getContent("tsb-reference-heading");
+
+  public readonly projectCostsHeading = () => this.getContent("project-costs-heading");
+
+  public readonly otherFundingSourcesHeading = () => this.getContent("other-funding-sources-heading");
+  public readonly otherFundsYes = () => this.getContent("other-funds-yes");
+  public readonly otherFundsNo = () => this.getContent("other-funds-no");
+
+  public readonly amountOfOtherFundingHeading = () => this.getContent("amount-of-other-funding-heading");
+  public readonly fundingLevelHeading = () => this.getContent("funding-level-heading");
+  public readonly fundingSoughtHeading = () => this.getContent("funding-sought-heading");
+  public readonly partnerContributionsHeading = () => this.getContent("partner-contributions-heading");
+
   public readonly organisationSectionTitle = () => this.getContent("organisation-section-title");
   public readonly commercialWorkSummaryHeading = () => this.getContent("commercial-work-summary-heading");
   public readonly aidEligibilityDeclaration = () => this.getContent("aid-eligibility-declaration");
@@ -39,4 +54,5 @@ export class PCRAddPartnerLabels extends ContentBase {
   public readonly contactsSectiontitle = () => this.getContent("contacts-section-title");
   public readonly financeContactHeading = () => this.getContent("finance-contact-heading");
   public readonly projectLeadContactHeading = () => this.getContent("project-lead-contact-heading");
+  public readonly fundingSectionTitle = () => this.getContent("funding-section-title");
 }
