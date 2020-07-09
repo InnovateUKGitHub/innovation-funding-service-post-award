@@ -252,7 +252,7 @@
       "section-title-costs": "{{costCategoryName}} costs",
       "guidance-title": "{{costCategoryName}} costs guidance",
       "back-link": "Back to project costs",
-      "button-submit": "Save and return to summary",
+      "button-submit": "Save and return to project costs",
       "button-add-cost": "Add a cost",
       "button-edit-cost": "Edit",
       "button-remove-cost": "Remove"
@@ -271,7 +271,7 @@
       "back-link": "Back to {{costCategoryName, lowercase}} costs",
       "button-submit": "Save and return to {{costCategoryName, lowercase}} costs",
       "overheads": {
-        "button-submit": "Save and return to summary"
+        "button-submit": "Save and return to project costs"
       }
     },
     "pcr-spend-profile-overhead-documents": {
