@@ -75,8 +75,9 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
 
   private renderFundingSection(pcrItem: PCRItemForPartnerAdditionDto, validator: PCRPartnerAdditionItemDtoValidator, documents: DocumentSummaryDto[], isIndustrial: boolean) {
     const totalProjectCosts = pcrItem.spendProfile.costs.reduce((t, v) => t + (v.value || 0), 0);
-    const costsRemaining = totalProjectCosts - (pcrItem.totalOtherFunding || 0);
-    const fundingSought = costsRemaining * (pcrItem.awardRate || 0) / 100;
+    const nonFundedCosts = totalProjectCosts - (pcrItem.totalOtherFunding || 0);
+    const fundingSought = nonFundedCosts * (pcrItem.awardRate || 0) / 100;
+    const partnerContribution = nonFundedCosts - fundingSought;
 
     return (
       <ACC.Section titleContent={x => x.pcrAddPartnerSummary.labels.fundingSectionTitle()} qa="add-partner-summary-funding">
@@ -88,7 +89,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
           { pcrItem.hasOtherFunding && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.amountOfOtherFundingHeading()} content={<ACC.Renderers.Currency value={pcrItem.totalOtherFunding}/>} qa="amountOfOtherFunding" action={this.props.getEditLink("otherFundingSourcesStep", null)} /> }
           <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.fundingLevelHeading()} content={<ACC.Renderers.Percentage value={pcrItem.awardRate}/>} validation={validator.awardRate} qa="fundingLevel"  action={this.props.getEditLink("awardRateStep", validator.awardRate)} />
           <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.fundingSoughtHeading()} content={<ACC.Renderers.Currency value={fundingSought}/>} qa="fundingSought" />
-          <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.partnerContributionsHeading()} content={<ACC.Renderers.Currency value={totalProjectCosts - fundingSought}/>} qa="partnerContribution" />
+          <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.partnerContributionsHeading()} content={<ACC.Renderers.Currency value={partnerContribution}/>} qa="partnerContribution" />
         </ACC.SummaryList>
       </ACC.Section>
     );
