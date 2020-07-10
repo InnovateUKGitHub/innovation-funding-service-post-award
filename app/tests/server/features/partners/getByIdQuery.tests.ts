@@ -2,7 +2,7 @@
 import { TestContext } from "../../testContextProvider";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { SalesforceProjectRole } from "@server/repositories";
-import { PartnerClaimStatus, PartnerDto, PartnerStatus, ProjectRole } from "@framework/types";
+import { PartnerClaimStatus, PartnerDto, PartnerStatus, ProjectRole, SpendProfileStatus } from "@framework/types";
 
 describe("getAllForProjectQuery", () => {
   it("when partner exists is mapped to DTO", async () => {
@@ -30,6 +30,7 @@ describe("getAllForProjectQuery", () => {
       x.auditReportFrequencyName = "Never, for this project";
       x.totalCostsAwarded = 100000;
       x.totalPrepayment = 500;
+      x.spendProfileStatus = "Complete";
     });
 
     const projectManger = context.testData.createProjectManager(project, partner);
@@ -73,6 +74,7 @@ describe("getAllForProjectQuery", () => {
       totalFundingDueToReceive: 62500,
       percentageParticipantCostsSubmitted: 0.08,
       newForecastNeeded: false,
+      spendProfileStatus: SpendProfileStatus.Complete,
     };
 
     expect(result).toEqual(expected);

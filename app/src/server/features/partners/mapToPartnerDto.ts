@@ -1,6 +1,6 @@
 import { SyncCommandBase } from "../common/commandBase";
 import { SalesforceProjectRole } from "../../repositories/partnersRepository";
-import { PartnerClaimStatus, PartnerDto, PartnerStatus, ProjectRole } from "@framework/types";
+import { PartnerClaimStatus, PartnerDto, PartnerStatus, ProjectRole, SpendProfileStatus } from "@framework/types";
 import { Partner } from "@framework/entities";
 
 export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
@@ -51,6 +51,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             percentageParticipantCostsSubmitted: this.valueIfPermission(this.calcPercentageClaimed(this.item.totalParticipantCosts, this.item.totalCostsSubmitted)),
             totalFundingDueToReceive: this.valueIfPermission(this.item.totalParticipantCosts * (this.item.awardRate / 100)),
             newForecastNeeded: this.item.newForecastNeeded,
+            spendProfileStatus: this.getSpendProfileStatus(this.item.spendProfileStatus),
         };
     }
 
@@ -87,6 +88,20 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
                 return PartnerStatus.Pending;
             default:
                 return PartnerStatus.Unknown;
+        }
+    }
+
+    getSpendProfileStatus(salesforceStatus: string): SpendProfileStatus {
+        switch (salesforceStatus) {
+            case "To Do":
+                return SpendProfileStatus.ToDo;
+            // TODO: this should be changed to incomplete once SF makes the change
+            case "In progress":
+                return SpendProfileStatus.Incomplete;
+            case "Complete":
+                return SpendProfileStatus.Complete;
+            default:
+                return SpendProfileStatus.Unknown;
         }
     }
 

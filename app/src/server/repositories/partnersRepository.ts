@@ -41,6 +41,7 @@ export interface ISalesforcePartner {
   Acc_TotalPrepayment__c: number;
   Acc_Postcode__c: string;
   Acc_NewForecastNeeded__c: boolean;
+  Acc_SpendProfileCompleted__c: string;
 }
 
 export interface IPartnerRepository {
@@ -94,6 +95,7 @@ export class PartnerRepository extends SalesforceRepositoryBaseWithMapping<ISale
     "Acc_TotalPrepayment__c",
     "Acc_Postcode__c",
     "Acc_NewForecastNeeded__c",
+    "Acc_SpendProfileCompleted__c",
   ];
 
   mapper = new SalesforcePartnerMapper();
