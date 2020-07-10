@@ -57,6 +57,8 @@ export class TestConfig implements IConfig {
   };
 
   public sil = {
+    bankCheckValidateUrl: "",
+    bankCheckVerifyUrl: "",
     companiesHouseSearchUrl: "",
     username: "",
     password: ""
