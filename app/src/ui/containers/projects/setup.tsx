@@ -1,5 +1,5 @@
 import { Pending } from "@shared/pending";
-import {PartnerDto, ProjectDto, ProjectRole} from "@framework/dtos";
+import {PartnerDto, ProjectDto, ProjectRole, SpendProfileStatus} from "@framework/dtos";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import * as ACC from "../../components";
 import React from "react";
@@ -66,7 +66,7 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
           <ACC.TaskListSection step={1} titleContent={x => x.projectSetup.taskList().sectionTitleEnterInfo()} qa="WhatDoYouWantToDo">
             <ACC.Task
               nameContent={x => x.projectSetup.setSpendProfile()}
-              status={placeholderStatus}
+              status={this.getSpendProfileStatus(partner)}
               route={this.props.routes.projectSetupSpendProfile.getLink({partnerId: partner.id, projectId: project.id})}
             />
             {/* TODO: replace placeholder (->dashboard) with link to bank details page */}
@@ -89,6 +89,18 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
         </Form.Form>
       </ACC.Page>
     );
+  }
+
+  private getSpendProfileStatus(partner: PartnerDto): "To do" | "Complete" | "Incomplete" {
+    switch (partner.spendProfileStatus) {
+      case SpendProfileStatus.Complete:
+        return "Complete";
+      case SpendProfileStatus.Incomplete:
+        return "Incomplete";
+      case SpendProfileStatus.ToDo:
+      default:
+        return "To do";
+    }
   }
 }
 

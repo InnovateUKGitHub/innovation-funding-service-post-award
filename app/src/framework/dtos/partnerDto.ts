@@ -19,6 +19,13 @@ export enum PartnerStatus {
   Pending = 5,
 }
 
+export enum SpendProfileStatus {
+  Unknown = 0,
+  ToDo = 10,
+  Incomplete = 20,
+  Complete = 30
+}
+
 export interface PartnerDto {
   id: string;
   type: string;
@@ -51,6 +58,7 @@ export interface PartnerDto {
   partnerStatus: PartnerStatus;
   percentageParticipantCostsSubmitted: number | null;
   totalFundingDueToReceive: number | null;
+  spendProfileStatus: SpendProfileStatus;
 
   overheadRate: number | null;
   newForecastNeeded: boolean | null;

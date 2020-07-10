@@ -35,6 +35,7 @@ export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePar
       totalPrepayment: item.Acc_TotalPrepayment__c,
       postcode: item.Acc_Postcode__c,
       newForecastNeeded: item.Acc_NewForecastNeeded__c,
+      spendProfileStatus: item.Acc_SpendProfileCompleted__c,
     };
   }
 }
