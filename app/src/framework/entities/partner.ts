@@ -29,4 +29,5 @@ export interface Partner {
   totalPrepayment: number;
   postcode: string;
   newForecastNeeded: boolean;
+  spendProfileStatus: string;
 }

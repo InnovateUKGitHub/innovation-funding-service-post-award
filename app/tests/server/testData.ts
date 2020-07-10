@@ -135,6 +135,7 @@ export class TestData {
       totalPrepayment: 500,
       postcode: "BS1 1AA",
       newForecastNeeded: false,
+      spendProfileStatus: "",
     };
 
     if (!!update) update(newItem);
