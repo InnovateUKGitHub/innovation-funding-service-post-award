@@ -1,6 +1,8 @@
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
 import { Authorisation, IContext, PartnerDto, ProjectRole } from "@framework/types";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
+import { PartnerSpendProfileStatusMapper } from "@server/features/partners/mapToPartnerDto";
+import { isBoolean } from "@framework/util";
 
 export class UpdatePartnerCommand extends CommandBase<boolean> {
   constructor(private readonly partner: PartnerDto) {
@@ -17,7 +19,8 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     await context.repositories.partners.update({
       Id: this.partner.id,
       Acc_Postcode__c: this.partner.postcode,
-      Acc_NewForecastNeeded__c: this.partner.newForecastNeeded === false || this.partner.newForecastNeeded === true ? this.partner.newForecastNeeded : undefined
+      Acc_NewForecastNeeded__c: isBoolean(this.partner.newForecastNeeded) ? this.partner.newForecastNeeded : undefined,
+      Acc_SpendProfileCompleted__c: new PartnerSpendProfileStatusMapper().mapToSalesforcePcrSpendProfileOverheadRateOption(this.partner.spendProfileStatus),
     });
 
     return true;
