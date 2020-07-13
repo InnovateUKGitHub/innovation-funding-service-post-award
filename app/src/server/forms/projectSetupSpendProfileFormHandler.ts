@@ -2,7 +2,6 @@ import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
 import { UpdateInitialForecastDetailsCommand } from "../features/forecastDetails";
 import { GetByIdQuery } from "../features/projects";
-import { InitialForecastDetailsDtosValidator } from "../../ui/validators";
 import { IContext } from "@framework/types/IContext";
 import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
@@ -10,6 +9,7 @@ import { Params } from "@ui/containers/forecasts/update";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ProjectSetupRoute, ProjectSetupSpendProfileParams, ProjectSetupSpendProfileRoute } from "@ui/containers";
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
+import { InitialForecastDetailsDtosValidator } from "@ui/validators/initialForecastDetailsDtosValidator";
 
 export class ProjectSetupSpendProfileFormHandler extends StandardFormHandlerBase<ProjectSetupSpendProfileParams, "initialForecastDetails"> {
   constructor() {
@@ -35,7 +35,8 @@ export class ProjectSetupSpendProfileFormHandler extends StandardFormHandlerBase
   }
 
   protected async run(context: IContext, params: Params, button: IFormButton, dto: ForecastDetailsDTO[]): Promise<ILinkInfo> {
-    await context.runCommand(new UpdateInitialForecastDetailsCommand(params.projectId, params.partnerId, dto));
+    // TODO handle submit
+    await context.runCommand(new UpdateInitialForecastDetailsCommand(params.projectId, params.partnerId, dto, false));
     return ProjectSetupRoute.getLink(params);
   }
 
@@ -44,7 +45,6 @@ export class ProjectSetupSpendProfileFormHandler extends StandardFormHandlerBase
   }
 
   protected createValidationResult(params: Params, dto: ForecastDetailsDTO[]) {
-    // TODO: Update once correct validator created as part of ACC-5850
-    return new InitialForecastDetailsDtosValidator(dto, [], undefined, false);
+    return new InitialForecastDetailsDtosValidator(dto, [], [], false, false);
   }
 }

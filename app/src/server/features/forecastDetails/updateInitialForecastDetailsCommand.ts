@@ -1,15 +1,18 @@
-import { CommandBase } from "@server/features/common";
+import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
 import { ISalesforceProfileDetails } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { GetCostCategoriesQuery } from "@server/features/claims";
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
+import { GetAllForecastsGOLCostsQuery, GetCostCategoriesQuery } from "@server/features/claims";
+import { Authorisation, IContext, PartnerStatus, ProjectRole } from "@framework/types";
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
+import { GetByIdQuery } from "@server/features/partners";
+import { InitialForecastDetailsDtosValidator } from "@ui/validators/initialForecastDetailsDtosValidator";
 
 export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
     private readonly projectId: string,
     private readonly partnerId: string,
     private readonly forecasts: ForecastDetailsDTO[],
+    private readonly submit: boolean,
   ) {
     super();
   }
@@ -19,11 +22,25 @@ export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
   }
 
   protected async Run(context: IContext) {
+    const partner = await context.runQuery(new GetByIdQuery(this.partnerId));
+    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+
+    if (partner.partnerStatus !== PartnerStatus.Pending) {
+      throw new BadRequestError("Cannot update partner initial forecast");
+    }
+
+    const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(this.partnerId));
+    const validation = new InitialForecastDetailsDtosValidator(this.forecasts, golCosts, costCategories, this.submit, true);
+
+    if (!validation.isValid) {
+      throw new ValidationError(validation);
+    }
+
     const existing = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(this.partnerId));
 
     const preparedForecasts = await this.ignoreCalculatedCostCategories(context, this.forecasts);
 
-    await this.updateProfileDetails(context, preparedForecasts, existing);
+    await this.updateProfileDetails(context, preparedForecasts, existing, this.submit);
 
     return true;
   }
@@ -31,7 +48,7 @@ export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
   private async ignoreCalculatedCostCategories(context: IContext, dtos: ForecastDetailsDTO[]) {
     // check to see if there are any calculated cost categories
     const calculatedCostCategoryIds = await context.runQuery(new GetCostCategoriesQuery())
-      .then(costCategories =>  costCategories.filter(x => x.isCalculated).map(x => x.id));
+      .then(costCategories => costCategories.filter(x => x.isCalculated).map(x => x.id));
 
     return dtos.filter(forecast => calculatedCostCategoryIds.indexOf(forecast.costCategoryId) === -1);
   }
@@ -41,11 +58,17 @@ export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
     return !existingItem || item.value !== existingItem.value;
   }
 
-  private async updateProfileDetails(context: IContext, forecasts: ForecastDetailsDTO[], existing: ForecastDetailsDTO[]) {
-    const updates = forecasts.filter(x => this.hasChanged(x, existing)).map<Updatable<ISalesforceProfileDetails>>(x => ({
-      Id: x.id,
-      Acc_InitialForecastCost__c: x.value
-    }));
+  private async updateProfileDetails(context: IContext, forecasts: ForecastDetailsDTO[], existing: ForecastDetailsDTO[], submit: boolean) {
+    const updates = submit
+      ? forecasts.map<Updatable<ISalesforceProfileDetails>>(x => ({
+        Id: x.id,
+        Acc_InitialForecastCost__c: x.value,
+        Acc_LatestForecastCost__c: x.value,
+      }))
+      : forecasts.filter(x => this.hasChanged(x, existing)).map<Updatable<ISalesforceProfileDetails>>(x => ({
+        Id: x.id,
+        Acc_InitialForecastCost__c: x.value
+      }));
 
     return context.repositories.profileDetails.update(updates);
   }
