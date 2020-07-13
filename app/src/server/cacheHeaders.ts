@@ -17,5 +17,6 @@ export const setOwaspHeaders = (req: express.Request, res: express.Response, nex
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.setHeader("X-XSS-Protection", "1");
   res.setHeader("Strict-Transport-Security", "max-age=31536000");
+  res.setHeader("Referrer-Policy", "no-referrer");
   return next();
 };
