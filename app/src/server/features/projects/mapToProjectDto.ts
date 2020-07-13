@@ -1,14 +1,12 @@
 // tslint:disable:no-bitwise
 import {ISalesforceProject} from "../../repositories/projectsRepository";
-import { ClaimFrequency, IContext, ProjectDto, ProjectRole, ProjectStatus, TypeOfAid } from "@framework/types";
+import { ClaimFrequency, IContext, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import {dayComparator, isNumber} from "@framework/util";
-import {ISalesforceProfileTotalPeriod} from "@server/repositories";
 
 export const mapToProjectDto = (
   context: IContext,
   item: ISalesforceProject,
-  roles: ProjectRole,
-  period: ISalesforceProfileTotalPeriod | undefined
+  roles: ProjectRole
 ): ProjectDto => {
   const claimFrequency = mapFrequencyToEnum(item.Acc_ClaimFrequency__c);
   // TODO change this to parseRequiredSalesforceDate and update tests to pass
@@ -33,8 +31,8 @@ export const mapToProjectDto = (
     startDate,
     endDate,
     periodId: item.Acc_CurrentPeriodNumber__c,
-    periodStartDate: period ? context.clock.parseOptionalSalesforceDate(period.Acc_ProjectPeriodStartDate__c) : null,
-    periodEndDate: period ? context.clock.parseOptionalSalesforceDate(period.Acc_ProjectPeriodEndDate__c) : null,
+    periodStartDate: context.clock.parseOptionalSalesforceDate(item.Acc_CurrentPeriodStartDate__c),
+    periodEndDate: context.clock.parseOptionalSalesforceDate(item.Acc_CurrentPeriodEndDate__c),
     pcrsToReview: item.Acc_PCRsForReview__c || 0,
     pcrsQueried: item.Acc_PCRsUnderQuery__c || 0,
     roles: roles || ProjectRole.Unknown,
