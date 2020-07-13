@@ -1,20 +1,12 @@
 // tslint:disable:no-identical-functions no-duplicate-string
 import "jest";
 import { TestContext } from "../../testContextProvider";
-import { ClaimFrequency, ProjectDto, ProjectRole, ProjectStatus, TypeOfAid } from "@framework/types";
+import { ClaimFrequency, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import { mapToProjectDto } from "@server/features/projects";
 import { DateTime } from "luxon";
-import { ISalesforceProject } from "@server/repositories";
 
 // tslint:disable:no-big-function
 describe("mapToProjectDto", () => {
-
-  function createPeriod(context: TestContext, project: ISalesforceProject, periodStartDate: DateTime, periodEndDate: DateTime) {
-    return context.testData.createProfileTotalPeriod(undefined, project.Acc_CurrentPeriodNumber__c, (x) => {
-      x.Acc_ProjectPeriodStartDate__c = periodStartDate.toFormat("yyyy-MM-dd");
-      x.Acc_ProjectPeriodEndDate__c = periodEndDate.toFormat("yyyy-MM-dd");
-    });
-  }
 
   it("when valid expect mapping",  () => {
     const context = new TestContext();
@@ -82,12 +74,13 @@ describe("mapToProjectDto", () => {
       x.Acc_NumberOfOpenClaims__c = expected.numberOfOpenClaims;
       x.Acc_NumberofPeriods__c = expected.numberOfPeriods;
       x.Acc_CurrentPeriodNumber__c = expected.periodId;
+      x.Acc_CurrentPeriodStartDate__c = periodStartDate.toFormat("yyyy-MM-dd");
+      x.Acc_CurrentPeriodEndDate__c = periodEndDate.toFormat("yyyy-MM-dd");
       x.Acc_Duration__c = expected.durationInMonths;
       x.Acc_LeadParticipantName__c = expected.leadPartnerName;
     });
 
-    const period = createPeriod(context, project, periodStartDate, periodEndDate);
-    const result = mapToProjectDto(context, project, ProjectRole.Unknown, period);
+    const result = mapToProjectDto(context, project, ProjectRole.Unknown);
 
     expect(result).toMatchObject(expected);
   });
@@ -102,7 +95,7 @@ describe("mapToProjectDto", () => {
       x.Acc_ProjectNumber__c = "30000";
     });
 
-    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown, undefined);
+    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
 
     expect(result.applicationUrl).toBe("https://ifs.application.url/application/competition/30000/project/1");
   });
@@ -116,7 +109,7 @@ describe("mapToProjectDto", () => {
       x.Acc_IFSApplicationId__c = 1;
       x.Acc_ProjectNumber__c = "30000";
     });
-    const result = mapToProjectDto(context, project, ProjectRole.Unknown, undefined);
+    const result = mapToProjectDto(context, project, ProjectRole.Unknown);
 
     expect(result.grantOfferLetterUrl).toBe("https://ifs.application.url/grantletter/competition/30000/project/1");
   });
@@ -126,9 +119,9 @@ describe("mapToProjectDto", () => {
     const projectNow = context.testData.createProject(x => {x.Acc_EndDate__c = DateTime.fromJSDate(new Date()).toFormat("yyyy-MM-dd");});
     const projectTomorrow = context.testData.createProject(x => {x.Acc_EndDate__c = DateTime.fromJSDate(new Date()).plus({days: 1}).toFormat("yyyy-MM-dd");});
     const projectYesterday = context.testData.createProject(x => {x.Acc_EndDate__c = DateTime.fromJSDate(new Date()).minus({days: 1}).toFormat("yyyy-MM-dd");});
-    expect(mapToProjectDto(context, projectNow, ProjectRole.Unknown, undefined).isPastEndDate).toBe(false);
-    expect(mapToProjectDto(context, projectTomorrow, ProjectRole.Unknown, undefined).isPastEndDate).toBe(false);
-    expect(mapToProjectDto(context, projectYesterday, ProjectRole.Unknown, undefined).isPastEndDate).toBe(true);
+    expect(mapToProjectDto(context, projectNow, ProjectRole.Unknown).isPastEndDate).toBe(false);
+    expect(mapToProjectDto(context, projectTomorrow, ProjectRole.Unknown).isPastEndDate).toBe(false);
+    expect(mapToProjectDto(context, projectYesterday, ProjectRole.Unknown).isPastEndDate).toBe(true);
   });
 
   it("ClaimFrequency should map correct - Quarterly",() => {
@@ -136,7 +129,7 @@ describe("mapToProjectDto", () => {
     const salesforce = context.testData.createProject(x => {
       x.Acc_ClaimFrequency__c = "Quarterly";
     });
-    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown, undefined);
+    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
     expect(result.claimFrequency).toBe(ClaimFrequency.Quarterly);
   });
 
@@ -145,7 +138,7 @@ describe("mapToProjectDto", () => {
     const salesforce = context.testData.createProject(x => {
       x.Acc_ClaimFrequency__c = "Monthly";
     });
-    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown, undefined);
+    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
     expect(result.claimFrequency).toBe(ClaimFrequency.Monthly);
   });
 
@@ -156,7 +149,7 @@ describe("mapToProjectDto", () => {
       x.Acc_GOLTotalCostAwarded__c = 100000;
     });
 
-    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown, undefined);
+    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
 
     expect(result.grantOfferLetterCosts).toBe(100000);
 
@@ -169,7 +162,7 @@ describe("mapToProjectDto", () => {
       x.Acc_TotalProjectCosts__c = 500000;
     });
 
-    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown, undefined);
+    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
 
     expect(result.costsClaimedToDate).toBe(500000);
 
