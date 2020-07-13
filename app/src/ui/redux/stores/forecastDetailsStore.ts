@@ -1,6 +1,6 @@
 import { StoreBase } from "./storeBase";
 import { ApiClient } from "@ui/apiClient";
-import { ForecastDetailsDtosValidator, InitialForecastDetailsDtosValidator } from "@ui/validators";
+import { ForecastDetailsDtosValidator } from "@ui/validators";
 import { Pending } from "@shared/pending";
 import { ClaimsStore } from "./claimsStore";
 import { ClaimsDetailsStore } from "./claimDetailsStore";
@@ -9,7 +9,7 @@ import { RootState } from "@ui/redux";
 import { messageSuccess, RootActionsOrThunk } from "@ui/redux/actions";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PartnersStore } from "@ui/redux/stores/partnersStore";
-import { Results } from "@ui/validation";
+import { InitialForecastDetailsDtosValidator } from "@ui/validators/initialForecastDetailsDtosValidator";
 
 export class ForecastDetailsStore extends StoreBase {
   constructor(
@@ -45,11 +45,9 @@ export class ForecastDetailsStore extends StoreBase {
   }
 
   private getInitialValidator(partnerId: string, dto: ForecastDetailsDTO[], showValidationErrors: boolean) {
-    const combined = Pending.combine({
-      golCosts: this.golCostsStore.getAllByPartner(partnerId),
-      partner: this.partnersStore.getById(partnerId)
-    });
-    return combined.then(x => new InitialForecastDetailsDtosValidator(dto, x.golCosts, x.partner, showValidationErrors));
+    return this.golCostsStore.getAllByPartner(partnerId)
+      // TODO needs cost categories?
+      .then(x => new InitialForecastDetailsDtosValidator(dto, x, [], false, showValidationErrors));
   }
 
   public getForecastEditor(partnerId: string, init?: (data: ForecastDetailsDTO[]) => void) {
@@ -91,14 +89,14 @@ export class ForecastDetailsStore extends StoreBase {
     );
   }
 
-  public updateInitialForcastEditor(saving: boolean, projectId: string, partnerId: string, dto: ForecastDetailsDTO[], message?: string, onComplete?: () => void) {
+  public updateInitialForcastEditor(saving: boolean, projectId: string, partnerId: string, dto: ForecastDetailsDTO[], submit: boolean, message?: string, onComplete?: () => void) {
     super.updateEditor(
       saving,
       "initialForecastDetails",
       storeKeys.getPartnerKey(partnerId),
       dto,
       (show) => this.getInitialValidator(partnerId, dto, show),
-      (p) => ApiClient.initialForecastDetails.update({ projectId, partnerId, forecasts: dto, ...p }),
+      (p) => ApiClient.initialForecastDetails.update({ projectId, partnerId, submit, forecasts: dto, ...p }),
       // tslint:disable-next-line:no-identical-functions
       () => {
         if (message) {
