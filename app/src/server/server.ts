@@ -112,6 +112,7 @@ export class Server {
     this.app.use(authRouter);
     this.app.use(internationalisationRouter);
     this.app.use(setOwaspHeaders, noCache, router);
+    this.app.disable("x-powered-by");
   }
 
   private primeCaches() {
