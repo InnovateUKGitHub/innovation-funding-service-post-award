@@ -11,6 +11,7 @@ export interface IStep<TStepName extends string, TStepProps extends IStepProps, 
   stepNumber: number;
   validation: (val: TVal) => Results<any>;
   stepRender: (props: TStepProps) => React.ReactNode;
+  supportsReadOnly?: boolean;
 }
 
 interface ISummary<TSummaryProps, TVal extends Results<{}>> {

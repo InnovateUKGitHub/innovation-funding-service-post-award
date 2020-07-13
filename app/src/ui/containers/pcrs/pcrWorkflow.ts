@@ -32,6 +32,7 @@ export interface PcrStepProps<TDto, TVal> extends IStepProps {
   getRequiredToCompleteMessage: (additionalMessage?: string) => React.ReactNode;
   isClient: boolean;
   routes: IRoutes;
+  mode: "prepare" | "review" | "view";
 }
 
 export interface PcrSummaryProps<TDto, TVal, TStepNames> extends ISummaryProps, BaseProps {
@@ -44,6 +45,7 @@ export interface PcrSummaryProps<TDto, TVal, TStepNames> extends ISummaryProps, 
   onSave: () => void;
   getStepLink: (stepName: TStepNames) => ILinkInfo;
   getEditLink: (stepName: TStepNames, validation: Result | null) => React.ReactNode;
+  getViewLink: (stepName: TStepNames) => React.ReactNode;
 }
 
 export type IPCRWorkflow<T, TVal extends Results<{}>> = IWorkflow<string, PcrStepProps<T, TVal>, PcrSummaryProps<T, TVal, string>, PCRWorkflowValidator>;
