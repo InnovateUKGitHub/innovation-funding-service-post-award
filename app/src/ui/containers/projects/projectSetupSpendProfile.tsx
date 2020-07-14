@@ -4,7 +4,7 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import { ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
-import { IForecastDetailsDtosValidator } from "@ui/validators";
+import { IInitialForecastDetailsDtosValidator } from "@ui/validators/initialForecastDetailsDtosValidator";
 
 export interface ProjectSetupSpendProfileParams {
   projectId: string;
@@ -13,12 +13,11 @@ export interface ProjectSetupSpendProfileParams {
 
 interface Data {
   data: Pending<ACC.Claims.ForecastData>;
-  // TODO: Validation will be handled as part of ACC-5850 so the validator here is a placeholder
-  editor: Pending<IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>>;
+  editor: Pending<IEditorStore<ForecastDetailsDTO[], IInitialForecastDetailsDtosValidator>>;
 }
 
 interface Callbacks {
-  onChange: (saving: boolean, dto: ForecastDetailsDTO[]) => void;
+  onChange: (saving: boolean, submit: boolean, dto: ForecastDetailsDTO[]) => void;
 }
 
 class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendProfileParams, Data, Callbacks> {
@@ -28,7 +27,7 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.data, x.editor)} />;
   }
 
-  public renderContents(combined: ACC.Claims.ForecastData, editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>) {
+  public renderContents(combined: ACC.Claims.ForecastData, editor: IEditorStore<ForecastDetailsDTO[], IInitialForecastDetailsDtosValidator>) {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
 
     return (
@@ -42,8 +41,8 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
           {this.renderGuidance()}
           <Form.Form
             editor={editor}
-            onChange={data => this.props.onChange(false, data)}
-            onSubmit={() => this.props.onChange(true, editor.data)}
+            onChange={data => this.props.onChange(false, false, data)}
+            onSubmit={() => this.props.onChange(true, false, editor.data)}
             qa="project-setup-spend-profile-form"
           >
             <ACC.Claims.ForecastTable data={combined} editor={editor} />
@@ -77,8 +76,8 @@ const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams
           claimDetails: Pending.done([]),
         })}
         editor={stores.forecastDetails.getInitialForecastEditor(props.partnerId)}
-        onChange={(saving, dto) => {
-          stores.forecastDetails.updateInitialForcastEditor(saving, props.projectId, props.partnerId, dto, "Your spend profile has been updated.", () => {
+        onChange={(saving, submit, dto) => {
+          stores.forecastDetails.updateInitialForcastEditor(saving, props.projectId, props.partnerId, dto, submit, "Your spend profile has been updated.", () => {
             stores.navigation.navigateTo(props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }));
           });
         }}
