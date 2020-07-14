@@ -2,10 +2,11 @@ import { BadRequestError, CommandBase, ValidationError } from "@server/features/
 import { ISalesforceProfileDetails } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { GetAllForecastsGOLCostsQuery, GetCostCategoriesQuery } from "@server/features/claims";
-import { Authorisation, IContext, PartnerStatus, ProjectRole } from "@framework/types";
+import { Authorisation, IContext, PartnerDto, PartnerStatus, ProjectRole, SpendProfileStatus } from "@framework/types";
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
 import { GetByIdQuery } from "@server/features/partners";
 import { InitialForecastDetailsDtosValidator } from "@ui/validators/initialForecastDetailsDtosValidator";
+import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 
 export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
@@ -41,6 +42,7 @@ export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
     const preparedForecasts = await this.ignoreCalculatedCostCategories(context, this.forecasts);
 
     await this.updateProfileDetails(context, preparedForecasts, existing, this.submit);
+    await this.updatePartner(context, partner, this.submit);
 
     return true;
   }
@@ -56,6 +58,15 @@ export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
   private hasChanged(item: ForecastDetailsDTO, existing: ForecastDetailsDTO[]): boolean {
     const existingItem = existing.find(x => x.id === item.id);
     return !existingItem || item.value !== existingItem.value;
+  }
+
+  private async updatePartner(context: IContext, partnerDto: PartnerDto, submit: boolean) {
+    if (submit) {
+      partnerDto.spendProfileStatus = SpendProfileStatus.Complete;
+    } else {
+      partnerDto.spendProfileStatus = SpendProfileStatus.Incomplete;
+    }
+    await context.runCommand(new UpdatePartnerCommand(partnerDto));
   }
 
   private async updateProfileDetails(context: IContext, forecasts: ForecastDetailsDTO[], existing: ForecastDetailsDTO[], submit: boolean) {

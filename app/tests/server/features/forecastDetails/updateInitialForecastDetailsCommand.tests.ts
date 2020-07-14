@@ -2,6 +2,8 @@ import { TestContext } from "../../testContextProvider";
 import { UpdateInitialForecastDetailsCommand } from "@server/features/forecastDetails";
 import { BadRequestError, ValidationError } from "@server/features/common/appError";
 import { ISalesforceProfileDetails } from "@server/repositories";
+import { GetByIdQuery } from "@server/features/partners";
+import { SpendProfileStatus } from "@framework/dtos";
 
 const mapProfileValue = (item: ISalesforceProfileDetails, value?: number): ForecastDetailsDTO => {
   return {
@@ -108,7 +110,10 @@ describe("UpdateInitialForecastDetailsCommand", () => {
     const context = new TestContext();
     const testData = context.testData;
     const project = testData.createProject();
-    const partner = context.testData.createPartner(project, x => x.participantStatus = "Pending");
+    const partner = context.testData.createPartner(project, x => {
+      x.participantStatus = "Pending";
+      x.spendProfileStatus = "To Do";
+    });
     const costCat = testData.createCostCategory();
     const periodId = 1;
     const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => {
@@ -132,13 +137,18 @@ describe("UpdateInitialForecastDetailsCommand", () => {
     const item = context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id)!;
     expect(item.Acc_InitialForecastCost__c).toBe(1500);
     expect(item.Acc_LatestForecastCost__c).toBe(1500);
+    const partnerDto = await context.runQuery(new GetByIdQuery(partner.id));
+    expect(partnerDto.spendProfileStatus).toEqual(SpendProfileStatus.Complete);
   });
 
   it("should update initial forecasts when forecast is invalid and submit === false", async () => {
     const context = new TestContext();
     const testData = context.testData;
     const project = testData.createProject();
-    const partner = context.testData.createPartner(project, x => x.participantStatus = "Pending");
+    const partner = context.testData.createPartner(project, x => {
+      x.participantStatus = "Pending";
+      x.spendProfileStatus = "To Do";
+    });
     const costCat = testData.createCostCategory();
     const periodId = 1;
     const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => {
@@ -162,6 +172,8 @@ describe("UpdateInitialForecastDetailsCommand", () => {
     const item = context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id)!;
     expect(item.Acc_InitialForecastCost__c).toBe(100);
     expect(item.Acc_LatestForecastCost__c).toBe(0);
+    const partnerDto = await context.runQuery(new GetByIdQuery(partner.id));
+    expect(partnerDto.spendProfileStatus).toEqual(SpendProfileStatus.Incomplete);
   });
 
   it("overheads should be ignored", async () => {
