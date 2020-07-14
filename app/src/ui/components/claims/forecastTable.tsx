@@ -1,7 +1,11 @@
 import { CondensedDateRange } from "../renderers/date";
 import React from "react";
 import { EditorStatus, IEditorStore } from "@ui/redux";
-import { IForecastDetailsDtosValidator, IForecastDetailsDtoValidator } from "@ui/validators";
+import {
+  IForecastDetailsDtoCostCategoryValidator,
+  IForecastDetailsDtosValidator,
+  IForecastDetailsDtoValidator
+} from "@ui/validators";
 import { TypedTable } from "../table";
 import classNames from "classnames";
 import { Currency } from "../renderers/currency";
@@ -77,6 +81,7 @@ export class ForecastTable extends React.Component<Props> {
     return approvedClaims[0].periodId;
   }
 
+  // tslint:disable-next-line:cognitive-complexity
   public render() {
     const { data, hideValidation, isSubmitting, editor } = this.props;
     const periodId = this.getPeriodId(data.project, data.claims, data.claim);
@@ -107,6 +112,7 @@ export class ForecastTable extends React.Component<Props> {
           "table__row--warning": !hideValidation && x.total > x.golCosts,
           "table__row--error": !hideValidation && x.validators.some(v => !v.isValid)
         })}
+        validationResult={!hideValidation ? editor && editor.validator.costCategoryForecasts.results : undefined}
       >
         <Table.String header="Month" value={x => x.categoryName} colClassName={() => "sticky-col sticky-col-left-1"} qa="category-name" />
 
