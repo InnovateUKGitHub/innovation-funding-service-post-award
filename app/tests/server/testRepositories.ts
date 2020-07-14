@@ -29,6 +29,7 @@ import { PcrSpendProfileEntityForCreate } from "@framework/entities";
 import { PCRProjectLocationPicklist } from "./features/pcrs/pcrProjectLocationPicklist";
 import { PCRSpendProfileCapitalUsageTypePicklist } from "./features/pcrs/pcrSpendProfileCapitalUsageTypesPicklist";
 import { PCRSpendProfileOverheadRatePicklist } from "./features/pcrs/pcrSpendProfileOverheadsRateOptionsPicklist";
+import { PartnerSpendProfileStatusMapper } from "@server/features/partners/mapToPartnerDto";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
@@ -53,7 +54,8 @@ class PartnerTestRepository extends TestRepository<Entities.Partner> implements 
     const item = this.Items.find(x => x.id === updatedPartner.Id);
     if (item) {
       item.postcode = updatedPartner.Acc_Postcode__c !== undefined ? updatedPartner.Acc_Postcode__c : item.postcode;
-
+      item.newForecastNeeded = updatedPartner.Acc_NewForecastNeeded__c;
+      item.spendProfileStatus = updatedPartner.Acc_SpendProfileCompleted__c;
       return Promise.resolve(true);
     }
     return Promise.resolve(false);

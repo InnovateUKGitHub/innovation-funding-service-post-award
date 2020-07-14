@@ -1,6 +1,13 @@
 import { SyncCommandBase } from "../common/commandBase";
 import { SalesforceProjectRole } from "../../repositories/partnersRepository";
-import { PartnerClaimStatus, PartnerDto, PartnerStatus, ProjectRole, SpendProfileStatus } from "@framework/types";
+import {
+    PartnerClaimStatus,
+    PartnerDto,
+    PartnerStatus,
+    PCRSpendProfileOverheadRate,
+    ProjectRole,
+    SpendProfileStatus
+} from "@framework/types";
 import { Partner } from "@framework/entities";
 
 export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
@@ -51,7 +58,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             percentageParticipantCostsSubmitted: this.valueIfPermission(this.calcPercentageClaimed(this.item.totalParticipantCosts, this.item.totalCostsSubmitted)),
             totalFundingDueToReceive: this.valueIfPermission(this.item.totalParticipantCosts * (this.item.awardRate / 100)),
             newForecastNeeded: this.item.newForecastNeeded,
-            spendProfileStatus: this.getSpendProfileStatus(this.item.spendProfileStatus),
+            spendProfileStatus: new PartnerSpendProfileStatusMapper().mapFromSalesforcePcrSpendProfileOverheadRateOption(this.item.spendProfileStatus),
         };
     }
 
@@ -91,20 +98,6 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
         }
     }
 
-    getSpendProfileStatus(salesforceStatus: string): SpendProfileStatus {
-        switch (salesforceStatus) {
-            case "To Do":
-                return SpendProfileStatus.ToDo;
-            // TODO: this should be changed to incomplete once SF makes the change
-            case "In progress":
-                return SpendProfileStatus.Incomplete;
-            case "Complete":
-                return SpendProfileStatus.Complete;
-            default:
-                return SpendProfileStatus.Unknown;
-        }
-    }
-
     private valueIfPermission(value: number | null) {
         if (this.projectLevelRoles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager) || this.partnerLevelRoles & ProjectRole.FinancialContact) {
             return value;
@@ -112,4 +105,31 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
         return null;
     }
 
+}
+
+export class PartnerSpendProfileStatusMapper {
+    private readonly options = {
+        toDo: "To Do",
+        // TODO: this should be changed to incomplete once SF makes the change
+        incomplete: "In progress",
+        complete: "Complete",
+    };
+
+    public mapFromSalesforcePcrSpendProfileOverheadRateOption = ((option: string | undefined): SpendProfileStatus => {
+        switch (option) {
+            case this.options.toDo: return SpendProfileStatus.ToDo;
+            case this.options.incomplete: return SpendProfileStatus.Incomplete;
+            case this.options.complete: return SpendProfileStatus.Complete;
+            default: return SpendProfileStatus.Unknown;
+        }
+    });
+
+    public mapToSalesforcePcrSpendProfileOverheadRateOption = ((option: SpendProfileStatus | undefined) => {
+        switch (option) {
+            case SpendProfileStatus.ToDo: return this.options.toDo;
+            case SpendProfileStatus.Incomplete: return this.options.incomplete;
+            case SpendProfileStatus.Complete: return this.options.complete;
+            default: return undefined;
+        }
+    });
 }
