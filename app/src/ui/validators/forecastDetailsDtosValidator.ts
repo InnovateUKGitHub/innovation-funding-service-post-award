@@ -3,19 +3,31 @@ import { Results } from "../validation/results";
 import { Result } from "../validation/result";
 import { ClaimDto, PartnerDto } from "@framework/types";
 import { NestedResult } from "@ui/validation";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export interface IForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> {
   items: NestedResult<IForecastDetailsDtoValidator>;
+  costCategoryForecasts: NestedResult<IForecastDetailsDtoCostCategoryValidator>;
   totalCosts: Result;
 }
 export interface IForecastDetailsDtoValidator extends Results<ForecastDetailsDTO> {
   id: Result;
   value: Result;
 }
+export interface IForecastDetailsDtoCostCategoryValidator extends Results<CostCategoryForecast> {
+  value: Result;
+}
+
+export interface CostCategoryForecast {
+  golCost: GOLCostDto;
+  forecasts: ForecastDetailsDTO[];
+  costCategory: CostCategoryDto;
+}
 
 export class ForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> implements IForecastDetailsDtosValidator {
   public readonly items = Validation.optionalChild(this, this.model, x => new ForecastDetailsDtoValidator(x));
   public totalCosts: Result;
+  public costCategoryForecasts: NestedResult<IForecastDetailsDtoCostCategoryValidator>;
 
   constructor(
     private readonly forecasts: ForecastDetailsDTO[],
@@ -45,6 +57,7 @@ export class ForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> 
     } else {
       this.totalCosts = Validation.valid(this);
     }
+    this.costCategoryForecasts = Validation.optionalChild(this, [], x => new ValidForecastDetailsDtoCostCategoryValidator(x));
   }
 }
 
@@ -58,4 +71,11 @@ export class ForecastDetailsDtoValidator extends Results<ForecastDetailsDTO> imp
     () => Validation.required(this, this.model.value, "Forecast is required."),
     () => Validation.number(this, this.model.value, "Forecast must be a number.")
   );
+}
+
+class ValidForecastDetailsDtoCostCategoryValidator extends Results<CostCategoryForecast> implements IForecastDetailsDtoCostCategoryValidator {
+  constructor(forecasts: CostCategoryForecast) {
+    super(forecasts, false);
+  }
+  public value = Validation.valid(this);
 }

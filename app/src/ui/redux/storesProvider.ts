@@ -26,7 +26,7 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
     contacts: new Stores.ContactsStore(getState, dispatch),
     costCategories,
     costsSummaries,
-    forecastDetails: new Stores.ForecastDetailsStore(claims, claimDetails, forecastGolCosts, partners, getState, dispatch),
+    forecastDetails: new Stores.ForecastDetailsStore(claims, claimDetails, forecastGolCosts, partners, costCategories, getState, dispatch),
     financialVirements: new Stores.FinancialVirementsStore(getState, dispatch),
     forecastGolCosts,
     messages: new Stores.MessagesStore(getState, dispatch),

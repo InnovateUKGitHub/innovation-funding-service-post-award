@@ -5,8 +5,10 @@ import { GetAllForecastsGOLCostsQuery, GetCostCategoriesQuery } from "@server/fe
 import { Authorisation, IContext, PartnerDto, PartnerStatus, ProjectRole, SpendProfileStatus } from "@framework/types";
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
 import { GetByIdQuery } from "@server/features/partners";
+import { GetByIdQuery as GetProjectByIdQuery } from "@server/features/projects";
 import { InitialForecastDetailsDtosValidator } from "@ui/validators/initialForecastDetailsDtosValidator";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
+import { GetCostCategoriesForPartnerQuery } from "@server/features/claims/getCostCategoriesForPartnerQuery";
 
 export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
@@ -23,8 +25,9 @@ export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
   }
 
   protected async Run(context: IContext) {
+    const project = await context.runQuery(new GetProjectByIdQuery(this.projectId));
     const partner = await context.runQuery(new GetByIdQuery(this.partnerId));
-    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const costCategories = await context.runQuery(new GetCostCategoriesForPartnerQuery(project, partner));
 
     if (partner.partnerStatus !== PartnerStatus.Pending) {
       throw new BadRequestError("Cannot update partner initial forecast");
