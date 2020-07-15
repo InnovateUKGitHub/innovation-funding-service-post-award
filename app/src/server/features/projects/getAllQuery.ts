@@ -10,11 +10,7 @@ export class GetAllQuery extends QueryBase<ProjectDto[]> {
       items.map(
         async (item) => {
           const roles = allRoles.forProject(item.Id).getRoles();
-          const periods = await context.repositories.profileTotalPeriod.getByProjectIdAndPeriodId(
-            item.Id,
-            item.Acc_CurrentPeriodNumber__c
-          );
-          return mapToProjectDto(context, item, roles, periods[0]);
+          return mapToProjectDto(context, item, roles);
         }
       )
     );
