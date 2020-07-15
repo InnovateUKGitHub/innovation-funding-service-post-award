@@ -28,6 +28,8 @@ export interface ISalesforceProject {
   Acc_Duration__c: number;
   Acc_NumberofPeriods__c: number | null;
   Acc_CurrentPeriodNumber__c: number;
+  Acc_CurrentPeriodStartDate__c: string;
+  Acc_CurrentPeriodEndDate__c: string;
 }
 
 export interface IProjectRepository {
@@ -67,6 +69,8 @@ export class ProjectRepository extends SalesforceRepositoryBase<ISalesforceProje
     "Acc_Duration__c",
     "Acc_NumberofPeriods__c",
     "Acc_CurrentPeriodNumber__c",
+    "Acc_CurrentPeriodStartDate__c",
+    "Acc_CurrentPeriodEndDate__c",
   ];
 
   getById(id: string) {

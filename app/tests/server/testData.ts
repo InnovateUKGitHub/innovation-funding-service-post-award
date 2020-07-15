@@ -84,6 +84,8 @@ export class TestData {
       Acc_NumberofPeriods__c: 5,
       Acc_CurrentPeriodNumber__c: 0,
       Acc_Duration__c: 15,
+      Acc_CurrentPeriodStartDate__c: "2020-06-01",
+      Acc_CurrentPeriodEndDate__c: "2020-06-30",
     };
 
     if (!!update) update(newItem);
