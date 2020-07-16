@@ -175,6 +175,7 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
       stepNumber: 9,
       validation: val => val.pcr,
       stepRender: SpendProfileStep,
+      supportsReadOnly: true,
     });
   }
 
