@@ -13,6 +13,7 @@ import { PCRWorkflowValidator } from "@ui/validators/pcrWorkflowValidator";
 import { GrantMovingOverFinancialYearForm } from "./financialVirements/financialVirementsSummary";
 import { NavigationArrowsForPCRs } from "@ui/containers/pcrs/navigationArrows";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { ForbiddenError } from "@server/features/common";
 
 export interface ProjectChangeRequestPrepareItemParams {
   projectId: string;
@@ -61,11 +62,27 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     });
   }
 
+  private getStepReviewLink(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, stepName: string) {
+    return this.props.routes.pcrReviewItem.getLink({
+      projectId: this.props.projectId,
+      pcrId: this.props.pcrId,
+      itemId: this.props.itemId,
+      step: workflow && workflow.findStepNumberByName(stepName)
+    });
+  }
+
   private getEditLink(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, stepName: string, validation: Result | null) {
     if (this.props.mode !== "prepare") {
       return null;
     }
     return <ACC.Link id={validation ? validation.key : undefined} replace={true} route={this.getStepLink(workflow, stepName)}>Edit</ACC.Link>;
+  }
+
+  private getViewLink(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, stepName: string) {
+    if (this.props.mode !== "review") {
+      return null;
+    }
+    return <ACC.Link replace={true} route={this.getStepReviewLink(workflow, stepName)}>View</ACC.Link>;
   }
 
   private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, pcr: PCRDto, pcrItem: PCRItemDto, pcrItemType: PCRItemTypeDto, editableItemTypes: PCRItemType[]) {
@@ -99,7 +116,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     return (
       <React.Fragment>
         {this.props.mode === "prepare" && this.props.step === 1 && this.renderGuidanceSection(pcrItem)}
-        {this.props.mode === "prepare" && !workflow.isOnSummary() && this.renderStep(workflow, project, pcr, pcrItem, pcrItemType, editor, documentsEditor)}
+        {!workflow.isOnSummary() && this.renderStep(workflow, project, pcr, pcrItem, pcrItemType, editor, documentsEditor)}
         {workflow.isOnSummary() && this.renderSummarySection(workflow, project, pcr, pcrItem, editor, editableItemTypes)}
       </React.Fragment>
     );
@@ -117,8 +134,11 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
   private renderStep(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, pcrItemType: PCRItemTypeDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>) {
     const validator = editor.validator.items.results.find(x => x.model.id === pcrItem.id)!;
     const status = editor.status || EditorStatus.Editing;
+    const { mode } = this.props;
 
     const currentStep = workflow.getCurrentStepInfo()!;
+    // When reviewing a pcr, the MO should only be able to visit pages which support read only.
+    if (mode === "review" && !currentStep.supportsReadOnly) throw new ForbiddenError();
 
     return (
       currentStep.stepRender({
@@ -131,6 +151,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
         status,
         isClient: this.props.isClient,
         routes: this.props.routes,
+        mode,
         onChange: itemDto => this.onChange(editor.data, itemDto),
         onSave: (skipToSummary) => this.onSave(workflow, editor.data, skipToSummary),
         getRequiredToCompleteMessage: (message) => {
@@ -157,6 +178,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
       onSave: () => this.onSave(workflow, editor.data),
       getStepLink: (stepName) => this.getStepLink(workflow, stepName),
       getEditLink: (stepName, validation) => this.getEditLink(workflow, stepName, validation),
+      getViewLink: (stepName) => this.getViewLink(workflow, stepName),
       mode,
       config: this.props.config,
       isClient: this.props.isClient,
@@ -304,12 +326,13 @@ export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParam
 
 export const PCRReviewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
   routeName: "pcrReviewItem",
-  routePath: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId",
+  routePath: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId?:step",
   container: (props) => <PCRItemContainer mode="review" {...props} />,
   getParams: (route) => ({
     projectId: route.params.projectId,
     itemId: route.params.itemId,
-    pcrId: route.params.pcrId
+    pcrId: route.params.pcrId,
+    step: parseInt(route.params.step, 10)
   }),
   getTitle: ({ params, stores }) => getTitle("Review project change request item", params, stores),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer)
