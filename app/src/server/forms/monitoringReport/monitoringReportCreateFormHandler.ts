@@ -30,6 +30,7 @@ export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<M
       lastUpdated: null,
       startDate: null,
       endDate: null,
+      addComments: "" // TODO:ACC-6858
     };
   }
 
