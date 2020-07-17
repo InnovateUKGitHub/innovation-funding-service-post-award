@@ -14,7 +14,11 @@ import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import classNames from "classnames";
-import { PCRSpendProfileCostDto, PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
+import {
+  PCRSpendProfileCostDto,
+  PCRSpendProfileLabourCostDto,
+  PCRSpendProfileMaterialsCostDto
+} from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryType } from "@framework/entities";
 import { PcrSpendProfileCostSummaryParams } from "@ui/containers";
 
@@ -60,36 +64,42 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data> {
     );
   }
 
-  private renderFooterRow(row: { key: string, title: React.ReactNode, value: React.ReactNode, qa: string, isBold?: boolean }) {
+  private renderFooterRow(row: { key: string, title: React.ReactNode, value: React.ReactNode, numberOfColumns: number, qa: string, isBold?: boolean }) {
     return (
       <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
-        <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{row.title}</th>
+        <th colSpan={row.numberOfColumns-1} className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{row.title}</th>
         <td className={classNames("govuk-table__cell", "govuk-table__cell--numeric", { "govuk-!-font-weight-bold": row.isBold })}>
           {row.value}
         </td>
-        <td className={classNames("govuk-table__cell")}/>
+        {/*<td className={classNames("govuk-table__cell")}/>*/}
       </tr>
     );
   }
 
-  private renderViewTable(costs: PCRSpendProfileCostDto[], costCategory: CostCategoryDto) {
-    const Table = ACC.TypedTable<PCRSpendProfileCostDto>();
+  private getFooters(costs: PCRSpendProfileCostDto[], costCategory: CostCategoryDto, numberOfColumns: number) {
     const total = costs.reduce((acc, cost) => acc + (cost.value || 0), 0);
-    const footers = [
+    return [
       this.renderFooterRow({
         key: "1",
         title: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.labels().totalCosts(costCategory.name)}/>,
         qa: "total-costs",
         isBold: false,
+        numberOfColumns,
         value: <ACC.Renderers.Currency value={total}/>
       })];
+  }
+
+  private renderViewTable(costs: PCRSpendProfileCostDto[], costCategory: CostCategoryDto) {
+    const Table = ACC.TypedTable<PCRSpendProfileCostDto>();
     // tslint:disable-next-line: no-small-switch
     switch (costCategory.type) {
       case CostCategoryType.Labour:
-        return this.renderLabourCostSummary(costs as PCRSpendProfileLabourCostDto[], total);
+        return this.renderLabourCostSummary(costs as PCRSpendProfileLabourCostDto[], costCategory);
+      case CostCategoryType.Materials:
+        return this.renderMaterialsCostSummary(costs as PCRSpendProfileMaterialsCostDto[], costCategory);
       default:
         return (
-          <Table.Table qa="default-costs" data={costs} footers={footers}>
+          <Table.Table qa="default-costs" data={costs} footers={this.getFooters(costs, costCategory, 2)}>
             <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().description()} value={x => x.description} qa={"description"}/>
             <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().cost()} value={x => x.value} qa={"cost"}/>
           </Table.Table>
@@ -97,15 +107,27 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data> {
     }
   }
 
-  private renderLabourCostSummary(costs: PCRSpendProfileLabourCostDto[], total: number) {
+  private renderLabourCostSummary(costs: PCRSpendProfileLabourCostDto[], costCategory: CostCategoryDto) {
     const Table = ACC.TypedTable<PCRSpendProfileLabourCostDto>();
     return (
-      <Table.Table qa="labour-costs" data={costs}>
-        <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().description()} value={x => x.description} qa={"description"} footer={<ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.labels().labour.totalCost()}/>}/>
+      <Table.Table qa="labour-costs" data={costs} footers={this.getFooters(costs, costCategory, 5)}>
+        <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().labour.role()} value={x => x.description} qa={"description"}/>
         <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().labour.grossCost()} value={x => x.grossCostOfRole} qa={"grossEmployeeCost"}/>
         <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().labour.rate()} value={x => x.ratePerDay} qa={"ratePerDay"}/>
         <Table.Number headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().labour.daysOnProject()} value={x => x.daysSpentOnProject} qa={"daysSpentOnProject"}/>
-        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().cost()} value={x => x.value} qa={"cost"} footer={<ACC.Renderers.Currency value={total}/>}/>
+        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().cost()} value={x => x.value} qa={"totalCost"}/>
+      </Table.Table>
+    );
+  }
+
+  private renderMaterialsCostSummary(costs: PCRSpendProfileMaterialsCostDto[], costCategory: CostCategoryDto) {
+    const Table = ACC.TypedTable<PCRSpendProfileMaterialsCostDto>();
+    return (
+      <Table.Table qa="materials-costs" data={costs} footers={this.getFooters(costs, costCategory, 4)}>
+        <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().materials.item()} value={x => x.description} qa={"description"}/>
+        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().materials.quantity()} value={x => x.quantity} qa={"quantity"}/>
+        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().materials.costPerItem()} value={x => x.costPerItem} qa={"costPerItem"}/>
+        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().materials.totalCost()} value={x => x.value} qa={"totalCost"}/>
       </Table.Table>
     );
   }
