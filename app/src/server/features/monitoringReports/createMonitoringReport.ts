@@ -41,6 +41,7 @@ export class CreateMonitoringReportCommand extends CommandBase<string> {
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_PeriodStartDate__c: profile.Acc_ProjectPeriodStartDate__c,
       Acc_PeriodEndDate__c: profile.Acc_ProjectPeriodEndDate__c,
+      Acc_AddComments__c: "",
       Acc_MonitoringReportStatus__c: "Draft"
     };
 

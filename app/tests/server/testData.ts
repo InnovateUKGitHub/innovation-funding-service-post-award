@@ -277,6 +277,7 @@ export class TestData {
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_PeriodStartDate__c: DateTime.fromFormat("2020-01-01", format).toFormat(format),
       Acc_PeriodEndDate__c: DateTime.fromFormat("2020-04-01", format).toFormat(format),
+      Acc_AddComments__c: "",
       LastModifiedDate: DateTime.local().toISO()
     };
 

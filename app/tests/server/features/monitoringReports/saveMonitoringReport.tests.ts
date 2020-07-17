@@ -113,6 +113,38 @@ describe("saveMonitoringReports", () => {
     expect(context.repositories.monitoringReportResponse.Items).toEqual([responseQuestion2]);
   });
 
+  it("should save the comments to the monitoring report if not submitted", async () => {
+    const context = new TestContext();
+
+    const report = createMonitoringReportTestData(context, 1);
+
+    const expectedDto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    expectedDto.addComments = "Test comment";
+    await context.runCommand(new SaveMonitoringReport(expectedDto, false));
+
+    const updatedDto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+
+    expect(updatedDto.addComments).toEqual(expectedDto.addComments);
+  });
+
+  it("should update the comments on the monitoring report if not submitted", async () => {
+    const context = new TestContext();
+
+    const report = createMonitoringReportTestData(context, 1);
+
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    dto.addComments = "Test comment";
+    await context.runCommand(new SaveMonitoringReport(dto, false));
+
+    const expectedDto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    expectedDto.addComments = "Updated test comment";
+    await context.runCommand(new SaveMonitoringReport(expectedDto, false));
+
+    const updatedDto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+
+    expect(updatedDto.addComments).toEqual(expectedDto.addComments);
+  });
+
   it("should not change the report status from draft if it has not been submitted", async () => {
     const context = new TestContext();
 
