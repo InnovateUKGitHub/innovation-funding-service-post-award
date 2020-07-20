@@ -15,10 +15,11 @@ import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWo
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import classNames from "classnames";
 import {
+  PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
   PCRSpendProfileLabourCostDto,
-  PCRSpendProfileMaterialsCostDto,
-  PCRSpendProfileSubcontractingCostDto
+  PCRSpendProfileMaterialsCostDto, PCRSpendProfileOtherCostsDto,
+  PCRSpendProfileSubcontractingCostDto, PCRSpendProfileTravelAndSubsCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryType } from "@framework/entities";
 import { PcrSpendProfileCostSummaryParams } from "@ui/containers";
@@ -72,7 +73,6 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data> {
         <td className={classNames("govuk-table__cell", "govuk-table__cell--numeric", { "govuk-!-font-weight-bold": row.isBold })}>
           {row.value}
         </td>
-        {/*<td className={classNames("govuk-table__cell")}/>*/}
       </tr>
     );
   }
@@ -97,8 +97,14 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data> {
         return this.renderLabourCostSummary(costs as PCRSpendProfileLabourCostDto[], costCategory);
       case CostCategoryType.Materials:
         return this.renderMaterialsCostSummary(costs as PCRSpendProfileMaterialsCostDto[], costCategory);
+      case CostCategoryType.Capital_Usage:
+        return this.renderCapitalUsageCostSummary(costs as PCRSpendProfileCapitalUsageCostDto[], costCategory);
       case CostCategoryType.Subcontracting:
         return this.renderSubcontractingCostSummary(costs as PCRSpendProfileSubcontractingCostDto[], costCategory);
+      case CostCategoryType.Travel_And_Subsistence:
+        return this.renderTravelAndSubsistenceCostSummary(costs as PCRSpendProfileTravelAndSubsCostDto[], costCategory);
+      case CostCategoryType.Other_Costs:
+        return this.renderOtherCostsCostSummary(costs as PCRSpendProfileOtherCostsDto[], costCategory);
       default:
         return (
           <Table.Table qa="default-costs" data={costs} footers={this.getFooters(costs, costCategory, 2)}>
@@ -142,6 +148,43 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data> {
         <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().subcontracting.subcontractorCountry()} value={x => x.subcontractorCountry} qa={"subcontractorCountry"}/>
         <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().subcontracting.subcontractorRoleAndDescription()} value={x => x.subcontractorRoleAndDescription} qa={"subcontractorRoleAndDescription"}/>
         <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().subcontracting.cost()} value={x => x.value} qa={"totalCost"}/>
+      </Table.Table>
+    );
+  }
+
+  private renderCapitalUsageCostSummary(costs: PCRSpendProfileCapitalUsageCostDto[], costCategory: CostCategoryDto) {
+    const Table = ACC.TypedTable<PCRSpendProfileCapitalUsageCostDto>();
+    return (
+      <Table.Table qa="capital-usage-costs" data={costs} footers={this.getFooters(costs, costCategory, 7)}>
+        <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().capitalUsage.description()} value={x => x.description} qa={"description"}/>
+        <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().capitalUsage.type()} value={x => x.typeLabel} qa={"type"}/>
+        <Table.Number headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().capitalUsage.depreciationPeriod()} value={x => x.depreciationPeriod} qa={"depreciationPeriod"}/>
+        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().capitalUsage.netPresentValue()} value={x => x.netPresentValue} qa={"netPresentValue"}/>
+        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().capitalUsage.residualValue()} value={x => x.residualValue} qa={"residualValue"}/>
+        <Table.Percentage headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().capitalUsage.utilisation()} value={x => x.utilisation} qa={"utilisation"}/>
+        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().capitalUsage.netCost()} value={x => x.value} qa={"totalCost"}/>
+      </Table.Table>
+    );
+  }
+
+  private renderTravelAndSubsistenceCostSummary(costs: PCRSpendProfileTravelAndSubsCostDto[], costCategory: CostCategoryDto) {
+    const Table = ACC.TypedTable<PCRSpendProfileTravelAndSubsCostDto>();
+    return (
+      <Table.Table qa="capital-usage-costs" data={costs} footers={this.getFooters(costs, costCategory, 4)}>
+        <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().travelAndSubs.description()} value={x => x.description} qa={"description"}/>
+        <Table.Number headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().travelAndSubs.numberOfTimes()} value={x => x.numberOfTimes} qa={"numberOfTimes"}/>
+        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().travelAndSubs.costOfEach()} value={x => x.costOfEach} qa={"costOfEach"}/>
+        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().travelAndSubs.totalCost()} value={x => x.value} qa={"totalCost"}/>
+      </Table.Table>
+    );
+  }
+
+  private renderOtherCostsCostSummary(costs: PCRSpendProfileOtherCostsDto[], costCategory: CostCategoryDto) {
+    const Table = ACC.TypedTable<PCRSpendProfileOtherCostsDto>();
+    return (
+      <Table.Table qa="capital-usage-costs" data={costs} footers={this.getFooters(costs, costCategory, 2)}>
+        <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().otherCosts.description()} value={x => x.description} qa={"description"}/>
+        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().otherCosts.totalCost()} value={x => x.value} qa={"totalCost"}/>
       </Table.Table>
     );
   }
