@@ -1,7 +1,7 @@
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
 import { ISalesforceProfileDetails } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { GetAllForecastsGOLCostsQuery, GetCostCategoriesQuery } from "@server/features/claims";
+import { GetAllForecastsGOLCostsQuery } from "@server/features/claims";
 import { Authorisation, IContext, PartnerDto, PartnerStatus, ProjectRole, SpendProfileStatus } from "@framework/types";
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
 import { GetByIdQuery } from "@server/features/partners";
@@ -9,6 +9,7 @@ import { GetByIdQuery as GetProjectByIdQuery } from "@server/features/projects";
 import { InitialForecastDetailsDtosValidator } from "@ui/validators/initialForecastDetailsDtosValidator";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import { GetCostCategoriesForPartnerQuery } from "@server/features/claims/getCostCategoriesForPartnerQuery";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
@@ -42,7 +43,7 @@ export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
 
     const existing = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(this.partnerId));
 
-    const preparedForecasts = await this.ignoreCalculatedCostCategories(context, this.forecasts);
+    const preparedForecasts = await this.ignoreCalculatedCostCategories(costCategories, this.forecasts);
 
     await this.updateProfileDetails(context, preparedForecasts, existing, this.submit);
     await this.updatePartner(context, partner, this.submit);
@@ -50,11 +51,9 @@ export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
     return true;
   }
 
-  private async ignoreCalculatedCostCategories(context: IContext, dtos: ForecastDetailsDTO[]) {
+  private async ignoreCalculatedCostCategories(costCategories: CostCategoryDto[], dtos: ForecastDetailsDTO[]) {
     // check to see if there are any calculated cost categories
-    const calculatedCostCategoryIds = await context.runQuery(new GetCostCategoriesQuery())
-      .then(costCategories => costCategories.filter(x => x.isCalculated).map(x => x.id));
-
+    const calculatedCostCategoryIds = await costCategories.filter(x => x.isCalculated).map(x => x.id);
     return dtos.filter(forecast => calculatedCostCategoryIds.indexOf(forecast.costCategoryId) === -1);
   }
 

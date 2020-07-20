@@ -33,11 +33,10 @@ export class InitialForecastDetailsDtosValidator extends Results<ForecastDetails
 
     return this.costCategories.map(costCategory => {
       const entry = groupedForecasts.find(x => x[0] === costCategory.id)!;
-      const [costCategoryId, costCategoryForecasts] = entry;
       return {
-        golCost: this.golCosts.find(gol => gol.costCategoryId === costCategoryId)!,
+        golCost: this.golCosts.find(gol => gol.costCategoryId === costCategory.id)!,
         costCategory,
-        forecasts: costCategoryForecasts
+        forecasts: entry && entry[1]
       };
     });
   }
@@ -57,11 +56,20 @@ export class InitialForecastDetailsDtoValidator extends Results<ForecastDetailsD
 }
 
 class InitialForecastDetailsDtoCostCategoryValidator extends Results<CostCategoryForecast> implements IForecastDetailsDtoCostCategoryValidator {
-  constructor(forecasts: CostCategoryForecast, private readonly submit: boolean, showValidationErrors: boolean) {
-    super(forecasts, showValidationErrors);
+  constructor(forecast: CostCategoryForecast, private readonly submit: boolean, showValidationErrors: boolean) {
+    super(forecast, showValidationErrors);
   }
 
-  public value = this.submit
-    ? Validation.isTrue(this, sum(this.model.forecasts, x =>isNumber(x.value) ? x.value : 0) === this.model.golCost.value, `The total forecasts for ${this.model.costCategory.name.toLocaleLowerCase()} must be the same as the total eligible costs`)
-    : Validation.valid(this);
+  private validateCostCategory() {
+    if (!this.submit) return Validation.valid(this);
+
+    // Don't validate calculated forecasts to support non-js form submission
+    if (this.model.costCategory.isCalculated) return Validation.valid(this);
+
+    const isValid = sum(this.model.forecasts, x => isNumber(x.value) ? x.value : 0) === this.model.golCost.value;
+    const message = `The total forecasts for ${this.model.costCategory.name.toLocaleLowerCase()} must be the same as the total eligible costs`;
+    return Validation.isTrue(this, isValid, message);
+  }
+
+  public value = this.validateCostCategory();
 }
