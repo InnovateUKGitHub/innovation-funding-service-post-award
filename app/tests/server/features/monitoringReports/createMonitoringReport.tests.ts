@@ -19,6 +19,7 @@ describe("createMonitoringReports", () => {
     expect(context.repositories.monitoringReportHeader.Items.length).toBe(1);
     expect(context.repositories.monitoringReportHeader.Items[0].Acc_PeriodStartDate__c).toBe("2018-01-02");
     expect(context.repositories.monitoringReportHeader.Items[0].Acc_PeriodEndDate__c).toBe("2018-03-04");
+    expect(context.repositories.monitoringReportHeader.Items[0].Acc_AddComments__c).toBe("");
     expect(result).toEqual(context.repositories.monitoringReportHeader.Items[0].Id);
   });
 
@@ -102,6 +103,7 @@ async function getCreateDto(context: TestContext, startDate?: string, endDate?: 
     endDate: null,
     periodId: 1,
     lastUpdated: null,
-    questions
+    questions,
+    addComments: "",
   };
 }

@@ -24,6 +24,7 @@ export interface MonitoringReportQuestionDto {
 
 export interface MonitoringReportDto extends MonitoringReportSummaryDto {
   questions: MonitoringReportQuestionDto[];
+  addComments: string;
 }
 
 export interface MonitoringReportOptionDto {

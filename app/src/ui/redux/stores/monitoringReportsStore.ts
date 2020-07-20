@@ -6,7 +6,7 @@ import { ApiClient } from "@ui/apiClient";
 import { LoadingStatus, Pending } from "@shared/pending";
 import { MonitoringReportDto, MonitoringReportSummaryDto } from "@framework/dtos";
 import { MonitoringReportStatus } from "@framework/types";
-import { dataLoadAction, handleEditorError, handleEditorSubmit, handleEditorSuccess, messageSuccess } from "../actions";
+import { dataLoadAction, messageSuccess } from "../actions";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 
@@ -65,6 +65,7 @@ export class MonitoringReportsStore extends StoreBase {
         periodId: NaN,
         projectId,
         questions,
+        addComments: "",
       }
       )),
       init,

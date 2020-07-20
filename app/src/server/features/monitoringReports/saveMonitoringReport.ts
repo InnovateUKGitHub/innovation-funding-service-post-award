@@ -2,7 +2,6 @@ import {
   Authorisation,
   IContext,
   MonitoringReportDto,
-  ProjectDto,
   ProjectRole
 } from "@framework/types";
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
@@ -24,7 +23,7 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
     return auth.forProject(this.monitoringReportDto.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 
-  private async updateHeader(context: IContext, project: ProjectDto) {
+  private async updateHeader(context: IContext) {
     const periodId = this.monitoringReportDto.periodId;
 
     const profile = await context.repositories.profileTotalPeriod
@@ -40,7 +39,8 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
       Id: this.monitoringReportDto.headerId,
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_PeriodStartDate__c: profile.Acc_ProjectPeriodStartDate__c,
-      Acc_PeriodEndDate__c: profile.Acc_ProjectPeriodEndDate__c
+      Acc_PeriodEndDate__c: profile.Acc_ProjectPeriodEndDate__c,
+      Acc_AddComments__c: this.monitoringReportDto.addComments
     };
 
     if (this.submit) {
@@ -106,7 +106,7 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
     }
 
     await this.updateMonitoringReport(context);
-    await this.updateHeader(context, project);
+    await this.updateHeader(context);
     await this.insertStatusChange(context);
     return true;
   }
