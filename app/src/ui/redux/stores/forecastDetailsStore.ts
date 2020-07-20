@@ -10,6 +10,7 @@ import { messageSuccess, RootActionsOrThunk } from "@ui/redux/actions";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PartnersStore } from "@ui/redux/stores/partnersStore";
 import { InitialForecastDetailsDtosValidator } from "@ui/validators/initialForecastDetailsDtosValidator";
+import { CostCategoriesStore } from "@ui/redux/stores/costCategoriesStore";
 
 export class ForecastDetailsStore extends StoreBase {
   constructor(
@@ -17,6 +18,7 @@ export class ForecastDetailsStore extends StoreBase {
     private readonly claimDetailsStore: ClaimsDetailsStore,
     private readonly golCostsStore: ForecastGolCostsStore,
     private readonly partnersStore: PartnersStore,
+    private readonly costCategoriesStore: CostCategoriesStore,
     getState: () => RootState, queue: (action: RootActionsOrThunk) => void
   ) {
     super(getState, queue);
@@ -44,10 +46,13 @@ export class ForecastDetailsStore extends StoreBase {
     return combined.then(x => new ForecastDetailsDtosValidator(dto, x.claims, x.claimDetails, x.golCosts, x.partner, showValidationErrors));
   }
 
-  private getInitialValidator(partnerId: string, dto: ForecastDetailsDTO[], showValidationErrors: boolean) {
-    return this.golCostsStore.getAllByPartner(partnerId)
-      // TODO needs cost categories?
-      .then(x => new InitialForecastDetailsDtosValidator(dto, x, [], false, showValidationErrors));
+  private getInitialValidator(partnerId: string, dto: ForecastDetailsDTO[], submit: boolean, showValidationErrors: boolean) {
+    const pending = Pending.combine({
+      costCategories: this.costCategoriesStore.getAllForPartner(partnerId),
+      colCosts: this.golCostsStore.getAllByPartner(partnerId),
+    });
+    return pending.chain(x =>
+      Pending.done(new InitialForecastDetailsDtosValidator(dto, x.colCosts, x.costCategories, submit, showValidationErrors)));
   }
 
   public getForecastEditor(partnerId: string, init?: (data: ForecastDetailsDTO[]) => void) {
@@ -66,7 +71,7 @@ export class ForecastDetailsStore extends StoreBase {
       storeKeys.getPartnerKey(partnerId),
       () => this.getAllInitialByPartner(partnerId),
       init,
-      (dto) => this.getInitialValidator(partnerId, dto, false)
+      (dto) => this.getInitialValidator(partnerId, dto, false, false)
     );
   }
 
@@ -95,7 +100,7 @@ export class ForecastDetailsStore extends StoreBase {
       "initialForecastDetails",
       storeKeys.getPartnerKey(partnerId),
       dto,
-      (show) => this.getInitialValidator(partnerId, dto, show),
+      (show) => this.getInitialValidator(partnerId, dto, submit, show),
       (p) => ApiClient.initialForecastDetails.update({ projectId, partnerId, submit, forecasts: dto, ...p }),
       // tslint:disable-next-line:no-identical-functions
       () => {

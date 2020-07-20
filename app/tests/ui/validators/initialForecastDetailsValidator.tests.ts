@@ -30,7 +30,7 @@ describe("InitialForecastDetailsValidator", () => {
 
       expect(labourResult.isValid).toBe(true);
     });
-    it("should not validate each cost category total if the forecast items are not valid", async () => {
+    it("should validate each cost category total if the forecast items are not valid", async () => {
 
       const context = new TestContext();
       const partner = context.testData.createPartner();
@@ -55,7 +55,7 @@ describe("InitialForecastDetailsValidator", () => {
 
       const labourResult = validation.costCategoryForecasts.results.find(x => x.model.costCategory.id === labour.id)!;
 
-      expect(labourResult.isValid).toBe(true);
+      expect(labourResult.isValid).toBe(false);
     });
     it("should validate each cost category total must equal the total eligible costs for that cost category", async () => {
 
