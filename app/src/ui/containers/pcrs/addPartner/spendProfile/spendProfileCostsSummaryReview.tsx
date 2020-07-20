@@ -17,7 +17,8 @@ import classNames from "classnames";
 import {
   PCRSpendProfileCostDto,
   PCRSpendProfileLabourCostDto,
-  PCRSpendProfileMaterialsCostDto
+  PCRSpendProfileMaterialsCostDto,
+  PCRSpendProfileSubcontractingCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryType } from "@framework/entities";
 import { PcrSpendProfileCostSummaryParams } from "@ui/containers";
@@ -91,12 +92,13 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data> {
 
   private renderViewTable(costs: PCRSpendProfileCostDto[], costCategory: CostCategoryDto) {
     const Table = ACC.TypedTable<PCRSpendProfileCostDto>();
-    // tslint:disable-next-line: no-small-switch
     switch (costCategory.type) {
       case CostCategoryType.Labour:
         return this.renderLabourCostSummary(costs as PCRSpendProfileLabourCostDto[], costCategory);
       case CostCategoryType.Materials:
         return this.renderMaterialsCostSummary(costs as PCRSpendProfileMaterialsCostDto[], costCategory);
+      case CostCategoryType.Subcontracting:
+        return this.renderSubcontractingCostSummary(costs as PCRSpendProfileSubcontractingCostDto[], costCategory);
       default:
         return (
           <Table.Table qa="default-costs" data={costs} footers={this.getFooters(costs, costCategory, 2)}>
@@ -115,7 +117,7 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data> {
         <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().labour.grossCost()} value={x => x.grossCostOfRole} qa={"grossEmployeeCost"}/>
         <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().labour.rate()} value={x => x.ratePerDay} qa={"ratePerDay"}/>
         <Table.Number headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().labour.daysOnProject()} value={x => x.daysSpentOnProject} qa={"daysSpentOnProject"}/>
-        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().cost()} value={x => x.value} qa={"totalCost"}/>
+        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().labour.totalCost()} value={x => x.value} qa={"totalCost"}/>
       </Table.Table>
     );
   }
@@ -125,9 +127,21 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data> {
     return (
       <Table.Table qa="materials-costs" data={costs} footers={this.getFooters(costs, costCategory, 4)}>
         <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().materials.item()} value={x => x.description} qa={"description"}/>
-        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().materials.quantity()} value={x => x.quantity} qa={"quantity"}/>
+        <Table.Number headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().materials.quantity()} value={x => x.quantity} qa={"quantity"}/>
         <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().materials.costPerItem()} value={x => x.costPerItem} qa={"costPerItem"}/>
         <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().materials.totalCost()} value={x => x.value} qa={"totalCost"}/>
+      </Table.Table>
+    );
+  }
+
+  private renderSubcontractingCostSummary(costs: PCRSpendProfileSubcontractingCostDto[], costCategory: CostCategoryDto) {
+    const Table = ACC.TypedTable<PCRSpendProfileSubcontractingCostDto>();
+    return (
+      <Table.Table qa="subcontracting-costs" data={costs} footers={this.getFooters(costs, costCategory, 4)}>
+        <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().subcontracting.subcontractorName()} value={x => x.description} qa={"description"}/>
+        <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().subcontracting.subcontractorCountry()} value={x => x.subcontractorCountry} qa={"subcontractorCountry"}/>
+        <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().subcontracting.subcontractorRoleAndDescription()} value={x => x.subcontractorRoleAndDescription} qa={"subcontractorRoleAndDescription"}/>
+        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().subcontracting.cost()} value={x => x.value} qa={"totalCost"}/>
       </Table.Table>
     );
   }
