@@ -20,6 +20,7 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
         {this.renderPeriod(editor)}
         {editor.data.questions.map(q => this.renderResponse(editor, q))}
         {this.renderLog()}
+        {/* TODO:ACC-6856:  this.renderAddComments(editor) */}
         { mode === "prepare" && this.renderForm(editor)}
       </ACC.Section>
     );

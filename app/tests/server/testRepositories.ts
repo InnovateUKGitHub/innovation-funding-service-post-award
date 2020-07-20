@@ -29,7 +29,6 @@ import { PcrSpendProfileEntityForCreate } from "@framework/entities";
 import { PCRProjectLocationPicklist } from "./features/pcrs/pcrProjectLocationPicklist";
 import { PCRSpendProfileCapitalUsageTypePicklist } from "./features/pcrs/pcrSpendProfileCapitalUsageTypesPicklist";
 import { PCRSpendProfileOverheadRatePicklist } from "./features/pcrs/pcrSpendProfileOverheadsRateOptionsPicklist";
-import { PartnerSpendProfileStatusMapper } from "@server/features/partners/mapToPartnerDto";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
