@@ -17,8 +17,7 @@ import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import classNames from "classnames";
-import { PCRSpendProfileCostDto, PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
-import { CostCategoryType } from "@framework/entities";
+import { PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
 
 export interface PcrSpendProfileCostSummaryParams {
   projectId: string;
@@ -31,7 +30,6 @@ interface Data {
   project: Pending<ProjectDto>;
   costCategory: Pending<CostCategoryDto>;
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
-  mode: "prepare" | "review";
  }
 
 interface Callbacks {
@@ -54,7 +52,7 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
     const addPartnerItem = editor.data.items.find(x => x.id === this.props.itemId && x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
     const addPartnerWorkflow = this.getWorkflow(addPartnerItem);
     const spendProfileStep = addPartnerWorkflow && addPartnerWorkflow.getCurrentStepInfo();
-    const stepRoute = this.props.mode === "prepare" ? this.props.routes.pcrPrepareItem.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, step: spendProfileStep && spendProfileStep.stepNumber || undefined}) : this.props.routes.pcrReviewItem.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, step: spendProfileStep && spendProfileStep.stepNumber || undefined});
+    const stepRoute = this.props.routes.pcrPrepareItem.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, step: spendProfileStep && spendProfileStep.stepNumber || undefined});
     const costs = addPartnerItem.spendProfile.costs.filter(x => x.costCategoryId === this.props.costCategoryId);
     const Form = ACC.TypedForm<PCRDto>();
     return (
@@ -67,8 +65,8 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
         <ACC.Section titleContent={x => x.pcrSpendProfileCostsSummaryContent.costsSectionTitle(costCategory.name)}>
-          {this.props.mode === "prepare" && this.renderGuidance(costCategory)}
-          {this.props.mode === "prepare" ? this.renderTable(costs, costCategory) : this.renderViewTable(costs, costCategory) }
+          {this.renderGuidance(costCategory)}
+          {this.renderTable(costs, costCategory)}
           <Form.Form
             qa="submit-costs"
             data={editor.data}
@@ -77,7 +75,7 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
             onChange={dto => this.props.onChange(dto)}
           >
             <Form.Fieldset>
-              {this.props.mode === "prepare" && <Form.Submit><ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.submitButton()}/></Form.Submit>}
+              <Form.Submit><ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.submitButton()}/></Form.Submit>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
@@ -101,26 +99,6 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
         <td className={classNames("govuk-table__cell")} />
       </tr>
     );
-  }
-
-  private renderViewTable(costs: PCRSpendProfileCostDto[], costCategory: CostCategoryDto) {
-    const Table = ACC.TypedTable<PCRSpendProfileCostDto>();
-    const total = costs.reduce((acc, cost) => acc + (cost.value || 0), 0);
-    const footers = [
-      this.renderFooterRow({
-      key: "1", title: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.labels().totalCosts(costCategory.name)}/>, qa: "total-costs", isBold: false, value: <ACC.Renderers.Currency value={total} />
-    })];
-    // tslint:disable-next-line: no-small-switch
-    switch(costCategory.type) {
-      case CostCategoryType.Labour: return this.renderLabourCostSummary(costs as PCRSpendProfileLabourCostDto[], total);
-      default:
-        return (
-          <Table.Table qa="default-costs" data={costs} footers={footers}>
-            <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().description()} value={x => x.description} qa={"description"}/>
-            <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().cost()} value={x => x.value} qa={"cost"}/>
-          </Table.Table>
-        );
-    }
   }
 
   private renderTable(costs: PCRSpendProfileCostDto[], costCategory: CostCategoryDto) {
@@ -149,19 +127,6 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
     );
   }
 
-  private renderLabourCostSummary(costs: PCRSpendProfileLabourCostDto[], total: number) {
-    const Table = ACC.TypedTable<PCRSpendProfileLabourCostDto>();
-    return (
-      <Table.Table qa="labour-costs" data={costs}>
-        <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().description()} value={x => x.description} qa={"description"} footer={<ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.labels().labour.totalCost()}/>}/>
-        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().labour.grossCost()} value={x => x.grossCostOfRole} qa={"grossEmployeeCost"}/>
-        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().labour.rate()} value={x => x.ratePerDay} qa={"ratePerDay"}/>
-        <Table.Number headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().labour.daysOnProject()} value={x => x.daysSpentOnProject} qa={"daysSpentOnProject"}/>
-        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().cost()} value={x => x.value} qa={"cost"} footer={<ACC.Renderers.Currency value={total}/>} />
-      </Table.Table>
-    );
-  }
-
   private renderLinks(itemId: string, costId: string, costCategoryId: string, projectId: string, pcrId: string) {
     const links: { route: ILinkInfo, text: React.ReactNode, qa: string; }[] = [];
     links.push({route: this.props.routes.pcrPrepareSpendProfileEditCost.getLink({itemId, costId, costCategoryId, projectId, pcrId}), text: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.editCostButton()} />, qa:"edit"});
@@ -182,7 +147,7 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
   }
 }
 
-const Container = (props: PcrSpendProfileCostSummaryParams & BaseProps & { mode: "prepare" | "review"}) => (
+const Container = (props: PcrSpendProfileCostSummaryParams & BaseProps) => (
   <StoresConsumer>
     {stores => (
       <Component
@@ -210,7 +175,7 @@ const Container = (props: PcrSpendProfileCostSummaryParams & BaseProps & { mode:
 export const PCRSpendProfileCostsSummaryRoute = defineRoute<PcrSpendProfileCostSummaryParams>({
   routeName: "pcrSpendProfileCostsSummary",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId",
-  container: (props) => <Container mode="prepare" {...props} />,
+  container: (props) => <Container {...props} />,
   getParams: (route) => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
@@ -219,18 +184,4 @@ export const PCRSpendProfileCostsSummaryRoute = defineRoute<PcrSpendProfileCostS
   }),
   getTitle: ({ content }) => (content.pcrSpendProfileCostsSummaryContent.title()),
   accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager)
-});
-
-export const PCRSpendProfileReviewCostsSummaryRoute = defineRoute<PcrSpendProfileCostSummaryParams>({
-  routeName: "pcrSpendProfileReviewCostsSummary",
-  routePath: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId/spendProfile/:costCategoryId",
-  container: (props) => <Container mode="review" {...props} />,
-  getParams: (route) => ({
-    projectId: route.params.projectId,
-    pcrId: route.params.pcrId,
-    itemId: route.params.itemId,
-    costCategoryId: route.params.costCategoryId,
-  }),
-  getTitle: ({ content }) => (content.pcrSpendProfileCostsSummaryContent.title()),
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer)
 });

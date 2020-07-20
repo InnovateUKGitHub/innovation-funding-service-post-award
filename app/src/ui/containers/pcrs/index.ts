@@ -6,6 +6,7 @@ export * from "./delete";
 export * from "./prepare";
 export * from "./pcrItemWorkflow";
 export * from "./addPartner/spendProfile/spendProfileCostsSummary";
+export * from "./addPartner/spendProfile/spendProfileCostsSummaryReview";
 export * from "./addPartner/spendProfile/spendProfilePrepareCost";
 export * from "./addPartner/spendProfile/spendProfileDeleteCost";
 export * from "./addPartner/spendProfile/overheadDocumentContainer";
