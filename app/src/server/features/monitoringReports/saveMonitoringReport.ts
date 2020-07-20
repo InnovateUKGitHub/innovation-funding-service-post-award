@@ -45,6 +45,7 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
 
     if (this.submit) {
       update.Acc_MonitoringReportStatus__c = "Awaiting IUK Approval";
+      update.Acc_AddComments__c = "";
     }
 
     await context.repositories.monitoringReportHeader.update(update);
@@ -53,7 +54,8 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
   private async insertStatusChange(context: IContext): Promise<void> {
     if (!this.submit) return;
     await context.repositories.monitoringReportStatusChange.createStatusChange({
-      Acc_MonitoringReport__c: this.monitoringReportDto.headerId
+      Acc_MonitoringReport__c: this.monitoringReportDto.headerId,
+      Acc_ExternalComment__c: this.monitoringReportDto.addComments
     });
   }
 

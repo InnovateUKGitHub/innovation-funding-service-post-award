@@ -42,4 +42,5 @@ export interface MonitoringReportStatusChangeDto {
   newStatusLabel: string;
   createdBy: string;
   createdDate: Date;
+  comments: string | null;
 }

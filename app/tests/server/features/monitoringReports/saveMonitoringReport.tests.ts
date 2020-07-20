@@ -188,6 +188,32 @@ describe("saveMonitoringReports", () => {
     await context.runCommand(new SaveMonitoringReport(dto, false));
     expect(context.repositories.monitoringReportStatusChange.Items).toHaveLength(0);
   });
+
+  it("should populate comments on the status change object if the report is submitted", async () => {
+    const context = new TestContext();
+    const report = createMonitoringReportTestData(context, 1, { Acc_MonitoringReportStatus__c: "Draft" });
+
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+    dto.addComments = "Test comment";
+
+    await context.runCommand(new SaveMonitoringReport(dto, true));
+    const statusChange = context.repositories.monitoringReportStatusChange.Items.find(x => x.Acc_MonitoringReport__c === dto.headerId);
+    expect(statusChange).toBeDefined();
+    expect(statusChange!.Acc_ExternalComment__c).toEqual(dto.addComments);
+  });
+
+  it("should clear comments on the monitoring report when the report is submitted", async () => {
+    const context = new TestContext();
+    const report = createMonitoringReportTestData(context, 1, { Acc_MonitoringReportStatus__c: "Draft", Acc_AddComments__c: "Test comment" });
+
+    const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
+
+    await context.runCommand(new SaveMonitoringReport(dto, true));
+    const statusChange = context.repositories.monitoringReportStatusChange.Items.find(x => x.Acc_MonitoringReport__c === dto.headerId);
+    expect(statusChange).toBeDefined();
+    expect(statusChange!.Acc_ExternalComment__c).toEqual("Test comment");
+    expect(report.Acc_AddComments__c).toBe("");
+  });
 });
 
 describe("saveMonitoringReports validation", () => {

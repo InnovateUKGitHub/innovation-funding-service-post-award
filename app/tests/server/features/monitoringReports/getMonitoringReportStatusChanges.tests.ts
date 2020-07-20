@@ -1,7 +1,7 @@
 import { TestContext } from "../../testContextProvider";
 import { GetMonitoringReportStatusChanges } from "@server/features/monitoringReports/getMonitoringReportStatusChanges";
 import { DateTime } from "luxon";
-import { MonitoringReportStatus, Option } from "@framework/types";
+import { MonitoringReportStatus } from "@framework/types";
 
 describe("GetMonitoringReportStatusChanges", () => {
   it("returns an object of the right shape", async () => {
@@ -13,6 +13,7 @@ describe("GetMonitoringReportStatusChanges", () => {
     const statusChange = testData.createMonitoringReportStatusChange(report);
     statusChange.Acc_PreviousMonitoringReportStatus__c = "Draft";
     statusChange.Acc_NewMonitoringReportStatus__c = "Approved";
+    statusChange.Acc_ExternalComment__c = "Test comment";
 
     const query = new GetMonitoringReportStatusChanges(project.Id, report.Id);
     const result = await context.runQuery(query);
@@ -23,6 +24,7 @@ describe("GetMonitoringReportStatusChanges", () => {
     expect(result[0].newStatusLabel).toBe("Approved");
     expect(result[0].monitoringReport).toBe(report.Id);
     expect(result[0].createdDate).toEqual(DateTime.fromISO(statusChange.CreatedDate).toJSDate());
+    expect(result[0].comments).toEqual("Test comment");
   });
 
   it("returns the correct number of status changes", async () => {
