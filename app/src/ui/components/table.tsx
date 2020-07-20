@@ -155,6 +155,14 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
     return null;
   });
 
+  const rowIds = props.data.map((dataItem, rowIndex) => {
+    const validation = props.validationResult && props.validationResult[rowIndex];
+    if (validation && validation.showValidationErrors && !validation.isValid) {
+      return validation.errors[0].key;
+    }
+    return undefined;
+  });
+
   const rowClasses = rowFlags.map(x => {
     switch (x) {
       case "warning": return "table__row--warning";
@@ -180,7 +188,7 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
         </thead>
         <tbody className="govuk-table__body">
           {
-            contents.map((row, rowIndex) => <tr className={classNames(standardRowCssClass, rowClass[rowIndex], rowClasses[rowIndex])} key={rowIndex}>{row}</tr>)
+            contents.map((row, rowIndex) => <tr id={rowIds[rowIndex]} className={classNames(standardRowCssClass, rowClass[rowIndex], rowClasses[rowIndex])} key={rowIndex}>{row}</tr>)
           }
         </tbody>
         {footers.length ? <tfoot>{footers}</tfoot> : null}
