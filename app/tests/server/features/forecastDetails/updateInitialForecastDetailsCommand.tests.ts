@@ -3,7 +3,8 @@ import { UpdateInitialForecastDetailsCommand } from "@server/features/forecastDe
 import { BadRequestError, ValidationError } from "@server/features/common/appError";
 import { ISalesforceProfileDetails } from "@server/repositories";
 import { GetByIdQuery } from "@server/features/partners";
-import { SpendProfileStatus } from "@framework/dtos";
+import { ProjectRole, SpendProfileStatus } from "@framework/dtos";
+import { Authorisation } from "@framework/types";
 
 const mapProfileValue = (item: ISalesforceProfileDetails, value?: number): ForecastDetailsDTO => {
   return {
@@ -16,6 +17,7 @@ const mapProfileValue = (item: ISalesforceProfileDetails, value?: number): Forec
   };
 };
 
+// tslint:disable-next-line:no-big-function
 describe("UpdateInitialForecastDetailsCommand", () => {
   it("when id not set expect validation exception", async () => {
     const context = new TestContext();
@@ -200,5 +202,58 @@ describe("UpdateInitialForecastDetailsCommand", () => {
     await context.runCommand(command);
 
     expect(overheadProfile.Acc_InitialForecastCost__c).toBe(originalAmount);
+  });
+  describe("accessControl", () => {
+    const getCommand = () => {
+      const context = new TestContext();
+      const testData = context.testData;
+      const project = testData.createProject();
+      const partner = context.testData.createPartner(project, x => {
+        x.participantStatus = "Pending";
+        x.spendProfileStatus = "To Do";
+      });
+      const costCat = testData.createCostCategory();
+      const periodId = 1;
+      const profileDetail = testData.createProfileDetail(costCat, partner, periodId, x => {
+        x.Acc_InitialForecastCost__c = 1400;
+        x.Acc_LatestForecastCost__c = 0;
+      });
+      testData.createProfileTotalCostCategory(costCat, partner, 1500);
+
+      const dto: ForecastDetailsDTO[] = [{
+        periodId,
+        id: profileDetail.Id,
+        costCategoryId: costCat.id,
+        periodStart: new Date(),
+        periodEnd: new Date(),
+        value: 100
+      }];
+
+      const command = new UpdateInitialForecastDetailsCommand(partner.projectId, partner.id, dto, false);
+      return {project, partner, command, context};
+    };
+    test("accessControl - Finance Contact passes", async () => {
+      const {project, partner, command, context} = getCommand();
+      const auth    = new Authorisation({
+        [project.Id]: {
+          projectRoles: ProjectRole.Unknown,
+          partnerRoles: { [partner.id]: ProjectRole.FinancialContact }
+        }
+      });
+      expect(await context.runAccessControl(auth, command)).toBe(true);
+    });
+    test("accessControl - Everyone else fails", async () => {
+      const {project, partner, command, context} = getCommand();
+      const auth    = new Authorisation({
+        [project.Id]: {
+          projectRoles: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer  | ProjectRole.ProjectManager | ProjectRole.Unknown,
+          partnerRoles: {
+            [partner.id]: ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer | ProjectRole.Unknown,
+            ["other partner"]: ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer | ProjectRole.FinancialContact | ProjectRole.Unknown,
+          }
+        }
+      });
+      expect(await context.runAccessControl(auth, command)).toBe(false);
+    });
   });
 });
