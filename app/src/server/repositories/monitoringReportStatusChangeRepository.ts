@@ -7,6 +7,7 @@ export interface ISalesforceMonitoringReportStatusChange {
   Acc_NewMonitoringReportStatus__c: string;
   Acc_CreatedByAlias__c: string;
   CreatedDate: string;
+  Acc_ExternalComment__c: string | null;
 }
 
 export interface IMonitoringReportStatusChangeRepository {
@@ -28,7 +29,8 @@ export class MonitoringReportStatusChangeRepository extends SalesforceRepository
     "Acc_PreviousMonitoringReportStatus__c",
     "Acc_NewMonitoringReportStatus__c",
     "Acc_CreatedByAlias__c",
-    "CreatedDate"
+    "CreatedDate",
+    "Acc_ExternalComment__c"
   ];
 
   public createStatusChange(statusChange: Partial<ISalesforceMonitoringReportStatusChange>) {

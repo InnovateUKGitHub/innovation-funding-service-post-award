@@ -435,7 +435,8 @@ class MonitoringReportStatusChangeTestRepository extends TestRepository<Reposito
       Acc_PreviousMonitoringReportStatus__c: statusChange.Acc_PreviousMonitoringReportStatus__c!,
       Acc_NewMonitoringReportStatus__c: statusChange.Acc_NewMonitoringReportStatus__c!,
       Acc_CreatedByAlias__c: statusChange.Acc_CreatedByAlias__c!,
-      CreatedDate: statusChange.CreatedDate!
+      CreatedDate: statusChange.CreatedDate!,
+      Acc_ExternalComment__c: statusChange.Acc_ExternalComment__c!
     });
   }
 

@@ -321,7 +321,8 @@ export class TestData {
       Acc_PreviousMonitoringReportStatus__c: "Draft",
       Acc_NewMonitoringReportStatus__c: "Submitted to Monitoring Officer",
       Acc_CreatedByAlias__c: "The Beast from The Chase",
-      CreatedDate: DateTime.local().toISO()
+      CreatedDate: DateTime.local().toISO(),
+      Acc_ExternalComment__c: "Test comment"
     };
 
     this.repositories.monitoringReportStatusChange.Items.push(response);
