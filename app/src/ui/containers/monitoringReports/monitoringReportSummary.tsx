@@ -20,7 +20,6 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
         {this.renderPeriod(editor)}
         {editor.data.questions.map(q => this.renderResponse(editor, q))}
         {this.renderLog()}
-        {/* TODO:ACC-6856:  this.renderAddComments(editor) */}
         { mode === "prepare" && this.renderForm(editor)}
       </ACC.Section>
     );
@@ -30,7 +29,7 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
     return (
       <ACC.Section>
         <ACC.Accordion>
-          <ACC.AccordionItem title="Status and comments log" qa="status-and-comments-log">
+          <ACC.AccordionItem titleContent={x => x.monitoringReportsSummary.labels.statusAndCommentsLog()} qa="status-and-comments-log">
             {/* Keeping logs inside loader because accordion defaults to closed*/}
             <ACC.Loader
               pending={this.props.statusChanges}
@@ -53,6 +52,15 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
           onChange={(dto) => this.props.onChange(dto)}
           qa="monitoringReportCreateForm"
         >
+          <ReportForm.Fieldset qa="additional-comments-section" headingContent={x => x.monitoringReportsSummary.labels.additionalComments()}>
+            <ReportForm.MultilineString
+              hintContent={x => x.monitoringReportsSummary.messages.additionalCommentsGuidance()}
+              name="additional-comments"
+              value={() => editor.data.addComments}
+              update={(dto, v) => dto.addComments = v || ""}
+              qa="additional-comments-text-area"
+            />
+          </ReportForm.Fieldset>
           <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsSummary.messages.submittingMonitoringReportMessage()} /></ACC.Renderers.SimpleString>
           <ReportForm.Fieldset qa="save-buttons">
             <ReportForm.Button name="save-submitted" styling="Primary" onClick={() => this.props.onSave(editor.data, true)}><ACC.Content value={(x) => x.monitoringReportsSummary.submitButton()} /></ReportForm.Button>
