@@ -170,7 +170,7 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data> {
   private renderTravelAndSubsistenceCostSummary(costs: PCRSpendProfileTravelAndSubsCostDto[], costCategory: CostCategoryDto) {
     const Table = ACC.TypedTable<PCRSpendProfileTravelAndSubsCostDto>();
     return (
-      <Table.Table qa="capital-usage-costs" data={costs} footers={this.getFooters(costs, costCategory, 4)}>
+      <Table.Table qa="travel-and-subs-costs" data={costs} footers={this.getFooters(costs, costCategory, 4)}>
         <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().travelAndSubs.description()} value={x => x.description} qa={"description"}/>
         <Table.Number headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().travelAndSubs.numberOfTimes()} value={x => x.numberOfTimes} qa={"numberOfTimes"}/>
         <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().travelAndSubs.costOfEach()} value={x => x.costOfEach} qa={"costOfEach"}/>
@@ -182,7 +182,7 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data> {
   private renderOtherCostsCostSummary(costs: PCRSpendProfileOtherCostsDto[], costCategory: CostCategoryDto) {
     const Table = ACC.TypedTable<PCRSpendProfileOtherCostsDto>();
     return (
-      <Table.Table qa="capital-usage-costs" data={costs} footers={this.getFooters(costs, costCategory, 2)}>
+      <Table.Table qa="other-costs" data={costs} footers={this.getFooters(costs, costCategory, 2)}>
         <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().otherCosts.description()} value={x => x.description} qa={"description"}/>
         <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().otherCosts.totalCost()} value={x => x.value} qa={"totalCost"}/>
       </Table.Table>
