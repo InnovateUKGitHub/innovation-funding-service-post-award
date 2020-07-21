@@ -465,6 +465,7 @@
     "calculated-guidance-overheads": "You will need to submit an overheads calculation spreadsheet, available following the link below, if the new partner feels their overheads are higher than 20%."
   },
   "monitoring-reports-messages": {
+    "additionalCommentsGuidance": "If you want to explain anything to Innovate UK, add it here.",
     "reportsSubmissionGuidance": "You should submit reports for this project according to the schedule agreed with Innovate UK.",
     "noOpenReportsMessage": "There are no open reports.",
     "noArchivedReportsMessage": "There are no archived reports.",
@@ -562,6 +563,8 @@
     "year-end-information": "The financial year ends on March 31st."
   },
   "monitoring-reports-labels": {
+    "status-and-comments-log": "Status and comments log",
+    "additional-comments": "Add comments"
   },
   "pcr-item":{
     "submit-button": "Save and continue",
