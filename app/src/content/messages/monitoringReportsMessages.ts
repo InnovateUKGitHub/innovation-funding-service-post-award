@@ -5,6 +5,7 @@ export class MonitoringReportsMessages extends ContentBase {
       super(parent, "monitoring-reports-messages");
     }
 
+    public readonly additionalCommentsGuidance = () => this.getContent("additionalCommentsGuidance");
     public readonly reportsSubmissionGuidance = () => this.getContent("reportsSubmissionGuidance");
     public readonly noOpenReportsMessage = () => this.getContent("noOpenReportsMessage");
     public readonly noArchivedReportsMessage = () => this.getContent("noArchivedReportsMessage");
