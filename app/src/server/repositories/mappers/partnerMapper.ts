@@ -36,6 +36,22 @@ export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePar
       postcode: item.Acc_Postcode__c,
       newForecastNeeded: item.Acc_NewForecastNeeded__c,
       spendProfileStatus: item.Acc_SpendProfileCompleted__c,
+
+      // TODO
+      bankDetailsTaskStatus: "",
+      bankCheckStatus: "",
+      firstName: "",
+      lastName: "",
+      accountPostcode: "",
+      accountBuildingAndStreet: "",
+      accountTownOrCity: "",
+      accountNumber: "",
+      sortCode: "",
+      companyNumber: "",
+      addressScore: 0,
+      companyNameScore: 0,
+      personalDetailsScore: 0,
+      regNumberIsValid: false,
     };
   }
 }

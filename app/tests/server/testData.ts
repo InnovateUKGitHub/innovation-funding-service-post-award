@@ -138,6 +138,20 @@ export class TestData {
       postcode: "BS1 1AA",
       newForecastNeeded: false,
       spendProfileStatus: "",
+      bankDetailsTaskStatus: "",
+      bankCheckStatus: "",
+      firstName: "",
+      lastName: "",
+      accountPostcode: "",
+      accountBuildingAndStreet: "",
+      accountTownOrCity: "",
+      accountNumber: "",
+      sortCode: "",
+      companyNumber: "",
+      addressScore: 0,
+      companyNameScore: 0,
+      personalDetailsScore: 0,
+      regNumberIsValid: false,
     };
 
     if (!!update) update(newItem);

@@ -19,7 +19,23 @@ export enum PartnerStatus {
   Pending = 5,
 }
 
+export enum BankCheckStatus {
+  Unknown = 0,
+  PendingValidation = 10,
+  ValidationPassed = 20,
+  ValidationFailed = 30,
+  VerificationPassed = 40,
+  VerificationFailed = 50,
+}
+
 export enum SpendProfileStatus {
+  Unknown = 0,
+  ToDo = 10,
+  Incomplete = 20,
+  Complete = 30
+}
+
+export enum BankDetailsTaskStatus {
   Unknown = 0,
   ToDo = 10,
   Incomplete = 20,
@@ -29,6 +45,7 @@ export enum SpendProfileStatus {
 export interface PartnerDto {
   id: string;
   type: string;
+
   postcode: string;
   isLead: boolean;
   isWithdrawn: boolean;
@@ -58,8 +75,25 @@ export interface PartnerDto {
   partnerStatus: PartnerStatus;
   percentageParticipantCostsSubmitted: number | null;
   totalFundingDueToReceive: number | null;
-  spendProfileStatus: SpendProfileStatus;
 
   overheadRate: number | null;
   newForecastNeeded: boolean | null;
+  spendProfileStatus: SpendProfileStatus;
+  bankDetailsTaskStatus: BankDetailsTaskStatus;
+
+  // Bank details checks
+  companyNumber: string;
+  sortCode: string;
+  accountNumber: string;
+  firstName: string;
+  lastName: string;
+  accountPostcode: string;
+  accountBuildingAndStreet: string;
+  accountTownOrCity: string;
+
+  bankCheckStatus: BankCheckStatus;
+  personalDetailsScore: number | null;
+  addressScore: number | null;
+  companyNameScore: number | null;
+  regNumberIsValid: boolean | null;
 }

@@ -2,8 +2,17 @@
 import { TestContext } from "../../testContextProvider";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { SalesforceProjectRole } from "@server/repositories";
-import { PartnerClaimStatus, PartnerDto, PartnerStatus, ProjectRole, SpendProfileStatus } from "@framework/types";
+import {
+  BankCheckStatus,
+  BankDetailsTaskStatus,
+  PartnerClaimStatus,
+  PartnerDto,
+  PartnerStatus,
+  ProjectRole,
+  SpendProfileStatus
+} from "@framework/types";
 
+// tslint:disable-next-line:no-big-function
 describe("getAllForProjectQuery", () => {
   it("when partner exists is mapped to DTO", async () => {
     const context = new TestContext();
@@ -31,6 +40,20 @@ describe("getAllForProjectQuery", () => {
       x.totalCostsAwarded = 100000;
       x.totalPrepayment = 500;
       x.spendProfileStatus = "Complete";
+      x.bankDetailsTaskStatus = "BankDetailsTaskStatus.Unknown";
+      x.bankCheckStatus = "BankCheckStatus.Unknown";
+      x.firstName = "Mr";
+      x.lastName = "Toad";
+      x.accountPostcode = "TH1 0WW";
+      x.accountBuildingAndStreet = "Toad Hall";
+      x.accountTownOrCity = "Berkshire";
+      x.accountNumber = "001122";
+      x.sortCode = "005566";
+      x.companyNumber = "123344";
+      x.addressScore = 6;
+      x.companyNameScore = 5;
+      x.personalDetailsScore = 4;
+      x.regNumberIsValid = true;
     });
 
     const projectManger = context.testData.createProjectManager(project, partner);
@@ -75,6 +98,20 @@ describe("getAllForProjectQuery", () => {
       percentageParticipantCostsSubmitted: 0.08,
       newForecastNeeded: false,
       spendProfileStatus: SpendProfileStatus.Complete,
+      bankDetailsTaskStatus: BankDetailsTaskStatus.Unknown,
+      bankCheckStatus: BankCheckStatus.Unknown,
+      firstName: "Mr",
+      lastName: "Toad",
+      accountPostcode: "TH1 0WW",
+      accountBuildingAndStreet: "Toad Hall",
+      accountTownOrCity: "Berkshire",
+      accountNumber: "001122",
+      sortCode: "005566",
+      companyNumber: "123344",
+      addressScore: 6,
+      companyNameScore: 5,
+      personalDetailsScore: 4,
+      regNumberIsValid: true,
     };
 
     expect(result).toEqual(expected);
