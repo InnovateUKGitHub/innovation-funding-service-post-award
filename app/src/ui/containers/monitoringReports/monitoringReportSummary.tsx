@@ -55,7 +55,7 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
           <ReportForm.Fieldset qa="additional-comments-section" headingContent={x => x.monitoringReportsSummary.labels.additionalComments()}>
             <ReportForm.MultilineString
               hintContent={x => x.monitoringReportsSummary.messages.additionalCommentsGuidance()}
-              name="additional-comments"
+              name="addComments"
               value={() => editor.data.addComments}
               update={(dto, v) => dto.addComments = v || ""}
               qa="additional-comments-text-area"
@@ -63,8 +63,8 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
           </ReportForm.Fieldset>
           <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsSummary.messages.submittingMonitoringReportMessage()} /></ACC.Renderers.SimpleString>
           <ReportForm.Fieldset qa="save-buttons">
-            <ReportForm.Button name="save-submitted" styling="Primary" onClick={() => this.props.onSave(editor.data, true)}><ACC.Content value={(x) => x.monitoringReportsSummary.submitButton()} /></ReportForm.Button>
-            <ReportForm.Button name="save-draft" onClick={() => this.props.onSave(editor.data, false)}><ACC.Content value={(x) => x.monitoringReportsSummary.saveAndReturnButton()} /></ReportForm.Button>
+            <ReportForm.Button name="submit" styling="Primary" onClick={() => this.props.onSave(editor.data, true)}><ACC.Content value={(x) => x.monitoringReportsSummary.submitButton()} /></ReportForm.Button>
+            <ReportForm.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(editor.data, false)}><ACC.Content value={(x) => x.monitoringReportsSummary.saveAndReturnButton()} /></ReportForm.Button>
           </ReportForm.Fieldset>
         </ReportForm.Form>
       </ACC.Section>
