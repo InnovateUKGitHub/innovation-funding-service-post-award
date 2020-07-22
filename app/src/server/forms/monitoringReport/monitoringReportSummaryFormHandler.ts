@@ -11,12 +11,15 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 export class MonitoringReportSummaryFormHandler extends StandardFormHandlerBase<MonitoringReportWorkflowParams, "monitoringReport"> {
 
   constructor() {
-    super(MonitoringReportWorkflowRoute, ["save-draft", "save-submitted"], "monitoringReport");
+    super(MonitoringReportWorkflowRoute, ["saveAndReturnToSummary", "submit"], "monitoringReport");
   }
 
   protected async getDto(context: IContext, params: MonitoringReportWorkflowParams, button: IFormButton, body: IFormBody): Promise<MonitoringReportDto> {
-    const query = new GetMonitoringReportById(params.projectId, params.id);
-    return context.runQuery(query);
+    const dto = await context.runQuery(new GetMonitoringReportById(params.projectId, params.id));
+
+    dto.addComments = body.addComments;
+
+    return dto;
   }
 
   protected createValidationResult(params: MonitoringReportWorkflowParams, dto: MonitoringReportDto) {
@@ -28,7 +31,7 @@ export class MonitoringReportSummaryFormHandler extends StandardFormHandlerBase<
   }
 
   protected async run(context: IContext, params: MonitoringReportWorkflowParams, button: IFormButton, dto: MonitoringReportDto): Promise<ILinkInfo> {
-    const command = new SaveMonitoringReport(dto, button.name === "save-submitted");
+    const command = new SaveMonitoringReport(dto, button.name === "submit");
     await context.runCommand(command);
     return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
   }
