@@ -40,7 +40,9 @@ describe("getAllForProjectQuery", () => {
       x.totalCostsAwarded = 100000;
       x.totalPrepayment = 500;
       x.spendProfileStatus = "Complete";
-      x.bankDetailsTaskStatus = "BankDetailsTaskStatus.Unknown";
+      x.spendProfileStatusLabel = "Complete";
+      x.bankDetailsTaskStatus = "Todo";
+      x.bankDetailsTaskStatusLabel = "To do";
       x.bankCheckStatus = "BankCheckStatus.Unknown";
       x.firstName = "Mr";
       x.lastName = "Toad";
@@ -98,7 +100,9 @@ describe("getAllForProjectQuery", () => {
       percentageParticipantCostsSubmitted: 0.08,
       newForecastNeeded: false,
       spendProfileStatus: SpendProfileStatus.Complete,
-      bankDetailsTaskStatus: BankDetailsTaskStatus.Unknown,
+      spendProfileStatusLabel: "Complete",
+      bankDetailsTaskStatus: BankDetailsTaskStatus.ToDo,
+      bankDetailsTaskStatusLabel: "To do",
       bankCheckStatus: BankCheckStatus.Unknown,
       firstName: "Mr",
       lastName: "Toad",

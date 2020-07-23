@@ -79,17 +79,19 @@ export interface PartnerDto {
   overheadRate: number | null;
   newForecastNeeded: boolean | null;
   spendProfileStatus: SpendProfileStatus;
+  spendProfileStatusLabel: string;
   bankDetailsTaskStatus: BankDetailsTaskStatus;
+  bankDetailsTaskStatusLabel: string;
 
   // Bank details checks
-  companyNumber: string;
-  sortCode: string;
-  accountNumber: string;
-  firstName: string;
-  lastName: string;
-  accountPostcode: string;
-  accountBuildingAndStreet: string;
-  accountTownOrCity: string;
+  companyNumber: string | null;
+  sortCode: string | null;
+  accountNumber: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  accountPostcode: string | null;
+  accountBuildingAndStreet: string | null;
+  accountTownOrCity: string | null;
 
   bankCheckStatus: BankCheckStatus;
   personalDetailsScore: number | null;

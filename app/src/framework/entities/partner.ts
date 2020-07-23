@@ -38,7 +38,9 @@ export interface Partner {
   accountTownOrCity: string;
   newForecastNeeded: boolean;
   spendProfileStatus: string;
+  spendProfileStatusLabel: string;
   bankDetailsTaskStatus: string;
+  bankDetailsTaskStatusLabel: string;
   bankCheckStatus: string;
   personalDetailsScore: number | null;
   addressScore: number | null;
