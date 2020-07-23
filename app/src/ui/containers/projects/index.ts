@@ -10,3 +10,4 @@ export * from "./partnerDetailsEdit";
 export * from "./setup";
 export * from "./projectSetupSpendProfile";
 export * from "./projectSetupBankDetails";
+export * from "./projectSetupBankDetailsVerify";

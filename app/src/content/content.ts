@@ -46,6 +46,7 @@ import { PCRAddPartnerSummaryContent } from "./pages/pcrs/addPartner/addPartnerS
 import { PCRAddPartnerOtherFundingSourcesContent } from "@content/pages/pcrs/addPartner/otherFundingSourcesContent";
 import { ProjectSetupBankDetailsContent } from "@content/pages/project/projectSetupBankDetailsContent";
 import { FailedBankCheckConfirmationContent } from "./pages/project/failedBankCheckConfirmationContent";
+import { ProjectSetupBankDetailsVerifyContent } from "@content/pages/project/projectSetupBankDetailsVerifyContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -64,6 +65,7 @@ export class Content extends ContentBase {
   public readonly projectSetupSpendProfile = new ProjectSetupSpendProfileContent(this);
   public readonly failedBankCheckConfirmation = new FailedBankCheckConfirmationContent(this);
   public readonly projectSetupBankDetails = new ProjectSetupBankDetailsContent(this);
+  public readonly projectSetupBankDetailsVerify = new ProjectSetupBankDetailsVerifyContent(this);
 
   public readonly financeSummary = new FinanceSummaryContent(this);
 

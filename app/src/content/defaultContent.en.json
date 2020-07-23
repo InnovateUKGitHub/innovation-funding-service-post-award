@@ -76,6 +76,13 @@
       "fieldset-title-billing-address": "Billing address",
       "fieldset-guidance-billing-address": "This is the billing address connected to this bank account. This is not the address of the bank."
     },
+    "project-setup-bank-details-verify": {
+      "title": "Confirm your bank details",
+      "guidance-message": "Your bank details will now be submitted to Innovate UK for review. We will contact you if we need any further information.",
+      "submit-button": "Submit bank details",
+      "change-button": "Change bank details",
+      "back-link": "Back to set up your project"
+    },
     "project-setup-spend-profile": {
       "title": "Spend Profile",
       "guidance-message": "You must provide a forecast of all eligible project costs to reflect your spend throughout the project.",
@@ -513,6 +520,7 @@
     "auditReportFrequency" :"Audit frequency"
   },
   "partner-labels": {
+    "organisation-name": "Organisation name",
     "company-number": "Company number",
     "company-number-hint": "This is the registered organisation number.",
     "sort-code": "Sort code",
