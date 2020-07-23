@@ -6,6 +6,7 @@ import { PartnerDto } from "@framework/dtos";
 import { dataLoadAction } from "../actions";
 import { LoadingStatus } from "@shared/pending";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
+import { ValidationError } from "@server/features/common";
 
 export class PartnersStore extends StoreBase {
   constructor(getState: () => RootState, dispatch: (action: any) => void) {
@@ -38,7 +39,7 @@ export class PartnersStore extends StoreBase {
     );
   }
 
-  public updatePartner(submit: boolean, partnerId: string, partnerDto: PartnerDto, onComplete?: (result: PartnerDto) => void): void {
+  public updatePartner(submit: boolean, partnerId: string, partnerDto: PartnerDto, onComplete?: (result: PartnerDto) => void, onError?: (error: any) => void): void {
     return this.updateEditor(
       submit,
       "partner",
@@ -50,6 +51,11 @@ export class PartnersStore extends StoreBase {
         this.queue(dataLoadAction(storeKeys.getPartnerKey(partnerId), "partner", LoadingStatus.Updated, result));
         if(onComplete) {
           onComplete(result);
+        }
+      },
+      (e) => {
+        if(onError) {
+          onError(e);
         }
       }
     );
