@@ -84,7 +84,7 @@ const PartnerDetailsEditContainer = (props: Params & BaseProps) => (
                     project={stores.projects.getById(props.id)}
                     partner={stores.partners.getById(props.partnerId)}
                     editor={stores.partners.getPartnerEditor(props.id, props.partnerId)}
-                    onUpdate={(saving, dto) => stores.partners.updatePartner(saving, props.partnerId, dto, () => stores.navigation.navigateTo(props.routes.partnerDetails.getLink({ id: props.id, partnerId: props.partnerId })))}
+                    onUpdate={(saving, dto) => stores.partners.updatePartner(saving, props.partnerId, dto, {onComplete: () => stores.navigation.navigateTo(props.routes.partnerDetails.getLink({ id: props.id, partnerId: props.partnerId }))})}
                     {...props}
                 />
             )

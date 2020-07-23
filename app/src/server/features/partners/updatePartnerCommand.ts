@@ -5,7 +5,8 @@ import { PartnerSpendProfileStatusMapper } from "@server/features/partners/mapTo
 import { isBoolean } from "@framework/util";
 
 export class UpdatePartnerCommand extends CommandBase<boolean> {
-  constructor(private readonly partner: PartnerDto) {
+  constructor(
+    private readonly partner: PartnerDto, private readonly validateBankDetails?: boolean) {
     super();
   }
 
@@ -31,7 +32,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
       throw new BadRequestError("Request is missing required fields");
     }
 
-    const validationResult = new PartnerDtoValidator(this.partner, true);
+    const validationResult = new PartnerDtoValidator(this.partner, true, this.validateBankDetails);
 
     if(!validationResult.isValid) {
       throw new ValidationError(validationResult);
