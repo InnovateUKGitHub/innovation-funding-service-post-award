@@ -1,7 +1,7 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { BankCheckStatus, BankDetailsTaskStatus, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
@@ -27,8 +27,8 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor)} />;
   }
   public renderContents(project: ProjectDto, editor: IEditorStore<PartnerDto, PartnerDtoValidator>) {
-    const Form = ACC.TypedForm<PartnerDto>();
 
+    const Form = ACC.TypedForm<PartnerDto>();
     return (
       <ACC.Page
         backLink={
@@ -150,10 +150,30 @@ const ProjectSetupBankDetailsContainer = (props: ProjectSetupBankDetailsParams &
     {stores => (
       <ProjectSetupBankDetailsComponent
         project={stores.projects.getById(props.projectId)}
-        editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
+        editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId, dto => {
+          dto.bankDetailsTaskStatus = BankDetailsTaskStatus.Incomplete;
+        })}
         onChange={(submit, dto) => {
-          stores.partners.updatePartner(submit, props.partnerId, dto, () =>
-            stores.navigation.navigateTo(props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId })));
+          stores.partners.updatePartner(submit, props.partnerId, dto,
+            (resp) => {
+              if (resp.bankCheckStatus === BankCheckStatus.ValidationFailed) {
+                stores.navigation.navigateTo(props.routes.failedBankCheckConfirmation.getLink({
+                  projectId: props.projectId,
+                  partnerId: props.partnerId
+                }));
+              } else {
+                stores.navigation.navigateTo(props.routes.projectSetup.getLink({
+                  projectId: props.projectId,
+                  partnerId: props.partnerId
+                }));
+              }
+            },
+            (e) => {
+              // TODO add bank details validation to Partner Validator and use correct type here
+              if (e && e.results && e.results.bankDetails && !e.results.bankDetails.isValid) {
+                dto.bankCheckValidationAttempts += 1;
+              }
+            });
         }}
         {...props}
       />
