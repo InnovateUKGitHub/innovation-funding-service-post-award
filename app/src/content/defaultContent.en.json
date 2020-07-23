@@ -65,11 +65,22 @@
       "noDocumentsMessage": "No documents uploaded.",
       "noMatchingDocumentsMessage": "No documents match."
     },
+    "project-setup-bank-details": {
+      "title": "Provide your bank details",
+      "guidance-message": "In order for us to pay your grant we need the bank details of your organisation. The bank account must belong to the organisation listed.",
+      "submit-button": "Submit bank details",
+      "back-link": "Back to set up your project",
+      "fieldset-title-organisation-info": "Organisation information",
+      "fieldset-title-account-details": "Account details",
+      "fieldset-title-account-holder": "Account holder",
+      "fieldset-title-billing-address": "Billing address",
+      "fieldset-guidance-billing-address": "This is the billing address connected to this bank account. This is not the address of the bank."
+    },
     "project-setup-spend-profile": {
       "title": "Spend Profile",
       "guidance-message": "You must provide a forecast of all eligible project costs to reflect your spend throughout the project.",
       "submit-button": "Save and return to project setup",
-      "back-link": "Back to project setup"
+      "back-link": "Back to set up your project"
     },
     "failed-bank-check-confirmation": {
       "title": "Further information required",
@@ -500,6 +511,19 @@
     "totalPrepayment": "Total grant paid in advance",
     "capLimit": "Claim cap",
     "auditReportFrequency" :"Audit frequency"
+  },
+  "partner-labels": {
+    "company-number": "Company number",
+    "company-number-hint": "This is the registered organisation number.",
+    "sort-code": "Sort code",
+    "sort-code-hint": "Must be 6 digits long, for example: 311212.",
+    "account-number": "Account number",
+    "account-number-hint": "Must be between 6 and 8 digits long, for example: 15481965.",
+    "first-name": "First name",
+    "last-name": "Last name",
+    "account-building-and-street": "Building and street",
+    "account-town-or-city": "Town or city",
+    "account-postcode": "Postcode"
   },
   "project-contact-labels" : {
     "contactName" : "Name",

@@ -9,3 +9,4 @@ export * from "./partnerDetails";
 export * from "./partnerDetailsEdit";
 export * from "./setup";
 export * from "./projectSetupSpendProfile";
+export * from "./projectSetupBankDetails";

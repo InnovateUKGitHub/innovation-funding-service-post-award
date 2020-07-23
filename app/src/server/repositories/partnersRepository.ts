@@ -42,6 +42,7 @@ export interface ISalesforcePartner {
   Acc_Postcode__c: string;
   Acc_NewForecastNeeded__c: boolean;
   Acc_SpendProfileCompleted__c: string;
+  SpendProfileStatusLabel: string;
 }
 
 export interface IPartnerRepository {
@@ -96,6 +97,7 @@ export class PartnerRepository extends SalesforceRepositoryBaseWithMapping<ISale
     "Acc_Postcode__c",
     "Acc_NewForecastNeeded__c",
     "Acc_SpendProfileCompleted__c",
+    "toLabel(Acc_SpendProfileCompleted__c) SpendProfileStatusLabel",
   ];
 
   mapper = new SalesforcePartnerMapper();

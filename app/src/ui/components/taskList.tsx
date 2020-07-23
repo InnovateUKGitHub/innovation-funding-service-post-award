@@ -7,11 +7,12 @@ import { Link } from "./links";
 import { Content } from "@ui/components/content";
 import { ContentSelector } from "@content/content";
 
+export type TaskStatus = "To do" | "Complete" | "Incomplete";
 interface ITask {
   name?: string;
   nameContent?: ContentSelector;
   route: ILinkInfo;
-  status: "To do" | "Complete" | "Incomplete";
+  status: TaskStatus;
   validation?: Result[];
 }
 

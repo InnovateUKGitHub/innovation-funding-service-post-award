@@ -1,8 +1,7 @@
+import React from "react";
 import { Pending } from "@shared/pending";
-import {PartnerDto, ProjectDto, ProjectRole, SpendProfileStatus} from "@framework/dtos";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import * as ACC from "../../components";
-import React from "react";
 import {IEditorStore, StoresConsumer} from "@ui/redux";
 import * as Dtos from "@framework/dtos";
 import {PartnerDtoValidator} from "@ui/validators/partnerValidator";
@@ -13,19 +12,19 @@ export interface ProjectSetupParams {
 }
 
 interface Data {
-  project: Pending<ProjectDto>;
+  project: Pending<Dtos.ProjectDto>;
   partner: Pending<Dtos.PartnerDto>;
-  editor: Pending<IEditorStore<PartnerDto, PartnerDtoValidator>>;
+  editor: Pending<IEditorStore<Dtos.PartnerDto, PartnerDtoValidator>>;
 }
 
 interface Callbacks {
-  onUpdate: (saving: boolean, dto: PartnerDto) => void;
+  onUpdate: (saving: boolean, dto: Dtos.PartnerDto) => void;
 }
 
 interface CombinedData {
-  project: ProjectDto;
-  partner: PartnerDto;
-  editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
+  project: Dtos.ProjectDto;
+  partner: Dtos.PartnerDto;
+  editor: IEditorStore<Dtos.PartnerDto, PartnerDtoValidator>;
 }
 
 class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Callbacks> {
@@ -41,11 +40,7 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
   }
 
   private renderContents({ project, partner, editor }: CombinedData) {
-    const Form = ACC.TypedForm<PartnerDto>();
-
-    // Placeholder values to be removed in future stories
-    const placeholderStatus = "To do";
-    const placeholderLink = this.props.routes.projectDashboard.getLink({});
+    const Form = ACC.TypedForm<Dtos.PartnerDto>();
 
     return (
       <ACC.Page
@@ -66,14 +61,13 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
           <ACC.TaskListSection step={1} titleContent={x => x.projectSetup.taskList().sectionTitleEnterInfo()} qa="WhatDoYouWantToDo">
             <ACC.Task
               nameContent={x => x.projectSetup.setSpendProfile()}
-              status={this.getSpendProfileStatus(partner)}
+              status={partner.spendProfileStatusLabel as ACC.TaskStatus}
               route={this.props.routes.projectSetupSpendProfile.getLink({partnerId: partner.id, projectId: project.id})}
             />
-            {/* TODO: replace placeholder (->dashboard) with link to bank details page */}
             <ACC.Task
               nameContent={x => x.projectSetup.provideBankDetails()}
-              status={placeholderStatus}
-              route={placeholderLink}
+              status={partner.bankDetailsTaskStatusLabel as ACC.TaskStatus}
+              route={this.props.routes.projectSetupBankDetails.getLink({partnerId: partner.id, projectId: project.id})}
             />
           </ACC.TaskListSection>
         </ACC.TaskList>
@@ -89,18 +83,6 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
         </Form.Form>
       </ACC.Page>
     );
-  }
-
-  private getSpendProfileStatus(partner: PartnerDto): "To do" | "Complete" | "Incomplete" {
-    switch (partner.spendProfileStatus) {
-      case SpendProfileStatus.Complete:
-        return "Complete";
-      case SpendProfileStatus.Incomplete:
-        return "Incomplete";
-      case SpendProfileStatus.ToDo:
-      default:
-        return "To do";
-    }
   }
 }
 
@@ -127,7 +109,6 @@ export const ProjectSetupRoute = defineRoute<ProjectSetupParams>({
   routePath: "/projects/:projectId/setup/:partnerId",
   getParams: (r) => ({ projectId: r.params.projectId, partnerId: r.params.partnerId }),
   container: ProjectSetupContainer,
-  accessControl: (auth, params) => auth.forProject(params.projectId)
-    .hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager),
+  accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(Dtos.ProjectRole.FinancialContact),
   getTitle: ({ content }) => content.projectSetup.title(),
 });
