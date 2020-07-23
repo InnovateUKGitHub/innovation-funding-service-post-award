@@ -40,8 +40,8 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={project} />}
       >
+        {this.renderGuidance()}
         <ACC.Section qa="bank-details-section" >
-          {this.renderGuidance()}
           <Form.Form
             editor={editor}
             onChange={() => this.props.onChange(false, editor.data)}
@@ -162,7 +162,7 @@ const ProjectSetupBankDetailsContainer = (props: ProjectSetupBankDetailsParams &
                   partnerId: props.partnerId
                 }));
               } else {
-                stores.navigation.navigateTo(props.routes.projectSetup.getLink({
+                stores.navigation.navigateTo(props.routes.projectSetupBankDetailsVerify.getLink({
                   projectId: props.projectId,
                   partnerId: props.partnerId
                 }));

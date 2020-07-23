@@ -5,6 +5,7 @@ export class PartnerLabels extends ContentBase {
     super(parent, "partner-labels");
   }
 
+  public readonly organisationName = () => this.getContent("organisation-name");
   public readonly companyNumber = () => this.getContent("company-number");
   public readonly companyNumberHint = () => this.getContent("company-number-hint");
   public readonly sortCode = () => this.getContent("sort-code");
