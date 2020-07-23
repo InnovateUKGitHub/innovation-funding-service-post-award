@@ -1,10 +1,11 @@
 import { SyncCommandBase } from "../common/commandBase";
 import { SalesforceProjectRole } from "../../repositories/partnersRepository";
 import {
+    BankCheckStatus,
+    BankDetailsTaskStatus,
     PartnerClaimStatus,
     PartnerDto,
     PartnerStatus,
-    PCRSpendProfileOverheadRate,
     ProjectRole,
     SpendProfileStatus
 } from "@framework/types";
@@ -59,6 +60,20 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             totalFundingDueToReceive: this.valueIfPermission(this.item.totalParticipantCosts * (this.item.awardRate / 100)),
             newForecastNeeded: this.item.newForecastNeeded,
             spendProfileStatus: new PartnerSpendProfileStatusMapper().mapFromSalesforcePcrSpendProfileOverheadRateOption(this.item.spendProfileStatus),
+            bankDetailsTaskStatus: BankDetailsTaskStatus.Unknown, // TODO
+            companyNumber: this.item.companyNumber,
+            accountNumber: this.item.accountNumber,
+            sortCode: this.item.sortCode,
+            firstName: this.item.firstName,
+            lastName: this.item.lastName,
+            accountPostcode: this.item.accountPostcode,
+            accountBuildingAndStreet: this.item.accountBuildingAndStreet,
+            accountTownOrCity: this.item.accountTownOrCity,
+            personalDetailsScore: this.item.personalDetailsScore,
+            companyNameScore: this.item.companyNameScore,
+            addressScore: this.item.addressScore,
+            regNumberIsValid: this.item.regNumberIsValid,
+            bankCheckStatus: BankCheckStatus.Unknown, // TODO
         };
     }
 
