@@ -106,8 +106,8 @@ const ProjectSetupContainer = (props: ProjectSetupParams & BaseProps) => (
           partner={stores.partners.getById(props.partnerId)}
           editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
           onUpdate={(saving, dto) =>
-              stores.partners.updatePartner(saving, props.partnerId, dto, () =>
-                  stores.navigation.navigateTo(props.routes.projectDashboard.getLink({})))}
+              stores.partners.updatePartner(saving, props.partnerId, dto, {onComplete: () =>
+                stores.navigation.navigateTo(props.routes.projectDashboard.getLink({}))})}
           {...props}
         />
       )
