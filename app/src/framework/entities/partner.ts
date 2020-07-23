@@ -28,6 +28,20 @@ export interface Partner {
   auditReportFrequencyName: string;
   totalPrepayment: number;
   postcode: string;
+  companyNumber: string;
+  sortCode: string;
+  accountNumber: string;
+  firstName: string;
+  lastName: string;
+  accountPostcode: string;
+  accountBuildingAndStreet: string;
+  accountTownOrCity: string;
   newForecastNeeded: boolean;
   spendProfileStatus: string;
+  bankDetailsTaskStatus: string;
+  bankCheckStatus: string;
+  personalDetailsScore: number | null;
+  addressScore: number | null;
+  companyNameScore: number | null;
+  regNumberIsValid: boolean | null;
 }
