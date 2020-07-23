@@ -1,6 +1,6 @@
-import { ContentPageBase } from "../contentPageBase";
-import { Content } from "../content";
-import { ProjectMessages } from "../messages/projectMessages";
+import { ContentPageBase } from "../../contentPageBase";
+import { Content } from "../../content";
+import { ProjectMessages } from "../../messages/projectMessages";
 
 export class ProjectDashboardContent extends ContentPageBase {
   constructor(content: Content) {

@@ -71,6 +71,12 @@
       "submit-button": "Save and return to project setup",
       "back-link": "Back to project setup"
     },
+    "failed-bank-check-confirmation": {
+      "title": "Further information required",
+      "back-link": "Back to project setup",
+      "return-to-setup": "Return to project setup",
+      "guidance": "This guidance message is only a placeholder"
+    },
     "finance-summary": {
       "title": "Finance summary",
       "totalsFooter": "Totals",

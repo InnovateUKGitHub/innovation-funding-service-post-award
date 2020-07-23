@@ -14,6 +14,7 @@ export const routeConfig = {
   claimSummary: Containers.ClaimSummaryRoute,
   error: Containers.ErrorRoute,
   financeSummary: Containers.FinanceSummaryRoute,
+  failedBankCheckConfirmation: Containers.FailedBankCheckConfirmationRoute,
   home: Containers.HomeRoute,
   monitoringReportCreate: Containers.MonitoringReportCreateRoute,
   monitoringReportDashboard: Containers.MonitoringReportDashboardRoute,
