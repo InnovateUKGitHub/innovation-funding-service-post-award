@@ -1,12 +1,12 @@
 import { ContentBase, ContentResult } from "./contentBase";
 import { HomePageContent } from "./pages/homePageContent";
-import { ProjectDashboardContent } from "./pages/projectDashboardContent";
-import { ProjectOverviewContent } from "./pages/projectOverviewContent";
-import { ProjectDetailsContent } from "./pages/projectDetailsContent";
-import { ProjectSetupContent } from "@content/pages/projectSetupContent";
-import { ProjectSetupSpendProfileContent } from "./pages/projectSetupSpendProfileContent";
+import { ProjectDashboardContent } from "./pages/project/projectDashboardContent";
+import { ProjectOverviewContent } from "./pages/project/projectOverviewContent";
+import { ProjectDetailsContent } from "./pages/project/projectDetailsContent";
+import { ProjectSetupContent } from "@content/pages/project/projectSetupContent";
+import { ProjectSetupSpendProfileContent } from "./pages/project/projectSetupSpendProfileContent";
 import { FinanceSummaryContent } from "./pages/financeSummaryContent";
-import { ProjectDocumentsContent } from "./pages/projectDocumentsContent";
+import { ProjectDocumentsContent } from "./pages/project/projectDocumentsContent";
 import { NotFoundContent, UnexpectedErrorContent } from "./pages/errorsContent";
 import { AllClaimsDashboardContent } from "@content/pages/claims/allClaimsDashboardContent";
 import { ClaimsDashboardContent } from "@content/pages/claims/claimsDashboardContent";
@@ -44,6 +44,7 @@ import { PCRAddPartnerAcademicCostsContent } from "@content/pages/pcrs/addPartne
 import { PCRAddPartnerStateAidEligibilityContent } from "@content/pages/pcrs/addPartner/stateAidEligibilityStepContent";
 import { PCRAddPartnerSummaryContent } from "./pages/pcrs/addPartner/addPartnerSummaryContent";
 import { PCRAddPartnerOtherFundingSourcesContent } from "@content/pages/pcrs/addPartner/otherFundingSourcesContent";
+import { FailedBankCheckConfirmationContent } from "./pages/project/failedBankCheckConfirmationContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -60,6 +61,7 @@ export class Content extends ContentBase {
   public readonly projectDetails = new ProjectDetailsContent(this);
   public readonly projectDocuments = new ProjectDocumentsContent(this);
   public readonly projectSetupSpendProfile = new ProjectSetupSpendProfileContent(this);
+  public readonly failedBankCheckConfirmation = new FailedBankCheckConfirmationContent(this);
 
   public readonly financeSummary = new FinanceSummaryContent(this);
 

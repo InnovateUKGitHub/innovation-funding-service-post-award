@@ -1,5 +1,5 @@
 import { ContentPageBase } from "@content/contentPageBase";
-import { Content } from "../content";
+import { Content } from "../../content";
 
 export class ProjectSetupSpendProfileContent extends ContentPageBase {
   constructor(content: Content) {

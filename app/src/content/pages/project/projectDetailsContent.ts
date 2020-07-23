@@ -1,5 +1,5 @@
 import { ContentPageBase } from "@content/contentPageBase";
-import { Content } from "../content";
+import { Content } from "../../content";
 import { ProjectMessages } from "@content/messages/projectMessages";
 import { ProjectLabels } from "@content/labels/projectLabels";
 import { ProjectContactLabels } from "@content/labels/projectContactLabels";

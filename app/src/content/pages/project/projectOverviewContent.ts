@@ -1,6 +1,6 @@
-import { ContentPageBase } from "../contentPageBase";
-import { Content } from "../content";
-import { ProjectMessages } from "../messages/projectMessages";
+import { ContentPageBase } from "../../contentPageBase";
+import { Content } from "../../content";
+import { ProjectMessages } from "../../messages/projectMessages";
 import { ProjectLabels } from "@content/labels/projectLabels";
 
 export class ProjectOverviewContent extends ContentPageBase {
