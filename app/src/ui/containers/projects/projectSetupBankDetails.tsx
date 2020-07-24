@@ -155,25 +155,28 @@ const ProjectSetupBankDetailsContainer = (props: ProjectSetupBankDetailsParams &
         })}
         onChange={(submit, dto) => {
           stores.partners.updatePartner(submit, props.partnerId, dto,
-            (resp) => {
-              if (resp.bankCheckStatus === BankCheckStatus.ValidationFailed) {
-                stores.navigation.navigateTo(props.routes.failedBankCheckConfirmation.getLink({
-                  projectId: props.projectId,
-                  partnerId: props.partnerId
-                }));
-              } else {
-                stores.navigation.navigateTo(props.routes.projectSetupBankDetailsVerify.getLink({
-                  projectId: props.projectId,
-                  partnerId: props.partnerId
-                }));
+            {
+              onComplete: (resp) => {
+                if (resp.bankCheckStatus === BankCheckStatus.ValidationFailed) {
+                  stores.navigation.navigateTo(props.routes.failedBankCheckConfirmation.getLink({
+                    projectId: props.projectId,
+                    partnerId: props.partnerId
+                  }));
+                } else {
+                  stores.navigation.navigateTo(props.routes.projectSetupBankDetailsVerify.getLink({
+                    projectId: props.projectId,
+                    partnerId: props.partnerId
+                  }));
+                }
+              },
+              onError: (e) => {
+                // TODO add bank details validation to Partner Validator and use correct type here
+                if (e && e.results && e.results.bankDetails && !e.results.bankDetails.isValid) {
+                  dto.bankCheckValidationAttempts += 1;
+                }
               }
-            },
-            (e) => {
-              // TODO add bank details validation to Partner Validator and use correct type here
-              if (e && e.results && e.results.bankDetails && !e.results.bankDetails.isValid) {
-                dto.bankCheckValidationAttempts += 1;
-              }
-            });
+            }
+          );
         }}
         {...props}
       />

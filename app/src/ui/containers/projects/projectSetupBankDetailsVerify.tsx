@@ -89,8 +89,8 @@ const ProjectSetupBankDetailsVerifyContainer = (props: ProjectSetupBankDetailsVe
         project={stores.projects.getById(props.projectId)}
         editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
         onChange={(submit, dto) => {
-          stores.partners.updatePartner(submit, props.partnerId, dto, () =>
-            stores.navigation.navigateTo(props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId })));
+          stores.partners.updatePartner(submit, props.partnerId, dto, {onComplete: () =>
+            stores.navigation.navigateTo(props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }))});
         }}
         {...props}
       />
