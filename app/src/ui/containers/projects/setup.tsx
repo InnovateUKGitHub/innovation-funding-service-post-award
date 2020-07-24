@@ -4,7 +4,7 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import * as ACC from "../../components";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import * as Dtos from "@framework/dtos";
-import { BankCheckStatus } from "@framework/dtos";
+import { BankCheckStatus, BankDetailsTaskStatus, PartnerStatus } from "@framework/dtos";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 
 export interface ProjectSetupParams {
@@ -64,18 +64,24 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
               nameContent={x => x.projectSetup.setSpendProfile()}
               status={partner.spendProfileStatusLabel as ACC.TaskStatus}
               route={this.props.routes.projectSetupSpendProfile.getLink({partnerId: partner.id, projectId: project.id})}
+              validation={[editor.validator.spendProfileStatus]}
             />
             <ACC.Task
               nameContent={x => x.projectSetup.provideBankDetails()}
               status={partner.bankDetailsTaskStatusLabel as ACC.TaskStatus}
               route={this.getBankDetailsLink(partner)}
+              disableLink={partner.bankDetailsTaskStatus === BankDetailsTaskStatus.Complete}
+              validation={[editor.validator.bankDetailsTaskStatus]}
             />
           </ACC.TaskListSection>
         </ACC.TaskList>
         <Form.Form
             data={partner}
             editor={editor}
-            onSubmit={() => this.props.onUpdate(true, editor.data)}
+            onSubmit={() => {
+              editor.data.partnerStatus = PartnerStatus.Active;
+              this.props.onUpdate(true, editor.data);
+            }}
             qa="projectSetupForm"
         >
           <Form.Fieldset>

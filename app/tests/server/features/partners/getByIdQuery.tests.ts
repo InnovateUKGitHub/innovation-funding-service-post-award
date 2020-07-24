@@ -101,7 +101,7 @@ describe("getAllForProjectQuery", () => {
       newForecastNeeded: false,
       spendProfileStatus: SpendProfileStatus.Complete,
       spendProfileStatusLabel: "Complete",
-      bankDetailsTaskStatus: BankDetailsTaskStatus.ToDo,
+      bankDetailsTaskStatus: BankDetailsTaskStatus.Unknown,
       bankDetailsTaskStatusLabel: "To do",
       bankCheckStatus: BankCheckStatus.PendingValidation,
       bankCheckValidationAttempts: 0,

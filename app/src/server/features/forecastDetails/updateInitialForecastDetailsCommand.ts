@@ -7,9 +7,9 @@ import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecast
 import { GetByIdQuery } from "@server/features/partners";
 import { GetByIdQuery as GetProjectByIdQuery } from "@server/features/projects";
 import { InitialForecastDetailsDtosValidator } from "@ui/validators/initialForecastDetailsDtosValidator";
-import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import { GetCostCategoriesForPartnerQuery } from "@server/features/claims/getCostCategoriesForPartnerQuery";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { PartnerSpendProfileStatusMapper } from "@server/features/partners/mapToPartnerDto";
 
 export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
@@ -68,7 +68,11 @@ export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
     } else {
       partnerDto.spendProfileStatus = SpendProfileStatus.Incomplete;
     }
-    await context.runCommand(new UpdatePartnerCommand(partnerDto));
+    // Calling repo directly here as it's the only place we can check that the spend profile transition is valid
+    await context.repositories.partners.update({
+      Id: partnerDto.id,
+      Acc_SpendProfileCompleted__c: new PartnerSpendProfileStatusMapper().mapToSalesforcePcrSpendProfileOverheadRateOption(partnerDto.spendProfileStatus),
+    });
   }
 
   private async updateProfileDetails(context: IContext, forecasts: ForecastDetailsDTO[], existing: ForecastDetailsDTO[], submit: boolean) {
