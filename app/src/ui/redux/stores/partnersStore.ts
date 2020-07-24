@@ -8,6 +8,12 @@ import { LoadingStatus } from "@shared/pending";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import { ValidationError } from "@server/features/common";
 
+interface UpdatePartnerOptions {
+  onComplete?: (result: PartnerDto) => void;
+  onError?: (error: any) => void;
+  validateBankDetails?: boolean;
+}
+
 export class PartnersStore extends StoreBase {
   constructor(getState: () => RootState, dispatch: (action: any) => void) {
     super(getState, dispatch);
@@ -39,23 +45,23 @@ export class PartnersStore extends StoreBase {
     );
   }
 
-  public updatePartner(submit: boolean, partnerId: string, partnerDto: PartnerDto, onComplete?: (result: PartnerDto) => void, onError?: (error: any) => void): void {
+  public updatePartner(submit: boolean, partnerId: string, partnerDto: PartnerDto, options?: UpdatePartnerOptions): void {
     return this.updateEditor(
       submit,
       "partner",
       storeKeys.getPartnerKey(partnerId),
       partnerDto,
-      () => new PartnerDtoValidator(partnerDto, true),
-      p => ApiClient.partners.updatePartner({ partnerId, partnerDto, ...p }),
+      () => new PartnerDtoValidator(partnerDto, true, options && options.validateBankDetails),
+      p => ApiClient.partners.updatePartner({ partnerId, partnerDto, validateBankDetails: options && options.validateBankDetails, ...p }),
       (result) => {
         this.queue(dataLoadAction(storeKeys.getPartnerKey(partnerId), "partner", LoadingStatus.Updated, result));
-        if(onComplete) {
-          onComplete(result);
+        if(options && options.onComplete) {
+          options.onComplete(result);
         }
       },
       (e) => {
-        if(onError) {
-          onError(e);
+        if(options && options.onError) {
+          options.onError(e);
         }
       }
     );

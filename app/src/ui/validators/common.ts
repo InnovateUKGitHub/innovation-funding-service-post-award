@@ -75,7 +75,7 @@ export function hasNoDuplicates<T>(results: Results<{}>, values: T[], message: s
 
 export function alphanumeric(results: Results<{}>, value: string, message?: string) {
   const regex = new RegExp(/^[a-z0-9]+$/i);
-  return isTrue(results, (!value) || regex.test(value), message || "Only  numbers and letters allowed");
+  return isTrue(results, (!value) || regex.test(value), message || "Only numbers and letters allowed");
 }
 
 export function number(results: Results<{}>, value: number | undefined | null, message?: string) {
@@ -88,6 +88,16 @@ export function integer(results: Results<{}>, value?: number | null, message?: s
 
 export function isPositiveInteger(results: Results<{}>, value: number | undefined | null, message?: string) {
   return isTrue(results, value === undefined || value === null || (isValueWholeNumber(value) && value >= 0), message || "Field must be a positive number");
+}
+
+export function sortCode(results: Results<{}>, value: string | null, message?: string) {
+  const regex = new RegExp(/[^0-9](6)+$/i);
+  return isTrue(results, (!value) || regex.test(value), message || "Invalid sort code");
+}
+
+export function accountNumber(results: Results<{}>, value: string | null, message?: string) {
+  const regex = new RegExp(/[^0-9](6, 8)+$/i);
+  return isTrue(results, (!value) || regex.test(value), message || "Invalid account number");
 }
 
 export function email(results: Results<{}>, value: string, message?: string) {
