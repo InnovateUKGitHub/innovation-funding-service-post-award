@@ -93,6 +93,7 @@ export interface PartnerDto {
   accountBuildingAndStreet: string | null;
   accountTownOrCity: string | null;
 
+  bankCheckValidationAttempts: number;
   bankCheckStatus: BankCheckStatus;
   personalDetailsScore: number | null;
   addressScore: number | null;

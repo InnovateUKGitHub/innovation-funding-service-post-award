@@ -75,7 +75,8 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             companyNameScore: this.item.companyNameScore,
             addressScore: this.item.addressScore,
             regNumberIsValid: this.item.regNumberIsValid,
-            bankCheckStatus: BankCheckStatus.Unknown, // TODO
+            bankCheckStatus: BankCheckStatus.PendingValidation, // TODO
+            bankCheckValidationAttempts: 0,
         };
     }
 
