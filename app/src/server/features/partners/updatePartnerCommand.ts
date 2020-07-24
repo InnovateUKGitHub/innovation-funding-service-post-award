@@ -1,8 +1,9 @@
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
-import { Authorisation, IContext, PartnerDto, ProjectRole } from "@framework/types";
+import { Authorisation, IContext, PartnerDto, PartnerStatus, ProjectRole } from "@framework/types";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
-import { PartnerSpendProfileStatusMapper } from "@server/features/partners/mapToPartnerDto";
+import { PartnerStatusMapper } from "@server/features/partners/mapToPartnerDto";
 import { isBoolean } from "@framework/util";
+import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 
 export class UpdatePartnerCommand extends CommandBase<boolean> {
   constructor(
@@ -15,24 +16,31 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
   }
 
   protected async Run(context: IContext) {
-    this.validateRequest();
+
+    const originalDto = await context.runQuery(new GetByIdQuery(this.partner.id));
+
+    this.validateRequest(originalDto);
 
     await context.repositories.partners.update({
       Id: this.partner.id,
       Acc_Postcode__c: this.partner.postcode,
       Acc_NewForecastNeeded__c: isBoolean(this.partner.newForecastNeeded) ? this.partner.newForecastNeeded : undefined,
-      Acc_SpendProfileCompleted__c: new PartnerSpendProfileStatusMapper().mapToSalesforcePcrSpendProfileOverheadRateOption(this.partner.spendProfileStatus),
+      Acc_ParticipantStatus__c: new PartnerStatusMapper().mapToSalesforce(this.partner.partnerStatus),
     });
 
     return true;
   }
 
-  private validateRequest() {
+  private validateRequest(originalDto: PartnerDto) {
     if(!this.partner) {
       throw new BadRequestError("Request is missing required fields");
     }
 
-    const validationResult = new PartnerDtoValidator(this.partner, true, this.validateBankDetails);
+    if (originalDto.partnerStatus !== PartnerStatus.Pending && this.validateBankDetails) {
+      throw new BadRequestError("Cannot validate bank details for an active partner");
+    }
+
+    const validationResult = new PartnerDtoValidator(this.partner, originalDto, true, this.validateBankDetails);
 
     if(!validationResult.isValid) {
       throw new ValidationError(validationResult);

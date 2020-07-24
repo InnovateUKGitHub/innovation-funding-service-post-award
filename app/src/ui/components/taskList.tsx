@@ -14,6 +14,7 @@ interface ITask {
   route: ILinkInfo;
   status: TaskStatus;
   validation?: Result[];
+  disableLink?: boolean;
 }
 
 export interface ITaskListItem {
@@ -24,19 +25,20 @@ export interface ITaskListItem {
   qa?: string;
 }
 
-export const Task: React.FunctionComponent<ITask> = ({ route, name, nameContent, status, validation }) => {
+export const Task: React.FunctionComponent<ITask> = ({ route, name, nameContent, status, validation, disableLink }) => {
   const actionClasses = classNames({
-    "app-task-list__task-action" : true,
+    "app-task-list__task-action": true,
     "app-task-list__task-action--completed": status === "Complete",
   });
   const hasError = validation && validation.find(x => !x.isValid);
 
+  const link = !!nameContent ? <Content value={nameContent}/> : name;
   return (
-    <li className={classNames("app-task-list__item", {"app-task-list__item--error": hasError})}>
+    <li className={classNames("app-task-list__item", { "app-task-list__item--error": hasError })}>
       {validation && validation.map((v) => <ValidationError error={v} key={v.key}/>)}
-      <span className="app-task-list__task-name"><Link route={route}>{
-        !!nameContent ? <Content value={nameContent}/> : name
-      }</Link></span>
+      <span className="app-task-list__task-name">
+        {disableLink ? link : <Link route={route}>{link}</Link>}
+      </span>
       <span className={actionClasses}>{status}</span>
     </li>
   );
