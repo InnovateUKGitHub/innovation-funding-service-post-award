@@ -51,6 +51,8 @@ export interface IConfig {
     };
 
     readonly sil: {
+      bankCheckValidateUrl: string,
+      bankCheckVerifyUrl: string,
       companiesHouseSearchUrl: string,
       username: string,
       password: string,
@@ -164,6 +166,8 @@ const s3Account = {
 };
 
 const sil = {
+    bankCheckValidateUrl: process.env.SIL_EXPERIAN_VALIDATE_URL!,
+    bankCheckVerifyUrl: process.env.SIL_EXPERIAN_VERIFY_URL!,
     companiesHouseSearchUrl: process.env.SIL_COMPANIES_HOUSE_SEARCH_URL!,
     username: process.env.SIL_USERNAME!,
     password: process.env.SIL_PASSWORD!,
