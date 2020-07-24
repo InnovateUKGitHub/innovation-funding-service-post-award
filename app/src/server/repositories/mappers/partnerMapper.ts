@@ -39,7 +39,7 @@ export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePar
       spendProfileStatusLabel: item.SpendProfileStatusLabel,
 
       // TODO
-      bankDetailsTaskStatus: "",
+      bankDetailsTaskStatus: item.Acc_BankCheckCompleted__c,
       bankDetailsTaskStatusLabel: "To do",
       bankCheckStatus: "",
       firstName: "",

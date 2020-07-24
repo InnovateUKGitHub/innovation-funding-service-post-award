@@ -1,21 +1,24 @@
 import { TestContext } from "../../testContextProvider";
 import { UpdatePartnerCommand } from "../../../../src/server/features/partners/updatePartnerCommand";
-import { PartnerDto, PartnerStatus } from "@framework/dtos";
+import { BankDetailsTaskStatus, PartnerDto, PartnerStatus, SpendProfileStatus } from "@framework/dtos";
 import { GetByIdQuery } from "@server/features/partners";
-import { ValidationError } from "@server/features/common";
+import { BadRequestError, ValidationError } from "@server/features/common";
 
 describe("updatePartnerCommand", () => {
   it("correctly updates the partner's postcode when the command is run", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
-    const partner = context.testData.createPartner(project);
+    const partner = context.testData.createPartner(project, item => {
+      item.postcode = null as any;
+      item.participantStatus = "Pending";
+      item.bankDetailsTaskStatus = "Complete";
+      item.spendProfileStatus = "Complete";
+    });
 
     const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
-    expected.postcode = "";
-    expected.partnerStatus = PartnerStatus.Pending;
 
     const command = new UpdatePartnerCommand(expected);
-    await expect(context.runCommand(command)).resolves;
+    await expect(context.runCommand(command)).resolves.toBe(true);
 
     expected.partnerStatus = PartnerStatus.Active;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
@@ -27,6 +30,43 @@ describe("updatePartnerCommand", () => {
     const result = await context.runQuery(new GetByIdQuery(partner.id));
     expect(result).not.toBe(null);
     expect(result.postcode).toEqual(expected.postcode);
+  });
+
+  it("Will not validate bank details for an active partner", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    const partner = context.testData.createPartner(project, item => {
+      item.participantStatus = "Active";
+      item.bankDetailsTaskStatus = "Complete";
+      item.spendProfileStatus = "Complete";
+    });
+
+    const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
+
+    const command = new UpdatePartnerCommand(expected, true);
+    await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
+  });
+
+  it("Will not allow a partner to become active if the bank checks and initial spend profile arte not complete", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    // tslint:disable-next-line:no-identical-functions
+    const partner = context.testData.createPartner(project, item => {
+      item.participantStatus = "Pending";
+      item.bankDetailsTaskStatus = "To do";
+      item.spendProfileStatus = "To do";
+    });
+
+    const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
+    expected.partnerStatus = PartnerStatus.Active;
+    const command = new UpdatePartnerCommand(expected, true);
+    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+
+    expected.bankDetailsTaskStatus = BankDetailsTaskStatus.Complete;
+    expected.spendProfileStatus = SpendProfileStatus.Complete;
+
+    // TODO put back in once SF fields are available
+    // await expect(context.runCommand(command)).resolves.toBe(true);
   });
 
   // TODO: this test is only a dummy until we have the SF fields for bank details
@@ -52,7 +92,9 @@ describe("updatePartnerCommand", () => {
   it("should correctly validate sort code", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
-    const partner = context.testData.createPartner(project);
+    const partner = context.testData.createPartner(project, item => {
+      item.participantStatus = "Pending";
+    });
 
     const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
     expected.sortCode = "00112";
@@ -69,7 +111,9 @@ describe("updatePartnerCommand", () => {
   it("should correctly validate account number", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
-    const partner = context.testData.createPartner(project);
+    const partner = context.testData.createPartner(project, item => {
+      item.participantStatus = "Pending";
+    });
 
     const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
     expected.accountNumber = "12345";

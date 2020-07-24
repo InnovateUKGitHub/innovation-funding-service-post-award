@@ -42,6 +42,7 @@ export interface ISalesforcePartner {
   Acc_Postcode__c: string;
   Acc_NewForecastNeeded__c: boolean;
   Acc_SpendProfileCompleted__c: string;
+  Acc_BankCheckCompleted__c: string; // TODO add to retrieved fields
   SpendProfileStatusLabel: string;
 }
 
