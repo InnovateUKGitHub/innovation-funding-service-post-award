@@ -54,6 +54,7 @@ export const routeConfig = {
   projectOverview: Containers.ProjectOverviewRoute,
   projectSetup: Containers.ProjectSetupRoute,
   projectSetupSpendProfile: Containers.ProjectSetupSpendProfileRoute,
+  projectSetupBankDetails: Containers.ProjectSetupBankDetailsRoute,
   reviewClaim: Containers.ReviewClaimRoute,
   reviewClaimLineItems: Containers.ReviewClaimLineItemsRoute,
   forecastDashboard: Containers.ForecastDashboardRoute,

@@ -36,9 +36,11 @@ export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePar
       postcode: item.Acc_Postcode__c,
       newForecastNeeded: item.Acc_NewForecastNeeded__c,
       spendProfileStatus: item.Acc_SpendProfileCompleted__c,
+      spendProfileStatusLabel: item.SpendProfileStatusLabel,
 
       // TODO
       bankDetailsTaskStatus: "",
+      bankDetailsTaskStatusLabel: "To do",
       bankCheckStatus: "",
       firstName: "",
       lastName: "",
