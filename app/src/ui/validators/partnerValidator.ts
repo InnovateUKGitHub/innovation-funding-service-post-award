@@ -1,17 +1,35 @@
 import * as Validation from "./common";
 import { Results } from "../validation/results";
-import { PartnerDto, PartnerStatus } from "@framework/dtos";
+import { BankDetailsTaskStatus, PartnerDto, PartnerStatus, SpendProfileStatus } from "@framework/dtos";
 import { Result } from "@ui/validation";
 
 export class PartnerDtoValidator extends Results<PartnerDto> {
 
     constructor(
         model: PartnerDto,
+        private readonly original: PartnerDto,
         showValidationErrors: boolean,
         private readonly validateBankDetails?: boolean,
     ) {
         super(model, showValidationErrors);
     }
+
+    private readonly allowedPartnerStatusTransitions: {[key: number]: PartnerStatus[]} = {
+        [PartnerStatus.Pending]: [PartnerStatus.Pending, PartnerStatus.Active],
+        [PartnerStatus.Active]: [PartnerStatus.Active],
+        [PartnerStatus.InvoluntaryWithdrawal]: [PartnerStatus.InvoluntaryWithdrawal],
+        [PartnerStatus.VoluntaryWithdrawal]: [PartnerStatus.VoluntaryWithdrawal],
+        [PartnerStatus.OnHold]: [PartnerStatus.OnHold],
+    };
+
+    private isPartnerStatusTransitionAllowed(original: PartnerDto, model: PartnerDto) {
+        const allowedTransitions = this.allowedPartnerStatusTransitions[original.partnerStatus] || [];
+        return allowedTransitions.indexOf(model.partnerStatus) >= 0;
+    }
+
+    public partnerStatus = Validation.isTrue(this, this.isPartnerStatusTransitionAllowed(this.original, this.model), "Partner status change not allowed");
+    public spendProfileStatus = Validation.isTrue(this, this.model.partnerStatus !== PartnerStatus.Active || this.model.spendProfileStatus === SpendProfileStatus.Complete, "You must complete your spend profile");
+    public bankDetailsTaskStatus = Validation.isTrue(this, this.model.partnerStatus !== PartnerStatus.Active || this.model.bankDetailsTaskStatus === BankDetailsTaskStatus.Complete, "You must provide your bank details");
 
     public postcode = this.model.partnerStatus === PartnerStatus.Active ? Validation.all(this,
         () => Validation.required(this, this.model.postcode, "Postcode field cannot be empty")
