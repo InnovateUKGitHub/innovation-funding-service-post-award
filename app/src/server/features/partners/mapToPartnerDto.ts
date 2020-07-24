@@ -60,7 +60,9 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             totalFundingDueToReceive: this.valueIfPermission(this.item.totalParticipantCosts * (this.item.awardRate / 100)),
             newForecastNeeded: this.item.newForecastNeeded,
             spendProfileStatus: new PartnerSpendProfileStatusMapper().mapFromSalesforcePcrSpendProfileOverheadRateOption(this.item.spendProfileStatus),
-            bankDetailsTaskStatus: BankDetailsTaskStatus.Unknown, // TODO
+            spendProfileStatusLabel: this.item.spendProfileStatusLabel,
+            bankDetailsTaskStatus: BankDetailsTaskStatus.ToDo, // TODO
+            bankDetailsTaskStatusLabel: this.item.bankDetailsTaskStatusLabel,
             companyNumber: this.item.companyNumber,
             accountNumber: this.item.accountNumber,
             sortCode: this.item.sortCode,
