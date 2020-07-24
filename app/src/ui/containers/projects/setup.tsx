@@ -2,9 +2,10 @@ import React from "react";
 import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import * as ACC from "../../components";
-import {IEditorStore, StoresConsumer} from "@ui/redux";
+import { IEditorStore, StoresConsumer } from "@ui/redux";
 import * as Dtos from "@framework/dtos";
-import {PartnerDtoValidator} from "@ui/validators/partnerValidator";
+import { BankCheckStatus } from "@framework/dtos";
+import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 
 export interface ProjectSetupParams {
   projectId: string;
@@ -67,7 +68,7 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
             <ACC.Task
               nameContent={x => x.projectSetup.provideBankDetails()}
               status={partner.bankDetailsTaskStatusLabel as ACC.TaskStatus}
-              route={this.props.routes.projectSetupBankDetails.getLink({partnerId: partner.id, projectId: project.id})}
+              route={this.getBankDetailsLink(partner)}
             />
           </ACC.TaskListSection>
         </ACC.TaskList>
@@ -83,6 +84,16 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
         </Form.Form>
       </ACC.Page>
     );
+  }
+
+  private getBankDetailsLink(partner: Dtos.PartnerDto) {
+    if (partner.bankCheckStatus === BankCheckStatus.PendingValidation) {
+      return this.props.routes.projectSetupBankDetails.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId});
+    }
+    if (partner.bankCheckStatus === BankCheckStatus.ValidationPassed) {
+      return this.props.routes.projectSetupBankDetailsVerify.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId});
+    }
+    return this.props.routes.projectSetup.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId});
   }
 }
 
