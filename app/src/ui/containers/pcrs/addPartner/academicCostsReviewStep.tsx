@@ -30,14 +30,14 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           costDto: this.props.pcrItem.spendProfile.costs.find(x => x.costCategoryId === costCategory.id) as PCRSpendProfileAcademicCostDto
         };
       }).filter(x => !!x);
-    const total = sum(data, x => x.costDto.value || 0);
+    const total = sum(data, x => (!!x.costDto ? x.costDto.value : 0) || 0);
 
     const Table = ACC.TypedTable<Data>();
 
     return (
       <ACC.Section titleContent={x => x.pcrAddPartnerAcademicCosts.labels.projectCostsHeading()}>
         <ACC.Section titleContent={x => x.pcrAddPartnerAcademicCosts.labels.tsbReferenceHeading()}>
-          <SimpleString>{pcrItem.tsbReference}</SimpleString>
+          <SimpleString qa="tsbReference">{pcrItem.tsbReference}</SimpleString>
         </ACC.Section>
         <ACC.Section titleContent={x => x.pcrAddPartnerAcademicCosts.costsSectionTitle()}>
           <Table.Table qa="costsTable" data={data}>
@@ -52,8 +52,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
             />
             <Table.Currency
               headerContent={x => x.pcrAddPartnerAcademicCosts.costHeading()}
-              qa="cost-value"
-              value={x => x.costDto.value}
+              qa="cost"
+              value={x => x.costDto? x.costDto.value : 0}
               width={30}
               footer={this.props.isClient && <ACC.Renderers.Currency value={total}/>}
             />
