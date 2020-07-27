@@ -19,12 +19,15 @@ import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server
 import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { GetPartnerDocumentQuery } from "@server/features/documents/getPartnerDocument";
+import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummary";
 
 export interface IDocumentsApi {
   getClaimDocuments: (params: ApiParams<{ projectId: string, partnerId: string, periodId: number, description?: DocumentDescription }>) => Promise<DocumentSummaryDto[]>;
   getClaimDetailDocuments: (params: ApiParams<{ claimDetailKey: ClaimDetailKey }>) => Promise<DocumentSummaryDto[]>;
   getProjectChangeRequestDocumentsOrItemDocuments: (params: ApiParams<{ projectId: string, projectChangeRequestIdOrItemId: string }>) => Promise<DocumentSummaryDto[]>;
   getProjectDocuments: (params: ApiParams<{ projectId: string }>) => Promise<DocumentSummaryDto[]>;
+  getPartnerDocuments: (params: ApiParams<{ projectId: string, partnerId: string }>) => Promise<DocumentSummaryDto[]>;
   uploadClaimDetailDocuments: (params: ApiParams<{ claimDetailKey: ClaimDetailKey, documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
   uploadClaimDocument: (params: ApiParams<{ claimKey: ClaimKey, document: DocumentUploadDto }>) => Promise<{ documentId: string }>;
   uploadClaimDocuments: (params: ApiParams<{ claimKey: ClaimKey, documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
@@ -81,10 +84,22 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       p => this.getProjectDocuments(p)
     );
 
+    this.getItems(
+      "/partners/:projectId/:partnerId",
+      (p) => ({ projectId: p.projectId, partnerId: p.partnerId }),
+      p => this.getPartnerDocuments(p)
+    );
+
     this.getAttachment(
       "/projects/:projectId/:documentId/content",
       (p) => ({ projectId: p.projectId, documentId: p.documentId }),
       p => this.getProjectDocument(p)
+    );
+
+    this.getAttachment(
+      "/partners/:projectId/:partnerId/:documentId/content",
+      (p) => ({ projectId: p.projectId, partnerId: p.partnerId, documentId: p.documentId }),
+      p => this.getPartnerDocument(p)
     );
 
     this.getItems(
@@ -165,8 +180,19 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     return contextProvider.start(params).runQuery(query);
   }
 
+  public async getPartnerDocuments(params: ApiParams<{ projectId: string, partnerId: string }>) {
+    const { projectId, partnerId } = params;
+    const query = new GetPartnerDocumentsQuery(projectId, partnerId);
+    return contextProvider.start(params).runQuery(query);
+  }
+
   public async getProjectDocument(params: ApiParams<{ projectId: string, documentId: string }>) {
     const query = new GetProjectDocumentQuery(params.projectId, params.documentId);
+    return contextProvider.start(params).runQuery(query);
+  }
+
+  public async getPartnerDocument(params: ApiParams<{ projectId: string, partnerId: string, documentId: string }>) {
+    const query = new GetPartnerDocumentQuery(params.projectId, params.partnerId, params.documentId);
     return contextProvider.start(params).runQuery(query);
   }
 
