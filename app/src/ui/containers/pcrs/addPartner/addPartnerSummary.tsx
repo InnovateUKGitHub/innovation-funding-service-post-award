@@ -84,7 +84,24 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
         <ACC.SummaryList qa="add-partner-summary-list-funding">
           { !isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.jesFormHeading()} content={this.renderDocuments(documents, DocumentDescription.JeSForm)} qa="supportingDocumentsJes" action={this.props.getEditLink("jeSStep", null)} /> }
           { !isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.tsbReferenceHeading()} content={pcrItem.tsbReference} validation={validator.tsbReference} qa="tsbReference" action={this.props.getEditLink("academicCostsStep", validator.tsbReference)} /> }
-          <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.projectCostsHeading()} content={<ACC.Renderers.Currency value={totalProjectCosts}/>} qa="projectCosts" action={isIndustrial ? this.props.mode !== "review" ? this.props.getEditLink("spendProfileStep", null) : this.props.getViewLink("spendProfileStep") : this.props.getEditLink("academicCostsStep", null) }/>
+          { isIndustrial && <ACC.SummaryListItem
+            labelContent={x => x.pcrAddPartnerSummary.labels.projectCostsHeading()}
+            content={<ACC.Renderers.Currency value={totalProjectCosts}/>}
+            qa="projectCosts"
+            action={
+              this.props.mode === "prepare"
+                ? this.props.getEditLink("spendProfileStep", null)
+                : this.props.getViewLink("spendProfileStep")}
+          /> }
+          { !isIndustrial && <ACC.SummaryListItem
+            labelContent={x => x.pcrAddPartnerSummary.labels.projectCostsHeading()}
+            content={<ACC.Renderers.Currency value={totalProjectCosts}/>}
+            qa="projectCosts"
+            action={
+              this.props.mode === "prepare"
+                ? this.props.getEditLink("academicCostsStep", null)
+                : this.props.getViewLink("academicCostsStep")}
+          /> }
           <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.otherFundingSourcesHeading()} content={<ACC.Content value={x => pcrItem.hasOtherFunding ? x.pcrAddPartnerSummary.labels.otherFundsYes() : x.pcrAddPartnerSummary.labels.otherFundsNo()}/>} validation={validator.hasOtherFunding} qa="hasOtherFunding" action={this.props.getEditLink("otherFundingStep", validator.hasOtherFunding)} />
           { pcrItem.hasOtherFunding && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.amountOfOtherFundingHeading()} content={<ACC.Renderers.Currency value={pcrItem.totalOtherFunding}/>} qa="amountOfOtherFunding" action={this.props.getEditLink("otherFundingSourcesStep", null)} /> }
           <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.fundingLevelHeading()} content={<ACC.Renderers.Percentage value={pcrItem.awardRate}/>} validation={validator.awardRate} qa="fundingLevel"  action={this.props.getEditLink("awardRateStep", validator.awardRate)} />
