@@ -1,10 +1,12 @@
 import { IResources } from "@framework/types/IContext";
 import { ICompaniesHouse } from "@server/resources/companiesHouse";
+import { IBankCheckService } from "@server/resources/bankCheckService";
 
 export class TestResources implements IResources {
   public defaultContent = new TestDefaultContent();
   public customContent = new TestCustomContent();
   public companiesHouse = new TestCompaniesHouse();
+  public bankCheckService = new TestBankCheckService();
 }
 
 class TestDefaultContent {
@@ -43,4 +45,21 @@ class TestCompaniesHouse implements ICompaniesHouse {
     }
   ];
   public searchCompany = () => Promise.resolve(this.results);
+}
+
+class TestBankCheckService implements IBankCheckService {
+  private readonly validateResult = {
+    checkPassed: true,
+    iban: "123456",
+    conditions: undefined,
+  };
+  private readonly verifyResult = {
+    addressScore: null,
+    companyNameScore: null,
+    personalDetailsScore: null,
+    regNumberScore: null,
+    conditions: undefined,
+  };
+  public validate = () => Promise.resolve(this.validateResult);
+  public verify = () => Promise.resolve(this.verifyResult);
 }
