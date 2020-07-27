@@ -24,6 +24,7 @@ import { NonAidFundingStep } from "@ui/containers/pcrs/addPartner/nonAidFundingS
 import { DeMinimisStep } from "@ui/containers/pcrs/addPartner/deMinimisStep";
 import { CombinedResultValidator } from "@ui/validation";
 import { OtherSourcesOfFundingStep } from "@ui/containers/pcrs/addPartner/otherSourcesOfFundingStep";
+import { AcademicCostsReviewStep } from "@ui/containers/pcrs/addPartner/academicCostsReviewStep";
 
 export type addPartnerStepNames =
   "roleAndOrganisationStep"
@@ -123,7 +124,7 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
       displayName: "Organisation name",
       stepNumber: 3,
       validation: val => val.pcr,
-      stepRender: AcademicOrganisationStep
+      stepRender: AcademicOrganisationStep,
     });
     workflow.steps.push({
       stepName: "jeSStep",
@@ -145,7 +146,8 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
           ...addPartnerValidator.spendProfile.results[0].errors
         );
       },
-      stepRender: AcademicCostsStep
+      stepRender: AcademicCostsStep,
+      readonlyStepRender: AcademicCostsReviewStep
     });
   } else {
     workflow.steps.push({
@@ -175,7 +177,7 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
       stepNumber: 9,
       validation: val => val.pcr,
       stepRender: SpendProfileStep,
-      supportsReadOnly: true,
+      readonlyStepRender: SpendProfileStep,
     });
   }
 
