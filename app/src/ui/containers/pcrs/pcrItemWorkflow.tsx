@@ -1,13 +1,23 @@
 import React from "react";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import { ILinkInfo, PCRItemDto, PCRItemStatus, PCRItemType, ProjectDto, ProjectRole } from "@framework/types";
+import {
+  ILinkInfo,
+  PCRItemDto,
+  PCRItemStatus,
+  PCRItemType,
+  ProjectDto,
+  ProjectRole
+} from "@framework/types";
 import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { EditorStatus, IEditorStore, IStores, StoresConsumer } from "@ui/redux";
-import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
+import {
+  MultipleDocumentUpdloadDtoValidator,
+  PCRDtoValidator,
+} from "@ui/validators";
 import { Result } from "@ui/validation/result";
-import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
+import { PcrStepProps, PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { Results } from "@ui/validation";
 import { PCRWorkflowValidator } from "@ui/validators/pcrWorkflowValidator";
 import { GrantMovingOverFinancialYearForm } from "./financialVirements/financialVirementsSummary";
@@ -137,32 +147,35 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     const { mode } = this.props;
 
     const currentStep = workflow.getCurrentStepInfo()!;
-    // When reviewing a pcr, the MO should only be able to visit pages which support read only.
-    if (mode === "review" && !currentStep.supportsReadOnly) throw new ForbiddenError();
-
-    return (
-      currentStep.stepRender({
-        pcr,
-        pcrItem,
-        pcrItemType,
-        documentsEditor,
-        project,
-        validator,
-        status,
-        isClient: this.props.isClient,
-        routes: this.props.routes,
-        mode,
-        onChange: itemDto => this.onChange(editor.data, itemDto),
-        onSave: (skipToSummary) => this.onSave(workflow, editor.data, skipToSummary),
-        getRequiredToCompleteMessage: (message) => {
-          const standardMessage = "This is required to complete this request.";
-          if (message) {
-            return <span>{message}<br />{standardMessage}</span>;
-          }
-          return standardMessage;
+    const props: PcrStepProps<PCRItemDto, typeof validator> = {
+      pcr,
+      pcrItem,
+      pcrItemType,
+      documentsEditor,
+      project,
+      validator,
+      status,
+      isClient: this.props.isClient,
+      routes: this.props.routes,
+      mode,
+      onChange: itemDto => this.onChange(editor.data, itemDto),
+      onSave: (skipToSummary) => this.onSave(workflow, editor.data, skipToSummary),
+      getRequiredToCompleteMessage: (message) => {
+        const standardMessage = "This is required to complete this request.";
+        if (message) {
+          return <span>{message}<br />{standardMessage}</span>;
         }
-      })
-    );
+        return standardMessage;
+      }
+    };
+
+    if (mode === "review") {
+      // When reviewing a pcr, the MO should only be able to visit pages which support read only.
+      if (!currentStep.readonlyStepRender) throw new ForbiddenError();
+      return currentStep.readonlyStepRender(props);
+    }
+
+    return currentStep.stepRender(props);
   }
 
   private renderSummary(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
