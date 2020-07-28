@@ -18,5 +18,14 @@ export const setOwaspHeaders = (req: express.Request, res: express.Response, nex
   res.setHeader("X-XSS-Protection", "1");
   res.setHeader("Strict-Transport-Security", "max-age=31536000");
   res.setHeader("Referrer-Policy", "no-referrer");
+  // https://developers.google.com/tag-manager/web/csp
+  res.setHeader("Content-Security-Policy", [
+    "default-src 'self'",
+    "script-src: 'unsafe-inline' https://www.googletagmanager.com https://tagmanager.google.com https://www.google-analytics.com https://ssl.google-analytics.com",
+    "style-src: https://tagmanager.google.com https://fonts.googleapis.com",
+    "img-src: www.googletagmanager.com https://www.google-analytics.com https://ssl.gstatic.com https://www.gstatic.com",
+    "connect-src: https://www.google-analytics.com",
+    "font-src: https://fonts.gstatic.com",
+  ].join("; "));
   return next();
 };
