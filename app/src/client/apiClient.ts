@@ -35,6 +35,7 @@ const clientApi: IApiClient = {
     deleteProjectChangeRequestDocumentOrItemDocument: (params) => ajaxJson(`/api/documents/projectChangeRequests/${params.projectId}/${params.projectChangeRequestIdOrItemId}/${params.documentId}`, {method: "DELETE"}),
     deleteClaimDetailDocument: ({ documentId, claimDetailKey }) => ajaxJson(`/api/documents/claim-details/${claimDetailKey.projectId}/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}/${documentId}`, { method: "DELETE" }),
     deleteClaimDocument: ({ documentId, claimKey }) => ajaxJson(`/api/documents/claims/${claimKey.projectId}/${claimKey.partnerId}/${claimKey.periodId}/${documentId}`, { method: "DELETE" }),
+    deletePartnerDocument: ({ documentId, projectId, partnerId }) => ajaxJson(`/api/documents/partners/${projectId}/${partnerId}/${documentId}`, { method: "DELETE" }),
     uploadClaimDetailDocuments: ({ claimDetailKey, documents }) => ajaxPostFiles(`/api/documents/claim-details/${claimDetailKey.projectId}/${claimDetailKey.partnerId}/${claimDetailKey.periodId}/${claimDetailKey.costCategoryId}`, documents),
     uploadClaimDocument: ({ claimKey, document }) => ajaxPostFile(`/api/documents/claims/${claimKey.projectId}/${claimKey.partnerId}/${claimKey.periodId}`, document),
     uploadClaimDocuments: ({ claimKey, documents }) => ajaxPostFiles(`/api/documents/claimDocuments/${claimKey.projectId}/${claimKey.partnerId}/${claimKey.periodId}`, documents),
