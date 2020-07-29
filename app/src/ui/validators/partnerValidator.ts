@@ -57,12 +57,21 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
         () => Validation.required(this, this.model.lastName, "Last name cannot be empty")
     ));
 
-    public acountBuildingAndStreet = this.conditionallyValidateBankDetails(() => Validation.all(this,
-        () => Validation.required(this, this.model.accountBuildingAndStreet, "Account building and street cannot be empty")
+    public accountStreet = this.conditionallyValidateBankDetails(() => Validation.all(this,
+        () => Validation.required(this, this.model.accountStreet, "Account street cannot be empty")
     ));
 
     public accountTownOrCity = this.conditionallyValidateBankDetails(() => Validation.all(this,
         () => Validation.required(this, this.model.accountTownOrCity, "Account town or city cannot be empty")
+    ));
+
+    // TODO: Should these values be required?
+    public accountBuilding = this.conditionallyValidateBankDetails(() => Validation.all(this,
+        () => Validation.required(this, this.model.accountBuilding, "Account building name cannot be empty")
+    ));
+
+    public accountLocality = this.conditionallyValidateBankDetails(() => Validation.all(this,
+        () => Validation.required(this, this.model.accountLocality, "Account locality cannot be empty")
     ));
 
     public accountPostcode = this.conditionallyValidateBankDetails(() => Validation.required(this, this.model.accountPostcode, "Account postcode cannot be empty"));

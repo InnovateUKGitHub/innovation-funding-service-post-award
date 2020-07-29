@@ -26,6 +26,17 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
       Acc_Postcode__c: this.partner.postcode,
       Acc_NewForecastNeeded__c: isBoolean(this.partner.newForecastNeeded) ? this.partner.newForecastNeeded : undefined,
       Acc_ParticipantStatus__c: new PartnerStatusMapper().mapToSalesforce(this.partner.partnerStatus),
+      // TODO
+      // Acc_AccountNumber__c: this.partner.accountNumber ? this.partner.accountNumber : undefined,
+      // Acc_SortCode__c: this.partner.sortCode ? this.partner.sortCode : undefined,
+      Acc_RegistrationNumber__c: this.partner.companyNumber ? this.partner.companyNumber : undefined,
+      Acc_FirstName__c: this.partner.firstName ? this.partner.firstName : undefined,
+      Acc_LastName__c: this.partner.lastName ? this.partner.lastName : undefined,
+      Acc_AddressStreet__c: this.partner.accountStreet ? this.partner.accountStreet : undefined,
+      Acc_AddressTown__c: this.partner.accountTownOrCity ? this.partner.accountTownOrCity : undefined,
+      Acc_AddressBuildingName__c: this.partner.accountBuilding ? this.partner.accountBuilding : undefined,
+      Acc_AddressLocality__c: this.partner.accountLocality ? this.partner.accountLocality : undefined,
+      Acc_AddressPostcode__c: this.partner.accountPostcode ? this.partner.accountPostcode : undefined,
     });
 
     return true;
