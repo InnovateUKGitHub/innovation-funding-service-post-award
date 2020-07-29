@@ -34,7 +34,9 @@ export interface Partner {
   firstName: string;
   lastName: string;
   accountPostcode: string;
-  accountBuildingAndStreet: string;
+  accountStreet: string;
+  accountBuilding: string;
+  accountLocality: string;
   accountTownOrCity: string;
   newForecastNeeded: boolean;
   spendProfileStatus: string;
@@ -42,6 +44,11 @@ export interface Partner {
   bankDetailsTaskStatus: string;
   bankDetailsTaskStatusLabel: string;
   bankCheckStatus: string;
+  validationCheckPassed: boolean;
+  iban: string;
+  validationConditionsSeverity: string;
+  validationConditionsCode: number;
+  validationConditionsDesc: string;
   personalDetailsScore: number | null;
   addressScore: number | null;
   companyNameScore: number | null;

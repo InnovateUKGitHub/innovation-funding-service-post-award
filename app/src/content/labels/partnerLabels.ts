@@ -14,7 +14,9 @@ export class PartnerLabels extends ContentBase {
   public readonly accountNumberHint = () => this.getContent("account-number-hint");
   public readonly firstName = () => this.getContent("first-name");
   public readonly lastName = () => this.getContent("last-name");
-  public readonly accountBuildingAndStreet = () => this.getContent("account-building-and-street");
+  public readonly accountBuilding = () => this.getContent("account-building");
+  public readonly accountStreet = () => this.getContent("account-street");
+  public readonly accountLocality = () => this.getContent("account-locality");
   public readonly accountTownOrCity = () => this.getContent("account-town-or-city");
   public readonly accountPostcode = () => this.getContent("account-postcode");
 

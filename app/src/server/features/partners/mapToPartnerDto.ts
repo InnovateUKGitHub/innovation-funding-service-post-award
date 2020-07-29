@@ -62,6 +62,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             newForecastNeeded: this.item.newForecastNeeded,
             // For active partners initialise these as complete as they may not have come through the acc ui and therefore not be set correctly
             spendProfileStatus: partnerStatus === PartnerStatus.Active ? SpendProfileStatus.Complete : new PartnerSpendProfileStatusMapper().mapFromSalesforcePcrSpendProfileOverheadRateOption(this.item.spendProfileStatus),
+            bankCheckStatus: partnerStatus === PartnerStatus.Active ? BankCheckStatus.VerificationPassed : new BankCheckStatusMapper().mapFromSalesforce(this.item.bankCheckStatus),
             bankDetailsTaskStatus: partnerStatus === PartnerStatus.Active ? BankDetailsTaskStatus.Complete : new BankDetailsTaskStatusMapper().mapFromSalesforce(this.item.bankDetailsTaskStatus),
             spendProfileStatusLabel: this.item.spendProfileStatusLabel,
             bankDetailsTaskStatusLabel: this.item.bankDetailsTaskStatusLabel,
@@ -71,13 +72,19 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             firstName: this.item.firstName,
             lastName: this.item.lastName,
             accountPostcode: this.item.accountPostcode,
-            accountBuildingAndStreet: this.item.accountBuildingAndStreet,
+            accountStreet: this.item.accountStreet,
+            accountBuilding: this.item.accountBuilding,
+            accountLocality: this.item.accountLocality,
             accountTownOrCity: this.item.accountTownOrCity,
+            validationCheckPassed: this.item.validationCheckPassed,
+            iban: this.item.iban,
+            validationConditionsSeverity: this.item.validationConditionsSeverity,
+            validationConditionsCode: this.item.validationConditionsCode,
+            validationConditionsDesc: this.item.validationConditionsDesc,
             personalDetailsScore: this.item.personalDetailsScore,
             companyNameScore: this.item.companyNameScore,
             addressScore: this.item.addressScore,
             regNumberIsValid: this.item.regNumberIsValid,
-            bankCheckStatus: BankCheckStatus.PendingValidation, // TODO
             bankCheckValidationAttempts: 0,
         };
     }
@@ -157,6 +164,38 @@ export class BankDetailsTaskStatusMapper {
             case BankDetailsTaskStatus.ToDo: return this.options.toDo;
             case BankDetailsTaskStatus.Incomplete: return this.options.incomplete;
             case BankDetailsTaskStatus.Complete: return this.options.complete;
+            default: return undefined;
+        }
+    });
+}
+
+export class BankCheckStatusMapper {
+    private readonly options = {
+        notValidated: "Not validated",
+        validationPassed: "Validation passed",
+        validationFailed: "Validation failed",
+        verificationPassed: "Verfication passed",
+        verificationFailed: "Verification failed",
+    };
+
+    public mapFromSalesforce = ((option: string | undefined): BankCheckStatus => {
+        switch (option) {
+            case this.options.notValidated: return BankCheckStatus.NotValidated;
+            case this.options.validationPassed: return BankCheckStatus.ValidationPassed;
+            case this.options.validationFailed: return BankCheckStatus.ValidationFailed;
+            case this.options.verificationPassed: return BankCheckStatus.VerificationPassed;
+            case this.options.verificationFailed: return BankCheckStatus.VerificationPassed;
+            default: return BankCheckStatus.Unknown;
+        }
+    });
+
+    public mapToSalesforce = ((option: BankCheckStatus | undefined) => {
+        switch (option) {
+            case BankCheckStatus.NotValidated: return this.options.notValidated;
+            case BankCheckStatus.ValidationPassed: return this.options.validationPassed;
+            case BankCheckStatus.ValidationFailed: return this.options.validationFailed;
+            case BankCheckStatus.VerificationPassed: return this.options.verificationPassed;
+            case BankCheckStatus.VerificationFailed: return this.options.verificationFailed;
             default: return undefined;
         }
     });

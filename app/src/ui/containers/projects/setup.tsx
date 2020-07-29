@@ -93,7 +93,7 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
   }
 
   private getBankDetailsLink(partner: Dtos.PartnerDto) {
-    if (partner.bankCheckStatus === BankCheckStatus.PendingValidation) {
+    if (partner.bankCheckStatus === BankCheckStatus.NotValidated) {
       return this.props.routes.projectSetupBankDetails.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId});
     }
     if (partner.bankCheckStatus === BankCheckStatus.ValidationPassed) {
