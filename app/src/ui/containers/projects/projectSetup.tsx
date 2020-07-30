@@ -70,7 +70,6 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
               nameContent={x => x.projectSetup.provideBankDetails()}
               status={partner.bankDetailsTaskStatusLabel as ACC.TaskStatus}
               route={this.getBankDetailsLink(partner)}
-              disableLink={partner.bankDetailsTaskStatus === BankDetailsTaskStatus.Complete}
               validation={[editor.validator.bankDetailsTaskStatus]}
             />
           </ACC.TaskListSection>
@@ -93,13 +92,22 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
   }
 
   private getBankDetailsLink(partner: Dtos.PartnerDto) {
-    if (partner.bankCheckStatus === BankCheckStatus.NotValidated) {
-      return this.props.routes.projectSetupBankDetails.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId});
+    switch(partner.bankCheckStatus) {
+      case BankCheckStatus.NotValidated: {
+        return this.props.routes.projectSetupBankDetails.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId});
+      }
+      case BankCheckStatus.ValidationFailed:
+      case BankCheckStatus.VerificationFailed: {
+        return this.props.routes.projectSetupBankStatement.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId});
+      }
+      case BankCheckStatus.ValidationPassed: {
+        return this.props.routes.projectSetupBankDetailsVerify.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId});
+      }
+      case BankCheckStatus.VerificationPassed: {
+        return null;
+      }
+      default: return null;
     }
-    if (partner.bankCheckStatus === BankCheckStatus.ValidationPassed) {
-      return this.props.routes.projectSetupBankDetailsVerify.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId});
-    }
-    return this.props.routes.projectSetup.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId});
   }
 }
 
