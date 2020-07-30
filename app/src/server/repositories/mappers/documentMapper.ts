@@ -34,6 +34,7 @@ export class DocumentDescriptionMapper {
     EndOfProjectSurvey: "EndOfProjectSurvey",
     JeSForm: "JeSForm",
     OverheadCalculationSpreadsheet: "OverheadCalculationSpreadsheet",
+    BankStatement: "BankStatement",
   };
 
   public mapFromSalesforceDocumentDescription = ((documentType: string | null | undefined): DocumentDescription | null => {
@@ -46,6 +47,7 @@ export class DocumentDescriptionMapper {
       case this.types.EndOfProjectSurvey: return DocumentDescription.EndOfProjectSurvey;
       case this.types.JeSForm: return DocumentDescription.JeSForm;
       case this.types.OverheadCalculationSpreadsheet: return DocumentDescription.OverheadCalculationSpreadsheet;
+      case this.types.BankStatement: return DocumentDescription.BankStatement;
       default: return null;
     }
   });
@@ -60,6 +62,7 @@ export class DocumentDescriptionMapper {
       case DocumentDescription.StatementOfExpenditure: return this.types.StatementOfExpenditure;
       case DocumentDescription.JeSForm: return this.types.JeSForm;
       case DocumentDescription.OverheadCalculationSpreadsheet: return this.types.OverheadCalculationSpreadsheet;
+      case DocumentDescription.BankStatement: return this.types.BankStatement;
       default: return null;
     }
   });

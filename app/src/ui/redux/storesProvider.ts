@@ -4,8 +4,9 @@ import * as Stores from "./stores";
 import { RootActionsOrThunk } from "./actions";
 
 export const createStores = (getState: () => RootState, dispatch: (action: RootActionsOrThunk) => void) => {
+  const partnerDocuments = new Stores.PartnerDocumentsStore(getState, dispatch);
   const projects = new Stores.ProjectsStore(getState, dispatch);
-  const partners = new Stores.PartnersStore(getState, dispatch);
+  const partners = new Stores.PartnersStore(partnerDocuments, getState, dispatch);
   const costCategories = new Stores.CostCategoriesStore(partners, getState, dispatch);
   const costsSummaries = new Stores.CostSummariesStore(getState, dispatch);
 
@@ -35,6 +36,7 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
     projectChangeRequestDocuments: new Stores.ProjectChangeRequestDocumentsStore(getState, dispatch),
     projectChangeRequests: new Stores.ProjectChangeRequestStore(projects, config, getState, dispatch),
     projectDocuments: new Stores.ProjectDocumentsStore(getState, dispatch),
+    partnerDocuments: new Stores.PartnerDocumentsStore(getState, dispatch),
     projects,
     partners,
     users: new Stores.UserStore(getState, dispatch),

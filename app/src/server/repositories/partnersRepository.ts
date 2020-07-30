@@ -43,9 +43,9 @@ export interface ISalesforcePartner {
   Acc_NewForecastNeeded__c: boolean;
   Acc_SpendProfileCompleted__c: string;
   Acc_BankCheckCompleted__c: string;
+  BankCheckCompletedLabel: string;
   SpendProfileStatusLabel: string;
   Acc_BankCheckState__c: string;
-  BankCheckStatusLabel: string;
   Acc_ValidationCheckPassed__c: boolean;
   Acc_Iban__c: string;
   Acc_ValidationConditionsSeverity__c: string;
@@ -118,8 +118,8 @@ export class PartnerRepository extends SalesforceRepositoryBaseWithMapping<ISale
     "Acc_SpendProfileCompleted__c",
     "toLabel(Acc_SpendProfileCompleted__c) SpendProfileStatusLabel",
     "Acc_BankCheckState__c",
-    "toLabel(Acc_BankCheckState__c) BankCheckStatusLabel",
     "Acc_BankCheckCompleted__c",
+    "toLabel(Acc_BankCheckCompleted__c) BankCheckCompletedLabel",
     "Acc_ValidationCheckPassed__c",
     "Acc_Iban__c",
     "Acc_ValidationConditionsSeverity__c",
