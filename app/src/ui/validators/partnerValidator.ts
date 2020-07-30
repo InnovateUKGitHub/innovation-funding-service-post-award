@@ -63,12 +63,21 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
         return Validation.isTrue(this, isValid, message);
     }
 
+    private validateForPartnerStatus(status: PartnerStatus, validation: () => Result) {
+        if (this.original.partnerStatus !== status) return Validation.valid(this);
+        return validation();
+    }
+
     public partnerStatus = Validation.isTrue(this, this.isPartnerStatusTransitionAllowed(this.original, this.model), "Partner status change not allowed");
-    public spendProfileStatus = Validation.isTrue(this, this.model.partnerStatus !== PartnerStatus.Active || this.model.spendProfileStatus === SpendProfileStatus.Complete, "You must complete your spend profile");
-    public bankDetailsTaskStatus = Validation.all(this,
-      () => Validation.isTrue(this, this.model.partnerStatus !== PartnerStatus.Active || this.model.bankDetailsTaskStatus === BankDetailsTaskStatus.Complete, "You must provide your bank details"),
-      () => this.validateBankDetailsTaskStatus(),
-      );
+
+    public spendProfileStatus = this.validateForPartnerStatus(PartnerStatus.Pending, () =>
+      Validation.isTrue(this, this.model.partnerStatus !== PartnerStatus.Active || this.model.spendProfileStatus === SpendProfileStatus.Complete, "You must complete your spend profile"));
+
+    public bankDetailsTaskStatus = this.validateForPartnerStatus(PartnerStatus.Pending, () =>
+      Validation.all(this,
+        () => Validation.isTrue(this, this.model.partnerStatus !== PartnerStatus.Active || this.model.bankDetailsTaskStatus === BankDetailsTaskStatus.Complete, "You must provide your bank details"),
+        () => this.validateBankDetailsTaskStatus(),
+      ));
 
     public postcode = this.model.partnerStatus === PartnerStatus.Active ? Validation.all(this,
         () => Validation.required(this, this.model.postcode, "Postcode field cannot be empty")
