@@ -21,6 +21,7 @@ import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/do
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { GetPartnerDocumentQuery } from "@server/features/documents/getPartnerDocument";
 import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummary";
+import { UploadPartnerDocumentCommand } from "@server/features/documents/uploadPartnerDocument";
 
 export interface IDocumentsApi {
   getClaimDocuments: (params: ApiParams<{ projectId: string, partnerId: string, periodId: number, description?: DocumentDescription }>) => Promise<DocumentSummaryDto[]>;
@@ -33,6 +34,7 @@ export interface IDocumentsApi {
   uploadClaimDocuments: (params: ApiParams<{ claimKey: ClaimKey, documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
   uploadProjectChangeRequestDocumentOrItemDocument: (params: ApiParams<{ projectId: string, projectChangeRequestIdOrItemId: string, documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
   uploadProjectDocument: (params: ApiParams<{ projectId: string, documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
+  uploadPartnerDocument: (params: ApiParams<{ projectId: string, partnerId: string, documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
   deleteClaimDetailDocument: (params: ApiParams<{ documentId: string, claimDetailKey: ClaimDetailKey }>) => Promise<boolean>;
   deleteClaimDocument: (params: ApiParams<{ documentId: string, claimKey: ClaimKey }>) => Promise<boolean>;
   deleteProjectChangeRequestDocumentOrItemDocument: (params: ApiParams<{documentId: string, projectId: string, projectChangeRequestIdOrItemId: string}>) => Promise<boolean>;
@@ -145,6 +147,12 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     );
 
     this.postAttachments(
+      "/partners/:projectId/:partnerId",
+      (p, q, b) => ({ projectId: p.projectId, partnerId: p.partnerId }),
+      p => this.uploadPartnerDocument(p)
+    );
+
+    this.postAttachments(
       "/projectChangeRequests/:projectId/:projectChangeRequestIdOrItemId",
       (p) => ({ projectId: p.projectId, projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId }),
       p => this.uploadProjectChangeRequestDocumentOrItemDocument(p)
@@ -242,6 +250,13 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
 
   public async uploadProjectDocument(params: ApiParams<{ projectId: string, documents: MultipleDocumentUploadDto }>) {
     const command = new UploadProjectDocumentCommand(params.projectId, params.documents);
+    const insertedIDs = await contextProvider.start(params).runCommand(command);
+
+    return { documentIds: insertedIDs };
+  }
+
+  public async uploadPartnerDocument(params: ApiParams<{ projectId: string, partnerId: string, documents: MultipleDocumentUploadDto }>) {
+    const command = new UploadPartnerDocumentCommand(params.projectId, params.partnerId, params.documents);
     const insertedIDs = await contextProvider.start(params).runCommand(command);
 
     return { documentIds: insertedIDs };
