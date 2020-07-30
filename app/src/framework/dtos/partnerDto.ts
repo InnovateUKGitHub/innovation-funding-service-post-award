@@ -21,7 +21,7 @@ export enum PartnerStatus {
 
 export enum BankCheckStatus {
   Unknown = 0,
-  PendingValidation = 10,
+  NotValidated = 10,
   ValidationPassed = 20,
   ValidationFailed = 30,
   VerificationPassed = 40,
@@ -90,8 +90,16 @@ export interface PartnerDto {
   firstName: string | null;
   lastName: string | null;
   accountPostcode: string | null;
-  accountBuildingAndStreet: string | null;
+  accountStreet: string | null;
+  accountBuilding: string | null;
+  accountLocality: string | null;
   accountTownOrCity: string | null;
+
+  validationCheckPassed: boolean;
+  iban: string | null;
+  validationConditionsSeverity: string | null;
+  validationConditionsCode: number | null;
+  validationConditionsDesc: string | null;
 
   bankCheckValidationAttempts: number;
   bankCheckStatus: BankCheckStatus;

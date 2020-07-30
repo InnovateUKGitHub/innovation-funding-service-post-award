@@ -42,8 +42,26 @@ export interface ISalesforcePartner {
   Acc_Postcode__c: string;
   Acc_NewForecastNeeded__c: boolean;
   Acc_SpendProfileCompleted__c: string;
-  Acc_BankCheckCompleted__c: string; // TODO add to retrieved fields
+  Acc_BankCheckCompleted__c: string;
   SpendProfileStatusLabel: string;
+  Acc_BankCheckState__c: string;
+  BankCheckStatusLabel: string;
+  Acc_ValidationCheckPassed__c: boolean;
+  Acc_Iban__c: string;
+  Acc_ValidationConditionsSeverity__c: string;
+  Acc_ValidationConditionsCode__c: number;
+  Acc_ValidationConditionsDesc__c: string;
+  Acc_CompanyName__c: string;
+  Acc_RegistrationNumber__c: string;
+  // Acc_SortCode__c: string;
+  // Acc_AccountNumber__c: string;
+  Acc_FirstName__c: string;
+  Acc_LastName__c: string;
+  Acc_AddressStreet__c: string;
+  Acc_AddressBuildingName__c: string;
+  Acc_AddressLocality__c: string;
+  Acc_AddressTown__c: string;
+  Acc_AddressPostcode__c: string;
 }
 
 export interface IPartnerRepository {
@@ -99,6 +117,25 @@ export class PartnerRepository extends SalesforceRepositoryBaseWithMapping<ISale
     "Acc_NewForecastNeeded__c",
     "Acc_SpendProfileCompleted__c",
     "toLabel(Acc_SpendProfileCompleted__c) SpendProfileStatusLabel",
+    "Acc_BankCheckState__c",
+    "toLabel(Acc_BankCheckState__c) BankCheckStatusLabel",
+    "Acc_BankCheckCompleted__c",
+    "Acc_ValidationCheckPassed__c",
+    "Acc_Iban__c",
+    "Acc_ValidationConditionsSeverity__c",
+    "Acc_ValidationConditionsCode__c",
+    "Acc_ValidationConditionsDesc__c",
+    "Acc_RegistrationNumber__c",
+    // TODO: put back in
+    // "Acc_SortCode__c",
+    // "Acc_AccountNumber__c",
+    "Acc_FirstName__c",
+    "Acc_LastName__c",
+    "Acc_AddressStreet__c",
+    "Acc_AddressBuildingName__c",
+    "Acc_AddressLocality__c",
+    "Acc_AddressTown__c",
+    "Acc_AddressPostcode__c",
   ];
 
   mapper = new SalesforcePartnerMapper();

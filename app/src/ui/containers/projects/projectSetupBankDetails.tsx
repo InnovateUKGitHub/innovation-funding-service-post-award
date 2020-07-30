@@ -57,7 +57,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.companyNumber()}
                 hintContent={x => x.projectSetupBankDetails.partnerLabels.companyNumberHint()}
                 update={(dto, val) => dto.companyNumber = val}
-                // validation={editor.validator.companyNumber}
+                validation={editor.validator.companyNumber}
               />
             </Form.Fieldset>
             <Form.Fieldset headingContent={x => x.projectSetupBankDetails.accountDetailsFieldsetTitle()}>
@@ -68,7 +68,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.sortCode()}
                 hintContent={x => x.projectSetupBankDetails.partnerLabels.sortCodeHint()}
                 update={(dto, val) => dto.sortCode = val}
-                // validation={editor.validator.sortCode}
+                validation={editor.validator.sortCode}
               />
               <Form.String
                 name="accountNumber"
@@ -77,7 +77,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.accountNumber()}
                 hintContent={x => x.projectSetupBankDetails.partnerLabels.accountNumberHint()}
                 update={(dto, val) => dto.accountNumber = val}
-                // validation={editor.validator.accountNumber}
+                validation={editor.validator.accountNumber}
               />
             </Form.Fieldset>
             <Form.Fieldset headingContent={x => x.projectSetupBankDetails.accountHolderFieldsetTitle()}>
@@ -87,7 +87,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
                 value={x => x.firstName}
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.firstName()}
                 update={(dto, val) => dto.firstName = val}
-                // validation={editor.validator.firstName}
+                validation={editor.validator.firstName}
               />
               <Form.String
                 name="lastName"
@@ -95,7 +95,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
                 value={x => x.lastName}
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.lastName()}
                 update={(dto, val) => dto.lastName = val}
-                // validation={editor.validator.lastName}
+                validation={editor.validator.lastName}
               />
             </Form.Fieldset>
             <Form.Fieldset headingContent={x => x.projectSetupBankDetails.billingAddressFieldsetTitle()}>
@@ -103,12 +103,28 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
                 <ACC.Content value={x => x.projectSetupBankDetails.billingAddressFieldsetGuidance()}/>
               </ACC.Renderers.SimpleString>
               <Form.String
-                name="accountBuildingAndStreet"
+                name="accountBuilding"
                 width={"one-third"}
-                value={x => x.accountBuildingAndStreet}
-                labelContent={x => x.projectSetupBankDetails.partnerLabels.accountBuildingAndStreet()}
-                update={(dto, val) => dto.accountBuildingAndStreet = val}
-                // validation={editor.validator.accountBuildingAndStreet}
+                value={x => x.accountBuilding}
+                labelContent={x => x.projectSetupBankDetails.partnerLabels.accountBuilding()}
+                update={(dto, val) => dto.accountBuilding = val}
+                validation={editor.validator.accountBuilding}
+              />
+              <Form.String
+                name="accountStreet"
+                width={"one-third"}
+                value={x => x.accountStreet}
+                labelContent={x => x.projectSetupBankDetails.partnerLabels.accountStreet()}
+                update={(dto, val) => dto.accountStreet = val}
+                validation={editor.validator.accountStreet}
+              />
+              <Form.String
+                name="accountLocality"
+                width={"one-third"}
+                value={x => x.accountLocality}
+                labelContent={x => x.projectSetupBankDetails.partnerLabels.accountLocality()}
+                update={(dto, val) => dto.accountLocality = val}
+                validation={editor.validator.accountLocality}
               />
               <Form.String
                 name="accountTownOrCity"
@@ -116,7 +132,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
                 value={x => x.accountTownOrCity}
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.accountTownOrCity()}
                 update={(dto, val) => dto.accountTownOrCity = val}
-                // validation={editor.validator.accountTownOrCity}
+                validation={editor.validator.accountTownOrCity}
               />
               <Form.String
                 name="accountPostcode"
@@ -124,7 +140,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
                 value={x => x.accountPostcode}
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.accountPostcode()}
                 update={(dto, val) => dto.accountPostcode = val}
-                // validation={editor.validator.accountPostcode}
+                validation={editor.validator.accountPostcode}
               />
             </Form.Fieldset>
             <Form.Fieldset>

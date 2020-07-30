@@ -43,15 +43,22 @@ describe("getAllForProjectQuery", () => {
       x.spendProfileStatusLabel = "Complete";
       x.bankDetailsTaskStatus = "Todo";
       x.bankDetailsTaskStatusLabel = "To do";
-      x.bankCheckStatus = "BankCheckStatus.Unknown";
+      x.bankCheckStatus = "BankCheckStatus.Todo";
       x.firstName = "Mr";
       x.lastName = "Toad";
       x.accountPostcode = "TH1 0WW";
-      x.accountBuildingAndStreet = "Toad Hall";
+      x.accountStreet = "Main Street";
+      x.accountBuilding = "Toad Hall";
+      x.accountLocality = "Local";
       x.accountTownOrCity = "Berkshire";
       x.accountNumber = "001122";
       x.sortCode = "005566";
       x.companyNumber = "123344";
+      x.validationCheckPassed = false;
+      x.iban = "123454321";
+      x.validationConditionsSeverity = "Warning";
+      x.validationConditionsCode = 2;
+      x.validationConditionsDesc = "A warning about a thing";
       x.addressScore = 6;
       x.companyNameScore = 5;
       x.personalDetailsScore = 4;
@@ -103,16 +110,23 @@ describe("getAllForProjectQuery", () => {
       spendProfileStatusLabel: "Complete",
       bankDetailsTaskStatus: BankDetailsTaskStatus.Unknown,
       bankDetailsTaskStatusLabel: "To do",
-      bankCheckStatus: BankCheckStatus.PendingValidation,
+      bankCheckStatus: BankCheckStatus.Unknown,
       bankCheckValidationAttempts: 0,
       firstName: "Mr",
       lastName: "Toad",
       accountPostcode: "TH1 0WW",
-      accountBuildingAndStreet: "Toad Hall",
+      accountStreet: "Main Street",
+      accountBuilding: "Toad Hall",
+      accountLocality: "Local",
       accountTownOrCity: "Berkshire",
       accountNumber: "001122",
       sortCode: "005566",
       companyNumber: "123344",
+      validationCheckPassed: false,
+      iban: "123454321",
+      validationConditionsSeverity: "Warning",
+      validationConditionsCode: 2,
+      validationConditionsDesc: "A warning about a thing",
       addressScore: 6,
       companyNameScore: 5,
       personalDetailsScore: 4,

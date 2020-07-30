@@ -49,7 +49,9 @@ class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<ProjectSetupB
             <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountNumber()} content={editor.data.accountNumber} qa={"accountNumber"}/>
             <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.firstName()} content={editor.data.firstName} qa={"firstName"}/>
             <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.lastName()} content={editor.data.lastName} qa={"lastName"}/>
-            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountBuildingAndStreet()} content={editor.data.accountBuildingAndStreet} qa={"accountBuildingAndStreet"}/>
+            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountBuilding()} content={editor.data.accountBuilding} qa={"accountBuilding"}/>
+            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountStreet()} content={editor.data.accountStreet} qa={"accountStreet"}/>
+            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountLocality()} content={editor.data.accountLocality} qa={"accountLocality"}/>
             <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountTownOrCity()} content={editor.data.accountTownOrCity} qa={"accountTownOrCity"}/>
             <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountPostcode()} content={editor.data.accountPostcode} qa={"accountPostcode"}/>
           </ACC.SummaryList>
