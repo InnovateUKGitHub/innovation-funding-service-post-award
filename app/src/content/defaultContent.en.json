@@ -76,6 +76,13 @@
       "fieldset-title-billing-address": "Billing address",
       "fieldset-guidance-billing-address": "This is the billing address connected to this bank account. This is not the address of the bank."
     },
+    "project-setup-bank-statement": {
+      "title": "Upload bank statement",
+      "guidance-message": "Our automated checks were unable to verify your bank details. We need you to upload a redacted bank statement for your organisation. This must be dated within the last 90 days.\n\nThis will allow us to confirm we have the correct details.\n\nThe statement must show your:\n* company name\n* account number\n* sort code",
+      "button-submit": "Submit bank statement",
+      "button-return": "Return to set up your project",
+      "back-link": "Back to set up your project"
+    },
     "project-setup-bank-details-verify": {
       "title": "Confirm your bank details",
       "guidance-message": "Your bank details will now be submitted to Innovate UK for review. We will contact you if we need any further information.",
@@ -551,6 +558,7 @@
     "document-description-DeMinimisDeclarationForm": "De Minimis Declaration Form",
     "document-description-JeSForm": "Je-S Form",
     "document-description-OverheadCalculationSpreadsheet": "Overhead calculation spreadsheet",
+    "document-description-BankStatement": "Bank Statement",
     "document-description-Unknown": "Unknown",
     "uploadButtonLabel" : "Upload",
     "uploadInputLabel": "Upload files",

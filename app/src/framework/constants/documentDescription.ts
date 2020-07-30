@@ -7,4 +7,5 @@ export enum DocumentDescription {
   StatementOfExpenditure = 60,
   JeSForm = 70,
   OverheadCalculationSpreadsheet = 80,
+  BankStatement = 90,
 }

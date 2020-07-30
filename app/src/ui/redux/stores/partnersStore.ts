@@ -6,7 +6,7 @@ import { PartnerDto } from "@framework/dtos";
 import { dataLoadAction } from "../actions";
 import { LoadingStatus } from "@shared/pending";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
-import { ValidationError } from "@server/features/common";
+import { PartnerDocumentsStore } from "@ui/redux/stores/partnerDocumentsStore";
 
 interface UpdatePartnerOptions {
   onComplete?: (result: PartnerDto) => void;
@@ -15,7 +15,7 @@ interface UpdatePartnerOptions {
 }
 
 export class PartnersStore extends StoreBase {
-  constructor(getState: () => RootState, dispatch: (action: any) => void) {
+  constructor(private readonly partnerDocumentsStore: PartnerDocumentsStore, getState: () => RootState, dispatch: (action: any) => void) {
     super(getState, dispatch);
   }
 
@@ -36,23 +36,25 @@ export class PartnersStore extends StoreBase {
   }
 
   public getPartnerEditor(projectId: string, partnerId: string, init?: (dto: PartnerDto) => void) {
-    return this.getEditor(
+    const partnerDocumentsPending = this.partnerDocumentsStore.getPartnerDocuments(projectId, partnerId);
+    return partnerDocumentsPending.chain(partnerDocuments => (this.getEditor(
       "partner",
       storeKeys.getPartnerKey(partnerId),
       () => this.getById(partnerId),
       init,
       // Using updated dto instead of getting original as happy to let validation happen server-side
-      (dto) => new PartnerDtoValidator(dto, dto, false)
-    );
+      (dto) => new PartnerDtoValidator(dto, dto, partnerDocuments, false)
+    )));
   }
 
   public updatePartner(submit: boolean, partnerId: string, partnerDto: PartnerDto, options?: UpdatePartnerOptions): void {
+    const partnerDocuments = this.partnerDocumentsStore.getPartnerDocuments(partnerDto.projectId, partnerId).data;
     return this.updateEditor(
       submit,
       "partner",
       storeKeys.getPartnerKey(partnerId),
       partnerDto,
-      () => new PartnerDtoValidator(partnerDto, partnerDto, true, options && options.validateBankDetails),
+      () => new PartnerDtoValidator(partnerDto, partnerDto, partnerDocuments || [], true, options && options.validateBankDetails),
       p => ApiClient.partners.updatePartner({ partnerId, partnerDto, validateBankDetails: options && options.validateBankDetails, ...p }),
       (result) => {
         this.queue(dataLoadAction(storeKeys.getPartnerKey(partnerId), "partner", LoadingStatus.Updated, result));
