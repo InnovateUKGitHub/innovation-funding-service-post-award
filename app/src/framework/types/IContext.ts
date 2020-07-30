@@ -10,8 +10,9 @@ import { RecordType } from "@framework/entities/recordType";
 import { Option } from "@framework/types";
 import { IDefaultContentStore } from "@server/resources/defaultContentStore";
 import { ICustomContentStore } from "@server/resources/customContentStore";
-import { CompaniesHouse, ICompaniesHouse } from "@server/resources/companiesHouse";
+import { ICompaniesHouse } from "@server/resources/companiesHouse";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { IBankCheckService } from "@server/resources/bankCheckService";
 
 export interface IRepositories {
   readonly claims: Repositories.IClaimRepository;
@@ -43,6 +44,7 @@ export interface IResources {
   readonly defaultContent: IDefaultContentStore;
   readonly customContent: ICustomContentStore;
   readonly companiesHouse: ICompaniesHouse;
+  readonly bankCheckService: IBankCheckService;
 }
 
 export interface IInternationalisation {
