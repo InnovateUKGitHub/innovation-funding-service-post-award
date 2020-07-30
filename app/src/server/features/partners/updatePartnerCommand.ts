@@ -4,6 +4,8 @@ import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import { PartnerStatusMapper } from "@server/features/partners/mapToPartnerDto";
 import { isBoolean } from "@framework/util";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
+import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummary";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
 export class UpdatePartnerCommand extends CommandBase<boolean> {
   constructor(
@@ -18,8 +20,9 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
   protected async Run(context: IContext) {
 
     const originalDto = await context.runQuery(new GetByIdQuery(this.partner.id));
+    const partnerDocuments = await context.runQuery(new GetPartnerDocumentsQuery(this.partner.projectId, this.partner.id));
 
-    this.validateRequest(originalDto);
+    this.validateRequest(originalDto, partnerDocuments);
 
     await context.repositories.partners.update({
       Id: this.partner.id,
@@ -42,7 +45,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     return true;
   }
 
-  private validateRequest(originalDto: PartnerDto) {
+  private validateRequest(originalDto: PartnerDto, partnerDocuments: DocumentSummaryDto[]) {
     if(!this.partner) {
       throw new BadRequestError("Request is missing required fields");
     }
@@ -51,7 +54,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
       throw new BadRequestError("Cannot validate bank details for an active partner");
     }
 
-    const validationResult = new PartnerDtoValidator(this.partner, originalDto, true, this.validateBankDetails);
+    const validationResult = new PartnerDtoValidator(this.partner, originalDto, partnerDocuments, true, this.validateBankDetails);
 
     if(!validationResult.isValid) {
       throw new ValidationError(validationResult);

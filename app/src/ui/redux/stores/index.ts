@@ -17,5 +17,6 @@ export * from "./partnersStore";
 export * from "./projectChangeRequestsStore";
 export * from "./projectChangeRequestDocumentsStore";
 export * from "./projectDocumentsStore";
+export * from "./partnerDocumentsStore";
 export * from "./projectsStore";
 export * from "./userStore";
