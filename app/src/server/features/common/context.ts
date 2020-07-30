@@ -11,6 +11,7 @@ import { IInternationalisation } from "@framework/types";
 import { CustomContentStore } from "@server/resources/customContentStore";
 import { CompaniesHouse } from "@server/resources/companiesHouse";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { BankCheckService } from "@server/resources/bankCheckService";
 
 // obvs needs to be singleton
 const cachesImplementation: Framework.ICaches = {
@@ -92,6 +93,7 @@ export class Context implements Framework.IContext {
     };
 
     this.resources = {
+      bankCheckService: new BankCheckService(),
       companiesHouse: new CompaniesHouse(),
       defaultContent: new DefaultContentStore(),
       customContent: new CustomContentStore()

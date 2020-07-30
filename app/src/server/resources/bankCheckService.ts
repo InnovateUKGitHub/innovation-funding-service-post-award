@@ -1,12 +1,12 @@
 import { Configuration, ConfigurationError } from "@server/features/common";
 import {
   AccountDetails,
-  BankCheckCondition,
   BankCheckResult,
   BankCheckValidationResult,
   BankCheckVerificationResult,
   BankDetails
  } from "@framework/types/bankCheck";
+import * as https from "https";
 
 export interface IVerifyBankCheckInputs {
   accountNumber: string;
@@ -31,26 +31,25 @@ export interface IBankCheckService {
 export class BankCheckService implements IBankCheckService {
 
   private getConnection() {
-    if (!Configuration.sil.bankCheckValidateUrl || !Configuration.sil.bankCheckVerifyUrl) {
+    if (!Configuration.sil.bankCheckUrl) {
       throw new ConfigurationError("Bank checking service not configured");
     }
-    const validateUrl = Configuration.sil.bankCheckValidateUrl;
-    const verifyUrl = Configuration.sil.bankCheckVerifyUrl;
-    return {validateUrl, verifyUrl};
+    const bankCheckUrl = Configuration.sil.bankCheckUrl;
+    return {bankCheckUrl};
   }
 
   public async validate(sortcode: string, accountNumber: string): Promise<BankCheckValidationResult> {
-    const {validateUrl} = this.getConnection();
+    const {bankCheckUrl} = this.getConnection();
     const bankDetails: BankDetails = {
       sortcode,
       accountNumber
     };
-    // tslint:disable-next-line: no-useless-cast
-    return await this.makeApiCall("validate", validateUrl, bankDetails) as BankCheckValidationResult;
+
+    return await this.getResult("/experianValidate", bankCheckUrl, bankDetails);
   }
 
   public async verify(inputs: IVerifyBankCheckInputs): Promise<BankCheckVerificationResult> {
-    const {verifyUrl} = this.getConnection();
+    const {bankCheckUrl} = this.getConnection();
     const {
       accountNumber,
       sortcode,
@@ -83,32 +82,68 @@ export class BankCheckService implements IBankCheckService {
       }
     };
 
-    // tslint:disable-next-line: no-useless-cast
-    return await this.makeApiCall("verify", verifyUrl, accountDetails) as BankCheckVerificationResult;
+    return await this.getResult("/experianVerify", bankCheckUrl, accountDetails);
+  }
+
+  private async getResult<T extends BankDetails | AccountDetails,
+  U extends BankCheckResult>(path: string, url: string, request: T): Promise<U> {
+    const res: any = [];
+
+    await this.makeApiCall(path, url, request)
+      .then(response => {
+        res.push(response);
+      })
+      .catch(error => {
+        throw new Error(`request failed with ${error}`);
+      });
+
+    if (!res[0]) {
+      throw new Error("Failed to get a response");
+    }
+
+    return res[0] as U;
   }
 
   private async makeApiCall<T extends BankDetails | AccountDetails,
-    U extends BankCheckResult>(what: string, url: string, request: T): Promise<U> {
-    const response = await fetch(url, {
-      ...({
+  U extends BankCheckResult>(path: string, hostname: string, request: T): Promise<U> {
+    return new Promise((resolve, reject) => {
+      const options = {
         method: "POST",
+        hostname,
+        path,
         headers: {
           "Accept": "application/json",
           "Content-Type": "application/json",
+        },
+        maxRedirects: 20
+      };
+      const postData = JSON.stringify(request);
+      const req = https.request(options, (res: any) => {
+        const chunks: any = [];
+        // reject on bad status
+        if (res.statusCode < 200 || res.statusCode >= 300) {
+          return reject(new Error("statusCode=" + res.statusCode));
         }
-      }), body: JSON.stringify(request)
+
+        res.on("data", (chunk: any) => {
+          chunks.push(chunk);
+        });
+
+        res.on("end", () => {
+          try {
+            const body = JSON.parse(Buffer.concat(chunks).toString());
+            resolve(body);
+          } catch (e) {
+            reject(e.message);
+          }
+        });
+      }).on("error", (e) => {
+        reject(`Got error: ${e.message}`);
+      });
+      if (postData) {
+        req.write(postData);
+      }
+      req.end();
     });
-    if (!response.ok) {
-      throw new Error(`SIL ${what} failed post request to ${url}`);
-    }
-
-    const result = await response.json() as U;
-
-    const conditions = ([] as BankCheckCondition[]).concat(result.conditions || []);
-    if (conditions.find(x => x.severity === "error")) {
-      throw new Error(`SIL ${what} call returned error(s) ${JSON.stringify(conditions)}`);
-    }
-
-    return result;
   }
 }
