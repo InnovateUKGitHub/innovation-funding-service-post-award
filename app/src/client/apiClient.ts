@@ -39,7 +39,8 @@ const clientApi: IApiClient = {
     uploadClaimDocument: ({ claimKey, document }) => ajaxPostFile(`/api/documents/claims/${claimKey.projectId}/${claimKey.partnerId}/${claimKey.periodId}`, document),
     uploadClaimDocuments: ({ claimKey, documents }) => ajaxPostFiles(`/api/documents/claimDocuments/${claimKey.projectId}/${claimKey.partnerId}/${claimKey.periodId}`, documents),
     uploadProjectChangeRequestDocumentOrItemDocument: ({projectId, projectChangeRequestIdOrItemId, documents}) => ajaxPostFiles(`/api/documents/projectChangeRequests/${projectId}/${projectChangeRequestIdOrItemId}`, documents),
-    uploadProjectDocument: ({ projectId, documents }) => ajaxPostFiles(`/api/documents/projects/${projectId}`, documents)
+    uploadProjectDocument: ({ projectId, documents }) => ajaxPostFiles(`/api/documents/projects/${projectId}`, documents),
+    uploadPartnerDocument: ({ projectId, partnerId, documents }) => ajaxPostFiles(`/api/documents/partners/${projectId}/${partnerId}`, documents),
   },
   financialVirements: {
     get: (params) => ajaxJson(`/api/financial-virements/${params.projectId}/${params.pcrId}/${params.pcrItemId}`),
