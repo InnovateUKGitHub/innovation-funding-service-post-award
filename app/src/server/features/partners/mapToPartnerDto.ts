@@ -174,7 +174,7 @@ export class BankCheckStatusMapper {
         notValidated: "Not validated",
         validationPassed: "Validation passed",
         validationFailed: "Validation failed",
-        verificationPassed: "Verfication passed",
+        verificationPassed: "Verification passed",
         verificationFailed: "Verification failed",
     };
 
