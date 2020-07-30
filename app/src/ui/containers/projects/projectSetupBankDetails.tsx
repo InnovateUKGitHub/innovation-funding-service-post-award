@@ -190,7 +190,8 @@ const ProjectSetupBankDetailsContainer = (props: ProjectSetupBankDetailsParams &
                 if (e && e.results && e.results.bankDetails && !e.results.bankDetails.isValid) {
                   dto.bankCheckValidationAttempts += 1;
                 }
-              }
+              },
+              validateBankDetails: submit,
             }
           );
         }}

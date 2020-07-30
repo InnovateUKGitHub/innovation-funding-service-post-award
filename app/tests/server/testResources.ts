@@ -1,6 +1,7 @@
 import { IResources } from "@framework/types/IContext";
 import { ICompaniesHouse } from "@server/resources/companiesHouse";
 import { IBankCheckService } from "@server/resources/bankCheckService";
+import { BankCheckCondition } from "@framework/types/bankCheck";
 
 export class TestResources implements IResources {
   public defaultContent = new TestDefaultContent();
@@ -48,17 +49,27 @@ class TestCompaniesHouse implements ICompaniesHouse {
 }
 
 class TestBankCheckService implements IBankCheckService {
+  private readonly conditions: BankCheckCondition = {
+    severity: "warning",
+    code: 2,
+    description: "description"
+  };
+
   private readonly validateResult = {
-    checkPassed: true,
-    iban: "123456",
-    conditions: undefined,
+    ValidationResult: {
+      checkPassed: true,
+      iban: "123456",
+      conditions: this.conditions
+    }
   };
   private readonly verifyResult = {
-    addressScore: null,
-    companyNameScore: null,
-    personalDetailsScore: null,
-    regNumberScore: null,
-    conditions: undefined,
+    VerificationResult: {
+      addressScore: null,
+      companyNameScore: null,
+      personalDetailsScore: null,
+      regNumberScore: null,
+      conditions: this.conditions,
+    }
   };
   public validate = () => Promise.resolve(this.validateResult);
   public verify = () => Promise.resolve(this.verifyResult);
