@@ -81,7 +81,7 @@ describe("updatePartnerCommand", () => {
     expected.accountNumber = "12344321";
     expected.firstName = "First";
     expected.lastName = "Name";
-    expected.accountBuildingAndStreet = "A Building on B Street";
+    expected.accountStreet = "A Building on B Street";
     expected.accountTownOrCity = "Town-City";
     expected.accountPostcode = "P05T C0D3";
 

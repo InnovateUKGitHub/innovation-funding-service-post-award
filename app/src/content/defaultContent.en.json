@@ -529,7 +529,9 @@
     "account-number-hint": "Must be between 6 and 8 digits long, for example: 15481965.",
     "first-name": "First name",
     "last-name": "Last name",
-    "account-building-and-street": "Building and street",
+    "account-building": "Building",
+    "account-street": "Street",
+    "account-locality": "Locality",
     "account-town-or-city": "Town or city",
     "account-postcode": "Postcode"
   },
