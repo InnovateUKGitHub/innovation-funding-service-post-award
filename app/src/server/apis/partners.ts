@@ -19,7 +19,7 @@ class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {
 
     this.getItems("/", (p, q) => ({ projectId: q.projectId }), (p) => p.projectId ? this.getAllByProjectId(p): this.getAll(p));
     this.getItem("/:partnerId", (p) => ({ partnerId: p.partnerId }), (p) => this.get(p));
-    this.putItem("/:partnerId", (p, q, b) => ({ partnerId: p.partnerId, partnerDto: processDto(b), validateBankDetails: p.validateBankDetails === "true" }), (p) => this.updatePartner(p));
+    this.putItem("/:partnerId", (p, q, b) => ({ partnerId: p.partnerId, partnerDto: processDto(b), validateBankDetails: q.validateBankDetails === "true" }), (p) => this.updatePartner(p));
   }
 
   public async getAll(params: ApiParams<{ }>) {

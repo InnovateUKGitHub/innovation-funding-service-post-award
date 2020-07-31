@@ -26,7 +26,7 @@ describe("Partner Validator", () => {
         const partnerDto = { ...originalDto };
         for (const newStatus of statuses) {
           partnerDto.partnerStatus = newStatus;
-          const validator = new PartnerDtoValidator(partnerDto, originalDto, [], true);
+          const validator = new PartnerDtoValidator(partnerDto, originalDto, [], {showValidationErrors: true});
           if (status === PartnerStatus.Pending && newStatus === PartnerStatus.Active) {
             expect(validator.partnerStatus.isValid).toBe(true);
           } else if (status === newStatus) {
@@ -47,7 +47,7 @@ describe("Partner Validator", () => {
       });
       const originalDto = await context.runQuery(new GetByIdQuery(partner.id));
       const partnerDto = { ...originalDto };
-      const validate = () => new PartnerDtoValidator(partnerDto, originalDto, [], true);
+      const validate = () => new PartnerDtoValidator(partnerDto, originalDto, [], {showValidationErrors: true});
       partnerDto.partnerStatus = PartnerStatus.Active;
       expect(validate().spendProfileStatus.isValid).toBe(false);
       partnerDto.spendProfileStatus = SpendProfileStatus.Complete;
@@ -64,7 +64,7 @@ describe("Partner Validator", () => {
       });
       const originalDto = await context.runQuery(new GetByIdQuery(partner.id));
       const partnerDto = { ...originalDto };
-      const validate = () => new PartnerDtoValidator(partnerDto, originalDto, [], true);
+      const validate = () => new PartnerDtoValidator(partnerDto, originalDto, [], {showValidationErrors: true});
       partnerDto.partnerStatus = PartnerStatus.Active;
       expect(validate().bankDetailsTaskStatus.isValid).toBe(false);
       partnerDto.bankDetailsTaskStatus = BankDetailsTaskStatus.Complete;
@@ -77,7 +77,7 @@ describe("Partner Validator", () => {
         x.bankCheckStatus = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.NotValidated) || "";
       });
       const partnerDto = await context.runQuery(new GetByIdQuery(partner.id));
-      const validate = () => new PartnerDtoValidator(partnerDto, partnerDto, [], true);
+      const validate = () => new PartnerDtoValidator(partnerDto, partnerDto, [], {showValidationErrors: true});
       partnerDto.bankDetailsTaskStatus = BankDetailsTaskStatus.ToDo;
       expect(validate().bankDetailsTaskStatus.isValid).toBe(true);
       partnerDto.bankDetailsTaskStatus = BankDetailsTaskStatus.Complete;
@@ -94,7 +94,7 @@ describe("Partner Validator", () => {
       });
       const originalDto = await context.runQuery(new GetByIdQuery(partner.id));
       const partnerDto = { ...originalDto };
-      const validate = (documents: DocumentSummaryDto[]) => new PartnerDtoValidator(partnerDto, originalDto, documents, true);
+      const validate = (documents: DocumentSummaryDto[]) => new PartnerDtoValidator(partnerDto, originalDto, documents, {showValidationErrors: true});
       partnerDto.bankDetailsTaskStatus = BankDetailsTaskStatus.Complete;
       expect(validate([]).bankDetailsTaskStatus.isValid).toBe(false);
       const document: DocumentSummaryDto = {fileName: "a", fileSize: 2, link: "", id: "", dateCreated: new Date(), uploadedBy: ""};
@@ -113,7 +113,7 @@ describe("Partner Validator", () => {
       });
       const originalDto = await context.runQuery(new GetByIdQuery(partner.id));
       const partnerDto = { ...originalDto };
-      const validate = (documents: DocumentSummaryDto[]) => new PartnerDtoValidator(partnerDto, originalDto, documents, true);
+      const validate = (documents: DocumentSummaryDto[]) => new PartnerDtoValidator(partnerDto, originalDto, documents, {showValidationErrors: true});
       partnerDto.bankDetailsTaskStatus = BankDetailsTaskStatus.Complete;
       expect(validate([]).bankDetailsTaskStatus.isValid).toBe(false);
       const document: DocumentSummaryDto = {fileName: "a", fileSize: 2, link: "", id: "", dateCreated: new Date(), uploadedBy: ""};
@@ -132,7 +132,7 @@ describe("Partner Validator", () => {
       });
       const originalDto = await context.runQuery(new GetByIdQuery(partner.id));
       const partnerDto = { ...originalDto };
-      const validate = () => new PartnerDtoValidator(partnerDto, originalDto, [], true);
+      const validate = () => new PartnerDtoValidator(partnerDto, originalDto, [], {showValidationErrors: true});
       partnerDto.bankDetailsTaskStatus = BankDetailsTaskStatus.Complete;
       expect(validate().bankDetailsTaskStatus.isValid).toBe(false);
       partnerDto.bankCheckStatus = BankCheckStatus.VerificationPassed;
@@ -147,7 +147,7 @@ describe("Partner Validator", () => {
         x.postcode = null as any;
       });
       const partnerDto = await context.runQuery(new GetByIdQuery(partner.id));
-      const validate = () => new PartnerDtoValidator(partnerDto, partnerDto, [], true);
+      const validate = () => new PartnerDtoValidator(partnerDto, partnerDto, [], {showValidationErrors: true});
       expect(validate().postcode.isValid).toBe(false);
       partnerDto.postcode = "BS1 6DF";
       expect(validate().postcode.isValid).toBe(true);
@@ -170,7 +170,10 @@ describe("Partner Validator", () => {
         x.accountTownOrCity = "";
       });
       const partnerDto = await context.runQuery(new GetByIdQuery(partner.id));
-      const validate = (validateBankDetails: boolean) => new PartnerDtoValidator(partnerDto, partnerDto, [], true, validateBankDetails);
+      const validate = (validateBankDetails: boolean) => new PartnerDtoValidator(partnerDto, partnerDto, [], {
+        showValidationErrors: true,
+        validateBankDetails
+      });
       expect(validate(true).accountNumber.isValid).toBe(false);
       expect(validate(true).sortCode.isValid).toBe(false);
       expect(validate(true).lastName.isValid).toBe(false);

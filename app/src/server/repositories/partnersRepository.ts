@@ -127,7 +127,6 @@ export class PartnerRepository extends SalesforceRepositoryBaseWithMapping<ISale
     "Acc_ValidationConditionsCode__c",
     "Acc_ValidationConditionsDesc__c",
     "Acc_RegistrationNumber__c",
-    // TODO: put back in
     "Acc_SortCode__c",
     "Acc_AccountNumber__c",
     "Acc_FirstName__c",

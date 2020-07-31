@@ -11,10 +11,13 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
         model: PartnerDto,
         private readonly original: PartnerDto,
         private readonly partnerDocuments: DocumentSummaryDto[],
-        showValidationErrors: boolean,
-        private readonly validateBankDetails?: boolean,
+        private readonly options: {
+            showValidationErrors: boolean,
+            validateBankDetails?: boolean,
+            failBankValidation?: boolean
+        }
     ) {
-        super(model, showValidationErrors);
+        super(model, options.showValidationErrors);
     }
 
     private readonly allowedPartnerStatusTransitions: {[key: number]: PartnerStatus[]} = {
@@ -87,6 +90,8 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
         () => Validation.required(this, this.model.companyNumber, "Company number cannot be empty")
     ));
 
+    public bankCheckValidation = this.conditionallyValidateBankDetails(() => Validation.isFalse(this, !!this.options.failBankValidation, "Check your sort code and account number."));
+
     public sortCode = this.conditionallyValidateBankDetails(() => Validation.all(this,
         () => Validation.required(this, this.model.sortCode, "Sort code cannot be empty"),
         () => Validation.sortCode(this, this.model.sortCode, "Please enter a valid sort code")
@@ -125,7 +130,7 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
     public accountPostcode = this.conditionallyValidateBankDetails(() => Validation.required(this, this.model.accountPostcode, "Account postcode cannot be empty"));
 
     private conditionallyValidateBankDetails(test: () => Result) {
-        if (!this.validateBankDetails) {
+        if (!this.options.validateBankDetails) {
             return Validation.valid(this);
         }
         return test();
