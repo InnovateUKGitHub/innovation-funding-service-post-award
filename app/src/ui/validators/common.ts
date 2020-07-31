@@ -91,12 +91,12 @@ export function isPositiveInteger(results: Results<{}>, value: number | undefine
 }
 
 export function sortCode(results: Results<{}>, value: string | null, message?: string) {
-  const regex = new RegExp(/[^0-9](6)+$/i);
+  const regex = new RegExp(/^\d{6}$/);
   return isTrue(results, (!value) || regex.test(value), message || "Invalid sort code");
 }
 
 export function accountNumber(results: Results<{}>, value: string | null, message?: string) {
-  const regex = new RegExp(/[^0-9](6, 8)+$/i);
+  const regex = new RegExp(/^\d{6,8}$/);
   return isTrue(results, (!value) || regex.test(value), message || "Invalid account number");
 }
 

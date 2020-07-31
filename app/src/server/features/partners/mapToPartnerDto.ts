@@ -61,7 +61,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             totalFundingDueToReceive: this.valueIfPermission(this.item.totalParticipantCosts * (this.item.awardRate / 100)),
             newForecastNeeded: this.item.newForecastNeeded,
             // For active partners initialise these as complete as they may not have come through the acc ui and therefore not be set correctly
-            spendProfileStatus: partnerStatus === PartnerStatus.Active ? SpendProfileStatus.Complete : new PartnerSpendProfileStatusMapper().mapFromSalesforcePcrSpendProfileOverheadRateOption(this.item.spendProfileStatus),
+            spendProfileStatus: partnerStatus === PartnerStatus.Active ? SpendProfileStatus.Complete : new PartnerSpendProfileStatusMapper().mapFromSalesforce(this.item.spendProfileStatus),
             bankCheckStatus: partnerStatus === PartnerStatus.Active ? BankCheckStatus.VerificationPassed : new BankCheckStatusMapper().mapFromSalesforce(this.item.bankCheckStatus),
             bankDetailsTaskStatus: partnerStatus === PartnerStatus.Active ? BankDetailsTaskStatus.Complete : new BankDetailsTaskStatusMapper().mapFromSalesforce(this.item.bankDetailsTaskStatus),
             spendProfileStatusLabel: this.item.spendProfileStatusLabel,
@@ -124,7 +124,7 @@ export class PartnerSpendProfileStatusMapper {
         complete: "Complete",
     };
 
-    public mapFromSalesforcePcrSpendProfileOverheadRateOption = ((option: string | undefined): SpendProfileStatus => {
+    public mapFromSalesforce = ((option: string | undefined): SpendProfileStatus => {
         switch (option) {
             case this.options.toDo: return SpendProfileStatus.ToDo;
             case this.options.incomplete: return SpendProfileStatus.Incomplete;
@@ -133,7 +133,7 @@ export class PartnerSpendProfileStatusMapper {
         }
     });
 
-    public mapToSalesforcePcrSpendProfileOverheadRateOption = ((option: SpendProfileStatus | undefined) => {
+    public mapToSalesforce = ((option: SpendProfileStatus | undefined) => {
         switch (option) {
             case SpendProfileStatus.ToDo: return this.options.toDo;
             case SpendProfileStatus.Incomplete: return this.options.incomplete;
@@ -184,7 +184,7 @@ export class BankCheckStatusMapper {
             case this.options.validationPassed: return BankCheckStatus.ValidationPassed;
             case this.options.validationFailed: return BankCheckStatus.ValidationFailed;
             case this.options.verificationPassed: return BankCheckStatus.VerificationPassed;
-            case this.options.verificationFailed: return BankCheckStatus.VerificationPassed;
+            case this.options.verificationFailed: return BankCheckStatus.VerificationFailed;
             default: return BankCheckStatus.Unknown;
         }
     });

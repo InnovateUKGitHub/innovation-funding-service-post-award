@@ -71,7 +71,7 @@ export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
     // Calling repo directly here as it's the only place we can check that the spend profile transition is valid
     await context.repositories.partners.update({
       Id: partnerDto.id,
-      Acc_SpendProfileCompleted__c: new PartnerSpendProfileStatusMapper().mapToSalesforcePcrSpendProfileOverheadRateOption(partnerDto.spendProfileStatus),
+      Acc_SpendProfileCompleted__c: new PartnerSpendProfileStatusMapper().mapToSalesforce(partnerDto.spendProfileStatus),
     });
   }
 
