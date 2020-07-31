@@ -9,23 +9,25 @@ import {
 import * as https from "https";
 
 export interface IVerifyBankCheckInputs {
-  accountNumber: string;
-  sortcode: string;
   companyName: string;
-  registrationNumber: string;
-  firstName: string;
-  lastName: string;
-  organisation: string;
-  buildingName: string;
-  street: string;
-  locality: string;
-  town: string;
-  postcode: string;
+  registrationNumber: string | null;
+  sortcode: string;
+  accountNumber: string;
+  firstName: string | null;
+  lastName: string | null;
+  address: {
+    organisation: string | null;
+    buildingName: string | null;
+    street: string | null;
+    locality: string | null;
+    town: string | null;
+    postcode: string | null;
+  };
 }
 
 export interface IBankCheckService {
   validate(sortcode: string, accountNumber: string): Promise<BankCheckValidationResult>;
-  verify(inputs: IVerifyBankCheckInputs): Promise<BankCheckVerificationResult>;
+  verify(accountDetails: IVerifyBankCheckInputs): Promise<BankCheckVerificationResult>;
 }
 
 export class BankCheckService implements IBankCheckService {
@@ -48,39 +50,8 @@ export class BankCheckService implements IBankCheckService {
     return await this.getResult("/experianValidate", bankCheckUrl, bankDetails);
   }
 
-  public async verify(inputs: IVerifyBankCheckInputs): Promise<BankCheckVerificationResult> {
+  public async verify(accountDetails: IVerifyBankCheckInputs): Promise<BankCheckVerificationResult> {
     const {bankCheckUrl} = this.getConnection();
-    const {
-      accountNumber,
-      sortcode,
-      companyName,
-      registrationNumber,
-      firstName,
-      lastName,
-      organisation,
-      buildingName,
-      street,
-      locality,
-      town,
-      postcode,
-    } = inputs;
-
-    const accountDetails: AccountDetails = {
-      sortcode,
-      accountNumber,
-      companyName,
-      registrationNumber,
-      firstName,
-      lastName,
-      address: {
-        organisation,
-        buildingName,
-        street,
-        locality,
-        town,
-        postcode,
-      }
-    };
 
     return await this.getResult("/experianVerify", bankCheckUrl, accountDetails);
   }

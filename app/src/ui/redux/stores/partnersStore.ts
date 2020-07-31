@@ -12,6 +12,7 @@ interface UpdatePartnerOptions {
   onComplete?: (result: PartnerDto) => void;
   onError?: (error: any) => void;
   validateBankDetails?: boolean;
+  verifyBankDetails?: boolean;
 }
 
 export class PartnersStore extends StoreBase {
@@ -58,7 +59,7 @@ export class PartnersStore extends StoreBase {
         showValidationErrors: true,
         validateBankDetails: options && options.validateBankDetails
       }),
-      p => ApiClient.partners.updatePartner({ partnerId, partnerDto, validateBankDetails: options && options.validateBankDetails, ...p }),
+      p => ApiClient.partners.updatePartner({ partnerId, partnerDto, validateBankDetails: options && options.validateBankDetails, verifyBankDetails: options && options.verifyBankDetails, ...p }),
       (result) => {
         this.queue(dataLoadAction(storeKeys.getPartnerKey(partnerId), "partner", LoadingStatus.Updated, result));
         if(options && options.onComplete) {
