@@ -45,6 +45,7 @@ export interface ISalesforcePartner {
   Acc_BankCheckCompleted__c: string;
   BankCheckCompletedLabel: string;
   SpendProfileStatusLabel: string;
+  BankDetailsTaskStatusLabel: string;
   Acc_BankCheckState__c: string;
   Acc_ValidationCheckPassed__c: boolean;
   Acc_Iban__c: string;
@@ -53,8 +54,8 @@ export interface ISalesforcePartner {
   Acc_ValidationConditionsDesc__c: string;
   Acc_CompanyName__c: string;
   Acc_RegistrationNumber__c: string;
-  // Acc_SortCode__c: string;
-  // Acc_AccountNumber__c: string;
+  Acc_SortCode__c: string;
+  Acc_AccountNumber__c: string;
   Acc_FirstName__c: string;
   Acc_LastName__c: string;
   Acc_AddressStreet__c: string;
@@ -127,8 +128,8 @@ export class PartnerRepository extends SalesforceRepositoryBaseWithMapping<ISale
     "Acc_ValidationConditionsDesc__c",
     "Acc_RegistrationNumber__c",
     // TODO: put back in
-    // "Acc_SortCode__c",
-    // "Acc_AccountNumber__c",
+    "Acc_SortCode__c",
+    "Acc_AccountNumber__c",
     "Acc_FirstName__c",
     "Acc_LastName__c",
     "Acc_AddressStreet__c",
