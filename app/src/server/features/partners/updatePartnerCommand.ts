@@ -28,7 +28,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
 
     if (this.partner.partnerStatus === PartnerStatus.Pending) {
       if (this.partner.bankCheckStatus === BankCheckStatus.NotValidated && this.validateBankDetails) {
-        await this.bankCheckValidate(update, context);
+        await this.bankCheckValidate(originalDto, partnerDocuments, update, context);
       }
     }
 
@@ -38,12 +38,13 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
       Acc_Postcode__c: this.partner.postcode,
       Acc_NewForecastNeeded__c: isBoolean(this.partner.newForecastNeeded) ? this.partner.newForecastNeeded : undefined,
       Acc_ParticipantStatus__c: new PartnerStatusMapper().mapToSalesforce(this.partner.partnerStatus),
+      Acc_BankCheckCompleted__c: new BankDetailsTaskStatusMapper().mapToSalesforce(this.partner.bankDetailsTaskStatus),
     });
 
     return true;
   }
 
-  private async bankCheckValidate(update: any, context: IContext) {
+  private async bankCheckValidate(originalDto: PartnerDto, partnerDocuments: DocumentSummaryDto[], update: any, context: IContext) {
     if (!this.partner.sortCode || !this.partner.accountNumber) {
       throw new BadRequestError("Sort code or account number not provided");
     }
@@ -53,8 +54,14 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     const validationResult = bankCheckValidateResult.ValidationResult;
 
     if (!validationResult.checkPassed) {
-      if (this.partner.bankCheckValidationAttempts < 2) {
-        throw new BadRequestError("Validation failed");
+      if (this.partner.bankCheckValidationAttempts <= context.config.bankCheckValidationAttempts) {
+        throw new ValidationError(
+          new PartnerDtoValidator(this.partner, originalDto, partnerDocuments, {
+            showValidationErrors: true,
+            validateBankDetails: true,
+            failBankValidation: true
+          })
+        );
       }
       update.Acc_BankCheckState__c = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.ValidationFailed);
     } else {
@@ -76,7 +83,6 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     update.Acc_AddressBuildingName__c = this.partner.accountBuilding;
     update.Acc_AddressLocality__c = this.partner.accountLocality;
     update.Acc_AddressPostcode__c = this.partner.accountPostcode;
-    update.Acc_BankCheckCompleted__c = new BankDetailsTaskStatusMapper().mapToSalesforce(this.partner.bankDetailsTaskStatus);
   }
 
   private validateRequest(originalDto: PartnerDto, partnerDocuments: DocumentSummaryDto[]) {
@@ -88,7 +94,10 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
       throw new BadRequestError("Cannot validate bank details for an active partner");
     }
 
-    const validationResult = new PartnerDtoValidator(this.partner, originalDto, partnerDocuments, true, this.validateBankDetails);
+    const validationResult = new PartnerDtoValidator(this.partner, originalDto, partnerDocuments, {
+      showValidationErrors: true,
+      validateBankDetails: this.validateBankDetails
+    });
 
     if(!validationResult.isValid) {
       throw new ValidationError(validationResult);
