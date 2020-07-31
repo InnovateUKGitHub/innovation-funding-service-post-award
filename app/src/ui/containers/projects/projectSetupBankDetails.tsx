@@ -53,10 +53,10 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
               <Form.String
                 name="companyNumber"
                 width={"one-third"}
-                value={x => x.companyNumber}
+                value={x => x.bankDetails.companyNumber}
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.companyNumber()}
                 hintContent={x => x.projectSetupBankDetails.partnerLabels.companyNumberHint()}
-                update={(dto, val) => dto.companyNumber = val}
+                update={(dto, val) => dto.bankDetails.companyNumber = val}
                 validation={editor.validator.companyNumber}
               />
             </Form.Fieldset>
@@ -64,19 +64,19 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
               <Form.String
                 name="sortCode"
                 width={"one-third"}
-                value={x => x.sortCode}
+                value={x => x.bankDetails.sortCode}
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.sortCode()}
                 hintContent={x => x.projectSetupBankDetails.partnerLabels.sortCodeHint()}
-                update={(dto, val) => dto.sortCode = val}
+                update={(dto, val) => dto.bankDetails.sortCode = val}
                 validation={editor.validator.sortCode.isValid ? editor.validator.bankCheckValidation : editor.validator.sortCode}
               />
               <Form.String
                 name="accountNumber"
                 width={"one-third"}
-                value={x => x.accountNumber}
+                value={x => x.bankDetails.accountNumber}
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.accountNumber()}
                 hintContent={x => x.projectSetupBankDetails.partnerLabels.accountNumberHint()}
-                update={(dto, val) => dto.accountNumber = val}
+                update={(dto, val) => dto.bankDetails.accountNumber = val}
                 validation={editor.validator.accountNumber.isValid ? editor.validator.bankCheckValidation : editor.validator.sortCode}
               />
             </Form.Fieldset>
@@ -84,17 +84,17 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
               <Form.String
                 name="firstName"
                 width={"one-third"}
-                value={x => x.firstName}
+                value={x => x.bankDetails.firstName}
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.firstName()}
-                update={(dto, val) => dto.firstName = val}
+                update={(dto, val) => dto.bankDetails.firstName = val}
                 validation={editor.validator.firstName}
               />
               <Form.String
                 name="lastName"
                 width={"one-third"}
-                value={x => x.lastName}
+                value={x => x.bankDetails.lastName}
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.lastName()}
-                update={(dto, val) => dto.lastName = val}
+                update={(dto, val) => dto.bankDetails.lastName = val}
                 validation={editor.validator.lastName}
               />
             </Form.Fieldset>
@@ -105,41 +105,41 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
               <Form.String
                 name="accountBuilding"
                 width={"one-third"}
-                value={x => x.accountBuilding}
+                value={x => x.bankDetails.address.accountBuilding}
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.accountBuilding()}
-                update={(dto, val) => dto.accountBuilding = val}
+                update={(dto, val) => dto.bankDetails.address.accountBuilding = val}
                 validation={editor.validator.accountBuilding}
               />
               <Form.String
                 name="accountStreet"
                 width={"one-third"}
-                value={x => x.accountStreet}
+                value={x => x.bankDetails.address.accountStreet}
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.accountStreet()}
-                update={(dto, val) => dto.accountStreet = val}
+                update={(dto, val) => dto.bankDetails.address.accountStreet = val}
                 validation={editor.validator.accountStreet}
               />
               <Form.String
                 name="accountLocality"
                 width={"one-third"}
-                value={x => x.accountLocality}
+                value={x => x.bankDetails.address.accountLocality}
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.accountLocality()}
-                update={(dto, val) => dto.accountLocality = val}
+                update={(dto, val) => dto.bankDetails.address.accountLocality = val}
                 validation={editor.validator.accountLocality}
               />
               <Form.String
                 name="accountTownOrCity"
                 width={"one-third"}
-                value={x => x.accountTownOrCity}
+                value={x => x.bankDetails.address.accountTownOrCity}
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.accountTownOrCity()}
-                update={(dto, val) => dto.accountTownOrCity = val}
+                update={(dto, val) => dto.bankDetails.address.accountTownOrCity = val}
                 validation={editor.validator.accountTownOrCity}
               />
               <Form.String
                 name="accountPostcode"
                 width={"one-third"}
-                value={x => x.accountPostcode}
+                value={x => x.bankDetails.address.accountPostcode}
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.accountPostcode()}
-                update={(dto, val) => dto.accountPostcode = val}
+                update={(dto, val) => dto.bankDetails.address.accountPostcode = val}
                 validation={editor.validator.accountPostcode}
               />
             </Form.Fieldset>

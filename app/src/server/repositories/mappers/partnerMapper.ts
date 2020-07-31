@@ -56,10 +56,13 @@ export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePar
       validationConditionsSeverity: item.Acc_ValidationConditionsSeverity__c,
       validationConditionsCode: item.Acc_ValidationConditionsCode__c,
       validationConditionsDesc: item.Acc_ValidationConditionsDesc__c,
-      addressScore: 0,
-      companyNameScore: 0,
-      personalDetailsScore: 0,
-      regNumberIsValid: false,
+      addressScore: item.Acc_AddressScore__c,
+      companyNameScore: item.Acc_CompanyNameScore__c,
+      personalDetailsScore: item.Acc_PersonalDetailsScore__c,
+      regNumberScore: item.Acc_RegNumberScore__c,
+      verificationConditionsSeverity: item.Acc_VerificationConditionsSeverity__c,
+      verificationConditionsCode: item.Acc_VerificationConditionsCode__c,
+      verificationConditionsDesc: item.Acc_VerificationConditionsDesc__c,
     };
   }
 }

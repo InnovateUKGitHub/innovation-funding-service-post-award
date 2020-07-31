@@ -160,7 +160,10 @@ export class TestData {
       addressScore: 0,
       companyNameScore: 0,
       personalDetailsScore: 0,
-      regNumberIsValid: false,
+      regNumberScore: "No match",
+      verificationConditionsSeverity: "",
+      verificationConditionsCode: 0,
+      verificationConditionsDesc: "",
     };
 
     if (!!update) update(newItem);
