@@ -65,9 +65,10 @@ class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<ProjectSetupB
           >
             <Form.Fieldset>
               <Form.Submit><ACC.Content value={x => x.projectSetupBankDetailsVerify.submitButton()}/></Form.Submit>
-              <ACC.Link styling="SecondaryButton" route={this.props.routes.projectSetupBankDetails.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId})}>
-                <ACC.Content value={x => x.projectSetupBankDetailsVerify.changeButton()}/>
-              </ACC.Link>
+              {/* TODO disable sort code & account fields & skip validate on resubmit of bank details */}
+              {/*<ACC.Link styling="SecondaryButton" route={this.props.routes.projectSetupBankDetails.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId})}>*/}
+              {/*  <ACC.Content value={x => x.projectSetupBankDetailsVerify.changeButton()}/>*/}
+              {/*</ACC.Link>*/}
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>

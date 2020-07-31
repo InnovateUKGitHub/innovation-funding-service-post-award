@@ -94,7 +94,7 @@ const clientApi: IApiClient = {
     get: (params) => ajaxJson(`/api/partners/${params.partnerId}`),
     getAll:(params) => ajaxJson(`/api/partners`),
     getAllByProjectId: (params) => ajaxJson(`/api/partners?projectId=${params.projectId}`),
-    updatePartner: (params) => ajaxPut(`/api/partners/${params.partnerId}`, params.partnerDto)
+    updatePartner: (params) => ajaxPut(`/api/partners/${params.partnerId}?validateBankDetails=${params.validateBankDetails}`, params.partnerDto)
   },
   users: {
     getCurrent: () => ajaxJson(`/api/users/current`)

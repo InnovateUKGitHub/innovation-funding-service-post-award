@@ -68,7 +68,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.sortCode()}
                 hintContent={x => x.projectSetupBankDetails.partnerLabels.sortCodeHint()}
                 update={(dto, val) => dto.sortCode = val}
-                validation={editor.validator.sortCode}
+                validation={editor.validator.sortCode.isValid ? editor.validator.bankCheckValidation : editor.validator.sortCode}
               />
               <Form.String
                 name="accountNumber"
@@ -77,7 +77,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.accountNumber()}
                 hintContent={x => x.projectSetupBankDetails.partnerLabels.accountNumberHint()}
                 update={(dto, val) => dto.accountNumber = val}
-                validation={editor.validator.accountNumber}
+                validation={editor.validator.accountNumber.isValid ? editor.validator.bankCheckValidation : editor.validator.sortCode}
               />
             </Form.Fieldset>
             <Form.Fieldset headingContent={x => x.projectSetupBankDetails.accountHolderFieldsetTitle()}>
@@ -172,6 +172,7 @@ const ProjectSetupBankDetailsContainer = (props: ProjectSetupBankDetailsParams &
         onChange={(submit, dto) => {
           stores.partners.updatePartner(submit, props.partnerId, dto,
             {
+              validateBankDetails: submit,
               onComplete: (resp) => {
                 if (resp.bankCheckStatus === BankCheckStatus.ValidationFailed) {
                   stores.navigation.navigateTo(props.routes.failedBankCheckConfirmation.getLink({
@@ -186,12 +187,11 @@ const ProjectSetupBankDetailsContainer = (props: ProjectSetupBankDetailsParams &
                 }
               },
               onError: (e) => {
-                // TODO add bank details validation to Partner Validator and use correct type here
-                if (e && e.results && e.results.bankDetails && !e.results.bankDetails.isValid) {
+                // TODO use correct type here
+                if (e && e.results && e.results.bankCheckValidation && !e.results.bankCheckValidation.isValid) {
                   dto.bankCheckValidationAttempts += 1;
                 }
               },
-              validateBankDetails: submit,
             }
           );
         }}

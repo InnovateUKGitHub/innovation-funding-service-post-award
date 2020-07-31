@@ -28,6 +28,9 @@ export interface Partner {
   auditReportFrequencyName: string;
   totalPrepayment: number;
   postcode: string;
+  newForecastNeeded: boolean;
+
+  // project setup
   companyNumber: string;
   sortCode: string;
   accountNumber: string;
@@ -38,7 +41,7 @@ export interface Partner {
   accountBuilding: string;
   accountLocality: string;
   accountTownOrCity: string;
-  newForecastNeeded: boolean;
+
   spendProfileStatus: string;
   spendProfileStatusLabel: string;
   bankDetailsTaskStatus: string;
