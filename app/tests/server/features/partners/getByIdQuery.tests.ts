@@ -58,11 +58,14 @@ describe("getAllForProjectQuery", () => {
       x.iban = "123454321";
       x.validationConditionsSeverity = "Warning";
       x.validationConditionsCode = 2;
-      x.validationConditionsDesc = "A warning about a thing";
+      x.validationConditionsDesc = "A warning about a validation thing";
       x.addressScore = 6;
       x.companyNameScore = 5;
       x.personalDetailsScore = 4;
-      x.regNumberIsValid = true;
+      x.regNumberScore = "Match";
+      x.verificationConditionsSeverity = "Warning";
+      x.verificationConditionsCode = 2;
+      x.verificationConditionsDesc = "A warning about a verification thing";
     });
 
     const projectManger = context.testData.createProjectManager(project, partner);
@@ -112,25 +115,36 @@ describe("getAllForProjectQuery", () => {
       bankDetailsTaskStatusLabel: "To do",
       bankCheckStatus: BankCheckStatus.Unknown,
       bankCheckValidationAttempts: 0,
-      firstName: "Mr",
-      lastName: "Toad",
-      accountPostcode: "TH1 0WW",
-      accountStreet: "Main Street",
-      accountBuilding: "Toad Hall",
-      accountLocality: "Local",
-      accountTownOrCity: "Berkshire",
-      accountNumber: "001122",
-      sortCode: "005566",
-      companyNumber: "123344",
-      validationCheckPassed: false,
-      iban: "123454321",
-      validationConditionsSeverity: "Warning",
-      validationConditionsCode: 2,
-      validationConditionsDesc: "A warning about a thing",
-      addressScore: 6,
-      companyNameScore: 5,
-      personalDetailsScore: 4,
-      regNumberIsValid: true,
+      bankDetails: {
+        accountNumber: "001122",
+        sortCode: "005566",
+        companyNumber: "123344",
+        firstName: "Mr",
+        lastName: "Toad",
+        address: {
+          accountPostcode: "TH1 0WW",
+          accountStreet: "Main Street",
+          accountBuilding: "Toad Hall",
+          accountLocality: "Local",
+          accountTownOrCity: "Berkshire",
+        },
+      },
+      validationResponse: {
+        validationCheckPassed: false,
+        iban: "123454321",
+        validationConditionsSeverity: "Warning",
+        validationConditionsCode: 2,
+        validationConditionsDesc: "A warning about a validation thing",
+      },
+      verificationResponse: {
+        addressScore: 6,
+        companyNameScore: 5,
+        personalDetailsScore: 4,
+        regNumberScore: "Match",
+        verificationConditionsSeverity: "Warning",
+        verificationConditionsCode: 2,
+        verificationConditionsDesc: "A warning about a verification thing",
+      },
     };
 
     expect(result).toEqual(expected);

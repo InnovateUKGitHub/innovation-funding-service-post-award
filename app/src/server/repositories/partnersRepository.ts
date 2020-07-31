@@ -47,11 +47,6 @@ export interface ISalesforcePartner {
   SpendProfileStatusLabel: string;
   BankDetailsTaskStatusLabel: string;
   Acc_BankCheckState__c: string;
-  Acc_ValidationCheckPassed__c: boolean;
-  Acc_Iban__c: string;
-  Acc_ValidationConditionsSeverity__c: string;
-  Acc_ValidationConditionsCode__c: number;
-  Acc_ValidationConditionsDesc__c: string;
   Acc_CompanyName__c: string;
   Acc_RegistrationNumber__c: string;
   Acc_SortCode__c: string;
@@ -63,6 +58,18 @@ export interface ISalesforcePartner {
   Acc_AddressLocality__c: string;
   Acc_AddressTown__c: string;
   Acc_AddressPostcode__c: string;
+  Acc_ValidationCheckPassed__c: boolean;
+  Acc_Iban__c: string;
+  Acc_ValidationConditionsSeverity__c: string;
+  Acc_ValidationConditionsCode__c: number;
+  Acc_ValidationConditionsDesc__c: string;
+  Acc_PersonalDetailsScore__c: number;
+  Acc_AddressScore__c: number;
+  Acc_CompanyNameScore__c: number;
+  Acc_RegNumberScore__c: string;
+  Acc_VerificationConditionsSeverity__c: string;
+  Acc_VerificationConditionsCode__c: number;
+  Acc_VerificationConditionsDesc__c: string;
 }
 
 export interface IPartnerRepository {
@@ -121,11 +128,6 @@ export class PartnerRepository extends SalesforceRepositoryBaseWithMapping<ISale
     "Acc_BankCheckState__c",
     "Acc_BankCheckCompleted__c",
     "toLabel(Acc_BankCheckCompleted__c) BankCheckCompletedLabel",
-    "Acc_ValidationCheckPassed__c",
-    "Acc_Iban__c",
-    "Acc_ValidationConditionsSeverity__c",
-    "Acc_ValidationConditionsCode__c",
-    "Acc_ValidationConditionsDesc__c",
     "Acc_RegistrationNumber__c",
     "Acc_SortCode__c",
     "Acc_AccountNumber__c",
@@ -136,6 +138,18 @@ export class PartnerRepository extends SalesforceRepositoryBaseWithMapping<ISale
     "Acc_AddressLocality__c",
     "Acc_AddressTown__c",
     "Acc_AddressPostcode__c",
+    "Acc_ValidationCheckPassed__c",
+    "Acc_Iban__c",
+    "Acc_ValidationConditionsSeverity__c",
+    "Acc_ValidationConditionsCode__c",
+    "Acc_ValidationConditionsDesc__c",
+    "Acc_PersonalDetailsScore__c",
+    "Acc_AddressScore__c",
+    "Acc_CompanyNameScore__c",
+    "Acc_RegNumberScore__c",
+    "Acc_VerificationConditionsSeverity__c",
+    "Acc_VerificationConditionsCode__c",
+    "Acc_VerificationConditionsDesc__c",
   ];
 
   mapper = new SalesforcePartnerMapper();
