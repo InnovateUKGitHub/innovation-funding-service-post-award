@@ -1,5 +1,6 @@
 import React from "react";
 import * as ACC from "@ui/components";
+import { FormBuilder } from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { BankCheckStatus, BankDetailsTaskStatus, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
@@ -61,24 +62,8 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
               />
             </Form.Fieldset>
             <Form.Fieldset headingContent={x => x.projectSetupBankDetails.accountDetailsFieldsetTitle()}>
-              <Form.String
-                name="sortCode"
-                width={"one-third"}
-                value={x => x.bankDetails.sortCode}
-                labelContent={x => x.projectSetupBankDetails.partnerLabels.sortCode()}
-                hintContent={x => x.projectSetupBankDetails.partnerLabels.sortCodeHint()}
-                update={(dto, val) => dto.bankDetails.sortCode = val}
-                validation={editor.validator.sortCode.isValid ? editor.validator.bankCheckValidation : editor.validator.sortCode}
-              />
-              <Form.String
-                name="accountNumber"
-                width={"one-third"}
-                value={x => x.bankDetails.accountNumber}
-                labelContent={x => x.projectSetupBankDetails.partnerLabels.accountNumber()}
-                hintContent={x => x.projectSetupBankDetails.partnerLabels.accountNumberHint()}
-                update={(dto, val) => dto.bankDetails.accountNumber = val}
-                validation={editor.validator.accountNumber.isValid ? editor.validator.bankCheckValidation : editor.validator.sortCode}
-              />
+              { this.renderSortCode(editor, Form) }
+              { this.renderAccountNumber(editor, Form) }
             </Form.Fieldset>
             <Form.Fieldset headingContent={x => x.projectSetupBankDetails.accountHolderFieldsetTitle()}>
               <Form.String
@@ -157,6 +142,54 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
       <ACC.Section qa={"guidance"}>
         <ACC.Content value={x => x.projectSetupBankDetails.guidanceMessage()}/>
       </ACC.Section>
+    );
+  }
+
+  private renderSortCode(editor: IEditorStore<PartnerDto, PartnerDtoValidator>, Form: FormBuilder<PartnerDto>) {
+    if (editor.data.bankCheckStatus === BankCheckStatus.NotValidated) {
+      return (
+          <Form.String
+            name="sortCode"
+            width={"one-third"}
+            value={x => x.bankDetails.sortCode}
+            labelContent={x => x.projectSetupBankDetails.partnerLabels.sortCode()}
+            hintContent={x => x.projectSetupBankDetails.partnerLabels.sortCodeHint()}
+            update={(dto, val) => dto.bankDetails.sortCode = val}
+            validation={editor.validator.sortCode.isValid ? editor.validator.bankCheckValidation : editor.validator.sortCode}
+          />
+      );
+    }
+    return (
+      <Form.Custom
+        name="sortCode"
+        value={x => <ACC.Renderers.SimpleString>{x.bankDetails.sortCode}</ACC.Renderers.SimpleString>}
+        labelContent={x => x.projectSetupBankDetails.partnerLabels.sortCode()}
+        update={_ => null}
+      />
+    );
+  }
+
+  private renderAccountNumber(editor: IEditorStore<PartnerDto, PartnerDtoValidator>, Form: FormBuilder<PartnerDto>) {
+    if (editor.data.bankCheckStatus === BankCheckStatus.NotValidated) {
+      return (
+          <Form.String
+            name="accountNumber"
+            width={"one-third"}
+            value={x => x.bankDetails.accountNumber}
+            labelContent={x => x.projectSetupBankDetails.partnerLabels.accountNumber()}
+            hintContent={x => x.projectSetupBankDetails.partnerLabels.accountNumberHint()}
+            update={(dto, val) => dto.bankDetails.accountNumber = val}
+            validation={editor.validator.accountNumber.isValid ? editor.validator.bankCheckValidation : editor.validator.accountNumber}
+          />
+      );
+    }
+    return (
+        <Form.Custom
+          name="accountNumber"
+          value={x => <ACC.Renderers.SimpleString>{x.bankDetails.accountNumber}</ACC.Renderers.SimpleString>}
+          labelContent={x => x.projectSetupBankDetails.partnerLabels.accountNumber()}
+          update={_ => null}
+        />
     );
   }
 }
