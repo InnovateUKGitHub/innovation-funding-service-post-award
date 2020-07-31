@@ -45,11 +45,12 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
   }
 
   private async bankCheckValidate(originalDto: PartnerDto, partnerDocuments: DocumentSummaryDto[], update: any, context: IContext) {
-    if (!this.partner.sortCode || !this.partner.accountNumber) {
+    const { bankDetails } = this.partner;
+    if (!bankDetails.sortCode || !bankDetails.accountNumber) {
       throw new BadRequestError("Sort code or account number not provided");
     }
 
-    const bankCheckValidateResult = await context.resources.bankCheckService.validate(this.partner.sortCode, this.partner.accountNumber);
+    const bankCheckValidateResult = await context.resources.bankCheckService.validate(bankDetails.sortCode, bankDetails.accountNumber);
 
     const validationResult = bankCheckValidateResult.ValidationResult;
 
@@ -73,16 +74,16 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     update.Acc_ValidationConditionsSeverity__c = validationResult.conditions.severity;
     update.Acc_ValidationConditionsCode__c = validationResult.conditions.code;
     update.Acc_ValidationConditionsDesc__c = validationResult.conditions.description;
-    update.Acc_AccountNumber__c = this.partner.accountNumber;
-    update.Acc_SortCode__c = this.partner.sortCode;
-    update.Acc_RegistrationNumber__c = this.partner.companyNumber;
-    update.Acc_FirstName__c = this.partner.firstName;
-    update.Acc_LastName__c = this.partner.lastName;
-    update.Acc_AddressStreet__c = this.partner.accountStreet;
-    update.Acc_AddressTown__c = this.partner.accountTownOrCity;
-    update.Acc_AddressBuildingName__c = this.partner.accountBuilding;
-    update.Acc_AddressLocality__c = this.partner.accountLocality;
-    update.Acc_AddressPostcode__c = this.partner.accountPostcode;
+    update.Acc_AccountNumber__c = bankDetails.accountNumber;
+    update.Acc_SortCode__c = bankDetails.sortCode;
+    update.Acc_RegistrationNumber__c = bankDetails.companyNumber;
+    update.Acc_FirstName__c = bankDetails.firstName;
+    update.Acc_LastName__c = bankDetails.lastName;
+    update.Acc_AddressStreet__c = bankDetails.address.accountStreet;
+    update.Acc_AddressTown__c = bankDetails.address.accountTownOrCity;
+    update.Acc_AddressBuildingName__c = bankDetails.address.accountBuilding;
+    update.Acc_AddressLocality__c = bankDetails.address.accountLocality;
+    update.Acc_AddressPostcode__c = bankDetails.address.accountPostcode;
   }
 
   private validateRequest(originalDto: PartnerDto, partnerDocuments: DocumentSummaryDto[]) {

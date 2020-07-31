@@ -194,31 +194,31 @@ describe("Partner Validator", () => {
       expect(validate(false).accountStreet.isValid).toBe(true);
       expect(validate(false).accountTownOrCity.isValid).toBe(true);
 
-      partnerDto.accountNumber = "123";
+      partnerDto.bankDetails.accountNumber = "123";
       expect(validate(true).accountNumber.isValid).toBe(false);
-      partnerDto.accountNumber = "123456";
+      partnerDto.bankDetails.accountNumber = "123456";
       expect(validate(true).accountNumber.isValid).toBe(true);
 
-      partnerDto.sortCode = "123";
+      partnerDto.bankDetails.sortCode = "123";
       expect(validate(true).sortCode.isValid).toBe(false);
-      partnerDto.sortCode = "123222";
+      partnerDto.bankDetails.sortCode = "123222";
       expect(validate(true).sortCode.isValid).toBe(true);
 
-      partnerDto.companyNumber = "234";
+      partnerDto.bankDetails.companyNumber = "234";
       expect(validate(true).companyNumber.isValid).toBe(true);
-      partnerDto.lastName = "234";
+      partnerDto.bankDetails.lastName = "234";
       expect(validate(true).lastName.isValid).toBe(true);
-      partnerDto.firstName = "345";
+      partnerDto.bankDetails.firstName = "345";
       expect(validate(true).firstName.isValid).toBe(true);
-      partnerDto.accountBuilding = "345";
+      partnerDto.bankDetails.address.accountBuilding = "345";
       expect(validate(true).accountBuilding.isValid).toBe(true);
-      partnerDto.accountLocality = "456";
+      partnerDto.bankDetails.address.accountLocality = "456";
       expect(validate(true).accountLocality.isValid).toBe(true);
-      partnerDto.accountPostcode = "456";
+      partnerDto.bankDetails.address.accountPostcode = "456";
       expect(validate(true).accountPostcode.isValid).toBe(true);
-      partnerDto.accountStreet = "567";
+      partnerDto.bankDetails.address.accountStreet = "567";
       expect(validate(true).accountStreet.isValid).toBe(true);
-      partnerDto.accountTownOrCity = "567";
+      partnerDto.bankDetails.address.accountTownOrCity = "567";
       expect(validate(true).accountTownOrCity.isValid).toBe(true);
     });
   });

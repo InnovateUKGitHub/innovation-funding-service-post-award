@@ -28,6 +28,7 @@ class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<ProjectSetupB
   }
   public renderContents(project: ProjectDto, editor: IEditorStore<PartnerDto, PartnerDtoValidator>) {
     const Form = ACC.TypedForm<PartnerDto>();
+    const { bankDetails } = editor.data;
 
     return (
       <ACC.Page
@@ -44,16 +45,16 @@ class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<ProjectSetupB
         <ACC.Section>
           <ACC.SummaryList qa="bank-details-summary">
             <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.organisationName()} content={editor.data.name} qa={"organisationName"}/>
-            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.companyNumber()} content={editor.data.companyNumber} qa={"companyNumber"}/>
-            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.sortCode()} content={editor.data.sortCode} qa={"sortCode"}/>
-            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountNumber()} content={editor.data.accountNumber} qa={"accountNumber"}/>
-            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.firstName()} content={editor.data.firstName} qa={"firstName"}/>
-            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.lastName()} content={editor.data.lastName} qa={"lastName"}/>
-            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountBuilding()} content={editor.data.accountBuilding} qa={"accountBuilding"}/>
-            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountStreet()} content={editor.data.accountStreet} qa={"accountStreet"}/>
-            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountLocality()} content={editor.data.accountLocality} qa={"accountLocality"}/>
-            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountTownOrCity()} content={editor.data.accountTownOrCity} qa={"accountTownOrCity"}/>
-            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountPostcode()} content={editor.data.accountPostcode} qa={"accountPostcode"}/>
+            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.companyNumber()} content={bankDetails.companyNumber} qa={"companyNumber"}/>
+            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.sortCode()} content={bankDetails.sortCode} qa={"sortCode"}/>
+            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountNumber()} content={bankDetails.accountNumber} qa={"accountNumber"}/>
+            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.firstName()} content={bankDetails.firstName} qa={"firstName"}/>
+            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.lastName()} content={bankDetails.lastName} qa={"lastName"}/>
+            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountBuilding()} content={bankDetails.address.accountBuilding} qa={"accountBuilding"}/>
+            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountStreet()} content={bankDetails.address.accountStreet} qa={"accountStreet"}/>
+            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountLocality()} content={bankDetails.address.accountLocality} qa={"accountLocality"}/>
+            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountTownOrCity()} content={bankDetails.address.accountTownOrCity} qa={"accountTownOrCity"}/>
+            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountPostcode()} content={bankDetails.address.accountPostcode} qa={"accountPostcode"}/>
           </ACC.SummaryList>
         </ACC.Section>
         <ACC.Section qa="bank-details-verify-section" >

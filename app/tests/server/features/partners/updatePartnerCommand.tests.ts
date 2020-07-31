@@ -76,14 +76,14 @@ describe("updatePartnerCommand", () => {
     const partner = context.testData.createPartner(project);
 
     const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
-    expected.companyNumber = "123454321";
-    expected.sortCode = "001122";
-    expected.accountNumber = "12344321";
-    expected.firstName = "First";
-    expected.lastName = "Name";
-    expected.accountStreet = "A Building on B Street";
-    expected.accountTownOrCity = "Town-City";
-    expected.accountPostcode = "P05T C0D3";
+    expected.bankDetails.companyNumber = "123454321";
+    expected.bankDetails.sortCode = "001122";
+    expected.bankDetails.accountNumber = "12344321";
+    expected.bankDetails.firstName = "First";
+    expected.bankDetails.lastName = "Name";
+    expected.bankDetails.address.accountStreet = "A Building on B Street";
+    expected.bankDetails.address.accountTownOrCity = "Town-City";
+    expected.bankDetails.address.accountPostcode = "P05T C0D3";
 
     const commandWithoutVaiidateBankDetails = await context.runCommand(new UpdatePartnerCommand(expected));
     expect(commandWithoutVaiidateBankDetails).toBe(true);
@@ -97,12 +97,12 @@ describe("updatePartnerCommand", () => {
     });
 
     const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
-    expected.sortCode = "00112";
+    expected.bankDetails.sortCode = "00112";
 
     const command = new UpdatePartnerCommand(expected, true);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
 
-    expected.sortCode = "00112G";
+    expected.bankDetails.sortCode = "00112G";
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
 
     // TODO: add pasing case once SF fiedls are mapped
@@ -116,15 +116,15 @@ describe("updatePartnerCommand", () => {
     });
 
     const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
-    expected.accountNumber = "12345";
+    expected.bankDetails.accountNumber = "12345";
 
     const command = new UpdatePartnerCommand(expected, true);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
 
-    expected.accountNumber = "123456789";
+    expected.bankDetails.accountNumber = "123456789";
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
 
-    expected.accountNumber = "1234567G";
+    expected.bankDetails.accountNumber = "1234567G";
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
 
     // TODO: add pasing case once SF fiedls are mapped

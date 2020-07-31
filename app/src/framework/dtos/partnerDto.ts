@@ -82,29 +82,38 @@ export interface PartnerDto {
   spendProfileStatusLabel: string;
   bankDetailsTaskStatus: BankDetailsTaskStatus;
   bankDetailsTaskStatusLabel: string;
+  bankCheckStatus: BankCheckStatus;
 
   // Bank details checks
-  companyNumber: string | null;
-  sortCode: string | null;
-  accountNumber: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  accountPostcode: string | null;
-  accountStreet: string | null;
-  accountBuilding: string | null;
-  accountLocality: string | null;
-  accountTownOrCity: string | null;
-
-  validationCheckPassed: boolean;
-  iban: string | null;
-  validationConditionsSeverity: string | null;
-  validationConditionsCode: number | null;
-  validationConditionsDesc: string | null;
-
+  bankDetails: {
+    companyNumber: string | null;
+    sortCode: string | null;
+    accountNumber: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    address: {
+      accountPostcode: string | null;
+      accountStreet: string | null;
+      accountBuilding: string | null;
+      accountLocality: string | null;
+      accountTownOrCity: string | null;
+    }
+  };
   bankCheckValidationAttempts: number;
-  bankCheckStatus: BankCheckStatus;
-  personalDetailsScore: number | null;
-  addressScore: number | null;
-  companyNameScore: number | null;
-  regNumberIsValid: boolean | null;
+  validationResponse: {
+    validationCheckPassed: boolean;
+    iban: string | null;
+    validationConditionsSeverity: string | null;
+    validationConditionsCode: number | null;
+    validationConditionsDesc: string | null;
+  };
+  verificationResponse: {
+    personalDetailsScore: number | null;
+    addressScore: number | null;
+    companyNameScore: number | null;
+    regNumberScore: string | null;
+    verificationConditionsSeverity: string | null;
+    verificationConditionsCode: number | null;
+    verificationConditionsDesc: string | null;
+  };
 }
