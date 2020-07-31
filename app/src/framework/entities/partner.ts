@@ -55,5 +55,8 @@ export interface Partner {
   personalDetailsScore: number | null;
   addressScore: number | null;
   companyNameScore: number | null;
-  regNumberIsValid: boolean | null;
+  regNumberScore: string | null;
+  verificationConditionsSeverity: string;
+  verificationConditionsCode: number;
+  verificationConditionsDesc: string;
 }
