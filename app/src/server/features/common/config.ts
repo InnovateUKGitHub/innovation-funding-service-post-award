@@ -29,6 +29,9 @@ export interface IConfig {
     readonly maxUploadFileCount: number;
     readonly permittedFileTypes: string[];
     readonly bankCheckValidationAttempts: number;
+    readonly bankCheckPersonalDetailsScorePass: number;
+    readonly bankCheckAddressScorePass: number;
+    readonly bankCheckCompanyNameScorePass: number;
 
     readonly prettyLogs: boolean;
 
@@ -158,6 +161,9 @@ if (!permittedFileTypes || !permittedFileTypes.length) {
 }
 
 const bankCheckValidationAttempts = parseInt(process.env.BANK_CHECK_VALIDATION_ATTEMPTS!, 10) ||  2;
+const bankCheckPersonalDetailsScorePass = parseInt(process.env.BANK_CHECK_PERSONAL_DETAILS_SCORE_PASS!, 10) || 6;
+const bankCheckAddressScorePass = parseInt(process.env.BANK_CHECK_PERSONAL_DETAILS_SCORE_PASS!, 10) || 6;
+const bankCheckCompanyNameScorePass = parseInt(process.env.BANK_CHECK_PERSONAL_DETAILS_SCORE_PASS!, 10) || 6;
 
 const googleTagManagerCode = process.env.GOOGLE_TAG_MANAGER_CODE!;
 
@@ -186,6 +192,9 @@ export const Configuration: IConfig = {
     maxUploadFileCount,
     permittedFileTypes,
     bankCheckValidationAttempts,
+    bankCheckPersonalDetailsScorePass,
+    bankCheckAddressScorePass,
+    bankCheckCompanyNameScorePass,
     prettyLogs,
     salesforce,
     serverUrl,

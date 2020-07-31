@@ -1,15 +1,19 @@
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
-import { Authorisation, BankCheckStatus, IContext, PartnerDto, PartnerStatus, ProjectRole } from "@framework/types";
+import { Authorisation, BankCheckStatus, BankDetailsTaskStatus, IContext, PartnerDto, PartnerStatus, ProjectRole } from "@framework/types";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import { BankCheckStatusMapper, BankDetailsTaskStatusMapper, PartnerStatusMapper } from "@server/features/partners/mapToPartnerDto";
-import { isBoolean } from "@framework/util";
+import { isBoolean, isNumber } from "@framework/util";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummary";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { BankCheckVerificationResultFields } from "@framework/types/bankCheck";
 
 export class UpdatePartnerCommand extends CommandBase<boolean> {
   constructor(
-    private readonly partner: PartnerDto, private readonly validateBankDetails?: boolean) {
+    private readonly partner: PartnerDto,
+    private readonly validateBankDetails?: boolean,
+    private readonly verifyBankDetails?: boolean
+  ) {
     super();
   }
 
@@ -32,6 +36,10 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
       }
       else if (this.partner.bankCheckStatus === BankCheckStatus.ValidationPassed && this.validateBankDetails) {
         await this.updateBankDetails(update);
+      }
+
+      if (this.partner.bankCheckStatus === BankCheckStatus.ValidationPassed && this.verifyBankDetails) {
+        await this.bankCheckVerify(update, context);
       }
     }
 
@@ -94,6 +102,71 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     this.updateBankDetails(update);
   }
 
+  private async bankCheckVerify(update: any, context: IContext) {
+    const { bankDetails } = this.partner;
+    const verifyInputs = {
+      companyName: this.partner.name,
+      registrationNumber: bankDetails.companyNumber ? bankDetails.companyNumber : "",
+      sortcode: bankDetails.sortCode!,
+      accountNumber: bankDetails.accountNumber!,
+      firstName: bankDetails.firstName ? bankDetails.firstName : "",
+      lastName: bankDetails.lastName ? bankDetails.lastName : "",
+      address: {
+        organisation: "",
+        buildingName: bankDetails.address ? bankDetails.address.accountBuilding : "",
+        street: bankDetails.address ? bankDetails.address.accountStreet : "",
+        locality: bankDetails.address ? bankDetails.address.accountLocality : "",
+        town: bankDetails.address ? bankDetails.address.accountTownOrCity : "",
+        postcode: bankDetails.address ? bankDetails.address.accountPostcode : "",
+      },
+    };
+    // const verifyInputs = {
+    //   companyName: "Vitruvius Stonework Ltd",
+    //   registrationNumber: "60674010",
+    //   sortcode: "404745",
+    //   accountNumber: "51406795",
+    //   firstName: "Abbas",
+    //   lastName: "Howes",
+    //   address: {
+    //     organisation: "",
+    //     buildingName: "Springbank Chapelgreen",
+    //     street: "Charlmont Road",
+    //     locality: "",
+    //     town: "",
+    //     postcode: "SW17 9AB",
+    //   },
+    // };
+    const bankCheckVerifyResult = await context.resources.bankCheckService.verify(verifyInputs);
+    const { VerificationResult } = bankCheckVerifyResult;
+
+    if (!this.validateVerifyResponse(VerificationResult, context)) {
+      update.Acc_BankCheckState__c = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.VerificationFailed);
+    } else {
+      update.Acc_BankCheckState__c = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.VerificationPassed);
+      this.partner.bankDetailsTaskStatus = BankDetailsTaskStatus.Complete;
+    }
+
+    update.Acc_AddressScore__c = VerificationResult.addressScore;
+    update.Acc_CompanyNameScore__c = VerificationResult.companyNameScore;
+    update.Acc_PersonalDetailsScore__c = VerificationResult.personalDetailsScore;
+    update.Acc_RegNumberScore__c = VerificationResult.regNumberScore;
+    update.Acc_VerificationConditionsSeverity__c = VerificationResult.conditions.severity;
+    update.Acc_VerificationConditionsCode__c = VerificationResult.conditions.code;
+    update.Acc_VerificationConditionsDesc__c = VerificationResult.conditions.description;
+  }
+
+  private validateVerifyResponse(VerificationResult: BankCheckVerificationResultFields, context: IContext) {
+    if ((!isNumber(VerificationResult.personalDetailsScore) || VerificationResult.personalDetailsScore < context.config.bankCheckPersonalDetailsScorePass)
+    || (!isNumber(VerificationResult.addressScore) || VerificationResult.addressScore < context.config.bankCheckAddressScorePass)
+    || (!isNumber(VerificationResult.companyNameScore) || VerificationResult.companyNameScore < context.config.bankCheckCompanyNameScorePass)) {
+      return false;
+    }
+    if (this.partner.organisationType === "Industrial") {
+      return VerificationResult.regNumberScore && VerificationResult.regNumberScore === "Match";
+    }
+    return true;
+  }
+
   private validateRequest(originalDto: PartnerDto, partnerDocuments: DocumentSummaryDto[]) {
     if(!this.partner) {
       throw new BadRequestError("Request is missing required fields");
@@ -105,7 +178,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
 
     const validationResult = new PartnerDtoValidator(this.partner, originalDto, partnerDocuments, {
       showValidationErrors: true,
-      validateBankDetails: this.validateBankDetails
+      validateBankDetails: this.validateBankDetails || this.verifyBankDetails
     });
 
     if(!validationResult.isValid) {
