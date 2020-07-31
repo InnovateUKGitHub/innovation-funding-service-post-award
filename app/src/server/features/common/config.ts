@@ -28,6 +28,7 @@ export interface IConfig {
     readonly maxFileSize: number;
     readonly maxUploadFileCount: number;
     readonly permittedFileTypes: string[];
+    readonly bankCheckValidationAttempts: number;
 
     readonly prettyLogs: boolean;
 
@@ -155,6 +156,9 @@ let permittedFileTypes = process.env.PERMITTED_FILE_TYPES && process.env.PERMITT
 if (!permittedFileTypes || !permittedFileTypes.length) {
     permittedFileTypes = ["pdf", "xps", "doc", "docx", "rdf", "txt", "csv", "odt", "ppt", "pptx", "odp", "xls", "xlsx", "ods", "jpg", "jpeg", "png"];
 }
+
+const bankCheckValidationAttempts = parseInt(process.env.BANK_CHECK_VALIDATION_ATTEMPTS!, 10) ||  2;
+
 const googleTagManagerCode = process.env.GOOGLE_TAG_MANAGER_CODE!;
 
 const s3Account = {
@@ -181,6 +185,7 @@ export const Configuration: IConfig = {
     maxFileSize,
     maxUploadFileCount,
     permittedFileTypes,
+    bankCheckValidationAttempts,
     prettyLogs,
     salesforce,
     serverUrl,

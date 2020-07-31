@@ -85,8 +85,7 @@ export class BankCheckService implements IBankCheckService {
     return await this.getResult("/experianVerify", bankCheckUrl, accountDetails);
   }
 
-  private async getResult<T extends BankDetails | AccountDetails,
-  U extends BankCheckResult>(path: string, url: string, request: T): Promise<U> {
+  private async getResult<T extends BankDetails | AccountDetails, U extends BankCheckResult>(path: string, url: string, request: T): Promise<U> {
     const res: any = [];
 
     await this.makeApiCall(path, url, request)
@@ -104,8 +103,7 @@ export class BankCheckService implements IBankCheckService {
     return res[0] as U;
   }
 
-  private async makeApiCall<T extends BankDetails | AccountDetails,
-  U extends BankCheckResult>(path: string, hostname: string, request: T): Promise<U> {
+  private async makeApiCall<T extends BankDetails | AccountDetails, U extends BankCheckResult>(path: string, hostname: string, request: T): Promise<U> {
     return new Promise((resolve, reject) => {
       const options = {
         method: "POST",

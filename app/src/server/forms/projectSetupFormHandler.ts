@@ -31,6 +31,6 @@ export class ProjectSetupFormHandler extends StandardFormHandlerBase<ProjectSetu
   }
 
   protected createValidationResult(params: Params, dto: PartnerDto) {
-    return new PartnerDtoValidator(dto, dto, [], false);
+    return new PartnerDtoValidator(dto, dto, [], {showValidationErrors: false});
   }
 }

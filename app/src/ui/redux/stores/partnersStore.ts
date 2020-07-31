@@ -43,7 +43,7 @@ export class PartnersStore extends StoreBase {
       () => this.getById(partnerId),
       init,
       // Using updated dto instead of getting original as happy to let validation happen server-side
-      (dto) => new PartnerDtoValidator(dto, dto, partnerDocuments, false)
+      (dto) => new PartnerDtoValidator(dto, dto, partnerDocuments, {showValidationErrors: false})
     )));
   }
 
@@ -54,7 +54,10 @@ export class PartnersStore extends StoreBase {
       "partner",
       storeKeys.getPartnerKey(partnerId),
       partnerDto,
-      () => new PartnerDtoValidator(partnerDto, partnerDto, partnerDocuments || [], true, options && options.validateBankDetails),
+      () => new PartnerDtoValidator(partnerDto, partnerDto, partnerDocuments || [], {
+        showValidationErrors: true,
+        validateBankDetails: options && options.validateBankDetails
+      }),
       p => ApiClient.partners.updatePartner({ partnerId, partnerDto, validateBankDetails: options && options.validateBankDetails, ...p }),
       (result) => {
         this.queue(dataLoadAction(storeKeys.getPartnerKey(partnerId), "partner", LoadingStatus.Updated, result));
