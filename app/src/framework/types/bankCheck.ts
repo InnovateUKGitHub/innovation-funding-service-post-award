@@ -27,21 +27,21 @@ export interface BankCheckValidationResult extends BankCheckResult {
 }
 
 export interface BankCheckAddress {
-  readonly organisation: string;
-  readonly buildingName: string;
-  readonly street: string;
-  readonly locality: string;
-  readonly town: string;
-  readonly postcode: string;
+  readonly organisation: string | null;
+  readonly buildingName: string | null;
+  readonly street: string | null;
+  readonly locality: string | null;
+  readonly town: string | null;
+  readonly postcode: string | null;
 }
 
 export interface AccountDetails {
   readonly sortcode: string;
   readonly accountNumber: string;
   readonly companyName: string;
-  readonly registrationNumber: string;
-  readonly firstName: string;
-  readonly lastName: string;
+  readonly registrationNumber: string | null;
+  readonly firstName: string | null;
+  readonly lastName: string | null;
   readonly address: BankCheckAddress;
 }
 
