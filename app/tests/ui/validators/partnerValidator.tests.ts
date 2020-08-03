@@ -158,6 +158,7 @@ describe("Partner Validator", () => {
       const context = new TestContext();
       const partner = context.testData.createPartner(undefined, x => {
         x.participantStatus = "Pending";
+        x.bankCheckStatus = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.NotValidated) || "";
         x.accountNumber = "";
         x.sortCode = "";
         x.companyNumber = "";
@@ -220,6 +221,22 @@ describe("Partner Validator", () => {
       expect(validate(true).accountStreet.isValid).toBe(true);
       partnerDto.bankDetails.address.accountTownOrCity = "567";
       expect(validate(true).accountTownOrCity.isValid).toBe(true);
+    });
+    it("should not validate the account number and postcode if the bank check validation has passed", async () => {
+      const context = new TestContext();
+      const partner = context.testData.createPartner(undefined, x => {
+        x.bankCheckStatus = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.VerificationPassed) || "";
+        x.participantStatus = "Pending";
+        x.accountNumber = "";
+        x.sortCode = "";
+      });
+      const partnerDto = await context.runQuery(new GetByIdQuery(partner.id));
+      const validate = () => new PartnerDtoValidator(partnerDto, partnerDto, [], {
+        showValidationErrors: true,
+        validateBankDetails: true
+      });
+      expect(validate().accountNumber.isValid).toBe(true);
+      expect(validate().sortCode.isValid).toBe(true);
     });
   });
 });

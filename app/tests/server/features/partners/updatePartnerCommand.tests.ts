@@ -5,6 +5,11 @@ import { GetByIdQuery } from "@server/features/partners";
 import { BadRequestError, ValidationError } from "@server/features/common";
 
 describe("updatePartnerCommand", () => {
+  // TODO validation failed
+  // TODO validation passed
+  // TODO update partner bank details after validation
+  // TODO verification passed
+  // TODO verification failed
   it("correctly updates the partner's postcode when the command is run", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
