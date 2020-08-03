@@ -1,7 +1,7 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { BankCheckStatus, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
@@ -95,8 +95,9 @@ const ProjectSetupBankDetailsVerifyContainer = (props: ProjectSetupBankDetailsVe
           stores.partners.updatePartner(submit, props.partnerId, dto,
             {
               verifyBankDetails: submit,
-              onComplete: () =>
-                stores.navigation.navigateTo(props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }))
+              onComplete: (resp: PartnerDto) => resp.bankCheckStatus === BankCheckStatus.VerificationPassed
+                ? stores.navigation.navigateTo(props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }))
+                : stores.navigation.navigateTo(props.routes.failedBankCheckConfirmation.getLink({ projectId: props.projectId, partnerId: props.partnerId }))
             }
           );
         }}
