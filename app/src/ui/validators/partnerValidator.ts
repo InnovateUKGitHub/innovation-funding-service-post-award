@@ -95,12 +95,12 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
     public sortCode = this.conditionallyValidateBankDetails(() => Validation.all(this,
         () => Validation.required(this, this.model.bankDetails.sortCode, "Sort code cannot be empty"),
         () => Validation.sortCode(this, this.model.bankDetails.sortCode, "Please enter a valid sort code")
-    ));
+    ), this.original.bankCheckStatus === BankCheckStatus.NotValidated);
 
     public accountNumber = this.conditionallyValidateBankDetails(() => Validation.all(this,
         () => Validation.required(this, this.model.bankDetails.accountNumber, "Account number cannot be empty"),
         () => Validation.accountNumber(this, this.model.bankDetails.accountNumber, "Please enter a valid account number")
-    ));
+    ), this.original.bankCheckStatus === BankCheckStatus.NotValidated);
 
     public firstName = this.conditionallyValidateBankDetails(() => Validation.all(this,
         () => Validation.required(this, this.model.bankDetails.firstName, "First name cannot be empty")
@@ -129,10 +129,10 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
 
     public accountPostcode = this.conditionallyValidateBankDetails(() => Validation.required(this, this.model.bankDetails.address.accountPostcode, "Account postcode cannot be empty"));
 
-    private conditionallyValidateBankDetails(test: () => Result) {
-        if (!this.options.validateBankDetails) {
-            return Validation.valid(this);
+    private conditionallyValidateBankDetails(test: () => Result, condition: boolean = true) {
+        if (condition && this.options.validateBankDetails) {
+            return test();
         }
-        return test();
+        return Validation.valid(this);
     }
 }
