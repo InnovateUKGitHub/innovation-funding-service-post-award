@@ -57,14 +57,14 @@ describe("getAllForProjectQuery", () => {
       x.validationCheckPassed = false;
       x.iban = "123454321";
       x.validationConditionsSeverity = "Warning";
-      x.validationConditionsCode = 2;
+      x.validationConditionsCode = "2";
       x.validationConditionsDesc = "A warning about a validation thing";
       x.addressScore = 6;
       x.companyNameScore = 5;
       x.personalDetailsScore = 4;
       x.regNumberScore = "Match";
       x.verificationConditionsSeverity = "Warning";
-      x.verificationConditionsCode = 2;
+      x.verificationConditionsCode = "2";
       x.verificationConditionsDesc = "A warning about a verification thing";
     });
 
@@ -133,7 +133,7 @@ describe("getAllForProjectQuery", () => {
         validationCheckPassed: false,
         iban: "123454321",
         validationConditionsSeverity: "Warning",
-        validationConditionsCode: 2,
+        validationConditionsCode: "2",
         validationConditionsDesc: "A warning about a validation thing",
       },
       verificationResponse: {
@@ -142,7 +142,7 @@ describe("getAllForProjectQuery", () => {
         personalDetailsScore: 4,
         regNumberScore: "Match",
         verificationConditionsSeverity: "Warning",
-        verificationConditionsCode: 2,
+        verificationConditionsCode: "2",
         verificationConditionsDesc: "A warning about a verification thing",
       },
     };

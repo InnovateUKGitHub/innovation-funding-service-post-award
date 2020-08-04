@@ -155,14 +155,14 @@ export class TestData {
       validationCheckPassed: false,
       iban: "",
       validationConditionsSeverity: "",
-      validationConditionsCode: 0,
+      validationConditionsCode: "",
       validationConditionsDesc: "",
       addressScore: 0,
       companyNameScore: 0,
       personalDetailsScore: 0,
       regNumberScore: "No match",
       verificationConditionsSeverity: "",
-      verificationConditionsCode: 0,
+      verificationConditionsCode: "",
       verificationConditionsDesc: "",
     };
 

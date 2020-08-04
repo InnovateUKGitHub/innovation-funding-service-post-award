@@ -50,13 +50,13 @@ export interface Partner {
   validationCheckPassed: boolean;
   iban: string;
   validationConditionsSeverity: string;
-  validationConditionsCode: number;
+  validationConditionsCode: string;
   validationConditionsDesc: string;
   personalDetailsScore: number | null;
   addressScore: number | null;
   companyNameScore: number | null;
   regNumberScore: string | null;
   verificationConditionsSeverity: string;
-  verificationConditionsCode: number;
+  verificationConditionsCode: string;
   verificationConditionsDesc: string;
 }

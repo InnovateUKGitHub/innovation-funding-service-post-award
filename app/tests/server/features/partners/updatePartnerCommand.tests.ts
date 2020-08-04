@@ -61,7 +61,7 @@ describe("updatePartnerCommand", () => {
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     const result = await context.runQuery(new GetByIdQuery(partner.id));
     expect(result.validationResponse.validationConditionsSeverity).toEqual("");
-    expect(result.validationResponse.validationConditionsCode).toEqual(0);
+    expect(result.validationResponse.validationConditionsCode).toEqual("");
     expect(result.validationResponse.validationConditionsDesc).toEqual("");
 
     expected.bankCheckValidationAttempts = 3;
@@ -70,7 +70,7 @@ describe("updatePartnerCommand", () => {
     const updatedResult = await context.runQuery(new GetByIdQuery(partner.id));
     expect(updatedResult.bankCheckStatus).toEqual(BankCheckStatus.ValidationFailed);
     expect(updatedResult.validationResponse.validationConditionsSeverity).toEqual("error");
-    expect(updatedResult.validationResponse.validationConditionsCode).toEqual(3);
+    expect(updatedResult.validationResponse.validationConditionsCode).toEqual("3");
     expect(updatedResult.validationResponse.validationConditionsDesc).toEqual("error description");
   });
 
@@ -105,7 +105,7 @@ describe("updatePartnerCommand", () => {
     expect(result.bankDetails.address.accountTownOrCity).toEqual(expected.bankDetails.address.accountTownOrCity);
     expect(result.validationResponse.validationCheckPassed).toEqual(true);
     expect(result.validationResponse.iban).toEqual("123456");
-    expect(result.validationResponse.validationConditionsCode).toEqual(2);
+    expect(result.validationResponse.validationConditionsCode).toEqual("2");
     expect(result.validationResponse.validationConditionsDesc).toEqual("description");
     expect(result.validationResponse.validationConditionsSeverity).toEqual("warning");
   });
@@ -158,7 +158,7 @@ describe("updatePartnerCommand", () => {
     expect(result.verificationResponse.companyNameScore).toEqual(8);
     expect(result.verificationResponse.personalDetailsScore).toEqual(7);
     expect(result.verificationResponse.regNumberScore).toEqual("Match");
-    expect(result.verificationResponse.verificationConditionsCode).toEqual(2);
+    expect(result.verificationResponse.verificationConditionsCode).toEqual("2");
     expect(result.verificationResponse.verificationConditionsDesc).toEqual("description");
     expect(result.verificationResponse.verificationConditionsSeverity).toEqual("warning");
   });
@@ -178,7 +178,7 @@ describe("updatePartnerCommand", () => {
     expect(result.verificationResponse.companyNameScore).toEqual(1);
     expect(result.verificationResponse.personalDetailsScore).toEqual(2);
     expect(result.verificationResponse.regNumberScore).toEqual("No Match");
-    expect(result.verificationResponse.verificationConditionsCode).toEqual(3);
+    expect(result.verificationResponse.verificationConditionsCode).toEqual("3");
     expect(result.verificationResponse.verificationConditionsDesc).toEqual("error description");
     expect(result.verificationResponse.verificationConditionsSeverity).toEqual("error");
   });
