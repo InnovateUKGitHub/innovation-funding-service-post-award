@@ -61,14 +61,14 @@ export interface ISalesforcePartner {
   Acc_ValidationCheckPassed__c: boolean;
   Acc_Iban__c: string;
   Acc_ValidationConditionsSeverity__c: string;
-  Acc_ValidationConditionsCode__c: number;
+  Acc_ValidationConditionsCode__c: string;
   Acc_ValidationConditionsDesc__c: string;
   Acc_PersonalDetailsScore__c: number;
   Acc_AddressScore__c: number;
   Acc_CompanyNameScore__c: number;
   Acc_RegNumberScore__c: string;
   Acc_VerificationConditionsSeverity__c: string;
-  Acc_VerificationConditionsCode__c: number;
+  Acc_VerificationConditionsCode__c: string;
   Acc_VerificationConditionsDesc__c: string;
 }
 

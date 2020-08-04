@@ -96,7 +96,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     update.Acc_ValidationCheckPassed__c = validationResult.checkPassed;
     update.Acc_Iban__c = validationResult.iban;
     update.Acc_ValidationConditionsSeverity__c = validationResult.conditions.severity;
-    update.Acc_ValidationConditionsCode__c = validationResult.conditions.code;
+    update.Acc_ValidationConditionsCode__c = validationResult.conditions.code ? validationResult.conditions.code.toString() : "";
     update.Acc_ValidationConditionsDesc__c = validationResult.conditions.description;
     update.Acc_AccountNumber__c = bankDetails.accountNumber;
     update.Acc_SortCode__c = bankDetails.sortCode;
@@ -136,7 +136,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     update.Acc_PersonalDetailsScore__c = VerificationResult.personalDetailsScore;
     update.Acc_RegNumberScore__c = VerificationResult.regNumberScore;
     update.Acc_VerificationConditionsSeverity__c = VerificationResult.conditions.severity;
-    update.Acc_VerificationConditionsCode__c = VerificationResult.conditions.code;
+    update.Acc_VerificationConditionsCode__c = VerificationResult.conditions.code ? VerificationResult.conditions.code.toString() : "";
     update.Acc_VerificationConditionsDesc__c = VerificationResult.conditions.description;
   }
 

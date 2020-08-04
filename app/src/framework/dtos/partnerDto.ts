@@ -46,7 +46,7 @@ interface ValidationResponse {
   validationCheckPassed: boolean;
   iban: string | null;
   validationConditionsSeverity: string | null;
-  validationConditionsCode: number | null;
+  validationConditionsCode: string | null;
   validationConditionsDesc: string | null;
 }
 interface VerificationResponse {
@@ -55,7 +55,7 @@ interface VerificationResponse {
   companyNameScore: number | null;
   regNumberScore: string | null;
   verificationConditionsSeverity: string | null;
-  verificationConditionsCode: number | null;
+  verificationConditionsCode: string | null;
   verificationConditionsDesc: string | null;
 }
 
