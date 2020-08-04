@@ -49,12 +49,37 @@ class PartnerTestRepository extends TestRepository<Entities.Partner> implements 
     return super.getOne(x => x.id === partnerId);
   }
 
+  // tslint:disable-next-line: cognitive-complexity
   update(updatedPartner: Repositories.ISalesforcePartner) {
     const item = this.Items.find(x => x.id === updatedPartner.Id);
     if (item) {
       item.postcode = updatedPartner.Acc_Postcode__c !== undefined ? updatedPartner.Acc_Postcode__c : item.postcode;
       item.newForecastNeeded = updatedPartner.Acc_NewForecastNeeded__c;
       item.spendProfileStatus = updatedPartner.Acc_SpendProfileCompleted__c;
+      item.bankDetailsTaskStatus = updatedPartner.Acc_BankCheckCompleted__c;
+      item.bankCheckStatus = updatedPartner.Acc_BankCheckState__c;
+      item.sortCode = updatedPartner.Acc_SortCode__c !== undefined ? updatedPartner.Acc_SortCode__c : item.sortCode;
+      item.accountNumber = updatedPartner.Acc_AccountNumber__c !== undefined ? updatedPartner.Acc_AccountNumber__c : item.accountNumber;
+      item.companyNumber = updatedPartner.Acc_RegistrationNumber__c !== undefined ? updatedPartner.Acc_RegistrationNumber__c : item.companyNumber;
+      item.firstName = updatedPartner.Acc_FirstName__c !== undefined ? updatedPartner.Acc_FirstName__c : item.firstName;
+      item.lastName = updatedPartner.Acc_LastName__c !== undefined ? updatedPartner.Acc_LastName__c : item.lastName;
+      item.accountStreet = updatedPartner.Acc_AddressStreet__c !== undefined ? updatedPartner.Acc_AddressStreet__c : item.accountStreet;
+      item.accountTownOrCity = updatedPartner.Acc_AddressTown__c !== undefined ? updatedPartner.Acc_AddressTown__c : item.accountTownOrCity;
+      item.accountBuilding = updatedPartner.Acc_AddressBuildingName__c !== undefined ? updatedPartner.Acc_AddressBuildingName__c : item.accountBuilding;
+      item.accountLocality = updatedPartner.Acc_AddressLocality__c !== undefined ? updatedPartner.Acc_AddressLocality__c : item.accountLocality;
+      item.accountPostcode = updatedPartner.Acc_AddressPostcode__c !== undefined ? updatedPartner.Acc_AddressPostcode__c : item.accountPostcode;
+      item.validationCheckPassed = updatedPartner.Acc_ValidationCheckPassed__c !== undefined ? updatedPartner.Acc_ValidationCheckPassed__c : item.validationCheckPassed;
+      item.iban = updatedPartner.Acc_Iban__c !== undefined ? updatedPartner.Acc_Iban__c : item.iban;
+      item.validationConditionsSeverity = updatedPartner.Acc_ValidationConditionsSeverity__c !== undefined ? updatedPartner.Acc_ValidationConditionsSeverity__c : item.validationConditionsSeverity;
+      item.validationConditionsCode = updatedPartner.Acc_ValidationConditionsCode__c !== undefined ? updatedPartner.Acc_ValidationConditionsCode__c : item.validationConditionsCode;
+      item.validationConditionsDesc = updatedPartner.Acc_ValidationConditionsDesc__c !== undefined ?  updatedPartner.Acc_ValidationConditionsDesc__c : item.validationConditionsDesc;
+      item.addressScore = updatedPartner.Acc_AddressScore__c !== undefined ? updatedPartner.Acc_AddressScore__c : item.addressScore;
+      item.companyNameScore = updatedPartner.Acc_CompanyNameScore__c !== undefined ? updatedPartner.Acc_CompanyNameScore__c : item.companyNameScore;
+      item.personalDetailsScore = updatedPartner.Acc_PersonalDetailsScore__c !== undefined ? updatedPartner.Acc_PersonalDetailsScore__c : item.personalDetailsScore;
+      item.regNumberScore = updatedPartner.Acc_RegNumberScore__c !== undefined ? updatedPartner.Acc_RegNumberScore__c : item.regNumberScore;
+      item.verificationConditionsSeverity = updatedPartner.Acc_VerificationConditionsSeverity__c !== undefined ? updatedPartner.Acc_VerificationConditionsSeverity__c : item.verificationConditionsSeverity;
+      item.verificationConditionsCode = updatedPartner.Acc_VerificationConditionsCode__c !== undefined ? updatedPartner.Acc_VerificationConditionsCode__c : item.verificationConditionsCode;
+      item.verificationConditionsDesc = updatedPartner.Acc_VerificationConditionsDesc__c !== undefined ? updatedPartner.Acc_VerificationConditionsDesc__c : item.verificationConditionsDesc;
       return Promise.resolve(true);
     }
     return Promise.resolve(false);
