@@ -7,6 +7,7 @@ import {
   BankDetails
  } from "@framework/types/bankCheck";
 import * as https from "https";
+import { RequestOptions } from "https";
 
 export interface IVerifyBankCheckInputs {
   companyName: string;
@@ -37,29 +38,30 @@ export class BankCheckService implements IBankCheckService {
       throw new ConfigurationError("Bank checking service not configured");
     }
     const bankCheckUrl = Configuration.sil.bankCheckUrl;
-    return {bankCheckUrl};
+    const bankCheckPort = Configuration.sil.bankCheckPort;
+    return {bankCheckUrl, bankCheckPort};
   }
 
   public async validate(sortcode: string, accountNumber: string): Promise<BankCheckValidationResult> {
-    const {bankCheckUrl} = this.getConnection();
+    const {bankCheckUrl, bankCheckPort} = this.getConnection();
     const bankDetails: BankDetails = {
       sortcode,
       accountNumber
     };
 
-    return await this.getResult("/experianValidate", bankCheckUrl, bankDetails);
+    return await this.getResult("/experianValidate", bankCheckUrl, bankCheckPort, bankDetails);
   }
 
   public async verify(accountDetails: IVerifyBankCheckInputs): Promise<BankCheckVerificationResult> {
-    const {bankCheckUrl} = this.getConnection();
+    const {bankCheckUrl, bankCheckPort} = this.getConnection();
 
-    return await this.getResult("/experianVerify", bankCheckUrl, accountDetails);
+    return await this.getResult("/experianVerify", bankCheckUrl, bankCheckPort, accountDetails);
   }
 
-  private async getResult<T extends BankDetails | AccountDetails, U extends BankCheckResult>(path: string, url: string, request: T): Promise<U> {
+  private async getResult<T extends BankDetails | AccountDetails, U extends BankCheckResult>(path: string, url: string, port: number | undefined, request: T): Promise<U> {
     const res: any = [];
 
-    await this.makeApiCall(path, url, request)
+    await this.makeApiCall(path, url, port, request)
       .then(response => {
         res.push(response);
       })
@@ -74,19 +76,24 @@ export class BankCheckService implements IBankCheckService {
     return res[0] as U;
   }
 
-  private async makeApiCall<T extends BankDetails | AccountDetails, U extends BankCheckResult>(path: string, hostname: string, request: T): Promise<U> {
+  private async makeApiCall<T extends BankDetails | AccountDetails, U extends BankCheckResult>(path: string, hostname: string, port: number | undefined, request: T): Promise<U> {
+    const options: RequestOptions = {
+      method: "POST",
+      hostname,
+      path,
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      }
+    };
+
+    if (port) {
+      options.port = port;
+    }
+
+    const postData = JSON.stringify(request);
+
     return new Promise((resolve, reject) => {
-      const options = {
-        method: "POST",
-        hostname,
-        path,
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-        },
-        maxRedirects: 20
-      };
-      const postData = JSON.stringify(request);
       const req = https.request(options, (res: any) => {
         const chunks: any = [];
         // reject on bad status
