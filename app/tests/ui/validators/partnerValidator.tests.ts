@@ -161,14 +161,6 @@ describe("Partner Validator", () => {
         x.bankCheckStatus = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.NotValidated) || "";
         x.accountNumber = "";
         x.sortCode = "";
-        x.companyNumber = "";
-        x.lastName = "";
-        x.firstName = "";
-        x.accountBuilding = "";
-        x.accountLocality = "";
-        x.accountPostcode = "";
-        x.accountStreet = "";
-        x.accountTownOrCity = "";
       });
       const partnerDto = await context.runQuery(new GetByIdQuery(partner.id));
       const validate = (validateBankDetails: boolean) => new PartnerDtoValidator(partnerDto, partnerDto, [], {
@@ -177,23 +169,9 @@ describe("Partner Validator", () => {
       });
       expect(validate(true).accountNumber.isValid).toBe(false);
       expect(validate(true).sortCode.isValid).toBe(false);
-      expect(validate(true).lastName.isValid).toBe(false);
-      expect(validate(true).firstName.isValid).toBe(false);
-      expect(validate(true).accountBuilding.isValid).toBe(false);
-      expect(validate(true).accountLocality.isValid).toBe(false);
-      expect(validate(true).accountPostcode.isValid).toBe(false);
-      expect(validate(true).accountStreet.isValid).toBe(false);
-      expect(validate(true).accountTownOrCity.isValid).toBe(false);
 
       expect(validate(false).accountNumber.isValid).toBe(true);
       expect(validate(false).sortCode.isValid).toBe(true);
-      expect(validate(false).lastName.isValid).toBe(true);
-      expect(validate(false).firstName.isValid).toBe(true);
-      expect(validate(false).accountBuilding.isValid).toBe(true);
-      expect(validate(false).accountLocality.isValid).toBe(true);
-      expect(validate(false).accountPostcode.isValid).toBe(true);
-      expect(validate(false).accountStreet.isValid).toBe(true);
-      expect(validate(false).accountTownOrCity.isValid).toBe(true);
 
       partnerDto.bankDetails.accountNumber = "123";
       expect(validate(true).accountNumber.isValid).toBe(false);
@@ -204,23 +182,6 @@ describe("Partner Validator", () => {
       expect(validate(true).sortCode.isValid).toBe(false);
       partnerDto.bankDetails.sortCode = "123222";
       expect(validate(true).sortCode.isValid).toBe(true);
-
-      partnerDto.bankDetails.companyNumber = "234";
-      expect(validate(true).companyNumber.isValid).toBe(true);
-      partnerDto.bankDetails.lastName = "234";
-      expect(validate(true).lastName.isValid).toBe(true);
-      partnerDto.bankDetails.firstName = "345";
-      expect(validate(true).firstName.isValid).toBe(true);
-      partnerDto.bankDetails.address.accountBuilding = "345";
-      expect(validate(true).accountBuilding.isValid).toBe(true);
-      partnerDto.bankDetails.address.accountLocality = "456";
-      expect(validate(true).accountLocality.isValid).toBe(true);
-      partnerDto.bankDetails.address.accountPostcode = "456";
-      expect(validate(true).accountPostcode.isValid).toBe(true);
-      partnerDto.bankDetails.address.accountStreet = "567";
-      expect(validate(true).accountStreet.isValid).toBe(true);
-      partnerDto.bankDetails.address.accountTownOrCity = "567";
-      expect(validate(true).accountTownOrCity.isValid).toBe(true);
     });
     it("should not validate the account number and postcode if the bank check validation has passed", async () => {
       const context = new TestContext();
