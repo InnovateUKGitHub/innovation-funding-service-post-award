@@ -62,6 +62,7 @@ export class TestConfig implements IConfig {
 
   public sil = {
     bankCheckUrl: "",
+    bankCheckPort: undefined,
     companiesHouseSearchUrl: "",
     username: "",
     password: ""
