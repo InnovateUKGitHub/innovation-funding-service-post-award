@@ -34,7 +34,8 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
       if (this.partner.bankCheckStatus === BankCheckStatus.NotValidated && this.validateBankDetails) {
         await this.bankCheckValidate(originalDto, partnerDocuments, update, context);
       }
-      else if (this.partner.bankCheckStatus === BankCheckStatus.ValidationPassed && this.validateBankDetails) {
+
+      if (this.partner.bankCheckStatus === BankCheckStatus.ValidationPassed && this.validateBankDetails) {
         await this.updateBankDetails(update);
       }
 
@@ -120,22 +121,6 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
         postcode: bankDetails.address ? bankDetails.address.accountPostcode : "",
       },
     };
-    // const verifyInputs = {
-    //   companyName: "Vitruvius Stonework Ltd",
-    //   registrationNumber: "60674010",
-    //   sortcode: "404745",
-    //   accountNumber: "51406795",
-    //   firstName: "Abbas",
-    //   lastName: "Howes",
-    //   address: {
-    //     organisation: "",
-    //     buildingName: "Springbank Chapelgreen",
-    //     street: "Charlmont Road",
-    //     locality: "",
-    //     town: "",
-    //     postcode: "SW17 9AB",
-    //   },
-    // };
     const bankCheckVerifyResult = await context.resources.bankCheckService.verify(verifyInputs);
     const { VerificationResult } = bankCheckVerifyResult;
 
