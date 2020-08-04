@@ -79,9 +79,9 @@ export interface PartnerDto {
   overheadRate: number | null;
   newForecastNeeded: boolean | null;
   spendProfileStatus: SpendProfileStatus;
-  spendProfileStatusLabel: string;
+  spendProfileStatusLabel: string | null;
   bankDetailsTaskStatus: BankDetailsTaskStatus;
-  bankDetailsTaskStatusLabel: string;
+  bankDetailsTaskStatusLabel: string | null;
   bankCheckStatus: BankCheckStatus;
 
   // Bank details checks
