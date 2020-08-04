@@ -42,6 +42,40 @@ export enum BankDetailsTaskStatus {
   Complete = 30
 }
 
+interface ValidationResponse {
+  validationCheckPassed: boolean;
+  iban: string | null;
+  validationConditionsSeverity: string | null;
+  validationConditionsCode: number | null;
+  validationConditionsDesc: string | null;
+}
+interface VerificationResponse {
+  personalDetailsScore: number | null;
+  addressScore: number | null;
+  companyNameScore: number | null;
+  regNumberScore: string | null;
+  verificationConditionsSeverity: string | null;
+  verificationConditionsCode: number | null;
+  verificationConditionsDesc: string | null;
+}
+
+interface AccountAddress {
+  accountPostcode: string | null;
+  accountStreet: string | null;
+  accountBuilding: string | null;
+  accountLocality: string | null;
+  accountTownOrCity: string | null;
+}
+
+interface BankDetails {
+  companyNumber: string | null;
+  sortCode: string | null;
+  accountNumber: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  address: AccountAddress;
+}
+
 export interface PartnerDto {
   id: string;
   type: string;
@@ -85,35 +119,8 @@ export interface PartnerDto {
   bankCheckStatus: BankCheckStatus;
 
   // Bank details checks
-  bankDetails: {
-    companyNumber: string | null;
-    sortCode: string | null;
-    accountNumber: string | null;
-    firstName: string | null;
-    lastName: string | null;
-    address: {
-      accountPostcode: string | null;
-      accountStreet: string | null;
-      accountBuilding: string | null;
-      accountLocality: string | null;
-      accountTownOrCity: string | null;
-    }
-  };
+  bankDetails: BankDetails;
   bankCheckValidationAttempts: number;
-  validationResponse: {
-    validationCheckPassed: boolean;
-    iban: string | null;
-    validationConditionsSeverity: string | null;
-    validationConditionsCode: number | null;
-    validationConditionsDesc: string | null;
-  };
-  verificationResponse: {
-    personalDetailsScore: number | null;
-    addressScore: number | null;
-    companyNameScore: number | null;
-    regNumberScore: string | null;
-    verificationConditionsSeverity: string | null;
-    verificationConditionsCode: number | null;
-    verificationConditionsDesc: string | null;
-  };
+  validationResponse: ValidationResponse;
+  verificationResponse: VerificationResponse;
 }
