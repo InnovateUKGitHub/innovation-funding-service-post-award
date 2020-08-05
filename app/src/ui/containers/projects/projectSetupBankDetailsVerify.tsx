@@ -48,8 +48,9 @@ class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<ProjectSetupB
             <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.companyNumber()} content={bankDetails.companyNumber} qa={"companyNumber"}/>
             <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.sortCode()} content={bankDetails.sortCode} qa={"sortCode"}/>
             <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountNumber()} content={bankDetails.accountNumber} qa={"accountNumber"}/>
-            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.firstName()} content={bankDetails.firstName} qa={"firstName"}/>
-            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.lastName()} content={bankDetails.lastName} qa={"lastName"}/>
+            {/* TODO: Commenting out in the hope we get an answer from experian in the coming weeks */}
+            {/* <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.firstName()} content={bankDetails.firstName} qa={"firstName"}/>
+            <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.lastName()} content={bankDetails.lastName} qa={"lastName"}/> */}
             <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountBuilding()} content={bankDetails.address.accountBuilding} qa={"accountBuilding"}/>
             <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountStreet()} content={bankDetails.address.accountStreet} qa={"accountStreet"}/>
             <ACC.SummaryListItem labelContent={x => x.projectSetupBankDetailsVerify.partnerLabels.accountLocality()} content={bankDetails.address.accountLocality} qa={"accountLocality"}/>

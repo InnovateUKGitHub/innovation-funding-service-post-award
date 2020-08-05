@@ -64,7 +64,8 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
               { this.renderSortCode(editor, Form) }
               { this.renderAccountNumber(editor, Form) }
             </Form.Fieldset>
-            <Form.Fieldset headingContent={x => x.projectSetupBankDetails.accountHolderFieldsetTitle()}>
+            {/* TODO: Commenting out in the hope we get an answer from experian in the coming weeks */}
+            {/* <Form.Fieldset headingContent={x => x.projectSetupBankDetails.accountHolderFieldsetTitle()}>
               <Form.String
                 name="firstName"
                 width={"one-third"}
@@ -79,7 +80,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
                 labelContent={x => x.projectSetupBankDetails.partnerLabels.lastName()}
                 update={(dto, val) => dto.bankDetails.lastName = val}
               />
-            </Form.Fieldset>
+            </Form.Fieldset> */}
             <Form.Fieldset headingContent={x => x.projectSetupBankDetails.billingAddressFieldsetTitle()}>
               <ACC.Renderers.SimpleString qa={"billingAddressFieldsetGuidance"}>
                 <ACC.Content value={x => x.projectSetupBankDetails.billingAddressFieldsetGuidance()}/>
