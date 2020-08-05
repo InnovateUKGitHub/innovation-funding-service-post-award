@@ -32,6 +32,7 @@ import { ContentProvider } from "@ui/redux/contentProvider";
 import { Content } from "@content/content";
 
 export async function serverRender(req: Request, res: Response, error?: IAppError): Promise<void> {
+  const nonce = res.locals.nonce;
   try {
     if (error && !(error instanceof FormHandlerError)) {
       throw error;
@@ -70,12 +71,12 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
 
     await loadAllData(store, () => {
       // render the app to cause any other actions to go round the loop
-      renderApp(router, store, stores, routes, content, modalRegister);
+      renderApp(router, nonce, store, stores, routes, content, modalRegister);
     });
 
     onComplete(store, stores, content, matched, params, error);
 
-    res.send(renderApp(router, store, stores, routes, content, modalRegister));
+    res.send(renderApp(router, nonce, store, stores, routes, content, modalRegister));
   }
   catch (e) {
     // TODO capture stask trace for logs
@@ -105,7 +106,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
 
     store.dispatch(Actions.setPageTitle(matched.getTitle({ params: routeState.params, stores, content })));
 
-    res.status(getErrorStatus(e)).send(renderApp(router, store, stores, routes, content, new ModalRegister()));
+    res.status(getErrorStatus(e)).send(renderApp(router, nonce, store, stores, routes, content, new ModalRegister()));
   }
 }
 
@@ -167,7 +168,7 @@ function startRouter(req: Request, router: Router): Promise<State> {
   });
 }
 
-function renderApp(router: Router, store: Store<RootState>, stores: IStores, routes: IRoutes, content: Content, modalRegister: ModalRegister): string {
+function renderApp(router: Router, nonce: string, store: Store<RootState>, stores: IStores, routes: IRoutes, content: Content, modalRegister: ModalRegister): string {
 
   const html = renderToString(
     <Provider store={store}>
@@ -185,7 +186,7 @@ function renderApp(router: Router, store: Store<RootState>, stores: IStores, rou
 
   const state = store.getState();
 
-  return renderHtml(html, state.title.htmlTitle, state);
+  return renderHtml(html, state.title.htmlTitle, state, nonce);
 }
 
 function getClientConfig(context: IContext): IClientConfig {

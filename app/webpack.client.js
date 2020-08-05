@@ -29,7 +29,7 @@ module.exports = function pack(env) {
       resolve: {
         extensions: [".ts", ".tsx", ".js", ".jsx"],
       },
-      devtool: "cheap-module-eval-source-map",
+      devtool: "source-map",
       module: {
         rules: [
           {

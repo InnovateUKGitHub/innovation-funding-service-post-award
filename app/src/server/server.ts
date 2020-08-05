@@ -24,6 +24,7 @@ import { GetPcrParticipantSizesQuery } from "@server/features/pcrs/getPcrPartici
 import { GetPcrProjectLocationsQuery } from "@server/features/pcrs/getPcrProjectLocationsQuery";
 import { GetPcrSpendProfileCapitalUsageTypesQuery } from "./features/pcrs/getPcrSpendProfileCapitalUsageTypesQuery";
 import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
+import { v4 as uuidv4 } from "uuid";
 
 export class Server {
   private readonly app: express.Express;
@@ -107,6 +108,10 @@ export class Server {
   }
 
   private routing() {
+    this.app.use((req, res, next) => {
+      res.locals.nonce = uuidv4();
+      next();
+    });
     this.app.use(setOwaspHeaders, allowCache, express.static("public"));
     this.app.use(noCache, healthRouter);
     this.app.use(authRouter);
