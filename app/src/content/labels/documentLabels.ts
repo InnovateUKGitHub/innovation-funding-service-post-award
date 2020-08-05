@@ -17,6 +17,7 @@ export class DocumentLabels extends ContentBase {
       case DocumentDescription.JeSForm: return this.getContent("document-description-JeSForm");
       case DocumentDescription.OverheadCalculationSpreadsheet: return this.getContent("document-description-OverheadCalculationSpreadsheet");
       case DocumentDescription.BankStatement: return this.getContent("document-description-BankStatement");
+      case DocumentDescription.AgreementToPCR: return this.getContent("document-description-AgreementToPCR");
       default: return this.getContent("document-description-Unknown");
     }
   }
