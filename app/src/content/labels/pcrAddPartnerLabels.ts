@@ -55,4 +55,6 @@ export class PCRAddPartnerLabels extends ContentBase {
   public readonly financeContactHeading = () => this.getContent("finance-contact-heading");
   public readonly projectLeadContactHeading = () => this.getContent("project-lead-contact-heading");
   public readonly fundingSectionTitle = () => this.getContent("funding-section-title");
+
+  public readonly agreementToPcrHeading = () => this.getContent("agreement-to-pcr-heading");
 }
