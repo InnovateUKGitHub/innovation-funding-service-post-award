@@ -107,6 +107,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
           <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.fundingLevelHeading()} content={<ACC.Renderers.Percentage value={pcrItem.awardRate}/>} validation={validator.awardRate} qa="fundingLevel"  action={this.props.getEditLink("awardRateStep", validator.awardRate)} />
           <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.fundingSoughtHeading()} content={<ACC.Renderers.Currency value={fundingSought}/>} qa="fundingSought" />
           <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.partnerContributionsHeading()} content={<ACC.Renderers.Currency value={partnerContribution}/>} qa="partnerContribution" />
+          <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.agreementToPcrHeading()} content={this.renderDocuments(documents, DocumentDescription.AgreementToPCR)} qa="agreementToPcrDocument" action={this.props.getEditLink("agreementToPcrStep", null)} />
         </ACC.SummaryList>
       </ACC.Section>
     );
