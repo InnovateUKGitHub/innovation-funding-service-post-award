@@ -110,8 +110,9 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
       registrationNumber: bankDetails.companyNumber ? bankDetails.companyNumber : "",
       sortcode: bankDetails.sortCode!,
       accountNumber: bankDetails.accountNumber!,
-      firstName: bankDetails.firstName ? bankDetails.firstName : "",
-      lastName: bankDetails.lastName ? bankDetails.lastName : "",
+      // As these are business accounts they do not have a named account holder associated, however these values seem to be required by the Experian Verify API. As such, we are hardcoding dummy values for them here.
+      firstName: "NA",
+      lastName: "NA",
       address: {
         organisation: "",
         buildingName: bankDetails.address ? bankDetails.address.accountBuilding : "",
@@ -141,8 +142,8 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
   }
 
   private validateVerifyResponse(VerificationResult: BankCheckVerificationResultFields, context: IContext) {
-    if ((!isNumber(VerificationResult.personalDetailsScore) || VerificationResult.personalDetailsScore < context.config.bankCheckPersonalDetailsScorePass)
-    || (!isNumber(VerificationResult.addressScore) || VerificationResult.addressScore < context.config.bankCheckAddressScorePass)
+    // Only checking against address and company name scores as personal details score will always fail.
+    if ((!isNumber(VerificationResult.addressScore) || VerificationResult.addressScore < context.config.bankCheckAddressScorePass)
     || (!isNumber(VerificationResult.companyNameScore) || VerificationResult.companyNameScore < context.config.bankCheckCompanyNameScorePass)) {
       return false;
     }
