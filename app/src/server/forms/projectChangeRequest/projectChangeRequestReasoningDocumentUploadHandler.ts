@@ -39,6 +39,6 @@ export class ProjectChangeRequestReasoningDocumentUploadHandler extends Multiple
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareReasoningParams, dto: MultipleDocumentUploadDto, button: IFormButton) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration, button.name === "uploadFile", true, null);
+    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration.options, button.name === "uploadFile", true, null);
   }
 }

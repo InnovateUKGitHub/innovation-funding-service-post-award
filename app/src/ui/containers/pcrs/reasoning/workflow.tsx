@@ -200,7 +200,7 @@ export const PCRViewReasoningRoute = defineRoute<ProjectChangeRequestPrepareReas
     htmlTitle: "Reasoning for Innovate UK",
     displayTitle: "Reasoning for Innovate UK"
   }),
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
+  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });
 
 export const PCRReviewReasoningRoute = defineRoute<ProjectChangeRequestPrepareReasoningParams>({
@@ -215,7 +215,7 @@ export const PCRReviewReasoningRoute = defineRoute<ProjectChangeRequestPrepareRe
     htmlTitle: "Reasoning for Innovate UK",
     displayTitle: "Reasoning for Innovate UK"
   }),
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer)
+  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer)
 });
 
 export const PCRPrepareReasoningRoute = defineRoute<ProjectChangeRequestPrepareReasoningParams>({
@@ -231,5 +231,5 @@ export const PCRPrepareReasoningRoute = defineRoute<ProjectChangeRequestPrepareR
     htmlTitle: "Provide reasoning to Innovate UK",
     displayTitle: "Provide reasoning to Innovate UK"
   }),
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });

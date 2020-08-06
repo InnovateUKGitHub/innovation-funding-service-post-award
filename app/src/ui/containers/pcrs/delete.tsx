@@ -92,5 +92,5 @@ export const PCRDeleteRoute = defineRoute({
     htmlTitle: "Delete draft request",
     displayTitle: "Delete draft request"
   }),
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });

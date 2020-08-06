@@ -34,6 +34,6 @@ export class ClaimDocumentsUploadHandler extends MultipleFileFormHandlerBase<Cla
   }
 
   protected createValidationResult(params: ClaimDocumentsPageParams, dto: MultipleDocumentUploadDto) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration, true, true, null);
+    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration.options, true, true, null);
   }
 }

@@ -90,7 +90,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     const periodId = this.props.periodId;
     const costCategoriesToUse = costCategories
       .filter(x => x.competitionType === project.competitionType && x.organisationType === partner.organisationType)
-      .filter(x => !x.isCalculated || claim.overheadRate > this.props.config.standardOverheadRate);
+      .filter(x => !x.isCalculated || claim.overheadRate > this.props.config.options.standardOverheadRate);
     const currentCostCategory = costCategoriesToUse.find(x => x.id === this.props.costCategoryId);
 
     if (currentCostCategory === undefined) return null;

@@ -106,5 +106,5 @@ export const PCRCreateRoute = defineRoute({
     projectId: route.params.projectId,
   }),
   getTitle: ({content}) => content.pcrCreate.title(),
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(Dtos.ProjectRole.ProjectManager)
+  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasAnyRoles(Dtos.ProjectRole.ProjectManager)
 });

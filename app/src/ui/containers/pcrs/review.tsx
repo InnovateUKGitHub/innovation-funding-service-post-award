@@ -217,5 +217,5 @@ export const PCRReviewRoute = defineRoute({
     htmlTitle: "Request",
     displayTitle: "Request"
   }),
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
+  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
 });
