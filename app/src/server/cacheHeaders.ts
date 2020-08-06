@@ -31,6 +31,6 @@ export const setOwaspHeaders = (req: express.Request, res: express.Response, nex
     "connect-src 'self' https://www.google-analytics.com",
     "font-src 'self' https://fonts.gstatic.com",
   ].join("; ");
-  res.setHeader("Content-Security-Policy", cspHeader);
+  res.setHeader("Content-Security-Policy-Report-Only", `${cspHeader}; report-uri /api/csp/violation-report;`);
   return next();
 };
