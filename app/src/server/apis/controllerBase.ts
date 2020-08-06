@@ -93,7 +93,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
       return { ...p, documents };
     };
 
-    this.router.post(path, upload.array("attachment", Configuration.maxUploadFileCount), this.executeMethod(201, wrappedGetParams, run, false));
+    this.router.post(path, upload.array("attachment", Configuration.options.maxUploadFileCount), this.executeMethod(201, wrappedGetParams, run, false));
   }
 
   protected putItem<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, TDto | null>) {

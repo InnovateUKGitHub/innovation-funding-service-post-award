@@ -37,6 +37,6 @@ export class OverheadDocumentsUploadHandler extends MultipleFileFormHandlerBase<
     }
 
     protected createValidationResult(params: OverheadDocumentsPageParams, dto: MultipleDocumentUploadDto) {
-        return new MultipleDocumentUpdloadDtoValidator(dto, Configuration, true, true, null);
+        return new MultipleDocumentUpdloadDtoValidator(dto, Configuration.options, true, true, null);
     }
 }

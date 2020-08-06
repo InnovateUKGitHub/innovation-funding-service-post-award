@@ -265,7 +265,7 @@ export const PCRSpendProfileAddCostRoute = defineRoute<PcrAddSpendProfileCostPar
     costCategoryId: route.params.costCategoryId,
   }),
   getTitle: ({ params, stores, content }) => content.pcrSpendProfilePrepareCostContent.title(),
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });
 
 export const PCRSpendProfileEditCostRoute = defineRoute<PcrEditSpendProfileCostParams>({
@@ -280,5 +280,5 @@ export const PCRSpendProfileEditCostRoute = defineRoute<PcrEditSpendProfileCostP
     costId: route.params.costId
   }),
   getTitle: ({ params, stores, content }) => content.pcrSpendProfilePrepareCostContent.title(),
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });

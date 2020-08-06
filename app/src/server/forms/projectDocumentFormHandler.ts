@@ -29,6 +29,6 @@ export class ProjectDocumentUploadHandler extends MultipleFileFormHandlerBase<Pr
   }
 
   protected createValidationResult(params: ProjectDocumentPageParams, dto: MultipleDocumentUploadDto): MultipleDocumentUpdloadDtoValidator {
-    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration, true, false, null);
+    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration.options, true, false, null);
   }
 }

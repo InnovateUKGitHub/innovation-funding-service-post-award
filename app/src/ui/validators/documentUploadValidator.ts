@@ -7,6 +7,7 @@ import { NestedResult } from "@ui/validation";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { getAllEnumValues } from "@shared/enumHelper";
 import { DocumentDescription } from "@framework/constants";
+import { IAppOptions } from "@framework/types/IAppOptions";
 
 const permittedFileTypeErrorMessage = (file: IFileWrapper) => {
   return `You cannot upload '${file.fileName}' because it is the wrong file type.`;
@@ -24,7 +25,7 @@ const fileEmptyErrorMessage = (file: IFileWrapper) => {
 export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
   public readonly description: Result;
   public readonly file: Result;
-  constructor(model: DocumentUploadDto, config: { maxFileSize: number, permittedFileTypes: string[] }, showValidationErrors: boolean, private readonly error: FileTypeNotAllowedError | null) {
+  constructor(model: DocumentUploadDto, config: IAppOptions, showValidationErrors: boolean, private readonly error: FileTypeNotAllowedError | null) {
     // file is deliberately not a private field so it isn't logged....
     // model is empty object for this reason
     super(null as any, showValidationErrors);
@@ -41,7 +42,7 @@ export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
 
 export class MultipleDocumentUpdloadDtoValidator extends Results<MultipleDocumentUploadDto> {
   public readonly description: Result;
-  constructor(model: MultipleDocumentUploadDto, config: { maxFileSize: number, maxUploadFileCount: number, permittedFileTypes: string[] }, filesRequired: boolean, showValidationErrors: boolean, private readonly error: FileTypeNotAllowedError | null) {
+  constructor(model: MultipleDocumentUploadDto, config: IAppOptions, filesRequired: boolean, showValidationErrors: boolean, private readonly error: FileTypeNotAllowedError | null) {
     // file is deliberately not a private field so it isn't logged....
     // model is empty object for this reason
     super(null as any, showValidationErrors);

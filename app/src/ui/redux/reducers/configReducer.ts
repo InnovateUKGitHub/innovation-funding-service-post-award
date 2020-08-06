@@ -1,13 +1,11 @@
 import { RootActions } from "../actions/root";
+import { IAppOptions } from "@framework/types/IAppOptions";
 
 export interface IClientConfig {
   ifsRoot: string;
   features: IFeatureFlags;
-  standardOverheadRate: number;
+  options: IAppOptions;
   ssoEnabled: boolean;
-  maxFileSize: number;
-  maxUploadFileCount: number;
-  permittedFileTypes: string[];
 }
 
 export const configReducer = (state: IClientConfig  = {} as IClientConfig , action: RootActions) => {

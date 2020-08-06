@@ -21,26 +21,24 @@ export class TestConfig implements IConfig {
   };
 
   public features = {
-    addPartnerWorkflow: true,
     changePeriodLengthWorkflow: false,
-    financialVirements: true,
-    pcrsEnabled: true,
-    pcrRemovePartner: true,
     contentHint: true,
     customContent: true,
-    numberOfProjectsToSearch: 3,
-    editPartnerPostcode: true
   };
 
   public logLevel = LogLevel.DEBUG;
 
-  public maxFileSize = 100000;
-  public maxUploadFileCount = 10;
-  public permittedFileTypes = ["pdf", "xps", "doc", "docx", "rdf", "txt", "csv", "odt", "ppt", "pptx", "odp", "xls", "xlsx", "ods", "jpg", "jpeg", "png"];
-  public bankCheckValidationRetries = 2;
-  public bankCheckPersonalDetailsScorePass = 6;
-  public bankCheckAddressScorePass = 6;
-  public bankCheckCompanyNameScorePass = 6;
+  public options = {
+    maxFileSize: 100000,
+    maxUploadFileCount: 10,
+    permittedFileTypes: ["pdf", "xps", "doc", "docx", "rdf", "txt", "csv", "odt", "ppt", "pptx", "odp", "xls", "xlsx", "ods", "jpg", "jpeg", "png"],
+    bankCheckValidationRetries: 2,
+    bankCheckPersonalDetailsScorePass: 6,
+    bankCheckAddressScorePass: 6,
+    bankCheckCompanyNameScorePass: 6,
+    numberOfProjectsToSearch: 3,
+    standardOverheadRate: 20,
+  };
 
   public prettyLogs = false;
 
@@ -75,8 +73,6 @@ export class TestConfig implements IConfig {
   };
 
   public cookieKey = "thekey";
-
-  public standardOverheadRate = 20;
 
   public googleTagManagerCode = "";
 

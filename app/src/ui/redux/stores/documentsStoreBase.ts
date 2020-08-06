@@ -9,11 +9,11 @@ import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/do
 export abstract class DocumentsStoreBase extends StoreBase {
 
   protected validateMultipleDocumentsDto(dto: MultipleDocumentUploadDto, showErrors: boolean, filesRequired: boolean) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, this.getState().config, filesRequired, showErrors, null);
+    return new MultipleDocumentUpdloadDtoValidator(dto, this.getState().config.options, filesRequired, showErrors, null);
   }
 
   protected validateDocumentUploadDto(dto: DocumentUploadDto, showErrors: boolean) {
-    return new DocumentUploadDtoValidator(dto, this.getState().config, showErrors, null);
+    return new DocumentUploadDtoValidator(dto, this.getState().config.options, showErrors, null);
   }
 
   protected afterUpdate(key: string, message: string | undefined, onComplete: (() => void) | undefined) {
