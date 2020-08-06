@@ -48,6 +48,7 @@ import { ProjectSetupBankDetailsContent } from "@content/pages/project/projectSe
 import { FailedBankCheckConfirmationContent } from "./pages/project/failedBankCheckConfirmationContent";
 import { ProjectSetupBankDetailsVerifyContent } from "@content/pages/project/projectSetupBankDetailsVerifyContent";
 import { ProjectSetupBankStatementContent } from "@content/pages/project/projectSetupBankStatementContent";
+import { PCRAddPartnerProjectLocationContent } from "./pages/pcrs/addPartner/projectLocationStepContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -101,6 +102,7 @@ export class Content extends ContentBase {
   public readonly pcrPeriodLengthChangeContent = new PCRPeriodLengthChangeContent(this);
   public readonly pcrAddPartnerRoleAndOrganisation = new PCRAddPartnerRoleAndOrganisationContent(this);
   public readonly pcrAddPartnerStateAidEligibilityContent = new PCRAddPartnerStateAidEligibilityContent(this);
+  public readonly pcrAddPartnerProjectLocationContent = new PCRAddPartnerProjectLocationContent(this);
   public readonly pcrAddPartnerOtherFunding = new PCRAddPartnerOtherFundingContent(this);
   public readonly pcrAddPartnerAwardRate = new PCRAddPartnerAwardRateContent(this);
   public readonly pcrAddPartnerOtherFundingSources = new PCRAddPartnerOtherFundingSourcesContent(this);

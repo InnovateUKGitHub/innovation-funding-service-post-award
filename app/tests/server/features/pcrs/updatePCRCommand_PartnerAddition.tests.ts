@@ -222,11 +222,6 @@ describe("UpdatePCRCommand - Partner addition", () => {
     item.projectLocation = PCRProjectLocation.InsideTheUnitedKingdom;
     await expect(context.runCommand(command)).resolves.toBe(true);
 
-    delete item.projectPostcode;
-    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
-    item.projectPostcode = "CF10 1AA";
-    await expect(context.runCommand(command)).resolves.toBe(true);
-
     delete item.awardRate;
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     item.awardRate = 12;
