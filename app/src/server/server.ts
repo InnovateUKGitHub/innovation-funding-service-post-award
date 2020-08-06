@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import { Configuration, Logger } from "./features/common";
 import { allowCache, noCache, setOwaspHeaders } from "./cacheHeaders";
 import { router as healthRouter } from "./health";
+import { router as cspRouter } from "./csp";
 import { router as authRouter } from "./auth";
 import { router } from "./router";
 import contextProvider from "./features/common/contextProvider";
@@ -84,7 +85,7 @@ export class Server {
         origin: true
       }),
       bodyParser.urlencoded({ extended: false }),
-      bodyParser.json(),
+      bodyParser.json({type: ["application/json", "application/csp-report"]}),
       this.handleGetWithPlus,
       this.requestLogger
     ]);
@@ -114,6 +115,7 @@ export class Server {
     });
     this.app.use(setOwaspHeaders, allowCache, express.static("public"));
     this.app.use(noCache, healthRouter);
+    this.app.use(noCache, cspRouter);
     this.app.use(authRouter);
     this.app.use(internationalisationRouter);
     this.app.use(setOwaspHeaders, noCache, router);
