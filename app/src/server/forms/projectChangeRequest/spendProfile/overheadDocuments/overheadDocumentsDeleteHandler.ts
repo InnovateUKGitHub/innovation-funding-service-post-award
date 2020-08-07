@@ -39,6 +39,6 @@ export class OverheadDocumentsDeleteHandler extends StandardFormHandlerBase<Over
     }
 
     protected createValidationResult(params: OverheadDocumentsPageParams, dto: MultipleDocumentUploadDto) {
-        return new MultipleDocumentUpdloadDtoValidator(dto, Configuration, false, false, null);
+        return new MultipleDocumentUpdloadDtoValidator(dto, Configuration.options, false, false, null);
     }
 }

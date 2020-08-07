@@ -25,7 +25,7 @@ export class UploadPartnerDocumentCommand extends CommandMultipleDocumentBase<st
   }
 
   protected async Run(context: IContext) {
-    const result = new MultipleDocumentUpdloadDtoValidator(this.documents, context.config, this.filesRequired, this.showValidationErrors, null);
+    const result = new MultipleDocumentUpdloadDtoValidator(this.documents, context.config.options, this.filesRequired, this.showValidationErrors, null);
 
     if (!result.isValid) {
       throw new ValidationError(result);

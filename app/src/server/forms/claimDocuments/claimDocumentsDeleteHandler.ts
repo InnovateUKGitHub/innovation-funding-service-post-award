@@ -22,7 +22,7 @@ export class ClaimDocumentsDeleteHandler extends StandardFormHandlerBase<ClaimDo
     return Promise.resolve({ id: button.value, files: [] });
   }
   protected createValidationResult(params: ClaimDocumentsPageParams, dto: Document) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration, false, false, null);
+    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration.options, false, false, null);
   }
 
   protected getStoreKey(params: ClaimDocumentsPageParams) {

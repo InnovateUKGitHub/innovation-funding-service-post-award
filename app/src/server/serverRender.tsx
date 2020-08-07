@@ -192,10 +192,7 @@ function getClientConfig(context: IContext): IClientConfig {
   return {
     ifsRoot: context.config.urls.ifsRoot,
     features: context.config.features,
-    standardOverheadRate: context.config.standardOverheadRate,
     ssoEnabled: context.config.sso.enabled,
-    maxFileSize: context.config.maxFileSize,
-    maxUploadFileCount: context.config.maxUploadFileCount,
-    permittedFileTypes: context.config.permittedFileTypes,
+    options: context.config.options
   };
 }

@@ -79,7 +79,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     const validationResult = bankCheckValidateResult.ValidationResult;
 
     if (!validationResult.checkPassed) {
-      if (this.partner.bankCheckRetryAttempts < context.config.bankCheckValidationRetries) {
+      if (this.partner.bankCheckRetryAttempts < context.config.options.bankCheckValidationRetries) {
         throw new ValidationError(
           new PartnerDtoValidator(this.partner, originalDto, partnerDocuments, {
             showValidationErrors: true,
@@ -143,8 +143,8 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
 
   private validateVerifyResponse(VerificationResult: BankCheckVerificationResultFields, context: IContext) {
     // Only checking against address and company name scores as personal details score will always fail.
-    if ((!isNumber(VerificationResult.addressScore) || VerificationResult.addressScore < context.config.bankCheckAddressScorePass)
-    || (!isNumber(VerificationResult.companyNameScore) || VerificationResult.companyNameScore < context.config.bankCheckCompanyNameScorePass)) {
+    if ((!isNumber(VerificationResult.addressScore) || VerificationResult.addressScore < context.config.options.bankCheckAddressScorePass)
+    || (!isNumber(VerificationResult.companyNameScore) || VerificationResult.companyNameScore < context.config.options.bankCheckCompanyNameScorePass)) {
       return false;
     }
     if (this.partner.organisationType === "Industrial") {

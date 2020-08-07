@@ -109,5 +109,5 @@ export const ProjectChangeRequestAddTypeRoute = defineRoute({
     htmlTitle: "Add types",
     displayTitle: "Add types"
   }),
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(Dtos.ProjectRole.ProjectManager)
+  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasRole(Dtos.ProjectRole.ProjectManager)
 });

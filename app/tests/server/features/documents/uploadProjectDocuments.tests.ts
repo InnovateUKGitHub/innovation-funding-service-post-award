@@ -84,10 +84,10 @@ describe("UploadProjectDocumentCommand", () => {
 
   it("should upload throw validation error if content to large", async () => {
     const context = new TestContext();
-    context.config.maxFileSize = 10;
+    context.config.options.maxFileSize = 10;
     const project = context.testData.createProject();
 
-    const content = context.testData.range(context.config.maxFileSize + 1, () => "a").join("");
+    const content = context.testData.range(context.config.options.maxFileSize + 1, () => "a").join("");
 
     const files = [context.testData.createFile(content)];
 
@@ -130,11 +130,11 @@ describe("UploadProjectDocumentCommand", () => {
 
   it("should throw valdiation error if too many documents", async () => {
     const context = new TestContext();
-    context.config.maxUploadFileCount = 3;
+    context.config.options.maxUploadFileCount = 3;
 
     const project = context.testData.createProject();
 
-    const files = context.testData.range(context.config.maxUploadFileCount + 1, () => context.testData.createFile());
+    const files = context.testData.range(context.config.options.maxUploadFileCount + 1, () => context.testData.createFile());
 
     const command = new UploadProjectDocumentCommand(project.Id, { files });
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
@@ -169,11 +169,11 @@ describe("UploadProjectDocumentCommand", () => {
 
     const command = new UploadProjectDocumentCommand(project.Id, { files: [file] });
 
-    context.config.permittedFileTypes = ["nottxt"];
+    context.config.options.permittedFileTypes = ["nottxt"];
 
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
 
-    context.config.permittedFileTypes = ["txt"];
+    context.config.options.permittedFileTypes = ["txt"];
 
     await expect(context.runCommand(command)).resolves.not.toBeNull();
 

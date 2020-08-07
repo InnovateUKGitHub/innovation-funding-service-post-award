@@ -150,10 +150,10 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     const isFC = (data.partner.roles & ProjectRole.FinancialContact) === ProjectRole.FinancialContact;
 
     if (isFC) {
-      return <ACC.Claims.ClaimTable getLink={x => this.getLink(x, data.project, data.partner)} standardOverheadRate={this.props.config.standardOverheadRate} {...data} />;
+      return <ACC.Claims.ClaimTable getLink={x => this.getLink(x, data.project, data.partner)} standardOverheadRate={this.props.config.options.standardOverheadRate} {...data} />;
     }
 
-    return <ACC.Claims.ClaimReviewTable getLink={x => this.getLink(x, data.project, data.partner)} standardOverheadRate={this.props.config.standardOverheadRate} {...data} />;
+    return <ACC.Claims.ClaimReviewTable getLink={x => this.getLink(x, data.project, data.partner)} standardOverheadRate={this.props.config.options.standardOverheadRate} {...data} />;
   }
 
   private getLink(costCategoryId: string, project: ProjectDto, partner: PartnerDto): ILinkInfo | null {

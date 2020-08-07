@@ -72,8 +72,7 @@ export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<string
       case PCRItemType.PeriodLengthChange:
         return new PcrWorkflow(periodLengthChangeWorkflow, step);
       case PCRItemType.PartnerAddition:
-        // If feature not turned on let it fall through to standard workflow
-        if (features.addPartnerWorkflow) return new PcrWorkflow(getAddPartnerWorkflow(pcrItem, step), step);
+        return new PcrWorkflow(getAddPartnerWorkflow(pcrItem, step), step);
       case PCRItemType.SinglePartnerFinancialVirement:
         return new PcrWorkflow(standardItemWorkflow, step);
       default:

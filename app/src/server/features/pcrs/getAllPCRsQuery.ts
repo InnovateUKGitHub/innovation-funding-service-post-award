@@ -1,5 +1,5 @@
 import { QueryBase } from "../common";
-import { PCRItemDto, PCRItemTypeDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
+import { PCRItemTypeDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { numberComparator } from "@framework/util";
 import { ProjectChangeRequestEntity } from "@framework/entities";
@@ -10,9 +10,8 @@ export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
     super();
   }
 
-  accessControl(auth: Authorisation, context: IContext) {
-    const canRun = context.config.features.pcrsEnabled && auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager, ProjectRole.FinancialContact);
-    return Promise.resolve(canRun);
+  public async accessControl(auth: Authorisation, context: IContext) {
+    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager, ProjectRole.FinancialContact);
   }
 
   protected async Run(context: IContext): Promise<PCRSummaryDto[]> {

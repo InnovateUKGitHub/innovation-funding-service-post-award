@@ -97,7 +97,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
 
   it("should throw validation error if the file content is too large", async () => {
     const context = new TestContext();
-    context.config.maxFileSize = 10;
+    context.config.options.maxFileSize = 10;
     const project = context.testData.createProject();
     const projectChangeRequest = context.testData.createPCR(project);
     const recordType: Entites.RecordType = {
@@ -107,7 +107,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
-    const tooLargeFileContent = new Array(context.config.maxFileSize + 1).fill("a").join("");
+    const tooLargeFileContent = new Array(context.config.options.maxFileSize + 1).fill("a").join("");
 
     const file = context.testData.createFile(tooLargeFileContent, "testFile.txt");
 
@@ -128,7 +128,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
-    const files = context.testData.range(context.config.maxUploadFileCount + 1, (i) => context.testData.createFile(`File content ${i}`, `File name ${i}`));
+    const files = context.testData.range(context.config.options.maxUploadFileCount + 1, (i) => context.testData.createFile(`File content ${i}`, `File name ${i}`));
 
     const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequestItem.id, {files});
     const result = context.runCommand(command);

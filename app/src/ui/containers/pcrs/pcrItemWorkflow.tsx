@@ -334,7 +334,7 @@ export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParam
   }),
   container: (props) => <PCRItemContainer mode="view" {...props} />,
   getTitle: ({ params, stores }) => getTitle("View project change request item", params, stores),
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
+  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });
 
 export const PCRReviewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
@@ -348,7 +348,7 @@ export const PCRReviewItemRoute = defineRoute<ProjectChangeRequestPrepareItemPar
     step: parseInt(route.params.step, 10)
   }),
   getTitle: ({ params, stores }) => getTitle("Review project change request item", params, stores),
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer)
+  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer)
 });
 
 export const PCRPrepareItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
@@ -362,5 +362,5 @@ export const PCRPrepareItemRoute = defineRoute<ProjectChangeRequestPrepareItemPa
     step: parseInt(route.params.step, 10)
   }),
   getTitle: ({ params, stores }) => getTitle("Prepare project change request item", params, stores),
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });

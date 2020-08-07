@@ -26,16 +26,7 @@ Your project summary should provide a clear overview of the whole project, inclu
 const nameChangeGuidance = `This will change the partner's name in all projects they are claiming funding for. You must upload a change of name certificate from Companies House as evidence of the change.
 `;
 
-const partnerAdditionGuidance = Configuration.features.addPartnerWorkflow ? undefined : `If the new partner is a business you need to send them an industrial partner finance form to apply to take part. Tell them to complete it and email it to your monitoring officer. Innovate UK will decide whether to approve their application.
-
-If the new partner is an academic, you need to tell them to complete a Je-S form and email it to your monitoring officer.
-
-You must also upload these documents:
-
-*  a letter on one partner’s headed paper signed by the whole consortium, confirming all partners are happy with the new partner joining the consortium
-*  a letter on headed paper from the new partner saying they want to join the project
-*  a brief list of the outstanding deliverables, and who each will be assigned to once the partner joins
-`;
+const partnerAdditionGuidance = undefined;
 
 const singlePartnerFinancialVirementGuidance = `You need to submit a reallocate project costs spreadsheet. In the yellow boxes enter the names of all partner organisations, their current costs and the costs you are proposing. Enter all partners’ details. There are separate tables for businesses and academic organisations.
 
@@ -89,10 +80,10 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
 
   private getEnabledStatus(metaInfo: IMetaValue, config: IConfig): boolean {
     if (metaInfo.type === PCRItemType.SinglePartnerFinancialVirement) {
-      return !config.features.financialVirements;
+      return false;
     }
     if (metaInfo.type === PCRItemType.MultiplePartnerFinancialVirement) {
-      return config.features.financialVirements;
+      return true;
     }
     if (metaInfo.type === PCRItemType.PeriodLengthChange) {
       return config.features.changePeriodLengthWorkflow;

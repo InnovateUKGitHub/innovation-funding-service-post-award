@@ -25,7 +25,7 @@ export class ClaimDetailDocumentDeleteHandler extends StandardFormHandlerBase<Cl
     return Promise.resolve({ id: button.value, files: [] });
   }
   protected createValidationResult(params: ClaimDetailDocumentsPageParams, dto: Document) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration, false, false, null);
+    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration.options, false, false, null);
   }
 
   protected getStoreKey(params: ClaimDetailDocumentsPageParams) {

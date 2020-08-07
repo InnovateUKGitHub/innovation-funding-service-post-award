@@ -54,7 +54,7 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
         backLink={this.getBackLink()}
         pageTitle={<ACC.PageTitle />}
       >
-        {totalNumberOfProjects >= this.props.config.features.numberOfProjectsToSearch && this.renderSearch()}
+        {totalNumberOfProjects >= this.props.config.options.numberOfProjectsToSearch && this.renderSearch()}
         {this.renderProjectLists(projects, partners)}
       </ACC.Page>
     );
