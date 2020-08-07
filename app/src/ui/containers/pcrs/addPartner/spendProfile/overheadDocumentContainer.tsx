@@ -182,5 +182,5 @@ export const PCRSpendProfileOverheadDocumentRoute = defineRoute<OverheadDocument
     costCategoryId: route.params.costCategoryId,
   }),
   getTitle: ({ params, stores, content }) => content.pcrSpendProfileOverheadDocumentContent.title(),
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });

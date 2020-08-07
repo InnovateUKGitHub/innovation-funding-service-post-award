@@ -90,10 +90,6 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     }
 
     private renderPartnerName(partner: PartnerDto) {
-        if (!this.props.config.features.editPartnerPostcode) {
-            return <PartnerName partner={partner} showIsLead={true} />;
-        }
-
         return (
             <ACC.Link route={this.props.routes.partnerDetails.getLink({ id: this.props.id, partnerId: partner.id })}>
                 <PartnerName partner={partner} showIsLead={true} />

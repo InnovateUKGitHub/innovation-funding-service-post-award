@@ -32,7 +32,7 @@ export class UploadClaimDetailDocumentCommand extends CommandMultipleDocumentBas
       throw new BadRequestError("No Claim Detail");
     }
 
-    const result = new MultipleDocumentUpdloadDtoValidator(this.documents, context.config, this.filesRequired, this.showValidationErrors, null);
+    const result = new MultipleDocumentUpdloadDtoValidator(this.documents, context.config.options, this.filesRequired, this.showValidationErrors, null);
     if (!result.isValid) {
       throw new ValidationError(result);
     }

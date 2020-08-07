@@ -162,11 +162,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
       case PCRItemType.PartnerWithdrawal:
         return new PCRPartnerWithdrawalItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, this.project, this.partners, originalItem as PCRItemForPartnerWithdrawalDto);
       case PCRItemType.PartnerAddition: {
-        if (this.featureFlags.addPartnerWorkflow) {
-          return new PCRPartnerAdditionItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRItemForPartnerAdditionDto);
-        }
-         // TODO remove once feature flag is removed
-        return new PCROldPartnerAdditionItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRItemForPartnerAdditionDto);
+        return new PCRPartnerAdditionItemDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRItemForPartnerAdditionDto);
       }
       case PCRItemType.MultiplePartnerFinancialVirement:
         return new MultiplePartnerFinancialVirementDtoValidator(item, canEdit, this.role, this.model.status, this.recordTypes, this.showValidationErrors, originalItem as PCRItemForMultiplePartnerFinancialVirementDto);
@@ -537,9 +533,6 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     () => this.model.organisationType === PCROrganisationType.Academic ? this.requiredIfComplete(this.model.tsbReference, "Enter the TSB reference") : Validation.valid(this),
     () => this.hasPermissionToEdit(this.model.tsbReference, this.original && this.original.tsbReference, "TSB reference cannot be changed"),
   );
-}
-
-export class PCROldPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForPartnerAdditionDto> {
 }
 
 export class PCRAccountNameChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForAccountNameChangeDto> {

@@ -1,4 +1,5 @@
 import { LogLevel, parseLogLevel } from "@framework/types/logLevel";
+import { IAppOptions } from "@framework/types/IAppOptions";
 import { isNumber } from "@framework/util";
 
 const defaultCacheTimeout: number = 720;
@@ -26,12 +27,7 @@ export interface IConfig {
 
     readonly logLevel: LogLevel;
 
-    readonly maxFileSize: number;
-    readonly maxUploadFileCount: number;
-    readonly permittedFileTypes: string[];
-    readonly bankCheckValidationRetries: number;
-    readonly bankCheckAddressScorePass: number;
-    readonly bankCheckCompanyNameScorePass: number;
+    readonly options: IAppOptions;
 
     readonly prettyLogs: boolean;
 
@@ -69,8 +65,6 @@ export interface IConfig {
     };
 
     readonly cookieKey: string;
-
-    readonly standardOverheadRate: number;
 
     readonly googleTagManagerCode: string;
 
@@ -110,14 +104,9 @@ const getFeatureFlagValue = (value: string | null | undefined, defaultValue: boo
 const defaultFeatureFlag = getFeatureFlagValue(process.env.FEATURE_DEFAULT, false);
 
 const features: IFeatureFlags = {
-    addPartnerWorkflow: getFeatureFlagValue(process.env.FEATURE_ADD_PARTNER, defaultFeatureFlag),
     changePeriodLengthWorkflow: getFeatureFlagValue(process.env.FEATURE_CHANGE_PERIOD_LENGTH, false),
-    financialVirements: getFeatureFlagValue(process.env.FEATURE_FINANCIAL_VIREMENTS, defaultFeatureFlag),
-    pcrsEnabled: getFeatureFlagValue(process.env.FEATURE_PCRS_ENABLED, defaultFeatureFlag),
     contentHint: getFeatureFlagValue(process.env.FEATURE_CONTENT_HINT, false),
     customContent: getFeatureFlagValue(process.env.FEATURE_CUSTOM_CONTENT, false),
-    numberOfProjectsToSearch: parseInt(process.env.FEATURE_SEARCH_NUMBER_PROJECTS!, 10) || 3,
-    editPartnerPostcode: getFeatureFlagValue(process.env.FEATURE_EDIT_PARTNER_POSTCODE, defaultFeatureFlag),
 };
 
 const logLevel = parseLogLevel(process.env.LOG_LEVEL! || process.env.LOGLEVEL!);
@@ -149,9 +138,6 @@ const cookieKey = process.env.COOKIE_KEY!;
 
 const standardOverheadRate = parseFloat(process.env.STANDARD_OVERHEAD_RATE!) || 20;
 
-const maxFileSize = parseInt(process.env.MAX_FILE_SIZE_IN_BYTES!, 10) || 10485760; // 10MB
-const maxUploadFileCount = parseInt(process.env.MAX_UPLOAD_FILE_COUNT!, 10) || 10;
-
 let permittedFileTypes = process.env.PERMITTED_FILE_TYPES && process.env.PERMITTED_FILE_TYPES
     .split(",")
     .map(x => x.trim())
@@ -162,9 +148,17 @@ if (!permittedFileTypes || !permittedFileTypes.length) {
 }
 
 const parsedBankCheckValidationRetries = parseInt(process.env.BANK_CHECK_VALIDATION_RETRIES!, 10);
-const bankCheckValidationRetries = isNumber(parsedBankCheckValidationRetries)?parsedBankCheckValidationRetries:1;
-const bankCheckAddressScorePass = parseInt(process.env.BANK_CHECK_ADDRESS_SCORE_PASS!, 10) || 6;
-const bankCheckCompanyNameScorePass = parseInt(process.env.BANK_CHECK_COMPANY_NAME_SCORE_PASS!, 10) || 6;
+const options: IAppOptions = {
+    bankCheckAddressScorePass: parseInt(process.env.BANK_CHECK_ADDRESS_SCORE_PASS!, 10) || 6,
+    bankCheckValidationRetries: isNumber(parsedBankCheckValidationRetries) ? parsedBankCheckValidationRetries : 1,
+    bankCheckCompanyNameScorePass: parseInt(process.env.BANK_CHECK_COMPANY_NAME_SCORE_PASS!, 10) || 6,
+    permittedFileTypes,
+    maxUploadFileCount: parseInt(process.env.MAX_UPLOAD_FILE_COUNT!, 10) || 10,
+    maxFileSize: parseInt(process.env.MAX_FILE_SIZE_IN_BYTES!, 10) || 10485760, // 10MB
+    standardOverheadRate: parseFloat(process.env.STANDARD_OVERHEAD_RATE!) || 20,
+    numberOfProjectsToSearch: parseInt(process.env.FEATURE_SEARCH_NUMBER_PROJECTS!, 10) || 3,
+};
+
 const googleTagManagerCode = process.env.GOOGLE_TAG_MANAGER_CODE!;
 
 const s3Account = {
@@ -189,16 +183,10 @@ export const Configuration: IConfig = {
     certificates,
     features,
     logLevel,
-    maxFileSize,
-    maxUploadFileCount,
-    permittedFileTypes,
-    bankCheckValidationRetries,
-    bankCheckAddressScorePass,
-    bankCheckCompanyNameScorePass,
+    options,
     prettyLogs,
     salesforce,
     serverUrl,
-    standardOverheadRate,
     sil,
     sso,
     urls,

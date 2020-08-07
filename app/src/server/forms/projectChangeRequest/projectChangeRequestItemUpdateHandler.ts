@@ -59,10 +59,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
         this.updatePartnerWithdrawal(item, body, stepName as removePartnerStepNames);
         break;
       case PCRItemType.PartnerAddition:
-        if (context.config.features.addPartnerWorkflow) {
-          this.updatePartnerAddition(projectDto, costCategories, item, body, stepName as addPartnerStepNames);
-        }
-        // nothing to update as only files
+        this.updatePartnerAddition(projectDto, costCategories, item, body, stepName as addPartnerStepNames);
         break;
       case PCRItemType.MultiplePartnerFinancialVirement:
         this.updateMultiplePartnerFinancialVirement(item, body, stepName);

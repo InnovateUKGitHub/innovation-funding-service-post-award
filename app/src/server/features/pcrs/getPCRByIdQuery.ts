@@ -11,7 +11,7 @@ export class GetPCRByIdQuery extends QueryBase<PCRDto> {
   }
 
   protected async accessControl(auth: Authorisation, context: IContext) {
-    return context.config.features.pcrsEnabled && auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
+    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
   }
 
   protected async Run(context: IContext): Promise<PCRDto> {

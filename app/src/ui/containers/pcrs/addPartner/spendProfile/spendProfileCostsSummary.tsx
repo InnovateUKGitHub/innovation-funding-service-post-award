@@ -183,5 +183,5 @@ export const PCRSpendProfileCostsSummaryRoute = defineRoute<PcrSpendProfileCostS
     costCategoryId: route.params.costCategoryId,
   }),
   getTitle: ({ content }) => (content.pcrSpendProfileCostsSummaryContent.title()),
-  accessControl: (auth, { projectId }, config) => config.features.pcrsEnabled && auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager)
+  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager)
 });

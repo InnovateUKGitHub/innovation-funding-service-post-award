@@ -160,7 +160,6 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
       { textContent: (x: Content) => x.projectOverview.links.monitoringReport(), link: routes.monitoringReportDashboard.getLink({ projectId }) },
       { textContent: (x: Content) => x.projectOverview.links.forecast(), link: routes.forecastDashboard.getLink({ projectId }), messages: () => this.getForecastMessages(partner) },
       { textContent: (x: Content) => x.projectOverview.links.forecasts(), link: routes.forecastDetails.getLink({ projectId, partnerId }), messages: () => this.getForecastMessages(partner) },
-      { textContent: (x: Content) => x.projectOverview.links.projectChangeRequests(), link: routes.projectChangeRequests.getLink({ projectId }), messages: () => this.getPcrMessages(project) },
       { textContent: (x: Content) => x.projectOverview.links.projectChangeRequests(), link: routes.pcrsDashboard.getLink({ projectId }), messages: () => this.getPcrMessages(project) },
       { textContent: (x: Content) => x.projectOverview.links.documents(), link: routes.projectDocuments.getLink({ projectId }) },
       { textContent: (x: Content) => x.projectOverview.links.details(), link: routes.projectDetails.getLink({ id: projectId }) },
