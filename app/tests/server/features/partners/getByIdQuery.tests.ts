@@ -114,7 +114,7 @@ describe("getAllForProjectQuery", () => {
       bankDetailsTaskStatus: BankDetailsTaskStatus.Unknown,
       bankDetailsTaskStatusLabel: "To do",
       bankCheckStatus: BankCheckStatus.Unknown,
-      bankCheckValidationAttempts: 0,
+      bankCheckRetryAttempts: 0,
       bankDetails: {
         accountNumber: "001122",
         sortCode: "005566",
