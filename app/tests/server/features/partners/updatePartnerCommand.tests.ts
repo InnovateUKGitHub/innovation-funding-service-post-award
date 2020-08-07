@@ -64,7 +64,7 @@ describe("updatePartnerCommand", () => {
     expect(result.validationResponse.validationConditionsCode).toEqual("");
     expect(result.validationResponse.validationConditionsDesc).toEqual("");
 
-    expected.bankCheckValidationAttempts = 3;
+    expected.bankCheckRetryAttempts = 3;
 
     await expect(context.runCommand(command)).resolves.toBe(true);
     const updatedResult = await context.runQuery(new GetByIdQuery(partner.id));

@@ -80,7 +80,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
                     accountTownOrCity: this.item.accountTownOrCity,
                 }
             },
-            bankCheckValidationAttempts: 0,
+            bankCheckRetryAttempts: 0,
             validationResponse: {
                 validationCheckPassed: this.item.validationCheckPassed,
                 iban: this.item.iban,
