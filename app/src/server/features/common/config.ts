@@ -175,8 +175,8 @@ const s3Account = {
 };
 
 const sil = {
-    bankCheckUrl: process.env.SIL_EXPERIAN__URL!,
-    bankCheckPort: process.env.SIL_EXPERIAN__PORT ? parseInt(process.env.SIL_EXPERIAN__PORT, 10) || undefined : undefined,
+    bankCheckUrl: process.env.SIL_EXPERIAN_URL!,
+    bankCheckPort: process.env.SIL_EXPERIAN_PORT ? parseInt(process.env.SIL_EXPERIAN_PORT, 10) || undefined : undefined,
     companiesHouseSearchUrl: process.env.SIL_COMPANIES_HOUSE_SEARCH_URL!,
     username: process.env.SIL_USERNAME!,
     password: process.env.SIL_PASSWORD!,
