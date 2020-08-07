@@ -50,78 +50,144 @@ import { ProjectSetupBankDetailsVerifyContent } from "@content/pages/project/pro
 import { ProjectSetupBankStatementContent } from "@content/pages/project/projectSetupBankStatementContent";
 import { PCRAddPartnerProjectLocationContent } from "./pages/pcrs/addPartner/projectLocationStepContent";
 import { PCRAddPartnerAgreementToPCRContent } from "./pages/pcrs/addPartner/agreementToPcrStepContent";
+import { ProjectDto } from "@framework/dtos";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
 export class Content extends ContentBase {
-  constructor() {
+  public readonly projectsDashboard: ProjectDashboardContent;
+  public readonly home: HomePageContent;
+
+  public readonly projectSetup: ProjectSetupContent;
+  public readonly projectOverview: ProjectOverviewContent;
+  public readonly projectDetails: ProjectDetailsContent;
+  public readonly projectDocuments: ProjectDocumentsContent;
+  public readonly projectSetupSpendProfile: ProjectSetupSpendProfileContent;
+  public readonly failedBankCheckConfirmation: FailedBankCheckConfirmationContent;
+  public readonly projectSetupBankDetails: ProjectSetupBankDetailsContent;
+  public readonly projectSetupBankStatement: ProjectSetupBankStatementContent;
+  public readonly projectSetupBankDetailsVerify: ProjectSetupBankDetailsVerifyContent;
+
+  public readonly financeSummary: FinanceSummaryContent;
+
+  public readonly allClaimsDashboard: AllClaimsDashboardContent;
+  public readonly claimsDashboard: ClaimsDashboardContent;
+  public readonly claimDocuments: ClaimDocumentsContent;
+  public readonly claimDetails: ClaimDetailsContent;
+  public readonly claimForecast: ClaimForecastContent;
+  public readonly claimPrepare: ClaimPrepareContent;
+  public readonly claimPrepareSummary: ClaimPrepareSummaryContent;
+  public readonly claimReview: ClaimReviewContent;
+
+  public readonly financialVirementSummary: FinancialVirementSummaryContent;
+  public readonly financialVirementEdit: FinancialVirementEditContent;
+  public readonly financialVirementEditPartnerLevel: FinancialVirementEditPartnerLevelContent;
+  public readonly financialVirementDetails: FinancialVirementDetailsContent;
+
+  public readonly monitoringReportsDashboard: MonitoringReportsDashboardContent;
+  public readonly monitoringReportsCreate: MonitoringReportsCreateContent;
+  public readonly monitoringReportsDelete: MonitoringReportsDeleteContent;
+  public readonly monitoringReportsSummary: MonitoringReportsSummaryContent;
+  public readonly monitoringReportsWorkflow: MonitoringReportsWorkflowContent;
+  public readonly monitoringReportsPeriodStep: MonitoringReportsPeriodStepContent;
+  public readonly monitoringReportsQuestionStep: MonitoringReportsQuestionStepContent;
+
+  public readonly partnerDetails: PartnerDetailsContent;
+  public readonly partnerDetailsEdit: PartnerDetailsEditContent;
+
+  public readonly pcrCreate: PCRCreateContent;
+
+  public readonly pcrPeriodLengthChangeContent: PCRPeriodLengthChangeContent;
+  public readonly pcrAddPartnerRoleAndOrganisation: PCRAddPartnerRoleAndOrganisationContent;
+  public readonly pcrAddPartnerStateAidEligibilityContent: PCRAddPartnerStateAidEligibilityContent;
+  public readonly pcrAddPartnerOtherFunding: PCRAddPartnerOtherFundingContent;
+  public readonly pcrAddPartnerAwardRate: PCRAddPartnerAwardRateContent;
+  public readonly pcrAddPartnerOtherFundingSources: PCRAddPartnerOtherFundingSourcesContent;
+  public readonly pcrAddPartnerAcademicCosts: PCRAddPartnerAcademicCostsContent;
+  public readonly pcrAddPartnerProjectLocationContent: PCRAddPartnerProjectLocationContent;
+  public readonly pcrAddPartnerAgreementToPcr: PCRAddPartnerAgreementToPCRContent;
+  public readonly pcrAddPartnerSummary: PCRAddPartnerSummaryContent;
+  public readonly pcrSpendProfileCostsSummaryContent: PcrSpendProfileCostsSummaryContent;
+  public readonly pcrSpendProfilePrepareCostContent: PcrSpendProfilePrepareCostContent;
+  public readonly pcrSpendProfileDeleteCostContent: PcrSpendProfileDeleteCostContent;
+  public readonly pcrSpendProfileOverheadDocumentContent: PcrSpendProfileOverheadDocumentContent;
+
+  public readonly errors: {
+    notfound: NotFoundContent,
+    unexpected: UnexpectedErrorContent
+  };
+
+  public readonly components: {
+    documents: DocumentsContent,
+    taskList: TaskListContent,
+  };
+
+  constructor(protected project: ProjectDto | null | undefined) {
     super(null, null);
+    this.projectsDashboard = new ProjectDashboardContent(this, project);
+    this.home = new HomePageContent(this, project);
+
+    this.projectSetup = new ProjectSetupContent(this, project);
+    this.projectOverview = new ProjectOverviewContent(this, project);
+    this.projectDetails = new ProjectDetailsContent(this, project);
+    this.projectDocuments = new ProjectDocumentsContent(this, project);
+    this.projectSetupSpendProfile = new ProjectSetupSpendProfileContent(this, project);
+    this.failedBankCheckConfirmation = new FailedBankCheckConfirmationContent(this, project);
+    this.projectSetupBankDetails = new ProjectSetupBankDetailsContent(this, project);
+    this.projectSetupBankStatement = new ProjectSetupBankStatementContent(this, project);
+    this.projectSetupBankDetailsVerify = new ProjectSetupBankDetailsVerifyContent(this, project);
+
+    this.financeSummary = new FinanceSummaryContent(this, project);
+
+    this.allClaimsDashboard = new AllClaimsDashboardContent(this, project);
+    this.claimsDashboard = new ClaimsDashboardContent(this, project);
+    this.claimDocuments = new ClaimDocumentsContent(this, project);
+    this.claimDetails = new ClaimDetailsContent(this, project);
+    this.claimForecast = new ClaimForecastContent(this, project);
+    this.claimPrepare = new ClaimPrepareContent(this, project);
+    this.claimPrepareSummary = new ClaimPrepareSummaryContent(this, project);
+    this.claimReview = new ClaimReviewContent(this, project);
+
+    this.financialVirementSummary = new FinancialVirementSummaryContent(this, project);
+    this.financialVirementEdit = new FinancialVirementEditContent(this, project);
+    this.financialVirementEditPartnerLevel = new FinancialVirementEditPartnerLevelContent(this, project);
+    this.financialVirementDetails = new FinancialVirementDetailsContent(this, project);
+
+    this.monitoringReportsDashboard = new MonitoringReportsDashboardContent(this, project);
+    this.monitoringReportsCreate = new MonitoringReportsCreateContent(this, project);
+    this.monitoringReportsDelete = new MonitoringReportsDeleteContent(this, project);
+    this.monitoringReportsSummary = new MonitoringReportsSummaryContent(this, project);
+    this.monitoringReportsWorkflow = new MonitoringReportsWorkflowContent(this, project);
+    this.monitoringReportsPeriodStep = new MonitoringReportsPeriodStepContent(this, project);
+    this.monitoringReportsQuestionStep = new MonitoringReportsQuestionStepContent(this, project);
+
+    this.partnerDetails = new PartnerDetailsContent(this, project);
+    this.partnerDetailsEdit = new PartnerDetailsEditContent(this, project);
+
+    this.pcrCreate = new PCRCreateContent(this, project);
+
+    this.pcrPeriodLengthChangeContent = new PCRPeriodLengthChangeContent(this, project);
+    this.pcrAddPartnerRoleAndOrganisation = new PCRAddPartnerRoleAndOrganisationContent(this, project);
+    this.pcrAddPartnerStateAidEligibilityContent = new PCRAddPartnerStateAidEligibilityContent(this, project);
+    this.pcrAddPartnerOtherFunding = new PCRAddPartnerOtherFundingContent(this, project);
+    this.pcrAddPartnerAwardRate = new PCRAddPartnerAwardRateContent(this, project);
+    this.pcrAddPartnerOtherFundingSources = new PCRAddPartnerOtherFundingSourcesContent(this, project);
+    this.pcrAddPartnerAcademicCosts = new PCRAddPartnerAcademicCostsContent(this, project);
+    this.pcrAddPartnerProjectLocationContent = new PCRAddPartnerProjectLocationContent(this, project);
+    this.pcrAddPartnerAgreementToPcr = new PCRAddPartnerAgreementToPCRContent(this, project);
+    this.pcrAddPartnerSummary = new PCRAddPartnerSummaryContent(this, project);
+    this.pcrSpendProfileCostsSummaryContent = new PcrSpendProfileCostsSummaryContent(this, project);
+    this.pcrSpendProfilePrepareCostContent = new PcrSpendProfilePrepareCostContent(this, project);
+    this.pcrSpendProfileDeleteCostContent = new PcrSpendProfileDeleteCostContent(this, project);
+    this.pcrSpendProfileOverheadDocumentContent = new PcrSpendProfileOverheadDocumentContent(this, project);
+
+    this.errors = {
+      notfound: new NotFoundContent(this, project),
+      unexpected: new UnexpectedErrorContent(this, project)
+    };
+    this.components = {
+      documents: new DocumentsContent(this, project),
+      taskList: new TaskListContent(this, project),
+    };
   }
-
-  public readonly home = new HomePageContent(this);
-
-  public readonly projectsDashboard = new ProjectDashboardContent(this);
-  public readonly projectSetup = new ProjectSetupContent(this);
-  public readonly projectOverview = new ProjectOverviewContent(this);
-  public readonly projectDetails = new ProjectDetailsContent(this);
-  public readonly projectDocuments = new ProjectDocumentsContent(this);
-  public readonly projectSetupSpendProfile = new ProjectSetupSpendProfileContent(this);
-  public readonly failedBankCheckConfirmation = new FailedBankCheckConfirmationContent(this);
-  public readonly projectSetupBankDetails = new ProjectSetupBankDetailsContent(this);
-  public readonly projectSetupBankStatement = new ProjectSetupBankStatementContent(this);
-  public readonly projectSetupBankDetailsVerify = new ProjectSetupBankDetailsVerifyContent(this);
-
-  public readonly financeSummary = new FinanceSummaryContent(this);
-
-  public readonly allClaimsDashboard = new AllClaimsDashboardContent(this);
-  public readonly claimsDashboard = new ClaimsDashboardContent(this);
-  public readonly claimDocuments = new ClaimDocumentsContent(this);
-  public readonly claimDetails = new ClaimDetailsContent(this);
-  public readonly claimForecast = new ClaimForecastContent(this);
-  public readonly claimPrepare = new ClaimPrepareContent(this);
-  public readonly claimPrepareSummary = new ClaimPrepareSummaryContent(this);
-  public readonly claimReview = new ClaimReviewContent(this);
-
-  public readonly financialVirementSummary = new FinancialVirementSummaryContent(this);
-  public readonly financialVirementEdit = new FinancialVirementEditContent(this);
-  public readonly financialVirementEditPartnerLevel = new FinancialVirementEditPartnerLevelContent(this);
-  public readonly financialVirementDetails = new FinancialVirementDetailsContent(this);
-
-  public readonly monitoringReportsDashboard = new MonitoringReportsDashboardContent(this);
-  public readonly monitoringReportsCreate = new MonitoringReportsCreateContent(this);
-  public readonly monitoringReportsDelete = new MonitoringReportsDeleteContent(this);
-  public readonly monitoringReportsSummary = new MonitoringReportsSummaryContent(this);
-  public readonly monitoringReportsWorkflow = new MonitoringReportsWorkflowContent(this);
-  public readonly monitoringReportsPeriodStep = new MonitoringReportsPeriodStepContent(this);
-  public readonly monitoringReportsQuestionStep = new MonitoringReportsQuestionStepContent(this);
-
-  public readonly partnerDetails = new PartnerDetailsContent(this);
-  public readonly partnerDetailsEdit = new PartnerDetailsEditContent(this);
-
-  public readonly pcrCreate = new PCRCreateContent(this);
-
-  public readonly pcrPeriodLengthChangeContent = new PCRPeriodLengthChangeContent(this);
-  public readonly pcrAddPartnerRoleAndOrganisation = new PCRAddPartnerRoleAndOrganisationContent(this);
-  public readonly pcrAddPartnerStateAidEligibilityContent = new PCRAddPartnerStateAidEligibilityContent(this);
-  public readonly pcrAddPartnerProjectLocationContent = new PCRAddPartnerProjectLocationContent(this);
-  public readonly pcrAddPartnerOtherFunding = new PCRAddPartnerOtherFundingContent(this);
-  public readonly pcrAddPartnerAwardRate = new PCRAddPartnerAwardRateContent(this);
-  public readonly pcrAddPartnerOtherFundingSources = new PCRAddPartnerOtherFundingSourcesContent(this);
-  public readonly pcrAddPartnerAcademicCosts = new PCRAddPartnerAcademicCostsContent(this);
-  public readonly pcrAddPartnerAgreementToPcr = new PCRAddPartnerAgreementToPCRContent(this);
-  public readonly pcrAddPartnerSummary = new PCRAddPartnerSummaryContent(this);
-  public readonly pcrSpendProfileCostsSummaryContent = new PcrSpendProfileCostsSummaryContent(this);
-  public readonly pcrSpendProfilePrepareCostContent = new PcrSpendProfilePrepareCostContent(this);
-  public readonly pcrSpendProfileDeleteCostContent = new PcrSpendProfileDeleteCostContent(this);
-  public readonly pcrSpendProfileOverheadDocumentContent = new PcrSpendProfileOverheadDocumentContent(this);
-
-  public readonly errors = {
-    notfound: new NotFoundContent(this),
-    unexpected: new UnexpectedErrorContent(this)
-  };
-
-  public readonly components = {
-    documents: new DocumentsContent(this),
-    taskList: new TaskListContent(this),
-  };
 }

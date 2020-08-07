@@ -2,10 +2,11 @@ import { ContentPageBase } from "../../contentPageBase";
 import { Content } from "../../content";
 import { ProjectMessages } from "../../messages/projectMessages";
 import { ProjectLabels } from "@content/labels/projectLabels";
+import { ProjectDto } from "@framework/dtos";
 
 export class ProjectOverviewContent extends ContentPageBase {
-  constructor(content: Content) {
-    super(content, "project-overview");
+  constructor(content: Content, protected project: ProjectDto | null | undefined) {
+    super(content, "project-overview", project);
   }
 
   public readonly links = {
@@ -19,7 +20,7 @@ export class ProjectOverviewContent extends ContentPageBase {
     summary: () => this.getContent("summaryLink"),
   };
 
-  public readonly messages = new ProjectMessages(this);
-  public readonly labels = new ProjectLabels(this);
+  public readonly messages = new ProjectMessages(this, this.project);
+  public readonly labels = new ProjectLabels(this, this.project);
 
 }

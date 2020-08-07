@@ -77,12 +77,6 @@ class AppComponent extends React.Component<IAppProps, {}> {
 }
 
 export class App extends React.Component<{ store: Store, routes: IRoutes }, { marker: {} }> {
-  constructor(props: any) {
-    super(props);
-    // whenever the store changes force a rerender this will flow down to container level
-    // where if no props have changed rendering stops
-    this.props.store.subscribe(() => this.setState({ marker: {} }));
-  }
 
   render() {
     return (

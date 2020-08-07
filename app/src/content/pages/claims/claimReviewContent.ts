@@ -3,14 +3,15 @@ import { Content } from "../../content";
 import { ClaimMessages } from "@content/messages/claimMessages";
 import { ClaimsLabels } from "@content/labels/claimsLabels";
 import { DocumentMessages } from "@content/messages/documentMessages";
+import { ProjectDto } from "@framework/dtos";
 
 export class ClaimReviewContent extends ContentPageBase {
-  constructor(private readonly content: Content) {
-    super(content, "claim-review");
+  constructor(private readonly content: Content, protected project: ProjectDto | null | undefined) {
+    super(content, "claim-review", project);
   }
-  public readonly messages = new ClaimMessages(this);
-  public readonly documentMessages = new DocumentMessages(this);
-  public readonly labels = new ClaimsLabels(this);
+  public readonly messages = new ClaimMessages(this, this.project);
+  public readonly documentMessages = new DocumentMessages(this, this.project);
+  public readonly labels = new ClaimsLabels(this, this.project);
   public readonly backLink = () => this.getContent("back-link");
   public readonly queryClaimOption = () => this.getContent("option-query-claim");
   public readonly approveClaimOption = () => this.getContent("option-submit-claim");

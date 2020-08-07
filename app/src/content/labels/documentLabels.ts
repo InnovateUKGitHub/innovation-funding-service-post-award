@@ -1,9 +1,10 @@
 import { ContentBase } from "../contentBase";
 import { DocumentDescription } from "@framework/constants";
+import { ProjectDto } from "@framework/dtos";
 
 export class DocumentLabels extends ContentBase {
-  constructor(parent: ContentBase) {
-    super(parent, "document-labels");
+  constructor(parent: ContentBase, protected project: ProjectDto | null | undefined) {
+    super(parent, "document-labels", project);
   }
 
   private getDocumentDescriptionLabel(documentDescription: DocumentDescription | null) {

@@ -1,13 +1,14 @@
 import { ContentPageBase } from "@content/contentPageBase";
 import { Content } from "../../content";
 import { PartnerLabels } from "@content/labels/partnerLabels";
+import { ProjectDto } from "@framework/dtos";
 
 export class ProjectSetupBankDetailsContent extends ContentPageBase {
-  constructor(content: Content) {
-    super(content, "project-setup-bank-details");
+  constructor(content: Content, protected project: ProjectDto | null | undefined) {
+    super(content, "project-setup-bank-details", project);
   }
 
-  public readonly partnerLabels = new PartnerLabels(this);
+  public readonly partnerLabels = new PartnerLabels(this, this.project);
   public readonly guidanceMessage = () => this.getContent("guidance-message", {markdown: true});
   public readonly submitButton = () => this.getContent("submit-button");
   public readonly backLink = () => this.getContent("back-link");
