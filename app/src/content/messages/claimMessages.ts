@@ -1,9 +1,10 @@
 import { ContentBase } from "../contentBase";
 import { DateFormat, formatDate } from "@framework/util";
+import { ProjectDto } from "@framework/dtos";
 
 export class ClaimMessages extends ContentBase {
-  constructor(parent: ContentBase) {
-    super(parent, "claims-messages");
+  constructor(parent: ContentBase, protected project: ProjectDto | null | undefined) {
+    super(parent, "claims-messages", project);
   }
 
   public readonly guidanceMessage = () => this.getContent("guidance-message", { markdown: true });

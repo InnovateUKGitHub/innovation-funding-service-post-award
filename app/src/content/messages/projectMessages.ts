@@ -1,8 +1,9 @@
 import { ContentBase } from "../contentBase";
+import { ProjectDto } from "@framework/dtos";
 
 export class ProjectMessages extends ContentBase {
-  constructor(parent: ContentBase) {
-    super(parent, "project-messages");
+  constructor(parent: ContentBase, protected project: ProjectDto | null | undefined) {
+    super(parent, "project-messages", project);
   }
 
   public readonly claimDue = () => this.getContent("claimDueMessage");

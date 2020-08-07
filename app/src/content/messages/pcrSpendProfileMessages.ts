@@ -1,9 +1,10 @@
 import {ContentBase} from "@content/contentBase";
 import {CostCategoryType} from "@framework/entities";
+import { ProjectDto } from "@framework/dtos";
 
 export class PcrSpendProfileMessages extends ContentBase {
-    constructor(parent: ContentBase) {
-        super(parent, "spend-profile-messages");
+    constructor(parent: ContentBase, protected project: ProjectDto | null | undefined) {
+        super(parent, "spend-profile-messages", project);
     }
 
     public readonly costGuidance = (costCategory: CostCategoryType) => {

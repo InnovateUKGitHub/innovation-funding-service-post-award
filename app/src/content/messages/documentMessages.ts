@@ -1,8 +1,9 @@
 import { ContentBase } from "../contentBase";
+import { ProjectDto } from "@framework/dtos";
 
 export class DocumentMessages extends ContentBase {
-  constructor(parent: ContentBase) {
-    super(parent, "document-messages");
+  constructor(parent: ContentBase, protected project: ProjectDto | null | undefined) {
+    super(parent, "document-messages", project);
   }
 
   public readonly header = () => this.getContent("header", { markdown: true });

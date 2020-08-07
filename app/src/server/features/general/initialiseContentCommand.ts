@@ -21,6 +21,7 @@ export class InitialiseContentCommand extends NonAuthorisedCommandBase<boolean> 
     if (defaultContentUpdateRequired || customContentUpdateRequired) {
       // need to set default content even if its only custom content updated
       // allows values to be removed from the custom content because reset to default content first
+      await this.setCRDCompetitionContent(context);
       await this.setDefaultContent(context);
       if (customContentUpdateRequired) {
         await this.setCustomContent(context);
@@ -48,5 +49,11 @@ export class InitialiseContentCommand extends NonAuthorisedCommandBase<boolean> 
     context.internationalisation.addResourceBundle(customContent);
     context.caches.contentStoreLastUpdated = context.clock.now();
     context.logger.info("Set custom content", context.caches.contentStoreLastUpdated);
+  }
+
+  private async setCRDCompetitionContent(context: IContext) {
+    const crdCompetitionContent = JSON.parse(await context.resources.crdCompetitionContent.getContent());
+    context.internationalisation.addResourceBundle(crdCompetitionContent);
+    context.logger.info("Set crd content", context.caches.contentStoreLastUpdated);
   }
 }

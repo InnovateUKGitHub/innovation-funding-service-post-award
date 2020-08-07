@@ -3,14 +3,15 @@ import { Content } from "../../content";
 import { MonitoringReportsMessages } from "@content/messages/monitoringReportsMessages";
 import { MonitoringReportsLabels } from "@content/labels/monitoringReportsLabels";
 import { ContentBase } from "@content/contentBase";
+import { ProjectDto } from "@framework/dtos";
 
 export class MonitoringReportsWorkflowContent extends ContentPageBase {
-  constructor(private readonly content: Content) {
-    super(content, "monitoring-reports-workflow");
+  constructor(private readonly content: Content, protected project: ProjectDto | null | undefined) {
+    super(content, "monitoring-reports-workflow", project);
   }
 
-  public readonly messages = new MonitoringReportsMessages(this);
-  public readonly labels = new MonitoringReportsLabels(this);
+  public readonly messages = new MonitoringReportsMessages(this, this.project);
+  public readonly labels = new MonitoringReportsLabels(this, this.project);
 
   public readonly editMode = new MonitoringReportsWorkflowContentEditMode(this.content);
   public readonly viewMode = new MonitoringReportsWorkflowContentViewMode(this.content);
