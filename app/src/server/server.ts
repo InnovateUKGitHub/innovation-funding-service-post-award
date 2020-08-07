@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import { Configuration, Logger } from "./features/common";
 import { allowCache, noCache, setOwaspHeaders } from "./cacheHeaders";
 import { router as healthRouter } from "./health";
+import { router as cspRouter } from "./csp";
 import { router as authRouter } from "./auth";
 import { router } from "./router";
 import contextProvider from "./features/common/contextProvider";
@@ -24,6 +25,7 @@ import { GetPcrParticipantSizesQuery } from "@server/features/pcrs/getPcrPartici
 import { GetPcrProjectLocationsQuery } from "@server/features/pcrs/getPcrProjectLocationsQuery";
 import { GetPcrSpendProfileCapitalUsageTypesQuery } from "./features/pcrs/getPcrSpendProfileCapitalUsageTypesQuery";
 import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
+import { v4 as uuidv4 } from "uuid";
 
 export class Server {
   private readonly app: express.Express;
@@ -83,7 +85,7 @@ export class Server {
         origin: true
       }),
       bodyParser.urlencoded({ extended: false }),
-      bodyParser.json(),
+      bodyParser.json({type: ["application/json", "application/csp-report"]}),
       this.handleGetWithPlus,
       this.requestLogger
     ]);
@@ -107,8 +109,13 @@ export class Server {
   }
 
   private routing() {
+    this.app.use((req, res, next) => {
+      res.locals.nonce = uuidv4();
+      next();
+    });
     this.app.use(setOwaspHeaders, allowCache, express.static("public"));
     this.app.use(noCache, healthRouter);
+    this.app.use(noCache, cspRouter);
     this.app.use(authRouter);
     this.app.use(internationalisationRouter);
     this.app.use(setOwaspHeaders, noCache, router);
