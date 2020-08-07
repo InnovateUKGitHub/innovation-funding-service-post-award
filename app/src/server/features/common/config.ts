@@ -163,9 +163,8 @@ if (!permittedFileTypes || !permittedFileTypes.length) {
 
 const parsedBankCheckValidationRetries = parseInt(process.env.BANK_CHECK_VALIDATION_RETRIES!, 10);
 const bankCheckValidationRetries = isNumber(parsedBankCheckValidationRetries)?parsedBankCheckValidationRetries:1;
-const bankCheckPersonalDetailsScorePass = parseInt(process.env.BANK_CHECK_PERSONAL_DETAILS_SCORE_PASS!, 10) || 6;
-const bankCheckAddressScorePass = parseInt(process.env.BANK_CHECK_PERSONAL_DETAILS_SCORE_PASS!, 10) || 6;
-const bankCheckCompanyNameScorePass = parseInt(process.env.BANK_CHECK_PERSONAL_DETAILS_SCORE_PASS!, 10) || 6;
+const bankCheckAddressScorePass = parseInt(process.env.BANK_CHECK_ADDRESS_SCORE_PASS!, 10) || 6;
+const bankCheckCompanyNameScorePass = parseInt(process.env.BANK_CHECK_COMPANY_NAME_SCORE_PASS!, 10) || 6;
 const googleTagManagerCode = process.env.GOOGLE_TAG_MANAGER_CODE!;
 
 const s3Account = {
