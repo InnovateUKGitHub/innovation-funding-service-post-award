@@ -215,7 +215,7 @@ const ProjectSetupBankDetailsContainer = (props: ProjectSetupBankDetailsParams &
               onError: (e) => {
                 // TODO use correct type here
                 if (e && e.results && e.results.bankCheckValidation && !e.results.bankCheckValidation.isValid) {
-                  dto.bankCheckValidationAttempts += 1;
+                  dto.bankCheckRetryAttempts += 1;
                 }
               },
             }
