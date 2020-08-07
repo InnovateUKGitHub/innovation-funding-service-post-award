@@ -37,7 +37,7 @@ export class TestConfig implements IConfig {
   public maxFileSize = 100000;
   public maxUploadFileCount = 10;
   public permittedFileTypes = ["pdf", "xps", "doc", "docx", "rdf", "txt", "csv", "odt", "ppt", "pptx", "odp", "xls", "xlsx", "ods", "jpg", "jpeg", "png"];
-  public bankCheckValidationAttempts = 2;
+  public bankCheckValidationRetries = 2;
   public bankCheckPersonalDetailsScorePass = 6;
   public bankCheckAddressScorePass = 6;
   public bankCheckCompanyNameScorePass = 6;

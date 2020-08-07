@@ -120,7 +120,7 @@ export interface PartnerDto {
 
   // Bank details checks
   bankDetails: BankDetails;
-  bankCheckValidationAttempts: number;
+  bankCheckRetryAttempts: number;
   validationResponse: ValidationResponse;
   verificationResponse: VerificationResponse;
 }

@@ -79,7 +79,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     const validationResult = bankCheckValidateResult.ValidationResult;
 
     if (!validationResult.checkPassed) {
-      if (this.partner.bankCheckValidationAttempts <= context.config.bankCheckValidationAttempts) {
+      if (this.partner.bankCheckRetryAttempts < context.config.bankCheckValidationRetries) {
         throw new ValidationError(
           new PartnerDtoValidator(this.partner, originalDto, partnerDocuments, {
             showValidationErrors: true,

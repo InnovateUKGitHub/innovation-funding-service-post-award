@@ -1,4 +1,5 @@
 import { LogLevel, parseLogLevel } from "@framework/types/logLevel";
+import { isNumber } from "@framework/util";
 
 const defaultCacheTimeout: number = 720;
 
@@ -28,7 +29,7 @@ export interface IConfig {
     readonly maxFileSize: number;
     readonly maxUploadFileCount: number;
     readonly permittedFileTypes: string[];
-    readonly bankCheckValidationAttempts: number;
+    readonly bankCheckValidationRetries: number;
     readonly bankCheckAddressScorePass: number;
     readonly bankCheckCompanyNameScorePass: number;
 
@@ -160,10 +161,11 @@ if (!permittedFileTypes || !permittedFileTypes.length) {
     permittedFileTypes = ["pdf", "xps", "doc", "docx", "rdf", "txt", "csv", "odt", "ppt", "pptx", "odp", "xls", "xlsx", "ods", "jpg", "jpeg", "png"];
 }
 
-const bankCheckValidationAttempts = parseInt(process.env.BANK_CHECK_VALIDATION_ATTEMPTS!, 10) ||  2;
-const bankCheckAddressScorePass = parseInt(process.env.BANK_CHECK_ADDRESS_SCORE_PASS!, 10) || 6;
-const bankCheckCompanyNameScorePass = parseInt(process.env.BANK_CHECK_COMPANY_NAME_SCORE_PASS!, 10) || 6;
-
+const parsedBankCheckValidationRetries = parseInt(process.env.BANK_CHECK_VALIDATION_RETRIES!, 10);
+const bankCheckValidationRetries = isNumber(parsedBankCheckValidationRetries)?parsedBankCheckValidationRetries:1;
+const bankCheckPersonalDetailsScorePass = parseInt(process.env.BANK_CHECK_PERSONAL_DETAILS_SCORE_PASS!, 10) || 6;
+const bankCheckAddressScorePass = parseInt(process.env.BANK_CHECK_PERSONAL_DETAILS_SCORE_PASS!, 10) || 6;
+const bankCheckCompanyNameScorePass = parseInt(process.env.BANK_CHECK_PERSONAL_DETAILS_SCORE_PASS!, 10) || 6;
 const googleTagManagerCode = process.env.GOOGLE_TAG_MANAGER_CODE!;
 
 const s3Account = {
@@ -191,7 +193,7 @@ export const Configuration: IConfig = {
     maxFileSize,
     maxUploadFileCount,
     permittedFileTypes,
-    bankCheckValidationAttempts,
+    bankCheckValidationRetries,
     bankCheckAddressScorePass,
     bankCheckCompanyNameScorePass,
     prettyLogs,
