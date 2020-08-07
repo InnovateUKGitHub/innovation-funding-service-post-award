@@ -500,7 +500,6 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
   );
 
   projectPostcode = Validation.all(this,
-    () => this.requiredIfComplete(this.model.projectPostcode, "Enter a postcode, postal code or zip code"),
     () => this.hasPermissionToEdit(this.model.projectPostcode, this.original && this.original.projectPostcode, "Project postcode cannot be changed"),
   );
 
