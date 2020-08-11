@@ -25,6 +25,7 @@ import { DeMinimisStep } from "@ui/containers/pcrs/addPartner/deMinimisStep";
 import { CombinedResultValidator } from "@ui/validation";
 import { OtherSourcesOfFundingStep } from "@ui/containers/pcrs/addPartner/otherSourcesOfFundingStep";
 import { AcademicCostsReviewStep } from "@ui/containers/pcrs/addPartner/academicCostsReviewStep";
+import { AgreementToPCRStep } from "./agreementToPcrStep";
 
 export type addPartnerStepNames =
   "roleAndOrganisationStep"
@@ -42,6 +43,7 @@ export type addPartnerStepNames =
   | "awardRateStep"
   | "otherFundingStep"
   | "otherFundingSourcesStep"
+  | "agreementToPcrStep"
 ;
 
 export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: number | undefined): IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> => {
@@ -75,6 +77,13 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
         validation: val => val.pcr,
         stepRender: AwardRateStep,
       },
+      {
+        stepName: "agreementToPcrStep",
+        displayName: "Upload partner agreement",
+        stepNumber: 14,
+        validation: val => val.files,
+        stepRender: AgreementToPCRStep,
+      }
     ],
     summary: {
       validation: val => val,

@@ -373,6 +373,9 @@
       "button-add": "Add another source of funding",
       "footer-label-total": "Total other funding"
     },
+    "pcr-add-partner-agreement-to-pcr":{
+      "guidance": "This guidance is only a placeholder"
+    },
     "pcr-period-length-change":{
       "guidance": "The period length can be 3 months or 1 month. This request will affect all remaining periods of the project for all partners. It will also change:\n* how your project's forecast is divided\n* how often your project submits a claim.\n\n\n\nWe will reject this if you submit it with any other request type.",
       "period-length-quarterly": "3 months",
@@ -662,7 +665,8 @@
     "contacts-section-title": "Contacts",
     "finance-contact-heading": "Finance contact",
     "project-lead-contact-heading": "Project manager",
-    "funding-section-title": "Funding"
+    "funding-section-title": "Funding",
+    "agreement-to-pcr-heading": "Upload partner agreement"
   },
   "pcr-period-length-change-labels":{
     "current-period-length": "Current period length",
