@@ -1,6 +1,7 @@
 export * from "./academicCostsStep";
 export * from "./academicOrganisationStep";
 export * from "./addPartnerSummary";
+export * from "./agreementToPcrStep";
 export * from "./aidEligibilityStep";
 export * from "./companiesHouseStep";
 export * from "./financeContactStep";
