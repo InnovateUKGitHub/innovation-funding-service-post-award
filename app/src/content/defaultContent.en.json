@@ -78,7 +78,7 @@
     },
     "project-setup-bank-statement": {
       "title": "Upload bank statement",
-      "guidance-message": "We need you to upload a redacted bank statement for your organisation. This must be dated within the last 90 days before the upload date.\n\nThis will allow us to confirm we have the correct details.\n\nThe statement must show your:\n* company name\n* account number\n* sort code",
+      "guidance-message": "We need you to upload a redacted bank statement for your organisation. This must be dated within 90 days of the upload date.\n\nThis will allow us to confirm we have the correct details.\n\nThe statement must show your:\n* company name\n* account number\n* sort code",
       "button-submit": "Submit bank statement",
       "button-return": "Return to set up your project",
       "back-link": "Back to set up your project"
@@ -100,7 +100,7 @@
       "title": "We need more information",
       "back-link": "Back to set up your project",
       "return-to-setup": "Return to set up your project",
-      "guidance": "Our automated checks were unable to verify your bank details.\n\nWe need you to upload a redacted bank statement for your organisation. This must be dated within the last 90 days before the upload date.\n\nThis will allow us to confirm we have the correct details.\n\nThe statement must show your:\n* company name\n* account number\n* sort code"
+      "guidance": "Our automated checks were unable to verify your bank details.\n\nWe need you to upload a redacted bank statement for your organisation. This must be dated within 90 days of the upload date.\n\nThis will allow us to confirm we have the correct details.\n\nThe statement must show your:\n* company name\n* account number\n* sort code"
     },
     "finance-summary": {
       "title": "Finance summary",
