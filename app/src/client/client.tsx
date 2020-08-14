@@ -9,11 +9,12 @@ import { Polyfill } from "./polyfill";
 
 import { configureRouter, routeConfig } from "@ui/routing";
 import {
-  createStores,
+  createStores, IStores,
   ModalProvider,
   ModalRegister,
   rootReducer,
   setupMiddleware,
+  StoresConsumer,
   StoresProvider
 } from "@ui/redux";
 import { App } from "../ui/containers/app";
@@ -52,14 +53,33 @@ class Client extends React.Component<{}> {
       <Provider store={store}>
         <RouterProvider router={router}>
           <StoresProvider value={getStores()}>
-            <ContentProvider value={new Content()}>
-              <ModalProvider value={new ModalRegister()}>
-                <App store={store} routes={routes} />
-              </ModalProvider>
-            </ContentProvider>
+            <StoresConsumer>{stores =>
+              <AppWithContent stores={stores} store={store} />
+            }
+            </StoresConsumer>
           </StoresProvider>
         </RouterProvider>
       </Provider>
+    );
+  }
+}
+
+class AppWithContent extends React.Component<{stores: IStores, store: typeof store}> {
+  constructor(props: any) {
+    super(props);
+    // whenever the store changes force a rerender this will flow down to container level
+    // where if no props have changed rendering stops
+    this.props.store.subscribe(() => this.setState({ marker: {} }));
+  }
+  render() {
+    const user = this.props.stores.users.getCurrentUser();
+    const project = this.props.stores.projects.getById(Object.keys(user.roleInfo)[0]).data;
+    return (
+      <ContentProvider value={new Content(project)}>
+        <ModalProvider value={new ModalRegister()}>
+          <App store={store} routes={routes} />
+        </ModalProvider>
+      </ContentProvider>
     );
   }
 }

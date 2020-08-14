@@ -12,6 +12,7 @@ import { CustomContentStore } from "@server/resources/customContentStore";
 import { CompaniesHouse } from "@server/resources/companiesHouse";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { BankCheckService } from "@server/resources/bankCheckService";
+import { CRDCompetitionContentStore } from "@server/resources/crdCompetitionContentStore";
 
 // obvs needs to be singleton
 const cachesImplementation: Framework.ICaches = {
@@ -96,6 +97,7 @@ export class Context implements Framework.IContext {
       bankCheckService: new BankCheckService(),
       companiesHouse: new CompaniesHouse(),
       defaultContent: new DefaultContentStore(),
+      crdCompetitionContent: new CRDCompetitionContentStore(),
       customContent: new CustomContentStore()
     };
   }

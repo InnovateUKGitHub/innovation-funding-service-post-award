@@ -30,6 +30,7 @@ import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { getErrorStatus } from "./errorHandlers";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { Content } from "@content/content";
+import { GetByIdQuery } from "./features/projects";
 
 export async function serverRender(req: Request, res: Response, error?: IAppError): Promise<void> {
   const nonce = res.locals.nonce;
@@ -38,7 +39,6 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
       throw error;
     }
 
-    const content = new Content();
     const routes = routeConfig;
     const router = configureRouter(routes);
     const route = await startRouter(req, router);
@@ -49,6 +49,9 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
 
     const context = contextProvider.start({ user: req.session!.user });
     const auth = await context.runQuery(new GetAllProjectRolesForUser());
+    const project = await context.runQuery(new GetByIdQuery(Object.keys(auth.permissions)[0]));
+    const content = new Content(project);
+
     const user: IClientUser = { roleInfo: auth.permissions, email: req.session!.user.email, csrf: req.csrfToken() };
     const clientConfig = getClientConfig(context);
 
@@ -102,7 +105,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
 
     const matched = matchRoute(routeState);
 
-    const content = new Content();
+    const content = new Content(undefined);
 
     store.dispatch(Actions.setPageTitle(matched.getTitle({ params: routeState.params, stores, content })));
 
@@ -169,16 +172,18 @@ function startRouter(req: Request, router: Router): Promise<State> {
 }
 
 function renderApp(router: Router, nonce: string, store: Store<RootState>, stores: IStores, routes: IRoutes, content: Content, modalRegister: ModalRegister): string {
+  const user = stores.users.getCurrentUser();
+  const project = stores.projects.getById(Object.keys(user.roleInfo)[0]).data;
 
   const html = renderToString(
     <Provider store={store}>
       <RouterProvider router={router}>
         <StoresProvider value={stores}>
-          <ContentProvider value={content}>
-            <ModalProvider value={modalRegister}>
-              <App store={store} routes={routes} />
-            </ModalProvider>
-          </ContentProvider>
+          <ContentProvider value={new Content(project)}>
+              <ModalProvider value={modalRegister}>
+                <App store={store} routes={routes}/>
+              </ModalProvider>
+            </ContentProvider>
         </StoresProvider>
       </RouterProvider>
     </Provider>

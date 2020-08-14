@@ -1,8 +1,9 @@
 import { ContentBase } from "@content/contentBase";
+import { ProjectDto } from "@framework/dtos";
 
 export class PCRAddPartnerLabels extends ContentBase {
-  constructor(parent: ContentBase) {
-    super(parent, "pcr-add-partner-labels");
+  constructor(parent: ContentBase, protected project: ProjectDto | null | undefined) {
+    super(parent, "pcr-add-partner-labels", project);
   }
   public readonly roleHeading = () => this.getContent("role-heading");
   public readonly commercialWorkHeading = () => this.getContent("commercial-work-heading");

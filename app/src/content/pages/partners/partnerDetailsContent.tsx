@@ -1,11 +1,12 @@
 import { ContentPageBase } from "@content/contentPageBase";
 import { ProjectContactLabels } from "@content/labels/projectContactLabels";
 import { Content } from "@content/content";
+import { ProjectDto } from "@framework/dtos";
 
 export class PartnerDetailsContent extends ContentPageBase {
-  constructor(content: Content) {
-    super(content, "partner-details");
+  constructor(content: Content, protected project: ProjectDto | null | undefined) {
+    super(content, "partner-details", project);
   }
 
-  public readonly contactLabels = new ProjectContactLabels(this);
+  public readonly contactLabels = new ProjectContactLabels(this, this.project);
 }

@@ -1,8 +1,9 @@
 import { ContentBase } from "../contentBase";
+import { ProjectDto } from "@framework/dtos";
 
 export class ProjectLabels extends ContentBase {
-  constructor(parent: ContentBase) {
-    super(parent, "project-labels");
+  constructor(parent: ContentBase, protected project: ProjectDto | null | undefined) {
+    super(parent, "project-labels", project);
   }
 
   public readonly projectCosts = () => this.getContent("projectCostsLabel");
