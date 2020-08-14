@@ -1,10 +1,11 @@
 import { ContentPageBase } from "../../contentPageBase";
 import { Content } from "../../content";
 import { ProjectMessages } from "../../messages/projectMessages";
+import { ProjectDto } from "@framework/dtos";
 
 export class ProjectDashboardContent extends ContentPageBase {
-  constructor(content: Content) {
-    super(content, "projects-dashboard");
+  constructor(content: Content, protected project: ProjectDto | null | undefined) {
+    super(content, "projects-dashboard", project);
   }
 
   public readonly searchTitle = () => this.getContent("searchTitle");
@@ -28,6 +29,6 @@ export class ProjectDashboardContent extends ContentPageBase {
     noMatchingProjects: () => this.getContent("noArchivedMatchingMessage"),
   };
 
-  public readonly messages = new ProjectMessages(this);
+  public readonly messages = new ProjectMessages(this, this.project);
 
 }

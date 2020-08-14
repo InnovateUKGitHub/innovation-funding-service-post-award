@@ -1,9 +1,10 @@
 import { ContentPageBase } from "../../contentPageBase";
 import { Content } from "../../content";
+import { ProjectDto } from "@framework/dtos";
 
 export class PCRCreateContent extends ContentPageBase {
-  constructor(private readonly content: Content) {
-    super(content, "pcr-create");
+  constructor(private readonly content: Content, protected project: ProjectDto | null | undefined) {
+    super(content, "pcr-create", project);
   }
 
   public readonly guidanceMessage = () => this.getContent("guidance-message", { markdown: true });

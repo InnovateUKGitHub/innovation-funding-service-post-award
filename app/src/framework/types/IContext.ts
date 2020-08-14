@@ -13,6 +13,7 @@ import { ICustomContentStore } from "@server/resources/customContentStore";
 import { ICompaniesHouse } from "@server/resources/companiesHouse";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { IBankCheckService } from "@server/resources/bankCheckService";
+import { ICRDCompetitionContentStore } from "@server/resources/crdCompetitionContentStore";
 
 export interface IRepositories {
   readonly claims: Repositories.IClaimRepository;
@@ -42,6 +43,7 @@ export interface IRepositories {
 
 export interface IResources {
   readonly defaultContent: IDefaultContentStore;
+  readonly crdCompetitionContent: ICRDCompetitionContentStore;
   readonly customContent: ICustomContentStore;
   readonly companiesHouse: ICompaniesHouse;
   readonly bankCheckService: IBankCheckService;
