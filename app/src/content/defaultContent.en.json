@@ -141,11 +141,35 @@
       "back-link": "Back to claims",
       "costs-and-grant-summary-title": "Summary"
     },
+    "claim-detail-documents": {
+      "back-link": "Back to {{costCategoryName}}",
+      "form-title": "Upload",
+      "subtitle": "All documents open in a new window",
+      "upload": "Upload documents"
+    },
     "claim-forecast": {
       "back-link": "Back to claims documents",
       "button-save-and-return": "Save and return to claims",
       "button-continue-to-summary": "Continue to summary",
       "overheads-costs": "Overheads costs: "
+    },
+    "edit-claim-line-items": {
+      "back-link": "Back to claims",
+      "header-description": "Description",
+      "header-last-updated": "Last updated",
+      "header-cost": "Cost (£)",
+      "header-action": "Action",
+      "button-save-and-return": "Save and return to claims",
+      "header-additional-information": "Additional information",
+      "header-supporting-documents": "Supporting documents",
+      "button-upload-and-remove-documents": "Upload and remove documents",
+      "hint-additional-information": "Explain any difference between the forecast costs and the total costs, and what actions are you taking because of this. For example updating the project plan or financial forecast.",
+      "button-remove": "Remove",
+      "no-data": "No data",
+      "total-costs": "Total costs",
+      "forecast-costs": "Forecast costs",
+      "difference": "Difference",
+      "add-cost": "Add a cost"
     },
     "claim-prepare": {
       "title": "Costs to be claimed",
@@ -399,7 +423,13 @@
     "interim-claim-guidance-mo": "You will be contacted by each partner when their monthly claim is ready for you to review.",
     "interim-claim-review-guidance-mo": "Once you have reviewed all costs and evidence for last month, email grants_service@innovateuk.ukri.org to start the final review of the monthly claim.\n\nContact the partner directly to query the claim.",
     "frequency-change-message": "Your project asked us to change the length of the remaining periods. You must make sure your forecast reflects your expected spend or your monitoring officer will not approve your claim.",
-    "last-chance-to-change-forecast": "This is your last chance to change the forecast for period {{periodId}}"
+    "last-chance-to-change-forecast": "This is your last chance to change the forecast for period {{periodId}}",
+    "document-detail-guidance": "Evidence for each expenditure might include, but is not limited to, invoices, timesheets, receipts and spreadsheets for capital usage.",
+    "document-disclaimer-message": "Do not remove any documents for previous months' costs.",
+    "document-validation-message": "No documents uploaded.",
+    "interim-claim-message": "When adding costs for last month, you must:\n\n* use a new line for every cost each month\n\n* name the month in the description\n\n* not alter any information for previous months' costs",
+    "edit-claim-line-item-guidance": "You must break down your total costs and upload evidence for each expenditure you are claiming for. Contact your monitoring officer for more information about the level of detail you are required to provide.",
+    "edit-claim-line-item-document-guidance": "Upload evidence of the costs for your monitoring officer to review. If you do not upload documents your monitoring officer is unlikely to accept your claim. Contact them for advice on which documents to provide."
   },
   "claims-labels": {
     "open-section-title": "Open",
@@ -587,7 +617,8 @@
     "no-documents-uploaded": "No documents uploaded.",
     "document-uploaded-success": "Your document has been uploaded.",
     "documents-uploaded-success": "{{documentsNumber}} documents have been uploaded.",
-    "documents-not-applicable": "Not applicable"
+    "documents-not-applicable": "Not applicable",
+    "new-window": "All documents open in a new window."
   },
   "financial-virement-labels":{
     "partner-name":"Partner",

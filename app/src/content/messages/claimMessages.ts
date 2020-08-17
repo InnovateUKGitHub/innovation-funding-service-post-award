@@ -23,4 +23,10 @@ export class ClaimMessages extends ContentBase {
   public readonly interimClaimReviewGuidanceMO = () => this.getContent("interim-claim-review-guidance-mo", { markdown: true });
   public readonly frequencyChangeMessage = () => this.getContent("frequency-change-message");
   public readonly lastChanceToChangeForecast = (periodId: number) => this.getContent("last-chance-to-change-forecast", { periodId });
+  public readonly documentDisclaimerMessage = () => this.getContent("document-disclaimer-message");
+  public readonly documentValidationMessage = () => this.getContent("document-validation-message");
+  public readonly documentDetailGuidance = () => this.getContent("document-detail-guidance");
+  public readonly interimClaimMessage = () => this.getContent("interim-claim-message", {markdown: true});
+  public readonly editClaimLineItemGuidance = () => this.getContent("edit-claim-line-item-guidance");
+  public readonly editClaimLiineItemDocumentGuidance = () => this.getContent("edit-claim-line-item-document-guidance");
 }
