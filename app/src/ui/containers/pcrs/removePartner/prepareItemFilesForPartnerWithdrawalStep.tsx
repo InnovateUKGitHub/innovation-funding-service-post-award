@@ -46,6 +46,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawal
             <ACC.UnorderedList>
               <li>a confirmation letter on headed paper from the partner who is leaving, signed by someone with financial authority</li>
               <li>a brief list of the outstanding deliverables, and who each will be assigned to once the partner leaves</li>
+              <li>copies of signed letters from all other project partners to show they have agreed to this change</li>
             </ACC.UnorderedList>
             <ACC.DocumentGuidance/>
             <UploadForm.MulipleFileUpload
