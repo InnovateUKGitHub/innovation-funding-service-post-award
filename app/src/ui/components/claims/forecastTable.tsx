@@ -12,7 +12,7 @@ import { Currency } from "../renderers/currency";
 import { NumberInput } from "../inputs/numberInput";
 import { AccessibilityText } from "../renderers/accessibilityText";
 import { Percentage } from "../renderers/percentage";
-import { ClaimDto, PartnerDto, ProjectDto } from "@framework/dtos";
+import { ClaimDto, PartnerDto, PartnerStatus, ProjectDto } from "@framework/dtos";
 import { numberComparator } from "@framework/util/comparator";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { CostCategoryType } from "@framework/entities";
@@ -228,8 +228,9 @@ export class ForecastTable extends React.Component<Props> {
     const costCategory = data.costCategories.find(x => x.id === forecastRow.categoryId);
     const validator = forecastRow.validators[index.column - 1];
     const error = validator && validator.value;
+    const isPending = data.partner.partnerStatus === PartnerStatus.Pending;
 
-    if ((costCategory && costCategory.isCalculated) || !editor || periodId < data.project.periodId || (periodId === data.project.periodId && !isSubmitting)) {
+    if ((costCategory && costCategory.isCalculated) || !editor || (periodId < data.project.periodId && !isPending) || (periodId === data.project.periodId && !isPending && !isSubmitting)) {
       return <Currency value={value} />;
     }
 
