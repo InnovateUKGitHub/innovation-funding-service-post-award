@@ -56,13 +56,13 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
     if (!documents.length) {
       return (
         <ACC.Section>
-          <ACC.ValidationMessage message="No documents uploaded." messageType="info" />
+          <ACC.ValidationMessage messageContent={x => x.claimDetailDocuments.messages.documentValidationMessage()} messageType="info" />
         </ACC.Section>
       );
     }
 
     return (
-      <ACC.Section subtitle="All documents open in a new window">
+      <ACC.Section subtitleContent={x => x.claimDetailDocuments.subtitle()}>
         <ACC.DocumentTableWithDelete onRemove={(document) => this.props.onDelete(editor.data, document)} documents={documents} qa="supporting-documents"/>
       </ACC.Section>
     );
@@ -80,16 +80,16 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={back}>{`Back to ${costCategory.name.toLowerCase()}`}</ACC.BackLink>}
+        backLink={<ACC.BackLink route={back}><ACC.Content value={x => x.claimDetailDocuments.backLink(costCategory.name)}/></ACC.BackLink>}
         error={(editor.error)}
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={project} />}
       >
         {this.renderInterimClaimDisclaimer(project, draftClaim)}
-        <ACC.Renderers.SimpleString qa="guidanceText">Evidence for each expenditure might include, but is not limited to, invoices, timesheets, receipts and spreadsheets for capital usage.</ACC.Renderers.SimpleString>
+        <ACC.Renderers.SimpleString qa="guidanceText"><ACC.Content value={x => x.claimDetailDocuments.messages.documentDetailGuidance()}/></ACC.Renderers.SimpleString>
         <ACC.Renderers.Messages messages={this.props.messages} />
         {this.renderDocuments(editor, documents)}
-        <ACC.Section title="Upload">
+        <ACC.Section titleContent={x => x.claimDetailDocuments.formTitle()}>
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
@@ -101,7 +101,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
               <ACC.DocumentGuidance/>
               <UploadForm.Hidden name="description" value={dto => dto.description}/>
               <UploadForm.MulipleFileUpload
-                label="Upload documents"
+                labelContent={x => x.claimDetailDocuments.upload()}
                 labelHidden={true}
                 name="attachment"
                 validation={editor.validator.files}
@@ -109,7 +109,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
                 update={(dto, files) => dto.files = files || []}
               />
             </UploadForm.Fieldset>
-            <UploadForm.Submit>Upload documents</UploadForm.Submit>
+            <UploadForm.Submit><ACC.Content value={x => x.claimDetailDocuments.upload()}/></UploadForm.Submit>
           </UploadForm.Form>
         </ACC.Section>
       </ACC.Page>
@@ -118,7 +118,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
 
   private renderInterimClaimDisclaimer(project: ProjectDto, draftClaim: ClaimDto | null) {
     if (!draftClaim || draftClaim.periodId !== project.periodId) return null;
-    return <ACC.ValidationMessage messageType="alert" qa="interim-document-detail-warning-FC" message="Do not remove any documents for previous months' costs." />;
+    return <ACC.ValidationMessage messageType="alert" qa="interim-document-detail-warning-FC" messageContent={x => x.claimDetailDocuments.messages.documentDisclaimerMessage()}/>;
   }
 }
 
