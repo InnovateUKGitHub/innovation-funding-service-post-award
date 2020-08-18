@@ -38,7 +38,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
   renderContents(companiesHouseLoader: (x: string) => Pending<CompanyDto[]>, companiesHouseResults: Pending<CompanyDto[]>) {
     const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
     return (
-      <ACC.Section qa="company-house" title="Company House">
+      <ACC.Section qa="company-house" titleContent={x => x.pcrAddPartnerCompanyHouse.sectionTitle()}>
         <Form.Form
           qa="addPartnerForm"
           data={this.props.pcrItem}
@@ -46,9 +46,9 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           onSubmit={() => this.props.onSave()}
           onChange={dto => this.props.onChange(dto)}
         >
-          <Form.Fieldset heading="Company details">
+          <Form.Fieldset headingContent={x => x.pcrAddPartnerCompanyHouse.formHeading()}>
             <Form.String
-              label="Organisation name"
+              labelContent={x => x.pcrAddPartnerCompanyHouse.labels.organisationNameHeading()}
               name="organisationName"
               value={dto => dto.organisationName}
               update={(dto, val) => {
@@ -57,7 +57,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
               validation={this.props.validator.companyHouseOrganisationName}
             />
             <Form.String
-              label="Registration number"
+              labelContent={x => x.pcrAddPartnerCompanyHouse.labels.registrationNumberHeading()}
               name="registrationNumber"
               value={dto => dto.registrationNumber}
               update={(dto, val) => {
@@ -66,7 +66,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
               validation={this.props.validator.registrationNumber}
             />
             <Form.String
-              label="Registered address"
+              labelContent={x => x.pcrAddPartnerCompanyHouse.labels.registeredAddressHeading()}
               name="registeredAddress"
               value={dto => dto.registeredAddress}
               update={(dto, val) => {
@@ -75,20 +75,20 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
               validation={this.props.validator.registeredAddress}
             />
           </Form.Fieldset>
-          <Form.Fieldset heading="Search companies house" qa="search-companies-house">
+          <Form.Fieldset headingContent={x => x.pcrAddPartnerCompanyHouse.searchHeading()} qa="search-companies-house">
             <Form.Search
               name="searchCompaniesHouse"
-              hint="Enter your organisation name or registration number"
+              hintContent={x => x.pcrAddPartnerCompanyHouse.hint()}
               labelHidden={true}
               value={() => this.state.queryString}
               update={(dto, val) => this.setState({ searchTerm: val })}
             />
-            <Form.Button styling="Primary" name="companiesHouseSearch" onClick={() => this.setState({ queryString: this.state.searchTerm })}>Search</Form.Button>
+            <Form.Button styling="Primary" name="companiesHouseSearch" onClick={() => this.setState({ queryString: this.state.searchTerm })}><ACC.Content value={x => x.pcrAddPartnerCompanyHouse.searchButton()}/></Form.Button>
           </Form.Fieldset>
           {this.renderPendingResults(Form, companiesHouseResults, this.props.pcrItem)}
           <Form.Fieldset qa="save-and-continue">
-            <Form.Submit>Save and continue</Form.Submit>
-            <Form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}>Save and return to summary</Form.Button>
+            <Form.Submit><ACC.Content value={x => x.pcrAddPartnerCompanyHouse.pcrItem.submitButton()}/></Form.Submit>
+            <Form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerCompanyHouse.pcrItem.returnToSummaryButton()}/></Form.Button>
           </Form.Fieldset>
         </Form.Form>
       </ACC.Section>
@@ -106,9 +106,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
       if (searchResults.length === 0) {
         // Only show warning message if results length is 0 and a search term has been entered
         return !this.state.queryString ? null : (
-          <SimpleString>
-            Is your organisation not showing in these results? Check your spelling, or try searching again using a more specific company name or the registration number.
-          </SimpleString>
+          <SimpleString><ACC.Content value={x => x.pcrAddPartnerCompanyHouse.resultNotShowing()}/></SimpleString>
         );
       }
       const companiesOptions: ACC.SelectOption[] = searchResults.map(x => ({
@@ -119,7 +117,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
 
       return (
         <ACC.Section qa="company-house-search-results">
-          <Form.Fieldset heading="Companies house search results" qa="searchResults">
+          <Form.Fieldset headingContent={x => x.pcrAddPartnerCompanyHouse.searchResultsHeading()} qa="searchResults">
             <Form.Radio
               name="searchResults"
               inline={false}
@@ -128,7 +126,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
               update={(x, val) => this.onCompanySelectUpdate(val, searchResults, pcrItem)}
             />
           </Form.Fieldset>
-          <SimpleString>Is your organisation not showing in these results? Check your spelling, or try searching again using a more specific company name or the registration number.</SimpleString>
+          <SimpleString><ACC.Content value={x => x.pcrAddPartnerCompanyHouse.resultNotShowing()}/></SimpleString>
         </ACC.Section>
       );
     }

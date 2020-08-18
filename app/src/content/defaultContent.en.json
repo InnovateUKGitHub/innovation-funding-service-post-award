@@ -416,11 +416,50 @@
       "cost-heading": "Cost (£)",
       "total-costs": "Total costs (£)"
     },
+    "pcr-add-partner-academic-organisation":{
+      "hint": "Enter the name of the organisation that you work for."
+    },
+    "pcr-add-partner-company-house":{
+      "section-title": "Company house",
+      "heading-form": "Company details",
+      "heading-search": "Search companies house",
+      "hint": "Enter your organisation name or registration number",
+      "button-search": "Search",
+      "result-not-showing": "Is your organisation not showing in these results? Check your spelling, or try searching again using a more specific company name or the registration number.",
+      "heading-search-results": "Companies house search results"
+    },
+    "pcr-add-partner-project-contacts":{
+      "section-title": "Add person to organisation",
+      "guidance": "This information will be used to create an account for this person in the Innovation Funding Service.",
+      "use-finance-details": "Use the same details as the finance contact",
+      "phone-number-hint": "We may use this to contact the partner for more information about this request."
+    },
+    "pcr-add-partner-finance-details":{
+      "section-title": "Financial details",
+      "hint-year-end": "This is the end of the last financial year for which you have your turnover.",
+      "heading-turnover": "Turnover (£)"
+    },
+    "pcr-add-partner-jes":{
+      "guidance": "Your new academic partner must apply for funding through the Je-S system. To find out more about the Je-S requirements and processes please go to:\n\n* <a href=\"https://www.gov.uk/government/publications/innovate-uk-completing-your-application-project-costs-guidance/guidance-for-academics-applying-via-the-je-s-system\" rel=\"noopener noreferrer\" target=\"_blank\" >guidance from Innovate UK for academics applying via the Je-S system (opens in a new window)</a>\n\n* the <a href=\"https://je-s.rcuk.ac.uk/\" rel=\"noopener noreferrer\" target=\"_blank\" >e-S website (opens in a new window)</a> \n\n\n\nUpload a pdf copy of the completed Je-S output form, once the new partner has a status of 'With Council'. If there is information outstanding or the partner is not at this status, your request will be rejected."
+    },
+    "pcr-add-partner-organisation-details":{
+      "section-title": "Organisation details",
+      "guidance": "This definition must include organisations that are part of the new partner organisation. That is, where the new partner organisation owns shares in another organisation or has shares owned by another organisation.\n\nUse the European Commission (EC) <a href=\"https://ec.europa.eu/growth/smes/business-friendly-environment/sme-definition_en\" rel=\"noopener noreferrer\" target=\"_blank\" > small to medium enterprise (SME) definition (opens in new window)</a> for guidance."
+    },
+    "pcr-add-partner-spend-profile":{
+      "return-to-summary-no-save-button": "Return to summary",
+      "category-heading": "Category",
+      "total-costs": "Total costs (£)",
+      "cost-heading": "Cost (£)",
+      "label-view": "View",
+      "label-edit": "Edit"
+    },
     "pcr-add-partner-other-funding":{
       "form-section-title": "Other public sector funding?",
       "guidance": "Is the new partner receiving any other public sector funding for this project? This is important as other public sector support counts as part of the funding they can receive.",
       "label-yes": "Yes",
-      "label-no": "No"
+      "label-no": "No",
+      "label-other-sources-question": "Is the new partner receiving any other public sector funding for this project?"
     },
     "pcr-add-partner-other-funding-sources":{
       "form-section-title": "Other public sector funding?",

@@ -20,7 +20,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
   const selectedSizeOption = props.pcrItem.participantSize && sizeOptions.find(x => parseInt(x.id, 10) === props.pcrItem.participantSize);
 
   return (
-    <ACC.Section title={"Organisation details"}>
+    <ACC.Section titleContent={x => x.pcrAddPartnerOrganisationDetails.sectionTitle()}>
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
@@ -28,10 +28,9 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
         onSubmit={() => props.onSave()}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset heading="Size">
+        <Form.Fieldset headingContent={x => x.pcrAddPartnerOrganisationDetails.labels.organisationSizeHeading()}>
           <React.Fragment>
-            <SimpleString>This definition must include organisations that are part of the new partner organisation. That is, where the new partner organisation owns shares in another organisation or has shares owned by another organisation.</SimpleString>
-            <SimpleString>Use the European Commission (EC) <a href="https://ec.europa.eu/growth/smes/business-friendly-environment/sme-definition_en" rel="noopener noreferrer" target="_blank"> small to medium enterprise (SME) definition (opens in new window)</a> for guidance.</SimpleString>
+            <SimpleString><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.guidance()}/></SimpleString>
           </React.Fragment>
           <Form.Radio
             name="participantSize"
@@ -45,7 +44,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
             validation={props.validator.participantSize}
           />
         </Form.Fieldset>
-        <Form.Fieldset heading="Number of full time employees">
+        <Form.Fieldset headingContent={x => x.pcrAddPartnerOrganisationDetails.labels.employeeCountHeading()}>
           <Form.Numeric
             name="numberOfEmployees"
             width={4}
@@ -55,8 +54,8 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
           />
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
-          <Form.Submit>Save and continue</Form.Submit>
-          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>Save and return to summary</Form.Button>
+          <Form.Submit><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.pcrItem.submitButton()}/></Form.Submit>
+          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.pcrItem.returnToSummaryButton()}/></Form.Button>
         </Form.Fieldset>
       </Form.Form>
     </ACC.Section>
