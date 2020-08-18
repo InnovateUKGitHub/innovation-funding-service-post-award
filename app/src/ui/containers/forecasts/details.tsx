@@ -27,7 +27,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
     const isMoPm = !!(data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
     const partnerName = isMoPm ? <PartnerName partner={data.partner}/> : null;
     const backLink = isMoPm ? this.props.routes.forecastDashboard.getLink({ projectId: data.project.id }) : this.props.routes.projectOverview.getLink({ projectId: data.project.id });
-    const backText = isMoPm ? "Back to forecasts" : "Back to project";
+    const backText = isMoPm ? <ACC.Content value={x => x.forecastsDetails.moOrPmBackLink()}/> : <ACC.Content value={x => x.forecastsDetails.backLink()}/>;
 
     return (
       <ACC.Page
@@ -39,7 +39,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
         <ACC.Section title={partnerName} qa="partner-name" className="govuk-!-padding-bottom-3">
           <ACC.Renderers.Messages messages={this.props.messages} />
           <ACC.Forecasts.Warning {...data}/>
-          {(isFc && data.partner.newForecastNeeded) && <ACC.ValidationMessage qa="period-change-warning" messageType="info" message="Your project asked us to change the length of the remaining periods. Make sure your forecast is correct before submitting your next claim."/>}
+          {(isFc && data.partner.newForecastNeeded) && <ACC.ValidationMessage qa="period-change-warning" messageType="info" messageContent={x => x.forecastsDetails.messages.projectChangeWarning()}/>}
           {this.renderOverheadsRate(data.partner.overheadRate)}
           <ACC.Claims.ForecastTable data={data} hideValidation={isMoPm} />
         </ACC.Section>
@@ -62,7 +62,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
 
     if (isFc) {
       return (isClaimApprovedOrPaid || data.partner.isWithdrawn)
-        ? <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message="You cannot change your forecast. Your project has ended."/>
+        ? <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" messageContent={x => x.forecastsDetails.messages.projectEnded()}/>
         : <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message={<span>You cannot change your forecast. You must <ACC.Link route={claimPageLink} styling="Link">submit your final claim</ACC.Link>.</span>}/>;
     }
 
@@ -72,13 +72,13 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
 
     return finalClaim.isApproved
       ? <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={<React.Fragment><PartnerName partner={data.partner}/> has submitted their final claim so cannot change their forecast.</React.Fragment>}/>
-      : <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={<React.Fragment><PartnerName partner={data.partner}/>} is due to submit their final claim so cannot change their forecast.</React.Fragment>}/>;
+      : <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={<React.Fragment><PartnerName partner={data.partner}/> is due to submit their final claim so cannot change their forecast.</React.Fragment>}/>;
   }
 
   private renderOverheadsRate(overheadRate: number | null) {
     if (overheadRate === null || overheadRate === undefined) return null;
 
-    return <ACC.Renderers.SimpleString qa="overhead-costs">Overhead costs: <ACC.Renderers.Percentage value={overheadRate} /></ACC.Renderers.SimpleString>;
+    return <ACC.Renderers.SimpleString qa="overhead-costs"><ACC.Content value={x => x.forecastsDetails.labels.overheadCosts()}/><ACC.Renderers.Percentage value={overheadRate} /></ACC.Renderers.SimpleString>;
   }
 
   private renderUpdateSection(project: ProjectDto, partner: PartnerDto, claims: ClaimDto[]) {
@@ -89,7 +89,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
     if (partner.isWithdrawn) return null;
     if (finalClaim) return null;
 
-    return <ACC.Link id="update-forecast" styling="PrimaryButton" route={this.props.routes.forecastUpdate.getLink({ projectId: project.id, partnerId: partner.id })}>Update forecast</ACC.Link>;
+    return <ACC.Link id="update-forecast" styling="PrimaryButton" route={this.props.routes.forecastUpdate.getLink({ projectId: project.id, partnerId: partner.id })}><ACC.Content value={x => x.forecastsDetails.updateForecastLink()}/></ACC.Link>;
   }
 }
 
@@ -126,8 +126,5 @@ export const ForecastDetailsRoute = defineRoute({
     const isFC = auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact);
     return isMOOrPM || isFC;
   },
-  getTitle: () => ({
-    htmlTitle: "View forecast - View project",
-    displayTitle: "Forecast"
-  })
+  getTitle: ({content}) => content.forecastsDetails.title()
 });

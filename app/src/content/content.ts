@@ -52,6 +52,9 @@ import { PCRAddPartnerProjectLocationContent } from "./pages/pcrs/addPartner/pro
 import { PCRAddPartnerAgreementToPCRContent } from "./pages/pcrs/addPartner/agreementToPcrStepContent";
 import { ClaimDetailDocumentsContent } from "./pages/claims/claimDetailDocumentsContent";
 import { EditClaimLineItemsContent } from "./pages/claims/editClaimLineItemsContent";
+import { ForecastsDashboardContent } from "./pages/forecasts/dashboardContent";
+import { ForecastsDetailsContent } from "./pages/forecasts/detailsContent";
+import { ForecastsUpdateContent } from "./pages/forecasts/updateContent";
 import { ProjectDto } from "@framework/dtos";
 
 export type ContentSelector = (content: Content) => ContentResult;
@@ -87,6 +90,10 @@ export class Content extends ContentBase {
   public readonly financialVirementEdit: FinancialVirementEditContent;
   public readonly financialVirementEditPartnerLevel: FinancialVirementEditPartnerLevelContent;
   public readonly financialVirementDetails: FinancialVirementDetailsContent;
+
+  public readonly forecastsDashboard: ForecastsDashboardContent;
+  public readonly forecastsDetails: ForecastsDetailsContent;
+  public readonly forecastsUpdate: ForecastsUpdateContent;
 
   public readonly monitoringReportsDashboard: MonitoringReportsDashboardContent;
   public readonly monitoringReportsCreate: MonitoringReportsCreateContent;
@@ -158,6 +165,10 @@ export class Content extends ContentBase {
     this.financialVirementEdit = new FinancialVirementEditContent(this, project);
     this.financialVirementEditPartnerLevel = new FinancialVirementEditPartnerLevelContent(this, project);
     this.financialVirementDetails = new FinancialVirementDetailsContent(this, project);
+
+    this.forecastsDashboard = new ForecastsDashboardContent(this, project);
+    this.forecastsDetails = new ForecastsDetailsContent(this, project);
+    this.forecastsUpdate = new ForecastsUpdateContent(this, project);
 
     this.monitoringReportsDashboard = new MonitoringReportsDashboardContent(this, project);
     this.monitoringReportsCreate = new MonitoringReportsCreateContent(this, project);
