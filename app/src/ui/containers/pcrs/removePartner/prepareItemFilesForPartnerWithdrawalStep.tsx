@@ -23,7 +23,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawal
         {this.renderFiles(documentsEditor, documents)}
         <form.Form qa="saveAndContinue" data={this.props.pcrItem} onSubmit={() => this.props.onSave()}>
           <form.Fieldset>
-            <form.Button name="default" styling="Primary">Save and continue</form.Button>
+            <form.Button name="default" styling="Primary"><ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.pcrItem.submitButton()}/></form.Button>
           </form.Fieldset>
         </form.Form>
       </React.Fragment>
@@ -41,13 +41,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawal
           onChange={(dto) => this.props.onFileChange("DontSave", dto)}
           qa="projectChangeRequestItemUpload"
         >
-          <UploadForm.Fieldset heading="Upload withdrawal of partner certificate">
-            <ACC.Renderers.SimpleString>You must upload these documents:</ACC.Renderers.SimpleString>
-            <ACC.UnorderedList>
-              <li>a confirmation letter on headed paper from the partner who is leaving, signed by someone with financial authority</li>
-              <li>a brief list of the outstanding deliverables, and who each will be assigned to once the partner leaves</li>
-              <li>copies of signed letters from all other project partners to show they have agreed to this change</li>
-            </ACC.UnorderedList>
+          <UploadForm.Fieldset headingContent={x => x.pcrRemovePartnerPrepareItemFiles.guidanceHeading()}>
+            <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.guidance()}/></ACC.Renderers.SimpleString>
             <ACC.DocumentGuidance/>
             <UploadForm.MulipleFileUpload
               label="Upload files"
@@ -59,7 +54,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawal
             />
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
-            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}>Upload documents</UploadForm.Button>
+            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}><ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.pcrItem.submitButton()}/></UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
       </ACC.Section>
@@ -69,14 +64,14 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawal
   private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (documents.length) {
       return (
-        <ACC.Section title="Files uploaded" subtitle="All documents open in a new window.">
+        <ACC.Section titleContent={x => x.pcrRemovePartnerPrepareItemFiles.documentLabels.filesUploadedTitle()} subtitleContent={x => x.pcrRemovePartnerPrepareItemFiles.documentLabels.filesUploadedSubtitle()}>
           <ACC.DocumentListWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="supporting-documents" />
         </ACC.Section>
       );
     }
     return (
-      <ACC.Section title="Files uploaded">
-        <ACC.ValidationMessage message="No documents uploaded." messageType="info" />
+      <ACC.Section titleContent={x => x.pcrRemovePartnerPrepareItemFiles.documentLabels.filesUploadedTitle()}>
+        <ACC.ValidationMessage messageContent={x => x.pcrRemovePartnerPrepareItemFiles.documentMessages.noDocumentsUploaded()} messageType="info" />
       </ACC.Section>
     );
   }
