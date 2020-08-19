@@ -35,10 +35,10 @@ class Component extends React.Component<PcrStepProps<PCRItemForAccountNameChange
           onChange={(dto) => this.props.onFileChange("DontSave", dto)}
           qa="projectChangeRequestItemUpload"
         >
-          <UploadForm.Fieldset heading="Upload change of name certificate">
+          <UploadForm.Fieldset headingContent={x => x.pcrNameChangePrepareItemFiles.uploadCertificateHeading()}>
             <ACC.DocumentGuidance/>
             <UploadForm.MulipleFileUpload
-              label="Upload files"
+              labelContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.uploadInputLabel()}
               name="attachment"
               labelHidden={true}
               value={data => data.files}
@@ -47,8 +47,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForAccountNameChange
             />
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
-            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}>Upload documents</UploadForm.Button>
-            <UploadForm.Button name="uploadFileAndContinue" styling="Primary">Save and continue</UploadForm.Button>
+            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}><ACC.Content value={x => x.pcrNameChangePrepareItemFiles.documentLabels.uploadButtonLabel()}/></UploadForm.Button>
+            <UploadForm.Button name="uploadFileAndContinue" styling="Primary"><ACC.Content value={x => x.pcrNameChangePrepareItemFiles.pcrItem.submitButton()}/></UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
       </ACC.Section>
@@ -58,14 +58,14 @@ class Component extends React.Component<PcrStepProps<PCRItemForAccountNameChange
   private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (documents.length) {
       return (
-        <ACC.Section title="Files uploaded" subtitle="All documents open in a new window.">
+        <ACC.Section titleContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.filesUploadedTitle()} subtitleContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.filesUploadedSubtitle()}>
           <ACC.DocumentListWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="supporting-documents" />
         </ACC.Section>
       );
     }
     return (
-      <ACC.Section title="Files uploaded">
-        <ACC.ValidationMessage message="No documents uploaded." messageType="info" />
+      <ACC.Section titleContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.filesUploadedTitle()}>
+        <ACC.ValidationMessage messageContent={x => x.pcrNameChangePrepareItemFiles.doucmentMessages.noDocumentsUploaded()} messageType="info" />
       </ACC.Section>
     );
   }

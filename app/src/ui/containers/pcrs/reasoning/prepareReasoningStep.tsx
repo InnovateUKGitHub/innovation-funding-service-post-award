@@ -9,25 +9,18 @@ export class PCRPrepareReasoningStep extends ContainerBase<ReasoningStepProps, {
     const {editor, onSave, onChange} = this.props;
     const PCRForm = ACC.TypedForm<PCRDto>();
 
-    const reasoningHint = (
-      <ACC.Renderers.SimpleString>
-        You must explain each change. Be brief and write clearly.<br/>
-        If you are requesting a reallocation of project costs, you must justify each change to your costs.
-      </ACC.Renderers.SimpleString>
-    );
-
     return (
       <ACC.Section qa="reasoning-save-and-return">
         <PCRForm.Form
           editor={editor}
           onChange={dto => onChange(dto)}
         >
-          <PCRForm.Fieldset heading="Reasoning">
+          <PCRForm.Fieldset headingContent={x => x.pcrPrepareReasoning.reasoningHeading()}>
             <PCRForm.MultilineString
               name="reasoningComments"
-              label="Reasoning"
+              labelContent={x => x.pcrPrepareReasoning.reasoningHeading()}
               labelHidden={true}
-              hint={reasoningHint}
+              hintContent={x => x.pcrPrepareReasoning.hint()}
               qa="reason"
               value={m => m.reasoningComments}
               update={(m, v) => m.reasoningComments = v || ""}
@@ -35,7 +28,7 @@ export class PCRPrepareReasoningStep extends ContainerBase<ReasoningStepProps, {
               rows={15}
             />
           </PCRForm.Fieldset>
-          <PCRForm.Button name="reasoningStep" styling="Primary" onClick={() => onSave(editor.data)}>Save and continue</PCRForm.Button>
+          <PCRForm.Button name="reasoningStep" styling="Primary" onClick={() => onSave(editor.data)}><ACC.Content value={x => x.pcrPrepareReasoning.pcrItem.submitButton()}/></PCRForm.Button>
         </PCRForm.Form>
       </ACC.Section>
     );

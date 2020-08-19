@@ -479,6 +479,42 @@
       "guidance": "The period length can be 3 months or 1 month. This request will affect all remaining periods of the project for all partners. It will also change:\n* how your project's forecast is divided\n* how often your project submits a claim.\n\n\n\nWe will reject this if you submit it with any other request type.",
       "period-length-quarterly": "3 months",
       "period-length-monthly": "1 month"
+    },
+    "pcr-name-change":{
+      "heading-select-partner": "Select partner",
+      "heading-enter-name": "Enter new name"
+    },
+    "pcr-name-change-prepare-item-files":{
+      "heading-upload-certificate": "Upload change of name certificate"
+    },
+    "pcr-reasoning-prepare-reasoning":{
+      "title":{
+        "html": "Provide reasoning to Innovate UK",
+        "display": "Provide reasoning to Innovate UK"
+      },
+      "hint": "You must explain each change. Be brief and write clearly.<br/>If you are requesting a reallocation of project costs, you must justify each change to your costs.",
+      "heading-reasoning": "Reasoning"
+    },
+    "pcr-reasoning-summary":{
+      "heading-mark-as-complete": "Mark as complete",
+      "edit": "Edit",
+      "no-documents": "No documents attached"
+    },
+    "pcr-reasoning-workflow":{
+      "title":{
+        "html": "Reasoning for Innovate UK",
+        "display": "Reasoning for Innovate UK"
+      },
+      "back-link": "Back to request"
+    },
+    "pcr-prepare-item-files-for-partner-withdrawel":{
+      "guidance-heading": "Upload withdrawal of partner certificate",
+      "guidance": "You must upload these documents:\n\n* a confirmation letter on headed paper from the partner who is leaving, signed by someone with financial authority\n* a brief list of the outstanding deliverables, and who each will be assigned to once the partner leaves\n* copies of signed letters from all other project partners to show they have agreed to this change"
+    },
+    "pcr-remove-partner":{
+      "heading-select-partner": "Select partner to remove",
+      "heading-removal-period": "When is their last period?",
+      "hint-removal-period": "The partner can make a claim for this period before being removed. If they have a claim in progress, they will be removed once that claim has been paid."
     }
   },
   "claims-messages": {
@@ -685,7 +721,8 @@
     "fileSizeLabel": "File size",
     "uploadedByLabel" : "Uploaded by",
     "filesUploadedTitle": "Files uploaded",
-    "filesUploadedSubtitle": "All documents uploaded during this request will be shown here. All documents open in a new window."
+    "filesUploadedSubtitle": "All documents uploaded during this request will be shown here. All documents open in a new window.",
+    "uploadDocumentsLabel": "Upload documents"
   },
   "document-messages": {
     "header": "You can upload up to 10 documents at a time. Each document must:\n\n* be less than 10MB in file size\n* have a unique file name that describes its contents\n\nThere is no limit to the number of files you can upload in total.",
@@ -739,7 +776,8 @@
   },
   "pcr-item":{
     "submit-button": "Save and continue",
-    "return-to-summary-button": "Save and return to summary"
+    "return-to-summary-button": "Save and return to summary",
+    "return-to-request-button": "Save and return to request"
   },
   "pcr-add-partner-labels":{
     "role-heading": "Project role",
@@ -787,6 +825,24 @@
   "pcr-period-length-change-labels":{
     "current-period-length": "Current period length",
     "new-period-length": "New period length"
+  },
+  "pcr-name-change-labels":{
+    "enter-name": "Enter new name",
+    "existing-name": "Existing name",
+    "proposed-name": "Proposed name",
+    "certificate": "Change of anme certificate"
+  },
+  "pcr-reasoning-labels":{
+    "request-number": "Request number",
+    "types": "Types",
+    "comments": "Comments",
+    "Files": "Files"
+  },
+  "pcr-remove-partner-labels":{
+    "removal-period": "Removal period",
+    "removed-partner": "Partner being removed",
+    "last-period": "Last period",
+    "documents": "Documents"
   },
   "task-list": {
     "section-title-enter-info": "Give us information"
