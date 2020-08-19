@@ -40,4 +40,6 @@ export class FinancialVirementLabels extends ContentBase {
 
   public readonly grantMovingOverYear = () => this.getContent("grant-moving-over-year");
   public readonly yearEndInformation = () => this.getContent("year-end-information");
+
+  public readonly backToSummary = () => this.getContent("back-to-summary");
 }

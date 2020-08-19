@@ -1,5 +1,5 @@
-import { ContentPageBase } from "../contentPageBase";
-import { Content } from "../content";
+import { ContentPageBase } from "../../../contentPageBase";
+import { Content } from "../../../content";
 import { FinancialVirementLabels } from "@content/labels/financialVirementLabels";
 import { ProjectDto } from "@framework/dtos";
 

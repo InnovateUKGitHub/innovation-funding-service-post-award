@@ -1,5 +1,5 @@
-import { ContentPageBase } from "../contentPageBase";
-import { Content } from "../content";
+import { ContentPageBase } from "../../../contentPageBase";
+import { Content } from "../../../content";
 import { FinancialVirementLabels } from "@content/labels/financialVirementLabels";
 import { ProjectDto } from "@framework/dtos";
 
@@ -9,4 +9,8 @@ export class FinancialVirementSummaryContent extends ContentPageBase {
   }
 
   public readonly labels = new FinancialVirementLabels(this, this.project);
+
+  public readonly guidance = () => this.getContent("guidance");
+  public readonly changeGrantLink = () => this.getContent("link-change-grant");
+  public readonly grantValueMovingOverHeading = () => this.getContent("heading-year-end-grant-value", {markdown: true});
 }
