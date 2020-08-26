@@ -4,7 +4,7 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
-import { ClaimDto, ClaimStatus, ClaimStatusChangeDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { ClaimDto, ClaimStatusChangeDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { StoresConsumer } from "@ui/redux";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
@@ -62,18 +62,9 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
         {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" messageContent={x => x.claimPrepare.messages.finalClaim()}/>}
-        {this.isInterimClaim(data.claim, data.project) && <ACC.ValidationMessage messageType="info" qa="interim-claim-guidance-FC" messageContent={x => x.claimPrepare.messages.interimClaimGuidanceFC()}/>}
         {this.renderDetailsSection(data)}
       </ACC.Page>
     );
-  }
-
-  // TODO: Interim solution for monthly claims. Remove once permament solution in place.
-  private isInterimClaim(claim: ClaimDto, project: ProjectDto) {
-    if (claim.status !== ClaimStatus.DRAFT || claim.periodId !== project.periodId) {
-      return false;
-    }
-    return true;
   }
 
   private renderDetailsSection(data: CombinedData) {
@@ -95,7 +86,7 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
         >
           {this.renderLogsSection()}
           <Form.Fieldset qa="save-and-continue">
-            {!this.isInterimClaim(data.claim, data.project) && <Form.Submit><ACC.Content value={x => x.claimPrepare.saveAndContinueButton()} /></Form.Submit>}
+            <Form.Submit><ACC.Content value={x => x.claimPrepare.saveAndContinueButton()} /></Form.Submit>
             <Form.Button name="save" onClick={() => this.props.onUpdate(true, data.editor.data, this.getBackLink(data.project, data.partner))}><ACC.Content value={x => x.claimPrepare.saveAndReturnButton()} /></Form.Button>
           </Form.Fieldset>
         </Form.Form>

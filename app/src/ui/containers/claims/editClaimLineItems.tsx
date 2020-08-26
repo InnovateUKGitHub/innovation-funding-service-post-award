@@ -1,7 +1,7 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
-import { ClaimDto, ProjectDto, ProjectRole } from "@framework/types";
+import { ProjectDto, ProjectRole } from "@framework/types";
 import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
 import { ValidationMessage } from "@ui/components";
@@ -24,7 +24,6 @@ interface Data {
   editor: Pending<IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>>;
   forecastDetail: Pending<ForecastDetailsDTO>;
   documents: Pending<DocumentSummaryDto[]>;
-  draftClaim: Pending<ClaimDto | null>;
 }
 
 interface CombinedData {
@@ -34,7 +33,6 @@ interface CombinedData {
   forecastDetail: ForecastDetailsDTO;
   documents: DocumentSummaryDto[];
   editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>;
-  draftClaim: ClaimDto | null;
 }
 
 interface Callbacks {
@@ -59,13 +57,12 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
       forecastDetail: this.props.forecastDetail,
       documents: this.props.documents,
       editor: this.props.editor,
-      draftClaim: this.props.draftClaim,
     });
 
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
   }
 
-  private renderContents({ project, costCategories, documents, forecastDetail, claimDetails, editor, draftClaim }: CombinedData) {
+  private renderContents({ project, costCategories, documents, forecastDetail, claimDetails, editor }: CombinedData) {
     const back = this.props.routes.prepareClaim.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
 
@@ -76,8 +73,6 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={project} />}
       >
-        {/*TODO Used for interim solution to claim monthly. Can be removed once full solution is in place.*/}
-        {this.renderInterimClaimMessage(draftClaim, project)}
         {this.renderGuidanceMessage()}
         <ACC.Section>
           <ACC.TextHint text={costCategory.hintText} />
@@ -86,17 +81,6 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             : this.renderTable(editor, forecastDetail, documents)}
         </ACC.Section>
       </ACC.Page>
-    );
-  }
-
-  private renderInterimClaimMessage(draftClaim: ClaimDto | null, project: ProjectDto) {
-    if (!draftClaim || draftClaim.periodId !== project.periodId) return null;
-    return (
-      <ACC.ValidationMessage
-        messageType="alert"
-        qa="interim-claim-guidance-FC"
-        messageContent={x => x.editClaimLineItems.messages.interimClaimMessage()}
-      />
     );
   }
 
@@ -359,8 +343,6 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
             dto.lineItems.push(...extraLineItems);
           })}
           onUpdate={(saving, dto, goToUpload) => stores.claimDetails.updateClaimDetailsEditor(saving, props.projectId, props.partnerId, props.periodId, props.costCategoryId, dto, () => stores.navigation.navigateTo(getDestination(props, goToUpload)))}
-          // TODO Used for interim solution to claim monthly. Can be removed once full solution is in place.
-          draftClaim={stores.claims.getDraftClaimForPartner(props.partnerId)}
           {...props}
         />
       )
