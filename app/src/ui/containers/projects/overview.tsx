@@ -4,7 +4,6 @@ import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import {
-  Authorisation,
   IClientUser,
   PartnerClaimStatus,
   PartnerDto,
@@ -18,12 +17,10 @@ import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { StoresConsumer } from "@ui/redux";
 import { IRoutes } from "@ui/routing";
 import { Content } from "@content/content";
-import { ClaimDto } from "@framework/dtos";
 
 interface Data {
   projectDetails: Pending<Dtos.ProjectDto>;
   partners: Pending<Dtos.PartnerDto[]>;
-  draftClaims: Pending<Dtos.ClaimDto[]>;
   user: IClientUser;
   config: IClientConfig;
 }
@@ -37,10 +34,9 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     const combined = Pending.combine({
       project: this.props.projectDetails,
       partners: this.props.partners,
-      draftClaims: this.props.draftClaims,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.partners, x.draftClaims)} />;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.partners)} />;
   }
 
   private isPartnerWithdrawn(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[]) {
@@ -51,7 +47,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     return partners.some(p => !!(p.roles & ProjectRole.FinancialContact) && p.isWithdrawn);
   }
 
-  private renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[], draftClaims: Dtos.ClaimDto[]) {
+  private renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[]) {
     // find first partner with role
     const partner = partners.filter(x => x.roles !== ProjectRole.Unknown)[0];
 
@@ -72,7 +68,6 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
       >
-        {this.renderInterimClaimDisclaimer(project, draftClaims)}
         <ACC.Section
           qa="period-information"
           className="govuk-!-padding-bottom-6"
@@ -84,20 +79,6 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
         {this.renderLinks(project, partner || partners[0], this.props.routes)}
       </ACC.Page>
     );
-  }
-
-  private renderInterimClaimDisclaimer(project: ProjectDto, draftClaims: ClaimDto[]) {
-    if (draftClaims.length === 0) return null;
-    const hasClaimInCurrentPeriod = draftClaims.some(x => x.periodId === project.periodId);
-    if (!hasClaimInCurrentPeriod) return null;
-
-    if (project.roles & ProjectRole.MonitoringOfficer) {
-      return <ACC.ValidationMessage messageType="alert" qa="interim-claim-disclaimer-MO" messageContent={x => x.projectOverview.messages.interimClaimDisclaimerMO()} />;
-    }
-    if (project.roles & (ProjectRole.ProjectManager | ProjectRole.FinancialContact)) {
-      return <ACC.ValidationMessage messageType="alert" qa="interim-claim-disclaimer-FC" messageContent={x => x.projectOverview.messages.interimClaimDisclaimerFC()} />;
-    }
-    return null;
   }
 
   private renderProjectOverviewDetails(project: ProjectDto, partner: PartnerDto) {
@@ -251,33 +232,13 @@ const ProjectOverviewContainer = (props: Params & BaseProps) => {
   return (
     <StoresConsumer>
       {
-        stores => {
-          const partnersPending = stores.partners.getPartnersForProject(props.projectId);
-          const user = stores.users.getCurrentUser();
-          const auth = new Authorisation(user.roleInfo);
-          // TODO Used for interim solution to claim monthly. Can be removed once full solution is in place.
-          const draftClaimsPending = partnersPending.chain(partners => {
-            if (auth.forProject(props.projectId).hasRole(ProjectRole.MonitoringOfficer)) {
-              return stores.claims.getDraftClaimsForProject(props.projectId);
-            }
-            if (auth.forProject(props.projectId).hasRole(ProjectRole.ProjectManager)) {
-              const leadPartner = partners.find(x => x.isLead)!;
-              return stores.claims.getDraftClaimForPartner(leadPartner.id).then(x => !!x ? [x] : []);
-            }
-            const partner = partners.find(x => auth.forPartner(props.projectId, x.id).hasRole(ProjectRole.FinancialContact));
-            if (!partner) return Pending.done([]);
-            return stores.claims.getDraftClaimForPartner(partner.id).then(x => !!x ? [x] : []);
-          });
-          return (
-            <ProjectOverviewComponent
-              projectDetails={stores.projects.getById(props.projectId)}
-              partners={partnersPending}
-              draftClaims={draftClaimsPending}
-              user={user}
-              {...props}
-            />
-          );
-        }
+        stores =>
+          <ProjectOverviewComponent
+            projectDetails={stores.projects.getById(props.projectId)}
+            partners={stores.partners.getPartnersForProject(props.projectId)}
+            user={stores.users.getCurrentUser()}
+            {...props}
+          />
       }
     </StoresConsumer>
   );

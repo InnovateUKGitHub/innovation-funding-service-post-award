@@ -2,7 +2,7 @@ import React from "react";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
-import { ClaimDto, DocumentDescription, ProjectDto, ProjectRole } from "@framework/types";
+import { DocumentDescription, ProjectDto, ProjectRole } from "@framework/types";
 import { IEditorStore } from "@ui/redux/reducers";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
 import { StoresConsumer } from "@ui/redux";
@@ -22,7 +22,6 @@ interface Data {
   costCategories: Pending<CostCategoryDto[]>;
   documents: Pending<DocumentSummaryDto[]>;
   editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
-  draftClaim: Pending<ClaimDto | null>;
 }
 
 interface CombinedData {
@@ -30,7 +29,6 @@ interface CombinedData {
   costCategories: CostCategoryDto[];
   documents: DocumentSummaryDto[];
   editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
-  draftClaim: ClaimDto | null;
 }
 
 interface Callbacks {
@@ -46,7 +44,6 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
       costCategories: this.props.costCategories,
       documents: this.props.documents,
       editor: this.props.editor,
-      draftClaim: this.props.draftClaim,
     });
 
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
@@ -68,7 +65,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
     );
   }
 
-  private renderContents({ project, costCategories, documents, editor, draftClaim }: CombinedData) {
+  private renderContents({ project, costCategories, documents, editor }: CombinedData) {
     const back = this.props.routes.prepareClaimLineItems.getLink({
       projectId: project.id,
       partnerId: this.props.partnerId,
@@ -85,7 +82,6 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={project} />}
       >
-        {this.renderInterimClaimDisclaimer(project, draftClaim)}
         <ACC.Renderers.SimpleString qa="guidanceText"><ACC.Content value={x => x.claimDetailDocuments.messages.documentDetailGuidance()}/></ACC.Renderers.SimpleString>
         <ACC.Renderers.Messages messages={this.props.messages} />
         {this.renderDocuments(editor, documents)}
@@ -115,11 +111,6 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
       </ACC.Page>
     );
   }
-
-  private renderInterimClaimDisclaimer(project: ProjectDto, draftClaim: ClaimDto | null) {
-    if (!draftClaim || draftClaim.periodId !== project.periodId) return null;
-    return <ACC.ValidationMessage messageType="alert" qa="interim-document-detail-warning-FC" messageContent={x => x.claimDetailDocuments.messages.documentDisclaimerMessage()}/>;
-  }
 }
 
 const ClaimDetailDocumentsContainer = (props: ClaimDetailDocumentsPageParams & BaseProps) => (
@@ -140,8 +131,6 @@ const ClaimDetailDocumentsContainer = (props: ClaimDetailDocumentsPageParams & B
             stores.messages.clearMessages();
             stores.claimDetailDocuments.deleteClaimDetailDocumentsEditor(props.projectId, props.partnerId, props.periodId, props.costCategoryId, dto, document);
           }}
-          // TODO Used for interim solution to claim monthly. Can be removed once full solution is in place.
-          draftClaim={stores.claims.getDraftClaimForPartner(props.partnerId)}
           {...props}
         />
       )
