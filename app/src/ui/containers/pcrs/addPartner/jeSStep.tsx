@@ -25,8 +25,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
         {this.renderFiles(documentsEditor, documents)}
         <Form.Form qa="saveAndContinue" data={this.props.pcrItem} onSubmit={() => this.props.onSave()}>
           <Form.Fieldset>
-            <Form.Submit>Save and continue</Form.Submit>
-            <Form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}>Save and return to summary</Form.Button>
+            <Form.Submit><ACC.Content value={x => x.pcrAddPartnerJeS.pcrItem.submitButton()}/></Form.Submit>
+            <Form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerJeS.pcrItem.returnToSummaryButton()}/></Form.Button>
           </Form.Fieldset>
         </Form.Form>
       </React.Fragment>
@@ -44,19 +44,14 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           onChange={(dto) => this.props.onFileChange(false, dto)}
           qa="projectChangeRequestItemUpload"
         >
-          <UploadForm.Fieldset heading="Je-S form">
-            <ACC.Renderers.SimpleString>Your new academic partner must apply for funding through the Je-S system. To find out more about the Je-S requirements and processes please go to:</ACC.Renderers.SimpleString>
-            <ACC.UnorderedList>
-              <li><a href="https://www.gov.uk/government/publications/innovate-uk-completing-your-application-project-costs-guidance/guidance-for-academics-applying-via-the-je-s-system" rel="noopener noreferrer" target="_blank">guidance from Innovate UK for academics applying via the Je-S system (opens in a new window)</a></li>
-              <li> the <a href="https://je-s.rcuk.ac.uk/" rel="noopener noreferrer" target="_blank">Je-S website (opens in a new window)</a>.</li>
-            </ACC.UnorderedList>
-            <ACC.Renderers.SimpleString>Upload a pdf copy of the completed Je-S output form, once the new partner has a status of 'With Council'. If there is information outstanding or the partner is not at this status, your request will be rejected.</ACC.Renderers.SimpleString>
+          <UploadForm.Fieldset headingContent={x => x.pcrAddPartnerJeS.labels.jesFormHeading()}>
+            <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerJeS.guidance()}/></ACC.Renderers.SimpleString>
           </UploadForm.Fieldset>
           <UploadForm.Fieldset qa="documentUpload">
             <UploadForm.Hidden name="description" value={x => DocumentDescription.JeSForm} />
             <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
-              label="Upload files"
+              labelContent={x => x.pcrAddPartnerJeS.documentLabels.uploadInputLabel()}
               name="attachment"
               labelHidden={true}
               value={data => data.files}
@@ -68,7 +63,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
             />
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
-            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}>Upload</UploadForm.Button>
+            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}><ACC.Content value={x => x.pcrAddPartnerJeS.documentLabels.uploadButtonLabel()}/></UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
       </ACC.Section>
@@ -78,14 +73,14 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
   private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (documents.length) {
       return (
-        <ACC.Section title="Files uploaded" subtitle="All documents uploaded during this request will be shown here. All documents open in a new window.">
+        <ACC.Section titleContent={x => x.pcrAddPartnerJeS.documentLabels.filesUploadedTitle()} subtitleContent={x => x.pcrAddPartnerJeS.documentLabels.filesUploadedSubtitle()}>
           {documents.length ? <ACC.DocumentTableWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="je-s-document"/> : null}
         </ACC.Section>
       );
     }
     return (
-      <ACC.Section title="Files uploaded">
-        <ACC.ValidationMessage message="No documents uploaded." messageType="info" />
+      <ACC.Section titleContent={x => x.pcrAddPartnerJeS.documentLabels.filesUploadedTitle()}>
+        <ACC.ValidationMessage messageContent={x => x.pcrAddPartnerJeS.documentMessages.noDocumentsUploaded()} messageType="info" />
       </ACC.Section>
     );
   }
