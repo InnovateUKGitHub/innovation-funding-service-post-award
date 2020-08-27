@@ -33,12 +33,12 @@ class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.forecastDetails.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}>Back to forecast</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.forecastDetails.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}><ACC.Content value={x => x.forecastsUpdate.backLink()}/></ACC.BackLink>}
         error={editor.error}
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={combined.project} />}
       >
-        {(combined.claim && combined.claim.isFinalClaim) && <ACC.ValidationMessage messageType="info" message="This is the final claim."/>}
+        {(combined.claim && combined.claim.isFinalClaim) && <ACC.ValidationMessage messageType="info" messageContent={x => x.forecastsUpdate.messages.finalClaim()}/>}
         <ACC.Section title="" qa="partner-forecast" >
           <ACC.Forecasts.Warning {...combined} editor={editor} />
           {this.renderOverheadsRate(combined.partner.overheadRate)}
@@ -51,7 +51,7 @@ class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
             <ACC.Claims.ForecastTable data={combined} editor={editor} />
             <Form.Fieldset>
               <ACC.Claims.ClaimLastModified partner={combined.partner} />
-              <Form.Submit>Submit</Form.Submit>
+              <Form.Submit><ACC.Content value={x => x.forecastsUpdate.submitButton()}/></Form.Submit>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
@@ -61,7 +61,7 @@ class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
 
   private renderOverheadsRate(overheadRate: number | null) {
     if (!isNumber(overheadRate)) return null;
-    return <ACC.Renderers.SimpleString qa="overhead-costs">Overhead costs: <ACC.Renderers.Percentage value={overheadRate} /></ACC.Renderers.SimpleString>;
+    return <ACC.Renderers.SimpleString qa="overhead-costs"><ACC.Content value={x => x.forecastsUpdate.labels.overheadCosts()}/><ACC.Renderers.Percentage value={overheadRate} /></ACC.Renderers.SimpleString>;
   }
 }
 
@@ -99,9 +99,6 @@ export const UpdateForecastRoute = defineRoute({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,
   }),
-  getTitle: () => ({
-    htmlTitle: "Update forecast",
-    displayTitle: "Update forecast"
-  }),
+  getTitle: ({content}) => content.forecastsUpdate.title(),
   accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
 });
