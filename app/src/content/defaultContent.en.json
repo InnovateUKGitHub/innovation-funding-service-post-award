@@ -210,6 +210,35 @@
       "save-button": "Save and return to reallocate project costs",
       "remaining-grant-info" :"You may change the new remaining grant for any partner, so the total new remaining grant is no more than the remaining grant already agreed for the project. The funding level will update to the new funding level for the remaining costs on the project."
     },
+    "forecasts-dashboard":{
+      "title": {
+        "html": "Forecasts - View project",
+        "display": "Forecasts"
+      },
+      "header-partner": "Partner",
+      "header-total-eligible-costs": "Total eligible costs",
+      "header-forecasts-and-costs": "Forecasts and costs",
+      "header-underspend": "Underspend",
+      "header-last-update": "Date of last update",
+      "header-action": "Action"
+    },
+    "forecasts-details":{
+      "title": {
+        "html": "View forecast - View project",
+        "display": "Forecast"
+      },
+      "back-link-mo-or-pm": "Back to forecasts",
+      "back-link": "Back to project",
+      "link-update-forecast": "Update forecast"
+    },
+    "forecasts-update":{
+      "title": {
+        "html": "Update forecast",
+        "display": "Update forecast"
+      },
+      "back-link": "Back to forecast",
+      "button-submit": "Submit"
+    },
     "monitoring-reports-dashboard":{
       "title": {
         "html": "Monitoring reports - View project",
@@ -533,6 +562,11 @@
     "cost-guidance-default": "",
     "calculated-guidance-overheads": "You will need to submit an overheads calculation spreadsheet, available following the link below, if the new partner feels their overheads are higher than 20%."
   },
+  "forecasts-messages": {
+    "warning-period-change": "Your project asked us to change the length of the remaining periods. Make sure your forecast is correct before submitting your next claim.",
+    "project-ended": "You cannot change your forecast. Your project has ended.",
+    "final-claim": "This is the final claim."
+  },
   "monitoring-reports-messages": {
     "additionalCommentsGuidance": "If you want to explain anything to Innovate UK, add it here.",
     "reportsSubmissionGuidance": "You should submit reports for this project according to the schedule agreed with Innovate UK.",
@@ -649,6 +683,9 @@
     "partner-totals": "Partner totals",
     "grant-moving-over-year": "Grant value moving over the financial year end",
     "year-end-information": "The financial year ends on March 31st."
+  },
+  "forecasts-labels": {
+    "overhead-costs": "Overhead costs: "
   },
   "monitoring-reports-labels": {
     "status-and-comments-log": "Status and comments log",
