@@ -71,7 +71,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={back}>Back to claim</ACC.BackLink>}
+        backLink={<ACC.BackLink route={back}><ACC.Content value={x => x.editClaimLineItems.backLink()}/></ACC.BackLink>}
         error={editor.error}
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={project} />}
@@ -95,15 +95,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
       <ACC.ValidationMessage
         messageType="alert"
         qa="interim-claim-guidance-FC"
-        message={
-          <div>When adding costs for last month, you must:
-            <ul>
-              <li>use a new line for every cost each month</li>
-              <li>name the month in the description</li>
-              <li>not alter any information for previous months' costs</li>
-            </ul>
-          </div>
-        }
+        messageContent={x => x.editClaimLineItems.messages.interimClaimMessage()}
       />
     );
   }
@@ -134,21 +126,21 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             footers={this.renderFooters(mockItems, forecastDetail, false, editor)}
             qa="current-claim-summary-table"
           >
-            <LineItemTable.String header="Description" qa="cost-description" value={(x, i) => x.description} />
-            <LineItemTable.ShortDate header="Last updated" qa="cost-last-updated" value={(x, i) => x.lastModifiedDate} />
-            <LineItemTable.Currency header="Cost (£)" qa="cost-value" value={(x, i) => x.value} width={30} />
+            <LineItemTable.String headerContent={x => x.editClaimLineItems.descriptionHeader()} qa="cost-description" value={(x, i) => x.description} />
+            <LineItemTable.ShortDate headerContent={x => x.editClaimLineItems.lastUpdatedHeader()} qa="cost-last-updated" value={(x, i) => x.lastModifiedDate} />
+            <LineItemTable.Currency headerContent={x => x.editClaimLineItems.costHeader()} qa="cost-value" value={(x, i) => x.value} width={30} />
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
           {this.renderDocuments(documents)}
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
-          <LineItemForm.Button name="upload" onClick={() => this.props.onUpdate(true, editor.data, true)}>Upload and remove documents</LineItemForm.Button>
+          <LineItemForm.Button name="upload" onClick={() => this.props.onUpdate(true, editor.data, true)}><ACC.Content value={x => x.editClaimLineItems.uploadAndRemoveDocumentsButton()}/></LineItemForm.Button>
         </LineItemForm.Fieldset>
-        <LineItemForm.Fieldset heading={"Additional information"} qa="additional-info-form" headingQa="additional-info-heading">
+        <LineItemForm.Fieldset headingContent={x => x.editClaimLineItems.additionalInformationHeading()} qa="additional-info-form" headingQa="additional-info-heading">
           <LineItemForm.MultilineString
             label="additional-info"
-            hint="Explain any difference between the forecast costs and the total costs, and what actions are you taking because of this. For example updating the project plan or financial forecast."
+            hintContent={x => x.editClaimLineItems.additionalInformationHint()}
             labelHidden={true}
             name="comments"
             value={() => editor.data.comments}
@@ -156,7 +148,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             qa="info-text-area"
           />
         </LineItemForm.Fieldset>
-        <LineItemForm.Submit>Save and return to claim</LineItemForm.Submit>
+        <LineItemForm.Submit><ACC.Content value={x => x.editClaimLineItems.saveAndReturnButton()}/></LineItemForm.Submit>
       </LineItemForm.Form>
     );
 
@@ -181,11 +173,11 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             footers={this.renderFooters(editor.data.lineItems, forecastDetail, this.state.showAddRemove, editor)}
             qa="current-claim-summary-table"
           >
-            <LineItemTable.Custom header="Description" qa="cost-description" value={(x, i) => this.renderDescription(x, i, validationResults[i.row], editor)} />
-            <LineItemTable.Custom header="Cost (£)" qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, validationResults[i.row], editor)} width={30} />
-            <LineItemTable.ShortDate header="Last updated" qa="cost-last-updated" value={x => x.lastModifiedDate} />
+            <LineItemTable.Custom headerContent={x => x.editClaimLineItems.descriptionHeader()} qa="cost-description" value={(x, i) => this.renderDescription(x, i, validationResults[i.row], editor)} />
+            <LineItemTable.Custom headerContent={x => x.editClaimLineItems.costHeader()} qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, validationResults[i.row], editor)} width={30} />
+            <LineItemTable.ShortDate headerContent={x => x.editClaimLineItems.lastUpdatedHeader()} qa="cost-last-updated" value={x => x.lastModifiedDate} />
             {this.state.showAddRemove ?
-              <LineItemTable.Custom header="Action" hideHeader={true} qa="remove" value={(x, i) => <a href="" className="govuk-link" role="button" onClick={e => this.removeItem(x, i, e, editor)}>Remove</a>} width={1}/>
+              <LineItemTable.Custom headerContent={x => x.editClaimLineItems.actionHeader()} hideHeader={true} qa="remove" value={(x, i) => <a href="" className="govuk-link" role="button" onClick={e => this.removeItem(x, i, e, editor)}><ACC.Content value={y => y.editClaimLineItems.removeButton()}/></a>} width={1}/>
               : null}
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
@@ -193,12 +185,12 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
           {this.renderDocuments(documents)}
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
-          <LineItemForm.Button name="upload" onClick={() => this.props.onUpdate(true, editor.data, true)}>Upload and remove documents</LineItemForm.Button>
+          <LineItemForm.Button name="upload" onClick={() => this.props.onUpdate(true, editor.data, true)}><ACC.Content value={x => x.editClaimLineItems.uploadAndRemoveDocumentsButton()}/></LineItemForm.Button>
         </LineItemForm.Fieldset>
-        <LineItemForm.Fieldset heading={"Additional information"} qa="additional-info-form" headingQa="additional-info-heading">
+        <LineItemForm.Fieldset headingContent={x => x.editClaimLineItems.additionalInformationHeading()} qa="additional-info-form" headingQa="additional-info-heading">
           <LineItemForm.MultilineString
             label="additional-info"
-            hint="Explain any difference between the forecast costs and the total costs, and what actions are you taking because of this. For example updating the project plan or financial forecast."
+            hintContent={x => x.editClaimLineItems.additionalInformationHint()}
             labelHidden={true}
             name="comments"
             value={() => editor.data.comments}
@@ -206,24 +198,22 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             qa="info-text-area"
           />
         </LineItemForm.Fieldset>
-        <LineItemForm.Submit>Save and return to claim</LineItemForm.Submit>
+        <LineItemForm.Submit><ACC.Content value={x => x.editClaimLineItems.saveAndReturnButton()}/></LineItemForm.Submit>
       </LineItemForm.Form>
     );
   }
 
   private renderGuidanceMessage() {
     return (
-      <ACC.Renderers.SimpleString qa="guidance-message">
-        You must break down your total costs and upload evidence for each expenditure you are claiming for. Contact your monitoring officer for more information about the level of detail you are required to provide.
-      </ACC.Renderers.SimpleString>
+      <ACC.Renderers.SimpleString qa="guidance-message"><ACC.Content value={x => x.editClaimLineItems.messages.editClaimLineItemGuidance()}/> </ACC.Renderers.SimpleString>
     );
   }
 
   private renderDocuments(documents: DocumentSummaryDto[]) {
     return (
-      <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "All documents open in a new window." : ""} qa="supporting-documents-section">
-        <ACC.Renderers.SimpleString>Upload evidence of the costs for your monitoring officer to review. If you do not upload documents your monitoring officer is unlikely to accept your claim. Contact them for advice on which documents to provide.</ACC.Renderers.SimpleString>
-        {documents.length > 0 ? <ACC.DocumentTable documents={documents} qa="supporting-documents"/> : <ValidationMessage message="No documents uploaded." messageType="info" />}
+      <ACC.Section titleContent={x => x.editClaimLineItems.supportingDocumentsHeader()} subtitle={documents.length > 0 ? <ACC.Content value={x => x.editClaimLineItems.documentMessages.newWindow()}/> : ""} qa="supporting-documents-section">
+        <ACC.Renderers.SimpleString><ACC.Content value={x => x.editClaimLineItems.messages.editClaimLiineItemDocumentGuidance()}/></ACC.Renderers.SimpleString>
+        {documents.length > 0 ? <ACC.DocumentTable documents={documents} qa="supporting-documents"/> : <ValidationMessage messageContent={x => x.editClaimLineItems.documentMessages.noDocumentsUploaded()} messageType="info" />}
       </ACC.Section>
     );
   }
@@ -294,36 +284,36 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     if (showAddRemove) {
       footers.push(
         <tr key={1} className="govuk-table__row">
-          <td className="govuk-table__cell" colSpan={4}><a href="" className="govuk-link" role="button" onClick={(e) => this.addItem(e, editor)} data-qa="add-cost">Add a cost</a></td>
+          <td className="govuk-table__cell" colSpan={4}><a href="" className="govuk-link" role="button" onClick={(e) => this.addItem(e, editor)} data-qa="add-cost"><ACC.Content value={x => x.editClaimLineItems.addCost()}/></a></td>
         </tr>
       );
     }
 
     footers.push(
       <tr key={2} className="govuk-table__row">
-        <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Total costs</td>
+        <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"><ACC.Content value={x => x.editClaimLineItems.totalCosts()}/></td>
         <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={total} /></td>
-        <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td>
-        {showAddRemove ? <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td> : null}
+        <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText><ACC.Content value={x => x.editClaimLineItems.noData()}/></ACC.Renderers.AccessibilityText></td>
+        {showAddRemove ? <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText><ACC.Content value={x => x.editClaimLineItems.noData()}/></ACC.Renderers.AccessibilityText></td> : null}
       </tr>
     );
 
     footers.push(
       <tr key={3} className="govuk-table__row">
-        <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Forecast costs</td>
+        <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"><ACC.Content value={x => x.editClaimLineItems.forecastCosts()}/></td>
         <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={forecast} /></td>
-        <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td>
-        {showAddRemove ? <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td> : null}
+        <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText><ACC.Content value={x => x.editClaimLineItems.noData()}/></ACC.Renderers.AccessibilityText></td>
+        {showAddRemove ? <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText><ACC.Content value={x => x.editClaimLineItems.noData()}/></ACC.Renderers.AccessibilityText></td> : null}
       </tr>
     );
 
     if (forecast > 0) {
       footers.push(
         <tr key={4} className="govuk-table__row">
-          <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">Difference</td>
+          <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold"><ACC.Content value={x => x.editClaimLineItems.difference()}/></td>
           <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Percentage value={diff} /></td>
-          <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td>
-          {showAddRemove ? <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td> : null}
+          <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText><ACC.Content value={x => x.editClaimLineItems.noData()}/></ACC.Renderers.AccessibilityText></td>
+          {showAddRemove ? <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText><ACC.Content value={x => x.editClaimLineItems.noData()}/></ACC.Renderers.AccessibilityText></td> : null}
         </tr>
       );
     }
