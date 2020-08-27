@@ -9,8 +9,8 @@ import { PCRContactRole } from "@framework/constants";
 export const FinanceContactStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => {
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
   return (
-    <ACC.Section title="Add person to organisation">
-      <ACC.Renderers.SimpleString>This information will be used to create an account for this person in the Innovation Funding Service.</ACC.Renderers.SimpleString>
+    <ACC.Section titleContent={x => x.pcrAddPartnerProjectContacts.sectionTitle()}>
+      <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerProjectContacts.guidance()}/></ACC.Renderers.SimpleString>
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
@@ -18,10 +18,10 @@ export const FinanceContactStep = (props: PcrStepProps<PCRItemForPartnerAddition
         onSubmit={() => props.onSave()}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset heading="Finance contact">
+        <Form.Fieldset headingContent={x => x.pcrAddPartnerProjectContacts.labels.financeContactHeading()}>
           <Form.Hidden name="contact1ProjectRole" value={x => x.contact1ProjectRole = PCRContactRole.FinanceContact}/>
           <Form.String
-            label="First name"
+            labelContent={x => x.pcrAddPartnerProjectContacts.labels.contactFirstNameHeading()}
             name="contact1Forename"
             value={dto => dto.contact1Forename}
             update={(x, val) => {
@@ -30,7 +30,7 @@ export const FinanceContactStep = (props: PcrStepProps<PCRItemForPartnerAddition
             validation={props.validator.contact1Forename}
           />
           <Form.String
-            label="Last name"
+            labelContent={x => x.pcrAddPartnerProjectContacts.labels.contactLastNameHeading()}
             name="contact1Surname"
             value={dto => dto.contact1Surname}
             update={(x, val) => {
@@ -39,8 +39,8 @@ export const FinanceContactStep = (props: PcrStepProps<PCRItemForPartnerAddition
             validation={props.validator.contact1Surname}
           />
           <Form.String
-            label="Phone number"
-            hint="We may use this to contact the partner for more information about this request."
+            labelContent={x => x.pcrAddPartnerProjectContacts.labels.contactPhoneNumberHeading()}
+            hintContent={x => x.pcrAddPartnerProjectContacts.phoneNumberHint()}
             name="contact1Phone"
             value={dto => dto.contact1Phone}
             update={(x, val) => {
@@ -49,7 +49,7 @@ export const FinanceContactStep = (props: PcrStepProps<PCRItemForPartnerAddition
             validation={props.validator.contact1Phone}
           />
           <Form.String
-            label="Email"
+            labelContent={x => x.pcrAddPartnerProjectContacts.labels.contactEmailHeading()}
             name="contact1Email"
             value={dto => dto.contact1Email}
             update={(x, val) => {
@@ -59,8 +59,8 @@ export const FinanceContactStep = (props: PcrStepProps<PCRItemForPartnerAddition
           />
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
-          <Form.Submit>Save and continue</Form.Submit>
-          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>Save and return to summary</Form.Button>
+          <Form.Submit><ACC.Content value={x => x.pcrAddPartnerProjectContacts.pcrItem.submitButton()}/></Form.Submit>
+          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerProjectContacts.pcrItem.returnToSummaryButton()}/></Form.Button>
         </Form.Fieldset>
       </Form.Form>
     </ACC.Section>

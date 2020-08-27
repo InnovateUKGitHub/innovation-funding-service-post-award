@@ -28,7 +28,7 @@ export const OtherFundingStep = (props: PcrStepProps<PCRItemForPartnerAdditionDt
         <Form.Fieldset>
           <Form.Radio
             name="hasOtherFunding"
-            label="Is the new partner receiving any other public sector funding for this project?"
+            labelContent={x => x.pcrAddPartnerOtherFunding.questionLabel()}
             labelHidden={true}
             options={options}
             inline={false}
