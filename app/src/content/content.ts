@@ -50,6 +50,8 @@ import { ProjectSetupBankDetailsVerifyContent } from "@content/pages/project/pro
 import { ProjectSetupBankStatementContent } from "@content/pages/project/projectSetupBankStatementContent";
 import { PCRAddPartnerProjectLocationContent } from "./pages/pcrs/addPartner/projectLocationStepContent";
 import { PCRAddPartnerAgreementToPCRContent } from "./pages/pcrs/addPartner/agreementToPcrStepContent";
+import { ClaimDetailDocumentsContent } from "./pages/claims/claimDetailDocumentsContent";
+import { EditClaimLineItemsContent } from "./pages/claims/editClaimLineItemsContent";
 import { ProjectDto } from "@framework/dtos";
 
 export type ContentSelector = (content: Content) => ContentResult;
@@ -74,7 +76,9 @@ export class Content extends ContentBase {
   public readonly claimsDashboard: ClaimsDashboardContent;
   public readonly claimDocuments: ClaimDocumentsContent;
   public readonly claimDetails: ClaimDetailsContent;
+  public readonly claimDetailDocuments: ClaimDetailDocumentsContent;
   public readonly claimForecast: ClaimForecastContent;
+  public readonly editClaimLineItems: EditClaimLineItemsContent;
   public readonly claimPrepare: ClaimPrepareContent;
   public readonly claimPrepareSummary: ClaimPrepareSummaryContent;
   public readonly claimReview: ClaimReviewContent;
@@ -143,7 +147,9 @@ export class Content extends ContentBase {
     this.claimsDashboard = new ClaimsDashboardContent(this, project);
     this.claimDocuments = new ClaimDocumentsContent(this, project);
     this.claimDetails = new ClaimDetailsContent(this, project);
+    this.claimDetailDocuments = new ClaimDetailDocumentsContent(this, project);
     this.claimForecast = new ClaimForecastContent(this, project);
+    this.editClaimLineItems = new EditClaimLineItemsContent(this, project);
     this.claimPrepare = new ClaimPrepareContent(this, project);
     this.claimPrepareSummary = new ClaimPrepareSummaryContent(this, project);
     this.claimReview = new ClaimReviewContent(this, project);
