@@ -138,7 +138,7 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
     partnerLevel.newRemainingGrant = roundCurrency(newRemainingCosts * newFundingPercentage);
 
     dto.newEligibleCosts = dto.partners.filter(x => !!x.newEligibleCosts).reduce((total, x) => total + x.newEligibleCosts, 0);
-    dto.newRemainingGrant = dto.partners.reduce((total, p) => total + p.newRemainingGrant, 0);
+    dto.newRemainingGrant = roundCurrency(dto.partners.reduce((total, p) => total + p.newRemainingGrant, 0));
     this.props.onChange(false, dto);
   }
 
