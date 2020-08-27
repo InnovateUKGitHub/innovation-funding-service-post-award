@@ -210,6 +210,11 @@
       "save-button": "Save and return to reallocate project costs",
       "remaining-grant-info" :"You may change the new remaining grant for any partner, so the total new remaining grant is no more than the remaining grant already agreed for the project. The funding level will update to the new funding level for the remaining costs on the project."
     },
+    "financial-virement-summary":{
+      "guidance": "If the new remaining project grant is higher as a result of the reallocation of costs, you can change the funding level of partners to lower the new project grant.",
+      "link-change-grant": "Change remaining grant",
+      "heading-year-end-grant-value": "<b>Grant value moving over<br />the financial year end</b>"
+    },
     "forecasts-dashboard":{
       "title": {
         "html": "Forecasts - View project",
@@ -220,7 +225,8 @@
       "header-forecasts-and-costs": "Forecasts and costs",
       "header-underspend": "Underspend",
       "header-last-update": "Date of last update",
-      "header-action": "Action"
+      "back-link": "Back to project",
+      "link-update-forecast": "Update forecast"
     },
     "forecasts-details":{
       "title": {
@@ -682,7 +688,8 @@
     "project-totals": "Project totals",
     "partner-totals": "Partner totals",
     "grant-moving-over-year": "Grant value moving over the financial year end",
-    "year-end-information": "The financial year ends on March 31st."
+    "year-end-information": "The financial year ends on March 31st.",
+    "back-to-summary": "Back to summary"
   },
   "forecasts-labels": {
     "overhead-costs": "Overhead costs: "
