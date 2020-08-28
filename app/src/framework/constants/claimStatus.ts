@@ -7,5 +7,6 @@ export enum ClaimStatus {
   INNOVATE_QUERIED = "Innovate Queried",
   APPROVED = "Approved",
   PAID = "Paid",
-  AWAITING_IAR = "Awaiting IAR"
+  AWAITING_IAR = "Awaiting IAR",
+  PAYMENT_REQUESTED = "Payment requested"
 }
