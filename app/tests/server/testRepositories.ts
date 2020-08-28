@@ -148,6 +148,7 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
       { value: ClaimStatus.AWAITING_IAR, label: "Awaiting IAR", active: true, defaultValue: false },
       { value: ClaimStatus.DRAFT, label: "Draft", active: true, defaultValue: false },
       { value: ClaimStatus.SUBMITTED, label: "Submitted", active: true, defaultValue: false },
+      { value: ClaimStatus.PAYMENT_REQUESTED, label: "Payment requested", active: true, defaultValue: false },
     ]);
   }
 }
