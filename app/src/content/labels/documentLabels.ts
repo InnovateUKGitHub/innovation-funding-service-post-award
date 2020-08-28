@@ -32,4 +32,5 @@ export class DocumentLabels extends ContentBase {
   public readonly uploadedByLabel = () => this.getContent("uploadedByLabel");
   public readonly filesUploadedTitle = () => this.getContent("filesUploadedTitle");
   public readonly filesUploadedSubtitle = () => this.getContent("filesUploadedSubtitle");
+  public readonly uploadDocumentsLabel = () => this.getContent("uploadDocumentsLabel");
 }

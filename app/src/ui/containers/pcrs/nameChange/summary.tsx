@@ -17,9 +17,9 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForAccountNameCha
     return (
       <ACC.Section qa="name-change-summary">
         <ACC.SummaryList qa="name-change-summary-list">
-          <ACC.SummaryListItem label="Existing name" content={pcrItem.partnerNameSnapshot} validation={validator.partnerId} qa="currentPartnerName" action={this.props.getEditLink("partnerNameStep", validator.partnerId)} />
-          <ACC.SummaryListItem label="Proposed name" content={pcrItem.accountName} validation={validator.accountName} qa="newPartnerName" action={this.props.getEditLink("partnerNameStep", validator.accountName)} />
-          <ACC.SummaryListItem label="Change of name certificate" content={this.renderDocuments(documents)} qa="supportingDocuments" action={this.props.getEditLink("filesStep", null)} />
+          <ACC.SummaryListItem labelContent={x => x.pcrNameChangeSummary.labels.exisitingName()} content={pcrItem.partnerNameSnapshot} validation={validator.partnerId} qa="currentPartnerName" action={this.props.getEditLink("partnerNameStep", validator.partnerId)} />
+          <ACC.SummaryListItem labelContent={x => x.pcrNameChangeSummary.labels.proposedName()} content={pcrItem.accountName} validation={validator.accountName} qa="newPartnerName" action={this.props.getEditLink("partnerNameStep", validator.accountName)} />
+          <ACC.SummaryListItem labelContent={x => x.pcrNameChangeSummary.labels.certificate()} content={this.renderDocuments(documents)} qa="supportingDocuments" action={this.props.getEditLink("filesStep", null)} />
         </ACC.SummaryList>
       </ACC.Section>
     );
@@ -28,7 +28,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForAccountNameCha
   private renderDocuments(documents: DocumentSummaryDto[]) {
     return documents.length > 0
       ? <ACC.DocumentList documents={documents} qa="documentsList" />
-      : "No documents uploaded.";
+      : <ACC.Content value={x => x.pcrNameChangeSummary.documentMessage.noDocumentsUploaded()}/>;
   }
 }
 

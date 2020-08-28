@@ -62,7 +62,17 @@ import { PCRAddPartnerFinanceDetailsContent } from "./pages/pcrs/addPartner/fina
 import { PCRAddPartnerOrganisationDetailsContent } from "./pages/pcrs/addPartner/organisationDetailsStepContent";
 import { PCRAddPartnerSpendProfileContent } from "./pages/pcrs/addPartner/spendProfileStepContent";
 import { PCRAddPartnerJeSContent } from "./pages/pcrs/addPartner/jeSStepContent";
+import { PCRNameChangeContent } from "./pages/pcrs/nameChange/nameChangeStepContent";
+import { PCRNameChangePrepareItemFilesContent } from "./pages/pcrs/nameChange/prepareItemFilesStepContent";
+import { PCRNameChangeSummaryContent } from "./pages/pcrs/nameChange/summaryContent";
+import { PCRReasoningPrepareFilesContent } from "./pages/pcrs/reasoning/prepareFilesStepContent";
+import { PCRReasoningPrepareReasoningContent } from "./pages/pcrs/reasoning/prepareReasonStepContent";
+import { PCRReasoningSummaryContent } from "./pages/pcrs/reasoning/summaryContent";
+import { PCRReasoningWorkflowContent } from "./pages/pcrs/reasoning/workflowContent";
+import { PCRPrepareItemFilesForPartnerWithrawelContent } from "./pages/pcrs/removePartner/prepareItemFilesForPartnerWithdrawelStepContent";
 import { ProjectDto } from "@framework/dtos";
+import { PCRRemovePartnerContent } from "./pages/pcrs/removePartner/removePartnerStepContent";
+import { PCRRemovePartnerSummaryContent } from "./pages/pcrs/removePartner/removePartnerSummaryContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -136,6 +146,19 @@ export class Content extends ContentBase {
   public readonly pcrSpendProfilePrepareCostContent: PcrSpendProfilePrepareCostContent;
   public readonly pcrSpendProfileDeleteCostContent: PcrSpendProfileDeleteCostContent;
   public readonly pcrSpendProfileOverheadDocumentContent: PcrSpendProfileOverheadDocumentContent;
+
+  public readonly pcrNameChange: PCRNameChangeContent;
+  public readonly pcrNameChangePrepareItemFiles: PCRNameChangePrepareItemFilesContent;
+  public readonly pcrNameChangeSummary: PCRNameChangeSummaryContent;
+
+  public readonly pcrReasoningPrepareFiles: PCRReasoningPrepareFilesContent;
+  public readonly pcrPrepareReasoning: PCRReasoningPrepareReasoningContent;
+  public readonly pcrReasoningSummary: PCRReasoningSummaryContent;
+  public readonly pcrReasoningWorkflow: PCRReasoningWorkflowContent;
+
+  public readonly pcrRemovePartnerPrepareItemFiles: PCRPrepareItemFilesForPartnerWithrawelContent;
+  public readonly pcrRemovePartner: PCRRemovePartnerContent;
+  public readonly pcrRemovePartnerSummary: PCRRemovePartnerSummaryContent;
 
   public readonly errors: {
     notfound: NotFoundContent,
@@ -218,6 +241,19 @@ export class Content extends ContentBase {
     this.pcrSpendProfilePrepareCostContent = new PcrSpendProfilePrepareCostContent(this, project);
     this.pcrSpendProfileDeleteCostContent = new PcrSpendProfileDeleteCostContent(this, project);
     this.pcrSpendProfileOverheadDocumentContent = new PcrSpendProfileOverheadDocumentContent(this, project);
+
+    this.pcrNameChange = new PCRNameChangeContent(this, project);
+    this.pcrNameChangePrepareItemFiles = new PCRNameChangePrepareItemFilesContent(this, project);
+    this.pcrNameChangeSummary = new PCRNameChangeSummaryContent(this, project);
+
+    this.pcrReasoningPrepareFiles = new PCRReasoningPrepareFilesContent(this, project);
+    this.pcrPrepareReasoning = new PCRReasoningPrepareReasoningContent(this, project);
+    this.pcrReasoningSummary = new PCRReasoningSummaryContent(this, project);
+    this.pcrReasoningWorkflow = new PCRReasoningWorkflowContent(this, project);
+
+    this.pcrRemovePartnerPrepareItemFiles = new PCRPrepareItemFilesForPartnerWithrawelContent(this, project);
+    this.pcrRemovePartner = new PCRRemovePartnerContent(this, project);
+    this.pcrRemovePartnerSummary = new PCRRemovePartnerSummaryContent(this, project);
 
     this.errors = {
       notfound: new NotFoundContent(this, project),
