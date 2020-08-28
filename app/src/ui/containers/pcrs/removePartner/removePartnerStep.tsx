@@ -29,7 +29,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRP
         onSubmit={() => props.onSave()}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset heading="Select partner to remove">
+        <Form.Fieldset headingContent={x => x.pcrRemovePartner.selectPartnerHeading()}>
           <Form.Radio
             name="partnerId"
             hint={props.getRequiredToCompleteMessage()}
@@ -40,10 +40,10 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRP
             validation={props.validator.partnerId}
           />
         </Form.Fieldset>
-        <Form.Fieldset heading="When is their last period?">
+        <Form.Fieldset headingContent={x => x.pcrRemovePartner.removalPeriodHeading()}>
           <Form.Numeric
-            label="Removal period"
-            hint="The partner can make a claim for this period before being removed. If they have a claim in progress, they will be removed once that claim has been paid."
+            labelContent={x => x.pcrRemovePartner.labels.removalPeriod()}
+            hintContent={x => x.pcrRemovePartner.removalPeriodHint()}
             labelHidden={true}
             width={3}
             name="removalPeriod"
@@ -52,7 +52,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRP
             validation={props.validator.removalPeriod}
           />
         </Form.Fieldset>
-        <Form.Submit>Save and continue</Form.Submit>
+        <Form.Submit><ACC.Content value={x => x.pcrRemovePartner.pcrItem.submitButton()}/></Form.Submit>
       </Form.Form>
     </ACC.Section>
   );
