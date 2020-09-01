@@ -66,6 +66,7 @@ function getRouteTransitionOptions(payload: { route: State, previousRoute: State
 }
 
 export const dataReducer = combineReducers({
+  accounts: dataStoreReducer<Dtos.AccountDto[]>("accounts"),
   claims: dataStoreReducer<Dtos.ClaimDto[]>("claims"),
   claim: dataStoreReducer<Dtos.ClaimDto>("claim"),
   claimDetail: dataStoreReducer<ClaimDetailsDto>("claimDetail"),

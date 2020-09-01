@@ -1,5 +1,6 @@
 const getKey = (...args: (string | number | boolean | "all")[]) => args.join("_");
 
+const getAccountKey = () => getKey("accountKey", "account", "all");
 const getProjectKey = (projectId: string) => getKey("projectKey", "project", projectId);
 const getProjectsKey = () => getKey("projectsKey", "project", "all");
 const getPartnerKey = (partnerId: string) => getKey("partnerKey", "partner", partnerId);
@@ -20,6 +21,7 @@ const getPcrSpendProfileOverheadRateOptionsKey = () => getKey("pcrSpendProfileOv
 const getCompaniesKey = (searchString: string, itemsPerPage?: number, startIndex?: number) => getKey("companiesKey", "search", searchString, "items", itemsPerPage || "unspecified", "index", startIndex || "0");
 
 export const storeKeys = {
+  getAccountKey,
   getProjectKey,
   getProjectsKey,
   getPartnerKey,

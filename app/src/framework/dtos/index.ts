@@ -1,3 +1,4 @@
+export * from "./accountDto";
 export * from "./claimDto";
 export * from "./claimFrequency";
 export * from "./companyDto";

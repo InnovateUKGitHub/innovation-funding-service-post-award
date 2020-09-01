@@ -68,6 +68,7 @@ export class Context implements Framework.IContext {
     const recordTypeCallback = (objectName: string, recordType: string) => this.getRecordTypeId(objectName, recordType);
 
     this.repositories = {
+      accounts: new Repositories.AccountsRepository(connectionCallback, this.logger),
       claims: new Repositories.ClaimRepository(connectionCallback, this.logger),
       claimDetails: new Repositories.ClaimDetailsRepository(recordTypeCallback, connectionCallback, this.logger),
       claimStatusChanges: new Repositories.ClaimStatusChangeRepository(connectionCallback, this.logger),

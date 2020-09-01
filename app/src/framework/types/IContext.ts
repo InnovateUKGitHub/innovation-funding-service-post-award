@@ -16,6 +16,7 @@ import { IBankCheckService } from "@server/resources/bankCheckService";
 import { ICRDCompetitionContentStore } from "@server/resources/crdCompetitionContentStore";
 
 export interface IRepositories {
+  readonly accounts: Repositories.IAccountsRepository;
   readonly claims: Repositories.IClaimRepository;
   readonly claimStatusChanges: Repositories.IClaimStatusChangeRepository;
   readonly claimDetails: Repositories.IClaimDetailsRepository;
