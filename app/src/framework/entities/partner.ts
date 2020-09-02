@@ -59,4 +59,6 @@ export interface Partner {
   verificationConditionsSeverity: string;
   verificationConditionsCode: string;
   verificationConditionsDesc: string;
+  totalGrantApproved: number;
+  remainingParticipantGrant: number;
 }

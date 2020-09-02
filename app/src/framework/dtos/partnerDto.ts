@@ -109,6 +109,8 @@ export interface PartnerDto {
   partnerStatus: PartnerStatus;
   percentageParticipantCostsSubmitted: number | null;
   totalFundingDueToReceive: number | null;
+  totalGrantApproved: number | null;
+  remainingParticipantGrant: number | null;
 
   overheadRate: number | null;
   newForecastNeeded: boolean | null;
