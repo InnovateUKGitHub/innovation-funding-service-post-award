@@ -63,6 +63,8 @@ export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePar
       verificationConditionsSeverity: item.Acc_VerificationConditionsSeverity__c,
       verificationConditionsCode: item.Acc_VerificationConditionsCode__c,
       verificationConditionsDesc: item.Acc_VerificationConditionsDesc__c,
+      totalGrantApproved: item.Acc_TotalGrantApproved__c,
+      remainingParticipantGrant: item.Acc_RemainingParticipantGrant__c,
     };
   }
 }
