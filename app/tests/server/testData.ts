@@ -164,6 +164,8 @@ export class TestData {
       verificationConditionsSeverity: "",
       verificationConditionsCode: "",
       verificationConditionsDesc: "",
+      totalGrantApproved: 0,
+      remainingParticipantGrant: 0,
     };
 
     if (!!update) update(newItem);

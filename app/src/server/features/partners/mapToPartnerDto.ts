@@ -65,6 +65,8 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             bankCheckStatus: partnerStatus === PartnerStatus.Active ? BankCheckStatus.VerificationPassed : new BankCheckStatusMapper().mapFromSalesforce(this.item.bankCheckStatus),
             bankDetailsTaskStatus: partnerStatus === PartnerStatus.Active ? BankDetailsTaskStatus.Complete : new BankDetailsTaskStatusMapper().mapFromSalesforce(this.item.bankDetailsTaskStatus),
             spendProfileStatusLabel: this.item.spendProfileStatusLabel,
+            totalGrantApproved: this.item.totalGrantApproved,
+            remainingParticipantGrant: this.item.remainingParticipantGrant,
             bankDetailsTaskStatusLabel: this.item.bankDetailsTaskStatusLabel,
             bankDetails: {
                 companyNumber: this.item.companyNumber,

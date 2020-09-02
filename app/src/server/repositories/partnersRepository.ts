@@ -70,6 +70,8 @@ export interface ISalesforcePartner {
   Acc_VerificationConditionsSeverity__c: string;
   Acc_VerificationConditionsCode__c: string;
   Acc_VerificationConditionsDesc__c: string;
+  Acc_TotalGrantApproved__c: number;
+  Acc_RemainingParticipantGrant__c: number;
 }
 
 export interface IPartnerRepository {
