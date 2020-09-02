@@ -139,7 +139,8 @@
         "display": "Claim"
       },
       "back-link": "Back to claims",
-      "costs-and-grant-summary-title": "Summary"
+      "costs-and-grant-summary-title": "Summary",
+      "section-title-comments": "Comments"
     },
     "claim-detail-documents": {
       "back-link": "Back to {{costCategoryName}}",
@@ -515,6 +516,16 @@
       "heading-select-partner": "Select partner to remove",
       "heading-removal-period": "When is their last period?",
       "hint-removal-period": "The partner can make a claim for this period before being removed. If they have a claim in progress, they will be removed once that claim has been paid."
+    },
+    "pcr-scope-change-project-summary-change":{
+      "heading-project-summary": "Proposed project summary",
+      "published-summary": "Published project summary",
+      "no-available-summary": "No project summary available."
+    },
+    "pcr-scope-change-public-description-change":{
+      "heading-public-description": "Proposed public description",
+      "published-description": "Published public description",
+      "no-available-description": "No public description available."
     }
   },
   "claims-messages": {
@@ -553,7 +564,6 @@
     "difference": "Difference",
     "status": "Status",
     "last-updated-date": "Date of last update",
-    "section-title-comments": "Comments",
     "costs-claimed": "Costs claimed",
     "costs-approved": "Costs approved",
     "costs-deferred": "Costs deferred",
@@ -836,13 +846,19 @@
     "request-number": "Request number",
     "types": "Types",
     "comments": "Comments",
-    "Files": "Files"
+    "files": "Files"
   },
   "pcr-remove-partner-labels":{
     "removal-period": "Removal period",
     "removed-partner": "Partner being removed",
     "last-period": "Last period",
     "documents": "Documents"
+  },
+  "pcr-scope-change-labels":{
+    "existing-description": "Existing public description",
+    "new-description": "New public description",
+    "existing-summary": "Existing project summary",
+    "new-summary": "New project summary"
   },
   "task-list": {
     "section-title-enter-info": "Give us information"

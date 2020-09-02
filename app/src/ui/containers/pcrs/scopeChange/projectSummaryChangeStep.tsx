@@ -16,8 +16,8 @@ export const ProjectSummaryChangeStep = (props: PcrStepProps<PCRItemForScopeChan
         onChange={dto => props.onChange(dto)}
         onSubmit={() => props.onSave()}
       >
-        <Form.Fieldset heading="Proposed project summary">
-          <ACC.Info summary="Published project summary"><ACC.Renderers.SimpleString multiline={true}>{props.pcrItem.projectSummarySnapshot || "No project summary available."}</ACC.Renderers.SimpleString></ACC.Info>
+        <Form.Fieldset headingContent={x => x.pcrScopeChangeProjectSummaryChange.projectSummaryHeading()}>
+          <ACC.Info summary={<ACC.Content value={x => x.pcrScopeChangeProjectSummaryChange.publishedSummary()}/>}><ACC.Renderers.SimpleString multiline={true}>{props.pcrItem.projectSummarySnapshot || <ACC.Content value={x => x.pcrScopeChangeProjectSummaryChange.noAvailableSummary()}/>}</ACC.Renderers.SimpleString></ACC.Info>
           <Form.MultilineString
             name="summary"
             hint={props.getRequiredToCompleteMessage()}
@@ -28,7 +28,7 @@ export const ProjectSummaryChangeStep = (props: PcrStepProps<PCRItemForScopeChan
             rows={15}
           />
         </Form.Fieldset>
-        <Form.Submit>Save and continue</Form.Submit>
+        <Form.Submit><ACC.Content value={x => x.pcrScopeChangeProjectSummaryChange.pcrItem.submitButton()}/></Form.Submit>
       </Form.Form>
     </ACC.Section>
   );
