@@ -674,10 +674,11 @@
     "partners": "Partner information",
     "partner": "Partner",
     "awardRate": "Funding level",
-    "totalGrant": "Total grant",
+    "totalGrant": "Total grant approved",
     "totalPrepayment": "Total grant paid in advance",
     "capLimit": "Claim cap",
-    "auditReportFrequency" :"Audit frequency"
+    "auditReportFrequency" :"Audit frequency",
+    "remainingGrant": "Remaining grant"
   },
   "partner-labels": {
     "organisation-name": "Organisation name",

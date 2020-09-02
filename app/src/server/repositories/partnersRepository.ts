@@ -152,6 +152,8 @@ export class PartnerRepository extends SalesforceRepositoryBaseWithMapping<ISale
     "Acc_VerificationConditionsSeverity__c",
     "Acc_VerificationConditionsCode__c",
     "Acc_VerificationConditionsDesc__c",
+    "Acc_TotalGrantApproved__c",
+    "Acc_RemainingParticipantGrant__c",
   ];
 
   mapper = new SalesforcePartnerMapper();
