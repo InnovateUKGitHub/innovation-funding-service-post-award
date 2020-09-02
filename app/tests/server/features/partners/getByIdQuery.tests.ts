@@ -66,6 +66,8 @@ describe("getAllForProjectQuery", () => {
       x.verificationConditionsSeverity = "Warning";
       x.verificationConditionsCode = "2";
       x.verificationConditionsDesc = "A warning about a verification thing";
+      x.totalGrantApproved = 1234.54;
+      x.remainingParticipantGrant = 4321.12;
     });
 
     const projectManger = context.testData.createProjectManager(project, partner);
@@ -111,6 +113,8 @@ describe("getAllForProjectQuery", () => {
       newForecastNeeded: false,
       spendProfileStatus: SpendProfileStatus.Complete,
       spendProfileStatusLabel: "Complete",
+      totalGrantApproved: 1234.54,
+      remainingParticipantGrant: 4321.12,
       bankDetailsTaskStatus: BankDetailsTaskStatus.Unknown,
       bankDetailsTaskStatusLabel: "To do",
       bankCheckStatus: BankCheckStatus.Unknown,
