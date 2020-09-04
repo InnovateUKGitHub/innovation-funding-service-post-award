@@ -1,3 +1,4 @@
+export * from "./accountsRepository";
 export * from "./claimDetailsRepository";
 export * from "./claimLineItemRepository";
 export * from "./claimStatusChangeRepository";
