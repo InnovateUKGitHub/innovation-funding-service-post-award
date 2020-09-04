@@ -42,7 +42,8 @@ export class ProjectContactsRepository extends SalesforceRepositoryBase<ISalesfo
   ];
 
   getAllByProjectId(projectId: string): Promise<ISalesforceProjectContact[]> {
-    return this.where(`Acc_ProjectId__c = '${projectId}' AND Acc_Role__c != 'Innovation lead'`);
+    // TODO: This may not be a complete list and might need updating or rethinking in future.
+    return this.where(`Acc_ProjectId__c = '${projectId}' AND (Acc_Role__c = 'Monitoring officer' OR Acc_Role__c = 'Project Manager' OR Acc_Role__c = 'Finance contact')`);
   }
 
   async getAllForUser(email: string): Promise<ISalesforceProjectContact[]> {
