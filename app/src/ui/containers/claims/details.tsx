@@ -63,7 +63,6 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
         {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" messageContent={x => x.claimDetails.messages.finalClaim()}/>}
-        {this.renderInterimClaimMessage(data.claim, data.project)}
         {this.renderPageSubtitle(data)}
         {this.renderCostsAndGrantSummary(data)}
         {this.renderTableSection(data)}
@@ -122,14 +121,6 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         </ACC.Accordion>
       </ACC.Section>
     );
-  }
-
-  private renderInterimClaimMessage(claim: ClaimDto, project: ProjectDto) {
-    const isMO = project.roles & ProjectRole.MonitoringOfficer;
-    if (isMO && claim.status === ClaimStatus.DRAFT && claim.periodId === project.periodId) {
-      return <ACC.ValidationMessage messageType="alert" qa="interim-claim-guidance-MO" messageContent={x => x.claimDetails.messages.interimClaimReviewGuidanceMO()}/>;
-    }
-    return null;
   }
 
   private renderCommentsFromFC(project: ProjectDto, claim: ClaimDto) {

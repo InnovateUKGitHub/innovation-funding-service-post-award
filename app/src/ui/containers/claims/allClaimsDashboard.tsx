@@ -38,7 +38,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
         backLink={<Acc.Projects.ProjectBackLink project={projectDetails} routes={this.props.routes} />}
         project={projectDetails}
       >
-        {this.renderGuidanceMessages(projectDetails, currentClaims)}
+        {this.renderGuidanceMessages(projectDetails)}
         <Acc.Renderers.Messages messages={this.props.messages} />
         <Acc.Section qa="current-claims-section" titleContent={x => x.allClaimsDashboard.labels.openSectionTitle()}>
           {this.renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)}
@@ -50,16 +50,10 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
     );
   }
 
-  private renderGuidanceMessages(projectDetails: ProjectDto, currentClaims: ClaimDto[]) {
+  private renderGuidanceMessages(projectDetails: ProjectDto) {
     const isFC = projectDetails.roles & ProjectRole.FinancialContact;
     if (isFC) {
       return <Acc.ValidationMessage qa="guidance-message" messageType="info" messageContent={x => x.allClaimsDashboard.messages.guidanceMessage()}/>;
-    }
-
-    const isMO = projectDetails.roles & ProjectRole.MonitoringOfficer;
-    const hasInterimClaim = !!currentClaims.find(x => x.periodId === projectDetails.periodId);
-    if (isMO && hasInterimClaim) {
-      return <Acc.ValidationMessage qa="interim-claim-guidance-MO" messageType="info" messageContent={x => x.allClaimsDashboard.messages.interimClaimGuidanceMO()}/>;
     }
 
     return null;

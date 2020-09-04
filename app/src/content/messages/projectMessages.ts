@@ -14,8 +14,6 @@ export class ProjectMessages extends ContentBase {
   public readonly claimsToReview = (numberOfClaims: number) => this.getContent("claimsToReviewMessage", { numberOfClaims });
   public readonly claimToSubmit = () => this.getContent("claimToSubmitMessage");
   public readonly iarRequired = () => this.getContent("iarRequiredMessage");
-  public readonly interimClaimDisclaimerFC = () => this.getContent("interim-claim-disclaimer-FC");
-  public readonly interimClaimDisclaimerMO = () => this.getContent("interim-claim-disclaimer-MO");
   public readonly noClaimDue = () => this.getContent("noClaimDueMessage");
   public readonly projectEnded = () => this.getContent("projectEndedMessage");
   public readonly finalClaimPeriod = () => this.getContent("finalClaimPeriodMessage");
