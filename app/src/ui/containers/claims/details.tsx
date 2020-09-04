@@ -110,7 +110,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private renderAccordionSection(data: CombinedData) {
-    const isArchived = data.claim.status === ClaimStatus.PAID || data.claim.status === ClaimStatus.APPROVED;
+    const isArchived = data.claim.status === ClaimStatus.PAID || data.claim.status === ClaimStatus.APPROVED || ClaimStatus.PAYMENT_REQUESTED;
     const isMO = data.project.roles & ProjectRole.MonitoringOfficer;
     const showForecast = this.props.forecastData && !(isArchived && isMO);
     return (
