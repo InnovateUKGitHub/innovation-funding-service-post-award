@@ -1,4 +1,5 @@
 import express from "express";
+import * as accounts from "./accounts";
 import * as claims from "./claims";
 import * as claimDetails from "./claimDetails";
 import * as companiesHouse from "./companies";
@@ -21,6 +22,7 @@ import { NotFoundError } from "../features/common/appError";
 import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
 
 export interface IApiClient {
+  accounts: accounts.IAccountsApi;
   claimDetails: claimDetails.IClaimDetailsApi;
   costsSummary: costsSummary.ICostsSummaryApi;
   companies: companiesHouse.ICompaniesApi;
@@ -40,6 +42,7 @@ export interface IApiClient {
 }
 
 export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
+  accounts: accounts.controller,
   claims: claims.controller,
   claimDetails: claimDetails.controller,
   companies: companiesHouse.controller,

@@ -5,7 +5,10 @@ import { UnauthenticatedError } from "@server/features/common/appError";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 const clientApi: IApiClient = {
-  claims : {
+  accounts: {
+    getAll: (params) => ajaxJson("/api/accounts"),
+  },
+  claims: {
     getAllByProjectId: (params) => ajaxJson(`/api/claims/?projectId=${params.projectId}`),
     getAllByPartnerId: (params) => ajaxJson(`/api/claims/?partnerId=${params.partnerId}`),
     get: (params) => ajaxJson(`/api/claims/${params.partnerId}/${params.periodId}`),

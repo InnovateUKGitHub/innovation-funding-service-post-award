@@ -702,7 +702,14 @@ class FinancialVirementsTestRepository extends TestRepository<Entities.PartnerFi
   }
 }
 
+class AccountsTestRepository extends TestRepository<Repositories.ISalesforceAccount> implements Repositories.IAccountsRepository {
+  getAccounts() {
+    return super.getAll();
+  }
+}
+
 export interface ITestRepositories extends IRepositories {
+  accounts: AccountsTestRepository;
   claims: ClaimsTestRepository;
   claimDetails: ClaimDetailsTestRepository;
   claimLineItems: ClaimLineItemsTestRepository;
@@ -736,6 +743,7 @@ export const createTestRepositories = (): ITestRepositories => {
   const projectChangeRequests = new PCRTestRepository();
 
   return ({
+    accounts: new AccountsTestRepository(),
     claims: claimsRepository,
     claimStatusChanges: new ClaimStatusChangeTestRepository(claimsRepository),
     claimDetails: new ClaimDetailsTestRepository(),
