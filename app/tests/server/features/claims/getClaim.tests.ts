@@ -106,6 +106,20 @@ describe("GetClaim", () => {
     expect(result.isApproved).toBe(true);
   });
 
+  it("calculates isApproved true if ClaimStatus is Payment Requested", async () => {
+    const context  = new TestContext();
+    const partner  = context.testData.createPartner();
+    const testData = context.testData;
+    const period   = 1;
+
+    testData.createProfileTotalPeriod(partner, period);
+    testData.createClaim(partner, period, x => x.Acc_ClaimStatus__c = ClaimStatus.PAYMENT_REQUESTED);
+    const query  = new GetClaim(partner.id, period);
+    const result = await context.runQuery(query);
+
+    expect(result.isApproved).toBe(true);
+  });
+
   it("calculates allowIarEdit true if ClaimStatus is Draft", async () => {
     const context  = new TestContext();
     const partner  = context.testData.createPartner();
