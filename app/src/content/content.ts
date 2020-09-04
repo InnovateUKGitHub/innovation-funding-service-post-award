@@ -70,9 +70,12 @@ import { PCRReasoningPrepareReasoningContent } from "./pages/pcrs/reasoning/prep
 import { PCRReasoningSummaryContent } from "./pages/pcrs/reasoning/summaryContent";
 import { PCRReasoningWorkflowContent } from "./pages/pcrs/reasoning/workflowContent";
 import { PCRPrepareItemFilesForPartnerWithrawelContent } from "./pages/pcrs/removePartner/prepareItemFilesForPartnerWithdrawelStepContent";
-import { ProjectDto } from "@framework/dtos";
 import { PCRRemovePartnerContent } from "./pages/pcrs/removePartner/removePartnerStepContent";
 import { PCRRemovePartnerSummaryContent } from "./pages/pcrs/removePartner/removePartnerSummaryContent";
+import { PCRScopeChangeProjectSummaryChangeContent } from "./pages/pcrs/scopeChange/scopeChangeProjectSummaryChangeStepContent";
+import { PCRScopeChangePublicDescriptionChangeContent } from "./pages/pcrs/scopeChange/scopeChangePublicDescriptionChangeStepContent";
+import { PCRScopeChangeSummaryContent } from "./pages/pcrs/scopeChange/scopeChangeSummaryContent";
+import { ProjectDto } from "@framework/dtos";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -159,6 +162,10 @@ export class Content extends ContentBase {
   public readonly pcrRemovePartnerPrepareItemFiles: PCRPrepareItemFilesForPartnerWithrawelContent;
   public readonly pcrRemovePartner: PCRRemovePartnerContent;
   public readonly pcrRemovePartnerSummary: PCRRemovePartnerSummaryContent;
+
+  public readonly pcrScopeChangeProjectSummaryChange: PCRScopeChangeProjectSummaryChangeContent;
+  public readonly pcrScopeChangePublicDescriptionChange: PCRScopeChangePublicDescriptionChangeContent;
+  public readonly pcrScopeChangeSummary: PCRScopeChangeSummaryContent;
 
   public readonly errors: {
     notfound: NotFoundContent,
@@ -254,6 +261,10 @@ export class Content extends ContentBase {
     this.pcrRemovePartnerPrepareItemFiles = new PCRPrepareItemFilesForPartnerWithrawelContent(this, project);
     this.pcrRemovePartner = new PCRRemovePartnerContent(this, project);
     this.pcrRemovePartnerSummary = new PCRRemovePartnerSummaryContent(this, project);
+
+    this.pcrScopeChangeProjectSummaryChange = new PCRScopeChangeProjectSummaryChangeContent(this, project);
+    this.pcrScopeChangePublicDescriptionChange = new PCRScopeChangePublicDescriptionChangeContent(this, project);
+    this.pcrScopeChangeSummary = new PCRScopeChangeSummaryContent(this, project);
 
     this.errors = {
       notfound: new NotFoundContent(this, project),
