@@ -69,7 +69,8 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data, Callbacks> {
               <FinanceSummaryTable.Custom headerContent={x => x.financeSummary.projectLabels.partner()} hideHeader={true} qa="Partner" value={x => <ACC.PartnerName partner={x} showIsLead={true} />} />
               <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalEligibleCosts()} qa="TotalEligibleCosts" value={x => x.totalParticipantGrant} />
               <FinanceSummaryTable.Percentage headerContent={x => x.financeSummary.projectLabels.awardRate()} qa="FundingLevel" value={x => x.awardRate} />
-              <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalGrant()} qa="TotalGrant" value={x => x.totalFundingDueToReceive} />
+              <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalGrant()} qa="TotalGrant" value={x => x.totalGrantApproved} />
+              <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.remainingGrant()} qa="RemainingGrant" value={x => x.remainingParticipantGrant} />
               <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalPrepayment()} qa="TotalGrantPaidInAdvance" value={x => x.totalPrepayment} />
               <FinanceSummaryTable.Percentage headerContent={x => x.financeSummary.projectLabels.capLimit()} qa="ClaimCap" value={x => x.capLimit} />
             </FinanceSummaryTable.Table>

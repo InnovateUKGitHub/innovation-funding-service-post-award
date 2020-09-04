@@ -26,5 +26,5 @@ export class ProjectLabels extends ContentBase {
   public readonly totalPrepayment = () => this.getContent("totalPrepayment");
   public readonly capLimit = () => this.getContent("capLimit");
   public readonly auditReportFrequency = () => this.getContent("auditReportFrequency");
-
+  public readonly remainingGrant = () => this.getContent("remainingGrant");
 }
