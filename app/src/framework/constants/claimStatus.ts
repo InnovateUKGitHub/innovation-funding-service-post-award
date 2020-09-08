@@ -8,5 +8,5 @@ export enum ClaimStatus {
   APPROVED = "Approved",
   PAID = "Paid",
   AWAITING_IAR = "Awaiting IAR",
-  PAYMENT_REQUESTED = "Payment requested"
+  PAYMENT_REQUESTED = "Payment Requested"
 }
