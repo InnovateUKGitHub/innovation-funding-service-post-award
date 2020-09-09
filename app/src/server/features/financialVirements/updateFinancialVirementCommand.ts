@@ -96,7 +96,7 @@ export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
 
     const newRemainingGrant = calculateNewRemainingGrant(dto.virements, dto.newFundingLevel);
     if (original.newRemainingGrant !== newRemainingGrant) {
-      update.Acc_NewRemainingGrant__c = roundCurrency(newRemainingGrant);
+      update.Acc_NewRemainingGrant__c = newRemainingGrant;
       isUpdated = true;
     }
 
