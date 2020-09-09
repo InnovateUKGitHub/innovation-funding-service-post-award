@@ -7,7 +7,7 @@ import {
   calculateNewEligibleCosts,
   calculateNewRemainingGrant
 } from "@server/features/financialVirements/financialVirementsCalculations";
-import { sum } from "@framework/util";
+import { roundCurrency, sum } from "@framework/util";
 
 export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
   constructor(private readonly projectId: string, private readonly pcrId: string, private readonly pcrItemId: string) {
@@ -62,15 +62,13 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
     const originalEligibleCosts = sum(virements, v => v.originalEligibleCosts);
     const originalRemainingCosts = originalEligibleCosts - costsClaimedToDate;
 
-    // Salesforce are not calculating partner.newEligibleCosts on creation or on save. We can save it on the first update command but
-    // before the first update as the value from salesforce is undefined, we need to calculate it here.
-    const newEligibleCosts = partner.newEligibleCosts !== undefined ? partner.newEligibleCosts : calculateNewEligibleCosts(virements);
+    // Not clear if SF is setting newEligibleCosts on create so defensive coding here
+    const newEligibleCosts = partner.newEligibleCosts !== undefined ? roundCurrency(partner.newEligibleCosts) : calculateNewEligibleCosts(virements);
     const newRemainingCosts = newEligibleCosts - costsClaimedToDate;
     const originalRemainingGrant = originalRemainingCosts * originalFundingPercentage;
 
-    // Salesforce are not calculating partner.newRemainingGrant on creation or on save. We can save it on the first update command but
-    // before the first update as the value from salesforce is undefined, we need to calculate it here.
-    const newRemainingGrant = partner.newRemainingGrant !== undefined ? partner.newRemainingGrant : calculateNewRemainingGrant(virements, partner.newFundingLevel);
+    // Not clear if SF is setting newRemainingGrant on create so defensive coding here
+    const newRemainingGrant = partner.newRemainingGrant !== undefined ? roundCurrency(partner.newRemainingGrant) : calculateNewRemainingGrant(virements, partner.newFundingLevel);
 
     return {
       partnerId: partner.partnerId,
