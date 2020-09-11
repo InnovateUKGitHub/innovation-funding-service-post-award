@@ -129,6 +129,7 @@ export class TestData {
       projectRoleName: "Unknown",
       totalCostsSubmitted: 0,
       participantStatus: "On Hold",
+      participantStatusLabel: "On Hold",
       totalFutureForecastsForParticipant: 0,
       trackingClaims: "",
       auditReportFrequency: "Never, for this project",
@@ -166,6 +167,7 @@ export class TestData {
       verificationConditionsDesc: "",
       totalGrantApproved: 0,
       remainingParticipantGrant: 0,
+      isNonFunded: true
     };
 
     if (!!update) update(newItem);

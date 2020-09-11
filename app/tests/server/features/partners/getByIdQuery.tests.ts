@@ -34,6 +34,7 @@ describe("getAllForProjectQuery", () => {
       x.claimsOverdue = 30;
       x.trackingClaims = "Claim Due";
       x.participantStatus = "On Hold";
+      x.participantStatusLabel = "On Hold";
       x.overheadRate = 75;
       x.totalCostsSubmitted = 100;
       x.auditReportFrequencyName = "Never, for this project";
@@ -68,6 +69,7 @@ describe("getAllForProjectQuery", () => {
       x.verificationConditionsDesc = "A warning about a verification thing";
       x.totalGrantApproved = 1234.54;
       x.remainingParticipantGrant = 4321.12;
+      x.isNonFunded = true;
     });
 
     const projectManger = context.testData.createProjectManager(project, partner);
@@ -105,6 +107,7 @@ describe("getAllForProjectQuery", () => {
       overheadRate: 75,
       auditReportFrequencyName: "Never, for this project",
       partnerStatus: PartnerStatus.OnHold,
+      partnerStatusLabel: "On Hold",
       isWithdrawn: false,
       totalCostsAwarded: 100000,
       totalPrepayment: 500,
@@ -149,6 +152,7 @@ describe("getAllForProjectQuery", () => {
         verificationConditionsCode: "2",
         verificationConditionsDesc: "A warning about a verification thing",
       },
+      isNonFunded: true
     };
 
     expect(result).toEqual(expected);
