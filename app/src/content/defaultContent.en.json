@@ -50,7 +50,7 @@
       "documentsLink": "Documents",
       "detailsLink": "Project details",
       "summaryLink": "Finance summary",
-      "project-messages":{
+      "project-messages": {
         "pcrQueried": "Request queried",
         "pcrToReview": "Requests to review: {{numberOfPcrs}}"
       }
@@ -58,8 +58,8 @@
     "project-details": {
       "title": "Project details"
     },
-    "project-documents" : {
-      "title" : "Project documents",
+    "project-documents": {
+      "title": "Project documents",
       "uploadTitle": "Upload",
       "uploadInstruction": "You can upload and store any documents relevant for this project. Any documents added to the project by Innovate UK will also be visible here.",
       "noDocumentsMessage": "No documents uploaded.",
@@ -178,8 +178,7 @@
       "button-save-and-return": "Save and return to claims",
       "button-save-and-continue": "Continue to claims documents"
     },
-    "claim-prepare-summary": {
-    },
+    "claim-prepare-summary": {},
     "claim-review": {
       "title": {
         "html": "Review claim",
@@ -198,25 +197,25 @@
       "label-input-upload": "Upload files",
       "accordion-title-upload-claim-validation-form": "Claim validation form"
     },
-    "financial-virement-details":{
+    "financial-virement-details": {
       "title": "Reallocate costs"
     },
-    "financial-virement-edit":{
+    "financial-virement-edit": {
       "title": "Reallocate costs",
       "summary-title": "Summary of project costs",
       "save-button": "Save and return to reallocate project costs"
     },
-    "financial-virement-edit-partner-level":{
+    "financial-virement-edit-partner-level": {
       "title": "Change remaining grant",
       "save-button": "Save and return to reallocate project costs",
-      "remaining-grant-info" :"You may change the new remaining grant for any partner, so the total new remaining grant is no more than the remaining grant already agreed for the project. The funding level will update to the new funding level for the remaining costs on the project."
+      "remaining-grant-info": "You may change the new remaining grant for any partner, so the total new remaining grant is no more than the remaining grant already agreed for the project. The funding level will update to the new funding level for the remaining costs on the project."
     },
-    "financial-virement-summary":{
+    "financial-virement-summary": {
       "guidance": "If the new remaining project grant is higher as a result of the reallocation of costs, you can change the funding level of partners to lower the new project grant.",
       "link-change-grant": "Change remaining grant",
       "heading-year-end-grant-value": "<b>Grant value moving over<br />the financial year end</b>"
     },
-    "forecasts-dashboard":{
+    "forecasts-dashboard": {
       "title": {
         "html": "Forecasts - View project",
         "display": "Forecasts"
@@ -229,7 +228,7 @@
       "back-link": "Back to project",
       "link-update-forecast": "Update forecast"
     },
-    "forecasts-details":{
+    "forecasts-details": {
       "title": {
         "html": "View forecast - View project",
         "display": "Forecast"
@@ -238,7 +237,7 @@
       "back-link": "Back to project",
       "link-update-forecast": "Update forecast"
     },
-    "forecasts-update":{
+    "forecasts-update": {
       "title": {
         "html": "Update forecast",
         "display": "Update forecast"
@@ -246,26 +245,26 @@
       "back-link": "Back to forecast",
       "button-submit": "Submit"
     },
-    "monitoring-reports-dashboard":{
+    "monitoring-reports-dashboard": {
       "title": {
         "html": "Monitoring reports - View project",
         "display": "Monitoring reports"
       },
-      "button-new-monitoring-report" : "Start a new report",
+      "button-new-monitoring-report": "Start a new report",
       "section-title-open": "Open",
       "section-title-archived": "Archived",
       "link-view-monitoring-report": "View report",
       "link-edit-monitoring-report": "Edit report",
       "link-delete-monitoring-report": "Delete report"
     },
-    "monitoring-reports-create":{
+    "monitoring-reports-create": {
       "title": {
         "html": "Create monitoring report",
         "display": "Monitoring report"
       },
       "back-link": "Back to monitoring reports"
     },
-    "monitoring-reports-delete":{
+    "monitoring-reports-delete": {
       "title": {
         "html": "Delete monitoring report",
         "display": "Monitoring report"
@@ -273,12 +272,12 @@
       "back-link": "Back to monitoring reports",
       "button-delete-report": "Delete report"
     },
-    "monitoring-reports-summary":{
+    "monitoring-reports-summary": {
       "button-submit": "Submit report",
       "button-save-and-return": "Save and return to project",
-      "button-edit-item" : "Edit"
+      "button-edit-item": "Edit"
     },
-    "monitoring-reports-workflow":{
+    "monitoring-reports-workflow": {
       "editMode": {
         "title": {
           "html": "Edit monitoring report",
@@ -294,40 +293,40 @@
       "back-link": "Back to monitoring reports",
       "link-back-to-step": "Back to {{step}}"
     },
-    "monitoring-reports-workflow-edit":{
+    "monitoring-reports-workflow-edit": {
       "title": {
         "html": "Edit monitoring report",
         "display": "Monitoring report"
       }
     },
-    "monitoring-reports-workflow-view":{
+    "monitoring-reports-workflow-view": {
       "title": {
         "html": "View monitoring report",
         "display": "Monitoring report"
       }
     },
-    "monitoring-reports-period-step":{
+    "monitoring-reports-period-step": {
       "title": {
         "html": "Edit monitoring report",
         "display": "Monitoring report"
       },
       "back-link": "Back to summary"
     },
-    "monitoring-reports-question-step":{
+    "monitoring-reports-question-step": {
       "button-continue": "Continue",
       "button-save-and-return": "Save and return to summary"
     },
-    "partner-details":{
+    "partner-details": {
       "title": {
         "html": "View partner information",
         "display": "Partner information"
       },
-      "project-contact-labels" : {
+      "project-contact-labels": {
         "partnerName": "Name",
         "partnerType": "Type"
       }
     },
-    "partner-details-edit":{
+    "partner-details-edit": {
       "title": {
         "html": "Edit partner information",
         "display": "Partner information"
@@ -374,7 +373,7 @@
       "back-link": "Back to overheads costs",
       "heading-template": "Templates"
     },
-    "pcr-create":{
+    "pcr-create": {
       "title": "Start a new request",
       "guidance-message": "Before you submit, you must:\n* ask all project partners to approve the changes\n* discuss this request with your monitoring officer",
       "select-request-types-title": "Select request types",
@@ -383,14 +382,14 @@
       "button-create-request": "Create request",
       "button-cancel-request": "Cancel"
     },
-    "pcr-add-partner-role-and-organisation":{
+    "pcr-add-partner-role-and-organisation": {
       "form-section-title": "New partner information",
       "validation-message": "You cannot change this information after you continue.",
       "info-summary": "What are the different types?",
       "organisation-type-info": "**Business** - a business based in the UK or overseas.\n\n **Research** - higher education and organisations registered with Je-S.\n\n **Research and technology organisation (RTO)** - organisations which solely promote and conduct collaborative research and innovation.\n\n **Public sector, charity or non Je-S registered research organisation** - a not-for-profit public sector body or charity working on innovation, not registered with Je-S.",
       "organisation-type-hint": "If the new partner's organisation type is not listed, contact your monitoring officer."
     },
-    "pcr-add-partner-state-aid-eligibility":{
+    "pcr-add-partner-state-aid-eligibility": {
       "form-section-title-state-aid": "State aid eligibility",
       "form-section-title-de-minimis": "De minimis aid eligibility",
       "form-section-title-non-aid-funding": "Non-aid funding",
@@ -400,15 +399,15 @@
       "guidance-de-minimis": "The funding will be made as a de minimis grant. All organisations for a de minimis award must complete and upload a de minimis declaration. This states any and all de minimis awards (from any source of public funding) during the current and previous 2 fiscal years.\n\nIn order to minimise distortion of competition, the European Commission sets limits on how much assistance can be given without its prior approval, to organisations operating in a competitive market. There is a ceiling of €200,000 for all de minimis aid provided to any one organisation over a 3 fiscal year period.\n\nThe new organisation needs to declare any de minimis aid awarded to any other public funding body which requests it. They must also keep all documentation associated with the award for 10 years from the date the award is granted.",
       "guidance-non-aid-funding": "This competition provides funding that is classed as non-aid. The new organisation should seek independent legal advice on what this means for them, before you complete this project change request.\n\n\n\nNon-aid is only granted to organisations which declare that they will not use the funding:\n\n\n\n*  in any way which gives them selective economic or commercial advantage\n\n*  in any other way which would <a href=\"https://ec.europa.eu/regional_policy/sources/conferences/state-aid/01_rdi2017_spatharis.pdf\" rel=\"noopener noreferrer\" target=\"_blank\" >determine the funding as State aid (opens in new window)</a> as defined by the European Commission \n\n\n\nIt is important to note that it is the activity they intend to perform in the project, which is assessed as eligible for non-aid, and not their organisation as an entity.\n\n\n\nIf they are found to be exploiting the outputs from this project commercially or economically to gain a selective advantage in the market, we will withdraw our offer."
     },
-    "pcr-add-partner-award-rate":{
+    "pcr-add-partner-award-rate": {
       "form-section-title": "Funding level",
       "guidance": "The maximum the new organisation can enter is based on their size, type of organisation and research category of the project, based on the <a href=\"https://www.gov.uk/guidance/innovate-uk-funding-general-guidance-for-applicants#funding-rules\" rel=\"noopener noreferrer\" target=\"_blank\" >Innovate UK general guidance for grant applicants</a> (opens in new window). This will be reviewed by Innovate UK to ensure the project stays within the funding rules.\n\n\n\nThe percentage applied for must reflect other funding received."
     },
-    "pcr-add-partner-project-location":{
+    "pcr-add-partner-project-location": {
       "project-location-guidance": "Indicate where the majority of the work being done by this partner will take place.",
       "postcode-guidance": "If this is not available, leave this blank."
     },
-    "pcr-add-partner-academic-costs":{
+    "pcr-add-partner-academic-costs": {
       "step-guidance": "Enter this information from the completed Je-S form.",
       "tsb-label": "This number is found at the top of the Je-S form",
       "costs-section-title": "Project costs",
@@ -417,10 +416,10 @@
       "cost-heading": "Cost (£)",
       "total-costs": "Total costs (£)"
     },
-    "pcr-add-partner-academic-organisation":{
+    "pcr-add-partner-academic-organisation": {
       "hint": "Enter the name of the organisation that you work for."
     },
-    "pcr-add-partner-company-house":{
+    "pcr-add-partner-company-house": {
       "section-title": "Company house",
       "heading-form": "Company details",
       "heading-search": "Search companies house",
@@ -429,25 +428,25 @@
       "result-not-showing": "Is your organisation not showing in these results? Check your spelling, or try searching again using a more specific company name or the registration number.",
       "heading-search-results": "Companies house search results"
     },
-    "pcr-add-partner-project-contacts":{
+    "pcr-add-partner-project-contacts": {
       "section-title": "Add person to organisation",
       "guidance": "This information will be used to create an account for this person in the Innovation Funding Service.",
       "use-finance-details": "Use the same details as the finance contact",
       "phone-number-hint": "We may use this to contact the partner for more information about this request."
     },
-    "pcr-add-partner-finance-details":{
+    "pcr-add-partner-finance-details": {
       "section-title": "Financial details",
       "hint-year-end": "This is the end of the last financial year for which you have your turnover.",
       "heading-turnover": "Turnover (£)"
     },
-    "pcr-add-partner-jes":{
+    "pcr-add-partner-jes": {
       "guidance": "Your new academic partner must apply for funding through the Je-S system. To find out more about the Je-S requirements and processes please go to:\n\n* <a href=\"https://www.gov.uk/government/publications/innovate-uk-completing-your-application-project-costs-guidance/guidance-for-academics-applying-via-the-je-s-system\" rel=\"noopener noreferrer\" target=\"_blank\" >guidance from Innovate UK for academics applying via the Je-S system (opens in a new window)</a>\n\n* the <a href=\"https://je-s.rcuk.ac.uk/\" rel=\"noopener noreferrer\" target=\"_blank\" >e-S website (opens in a new window)</a> \n\n\n\nUpload a pdf copy of the completed Je-S output form, once the new partner has a status of 'With Council'. If there is information outstanding or the partner is not at this status, your request will be rejected."
     },
-    "pcr-add-partner-organisation-details":{
+    "pcr-add-partner-organisation-details": {
       "section-title": "Organisation details",
       "guidance": "This definition must include organisations that are part of the new partner organisation. That is, where the new partner organisation owns shares in another organisation or has shares owned by another organisation.\n\nUse the European Commission (EC) <a href=\"https://ec.europa.eu/growth/smes/business-friendly-environment/sme-definition_en\" rel=\"noopener noreferrer\" target=\"_blank\" > small to medium enterprise (SME) definition (opens in new window)</a> for guidance."
     },
-    "pcr-add-partner-spend-profile":{
+    "pcr-add-partner-spend-profile": {
       "return-to-summary-no-save-button": "Return to summary",
       "category-heading": "Category",
       "total-costs": "Total costs (£)",
@@ -455,14 +454,14 @@
       "label-view": "View",
       "label-edit": "Edit"
     },
-    "pcr-add-partner-other-funding":{
+    "pcr-add-partner-other-funding": {
       "form-section-title": "Other public sector funding?",
       "guidance": "Is the new partner receiving any other public sector funding for this project? This is important as other public sector support counts as part of the funding they can receive.",
       "label-yes": "Yes",
       "label-no": "No",
       "label-other-sources-question": "Is the new partner receiving any other public sector funding for this project?"
     },
-    "pcr-add-partner-other-funding-sources":{
+    "pcr-add-partner-other-funding-sources": {
       "form-section-title": "Other public sector funding?",
       "guidance": "Include all sources of funding the new partner is receiving on top of the funding they are claiming from Innovate UK. These will be taken into account when calculating the funding they will receive.",
       "column-header-description": "Source of funding",
@@ -472,57 +471,57 @@
       "button-add": "Add another source of funding",
       "footer-label-total": "Total other funding"
     },
-    "pcr-add-partner-agreement-to-pcr":{
+    "pcr-add-partner-agreement-to-pcr": {
       "guidance": "You must upload copies of signed letters from all other project partners to show they have agreed to this change",
       "heading": "Upload partner agreement"
     },
-    "pcr-period-length-change":{
+    "pcr-period-length-change": {
       "guidance": "The period length can be 3 months or 1 month. This request will affect all remaining periods of the project for all partners. It will also change:\n* how your project's forecast is divided\n* how often your project submits a claim.\n\n\n\nWe will reject this if you submit it with any other request type.",
       "period-length-quarterly": "3 months",
       "period-length-monthly": "1 month"
     },
-    "pcr-name-change":{
+    "pcr-name-change": {
       "heading-select-partner": "Select partner",
       "heading-enter-name": "Enter new name"
     },
-    "pcr-name-change-prepare-item-files":{
+    "pcr-name-change-prepare-item-files": {
       "heading-upload-certificate": "Upload change of name certificate"
     },
-    "pcr-reasoning-prepare-reasoning":{
-      "title":{
+    "pcr-reasoning-prepare-reasoning": {
+      "title": {
         "html": "Provide reasoning to Innovate UK",
         "display": "Provide reasoning to Innovate UK"
       },
       "hint": "You must explain each change. Be brief and write clearly.<br/>If you are requesting a reallocation of project costs, you must justify each change to your costs.",
       "heading-reasoning": "Reasoning"
     },
-    "pcr-reasoning-summary":{
+    "pcr-reasoning-summary": {
       "heading-mark-as-complete": "Mark as complete",
       "edit": "Edit",
       "no-documents": "No documents attached"
     },
-    "pcr-reasoning-workflow":{
-      "title":{
+    "pcr-reasoning-workflow": {
+      "title": {
         "html": "Reasoning for Innovate UK",
         "display": "Reasoning for Innovate UK"
       },
       "back-link": "Back to request"
     },
-    "pcr-prepare-item-files-for-partner-withdrawel":{
+    "pcr-prepare-item-files-for-partner-withdrawel": {
       "guidance-heading": "Upload withdrawal of partner certificate",
       "guidance": "You must upload these documents:\n\n* a confirmation letter on headed paper from the partner who is leaving, signed by someone with financial authority\n* a brief list of the outstanding deliverables, and who each will be assigned to once the partner leaves\n* copies of signed letters from all other project partners to show they have agreed to this change"
     },
-    "pcr-remove-partner":{
+    "pcr-remove-partner": {
       "heading-select-partner": "Select partner to remove",
       "heading-removal-period": "When is their last period?",
       "hint-removal-period": "The partner can make a claim for this period before being removed. If they have a claim in progress, they will be removed once that claim has been paid."
     },
-    "pcr-scope-change-project-summary-change":{
+    "pcr-scope-change-project-summary-change": {
       "heading-project-summary": "Proposed project summary",
       "published-summary": "Published project summary",
       "no-available-summary": "No project summary available."
     },
-    "pcr-scope-change-public-description-change":{
+    "pcr-scope-change-public-description-change": {
       "heading-public-description": "Proposed public description",
       "published-description": "Published public description",
       "no-available-description": "No public description available."
@@ -629,7 +628,7 @@
     "claimToSubmitMessage": "You need to submit your claim.",
     "claimRequiresRequiresIARMessage": "You need to submit your IAR.",
     "projectEndedMessage": "Project ended",
-    "finalClaimPeriodMessage" : "Final claim period",
+    "finalClaimPeriodMessage": "Final claim period",
     "currentPeriodInfo": "Project period {{currentPeriod}} of {{numberOfPeriods}}",
     "pcrQueried": "Project change request queried",
     "pcrToReview": "Project change requests to review: {{numberOfPcrs}}",
@@ -682,7 +681,7 @@
     "totalGrant": "Total grant approved",
     "totalPrepayment": "Total grant paid in advance",
     "capLimit": "Claim cap",
-    "auditReportFrequency" :"Audit frequency",
+    "auditReportFrequency": "Audit frequency",
     "remainingGrant": "Remaining grant"
   },
   "partner-labels": {
@@ -701,14 +700,18 @@
     "account-town-or-city": "Town or city",
     "account-postcode": "Postcode"
   },
-  "project-contact-labels" : {
-    "contactName" : "Name",
+  "project-contact-labels": {
+    "contactName": "Name",
     "partnerName": "Partner",
     "partnerType": "Partner type",
+    "status": "Status",
+    "fundingType": "Funding status",
     "partnerPostcode": "Location",
-    "contactEmail": "Email"
+    "contactEmail": "Email",
+    "nonFundedLabel": "Non-funded",
+    "fundedLabel": "Funded"
   },
-  "document-labels" : {
+  "document-labels": {
     "document-description-IAR": "Independent accountant’s report",
     "document-description-Evidence": "Claim evidence",
     "document-description-EndOfProjectSurvey": "End-of-project survey",
@@ -720,19 +723,19 @@
     "document-description-BankStatement": "Bank Statement",
     "document-description-AgreementToPCR": "Agreement to PCR",
     "document-description-Unknown": "Unknown",
-    "uploadButtonLabel" : "Upload",
+    "uploadButtonLabel": "Upload",
     "uploadInputLabel": "Upload files",
     "fileNameLabel": "File name",
     "dateUploadedLabel": "Date uploaded",
     "fileSizeLabel": "File size",
-    "uploadedByLabel" : "Uploaded by",
+    "uploadedByLabel": "Uploaded by",
     "filesUploadedTitle": "Files uploaded",
     "filesUploadedSubtitle": "All documents uploaded during this request will be shown here. All documents open in a new window.",
     "uploadDocumentsLabel": "Upload documents"
   },
   "document-messages": {
     "header": "You can upload up to 10 documents at a time. Each document must:\n\n* be less than 10MB in file size\n* have a unique file name that describes its contents\n\nThere is no limit to the number of files you can upload in total.",
-    "infoTitle":"What file types can I upload?",
+    "infoTitle": "What file types can I upload?",
     "infoContent": "You can upload these file types:\n\n* PDF (pdf, xps)\n* text (doc, docx, rdf, txt, csv, odt)\n* presentation (ppt, pptx, odp)\n* spreadsheet (xls, xlsx, ods)\n* image (jpg, jpeg, png)",
     "uploaded-document": "Your document has been uploaded.",
     "uploaded-documents": "{{filesLength}} documents have been uploaded.",
@@ -742,11 +745,11 @@
     "documents-not-applicable": "Not applicable",
     "new-window": "All documents open in a new window."
   },
-  "financial-virement-labels":{
-    "partner-name":"Partner",
+  "financial-virement-labels": {
+    "partner-name": "Partner",
     "cost-category-name": "Cost category",
-    "original-funding-level":"Funding level",
-    "new-funding-level":"New funding level",
+    "original-funding-level": "Funding level",
+    "new-funding-level": "New funding level",
     "project-original-eligible-costs": "Total eligible costs",
     "project-new-eligible-costs": "New total eligible costs",
     "project-difference-costs": "Difference",
@@ -780,12 +783,12 @@
     "status-and-comments-log": "Status and comments log",
     "additional-comments": "Add comments"
   },
-  "pcr-item":{
+  "pcr-item": {
     "submit-button": "Save and continue",
     "return-to-summary-button": "Save and return to summary",
     "return-to-request-button": "Save and return to request"
   },
-  "pcr-add-partner-labels":{
+  "pcr-add-partner-labels": {
     "role-heading": "Project role",
     "commercial-work-heading": "Project outputs",
     "commercial-work-label": "Will the new partner's work on the project be mostly commercial or economic?",
@@ -828,29 +831,29 @@
     "agreement-to-pcr-heading": "Partner agreement",
     "agreement-section-title": "Agreement"
   },
-  "pcr-period-length-change-labels":{
+  "pcr-period-length-change-labels": {
     "current-period-length": "Current period length",
     "new-period-length": "New period length"
   },
-  "pcr-name-change-labels":{
+  "pcr-name-change-labels": {
     "enter-name": "Enter new name",
     "existing-name": "Existing name",
     "proposed-name": "Proposed name",
     "certificate": "Change of anme certificate"
   },
-  "pcr-reasoning-labels":{
+  "pcr-reasoning-labels": {
     "request-number": "Request number",
     "types": "Types",
     "comments": "Comments",
     "files": "Files"
   },
-  "pcr-remove-partner-labels":{
+  "pcr-remove-partner-labels": {
     "removal-period": "Removal period",
     "removed-partner": "Partner being removed",
     "last-period": "Last period",
     "documents": "Documents"
   },
-  "pcr-scope-change-labels":{
+  "pcr-scope-change-labels": {
     "existing-description": "Existing public description",
     "new-description": "New public description",
     "existing-summary": "Existing project summary",
