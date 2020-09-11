@@ -54,6 +54,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             statusName: this.item.trackingClaims || "",
             overheadRate: this.valueIfPermission(this.item.overheadRate) || null,
             partnerStatus,
+            partnerStatusLabel: this.item.participantStatusLabel,
             isWithdrawn: [PartnerStatus.VoluntaryWithdrawal, PartnerStatus.InvoluntaryWithdrawal].indexOf(partnerStatus) >= 0,
             totalCostsAwarded: this.item.totalCostsAwarded,
             auditReportFrequencyName: this.item.auditReportFrequencyName,
@@ -100,6 +101,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
                 verificationConditionsCode: this.item.verificationConditionsCode,
                 verificationConditionsDesc: this.item.verificationConditionsDesc,
             },
+            isNonFunded: this.item.isNonFunded
         };
     }
 

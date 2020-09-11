@@ -4,7 +4,7 @@ import * as ACC from "../../components";
 import { Pending } from "../../../shared/pending";
 import { PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { StoresConsumer } from "@ui/redux";
-import { PartnerName } from "../../components";
+import { Content, PartnerName } from "../../components";
 
 interface Data {
     projectDetails: Pending<ProjectDto>;
@@ -83,6 +83,8 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                 <PartnersTable.Table qa="partner-information" data={partners}>
                     <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.partnerName()} value={x => this.renderPartnerName(x)} qa="partner-name" />
                     <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.partnerType()} value={x => x.type} qa="partner-type" />
+                    <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.statusLabel()} value={x => x.partnerStatusLabel} qa="partner-status" />
+                    <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.fundingLabel()} value={x => <Content value={content => content.partnerDetails.contactLabels.fundingState(x.isNonFunded)} />} qa="partner-funding" />
                     <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.partnerPostcode()} value={x => x.postcode} qa="partner-postcode" />
                 </PartnersTable.Table>
             </ACC.Section>

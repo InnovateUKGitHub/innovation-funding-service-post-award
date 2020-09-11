@@ -107,6 +107,7 @@ export interface PartnerDto {
   auditReportFrequencyName: string;
   totalPrepayment: number | null;
   partnerStatus: PartnerStatus;
+  partnerStatusLabel: string;
   percentageParticipantCostsSubmitted: number | null;
   totalFundingDueToReceive: number | null;
   totalGrantApproved: number | null;
@@ -125,4 +126,6 @@ export interface PartnerDto {
   bankCheckRetryAttempts: number;
   validationResponse: ValidationResponse;
   verificationResponse: VerificationResponse;
+
+  isNonFunded: boolean;
 }

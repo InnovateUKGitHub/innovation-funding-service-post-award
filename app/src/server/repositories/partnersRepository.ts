@@ -34,6 +34,7 @@ export interface ISalesforcePartner {
   Acc_TrackingClaims__c: string;
   Acc_OverheadRate__c: number;
   Acc_ParticipantStatus__c: string;
+  ParticipantStatusLabel: string;
   Acc_TotalCostsSubmitted__c: number;
   Acc_TotalCostsAwarded__c: number;
   Acc_AuditReportFrequency__c: string;
@@ -72,6 +73,7 @@ export interface ISalesforcePartner {
   Acc_VerificationConditionsDesc__c: string;
   Acc_TotalGrantApproved__c: number;
   Acc_RemainingParticipantGrant__c: number;
+  Acc_NonfundedParticipant__c: boolean;
 }
 
 export interface IPartnerRepository {
@@ -91,7 +93,6 @@ export interface IPartnerRepository {
  * A Sum of the number of outstanding claims etc are also de-normalised at this level
  */
 export class PartnerRepository extends SalesforceRepositoryBaseWithMapping<ISalesforcePartner, Partner> implements IPartnerRepository {
-
   protected readonly salesforceObjectName = "Acc_ProjectParticipant__c";
 
   protected readonly salesforceFieldNames = [
@@ -118,6 +119,7 @@ export class PartnerRepository extends SalesforceRepositoryBaseWithMapping<ISale
     "Acc_TrackingClaims__c",
     "Acc_OverheadRate__c",
     "Acc_ParticipantStatus__c",
+    "toLabel(Acc_ParticipantStatus__c) ParticipantStatusLabel",
     "Acc_TotalCostsSubmitted__c",
     "Acc_TotalCostsAwarded__c",
     "Acc_AuditReportFrequency__c",
@@ -154,6 +156,7 @@ export class PartnerRepository extends SalesforceRepositoryBaseWithMapping<ISale
     "Acc_VerificationConditionsDesc__c",
     "Acc_TotalGrantApproved__c",
     "Acc_RemainingParticipantGrant__c",
+    "Acc_NonfundedParticipant__c"
   ];
 
   mapper = new SalesforcePartnerMapper();
@@ -171,6 +174,8 @@ export class PartnerRepository extends SalesforceRepositoryBaseWithMapping<ISale
   }
 
   getAll() {
-    return super.where("Acc_ProjectId__r.Acc_ProjectStatus__c != 'Not set' AND Acc_ProjectId__r.Acc_ProjectStatus__c != 'PCL Creation Complete'");
+    return super.where(
+      "Acc_ProjectId__r.Acc_ProjectStatus__c != 'Not set' AND Acc_ProjectId__r.Acc_ProjectStatus__c != 'PCL Creation Complete'"
+    );
   }
 }

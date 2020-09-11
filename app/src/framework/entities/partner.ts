@@ -22,6 +22,7 @@ export interface Partner {
   trackingClaims: string;
   overheadRate: number;
   participantStatus: string;
+  participantStatusLabel: string;
   totalCostsSubmitted: number;
   totalCostsAwarded: number;
   auditReportFrequency: string;
@@ -61,4 +62,5 @@ export interface Partner {
   verificationConditionsDesc: string;
   totalGrantApproved: number;
   remainingParticipantGrant: number;
+  isNonFunded: boolean;
 }
