@@ -27,7 +27,8 @@ export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePar
       claimsUnderQuery: item.Acc_ClaimsUnderQuery__c,
       trackingClaims: item.Acc_TrackingClaims__c,
       overheadRate: item.Acc_OverheadRate__c,
-      participantStatus:item.Acc_ParticipantStatus__c,
+      participantStatus: item.Acc_ParticipantStatus__c,
+      participantStatusLabel: item.ParticipantStatusLabel,
       totalCostsSubmitted: item.Acc_TotalCostsSubmitted__c,
       totalCostsAwarded: item.Acc_TotalCostsAwarded__c,
       auditReportFrequency: item.Acc_AuditReportFrequency__c,
@@ -37,7 +38,6 @@ export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePar
       newForecastNeeded: item.Acc_NewForecastNeeded__c,
       spendProfileStatus: item.Acc_SpendProfileCompleted__c,
       spendProfileStatusLabel: item.SpendProfileStatusLabel,
-
       bankDetailsTaskStatus: item.Acc_BankCheckCompleted__c,
       bankDetailsTaskStatusLabel: item.BankCheckCompletedLabel,
       bankCheckStatus: item.Acc_BankCheckState__c,
@@ -65,6 +65,7 @@ export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePar
       verificationConditionsDesc: item.Acc_VerificationConditionsDesc__c,
       totalGrantApproved: item.Acc_TotalGrantApproved__c,
       remainingParticipantGrant: item.Acc_RemainingParticipantGrant__c,
+      isNonFunded: item.Acc_NonfundedParticipant__c
     };
   }
 }
