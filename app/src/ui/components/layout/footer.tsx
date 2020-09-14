@@ -26,7 +26,7 @@ const links: Link[] = [
 export const Footer: React.FunctionComponent<{}> = () => {
   const renderLinks = (l: Link, i: number) => (
     <li key={i} className="govuk-footer__inline-list-item">
-      <a className="govuk-footer__link" target="_blank" data-qa={l.text.split(" ").join("-").toLocaleLowerCase()} href={l.link}>{l.text}</a>
+      <a className="govuk-footer__link" target="_blank" data-qa={l.text.split(" ").join("-").toLocaleLowerCase()} href={l.link} rel="noopener noreferrer">{l.text}</a>
     </li>
   );
 
