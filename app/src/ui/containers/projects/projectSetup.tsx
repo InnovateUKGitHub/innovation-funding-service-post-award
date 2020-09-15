@@ -52,6 +52,7 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
         error={editor.error}
         validator={editor.validator}
         project={project}
+        partner={partner}
       >
         <ACC.Section qa="guidance">
           <ACC.Renderers.SimpleString>

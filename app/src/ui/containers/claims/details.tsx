@@ -61,6 +61,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       <ACC.Page
         backLink={<ACC.BackLink route={backLink}><ACC.Content value={x => x.claimDetails.backLink()} /></ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={data.project} />}
+        partner={data.partner}
       >
         {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" messageContent={x => x.claimDetails.messages.finalClaim()}/>}
         {this.renderPageSubtitle(data)}
