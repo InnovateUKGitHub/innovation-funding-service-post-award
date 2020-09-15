@@ -67,6 +67,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
         backLink={<ACC.BackLink route={this.props.routes.projectDashboard.getLink({})}>Back to projects</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
+        partner={partner}
       >
         <ACC.Section
           qa="period-information"
