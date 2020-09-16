@@ -42,6 +42,7 @@ import { ProjectChangeRequestSpendProfileDeleteCostHandler } from "@server/forms
 import { ProjectChangeRequestSpendProfileEditCostHandler } from "@server/forms/projectChangeRequest/spendProfile/spendProfileEditCostHandler";
 import { ProjectSetupSpendProfileFormHandler } from "./projectSetupSpendProfileFormHandler";
 import { ProjectSetupFormHandler } from "@server/forms/projectSetupFormHandler";
+import { PartnerDetailsEditFormHandler } from "@server/forms/partnerDetailsEditFormHandler";
 import { OverheadDocumentsUploadHandler } from "@server/forms/projectChangeRequest/spendProfile/overheadDocuments/overheadDocumentsUploadHandler";
 import { OverheadDocumentsDeleteHandler } from "@server/forms/projectChangeRequest/spendProfile/overheadDocuments/overheadDocumentsDeleteHandler";
 
@@ -77,6 +78,7 @@ export const standardFormHandlers: (StandardFormHandlerBase<{}, EditorStateKeys>
   new VirementCostsUpdateHandler(),
   new VirementPartnerCostsUpdateHandler(),
   new ProjectSetupFormHandler(),
+  new PartnerDetailsEditFormHandler(),
   new ProjectSetupSpendProfileFormHandler(),
 ];
 
