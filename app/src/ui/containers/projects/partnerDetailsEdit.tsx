@@ -12,7 +12,7 @@ interface Data {
     editor: Pending<IEditorStore<PartnerDto, PartnerDtoValidator>>;
 }
 
-interface Params {
+export interface PartnerDetailsParams {
     id: string;
     partnerId: string;
 }
@@ -27,7 +27,7 @@ interface CombinedData {
     editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
 }
 
-class PartnerDetailsEditComponent extends ContainerBase<Params, Data, Callbacks> {
+class PartnerDetailsEditComponent extends ContainerBase<PartnerDetailsParams, Data, Callbacks> {
 
     render() {
         const combined = Pending.combine({
@@ -76,7 +76,7 @@ class PartnerDetailsEditComponent extends ContainerBase<Params, Data, Callbacks>
     }
 }
 
-const PartnerDetailsEditContainer = (props: Params & BaseProps) => (
+const PartnerDetailsEditContainer = (props: PartnerDetailsParams & BaseProps) => (
     <StoresConsumer>
         {
             stores => (
@@ -92,7 +92,7 @@ const PartnerDetailsEditContainer = (props: Params & BaseProps) => (
     </StoresConsumer>
 );
 
-export const PartnerDetailsEditRoute = defineRoute<Params>({
+export const PartnerDetailsEditRoute = defineRoute<PartnerDetailsParams>({
     routeName: "partnerDetailsEdit",
     routePath: "/projects/:id/edit/:partnerId",
     container: (props) => <PartnerDetailsEditContainer {...props} />,
