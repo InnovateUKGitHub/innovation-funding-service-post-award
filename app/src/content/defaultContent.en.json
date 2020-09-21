@@ -675,6 +675,7 @@
     "scope": "Project scope statement",
     "projectMembers": "Project members",
     "financeContacts": "Finance contacts",
+    "otherContacts": "Other contacts",
     "partners": "Partner information",
     "partner": "Partner",
     "awardRate": "Funding level",
@@ -702,6 +703,7 @@
   },
   "project-contact-labels": {
     "contactName": "Name",
+    "roleName": "Role",
     "partnerName": "Partner",
     "partnerType": "Partner type",
     "status": "Status",
@@ -709,7 +711,8 @@
     "partnerPostcode": "Location",
     "contactEmail": "Email",
     "nonFundedLabel": "Non-funded",
-    "fundedLabel": "Funded"
+    "fundedLabel": "Funded",
+    "noContactsMessage": "No contacts exist."
   },
   "document-labels": {
     "document-description-IAR": "Independent accountant’s report",

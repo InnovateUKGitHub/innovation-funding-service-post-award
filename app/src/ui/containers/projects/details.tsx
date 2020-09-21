@@ -25,6 +25,8 @@ interface CombinedData {
     contacts: ProjectContactDto[];
 }
 
+type ProjectContactRole = ProjectContactDto["role"];
+
 class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     render() {
         const combined = Pending.combine({
@@ -36,11 +38,52 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)} />;
     }
 
-    private renderContents({ project, partners, contacts }: CombinedData) {
-        const monitoringOfficer = contacts.find(x => x.role === "Monitoring officer");
-        const projectManager = contacts.find(x => x.role === "Project Manager");
-        const projectManagerPartner = projectManager ? partners.find(x => x.accountId === projectManager.accountId) : null;
+    private getRoles() {
+        const primaryRoles: ProjectContactRole[] = ["Monitoring officer", "Project Manager", "Innovation lead", "IPM"];
+        // Note: Excluded roles are already rendered elsewhere on page
+        const excludedOtherRoles: ProjectContactRole[] = [...primaryRoles, "Finance contact"];
 
+        return {
+            primaryRoles,
+            excludedOtherRoles
+        };
+    }
+
+    private renderPrimaryContacts(partners: CombinedData["partners"], contacts: CombinedData["contacts"]) {
+        const { primaryRoles } = this.getRoles();
+
+        const projectContacts = primaryRoles.map((role: ProjectContactRole) => {
+            // Note: kebabCase the role name, this saves manually crafting a string
+            const qa = role.replace(/\s+/g, "-").toLowerCase();
+            const contact = contacts.find(x => x.role === role);
+            const partner = contact && partners.find(x => x.accountId === contact.accountId);
+
+            return {
+                qa,
+                contact,
+                partner
+            };
+        });
+
+        return (
+            <>
+                {projectContacts.map(contact => <ACC.ProjectContact key={contact.qa} {...contact} />)}
+            </>
+        );
+    }
+
+    private renderOtherContacts(contacts: CombinedData["contacts"]) {
+      const { excludedOtherRoles } = this.getRoles();
+      const otherContacts = contacts.filter(x => excludedOtherRoles.indexOf(x.role) === -1);
+
+      return (
+        <ACC.Section titleContent={x => x.projectDetails.projectLabels.otherContacts()} qa="other-contacts-table">
+            <ACC.Partners.ContactsTable contacts={otherContacts} projectContactLabels={x => x.projectDetails.contactLabels} />
+        </ACC.Section>
+      );
+    }
+
+    private renderContents({ project, partners, contacts }: CombinedData) {
         return (
             <ACC.Page
                 backLink={<ACC.Projects.ProjectBackLink project={project} routes={this.props.routes} />}
@@ -55,13 +98,17 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                 />
 
                 <ACC.Section titleContent={x => x.projectDetails.projectLabels.projectMembers()}>
-                    <ACC.ProjectContact contact={monitoringOfficer} qa="monitoring-officer" />
-                    <ACC.ProjectContact contact={projectManager} partner={projectManagerPartner} qa="project-manager" />
+                    {this.renderPrimaryContacts(partners, contacts)}
+
                     <ACC.Section titleContent={x => x.projectDetails.projectLabels.financeContacts()}>
                         <ACC.PartnersAndFinanceContacts contacts={contacts} partners={partners} projectContactLabels={x => x.projectDetails.contactLabels} />
                     </ACC.Section>
+
+                    {this.renderOtherContacts(contacts)}
                 </ACC.Section>
+
                 {this.renderPartnersContactInformationSummaryList(partners)}
+
                 <ACC.Section title="Project information" qa="project-details">
                     <ACC.SummaryList qa="project-information">
                         <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.startDate()} qa="start-date" content={<ACC.Renderers.FullDate value={project.startDate} />} />

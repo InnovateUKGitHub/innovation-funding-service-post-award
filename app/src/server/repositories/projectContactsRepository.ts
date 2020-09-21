@@ -14,6 +14,9 @@ export interface ISalesforceProjectContact {
     Name: string;
     Email: string;
   };
+  Acc_UserId__r: {
+    Name: string;
+  };
 }
 
 export interface IProjectContactsRepository {
@@ -39,11 +42,11 @@ export class ProjectContactsRepository extends SalesforceRepositoryBase<ISalesfo
     "Acc_ContactId__r.Id",
     "Acc_ContactId__r.Name",
     "Acc_ContactId__r.Email",
+    "Acc_UserId__r.Name"
   ];
 
   getAllByProjectId(projectId: string): Promise<ISalesforceProjectContact[]> {
-    // TODO: This may not be a complete list and might need updating or rethinking in future.
-    return this.where(`Acc_ProjectId__c = '${projectId}' AND (Acc_Role__c = 'Monitoring officer' OR Acc_Role__c = 'Project Manager' OR Acc_Role__c = 'Finance contact')`);
+    return this.where(`Acc_ProjectId__c = '${projectId}'`);
   }
 
   async getAllForUser(email: string): Promise<ISalesforceProjectContact[]> {
