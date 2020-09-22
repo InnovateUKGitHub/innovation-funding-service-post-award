@@ -162,6 +162,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
       case PCRSpendProfileOverheadRate.Zero:
         return 0;
       case PCRSpendProfileOverheadRate.Twenty:
+        // Keep this?
         const labourCostCategory = costCategories.find(x => x.type === CostCategoryType.Labour)!;
         const labourCosts = items
           .filter(x => x.costCategoryId === labourCostCategory.id)
@@ -238,6 +239,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
       .filter(x => x.costCategory !== CostCategoryType.Overheads)
       .map(x => this.mapPcrSpendProfileDtoToEntity(context, x));
 
+    // Question around if we want to calculate overheads for PCR Spend Profile
     this.addOverheads(costCategories, mappedEntities, overheadsRates);
 
     const paired = [...this.spendProfileDto.costs, ...this.spendProfileDto.funds]

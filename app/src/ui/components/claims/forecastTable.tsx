@@ -257,7 +257,8 @@ export class ForecastTable extends React.Component<Props> {
       const updatedCategory = this.props.data.costCategories.find(x => x.id === categoryId);
       const overheadRate = this.props.data.partner.overheadRate;
 
-      if (updatedCategory && updatedCategory.type === CostCategoryType.Labour && overheadRate) {
+      // Will not run once labour is not related
+      if (updatedCategory && updatedCategory.hasRelated && overheadRate) {
         const overheadsCategory = this.props.data.costCategories
           .filter(x => x.competitionType === this.props.data.project.competitionType && x.organisationType === this.props.data.partner.organisationType)
           .find(x => x.isCalculated);

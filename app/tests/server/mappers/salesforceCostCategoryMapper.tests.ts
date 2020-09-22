@@ -87,7 +87,7 @@ describe("SalesforceCostCategoryMapper", () => {
     const result1 = mapper.map(createSalesforceRecord({ Acc_CostCategoryName__c : "Labour" }));
     const result2 = mapper.map(createSalesforceRecord({ Acc_CostCategoryName__c : "NotLabour" }));
 
-    expect(result1.hasRelated).toEqual(true);
+    expect(result1.hasRelated).toEqual(false);
     expect(result2.hasRelated).toEqual(false);
   });
 
@@ -97,7 +97,7 @@ describe("SalesforceCostCategoryMapper", () => {
     const result1 = mapper.map(createSalesforceRecord({ Acc_CostCategoryName__c : "Overheads" }));
     const result2 = mapper.map(createSalesforceRecord({ Acc_CostCategoryName__c : "NotOverheads" }));
 
-    expect(result1.isCalculated).toEqual(true);
+    expect(result1.isCalculated).toEqual(false);
     expect(result2.isCalculated).toEqual(false);
   });
 });
