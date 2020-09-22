@@ -1,17 +1,16 @@
 {
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "server debug",
-            "sourceMaps": true,
-            "program": "${workspaceFolder}\\src\\server\\index.ts",
-            "cwd": "${workspaceFolder}",
-            "protocol": "inspector",
-            "outFiles": [
-                "${workspaceFolder}\\dist\\src\\server\\**\\*js"
-            ]
-        }
-    ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node-terminal",
+      "name": "IFS-PA: start:dev",
+      "request": "launch",
+      "command": "npm run start:dev",
+      "cwd": "${workspaceFolder}",
+      "skipFiles": [
+        "${workspaceFolder}/node_modules/**/*.js",
+        "${workspaceFolder}/lib/**/*.js"
+      ]
+    }
+  ]
 }
