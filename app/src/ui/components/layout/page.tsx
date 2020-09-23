@@ -1,5 +1,5 @@
 import React from "react";
-import { IAppError, ProjectDto, ProjectStatus } from "@framework/types";
+import { IAppError, PartnerDto, PartnerStatus, ProjectDto, ProjectStatus } from "@framework/types";
 import { CombinedResultsValidator, Results } from "@ui/validation";
 import { AriaLive } from "../renderers/ariaLive";
 import { ErrorSummary } from "../errorSummary";
@@ -13,10 +13,11 @@ interface Props {
   error?: IAppError | null;
   validator?: Results<{}> | Results<{}>[] | null;
   project?: ProjectDto;
+  partner?: PartnerDto;
 }
 
 export const Page: React.FunctionComponent<Props> = (props) => {
-  const { pageTitle, backLink, error, children, project } = props;
+  const { pageTitle, backLink, error, children, project, partner} = props;
   const validation = props.validator !== undefined && Array.isArray(props.validator) ? new CombinedResultsValidator(...props.validator) : props.validator;
   return (
     <div>
@@ -27,14 +28,14 @@ export const Page: React.FunctionComponent<Props> = (props) => {
           <ValidationSummary validation={validation} compressed={false} />
         </AriaLive>
         {pageTitle}
-        {renderOnHoldSection(project)}
+        {renderOnHoldSection(project, partner)}
         {children}
       </main>
     </div>
   );
 };
 
-const renderOnHoldSection = (project: ProjectDto | undefined) => {
+const renderOnHoldSection = (project: ProjectDto | undefined, partner: PartnerDto | undefined) => {
   if (!!project && project.status === ProjectStatus.OnHold) {
     return (
       <Section>
@@ -42,5 +43,14 @@ const renderOnHoldSection = (project: ProjectDto | undefined) => {
       </Section>
     );
   }
+
+  if (!!partner && partner.partnerStatus  === PartnerStatus.OnHold) {
+    return (
+      <Section>
+        <ValidationMessage messageType={"info"} message={"Partner is on hold. Contact Innovate UK for more information."} qa={"on-hold-info-message"}/>
+      </Section>
+    );
+  }
+
   return null;
 };

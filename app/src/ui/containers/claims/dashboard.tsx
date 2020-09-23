@@ -39,6 +39,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
         pageTitle={<Acc.Projects.Title project={project} />}
         backLink={<Acc.Projects.ProjectBackLink project={project} routes={this.props.routes} />}
         project={project}
+        partner={partner}
       >
         {this.renderGuidanceMessage()}
         <Acc.Renderers.Messages messages={this.props.messages} />

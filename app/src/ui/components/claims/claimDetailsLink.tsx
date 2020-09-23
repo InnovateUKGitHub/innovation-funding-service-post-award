@@ -1,5 +1,5 @@
 import React from "react";
-import { ClaimDto, ClaimStatus, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
+import { ClaimDto, ClaimStatus, PartnerDto, PartnerStatus, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import { IRoutes } from "@ui/routing";
 import { Link } from "../links";
 
@@ -34,6 +34,7 @@ export const ClaimDetailsLink: React.FunctionComponent<PropsWithRoutes> = (props
 export const getClaimDetailsLinkType = (props: {claim: ClaimDto; project: ProjectDto; partner: PartnerDto;}): "edit" | "review" | "view" | "nothing" => {
 
   if (props.project.status === ProjectStatus.OnHold) return "view";
+  if (props.partner.partnerStatus === PartnerStatus.OnHold) return "view";
   switch (props.claim.status) {
     case ClaimStatus.DRAFT:
       if (props.partner.roles & ProjectRole.FinancialContact) {
