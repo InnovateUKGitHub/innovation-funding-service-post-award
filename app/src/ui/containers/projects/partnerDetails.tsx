@@ -43,6 +43,7 @@ class PartnerDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                 backLink={<ACC.BackLink route={this.props.routes.projectDetails.getLink({ id: this.props.id })}>Back to project details</ACC.BackLink>}
                 pageTitle={<ACC.Projects.Title project={project} />}
                 project={project}
+                partner={partner}
             >
                 <ACC.Section>
                     <ACC.SummaryList qa="partner-details">

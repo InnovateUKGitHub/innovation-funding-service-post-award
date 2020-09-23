@@ -1,7 +1,7 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import { ClaimDto, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/dtos";
+import { ClaimDto, PartnerDto, PartnerStatus, ProjectDto, ProjectRole, ProjectStatus } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { PrepareClaimRoute } from "@ui/containers";
 import { StoresConsumer } from "@ui/redux";
@@ -34,6 +34,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
         pageTitle={<ACC.Projects.Title project={data.project} />}
         backLink={<ACC.BackLink route={backLink}>{backText}</ACC.BackLink>}
         project={data.project}
+        partner={data.partner}
       >
         {this.renderFinalClaimMessage(data, isFc)}
         <ACC.Section title={partnerName} qa="partner-name" className="govuk-!-padding-bottom-3">
@@ -88,6 +89,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
     if (!(partner.roles & ProjectRole.FinancialContact)) return null;
     if (partner.isWithdrawn) return null;
     if (finalClaim) return null;
+    if (partner.partnerStatus === PartnerStatus.OnHold) return null;
 
     return <ACC.Link id="update-forecast" styling="PrimaryButton" route={this.props.routes.forecastUpdate.getLink({ projectId: project.id, partnerId: partner.id })}><ACC.Content value={x => x.forecastsDetails.updateForecastLink()}/></ACC.Link>;
   }

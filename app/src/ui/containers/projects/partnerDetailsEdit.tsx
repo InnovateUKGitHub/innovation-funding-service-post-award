@@ -49,6 +49,7 @@ class PartnerDetailsEditComponent extends ContainerBase<PartnerDetailsParams, Da
                 error={editor.error}
                 validator={editor.validator}
                 project={project}
+                partner={partner}
             >
                 <Form.Form
                     data={partner}
