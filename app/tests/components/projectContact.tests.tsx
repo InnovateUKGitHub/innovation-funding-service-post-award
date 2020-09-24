@@ -23,13 +23,8 @@ describe("ProjectMember", () => {
         expect(wrapper.html()).toContain("aTestRole");
     });
 
-    it("should return null if aProjectContact is null", () => {
-        const result = shallow(<ProjectContact contact={null} qa="member-a" />);
-        expect(result.html()).toBeNull();
-    });
-
-    it("should return null if aProjectContact is undefined", () => {
-        const result = shallow(<ProjectContact contact={undefined} qa="member-a" />);
+    it("should return null when ProjectContact has no contact set", () => {
+        const result = shallow(<ProjectContact qa="member-a" />);
         expect(result.html()).toBeNull();
     });
 

@@ -205,6 +205,9 @@ export class TestData {
         Name: `Ms Contact ${seed}`,
         Email: `projectcontact${seed}@login.com`,
       },
+      Acc_UserId__r: {
+        Name: "Mr Internal Contact",
+      },
       Acc_Role__c: role,
       RoleName: roleName,
     };

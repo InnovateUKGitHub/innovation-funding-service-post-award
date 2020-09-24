@@ -5,27 +5,34 @@ import { PartnerName } from "@ui/components/partners";
 import { Section } from "@ui/components/layout";
 import { SimpleString } from "@ui/components/renderers";
 
-interface Props {
-  contact?: ProjectContactDto | null;
-  partner?: PartnerDto | null;
+interface IProjectContact {
+  contact?: ProjectContactDto;
+  partner?: PartnerDto;
   qa: string;
 }
 
-export const ProjectContact: React.FunctionComponent<Props> = (props) => {
-
-  const contact = props.contact;
-
-  const partner = props.partner;
-
-  if (!contact) {
-    return null;
-  }
+export const ProjectContact: React.FunctionComponent<IProjectContact> = ({
+  contact,
+  partner,
+  qa,
+}) => {
+  if (!contact) return null;
 
   return (
     <Section title={contact.roleName}>
-      <SimpleString className={"govuk-!-margin-bottom-0"} qa={`${props.qa}-roleName`}>{contact.name}</SimpleString>
-      <SimpleString className={"govuk-!-margin-bottom-0"} qa={`${props.qa}-name`}><PartnerName partner={partner}/></SimpleString>
-      <Email value={contact.email} qa={props.qa + "-email"}/>
+      <SimpleString className="govuk-!-margin-bottom-0" qa={`${qa}-roleName`}>
+        {contact.name}
+      </SimpleString>
+
+      {partner && (
+        <SimpleString className="govuk-!-margin-bottom-0" qa={`${qa}-name`}>
+          <PartnerName partner={partner} />
+        </SimpleString>
+      )}
+
+      <Email value={contact.email} qa={`${qa}-email`} />
     </Section>
   );
 };
+
+ProjectContact.displayName = "ProjectContact";
