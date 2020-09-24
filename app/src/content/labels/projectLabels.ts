@@ -14,6 +14,7 @@ export class ProjectLabels extends ContentBase {
   public readonly percentageEligibleCostsClaimed = () => this.getContent("percentageEligibleCostsClaimedLabel");
   public readonly projectMembers = () => this.getContent("projectMembers");
   public readonly financeContacts = () => this.getContent("financeContacts");
+  public readonly otherContacts = () => this.getContent("otherContacts");
   public readonly projectInformation = () => this.getContent("projectInformation");
   public readonly startDate = () => this.getContent("startDate");
   public readonly endDate = () => this.getContent("endDate");
