@@ -107,6 +107,7 @@ const features: IFeatureFlags = {
     changePeriodLengthWorkflow: getFeatureFlagValue(process.env.FEATURE_CHANGE_PERIOD_LENGTH, false),
     contentHint: getFeatureFlagValue(process.env.FEATURE_CONTENT_HINT, false),
     customContent: getFeatureFlagValue(process.env.FEATURE_CUSTOM_CONTENT, false),
+    displayOtherContacts: getFeatureFlagValue(process.env.FEATURE_OTHER_CONTACTS, false),
 };
 
 const logLevel = parseLogLevel(process.env.LOG_LEVEL! || process.env.LOGLEVEL!);
