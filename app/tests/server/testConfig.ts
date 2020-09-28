@@ -24,6 +24,7 @@ export class TestConfig implements IConfig {
     changePeriodLengthWorkflow: false,
     contentHint: true,
     customContent: true,
+    displayOtherContacts: true
   };
 
   public logLevel = LogLevel.DEBUG;
