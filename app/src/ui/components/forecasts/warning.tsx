@@ -24,9 +24,6 @@ export const Warning = (props: Props) => (
 );
 
 const renderWarningMessage = (props: Props) => {
-  if (!(props.partner.roles & ProjectRole.FinancialContact)) {
-    return null;
-  }
   const categories: string[] = [];
   const currentPeriod = props.claims.reduce((prev, item) => item.periodId > prev ? item.periodId : prev, 0);
   const forecasts = !!props.editor ? props.editor.data : props.forecastDetails;
@@ -45,13 +42,22 @@ const renderWarningMessage = (props: Props) => {
       }
     });
 
-  const categoriesList = categories.map((x, i) => <li key={i}>{x.toLocaleLowerCase()}</li>);
+  const categoriesList = <ul>{categories.map(x => <li key={x}>{x.toLocaleLowerCase()}</li>)}</ul>;
+  const isFC = (props.partner.roles & ProjectRole.FinancialContact)  === ProjectRole.FinancialContact;
 
-  return categories.length === 0 ? null : (
+  if (categories.length === 0) return null;
+
+  return isFC ? (
     <ValidationMessage
       messageType="info"
       message={<div>The amount you are requesting is more than the grant offered for: <ul>{categoriesList}</ul> Your Monitoring Officer will let you know if they have any concerns.</div>}
-      qa="forecasts-warning"
+      qa="forecasts-warning-fc"
+    />
+  ) : (
+    <ValidationMessage
+        messageType="info"
+        message={<div>The partner is requesting an amount more than the grant offered for: <ul>{categoriesList}</ul></div>}
+        qa="forecasts-warning-mo-pm"
     />
   );
 };
