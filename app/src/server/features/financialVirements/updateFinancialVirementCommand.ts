@@ -5,7 +5,6 @@ import { ISalesforceFinancialVirement } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { CostCategoryFinancialVirement, PartnerFinancialVirement } from "@framework/entities";
 import { FinancialVirementDtoValidator } from "@ui/validators/financialVirementDtoValidator";
-import { roundCurrency } from "@framework/util";
 import {
   calculateNewEligibleCosts,
   calculateNewRemainingGrant
