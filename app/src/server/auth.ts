@@ -87,10 +87,10 @@ router.post("/auth/success", (req, res, next) => passport.authenticate("shibbole
 })(req, res, next));
 
 router.use((req, res, next) => {
-  // if user is logged in continue
   if (Configuration.sso.enabled && req.url === "/") {
     res.redirect("/projects/dashboard");
   }
+  // if user is logged in continue
   else if (req.session && req.session.user && req.session.user.email) {
     req.session.last_reset = getCookieTimestamp();
     next();
