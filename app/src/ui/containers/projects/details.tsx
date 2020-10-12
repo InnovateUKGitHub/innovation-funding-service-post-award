@@ -1,7 +1,7 @@
 import React from "react";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as ACC from "../../components";
-import { Pending } from "../../../shared/pending";
+import { Pending } from "@shared/pending";
 import { PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { StoresConsumer } from "@ui/redux";
 import { Content, PartnerName } from "../../components";
@@ -114,7 +114,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                     {this.renderOtherContacts(contacts)}
                 </ACC.Section>
 
-                {this.renderPartnersContactInformationSummaryList(partners)}
+                {this.renderPartnerInformationTable(partners, project)}
 
                 <ACC.Section title="Project information" qa="project-details">
                     <ACC.SummaryList qa="project-information">
@@ -129,16 +129,17 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         );
     }
 
-    private renderPartnersContactInformationSummaryList(partners: PartnerDto[]) {
+    private renderPartnerInformationTable(partners: CombinedData["partners"], project: CombinedData["project"]) {
         const PartnersTable = ACC.TypedTable<PartnerDto>();
+        const isMoPm = !!(project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
 
         return (
             <ACC.Section titleContent={x => x.projectDetails.projectLabels.partners()}>
                 <PartnersTable.Table qa="partner-information" data={partners}>
                     <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.partnerName()} value={x => this.renderPartnerName(x)} qa="partner-name"/>
                     <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.partnerType()} value={x => x.type} qa="partner-type"/>
-                    <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.statusLabel()} value={x => x.partnerStatusLabel} qa="partner-status"/>
-                    <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.fundingLabel()} value={x => <Content value={content => content.partnerDetails.contactLabels.fundingState(x.isNonFunded)}/>} qa="partner-funding"/>
+                    {isMoPm ? <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.statusLabel()} value={x => x.partnerStatusLabel} qa="partner-status"/> : null}
+                    {isMoPm ? <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.fundingLabel()} value={x => <Content value={content => content.partnerDetails.contactLabels.fundingState(x.isNonFunded)}/>} qa="partner-funding"/> : null}
                     <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.partnerPostcode()} value={x => x.postcode} qa="partner-postcode"/>
                 </PartnersTable.Table>
             </ACC.Section>
