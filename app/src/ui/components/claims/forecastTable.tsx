@@ -1,21 +1,20 @@
-import { CondensedDateRange } from "../renderers/date";
-import React from "react";
+import { ClaimDto, PartnerDto, PartnerStatus, ProjectDto } from "@framework/dtos";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { CostCategoryType } from "@framework/entities";
+import { numberComparator } from "@framework/util/comparator";
 import { EditorStatus, IEditorStore } from "@ui/redux";
 import {
-  IForecastDetailsDtoCostCategoryValidator,
   IForecastDetailsDtosValidator,
   IForecastDetailsDtoValidator
 } from "@ui/validators";
-import { TypedTable } from "../table";
 import classNames from "classnames";
-import { Currency } from "../renderers/currency";
+import React from "react";
 import { NumberInput } from "../inputs/numberInput";
 import { AccessibilityText } from "../renderers/accessibilityText";
+import { Currency } from "../renderers/currency";
+import { CondensedDateRange } from "../renderers/date";
 import { Percentage } from "../renderers/percentage";
-import { ClaimDto, PartnerDto, PartnerStatus, ProjectDto } from "@framework/dtos";
-import { numberComparator } from "@framework/util/comparator";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { CostCategoryType } from "@framework/entities";
+import { TypedTable } from "../table";
 
 export interface ForecastData {
   project: ProjectDto;
@@ -81,7 +80,7 @@ export class ForecastTable extends React.Component<Props> {
     return approvedClaims[0].periodId;
   }
 
-  // tslint:disable-next-line:cognitive-complexity
+  // tslint:disable-next-line: cognitive-complexity
   public render() {
     const { data, hideValidation, isSubmitting, editor } = this.props;
     const periodId = this.getPeriodId(data.project, data.claims, data.claim);
@@ -106,7 +105,7 @@ export class ForecastTable extends React.Component<Props> {
         data={parsed}
         qa="forecast-table"
         headers={this.renderTableHeaders(periods, periodId, data.claim)}
-        footers={this.renderTableFooters(periods, parsed, this.props.hideValidation !== true && editor ? editor.validator: undefined)}
+        footers={this.renderTableFooters(periods, parsed, this.props.hideValidation !== true && editor ? editor.validator : undefined)}
         headerRowClass="govuk-body-s govuk-table__header--light"
         bodyRowClass={x => classNames("govuk-body-s", {
           "table__row--warning": !hideValidation && x.total > x.golCosts,
@@ -141,7 +140,7 @@ export class ForecastTable extends React.Component<Props> {
     );
   }
 
-  private parseClaimData(data: ForecastData, editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>|undefined, periodId: number, numberOfPeriods: number | null) {
+  private parseClaimData(data: ForecastData, editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator> | undefined, periodId: number, numberOfPeriods: number | null) {
     const tableRows: TableRow[] = [];
     const forecasts = !!editor ? editor.data : data.forecastDetails;
     const costCategories = data.costCategories.filter(x => x.competitionType === data.project.competitionType && x.organisationType === data.partner.organisationType);
@@ -220,10 +219,10 @@ export class ForecastTable extends React.Component<Props> {
   }
 
   private renderDateRange(details: ClaimDetailsSummaryDto | ForecastDetailsDTO) {
-    return <CondensedDateRange start={details.periodStart} end={details.periodEnd}/>;
+    return <CondensedDateRange start={details.periodStart} end={details.periodEnd} />;
   }
 
-  private renderForecastCell(forecastRow: TableRow, periodId: number, index: Index, data: ForecastData, editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>|undefined, isSubmitting: boolean) {
+  private renderForecastCell(forecastRow: TableRow, periodId: number, index: Index, data: ForecastData, editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator> | undefined, isSubmitting: boolean) {
     const value = forecastRow.forecasts[periodId];
     const costCategory = data.costCategories.find(x => x.id === forecastRow.categoryId);
     const validator = forecastRow.validators[index.column - 1];
@@ -254,16 +253,16 @@ export class ForecastTable extends React.Component<Props> {
 
     if (!!item) {
       update(item);
-      const updatedCategory = this.props.data.costCategories.find(x => x.id === categoryId);
-      const overheadRate = this.props.data.partner.overheadRate;
+      const { partner, project, costCategories } = this.props.data;
+      const { overheadRate, organisationType } = partner;
 
-      // Will not run once labour is not related
-      if (updatedCategory && updatedCategory.hasRelated && overheadRate) {
-        const overheadsCategory = this.props.data.costCategories
-          .filter(x => x.competitionType === this.props.data.project.competitionType && x.organisationType === this.props.data.partner.organisationType)
-          .find(x => x.isCalculated);
+      if (overheadRate) {
+        const overheadsCategory = costCategories
+          .filter(x => x.competitionType === project.competitionType && x.organisationType === organisationType)
+          .find(x => x.type === CostCategoryType.Overheads);
 
         const categoryToUpdate = overheadsCategory && data.find(x => x.costCategoryId === overheadsCategory.id && x.periodId === item.periodId);
+
         if (categoryToUpdate) {
           categoryToUpdate.value = item.value * (overheadRate / 100);
         }
@@ -312,7 +311,7 @@ export class ForecastTable extends React.Component<Props> {
     )];
   }
 
-  private renderTableFooters(periods: string[], parsed: TableRow[], validator: IForecastDetailsDtosValidator|undefined) {
+  private renderTableFooters(periods: string[], parsed: TableRow[], validator: IForecastDetailsDtosValidator | undefined) {
     const cells = [];
     const costTotal = parsed.reduce((total, item) => total + item.total, 0);
     const golTotal = parsed.reduce((total, item) => total + item.golCosts, 0);

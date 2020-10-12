@@ -124,7 +124,7 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
 
     partnerVirement.newEligibleCosts = value!;
 
-    if (costCategory.hasRelated && partner.overheadRate) {
+    if (partner.overheadRate) {
       const calculatedCostCategoryIds = this.props.costCategories.then(x => x.filter(y => y.isCalculated).map(y => y.id)).data || [];
       const related = partnerLevel.virements.find(v => calculatedCostCategoryIds.indexOf(v.costCategoryId) !== -1);
       if (related) {

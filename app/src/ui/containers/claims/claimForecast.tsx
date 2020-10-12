@@ -48,7 +48,6 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.data, x.editor)} />;
   }
 
-  // Still want to display overhead rate on forecast table?
   renderOverheadsRate(overheadRate: number | null) {
     if (!isNumber(overheadRate)) return null;
 

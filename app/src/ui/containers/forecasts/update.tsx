@@ -41,7 +41,6 @@ class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
         {(combined.claim && combined.claim.isFinalClaim) && <ACC.ValidationMessage messageType="info" message={x => x.forecastsUpdate.messages.finalClaim()}/>}
         <ACC.Section title="" qa="partner-forecast" >
           <ACC.Forecasts.Warning {...combined} editor={editor} />
-          {/* show overhead rate? */}
           {this.renderOverheadsRate(combined.partner.overheadRate)}
           <Form.Form
             editor={editor}
