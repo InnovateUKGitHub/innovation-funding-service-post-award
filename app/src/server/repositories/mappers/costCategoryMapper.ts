@@ -1,6 +1,6 @@
-import { SalesforceBaseMapper } from "./saleforceMapperBase";
-import { ISalesforceCostCategory } from "../costCategoriesRepository";
 import { CostCategory, CostCategoryType } from "@framework/entities";
+import { ISalesforceCostCategory } from "../costCategoriesRepository";
+import { SalesforceBaseMapper } from "./saleforceMapperBase";
 
 export class SalesforceCostCategoryMapper extends SalesforceBaseMapper<ISalesforceCostCategory, CostCategory> {
 

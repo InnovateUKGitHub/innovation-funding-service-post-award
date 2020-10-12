@@ -47,12 +47,11 @@ export class ForecastDetailsStore extends StoreBase {
   }
 
   private getInitialValidator(partnerId: string, dto: ForecastDetailsDTO[], submit: boolean, showValidationErrors: boolean) {
-    const pending = Pending.combine({
+    const combined = Pending.combine({
       costCategories: this.costCategoriesStore.getAllForPartner(partnerId),
       colCosts: this.golCostsStore.getAllByPartner(partnerId),
     });
-    return pending.chain(x =>
-      Pending.done(new InitialForecastDetailsDtosValidator(dto, x.colCosts, x.costCategories, submit, showValidationErrors)));
+    return combined.then(x => new InitialForecastDetailsDtosValidator(dto, x.colCosts, x.costCategories, submit, showValidationErrors));
   }
 
   public getForecastEditor(partnerId: string, init?: (data: ForecastDetailsDTO[]) => void) {

@@ -85,7 +85,6 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     );
   }
 
-  // Make sure SF isn't calculating claims overheads when submitting Labour line items
   private renderCalculated(costCategory: CostCategoryDto, claimDetails: ClaimDetailsDto, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[], editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator> ) {
     const mockItems: ClaimLineItemDto[] = [{
       costCategoryId: costCategory.id,
