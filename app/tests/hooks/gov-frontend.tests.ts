@@ -1,6 +1,7 @@
 import { renderHook } from "@testing-library/react-hooks";
 
 import { GDSModules, useGovFrontend } from "@ui/hooks";
+import { hookTestBed, TestBedStore } from "@shared/TestBed";
 
 describe("useGovFrontend()", () => {
   const stubGdsInit = jest.fn();
@@ -12,16 +13,25 @@ describe("useGovFrontend()", () => {
     Header: stubGdsModule,
   };
 
+  const stubElement = document.createElement("div");
+
   Object.assign(window, { GOVUKFrontend: subGDSLibrary });
 
   beforeEach(jest.clearAllMocks);
 
-  const setup = () => renderHook(() => useGovFrontend("Header"));
+  const setup = (isClient: boolean) => {
+    const stubStore = {
+      config: {
+        isClient,
+      },
+    } as any;
+
+    return renderHook(() => useGovFrontend("Header"), hookTestBed({ stores: stubStore as TestBedStore }));
+  };
 
   test("should call when a node is available", () => {
-    const { result } = setup();
+    const { result } = setup(true);
 
-    const stubElement = document.createElement("div");
     result.current.setRef(stubElement);
 
     expect(stubGdsInit).toHaveBeenCalledTimes(1);
@@ -29,13 +39,19 @@ describe("useGovFrontend()", () => {
     expect(stubGdsModule).toBeCalledWith(stubElement);
   });
 
-  test("should not invoke gds library when a node is not present", () => {
-    const { result } = setup();
+  describe("should not invoke gds library", () => {
+    test.each`
+      name                               | targetNode     | isClient
+      ${"with client with node as null"} | ${null}        | ${true}
+      ${"with server with node as null"} | ${null}        | ${false}
+      ${"with server with a valid node"} | ${stubElement} | ${false}
+    `("rendering $name", ({ targetNode, isClient }) => {
+      const { result } = setup(isClient);
 
-    const stubElement = null;
-    result.current.setRef(stubElement);
+      result.current.setRef(targetNode);
 
-    expect(stubGdsInit).not.toHaveBeenCalled();
-    expect(stubGdsModule).not.toHaveBeenCalled();
+      expect(stubGdsInit).not.toHaveBeenCalled();
+      expect(stubGdsModule).not.toHaveBeenCalled();
+    });
   });
 });

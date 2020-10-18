@@ -1,30 +1,42 @@
-// var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-var TsConfigPathsPlugin = require('awesome-typescript-loader').TsConfigPathsPlugin;
-var webpack = require("webpack");
+const webpack = require("webpack");
+const path = require("path");
+
+const TsConfigPathsPlugin = require("awesome-typescript-loader").TsConfigPathsPlugin;
 
 module.exports = function pack(env) {
-
   if (env !== "production" && env !== "development") {
-    throw Error("Invalid env: Please use \"development\" or \"production\"");
+    throw Error('Invalid env: Please use "development" or "production"');
   }
 
   process.env.BABEL_ENV = env;
+
+  const appEntryPoint = path.resolve(__dirname, "src/client/client.tsx");
+  const componentGuidesEntryPoint = path.resolve(__dirname, "src/client/componentsGuide.tsx");
+
+  const buildOutput = path.resolve(__dirname, "public/build");
+
+  const apiTargetFile = "apiClient.ts";
+  const apiServerTarget = new RegExp(apiTargetFile);
+  const apiClientTarget = path.resolve(__dirname, "src/client", apiTargetFile);
+
+  // Note: For the client we swap the required file to client endpoints
+  const ReplaceApiModule = new webpack.NormalModuleReplacementPlugin(apiServerTarget, apiClientTarget);
 
   return [
     {
       mode: env,
       entry: {
-        bundle: ["@babel/polyfill", "isomorphic-fetch", "./src/client/client.tsx"],
-        componentsGuide: "./src/client/componentsGuide.tsx",
+        bundle: ["isomorphic-fetch", appEntryPoint],
+        componentsGuide: componentGuidesEntryPoint,
         vendor: ["react"],
       },
       node: {
         fs: "empty",
-        net: "empty"
+        net: "empty",
       },
       output: {
-        path: __dirname + "/public/build",
         filename: "[name].js",
+        path: buildOutput,
       },
       resolve: {
         extensions: [".ts", ".tsx", ".js", ".jsx"],
@@ -39,19 +51,31 @@ module.exports = function pack(env) {
               presets: [
                 "@babel/preset-react",
                 "@babel/preset-typescript",
-                ["@babel/preset-env", {"modules": false}]
+                [
+                  "@babel/preset-env",
+                  {
+                    modules: false,
+                    useBuiltIns: "usage",
+                    corejs: "3.8",
+                  },
+                ],
               ],
-              env : {
+              plugins: [
+                "@babel/plugin-transform-runtime",
+                "@babel/plugin-transform-modules-commonjs",
+                "@babel/plugin-proposal-class-properties",
+              ],
+              env: {
                 production: {
-                  plugins: ["transform-remove-console"]
-                }
-              }
-            }
+                  plugins: ["transform-remove-console"],
+                },
+              },
+            },
           },
           {
             test: /\.tsx?$/,
-            loader: "awesome-typescript-loader"
-          }
+            loader: "awesome-typescript-loader",
+          },
         ],
       },
       optimization: {
@@ -66,14 +90,11 @@ module.exports = function pack(env) {
         },
       },
       resolve: {
-        modules: ['node_modules'],
-        extensions: ['.tsx', '.ts', '.jsx', '.js'],
-        plugins: [ new TsConfigPathsPlugin() ],
+        modules: ["node_modules"],
+        extensions: [".tsx", ".ts", ".jsx", ".js"],
+        plugins: [new TsConfigPathsPlugin()],
       },
-      plugins: [
-        new webpack.NormalModuleReplacementPlugin(/apiClient\.ts/, "../client/apiClient.ts"),
-        // new BundleAnalyzerPlugin({ analyzerMode: "static" })
-      ]
-    }
+      plugins: [ReplaceApiModule],
+    },
   ];
 };

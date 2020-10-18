@@ -1,15 +1,14 @@
 import React from "react";
-import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "../containerBase";
-import { PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
-import { Pending } from "../../../shared/pending";
-import * as ACC from "../../components";
-import { IEditorStore } from "../../redux";
-import { MultipleDocumentUpdloadDtoValidator } from "../../validators/documentUploadValidator";
-import { getFileSize } from "@framework/util";
-import { StoresConsumer } from "@ui/redux";
-import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+
+import * as ACC from "@ui/components";
+import { IEditorStore, useStores } from "@ui/redux";
 import { useContent } from "@ui/hooks";
+import { Pending } from "@shared/pending";
+import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
+import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
+
+import { getFileSize } from "@framework/util";
+import { DocumentSummaryDto, MultipleDocumentUploadDto, ProjectDto, ProjectRole } from "@framework/dtos";
 
 export interface ProjectDocumentPageParams {
   projectId: string;
@@ -17,7 +16,6 @@ export interface ProjectDocumentPageParams {
 
 interface Data {
   project: Pending<ProjectDto>;
-  partners: Pending<PartnerDto[]>;
   documents: Pending<DocumentSummaryDto[]>;
   editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
   isClient: boolean;
@@ -25,7 +23,6 @@ interface Data {
 
 interface CombinedData {
   project: ProjectDto;
-  partners: PartnerDto[];
   documents: DocumentSummaryDto[];
   editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
 }
@@ -50,7 +47,6 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
   render() {
     const combined = Pending.combine({
       project: this.props.project,
-      partners: this.props.partners,
       documents: this.props.documents,
       editor: this.props.editor,
     });
@@ -58,7 +54,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)} />;
   }
 
-  private renderContents({ project, partners, documents, editor }: CombinedData) {
+  private renderContents({ project, documents, editor }: CombinedData) {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     return (
@@ -96,10 +92,6 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
         {this.renderDocumentsSection(documents)}
       </ACC.Page>
     );
-  }
-
-  private renderDocumentName(document: DocumentSummaryDto) {
-    return <a target={"_blank"} href={document.link} className="govuk-link">{document.fileName}</a>;
   }
 
   private renderDocumentsSection(documents: DocumentSummaryDto[]) {
@@ -156,29 +148,30 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
       </ProjectDocumentsTable.Table>
     );
   }
+
+  private renderDocumentName(document: DocumentSummaryDto) {
+    return <a target={"_blank"} href={document.link} className="govuk-link">{document.fileName}</a>;
+  }
 }
 
 const ProjectDocumentsContainer = (props: ProjectDocumentPageParams & BaseProps) => {
+  const stores = useStores();
   const { getContent } = useContent();
 
   return (
-    <StoresConsumer>
-      {(stores) => (
-        <ProjectDocumentsComponent
-          project={stores.projects.getById(props.projectId)}
-          partners={stores.partners.getPartnersForProject(props.projectId)}
-          documents={stores.projectDocuments.getProjectDocuments(props.projectId)}
-          editor={stores.projectDocuments.getProjectDocumentEditor(props.projectId)}
-          isClient={stores.config.isClient()}
-          onChange={(saving, dto) => {
-            stores.messages.clearMessages();
-            const successMessage = getContent(x => x.projectDocuments.documentMessages.getDocumentUploadedMessage(dto.files.length));
-            stores.projectDocuments.updateProjectDocumentsEditor(saving, props.projectId, dto, successMessage);
-          }}
-          {...props}
-        />
-      )}
-    </StoresConsumer>
+    <ProjectDocumentsComponent
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      documents={stores.projectDocuments.getProjectDocuments(props.projectId)}
+      editor={stores.projectDocuments.getProjectDocumentEditor(props.projectId)}
+      onChange={(saving, dto) => {
+        stores.messages.clearMessages();
+        const successMessage = getContent(x =>
+          x.projectDocuments.documentMessages.getDocumentUploadedMessage(dto.files.length),
+        );
+        stores.projectDocuments.updateProjectDocumentsEditor(saving, props.projectId, dto, successMessage);
+      }}
+    />
   );
 };
 

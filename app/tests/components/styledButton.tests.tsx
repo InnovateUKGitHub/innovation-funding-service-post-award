@@ -2,9 +2,15 @@ import React from "react";
 import { render } from "@testing-library/react";
 
 import { Button, StyledButtonProps } from "../../src/ui/components";
+import { TestBed } from "@shared/TestBed";
 
 describe("StyledButton", () => {
-  const setup = (props: StyledButtonProps) => render(<Button {...props} />);
+  const setup = (props: StyledButtonProps) =>
+    render(
+      <TestBed>
+        <Button {...props} />
+      </TestBed>,
+    );
 
   describe("@renders", () => {
     test.each`

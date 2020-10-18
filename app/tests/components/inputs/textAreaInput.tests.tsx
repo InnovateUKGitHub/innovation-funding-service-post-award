@@ -73,7 +73,7 @@ describe("TextAreaInput", () => {
     (wrapper.find("textarea").instance() as any).value = "3";
     wrapper.simulate("change");
 
-    await new Promise(resolve => setTimeout(() => resolve(), 500));
+    await new Promise<void>(resolve => setTimeout(resolve, 500));
 
     expect(wrapper.state("value")).toBe("3");
     expect(onChange).toHaveBeenCalledTimes(1);

@@ -2,7 +2,7 @@ import * as React from "react";
 import classNames from "classnames";
 import { BaseInput, FormInputWidths } from "./baseInput";
 
-interface TextInputProps extends InputProps<string> {
+export interface TextInputProps extends InputProps<string> {
   maxLength?: number;
   handleKeyTyped?: boolean;
   width?: FormInputWidths;

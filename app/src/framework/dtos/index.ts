@@ -8,6 +8,7 @@ export * from "./pcrDtos";
 export * from "./projectDto";
 export * from "./option";
 export * from "./documentDto";
+export * from "./documentUploadDto";
 export * from "./claimDetailsDto";
 export * from "./claimLineItemDto";
 export * from "./contact";

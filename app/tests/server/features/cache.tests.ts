@@ -25,11 +25,11 @@ describe("Cache", () => {
     expect(cache.fetch("Example", valToAdd)).toBe(1);
 
     // get again and it should be new value
-    await new Promise((res, rej) => {
+    await new Promise<void>(res => {
       setTimeout(() => {
         expect(cache.fetch("Example", valToAdd)).toBe(2);
         res();
-      }, delay + 1 );
+      }, delay + 1);
     });
   });
 

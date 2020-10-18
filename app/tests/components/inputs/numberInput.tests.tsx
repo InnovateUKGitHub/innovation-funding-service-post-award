@@ -72,7 +72,7 @@ describe("NumberInput", () => {
     (output.find("input").instance() as any).value = "3";
     output.simulate("change");
 
-    await new Promise(resolve => setTimeout(() => resolve(), 500));
+    await new Promise<void>(resolve => setTimeout(resolve, 500));
 
     expect(output.state("value")).toBe("3");
     expect(onChange).toHaveBeenCalledTimes(1);
@@ -87,7 +87,7 @@ describe("NumberInput", () => {
     (output.find("input").instance() as any).value = "1";
     output.simulate("change");
 
-    await new Promise(resolve => setTimeout(() => resolve(), 500));
+    await new Promise<void>(resolve => setTimeout(resolve, 500));
 
     expect(output.state("value")).toBe("1");
     expect(onChange).not.toHaveBeenCalled();
