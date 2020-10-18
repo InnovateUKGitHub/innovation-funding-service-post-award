@@ -573,7 +573,12 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
   async createProjectChangeRequest(projectChangeRequest: Entities.ProjectChangeRequestForCreateEntity): Promise<string> {
     const id = `ProjectChangeRequest${(this.Items.length)}`;
     const items = this.mapItemsForCreate(id, projectChangeRequest, projectChangeRequest.items);
-    await super.insertOne({ id, items, ...projectChangeRequest } as Entities.ProjectChangeRequestEntity);
+
+    // @ts-ignore
+    const insertPayload: Entities.ProjectChangeRequestEntity = { id, items, ...projectChangeRequest };
+
+    await super.insertOne(insertPayload);
+
     return id;
   }
 

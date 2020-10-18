@@ -106,12 +106,12 @@ describe("<PageLoader />", () => {
 });
 
 describe("<Loader />", () => {
-  const pendingDone = new Pending(LoadingStatus.Done);
-  const pendingPreload = new Pending(LoadingStatus.Preload);
-  const pendingLoading = new Pending(LoadingStatus.Loading);
-  const pendingFailed = new Pending(LoadingStatus.Failed);
+  const pendingDone = new Pending(LoadingStatus.Done, {});
+  const pendingPreload = new Pending(LoadingStatus.Preload, {});
+  const pendingLoading = new Pending(LoadingStatus.Loading, null);
+  const pendingFailed = new Pending(LoadingStatus.Failed, {});
 
-  const setup = (props: LoadingProps<{}>) =>
+  const setup = <T extends unknown>(props: LoadingProps<T>) =>
     render(
       <TestBed content={stubContent as TestBedContent}>
         <Loader {...props} />
@@ -164,6 +164,7 @@ describe("<Loader />", () => {
           pending: pendingLoading,
           renderLoading: () => <div data-qa={stubLoaderQa}>some custom loader</div>,
         });
+
         expect(getByTestId(stubLoaderQa)).toBeInTheDocument();
       });
 
@@ -200,7 +201,7 @@ describe("<Loader />", () => {
           const { getByTestId } = setup({
             render: jest.fn(),
             pending: pendingFailed,
-            renderError: (e) => (
+            renderError: e => (
               <div data-qa={e && e.code ? "renderError()-with-code" : stubWithoutErrorCodeQa}>renderError test</div>
             ),
           });
@@ -215,7 +216,7 @@ describe("<Loader />", () => {
           const { getByTestId } = setup({
             render: jest.fn(),
             pending: new Pending(LoadingStatus.Failed, {}, { code: "stub-error" }),
-            renderError: (e) => (
+            renderError: e => (
               <div data-qa={e && e.code ? stubWithoutErrorCodeQa : "renderError-no-code"}>renderError test</div>
             ),
           });

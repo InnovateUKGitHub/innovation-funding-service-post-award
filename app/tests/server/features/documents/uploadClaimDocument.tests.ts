@@ -14,22 +14,13 @@ const validStatus = [
   ClaimStatus.INNOVATE_QUERIED,
 ];
 
-const invalidStatus: ClaimStatus[] = [];
-// tslint:disable forin
-for (const key in ClaimStatus) {
-  const status = ClaimStatus[key] as ClaimStatus;
-  if (validStatus.indexOf(status) === -1) {
-    invalidStatus.push(status);
-  }
-}
-
 describe("UploadClaimDocumentCommand", () => {
   describe("When an IAR is uploaded", () => {
     it("throw an exception if an IAR is not required", async () => {
       const context = new TestContext();
 
       const project = context.testData.createProject();
-      const claim = context.testData.createClaim(undefined, 1, (item) => {
+      const claim = context.testData.createClaim(undefined, 1, item => {
         item.Acc_IARRequired__c = false;
         item.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
       });
@@ -37,10 +28,13 @@ describe("UploadClaimDocumentCommand", () => {
       const claimKey = {
         projectId: project.Id,
         partnerId: claim.Acc_ProjectParticipant__r.Id,
-        periodId: claim.Acc_ProjectPeriodNumber__c
+        periodId: claim.Acc_ProjectPeriodNumber__c,
       };
 
-      const command = new UploadClaimDocumentCommand(claimKey, { file : context.testData.createFile(), description: DocumentDescription.IAR });
+      const command = new UploadClaimDocumentCommand(claimKey, {
+        file: context.testData.createFile(),
+        description: DocumentDescription.IAR,
+      });
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 
@@ -48,7 +42,7 @@ describe("UploadClaimDocumentCommand", () => {
       const context = new TestContext();
       const partner = context.testData.createPartner();
       const project = context.testData.createProject();
-      const claim = context.testData.createClaim(partner, 1, (item) => {
+      const claim = context.testData.createClaim(partner, 1, item => {
         item.Acc_IARRequired__c = false;
         item.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
       });
@@ -56,13 +50,13 @@ describe("UploadClaimDocumentCommand", () => {
       const badFile = {
         fileName: undefined,
         content: "Some content",
-        description: DocumentDescription.IAR
+        description: DocumentDescription.IAR,
       };
 
       const claimKey = {
         projectId: project.Id,
         partnerId: claim.Acc_ProjectParticipant__r.Id,
-        periodId: claim.Acc_ProjectPeriodNumber__c
+        periodId: claim.Acc_ProjectPeriodNumber__c,
       };
 
       const command = new UploadClaimDocumentCommand(claimKey, badFile as any);
@@ -73,19 +67,22 @@ describe("UploadClaimDocumentCommand", () => {
       const context = new TestContext();
       const partner = context.testData.createPartner();
       const project = context.testData.createProject();
-      const claim = context.testData.createClaim(partner, 1, (item) => {
+      const claim = context.testData.createClaim(partner, 1, item => {
         item.Acc_IARRequired__c = true;
         item.Acc_ClaimStatus__c = ClaimStatus.AWAITING_IAR;
       });
       const claimKey = {
         projectId: project.Id,
         partnerId: claim.Acc_ProjectParticipant__r.Id,
-        periodId: claim.Acc_ProjectPeriodNumber__c
+        periodId: claim.Acc_ProjectPeriodNumber__c,
       };
 
       const nonIARDocument = context.testData.createFile("test content", "fileName.txt");
 
-      const command = new UploadClaimDocumentCommand(claimKey, {file: nonIARDocument, description: DocumentDescription.ClaimValidationForm});
+      const command = new UploadClaimDocumentCommand(claimKey, {
+        file: nonIARDocument,
+        description: DocumentDescription.ClaimValidationForm,
+      });
       const documentId = await context.runCommand(command);
       const document = await context.repositories.documents.getDocumentMetadata(documentId);
 
@@ -102,13 +99,15 @@ describe("UploadClaimDocumentCommand", () => {
       const claimKey = {
         projectId: project.Id,
         partnerId: claim.Acc_ProjectParticipant__r.Id,
-        periodId: claim.Acc_ProjectPeriodNumber__c
+        periodId: claim.Acc_ProjectPeriodNumber__c,
       };
 
-      const validExtension = { file: context.testData.createFile("test", "file.csv")};
-      const nonValidExtension = { file: context.testData.createFile("test", "file.zip")};
+      const validExtension = { file: context.testData.createFile("test", "file.csv") };
+      const nonValidExtension = { file: context.testData.createFile("test", "file.zip") };
       await expect(context.runCommand(new UploadClaimDocumentCommand(claimKey, validExtension))).resolves.toBe("1");
-      await expect(context.runCommand(new UploadClaimDocumentCommand(claimKey, nonValidExtension))).rejects.toThrow(ValidationError);
+      await expect(context.runCommand(new UploadClaimDocumentCommand(claimKey, nonValidExtension))).rejects.toThrow(
+        ValidationError,
+      );
     });
 
     it("should throw a validation error if the file description is not allowed", async () => {
@@ -119,13 +118,21 @@ describe("UploadClaimDocumentCommand", () => {
       const claimKey = {
         projectId: project.Id,
         partnerId: claim.Acc_ProjectParticipant__r.Id,
-        periodId: claim.Acc_ProjectPeriodNumber__c
+        periodId: claim.Acc_ProjectPeriodNumber__c,
       };
 
-      const validDescription: DocumentUploadDto = { file: context.testData.createFile("test", "file.csv"), description: DocumentDescription.ClaimValidationForm};
-      const notValidDescription: DocumentUploadDto = { file: context.testData.createFile("test", "file.csv"), description: "invalid" as any as number};
+      const validDescription: DocumentUploadDto = {
+        file: context.testData.createFile("test", "file.csv"),
+        description: DocumentDescription.ClaimValidationForm,
+      };
+      const notValidDescription: DocumentUploadDto = {
+        file: context.testData.createFile("test", "file.csv"),
+        description: ("invalid" as any) as number,
+      };
       await expect(context.runCommand(new UploadClaimDocumentCommand(claimKey, validDescription))).resolves.toBe("1");
-      await expect(context.runCommand(new UploadClaimDocumentCommand(claimKey, notValidDescription))).rejects.toThrow(ValidationError);
+      await expect(context.runCommand(new UploadClaimDocumentCommand(claimKey, notValidDescription))).rejects.toThrow(
+        ValidationError,
+      );
     });
 
     describe("When the claim status is AWAITING_IAR", () => {
@@ -133,7 +140,7 @@ describe("UploadClaimDocumentCommand", () => {
         const context = new TestContext();
         const partner = context.testData.createPartner();
         const project = context.testData.createProject();
-        const claim = context.testData.createClaim(partner, 1, (item) => {
+        const claim = context.testData.createClaim(partner, 1, item => {
           item.Acc_IARRequired__c = true;
           item.Acc_ClaimStatus__c = ClaimStatus.AWAITING_IAR;
         });
@@ -141,10 +148,13 @@ describe("UploadClaimDocumentCommand", () => {
         const claimKey = {
           projectId: project.Id,
           partnerId: claim.Acc_ProjectParticipant__r.Id,
-          periodId: claim.Acc_ProjectPeriodNumber__c
+          periodId: claim.Acc_ProjectPeriodNumber__c,
         };
 
-        const command = new UploadClaimDocumentCommand(claimKey, { file: context.testData.createFile(), description: DocumentDescription.IAR });
+        const command = new UploadClaimDocumentCommand(claimKey, {
+          file: context.testData.createFile(),
+          description: DocumentDescription.IAR,
+        });
         await context.runCommand(command);
         expect(context.repositories.claims.Items[0].Acc_ClaimStatus__c).toBe(ClaimStatus.AWAITING_IUK_APPROVAL);
       });
@@ -153,7 +163,7 @@ describe("UploadClaimDocumentCommand", () => {
         const context = new TestContext();
         const partner = context.testData.createPartner();
         const project = context.testData.createProject();
-        const claim = context.testData.createClaim(partner, 1, (item) => {
+        const claim = context.testData.createClaim(partner, 1, item => {
           item.Acc_IARRequired__c = true;
           item.Acc_ClaimStatus__c = ClaimStatus.AWAITING_IAR;
         });
@@ -161,14 +171,14 @@ describe("UploadClaimDocumentCommand", () => {
         const claimKey = {
           projectId: project.Id,
           partnerId: claim.Acc_ProjectParticipant__r.Id,
-          periodId: claim.Acc_ProjectPeriodNumber__c
+          periodId: claim.Acc_ProjectPeriodNumber__c,
         };
 
         expect(context.repositories.claimStatusChanges.Items.length).toBe(0);
 
         const file = context.testData.createFile();
 
-        const command = new UploadClaimDocumentCommand(claimKey, { file, description: DocumentDescription.IAR});
+        const command = new UploadClaimDocumentCommand(claimKey, { file, description: DocumentDescription.IAR });
         await context.runCommand(command);
 
         expect(context.repositories.claimStatusChanges.Items.length).toBe(1);
@@ -180,7 +190,7 @@ describe("UploadClaimDocumentCommand", () => {
         const context = new TestContext();
         const partner = context.testData.createPartner();
         const project = context.testData.createProject();
-        const claim = context.testData.createClaim(partner, 1, (item) => {
+        const claim = context.testData.createClaim(partner, 1, item => {
           item.Acc_IARRequired__c = true;
           item.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
         });
@@ -188,10 +198,10 @@ describe("UploadClaimDocumentCommand", () => {
         const claimKey = {
           projectId: project.Id,
           partnerId: claim.Acc_ProjectParticipant__r.Id,
-          periodId: claim.Acc_ProjectPeriodNumber__c
+          periodId: claim.Acc_ProjectPeriodNumber__c,
         };
 
-        const command = new UploadClaimDocumentCommand(claimKey,  { file: context.testData.createFile() });
+        const command = new UploadClaimDocumentCommand(claimKey, { file: context.testData.createFile() });
         await context.runCommand(command);
         expect(context.repositories.claims.Items[0].Acc_ClaimStatus__c).toBe(ClaimStatus.DRAFT);
       });
@@ -203,14 +213,14 @@ describe("UploadClaimDocumentCommand", () => {
           const context = new TestContext();
           const partner = context.testData.createPartner();
           const project = context.testData.createProject();
-          const claim = context.testData.createClaim(partner, 1, (item) => {
+          const claim = context.testData.createClaim(partner, 1, item => {
             item.Acc_IARRequired__c = true;
             item.Acc_ClaimStatus__c = status;
           });
           const claimKey = {
             projectId: project.Id,
             partnerId: claim.Acc_ProjectParticipant__r.Id,
-            periodId: claim.Acc_ProjectPeriodNumber__c
+            periodId: claim.Acc_ProjectPeriodNumber__c,
           };
 
           const expectedContent = "The file";
@@ -238,12 +248,13 @@ describe("UploadClaimDocumentCommand", () => {
           item.Id = claimId;
           item.Acc_IARRequired__c = true;
         });
-        const originalDocumentId = context.testData.createDocument("12345", "cat", "jpg", "","", "IAR").ContentDocumentId;
+        const originalDocumentId = context.testData.createDocument("12345", "cat", "jpg", "", "", "IAR")
+          .ContentDocumentId;
 
         const claimKey = {
           projectId: project.Id,
           partnerId: claim.Acc_ProjectParticipant__r.Id,
-          periodId: claim.Acc_ProjectPeriodNumber__c
+          periodId: claim.Acc_ProjectPeriodNumber__c,
         };
 
         expect(context.repositories.documents.Items).toHaveLength(1);
@@ -261,12 +272,18 @@ describe("UploadClaimDocumentCommand", () => {
   });
 
   describe("when the claim status does not allow an IAR upload", () => {
-    invalidStatus.forEach(status => {
-      it("should not upload a claim document with an IAR description when the claim is not in a valid status", async () => {
+    const invalidClaimStates: ClaimStatus[] = Object.values(ClaimStatus).filter(
+      claimKey => !validStatus.includes(claimKey),
+    );
+
+    invalidClaimStates.forEach(status => {
+      const statusName = status || "Unknown";
+
+      it(`should not upload a claim document with an IAR description when the claim is not in a valid status (${statusName})`, async () => {
         const context = new TestContext();
         const partner = context.testData.createPartner();
         const project = context.testData.createProject();
-        const claim = context.testData.createClaim(partner, 1, (item) => {
+        const claim = context.testData.createClaim(partner, 1, item => {
           item.Acc_IARRequired__c = true;
           item.Acc_ClaimStatus__c = status;
         });
@@ -274,7 +291,7 @@ describe("UploadClaimDocumentCommand", () => {
         const claimKey = {
           projectId: project.Id,
           partnerId: claim.Acc_ProjectParticipant__r.Id,
-          periodId: claim.Acc_ProjectPeriodNumber__c
+          periodId: claim.Acc_ProjectPeriodNumber__c,
         };
 
         const file = context.testData.createFile();
@@ -286,50 +303,54 @@ describe("UploadClaimDocumentCommand", () => {
   });
 
   describe("access control", () => {
+    const setupAccessControlContext = () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner(project);
+      const claim = context.testData.createClaim(partner);
 
-      const setupAccessControlContext = () => {
-          const context = new TestContext();
-          const project = context.testData.createProject();
-          const partner = context.testData.createPartner(project);
-          const claim = context.testData.createClaim(partner);
-
-          const claimKey = {
-              projectId: project.Id,
-              partnerId: partner.id,
-              periodId: 1,
-          };
-
-          const file = context.testData.createFile();
-
-          const command = new UploadClaimDocumentCommand(claimKey, { file });
-
-          return {command, project, claim, context};
+      const claimKey = {
+        projectId: project.Id,
+        partnerId: partner.id,
+        periodId: 1,
       };
 
-      test("accessControl - FC can upload documents for their claim", async () => {
-          const {command, project, claim, context} = setupAccessControlContext();
+      const file = context.testData.createFile();
 
-          const auth = new Authorisation({
-              [project.Id]: {
-                  projectRoles: ProjectRole.FinancialContact,
-                  partnerRoles: {[claim.Acc_ProjectParticipant__r.Id]: ProjectRole.FinancialContact | ProjectRole.ProjectManager}
-              }
-          });
+      const command = new UploadClaimDocumentCommand(claimKey, { file });
 
-          expect(await context.runAccessControl(auth, command)).toBe(true);
+      return { command, project, claim, context };
+    };
+
+    test("accessControl - FC can upload documents for their claim", async () => {
+      const { command, project, claim, context } = setupAccessControlContext();
+
+      const auth = new Authorisation({
+        [project.Id]: {
+          projectRoles: ProjectRole.FinancialContact,
+          partnerRoles: {
+            [claim.Acc_ProjectParticipant__r.Id]: ProjectRole.FinancialContact | ProjectRole.ProjectManager,
+          },
+        },
       });
 
-      test("accessControl - All other roles are restricted", async () => {
-          const {command, project, claim, context} = setupAccessControlContext();
+      expect(await context.runAccessControl(auth, command)).toBe(true);
+    });
 
-          const auth = new Authorisation({
-              [project.Id]: {
-                  projectRoles: ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer | ProjectRole.FinancialContact,
-                  partnerRoles: {[claim.Acc_ProjectParticipant__r.Id]: ProjectRole.ProjectManager | ProjectRole.Unknown | ProjectRole.MonitoringOfficer}
-              }
-          });
+    test("accessControl - All other roles are restricted", async () => {
+      const { command, project, claim, context } = setupAccessControlContext();
 
-          expect(await context.runAccessControl(auth, command)).toBe(false);
+      const auth = new Authorisation({
+        [project.Id]: {
+          projectRoles: ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer | ProjectRole.FinancialContact,
+          partnerRoles: {
+            [claim.Acc_ProjectParticipant__r.Id]:
+              ProjectRole.ProjectManager | ProjectRole.Unknown | ProjectRole.MonitoringOfficer,
+          },
+        },
       });
+
+      expect(await context.runAccessControl(auth, command)).toBe(false);
+    });
   });
 });

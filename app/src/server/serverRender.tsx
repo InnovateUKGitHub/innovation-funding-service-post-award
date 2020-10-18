@@ -44,7 +44,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     const router = configureRouter(routes);
     const route = await startRouter(req, router);
 
-    if (route && route.name === routerConstants.UNKNOWN_ROUTE) {
+    if (route.name === routerConstants.UNKNOWN_ROUTE) {
       throw new NotFoundError();
     }
 
@@ -110,8 +110,8 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
 }
 
 function loadAllData(store: Store, render: () => void): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const unsub = store.subscribe(() => {
+  return new Promise<void>(resolve => {
+    const unsubscribeStore = store.subscribe(() => {
       if (store.getState().loadStatus === 0) {
         // render the app to cause any other actions to go round the loop
         render();
@@ -121,14 +121,15 @@ function loadAllData(store: Store, render: () => void): Promise<void> {
         // causing another store changed event
         process.nextTick(() => {
           if (store.getState().loadStatus === 0) {
-            unsub();
+            unsubscribeStore();
+
             resolve();
           }
         });
       }
     });
 
-    // inital action to kick of callbacks
+    // initial action to kick of callbacks
     store.dispatch(Actions.initaliseAction());
   });
 }
@@ -169,7 +170,7 @@ const onComplete = (
 function startRouter(req: Request, router: Router): Promise<State> {
   return new Promise((resolve, reject) => {
     router.start(req.originalUrl, (routeError, route) => {
-      if (routeError) {
+      if (routeError || !route) {
         return reject(routeError);
       }
 

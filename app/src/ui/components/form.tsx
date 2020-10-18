@@ -201,41 +201,35 @@ interface StringFieldProps<T> extends ExternalFieldProps<T, string> {
   width?: FormInputWidths;
 }
 
-const StringField = <T extends {}>(props: StringFieldProps<T> & InternalFieldProps<T>) => {
-  return (
-    <FieldComponent
-      field={((data, disabled) => <TextInput width={props.width} name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} placeholder={props.placeholder} disabled={disabled} />)}
-      {...props}
-    />
-  );
-};
+const StringField = <T extends {}>({ field, ...props }: StringFieldProps<T> & InternalFieldProps<T>) => (
+  <FieldComponent
+    {...props}
+    field={field || ((data, disabled) => <TextInput width={props.width} name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} placeholder={props.placeholder} disabled={disabled} />)}
+  />
+);
 
 interface SearchFieldProps<T> extends ExternalFieldProps<T, string> {
   width?: FormInputWidths;
 }
 
-const SearchField = <T extends {}>(props: SearchFieldProps<T> & InternalFieldProps<T>) => {
-  return (
-    <FieldComponent
-      field={((data, disabled) => <SearchInput width={props.width} name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} placeholder={props.placeholder} disabled={disabled} />)}
+const SearchField = <T extends {}>({field, ...props}: SearchFieldProps<T> & InternalFieldProps<T>) => (
+  <FieldComponent
       {...props}
-    />
-  );
-};
+      field={field || ((data, disabled) => <SearchInput width={props.width} name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} placeholder={props.placeholder} disabled={disabled} />)}
+  />
+);
 
 interface MultiStringFieldProps<T> extends ExternalFieldProps<T, string> {
   rows?: number;
   qa?: string;
 }
 
-const MultiStringField = <T extends {}>(props: MultiStringFieldProps<T> & InternalFieldProps<T>) => {
-  return (
-    <FieldComponent
-      field={((data, disabled) => <TextAreaInput name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} rows={props.rows} qa={props.qa} ariaDescribedBy={props.hint ? createFieldHintId(props) : undefined} disabled={disabled} />)}
+const MultiStringField = <T extends {}>({field, ...props}: MultiStringFieldProps<T> & InternalFieldProps<T>) => (
+  <FieldComponent
       {...props}
-    />
-  );
-};
+      field={field || ((data, disabled) => <TextAreaInput name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} rows={props.rows} qa={props.qa} ariaDescribedBy={props.hint ? createFieldHintId(props) : undefined} disabled={disabled} />)}
+  />
+);
 
 interface NumericFieldProps<T> extends ExternalFieldProps<T, number> {
   width?: FormInputWidths;
@@ -243,10 +237,11 @@ interface NumericFieldProps<T> extends ExternalFieldProps<T, number> {
 
 const NumericField = <T extends {}>(props: NumericFieldProps<T> & InternalFieldProps<T>) => {
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, number> };
+
   return (
     <TypedFieldComponent
-      field={((data, disabled) => <NumberInput name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} width={props.width} disabled={disabled} />)}
-      {...props}
+        {...props}
+        field={((data, disabled) => <NumberInput name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} width={props.width} disabled={disabled} />)}
     />
   );
 };
@@ -263,10 +258,11 @@ interface RadioFieldProps<T extends {}> extends ExternalFieldProps<T, SelectOpti
 
 const RadioOptionsField = <T extends {}>(props: RadioFieldProps<T> & InternalFieldProps<T>) => {
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, SelectOption> };
+
   return (
     <TypedFieldComponent
-      field={(data, disabled) => <RadioList options={props.options} name={props.name} value={props.value(data, disabled)} inline={props.inline} onChange={(val) => handleChange(props, val)} disabled={disabled} />}
-      {...props}
+        {...props}
+        field={(data, disabled) => <RadioList options={props.options} name={props.name} value={props.value(data, disabled)} inline={props.inline} onChange={(val) => handleChange(props, val)} disabled={disabled} />}
     />
   );
 };
@@ -277,10 +273,11 @@ interface CheckboxFieldProps<T extends {}> extends ExternalFieldProps<T, SelectO
 
 const CheckboxOptionsField = <T extends {}>(props: CheckboxFieldProps<T> & InternalFieldProps<T>) => {
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, SelectOption[]> };
+
   return (
     <TypedFieldComponent
-      field={(data, disabled) => <CheckboxList options={props.options} name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} disabled={disabled} />}
-      {...props}
+        {...props}
+        field={(data, disabled) => <CheckboxList options={props.options} name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} disabled={disabled} />}
     />
   );
 };
@@ -297,19 +294,18 @@ interface DropdownFieldProps<T extends {}> extends ExternalFieldProps<T, Dropdow
 
 const DropdownListField = <T extends {}>(props: DropdownFieldProps<T> & InternalFieldProps<T>) => {
   const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, DropdownOption> };
+
   return (
     <TypedFieldComponent
-      field={(data, disabled) => <DropdownList placeholder={props.placeholder} options={props.options} name={props.name} hasEmptyOption={props.hasEmptyOption} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} disabled={disabled} />}
       {...props}
+      field={(data, disabled) => <DropdownList placeholder={props.placeholder} options={props.options} name={props.name} hasEmptyOption={props.hasEmptyOption} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} disabled={disabled} />}
     />
   );
 };
 
-const HiddenField = <T extends {}>(props: HiddenFieldProps<T> & InternalFieldProps<T>) => {
-  return (
-    <input type="hidden" name={props.name} value={props.value((props as any as InternalFieldProps<T>).formData) || ""} />
-  );
-};
+const HiddenField = <T extends {}>(props: HiddenFieldProps<T> & InternalFieldProps<T>) => (
+  <input type="hidden" value={props.value((props as any as InternalFieldProps<T>).formData) || ""} />
+);
 
 interface SubmitProps {
   className?: string;
@@ -355,41 +351,35 @@ const ButtonComponent = <T extends {}>(props: ButtonProps & InternalFieldProps<T
   </Button>
 );
 
-const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, IFileWrapper> & InternalFieldProps<T>) => {
-  return (
-    <FieldComponent
-      field={((data, disabled, hasError) => <FileUpload value={props.value(data, disabled)} name={props.name} onChange={(val) => handleChange(props, val)} disabled={disabled} error={hasError} />)}
-      {...props}
-    />
-  );
-};
+const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, IFileWrapper> & InternalFieldProps<T>) => (
+  <FieldComponent
+    {...props}
+    field={((data, disabled, hasError) => <FileUpload value={props.value(data, disabled)} name={props.name} onChange={(val) => handleChange(props, val)} disabled={disabled} error={hasError} />)}
+  />
+);
 
-const MulipleFileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, IFileWrapper[]> & InternalFieldProps<T>) => {
-  return (
-    <FieldComponent
-      field={((data, disabled, hasError) => <MulipleFileUpload value={props.value(data, disabled)} name={props.name} onChange={(val) => handleChange(props, val)} disabled={disabled} error={hasError} />)}
-      {...props}
-    />
-  );
-};
+const MulipleFileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, IFileWrapper[]> & InternalFieldProps<T>) => (
+  <FieldComponent
+    {...props}
+    field={((data, disabled, hasError) => <MulipleFileUpload value={props.value(data, disabled)} name={props.name} onChange={(val) => handleChange(props, val)} disabled={disabled} error={hasError} />)}
+  />
+);
 
-const FullDateComponent = <T extends {}>(props: ExternalFieldProps<T, Date> & InternalFieldProps<T>) => {
-  return (
-    <FieldComponent
-      field={(data, disabled, hasError) => (
-        <FullDateInput
-          name={props.name}
-          disabled={disabled}
-          value={props.value(data, disabled)}
-          onChange={val => handleChange(props, val)}
-          ariaDescribedBy={props.hint ? createFieldHintId(props) : undefined}
-          hasError={hasError}
-        />
-      )}
-      {...props}
-    />
-  );
-};
+const FullDateComponent = <T extends {}>(props: ExternalFieldProps<T, Date> & InternalFieldProps<T>) => (
+  <FieldComponent
+    {...props}
+    field={(data, disabled, hasError) => (
+      <FullDateInput
+        name={props.name}
+        disabled={disabled}
+        value={props.value(data, disabled)}
+        onChange={val => handleChange(props, val)}
+        ariaDescribedBy={props.hint ? createFieldHintId(props) : undefined}
+        hasError={hasError}
+      />
+    )}
+  />
+);
 
 interface MonthYearProps<TDto, TValue> extends ExternalFieldProps<TDto, TValue> {
   startOrEnd: "start" | "end";
@@ -399,6 +389,7 @@ interface MonthYearProps<TDto, TValue> extends ExternalFieldProps<TDto, TValue> 
 const MonthYearComponent = <T extends {}>(props: MonthYearProps<T, Date> & InternalFieldProps<T>) => {
   return (
     <FieldComponent
+      {...props}
       field={(data, disabled, hasError) => (
         <MonthYearInput
           name={props.name}
@@ -411,7 +402,6 @@ const MonthYearComponent = <T extends {}>(props: MonthYearProps<T, Date> & Inter
           hideLabel={props.hideLabel}
         />
       )}
-      {...props}
     />
   );
 };
@@ -419,8 +409,8 @@ const MonthYearComponent = <T extends {}>(props: MonthYearProps<T, Date> & Inter
 const CustomComponent = <T extends {}>(props: ExternalFieldProps<T, React.ReactNode> & InternalFieldProps<T>) => {
   return (
     <FieldComponent
-      field={(data, disabled) => props.value(data, disabled)}
       {...props}
+      field={(data, disabled) => props.value(data, disabled)}
     />
   );
 };

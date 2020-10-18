@@ -114,7 +114,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     const completeItem = createCompleteAcademicPcrItem();
     context.testData.createPCRItem(projectChangeRequest, recordType, completeItem);
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
-    const item = dto.items[0] as PCRItemForPartnerAdditionDto;
+    const item = dto.items[0] as Partial<PCRItemForPartnerAdditionDto>;
     item.status = PCRItemStatus.Complete;
     const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
 
@@ -133,7 +133,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     const completeItem = createCompleteIndustrialPcrItem();
     context.testData.createPCRItem(projectChangeRequest, recordType, completeItem);
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
-    const item = dto.items[0] as PCRItemForPartnerAdditionDto;
+    const item = dto.items[0] as Partial<PCRItemForPartnerAdditionDto>;
     item.status = PCRItemStatus.Complete;
     const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
 

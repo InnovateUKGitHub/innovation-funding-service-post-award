@@ -67,9 +67,5 @@
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
     "forceConsistentCasingInFileNames": true,
   },
-  "exclude": [
-    "node_modules",
-    // "tests",
-    // "**/*.tests.ts"
-  ]
+  "exclude": ["node_modules"]
 }

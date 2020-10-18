@@ -2,7 +2,7 @@
 import { TestContext } from "../../testContextProvider";
 import { SaveMonitoringReport } from "@server/features/monitoringReports/saveMonitoringReport";
 import { BadRequestError, ValidationError } from "@server/features/common";
-import { default as Repositories } from "@server/repositories";
+import * as Repositories from "@server/repositories";
 import { GetMonitoringReportById } from "@server/features/monitoringReports/getMonitoringReport";
 
 const createMonitoringReportTestData = (context: TestContext, periodId: number, update?: Partial<Repositories.ISalesforceMonitoringReportHeader>): Repositories.ISalesforceMonitoringReportHeader => {

@@ -1,4 +1,4 @@
-import React, { createElement, Fragment } from "react";
+import React, { Fragment } from "react";
 import { LoadingStatus, Pending } from "../../shared/pending";
 import { ErrorSummary } from "./errorSummary";
 import { ErrorCode, IAppError } from "@framework/types/IAppError";
@@ -59,7 +59,7 @@ export function Loader<T>({ pending, render, renderError, renderLoading }: Loadi
 
 function LoadingMessage() {
   const { getContent } = useContent();
-  const loadingMessage = getContent((x) => x.components.loading.message);
+  const loadingMessage = getContent(x => x.components.loading.message);
 
   return (
     <SimpleString className="govuk-!-padding-top-5 govuk-!-padding-bottom-5" qa="loading-message">
@@ -69,7 +69,7 @@ function LoadingMessage() {
 }
 
 export function PageLoader<T>(props: LoadingProps<T>) {
-  const handleError: LoadingProps<T>["renderError"] = (e) => {
+  const handleError: LoadingProps<T>["renderError"] = e => {
     const hasRequestError = e && e.code === ErrorCode.REQUEST_ERROR;
 
     return hasRequestError ? <NotFoundErrorPage /> : <StandardErrorPage />;
