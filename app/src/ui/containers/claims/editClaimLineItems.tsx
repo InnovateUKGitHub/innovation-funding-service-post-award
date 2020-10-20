@@ -73,6 +73,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={project} />}
       >
+        {this.renderNegativeClaimWarning(claimDetails)}
         {this.renderGuidanceMessage()}
         <ACC.Section>
           <ACC.TextHint text={costCategory.hintText} />
@@ -206,6 +207,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     return (
       <span>
         <ACC.ValidationError error={validation.cost} />
+
         <ACC.Inputs.NumberInput
           name={`value${index.row}`}
           value={item.value}
@@ -214,6 +216,16 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
           ariaLabel={`value of claim line item ${index.row + 1}`}
         />
       </span>
+    );
+  }
+  private renderNegativeClaimWarning(item: ClaimDetailsDto) {
+
+    return item.value >= 0 ?  null : (
+      <ValidationMessage
+        messageType="info"
+        message={<div>The claim entered has a value which is less than zero.</div>}
+        qa="warning-negative-claim"
+      />
     );
   }
 
