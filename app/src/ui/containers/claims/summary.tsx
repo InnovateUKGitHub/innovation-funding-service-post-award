@@ -63,6 +63,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
   }
 
   private renderContents(data: CombinedData) {
+    const totalCostsClaimed: number = data.claimDetails.reduce((totalCost, claimDetail) => totalCost + claimDetail.costsClaimedThisPeriod, 0);
 
     return (
       <ACC.Page
@@ -71,15 +72,28 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
+        {this.renderWarningMessage(totalCostsClaimed)}
         <ACC.Section qa="claimSummaryForm" title={<ACC.Claims.ClaimPeriodDate claim={data.claim} />}>
           {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message="This is the final claim." />}
-          {this.renderCostsPaidSummary(data)}
+          {this.renderCostsPaidSummary(data, totalCostsClaimed)}
           {this.renderDocumentsSummary(data)}
           {!data.claim.isFinalClaim && this.renderForecastSummary(data)}
           {this.renderClaimForm(data)}
         </ACC.Section>
       </ACC.Page>
     );
+  }
+
+  private renderWarningMessage(totalCostsClaimed: number) {
+    const displayWarning: boolean = totalCostsClaimed < 0;
+
+    return displayWarning? (
+      <ACC.ValidationMessage
+        qa="summary-warning"
+        messageType="info"
+        message={x => x.claimPrepareSummary.messages.claimSummaryWarning()}
+      />
+    ): null;
   }
 
   private renderBackLink(data: CombinedData) {
@@ -133,8 +147,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
     this.props.onUpdate(true, dto, this.getBackLink(project));
   }
 
-  private renderCostsPaidSummary(data: CombinedData) {
-    const totalCostsClaimed = data.claimDetails.map((x) => x.costsClaimedThisPeriod).reduce((res, x) => res + x);
+  private renderCostsPaidSummary(data: CombinedData, totalCostsClaimed: number) {
     const totalCostsPaid = totalCostsClaimed * (data.partner.awardRate! / 100);
 
     return (

@@ -73,7 +73,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={project} />}
       >
-        {this.renderNegativeClaimWarning(claimDetails)}
+        {this.renderNegativeClaimWarning(editor.data)}
         {this.renderGuidanceMessage()}
         <ACC.Section>
           <ACC.TextHint text={costCategory.hintText} />
@@ -207,7 +207,6 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     return (
       <span>
         <ACC.ValidationError error={validation.cost} />
-
         <ACC.Inputs.NumberInput
           name={`value${index.row}`}
           value={item.value}
@@ -218,16 +217,35 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
       </span>
     );
   }
-  private renderNegativeClaimWarning(item: ClaimDetailsDto) {
 
-    return item.value >= 0 ?  null : (
-      <ValidationMessage
+  private renderNegativeClaimWarning(editor: ClaimDetailsDto) {
+    const errorItems = editor.lineItems.reduce<string[]>(
+      (acc, i) => i.value < 0 ? [...acc, i.description] : acc,
+      []
+    );
+
+    if (!errorItems.length) return null;
+
+    const markup = (
+      <>
+        <ACC.Renderers.SimpleString>
+          <ACC.Content value={(content) => content.editClaimLineItems.messages.negativeClaimWarning()} />
+        </ACC.Renderers.SimpleString>
+
+        <ul>
+          {errorItems.map((costCategory) => <li key={costCategory}>{costCategory}</li>)}
+        </ul>
+      </>
+    );
+
+    return (
+      <ACC.ValidationMessage
         messageType="info"
-        message={<div>The claim entered has a value which is less than zero.</div>}
-        qa="warning-negative-claim"
+        qa="claim-warning"
+        message={markup}
       />
     );
-  }
+}
 
   renderDescription(item: ClaimLineItemDto, index: { column: number; row: number; }, validation: ClaimLineItemDtoValidator, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
     return (

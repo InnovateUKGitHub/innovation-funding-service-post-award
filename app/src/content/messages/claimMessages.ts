@@ -26,4 +26,6 @@ export class ClaimMessages extends ContentBase {
   public readonly interimClaimMessage = () => this.getContent("interim-claim-message", {markdown: true});
   public readonly editClaimLineItemGuidance = () => this.getContent("edit-claim-line-item-guidance");
   public readonly editClaimLiineItemDocumentGuidance = () => this.getContent("edit-claim-line-item-document-guidance");
+  public readonly negativeClaimWarning = () => this.getContent("negative-claim-warning");
+  public readonly claimSummaryWarning = () => this.getContent("claim-summary-warning");
 }
