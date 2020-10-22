@@ -73,3 +73,5 @@ class ContentComponent extends Component<InnerProps> {
     );
   }
 }
+
+export const useContentResult = (contentResult: ContentResult): string => contentResult.content;

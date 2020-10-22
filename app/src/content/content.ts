@@ -75,11 +75,15 @@ import { PCRRemovePartnerSummaryContent } from "./pages/pcrs/removePartner/remov
 import { PCRScopeChangeProjectSummaryChangeContent } from "./pages/pcrs/scopeChange/scopeChangeProjectSummaryChangeStepContent";
 import { PCRScopeChangePublicDescriptionChangeContent } from "./pages/pcrs/scopeChange/scopeChangePublicDescriptionChangeStepContent";
 import { PCRScopeChangeSummaryContent } from "./pages/pcrs/scopeChange/scopeChangeSummaryContent";
+
+import { HeaderContent } from "@content/general-content/HeaderContent";
+
 import { ProjectDto } from "@framework/dtos";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
 export class Content extends ContentBase {
+  public readonly header: HeaderContent;
   public readonly projectsDashboard: ProjectDashboardContent;
   public readonly home: HomePageContent;
 
@@ -179,6 +183,9 @@ export class Content extends ContentBase {
 
   constructor(protected project: ProjectDto | null | undefined) {
     super(null, null);
+
+    this.header = new HeaderContent(this);
+
     this.projectsDashboard = new ProjectDashboardContent(this, project);
     this.home = new HomePageContent(this, project);
 

@@ -1,4 +1,14 @@
 {
+  "site": {
+    "header": {
+      "mobileNavigationLabel": "Menu",
+      "navigation": {
+        "dashboard": "Dashboard",
+        "profile": "Profile",
+        "signOut": "Sign Out"
+      }
+    }
+  },
   "example": {
     "contentTitle": "Content solution",
     "content": "Some example content"
