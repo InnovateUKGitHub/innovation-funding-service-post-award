@@ -1,3 +1,4 @@
+// tslint:disable: object-literal-key-quotes
 import React from "react";
 import { IStores, ModalRegister, useModal, useStores } from "@ui/redux";
 import { updatePageTitle } from "@ui/redux/actions";
@@ -10,6 +11,21 @@ import { Store } from "redux";
 import { State as RouteState } from "router5";
 import { Content } from "@content/content";
 import { useContent } from "@ui/redux/contentProvider";
+import { FooterLinks } from "@ui/components/layout/footer.config";
+
+// TODO: This needs to be an external file, preferably near a config directory. The href values domain name need to be generated from config
+const footerLinks: FooterLinks = [
+  {"data-qa": "innovate-uk", text: "Innovate UK", href: "https://www.gov.uk/government/organisations/innovate-uk"},
+  {"data-qa": "innovation-funding-advice", text: "Innovation funding advice", href: "https://www.gov.uk/guidance/innovation-apply-for-a-funding-award"},
+  {"data-qa": "connect-to-innovation-experts", text: "Connect to innovation experts", href: "https://www.gov.uk/guidance/innovation-get-support-and-advice"},
+  {"data-qa": "events", text: "Events", href: "https://connect.innovateuk.org/events"},
+  {"data-qa": "innovate-uk-blog", text: "Innovate UK blog", href: "https://innovateuk.blog.gov.uk/"},
+  {"data-qa": "gov.uk-accessibility", text: "GOV.UK accessibility", href: "https://www.gov.uk/help/accessibility"},
+  {"data-qa": "terms-and-conditions", text: "Terms and conditions", href: "https://apply-for-innovation-funding.service.gov.uk/info/terms-and-conditions"},
+  {"data-qa": "contact-us", text: "Contact us", href: "https://apply-for-innovation-funding.service.gov.uk/info/contact"},
+  {"data-qa": "sign-up-for-competition-updates", text: "Sign up for competition updates", href: "http://info.innovateuk.org/emailpref"},
+  {"data-qa": "latest-funding-opportunities", text: "Latest funding opportunities", href: "https://apply-for-innovation-funding.service.gov.uk/competition/search"}
+];
 
 interface IAppProps {
   // @todo see if we can remove and replace with a callback to set page title
@@ -40,7 +56,6 @@ class AppView extends React.Component<IAppProps> {
     if (newRoute || (loadStatus === 0 && hashLoaded)) {
       const { filteredRoute, params } = this.createRouteProps();
 
-      // Note: update page title
       dispatch(updatePageTitle(filteredRoute, params, stores, content));
     }
   }
@@ -94,7 +109,7 @@ class AppView extends React.Component<IAppProps> {
           )}
         </div>
 
-        <Footer />
+        <Footer links={footerLinks} />
 
         {modalRegister.getModals().map((modal) => (
           <PrivateModal key={`modal-${modal.id}`} {...modal} />
@@ -109,7 +124,7 @@ interface AppRoute {
   routes: IRoutes;
 }
 
-export const App: React.FunctionComponent<AppRoute> = (props) => {
+export const App = (props: AppRoute) => {
   const stores = useStores();
   const content = useContent();
   const modalRegister = useModal();
