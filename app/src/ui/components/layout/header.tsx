@@ -1,6 +1,5 @@
 import React from "react";
-import { ContentConsumer } from "@ui/redux";
-import { useContentResult } from "@ui/components";
+import { ContentConsumer, useContentResult } from "@ui/redux";
 import { ContentResult } from "@content/contentBase";
 import { HeaderContent } from "@content/general-content/HeaderContent";
 

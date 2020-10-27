@@ -1,40 +1,33 @@
-import React, { Component } from "react";
+import React from "react";
 import { Markdown } from "./renderers/markdown";
-import { ContentConsumer } from "@ui/redux/contentProvider";
+import { useContent } from "@ui/redux/contentProvider";
 import { ContentSelector } from "@content/content";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { Modal } from "@ui/components/modal";
 import { Section } from "@ui/components/layout";
 import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
 import { ModalLink } from "@ui/components/links";
-import { ContentResult } from "@content/contentBase";
-import { MessageStyle } from "@ui/components/validationMessage";
 
-interface Props {
+interface IContentProps {
   value: ContentSelector;
-  messageStyle?: MessageStyle;
+  styles?: React.CSSProperties;
 }
 
-interface InnerProps {
-  result: ContentResult;
-  config: IFeatureFlags;
-  messageStyle?: MessageStyle;
-}
+export const Content = ({ value, styles }: IContentProps) => {
+  const stores = useStores();
+  const [appContent] = useContent();
 
-export const Content = ({ value, messageStyle }: Props) => (
-  <StoresConsumer>{stores =>
-    <ContentConsumer>{content =>
-      <ContentComponent config={stores.config.getConfig().features} result={value(content)} messageStyle={messageStyle}/>}
-    </ContentConsumer>}
-  </StoresConsumer>
-);
+  const config = stores.config.getConfig().features;
+  const { key, content, markdown } = value(appContent);
 
-class ContentComponent extends Component<InnerProps> {
+  const displayValue: string | JSX.Element = markdown ? (
+    <Markdown style={styles && { color: styles.color }} value={content} />
+  ) : (
+    content
+  );
 
-  private renderContentHint(displayValue: string | JSX.Element) {
-    if (!this.props.config.contentHint) return null;
-
-    const modalId = `content-${this.props.result.key}`;
+  const renderContentHint = () => {
+    const modalId = `content-${key}`;
 
     return (
       <React.Fragment>
@@ -52,26 +45,34 @@ class ContentComponent extends Component<InnerProps> {
         <Modal id={modalId}>
           <Section title="Content hint">
             <SummaryList qa="content_info">
-              <SummaryListItem hideAction={true} label="Current value" content={displayValue} qa="current_value"/>
-              <SummaryListItem hideAction={true} label="Content key" content={this.props.result.key} qa="current_value"/>
+              <SummaryListItem
+                hideAction={true}
+                label="Current value"
+                content={displayValue}
+                qa="current_value"
+              />
+
+              <SummaryListItem
+                hideAction={true}
+                label="Content key"
+                content={key}
+                qa="current_value"
+              />
             </SummaryList>
-            <ModalLink styling="PrimaryButton" modalId={modalId} open={false}>Close</ModalLink>
+
+            <ModalLink styling="PrimaryButton" modalId={modalId} open={false}>
+              Close
+            </ModalLink>
           </Section>
         </Modal>
       </React.Fragment>
     );
-  }
+  };
 
-  public render() {
-    const style = this.props.messageStyle && { color: this.props.messageStyle.colour };
-    const displayValue = this.props.result.markdown ? <Markdown style={style} value={this.props.result.content}/> : this.props.result.content;
-    return (
-      <React.Fragment>
-        {displayValue}
-        {this.renderContentHint(displayValue)}
-      </React.Fragment>
-    );
-  }
-}
-
-export const useContentResult = (contentResult: ContentResult): string => contentResult.content;
+  return (
+    <React.Fragment>
+      {displayValue}
+      {config.contentHint && renderContentHint()}
+    </React.Fragment>
+  );
+};

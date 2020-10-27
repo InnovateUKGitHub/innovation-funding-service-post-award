@@ -1,12 +1,22 @@
 import React from "react";
-import marked from "marked";
+import Marked from "marked";
 
-interface Props {
-  value: string|null|undefined;
+export interface IMarkdownProps {
+  value: string;
   style?: React.CSSProperties;
 }
 
-export const Markdown = (props: Props) => {
-  if(!props.value) return null;
-  return <span style={props.style} className={"govuk-body markdown"} dangerouslySetInnerHTML={{ __html: marked(props.value) }} />;
-};
+export function Markdown({ value, ...props }: IMarkdownProps) {
+  if (!value.length) return null;
+
+  const dangerousHTML = Marked(value);
+
+  return (
+    <span
+      {...props}
+      data-qa="markdown"
+      className="govuk-body markdown"
+      dangerouslySetInnerHTML={{ __html: dangerousHTML }}
+    />
+  );
+}

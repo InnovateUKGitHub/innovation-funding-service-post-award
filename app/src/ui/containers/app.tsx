@@ -126,7 +126,7 @@ interface AppRoute {
 
 export const App = (props: AppRoute) => {
   const stores = useStores();
-  const content = useContent();
+  const [content] = useContent();
   const modalRegister = useModal();
 
   return (

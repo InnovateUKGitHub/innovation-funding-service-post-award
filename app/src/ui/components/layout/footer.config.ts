@@ -1,7 +1,6 @@
 // tslint:disable: object-literal-key-quotes
 import * as React from "react";
 import { useContent } from "@ui/redux";
-import { useContentResult } from "../content";
 
 export type LinkProps = React.AnchorHTMLAttributes<{}> & {
   "data-qa": string;
@@ -30,40 +29,40 @@ type RequiredContentLabels =
 export const useExternalContent = (): {
   [key in RequiredContentLabels]: FooterExternalContent;
 } => {
-  const { footer } = useContent();
+  const [content, getContent] = useContent();
 
   return {
     title: {
       "data-qa": "footer-title",
-      children: useContentResult(footer.supportLinks),
+      children: getContent(content.footer.supportLinks),
     },
     usesCookie: {
       "data-qa": "uses-cookies",
-      children: useContentResult(footer.explainCookies),
+      children: getContent(content.footer.explainCookies),
     },
     moreAboutCookies: {
       "data-qa": "more-about-cookies-text",
       href: "https://apply-for-innovation-funding.service.gov.uk/info/cookies",
-      children: useContentResult(footer.cookieFindOutMore),
+      children: getContent(content.footer.cookieFindOutMore),
     },
     govLicenseLinkPart1: {
       "data-qa": "govLicenseLinkPart1",
-      children: useContentResult(footer.govLicenseLinkPart1),
+      children: getContent(content.footer.govLicenseLinkPart1),
     },
     govLicenseLinkPart2: {
       "data-qa": "license-link",
       href: "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
-      children: useContentResult(footer.govLicenseLinkPart2),
+      children: getContent(content.footer.govLicenseLinkPart2),
     },
     govLicenseLinkPart3: {
       "data-qa": "govLicenseLinkPart3",
-      children: useContentResult(footer.govLicenseLinkPart3),
+      children: getContent(content.footer.govLicenseLinkPart3),
     },
     crownCopyrightLink: {
       "data-qa": "crown-copyright-link",
       href:
         "https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/",
-      children: useContentResult(footer.crownCopyright),
+      children: getContent(content.footer.crownCopyright),
     },
   };
 };
