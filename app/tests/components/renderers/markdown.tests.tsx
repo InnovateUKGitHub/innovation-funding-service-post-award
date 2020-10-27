@@ -1,73 +1,71 @@
-// tslint:disable
 import "jest";
-import React from "react";
 import Adapter from "enzyme-adapter-react-16";
-import Enzyme, { shallow, mount } from "enzyme";
-import { Markdown } from "@ui/components/renderers/markdown";
+
+import React from "react";
+import Enzyme, { mount } from "enzyme";
+import { IMarkdownProps, Markdown } from "@ui/components/renderers/markdown";
+import { findByQa } from "../helpers/find-by-qa";
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("Markdown", () => {
-  it("should wrap content in styles span", () => {
-    const expected = "content";
-    const result = mount(<Markdown value={expected}/>);
+  const setup = (props: IMarkdownProps) => mount(<Markdown {...props} />);
 
-    const elem = result.getDOMNode();
-    expect(elem.tagName).toBe("SPAN");
-    expect(elem).toHaveProperty("className", "govuk-body markdown");
-  });
+  const stubString = "content";
 
-  it("should return null if no content", () => {
-    const expected = "";
-    const result = mount(<Markdown value={expected}/>);
-
-    expect(result.html()).toBeNull();
-  });
-
-  it("should return null if content is null", () => {
-    const expected = null;
-    const result = mount(<Markdown value={expected}/>);
-
-    expect(result.html()).toBeNull();
-  });
-
-  it("should handle normal strings", () => {
-    const expected = "content";
-    const result = mount(<Markdown value={expected}/>);
-
-    expect(result.html()).toContain("<p>content</p>");
-  });
-
-  it("should convert headings", () => {
-    const expected = `
+  const stubMarkdownHeading = `
 Heading Test
 ------------
-    `;
-    const result = mount(<Markdown value={expected}/>);
-
-    expect(result.html()).toContain("<h2 id=\"heading-test\">Heading Test</h2>");
-  });
-
-  it("should convert unordered lists", () => {
-    const expected = `
+`;
+  const stubUnOrderedList = `
 * Item 1
 * Item 2
-    `;
-    const result = mount(<Markdown value={expected}/>);
+  `;
 
-    expect(result.html().replace(/\n/g, ``)).toContain(`<ul><li>Item 1</li><li>Item 2</li></ul>`);
-  });
-
-  it("should convert ordered lists", () => {
-    const expected = `
+  const stubOrderedList = `
 1. Item 1
 1. Item 2
-    `;
-    const result = mount(<Markdown value={expected}/>);
+  `;
 
-    expect(result.html().replace(/\n/g, ``)).toContain(`<ol><li>Item 1</li><li>Item 2</li></ol>`);
+  describe("@renders", () => {
+    it("should wrap content in <span>", () => {
+      const wrapper = setup({ value: stubString });
+
+      const spanElement = wrapper.getDOMNode();
+      expect(spanElement.tagName).toBe("SPAN");
+      expect(spanElement).toHaveProperty("className", "govuk-body markdown");
+    });
+
+    it("should return null when empty string is passed", () => {
+      const emptyString = "";
+      const wrapper = setup({ value: emptyString });
+
+      expect(wrapper.html()).toBe(null);
+    });
+
+    test.each`
+      name                         | markdown               | expected
+      ${"handle normal strings"}   | ${stubString}          | ${"content"}
+      ${"convert string"}          | ${stubString}          | ${"<p>content</p>"}
+      ${"convert headings"}        | ${stubMarkdownHeading} | ${'<h2 id="heading-test">Heading Test</h2></span>'}
+      ${"convert unordered lists"} | ${stubUnOrderedList}   | ${"<ul><li>Item 1</li><li>Item 2</li></ul>"}
+      ${"convert unordered lists"} | ${stubOrderedList}     | ${"<ol><li>Item 1</li><li>Item 2</li></ol>"}
+    `("should $name", ({ markdown, expected }) => {
+      const wrapper = setup({ value: markdown });
+
+      // Note: added easily assert single line string
+      const htmlWithoutLineBreaks = wrapper.html().replace(/\n/g, "");
+
+      expect(htmlWithoutLineBreaks).toContain(expected);
+    });
+
+    it("should return styles", () => {
+      const stubStyles = { color: "red" };
+      const wrapper = setup({ value: "non-empty-string", style: stubStyles });
+
+      const element = findByQa(wrapper, "markdown").prop("style");
+
+      expect(element).toMatchObject(stubStyles);
+    });
   });
-
-
 });
-
