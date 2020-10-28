@@ -136,7 +136,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
     }
     return (
       <ACC.Section titleContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedTitle()}>
-        <ACC.ValidationMessage messageContent={x => x.pcrSpendProfileOverheadDocumentContent.messages.noDocumentsUploaded()} messageType="info" />
+        <ACC.ValidationMessage message={x => x.pcrSpendProfileOverheadDocumentContent.messages.noDocumentsUploaded()} messageType="info" />
       </ACC.Section>
     );
   }

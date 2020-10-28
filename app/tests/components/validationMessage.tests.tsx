@@ -1,44 +1,78 @@
 import "jest";
-import React from "react";
-import { ValidationMessage } from "../../src/ui/components";
+import Enzyme, { mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
-import Enzyme, { shallow } from "enzyme";
-
 Enzyme.configure({ adapter: new Adapter() });
 
+import React from "react";
+import { IValidationMessageProps, ValidationMessage } from "@ui/components";
+import { Content } from "@content/content";
+import { findByQa } from "./helpers/find-by-qa";
+import TestBed from "./helpers/TestBed";
+
 describe("ValidationMessage", () => {
-  it("when message is empty should render null", () => {
-    const wrapper = shallow(<ValidationMessage message="" messageType="success" />);
-    expect(wrapper.html()).toBeNull();
-  });
+  const setup = (props: IValidationMessageProps) => {
+    const stubCopy = {
+      home: {
+        exampleContentTitle: () => ({
+          content: "stub-exampleContentTitle",
+        }),
+      },
+    } as Partial<Content>;
 
-  it("should render an error message", () => {
-    const wrapper = shallow(<ValidationMessage message="Error message" messageType="error" />).html();
-    expect(wrapper).toContain(`<span class=\"govuk-warning-text__assistive\">Error</span>`);
-    expect(wrapper).toContain(`<span>Error message</span>`);
-  });
+    const wrapper = mount(
+      <TestBed content={stubCopy}>
+        <ValidationMessage {...props} />
+      </TestBed>,
+    );
 
-  it("should render an info message", () => {
-    const wrapper = shallow(<ValidationMessage message="Info message" messageType="info" />).html();
-    expect(wrapper).toContain(`<span class=\"govuk-warning-text__assistive\">Info</span>`);
-    expect(wrapper).toContain(`<span>Info message</span>`);
-  });
+    const assistiveMessage = findByQa(wrapper, "validation-message-assistive");
+    const messageElement = findByQa(wrapper, "validation-message-content");
 
-  it("should render a success message", () => {
-    const wrapper = shallow(<ValidationMessage message="Success message" messageType="success" />).html();
-    expect(wrapper).toContain(`<span class=\"govuk-warning-text__assistive\">Success</span>`);
-    expect(wrapper).toContain(`<span>Success message</span>`);
-  });
+    return {
+      wrapper,
+      assistiveMessage,
+      messageElement,
+    };
+  };
 
-  it("should render a warning message", () => {
-    const wrapper = shallow(<ValidationMessage message="Warning message" messageType="warning" />).html();
-    expect(wrapper).toContain(`<span class=\"govuk-warning-text__assistive\">Warning</span>`);
-    expect(wrapper).toContain(`<span>Warning message</span>`);
-  });
+  const StubComponentContent = () => <div>custom component</div>;
 
-  it("should render a React Node", () => {
-    const wrapper = shallow(<ValidationMessage message={<div>Test</div>} messageType="warning" />).html();
-    expect(wrapper).toContain(`<span class=\"govuk-warning-text__assistive\">Warning</span>`);
-    expect(wrapper).toContain(`<span><div>Test</div></span>`);
+  describe("@renders", () => {
+    it("when message is empty should render null", () => {
+      const { wrapper } = setup({ message: "", messageType: "success" });
+      expect(wrapper.html()).toBe(null);
+    });
+
+    test.each`
+      name                 | message                                             | expected
+      ${"react component"} | ${(<StubComponentContent />)}                       | ${"div"}
+      ${"react element"}   | ${(<div>content within div</div>)}                  | ${"div"}
+      ${"react fragment"}  | ${(<>content within a react shorthand fragment</>)} | ${"div"}
+      ${"string"}          | ${"stub string"}                                    | ${"span"}
+      ${"number"}          | ${100}                                              | ${"span"}
+    `("should render a $name within a $expected", ({ message, expected }) => {
+      const { messageElement } = setup({ message, messageType: "info" });
+
+      expect(messageElement.type()).toBe(expected);
+    });
+
+    it("when message is a content lookup render within a <span>", () => {
+      const { messageElement } = setup({ message: (x) => x.home.exampleContentTitle(), messageType: "success" });
+
+      expect(messageElement.type()).toBe("span");
+    });
+
+    test.each`
+      name                                  | props
+      ${"should render an info message"}    | ${{ message: "Info message", messageType: "info" }}
+      ${"should render an error message"}   | ${{ message: "Error message", messageType: "error" }}
+      ${"should render an success message"} | ${{ message: "Success message", messageType: "success" }}
+      ${"should render an warning message"} | ${{ message: "Warning message", messageType: "warning" }}
+    `("$name", ({ props }) => {
+      const { assistiveMessage, messageElement } = setup(props);
+
+      expect(assistiveMessage.text().toLowerCase()).toBe(props.messageType);
+      expect(messageElement.text()).toBe(props.message);
+    });
   });
 });

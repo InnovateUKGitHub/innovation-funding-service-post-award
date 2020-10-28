@@ -197,7 +197,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     return (
       <ACC.Section titleContent={x => x.editClaimLineItems.supportingDocumentsHeader()} subtitle={documents.length > 0 ? <ACC.Content value={x => x.editClaimLineItems.documentMessages.newWindow()}/> : ""} qa="supporting-documents-section">
         <ACC.Renderers.SimpleString><ACC.Content value={x => x.editClaimLineItems.messages.editClaimLiineItemDocumentGuidance()}/></ACC.Renderers.SimpleString>
-        {documents.length > 0 ? <ACC.DocumentTable documents={documents} qa="supporting-documents"/> : <ValidationMessage messageContent={x => x.editClaimLineItems.documentMessages.noDocumentsUploaded()} messageType="info" />}
+        {documents.length > 0 ? <ACC.DocumentTable documents={documents} qa="supporting-documents"/> : <ValidationMessage message={x => x.editClaimLineItems.documentMessages.noDocumentsUploaded()} messageType="info" />}
       </ACC.Section>
     );
   }

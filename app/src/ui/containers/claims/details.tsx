@@ -63,7 +63,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         pageTitle={<ACC.Projects.Title project={data.project} />}
         partner={data.partner}
       >
-        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" messageContent={x => x.claimDetails.messages.finalClaim()}/>}
+        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={x => x.claimDetails.messages.finalClaim()}/>}
         {this.renderPageSubtitle(data)}
         {this.renderCostsAndGrantSummary(data)}
         {this.renderTableSection(data)}
