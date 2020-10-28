@@ -7,7 +7,7 @@ export const DeleteSubcontractingCostFormComponent = (props: SpendProfileDeleteF
   const { data, costCategory } = props;
   return (
     <ACC.Section titleContent={x => x.pcrSpendProfileDeleteCostContent.costSectionTitle(costCategory.name)}>
-      <ACC.ValidationMessage messageType="alert" messageContent={x => x.pcrSpendProfileDeleteCostContent.deleteGuidance()} />
+      <ACC.ValidationMessage messageType="alert" message={x => x.pcrSpendProfileDeleteCostContent.deleteGuidance()} />
       <ACC.SummaryList qa="deleteSubcontractingCost">
         <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.subcontracting.subcontractorName()} content={data.description} qa="description" />
         <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.subcontracting.subcontractorCountry()} content={data.subcontractorCountry} qa="subcontractorCountry" />

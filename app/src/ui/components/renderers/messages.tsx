@@ -2,12 +2,14 @@ import React from "react";
 import { ValidationMessage } from "../validationMessage";
 import { AriaLive } from "./ariaLive";
 
-interface Props {
+export interface IMessagesProps {
   messages: string[];
 }
 
-export const Messages: React.FunctionComponent<Props> = (props) => (
+export const Messages = ({ messages }: IMessagesProps) => (
   <AriaLive>
-    {props.messages.map((x, i) => <ValidationMessage message={x} messageType="success" key={i} />)}
+    {messages.map((x, i) => (
+      <ValidationMessage message={x} messageType="success" key={i} />
+    ))}
   </AriaLive>
 );
