@@ -6,7 +6,7 @@ import { Content } from "@content/content";
 export type SetPageTitleAction = ReturnType<typeof setPageTitle>;
 export const setPageTitle = (title: { displayTitle: string, htmlTitle: string }) => createAction("SET_PAGE_TITLE", title);
 
-export const udpatePageTitle = (route: MatchedRoute, params: {}, stores: IStores, content: Content): AsyncThunk<void, SetPageTitleAction> => {
+export const updatePageTitle = (route: MatchedRoute, params: {}, stores: IStores, content: Content): AsyncThunk<void, SetPageTitleAction> => {
   return (dispatch, getState) => {
     const state = getState();
     const title = route.getTitle({ params, stores, content });

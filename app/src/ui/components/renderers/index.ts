@@ -9,3 +9,4 @@ export * from "./messages";
 export * from "./percentage";
 export * from "./simpleString";
 export * from "./json";
+export * from "./externalLink";

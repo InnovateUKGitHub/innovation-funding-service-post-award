@@ -1,18 +1,19 @@
 import "jest";
-import React from "react";
-import { PhaseBanner } from "../../../src/ui/components/layout/phaseBanner";
-
-import Enzyme, { shallow } from "enzyme";
+import Enzyme, {mount} from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
 
-Enzyme.configure({ adapter: new Adapter() });
+import React from "react";
+import {PhaseBanner} from "@ui/components";
+import {findByQa} from "../helpers/find-by-qa";
+
+Enzyme.configure({adapter: new Adapter()});
 
 describe("PhaseBanner", () => {
+    it("should render feedback link", () => {
+        const wrapper = mount(<PhaseBanner/>);
+        const target = findByQa(wrapper, "phase-banner-link");
 
-    it("should render feedback <a>", () => {
-        const wrapper = shallow(<PhaseBanner />);
-        expect(wrapper
-            .containsMatchingElement(<a className="govuk-link" href="https://www.surveymonkey.co.uk/r/IFSPostAwardFeedback">feedback</a>))
-            .toBeTruthy();
+        expect(target.prop("href")).toBe("https://www.surveymonkey.co.uk/r/IFSPostAwardFeedback");
+        expect(target.text()).toBe("feedback");
     });
 });

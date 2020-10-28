@@ -4,37 +4,47 @@ import { Guide } from "../ui/componentsGuide/guide";
 import { Provider } from "react-redux";
 import { PageTitleState } from "@ui/redux/reducers/pageTitleReducer";
 import { combineReducers, createStore } from "redux";
-
-function getGuide(): string {
-    let query = window.location.search;
-    if (query) {
-        query = query.substring(1);
-        return query.split("&")
-            .map(x => {
-                const parts = x.split("=");
-                return { key: parts[0] && parts[0].toLowerCase(), value: decodeURIComponent(parts[1]) };
-            })
-            .filter(x => x.key === "guide")
-            .map(x => x.value)[0];
-    }
-    return "";
-}
+import { ContentProvider } from "@ui/redux";
+import { Content } from "@content/content";
 
 const exampleTitle: PageTitleState = {
-    displayTitle: "Component guide example title",
-    htmlTitle: "Example title",
+  displayTitle: "Component guide example title",
+  htmlTitle: "Example title",
 };
 
 const reducer = combineReducers({
-    title: (s: PageTitleState = exampleTitle) => s
+  title: (s: PageTitleState = exampleTitle) => s,
 });
 
 const store = createStore(reducer, { title: exampleTitle });
 
-const rootComponent = (
-    <Provider store={store}>
-        <Guide source={"client"} filter={getGuide()} />
-    </Provider>
-);
+const ClientGuide = () => {
+  function getGuide(): string {
+    let query = window.location.search;
 
-ReactDom.render(rootComponent, document.getElementById("root"));
+    if (!query) return "";
+
+    query = query.substring(1);
+    return query
+      .split("&")
+      .map((x) => {
+        const parts = x.split("=");
+        return {
+          key: parts[0] && parts[0].toLowerCase(),
+          value: decodeURIComponent(parts[1]),
+        };
+      })
+      .filter((x) => x.key === "guide")
+      .map((x) => x.value)[0];
+  }
+
+  return (
+    <Provider store={store}>
+      <ContentProvider value={new Content(null)}>
+        <Guide source="client" filter={getGuide()} />
+      </ContentProvider>
+    </Provider>
+  );
+};
+
+ReactDom.render(<ClientGuide />, document.getElementById("root"));

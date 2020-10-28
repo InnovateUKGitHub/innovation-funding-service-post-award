@@ -1,4 +1,4 @@
-import React from "react";
+import { createContext, useContext } from "react";
 import { RootState } from "./reducers";
 import * as Stores from "./stores";
 import { RootActionsOrThunk } from "./actions";
@@ -46,7 +46,8 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
 
 export type IStores = ReturnType<typeof createStores>;
 
-const StoresContext = React.createContext<IStores>(null as any);
+const StoresContext = createContext<IStores>(null as any);
 
 export const StoresProvider = StoresContext.Provider;
 export const StoresConsumer = StoresContext.Consumer;
+export const useStores = () => useContext(StoresContext);
