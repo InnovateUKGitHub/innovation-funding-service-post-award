@@ -1,4 +1,10 @@
 import { ContentBase, ContentResult } from "./contentBase";
+
+// General
+import { HeaderContent } from "./general-content/HeaderContent";
+import { FooterContent } from "./general-content/FooterContent";
+
+// Pages
 import { HomePageContent } from "./pages/homePageContent";
 import { ProjectDashboardContent } from "./pages/project/projectDashboardContent";
 import { ProjectOverviewContent } from "./pages/project/projectOverviewContent";
@@ -75,11 +81,14 @@ import { PCRRemovePartnerSummaryContent } from "./pages/pcrs/removePartner/remov
 import { PCRScopeChangeProjectSummaryChangeContent } from "./pages/pcrs/scopeChange/scopeChangeProjectSummaryChangeStepContent";
 import { PCRScopeChangePublicDescriptionChangeContent } from "./pages/pcrs/scopeChange/scopeChangePublicDescriptionChangeStepContent";
 import { PCRScopeChangeSummaryContent } from "./pages/pcrs/scopeChange/scopeChangeSummaryContent";
+
 import { ProjectDto } from "@framework/dtos";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
 export class Content extends ContentBase {
+  public readonly header: HeaderContent;
+  public readonly footer: FooterContent;
   public readonly projectsDashboard: ProjectDashboardContent;
   public readonly home: HomePageContent;
 
@@ -168,17 +177,21 @@ export class Content extends ContentBase {
   public readonly pcrScopeChangeSummary: PCRScopeChangeSummaryContent;
 
   public readonly errors: {
-    notfound: NotFoundContent,
-    unexpected: UnexpectedErrorContent
+    notfound: NotFoundContent;
+    unexpected: UnexpectedErrorContent;
   };
 
   public readonly components: {
-    documents: DocumentsContent,
-    taskList: TaskListContent,
+    documents: DocumentsContent;
+    taskList: TaskListContent;
   };
 
   constructor(protected project: ProjectDto | null | undefined) {
     super(null, null);
+
+    this.header = new HeaderContent(this);
+    this.footer = new FooterContent(this);
+
     this.projectsDashboard = new ProjectDashboardContent(this, project);
     this.home = new HomePageContent(this, project);
 
@@ -268,7 +281,7 @@ export class Content extends ContentBase {
 
     this.errors = {
       notfound: new NotFoundContent(this, project),
-      unexpected: new UnexpectedErrorContent(this, project)
+      unexpected: new UnexpectedErrorContent(this, project),
     };
     this.components = {
       documents: new DocumentsContent(this, project),

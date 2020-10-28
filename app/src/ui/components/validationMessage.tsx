@@ -6,7 +6,7 @@ import { Content } from "@ui/components/content";
 
 type MessageType = "info" | "error" | "success" | "warning" | "alert";
 
-interface Props {
+interface IValidationMessageProps {
     message?: React.ReactNode;
     messageContent?: ContentSelector;
     messageType: MessageType;
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export interface MessageStyle {
-  colour?: string;
+  color?: string;
   validationColour: string;
   validationClass: string;
   validationText: string;
@@ -36,7 +36,7 @@ const getMessageStyle = (messageType: MessageType): MessageStyle => {
       validationColour: colours.GOVUK_COLOUR_GREEN,
       validationClass: "acc-message__success",
       validationText: "Success",
-      colour: colours.GOVUK_COLOUR_GREEN,
+      color: colours.GOVUK_COLOUR_GREEN,
     };
     case "warning": return {
       validationColour: colours.GOVUK_COLOUR_BLACK,
@@ -47,26 +47,26 @@ const getMessageStyle = (messageType: MessageType): MessageStyle => {
       validationColour: colours.GOVUK_ERROR_COLOUR,
       validationClass: "acc-message__alert",
       validationText: "Alert",
-      colour: colours.GOVUK_ERROR_COLOUR,
+      color: colours.GOVUK_ERROR_COLOUR,
     };
   }
 };
 
-export const ValidationMessage: React.FunctionComponent<Props> = ({ message, messageContent, messageType, qa = "validation-message" }) => {
+export const ValidationMessage = ({ message, messageContent, messageType, qa = "validation-message" }: IValidationMessageProps) => {
     if (!message && !messageContent) return null;
 
-    const messageStyle = getMessageStyle(messageType);
-    const {colour, validationColour, validationClass, validationText} = messageStyle;
+    const contentStyle = getMessageStyle(messageType);
+    const {color, validationColour, validationClass, validationText} = contentStyle;
     const msgClasses = classnames("govuk-warning-text-background", "govuk-warning-text", "acc-message", validationClass);
     const style = {
       borderColor: validationColour,
-      color:colour
+      color
     };
 
     return (
       <div className={msgClasses} style={style} data-qa={qa} data-qa-type={messageType}>
         <span className="govuk-warning-text__assistive">{validationText}</span>
-        <span>{messageContent ? <Content messageStyle={messageStyle} value={messageContent}/> : message}</span>
+        <span>{messageContent ? <Content styles={contentStyle} value={messageContent}/> : message}</span>
       </div>
     );
 };

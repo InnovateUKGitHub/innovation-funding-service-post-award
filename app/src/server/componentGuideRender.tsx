@@ -7,6 +7,8 @@ import { PageTitleState } from "@ui/redux/reducers/pageTitleReducer";
 import { combineReducers, createStore } from "redux";
 import { Provider } from "react-redux";
 import { Configuration } from "./features/common";
+import { ContentProvider } from "@ui/redux";
+import { Content } from "@content/content";
 
 export function componentGuideRender(req: Request, res: Response) {
     const exampleTitle: PageTitleState = {
@@ -22,7 +24,9 @@ export function componentGuideRender(req: Request, res: Response) {
 
     const html = renderToString(
         <Provider store={store}>
-            <Guide source="server" filter={req.query.guide}/>
+            <ContentProvider value={new Content(null)}>
+                <Guide source="server" filter={req.query.guide}/>
+            </ContentProvider>
         </Provider>
       );
 

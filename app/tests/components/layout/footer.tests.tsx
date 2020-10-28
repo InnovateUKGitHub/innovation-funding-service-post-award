@@ -1,108 +1,103 @@
+// tslint:disable: object-literal-key-quotes
 import "jest";
-import React from "react";
-import { Footer } from "../../../src/ui/components/layout/footer";
-
-import Enzyme, { shallow } from "enzyme";
+import Enzyme, { mount } from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
+
+import React from "react";
+import * as footerConfig from "@ui/components/layout/footer.config";
+import { Footer, FooterProps } from "@ui/components/layout/footer";
+
+import { findByQa } from "../helpers/find-by-qa";
 
 Enzyme.configure({ adapter: new Adapter() });
 
 describe("Footer", () => {
-    describe("footer contains the expected anchor elements", () => {
-        it("should render 'Innovate UK' <a>", () => {
-            const result = Footer({});
-            const wrapper = shallow(result!);
-            expect(wrapper
-                .containsMatchingElement(<a className="govuk-footer__link" target="_blank" href="https://www.gov.uk/government/organisations/innovate-uk">Innovate UK</a>))
-                .toBeTruthy();
-        });
-        it("should render 'Innovation Funding Service' <a>", () => {
-            const result = Footer({});
-            const wrapper = shallow(result!);
-            expect(wrapper
-                .containsMatchingElement(<a className="govuk-footer__link" target="_blank" href="https://www.gov.uk/guidance/innovation-apply-for-a-funding-award">Innovation funding advice</a>))
-                .toBeTruthy();
-        });
-        it("should render 'Connect to innovation experts' <a>", () => {
-            const result = Footer({});
-            const wrapper = shallow(result!);
-            expect(wrapper
-                .containsMatchingElement(<a className="govuk-footer__link" target="_blank" href="https://www.gov.uk/guidance/innovation-get-support-and-advice">Connect to innovation experts</a>))
-                .toBeTruthy();
-        });
-        it("should render 'Events' <a>", () => {
-            const result = Footer({});
-            const wrapper = shallow(result!);
-            expect(wrapper
-                .containsMatchingElement(<a className="govuk-footer__link" target="_blank" href="https://connect.innovateuk.org/events">Events</a>))
-                .toBeTruthy();
-        });
-        it("should render 'Innovate UK blog' <a>", () => {
-            const result = Footer({});
-            const wrapper = shallow(result!);
-            expect(wrapper
-                .containsMatchingElement(<a className="govuk-footer__link" target="_blank" href="https://innovateuk.blog.gov.uk/">Innovate UK blog</a>))
-                .toBeTruthy();
-        });
-        it("should render 'GOV.UK accessibility' <a>", () => {
-            const result = Footer({});
-            const wrapper = shallow(result!);
-            expect(wrapper
-                .containsMatchingElement(<a className="govuk-footer__link" target="_blank" href="https://www.gov.uk/help/accessibility">GOV.UK accessibility</a>))
-                .toBeTruthy();
-        });
-        it("should render 'Terms and conditions' <a>", () => {
-            const result = Footer({});
-            const wrapper = shallow(result!);
-            expect(wrapper
-                .containsMatchingElement(<a className="govuk-footer__link" target="_blank" href="https://apply-for-innovation-funding.service.gov.uk/info/terms-and-conditions">Terms and conditions</a>))
-                .toBeTruthy();
-        });
-        it("should render 'Contact us' <a>", () => {
-            const result = Footer({});
-            const wrapper = shallow(result!);
-            expect(wrapper
-                .containsMatchingElement(<a className="govuk-footer__link" target="_blank" href="https://apply-for-innovation-funding.service.gov.uk/info/contact">Contact us</a>))
-                .toBeTruthy();
-        });
-        it("should render 'Sign up for competition updates' <a>", () => {
-            const result = Footer({});
-            const wrapper = shallow(result!);
-            expect(wrapper
-                .containsMatchingElement(<a className="govuk-footer__link" target="_blank" href="http://info.innovateuk.org/emailpref">Sign up for competition updates</a>))
-                .toBeTruthy();
-        });
-        it("should render 'Latest funding opportunities' <a>", () => {
-            const result = Footer({});
-            const wrapper = shallow(result!);
-            expect(wrapper
-                .containsMatchingElement(<a className="govuk-footer__link" target="_blank" href="https://apply-for-innovation-funding.service.gov.uk/competition/search">Latest funding opportunities</a>))
-                .toBeTruthy();
-        });
-        it("should render 'Find out more about cookies' <a>", () => {
-            const result = Footer({});
-            const wrapper = shallow(result!);
-            expect(wrapper
-                .containsMatchingElement(
-                    <a className="govuk-footer__link" href="https://apply-for-innovation-funding.service.gov.uk/info/cookies">
-                        Find out more about cookies
-                    </a>
-                ))
-                .toBeTruthy();
-        });
-        it("should render 'Open Government Licence v3.0' <a>", () => {
-            const result = Footer({});
-            const wrapper = shallow(result!);
-            expect(wrapper
-                .containsMatchingElement(<a className="govuk-footer__link" href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/" rel="license">Open Government Licence v3.0</a>))
-                .toBeTruthy();
-        });
-        it("should render '© Crown copyright' <a>", () => {
-            const result = Footer({});
-            const wrapper = shallow(result!);
-            expect(wrapper
-                .containsMatchingElement(<a className="govuk-footer__link govuk-footer__copyright-logo" href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/">© Crown copyright</a>))
-                .toBeTruthy();
-        });
+  const stubDataContext = {
+    title: {
+      "data-qa": "stub-qa-title",
+      children: "stub-title",
+    },
+    usesCookie: {
+      "data-qa": "stub-qa-usesCookie",
+      children: "stub-usesCookie",
+    },
+    crownCopyrightLink: {
+      "data-qa": "stub-qa-crownCopyrightLink",
+      href: "stub-href-crownCopyrightLink",
+      children: "stub-crownCopyrightLink",
+    },
+    moreAboutCookies: {
+      "data-qa": "stub-qa-moreAboutCookies",
+      href: "stub-href-moreAboutCookies",
+      children: "stub-moreAboutCookies",
+    },
+    govLicenseLinkPart1: {
+      "data-qa": "stub-qa-govLicenseLinkPart1",
+      children: "stub-govLicenseLinkPart1",
+    },
+    govLicenseLinkPart2: {
+      "data-qa": "stub-qa-govLicenseLinkPart2",
+      href: "stub-href-govLicenseLinkPart2",
+      children: "stub-govLicenseLinkPart2",
+    },
+    govLicenseLinkPart3: {
+      "data-qa": "stub-qa-govLicenseLinkPart3",
+      children: "stub-govLicenseLinkPart3",
+    },
+  };
+
+  beforeEach(() => {
+    jest.spyOn(footerConfig, "useExternalContent").mockReturnValue(stubDataContext as any);
+  });
+
+  const stubLinks: footerConfig.FooterLinks = [
+    {
+      "data-qa": "link-1",
+      text: "Link 1",
+      href: "https://www.gov.uk/link-1",
+    },
+    {
+      "data-qa": "link-2",
+      text: "Link 2",
+      href: "https://www.gov.uk/link-2",
+    },
+  ];
+
+  const setup = (props?: FooterProps) => mount(<Footer links={stubLinks} {...props} />);
+
+  it("should render links", () => {
+    const wrapper = setup();
+
+    stubLinks.forEach((stubLink) => {
+      // Note: get link by qa then grab item by array index
+      const footerLink = findByQa(wrapper, stubLink["data-qa"]);
+      expect(footerLink.text()).toBe(stubLink.text);
     });
+  });
+
+  test.each`
+    name                                         | link
+    ${"title"}                                   | ${stubDataContext.title}
+    ${"GOV.UK uses cookies"}                     | ${stubDataContext.usesCookie}
+    ${"external government license link part 1"} | ${stubDataContext.govLicenseLinkPart1}
+    ${"external government license link part 3"} | ${stubDataContext.govLicenseLinkPart3}
+  `("should find $name content", ({ link }) => {
+    const wrapper = setup();
+
+    const footerContent = findByQa(wrapper, link["data-qa"]);
+    expect(footerContent.text()).toBe(link.children);
+  });
+
+  test.each`
+    name                                    | link
+    ${"crown copyright"}                    | ${stubDataContext.crownCopyrightLink}
+    ${"more about cookies"}                 | ${stubDataContext.moreAboutCookies}
+    ${"external government license part 2"} | ${stubDataContext.govLicenseLinkPart2}
+  `("should find $name link", ({ link }) => {
+    const wrapper = setup();
+
+    const footerLink = findByQa(wrapper, link["data-qa"]);
+    expect(footerLink.text()).toBe(link.children);
+    expect(footerLink.prop("href")).toBe(link.href);
+  });
 });

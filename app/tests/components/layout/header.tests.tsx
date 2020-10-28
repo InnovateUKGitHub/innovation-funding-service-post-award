@@ -1,52 +1,93 @@
-// tslint:disable:no-duplicate-string
 import "jest";
 import React from "react";
-import { Header } from "@ui/components/layout/header";
-import Enzyme, { shallow } from "enzyme";
+import Enzyme, {mount} from "enzyme";
 import Adapter from "enzyme-adapter-react-16";
+import {ContentProvider} from "@ui/redux";
+import {Header, HeaderProps} from "@ui/components/layout/header";
+import {getDataQA} from "../../test-utils/getQaRef";
 
-Enzyme.configure({ adapter: new Adapter() });
+Enzyme.configure({adapter: new Adapter()});
 
 describe("Header", () => {
-    const ifsRoot = "https://example.apply-for-innovation-funding.service.gov.uk";
+    const setup = (props: Partial<HeaderProps> = {}) => {
+        // Testbed
+        const stubProvider = {
+            header: {
+                siteName: "stub-siteName",
+                mobileNavigationLabel: {
+                    content: "stub-mobileNavigationLabel"
+                },
+            }
+        };
 
-    it("header shoud contain Innovation Funding Service link", () => {
-        const result = <Header ifsRoot={ifsRoot} />;
-        const wrapper = shallow(result);
-        const link = wrapper.find("a[data-qa='service-name']");
-        expect(link).not.toBeNull();
-        expect(link.text()).toBe("Innovation Funding Service");
-        expect(link.hasClass("govuk-header__link govuk-header__link--service-name")).toBe(true);
-        expect(link.get(0).props.href).toBe(`${ifsRoot}/competition/search`);
+        // Stub Data
+        const stubUrl = "www.google.com";
+        const stubNavItems = Array.from({length: 3}, (_, i) => ({
+            text: `text-${i}`,
+            href: `href-${i}`,
+            qa: `qa-${i}`,
+        }));
+
+        const wrapper = mount(
+            <ContentProvider value={stubProvider as any}>
+                <Header siteLink={stubUrl} navigationItems={stubNavItems} {...props} />
+            </ContentProvider>
+        );
+
+        return {
+            wrapper,
+            stubUrl,
+            stubNavItems,
+            stubProvider
+        };
+    };
+
+    describe("@data", () => {
+        it("should return content from context", () => {
+            const {wrapper, stubProvider} = setup();
+
+            const siteName = getDataQA(wrapper, "service-name");
+            const mobileNavToggle = getDataQA(wrapper, "mobile-nav-toggle");
+
+            expect(siteName.text()).toBe(stubProvider.header.siteName);
+            expect(mobileNavToggle.text()).toBe(stubProvider.header.mobileNavigationLabel.content);
+        });
     });
 
-    it("header shoud contain dashboard link", () => {
-        const result = <Header ifsRoot={ifsRoot} />;
-        const wrapper = shallow(result);
-        const link = wrapper.find("a[data-qa='nav-dashboard']");
-        expect(link).not.toBeNull();
-        expect(link.text()).toBe("Dashboard");
-        expect(link.hasClass("govuk-header__link")).toBe(true);
-        expect(link.get(0).props.href).toBe(`${ifsRoot}/dashboard-selection`);
-    });
+    describe("@renders", () => {
+        it("renders no navigation items", () => {
+            const {wrapper} = setup({ navigationItems: [] });
 
-    it("header shoud contain profile link", () => {
-        const result = <Header ifsRoot={ifsRoot} />;
-        const wrapper = shallow(result);
-        const link = wrapper.find("a[data-qa='nav-profile']");
-        expect(link).not.toBeNull();
-        expect(link.text()).toBe("Profile");
-        expect(link.hasClass("govuk-header__link")).toBe(true);
-        expect(link.get(0).props.href).toBe(`${ifsRoot}/profile/view`);
-    });
+            const navItems = getDataQA(wrapper, "header-navigation-item");
 
-    it("header shoud contain logout link", () => {
-        const result = <Header ifsRoot={ifsRoot} />;
-        const wrapper = shallow(result);
-        const link = wrapper.find("a[data-qa='nav-sign-out']");
-        expect(link).not.toBeNull();
-        expect(link.text()).toBe("Sign out");
-        expect(link.hasClass("govuk-header__link")).toBe(true);
-        expect(link.get(0).props.href).toBe(`/logout`);
+            expect(navItems.length).toBe(0);
+        });
+
+        it("renders navigation items", () => {
+            const {wrapper, stubNavItems} = setup();
+
+            const navItems = getDataQA(wrapper, "header-navigation-item");
+
+            // Note: check object renders with expected properties
+            stubNavItems.forEach(stubItem => {
+                const item = getDataQA(wrapper, stubItem.qa);
+                expect(item.text()).toBe(stubItem.text);
+                expect(item.prop("href")).toBe(stubItem.href);
+            });
+
+            expect(navItems.length).toBe(stubNavItems.length);
+        });
+
+        describe("renders required elements", () => {
+            const {wrapper} = setup();
+
+            test.each`
+              name                          | qa
+              ${"with logo"}                | ${"logo"}
+              ${"with mobile-nav-toggle"}   | ${"mobile-nav-toggle"}
+            `("$name", ({qa}) => {
+                expect(getDataQA(wrapper, qa)).toBeDefined();
+            });
+        });
     });
 });

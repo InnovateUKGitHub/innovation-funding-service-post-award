@@ -1,4 +1,25 @@
 {
+  "site": {
+    "header": {
+      "mobileNavigationLabel": "Menu",
+      "navigation": {
+        "dashboard": "Dashboard",
+        "profile": "Profile",
+        "signOut": "Sign Out"
+      }
+    },
+    "footer": {
+      "supportLinks": "Support links",
+      "cookieFindOutMore": "Find out more about cookies",
+      "explainCookies": "GOV.UK uses cookies to make the site simpler.",
+      "externalLinkText": {
+        "part1": "All content is available under the ",
+        "part2LinkText": "Open Government Licence v3.0",
+        "part2": ", except where otherwise stated"
+      },
+      "crownCopyright": "© Crown copyright"
+    }
+  },
   "example": {
     "contentTitle": "Content solution",
     "content": "Some example content"

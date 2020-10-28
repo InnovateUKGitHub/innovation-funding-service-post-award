@@ -1,4 +1,4 @@
-import React from "react";
+import {createContext, useContext} from "react";
 
 interface IModal {
   id: string;
@@ -27,7 +27,8 @@ export class ModalRegister {
   }
 }
 
-const ModalContext = React.createContext<ModalRegister>(null as any);
+const ModalContext = createContext<ModalRegister>(null as any);
 
 export const ModalProvider = ModalContext.Provider;
 export const ModalConsumer = ModalContext.Consumer;
+export const useModal = () => useContext(ModalContext);
