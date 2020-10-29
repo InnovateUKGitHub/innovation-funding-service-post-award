@@ -1,72 +1,95 @@
 import React from "react";
-import classnames from "classnames";
-import * as colours from "../styles/colours";
+import cx from "classnames";
 import { ContentSelector } from "@content/content";
-import { Content } from "@ui/components/content";
+import { Content, isContentSolution } from "@ui/components/content";
+
+import * as colours from "../styles/colours";
 
 type MessageType = "info" | "error" | "success" | "warning" | "alert";
 
-interface IValidationMessageProps {
-    message?: React.ReactNode;
-    messageContent?: ContentSelector;
-    messageType: MessageType;
-    qa?: string;
+type ValidationInlineStyles = React.CSSProperties & {
+  borderColor: string;
+};
+
+interface ValidationTypeUi {
+  className: string;
+  text: string;
+  styles: ValidationInlineStyles;
 }
 
-export interface MessageStyle {
-  color?: string;
-  validationColour: string;
-  validationClass: string;
-  validationText: string;
-}
-
-const getMessageStyle = (messageType: MessageType): MessageStyle => {
-  switch (messageType) {
-    case "info": return {
-      validationColour: colours.GOVUK_COLOUR_BLUE,
-      validationClass: "acc-message__info",
-      validationText: "Info",
-    };
-    case "error": return {
-      validationColour: colours.GOVUK_ERROR_COLOUR,
-      validationClass: "acc-message__error",
-      validationText: "Error",
-    };
-    case "success": return {
-      validationColour: colours.GOVUK_COLOUR_GREEN,
-      validationClass: "acc-message__success",
-      validationText: "Success",
+const validationStyles: {
+  [key in MessageType]: ValidationTypeUi;
+} = {
+  info: {
+    className: "acc-message__info",
+    text: "Info",
+    styles: {
+      borderColor: colours.GOVUK_COLOUR_BLUE,
+    },
+  },
+  error: {
+    className: "acc-message__error",
+    text: "Error",
+    styles: {
+      borderColor: colours.GOVUK_ERROR_COLOUR,
+    },
+  },
+  success: {
+    className: "acc-message__success",
+    text: "Success",
+    styles: {
+      borderColor: colours.GOVUK_COLOUR_GREEN,
       color: colours.GOVUK_COLOUR_GREEN,
-    };
-    case "warning": return {
-      validationColour: colours.GOVUK_COLOUR_BLACK,
-      validationClass: "acc-message__warning",
-      validationText: "Warning",
-    };
-    case "alert": return {
-      validationColour: colours.GOVUK_ERROR_COLOUR,
-      validationClass: "acc-message__alert",
-      validationText: "Alert",
+    },
+  },
+  warning: {
+    className: "acc-message__warning",
+    text: "Warning",
+    styles: {
+      borderColor: colours.GOVUK_COLOUR_BLACK,
+    },
+  },
+  alert: {
+    className: "acc-message__alert",
+    text: "Alert",
+    styles: {
+      borderColor: colours.GOVUK_ERROR_COLOUR,
       color: colours.GOVUK_ERROR_COLOUR,
-    };
-  }
+    },
+  },
 };
 
-export const ValidationMessage = ({ message, messageContent, messageType, qa = "validation-message" }: IValidationMessageProps) => {
-    if (!message && !messageContent) return null;
+export interface IValidationMessageProps {
+  message: React.ReactChild | ContentSelector;
+  messageType: MessageType;
+  qa?: string;
+}
 
-    const contentStyle = getMessageStyle(messageType);
-    const {color, validationColour, validationClass, validationText} = contentStyle;
-    const msgClasses = classnames("govuk-warning-text-background", "govuk-warning-text", "acc-message", validationClass);
-    const style = {
-      borderColor: validationColour,
-      color
-    };
+export function ValidationMessage({ message, messageType, qa = "validation-message" }: IValidationMessageProps) {
+  const isString = typeof message === "string";
 
-    return (
-      <div className={msgClasses} style={style} data-qa={qa} data-qa-type={messageType}>
-        <span className="govuk-warning-text__assistive">{validationText}</span>
-        <span>{messageContent ? <Content styles={contentStyle} value={messageContent}/> : message}</span>
-      </div>
-    );
-};
+  if (isString && !(message as string).length) return null;
+
+  const ui = validationStyles[messageType];
+
+  // TODO: Replace this with .includes
+  const isBlockElement = ["string", "number", "function"].indexOf(typeof message) === -1;
+  const ElementType = isBlockElement ? "div" : "span";
+
+  return (
+    <div
+      className={cx("govuk-warning-text-background", "govuk-warning-text", "acc-message", ui.className)}
+      data-qa={qa}
+      data-qa-type={messageType}
+      style={ui.styles}
+    >
+      <span data-qa={`${qa}-assistive`} className="govuk-warning-text__assistive">
+        {ui.text}
+      </span>
+
+      <ElementType data-qa={`${qa}-content`}>
+        {isContentSolution(message) ? <Content styles={ui.styles} value={message} /> : message}
+      </ElementType>
+    </div>
+  );
+}

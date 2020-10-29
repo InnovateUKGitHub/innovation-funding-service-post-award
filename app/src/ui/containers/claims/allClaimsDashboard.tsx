@@ -53,7 +53,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
   private renderGuidanceMessages(projectDetails: ProjectDto) {
     const isFC = projectDetails.roles & ProjectRole.FinancialContact;
     if (isFC) {
-      return <Acc.ValidationMessage qa="guidance-message" messageType="info" messageContent={x => x.allClaimsDashboard.messages.guidanceMessage()}/>;
+      return <Acc.ValidationMessage qa="guidance-message" messageType="info" message={x => x.allClaimsDashboard.messages.guidanceMessage()}/>;
     }
 
     return null;

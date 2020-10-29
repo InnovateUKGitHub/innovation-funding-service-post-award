@@ -53,7 +53,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
     if (!documents.length) {
       return (
         <ACC.Section>
-          <ACC.ValidationMessage messageContent={x => x.claimDetailDocuments.messages.documentValidationMessage()} messageType="info" />
+          <ACC.ValidationMessage message={x => x.claimDetailDocuments.messages.documentValidationMessage()} messageType="info" />
         </ACC.Section>
       );
     }

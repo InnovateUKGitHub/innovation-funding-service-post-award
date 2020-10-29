@@ -13,6 +13,14 @@ interface IContentProps {
   styles?: React.CSSProperties;
 }
 
+// Note: Create type guard so TSC can infer ContentSelector correctly
+export const isContentSolution = (content: any): content is ContentSelector => {
+  const isNotString = typeof content !== "string";
+  const isFn = typeof content === "function";
+
+  return isNotString && isFn;
+};
+
 export const Content = ({ value, styles }: IContentProps) => {
   const stores = useStores();
   const [appContent] = useContent();
@@ -45,19 +53,9 @@ export const Content = ({ value, styles }: IContentProps) => {
         <Modal id={modalId}>
           <Section title="Content hint">
             <SummaryList qa="content_info">
-              <SummaryListItem
-                hideAction={true}
-                label="Current value"
-                content={displayValue}
-                qa="current_value"
-              />
+              <SummaryListItem hideAction={true} label="Current value" content={displayValue} qa="current_value" />
 
-              <SummaryListItem
-                hideAction={true}
-                label="Content key"
-                content={key}
-                qa="current_value"
-              />
+              <SummaryListItem hideAction={true} label="Content key" content={key} qa="current_value" />
             </SummaryList>
 
             <ModalLink styling="PrimaryButton" modalId={modalId} open={false}>

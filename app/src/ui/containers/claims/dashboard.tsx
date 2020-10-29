@@ -58,7 +58,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
       <Acc.ValidationMessage
         qa="guidance-message"
         messageType="info"
-        messageContent={x => x.claimsDashboard.messages.guidanceMessage()}
+        message={x => x.claimsDashboard.messages.guidanceMessage()}
       />
     );
   }
