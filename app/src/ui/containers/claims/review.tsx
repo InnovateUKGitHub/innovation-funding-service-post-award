@@ -87,7 +87,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" messageContent={x => x.claimReview.messages.finalClaim()}/>}
+        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={x => x.claimReview.messages.finalClaim()}/>}
         {this.renderClaimReviewSection(data)}
         <ACC.Section>
           <ACC.Accordion>
@@ -203,7 +203,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   private renderDocumentList(editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (!documents.length) {
       return (
-        <ACC.ValidationMessage messageContent={x => x.claimDocuments.documentMessages.noDocumentsUploaded()} messageType="info" />
+        <ACC.ValidationMessage message={x => x.claimDocuments.documentMessages.noDocumentsUploaded()} messageType="info" />
       );
     }
 

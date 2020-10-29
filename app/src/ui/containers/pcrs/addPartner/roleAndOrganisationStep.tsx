@@ -33,7 +33,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           onSubmit={() => this.onSave(this.props.pcrItem)}
           onChange={dto => this.onChange(dto)}
         >
-          <ACC.ValidationMessage messageType="info" messageContent={x => x.pcrAddPartnerRoleAndOrganisation.validationMessage()}/>
+          <ACC.ValidationMessage messageType="info" message={x => x.pcrAddPartnerRoleAndOrganisation.validationMessage()}/>
           <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.roleHeading()}>
             <Form.Radio
               name="projectRole"

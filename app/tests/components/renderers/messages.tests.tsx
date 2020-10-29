@@ -1,32 +1,50 @@
-// tslint:disable: no-duplicate-string
 import "jest";
-import React from "react";
-import { Messages } from "../../../src/ui/components/renderers";
-import Adapter from "enzyme-adapter-react-16";
 import Enzyme, { mount } from "enzyme";
-
+import Adapter from "enzyme-adapter-react-16";
 Enzyme.configure({ adapter: new Adapter() });
 
+import React from "react";
+import { IMessagesProps, Messages } from "@ui/components/renderers";
+import { findByQa } from "../helpers/find-by-qa";
+
 describe("Messages", () => {
+  const setup = (props: IMessagesProps) => {
+    const wrapper = mount(<Messages {...props} />);
+    const validationMessage = findByQa(wrapper, "validation-message-content");
+
+    return {
+      wrapper,
+      validationMessage,
+    };
+  };
+
   it("should render given message", () => {
-    const wrapper = mount(<Messages messages={["first"]} />);
-    expect(wrapper.html()).toContain("<span>first</span>");
+    const { validationMessage } = setup({ messages: ["first"] });
+
+    expect(validationMessage.text()).toBe("first");
   });
 
   it("should render an aria live", () => {
-    const wrapper = mount(<Messages messages={["first"]} />);
-    expect(wrapper.html()).toContain(`<div aria-live="polite">`);
+    const { wrapper } = setup({ messages: ["first"] });
+
+    const ariaComponent = wrapper.find("AriaLive").hostNodes();
+
+    expect(ariaComponent).toBeDefined();
   });
 
-  it("should render given messages as an array", () => {
-    const wrapper = mount(<Messages messages={["first", "second"]} />);
+  it("should render total messages correctly", () => {
+    const stubMessages = ["first", "second"];
+    const { validationMessage } = setup({ messages: stubMessages });
 
-    // find contents of the AriaLive
-    const messages = wrapper.childAt(0).childAt(0).children().map(x => x);
-
-    expect(messages.length).toBe(2);
-    expect(messages[0].html()).toContain("<span>first</span>");
-    expect(messages[1].html()).toContain("<span>second</span>");
+    expect(validationMessage.length).toBe(stubMessages.length);
   });
 
+  it("should render validation messages correctly", () => {
+    const stubMessages = ["first", "second"];
+    const { validationMessage } = setup({ messages: stubMessages });
+
+    stubMessages.forEach((_, i) => {
+      expect(validationMessage.at(i).text()).toBe(stubMessages[i]);
+    });
+  });
 });

@@ -67,7 +67,7 @@ class DashboardComponent extends ContainerBase<Params&Props, Data, Callbacks> {
         <ACC.ValidationMessage
           qa="guidance-message"
           messageType="info"
-          messageContent={x => x.monitoringReportsDashboard.messages.reportsSubmissionGuidance()}
+          message={x => x.monitoringReportsDashboard.messages.reportsSubmissionGuidance()}
         />
 
         <ACC.Link route={this.props.routes.monitoringReportCreate.getLink({ projectId: this.props.projectId })} className="govuk-button"><ACC.Content value={(x) => x.monitoringReportsDashboard.buttonNewMonitoringReport()}/></ACC.Link>

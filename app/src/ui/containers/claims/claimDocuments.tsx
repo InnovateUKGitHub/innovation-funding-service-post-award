@@ -69,7 +69,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
         }
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" messageContent={x => x.claimDocuments.messages.finalClaim()}/>}
+        {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={x => x.claimDocuments.messages.finalClaim()}/>}
         <ACC.Section>
           {this.renderGuidanceText(claim)}
         </ACC.Section>
@@ -157,7 +157,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
     if (!documents.length) {
       return (
         <ACC.Section>
-          <ACC.ValidationMessage messageContent={x => x.claimDocuments.documentMessages.noDocumentsUploaded()} messageType="info" />
+          <ACC.ValidationMessage message={x => x.claimDocuments.documentMessages.noDocumentsUploaded()} messageType="info" />
         </ACC.Section>
       );
     }
