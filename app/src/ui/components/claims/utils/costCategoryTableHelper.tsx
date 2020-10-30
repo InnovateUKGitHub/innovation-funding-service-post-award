@@ -3,8 +3,8 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { CostCategoryType } from "@framework/entities";
 import { ClaimDto, PartnerDto, ProjectDto } from "@framework/types";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { CostsSummaryForPeriodValidator } from "@ui/validators";
 import { Link } from "../../links";
+import { Result } from "@ui/validation";
 
 export interface ClaimProps {
   project: ProjectDto;
@@ -12,7 +12,7 @@ export interface ClaimProps {
   costCategories: CostCategoryDto[];
   claim: ClaimDto;
   claimDetails: CostsSummaryForPeriodDto[];
-  validation?: CostsSummaryForPeriodValidator[];
+  validation?: Result;
   getLink: (costCategoryId: string) => ILinkInfo | null;
   standardOverheadRate: number;
 }
@@ -80,7 +80,7 @@ export function renderCostCategory(
 
   if (!route) return category.name;
 
-  const linkId = validation && validation[row] && validation[row].errors[0] && validation[row].errors[0].key;
+  const linkId = validation && validation.errorMessage && validation.key  || "";
 
   return (
     <Link id={linkId} route={route}>

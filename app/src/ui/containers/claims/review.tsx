@@ -107,7 +107,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         <ACC.Claims.ClaimReviewTable
           {...data}
           standardOverheadRate={this.props.config.options.standardOverheadRate}
-          validation={data.editor.validator.claimDetails.results}
+          validation={data.editor.validator.totalCosts}
           getLink={costCategoryId => this.getClaimLineItemLink(costCategoryId)}
         />
       </ACC.Section>
