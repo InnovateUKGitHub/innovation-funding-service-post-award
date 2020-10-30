@@ -12,6 +12,7 @@ import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { AccessibilityText } from "./renderers/accessibilityText";
 import { ContentSelector } from "@content/content";
 import { Content } from "./content";
+import { Result } from "@ui/validation";
 
 export type dividerTypes = "normal" | "bold";
 type columnMode = "cell" | "header" | "footer" | "col";
@@ -58,7 +59,7 @@ interface TableProps<T> {
   footers?: JSX.Element[];
   headers?: JSX.Element[];
   data: T[];
-  validationResult?: (Results<{}> | null | undefined)[];
+  validationResult?: (Results<{}> | null | undefined)[] | Result;
   caption?: React.ReactNode;
   bodyRowClass?: (row: T, index: number) => string;
   bodyRowFlag?: (row: T, index: number) => "warning" | "info" | "error" | "edit" | null;
