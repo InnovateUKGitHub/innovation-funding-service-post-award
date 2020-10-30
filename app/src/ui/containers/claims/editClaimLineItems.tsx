@@ -73,6 +73,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={project} />}
       >
+        {this.renderNegativeClaimWarning(editor.data)}
         {this.renderGuidanceMessage()}
         <ACC.Section>
           <ACC.TextHint text={costCategory.hintText} />
@@ -216,6 +217,35 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
       </span>
     );
   }
+
+  private renderNegativeClaimWarning(editor: ClaimDetailsDto) {
+    const errorItems = editor.lineItems.reduce<string[]>(
+      (acc, i) => i.value < 0 ? [...acc, i.description] : acc,
+      []
+    );
+
+    if (!errorItems.length) return null;
+
+    const markup = (
+      <>
+        <ACC.Renderers.SimpleString>
+          <ACC.Content value={(content) => content.editClaimLineItems.messages.negativeClaimWarning()} />
+        </ACC.Renderers.SimpleString>
+
+        <ul>
+          {errorItems.map((costCategory) => <li key={costCategory}>{costCategory}</li>)}
+        </ul>
+      </>
+    );
+
+    return (
+      <ACC.ValidationMessage
+        messageType="info"
+        qa="claim-warning"
+        message={markup}
+      />
+    );
+}
 
   renderDescription(item: ClaimLineItemDto, index: { column: number; row: number; }, validation: ClaimLineItemDtoValidator, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
     return (
