@@ -29,41 +29,41 @@ type RequiredContentLabels =
 export const useExternalContent = (): {
   [key in RequiredContentLabels]: FooterExternalContent;
 } => {
-  const { getCopy } = useContent();
+  const { getContent } = useContent();
 
   return {
     title: {
       "data-qa": "footer-title",
-      children: getCopy((x) => x.footer.supportLinks),
+      children: getContent((x) => x.footer.supportLinks),
     },
     usesCookie: {
       "data-qa": "uses-cookies",
-      children: getCopy((x) => x.footer.explainCookies),
+      children: getContent((x) => x.footer.explainCookies),
     },
     moreAboutCookies: {
       "data-qa": "more-about-cookies-text",
       href: "https://apply-for-innovation-funding.service.gov.uk/info/cookies",
-      children: getCopy((x) => x.footer.cookieFindOutMore),
+      children: getContent((x) => x.footer.cookieFindOutMore),
     },
     govLicenseLinkPart1: {
       "data-qa": "govLicenseLinkPart1",
-      children: getCopy((x) => x.footer.govLicenseLinkPart1),
+      children: getContent((x) => x.footer.govLicenseLinkPart1),
     },
     govLicenseLinkPart2: {
       "data-qa": "license-link",
       href:
         "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
-      children: getCopy((x) => x.footer.govLicenseLinkPart2),
+      children: getContent((x) => x.footer.govLicenseLinkPart2),
     },
     govLicenseLinkPart3: {
       "data-qa": "govLicenseLinkPart3",
-      children: getCopy((x) => x.footer.govLicenseLinkPart3),
+      children: getContent((x) => x.footer.govLicenseLinkPart3),
     },
     crownCopyrightLink: {
       "data-qa": "crown-copyright-link",
       href:
         "https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/",
-      children: getCopy((x) => x.footer.crownCopyright),
+      children: getContent((x) => x.footer.crownCopyright),
     },
   };
 };
