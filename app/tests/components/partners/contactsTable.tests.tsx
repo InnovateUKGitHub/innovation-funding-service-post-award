@@ -1,7 +1,6 @@
-import "jest";
 import React from "react";
-import Enzyme, { mount } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
+import { mount } from "enzyme";
+
 import { getColumnValues } from "../helpers/tableHelpers";
 import { findByQa } from "../helpers/find-by-qa";
 import { ProjectContactLabels } from "@content/labels/projectContactLabels";
@@ -11,8 +10,6 @@ import {
   ContactsTable,
   IContactsTable,
 } from "@ui/components/partners/contactsTable";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 const TestProviders: React.FunctionComponent = (props) => {
   const testStores = {

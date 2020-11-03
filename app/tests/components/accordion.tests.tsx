@@ -1,10 +1,6 @@
-import "jest";
 import React from "react";
-import Enzyme, { mount, shallow } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
+import { mount, shallow } from "enzyme";
 import { Accordion, AccordionItem } from "../../src/ui/components";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe("Accordion", () => {
   it("Renders with correct class", () => {

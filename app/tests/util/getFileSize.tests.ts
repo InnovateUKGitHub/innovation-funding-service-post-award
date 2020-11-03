@@ -1,4 +1,4 @@
-import "jest";
+
 import { getFileSize } from "@framework/util";
 
 describe("getFileSize", () => {

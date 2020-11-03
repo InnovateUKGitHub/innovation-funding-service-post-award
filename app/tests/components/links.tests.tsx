@@ -1,17 +1,14 @@
 // tslint:disable:no-identical-functions
-import "jest";
 import React from "react";
 import * as Links from "../../src/ui/components/links";
-import Enzyme, { mount } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
+import { mount } from "enzyme";
+
 import { RouterProvider } from "react-router5";
 import { createRouter } from "router5";
 import browserPluginFactory from "router5/plugins/browser";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import { rootReducer } from "../../src/ui/redux/reducers";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 const route = { routeName: "test", routeParams: { id : "exampleId"}, accessControl: () => true};
 const router = createRouter([{name: route.routeName, path: "/test/:id" }]).usePlugin(browserPluginFactory({ useHash: false }));

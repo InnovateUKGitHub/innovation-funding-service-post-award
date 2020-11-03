@@ -1,11 +1,7 @@
-// tslint:disable:no-duplicate-string
-import "jest";
 import React from "react";
-import Enzyme, { mount } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-import { FileUpload } from "../../../src/ui/components/inputs/fileUpload";
+import { mount } from "enzyme";
 
-Enzyme.configure({ adapter: new Adapter() });
+import { FileUpload } from "../../../src/ui/components/inputs/fileUpload";
 
 describe("FileInput", () => {
   it("Renders with correct name", () => {

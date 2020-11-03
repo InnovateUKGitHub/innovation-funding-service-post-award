@@ -1,10 +1,7 @@
-import "jest";
 import React from "react";
 import Enzyme from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-import { HashTabItem, HashTabs } from "../../../src/ui/components/layout/hashTabs";
 
-Enzyme.configure({ adapter: new Adapter() });
+import { HashTabItem, HashTabs } from "../../../src/ui/components/layout/hashTabs";
 
 describe("Hash Tabs", () => {
   const aTabList: HashTabItem[] = [

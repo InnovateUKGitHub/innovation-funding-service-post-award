@@ -1,12 +1,9 @@
-import "jest";
 import React from "react";
-import Enzyme, {mount} from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
+import {mount} from "enzyme";
+
 import {ContentProvider} from "@ui/redux";
 import {Header, HeaderProps} from "@ui/components/layout/header";
 import {getDataQA} from "../../test-utils/getQaRef";
-
-Enzyme.configure({adapter: new Adapter()});
 
 describe("Header", () => {
     const setup = (props: Partial<HeaderProps> = {}) => {

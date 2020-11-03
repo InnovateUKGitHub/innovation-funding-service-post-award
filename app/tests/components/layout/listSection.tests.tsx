@@ -1,10 +1,7 @@
-import "jest";
 import React from "react";
-import Enzyme, { mount } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-import { ListItem } from "../../../src/ui/components/layout/listSection";
+import { mount } from "enzyme";
 
-Enzyme.configure({ adapter: new Adapter() });
+import { ListItem } from "../../../src/ui/components/layout/listSection";
 
 describe("ListItem", () => {
   it("should render with action required styles", () => {
