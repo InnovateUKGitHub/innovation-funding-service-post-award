@@ -23,10 +23,10 @@ export const isContentSolution = (content: any): content is ContentSelector => {
 
 export const Content = ({ value, styles }: IContentProps) => {
   const stores = useStores();
-  const appContent = useContent().content;
+  const { getResultByQuery } = useContent();
 
   const config = stores.config.getConfig().features;
-  const { key, content, markdown } = value(appContent);
+  const { key, content, markdown } = getResultByQuery(value);
 
   const displayValue: string | JSX.Element = markdown ? (
     <Markdown style={styles && { color: styles.color }} value={content} />
