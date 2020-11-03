@@ -1,10 +1,7 @@
-import "jest";
 import React from "react";
 import { Email } from "../../../src/ui/components/renderers";
-import Adapter from "enzyme-adapter-react-16";
-import Enzyme, { shallow } from "enzyme";
 
-Enzyme.configure({ adapter: new Adapter() });
+import { shallow } from "enzyme";
 
 describe("Email", () => {
    it("when valid should render tedtester@example.com as a mail link", () => {

@@ -1,11 +1,8 @@
 // tslint:disable:no-duplicate-string
-import "jest";
 import React from "react";
-import Enzyme, { mount } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-import { AccordionItem } from "../../src/ui/components";
+import { mount } from "enzyme";
 
-Enzyme.configure({ adapter: new Adapter() });
+import { AccordionItem } from "../../src/ui/components";
 
 describe("AccordionItem", () => {
   it("Renders with correct class", () => {

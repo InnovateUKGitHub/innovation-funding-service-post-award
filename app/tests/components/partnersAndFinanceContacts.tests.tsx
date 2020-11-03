@@ -1,8 +1,7 @@
 // tslint:disable:no-duplicate-string
-import "jest";
 import React from "react";
-import Enzyme, { mount } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
+import { mount } from "enzyme";
+
 import { PartnersAndFinanceContacts } from "@ui/components/partnersAndFinanceContacts";
 import { getColumnValues } from "./helpers/tableHelpers";
 import { PartnerDto } from "@framework/types";
@@ -10,8 +9,6 @@ import { ProjectContactLabels } from "@content/labels/projectContactLabels";
 import { ContentResult } from "@content/contentBase";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { StoresProvider } from "@ui/redux";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 const testPartnerData: PartnerDto[] = [
   {

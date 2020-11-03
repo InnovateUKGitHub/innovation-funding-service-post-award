@@ -1,4 +1,4 @@
-import "jest";
+
 import { createAction } from "../../../src/ui/redux/actions/common";
 
 describe("createAction", () => {

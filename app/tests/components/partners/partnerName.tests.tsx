@@ -1,11 +1,8 @@
-import "jest";
 import React from "react";
-import Enzyme, { mount } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
+import { mount } from "enzyme";
+
 import { PartnerDto } from "@framework/dtos";
 import { PartnerName } from "@ui/components";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe("Partner Name", () => {
   it("should render the partner name", () => {
