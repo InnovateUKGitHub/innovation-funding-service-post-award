@@ -1,8 +1,7 @@
 // tslint:disable:no-duplicate-string
-import "jest";
 import React from "react";
-import Enzyme, { mount } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
+import { mount } from "enzyme";
+
 import { NavigationArrows } from "../../src/ui/components";
 import { createStore } from "redux";
 import { rootReducer } from "../../src/ui/redux/reducers";
@@ -10,8 +9,6 @@ import { RouterProvider } from "react-router5";
 import { Provider } from "react-redux";
 import { IClientUser, ProjectRole } from "@framework/types";
 import { configureRouter, routeConfig } from "@ui/routing";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 const routes = routeConfig;
 const router = configureRouter(routes);

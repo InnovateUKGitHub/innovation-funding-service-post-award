@@ -1,4 +1,4 @@
-import "jest";
+
 import { isNumber } from "@framework/util";
 
 describe("isNumber", () => {

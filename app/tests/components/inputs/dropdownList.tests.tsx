@@ -1,11 +1,8 @@
 // tslint:disable:no-duplicate-string no-identical-functions
-import "jest";
 import React from "react";
-import Enzyme, { mount } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-import { DropdownList } from "@ui/components/inputs";
+import { mount } from "enzyme";
 
-Enzyme.configure({ adapter: new Adapter() });
+import { DropdownList } from "@ui/components/inputs";
 
 const dropdownOptions = [
   { id: "1", value: "Value 1" },

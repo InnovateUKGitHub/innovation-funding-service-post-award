@@ -1,10 +1,7 @@
-import "jest";
 import React from "react";
-import Enzyme, { mount } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-import { SectionPanel } from "../../../src/ui/components/layout/sectionPanel";
+import { mount } from "enzyme";
 
-Enzyme.configure({ adapter: new Adapter() });
+import { SectionPanel } from "../../../src/ui/components/layout/sectionPanel";
 
 describe("SectionPanel", () => {
   it("should render with the correct title", () => {

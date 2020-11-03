@@ -1,5 +1,5 @@
 // tslint:disable: no-duplicate-string
-import "jest";
+
 import { Authorisation, ProjectRole } from "@framework/types";
 
 describe("authorisation", () => {

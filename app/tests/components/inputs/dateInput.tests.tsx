@@ -1,11 +1,8 @@
 // tslint:disable:no-duplicate-string no-identical-functions
-import "jest";
 import React from "react";
-import Enzyme, { mount } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-import { FullDateInput, MonthYearInput } from "@ui/components/inputs/dateInput";
+import { mount } from "enzyme";
 
-Enzyme.configure({ adapter: new Adapter() });
+import { FullDateInput, MonthYearInput } from "@ui/components/inputs/dateInput";
 
 describe("FullDateInput", () => {
   it("Renders with given name", () => {

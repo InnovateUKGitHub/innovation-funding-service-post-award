@@ -1,11 +1,8 @@
-import "jest";
 import React from "react";
-import Enzyme, { mount, render, shallow } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
+import { mount, render, shallow } from "enzyme";
+
 import { Loader } from "../../src/ui/components";
 import { LoadingStatus } from "../../src/shared/pending";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe("Loader", () => {
   test("Preload - renderFunctions null", () => {

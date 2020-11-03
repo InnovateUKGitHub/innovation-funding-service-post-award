@@ -1,4 +1,4 @@
-import "jest";
+
 import { ContentBase } from "@content/contentBase";
 import i18next from "i18next";
 
