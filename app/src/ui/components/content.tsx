@@ -23,7 +23,7 @@ export const isContentSolution = (content: any): content is ContentSelector => {
 
 export const Content = ({ value, styles }: IContentProps) => {
   const stores = useStores();
-  const [appContent] = useContent();
+  const appContent = useContent().content;
 
   const config = stores.config.getConfig().features;
   const { key, content, markdown } = value(appContent);

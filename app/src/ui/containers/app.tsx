@@ -14,6 +14,7 @@ import { useContent } from "@ui/redux/contentProvider";
 import { FooterLinks } from "@ui/components/layout/footer.config";
 
 // TODO: This needs to be an external file, preferably near a config directory. The href values domain name need to be generated from config
+// prettier-ignore
 const footerLinks: FooterLinks = [
   {"data-qa": "innovate-uk", text: "Innovate UK", href: "https://www.gov.uk/government/organisations/innovate-uk"},
   {"data-qa": "innovation-funding-advice", text: "Innovation funding advice", href: "https://www.gov.uk/guidance/innovation-apply-for-a-funding-award"},
@@ -76,6 +77,7 @@ class AppView extends React.Component<IAppProps> {
   }
 
   public render() {
+    // prettier-ignore
     const { modalRegister, messages, route, config, routes, isClient, content } = this.props;
 
     const { filteredRoute, params } = this.createRouteProps();
@@ -126,7 +128,7 @@ interface AppRoute {
 
 export const App = (props: AppRoute) => {
   const stores = useStores();
-  const [content] = useContent();
+  const { content } = useContent();
   const modalRegister = useModal();
 
   return (
