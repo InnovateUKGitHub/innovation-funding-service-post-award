@@ -29,40 +29,41 @@ type RequiredContentLabels =
 export const useExternalContent = (): {
   [key in RequiredContentLabels]: FooterExternalContent;
 } => {
-  const [content, getContent] = useContent();
+  const { getCopy } = useContent();
 
   return {
     title: {
       "data-qa": "footer-title",
-      children: getContent(content.footer.supportLinks),
+      children: getCopy((x) => x.footer.supportLinks),
     },
     usesCookie: {
       "data-qa": "uses-cookies",
-      children: getContent(content.footer.explainCookies),
+      children: getCopy((x) => x.footer.explainCookies),
     },
     moreAboutCookies: {
       "data-qa": "more-about-cookies-text",
       href: "https://apply-for-innovation-funding.service.gov.uk/info/cookies",
-      children: getContent(content.footer.cookieFindOutMore),
+      children: getCopy((x) => x.footer.cookieFindOutMore),
     },
     govLicenseLinkPart1: {
       "data-qa": "govLicenseLinkPart1",
-      children: getContent(content.footer.govLicenseLinkPart1),
+      children: getCopy((x) => x.footer.govLicenseLinkPart1),
     },
     govLicenseLinkPart2: {
       "data-qa": "license-link",
-      href: "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
-      children: getContent(content.footer.govLicenseLinkPart2),
+      href:
+        "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+      children: getCopy((x) => x.footer.govLicenseLinkPart2),
     },
     govLicenseLinkPart3: {
       "data-qa": "govLicenseLinkPart3",
-      children: getContent(content.footer.govLicenseLinkPart3),
+      children: getCopy((x) => x.footer.govLicenseLinkPart3),
     },
     crownCopyrightLink: {
       "data-qa": "crown-copyright-link",
       href:
         "https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/",
-      children: getContent(content.footer.crownCopyright),
+      children: getCopy((x) => x.footer.crownCopyright),
     },
   };
 };
