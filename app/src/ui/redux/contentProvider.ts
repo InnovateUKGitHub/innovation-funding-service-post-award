@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import { Content } from "@content/content";
+import { Content, ContentSelector } from "@content/content";
 import { ContentResult } from "@content/contentBase";
 
 const ContentContext = createContext<Content>(null as any);
@@ -7,13 +7,24 @@ const ContentContext = createContext<Content>(null as any);
 export const ContentProvider = ContentContext.Provider;
 export const ContentConsumer = ContentContext.Consumer;
 
-export const useContentResult = (result: ContentResult): string =>
-  result.content;
+type IGetContentResult = (contentResultQuery: ContentResult) => string;
 
-type ContentHookResponse = [Content, (result: ContentResult) => string];
+export const getContentResult: IGetContentResult = ({ content }) => content;
 
-export const useContent = (): ContentHookResponse => {
-  const content = useContext(ContentContext);
+export const useContent = (): {
+  content: Content;
+  getCopy: (contentQuery: ContentSelector) => string;
+  getContentResult: IGetContentResult;
+} => {
+  const appContent = useContext(ContentContext);
 
-  return [content, useContentResult];
+  if (!appContent) {
+    throw new Error("useContent must be used within a ContentProvider");
+  }
+
+  return {
+    content: appContent,
+    getCopy: (contentQuery: ContentSelector) => contentQuery(appContent).content,
+    getContentResult,
+  };
 };
