@@ -1,5 +1,5 @@
 import React from "react";
-import { ContentConsumer, useContentResult } from "@ui/redux";
+import { ContentConsumer, getContentResult } from "@ui/redux";
 import { ContentResult } from "@content/contentBase";
 import { HeaderContent } from "@content/general-content/HeaderContent";
 
@@ -23,17 +23,17 @@ export const useHeader = (
   const siteLink = getIfsLink("/competition/search");
   const navigationItems = [
     {
-      text: useContentResult(content.dashboard),
+      text: getContentResult(content.dashboard),
       href: getIfsLink("/dashboard-selection"),
       qa: "nav-dashboard",
     },
     {
-      text: useContentResult(content.profile),
+      text: getContentResult(content.profile),
       href: getIfsLink("/profile/view"),
       qa: "nav-profile",
     },
     {
-      text: useContentResult(content.signOut),
+      text: getContentResult(content.signOut),
       href: "/logout",
       qa: "nav-sign-out",
     },
@@ -155,7 +155,7 @@ export class Header extends React.PureComponent<HeaderProps> {
                   aria-label="Show or hide Top Level Navigation"
                   data-qa="mobile-nav-toggle"
                 >
-                  {useContentResult(content.header.mobileNavigationLabel)}
+                  {getContentResult(content.header.mobileNavigationLabel)}
                 </button>
 
                 {this.renderNavigation()}
