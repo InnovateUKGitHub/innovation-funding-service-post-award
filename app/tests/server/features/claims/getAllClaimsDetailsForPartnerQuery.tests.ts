@@ -1,4 +1,4 @@
-import "jest";
+
 import { TestContext } from "../../testContextProvider";
 import { GetAllClaimDetailsByPartner } from "../../../../src/server/features/claimDetails";
 

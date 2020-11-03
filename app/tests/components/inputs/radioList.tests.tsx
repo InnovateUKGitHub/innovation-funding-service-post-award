@@ -1,12 +1,9 @@
-// tslint:disable:no-duplicate-string
-import "jest";
+
 import React from "react";
-import Enzyme, { mount } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
+import { mount } from "enzyme";
+
 import { RadioList} from "../../../src/ui/components/inputs/radioList";
 import { range } from "../../../src/shared/range";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 const options = range(4).map(i => ({ value: `Option ${i}`, id: `${i}` }));
 

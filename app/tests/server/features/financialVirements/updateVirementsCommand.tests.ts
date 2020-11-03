@@ -1,4 +1,4 @@
-import "jest";
+
 import { TestContext } from "../../testContextProvider";
 import { GetFinancialVirementQuery } from "../../../../src/server/features/financialVirements/getFinancialVirementQuery";
 import { UpdateFinancialVirementCommand } from "../../../../src/server/features/financialVirements/updateFinancialVirementCommand";

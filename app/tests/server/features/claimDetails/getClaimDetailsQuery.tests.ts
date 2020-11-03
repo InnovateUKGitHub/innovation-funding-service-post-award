@@ -1,4 +1,4 @@
-import "jest";
+
 import { DateTime } from "luxon";
 import { TestContext } from "../../testContextProvider";
 import { GetClaimDetailsQuery } from "../../../../src/server/features/claimDetails";

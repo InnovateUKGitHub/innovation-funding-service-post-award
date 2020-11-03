@@ -1,11 +1,8 @@
-import "jest";
 import React from "react";
 import { CondensedDateRange, FullDate, FullDateTime, LongDateRange, ShortDate, ShortDateRange, ShortDateTime } from "../../../src/ui/components/renderers/date";
-import Adapter from "enzyme-adapter-react-16";
-import Enzyme, { mount, shallow } from "enzyme";
-import { Percentage } from "../../../src/ui/components/renderers";
 
-Enzyme.configure({ adapter: new Adapter() });
+import { mount, shallow } from "enzyme";
+import { Percentage } from "../../../src/ui/components/renderers";
 
 describe("Percentage", () => {
   it("should render the percentage with 1 decimal place by default", () => {

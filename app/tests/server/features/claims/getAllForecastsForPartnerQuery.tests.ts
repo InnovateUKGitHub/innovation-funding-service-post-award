@@ -1,4 +1,4 @@
-import "jest";
+
 import { TestContext } from "../../testContextProvider";
 import { GetAllForecastsForPartnerQuery } from "../../../../src/server/features/forecastDetails";
 

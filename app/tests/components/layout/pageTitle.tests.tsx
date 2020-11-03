@@ -1,12 +1,9 @@
-import "jest";
 import React from "react";
 import { PageTitle } from "../../../src/ui/components/layout/pageTitle";
 
-import Enzyme, { mount } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-import { IStores, StoresProvider } from "@ui/redux";
+import { mount } from "enzyme";
 
-Enzyme.configure({ adapter: new Adapter() });
+import { IStores, StoresProvider } from "@ui/redux";
 
 describe("PageTitle", () => {
     const stores: IStores = {

@@ -1,12 +1,7 @@
-import "jest";
-import Adapter from "enzyme-adapter-react-16";
-
 import React from "react";
-import Enzyme, { mount } from "enzyme";
+import { mount } from "enzyme";
 import { IMarkdownProps, Markdown } from "@ui/components/renderers/markdown";
 import { findByQa } from "../helpers/find-by-qa";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe("Markdown", () => {
   const setup = (props: IMarkdownProps) => mount(<Markdown {...props} />);

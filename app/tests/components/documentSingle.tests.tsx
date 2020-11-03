@@ -1,11 +1,8 @@
 // tslint:disable:no-duplicate-string
-import "jest";
 import React from "react";
 import { DocumentSingle } from "../../src/ui/components";
-import Adapter from "enzyme-adapter-react-16";
-import Enzyme, { mount, shallow } from "enzyme";
 
-Enzyme.configure({ adapter: new Adapter() });
+import { mount, shallow } from "enzyme";
 
 describe("DocumentSingle", () => {
     it("should render LABOUR_COSTS_Q3_2017-11-05.pdf text as  https://www.google.com/ link ", () => {

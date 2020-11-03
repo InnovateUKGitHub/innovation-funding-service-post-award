@@ -1,12 +1,9 @@
 // tslint:disable:no-identical-functions no-duplicate-string
-import "jest";
 import React from "react";
 import Enzyme from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
+
 import { DateTime, Settings } from "luxon";
 import { ClaimWindow } from "../../../src/ui/components/claims/claimWindow";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe("Claim Window", () => {
 

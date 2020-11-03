@@ -1,11 +1,7 @@
-// tslint:disable:no-duplicate-string
-import "jest";
 import React from "react";
-import Enzyme, { mount } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-import { TextAreaInput } from "../../../src/ui/components/inputs/textAreaInput";
+import { mount } from "enzyme";
 
-Enzyme.configure({ adapter: new Adapter() });
+import { TextAreaInput } from "../../../src/ui/components/inputs/textAreaInput";
 
 describe("TextAreaInput", () => {
   it("Renders with correct class", () => {

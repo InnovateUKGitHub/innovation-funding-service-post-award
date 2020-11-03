@@ -1,10 +1,7 @@
-import "jest";
 import React from "react";
-import Enzyme, { mount } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-import { InsetText } from "../../../src/ui/components/layout/insetText";
+import { mount } from "enzyme";
 
-Enzyme.configure({ adapter: new Adapter() });
+import { InsetText } from "../../../src/ui/components/layout/insetText";
 
 describe("InsetText", () => {
   it("should render with the correct text", () => {

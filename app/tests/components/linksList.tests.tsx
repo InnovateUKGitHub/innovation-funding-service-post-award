@@ -1,10 +1,7 @@
-import "jest";
 import React from "react";
 import Enzyme from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-import { LinksList } from "../../src/ui/components/linksList";
 
-Enzyme.configure({ adapter: new Adapter() });
+import { LinksList } from "../../src/ui/components/linksList";
 
 describe("Links Lists", () => {
   it("should render a react fragment", () => {

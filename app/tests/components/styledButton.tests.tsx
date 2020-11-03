@@ -1,11 +1,9 @@
-import "jest";
+
 import React, { CSSProperties } from "react";
-import Adapter from "enzyme-adapter-react-16";
-import Enzyme, { shallow } from "enzyme";
+
+import { shallow } from "enzyme";
 import { Button } from "../../src/ui/components";
 import { GOVUK_LINK_COLOUR } from "../../src/ui/styles/colours";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe("StyledButton", () => {
   it("should be styled as a primary button when given a primary styling", () => {

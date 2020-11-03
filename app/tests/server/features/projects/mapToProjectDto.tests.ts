@@ -1,5 +1,5 @@
 // tslint:disable:no-identical-functions no-duplicate-string
-import "jest";
+
 import { TestContext } from "../../testContextProvider";
 import { ClaimFrequency, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import { mapToProjectDto } from "@server/features/projects";
