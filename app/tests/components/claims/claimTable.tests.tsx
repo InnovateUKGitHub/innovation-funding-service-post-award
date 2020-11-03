@@ -1,18 +1,15 @@
 // tslint:disable:no-identical-functions no-duplicate-string
 import { ClaimTable } from "../../../src/ui/components/claims/claimTable";
-import "jest";
+
 import Enzyme from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-import { DateTime, Settings } from "luxon";
-import React from "react";
+
+import { DateTime, Settings } from "luxon";import React from "react";
 import { ClaimDto, PartnerDto, ProjectDto } from "@framework/dtos";
 import { createDto } from "../helpers/dtoHelpers";
 import { getColumnValues, getFooterValue } from "../helpers/tableHelpers";
 import { range } from "@shared/range";
 import { ILinkInfo } from "@framework/types";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe("Claim Table", () => {
   const currencyFormatter = Intl.NumberFormat("en-GB", { style: "currency", currency: "GBP", });

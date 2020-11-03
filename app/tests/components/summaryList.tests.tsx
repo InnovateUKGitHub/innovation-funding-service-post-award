@@ -1,10 +1,7 @@
-import "jest";
 import React from "react";
-import Adapter from "enzyme-adapter-react-16";
-import Enzyme, { mount, shallow } from "enzyme";
-import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
 
-Enzyme.configure({ adapter: new Adapter() });
+import { mount, shallow } from "enzyme";
+import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
 
 describe("SummaryList", () => {
     it("Renders without borders", () => {

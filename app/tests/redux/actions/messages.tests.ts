@@ -1,4 +1,4 @@
-import "jest";
+
 import { messageSuccess, removeMessages } from "../../../src/ui/redux/actions";
 
 describe("messageSuccess", () => {

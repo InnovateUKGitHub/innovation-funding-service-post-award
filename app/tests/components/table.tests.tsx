@@ -1,10 +1,6 @@
-import "jest";
 import React from "react";
 import { TypedTable } from "../../src/ui/components/table";
-import Enzyme, { shallow } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-
-Enzyme.configure({ adapter: new Adapter() });
+import { shallow } from "enzyme";
 
 describe("Table", () => {
   it("should render <td> with given number", () => {

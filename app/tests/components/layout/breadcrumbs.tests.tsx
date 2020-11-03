@@ -1,17 +1,13 @@
-import "jest";
 import React from "react";
 import { Breadcrumbs } from "../../../src/ui/components/layout/breadcrumbs";
 import { createRouter } from "router5";
 import { RouterProvider } from "react-router5";
-import Enzyme, { mount } from "enzyme";
+import { mount } from "enzyme";
 
 import browserPluginFactory from "router5/plugins/browser";
-import Adapter from "enzyme-adapter-react-16";
 
 const route = { name: "test", path: "/test" } as any;
 const router = createRouter([route]).usePlugin(browserPluginFactory({ useHash: false }));
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe("Breadcrumbs", () => {
     it("should render 3 breadcrumb navigation links and current pages", () => {

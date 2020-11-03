@@ -1,10 +1,7 @@
-import "jest";
 import React from "react";
-import Enzyme, { mount, shallow } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-import { NumberInput } from "@ui/components/inputs";
+import { mount, shallow } from "enzyme";
 
-Enzyme.configure({ adapter: new Adapter() });
+import { NumberInput } from "@ui/components/inputs";
 
 describe("NumberInput", () => {
   it("Renders with given name", () => {

@@ -1,15 +1,10 @@
 // tslint:disable: object-literal-key-quotes
-import "jest";
-import Enzyme, { mount } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
-
 import React from "react";
-import * as footerConfig from "@ui/components/layout/footer.config";
+import { mount } from "enzyme";
 import { Footer, FooterProps } from "@ui/components/layout/footer";
+import * as footerConfig from "@ui/components/layout/footer.config";
 
 import { findByQa } from "../helpers/find-by-qa";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe("Footer", () => {
   const stubDataContext = {
@@ -47,7 +42,9 @@ describe("Footer", () => {
   };
 
   beforeEach(() => {
-    jest.spyOn(footerConfig, "useExternalContent").mockReturnValue(stubDataContext as any);
+    jest
+      .spyOn(footerConfig, "useExternalContent")
+      .mockReturnValue(stubDataContext as any);
   });
 
   const stubLinks: footerConfig.FooterLinks = [
@@ -63,7 +60,8 @@ describe("Footer", () => {
     },
   ];
 
-  const setup = (props?: FooterProps) => mount(<Footer links={stubLinks} {...props} />);
+  const setup = (props?: FooterProps) =>
+    mount(<Footer links={stubLinks} {...props} />);
 
   it("should render links", () => {
     const wrapper = setup();

@@ -1,12 +1,9 @@
-import "jest";
 import React from "react";
-import Enzyme, { mount } from "enzyme";
-import Adapter from "enzyme-adapter-react-16";
+import { mount } from "enzyme";
+
 import { Title } from "../../../src/ui/components/projects/title";
 import { IStores, StoresProvider } from "@ui/redux";
 import { ProjectDto } from "@framework/dtos";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe("Title", () => {
   it("should render with the correct title", () => {

@@ -1,5 +1,4 @@
 // tslint:disable:no-duplicate-string no-identical-functions
-import "jest";
 import React from "react";
 import {
   CondensedDateRange,
@@ -14,11 +13,9 @@ import {
   ShortDateRangeFromDuration,
   ShortDateTime
 } from "../../../src/ui/components/renderers/date";
-import Adapter from "enzyme-adapter-react-16";
-import Enzyme, { mount, shallow } from "enzyme";
-import { DateTime } from "luxon";
 
-Enzyme.configure({ adapter: new Adapter() });
+import { mount, shallow } from "enzyme";
+import { DateTime } from "luxon";
 
 const date = new Date("1993/01/07 09:02:01");
 const afternoonDate = new Date("1993/01/07 21:02:01");

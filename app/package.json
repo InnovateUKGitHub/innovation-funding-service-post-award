@@ -120,6 +120,7 @@
     "@content": "dist/src/content"
   },
   "jest": {
+    "setupFilesAfterEnv": ["./config/jest-setup.js"],
     "testURL": "http://localhost",
     "reporters": [
       "default",

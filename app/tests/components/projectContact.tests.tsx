@@ -1,13 +1,10 @@
 // tslint:disable:no-duplicate-string
-import "jest";
 import React from "react";
 import { ProjectContact } from "../../src/ui/components/projectContact";
-import Adapter from "enzyme-adapter-react-16";
-import Enzyme, { mount, shallow } from "enzyme";
+
+import { mount, shallow } from "enzyme";
 import { PartnerDto } from "@framework/dtos";
 import { createDto } from "@framework/util";
-
-Enzyme.configure({ adapter: new Adapter() });
 
 describe("ProjectMember", () => {
     const aProjectContact = createDto<ProjectContactDto>({ role: "Project Manager", name: "aTestName", email: "testemail@email.com", roleName: "aTestRole" });

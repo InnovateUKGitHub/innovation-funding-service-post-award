@@ -1,11 +1,8 @@
 // tslint:disable:no-duplicate-string
-import "jest";
 import React from "react";
-import Adapter from "enzyme-adapter-react-16";
-import Enzyme, {mount, shallow} from "enzyme";
-import {ClaimPeriodDate} from "../../../src/ui/components/claims/claimPeriodDate";
 
-Enzyme.configure({ adapter: new Adapter() });
+import {mount, shallow} from "enzyme";
+import {ClaimPeriodDate} from "../../../src/ui/components/claims/claimPeriodDate";
 
 const startDate = new Date("1993/01/07 09:02:01");
 const endDate = new Date("1993/01/07 09:02:01");

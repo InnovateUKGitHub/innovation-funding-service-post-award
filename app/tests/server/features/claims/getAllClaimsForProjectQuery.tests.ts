@@ -1,4 +1,4 @@
-import "jest";
+
 import { TestContext } from "../../testContextProvider";
 import { GetAllClaimsForProjectQuery } from "@server/features/claims";
 import { ClaimStatus } from "@framework/types";

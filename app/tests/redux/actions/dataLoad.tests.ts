@@ -1,4 +1,4 @@
-import "jest";
+
 import { conditionalLoad, dataLoadAction } from "../../../src/ui/redux/actions";
 import { LoadingStatus } from "../../../src/shared/pending";
 
