@@ -54,7 +54,6 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
 
   private renderFinalClaimMessage(data: ACC.Claims.ForecastData, isFc: boolean) {
     const finalClaim = data.claims.find(x => x.isFinalClaim);
-    // Checks that the data exists in either past or present
 
     if (!finalClaim) return null;
 
@@ -64,7 +63,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
     if (isFc) {
       return (isClaimApprovedOrPaid || data.partner.isWithdrawn)
         ? <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message={x => x.forecastsDetails.messages.projectEnded()}/>
-        : <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message={<span>You cannot change your forecast. You must <ACC.Link route={claimPageLink} styling="Link">submit your final claim</ACC.Link>.</span>}/>;
+        : <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message={<span><ACC.Content value={x => x.components.forecastDetails.finalClaimMessageFC} /><ACC.Link route={claimPageLink} styling="Link"><ACC.Content value={x => x.components.forecastDetails.submitLink} /></ACC.Link>.</span>}/>;
     }
 
     const isPm = data.project.roles & (ProjectRole.ProjectManager);
@@ -72,8 +71,8 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
     if (isPm) return null;
 
     return finalClaim.isApproved
-      ? <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={<React.Fragment><PartnerName partner={data.partner}/> has submitted their final claim so cannot change their forecast.</React.Fragment>}/>
-      : <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={<React.Fragment><PartnerName partner={data.partner}/> is due to submit their final claim so cannot change their forecast.</React.Fragment>}/>;
+      ? <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={<React.Fragment><PartnerName partner={data.partner}/><ACC.Content value={x => x.components.forecastDetails.finalClaimMessageMO} /></React.Fragment>}/>
+      : <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={<React.Fragment><PartnerName partner={data.partner}/><ACC.Content value={x => x.components.forecastDetails.finalClaimDueMessageMO} /></React.Fragment>}/>;
   }
 
   private renderOverheadsRate(overheadRate: number | null) {

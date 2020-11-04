@@ -5,80 +5,94 @@ import { ErrorCode, IAppError } from "@framework/types/IAppError";
 import { StandardErrorPage } from "./standardErrorPage";
 import { NotFoundErrorPage } from "./notFoundErrorPage";
 import { SimpleString } from "./renderers";
+import { useContent } from "@ui/redux/contentProvider";
 
 interface LoadingProps<T> {
-    pending: Pending<T>;
-    render: (data: T, loading?: boolean) => React.ReactNode;
-    renderError?: (error: IAppError | null) => React.ReactNode ;
-    renderLoading?: () => React.ReactNode;
+  pending: Pending<T>;
+  render: (data: T, loading?: boolean) => React.ReactNode;
+  renderError?: (error: IAppError | null) => React.ReactNode;
+  renderLoading?: () => React.ReactNode;
 }
 
 /**
  * component to render a given ReactNode based on the state of a given Pending object
  */
-export class Loader<T> extends React.Component<LoadingProps<T>, {}> {
-    render() {
-        let result;
+export function Loader<T>(props: LoadingProps<T>) {
+  const { getContent } = useContent();
 
-        switch (this.props.pending.state) {
-            // don't render anything as the request hasn't been made
-            case LoadingStatus.Preload:
-                return null;
-            // request completed, call the given render function
-            case LoadingStatus.Done:
-            case LoadingStatus.Updated:
-                result = this.renderDone(this.props.pending.data!, false);
-                break;
-            // request is loading or data marked as stale
-            case LoadingStatus.Stale:
-            case LoadingStatus.Loading:
-                // if we have data render it, otherwise call the loading function
-                if (this.props.pending.data) {
-                    result = this.renderDone(this.props.pending.data, true);
-                } else {
-                    result = this.renderLoading();
-                }
-                break;
-            // request failed for some reason, call the error function to handle it
-            case LoadingStatus.Failed:
-                result = this.renderError(this.props.pending.error);
-                break;
-            // shouldn't ever be in a status not handled above
-            default:
-                throw new Error("Broken pending data, status missing.");
-        }
+  const renderDone = (data: T, loading: boolean) => props.render(data, loading);
 
-        if (typeof result === "string") {
-            return <span>{result}</span>;
+  const renderLoading = (): React.ReactNode => {
+    const loading = getContent((x) => x.components.loading.message);
 
-        } else if (Array.isArray(result)) {
-            return <div>{result}</div>;
+    return !!props.renderLoading ? (
+      props.renderLoading()
+    ) : (
+      <SimpleString
+        className="govuk-!-padding-top-5 govuk-!-padding-bottom-5"
+        qa="loading-message"
+      >
+        {loading}
+      </SimpleString>
+    );
+  };
 
-        } else {
-            return result as JSX.Element;
-        }
-    }
+  const renderError = (error: IAppError): React.ReactNode => {
+    if (props.renderError) return props.renderError(error);
 
-    private renderDone(data: T, loading: boolean): any {
-        return this.props.render(data, loading);
-    }
+    return <ErrorSummary error={error} />;
+  };
 
-    private renderLoading(): React.ReactNode {
-        return !!this.props.renderLoading ? this.props.renderLoading() : <SimpleString className="govuk-!-padding-top-5 govuk-!-padding-bottom-5">Loading...</SimpleString>;
-    }
+  let result;
 
-    private renderError(error: IAppError): React.ReactNode {
-        if (this.props.renderError) return this.props.renderError(error);
+  switch (props.pending.state) {
+    // don't render anything as the request hasn't been made
+    case LoadingStatus.Preload:
+      return null;
+    // request completed, call the given render function
+    case LoadingStatus.Done:
+    case LoadingStatus.Updated:
+      result = renderDone(props.pending.data!, false);
+      break;
+    // request is loading or data marked as stale
+    case LoadingStatus.Stale:
+    case LoadingStatus.Loading:
+      // if we have data render it, otherwise call the loading function
+      if (props.pending.data) {
+        result = renderDone(props.pending.data, true);
+      } else {
+        result = renderLoading();
+      }
+      break;
+    // request failed for some reason, call the error function to handle it
+    case LoadingStatus.Failed:
+      result = renderError(props.pending.error);
+      break;
+    // shouldn't ever be in a status not handled above
+    default:
+      throw new Error("Broken pending data, status missing.");
+  }
 
-        return <ErrorSummary error={error}/>;
-    }
+  if (typeof result === "string") {
+    return <span>{result}</span>;
+  } else if (Array.isArray(result)) {
+    return <div>{result}</div>;
+  } else {
+    return result as JSX.Element;
+  }
 }
 
-export const PageLoader = <T, B>(props: LoadingProps<T>) => {
+export function PageLoader<T>(props: LoadingProps<T>) {
   return (
     <Loader
       {...props}
-      renderError={(error) => (error && error.code === ErrorCode.REQUEST_ERROR) ? <NotFoundErrorPage /> : <StandardErrorPage />}
+      renderError={(error) =>
+        error && error.code === ErrorCode.REQUEST_ERROR ? (
+          <NotFoundErrorPage />
+        ) : (
+          <StandardErrorPage />
+        )
+      }
     />
   );
-};
+}
