@@ -1,6 +1,7 @@
 import React from "react";
 import { SimpleString } from "./renderers/simpleString";
 import { ShortDateTime } from "./renderers/date";
+import { Content } from "./content";
 
 export interface LogItem {
   newStatusLabel: string;
@@ -16,8 +17,12 @@ export interface Props {
 
 export class Logs extends React.Component<Props> {
   render() {
-    if(!this.props.data || !this.props.data.length) {
-      return <SimpleString>There are no changes.</SimpleString>;
+    if (!this.props.data || !this.props.data.length) {
+      return (
+        <SimpleString>
+          <Content value={(x) => x.components.logs.noChangesMessage} />
+        </SimpleString>
+      );
     }
 
     return (
@@ -30,13 +35,21 @@ export class Logs extends React.Component<Props> {
           </colgroup>
           <thead className="govuk-table__head">
             <tr className="govuk-table__row">
-              <th className="govuk-table__header" scope="col" key="0">Date and time</th>
-              <th className="govuk-table__header" scope="col" key="1">Status update</th>
-              <th className="govuk-table__header" scope="col" key="2">Created by</th>
+              <th className="govuk-table__header" scope="col" key="0">
+                <Content value={(x) => x.components.logs.columnHeaderDate} />
+              </th>
+              <th className="govuk-table__header" scope="col" key="1">
+                <Content value={(x) => x.components.logs.statusUpdate} />
+              </th>
+              <th className="govuk-table__header" scope="col" key="2">
+                <Content value={(x) => x.components.logs.createdBy} />
+              </th>
             </tr>
           </thead>
           <tbody className="govuk-table__body">
-            {this.props.data.map((row, rowIndex) => this.renderLogRow(row, rowIndex))}
+            {this.props.data.map((row, rowIndex) =>
+              this.renderLogRow(row, rowIndex)
+            )}
           </tbody>
         </table>
       </div>
@@ -47,9 +60,15 @@ export class Logs extends React.Component<Props> {
     return (
       <React.Fragment key={index}>
         <tr className="govuk-table__row" key={`${index}_a`}>
-          <td className="govuk-table__cell" key="0"><ShortDateTime value={item.createdDate} /></td>
-          <td className="govuk-table__cell" key="1">{item.newStatusLabel} </td>
-          <td className="govuk-table__cell" key="2">{item.createdBy}</td>
+          <td className="govuk-table__cell" key="0">
+            <ShortDateTime value={item.createdDate} />
+          </td>
+          <td className="govuk-table__cell" key="1">
+            {item.newStatusLabel}{" "}
+          </td>
+          <td className="govuk-table__cell" key="2">
+            {item.createdBy}
+          </td>
         </tr>
         {this.renderCommentsRow(item, index)}
       </React.Fragment>
@@ -63,8 +82,17 @@ export class Logs extends React.Component<Props> {
 
     return (
       <tr className={"govuk-table__row"} key={`${index}_b`}>
-        <td className="govuk-table__cell govuk-!-padding-top-1" key="0" colSpan={3}>
-          <div className="govuk-inset-text govuk-!-margin-top-0" style={{ whiteSpace: "pre-wrap" }}>{item.comments}</div>
+        <td
+          className="govuk-table__cell govuk-!-padding-top-1"
+          key="0"
+          colSpan={3}
+        >
+          <div
+            className="govuk-inset-text govuk-!-margin-top-0"
+            style={{ whiteSpace: "pre-wrap" }}
+          >
+            {item.comments}
+          </div>
         </td>
       </tr>
     );

@@ -83,6 +83,20 @@ import { PCRScopeChangePublicDescriptionChangeContent } from "./pages/pcrs/scope
 import { PCRScopeChangeSummaryContent } from "./pages/pcrs/scopeChange/scopeChangeSummaryContent";
 
 import { ProjectDto } from "@framework/dtos";
+import { ValidationSummaryContent } from "@content/components/validationSummaryContent";
+import { ErrorSummaryContent } from "@content/components/errorSummaryContent";
+import { StandardErrorPageContent } from "./components/standardErrorPageContent";
+import { NotFoundErrorPageContent } from "./components/notFoundErrorPageContent";
+import { LogsContent } from "./components/logsContent";
+import { LoadingContent } from "./components/loadingContent";
+import { DocumentSingleContent } from "./components/documentSingleContent";
+import { DocumentGuidanceContent } from "./components/documentGuidanceContent";
+import { ClaimLastModifiedContent } from "./components/claimLastModifiedContent";
+import { ClaimWindowContent } from "./components/claimWindowContent";
+import { ForecastTableContent } from "./components/forecastTableContent";
+import { ReportFormContent } from "./components/reportFormContent";
+import { ForecastDetailsContent } from "./components/forecastDetailsContent";
+import { WarningContent } from "./components/warningContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -184,6 +198,20 @@ export class Content extends ContentBase {
   public readonly components: {
     documents: DocumentsContent;
     taskList: TaskListContent;
+    validationSummary: ValidationSummaryContent;
+    errorSummary: ErrorSummaryContent;
+    standardErrorPage: StandardErrorPageContent;
+    notFoundErrorPage: NotFoundErrorPageContent;
+    logs: LogsContent;
+    loading: LoadingContent;
+    documentSingle: DocumentSingleContent;
+    documentGuidance: DocumentGuidanceContent;
+    claimLastModified: ClaimLastModifiedContent;
+    claimWindow: ClaimWindowContent;
+    forecastTable: ForecastTableContent;
+    reportForm: ReportFormContent;
+    forecastDetails: ForecastDetailsContent;
+    warningContent: WarningContent;
   };
 
   constructor(protected project: ProjectDto | null | undefined) {
@@ -286,6 +314,20 @@ export class Content extends ContentBase {
     this.components = {
       documents: new DocumentsContent(this, project),
       taskList: new TaskListContent(this, project),
+      validationSummary: new ValidationSummaryContent(this, project),
+      errorSummary: new ErrorSummaryContent(this, project),
+      standardErrorPage: new StandardErrorPageContent(this, project),
+      notFoundErrorPage: new NotFoundErrorPageContent(this, project),
+      logs: new LogsContent(this, project),
+      loading: new LoadingContent(this, project),
+      documentSingle: new DocumentSingleContent(this, project),
+      documentGuidance: new DocumentGuidanceContent(this, project),
+      claimLastModified: new ClaimLastModifiedContent(this, project),
+      claimWindow: new ClaimWindowContent(this, project),
+      forecastTable: new ForecastTableContent(this, project),
+      reportForm: new ReportFormContent(this, project),
+      forecastDetails: new ForecastDetailsContent(this, project),
+      warningContent: new WarningContent(this, project)
     };
   }
 }
