@@ -1,40 +1,33 @@
 import React from "react";
-import { Link } from "react-router5";
+import { Link, LinkProps } from "react-router5";
 
-interface Props {
-  links: LinkProps[];
-}
-
-interface LinkProps {
+interface BreadcrumbItem extends LinkProps {
   text: string;
-  routeName: string;
-  routeParams: any;
+}
+export interface BreadcrumbsProps {
+  links: BreadcrumbItem[];
+  children: React.ReactNode;
 }
 
-export const Breadcrumbs: React.FunctionComponent<Props> = (props) => {
-
-  const renderLink = (link: LinkProps, i: number) => {
-    const { text, routeName, routeParams } = link;
-
-    return (
-      <li key={`breadcrumb${i}`} className="govuk-breadcrumbs__list-item">
-        <Link routeName={routeName} routeParams={routeParams}>{text}</Link>
-      </li>
-    );
-  };
-
-  const renderLastLink = () => (
-    <li key={`breadcrumb-current`} className="govuk-breadcrumbs__list-item" aria-current="page">
-      {props.children}
-    </li>
-  );
-
+export function Breadcrumbs({ children, links }: BreadcrumbsProps) {
   return (
     <div className="govuk-breadcrumbs">
       <ol className="govuk-breadcrumbs__list">
-        { props.links.map((x, i) => renderLink(x, i)) }
-        { renderLastLink() }
+        {links.map(({ text, ...routeProps }) => (
+          <li key={text} data-qa="breadcrumb-item" className="govuk-breadcrumbs__list-item">
+            <Link {...routeProps}>{text}</Link>
+          </li>
+        ))}
+
+        <li
+          key={`breadcrumb-current`}
+          data-qa="breadcrumb-current-item"
+          className="govuk-breadcrumbs__list-item"
+          aria-current="page"
+        >
+          {children}
+        </li>
       </ol>
     </div>
   );
-};
+}
