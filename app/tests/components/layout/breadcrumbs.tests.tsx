@@ -1,49 +1,51 @@
 import React from "react";
-import { Breadcrumbs } from "../../../src/ui/components/layout/breadcrumbs";
-import { createRouter } from "router5";
-import { RouterProvider } from "react-router5";
+import {
+  Breadcrumbs,
+  BreadcrumbsProps,
+} from "../../../src/ui/components/layout/breadcrumbs";
 import { mount } from "enzyme";
 
-import browserPluginFactory from "router5/plugins/browser";
-
-const route = { name: "test", path: "/test" } as any;
-const router = createRouter([route]).usePlugin(browserPluginFactory({ useHash: false }));
+import { findByQa } from "../helpers/find-by-qa";
+import TestBed from "../helpers/TestBed";
 
 describe("Breadcrumbs", () => {
-    it("should render 3 breadcrumb navigation links and current pages", () => {
-        const testID = 5;
-        const links = [
-            { routeName: "home", text: "Home", routeParams: {} },
-            { routeName: "contacts", text: "Contacts", routeParams: {} },
-            { routeName: "contact_details", text: `Contact ${testID}`, routeParams: { id: testID } }
-        ];
-        const wrapper = mount(
-            <RouterProvider router={router}>
-                <Breadcrumbs links={links}>Test</Breadcrumbs>
-            </RouterProvider>
-        );
+  const testID = 5;
 
-        expect(wrapper
-            .containsMatchingElement(<a className="">Home</a>))
-            .toBeTruthy();
-        expect(wrapper
-            .containsMatchingElement(<a className="">Contacts</a>))
-            .toBeTruthy();
-        expect(wrapper
-            .containsMatchingElement(<a className="">Contact 5</a>))
-            .toBeTruthy();
-        expect(wrapper
-            .containsMatchingElement(<li className="govuk-breadcrumbs__list-item" aria-current="page">Test</li>))
-            .toBeTruthy();
+  const linkStubs: BreadcrumbsProps["links"] = [
+    { routeName: "home", text: "Home", routeParams: {} },
+    { routeName: "contacts", text: "Contacts", routeParams: {} },
+    {
+      routeName: "contact_details",
+      text: `Contact ${testID}`,
+      routeParams: { id: testID },
+    },
+  ];
+
+  const defaultProps = {
+    children: "test",
+    links: [],
+  };
+
+  const setup = (props?: Partial<BreadcrumbsProps>) => {
+    return mount(<TestBed><Breadcrumbs {...defaultProps} {...props} /></TestBed>);
+  };
+
+  it("tests the three breadcrumbs", () => {
+    const wrapper = setup({ links: linkStubs });
+    linkStubs.forEach((link, i) => {
+      // Note: using at due to router link HOC
+      const target = findByQa(wrapper, "breadcrumb-item")
+        .at(i)
+        .find("a")
+        .text();
+      expect(target).toBe(link.text);
     });
-    it("should only render current page breadcrumb navigation", () => {
-        const wrapper = mount(
-            <RouterProvider router={router}>
-                <Breadcrumbs links={[]}>Test</Breadcrumbs>
-            </RouterProvider>
-        );
-        expect(wrapper
-            .containsMatchingElement(<li className="govuk-breadcrumbs__list-item" aria-current="page">Test</li>))
-            .toBeTruthy();
-    });
+  });
+
+  it("should only render current page breadcrumb navigation", () => {
+    const wrapper = setup();
+    const target = findByQa(wrapper, "breadcrumb-current-item");
+
+    expect(target.text()).toBe(defaultProps.children);
+  });
 });
