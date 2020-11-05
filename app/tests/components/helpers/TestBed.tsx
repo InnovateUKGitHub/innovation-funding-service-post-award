@@ -1,29 +1,38 @@
 import React from "react";
 
 import { Content } from "@content/content";
-import { ContentProvider, StoresProvider } from "@ui/redux";
+import { ContentProvider, IStores, StoresProvider } from "@ui/redux";
 import { IFeatureFlags } from "@framework/types";
 
-interface ITestBedProps {
-  content: Partial<Content>;
+export interface ITestBedProps {
+  content?: Partial<Content>;
+  stores?: Partial<IStores>;
   children: React.ReactElement<{}>;
 }
 
 // Note: When testing a component that consumes <Content />, it expects a provider to be present.
-export function TestBed({ content, children }: ITestBedProps) {
+export function TestBed({ content, stores, children }: ITestBedProps) {
+  const storesValue = stores || stubStores;
+  const contentValue = content || {};
+
   return (
-    <StoresProvider value={stubStores as any}>
-      <ContentProvider value={content as any}>{children}</ContentProvider>
+    <StoresProvider value={storesValue as any}>
+      <ContentProvider value={contentValue as any}>{children}</ContentProvider>
     </StoresProvider>
   );
 }
 
-const stubStores = {
+export const stubStores = {
   config: {
     getConfig: () => ({
       features: {
         contentHint: false,
       } as IFeatureFlags,
+    }),
+  },
+  navigation: {
+    getPageTitle: () => ({
+      displayTitle: "stub-displayTitle",
     }),
   },
 };
