@@ -1,58 +1,64 @@
 import React from "react";
-import { PageTitle } from "../../../src/ui/components/layout/pageTitle";
-
 import { mount } from "enzyme";
 
-import { IStores, StoresProvider } from "@ui/redux";
+import { PageTitle, PageTitleProps } from "../../../src/ui/components/layout/pageTitle";
+import { findByQa } from "../helpers/find-by-qa";
+import TestBed, { ITestBedProps, stubStores } from "../helpers/TestBed";
 
 describe("PageTitle", () => {
-    const stores: IStores = {
-        navigation: {
-            getPageTitle: () => ({ displayTitle: "a test title", htmlTitle: "" })
-        }
-    } as IStores;
+  const setup = (props?: PageTitleProps, stores?: ITestBedProps["stores"]) => {
+    const wrapper = mount(
+      <TestBed stores={stores}>
+        <PageTitle {...props} />
+      </TestBed>,
+    );
 
-    it("should render title from stores", () => {
+    const titleElement = findByQa(wrapper, "page-title-value");
+    const captionElement = findByQa(wrapper, "page-title-caption");
 
-        const result = (
-            <StoresProvider value={stores}>
-                <PageTitle/>
-            </StoresProvider>
-        );
+    return {
+      wrapper,
+      titleElement,
+      captionElement,
+    };
+  };
 
-        const wrapper = mount(result);
-        expect(wrapper
-            .containsMatchingElement(<h1 className="govuk-heading-xl clearFix">a test title</h1>))
-            .toBeTruthy();
-    });
+  test.each`
+    name                 | caption           | matches
+    ${"with caption"}    | ${"stub-caption"} | ${"stub-caption"}
+    ${"without caption"} | ${null}           | ${null}
+  `("renders $name", ({ caption, matches }) => {
+    const { captionElement } = setup({ caption });
 
-    it("should render caption", () => {
-        const result = (
-            <StoresProvider value={stores}>
-                <PageTitle caption="a test caption" />
-            </StoresProvider>
-        );
+    expect(captionElement.exists()).toBe(!!matches);
 
-        const wrapper = mount(result);
-        expect(wrapper
-            .containsMatchingElement(<span className="govuk-caption-xl">a test caption</span>))
-            .toBeTruthy();
-    });
+    if (matches) {
+      expect(captionElement.text()).toBe(matches);
+    }
+  });
 
-    it("should not reder caption if prop is not passed in", () => {
+  test.each`
+    name                                                              | title                | displayTitle            | matches
+    ${"returns null if no valid title is set"}                        | ${""}                | ${""}                   | ${null}
+    ${"returns title from props"}                                     | ${"stub-only-title"} | ${""}                   | ${"stub-only-title"}
+    ${"returns title from props if defined rather than displayTitle"} | ${"stub-title"}      | ${"stub-fallbackTitle"} | ${"stub-title"}
+    ${"returns displayTitle value when title is not defined"}         | ${""}                | ${"stub-getPageTitle"}  | ${"stub-getPageTitle"}
+  `("$name", ({ title, displayTitle, matches }) => {
+    const stubTestBedStore = {
+      ...stubStores,
+      navigation: {
+        getPageTitle: () => ({
+          displayTitle,
+        }),
+      },
+    };
 
-        const result = (
-            <StoresProvider value={stores}>
-                <PageTitle />
-            </StoresProvider>
-        );
+    const { titleElement } = setup({ title }, stubTestBedStore as any);
 
-        const wrapper = mount(result);
-        expect(wrapper
-            .containsMatchingElement(<h1 className="govuk-heading-xl clearFix">a test title</h1>))
-            .toBeTruthy();
-        expect(wrapper
-            .containsMatchingElement(<span className="govuk-caption-xl">a test caption</span>))
-            .toBeFalsy();
-    });
+    if (matches) {
+      expect(titleElement.text()).toBe(matches);
+    } else {
+      expect(titleElement.exists()).toBeFalsy();
+    }
+  });
 });

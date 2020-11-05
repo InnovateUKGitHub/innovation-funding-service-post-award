@@ -1,34 +1,29 @@
 import React from "react";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 
-interface Props {
+export interface PageTitleProps {
   title?: string;
   caption?: string;
 }
 
-interface Data {
-  storePageTitle: string;
+export function PageTitle({ caption, title }: PageTitleProps) {
+  const stores = useStores();
+
+  const titleValue = title || stores.navigation.getPageTitle().displayTitle;
+
+  if (!titleValue || !titleValue.length) return null;
+
+  return (
+    <div data-qa="page-title">
+      {caption && (
+        <span className="govuk-caption-xl" data-qa="page-title-caption">
+          {caption}
+        </span>
+      )}
+
+      <h1 className="govuk-heading-xl clearFix" data-qa="page-title-value">
+        {titleValue}
+      </h1>
+    </div>
+  );
 }
-
-class PageTitleComponent extends React.Component<Props & Data> {
-  render() {
-
-    return (
-      <div data-qa="page-title">
-        {this.renderCaption()}
-        <h1 className="govuk-heading-xl clearFix">{this.props.title || this.props.storePageTitle}</h1>
-      </div>
-    );
-  }
-
-  private renderCaption() {
-    const { caption } = this.props;
-    return caption ? <span className="govuk-caption-xl">{caption}</span> : null;
-  }
-}
-
-export const PageTitle = (props: Props) => (
-  <StoresConsumer>
-    {stores => <PageTitleComponent storePageTitle={stores.navigation.getPageTitle().displayTitle} {...props}/>}
-  </StoresConsumer>
-);
