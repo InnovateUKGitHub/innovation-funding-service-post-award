@@ -9,9 +9,21 @@ import { RouterProvider } from "react-router5";
 import { Provider } from "react-redux";
 import { IClientUser, ProjectRole } from "@framework/types";
 import { configureRouter, routeConfig } from "@ui/routing";
+import TestBed from "./helpers/TestBed";
 
 const routes = routeConfig;
 const router = configureRouter(routes);
+
+const store = createStore(rootReducer, { user: {
+  email: "iuk.accproject@bjss.com.bjsspoc2",
+  roleInfo: {
+    a0C0Q000001tr5yUAA: {
+      projectRoles: ProjectRole.MonitoringOfficer,
+      partnerRoles: {}
+    }
+  },
+  csrf: "CSFR"
+} as IClientUser});
 
 const previousLink = {
   label: "Overheads",
@@ -33,26 +45,14 @@ const nextLink = {
   })
 };
 
-const preloadedState: IClientUser = {
-  email: "iuk.accproject@bjss.com.bjsspoc2",
-  roleInfo: {
-    a0C0Q000001tr5yUAA: {
-      projectRoles: ProjectRole.MonitoringOfficer,
-      partnerRoles: {}
-    }
-  },
-  csrf: "CSFR"
-
-};
-
 describe("NavigationArrows", () => {
   it("renders only the next arrow if no previous link is given", () => {
     const wrapper = mount(
-      <Provider store={createStore(rootReducer, { user: preloadedState })}>
+      <TestBed stores={store} providedRoute={router}>
         <RouterProvider router={router}>
           <NavigationArrows previousLink={null} nextLink={nextLink} />
         </RouterProvider>
-      </Provider>
+      </TestBed>
     );
 
     expect(wrapper.find("a").length).toEqual(1);
@@ -62,7 +62,7 @@ describe("NavigationArrows", () => {
 
   it("renders the previous and the next arrow", () => {
     const wrapper = mount(
-      <Provider store={createStore(rootReducer, { user: preloadedState })}>
+      <Provider store={store}>
         <RouterProvider router={router}>
           <NavigationArrows previousLink={previousLink} nextLink={nextLink} />
         </RouterProvider>
@@ -80,7 +80,7 @@ describe("NavigationArrows", () => {
 
   it("renders only the previous arrow if no next link is given", () => {
     const wrapper = mount(
-      <Provider store={createStore(rootReducer, { user: preloadedState })}>
+      <Provider store={store}>
         <RouterProvider router={router}>
           <NavigationArrows previousLink={previousLink} nextLink={null} />
         </RouterProvider>
@@ -94,7 +94,7 @@ describe("NavigationArrows", () => {
 
   it("renders no arrows if no links are given", () => {
     const wrapper = mount(
-      <Provider store={createStore(rootReducer, { user: preloadedState })}>
+      <Provider store={store}>
         <RouterProvider router={router}>
           <NavigationArrows previousLink={null} nextLink={null} />
         </RouterProvider>
