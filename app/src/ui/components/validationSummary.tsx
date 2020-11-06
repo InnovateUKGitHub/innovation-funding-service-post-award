@@ -1,5 +1,5 @@
 import React from "react";
-import { IValidationResult, Nested, NestedResult, Result, Results } from "../validation";
+import { IValidationResult, NestedResult, Result, Results } from "../validation";
 import { flatten } from "@framework/util/arrayHelpers";
 import { useContent } from "@ui/redux";
 
@@ -28,8 +28,9 @@ const prepareMessage = (errorMessage: string | null | undefined): React.ReactNod
   return null;
 };
 
-export const ValidationSummary: React.FunctionComponent<Props> = ({ validation, compressed }) => {
+export function ValidationSummary({ validation, compressed }: Props) {
   const {getContent} = useContent();
+
   const results: Result[] = [];
   if (validation && validation.errors) {
     validation.errors.filter(x => !x.isValid && x.showValidationErrors).forEach(x => {

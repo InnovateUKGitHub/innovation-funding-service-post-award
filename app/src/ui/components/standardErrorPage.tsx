@@ -3,7 +3,7 @@ import { Page } from "./layout/page";
 import { Section } from "./layout/section";
 import { SimpleString } from "./renderers/simpleString";
 import { PageTitle } from "@ui/components/layout";
-import { ContentConsumer, useContent } from "@ui/redux/contentProvider";
+import { useContent } from "@ui/redux/contentProvider";
 import { ExternalLink } from "./renderers";
 
 const dashboardLink = "/projects/dashboard";
@@ -23,7 +23,7 @@ export const StandardErrorPage = () => {
   );
 
   return (
-    <Page pageTitle={<PageTitle title={errorTitle} />} backLink={null}>
+    <Page pageTitle={<PageTitle title={errorTitle} />}>
       <Section>
         <SimpleString>{errorContent}</SimpleString>
       </Section>

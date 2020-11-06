@@ -7,50 +7,66 @@ import { Section } from "./section";
 import { ValidationSummary } from "../validationSummary";
 import { ValidationMessage } from "../validationMessage";
 
-interface Props {
-  backLink: React.ReactNode | null;
-  pageTitle: React.ReactNode;
+export interface PageProps {
+  pageTitle: React.ReactElement<{}>;
+  children: React.ReactNode;
+  backLink?: React.ReactElement<{}>;
   error?: IAppError | null;
   validator?: Results<{}> | Results<{}>[] | null;
   project?: ProjectDto;
   partner?: PartnerDto;
 }
 
-export const Page: React.FunctionComponent<Props> = (props) => {
-  const { pageTitle, backLink, error, children, project, partner} = props;
-  const validation = props.validator !== undefined && Array.isArray(props.validator) ? new CombinedResultsValidator(...props.validator) : props.validator;
-  return (
-    <div>
-      {backLink && (<div className="govuk-grid-row"><div className="govuk-grid-column-full">{backLink}</div></div>)}
-      <main className="govuk-main-wrapper" id="main-content" role="main" >
-        <AriaLive>
-          <ErrorSummary error={error} />
-          <ValidationSummary validation={validation} compressed={false} />
-        </AriaLive>
-        {pageTitle}
-        {renderOnHoldSection(project, partner)}
-        {children}
-      </main>
-    </div>
-  );
-};
+// TODO: Refactor this out + test using RTL
+const usePageValidationMessage = (project?: ProjectDto, partner?: PartnerDto) => {
+  const projectStatus = project && project.status;
+  const partnerStatus = partner && partner.partnerStatus;
 
-const renderOnHoldSection = (project: ProjectDto | undefined, partner: PartnerDto | undefined) => {
-  if (!!project && project.status === ProjectStatus.OnHold) {
-    return (
-      <Section>
-        <ValidationMessage messageType={"info"} message={"This project is on hold. Contact Innovate UK for more information."} qa={"on-hold-info-message"}/>
-      </Section>
-    );
+  if (projectStatus === ProjectStatus.OnHold) {
+    return "This project is on hold. Contact Innovate UK for more information.";
   }
 
-  if (!!partner && partner.partnerStatus  === PartnerStatus.OnHold) {
-    return (
-      <Section>
-        <ValidationMessage messageType={"info"} message={"Partner is on hold. Contact Innovate UK for more information."} qa={"on-hold-info-message"}/>
-      </Section>
-    );
+  if (partnerStatus === PartnerStatus.OnHold) {
+    return "Partner is on hold. Contact Innovate UK for more information.";
   }
 
   return null;
 };
+
+export function Page({ pageTitle, backLink, error, children, project, partner, validator }: PageProps) {
+  const validation = validator && Array.isArray(validator) ? new CombinedResultsValidator(...validator) : validator;
+  const displayAriaLive: boolean = !!error || !!validation;
+
+  const pageErrorMessage = usePageValidationMessage(project, partner);
+
+  return (
+    <div>
+      {backLink && (
+        <div className="govuk-grid-row">
+          <div className="govuk-grid-column-full" data-qa="page-backlink">
+            {backLink}
+          </div>
+        </div>
+      )}
+
+      <main className="govuk-main-wrapper" id="main-content" role="main">
+        {displayAriaLive && (
+          <AriaLive>
+            {error && <ErrorSummary error={error} />}
+            {validation && <ValidationSummary validation={validation} compressed={false} />}
+          </AriaLive>
+        )}
+
+        {pageTitle}
+
+        {pageErrorMessage && (
+          <Section>
+            <ValidationMessage messageType="info" qa="on-hold-info-message" message={pageErrorMessage} />
+          </Section>
+        )}
+
+        {children}
+      </main>
+    </div>
+  );
+}
