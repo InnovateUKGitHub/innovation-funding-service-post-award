@@ -83,7 +83,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         </ACC.Renderers.SimpleString>
 
         <ACC.Section>
-          <ACC.TextHint text={costCategory.hintText} />
+          {costCategory.hintText && <ACC.TextHint>{costCategory.hintText}</ACC.TextHint>}
           {costCategory.isCalculated
             ? this.renderCalculated(costCategory, claimDetails, forecastDetail, documents, editor)
             : this.renderTable(editor, forecastDetail, documents)}

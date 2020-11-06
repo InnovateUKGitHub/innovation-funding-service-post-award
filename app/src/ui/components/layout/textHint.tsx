@@ -1,9 +1,16 @@
 import React from "react";
 import * as colour from "../../styles/colours";
 
-export const TextHint: React.FunctionComponent<{ text: string|null}> = ({ text }) => {
-  if(!text) {
-    return null;
-  }
-  return (<div className="govuk-body" style={{color: colour.GOVUK_SECONDARY_TEXT_COLOUR}}>{text}</div>);
-};
+export interface TextHintReactProps {
+  children: string;
+  style?: never;
+  className?: never;
+}
+
+export function TextHint(props: TextHintReactProps) {
+  if (!props.children.length) return null;
+
+  return (
+    <p {...props} data-qa="text-hint" className="govuk-body" style={{ color: colour.GOVUK_SECONDARY_TEXT_COLOUR }} />
+  );
+}

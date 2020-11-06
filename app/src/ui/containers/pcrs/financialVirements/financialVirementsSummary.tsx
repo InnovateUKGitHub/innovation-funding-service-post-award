@@ -119,7 +119,8 @@ export class GrantMovingOverFinancialYearForm extends React.Component<PropsWithF
 
     return (
       <Form.Fieldset qa="fieldset-grantMovingOverFinancialYear" headingContent={x => x.financialVirementSummary.labels.grantMovingOverYear}>
-        <ACC.TextHint text={"The financial year ends on 31 March."} />
+        <ACC.TextHint>The financial year ends on 31 March.</ACC.TextHint>
+
         <Form.Numeric
           name="grantMovingOverFinancialYear"
           width={5}
