@@ -1,8 +1,16 @@
 import React from "react";
 
+import createRouter from "router5";
+import browserPluginFactory from "router5/plugins/browser";
+import { IFeatureFlags } from "@framework/types";
 import { Content } from "@content/content";
 import { ContentProvider, IStores, StoresProvider } from "@ui/redux";
-import { IFeatureFlags } from "@framework/types";
+import { RouterProvider } from "react-router5";
+
+const route = { name: "test", path: "/test" } as any;
+const router = createRouter([route]).usePlugin(
+  browserPluginFactory({ useHash: false })
+);
 
 export interface ITestBedProps {
   content?: Partial<Content>;
@@ -16,9 +24,13 @@ export function TestBed({ content, stores, children }: ITestBedProps) {
   const contentValue = content || {};
 
   return (
-    <StoresProvider value={storesValue as any}>
-      <ContentProvider value={contentValue as any}>{children}</ContentProvider>
-    </StoresProvider>
+    <RouterProvider router={router}>
+      <StoresProvider value={storesValue as any}>
+        <ContentProvider value={contentValue as any}>
+          {children}
+        </ContentProvider>
+      </StoresProvider>
+    </RouterProvider>
   );
 }
 
