@@ -6,7 +6,6 @@ import { PageTitle } from "@ui/components/layout";
 import { useContent } from "@ui/redux/contentProvider";
 import { ExternalLink } from "./renderers";
 
-// TODO: Ask Steve for the link
 const innovateUKLink = "https://www.gov.uk/government/organisations/innovate-uk";
 const dashboardLink = "/projects/dashboard";
 
@@ -28,7 +27,7 @@ export function NotFoundErrorPage() {
   );
 
   return (
-    <Page pageTitle={<PageTitle title={errorTitle} />} backLink={null}>
+    <Page pageTitle={<PageTitle title={errorTitle} />}>
       <Section>
         <SimpleString qa="errorMessage">{errorContent}</SimpleString>
       </Section>
