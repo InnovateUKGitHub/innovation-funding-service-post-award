@@ -86,46 +86,44 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       : <ACC.ValidationMessage message="No documents uploaded." messageType="info" />;
   }
 
-  private getLinks(costCategories: CostCategoryDto[], project: ProjectDto, partner: PartnerDto, claim: ClaimDto, pages: { getLink: (params: Params) => ILinkInfo }) {
+  // TODO - this is something which we do in at least two places so should be generic
+  private filterOverheads(costCategoryName: string, overheadRate: number): boolean {
+    return !(costCategoryName === "Overheads" &&
+            overheadRate <= this.props.config.options.standardOverheadRate);
+  }
+
+  private getLinks(costCategories: CostCategoryDto[], project: ProjectDto, partner: PartnerDto, overheadRate: number, pages: { getLink: (params: Params) => ILinkInfo }) {
     const periodId = this.props.periodId;
     const costCategoriesToUse = costCategories
       .filter(x => x.competitionType === project.competitionType && x.organisationType === partner.organisationType)
-      .filter(x => !x.isCalculated || claim.overheadRate > this.props.config.options.standardOverheadRate);
+      .filter(x => this.filterOverheads(x.name, overheadRate));
+
     const currentCostCategory = costCategoriesToUse.find(x => x.id === this.props.costCategoryId);
-
     if (currentCostCategory === undefined) return null;
-    const currentPosition = costCategoriesToUse.indexOf(currentCostCategory);
 
+    const currentPosition = costCategoriesToUse.indexOf(currentCostCategory);
     let nextCostCategory = null;
     let previousCostCategory = null;
 
     if (currentPosition !== costCategoriesToUse.length - 1) {
       nextCostCategory = costCategoriesToUse[currentPosition + 1];
     }
-
     if (currentPosition !== 0) {
       previousCostCategory = costCategoriesToUse[currentPosition - 1];
     }
 
-    const previousLink = previousCostCategory ? {
-      label: previousCostCategory.name,
+    const createCostCategoryLink = (costCategory: CostCategoryDto | null) => costCategory ? ({
+      label: costCategory.name,
       route: pages.getLink({
         partnerId: partner.id,
         projectId: project.id,
         periodId,
-        costCategoryId: previousCostCategory.id
+        costCategoryId: costCategory.id
       })
-    } : null;
+    }) : null;
 
-    const nextLink = nextCostCategory ? {
-      label: nextCostCategory.name,
-      route: pages.getLink({
-        partnerId: partner.id,
-        projectId: project.id,
-        periodId,
-        costCategoryId: nextCostCategory.id
-      })
-    } : null;
+    const previousLink = createCostCategoryLink(previousCostCategory);
+    const nextLink = createCostCategoryLink(nextCostCategory);
 
     return {
       previousLink,
@@ -135,10 +133,10 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
 
   private readonly renderNavigationArrows = (costCategories: CostCategoryDto[], project: ProjectDto, partner: PartnerDto, claim: ClaimDto) => {
     const route = this.props.route.name === ReviewClaimLineItemsRoute.routeName ? ReviewClaimLineItemsRoute : ClaimLineItemsRoute;
-    const arrowLinks = this.getLinks(costCategories, project, partner, claim, route);
-    if (arrowLinks === null) return null;
+    const navigationLinks = this.getLinks(costCategories, project, partner, claim.overheadRate, route);
+    if (navigationLinks === null) return null;
 
-    return <ACC.NavigationArrows nextLink={arrowLinks.nextLink} previousLink={arrowLinks.previousLink} />;
+    return navigationLinks ? <ACC.NavigationArrows {...navigationLinks} /> : null;
   }
 
   private readonly renderAdditionalInformation = (claimDetail: ClaimDetailsDto) => {

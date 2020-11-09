@@ -36,8 +36,7 @@ export class VirementCostsUpdateHandler extends StandardFormHandlerBase<Virement
       const newEligibleCosts = parseFloat(body[x.costCategoryId]);
       x.newEligibleCosts = newEligibleCosts;
 
-      const costCategory = costCategories.find(c => c.id === x.costCategoryId)!;
-      if (costCategory.hasRelated && partner.overheadRate) {
+      if (partner.overheadRate) {
         const related = partnerVirementDto.virements.find(v => calculatedCostCategoryIds.indexOf(v.costCategoryId) !== -1);
         if (related) {
           related.newEligibleCosts = roundCurrency((newEligibleCosts || 0) * (partner.overheadRate / 100));
