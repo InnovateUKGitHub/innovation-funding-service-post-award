@@ -1,6 +1,6 @@
-import { SalesforceBaseMapper } from "./saleforceMapperBase";
-import { ISalesforceCostCategory } from "../costCategoriesRepository";
 import { CostCategory, CostCategoryType } from "@framework/entities";
+import { ISalesforceCostCategory } from "../costCategoriesRepository";
+import { SalesforceBaseMapper } from "./saleforceMapperBase";
 
 export class SalesforceCostCategoryMapper extends SalesforceBaseMapper<ISalesforceCostCategory, CostCategory> {
 
@@ -30,8 +30,8 @@ export class SalesforceCostCategoryMapper extends SalesforceBaseMapper<ISalesfor
       type,
       competitionType: x.Acc_CompetitionType__c,
       organisationType: x.Acc_OrganisationType__c,
-      isCalculated: type === CostCategoryType.Overheads,
-      hasRelated: type === CostCategoryType.Labour,
+      isCalculated: false,
+      hasRelated: false,
       description: x.Acc_CostCategoryDescription__c,
       hintText: x.Acc_HintText__c,
       displayOrder: x.Acc_DisplayOrder__c

@@ -1,9 +1,6 @@
 /* tslint:disable:no-identical-functions */
-import { BadRequestError, CommandBase, ValidationError } from "../common";
 import { Option, ProjectRole } from "@framework/dtos";
-import { Authorisation, IContext, PCRSpendProfileOverheadRate } from "@framework/types";
-import { CostCategoryType, PcrSpendProfileEntity } from "@framework/entities";
-import { isNumber, roundCurrency } from "@framework/util";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import {
   PCRSpendProfileAcademicCostDto,
   PCRSpendProfileCapitalUsageCostDto,
@@ -15,12 +12,15 @@ import {
   PCRSpendProfileOtherFundingDto,
   PCRSpendProfileOverheadsCostDto,
   PCRSpendProfileSubcontractingCostDto,
-  PCRSpendProfileTravelAndSubsCostDto,
+  PCRSpendProfileTravelAndSubsCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
-import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
+import { CostCategoryType, PcrSpendProfileEntity } from "@framework/entities";
+import { Authorisation, IContext, PCRSpendProfileOverheadRate } from "@framework/types";
+import { isNumber, roundCurrency } from "@framework/util";
 import { GetCostCategoriesQuery } from "@server/features/claims";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
+import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
+import { BadRequestError, CommandBase, ValidationError } from "../common";
 
 interface BaseEntityFields {
   id: string;
@@ -138,17 +138,17 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   private addOverheads(costCategories: CostCategoryDto[], entities: PcrSpendProfileEntity[], overheadsRates: Option<PCRSpendProfileOverheadRate>[]) {
     // Validation has already ensured there is at most one overheads cost
     const overheadsCostDto = this.spendProfileDto.costs.find(x => x.costCategory === CostCategoryType.Overheads) as PCRSpendProfileOverheadsCostDto;
+    if (!overheadsCostDto || !overheadsCostDto.overheadRate) return;
 
-    if (!overheadsCostDto) return;
+    const overheadRate = overheadsCostDto.overheadRate;
+    const overheadRateOption = overheadsRates.find(x => x.value === overheadRate);
 
-    const overheadRateOption = overheadsRates.find(x => x.value === overheadsCostDto.overheadRate);
-
-    if (overheadsCostDto.overheadRate && !overheadRateOption) throw new BadRequestError("Overhead rate not allowed");
+    if (!overheadRateOption) throw new BadRequestError("Overhead rate not allowed");
 
     entities.push({
       ...this.getBaseSpendProfileEntity(overheadsCostDto),
-      overheadRate: overheadsCostDto.overheadRate,
-      description: overheadsCostDto.overheadRate ? overheadRateOption!.label : null,
+      overheadRate,
+      description: overheadsCostDto.overheadRate ? overheadRateOption.label : null,
       value: this.getOverheadsCostValue(overheadsCostDto, costCategories, entities)
     });
   }
