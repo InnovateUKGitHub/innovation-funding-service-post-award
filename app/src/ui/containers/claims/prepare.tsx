@@ -74,7 +74,7 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
       <ACC.Section title={<ACC.Claims.ClaimPeriodDate claim={data.claim} />}>
         <ACC.Claims.ClaimTable
           {...data}
-          validation={data.editor.validator.claimDetails.results}
+          validation={data.editor.validator.totalCosts}
           standardOverheadRate={this.props.config.options.standardOverheadRate}
           getLink={costCategoryId => this.props.routes.prepareClaimLineItems.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId })}
         />

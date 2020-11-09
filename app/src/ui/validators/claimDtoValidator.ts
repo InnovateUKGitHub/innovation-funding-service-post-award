@@ -60,28 +60,7 @@ export class ClaimDtoValidator extends Results<ClaimDto>  {
     }
     public iar = this.validateIar();
 
-    public claimDetails = Validation.optionalChild(
-      this,
-      this.details,
-      (item) => new CostsSummaryForPeriodValidator(item, this.costCategories.find(x => x.id === item.costCategoryId), this.showValidationErrors),
-      "Your costs for this period are more than your remaining grant offer letter costs in at least one cost category. You must remove some costs before you can submit this claim."
-    );
-}
+    readonly remainingOfferCosts = this.details.reduce((total, item) => total + item.remainingOfferCosts, 0);
 
-export class CostsSummaryForPeriodValidator extends Results<CostsSummaryForPeriodDto> {
-    constructor(
-      readonly model: CostsSummaryForPeriodDto,
-      private readonly costCategory: CostCategoryDto | null | undefined,
-      readonly show: boolean
-    ) {
-        super(model, show);
-    }
-
-    costsClaimedThisPeriod = Validation.isFalse(
-      this,
-      this.model.offerTotal < (this.model.costsClaimedToDate + this.model.costsClaimedThisPeriod),
-      this.costCategory
-        ? `Your costs for ${this.costCategory.name} this period are more than your remaining grant offer letter costs. You must remove some costs before you can submit this claim.`
-        : `Your costs for this period are more than your remaining grant offer letter costs. You must remove some costs before you can submit this claim.`
-    );
+    public totalCosts = Validation.isPositiveInteger(this, this.remainingOfferCosts, "Your costs for this period are more than your remaining grant offer letter costs in at least one cost category. You must remove some costs before you can submit this claim.");
 }
