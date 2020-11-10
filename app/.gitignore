@@ -10,3 +10,6 @@ build/
 
 test-report.html
 .idea
+
+# Generated files
+dashboard/
