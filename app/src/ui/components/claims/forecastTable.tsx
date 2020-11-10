@@ -286,7 +286,6 @@ export class ForecastTable extends React.Component<Props> {
           <AccessibilityText>Cost categories</AccessibilityText>
         </th>
         {previous > 0 ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={previous}>Costs claimed</th> : null}
-        {/*If there isn't a draft claim then don't show "Costs you are claiming"*/}
         {!!claim && claimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Costs you are claiming</th> : null}
         {forecasts ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={periods.length - claimPeriod}>Forecast</th> : null}
         <th className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-right-3">Total</th>
@@ -326,7 +325,7 @@ export class ForecastTable extends React.Component<Props> {
 
     cells.push(<th key="th" className="govuk-table__cell govuk-!-font-weight-bold acc-table__cell-top-border sticky-col sticky-col-left-1">Total</th>);
     cells.push(totals.map((value, index) => this.renderTableFooterCell(value, index)));
-    cells.push(this.renderTableFooterCell(costTotal, totals.length + 1, "sticky-col sticky-col-right-3"));
+    cells.push(this.renderTableFooterCell(costTotal, totals.length + 1, "sticky-col sticky-col-right-3", "qa-costs-remaining"));
     cells.push(this.renderTableFooterCell(golTotal, totals.length + 2, "sticky-col sticky-col-right-2"));
     cells.push((
       <td key="total_diff" className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular sticky-col sticky-col-right-1">
@@ -337,9 +336,9 @@ export class ForecastTable extends React.Component<Props> {
     return [<tr id={warningId} key="footer1" className={classNames("govuk-table__row", "govuk-body-s", { "table__row--error": warning })}>{cells}</tr>];
   }
 
-  private readonly renderTableFooterCell = (total: number, key: number, className?: string) => (
+  private readonly renderTableFooterCell = (total: number, key: number, className?: string, qa?: string) => (
     <td key={key} className={`govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular ${className}`}>
-      <Currency value={total} />
+      <Currency data-qa={qa} value={total} />
     </td>
   )
 }
