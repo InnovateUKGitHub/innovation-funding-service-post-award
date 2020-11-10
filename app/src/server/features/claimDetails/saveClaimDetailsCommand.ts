@@ -1,5 +1,5 @@
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
+import { Authorisation, ClaimDetailKey, ClaimDetailsDto, ClaimLineItemDto, IContext, ProjectRole } from "@framework/types";
 import { ClaimDetailsValidator } from "@ui/validators";
 import { isNumber } from "@framework/util";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";

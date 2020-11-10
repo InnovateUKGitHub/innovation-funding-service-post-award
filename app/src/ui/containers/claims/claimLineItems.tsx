@@ -3,7 +3,7 @@ import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { Pending } from "../../../shared/pending";
 import * as ACC from "@ui/components";
 import { State } from "router5";
-import { ClaimDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { ClaimDetailsDto, ClaimDto, ClaimLineItemDto, ForecastDetailsDTO, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import classNames from "classnames";
 import { StoresConsumer } from "@ui/redux";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";

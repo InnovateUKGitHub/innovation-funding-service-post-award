@@ -6,7 +6,7 @@ import {
   EditClaimLineItemsRoute,
   PrepareClaimRoute
 } from "@ui/containers";
-import { IContext, ILinkInfo } from "@framework/types";
+import { ClaimDetailsDto, IContext, ILinkInfo } from "@framework/types";
 import { range } from "@shared/range";
 import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetailsCommand";
 import { ClaimDetailsValidator } from "@ui/validators/claimDetailsValidator";

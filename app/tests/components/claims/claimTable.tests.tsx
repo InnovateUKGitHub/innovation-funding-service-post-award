@@ -4,7 +4,7 @@ import { ClaimTable } from "../../../src/ui/components/claims/claimTable";
 import Enzyme from "enzyme";
 
 import { DateTime, Settings } from "luxon";import React from "react";
-import { ClaimDto, PartnerDto, ProjectDto } from "@framework/dtos";
+import { ClaimDto, CostsSummaryForPeriodDto, PartnerDto, ProjectDto } from "@framework/dtos";
 import { createDto } from "../helpers/dtoHelpers";
 import { getColumnValues, getFooterValue } from "../helpers/tableHelpers";
 import { range } from "@shared/range";

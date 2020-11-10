@@ -4,7 +4,7 @@ import { GetAllClaimsForProjectQuery, GetAllForPartnerQuery, GetClaim } from "..
 import { UpdateClaimCommand } from "../features/claims/updateClaim";
 import { processDto } from "../../shared/processResponse";
 import { BadRequestError } from "../features/common/appError";
-import { ClaimDto, ClaimStatusChangeDto } from "@framework/types";
+import { ClaimDto, ClaimKey, ClaimStatusChangeDto } from "@framework/types";
 import { GetClaimStatusChangesQuery } from "@server/features/claims/getClaimStatusChangesQuery";
 
 export interface IClaimsApi {

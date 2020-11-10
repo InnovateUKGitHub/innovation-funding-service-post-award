@@ -2,12 +2,12 @@
  * Each component guide is in the structure of IGuide where 'name' is the name of the component or set of components being described and 'options' is an array of IGuideOptions.
  */
 
-interface IGuide {
+export interface IGuide {
     name: string;
     options: IGuideOption[];
 }
 
-interface IGuideOption {
+export interface IGuideOption {
     /** * The name of the specific component or variation of that component. */
     name: string;
      /** * Describes what is being rendered. */

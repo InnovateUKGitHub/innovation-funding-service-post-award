@@ -5,6 +5,7 @@ import {
     LongYear, Months, MonthYear, ShortDate, ShortDateRange,
     ShortDateRangeFromDuration, ShortDateTime, ShortMonth
 } from "../components/renderers/date";
+import { IGuide } from "@framework/types";
 
 const startDate = new Date("2018/01/01");
 const endDate = new Date("2019/12/31");

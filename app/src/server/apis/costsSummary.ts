@@ -1,6 +1,7 @@
 import { ApiParams, ControllerBase } from "./controllerBase";
 import { GetCostsSummaryForPeriodQuery } from "../features/claimDetails";
 import contextProvider from "../features/common/contextProvider";
+import { CostsSummaryForPeriodDto } from "@framework/dtos";
 
 export interface ICostsSummaryApi {
   getAllByPartnerIdForPeriod: (params: ApiParams<{ projectId: string, partnerId: string, periodId: number }>) => Promise<CostsSummaryForPeriodDto[]>;

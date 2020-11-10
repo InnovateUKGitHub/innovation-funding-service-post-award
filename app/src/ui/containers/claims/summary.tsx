@@ -8,6 +8,7 @@ import {
   ClaimDto,
   ClaimStatus,
   ClaimStatusChangeDto,
+  CostsSummaryForPeriodDto,
   ILinkInfo,
   PartnerDto,
   ProjectDto,

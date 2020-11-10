@@ -5,7 +5,7 @@ import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery, GetCostCategoriesQ
 import { GetAllClaimDetailsByPartner } from "@server/features/claimDetails";
 import { GetByIdQuery as GetProjectById } from "@server/features/projects";
 import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
-import { Authorisation, ClaimDto, ClaimStatus, IContext, PartnerDto, ProjectRole } from "@framework/types";
+import { Authorisation, ClaimDetailsSummaryDto, ClaimDto, ClaimStatus, ForecastDetailsDTO, GOLCostDto, IContext, PartnerDto, ProjectRole } from "@framework/types";
 import { GetAllForecastsForPartnerQuery } from "./getAllForecastsForPartnerQuery";
 import { GetByIdQuery } from "@server/features/partners";
 import { UpdatePartnerCommand } from "../partners/updatePartnerCommand";

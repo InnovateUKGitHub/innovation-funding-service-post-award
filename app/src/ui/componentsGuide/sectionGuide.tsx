@@ -1,6 +1,7 @@
 import React from "react";
 import { Section } from "../components/layout/section";
 import { SimpleString } from "../components/renderers/simpleString";
+import { IGuide } from "@framework/types";
 
 export const sectionGuide: IGuide = {
     name: "Section",

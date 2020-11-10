@@ -1,5 +1,6 @@
 import React from "react";
 import { Percentage } from "@ui/components/renderers";
+import { IGuide } from "@framework/types";
 
 export const percentageGuide: IGuide = {
   name: "Percentage",

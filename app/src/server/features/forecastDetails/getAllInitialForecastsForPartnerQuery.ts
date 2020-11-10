@@ -1,5 +1,5 @@
 import { QueryBase } from "../common";
-import { IContext } from "@framework/types";
+import { ForecastDetailsDTO, IContext } from "@framework/types";
 import { mapInitialForecastDetail } from "@server/features/forecastDetails/mapForecastDetail";
 
 export class GetAllInitialForecastsForPartnerQuery extends QueryBase<ForecastDetailsDTO[]> {

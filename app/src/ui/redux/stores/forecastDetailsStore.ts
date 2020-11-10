@@ -11,6 +11,7 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PartnersStore } from "@ui/redux/stores/partnersStore";
 import { InitialForecastDetailsDtosValidator } from "@ui/validators/initialForecastDetailsDtosValidator";
 import { CostCategoriesStore } from "@ui/redux/stores/costCategoriesStore";
+import { ForecastDetailsDTO } from "@framework/dtos";
 
 export class ForecastDetailsStore extends StoreBase {
   constructor(

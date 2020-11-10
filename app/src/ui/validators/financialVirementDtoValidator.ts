@@ -1,5 +1,6 @@
 import { Results } from "@ui/validation/results";
 import * as Validation from "./common";
+import { CostCategoryVirementDto, FinancialVirementDto, PartnerVirementsDto } from "@framework/dtos";
 
 export class FinancialVirementDtoValidator extends Results<FinancialVirementDto> {
 

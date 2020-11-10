@@ -1,6 +1,5 @@
-interface ClaimDetailKey {
+export interface ClaimKey {
   projectId: string;
   partnerId: string;
   periodId: number;
-  costCategoryId: string;
 }

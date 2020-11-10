@@ -4,6 +4,7 @@ import { range } from "../../shared/range";
 import { TypedTable } from "../components/table";
 import { FullDateTime } from "../components/renderers";
 import { Currency } from "../components/renderers/currency";
+import { IGuide } from "@framework/types";
 
 const exampleDataItem = (seed: number) => {
     const date = new Date();

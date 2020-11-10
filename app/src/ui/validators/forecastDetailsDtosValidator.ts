@@ -1,7 +1,7 @@
 import * as Validation from "./common";
 import { Results } from "../validation/results";
 import { Result } from "../validation/result";
-import { ClaimDto, PartnerDto } from "@framework/types";
+import { ClaimDetailsSummaryDto, ClaimDto, ForecastDetailsDTO, GOLCostDto, PartnerDto } from "@framework/types";
 import { NestedResult } from "@ui/validation";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 

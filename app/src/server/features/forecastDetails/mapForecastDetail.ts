@@ -1,5 +1,5 @@
 import { ISalesforceProfileDetails } from "../../repositories";
-import { IContext } from "@framework/types";
+import { ForecastDetailsDTO, IContext } from "@framework/types";
 import { SALESFORCE_DATE_FORMAT } from "../common";
 
 const mapCommon = (context: IContext, forecastDetail: ISalesforceProfileDetails): Pick<ForecastDetailsDTO, Exclude<keyof ForecastDetailsDTO, "value">> => ({

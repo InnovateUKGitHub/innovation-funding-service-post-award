@@ -3,7 +3,7 @@ import { UpdateInitialForecastDetailsCommand } from "@server/features/forecastDe
 import { BadRequestError, ValidationError } from "@server/features/common/appError";
 import { ISalesforceProfileDetails } from "@server/repositories";
 import { GetByIdQuery } from "@server/features/partners";
-import { ProjectRole, SpendProfileStatus } from "@framework/dtos";
+import { ForecastDetailsDTO, ProjectRole, SpendProfileStatus } from "@framework/dtos";
 import { Authorisation } from "@framework/types";
 
 const mapProfileValue = (item: ISalesforceProfileDetails, value?: number): ForecastDetailsDTO => {

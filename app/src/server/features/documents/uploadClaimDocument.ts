@@ -1,7 +1,7 @@
 import { BadRequestError, CommandDocumentBase, ValidationError } from "@server/features/common";
 import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
 import { DocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
-import { Authorisation, ClaimDto, ClaimStatus, DocumentDescription, IContext, ProjectRole } from "@framework/types";
+import { Authorisation, ClaimDto, ClaimKey, ClaimStatus, DocumentDescription, IContext, ProjectRole } from "@framework/types";
 import mapClaim from "@server/features/claims/mapClaim";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
 import { UpdateClaimCommand } from "../claims";

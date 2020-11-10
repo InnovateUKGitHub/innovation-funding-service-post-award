@@ -1,4 +1,4 @@
-interface CostsSummaryForPeriodDto {
+export interface CostsSummaryForPeriodDto {
     costCategoryId: string;
     offerTotal: number;
     forecastThisPeriod: number;

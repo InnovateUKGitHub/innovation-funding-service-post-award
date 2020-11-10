@@ -1,4 +1,5 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
+import { ForecastDetailsDTO } from "@framework/dtos";
 
 export interface ISalesforceProfileDetails {
   Id: string;

@@ -9,6 +9,7 @@ import {
   IForecastDetailsDtosValidator,
   IForecastDetailsDtoValidator
 } from "@ui/validators/forecastDetailsDtosValidator";
+import { ForecastDetailsDTO, GOLCostDto } from "@framework/dtos";
 
 export class InitialForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> implements IForecastDetailsDtosValidator {
 

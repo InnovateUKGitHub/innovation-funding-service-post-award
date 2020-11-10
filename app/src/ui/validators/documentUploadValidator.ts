@@ -8,6 +8,7 @@ import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/do
 import { getAllEnumValues } from "@shared/enumHelper";
 import { DocumentDescription } from "@framework/constants";
 import { IAppOptions } from "@framework/types/IAppOptions";
+import { IFileWrapper } from "@framework/types";
 
 const permittedFileTypeErrorMessage = (file: IFileWrapper) => {
   return `You cannot upload '${file.fileName}' because it is the wrong file type.`;

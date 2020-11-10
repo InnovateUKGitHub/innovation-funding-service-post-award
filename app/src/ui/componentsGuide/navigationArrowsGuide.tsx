@@ -6,7 +6,7 @@ import {rootReducer} from "../redux/reducers";
 import { RouterProvider } from "react-router5";
 import createRouter from "router5";
 import browserPluginFactory from "router5/plugins/browser";
-import { ILinkInfo } from "@framework/types";
+import { IGuide, ILinkInfo } from "@framework/types";
 
 const route = { name: "test", path: "/components" } as any;
 const router = createRouter([route]).usePlugin(browserPluginFactory({ useHash: false }));

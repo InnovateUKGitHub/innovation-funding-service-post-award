@@ -3,7 +3,7 @@ import React from "react";
 import { ProjectContact } from "../../src/ui/components/projectContact";
 
 import { mount, shallow } from "enzyme";
-import { PartnerDto } from "@framework/dtos";
+import { PartnerDto, ProjectContactDto } from "@framework/dtos";
 import { createDto } from "@framework/util";
 
 describe("ProjectMember", () => {

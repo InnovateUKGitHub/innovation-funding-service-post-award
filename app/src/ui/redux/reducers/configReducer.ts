@@ -1,5 +1,6 @@
 import { RootActions } from "../actions/root";
 import { IAppOptions } from "@framework/types/IAppOptions";
+import { IFeatureFlags } from "@framework/types";
 
 export interface IClientConfig {
   ifsRoot: string;

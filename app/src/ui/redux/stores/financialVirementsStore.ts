@@ -4,6 +4,7 @@ import { LoadingStatus, Pending } from "@shared/pending";
 import { NotFoundError } from "@server/features/common";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { FinancialVirementDtoValidator } from "@ui/validators";
+import { FinancialVirementDto } from "@framework/dtos";
 
 export class FinancialVirementsStore extends StoreBase {
   private getKey(projectId: string, pcrId: string, pcrItemId: string) {

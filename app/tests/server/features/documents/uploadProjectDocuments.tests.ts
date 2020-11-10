@@ -3,7 +3,7 @@
 import { TestContext } from "../../testContextProvider";
 import { UploadProjectDocumentCommand } from "@server/features/documents/uploadProjectDocument";
 import { ValidationError } from "@server/features/common/appError";
-import { Authorisation, DocumentDescription, ProjectRole } from "@framework/types";
+import { Authorisation, DocumentDescription, IFileWrapper, ProjectRole } from "@framework/types";
 import { TestFileWrapper } from "../../testData";
 
 describe("UploadProjectDocumentCommand", () => {
