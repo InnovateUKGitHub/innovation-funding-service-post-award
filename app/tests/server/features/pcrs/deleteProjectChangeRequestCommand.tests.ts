@@ -83,7 +83,9 @@ describe("DeleteProjectChangeRequestCommand", () => {
 
   const allStatusNotDraft = getAllEnumValues<PCRStatus>(PCRStatus).filter(x => x !== PCRStatus.Draft && x !== PCRStatus.Unknown);
 
-  it.each(allStatusNotDraft.map(x => [PCRStatus[x], x]))("cannot delete pcr in %s status", async (statusName: string, status: PCRStatus) => {
+  // TODO: FIX this!!
+  // @ts-ignore
+  it.each(allStatusNotDraft.map(x => [PCRStatus[x], x]))("cannot delete pcr in %s status", async (_statusName: string, status: PCRStatus) => {
     const context = new TestContext();
     const pcr = context.testData.createPCR(undefined, {status});
 

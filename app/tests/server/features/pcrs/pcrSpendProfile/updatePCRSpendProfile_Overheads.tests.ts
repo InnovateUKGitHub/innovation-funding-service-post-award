@@ -33,7 +33,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       };
       spendProfileDto.costs.push(cost);
       const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
-      await expect(await context.runCommand(command)).toBe(true);
+      await context.runCommand(command);
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
       expect(insertedSpendProfileCost).toMatchObject({ ...cost, value: 0, id: insertedSpendProfileCost.id });
     });
@@ -84,7 +84,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       spendProfileDto.costs.push(otherCost);
       spendProfileDto.costs.push(...labourCosts);
       const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
-      await expect(await context.runCommand(command)).toBe(true);
+      await context.runCommand(command);
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items.find(x => x.costCategoryId === costCategoryOverheads.id)!;
       expect(insertedSpendProfileCost).toMatchObject({ ...cost, value: roundCurrency((20/100)*(20*6 + 21*7)), id: insertedSpendProfileCost.id });
     });
@@ -103,7 +103,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       };
       spendProfileDto.costs.push(cost);
       const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
-      await expect(await context.runCommand(command)).toBe(true);
+      await context.runCommand(command);
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items.find(x => x.costCategoryId === costCategoryOverheads.id)!;
       expect(insertedSpendProfileCost).toMatchObject({ ...cost, id: insertedSpendProfileCost.id });
     });
@@ -148,12 +148,12 @@ describe("UpdatePCRSpendProfileCommand", () => {
         description: PCRSpendProfileOverheadRatePicklist.get(PCRSpendProfileOverheadRate.Calculated)!.label || null,
         overheadRate: PCRSpendProfileOverheadRate.Calculated,
       } as PCRSpendProfileOverheadsCostDto);
-      await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
+      await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto));
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
       const cost = spendProfileDto.costs[0] as PCRSpendProfileOverheadsCostDto;
       cost.id = insertedSpendProfileCost.id;
       cost.value = 60;
-      await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
+      await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto));
       expect(context.repositories.pcrSpendProfile.Items).toHaveLength(1);
       const updatedCost = context.repositories.pcrSpendProfile.Items[0];
       expect(updatedCost.value).toBe(60);
@@ -195,7 +195,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       spendProfileDto.costs.push(cost);
       spendProfileDto.costs.push(...labourCosts);
       const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
-      await expect(await context.runCommand(command)).toBe(true);
+      await context.runCommand(command);
 
       const inserted = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
       inserted.costs.push({
@@ -208,7 +208,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         daysSpentOnProject: 10,
         grossCostOfRole: 24,
       });
-      await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, inserted))).toBe(true);
+      await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, inserted));
       const updatedSpendProfileCosts = context.repositories.pcrSpendProfile.Items.filter(x => x.costCategoryId === costCategoryOverheads.id);
       expect(updatedSpendProfileCosts).toHaveLength(1);
       expect(updatedSpendProfileCosts[0]).toMatchObject({ ...cost, value: roundCurrency((20/100)*(20*6 + 21*7 + 25*10)), id: updatedSpendProfileCosts[0].id });

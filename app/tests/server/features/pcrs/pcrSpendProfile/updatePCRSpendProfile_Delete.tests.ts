@@ -22,10 +22,10 @@ describe("UpdatePCRSpendProfileCommand", () => {
       grossCostOfRole: 100
     });
     const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
-    await expect(await context.runCommand(command)).toBe(true);
+    await context.runCommand(command);
     expect(context.repositories.pcrSpendProfile.Items).toHaveLength(1);
     spendProfileDto.costs = [];
-    await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
+    await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto));
     expect(context.repositories.pcrSpendProfile.Items).toHaveLength(0);
   });
 });

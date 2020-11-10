@@ -42,7 +42,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         description: "Something unexpected",
       } as PCRSpendProfileOtherCostsDto);
       const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
-      await expect(await context.runCommand(command)).toBe(true);
+      await context.runCommand(command);
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
       expect(insertedSpendProfileCost).toBeDefined();
       expect(insertedSpendProfileCost.id).toBeTruthy();
@@ -62,13 +62,13 @@ describe("UpdatePCRSpendProfileCommand", () => {
         costCategory: CostCategoryType.Other_Costs,
         description: "Whale watching in Iceland",
       } as PCRSpendProfileOtherCostsDto);
-      await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
+      await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto));
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
       const cost = spendProfileDto.costs[0] as PCRSpendProfileOtherCostsDto;
       cost.id = insertedSpendProfileCost.id;
       cost.value = 2500;
       cost.description = "Whale watching in Tadoussac";
-      await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
+      await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto));
       expect(insertedSpendProfileCost.value).toBe(2500);
       expect(insertedSpendProfileCost.description).toBe("Whale watching in Tadoussac");
     });
