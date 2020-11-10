@@ -49,7 +49,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         description: "Hammer",
       } as PCRSpendProfileMaterialsCostDto);
       const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
-      await expect(await context.runCommand(command)).toBe(true);
+      await context.runCommand(command);
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
       expect(insertedSpendProfileCost).toBeDefined();
       expect(insertedSpendProfileCost.id).toBeTruthy();
@@ -72,7 +72,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         costPerItem: 4,
         description: "Wrench",
       } as PCRSpendProfileMaterialsCostDto);
-      await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
+      await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto));
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
       const cost = spendProfileDto.costs[0] as PCRSpendProfileMaterialsCostDto;
       cost.id = insertedSpendProfileCost.id;
@@ -80,7 +80,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       cost.costPerItem = 5;
       cost.description = "Spanner";
       cost.quantity = 6;
-      await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
+      await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto));
       expect(insertedSpendProfileCost.value).toBe(5*6);
       expect(insertedSpendProfileCost.description).toBe("Spanner");
       expect(insertedSpendProfileCost.costPerItem).toBe(5);

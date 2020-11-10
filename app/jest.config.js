@@ -1,9 +1,10 @@
 module.exports = {
+  verbose: true,
+  coverageDirectory: "dashboard/unit_testing",
   testURL: "http://localhost",
   snapshotSerializers: ["enzyme-to-json/serializer"],
-  setupFilesAfterEnv: ["./config/jest-setup.js"],
+  setupFilesAfterEnv: ["<rootDir>/config/jest-setup.js"],
   coveragePathIgnorePatterns: ["/node_modules/"],
-  coverageDirectory: "dashboard/unit_testing",
   collectCoverageFrom: [
     "src/server/features/**/*.{ts,tsx}",
     "src/ui/components/**/*.{ts,tsx}",
@@ -11,16 +12,14 @@ module.exports = {
     "src/ui/validators/**/*.{ts,tsx}",
   ],
   coverageReporters: ["text", "html", "lcov"],
+  transformIgnorePatterns: ["<rootDir>/node_modules/"],
   transform: {
     "^.+\\.tsx?$": "ts-jest",
   },
   testRegex: "(/tests/.*(tests|spec))\\.tsx?$",
   moduleFileExtensions: ["ts", "tsx", "js"],
   testResultsProcessor: "jest-bamboo-reporter",
-  watchPlugins: [
-    "jest-watch-typeahead/filename",
-    "jest-watch-typeahead/testname",
-  ],
+  watchPlugins: ["jest-watch-typeahead/filename", "jest-watch-typeahead/testname"],
   moduleNameMapper: {
     "@server/(.*)": "<rootDir>/src/server/$1",
     "@shared/(.*)": "<rootDir>/src/shared/$1",

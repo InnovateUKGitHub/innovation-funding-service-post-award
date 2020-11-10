@@ -249,7 +249,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
     const item = dto.items[0] as PCRItemForPartnerAdditionDto;
     item.status = PCRItemStatus.Complete;
-    await expect(await context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).toBe(true);
+    await context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto));
     const updated = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
     const updatedItem = updated.items[0] as PCRItemForPartnerAdditionDto;
     expect(updatedItem.status).toEqual(PCRItemStatus.Complete);
@@ -310,7 +310,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     ];
 
     const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
-    await expect(await context.runCommand(command)).toBe(true);
+    await context.runCommand(command);
     const updated = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
     const updatedItem = updated.items[0] as PCRItemForPartnerAdditionDto;
     expect(updatedItem.contact1ProjectRole).toEqual(PCRContactRole.FinanceContact);
@@ -359,7 +359,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
         grossCostOfRole: 200
       });
       const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
-      await expect(await context.runCommand(command)).toBe(true);
+      await context.runCommand(command);
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
       expect(insertedSpendProfileCost).toBeDefined();
       expect(insertedSpendProfileCost.id).toBeTruthy();

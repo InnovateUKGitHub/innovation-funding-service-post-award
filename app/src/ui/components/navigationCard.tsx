@@ -49,6 +49,8 @@ export class NavigationCardsGrid extends React.Component<NavigationCardsGridProp
     let current = 0;
     const results = [];
     while (current < children.length) {
+      // TODO: FIX this!!
+      // @ts-ignore
       results.push(this.renderRow(children.slice(current, current + 3), Math.floor(current / 3)));
       current = current + 3;
     }

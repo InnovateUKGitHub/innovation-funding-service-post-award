@@ -63,7 +63,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         utilisation: 10,
       } as PCRSpendProfileCapitalUsageCostDto);
       const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
-      await expect(await context.runCommand(command)).toBe(true);
+      await context.runCommand(command);
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
       expect(insertedSpendProfileCost).toBeDefined();
       expect(insertedSpendProfileCost.id).toBeTruthy();
@@ -92,7 +92,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         residualValue: 200,
         utilisation: 10,
       } as PCRSpendProfileCapitalUsageCostDto);
-      await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
+      await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto));
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
       const cost = spendProfileDto.costs[0] as PCRSpendProfileCapitalUsageCostDto;
       cost.id = insertedSpendProfileCost.id;
@@ -103,7 +103,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       cost.netPresentValue = 350;
       cost.residualValue = 100;
       cost.utilisation = 5;
-      await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
+      await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto));
       expect(insertedSpendProfileCost.value).toBe((5/100)*(350-100));
       expect(insertedSpendProfileCost.capitalUsageType).toBe(PCRSpendProfileCapitalUsageType.Existing);
       expect(insertedSpendProfileCost.description).toBe("CBA");

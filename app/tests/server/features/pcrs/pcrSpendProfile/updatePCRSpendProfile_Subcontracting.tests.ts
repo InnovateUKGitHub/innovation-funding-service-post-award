@@ -50,7 +50,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         subcontractorRoleAndDescription: "Developer",
       } as PCRSpendProfileSubcontractingCostDto);
       const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
-      await expect(await context.runCommand(command)).toBe(true);
+      await context.runCommand(command);
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
       expect(insertedSpendProfileCost).toBeDefined();
       expect(insertedSpendProfileCost.id).toBeTruthy();
@@ -73,7 +73,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         subcontractorRoleAndDescription: "Developer",
         subcontractorCountry: "Spain"
       } as PCRSpendProfileSubcontractingCostDto);
-      await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
+      await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto));
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
       const cost = spendProfileDto.costs[0] as PCRSpendProfileSubcontractingCostDto;
       cost.id = insertedSpendProfileCost.id;
@@ -81,7 +81,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       cost.description = "Website";
       cost.subcontractorRoleAndDescription = "Tester";
       cost.subcontractorCountry = "Spain";
-      await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
+      await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto));
       expect(insertedSpendProfileCost.value).toBe(2102);
       expect(insertedSpendProfileCost.description).toBe("Website");
       expect(insertedSpendProfileCost.subcontractorRoleAndDescription).toBe("Tester");

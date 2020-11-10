@@ -51,7 +51,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
                 grossCostOfRole: 200
             } as PCRSpendProfileLabourCostDto);
             const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
-            await expect(await context.runCommand(command)).toBe(true);
+            await context.runCommand(command);
             const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
             expect(insertedSpendProfileCost).toBeDefined();
             expect(insertedSpendProfileCost.id).toBeTruthy();
@@ -78,7 +78,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
                 description: "Queen",
                 grossCostOfRole: 100
             } as PCRSpendProfileLabourCostDto);
-            await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
+            await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto));
             const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
             const cost = spendProfileDto.costs[0] as PCRSpendProfileLabourCostDto;
             cost.id = insertedSpendProfileCost.id;
@@ -87,7 +87,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
             cost.description = "Queenie";
             cost.daysSpentOnProject = 5;
             cost.ratePerDay = 6;
-            await expect(await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).toBe(true);
+            await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto));
             expect(insertedSpendProfileCost.value).toBe(30);
             expect(insertedSpendProfileCost.ratePerDay).toBe(6);
             expect(insertedSpendProfileCost.daysSpentOnProject).toBe(5);

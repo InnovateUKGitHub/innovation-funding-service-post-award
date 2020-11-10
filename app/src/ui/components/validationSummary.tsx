@@ -67,4 +67,4 @@ export function ValidationSummary({ validation, compressed }: Props) {
       </div>
     </div>
   );
-};
+}

@@ -41,7 +41,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
             spendProfileDto.costs = [cost];
 
             const command = new UpdatePCRSpendProfileCommand(project.Id, pcrItem.id, spendProfileDto);
-            await expect(await context.runCommand(command)).toBe(true);
+            await context.runCommand(command);
 
             const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
             expect(insertedSpendProfileCost).toBeDefined();
@@ -77,7 +77,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
             spendProfileDto.costs = [directlyIncurredCost, exceptionsEquipmentCost];
 
             const command = new UpdatePCRSpendProfileCommand(project.Id, pcrItem.id, spendProfileDto);
-            await expect(await context.runCommand(command)).toBe(true);
+            await context.runCommand(command);
 
             const insertedItems = context.repositories.pcrSpendProfile.Items;
             expect(insertedItems).toHaveLength(2);
@@ -153,7 +153,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
             spendProfileDto.costs = [cost];
 
             const command = new UpdatePCRSpendProfileCommand(project.Id, pcrItem.id, spendProfileDto);
-            await expect(await context.runCommand(command)).toBe(true);
+            await context.runCommand(command);
         });
         it("should allow an academic cost with null value", async () => {
             const {context, project, pcrItem, spendProfileDto} = await setup();
@@ -170,7 +170,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
             }];
 
             const command = new UpdatePCRSpendProfileCommand(project.Id, pcrItem.id, spendProfileDto);
-            await expect(await context.runCommand(command)).toBe(true);
+            await context.runCommand(command);
 
             const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
             expect(insertedSpendProfileCost).toBeDefined();
