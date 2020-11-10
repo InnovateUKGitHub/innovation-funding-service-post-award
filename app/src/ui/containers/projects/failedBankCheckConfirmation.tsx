@@ -21,7 +21,7 @@ class FailedBankCheckConfirmationComponent extends ContainerBase<FailedBankCheck
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={projectSetupRoute}> <ACC.Content value={x => x.failedBankCheckConfirmation.backLink} /></ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title project={project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
         project={project}
       >
         <ACC.Section qa="guidance">

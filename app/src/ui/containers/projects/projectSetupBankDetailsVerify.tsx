@@ -39,7 +39,7 @@ class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<ProjectSetupB
         }
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title project={project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
       >
         {this.renderGuidance()}
         <ACC.Section>

@@ -31,7 +31,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
 
     return (
       <ACC.Page
-        pageTitle={<ACC.Projects.Title project={data.project} />}
+        pageTitle={<ACC.Projects.Title {...data.project} />}
         backLink={<ACC.BackLink route={backLink}>{backText}</ACC.BackLink>}
         project={data.project}
         partner={data.partner}

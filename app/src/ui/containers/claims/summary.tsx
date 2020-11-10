@@ -71,7 +71,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
         backLink={this.renderBackLink(data)}
         error={data.editor.error}
         validator={data.editor.validator}
-        pageTitle={<ACC.Projects.Title project={data.project} />}
+        pageTitle={<ACC.Projects.Title {...data.project} />}
       >
         {this.renderWarningMessage(totalCostsClaimed)}
         <ACC.Section qa="claimSummaryForm" title={<ACC.Claims.ClaimPeriodDate claim={data.claim} />}>

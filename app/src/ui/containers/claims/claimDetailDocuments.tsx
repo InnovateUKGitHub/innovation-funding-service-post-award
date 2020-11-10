@@ -80,7 +80,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
         backLink={<ACC.BackLink route={back}><ACC.Content value={x => x.claimDetailDocuments.backLink(costCategory.name)}/></ACC.BackLink>}
         error={(editor.error)}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title project={project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
       >
         <ACC.Renderers.SimpleString qa="guidanceText"><ACC.Content value={x => x.claimDetailDocuments.messages.documentDetailGuidance}/></ACC.Renderers.SimpleString>
         <ACC.Renderers.Messages messages={this.props.messages} />

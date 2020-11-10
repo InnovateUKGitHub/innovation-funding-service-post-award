@@ -68,7 +68,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
         backLink={<ACC.BackLink route={back}><ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.backLink(costCategory.name)}/></ACC.BackLink>}
         error={(editor.error)}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title project={project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
         {this.renderForm(editor)}

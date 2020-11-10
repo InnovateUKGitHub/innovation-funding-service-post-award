@@ -35,7 +35,7 @@ class Component extends ContainerBase<MonitoringReportCreateParams, Data, Callba
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}><ACC.Content value={(x) => x.monitoringReportsCreate.backLink} /></ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title project={project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
         validator={editor.validator}
         error={editor.error}
       >

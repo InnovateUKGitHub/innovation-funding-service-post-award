@@ -34,7 +34,7 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     return (
       <ACC.Page
         backLink={<ACC.Projects.ProjectBackLink project={project} routes={this.props.routes} />}
-        pageTitle={<ACC.Projects.Title project={project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
         project={project}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />

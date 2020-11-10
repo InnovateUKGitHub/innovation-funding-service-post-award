@@ -58,7 +58,7 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={stepRoute}><ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.backLink}/></ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title project={project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
         project={project}
         validator={editor.validator}
         error={editor.error}

@@ -36,7 +36,7 @@ class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
         backLink={<ACC.BackLink route={this.props.routes.forecastDetails.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}><ACC.Content value={x => x.forecastsUpdate.backLink}/></ACC.BackLink>}
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title project={combined.project} />}
+        pageTitle={<ACC.Projects.Title {...combined.project} />}
       >
         {(combined.claim && combined.claim.isFinalClaim) && <ACC.ValidationMessage messageType="info" message={x => x.forecastsUpdate.messages.finalClaim}/>}
         <ACC.Section title="" qa="partner-forecast" >

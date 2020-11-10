@@ -34,7 +34,7 @@ class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
 
     return (
       <ACC.Page
-        pageTitle={<ACC.Projects.Title project={project}/>}
+        pageTitle={<ACC.Projects.Title {...project}/>}
         backLink={<ACC.Projects.ProjectBackLink project={project} routes={this.props.routes}/>}
         project={project}
       >

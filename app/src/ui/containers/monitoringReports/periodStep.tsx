@@ -35,7 +35,7 @@ class Component extends ContainerBase<MonitoringReportPreparePeriodParams, Data,
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={this.props.routes.monitoringReportWorkflow.getLink({ projectId: this.props.projectId, id: this.props.id, mode: "prepare", step: undefined })}><ACC.Content value={(x) => x.monitoringReportsPeriodStep.backLink} /></ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title project={project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
         validator={editor.validator}
         error={editor.error}
       >

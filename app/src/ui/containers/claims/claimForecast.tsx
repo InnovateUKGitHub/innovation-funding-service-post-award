@@ -62,7 +62,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
         backLink={<ACC.BackLink route={this.props.routes.claimDocuments.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}><ACC.Content value={x => x.claimForecast.backLink}/></ACC.BackLink>}
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title project={combined.project} />}
+        pageTitle={<ACC.Projects.Title {...combined.project} />}
       >
         <ACC.Section qa="partner-name">
           <ACC.Renderers.AriaLive>

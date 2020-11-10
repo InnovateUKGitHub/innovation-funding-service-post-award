@@ -36,7 +36,7 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.projectChangeRequestId })}>Back to requests</ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title project={project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
         project={project}
         validator={editor.validator}
         error={editor.error}

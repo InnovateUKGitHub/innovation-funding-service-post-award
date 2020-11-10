@@ -101,7 +101,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     return (
       <ACC.Page
         backLink={this.getBackLink()}
-        pageTitle={<ACC.Projects.Title project={project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
         project={project}
         validator={validation}
         error={editor.error || documentsEditor.error}

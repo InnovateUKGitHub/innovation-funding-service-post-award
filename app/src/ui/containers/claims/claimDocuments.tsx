@@ -59,7 +59,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
 
     return (
       <ACC.Page
-        pageTitle={<ACC.Projects.Title project={project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
         error={(editor.error)}
         validator={editor.validator}
         backLink={

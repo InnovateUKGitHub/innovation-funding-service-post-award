@@ -35,7 +35,7 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
     const DeleteForm = ACC.TypedForm<Dtos.MonitoringReportDto>();
     return (
       <ACC.Page
-        pageTitle={<ACC.Projects.Title project={project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
         backLink={<ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}><ACC.Content value={(x) => x.monitoringReportsDelete.backLink} /></ACC.BackLink>}
         error={editor.error}
       >

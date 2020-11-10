@@ -71,7 +71,7 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
     return (
       <ACC.Page
         backLink={this.getBackLink()}
-        pageTitle={<ACC.Projects.Title project={project}/>}
+        pageTitle={<ACC.Projects.Title {...project}/>}
         project={project}
         validator={[editor.validator, documentsEditor.validator]}
         error={editor.error || documentsEditor.error}
