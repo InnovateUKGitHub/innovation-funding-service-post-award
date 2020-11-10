@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Footer config useExternalContent should return with content 1`] = `
+Object {
+  "crownCopyrightLink": Object {
+    "children": "stub-content-crownCopyright",
+    "data-qa": "crown-copyright-link",
+    "href": "https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/",
+  },
+  "govLicenseLinkPart1": Object {
+    "children": "stub-content-govLicenseLinkPart1",
+    "data-qa": "govLicenseLinkPart1",
+  },
+  "govLicenseLinkPart2": Object {
+    "children": "stub-content-govLicenseLinkPart2",
+    "data-qa": "license-link",
+    "href": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+  },
+  "govLicenseLinkPart3": Object {
+    "children": "stub-content-govLicenseLinkPart3",
+    "data-qa": "govLicenseLinkPart3",
+  },
+  "moreAboutCookies": Object {
+    "children": "stub-content-cookieFindOutMore",
+    "data-qa": "more-about-cookies-text",
+    "href": "https://apply-for-innovation-funding.service.gov.uk/info/cookies",
+  },
+  "title": Object {
+    "children": "stub-content-supportLinks",
+    "data-qa": "footer-title",
+  },
+  "usesCookie": Object {
+    "children": "stub-content-explainCookies",
+    "data-qa": "uses-cookies",
+  },
+}
+`;
