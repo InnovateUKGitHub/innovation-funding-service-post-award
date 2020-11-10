@@ -10,7 +10,7 @@ export * from "./phaseBanner";
 export * from "./section";
 export * from "./sectionPanel";
 export * from "./textHint";
-export * from "./listSection";
+export * from "./listItem";
 export * from "./readonlyLabel";
 export * from "./tabs";
 export * from "./unorderedList";
