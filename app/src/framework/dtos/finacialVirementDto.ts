@@ -1,4 +1,4 @@
-interface FinancialVirementDto {
+export interface FinancialVirementDto {
   pcrItemId: string;
   costsClaimedToDate: number;
 
@@ -15,7 +15,7 @@ interface FinancialVirementDto {
   partners: PartnerVirementsDto[];
 }
 
-interface PartnerVirementsDto {
+export interface PartnerVirementsDto {
   partnerId: string;
   costsClaimedToDate: number;
 
@@ -32,7 +32,7 @@ interface PartnerVirementsDto {
   virements: CostCategoryVirementDto[];
 }
 
-interface CostCategoryVirementDto {
+export interface CostCategoryVirementDto {
   costCategoryId: string;
   costCategoryName: string;
   costsClaimedToDate: number;

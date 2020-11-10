@@ -1,4 +1,5 @@
 import { roundCurrency, sum } from "@framework/util";
+import { CostCategoryVirementDto } from "@framework/dtos";
 
 export const calculateNewEligibleCosts = (virements: CostCategoryVirementDto[]) => {
   return roundCurrency(sum(virements, v => v.newEligibleCosts));

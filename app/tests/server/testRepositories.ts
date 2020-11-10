@@ -4,12 +4,14 @@ import * as Repositories from "@server/repositories";
 import { FileTypeNotAllowedError } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import {
+  ClaimDetailKey,
   ClaimStatus,
   DocumentDescription,
   IPicklistEntry,
   IRepositories,
   MonitoringReportStatus,
-  PCRStatus, TypeOfAid
+  PCRStatus,
+  TypeOfAid
 } from "@framework/types";
 import { TestFileWrapper } from "./testData";
 import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";

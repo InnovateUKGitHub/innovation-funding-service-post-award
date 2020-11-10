@@ -1,3 +1,5 @@
+import { IFileWrapper } from "@framework/types";
+
 const options = {
   minimumFractionDigits: 0,
   maximumFractionDigits: 2

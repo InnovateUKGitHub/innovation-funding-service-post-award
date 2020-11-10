@@ -10,6 +10,7 @@ import {
   ContactsTable,
   IContactsTable,
 } from "@ui/components/partners/contactsTable";
+import { ProjectContactDto } from "@framework/dtos";
 
 const TestProviders: React.FunctionComponent = (props) => {
   const testStores = {

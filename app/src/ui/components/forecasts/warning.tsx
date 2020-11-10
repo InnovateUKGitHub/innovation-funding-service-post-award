@@ -1,6 +1,6 @@
 import React from "react";
 import { ValidationMessage } from "../validationMessage";
-import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { ClaimDetailsSummaryDto, ClaimDto, ForecastDetailsDTO, GOLCostDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { IEditorStore } from "@ui/redux";
 import { ForecastDetailsDtosValidator } from "@ui/validators";
 import { AriaLive } from "../renderers/ariaLive";

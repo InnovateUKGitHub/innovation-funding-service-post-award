@@ -1,6 +1,6 @@
 import React from "react";
 import { Email } from "./renderers/email";
-import { PartnerDto } from "@framework/dtos";
+import { PartnerDto, ProjectContactDto } from "@framework/dtos";
 import { PartnerName } from "@ui/components/partners";
 import { Section } from "@ui/components/layout";
 import { SimpleString } from "@ui/components/renderers";

@@ -12,6 +12,7 @@ import {
   ClaimStatus,
   DocumentDescription,
   IClientUser,
+  IFileWrapper,
   PCRPartnerType,
   PCRProjectRole,
   TypeOfAid

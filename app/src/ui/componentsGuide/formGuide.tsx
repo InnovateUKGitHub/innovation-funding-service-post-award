@@ -2,6 +2,8 @@ import React from "react";
 import { TypedForm } from "../components/form";
 import { Json } from "../components/renderers/json";
 import { range } from "../../shared/range";
+import { IFileWrapper } from "@framework/types";
+import { IGuide } from "@framework/types";
 
 export const formGuide: IGuide = {
     name: "Forms",

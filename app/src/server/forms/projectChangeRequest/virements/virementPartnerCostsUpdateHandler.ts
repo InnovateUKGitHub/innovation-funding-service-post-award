@@ -1,6 +1,6 @@
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import { FinancialVirementEditPartnerLevelRoute, FinancialVirementParams, PCRPrepareItemRoute, VirementCostsParams } from "@ui/containers";
-import { IContext, ILinkInfo } from "@framework/types";
+import { FinancialVirementDto, IContext, ILinkInfo } from "@framework/types";
 import { GetFinancialVirementQuery } from "@server/features/financialVirements/getFinancialVirementQuery";
 import { BadRequestError } from "@server/features/common";
 import { UpdateFinancialVirementCommand } from "@server/features/financialVirements/updateFinancialVirementCommand";

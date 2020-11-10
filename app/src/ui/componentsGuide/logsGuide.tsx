@@ -1,6 +1,7 @@
 import React from "react";
 import { LogItem, Logs } from "@ui/components/logs";
 import { DateTime } from "luxon";
+import { IGuide } from "@framework/types";
 
 const data: LogItem[] = [
   { newStatusLabel: "Approved", createdDate: DateTime.local().minus({ days: 1 }).toJSDate(), comments: "", createdBy: "Shane" },

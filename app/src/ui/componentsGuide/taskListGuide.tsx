@@ -7,7 +7,8 @@ import { createStore } from "redux";
 import { rootReducer } from "@ui/redux";
 import { RouterProvider } from "react-router5";
 import { Provider } from "react-redux";
-import { Result, Results } from "@ui/validation";
+import { Result } from "@ui/validation";
+import { IGuide } from "@framework/types";
 
 const route = { name: "home", routeName: "home", path: "/" } as any;
 const router = createRouter([route]).usePlugin(browserPluginFactory({ useHash: false }));

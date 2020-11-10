@@ -2,6 +2,7 @@ import React from "react";
 
 import { Content } from "@content/content";
 import { ContentProvider, StoresProvider } from "@ui/redux";
+import { IFeatureFlags } from "@framework/types";
 
 interface ITestBedProps {
   content: Partial<Content>;

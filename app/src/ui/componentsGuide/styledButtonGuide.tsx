@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "@ui/components/styledButton";
+import { IGuide } from "@framework/types";
 
 export const buttonGuide: IGuide = {
   name: "Button",

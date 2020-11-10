@@ -16,6 +16,7 @@ import { FormInputWidths } from "./inputs/baseInput";
 import { DropdownList } from "./inputs";
 import { ContentSelector } from "@content/content";
 import { Content } from "./content";
+import { IFileWrapper } from "@framework/types";
 
 interface SharedFormProps<T> {
   onChange?: (data: T) => void;

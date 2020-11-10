@@ -1,4 +1,6 @@
-interface ClaimDetailsSummaryDto {
+import { ClaimLineItemDto } from "@framework/types";
+
+export interface ClaimDetailsSummaryDto {
   partnerId: string;
   costCategoryId: string;
   periodId: number;
@@ -8,6 +10,6 @@ interface ClaimDetailsSummaryDto {
   comments: string | null;
 }
 
-interface ClaimDetailsDto extends ClaimDetailsSummaryDto {
+export interface ClaimDetailsDto extends ClaimDetailsSummaryDto {
   lineItems: ClaimLineItemDto[];
 }

@@ -1,6 +1,7 @@
 import { LogLevel, parseLogLevel } from "@framework/types/logLevel";
 import { IAppOptions } from "@framework/types/IAppOptions";
 import { isNumber } from "@framework/util";
+import { IFeatureFlags } from "@framework/types";
 
 const defaultCacheTimeout: number = 720;
 

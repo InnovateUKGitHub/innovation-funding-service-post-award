@@ -1,3 +1,5 @@
+import { IFileWrapper } from "@framework/types";
+
 export class ClientFileWrapper implements IFileWrapper {
   constructor(public readonly file: File) {
     this.fileName = file.name;

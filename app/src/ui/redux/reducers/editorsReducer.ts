@@ -3,7 +3,7 @@ import { actionTypes } from "redux-router5";
 import * as Validators from "@ui/validators";
 import { RootActions } from "@ui/redux/actions";
 import { Results } from "@ui/validation/results";
-import { ClaimDto, IAppError, MonitoringReportDto, PartnerDto } from "@framework/types";
+import { ClaimDetailsDto, ClaimDto, FinancialVirementDto, ForecastDetailsDTO, IAppError, MonitoringReportDto, PartnerDto } from "@framework/types";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";

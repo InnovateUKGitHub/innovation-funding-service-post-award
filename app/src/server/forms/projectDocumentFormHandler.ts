@@ -3,7 +3,7 @@ import { ProjectDocumentPageParams, ProjectDocumentsRoute } from "../../ui/conta
 import { UploadProjectDocumentCommand } from "../features/documents/uploadProjectDocument";
 import { Configuration } from "@server/features/common";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { DocumentDescription, IContext, ILinkInfo } from "@framework/types";
+import { DocumentDescription, IContext, IFileWrapper, ILinkInfo } from "@framework/types";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 

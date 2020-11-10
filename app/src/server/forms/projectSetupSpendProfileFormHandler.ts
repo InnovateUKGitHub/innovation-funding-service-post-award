@@ -11,6 +11,7 @@ import { ProjectSetupRoute, ProjectSetupSpendProfileParams, ProjectSetupSpendPro
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
 import { InitialForecastDetailsDtosValidator } from "@ui/validators/initialForecastDetailsDtosValidator";
 import { isNumber } from "@framework/util";
+import { ForecastDetailsDTO } from "@framework/dtos";
 
 // need to store isComplete in dto but as dto is an array the solution is to store isComplete on every entry
 interface Dto extends ForecastDetailsDTO {

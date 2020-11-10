@@ -1,5 +1,6 @@
 import React from "react";
 import { Markdown, SimpleString } from "../components/renderers";
+import { IGuide } from "@framework/types";
 
 export const renderersGuide: IGuide = {
     name: "Renderers",

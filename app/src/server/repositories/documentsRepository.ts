@@ -9,6 +9,7 @@ import { DocumentEntity } from "@framework/entities/document";
 import { DocumentDescriptionMapper, SalesforceDocumentMapper } from "@server/repositories/mappers/documentMapper";
 import { DocumentDescription } from "@framework/constants";
 import { DocumentFilter } from "@framework/types/DocumentFilter";
+import { IFileWrapper } from "@framework/types";
 
 export interface IDocumentsRepository {
   insertDocument(document: IFileWrapper, recordId: string, description?: DocumentDescription): Promise<string>;

@@ -3,6 +3,7 @@ import { ApiParams, ControllerBase } from "./controllerBase";
 import { GetFinancialVirementQuery } from "@server/features/financialVirements/getFinancialVirementQuery";
 import { UpdateFinancialVirementCommand } from "@server/features/financialVirements/updateFinancialVirementCommand";
 import { processDto } from "@shared/processResponse";
+import { FinancialVirementDto } from "@framework/dtos";
 
 export interface IFinancialVirement {
   get: (params: ApiParams<{ projectId: string, pcrId: string, pcrItemId: string }>) => Promise<FinancialVirementDto>;

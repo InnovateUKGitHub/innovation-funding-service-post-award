@@ -4,7 +4,7 @@ import { mount } from "enzyme";
 
 import { PartnersAndFinanceContacts } from "@ui/components/partnersAndFinanceContacts";
 import { getColumnValues } from "./helpers/tableHelpers";
-import { PartnerDto } from "@framework/types";
+import { PartnerDto, ProjectContactDto } from "@framework/types";
 import { ProjectContactLabels } from "@content/labels/projectContactLabels";
 import { ContentResult } from "@content/contentBase";
 import { ContentProvider } from "@ui/redux/contentProvider";
