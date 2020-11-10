@@ -1,5 +1,6 @@
 import React from "react";
 import { InsetText } from "../components/layout/insetText";
+import { IGuide } from "@framework/types";
 
 export const insetText: IGuide = {
     name: "InsetText",

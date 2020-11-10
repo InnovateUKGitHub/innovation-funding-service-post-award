@@ -1,7 +1,7 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { ProjectRole } from "@framework/types";
+import { ForecastDetailsDTO, ProjectRole } from "@framework/types";
 import { isNumber } from "@framework/util";
 import { Pending } from "@shared/pending";
 import { IEditorStore, StoresConsumer } from "@ui/redux";

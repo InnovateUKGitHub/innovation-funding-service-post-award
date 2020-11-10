@@ -1,4 +1,5 @@
 import { DocumentDescription } from "@framework/constants";
+import { IFileWrapper } from "@framework/types";
 
 export interface DocumentUploadDto {
   file: IFileWrapper | null;

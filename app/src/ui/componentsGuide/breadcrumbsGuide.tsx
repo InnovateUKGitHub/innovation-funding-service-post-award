@@ -6,6 +6,7 @@ import { RouterProvider } from "react-router5";
 import { Provider } from "react-redux";
 import createRouter from "router5";
 import browserPluginFactory from "router5/plugins/browser";
+import { IGuide } from "@framework/types";
 
 const links = [
   {

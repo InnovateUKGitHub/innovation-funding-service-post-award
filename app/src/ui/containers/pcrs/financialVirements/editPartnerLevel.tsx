@@ -4,7 +4,7 @@ import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
 import { FinancialVirementDtoValidator, PartnerVirementsDtoValidator } from "@ui/validators";
-import { PartnerDto, ProjectDto } from "@framework/dtos";
+import { FinancialVirementDto, PartnerDto, PartnerVirementsDto, ProjectDto } from "@framework/dtos";
 
 export interface FinancialVirementParams {
   projectId: string;

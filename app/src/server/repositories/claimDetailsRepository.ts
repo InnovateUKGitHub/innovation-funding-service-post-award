@@ -1,6 +1,7 @@
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 import { Connection } from "jsforce";
 import { ILogger } from "@server/features/common";
+import { ClaimDetailKey } from "@framework/types";
 
 export interface ISalesforceClaimDetails {
   Id: string;

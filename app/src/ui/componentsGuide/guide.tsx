@@ -38,6 +38,7 @@ import { breadcrumbsGuide } from "@ui/componentsGuide/breadcrumbsGuide";
 import { modalGuide } from "@ui/componentsGuide/modalGuide";
 import { listGuide } from "@ui/componentsGuide/listGuide";
 import { readonlyLabel } from "@ui/componentsGuide/readonlyLabelGuide";
+import { IGuide } from "@framework/types";
 
 const guides: IGuide[] = [
   accordionGuide,

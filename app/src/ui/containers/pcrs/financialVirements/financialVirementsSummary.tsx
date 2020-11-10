@@ -4,7 +4,7 @@ import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { MultiplePartnerFinancialVirementDtoValidator, PCRDtoValidator } from "@ui/validators";
-import { PartnerDto, PCRDto, PCRItemDto, PCRItemForMultiplePartnerFinancialVirementDto } from "@framework/dtos";
+import { FinancialVirementDto, PartnerDto, PartnerVirementsDto, PCRDto, PCRItemDto, PCRItemForMultiplePartnerFinancialVirementDto } from "@framework/dtos";
 import { PCRItemType } from "@framework/types";
 
 interface Props extends PcrSummaryProps<PCRItemForMultiplePartnerFinancialVirementDto, MultiplePartnerFinancialVirementDtoValidator, ""> {

@@ -10,7 +10,7 @@ import { ForecastDetailsDtosValidator } from "../../ui/validators";
 import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "../features/forecastDetails";
 import { GetAllProjectRolesForUser, GetByIdQuery } from "../features/projects";
 import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
-import { IContext, ILinkInfo, ProjectRole } from "@framework/types";
+import { ForecastDetailsDTO, IContext, ILinkInfo, ProjectRole } from "@framework/types";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 

@@ -1,5 +1,5 @@
 import { ISalesforceClaimLineItem } from "@server/repositories";
-import { IContext } from "@framework/types";
+import { ClaimLineItemDto, IContext } from "@framework/types";
 
 export default (context: IContext) => (item: ISalesforceClaimLineItem): ClaimLineItemDto => ({
   id: item.Id,

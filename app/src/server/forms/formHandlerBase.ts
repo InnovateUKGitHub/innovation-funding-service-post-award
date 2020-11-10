@@ -8,6 +8,7 @@ import { IContext } from "@framework/types/IContext";
 import { upload } from "./memoryStorage";
 import { EditorState, EditorStateKeys } from "@ui/redux";
 import { InferEditorStoreDto, InferEditorStoreValidator } from "@ui/redux/stores/storeBase";
+import { IFileWrapper } from "@framework/types";
 
 interface RouteInfo<TParams> {
   routeName: string;

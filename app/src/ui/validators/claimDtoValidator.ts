@@ -1,7 +1,7 @@
 import * as Validation from "./common";
 import { Results } from "../validation/results";
 import { Result } from "../validation/result";
-import { ClaimDto, ClaimStatus } from "@framework/types";
+import { ClaimDto, ClaimStatus, CostsSummaryForPeriodDto } from "@framework/types";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 

@@ -3,7 +3,7 @@ import { DateTime } from "luxon";
 import { TestContext } from "../../testContextProvider";
 import { UpdateForecastDetailsCommand } from "@server/features/forecastDetails";
 import { BadRequestError, ValidationError } from "@server/features/common/appError";
-import { ClaimFrequency, ClaimStatus } from "@framework/types";
+import { ClaimFrequency, ClaimStatus, ForecastDetailsDTO } from "@framework/types";
 import { ISalesforceProfileDetails } from "@server/repositories";
 
 const mapProfileValue = (item: ISalesforceProfileDetails, value?: number): ForecastDetailsDTO => {

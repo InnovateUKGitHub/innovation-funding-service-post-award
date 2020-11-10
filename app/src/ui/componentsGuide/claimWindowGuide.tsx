@@ -1,6 +1,7 @@
 import React from "react";
 import { ClaimWindow } from "../components/claims/claimWindow";
 import { DateTime } from "luxon";
+import { IGuide } from "@framework/types";
 
 const beforePeriodEndDate = DateTime.local().plus({months:1}).set({ day: 1 }).minus({days:1});
 const inPeriodEndDate = DateTime.local().set({ day: 1 }).minus({days:1});

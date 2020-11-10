@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, ModalLink, PrivateModal, Section } from "@ui/components";
 import { SimpleString } from "@ui/components/renderers";
 import { ModalConsumer, ModalProvider, ModalRegister } from "@ui/redux";
+import { IGuide } from "@framework/types";
 
 export const modalGuide: IGuide = {
   name: "Modal",

@@ -4,7 +4,7 @@ interface IStream {
   pipe<T extends NodeJS.WritableStream>(destination: T, options?: { end?: boolean; }): T;
 }
 
-interface DocumentSummaryDto {
+export interface DocumentSummaryDto {
   fileName: string;
   link: string;
   id: string;
@@ -14,12 +14,12 @@ interface DocumentSummaryDto {
   uploadedBy: string;
 }
 
-interface DocumentDescriptionDto {
+export interface DocumentDescriptionDto {
   id: DocumentDescription;
   label: string;
 }
 
-interface DocumentDto {
+export interface DocumentDto {
   fileName: string;
   fileType: string | null;
   contentLength: number;

@@ -2,7 +2,7 @@ import React from "react";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
-import { PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { PartnerDto, ProjectContactDto, ProjectDto, ProjectRole } from "@framework/types";
 import { StoresConsumer } from "@ui/redux";
 import { Content, PartnerName } from "../../components";
 

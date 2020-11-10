@@ -1,5 +1,5 @@
 import { CommandBase, ValidationError } from "@server/features/common";
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
+import { Authorisation, CostCategoryVirementDto, FinancialVirementDto, IContext, PartnerVirementsDto, ProjectRole } from "@framework/types";
 import { flatten } from "@framework/util/arrayHelpers";
 import { ISalesforceFinancialVirement } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";

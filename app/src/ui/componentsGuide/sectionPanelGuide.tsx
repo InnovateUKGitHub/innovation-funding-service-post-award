@@ -1,5 +1,6 @@
 import React from "react";
 import { SectionPanel } from "../components";
+import { IGuide } from "@framework/types";
 
 export const sectionPanelGuide: IGuide = {
     name: "Section Panel",

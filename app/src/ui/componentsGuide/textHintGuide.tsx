@@ -1,5 +1,6 @@
 import React from "react";
 import { TextHint} from "../components/layout/textHint";
+import { IGuide } from "@framework/types";
 
 export const textHint: IGuide = {
   name: "TextHint",

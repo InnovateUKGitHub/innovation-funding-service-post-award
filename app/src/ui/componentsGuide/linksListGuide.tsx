@@ -1,5 +1,6 @@
 import React from "react";
 import { LinksList } from "../components";
+import { IGuide } from "@framework/types";
 
 const links = [
     { url: "test1", text: "Innovate UK" },

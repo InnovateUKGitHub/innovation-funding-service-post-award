@@ -6,6 +6,7 @@ import {
 } from "@server/features/forecastDetails";
 import { processDto } from "@shared/processResponse";
 import { ApiParams, ControllerBase } from "./controllerBase";
+import { ForecastDetailsDTO } from "@framework/dtos";
 
 export interface IForecastDetailsApi {
   getAllByPartnerId: (params: ApiParams<{ partnerId: string }>) => Promise<ForecastDetailsDTO[]>;

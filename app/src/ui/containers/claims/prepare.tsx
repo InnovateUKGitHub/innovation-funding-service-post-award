@@ -4,7 +4,7 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
-import { ClaimDto, ClaimStatusChangeDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { ClaimDto, ClaimStatusChangeDto, CostsSummaryForPeriodDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { StoresConsumer } from "@ui/redux";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 

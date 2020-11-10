@@ -2,7 +2,7 @@ import { BadRequestError, CommandBase, ValidationError } from "@server/features/
 import { ISalesforceProfileDetails } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { GetAllForecastsGOLCostsQuery } from "@server/features/claims";
-import { Authorisation, IContext, PartnerDto, PartnerStatus, ProjectRole, SpendProfileStatus } from "@framework/types";
+import { Authorisation, ForecastDetailsDTO, IContext, PartnerDto, PartnerStatus, ProjectRole, SpendProfileStatus } from "@framework/types";
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
 import { GetByIdQuery } from "@server/features/partners";
 import { GetByIdQuery as GetProjectByIdQuery } from "@server/features/projects";

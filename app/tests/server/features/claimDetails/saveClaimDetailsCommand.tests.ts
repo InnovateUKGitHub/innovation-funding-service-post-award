@@ -1,6 +1,6 @@
 import { TestContext } from "../../testContextProvider";
 import { BadRequestError, ValidationError } from "@server/features/common/appError";
-import { Authorisation, ProjectRole } from "@framework/types";
+import { Authorisation, ClaimDetailsDto, ClaimLineItemDto, ProjectRole } from "@framework/types";
 import { mapClaimDetails } from "@server/features/claimDetails/mapClaimDetails";
 import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetailsCommand";
 import { ISalesforceClaimDetails } from "@server/repositories";
