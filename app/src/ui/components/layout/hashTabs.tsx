@@ -54,19 +54,19 @@ export class HashTabs extends React.PureComponent<TabProps, State> {
 
     const selected = this.findSelectedItem();
     return (
-      <div className="govuk-tabs" data-module="govuk-tabs" data-qa={qa} ref={(e) => this.elem = e}>
+      <div className="govuk-tabs" data-module="govuk-tabs" ref={(e) => this.elem = e}>
         <h2 className="govuk-tabs__title">
           Contents
         </h2>
-        <ul className="govuk-tabs__list" role="tablist">
-          {tabList.map((item, index) => this.renderTabItem(item, selected.hash === item.hash, index))}
+        <ul className="govuk-tabs__list" data-qa={qa} role="tablist">
+          {tabList.map((item) => this.renderTabItem(item, selected.hash === item.hash))}
         </ul>
-        {tabList.map((item, index) => this.renderTabContents(item, selected.hash === item.hash, index))}
+        {tabList.map((item) => this.renderTabContents(item, selected.hash === item.hash))}
       </div>
     );
   }
 
-  private renderTabItem(item: HashTabItem, selected: boolean, index: number) {
+  private renderTabItem(item: HashTabItem, selected: boolean) {
     const tab = this.renderTab(item, selected);
     if (!tab) return null;
 
@@ -78,7 +78,7 @@ export class HashTabs extends React.PureComponent<TabProps, State> {
     );
 
     return (
-      <li role="presentation" className={classes} key={`tab-${index}`} data-qa={item.qa}>
+      <li key={`tab-${item.text}`} role="presentation" data-qa={item.qa} className={classes}>
         {tab}
       </li>
     );
@@ -89,11 +89,11 @@ export class HashTabs extends React.PureComponent<TabProps, State> {
     return <a href={`#${item.hash}`} className={classes} aria-selected={selected} role="tab">{item.text}</a>;
   }
 
-  private renderTabContents(item: HashTabItem, selected: boolean, index: number) {
+  private renderTabContents(item: HashTabItem, selected: boolean) {
     const classes = cn("govuk-tabs__panel", {"govuk-tabs__panel--hidden": !selected});
     return (
       <section key={item.hash} id={item.hash} className={classes}>
-        {this.props.messages !== undefined ? <Messages messages={this.props.messages}/> : null}
+        {this.props.messages && <Messages messages={this.props.messages}/>}
         {item.content}
       </section>
     );
