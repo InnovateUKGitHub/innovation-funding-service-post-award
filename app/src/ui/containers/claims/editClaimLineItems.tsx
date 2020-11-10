@@ -71,7 +71,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         backLink={<ACC.BackLink route={back}><ACC.Content value={x => x.editClaimLineItems.backLink}/></ACC.BackLink>}
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title project={project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
       >
         {this.renderNegativeClaimWarning(editor.data)}
 

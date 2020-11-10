@@ -40,7 +40,7 @@ class Component extends ContainerBase<FinancialVirementParams, Props, {}> {
     return (
       <ACC.Page
         backLink={this.getBackLink()}
-        pageTitle={<ACC.Projects.Title project={project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
         error={editor.error}
         validator={editor.validator}
       >

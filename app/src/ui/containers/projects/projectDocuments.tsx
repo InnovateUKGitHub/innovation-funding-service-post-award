@@ -62,7 +62,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
 
     return (
       <ACC.Page
-        pageTitle={<ACC.Projects.Title project={project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
         backLink={<ACC.Projects.ProjectBackLink project={project} routes={this.props.routes} />}
         validator={editor.validator}
         error={editor.error}

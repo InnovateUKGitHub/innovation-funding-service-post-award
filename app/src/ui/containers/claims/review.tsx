@@ -88,7 +88,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         backLink={<ACC.BackLink route={this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}><ACC.Content value={x => x.claimReview.backLink}/></ACC.BackLink>}
         error={data.editor.error}
         validator={[data.editor.validator, data.documentsEditor.validator]}
-        pageTitle={<ACC.Projects.Title project={data.project} />}
+        pageTitle={<ACC.Projects.Title {...data.project} />}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
         {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={x => x.claimReview.messages.finalClaim}/>}

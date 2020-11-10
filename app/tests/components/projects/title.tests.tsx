@@ -1,26 +1,26 @@
 import React from "react";
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
 
-import { Title } from "../../../src/ui/components/projects/title";
-import { IStores, StoresProvider } from "@ui/redux";
-import { ProjectDto } from "@framework/dtos";
+import { Title, TitleProps } from "../../../src/ui/components/projects/title";
+import TestBed from "../helpers/TestBed";
 
-describe("Title", () => {
-  it("should render with the correct title", () => {
-    const stores: IStores = {
-      navigation: {
-        getPageTitle: () => ({displayTitle: "", htmlTitle: ""})
-      }
-    } as IStores;
+describe("<Title />", () => {
+  const setup = (props: TitleProps) =>
+    render(
+      <TestBed>
+        <Title {...props} />
+      </TestBed>,
+    );
 
-    const project: Partial<ProjectDto> = {
-      projectNumber: "3",
-      title: "project title"
+  it("should render with required props", () => {
+    const stubProject: TitleProps = {
+      projectNumber: "000000",
+      title: "stub-title",
     };
+    const { queryByText } = setup(stubProject);
 
-    const result = <StoresProvider value={stores}><Title project={project as ProjectDto} /></StoresProvider>;
-    const wrapper = mount(result);
+    const expectedTitle = queryByText(`${stubProject.projectNumber} : ${stubProject.title}`);
 
-    expect(wrapper.text()).toContain("3 : project title");
+    expect(expectedTitle).toBeTruthy();
   });
 });

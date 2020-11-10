@@ -66,7 +66,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={backLink}>Back to claim</ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title project={project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
       >
         <ACC.Section>
           <ClaimLineItemsTable lineItems={claimDetails.lineItems} forecastDetail={forecastDetail} />

@@ -45,7 +45,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
         }
         error={editor.error}
         validator={[editor.validator, documentsEditor.validator]}
-        pageTitle={<ACC.Projects.Title project={project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
         {this.renderGuidance()}

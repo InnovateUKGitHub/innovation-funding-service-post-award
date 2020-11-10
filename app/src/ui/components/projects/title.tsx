@@ -2,10 +2,10 @@ import React from "react";
 import { ProjectDto } from "@framework/types";
 import { PageTitle } from "../layout/pageTitle";
 
-interface Props {
-  project: ProjectDto;
-}
+export type TitleProps = Pick<ProjectDto, "projectNumber" | "title">;
 
-export const Title: React.FunctionComponent<Props> = ({project}) => (
-  <PageTitle caption={`${project.projectNumber || ""} : ${project.title || ""}`} />
-);
+export function Title({ projectNumber, title }: TitleProps) {
+  const captionValue = `${projectNumber} : ${title}`;
+
+  return <PageTitle caption={captionValue} />;
+}

@@ -39,7 +39,7 @@ class Component extends ContainerBase<MonitoringReportWorkflowParams, Data, Call
     return (
       <ACC.Page
         backLink={this.getBackLink(workflow)}
-        pageTitle={<ACC.Projects.Title project={project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
         validator={workflow.getValidation(editor.validator)}
         error={editor.error}
       >

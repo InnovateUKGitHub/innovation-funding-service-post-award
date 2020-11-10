@@ -35,7 +35,7 @@ class PCRCreateComponent extends ContainerBase<CreateProjectChangeRequestParams,
         backLink={<ACC.BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>
           <ACC.Content value={x => x.pcrCreate.backLink}/>
         </ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title project={project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
         project={project}
         validator={editor.validator}
         error={editor.error}

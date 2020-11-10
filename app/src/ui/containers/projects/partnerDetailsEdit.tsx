@@ -45,7 +45,7 @@ class PartnerDetailsEditComponent extends ContainerBase<PartnerDetailsParams, Da
         return (
             <ACC.Page
                 backLink={<ACC.BackLink route={this.props.routes.partnerDetails.getLink({ id: this.props.id, partnerId: this.props.partnerId })} >Back to partner information</ACC.BackLink>}
-                pageTitle={<ACC.Projects.Title project={project} />}
+                pageTitle={<ACC.Projects.Title {...project} />}
                 error={editor.error}
                 validator={editor.validator}
                 project={project}

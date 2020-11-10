@@ -105,7 +105,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
             <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.backLink(costCategory.name)}/>
           </ACC.BackLink>
         )}
-        pageTitle={<ACC.Projects.Title project={project}/>}
+        pageTitle={<ACC.Projects.Title {...project}/>}
         project={project}
         validator={validator}
         error={editor.error}

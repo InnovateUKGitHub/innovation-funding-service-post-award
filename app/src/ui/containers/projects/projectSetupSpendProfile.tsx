@@ -41,7 +41,7 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
         backLink={<ACC.BackLink route={this.props.routes.projectSetup.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}><ACC.Content value={(x) => x.projectSetupSpendProfile.backLink} /></ACC.BackLink>}
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title project={combined.project} />}
+        pageTitle={<ACC.Projects.Title {...combined.project} />}
       >
         <ACC.Section qa="project-setup-spend-profile" >
           {this.renderGuidance()}

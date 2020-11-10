@@ -59,7 +59,7 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
         backLink={<ACC.BackLink route={this.getBackLink(data.project, data.partner)}><ACC.Content value={x => x.claimPrepare.backLink} /></ACC.BackLink>}
         error={data.editor.error}
         validator={data.editor.validator}
-        pageTitle={<ACC.Projects.Title project={data.project} />}
+        pageTitle={<ACC.Projects.Title {...data.project} />}
       >
         {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={x => x.claimPrepare.messages.finalClaim}/>}
         {this.renderDetailsSection(data)}
