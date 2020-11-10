@@ -1,6 +1,6 @@
 import React from "react";
 import { ValidationSummary } from "../components/validationSummary";
-import { Result } from "../validation/result";
+import { IGuide } from "@framework/types";
 import { Results } from "../validation/results";
 import * as Validation from "../validators/common";
 

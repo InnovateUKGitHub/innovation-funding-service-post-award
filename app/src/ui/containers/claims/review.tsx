@@ -5,10 +5,14 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
 import {
+  ClaimDetailsSummaryDto,
   ClaimDto,
   ClaimStatus,
   ClaimStatusChangeDto,
+  CostsSummaryForPeriodDto,
   DocumentDescription,
+  ForecastDetailsDTO,
+  GOLCostDto,
   PartnerDto,
   ProjectDto,
   ProjectRole

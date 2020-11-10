@@ -2,6 +2,7 @@ import { Stream } from "stream";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 import { ServerFileWrapper } from "@server/apis/controllerBase";
 import { DocumentFilter } from "@framework/types/DocumentFilter";
+import { IFileWrapper } from "@framework/types";
 
 export interface ISalesforceDocument {
   Id: string;

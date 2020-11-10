@@ -1,5 +1,6 @@
 import React from "react";
 import { Info } from "@ui/components";
+import { IGuide } from "@framework/types";
 
 export const info: IGuide = {
     name: "Info",

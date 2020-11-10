@@ -1,6 +1,6 @@
 import React from "react";
 import { TypedTable } from "./table";
-import { PartnerDto } from "@framework/types";
+import { PartnerDto, ProjectContactDto } from "@framework/types";
 import { PartnerName } from "@ui/components/partners";
 import { Content } from "@content/content";
 import { ProjectContactLabels } from "@content/labels/projectContactLabels";

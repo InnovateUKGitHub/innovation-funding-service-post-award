@@ -1,5 +1,6 @@
 import React from "react";
 import { UnorderedList } from "@ui/components";
+import { IGuide } from "@framework/types";
 
 export const listGuide: IGuide = {
     name: "List",

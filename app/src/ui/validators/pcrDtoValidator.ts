@@ -21,6 +21,7 @@ import {
 } from "@framework/dtos";
 import { PCRItemStatus, PCRItemType, PCROrganisationType, PCRProjectRole, PCRStatus } from "@framework/constants";
 import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
+import { IFeatureFlags } from "@framework/types";
 
 export class PCRDtoValidator extends Results<PCRDto> {
 

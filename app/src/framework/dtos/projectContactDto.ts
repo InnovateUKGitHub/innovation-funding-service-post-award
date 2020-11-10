@@ -1,4 +1,4 @@
-interface ProjectContactDto {
+export interface ProjectContactDto {
     id: string;
     name: string;
     role: "Monitoring officer" | "Project Manager" | "Finance contact" | "Innovation lead" | "IPM";

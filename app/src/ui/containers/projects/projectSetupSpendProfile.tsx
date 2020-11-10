@@ -1,7 +1,7 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { PartnerDto, ProjectRole, SpendProfileStatus } from "@framework/types";
+import { ForecastDetailsDTO, PartnerDto, ProjectRole, SpendProfileStatus } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";

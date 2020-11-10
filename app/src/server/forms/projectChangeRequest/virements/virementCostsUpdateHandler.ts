@@ -1,4 +1,4 @@
-import { IContext, ILinkInfo } from "@framework/types";
+import { FinancialVirementDto, IContext, ILinkInfo } from "@framework/types";
 import { BadRequestError } from "@server/features/common";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import { FinancialVirementEditRoute, PCRPrepareItemRoute, VirementCostsParams } from "@ui/containers";

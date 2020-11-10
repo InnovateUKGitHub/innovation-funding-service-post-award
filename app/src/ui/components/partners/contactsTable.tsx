@@ -4,6 +4,7 @@ import { Content as IContent } from "@content/content";
 import { ProjectContactLabels } from "@content/labels/projectContactLabels";
 import { SimpleString } from "../renderers";
 import { Content } from "../content";
+import { ProjectContactDto } from "@framework/dtos";
 
 export interface IContactsTable {
   contacts: ProjectContactDto[];

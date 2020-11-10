@@ -9,6 +9,7 @@ import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCate
 import { Params, UpdateForecastRoute } from "@ui/containers/forecasts/update";
 import { ForecastDetailsRoute } from "@ui/containers/forecasts/details";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { ForecastDetailsDTO } from "@framework/dtos";
 
 export class UpdateForecastFormHandler extends StandardFormHandlerBase<Params, "forecastDetails"> {
   constructor() {

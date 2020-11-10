@@ -2,6 +2,7 @@ import * as React from "react";
 import classNames from "classnames";
 import { BaseInput } from "./baseInput";
 import { ClientFileWrapper } from "../../../client/clientFileWrapper";
+import { IFileWrapper } from "@framework/types";
 
 interface FileUploadProps {
   name: string;

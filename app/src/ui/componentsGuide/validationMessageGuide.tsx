@@ -1,5 +1,6 @@
 import React from "react";
 import { ValidationMessage} from "../components";
+import { IGuide } from "@framework/types";
 
 export const validationMessageGuide: IGuide = {
     name: "Validation Message",

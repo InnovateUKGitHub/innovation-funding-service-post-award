@@ -1,6 +1,7 @@
 import React from "react";
 import { PageTitle } from "@ui/components";
 import { IStores, StoresProvider } from "@ui/redux";
+import { IGuide } from "@framework/types";
 
 const stores: IStores = {
     navigation: {

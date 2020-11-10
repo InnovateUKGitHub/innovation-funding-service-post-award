@@ -23,6 +23,7 @@ import { GetPartnerDocumentQuery } from "@server/features/documents/getPartnerDo
 import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummary";
 import { UploadPartnerDocumentCommand } from "@server/features/documents/uploadPartnerDocument";
 import { DeletePartnerDocumentCommand } from "@server/features/documents/deletePartnerDocument";
+import { ClaimDetailKey, ClaimKey } from "@framework/types";
 
 export interface IDocumentsApi {
   getClaimDocuments: (params: ApiParams<{ projectId: string, partnerId: string, periodId: number, description?: DocumentDescription }>) => Promise<DocumentSummaryDto[]>;

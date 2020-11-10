@@ -3,7 +3,7 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
 import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
-import { PartnerDto, ProjectDto } from "@framework/dtos";
+import { CostCategoryVirementDto, FinancialVirementDto, PartnerDto, ProjectDto } from "@framework/dtos";
 import { CostCategoryVirementDtoValidator, FinancialVirementDtoValidator } from "@ui/validators";
 import { createDto } from "@framework/util/dtoHelpers";
 import { roundCurrency } from "@framework/util";

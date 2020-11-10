@@ -3,6 +3,7 @@ import { processDto } from "@shared/processResponse";
 import { ApiParams, ControllerBase } from "./controllerBase";
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
 import { UpdateInitialForecastDetailsCommand } from "@server/features/forecastDetails";
+import { ForecastDetailsDTO } from "@framework/dtos";
 
 export interface IInitialForecastDetailsApi {
   getAllByPartnerId: (params: ApiParams<{ partnerId: string }>) => Promise<ForecastDetailsDTO[]>;

@@ -1,4 +1,4 @@
-import { DocumentDescription, IContext, ILinkInfo } from "@framework/types";
+import { DocumentDescription, IContext, IFileWrapper, ILinkInfo } from "@framework/types";
 import { Configuration } from "@server/features/common";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";

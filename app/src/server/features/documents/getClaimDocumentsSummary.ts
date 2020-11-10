@@ -1,4 +1,4 @@
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
+import { Authorisation, ClaimKey, IContext, ProjectRole } from "@framework/types";
 import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
 import { DocumentEntity } from "@framework/entities/document";
 import { DocumentFilter } from "@framework/types/DocumentFilter";

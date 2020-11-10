@@ -2,7 +2,7 @@ import { BadRequestError, CommandMultipleDocumentBase, ValidationError } from "@
 import {
   MultipleDocumentUpdloadDtoValidator
 } from "@ui/validators/documentUploadValidator";
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
+import { Authorisation, ClaimDetailKey, IContext, ProjectRole } from "@framework/types";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 export class UploadClaimDetailDocumentCommand extends CommandMultipleDocumentBase<string[]> {
