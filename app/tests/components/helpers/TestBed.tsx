@@ -6,6 +6,7 @@ import { IFeatureFlags } from "@framework/types";
 import { Content } from "@content/content";
 import { ContentProvider, IStores, StoresProvider } from "@ui/redux";
 import { RouterProvider } from "react-router5";
+import { RenderHookOptions } from "@testing-library/react-hooks";
 
 const route = { name: "test", path: "/test" } as any;
 const router = createRouter([route]).usePlugin(
@@ -33,6 +34,17 @@ export function TestBed({ content, stores, children }: ITestBedProps) {
     </RouterProvider>
   );
 }
+
+// TODO: Remove when upgrading tsc > 3.5.1
+type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
+
+type HookTestBedProps = Omit<ITestBedProps, "children">;
+
+export const hookTestBed = (props: HookTestBedProps) => ({
+  wrapper: (wrapperProps: ITestBedProps) => (
+    <TestBed {...props} {...wrapperProps} />
+  ),
+});
 
 export const stubStores = {
   config: {
