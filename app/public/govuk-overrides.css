@@ -306,18 +306,11 @@ div.card-link > a:focus {
   font-weight: normal;
 }
 
-.card-link__message--alert {
-  color: #ff0000;
-  font-weight: normal;
-}
-
-.card-link a:focus > .card-link__messages > .card-link__message,
-.card-link a:focus > .card-link__messages > .card-link__message--alert {
+.card-link a:focus > .card-link__messages > .card-link__message {
   color: #000000;
 }
 
-.card-link a:hover > .card-link__messages > .card-link__message,
-.card-link a:hover > .card-link__messages > .card-link__message--alert {
+.card-link a:hover > .card-link__messages > .card-link__message {
   color: #ffffff;
 }
 
