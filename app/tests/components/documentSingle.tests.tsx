@@ -1,48 +1,97 @@
-// tslint:disable:no-duplicate-string
 import React from "react";
-import { DocumentSingle, DocumentSingleProps } from "../../src/ui/components";
+import { mount } from "enzyme";
 
-import { mount, shallow } from "enzyme";
-import TestBed from "./helpers/TestBed";
+import { DocumentSingle, DocumentSingleProps } from "../../src/ui/components";
 import { findByQa } from "./helpers/find-by-qa";
+import TestBed from "./helpers/TestBed";
+
+type AnchorWithDataQa = { "data-qa": string } & React.DetailedHTMLProps<
+  React.AnchorHTMLAttributes<HTMLAnchorElement>,
+  HTMLAnchorElement
+>;
 
 describe("DocumentSingle", () => {
+  const stubContent = {
+    components: {
+      documentSingle: {
+        newWindow: { content: "stub-newWindowContent" },
+      },
+    },
+  };
 
-    const stubContent = {
-        components: {
-          documentSingle: {
-            newWindow: "stub-newWindowContent"
-          }
-        }
-      };
+  const defaultProps: DocumentSingleProps = {
+    document: {
+      link: "https://www.google.com/",
+      fileName: "stub-filename",
+    },
+  };
 
-    const setup = (props: DocumentSingleProps) => {
-        const shallowWrapper = shallow(<TestBed content={stubContent as any}><DocumentSingle {...props} /></TestBed>);
-        const mountWrapper = mount(<TestBed content={stubContent as any}><DocumentSingle {...props} /></TestBed>);
+  const setup = (props?: Partial<DocumentSingleProps>) => {
+    const wrapper = mount(
+      <TestBed content={stubContent as any}>
+        <DocumentSingle {...defaultProps} {...props} />
+      </TestBed>,
+    );
 
-        const documentLinkElement = findByQa(mountWrapper, "qa");
+    const messageElement = findByQa(wrapper, "document-single-message");
+    const linkElement = wrapper.find("a");
 
-        return {
-            shallowWrapper,
-            mountWrapper,
-            documentLinkElement
-        };
+    // Note: Remove prop don't need
+    const { className, ...linkElementProps } = linkElement.props();
+
+    return {
+      wrapper,
+      linkElement,
+      linkElementProps,
+      messageElement,
     };
-    const document = { link: "https://www.google.com/", fileName: "LABOUR_COSTS_Q3_2017-11-05.pdf", id: "1", fileSize: 3, dateCreated: new Date(), owner: "owner1@ownder.com", uploadedBy: "Arthur the Aardvark" };
+  };
 
-    it("should render LABOUR_COSTS_Q3_2017-11-05.pdf text as  https://www.google.com/ link ", () => {
-        const { documentLinkElement } = setup({message: "test", document, qa: "qa"});
-        expect(documentLinkElement.get(0).props.href).toBe(document.link);
-        expect(documentLinkElement.props().children).toBe(document.fileName);
-    });
+  it("should render valid link", () => {
+    const { linkElementProps, messageElement } = setup();
 
-    it("should render a An IAR has been added to this claim section heading", () => {
-        const { mountWrapper } = setup({message: "An IAR has been added to this claim", document, qa: "qa"});
-        expect(mountWrapper.find("p").props().children).toBe("An IAR has been added to this claim");
-    });
+    // tslint:disable: object-literal-key-quotes
+    const expectedProps = {
+      href: defaultProps.document.link,
+      children: defaultProps.document.fileName,
+      target: undefined,
+      "data-qa": undefined,
+      style: { paddingRight: 20 },
+    };
 
-    it("should render <a> that opens in a new window", () => {
-        const { shallowWrapper } = setup({message: "An IAR has been added to this claim", document, qa: "qa", openNewWindow: true});
-        expect(shallowWrapper.html()).toContain("<a target=\"_blank\"");
-    });
+    expect(linkElementProps).toStrictEqual(expectedProps);
+    expect(messageElement.exists()).toBe(false);
+  });
+
+  it("should render message", () => {
+    const stubMessage = "stub-message";
+    const { messageElement } = setup({ message: stubMessage });
+
+    expect(messageElement.text()).toBe(stubMessage);
+  });
+
+  it("should render a removeElement", () => {
+    const stubElementQa = "stub-qa-removeElement";
+    const { wrapper } = setup({ removeElement: <div data-qa={stubElementQa}>removeElement</div> });
+
+    const target = findByQa(wrapper, stubElementQa);
+
+    expect(target.exists()).toBe(true);
+  });
+
+  it("should render a qa", () => {
+    const stubQa = "stub-qa";
+    const { linkElementProps } = setup({ qa: stubQa });
+
+    // Note: Added type since "data-qa" is a custom attr
+    const target = linkElementProps as AnchorWithDataQa;
+
+    expect(target["data-qa"]).toBe(stubQa);
+  });
+
+  it("should render a link which opens new window", () => {
+    const { linkElementProps } = setup({ openNewWindow: true });
+
+    expect(linkElementProps.target).toContain("_blank");
+  });
 });
