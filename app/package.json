@@ -16,7 +16,7 @@
     "build": "npm run build:server && npm run build:client",
     "build:dev": "npm run build:server && npm run build:client:dev",
     "test": "jest",
-    "test:watch": "jest --watch",
+    "test:watch": "jest --coverage --watch",
     "test:coverage": "jest --coverage",
     "lint": "tslint --project tsconfig.json",
     "lint:fix": "tslint --fix --project tsconfig.json",
