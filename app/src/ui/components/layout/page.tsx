@@ -52,7 +52,7 @@ export function Page({ pageTitle, backLink, error, children, project, partner, v
       <main className="govuk-main-wrapper" id="main-content" role="main">
         {displayAriaLive && (
           <AriaLive>
-            {error && <ErrorSummary error={error} />}
+            {error && <ErrorSummary {...error} />}
             {validation && <ValidationSummary validation={validation} compressed={false} />}
           </AriaLive>
         )}
