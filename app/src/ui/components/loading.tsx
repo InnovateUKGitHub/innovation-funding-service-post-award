@@ -7,16 +7,15 @@ import { NotFoundErrorPage } from "./notFoundErrorPage";
 import { SimpleString } from "./renderers";
 import { useContent } from "@ui/redux/contentProvider";
 
-interface LoadingProps<T> {
+type LoadingError = IAppError | null;
+
+export interface LoadingProps<T> {
   pending: Pending<T>;
   render: (data: T, loading?: boolean) => React.ReactNode;
-  renderError?: (error: IAppError | null) => React.ReactNode;
+  renderError?: (error?: LoadingError) => React.ReactNode;
   renderLoading?: () => React.ReactNode;
 }
 
-/**
- * component to render a given ReactNode based on the state of a given Pending object
- */
 export function Loader<T>(props: LoadingProps<T>) {
   const { getContent } = useContent();
 
@@ -28,19 +27,16 @@ export function Loader<T>(props: LoadingProps<T>) {
     return !!props.renderLoading ? (
       props.renderLoading()
     ) : (
-      <SimpleString
-        className="govuk-!-padding-top-5 govuk-!-padding-bottom-5"
-        qa="loading-message"
-      >
+      <SimpleString className="govuk-!-padding-top-5 govuk-!-padding-bottom-5" qa="loading-message">
         {loading}
       </SimpleString>
     );
   };
 
-  const renderError = (error: IAppError): React.ReactNode => {
+  const renderError = (error?: LoadingError): React.ReactNode => {
     if (props.renderError) return props.renderError(error);
 
-    return <ErrorSummary error={error} />;
+    return error ? <ErrorSummary code={error.code} /> : null;
   };
 
   let result;
@@ -87,11 +83,7 @@ export function PageLoader<T>(props: LoadingProps<T>) {
     <Loader
       {...props}
       renderError={(error) =>
-        error && error.code === ErrorCode.REQUEST_ERROR ? (
-          <NotFoundErrorPage />
-        ) : (
-          <StandardErrorPage />
-        )
+        error && error.code === ErrorCode.REQUEST_ERROR ? <NotFoundErrorPage /> : <StandardErrorPage />
       }
     />
   );
