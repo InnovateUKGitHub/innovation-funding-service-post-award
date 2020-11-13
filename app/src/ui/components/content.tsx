@@ -13,14 +13,6 @@ interface IContentProps {
   styles?: React.CSSProperties;
 }
 
-// Note: Create type guard so TSC can infer ContentSelector correctly
-export const isContentSolution = (content: any): content is ContentSelector => {
-  const isNotString = typeof content !== "string";
-  const isFn = typeof content === "function";
-
-  return isNotString && isFn;
-};
-
 export const Content = ({ value, styles }: IContentProps) => {
   const stores = useStores();
   const { getResultByQuery } = useContent();
