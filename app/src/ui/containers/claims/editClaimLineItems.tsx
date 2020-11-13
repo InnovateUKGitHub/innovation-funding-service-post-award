@@ -74,7 +74,14 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         pageTitle={<ACC.Projects.Title project={project} />}
       >
         {this.renderNegativeClaimWarning(editor.data)}
-        {this.renderGuidanceMessage()}
+
+        <ACC.Renderers.SimpleString qa="guidance-message">
+          <ACC.Content value={(x) => x.claimDocuments.messages.editClaimLineItemGuidance} />
+        </ACC.Renderers.SimpleString>
+        <ACC.Renderers.SimpleString qa="guidance-currency-message">
+          <ACC.Content value={(x) => x.claimDocuments.messages.editClaimLineItemCurrencyGbp} />
+        </ACC.Renderers.SimpleString>
+
         <ACC.Section>
           <ACC.TextHint text={costCategory.hintText} />
           {costCategory.isCalculated
@@ -188,16 +195,10 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     );
   }
 
-  private renderGuidanceMessage() {
-    return (
-      <ACC.Renderers.SimpleString qa="guidance-message"><ACC.Content value={x => x.editClaimLineItems.messages.editClaimLineItemGuidance()}/> </ACC.Renderers.SimpleString>
-    );
-  }
-
   private renderDocuments(documents: DocumentSummaryDto[]) {
     return (
       <ACC.Section titleContent={x => x.editClaimLineItems.supportingDocumentsHeader()} subtitle={documents.length > 0 ? <ACC.Content value={x => x.editClaimLineItems.documentMessages.newWindow()}/> : ""} qa="supporting-documents-section">
-        <ACC.Renderers.SimpleString><ACC.Content value={x => x.editClaimLineItems.messages.editClaimLiineItemDocumentGuidance()}/></ACC.Renderers.SimpleString>
+        <ACC.Renderers.SimpleString><ACC.Content value={x => x.editClaimLineItems.messages.editClaimLineItemDocumentGuidance()}/></ACC.Renderers.SimpleString>
         {documents.length > 0 ? <ACC.DocumentTable documents={documents} qa="supporting-documents"/> : <ValidationMessage message={x => x.editClaimLineItems.documentMessages.noDocumentsUploaded()} messageType="info" />}
       </ACC.Section>
     );
