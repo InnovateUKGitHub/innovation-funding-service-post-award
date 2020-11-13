@@ -38,7 +38,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
         backLink={<Acc.Projects.ProjectBackLink project={projectDetails} routes={this.props.routes} />}
         project={projectDetails}
       >
-        {this.renderGuidanceMessages(projectDetails)}
+        {this.renderGuidanceMessage(projectDetails)}
         <Acc.Renderers.Messages messages={this.props.messages} />
         <Acc.Section qa="current-claims-section" titleContent={x => x.allClaimsDashboard.labels.openSectionTitle()}>
           {this.renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)}
@@ -50,7 +50,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
     );
   }
 
-  private renderGuidanceMessages(projectDetails: ProjectDto) {
+  private renderGuidanceMessage(projectDetails: ProjectDto) {
     const isFC = projectDetails.roles & ProjectRole.FinancialContact;
     if (isFC) {
       return <Acc.ValidationMessage qa="guidance-message" messageType="info" message={x => x.allClaimsDashboard.messages.guidanceMessage()}/>;
