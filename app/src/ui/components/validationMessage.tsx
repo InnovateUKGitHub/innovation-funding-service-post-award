@@ -1,7 +1,8 @@
 import React from "react";
 import cx from "classnames";
+import { isContentSolution } from "@ui/redux";
 import { ContentSelector } from "@content/content";
-import { Content, isContentSolution } from "@ui/components/content";
+import { Content } from "@ui/components/content";
 
 import * as colours from "../styles/colours";
 
