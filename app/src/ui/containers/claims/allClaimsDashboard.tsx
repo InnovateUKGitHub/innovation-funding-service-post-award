@@ -6,6 +6,7 @@ import { Pending } from "@shared/pending";
 import { DateTime } from "luxon";
 import { StoresConsumer } from "@ui/redux";
 import { getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
+import { getPartnerName } from "@ui/components";
 
 export interface AllClaimsDashboardParams {
   projectId: string;
@@ -137,11 +138,15 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
 
     return (
       <Acc.Accordion qa="previous-claims">
-        {grouped.map((x, i) => (
-          <Acc.AccordionItem title={<Acc.PartnerName partner={x.partner} showIsLead={true}/>} key={i} qa={`accordion-item-${i}`}>
-            {this.previousClaimsSection(project, x.partner, x.claims)}
-          </Acc.AccordionItem>
-        ))}
+        {grouped.map((x, i) => {
+          const partnerName = getPartnerName(x.partner, true);
+
+          return (
+            <Acc.AccordionItem key={i} title={partnerName} qa={`accordion-item-${i}`}>
+              {this.previousClaimsSection(project, x.partner, x.claims)}
+            </Acc.AccordionItem>
+          );
+        })}
       </Acc.Accordion>
     );
   }
@@ -153,9 +158,11 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
       );
     }
     const ClaimTable = Acc.TypedTable<ClaimDto>();
+    const partnerName = getPartnerName(partner);
+
     return (
       <div>
-        <ClaimTable.Table data={previousClaims} caption={<Acc.PartnerName partner={partner}/>} qa={`previousClaims-${partner.accountId}`}>
+        <ClaimTable.Table data={previousClaims} caption={partnerName} qa={`previousClaims-${partner.accountId}`}>
           <ClaimTable.Custom qa="period" value={(x) => this.renderClosedPeriodColumn(x)} />
           <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.forecastCosts} qa="forecast-cost" value={(x) => x.forecastCost} />
           <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.actualCosts} qa="actual-cost" value={(x) => x.totalCost} />
