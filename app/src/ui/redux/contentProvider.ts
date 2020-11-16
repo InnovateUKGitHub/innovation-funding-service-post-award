@@ -12,7 +12,7 @@ type ContentQuery<Param, Response> = (contentQuery: Param) => Response;
 interface IUseContent {
   content: Content;
   getContentFromResult: ContentQuery<ContentResult, string>;
-  getContent: ContentQuery<React.ReactChild | ContentSelector, React.ReactChild>;
+  getContent: ContentQuery<string | ContentSelector, string>;
   getResultByQuery: ContentQuery<ContentSelector, ContentResult>;
 }
 
@@ -26,7 +26,7 @@ export const useContent = (): IUseContent => {
   }
 
   // Note: This util check if the param is a content solution and gets it or returns the original value
-  const getContent = (contentRequest: React.ReactChild | ContentSelector): React.ReactChild => {
+  const getContent = (contentRequest: string | ContentSelector): string => {
     return isContentSolution(contentRequest) ? contentRequest(appContent).content : contentRequest;
   };
 
