@@ -6,8 +6,9 @@ import * as MonitoringReports from "./monitoringReports";
 import * as Forecasts from "./forecasts";
 import * as Partners from "./partners";
 
+export { Claims, Inputs, Forecasts, MonitoringReports, Projects, Renderers, Partners };
+
 export * from "./accordion";
-export * from "./accordionItem";
 export * from "./content";
 export * from "./details";
 export * from "./documentGuidance";
@@ -35,13 +36,3 @@ export * from "./taskList";
 export * from "./validationError";
 export * from "./validationMessage";
 export * from "./validationSummary";
-
-export {
-  Claims,
-  Inputs,
-  Forecasts,
-  MonitoringReports,
-  Projects,
-  Renderers,
-  Partners
-};
