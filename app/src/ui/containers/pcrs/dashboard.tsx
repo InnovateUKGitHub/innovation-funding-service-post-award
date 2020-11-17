@@ -43,7 +43,7 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
           {this.renderStartANewRequestLink(project)}
         </ACC.Section>
         <ACC.Accordion>
-          <ACC.AccordionItem title="Past requests">
+          <ACC.AccordionItem title="Past requests" qa="past-requests">
             {this.renderTable(project, archived, "pcrs-archived", "You have no past requests.")}
           </ACC.AccordionItem>
         </ACC.Accordion>
