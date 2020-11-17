@@ -1,8 +1,7 @@
 import React from "react";
-import {Accordion} from "../components/accordion";
-import {DocumentList, ProjectContact} from "../components";
-import {AccordionItem} from "../components/accordionItem";
 import { IGuide } from "@framework/types";
+
+import { Accordion, AccordionItem, DocumentList, ProjectContact } from "../components";
 
 const documents = [
   { link: "https://www.google.com/", fileName: "LABOUR_COSTS_Q3_2017-11-05.pdf", id: "1", fileSize: 3, dateCreated: new Date(), owner: "owner1@ownder.com", uploadedBy: "Snap" },
@@ -24,8 +23,11 @@ export const accordionGuide: IGuide = {
       </Accordion>`,
       render: () => (
         <Accordion>
-          <AccordionItem title="Section 1">
+          <AccordionItem title="Section 1" qa="Section1">
             <DocumentList documents={documents} qa="documentList"/>
+          </AccordionItem>
+          <AccordionItem title="Section 2" qa="Section2">
+            <DocumentList documents={documents} qa="documentList2"/>
           </AccordionItem>
         </Accordion>
       )
@@ -44,10 +46,10 @@ export const accordionGuide: IGuide = {
       </Accordion>`,
       render: () => (
         <Accordion>
-          <AccordionItem title="Section 1">
+          <AccordionItem title="Item 1" qa="Item1">
             <DocumentList documents={documents} qa="documentList"/>
           </AccordionItem>
-          <AccordionItem title="Section 2">
+          <AccordionItem title="Item 2" qa="Item2">
             <ProjectContact contact={{id:"1", role:"Finance contact", projectId:"1", name: "Ms A Bloggs", email: "a.bloggs@test.com", roleName: "Team lead" }} qa="teamMember"/>
           </AccordionItem>
         </Accordion>
