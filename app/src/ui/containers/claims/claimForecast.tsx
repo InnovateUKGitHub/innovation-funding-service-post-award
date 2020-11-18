@@ -79,7 +79,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
           >
             <ACC.Claims.ForecastTable data={combined} editor={editor} isSubmitting={true} />
             <Form.Fieldset qa="last-saved">
-              <ACC.Claims.ClaimLastModified partner={combined.partner} />
+              {combined.partner.forecastLastModifiedDate && <ACC.Claims.ClaimLastModified modifiedDate={combined.partner.forecastLastModifiedDate} />}
             </Form.Fieldset>
             <Form.Fieldset qa="save-and-continue">
               <Form.Submit><ACC.Content value={x => x.claimForecast.continueToSummaryButton} /></Form.Submit>
