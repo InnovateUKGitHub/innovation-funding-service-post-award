@@ -30,7 +30,7 @@ export const ProjectContact: React.FunctionComponent<IProjectContact> = ({
         </SimpleString>
       )}
 
-      <Email value={contact.email} qa={`${qa}-email`} />
+      <Email qa={`${qa}-email`}>{contact.email}</Email>
     </Section>
   );
 };

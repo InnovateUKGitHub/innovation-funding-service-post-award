@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Email @renders should return as default 1`] = `
+<div>
+  <a
+    class="govuk-link govuk-!-font-size-19"
+    data-qa="email-qa"
+    href="mailto:stub-children@email.com"
+  >
+    stub-children@email.com
+  </a>
+</div>
+`;
