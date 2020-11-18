@@ -45,7 +45,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
           <ACC.Claims.ForecastTable data={data} hideValidation={isMoPm} />
         </ACC.Section>
         <ACC.Section qa="viewForecastUpdate">
-          <ACC.Claims.ClaimLastModified partner={data.partner} />
+          {data.partner.forecastLastModifiedDate && <ACC.Claims.ClaimLastModified modifiedDate={data.partner.forecastLastModifiedDate} />}
           {this.renderUpdateSection(data.project, data.partner, data.claims)}
         </ACC.Section>
       </ACC.Page>

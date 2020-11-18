@@ -1,25 +1,18 @@
 import React from "react";
-import { PartnerDto } from "@framework/types";
-import { SimpleString } from "../renderers/simpleString";
-import { FullDateTime } from "../renderers/date";
-import { useContent } from "@ui/redux/contentProvider";
+import { FullDateTime, SimpleString } from "../renderers";
+import { useContent } from "@ui/redux";
 
-interface Props {
-  partner: PartnerDto | null;
+export interface ClaimLastModifiedProps {
+  modifiedDate: Date;
 }
 
-export const ClaimLastModified: React.FunctionComponent<Props> = (props) => {
-
+export function ClaimLastModified({ modifiedDate }: ClaimLastModifiedProps) {
   const { getContent } = useContent();
-
-  if (!props.partner) return null;
-
   const messagePrefix = getContent((x) => x.components.claimLastModified.message);
 
   return (
-  <SimpleString qa="last-updated">
-    {messagePrefix}
-    <FullDateTime value={props.partner.forecastLastModifiedDate} />
-  </SimpleString>
+    <SimpleString qa="last-updated">
+      {messagePrefix}: <FullDateTime value={modifiedDate} />
+    </SimpleString>
   );
-};
+}
