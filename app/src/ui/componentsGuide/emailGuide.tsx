@@ -9,7 +9,7 @@ export const emailGuide: IGuide = {
             name: "Simple",
             comments: "Renders an email link",
             example: "<Email value=\"test@test.com\"/>",
-            render: () => <Email value="test@test.com" />
+            render: () => <Email>test@test.com</Email>
         }
     ]
 };

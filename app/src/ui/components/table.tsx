@@ -229,8 +229,17 @@ const ShortDateTimeColumn = <T extends {}>(props: ExternalColumnProps<T, Date | 
 };
 
 const EmailColumn = <T extends {}>(props: ExternalColumnProps<T, string | null>) => {
-  const TypedColumn = TableColumn as { new(): TableColumn<T> };
-  return <TypedColumn renderCell={(data, index) => <Email value={props.value(data, index)} />} {...props} />;
+  const TypedColumn = TableColumn as { new (): TableColumn<T> };
+
+  return (
+    <TypedColumn
+      {...props}
+      renderCell={(data, index) => {
+        const emailValue = props.value(data, index);
+        return emailValue && <Email>{emailValue}</Email>;
+      }}
+    />
+  );
 };
 
 const CurrencyColumn = <T extends {}>(props: ExternalColumnProps<T, number | null> & { fractionDigits?: number }) => {
