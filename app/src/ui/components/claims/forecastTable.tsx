@@ -15,6 +15,7 @@ import { Currency } from "../renderers/currency";
 import { CondensedDateRange } from "../renderers/date";
 import { Percentage } from "../renderers/percentage";
 import { TypedTable } from "../table";
+import { Content } from "../content";
 
 export interface ForecastData {
   project: ProjectDto;
@@ -280,31 +281,41 @@ export class ForecastTable extends React.Component<Props> {
     const previous = claim ? claimPeriod - 1 : claimPeriod;
     const forecasts = periods.length > claimPeriod;
 
+    const costsClaimedText = <Content value={x => x.components.forecastTable.costsClaimedHeader} />;
+    const costsClaimingText = <Content value={x => x.components.forecastTable.costsClaimingHeader} />;
+    const forecastText = <Content value={x => x.components.forecastTable.forecastHeader} />;
+    const totalText = <Content value={x => x.components.forecastTable.totalHeader} />;
+    const totalEligibleCostsText = <Content value={x => x.components.forecastTable.totalEligibleCostsHeader} />;
+    const differenceText = <Content value={x => x.components.forecastTable.differenceHeader} />;
+    const periodText = <Content value={x => x.components.forecastTable.periodHeader} />;
+    const noDataText = <Content value={x => x.components.forecastTable.noDataText} />;
+    const costCategoriesText = <Content value={x => x.components.forecastTable.costCategoriesHeader} />;
+
     return [(
       <tr key="cHeader1" className="govuk-table__row govuk-body-s">
         <th className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-left-1">
-          <AccessibilityText>Cost categories</AccessibilityText>
+          <AccessibilityText>{costCategoriesText}</AccessibilityText>
         </th>
-        {previous > 0 ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={previous}>Costs claimed</th> : null}
-        {!!claim && claimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric">Costs you are claiming</th> : null}
-        {forecasts ? <th className="govuk-table__header govuk-table__header--numeric" colSpan={periods.length - claimPeriod}>Forecast</th> : null}
-        <th className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-right-3">Total</th>
-        <th className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-right-2">Total eligible costs</th>
-        <th className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-right-1">Difference</th>
+        {previous > 0 ? <th className="govuk-table__header govuk-table__header--numeric" data-qa="costs-claimed" colSpan={previous}>{costsClaimedText}</th> : null}
+        {!!claim && claimPeriod > 0 ? <th className="govuk-table__header govuk-table__header--numeric" data-qa="costs-claiming">{costsClaimingText}</th> : null}
+        {forecasts ? <th className="govuk-table__header govuk-table__header--numeric" data-qa="forecast-header" colSpan={periods.length - claimPeriod}>{forecastText}</th> : null}
+        <th className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-right-3" data-qa="total-header">{totalText}</th>
+        <th className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-right-2" data-qa="total-eligible-cost">{totalEligibleCostsText}</th>
+        <th className="govuk-table__header govuk-table__header--numeric sticky-col sticky-col-right-1">{differenceText}</th>
       </tr>
     ),
     (
       <tr key="cHeader2" className="govuk-table__row govuk-body-s">
-        <th className="govuk-table__header sticky-col sticky-col-left-1">Period</th>
+        <th className="govuk-table__header sticky-col sticky-col-left-1">{periodText}</th>
         {periods.map((p, i) => <th key={i} className="govuk-table__header" style={{ textAlign: "right" }}>{p}</th>)}
         <th className="govuk-table__header sticky-col sticky-col-right-3">
-          <AccessibilityText>No data</AccessibilityText>
+          <AccessibilityText>{noDataText}</AccessibilityText>
         </th>
         <th className="govuk-table__header sticky-col sticky-col-right-2">
-          <AccessibilityText>No data</AccessibilityText>
+          <AccessibilityText>{noDataText}</AccessibilityText>
         </th>
         <th className="govuk-table__header sticky-col sticky-col-right-1">
-          <AccessibilityText>No data</AccessibilityText>
+          <AccessibilityText>{noDataText}</AccessibilityText>
         </th>
       </tr>
     )];

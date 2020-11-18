@@ -24,6 +24,91 @@
     "contentTitle": "Content solution",
     "content": "Some example content"
   },
+  "components": {
+    "validationSummary": {
+      "title": "There is a problem"
+    },
+    "errorSummary": {
+      "title": "There is a problem",
+      "expiredMessage": "Your session has expired. You must reload the page before trying again.",
+      "unsavedWarning": "Anything you have not already saved will be lost.",
+      "somethingGoneWrong": "Something has gone wrong at our end and we were unable to complete the action. Try submitting the page again."
+    },
+    "standardErrorPage": {
+      "message": "You can either go back to the page you were previously on or go back to your",
+      "dashboardText": "dashboard"
+    },
+    "notFoundErrorPage": {
+      "errorMessage": "Please check the web address or search term you entered for any errors. You can return to",
+      "goBackMessage": "or go back to the",
+      "yourDashBoard": "your dashboard",
+      "innovateUKMessage": "Innovate UK homepage"
+    },
+    "logs": {
+      "noChangesMessage": "There are no changes.",
+      "columnHeaderDate": "Date and time",
+      "statusUpdate": "Status update",
+      "createdBy": "Created by"
+    },
+    "loading": {
+      "message": "Loading..."
+    },
+    "documentSingle": {
+      "newWindow": "opens in a new window"
+    },
+    "documentGuidance": {
+      "uploadGuidance": "You can upload up to 10 documents at a time. Each document must:",
+      "fileSize": "be less than 10MB in file size",
+      "uniqueFileName": "have a unique file name that describes its contents",
+      "noFilesNumberLimit": "There is no limit to the number of files you can upload in total.",
+      "fileTypesUpload": "You can upload these file types:",
+      "pdfFiles": "PDF (pdf, xps)",
+      "textFiles": "text (doc, docx, rdf, txt, csv, odt)",
+      "presentationFiles": "presentation (ppt, pptx, odp)",
+      "spreadsheetFiles": "preadsheet (xls, xlsx, ods)",
+      "imageFiles": "image (jpg, jpeg, png)",
+      "fileTypesQuestion": "What file types can I upload?"
+    },
+    "claimLastModified": {
+      "message": "Changes last saved: "
+    },
+    "claimWindow": {
+      "nextClaimPeriod": "Next claim period",
+      "begins": "Begins",
+      "end": "Ends",
+      "daysOutstanding": "days left of claim period",
+      "deadline": "deadline",
+      "daysOverdue": "days past claim period"
+    },
+    "forecastTable": {
+      "costsClaimedHeader": "Costs claimed",
+      "costsClaimingHeader": "Costs you are claiming",
+      "forecastHeader": "Forecast",
+      "totalHeader": "Total",
+      "totalEligibleCostsHeader": "Total eligible costs",
+      "differenceHeader": "Difference",
+      "periodHeader": "Period",
+      "noDataText": "No data",
+      "costCategoriesHeader": "Cost categories"
+    },
+    "reportForm": {
+      "reportMessage": "Each report refers to a period of the project. You may have more than one report per period.",
+      "questionScoreMessage": "For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. The report will be returned to you otherwise.",
+      "continueText": "Continue",
+      "saveAndReturnText": "Save and return to monitoring reports"
+    },
+    "forecastDetails": {
+      "finalClaimMessageFC": "You cannot change your forecast. You must",
+      "submitLink": "submit your final claim",
+      "finalClaimMessageMO": "has submitted their final claim so cannot change their forecast.",
+      "finalClaimDueMessageMO": "is due to submit their final claim so cannot change their forecast."
+    },
+    "warningContent": {
+      "amountRequestMessage": "The amount you are requesting is more than the grant offered for:",
+      "contactmessage": "Your Monitoring Officer will let you know if they have any concerns.",
+      "MOPMmessage": "The partner is requesting an amount more than the grant offered for:"
+    }
+  },
   "pages": {
     "home": {
       "title": "Home"
@@ -421,6 +506,7 @@
       "guidance-non-aid-funding": "This competition provides funding that is classed as non-aid. The new organisation should seek independent legal advice on what this means for them, before you complete this project change request.\n\n\n\nNon-aid is only granted to organisations which declare that they will not use the funding:\n\n\n\n*  in any way which gives them selective economic or commercial advantage\n\n*  in any other way which would <a href=\"https://ec.europa.eu/regional_policy/sources/conferences/state-aid/01_rdi2017_spatharis.pdf\" rel=\"noopener noreferrer\" target=\"_blank\" >determine the funding as State aid (opens in new window)</a> as defined by the European Commission \n\n\n\nIt is important to note that it is the activity they intend to perform in the project, which is assessed as eligible for non-aid, and not their organisation as an entity.\n\n\n\nIf they are found to be exploiting the outputs from this project commercially or economically to gain a selective advantage in the market, we will withdraw our offer."
     },
     "pcr-add-partner-award-rate": {
+
       "form-section-title": "Funding level",
       "guidance": "The maximum the new organisation can enter is based on their size, type of organisation and research category of the project, based on the <a href=\"https://www.gov.uk/guidance/innovate-uk-funding-general-guidance-for-applicants#funding-rules\" rel=\"noopener noreferrer\" target=\"_blank\" >Innovate UK general guidance for grant applicants</a> (opens in new window). This will be reviewed by Innovate UK to ensure the project stays within the funding rules.\n\n\n\nThe percentage applied for must reflect other funding received."
     },
