@@ -1,6 +1,7 @@
 import React from "react";
 import { IValidationResult, Nested, NestedResult, Result, Results } from "../validation";
 import { flatten } from "@framework/util/arrayHelpers";
+import { useContent } from "@ui/redux";
 
 interface Props {
   validation?: IValidationResult | null;
@@ -28,6 +29,7 @@ const prepareMessage = (errorMessage: string | null | undefined): React.ReactNod
 };
 
 export const ValidationSummary: React.FunctionComponent<Props> = ({ validation, compressed }) => {
+  const {getContent} = useContent();
   const results: Result[] = [];
   if (validation && validation.errors) {
     validation.errors.filter(x => !x.isValid && x.showValidationErrors).forEach(x => {
@@ -52,9 +54,11 @@ export const ValidationSummary: React.FunctionComponent<Props> = ({ validation, 
     return null;
   }
 
+  const title = getContent(x => x.components.validationSummary.validationsTitle);
+
   return (
     <div className="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabIndex={-1} data-module="govuk-error-summary" data-qa="validation-summary">
-      <h2 className="govuk-error-summary__title" id="error-summary-title">There is a problem</h2>
+      <h2 className="govuk-error-summary__title" id="error-summary-title">{title}</h2>
       <div className="govuk-error-summary__body">
         <ul className="govuk-list govuk-error-summary__list">
           {results.map(x => <li key={`error${x.key}`}><a href={`#${x.key}`}>{prepareMessage(x.errorMessage)}</a></li>)}
