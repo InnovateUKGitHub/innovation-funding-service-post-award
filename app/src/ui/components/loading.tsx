@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { createElement, Fragment } from "react";
 import { LoadingStatus, Pending } from "../../shared/pending";
 import { ErrorSummary } from "./errorSummary";
 import { ErrorCode, IAppError } from "@framework/types/IAppError";
@@ -7,84 +7,73 @@ import { NotFoundErrorPage } from "./notFoundErrorPage";
 import { SimpleString } from "./renderers";
 import { useContent } from "@ui/redux/contentProvider";
 
-type LoadingError = IAppError | null;
-
 export interface LoadingProps<T> {
   pending: Pending<T>;
+  // TODO: Investigate a stricter type which has to return an element / null
   render: (data: T, loading?: boolean) => React.ReactNode;
-  renderError?: (error?: LoadingError) => React.ReactNode;
-  renderLoading?: () => React.ReactNode;
+  renderError?: (error?: IAppError) => JSX.Element;
+  renderLoading?: () => JSX.Element;
 }
 
-export function Loader<T>(props: LoadingProps<T>) {
-  const { getContent } = useContent();
+export function Loader<T>({ pending, render, renderError, renderLoading }: LoadingProps<T>) {
+  const pendingWaiting = () => {
+    const loadingElement = (renderLoading && renderLoading()) || <LoadingMessage />;
 
-  const renderDone = (data: T, loading: boolean) => props.render(data, loading);
-
-  const renderLoading = (): React.ReactNode => {
-    const loading = getContent((x) => x.components.loading.message);
-
-    return !!props.renderLoading ? (
-      props.renderLoading()
-    ) : (
-      <SimpleString className="govuk-!-padding-top-5 govuk-!-padding-bottom-5" qa="loading-message">
-        {loading}
-      </SimpleString>
-    );
+    return !!pending.data ? render(pending.data, true) : loadingElement;
   };
 
-  const renderError = (error?: LoadingError): React.ReactNode => {
-    if (props.renderError) return props.renderError(error);
+  const pendingError = (error?: IAppError) => {
+    const hasRenderError = renderError && renderError(error);
 
-    return error ? <ErrorSummary code={error.code} /> : null;
+    return hasRenderError || (error && <ErrorSummary {...error} />);
   };
 
-  let result;
+  let pendingElement: React.ReactNode;
 
-  switch (props.pending.state) {
-    // don't render anything as the request hasn't been made
-    case LoadingStatus.Preload:
-      return null;
-    // request completed, call the given render function
-    case LoadingStatus.Done:
-    case LoadingStatus.Updated:
-      result = renderDone(props.pending.data!, false);
+  switch (pending.state) {
+    case LoadingStatus.Failed:
+      pendingElement = pendingError(pending.error);
       break;
-    // request is loading or data marked as stale
+
     case LoadingStatus.Stale:
     case LoadingStatus.Loading:
-      // if we have data render it, otherwise call the loading function
-      if (props.pending.data) {
-        result = renderDone(props.pending.data, true);
-      } else {
-        result = renderLoading();
-      }
+      pendingElement = pendingWaiting();
       break;
-    // request failed for some reason, call the error function to handle it
-    case LoadingStatus.Failed:
-      result = renderError(props.pending.error);
+
+    case LoadingStatus.Done:
+    case LoadingStatus.Updated:
+      pendingElement = render(pending.data!, false);
       break;
-    // shouldn't ever be in a status not handled above
+
+    case LoadingStatus.Preload:
     default:
-      throw new Error("Broken pending data, status missing.");
+      pendingElement = null;
   }
 
-  if (typeof result === "string") {
-    return <span>{result}</span>;
-  } else if (Array.isArray(result)) {
-    return <div>{result}</div>;
-  } else {
-    return result as JSX.Element;
-  }
+  // TODO: Update this to .includes during tsc upgrade
+  const isTextElement = ["string", "number"].indexOf(typeof pendingElement) !== -1;
+  const LoadingElement = isTextElement ? "span" : Fragment;
+
+  return <LoadingElement>{pendingElement}</LoadingElement>;
+}
+
+function LoadingMessage() {
+  const { getContent } = useContent();
+  const loadingMessage = getContent((x) => x.components.loading.message);
+
+  return (
+    <SimpleString className="govuk-!-padding-top-5 govuk-!-padding-bottom-5" qa="loading-message">
+      {loadingMessage}
+    </SimpleString>
+  );
 }
 
 export function PageLoader<T>(props: LoadingProps<T>) {
-  return (
-    <Loader
-      {...props}
-      renderError={(error) =>
-        error && error.code === ErrorCode.REQUEST_ERROR ? <NotFoundErrorPage /> : <StandardErrorPage />
-      }
-    />
-  );
+  const handleError: LoadingProps<T>["renderError"] = (e) => {
+    const hasRequestError = e && e.code === ErrorCode.REQUEST_ERROR;
+
+    return hasRequestError ? <NotFoundErrorPage /> : <StandardErrorPage />;
+  };
+
+  return <Loader renderError={handleError} {...props} />;
 }
