@@ -60,7 +60,7 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
           </ACC.Renderers.SimpleString>
         </ACC.Section>
         <ACC.TaskList qa="taskList">
-          <ACC.TaskListSection step={1} titleContent={x => x.projectSetup.taskList().sectionTitleEnterInfo()} qa="WhatDoYouWantToDo">
+          <ACC.TaskListSection step={1} titleContent={x => x.projectSetup.taskList().sectionTitleEnterInfo} qa="WhatDoYouWantToDo">
             <ACC.Task
               nameContent={x => x.projectSetup.setSpendProfile()}
               status={partner.spendProfileStatusLabel as ACC.TaskStatus}

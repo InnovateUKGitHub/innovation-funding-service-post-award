@@ -6,5 +6,5 @@ export class TaskListContent extends ContentBase {
         super(parent, "task-list", project);
     }
 
-    public readonly sectionTitleEnterInfo = () => this.getContent("section-title-enter-info");
+    public readonly sectionTitleEnterInfo = this.getContent("section-title-enter-info");
 }
