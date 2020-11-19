@@ -9,9 +9,11 @@ interface Props {
 }
 
 export const ClaimLastModified: React.FunctionComponent<Props> = (props) => {
-  if (!props.partner) return null;
 
   const { getContent } = useContent();
+
+  if (!props.partner) return null;
+
   const messagePrefix = getContent((x) => x.components.claimLastModified.message);
 
   return (
