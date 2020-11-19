@@ -14,6 +14,7 @@ import {
   ShortDateTime
 } from "../../../src/ui/components/renderers/date";
 
+// tslint:disable-next-line: import-blacklist
 import { mount, shallow } from "enzyme";
 import { DateTime } from "luxon";
 

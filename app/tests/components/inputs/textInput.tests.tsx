@@ -1,5 +1,6 @@
 
 import React from "react";
+// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
 import { TextInput } from "../../../src/ui/components/inputs/textInput";

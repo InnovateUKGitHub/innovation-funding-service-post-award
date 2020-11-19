@@ -1,6 +1,7 @@
 
 import React, { CSSProperties } from "react";
 
+// tslint:disable-next-line: import-blacklist
 import { shallow } from "enzyme";
 import { Button } from "../../src/ui/components";
 import { GOVUK_LINK_COLOUR } from "../../src/ui/styles/colours";

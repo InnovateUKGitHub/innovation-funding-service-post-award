@@ -1,5 +1,6 @@
 // tslint:disable: object-literal-key-quotes
 import React from "react";
+// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 import { Footer, FooterProps } from "@ui/components/layout/footer";
 import * as footerConfig from "@ui/components/layout/footer.config";

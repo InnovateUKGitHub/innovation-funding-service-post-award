@@ -1,5 +1,6 @@
 import React from "react";
 
+// tslint:disable-next-line: import-blacklist
 import { mount, shallow } from "enzyme";
 import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
 

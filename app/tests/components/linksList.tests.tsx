@@ -1,4 +1,5 @@
 import React from "react";
+// tslint:disable-next-line: import-blacklist
 import Enzyme from "enzyme";
 
 import { LinksList } from "../../src/ui/components/linksList";

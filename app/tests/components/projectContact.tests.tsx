@@ -2,6 +2,7 @@
 import React from "react";
 import { ProjectContact } from "../../src/ui/components/projectContact";
 
+// tslint:disable-next-line: import-blacklist
 import { mount, shallow } from "enzyme";
 import { PartnerDto, ProjectContactDto } from "@framework/dtos";
 import { createDto } from "@framework/util";

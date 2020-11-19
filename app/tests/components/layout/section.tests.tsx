@@ -1,6 +1,7 @@
 import React from "react";
 import { Section } from "../../../src/ui/components/layout/section";
 
+// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
 describe("Section", () => {
