@@ -100,7 +100,7 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data, Callbacks> {
       return [(
         <tr key={1}>
           <th key="th" className="govuk-table__cell acc-table__cell-top-border">
-            <ACC.Content value={x => x.financeSummary.totalsFooterLabel()} />
+            <ACC.Content value={x => x.financeSummary.totalsFooterLabel} />
           </th>
           {this.renderTableFooter(<ACC.Renderers.Currency value={totalParticipantGrantTotal} />, 1)}
           {this.renderTableFooter(<ACC.Renderers.Currency value={totalCostsSubmittedTotal} />, 2)}
