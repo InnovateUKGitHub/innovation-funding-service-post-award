@@ -1,4 +1,5 @@
 import React from "react";
+// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 import { IMarkdownProps, Markdown } from "@ui/components/renderers/markdown";
 import { findByQa } from "../helpers/find-by-qa";

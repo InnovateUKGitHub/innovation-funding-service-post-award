@@ -1,4 +1,5 @@
 import React from "react";
+// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
 import { DocumentSingle, DocumentSingleProps } from "../../src/ui/components";

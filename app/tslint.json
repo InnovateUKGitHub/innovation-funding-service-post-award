@@ -8,6 +8,8 @@
   ],
   "jsRules": {},
   "rules": {
+    // Force RTL usage
+    "import-blacklist": [true, "enzyme"],
     // override rules here
     "no-multi-assign": true,
     "prefer-readonly": true,

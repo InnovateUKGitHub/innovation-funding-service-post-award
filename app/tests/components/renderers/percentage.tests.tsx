@@ -1,6 +1,7 @@
 import React from "react";
 import { CondensedDateRange, FullDate, FullDateTime, LongDateRange, ShortDate, ShortDateRange, ShortDateTime } from "../../../src/ui/components/renderers/date";
 
+// tslint:disable-next-line: import-blacklist
 import { mount, shallow } from "enzyme";
 import { Percentage } from "../../../src/ui/components/renderers";
 

@@ -1,4 +1,5 @@
 import React from "react";
+// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 import { PartnerStatus, ProjectStatus } from "@framework/dtos";
 import { ErrorCode, IAppError } from "@framework/types";

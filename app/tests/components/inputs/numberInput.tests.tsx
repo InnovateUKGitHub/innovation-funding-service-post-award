@@ -1,4 +1,5 @@
 import React from "react";
+// tslint:disable-next-line: import-blacklist
 import { mount, shallow } from "enzyme";
 
 import { NumberInput } from "@ui/components/inputs";

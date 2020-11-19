@@ -1,6 +1,7 @@
 // tslint:disable:no-duplicate-string
 import React from "react";
 
+// tslint:disable-next-line: import-blacklist
 import {mount, shallow} from "enzyme";
 import {ClaimPeriodDate} from "../../../src/ui/components/claims/claimPeriodDate";
 

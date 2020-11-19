@@ -1,6 +1,7 @@
 // tslint:disable:no-identical-functions no-duplicate-string
 import { ClaimTable } from "../../../src/ui/components/claims/claimTable";
 
+// tslint:disable-next-line: import-blacklist
 import Enzyme from "enzyme";
 
 import { DateTime, Settings } from "luxon";import React from "react";

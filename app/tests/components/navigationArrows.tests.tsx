@@ -1,5 +1,6 @@
 // tslint:disable:no-duplicate-string
 import React from "react";
+// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
 import { NavigationArrows } from "../../src/ui/components";

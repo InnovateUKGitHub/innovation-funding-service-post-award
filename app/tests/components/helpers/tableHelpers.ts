@@ -1,3 +1,4 @@
+// tslint:disable-next-line: import-blacklist
 import { ReactWrapper } from "enzyme";
 
 export function getColumnValues(wrapper: ReactWrapper, tableQA: string, columnQA: string): ReactWrapper[] {
