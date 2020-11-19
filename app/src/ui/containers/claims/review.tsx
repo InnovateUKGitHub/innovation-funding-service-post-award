@@ -91,7 +91,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={x => x.claimReview.messages.finalClaim()}/>}
+        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={x => x.claimReview.messages.finalClaim}/>}
         {this.renderClaimReviewSection(data)}
         <ACC.Section>
           <ACC.Accordion>
@@ -186,7 +186,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
           qa="projectDocumentUpload"
         >
           <UploadForm.Fieldset>
-            <ACC.Content value={x => x.claimReview.messages.uploadClaimValidationFormInstructions()} />
+            <ACC.Content value={x => x.claimReview.messages.uploadClaimValidationFormInstructions} />
             <ACC.DocumentGuidanceWithContent documentMessages={x => x.claimReview.documentMessages} />
             <UploadForm.MulipleFileUpload
               labelContent={x => x.claimReview.uploadInputLabel()}
@@ -320,7 +320,7 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => (
                 documentsEditor={stores.claimDocuments.getClaimDocumentsEditor(props.projectId, props.partnerId, props.periodId)}
                 onUpdate={(saving, dto) => {
                   stores.messages.clearMessages();
-                  const message = dto.status === ClaimStatus.MO_QUERIED ? content.claimReview.messages.claimQueried() : content.claimReview.messages.claimApproved();
+                  const message = dto.status === ClaimStatus.MO_QUERIED ? content.claimReview.messages.claimQueried : content.claimReview.messages.claimApproved;
                   stores.claims.updateClaimEditor(saving, props.projectId, props.partnerId, props.periodId, dto, message.content, () => stores.navigation.navigateTo(props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })));
                 }}
                 onUpload={(saving, dto) => {
