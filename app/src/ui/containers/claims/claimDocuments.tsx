@@ -181,7 +181,7 @@ const ClaimDocumentsContainer = (props: ClaimDocumentsPageParams & BaseProps) =>
               editor={stores.claimDocuments.getClaimDocumentsEditor(props.projectId, props.partnerId, props.periodId)}
               documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
               // TODO temporary measure until we get the description types from SF
-              documentDescriptions={Pending.done( getAllEnumValues(DocumentDescription).map(x => ({ id: x, label: content.claimDocuments.documents.labels().documentDescriptionLabel(x).content })) )}
+              documentDescriptions={Pending.done( getAllEnumValues(DocumentDescription).map(x => ({ id: x, label: content.claimDocuments.documents.labels.documentDescriptionLabel(x).content })) )}
               claim={stores.claims.get(props.partnerId, props.periodId)}
               onChange={(saving, dto) => {
                 stores.messages.clearMessages();
