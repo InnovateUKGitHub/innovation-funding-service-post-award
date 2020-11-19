@@ -53,7 +53,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
   private renderGuidanceMessage(projectDetails: ProjectDto) {
     const isFC = projectDetails.roles & ProjectRole.FinancialContact;
     if (isFC) {
-      return <Acc.ValidationMessage qa="guidance-message" messageType="info" message={x => x.allClaimsDashboard.messages.guidanceMessage()}/>;
+      return <Acc.ValidationMessage qa="guidance-message" messageType="info" message={x => x.allClaimsDashboard.messages.guidanceMessage}/>;
     }
 
     return null;
@@ -79,7 +79,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
       if (project.status === ProjectStatus.Terminated || project.status === ProjectStatus.Closed) {
         return (
           <Acc.Renderers.SimpleString qa="theFinalClaimApprovedNotificationMessage">
-            <Acc.Content value={ x => x.allClaimsDashboard.messages.noRemainingClaims()}/>
+            <Acc.Content value={ x => x.allClaimsDashboard.messages.noRemainingClaims}/>
           </Acc.Renderers.SimpleString>
         );
       }
@@ -149,7 +149,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
   private previousClaimsSection(project: ProjectDto, partner: PartnerDto, previousClaims: ClaimDto[]) {
     if (previousClaims.length === 0) {
       return (
-        <Acc.Renderers.SimpleString qa={`noClosedClaims-${partner.accountId}`}><Acc.Content value={x => x.allClaimsDashboard.messages.noClosedClaims()}/></Acc.Renderers.SimpleString>
+        <Acc.Renderers.SimpleString qa={`noClosedClaims-${partner.accountId}`}><Acc.Content value={x => x.allClaimsDashboard.messages.noClosedClaims}/></Acc.Renderers.SimpleString>
       );
     }
     const ClaimTable = Acc.TypedTable<ClaimDto>();

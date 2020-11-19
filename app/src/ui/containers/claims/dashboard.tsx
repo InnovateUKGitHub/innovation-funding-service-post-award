@@ -58,7 +58,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
       <Acc.ValidationMessage
         qa="guidance-message"
         messageType="info"
-        message={x => x.claimsDashboard.messages.guidanceMessage()}
+        message={x => x.claimsDashboard.messages.guidanceMessage}
       />
     );
   }
@@ -68,7 +68,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
     if (previousClaims && previousClaims.find(x => x.isFinalClaim)) {
       return (
         <Acc.Renderers.SimpleString qa="yourFinalClaimApprovedNotificationMessage">
-          <Acc.Content value={x => x.claimsDashboard.messages.noRemainingClaims()}/>
+          <Acc.Content value={x => x.claimsDashboard.messages.noRemainingClaims}/>
         </Acc.Renderers.SimpleString>
       );
     }
@@ -96,7 +96,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
       return this.renderClaimsTable(data, tableQa, project, partner, "Closed");
     }
 
-    return <Acc.Renderers.SimpleString><Acc.Content value={x => x.claimsDashboard.messages.noClosedClaims()}/></Acc.Renderers.SimpleString>;
+    return <Acc.Renderers.SimpleString><Acc.Content value={x => x.claimsDashboard.messages.noClosedClaims}/></Acc.Renderers.SimpleString>;
   }
 
   private renderClaimsTable(data: ClaimDto[], tableQa: string, project: ProjectDto, partner: PartnerDto, tableCaption?: string) {

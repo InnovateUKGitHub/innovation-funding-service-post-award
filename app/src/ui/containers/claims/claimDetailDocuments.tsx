@@ -53,7 +53,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
     if (!documents.length) {
       return (
         <ACC.Section>
-          <ACC.ValidationMessage message={x => x.claimDetailDocuments.messages.documentValidationMessage()} messageType="info" />
+          <ACC.ValidationMessage message={x => x.claimDetailDocuments.messages.documentValidationMessage} messageType="info" />
         </ACC.Section>
       );
     }
@@ -82,7 +82,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={project} />}
       >
-        <ACC.Renderers.SimpleString qa="guidanceText"><ACC.Content value={x => x.claimDetailDocuments.messages.documentDetailGuidance()}/></ACC.Renderers.SimpleString>
+        <ACC.Renderers.SimpleString qa="guidanceText"><ACC.Content value={x => x.claimDetailDocuments.messages.documentDetailGuidance}/></ACC.Renderers.SimpleString>
         <ACC.Renderers.Messages messages={this.props.messages} />
         {this.renderDocuments(editor, documents)}
         <ACC.Section titleContent={x => x.claimDetailDocuments.formTitle()}>

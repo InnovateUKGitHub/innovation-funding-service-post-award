@@ -69,7 +69,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
         }
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={x => x.claimDocuments.messages.finalClaim()}/>}
+        {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={x => x.claimDocuments.messages.finalClaim}/>}
         <ACC.Section>
           {this.renderGuidanceText(claim)}
         </ACC.Section>
@@ -142,12 +142,12 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
   private renderGuidanceText(claim: ClaimDto) {
     if (claim.isIarRequired && claim.isFinalClaim) {
       return (
-        <span data-qa="iarText"><ACC.Content value={x => x.claimDocuments.messages.finalClaimGuidance()}/></span>
+        <span data-qa="iarText"><ACC.Content value={x => x.claimDocuments.messages.finalClaimGuidance}/></span>
       );
     }
 
     if (claim.isIarRequired) {
-      return <ACC.Renderers.SimpleString qa="iarText"><ACC.Content value={x => x.claimDocuments.messages.iarRequired()} /></ACC.Renderers.SimpleString>;
+      return <ACC.Renderers.SimpleString qa="iarText"><ACC.Content value={x => x.claimDocuments.messages.iarRequired} /></ACC.Renderers.SimpleString>;
     }
 
     return null;

@@ -198,7 +198,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
   private renderDocuments(documents: DocumentSummaryDto[]) {
     return (
       <ACC.Section titleContent={x => x.editClaimLineItems.supportingDocumentsHeader()} subtitle={documents.length > 0 ? <ACC.Content value={x => x.editClaimLineItems.documentMessages.newWindow()}/> : ""} qa="supporting-documents-section">
-        <ACC.Renderers.SimpleString><ACC.Content value={x => x.editClaimLineItems.messages.editClaimLineItemDocumentGuidance()}/></ACC.Renderers.SimpleString>
+        <ACC.Renderers.SimpleString><ACC.Content value={x => x.editClaimLineItems.messages.editClaimLineItemDocumentGuidance}/></ACC.Renderers.SimpleString>
         {documents.length > 0 ? <ACC.DocumentTable documents={documents} qa="supporting-documents"/> : <ValidationMessage message={x => x.editClaimLineItems.documentMessages.noDocumentsUploaded()} messageType="info" />}
       </ACC.Section>
     );
@@ -230,7 +230,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     const markup = (
       <>
         <ACC.Renderers.SimpleString>
-          <ACC.Content value={(content) => content.editClaimLineItems.messages.negativeClaimWarning()} />
+          <ACC.Content value={(content) => content.editClaimLineItems.messages.negativeClaimWarning} />
         </ACC.Renderers.SimpleString>
 
         <ul>
