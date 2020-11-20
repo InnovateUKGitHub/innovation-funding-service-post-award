@@ -12,6 +12,6 @@ export class PCRAddPartnerProjectLocationContent extends ContentPageBase {
   public readonly pcrItem = new PCRItem(this, this.project);
   public readonly labels = new PCRAddPartnerLabels(this, this.project);
 
-  public readonly projectLocationGuidance = () => this.getContent("project-location-guidance");
-  public readonly postcodeGuidance = () => this.getContent("postcode-guidance");
+  public readonly projectLocationGuidance = this.getContent("project-location-guidance");
+  public readonly postcodeGuidance = this.getContent("postcode-guidance");
 }
