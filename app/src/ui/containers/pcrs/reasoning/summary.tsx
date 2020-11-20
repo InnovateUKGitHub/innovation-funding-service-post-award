@@ -43,17 +43,17 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
       <ACC.Section qa="reasoning-save-and-return">
         <ACC.Section>
           <ACC.SummaryList qa="pcr_reasoning">
-            <ACC.SummaryListItem labelContent={x => x.pcrReasoningSummary.labels.requestNumber()} content={pcr.requestNumber} qa="numberRow" />
-            <ACC.SummaryListItem labelContent={x => x.pcrReasoningSummary.labels.types()} content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.shortName)}/>} qa="typesRow"/>
+            <ACC.SummaryListItem labelContent={x => x.pcrReasoningSummary.labels.requestNumber} content={pcr.requestNumber} qa="numberRow" />
+            <ACC.SummaryListItem labelContent={x => x.pcrReasoningSummary.labels.types} content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.shortName)}/>} qa="typesRow"/>
             <ACC.SummaryListItem
-              labelContent={x => x.pcrReasoningSummary.labels.comments()}
+              labelContent={x => x.pcrReasoningSummary.labels.comments}
               content={<ACC.Renderers.SimpleString multiline={true}>{pcr.reasoningComments}</ACC.Renderers.SimpleString>}
               qa="comments"
               validation={editor.validator.reasoningComments}
               action={mode === "prepare" && <ACC.Link id={editor.validator.reasoningComments.key} route={getStepLink("reasoningStep")}><ACC.Content value={x => x.pcrReasoningSummary.edit()}/></ACC.Link>}
             />
             <ACC.SummaryListItem
-              labelContent={x => x.pcrReasoningSummary.labels.files()}
+              labelContent={x => x.pcrReasoningSummary.labels.files}
               content={documents.length ? <ACC.DocumentList documents={documents} qa="docs" /> : <ACC.Content value={x => x.pcrReasoningSummary.noDocuments()}/>}
               qa="files"
               action={mode === "prepare" && <ACC.Link route={getStepLink("filesStep")}><ACC.Content value={x => x.pcrReasoningSummary.edit()}/></ACC.Link>}
