@@ -4,7 +4,7 @@ import { mount } from "enzyme";
 
 import { DocumentSingle, DocumentSingleProps } from "../../src/ui/components";
 import { findByQa } from "./helpers/find-by-qa";
-import TestBed from "./helpers/TestBed";
+import TestBed, { TestBedContent } from "./helpers/TestBed";
 
 type AnchorWithDataQa = { "data-qa": string } & React.DetailedHTMLProps<
   React.AnchorHTMLAttributes<HTMLAnchorElement>,
@@ -29,7 +29,7 @@ describe("DocumentSingle", () => {
 
   const setup = (props?: Partial<DocumentSingleProps>) => {
     const wrapper = mount(
-      <TestBed content={stubContent as any}>
+      <TestBed content={stubContent as TestBedContent}>
         <DocumentSingle {...defaultProps} {...props} />
       </TestBed>,
     );

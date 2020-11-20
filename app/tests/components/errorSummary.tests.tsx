@@ -4,7 +4,7 @@ import { mount } from "enzyme";
 import { ErrorSummary, ErrorSummaryProps } from "@ui/components";
 import { findByQa } from "./helpers/find-by-qa";
 import { ErrorCode } from "@framework/types";
-import TestBed from "./helpers/TestBed";
+import TestBed, { TestBedContent } from "./helpers/TestBed";
 
 describe("<ErrorSummary />", () => {
   const unAuthenticatedError: ErrorSummaryProps = { code: ErrorCode.UNAUTHENTICATED_ERROR };
@@ -31,7 +31,7 @@ describe("<ErrorSummary />", () => {
 
   const setup = (props: ErrorSummaryProps) => {
     const wrapper = mount(
-      <TestBed content={stubContent as any}>
+      <TestBed content={stubContent as TestBedContent}>
         <ErrorSummary {...props} />
       </TestBed>,
     );

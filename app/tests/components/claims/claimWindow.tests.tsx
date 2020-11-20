@@ -5,7 +5,7 @@ import Enzyme, { mount, shallow } from "enzyme";
 
 import { DateTime, Settings } from "luxon";
 import { ClaimWindow } from "../../../src/ui/components/claims/claimWindow";
-import { TestBed } from "../helpers/TestBed";
+import { TestBed, TestBedContent } from "../helpers/TestBed";
 import { findByQa } from "../helpers/find-by-qa";
 import { text } from "body-parser";
 
@@ -25,7 +25,7 @@ describe("Claim Window", () => {
   };
 
   const setup = (props: any) => {
-    const mountWrapper = mount(<TestBed content={stubContent as any}><ClaimWindow {...props} /></TestBed>);
+    const mountWrapper = mount(<TestBed content={stubContent as TestBedContent}><ClaimWindow {...props} /></TestBed>);
 
     const headingElement = findByQa(mountWrapper, "claim-window-heading");
     const beginningPeriodElement = findByQa(mountWrapper, "claim-begins");

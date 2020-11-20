@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 
 import { Loader, LoadingProps, PageLoader } from "../../src/ui/components";
 import { LoadingStatus, Pending } from "../../src/shared/pending";
-import TestBed from "./helpers/TestBed";
+import TestBed, { TestBedContent } from "./helpers/TestBed";
 import { ErrorCode } from "@framework/types";
 
 const stubContent = {
@@ -59,7 +59,7 @@ const stubContent = {
 describe("<PageLoader />", () => {
   const setup = (props: LoadingProps<{}>) =>
     render(
-      <TestBed content={stubContent as any}>
+      <TestBed content={stubContent as TestBedContent}>
         <PageLoader {...props} />
       </TestBed>,
     );
@@ -113,7 +113,7 @@ describe("<Loader />", () => {
 
   const setup = (props: LoadingProps<{}>) =>
     render(
-      <TestBed content={stubContent as any}>
+      <TestBed content={stubContent as TestBedContent}>
         <Loader {...props} />
       </TestBed>,
     );

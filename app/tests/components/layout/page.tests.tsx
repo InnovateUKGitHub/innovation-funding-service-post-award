@@ -7,7 +7,7 @@ import { Results } from "@ui/validation";
 
 import { Page, PageProps } from "../../../src/ui/components/layout/page";
 import { findByQa } from "../helpers/find-by-qa";
-import TestBed from "../helpers/TestBed";
+import TestBed, { TestBedContent } from "../helpers/TestBed";
 
 describe("<Page />", () => {
   const defaultProps = {
@@ -28,7 +28,11 @@ describe("<Page />", () => {
         },
       },
     };
-    const wrapper = mount(<TestBed content={stubContent as any}><Page {...defaultProps} {...props} /></TestBed>);
+    const wrapper = mount(
+      <TestBed content={stubContent as TestBedContent}>
+        <Page {...defaultProps} {...props} />
+      </TestBed>,
+    );
     const holdMessageElement = findByQa(wrapper, "on-hold-info-message");
     const backlinkElement = findByQa(wrapper, "page-backlink");
     const pageErrorElement = findByQa(wrapper, "error-summary");

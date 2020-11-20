@@ -2,7 +2,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 
 import { ClaimLastModified, ClaimLastModifiedProps } from "@ui/components/claims";
-import TestBed from "../helpers/TestBed";
+import TestBed, { TestBedContent } from "../helpers/TestBed";
 
 describe("<ClaimLastModified />", () => {
   const stubContent = {
@@ -16,7 +16,7 @@ describe("<ClaimLastModified />", () => {
   };
   const setup = (props: ClaimLastModifiedProps) =>
     render(
-      <TestBed content={stubContent as any}>
+      <TestBed content={stubContent as TestBedContent}>
         <ClaimLastModified {...props} />
       </TestBed>,
     );
