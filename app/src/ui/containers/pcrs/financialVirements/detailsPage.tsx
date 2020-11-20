@@ -53,10 +53,10 @@ class Component extends ContainerBase<Params, Props, {}> {
         <ACC.Section title={partner.name}>
           {this.renderReasoning(project, pcr)}
           <VirementTable.Table qa="partnerVirements" data={data}>
-            <VirementTable.String qa="costCategory" headerContent={x => x.financialVirementDetails.labels.costCategoryName()} value={x => x.costCategory.name} footer={<ACC.Content value={x => x.financialVirementDetails.labels.partnerTotals()} />} />
-            <VirementTable.Currency qa="originalEligibleCosts" headerContent={x => x.financialVirementDetails.labels.costCategoryOriginalEligibleCosts()} value={x => x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.originalEligibleCosts} />} />
-            <VirementTable.Currency qa="newEligibleCosts" headerContent={x => x.financialVirementDetails.labels.costCategoryNewEligibleCosts()} value={x => x.virement.newEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.newEligibleCosts} />} />
-            <VirementTable.Currency qa="difference" headerContent={x => x.financialVirementDetails.labels.costCategoryDifferenceCosts()} value={x => x.virement.newEligibleCosts - x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.newEligibleCosts - financialVirements.originalEligibleCosts} />} />
+            <VirementTable.String qa="costCategory" headerContent={x => x.financialVirementDetails.labels.costCategoryName} value={x => x.costCategory.name} footer={<ACC.Content value={x => x.financialVirementDetails.labels.partnerTotals} />} />
+            <VirementTable.Currency qa="originalEligibleCosts" headerContent={x => x.financialVirementDetails.labels.costCategoryOriginalEligibleCosts} value={x => x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.originalEligibleCosts} />} />
+            <VirementTable.Currency qa="newEligibleCosts" headerContent={x => x.financialVirementDetails.labels.costCategoryNewEligibleCosts} value={x => x.virement.newEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.newEligibleCosts} />} />
+            <VirementTable.Currency qa="difference" headerContent={x => x.financialVirementDetails.labels.costCategoryDifferenceCosts} value={x => x.virement.newEligibleCosts - x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.newEligibleCosts - financialVirements.originalEligibleCosts} />} />
           </VirementTable.Table>
         </ACC.Section>
       </ACC.Page>
@@ -82,9 +82,9 @@ class Component extends ContainerBase<Params, Props, {}> {
     };
 
     if (this.props.mode === "review") {
-      return <ACC.BackLink route={this.props.routes.pcrReviewItem.getLink(params)} preserveData={true}><ACC.Content value={x => x.financialVirementDetails.labels.backToSummary()}/></ACC.BackLink>;
+      return <ACC.BackLink route={this.props.routes.pcrReviewItem.getLink(params)} preserveData={true}><ACC.Content value={x => x.financialVirementDetails.labels.backToSummary}/></ACC.BackLink>;
     }
-    return <ACC.BackLink route={this.props.routes.pcrViewItem.getLink(params)} preserveData={true}><ACC.Content value={x => x.financialVirementDetails.labels.backToSummary()}/></ACC.BackLink>;
+    return <ACC.BackLink route={this.props.routes.pcrViewItem.getLink(params)} preserveData={true}><ACC.Content value={x => x.financialVirementDetails.labels.backToSummary}/></ACC.BackLink>;
   }
 }
 
