@@ -78,7 +78,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
   private renderOverheadsRate(overheadRate: number | null) {
     if (overheadRate === null || overheadRate === undefined) return null;
 
-    return <ACC.Renderers.SimpleString qa="overhead-costs"><ACC.Content value={x => x.forecastsDetails.labels.overheadCosts()}/><ACC.Renderers.Percentage value={overheadRate} /></ACC.Renderers.SimpleString>;
+    return <ACC.Renderers.SimpleString qa="overhead-costs"><ACC.Content value={x => x.forecastsDetails.labels.overheadCosts}/><ACC.Renderers.Percentage value={overheadRate} /></ACC.Renderers.SimpleString>;
   }
 
   private renderUpdateSection(project: ProjectDto, partner: PartnerDto, claims: ClaimDto[]) {

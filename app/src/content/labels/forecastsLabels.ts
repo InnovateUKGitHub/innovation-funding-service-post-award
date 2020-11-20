@@ -6,5 +6,5 @@ export class ForecastsLabels extends ContentBase {
     super(parent, "forecasts-labels", project);
   }
 
-  public readonly overheadCosts = () => this.getContent("overhead-costs");
+  public readonly overheadCosts = this.getContent("overhead-costs");
 }
