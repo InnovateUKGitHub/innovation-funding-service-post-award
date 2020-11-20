@@ -11,7 +11,7 @@ export class PCRPeriodLengthChangeContent extends ContentPageBase {
 
   public readonly pcrItem = new PCRItem(this, this.project);
   public readonly labels = new PCRPeriodLengthChangeLabels(this, this.project);
-  public readonly periodLengthQuarterly = () => this.getContent("period-length-quarterly");
-  public readonly periodLengthMonthly = () => this.getContent("period-length-monthly");
-  public readonly guidance = () => this.getContent("guidance", { markdown: true });
+  public readonly periodLengthQuarterly = this.getContent("period-length-quarterly");
+  public readonly periodLengthMonthly = this.getContent("period-length-monthly");
+  public readonly guidance = this.getContent("guidance", { markdown: true });
 }
