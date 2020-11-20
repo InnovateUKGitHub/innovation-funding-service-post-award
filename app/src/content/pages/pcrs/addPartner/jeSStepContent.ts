@@ -16,5 +16,5 @@ export class PCRAddPartnerJeSContent extends ContentPageBase {
   public readonly documentLabels = new DocumentLabels(this, this.project);
   public readonly documentMessages = new DocumentMessages(this, this.project);
 
-  public readonly guidance = () => this.getContent("guidance", {markdown: true});
+  public readonly guidance = this.getContent("guidance", {markdown: true});
 }
