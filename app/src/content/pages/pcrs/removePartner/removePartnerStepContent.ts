@@ -12,7 +12,7 @@ export class PCRRemovePartnerContent extends ContentPageBase {
   public readonly pcrItem = new PCRItem(this, this.project);
   public readonly labels = new PCRRemovePartnerLabels(this, this.project);
 
-  public readonly selectPartnerHeading = () => this.getContent("heading-select-partner");
-  public readonly removalPeriodHeading = () => this.getContent("heading-removal-period");
-  public readonly removalPeriodHint = () => this.getContent("hint-removal-period");
+  public readonly selectPartnerHeading = this.getContent("heading-select-partner");
+  public readonly removalPeriodHeading = this.getContent("heading-removal-period");
+  public readonly removalPeriodHint = this.getContent("hint-removal-period");
 }
