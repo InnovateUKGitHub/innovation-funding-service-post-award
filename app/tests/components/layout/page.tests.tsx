@@ -2,7 +2,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 import { renderHook } from "@testing-library/react-hooks";
 
-import TestBed, { TestBedContent } from "../helpers/TestBed";
+import TestBed, { TestBedContent } from "@shared/TestBed";
 import { PartnerStatus, ProjectStatus } from "@framework/dtos";
 import { ErrorCode, IAppError } from "@framework/types";
 import { Result, Results } from "@ui/validation";

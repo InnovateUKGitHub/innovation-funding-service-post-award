@@ -2,7 +2,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 
 import { PageTitle, PageTitleProps } from "../../../src/ui/components/layout/pageTitle";
-import TestBed, { stubStores, TestBedStore } from "../helpers/TestBed";
+import TestBed, { stubStores, TestBedStore } from "@shared/TestBed";
 
 describe("<PageTitle />", () => {
   const setup = (props?: PageTitleProps, stores?: TestBedStore) => {

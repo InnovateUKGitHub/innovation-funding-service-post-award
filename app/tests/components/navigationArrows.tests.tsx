@@ -8,7 +8,7 @@ import { createStore } from "redux";
 import { rootReducer } from "../../src/ui/redux/reducers";
 import { IClientUser, ProjectRole } from "@framework/types";
 import { routeConfig } from "@ui/routing";
-import TestBed from "./helpers/TestBed";
+import TestBed from "@shared/TestBed";
 import { IStores } from "@ui/redux/storesProvider";
 
 const routes = routeConfig;

@@ -14,21 +14,20 @@ export type TestBedContent = Partial<Content>;
 export type TestBedStore = Partial<IStores>;
 
 export interface ITestBedProps {
+  children: React.ReactElement<{}>;
   content?: TestBedContent;
   stores?: TestBedStore;
-  children: React.ReactElement<{}>;
 }
 
 // Note: When testing a component that consumes <Content />, it expects a provider to be present.
-export function TestBed({ content, stores, children }: ITestBedProps) {
+export function TestBed({ stores, content = {}, children }: ITestBedProps) {
   // TODO: Consider deep merge strategy
   const storesValue = stores || stubStores;
-  const contentValue = content || {};
 
   return (
     <RouterProvider router={router}>
       <StoresProvider value={storesValue as any}>
-        <ContentProvider value={contentValue as any}>{children}</ContentProvider>
+        <ContentProvider value={content as any}>{children}</ContentProvider>
       </StoresProvider>
     </RouterProvider>
   );
@@ -44,6 +43,7 @@ export const hookTestBed = (props: HookTestBedProps) => ({
 });
 
 export const stubStores = {
+  users: { getCurrentUser: () => ({ csrf: "stub-csrf" }) },
   config: {
     getConfig: () => ({
       features: {

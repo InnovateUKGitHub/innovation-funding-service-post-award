@@ -6,7 +6,7 @@ import React from "react";
 import { IValidationMessageProps, ValidationMessage } from "@ui/components";
 import { Content } from "@content/content";
 import { findByQa } from "./helpers/find-by-qa";
-import TestBed from "./helpers/TestBed";
+import TestBed from "@shared/TestBed";
 
 describe("ValidationMessage", () => {
   const setup = (props: IValidationMessageProps) => {

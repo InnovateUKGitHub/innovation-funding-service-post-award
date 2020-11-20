@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react-hooks";
 import { useExternalContent } from "@ui/components/layout/footer.config";
 import { Content } from "../../../src/content";
-import { hookTestBed } from "../helpers/TestBed";
+import { hookTestBed } from "@shared/TestBed";
 
 describe("Footer config", () => {
   describe("useExternalContent", () => {

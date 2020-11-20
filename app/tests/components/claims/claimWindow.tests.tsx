@@ -5,7 +5,7 @@ import Enzyme, { mount, shallow } from "enzyme";
 
 import { DateTime, Settings } from "luxon";
 import { ClaimWindow } from "../../../src/ui/components/claims/claimWindow";
-import { TestBed, TestBedContent } from "../helpers/TestBed";
+import { TestBed, TestBedContent } from "@shared/TestBed";
 import { findByQa } from "../helpers/find-by-qa";
 import { text } from "body-parser";
 

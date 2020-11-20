@@ -10,7 +10,7 @@ import { rootReducer } from "../../../src/ui/redux/reducers";
 import { IClientUser } from "@framework/types";
 import { routeConfig } from "@ui/routing/routeConfig";
 import { ClaimDetailsLink } from "@ui/components/claims/claimDetailsLink";
-import TestBed from "../helpers/TestBed";
+import { TestBed } from "@shared/TestBed";
 import { IStores } from "@ui/redux";
 
 const routes = routeConfig;
