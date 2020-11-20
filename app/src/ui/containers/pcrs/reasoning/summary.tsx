@@ -50,13 +50,13 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
               content={<ACC.Renderers.SimpleString multiline={true}>{pcr.reasoningComments}</ACC.Renderers.SimpleString>}
               qa="comments"
               validation={editor.validator.reasoningComments}
-              action={mode === "prepare" && <ACC.Link id={editor.validator.reasoningComments.key} route={getStepLink("reasoningStep")}><ACC.Content value={x => x.pcrReasoningSummary.edit()}/></ACC.Link>}
+              action={mode === "prepare" && <ACC.Link id={editor.validator.reasoningComments.key} route={getStepLink("reasoningStep")}><ACC.Content value={x => x.pcrReasoningSummary.edit}/></ACC.Link>}
             />
             <ACC.SummaryListItem
               labelContent={x => x.pcrReasoningSummary.labels.files}
-              content={documents.length ? <ACC.DocumentList documents={documents} qa="docs" /> : <ACC.Content value={x => x.pcrReasoningSummary.noDocuments()}/>}
+              content={documents.length ? <ACC.DocumentList documents={documents} qa="docs" /> : <ACC.Content value={x => x.pcrReasoningSummary.noDocuments}/>}
               qa="files"
-              action={mode === "prepare" && <ACC.Link route={getStepLink("filesStep")}><ACC.Content value={x => x.pcrReasoningSummary.edit()}/></ACC.Link>}
+              action={mode === "prepare" && <ACC.Link route={getStepLink("filesStep")}><ACC.Content value={x => x.pcrReasoningSummary.edit}/></ACC.Link>}
             />
           </ACC.SummaryList>
         </ACC.Section>
@@ -82,7 +82,7 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
         onChange={dto => this.props.onChange(dto)}
         onSubmit={() => this.props.onSave(editor.data)}
       >
-        <PCRForm.Fieldset headingContent={x => x.pcrReasoningSummary.markAsCompleteHeading()}>
+        <PCRForm.Fieldset headingContent={x => x.pcrReasoningSummary.markAsCompleteHeading}>
           <PCRForm.Checkboxes
             name="reasoningStatus"
             options={options}
