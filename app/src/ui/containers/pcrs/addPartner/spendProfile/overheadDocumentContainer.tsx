@@ -73,7 +73,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
         <ACC.Renderers.Messages messages={this.props.messages} />
         {this.renderForm(editor)}
         {this.renderFiles(editor, documents)}
-        <ACC.Link styling="PrimaryButton" route={back}><ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.submitButton()}/></ACC.Link>
+        <ACC.Link styling="PrimaryButton" route={back}><ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.submitButton}/></ACC.Link>
       </ACC.Page>
     );
   }
@@ -88,13 +88,13 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
           onChange={(dto) => this.props.onFileChange(false, dto)}
           qa="projectChangeRequestItemUpload"
         >
-          <UploadForm.Fieldset headingContent={x => x.pcrSpendProfileOverheadDocumentContent.guidanceHeading()}>
-            <ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadGuidance()}/>
+          <UploadForm.Fieldset headingContent={x => x.pcrSpendProfileOverheadDocumentContent.guidanceHeading}>
+            <ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadGuidance}/>
           </UploadForm.Fieldset>
-          <UploadForm.Fieldset headingContent={x => x.pcrSpendProfileOverheadDocumentContent.templateHeading()} qa="template">
+          <UploadForm.Fieldset headingContent={x => x.pcrSpendProfileOverheadDocumentContent.templateHeading} qa="template">
             {this.renderTemplateLink()}
           </UploadForm.Fieldset>
-          <UploadForm.Fieldset qa="documentUpload" headingContent={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadHeading()}>
+          <UploadForm.Fieldset qa="documentUpload" headingContent={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadHeading}>
             <UploadForm.Hidden name="description" value={x => DocumentDescription.OverheadCalculationSpreadsheet} />
             <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
