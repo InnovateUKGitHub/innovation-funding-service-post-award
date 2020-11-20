@@ -22,8 +22,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
     return (
       <React.Fragment>
-        <ACC.Section qa="de-minimis" titleContent={x => x.pcrAddPartnerStateAidEligibilityContent.deMinimisTitle()}>
-          <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.deMinimisGuidance()}/>
+        <ACC.Section qa="de-minimis" titleContent={x => x.pcrAddPartnerStateAidEligibilityContent.deMinimisTitle}>
+          <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.deMinimisGuidance}/>
           {this.renderDeMinimisForm(documentsEditor)}
           {this.renderDeMinimisFiles(documentsEditor, documents)}
         </ACC.Section>
@@ -66,10 +66,10 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           onChange={(dto) => this.props.onFileChange(false, dto)}
           qa="projectChangeRequestItemUpload"
         >
-          <UploadForm.Fieldset headingContent={x => x.pcrAddPartnerStateAidEligibilityContent.templateSectionTitle()} qa="template">
+          <UploadForm.Fieldset headingContent={x => x.pcrAddPartnerStateAidEligibilityContent.templateSectionTitle} qa="template">
             {this.renderTemplateLinks(this.props.pcrItemType)}
           </UploadForm.Fieldset>
-          <UploadForm.Fieldset headingContent={x => x.pcrAddPartnerStateAidEligibilityContent.uploadDeclarationSectionTitle()} qa="documentGuidance">
+          <UploadForm.Fieldset headingContent={x => x.pcrAddPartnerStateAidEligibilityContent.uploadDeclarationSectionTitle} qa="documentGuidance">
             <UploadForm.Hidden name="description" value={x => DocumentDescription.DeMinimisDeclarationForm} />
             <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
