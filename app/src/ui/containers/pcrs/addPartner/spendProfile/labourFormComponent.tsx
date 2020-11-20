@@ -24,7 +24,7 @@ export class LabourFormComponent extends Component<SpendProfileCostFormProps<PCR
             value={dto => dto.id}
           />
           <Form.String
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.role()}
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.role}
             width={"one-third"}
             name="description"
             value={dto => dto.description}
@@ -32,7 +32,7 @@ export class LabourFormComponent extends Component<SpendProfileCostFormProps<PCR
             validation={validator && validator.description}
           />
           <Form.Numeric
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.grossCost()}
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.grossCost}
             name="grossCostOfRole"
             width={"one-third"}
             value={dto => dto.grossCostOfRole}
@@ -40,8 +40,8 @@ export class LabourFormComponent extends Component<SpendProfileCostFormProps<PCR
             validation={validator && validator.grossCostOfRole}
           />
           <Form.Numeric
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.rate()}
-            hintContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.rateHint()}
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.rate}
+            hintContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.rateHint}
             name="ratePerDay"
             width={"one-third"}
             value={dto => dto.ratePerDay}
@@ -49,7 +49,7 @@ export class LabourFormComponent extends Component<SpendProfileCostFormProps<PCR
             validation={validator && validator.ratePerDay}
           />
           <Form.Numeric
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.daysOnProject()}
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.daysOnProject}
             name="daysSpentOnProject"
             width={"one-third"}
             value={dto => dto.daysSpentOnProject}
@@ -57,8 +57,8 @@ export class LabourFormComponent extends Component<SpendProfileCostFormProps<PCR
             validation={validator && validator.daysSpentOnProject}
           />
           {this.props.isClient && <Form.Custom
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.totalCost()}
-            hintContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.totalCostHint()}
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.totalCost}
+            hintContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.totalCostHint}
             labelBold={true}
             name="totalCost"
             value={dto => <ACC.Renderers.SimpleString><ACC.Renderers.Currency value={dto.value}/></ACC.Renderers.SimpleString>}

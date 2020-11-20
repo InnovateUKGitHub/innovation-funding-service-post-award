@@ -120,8 +120,8 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
     ];
     return (
       <Table.Table qa="costs" data={costs} footers={footers}>
-        <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().description()} value={x => x.description} qa={"description"}/>
-        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().cost()} value={x => x.value} qa={"cost"}/>
+        <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().description} value={x => x.description} qa={"description"}/>
+        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().cost} value={x => x.value} qa={"cost"}/>
         <Table.Custom qa="links" header="Links" hideHeader={true} value={x => this.renderLinks(this.props.itemId, x.id, this.props.costCategoryId, this.props.projectId, this.props.pcrId)} />
       </Table.Table>
     );

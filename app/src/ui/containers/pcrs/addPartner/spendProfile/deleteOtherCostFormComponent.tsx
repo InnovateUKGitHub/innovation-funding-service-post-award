@@ -9,8 +9,8 @@ export const DeleteOtherCostFormComponent = (props: SpendProfileDeleteFormProps<
     <ACC.Section titleContent={x => x.pcrSpendProfileDeleteCostContent.costSectionTitle(costCategory.name)}>
       <ACC.ValidationMessage messageType="alert" message={x => x.pcrSpendProfileDeleteCostContent.deleteGuidance()} />
       <ACC.SummaryList qa="deleteOtherCost">
-        <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.otherCosts.description()} content={data.description} qa="description" />
-        <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.otherCosts.totalCost()} content={<ACC.Renderers.Currency value={data.value} />} qa="value" />
+        <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.otherCosts.description} content={data.description} qa="description" />
+        <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.otherCosts.totalCost} content={<ACC.Renderers.Currency value={data.value} />} qa="value" />
       </ACC.SummaryList>
     </ACC.Section>
   );

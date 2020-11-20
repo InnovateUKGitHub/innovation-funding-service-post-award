@@ -57,7 +57,7 @@ class Component extends React.Component<SpendProfileCostFormProps<PCRSpendProfil
           />
           {this.renderFormHiddenSection(data, Form, validator, documents, editor)}
           {this.props.isClient && <Form.Custom
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.overheads.totalCost()}
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.overheads.totalCost}
             labelBold={true}
             name="totalCost"
             value={dto => <ACC.Renderers.SimpleString><ACC.Renderers.Currency value={dto.value}/></ACC.Renderers.SimpleString>}
@@ -87,10 +87,10 @@ class Component extends React.Component<SpendProfileCostFormProps<PCRSpendProfil
     return (
       <form.Fieldset>
         <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.messages.overHeadsCalculatedGuidance()} /></ACC.Renderers.SimpleString>
-        <form.Button name="calculateOverheadsDocuments" onClick={() => this.props.onSave(editor.data, this.getUploadDocumentsLink())}><ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.labels.overheads.uploadDocumentsLink()} /></form.Button>
+        <form.Button name="calculateOverheadsDocuments" onClick={() => this.props.onSave(editor.data, this.getUploadDocumentsLink())}><ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.labels.overheads.uploadDocumentsLink} /></form.Button>
         {this.renderDocuments(documents)}
         <form.Numeric
-          labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.overheads.calculatedCost()}
+          labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.overheads.calculatedCost}
           width="one-quarter"
           name="value"
           value={dto => dto.value}
