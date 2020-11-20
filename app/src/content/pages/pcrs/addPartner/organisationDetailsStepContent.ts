@@ -12,6 +12,6 @@ export class PCRAddPartnerOrganisationDetailsContent extends ContentPageBase {
   public readonly pcrItem = new PCRItem(this, this.project);
   public readonly labels = new PCRAddPartnerLabels(this, this.project);
 
-  public readonly sectionTitle = () => this.getContent("section-title");
-  public readonly guidance = () => this.getContent("guidance", {markdown: true});
+  public readonly sectionTitle = this.getContent("section-title");
+  public readonly guidance = this.getContent("guidance", {markdown: true});
 }

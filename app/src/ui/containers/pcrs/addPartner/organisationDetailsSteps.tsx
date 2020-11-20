@@ -20,7 +20,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
   const selectedSizeOption = props.pcrItem.participantSize && sizeOptions.find(x => parseInt(x.id, 10) === props.pcrItem.participantSize);
 
   return (
-    <ACC.Section titleContent={x => x.pcrAddPartnerOrganisationDetails.sectionTitle()}>
+    <ACC.Section titleContent={x => x.pcrAddPartnerOrganisationDetails.sectionTitle}>
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
@@ -30,7 +30,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
       >
         <Form.Fieldset headingContent={x => x.pcrAddPartnerOrganisationDetails.labels.organisationSizeHeading}>
           <React.Fragment>
-            <SimpleString><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.guidance()}/></SimpleString>
+            <SimpleString><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.guidance}/></SimpleString>
           </React.Fragment>
           <Form.Radio
             name="participantSize"
