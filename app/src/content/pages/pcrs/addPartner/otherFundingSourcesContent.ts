@@ -12,12 +12,12 @@ export class PCRAddPartnerOtherFundingSourcesContent extends ContentPageBase {
   public readonly pcrItem = new PCRItem(this, this.project);
   public readonly labels = new PCRAddPartnerLabels(this, this.project);
 
-  public readonly formSectionTitle = () => this.getContent("form-section-title");
-  public readonly guidance = () => this.getContent("guidance", {markdown: true});
-  public readonly columnHeaderDescription = () => this.getContent("column-header-description");
-  public readonly columnHeaderDate = () => this.getContent("column-header-date");
-  public readonly columnHeaderValue = () => this.getContent("column-header-value");
-  public readonly footerLabelTotal = () => this.getContent("footer-label-total");
-  public readonly removeButton = () => this.getContent("button-remove");
-  public readonly addButton = () => this.getContent("button-add");
+  public readonly formSectionTitle = this.getContent("form-section-title");
+  public readonly guidance = this.getContent("guidance", {markdown: true});
+  public readonly columnHeaderDescription = this.getContent("column-header-description");
+  public readonly columnHeaderDate = this.getContent("column-header-date");
+  public readonly columnHeaderValue = this.getContent("column-header-value");
+  public readonly footerLabelTotal = this.getContent("footer-label-total");
+  public readonly removeButton = this.getContent("button-remove");
+  public readonly addButton = this.getContent("button-add");
 }
