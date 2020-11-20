@@ -12,6 +12,6 @@ export class MonitoringReportsQuestionStepContent extends ContentPageBase {
   public readonly messages = new MonitoringReportsMessages(this, this.project);
   public readonly labels = new MonitoringReportsLabels(this, this.project);
 
-  public readonly continueButton = () => this.getContent("button-continue");
-  public readonly saveAndReturnButton = () => this.getContent("button-save-and-return");
+  public readonly continueButton = this.getContent("button-continue");
+  public readonly saveAndReturnButton = this.getContent("button-save-and-return");
 }
