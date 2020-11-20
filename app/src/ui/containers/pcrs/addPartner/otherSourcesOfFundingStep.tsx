@@ -26,8 +26,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     const Table = ACC.TypedTable<PCRSpendProfileOtherFundingDto>();
 
     return (
-      <ACC.Section titleContent={x => x.pcrAddPartnerOtherFundingSources.formSectionTitle()}>
-        <ACC.Content value={x => x.pcrAddPartnerOtherFundingSources.guidance()} />
+      <ACC.Section titleContent={x => x.pcrAddPartnerOtherFundingSources.formSectionTitle}>
+        <ACC.Content value={x => x.pcrAddPartnerOtherFundingSources.guidance} />
         <Form.Form
           qa="addPartnerForm"
           data={{}}
@@ -55,7 +55,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     return (
       <Table.Table qa="otherFundingTable" data={funds} footers={this.renderFooters(pcrItem)}>
         <Table.Custom
-          headerContent={x => x.pcrAddPartnerOtherFundingSources.columnHeaderDescription()}
+          headerContent={x => x.pcrAddPartnerOtherFundingSources.columnHeaderDescription}
           qa="cost-description"
           value={(x, i) => (
             <React.Fragment>
@@ -75,7 +75,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           )}
         />
         <Table.Custom
-          headerContent={x => x.pcrAddPartnerOtherFundingSources.columnHeaderDate()}
+          headerContent={x => x.pcrAddPartnerOtherFundingSources.columnHeaderDate}
           qa="cost-date"
           value={(x, i) => (
             <Form.MonthYear
@@ -92,7 +92,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           )}
         />
         <Table.Custom
-          headerContent={x => x.pcrAddPartnerOtherFundingSources.columnHeaderValue()}
+          headerContent={x => x.pcrAddPartnerOtherFundingSources.columnHeaderValue}
           qa="cost-value"
           value={(x, i) => (
             <Form.Numeric
@@ -112,7 +112,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           qa="remove"
           value={dto => (
             <a data-qa="remove-fund" href="" className="govuk-link" role="button" onClick={e => this.removeItem(e, pcrItem, dto)}>
-              <ACC.Content value={x => x.pcrAddPartnerOtherFundingSources.removeButton()} />
+              <ACC.Content value={x => x.pcrAddPartnerOtherFundingSources.removeButton} />
             </a>
           )}
           width={1}
@@ -162,7 +162,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
         <tr key={1} className="govuk-table__row">
           <td colSpan={4} className="govuk-table__cell">
             <a href="" className="govuk-link" role="button" onClick={(e) => this.addItem(e, pcrItemDto)} data-qa="add-fund">
-              <ACC.Content value={x => x.pcrAddPartnerOtherFundingSources.addButton()} />
+              <ACC.Content value={x => x.pcrAddPartnerOtherFundingSources.addButton} />
             </a>
           </td>
         </tr>
@@ -173,7 +173,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
       <tr key={2} className="govuk-table__row">
         <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td>
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
-          <ACC.Content value={x => x.pcrAddPartnerOtherFundingSources.footerLabelTotal()} />
+          <ACC.Content value={x => x.pcrAddPartnerOtherFundingSources.footerLabelTotal} />
         </td>
         <td className="govuk-table__cell govuk-table__cell--numeric"><ACC.Renderers.Currency value={total} /></td>
         {this.props.isClient ? <td className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></td> : null}
