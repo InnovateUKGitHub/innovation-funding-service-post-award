@@ -121,8 +121,8 @@ class Component extends React.Component<SpendProfileCostFormProps<PCRSpendProfil
 
   private renderDocuments(documents: DocumentSummaryDto[]) {
     return (
-      <ACC.Section titleContent={x => x.pcrSpendProfilePrepareCostContent.documentLabels.filesUploadedTitle()} qa="supporting-documents-section">
-        <ACC.Renderers.SimpleString>{documents.length ? <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.documentLabels.filesUploadedSubtitle()}/> : "" }</ACC.Renderers.SimpleString>
+      <ACC.Section titleContent={x => x.pcrSpendProfilePrepareCostContent.documentLabels.filesUploadedTitle} qa="supporting-documents-section">
+        <ACC.Renderers.SimpleString>{documents.length ? <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.documentLabels.filesUploadedSubtitle}/> : "" }</ACC.Renderers.SimpleString>
         {documents.length > 0 ? <ACC.DocumentTable documents={documents} qa="supporting-documents"/> : <ValidationMessage message={x => x.pcrSpendProfilePrepareCostContent.documentMessages.noDocumentsUploaded()} messageType="info" />}
       </ACC.Section>
     );

@@ -55,7 +55,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
             <UploadForm.Hidden name="description" value={x => DocumentDescription.AgreementToPCR} />
             <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
-              labelContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.uploadInputLabel()}
+              labelContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.uploadInputLabel}
               name="attachment"
               labelHidden={true}
               value={data => data.files}
@@ -68,7 +68,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
             <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}>
-              <ACC.Content value={x => x.pcrAddPartnerAgreementToPcr.documentLabels.uploadButtonLabel()} />
+              <ACC.Content value={x => x.pcrAddPartnerAgreementToPcr.documentLabels.uploadButtonLabel} />
             </UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
@@ -80,8 +80,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     if (documents.length) {
       return (
         <ACC.Section
-          titleContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.filesUploadedTitle()}
-          subtitleContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.filesUploadedSubtitle()}
+          titleContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.filesUploadedTitle}
+          subtitleContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.filesUploadedSubtitle}
         >
           {
             documents.length
@@ -92,7 +92,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
       );
     }
     return (
-      <ACC.Section titleContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.filesUploadedTitle()}>
+      <ACC.Section titleContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.filesUploadedTitle}>
         <ACC.ValidationMessage message={x => x.pcrAddPartnerAgreementToPcr.documentMessages.noDocumentsUploaded()} messageType="info" />
       </ACC.Section>
     );

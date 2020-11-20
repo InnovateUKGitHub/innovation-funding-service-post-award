@@ -64,13 +64,13 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawal
   private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (documents.length) {
       return (
-        <ACC.Section titleContent={x => x.pcrRemovePartnerPrepareItemFiles.documentLabels.filesUploadedTitle()} subtitleContent={x => x.pcrRemovePartnerPrepareItemFiles.documentLabels.filesUploadedSubtitle()}>
+        <ACC.Section titleContent={x => x.pcrRemovePartnerPrepareItemFiles.documentLabels.filesUploadedTitle} subtitleContent={x => x.pcrRemovePartnerPrepareItemFiles.documentLabels.filesUploadedSubtitle}>
           <ACC.DocumentListWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="supporting-documents" />
         </ACC.Section>
       );
     }
     return (
-      <ACC.Section titleContent={x => x.pcrRemovePartnerPrepareItemFiles.documentLabels.filesUploadedTitle()}>
+      <ACC.Section titleContent={x => x.pcrRemovePartnerPrepareItemFiles.documentLabels.filesUploadedTitle}>
         <ACC.ValidationMessage message={x => x.pcrRemovePartnerPrepareItemFiles.documentMessages.noDocumentsUploaded()} messageType="info" />
       </ACC.Section>
     );

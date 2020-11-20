@@ -74,15 +74,15 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
     if (documents.length) {
       return (
         <ACC.Section
-          titleContent={x => x.projectSetupBankStatement.documentLabels.filesUploadedTitle()}
-          subtitleContent={x => x.projectSetupBankStatement.documentLabels.filesUploadedSubtitle()}
+          titleContent={x => x.projectSetupBankStatement.documentLabels.filesUploadedTitle}
+          subtitleContent={x => x.projectSetupBankStatement.documentLabels.filesUploadedSubtitle}
         >
           <ACC.DocumentTableWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="partner-document"/>
         </ACC.Section>
       );
     }
     return (
-      <ACC.Section titleContent={x => x.projectSetupBankStatement.documentLabels.filesUploadedTitle()}>
+      <ACC.Section titleContent={x => x.projectSetupBankStatement.documentLabels.filesUploadedTitle}>
         <ACC.ValidationMessage message={x => x.projectSetupBankStatement.documentMessages.noDocumentsUploaded()} messageType="info" />
       </ACC.Section>
     );
@@ -103,7 +103,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
             <UploadForm.Hidden name="description" value={x => DocumentDescription.BankStatement} />
             <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
-              labelContent={x => x.projectSetupBankStatement.documentLabels.uploadInputLabel()}
+              labelContent={x => x.projectSetupBankStatement.documentLabels.uploadInputLabel}
               name="attachment"
               labelHidden={true}
               value={data => data.files}
@@ -116,7 +116,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
             <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}>
-              <ACC.Content value={x => x.projectSetupBankStatement.documentLabels.uploadButtonLabel()} />
+              <ACC.Content value={x => x.projectSetupBankStatement.documentLabels.uploadButtonLabel} />
             </UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
