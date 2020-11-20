@@ -6,8 +6,8 @@ export class PCRRemovePartnerLabels extends ContentBase {
     super(parent, "pcr-remove-partner-labels", project);
   }
 
-  public readonly removalPeriod = () => this.getContent("removal-period");
-  public readonly removedPartner = () => this.getContent("removed-partner");
-  public readonly lastPeriod = () => this.getContent("last-period");
-  public readonly documents = () => this.getContent("documents");
+  public readonly removalPeriod = this.getContent("removal-period");
+  public readonly removedPartner = this.getContent("removed-partner");
+  public readonly lastPeriod = this.getContent("last-period");
+  public readonly documents = this.getContent("documents");
 }
