@@ -38,7 +38,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForAccountNameChange
           <UploadForm.Fieldset headingContent={x => x.pcrNameChangePrepareItemFiles.uploadCertificateHeading()}>
             <ACC.DocumentGuidance/>
             <UploadForm.MulipleFileUpload
-              labelContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.uploadInputLabel()}
+              labelContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.uploadInputLabel}
               name="attachment"
               labelHidden={true}
               value={data => data.files}
@@ -47,7 +47,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForAccountNameChange
             />
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
-            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}><ACC.Content value={x => x.pcrNameChangePrepareItemFiles.documentLabels.uploadButtonLabel()}/></UploadForm.Button>
+            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}><ACC.Content value={x => x.pcrNameChangePrepareItemFiles.documentLabels.uploadButtonLabel}/></UploadForm.Button>
             <UploadForm.Button name="uploadFileAndContinue" styling="Primary"><ACC.Content value={x => x.pcrNameChangePrepareItemFiles.pcrItem.submitButton()}/></UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
@@ -58,13 +58,13 @@ class Component extends React.Component<PcrStepProps<PCRItemForAccountNameChange
   private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (documents.length) {
       return (
-        <ACC.Section titleContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.filesUploadedTitle()} subtitleContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.filesUploadedSubtitle()}>
+        <ACC.Section titleContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.filesUploadedTitle} subtitleContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.filesUploadedSubtitle}>
           <ACC.DocumentListWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="supporting-documents" />
         </ACC.Section>
       );
     }
     return (
-      <ACC.Section titleContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.filesUploadedTitle()}>
+      <ACC.Section titleContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.filesUploadedTitle}>
         <ACC.ValidationMessage message={x => x.pcrNameChangePrepareItemFiles.doucmentMessages.noDocumentsUploaded()} messageType="info" />
       </ACC.Section>
     );

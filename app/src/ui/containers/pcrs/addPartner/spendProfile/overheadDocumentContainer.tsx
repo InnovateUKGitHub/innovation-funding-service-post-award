@@ -98,7 +98,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
             <UploadForm.Hidden name="description" value={x => DocumentDescription.OverheadCalculationSpreadsheet} />
             <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
-              labelContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.uploadInputLabel()}
+              labelContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.uploadInputLabel}
               name="attachment"
               labelHidden={true}
               value={data => data.files}
@@ -110,7 +110,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
             />
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
-            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}><ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.labels.uploadButtonLabel()}/></UploadForm.Button>
+            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}><ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.labels.uploadButtonLabel}/></UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
       </ACC.Section>
@@ -129,13 +129,13 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
   private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (documents.length) {
       return (
-        <ACC.Section titleContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedTitle()} subtitleContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedSubtitle()}>
+        <ACC.Section titleContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedTitle} subtitleContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedSubtitle}>
           <ACC.DocumentTableWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="overhead-calculation-document"/>
         </ACC.Section>
       );
     }
     return (
-      <ACC.Section titleContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedTitle()}>
+      <ACC.Section titleContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedTitle}>
         <ACC.ValidationMessage message={x => x.pcrSpendProfileOverheadDocumentContent.messages.noDocumentsUploaded()} messageType="info" />
       </ACC.Section>
     );

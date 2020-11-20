@@ -73,7 +73,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
             <UploadForm.Hidden name="description" value={x => DocumentDescription.DeMinimisDeclarationForm} />
             <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
-              labelContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.uploadInputLabel()}
+              labelContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.uploadInputLabel}
               name="attachment"
               labelHidden={true}
               value={data => data.files}
@@ -86,7 +86,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
             <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}>
-              <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.uploadButtonLabel()} />
+              <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.uploadButtonLabel} />
             </UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
@@ -98,8 +98,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     if (documents.length) {
       return (
         <ACC.Section
-          titleContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.filesUploadedTitle()}
-          subtitleContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.filesUploadedSubtitle()}
+          titleContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.filesUploadedTitle}
+          subtitleContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.filesUploadedSubtitle}
         >
           {
             documents.length
@@ -110,7 +110,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
       );
     }
     return (
-      <ACC.Section titleContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.filesUploadedTitle()}>
+      <ACC.Section titleContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.filesUploadedTitle}>
         <ACC.ValidationMessage message={x => x.pcrAddPartnerStateAidEligibilityContent.documentMessages.noDocumentsUploaded()} messageType="info" />
       </ACC.Section>
     );
