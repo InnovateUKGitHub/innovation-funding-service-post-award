@@ -33,7 +33,7 @@ class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.forecastDetails.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}><ACC.Content value={x => x.forecastsUpdate.backLink()}/></ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.forecastDetails.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}><ACC.Content value={x => x.forecastsUpdate.backLink}/></ACC.BackLink>}
         error={editor.error}
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={combined.project} />}
@@ -51,7 +51,7 @@ class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
             <ACC.Claims.ForecastTable data={combined} editor={editor} />
             <Form.Fieldset>
               <ACC.Claims.ClaimLastModified partner={combined.partner} />
-              <Form.Submit><ACC.Content value={x => x.forecastsUpdate.submitButton()}/></Form.Submit>
+              <Form.Submit><ACC.Content value={x => x.forecastsUpdate.submitButton}/></Form.Submit>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
