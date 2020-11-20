@@ -6,6 +6,6 @@ export class PCRPeriodLengthChangeLabels extends ContentBase {
     super(parent, "pcr-period-length-change-labels", project);
   }
 
-  public readonly currentPeriodLength = () => this.getContent("current-period-length");
-  public readonly newPeriodLength = () => this.getContent("new-period-length");
+  public readonly currentPeriodLength = this.getContent("current-period-length");
+  public readonly newPeriodLength = this.getContent("new-period-length");
 }
