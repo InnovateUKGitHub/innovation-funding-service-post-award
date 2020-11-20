@@ -24,14 +24,14 @@ export class OtherCostsFormComponent extends Component<SpendProfileCostFormProps
             value={dto => dto.id}
           />
           <Form.MultilineString
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.otherCosts.description()}
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.otherCosts.description}
             name="description"
             value={dto => dto.description}
             update={(x, val) => x.description = val}
             validation={validator && validator.description}
           />
           <Form.Numeric
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.otherCosts.totalCost()}
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.otherCosts.totalCost}
             width="one-quarter"
             name="value"
             value={dto => dto.value}
