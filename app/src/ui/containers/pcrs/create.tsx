@@ -33,14 +33,14 @@ class PCRCreateComponent extends ContainerBase<CreateProjectChangeRequestParams,
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>
-          <ACC.Content value={x => x.pcrCreate.backLink()}/>
+          <ACC.Content value={x => x.pcrCreate.backLink}/>
         </ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         validator={editor.validator}
         error={editor.error}
       >
-        <ACC.Content value={x => x.pcrCreate.guidanceMessage()}/>
+        <ACC.Content value={x => x.pcrCreate.guidanceMessage}/>
         <ACC.Section qa="pcr-create">
           {this.renderForm(editor, itemTypes)}
         </ACC.Section>
@@ -56,9 +56,9 @@ class PCRCreateComponent extends ContainerBase<CreateProjectChangeRequestParams,
     const selected = options.filter(x => pcrEditor.data.items.some(y => y.type.toString() === x.id));
     return (
       <PCRForm.Form editor={pcrEditor} onSubmit={() => this.props.onChange(true, pcrEditor.data)} onChange={dto => this.props.onChange(false, dto)} qa="pcr-create-form">
-        <PCRForm.Fieldset headingContent={x => x.pcrCreate.selectRequestTypesTitle()}>
+        <PCRForm.Fieldset headingContent={x => x.pcrCreate.selectRequestTypesTitle}>
           <PCRForm.Checkboxes
-            hintContent={x => x.pcrCreate.selectTypesHint()}
+            hintContent={x => x.pcrCreate.selectTypesHint}
             options={options}
             name="types"
             validation={pcrEditor.validator.items}
@@ -71,9 +71,9 @@ class PCRCreateComponent extends ContainerBase<CreateProjectChangeRequestParams,
           />
         </PCRForm.Fieldset>
         <PCRForm.Fieldset>
-          <PCRForm.Submit><ACC.Content value={x => x.pcrCreate.createRequestButton()} /></PCRForm.Submit>
+          <PCRForm.Submit><ACC.Content value={x => x.pcrCreate.createRequestButton} /></PCRForm.Submit>
           <ACC.Link styling="SecondaryButton" route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>
-            <ACC.Content value={x => x.pcrCreate.cancelRequestButton()}/>
+            <ACC.Content value={x => x.pcrCreate.cancelRequestButton}/>
           </ACC.Link>
         </PCRForm.Fieldset>
       </PCRForm.Form>
