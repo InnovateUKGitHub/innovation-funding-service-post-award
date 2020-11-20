@@ -11,15 +11,17 @@ const route = { name: "test", path: "/test" } as any;
 const router = createRouter([route]).usePlugin(browserPluginFactory({ useHash: false }));
 
 export type TestBedContent = Partial<Content>;
+export type TestBedStore = Partial<IStores>;
 
 export interface ITestBedProps {
   content?: TestBedContent;
-  stores?: Partial<IStores>;
+  stores?: TestBedStore;
   children: React.ReactElement<{}>;
 }
 
 // Note: When testing a component that consumes <Content />, it expects a provider to be present.
 export function TestBed({ content, stores, children }: ITestBedProps) {
+  // TODO: Consider deep merge strategy
   const storesValue = stores || stubStores;
   const contentValue = content || {};
 
