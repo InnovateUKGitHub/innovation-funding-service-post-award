@@ -86,7 +86,7 @@ class Component extends React.Component<SpendProfileCostFormProps<PCRSpendProfil
     if (this.props.isClient && data.overheadRate !== PCRSpendProfileOverheadRate.Calculated) return null;
     return (
       <form.Fieldset>
-        <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.messages.overHeadsCalculatedGuidance()} /></ACC.Renderers.SimpleString>
+        <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.messages.overHeadsCalculatedGuidance} /></ACC.Renderers.SimpleString>
         <form.Button name="calculateOverheadsDocuments" onClick={() => this.props.onSave(editor.data, this.getUploadDocumentsLink())}><ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.labels.overheads.uploadDocumentsLink} /></form.Button>
         {this.renderDocuments(documents)}
         <form.Numeric
