@@ -28,7 +28,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
     return (
       <ACC.Section titleContent={x => x.pcrAddPartnerAcademicCosts.labels.projectCostsHeading}>
-        <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.stepGuidance()}/></ACC.Renderers.SimpleString>
+        <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.stepGuidance}/></ACC.Renderers.SimpleString>
         <Form.Form
           data={this.props.pcrItem}
           isSaving={this.props.status === EditorStatus.Saving}
@@ -48,7 +48,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     return (
       <Form.Fieldset headingContent={x => x.pcrAddPartnerAcademicCosts.labels.tsbReferenceHeading}>
         <Form.String
-          labelContent={x => x.pcrAddPartnerAcademicCosts.tsbLabel()}
+          labelContent={x => x.pcrAddPartnerAcademicCosts.tsbLabel}
           width={"one-third"}
           name="tsbReference"
           value={dto => dto.tsbReference}
@@ -72,17 +72,17 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     const Table = ACC.TypedTable<Data>();
 
     return (
-      <Form.Fieldset headingContent={x => x.pcrAddPartnerAcademicCosts.costsSectionTitle()}>
-        <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.costsGuidance()}/></ACC.Renderers.SimpleString>
+      <Form.Fieldset headingContent={x => x.pcrAddPartnerAcademicCosts.costsSectionTitle}>
+        <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.costsGuidance}/></ACC.Renderers.SimpleString>
         <Table.Table qa="costsTable" data={data}>
           <Table.String
-            headerContent={x => x.pcrAddPartnerAcademicCosts.categoryHeading()}
+            headerContent={x => x.pcrAddPartnerAcademicCosts.categoryHeading}
             qa="category"
             value={x => x.costCategory.name}
-            footer={this.props.isClient && <ACC.Renderers.SimpleString className={"govuk-!-font-weight-bold"}><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.totalCosts()}/></ACC.Renderers.SimpleString>}
+            footer={this.props.isClient && <ACC.Renderers.SimpleString className={"govuk-!-font-weight-bold"}><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.totalCosts}/></ACC.Renderers.SimpleString>}
           />
           <Table.Custom
-            headerContent={x => x.pcrAddPartnerAcademicCosts.costHeading()}
+            headerContent={x => x.pcrAddPartnerAcademicCosts.costHeading}
             qa="cost-value"
             classSuffix="numeric"
             value={x => this.renderCost(x)}
