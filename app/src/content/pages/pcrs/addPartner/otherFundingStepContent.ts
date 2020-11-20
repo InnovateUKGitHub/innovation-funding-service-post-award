@@ -12,7 +12,7 @@ export class PCRAddPartnerOtherFundingContent extends ContentPageBase {
   public readonly pcrItem = new PCRItem(this, this.project);
   public readonly labels = new PCRAddPartnerLabels(this, this.project);
 
-  public readonly formSectionTitle = () => this.getContent("form-section-title");
-  public readonly guidance = () => this.getContent("guidance", {markdown: true});
-  public readonly questionLabel = () => this.getContent("label-other-sources-question");
+  public readonly formSectionTitle = this.getContent("form-section-title");
+  public readonly guidance = this.getContent("guidance", {markdown: true});
+  public readonly questionLabel = this.getContent("label-other-sources-question");
 }

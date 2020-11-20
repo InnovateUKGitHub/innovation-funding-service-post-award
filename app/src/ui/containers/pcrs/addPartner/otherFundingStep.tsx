@@ -16,8 +16,8 @@ export const OtherFundingStep = (props: PcrStepProps<PCRItemForPartnerAdditionDt
   }];
 
   return (
-    <ACC.Section titleContent={x => x.pcrAddPartnerOtherFunding.formSectionTitle()}>
-      <Content value={x => x.pcrAddPartnerOtherFunding.guidance()} />
+    <ACC.Section titleContent={x => x.pcrAddPartnerOtherFunding.formSectionTitle}>
+      <Content value={x => x.pcrAddPartnerOtherFunding.guidance} />
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
@@ -28,7 +28,7 @@ export const OtherFundingStep = (props: PcrStepProps<PCRItemForPartnerAdditionDt
         <Form.Fieldset>
           <Form.Radio
             name="hasOtherFunding"
-            labelContent={x => x.pcrAddPartnerOtherFunding.questionLabel()}
+            labelContent={x => x.pcrAddPartnerOtherFunding.questionLabel}
             labelHidden={true}
             options={options}
             inline={false}
