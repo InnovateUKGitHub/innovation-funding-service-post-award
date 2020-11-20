@@ -8,10 +8,11 @@ export interface PageTitleProps {
 
 export function PageTitle({ caption, title }: PageTitleProps) {
   const stores = useStores();
+  const { displayTitle } = stores.navigation.getPageTitle();
 
-  const titleValue = title || stores.navigation.getPageTitle().displayTitle;
+  const titleValue = title || displayTitle;
 
-  if (!titleValue || !titleValue.length) return null;
+  if (!titleValue.length) return null;
 
   return (
     <div data-qa="page-title">
@@ -21,9 +22,7 @@ export function PageTitle({ caption, title }: PageTitleProps) {
         </span>
       )}
 
-      <h1 className="govuk-heading-xl clearFix" data-qa="page-title-value">
-        {titleValue}
-      </h1>
+      <h1 className="govuk-heading-xl clearFix">{titleValue}</h1>
     </div>
   );
 }
