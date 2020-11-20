@@ -23,8 +23,8 @@ export class MonitoringReportQuestionStep extends React.Component<Props> {
           <ReportForm.Form editor={editor} onChange={(dto) => onChange(dto)} qa="monitoringReportQuestionForm" >
             {this.renderFormItem(editor, questionNumber)}
             <ReportForm.Fieldset qa="save-buttons">
-              <ReportForm.Button name="save-continue" styling="Primary" onClick={() => onSave(editor.data, true)}><ACC.Content value={(x) => x.monitoringReportsQuestionStep.continueButton()} /></ReportForm.Button>
-              <ReportForm.Button name="save-return" onClick={() => onSave(editor.data, false)}><ACC.Content value={(x) => x.monitoringReportsQuestionStep.saveAndReturnButton()} /></ReportForm.Button>
+              <ReportForm.Button name="save-continue" styling="Primary" onClick={() => onSave(editor.data, true)}><ACC.Content value={(x) => x.monitoringReportsQuestionStep.continueButton} /></ReportForm.Button>
+              <ReportForm.Button name="save-return" onClick={() => onSave(editor.data, false)}><ACC.Content value={(x) => x.monitoringReportsQuestionStep.saveAndReturnButton} /></ReportForm.Button>
             </ReportForm.Fieldset>
           </ReportForm.Form>
         </ACC.Section>
