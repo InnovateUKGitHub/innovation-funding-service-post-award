@@ -70,7 +70,7 @@
       "fileTypesQuestion": "What file types can I upload?"
     },
     "claimLastModified": {
-      "message": "Changes last saved: "
+      "message": "Changes last saved"
     },
     "claimWindow": {
       "nextClaimPeriod": "Next claim period",
