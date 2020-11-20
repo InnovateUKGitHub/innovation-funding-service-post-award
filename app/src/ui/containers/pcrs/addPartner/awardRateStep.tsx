@@ -32,10 +32,10 @@ export const AwardRateStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, 
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
           <Form.Submit>
-            <ACC.Content value={x => x.pcrAddPartnerAwardRate.pcrItem.submitButton()}/>
+            <ACC.Content value={x => x.pcrAddPartnerAwardRate.pcrItem.submitButton}/>
           </Form.Submit>
           <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
-            <Content value={x => x.pcrAddPartnerAwardRate.pcrItem.returnToSummaryButton()} />
+            <Content value={x => x.pcrAddPartnerAwardRate.pcrItem.returnToSummaryButton} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>

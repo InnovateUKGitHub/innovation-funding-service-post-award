@@ -98,10 +98,10 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     return (
       <Form.Fieldset qa="save-and-continue">
         <Form.Submit>
-          <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.pcrItem.submitButton()}/>
+          <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.pcrItem.submitButton}/>
         </Form.Submit>
         <Form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}>
-          <Content value={x => x.pcrAddPartnerAcademicCosts.pcrItem.returnToSummaryButton()}/>
+          <Content value={x => x.pcrAddPartnerAcademicCosts.pcrItem.returnToSummaryButton}/>
         </Form.Button>
       </Form.Fieldset>
     );

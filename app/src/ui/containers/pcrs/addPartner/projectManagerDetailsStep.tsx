@@ -69,8 +69,8 @@ export const ProjectManagerDetailsStep = (props: PcrStepProps<PCRItemForPartnerA
           />
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
-          <Form.Submit>S<ACC.Content value={x => x.pcrAddPartnerProjectContacts.pcrItem.submitButton()}/></Form.Submit>
-          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerProjectContacts.pcrItem.returnToSummaryButton()}/></Form.Button>
+          <Form.Submit>S<ACC.Content value={x => x.pcrAddPartnerProjectContacts.pcrItem.submitButton}/></Form.Submit>
+          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerProjectContacts.pcrItem.returnToSummaryButton}/></Form.Button>
         </Form.Fieldset>
       </Form.Form>
     </ACC.Section>

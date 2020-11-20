@@ -50,7 +50,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRA
             validation={props.validator.accountName}
           />
         </Form.Fieldset>
-        <Form.Submit><ACC.Content value={x => x.pcrNameChange.pcrItem.submitButton()}/></Form.Submit>
+        <Form.Submit><ACC.Content value={x => x.pcrNameChange.pcrItem.submitButton}/></Form.Submit>
       </Form.Form>
     </ACC.Section>
   );

@@ -28,7 +28,7 @@ export class PCRPrepareReasoningStep extends ContainerBase<ReasoningStepProps, {
               rows={15}
             />
           </PCRForm.Fieldset>
-          <PCRForm.Button name="reasoningStep" styling="Primary" onClick={() => onSave(editor.data)}><ACC.Content value={x => x.pcrPrepareReasoning.pcrItem.submitButton()}/></PCRForm.Button>
+          <PCRForm.Button name="reasoningStep" styling="Primary" onClick={() => onSave(editor.data)}><ACC.Content value={x => x.pcrPrepareReasoning.pcrItem.submitButton}/></PCRForm.Button>
         </PCRForm.Form>
       </ACC.Section>
     );
