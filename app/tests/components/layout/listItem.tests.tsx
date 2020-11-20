@@ -1,11 +1,7 @@
 import React from "react";
-// tslint:disable-next-line: import-blacklist
-import { mount } from "enzyme";
 
-import {
-  ListItem,
-  ListItemProps,
-} from "../../../src/ui/components/layout/listItem";
+import { ListItem, ListItemProps } from "../../../src/ui/components/layout/listItem";
+import { render } from "@testing-library/react";
 
 describe("ListItem", () => {
   const setup = (props?: Partial<ListItemProps>) => {
@@ -13,39 +9,36 @@ describe("ListItem", () => {
       children: <div>some child element</div>,
     };
 
-    const wrapper = mount(<ListItem {...defaultProps} {...props} />);
-
-    // TODO: Improve this it is not resilient, consider refactoring to create a uid to query
-    const listItem = wrapper.find("ListItem").children();
-
-    return {
-      wrapper,
-      listItem,
-    };
+    return render(<ListItem {...defaultProps} {...props} />);
   };
 
   describe("@renders", () => {
-    it("with action required styles", () => {
-      const { listItem } = setup({ actionRequired: true });
-      const listItemClasses = listItem.prop("className");
+    describe("with className", () => {
+      it("which has an actionRequired class", () => {
+        const { container } = setup({ actionRequired: true });
 
-      expect(listItemClasses).toContain("actionRequired");
+        expect(container.firstChild).toHaveClass("acc-list-item__actionRequired");
+      });
+
+      it("with default classes", () => {
+        const { container } = setup();
+
+        expect(container.firstChild).not.toHaveClass("acc-list-item__actionRequired");
+      });
     });
 
-    it("with default styles", () => {
-      const { listItem } = setup();
-      const listItemClasses = listItem.prop("className");
-
-      expect(listItemClasses).not.toContain("actionRequired");
-    });
-
-    it("with qa value", () => {
+    it("with data-qa value", () => {
       const stubQa = "stub-qa";
-      const { listItem } = setup({ qa: stubQa });
+      const { queryByTestId } = setup({ qa: stubQa });
 
-      const qaValue = listItem.prop("data-qa");
+      expect(queryByTestId(stubQa)).toBeTruthy();
+    });
 
-      expect(qaValue).toBe(stubQa);
+    it("with other props", () => {
+      const stubTitle = "stub-title";
+      const { getByTitle } = setup({ title: stubTitle });
+
+      expect(getByTitle(stubTitle)).toBeTruthy();
     });
   });
 });
