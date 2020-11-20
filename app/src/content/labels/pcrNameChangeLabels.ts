@@ -6,8 +6,8 @@ export class PCRNameChangeLabels extends ContentBase {
     super(parent, "pcr-name-change-labels", project);
   }
 
-  public readonly enterName = () => this.getContent("enter-name");
-  public readonly exisitingName = () => this.getContent("exiting-name");
-  public readonly proposedName = () => this.getContent("proposed-name");
-  public readonly certificate = () => this.getContent("certificate");
+  public readonly enterName = this.getContent("enter-name");
+  public readonly exisitingName = this.getContent("exiting-name");
+  public readonly proposedName = this.getContent("proposed-name");
+  public readonly certificate = this.getContent("certificate");
 }

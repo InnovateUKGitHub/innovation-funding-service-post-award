@@ -41,7 +41,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRA
         </Form.Fieldset>
         <Form.Fieldset headingContent={x => x.pcrNameChange.enterNameHeading()}>
           <Form.String
-            labelContent={x => x.pcrNameChange.labels.enterName()}
+            labelContent={x => x.pcrNameChange.labels.enterName}
             hint={props.getRequiredToCompleteMessage()}
             labelHidden={true}
             name="accountName"
