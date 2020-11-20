@@ -13,12 +13,12 @@ export const PeriodLengthChangeSummary = (props: PcrSummaryProps<PCRItemForPerio
       <ACC.Section qa="guidance">
         <ACC.Content value={(x) => x.pcrPeriodLengthChangeContent.guidance()}/>
       </ACC.Section>
-      <ACC.ReadonlyLabel qa="current-length" labelContent={x => x.pcrPeriodLengthChangeContent.labels.currentPeriodLength()}>
+      <ACC.ReadonlyLabel qa="current-length" labelContent={x => x.pcrPeriodLengthChangeContent.labels.currentPeriodLength}>
         <ACC.Renderers.SimpleString qa="current-length">
           {props.project.claimFrequency === ClaimFrequency.Monthly ? monthlyContent : quarterlyContent}
         </ACC.Renderers.SimpleString>
       </ACC.ReadonlyLabel>
-      <ACC.ReadonlyLabel qa="new-length" labelContent={x => x.pcrPeriodLengthChangeContent.labels.newPeriodLength()}>
+      <ACC.ReadonlyLabel qa="new-length" labelContent={x => x.pcrPeriodLengthChangeContent.labels.newPeriodLength}>
         <ACC.Renderers.SimpleString qa="new-length">
           {props.project.claimFrequency === ClaimFrequency.Monthly ? quarterlyContent : monthlyContent}
         </ACC.Renderers.SimpleString>
