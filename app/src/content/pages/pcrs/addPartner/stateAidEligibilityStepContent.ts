@@ -16,12 +16,12 @@ export class PCRAddPartnerStateAidEligibilityContent extends ContentPageBase {
   public readonly documentLabels = new DocumentLabels(this, this.project);
   public readonly documentMessages = new DocumentMessages(this, this.project);
 
-  public readonly stateAidTitle = () => this.getContent("form-section-title-state-aid");
-  public readonly deMinimisTitle = () => this.getContent("form-section-title-de-minimis");
-  public readonly nonAidFundingTitle = () => this.getContent("form-section-title-non-aid-funding");
-  public readonly stateAidGuidance = () => this.getContent("guidance-state-aid", {markdown: true});
-  public readonly deMinimisGuidance = () => this.getContent("guidance-de-minimis", {markdown: true});
-  public readonly nonAidFundingGuidance = () => this.getContent("guidance-non-aid-funding", {markdown: true});
-  public readonly templateSectionTitle = () => this.getContent("section-title-template");
-  public readonly uploadDeclarationSectionTitle = () => this.getContent("section-title-upload-declaration");
+  public readonly stateAidTitle = this.getContent("form-section-title-state-aid");
+  public readonly deMinimisTitle = this.getContent("form-section-title-de-minimis");
+  public readonly nonAidFundingTitle = this.getContent("form-section-title-non-aid-funding");
+  public readonly stateAidGuidance = this.getContent("guidance-state-aid", {markdown: true});
+  public readonly deMinimisGuidance = this.getContent("guidance-de-minimis", {markdown: true});
+  public readonly nonAidFundingGuidance = this.getContent("guidance-non-aid-funding", {markdown: true});
+  public readonly templateSectionTitle = this.getContent("section-title-template");
+  public readonly uploadDeclarationSectionTitle = this.getContent("section-title-upload-declaration");
 }
