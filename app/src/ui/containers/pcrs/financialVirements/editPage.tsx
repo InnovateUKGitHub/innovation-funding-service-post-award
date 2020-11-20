@@ -69,21 +69,21 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
           <VirementForm.Form editor={editor} onChange={(dto) => this.props.onChange(false, dto)} onSubmit={() => this.props.onChange(true, editor.data)} qa="virementForm">
             <VirementForm.Fieldset>
               <VirementTable.Table qa="partnerVirements" data={costCategoriesWithVirement} validationResult={validation}>
-                <VirementTable.String qa="costCategory" headerContent={x => x.financialVirementEdit.labels.costCategoryName()} value={x => x.costCategory.name} footer={<ACC.Content value={x => x.financialVirementEdit.labels.partnerTotals()} />} />
-                <VirementTable.Currency qa="originalEligibleCosts" headerContent={x => x.financialVirementEdit.labels.costCategoryOriginalEligibleCosts()} value={x => x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={partnerVirements.originalEligibleCosts} />} />
-                <VirementTable.Currency qa="originalCostsClaimed" headerContent={x => x.financialVirementEdit.labels.costCategoryCostsClaimed()} value={x => x.virement.costsClaimedToDate} footer={<ACC.Renderers.Currency value={partnerVirements.costsClaimedToDate} />} />
-                <VirementTable.Custom qa="newEligibleCosts" headerContent={x => x.financialVirementEdit.labels.costCategoryNewEligibleCosts()} value={(x, i) => this.renderInput(partner, x.costCategory, x.virement, editor.status === EditorStatus.Saving, validation[i.row])} footer={<ACC.Renderers.Currency value={partnerVirements.newEligibleCosts} />} classSuffix={"numeric"} />
-                <VirementTable.Currency qa="difference" headerContent={x => x.financialVirementEdit.labels.costCategoryDifferenceCosts()} value={x => x.virement.newEligibleCosts - x.virement.originalEligibleCosts} />
+                <VirementTable.String qa="costCategory" headerContent={x => x.financialVirementEdit.labels.costCategoryName} value={x => x.costCategory.name} footer={<ACC.Content value={x => x.financialVirementEdit.labels.partnerTotals} />} />
+                <VirementTable.Currency qa="originalEligibleCosts" headerContent={x => x.financialVirementEdit.labels.costCategoryOriginalEligibleCosts} value={x => x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={partnerVirements.originalEligibleCosts} />} />
+                <VirementTable.Currency qa="originalCostsClaimed" headerContent={x => x.financialVirementEdit.labels.costCategoryCostsClaimed} value={x => x.virement.costsClaimedToDate} footer={<ACC.Renderers.Currency value={partnerVirements.costsClaimedToDate} />} />
+                <VirementTable.Custom qa="newEligibleCosts" headerContent={x => x.financialVirementEdit.labels.costCategoryNewEligibleCosts} value={(x, i) => this.renderInput(partner, x.costCategory, x.virement, editor.status === EditorStatus.Saving, validation[i.row])} footer={<ACC.Renderers.Currency value={partnerVirements.newEligibleCosts} />} classSuffix={"numeric"} />
+                <VirementTable.Currency qa="difference" headerContent={x => x.financialVirementEdit.labels.costCategoryDifferenceCosts} value={x => x.virement.newEligibleCosts - x.virement.originalEligibleCosts} />
               </VirementTable.Table>
             </VirementForm.Fieldset>
             <VirementForm.Fieldset headingContent={x => x.financialVirementEdit.summaryTitle()}>
               <SummaryTable.Table qa="summary-table" data={[editor.data]}>
-                <SummaryTable.Currency qa="originalEligibleCosts" headerContent={x => x.financialVirementEdit.labels.projectOriginalEligibleCosts()} value={x => x.originalEligibleCosts} />
-                <SummaryTable.Currency qa="newEligibleCosts" headerContent={x => x.financialVirementEdit.labels.projectNewEligibleCosts()} value={x => x.newEligibleCosts} />
-                <SummaryTable.Currency qa="differenceEligibleCosts" headerContent={x => x.financialVirementEdit.labels.projectDifferenceCosts()} value={x => x.newEligibleCosts - x.originalEligibleCosts} />
-                <SummaryTable.Currency qa="originalRemainingGrant" headerContent={x => x.financialVirementEdit.labels.projectOriginalRemainingGrant()} value={x => x.originalRemainingGrant} />
-                <SummaryTable.Currency qa="newRemainingGrant" headerContent={x => x.financialVirementEdit.labels.projectNewRemainingGrant()} value={x => x.newRemainingGrant} />
-                <SummaryTable.Currency qa="differenceRemainingGrant" headerContent={x => x.financialVirementEdit.labels.projectDifferenceGrant()} value={x => x.newRemainingGrant - x.originalRemainingGrant} />
+                <SummaryTable.Currency qa="originalEligibleCosts" headerContent={x => x.financialVirementEdit.labels.projectOriginalEligibleCosts} value={x => x.originalEligibleCosts} />
+                <SummaryTable.Currency qa="newEligibleCosts" headerContent={x => x.financialVirementEdit.labels.projectNewEligibleCosts} value={x => x.newEligibleCosts} />
+                <SummaryTable.Currency qa="differenceEligibleCosts" headerContent={x => x.financialVirementEdit.labels.projectDifferenceCosts} value={x => x.newEligibleCosts - x.originalEligibleCosts} />
+                <SummaryTable.Currency qa="originalRemainingGrant" headerContent={x => x.financialVirementEdit.labels.projectOriginalRemainingGrant} value={x => x.originalRemainingGrant} />
+                <SummaryTable.Currency qa="newRemainingGrant" headerContent={x => x.financialVirementEdit.labels.projectNewRemainingGrant} value={x => x.newRemainingGrant} />
+                <SummaryTable.Currency qa="differenceRemainingGrant" headerContent={x => x.financialVirementEdit.labels.projectDifferenceGrant} value={x => x.newRemainingGrant - x.originalRemainingGrant} />
               </SummaryTable.Table>
             </VirementForm.Fieldset>
             <VirementForm.Fieldset>
@@ -150,7 +150,7 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
       itemId: this.props.itemId
     };
 
-    return <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)} preserveData={true}><ACC.Content value={x => x.financialVirementEdit.labels.backToSummary()}/></ACC.BackLink>;
+    return <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)} preserveData={true}><ACC.Content value={x => x.financialVirementEdit.labels.backToSummary}/></ACC.BackLink>;
   }
 }
 
