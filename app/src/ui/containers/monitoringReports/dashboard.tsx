@@ -67,18 +67,18 @@ class DashboardComponent extends ContainerBase<Params&Props, Data, Callbacks> {
         <ACC.ValidationMessage
           qa="guidance-message"
           messageType="info"
-          message={x => x.monitoringReportsDashboard.messages.reportsSubmissionGuidance()}
+          message={x => x.monitoringReportsDashboard.messages.reportsSubmissionGuidance}
         />
 
         <ACC.Link route={this.props.routes.monitoringReportCreate.getLink({ projectId: this.props.projectId })} className="govuk-button"><ACC.Content value={(x) => x.monitoringReportsDashboard.buttonNewMonitoringReport()}/></ACC.Link>
         <ACC.Section title={ < ACC.Content value={x => x.monitoringReportsDashboard.sectionTitleOpen()} /> } >
           {reportSections.open.length ? this.renderTable(project, reportSections.open, "current") : null}
 
-          {!reportSections.open.length ? <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsDashboard.messages.noOpenReportsMessage()}/></ACC.Renderers.SimpleString> : null}
+          {!reportSections.open.length ? <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsDashboard.messages.noOpenReportsMessage}/></ACC.Renderers.SimpleString> : null}
         </ACC.Section>
         <ACC.Section title={ < ACC.Content value={x => x.monitoringReportsDashboard.sectionTitleArchived()} /> } >
           {reportSections.archived.length ? this.renderTable(project, reportSections.archived, "previous") : null}
-          {!reportSections.archived.length ? <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsDashboard.messages.noArchivedReportsMessage()}/></ACC.Renderers.SimpleString> : null}
+          {!reportSections.archived.length ? <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsDashboard.messages.noArchivedReportsMessage}/></ACC.Renderers.SimpleString> : null}
         </ACC.Section>
       </ACC.Page>
     );
