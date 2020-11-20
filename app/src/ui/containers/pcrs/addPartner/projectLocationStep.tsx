@@ -30,7 +30,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
         <Form.Fieldset>
           <Form.Radio
             name="projectLocation"
-            hintContent={x => x.pcrAddPartnerProjectLocationContent.projectLocationGuidance()}
+            hintContent={x => x.pcrAddPartnerProjectLocationContent.projectLocationGuidance}
             options={projectLocationOptions}
             inline={false}
             value={() => selectedProjectLocationOption || undefined}
@@ -54,7 +54,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
         <Form.Fieldset headingContent={x => x.pcrAddPartnerProjectLocationContent.labels.postcodeHeading}>
           <Form.String
             name="projectPostcode"
-            hintContent={x => x.pcrAddPartnerProjectLocationContent.postcodeGuidance()}
+            hintContent={x => x.pcrAddPartnerProjectLocationContent.postcodeGuidance}
             value={dto => dto.projectPostcode}
             update={(x, val) => {
               x.projectPostcode = val;
