@@ -56,7 +56,7 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.getBackLink(data.project, data.partner)}><ACC.Content value={x => x.claimPrepare.backLink()} /></ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.getBackLink(data.project, data.partner)}><ACC.Content value={x => x.claimPrepare.backLink} /></ACC.BackLink>}
         error={data.editor.error}
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title project={data.project} />}
@@ -86,8 +86,8 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
         >
           {this.renderLogsSection()}
           <Form.Fieldset qa="save-and-continue">
-            <Form.Submit><ACC.Content value={x => x.claimPrepare.saveAndContinueButton()} /></Form.Submit>
-            <Form.Button name="save" onClick={() => this.props.onUpdate(true, data.editor.data, this.getBackLink(data.project, data.partner))}><ACC.Content value={x => x.claimPrepare.saveAndReturnButton()} /></Form.Button>
+            <Form.Submit><ACC.Content value={x => x.claimPrepare.saveAndContinueButton} /></Form.Submit>
+            <Form.Button name="save" onClick={() => this.props.onUpdate(true, data.editor.data, this.getBackLink(data.project, data.partner))}><ACC.Content value={x => x.claimPrepare.saveAndReturnButton} /></Form.Button>
           </Form.Fieldset>
         </Form.Form>
       </ACC.Section>
