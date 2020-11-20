@@ -38,7 +38,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
   renderContents(companiesHouseLoader: (x: string) => Pending<CompanyDto[]>, companiesHouseResults: Pending<CompanyDto[]>) {
     const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
     return (
-      <ACC.Section qa="company-house" titleContent={x => x.pcrAddPartnerCompanyHouse.sectionTitle()}>
+      <ACC.Section qa="company-house" titleContent={x => x.pcrAddPartnerCompanyHouse.sectionTitle}>
         <Form.Form
           qa="addPartnerForm"
           data={this.props.pcrItem}
@@ -46,7 +46,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           onSubmit={() => this.props.onSave()}
           onChange={dto => this.props.onChange(dto)}
         >
-          <Form.Fieldset headingContent={x => x.pcrAddPartnerCompanyHouse.formHeading()}>
+          <Form.Fieldset headingContent={x => x.pcrAddPartnerCompanyHouse.formHeading}>
             <Form.String
               labelContent={x => x.pcrAddPartnerCompanyHouse.labels.organisationNameHeading}
               name="organisationName"
@@ -75,15 +75,15 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
               validation={this.props.validator.registeredAddress}
             />
           </Form.Fieldset>
-          <Form.Fieldset headingContent={x => x.pcrAddPartnerCompanyHouse.searchHeading()} qa="search-companies-house">
+          <Form.Fieldset headingContent={x => x.pcrAddPartnerCompanyHouse.searchHeading} qa="search-companies-house">
             <Form.Search
               name="searchCompaniesHouse"
-              hintContent={x => x.pcrAddPartnerCompanyHouse.hint()}
+              hintContent={x => x.pcrAddPartnerCompanyHouse.hint}
               labelHidden={true}
               value={() => this.state.queryString}
               update={(dto, val) => this.setState({ searchTerm: val })}
             />
-            <Form.Button styling="Primary" name="companiesHouseSearch" onClick={() => this.setState({ queryString: this.state.searchTerm })}><ACC.Content value={x => x.pcrAddPartnerCompanyHouse.searchButton()}/></Form.Button>
+            <Form.Button styling="Primary" name="companiesHouseSearch" onClick={() => this.setState({ queryString: this.state.searchTerm })}><ACC.Content value={x => x.pcrAddPartnerCompanyHouse.searchButton}/></Form.Button>
           </Form.Fieldset>
           {this.renderPendingResults(Form, companiesHouseResults, this.props.pcrItem)}
           <Form.Fieldset qa="save-and-continue">
@@ -106,7 +106,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
       if (searchResults.length === 0) {
         // Only show warning message if results length is 0 and a search term has been entered
         return !this.state.queryString ? null : (
-          <SimpleString><ACC.Content value={x => x.pcrAddPartnerCompanyHouse.resultNotShowing()}/></SimpleString>
+          <SimpleString><ACC.Content value={x => x.pcrAddPartnerCompanyHouse.resultNotShowing}/></SimpleString>
         );
       }
       const companiesOptions: ACC.SelectOption[] = searchResults.map(x => ({
@@ -117,7 +117,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
 
       return (
         <ACC.Section qa="company-house-search-results">
-          <Form.Fieldset headingContent={x => x.pcrAddPartnerCompanyHouse.searchResultsHeading()} qa="searchResults">
+          <Form.Fieldset headingContent={x => x.pcrAddPartnerCompanyHouse.searchResultsHeading} qa="searchResults">
             <Form.Radio
               name="searchResults"
               inline={false}
@@ -126,7 +126,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
               update={(x, val) => this.onCompanySelectUpdate(val, searchResults, pcrItem)}
             />
           </Form.Fieldset>
-          <SimpleString><ACC.Content value={x => x.pcrAddPartnerCompanyHouse.resultNotShowing()}/></SimpleString>
+          <SimpleString><ACC.Content value={x => x.pcrAddPartnerCompanyHouse.resultNotShowing}/></SimpleString>
         </ACC.Section>
       );
     }
