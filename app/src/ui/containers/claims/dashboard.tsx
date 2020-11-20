@@ -43,10 +43,10 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
       >
         {this.renderGuidanceMessage()}
         <Acc.Renderers.Messages messages={this.props.messages} />
-        <Acc.Section qa="current-claims-section" titleContent={x => x.claimsDashboard.labels.openSectionTitle()}>
+        <Acc.Section qa="current-claims-section" titleContent={x => x.claimsDashboard.labels.openSectionTitle}>
           {this.renderCurrentClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project, partner, previousClaims)}
         </Acc.Section>
-        <Acc.Section qa="previous-claims-section" titleContent={x => x.claimsDashboard.labels.closedSectionTitle()}>
+        <Acc.Section qa="previous-claims-section" titleContent={x => x.claimsDashboard.labels.closedSectionTitle}>
           {this.renderPreviousClaims(previousClaims, "previous-claims-table", project, partner)}
         </Acc.Section>
       </Acc.Page>
@@ -110,14 +110,14 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
         caption={tableCaption}
       >
         <ClaimTable.Custom
-          headerContent={x => x.claimsDashboard.labels.period()}
+          headerContent={x => x.claimsDashboard.labels.period}
           qa="period"
           value={x => <Acc.Claims.ClaimPeriodDate claim={x} />}
         />
-        <ClaimTable.Currency headerContent={x => x.claimsDashboard.labels.forecastCosts()} header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
-        <ClaimTable.Currency headerContent={x => x.claimsDashboard.labels.actualCosts()} header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
-        <ClaimTable.Currency headerContent={x => x.claimsDashboard.labels.difference()} header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
-        <ClaimTable.Custom headerContent={x => x.claimsDashboard.labels.status()} header="Status" qa="status" value={(x) => x.statusLabel} />
+        <ClaimTable.Currency headerContent={x => x.claimsDashboard.labels.forecastCosts} header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
+        <ClaimTable.Currency headerContent={x => x.claimsDashboard.labels.actualCosts} header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
+        <ClaimTable.Currency headerContent={x => x.claimsDashboard.labels.difference} header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
+        <ClaimTable.Custom headerContent={x => x.claimsDashboard.labels.status} header="Status" qa="status" value={(x) => x.statusLabel} />
         <ClaimTable.ShortDate
           header="Date of last update"
           qa="date"

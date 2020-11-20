@@ -131,7 +131,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     });
 
     return (
-      <ACC.AccordionItem titleContent={x => x.claimReview.labels.forecastAccordionTitle()} qa="forecast-accordion">
+      <ACC.AccordionItem titleContent={x => x.claimReview.labels.forecastAccordionTitle} qa="forecast-accordion">
         <ACC.Loader
           pending={pendingForecastData}
           render={(forecastData) => (<ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />)}
@@ -277,7 +277,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
 
   private renderLogsItem() {
   return (
-    <ACC.AccordionItem titleContent={x => x.claimReview.labels.claimLogAccordionTitle()} qa="log-accordion">
+    <ACC.AccordionItem titleContent={x => x.claimReview.labels.claimLogAccordionTitle} qa="log-accordion">
       {/* Keeping logs inside loader because accordion defaults to closed*/}
       <ACC.Loader
         pending={this.props.statusChanges}

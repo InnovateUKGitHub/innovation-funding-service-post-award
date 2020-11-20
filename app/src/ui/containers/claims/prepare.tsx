@@ -102,7 +102,7 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
   private renderLogsSection() {
     return (
       <ACC.Accordion>
-        <ACC.AccordionItem titleContent={x => x.claimPrepare.labels.claimLogAccordionTitle()} qa="status-and-comments-log">
+        <ACC.AccordionItem titleContent={x => x.claimPrepare.labels.claimLogAccordionTitle} qa="status-and-comments-log">
           {/* Keeping logs inside loader because accordion defaults to closed*/}
           <ACC.Loader
             pending={this.props.statusChanges}
