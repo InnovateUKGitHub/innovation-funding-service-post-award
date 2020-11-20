@@ -101,9 +101,9 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
       <ACC.SectionPanel qa="claims-totals" title={<React.Fragment><PartnerName partner={partner} /> costs to date</React.Fragment>}>
         <ACC.DualDetails displayDensity="Compact">
           <PartnerSummaryDetails.Details qa="claims-totals-col-0" data={partner}>
-            <PartnerSummaryDetails.Currency label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCosts()}/>} qa="gol-costs" value={x => x.totalParticipantGrant} />
-            <PartnerSummaryDetails.Currency label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCostsClaimed()}/>} qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
-            <PartnerSummaryDetails.Percentage label={<ACC.Content value={x => x.projectOverview.labels.percentageEligibleCostsClaimed()}/>} qa="percentage-costs" value={x => x.percentageParticipantCostsClaimed} />
+            <PartnerSummaryDetails.Currency label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCosts}/>} qa="gol-costs" value={x => x.totalParticipantGrant} />
+            <PartnerSummaryDetails.Currency label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCostsClaimed}/>} qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
+            <PartnerSummaryDetails.Percentage label={<ACC.Content value={x => x.projectOverview.labels.percentageEligibleCostsClaimed}/>} qa="percentage-costs" value={x => x.percentageParticipantCostsClaimed} />
           </PartnerSummaryDetails.Details>
         </ACC.DualDetails>
       </ACC.SectionPanel>
@@ -116,15 +116,15 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     return (
       <ACC.SectionPanel qa="claims-summary">
         <ACC.DualDetails>
-          <ProjectSummaryDetails.Details title={<ACC.Content value={x => x.projectOverview.labels.projectCosts()}/>} data={project} qa="project-summary">
-            <ProjectSummaryDetails.Currency label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCosts()}/>} qa="gol-costs" value={x => x.grantOfferLetterCosts} />
-            <ProjectSummaryDetails.Currency label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCostsClaimed()}/>} qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
-            <ProjectSummaryDetails.Percentage label={<ACC.Content value={x => x.projectOverview.labels.percentageEligibleCostsClaimed()}/>} qa="claimed-percentage" value={x => x.claimedPercentage} />
+          <ProjectSummaryDetails.Details title={<ACC.Content value={x => x.projectOverview.labels.projectCosts}/>} data={project} qa="project-summary">
+            <ProjectSummaryDetails.Currency label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCosts}/>} qa="gol-costs" value={x => x.grantOfferLetterCosts} />
+            <ProjectSummaryDetails.Currency label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCostsClaimed}/>} qa="claimed-costs" value={x => x.costsClaimedToDate || 0} />
+            <ProjectSummaryDetails.Percentage label={<ACC.Content value={x => x.projectOverview.labels.percentageEligibleCostsClaimed}/>} qa="claimed-percentage" value={x => x.claimedPercentage} />
           </ProjectSummaryDetails.Details>
           <PartnerSummaryDetails.Details data={partner} title={<React.Fragment><ACC.PartnerName partner={partner} /> costs to date</React.Fragment>} qa="lead-partner-summary">
-            <PartnerSummaryDetails.Currency label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCosts()}/>} qa="gol-costs" value={x => x.totalParticipantGrant} />
-            <PartnerSummaryDetails.Currency label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCostsClaimed()}/>} qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
-            <PartnerSummaryDetails.Percentage label={<ACC.Content value={x => x.projectOverview.labels.percentageEligibleCostsClaimed()}/>} qa="claimed-percentage" value={x => x.percentageParticipantCostsClaimed} />
+            <PartnerSummaryDetails.Currency label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCosts}/>} qa="gol-costs" value={x => x.totalParticipantGrant} />
+            <PartnerSummaryDetails.Currency label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCostsClaimed}/>} qa="claimed-costs" value={x => x.totalParticipantCostsClaimed || 0} />
+            <PartnerSummaryDetails.Percentage label={<ACC.Content value={x => x.projectOverview.labels.percentageEligibleCostsClaimed}/>} qa="claimed-percentage" value={x => x.percentageParticipantCostsClaimed} />
           </PartnerSummaryDetails.Details>
         </ACC.DualDetails>
       </ACC.SectionPanel>
