@@ -4,7 +4,7 @@ import { mount } from "enzyme";
 
 import { DocumentSingle, DocumentSingleProps } from "../../src/ui/components";
 import { findByQa } from "./helpers/find-by-qa";
-import TestBed, { TestBedContent } from "./helpers/TestBed";
+import TestBed, { TestBedContent } from "@shared/TestBed";
 
 type AnchorWithDataQa = { "data-qa": string } & React.DetailedHTMLProps<
   React.AnchorHTMLAttributes<HTMLAnchorElement>,

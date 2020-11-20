@@ -2,7 +2,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import TestBed, { TestBedContent } from "./helpers/TestBed";
+import TestBed, { TestBedContent } from "@shared/TestBed";
 import * as hookModule from "@ui/hooks/is-client.hook";
 import { AccordionItem, AccordionItemProps } from "../../src/ui/components";
 import { AccordionProvider, IAccordionContext } from "../../src/ui/components/accordion/accordion-context";
@@ -39,10 +39,10 @@ interface ISetup {
 const setupComponent = ({
   props,
   // TODO: Check is this key name correct ??
-  contentStore: stubContentStore,
+  contentStore,
   accordionContext = defaultAccordionContext,
 }: ISetup) => (
-  <TestBed content={stubContentStore}>
+  <TestBed content={contentStore}>
     <AccordionProvider value={accordionContext}>
       <AccordionItem {...defaultProps} {...props} />
     </AccordionProvider>

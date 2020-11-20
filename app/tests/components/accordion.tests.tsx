@@ -2,7 +2,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import TestBed from "./helpers/TestBed";
+import TestBed from "@shared/TestBed";
 import * as hookModule from "@ui/hooks/is-client.hook";
 import { Accordion, AccordionItem, AccordionProps } from "../../src/ui/components";
 

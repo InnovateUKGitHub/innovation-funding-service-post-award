@@ -1,11 +1,13 @@
 import React from "react";
 import ReactDom from "react-dom";
-import { Guide } from "../ui/componentsGuide/guide";
-import { Provider } from "react-redux";
-import { PageTitleState } from "@ui/redux/reducers/pageTitleReducer";
 import { combineReducers, createStore } from "redux";
-import { ContentProvider } from "@ui/redux";
+import { Provider } from "react-redux";
+
 import { Content } from "@content/content";
+import { PageTitleState } from "@ui/redux/reducers/pageTitleReducer";
+import { Guide } from "@ui/componentsGuide/guide";
+
+import TestBed from "@shared/TestBed";
 
 const exampleTitle: PageTitleState = {
   displayTitle: "Component guide example title",
@@ -40,9 +42,9 @@ const ClientGuide = () => {
 
   return (
     <Provider store={store}>
-      <ContentProvider value={new Content(null)}>
+      <TestBed content={new Content(null)}>
         <Guide source="client" filter={getGuide()} />
-      </ContentProvider>
+      </TestBed>
     </Provider>
   );
 };

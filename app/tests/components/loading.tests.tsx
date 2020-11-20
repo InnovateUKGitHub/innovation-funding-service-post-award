@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 
 import { Loader, LoadingProps, PageLoader } from "../../src/ui/components";
 import { LoadingStatus, Pending } from "../../src/shared/pending";
-import TestBed, { TestBedContent } from "./helpers/TestBed";
+import TestBed, { TestBedContent } from "@shared/TestBed";
 import { ErrorCode } from "@framework/types";
 
 const stubContent = {
