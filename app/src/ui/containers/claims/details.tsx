@@ -86,12 +86,12 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         <ACC.SectionPanel qa="claims-summary">
           <ACC.DualDetails>
             <ClaimSummaryDetails.Details title={<ACC.Content value={x => x.claimDetails.costsAndGrantSummaryTitle()} />} data={data.claim} qa="claim-costs-summary">
-              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.costsClaimed()} />} qa="costs-claimed" value={x => x.totalCostsSubmitted} />
-              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.costsApproved()} />} qa="costs-approved" value={x => x.totalCostsApproved} />
-              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.costsDeferred()} />} qa="costs-deferred" value={x => x.totalDeferredAmount} />
+              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.costsClaimed} />} qa="costs-claimed" value={x => x.totalCostsSubmitted} />
+              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.costsApproved} />} qa="costs-approved" value={x => x.totalCostsApproved} />
+              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.costsDeferred} />} qa="costs-deferred" value={x => x.totalDeferredAmount} />
             </ClaimSummaryDetails.Details>
             <ClaimSummaryDetails.Details data={data.claim} qa="claim-grant-summary">
-              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.totalGrantPaid()} />} qa="total-grant-paid" value={x => x.periodCostsToBePaid} />
+              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.totalGrantPaid} />} qa="total-grant-paid" value={x => x.periodCostsToBePaid} />
             </ClaimSummaryDetails.Details>
           </ACC.DualDetails>
         </ACC.SectionPanel>
@@ -168,7 +168,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
   private renderForecastItem(pendingForecastData: Pending<ACC.Claims.ForecastData>) {
     return (
-      <ACC.AccordionItem titleContent={x => x.claimDetails.labels.forecastAccordionTitle()} qa="forecast-accordion">
+      <ACC.AccordionItem titleContent={x => x.claimDetails.labels.forecastAccordionTitle} qa="forecast-accordion">
         <ACC.Loader
           pending={pendingForecastData}
           render={(forecastData) => (
@@ -181,7 +181,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
   private renderLogsItem() {
     return (
-      <ACC.AccordionItem titleContent={x => x.claimDetails.labels.claimLogAccordionTitle()} qa="claim-status-change-accordion">
+      <ACC.AccordionItem titleContent={x => x.claimDetails.labels.claimLogAccordionTitle} qa="claim-status-change-accordion">
         {/* Keeping logs inside loader because accordion defaults to closed*/}
         <ACC.Loader
           pending={this.props.statusChanges}

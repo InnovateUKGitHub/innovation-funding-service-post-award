@@ -40,10 +40,10 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
       >
         {this.renderGuidanceMessage(projectDetails)}
         <Acc.Renderers.Messages messages={this.props.messages} />
-        <Acc.Section qa="current-claims-section" titleContent={x => x.allClaimsDashboard.labels.openSectionTitle()}>
+        <Acc.Section qa="current-claims-section" titleContent={x => x.allClaimsDashboard.labels.openSectionTitle}>
           {this.renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)}
         </Acc.Section>
-        <Acc.Section qa="closed-claims-section" titleContent={x => x.allClaimsDashboard.labels.closedSectionTitle()}>
+        <Acc.Section qa="closed-claims-section" titleContent={x => x.allClaimsDashboard.labels.closedSectionTitle}>
           {this.renderPreviousClaimsSections(projectDetails, partners, previousClaims)}
         </Acc.Section>
       </Acc.Page>
@@ -112,12 +112,12 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
           caption="Open"
           qa="current-claims-table"
         >
-          <ClaimTable.Custom headerContent={x => x.allClaimsDashboard.labels.partner()} qa="partner" value={renderPartnerName} />
-          <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.forecastCosts()} qa="forecast-cost" value={(x) => x.forecastCost} />
-          <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.actualCosts()} qa="actual-cost" value={(x) => x.totalCost} />
-          <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.difference()} qa="diff" value={(x) => x.forecastCost - x.totalCost} />
-          <ClaimTable.String headerContent={x => x.allClaimsDashboard.labels.status()} qa="status" value={(x) => x.statusLabel} />
-          <ClaimTable.ShortDate headerContent={x => x.allClaimsDashboard.labels.lastUpdated()} qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate} />
+          <ClaimTable.Custom headerContent={x => x.allClaimsDashboard.labels.partner} qa="partner" value={renderPartnerName} />
+          <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.forecastCosts} qa="forecast-cost" value={(x) => x.forecastCost} />
+          <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.actualCosts} qa="actual-cost" value={(x) => x.totalCost} />
+          <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.difference} qa="diff" value={(x) => x.forecastCost - x.totalCost} />
+          <ClaimTable.String headerContent={x => x.allClaimsDashboard.labels.status} qa="status" value={(x) => x.statusLabel} />
+          <ClaimTable.ShortDate headerContent={x => x.allClaimsDashboard.labels.lastUpdated} qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate} />
           <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partners.find(p => p.id === x.partnerId)!} routes={this.props.routes} />} />
         </ClaimTable.Table>
       </Acc.Section>
@@ -157,11 +157,11 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
       <div>
         <ClaimTable.Table data={previousClaims} caption={<Acc.PartnerName partner={partner}/>} qa={`previousClaims-${partner.accountId}`}>
           <ClaimTable.Custom qa="period" value={(x) => this.renderClosedPeriodColumn(x)} />
-          <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.forecastCosts()} qa="forecast-cost" value={(x) => x.forecastCost} />
-          <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.actualCosts()} qa="actual-cost" value={(x) => x.totalCost} />
-          <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.difference()} qa="diff" value={(x) => x.forecastCost - x.totalCost} />
-          <ClaimTable.String headerContent={x => x.allClaimsDashboard.labels.status()} qa="status" value={(x) => x.statusLabel} />
-          <ClaimTable.ShortDate headerContent={x => x.allClaimsDashboard.labels.lastUpdated()} qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate} />
+          <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.forecastCosts} qa="forecast-cost" value={(x) => x.forecastCost} />
+          <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.actualCosts} qa="actual-cost" value={(x) => x.totalCost} />
+          <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.difference} qa="diff" value={(x) => x.forecastCost - x.totalCost} />
+          <ClaimTable.String headerContent={x => x.allClaimsDashboard.labels.status} qa="status" value={(x) => x.statusLabel} />
+          <ClaimTable.ShortDate headerContent={x => x.allClaimsDashboard.labels.lastUpdated} qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate} />
           <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} routes={this.props.routes} />} />
         </ClaimTable.Table>
       </div>
