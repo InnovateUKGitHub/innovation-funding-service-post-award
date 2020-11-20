@@ -21,6 +21,6 @@ export class PcrSpendProfilePrepareCostContent extends ContentPageBase {
   public readonly backLink = (costCategoryName: string) => this.getContent("back-link", {costCategoryName});
   public readonly submitButton = (costCategoryName: string) => this.getContent("button-submit", {costCategoryName});
   public readonly overheads = {
-    submitButton: () => this.getContent("overheads.button-submit"),
+    submitButton: this.getContent("overheads.button-submit"),
   };
 }

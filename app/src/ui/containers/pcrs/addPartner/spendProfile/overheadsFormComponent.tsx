@@ -65,7 +65,7 @@ class Component extends React.Component<SpendProfileCostFormProps<PCRSpendProfil
           />}
         </Form.Fieldset>
         <Form.Fieldset qa="save">
-          <Form.Submit><ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.overheads.submitButton()}/></Form.Submit>
+          <Form.Submit><ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.overheads.submitButton}/></Form.Submit>
         </Form.Fieldset>
       </Form.Form>
     );
