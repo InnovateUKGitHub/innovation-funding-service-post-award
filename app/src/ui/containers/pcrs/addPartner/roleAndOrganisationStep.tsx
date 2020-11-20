@@ -25,7 +25,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
       id: "false", value: <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkNo}/>
     }];
     return (
-      <ACC.Section qa="role-and-partner-type" titleContent={x => x.pcrAddPartnerRoleAndOrganisation.formSectionTitle()}>
+      <ACC.Section qa="role-and-partner-type" titleContent={x => x.pcrAddPartnerRoleAndOrganisation.formSectionTitle}>
         <Form.Form
           qa="addPartnerForm"
           data={this.props.pcrItem}
@@ -33,7 +33,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           onSubmit={() => this.onSave(this.props.pcrItem)}
           onChange={dto => this.onChange(dto)}
         >
-          <ACC.ValidationMessage messageType="info" message={x => x.pcrAddPartnerRoleAndOrganisation.validationMessage()}/>
+          <ACC.ValidationMessage messageType="info" message={x => x.pcrAddPartnerRoleAndOrganisation.validationMessage}/>
           <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.roleHeading}>
             <Form.Radio
               name="projectRole"
@@ -66,12 +66,12 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
             />
           </Form.Fieldset>
           <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.organisationHeading}>
-            <ACC.Info summary={<ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.infoSummary()}/>}>
-              <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.organisationTypeInfo()}/>
+            <ACC.Info summary={<ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.infoSummary}/>}>
+              <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.organisationTypeInfo}/>
             </ACC.Info>
             <Form.Radio
               name="partnerType"
-              hintContent={x => x.pcrAddPartnerRoleAndOrganisation.organisationTypeHint()}
+              hintContent={x => x.pcrAddPartnerRoleAndOrganisation.organisationTypeHint}
               options={typeOptions.options}
               inline={false}
               value={() => typeOptions.selected}
