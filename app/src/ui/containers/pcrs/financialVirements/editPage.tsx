@@ -76,7 +76,7 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
                 <VirementTable.Currency qa="difference" headerContent={x => x.financialVirementEdit.labels.costCategoryDifferenceCosts} value={x => x.virement.newEligibleCosts - x.virement.originalEligibleCosts} />
               </VirementTable.Table>
             </VirementForm.Fieldset>
-            <VirementForm.Fieldset headingContent={x => x.financialVirementEdit.summaryTitle()}>
+            <VirementForm.Fieldset headingContent={x => x.financialVirementEdit.summaryTitle}>
               <SummaryTable.Table qa="summary-table" data={[editor.data]}>
                 <SummaryTable.Currency qa="originalEligibleCosts" headerContent={x => x.financialVirementEdit.labels.projectOriginalEligibleCosts} value={x => x.originalEligibleCosts} />
                 <SummaryTable.Currency qa="newEligibleCosts" headerContent={x => x.financialVirementEdit.labels.projectNewEligibleCosts} value={x => x.newEligibleCosts} />
@@ -87,7 +87,7 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
               </SummaryTable.Table>
             </VirementForm.Fieldset>
             <VirementForm.Fieldset>
-              <VirementForm.Submit><ACC.Content value={x => x.financialVirementEdit.saveButton()} /></VirementForm.Submit>
+              <VirementForm.Submit><ACC.Content value={x => x.financialVirementEdit.saveButton} /></VirementForm.Submit>
             </VirementForm.Fieldset>
           </VirementForm.Form>
         </ACC.Section>

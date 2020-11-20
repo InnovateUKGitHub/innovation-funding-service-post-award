@@ -10,6 +10,6 @@ export class FinancialVirementEditContent extends ContentPageBase {
 
   public readonly labels = new FinancialVirementLabels(this, this.project);
 
-  public readonly summaryTitle = () => this.getContent("summary-title");
-  public readonly saveButton = () => this.getContent("save-button");
+  public readonly summaryTitle = this.getContent("summary-title");
+  public readonly saveButton = this.getContent("save-button");
 }
