@@ -45,7 +45,7 @@ class Component extends ContainerBase<FinancialVirementParams, Props, {}> {
         validator={editor.validator}
       >
         <ACC.Section>
-          <ACC.Renderers.SimpleString><ACC.Content value={x => x.financialVirementEditPartnerLevel.remainingGrantInfo()} /></ACC.Renderers.SimpleString>
+          <ACC.Renderers.SimpleString><ACC.Content value={x => x.financialVirementEditPartnerLevel.remainingGrantInfo} /></ACC.Renderers.SimpleString>
           <VirementForm.Form editor={editor} onChange={(dto) => this.props.onChange(false, dto)} onSubmit={() => this.props.onChange(true, editor.data)} qa="partner_level_form">
             <VirementForm.Fieldset>
               <VirementTable.Table qa="partnerVirements" data={data} validationResult={validation}>
@@ -59,7 +59,7 @@ class Component extends ContainerBase<FinancialVirementParams, Props, {}> {
               </VirementTable.Table>
             </VirementForm.Fieldset>
             <VirementForm.Fieldset>
-              <VirementForm.Submit><ACC.Content value={x => x.financialVirementEditPartnerLevel.saveButton()} /></VirementForm.Submit>
+              <VirementForm.Submit><ACC.Content value={x => x.financialVirementEditPartnerLevel.saveButton} /></VirementForm.Submit>
             </VirementForm.Fieldset>
           </VirementForm.Form>
         </ACC.Section>

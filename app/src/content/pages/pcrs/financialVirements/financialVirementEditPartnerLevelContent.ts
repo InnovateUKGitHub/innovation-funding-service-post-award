@@ -8,9 +8,9 @@ export class FinancialVirementEditPartnerLevelContent extends ContentPageBase {
     super(content, "financial-virement-edit-partner-level", project);
   }
 
-  public readonly saveButton = () => this.getContent("save-button");
+  public readonly saveButton = this.getContent("save-button");
 
-  public readonly remainingGrantInfo = () => this.getContent("remaining-grant-info");
+  public readonly remainingGrantInfo = this.getContent("remaining-grant-info");
 
   public readonly labels = new FinancialVirementLabels(this, this.project);
 }
