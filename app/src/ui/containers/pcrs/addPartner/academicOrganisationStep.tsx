@@ -19,7 +19,7 @@ export const AcademicOrganisationStep = (props: PcrStepProps<PCRItemForPartnerAd
         <Form.Fieldset headingContent={x => x.pcrAddPartnerAcademicOrganisation.labels.organisationSectionTitle}>
           <Form.String
             name="organisationName"
-            hintContent={x => x.pcrAddPartnerAcademicOrganisation.hint()}
+            hintContent={x => x.pcrAddPartnerAcademicOrganisation.hint}
             value={dto => dto.organisationName}
             update={(x, val) => {
               x.organisationName = val;
