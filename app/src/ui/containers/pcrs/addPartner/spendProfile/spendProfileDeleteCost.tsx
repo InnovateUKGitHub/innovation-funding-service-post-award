@@ -96,7 +96,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
               styling="Warning"
               onClick={() => this.props.onDelete(editor.data, this.props.projectId)}
             >
-              <ACC.Content value={x => x.pcrSpendProfileDeleteCostContent.deleteButton()}/>
+              <ACC.Content value={x => x.pcrSpendProfileDeleteCostContent.deleteButton}/>
             </DeleteForm.Button>
           </DeleteForm.Form>
         </ACC.Section>
