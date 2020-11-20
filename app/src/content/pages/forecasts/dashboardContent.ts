@@ -7,10 +7,10 @@ export class ForecastsDashboardContent extends ContentPageBase {
     super(content, "forecasts-dashboard", project);
   }
 
-  public readonly partnerHeader = () => this.getContent("header-partner");
-  public readonly totalEligibleCostsHeader = () => this.getContent("header-total-eligible-costs");
-  public readonly forecastsAndCostsHeader = () => this.getContent("header-forecasts-and-costs");
-  public readonly underspendHeader = () => this.getContent("header-underspend");
-  public readonly lastUpdateHeader = () => this.getContent("header-last-update");
-  public readonly actionHeader = () => this.getContent("header-action");
+  public readonly partnerHeader = this.getContent("header-partner");
+  public readonly totalEligibleCostsHeader = this.getContent("header-total-eligible-costs");
+  public readonly forecastsAndCostsHeader = this.getContent("header-forecasts-and-costs");
+  public readonly underspendHeader = this.getContent("header-underspend");
+  public readonly lastUpdateHeader = this.getContent("header-last-update");
+  public readonly actionHeader = this.getContent("header-action");
 }
