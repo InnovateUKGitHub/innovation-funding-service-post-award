@@ -31,8 +31,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           onChange={dto => this.props.onChange(dto)}
         >
           <Form.Fieldset qa="save-and-continue">
-            {this.props.mode === "prepare" && <Form.Submit><ACC.Content value={x => x.pcrAddPartnerSpendProfile.pcrItem.submitButton()}/></Form.Submit>}
-            {this.props.mode === "prepare" && <Form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerSpendProfile.pcrItem.returnToSummaryButton()}/></Form.Button>}
+            {this.props.mode === "prepare" && <Form.Submit><ACC.Content value={x => x.pcrAddPartnerSpendProfile.pcrItem.submitButton}/></Form.Submit>}
+            {this.props.mode === "prepare" && <Form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerSpendProfile.pcrItem.returnToSummaryButton}/></Form.Button>}
             {this.props.mode === "review" && <ACC.Link styling="SecondaryButton" route={this.props.routes.pcrReviewItem.getLink({ itemId: this.props.pcrItem.id, pcrId: this.props.pcr.id, projectId: this.props.project.id })}><ACC.Content value={x => x.pcrAddPartnerSpendProfile.returnToSummaryNoSave}/></ACC.Link>}
           </Form.Fieldset>
         </Form.Form>

@@ -54,8 +54,8 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
           />
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
-          <Form.Submit><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.pcrItem.submitButton()}/></Form.Submit>
-          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.pcrItem.returnToSummaryButton()}/></Form.Button>
+          <Form.Submit><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.pcrItem.submitButton}/></Form.Submit>
+          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.pcrItem.returnToSummaryButton}/></Form.Button>
         </Form.Fieldset>
       </Form.Form>
     </ACC.Section>

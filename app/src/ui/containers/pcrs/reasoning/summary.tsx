@@ -92,7 +92,7 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
           />
         </PCRForm.Fieldset>
         <PCRForm.Fieldset qa="submit-button">
-          <PCRForm.Submit><ACC.Content value={x => x.pcrReasoningSummary.pcrItem.returnToRequestButton()}/></PCRForm.Submit>
+          <PCRForm.Submit><ACC.Content value={x => x.pcrReasoningSummary.pcrItem.returnToRequestButton}/></PCRForm.Submit>
         </PCRForm.Fieldset>
       </PCRForm.Form>
     );

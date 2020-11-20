@@ -25,8 +25,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
         {this.renderFiles(documentsEditor, documents)}
         <Form.Form qa="saveAndContinue" data={this.props.pcrItem} onSubmit={() => this.props.onSave()}>
           <Form.Fieldset>
-            <Form.Submit><ACC.Content value={x => x.pcrAddPartnerJeS.pcrItem.submitButton()}/></Form.Submit>
-            <Form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerJeS.pcrItem.returnToSummaryButton()}/></Form.Button>
+            <Form.Submit><ACC.Content value={x => x.pcrAddPartnerJeS.pcrItem.submitButton}/></Form.Submit>
+            <Form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerJeS.pcrItem.returnToSummaryButton}/></Form.Button>
           </Form.Fieldset>
         </Form.Form>
       </React.Fragment>

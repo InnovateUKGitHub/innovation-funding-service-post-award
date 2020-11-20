@@ -52,7 +52,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRP
             validation={props.validator.removalPeriod}
           />
         </Form.Fieldset>
-        <Form.Submit><ACC.Content value={x => x.pcrRemovePartner.pcrItem.submitButton()}/></Form.Submit>
+        <Form.Submit><ACC.Content value={x => x.pcrRemovePartner.pcrItem.submitButton}/></Form.Submit>
       </Form.Form>
     </ACC.Section>
   );

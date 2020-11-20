@@ -28,7 +28,7 @@ export const ProjectSummaryChangeStep = (props: PcrStepProps<PCRItemForScopeChan
             rows={15}
           />
         </Form.Fieldset>
-        <Form.Submit><ACC.Content value={x => x.pcrScopeChangeProjectSummaryChange.pcrItem.submitButton()}/></Form.Submit>
+        <Form.Submit><ACC.Content value={x => x.pcrScopeChangeProjectSummaryChange.pcrItem.submitButton}/></Form.Submit>
       </Form.Form>
     </ACC.Section>
   );

@@ -55,7 +55,7 @@ class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & 
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
             <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}><ACC.Content value={x => x.pcrReasoningPrepareFiles.documentLabels.uploadDocumentsLabel}/></UploadForm.Button>
-            <UploadForm.Button name="uploadFileAndContinue" styling="Primary"><ACC.Content value={x => x.pcrReasoningPrepareFiles.pcrItem.submitButton()}/></UploadForm.Button>
+            <UploadForm.Button name="uploadFileAndContinue" styling="Primary"><ACC.Content value={x => x.pcrReasoningPrepareFiles.pcrItem.submitButton}/></UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
       </ACC.Section>

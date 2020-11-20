@@ -23,7 +23,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawal
         {this.renderFiles(documentsEditor, documents)}
         <form.Form qa="saveAndContinue" data={this.props.pcrItem} onSubmit={() => this.props.onSave()}>
           <form.Fieldset>
-            <form.Button name="default" styling="Primary"><ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.pcrItem.submitButton()}/></form.Button>
+            <form.Button name="default" styling="Primary"><ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.pcrItem.submitButton}/></form.Button>
           </form.Fieldset>
         </form.Form>
       </React.Fragment>
@@ -54,7 +54,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawal
             />
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
-            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}><ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.pcrItem.submitButton()}/></UploadForm.Button>
+            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}><ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.pcrItem.submitButton}/></UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
       </ACC.Section>

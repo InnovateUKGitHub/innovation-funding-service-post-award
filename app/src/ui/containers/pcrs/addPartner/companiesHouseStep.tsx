@@ -87,8 +87,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           </Form.Fieldset>
           {this.renderPendingResults(Form, companiesHouseResults, this.props.pcrItem)}
           <Form.Fieldset qa="save-and-continue">
-            <Form.Submit><ACC.Content value={x => x.pcrAddPartnerCompanyHouse.pcrItem.submitButton()}/></Form.Submit>
-            <Form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerCompanyHouse.pcrItem.returnToSummaryButton()}/></Form.Button>
+            <Form.Submit><ACC.Content value={x => x.pcrAddPartnerCompanyHouse.pcrItem.submitButton}/></Form.Submit>
+            <Form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerCompanyHouse.pcrItem.returnToSummaryButton}/></Form.Button>
           </Form.Fieldset>
         </Form.Form>
       </ACC.Section>

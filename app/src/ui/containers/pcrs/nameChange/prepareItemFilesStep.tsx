@@ -48,7 +48,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForAccountNameChange
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
             <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}><ACC.Content value={x => x.pcrNameChangePrepareItemFiles.documentLabels.uploadButtonLabel}/></UploadForm.Button>
-            <UploadForm.Button name="uploadFileAndContinue" styling="Primary"><ACC.Content value={x => x.pcrNameChangePrepareItemFiles.pcrItem.submitButton()}/></UploadForm.Button>
+            <UploadForm.Button name="uploadFileAndContinue" styling="Primary"><ACC.Content value={x => x.pcrNameChangePrepareItemFiles.pcrItem.submitButton}/></UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
       </ACC.Section>
