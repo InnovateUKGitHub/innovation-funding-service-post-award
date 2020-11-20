@@ -43,9 +43,9 @@ return (
 export const DocumentGuidanceWithContent = (props: { documentMessages: (x: Content) => DocumentMessages }) => {
   return (
     <React.Fragment>
-      <ACC.Content value={x => props.documentMessages(x).header()}/>
-      <ACC.Info summary={<ACC.Content value={x => props.documentMessages(x).infoTitle()}/>}>
-        <ACC.Content value={x => props.documentMessages(x).infoContent()}/>
+      <ACC.Content value={x => props.documentMessages(x).header}/>
+      <ACC.Info summary={<ACC.Content value={x => props.documentMessages(x).infoTitle}/>}>
+        <ACC.Content value={x => props.documentMessages(x).infoContent}/>
       </ACC.Info>
     </React.Fragment>
   );

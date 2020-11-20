@@ -71,7 +71,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawal
     }
     return (
       <ACC.Section titleContent={x => x.pcrRemovePartnerPrepareItemFiles.documentLabels.filesUploadedTitle}>
-        <ACC.ValidationMessage message={x => x.pcrRemovePartnerPrepareItemFiles.documentMessages.noDocumentsUploaded()} messageType="info" />
+        <ACC.ValidationMessage message={x => x.pcrRemovePartnerPrepareItemFiles.documentMessages.noDocumentsUploaded} messageType="info" />
       </ACC.Section>
     );
   }

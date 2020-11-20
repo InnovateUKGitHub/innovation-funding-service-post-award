@@ -207,7 +207,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   private renderDocumentList(editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (!documents.length) {
       return (
-        <ACC.ValidationMessage message={x => x.claimDocuments.documentMessages.noDocumentsUploaded()} messageType="info" />
+        <ACC.ValidationMessage message={x => x.claimDocuments.documentMessages.noDocumentsUploaded} messageType="info" />
       );
     }
 
@@ -325,7 +325,7 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => (
                 }}
                 onUpload={(saving, dto) => {
                   stores.messages.clearMessages();
-                  const successMessage = dto.files.length === 1 ? content.claimDocuments.documentMessages.documentUploaded() : content.claimDocuments.documentMessages.documentsUploaded(dto.files.length);
+                  const successMessage = dto.files.length === 1 ? content.claimDocuments.documentMessages.documentUploaded : content.claimDocuments.documentMessages.documentsUploaded(dto.files.length);
                   stores.claimDocuments.updateClaimDocumentsEditor(saving, props.projectId, props.partnerId, props.periodId, dto, successMessage.content);
                 }}
                 onDelete={(dto, document) => {

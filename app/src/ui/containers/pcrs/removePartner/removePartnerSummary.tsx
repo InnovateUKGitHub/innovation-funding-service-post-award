@@ -28,7 +28,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerWithdra
   private renderDocuments(documents: DocumentSummaryDto[]) {
     return documents.length > 0
       ? <ACC.DocumentList documents={documents} qa="documentsList" />
-      : <ACC.Content value={x => x.pcrRemovePartnerSummary.documentMessages.noDocumentsUploaded()}/>;
+      : <ACC.Content value={x => x.pcrRemovePartnerSummary.documentMessages.noDocumentsUploaded}/>;
   }
 }
 

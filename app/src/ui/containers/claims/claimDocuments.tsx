@@ -157,7 +157,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
     if (!documents.length) {
       return (
         <ACC.Section>
-          <ACC.ValidationMessage message={x => x.claimDocuments.documentMessages.noDocumentsUploaded()} messageType="info" />
+          <ACC.ValidationMessage message={x => x.claimDocuments.documentMessages.noDocumentsUploaded} messageType="info" />
         </ACC.Section>
       );
     }
@@ -186,7 +186,7 @@ const ClaimDocumentsContainer = (props: ClaimDocumentsPageParams & BaseProps) =>
               onChange={(saving, dto) => {
                 stores.messages.clearMessages();
                 const successMessage = dto.files.length === 1
-                  ? content.claimDocuments.documentMessages.documentUploadedSuccess().content
+                  ? content.claimDocuments.documentMessages.documentUploadedSuccess.content
                   : content.claimDocuments.documentMessages.documentsUploadedSuccess(dto.files.length).content;
                 stores.claimDocuments.updateClaimDocumentsEditor(saving, props.projectId, props.partnerId, props.periodId, dto, successMessage);
               }}

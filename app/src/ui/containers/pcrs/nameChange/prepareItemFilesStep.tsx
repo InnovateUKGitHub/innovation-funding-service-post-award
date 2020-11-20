@@ -65,7 +65,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForAccountNameChange
     }
     return (
       <ACC.Section titleContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.filesUploadedTitle}>
-        <ACC.ValidationMessage message={x => x.pcrNameChangePrepareItemFiles.doucmentMessages.noDocumentsUploaded()} messageType="info" />
+        <ACC.ValidationMessage message={x => x.pcrNameChangePrepareItemFiles.doucmentMessages.noDocumentsUploaded} messageType="info" />
       </ACC.Section>
     );
   }
