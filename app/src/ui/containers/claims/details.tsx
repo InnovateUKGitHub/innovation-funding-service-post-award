@@ -60,7 +60,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={backLink}><ACC.Content value={x => x.claimDetails.backLink()} /></ACC.BackLink>}
+        backLink={<ACC.BackLink route={backLink}><ACC.Content value={x => x.claimDetails.backLink} /></ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={data.project} />}
         partner={data.partner}
       >
@@ -85,7 +85,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       <ACC.Section>
         <ACC.SectionPanel qa="claims-summary">
           <ACC.DualDetails>
-            <ClaimSummaryDetails.Details title={<ACC.Content value={x => x.claimDetails.costsAndGrantSummaryTitle()} />} data={data.claim} qa="claim-costs-summary">
+            <ClaimSummaryDetails.Details title={<ACC.Content value={x => x.claimDetails.costsAndGrantSummaryTitle} />} data={data.claim} qa="claim-costs-summary">
               <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.costsClaimed} />} qa="costs-claimed" value={x => x.totalCostsSubmitted} />
               <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.costsApproved} />} qa="costs-approved" value={x => x.totalCostsApproved} />
               <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.costsDeferred} />} qa="costs-deferred" value={x => x.totalDeferredAmount} />
@@ -128,7 +128,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
   private renderCommentsFromFC(project: ProjectDto, claim: ClaimDto) {
     if (project.roles & ProjectRole.MonitoringOfficer && (claim.status === ClaimStatus.DRAFT || claim.status === ClaimStatus.MO_QUERIED) && claim.comments) {
       return (
-        <ACC.Section titleContent={x => x.claimDetails.commentsSectionTitle()} qa="additionalComments">
+        <ACC.Section titleContent={x => x.claimDetails.commentsSectionTitle} qa="additionalComments">
           <ACC.Renderers.SimpleString multiline={true}>
             {claim.comments}
           </ACC.Renderers.SimpleString>
