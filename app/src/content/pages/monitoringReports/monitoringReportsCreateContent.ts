@@ -12,5 +12,5 @@ export class MonitoringReportsCreateContent extends ContentPageBase {
   public readonly messages = new MonitoringReportsMessages(this, this.project);
   public readonly labels = new MonitoringReportsLabels(this, this.project);
 
-  public readonly backLink = () => this.getContent("back-link");
+  public readonly backLink = this.getContent("back-link");
 }
