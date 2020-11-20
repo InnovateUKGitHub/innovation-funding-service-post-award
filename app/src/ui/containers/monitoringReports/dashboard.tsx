@@ -70,13 +70,13 @@ class DashboardComponent extends ContainerBase<Params&Props, Data, Callbacks> {
           message={x => x.monitoringReportsDashboard.messages.reportsSubmissionGuidance}
         />
 
-        <ACC.Link route={this.props.routes.monitoringReportCreate.getLink({ projectId: this.props.projectId })} className="govuk-button"><ACC.Content value={(x) => x.monitoringReportsDashboard.buttonNewMonitoringReport()}/></ACC.Link>
-        <ACC.Section title={ < ACC.Content value={x => x.monitoringReportsDashboard.sectionTitleOpen()} /> } >
+        <ACC.Link route={this.props.routes.monitoringReportCreate.getLink({ projectId: this.props.projectId })} className="govuk-button"><ACC.Content value={(x) => x.monitoringReportsDashboard.buttonNewMonitoringReport}/></ACC.Link>
+        <ACC.Section title={ < ACC.Content value={x => x.monitoringReportsDashboard.sectionTitleOpen} /> } >
           {reportSections.open.length ? this.renderTable(project, reportSections.open, "current") : null}
 
           {!reportSections.open.length ? <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsDashboard.messages.noOpenReportsMessage}/></ACC.Renderers.SimpleString> : null}
         </ACC.Section>
-        <ACC.Section title={ < ACC.Content value={x => x.monitoringReportsDashboard.sectionTitleArchived()} /> } >
+        <ACC.Section title={ < ACC.Content value={x => x.monitoringReportsDashboard.sectionTitleArchived} /> } >
           {reportSections.archived.length ? this.renderTable(project, reportSections.archived, "previous") : null}
           {!reportSections.archived.length ? <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsDashboard.messages.noArchivedReportsMessage}/></ACC.Renderers.SimpleString> : null}
         </ACC.Section>
@@ -105,14 +105,14 @@ class DashboardComponent extends ContainerBase<Params&Props, Data, Callbacks> {
     const links: { route: ILinkInfo, titleContent: ContentSelector, qa: string; }[] = [];
 
     if (this.editStatuses.indexOf(report.status) > -1) {
-      links.push({ route: this.props.routes.monitoringReportWorkflow.getLink({ projectId: report.projectId, id: report.headerId, mode: "prepare", step: undefined }), titleContent: (content) => content.monitoringReportsDashboard.linkEditMonitoringReport(), qa: "editLink" });
+      links.push({ route: this.props.routes.monitoringReportWorkflow.getLink({ projectId: report.projectId, id: report.headerId, mode: "prepare", step: undefined }), titleContent: (content) => content.monitoringReportsDashboard.linkEditMonitoringReport, qa: "editLink" });
     }
     else {
-      links.push({ route: this.props.routes.monitoringReportWorkflow.getLink({ projectId: report.projectId, id: report.headerId, mode: "view", step: undefined }), titleContent: (content) => content.monitoringReportsDashboard.linkViewMonitoringReport(), qa: "viewLink" });
+      links.push({ route: this.props.routes.monitoringReportWorkflow.getLink({ projectId: report.projectId, id: report.headerId, mode: "view", step: undefined }), titleContent: (content) => content.monitoringReportsDashboard.linkViewMonitoringReport, qa: "viewLink" });
     }
 
     if (report.status === MonitoringReportStatus.Draft) {
-      links.push({ route: this.props.routes.monitoringReportDelete.getLink({ projectId: report.projectId, id: report.headerId }), titleContent: (content) => content.monitoringReportsDashboard.linkDeleteMonitoringReport(), qa: "deleteLink" });
+      links.push({ route: this.props.routes.monitoringReportDelete.getLink({ projectId: report.projectId, id: report.headerId }), titleContent: (content) => content.monitoringReportsDashboard.linkDeleteMonitoringReport, qa: "deleteLink" });
     }
 
     return links.map((x, i) => <div key={i} data-qa={x.qa}><ACC.Link route={x.route}><ACC.Content value={x.titleContent}/></ACC.Link></div>);
