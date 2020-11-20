@@ -39,19 +39,19 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
         <ACC.Section titleContent={x => x.pcrAddPartnerAcademicCosts.labels.tsbReferenceHeading}>
           <SimpleString qa="tsbReference">{pcrItem.tsbReference}</SimpleString>
         </ACC.Section>
-        <ACC.Section titleContent={x => x.pcrAddPartnerAcademicCosts.costsSectionTitle()}>
+        <ACC.Section titleContent={x => x.pcrAddPartnerAcademicCosts.costsSectionTitle}>
           <Table.Table qa="costsTable" data={data}>
             <Table.String
-              headerContent={x => x.pcrAddPartnerAcademicCosts.categoryHeading()}
+              headerContent={x => x.pcrAddPartnerAcademicCosts.categoryHeading}
               qa="category"
               value={x => x.costCategory.name}
               footer={this.props.isClient &&
               <ACC.Renderers.SimpleString className={"govuk-!-font-weight-bold"}>
-                <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.totalCosts()}/>
+                <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.totalCosts}/>
               </ACC.Renderers.SimpleString>}
             />
             <Table.Currency
-              headerContent={x => x.pcrAddPartnerAcademicCosts.costHeading()}
+              headerContent={x => x.pcrAddPartnerAcademicCosts.costHeading}
               qa="cost"
               value={x => x.costDto? x.costDto.value : 0}
               width={30}
