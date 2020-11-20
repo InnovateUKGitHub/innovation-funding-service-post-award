@@ -35,7 +35,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForAccountNameChange
           onChange={(dto) => this.props.onFileChange("DontSave", dto)}
           qa="projectChangeRequestItemUpload"
         >
-          <UploadForm.Fieldset headingContent={x => x.pcrNameChangePrepareItemFiles.uploadCertificateHeading()}>
+          <UploadForm.Fieldset headingContent={x => x.pcrNameChangePrepareItemFiles.uploadCertificateHeading}>
             <ACC.DocumentGuidance/>
             <UploadForm.MulipleFileUpload
               labelContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.uploadInputLabel}
