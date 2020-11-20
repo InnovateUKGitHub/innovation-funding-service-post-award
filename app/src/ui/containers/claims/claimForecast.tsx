@@ -51,7 +51,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
   renderOverheadsRate(overheadRate: number | null) {
     if (!isNumber(overheadRate)) return null;
 
-    return <ACC.Renderers.SimpleString qa="overhead-costs"><ACC.Content value={x => x.claimForecast.overheadsCosts()}/><ACC.Renderers.Percentage value={overheadRate} /></ACC.Renderers.SimpleString>;
+    return <ACC.Renderers.SimpleString qa="overhead-costs"><ACC.Content value={x => x.claimForecast.overheadsCosts}/><ACC.Renderers.Percentage value={overheadRate} /></ACC.Renderers.SimpleString>;
   }
 
   renderContents(combined: ACC.Claims.ForecastData, editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>) {
@@ -59,7 +59,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.claimDocuments.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}><ACC.Content value={x => x.claimForecast.backLink()}/></ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.claimDocuments.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}><ACC.Content value={x => x.claimForecast.backLink}/></ACC.BackLink>}
         error={editor.error}
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={combined.project} />}
@@ -82,8 +82,8 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
               <ACC.Claims.ClaimLastModified partner={combined.partner} />
             </Form.Fieldset>
             <Form.Fieldset qa="save-and-continue">
-              <Form.Submit><ACC.Content value={x => x.claimForecast.continueToSummaryButton()} /></Form.Submit>
-              <Form.Button name="save" onClick={() => this.props.onUpdate(true, editor.data, this.getBackLink(combined.project))}><ACC.Content value={x => x.claimForecast.saveAndReturnButton()} /></Form.Button>
+              <Form.Submit><ACC.Content value={x => x.claimForecast.continueToSummaryButton} /></Form.Submit>
+              <Form.Button name="save" onClick={() => this.props.onUpdate(true, editor.data, this.getBackLink(combined.project))}><ACC.Content value={x => x.claimForecast.saveAndReturnButton} /></Form.Button>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
