@@ -16,7 +16,7 @@ export const FinanceDetailsStep = (props: PcrStepProps<PCRItemForPartnerAddition
         onSubmit={() => props.onSave()}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset headingContent={x => x.pcrAddPartnerFinanceDetails.labels.financialYearEndHeading()} qa="endOfFinancialYear">
+        <Form.Fieldset headingContent={x => x.pcrAddPartnerFinanceDetails.labels.financialYearEndHeading} qa="endOfFinancialYear">
           <Form.MonthYear
             name="financialYearEndDate"
             hintContent={x => x.pcrAddPartnerFinanceDetails.yearEndHint()}

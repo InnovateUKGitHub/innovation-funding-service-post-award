@@ -35,8 +35,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     const Table = ACC.TypedTable<Data>();
 
     return (
-      <ACC.Section titleContent={x => x.pcrAddPartnerAcademicCosts.labels.projectCostsHeading()}>
-        <ACC.Section titleContent={x => x.pcrAddPartnerAcademicCosts.labels.tsbReferenceHeading()}>
+      <ACC.Section titleContent={x => x.pcrAddPartnerAcademicCosts.labels.projectCostsHeading}>
+        <ACC.Section titleContent={x => x.pcrAddPartnerAcademicCosts.labels.tsbReferenceHeading}>
           <SimpleString qa="tsbReference">{pcrItem.tsbReference}</SimpleString>
         </ACC.Section>
         <ACC.Section titleContent={x => x.pcrAddPartnerAcademicCosts.costsSectionTitle()}>

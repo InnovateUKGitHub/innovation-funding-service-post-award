@@ -19,7 +19,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
   const selectedProjectLocationOption = props.pcrItem.projectLocation && projectLocationOptions.find(x => parseInt(x.id, 10) === props.pcrItem.projectLocation);
 
   return (
-    <ACC.Section titleContent={x => x.pcrAddPartnerProjectLocationContent.labels.projectLocationHeading()}>
+    <ACC.Section titleContent={x => x.pcrAddPartnerProjectLocationContent.labels.projectLocationHeading}>
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
@@ -41,7 +41,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
             validation={props.validator.projectLocation}
           />
         </Form.Fieldset>
-        <Form.Fieldset headingContent={x => x.pcrAddPartnerProjectLocationContent.labels.townOrCityHeading()}>
+        <Form.Fieldset headingContent={x => x.pcrAddPartnerProjectLocationContent.labels.townOrCityHeading}>
           <Form.String
             name="projectCity"
             value={dto => dto.projectCity}
@@ -51,7 +51,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
             validation={props.validator.projectCity}
           />
         </Form.Fieldset>
-        <Form.Fieldset headingContent={x => x.pcrAddPartnerProjectLocationContent.labels.postcodeHeading()}>
+        <Form.Fieldset headingContent={x => x.pcrAddPartnerProjectLocationContent.labels.postcodeHeading}>
           <Form.String
             name="projectPostcode"
             hintContent={x => x.pcrAddPartnerProjectLocationContent.postcodeGuidance()}

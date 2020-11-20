@@ -20,9 +20,9 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     const roleOptions = this.getOptions(this.props.pcrItem.projectRole, this.props.pcrProjectRoles);
     const typeOptions = this.getOptions(this.props.pcrItem.partnerType, this.props.pcrPartnerTypes);
     const commercialWorkOptions: ACC.SelectOption[] = [{
-      id: "true", value: <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkYes()}/>
+      id: "true", value: <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkYes}/>
     }, {
-      id: "false", value: <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkNo()}/>
+      id: "false", value: <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkNo}/>
     }];
     return (
       <ACC.Section qa="role-and-partner-type" titleContent={x => x.pcrAddPartnerRoleAndOrganisation.formSectionTitle()}>
@@ -34,7 +34,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           onChange={dto => this.onChange(dto)}
         >
           <ACC.ValidationMessage messageType="info" message={x => x.pcrAddPartnerRoleAndOrganisation.validationMessage()}/>
-          <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.roleHeading()}>
+          <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.roleHeading}>
             <Form.Radio
               name="projectRole"
               options={roleOptions.options}
@@ -47,11 +47,11 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
               validation={this.props.validator.projectRole}
             />
           </Form.Fieldset>
-          <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkHeading()}>
+          <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkHeading}>
             <Form.Radio
               name="isCommercialWork"
-              labelContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkLabel()}
-              hintContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkHint()}
+              labelContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkLabel}
+              hintContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkHint}
               options={commercialWorkOptions}
               inline={false}
               value={(dto) => {
@@ -65,7 +65,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
               validation={this.props.validator.isCommercialWork}
             />
           </Form.Fieldset>
-          <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.organisationHeading()}>
+          <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.organisationHeading}>
             <ACC.Info summary={<ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.infoSummary()}/>}>
               <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.organisationTypeInfo()}/>
             </ACC.Info>

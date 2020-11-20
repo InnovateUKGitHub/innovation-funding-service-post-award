@@ -16,7 +16,7 @@ export const AcademicOrganisationStep = (props: PcrStepProps<PCRItemForPartnerAd
         onSubmit={() => props.onSave()}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset headingContent={x => x.pcrAddPartnerAcademicOrganisation.labels.organisationSectionTitle()}>
+        <Form.Fieldset headingContent={x => x.pcrAddPartnerAcademicOrganisation.labels.organisationSectionTitle}>
           <Form.String
             name="organisationName"
             hintContent={x => x.pcrAddPartnerAcademicOrganisation.hint()}
