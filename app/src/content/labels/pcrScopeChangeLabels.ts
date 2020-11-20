@@ -6,8 +6,8 @@ export class PCRScopeChangeLabels extends ContentBase {
     super(parent, "pcr-scope-change-labels", project);
   }
 
-  public readonly existingDescription = () => this.getContent("existing-description");
-  public readonly newDescription = () => this.getContent("new-description");
-  public readonly existingSummary = () => this.getContent("existing-summary");
-  public readonly newSummary = () => this.getContent("new-summary");
+  public readonly existingDescription = this.getContent("existing-description");
+  public readonly newDescription = this.getContent("new-description");
+  public readonly existingSummary = this.getContent("existing-summary");
+  public readonly newSummary = this.getContent("new-summary");
 }

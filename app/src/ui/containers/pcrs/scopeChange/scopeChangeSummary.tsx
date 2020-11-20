@@ -12,14 +12,14 @@ export const ScopeChangeSummary = (props: PcrSummaryProps<PCRItemForScopeChangeD
     <ACC.Section qa="scope-change-summary">
       <ACC.SummaryList qa="scope-change-summary-list">
         <ACC.SummaryListItem
-          labelContent={x => x.pcrScopeChangeSummary.labels.existingDescription()}
+          labelContent={x => x.pcrScopeChangeSummary.labels.existingDescription}
           content={
             <SimpleString multiline={true}>{pcrItem.publicDescriptionSnapshot}</SimpleString>
           }
           qa="currentPublicDescription"
         />
         <ACC.SummaryListItem
-          labelContent={x => x.pcrScopeChangeSummary.labels.newDescription()}
+          labelContent={x => x.pcrScopeChangeSummary.labels.newDescription}
           content={
             <SimpleString multiline={true}>{pcrItem.publicDescription}</SimpleString>
           }
@@ -28,14 +28,14 @@ export const ScopeChangeSummary = (props: PcrSummaryProps<PCRItemForScopeChangeD
           action={props.getEditLink("publicDescriptionStep", validator.publicDescription)}
         />
         <ACC.SummaryListItem
-          labelContent={x => x.pcrScopeChangeSummary.labels.existingSummary()}
+          labelContent={x => x.pcrScopeChangeSummary.labels.existingSummary}
           content={
             <SimpleString multiline={true}>{pcrItem.projectSummarySnapshot}</SimpleString>
           }
           qa="currentProjectSummary"
         />
         <ACC.SummaryListItem
-          labelContent={x => x.pcrScopeChangeSummary.labels.newSummary()}
+          labelContent={x => x.pcrScopeChangeSummary.labels.newSummary}
           content={
             <SimpleString multiline={true}>{pcrItem.projectSummary}</SimpleString>}
           qa="newProjectSummary"
