@@ -16,7 +16,7 @@ export class MonitoringReportsWorkflowContent extends ContentPageBase {
   public readonly editMode = new MonitoringReportsWorkflowContentEditMode(this.content);
   public readonly viewMode = new MonitoringReportsWorkflowContentViewMode(this.content);
 
-  public readonly backLink = () => this.getContent("back-link");
+  public readonly backLink = this.getContent("back-link");
 
   public readonly backToStepLink = (step: string) => this.getContent("link-back-to-step", {step});
 }

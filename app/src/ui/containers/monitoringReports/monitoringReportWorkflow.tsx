@@ -97,11 +97,11 @@ class Component extends ContainerBase<MonitoringReportWorkflowParams, Data, Call
 
   private getBackLink(workflow: MonitoringReportWorkflowDef) {
     if (this.props.mode === "view") {
-      return <ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}><ACC.Content value={(x) => x.monitoringReportsWorkflow.backLink()} /></ACC.BackLink>;
+      return <ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}><ACC.Content value={(x) => x.monitoringReportsWorkflow.backLink} /></ACC.BackLink>;
     }
     const prevStep = workflow.getPrevStepInfo();
     if (!prevStep) {
-      return <ACC.BackLink route={this.props.routes.monitoringReportPreparePeriod.getLink({ projectId: this.props.projectId, id: this.props.id })}><ACC.Content value={(x) => x.monitoringReportsWorkflow.backLink()} /></ACC.BackLink>;
+      return <ACC.BackLink route={this.props.routes.monitoringReportPreparePeriod.getLink({ projectId: this.props.projectId, id: this.props.id })}><ACC.Content value={(x) => x.monitoringReportsWorkflow.backLink} /></ACC.BackLink>;
     }
     return <ACC.BackLink route={this.props.routes.monitoringReportWorkflow.getLink({ projectId: this.props.projectId, id: this.props.id, mode: this.props.mode, step: prevStep.stepNumber })}><ACC.Content value={(x) => x.monitoringReportsWorkflow.backToStepLink(prevStep.displayName.toLocaleLowerCase())} /></ACC.BackLink>;
   }
