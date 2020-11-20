@@ -61,7 +61,7 @@ class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
 
   private renderOverheadsRate(overheadRate: number | null) {
     if (!isNumber(overheadRate)) return null;
-    return <ACC.Renderers.SimpleString qa="overhead-costs"><ACC.Content value={x => x.forecastsUpdate.labels.overheadCosts()}/><ACC.Renderers.Percentage value={overheadRate} /></ACC.Renderers.SimpleString>;
+    return <ACC.Renderers.SimpleString qa="overhead-costs"><ACC.Content value={x => x.forecastsUpdate.labels.overheadCosts}/><ACC.Renderers.Percentage value={overheadRate} /></ACC.Renderers.SimpleString>;
   }
 }
 
