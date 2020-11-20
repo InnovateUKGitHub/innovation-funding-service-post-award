@@ -27,7 +27,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
     const isMoPm = !!(data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
     const partnerName = isMoPm ? <PartnerName partner={data.partner}/> : null;
     const backLink = isMoPm ? this.props.routes.forecastDashboard.getLink({ projectId: data.project.id }) : this.props.routes.projectOverview.getLink({ projectId: data.project.id });
-    const backText = isMoPm ? <ACC.Content value={x => x.forecastsDetails.moOrPmBackLink()}/> : <ACC.Content value={x => x.forecastsDetails.backLink()}/>;
+    const backText = isMoPm ? <ACC.Content value={x => x.forecastsDetails.moOrPmBackLink}/> : <ACC.Content value={x => x.forecastsDetails.backLink}/>;
 
     return (
       <ACC.Page
@@ -90,7 +90,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
     if (finalClaim) return null;
     if (partner.partnerStatus === PartnerStatus.OnHold) return null;
 
-    return <ACC.Link id="update-forecast" styling="PrimaryButton" route={this.props.routes.forecastUpdate.getLink({ projectId: project.id, partnerId: partner.id })}><ACC.Content value={x => x.forecastsDetails.updateForecastLink()}/></ACC.Link>;
+    return <ACC.Link id="update-forecast" styling="PrimaryButton" route={this.props.routes.forecastUpdate.getLink({ projectId: project.id, partnerId: partner.id })}><ACC.Content value={x => x.forecastsDetails.updateForecastLink}/></ACC.Link>;
   }
 }
 

@@ -12,7 +12,7 @@ export class ForecastsDetailsContent extends ContentPageBase {
   public readonly labels = new ForecastsLabels(this, this.project);
   public readonly messages = new ForecastsMessages(this, this.project);
 
-  public readonly moOrPmBackLink = () => this.getContent("back-link-mo-or-pm");
-  public readonly backLink = () => this.getContent("back-link");
-  public readonly updateForecastLink = () => this.getContent("link-update-forecast");
+  public readonly moOrPmBackLink = this.getContent("back-link-mo-or-pm");
+  public readonly backLink = this.getContent("back-link");
+  public readonly updateForecastLink = this.getContent("link-update-forecast");
 }
