@@ -6,8 +6,8 @@ export class PCRReasoningLabels extends ContentBase {
     super(parent, "pcr-reasoning-labels", project);
   }
 
-  public readonly requestNumber = () => this.getContent("request-number");
-  public readonly types = () => this.getContent("types");
-  public readonly comments = () => this.getContent("comments");
-  public readonly files = () => this.getContent("files");
+  public readonly requestNumber = this.getContent("request-number");
+  public readonly types = this.getContent("types");
+  public readonly comments = this.getContent("comments");
+  public readonly files = this.getContent("files");
 }
