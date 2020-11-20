@@ -121,7 +121,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
     const docs = documents.filter(x => x.description === description);
     return docs.length > 0
       ? <ACC.DocumentList documents={docs} qa="documents" />
-      : <ACC.Content value={x => x.pcrAddPartnerSummary.documentMessages.documentsNotApplicable()}/>;
+      : <ACC.Content value={x => x.pcrAddPartnerSummary.documentMessages.documentsNotApplicable}/>;
   }
 }
 

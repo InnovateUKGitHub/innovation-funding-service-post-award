@@ -93,7 +93,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     }
     return (
       <ACC.Section titleContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.filesUploadedTitle}>
-        <ACC.ValidationMessage message={x => x.pcrAddPartnerAgreementToPcr.documentMessages.noDocumentsUploaded()} messageType="info" />
+        <ACC.ValidationMessage message={x => x.pcrAddPartnerAgreementToPcr.documentMessages.noDocumentsUploaded} messageType="info" />
       </ACC.Section>
     );
   }

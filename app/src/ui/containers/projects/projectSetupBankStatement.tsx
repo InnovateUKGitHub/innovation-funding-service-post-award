@@ -83,7 +83,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
     }
     return (
       <ACC.Section titleContent={x => x.projectSetupBankStatement.documentLabels.filesUploadedTitle}>
-        <ACC.ValidationMessage message={x => x.projectSetupBankStatement.documentMessages.noDocumentsUploaded()} messageType="info" />
+        <ACC.ValidationMessage message={x => x.projectSetupBankStatement.documentMessages.noDocumentsUploaded} messageType="info" />
       </ACC.Section>
     );
   }

@@ -72,7 +72,7 @@ class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & 
     }
     return (
       <ACC.Section titleContent={x => x.pcrReasoningPrepareFiles.documentLabels.filesUploadedTitle}>
-        <ACC.ValidationMessage message={x => x.pcrReasoningPrepareFiles.documentMessages.noDocumentsUploaded()} messageType="info" />
+        <ACC.ValidationMessage message={x => x.pcrReasoningPrepareFiles.documentMessages.noDocumentsUploaded} messageType="info" />
       </ACC.Section>
     );
   }

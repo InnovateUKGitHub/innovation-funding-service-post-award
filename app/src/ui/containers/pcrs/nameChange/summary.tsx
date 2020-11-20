@@ -28,7 +28,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForAccountNameCha
   private renderDocuments(documents: DocumentSummaryDto[]) {
     return documents.length > 0
       ? <ACC.DocumentList documents={documents} qa="documentsList" />
-      : <ACC.Content value={x => x.pcrNameChangeSummary.documentMessage.noDocumentsUploaded()}/>;
+      : <ACC.Content value={x => x.pcrNameChangeSummary.documentMessage.noDocumentsUploaded}/>;
   }
 }
 
