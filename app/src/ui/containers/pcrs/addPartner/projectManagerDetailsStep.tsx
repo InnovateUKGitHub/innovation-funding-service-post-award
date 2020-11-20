@@ -18,8 +18,8 @@ const useFinanceContactDetails = (props: PcrStepProps<PCRItemForPartnerAdditionD
 export const ProjectManagerDetailsStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => {
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
   return (
-    <ACC.Section titleContent={x => x.pcrAddPartnerProjectContacts.sectionTitle()}>
-      <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerProjectContacts.guidance()}/></ACC.Renderers.SimpleString>
+    <ACC.Section titleContent={x => x.pcrAddPartnerProjectContacts.sectionTitle}>
+      <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerProjectContacts.guidance}/></ACC.Renderers.SimpleString>
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
@@ -28,7 +28,7 @@ export const ProjectManagerDetailsStep = (props: PcrStepProps<PCRItemForPartnerA
         onChange={dto => props.onChange(dto)}
       >
         <Form.Fieldset headingContent={x => x.pcrAddPartnerProjectContacts.labels.projectLeadContactHeading}>
-          {props.isClient && <Form.Button name="useFinanceContactDetails" onClick={() => useFinanceContactDetails(props)}><ACC.Content value={x => x.pcrAddPartnerProjectContacts.useFinanceDetails()}/></Form.Button>}
+          {props.isClient && <Form.Button name="useFinanceContactDetails" onClick={() => useFinanceContactDetails(props)}><ACC.Content value={x => x.pcrAddPartnerProjectContacts.useFinanceDetails}/></Form.Button>}
           <Form.Hidden name="contact2ProjectRole" value={x => x.contact2ProjectRole = PCRContactRole.ProjectManager}/>
           <Form.String
             labelContent={x => x.pcrAddPartnerProjectContacts.labels.contactFirstNameHeading}
@@ -50,7 +50,7 @@ export const ProjectManagerDetailsStep = (props: PcrStepProps<PCRItemForPartnerA
           />
           <Form.String
             labelContent={x => x.pcrAddPartnerProjectContacts.labels.contactPhoneNumberHeading}
-            hintContent={x => x.pcrAddPartnerProjectContacts.phoneNumberHint()}
+            hintContent={x => x.pcrAddPartnerProjectContacts.phoneNumberHint}
             name="contact2Phone"
             value={dto => dto.contact2Phone}
             update={(x, val) => {

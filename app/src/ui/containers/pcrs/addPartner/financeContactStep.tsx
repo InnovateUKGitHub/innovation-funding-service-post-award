@@ -9,8 +9,8 @@ import { PCRContactRole } from "@framework/constants";
 export const FinanceContactStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => {
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
   return (
-    <ACC.Section titleContent={x => x.pcrAddPartnerProjectContacts.sectionTitle()}>
-      <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerProjectContacts.guidance()}/></ACC.Renderers.SimpleString>
+    <ACC.Section titleContent={x => x.pcrAddPartnerProjectContacts.sectionTitle}>
+      <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerProjectContacts.guidance}/></ACC.Renderers.SimpleString>
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
@@ -40,7 +40,7 @@ export const FinanceContactStep = (props: PcrStepProps<PCRItemForPartnerAddition
           />
           <Form.String
             labelContent={x => x.pcrAddPartnerProjectContacts.labels.contactPhoneNumberHeading}
-            hintContent={x => x.pcrAddPartnerProjectContacts.phoneNumberHint()}
+            hintContent={x => x.pcrAddPartnerProjectContacts.phoneNumberHint}
             name="contact1Phone"
             value={dto => dto.contact1Phone}
             update={(x, val) => {
