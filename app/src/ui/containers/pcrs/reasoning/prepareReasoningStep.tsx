@@ -15,12 +15,12 @@ export class PCRPrepareReasoningStep extends ContainerBase<ReasoningStepProps, {
           editor={editor}
           onChange={dto => onChange(dto)}
         >
-          <PCRForm.Fieldset headingContent={x => x.pcrPrepareReasoning.reasoningHeading()}>
+          <PCRForm.Fieldset headingContent={x => x.pcrPrepareReasoning.reasoningHeading}>
             <PCRForm.MultilineString
               name="reasoningComments"
-              labelContent={x => x.pcrPrepareReasoning.reasoningHeading()}
+              labelContent={x => x.pcrPrepareReasoning.reasoningHeading}
               labelHidden={true}
-              hintContent={x => x.pcrPrepareReasoning.hint()}
+              hintContent={x => x.pcrPrepareReasoning.hint}
               qa="reason"
               value={m => m.reasoningComments}
               update={(m, v) => m.reasoningComments = v || ""}
