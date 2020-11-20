@@ -57,7 +57,7 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
     const Form = ACC.TypedForm<PCRDto>();
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={stepRoute}><ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.backLink()}/></ACC.BackLink>}
+        backLink={<ACC.BackLink route={stepRoute}><ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.backLink}/></ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
         validator={editor.validator}
@@ -75,7 +75,7 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
             onChange={dto => this.props.onChange(dto)}
           >
             <Form.Fieldset>
-              <Form.Submit><ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.submitButton()}/></Form.Submit>
+              <Form.Submit><ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.submitButton}/></Form.Submit>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
@@ -86,7 +86,7 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
   private renderGuidance(costCategory: CostCategoryDto) {
     return (
       <ACC.Info summary={<ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.guidanceTitle(costCategory.name)}/>}>
-        <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.messages().costGuidance(costCategory.type)}/>
+        <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.messages.costGuidance(costCategory.type)}/>
       </ACC.Info>
     );
   }
@@ -109,19 +109,19 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
         <tr key={1} className="govuk-table__row">
           <td className="govuk-table__cell" colSpan={3}>
             <ACC.Link route={this.props.routes.pcrPrepareSpendProfileAddCost.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, costCategoryId: this.props.costCategoryId})}>
-              <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.addCostButton()}/>
+              <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.addCostButton}/>
             </ACC.Link>
           </td>
         </tr>
       ),
       this.renderFooterRow({
-        key: "2", title: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.labels().totalCosts(costCategory.name)}/>, qa: "total-costs", isBold: false, value: <ACC.Renderers.Currency value={total} />
+        key: "2", title: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.labels.totalCosts(costCategory.name)}/>, qa: "total-costs", isBold: false, value: <ACC.Renderers.Currency value={total} />
       }),
     ];
     return (
       <Table.Table qa="costs" data={costs} footers={footers}>
-        <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().description} value={x => x.description} qa={"description"}/>
-        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels().cost} value={x => x.value} qa={"cost"}/>
+        <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels.description} value={x => x.description} qa={"description"}/>
+        <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels.cost} value={x => x.value} qa={"cost"}/>
         <Table.Custom qa="links" header="Links" hideHeader={true} value={x => this.renderLinks(this.props.itemId, x.id, this.props.costCategoryId, this.props.projectId, this.props.pcrId)} />
       </Table.Table>
     );
@@ -129,8 +129,8 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
 
   private renderLinks(itemId: string, costId: string, costCategoryId: string, projectId: string, pcrId: string) {
     const links: { route: ILinkInfo, text: React.ReactNode, qa: string; }[] = [];
-    links.push({route: this.props.routes.pcrPrepareSpendProfileEditCost.getLink({itemId, costId, costCategoryId, projectId, pcrId}), text: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.editCostButton()} />, qa:"edit"});
-    links.push({route: this.props.routes.pcrPrepareSpendProfileDeleteCost.getLink({itemId, costId, costCategoryId, projectId, pcrId}), text: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.removeCostButton()} />, qa:"remove"});
+    links.push({route: this.props.routes.pcrPrepareSpendProfileEditCost.getLink({itemId, costId, costCategoryId, projectId, pcrId}), text: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.editCostButton} />, qa:"edit"});
+    links.push({route: this.props.routes.pcrPrepareSpendProfileDeleteCost.getLink({itemId, costId, costCategoryId, projectId, pcrId}), text: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.removeCostButton} />, qa:"remove"});
 
     return links.map((x, i) => <div key={i} data-qa={x.qa}><ACC.Link route={x.route}>{x.text}</ACC.Link></div>);
   }
