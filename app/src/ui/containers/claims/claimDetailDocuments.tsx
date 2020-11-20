@@ -59,7 +59,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
     }
 
     return (
-      <ACC.Section subtitleContent={x => x.claimDetailDocuments.subtitle()}>
+      <ACC.Section subtitleContent={x => x.claimDetailDocuments.subtitle}>
         <ACC.DocumentTableWithDelete onRemove={(document) => this.props.onDelete(editor.data, document)} documents={documents} qa="supporting-documents"/>
       </ACC.Section>
     );
@@ -85,7 +85,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
         <ACC.Renderers.SimpleString qa="guidanceText"><ACC.Content value={x => x.claimDetailDocuments.messages.documentDetailGuidance}/></ACC.Renderers.SimpleString>
         <ACC.Renderers.Messages messages={this.props.messages} />
         {this.renderDocuments(editor, documents)}
-        <ACC.Section titleContent={x => x.claimDetailDocuments.formTitle()}>
+        <ACC.Section titleContent={x => x.claimDetailDocuments.formTitle}>
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
@@ -97,7 +97,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
               <ACC.DocumentGuidance/>
               <UploadForm.Hidden name="description" value={dto => dto.description}/>
               <UploadForm.MulipleFileUpload
-                labelContent={x => x.claimDetailDocuments.upload()}
+                labelContent={x => x.claimDetailDocuments.upload}
                 labelHidden={true}
                 name="attachment"
                 validation={editor.validator.files}
@@ -105,7 +105,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
                 update={(dto, files) => dto.files = files || []}
               />
             </UploadForm.Fieldset>
-            <UploadForm.Submit><ACC.Content value={x => x.claimDetailDocuments.upload()}/></UploadForm.Submit>
+            <UploadForm.Submit><ACC.Content value={x => x.claimDetailDocuments.upload}/></UploadForm.Submit>
           </UploadForm.Form>
         </ACC.Section>
       </ACC.Page>
