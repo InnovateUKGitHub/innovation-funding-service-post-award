@@ -9,7 +9,7 @@ export const DeleteCapitalUsageCostFormComponent = (props: SpendProfileDeleteFor
   const { data, costCategory } = props;
   return (
     <ACC.Section titleContent={x => x.pcrSpendProfileDeleteCostContent.costSectionTitle(costCategory.name)}>
-      <ACC.ValidationMessage messageType="alert" message={x => x.pcrSpendProfileDeleteCostContent.deleteGuidance()} />
+      <ACC.ValidationMessage messageType="alert" message={x => x.pcrSpendProfileDeleteCostContent.deleteGuidance} />
       <ACC.SummaryList qa="deleteCapitalUsageCost">
         <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.capitalUsage.description} content={data.description} qa="description" />
         <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.capitalUsage.type} content={data.typeLabel} qa="type" />
