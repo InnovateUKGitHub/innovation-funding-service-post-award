@@ -29,7 +29,7 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
     return (
       <ACC.Section>
         <ACC.Accordion>
-          <ACC.AccordionItem titleContent={x => x.monitoringReportsSummary.labels.statusAndCommentsLog()} qa="status-and-comments-log">
+          <ACC.AccordionItem titleContent={x => x.monitoringReportsSummary.labels.statusAndCommentsLog} qa="status-and-comments-log">
             {/* Keeping logs inside loader because accordion defaults to closed*/}
             <ACC.Loader
               pending={this.props.statusChanges}
@@ -52,7 +52,7 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
           onChange={(dto) => this.props.onChange(dto)}
           qa="monitoringReportCreateForm"
         >
-          <ReportForm.Fieldset qa="additional-comments-section" headingContent={x => x.monitoringReportsSummary.labels.additionalComments()}>
+          <ReportForm.Fieldset qa="additional-comments-section" headingContent={x => x.monitoringReportsSummary.labels.additionalComments}>
             <ReportForm.MultilineString
               hintContent={x => x.monitoringReportsSummary.messages.additionalCommentsGuidance()}
               name="addComments"
