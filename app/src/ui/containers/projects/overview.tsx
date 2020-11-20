@@ -54,12 +54,12 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     const isProjectClosed = project.status === ProjectStatus.Closed || project.status === ProjectStatus.Terminated;
 
     const title = isProjectClosed || project.isPastEndDate || this.isPartnerWithdrawn(project, partners)
-      ? <ACC.Content value={x => x.projectOverview.messages.projectEnded()}/>
+      ? <ACC.Content value={x => x.projectOverview.messages.projectEnded}/>
       : <ACC.Content value={x => x.projectOverview.messages.currentPeriodInfo(project.periodId, project.numberOfPeriods)}/>;
 
     const subtitle = isProjectClosed ? null :
       project.isPastEndDate || this.isPartnerWithdrawn(project, partners)
-        ? <ACC.Content value={x => x.projectOverview.messages.finalClaimPeriod()}/>
+        ? <ACC.Content value={x => x.projectOverview.messages.finalClaimPeriod}/>
         : <ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />;
 
     return (
@@ -174,7 +174,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     const result: ACC.NavigationCardMessage[] = [];
     if (project.roles & ProjectRole.ProjectManager) {
       if (project.pcrsQueried > 0) {
-        result.push({ message: <ACC.Content value={x => x.projectOverview.messages.pcrQueried()} />, qa:"message-pcrQueried"});
+        result.push({ message: <ACC.Content value={x => x.projectOverview.messages.pcrQueried} />, qa:"message-pcrQueried"});
       }
     }
     if (project.roles & ProjectRole.MonitoringOfficer) {
@@ -188,7 +188,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
 
     if (partner && (partner.roles & ProjectRole.FinancialContact)) {
       if (partner.newForecastNeeded) {
-        result.push({ message: <ACC.Content value={x => x.projectOverview.messages.checkForecast()} />, qa: "message-newForecastNeeded"});
+        result.push({ message: <ACC.Content value={x => x.projectOverview.messages.checkForecast} />, qa: "message-newForecastNeeded"});
       }
     }
 
@@ -201,22 +201,22 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     if (project.roles & ProjectRole.FinancialContact) {
       switch (partner.claimStatus) {
         case PartnerClaimStatus.NoClaimsDue:
-          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.noClaimDue()} />, qa: "message-NoClaimsDue"});
+          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.noClaimDue} />, qa: "message-NoClaimsDue"});
           break;
         case PartnerClaimStatus.ClaimDue:
-          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimDue()} />, qa: "message-ClaimDue"});
+          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimDue} />, qa: "message-ClaimDue"});
           break;
         case PartnerClaimStatus.ClaimsOverdue:
-          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimOverdue()} />, qa: "message-ClaimsOverdue"});
+          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimOverdue} />, qa: "message-ClaimsOverdue"});
           break;
         case PartnerClaimStatus.ClaimQueried:
-          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimQueried()} />, qa: "message-ClaimQueried"});
+          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimQueried} />, qa: "message-ClaimQueried"});
           break;
         case PartnerClaimStatus.ClaimSubmitted:
-          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimSubmitted()} />, qa: "message-ClaimSubmitted"});
+          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.claimSubmitted} />, qa: "message-ClaimSubmitted"});
           break;
         case PartnerClaimStatus.IARRequired:
-          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.iarRequired()} />, qa: "message-IARRequired"});
+          result.push({ message: <ACC.Content value={x => x.projectOverview.messages.iarRequired} />, qa: "message-IARRequired"});
       }
     }
 

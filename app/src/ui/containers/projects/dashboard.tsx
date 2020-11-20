@@ -199,18 +199,18 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     const messages: React.ReactNode[] = [];
 
     if (partner && partner.newForecastNeeded) {
-      messages.push(<ACC.Content value={x => x.projectsDashboard.messages.checkForecast()} />);
+      messages.push(<ACC.Content value={x => x.projectsDashboard.messages.checkForecast} />);
     }
 
     switch (partner && partner.claimStatus) {
       case PartnerClaimStatus.ClaimDue:
-        messages.push(<ACC.Content value={x => x.projectsDashboard.messages.claimToSubmit()} />);
+        messages.push(<ACC.Content value={x => x.projectsDashboard.messages.claimToSubmit} />);
         break;
       case PartnerClaimStatus.ClaimQueried:
-        messages.push(<ACC.Content value={x => x.projectsDashboard.messages.claimQueried()} />);
+        messages.push(<ACC.Content value={x => x.projectsDashboard.messages.claimQueried} />);
         break;
       case PartnerClaimStatus.IARRequired:
-        messages.push(<ACC.Content value={x => x.projectsDashboard.messages.claimRequiresIAR()} />);
+        messages.push(<ACC.Content value={x => x.projectsDashboard.messages.claimRequiresIAR} />);
         break;
     }
     return messages;
@@ -220,7 +220,7 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     const messages: React.ReactNode[] = [];
 
     if (section === "pending") {
-      messages.push(<ACC.Content value={x => x.projectsDashboard.messages.pendingProject()} />);
+      messages.push(<ACC.Content value={x => x.projectsDashboard.messages.pendingProject} />);
     }
 
     if (section === "archived") messages.push(project.statusName);
@@ -231,7 +231,7 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
       const isPm = !!(project.roles & ProjectRole.ProjectManager);
 
       if (project.status === ProjectStatus.OnHold) {
-        messages.push(<ACC.Content value={x => x.projectsDashboard.messages.projectOnHold()} />);
+        messages.push(<ACC.Content value={x => x.projectsDashboard.messages.projectOnHold} />);
       }
 
       if (isMo) {
@@ -244,7 +244,7 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
       }
 
       if (isPm) {
-        if (project.pcrsQueried > 0) messages.push(<ACC.Content value={x => x.projectsDashboard.messages.pcrQueried()} />);
+        if (project.pcrsQueried > 0) messages.push(<ACC.Content value={x => x.projectsDashboard.messages.pcrQueried} />);
       }
     }
 
@@ -263,7 +263,7 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
 
     if (section === "open" || section === "awaiting") {
 
-      const endedMessage = <ACC.Content value={x => x.projectsDashboard.messages.projectEnded()} />;
+      const endedMessage = <ACC.Content value={x => x.projectsDashboard.messages.projectEnded} />;
       const openMessage = (
         <React.Fragment>
           Period {project.periodId} of {project.numberOfPeriods}&nbsp;(<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />)

@@ -56,7 +56,7 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
       >
         <ACC.Section qa="guidance">
           <ACC.Renderers.SimpleString>
-            <ACC.Content value={x => x.projectSetup.projectMessages.setupGuidance()}/>
+            <ACC.Content value={x => x.projectSetup.projectMessages.setupGuidance}/>
           </ACC.Renderers.SimpleString>
         </ACC.Section>
         <ACC.TaskList qa="taskList">
