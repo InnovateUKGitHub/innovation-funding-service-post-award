@@ -87,12 +87,12 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
 
   private getBackLink() {
     if (this.props.mode === "review") {
-      return <ACC.BackLink route={this.props.routes.pcrReview.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}><ACC.Content value={x => x.pcrReasoningWorkflow.backLink()}/></ACC.BackLink>;
+      return <ACC.BackLink route={this.props.routes.pcrReview.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}><ACC.Content value={x => x.pcrReasoningWorkflow.backLink}/></ACC.BackLink>;
     }
     if (this.props.mode === "prepare") {
-      return <ACC.BackLink route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}><ACC.Content value={x => x.pcrReasoningWorkflow.backLink()}/></ACC.BackLink>;
+      return <ACC.BackLink route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}><ACC.Content value={x => x.pcrReasoningWorkflow.backLink}/></ACC.BackLink>;
     }
-    return <ACC.BackLink route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}><ACC.Content value={x => x.pcrReasoningWorkflow.backLink()}/></ACC.BackLink>;
+    return <ACC.BackLink route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}><ACC.Content value={x => x.pcrReasoningWorkflow.backLink}/></ACC.BackLink>;
   }
 
   private renderStep(stepNumber: number, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>) {
