@@ -48,7 +48,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
         >
           <Form.Fieldset headingContent={x => x.pcrAddPartnerCompanyHouse.formHeading()}>
             <Form.String
-              labelContent={x => x.pcrAddPartnerCompanyHouse.labels.organisationNameHeading()}
+              labelContent={x => x.pcrAddPartnerCompanyHouse.labels.organisationNameHeading}
               name="organisationName"
               value={dto => dto.organisationName}
               update={(dto, val) => {
@@ -57,7 +57,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
               validation={this.props.validator.companyHouseOrganisationName}
             />
             <Form.String
-              labelContent={x => x.pcrAddPartnerCompanyHouse.labels.registrationNumberHeading()}
+              labelContent={x => x.pcrAddPartnerCompanyHouse.labels.registrationNumberHeading}
               name="registrationNumber"
               value={dto => dto.registrationNumber}
               update={(dto, val) => {
@@ -66,7 +66,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
               validation={this.props.validator.registrationNumber}
             />
             <Form.String
-              labelContent={x => x.pcrAddPartnerCompanyHouse.labels.registeredAddressHeading()}
+              labelContent={x => x.pcrAddPartnerCompanyHouse.labels.registeredAddressHeading}
               name="registeredAddress"
               value={dto => dto.registeredAddress}
               update={(dto, val) => {

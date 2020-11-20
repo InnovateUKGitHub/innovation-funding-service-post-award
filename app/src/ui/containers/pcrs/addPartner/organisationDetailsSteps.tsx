@@ -28,7 +28,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
         onSubmit={() => props.onSave()}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset headingContent={x => x.pcrAddPartnerOrganisationDetails.labels.organisationSizeHeading()}>
+        <Form.Fieldset headingContent={x => x.pcrAddPartnerOrganisationDetails.labels.organisationSizeHeading}>
           <React.Fragment>
             <SimpleString><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.guidance()}/></SimpleString>
           </React.Fragment>
@@ -44,7 +44,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
             validation={props.validator.participantSize}
           />
         </Form.Fieldset>
-        <Form.Fieldset headingContent={x => x.pcrAddPartnerOrganisationDetails.labels.employeeCountHeading()}>
+        <Form.Fieldset headingContent={x => x.pcrAddPartnerOrganisationDetails.labels.employeeCountHeading}>
           <Form.Numeric
             name="numberOfEmployees"
             width={4}

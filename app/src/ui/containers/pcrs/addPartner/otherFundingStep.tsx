@@ -10,9 +10,9 @@ export const OtherFundingStep = (props: PcrStepProps<PCRItemForPartnerAdditionDt
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
 
   const options: ACC.SelectOption[] = [{
-    id: "true", value: <Content value={x => x.pcrAddPartnerOtherFunding.labels.otherFundsYes()}/>
+    id: "true", value: <Content value={x => x.pcrAddPartnerOtherFunding.labels.otherFundsYes}/>
   }, {
-    id: "false", value: <Content value={x => x.pcrAddPartnerOtherFunding.labels.otherFundsNo()}/>
+    id: "false", value: <Content value={x => x.pcrAddPartnerOtherFunding.labels.otherFundsNo}/>
   }];
 
   return (

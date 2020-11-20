@@ -44,7 +44,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           onChange={(dto) => this.props.onFileChange(false, dto)}
           qa="projectChangeRequestItemUpload"
         >
-          <UploadForm.Fieldset headingContent={x => x.pcrAddPartnerJeS.labels.jesFormHeading()}>
+          <UploadForm.Fieldset headingContent={x => x.pcrAddPartnerJeS.labels.jesFormHeading}>
             <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerJeS.guidance()}/></ACC.Renderers.SimpleString>
           </UploadForm.Fieldset>
           <UploadForm.Fieldset qa="documentUpload">

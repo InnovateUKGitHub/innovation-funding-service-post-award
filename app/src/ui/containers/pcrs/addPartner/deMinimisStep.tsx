@@ -49,7 +49,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
       <ACC.Section>
         <ACC.LinksList
           openNewWindow={true}
-          links={itemType.files.map(x => ({ url: x.relativeUrl, textContent: (content: Content) => content.pcrAddPartnerStateAidEligibilityContent.labels.deMinimisDeclarationForm() }))}
+          links={itemType.files.map(x => ({ url: x.relativeUrl, textContent: (content: Content) => content.pcrAddPartnerStateAidEligibilityContent.labels.deMinimisDeclarationForm }))}
         />
       </ACC.Section>
     );
