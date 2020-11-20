@@ -10,12 +10,12 @@ export class ClaimDocumentsContent extends ContentPageBase {
   constructor(private readonly content: Content, protected project: ProjectDto | null | undefined) {
     super(content, "claim-documents", project);
   }
-  public readonly backLink = () => this.getContent("back-link");
-  public readonly saveAndReturnButton = () => this.getContent("button-save-and-return");
-  public readonly saveAndContinueToSummaryButton = () => this.getContent("button-save-and-continue-to-summary");
-  public readonly saveAndContinueToForecastButton = () => this.getContent("button-save-and-continue-to-forecast");
-  public readonly uploadSectionTitle = () => this.getContent("section-title-upload");
-  public readonly documentsListSectionTitle = () => this.getContent("section-title-document-list");
+  public readonly backLink = this.getContent("back-link");
+  public readonly saveAndReturnButton = this.getContent("button-save-and-return");
+  public readonly saveAndContinueToSummaryButton = this.getContent("button-save-and-continue-to-summary");
+  public readonly saveAndContinueToForecastButton = this.getContent("button-save-and-continue-to-forecast");
+  public readonly uploadSectionTitle = this.getContent("section-title-upload");
+  public readonly documentsListSectionTitle = this.getContent("section-title-document-list");
 
   public readonly messages = new ClaimMessages(this, this.project);
   public readonly documentMessages = new DocumentMessages(this, this.project);

@@ -64,7 +64,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
         validator={editor.validator}
         backLink={
           <ACC.BackLink route={this.props.routes.prepareClaim.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId, periodId:this.props.periodId})}>
-            <ACC.Content value={x => x.claimDocuments.backLink()} />
+            <ACC.Content value={x => x.claimDocuments.backLink} />
           </ACC.BackLink>
         }
       >
@@ -73,7 +73,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
         <ACC.Section>
           {this.renderGuidanceText(claim)}
         </ACC.Section>
-        <ACC.Section titleContent={x => x.claimDocuments.uploadSectionTitle()}>
+        <ACC.Section titleContent={x => x.claimDocuments.uploadSectionTitle}>
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
@@ -106,12 +106,12 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
             <UploadForm.Button styling="Secondary" name="upload" onClick={() => this.props.onChange(true, editor.data)}>Upload documents</UploadForm.Button>
           </UploadForm.Form>
         </ACC.Section>
-        <ACC.Section titleContent={x => x.claimDocuments.documentsListSectionTitle()}>
+        <ACC.Section titleContent={x => x.claimDocuments.documentsListSectionTitle}>
           {this.renderDocuments(editor, documents)}
         </ACC.Section>
         <ACC.Section qa="buttons">
           {this.renderNextStepLink(claim)}
-          <ACC.Link styling="SecondaryButton" id="save-claim" route={this.getDashboardLink(project)}><ACC.Content value={x => x.claimDocuments.saveAndReturnButton()} /></ACC.Link>
+          <ACC.Link styling="SecondaryButton" id="save-claim" route={this.getDashboardLink(project)}><ACC.Content value={x => x.claimDocuments.saveAndReturnButton} /></ACC.Link>
         </ACC.Section>
       </ACC.Page>
     );
@@ -121,13 +121,13 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
     if (claim.isFinalClaim) {
       return (
         <ACC.Link styling="PrimaryButton" id="continue-claim" route={this.props.routes.claimSummary.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>
-          <ACC.Content value={x => x.claimDocuments.saveAndContinueToSummaryButton()}/>
+          <ACC.Content value={x => x.claimDocuments.saveAndContinueToSummaryButton}/>
         </ACC.Link>
       );
     }
     return (
       <ACC.Link styling="PrimaryButton" id="continue-claim" route={this.props.routes.claimForecast.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId})}>
-        <ACC.Content value={x => x.claimDocuments.saveAndContinueToForecastButton()}/>
+        <ACC.Content value={x => x.claimDocuments.saveAndContinueToForecastButton}/>
       </ACC.Link>
     );
   }
