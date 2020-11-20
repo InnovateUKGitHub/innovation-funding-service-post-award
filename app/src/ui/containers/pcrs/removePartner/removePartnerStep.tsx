@@ -42,7 +42,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRP
         </Form.Fieldset>
         <Form.Fieldset headingContent={x => x.pcrRemovePartner.removalPeriodHeading()}>
           <Form.Numeric
-            labelContent={x => x.pcrRemovePartner.labels.removalPeriod()}
+            labelContent={x => x.pcrRemovePartner.labels.removalPeriod}
             hintContent={x => x.pcrRemovePartner.removalPeriodHint()}
             labelHidden={true}
             width={3}
