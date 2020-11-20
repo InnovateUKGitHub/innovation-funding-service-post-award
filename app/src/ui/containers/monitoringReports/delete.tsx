@@ -40,7 +40,7 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
         error={editor.error}
       >
         <ACC.Section>
-          <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsDelete.messages.deletingMonitoringReportMessage()} /></ACC.Renderers.SimpleString>
+          <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsDelete.messages.deletingMonitoringReportMessage} /></ACC.Renderers.SimpleString>
           <DeleteForm.Form editor={editor} qa="monitoringReportDelete">
             <DeleteForm.Fieldset>
               <DeleteForm.Button
@@ -70,7 +70,7 @@ const DeleteVerificationContainer = (props: MonitoringReportDeleteParams&BasePro
               <DeleteVerificationComponent
                 project={stores.projects.getById(props.projectId)}
                 editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
-                delete={(dto) => stores.monitoringReports.deleteReport(props.projectId, props.id, dto, content.monitoringReportsDelete.messages.onDeleteMonitoringReportMessage().content, () => stores.navigation.navigateTo(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId })))}
+                delete={(dto) => stores.monitoringReports.deleteReport(props.projectId, props.id, dto, content.monitoringReportsDelete.messages.onDeleteMonitoringReportMessage.content, () => stores.navigation.navigateTo(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId })))}
                 {...props}
               />
             )
