@@ -16,8 +16,8 @@ export const PublicDescriptionChangeStep = (props: PcrStepProps<PCRItemForScopeC
           onChange={dto => props.onChange(dto)}
           onSubmit={() => props.onSave()}
         >
-          <Form.Fieldset headingContent={x => x.pcrScopeChangePublicDescriptionChange.publicDescriptionHeading()}>
-            <ACC.Info summary={<ACC.Content value={x => x.pcrScopeChangePublicDescriptionChange.publishedDescription()}/>}><ACC.Renderers.SimpleString multiline={true}>{props.pcrItem.publicDescriptionSnapshot || <ACC.Content value={x => x.pcrScopeChangePublicDescriptionChange.noAvailableDescription()}/>}</ACC.Renderers.SimpleString></ACC.Info>
+          <Form.Fieldset headingContent={x => x.pcrScopeChangePublicDescriptionChange.publicDescriptionHeading}>
+            <ACC.Info summary={<ACC.Content value={x => x.pcrScopeChangePublicDescriptionChange.publishedDescription}/>}><ACC.Renderers.SimpleString multiline={true}>{props.pcrItem.publicDescriptionSnapshot || <ACC.Content value={x => x.pcrScopeChangePublicDescriptionChange.noAvailableDescription}/>}</ACC.Renderers.SimpleString></ACC.Info>
             <Form.MultilineString
               name="description"
               hint={props.getRequiredToCompleteMessage()}
