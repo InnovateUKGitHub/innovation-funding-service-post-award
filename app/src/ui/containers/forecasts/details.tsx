@@ -40,7 +40,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
         <ACC.Section title={partnerName} qa="partner-name" className="govuk-!-padding-bottom-3">
           <ACC.Renderers.Messages messages={this.props.messages} />
           <ACC.Forecasts.Warning {...data}/>
-          {(isFc && data.partner.newForecastNeeded) && <ACC.ValidationMessage qa="period-change-warning" messageType="info" message={x => x.forecastsDetails.messages.projectChangeWarning()}/>}
+          {(isFc && data.partner.newForecastNeeded) && <ACC.ValidationMessage qa="period-change-warning" messageType="info" message={x => x.forecastsDetails.messages.projectChangeWarning}/>}
           {this.renderOverheadsRate(data.partner.overheadRate)}
           <ACC.Claims.ForecastTable data={data} hideValidation={isMoPm} />
         </ACC.Section>
@@ -62,7 +62,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
 
     if (isFc) {
       return (isClaimApprovedOrPaid || data.partner.isWithdrawn)
-        ? <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message={x => x.forecastsDetails.messages.projectEnded()}/>
+        ? <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message={x => x.forecastsDetails.messages.projectEnded}/>
         : <ACC.ValidationMessage qa="final-claim-message-FC" messageType="info" message={<span><ACC.Content value={x => x.components.forecastDetails.finalClaimMessageFC} /><ACC.Link route={claimPageLink} styling="Link"><ACC.Content value={x => x.components.forecastDetails.submitLink} /></ACC.Link>.</span>}/>;
     }
 
