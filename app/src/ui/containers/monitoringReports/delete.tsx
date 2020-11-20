@@ -36,7 +36,7 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
     return (
       <ACC.Page
         pageTitle={<ACC.Projects.Title project={project} />}
-        backLink={<ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}><ACC.Content value={(x) => x.monitoringReportsDelete.backLink()} /></ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}><ACC.Content value={(x) => x.monitoringReportsDelete.backLink} /></ACC.BackLink>}
         error={editor.error}
       >
         <ACC.Section>
@@ -50,7 +50,7 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
                 onClick={() => this.props.delete(editor.data)}
                 value={editor.data.headerId}
               >
-                <ACC.Content value={(x) => x.monitoringReportsDelete.deleteReportButton()} />
+                <ACC.Content value={(x) => x.monitoringReportsDelete.deleteReportButton} />
               </DeleteForm.Button>
             </DeleteForm.Fieldset>
           </DeleteForm.Form>
