@@ -7,7 +7,7 @@ export class FailedBankCheckConfirmationContent extends ContentPageBase {
     super(content, "failed-bank-check-confirmation", project);
   }
 
-  public readonly backLink = () => this.getContent("back-link");
-  public readonly returnButton = () => this.getContent("return-to-setup");
-  public readonly guidance = () => this.getContent("guidance",  {markdown: true});
+  public readonly backLink = this.getContent("back-link");
+  public readonly returnButton = this.getContent("return-to-setup");
+  public readonly guidance = this.getContent("guidance",  {markdown: true});
 }
