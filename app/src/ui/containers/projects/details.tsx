@@ -136,11 +136,11 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         return (
             <ACC.Section titleContent={x => x.projectDetails.projectLabels.partners}>
                 <PartnersTable.Table qa="partner-information" data={partners}>
-                    <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.partnerName()} value={x => this.renderPartnerName(x)} qa="partner-name"/>
-                    <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.partnerType()} value={x => x.type} qa="partner-type"/>
-                    {isMoPm ? <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.statusLabel()} value={x => x.partnerStatusLabel} qa="partner-status"/> : null}
-                    {isMoPm ? <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.fundingLabel()} value={x => <Content value={content => content.partnerDetails.contactLabels.fundingState(x.isNonFunded)}/>} qa="partner-funding"/> : null}
-                    <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.partnerPostcode()} value={x => x.postcode} qa="partner-postcode"/>
+                    <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.partnerName} value={x => this.renderPartnerName(x)} qa="partner-name"/>
+                    <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.partnerType} value={x => x.type} qa="partner-type"/>
+                    {isMoPm ? <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.statusLabel} value={x => x.partnerStatusLabel} qa="partner-status"/> : null}
+                    {isMoPm ? <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.fundingLabel} value={x => <Content value={content => content.partnerDetails.contactLabels.fundingState(x.isNonFunded)}/>} qa="partner-funding"/> : null}
+                    <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.partnerPostcode} value={x => x.postcode} qa="partner-postcode"/>
                 </PartnersTable.Table>
             </ACC.Section>
         );

@@ -19,13 +19,13 @@ export const ContactsTable: React.FunctionComponent<IContactsTable> = ({
 
   return contacts.length ? (
     <ContactsUI.Table qa="contacts-table-details" data={contacts}>
-      <ContactsUI.String headerContent={x => projectContactLabels(x).contactName()} value={x => x.name} qa="partner-name" />
-      <ContactsUI.String headerContent={x => projectContactLabels(x).roleName()} value={x => x.roleName} qa="partner-roleName" />
-      <ContactsUI.Email headerContent={x => projectContactLabels(x).contactEmail()} value={x => x.email} qa="partner-email" />
+      <ContactsUI.String headerContent={x => projectContactLabels(x).contactName} value={x => x.name} qa="partner-name" />
+      <ContactsUI.String headerContent={x => projectContactLabels(x).roleName} value={x => x.roleName} qa="partner-roleName" />
+      <ContactsUI.Email headerContent={x => projectContactLabels(x).contactEmail} value={x => x.email} qa="partner-email" />
     </ContactsUI.Table>
   ) : (
     <SimpleString className="govuk-!-margin-bottom-0" qa="no-contacts-exist">
-      <Content value={x => projectContactLabels(x).noContactsMessage()} />
+      <Content value={x => projectContactLabels(x).noContactsMessage} />
     </SimpleString>
   );
 };
