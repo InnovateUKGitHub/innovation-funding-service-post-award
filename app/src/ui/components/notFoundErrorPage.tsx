@@ -1,9 +1,10 @@
 import React from "react";
+
+import { useContent } from "@ui/hooks";
 import { Page } from "./layout/page";
 import { Section } from "./layout/section";
 import { SimpleString } from "./renderers/simpleString";
 import { PageTitle } from "@ui/components/layout";
-import { useContent } from "@ui/redux/contentProvider";
 import { ExternalLink } from "./renderers";
 
 const innovateUKLink = "https://www.gov.uk/government/organisations/innovate-uk";

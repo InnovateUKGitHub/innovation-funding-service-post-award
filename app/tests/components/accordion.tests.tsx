@@ -3,13 +3,13 @@ import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import TestBed from "@shared/TestBed";
-import * as hookModule from "@ui/hooks/is-client.hook";
+import * as hooksModule from "@ui/hooks";
 import { Accordion, AccordionItem, AccordionProps } from "../../src/ui/components";
 
 // TODO: Add this to linting config, tests are naturally going to be verbose to make this easier to read
 // tslint:disable: no-duplicate-string
 describe("<Accordion />", () => {
-  const isClientSpy = jest.spyOn(hookModule, "useIsClient");
+  const isClientSpy = jest.spyOn(hooksModule, "useIsClient");
 
   const createAccordionItem = (uid: string) => (
     <AccordionItem qa={`${uid}-accordion-test`} title={`${uid}-title`}>

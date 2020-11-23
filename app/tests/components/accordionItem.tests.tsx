@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import TestBed, { TestBedContent } from "@shared/TestBed";
-import * as hookModule from "@ui/hooks/is-client.hook";
+import * as hooksModule from "@ui/hooks";
 import { AccordionItem, AccordionItemProps } from "../../src/ui/components";
 import { AccordionProvider, IAccordionContext } from "../../src/ui/components/accordion/accordion-context";
 
@@ -58,7 +58,7 @@ const accordionItemQa = {
 
 // tslint:disable-next-line: no-big-function
 describe("AccordionItem", () => {
-  const isClientSpy = jest.spyOn(hookModule, "useIsClient");
+  const isClientSpy = jest.spyOn(hooksModule, "useIsClient");
 
   beforeEach(jest.clearAllMocks);
 

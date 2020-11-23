@@ -1,7 +1,8 @@
 import React from "react";
-import { ShortDate } from "../renderers/date";
 import { DateTime } from "luxon";
-import { useContent } from "@ui/redux/contentProvider";
+
+import { useContent } from "@ui/hooks";
+import { ShortDate } from "../renderers/date";
 
 interface Props {
   periodEnd: Date;

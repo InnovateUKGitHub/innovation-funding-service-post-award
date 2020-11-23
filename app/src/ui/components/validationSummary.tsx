@@ -1,7 +1,7 @@
 import React from "react";
 import { IValidationResult, NestedResult, Result, Results } from "../validation";
 import { flatten } from "@framework/util/arrayHelpers";
-import { useContent } from "@ui/redux";
+import { useContent } from "@ui/hooks";
 
 interface Props {
   validation?: IValidationResult | null;

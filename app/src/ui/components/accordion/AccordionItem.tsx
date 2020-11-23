@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import cx from "classnames";
 
+import { useContent, useIsClient } from "@ui/hooks";
 import { ContentSelector } from "@content/content";
-import { useIsClient } from "@ui/hooks/is-client.hook";
-import { useContent } from "@ui/redux";
 import { useAccordion } from "./accordion-context";
 
 // TODO: Merge props.titleContent into props.title

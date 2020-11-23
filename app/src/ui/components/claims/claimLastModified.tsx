@@ -1,6 +1,6 @@
 import React from "react";
 import { FullDateTime, SimpleString } from "../renderers";
-import { useContent } from "@ui/redux";
+import { useContent } from "@ui/hooks";
 
 export interface ClaimLastModifiedProps {
   modifiedDate: Date;

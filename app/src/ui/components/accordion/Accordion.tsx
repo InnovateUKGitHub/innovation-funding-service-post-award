@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+
+import { useIsClient } from "@ui/hooks";
 import { AccordionForceOptions, AccordionProvider, IAccordionContext } from "./accordion-context";
-import { useIsClient } from "../../hooks/is-client.hook";
 import { AccordionControls } from "./AccordionControls";
 import { AccordionItem } from "./AccordionItem";
 
