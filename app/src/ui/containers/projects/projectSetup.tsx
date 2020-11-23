@@ -46,7 +46,7 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={this.props.routes.projectDashboard.getLink({})}>
-          <ACC.Content value={x => x.projectSetup.backLink()} />
+          <ACC.Content value={x => x.projectSetup.backLink} />
         </ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         error={editor.error}
@@ -60,15 +60,15 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
           </ACC.Renderers.SimpleString>
         </ACC.Section>
         <ACC.TaskList qa="taskList">
-          <ACC.TaskListSection step={1} titleContent={x => x.projectSetup.taskList().sectionTitleEnterInfo} qa="WhatDoYouWantToDo">
+          <ACC.TaskListSection step={1} titleContent={x => x.projectSetup.taskList.sectionTitleEnterInfo} qa="WhatDoYouWantToDo">
             <ACC.Task
-              nameContent={x => x.projectSetup.setSpendProfile()}
+              nameContent={x => x.projectSetup.setSpendProfile}
               status={partner.spendProfileStatusLabel as ACC.TaskStatus}
               route={this.props.routes.projectSetupSpendProfile.getLink({partnerId: partner.id, projectId: project.id})}
               validation={[editor.validator.spendProfileStatus]}
             />
             <ACC.Task
-              nameContent={x => x.projectSetup.provideBankDetails()}
+              nameContent={x => x.projectSetup.provideBankDetails}
               status={partner.bankDetailsTaskStatusLabel as ACC.TaskStatus}
               route={this.getBankDetailsLink(partner)}
               validation={[editor.validator.bankDetailsTaskStatus]}
@@ -85,7 +85,7 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
             qa="projectSetupForm"
         >
           <Form.Fieldset>
-            <Form.Submit><ACC.Content value={x => x.projectSetup.complete()}/></Form.Submit>
+            <Form.Submit><ACC.Content value={x => x.projectSetup.complete}/></Form.Submit>
           </Form.Fieldset>
         </Form.Form>
       </ACC.Page>
