@@ -40,7 +40,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
       <ACC.Page
         backLink={
           <ACC.BackLink route={this.props.routes.projectSetup.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}>
-            <ACC.Content value={(x) => x.projectSetupBankStatement.backLink()} />
+            <ACC.Content value={(x) => x.projectSetupBankStatement.backLink} />
           </ACC.BackLink>
         }
         error={editor.error}
@@ -59,9 +59,9 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
             qa="submit-bank-statement-form"
           >
             <Form.Fieldset>
-              <Form.Submit><ACC.Content value={x => x.projectSetupBankStatement.submitButton()}/></Form.Submit>
+              <Form.Submit><ACC.Content value={x => x.projectSetupBankStatement.submitButton}/></Form.Submit>
               <ACC.Link styling="SecondaryButton" route={this.props.routes.projectSetup.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId})}>
-                <ACC.Content value={x => x.projectSetupBankStatement.returnButton()}/>
+                <ACC.Content value={x => x.projectSetupBankStatement.returnButton}/>
               </ACC.Link>
             </Form.Fieldset>
           </Form.Form>
@@ -127,7 +127,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
   private renderGuidance() {
     return (
       <ACC.Section qa={"guidance"}>
-        <ACC.Content value={x => x.projectSetupBankStatement.guidanceMessage()}/>
+        <ACC.Content value={x => x.projectSetupBankStatement.guidanceMessage}/>
       </ACC.Section>
     );
   }
