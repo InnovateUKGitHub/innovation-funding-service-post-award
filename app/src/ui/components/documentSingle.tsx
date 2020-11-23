@@ -1,6 +1,6 @@
 import React from "react";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { useContent } from "@ui/redux/contentProvider";
+import { useContent } from "@ui/hooks";
 import { SimpleString } from "./renderers";
 
 export interface DocumentSingleProps {

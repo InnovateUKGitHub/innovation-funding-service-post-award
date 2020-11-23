@@ -10,7 +10,7 @@ import { BaseProps } from "./containerBase";
 import { Store } from "redux";
 import { State as RouteState } from "router5";
 import { Content } from "@content/content";
-import { useContent } from "@ui/redux/contentProvider";
+import { useContent } from "@ui/hooks";
 import { FooterLinks } from "@ui/components/layout/footer.config";
 
 // TODO: This needs to be an external file, preferably near a config directory. The href values domain name need to be generated from config

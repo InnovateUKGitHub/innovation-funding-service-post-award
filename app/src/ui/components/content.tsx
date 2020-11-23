@@ -1,6 +1,6 @@
 import React from "react";
 import { Markdown } from "./renderers/markdown";
-import { useContent } from "@ui/redux/contentProvider";
+import { useContent } from "@ui/hooks";
 import { ContentSelector } from "@content/content";
 import { useStores } from "@ui/redux";
 import { Modal } from "@ui/components/modal";

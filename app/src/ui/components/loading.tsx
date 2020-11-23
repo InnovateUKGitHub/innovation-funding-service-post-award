@@ -2,10 +2,10 @@ import React, { createElement, Fragment } from "react";
 import { LoadingStatus, Pending } from "../../shared/pending";
 import { ErrorSummary } from "./errorSummary";
 import { ErrorCode, IAppError } from "@framework/types/IAppError";
+import { useContent } from "@ui/hooks";
 import { StandardErrorPage } from "./standardErrorPage";
 import { NotFoundErrorPage } from "./notFoundErrorPage";
 import { SimpleString } from "./renderers";
-import { useContent } from "@ui/redux/contentProvider";
 
 export interface LoadingProps<T> {
   pending: Pending<T>;

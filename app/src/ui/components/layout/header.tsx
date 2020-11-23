@@ -1,5 +1,6 @@
 import React from "react";
-import { ContentConsumer, getContentFromResult } from "@ui/redux";
+import { ContentConsumer } from "@ui/redux";
+import { getContentFromResult } from "@ui/hooks";
 import { ContentResult } from "@content/contentBase";
 import { HeaderContent } from "@content/general-content/HeaderContent";
 

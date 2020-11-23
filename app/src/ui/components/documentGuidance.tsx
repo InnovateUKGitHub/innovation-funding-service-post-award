@@ -2,7 +2,7 @@ import React from "react";
 import * as ACC from "@ui/components";
 import { Content } from "@content/content";
 import { DocumentMessages } from "@content/messages/documentMessages";
-import { useContent } from "@ui/redux/contentProvider";
+import { useContent } from "@ui/hooks";
 
 export const DocumentGuidance = (props: {}) => {
 const {getContent} = useContent();
