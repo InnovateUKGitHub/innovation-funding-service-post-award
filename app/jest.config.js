@@ -7,7 +7,10 @@ module.exports = {
   coveragePathIgnorePatterns: ["/node_modules/"],
   collectCoverageFrom: [
     "src/server/features/**/*.{ts,tsx}",
-    "src/ui/components/**/*.{ts,tsx}",
+    "src/ui/components/**/*.{ts,tsx,json}",
+    "src/ui/hooks/**/*.{ts,tsx,json}",
+    "src/ui/helpers/**/*.{ts,tsx,json}",
+    "src/ui/styles/**/*.{ts,tsx,json}",
     "src/ui/redux/**/*.{ts,tsx}",
     "src/ui/validators/**/*.{ts,tsx}",
   ],
