@@ -38,7 +38,7 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.projectSetup.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}><ACC.Content value={(x) => x.projectSetupSpendProfile.backLink()} /></ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.projectSetup.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}><ACC.Content value={(x) => x.projectSetupSpendProfile.backLink} /></ACC.BackLink>}
         error={editor.error}
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title project={combined.project} />}
@@ -62,7 +62,7 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
                 value={_ => partnerEditor.data.spendProfileStatus === SpendProfileStatus.Complete ? options : []}
                 update={(_, value) => partnerEditor.data.spendProfileStatus = (value && value.some(y => y.id === "true")) ? SpendProfileStatus.Complete : SpendProfileStatus.Incomplete}
               />
-              <Form.Submit><ACC.Content value={x => x.projectSetupSpendProfile.submitButton()}/></Form.Submit>
+              <Form.Submit><ACC.Content value={x => x.projectSetupSpendProfile.submitButton}/></Form.Submit>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
@@ -71,7 +71,7 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
   }
 
   private renderGuidance() {
-    return <ACC.Renderers.SimpleString qa="guidance"><ACC.Content value={x => x.projectSetupSpendProfile.guidanceMessage()}/></ACC.Renderers.SimpleString>;
+    return <ACC.Renderers.SimpleString qa="guidance"><ACC.Content value={x => x.projectSetupSpendProfile.guidanceMessage}/></ACC.Renderers.SimpleString>;
   }
 }
 
