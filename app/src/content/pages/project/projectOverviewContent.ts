@@ -10,14 +10,14 @@ export class ProjectOverviewContent extends ContentPageBase {
   }
 
   public readonly links = {
-    claims: () => this.getContent("claimsLink"),
-    monitoringReport: () => this.getContent("monitoringReportLink"),
-    forecast: () => this.getContent("forecastLink"),
-    forecasts: () => this.getContent("forecastsLink"),
-    projectChangeRequests: () => this.getContent("projectChangeRequestsLink"),
-    documents: () => this.getContent("documentsLink"),
-    details: () => this.getContent("detailsLink"),
-    summary: () => this.getContent("summaryLink"),
+    claims: this.getContent("claimsLink"),
+    monitoringReport: this.getContent("monitoringReportLink"),
+    forecast: this.getContent("forecastLink"),
+    forecasts: this.getContent("forecastsLink"),
+    projectChangeRequests: this.getContent("projectChangeRequestsLink"),
+    documents: this.getContent("documentsLink"),
+    details: this.getContent("detailsLink"),
+    summary: this.getContent("summaryLink"),
   };
 
   public readonly messages = new ProjectMessages(this, this.project);

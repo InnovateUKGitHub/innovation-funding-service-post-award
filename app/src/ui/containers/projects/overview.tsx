@@ -137,15 +137,15 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     const partnerId = partner.id;
 
     let links = [
-      { textContent: (x: Content) => x.projectOverview.links.claims(), link: routes.allClaimsDashboard.getLink({ projectId }), messages: () => this.getClaimMessages(project, partner) },
-      { textContent: (x: Content) => x.projectOverview.links.claims(), link: routes.claimsDashboard.getLink({ projectId, partnerId }), messages: () => this.getClaimMessages(project, partner) },
-      { textContent: (x: Content) => x.projectOverview.links.monitoringReport(), link: routes.monitoringReportDashboard.getLink({ projectId }) },
-      { textContent: (x: Content) => x.projectOverview.links.forecast(), link: routes.forecastDashboard.getLink({ projectId }), messages: () => this.getForecastMessages(partner) },
-      { textContent: (x: Content) => x.projectOverview.links.forecasts(), link: routes.forecastDetails.getLink({ projectId, partnerId }), messages: () => this.getForecastMessages(partner) },
-      { textContent: (x: Content) => x.projectOverview.links.projectChangeRequests(), link: routes.pcrsDashboard.getLink({ projectId }), messages: () => this.getPcrMessages(project) },
-      { textContent: (x: Content) => x.projectOverview.links.documents(), link: routes.projectDocuments.getLink({ projectId }) },
-      { textContent: (x: Content) => x.projectOverview.links.details(), link: routes.projectDetails.getLink({ id: projectId }) },
-      { textContent: (x: Content) => x.projectOverview.links.summary(), link: routes.financeSummary.getLink({ projectId, partnerId }) },
+      { textContent: (x: Content) => x.projectOverview.links.claims, link: routes.allClaimsDashboard.getLink({ projectId }), messages: () => this.getClaimMessages(project, partner) },
+      { textContent: (x: Content) => x.projectOverview.links.claims, link: routes.claimsDashboard.getLink({ projectId, partnerId }), messages: () => this.getClaimMessages(project, partner) },
+      { textContent: (x: Content) => x.projectOverview.links.monitoringReport, link: routes.monitoringReportDashboard.getLink({ projectId }) },
+      { textContent: (x: Content) => x.projectOverview.links.forecast, link: routes.forecastDashboard.getLink({ projectId }), messages: () => this.getForecastMessages(partner) },
+      { textContent: (x: Content) => x.projectOverview.links.forecasts, link: routes.forecastDetails.getLink({ projectId, partnerId }), messages: () => this.getForecastMessages(partner) },
+      { textContent: (x: Content) => x.projectOverview.links.projectChangeRequests, link: routes.pcrsDashboard.getLink({ projectId }), messages: () => this.getPcrMessages(project) },
+      { textContent: (x: Content) => x.projectOverview.links.documents, link: routes.projectDocuments.getLink({ projectId }) },
+      { textContent: (x: Content) => x.projectOverview.links.details, link: routes.projectDetails.getLink({ id: projectId }) },
+      { textContent: (x: Content) => x.projectOverview.links.summary, link: routes.financeSummary.getLink({ projectId, partnerId }) },
     ];
 
     // filter out links the current user doesn't have access to
