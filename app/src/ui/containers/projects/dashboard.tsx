@@ -119,14 +119,14 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     );
   }
 
-  private renderProjectList(projects: ProjectData[], messages?: (x: Content) => { noProjects: () => ContentResult, noMatchingProjects: () => ContentResult }) {
+  private renderProjectList(projects: ProjectData[], messages?: (x: Content) => { noProjects: ContentResult, noMatchingProjects: ContentResult }) {
 
     if (!projects.length && this.props.search && messages) {
-      return <ACC.Renderers.SimpleString><ACC.Content value={x => messages(x).noMatchingProjects()} /></ACC.Renderers.SimpleString>;
+      return <ACC.Renderers.SimpleString><ACC.Content value={x => messages(x).noMatchingProjects} /></ACC.Renderers.SimpleString>;
     }
 
     if (!projects.length && messages) {
-      return <ACC.Renderers.SimpleString><ACC.Content value={x => messages(x).noProjects()} /></ACC.Renderers.SimpleString>;
+      return <ACC.Renderers.SimpleString><ACC.Content value={x => messages(x).noProjects} /></ACC.Renderers.SimpleString>;
     }
 
     return (
@@ -280,8 +280,8 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     const Form = ACC.TypedForm<typeof formData>();
     return (
       <Form.Form data={formData} qa={"projectSearch"} isGet={true} onSubmit={() => { return; }} onChange={v => this.props.onSearch(v.projectSearchString)}>
-        <Form.Fieldset heading={<ACC.Content value={x => x.projectsDashboard.searchTitle()} />}>
-          <Form.Search width="one-half" hint={<ACC.Content value={x => x.projectsDashboard.searchHint()} />} label={<ACC.Content value={x => x.projectsDashboard.searchLabel()} />} labelHidden={true} name="search" value={x => x.projectSearchString} update={(x, v) => x.projectSearchString = v || ""} />
+        <Form.Fieldset heading={<ACC.Content value={x => x.projectsDashboard.searchTitle} />}>
+          <Form.Search width="one-half" hint={<ACC.Content value={x => x.projectsDashboard.searchHint} />} label={<ACC.Content value={x => x.projectsDashboard.searchLabel} />} labelHidden={true} name="search" value={x => x.projectSearchString} update={(x, v) => x.projectSearchString = v || ""} />
         </Form.Fieldset>
       </Form.Form>
     );
