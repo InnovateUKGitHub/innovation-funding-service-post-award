@@ -69,7 +69,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
         project={project}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        <ACC.Section titleContent={x => x.projectDocuments.uploadTitle()}>
+        <ACC.Section titleContent={x => x.projectDocuments.uploadTitle}>
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
@@ -78,7 +78,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
             qa="projectDocumentUpload"
           >
             <UploadForm.Fieldset>
-              <ACC.Content value={x => x.projectDocuments.uploadInstruction()} />
+              <ACC.Content value={x => x.projectDocuments.uploadInstruction} />
               <ACC.DocumentGuidanceWithContent documentMessages={x => x.projectDocuments.documentMessages} />
               <UploadForm.MulipleFileUpload
                 labelContent={x => x.projectDocuments.documentLabels.uploadInputLabel}
@@ -111,7 +111,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
       : documents;
 
     if (documents.length === 0) {
-      return <ACC.ValidationMessage qa={"noDocuments"} message={<ACC.Content value={x => x.projectDocuments.noDocumentsMessage()} />} messageType="info" />;
+      return <ACC.ValidationMessage qa={"noDocuments"} message={<ACC.Content value={x => x.projectDocuments.noDocumentsMessage} />} messageType="info" />;
     }
 
     if (documentsToDisplay.length === 0) {
@@ -119,7 +119,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
         <React.Fragment>
           {this.renderDocumentsFilter()}
           <ACC.Renderers.SimpleString qa={"noDocuments"}>
-            <ACC.Content value={x => x.projectDocuments.noMatchingDocumentsMessage()} />
+            <ACC.Content value={x => x.projectDocuments.noMatchingDocumentsMessage} />
           </ACC.Renderers.SimpleString>
         </React.Fragment>
       );
