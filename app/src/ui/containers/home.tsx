@@ -47,8 +47,8 @@ class Component extends ContainerBaseWithState<{}, Data, {}, State> {
             {
               content => (
                 <div className="govuk-grid-column-one-third">
-                  <h2><ACC.Content value={x => x.home.exampleContentTitle()} /></h2>
-                  <SimpleString><ACC.Content value={x => x.home.exampleContent()} /></SimpleString>
+                  <h2><ACC.Content value={x => x.home.exampleContentTitle} /></h2>
+                  <SimpleString><ACC.Content value={x => x.home.exampleContent} /></SimpleString>
                 </div>
               )
             }
