@@ -11,9 +11,9 @@ describe("ValidationMessage", () => {
   const setup = (props: IValidationMessageProps) => {
     const stubCopy = {
       home: {
-        exampleContentTitle: () => ({
+        exampleContentTitle: {
           content: "stub-exampleContentTitle",
-        }),
+        },
       },
     } as Partial<Content>;
 
@@ -55,7 +55,7 @@ describe("ValidationMessage", () => {
     });
 
     it("when message is a content lookup render within a <span>", () => {
-      const { messageElement } = setup({ message: (x) => x.home.exampleContentTitle(), messageType: "success" });
+      const { messageElement } = setup({ message: (x) => x.home.exampleContentTitle, messageType: "success" });
 
       expect(messageElement.type()).toBe("span");
     });
