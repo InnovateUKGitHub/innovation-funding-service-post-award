@@ -34,7 +34,7 @@ class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<ProjectSetupB
       <ACC.Page
         backLink={
           <ACC.BackLink route={this.props.routes.projectSetup.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}>
-            <ACC.Content value={(x) => x.projectSetupBankDetailsVerify.backLink()} />
+            <ACC.Content value={(x) => x.projectSetupBankDetailsVerify.backLink} />
           </ACC.BackLink>
         }
         error={editor.error}
@@ -66,9 +66,9 @@ class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<ProjectSetupB
             qa="bank-details-form"
           >
             <Form.Fieldset>
-              <Form.Submit><ACC.Content value={x => x.projectSetupBankDetailsVerify.submitButton()}/></Form.Submit>
+              <Form.Submit><ACC.Content value={x => x.projectSetupBankDetailsVerify.submitButton}/></Form.Submit>
               <ACC.Link styling="SecondaryButton" route={this.props.routes.projectSetupBankDetails.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId})}>
-                <ACC.Content value={x => x.projectSetupBankDetailsVerify.changeButton()}/>
+                <ACC.Content value={x => x.projectSetupBankDetailsVerify.changeButton}/>
               </ACC.Link>
             </Form.Fieldset>
           </Form.Form>
@@ -80,7 +80,7 @@ class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<ProjectSetupB
   private renderGuidance() {
     return (
       <ACC.Section qa={"guidance"}>
-        <ACC.Content value={x => x.projectSetupBankDetailsVerify.guidanceMessage()}/>
+        <ACC.Content value={x => x.projectSetupBankDetailsVerify.guidanceMessage}/>
       </ACC.Section>
     );
   }
