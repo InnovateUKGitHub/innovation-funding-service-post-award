@@ -34,7 +34,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
       <ACC.Page
         backLink={
           <ACC.BackLink route={this.props.routes.projectSetup.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}>
-            <ACC.Content value={(x) => x.projectSetupBankDetails.backLink()} />
+            <ACC.Content value={(x) => x.projectSetupBankDetails.backLink} />
           </ACC.BackLink>
         }
         error={editor.error}
@@ -49,7 +49,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
             onSubmit={() => this.props.onChange(true, editor.data)}
             qa="bank-details-form"
           >
-            <Form.Fieldset headingContent={x => x.projectSetupBankDetails.organisationInfoFieldsetTitle()}>
+            <Form.Fieldset headingContent={x => x.projectSetupBankDetails.organisationInfoFieldsetTitle}>
               <ACC.Renderers.SimpleString bold={true}>{editor.data.name}</ACC.Renderers.SimpleString>
               <Form.String
                 name="companyNumber"
@@ -60,7 +60,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
                 update={(dto, val) => dto.bankDetails.companyNumber = val}
               />
             </Form.Fieldset>
-            <Form.Fieldset headingContent={x => x.projectSetupBankDetails.accountDetailsFieldsetTitle()}>
+            <Form.Fieldset headingContent={x => x.projectSetupBankDetails.accountDetailsFieldsetTitle}>
               { this.renderSortCode(editor, Form) }
               { this.renderAccountNumber(editor, Form) }
             </Form.Fieldset>
@@ -81,9 +81,9 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
                 update={(dto, val) => dto.bankDetails.lastName = val}
               />
             </Form.Fieldset> */}
-            <Form.Fieldset headingContent={x => x.projectSetupBankDetails.billingAddressFieldsetTitle()}>
+            <Form.Fieldset headingContent={x => x.projectSetupBankDetails.billingAddressFieldsetTitle}>
               <ACC.Renderers.SimpleString qa={"billingAddressFieldsetGuidance"}>
-                <ACC.Content value={x => x.projectSetupBankDetails.billingAddressFieldsetGuidance()}/>
+                <ACC.Content value={x => x.projectSetupBankDetails.billingAddressFieldsetGuidance}/>
               </ACC.Renderers.SimpleString>
               <Form.String
                 name="accountBuilding"
@@ -122,7 +122,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
               />
             </Form.Fieldset>
             <Form.Fieldset>
-              <Form.Submit><ACC.Content value={x => x.projectSetupBankDetails.submitButton()}/></Form.Submit>
+              <Form.Submit><ACC.Content value={x => x.projectSetupBankDetails.submitButton}/></Form.Submit>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
@@ -133,7 +133,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
   private renderGuidance() {
     return (
       <ACC.Section qa={"guidance"}>
-        <ACC.Content value={x => x.projectSetupBankDetails.guidanceMessage()}/>
+        <ACC.Content value={x => x.projectSetupBankDetails.guidanceMessage}/>
       </ACC.Section>
     );
   }
