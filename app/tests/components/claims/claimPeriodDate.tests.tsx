@@ -1,35 +1,37 @@
 // tslint:disable:no-duplicate-string
 import React from "react";
 
-// tslint:disable-next-line: import-blacklist
-import {mount, shallow} from "enzyme";
-import {ClaimPeriodDate} from "../../../src/ui/components/claims/claimPeriodDate";
+import { render } from "@testing-library/react";
+import { ClaimPeriodDate, ClaimPeriodProps } from "../../../src/ui/components/claims/claimPeriodDate";
 
 const startDate = new Date("1993/01/07 09:02:01");
 const endDate = new Date("1993/01/07 09:02:01");
 const claim = {
   periodStartDate: startDate,
   periodEndDate: endDate,
-  periodId: 1
+  periodId: 1,
 };
 
 const partner = {
-  name: "Test partner"
+  name: "Test partner",
+  isWithdrawn: false,
+  isLead: false
 };
 
-describe("ClaimPeriodDate", () => {
-  it("should render as null if no claim is given", () => {
-    const wrapper = mount(<ClaimPeriodDate claim={null} />);
-    expect(wrapper.html()).toBeNull();
-  });
+function setup(props: ClaimPeriodProps) {
+  return render(<ClaimPeriodDate {...props} />);
+}
 
-  it("should render period range without partner name if only claim is given", () => {
-    const wrapper = shallow(<ClaimPeriodDate claim={claim as any} />).render();
-    expect(wrapper.text()).toEqual("Period 1: 7 Jan to 7 Jan 1993");
-  });
+describe("<ClaimPeriodDate />", () => {
+  describe("@renders", () => {
+    test("period range without partner name if only claim is given", () => {
+      const { queryByText } = setup({claim});
+      expect(queryByText("Period 1:")).toBeInTheDocument();
+    });
 
-  it("should render period range with partner name", () => {
-    const wrapper = shallow(<ClaimPeriodDate claim={claim as any} partner={partner as any}/>).render();
-    expect(wrapper.text()).toEqual("Test partner claim for period 1: 7 Jan to 7 Jan 1993");
+    test("period range with partner name", () => {
+      const { queryByText } = setup({claim, partner});
+      expect(queryByText("Test partner claim for period 1:")).toBeInTheDocument();
+    });
   });
 });

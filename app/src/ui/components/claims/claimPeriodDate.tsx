@@ -1,27 +1,29 @@
 import React from "react";
-import {ClaimDto, PartnerDto} from "@framework/types";
+import { ClaimDto, PartnerDto } from "@framework/types";
 import { ShortDateRange } from "../renderers/date";
-import { PartnerName } from "@ui/components";
+import { getPartnerName, PartnerName } from "@ui/components";
 
-interface Props {
-  claim: ClaimDto | null;
-  partner?: PartnerDto | null;
+export interface ClaimPeriodProps {
+  claim: Pick<ClaimDto, "periodId" | "periodStartDate" | "periodEndDate">;
+  partner?: Pick<PartnerDto, "name" | "isWithdrawn" | "isLead">;
 }
 
-export const ClaimPeriodDate: React.FunctionComponent<Props> = (props) => {
-  if (!props.claim) return null;
-
-  if (!props.partner) {
-    return (
-      <React.Fragment>
-        Period {props.claim.periodId}: <ShortDateRange start={props.claim.periodStartDate} end={props.claim.periodEndDate} />
-      </React.Fragment>
-    );
-  }
+export function getClaimPeriodDate({ claim, partner }: ClaimPeriodProps) {
+  const partnerClaim = "claim for period";
+  const fallbackClaimPeriod = "Period";
+  const periodId = claim.periodId + ":";
+  const periodPrefix = partner ? `${getPartnerName(partner)} ${partnerClaim}` : fallbackClaimPeriod;
 
   return (
-    <React.Fragment>
-      <PartnerName partner={props.partner}/> claim for period {props.claim.periodId}: <ShortDateRange start={props.claim.periodStartDate} end={props.claim.periodEndDate} />
-    </React.Fragment>
+    <>
+      {periodPrefix} {periodId} <ShortDateRange start={claim.periodStartDate} end={claim.periodEndDate} />
+    </>
   );
+}
+
+/**
+ * @deprecated Please use getClaimPeriodDate()
+ */
+export const ClaimPeriodDate: React.FunctionComponent<ClaimPeriodProps> = (props) => {
+  return getClaimPeriodDate(props);
 };
