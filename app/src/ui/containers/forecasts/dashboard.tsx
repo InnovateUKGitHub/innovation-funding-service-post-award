@@ -40,12 +40,12 @@ class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
       >
         <ACC.Section qa="project-forecasts">
           <Table.Table data={partners} qa="partner-table">
-            <Table.Custom headerContent={x => x.forecastsDashboard.partnerHeader()} value={x => <ACC.PartnerName partner={x} showIsLead={true}/>} qa="partner" />
-            <Table.Currency headerContent={x => x.forecastsDashboard.totalEligibleCostsHeader()} value={x => x.totalParticipantGrant} qa="grant-offered" />
-            <Table.Currency headerContent={x => x.forecastsDashboard.forecastsAndCostsHeader()} value={x => getForecastsAndCosts(x)} qa="forecasts-and-costs" />
-            <Table.Currency headerContent={x => x.forecastsDashboard.underspendHeader()} value={x => x.totalParticipantGrant! - getForecastsAndCosts(x)} qa="underspend" />
-            <Table.ShortDate headerContent={x => x.forecastsDashboard.lastUpdateHeader()} value={x => x.forecastLastModifiedDate} qa="last-updated" />
-            <Table.Link headerContent={x => x.forecastsDashboard.actionHeader()} hideHeader={true} value={x => this.props.routes.forecastDetails.getLink({ projectId: this.props.projectId, partnerId: x.id })} content="View forecast" qa="view-partner-forecast" />
+            <Table.Custom headerContent={x => x.forecastsDashboard.partnerHeader} value={x => <ACC.PartnerName partner={x} showIsLead={true}/>} qa="partner" />
+            <Table.Currency headerContent={x => x.forecastsDashboard.totalEligibleCostsHeader} value={x => x.totalParticipantGrant} qa="grant-offered" />
+            <Table.Currency headerContent={x => x.forecastsDashboard.forecastsAndCostsHeader} value={x => getForecastsAndCosts(x)} qa="forecasts-and-costs" />
+            <Table.Currency headerContent={x => x.forecastsDashboard.underspendHeader} value={x => x.totalParticipantGrant! - getForecastsAndCosts(x)} qa="underspend" />
+            <Table.ShortDate headerContent={x => x.forecastsDashboard.lastUpdateHeader} value={x => x.forecastLastModifiedDate} qa="last-updated" />
+            <Table.Link headerContent={x => x.forecastsDashboard.actionHeader} hideHeader={true} value={x => this.props.routes.forecastDetails.getLink({ projectId: this.props.projectId, partnerId: x.id })} content="View forecast" qa="view-partner-forecast" />
           </Table.Table>
         </ACC.Section>
       </ACC.Page>

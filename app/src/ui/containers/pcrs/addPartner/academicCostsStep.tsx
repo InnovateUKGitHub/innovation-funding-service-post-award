@@ -27,8 +27,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     const {costCategories} = this.props;
     const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
     return (
-      <ACC.Section titleContent={x => x.pcrAddPartnerAcademicCosts.labels.projectCostsHeading()}>
-        <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.stepGuidance()}/></ACC.Renderers.SimpleString>
+      <ACC.Section titleContent={x => x.pcrAddPartnerAcademicCosts.labels.projectCostsHeading}>
+        <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.stepGuidance}/></ACC.Renderers.SimpleString>
         <Form.Form
           data={this.props.pcrItem}
           isSaving={this.props.status === EditorStatus.Saving}
@@ -46,9 +46,9 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
 
   private renderTsb(Form: FormBuilder<PCRItemForPartnerAdditionDto>) {
     return (
-      <Form.Fieldset headingContent={x => x.pcrAddPartnerAcademicCosts.labels.tsbReferenceHeading()}>
+      <Form.Fieldset headingContent={x => x.pcrAddPartnerAcademicCosts.labels.tsbReferenceHeading}>
         <Form.String
-          labelContent={x => x.pcrAddPartnerAcademicCosts.tsbLabel()}
+          labelContent={x => x.pcrAddPartnerAcademicCosts.tsbLabel}
           width={"one-third"}
           name="tsbReference"
           value={dto => dto.tsbReference}
@@ -72,17 +72,17 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     const Table = ACC.TypedTable<Data>();
 
     return (
-      <Form.Fieldset headingContent={x => x.pcrAddPartnerAcademicCosts.costsSectionTitle()}>
-        <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.costsGuidance()}/></ACC.Renderers.SimpleString>
+      <Form.Fieldset headingContent={x => x.pcrAddPartnerAcademicCosts.costsSectionTitle}>
+        <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.costsGuidance}/></ACC.Renderers.SimpleString>
         <Table.Table qa="costsTable" data={data}>
           <Table.String
-            headerContent={x => x.pcrAddPartnerAcademicCosts.categoryHeading()}
+            headerContent={x => x.pcrAddPartnerAcademicCosts.categoryHeading}
             qa="category"
             value={x => x.costCategory.name}
-            footer={this.props.isClient && <ACC.Renderers.SimpleString className={"govuk-!-font-weight-bold"}><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.totalCosts()}/></ACC.Renderers.SimpleString>}
+            footer={this.props.isClient && <ACC.Renderers.SimpleString className={"govuk-!-font-weight-bold"}><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.totalCosts}/></ACC.Renderers.SimpleString>}
           />
           <Table.Custom
-            headerContent={x => x.pcrAddPartnerAcademicCosts.costHeading()}
+            headerContent={x => x.pcrAddPartnerAcademicCosts.costHeading}
             qa="cost-value"
             classSuffix="numeric"
             value={x => this.renderCost(x)}
@@ -98,10 +98,10 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     return (
       <Form.Fieldset qa="save-and-continue">
         <Form.Submit>
-          <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.pcrItem.submitButton()}/>
+          <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.pcrItem.submitButton}/>
         </Form.Submit>
         <Form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}>
-          <Content value={x => x.pcrAddPartnerAcademicCosts.pcrItem.returnToSummaryButton()}/>
+          <Content value={x => x.pcrAddPartnerAcademicCosts.pcrItem.returnToSummaryButton}/>
         </Form.Button>
       </Form.Fieldset>
     );

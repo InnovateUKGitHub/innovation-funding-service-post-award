@@ -9,8 +9,8 @@ export class ProjectSetupBankDetailsVerifyContent extends ContentPageBase {
   }
 
   public readonly partnerLabels = new PartnerLabels(this, this.project);
-  public readonly guidanceMessage = () => this.getContent("guidance-message", {markdown: true});
-  public readonly submitButton = () => this.getContent("submit-button");
-  public readonly changeButton = () => this.getContent("change-button");
-  public readonly backLink = () => this.getContent("back-link");
+  public readonly guidanceMessage = this.getContent("guidance-message", {markdown: true});
+  public readonly submitButton = this.getContent("submit-button");
+  public readonly changeButton = this.getContent("change-button");
+  public readonly backLink = this.getContent("back-link");
 }

@@ -12,7 +12,7 @@ export class PCRAddPartnerFinanceDetailsContent extends ContentPageBase {
   public readonly pcrItem = new PCRItem(this, this.project);
   public readonly labels = new PCRAddPartnerLabels(this, this.project);
 
-  public readonly sectionTitle = () => this.getContent("section-title");
-  public readonly yearEndHint = () => this.getContent("hint-year-end");
-  public readonly turnoverHeading = () => this.getContent("heading-turnover");
+  public readonly sectionTitle = this.getContent("section-title");
+  public readonly yearEndHint = this.getContent("hint-year-end");
+  public readonly turnoverHeading = this.getContent("heading-turnover");
 }

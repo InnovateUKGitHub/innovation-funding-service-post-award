@@ -14,6 +14,6 @@ export class PCRPrepareItemFilesForPartnerWithrawelContent extends ContentPageBa
   public readonly documentLabels = new DocumentLabels(this, this.project);
   public readonly documentMessages = new DocumentMessages(this, this.project);
 
-  public readonly guidanceHeading = () => this.getContent("guidance-heading");
-  public readonly guidance = () => this.getContent("guidance", {markdown: true});
+  public readonly guidanceHeading = this.getContent("guidance-heading");
+  public readonly guidance = this.getContent("guidance", {markdown: true});
 }

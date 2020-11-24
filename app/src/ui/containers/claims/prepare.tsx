@@ -56,12 +56,12 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.getBackLink(data.project, data.partner)}><ACC.Content value={x => x.claimPrepare.backLink()} /></ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.getBackLink(data.project, data.partner)}><ACC.Content value={x => x.claimPrepare.backLink} /></ACC.BackLink>}
         error={data.editor.error}
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
-        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={x => x.claimPrepare.messages.finalClaim()}/>}
+        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={x => x.claimPrepare.messages.finalClaim}/>}
         {this.renderDetailsSection(data)}
       </ACC.Page>
     );
@@ -86,8 +86,8 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
         >
           {this.renderLogsSection()}
           <Form.Fieldset qa="save-and-continue">
-            <Form.Submit><ACC.Content value={x => x.claimPrepare.saveAndContinueButton()} /></Form.Submit>
-            <Form.Button name="save" onClick={() => this.props.onUpdate(true, data.editor.data, this.getBackLink(data.project, data.partner))}><ACC.Content value={x => x.claimPrepare.saveAndReturnButton()} /></Form.Button>
+            <Form.Submit><ACC.Content value={x => x.claimPrepare.saveAndContinueButton} /></Form.Submit>
+            <Form.Button name="save" onClick={() => this.props.onUpdate(true, data.editor.data, this.getBackLink(data.project, data.partner))}><ACC.Content value={x => x.claimPrepare.saveAndReturnButton} /></Form.Button>
           </Form.Fieldset>
         </Form.Form>
       </ACC.Section>
@@ -102,7 +102,7 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
   private renderLogsSection() {
     return (
       <ACC.Accordion>
-        <ACC.AccordionItem titleContent={x => x.claimPrepare.labels.claimLogAccordionTitle()} qa="status-and-comments-log">
+        <ACC.AccordionItem titleContent={x => x.claimPrepare.labels.claimLogAccordionTitle} qa="status-and-comments-log">
           {/* Keeping logs inside loader because accordion defaults to closed*/}
           <ACC.Loader
             pending={this.props.statusChanges}

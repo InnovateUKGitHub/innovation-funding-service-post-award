@@ -24,7 +24,7 @@ export class TravelAndSubsFormComponent extends Component<SpendProfileCostFormPr
             value={dto => dto.id}
           />
           <Form.String
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.description()}
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.description}
             width={"one-half"}
             name="description"
             value={dto => dto.description}
@@ -32,7 +32,7 @@ export class TravelAndSubsFormComponent extends Component<SpendProfileCostFormPr
             validation={validator && validator.description}
           />
           <Form.Numeric
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.numberOfTimes()}
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.numberOfTimes}
             name="numberOfTimes"
             width={"one-third"}
             value={dto => dto.numberOfTimes}
@@ -40,7 +40,7 @@ export class TravelAndSubsFormComponent extends Component<SpendProfileCostFormPr
             validation={validator && validator.numberOfTimes}
           />
           <Form.Numeric
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.costOfEach()}
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.costOfEach}
             name="costOfEach"
             width={"one-third"}
             value={dto => dto.costOfEach}
@@ -48,7 +48,7 @@ export class TravelAndSubsFormComponent extends Component<SpendProfileCostFormPr
             validation={validator && validator.costOfEach}
           />
           {this.props.isClient && <Form.Custom
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.totalCost()}
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.totalCost}
             labelBold={true}
             name="totalCost"
             value={dto => <ACC.Renderers.SimpleString><ACC.Renderers.Currency value={dto.value}/></ACC.Renderers.SimpleString>}

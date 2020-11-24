@@ -12,6 +12,6 @@ export class ForecastsUpdateContent extends ContentPageBase {
   public readonly labels = new ForecastsLabels(this, this.project);
   public readonly messages = new ForecastsMessages(this, this.project);
 
-  public readonly backLink = () => this.getContent("back-link");
-  public readonly submitButton = () => this.getContent("button-submit");
+  public readonly backLink = this.getContent("back-link");
+  public readonly submitButton = this.getContent("button-submit");
 }

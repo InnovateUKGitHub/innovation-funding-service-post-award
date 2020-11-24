@@ -9,6 +9,7 @@ import { ProjectContactLabels } from "@content/labels/projectContactLabels";
 import { ContentResult } from "@content/contentBase";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { StoresProvider } from "@ui/redux";
+import { Content } from "@content/content";
 
 const testPartnerData: PartnerDto[] = [
   {
@@ -73,13 +74,17 @@ const testContactData: ProjectContactDto[] = [
   }
 ];
 
-const createContentResult: (content: string) => () => ContentResult = (content) => () => ({ content, key: content, markdown: false });
-
-const labels = () => ({
-  contactEmail: createContentResult("Email"),
-  contactName: createContentResult("Name"),
-  partnerName: createContentResult("Partner"),
-}) as ProjectContactLabels;
+const labels = {
+  contactEmail: {
+    content: "Email"
+  },
+  contactName: {
+    content: "Name"
+  },
+  partnerName: {
+    content: "Partner"
+  },
+} as ProjectContactLabels;
 
 const testStores = {
   config : {
@@ -95,7 +100,7 @@ const TestProviders: React.FunctionComponent = (props) => <StoresProvider value=
 
 describe("Partners Table", () => {
   const testForCorrectTableEntries = (expectedA: string, expectedB: string, expectedC: string, columnQA: string) => {
-    const wrapper = mount(<TestProviders><PartnersAndFinanceContacts partners={testPartnerData} contacts={testContactData} projectContactLabels={labels} /></TestProviders>);
+    const wrapper = mount(<TestProviders><PartnersAndFinanceContacts partners={testPartnerData} contacts={testContactData} projectContactLabels={() => labels} /></TestProviders>);
     const columnValues = getColumnValues(wrapper, "finance-contact-details", columnQA).map(x => x.text());
     expect(columnValues[0]).toBe(expectedA);
     expect(columnValues[1]).toBe(expectedB);

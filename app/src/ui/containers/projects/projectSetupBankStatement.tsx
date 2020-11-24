@@ -40,7 +40,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
       <ACC.Page
         backLink={
           <ACC.BackLink route={this.props.routes.projectSetup.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}>
-            <ACC.Content value={(x) => x.projectSetupBankStatement.backLink()} />
+            <ACC.Content value={(x) => x.projectSetupBankStatement.backLink} />
           </ACC.BackLink>
         }
         error={editor.error}
@@ -59,9 +59,9 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
             qa="submit-bank-statement-form"
           >
             <Form.Fieldset>
-              <Form.Submit><ACC.Content value={x => x.projectSetupBankStatement.submitButton()}/></Form.Submit>
+              <Form.Submit><ACC.Content value={x => x.projectSetupBankStatement.submitButton}/></Form.Submit>
               <ACC.Link styling="SecondaryButton" route={this.props.routes.projectSetup.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId})}>
-                <ACC.Content value={x => x.projectSetupBankStatement.returnButton()}/>
+                <ACC.Content value={x => x.projectSetupBankStatement.returnButton}/>
               </ACC.Link>
             </Form.Fieldset>
           </Form.Form>
@@ -74,16 +74,16 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
     if (documents.length) {
       return (
         <ACC.Section
-          titleContent={x => x.projectSetupBankStatement.documentLabels.filesUploadedTitle()}
-          subtitleContent={x => x.projectSetupBankStatement.documentLabels.filesUploadedSubtitle()}
+          titleContent={x => x.projectSetupBankStatement.documentLabels.filesUploadedTitle}
+          subtitleContent={x => x.projectSetupBankStatement.documentLabels.filesUploadedSubtitle}
         >
           <ACC.DocumentTableWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="partner-document"/>
         </ACC.Section>
       );
     }
     return (
-      <ACC.Section titleContent={x => x.projectSetupBankStatement.documentLabels.filesUploadedTitle()}>
-        <ACC.ValidationMessage message={x => x.projectSetupBankStatement.documentMessages.noDocumentsUploaded()} messageType="info" />
+      <ACC.Section titleContent={x => x.projectSetupBankStatement.documentLabels.filesUploadedTitle}>
+        <ACC.ValidationMessage message={x => x.projectSetupBankStatement.documentMessages.noDocumentsUploaded} messageType="info" />
       </ACC.Section>
     );
   }
@@ -103,7 +103,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
             <UploadForm.Hidden name="description" value={x => DocumentDescription.BankStatement} />
             <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
-              labelContent={x => x.projectSetupBankStatement.documentLabels.uploadInputLabel()}
+              labelContent={x => x.projectSetupBankStatement.documentLabels.uploadInputLabel}
               name="attachment"
               labelHidden={true}
               value={data => data.files}
@@ -116,7 +116,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
             <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}>
-              <ACC.Content value={x => x.projectSetupBankStatement.documentLabels.uploadButtonLabel()} />
+              <ACC.Content value={x => x.projectSetupBankStatement.documentLabels.uploadButtonLabel} />
             </UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
@@ -127,7 +127,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
   private renderGuidance() {
     return (
       <ACC.Section qa={"guidance"}>
-        <ACC.Content value={x => x.projectSetupBankStatement.guidanceMessage()}/>
+        <ACC.Content value={x => x.projectSetupBankStatement.guidanceMessage}/>
       </ACC.Section>
     );
   }

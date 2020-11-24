@@ -26,10 +26,10 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
         <Form.Form qa="saveAndContinue" data={pcrItem} onSubmit={() => onSave()}>
           <Form.Fieldset>
           <Form.Submit>
-              <ACC.Content value={x => x.pcrAddPartnerAgreementToPcr.pcrItem.submitButton()}/>
+              <ACC.Content value={x => x.pcrAddPartnerAgreementToPcr.pcrItem.submitButton}/>
             </Form.Submit>
             <Form.Button name="saveAndReturnToSummary" onClick={() => onSave(true)}>
-              <ACC.Content value={x => x.pcrAddPartnerAgreementToPcr.pcrItem.returnToSummaryButton()}/>
+              <ACC.Content value={x => x.pcrAddPartnerAgreementToPcr.pcrItem.returnToSummaryButton}/>
             </Form.Button>
           </Form.Fieldset>
         </Form.Form>
@@ -48,14 +48,14 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           onChange={(dto) => this.props.onFileChange(false, dto)}
           qa="projectChangeRequestItemUpload"
         >
-          <UploadForm.Fieldset headingContent={x => x.pcrAddPartnerAgreementToPcr.heading()}>
-            <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerAgreementToPcr.guidance()} /></ACC.Renderers.SimpleString>
+          <UploadForm.Fieldset headingContent={x => x.pcrAddPartnerAgreementToPcr.heading}>
+            <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerAgreementToPcr.guidance} /></ACC.Renderers.SimpleString>
           </UploadForm.Fieldset>
           <UploadForm.Fieldset qa="documentUpload">
             <UploadForm.Hidden name="description" value={x => DocumentDescription.AgreementToPCR} />
             <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
-              labelContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.uploadInputLabel()}
+              labelContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.uploadInputLabel}
               name="attachment"
               labelHidden={true}
               value={data => data.files}
@@ -68,7 +68,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
             <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}>
-              <ACC.Content value={x => x.pcrAddPartnerAgreementToPcr.documentLabels.uploadButtonLabel()} />
+              <ACC.Content value={x => x.pcrAddPartnerAgreementToPcr.documentLabels.uploadButtonLabel} />
             </UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
@@ -80,8 +80,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     if (documents.length) {
       return (
         <ACC.Section
-          titleContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.filesUploadedTitle()}
-          subtitleContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.filesUploadedSubtitle()}
+          titleContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.filesUploadedTitle}
+          subtitleContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.filesUploadedSubtitle}
         >
           {
             documents.length
@@ -92,8 +92,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
       );
     }
     return (
-      <ACC.Section titleContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.filesUploadedTitle()}>
-        <ACC.ValidationMessage message={x => x.pcrAddPartnerAgreementToPcr.documentMessages.noDocumentsUploaded()} messageType="info" />
+      <ACC.Section titleContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.filesUploadedTitle}>
+        <ACC.ValidationMessage message={x => x.pcrAddPartnerAgreementToPcr.documentMessages.noDocumentsUploaded} messageType="info" />
       </ACC.Section>
     );
   }

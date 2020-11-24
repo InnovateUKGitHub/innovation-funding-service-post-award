@@ -45,21 +45,21 @@ class Component extends ContainerBase<FinancialVirementParams, Props, {}> {
         validator={editor.validator}
       >
         <ACC.Section>
-          <ACC.Renderers.SimpleString><ACC.Content value={x => x.financialVirementEditPartnerLevel.remainingGrantInfo()} /></ACC.Renderers.SimpleString>
+          <ACC.Renderers.SimpleString><ACC.Content value={x => x.financialVirementEditPartnerLevel.remainingGrantInfo} /></ACC.Renderers.SimpleString>
           <VirementForm.Form editor={editor} onChange={(dto) => this.props.onChange(false, dto)} onSubmit={() => this.props.onChange(true, editor.data)} qa="partner_level_form">
             <VirementForm.Fieldset>
               <VirementTable.Table qa="partnerVirements" data={data} validationResult={validation}>
-                <VirementTable.String qa="partner" headerContent={x => x.financialVirementEditPartnerLevel.labels.partnerName()} value={x => x.partner.name} footer={<ACC.Content value={x => x.financialVirementEditPartnerLevel.labels.projectTotals()} />} isDivider="normal" />
-                <VirementTable.Currency qa="remainingCosts" headerContent={x => x.financialVirementEditPartnerLevel.labels.partnerOriginalRemainingCosts()} value={x => x.virement.originalRemainingCosts} footer={<ACC.Renderers.Currency value={editor.data.originalRemainingCosts} />} />
-                <VirementTable.Currency qa="remainingGrant" headerContent={x => x.financialVirementEditPartnerLevel.labels.partnerOriginalRemainingGrant()} value={x => x.virement.originalRemainingGrant} footer={<ACC.Renderers.Currency value={editor.data.originalRemainingGrant} />} />
-                <VirementTable.Percentage qa="fundingLevel" headerContent={x => x.financialVirementEditPartnerLevel.labels.originalFundingLevel()} value={(x, i) => x.virement.originalFundingLevel} footer={<ACC.Renderers.Percentage value={editor.data.originalFundingLevel} />} isDivider="normal" />
-                <VirementTable.Currency qa="newCosts" headerContent={x => x.financialVirementEditPartnerLevel.labels.partnerNewRemainingCosts()} value={x => x.virement.newRemainingCosts} footer={<ACC.Renderers.Currency value={editor.data.newRemainingCosts} />} />
-                <VirementTable.Custom qa="newGrant" headerContent={x => x.financialVirementEditPartnerLevel.labels.partnerNewRemainingGrant()} value={x => this.renderInput(x.partner, x.virement, editor.status === EditorStatus.Saving, x.validator)} footer={this.renderFooter(editor)} classSuffix="numeric" />
-                <VirementTable.Percentage qa="newLevel" headerContent={x => x.financialVirementEditPartnerLevel.labels.newFundingLevel()} value={(x, i) => x.virement.newFundingLevel} footer={<ACC.Renderers.Percentage value={editor.data.newFundingLevel} />} />
+                <VirementTable.String qa="partner" headerContent={x => x.financialVirementEditPartnerLevel.labels.partnerName} value={x => x.partner.name} footer={<ACC.Content value={x => x.financialVirementEditPartnerLevel.labels.projectTotals} />} isDivider="normal" />
+                <VirementTable.Currency qa="remainingCosts" headerContent={x => x.financialVirementEditPartnerLevel.labels.partnerOriginalRemainingCosts} value={x => x.virement.originalRemainingCosts} footer={<ACC.Renderers.Currency value={editor.data.originalRemainingCosts} />} />
+                <VirementTable.Currency qa="remainingGrant" headerContent={x => x.financialVirementEditPartnerLevel.labels.partnerOriginalRemainingGrant} value={x => x.virement.originalRemainingGrant} footer={<ACC.Renderers.Currency value={editor.data.originalRemainingGrant} />} />
+                <VirementTable.Percentage qa="fundingLevel" headerContent={x => x.financialVirementEditPartnerLevel.labels.originalFundingLevel} value={(x, i) => x.virement.originalFundingLevel} footer={<ACC.Renderers.Percentage value={editor.data.originalFundingLevel} />} isDivider="normal" />
+                <VirementTable.Currency qa="newCosts" headerContent={x => x.financialVirementEditPartnerLevel.labels.partnerNewRemainingCosts} value={x => x.virement.newRemainingCosts} footer={<ACC.Renderers.Currency value={editor.data.newRemainingCosts} />} />
+                <VirementTable.Custom qa="newGrant" headerContent={x => x.financialVirementEditPartnerLevel.labels.partnerNewRemainingGrant} value={x => this.renderInput(x.partner, x.virement, editor.status === EditorStatus.Saving, x.validator)} footer={this.renderFooter(editor)} classSuffix="numeric" />
+                <VirementTable.Percentage qa="newLevel" headerContent={x => x.financialVirementEditPartnerLevel.labels.newFundingLevel} value={(x, i) => x.virement.newFundingLevel} footer={<ACC.Renderers.Percentage value={editor.data.newFundingLevel} />} />
               </VirementTable.Table>
             </VirementForm.Fieldset>
             <VirementForm.Fieldset>
-              <VirementForm.Submit><ACC.Content value={x => x.financialVirementEditPartnerLevel.saveButton()} /></VirementForm.Submit>
+              <VirementForm.Submit><ACC.Content value={x => x.financialVirementEditPartnerLevel.saveButton} /></VirementForm.Submit>
             </VirementForm.Fieldset>
           </VirementForm.Form>
         </ACC.Section>
@@ -108,7 +108,7 @@ class Component extends ContainerBase<FinancialVirementParams, Props, {}> {
       itemId: this.props.itemId
     };
 
-    return <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)} preserveData={true}><ACC.Content value={x => x.financialVirementEditPartnerLevel.labels.backToSummary()}/></ACC.BackLink>;
+    return <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)} preserveData={true}><ACC.Content value={x => x.financialVirementEditPartnerLevel.labels.backToSummary}/></ACC.BackLink>;
   }
 }
 

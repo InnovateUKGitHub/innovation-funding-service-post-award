@@ -25,8 +25,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
         {this.renderFiles(documentsEditor, documents)}
         <Form.Form qa="saveAndContinue" data={this.props.pcrItem} onSubmit={() => this.props.onSave()}>
           <Form.Fieldset>
-            <Form.Submit><ACC.Content value={x => x.pcrAddPartnerJeS.pcrItem.submitButton()}/></Form.Submit>
-            <Form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerJeS.pcrItem.returnToSummaryButton()}/></Form.Button>
+            <Form.Submit><ACC.Content value={x => x.pcrAddPartnerJeS.pcrItem.submitButton}/></Form.Submit>
+            <Form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerJeS.pcrItem.returnToSummaryButton}/></Form.Button>
           </Form.Fieldset>
         </Form.Form>
       </React.Fragment>
@@ -44,14 +44,14 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           onChange={(dto) => this.props.onFileChange(false, dto)}
           qa="projectChangeRequestItemUpload"
         >
-          <UploadForm.Fieldset headingContent={x => x.pcrAddPartnerJeS.labels.jesFormHeading()}>
-            <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerJeS.guidance()}/></ACC.Renderers.SimpleString>
+          <UploadForm.Fieldset headingContent={x => x.pcrAddPartnerJeS.labels.jesFormHeading}>
+            <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerJeS.guidance}/></ACC.Renderers.SimpleString>
           </UploadForm.Fieldset>
           <UploadForm.Fieldset qa="documentUpload">
             <UploadForm.Hidden name="description" value={x => DocumentDescription.JeSForm} />
             <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
-              labelContent={x => x.pcrAddPartnerJeS.documentLabels.uploadInputLabel()}
+              labelContent={x => x.pcrAddPartnerJeS.documentLabels.uploadInputLabel}
               name="attachment"
               labelHidden={true}
               value={data => data.files}
@@ -63,7 +63,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
             />
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
-            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}><ACC.Content value={x => x.pcrAddPartnerJeS.documentLabels.uploadButtonLabel()}/></UploadForm.Button>
+            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}><ACC.Content value={x => x.pcrAddPartnerJeS.documentLabels.uploadButtonLabel}/></UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
       </ACC.Section>
@@ -73,14 +73,14 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
   private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (documents.length) {
       return (
-        <ACC.Section titleContent={x => x.pcrAddPartnerJeS.documentLabels.filesUploadedTitle()} subtitleContent={x => x.pcrAddPartnerJeS.documentLabels.filesUploadedSubtitle()}>
+        <ACC.Section titleContent={x => x.pcrAddPartnerJeS.documentLabels.filesUploadedTitle} subtitleContent={x => x.pcrAddPartnerJeS.documentLabels.filesUploadedSubtitle}>
           {documents.length ? <ACC.DocumentTableWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="je-s-document"/> : null}
         </ACC.Section>
       );
     }
     return (
-      <ACC.Section titleContent={x => x.pcrAddPartnerJeS.documentLabels.filesUploadedTitle()}>
-        <ACC.ValidationMessage message={x => x.pcrAddPartnerJeS.documentMessages.noDocumentsUploaded()} messageType="info" />
+      <ACC.Section titleContent={x => x.pcrAddPartnerJeS.documentLabels.filesUploadedTitle}>
+        <ACC.ValidationMessage message={x => x.pcrAddPartnerJeS.documentMessages.noDocumentsUploaded} messageType="info" />
       </ACC.Section>
     );
   }

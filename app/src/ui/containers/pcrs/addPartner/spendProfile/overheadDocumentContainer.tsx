@@ -73,7 +73,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
         <ACC.Renderers.Messages messages={this.props.messages} />
         {this.renderForm(editor)}
         {this.renderFiles(editor, documents)}
-        <ACC.Link styling="PrimaryButton" route={back}><ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.submitButton()}/></ACC.Link>
+        <ACC.Link styling="PrimaryButton" route={back}><ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.submitButton}/></ACC.Link>
       </ACC.Page>
     );
   }
@@ -88,17 +88,17 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
           onChange={(dto) => this.props.onFileChange(false, dto)}
           qa="projectChangeRequestItemUpload"
         >
-          <UploadForm.Fieldset headingContent={x => x.pcrSpendProfileOverheadDocumentContent.guidanceHeading()}>
-            <ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadGuidance()}/>
+          <UploadForm.Fieldset headingContent={x => x.pcrSpendProfileOverheadDocumentContent.guidanceHeading}>
+            <ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadGuidance}/>
           </UploadForm.Fieldset>
-          <UploadForm.Fieldset headingContent={x => x.pcrSpendProfileOverheadDocumentContent.templateHeading()} qa="template">
+          <UploadForm.Fieldset headingContent={x => x.pcrSpendProfileOverheadDocumentContent.templateHeading} qa="template">
             {this.renderTemplateLink()}
           </UploadForm.Fieldset>
-          <UploadForm.Fieldset qa="documentUpload" headingContent={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadHeading()}>
+          <UploadForm.Fieldset qa="documentUpload" headingContent={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadHeading}>
             <UploadForm.Hidden name="description" value={x => DocumentDescription.OverheadCalculationSpreadsheet} />
             <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
-              labelContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.uploadInputLabel()}
+              labelContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.uploadInputLabel}
               name="attachment"
               labelHidden={true}
               value={data => data.files}
@@ -110,7 +110,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
             />
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
-            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}><ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.labels.uploadButtonLabel()}/></UploadForm.Button>
+            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}><ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.labels.uploadButtonLabel}/></UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
       </ACC.Section>
@@ -129,14 +129,14 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
   private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (documents.length) {
       return (
-        <ACC.Section titleContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedTitle()} subtitleContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedSubtitle()}>
+        <ACC.Section titleContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedTitle} subtitleContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedSubtitle}>
           <ACC.DocumentTableWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="overhead-calculation-document"/>
         </ACC.Section>
       );
     }
     return (
-      <ACC.Section titleContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedTitle()}>
-        <ACC.ValidationMessage message={x => x.pcrSpendProfileOverheadDocumentContent.messages.noDocumentsUploaded()} messageType="info" />
+      <ACC.Section titleContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedTitle}>
+        <ACC.ValidationMessage message={x => x.pcrSpendProfileOverheadDocumentContent.messages.noDocumentsUploaded} messageType="info" />
       </ACC.Section>
     );
   }

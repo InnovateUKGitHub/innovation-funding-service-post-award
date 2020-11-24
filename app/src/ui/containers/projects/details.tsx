@@ -84,7 +84,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         const otherContacts = contacts.filter(x => excludedOtherRoles.indexOf(x.role) === -1);
 
         return (
-            <ACC.Section titleContent={x => x.projectDetails.projectLabels.otherContacts()} qa="other-contacts-table">
+            <ACC.Section titleContent={x => x.projectDetails.projectLabels.otherContacts} qa="other-contacts-table">
                 <ACC.Partners.ContactsTable contacts={otherContacts} projectContactLabels={x => x.projectDetails.contactLabels} />
             </ACC.Section>
         );
@@ -104,10 +104,10 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                     subtitle={<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate}/>}
                 />
 
-                <ACC.Section titleContent={x => x.projectDetails.projectLabels.projectMembers()}>
+                <ACC.Section titleContent={x => x.projectDetails.projectLabels.projectMembers}>
                     {this.renderPrimaryContacts(partners, contacts)}
 
-                    <ACC.Section titleContent={x => x.projectDetails.projectLabels.financeContacts()}>
+                    <ACC.Section titleContent={x => x.projectDetails.projectLabels.financeContacts}>
                         <ACC.PartnersAndFinanceContacts contacts={contacts} partners={partners} projectContactLabels={x => x.projectDetails.contactLabels} />
                     </ACC.Section>
 
@@ -118,11 +118,11 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
                 <ACC.Section title="Project information" qa="project-details">
                     <ACC.SummaryList qa="project-information">
-                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.startDate()} qa="start-date" content={<ACC.Renderers.FullDate value={project.startDate}/>}/>
-                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.endDate()} qa="end-date" content={<ACC.Renderers.FullDate value={project.endDate}/>}/>
-                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.duration()} qa="duration" content={`${project.durationInMonths} ${project.durationInMonths === 1 ? "month" : "months"}`}/>
-                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.numberOfPeriods()} qa="periods" content={project.numberOfPeriods}/>
-                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.scope()} qa="scope" content={<ACC.Renderers.SimpleString multiline={true}>{project.summary}</ACC.Renderers.SimpleString>}/>
+                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.startDate} qa="start-date" content={<ACC.Renderers.FullDate value={project.startDate}/>}/>
+                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.endDate} qa="end-date" content={<ACC.Renderers.FullDate value={project.endDate}/>}/>
+                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.duration} qa="duration" content={`${project.durationInMonths} ${project.durationInMonths === 1 ? "month" : "months"}`}/>
+                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.numberOfPeriods} qa="periods" content={project.numberOfPeriods}/>
+                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.scope} qa="scope" content={<ACC.Renderers.SimpleString multiline={true}>{project.summary}</ACC.Renderers.SimpleString>}/>
                     </ACC.SummaryList>
                 </ACC.Section>
             </ACC.Page>
@@ -134,13 +134,13 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         const isMoPm = !!(project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
 
         return (
-            <ACC.Section titleContent={x => x.projectDetails.projectLabels.partners()}>
+            <ACC.Section titleContent={x => x.projectDetails.projectLabels.partners}>
                 <PartnersTable.Table qa="partner-information" data={partners}>
-                    <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.partnerName()} value={x => this.renderPartnerName(x)} qa="partner-name"/>
-                    <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.partnerType()} value={x => x.type} qa="partner-type"/>
-                    {isMoPm ? <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.statusLabel()} value={x => x.partnerStatusLabel} qa="partner-status"/> : null}
-                    {isMoPm ? <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.fundingLabel()} value={x => <Content value={content => content.partnerDetails.contactLabels.fundingState(x.isNonFunded)}/>} qa="partner-funding"/> : null}
-                    <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.partnerPostcode()} value={x => x.postcode} qa="partner-postcode"/>
+                    <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.partnerName} value={x => this.renderPartnerName(x)} qa="partner-name"/>
+                    <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.partnerType} value={x => x.type} qa="partner-type"/>
+                    {isMoPm ? <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.statusLabel} value={x => x.partnerStatusLabel} qa="partner-status"/> : null}
+                    {isMoPm ? <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.fundingLabel} value={x => <Content value={content => content.partnerDetails.contactLabels.fundingState(x.isNonFunded)}/>} qa="partner-funding"/> : null}
+                    <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.partnerPostcode} value={x => x.postcode} qa="partner-postcode"/>
                 </PartnersTable.Table>
             </ACC.Section>
         );

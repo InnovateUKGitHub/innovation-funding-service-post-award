@@ -9,5 +9,5 @@ export class PCRReasoningWorkflowContent extends ContentPageBase {
   }
 
   public readonly labels = new PCRReasoningLabels(this, this.project);
-  public readonly backLink = () => this.getContent("back-link");
+  public readonly backLink = this.getContent("back-link");
 }

@@ -92,7 +92,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
       <ACC.ValidationMessage
         qa="summary-warning"
         messageType="info"
-        message={x => x.claimPrepareSummary.messages.claimSummaryWarning()}
+        message={x => x.claimPrepareSummary.messages.claimSummaryWarning}
       />
     ): null;
   }
@@ -125,7 +125,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
           />
         </Form.Fieldset>
         <Form.Fieldset qa="save-buttons">
-          <ACC.Renderers.SimpleString><ACC.Content value={x => x.claimPrepareSummary.messages.submitClaimConfirmation()}/></ACC.Renderers.SimpleString>
+          <ACC.Renderers.SimpleString><ACC.Content value={x => x.claimPrepareSummary.messages.submitClaimConfirmation}/></ACC.Renderers.SimpleString>
           <Form.Submit>Submit claim</Form.Submit>
           <Form.Button name="save" onClick={() => this.onSave(claim, editor, false, data.project)}>Save and return to claims</Form.Button>
         </Form.Fieldset>

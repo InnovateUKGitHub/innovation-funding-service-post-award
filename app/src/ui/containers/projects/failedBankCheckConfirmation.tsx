@@ -20,17 +20,17 @@ class FailedBankCheckConfirmationComponent extends ContainerBase<FailedBankCheck
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={projectSetupRoute}> <ACC.Content value={x => x.failedBankCheckConfirmation.backLink()} /></ACC.BackLink>}
+        backLink={<ACC.BackLink route={projectSetupRoute}> <ACC.Content value={x => x.failedBankCheckConfirmation.backLink} /></ACC.BackLink>}
         pageTitle={<ACC.Projects.Title project={project} />}
         project={project}
       >
         <ACC.Section qa="guidance">
           <ACC.Renderers.SimpleString>
-            <ACC.Content value={x => x.failedBankCheckConfirmation.guidance()} />
+            <ACC.Content value={x => x.failedBankCheckConfirmation.guidance} />
           </ACC.Renderers.SimpleString>
         </ACC.Section>
         <ACC.Section qa="return-to-setup-button">
-          <ACC.Link styling="PrimaryButton" route={projectSetupRoute}><ACC.Content value={x => x.failedBankCheckConfirmation.returnButton()} /></ACC.Link>
+          <ACC.Link styling="PrimaryButton" route={projectSetupRoute}><ACC.Content value={x => x.failedBankCheckConfirmation.returnButton} /></ACC.Link>
         </ACC.Section>
       </ACC.Page>
     );

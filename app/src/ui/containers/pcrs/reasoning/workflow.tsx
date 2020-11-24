@@ -87,12 +87,12 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
 
   private getBackLink() {
     if (this.props.mode === "review") {
-      return <ACC.BackLink route={this.props.routes.pcrReview.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}><ACC.Content value={x => x.pcrReasoningWorkflow.backLink()}/></ACC.BackLink>;
+      return <ACC.BackLink route={this.props.routes.pcrReview.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}><ACC.Content value={x => x.pcrReasoningWorkflow.backLink}/></ACC.BackLink>;
     }
     if (this.props.mode === "prepare") {
-      return <ACC.BackLink route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}><ACC.Content value={x => x.pcrReasoningWorkflow.backLink()}/></ACC.BackLink>;
+      return <ACC.BackLink route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}><ACC.Content value={x => x.pcrReasoningWorkflow.backLink}/></ACC.BackLink>;
     }
-    return <ACC.BackLink route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}><ACC.Content value={x => x.pcrReasoningWorkflow.backLink()}/></ACC.BackLink>;
+    return <ACC.BackLink route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}><ACC.Content value={x => x.pcrReasoningWorkflow.backLink}/></ACC.BackLink>;
   }
 
   private renderStep(stepNumber: number, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>) {
@@ -101,8 +101,8 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
       <React.Fragment>
         <ACC.Section>
           <ACC.SummaryList qa="pcr-prepareReasoning">
-            <ACC.SummaryListItem labelContent={x => x.pcrReasoningWorkflow.labels.requestNumber()} content={pcr.requestNumber} qa="numberRow"/>
-            <ACC.SummaryListItem labelContent={x => x.pcrReasoningWorkflow.labels.types()} content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.shortName)}/>} qa="typesRow"/>
+            <ACC.SummaryListItem labelContent={x => x.pcrReasoningWorkflow.labels.requestNumber} content={pcr.requestNumber} qa="numberRow"/>
+            <ACC.SummaryListItem labelContent={x => x.pcrReasoningWorkflow.labels.types} content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.shortName)}/>} qa="typesRow"/>
           </ACC.SummaryList>
         </ACC.Section>
         { stepNumber === 1 && this.renderGuidanceSection(editor.data) }

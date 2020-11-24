@@ -16,6 +16,6 @@ export class PCRAddPartnerAgreementToPCRContent extends ContentPageBase {
   public readonly documentLabels = new DocumentLabels(this, this.project);
   public readonly documentMessages = new DocumentMessages(this, this.project);
 
-  public readonly guidance = () => this.getContent("guidance");
-  public readonly heading = () => this.getContent("heading");
+  public readonly guidance = this.getContent("guidance");
+  public readonly heading = this.getContent("heading");
 }

@@ -57,19 +57,19 @@ class PartnerDetailsEditComponent extends ContainerBase<PartnerDetailsParams, Da
                     onSubmit={() => this.props.onUpdate(true, editor.data)}
                     qa="partnerDetailsForm"
                 >
-                    <Form.Fieldset headingContent={x => x.partnerDetailsEdit.postcodeSectionTitle()}>
-                        <Form.Custom name="current-partner-postcode-value" labelContent={x => x.partnerDetailsEdit.currentPostcodeLabel()} value={x => <ACC.Renderers.SimpleString>{x.postcode}</ACC.Renderers.SimpleString>} update={() => null} />
+                    <Form.Fieldset headingContent={x => x.partnerDetailsEdit.postcodeSectionTitle}>
+                        <Form.Custom name="current-partner-postcode-value" labelContent={x => x.partnerDetailsEdit.currentPostcodeLabel} value={x => <ACC.Renderers.SimpleString>{x.postcode}</ACC.Renderers.SimpleString>} update={() => null} />
                         <Form.String
                           name="new-partner-postcode-value"
-                          hintContent={x => x.partnerDetailsEdit.newPostcodeHint()}
+                          hintContent={x => x.partnerDetailsEdit.newPostcodeHint}
                           width="one-quarter"
                           value={(m) => editor.data.postcode}
-                          labelContent={x => x.partnerDetailsEdit.newPostcodeLabel()}
+                          labelContent={x => x.partnerDetailsEdit.newPostcodeLabel}
                           update={(m, val) => editor.data.postcode = val!}
                         />
                     </Form.Fieldset>
                     <Form.Fieldset>
-                        <Form.Submit><ACC.Content value={(content) => content.partnerDetailsEdit.buttonSaveAndReturnPartnerDetails()} /></Form.Submit>
+                        <Form.Submit><ACC.Content value={(content) => content.partnerDetailsEdit.buttonSaveAndReturnPartnerDetails} /></Form.Submit>
                     </Form.Fieldset>
                 </Form.Form>
             </ACC.Page >

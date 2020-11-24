@@ -29,7 +29,7 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
     return (
       <ACC.Section>
         <ACC.Accordion>
-          <ACC.AccordionItem titleContent={x => x.monitoringReportsSummary.labels.statusAndCommentsLog()} qa="status-and-comments-log">
+          <ACC.AccordionItem titleContent={x => x.monitoringReportsSummary.labels.statusAndCommentsLog} qa="status-and-comments-log">
             {/* Keeping logs inside loader because accordion defaults to closed*/}
             <ACC.Loader
               pending={this.props.statusChanges}
@@ -52,19 +52,19 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
           onChange={(dto) => this.props.onChange(dto)}
           qa="monitoringReportCreateForm"
         >
-          <ReportForm.Fieldset qa="additional-comments-section" headingContent={x => x.monitoringReportsSummary.labels.additionalComments()}>
+          <ReportForm.Fieldset qa="additional-comments-section" headingContent={x => x.monitoringReportsSummary.labels.additionalComments}>
             <ReportForm.MultilineString
-              hintContent={x => x.monitoringReportsSummary.messages.additionalCommentsGuidance()}
+              hintContent={x => x.monitoringReportsSummary.messages.additionalCommentsGuidance}
               name="addComments"
               value={() => editor.data.addComments}
               update={(dto, v) => dto.addComments = v || ""}
               qa="additional-comments-text-area"
             />
           </ReportForm.Fieldset>
-          <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsSummary.messages.submittingMonitoringReportMessage()} /></ACC.Renderers.SimpleString>
+          <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsSummary.messages.submittingMonitoringReportMessage} /></ACC.Renderers.SimpleString>
           <ReportForm.Fieldset qa="save-buttons">
-            <ReportForm.Button name="submit" styling="Primary" onClick={() => this.props.onSave(editor.data, true)}><ACC.Content value={(x) => x.monitoringReportsSummary.submitButton()} /></ReportForm.Button>
-            <ReportForm.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(editor.data, false)}><ACC.Content value={(x) => x.monitoringReportsSummary.saveAndReturnButton()} /></ReportForm.Button>
+            <ReportForm.Button name="submit" styling="Primary" onClick={() => this.props.onSave(editor.data, true)}><ACC.Content value={(x) => x.monitoringReportsSummary.submitButton} /></ReportForm.Button>
+            <ReportForm.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(editor.data, false)}><ACC.Content value={(x) => x.monitoringReportsSummary.saveAndReturnButton} /></ReportForm.Button>
           </ReportForm.Fieldset>
         </ReportForm.Form>
       </ACC.Section>
@@ -82,7 +82,7 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
           replace={true}
           route={this.props.getEditLink(`question-${question.displayOrder}`)}
         >
-          <ACC.Content value={(x) => x.monitoringReportsSummary.editItemButton()} />
+          <ACC.Content value={(x) => x.monitoringReportsSummary.editItemButton} />
         </ACC.Link>
       </span>
     );
@@ -127,7 +127,7 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
             content={editor.data.periodId}
             qa={`period`}
             /*Put the action on the second item if not showing the first*/
-            action={this.props.mode === "prepare" && <ACC.Link id={validation.key} replace={true} route={this.props.routes.monitoringReportPreparePeriod.getLink({projectId: this.props.projectId, id: this.props.id})}><ACC.Content value={(x) => x.monitoringReportsSummary.editItemButton()} /></ACC.Link>}
+            action={this.props.mode === "prepare" && <ACC.Link id={validation.key} replace={true} route={this.props.routes.monitoringReportPreparePeriod.getLink({projectId: this.props.projectId, id: this.props.id})}><ACC.Content value={(x) => x.monitoringReportsSummary.editItemButton} /></ACC.Link>}
           />
         </ACC.SummaryList>
       </ACC.Section>

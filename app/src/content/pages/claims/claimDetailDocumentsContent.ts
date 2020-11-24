@@ -9,7 +9,7 @@ export class ClaimDetailDocumentsContent extends ContentPageBase {
   }
   public readonly messages = new ClaimMessages(this, this.project);
   public readonly backLink = (costCategoryName: string) => this.getContent("back-link", {costCategoryName});
-  public readonly formTitle = () => this.getContent("form-title");
-  public readonly subtitle = () => this.getContent("subtitle");
-  public readonly upload = () => this.getContent("upload");
+  public readonly formTitle = this.getContent("form-title");
+  public readonly subtitle = this.getContent("subtitle");
+  public readonly upload = this.getContent("upload");
 }

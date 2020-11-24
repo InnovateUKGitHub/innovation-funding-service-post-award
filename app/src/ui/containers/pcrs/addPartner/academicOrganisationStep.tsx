@@ -16,10 +16,10 @@ export const AcademicOrganisationStep = (props: PcrStepProps<PCRItemForPartnerAd
         onSubmit={() => props.onSave()}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset headingContent={x => x.pcrAddPartnerAcademicOrganisation.labels.organisationSectionTitle()}>
+        <Form.Fieldset headingContent={x => x.pcrAddPartnerAcademicOrganisation.labels.organisationSectionTitle}>
           <Form.String
             name="organisationName"
-            hintContent={x => x.pcrAddPartnerAcademicOrganisation.hint()}
+            hintContent={x => x.pcrAddPartnerAcademicOrganisation.hint}
             value={dto => dto.organisationName}
             update={(x, val) => {
               x.organisationName = val;
@@ -28,8 +28,8 @@ export const AcademicOrganisationStep = (props: PcrStepProps<PCRItemForPartnerAd
           />
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
-          <Form.Submit><ACC.Content value={x => x.pcrAddPartnerAcademicOrganisation.pcrItem.submitButton()}/></Form.Submit>
-          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerAcademicOrganisation.pcrItem.returnToSummaryButton()}/></Form.Button>
+          <Form.Submit><ACC.Content value={x => x.pcrAddPartnerAcademicOrganisation.pcrItem.submitButton}/></Form.Submit>
+          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerAcademicOrganisation.pcrItem.returnToSummaryButton}/></Form.Button>
         </Form.Fieldset>
       </Form.Form>
     </ACC.Section>

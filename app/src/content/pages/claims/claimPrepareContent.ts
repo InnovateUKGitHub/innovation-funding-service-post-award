@@ -10,7 +10,7 @@ export class ClaimPrepareContent extends ContentPageBase {
   }
   public readonly messages = new ClaimMessages(this, this.project);
   public readonly labels = new ClaimsLabels(this, this.project);
-  public readonly backLink = () => this.getContent("back-link");
-  public readonly saveAndReturnButton = () => this.getContent("button-save-and-return");
-  public readonly saveAndContinueButton = () => this.getContent("button-save-and-continue");
+  public readonly backLink = this.getContent("back-link");
+  public readonly saveAndReturnButton = this.getContent("button-save-and-return");
+  public readonly saveAndContinueButton = this.getContent("button-save-and-continue");
 }

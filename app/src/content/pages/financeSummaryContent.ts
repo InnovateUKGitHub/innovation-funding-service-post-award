@@ -12,5 +12,5 @@ export class FinanceSummaryContent extends ContentPageBase {
   public readonly projectMessages = new ProjectMessages(this, this.project);
   public readonly projectLabels = new ProjectLabels(this, this.project);
 
-  public readonly totalsFooterLabel = () => this.getContent("totalsFooter");
+  public readonly totalsFooterLabel = this.getContent("totalsFooter");
 }
