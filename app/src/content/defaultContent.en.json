@@ -111,6 +111,11 @@
     "onHoldContent": {
       "projectOnHoldMessage": "This project is on hold. Contact Innovate UK for more information.",
       "partnerOnHoldMessage": "Partner is on hold. Contact Innovate UK for more information."
+    },
+    "claimDetailsLinkContent": {
+      "editClaim": "Edit claim",
+      "reviewClaim": "Review claim",
+      "viewClaim": "View claim"
     }
   },
   "pages": {

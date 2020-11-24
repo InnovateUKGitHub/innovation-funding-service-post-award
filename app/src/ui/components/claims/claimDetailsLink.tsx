@@ -2,29 +2,31 @@ import React from "react";
 import { ClaimDto, ClaimStatus, PartnerDto, PartnerStatus, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import { IRoutes } from "@ui/routing";
 import { Link } from "../links";
+import { useContent } from "@ui/hooks";
 
-interface Props {
+export interface ClaimDetailsLinkProps {
   claim: ClaimDto;
   project: ProjectDto;
   partner: PartnerDto;
 }
 
-interface PropsWithRoutes extends Props {
+interface ClaimDetailsLinkRoutes extends ClaimDetailsLinkProps {
   routes: IRoutes;
 }
 
-export const ClaimDetailsLink: React.FunctionComponent<PropsWithRoutes> = (props) => {
+export const ClaimDetailsLink: React.FunctionComponent<ClaimDetailsLinkRoutes> = (props) => {
   const linkProps = { projectId: props.project.id, partnerId: props.partner.id, periodId: props.claim.periodId };
+  const { getContent } = useContent();
 
   switch (getClaimDetailsLinkType(props)) {
     case "edit":
-      return <Link route={props.routes.prepareClaim.getLink(linkProps)}>Edit claim</Link>;
+      return <Link route={props.routes.prepareClaim.getLink(linkProps)}>{getContent(x => x.components.claimDetailsLinkContent.editClaimText)}</Link>;
 
     case "review":
-      return <Link route={props.routes.reviewClaim.getLink(linkProps)}>Review claim</Link>;
+      return <Link route={props.routes.reviewClaim.getLink(linkProps)}>{getContent(x => x.components.claimDetailsLinkContent.reviewClaimText)}</Link>;
 
     case "view":
-      return <Link route={props.routes.claimDetails.getLink(linkProps)}>View claim</Link>;
+      return <Link route={props.routes.claimDetails.getLink(linkProps)}>{getContent(x => x.components.claimDetailsLinkContent.viewClaimText)}</Link>;
 
     default:
       return null;

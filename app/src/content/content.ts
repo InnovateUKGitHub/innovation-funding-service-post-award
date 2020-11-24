@@ -98,6 +98,7 @@ import { ReportFormContent } from "./components/reportFormContent";
 import { ForecastDetailsContent } from "./components/forecastDetailsContent";
 import { WarningContent } from "./components/warningContent";
 import { OnHoldContent } from "./components/onHoldContent";
+import { ClaimDetailsLinkContent } from "./components/claimDetailsLinkContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -214,6 +215,7 @@ export class Content extends ContentBase {
     forecastDetails: ForecastDetailsContent;
     warningContent: WarningContent;
     onHoldContent: OnHoldContent;
+    claimDetailsLinkContent: ClaimDetailsLinkContent;
   };
 
   constructor(protected project: ProjectDto | null | undefined) {
@@ -330,7 +332,8 @@ export class Content extends ContentBase {
       reportForm: new ReportFormContent(this, project),
       forecastDetails: new ForecastDetailsContent(this, project),
       warningContent: new WarningContent(this, project),
-      onHoldContent: new OnHoldContent(this, project)
+      onHoldContent: new OnHoldContent(this, project),
+      claimDetailsLinkContent: new ClaimDetailsLinkContent(this, project)
     };
   }
 }
