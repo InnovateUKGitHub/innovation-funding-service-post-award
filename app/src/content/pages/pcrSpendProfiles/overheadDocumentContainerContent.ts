@@ -13,10 +13,10 @@ export class PcrSpendProfileOverheadDocumentContent extends ContentPageBase {
   public readonly labels = new DocumentLabels(this, this.project);
   public readonly messages = new DocumentMessages(this, this.project);
 
-  public readonly guidanceHeading = () => this.getContent("guidance-heading");
-  public readonly backLink = () => this.getContent("back-link");
-  public readonly submitButton = () => this.getContent("button-submit");
-  public readonly documentUploadGuidance = () => this.getContent("guidance-document-upload", { markdown: true });
-  public readonly documentUploadHeading = () => this.getContent("document-upload-heading");
-  public readonly templateHeading = () => this.getContent("heading-template");
+  public readonly guidanceHeading = this.getContent("guidance-heading");
+  public readonly backLink = this.getContent("back-link");
+  public readonly submitButton = this.getContent("button-submit");
+  public readonly documentUploadGuidance = this.getContent("guidance-document-upload", { markdown: true });
+  public readonly documentUploadHeading = this.getContent("document-upload-heading");
+  public readonly templateHeading = this.getContent("heading-template");
 }

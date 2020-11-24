@@ -20,5 +20,5 @@ export class PcrSpendProfileMessages extends ContentBase {
                 return this.getContent(`cost-guidance-default`, {markdown: true});
         }
     }
-    public readonly overHeadsCalculatedGuidance = () => this.getContent("calculated-guidance-overheads");
+    public readonly overHeadsCalculatedGuidance = this.getContent("calculated-guidance-overheads");
 }

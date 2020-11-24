@@ -22,18 +22,18 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
     return (
       <React.Fragment>
-        <ACC.Section qa="de-minimis" titleContent={x => x.pcrAddPartnerStateAidEligibilityContent.deMinimisTitle()}>
-          <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.deMinimisGuidance()}/>
+        <ACC.Section qa="de-minimis" titleContent={x => x.pcrAddPartnerStateAidEligibilityContent.deMinimisTitle}>
+          <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.deMinimisGuidance}/>
           {this.renderDeMinimisForm(documentsEditor)}
           {this.renderDeMinimisFiles(documentsEditor, documents)}
         </ACC.Section>
         <Form.Form qa="saveAndContinue" data={pcrItem} onSubmit={() => onSave()}>
           <Form.Fieldset>
             <Form.Submit>
-              <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.pcrItem.submitButton()}/>
+              <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.pcrItem.submitButton}/>
             </Form.Submit>
             <Form.Button name="saveAndReturnToSummary" onClick={() => onSave(true)}>
-              <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.pcrItem.returnToSummaryButton()}/>
+              <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.pcrItem.returnToSummaryButton}/>
             </Form.Button>
           </Form.Fieldset>
         </Form.Form>
@@ -49,7 +49,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
       <ACC.Section>
         <ACC.LinksList
           openNewWindow={true}
-          links={itemType.files.map(x => ({ url: x.relativeUrl, textContent: (content: Content) => content.pcrAddPartnerStateAidEligibilityContent.labels.deMinimisDeclarationForm() }))}
+          links={itemType.files.map(x => ({ url: x.relativeUrl, textContent: (content: Content) => content.pcrAddPartnerStateAidEligibilityContent.labels.deMinimisDeclarationForm }))}
         />
       </ACC.Section>
     );
@@ -66,14 +66,14 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           onChange={(dto) => this.props.onFileChange(false, dto)}
           qa="projectChangeRequestItemUpload"
         >
-          <UploadForm.Fieldset headingContent={x => x.pcrAddPartnerStateAidEligibilityContent.templateSectionTitle()} qa="template">
+          <UploadForm.Fieldset headingContent={x => x.pcrAddPartnerStateAidEligibilityContent.templateSectionTitle} qa="template">
             {this.renderTemplateLinks(this.props.pcrItemType)}
           </UploadForm.Fieldset>
-          <UploadForm.Fieldset headingContent={x => x.pcrAddPartnerStateAidEligibilityContent.uploadDeclarationSectionTitle()} qa="documentGuidance">
+          <UploadForm.Fieldset headingContent={x => x.pcrAddPartnerStateAidEligibilityContent.uploadDeclarationSectionTitle} qa="documentGuidance">
             <UploadForm.Hidden name="description" value={x => DocumentDescription.DeMinimisDeclarationForm} />
             <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
-              labelContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.uploadInputLabel()}
+              labelContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.uploadInputLabel}
               name="attachment"
               labelHidden={true}
               value={data => data.files}
@@ -86,7 +86,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
             <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}>
-              <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.uploadButtonLabel()} />
+              <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.uploadButtonLabel} />
             </UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
@@ -98,8 +98,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     if (documents.length) {
       return (
         <ACC.Section
-          titleContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.filesUploadedTitle()}
-          subtitleContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.filesUploadedSubtitle()}
+          titleContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.filesUploadedTitle}
+          subtitleContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.filesUploadedSubtitle}
         >
           {
             documents.length
@@ -110,8 +110,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
       );
     }
     return (
-      <ACC.Section titleContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.filesUploadedTitle()}>
-        <ACC.ValidationMessage message={x => x.pcrAddPartnerStateAidEligibilityContent.documentMessages.noDocumentsUploaded()} messageType="info" />
+      <ACC.Section titleContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.filesUploadedTitle}>
+        <ACC.ValidationMessage message={x => x.pcrAddPartnerStateAidEligibilityContent.documentMessages.noDocumentsUploaded} messageType="info" />
       </ACC.Section>
     );
   }

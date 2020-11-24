@@ -20,7 +20,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
   const selectedSizeOption = props.pcrItem.participantSize && sizeOptions.find(x => parseInt(x.id, 10) === props.pcrItem.participantSize);
 
   return (
-    <ACC.Section titleContent={x => x.pcrAddPartnerOrganisationDetails.sectionTitle()}>
+    <ACC.Section titleContent={x => x.pcrAddPartnerOrganisationDetails.sectionTitle}>
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
@@ -28,9 +28,9 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
         onSubmit={() => props.onSave()}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset headingContent={x => x.pcrAddPartnerOrganisationDetails.labels.organisationSizeHeading()}>
+        <Form.Fieldset headingContent={x => x.pcrAddPartnerOrganisationDetails.labels.organisationSizeHeading}>
           <React.Fragment>
-            <SimpleString><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.guidance()}/></SimpleString>
+            <SimpleString><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.guidance}/></SimpleString>
           </React.Fragment>
           <Form.Radio
             name="participantSize"
@@ -44,7 +44,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
             validation={props.validator.participantSize}
           />
         </Form.Fieldset>
-        <Form.Fieldset headingContent={x => x.pcrAddPartnerOrganisationDetails.labels.employeeCountHeading()}>
+        <Form.Fieldset headingContent={x => x.pcrAddPartnerOrganisationDetails.labels.employeeCountHeading}>
           <Form.Numeric
             name="numberOfEmployees"
             width={4}
@@ -54,8 +54,8 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
           />
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
-          <Form.Submit><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.pcrItem.submitButton()}/></Form.Submit>
-          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.pcrItem.returnToSummaryButton()}/></Form.Button>
+          <Form.Submit><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.pcrItem.submitButton}/></Form.Submit>
+          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.pcrItem.returnToSummaryButton}/></Form.Button>
         </Form.Fieldset>
       </Form.Form>
     </ACC.Section>

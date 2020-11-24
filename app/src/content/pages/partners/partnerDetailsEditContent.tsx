@@ -10,9 +10,9 @@ export class PartnerDetailsEditContent extends ContentPageBase {
 
   public readonly contactLabels = new ProjectContactLabels(this, this.project);
 
-  public readonly postcodeSectionTitle = () => this.getContent("section-title-postcode");
-  public readonly currentPostcodeLabel = () => this.getContent("label-current-postcode");
-  public readonly newPostcodeLabel = () => this.getContent("label-new-postcode");
-  public readonly newPostcodeHint = () => this.getContent("hint-new-postcode");
-  public readonly buttonSaveAndReturnPartnerDetails = () => this.getContent("save-and-return-partner-details-button");
+  public readonly postcodeSectionTitle = this.getContent("section-title-postcode");
+  public readonly currentPostcodeLabel = this.getContent("label-current-postcode");
+  public readonly newPostcodeLabel = this.getContent("label-new-postcode");
+  public readonly newPostcodeHint = this.getContent("hint-new-postcode");
+  public readonly buttonSaveAndReturnPartnerDetails = this.getContent("save-and-return-partner-details-button");
 }

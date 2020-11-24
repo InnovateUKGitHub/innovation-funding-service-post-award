@@ -24,7 +24,7 @@ export class MaterialsFormComponent extends Component<SpendProfileCostFormProps<
             value={dto => dto.id}
           />
           <Form.String
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.materials.item()}
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.materials.item}
             width={"one-third"}
             name="description"
             value={dto => dto.description}
@@ -32,7 +32,7 @@ export class MaterialsFormComponent extends Component<SpendProfileCostFormProps<
             validation={validator && validator.description}
           />
           <Form.Numeric
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.materials.quantity()}
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.materials.quantity}
             name="quantity"
             width={"one-third"}
             value={dto => dto.quantity}
@@ -40,7 +40,7 @@ export class MaterialsFormComponent extends Component<SpendProfileCostFormProps<
             validation={validator && validator.quantity}
           />
           <Form.Numeric
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.materials.costPerItem()}
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.materials.costPerItem}
             name="costPerItem"
             width={"one-third"}
             value={dto => dto.costPerItem}
@@ -48,7 +48,7 @@ export class MaterialsFormComponent extends Component<SpendProfileCostFormProps<
             validation={validator && validator.costPerItem}
           />
           {this.props.isClient && <Form.Custom
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.materials.totalCost()}
+            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.materials.totalCost}
             labelBold={true}
             name="totalCost"
             value={dto => <ACC.Renderers.SimpleString><ACC.Renderers.Currency value={dto.value}/></ACC.Renderers.SimpleString>}

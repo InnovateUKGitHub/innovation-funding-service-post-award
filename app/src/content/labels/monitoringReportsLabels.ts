@@ -6,6 +6,6 @@ export class MonitoringReportsLabels extends ContentBase {
     super(parent, "monitoring-reports-labels", project);
   }
 
-  public readonly statusAndCommentsLog = () => this.getContent("status-and-comments-log");
-  public readonly additionalComments = () => this.getContent("additional-comments");
+  public readonly statusAndCommentsLog = this.getContent("status-and-comments-log");
+  public readonly additionalComments = this.getContent("additional-comments");
 }

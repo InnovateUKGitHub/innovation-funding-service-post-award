@@ -10,14 +10,14 @@ export const OtherFundingStep = (props: PcrStepProps<PCRItemForPartnerAdditionDt
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
 
   const options: ACC.SelectOption[] = [{
-    id: "true", value: <Content value={x => x.pcrAddPartnerOtherFunding.labels.otherFundsYes()}/>
+    id: "true", value: <Content value={x => x.pcrAddPartnerOtherFunding.labels.otherFundsYes}/>
   }, {
-    id: "false", value: <Content value={x => x.pcrAddPartnerOtherFunding.labels.otherFundsNo()}/>
+    id: "false", value: <Content value={x => x.pcrAddPartnerOtherFunding.labels.otherFundsNo}/>
   }];
 
   return (
-    <ACC.Section titleContent={x => x.pcrAddPartnerOtherFunding.formSectionTitle()}>
-      <Content value={x => x.pcrAddPartnerOtherFunding.guidance()} />
+    <ACC.Section titleContent={x => x.pcrAddPartnerOtherFunding.formSectionTitle}>
+      <Content value={x => x.pcrAddPartnerOtherFunding.guidance} />
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
@@ -28,7 +28,7 @@ export const OtherFundingStep = (props: PcrStepProps<PCRItemForPartnerAdditionDt
         <Form.Fieldset>
           <Form.Radio
             name="hasOtherFunding"
-            labelContent={x => x.pcrAddPartnerOtherFunding.questionLabel()}
+            labelContent={x => x.pcrAddPartnerOtherFunding.questionLabel}
             labelHidden={true}
             options={options}
             inline={false}
@@ -45,10 +45,10 @@ export const OtherFundingStep = (props: PcrStepProps<PCRItemForPartnerAdditionDt
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
           <Form.Submit>
-            <ACC.Content value={x => x.pcrAddPartnerOtherFunding.pcrItem.submitButton()}/>
+            <ACC.Content value={x => x.pcrAddPartnerOtherFunding.pcrItem.submitButton}/>
           </Form.Submit>
           <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
-            <Content value={x => x.pcrAddPartnerOtherFunding.pcrItem.returnToSummaryButton()} />
+            <Content value={x => x.pcrAddPartnerOtherFunding.pcrItem.returnToSummaryButton} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>

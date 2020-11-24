@@ -29,7 +29,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRP
         onSubmit={() => props.onSave()}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset headingContent={x => x.pcrRemovePartner.selectPartnerHeading()}>
+        <Form.Fieldset headingContent={x => x.pcrRemovePartner.selectPartnerHeading}>
           <Form.Radio
             name="partnerId"
             hint={props.getRequiredToCompleteMessage()}
@@ -40,10 +40,10 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRP
             validation={props.validator.partnerId}
           />
         </Form.Fieldset>
-        <Form.Fieldset headingContent={x => x.pcrRemovePartner.removalPeriodHeading()}>
+        <Form.Fieldset headingContent={x => x.pcrRemovePartner.removalPeriodHeading}>
           <Form.Numeric
-            labelContent={x => x.pcrRemovePartner.labels.removalPeriod()}
-            hintContent={x => x.pcrRemovePartner.removalPeriodHint()}
+            labelContent={x => x.pcrRemovePartner.labels.removalPeriod}
+            hintContent={x => x.pcrRemovePartner.removalPeriodHint}
             labelHidden={true}
             width={3}
             name="removalPeriod"
@@ -52,7 +52,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRP
             validation={props.validator.removalPeriod}
           />
         </Form.Fieldset>
-        <Form.Submit><ACC.Content value={x => x.pcrRemovePartner.pcrItem.submitButton()}/></Form.Submit>
+        <Form.Submit><ACC.Content value={x => x.pcrRemovePartner.pcrItem.submitButton}/></Form.Submit>
       </Form.Form>
     </ACC.Section>
   );

@@ -10,7 +10,7 @@ export class PCRScopeChangePublicDescriptionChangeContent extends ContentPageBas
 
   public readonly pcrItem = new PCRItem(this, this.project);
 
-  public readonly publicDescriptionHeading = () => this.getContent("heading-public-description");
-  public readonly publishedDescription = () => this.getContent("published-description");
-  public readonly noAvailableDescription = () => this.getContent("no-available-description");
+  public readonly publicDescriptionHeading = this.getContent("heading-public-description");
+  public readonly publishedDescription = this.getContent("published-description");
+  public readonly noAvailableDescription = this.getContent("no-available-description");
 }

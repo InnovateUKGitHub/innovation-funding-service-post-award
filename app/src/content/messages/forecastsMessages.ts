@@ -7,7 +7,7 @@ export class ForecastsMessages extends ContentBase {
     super(parent, "forecasts-messages", project);
   }
 
-  public readonly projectChangeWarning = () => this.getContent("warning-period-change");
-  public readonly projectEnded = () => this.getContent("project-ended");
-  public readonly finalClaim = () => this.getContent("final-claim");
+  public readonly projectChangeWarning = this.getContent("warning-period-change");
+  public readonly projectEnded = this.getContent("project-ended");
+  public readonly finalClaim = this.getContent("final-claim");
 }

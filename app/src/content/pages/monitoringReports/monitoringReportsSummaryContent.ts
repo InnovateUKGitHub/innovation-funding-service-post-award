@@ -12,7 +12,7 @@ export class MonitoringReportsSummaryContent extends ContentPageBase {
   public readonly messages = new MonitoringReportsMessages(this, this.project);
   public readonly labels = new MonitoringReportsLabels(this, this.project);
 
-  public readonly editItemButton = () => this.getContent("button-edit-item");
-  public readonly submitButton = () => this.getContent("button-submit");
-  public readonly saveAndReturnButton = () => this.getContent("button-save-and-return");
+  public readonly editItemButton = this.getContent("button-edit-item");
+  public readonly submitButton = this.getContent("button-submit");
+  public readonly saveAndReturnButton = this.getContent("button-save-and-return");
 }

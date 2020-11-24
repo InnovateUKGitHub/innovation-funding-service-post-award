@@ -85,13 +85,13 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}><ACC.Content value={x => x.claimReview.backLink()}/></ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}><ACC.Content value={x => x.claimReview.backLink}/></ACC.BackLink>}
         error={data.editor.error}
         validator={[data.editor.validator, data.documentsEditor.validator]}
         pageTitle={<ACC.Projects.Title project={data.project} />}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={x => x.claimReview.messages.finalClaim()}/>}
+        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={x => x.claimReview.messages.finalClaim}/>}
         {this.renderClaimReviewSection(data)}
         <ACC.Section>
           <ACC.Accordion>
@@ -131,7 +131,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     });
 
     return (
-      <ACC.AccordionItem titleContent={x => x.claimReview.labels.forecastAccordionTitle()} qa="forecast-accordion">
+      <ACC.AccordionItem titleContent={x => x.claimReview.labels.forecastAccordionTitle} qa="forecast-accordion">
         <ACC.Loader
           pending={pendingForecastData}
           render={(forecastData) => (<ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />)}
@@ -147,8 +147,8 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   private renderForm(data: CombinedData) {
     const Form = ACC.TypedForm<ClaimDto>();
     const options: ACC.SelectOption[] = [
-      { id: ClaimStatus.MO_QUERIED, value: <ACC.Content value={x => x.claimReview.queryClaimOption()} /> },
-      { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: <ACC.Content value={x => x.claimReview.approveClaimOption()} /> },
+      { id: ClaimStatus.MO_QUERIED, value: <ACC.Content value={x => x.claimReview.queryClaimOption} /> },
+      { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: <ACC.Content value={x => x.claimReview.approveClaimOption} /> },
     ];
 
     return (
@@ -158,7 +158,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
         onChange={(dto) => this.props.onUpdate(false, dto)}
         qa="review-form"
       >
-        <Form.Fieldset headingContent={x => x.claimReview.howToProceedSectionTitle()}>
+        <Form.Fieldset headingContent={x => x.claimReview.howToProceedSectionTitle}>
           <Form.Radio
             name="status"
             options={options}
@@ -177,7 +177,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     return (
-      <ACC.AccordionItem titleContent={x => x.claimReview.uploadClaimValidationFormAccordionTitle()} qa="upload-claims-validation-form-accordion">
+      <ACC.AccordionItem titleContent={x => x.claimReview.uploadClaimValidationFormAccordionTitle} qa="upload-claims-validation-form-accordion">
         <UploadForm.Form
           enctype="multipart"
           editor={data.documentsEditor}
@@ -186,10 +186,10 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
           qa="projectDocumentUpload"
         >
           <UploadForm.Fieldset>
-            <ACC.Content value={x => x.claimReview.messages.uploadClaimValidationFormInstructions()} />
+            <ACC.Content value={x => x.claimReview.messages.uploadClaimValidationFormInstructions} />
             <ACC.DocumentGuidanceWithContent documentMessages={x => x.claimReview.documentMessages} />
             <UploadForm.MulipleFileUpload
-              labelContent={x => x.claimReview.uploadInputLabel()}
+              labelContent={x => x.claimReview.uploadInputLabel}
               name="attachment"
               labelHidden={true}
               value={x => x.files}
@@ -197,7 +197,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
               validation={data.documentsEditor.validator.files}
             />
           </UploadForm.Fieldset>
-          <UploadForm.Submit styling="Secondary"><ACC.Content value={x => x.claimReview.uploadButton()} /></UploadForm.Submit>
+          <UploadForm.Submit styling="Secondary"><ACC.Content value={x => x.claimReview.uploadButton} /></UploadForm.Submit>
         </UploadForm.Form>
         {this.renderDocumentList(data.documentsEditor, data.documents)}
       </ACC.AccordionItem>
@@ -207,7 +207,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   private renderDocumentList(editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (!documents.length) {
       return (
-        <ACC.ValidationMessage message={x => x.claimDocuments.documentMessages.noDocumentsUploaded()} messageType="info" />
+        <ACC.ValidationMessage message={x => x.claimDocuments.documentMessages.noDocumentsUploaded} messageType="info" />
       );
     }
 
@@ -234,11 +234,11 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     return [
       // Returning array here instead of React.Fragment as Fieldset data will not persist through Fragment,
       (
-      <Form.Fieldset key="form" headingContent={x => x.claimReview.additionalInfoSectionTitle()} qa="additional-info-form" headingQa="additional-info-heading">
+      <Form.Fieldset key="form" headingContent={x => x.claimReview.additionalInfoSectionTitle} qa="additional-info-form" headingQa="additional-info-heading">
         <Form.MultilineString
           label="additional-info"
           labelHidden={true}
-          hintContent={x => x.claimReview.additionalInfoHint()}
+          hintContent={x => x.claimReview.additionalInfoHint}
           name="comments"
           value={m => m.comments}
           update={(m, v) => m.comments = v}
@@ -249,7 +249,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       ),
       (
         <ACC.Renderers.SimpleString key="reminder">
-          <ACC.Content value={x => x.claimReview.monitoringReportReminder()} />
+          <ACC.Content value={x => x.claimReview.monitoringReportReminder} />
         </ACC.Renderers.SimpleString>
       ),
       !!submitButtonLabel ? <Form.Submit key="button">{submitButtonLabel}</Form.Submit> : null
@@ -259,11 +259,11 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   private getSubmitButtonLabel(editor: IEditorStore<ClaimDto, ClaimDtoValidator>) {
   // If rendering from the server then always use "Submit"
   if (!this.props.isClient || editor.data.status === ClaimStatus.AWAITING_IUK_APPROVAL) {
-    return <ACC.Content value={x => x.claimReview.submitButton()} />;
+    return <ACC.Content value={x => x.claimReview.submitButton} />;
   }
 
   if (editor.data.status === ClaimStatus.MO_QUERIED) {
-    return <ACC.Content value={x => x.claimReview.sendQueryButton()} />;
+    return <ACC.Content value={x => x.claimReview.sendQueryButton} />;
   }
 
   return null;
@@ -277,7 +277,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
 
   private renderLogsItem() {
   return (
-    <ACC.AccordionItem titleContent={x => x.claimReview.labels.claimLogAccordionTitle()} qa="log-accordion">
+    <ACC.AccordionItem titleContent={x => x.claimReview.labels.claimLogAccordionTitle} qa="log-accordion">
       {/* Keeping logs inside loader because accordion defaults to closed*/}
       <ACC.Loader
         pending={this.props.statusChanges}
@@ -320,12 +320,12 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => (
                 documentsEditor={stores.claimDocuments.getClaimDocumentsEditor(props.projectId, props.partnerId, props.periodId)}
                 onUpdate={(saving, dto) => {
                   stores.messages.clearMessages();
-                  const message = dto.status === ClaimStatus.MO_QUERIED ? content.claimReview.messages.claimQueried() : content.claimReview.messages.claimApproved();
+                  const message = dto.status === ClaimStatus.MO_QUERIED ? content.claimReview.messages.claimQueried : content.claimReview.messages.claimApproved;
                   stores.claims.updateClaimEditor(saving, props.projectId, props.partnerId, props.periodId, dto, message.content, () => stores.navigation.navigateTo(props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })));
                 }}
                 onUpload={(saving, dto) => {
                   stores.messages.clearMessages();
-                  const successMessage = dto.files.length === 1 ? content.claimDocuments.documentMessages.documentUploaded() : content.claimDocuments.documentMessages.documentsUploaded(dto.files.length);
+                  const successMessage = dto.files.length === 1 ? content.claimDocuments.documentMessages.documentUploaded : content.claimDocuments.documentMessages.documentsUploaded(dto.files.length);
                   stores.claimDocuments.updateClaimDocumentsEditor(saving, props.projectId, props.partnerId, props.periodId, dto, successMessage.content);
                 }}
                 onDelete={(dto, document) => {

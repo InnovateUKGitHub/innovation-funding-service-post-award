@@ -14,5 +14,5 @@ export class PCRNameChangePrepareItemFilesContent extends ContentPageBase {
   public readonly documentLabels = new DocumentLabels(this, this.project);
   public readonly doucmentMessages = new DocumentMessages(this, this.project);
 
-  public readonly uploadCertificateHeading = () => this.getContent("heading-upload-certificate");
+  public readonly uploadCertificateHeading = this.getContent("heading-upload-certificate");
 }

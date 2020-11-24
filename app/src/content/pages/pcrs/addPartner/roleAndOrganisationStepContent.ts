@@ -12,9 +12,9 @@ export class PCRAddPartnerRoleAndOrganisationContent extends ContentPageBase {
   public readonly pcrItem = new PCRItem(this, this.project);
   public readonly labels = new PCRAddPartnerLabels(this, this.project);
 
-  public readonly formSectionTitle = () => this.getContent("form-section-title");
-  public readonly validationMessage = () => this.getContent("validation-message");
-  public readonly infoSummary = () => this.getContent("info-summary");
-  public readonly organisationTypeInfo = () => this.getContent("organisation-type-info", { markdown: true });
-  public readonly organisationTypeHint = () => this.getContent("organisation-type-hint");
+  public readonly formSectionTitle = this.getContent("form-section-title");
+  public readonly validationMessage = this.getContent("validation-message");
+  public readonly infoSummary = this.getContent("info-summary");
+  public readonly organisationTypeInfo = this.getContent("organisation-type-info", { markdown: true });
+  public readonly organisationTypeHint = this.getContent("organisation-type-hint");
 }

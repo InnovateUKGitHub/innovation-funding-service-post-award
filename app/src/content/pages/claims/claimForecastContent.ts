@@ -8,8 +8,8 @@ export class ClaimForecastContent extends ContentPageBase {
     super(content, "claim-forecast", project);
   }
   public readonly messages = new ClaimMessages(this, this.project);
-  public readonly backLink = () => this.getContent("back-link");
-  public readonly saveAndReturnButton = () => this.getContent("button-save-and-return");
-  public readonly continueToSummaryButton = () => this.getContent("button-continue-to-summary");
-  public readonly overheadsCosts = () => this.getContent("overheads-costs");
+  public readonly backLink = this.getContent("back-link");
+  public readonly saveAndReturnButton = this.getContent("button-save-and-return");
+  public readonly continueToSummaryButton = this.getContent("button-continue-to-summary");
+  public readonly overheadsCosts = this.getContent("overheads-costs");
 }

@@ -51,17 +51,20 @@ describe("Contacts Table", () => {
   ];
 
   const setupTest = (contacts: IContactsTable["contacts"]) => {
-    const createTestContent = (content: string) => () => ({
-      content,
-      key: content,
-      markdown: false,
-    });
 
     const testLabels = {
-      contactName: createTestContent("Contact"),
-      roleName: createTestContent("Name"),
-      contactEmail: createTestContent("Partner"),
-      noContactsMessage: createTestContent("No contacts exist."),
+      contactName: {
+        content: "Contact"
+      },
+      roleName: {
+        content: "Name"
+      },
+      contactEmail: {
+        content: "Partner"
+      },
+      noContactsMessage: {
+        content: "No contacts exist."
+      },
     } as ProjectContactLabels;
 
     const wrapper = mount(

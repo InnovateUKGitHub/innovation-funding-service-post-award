@@ -9,6 +9,6 @@ export class PCRReasoningPrepareReasoningContent extends ContentPageBase {
   }
 
   public readonly pcrItem = new PCRItem(this, this.project);
-  public readonly hint = () => this.getContent("hint", {markdown: true});
-  public readonly reasoningHeading = () => this.getContent("heading-reasoning");
+  public readonly hint = this.getContent("hint", {markdown: true});
+  public readonly reasoningHeading = this.getContent("heading-reasoning");
 }

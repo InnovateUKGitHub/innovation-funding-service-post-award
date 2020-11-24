@@ -12,5 +12,5 @@ export class PCRAddPartnerAcademicOrganisationContent extends ContentPageBase {
   public readonly pcrItem = new PCRItem(this, this.project);
   public readonly labels = new PCRAddPartnerLabels(this, this.project);
 
-  public readonly hint = () => this.getContent("hint");
+  public readonly hint = this.getContent("hint");
 }

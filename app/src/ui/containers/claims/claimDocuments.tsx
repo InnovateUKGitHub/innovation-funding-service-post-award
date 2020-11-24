@@ -64,16 +64,16 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
         validator={editor.validator}
         backLink={
           <ACC.BackLink route={this.props.routes.prepareClaim.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId, periodId:this.props.periodId})}>
-            <ACC.Content value={x => x.claimDocuments.backLink()} />
+            <ACC.Content value={x => x.claimDocuments.backLink} />
           </ACC.BackLink>
         }
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={x => x.claimDocuments.messages.finalClaim()}/>}
+        {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={x => x.claimDocuments.messages.finalClaim}/>}
         <ACC.Section>
           {this.renderGuidanceText(claim)}
         </ACC.Section>
-        <ACC.Section titleContent={x => x.claimDocuments.uploadSectionTitle()}>
+        <ACC.Section titleContent={x => x.claimDocuments.uploadSectionTitle}>
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
@@ -106,12 +106,12 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
             <UploadForm.Button styling="Secondary" name="upload" onClick={() => this.props.onChange(true, editor.data)}>Upload documents</UploadForm.Button>
           </UploadForm.Form>
         </ACC.Section>
-        <ACC.Section titleContent={x => x.claimDocuments.documentsListSectionTitle()}>
+        <ACC.Section titleContent={x => x.claimDocuments.documentsListSectionTitle}>
           {this.renderDocuments(editor, documents)}
         </ACC.Section>
         <ACC.Section qa="buttons">
           {this.renderNextStepLink(claim)}
-          <ACC.Link styling="SecondaryButton" id="save-claim" route={this.getDashboardLink(project)}><ACC.Content value={x => x.claimDocuments.saveAndReturnButton()} /></ACC.Link>
+          <ACC.Link styling="SecondaryButton" id="save-claim" route={this.getDashboardLink(project)}><ACC.Content value={x => x.claimDocuments.saveAndReturnButton} /></ACC.Link>
         </ACC.Section>
       </ACC.Page>
     );
@@ -121,13 +121,13 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
     if (claim.isFinalClaim) {
       return (
         <ACC.Link styling="PrimaryButton" id="continue-claim" route={this.props.routes.claimSummary.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}>
-          <ACC.Content value={x => x.claimDocuments.saveAndContinueToSummaryButton()}/>
+          <ACC.Content value={x => x.claimDocuments.saveAndContinueToSummaryButton}/>
         </ACC.Link>
       );
     }
     return (
       <ACC.Link styling="PrimaryButton" id="continue-claim" route={this.props.routes.claimForecast.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId})}>
-        <ACC.Content value={x => x.claimDocuments.saveAndContinueToForecastButton()}/>
+        <ACC.Content value={x => x.claimDocuments.saveAndContinueToForecastButton}/>
       </ACC.Link>
     );
   }
@@ -142,12 +142,12 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
   private renderGuidanceText(claim: ClaimDto) {
     if (claim.isIarRequired && claim.isFinalClaim) {
       return (
-        <span data-qa="iarText"><ACC.Content value={x => x.claimDocuments.messages.finalClaimGuidance()}/></span>
+        <span data-qa="iarText"><ACC.Content value={x => x.claimDocuments.messages.finalClaimGuidance}/></span>
       );
     }
 
     if (claim.isIarRequired) {
-      return <ACC.Renderers.SimpleString qa="iarText"><ACC.Content value={x => x.claimDocuments.messages.iarRequired()} /></ACC.Renderers.SimpleString>;
+      return <ACC.Renderers.SimpleString qa="iarText"><ACC.Content value={x => x.claimDocuments.messages.iarRequired} /></ACC.Renderers.SimpleString>;
     }
 
     return null;
@@ -157,7 +157,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
     if (!documents.length) {
       return (
         <ACC.Section>
-          <ACC.ValidationMessage message={x => x.claimDocuments.documentMessages.noDocumentsUploaded()} messageType="info" />
+          <ACC.ValidationMessage message={x => x.claimDocuments.documentMessages.noDocumentsUploaded} messageType="info" />
         </ACC.Section>
       );
     }
@@ -181,12 +181,12 @@ const ClaimDocumentsContainer = (props: ClaimDocumentsPageParams & BaseProps) =>
               editor={stores.claimDocuments.getClaimDocumentsEditor(props.projectId, props.partnerId, props.periodId)}
               documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
               // TODO temporary measure until we get the description types from SF
-              documentDescriptions={Pending.done( getAllEnumValues(DocumentDescription).map(x => ({ id: x, label: content.claimDocuments.documents.labels().documentDescriptionLabel(x).content })) )}
+              documentDescriptions={Pending.done( getAllEnumValues(DocumentDescription).map(x => ({ id: x, label: content.claimDocuments.documents.labels.documentDescriptionLabel(x).content })) )}
               claim={stores.claims.get(props.partnerId, props.periodId)}
               onChange={(saving, dto) => {
                 stores.messages.clearMessages();
                 const successMessage = dto.files.length === 1
-                  ? content.claimDocuments.documentMessages.documentUploadedSuccess().content
+                  ? content.claimDocuments.documentMessages.documentUploadedSuccess.content
                   : content.claimDocuments.documentMessages.documentsUploadedSuccess(dto.files.length).content;
                 stores.claimDocuments.updateClaimDocumentsEditor(saving, props.projectId, props.partnerId, props.periodId, dto, successMessage);
               }}

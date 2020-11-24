@@ -11,7 +11,7 @@ export class PCRReasoningSummaryContent extends ContentPageBase {
 
   public readonly pcrItem = new PCRItem(this, this.project);
   public readonly labels = new PCRReasoningLabels(this, this.project);
-  public readonly markAsCompleteHeading = () => this.getContent("heading-mark-as-complete");
-  public readonly edit = () => this.getContent("edit");
-  public readonly noDocuments = () => this.getContent("no-documents");
+  public readonly markAsCompleteHeading = this.getContent("heading-mark-as-complete");
+  public readonly edit = this.getContent("edit");
+  public readonly noDocuments = this.getContent("no-documents");
 }

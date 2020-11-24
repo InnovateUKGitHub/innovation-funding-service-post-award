@@ -19,7 +19,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
   const selectedProjectLocationOption = props.pcrItem.projectLocation && projectLocationOptions.find(x => parseInt(x.id, 10) === props.pcrItem.projectLocation);
 
   return (
-    <ACC.Section titleContent={x => x.pcrAddPartnerProjectLocationContent.labels.projectLocationHeading()}>
+    <ACC.Section titleContent={x => x.pcrAddPartnerProjectLocationContent.labels.projectLocationHeading}>
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
@@ -30,7 +30,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
         <Form.Fieldset>
           <Form.Radio
             name="projectLocation"
-            hintContent={x => x.pcrAddPartnerProjectLocationContent.projectLocationGuidance()}
+            hintContent={x => x.pcrAddPartnerProjectLocationContent.projectLocationGuidance}
             options={projectLocationOptions}
             inline={false}
             value={() => selectedProjectLocationOption || undefined}
@@ -41,7 +41,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
             validation={props.validator.projectLocation}
           />
         </Form.Fieldset>
-        <Form.Fieldset headingContent={x => x.pcrAddPartnerProjectLocationContent.labels.townOrCityHeading()}>
+        <Form.Fieldset headingContent={x => x.pcrAddPartnerProjectLocationContent.labels.townOrCityHeading}>
           <Form.String
             name="projectCity"
             value={dto => dto.projectCity}
@@ -51,10 +51,10 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
             validation={props.validator.projectCity}
           />
         </Form.Fieldset>
-        <Form.Fieldset headingContent={x => x.pcrAddPartnerProjectLocationContent.labels.postcodeHeading()}>
+        <Form.Fieldset headingContent={x => x.pcrAddPartnerProjectLocationContent.labels.postcodeHeading}>
           <Form.String
             name="projectPostcode"
-            hintContent={x => x.pcrAddPartnerProjectLocationContent.postcodeGuidance()}
+            hintContent={x => x.pcrAddPartnerProjectLocationContent.postcodeGuidance}
             value={dto => dto.projectPostcode}
             update={(x, val) => {
               x.projectPostcode = val;
@@ -63,8 +63,8 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
           />
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
-          <Form.Submit><ACC.Content value={x => x.pcrAddPartnerProjectLocationContent.pcrItem.submitButton()} /></Form.Submit>
-          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerProjectLocationContent.pcrItem.returnToSummaryButton()} /></Form.Button>
+          <Form.Submit><ACC.Content value={x => x.pcrAddPartnerProjectLocationContent.pcrItem.submitButton} /></Form.Submit>
+          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerProjectLocationContent.pcrItem.returnToSummaryButton} /></Form.Button>
         </Form.Fieldset>
       </Form.Form>
     </ACC.Section>

@@ -20,12 +20,12 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     const roleOptions = this.getOptions(this.props.pcrItem.projectRole, this.props.pcrProjectRoles);
     const typeOptions = this.getOptions(this.props.pcrItem.partnerType, this.props.pcrPartnerTypes);
     const commercialWorkOptions: ACC.SelectOption[] = [{
-      id: "true", value: <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkYes()}/>
+      id: "true", value: <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkYes}/>
     }, {
-      id: "false", value: <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkNo()}/>
+      id: "false", value: <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkNo}/>
     }];
     return (
-      <ACC.Section qa="role-and-partner-type" titleContent={x => x.pcrAddPartnerRoleAndOrganisation.formSectionTitle()}>
+      <ACC.Section qa="role-and-partner-type" titleContent={x => x.pcrAddPartnerRoleAndOrganisation.formSectionTitle}>
         <Form.Form
           qa="addPartnerForm"
           data={this.props.pcrItem}
@@ -33,8 +33,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           onSubmit={() => this.onSave(this.props.pcrItem)}
           onChange={dto => this.onChange(dto)}
         >
-          <ACC.ValidationMessage messageType="info" message={x => x.pcrAddPartnerRoleAndOrganisation.validationMessage()}/>
-          <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.roleHeading()}>
+          <ACC.ValidationMessage messageType="info" message={x => x.pcrAddPartnerRoleAndOrganisation.validationMessage}/>
+          <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.roleHeading}>
             <Form.Radio
               name="projectRole"
               options={roleOptions.options}
@@ -47,11 +47,11 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
               validation={this.props.validator.projectRole}
             />
           </Form.Fieldset>
-          <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkHeading()}>
+          <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkHeading}>
             <Form.Radio
               name="isCommercialWork"
-              labelContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkLabel()}
-              hintContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkHint()}
+              labelContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkLabel}
+              hintContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkHint}
               options={commercialWorkOptions}
               inline={false}
               value={(dto) => {
@@ -65,13 +65,13 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
               validation={this.props.validator.isCommercialWork}
             />
           </Form.Fieldset>
-          <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.organisationHeading()}>
-            <ACC.Info summary={<ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.infoSummary()}/>}>
-              <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.organisationTypeInfo()}/>
+          <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.organisationHeading}>
+            <ACC.Info summary={<ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.infoSummary}/>}>
+              <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.organisationTypeInfo}/>
             </ACC.Info>
             <Form.Radio
               name="partnerType"
-              hintContent={x => x.pcrAddPartnerRoleAndOrganisation.organisationTypeHint()}
+              hintContent={x => x.pcrAddPartnerRoleAndOrganisation.organisationTypeHint}
               options={typeOptions.options}
               inline={false}
               value={() => typeOptions.selected}
@@ -95,8 +95,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
             />
         </Form.Fieldset>
           <Form.Fieldset qa="save-and-continue">
-            <Form.Submit><ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.pcrItem.submitButton()}/></Form.Submit>
-            <Form.Button name="saveAndReturnToSummary" onClick={() => this.onSave(this.props.pcrItem, true)}><ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.pcrItem.returnToSummaryButton()}/></Form.Button>
+            <Form.Submit><ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.pcrItem.submitButton}/></Form.Submit>
+            <Form.Button name="saveAndReturnToSummary" onClick={() => this.onSave(this.props.pcrItem, true)}><ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.pcrItem.returnToSummaryButton}/></Form.Button>
           </Form.Fieldset>
         </Form.Form>
       </ACC.Section>

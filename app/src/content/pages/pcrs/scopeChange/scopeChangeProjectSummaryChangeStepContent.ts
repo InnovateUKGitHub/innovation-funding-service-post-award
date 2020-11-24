@@ -10,7 +10,7 @@ export class PCRScopeChangeProjectSummaryChangeContent extends ContentPageBase {
 
   public readonly pcrItem = new PCRItem(this, this.project);
 
-  public readonly projectSummaryHeading = () => this.getContent("heading-project-summary");
-  public readonly publishedSummary = () => this.getContent("published-summary");
-  public readonly noAvailableSummary = () => this.getContent("no-available-summary");
+  public readonly projectSummaryHeading = this.getContent("heading-project-summary");
+  public readonly publishedSummary = this.getContent("published-summary");
+  public readonly noAvailableSummary = this.getContent("no-available-summary");
 }

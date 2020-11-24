@@ -28,7 +28,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRA
         onSubmit={() => props.onSave()}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset headingContent={x => x.pcrNameChange.selectPartnerHeading()}>
+        <Form.Fieldset headingContent={x => x.pcrNameChange.selectPartnerHeading}>
           <Form.Radio
             name="partnerId"
             hint={props.getRequiredToCompleteMessage()}
@@ -39,9 +39,9 @@ const InnerContainer = (props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRA
             validation={props.validator.partnerId}
           />
         </Form.Fieldset>
-        <Form.Fieldset headingContent={x => x.pcrNameChange.enterNameHeading()}>
+        <Form.Fieldset headingContent={x => x.pcrNameChange.enterNameHeading}>
           <Form.String
-            labelContent={x => x.pcrNameChange.labels.enterName()}
+            labelContent={x => x.pcrNameChange.labels.enterName}
             hint={props.getRequiredToCompleteMessage()}
             labelHidden={true}
             name="accountName"
@@ -50,7 +50,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRA
             validation={props.validator.accountName}
           />
         </Form.Fieldset>
-        <Form.Submit><ACC.Content value={x => x.pcrNameChange.pcrItem.submitButton()}/></Form.Submit>
+        <Form.Submit><ACC.Content value={x => x.pcrNameChange.pcrItem.submitButton}/></Form.Submit>
       </Form.Form>
     </ACC.Section>
   );

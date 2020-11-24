@@ -36,11 +36,11 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
     return (
       <ACC.Page
         pageTitle={<ACC.Projects.Title project={project} />}
-        backLink={<ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}><ACC.Content value={(x) => x.monitoringReportsDelete.backLink()} /></ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}><ACC.Content value={(x) => x.monitoringReportsDelete.backLink} /></ACC.BackLink>}
         error={editor.error}
       >
         <ACC.Section>
-          <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsDelete.messages.deletingMonitoringReportMessage()} /></ACC.Renderers.SimpleString>
+          <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsDelete.messages.deletingMonitoringReportMessage} /></ACC.Renderers.SimpleString>
           <DeleteForm.Form editor={editor} qa="monitoringReportDelete">
             <DeleteForm.Fieldset>
               <DeleteForm.Button
@@ -50,7 +50,7 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
                 onClick={() => this.props.delete(editor.data)}
                 value={editor.data.headerId}
               >
-                <ACC.Content value={(x) => x.monitoringReportsDelete.deleteReportButton()} />
+                <ACC.Content value={(x) => x.monitoringReportsDelete.deleteReportButton} />
               </DeleteForm.Button>
             </DeleteForm.Fieldset>
           </DeleteForm.Form>
@@ -70,7 +70,7 @@ const DeleteVerificationContainer = (props: MonitoringReportDeleteParams&BasePro
               <DeleteVerificationComponent
                 project={stores.projects.getById(props.projectId)}
                 editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
-                delete={(dto) => stores.monitoringReports.deleteReport(props.projectId, props.id, dto, content.monitoringReportsDelete.messages.onDeleteMonitoringReportMessage().content, () => stores.navigation.navigateTo(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId })))}
+                delete={(dto) => stores.monitoringReports.deleteReport(props.projectId, props.id, dto, content.monitoringReportsDelete.messages.onDeleteMonitoringReportMessage.content, () => stores.navigation.navigateTo(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId })))}
                 {...props}
               />
             )

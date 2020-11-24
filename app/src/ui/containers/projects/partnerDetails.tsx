@@ -48,17 +48,17 @@ class PartnerDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                 <ACC.Section>
                     <ACC.SummaryList qa="partner-details">
                         <ACC.SummaryListItem
-                            labelContent={x => x.partnerDetails.contactLabels.partnerName()}
+                            labelContent={x => x.partnerDetails.contactLabels.partnerName}
                             qa="partner-name"
                             content={<ACC.Renderers.SimpleString>{partner.name}</ACC.Renderers.SimpleString>}
                         />
                         <ACC.SummaryListItem
-                            labelContent={x => x.partnerDetails.contactLabels.partnerType()}
+                            labelContent={x => x.partnerDetails.contactLabels.partnerType}
                             qa="partner-type"
                             content={<ACC.Renderers.SimpleString>{partner.type}</ACC.Renderers.SimpleString>}
                         />
                         <ACC.SummaryListItem
-                            labelContent={x => x.partnerDetails.contactLabels.partnerPostcode()}
+                            labelContent={x => x.partnerDetails.contactLabels.partnerPostcode}
                             qa="partner-postcode"
                             content={<ACC.Renderers.SimpleString>{partner.postcode}</ACC.Renderers.SimpleString>}
                             action={isFC || isPM ? <ACC.Link styling={"Link"} route={this.props.routes.partnerDetailsEdit.getLink({ id: this.props.id, partnerId: this.props.partnerId })}>Edit</ACC.Link> : null}

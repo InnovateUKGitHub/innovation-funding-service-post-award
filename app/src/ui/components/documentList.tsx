@@ -101,7 +101,7 @@ export const DocumentTable: React.FunctionComponent<DocumentTableProps> = ({ doc
   return (
       <ProjectDocumentsTable.Table data={documents} qa={qa}>
         <ProjectDocumentsTable.Custom header="File name" qa="fileName" value={x => renderDocumentName(x)} />
-        <ProjectDocumentsTable.Custom header="Type" qa="fileType" value={x => x.description ? <Content value={c => c.components.documents.labels().documentDescriptionLabel(x.description!)}/> : null} />
+        <ProjectDocumentsTable.Custom header="Type" qa="fileType" value={x => x.description ? <Content value={c => c.components.documents.labels.documentDescriptionLabel(x.description!)}/> : null} />
         <ProjectDocumentsTable.ShortDate header="Date uploaded" qa="dateUploaded" value={x => x.dateCreated} />
         <ProjectDocumentsTable.Custom header="Size" qa="fileSize" classSuffix="numeric" value={x => getFileSize(x.fileSize)} />
         <ProjectDocumentsTable.String header="Uploaded by" qa="uploadedBy" value={x => x.uploadedBy} />

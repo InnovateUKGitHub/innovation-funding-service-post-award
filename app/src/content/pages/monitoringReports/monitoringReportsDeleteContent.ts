@@ -12,7 +12,7 @@ export class MonitoringReportsDeleteContent extends ContentPageBase {
   public readonly messages = new MonitoringReportsMessages(this, this.project);
   public readonly labels = new MonitoringReportsLabels(this, this.project);
 
-  public readonly backLink = () => this.getContent("back-link");
+  public readonly backLink = this.getContent("back-link");
 
-  public readonly deleteReportButton = () => this.getContent("button-delete-report");
+  public readonly deleteReportButton = this.getContent("button-delete-report");
 }

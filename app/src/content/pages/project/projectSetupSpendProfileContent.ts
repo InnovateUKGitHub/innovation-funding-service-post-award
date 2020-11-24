@@ -7,7 +7,7 @@ export class ProjectSetupSpendProfileContent extends ContentPageBase {
     super(content, "project-setup-spend-profile", project);
   }
 
-  public readonly guidanceMessage = () => this.getContent("guidance-message");
-  public readonly submitButton = () => this.getContent("submit-button");
-  public readonly backLink = () => this.getContent("back-link");
+  public readonly guidanceMessage = this.getContent("guidance-message");
+  public readonly submitButton = this.getContent("submit-button");
+  public readonly backLink = this.getContent("back-link");
 }
