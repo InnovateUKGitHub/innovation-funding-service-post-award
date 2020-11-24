@@ -1,103 +1,140 @@
 import React from "react";
-// tslint:disable-next-line: import-blacklist
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
+import { renderHook } from "@testing-library/react-hooks";
+
+import TestBed, { TestBedContent } from "../helpers/TestBed";
 import { PartnerStatus, ProjectStatus } from "@framework/dtos";
 import { ErrorCode, IAppError } from "@framework/types";
-import { Results } from "@ui/validation";
+import { Result, Results } from "@ui/validation";
 
-import { Page, PageProps } from "../../../src/ui/components/layout/page";
-import { findByQa } from "../helpers/find-by-qa";
-import TestBed, { TestBedContent } from "../helpers/TestBed";
+import {
+  Page,
+  PageProps,
+  PageValidationPartnerStatus,
+  PageValidationProjectStatus,
+  usePageValidationMessage,
+} from "../../../src/ui/components/layout/page";
+
+describe("usePageValidationMessage()", () => {
+  const renderPageContent = (project: PageValidationProjectStatus, partner: PageValidationPartnerStatus) => {
+    return renderHook(() => usePageValidationMessage(project, partner));
+  };
+
+  it("should return null", () => {
+    const { result } = renderPageContent(ProjectStatus.Live, PartnerStatus.Active);
+
+    expect(result.current).toBeNull();
+  });
+
+  it("should return project hold message", () => {
+    const { result } = renderPageContent(ProjectStatus.OnHold, PartnerStatus.Active);
+
+    expect(result.current).toBe("This project is on hold. Contact Innovate UK for more information.");
+  });
+
+  it("should return partner hold message", () => {
+    const { result } = renderPageContent(ProjectStatus.Live, PartnerStatus.OnHold);
+
+    expect(result.current).toBe("Partner is on hold. Contact Innovate UK for more information.");
+  });
+});
 
 describe("<Page />", () => {
-  const defaultProps = {
-    pageTitle: <h1>stub-pageTitle</h1>,
-    children: <p>stub-children</p>,
+  const stubTitleQa = "title-qa";
+  const stubChildrenQa = "children-qa";
+
+  const defaultProps: PageProps = {
+    pageTitle: <h1 data-qa={stubTitleQa}>stub title</h1>,
+    children: <div data-qa={stubChildrenQa}>stub children</div>,
+  };
+
+  const stubContent = {
+    components: {
+      validationSummary: {
+        validationsTitle: { content: "stub-validationsTitle" },
+      },
+      errorSummary: {
+        errorTitle: { content: "stub-errorTitle" },
+        expiredMessageContent: { content: "stub-expiredMessageContent" },
+        unsavedWarningContent: { content: "stub-unsavedWarningContent" },
+        somethingGoneWrongContent: {
+          content: "stub-somethingGoneWrongContent",
+        },
+      },
+    },
   };
 
   const setup = (props?: Partial<PageProps>) => {
-    const stubContent = {
-      components: {
-        errorSummary: {
-          errorTitle: { content: "stub-errorTitle" },
-          expiredMessageContent: { content: "stub-expiredMessageContent" },
-          unsavedWarningContent: { content: "stub-unsavedWarningContent" },
-          somethingGoneWrongContent: {
-            content: "stub-somethingGoneWrongContent",
-          },
-        },
-      },
-    };
-    const wrapper = mount(
+    const result = render(
       <TestBed content={stubContent as TestBedContent}>
         <Page {...defaultProps} {...props} />
       </TestBed>,
     );
-    const holdMessageElement = findByQa(wrapper, "on-hold-info-message");
-    const backlinkElement = findByQa(wrapper, "page-backlink");
-    const pageErrorElement = findByQa(wrapper, "error-summary");
-    const validationSummaryElement = wrapper.find("ValidationSummary");
+
+    const holdMessageElementQa = "on-hold-info-message";
+    const backlinkElementQa = "page-backlink";
+    const pageErrorElementQa = "error-summary";
+    const validationSummaryQa = "validation-summary";
 
     return {
-      wrapper,
-      holdMessageElement,
-      backlinkElement,
-      pageErrorElement,
-      validationSummaryElement,
+      ...result,
+      holdMessageElementQa,
+      backlinkElementQa,
+      pageErrorElementQa,
+      validationSummaryQa,
     };
   };
 
-  it("renders in default state", () => {
-    const { wrapper, pageErrorElement, backlinkElement, holdMessageElement } = setup();
+  describe("@renders", () => {
+    it("with default props", () => {
+      const { queryByTestId, pageErrorElementQa, backlinkElementQa, holdMessageElementQa } = setup();
 
-    // Note: I want to match against a string not nodes
-    const titleContent = defaultProps.pageTitle.props.children;
-    const childrenContent = defaultProps.children.props.children;
+      expect(queryByTestId(stubTitleQa)).toBeInTheDocument();
+      expect(queryByTestId(stubChildrenQa)).toBeInTheDocument();
 
-    const renderedHtml = wrapper.html();
+      expect(queryByTestId(pageErrorElementQa)).not.toBeInTheDocument();
+      expect(queryByTestId(backlinkElementQa)).not.toBeInTheDocument();
+      expect(queryByTestId(holdMessageElementQa)).not.toBeInTheDocument();
+    });
 
-    // Note: since we have no data-qa, we just delve into the ReactElement children and cross check the rendered html
-    expect(renderedHtml).toContain(titleContent);
-    expect(renderedHtml).toContain(childrenContent);
+    it("with a backLink", () => {
+      const { backlinkElementQa, queryByTestId } = setup({ backLink: <div>backlink element</div> });
 
-    // Note: no prop no dice!
-    expect(pageErrorElement.exists()).toBe(false);
-    expect(backlinkElement.exists()).toBe(false);
-    expect(holdMessageElement.exists()).toBe(false);
+      expect(queryByTestId(backlinkElementQa)).toBeInTheDocument();
+    });
   });
 
-  it("should render a back link", () => {
-    const { backlinkElement } = setup({ backLink: <div>backlink element</div> });
-
-    expect(backlinkElement.exists()).toBe(true);
-  });
-
-  it("should render an <ErrorSummary />", () => {
+  it("with an <ErrorSummary />", () => {
     const stubAppError: IAppError = {
       code: ErrorCode.BAD_REQUEST_ERROR,
       message: "stub-message",
       results: null,
     };
 
-    const { pageErrorElement } = setup({ error: stubAppError });
+    const { queryByTestId, pageErrorElementQa } = setup({ error: stubAppError });
 
-    expect(pageErrorElement.exists()).toBe(true);
+    expect(queryByTestId(pageErrorElementQa)).toBeInTheDocument();
   });
 
-  describe("should render a <ValidationSummary />", () => {
-    const stubResult: Results<{}> = new Results({}, false);
+  describe("with a <ValidationSummary />", () => {
+    const stubError1: Result = new Result(null, true, false, "stub-1-errorMessage", false);
+    const stubError2: Result = new Result(null, true, false, "stub-2-errorMessage", false);
 
-    it("when validations is a single item", () => {
-      const singleValidation: PageProps["validator"] = stubResult;
-      const { validationSummaryElement } = setup({ validator: singleValidation });
+    it("with a singular validation", () => {
+      const singleValidation: PageProps["validator"] = new Results({}, false, [stubError1]);
+      const { queryByText } = setup({ validator: singleValidation });
 
-      expect(validationSummaryElement.exists()).toBe(true);
+      expect(queryByText(stubContent.components.validationSummary.validationsTitle.content)).toBeInTheDocument();
     });
-    it("when validations is an array", () => {
-      const arrayOfValidations: PageProps["validator"] = [stubResult, stubResult];
-      const { validationSummaryElement } = setup({ validator: arrayOfValidations });
 
-      expect(validationSummaryElement.exists()).toBe(true);
+    it("with multiple validations", () => {
+      const stubValidationArray1 = new Results({}, false, [stubError1]);
+      const stubValidationArray2 = new Results({}, false, [stubError2]);
+      const arrayOfValidations: PageProps["validator"] = [stubValidationArray1, stubValidationArray2];
+
+      const { queryByText } = setup({ validator: arrayOfValidations });
+
+      expect(queryByText(stubContent.components.validationSummary.validationsTitle.content)).toBeInTheDocument();
     });
   });
 
@@ -107,9 +144,9 @@ describe("<Page />", () => {
       ${"with a project"} | ${{ project: { status: ProjectStatus.OnHold } as any }}        | ${"This project is on hold. Contact Innovate UK for more information."}
       ${"with a partner"} | ${{ partner: { partnerStatus: PartnerStatus.OnHold } as any }} | ${"Partner is on hold. Contact Innovate UK for more information."}
     `("$name on hold", ({ props, expectedMessage }) => {
-      const { holdMessageElement } = setup(props);
+      const { holdMessageElementQa, queryByTestId } = setup(props);
 
-      expect(holdMessageElement.text()).toContain(expectedMessage);
+      expect(queryByTestId(holdMessageElementQa)).toHaveTextContent(expectedMessage);
     });
   });
 });
