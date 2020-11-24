@@ -7,21 +7,13 @@ import { Section } from "./section";
 import { ValidationSummary } from "../validationSummary";
 import { ValidationMessage } from "../validationMessage";
 
-export interface PageProps {
-  pageTitle: React.ReactElement<{}>;
-  children: React.ReactNode;
-  backLink?: React.ReactElement<{}>;
-  error?: IAppError | null;
-  validator?: Results<{}> | Results<{}>[] | null;
-  project?: ProjectDto;
-  partner?: PartnerDto;
-}
+export type PageValidationProjectStatus = ProjectDto["status"];
+export type PageValidationPartnerStatus = PartnerDto["partnerStatus"];
 
-// TODO: Refactor this out + test using RTL
-const usePageValidationMessage = (project?: ProjectDto, partner?: PartnerDto) => {
-  const projectStatus = project && project.status;
-  const partnerStatus = partner && partner.partnerStatus;
-
+export const usePageValidationMessage = (
+  projectStatus?: PageValidationProjectStatus,
+  partnerStatus?: PageValidationPartnerStatus,
+) => {
   if (projectStatus === ProjectStatus.OnHold) {
     return "This project is on hold. Contact Innovate UK for more information.";
   }
@@ -33,11 +25,24 @@ const usePageValidationMessage = (project?: ProjectDto, partner?: PartnerDto) =>
   return null;
 };
 
+export interface PageProps {
+  pageTitle: React.ReactElement<{}>;
+  children: React.ReactNode;
+  backLink?: React.ReactElement<{}>;
+  error?: IAppError | null;
+  validator?: Results<{}> | Results<{}>[] | null;
+  project?: ProjectDto;
+  partner?: PartnerDto;
+}
+
 export function Page({ pageTitle, backLink, error, children, project, partner, validator }: PageProps) {
   const validation = validator && Array.isArray(validator) ? new CombinedResultsValidator(...validator) : validator;
   const displayAriaLive: boolean = !!error || !!validation;
 
-  const pageErrorMessage = usePageValidationMessage(project, partner);
+  const projectStatus = project && project.status;
+  const partnerStatus = partner && partner.partnerStatus;
+
+  const pageErrorMessage = usePageValidationMessage(projectStatus, partnerStatus);
 
   return (
     <div>
