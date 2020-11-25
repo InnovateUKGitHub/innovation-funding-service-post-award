@@ -6,6 +6,7 @@ import { ErrorSummary } from "../errorSummary";
 import { Section } from "./section";
 import { ValidationSummary } from "../validationSummary";
 import { ValidationMessage } from "../validationMessage";
+import { useContent } from "@ui/hooks";
 
 export type PageValidationProjectStatus = ProjectDto["status"];
 export type PageValidationPartnerStatus = PartnerDto["partnerStatus"];
@@ -14,12 +15,14 @@ export const usePageValidationMessage = (
   projectStatus?: PageValidationProjectStatus,
   partnerStatus?: PageValidationPartnerStatus,
 ) => {
+  const { getContent } = useContent();
+
   if (projectStatus === ProjectStatus.OnHold) {
-    return "This project is on hold. Contact Innovate UK for more information.";
+    return getContent((x) => x.components.onHoldContent.projectOnHoldMessage);
   }
 
   if (partnerStatus === PartnerStatus.OnHold) {
-    return "Partner is on hold. Contact Innovate UK for more information.";
+    return getContent((x) => x.components.onHoldContent.partnerOnHoldMessage);
   }
 
   return null;

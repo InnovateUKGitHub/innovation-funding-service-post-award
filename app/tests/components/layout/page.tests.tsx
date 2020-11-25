@@ -2,7 +2,7 @@ import React from "react";
 import { render } from "@testing-library/react";
 import { renderHook } from "@testing-library/react-hooks";
 
-import TestBed, { TestBedContent } from "@shared/TestBed";
+import TestBed, { hookTestBed, TestBedContent } from "@shared/TestBed";
 import { PartnerStatus, ProjectStatus } from "@framework/dtos";
 import { ErrorCode, IAppError } from "@framework/types";
 import { Result, Results } from "@ui/validation";
@@ -16,8 +16,20 @@ import {
 } from "../../../src/ui/components/layout/page";
 
 describe("usePageValidationMessage()", () => {
+  const stubContent = {
+    components: {
+      onHoldContent: {
+        projectOnHoldMessage: { content: "stub-projectOnHoldMessage" },
+        partnerOnHoldMessage: { content: "stub-partnerOnHoldMessage" },
+      },
+    },
+  };
+
   const renderPageContent = (project: PageValidationProjectStatus, partner: PageValidationPartnerStatus) => {
-    return renderHook(() => usePageValidationMessage(project, partner));
+    return renderHook(
+      () => usePageValidationMessage(project, partner),
+      hookTestBed({ content: stubContent as TestBedContent }),
+    );
   };
 
   it("should return null", () => {
@@ -29,13 +41,13 @@ describe("usePageValidationMessage()", () => {
   it("should return project hold message", () => {
     const { result } = renderPageContent(ProjectStatus.OnHold, PartnerStatus.Active);
 
-    expect(result.current).toBe("This project is on hold. Contact Innovate UK for more information.");
+    expect(result.current).toBe(stubContent.components.onHoldContent.projectOnHoldMessage.content);
   });
 
   it("should return partner hold message", () => {
     const { result } = renderPageContent(ProjectStatus.Live, PartnerStatus.OnHold);
 
-    expect(result.current).toBe("Partner is on hold. Contact Innovate UK for more information.");
+    expect(result.current).toBe(stubContent.components.onHoldContent.partnerOnHoldMessage.content);
   });
 });
 
@@ -60,6 +72,10 @@ describe("<Page />", () => {
         somethingGoneWrongContent: {
           content: "stub-somethingGoneWrongContent",
         },
+      },
+      onHoldContent: {
+        projectOnHoldMessage: { content: "stub-projectOnHoldMessage" },
+        partnerOnHoldMessage: { content: "stub-partnerOnHoldMessage" },
       },
     },
   };
@@ -141,8 +157,8 @@ describe("<Page />", () => {
   describe("renders a hold message", () => {
     test.each`
       name                | props                                                          | expectedMessage
-      ${"with a project"} | ${{ project: { status: ProjectStatus.OnHold } as any }}        | ${"This project is on hold. Contact Innovate UK for more information."}
-      ${"with a partner"} | ${{ partner: { partnerStatus: PartnerStatus.OnHold } as any }} | ${"Partner is on hold. Contact Innovate UK for more information."}
+      ${"with a project"} | ${{ project: { status: ProjectStatus.OnHold } as any }}        | ${stubContent.components.onHoldContent.projectOnHoldMessage.content}
+      ${"with a partner"} | ${{ partner: { partnerStatus: PartnerStatus.OnHold } as any }} | ${stubContent.components.onHoldContent.partnerOnHoldMessage.content}
     `("$name on hold", ({ props, expectedMessage }) => {
       const { holdMessageElementQa, queryByTestId } = setup(props);
 

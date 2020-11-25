@@ -107,6 +107,10 @@
       "amountRequestMessage": "The amount you are requesting is more than the grant offered for:",
       "contactmessage": "Your Monitoring Officer will let you know if they have any concerns.",
       "MOPMmessage": "The partner is requesting an amount more than the grant offered for:"
+    },
+    "onHoldContent": {
+      "projectOnHoldMessage": "This project is on hold. Contact Innovate UK for more information.",
+      "partnerOnHoldMessage": "Partner is on hold. Contact Innovate UK for more information."
     }
   },
   "pages": {
