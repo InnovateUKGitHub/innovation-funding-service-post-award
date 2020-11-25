@@ -5,7 +5,8 @@ import { isNumber } from "@framework/util";
 import { ClaimDetailsSummaryDto, ClaimDto, ForecastDetailsDTO, GOLCostDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { ForecastDetailsDtosValidator } from "@ui/validators";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, StoresConsumer, useStores } from "@ui/redux";
+import { useContent } from "@ui/hooks";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export interface ClaimForecastParams {
@@ -99,31 +100,42 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
   }
 }
 
-const ClaimForcastContainer = (props: ClaimForecastParams & BaseProps) => (
-  <StoresConsumer>
-    {
-      stores => (
-        <ClaimForecastComponent
-          project={stores.projects.getById(props.projectId)}
-          partner={stores.partners.getById(props.partnerId)}
-          claim={stores.claims.getActiveClaimForPartner(props.partnerId)}
-          claims={stores.claims.getAllClaimsForPartner(props.partnerId)}
-          claimDetails={stores.claimDetails.getAllByPartner(props.partnerId)}
-          forecastDetails={stores.forecastDetails.getAllByPartner(props.partnerId)}
-          golCosts={stores.forecastGolCosts.getAllByPartner(props.partnerId)}
-          costCategories={stores.costCategories.getAll()}
-          editor={stores.forecastDetails.getForecastEditor(props.partnerId)}
-          onUpdate={(saving, dto, link) => {
-            stores.forecastDetails.updateForcastEditor(saving, props.projectId, props.partnerId, dto, false,  "You have saved your claim.", () => {
-              if (link) stores.navigation.navigateTo(link);
-            });
-          }}
-          {...props}
-        />
-      )
-    }
-  </StoresConsumer>
-);
+const ClaimForcastContainer = (props: ClaimForecastParams & BaseProps) => {
+  const stores = useStores();
+  const { getContent } = useContent();
+
+  const claimSavedMessage = getContent((x) => x.claimForecast.messages.claimSavedMessage);
+
+  const handleOnUpdate: Callbacks["onUpdate"] = (saving, dto, link) => {
+    stores.forecastDetails.updateForcastEditor(
+      saving,
+      props.projectId,
+      props.partnerId,
+      dto,
+      false,
+      claimSavedMessage,
+      () => {
+        if (link) stores.navigation.navigateTo(link);
+      },
+    );
+  };
+
+  return (
+    <ClaimForecastComponent
+      project={stores.projects.getById(props.projectId)}
+      partner={stores.partners.getById(props.partnerId)}
+      claim={stores.claims.getActiveClaimForPartner(props.partnerId)}
+      claims={stores.claims.getAllClaimsForPartner(props.partnerId)}
+      claimDetails={stores.claimDetails.getAllByPartner(props.partnerId)}
+      forecastDetails={stores.forecastDetails.getAllByPartner(props.partnerId)}
+      golCosts={stores.forecastGolCosts.getAllByPartner(props.partnerId)}
+      costCategories={stores.costCategories.getAll()}
+      editor={stores.forecastDetails.getForecastEditor(props.partnerId)}
+      onUpdate={handleOnUpdate}
+      {...props}
+    />
+  );
+};
 
 export const ClaimForecastRoute = defineRoute({
   routeName: "claimForecast",
