@@ -671,7 +671,8 @@
     "edit-claim-line-item-convert-gbp": "You must convert all foreign currency amounts to pounds Sterling (GBP) before you enter them into your claim.",
     "edit-claim-line-item-document-guidance": "Upload evidence of the costs for your monitoring officer to review. If you do not upload documents your monitoring officer is unlikely to accept your claim. Contact them for advice on which documents to provide.",
     "negative-claim-warning": "You have entered negative values for the following items:",
-    "claim-summary-warning": "You have entered a negative claim for this period. Click 'Edit costs to be claimed' button if you wish to change this."
+    "claim-summary-warning": "You have entered a negative claim for this period. Click 'Edit costs to be claimed' button if you wish to change this.",
+    "claim-saved-message": "You have saved your claim."
   },
   "claims-labels": {
     "open-section-title": "Open",
