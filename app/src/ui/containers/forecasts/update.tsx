@@ -6,6 +6,7 @@ import { isNumber } from "@framework/util";
 import { Pending } from "@shared/pending";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { ForecastDetailsDtosValidator } from "@ui/validators";
+import { useContent } from "@ui/hooks";
 
 export interface Params {
   projectId: string;
@@ -69,7 +70,12 @@ class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const UpdateForecastContainer = (props: Params & BaseProps) => (
+const UpdateForecastContainer = (props: Params & BaseProps) => {
+  const { getContent } = useContent();
+
+  const forecastUpdatedMessage = getContent((x) => x.forecastsUpdate.messages.forecastUpdated);
+
+  return (
   <StoresConsumer>
     {stores => (
       <UpdateForecastComponent
@@ -85,7 +91,7 @@ const UpdateForecastContainer = (props: Params & BaseProps) => (
         })}
         editor={stores.forecastDetails.getForecastEditor(props.partnerId)}
         onChange={(saving, dto) => {
-          stores.forecastDetails.updateForcastEditor(saving, props.projectId, props.partnerId, dto, false, "Your forecast has been updated.", () => {
+          stores.forecastDetails.updateForcastEditor(saving, props.projectId, props.partnerId, dto, false, forecastUpdatedMessage, () => {
             stores.navigation.navigateTo(props.routes.forecastDetails.getLink({ projectId: props.projectId, partnerId: props.partnerId }));
           });
         }}
@@ -94,6 +100,7 @@ const UpdateForecastContainer = (props: Params & BaseProps) => (
     )}
   </StoresConsumer>
 );
+      };
 
 export const UpdateForecastRoute = defineRoute({
   routeName: "updateForecast",

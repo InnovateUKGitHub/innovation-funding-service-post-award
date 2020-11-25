@@ -776,7 +776,8 @@
   "forecasts-messages": {
     "warning-period-change": "Your project asked us to change the length of the remaining periods. Make sure your forecast is correct before submitting your next claim.",
     "project-ended": "You cannot change your forecast. Your project has ended.",
-    "final-claim": "This is the final claim."
+    "final-claim": "This is the final claim.",
+    "forecast-updated": "Your forecast has been updated."
   },
   "monitoring-reports-messages": {
     "additionalCommentsGuidance": "If you want to explain anything to Innovate UK, add it here.",
