@@ -250,23 +250,35 @@ export class ForecastTable extends React.Component<Props> {
   }
 
   private updateItem(data: ForecastDetailsDTO[], categoryId: string, periodId: number, update: (item: ForecastDetailsDTO) => void) {
-    const item = data.find(x => x.costCategoryId === categoryId && x.periodId === periodId);
+    const cell = data.find(x => x.costCategoryId === categoryId && x.periodId === periodId);
 
-    if (!!item) {
-      update(item);
+    if (!!cell) {
       const { partner, project, costCategories } = this.props.data;
-      const { overheadRate, organisationType } = partner;
 
-      if (overheadRate) {
-        const overheadsCategory = costCategories
-          .filter(x => x.competitionType === project.competitionType && x.organisationType === organisationType)
-          .find(x => x.type === CostCategoryType.Overheads);
+      update(cell);
 
-        const categoryToUpdate = overheadsCategory && data.find(x => x.costCategoryId === overheadsCategory.id && x.periodId === item.periodId);
+      const overheadRates = getOverheadRate(
+        partner,
+        project,
+        costCategories,
+        cell,
+        data
+      );
 
-        if (categoryToUpdate) {
-          categoryToUpdate.value = item.value * (overheadRate / 100);
-        }
+      if (
+        overheadRates &&
+        overheadRates.overheadsData &&
+        overheadRates.labourCategory &&
+        partner.overheadRate
+      ) {
+        const updatedValue = calculateOverheadCell(
+          partner.overheadRate,
+          overheadRates.labourCategory.id,
+          overheadRates.overheadsData.value,
+          cell
+        );
+
+        overheadRates.overheadsData.value = updatedValue;
       }
     }
 
@@ -352,4 +364,44 @@ export class ForecastTable extends React.Component<Props> {
       <Currency data-qa={qa} value={total} />
     </td>
   )
+}
+
+function getOverheadRate(
+  partner: ForecastData["partner"],
+  project: ForecastData["project"],
+  costCategories: ForecastData["costCategories"],
+  cell: ForecastDetailsDTO,
+  data: ForecastDetailsDTO[]
+) {
+  const { overheadRate, organisationType } = partner;
+
+  if (!overheadRate) return null;
+
+  const filteredCostCategories = costCategories.filter((x) => x.competitionType === project.competitionType && x.organisationType === organisationType);
+
+  const overheadsCategory = filteredCostCategories.find((x) => x.type === CostCategoryType.Overheads);
+
+  if (!overheadsCategory) return null;
+
+  const labourCategory = filteredCostCategories.find((x) => x.type === CostCategoryType.Labour);
+
+  const overheadsData = data.find((x) => x.costCategoryId === overheadsCategory.id && x.periodId === cell.periodId);
+
+  return {
+    labourCategory,
+    overheadsData,
+  };
+}
+
+export function calculateOverheadCell(
+  overheadRate: number,
+  labourCategoryId: string,
+  currentValue: number,
+  cell: ForecastDetailsDTO
+): number {
+  const editingLabourCategory = cell.costCategoryId === labourCategoryId;
+
+  const recalculatedValue = cell.value * (overheadRate / 100);
+
+  return editingLabourCategory ? recalculatedValue : currentValue;
 }
