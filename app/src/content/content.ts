@@ -99,6 +99,7 @@ import { ForecastDetailsContent } from "./components/forecastDetailsContent";
 import { WarningContent } from "./components/warningContent";
 import { OnHoldContent } from "./components/onHoldContent";
 import { ClaimDetailsLinkContent } from "./components/claimDetailsLinkContent";
+import { PhaseBannerContent } from "./components/phaseBannerContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -216,6 +217,7 @@ export class Content extends ContentBase {
     warningContent: WarningContent;
     onHoldContent: OnHoldContent;
     claimDetailsLinkContent: ClaimDetailsLinkContent;
+    phaseBannerContent: PhaseBannerContent;
   };
 
   constructor(protected project: ProjectDto | null | undefined) {
@@ -333,7 +335,8 @@ export class Content extends ContentBase {
       forecastDetails: new ForecastDetailsContent(this, project),
       warningContent: new WarningContent(this, project),
       onHoldContent: new OnHoldContent(this, project),
-      claimDetailsLinkContent: new ClaimDetailsLinkContent(this, project)
+      claimDetailsLinkContent: new ClaimDetailsLinkContent(this, project),
+      phaseBannerContent: new PhaseBannerContent(this, project)
     };
   }
 }

@@ -116,6 +116,12 @@
       "editClaim": "Edit claim",
       "reviewClaim": "Review claim",
       "viewClaim": "View claim"
+    },
+    "phaseBannerContent": {
+      "newServiceMessage": "This is a new service – your",
+      "feedbackMessage": "feedback",
+      "helpImprove": "will help us to improve it.",
+      "betaText": "beta"
     }
   },
   "pages": {
