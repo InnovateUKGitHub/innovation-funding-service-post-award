@@ -503,6 +503,14 @@
       "button-create-request": "Create request",
       "button-cancel-request": "Cancel"
     },
+    "pcr-time-extension-step": {
+      "existing-project-heading": "Existing project details",
+      "date-label": "Start and end date",
+      "duration-label": "Duration",
+      "proposed-project-heading": "Proposed project details",
+      "time-extension-hint": "Enter the number of months you want to extend your project by.",
+      "save-and-continue": "Save and continue"
+    },
     "pcr-add-partner-role-and-organisation": {
       "form-section-title": "New partner information",
       "validation-message": "You cannot change this information after you continue.",

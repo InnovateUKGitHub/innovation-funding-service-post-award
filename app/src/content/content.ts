@@ -100,6 +100,7 @@ import { WarningContent } from "./components/warningContent";
 import { OnHoldContent } from "./components/onHoldContent";
 import { ClaimDetailsLinkContent } from "./components/claimDetailsLinkContent";
 import { PhaseBannerContent } from "./components/phaseBannerContent";
+import { PCRTimeExtensionStepContent } from "./pages/pcrs/pcrTimeExtensionStepContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -153,6 +154,7 @@ export class Content extends ContentBase {
   public readonly partnerDetailsEdit: PartnerDetailsEditContent;
 
   public readonly pcrCreate: PCRCreateContent;
+  public readonly pcrTimeExtensionStepContent: PCRTimeExtensionStepContent;
 
   public readonly pcrPeriodLengthChangeContent: PCRPeriodLengthChangeContent;
   public readonly pcrAddPartnerRoleAndOrganisation: PCRAddPartnerRoleAndOrganisationContent;
@@ -273,6 +275,8 @@ export class Content extends ContentBase {
     this.partnerDetailsEdit = new PartnerDetailsEditContent(this, project);
 
     this.pcrCreate = new PCRCreateContent(this, project);
+
+    this.pcrTimeExtensionStepContent = new PCRTimeExtensionStepContent(this, project);
 
     this.pcrPeriodLengthChangeContent = new PCRPeriodLengthChangeContent(this, project);
     this.pcrAddPartnerRoleAndOrganisation = new PCRAddPartnerRoleAndOrganisationContent(this, project);
