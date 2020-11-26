@@ -1,4 +1,5 @@
-export * from "./dashboard";
+export * from "./dashboard/Dashboard";
+
 export * from "./details";
 export * from "./financeSummary";
 export * from "./failedBankCheckConfirmation";
