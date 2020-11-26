@@ -113,21 +113,6 @@ describe("UploadProjectDocumentCommand", () => {
     expect(document.pathOnClient).toEqual(fileName);
   });
 
-  it("should handle empty document in array", async () => {
-    const context = new TestContext();
-    const project = context.testData.createProject();
-
-    const file1 = context.testData.createFile();
-    const empty: IFileWrapper = new TestFileWrapper(undefined as any, undefined as any);
-    const file2 = context.testData.createFile();
-
-    const files = [file1, empty, file2];
-
-    const command = new UploadProjectDocumentCommand(project.Id, { files });
-    const documentIds = await context.runCommand(command);
-    expect(documentIds.length).toBe(2);
-  });
-
   it("should throw valdiation error if too many documents", async () => {
     const context = new TestContext();
     context.config.options.maxUploadFileCount = 3;
@@ -137,17 +122,6 @@ describe("UploadProjectDocumentCommand", () => {
     const files = context.testData.range(context.config.options.maxUploadFileCount + 1, () => context.testData.createFile());
 
     const command = new UploadProjectDocumentCommand(project.Id, { files });
-    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
-  });
-
-  it("should throw a validation exception if file name not set", async () => {
-    const context = new TestContext();
-    const project = context.testData.createProject();
-
-    const file = context.testData.createFile();
-    file.fileName = undefined as any;
-
-    const command = new UploadProjectDocumentCommand(project.Id, { files: [file] });
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
