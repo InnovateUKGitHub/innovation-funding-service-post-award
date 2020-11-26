@@ -35,7 +35,7 @@ export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
       () => Validation.required(this, model && model.file && model.file.fileName, "Choose a file to upload."),
       () => Validation.isTrue(this, model.file!.size <= config.maxFileSize, fileTooBigErrorMessage(model.file!, config.maxFileSize)),
       () => Validation.isFalse(this, model.file!.size === 0, fileEmptyErrorMessage(model.file!)),
-      () => Validation.permitedValues(this, getFileExtension(model.file), config.permittedFileTypes, permittedFileTypeErrorMessage(model.file!)),
+      () => validateFileExtension(this, model.file, config.permittedFileTypes),
     );
     this.description = model.description ? Validation.permitedValues(this, model.description, getAllEnumValues(DocumentDescription), "Not a valid description") : Validation.valid(this);
   }
@@ -73,23 +73,22 @@ export class MultipleDocumentUpdloadDtoValidator extends Results<MultipleDocumen
 }
 
 export class FileDtoValidator extends Results<IFileWrapper> {
-  constructor(model: IFileWrapper, maxFileSize: number, permittedFileTypes: string[], showValidationErrors: boolean) {
+  constructor(file: IFileWrapper, maxFileSize: number, permittedFileTypes: string[], showValidationErrors: boolean) {
     // file is deliberately not a private field so it isn't logged....
     // model is empty object for this reason
     super(null as any, showValidationErrors);
 
-    if (!model.fileName && !model.size) {
-      this.file = Validation.valid(this);
-    }
-    else {
-      this.file = Validation.all(this,
-        () => Validation.required(this, model && model.fileName, "Select a file to upload."),
-        () => Validation.isTrue(this, model.size <= maxFileSize, fileTooBigErrorMessage(model, maxFileSize)),
-        () => Validation.isFalse(this, model.size === 0, fileEmptyErrorMessage(model)),
-        () => Validation.permitedValues(this, getFileExtension(model), permittedFileTypes, permittedFileTypeErrorMessage(model)),
-      );
-    }
+    this.file = Validation.all(this,
+      () => Validation.required(this, file.fileName, "Select a file to upload."),
+      () => Validation.isTrue(this, file.size <= maxFileSize, fileTooBigErrorMessage(file, maxFileSize)),
+      () => Validation.isFalse(this, file.size === 0, fileEmptyErrorMessage(file)),
+      () => validateFileExtension(this, file, permittedFileTypes),
+    );
   }
 
   public readonly file: Result;
+}
+function validateFileExtension(results: Results<{}>, file: IFileWrapper | null, permittedFileTypes: string[]) {
+  const fileName = file ? file.fileName : "";
+  return Validation.permitedValues(results, getFileExtension(fileName), permittedFileTypes, permittedFileTypeErrorMessage(file!));
 }
