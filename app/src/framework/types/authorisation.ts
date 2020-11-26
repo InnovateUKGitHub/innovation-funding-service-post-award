@@ -1,6 +1,21 @@
 import { IRoleInfo } from "@server/features/projects/getAllProjectRolesForUser";
 import { ProjectRole } from ".";
 
+type AvailableAuthRoles = "isPm" | "isPmOrMo" | "isFc" | "isMo";
+
+export function getAuthRoles(role: ProjectRole): { [key in AvailableAuthRoles]: boolean } {
+  const isMo = !!(role & ProjectRole.MonitoringOfficer);
+  const isFc = !!(role & ProjectRole.FinancialContact);
+  const isPm = !!(role & ProjectRole.ProjectManager);
+
+  return {
+    isPm,
+    isPmOrMo: isPm || isMo,
+    isFc,
+    isMo,
+  };
+}
+
 class RoleChecker {
   private readonly permissions: ProjectRole;
   constructor(roles: ProjectRole) {
@@ -30,13 +45,12 @@ class RoleChecker {
   }
 
   private combineRoles(roles: ProjectRole[]) {
-    return roles.reduce((combined, r) => combined |= r, ProjectRole.Unknown);
+    return roles.reduce((combined, r) => (combined |= r), ProjectRole.Unknown);
   }
 }
 
 // This class acts as a helper for the role information cached on the server
 export class Authorisation {
-
   constructor(roles: { [key: string]: IRoleInfo }) {
     this.permissions = roles;
   }
@@ -56,7 +70,7 @@ export class Authorisation {
     const project = this.permissions && this.permissions[projectId];
     if (project) {
       const partner = project.partnerRoles[partnerId];
-      if(partner !== undefined) {
+      if (partner !== undefined) {
         return partner;
       }
     }
