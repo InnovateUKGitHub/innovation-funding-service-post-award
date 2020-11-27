@@ -5,10 +5,11 @@ import { Pending } from "@shared/pending";
 import { DocumentDescription, ProjectDto, ProjectRole } from "@framework/types";
 import { IEditorStore } from "@ui/redux/reducers";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
-import { StoresConsumer } from "@ui/redux";
+import { StoresConsumer, useStores } from "@ui/redux";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { useContent } from "@ui/hooks";
 
 export interface ClaimDetailDocumentsPageParams {
   projectId: string;
@@ -113,30 +114,62 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
   }
 }
 
-const ClaimDetailDocumentsContainer = (props: ClaimDetailDocumentsPageParams & BaseProps) => (
-  <StoresConsumer>
-    {
-      stores => (
-        <ClaimDetailDocumentsComponent
-          project={stores.projects.getById(props.projectId)}
-          costCategories={stores.costCategories.getAll()}
-          documents={stores.claimDetailDocuments.getClaimDetailDocuments(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
-          editor={stores.claimDetailDocuments.getClaimDetailDocumentsEditor(props.projectId, props.partnerId, props.periodId, props.costCategoryId, (dto) => dto.description = DocumentDescription.Evidence)}
-          onChange={(saving, dto) => {
-            stores.messages.clearMessages();
-            const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
-            stores.claimDetailDocuments.updateClaimDetailDocumentsEditor(saving, props.projectId, props.partnerId, props.periodId, props.costCategoryId, dto, successMessage);
-          }}
-          onDelete={(dto, document) => {
-            stores.messages.clearMessages();
-            stores.claimDetailDocuments.deleteClaimDetailDocumentsEditor(props.projectId, props.partnerId, props.periodId, props.costCategoryId, dto, document);
-          }}
-          {...props}
-        />
-      )
-    }
-  </StoresConsumer>
-);
+const ClaimDetailDocumentsContainer = (props: ClaimDetailDocumentsPageParams & BaseProps) => {
+  const stores = useStores();
+  const { getContent } = useContent();
+
+  const handleOnChange: Callbacks["onChange"] = (saving, dto) => {
+    stores.messages.clearMessages();
+    const successMessage =
+      dto.files.length === 1
+        ? getContent((x) => x.claimDetailDocuments.singleDocumentUploadedMessage)
+        : getContent((x) => x.claimDetailDocuments.multipleDocumentsUploadedMessage(dto.files.length));
+    stores.claimDetailDocuments.updateClaimDetailDocumentsEditor(
+      saving,
+      props.projectId,
+      props.partnerId,
+      props.periodId,
+      props.costCategoryId,
+      dto,
+      successMessage,
+    );
+  };
+
+  const handleOnDelete: Callbacks["onDelete"] = (dto, document) => {
+    stores.messages.clearMessages();
+    stores.claimDetailDocuments.deleteClaimDetailDocumentsEditor(
+      props.projectId,
+      props.partnerId,
+      props.periodId,
+      props.costCategoryId,
+      dto,
+      document,
+    );
+  };
+
+  return (
+    <ClaimDetailDocumentsComponent
+      project={stores.projects.getById(props.projectId)}
+      costCategories={stores.costCategories.getAll()}
+      documents={stores.claimDetailDocuments.getClaimDetailDocuments(
+        props.projectId,
+        props.partnerId,
+        props.periodId,
+        props.costCategoryId,
+      )}
+      editor={stores.claimDetailDocuments.getClaimDetailDocumentsEditor(
+        props.projectId,
+        props.partnerId,
+        props.periodId,
+        props.costCategoryId,
+        (dto) => (dto.description = DocumentDescription.Evidence),
+      )}
+      onChange={handleOnChange}
+      onDelete={handleOnDelete}
+      {...props}
+    />
+  );
+};
 
 export const ClaimDetailDocumentsRoute = defineRoute({
   routeName: "claimDetailDocuments",

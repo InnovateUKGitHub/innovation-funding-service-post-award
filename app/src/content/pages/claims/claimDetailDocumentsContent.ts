@@ -12,4 +12,12 @@ export class ClaimDetailDocumentsContent extends ContentPageBase {
   public readonly formTitle = this.getContent("form-title");
   public readonly subtitle = this.getContent("subtitle");
   public readonly upload = this.getContent("upload");
+
+  public readonly addDocumentsForTitle = this.getContent("add-documents-for-title");
+  public readonly addDocumentTitle = this.getContent("add-documents-title");
+  public readonly documentsTitle = this.getContent("documents-title");
+  public readonly claimDocumentsTitle = this.getContent("claim-documents-title");
+
+  public readonly singleDocumentUploadedMessage = this.getContent("single-document-uploaded-message");
+  public readonly multipleDocumentsUploadedMessage = (documentCount: number) => this.getContent("multiple-documents-uploaded-message", { documentCount });
 }
