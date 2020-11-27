@@ -3,6 +3,9 @@ import { PartnerDto, ProjectDto } from "@framework/dtos";
 
 export type Section = "archived" | "open" | "awaiting" | "upcoming" | "pending";
 
+export type CuratedSections = Exclude<Section, "awaiting">;
+export type CuratedSection<T> = { [key in CuratedSections]: T };
+
 export interface ProjectProps {
   section: Section;
   project: ProjectDto;
