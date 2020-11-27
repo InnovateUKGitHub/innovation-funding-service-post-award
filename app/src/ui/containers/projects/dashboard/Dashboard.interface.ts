@@ -17,3 +17,9 @@ export interface DashboardProjectProps extends ProjectProps {
 }
 
 export type DashboardProjectAttr = Pick<DashboardProjectProps, "partner" | "routes" | "section">;
+
+export interface ProjectData {
+  project: ProjectDto;
+  partner?: PartnerDto;
+  projectSection: Section;
+}
