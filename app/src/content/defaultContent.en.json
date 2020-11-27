@@ -267,7 +267,13 @@
       "back-link": "Back to {{costCategoryName}}",
       "form-title": "Upload",
       "subtitle": "All documents open in a new window",
-      "upload": "Upload documents"
+      "upload": "Upload documents",
+      "single-document-uploaded-message": "Your document has been uploaded.",
+      "multiple-documents-uploaded-message": "{{documentCount}} documents have been uploaded.",
+      "add-documents-for-title": "Add documents for",
+      "add-documents-title": "Add documents",
+      "documents-title": "documents",
+      "claim-documents-title": "Claim documents"
     },
     "claim-forecast": {
       "back-link": "Back to claims documents",
