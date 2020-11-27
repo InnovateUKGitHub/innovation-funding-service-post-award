@@ -8,6 +8,7 @@ import classNames from "classnames";
 import { StoresConsumer } from "@ui/redux";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { useContent } from "@ui/hooks";
 
 interface Params {
   projectId: string;
@@ -63,6 +64,9 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       this.props.routes.reviewClaim.getLink(params) :
       this.props.routes.claimDetails.getLink(params);
 
+    const supportingDocumentsTitle = <ACC.Content value={x => x.claimLineItems.supportingDocumentsTitle}/>;
+    const documentsInNewWindow = <ACC.Content value={x => x.claimLineItems.documentsInNewWindow}/>;
+
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={backLink}>Back to claim</ACC.BackLink>}
@@ -71,7 +75,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
         <ACC.Section>
           <ClaimLineItemsTable lineItems={claimDetails.lineItems} forecastDetail={forecastDetail} />
         </ACC.Section>
-        <ACC.Section title="Supporting documents" subtitle={documents.length > 0 ? "(Documents open in a new window)" : ""} qa="supporting-documents-section">
+        <ACC.Section title={supportingDocumentsTitle} subtitle={documents.length > 0 ? documentsInNewWindow : ""} qa="supporting-documents-section">
           {this.renderDocumentList(documents)}
         </ACC.Section>
         {this.renderAdditionalInformation(claimDetails)}
@@ -83,7 +87,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
   private renderDocumentList(documents: DocumentSummaryDto[]) {
     return documents.length > 0
       ? <ACC.DocumentTable documents={documents} qa="supporting-documents"/>
-      : <ACC.ValidationMessage message="No documents uploaded." messageType="info" />;
+      : <ACC.ValidationMessage message={<ACC.Content value={x => x.claimLineItems.noDocumentsUploaded}/>} messageType="info" />;
   }
 
   // TODO - this is something which we do in at least two places so should be generic
@@ -141,8 +145,9 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
 
   private readonly renderAdditionalInformation = (claimDetail: ClaimDetailsDto) => {
     if (!claimDetail.comments) return null;
+
     return (
-      <ACC.Section title="Additional information" qa="additional-information">
+      <ACC.Section title={<ACC.Content value={x => x.claimLineItems.additionalInfoTitle}/>} qa="additional-information">
         <ACC.Renderers.SimpleString>
           {claimDetail.comments}
         </ACC.Renderers.SimpleString>
@@ -153,11 +158,15 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
 
 const ClaimLineItemsTable: React.FunctionComponent<{ lineItems: ClaimLineItemDto[], forecastDetail: ForecastDetailsDTO }> = ({ lineItems, forecastDetail }) => {
   const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
+
+  const { getContent } = useContent();
+  const noDataMessage = getContent(x=> x.claimLineItems.noDataMessage);
+
   const renderFooterRow = (row: { key: string, title: string, value: React.ReactNode, qa: string, isBold?: boolean }) => (
     <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
       <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{row.title}</th>
       <td className={classNames("govuk-table__cell", "govuk-table__cell--numeric", { "govuk-!-font-weight-bold": row.isBold })}>{row.value}</td>
-      <th className="govuk-table__cell"><ACC.Renderers.AccessibilityText>No data</ACC.Renderers.AccessibilityText></th>
+      <th className="govuk-table__cell"><ACC.Renderers.AccessibilityText>{noDataMessage}</ACC.Renderers.AccessibilityText></th>
     </tr>
   );
 
@@ -165,28 +174,35 @@ const ClaimLineItemsTable: React.FunctionComponent<{ lineItems: ClaimLineItemDto
   const forecast = forecastDetail.value;
   const diff = 100 * (forecast - total) / forecast;
 
+  const totalCostTitle = getContent(x=> x.claimLineItems.totalCostTitle);
+  const forecastCostTitle = getContent(x=> x.claimLineItems.forecastCostTitle);
+  const differenceTitle = getContent(x=> x.claimLineItems.differenceTitle);
+  const descriptionHeader = getContent(x=> x.claimLineItems.descriptionHeader);
+  const costHeader = getContent(x=> x.claimLineItems.costHeader);
+  const lastUpdatedHeader = getContent(x=> x.claimLineItems.lastUpdatedHeader);
+
   return (
     <LineItemTable.Table
       data={lineItems}
       qa="current-claim-summary-table"
       footers={[
         renderFooterRow({
-          key: "1", title: "Total costs", qa: "footer-total-costs", isBold: true, value:
+          key: "1", title: totalCostTitle, qa: "footer-total-costs", isBold: true, value:
             <ACC.Renderers.Currency value={total} />
         }),
         renderFooterRow({
-          key: "2", title: "Forecast costs", qa: "footer-forecast-costs", value:
+          key: "2", title: forecastCostTitle, qa: "footer-forecast-costs", value:
             <ACC.Renderers.Currency value={forecast} />
         }),
         renderFooterRow({
-          key: "3", title: "Difference", qa: "footer-difference", value:
+          key: "3", title: differenceTitle, qa: "footer-difference", value:
             <ACC.Renderers.Percentage value={diff} />
         })
       ]}
     >
-      <LineItemTable.String header="Description" qa="cost-description" value={(x) => x.description} />
-      <LineItemTable.Currency header="Cost (£)" qa="cost-value" value={(x) => x.value} />
-      <LineItemTable.ShortDate colClassName={x => "govuk-table__header--numeric"} header="Last updated" qa="cost-last-updated" value={x => x.lastModifiedDate} />
+      <LineItemTable.String header={descriptionHeader} qa="cost-description" value={(x) => x.description} />
+      <LineItemTable.Currency header={costHeader} qa="cost-value" value={(x) => x.value} />
+      <LineItemTable.ShortDate colClassName={x => "govuk-table__header--numeric"} header={lastUpdatedHeader} qa="cost-last-updated" value={x => x.lastModifiedDate} />
     </LineItemTable.Table>
   );
 };

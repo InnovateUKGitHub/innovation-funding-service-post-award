@@ -275,6 +275,19 @@
       "button-continue-to-summary": "Continue to summary",
       "overheads-costs": "Overheads costs: "
     },
+    "claim-line-items": {
+      "supporting-documents-title": "Supporting documents",
+      "documents-in-new-window": "Documents open in a new window",
+      "no-documents-uploaded": "No documents uploaded.",
+      "additional-info-title": "Additional information",
+      "no-data-message": "No data",
+      "total-cost-title": "Total costs",
+      "forecast-cost-title": "Forecast costs",
+      "difference-title": "Difference",
+      "description-header": "Description",
+      "cost-header": "Cost (£)",
+      "last-updated-header": "Last updated"
+    },
     "edit-claim-line-items": {
       "back-link": "Back to claims",
       "header-description": "Description",
