@@ -101,6 +101,7 @@ import { OnHoldContent } from "./components/onHoldContent";
 import { ClaimDetailsLinkContent } from "./components/claimDetailsLinkContent";
 import { PhaseBannerContent } from "./components/phaseBannerContent";
 import { PCRTimeExtensionStepContent } from "./pages/pcrs/pcrTimeExtensionStepContent";
+import { ClaimLineItemsContent } from "./pages/claims/claimLineItemsContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -132,6 +133,7 @@ export class Content extends ContentBase {
   public readonly claimPrepare: ClaimPrepareContent;
   public readonly claimPrepareSummary: ClaimPrepareSummaryContent;
   public readonly claimReview: ClaimReviewContent;
+  public readonly claimLineItems: ClaimLineItemsContent;
 
   public readonly financialVirementSummary: FinancialVirementSummaryContent;
   public readonly financialVirementEdit: FinancialVirementEditContent;
@@ -253,6 +255,7 @@ export class Content extends ContentBase {
     this.claimPrepare = new ClaimPrepareContent(this, project);
     this.claimPrepareSummary = new ClaimPrepareSummaryContent(this, project);
     this.claimReview = new ClaimReviewContent(this, project);
+    this.claimLineItems = new ClaimLineItemsContent(this, project);
 
     this.financialVirementSummary = new FinancialVirementSummaryContent(this, project);
     this.financialVirementEdit = new FinancialVirementEditContent(this, project);
