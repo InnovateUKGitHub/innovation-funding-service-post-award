@@ -15,25 +15,25 @@ const pdf = getContent(x => x.components.documentGuidance.pdfFiles);
 const text = getContent(x => x.components.documentGuidance.textFiles);
 const presentation = getContent(x => x.components.documentGuidance.presentationFiles);
 const spreadsheet = getContent(x => x.components.documentGuidance.spreadsheetFiles);
-const image = getContent(x => x.components.documentGuidance.imagesFiles);
+const availableImageExtensions = getContent(x => x.components.documentGuidance.availableImageExtensions);
 const fileTypesQuestion = getContent(x => x.components.documentGuidance.fileTypesQuestion);
 
 return (
     <React.Fragment>
-      <ACC.Renderers.SimpleString>{uploadGuidance}</ACC.Renderers.SimpleString>
+      <ACC.Renderers.SimpleString>{uploadGuidance}:</ACC.Renderers.SimpleString>
       <ACC.UnorderedList>
         <li>{fileSizeGuidance}</li>
         <li>{fileNameGuidance}</li>
       </ACC.UnorderedList>
       <ACC.Renderers.SimpleString>{noFilesNumberLimitMessage}</ACC.Renderers.SimpleString>
       <ACC.Info summary={fileTypesQuestion}>
-        <p>{fileTypesUploadMessage}</p>
+        <p>{fileTypesUploadMessage}:</p>
         <ul>
           <li>{pdf}</li>
           <li>{text}</li>
           <li>{presentation}</li>
           <li>{spreadsheet}</li>
-          <li>{image}</li>
+          <li>{availableImageExtensions}</li>
         </ul>
       </ACC.Info>
     </React.Fragment>
