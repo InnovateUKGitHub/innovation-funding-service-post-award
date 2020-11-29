@@ -16,6 +16,7 @@ import {
 } from "@framework/types";
 import { StoresConsumer } from "@ui/redux";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { useContent } from "@ui/hooks";
 
 export interface ClaimSummaryParams {
   projectId: string;
@@ -75,7 +76,12 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
       >
         {this.renderWarningMessage(totalCostsClaimed)}
         <ACC.Section qa="claimSummaryForm" title={<ACC.Claims.ClaimPeriodDate claim={data.claim} />}>
-          {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message="This is the final claim." />}
+          {data.claim.isFinalClaim && (
+            <ACC.ValidationMessage
+              messageType="info"
+              message={<ACC.Content value={(x) => x.claimPrepareSummary.messages.finalClaim} />}
+            />
+          )}
           {this.renderCostsPaidSummary(data, totalCostsClaimed)}
           {this.renderDocumentsSummary(data)}
           {!data.claim.isFinalClaim && this.renderForecastSummary(data)}
@@ -98,15 +104,22 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
   }
 
   private renderBackLink(data: CombinedData) {
+    const backToDocumentLink = <ACC.Content value={x => x.claimPrepareSummary.backToDocuments}/>;
+    const backToForecastLink = <ACC.Content value={x => x.claimPrepareSummary.backToForecast}/>;
+
     if (data.claim.isFinalClaim) {
-      return <ACC.BackLink route={this.props.routes.claimDocuments.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>Back to claim documents</ACC.BackLink>;
+      return <ACC.BackLink route={this.props.routes.claimDocuments.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>{backToDocumentLink}</ACC.BackLink>;
     }
-    return <ACC.BackLink route={this.props.routes.claimForecast.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>Back to update forecast</ACC.BackLink>;
+    return <ACC.BackLink route={this.props.routes.claimForecast.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>{backToForecastLink}</ACC.BackLink>;
   }
 
   private renderClaimForm(data: CombinedData) {
     const Form = ACC.TypedForm<ClaimDto>();
     const { editor, claim } = data;
+    const commentHint = <ACC.Content value={x => x.claimPrepareSummary.addCommentsHint}/>;
+    const addCommentsHeading = <ACC.Content value={x => x.claimPrepareSummary.addCommentsHeading}/>;
+    const submitClaimMessage = <ACC.Content value={x => x.claimPrepareSummary.submitClaimMessage}/>;
+    const saveAndReturn = <ACC.Content value={x => x.claimPrepareSummary.saveAndReturn}/>;
 
     return (
       <Form.Form
@@ -114,10 +127,10 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
         onSubmit={() => this.onSave(claim, editor, true, data.project)}
         qa="summary-form"
       >
-        <Form.Fieldset heading="Add comments">
+        <Form.Fieldset heading={addCommentsHeading}>
           <Form.MultilineString
             name="comments"
-            hint="If you want to explain anything to your monitoring officer or to Innovate UK, add it here."
+            hint={commentHint}
             value={x => x.comments}
             update={(m, v) => m.comments = v || ""}
             validation={editor.validator.comments}
@@ -126,8 +139,8 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
         </Form.Fieldset>
         <Form.Fieldset qa="save-buttons">
           <ACC.Renderers.SimpleString><ACC.Content value={x => x.claimPrepareSummary.messages.submitClaimConfirmation}/></ACC.Renderers.SimpleString>
-          <Form.Submit>Submit claim</Form.Submit>
-          <Form.Button name="save" onClick={() => this.onSave(claim, editor, false, data.project)}>Save and return to claims</Form.Button>
+          <Form.Submit>{submitClaimMessage}</Form.Submit>
+          <Form.Button name="save" onClick={() => this.onSave(claim, editor, false, data.project)}>{saveAndReturn}</Form.Button>
         </Form.Fieldset>
       </Form.Form>
     );
@@ -150,28 +163,33 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
 
   private renderCostsPaidSummary(data: CombinedData, totalCostsClaimed: number) {
     const totalCostsPaid = totalCostsClaimed * (data.partner.awardRate! / 100);
+    const costClaimedLabel = <ACC.Content value={x => x.claimPrepareSummary.costClaimedLabel}/>;
+    const fundingLevelLabel = <ACC.Content value={x => x.claimPrepareSummary.fundingLevelLabel}/>;
+    const costsToBePaidLabel = <ACC.Content value={x => x.claimPrepareSummary.costsToBePaidLabel}/>;
+    const editCostsMessage = <ACC.Content value={x => x.claimPrepareSummary.editCostsMessage}/>;
+    const costsTitle = <ACC.Content value={x => x.claimPrepareSummary.costsTitle}/>;
 
     return (
-      <ACC.Section title={"Costs to be claimed"} qa="costs-to-be-claimed-summary">
+      <ACC.Section title={costsTitle} qa="costs-to-be-claimed-summary">
         <ACC.SummaryList qa="costs-to-be-claimed-summary-list">
           <ACC.SummaryListItem
-            label="Total costs to be claimed"
+            label={costClaimedLabel}
             content={<ACC.Renderers.Currency value={totalCostsClaimed} />}
             qa="totalCostsClaimed"
           />
           <ACC.SummaryListItem
-            label="Funding level"
+            label={fundingLevelLabel}
             content={<ACC.Renderers.Percentage value={data.partner.awardRate} />}
             qa="fundingLevel"
           />
           <ACC.SummaryListItem
-            label="Total costs to be paid"
+            label={costsToBePaidLabel}
             content={<ACC.Renderers.Currency value={totalCostsPaid} />}
             qa="totalCostsPaid"
           />
         </ACC.SummaryList>
         <ACC.Renderers.SimpleString>
-          <ACC.Link id="editCostsToBeClaimedLink" route={this.props.routes.prepareClaim.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>Edit costs to be claimed</ACC.Link>
+          <ACC.Link id="editCostsToBeClaimedLink" route={this.props.routes.prepareClaim.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>{editCostsMessage}</ACC.Link>
         </ACC.Renderers.SimpleString>
 
       </ACC.Section>
@@ -182,21 +200,23 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
     return (
       <React.Fragment>
         {documents.length ?
-          <ACC.Section subtitle="All documents open in a new window" >
+          <ACC.Section subtitle={<ACC.Content value={x => x.claimPrepareSummary.documentsNewWindowSubtitle}/>} >
             <ACC.DocumentList documents={documents} qa="claim-documents-list" />
           </ACC.Section>
-          : <ACC.ValidationMessage message="No documents uploaded." messageType="info" />
+          : <ACC.ValidationMessage message={<ACC.Content value={x => x.claimPrepareSummary.noDocumentsUploadedMessage}/>} messageType="info" />
         }
       </React.Fragment>
     );
   }
 
   private renderDocumentsSummary(data: CombinedData) {
+    const claimDocumentsTitle = <ACC.Content value={x => x.claimPrepareSummary.claimDocumentsTitle}/>;
+    const editClaimDocuments = <ACC.Content value={x => x.claimPrepareSummary.editClaimDocuments}/>;
     return (
-      <ACC.Section title={"Claim documents"} qa="claim-documents-summary">
+      <ACC.Section title={claimDocumentsTitle} qa="claim-documents-summary">
         {this.renderDocuments(data.documents)}
         <ACC.Renderers.SimpleString>
-          <ACC.Link id="claimDocumentsLink" route={this.props.routes.claimDocuments.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>Edit claim documents</ACC.Link>
+          <ACC.Link id="claimDocumentsLink" route={this.props.routes.claimDocuments.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>{editClaimDocuments}</ACC.Link>
         </ACC.Renderers.SimpleString>
       </ACC.Section>
     );
@@ -207,22 +227,27 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
     const totalForecastsAndCosts = (data.partner.totalFutureForecastsForParticipants || 0) + (data.partner.totalParticipantCostsClaimed || 0) + (data.claim.totalCost || 0);
     const difference = totalEligibleCosts - totalForecastsAndCosts;
     const differencePercentage = (totalEligibleCosts > 0) ? (difference * 100) / totalEligibleCosts : 0;
+    const eligibleCostsLabel = <ACC.Content value={x => x.claimPrepareSummary.eligibleCostsLabel}/>;
+    const forecastLabel = <ACC.Content value={x => x.claimPrepareSummary.forecastLabel}/>;
+    const differenceLabel = <ACC.Content value={x => x.claimPrepareSummary.differenceLabel}/>;
+    const editForecastMessage = <ACC.Content value={x => x.claimPrepareSummary.editForecastMessage}/>;
+    const forecastTitle = <ACC.Content value={x => x.claimPrepareSummary.forecastTitle}/>;
 
     return (
-      <ACC.Section title={"Forecast"} qa="forecast-summary">
+      <ACC.Section title={forecastTitle} qa="forecast-summary">
         <ACC.SummaryList qa="forecast-summary-list">
           <ACC.SummaryListItem
-            label="Total eligible costs"
+            label={eligibleCostsLabel}
             content={<ACC.Renderers.Currency value={totalEligibleCosts} />}
             qa="totalEligibleCosts"
           />
           <ACC.SummaryListItem
-            label="Total of forecasts and costs"
+            label={forecastLabel}
             content={<ACC.Renderers.Currency value={totalForecastsAndCosts} />}
             qa="totalForecastsAndCosts"
           />
           <ACC.SummaryListItem
-            label="Difference"
+            label={differenceLabel}
             content={
               <React.Fragment>
                 <ACC.Renderers.Currency value={difference} /> (<ACC.Renderers.Percentage value={differencePercentage} />)
@@ -232,7 +257,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
           />
         </ACC.SummaryList>
         <ACC.Renderers.SimpleString>
-          <ACC.Link id="editForecastLink" route={this.props.routes.claimForecast.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>Edit forecast</ACC.Link>
+          <ACC.Link id="editForecastLink" route={this.props.routes.claimForecast.getLink({ projectId: data.project.id, partnerId: data.partner.id, periodId: this.props.periodId })}>{editForecastMessage}</ACC.Link>
         </ACC.Renderers.SimpleString>
       </ACC.Section>
     );
@@ -245,7 +270,11 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
   }
 }
 
-const ClaimSummaryContainer = (props: ClaimSummaryParams & BaseProps) => (
+const ClaimSummaryContainer = (props: ClaimSummaryParams & BaseProps) => {
+  const { getContent } = useContent();
+  const claimedSavedMessage = getContent(x => x.claimPrepareSummary.messages.claimSavedMessage);
+
+  return (
   <StoresConsumer>
     {
       stores => (
@@ -258,7 +287,7 @@ const ClaimSummaryContainer = (props: ClaimSummaryParams & BaseProps) => (
           documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
           editor={stores.claims.getClaimEditor(props.projectId, props.partnerId, props.periodId)}
           onUpdate={(saving, dto, link) =>
-            stores.claims.updateClaimEditor(saving, props.projectId, props.partnerId, props.periodId, dto, "You have saved your claim.", () =>
+            stores.claims.updateClaimEditor(saving, props.projectId, props.partnerId, props.periodId, dto, claimedSavedMessage, () =>
               stores.navigation.navigateTo(link))}
           {...props}
         />
@@ -266,6 +295,7 @@ const ClaimSummaryContainer = (props: ClaimSummaryParams & BaseProps) => (
     }
   </StoresConsumer>
 );
+};
 
 export const ClaimSummaryRoute = defineRoute({
   routeName: "claimSummary",
