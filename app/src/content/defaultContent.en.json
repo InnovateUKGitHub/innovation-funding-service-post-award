@@ -420,7 +420,11 @@
       "section-title-archived": "Archived",
       "link-view-monitoring-report": "View report",
       "link-edit-monitoring-report": "Edit report",
-      "link-delete-monitoring-report": "Delete report"
+      "link-delete-monitoring-report": "Delete report",
+      "header-title": "Title",
+      "header-status": "Status",
+      "header-date-updated": "Last updated",
+      "header-action": "Action"
     },
     "monitoring-reports-create": {
       "title": {
