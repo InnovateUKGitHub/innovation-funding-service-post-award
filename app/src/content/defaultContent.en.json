@@ -322,7 +322,28 @@
       "button-save-and-return": "Save and return to claims",
       "button-save-and-continue": "Continue to claims documents"
     },
-    "claim-prepare-summary": {},
+    "claim-prepare-summary": {
+      "back_to-documents": "Back to claim documents",
+      "back-to-forecast": "Back to update forecast",
+      "add-comments-heading": "Add comments",
+      "add-comments-hint": "If you want to explain anything to your monitoring officer or to Innovate UK, add it here.",
+      "submit-claim-message": "Submit claim",
+      "save-and-return-message": "Save and return to claims",
+      "costs-claimed-label": "Total costs to be claimed",
+      "funding-level-label": "Funding level",
+      "costs-to-be-paid-label": "Total costs to be paid",
+      "edit-costs-message": "Edit costs to be claimed",
+      "documents-in-new-window-subtitle": "All documents open in a new window.",
+      "no-documents-uploaded-message": "No documents uploaded.",
+      "claim-documents-title": "Claim documents",
+      "edit-claim-documents": "Edit claim documents",
+      "eligible-costs-label": "Total eligible costs",
+      "forecast-label": "Total of forecasts and costs",
+      "difference-label": "Difference",
+      "edit-forecast-message": "Edit forecast",
+      "costs-title": "Costs to be claimed",
+      "forecast-title": "Forecast"
+    },
     "claim-review": {
       "title": {
         "html": "Review claim",
