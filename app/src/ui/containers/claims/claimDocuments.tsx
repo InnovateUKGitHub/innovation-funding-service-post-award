@@ -52,7 +52,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
     DocumentDescription.StatementOfExpenditure,
   ];
 
-  renderContents(project: ProjectDto, editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[], claim: ClaimDto, documentDescriptions: DocumentDescriptionDto[]) {
+  private renderContents(project: ProjectDto, editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[], claim: ClaimDto, documentDescriptions: DocumentDescriptionDto[]) {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     const documentTypeOptions: DropdownOption[] = documentDescriptions
@@ -85,7 +85,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
             <UploadForm.Fieldset>
               <ACC.DocumentGuidance />
               <UploadForm.MulipleFileUpload
-                label="Upload documents"
+                label={<ACC.Content value={x => x.claimDocuments.uploadDocumentLabel}/>}
                 labelHidden={true}
                 name="attachment"
                 validation={editor.validator.files}
@@ -93,7 +93,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
                 update={(dto, files) => dto.files = files || []}
               />
               <UploadForm.DropdownList
-                label="Description"
+                label={<ACC.Content value={x => x.claimDocuments.descriptionLabel}/>}
                 labelHidden={false}
                 hasEmptyOption={true}
                 placeholder="-- No description --"
@@ -105,7 +105,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
               />
             </UploadForm.Fieldset>
             {/*TODO @documents-content make button label consistent*/}
-            <UploadForm.Button styling="Secondary" name="upload" onClick={() => this.props.onChange(true, editor.data)}>Upload documents</UploadForm.Button>
+            <UploadForm.Button styling="Secondary" name="upload" onClick={() => this.props.onChange(true, editor.data)}>{<ACC.Content value={x => x.claimDocuments.uploadMessage}/>}</UploadForm.Button>
           </UploadForm.Form>
         </ACC.Section>
         <ACC.Section titleContent={x => x.claimDocuments.documentsListSectionTitle}>
@@ -165,7 +165,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
     }
 
     return (
-      <ACC.Section subtitle="All documents open in a new window">
+      <ACC.Section subtitle={<ACC.Content value={x => x.claimDocuments.subtitleMessage}/>}>
         {documents.length ? <ACC.DocumentTableWithDelete hideRemove={x => this.allowedDocuments.indexOf(x.description!) < 0} onRemove={(document) => this.props.onDelete(editor.data, document)} documents={documents} qa="claim-supporting-documents"/> : null}
       </ACC.Section>
     );
