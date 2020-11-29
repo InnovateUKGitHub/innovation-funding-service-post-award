@@ -16,6 +16,10 @@ export class ClaimDocumentsContent extends ContentPageBase {
   public readonly saveAndContinueToForecastButton = this.getContent("button-save-and-continue-to-forecast");
   public readonly uploadSectionTitle = this.getContent("section-title-upload");
   public readonly documentsListSectionTitle = this.getContent("section-title-document-list");
+  public readonly subtitleMessage = this.getContent("subtitle-message");
+  public readonly uploadDocumentLabel = this.getContent("upload-documents-label");
+  public readonly descriptionLabel = this.getContent("description-label");
+  public readonly uploadMessage = this.getContent("upload-documents-message");
 
   public readonly messages = new ClaimMessages(this, this.project);
   public readonly documentMessages = new DocumentMessages(this, this.project);
