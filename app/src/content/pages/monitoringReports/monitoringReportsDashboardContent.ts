@@ -20,4 +20,8 @@ export class MonitoringReportsDashboardContent extends ContentPageBase {
   public readonly linkViewMonitoringReport = this.getContent("link-view-monitoring-report");
   public readonly linkEditMonitoringReport = this.getContent("link-edit-monitoring-report");
   public readonly linkDeleteMonitoringReport = this.getContent("link-delete-monitoring-report");
+  public readonly titleHeader  = this.getContent("header-title");
+  public readonly statusHeader = this.getContent("header-status");
+  public readonly dateUploadedHeader = this.getContent("header-date-updated");
+  public readonly actionHeader = this.getContent("header-action");
 }

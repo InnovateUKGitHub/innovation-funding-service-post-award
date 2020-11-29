@@ -8,7 +8,6 @@ import * as ACC from "@ui/components";
 import { ContentConsumer, StoresConsumer } from "@ui/redux";
 import { MonitoringReportsDashboardContent } from "@content/pages/monitoringReports/monitoringReportsDashboardContent";
 import { ContentSelector } from "@content/content";
-import { Content } from "@content/content";
 
 interface Params {
   projectId: string;
@@ -93,10 +92,10 @@ class DashboardComponent extends ContainerBase<Params&Props, Data, Callbacks> {
         bodyRowFlag={x => section !== "current" ? null : this.editStatuses.indexOf(x.status) >= 0 ? "edit" : null}
         qa={`${section}-reports-table`}
       >
-        <ReportsTable.Custom header="Title" qa="title" value={x => <ACC.PeriodTitle periodId={x.periodId} periodStartDate={x.startDate} periodEndDate={x.endDate} />} />
-        <ReportsTable.String header="Status" qa="status" value={x => x.statusName} />
-        <ReportsTable.ShortDateTime header="Last updated" qa="dateUpdated" value={x => x.lastUpdated} />
-        <ReportsTable.Custom header="Action" hideHeader={true} qa="link" value={x => this.renderLinks(x)} />
+        <ReportsTable.Custom header={<ACC.Content value={x => x.monitoringReportsDashboard.titleHeader}/>} qa="title" value={x => <ACC.PeriodTitle periodId={x.periodId} periodStartDate={x.startDate} periodEndDate={x.endDate} />} />
+        <ReportsTable.String header={<ACC.Content value={x => x.monitoringReportsDashboard.statusHeader}/>} qa="status" value={x => x.statusName} />
+        <ReportsTable.ShortDateTime header={<ACC.Content value={x => x.monitoringReportsDashboard.dateUploadedHeader}/>} qa="dateUpdated" value={x => x.lastUpdated} />
+        <ReportsTable.Custom header={<ACC.Content value={x => x.monitoringReportsDashboard.actionHeader}/>} hideHeader={true} qa="link" value={x => this.renderLinks(x)} />
       </ReportsTable.Table>
     );
   }
