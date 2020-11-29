@@ -202,7 +202,9 @@
       "guidance-message": "We need you to upload a redacted bank statement for your organisation. This must be dated within 90 days of the upload date.\n\nThis will allow us to confirm we have the correct details.\n\nThe statement must show your:\n* company name\n* account number\n* sort code",
       "button-submit": "Submit bank statement",
       "button-return": "Return to set up your project",
-      "back-link": "Back to set up your project"
+      "back-link": "Back to set up your project",
+      "documents-uploaded-message": "documents have been uploaded.",
+      "document-removed-message": "Your document has been removed."
     },
     "project-setup-bank-details-verify": {
       "title": "Confirm your bank details",

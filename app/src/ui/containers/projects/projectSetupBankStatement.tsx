@@ -3,11 +3,12 @@ import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { BankDetailsTaskStatus, DocumentDescription, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, StoresConsumer, useStores } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { useContent } from "@ui/hooks";
 
 export interface ProjectSetupBankStatementParams {
   projectId: string;
@@ -133,37 +134,64 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
   }
 }
 
-const ProjectSetupBankStatementContainer = (props: ProjectSetupBankStatementParams & BaseProps) => (
-  <StoresConsumer>
-    {stores => (
-      <ProjectSetupBankStatementComponent
-        project={stores.projects.getById(props.projectId)}
-        editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId, dto => {
-          dto.bankDetailsTaskStatus = BankDetailsTaskStatus.Complete;
-        })}
-        documents={stores.partnerDocuments.getPartnerDocuments(props.projectId, props.partnerId)}
-        documentsEditor={stores.partnerDocuments.getPartnerDocumentEditor(props.partnerId)}
-        onChange={(submit, dto) => {
-          stores.partners.updatePartner(submit, props.partnerId, dto, {
-              onComplete: (resp) => {
-                stores.navigation.navigateTo(props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }));
-              }});
-        }}
-        onFileChange={(isSaving, dto) => {
-          stores.messages.clearMessages();
-          // show message if remaining on page
-          const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
-          stores.partnerDocuments.updatePartnerDocumentsEditor(isSaving, props.projectId, props.partnerId, dto, successMessage);
-        }}
-        onFileDelete={(dto, document) => {
-          stores.messages.clearMessages();
-          stores.partnerDocuments.deletePartnerDocumentsEditor(props.projectId, props.partnerId, dto, document, "Your document has been removed.");
-        }}
-        {...props}
-      />
-    )}
-  </StoresConsumer>
-);
+const ProjectSetupBankStatementContainer = (props: ProjectSetupBankStatementParams & BaseProps) => {
+  const stores = useStores();
+  const { getContent } = useContent();
+
+  const documentUploadedMessage = getContent(x => x.projectSetupBankStatement.documentMessages.documentUploaded);
+  const documentsUploadedMessage = getContent(x => x.projectSetupBankStatement.documentsUploaded);
+  const documentsRemovedMessage = getContent(x => x.projectSetupBankStatement.documentsRemovedMessage);
+
+  const handleOnChange: Callbacks["onChange"] = (submit, dto) => {
+    stores.partners.updatePartner(submit, props.partnerId, dto, {
+      onComplete: (resp) => {
+        stores.navigation.navigateTo(
+          props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }),
+        );
+      },
+    });
+  };
+
+  const handleOnFileChange: Data["onFileChange"] = (isSaving, dto) => {
+    stores.messages.clearMessages();
+    // show message if remaining on page
+    const successMessage =
+      dto.files.length === 1 ? `${documentUploadedMessage}` : `${dto.files.length} ${documentsUploadedMessage}`;
+    stores.partnerDocuments.updatePartnerDocumentsEditor(
+      isSaving,
+      props.projectId,
+      props.partnerId,
+      dto,
+      successMessage,
+    );
+  };
+
+  const handleOnFileDelete: Data["onFileDelete"] = (dto, document) => {
+    stores.messages.clearMessages();
+    stores.partnerDocuments.deletePartnerDocumentsEditor(
+      props.projectId,
+      props.partnerId,
+      dto,
+      document,
+      documentsRemovedMessage,
+    );
+  };
+
+  return (
+        <ProjectSetupBankStatementComponent
+          project={stores.projects.getById(props.projectId)}
+          editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId, (dto) => {
+            dto.bankDetailsTaskStatus = BankDetailsTaskStatus.Complete;
+          })}
+          documents={stores.partnerDocuments.getPartnerDocuments(props.projectId, props.partnerId)}
+          documentsEditor={stores.partnerDocuments.getPartnerDocumentEditor(props.partnerId)}
+          onChange={handleOnChange}
+          onFileChange={handleOnFileChange}
+          onFileDelete={handleOnFileDelete}
+          {...props}
+        />
+  );
+};
 
 export const ProjectSetupBankStatementRoute = defineRoute({
   routeName: "projectSetupBankStatement",
