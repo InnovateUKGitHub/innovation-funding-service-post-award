@@ -9,4 +9,7 @@ export class PartnerDetailsContent extends ContentPageBase {
   }
 
   public readonly contactLabels = new ProjectContactLabels(this, this.project);
+  public readonly backToProjectDetails = this.getContent("backToProjectDetails");
+  public readonly editLink = this.getContent("editLink");
+
 }

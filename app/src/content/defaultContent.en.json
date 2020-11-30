@@ -515,7 +515,9 @@
       "project-contact-labels": {
         "partnerName": "Name",
         "partnerType": "Type"
-      }
+      },
+      "backToProjectDetails": "Back to project details",
+      "editLink": "Edit"
     },
     "partner-details-edit": {
       "title": {
