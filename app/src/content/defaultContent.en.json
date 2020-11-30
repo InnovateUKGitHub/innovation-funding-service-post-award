@@ -217,7 +217,10 @@
       "title": "Spend Profile",
       "guidance-message": "You must provide a forecast of all eligible project costs to reflect your spend throughout the project.",
       "submit-button": "Save and return to project setup",
-      "back-link": "Back to set up your project"
+      "back-link": "Back to set up your project",
+      "ready_to_submit-message": "This is ready to submit.",
+      "mark-as-complete": "Mark as complete",
+      "spend-profile-updated-message": "Your spend profile has been updated."
     },
     "failed-bank-check-confirmation": {
       "title": "We need more information",
