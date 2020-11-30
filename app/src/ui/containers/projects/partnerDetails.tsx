@@ -38,9 +38,12 @@ class PartnerDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         const isFC = (partner.roles & ProjectRole.FinancialContact) === ProjectRole.FinancialContact;
         const isPM = (partner.roles & ProjectRole.ProjectManager) === ProjectRole.ProjectManager;
 
+        const backToProjectDetailsLink = <ACC.Content value={x => x.partnerDetails.backToProjectDetails}/>;
+        const editLink = <ACC.Content value={x => x.partnerDetails.editLink}/>;
+
         return (
             <ACC.Page
-                backLink={<ACC.BackLink route={this.props.routes.projectDetails.getLink({ id: this.props.id })}>Back to project details</ACC.BackLink>}
+                backLink={<ACC.BackLink route={this.props.routes.projectDetails.getLink({ id: this.props.id })}>{backToProjectDetailsLink}</ACC.BackLink>}
                 pageTitle={<ACC.Projects.Title {...project} />}
                 project={project}
                 partner={partner}
@@ -61,7 +64,7 @@ class PartnerDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                             labelContent={x => x.partnerDetails.contactLabels.partnerPostcode}
                             qa="partner-postcode"
                             content={<ACC.Renderers.SimpleString>{partner.postcode}</ACC.Renderers.SimpleString>}
-                            action={isFC || isPM ? <ACC.Link styling={"Link"} route={this.props.routes.partnerDetailsEdit.getLink({ id: this.props.id, partnerId: this.props.partnerId })}>Edit</ACC.Link> : null}
+                            action={isFC || isPM ? <ACC.Link styling={"Link"} route={this.props.routes.partnerDetailsEdit.getLink({ id: this.props.id, partnerId: this.props.partnerId })}>{editLink}</ACC.Link> : null}
                         />
                     </ACC.SummaryList>
                 </ACC.Section>
