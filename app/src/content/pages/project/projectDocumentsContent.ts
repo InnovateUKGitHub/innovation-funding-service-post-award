@@ -13,6 +13,8 @@ export class ProjectDocumentsContent extends ContentPageBase {
   public readonly uploadInstruction = this.getContent("uploadInstruction", { markdown: true });
   public readonly noDocumentsMessage = this.getContent("noDocumentsMessage");
   public readonly noMatchingDocumentsMessage = this.getContent("noMatchingDocumentsMessage");
+  public readonly searchDocumentsMessage = this.getContent("searchDocumentsMessage");
+  public readonly documentsUploadedMessage = this.getContent("documentsUploadedMessage");
   public readonly documentLabels = new DocumentLabels(this, this.project);
   public readonly documentMessages = new DocumentMessages(this, this.project);
 }
