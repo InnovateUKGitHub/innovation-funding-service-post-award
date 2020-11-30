@@ -116,7 +116,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
                 {this.renderPartnerInformationTable(partners, project)}
 
-                <ACC.Section title="Project information" qa="project-details">
+                <ACC.Section title={<ACC.Content value={x => x.projectDetails.projectLabels.projectInformation}/>} qa="project-details">
                     <ACC.SummaryList qa="project-information">
                         <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.startDate} qa="start-date" content={<ACC.Renderers.FullDate value={project.startDate}/>}/>
                         <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.endDate} qa="end-date" content={<ACC.Renderers.FullDate value={project.endDate}/>}/>
