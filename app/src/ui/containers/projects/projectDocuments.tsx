@@ -134,9 +134,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
   }
 
   private renderDocumentsFilter() {
-    if (!this.props.isClient) {
-      return null;
-    }
+    if (!this.props.isClient) return null;
     const FilterForm = ACC.TypedForm<{ filterBoxText: string | null }>();
 
     return (
@@ -159,25 +157,35 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
   }
 }
 
-const ProjectDocumentsContainer = (props: ProjectDocumentPageParams & BaseProps) => (
-  <StoresConsumer>
-    {stores => (
-      <ProjectDocumentsComponent
-        project={stores.projects.getById(props.projectId)}
-        partners={stores.partners.getPartnersForProject(props.projectId)}
-        documents={stores.projectDocuments.getProjectDocuments(props.projectId)}
-        editor={stores.projectDocuments.getProjectDocumentEditor(props.projectId)}
-        isClient={stores.config.isClient()}
-        onChange={(saving, dto) => {
-          stores.messages.clearMessages();
-          const successMessage = dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.`;
-          stores.projectDocuments.updateProjectDocumentsEditor(saving, props.projectId, dto, successMessage);
-        }}
-        {...props}
-      />
-    )}
-  </StoresConsumer>
-);
+const ProjectDocumentsContainer = (props: ProjectDocumentPageParams & BaseProps) => {
+  const yourDocumentUploadedMessage = (
+    <ACC.Content value={(x) => x.projectDocuments.documentMessages.documentUploaded} />
+  );
+  const documentsUploadedMessage = <ACC.Content value={(x) => x.projectDocuments.documentsUploadedMessage} />;
+
+  return (
+    <StoresConsumer>
+      {(stores) => (
+        <ProjectDocumentsComponent
+          project={stores.projects.getById(props.projectId)}
+          partners={stores.partners.getPartnersForProject(props.projectId)}
+          documents={stores.projectDocuments.getProjectDocuments(props.projectId)}
+          editor={stores.projectDocuments.getProjectDocumentEditor(props.projectId)}
+          isClient={stores.config.isClient()}
+          onChange={(saving, dto) => {
+            stores.messages.clearMessages();
+            const successMessage =
+              dto.files.length === 1
+                ? `${yourDocumentUploadedMessage}`
+                : `${dto.files.length} ${documentsUploadedMessage}`;
+            stores.projectDocuments.updateProjectDocumentsEditor(saving, props.projectId, dto, successMessage);
+          }}
+          {...props}
+        />
+      )}
+    </StoresConsumer>
+  );
+};
 
 export const ProjectDocumentsRoute = defineRoute({
   routeName: "projectDocuments",
