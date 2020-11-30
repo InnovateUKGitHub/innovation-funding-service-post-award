@@ -234,7 +234,10 @@
       "project-labels": {
         "totalEligibleCostsClaimedLabel": "Costs claimed to date",
         "percentageEligibleCostsClaimedLabel": "Percentage of costs claimed to date"
-      }
+      },
+      "bact-to-project-overview": "Back to project overview",
+      "partner-finance-details-title": "Partner finance details",
+      "accountants-report-title": "When an independent accountant's report is needed"
     },
     "all-claims-dashboard": {
       "title": "Claims"

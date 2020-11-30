@@ -31,9 +31,11 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderContents(project: ProjectDto, partners: PartnerDto[]) {
+    const backLinkTitle = <ACC.Content value={x => x.financeSummary.backToProjectOverview}/>;
+
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.projectOverview.getLink({ projectId: this.props.projectId })}>Back to project overview</ACC.BackLink>}
+        backLink={<ACC.BackLink route={this.props.routes.projectOverview.getLink({ projectId: this.props.projectId })}>{backLinkTitle}</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title {...project} />}
         project={project}
       >
@@ -55,16 +57,20 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data, Callbacks> {
         ? partners
         : partners.filter(x => x.id === this.props.partnerId);
 
+    const costToDateTitle = <ACC.Content value={x => x.financeSummary.projectLabels.projectCosts}/>;
+    const partnerFinanceDetailsTitle = <ACC.Content value={x => x.financeSummary.partnerFinanceDetailsTitle}/>;
+    const accountantsReportTitle = <ACC.Content value={x => x.financeSummary.accountantsReportTitle}/>;
+
     return (
       <React.Fragment>
-        <ACC.Section title="Project costs to date">
+        <ACC.Section title={costToDateTitle}>
           <FinanceSummaryTable.Table data={partnersToShow} qa="ProjectCostsToDate" footers={this.renderTotalValueFooters(project, partners)}>
             <FinanceSummaryTable.Custom headerContent={x => x.financeSummary.projectLabels.partner} hideHeader={true} qa="Partner" value={x => <ACC.PartnerName partner={x} showIsLead={true} />} />
             <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalEligibleCosts} qa="TotalEligibleCosts" value={x => x.totalParticipantGrant} />
             <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalEligibleCostsClaimed} qa="CostsClaimedToDate" value={x => x.totalCostsSubmitted} />
             <FinanceSummaryTable.Percentage headerContent={x => x.financeSummary.projectLabels.percentageEligibleCostsClaimed} qa="PercentageOfCostsClaimedToDate" value={x => x.percentageParticipantCostsSubmitted} />
           </FinanceSummaryTable.Table>
-          <ACC.Section title="Partner finance details">
+          <ACC.Section title={partnerFinanceDetailsTitle}>
             <FinanceSummaryTable.Table data={partnersToShow} qa="PartnerFinanceDetails">
               <FinanceSummaryTable.Custom headerContent={x => x.financeSummary.projectLabels.partner} hideHeader={true} qa="Partner" value={x => <ACC.PartnerName partner={x} showIsLead={true} />} />
               <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalEligibleCosts} qa="TotalEligibleCosts" value={x => x.totalParticipantGrant} />
@@ -74,7 +80,7 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data, Callbacks> {
               <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalPrepayment} qa="TotalGrantPaidInAdvance" value={x => x.totalPrepayment} />
               <FinanceSummaryTable.Percentage headerContent={x => x.financeSummary.projectLabels.capLimit} qa="ClaimCap" value={x => x.capLimit} />
             </FinanceSummaryTable.Table>
-            <ACC.Section title="When an independent accountant's report is needed">
+            <ACC.Section title={accountantsReportTitle}>
               <FinanceSummaryTable.Table data={partnersToShow} qa="WhenAnIarIsNeeded" >
                 <FinanceSummaryTable.Custom headerContent={x => x.financeSummary.projectLabels.partner} hideHeader={true} value={x => <ACC.PartnerName partner={x} showIsLead={true} />} qa="Partner" />
                 <FinanceSummaryTable.String headerContent={x => x.financeSummary.projectLabels.auditReportFrequency} hideHeader={true} value={x => x.auditReportFrequencyName} qa="Frequency" />
