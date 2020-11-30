@@ -5,7 +5,6 @@ import { Pending } from "../../../shared/pending";
 import { PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
-
 interface Data {
     project: Pending<ProjectDto>;
     partner: Pending<PartnerDto>;
@@ -44,7 +43,7 @@ class PartnerDetailsEditComponent extends ContainerBase<PartnerDetailsParams, Da
 
         return (
             <ACC.Page
-                backLink={<ACC.BackLink route={this.props.routes.partnerDetails.getLink({ id: this.props.id, partnerId: this.props.partnerId })} >Back to partner information</ACC.BackLink>}
+                backLink={<ACC.BackLink route={this.props.routes.partnerDetails.getLink({ id: this.props.id, partnerId: this.props.partnerId })} >{<ACC.Content value={x => x.partnerDetailsEdit.backToPartnerInfo}/>}</ACC.BackLink>}
                 pageTitle={<ACC.Projects.Title {...project} />}
                 error={editor.error}
                 validator={editor.validator}
