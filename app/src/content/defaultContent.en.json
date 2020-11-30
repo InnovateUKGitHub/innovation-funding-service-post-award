@@ -186,7 +186,9 @@
       "project-messages": {
         "pcrQueried": "Request queried",
         "pcrToReview": "Requests to review: {{numberOfPcrs}}"
-      }
+      },
+      "backToProjects": "Back to projects",
+      "costsToDateMessage": "costs to date"
     },
     "project-details": {
       "title": "Project details"
