@@ -6,6 +6,7 @@ import { Pending } from "@shared/pending";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import { IForecastDetailsDtosValidator } from "@ui/validators";
+import { useContent } from "@ui/hooks";
 
 export interface ProjectSetupSpendProfileParams {
   projectId: string;
@@ -31,9 +32,11 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
   }
   public renderContents(combined: ACC.Claims.ForecastData, editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>, partnerEditor: IEditorStore<PartnerDto, PartnerDtoValidator>) {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
+    const readyToSubmitMessage = <ACC.Content value={x => x.projectSetupSpendProfile.readyToSubmitMessage}/>;
+    const markAsComplete = <ACC.Content value={x => x.projectSetupSpendProfile.markAsComplete}/>;
 
     const options: ACC.SelectOption[] = [
-      { id: "true", value: "This is ready to submit." }
+      { id: "true", value: readyToSubmitMessage }
     ];
 
     return (
@@ -55,7 +58,7 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
             qa="project-setup-spend-profile-form"
           >
             <ACC.Claims.ForecastTable data={combined} editor={editor} />
-            <Form.Fieldset heading="Mark as complete">
+            <Form.Fieldset heading={markAsComplete}>
               <Form.Checkboxes
                 name="isComplete"
                 options={options}
@@ -75,36 +78,51 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
   }
 }
 
-const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams & BaseProps) => (
-  <StoresConsumer>
-    {stores => (
-      <ProjectSetupSpendProfileComponent
-        data={Pending.combine({
-          project: stores.projects.getById(props.projectId),
-          partner: stores.partners.getById(props.partnerId),
-          forecastDetails: stores.forecastDetails.getAllInitialByPartner(props.partnerId),
-          golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
-          costCategories: stores.costCategories.getAll(),
-          // Initial forecast so happens before claims
-          claim: Pending.done(null),
-          claims: Pending.done([]),
-          claimDetails: Pending.done([]),
-        })}
-        editor={stores.forecastDetails.getInitialForecastEditor(props.partnerId)}
-        partnerEditor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
-        onChange={(saving, submit, dto) => {
-          stores.forecastDetails.updateInitialForcastEditor(saving, props.projectId, props.partnerId, dto, submit, "Your spend profile has been updated.", () => {
-            stores.navigation.navigateTo(props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }));
-          });
-        }}
-        onChangePartner={(dto) => {
-          stores.partners.updatePartner(false, props.partnerId, dto);
-        }}
-        {...props}
-      />
-    )}
-  </StoresConsumer>
-);
+const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams & BaseProps) => {
+  const { getContent } = useContent();
+  const spendProfileUpdatedMessage = getContent((x) => x.projectSetupSpendProfile.spendProfileUpdatedMessage);
+
+  return (
+    <StoresConsumer>
+      {(stores) => (
+        <ProjectSetupSpendProfileComponent
+          data={Pending.combine({
+            project: stores.projects.getById(props.projectId),
+            partner: stores.partners.getById(props.partnerId),
+            forecastDetails: stores.forecastDetails.getAllInitialByPartner(props.partnerId),
+            golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
+            costCategories: stores.costCategories.getAll(),
+            // Initial forecast so happens before claims
+            claim: Pending.done(null),
+            claims: Pending.done([]),
+            claimDetails: Pending.done([]),
+          })}
+          editor={stores.forecastDetails.getInitialForecastEditor(props.partnerId)}
+          partnerEditor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
+          onChange={(saving, submit, dto) => {
+            stores.forecastDetails.updateInitialForcastEditor(
+              saving,
+              props.projectId,
+              props.partnerId,
+              dto,
+              submit,
+              spendProfileUpdatedMessage,
+              () => {
+                stores.navigation.navigateTo(
+                  props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }),
+                );
+              },
+            );
+          }}
+          onChangePartner={(dto) => {
+            stores.partners.updatePartner(false, props.partnerId, dto);
+          }}
+          {...props}
+        />
+      )}
+    </StoresConsumer>
+  );
+};
 
 export const ProjectSetupSpendProfileRoute = defineRoute({
   routeName: "projectSetupSpendProfile",
