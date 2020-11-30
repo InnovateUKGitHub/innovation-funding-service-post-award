@@ -23,4 +23,7 @@ export class ProjectOverviewContent extends ContentPageBase {
   public readonly messages = new ProjectMessages(this, this.project);
   public readonly labels = new ProjectLabels(this, this.project);
 
+  public readonly backToProjects = this.getContent("backToProjects");
+  public readonly costsToDateMessage = this.getContent("costsToDateMessage");
+
 }
