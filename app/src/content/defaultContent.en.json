@@ -528,7 +528,8 @@
       "label-current-postcode": "Current location",
       "label-new-postcode": "New location",
       "hint-new-postcode": "Enter the postcode, postal code or zip code. If the location does not have one of these, enter the town or city.",
-      "save-and-return-partner-details-button": "Save and return to partner information"
+      "save-and-return-partner-details-button": "Save and return to partner information",
+      "back-to-partner-info": "Back to partner information"
     },
     "pcr-spend-profile-costs-summary": {
       "title": "Add partner",

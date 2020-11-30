@@ -15,4 +15,5 @@ export class PartnerDetailsEditContent extends ContentPageBase {
   public readonly newPostcodeLabel = this.getContent("label-new-postcode");
   public readonly newPostcodeHint = this.getContent("hint-new-postcode");
   public readonly buttonSaveAndReturnPartnerDetails = this.getContent("save-and-return-partner-details-button");
+  public readonly backToPartnerInfo = this.getContent("back-to-partner-info");
 }
