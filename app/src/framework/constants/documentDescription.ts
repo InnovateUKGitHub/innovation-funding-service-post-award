@@ -9,4 +9,6 @@ export enum DocumentDescription {
   OverheadCalculationSpreadsheet = 80,
   BankStatement = 90,
   AgreementToPCR = 100,
+  LMCMinutes = 110,
+  ScheduleThree = 120,
 }
