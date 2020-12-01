@@ -36,6 +36,8 @@ export class DocumentDescriptionMapper {
     OverheadCalculationSpreadsheet: "OverheadCalculationSpreadsheet",
     BankStatement: "BankStatement",
     AgreementToPCR: "AgreementToPCR",
+    LMCMinutes: "LMCMinutes",
+    ScheduleThree: "ScheduleThree",
   };
 
   public mapFromSalesforceDocumentDescription = ((documentType: string | null | undefined): DocumentDescription | null => {
@@ -50,6 +52,8 @@ export class DocumentDescriptionMapper {
       case this.types.OverheadCalculationSpreadsheet: return DocumentDescription.OverheadCalculationSpreadsheet;
       case this.types.BankStatement: return DocumentDescription.BankStatement;
       case this.types.AgreementToPCR: return DocumentDescription.AgreementToPCR;
+      case this.types.LMCMinutes: return DocumentDescription.LMCMinutes;
+      case this.types.ScheduleThree: return DocumentDescription.ScheduleThree;
       default: return null;
     }
   });
@@ -66,6 +70,8 @@ export class DocumentDescriptionMapper {
       case DocumentDescription.OverheadCalculationSpreadsheet: return this.types.OverheadCalculationSpreadsheet;
       case DocumentDescription.BankStatement: return this.types.BankStatement;
       case DocumentDescription.AgreementToPCR: return this.types.AgreementToPCR;
+      case DocumentDescription.LMCMinutes: return this.types.LMCMinutes;
+      case DocumentDescription.ScheduleThree: return this.types.ScheduleThree;
       default: return null;
     }
   });

@@ -44,10 +44,12 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
   }
 
   private readonly allowedDocuments = [
-    DocumentDescription.IAR,
-    DocumentDescription.StatementOfExpenditure,
+    DocumentDescription.Evidence,
     DocumentDescription.EndOfProjectSurvey,
-    DocumentDescription.Evidence
+    DocumentDescription.IAR,
+    DocumentDescription.LMCMinutes,
+    DocumentDescription.ScheduleThree,
+    DocumentDescription.StatementOfExpenditure,
   ];
 
   renderContents(project: ProjectDto, editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[], claim: ClaimDto, documentDescriptions: DocumentDescriptionDto[]) {
