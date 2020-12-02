@@ -26,4 +26,5 @@ export class EditClaimLineItemsContent extends ContentPageBase {
   public readonly forecastCosts = this.getContent("forecast-costs");
   public readonly difference = this.getContent("difference");
   public readonly addCost = this.getContent("add-cost");
+  public readonly additionalInfo = this.getContent("additional-info");
 }
