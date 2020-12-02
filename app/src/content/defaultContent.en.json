@@ -415,7 +415,8 @@
       "header-underspend": "Underspend",
       "header-last-update": "Date of last update",
       "back-link": "Back to project",
-      "link-update-forecast": "Update forecast"
+      "link-update-forecast": "Update forecast",
+      "view-forecast": "View forecast"
     },
     "forecasts-details": {
       "title": {
