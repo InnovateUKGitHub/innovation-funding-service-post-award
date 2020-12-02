@@ -114,16 +114,16 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
           qa="period"
           value={x => <Acc.Claims.ClaimPeriodDate claim={x} />}
         />
-        <ClaimTable.Currency headerContent={x => x.claimsDashboard.labels.forecastCosts} header="Forecast costs for period" qa="forecast-cost" value={(x) => x.forecastCost} />
-        <ClaimTable.Currency headerContent={x => x.claimsDashboard.labels.actualCosts} header="Actual costs for period" qa="actual-cost" value={(x) => x.totalCost} />
-        <ClaimTable.Currency headerContent={x => x.claimsDashboard.labels.difference} header="Difference" qa="diff" value={(x) => x.forecastCost - x.totalCost} />
-        <ClaimTable.Custom headerContent={x => x.claimsDashboard.labels.status} header="Status" qa="status" value={(x) => x.statusLabel} />
+        <ClaimTable.Currency headerContent={x => x.claimsDashboard.labels.forecastCosts} header={<Acc.Content value={x => x.claimsDashboard.labels.forecastCosts}/>} qa="forecast-cost" value={(x) => x.forecastCost} />
+        <ClaimTable.Currency headerContent={x => x.claimsDashboard.labels.actualCosts} header={<Acc.Content value={x => x.claimsDashboard.labels.actualCosts}/>} qa="actual-cost" value={(x) => x.totalCost} />
+        <ClaimTable.Currency headerContent={x => x.claimsDashboard.labels.difference} header={<Acc.Content value={x => x.claimsDashboard.labels.difference}/>}  qa="diff" value={(x) => x.forecastCost - x.totalCost} />
+        <ClaimTable.Custom headerContent={x => x.claimsDashboard.labels.status} header={<Acc.Content value={x => x.claimsDashboard.labels.status}/>}  qa="status" value={(x) => x.statusLabel} />
         <ClaimTable.ShortDate
-          header="Date of last update"
+          header={<Acc.Content value={x => x.claimsDashboard.labels.lastUpdated}/>}
           qa="date"
           value={(x) => (x.paidDate || x.approvedDate || x.lastModifiedDate)}
         />
-        <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} routes={this.props.routes} />} />
+        <ClaimTable.Custom header={<Acc.Content value={x => x.claimsDashboard.labels.actionHeader}/>} hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} routes={this.props.routes} />} />
       </ClaimTable.Table>
     );
   }
