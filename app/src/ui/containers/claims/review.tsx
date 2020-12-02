@@ -236,7 +236,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       (
       <Form.Fieldset key="form" headingContent={x => x.claimReview.additionalInfoSectionTitle} qa="additional-info-form" headingQa="additional-info-heading">
         <Form.MultilineString
-          label="additional-info"
+          label={<ACC.Content value={x => x.claimReview.additionalInfoLabel}/>}
           labelHidden={true}
           hintContent={x => x.claimReview.additionalInfoHint}
           name="comments"
