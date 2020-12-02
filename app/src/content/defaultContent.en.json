@@ -771,7 +771,9 @@
     "costs-claimed": "Costs claimed",
     "costs-approved": "Costs approved",
     "costs-deferred": "Costs deferred",
-    "total-grant-paid": "Total grant paid"
+    "total-grant-paid": "Total grant paid",
+    "open-caption": "Open",
+    "action-header": "Action"
   },
   "pcr-spend-profile-labels": {
     "cost": "Cost (£)",

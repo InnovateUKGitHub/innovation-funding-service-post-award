@@ -21,4 +21,6 @@ export class ClaimsLabels extends ContentBase {
   public readonly costsApproved = this.getContent("costs-approved");
   public readonly costsDeferred = this.getContent("costs-deferred");
   public readonly totalGrantPaid = this.getContent("total-grant-paid");
+  public readonly openCaption = this.getContent("open-caption");
+  public readonly actionHeader = this.getContent("action-header");
 }
