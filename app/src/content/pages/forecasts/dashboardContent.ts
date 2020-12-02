@@ -13,4 +13,5 @@ export class ForecastsDashboardContent extends ContentPageBase {
   public readonly underspendHeader = this.getContent("header-underspend");
   public readonly lastUpdateHeader = this.getContent("header-last-update");
   public readonly actionHeader = this.getContent("header-action");
+  public readonly viewForecastHeader = this.getContent("view-forecast");
 }
