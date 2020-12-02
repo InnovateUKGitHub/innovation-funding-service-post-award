@@ -110,7 +110,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
         <ClaimTable.Table
           data={claims}
           bodyRowFlag={x => this.getBodyRowFlag(x, project, partners) ? "edit" : null}
-          caption="Open"
+          caption={<Acc.Content value={x => x.allClaimsDashboard.labels.openCaption}/>}
           qa="current-claims-table"
         >
           <ClaimTable.Custom headerContent={x => x.allClaimsDashboard.labels.partner} qa="partner" value={renderPartnerName} />
@@ -119,7 +119,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
           <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.difference} qa="diff" value={(x) => x.forecastCost - x.totalCost} />
           <ClaimTable.String headerContent={x => x.allClaimsDashboard.labels.status} qa="status" value={(x) => x.statusLabel} />
           <ClaimTable.ShortDate headerContent={x => x.allClaimsDashboard.labels.lastUpdated} qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate} />
-          <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partners.find(p => p.id === x.partnerId)!} routes={this.props.routes} />} />
+          <ClaimTable.Custom header={<Acc.Content value={x => x.allClaimsDashboard.labels.actionHeader}/>} hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partners.find(p => p.id === x.partnerId)!} routes={this.props.routes} />} />
         </ClaimTable.Table>
       </Acc.Section>
     );
@@ -169,7 +169,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
           <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.difference} qa="diff" value={(x) => x.forecastCost - x.totalCost} />
           <ClaimTable.String headerContent={x => x.allClaimsDashboard.labels.status} qa="status" value={(x) => x.statusLabel} />
           <ClaimTable.ShortDate headerContent={x => x.allClaimsDashboard.labels.lastUpdated} qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate} />
-          <ClaimTable.Custom header="Action" hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} routes={this.props.routes} />} />
+          <ClaimTable.Custom header={<Acc.Content value={x => x.allClaimsDashboard.labels.actionHeader}/>} hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} routes={this.props.routes} />} />
         </ClaimTable.Table>
       </div>
     );
