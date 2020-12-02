@@ -14,4 +14,5 @@ export class MonitoringReportsQuestionStepContent extends ContentPageBase {
 
   public readonly continueButton = this.getContent("button-continue");
   public readonly saveAndReturnButton = this.getContent("button-save-and-return");
+  public readonly commentLabel = this.getContent("comment-label");
 }

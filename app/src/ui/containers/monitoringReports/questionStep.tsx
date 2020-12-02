@@ -58,7 +58,7 @@ export class MonitoringReportQuestionStep extends React.Component<Props> {
           ) }
         <ReportForm.MultilineString
           name={`question_${q.displayOrder}_comments`}
-          label="Comment"
+          label={<ACC.Content value={(x) => x.monitoringReportsQuestionStep.commentLabel}/>}
           value={x => q.comments}
           update={(x, value) => { x.questions[i].comments = value; }}
           validation={validator.responses.results[i].comments}
