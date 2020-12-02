@@ -471,7 +471,10 @@
     "monitoring-reports-summary": {
       "button-submit": "Submit report",
       "button-save-and-return": "Save and return to project",
-      "button-edit-item": "Edit"
+      "button-edit-item": "Edit",
+      "score-label": "Score",
+      "comments-label": "Comments",
+      "period-label": "Period"
     },
     "monitoring-reports-workflow": {
       "editMode": {

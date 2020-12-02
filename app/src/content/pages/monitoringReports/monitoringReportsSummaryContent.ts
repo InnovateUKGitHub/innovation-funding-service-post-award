@@ -15,4 +15,7 @@ export class MonitoringReportsSummaryContent extends ContentPageBase {
   public readonly editItemButton = this.getContent("button-edit-item");
   public readonly submitButton = this.getContent("button-submit");
   public readonly saveAndReturnButton = this.getContent("button-save-and-return");
+  public readonly scoreLabel = this.getContent("score-label");
+  public readonly commentLabel = this.getContent("comment-label");
+  public readonly periodLabel = this.getContent("period-label");
 }
