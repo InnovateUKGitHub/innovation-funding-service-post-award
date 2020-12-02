@@ -126,7 +126,12 @@
   },
   "pages": {
     "home": {
-      "title": "Home"
+      "title": "Home",
+      "current-user-heading": "Current user",
+      "change-user-message": "Change user",
+      "reset-user-message": "Reset user",
+      "projects-heading": "Projects",
+      "projects-dashboard-heading": "Projects dashboard"
     },
     "error-not-found": {
       "title": "Page not found"

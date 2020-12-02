@@ -30,18 +30,18 @@ class Component extends ContainerBaseWithState<{}, Data, {}, State> {
         <PageTitle />
         <div className="govuk-grid-row">
           <div className="govuk-grid-column-full">
-            <h2>Current user</h2>
+            <h2><ACC.Content value={x => x.home.currentUserHeading}/></h2>
             <CurrentUserForm.Form data={formData} qa={"currentUser"} onChange={v => this.setState(v)}>
               <CurrentUserForm.String label="user" labelHidden={true} name="user" value={x => x.email} update={(x, v) => x.email = v || ""} />
-              <CurrentUserForm.Submit>Change user</CurrentUserForm.Submit>
-              <CurrentUserForm.Button name="reset">Reset user</CurrentUserForm.Button>
+              <CurrentUserForm.Submit><ACC.Content value={x => x.home.changeUserMessage}/></CurrentUserForm.Submit>
+              <CurrentUserForm.Button name="reset"><ACC.Content value={x => x.home.resetUserMessage}/></CurrentUserForm.Button>
             </CurrentUserForm.Form>
           </div>
         </div>
         <div className="govuk-grid-row">
           <div className="govuk-grid-column-one-third">
-            <h2><Link route={this.props.routes.projectDashboard.getLink({})}>Projects</Link></h2>
-            <SimpleString>Projects dashboard</SimpleString>
+            <h2><Link route={this.props.routes.projectDashboard.getLink({})}><ACC.Content value={x => x.home.projectsHeading}/></Link></h2>
+            <SimpleString><ACC.Content value={x => x.home.projectsDashboardHeading}/></SimpleString>
           </div>
           <ContentConsumer>
             {
