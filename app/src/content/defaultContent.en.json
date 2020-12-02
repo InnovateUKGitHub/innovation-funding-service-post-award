@@ -385,7 +385,8 @@
       "button-send-query": "Send query",
       "button-upload": "Upload documents",
       "label-input-upload": "Upload files",
-      "accordion-title-upload-claim-validation-form": "Claim validation form"
+      "accordion-title-upload-claim-validation-form": "Claim validation form",
+      "additional-info": "additional-info"
     },
     "financial-virement-details": {
       "title": "Reallocate costs"
