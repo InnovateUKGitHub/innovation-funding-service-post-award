@@ -338,7 +338,8 @@
       "total-costs": "Total costs",
       "forecast-costs": "Forecast costs",
       "difference": "Difference",
-      "add-cost": "Add a cost"
+      "add-cost": "Add a cost",
+      "additional-info": "additional-info"
     },
     "claim-prepare": {
       "title": "Costs to be claimed",

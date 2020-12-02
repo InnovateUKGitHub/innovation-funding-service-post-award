@@ -131,7 +131,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset headingContent={x => x.editClaimLineItems.additionalInformationHeading} qa="additional-info-form" headingQa="additional-info-heading">
           <LineItemForm.MultilineString
-            label="additional-info"
+            label={<ACC.Content value={x => x.editClaimLineItems.additionalInfo}/>}
             hintContent={x => x.editClaimLineItems.additionalInformationHint}
             labelHidden={true}
             name="comments"
@@ -181,7 +181,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         </LineItemForm.Fieldset>
         <LineItemForm.Fieldset headingContent={x => x.editClaimLineItems.additionalInformationHeading} qa="additional-info-form" headingQa="additional-info-heading">
           <LineItemForm.MultilineString
-            label="additional-info"
+            label={<ACC.Content value={x => x.editClaimLineItems.additionalInfo}/>}
             hintContent={x => x.editClaimLineItems.additionalInformationHint}
             labelHidden={true}
             name="comments"
