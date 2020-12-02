@@ -513,7 +513,8 @@
     },
     "monitoring-reports-question-step": {
       "button-continue": "Continue",
-      "button-save-and-return": "Save and return to summary"
+      "button-save-and-return": "Save and return to summary",
+      "comment-label": "Comment"
     },
     "partner-details": {
       "title": {
