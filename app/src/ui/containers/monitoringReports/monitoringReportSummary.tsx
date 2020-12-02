@@ -95,7 +95,7 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
     return (
       <ACC.SummaryListItem
         validation={validation.score}
-        label="Score"
+        label={<ACC.Content value={(x) => x.monitoringReportsSummary.scoreLabel}/>}
         content={(response && `${response.questionScore} - ${response.questionText}`)}
         qa={`question-${question.displayOrder}-score`}
         action={this.getAction(validation, question)}
@@ -123,7 +123,7 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
         <ACC.SummaryList qa={`summary-period`}>
           <ACC.SummaryListItem
             validation={validation}
-            label="Period"
+            label={<ACC.Content value={(x) => x.monitoringReportsSummary.periodLabel}/>}
             content={editor.data.periodId}
             qa={`period`}
             /*Put the action on the second item if not showing the first*/
