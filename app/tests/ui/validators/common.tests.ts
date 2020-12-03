@@ -1,3 +1,4 @@
+// tslint:disable: no-duplicate-string
 import { DateTime } from "luxon";
 import * as Validators from "@ui/validators/common";
 import { Results } from "@ui/validation";
@@ -13,12 +14,12 @@ describe("common validators", () => {
       expect(Validators.isBeforeOrSameDay(new Results({}, true), null, new Date()).isValid).toBe(true);
     });
     it("should be valid when the date is before the test date", () => {
-      const date = DateTime.local().minus({day: 1}).toJSDate();
+      const date = DateTime.local().minus({ day: 1 }).toJSDate();
       const test = DateTime.local().toJSDate();
       expect(Validators.isBeforeOrSameDay(new Results({}, true), date, test).isValid).toBe(true);
     });
     it("should be invalid when the date is after the test date", () => {
-      const date = DateTime.local().plus({day: 1}).toJSDate();
+      const date = DateTime.local().plus({ day: 1 }).toJSDate();
       const test = DateTime.local().toJSDate();
       expect(Validators.isBeforeOrSameDay(new Results({}, true), date, test).isValid).toBe(false);
     });
@@ -59,6 +60,43 @@ describe("common validators", () => {
     });
     it("fails validation for different types", () => {
       expect(Validators.isUnchanged(new Results({}, true), "hello", new Date()).isValid).toBe(false);
+    });
+  });
+
+  describe("isPositiveFloat", () => {
+    describe("@returns", () => {
+      test.each`
+        name           | inputValue | expected
+        ${"when null"} | ${null}    | ${true}
+        ${"when 0"}    | ${0}       | ${true}
+      `("$expected $name", ({ inputValue, expected }) => {
+        const { isValid } = Validators.isPositiveFloat(new Results({}, true), inputValue);
+        expect(isValid).toBe(expected);
+      });
+
+      describe("given positive integer", () => {
+        test.each`
+          name                          | inputValue      | expected
+          ${"with no decimals"}         | ${3}            | ${true}
+          ${"with two decimal places"}  | ${3.63}         | ${true}
+          ${"with many decimal places"} | ${12.538295004} | ${true}
+        `("$expected $name", ({ inputValue, expected }) => {
+          const { isValid } = Validators.isPositiveFloat(new Results({}, true), inputValue);
+          expect(isValid).toBe(expected);
+        });
+      });
+
+      describe("given negative integer", () => {
+        test.each`
+          name                          | inputValue       | expected
+          ${"with no decimals"}         | ${-3}            | ${false}
+          ${"with two decimal places"}  | ${-3.63}         | ${false}
+          ${"with many decimal places"} | ${-12.538295004} | ${false}
+        `("$expected $name", ({ inputValue, expected }) => {
+          const { isValid } = Validators.isPositiveFloat(new Results({}, true), inputValue);
+          expect(isValid).toBe(expected);
+        });
+      });
     });
   });
 });

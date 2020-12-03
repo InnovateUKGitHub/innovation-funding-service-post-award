@@ -436,7 +436,7 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
 
   financialYearEndTurnover = Validation.all(this,
     () => this.model.organisationType === PCROrganisationType.Industrial ? this.requiredIfComplete(this.model.financialYearEndTurnover, "Enter a financial year end turnover") : Validation.valid(this),
-    () => Validation.isPositiveCurrency(this, this.model.financialYearEndTurnover, "Enter a financial year end turnover amount equal to or greater than 0"),
+    () => Validation.isPositiveFloat(this, this.model.financialYearEndTurnover, "Enter a financial year end turnover amount equal to or greater than 0"),
     () => this.hasPermissionToEdit(this.model.financialYearEndTurnover, this.original && this.original.financialYearEndTurnover, "Turnover cannot be changed"),
   );
 
