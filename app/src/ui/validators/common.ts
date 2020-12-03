@@ -114,16 +114,10 @@ export function isCurrency(results: Results<{}>, value: number | null, message?:
   return isTrue(results, !isNaN(value) && regex.test(value.toString()), message || "Invalid amount");
 }
 
-// TODO this only works to 2 decimal places, requires refactor with isPositiveFloat
-export function isPositiveCurrency(results: Results<{}>, value: number | null, message?: string) {
-  const regex = /^[0-9]+(\.[0-9]{1,2})?$/i;
-  if (value === null || value === undefined || value === 0) {
+export function isPositiveFloat(results: Results<{}>,value: number | null, message?: string) {
+  if (!value) {
     return valid(results);
   }
-  return isTrue(results, !isNaN(value) && regex.test(value.toString()), message || "Invalid amount");
-}
-
-export function isPositiveFloat(results: Results<{}>,value: number, message?: string) {
   const isCurrencyValue = Math.sign(value);
   return isPositiveInteger(results, isCurrencyValue, message || "You must put a positive currency value");
 }
