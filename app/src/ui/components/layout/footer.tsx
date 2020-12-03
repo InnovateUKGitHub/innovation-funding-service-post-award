@@ -1,6 +1,6 @@
-// tslint:disable: object-literal-key-quotes
 import * as React from "react";
 import cx from "classnames";
+import { GovWidthContainer } from "./GovWidthContainer";
 import { ExternalLink } from "../renderers";
 import { CrownCopyrightLogo } from "./crownCopyrightLogo";
 
@@ -15,7 +15,7 @@ export const Footer = ({ links }: FooterProps) => {
 
   return (
     <footer className="govuk-footer" role="contentinfo" data-qa="pageFooter">
-      <div className="govuk-width-container">
+      <GovWidthContainer>
         <div className="govuk-footer__meta">
           <div className="govuk-footer__meta-item govuk-footer__meta-item--grow">
             <h2 className="govuk-visually-hidden" {...content.title} />
@@ -55,7 +55,7 @@ export const Footer = ({ links }: FooterProps) => {
             <FooterLink className="govuk-footer__copyright-logo" {...content.crownCopyrightLink} />
           </div>
         </div>
-      </div>
+      </GovWidthContainer>
     </footer>
   );
 };

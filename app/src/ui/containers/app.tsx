@@ -3,7 +3,7 @@ import React from "react";
 import { IStores, ModalRegister, useModal, useStores } from "@ui/redux";
 import { updatePageTitle } from "@ui/redux/actions";
 import { IRoutes, MatchedRoute, matchRoute } from "@ui/routing";
-import { Footer, Header, PhaseBanner, PrivateModal, useHeader } from "@ui/components";
+import { Footer, GovWidthContainer, Header, PhaseBanner, PrivateModal, useHeader } from "@ui/components";
 import { StandardErrorPage } from "@ui/components/standardErrorPage";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { BaseProps } from "./containerBase";
@@ -98,22 +98,15 @@ class AppView extends React.Component<IAppProps> {
       <div>
         <Header {...headerProps} />
 
-        <div
-          className="govuk-width-container"
-          data-page-qa={filteredRoute.routeName}
-        >
+        <GovWidthContainer data-page-qa={filteredRoute.routeName}>
           <PhaseBanner />
 
-          {hasAccess ? (
-            <RouteContainer {...requiredRouteProps} {...params} />
-          ) : (
-            <StandardErrorPage />
-          )}
-        </div>
+          {hasAccess ? <RouteContainer {...requiredRouteProps} {...params} /> : <StandardErrorPage />}
+        </GovWidthContainer>
 
         <Footer links={footerLinks} />
 
-        {modalRegister.getModals().map((modal) => (
+        {modalRegister.getModals().map(modal => (
           <PrivateModal key={`modal-${modal.id}`} {...modal} />
         ))}
       </div>

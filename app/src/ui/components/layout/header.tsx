@@ -3,6 +3,7 @@ import { ContentConsumer } from "@ui/redux";
 import { getContentFromResult } from "@ui/hooks";
 import { ContentResult } from "@content/contentBase";
 import { HeaderContent } from "@content/general-content/HeaderContent";
+import { GovWidthContainer } from "./GovWidthContainer";
 
 interface NavigationItem {
   text: ContentResult["content"];
@@ -15,10 +16,7 @@ export interface HeaderProps {
   navigationItems?: NavigationItem[];
 }
 
-export const useHeader = (
-  domainUrl: string,
-  content: HeaderContent
-): HeaderProps => {
+export const useHeader = (domainUrl: string, content: HeaderContent): HeaderProps => {
   const getIfsLink = (value: string) => domainUrl + value;
 
   const siteLink = getIfsLink("/competition/search");
@@ -64,18 +62,9 @@ export class Header extends React.PureComponent<HeaderProps> {
 
     return (
       <nav>
-        <ul
-          id="navigation"
-          className="govuk-header__navigation"
-          aria-label="Top Level Navigation"
-          aria-hidden="false"
-        >
+        <ul id="navigation" className="govuk-header__navigation" aria-label="Top Level Navigation" aria-hidden="false">
           {navigationItems.map(({ text, qa, ...item }) => (
-            <li
-              key={text}
-              className="govuk-header__navigation-item"
-              data-qa="header-navigation-item"
-            >
+            <li key={text} className="govuk-header__navigation-item" data-qa="header-navigation-item">
               <a {...item} className="govuk-header__link" data-qa={qa}>
                 {text}
               </a>
@@ -88,10 +77,7 @@ export class Header extends React.PureComponent<HeaderProps> {
 
   private renderLogo() {
     return (
-      <a
-        href="https://www.gov.uk"
-        className="govuk-header__link govuk-header__link--homepage"
-      >
+      <a href="https://www.gov.uk" className="govuk-header__link govuk-header__link--homepage">
         <span className="govuk-header__logotype">
           <svg
             role="presentation"
@@ -112,11 +98,7 @@ export class Header extends React.PureComponent<HeaderProps> {
             <img src="/assets/images/govuk-logotype-crown.png" className="govuk-header__logotype-crown-fallback-image" />
             */}
           </svg>
-          <span
-            className="govuk-header__logotype-text"
-            data-qa="gov-uk-logo-text"
-            style={{ paddingLeft: "10px" }}
-          >
+          <span className="govuk-header__logotype-text" data-qa="gov-uk-logo-text" style={{ paddingLeft: "10px" }}>
             GOV.UK
           </span>
         </span>
@@ -127,15 +109,15 @@ export class Header extends React.PureComponent<HeaderProps> {
   render() {
     return (
       <ContentConsumer>
-        {(content) => (
+        {content => (
           <header
             className="govuk-header"
             role="banner"
             data-module="header"
             data-qa="pageHeader"
-            ref={(e) => (this.header = e)}
+            ref={e => (this.header = e)}
           >
-            <div className="govuk-header__container govuk-width-container">
+            <GovWidthContainer className="govuk-header__container">
               <div className="govuk-header__logo">{this.renderLogo()}</div>
 
               <div className="govuk-header__content">
@@ -161,7 +143,7 @@ export class Header extends React.PureComponent<HeaderProps> {
 
                 {this.renderNavigation()}
               </div>
-            </div>
+            </GovWidthContainer>
           </header>
         )}
       </ContentConsumer>

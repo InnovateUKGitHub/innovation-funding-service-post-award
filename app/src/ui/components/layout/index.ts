@@ -14,3 +14,4 @@ export * from "./listItem";
 export * from "./readonlyLabel";
 export * from "./tabs";
 export * from "./unorderedList";
+export * from "./GovWidthContainer";

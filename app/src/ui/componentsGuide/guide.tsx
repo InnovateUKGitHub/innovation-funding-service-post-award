@@ -39,6 +39,7 @@ import { modalGuide } from "@ui/componentsGuide/modalGuide";
 import { listGuide } from "@ui/componentsGuide/listGuide";
 import { readonlyLabel } from "@ui/componentsGuide/readonlyLabelGuide";
 import { IGuide } from "@framework/types";
+import { GovWidthContainer } from "@ui/components/layout";
 
 const guides: IGuide[] = [
   accordionGuide,
@@ -84,17 +85,17 @@ interface GuideProps {
   filter: string;
 }
 
-export const Guide: React.FunctionComponent<GuideProps> = (props) => {
+export const Guide: React.FunctionComponent<GuideProps> = props => {
   const componentDirectory = `${process.env.SERVER_URL}/components`;
   const guidesToRender = guides
     .map((guide, originalIndex) => ({ guide, originalIndex }))
-    .filter((x) => !props.filter || x.guide.name === props.filter);
+    .filter(x => !props.filter || x.guide.name === props.filter);
 
   return (
     <div>
       <Header siteLink={componentDirectory} />
 
-      <div className="govuk-width-container" style={{ maxWidth: "100%" }}>
+      <GovWidthContainer style={{ maxWidth: "100%" }}>
         <main
           className="govuk-main-wrapper"
           id="main-content"
@@ -126,23 +127,16 @@ export const Guide: React.FunctionComponent<GuideProps> = (props) => {
                   <h2 className="govuk-heading-m">{guide.name}</h2>
 
                   {guide.options.map((option, optionIndex) => (
-                    <div
-                      className="govuk-!-margin-bottom-9"
-                      key={`component-option-${originalIndex}-${optionIndex}`}
-                    >
+                    <div className="govuk-!-margin-bottom-9" key={`component-option-${originalIndex}-${optionIndex}`}>
                       <h3 className="govuk-heading-s">{option.name}</h3>
-                      <div
-                        style={{ padding: "5px", border: "dashed grey 1px" }}
-                      >
+                      <div style={{ padding: "5px", border: "dashed grey 1px" }}>
                         <p className="govuk-body">
                           <i>{option.comments}</i>
                         </p>
                         <div style={{ backgroundColor: "lightGrey" }}>
                           <pre>{option.example}</pre>
                         </div>
-                        <div style={{ background: "white" }}>
-                          {option.render()}
-                        </div>
+                        <div style={{ background: "white" }}>{option.render()}</div>
                       </div>
                     </div>
                   ))}
@@ -151,7 +145,7 @@ export const Guide: React.FunctionComponent<GuideProps> = (props) => {
             </div>
           </div>
         </main>
-      </div>
+      </GovWidthContainer>
     </div>
   );
 };
