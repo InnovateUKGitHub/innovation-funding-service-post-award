@@ -1,3 +1,16 @@
+/*
+ * <App />
+*/
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-content {
+  width: 100%;
+  flex: 1 1 100%;
+}
 
 .govuk-table__cell:not(:first-child):not(:last-child),
 .govuk-table__header:not(:first-child):not(:last-child) {
@@ -32,7 +45,7 @@
   border-collapse: collapse;
 }
 
-.govuk-summary-list .govuk-link{
+.govuk-summary-list .govuk-link {
   font: inherit;
   padding: 0px;
 }
@@ -88,7 +101,7 @@
   border-width: 1px 1px 1px 1px;
 }
 .acc-list-item__actionRequired {
-  background-color: #f8f8f8
+  background-color: #f8f8f8;
 }
 .acc-list-item__actionRequired.govuk-grid-row {
   border-color: #bfc1c3 #bfc1c3 #bfc1c3 #0b0c0c;
@@ -150,7 +163,7 @@
   }
 
   .govuk-grid-column--right-align {
-    text-align:right;
+    text-align: right;
   }
 }
 
@@ -170,7 +183,7 @@
 }
 
 .govuk-navigation-arrows__button:hover {
-  background: #f8f8f8
+  background: #f8f8f8;
 }
 
 .govuk-navigation-arrows__button__arrow {
@@ -245,7 +258,7 @@
 }
 
 .acc-section:last-child {
-  margin-bottom: 0!important;
+  margin-bottom: 0 !important;
 }
 
 /* overriding govuk styles so we always render content so bounding boxes are available */
@@ -270,10 +283,9 @@ div.card-link-grid {
 div.card-link {
   display: flex;
   background: #f8f8f8;
-  height:100%;
+  height: 100%;
   width: 100%;
 }
-
 
 div.card-link > a {
   border-top: 5px solid #005ea5;
@@ -299,7 +311,7 @@ div.card-link > a:focus {
 
 .card-link__title {
   text-decoration: underline;
-} 
+}
 
 .card-link__message {
   color: #000000;
@@ -315,12 +327,12 @@ div.card-link > a:focus {
 }
 
 button.govuk-link {
-  color:#1d70b8;
-  cursor:pointer;
-  text-decoration:underline;
-  background-color:inherit;
-  border:none;
-  box-sizing:unset;
+  color: #1d70b8;
+  cursor: pointer;
+  text-decoration: underline;
+  background-color: inherit;
+  border: none;
+  box-sizing: unset;
 }
 
 button.govuk-link:focus {
@@ -478,7 +490,7 @@ button.govuk-link:focus {
   }
 }
 
-.app-task-list__task-action--completed{
+.app-task-list__task-action--completed {
   color: #00703c;
 }
 
@@ -518,5 +530,5 @@ p.govuk-body--multiline {
 }
 
 .markdown p:last-child {
-  margin-bottom: 0!important;
+  margin-bottom: 0 !important;
 }

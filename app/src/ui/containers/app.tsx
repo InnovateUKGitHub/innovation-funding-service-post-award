@@ -95,10 +95,10 @@ class AppView extends React.Component<IAppProps> {
     const RouteContainer = filteredRoute.container;
 
     return (
-      <div>
+      <div className="app-container">
         <Header {...headerProps} />
 
-        <GovWidthContainer data-page-qa={filteredRoute.routeName}>
+        <GovWidthContainer className="app-content" data-page-qa={filteredRoute.routeName}>
           <PhaseBanner />
 
           {hasAccess ? <RouteContainer {...requiredRouteProps} {...params} /> : <StandardErrorPage />}
