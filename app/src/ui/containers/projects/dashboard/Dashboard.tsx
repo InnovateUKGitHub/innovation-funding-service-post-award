@@ -58,11 +58,15 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     const displayBackLink: boolean = config.ssoEnabled;
 
     return displayBackLink ? (
+      // Note: This has been added as the content component cannot infer the static string length of min 4 characters
+      // tslint:disable-next-line: react-a11y-anchors
       <a className="govuk-back-link" href={`${config.ifsRoot}/dashboard-selection`}>
-        Back to dashboard
+        <ACC.Content value={x => x.projectsDashboard.backToDashboard} />
       </a>
     ) : (
-      <ACC.BackLink route={this.props.routes.home.getLink({})}>Back to home page</ACC.BackLink>
+      <ACC.BackLink route={this.props.routes.home.getLink({})}>
+        <ACC.Content value={x => x.projectsDashboard.backToHomepage} />
+      </ACC.BackLink>
     );
   }
 
