@@ -1,6 +1,6 @@
 import React from "react";
 import { ContentConsumer } from "@ui/redux";
-import { getContentFromResult } from "@ui/hooks";
+import { getContentFromResult, useGovFrontend } from "@ui/hooks";
 import { ContentResult } from "@content/contentBase";
 import { HeaderContent } from "@content/general-content/HeaderContent";
 import { GovWidthContainer } from "./GovWidthContainer";
@@ -44,18 +44,10 @@ export const useHeader = (domainUrl: string, content: HeaderContent): HeaderProp
   };
 };
 
-export class Header extends React.PureComponent<HeaderProps> {
-  private header: HTMLElement | null = null;
+export function Header({ navigationItems, siteLink }: HeaderProps) {
+  const { setRef } = useGovFrontend("Header");
 
-  componentDidMount() {
-    const govFrontend = window && (window as any).GOVUKFrontend;
-    if (this.header && govFrontend) {
-      new govFrontend.Header(this.header).init();
-    }
-  }
-
-  private renderNavigation() {
-    const { navigationItems } = this.props;
+  const renderNavigation = () => {
     if (!navigationItems || (navigationItems && !navigationItems.length)) {
       return null;
     }
@@ -73,9 +65,9 @@ export class Header extends React.PureComponent<HeaderProps> {
         </ul>
       </nav>
     );
-  }
+  };
 
-  private renderLogo() {
+  const renderLogo = () => {
     return (
       <a href="https://www.gov.uk" className="govuk-header__link govuk-header__link--homepage">
         <span className="govuk-header__logotype">
@@ -104,49 +96,37 @@ export class Header extends React.PureComponent<HeaderProps> {
         </span>
       </a>
     );
-  }
+  };
 
-  render() {
-    return (
-      <ContentConsumer>
-        {content => (
-          <header
-            className="govuk-header"
-            role="banner"
-            data-module="header"
-            data-qa="pageHeader"
-            ref={e => (this.header = e)}
-          >
-            <GovWidthContainer className="govuk-header__container">
-              <div className="govuk-header__logo">{this.renderLogo()}</div>
+  return (
+    <ContentConsumer>
+      {content => (
+        <header className="govuk-header" role="banner" data-module="header" data-qa="pageHeader" ref={setRef}>
+          <GovWidthContainer className="govuk-header__container">
+            <div className="govuk-header__logo">{renderLogo()}</div>
 
-              <div className="govuk-header__content">
-                {/* tslint:disable-next-line:react-a11y-anchors */}
-                <a
-                  href={this.props.siteLink}
-                  className="govuk-header__link govuk-header__link--service-name"
-                  data-qa="service-name"
-                >
-                  {content.header.siteName}
-                </a>
+            <div className="govuk-header__content">
+              {/* tslint:disable-next-line:react-a11y-anchors */}
+              <a href={siteLink} className="govuk-header__link govuk-header__link--service-name" data-qa="service-name">
+                {content.header.siteName}
+              </a>
 
-                <button
-                  type="button"
-                  role="button"
-                  className="govuk-header__menu-button govuk-js-header-toggle"
-                  aria-controls="navigation"
-                  aria-label="Show or hide Top Level Navigation"
-                  data-qa="mobile-nav-toggle"
-                >
-                  {getContentFromResult(content.header.mobileNavigationLabel)}
-                </button>
+              <button
+                type="button"
+                role="button"
+                className="govuk-header__menu-button govuk-js-header-toggle"
+                aria-controls="navigation"
+                aria-label="Show or hide Top Level Navigation"
+                data-qa="mobile-nav-toggle"
+              >
+                {getContentFromResult(content.header.mobileNavigationLabel)}
+              </button>
 
-                {this.renderNavigation()}
-              </div>
-            </GovWidthContainer>
-          </header>
-        )}
-      </ContentConsumer>
-    );
-  }
+              {renderNavigation()}
+            </div>
+          </GovWidthContainer>
+        </header>
+      )}
+    </ContentConsumer>
+  );
 }
