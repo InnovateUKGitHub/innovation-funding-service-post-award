@@ -1,29 +1,22 @@
 import React from "react";
+import { useGovFrontend } from "@ui/hooks";
 
 interface InfoProps {
   summary: React.ReactNode;
+  children: React.ReactNode;
   qa?: string;
 }
 
-export class Info extends React.PureComponent<InfoProps, {}> {
+export function Info({ qa, summary, children }: InfoProps) {
+  const { setRef } = useGovFrontend("Details");
 
-  private elem: HTMLElement|null = null;
+  return (
+    <details data-module="govuk-details" className="govuk-details" ref={setRef} data-qa={qa}>
+      <summary className="govuk-details__summary">
+        <span className="govuk-details__summary-text">{summary}</span>
+      </summary>
 
-  componentDidMount() {
-    const govFrontend = window && (window as any).GOVUKFrontend;
-    if(this.elem && govFrontend) {
-      new govFrontend.Details(this.elem).init();
-    }
-  }
-
-  render() {
-    return (
-      <details data-module="govuk-details" className="govuk-details" ref={(e) => this.elem = e} data-qa={this.props.qa}>
-        <summary className="govuk-details__summary">
-          <span className="govuk-details__summary-text">{this.props.summary}</span>
-        </summary>
-        <div className="govuk-details__text">{this.props.children}</div>
-      </details>
-    );
-  }
+      <div className="govuk-details__text">{children}</div>
+    </details>
+  );
 }
