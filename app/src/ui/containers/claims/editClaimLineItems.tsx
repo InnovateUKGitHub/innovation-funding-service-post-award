@@ -17,7 +17,7 @@ export interface EditClaimDetailsParams {
   periodId: number;
 }
 
-interface Data {
+export interface Data {
   project: Pending<ProjectDto>;
   claimDetails: Pending<ClaimDetailsDto>;
   costCategories: Pending<CostCategoryDto[]>;
@@ -35,7 +35,7 @@ interface CombinedData {
   editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>;
 }
 
-interface Callbacks {
+export interface Callbacks {
   onUpdate: (saving: boolean, dto: ClaimDetailsDto, goToUpdload?: boolean) =>  void;
 }
 
