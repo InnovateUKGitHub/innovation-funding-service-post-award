@@ -1,60 +1,31 @@
 import React, { CSSProperties } from "react";
 import classNames from "classnames";
 
+import { useGovFrontend } from "@ui/hooks";
+
 export interface StyledButtonProps extends React.ButtonHTMLAttributes<{}> {
   styling: "Link" | "Secondary" | "Primary" | "Warning";
   className?: string;
   style?: CSSProperties;
 }
 
-export class Button extends React.PureComponent<StyledButtonProps, {}> {
+export function Button({ className, styling, ...props }: StyledButtonProps) {
+  const { setRef } = useGovFrontend("Button");
 
-  private elem: HTMLElement | null = null;
-  private readonly govukButton = "govuk-button govuk-!-margin-right-1";
+  const getButtonTypeClass = (type: StyledButtonProps["styling"]) => {
+    const govukButton = "govuk-button govuk-!-margin-right-1";
 
-  componentDidMount() {
-    const govFrontend = window && (window as any).GOVUKFrontend;
-    if (this.elem && govFrontend) {
-      new govFrontend.Button(this.elem).init();
-    }
-  }
+    const buttonTypeMap = {
+      Primary: govukButton,
+      Secondary: `${govukButton} govuk-button--secondary`,
+      Warning: `${govukButton} govuk-button--warning`,
+      Link: "govuk-link",
+    };
 
-  private getLinkButtonStyling(className?: string, style?: CSSProperties) {
-    const linkStyles = classNames(className, "govuk-link");
-    return { className: linkStyles, style };
-  }
+    return buttonTypeMap[type] || govukButton;
+  };
 
-  private getPrimaryButtonStyling(className?: string, style?: CSSProperties) {
-    const linkStyles = classNames(className, this.govukButton);
-    return { className: linkStyles, style };
-  }
+  const buttonStyling = getButtonTypeClass(styling);
 
-  private getSecondaryButtonStyling(className?: string, style?: CSSProperties) {
-    const linkStyles = classNames(className, this.govukButton, "govuk-button--secondary");
-    return { className: linkStyles, style };
-  }
-
-  private getWarningButtonStyling(className?: string, style?: CSSProperties) {
-    const linkStyles = classNames(className, this.govukButton, "govuk-button--warning");
-    return { className: linkStyles, style };
-  }
-
-  private getButtonStyling({ styling, className, style }: StyledButtonProps) {
-    switch (styling) {
-      case "Warning": return this.getWarningButtonStyling(className, style);
-      case "Link": return this.getLinkButtonStyling(className, style);
-      case "Secondary": return this.getSecondaryButtonStyling(className, style);
-      case "Primary":
-      default: return this.getPrimaryButtonStyling(className, style);
-    }
-  }
-
-  render() {
-    const { className, styling, style, children, ...rest } = this.props;
-    const buttonStyling = this.getButtonStyling({ className, styling, style });
-
-    return (
-      <button data-module="govuk-button" ref={(e) => this.elem = e} {...buttonStyling} {...rest} >{children}</button>
-    );
-  }
+  return <button data-module="govuk-button" ref={setRef} className={classNames(buttonStyling, className)} {...props} />;
 }
