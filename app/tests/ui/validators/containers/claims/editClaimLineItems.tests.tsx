@@ -1,32 +1,98 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import { Callbacks, Data, EditClaimDetailsParams, EditClaimLineItemsComponent } from "@ui/containers";
+import { EditClaimDetailsParams, EditClaimLineItemsCallbacks, EditClaimLineItemsComponent, EditClaimLineItemsData } from "@ui/containers";
 import { BaseProps, ContainerProps } from "@ui/containers/containerBase";
 import { LoadingStatus, Pending } from "@shared/pending";
 import { ClaimDetailsDto, DocumentSummaryDto, ForecastDetailsDTO, ProjectDto } from "@framework/dtos";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { IEditorStore } from "@ui/redux";
-import { ClaimDetailsValidator } from "@ui/validators";
 import { TestBed, TestBedContent } from "@shared/TestBed";
 
 const projectId = "test-id";
 
 const contentStub = {
+  editClaimLineItems: {
+    saveAndReturnButton: {
+      content: "stub-saveAndReturnButton",
+    },
+    backLink: {
+      content: "stub-backLink",
+    },
+    descriptionHeader: {
+      content: "stub-descriptionHeader",
+    },
+    lastUpdatedHeader: {
+      content: "stub-lastUpdatedHeader",
+    },
+    costHeader: {
+      content: "stub-costHeader",
+    },
+    uploadAndRemoveDocumentsButton: {
+      content: "stub-uploadAndRemoveDocumentsButton",
+    },
+    additionalInformationHeading: {
+      content: "stub-additionalInformationHeading",
+    },
+    additionalInfo: {
+      content: "stub-additionalInfo",
+    },
+    additionalInformationHint: {
+      content: "stub-additionalInformationHint",
+    },
+    actionHeader: {
+      content: "stub-actionHeader",
+    },
+    supportingDocumentsHeader: {
+      content: "stub-supportingDocumentsHeader",
+    },
+    totalCosts: {
+      content: "stub-totalCosts",
+    },
+    noData: {
+      content: "stub-noData",
+    },
+    addCost: {
+      content: "stub-addCost",
+    },
+    forecastCosts: {
+      content: "stub-forecastCosts",
+    },
+    difference: {
+      content: "stub-difference",
+    },
+    messages: {
+      editClaimLineItemDocumentGuidance: {
+        content: "stub-editClaimLineItemDocumentGuidance",
+      },
+      negativeClaimWarning: {
+        content: "stub-negativeClaimWarning",
+      },
+    },
+    documentMessages: {
+      noDocumentsUploaded: {
+        content: "stub-noDocumentsUploaded",
+      },
+    },
+  },
   claimDocuments: {
     messages: {
+      editClaimLineItemGuidance: {
+        content: "stub-editClaimLineItemGuidance",
+      },
       editClaimLineItemCurrencyGbp: {
         content: "stub-editClaimLineItemCurrencyGbp",
       },
     },
   },
-} as TestBedContent;
+};
 
 const stubBaseProps = {
-    routes: {
-        prepareClaim: {
-            getLink: jest.fn()
-        }
-    } as any
+  routes: {
+    prepareClaim: {
+      getLink: jest.fn().mockReturnValue({
+        routeName: "test",
+      }),
+    },
+  } as any,
 } as Partial<BaseProps>;
 
 const stubProps = {
@@ -39,14 +105,20 @@ const stubProps = {
     state: LoadingStatus.Done,
   } as Pending<ClaimDetailsDto>,
   costCategories: {
-    data: {
-    },
+    data: [{}],
     state: LoadingStatus.Done,
   } as Pending<CostCategoryDto[]>,
   editor: {
-    data: {},
+    data: {
+      data: { lineItems: [] },
+      validator: {
+        items: {
+          results: undefined,
+        },
+      },
+    },
     state: LoadingStatus.Done,
-  } as Pending<IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>>,
+  } as any,
   forecastDetail: {
     data: {},
     state: LoadingStatus.Done,
@@ -56,18 +128,25 @@ const stubProps = {
     state: LoadingStatus.Done,
   } as Pending<DocumentSummaryDto[]>,
   ...stubBaseProps,
-} as ContainerProps<EditClaimDetailsParams, Data, Callbacks>;
+} as ContainerProps<EditClaimDetailsParams, EditClaimLineItemsData, EditClaimLineItemsCallbacks>;
 
 describe("editClaimLineItems", () => {
-  describe("@renders", () => {
-    test("the correct currency conversion text", () => {
-      const { queryByTestId } = render(
-        <TestBed content={contentStub}>
-          <EditClaimLineItemsComponent {...stubProps} />
-        </TestBed>,
-      );
+  const setup = (props: ContainerProps<EditClaimDetailsParams, EditClaimLineItemsData, EditClaimLineItemsCallbacks>) => {
+    return render(
+      <TestBed content={contentStub as TestBedContent}>
+        <EditClaimLineItemsComponent {...props} />
+      </TestBed>,
+    );
+  };
 
-      expect(queryByTestId("guidance-currency-message")).toBeDefined();
+  describe("@renders", () => {
+    describe("@content solution", () => {
+      test("with editClaimLineItemCurrencyGbp", () => {
+        const stubMessage = contentStub.claimDocuments.messages.editClaimLineItemCurrencyGbp.content;
+        const { queryByText } = setup(stubProps);
+
+        expect(queryByText(stubMessage)).toBeInTheDocument();
+      });
     });
   });
 });

@@ -17,7 +17,7 @@ export interface EditClaimDetailsParams {
   periodId: number;
 }
 
-export interface Data {
+export interface EditClaimLineItemsData {
   project: Pending<ProjectDto>;
   claimDetails: Pending<ClaimDetailsDto>;
   costCategories: Pending<CostCategoryDto[]>;
@@ -35,12 +35,12 @@ interface CombinedData {
   editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>;
 }
 
-export interface Callbacks {
+export interface EditClaimLineItemsCallbacks {
   onUpdate: (saving: boolean, dto: ClaimDetailsDto, goToUpdload?: boolean) =>  void;
 }
 
-export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClaimDetailsParams, Data, Callbacks, { showAddRemove: boolean }> {
-  constructor(props: ContainerProps<EditClaimDetailsParams, Data, Callbacks>) {
+export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClaimDetailsParams, EditClaimLineItemsData, EditClaimLineItemsCallbacks, { showAddRemove: boolean }> {
+  constructor(props: ContainerProps<EditClaimDetailsParams, EditClaimLineItemsData, EditClaimLineItemsCallbacks>) {
     super(props);
     this.state = { showAddRemove: false };
   }
