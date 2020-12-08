@@ -411,6 +411,13 @@
       "link-change-grant": "Change remaining grant",
       "heading-year-end-grant-value": "<b>Grant value moving over<br />the financial year end</b>"
     },
+    "forecasts-components": {
+      "adviseMessage": {
+        "part1": "You can only update forecasts for future periods here. You must update your current period when you ",
+        "part2Link": "make a claim",
+        "part3": "."
+      }
+    },
     "forecasts-dashboard": {
       "title": {
         "html": "Forecasts - View project",
@@ -938,7 +945,7 @@
     "noContactsMessage": "No contacts exist."
   },
   "document-labels": {
-    "description" : {
+    "description": {
       "iAR": "Independent accountant’s report",
       "evidence": "Claim evidence",
       "endOfProjectSurvey": "End-of-project survey",

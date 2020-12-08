@@ -56,6 +56,7 @@ import { ProjectSetupBankDetailsVerifyContent } from "@content/pages/project/pro
 import { ProjectSetupBankStatementContent } from "@content/pages/project/projectSetupBankStatementContent";
 import { ClaimDetailDocumentsContent } from "./pages/claims/claimDetailDocumentsContent";
 import { EditClaimLineItemsContent } from "./pages/claims/editClaimLineItemsContent";
+import { ForecastsComponentsContent } from "./pages/forecasts/forecastComponents";
 import { ForecastsDashboardContent } from "./pages/forecasts/dashboardContent";
 import { ForecastsDetailsContent } from "./pages/forecasts/detailsContent";
 import { ForecastsUpdateContent } from "./pages/forecasts/updateContent";
@@ -140,6 +141,7 @@ export class Content extends ContentBase {
   public readonly financialVirementEditPartnerLevel: FinancialVirementEditPartnerLevelContent;
   public readonly financialVirementDetails: FinancialVirementDetailsContent;
 
+  public readonly forecastsComponents: ForecastsComponentsContent;
   public readonly forecastsDashboard: ForecastsDashboardContent;
   public readonly forecastsDetails: ForecastsDetailsContent;
   public readonly forecastsUpdate: ForecastsUpdateContent;
@@ -262,6 +264,7 @@ export class Content extends ContentBase {
     this.financialVirementEditPartnerLevel = new FinancialVirementEditPartnerLevelContent(this, project);
     this.financialVirementDetails = new FinancialVirementDetailsContent(this, project);
 
+    this.forecastsComponents = new ForecastsComponentsContent(this);
     this.forecastsDashboard = new ForecastsDashboardContent(this, project);
     this.forecastsDetails = new ForecastsDetailsContent(this, project);
     this.forecastsUpdate = new ForecastsUpdateContent(this, project);
@@ -343,7 +346,7 @@ export class Content extends ContentBase {
       warningContent: new WarningContent(this, project),
       onHoldContent: new OnHoldContent(this, project),
       claimDetailsLinkContent: new ClaimDetailsLinkContent(this, project),
-      phaseBannerContent: new PhaseBannerContent(this, project)
+      phaseBannerContent: new PhaseBannerContent(this, project),
     };
   }
 }
