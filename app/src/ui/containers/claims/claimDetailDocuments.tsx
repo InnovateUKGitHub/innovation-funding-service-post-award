@@ -120,10 +120,8 @@ const ClaimDetailDocumentsContainer = (props: ClaimDetailDocumentsPageParams & B
 
   const handleOnChange: Callbacks["onChange"] = (saving, dto) => {
     stores.messages.clearMessages();
-    const successMessage =
-      dto.files.length === 1
-        ? getContent((x) => x.claimDetailDocuments.singleDocumentUploadedMessage)
-        : getContent((x) => x.claimDetailDocuments.multipleDocumentsUploadedMessage(dto.files.length));
+    const successMessage = getContent(x => x.claimDetailDocuments.documentMessages.uploadMessages(dto.files.length));
+
     stores.claimDetailDocuments.updateClaimDetailDocumentsEditor(
       saving,
       props.projectId,

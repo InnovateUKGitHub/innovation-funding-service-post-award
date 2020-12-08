@@ -2,6 +2,7 @@ import { ContentPageBase } from "../../contentPageBase";
 import { Content } from "../../content";
 import { ClaimMessages } from "@content/messages/claimMessages";
 import { ProjectDto } from "@framework/dtos";
+import { DocumentMessages } from "@content/messages/documentMessages";
 
 export class ClaimDetailDocumentsContent extends ContentPageBase {
   constructor(private readonly content: Content, protected project: ProjectDto | null | undefined) {
@@ -18,6 +19,5 @@ export class ClaimDetailDocumentsContent extends ContentPageBase {
   public readonly documentsTitle = this.getContent("documents-title");
   public readonly claimDocumentsTitle = this.getContent("claim-documents-title");
 
-  public readonly singleDocumentUploadedMessage = this.getContent("single-document-uploaded-message");
-  public readonly multipleDocumentsUploadedMessage = (documentCount: number) => this.getContent("multiple-documents-uploaded-message", { documentCount });
+  public readonly documentMessages = new DocumentMessages(this, this.project);
 }

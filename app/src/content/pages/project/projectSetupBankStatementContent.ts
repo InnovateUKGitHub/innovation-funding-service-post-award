@@ -17,6 +17,5 @@ export class ProjectSetupBankStatementContent extends ContentPageBase {
   public readonly submitButton = this.getContent("button-submit");
   public readonly returnButton = this.getContent("button-return");
   public readonly backLink = this.getContent("back-link");
-  public readonly documentsUploaded = this.getContent("documents-uploaded-message");
   public readonly documentsRemovedMessage = this.getContent("document-removed-message");
 }
