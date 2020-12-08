@@ -329,7 +329,7 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => (
                 }}
                 onUpload={(saving, dto) => {
                   stores.messages.clearMessages();
-                  const successMessage = dto.files.length === 1 ? content.claimDocuments.documentMessages.documentUploaded : content.claimDocuments.documentMessages.documentsUploaded(dto.files.length);
+                  const successMessage = content.claimDocuments.documentMessages.uploadMessages(dto.files.length);
                   stores.claimDocuments.updateClaimDocumentsEditor(saving, props.projectId, props.partnerId, props.periodId, dto, successMessage.content);
                 }}
                 onDelete={(dto, document) => {

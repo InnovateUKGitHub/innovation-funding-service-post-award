@@ -9,6 +9,7 @@ import { getFileSize } from "@framework/util";
 import { StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { useContent } from "@ui/hooks";
 
 export interface ProjectDocumentPageParams {
   projectId: string;
@@ -158,10 +159,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
 }
 
 const ProjectDocumentsContainer = (props: ProjectDocumentPageParams & BaseProps) => {
-  const yourDocumentUploadedMessage = (
-    <ACC.Content value={(x) => x.projectDocuments.documentMessages.documentUploaded} />
-  );
-  const documentsUploadedMessage = <ACC.Content value={(x) => x.projectDocuments.documentsUploadedMessage} />;
+  const { getContent } = useContent();
 
   return (
     <StoresConsumer>
@@ -174,10 +172,7 @@ const ProjectDocumentsContainer = (props: ProjectDocumentPageParams & BaseProps)
           isClient={stores.config.isClient()}
           onChange={(saving, dto) => {
             stores.messages.clearMessages();
-            const successMessage =
-              dto.files.length === 1
-                ? `${yourDocumentUploadedMessage}`
-                : `${dto.files.length} ${documentsUploadedMessage}`;
+            const successMessage = getContent(x => x.projectDocuments.documentMessages.uploadMessages(dto.files.length));
             stores.projectDocuments.updateProjectDocumentsEditor(saving, props.projectId, dto, successMessage);
           }}
           {...props}

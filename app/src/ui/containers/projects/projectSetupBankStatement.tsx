@@ -138,8 +138,6 @@ const ProjectSetupBankStatementContainer = (props: ProjectSetupBankStatementPara
   const stores = useStores();
   const { getContent } = useContent();
 
-  const documentUploadedMessage = getContent(x => x.projectSetupBankStatement.documentMessages.documentUploaded);
-  const documentsUploadedMessage = getContent(x => x.projectSetupBankStatement.documentsUploaded);
   const documentsRemovedMessage = getContent(x => x.projectSetupBankStatement.documentsRemovedMessage);
 
   const handleOnChange: Callbacks["onChange"] = (submit, dto) => {
@@ -155,8 +153,7 @@ const ProjectSetupBankStatementContainer = (props: ProjectSetupBankStatementPara
   const handleOnFileChange: Data["onFileChange"] = (isSaving, dto) => {
     stores.messages.clearMessages();
     // show message if remaining on page
-    const successMessage =
-      dto.files.length === 1 ? `${documentUploadedMessage}` : `${dto.files.length} ${documentsUploadedMessage}`;
+    const successMessage = getContent(x => x.projectSetupBankStatement.documentMessages.uploadMessages(dto.files.length));
     stores.partnerDocuments.updatePartnerDocumentsEditor(
       isSaving,
       props.projectId,

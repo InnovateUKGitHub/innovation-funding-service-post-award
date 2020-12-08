@@ -187,9 +187,7 @@ const ClaimDocumentsContainer = (props: ClaimDocumentsPageParams & BaseProps) =>
               claim={stores.claims.get(props.partnerId, props.periodId)}
               onChange={(saving, dto) => {
                 stores.messages.clearMessages();
-                const successMessage = dto.files.length === 1
-                  ? content.claimDocuments.documentMessages.documentUploadedSuccess.content
-                  : content.claimDocuments.documentMessages.documentsUploadedSuccess(dto.files.length).content;
+                const successMessage = content.claimDocuments.documentMessages.uploadMessages(dto.files.length).content;
                 stores.claimDocuments.updateClaimDocumentsEditor(saving, props.projectId, props.partnerId, props.periodId, dto, successMessage);
               }}
               onDelete={(dto, document) => {
