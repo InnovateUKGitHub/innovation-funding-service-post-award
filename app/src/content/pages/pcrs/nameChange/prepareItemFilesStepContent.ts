@@ -12,7 +12,7 @@ export class PCRNameChangePrepareItemFilesContent extends ContentPageBase {
 
   public readonly pcrItem = new PCRItem(this, this.project);
   public readonly documentLabels = new DocumentLabels(this, this.project);
-  public readonly doucmentMessages = new DocumentMessages(this, this.project);
+  public readonly documentMessages = new DocumentMessages(this, this.project);
 
   public readonly uploadCertificateHeading = this.getContent("heading-upload-certificate");
 }

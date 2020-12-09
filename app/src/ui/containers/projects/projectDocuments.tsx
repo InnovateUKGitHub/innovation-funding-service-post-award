@@ -70,7 +70,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
         project={project}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        <ACC.Section titleContent={x => x.projectDocuments.documentMessages.formTitle}>
+        <ACC.Section titleContent={x => x.projectDocuments.documentMessages.uploadTitle}>
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
@@ -90,7 +90,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
                 validation={editor.validator.files}
               />
             </UploadForm.Fieldset>
-            <UploadForm.Submit styling="Secondary"><ACC.Content value={x => x.projectDocuments.documentLabels.uploadButtonLabel} /></UploadForm.Submit>
+            <UploadForm.Submit styling="Secondary"><ACC.Content value={x => x.projectDocuments.documentMessages.uploadTitle} /></UploadForm.Submit>
           </UploadForm.Form>
         </ACC.Section>
         {this.renderDocumentsSection(documents)}
@@ -172,7 +172,7 @@ const ProjectDocumentsContainer = (props: ProjectDocumentPageParams & BaseProps)
           isClient={stores.config.isClient()}
           onChange={(saving, dto) => {
             stores.messages.clearMessages();
-            const successMessage = getContent(x => x.projectDocuments.documentMessages.uploadMessages(dto.files.length));
+            const successMessage = getContent(x => x.projectDocuments.documentMessages.getDocumentUploadedMessage(dto.files.length));
             stores.projectDocuments.updateProjectDocumentsEditor(saving, props.projectId, dto, successMessage);
           }}
           {...props}

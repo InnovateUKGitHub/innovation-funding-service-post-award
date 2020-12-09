@@ -117,7 +117,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
             <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}>
-              <ACC.Content value={x => x.projectSetupBankStatement.documentLabels.uploadButtonLabel} />
+              <ACC.Content value={x => x.projectSetupBankStatement.documentMessages.uploadTitle} />
             </UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
@@ -153,7 +153,7 @@ const ProjectSetupBankStatementContainer = (props: ProjectSetupBankStatementPara
   const handleOnFileChange: Data["onFileChange"] = (isSaving, dto) => {
     stores.messages.clearMessages();
     // show message if remaining on page
-    const successMessage = getContent(x => x.projectSetupBankStatement.documentMessages.uploadMessages(dto.files.length));
+    const successMessage = getContent(x => x.projectSetupBankStatement.documentMessages.getDocumentUploadedMessage(dto.files.length));
     stores.partnerDocuments.updatePartnerDocumentsEditor(
       isSaving,
       props.projectId,

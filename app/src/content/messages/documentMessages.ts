@@ -13,15 +13,15 @@ export class DocumentMessages extends ContentBase {
   public readonly documentsNotApplicable = this.getContent("documents-not-applicable");
   public readonly newWindow = this.getContent("new-window");
 
-  public readonly formTitle = this.getContent("form-title");
+  public readonly uploadTitle = this.getContent("upload-title");
   public readonly uploadDocumentsLabel = this.getContent("upload-documents");
   public readonly documentsTitle = this.getContent("documents-title");
   public readonly claimDocumentsTitle = this.getContent("claim-documents-title");
   public readonly uploadInstruction = this.getContent("uploadInstruction", { markdown: true });
 
-  public readonly backLink = (costCategoryName: string) => this.getContent("back-link", {costCategoryName});
+  public readonly backLink = (previousPage: string) => this.getContent("back-link", {previousPage});
 
-  public uploadMessages(totalFiles: number) {
+  public getDocumentUploadedMessage(totalFiles: number) {
     const contentKey = (totalFiles === 1) ? "uploaded-document" : "uploaded-documents";
     return this.getContent(contentKey, {totalFiles});
   }
