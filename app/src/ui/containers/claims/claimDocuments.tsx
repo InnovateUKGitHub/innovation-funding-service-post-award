@@ -75,7 +75,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
         <ACC.Section>
           {this.renderGuidanceText(claim)}
         </ACC.Section>
-        <ACC.Section titleContent={x => x.claimDocuments.uploadSectionTitle}>
+        <ACC.Section titleContent={x => x.claimDocuments.documentMessages.formTitle}>
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
@@ -85,7 +85,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
             <UploadForm.Fieldset>
               <ACC.DocumentGuidance />
               <UploadForm.MulipleFileUpload
-                label={<ACC.Content value={x => x.claimDocuments.uploadDocumentLabel}/>}
+                label={<ACC.Content value={x => x.claimDocuments.documentMessages.uploadDocumentsLabel}/>}
                 labelHidden={true}
                 name="attachment"
                 validation={editor.validator.files}
@@ -105,7 +105,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
               />
             </UploadForm.Fieldset>
             {/*TODO @documents-content make button label consistent*/}
-            <UploadForm.Button styling="Secondary" name="upload" onClick={() => this.props.onChange(true, editor.data)}>{<ACC.Content value={x => x.claimDocuments.uploadMessage}/>}</UploadForm.Button>
+            <UploadForm.Button styling="Secondary" name="upload" onClick={() => this.props.onChange(true, editor.data)}>{<ACC.Content value={x => x.claimDocuments.documentMessages.uploadDocumentsLabel}/>}</UploadForm.Button>
           </UploadForm.Form>
         </ACC.Section>
         <ACC.Section titleContent={x => x.claimDocuments.documentsListSectionTitle}>
@@ -165,7 +165,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
     }
 
     return (
-      <ACC.Section subtitle={<ACC.Content value={x => x.claimDocuments.subtitleMessage}/>}>
+      <ACC.Section subtitle={<ACC.Content value={x => x.claimDocuments.documentMessages.newWindow}/>}>
         {documents.length ? <ACC.DocumentTableWithDelete hideRemove={x => this.allowedDocuments.indexOf(x.description!) < 0} onRemove={(document) => this.props.onDelete(editor.data, document)} documents={documents} qa="claim-supporting-documents"/> : null}
       </ACC.Section>
     );
