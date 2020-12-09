@@ -186,7 +186,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
           qa="projectDocumentUpload"
         >
           <UploadForm.Fieldset>
-            <ACC.Content value={x => x.claimReview.messages.uploadClaimValidationFormInstructions} />
+            <ACC.Content value={x => x.claimReview.documentMessages.uploadInstruction} />
             <ACC.DocumentGuidanceWithContent documentMessages={x => x.claimReview.documentMessages} />
             <UploadForm.MulipleFileUpload
               labelContent={x => x.claimReview.uploadInputLabel}

@@ -200,9 +200,6 @@
     },
     "project-documents": {
       "title": "Project documents",
-      "uploadTitle": "Upload",
-      "uploadInstruction": "You can upload and store any documents relevant for this project. Any documents added to the project by Innovate UK will also be visible here.",
-      "noDocumentsMessage": "No documents uploaded.",
       "noMatchingDocumentsMessage": "No documents match.",
       "searchDocumentsMessage": "Search documents"
     },
@@ -744,7 +741,6 @@
     "final-claim-guidance": "We need to ask you a few questions about the project before we can make your last payment.\n\nYou also need to upload an independent accountant's report (IAR).\n\n1.  Complete our survey.\n2.  Download a copy from the survey website.\n3.  Upload it here.",
     "claim-queried": "You have queried this claim.",
     "claim-approved": "You have approved this claim.",
-    "upload-instruction-claim-validation-form": "You can upload and store any documents relevant for this project. Any documents added to the project by Innovate UK will also be visible here.",
     "frequency-change-message": "Your project asked us to change the length of the remaining periods. You must make sure your forecast reflects your expected spend or your monitoring officer will not approve your claim.",
     "last-chance-to-change-forecast": "This is your last chance to change the forecast for period {{periodId}}",
     "document-detail-guidance": "Evidence for each expenditure might include, but is not limited to, invoices, timesheets, receipts and spreadsheets for capital usage.",
@@ -964,7 +960,8 @@
     "new-window": "All documents open in a new window.",
     "back-link": "Back to {{costCategoryName}}",
     "form-title": "Upload",
-    "upload-documents": "Upload documents"
+    "upload-documents": "Upload documents",
+    "uploadInstruction": "You can upload and store any documents relevant for this project. Any documents added to the project by Innovate UK will also be visible here."
   },
   "financial-virement-labels": {
     "partner-name": "Partner",
