@@ -68,7 +68,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
             <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}>
-              <ACC.Content value={x => x.pcrAddPartnerAgreementToPcr.documentLabels.uploadButtonLabel} />
+              <ACC.Content value={x => x.pcrAddPartnerAgreementToPcr.documentMessages.uploadTitle} />
             </UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>

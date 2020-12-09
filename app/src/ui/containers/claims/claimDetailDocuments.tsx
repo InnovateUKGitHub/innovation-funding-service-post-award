@@ -47,7 +47,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
       editor: this.props.editor,
     });
 
-    return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
+    return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)}/>;
   }
 
   private renderDocuments(editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
@@ -86,7 +86,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
         <ACC.Renderers.SimpleString qa="guidanceText"><ACC.Content value={x => x.claimDetailDocuments.messages.documentDetailGuidance}/></ACC.Renderers.SimpleString>
         <ACC.Renderers.Messages messages={this.props.messages} />
         {this.renderDocuments(editor, documents)}
-        <ACC.Section titleContent={x => x.claimDetailDocuments.documentMessages.formTitle}>
+        <ACC.Section titleContent={x => x.claimDetailDocuments.documentMessages.uploadTitle}>
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
@@ -120,7 +120,7 @@ const ClaimDetailDocumentsContainer = (props: ClaimDetailDocumentsPageParams & B
 
   const handleOnChange: Callbacks["onChange"] = (saving, dto) => {
     stores.messages.clearMessages();
-    const successMessage = getContent(x => x.claimDetailDocuments.documentMessages.uploadMessages(dto.files.length));
+    const successMessage = getContent(x => x.claimDetailDocuments.documentMessages.getDocumentUploadedMessage(dto.files.length));
 
     stores.claimDetailDocuments.updateClaimDetailDocumentsEditor(
       saving,

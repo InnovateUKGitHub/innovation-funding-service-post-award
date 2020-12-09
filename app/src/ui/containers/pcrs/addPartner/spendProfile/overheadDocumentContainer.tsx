@@ -110,7 +110,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
             />
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
-            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}><ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.labels.uploadButtonLabel}/></UploadForm.Button>
+            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}><ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.messages.uploadTitle}/></UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
       </ACC.Section>

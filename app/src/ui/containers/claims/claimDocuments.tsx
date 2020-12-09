@@ -75,7 +75,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
         <ACC.Section>
           {this.renderGuidanceText(claim)}
         </ACC.Section>
-        <ACC.Section titleContent={x => x.claimDocuments.documentMessages.formTitle}>
+        <ACC.Section titleContent={x => x.claimDocuments.documentMessages.uploadTitle}>
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
@@ -187,7 +187,7 @@ const ClaimDocumentsContainer = (props: ClaimDocumentsPageParams & BaseProps) =>
               claim={stores.claims.get(props.partnerId, props.periodId)}
               onChange={(saving, dto) => {
                 stores.messages.clearMessages();
-                const successMessage = content.claimDocuments.documentMessages.uploadMessages(dto.files.length).content;
+                const successMessage = content.claimDocuments.documentMessages.getDocumentUploadedMessage(dto.files.length).content;
                 stores.claimDocuments.updateClaimDocumentsEditor(saving, props.projectId, props.partnerId, props.periodId, dto, successMessage);
               }}
               onDelete={(dto, document) => {

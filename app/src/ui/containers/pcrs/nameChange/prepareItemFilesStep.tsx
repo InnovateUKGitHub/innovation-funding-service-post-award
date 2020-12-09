@@ -47,7 +47,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForAccountNameChange
             />
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
-            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}><ACC.Content value={x => x.pcrNameChangePrepareItemFiles.documentLabels.uploadButtonLabel}/></UploadForm.Button>
+            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}><ACC.Content value={x => x.pcrNameChangePrepareItemFiles.documentMessages.uploadTitle}/></UploadForm.Button>
             <UploadForm.Button name="uploadFileAndContinue" styling="Primary"><ACC.Content value={x => x.pcrNameChangePrepareItemFiles.pcrItem.submitButton}/></UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
@@ -65,7 +65,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForAccountNameChange
     }
     return (
       <ACC.Section titleContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.filesUploadedTitle}>
-        <ACC.ValidationMessage message={x => x.pcrNameChangePrepareItemFiles.doucmentMessages.noDocumentsUploaded} messageType="info" />
+        <ACC.ValidationMessage message={x => x.pcrNameChangePrepareItemFiles.documentMessages.noDocumentsUploaded} messageType="info" />
       </ACC.Section>
     );
   }

@@ -42,8 +42,8 @@ class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & 
           onChange={(dto) => this.props.onFileChange("DontSave", dto)}
           qa="projectChangeRequestItemUpload"
         >
-          <UploadForm.Fieldset headingContent={x => x.pcrReasoningPrepareFiles.documentLabels.uploadButtonLabel}>
-            <ACC.DocumentGuidance />
+          <UploadForm.Fieldset headingContent={x => x.pcrReasoningPrepareFiles.documentMessages.uploadDocumentsLabel}>
+          <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
               labelContent={x => x.pcrReasoningPrepareFiles.documentLabels.uploadInputLabel}
               name="attachment"
@@ -54,7 +54,7 @@ class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & 
             />
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
-            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}><ACC.Content value={x => x.pcrReasoningPrepareFiles.documentLabels.uploadDocumentsLabel}/></UploadForm.Button>
+            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}><ACC.Content value={x => x.pcrReasoningPrepareFiles.documentMessages.uploadDocumentsLabel}/></UploadForm.Button>
             <UploadForm.Button name="uploadFileAndContinue" styling="Primary"><ACC.Content value={x => x.pcrReasoningPrepareFiles.pcrItem.submitButton}/></UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
