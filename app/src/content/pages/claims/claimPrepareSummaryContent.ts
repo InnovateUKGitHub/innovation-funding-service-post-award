@@ -3,12 +3,14 @@ import { Content } from "../../content";
 import { ClaimMessages } from "@content/messages/claimMessages";
 import { ClaimsLabels } from "@content/labels/claimsLabels";
 import { ProjectDto } from "@framework/dtos";
+import { DocumentMessages } from "@content/messages/documentMessages";
 
 export class ClaimPrepareSummaryContent extends ContentPageBase {
   constructor(private readonly content: Content, protected project: ProjectDto | null | undefined) {
     super(content, "claim-prepare-summary", project);
   }
   public readonly messages = new ClaimMessages(this, this.project);
+  public readonly documentMessages = new DocumentMessages(this, this.project);
   public readonly labels = new ClaimsLabels(this, this.project);
 
   public readonly backToDocuments = this.getContent("back_to-documents");
@@ -21,7 +23,6 @@ export class ClaimPrepareSummaryContent extends ContentPageBase {
   public readonly fundingLevelLabel = this.getContent("funding-level-label");
   public readonly costsToBePaidLabel = this.getContent("costs-to-be-paid-label");
   public readonly editCostsMessage = this.getContent("edit-costs-message");
-  public readonly documentsNewWindowSubtitle = this.getContent("documents-in-new-window-subtitle");
   public readonly noDocumentsUploadedMessage = this.getContent("no-documents-uploaded-message");
   public readonly claimDocumentsTitle = this.getContent("claim-documents-title");
   public readonly editClaimDocuments = this.getContent("edit-claim-documents");

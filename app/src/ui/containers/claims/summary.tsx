@@ -200,7 +200,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
     return (
       <React.Fragment>
         {documents.length ?
-          <ACC.Section subtitle={<ACC.Content value={x => x.claimPrepareSummary.documentsNewWindowSubtitle}/>} >
+          <ACC.Section subtitle={<ACC.Content value={x => x.claimPrepareSummary.documentMessages.newWindow}/>} >
             <ACC.DocumentList documents={documents} qa="claim-documents-list" />
           </ACC.Section>
           : <ACC.ValidationMessage message={<ACC.Content value={x => x.claimPrepareSummary.noDocumentsUploadedMessage}/>} messageType="info" />
