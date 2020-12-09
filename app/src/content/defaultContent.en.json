@@ -274,16 +274,12 @@
     },
     "claim-documents": {
       "title": "Claim documents",
-      "section-title-upload": "Upload",
       "section-title-document-list": "List of documents",
       "back-link": "Back to costs to be claimed",
       "button-save-and-return": "Save and return to claims",
       "button-save-and-continue-to-summary": "Continue to summary",
       "button-save-and-continue-to-forecast": "Continue to update forecast",
-      "subtitle-message": "All documents open in a new window",
-      "upload-documents-label": "Upload documents",
-      "description-label": "Description",
-      "upload-documents-message": "Upload documents"
+      "description-label": "Description"
     },
     "claim-details": {
       "title": {
