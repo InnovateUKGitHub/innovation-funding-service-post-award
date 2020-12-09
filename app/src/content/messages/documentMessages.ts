@@ -17,6 +17,7 @@ export class DocumentMessages extends ContentBase {
   public readonly uploadDocumentsLabel = this.getContent("upload-documents");
   public readonly documentsTitle = this.getContent("documents-title");
   public readonly claimDocumentsTitle = this.getContent("claim-documents-title");
+  public readonly uploadInstruction = this.getContent("uploadInstruction", { markdown: true });
 
   public readonly backLink = (costCategoryName: string) => this.getContent("back-link", {costCategoryName});
 

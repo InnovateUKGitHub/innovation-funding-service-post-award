@@ -17,7 +17,6 @@ export class ClaimMessages extends ContentBase {
   public readonly claimQueried = this.getContent("claim-queried");
   public readonly claimApproved = this.getContent("claim-approved");
   public readonly finalClaimGuidance = this.getContent("final-claim-guidance", { markdown: true });
-  public readonly uploadClaimValidationFormInstructions = this.getContent("upload-instruction-claim-validation-form", { markdown: true });
   public readonly frequencyChangeMessage = this.getContent("frequency-change-message");
   public readonly lastChanceToChangeForecast = (periodId: number) => this.getContent("last-chance-to-change-forecast", { periodId });
   public readonly documentDisclaimerMessage = this.getContent("document-disclaimer-message");
@@ -30,5 +29,4 @@ export class ClaimMessages extends ContentBase {
   public readonly negativeClaimWarning = this.getContent("negative-claim-warning");
   public readonly claimSummaryWarning = this.getContent("claim-summary-warning");
   public readonly claimSavedMessage = this.getContent("claim-saved-message");
-
 }
