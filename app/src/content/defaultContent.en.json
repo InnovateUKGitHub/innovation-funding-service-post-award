@@ -294,16 +294,6 @@
       "costs-and-grant-summary-title": "Summary",
       "section-title-comments": "Comments"
     },
-    "claim-detail-documents": {
-      "back-link": "Back to {{costCategoryName}}",
-      "form-title": "Upload",
-      "subtitle": "All documents open in a new window",
-      "upload": "Upload documents",
-      "add-documents-for-title": "Add documents for",
-      "add-documents-title": "Add documents",
-      "documents-title": "documents",
-      "claim-documents-title": "Claim documents"
-    },
     "claim-forecast": {
       "back-link": "Back to claims documents",
       "button-save-and-return": "Save and return to claims",
@@ -975,7 +965,10 @@
     "uploaded-documents": "{{totalFiles}} documents have been uploaded.",
     "no-documents-uploaded": "No documents uploaded.",
     "documents-not-applicable": "Not applicable",
-    "new-window": "All documents open in a new window."
+    "new-window": "All documents open in a new window.",
+    "back-link": "Back to {{costCategoryName}}",
+    "form-title": "Upload",
+    "upload-documents": "Upload documents"
   },
   "financial-virement-labels": {
     "partner-name": "Partner",
