@@ -248,6 +248,10 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       </Form.Fieldset>
       ),
       (
+        <ACC.Renderers.SimpleString key="declaration">
+          <ACC.Content value={x => x.claimReview.claimReviewDeclaration} />
+        </ACC.Renderers.SimpleString>
+        ),(
         <ACC.Renderers.SimpleString key="reminder">
           <ACC.Content value={x => x.claimReview.monitoringReportReminder} />
         </ACC.Renderers.SimpleString>
