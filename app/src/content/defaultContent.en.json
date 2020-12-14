@@ -258,6 +258,19 @@
     "all-claims-dashboard": {
       "title": "Claims"
     },
+    "claims-components": {
+      "negativeCategoriesMessage": {
+        "before": "You have exceeded the total eligible costs for these categories",
+        "after": "Please check with your monitoring officer before submitting your claim."
+      },
+      "category-label": "Category",
+      "total-eligible-costs": "Total eligible costs",
+      "eligible-costs-claimed-to-date": "Eligible costs claimed to date",
+      "costs-claimed-this-period": "Costs claimed this period",
+      "remaining-eligible-costs": "Remaining eligible costs",
+      "forecast-for-period": "Forecast for period",
+      "difference-in-unit": "Difference ({{unitValue}})"
+    },
     "claims-dashboard": {
       "title": {
         "html": "Claims - View project",

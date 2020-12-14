@@ -103,6 +103,7 @@ import { ClaimDetailsLinkContent } from "./components/claimDetailsLinkContent";
 import { PhaseBannerContent } from "./components/phaseBannerContent";
 import { PCRTimeExtensionStepContent } from "./pages/pcrs/pcrTimeExtensionStepContent";
 import { ClaimLineItemsContent } from "./pages/claims/claimLineItemsContent";
+import { ClaimsComponentsContent } from "./pages/claims/components/claimsComponentsContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -124,6 +125,7 @@ export class Content extends ContentBase {
 
   public readonly financeSummary: FinanceSummaryContent;
 
+  public readonly claimsComponents: ClaimsComponentsContent;
   public readonly allClaimsDashboard: AllClaimsDashboardContent;
   public readonly claimsDashboard: ClaimsDashboardContent;
   public readonly claimDocuments: ClaimDocumentsContent;
@@ -247,6 +249,7 @@ export class Content extends ContentBase {
 
     this.financeSummary = new FinanceSummaryContent(this, project);
 
+    this.claimsComponents = new ClaimsComponentsContent(this, project);
     this.allClaimsDashboard = new AllClaimsDashboardContent(this, project);
     this.claimsDashboard = new ClaimsDashboardContent(this, project);
     this.claimDocuments = new ClaimDocumentsContent(this, project);
