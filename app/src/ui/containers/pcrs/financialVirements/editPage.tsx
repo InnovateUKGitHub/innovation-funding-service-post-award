@@ -98,7 +98,7 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
   private renderInput(partner: PartnerDto, costCategory: CostCategoryDto, virement: CostCategoryVirementDto, disabled: boolean, validation: CostCategoryVirementDtoValidator | null) {
     return (
       <React.Fragment>
-        <ACC.ValidationError overrideMessage={`Invalid cost for ${costCategory.name}`} error={validation && validation.newEligibleCosts} />
+        <ACC.ValidationError overrideMessage={`Invalid cost for ${costCategory.name}`} error={validation && validation.newPartnerEligibleCosts} />
         {costCategory.isCalculated ? <ACC.Renderers.Currency value={virement.newEligibleCosts} /> : null}
         {!costCategory.isCalculated ?
           <ACC.Inputs.NumberInput
@@ -114,33 +114,34 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
     );
   }
 
-  private updateValue(partner: PartnerDto, costCategory: CostCategoryDto, value: number | null) {
+  private updateValue({overheadRate, id}: PartnerDto, costCategory: CostCategoryDto, value: number | null) {
+    const projectCosts = this.props.editor.data!.data;
+    const currentPartner = projectCosts.partners.find((x) => x.partnerId === id)!;
+    const costCategoryVirements = currentPartner.virements.find((x) => x.costCategoryId === costCategory.id)!;
+    costCategoryVirements.newEligibleCosts = value!;
 
-    const dto = this.props.editor.data!.data;
-    const partnerLevel = dto.partners.find(x => x.partnerId === partner.id)!;
-
-    const partnerVirement = partnerLevel.virements
-      .find(x => x.costCategoryId === costCategory.id)!;
-
-    partnerVirement.newEligibleCosts = value!;
-
-    if (partner.overheadRate) {
-      const calculatedCostCategoryIds = this.props.costCategories.then(x => x.filter(y => y.isCalculated).map(y => y.id)).data || [];
-      const related = partnerLevel.virements.find(v => calculatedCostCategoryIds.indexOf(v.costCategoryId) !== -1);
+    if (overheadRate) {
+      const calculatedCostCategoryIds =
+        this.props.costCategories.then((x) => x.filter((y) => y.isCalculated).map((y) => y.id)).data || [];
+      const related = currentPartner.virements.find((v) => calculatedCostCategoryIds.indexOf(v.costCategoryId) !== -1);
       if (related) {
         // prevent newEligibleCosts from being calculated by SF
-        related.newEligibleCosts = roundCurrency((partnerVirement.newEligibleCosts || 0) * (partner.overheadRate / 100));
+        related.newEligibleCosts = roundCurrency(
+          (costCategoryVirements.newEligibleCosts || 0) * (overheadRate / 100),
+        );
       }
     }
 
-    partnerLevel.newEligibleCosts = partnerLevel.virements.reduce((total, x) => total + x.newEligibleCosts, 0);
-    const newRemainingCosts = partnerLevel.newEligibleCosts - partnerLevel.costsClaimedToDate;
-    const newFundingPercentage = partnerLevel.newFundingLevel / 100;
-    partnerLevel.newRemainingGrant = roundCurrency(newRemainingCosts * newFundingPercentage);
+    currentPartner.newEligibleCosts = currentPartner.virements.reduce((total, x) => total + x.newEligibleCosts, 0);
+    const newRemainingCosts = currentPartner.newEligibleCosts - currentPartner.costsClaimedToDate;
+    const newFundingPercentage = currentPartner.newFundingLevel / 100;
+    currentPartner.newRemainingGrant = roundCurrency(newRemainingCosts * newFundingPercentage);
 
-    dto.newEligibleCosts = dto.partners.filter(x => !!x.newEligibleCosts).reduce((total, x) => total + x.newEligibleCosts, 0);
-    dto.newRemainingGrant = roundCurrency(dto.partners.reduce((total, p) => total + p.newRemainingGrant, 0));
-    this.props.onChange(false, dto);
+    projectCosts.newEligibleCosts = projectCosts.partners
+      .filter((x) => !!x.newEligibleCosts)
+      .reduce((total, x) => total + x.newEligibleCosts, 0);
+    projectCosts.newRemainingGrant = roundCurrency(projectCosts.partners.reduce((total, p) => total + p.newRemainingGrant, 0));
+    this.props.onChange(false, projectCosts);
   }
 
   private getBackLink() {
