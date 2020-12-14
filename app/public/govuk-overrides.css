@@ -494,6 +494,10 @@ button.govuk-link:focus {
   color: #00703c;
 }
 
+.claim-table-cell--error {
+  color: #d4351c;
+}
+
 p.govuk-body--multiline {
   white-space: pre-line;
 }

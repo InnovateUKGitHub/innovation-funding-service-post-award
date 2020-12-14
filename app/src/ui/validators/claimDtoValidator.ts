@@ -62,5 +62,5 @@ export class ClaimDtoValidator extends Results<ClaimDto>  {
 
     readonly remainingOfferCosts = this.details.reduce((total, item) => total + item.remainingOfferCosts, 0);
 
-    public totalCosts = Validation.isPositiveFloat(this, this.remainingOfferCosts, "Your costs for this period are more than your remaining grant offer letter costs in at least one cost category. You must remove some costs before you can submit this claim.");
+    public totalCosts = Validation.isPositiveFloat(this, this.remainingOfferCosts, "You must reduce your claim to ensure the remaining eligible costs are zero or higher.");
 }

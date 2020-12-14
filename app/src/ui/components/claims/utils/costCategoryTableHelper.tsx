@@ -1,3 +1,4 @@
+// tslint:disable: prefer-for-of
 import React from "react";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { CostCategoryType } from "@framework/entities";
@@ -12,47 +13,82 @@ export interface ClaimProps {
   costCategories: CostCategoryDto[];
   claim: ClaimDto;
   claimDetails: CostsSummaryForPeriodDto[];
-  validation?: Result;
-  getLink: (costCategoryId: string) => ILinkInfo | null;
   standardOverheadRate: number;
+  getLink: (costCategoryId: string) => ILinkInfo | null;
+  validation?: Result;
 }
 
-export function createTableData(props: ClaimProps) {
-  const combinedData = props.costCategories
-    .filter(
-      (x) =>
-        x.competitionType === props.project.competitionType &&
-        x.organisationType === props.partner.organisationType
-    )
-    .map((x) => ({
-      category: x,
-      cost:
-        props.claimDetails.find((y) => y.costCategoryId === x.id) ||
-        ({} as CostsSummaryForPeriodDto),
-      isTotal: false,
-    }));
+export interface ClaimTableRow {
+  isTotal: boolean;
+  category: CostCategoryDto;
+  cost: CostsSummaryForPeriodDto;
+  label: string | JSX.Element;
+  differenceInPounds: number;
+  diffPercentage: number;
+}
 
-  const initialCategoryTotals = {
+interface ClaimTableResponse {
+  totalNegativeCategories: ClaimTableRow[];
+  costCategories: ClaimTableRow[];
+}
+
+export function createTableData(props: ClaimProps): ClaimTableResponse {
+  const costCategories: ClaimTableRow[] = [];
+  const totalNegativeCategories: ClaimTableRow[] = [];
+
+  // Note: Iterate through all costCategories to get get matching claim items
+  for (let index = 0; index < props.costCategories.length; index++) {
+    const category = props.costCategories[index];
+    const tableRow = createCostCategory(category, props);
+
+    if (!tableRow) break;
+
+    costCategories.push(tableRow.costCategory);
+
+    if (tableRow.hasNegativeCost) {
+      totalNegativeCategories.push(tableRow.costCategory);
+    }
+  }
+
+  const totalRow = calculateTotalRow(props.claimDetails);
+  const allCostCategories = [...costCategories, totalRow];
+
+  return {
+    totalNegativeCategories,
+    costCategories: allCostCategories,
+  };
+}
+
+const diffAsPounds = (x: CostsSummaryForPeriodDto): number => x.forecastThisPeriod - x.costsClaimedThisPeriod;
+const diffAsPercentage = (x: CostsSummaryForPeriodDto): number => (100 * diffAsPounds(x)) / x.forecastThisPeriod;
+
+function calculateTotalRow(claimDetails: ClaimProps["claimDetails"]): ClaimTableRow {
+  let totalRowCosts: CostsSummaryForPeriodDto = {
     costCategoryId: "",
     offerTotal: 0,
     forecastThisPeriod: 0,
     costsClaimedToDate: 0,
     costsClaimedThisPeriod: 0,
-    remainingOfferCosts: 0
+    remainingOfferCosts: 0,
   };
 
-  const totalRowCosts = props.claimDetails.reduce((catTotal, item) => {
-    return {
-      costCategoryId: "",
-      offerTotal: catTotal.offerTotal + item.offerTotal,
-      forecastThisPeriod: catTotal.forecastThisPeriod + item.forecastThisPeriod,
-      costsClaimedToDate: catTotal.costsClaimedToDate + item.costsClaimedToDate,
-      costsClaimedThisPeriod: catTotal.costsClaimedThisPeriod + item.costsClaimedThisPeriod,
-      remainingOfferCosts: catTotal.remainingOfferCosts + item.remainingOfferCosts,
-    };
-  }, initialCategoryTotals);
+  // Note: Iterate through all claimDetails then get total
+  for (let index = 0; index < claimDetails.length; index++) {
+    const item = claimDetails[index];
 
-  combinedData.push({
+    totalRowCosts = {
+      costCategoryId: "",
+      offerTotal: totalRowCosts.offerTotal + item.offerTotal,
+      forecastThisPeriod: totalRowCosts.forecastThisPeriod + item.forecastThisPeriod,
+      costsClaimedToDate: totalRowCosts.costsClaimedToDate + item.costsClaimedToDate,
+      costsClaimedThisPeriod: totalRowCosts.costsClaimedThisPeriod + item.costsClaimedThisPeriod,
+      remainingOfferCosts: totalRowCosts.remainingOfferCosts + item.remainingOfferCosts,
+    };
+  }
+
+  const staticTotalRowData = {
+    isTotal: true,
+    label: "Total",
     category: {
       name: "Total",
       type: CostCategoryType.Unknown,
@@ -64,27 +100,67 @@ export function createTableData(props: ClaimProps) {
       description: "",
       hintText: "",
     },
+  };
+
+  return {
+    ...staticTotalRowData,
     cost: totalRowCosts,
-    isTotal: true,
-  });
-  return combinedData;
+    differenceInPounds: diffAsPounds(totalRowCosts),
+    diffPercentage: diffAsPercentage(totalRowCosts),
+  };
 }
 
-export function renderCostCategory(
-  claimProps: ClaimProps,
-  category: CostCategoryDto,
-  row: number
+function createCostCategory(category: CostCategoryDto, claimItem: ClaimProps) {
+  const { project, partner, claimDetails, ...restClaimProps } = claimItem;
+
+  const isMatchingCompetition = category.competitionType === project.competitionType;
+  const isMatchingOrg = category.organisationType === partner.organisationType;
+  const isValidCategory = isMatchingCompetition && isMatchingOrg;
+
+  if (isValidCategory) {
+    const costCategoryItem = getMatchingCostCategory(category.id, claimDetails);
+
+    if (!costCategoryItem) return;
+
+    const hasNegativeCost: boolean = costCategoryItem.remainingOfferCosts < 0;
+
+    const costCategory = {
+      label: renderCostCategory(restClaimProps, category),
+      isTotal: false,
+      category,
+      cost: costCategoryItem,
+      differenceInPounds: diffAsPounds(costCategoryItem),
+      diffPercentage: diffAsPercentage(costCategoryItem),
+    };
+
+    return {
+      hasNegativeCost,
+      costCategory,
+    };
+  }
+}
+
+function getMatchingCostCategory<CategoryId extends string, Category extends { costCategoryId: CategoryId }>(
+  categoryId: CategoryId,
+  costCategories: Category[],
 ) {
-  const { getLink, validation } = claimProps;
-  const route = getLink(category.id);
+  return costCategories.find(costCategory => costCategory.costCategoryId === categoryId);
+}
 
-  if (!route) return category.name;
+export type ClaimInfoProps = Pick<ClaimProps, "getLink" | "validation">;
+export type CategoryInfoProps = Pick<CostCategoryDto, "id" | "name">;
 
-  const linkId = validation && validation.errorMessage && validation.key  || "";
+export function renderCostCategory(claimInfo: ClaimInfoProps, categoryInfo: CategoryInfoProps) {
+  const { getLink, validation } = claimInfo;
+  const route = getLink(categoryInfo.id);
+
+  if (!route) return categoryInfo.name;
+
+  const linkId = (validation && validation.errorMessage && validation.key) || "";
 
   return (
     <Link id={linkId} route={route}>
-      {category.name}
+      {categoryInfo.name}
     </Link>
   );
 }
