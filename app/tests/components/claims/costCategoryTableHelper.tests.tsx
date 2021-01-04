@@ -514,6 +514,40 @@ describe("createTableData()", () => {
       expect(firstLineItem.cost).toStrictEqual(stubData.claimDetails[0]);
     });
 
+    test("with one invalid cost category", () => {
+      const emptyCostCategory = {
+        id: "a060C000000dxWtQAI",
+        name: "",
+        type: 0,
+        competitionType: "",
+        organisationType: "",
+        isCalculated: false,
+        hasRelated: false,
+        description: "",
+        hintText: "",
+      };
+      const stubData: ClaimProps = {
+        ...defaultStubData,
+        costCategories: [emptyCostCategory],
+        claimDetails: [
+          {
+            costCategoryId: "a060C000000dxWtQAI",
+            offerTotal: 30000,
+            forecastThisPeriod: 10000,
+            costsClaimedToDate: 5000,
+            costsClaimedThisPeriod: 3500,
+            remainingOfferCosts: 21500,
+          },
+        ],
+      };
+      const { costCategories } = createTableData(stubData);
+
+      const [firstLineItem] = costCategories;
+
+      expect(firstLineItem.isTotal).toBe(true);
+      expect(costCategories.length).toBe(1);
+    });
+
     test("with the total row values", () => {
       const stubData: ClaimProps = {
         ...defaultStubData,

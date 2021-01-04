@@ -41,12 +41,12 @@ export function createTableData(props: ClaimProps): ClaimTableResponse {
     const category = props.costCategories[index];
     const tableRow = createCostCategory(category, props);
 
-    if (!tableRow) break;
+    if (tableRow) {
+      costCategories.push(tableRow.costCategory);
 
-    costCategories.push(tableRow.costCategory);
-
-    if (tableRow.hasNegativeCost) {
-      totalNegativeCategories.push(tableRow.costCategory);
+      if (tableRow.hasNegativeCost) {
+        totalNegativeCategories.push(tableRow.costCategory);
+      }
     }
   }
 
