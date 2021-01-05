@@ -1,9 +1,8 @@
 import { ContentBase } from "../contentBase";
-import { ProjectDto } from "@framework/dtos";
 
 export class DocumentMessages extends ContentBase {
-  constructor(parent: ContentBase, protected project: ProjectDto | null | undefined) {
-    super(parent, "document-messages", project);
+  constructor(parent: ContentBase, protected competitionType?: string) {
+    super(parent, "document-messages", competitionType);
   }
 
   public readonly header = this.getContent("header", { markdown: true });
@@ -19,10 +18,10 @@ export class DocumentMessages extends ContentBase {
   public readonly claimDocumentsTitle = this.getContent("claim-documents-title");
   public readonly uploadInstruction = this.getContent("uploadInstruction", { markdown: true });
 
-  public readonly backLink = (previousPage: string) => this.getContent("back-link", {previousPage});
+  public readonly backLink = (previousPage: string) => this.getContent("back-link", { previousPage });
 
   public getDocumentUploadedMessage(totalFiles: number) {
-    const contentKey = (totalFiles === 1) ? "uploaded-document" : "uploaded-documents";
-    return this.getContent(contentKey, {totalFiles});
+    const contentKey = totalFiles === 1 ? "uploaded-document" : "uploaded-documents";
+    return this.getContent(contentKey, { totalFiles });
   }
 }

@@ -9,7 +9,7 @@ describe("InitialiseContentCommand", () => {
     const content = { expected: "setting" };
 
     context.resources.defaultContent.setContent(JSON.stringify(content));
-    context.resources.crdCompetitionContent.setContent(JSON.stringify(content));
+    context.resources.competitionContent.setContent(JSON.stringify(content));
 
     await context.runCommand(new InitialiseContentCommand(false));
 
@@ -22,7 +22,7 @@ describe("InitialiseContentCommand", () => {
     const context = new TestContext();
 
     context.resources.defaultContent.setContent(JSON.stringify({ expected: "setting" }));
-    context.resources.crdCompetitionContent.setContent(JSON.stringify({ expected: "setting" }));
+    context.resources.competitionContent.setContent(JSON.stringify({ expected: "setting" }));
 
     await context.runCommand(new InitialiseContentCommand(false));
     await context.runCommand(new InitialiseContentCommand(false));
@@ -34,7 +34,7 @@ describe("InitialiseContentCommand", () => {
     const context = new TestContext();
 
     context.resources.defaultContent.setContent(JSON.stringify({ expected: "setting" }));
-    context.resources.crdCompetitionContent.setContent(JSON.stringify({ expected: "setting" }));
+    context.resources.competitionContent.setContent(JSON.stringify({ expected: "setting" }));
     context.resources.customContent.setContent(JSON.stringify({ expected: "custom setting" }));
 
     await context.runCommand(new InitialiseContentCommand(false));
@@ -46,7 +46,7 @@ describe("InitialiseContentCommand", () => {
     const context = new TestContext();
 
     context.resources.defaultContent.setContent(JSON.stringify({ expected: "setting" }));
-    context.resources.crdCompetitionContent.setContent(JSON.stringify({ expected: "setting" }));
+    context.resources.competitionContent.setContent(JSON.stringify({ expected: "setting" }));
     context.resources.customContent.setContent(JSON.stringify({ expected: "custom setting" }));
 
     await context.runCommand(new InitialiseContentCommand(true));
@@ -59,7 +59,7 @@ describe("InitialiseContentCommand", () => {
     const context = new TestContext();
 
     context.resources.defaultContent.setContent(JSON.stringify({ expected: "setting" }));
-    context.resources.crdCompetitionContent.setContent(JSON.stringify({ expected: "setting" }));
+    context.resources.competitionContent.setContent(JSON.stringify({ expected: "setting" }));
     await context.runCommand(new InitialiseContentCommand(true));
     expect(context.internationalisation.getValue("expected")).toBe("setting");
 

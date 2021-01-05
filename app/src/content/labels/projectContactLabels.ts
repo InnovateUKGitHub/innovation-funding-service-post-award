@@ -1,12 +1,8 @@
 import { ContentBase } from "../contentBase";
-import { ProjectDto } from "@framework/dtos";
 
 export class ProjectContactLabels extends ContentBase {
-  constructor(
-    parent: ContentBase,
-    protected project: ProjectDto | null | undefined
-  ) {
-    super(parent, "project-contact-labels", project);
+  constructor(parent: ContentBase, protected competitionType?: string) {
+    super(parent, "project-contact-labels", competitionType);
   }
 
   public readonly fundingState = (isNonFunded: boolean) => {

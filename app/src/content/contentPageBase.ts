@@ -1,12 +1,10 @@
 import i18next from "i18next";
 import { ContentBase } from "./contentBase";
 import { Content } from "./content";
-import { ProjectDto } from "@framework/dtos";
 
 export abstract class ContentPageBase extends ContentBase {
-
-  protected constructor(parent: Content, pageName: string, protected project?: ProjectDto | null | undefined) {
-    super(parent, `pages.${pageName}`, project);
+  protected constructor(parent: Content, pageName: string, protected competitionType?: string) {
+    super(parent, `pages.${pageName}`, competitionType);
   }
 
   public title() {
@@ -34,6 +32,5 @@ export abstract class ContentPageBase extends ContentBase {
       displayTitle: general || generalKey,
       displayTitleKey: generalKey,
     };
-
   }
 }

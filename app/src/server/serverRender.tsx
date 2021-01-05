@@ -1,12 +1,17 @@
 import React from "react";
-import { Request, Response } from "express";
 import { renderToString } from "react-dom/server";
 import { AnyAction, createStore, Store } from "redux";
+import { constants as routerConstants, Router, State } from "router5";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router5";
-import { constants as routerConstants, Router, State } from "router5";
+import { Request, Response } from "express";
 
-import contextProvider from "./features/common/contextProvider";
+import { configureRouter, IRoutes, MatchedRoute, matchRoute, routeConfig } from "@ui/routing";
+import { ErrorCode, IAppError, IClientUser, IContext } from "@framework/types";
+import { IClientConfig } from "@ui/redux/reducers/configReducer";
+import * as Actions from "@ui/redux/actions";
+import { App } from "@ui/containers/app";
+import { Content } from "@content/content";
 import {
   createStores,
   IStores,
@@ -16,24 +21,20 @@ import {
   RootState,
   setupInitialState,
   setupMiddleware,
-  StoresProvider
+  StoresProvider,
 } from "@ui/redux";
-import { App } from "@ui/containers/app";
-import * as Actions from "@ui/redux/actions";
-import { renderHtml } from "./html";
+
+import contextProvider from "./features/common/contextProvider";
 import { ForbiddenError, FormHandlerError, NotFoundError } from "./features/common/appError";
-import { configureRouter, IRoutes, MatchedRoute, matchRoute, routeConfig } from "@ui/routing";
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
 import { Logger } from "./features/common/logger";
-import { ErrorCode, IAppError, IClientUser, IContext } from "@framework/types";
-import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { getErrorStatus } from "./errorHandlers";
-import { ContentProvider } from "@ui/redux/contentProvider";
-import { Content } from "@content/content";
-import { GetByIdQuery } from "./features/projects";
+import { renderHtml } from "./html";
 
 export async function serverRender(req: Request, res: Response, error?: IAppError): Promise<void> {
+  const content = new Content();
   const nonce = res.locals.nonce;
+
   try {
     if (error && !(error instanceof FormHandlerError)) {
       throw error;
@@ -49,8 +50,6 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
 
     const context = contextProvider.start({ user: req.session!.user });
     const auth = await context.runQuery(new GetAllProjectRolesForUser());
-    const project = await context.runQuery(new GetByIdQuery(Object.keys(auth.permissions)[0]));
-    const content = new Content(project);
 
     const user: IClientUser = { roleInfo: auth.permissions, email: req.session!.user.email, csrf: req.csrfToken() };
     const clientConfig = getClientConfig(context);
@@ -62,7 +61,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
 
     const stores = createStores(
       () => store.getState(),
-      (action) => process.nextTick(() => store.dispatch(action as AnyAction))
+      action => process.nextTick(() => store.dispatch(action as AnyAction)),
     );
 
     const matched = matchRoute(route);
@@ -74,25 +73,24 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
 
     await loadAllData(store, () => {
       // render the app to cause any other actions to go round the loop
-      renderApp(router, nonce, store, stores, routes, content, modalRegister);
+      renderApp(router, nonce, store, stores, routes, modalRegister);
     });
 
     onComplete(store, stores, content, matched, params, error);
 
-    res.send(renderApp(router, nonce, store, stores, routes, content, modalRegister));
-  }
-  catch (e) {
-    // TODO capture stask trace for logs
+    res.send(renderApp(router, nonce, store, stores, routes, modalRegister));
+  } catch (e) {
+    // TODO capture stack trace for logs
     new Logger(req.session && req.session.user).error("Unable to render", e);
 
     const routeState: State = {
       name: e instanceof NotFoundError ? "errorNotFound" : "error",
       params: {},
-      path: ""
+      path: "",
     };
 
     const initalState = {
-      router: { route: routeState }
+      router: { route: routeState },
     };
 
     const routes = routeConfig;
@@ -100,16 +98,14 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     const store = createStore(rootReducer, initalState);
     const stores = createStores(
       () => store.getState(),
-      (action) => process.nextTick(() => store.dispatch(action as AnyAction))
+      action => process.nextTick(() => store.dispatch(action as AnyAction)),
     );
 
     const matched = matchRoute(routeState);
 
-    const content = new Content(undefined);
-
     store.dispatch(Actions.setPageTitle(matched.getTitle({ params: routeState.params, stores, content })));
 
-    res.status(getErrorStatus(e)).send(renderApp(router, nonce, store, stores, routes, content, new ModalRegister()));
+    res.status(getErrorStatus(e)).send(renderApp(router, nonce, store, stores, routes, new ModalRegister()));
   }
 }
 
@@ -121,8 +117,8 @@ function loadAllData(store: Store, render: () => void): Promise<void> {
         render();
 
         // queue to see if all data loads are finished
-        // if they havnt finished it is preusmed a promise is still to resolve
-        // casuing another store changed event
+        // if they haven't finished it is presumed a promise is still to resolve
+        // causing another store changed event
         process.nextTick(() => {
           if (store.getState().loadStatus === 0) {
             unsub();
@@ -137,24 +133,35 @@ function loadAllData(store: Store, render: () => void): Promise<void> {
   });
 }
 
-const onComplete = (store: Store, stores: IStores, content: Content, matched: MatchedRoute, params: {}, error: FormHandlerError | undefined) => {
-  // validation errror occoured so add it into store as validation error
+const onComplete = (
+  store: Store,
+  stores: IStores,
+  content: Content,
+  matched: MatchedRoute,
+  params: {},
+  error?: FormHandlerError,
+) => {
+  // validation error occurred so add it into store as validation error
   if (error && error.code === ErrorCode.VALIDATION_ERROR) {
     store.dispatch(Actions.updateEditorAction(error.key, error.store, error.dto, error.error.results!));
   }
-  // some other validation errror occoured so add it into store as actual error
+
+  // some other validation error occurred so add it into store as actual error
   // need to pair with the submit action to keep count in sync
   else if (error) {
     store.dispatch(Actions.handleEditorSubmit(error.key, error.store, error.dto, error.result));
-    store.dispatch(Actions.handleEditorError({
-      id: error.key,
-      dto: error.dto,
-      validation: error.result,
-      error: error.error,
-      store: error.store,
-      scrollToTop: false
-    }));
+    store.dispatch(
+      Actions.handleEditorError({
+        id: error.key,
+        dto: error.dto,
+        validation: error.result,
+        error: error.error,
+        store: error.store,
+        scrollToTop: false,
+      }),
+    );
   }
+
   store.dispatch(Actions.setPageTitle(matched.getTitle({ params, stores, content })));
 };
 
@@ -171,22 +178,24 @@ function startRouter(req: Request, router: Router): Promise<State> {
   });
 }
 
-function renderApp(router: Router, nonce: string, store: Store<RootState>, stores: IStores, routes: IRoutes, content: Content, modalRegister: ModalRegister): string {
-  const user = stores.users.getCurrentUser();
-  const project = stores.projects.getById(Object.keys(user.roleInfo)[0]).data;
-
+function renderApp(
+  router: Router,
+  nonce: string,
+  store: Store<RootState>,
+  stores: IStores,
+  routes: IRoutes,
+  modalRegister: ModalRegister,
+): string {
   const html = renderToString(
     <Provider store={store}>
       <RouterProvider router={router}>
         <StoresProvider value={stores}>
-          <ContentProvider value={new Content(project)}>
-              <ModalProvider value={modalRegister}>
-                <App store={store} routes={routes}/>
-              </ModalProvider>
-            </ContentProvider>
+          <ModalProvider value={modalRegister}>
+            <App store={store} routes={routes} />
+          </ModalProvider>
         </StoresProvider>
       </RouterProvider>
-    </Provider>
+    </Provider>,
   );
 
   const state = store.getState();
@@ -199,6 +208,6 @@ function getClientConfig(context: IContext): IClientConfig {
     ifsRoot: context.config.urls.ifsRoot,
     features: context.config.features,
     ssoEnabled: context.config.sso.enabled,
-    options: context.config.options
+    options: context.config.options,
   };
 }

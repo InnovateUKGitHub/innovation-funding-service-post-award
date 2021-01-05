@@ -1,11 +1,10 @@
 import { ContentBase } from "../contentBase";
 import { DocumentLabels } from "@content/labels/documentLabels";
 import { DocumentMessages } from "@content/messages/documentMessages";
-import { ProjectDto } from "@framework/dtos";
 
 export class WarningContent extends ContentBase {
-  constructor(parent: ContentBase, protected project: ProjectDto | null | undefined) {
-    super(parent, "warningContent", project);
+  constructor(parent: ContentBase, protected competitionType?: string) {
+    super(parent, "warningContent", competitionType);
   }
 
   public readonly amountRequestMessage = this.getContent("components.warningContent.amountRequestMessage");

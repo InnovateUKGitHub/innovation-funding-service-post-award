@@ -34,6 +34,6 @@ Any content added to the custom content file will supersede the default content.
  
  Currently only supported as additional content file in source control. Further work needed to support hosting in Amazon S3 bucket.
  
- See use of `crdComopetitionContent.en.json`
+ See use of `competition-content.en.json`
  
  

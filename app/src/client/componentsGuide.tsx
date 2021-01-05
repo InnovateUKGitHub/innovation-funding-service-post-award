@@ -42,7 +42,7 @@ const ClientGuide = () => {
 
   return (
     <Provider store={store}>
-      <TestBed content={new Content(null)}>
+      <TestBed content={new Content()}>
         <Guide source="client" filter={getGuide()} />
       </TestBed>
     </Provider>

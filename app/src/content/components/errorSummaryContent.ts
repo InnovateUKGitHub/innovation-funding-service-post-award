@@ -1,10 +1,9 @@
 import { ContentPageBase } from "../contentPageBase";
 import { Content } from "../content";
-import { ProjectDto } from "@framework/dtos";
 
 export class ErrorSummaryContent extends ContentPageBase {
-  constructor(content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "errorSummary", project);
+  constructor(content: Content, protected competitionType?: string) {
+    super(content, "errorSummary", competitionType);
   }
 
   public readonly errorTitle = this.getContent("components.errorSummary.title");

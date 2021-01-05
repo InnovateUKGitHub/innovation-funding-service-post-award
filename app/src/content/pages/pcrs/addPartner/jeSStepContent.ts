@@ -2,19 +2,18 @@ import { ContentPageBase } from "../../../contentPageBase";
 import { Content } from "../../../content";
 import { PCRItem } from "../pcrItem";
 import { PCRAddPartnerLabels } from "@content/labels/pcrAddPartnerLabels";
-import { ProjectDto } from "@framework/dtos";
 import { DocumentLabels } from "@content/labels/documentLabels";
 import { DocumentMessages } from "@content/messages/documentMessages";
 
 export class PCRAddPartnerJeSContent extends ContentPageBase {
-  constructor(private readonly content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "pcr-add-partner-jes", project);
+  constructor(private readonly content: Content, protected competitionType?: string) {
+    super(content, "pcr-add-partner-jes", competitionType);
   }
 
-  public readonly pcrItem = new PCRItem(this, this.project);
-  public readonly labels = new PCRAddPartnerLabels(this, this.project);
-  public readonly documentLabels = new DocumentLabels(this, this.project);
-  public readonly documentMessages = new DocumentMessages(this, this.project);
+  public readonly pcrItem = new PCRItem(this, this.competitionType);
+  public readonly labels = new PCRAddPartnerLabels(this, this.competitionType);
+  public readonly documentLabels = new DocumentLabels(this, this.competitionType);
+  public readonly documentMessages = new DocumentMessages(this, this.competitionType);
 
-  public readonly guidance = this.getContent("guidance", {markdown: true});
+  public readonly guidance = this.getContent("guidance", { markdown: true });
 }

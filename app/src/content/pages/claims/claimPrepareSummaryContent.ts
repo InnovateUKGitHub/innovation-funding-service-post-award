@@ -2,16 +2,15 @@ import { ContentPageBase } from "../../contentPageBase";
 import { Content } from "../../content";
 import { ClaimMessages } from "@content/messages/claimMessages";
 import { ClaimsLabels } from "@content/labels/claimsLabels";
-import { ProjectDto } from "@framework/dtos";
 import { DocumentMessages } from "@content/messages/documentMessages";
 
 export class ClaimPrepareSummaryContent extends ContentPageBase {
-  constructor(private readonly content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "claim-prepare-summary", project);
+  constructor(private readonly content: Content, protected competitionType?: string) {
+    super(content, "claim-prepare-summary", competitionType);
   }
-  public readonly messages = new ClaimMessages(this, this.project);
-  public readonly documentMessages = new DocumentMessages(this, this.project);
-  public readonly labels = new ClaimsLabels(this, this.project);
+  public readonly messages = new ClaimMessages(this, this.competitionType);
+  public readonly documentMessages = new DocumentMessages(this, this.competitionType);
+  public readonly labels = new ClaimsLabels(this, this.competitionType);
 
   public readonly backToDocuments = this.getContent("back_to-documents");
   public readonly backToForecast = this.getContent("back-to-forecast");
@@ -27,7 +26,7 @@ export class ClaimPrepareSummaryContent extends ContentPageBase {
   public readonly claimDocumentsTitle = this.getContent("claim-documents-title");
   public readonly editClaimDocuments = this.getContent("edit-claim-documents");
   public readonly eligibleCostsLabel = this.getContent("eligible-costs-label");
-  public readonly forecastLabel  = this.getContent("forecast-label");
+  public readonly forecastLabel = this.getContent("forecast-label");
   public readonly differenceLabel = this.getContent("difference-label");
   public readonly editForecastMessage = this.getContent("edit-forecast-message");
   public readonly costsTitle = this.getContent("costs-title");

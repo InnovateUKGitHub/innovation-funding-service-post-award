@@ -8,6 +8,7 @@
   ],
   "jsRules": {},
   "rules": {
+    "semicolon": [true, "always", "ignore-bound-class-methods"],
     // Force RTL usage
     "import-blacklist": [true, "enzyme"],
     // override rules here

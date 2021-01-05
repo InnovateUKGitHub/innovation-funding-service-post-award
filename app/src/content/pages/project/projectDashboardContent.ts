@@ -1,11 +1,10 @@
 import { ContentPageBase } from "../../contentPageBase";
 import { Content } from "../../content";
 import { ProjectMessages } from "../../messages/projectMessages";
-import { ProjectDto } from "@framework/dtos";
 
 export class ProjectDashboardContent extends ContentPageBase {
-  constructor(content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "projects-dashboard", project);
+  constructor(content: Content, protected competitionType?: string) {
+    super(content, "projects-dashboard", competitionType);
   }
 
   public readonly searchTitle = this.getContent("searchTitle");
@@ -20,12 +19,16 @@ export class ProjectDashboardContent extends ContentPageBase {
     return hasSingleProject
       ? this.getContent("project-prefix-count.singular", { projectCount })
       : this.getContent("project-prefix-count.plural", { projectCount });
-  }
+  };
 
-  public readonly pendingMessage = (projectCount: number) => this.getContent("countMessages.pendingMessage", { projectCount });
-  public readonly liveMessage = (projectCount: number) => this.getContent("countMessages.liveMessage", { projectCount });
-  public readonly upcomingMessage = (projectCount: number) => this.getContent("countMessages.upcomingMessage", { projectCount });
-  public readonly archivedMessage = (projectCount: number) => this.getContent("countMessages.archivedMessage", { projectCount });
+  public readonly pendingMessage = (projectCount: number) =>
+    this.getContent("countMessages.pendingMessage", { projectCount });
+  public readonly liveMessage = (projectCount: number) =>
+    this.getContent("countMessages.liveMessage", { projectCount });
+  public readonly upcomingMessage = (projectCount: number) =>
+    this.getContent("countMessages.upcomingMessage", { projectCount });
+  public readonly archivedMessage = (projectCount: number) =>
+    this.getContent("countMessages.archivedMessage", { projectCount });
 
   public readonly live = {
     noProjects: this.getContent("noLiveProjectsMessage"),
@@ -42,5 +45,5 @@ export class ProjectDashboardContent extends ContentPageBase {
     noMatchingProjects: this.getContent("noArchivedMatchingMessage"),
   };
 
-  public readonly messages = new ProjectMessages(this, this.project);
+  public readonly messages = new ProjectMessages(this, this.competitionType);
 }

@@ -1,9 +1,8 @@
 import { ContentBase } from "@content/contentBase";
-import { ProjectDto } from "@framework/dtos";
 
 export class PCRPeriodLengthChangeLabels extends ContentBase {
-  constructor(parent: ContentBase, protected project: ProjectDto | null | undefined) {
-    super(parent, "pcr-period-length-change-labels", project);
+  constructor(parent: ContentBase, protected competitionType?: string) {
+    super(parent, "pcr-period-length-change-labels", competitionType);
   }
 
   public readonly currentPeriodLength = this.getContent("current-period-length");

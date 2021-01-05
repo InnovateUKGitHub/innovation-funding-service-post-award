@@ -1,14 +1,13 @@
 import { ContentBase } from "@content/contentBase";
-import { ProjectDto } from "@framework/dtos";
 
 export class PcrSpendProfileLabels extends ContentBase {
-  constructor(parent: ContentBase, protected project: ProjectDto | null | undefined) {
-    super(parent, "pcr-spend-profile-labels", project);
+  constructor(parent: ContentBase, protected competitionType?: string) {
+    super(parent, "pcr-spend-profile-labels", competitionType);
   }
 
   public readonly description = this.getContent("description");
   public readonly cost = this.getContent("cost");
-  public readonly totalCosts = (costCategoryName: string) => this.getContent("total-costs", {costCategoryName});
+  public readonly totalCosts = (costCategoryName: string) => this.getContent("total-costs", { costCategoryName });
   public readonly labour = {
     role: this.getContent("labour.role"),
     grossCost: this.getContent("labour.gross-cost"),

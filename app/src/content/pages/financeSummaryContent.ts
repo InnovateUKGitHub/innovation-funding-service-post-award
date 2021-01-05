@@ -2,15 +2,14 @@ import { ContentPageBase } from "../contentPageBase";
 import { Content } from "../content";
 import { ProjectMessages } from "../messages/projectMessages";
 import { ProjectLabels } from "@content/labels/projectLabels";
-import { ProjectDto } from "@framework/dtos";
 
 export class FinanceSummaryContent extends ContentPageBase {
-  constructor(content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "finance-summary", project);
+  constructor(content: Content, protected competitionType?: string) {
+    super(content, "finance-summary", competitionType);
   }
 
-  public readonly projectMessages = new ProjectMessages(this, this.project);
-  public readonly projectLabels = new ProjectLabels(this, this.project);
+  public readonly projectMessages = new ProjectMessages(this, this.competitionType);
+  public readonly projectLabels = new ProjectLabels(this, this.competitionType);
 
   public readonly totalsFooterLabel = this.getContent("totalsFooter");
   public readonly backToProjectOverview = this.getContent("bact-to-project-overview");

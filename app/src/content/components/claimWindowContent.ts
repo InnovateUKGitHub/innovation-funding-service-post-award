@@ -1,10 +1,9 @@
 import { ContentPageBase } from "../contentPageBase";
 import { Content } from "../content";
-import { ProjectDto } from "@framework/dtos";
 
 export class ClaimWindowContent extends ContentPageBase {
-  constructor(content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "claimWindow", project);
+  constructor(content: Content, protected competitionType?: string) {
+    super(content, "claimWindow", competitionType);
   }
 
   public readonly nextClaimPeriod = this.getContent("components.claimWindow.nextClaimPeriod");

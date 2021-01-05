@@ -1,9 +1,8 @@
 import { ContentBase } from "@content/contentBase";
-import { ProjectDto } from "@framework/dtos";
 
 export class PCRNameChangeLabels extends ContentBase {
-  constructor(parent: ContentBase, protected project: ProjectDto | null | undefined) {
-    super(parent, "pcr-name-change-labels", project);
+  constructor(parent: ContentBase, protected competitionType?: string) {
+    super(parent, "pcr-name-change-labels", competitionType);
   }
 
   public readonly enterName = this.getContent("enter-name");

@@ -1,30 +1,30 @@
 import React from "react";
+import { hydrate } from "react-dom";
+import i18next from "i18next";
 import { Provider } from "react-redux";
 import { AnyAction, createStore } from "redux";
 import { RouterProvider } from "react-router5";
-import { hydrate } from "react-dom";
-import i18next from "i18next";
 
-import { Polyfill } from "./polyfill";
-
+import * as Actions from "@ui/redux/actions";
 import { configureRouter, routeConfig } from "@ui/routing";
+import { processDto } from "@shared/processResponse";
+import { App } from "@ui/containers/app";
 import {
-  createStores, IStores,
+  createStores,
+  IStores,
   ModalProvider,
   ModalRegister,
   rootReducer,
   setupMiddleware,
   StoresConsumer,
-  StoresProvider
+  StoresProvider,
 } from "@ui/redux";
-import { App } from "../ui/containers/app";
-import { processDto } from "../shared/processResponse";
-import * as Actions from "@ui/redux/actions";
-import { ContentProvider } from "@ui/redux/contentProvider";
-import { Content } from "@content/content";
 
-// get servers store to initalise client store
+import { Polyfill } from "./polyfill";
+
+// get servers store to initialise client store
 const serverState = processDto((window as any).__PRELOADED_STATE__);
+
 serverState.isClient = true;
 
 const routes = routeConfig;
@@ -36,7 +36,7 @@ const store = createStore(rootReducer, serverState, middleware);
 const getStores = () => {
   return createStores(
     () => store.getState(),
-    (action) => setTimeout(() => store.dispatch(action as AnyAction))
+    action => setTimeout(() => store.dispatch(action as AnyAction)),
   );
 };
 
@@ -53,10 +53,7 @@ class Client extends React.Component<{}> {
       <Provider store={store}>
         <RouterProvider router={router}>
           <StoresProvider value={getStores()}>
-            <StoresConsumer>{stores =>
-              <AppWithContent stores={stores} store={store} />
-            }
-            </StoresConsumer>
+            <StoresConsumer>{stores => <AppWithContent stores={stores} store={store} />}</StoresConsumer>
           </StoresProvider>
         </RouterProvider>
       </Provider>
@@ -64,48 +61,46 @@ class Client extends React.Component<{}> {
   }
 }
 
-class AppWithContent extends React.Component<{stores: IStores, store: typeof store}> {
+class AppWithContent extends React.Component<{ stores: IStores; store: typeof store }> {
   constructor(props: any) {
     super(props);
     // whenever the store changes force a rerender this will flow down to container level
     // where if no props have changed rendering stops
     this.props.store.subscribe(() => this.setState({ marker: {} }));
   }
+
   render() {
-    const user = this.props.stores.users.getCurrentUser();
-    const project = this.props.stores.projects.getById(Object.keys(user.roleInfo)[0]).data;
     return (
-      <ContentProvider value={new Content(project)}>
-        <ModalProvider value={new ModalRegister()}>
-          <App store={store} routes={routes} />
-        </ModalProvider>
-      </ContentProvider>
+      <ModalProvider value={new ModalRegister()}>
+        <App store={store} routes={routes} />
+      </ModalProvider>
     );
   }
 }
 
 Polyfill()
-  .then(() => i18next.init({
-    lng: "en",
-    fallbackLng: "en",
-    defaultNS: "default",
-    interpolation: {
-      format: (value: string, format, lng) => {
-        if (format === "lowercase") return value.toLocaleLowerCase();
-        return value;
-      }
-    }
-  }))
+  .then(() =>
+    i18next.init({
+      lng: "en",
+      fallbackLng: "en",
+      defaultNS: "default",
+      interpolation: {
+        format: (value: string, format, lng) => {
+          if (format === "lowercase") return value.toLocaleLowerCase();
+          return value;
+        },
+      },
+    }),
+  )
   // temporarily add it globally to help debugging...
-  .then(() => (window as any).i18n = i18next)
+  .then(() => ((window as any).i18n = i18next))
   .then(() => {
     // get the english by default, if supporting another language and the browser specifies it then would need to get that too
     return fetch("/globalization/en")
       .then(content => {
         if (content.ok) {
           return content.json();
-        }
-        else {
+        } else {
           throw new Error(`Unable to load content : ${content.status} : ${content.statusText}`);
         }
       })
@@ -113,5 +108,4 @@ Polyfill()
         i18next.addResourceBundle("en", "default", content, true, true);
       });
   })
-  .then(() => router.start(() => hydrate((<Client/>), document.getElementById("root")
-  )));
+  .then(() => router.start(() => hydrate(<Client />, document.getElementById("root"))));

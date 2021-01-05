@@ -1,10 +1,9 @@
 import { ContentPageBase } from "../contentPageBase";
 import { Content } from "../content";
-import { ProjectDto } from "@framework/dtos";
 
 export class ForecastTableContent extends ContentPageBase {
-  constructor(content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "forecastTable", project);
+  constructor(content: Content, protected competitionType?: string) {
+    super(content, "forecastTable", competitionType);
   }
 
   public readonly costsClaimedHeader = this.getContent("components.forecastTable.costsClaimedHeader");
@@ -16,5 +15,4 @@ export class ForecastTableContent extends ContentPageBase {
   public readonly periodHeader = this.getContent("components.forecastTable.periodHeader");
   public readonly noDataText = this.getContent("components.forecastTable.noDataText");
   public readonly costCategoriesHeader = this.getContent("components.forecastTable.costCategoriesHeader");
-
 }

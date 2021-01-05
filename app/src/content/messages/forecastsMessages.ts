@@ -1,10 +1,8 @@
 import { ContentBase } from "../contentBase";
-import { DateFormat, formatDate } from "@framework/util";
-import { ProjectDto } from "@framework/dtos";
 
 export class ForecastsMessages extends ContentBase {
-  constructor(parent: ContentBase, protected project: ProjectDto | null | undefined) {
-    super(parent, "forecasts-messages", project);
+  constructor(parent: ContentBase, protected competitionType?: string) {
+    super(parent, "forecasts-messages", competitionType);
   }
 
   public readonly projectChangeWarning = this.getContent("warning-period-change");

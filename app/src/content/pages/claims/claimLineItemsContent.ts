@@ -1,11 +1,9 @@
 import { ContentPageBase } from "../../contentPageBase";
 import { Content } from "../../content";
-import { ClaimMessages } from "@content/messages/claimMessages";
-import { ProjectDto } from "@framework/dtos";
 
 export class ClaimLineItemsContent extends ContentPageBase {
-  constructor(private readonly content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "claim-line-items", project);
+  constructor(private readonly content: Content, protected competitionType?: string) {
+    super(content, "claim-line-items", competitionType);
   }
 
   public readonly supportingDocumentsTitle = this.getContent("supporting-documents-title");

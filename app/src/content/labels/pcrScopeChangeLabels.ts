@@ -1,9 +1,8 @@
 import { ContentBase } from "@content/contentBase";
-import { ProjectDto } from "@framework/dtos";
 
 export class PCRScopeChangeLabels extends ContentBase {
-  constructor(parent: ContentBase, protected project: ProjectDto | null | undefined) {
-    super(parent, "pcr-scope-change-labels", project);
+  constructor(parent: ContentBase, protected competitionType?: string) {
+    super(parent, "pcr-scope-change-labels", competitionType);
   }
 
   public readonly existingDescription = this.getContent("existing-description");

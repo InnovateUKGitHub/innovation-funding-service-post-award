@@ -1,11 +1,10 @@
 import { ContentBase } from "../contentBase";
 import { DocumentLabels } from "@content/labels/documentLabels";
 import { DocumentMessages } from "@content/messages/documentMessages";
-import { ProjectDto } from "@framework/dtos";
 
 export class ReportFormContent extends ContentBase {
-  constructor(parent: ContentBase, protected project: ProjectDto | null | undefined) {
-    super(parent, "reportForm", project);
+  constructor(parent: ContentBase, protected competitionType?: string) {
+    super(parent, "reportForm", competitionType);
   }
 
   public readonly reportMessage = this.getContent("components.reportForm.reportMessage");

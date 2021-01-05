@@ -83,7 +83,6 @@ import { PCRScopeChangeProjectSummaryChangeContent } from "./pages/pcrs/scopeCha
 import { PCRScopeChangePublicDescriptionChangeContent } from "./pages/pcrs/scopeChange/scopeChangePublicDescriptionChangeStepContent";
 import { PCRScopeChangeSummaryContent } from "./pages/pcrs/scopeChange/scopeChangeSummaryContent";
 
-import { ProjectDto } from "@framework/dtos";
 import { ValidationSummaryContent } from "@content/components/validationSummaryContent";
 import { ErrorSummaryContent } from "@content/components/errorSummaryContent";
 import { StandardErrorPageContent } from "./components/standardErrorPageContent";
@@ -228,128 +227,131 @@ export class Content extends ContentBase {
     phaseBannerContent: PhaseBannerContent;
   };
 
-  constructor(protected project: ProjectDto | null | undefined) {
+  constructor(protected competitionType?: string) {
     super(null, null);
 
     this.header = new HeaderContent(this);
     this.footer = new FooterContent(this);
 
-    this.projectsDashboard = new ProjectDashboardContent(this, project);
-    this.home = new HomePageContent(this, project);
+    this.projectsDashboard = new ProjectDashboardContent(this, competitionType);
+    this.home = new HomePageContent(this, competitionType);
 
-    this.projectSetup = new ProjectSetupContent(this, project);
-    this.projectOverview = new ProjectOverviewContent(this, project);
-    this.projectDetails = new ProjectDetailsContent(this, project);
-    this.projectDocuments = new ProjectDocumentsContent(this, project);
-    this.projectSetupSpendProfile = new ProjectSetupSpendProfileContent(this, project);
-    this.failedBankCheckConfirmation = new FailedBankCheckConfirmationContent(this, project);
-    this.projectSetupBankDetails = new ProjectSetupBankDetailsContent(this, project);
-    this.projectSetupBankStatement = new ProjectSetupBankStatementContent(this, project);
-    this.projectSetupBankDetailsVerify = new ProjectSetupBankDetailsVerifyContent(this, project);
+    this.projectSetup = new ProjectSetupContent(this, competitionType);
+    this.projectOverview = new ProjectOverviewContent(this, competitionType);
+    this.projectDetails = new ProjectDetailsContent(this, competitionType);
+    this.projectDocuments = new ProjectDocumentsContent(this, competitionType);
+    this.projectSetupSpendProfile = new ProjectSetupSpendProfileContent(this, competitionType);
+    this.failedBankCheckConfirmation = new FailedBankCheckConfirmationContent(this, competitionType);
+    this.projectSetupBankDetails = new ProjectSetupBankDetailsContent(this, competitionType);
+    this.projectSetupBankStatement = new ProjectSetupBankStatementContent(this, competitionType);
+    this.projectSetupBankDetailsVerify = new ProjectSetupBankDetailsVerifyContent(this, competitionType);
 
-    this.financeSummary = new FinanceSummaryContent(this, project);
+    this.financeSummary = new FinanceSummaryContent(this, competitionType);
 
-    this.claimsComponents = new ClaimsComponentsContent(this, project);
-    this.allClaimsDashboard = new AllClaimsDashboardContent(this, project);
-    this.claimsDashboard = new ClaimsDashboardContent(this, project);
-    this.claimDocuments = new ClaimDocumentsContent(this, project);
-    this.claimDetails = new ClaimDetailsContent(this, project);
-    this.claimDetailDocuments = new ClaimDetailDocumentsContent(this, project);
-    this.claimForecast = new ClaimForecastContent(this, project);
-    this.editClaimLineItems = new EditClaimLineItemsContent(this, project);
-    this.claimPrepare = new ClaimPrepareContent(this, project);
-    this.claimPrepareSummary = new ClaimPrepareSummaryContent(this, project);
-    this.claimReview = new ClaimReviewContent(this, project);
-    this.claimLineItems = new ClaimLineItemsContent(this, project);
+    this.claimsComponents = new ClaimsComponentsContent(this, competitionType);
+    this.allClaimsDashboard = new AllClaimsDashboardContent(this, competitionType);
+    this.claimsDashboard = new ClaimsDashboardContent(this, competitionType);
+    this.claimDocuments = new ClaimDocumentsContent(this, competitionType);
+    this.claimDetails = new ClaimDetailsContent(this, competitionType);
+    this.claimDetailDocuments = new ClaimDetailDocumentsContent(this, competitionType);
+    this.claimForecast = new ClaimForecastContent(this, competitionType);
+    this.editClaimLineItems = new EditClaimLineItemsContent(this, competitionType);
+    this.claimPrepare = new ClaimPrepareContent(this, competitionType);
+    this.claimPrepareSummary = new ClaimPrepareSummaryContent(this, competitionType);
+    this.claimReview = new ClaimReviewContent(this, competitionType);
+    this.claimLineItems = new ClaimLineItemsContent(this, competitionType);
 
-    this.financialVirementSummary = new FinancialVirementSummaryContent(this, project);
-    this.financialVirementEdit = new FinancialVirementEditContent(this, project);
-    this.financialVirementEditPartnerLevel = new FinancialVirementEditPartnerLevelContent(this, project);
-    this.financialVirementDetails = new FinancialVirementDetailsContent(this, project);
+    this.financialVirementSummary = new FinancialVirementSummaryContent(this, competitionType);
+    this.financialVirementEdit = new FinancialVirementEditContent(this, competitionType);
+    this.financialVirementEditPartnerLevel = new FinancialVirementEditPartnerLevelContent(this, competitionType);
+    this.financialVirementDetails = new FinancialVirementDetailsContent(this, competitionType);
 
     this.forecastsComponents = new ForecastsComponentsContent(this);
-    this.forecastsDashboard = new ForecastsDashboardContent(this, project);
-    this.forecastsDetails = new ForecastsDetailsContent(this, project);
-    this.forecastsUpdate = new ForecastsUpdateContent(this, project);
+    this.forecastsDashboard = new ForecastsDashboardContent(this, competitionType);
+    this.forecastsDetails = new ForecastsDetailsContent(this, competitionType);
+    this.forecastsUpdate = new ForecastsUpdateContent(this, competitionType);
 
-    this.monitoringReportsDashboard = new MonitoringReportsDashboardContent(this, project);
-    this.monitoringReportsCreate = new MonitoringReportsCreateContent(this, project);
-    this.monitoringReportsDelete = new MonitoringReportsDeleteContent(this, project);
-    this.monitoringReportsSummary = new MonitoringReportsSummaryContent(this, project);
-    this.monitoringReportsWorkflow = new MonitoringReportsWorkflowContent(this, project);
-    this.monitoringReportsPeriodStep = new MonitoringReportsPeriodStepContent(this, project);
-    this.monitoringReportsQuestionStep = new MonitoringReportsQuestionStepContent(this, project);
+    this.monitoringReportsDashboard = new MonitoringReportsDashboardContent(this, competitionType);
+    this.monitoringReportsCreate = new MonitoringReportsCreateContent(this, competitionType);
+    this.monitoringReportsDelete = new MonitoringReportsDeleteContent(this, competitionType);
+    this.monitoringReportsSummary = new MonitoringReportsSummaryContent(this, competitionType);
+    this.monitoringReportsWorkflow = new MonitoringReportsWorkflowContent(this, competitionType);
+    this.monitoringReportsPeriodStep = new MonitoringReportsPeriodStepContent(this, competitionType);
+    this.monitoringReportsQuestionStep = new MonitoringReportsQuestionStepContent(this, competitionType);
 
-    this.partnerDetails = new PartnerDetailsContent(this, project);
-    this.partnerDetailsEdit = new PartnerDetailsEditContent(this, project);
+    this.partnerDetails = new PartnerDetailsContent(this, competitionType);
+    this.partnerDetailsEdit = new PartnerDetailsEditContent(this, competitionType);
 
-    this.pcrCreate = new PCRCreateContent(this, project);
+    this.pcrCreate = new PCRCreateContent(this, competitionType);
 
-    this.pcrTimeExtensionStepContent = new PCRTimeExtensionStepContent(this, project);
+    this.pcrTimeExtensionStepContent = new PCRTimeExtensionStepContent(this, competitionType);
 
-    this.pcrPeriodLengthChangeContent = new PCRPeriodLengthChangeContent(this, project);
-    this.pcrAddPartnerRoleAndOrganisation = new PCRAddPartnerRoleAndOrganisationContent(this, project);
-    this.pcrAddPartnerStateAidEligibilityContent = new PCRAddPartnerStateAidEligibilityContent(this, project);
-    this.pcrAddPartnerOtherFunding = new PCRAddPartnerOtherFundingContent(this, project);
-    this.pcrAddPartnerAwardRate = new PCRAddPartnerAwardRateContent(this, project);
-    this.pcrAddPartnerOtherFundingSources = new PCRAddPartnerOtherFundingSourcesContent(this, project);
-    this.pcrAddPartnerAcademicCosts = new PCRAddPartnerAcademicCostsContent(this, project);
-    this.pcrAddPartnerAcademicOrganisation = new PCRAddPartnerAcademicOrganisationContent(this, project);
-    this.pcrAddPartnerCompanyHouse = new PCRAddPartnerCompanyHouseContent(this, project);
-    this.pcrAddPartnerProjectContacts = new PCRAddPartnerProjectContactsContent(this, project);
-    this.pcrAddPartnerFinanceDetails = new PCRAddPartnerFinanceDetailsContent(this, project);
-    this.pcrAddPartnerJeS = new PCRAddPartnerJeSContent(this, project);
-    this.pcrAddPartnerOrganisationDetails = new PCRAddPartnerOrganisationDetailsContent(this, project);
-    this.pcrAddPartnerSpendProfile = new PCRAddPartnerSpendProfileContent(this, project);
-    this.pcrAddPartnerProjectLocationContent = new PCRAddPartnerProjectLocationContent(this, project);
-    this.pcrAddPartnerAgreementToPcr = new PCRAddPartnerAgreementToPCRContent(this, project);
-    this.pcrAddPartnerSummary = new PCRAddPartnerSummaryContent(this, project);
-    this.pcrSpendProfileCostsSummaryContent = new PcrSpendProfileCostsSummaryContent(this, project);
-    this.pcrSpendProfilePrepareCostContent = new PcrSpendProfilePrepareCostContent(this, project);
-    this.pcrSpendProfileDeleteCostContent = new PcrSpendProfileDeleteCostContent(this, project);
-    this.pcrSpendProfileOverheadDocumentContent = new PcrSpendProfileOverheadDocumentContent(this, project);
+    this.pcrPeriodLengthChangeContent = new PCRPeriodLengthChangeContent(this, competitionType);
+    this.pcrAddPartnerRoleAndOrganisation = new PCRAddPartnerRoleAndOrganisationContent(this, competitionType);
+    this.pcrAddPartnerStateAidEligibilityContent = new PCRAddPartnerStateAidEligibilityContent(this, competitionType);
+    this.pcrAddPartnerOtherFunding = new PCRAddPartnerOtherFundingContent(this, competitionType);
+    this.pcrAddPartnerAwardRate = new PCRAddPartnerAwardRateContent(this, competitionType);
+    this.pcrAddPartnerOtherFundingSources = new PCRAddPartnerOtherFundingSourcesContent(this, competitionType);
+    this.pcrAddPartnerAcademicCosts = new PCRAddPartnerAcademicCostsContent(this, competitionType);
+    this.pcrAddPartnerAcademicOrganisation = new PCRAddPartnerAcademicOrganisationContent(this, competitionType);
+    this.pcrAddPartnerCompanyHouse = new PCRAddPartnerCompanyHouseContent(this, competitionType);
+    this.pcrAddPartnerProjectContacts = new PCRAddPartnerProjectContactsContent(this, competitionType);
+    this.pcrAddPartnerFinanceDetails = new PCRAddPartnerFinanceDetailsContent(this, competitionType);
+    this.pcrAddPartnerJeS = new PCRAddPartnerJeSContent(this, competitionType);
+    this.pcrAddPartnerOrganisationDetails = new PCRAddPartnerOrganisationDetailsContent(this, competitionType);
+    this.pcrAddPartnerSpendProfile = new PCRAddPartnerSpendProfileContent(this, competitionType);
+    this.pcrAddPartnerProjectLocationContent = new PCRAddPartnerProjectLocationContent(this, competitionType);
+    this.pcrAddPartnerAgreementToPcr = new PCRAddPartnerAgreementToPCRContent(this, competitionType);
+    this.pcrAddPartnerSummary = new PCRAddPartnerSummaryContent(this, competitionType);
+    this.pcrSpendProfileCostsSummaryContent = new PcrSpendProfileCostsSummaryContent(this, competitionType);
+    this.pcrSpendProfilePrepareCostContent = new PcrSpendProfilePrepareCostContent(this, competitionType);
+    this.pcrSpendProfileDeleteCostContent = new PcrSpendProfileDeleteCostContent(this, competitionType);
+    this.pcrSpendProfileOverheadDocumentContent = new PcrSpendProfileOverheadDocumentContent(this, competitionType);
 
-    this.pcrNameChange = new PCRNameChangeContent(this, project);
-    this.pcrNameChangePrepareItemFiles = new PCRNameChangePrepareItemFilesContent(this, project);
-    this.pcrNameChangeSummary = new PCRNameChangeSummaryContent(this, project);
+    this.pcrNameChange = new PCRNameChangeContent(this, competitionType);
+    this.pcrNameChangePrepareItemFiles = new PCRNameChangePrepareItemFilesContent(this, competitionType);
+    this.pcrNameChangeSummary = new PCRNameChangeSummaryContent(this, competitionType);
 
-    this.pcrReasoningPrepareFiles = new PCRReasoningPrepareFilesContent(this, project);
-    this.pcrPrepareReasoning = new PCRReasoningPrepareReasoningContent(this, project);
-    this.pcrReasoningSummary = new PCRReasoningSummaryContent(this, project);
-    this.pcrReasoningWorkflow = new PCRReasoningWorkflowContent(this, project);
+    this.pcrReasoningPrepareFiles = new PCRReasoningPrepareFilesContent(this, competitionType);
+    this.pcrPrepareReasoning = new PCRReasoningPrepareReasoningContent(this, competitionType);
+    this.pcrReasoningSummary = new PCRReasoningSummaryContent(this, competitionType);
+    this.pcrReasoningWorkflow = new PCRReasoningWorkflowContent(this, competitionType);
 
-    this.pcrRemovePartnerPrepareItemFiles = new PCRPrepareItemFilesForPartnerWithrawelContent(this, project);
-    this.pcrRemovePartner = new PCRRemovePartnerContent(this, project);
-    this.pcrRemovePartnerSummary = new PCRRemovePartnerSummaryContent(this, project);
+    this.pcrRemovePartnerPrepareItemFiles = new PCRPrepareItemFilesForPartnerWithrawelContent(this, competitionType);
+    this.pcrRemovePartner = new PCRRemovePartnerContent(this, competitionType);
+    this.pcrRemovePartnerSummary = new PCRRemovePartnerSummaryContent(this, competitionType);
 
-    this.pcrScopeChangeProjectSummaryChange = new PCRScopeChangeProjectSummaryChangeContent(this, project);
-    this.pcrScopeChangePublicDescriptionChange = new PCRScopeChangePublicDescriptionChangeContent(this, project);
-    this.pcrScopeChangeSummary = new PCRScopeChangeSummaryContent(this, project);
+    this.pcrScopeChangeProjectSummaryChange = new PCRScopeChangeProjectSummaryChangeContent(this, competitionType);
+    this.pcrScopeChangePublicDescriptionChange = new PCRScopeChangePublicDescriptionChangeContent(
+      this,
+      competitionType,
+    );
+    this.pcrScopeChangeSummary = new PCRScopeChangeSummaryContent(this, competitionType);
 
     this.errors = {
-      notfound: new NotFoundContent(this, project),
-      unexpected: new UnexpectedErrorContent(this, project),
+      notfound: new NotFoundContent(this, competitionType),
+      unexpected: new UnexpectedErrorContent(this, competitionType),
     };
     this.components = {
-      documents: new DocumentsContent(this, project),
-      taskList: new TaskListContent(this, project),
-      validationSummary: new ValidationSummaryContent(this, project),
-      errorSummary: new ErrorSummaryContent(this, project),
-      standardErrorPage: new StandardErrorPageContent(this, project),
-      notFoundErrorPage: new NotFoundErrorPageContent(this, project),
-      logs: new LogsContent(this, project),
-      loading: new LoadingContent(this, project),
-      documentSingle: new DocumentSingleContent(this, project),
-      documentGuidance: new DocumentGuidanceContent(this, project),
-      claimLastModified: new ClaimLastModifiedContent(this, project),
-      claimWindow: new ClaimWindowContent(this, project),
-      forecastTable: new ForecastTableContent(this, project),
-      reportForm: new ReportFormContent(this, project),
-      forecastDetails: new ForecastDetailsContent(this, project),
-      warningContent: new WarningContent(this, project),
-      onHoldContent: new OnHoldContent(this, project),
-      claimDetailsLinkContent: new ClaimDetailsLinkContent(this, project),
-      phaseBannerContent: new PhaseBannerContent(this, project),
+      documents: new DocumentsContent(this, competitionType),
+      taskList: new TaskListContent(this, competitionType),
+      validationSummary: new ValidationSummaryContent(this, competitionType),
+      errorSummary: new ErrorSummaryContent(this, competitionType),
+      standardErrorPage: new StandardErrorPageContent(this, competitionType),
+      notFoundErrorPage: new NotFoundErrorPageContent(this, competitionType),
+      logs: new LogsContent(this, competitionType),
+      loading: new LoadingContent(this, competitionType),
+      documentSingle: new DocumentSingleContent(this, competitionType),
+      documentGuidance: new DocumentGuidanceContent(this, competitionType),
+      claimLastModified: new ClaimLastModifiedContent(this, competitionType),
+      claimWindow: new ClaimWindowContent(this, competitionType),
+      forecastTable: new ForecastTableContent(this, competitionType),
+      reportForm: new ReportFormContent(this, competitionType),
+      forecastDetails: new ForecastDetailsContent(this, competitionType),
+      warningContent: new WarningContent(this, competitionType),
+      onHoldContent: new OnHoldContent(this, competitionType),
+      claimDetailsLinkContent: new ClaimDetailsLinkContent(this, competitionType),
+      phaseBannerContent: new PhaseBannerContent(this, competitionType),
     };
   }
 }

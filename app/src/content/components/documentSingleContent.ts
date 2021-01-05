@@ -1,10 +1,9 @@
 import { ContentPageBase } from "../contentPageBase";
 import { Content } from "../content";
-import { ProjectDto } from "@framework/dtos";
 
 export class DocumentSingleContent extends ContentPageBase {
-  constructor(content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "documentSingle", project);
+  constructor(content: Content, protected competitionType?: string) {
+    super(content, "documentSingle", competitionType);
   }
 
   public readonly newWindow = this.getContent("components.documentSingle.newWindow");
