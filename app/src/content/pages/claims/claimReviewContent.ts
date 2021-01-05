@@ -3,15 +3,14 @@ import { Content } from "../../content";
 import { ClaimMessages } from "@content/messages/claimMessages";
 import { ClaimsLabels } from "@content/labels/claimsLabels";
 import { DocumentMessages } from "@content/messages/documentMessages";
-import { ProjectDto } from "@framework/dtos";
 
 export class ClaimReviewContent extends ContentPageBase {
-  constructor(private readonly content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "claim-review", project);
+  constructor(private readonly content: Content, protected competitionType?: string) {
+    super(content, "claim-review", competitionType);
   }
-  public readonly messages = new ClaimMessages(this, this.project);
-  public readonly documentMessages = new DocumentMessages(this, this.project);
-  public readonly labels = new ClaimsLabels(this, this.project);
+  public readonly messages = new ClaimMessages(this, this.competitionType);
+  public readonly documentMessages = new DocumentMessages(this, this.competitionType);
+  public readonly labels = new ClaimsLabels(this, this.competitionType);
   public readonly backLink = this.getContent("back-link");
   public readonly queryClaimOption = this.getContent("option-query-claim");
   public readonly approveClaimOption = this.getContent("option-submit-claim");
@@ -24,6 +23,8 @@ export class ClaimReviewContent extends ContentPageBase {
   public readonly sendQueryButton = this.getContent("button-send-query");
   public readonly uploadButton = this.getContent("button-upload");
   public readonly uploadInputLabel = this.getContent("label-input-upload");
-  public readonly uploadClaimValidationFormAccordionTitle = this.getContent("accordion-title-upload-claim-validation-form");
+  public readonly uploadClaimValidationFormAccordionTitle = this.getContent(
+    "accordion-title-upload-claim-validation-form",
+  );
   public readonly additionalInfoLabel = this.getContent("additional-info");
 }

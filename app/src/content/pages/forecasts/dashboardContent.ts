@@ -1,10 +1,9 @@
 import { ContentPageBase } from "../../contentPageBase";
 import { Content } from "../../content";
-import { ProjectDto } from "@framework/dtos";
 
 export class ForecastsDashboardContent extends ContentPageBase {
-  constructor(private readonly content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "forecasts-dashboard", project);
+  constructor(private readonly content: Content, protected competitionType?: string) {
+    super(content, "forecasts-dashboard", competitionType);
   }
 
   public readonly partnerHeader = this.getContent("header-partner");

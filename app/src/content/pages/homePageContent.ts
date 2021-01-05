@@ -1,10 +1,9 @@
 import { ContentPageBase } from "../contentPageBase";
 import { Content } from "../content";
-import { ProjectDto } from "@framework/dtos";
 
 export class HomePageContent extends ContentPageBase {
-  constructor(content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "home", project);
+  constructor(content: Content, protected competitionType?: string) {
+    super(content, "home", competitionType);
   }
 
   public readonly exampleContentTitle = this.getContent("example.contentTitle");
@@ -14,5 +13,4 @@ export class HomePageContent extends ContentPageBase {
   public readonly resetUserMessage = this.getContent("reset-user-message");
   public readonly projectsHeading = this.getContent("projects-heading");
   public readonly projectsDashboardHeading = this.getContent("projects-dashboard-heading");
-
 }

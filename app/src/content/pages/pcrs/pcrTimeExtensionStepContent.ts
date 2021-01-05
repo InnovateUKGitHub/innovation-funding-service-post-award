@@ -1,10 +1,9 @@
 import { ContentPageBase } from "../../contentPageBase";
 import { Content } from "../../content";
-import { ProjectDto } from "@framework/dtos";
 
 export class PCRTimeExtensionStepContent extends ContentPageBase {
-  constructor(private readonly content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "pcr-time-extension-step", project);
+  constructor(private readonly content: Content, protected competitionType?: string) {
+    super(content, "pcr-time-extension-step", competitionType);
   }
 
   public readonly existingProjectHeading = this.getContent("existing-project-heading");
@@ -13,5 +12,4 @@ export class PCRTimeExtensionStepContent extends ContentPageBase {
   public readonly proposedProjectHeading = this.getContent("proposed-project-heading");
   public readonly timeExtensionHint = this.getContent("time-extension-hint");
   public readonly saveAndContinue = this.getContent("save-and-continue");
-
 }

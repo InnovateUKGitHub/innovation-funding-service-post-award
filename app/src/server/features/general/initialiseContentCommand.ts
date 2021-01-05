@@ -1,4 +1,4 @@
-import { CommandBase, NonAuthorisedCommandBase } from "../common/commandBase";
+import { NonAuthorisedCommandBase } from "../common/commandBase";
 import { IContext } from "@framework/types";
 
 const defaultContentMarker = new Date("1970/01/01");
@@ -16,12 +16,13 @@ export class InitialiseContentCommand extends NonAuthorisedCommandBase<boolean> 
 
     // if we are using custom content then check if last modified is greater than last updated
     const lastUpdated = context.caches.contentStoreLastUpdated || defaultContentMarker;
-    const customContentUpdateRequired = useCustomContent && await this.checkCustomContentModified(context, lastUpdated);
+    const customContentUpdateRequired =
+      useCustomContent && (await this.checkCustomContentModified(context, lastUpdated));
 
     if (defaultContentUpdateRequired || customContentUpdateRequired) {
       // need to set default content even if its only custom content updated
       // allows values to be removed from the custom content because reset to default content first
-      await this.setCRDCompetitionContent(context);
+      await this.setCompetitionContent(context);
       await this.setDefaultContent(context);
       if (customContentUpdateRequired) {
         await this.setCustomContent(context);
@@ -33,8 +34,7 @@ export class InitialiseContentCommand extends NonAuthorisedCommandBase<boolean> 
   }
 
   private checkCustomContentModified(context: IContext, lastUpdated: Date) {
-    return context.resources.customContent.getInfo()
-      .then(x => x.lastModified > lastUpdated);
+    return context.resources.customContent.getInfo().then(x => x.lastModified > lastUpdated);
   }
 
   private async setDefaultContent(context: IContext) {
@@ -51,9 +51,9 @@ export class InitialiseContentCommand extends NonAuthorisedCommandBase<boolean> 
     context.logger.info("Set custom content", context.caches.contentStoreLastUpdated);
   }
 
-  private async setCRDCompetitionContent(context: IContext) {
-    const crdCompetitionContent = JSON.parse(await context.resources.crdCompetitionContent.getContent());
-    context.internationalisation.addResourceBundle(crdCompetitionContent);
+  private async setCompetitionContent(context: IContext) {
+    const competitionContent = JSON.parse(await context.resources.competitionContent.getContent());
+    context.internationalisation.addResourceBundle(competitionContent);
     context.logger.info("Set crd content", context.caches.contentStoreLastUpdated);
   }
 }

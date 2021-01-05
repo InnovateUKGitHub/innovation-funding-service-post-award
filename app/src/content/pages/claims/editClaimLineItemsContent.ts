@@ -1,15 +1,14 @@
 import { ContentPageBase } from "../../contentPageBase";
 import { Content } from "../../content";
 import { ClaimMessages } from "@content/messages/claimMessages";
-import { ProjectDto } from "@framework/dtos";
 import { DocumentMessages } from "@content/messages/documentMessages";
 
 export class EditClaimLineItemsContent extends ContentPageBase {
-  constructor(private readonly content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "edit-claim-line-items", project);
+  constructor(private readonly content: Content, protected competitionType?: string) {
+    super(content, "edit-claim-line-items", competitionType);
   }
-  public readonly messages = new ClaimMessages(this, this.project);
-  public readonly documentMessages = new DocumentMessages(this, this.project);
+  public readonly messages = new ClaimMessages(this, this.competitionType);
+  public readonly documentMessages = new DocumentMessages(this, this.competitionType);
   public readonly backLink = this.getContent("back-link");
   public readonly descriptionHeader = this.getContent("header-description");
   public readonly lastUpdatedHeader = this.getContent("header-last-updated");

@@ -3,22 +3,21 @@ import { Content } from "../../content";
 import { MonitoringReportsMessages } from "@content/messages/monitoringReportsMessages";
 import { MonitoringReportsLabels } from "@content/labels/monitoringReportsLabels";
 import { ContentBase } from "@content/contentBase";
-import { ProjectDto } from "@framework/dtos";
 
 export class MonitoringReportsWorkflowContent extends ContentPageBase {
-  constructor(private readonly content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "monitoring-reports-workflow", project);
+  constructor(private readonly content: Content, protected competitionType?: string) {
+    super(content, "monitoring-reports-workflow", competitionType);
   }
 
-  public readonly messages = new MonitoringReportsMessages(this, this.project);
-  public readonly labels = new MonitoringReportsLabels(this, this.project);
+  public readonly messages = new MonitoringReportsMessages(this, this.competitionType);
+  public readonly labels = new MonitoringReportsLabels(this, this.competitionType);
 
   public readonly editMode = new MonitoringReportsWorkflowContentEditMode(this.content);
   public readonly viewMode = new MonitoringReportsWorkflowContentViewMode(this.content);
 
   public readonly backLink = this.getContent("back-link");
 
-  public readonly backToStepLink = (step: string) => this.getContent("link-back-to-step", {step});
+  public readonly backToStepLink = (step: string) => this.getContent("link-back-to-step", { step });
 }
 
 export class MonitoringReportsWorkflowContentEditMode extends ContentPageBase {

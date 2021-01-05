@@ -1,17 +1,21 @@
 // tslint:disable: object-literal-key-quotes
 import React from "react";
+import { Store } from "redux";
+import { Params, State as RouteState } from "router5";
+
+import { Content } from "@content/content";
+import { useCompetitionType } from "@ui/hooks";
+import { IRoutes, MatchedRoute, matchRoute } from "@ui/routing";
 import { IStores, ModalRegister, useModal, useStores } from "@ui/redux";
 import { updatePageTitle } from "@ui/redux/actions";
-import { IRoutes, MatchedRoute, matchRoute } from "@ui/routing";
+import { ContentProvider } from "@ui/redux/contentProvider";
+import { IClientConfig } from "@ui/redux/reducers/configReducer";
+
 import { Footer, GovWidthContainer, Header, PhaseBanner, PrivateModal, useHeader } from "@ui/components";
 import { StandardErrorPage } from "@ui/components/standardErrorPage";
-import { IClientConfig } from "@ui/redux/reducers/configReducer";
-import { BaseProps } from "./containerBase";
-import { Store } from "redux";
-import { State as RouteState } from "router5";
-import { Content } from "@content/content";
-import { useContent } from "@ui/hooks";
 import { FooterLinks } from "@ui/components/layout/footer.config";
+
+import { BaseProps } from "./containerBase";
 
 // TODO: This needs to be an external file, preferably near a config directory. The href values domain name need to be generated from config
 // prettier-ignore
@@ -27,7 +31,6 @@ const footerLinks: FooterLinks = [
   {"data-qa": "sign-up-for-competition-updates", text: "Sign up for competition updates", href: "http://info.innovateuk.org/emailpref"},
   {"data-qa": "latest-funding-opportunities", text: "Latest funding opportunities", href: "https://apply-for-innovation-funding.service.gov.uk/competition/search"}
 ];
-
 interface IAppProps {
   // @todo see if we can remove and replace with a callback to set page title
   dispatch: any;
@@ -40,6 +43,8 @@ interface IAppProps {
   route: RouteState;
   routes: IRoutes;
   content: Content;
+  params: Params;
+  currentRoute: MatchedRoute;
 }
 
 class AppView extends React.Component<IAppProps> {
@@ -49,15 +54,13 @@ class AppView extends React.Component<IAppProps> {
   }
 
   public componentDidUpdate(prevProps: Readonly<IAppProps>) {
-    const { route, loadStatus, stores, content, dispatch } = this.props;
+    const { route, loadStatus, stores, content, dispatch, currentRoute, params } = this.props;
 
     const newRoute = prevProps.route !== route;
     const hashLoaded = prevProps.loadStatus !== 0;
 
     if (newRoute || (loadStatus === 0 && hashLoaded)) {
-      const { filteredRoute, params } = this.createRouteProps();
-
-      dispatch(updatePageTitle(filteredRoute, params, stores, content));
+      dispatch(updatePageTitle(currentRoute, params, stores, content));
     }
   }
 
@@ -67,21 +70,10 @@ class AppView extends React.Component<IAppProps> {
     return route.accessControl(auth, params, this.props.config);
   }
 
-  private createRouteProps() {
-    const { route } = this.props;
-
-    const filteredRoute = matchRoute(route);
-    const params = filteredRoute.getParams(route);
-
-    return { filteredRoute, params };
-  }
-
   public render() {
-    // prettier-ignore
-    const { modalRegister, messages, route, config, routes, isClient, content } = this.props;
+    const { modalRegister, messages, route, config, routes, isClient, content, currentRoute, params } = this.props;
 
-    const { filteredRoute, params } = this.createRouteProps();
-    const hasAccess = this.accessControl(filteredRoute, params);
+    const hasAccess = this.accessControl(currentRoute, params);
 
     const requiredRouteProps: BaseProps = {
       messages,
@@ -92,24 +84,26 @@ class AppView extends React.Component<IAppProps> {
     };
 
     const headerProps = useHeader(config.ifsRoot, content.header);
-    const RouteContainer = filteredRoute.container;
+    const RouteContainer = currentRoute.container;
 
     return (
-      <div className="app-container">
-        <Header {...headerProps} />
+      <ContentProvider value={content}>
+        <div className="app-container">
+          <Header {...headerProps} />
 
-        <GovWidthContainer className="app-content" data-page-qa={filteredRoute.routeName}>
-          <PhaseBanner />
+          <GovWidthContainer className="app-content" data-page-qa={currentRoute.routeName}>
+            <PhaseBanner />
 
-          {hasAccess ? <RouteContainer {...requiredRouteProps} {...params} /> : <StandardErrorPage />}
-        </GovWidthContainer>
+            {hasAccess ? <RouteContainer {...requiredRouteProps} {...params} /> : <StandardErrorPage />}
+          </GovWidthContainer>
 
-        <Footer links={footerLinks} />
+          <Footer links={footerLinks} />
 
-        {modalRegister.getModals().map(modal => (
-          <PrivateModal key={`modal-${modal.id}`} {...modal} />
-        ))}
-      </div>
+          {modalRegister.getModals().map(modal => (
+            <PrivateModal key={`modal-${modal.id}`} {...modal} />
+          ))}
+        </div>
+      </ContentProvider>
     );
   }
 }
@@ -119,23 +113,30 @@ interface AppRoute {
   routes: IRoutes;
 }
 
-export const App = (props: AppRoute) => {
+export function App(props: AppRoute) {
   const stores = useStores();
-  const { content } = useContent();
   const modalRegister = useModal();
+
+  const getRoute = stores.navigation.getRoute();
+  const currentRoute = matchRoute(getRoute);
+  const params: Params = currentRoute.getParams(getRoute);
+
+  const competitionType = useCompetitionType(params);
 
   return (
     <AppView
-      content={content}
+      content={new Content(competitionType)}
       stores={stores}
       modalRegister={modalRegister}
       loadStatus={stores.navigation.getLoadStatus()}
       config={stores.config.getConfig()}
       isClient={stores.config.isClient()}
       messages={stores.messages.messages()}
-      route={stores.navigation.getRoute()}
+      route={getRoute}
+      params={params}
+      currentRoute={currentRoute}
       dispatch={props.store.dispatch}
       routes={props.routes}
     />
   );
-};
+}

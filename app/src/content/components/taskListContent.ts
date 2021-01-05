@@ -1,10 +1,9 @@
 import { ContentBase } from "../contentBase";
-import { ProjectDto } from "@framework/dtos";
 
 export class TaskListContent extends ContentBase {
-    constructor(parent: ContentBase, protected project: ProjectDto | null | undefined) {
-        super(parent, "task-list", project);
-    }
+  constructor(parent: ContentBase, protected competitionType?: string) {
+    super(parent, "task-list", competitionType);
+  }
 
-    public readonly sectionTitleEnterInfo = this.getContent("section-title-enter-info");
+  public readonly sectionTitleEnterInfo = this.getContent("section-title-enter-info");
 }

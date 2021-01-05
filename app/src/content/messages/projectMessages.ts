@@ -1,9 +1,8 @@
 import { ContentBase } from "../contentBase";
-import { ProjectDto } from "@framework/dtos";
 
 export class ProjectMessages extends ContentBase {
-  constructor(parent: ContentBase, protected project: ProjectDto | null | undefined) {
-    super(parent, "project-messages", project);
+  constructor(parent: ContentBase, protected competitionType?: string) {
+    super(parent, "project-messages", competitionType);
   }
 
   public readonly checkForecast = this.getContent("checkForecast");
@@ -14,12 +13,14 @@ export class ProjectMessages extends ContentBase {
   public readonly claimDue = this.getContent("claimDueMessage");
   public readonly claimOverdue = this.getContent("claimOverdueMessage");
   public readonly claimSubmitted = this.getContent("claimSubmittedMessage");
-  public readonly claimsToReview = (numberOfClaims: number) => this.getContent("claimsToReviewMessage", { numberOfClaims });
+  public readonly claimsToReview = (numberOfClaims: number) =>
+    this.getContent("claimsToReviewMessage", { numberOfClaims });
   public readonly iarRequired = this.getContent("iarRequiredMessage");
   public readonly noClaimDue = this.getContent("noClaimDueMessage");
   public readonly projectEnded = this.getContent("projectEndedMessage");
   public readonly finalClaimPeriod = this.getContent("finalClaimPeriodMessage");
-  public readonly currentPeriodInfo = (currentPeriod: number, numberOfPeriods: number) => this.getContent("currentPeriodInfo", { currentPeriod, numberOfPeriods });
+  public readonly currentPeriodInfo = (currentPeriod: number, numberOfPeriods: number) =>
+    this.getContent("currentPeriodInfo", { currentPeriod, numberOfPeriods });
   public readonly pcrQueried = this.getContent("pcrQueried");
   public readonly pcrsToReview = (numberOfPcrs: number) => this.getContent("pcrToReview", { numberOfPcrs });
   public readonly projectOnHold = this.getContent("projectOnHold");

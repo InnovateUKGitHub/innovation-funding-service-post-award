@@ -1,10 +1,9 @@
 import { ContentPageBase } from "../contentPageBase";
 import { Content } from "../content";
-import { ProjectDto } from "@framework/dtos";
 
 export class LogsContent extends ContentPageBase {
-  constructor(content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "logs", project);
+  constructor(content: Content, protected competitionType?: string) {
+    super(content, "logs", competitionType);
   }
 
   public readonly noChangesMessage = this.getContent("components.logs.noChangesMessage");

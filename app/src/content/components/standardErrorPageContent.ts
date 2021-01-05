@@ -1,10 +1,9 @@
 import { ContentPageBase } from "../contentPageBase";
 import { Content } from "../content";
-import { ProjectDto } from "@framework/dtos";
 
 export class StandardErrorPageContent extends ContentPageBase {
-  constructor(content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "standardError", project);
+  constructor(content: Content, protected competitionType?: string) {
+    super(content, "standardError", competitionType);
   }
 
   public readonly standardError = this.getContent("components.standardErrorPage.message");

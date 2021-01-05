@@ -1,12 +1,11 @@
 import { ContentPageBase } from "../../../contentPageBase";
 import { Content } from "../../../content";
-import { ProjectDto } from "@framework/dtos";
 import { PCRScopeChangeLabels } from "@content/labels/pcrScopeChangeLabels";
 
 export class PCRScopeChangeSummaryContent extends ContentPageBase {
-  constructor(content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "pcr-scope-change-summary", project);
+  constructor(content: Content, protected competitionType?: string) {
+    super(content, "pcr-scope-change-summary", competitionType);
   }
 
-  public readonly labels = new PCRScopeChangeLabels(this, this.project);
+  public readonly labels = new PCRScopeChangeLabels(this, this.competitionType);
 }

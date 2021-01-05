@@ -2,11 +2,10 @@ import { ContentPageBase } from "../../contentPageBase";
 import { Content } from "../../content";
 import { ProjectMessages } from "../../messages/projectMessages";
 import { ProjectLabels } from "@content/labels/projectLabels";
-import { ProjectDto } from "@framework/dtos";
 
 export class ProjectOverviewContent extends ContentPageBase {
-  constructor(content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "project-overview", project);
+  constructor(content: Content, protected competitionType?: string) {
+    super(content, "project-overview", competitionType);
   }
 
   public readonly links = {
@@ -20,10 +19,9 @@ export class ProjectOverviewContent extends ContentPageBase {
     summary: this.getContent("summaryLink"),
   };
 
-  public readonly messages = new ProjectMessages(this, this.project);
-  public readonly labels = new ProjectLabels(this, this.project);
+  public readonly messages = new ProjectMessages(this, this.competitionType);
+  public readonly labels = new ProjectLabels(this, this.competitionType);
 
   public readonly backToProjects = this.getContent("backToProjects");
   public readonly costsToDateMessage = this.getContent("costsToDateMessage");
-
 }

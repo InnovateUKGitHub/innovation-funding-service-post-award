@@ -1,10 +1,9 @@
 import { ContentPageBase } from "../contentPageBase";
 import { Content } from "../content";
-import { ProjectDto } from "@framework/dtos";
 
 export class DocumentGuidanceContent extends ContentPageBase {
-  constructor(content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "documentGuidance", project);
+  constructor(content: Content, protected competitionType?: string) {
+    super(content, "documentGuidance", competitionType);
   }
 
   public readonly uploadGuidance = this.getContent("components.documentGuidance.uploadGuidance");

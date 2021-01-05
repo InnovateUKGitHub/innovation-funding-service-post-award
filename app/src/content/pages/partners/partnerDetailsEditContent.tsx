@@ -1,14 +1,13 @@
 import { ContentPageBase } from "@content/contentPageBase";
 import { ProjectContactLabels } from "@content/labels/projectContactLabels";
 import { Content } from "@content/content";
-import { ProjectDto } from "@framework/dtos";
 
 export class PartnerDetailsEditContent extends ContentPageBase {
-  constructor(content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "partner-details-edit", project);
+  constructor(content: Content, protected competitionType?: string) {
+    super(content, "partner-details-edit", competitionType);
   }
 
-  public readonly contactLabels = new ProjectContactLabels(this, this.project);
+  public readonly contactLabels = new ProjectContactLabels(this, this.competitionType);
 
   public readonly postcodeSectionTitle = this.getContent("section-title-postcode");
   public readonly currentPostcodeLabel = this.getContent("label-current-postcode");

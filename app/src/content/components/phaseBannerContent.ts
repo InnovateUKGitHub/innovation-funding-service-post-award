@@ -1,10 +1,9 @@
 import { ContentPageBase } from "../contentPageBase";
 import { Content } from "../content";
-import { ProjectDto } from "@framework/dtos";
 
 export class PhaseBannerContent extends ContentPageBase {
-  constructor(content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "phaseBannerContent", project);
+  constructor(content: Content, protected competitionType?: string) {
+    super(content, "phaseBannerContent", competitionType);
   }
 
   public readonly newServiceMessage = this.getContent("components.phaseBannerContent.newServiceMessage");

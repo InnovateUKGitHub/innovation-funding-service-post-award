@@ -1,10 +1,9 @@
 import { ContentPageBase } from "../contentPageBase";
 import { Content } from "../content";
-import { ProjectDto } from "@framework/dtos";
 
 export class ClaimLastModifiedContent extends ContentPageBase {
-  constructor(content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "claimLastModified", project);
+  constructor(content: Content, protected competitionType?: string) {
+    super(content, "claimLastModified", competitionType);
   }
 
   public readonly message = this.getContent("components.claimLastModified.message");

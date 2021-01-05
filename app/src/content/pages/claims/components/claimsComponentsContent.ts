@@ -1,10 +1,9 @@
 import { ContentPageBase } from "../../../contentPageBase";
 import { Content } from "../../../content";
-import { ProjectDto } from "@framework/dtos";
 
 export class ClaimsComponentsContent extends ContentPageBase {
-  constructor(private readonly content: Content, protected project: ProjectDto | null | undefined) {
-    super(content, "claims-components", project);
+  constructor(private readonly content: Content, protected competitionType?: string) {
+    super(content, "claims-components", competitionType);
   }
 
   public readonly negativeCategoriesMessage = {

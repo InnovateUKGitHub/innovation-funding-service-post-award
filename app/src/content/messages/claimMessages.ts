@@ -1,10 +1,9 @@
 import { ContentBase } from "../contentBase";
 import { DateFormat, formatDate } from "@framework/util";
-import { ProjectDto } from "@framework/dtos";
 
 export class ClaimMessages extends ContentBase {
-  constructor(parent: ContentBase, protected project: ProjectDto | null | undefined) {
-    super(parent, "claims-messages", project);
+  constructor(parent: ContentBase, protected competitionType?: string) {
+    super(parent, "claims-messages", competitionType);
   }
 
   public readonly guidanceMessage = this.getContent("guidance-message", { markdown: true });
@@ -22,7 +21,7 @@ export class ClaimMessages extends ContentBase {
   public readonly documentDisclaimerMessage = this.getContent("document-disclaimer-message");
   public readonly documentValidationMessage = this.getContent("document-validation-message");
   public readonly documentDetailGuidance = this.getContent("document-detail-guidance");
-  public readonly interimClaimMessage = this.getContent("interim-claim-message", {markdown: true});
+  public readonly interimClaimMessage = this.getContent("interim-claim-message", { markdown: true });
   public readonly editClaimLineItemGuidance = this.getContent("edit-claim-line-item-guidance");
   public readonly editClaimLineItemCurrencyGbp = this.getContent("edit-claim-line-item-convert-gbp");
   public readonly editClaimLineItemDocumentGuidance = this.getContent("edit-claim-line-item-document-guidance");

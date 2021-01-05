@@ -25,7 +25,7 @@ export function componentGuideRender(req: Request, res: Response) {
 
   const html = renderToString(
     <Provider store={store}>
-      <TestBed content={new Content(null)}>
+      <TestBed content={new Content()}>
         <Guide source="server" filter={req.query.guide} />
       </TestBed>
     </Provider>,
