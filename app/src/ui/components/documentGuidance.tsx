@@ -40,7 +40,13 @@ return (
   );
 };
 
-export const DocumentGuidanceWithContent = (props: { documentMessages: (x: Content) => DocumentMessages }) => {
+export type IDocumentMessages = ((x: Content) => DocumentMessages);
+
+interface DocumentGuidanceWithContentProps {
+  documentMessages: IDocumentMessages;
+}
+
+export const DocumentGuidanceWithContent = (props: DocumentGuidanceWithContentProps ) => {
   return (
     <React.Fragment>
       <ACC.Content value={x => props.documentMessages(x).header}/>
