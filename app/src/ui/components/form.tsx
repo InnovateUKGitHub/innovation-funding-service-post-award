@@ -163,7 +163,8 @@ class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & 
     return (
       <div data-qa={`field-${name}`} className={classNames("govuk-form-group", { "govuk-form-group--error": hasError })}>
         {!!label || !!labelContent ? <label className={classNames("govuk-label", { "govuk-visually-hidden": labelHidden, "govuk-label--m": labelBold })} htmlFor={name}>{labelContent ? <Content value={labelContent} /> : label}</label> : null}
-        {hintValue ? <span id={createFieldHintId(this.props)} className="govuk-hint">{hintValue}</span> : null}
+        {/* changed hint element to be a <div> to allow nested block elements */}
+        {hintValue ? <div id={createFieldHintId(this.props)} className="govuk-hint">{hintValue}</div> : null}
         <ValidationError error={validation} />
         {field(formData, this.props.disabled, hasError)}
       </div>

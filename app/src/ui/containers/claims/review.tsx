@@ -1,6 +1,6 @@
 import React from "react";
 import * as ACC from "@ui/components";
-import { ContentConsumer, IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
@@ -15,12 +15,15 @@ import {
   GOLCostDto,
   PartnerDto,
   ProjectDto,
-  ProjectRole
+  ProjectRole,
 } from "@framework/types";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { projectCompetition, useContent } from "@ui/hooks";
+import { Content } from "@content/content";
+import { IDocumentMessages } from "@ui/components";
 
 export interface ReviewClaimParams {
   projectId: string;
@@ -28,7 +31,8 @@ export interface ReviewClaimParams {
   periodId: number;
 }
 
-interface Data {
+interface ReviewData {
+  content: ReviewContent;
   project: Pending<ProjectDto>;
   partner: Pending<PartnerDto>;
   costCategories: Pending<CostCategoryDto[]>;
@@ -44,7 +48,85 @@ interface Data {
   documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
 }
 
-interface Callbacks {
+type ReviewContentKeys =
+  | "backlinkMessage"
+  | "isFinalClaimMessage"
+  | "logItemTitle"
+  | "additionalInfoHint"
+  | "forecastItemTitle"
+  | "queryClaimOption"
+  | "approveClaimOption"
+  | "howToProceedSectionTitle"
+  | "submitButton"
+  | "sendQueryButton"
+  | "uploadClaimValidationFormAccordionTitle"
+  | "uploadInputLabel"
+  | "uploadButton"
+  | "claimReviewDeclaration"
+  | "monitoringReportReminder"
+  | "additionalInfoSectionTitle"
+  | "additionalInfoLabel"
+  | "uploadInstruction"
+  | "noDocumentsUploaded";
+
+type ReviewContentKTPKeys =
+  | "additionalInfoHintIfYou"
+  | "additionalInfoHintQueryClaim"
+  | "additionalInfoHintSubmitClaim";
+
+interface ReviewContent {
+  default: Record<ReviewContentKeys, string>;
+  document: IDocumentMessages;
+  getCompetitionContent: (competitionType: string) => Record<ReviewContentKTPKeys, string> | undefined;
+}
+
+export function useReviewContent(): ReviewContent {
+  const { getContent } = useContent();
+
+  const defaultContent = {
+    additionalInfoHint: getContent(x => x.claimReview.additionalInfoHint),
+    backlinkMessage: getContent(x => x.claimReview.backLink),
+    queryClaimOption: getContent(x => x.claimReview.queryClaimOption),
+    approveClaimOption: getContent(x => x.claimReview.approveClaimOption),
+    howToProceedSectionTitle: getContent(x => x.claimReview.howToProceedSectionTitle),
+    submitButton: getContent(x => x.claimReview.submitButton),
+    sendQueryButton: getContent(x => x.claimReview.sendQueryButton),
+    uploadClaimValidationFormAccordionTitle: getContent(x => x.claimReview.uploadClaimValidationFormAccordionTitle),
+    uploadInputLabel: getContent(x => x.claimReview.uploadInputLabel),
+    uploadButton: getContent(x => x.claimReview.uploadButton),
+    claimReviewDeclaration: getContent(x => x.claimReview.claimReviewDeclaration),
+    monitoringReportReminder: getContent(x => x.claimReview.monitoringReportReminder),
+    additionalInfoSectionTitle: getContent(x => x.claimReview.additionalInfoSectionTitle),
+    additionalInfoLabel: getContent(x => x.claimReview.additionalInfoLabel),
+    isFinalClaimMessage: getContent(x => x.claimReview.messages.finalClaim),
+    forecastItemTitle: getContent(x => x.claimReview.labels.forecastAccordionTitle),
+    logItemTitle: getContent(x => x.claimReview.labels.claimLogAccordionTitle),
+    uploadInstruction: getContent(x => x.claimReview.documentMessages.uploadInstruction),
+    noDocumentsUploaded: getContent(x => x.claimReview.documentMessages.noDocumentsUploaded),
+  };
+
+  const document = (x: Content) => x.claimReview.documentMessages;
+
+  const ktpContent: Record<ReviewContentKTPKeys, string> = {
+    additionalInfoHintQueryClaim: getContent(x => x.claimReview.additionalInfoHintQueryClaim),
+    additionalInfoHintSubmitClaim: getContent(x => x.claimReview.additionalInfoHintSubmitClaim),
+    additionalInfoHintIfYou: getContent(x => x.claimReview.additionalInfoHintIfYou),
+  };
+
+  const getCompetitionContent = (competitionType: string) => {
+    const { isKTP } = projectCompetition(competitionType);
+
+    return isKTP ? ktpContent : undefined;
+  };
+
+  return {
+    getCompetitionContent,
+    default: defaultContent,
+    document,
+  };
+}
+
+interface ReviewCallbacks {
   onUpdate: (saving: boolean, dto: ClaimDto) => void;
   onUpload: (saving: boolean, dto: MultipleDocumentUploadDto) => void;
   onDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
@@ -61,7 +143,7 @@ interface CombinedData {
   documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
 }
 
-class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> {
+class ReviewComponent extends ContainerBase<ReviewClaimParams, ReviewData, ReviewCallbacks> {
   public render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -71,10 +153,10 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       claimDetails: this.props.costsSummaryForPeriod,
       editor: this.props.editor,
       documents: this.props.documents,
-      documentsEditor: this.props.documentsEditor
+      documentsEditor: this.props.documentsEditor,
     });
 
-    return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
+    return <ACC.PageLoader pending={combined} render={data => this.renderContents(data)} />;
   }
 
   private getClaimPeriodTitle(data: CombinedData) {
@@ -82,24 +164,39 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   }
 
   private renderContents(data: CombinedData) {
+    const { content } = this.props;
+
+    const backLinkElement = (
+      <ACC.BackLink route={this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}>
+        {content.default.backlinkMessage}
+      </ACC.BackLink>
+    );
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}><ACC.Content value={x => x.claimReview.backLink}/></ACC.BackLink>}
+        backLink={backLinkElement}
         error={data.editor.error}
         validator={[data.editor.validator, data.documentsEditor.validator]}
         pageTitle={<ACC.Projects.Title {...data.project} />}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={x => x.claimReview.messages.finalClaim}/>}
+
+        {data.claim.isFinalClaim && (
+          <ACC.ValidationMessage messageType="info" message={this.props.content.default.isFinalClaimMessage} />
+        )}
+
         {this.renderClaimReviewSection(data)}
+
         <ACC.Section>
           <ACC.Accordion>
             {this.renderForecastItem()}
+
             {this.renderLogsItem()}
+
             {this.renderUploadClaimValidationForm(data)}
           </ACC.Accordion>
         </ACC.Section>
+
         {this.renderForm(data)}
       </ACC.Page>
     );
@@ -119,6 +216,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
   }
 
   private renderForecastItem() {
+    const { content } = this.props;
     const pendingForecastData: Pending<ACC.Claims.ForecastData> = Pending.combine({
       project: this.props.project,
       partner: this.props.partner,
@@ -127,47 +225,55 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
       claimDetails: this.props.claimDetails,
       forecastDetails: this.props.forecastDetails,
       golCosts: this.props.golCosts,
-      costCategories: this.props.costCategories
+      costCategories: this.props.costCategories,
     });
 
     return (
-      <ACC.AccordionItem titleContent={x => x.claimReview.labels.forecastAccordionTitle} qa="forecast-accordion">
+      <ACC.AccordionItem title={content.default.forecastItemTitle} qa="forecast-accordion">
         <ACC.Loader
           pending={pendingForecastData}
-          render={(forecastData) => (<ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />)}
+          render={forecastData => <ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />}
         />
       </ACC.AccordionItem>
     );
   }
 
   private getClaimLineItemLink(costCategoryId: string) {
-    return this.props.routes.reviewClaimLineItems.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId });
+    return this.props.routes.reviewClaimLineItems.getLink({
+      partnerId: this.props.partnerId,
+      projectId: this.props.projectId,
+      periodId: this.props.periodId,
+      costCategoryId,
+    });
   }
 
   private renderForm(data: CombinedData) {
+    const { content } = this.props;
     const Form = ACC.TypedForm<ClaimDto>();
+
     const options: ACC.SelectOption[] = [
-      { id: ClaimStatus.MO_QUERIED, value: <ACC.Content value={x => x.claimReview.queryClaimOption} /> },
-      { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: <ACC.Content value={x => x.claimReview.approveClaimOption} /> },
+      { id: ClaimStatus.MO_QUERIED, value: content.default.queryClaimOption },
+      { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: content.default.approveClaimOption },
     ];
 
     return (
       <Form.Form
         editor={data.editor}
         onSubmit={() => this.props.onUpdate(true, data.editor.data)}
-        onChange={(dto) => this.props.onUpdate(false, dto)}
+        onChange={dto => this.props.onUpdate(false, dto)}
         qa="review-form"
       >
-        <Form.Fieldset headingContent={x => x.claimReview.howToProceedSectionTitle}>
+        <Form.Fieldset heading={content.default.howToProceedSectionTitle}>
           <Form.Radio
             name="status"
             options={options}
-            value={(dto) => options.find(x => x.id === dto.status)}
+            value={dto => options.find(x => x.id === dto.status)}
             update={(dto, val) => this.updateStatus(dto, val)}
             validation={data.editor.validator.status}
             inline={true}
           />
-          {this.renderFormHiddenSection(data.editor, Form)}
+
+          {this.renderFormHiddenSection(data.editor, Form, data.project)}
         </Form.Fieldset>
       </Form.Form>
     );
@@ -177,52 +283,117 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     return (
-      <ACC.AccordionItem titleContent={x => x.claimReview.uploadClaimValidationFormAccordionTitle} qa="upload-claims-validation-form-accordion">
+      <ACC.AccordionItem
+        title={this.props.content.default.uploadClaimValidationFormAccordionTitle}
+        qa="upload-claims-validation-form-accordion"
+      >
         <UploadForm.Form
           enctype="multipart"
           editor={data.documentsEditor}
-          onChange={dto => this.props.onUpload(false, {...dto, description: DocumentDescription.ClaimValidationForm})}
-          onSubmit={() => this.props.onUpload(true, {...data.documentsEditor.data, description: DocumentDescription.ClaimValidationForm})}
+          onChange={dto => this.props.onUpload(false, { ...dto, description: DocumentDescription.ClaimValidationForm })}
+          onSubmit={() =>
+            this.props.onUpload(true, {
+              ...data.documentsEditor.data,
+              description: DocumentDescription.ClaimValidationForm,
+            })
+          }
           qa="projectDocumentUpload"
         >
           <UploadForm.Fieldset>
-            <ACC.Content value={x => x.claimReview.documentMessages.uploadInstruction} />
-            <ACC.DocumentGuidanceWithContent documentMessages={x => x.claimReview.documentMessages} />
+            <ACC.Renderers.SimpleString>{this.props.content.default.uploadInstruction}</ACC.Renderers.SimpleString>
+            <ACC.DocumentGuidanceWithContent documentMessages={this.props.content.document} />
             <UploadForm.MulipleFileUpload
-              labelContent={x => x.claimReview.uploadInputLabel}
+              label={this.props.content.default.uploadInputLabel}
               name="attachment"
               labelHidden={true}
               value={x => x.files}
-              update={(dto, files) => dto.files = files || []}
+              update={(dto, files) => (dto.files = files || [])}
               validation={data.documentsEditor.validator.files}
             />
           </UploadForm.Fieldset>
-          <UploadForm.Submit styling="Secondary"><ACC.Content value={x => x.claimReview.uploadButton} /></UploadForm.Submit>
+          <UploadForm.Submit styling="Secondary">{this.props.content.default.uploadButton}</UploadForm.Submit>
         </UploadForm.Form>
         {this.renderDocumentList(data.documentsEditor, data.documents)}
       </ACC.AccordionItem>
     );
   }
 
-  private renderDocumentList(editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
+  private renderDocumentList(
+    editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
+    documents: DocumentSummaryDto[],
+  ) {
+    const { content } = this.props;
+
     if (!documents.length) {
-      return (
-        <ACC.ValidationMessage message={x => x.claimDocuments.documentMessages.noDocumentsUploaded} messageType="info" />
-      );
+      return <ACC.ValidationMessage message={content.default.noDocumentsUploaded} messageType="info" />;
     }
 
-    const claimValidationFormDocuments = documents.filter(x => x.description === DocumentDescription.ClaimValidationForm);
+    const claimValidationFormDocuments = documents.filter(
+      x => x.description === DocumentDescription.ClaimValidationForm,
+    );
     const claimSupportingDocuments = documents.filter(x => x.description !== DocumentDescription.ClaimValidationForm);
 
     return (
       <React.Fragment>
-        {claimValidationFormDocuments.length ? <ACC.DocumentListWithDelete documents={claimValidationFormDocuments} onRemove={(document) => this.props.onDelete(editor.data, document)} qa="claim-validation-form-documents"/> : null}
-        {claimSupportingDocuments.length ? <ACC.DocumentList documents={claimSupportingDocuments} qa="claim-supporting-documents" /> : null}
+        {claimValidationFormDocuments.length ? (
+          <ACC.DocumentListWithDelete
+            documents={claimValidationFormDocuments}
+            onRemove={document => this.props.onDelete(editor.data, document)}
+            qa="claim-validation-form-documents"
+          />
+        ) : null}
+
+        {claimSupportingDocuments.length ? (
+          <ACC.DocumentList documents={claimSupportingDocuments} qa="claim-supporting-documents" />
+        ) : null}
       </React.Fragment>
     );
   }
 
-  private renderFormHiddenSection(editor: IEditorStore<ClaimDto, ClaimDtoValidator>, Form: ACC.FormBuilder<ClaimDto>) {
+  private getCompetitionHintContent(competitionType: string) {
+    const { content } = this.props;
+
+    const ktpContent = content.getCompetitionContent(competitionType);
+
+    return ktpContent ? (
+      <>
+        {ktpContent.additionalInfoHintIfYou}
+        <li>{ktpContent.additionalInfoHintQueryClaim}</li>
+        <li>{ktpContent.additionalInfoHintSubmitClaim}</li>
+      </>
+    ) : (
+      content.default.additionalInfoHint
+    );
+  }
+
+  private getMODeclarationMessage(competitionType: string) {
+    const { isKTP } = projectCompetition(competitionType);
+
+    if (isKTP) return null;
+
+    return (
+      <ACC.Renderers.SimpleString key="declaration">
+        {this.props.content.default.claimReviewDeclaration}
+      </ACC.Renderers.SimpleString>
+    );
+  }
+
+  private getMOReminderMessage(competitionType: string) {
+    const { isKTP } = projectCompetition(competitionType);
+    const reminderMessage = this.props.content.default.monitoringReportReminder;
+
+    if (isKTP) {
+      return <ACC.ValidationMessage qa="ktp-mo-report-reminder" messageType="info" message={reminderMessage} />;
+    }
+
+    return <ACC.Renderers.SimpleString key="reminder">{reminderMessage}</ACC.Renderers.SimpleString>;
+  }
+
+  private renderFormHiddenSection(
+    editor: IEditorStore<ClaimDto, ClaimDtoValidator>,
+    Form: ACC.FormBuilder<ClaimDto>,
+    project: ProjectDto,
+  ) {
     // on client if the status hasn't yet been set by the radio buttons then don't show
     // if server rendering we need to always show
     if (!editor.data.status && this.props.isClient) {
@@ -231,67 +402,67 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, Data, Callbacks> 
 
     const submitButtonLabel = this.getSubmitButtonLabel(editor);
 
+    const hintValue = this.getCompetitionHintContent(project.competitionType);
+    const declarationMessage = this.getMODeclarationMessage(project.competitionType);
+    const reminderMessage = this.getMOReminderMessage(project.competitionType);
+
+    // Note: <Fieldset> has not got got support for React.Fragment
     return [
       // Returning array here instead of React.Fragment as Fieldset data will not persist through Fragment,
-      (
-      <Form.Fieldset key="form" headingContent={x => x.claimReview.additionalInfoSectionTitle} qa="additional-info-form" headingQa="additional-info-heading">
+      // tslint:disable-next-line: jsx-wrap-multiline
+      <Form.Fieldset
+        key="form"
+        heading={this.props.content.default.additionalInfoSectionTitle}
+        qa="additional-info-form"
+        headingQa="additional-info-heading"
+      >
         <Form.MultilineString
-          label={<ACC.Content value={x => x.claimReview.additionalInfoLabel}/>}
+          label={this.props.content.default.additionalInfoLabel}
           labelHidden={true}
-          hintContent={x => x.claimReview.additionalInfoHint}
+          hint={hintValue}
           name="comments"
           value={m => m.comments}
-          update={(m, v) => m.comments = v}
+          update={(m, v) => (m.comments = v)}
           validation={editor.validator.comments}
           qa="info-text-area"
         />
-      </Form.Fieldset>
-      ),
-      (
-        <ACC.Renderers.SimpleString key="declaration">
-          <ACC.Content value={x => x.claimReview.claimReviewDeclaration} />
-        </ACC.Renderers.SimpleString>
-        ),(
-        <ACC.Renderers.SimpleString key="reminder">
-          <ACC.Content value={x => x.claimReview.monitoringReportReminder} />
-        </ACC.Renderers.SimpleString>
-      ),
-      !!submitButtonLabel ? <Form.Submit key="button">{submitButtonLabel}</Form.Submit> : null
+      </Form.Fieldset>,
+      declarationMessage,
+      reminderMessage,
+      !!submitButtonLabel ? <Form.Submit key="button">{submitButtonLabel}</Form.Submit> : null,
     ];
-}
+  }
 
   private getSubmitButtonLabel(editor: IEditorStore<ClaimDto, ClaimDtoValidator>) {
-  // If rendering from the server then always use "Submit"
-  if (!this.props.isClient || editor.data.status === ClaimStatus.AWAITING_IUK_APPROVAL) {
-    return <ACC.Content value={x => x.claimReview.submitButton} />;
-  }
+    // If rendering from the server then always use "Submit"
+    if (!this.props.isClient || editor.data.status === ClaimStatus.AWAITING_IUK_APPROVAL) {
+      return this.props.content.default.submitButton;
+    }
 
-  if (editor.data.status === ClaimStatus.MO_QUERIED) {
-    return <ACC.Content value={x => x.claimReview.sendQueryButton} />;
-  }
+    if (editor.data.status === ClaimStatus.MO_QUERIED) {
+      return this.props.content.default.sendQueryButton;
+    }
 
-  return null;
-}
+    return null;
+  }
 
   private updateStatus(dto: ClaimDto, option: ACC.SelectOption | null | undefined) {
-  if (option && (option.id === ClaimStatus.MO_QUERIED || option.id === ClaimStatus.AWAITING_IUK_APPROVAL)) {
-    dto.status = option.id;
+    if (option && (option.id === ClaimStatus.MO_QUERIED || option.id === ClaimStatus.AWAITING_IUK_APPROVAL)) {
+      dto.status = option.id;
+    }
   }
-}
 
   private renderLogsItem() {
-  return (
-    <ACC.AccordionItem titleContent={x => x.claimReview.labels.claimLogAccordionTitle} qa="log-accordion">
-      {/* Keeping logs inside loader because accordion defaults to closed*/}
-      <ACC.Loader
-        pending={this.props.statusChanges}
-        render={(statusChanges) => (
-          <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
-        )}
-      />
-    </ACC.AccordionItem>
-  );
-}
+    return (
+      <ACC.AccordionItem title={this.props.content.default.logItemTitle} qa="log-accordion">
+        {/* Keeping logs inside loader because accordion defaults to closed*/}
+        <ACC.Loader
+          pending={this.props.statusChanges}
+          render={statusChanges => <ACC.Logs qa="claim-status-change-table" data={statusChanges} />}
+        />
+      </ACC.AccordionItem>
+    );
+  }
 }
 
 const initEditor = (dto: ClaimDto) => {
@@ -301,56 +472,73 @@ const initEditor = (dto: ClaimDto) => {
   }
 };
 
-const ReviewContainer = (props: ReviewClaimParams & BaseProps) => (
-  <StoresConsumer>
-    {
-      stores => (
-        <ContentConsumer>
-          {
-            content => (
-              <ReviewComponent
-                project={stores.projects.getById(props.projectId)}
-                partner={stores.partners.getById(props.partnerId)}
-                costCategories={stores.costCategories.getAll()}
-                claim={stores.claims.get(props.partnerId, props.periodId)}
-                claims={stores.claims.getAllClaimsForPartner(props.partnerId)}
-                costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}
-                claimDetails={stores.claimDetails.getAllByPartner(props.partnerId)}
-                forecastDetails={stores.forecastDetails.getAllByPartner(props.partnerId)}
-                golCosts={stores.forecastGolCosts.getAllByPartner(props.partnerId)}
-                statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
-                editor={stores.claims.getClaimEditor(props.projectId, props.partnerId, props.periodId, initEditor)}
-                documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
-                documentsEditor={stores.claimDocuments.getClaimDocumentsEditor(props.projectId, props.partnerId, props.periodId)}
-                onUpdate={(saving, dto) => {
-                  stores.messages.clearMessages();
-                  const message = dto.status === ClaimStatus.MO_QUERIED ? content.claimReview.messages.claimQueried : content.claimReview.messages.claimApproved;
-                  stores.claims.updateClaimEditor(saving, props.projectId, props.partnerId, props.periodId, dto, message.content, () => stores.navigation.navigateTo(props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })));
-                }}
-                onUpload={(saving, dto) => {
-                  stores.messages.clearMessages();
-                  const successMessage = content.claimDocuments.documentMessages.getDocumentUploadedMessage(dto.files.length);
-                  stores.claimDocuments.updateClaimDocumentsEditor(saving, props.projectId, props.partnerId, props.periodId, dto, successMessage.content);
-                }}
-                onDelete={(dto, document) => {
-                  stores.messages.clearMessages();
-                  stores.claimDocuments.deleteClaimDocument(props.projectId, props.partnerId, props.periodId, dto, document);
-                }}
-                {...props}
-              />
-            )
-          }
-        </ContentConsumer>
-      )
-    }
-  </StoresConsumer>
-);
+const ReviewContainer = (props: ReviewClaimParams & BaseProps) => {
+  const stores = useStores();
+  const { content } = useContent();
+  const reviewContent = useReviewContent();
+
+  return (
+    <ReviewComponent
+      content={reviewContent}
+      project={stores.projects.getById(props.projectId)}
+      partner={stores.partners.getById(props.partnerId)}
+      costCategories={stores.costCategories.getAll()}
+      claim={stores.claims.get(props.partnerId, props.periodId)}
+      claims={stores.claims.getAllClaimsForPartner(props.partnerId)}
+      costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}
+      claimDetails={stores.claimDetails.getAllByPartner(props.partnerId)}
+      forecastDetails={stores.forecastDetails.getAllByPartner(props.partnerId)}
+      golCosts={stores.forecastGolCosts.getAllByPartner(props.partnerId)}
+      statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
+      editor={stores.claims.getClaimEditor(props.projectId, props.partnerId, props.periodId, initEditor)}
+      documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
+      documentsEditor={stores.claimDocuments.getClaimDocumentsEditor(props.projectId, props.partnerId, props.periodId)}
+      onUpdate={(saving, dto) => {
+        stores.messages.clearMessages();
+        const message =
+          dto.status === ClaimStatus.MO_QUERIED
+            ? content.claimReview.messages.claimQueried
+            : content.claimReview.messages.claimApproved;
+        stores.claims.updateClaimEditor(
+          saving,
+          props.projectId,
+          props.partnerId,
+          props.periodId,
+          dto,
+          message.content,
+          () => stores.navigation.navigateTo(props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })),
+        );
+      }}
+      onUpload={(saving, dto) => {
+        stores.messages.clearMessages();
+        const successMessage = content.claimDocuments.documentMessages.getDocumentUploadedMessage(dto.files.length);
+        stores.claimDocuments.updateClaimDocumentsEditor(
+          saving,
+          props.projectId,
+          props.partnerId,
+          props.periodId,
+          dto,
+          successMessage.content,
+        );
+      }}
+      onDelete={(dto, document) => {
+        stores.messages.clearMessages();
+        stores.claimDocuments.deleteClaimDocument(props.projectId, props.partnerId, props.periodId, dto, document);
+      }}
+      {...props}
+    />
+  );
+};
 
 export const ReviewClaimRoute = defineRoute({
   routeName: "reviewClaim",
   routePath: "/projects/:projectId/claims/:partnerId/review/:periodId",
   container: ReviewContainer,
-  getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
+  getParams: route => ({
+    projectId: route.params.projectId,
+    partnerId: route.params.partnerId,
+    periodId: parseInt(route.params.periodId, 10),
+  }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
-  getTitle: ({content}) => content.claimReview.title(),
+  getTitle: ({ content }) => content.claimReview.title(),
 });

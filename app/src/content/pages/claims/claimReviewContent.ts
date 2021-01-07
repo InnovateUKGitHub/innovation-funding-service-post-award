@@ -17,6 +17,9 @@ export class ClaimReviewContent extends ContentPageBase {
   public readonly howToProceedSectionTitle = this.getContent("section-title-how-to-proceed");
   public readonly additionalInfoSectionTitle = this.getContent("section-title-additional-info");
   public readonly additionalInfoHint = this.getContent("additional-info-hint");
+  public readonly additionalInfoHintIfYou = this.getContent("additional-info-hint-if-you");
+  public readonly additionalInfoHintQueryClaim = this.getContent("additional-info-hint-query-claim");
+  public readonly additionalInfoHintSubmitClaim = this.getContent("additional-info-hint-submit-claim");
   public readonly claimReviewDeclaration = this.getContent("claim-review-declaration");
   public readonly monitoringReportReminder = this.getContent("monitoring-report-reminder");
   public readonly submitButton = this.getContent("button-submit");
