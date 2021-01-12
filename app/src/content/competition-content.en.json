@@ -6,6 +6,9 @@
         "additional-info-hint-query-claim": "query the claim, you must explain what the partner needs to change",
         "additional-info-hint-submit-claim": "submit the claim for approval, you can write a supporting statement to Innovate UK",
         "monitoring-report-reminder": "You must submit a monitoring officer report for this period. We cannot pay the approved claim before we receive your report."
+      },
+      "finance-summary": {
+        "accountants-report-title": "When a schedule 3 is needed"
       }
     }
   }
