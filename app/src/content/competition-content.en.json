@@ -9,6 +9,10 @@
       },
       "finance-summary": {
         "accountants-report-title": "When a schedule 3 is needed"
+      },
+      "claim-prepare-summary": {
+        "add-comments-heading": "Supporting statement",
+        "add-comments-hint": "You must write a supporting statement for your claim. All supporting information for your monitoring officer and Innovate UK must be included here."
       }
     }
   }
