@@ -13,6 +13,15 @@
       "claim-prepare-summary": {
         "add-comments-heading": "Supporting statement",
         "add-comments-hint": "You must write a supporting statement for your claim. All supporting information for your monitoring officer and Innovate UK must be included here."
+      },
+      "claim-documents": {
+        "introMessage": {
+          "uploadAndStoreMessage": "You can upload and store all your claim support documents for this project here.",
+          "uploadGuidanceMessage": "For KTP claims, you must upload one of these claim approval documents:",
+          "lmcMinutesMessage": "1. LMC minutes - from the local management committee (LMC) meeting where your claim was approved.",
+          "virtualApprovalMessage": "2. Virtual approval - an email approval saved as a PDF document or screenshot image clearly showing the date and time the email was sent.",
+          "schedule3ReminderMessage": "You must also upload a Schedule 3 for your final KTP claim"
+        }
       }
     }
   }
