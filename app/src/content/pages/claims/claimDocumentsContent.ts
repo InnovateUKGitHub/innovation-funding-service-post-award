@@ -20,4 +20,13 @@ export class ClaimDocumentsContent extends ContentPageBase {
   public readonly documentMessages = new DocumentMessages(this, this.competitionType);
   public readonly labels = new ClaimsLabels(this, this.competitionType);
   public readonly documents = new DocumentsContent(this, this.competitionType);
+
+  public readonly introMessage = {
+    uploadAndStoreMessage: this.getContent("introMessage.uploadAndStoreMessage"),
+    uploadGuidanceMessage: this.getContent("introMessage.uploadGuidanceMessage"),
+    schedule3ReminderMessage: this.getContent("introMessage.schedule3ReminderMessage"),
+  };
+
+  public readonly lmcMinutesMessage = this.getContent("introMessage.lmcMinutesMessage");
+  public readonly virtualApprovalMessage = this.getContent("introMessage.virtualApprovalMessage");
 }

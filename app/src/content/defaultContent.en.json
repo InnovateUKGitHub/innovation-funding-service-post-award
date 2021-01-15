@@ -66,8 +66,8 @@
       "textFiles": "text (doc, docx, rdf, txt, csv, odt)",
       "presentationFiles": "presentation (ppt, pptx, odp)",
       "spreadsheetFiles": "spreadsheet (xls, xlsx, ods)",
-      "availableImageExtensions": "image (jpg, jpeg, png)",
-      "fileTypesQuestion": "What file types can I upload?"
+      "availableImageExtensions": "images (jpg, jpeg, png)",
+      "fileTypesQuestion": "Learn more about files you can upload"
     },
     "claimLastModified": {
       "message": "Changes last saved"
