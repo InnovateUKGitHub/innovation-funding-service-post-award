@@ -149,4 +149,29 @@ describe("editClaimLineItems", () => {
       });
     });
   });
+
+  describe("render competitionType contents", () => {
+    test("with ktp competitionType", () => {
+      const stubKtpProps = {
+        ...stubProps,
+        project: {
+          ...stubProps.project,
+          data: {
+            ...stubProps.project.data,
+            competitionType: "KTP",
+          } as Partial<ProjectDto>
+        } as Pending<ProjectDto>
+      };
+      const uploadAndRemoveDocumentsButton = contentStub.editClaimLineItems.uploadAndRemoveDocumentsButton.content;
+      const additionalInformationHeading = contentStub.editClaimLineItems.additionalInformationHeading.content;
+      const additionalInfo = contentStub.editClaimLineItems.additionalInfo.content;
+      const additionalInformationHint = contentStub.editClaimLineItems.additionalInformationHint.content;
+      const { queryByText } = setup(stubKtpProps);
+
+      expect(queryByText(uploadAndRemoveDocumentsButton)).not.toBeInTheDocument();
+      expect(queryByText(additionalInformationHeading)).not.toBeInTheDocument();
+      expect(queryByText(additionalInfo)).not.toBeInTheDocument();
+      expect(queryByText(additionalInformationHint)).not.toBeInTheDocument();
+    });
+  });
 });

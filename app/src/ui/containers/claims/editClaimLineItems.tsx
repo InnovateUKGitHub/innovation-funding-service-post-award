@@ -9,6 +9,7 @@ import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { range } from "@shared/range";
+import { projectCompetition } from "@ui/hooks";
 
 export interface EditClaimDetailsParams {
   projectId: string;
@@ -66,6 +67,9 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     const back = this.props.routes.prepareClaim.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
 
+    const { isKTP } = projectCompetition(project.competitionType);
+    const editClaimLineItemGuidance = <ACC.Content value={(x) => x.claimDocuments.messages.editClaimLineItemGuidance} />;
+
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={back}><ACC.Content value={x => x.editClaimLineItems.backLink}/></ACC.BackLink>}
@@ -76,7 +80,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         {this.renderNegativeClaimWarning(editor.data)}
 
         <ACC.Renderers.SimpleString qa="guidance-message">
-          <ACC.Content value={(x) => x.claimDocuments.messages.editClaimLineItemGuidance} />
+          {!isKTP && editClaimLineItemGuidance}
         </ACC.Renderers.SimpleString>
         <ACC.Renderers.SimpleString qa="guidance-currency-message">
           <ACC.Content value={(x) => x.claimDocuments.messages.editClaimLineItemCurrencyGbp} />
@@ -85,14 +89,14 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         <ACC.Section>
           {costCategory.hintText && <ACC.TextHint>{costCategory.hintText}</ACC.TextHint>}
           {costCategory.isCalculated
-            ? this.renderCalculated(costCategory, claimDetails, forecastDetail, documents, editor)
-            : this.renderTable(editor, forecastDetail, documents)}
+            ? this.renderCalculated(costCategory, claimDetails, forecastDetail, documents, editor, project.competitionType)
+            : this.renderTable(editor, forecastDetail, documents, project.competitionType)}
         </ACC.Section>
       </ACC.Page>
     );
   }
 
-  private renderCalculated(costCategory: CostCategoryDto, claimDetails: ClaimDetailsDto, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[], editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator> ) {
+  private renderCalculated(costCategory: CostCategoryDto, claimDetails: ClaimDetailsDto, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[], editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>, competitionType: string ) {
     const mockItems: ClaimLineItemDto[] = [{
       costCategoryId: costCategory.id,
       description: costCategory.name,
@@ -105,6 +109,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
 
     const LineItemForm = ACC.TypedForm<ClaimDetailsDto>();
     const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
+    const supportingDocumentContent = this.getCompetitionRenderCalculatedDocumentSection(competitionType, documents, editor);
 
     return (
       <LineItemForm.Form
@@ -123,33 +128,19 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             <LineItemTable.Currency headerContent={x => x.editClaimLineItems.costHeader} qa="cost-value" value={(x, i) => x.value} width={30} />
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
-        <LineItemForm.Fieldset>
-          {this.renderDocuments(documents)}
-        </LineItemForm.Fieldset>
-        <LineItemForm.Fieldset>
-          <LineItemForm.Button name="upload" onClick={() => this.props.onUpdate(true, editor.data, true)}><ACC.Content value={x => x.editClaimLineItems.uploadAndRemoveDocumentsButton}/></LineItemForm.Button>
-        </LineItemForm.Fieldset>
-        <LineItemForm.Fieldset headingContent={x => x.editClaimLineItems.additionalInformationHeading} qa="additional-info-form" headingQa="additional-info-heading">
-          <LineItemForm.MultilineString
-            label={<ACC.Content value={x => x.editClaimLineItems.additionalInfo}/>}
-            hintContent={x => x.editClaimLineItems.additionalInformationHint}
-            labelHidden={true}
-            name="comments"
-            value={() => editor.data.comments}
-            update={(dto, v) => dto.comments = v}
-            qa="info-text-area"
-          />
-        </LineItemForm.Fieldset>
+        {supportingDocumentContent}
         <LineItemForm.Submit><ACC.Content value={x => x.editClaimLineItems.saveAndReturnButton}/></LineItemForm.Submit>
       </LineItemForm.Form>
     );
 
   }
 
-  private renderTable(editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[]) {
+  private renderTable(editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[], competitionType: string ) {
     const LineItemForm = ACC.TypedForm<ClaimDetailsDto>();
     const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
     const validationResults = editor.validator.items.results;
+
+    const documentSection = this.getCompetitionRenderTableDocumentContent(competitionType, documents, editor);
 
     return (
       <LineItemForm.Form
@@ -173,25 +164,74 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
               : null}
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
+        {documentSection}
+        <LineItemForm.Submit><ACC.Content value={x => x.editClaimLineItems.saveAndReturnButton}/></LineItemForm.Submit>
+      </LineItemForm.Form>
+    );
+  }
+
+  private getCompetitionRenderCalculatedDocumentSection(competitionType: string, documents: DocumentSummaryDto[], editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
+    const { isKTP } = projectCompetition(competitionType);
+
+    const LineItemForm = ACC.TypedForm<ClaimDetailsDto>();
+
+    return !isKTP && (
+      <>
+        <LineItemForm.Fieldset>{this.renderDocuments(documents)}</LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
-          {this.renderDocuments(documents)}
+          <LineItemForm.Button name="upload" onClick={() => this.props.onUpdate(true, editor.data, true)}>
+            <ACC.Content value={x => x.editClaimLineItems.uploadAndRemoveDocumentsButton} />
+          </LineItemForm.Button>
         </LineItemForm.Fieldset>
-        <LineItemForm.Fieldset>
-          <LineItemForm.Button name="upload" onClick={() => this.props.onUpdate(true, editor.data, true)}><ACC.Content value={x => x.editClaimLineItems.uploadAndRemoveDocumentsButton}/></LineItemForm.Button>
-        </LineItemForm.Fieldset>
-        <LineItemForm.Fieldset headingContent={x => x.editClaimLineItems.additionalInformationHeading} qa="additional-info-form" headingQa="additional-info-heading">
+        <LineItemForm.Fieldset
+          headingContent={x => x.editClaimLineItems.additionalInformationHeading}
+          qa="additional-info-form"
+          headingQa="additional-info-heading"
+        >
           <LineItemForm.MultilineString
-            label={<ACC.Content value={x => x.editClaimLineItems.additionalInfo}/>}
+            label={<ACC.Content value={x => x.editClaimLineItems.additionalInfo} />}
             hintContent={x => x.editClaimLineItems.additionalInformationHint}
             labelHidden={true}
             name="comments"
             value={() => editor.data.comments}
-            update={(data, v) => data.comments = v}
+            update={(dto, v) => (dto.comments = v)}
             qa="info-text-area"
           />
         </LineItemForm.Fieldset>
-        <LineItemForm.Submit><ACC.Content value={x => x.editClaimLineItems.saveAndReturnButton}/></LineItemForm.Submit>
-      </LineItemForm.Form>
+      </>
+    );
+  }
+
+  private getCompetitionRenderTableDocumentContent(competitionType: string, documents: DocumentSummaryDto[], editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
+    const { isKTP } = projectCompetition(competitionType);
+    const LineItemForm = ACC.TypedForm<ClaimDetailsDto>();
+
+    return isKTP ? (
+        ""
+      ) : (
+      <>
+        <LineItemForm.Fieldset>{this.renderDocuments(documents)}</LineItemForm.Fieldset>
+        <LineItemForm.Fieldset>
+          <LineItemForm.Button name="upload" onClick={() => this.props.onUpdate(true, editor.data, true)}>
+            <ACC.Content value={x => x.editClaimLineItems.uploadAndRemoveDocumentsButton} />
+          </LineItemForm.Button>
+        </LineItemForm.Fieldset>
+        <LineItemForm.Fieldset
+          headingContent={x => x.editClaimLineItems.additionalInformationHeading}
+          qa="additional-info-form"
+          headingQa="additional-info-heading"
+        >
+          <LineItemForm.MultilineString
+            label={<ACC.Content value={x => x.editClaimLineItems.additionalInfo} />}
+            hintContent={x => x.editClaimLineItems.additionalInformationHint}
+            labelHidden={true}
+            name="comments"
+            value={() => editor.data.comments}
+            update={(data, v) => (data.comments = v)}
+            qa="info-text-area"
+          />
+        </LineItemForm.Fieldset>
+      </>
     );
   }
 
