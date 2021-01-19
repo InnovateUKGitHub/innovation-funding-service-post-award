@@ -8,7 +8,7 @@ import classNames from "classnames";
 import { StoresConsumer } from "@ui/redux";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { useContent } from "@ui/hooks";
+import { projectCompetition, useContent } from "@ui/hooks";
 
 interface Params {
   projectId: string;
@@ -64,9 +64,6 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       this.props.routes.reviewClaim.getLink(params) :
       this.props.routes.claimDetails.getLink(params);
 
-    const supportingDocumentsTitle = <ACC.Content value={x => x.claimLineItems.supportingDocumentsTitle}/>;
-    const documentsInNewWindow = <ACC.Content value={x => x.claimLineItems.documentsInNewWindow}/>;
-
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={backLink}>Back to claim</ACC.BackLink>}
@@ -75,12 +72,29 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
         <ACC.Section>
           <ClaimLineItemsTable lineItems={claimDetails.lineItems} forecastDetail={forecastDetail} />
         </ACC.Section>
-        <ACC.Section title={supportingDocumentsTitle} subtitle={documents.length > 0 ? documentsInNewWindow : ""} qa="supporting-documents-section">
+        {this.getSupportingDocumentsSection(project.competitionType, documents, claimDetails)}
+        {this.renderNavigationArrows(costCategories, project, partner, claim)}
+      </ACC.Page>
+    );
+  }
+
+  private getSupportingDocumentsSection(competitionType: string, documents: DocumentSummaryDto[], claimDetails: ClaimDetailsDto) {
+    const { isKTP } = projectCompetition(competitionType);
+
+    const supportingDocumentsTitle = <ACC.Content value={x => x.claimLineItems.supportingDocumentsTitle}/>;
+    const documentsInNewWindow = <ACC.Content value={x => x.claimLineItems.documentsInNewWindow}/>;
+
+    return isKTP && (
+      <>
+        <ACC.Section
+          title={supportingDocumentsTitle}
+          subtitle={documents.length > 0 ? documentsInNewWindow : ""}
+          qa="supporting-documents-section"
+        >
           {this.renderDocumentList(documents)}
         </ACC.Section>
         {this.renderAdditionalInformation(claimDetails)}
-        {this.renderNavigationArrows(costCategories, project, partner, claim)}
-      </ACC.Page>
+      </>
     );
   }
 
