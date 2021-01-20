@@ -16,10 +16,18 @@ export function useCompetitionType(params: Params): string | undefined {
 // TODO: Implement string literal type - { [key: `${is}ICompetitions`]: boolean }
 export function projectCompetition(competition: string) {
   const isCRandD: boolean = competition === "CR&D";
+  const isContracts: boolean = competition === "CONTRACTS";
+  const isSBRI: boolean = competition === "SBRI";
   const isKTP: boolean = competition === "KTP";
+  const isCatapults: boolean = competition === "CATAPULTS";
+  const isLoans: boolean = competition === "LOANS";
 
   return {
-    isKTP,
     isCRandD,
+    isContracts,
+    isSBRI,
+    isKTP,
+    isCatapults,
+    isLoans,
   };
 }
