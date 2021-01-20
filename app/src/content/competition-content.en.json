@@ -22,6 +22,10 @@
           "virtualApprovalMessage": "2. Virtual approval - an email approval saved as a PDF document or screenshot image clearly showing the date and time the email was sent.",
           "schedule3ReminderMessage": "You must also upload a Schedule 3 for your final KTP claim"
         }
+      },
+      "claims-messages": {
+        "iar-required": "You must attach a schedule 3 to this claim.",
+        "final-claim-guidance": "You need to complete the following tasks before we can approve your final claim and make your last payment: \n\n-   upload a Schedule 3 \n-   upload the LMC meeting's minutes or virtual approval\n-   complete your final report"
       }
     }
   }

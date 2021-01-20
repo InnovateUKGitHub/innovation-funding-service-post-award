@@ -1,6 +1,6 @@
 import React from "react";
 import * as ACC from "@ui/components";
-import { ClaimDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore, useStores } from "@ui/redux";
@@ -185,9 +185,25 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
         }
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
+
         {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={content.default.finalClaim} />}
-        <ACC.Section>{this.renderRequiredDocumentText(claim)}</ACC.Section>
+
+        {claim.isIarRequired && (
+          <ACC.Section>
+            {claim.isFinalClaim ? (
+              <span data-qa="iarText">
+                <ACC.Content value={x => x.claimDocuments.messages.finalClaimGuidance} />
+              </span>
+            ) : (
+              <ACC.Renderers.SimpleString qa="iarText">
+                <ACC.Content value={x => x.claimDocuments.messages.iarRequired} />
+              </ACC.Renderers.SimpleString>
+            )}
+          </ACC.Section>
+        )}
+
         <ACC.Renderers.SimpleString>{ktpIntroContent}</ACC.Renderers.SimpleString>
+
         <ACC.Section title={content.default.uploadTitle}>
           <UploadForm.Form
             enctype="multipart"
@@ -277,20 +293,6 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
     return isPmOrMo
       ? this.props.routes.allClaimsDashboard.getLink({ projectId: project.id })
       : this.props.routes.claimsDashboard.getLink({ projectId: project.id, partnerId: this.props.partnerId });
-  }
-
-  private renderRequiredDocumentText(claim: ClaimDto) {
-    const { content } = this.props;
-
-    if (claim.isIarRequired && claim.isFinalClaim) {
-      return <span data-qa="iarText">{content.default.finalClaimGuidance}</span>;
-    }
-
-    if (claim.isIarRequired) {
-      return <ACC.Renderers.SimpleString qa="iarText">{content.default.iarRequired}</ACC.Renderers.SimpleString>;
-    }
-
-    return null;
   }
 
   private renderDocuments(
