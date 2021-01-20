@@ -34,6 +34,7 @@ export class TestConfig implements IConfig {
     maxUploadFileCount: 10,
     permittedFileTypes: ["pdf", "xps", "doc", "docx", "rdf", "txt", "csv", "odt", "ppt", "pptx", "odp", "xls", "xlsx", "ods", "jpg", "jpeg", "png"], // TODO: deprecated list
     permittedTypes: {}, // TODO: test when we deprecate the permittedFileTypes field
+    validCharacters: /^[\w\d\s\\.\-\(\)]+$/,
     bankCheckValidationRetries: 2,
     bankCheckPersonalDetailsScorePass: 6,
     bankCheckAddressScorePass: 6,

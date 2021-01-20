@@ -73,6 +73,7 @@
     "redux-router5": "^6.0.2",
     "redux-thunk": "^2.3.0",
     "router5": "^6.4.1",
+    "sanitize-filename": "^1.6.3",
     "uuid": "^8.3.0"
   },
   "devDependencies": {

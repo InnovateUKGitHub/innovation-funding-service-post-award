@@ -1,3 +1,5 @@
+import sanitize from "sanitize-filename";
+
 const options = {
   minimumFractionDigits: 0,
   maximumFractionDigits: 2,
@@ -17,7 +19,13 @@ export function getFileSize(
   return getFileSize(size / 1024, nextUnit);
 }
 
-export function getFileExtension(fileName: string): string {
-  const dotIndex = fileName.lastIndexOf(".");
-  return dotIndex > 0 ? fileName.substr(dotIndex + 1).toLocaleLowerCase() : "";
+export function getFileExtension(fullFileName: string): string {
+  const dotIndex = fullFileName.lastIndexOf(".");
+  return dotIndex > 0 ? fullFileName.substr(dotIndex + 1).toLocaleLowerCase() : "";
+}
+
+export function getFileName(fullFileName: string): string {
+  const startOfFileExtension = fullFileName.lastIndexOf(".");
+  const fileName = startOfFileExtension > 0 ? fullFileName.substr(0, startOfFileExtension) : fullFileName;
+  return sanitize(fileName);
 }
