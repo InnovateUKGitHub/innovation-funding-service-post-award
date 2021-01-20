@@ -6,6 +6,7 @@ export interface IAppOptions {
    */
   readonly permittedFileTypes: string[];
   readonly permittedTypes: Record<string, string[]>;
+  readonly validCharacters: RegExp;
   readonly bankCheckValidationRetries: number;
   readonly bankCheckAddressScorePass: number;
   readonly bankCheckCompanyNameScorePass: number;
