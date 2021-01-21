@@ -75,18 +75,22 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
             qa="projectDocumentUpload"
           >
             <UploadForm.Fieldset>
-              <ACC.Content value={x => x.projectDocuments.documentMessages.uploadInstruction} />
-              <ACC.DocumentGuidanceWithContent documentMessages={x => x.projectDocuments.documentMessages} />
+              <ACC.Renderers.SimpleString>
+                <ACC.Content value={x => x.projectDocuments.documentMessages.uploadInstruction} />
+              </ACC.Renderers.SimpleString>
+              <ACC.DocumentGuidance />
               <UploadForm.MulipleFileUpload
                 labelContent={x => x.projectDocuments.documentLabels.uploadInputLabel}
                 name="attachment"
                 labelHidden={true}
                 value={data => data.files}
-                update={(dto, files) => dto.files = files || []}
+                update={(dto, files) => (dto.files = files || [])}
                 validation={editor.validator.files}
               />
             </UploadForm.Fieldset>
-            <UploadForm.Submit styling="Secondary"><ACC.Content value={x => x.projectDocuments.documentMessages.uploadTitle} /></UploadForm.Submit>
+            <UploadForm.Submit styling="Secondary">
+              <ACC.Content value={x => x.projectDocuments.documentMessages.uploadTitle} />
+            </UploadForm.Submit>
           </UploadForm.Form>
         </ACC.Section>
         {this.renderDocumentsSection(documents)}

@@ -26,8 +26,8 @@ export class ClaimReviewContent extends ContentPageBase {
   public readonly sendQueryButton = this.getContent("button-send-query");
   public readonly uploadButton = this.getContent("button-upload");
   public readonly uploadInputLabel = this.getContent("label-input-upload");
-  public readonly uploadClaimValidationFormAccordionTitle = this.getContent(
-    "accordion-title-upload-claim-validation-form",
+  public readonly uploadSupportingDocumentsFormAccordionTitle = this.getContent(
+    "accordion-title-supporting-documents-form",
   );
   public readonly additionalInfoLabel = this.getContent("additional-info");
 }
