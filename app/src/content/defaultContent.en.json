@@ -382,7 +382,7 @@
       "button-send-query": "Send query",
       "button-upload": "Upload documents",
       "label-input-upload": "Upload files",
-      "accordion-title-upload-claim-validation-form": "Claim validation form",
+      "accordion-title-supporting-documents-form": "Supporting documents",
       "additional-info": "additional-info"
     },
     "financial-virement-details": {
@@ -967,7 +967,7 @@
     "uploaded-documents": "{{totalFiles}} documents have been uploaded.",
     "no-documents-uploaded": "No documents uploaded.",
     "documents-not-applicable": "Not applicable",
-    "new-window": "All documents open in a new window.",
+    "new-window": "All documents open in new window.",
     "back-link": "Back to {{previousPage}}",
     "upload-title": "Upload",
     "upload-documents": "Upload documents",
