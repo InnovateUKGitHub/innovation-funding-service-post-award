@@ -26,8 +26,8 @@ const stubContent = {
     sendQueryButton: {
       content: "stub-sendQueryButton",
     },
-    uploadClaimValidationFormAccordionTitle: {
-      content: "stub-uploadClaimValidationFormAccordionTitle",
+    uploadSupportingDocumentsFormAccordionTitle: {
+      content: "stub-uploadSupportingDocumentsFormAccordionTitle",
     },
     uploadInputLabel: {
       content: "stub-uploadInputLabel",
@@ -71,11 +71,27 @@ const stubContent = {
       noDocumentsUploaded: {
         content: "stub-noDocumentsUploaded",
       },
+      newWindow: {
+        content: "stub-newWindow"
+      }
     },
     messages: {
       finalClaim: {
         content: "stub-finalClaim",
       },
+    },
+  },
+  claimDocuments: {
+    descriptionLabel: {
+      content: "stub-descriptionLabel",
+    },
+  },
+  projectDocuments: {
+    noMatchingDocumentsMessage: {
+      content: "stub-noMatchingDocumentsMessage",
+    },
+    searchDocumentsMessage: {
+      content: "stub-searchDocumentsMessage",
     },
   },
 } as any;
@@ -86,21 +102,21 @@ const renderPageContent = () => {
 
 describe("useReviewContent()", () => {
   test.each`
-    name                                         | property
-    ${"additionalInfoHint"}                      | ${"additionalInfoHint"}
-    ${"backlinkMessage"}                         | ${"backLink"}
-    ${"queryClaimOption"}                        | ${"queryClaimOption"}
-    ${"approveClaimOption"}                      | ${"approveClaimOption"}
-    ${"howToProceedSectionTitle"}                | ${"howToProceedSectionTitle"}
-    ${"submitButton"}                            | ${"submitButton"}
-    ${"sendQueryButton"}                         | ${"sendQueryButton"}
-    ${"uploadClaimValidationFormAccordionTitle"} | ${"uploadClaimValidationFormAccordionTitle"}
-    ${"uploadInputLabel"}                        | ${"uploadInputLabel"}
-    ${"uploadButton"}                            | ${"uploadButton"}
-    ${"claimReviewDeclaration"}                  | ${"claimReviewDeclaration"}
-    ${"monitoringReportReminder"}                | ${"monitoringReportReminder"}
-    ${"additionalInfoSectionTitle"}              | ${"additionalInfoSectionTitle"}
-    ${"additionalInfoLabel"}                     | ${"additionalInfoLabel"}
+    name                                             | property
+    ${"additionalInfoHint"}                          | ${"additionalInfoHint"}
+    ${"backlinkMessage"}                             | ${"backLink"}
+    ${"queryClaimOption"}                            | ${"queryClaimOption"}
+    ${"approveClaimOption"}                          | ${"approveClaimOption"}
+    ${"howToProceedSectionTitle"}                    | ${"howToProceedSectionTitle"}
+    ${"submitButton"}                                | ${"submitButton"}
+    ${"sendQueryButton"}                             | ${"sendQueryButton"}
+    ${"uploadSupportingDocumentsFormAccordionTitle"} | ${"uploadSupportingDocumentsFormAccordionTitle"}
+    ${"uploadInputLabel"}                            | ${"uploadInputLabel"}
+    ${"uploadButton"}                                | ${"uploadButton"}
+    ${"claimReviewDeclaration"}                      | ${"claimReviewDeclaration"}
+    ${"monitoringReportReminder"}                    | ${"monitoringReportReminder"}
+    ${"additionalInfoSectionTitle"}                  | ${"additionalInfoSectionTitle"}
+    ${"additionalInfoLabel"}                         | ${"additionalInfoLabel"}
   `("with $property ", ({ name, property }: Record<"name" | "property", string>) => {
     const { result } = renderPageContent();
 
@@ -113,7 +129,7 @@ describe("useReviewContent()", () => {
   test.each`
     name                     | property
     ${"isFinalClaimMessage"} | ${"finalClaim"}
-  `("with $property", ({ name, property }: Record<"name" | "property", string>) => {
+  `("with message $property", ({ name, property }: Record<"name" | "property", string>) => {
     const { result } = renderPageContent();
 
     const content = (result.current.default as any)[name];
@@ -126,11 +142,50 @@ describe("useReviewContent()", () => {
     name                   | property
     ${"forecastItemTitle"} | ${"forecastAccordionTitle"}
     ${"logItemTitle"}      | ${"claimLogAccordionTitle"}
-  `("with $property", ({ name, property }: Record<"name" | "property", string>) => {
+  `("with labels $property", ({ name, property }: Record<"name" | "property", string>) => {
     const { result } = renderPageContent();
 
     const content = (result.current.default as any)[name];
     const expectedContent = stubContent.claimReview.labels[property].content;
+
+    expect(content).toBe(expectedContent);
+  });
+
+  test.each`
+    name                     | property
+    ${"uploadInstruction"}   | ${"uploadInstruction"}
+    ${"noDocumentsUploaded"} | ${"noDocumentsUploaded"}
+    ${"newWindow"}           | ${"newWindow"}
+  `("with documentMessages $property", ({ name, property }: Record<"name" | "property", string>) => {
+    const { result } = renderPageContent();
+
+    const content = (result.current.default as any)[name];
+    const expectedContent = stubContent.claimReview.documentMessages[property].content;
+
+    expect(content).toBe(expectedContent);
+  });
+
+  test.each`
+    name                            | property
+    ${"descriptionLabel"}           | ${"descriptionLabel"}
+  `("with claimDocuments $property ", ({ name, property }: Record<"name" | "property", string>) => {
+    const { result } = renderPageContent();
+
+    const content = (result.current.default as any)[name];
+    const expectedContent = stubContent.claimDocuments[property].content;
+
+    expect(content).toBe(expectedContent);
+  });
+
+  test.each`
+    name                            | property
+    ${"noMatchingDocumentsMessage"} | ${"noMatchingDocumentsMessage"}
+    ${"searchDocumentsMessage"}     | ${"searchDocumentsMessage"}
+  `("with projectDocuments $property ", ({ name, property }: Record<"name" | "property", string>) => {
+    const { result } = renderPageContent();
+
+    const content = (result.current.default as any)[name];
+    const expectedContent = stubContent.projectDocuments[property].content;
 
     expect(content).toBe(expectedContent);
   });

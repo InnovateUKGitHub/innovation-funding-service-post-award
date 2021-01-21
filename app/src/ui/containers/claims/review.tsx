@@ -1,7 +1,7 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { IEditorStore, useStores } from "@ui/redux";
-import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
 import {
@@ -23,7 +23,10 @@ import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { projectCompetition, useContent } from "@ui/hooks";
 import { Content } from "@content/content";
-import { IDocumentMessages } from "@ui/components";
+import { DropdownOption, IDocumentMessages } from "@ui/components";
+import { noop } from "@ui/helpers/noop";
+
+import { EnumDocuments } from "./components";
 
 export interface ReviewClaimParams {
   projectId: string;
@@ -59,7 +62,7 @@ type ReviewContentKeys =
   | "howToProceedSectionTitle"
   | "submitButton"
   | "sendQueryButton"
-  | "uploadClaimValidationFormAccordionTitle"
+  | "uploadSupportingDocumentsFormAccordionTitle"
   | "uploadInputLabel"
   | "uploadButton"
   | "claimReviewDeclaration"
@@ -67,7 +70,11 @@ type ReviewContentKeys =
   | "additionalInfoSectionTitle"
   | "additionalInfoLabel"
   | "uploadInstruction"
-  | "noDocumentsUploaded";
+  | "noDocumentsUploaded"
+  | "descriptionLabel"
+  | "newWindow"
+  | "noMatchingDocumentsMessage"
+  | "searchDocumentsMessage";
 
 type ReviewContentKTPKeys =
   | "additionalInfoHintIfYou"
@@ -91,7 +98,9 @@ export function useReviewContent(): ReviewContent {
     howToProceedSectionTitle: getContent(x => x.claimReview.howToProceedSectionTitle),
     submitButton: getContent(x => x.claimReview.submitButton),
     sendQueryButton: getContent(x => x.claimReview.sendQueryButton),
-    uploadClaimValidationFormAccordionTitle: getContent(x => x.claimReview.uploadClaimValidationFormAccordionTitle),
+    uploadSupportingDocumentsFormAccordionTitle: getContent(
+      x => x.claimReview.uploadSupportingDocumentsFormAccordionTitle,
+    ),
     uploadInputLabel: getContent(x => x.claimReview.uploadInputLabel),
     uploadButton: getContent(x => x.claimReview.uploadButton),
     claimReviewDeclaration: getContent(x => x.claimReview.claimReviewDeclaration),
@@ -103,6 +112,10 @@ export function useReviewContent(): ReviewContent {
     logItemTitle: getContent(x => x.claimReview.labels.claimLogAccordionTitle),
     uploadInstruction: getContent(x => x.claimReview.documentMessages.uploadInstruction),
     noDocumentsUploaded: getContent(x => x.claimReview.documentMessages.noDocumentsUploaded),
+    newWindow: getContent(x => x.claimReview.documentMessages.newWindow),
+    descriptionLabel: getContent(x => x.claimDocuments.descriptionLabel),
+    noMatchingDocumentsMessage: getContent(x => x.projectDocuments.noMatchingDocumentsMessage),
+    searchDocumentsMessage: getContent(x => x.projectDocuments.searchDocumentsMessage),
   };
 
   const document = (x: Content) => x.claimReview.documentMessages;
@@ -143,7 +156,18 @@ interface CombinedData {
   documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
 }
 
-class ReviewComponent extends ContainerBase<ReviewClaimParams, ReviewData, ReviewCallbacks> {
+interface ReviewState {
+  documentFilter: string;
+}
+
+class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewData, ReviewCallbacks, ReviewState> {
+  constructor(props: ContainerProps<ReviewClaimParams, ReviewData, ReviewCallbacks>) {
+    super(props);
+    this.state = {
+      documentFilter: "",
+    };
+  }
+
   public render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -193,7 +217,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, ReviewData, Revie
 
             {this.renderLogsItem()}
 
-            {this.renderUploadClaimValidationForm(data)}
+            {this.renderSupportingDocumentsItem(data)}
           </ACC.Accordion>
         </ACC.Section>
 
@@ -279,75 +303,155 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, ReviewData, Revie
     );
   }
 
-  renderUploadClaimValidationForm(data: CombinedData): React.ReactNode {
+  private filterDowndownList(selectedDocument: MultipleDocumentUploadDto, documents: DropdownOption[]) {
+    if (!documents.length || !selectedDocument.description) return undefined;
+
+    const targetId = selectedDocument.description.toString();
+
+    return documents.find(x => x.id === targetId);
+  }
+
+  private readonly claimAllowedDocuments: DocumentDescription[] = [
+    DocumentDescription.IAR,
+    DocumentDescription.Evidence,
+    DocumentDescription.EndOfProjectSurvey,
+    DocumentDescription.StatementOfExpenditure,
+    DocumentDescription.LMCMinutes,
+    DocumentDescription.ScheduleThree,
+  ];
+
+  renderSupportingDocumentsItem({ documentsEditor, documents }: CombinedData): React.ReactNode {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     return (
-      <ACC.AccordionItem
-        title={this.props.content.default.uploadClaimValidationFormAccordionTitle}
-        qa="upload-claims-validation-form-accordion"
-      >
-        <UploadForm.Form
-          enctype="multipart"
-          editor={data.documentsEditor}
-          onChange={dto => this.props.onUpload(false, { ...dto, description: DocumentDescription.ClaimValidationForm })}
-          onSubmit={() =>
-            this.props.onUpload(true, {
-              ...data.documentsEditor.data,
-              description: DocumentDescription.ClaimValidationForm,
-            })
-          }
-          qa="projectDocumentUpload"
-        >
-          <UploadForm.Fieldset>
-            <ACC.Renderers.SimpleString>{this.props.content.default.uploadInstruction}</ACC.Renderers.SimpleString>
-            <ACC.DocumentGuidanceWithContent documentMessages={this.props.content.document} />
-            <UploadForm.MulipleFileUpload
-              label={this.props.content.default.uploadInputLabel}
-              name="attachment"
-              labelHidden={true}
-              value={x => x.files}
-              update={(dto, files) => (dto.files = files || [])}
-              validation={data.documentsEditor.validator.files}
-            />
-          </UploadForm.Fieldset>
-          <UploadForm.Submit styling="Secondary">{this.props.content.default.uploadButton}</UploadForm.Submit>
-        </UploadForm.Form>
-        {this.renderDocumentList(data.documentsEditor, data.documents)}
-      </ACC.AccordionItem>
+      <EnumDocuments documentsToCheck={this.claimAllowedDocuments}>
+        {docs => (
+          <ACC.AccordionItem
+            title={this.props.content.default.uploadSupportingDocumentsFormAccordionTitle}
+            qa="upload-supporting-documents-form-accordion"
+          >
+            <UploadForm.Form
+              enctype="multipart"
+              editor={documentsEditor}
+              onChange={dto => this.props.onUpload(false, dto)}
+              onSubmit={() => this.props.onUpload(true, documentsEditor.data)}
+              qa="projectDocumentUpload"
+            >
+              <UploadForm.Fieldset>
+                <ACC.Renderers.SimpleString>{this.props.content.default.uploadInstruction}</ACC.Renderers.SimpleString>
+
+                <ACC.DocumentGuidance />
+
+                <UploadForm.MulipleFileUpload
+                  label={this.props.content.default.uploadInputLabel}
+                  name="attachment"
+                  labelHidden={true}
+                  value={x => x.files}
+                  update={(dto, files) => (dto.files = files || [])}
+                  validation={documentsEditor.validator.files}
+                />
+
+                <UploadForm.DropdownList
+                  label={this.props.content.default.descriptionLabel}
+                  labelHidden={false}
+                  hasEmptyOption={true}
+                  placeholder="-- No description --"
+                  name="description"
+                  validation={documentsEditor.validator.files}
+                  options={docs}
+                  value={selectedOption => this.filterDowndownList(selectedOption, docs)}
+                  update={(dto, value) => (dto.description = value ? parseInt(value.id, 10) : undefined)}
+                />
+              </UploadForm.Fieldset>
+
+              <UploadForm.Submit styling="Secondary">{this.props.content.default.uploadButton}</UploadForm.Submit>
+            </UploadForm.Form>
+
+            {this.renderDocumentsFilterSection(documents, documentsEditor)}
+          </ACC.AccordionItem>
+        )}
+      </EnumDocuments>
     );
   }
 
-  private renderDocumentList(
-    editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
+  private renderDocumentsFilterSection(
     documents: DocumentSummaryDto[],
+    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
   ) {
-    const { content } = this.props;
+    const { isClient } = this.props;
+    const documentFilterText = this.state.documentFilter;
+    const hasTextToFilter = !!documentFilterText.length;
 
-    if (!documents.length) {
-      return <ACC.ValidationMessage message={content.default.noDocumentsUploaded} messageType="info" />;
-    }
-
-    const claimValidationFormDocuments = documents.filter(
-      x => x.description === DocumentDescription.ClaimValidationForm,
-    );
-    const claimSupportingDocuments = documents.filter(x => x.description !== DocumentDescription.ClaimValidationForm);
+    const documentsToDisplay =
+    isClient && hasTextToFilter
+        ? documents.filter(document => new RegExp(documentFilterText, "gi").test(document.fileName))
+        : documents;
 
     return (
-      <React.Fragment>
-        {claimValidationFormDocuments.length ? (
-          <ACC.DocumentListWithDelete
-            documents={claimValidationFormDocuments}
-            onRemove={document => this.props.onDelete(editor.data, document)}
-            qa="claim-validation-form-documents"
-          />
-        ) : null}
+      <>
+        {isClient && this.renderDocumentSearchField(documents)}
 
-        {claimSupportingDocuments.length ? (
-          <ACC.DocumentList documents={claimSupportingDocuments} qa="claim-supporting-documents" />
-        ) : null}
-      </React.Fragment>
+        {!documentsToDisplay.length && !!documents.length ? (
+          <ACC.Renderers.SimpleString qa="noDocuments">
+            {this.props.content.default.noMatchingDocumentsMessage}
+          </ACC.Renderers.SimpleString>
+        ) : (
+          this.renderDocumentResultsTable(documentsEditor, documentsToDisplay)
+        )}
+      </>
     );
+  }
+
+  private renderDocumentSearchField(documents: DocumentSummaryDto[]) {
+    if (documents.length === 0) {
+      return (
+        <ACC.ValidationMessage
+          qa={"noDocuments"}
+          message={<ACC.Content value={x => x.projectDocuments.documentMessages.noDocumentsUploaded} />}
+          messageType="info"
+        />
+      );
+    }
+
+    const FilterForm = ACC.TypedForm<ReviewState>();
+
+    const handleOnSearch = ({ documentFilter }: ReviewState) => {
+      const filteredQuery = documentFilter.trim();
+      const newValue = !!filteredQuery.length ? filteredQuery : "";
+
+      this.setState({ documentFilter: newValue });
+    };
+
+    return (
+      <>
+        <ACC.Renderers.SimpleString>{this.props.content.default.newWindow}</ACC.Renderers.SimpleString>
+        <FilterForm.Form data={this.state} onSubmit={noop} onChange={handleOnSearch} qa="document-mo-search-form">
+          <FilterForm.Search
+            name="document-filter"
+            labelHidden={true}
+            value={x => x.documentFilter}
+            update={(x, v) => (x.documentFilter = v || "")}
+            placeholder={this.props.content.default.searchDocumentsMessage}
+          />
+        </FilterForm.Form>
+      </>
+    );
+  }
+
+  private renderDocumentResultsTable(
+    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
+    documents: DocumentSummaryDto[],
+  ) {
+
+    return documents.length ? (
+      <ACC.Section>
+        <ACC.DocumentTableWithDelete
+          onRemove={document => this.props.onDelete(documentsEditor.data, document)}
+          documents={documents}
+          qa="claim-supporting-documents"
+        />
+      </ACC.Section>
+    ) : null;
   }
 
   private getCompetitionHintContent(competitionType: string) {
