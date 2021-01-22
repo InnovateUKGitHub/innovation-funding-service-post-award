@@ -1,5 +1,4 @@
 import { ClaimDto, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/dtos";
-import React from "react";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import * as Acc from "@ui/components";
 import { Pending } from "@shared/pending";
@@ -97,7 +96,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
   }
 
   private renderCurrentClaims(periodId: number, start: Date, end: Date, claims: ClaimDto[], project: ProjectDto, partners: PartnerDto[], index: number) {
-    const title = <React.Fragment>Period {periodId}: <Acc.Renderers.ShortDateRange start={start} end={end} /></React.Fragment>;
+    const title = <>Period {periodId}: <Acc.Renderers.ShortDateRange start={start} end={end} /></>;
     const ClaimTable = Acc.TypedTable<ClaimDto>();
     const renderPartnerName = (x: ClaimDto) => {
       const p = partners.filter(y => y.id === x.partnerId)[0];

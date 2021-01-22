@@ -1,4 +1,3 @@
-import React from "react";
 import { GovWidthContainer, GovWidthContainerProps } from "@ui/components";
 import { render } from "@testing-library/react";
 

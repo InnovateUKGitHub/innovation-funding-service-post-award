@@ -1,4 +1,3 @@
-import React from "react";
 import { ErrorCode } from "@framework/types/IAppError";
 import { useContent } from "@ui/hooks";
 

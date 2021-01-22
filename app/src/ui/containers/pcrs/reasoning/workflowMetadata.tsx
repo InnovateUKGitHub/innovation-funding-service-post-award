@@ -1,4 +1,3 @@
-import React from "react";
 import { PCRPrepareReasoningStep } from "@ui/containers/pcrs/reasoning/prepareReasoningStep";
 import { PCRDto } from "@framework/dtos";
 import { PCRPrepareReasoningFilesStep } from "@ui/containers/pcrs/reasoning/prepareFilesStep";

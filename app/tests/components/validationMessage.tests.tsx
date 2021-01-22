@@ -1,8 +1,6 @@
-
 // tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
-import React from "react";
 import { IValidationMessageProps, ValidationMessage } from "@ui/components";
 import { Content } from "@content/content";
 import { findByQa } from "./helpers/find-by-qa";
@@ -56,7 +54,7 @@ describe("ValidationMessage", () => {
     });
 
     it("when message is a content lookup render within a <span>", () => {
-      const { messageElement } = setup({ message: (x) => x.home.exampleContentTitle, messageType: "success" });
+      const { messageElement } = setup({ message: x => x.home.exampleContentTitle, messageType: "success" });
 
       expect(messageElement.type()).toBe("span");
     });

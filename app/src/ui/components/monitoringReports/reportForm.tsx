@@ -19,7 +19,7 @@ export class MonitoringReportPeriodFormComponent extends Component<PeriodProps> 
     const ReportForm = TypedForm<Dtos.MonitoringReportDto>();
 
     return (
-      <React.Fragment>
+      <>
         <Section>
           <SimpleString><Content value={(x) => x.components.reportForm.reportMessage} /></SimpleString>
           <SimpleString><Content value={(x) => x.components.reportForm.questionScoreMessage} /></SimpleString>
@@ -49,7 +49,7 @@ export class MonitoringReportPeriodFormComponent extends Component<PeriodProps> 
             </ReportForm.Fieldset>
           </ReportForm.Form>
         </Section>
-      </React.Fragment>
+      </>
     );
   }
 }

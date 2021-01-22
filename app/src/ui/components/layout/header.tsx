@@ -1,4 +1,3 @@
-import React from "react";
 import { ContentConsumer } from "@ui/redux";
 import { getContentFromResult, useGovFrontend } from "@ui/hooks";
 import { ContentResult } from "@content/contentBase";

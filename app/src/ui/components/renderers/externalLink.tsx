@@ -1,5 +1,3 @@
-import React from "react";
-
 type ExternalLinkProps = React.AnchorHTMLAttributes<{}>;
 
 export function ExternalLink({ rel, ...props }: ExternalLinkProps) {

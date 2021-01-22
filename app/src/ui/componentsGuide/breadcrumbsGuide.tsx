@@ -1,4 +1,3 @@
-import React from "react";
 import { Breadcrumbs } from "@ui/components";
 import { createStore } from "redux";
 import { rootReducer } from "@ui/redux";

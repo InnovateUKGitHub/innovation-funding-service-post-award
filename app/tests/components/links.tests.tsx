@@ -1,5 +1,4 @@
 // tslint:disable:no-identical-functions
-import React from "react";
 import * as Links from "../../src/ui/components/links";
 // tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";

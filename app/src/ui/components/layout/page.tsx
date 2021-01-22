@@ -1,4 +1,3 @@
-import React from "react";
 import { IAppError, PartnerDto, PartnerStatus, ProjectDto, ProjectStatus } from "@framework/types";
 import { CombinedResultsValidator, Results } from "@ui/validation";
 import { AriaLive } from "../renderers/ariaLive";

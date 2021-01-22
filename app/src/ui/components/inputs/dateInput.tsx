@@ -1,5 +1,5 @@
 // tslint:disable no-duplicate-string
-import * as React from "react";
+import React from "react";
 import { BaseInput } from "./baseInput";
 import { DateTime } from "luxon";
 import classNames from "classnames";

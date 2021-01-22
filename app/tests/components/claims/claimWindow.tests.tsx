@@ -1,5 +1,4 @@
 // tslint:disable:no-identical-functions no-duplicate-string
-import React from "react";
 // tslint:disable-next-line: import-blacklist
 import Enzyme, { mount, shallow } from "enzyme";
 

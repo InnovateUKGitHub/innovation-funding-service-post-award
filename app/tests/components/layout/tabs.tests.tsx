@@ -1,4 +1,3 @@
-import React from "react";
 // tslint:disable-next-line: import-blacklist
 import Enzyme from "enzyme";
 

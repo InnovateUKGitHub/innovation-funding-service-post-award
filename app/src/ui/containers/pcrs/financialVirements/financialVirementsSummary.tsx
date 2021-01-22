@@ -36,25 +36,25 @@ class Component extends React.Component<Props> {
 
     if (this.props.mode === "prepare") {
       return (
-        <React.Fragment>
+        <>
           {this.renderPrepareTable(paired, virement)}
           <ACC.Section qa="edit-partner-level">
             <ACC.Renderers.SimpleString><ACC.Content value={x => x.financialVirementSummary.guidance}/></ACC.Renderers.SimpleString>
             <ACC.Link styling={"SecondaryButton"} route={this.props.routes.pcrFinancialVirementEditPartnerLevel.getLink({ itemId: this.props.pcrItem.id, pcrId: this.props.pcr.id, projectId: this.props.projectId })}><ACC.Content value={x => x.financialVirementSummary.changeGrantLink}/></ACC.Link>
           </ACC.Section>
-        </React.Fragment>
+        </>
       );
     }
 
     return (
-      <React.Fragment>
+      <>
         {this.renderReviewTable(paired, virement)}
         <ACC.Section>
           <ACC.SummaryList qa="pcr_financial-virement">
             <ACC.SummaryListItem qa="grantValueYearEnd" labelContent={x => x.financialVirementSummary.grantValueMovingOverHeading} content={<ACC.Renderers.Currency value={this.props.pcrItem.grantMovingOverFinancialYear} />}/>
           </ACC.SummaryList>
         </ACC.Section>
-      </React.Fragment>
+      </>
     );
   }
 

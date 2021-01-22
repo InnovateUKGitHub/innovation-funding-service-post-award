@@ -1,4 +1,3 @@
-import React from "react";
 import { IGuide } from "@framework/types";
 import { TextHint } from "../components/layout/textHint";
 

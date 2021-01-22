@@ -1,4 +1,3 @@
-import React from "react";
 import cx from "classnames";
 import { isContentSolution } from "@ui/hooks";
 import { ContentSelector } from "@content/content";

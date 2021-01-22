@@ -1,4 +1,3 @@
-import React from "react";
 import { TypedForm } from "@ui/components";
 import { IGuide } from "@framework/types";
 

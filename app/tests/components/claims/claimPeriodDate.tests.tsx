@@ -1,6 +1,4 @@
 // tslint:disable:no-duplicate-string
-import React from "react";
-
 import { render } from "@testing-library/react";
 import { ClaimPeriodDate, ClaimPeriodProps } from "../../../src/ui/components/claims/claimPeriodDate";
 
@@ -15,7 +13,7 @@ const claim = {
 const partner = {
   name: "Test partner",
   isWithdrawn: false,
-  isLead: false
+  isLead: false,
 };
 
 function setup(props: ClaimPeriodProps) {
@@ -25,12 +23,12 @@ function setup(props: ClaimPeriodProps) {
 describe("<ClaimPeriodDate />", () => {
   describe("@renders", () => {
     test("period range without partner name if only claim is given", () => {
-      const { queryByText } = setup({claim});
+      const { queryByText } = setup({ claim });
       expect(queryByText("Period 1:")).toBeInTheDocument();
     });
 
     test("period range with partner name", () => {
-      const { queryByText } = setup({claim, partner});
+      const { queryByText } = setup({ claim, partner });
       expect(queryByText("Test partner claim for period 1:")).toBeInTheDocument();
     });
   });

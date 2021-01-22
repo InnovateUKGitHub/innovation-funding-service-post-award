@@ -20,7 +20,7 @@ export class Logs extends React.Component<Props> {
     if (!this.props.data || !this.props.data.length) {
       return (
         <SimpleString>
-          <Content value={(x) => x.components.logs.noChangesMessage} />
+          <Content value={x => x.components.logs.noChangesMessage} />
         </SimpleString>
       );
     }
@@ -36,20 +36,18 @@ export class Logs extends React.Component<Props> {
           <thead className="govuk-table__head">
             <tr className="govuk-table__row">
               <th className="govuk-table__header" scope="col" key="0">
-                <Content value={(x) => x.components.logs.columnHeaderDate} />
+                <Content value={x => x.components.logs.columnHeaderDate} />
               </th>
               <th className="govuk-table__header" scope="col" key="1">
-                <Content value={(x) => x.components.logs.statusUpdate} />
+                <Content value={x => x.components.logs.statusUpdate} />
               </th>
               <th className="govuk-table__header" scope="col" key="2">
-                <Content value={(x) => x.components.logs.createdBy} />
+                <Content value={x => x.components.logs.createdBy} />
               </th>
             </tr>
           </thead>
           <tbody className="govuk-table__body">
-            {this.props.data.map((row, rowIndex) =>
-              this.renderLogRow(row, rowIndex)
-            )}
+            {this.props.data.map((row, rowIndex) => this.renderLogRow(row, rowIndex))}
           </tbody>
         </table>
       </div>
@@ -82,15 +80,8 @@ export class Logs extends React.Component<Props> {
 
     return (
       <tr className={"govuk-table__row"} key={`${index}_b`}>
-        <td
-          className="govuk-table__cell govuk-!-padding-top-1"
-          key="0"
-          colSpan={3}
-        >
-          <div
-            className="govuk-inset-text govuk-!-margin-top-0"
-            style={{ whiteSpace: "pre-wrap" }}
-          >
+        <td className="govuk-table__cell govuk-!-padding-top-1" key="0" colSpan={3}>
+          <div className="govuk-inset-text govuk-!-margin-top-0" style={{ whiteSpace: "pre-wrap" }}>
             {item.comments}
           </div>
         </td>

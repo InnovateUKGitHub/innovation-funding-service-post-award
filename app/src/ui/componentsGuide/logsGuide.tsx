@@ -1,4 +1,3 @@
-import React from "react";
 import { LogItem, Logs } from "@ui/components/logs";
 import { DateTime } from "luxon";
 import { IGuide } from "@framework/types";

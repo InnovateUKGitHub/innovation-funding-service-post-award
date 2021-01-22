@@ -1,5 +1,4 @@
 // tslint:disable: no-duplicate-string no-big-function
-import React from "react";
 import {
   CategoryInfoProps,
   ClaimInfoProps,

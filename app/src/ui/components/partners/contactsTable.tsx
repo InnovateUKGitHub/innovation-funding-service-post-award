@@ -1,4 +1,3 @@
-import React from "react";
 import { TypedTable } from "../table";
 import { Content as IContent } from "@content/content";
 import { ProjectContactLabels } from "@content/labels/projectContactLabels";

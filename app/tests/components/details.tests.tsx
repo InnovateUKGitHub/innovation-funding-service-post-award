@@ -1,5 +1,4 @@
 // tslint:disable:no-duplicate-string
-import React from "react";
 import {DualDetails, TypedDetails} from "../../src/ui/components/details";
 // tslint:disable-next-line: import-blacklist
 import { mount, shallow } from "enzyme";

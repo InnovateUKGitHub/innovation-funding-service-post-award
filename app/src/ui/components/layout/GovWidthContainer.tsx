@@ -1,4 +1,3 @@
-import React from "react";
 import cx from "classnames";
 
 type DivAttr = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;

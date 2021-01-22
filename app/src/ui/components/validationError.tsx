@@ -1,4 +1,3 @@
-import React from "react";
 import { Result } from "../validation/result";
 import { NestedResult, Results } from "@ui/validation";
 
@@ -53,10 +52,10 @@ export const ValidationError: React.FunctionComponent<Props> = ({ error, hideMes
   validations.push(error);
 
   return (
-    <React.Fragment>
+    <>
       {validations.map((r) => <ValidationErrorAnchor result={r} key={r.key} />)}
       {!hideMessage ? <span style={alignTextLeftStyle} className="govuk-error-message">{prepareMessage(overrideMessage, error.errorMessage)}</span> : null}
-    </React.Fragment>
+    </>
   );
 };
 

@@ -1,4 +1,3 @@
-import React from "react";
 import { BackLink } from "../links";
 import { ProjectDto } from "@framework/dtos";
 import { IRoutes } from "@ui/routing";

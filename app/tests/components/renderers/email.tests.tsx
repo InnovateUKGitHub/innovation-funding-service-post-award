@@ -1,4 +1,3 @@
-import React from "react";
 import { render } from "@testing-library/react";
 
 import { Email, EmailProps } from "../../../src/ui/components/renderers";

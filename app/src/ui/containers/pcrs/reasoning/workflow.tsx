@@ -1,4 +1,3 @@
-import React from "react";
 
 import { BaseProps, ContainerBase, defineRoute } from "../../containerBase";
 import { ILinkInfo, PCRItemStatus, ProjectDto, ProjectRole } from "@framework/types";
@@ -98,7 +97,7 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
   private renderStep(stepNumber: number, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>) {
     const step = this.findStepByNumber(stepNumber);
     return (
-      <React.Fragment>
+      <>
         <ACC.Section>
           <ACC.SummaryList qa="pcr-prepareReasoning">
             <ACC.SummaryListItem labelContent={x => x.pcrReasoningWorkflow.labels.requestNumber} content={pcr.requestNumber} qa="numberRow"/>
@@ -113,7 +112,7 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
           editor,
           documentsEditor
         })}
-      </React.Fragment>
+      </>
     );
   }
 

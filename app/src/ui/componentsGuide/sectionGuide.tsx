@@ -1,4 +1,3 @@
-import React from "react";
 import { Section } from "../components/layout/section";
 import { SimpleString } from "../components/renderers/simpleString";
 import { IGuide } from "@framework/types";
@@ -64,7 +63,7 @@ export const sectionGuide: IGuide = {
                   </Section>
               </Section>`,
             render: () => (
-              <React.Fragment>
+              <>
                 <Section title="Section title 1" >
                     <Section title="Section title 1.1">
                         <Section title="Section title 1.1.1">
@@ -81,7 +80,7 @@ export const sectionGuide: IGuide = {
                       <Section title="Section title 2.1.1" />
                   </Section>
               </Section>
-              </React.Fragment>
+              </>
             )
         },
     ]

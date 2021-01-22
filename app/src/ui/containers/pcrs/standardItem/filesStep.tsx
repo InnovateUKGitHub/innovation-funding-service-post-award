@@ -17,11 +17,11 @@ interface FileStepsProps {
 class FilesStepComponent extends React.Component<PcrStepProps<PCRStandardItemDto, PCRStandardItemDtoValidator> & FileStepsProps> {
   render() {
     return (
-      <React.Fragment>
+      <>
         {this.renderTemplateLinks(this.props.pcrItemType)}
         {this.renderFiles(this.props.documentsEditor, this.props.documents)}
         {this.renderForm(this.props.documentsEditor)}
-      </React.Fragment>
+      </>
     );
   }
 

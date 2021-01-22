@@ -1,6 +1,5 @@
 // tslint:disable: no-identical-functions no-big-function no-duplicate-string
 
-import React from "react";
 import { render } from "@testing-library/react";
 
 import {

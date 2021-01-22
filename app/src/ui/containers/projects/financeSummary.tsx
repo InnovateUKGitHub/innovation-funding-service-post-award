@@ -1,4 +1,3 @@
-import React from "react";
 import * as ACC from "@ui/components";
 import { PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { Pending } from "@shared/pending";
@@ -62,7 +61,7 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data, Callbacks> {
     const accountantsReportTitle = <ACC.Content value={x => x.financeSummary.accountantsReportTitle}/>;
 
     return (
-      <React.Fragment>
+      <>
         <ACC.Section title={costToDateTitle}>
           <FinanceSummaryTable.Table data={partnersToShow} qa="ProjectCostsToDate" footers={this.renderTotalValueFooters(project, partners)}>
             <FinanceSummaryTable.Custom headerContent={x => x.financeSummary.projectLabels.partner} hideHeader={true} qa="Partner" value={x => <ACC.PartnerName partner={x} showIsLead={true} />} />
@@ -88,7 +87,7 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data, Callbacks> {
             </ACC.Section>
           </ACC.Section>
         </ACC.Section>
-      </React.Fragment>
+      </>
     );
   }
 

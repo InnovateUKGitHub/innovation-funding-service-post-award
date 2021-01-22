@@ -1,4 +1,3 @@
-import React from "react";
 import * as ACC from "../../components";
 import { ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";

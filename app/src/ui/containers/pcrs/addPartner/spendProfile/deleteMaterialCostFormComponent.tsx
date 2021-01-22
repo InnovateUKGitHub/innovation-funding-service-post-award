@@ -1,4 +1,3 @@
-import React from "react";
 import * as ACC from "@ui/components";
 import { PCRSpendProfileMaterialsCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { SpendProfileDeleteFormProps } from "@ui/containers";

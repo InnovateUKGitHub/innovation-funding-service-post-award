@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, LinkProps } from "react-router5";
 
 interface BreadcrumbItem extends LinkProps {

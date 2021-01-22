@@ -1,4 +1,3 @@
-import React from "react";
 import { render } from "@testing-library/react";
 import { EditClaimDetailsParams, EditClaimLineItemsCallbacks, EditClaimLineItemsComponent, EditClaimLineItemsData } from "@ui/containers";
 import { BaseProps, ContainerProps } from "@ui/containers/containerBase";

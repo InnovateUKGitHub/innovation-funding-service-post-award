@@ -1,4 +1,3 @@
-import React from "react";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import {
   ILinkInfo,
@@ -124,11 +123,11 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
 
   private renderWorkflow(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, project: ProjectDto, pcr: PCRDto, pcrItem: PCRItemDto, pcrItemType: PCRItemTypeDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, editableItemTypes: PCRItemType[]) {
     return (
-      <React.Fragment>
+      <>
         {this.props.mode === "prepare" && this.props.step === 1 && this.renderGuidanceSection(pcrItem)}
         {!workflow.isOnSummary() && this.renderStep(workflow, project, pcr, pcrItem, pcrItemType, editor, documentsEditor)}
         {workflow.isOnSummary() && this.renderSummarySection(workflow, project, pcr, pcrItem, editor, editableItemTypes)}
-      </React.Fragment>
+      </>
     );
   }
 

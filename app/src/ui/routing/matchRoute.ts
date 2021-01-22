@@ -1,4 +1,3 @@
-import React from "react";
 import { State } from "router5";
 import { routeConfig, RouteKeys } from "./routeConfig";
 import { ErrorNotFoundRoute } from "@ui/containers";

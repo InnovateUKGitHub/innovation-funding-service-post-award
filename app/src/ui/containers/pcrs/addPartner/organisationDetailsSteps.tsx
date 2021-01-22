@@ -1,4 +1,3 @@
-import React from "react";
 import * as ACC from "@ui/components";
 import { Option, PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { EditorStatus, StoresConsumer } from "@ui/redux";
@@ -29,9 +28,9 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
         onChange={dto => props.onChange(dto)}
       >
         <Form.Fieldset headingContent={x => x.pcrAddPartnerOrganisationDetails.labels.organisationSizeHeading}>
-          <React.Fragment>
+          <>
             <SimpleString><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.guidance}/></SimpleString>
-          </React.Fragment>
+          </>
           <Form.Radio
             name="participantSize"
             options={sizeOptions}

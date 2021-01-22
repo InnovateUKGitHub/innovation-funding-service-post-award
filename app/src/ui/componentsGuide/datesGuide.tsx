@@ -1,4 +1,3 @@
-import React from "react";
 import {
     CondensedDateRange, DayAndLongMonth, Duration,
     FullDate, FullDateTime, LongDateRange,

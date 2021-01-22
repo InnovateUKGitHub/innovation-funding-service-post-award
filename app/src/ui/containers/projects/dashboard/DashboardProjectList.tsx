@@ -1,4 +1,3 @@
-import React from "react";
 import { IRoutes } from "@ui/routing";
 import { ProjectData } from "./Dashboard.interface";
 import { useContent } from "@ui/hooks";

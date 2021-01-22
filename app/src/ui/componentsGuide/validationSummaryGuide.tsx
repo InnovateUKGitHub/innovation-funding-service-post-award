@@ -1,4 +1,3 @@
-import React from "react";
 import { ValidationSummary } from "../components/validationSummary";
 import { IGuide } from "@framework/types";
 import { Results } from "../validation/results";
@@ -21,7 +20,7 @@ export const validationSummaryGuide: IGuide = {
     options: [
         {
             name: "Simple",
-            comments: <React.Fragment>Renders a list of errors with anchor links to the relevent error.<br/>Will not display until show errors is true and there is an error.</React.Fragment>,
+            comments: <>Renders a list of errors with anchor links to the relevent error.<br/>Will not display until show errors is true and there is an error.</>,
             example: "<ValidationError error={validationError}/>",
             render: () => <ValidationSummary validation={new ExampleValidator(exampleDto, true)}/>
         }

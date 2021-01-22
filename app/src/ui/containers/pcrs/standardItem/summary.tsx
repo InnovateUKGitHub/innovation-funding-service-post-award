@@ -11,33 +11,44 @@ interface Props {
   documents: DocumentSummaryDto[];
 }
 
-class SummaryComponent extends React.Component<PcrSummaryProps<PCRStandardItemDto, PCRStandardItemDtoValidator, standardItemStepNames> & Props> {
+class SummaryComponent extends React.Component<
+  PcrSummaryProps<PCRStandardItemDto, PCRStandardItemDtoValidator, standardItemStepNames> & Props
+> {
   public render() {
     return (
       <ACC.Section qa="standard-item-summary">
         <ACC.SummaryList qa="standard-item-summary-list">
-          <ACC.SummaryListItem label="Documents" content={this.renderDocuments(this.props.documents)} qa="supportingDocuments" action={this.props.getEditLink("filesStep", null)} />
+          <ACC.SummaryListItem
+            label="Documents"
+            content={this.renderDocuments(this.props.documents)}
+            qa="supportingDocuments"
+            action={this.props.getEditLink("filesStep", null)}
+          />
         </ACC.SummaryList>
       </ACC.Section>
     );
   }
 
   private renderDocuments(documents: DocumentSummaryDto[]) {
-    return documents.length > 0
-      ? <ACC.DocumentList documents={documents} qa="documentsList" />
-      : "No documents uploaded.";
+    return documents.length > 0 ? (
+      <ACC.DocumentList documents={documents} qa="documentsList" />
+    ) : (
+      "No documents uploaded."
+    );
   }
 }
 
-export const Summary = (props: PcrSummaryProps<PCRStandardItemDto, PCRStandardItemDtoValidator, standardItemStepNames>) => (
+export const Summary = (
+  props: PcrSummaryProps<PCRStandardItemDto, PCRStandardItemDtoValidator, standardItemStepNames>,
+) => (
   <StoresConsumer>
-    {
-      stores => {
-        return (<ACC.Loader
+    {stores => {
+      return (
+        <ACC.Loader
           pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrItem.id)}
           render={documents => <SummaryComponent documents={documents} {...props} />}
-        />);
-      }
-    }
+        />
+      );
+    }}
   </StoresConsumer>
 );
