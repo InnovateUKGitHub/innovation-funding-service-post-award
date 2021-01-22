@@ -64,6 +64,12 @@ module.exports = function pack(env) {
                 "@babel/plugin-transform-runtime",
                 "@babel/plugin-transform-modules-commonjs",
                 "@babel/plugin-proposal-class-properties",
+                [
+                  "@babel/plugin-transform-react-jsx",
+                  {
+                    runtime: "automatic",
+                  },
+                ],
               ],
               env: {
                 production: {
