@@ -1,4 +1,3 @@
-import React from "react";
 import * as ACC from "@ui/components";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { ClaimFrequency, PCRItemForPeriodLengthChangeDto } from "@framework/dtos";

@@ -1,4 +1,3 @@
-import React from "react";
 import { PCRItemForTimeExtensionDto } from "@framework/dtos";
 import { TimeExtensionSummary } from "@ui/containers/pcrs/timeExtension/timeExtensionSummary";
 import { TimeExtensionStep } from "@ui/containers/pcrs/timeExtension/timeExtensionStep";

@@ -1,4 +1,3 @@
-import React from "react";
 import { TypedTable } from "../table";
 import { ClaimProps, ClaimTableRow, createTableData } from "./utils/costCategoryTableHelper";
 import { useContent } from "@ui/hooks";

@@ -1,4 +1,3 @@
-import React from "react";
 import { render } from "@testing-library/react";
 
 import { ValidationListMessage, ValidationListMessageProps } from "@ui/components/ValidationListMessage";

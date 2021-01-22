@@ -18,7 +18,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawal
     const { documents, documentsEditor } = this.props;
     const form = ACC.TypedForm<PCRItemForPartnerWithdrawalDto>();
     return (
-      <React.Fragment>
+      <>
         {this.renderForm(documentsEditor)}
         {this.renderFiles(documentsEditor, documents)}
         <form.Form qa="saveAndContinue" data={this.props.pcrItem} onSubmit={() => this.props.onSave()}>
@@ -26,7 +26,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawal
             <form.Button name="default" styling="Primary"><ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.pcrItem.submitButton}/></form.Button>
           </form.Fieldset>
         </form.Form>
-      </React.Fragment>
+      </>
     );
   }
 

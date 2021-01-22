@@ -1,4 +1,3 @@
-import React from "react";
 import { ProjectDto } from "@framework/types";
 import { PageTitle } from "../layout/pageTitle";
 

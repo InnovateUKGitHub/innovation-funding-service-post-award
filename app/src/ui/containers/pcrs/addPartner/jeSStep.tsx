@@ -20,7 +20,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
     const { documents, documentsEditor } = this.props;
     return (
-      <React.Fragment>
+      <>
         {this.renderForm(documentsEditor)}
         {this.renderFiles(documentsEditor, documents)}
         <Form.Form qa="saveAndContinue" data={this.props.pcrItem} onSubmit={() => this.props.onSave()}>
@@ -29,7 +29,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
             <Form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerJeS.pcrItem.returnToSummaryButton}/></Form.Button>
           </Form.Fieldset>
         </Form.Form>
-      </React.Fragment>
+      </>
     );
   }
 

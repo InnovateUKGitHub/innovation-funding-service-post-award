@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { ContentSelector } from "@content/content";
 import { Content } from "@ui/components/content";
 
@@ -30,5 +30,5 @@ export const LinksList: React.FunctionComponent<Props> = (props) => {
       </div>
     ));
 
-  return <React.Fragment>{list}</React.Fragment>;
+  return <>{list}</>;
 };

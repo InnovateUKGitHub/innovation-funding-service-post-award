@@ -1,4 +1,3 @@
-import React from "react";
 import { Task, TaskList, TaskListSection } from "@ui/components/taskList";
 import { HomeRoute } from "@ui/containers";
 import createRouter from "router5";

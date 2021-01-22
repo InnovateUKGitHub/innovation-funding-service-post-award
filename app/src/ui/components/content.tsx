@@ -1,4 +1,3 @@
-import React from "react";
 import { Markdown } from "./renderers/markdown";
 import { useContent } from "@ui/hooks";
 import { ContentSelector } from "@content/content";
@@ -30,7 +29,7 @@ export const Content = ({ value, styles }: IContentProps) => {
     const modalId = `content-${key}`;
 
     return (
-      <React.Fragment>
+      <>
         &nbsp;
         <i
           aria-label="Open content modal dialogue"
@@ -55,14 +54,14 @@ export const Content = ({ value, styles }: IContentProps) => {
             </ModalLink>
           </Section>
         </Modal>
-      </React.Fragment>
+      </>
     );
   };
 
   return (
-    <React.Fragment>
+    <>
       {displayValue}
       {config.contentHint && renderContentHint()}
-    </React.Fragment>
+    </>
   );
 };

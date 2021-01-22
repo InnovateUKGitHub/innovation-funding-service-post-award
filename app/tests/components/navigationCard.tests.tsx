@@ -1,4 +1,3 @@
-import React from "react";
 import { chunks, NavigationCard, NavigationCardProps, NavigationCardsGrid } from "@ui/components";
 // tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";

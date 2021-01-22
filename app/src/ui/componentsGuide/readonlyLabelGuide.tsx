@@ -1,4 +1,3 @@
-import React from "react";
 import { ReadonlyLabel } from "@ui/components";
 import { SimpleString } from "@ui/components/renderers";
 import { IGuide } from "@framework/types";

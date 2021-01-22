@@ -1,4 +1,3 @@
-import React from "react";
 import * as ACC from "@ui/components";
 import { Option, PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { EditorStatus, StoresConsumer } from "@ui/redux";

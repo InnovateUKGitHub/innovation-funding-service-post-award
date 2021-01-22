@@ -1,5 +1,5 @@
 // tslint:disable: object-literal-key-quotes
-import * as React from "react";
+import React from "react";
 import { useContent } from "@ui/hooks";
 
 export type LinkProps = React.AnchorHTMLAttributes<{}> & {

@@ -1,3 +1,4 @@
+import React from "react";
 import { ClaimDetailsSummaryDto, ClaimDto, ForecastDetailsDTO, GOLCostDto, PartnerDto, PartnerStatus, ProjectDto } from "@framework/dtos";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { CostCategoryType } from "@framework/entities";
@@ -8,7 +9,6 @@ import {
   IForecastDetailsDtoValidator
 } from "@ui/validators";
 import classNames from "classnames";
-import React from "react";
 import { NumberInput } from "../inputs/numberInput";
 import { AccessibilityText } from "../renderers/accessibilityText";
 import { Currency } from "../renderers/currency";

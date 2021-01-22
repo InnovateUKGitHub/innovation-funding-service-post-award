@@ -1,4 +1,3 @@
-import React from "react";
 import * as Acc from "../../components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";

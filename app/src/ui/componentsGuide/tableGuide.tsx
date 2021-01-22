@@ -1,5 +1,4 @@
 // tslint:disable
-import React from "react";
 import { range } from "../../shared/range";
 import { TypedTable } from "../components/table";
 import { FullDateTime } from "../components/renderers";

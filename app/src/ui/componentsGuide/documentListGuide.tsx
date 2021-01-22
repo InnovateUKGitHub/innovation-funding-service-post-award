@@ -1,4 +1,3 @@
-import React from "react";
 import { DocumentList } from "../components";
 import { IGuide } from "@framework/types";
 

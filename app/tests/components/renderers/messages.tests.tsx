@@ -2,7 +2,6 @@
 // tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
-import React from "react";
 import { IMessagesProps, Messages } from "@ui/components/renderers";
 import { findByQa } from "../helpers/find-by-qa";
 

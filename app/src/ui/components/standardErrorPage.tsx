@@ -1,4 +1,3 @@
-import React from "react";
 import { useContent } from "@ui/hooks";
 import { Page } from "./layout/page";
 import { Section } from "./layout/section";

@@ -22,11 +22,13 @@ export function NavigationCard({ qa, label, route, messages = [] }: NavigationCa
   return (
     <div className="card-link" data-qa={qa}>
       <Link className="card-link__link" route={route}>
-        <h2 className="card-link__title" data-qa="navigation-card-label">{label}</h2>
+        <h2 className="card-link__title" data-qa="navigation-card-label">
+          {label}
+        </h2>
 
         {hasMessages && (
           <div className="card-link__messages" data-qa="navigation-card-list">
-            {messages.map((x) => (
+            {messages.map(x => (
               <SimpleString key={x.qa} {...x} className="card-link__message">
                 {x.message}
               </SimpleString>
@@ -58,7 +60,11 @@ export function NavigationCardsGrid({ children }: NavigationCardsGridProps) {
         return (
           <div key={groupUid} className="govuk-grid-row card-link-grid" data-qa="navigation-group">
             {group.map((navCard, rowIndex) => (
-              <div key={`${groupUid}-row-${rowIndex}`} className="govuk-grid-column-one-third" data-qa="navigation-group-item">
+              <div
+                key={`${groupUid}-row-${rowIndex}`}
+                className="govuk-grid-column-one-third"
+                data-qa="navigation-group-item"
+              >
                 {navCard}
               </div>
             ))}

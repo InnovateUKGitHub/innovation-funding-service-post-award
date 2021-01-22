@@ -1,4 +1,3 @@
-import React from "react";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
@@ -69,19 +68,19 @@ class Component extends ContainerBase<FinancialVirementParams, Props, {}> {
 
   private renderInput(partner: PartnerDto, virement: PartnerVirementsDto, disabled: boolean, validation: PartnerVirementsDtoValidator | undefined) {
     return (
-      <React.Fragment>
+      <>
         <ACC.ValidationError overrideMessage={`Invalid grant for ${partner.name}`} error={validation && validation.newRemainingGrant} />
         <ACC.Inputs.NumberInput name={virement.partnerId} value={virement.newRemainingGrant} onChange={(val) => this.updateValue(partner, val)} width={4} ariaLabel={partner.name} disabled={disabled} />
-      </React.Fragment>
+      </>
     );
   }
 
   private renderFooter(editor: IEditorStore<FinancialVirementDto, FinancialVirementDtoValidator>) {
     return (
-      <React.Fragment>
+      <>
         <ACC.ValidationError error={editor.validator.newRemainingGrant} />
         <ACC.Renderers.Currency value={editor.data.newRemainingGrant} />
-      </React.Fragment>
+      </>
     );
   }
 

@@ -1,4 +1,3 @@
-import React from "react";
 import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import * as ACC from "../../components";

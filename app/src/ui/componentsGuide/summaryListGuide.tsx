@@ -1,4 +1,3 @@
-import React from "react";
 import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
 import { LineBreakList } from "@ui/components/renderers";
 import { IGuide } from "@framework/types";

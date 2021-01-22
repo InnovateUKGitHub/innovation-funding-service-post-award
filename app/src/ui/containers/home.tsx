@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, Modal, PageTitle, TypedForm } from "../components";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute, } from "./containerBase";
 import { SimpleString } from "../components/renderers";

@@ -1,5 +1,3 @@
-import React from "react";
-
 import { BaseInput } from "./baseInput";
 
 interface DropdownListProps extends InputProps<{ id: string, value: string | number }> {

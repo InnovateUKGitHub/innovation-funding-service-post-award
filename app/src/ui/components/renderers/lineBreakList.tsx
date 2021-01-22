@@ -6,7 +6,7 @@ interface Props {
 
 export const LineBreakList: React.FunctionComponent<Props> = ({ items }) => {
   return (
-    <React.Fragment>
+    <>
       {
         items.reduce<ReactNode[]>((result, item, index) => {
           if(index > 0) {
@@ -16,6 +16,6 @@ export const LineBreakList: React.FunctionComponent<Props> = ({ items }) => {
           return result;
         }, [])
       }
-    </React.Fragment>
+    </>
   );
 };

@@ -21,7 +21,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     const { documents, documentsEditor, pcrItem, onSave } = this.props;
     const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
     return (
-      <React.Fragment>
+      <>
         <ACC.Section qa="de-minimis" titleContent={x => x.pcrAddPartnerStateAidEligibilityContent.deMinimisTitle}>
           <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.deMinimisGuidance}/>
           {this.renderDeMinimisForm(documentsEditor)}
@@ -37,7 +37,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
             </Form.Button>
           </Form.Fieldset>
         </Form.Form>
-      </React.Fragment>
+      </>
     );
   }
 

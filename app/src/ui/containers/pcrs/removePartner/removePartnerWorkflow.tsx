@@ -1,4 +1,3 @@
-import React from "react";
 import { PCRItemForPartnerWithdrawalDto } from "@framework/dtos";
 import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";

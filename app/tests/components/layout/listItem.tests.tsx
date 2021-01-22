@@ -1,5 +1,3 @@
-import React from "react";
-
 import { ListItem, ListItemProps } from "../../../src/ui/components/layout/listItem";
 import { render } from "@testing-library/react";
 

@@ -1,4 +1,3 @@
-import React from "react";
 import { DocumentSingle, DocumentSingleProps } from "../components";
 import { ClaimDto } from "@framework/types";
 import * as ACC from "../components";

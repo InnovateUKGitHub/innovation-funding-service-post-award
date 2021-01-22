@@ -1,4 +1,3 @@
-import React from "react";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { ClaimDetailsDto, ClaimLineItemDto, ForecastDetailsDTO, ProjectDto, ProjectRole } from "@framework/types";

@@ -1,4 +1,3 @@
-import React from "react";
 import * as ACC from "@ui/components";
 import { Content } from "@content/content";
 import { DocumentMessages } from "@content/messages/documentMessages";
@@ -52,11 +51,11 @@ interface DocumentGuidanceWithContentProps {
 
 export const DocumentGuidanceWithContent = (props: DocumentGuidanceWithContentProps) => {
   return (
-    <React.Fragment>
+    <>
       <ACC.Content value={x => props.documentMessages(x).header} />
       <ACC.Info summary={<ACC.Content value={x => props.documentMessages(x).infoTitle} />}>
         <ACC.Content value={x => props.documentMessages(x).infoContent} />
       </ACC.Info>
-    </React.Fragment>
+    </>
   );
 };

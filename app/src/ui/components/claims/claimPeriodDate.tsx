@@ -1,4 +1,3 @@
-import React from "react";
 import { ClaimDto, PartnerDto } from "@framework/types";
 import { ShortDateRange } from "../renderers/date";
 import { getPartnerName, PartnerName } from "@ui/components";

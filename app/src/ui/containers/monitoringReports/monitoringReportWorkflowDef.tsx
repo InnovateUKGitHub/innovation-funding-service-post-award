@@ -1,4 +1,3 @@
-import React from "react";
 import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
 import * as Dtos from "@framework/dtos";
 import { MonitoringReportDtoValidator } from "@ui/validators";

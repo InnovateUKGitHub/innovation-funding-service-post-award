@@ -1,4 +1,3 @@
-import React from "react";
 import * as ACC from "@ui/components";
 import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { Pending } from "@shared/pending";

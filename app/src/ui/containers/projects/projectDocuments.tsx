@@ -1,5 +1,3 @@
-import React from "react";
-
 import * as ACC from "@ui/components";
 import { IEditorStore, useStores } from "@ui/redux";
 import { useContent } from "@ui/hooks";
@@ -7,7 +5,7 @@ import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
 
-import { DocumentDescriptionDto, DocumentSummaryDto, MultipleDocumentUploadDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { DocumentSummaryDto, MultipleDocumentUploadDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { noop } from "@ui/helpers/noop";
 import { DocumentDescription } from "@framework/types";
 import { EnumDocuments } from "../claims/components";

@@ -1,4 +1,3 @@
-import React from "react";
 import { AccessibilityText } from "../renderers";
 
 export interface AccordionControlsProps {

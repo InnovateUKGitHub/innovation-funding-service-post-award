@@ -1,4 +1,3 @@
-import React from "react";
 import { ILinkInfo } from "@framework/types";
 import { Result } from "@ui/validation";
 import classNames from "classnames";

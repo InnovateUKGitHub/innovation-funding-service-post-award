@@ -1,4 +1,3 @@
-import React from "react";
 import * as ACC from "@ui/components";
 import { suspendProjectSteps } from "./workflow";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";

@@ -1,4 +1,3 @@
-import React from "react";
 import {NavigationArrows} from "../components";
 import {Provider} from "react-redux";
 import {createStore} from "redux";

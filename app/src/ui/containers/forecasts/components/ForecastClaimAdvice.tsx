@@ -1,5 +1,3 @@
-import React from "react";
-
 import { useContent } from "@ui/hooks";
 import { ILinkInfo } from "@framework/types";
 import { SimpleString } from "@ui/components/renderers";

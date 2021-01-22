@@ -1,8 +1,7 @@
 import React from "react";
 import { Link } from "./links";
 import { ILinkInfo } from "@framework/types";
-import {ArrowLeft} from "./svg/arrowLeft";
-import {ArrowRight} from "./svg/arrowRight";
+import { ArrowLeft } from "./svg/arrowLeft";
 
 interface LinkProps {
   label: string;

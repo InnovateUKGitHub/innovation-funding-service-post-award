@@ -1,4 +1,3 @@
-import React from "react";
 import { ValidationMessage } from "../validationMessage";
 import { AriaLive } from "./ariaLive";
 

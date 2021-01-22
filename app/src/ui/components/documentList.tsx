@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { stringComparator } from "@framework/util/comparator";
 import { LinksList } from "./linksList";
 import { TypedForm } from "./form";

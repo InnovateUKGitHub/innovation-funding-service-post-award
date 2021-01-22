@@ -1,8 +1,7 @@
-import React from "react";
+import { useContent } from "@ui/hooks";
 import { SimpleString } from "@ui/components/renderers";
 
 import { CuratedSection } from "./Dashboard.interface";
-import { useContent } from "@ui/hooks";
 
 interface DashboardProjectCountProps {
   curatedTotals: CuratedSection<number>;

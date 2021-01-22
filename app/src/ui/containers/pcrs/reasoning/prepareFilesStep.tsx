@@ -21,10 +21,10 @@ class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & 
       <ACC.Loader
         pending={this.props.documents}
         render={(documents) => (
-          <React.Fragment>
+          <>
             {this.renderFiles(this.props.documentsEditor, documents)}
             {this.renderForm(this.props.documentsEditor)}
-          </React.Fragment>
+          </>
         )}
       />
     );

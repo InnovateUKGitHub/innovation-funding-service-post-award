@@ -1,5 +1,3 @@
-import React from "react";
-
 import createRouter from "router5";
 import browserPluginFactory from "router5/plugins/browser";
 import { IFeatureFlags } from "@framework/types";

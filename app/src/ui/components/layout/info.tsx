@@ -1,4 +1,3 @@
-import React from "react";
 import { useGovFrontend } from "@ui/hooks";
 
 interface InfoProps {

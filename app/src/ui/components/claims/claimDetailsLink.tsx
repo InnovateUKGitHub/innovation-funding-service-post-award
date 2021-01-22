@@ -1,4 +1,3 @@
-import React from "react";
 import { ClaimDto, ClaimStatus, PartnerDto, PartnerStatus, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import { IRoutes } from "@ui/routing";
 import { Link } from "../links";
