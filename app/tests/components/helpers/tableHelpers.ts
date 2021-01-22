@@ -29,7 +29,7 @@ export function getFooterValue(
   return row.find("td").at(colIndex);
 }
 
-export function getRowElements(containerEl: HTMLElement, dataQa: string, index: number): ChildNode[] {
+export function getRowElements(containerEl: Element, dataQa: string, index: number): ChildNode[] {
   const getUid = containerEl.querySelector(`[data-qa="${dataQa}"]`);
 
   if (!getUid) {
@@ -48,7 +48,7 @@ export function getRowElements(containerEl: HTMLElement, dataQa: string, index: 
   return Array.from(getChildNodes);
 }
 
-export function getColumnTextValues(container: HTMLElement, dataQa: string, index: number): string[] {
+export function getColumnTextValues(container: Element, dataQa: string, index: number): string[] {
   const columnValue = getRowElements(container, dataQa, index);
 
   // Note: Check textContent is defined
