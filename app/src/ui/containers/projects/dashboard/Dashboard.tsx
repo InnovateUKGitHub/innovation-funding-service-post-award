@@ -1,4 +1,3 @@
-import React from "react";
 import * as ACC from "../../../components";
 import { PartnerDto, ProjectDto } from "@framework/types";
 import { useStores } from "@ui/redux";

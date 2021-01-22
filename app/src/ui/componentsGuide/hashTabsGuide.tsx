@@ -1,4 +1,3 @@
-import React from "react";
 import { HashTabItem, HashTabs } from "../components/layout/hashTabs";
 import { IGuide } from "@framework/types";
 

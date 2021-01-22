@@ -1,5 +1,3 @@
-import React from "react";
-
 export const CrownCopyrightLogo = (props: React.SVGAttributes<{}>) => (
   <svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 483.2 195.7">
     <path

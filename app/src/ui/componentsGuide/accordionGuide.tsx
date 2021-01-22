@@ -1,4 +1,3 @@
-import React from "react";
 import { IGuide } from "@framework/types";
 
 import { Accordion, AccordionItem, DocumentList, ProjectContact } from "../components";

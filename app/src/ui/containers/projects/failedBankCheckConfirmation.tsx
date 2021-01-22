@@ -1,4 +1,3 @@
-import React from "react";
 import {StoresConsumer} from "@ui/redux";
 import {ProjectDto, ProjectRole} from "@framework/dtos";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";

@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { ExternalLink } from "../renderers";
 import { useContent } from "@ui/hooks";
 

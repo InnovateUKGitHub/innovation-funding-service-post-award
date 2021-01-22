@@ -1,4 +1,3 @@
-import React from "react";
 import Marked from "marked";
 
 export interface IMarkdownProps {

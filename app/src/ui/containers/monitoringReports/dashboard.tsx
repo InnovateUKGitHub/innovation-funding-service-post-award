@@ -1,5 +1,4 @@
 import { MonitoringReportStatus } from "@framework/constants";
-import React from "react";
 import * as Dtos from "@framework/dtos";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { Pending } from "@shared/pending";

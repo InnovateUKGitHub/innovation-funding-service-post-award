@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 
 export const UnorderedList: React.FunctionComponent<{ qa?: string }> = (props) => {
   const classNames = "govuk-list govuk-list--bullet govuk-!-margin-bottom-10";

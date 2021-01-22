@@ -1,4 +1,3 @@
-import React from "react";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { ClaimDto, PartnerDto, PartnerStatus, ProjectDto, ProjectRole, ProjectStatus } from "@framework/dtos";
@@ -113,8 +112,8 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
     if (isPm) return null;
 
     return finalClaim.isApproved
-      ? <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={<React.Fragment><PartnerName partner={data.partner}/><ACC.Content value={x => x.components.forecastDetails.finalClaimMessageMO} /></React.Fragment>}/>
-      : <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={<React.Fragment><PartnerName partner={data.partner}/><ACC.Content value={x => x.components.forecastDetails.finalClaimDueMessageMO} /></React.Fragment>}/>;
+      ? <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={<><PartnerName partner={data.partner}/><ACC.Content value={x => x.components.forecastDetails.finalClaimMessageMO} /></>}/>
+      : <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={<><PartnerName partner={data.partner}/><ACC.Content value={x => x.components.forecastDetails.finalClaimDueMessageMO} /></>}/>;
     }
 
   private renderOverheadsRate(overheadRate: number | null) {

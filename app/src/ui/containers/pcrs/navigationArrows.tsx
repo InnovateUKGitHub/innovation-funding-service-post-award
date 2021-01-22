@@ -1,4 +1,3 @@
-import React from "react";
 import * as ACC from "@ui/components";
 import { PCRDto, PCRItemDto } from "@framework/dtos";
 import { IRoutes } from "@ui/routing";

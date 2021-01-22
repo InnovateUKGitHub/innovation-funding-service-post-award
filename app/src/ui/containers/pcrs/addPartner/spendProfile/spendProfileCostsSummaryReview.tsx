@@ -1,4 +1,3 @@
-import React from "react";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import {
   PCRItemForPartnerAdditionDto,

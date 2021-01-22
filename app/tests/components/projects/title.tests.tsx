@@ -1,4 +1,3 @@
-import React from "react";
 import { render } from "@testing-library/react";
 
 import { Title, TitleProps } from "../../../src/ui/components/projects/title";

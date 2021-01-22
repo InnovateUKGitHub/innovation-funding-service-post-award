@@ -58,7 +58,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           headerContent={x => x.pcrAddPartnerOtherFundingSources.columnHeaderDescription}
           qa="cost-description"
           value={(x, i) => (
-            <React.Fragment>
+            <>
               <Form.Hidden value={_dontUse => funds[i.row].id} name={`item_${i.row}_id`} />
               <Form.String
                 name={`item_${i.row}_description`}
@@ -71,7 +71,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
                 }}
                 validation={this.getCostValidation(i.row, "description")}
               />
-            </React.Fragment>
+            </>
           )}
         />
         <Table.Custom

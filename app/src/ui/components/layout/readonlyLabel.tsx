@@ -1,4 +1,3 @@
-import React from "react";
 import { ContentSelector } from "@content/content";
 import { Content } from "@ui/components";
 

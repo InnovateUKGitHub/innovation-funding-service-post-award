@@ -1,5 +1,5 @@
-import { TextAreaInput } from "./inputs/textAreaInput";
 import React, { CSSProperties } from "react";
+import { TextAreaInput } from "./inputs/textAreaInput";
 import { Result } from "@ui/validation";
 import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
 import { ValidationError } from "./validationError";

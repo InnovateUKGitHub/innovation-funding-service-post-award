@@ -1,4 +1,3 @@
-import React from "react";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
 import { Pending } from "@shared/pending";
@@ -97,7 +96,7 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
 
   private renderInput(partner: PartnerDto, costCategory: CostCategoryDto, virement: CostCategoryVirementDto, disabled: boolean, validation: CostCategoryVirementDtoValidator | null) {
     return (
-      <React.Fragment>
+      <>
         <ACC.ValidationError overrideMessage={`Invalid cost for ${costCategory.name}`} error={validation && validation.newPartnerEligibleCosts} />
         {costCategory.isCalculated ? <ACC.Renderers.Currency value={virement.newEligibleCosts} /> : null}
         {!costCategory.isCalculated ?
@@ -110,7 +109,7 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
             disabled={disabled}
           />
           : null}
-      </React.Fragment>
+      </>
     );
   }
 

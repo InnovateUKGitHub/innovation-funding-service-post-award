@@ -1,4 +1,3 @@
-import React from "react";
 import { useStores } from "@ui/redux";
 
 export interface PageTitleProps {

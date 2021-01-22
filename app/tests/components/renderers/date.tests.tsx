@@ -1,5 +1,4 @@
 // tslint:disable:no-duplicate-string no-identical-functions
-import React from "react";
 import {
   CondensedDateRange,
   Duration,

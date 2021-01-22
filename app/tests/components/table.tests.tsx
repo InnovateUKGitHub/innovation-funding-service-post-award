@@ -1,4 +1,3 @@
-import React from "react";
 import { TypedTable } from "../../src/ui/components/table";
 // tslint:disable-next-line: import-blacklist
 import { shallow } from "enzyme";

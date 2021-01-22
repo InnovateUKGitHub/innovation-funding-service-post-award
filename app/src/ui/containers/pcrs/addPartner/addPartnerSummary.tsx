@@ -18,7 +18,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
     // Used to determine items displayed for industrial org vs academic org
     const isIndustrial = pcrItem.organisationType === PCROrganisationType.Industrial;
     return (
-      <React.Fragment>
+      <>
         { this.renderOrganisationSection(pcrItem, validator, documents, isIndustrial) }
         { this.renderProjectContacts(pcrItem, validator) }
         { this.renderFundingSection(pcrItem, validator, documents, isIndustrial) }
@@ -27,7 +27,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
             <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.agreementToPcrHeading} content={this.renderDocuments(documents, DocumentDescription.AgreementToPCR)} qa="agreementToPcrDocument" action={this.props.getEditLink("agreementToPcrStep", null)} />
           </ACC.SummaryList>
         </ACC.Section>
-      </React.Fragment>
+      </>
     );
   }
 

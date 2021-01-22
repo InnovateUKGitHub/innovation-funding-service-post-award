@@ -1,4 +1,3 @@
-import React from "react";
 import * as ACC from "@ui/components";
 import { PCRItemForProjectSuspensionDto } from "@framework/dtos";
 import { EditorStatus } from "@ui/redux";

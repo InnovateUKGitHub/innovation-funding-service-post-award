@@ -1,4 +1,3 @@
-import React from "react";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
@@ -198,14 +197,14 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
 
   private renderDocuments(documents: DocumentSummaryDto[]) {
     return (
-      <React.Fragment>
+      <>
         {documents.length ?
           <ACC.Section subtitle={<ACC.Content value={x => x.claimPrepareSummary.documentMessages.newWindow}/>} >
             <ACC.DocumentList documents={documents} qa="claim-documents-list" />
           </ACC.Section>
           : <ACC.ValidationMessage message={<ACC.Content value={x => x.claimPrepareSummary.noDocumentsUploadedMessage}/>} messageType="info" />
         }
-      </React.Fragment>
+      </>
     );
   }
 
@@ -249,9 +248,9 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
           <ACC.SummaryListItem
             label={differenceLabel}
             content={
-              <React.Fragment>
+              <>
                 <ACC.Renderers.Currency value={difference} /> (<ACC.Renderers.Percentage value={differencePercentage} />)
-              </React.Fragment>
+              </>
             }
             qa="differenceEligibleAndForecast"
           />

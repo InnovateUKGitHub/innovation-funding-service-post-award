@@ -17,10 +17,10 @@ class Component extends React.Component<PcrStepProps<PCRItemForAccountNameChange
   render(): React.ReactNode {
     const { documents, documentsEditor } = this.props;
     return (
-      <React.Fragment>
+      <>
         {this.renderFiles(documentsEditor, documents)}
         {this.renderForm(documentsEditor)}
-      </React.Fragment>
+      </>
     );
   }
 

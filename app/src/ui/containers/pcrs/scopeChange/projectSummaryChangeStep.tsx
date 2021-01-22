@@ -1,4 +1,3 @@
-import React from "react";
 import * as ACC from "@ui/components";
 import { PCRItemForScopeChangeDto } from "@framework/dtos";
 import { EditorStatus } from "@ui/redux";

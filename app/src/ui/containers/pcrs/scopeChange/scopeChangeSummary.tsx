@@ -1,4 +1,3 @@
-import React from "react";
 import * as ACC from "../../../components";
 import { SimpleString } from "@ui/components/renderers";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";

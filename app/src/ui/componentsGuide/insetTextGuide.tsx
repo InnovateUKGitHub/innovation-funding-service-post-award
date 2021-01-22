@@ -1,4 +1,3 @@
-import React from "react";
 import { InsetText } from "../components/layout/insetText";
 import { IGuide } from "@framework/types";
 

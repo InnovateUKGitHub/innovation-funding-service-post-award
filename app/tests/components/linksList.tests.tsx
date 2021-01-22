@@ -1,4 +1,4 @@
-import React from "react";
+import {Fragment} from "react";
 // tslint:disable-next-line: import-blacklist
 import Enzyme from "enzyme";
 
@@ -9,7 +9,7 @@ describe("Links Lists", () => {
     const links   = [] as any[];
     const result  = <LinksList links={links} />;
     const wrapper = Enzyme.shallow(result);
-    expect(wrapper.getElement()).toMatchObject(<React.Fragment />);
+    expect(wrapper.getElement()).toMatchObject(<Fragment />);
   });
 
   it("should render given link", () => {
@@ -36,14 +36,14 @@ describe("Links Lists", () => {
     const links   = null as any;
     const result  = <LinksList links={links} />;
     const wrapper = Enzyme.shallow(result);
-    expect(wrapper.getElement()).toMatchObject(<React.Fragment />);
+    expect(wrapper.getElement()).toMatchObject(<Fragment />);
   });
 
   it("should not error for object props", () => {
     const links   = {} as any;
     const result  = <LinksList links={links} />;
     const wrapper = Enzyme.shallow(result);
-    expect(wrapper.getElement()).toMatchObject(<React.Fragment />);
+    expect(wrapper.getElement()).toMatchObject(<Fragment />);
   });
 
 });

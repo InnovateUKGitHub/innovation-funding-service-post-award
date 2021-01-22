@@ -1,4 +1,3 @@
-import React from "react";
 import { Percentage } from "@ui/components/renderers";
 import { IGuide } from "@framework/types";
 

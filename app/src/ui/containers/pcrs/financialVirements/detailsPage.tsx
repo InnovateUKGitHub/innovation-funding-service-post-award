@@ -1,4 +1,3 @@
-import React from "react";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { StoresConsumer } from "@ui/redux";
 import { Pending } from "@shared/pending";

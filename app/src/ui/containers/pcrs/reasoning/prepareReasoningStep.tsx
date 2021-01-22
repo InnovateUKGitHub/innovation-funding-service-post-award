@@ -1,4 +1,3 @@
-import React from "react";
 import { ContainerBase } from "../../containerBase";
 import * as ACC from "../../../components";
 import { PCRDto } from "@framework/dtos/pcrDtos";

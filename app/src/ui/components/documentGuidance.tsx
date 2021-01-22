@@ -1,4 +1,3 @@
-import React from "react";
 import * as ACC from "@ui/components";
 import { Content } from "@content/content";
 import { DocumentMessages } from "@content/messages/documentMessages";
@@ -56,11 +55,11 @@ export const DocumentGuidanceWithContent = (props: DocumentGuidanceWithContentPr
   const { permittedTypes } = stores.config.getConfig().options;
 
   return (
-    <React.Fragment>
+    <>
       <ACC.Content value={x => props.documentMessages(x).header} />
       <ACC.Info summary={<ACC.Content value={x => props.documentMessages(x).infoTitle} />}>
         <ACC.Content value={x => props.documentMessages(x).infoContent(permittedTypes)} />
       </ACC.Info>
-    </React.Fragment>
+    </>
   );
 };

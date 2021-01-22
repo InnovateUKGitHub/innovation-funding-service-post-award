@@ -1,4 +1,3 @@
-import React from "react";
 import { SimpleString } from "./renderers";
 import { ValidationMessage } from "./validationMessage";
 

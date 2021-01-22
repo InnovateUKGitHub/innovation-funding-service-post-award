@@ -1,4 +1,3 @@
-import React from "react";
 import { BaseProps, defineRoute } from "./containerBase";
 import { StandardErrorPage } from "../components/standardErrorPage";
 import { NotFoundErrorPage } from "../components/notFoundErrorPage";

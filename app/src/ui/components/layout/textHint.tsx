@@ -1,4 +1,3 @@
-import React from "react";
 import * as colour from "../../styles/colours";
 
 export interface TextHintReactProps {

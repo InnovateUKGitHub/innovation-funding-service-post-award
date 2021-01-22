@@ -1,5 +1,4 @@
 // tslint:disable:no-duplicate-string
-import React from "react";
 import { ProjectContact } from "../../src/ui/components/projectContact";
 
 // tslint:disable-next-line: import-blacklist

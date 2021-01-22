@@ -1,5 +1,3 @@
-import React from "react";
-
 interface Props {
   partner: { name: string; isWithdrawn: boolean; isLead: boolean } | null | undefined;
   showWithdrawn?: boolean;
@@ -32,5 +30,5 @@ export const PartnerName: React.FunctionComponent<Props> = ({ partner, showIsLea
 
   if (!partner) return null;
 
-  return <React.Fragment>{name}</React.Fragment>;
+  return <>{name}</>;
 };

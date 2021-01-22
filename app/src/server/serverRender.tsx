@@ -1,4 +1,3 @@
-import React from "react";
 import { renderToString } from "react-dom/server";
 import { AnyAction, createStore, Store } from "redux";
 import { constants as routerConstants, Router, State } from "router5";

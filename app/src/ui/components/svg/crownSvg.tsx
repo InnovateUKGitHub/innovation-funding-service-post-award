@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 
 export const SvgCrown = ({colour}: {colour: string}) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132 97" height="30" width="36" version="1.1" className="govuk-modal-dialogue__crown">

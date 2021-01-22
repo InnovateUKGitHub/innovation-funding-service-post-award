@@ -1,4 +1,3 @@
-import React from "react";
 import { ClaimWindow } from "../components/claims/claimWindow";
 import { DateTime } from "luxon";
 import { IGuide } from "@framework/types";

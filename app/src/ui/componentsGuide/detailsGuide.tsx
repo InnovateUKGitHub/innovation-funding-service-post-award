@@ -1,5 +1,4 @@
-import React from "react";
-import {DualDetails, TypedDetails} from "../components/details";
+import { DualDetails, TypedDetails } from "../components/details";
 import { IGuide } from "@framework/types";
 
 export const detailsGuide: IGuide = {

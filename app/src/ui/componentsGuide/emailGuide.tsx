@@ -1,4 +1,3 @@
-import React from "react";
 import { Email } from "../components/renderers";
 import { IGuide } from "@framework/types";
 

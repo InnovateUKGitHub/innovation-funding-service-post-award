@@ -1,4 +1,3 @@
-import React from "react";
 import { Currency } from "@ui/components/renderers";
 import { IGuide } from "@framework/types";
 

@@ -1,4 +1,3 @@
-import React from "react";
 import { PCRItemForPartnerAdditionDto, TypeOfAid } from "@framework/dtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
