@@ -46,7 +46,7 @@ describe("createTableData()", () => {
     getLink: stubLink,
   };
 
-  describe("returns no items", () => {
+  describe("returns items with empty data", () => {
     test("when costCategory has no matching claimDetail", () => {
       const stubData: ClaimProps = {
         ...defaultStubData,
@@ -78,7 +78,7 @@ describe("createTableData()", () => {
       const lastCostCategory = costCategories.length - 1;
       const lineItems = costCategories.slice(0, lastCostCategory);
 
-      expect(lineItems.length).toBe(0);
+      expect(lineItems.length).toBe(1);
       expect(totalNegativeCategories.length).toBe(0);
     });
 
@@ -114,7 +114,7 @@ describe("createTableData()", () => {
       const lastCostCategory = costCategories.length - 1;
       const lineItems = costCategories.slice(0, lastCostCategory);
 
-      expect(lineItems.length).toBe(0);
+      expect(lineItems.length).toBe(1);
       expect(totalNegativeCategories.length).toBe(0);
     });
 
@@ -514,21 +514,33 @@ describe("createTableData()", () => {
       expect(firstLineItem.cost).toStrictEqual(stubData.claimDetails[0]);
     });
 
-    test("with one invalid cost category", () => {
-      const emptyCostCategory = {
-        id: "a060C000000dxWtQAI",
-        name: "",
-        type: 0,
-        competitionType: "",
-        organisationType: "",
-        isCalculated: false,
-        hasRelated: false,
-        description: "",
-        hintText: "",
-      };
+    test("with two cost categories 1 valid 1 with no matching claim details", () => {
       const stubData: ClaimProps = {
         ...defaultStubData,
-        costCategories: [emptyCostCategory],
+        costCategories: [
+          {
+            id: "a060C000000dxWtQAI",
+            name: "Labour",
+            type: 10,
+            competitionType: "CR&D",
+            organisationType: "Industrial",
+            isCalculated: false,
+            hasRelated: false,
+            description: "Labour costs for industrial organisations",
+            hintText: "stub-hintText",
+          },
+          {
+            id: "a060C000000dxWwQAI",
+            name: "Capital usage",
+            type: 40,
+            competitionType: "CR&D",
+            organisationType: "Industrial",
+            isCalculated: false,
+            hasRelated: false,
+            description: "Capital usage costs for industrial organisations",
+            hintText: "stub-hintText",
+          },
+        ],
         claimDetails: [
           {
             costCategoryId: "a060C000000dxWtQAI",
@@ -542,10 +554,34 @@ describe("createTableData()", () => {
       };
       const { costCategories } = createTableData(stubData);
 
-      const [firstLineItem] = costCategories;
+      const lastCostCategory = costCategories.length - 1;
+      const lineItems = costCategories.slice(0, lastCostCategory);
 
-      expect(firstLineItem.isTotal).toBe(true);
-      expect(costCategories.length).toBe(1);
+      expect(lineItems).toHaveLength(2);
+
+      const [row1, row2] = lineItems;
+
+      expect(typeof row1.label).toBe("object");
+      expect(row1.isTotal).toBe(false);
+      expect(row1.differenceInPounds).toBe(6500);
+      expect(row1.diffPercentage).toBe(65);
+      expect(row1.category).toStrictEqual(stubData.costCategories[0]);
+      expect(row1.cost).toStrictEqual(stubData.claimDetails[0]);
+
+      // Note: this should return an empty row data as not claim watch matched
+      expect(typeof row2.label).toBe("object");
+      expect(row2.isTotal).toBe(false);
+      expect(row2.differenceInPounds).toBe(0);
+      expect(row2.diffPercentage).toBe(0);
+      expect(row2.category).toStrictEqual(stubData.costCategories[1]);
+      expect(row2.cost).toStrictEqual({
+        costCategoryId: "",
+        costsClaimedThisPeriod: 0,
+        costsClaimedToDate: 0,
+        forecastThisPeriod: 0,
+        offerTotal: 0,
+        remainingOfferCosts: 0,
+      });
     });
 
     test("with the total row values", () => {
