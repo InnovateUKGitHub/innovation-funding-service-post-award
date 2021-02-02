@@ -8,6 +8,7 @@ import { ForecastDetailsDtosValidator } from "@ui/validators";
 import { IEditorStore, StoresConsumer, useStores } from "@ui/redux";
 import { useContent } from "@ui/hooks";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { getArrayFromPeriod } from "./utils/claimForecastUtils";
 
 export interface ClaimForecastParams {
   projectId: string;
@@ -27,6 +28,7 @@ interface Data {
   editor: Pending<IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>>;
 }
 
+// TODO: ACC-7460
 interface Callbacks {
   onUpdate: (saving: boolean, dto: ForecastDetailsDTO[], link?: ILinkInfo) => void;
 }
@@ -58,6 +60,20 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
   renderContents(combined: ACC.Claims.ForecastData, editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>) {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
 
+    const periodId = combined.project.periodId;
+    const handleSubmit = () => {
+      const forecasts = getArrayFromPeriod(editor.data, periodId);
+      return this.props.onUpdate(
+        true,
+        forecasts,
+        this.props.routes.claimSummary.getLink({
+          projectId: this.props.projectId,
+          partnerId: this.props.partnerId,
+          periodId: this.props.periodId,
+        }),
+      );
+    };
+
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={this.props.routes.claimDocuments.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}><ACC.Content value={x => x.claimForecast.backLink}/></ACC.BackLink>}
@@ -75,7 +91,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
           <Form.Form
             editor={editor}
             onChange={data => this.props.onUpdate(false, data)}
-            onSubmit={() => this.props.onUpdate(true, editor.data, this.props.routes.claimSummary.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId }))}
+            onSubmit={handleSubmit}
             qa="claim-forecast-form"
           >
             <ACC.Claims.ForecastTable data={combined} editor={editor} isSubmitting={true} />
