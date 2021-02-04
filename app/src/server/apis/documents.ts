@@ -24,6 +24,7 @@ import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerD
 import { UploadPartnerDocumentCommand } from "@server/features/documents/uploadPartnerDocument";
 import { DeletePartnerDocumentCommand } from "@server/features/documents/deletePartnerDocument";
 import { ClaimDetailKey, ClaimKey } from "@framework/types";
+import { DeleteProjectDocumentCommand } from "@server/features/documents/deleteProjectDocument";
 
 export interface IDocumentsApi {
   getClaimDocuments: (params: ApiParams<{ projectId: string, partnerId: string, periodId: number, description?: DocumentDescription }>) => Promise<DocumentSummaryDto[]>;
@@ -40,6 +41,7 @@ export interface IDocumentsApi {
   deleteClaimDetailDocument: (params: ApiParams<{ documentId: string, claimDetailKey: ClaimDetailKey }>) => Promise<boolean>;
   deleteClaimDocument: (params: ApiParams<{ documentId: string, claimKey: ClaimKey }>) => Promise<boolean>;
   deletePartnerDocument: (params: ApiParams<{ documentId: string, projectId: string, partnerId: string }>) => Promise<boolean>;
+  deleteProjectDocument: (params: ApiParams<{ projectId: string, documentId: string }>) => Promise<boolean>;
   deleteProjectChangeRequestDocumentOrItemDocument: (params: ApiParams<{documentId: string, projectId: string, projectChangeRequestIdOrItemId: string}>) => Promise<boolean>;
 }
 
@@ -87,6 +89,12 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       "/partners/:projectId/:partnerId/:documentId",
       (p) => ({ documentId: p.documentId, projectId: p.projectId, partnerId: p.partnerId }),
       p => this.deletePartnerDocument(p)
+    );
+
+    this.deleteItem(
+      "/projects/:projectId/:documentId",
+      (p) => ({ projectId: p.projectId, documentId: p.documentId }),
+      p => this.deleteProjectDocument(p)
     );
 
     this.getItems(
@@ -289,6 +297,14 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
   public async deletePartnerDocument(params: ApiParams<{ projectId: string, partnerId: string, documentId: string }>): Promise<boolean> {
     const { documentId, projectId, partnerId } = params;
     const command = new DeletePartnerDocumentCommand(documentId, projectId, partnerId);
+    await contextProvider.start(params).runCommand(command);
+
+    return true;
+  }
+
+  public async deleteProjectDocument(params: ApiParams<{ projectId: string, documentId: string }>): Promise<boolean> {
+    const { projectId , documentId} = params;
+    const command = new DeleteProjectDocumentCommand(projectId, documentId);
     await contextProvider.start(params).runCommand(command);
 
     return true;

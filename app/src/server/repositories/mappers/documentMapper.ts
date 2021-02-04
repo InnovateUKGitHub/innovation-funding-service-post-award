@@ -38,6 +38,14 @@ export class DocumentDescriptionMapper {
     AgreementToPCR: "AgreementToPCR",
     LMCMinutes: "LMCMinutes",
     ScheduleThree: "ScheduleThree",
+    ReviewMeeting: "ReviewMeeting",
+    Plans: "Plans",
+    CollaborationAgreement: "CollaborationAgreement",
+    RiskRegister: "RiskRegister",
+    AnnexThree: "AnnexThree",
+    Presentation: "Presentation",
+    Email: "Email",
+    MeetingAgenda: "MeetingAgenda"
   };
 
   public mapFromSalesforceDocumentDescription = ((documentType: string | null | undefined): DocumentDescription | null => {
@@ -54,6 +62,14 @@ export class DocumentDescriptionMapper {
       case this.types.AgreementToPCR: return DocumentDescription.AgreementToPCR;
       case this.types.LMCMinutes: return DocumentDescription.LMCMinutes;
       case this.types.ScheduleThree: return DocumentDescription.ScheduleThree;
+      case this.types.ReviewMeeting: return DocumentDescription.ReviewMeeting;
+      case this.types.Plans: return DocumentDescription.Plans;
+      case this.types.CollaborationAgreement: return DocumentDescription.CollaborationAgreement;
+      case this.types.RiskRegister: return DocumentDescription.RiskRegister;
+      case this.types.AnnexThree: return DocumentDescription.AnnexThree;
+      case this.types.Presentation: return DocumentDescription.Presentation;
+      case this.types.Email: return DocumentDescription.Email;
+      case this.types.MeetingAgenda: return DocumentDescription.MeetingAgenda;
       default: return null;
     }
   });
@@ -72,6 +88,14 @@ export class DocumentDescriptionMapper {
       case DocumentDescription.AgreementToPCR: return this.types.AgreementToPCR;
       case DocumentDescription.LMCMinutes: return this.types.LMCMinutes;
       case DocumentDescription.ScheduleThree: return this.types.ScheduleThree;
+      case DocumentDescription.ReviewMeeting: return this.types.ReviewMeeting;
+      case DocumentDescription.Plans: return this.types.Plans;
+      case DocumentDescription.CollaborationAgreement: return this.types.CollaborationAgreement;
+      case DocumentDescription.RiskRegister: return this.types.RiskRegister;
+      case DocumentDescription.AnnexThree: return this.types.AnnexThree;
+      case DocumentDescription.Presentation: return this.types.Presentation;
+      case DocumentDescription.Email: return this.types.Email;
+      case DocumentDescription.MeetingAgenda: return this.types.MeetingAgenda;
       default: return null;
     }
   });

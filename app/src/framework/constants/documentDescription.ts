@@ -11,4 +11,12 @@ export enum DocumentDescription {
   AgreementToPCR = 100,
   LMCMinutes = 110,
   ScheduleThree = 120,
+  ReviewMeeting = 130,
+  Plans = 140,
+  CollaborationAgreement = 150,
+  RiskRegister = 160,
+  AnnexThree = 170,
+  Presentation = 180,
+  Email = 190,
+  MeetingAgenda = 200
 }
