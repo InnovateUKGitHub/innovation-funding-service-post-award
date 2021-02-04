@@ -303,7 +303,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
     );
   }
 
-  private filterDowndownList(selectedDocument: MultipleDocumentUploadDto, documents: DropdownOption[]) {
+  private filterDropdownList(selectedDocument: MultipleDocumentUploadDto, documents: DropdownOption[]) {
     if (!documents.length || !selectedDocument.description) return undefined;
 
     const targetId = selectedDocument.description.toString();
@@ -359,7 +359,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
                   name="description"
                   validation={documentsEditor.validator.files}
                   options={docs}
-                  value={selectedOption => this.filterDowndownList(selectedOption, docs)}
+                  value={selectedOption => this.filterDropdownList(selectedOption, docs)}
                   update={(dto, value) => (dto.description = value ? parseInt(value.id, 10) : undefined)}
                 />
               </UploadForm.Fieldset>

@@ -18,6 +18,11 @@ export class DocumentMessages extends ContentBase {
   public readonly claimDocumentsTitle = this.getContent("claim-documents-title");
   public readonly uploadInstruction = this.getContent("upload-instruction");
 
+  public readonly documentsIntroMessage = {
+    storingDocumentsMessage: this.getContent("documentsIntroMessage.storing-documents-message"),
+    notForClaimsMessage: this.getContent("documentsIntroMessage.not-for-claims-message"),
+  };
+
   public readonly backLink = (previousPage: string) => this.getContent("back-link", { previousPage });
 
   public getDocumentUploadedMessage(totalFiles: number) {

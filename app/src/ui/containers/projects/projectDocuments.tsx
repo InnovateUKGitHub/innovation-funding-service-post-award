@@ -7,14 +7,17 @@ import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
 
-import { getFileSize } from "@framework/util";
-import { DocumentSummaryDto, MultipleDocumentUploadDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { DocumentDescriptionDto, DocumentSummaryDto, MultipleDocumentUploadDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { noop } from "@ui/helpers/noop";
+import { DocumentDescription } from "@framework/types";
+import { EnumDocuments } from "../claims/components";
+import { DropdownOption } from "@ui/components";
 
 export interface ProjectDocumentPageParams {
   projectId: string;
 }
 
-interface Data {
+interface ProjectDocumentData {
   project: Pending<ProjectDto>;
   documents: Pending<DocumentSummaryDto[]>;
   editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
@@ -29,18 +32,23 @@ interface CombinedData {
 
 interface Callbacks {
   onChange: (save: boolean, dto: MultipleDocumentUploadDto) => void;
+  onDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
-interface State {
-  filterBoxText: string | null;
+interface ProjectDocumentState {
+  documentFilter: string;
 }
 
-class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPageParams, Data, Callbacks, State> {
-
-  constructor(props: ContainerProps<ProjectDocumentPageParams, Data, Callbacks>) {
+class ProjectDocumentsComponent extends ContainerBaseWithState<
+  ProjectDocumentPageParams,
+  ProjectDocumentData,
+  Callbacks,
+  ProjectDocumentState
+> {
+  constructor(props: ContainerProps<ProjectDocumentPageParams, ProjectDocumentData, Callbacks>) {
     super(props);
     this.state = {
-      filterBoxText: null
+      documentFilter: "",
     };
   }
 
@@ -54,6 +62,25 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)} />;
   }
 
+  private filterDropdownList(selectedDocument: MultipleDocumentUploadDto, documents: DropdownOption[]) {
+    if (!documents.length || !selectedDocument.description) return undefined;
+
+    const targetId = selectedDocument.description.toString();
+
+    return documents.find(x => x.id === targetId);
+  }
+
+  private readonly allowedProjectDocuments: DocumentDescription[] = [
+    DocumentDescription.ReviewMeeting,
+    DocumentDescription.Plans,
+    DocumentDescription.CollaborationAgreement,
+    DocumentDescription.RiskRegister,
+    DocumentDescription.AnnexThree,
+    DocumentDescription.Presentation,
+    DocumentDescription.Email,
+    DocumentDescription.MeetingAgenda,
+  ];
+
   private renderContents({ project, documents, editor }: CombinedData) {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
@@ -66,95 +93,144 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<ProjectDocumentPa
         project={project}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
+        <>
+          <ACC.Renderers.SimpleString>
+            <ACC.Content
+              value={x => x.projectDocuments.documentMessages.documentsIntroMessage.storingDocumentsMessage}
+            />
+          </ACC.Renderers.SimpleString>
+          <ACC.Renderers.SimpleString>
+            <ACC.Content value={x => x.projectDocuments.documentMessages.documentsIntroMessage.notForClaimsMessage} />
+          </ACC.Renderers.SimpleString>
+        </>
         <ACC.Section titleContent={x => x.projectDocuments.documentMessages.uploadTitle}>
-          <UploadForm.Form
-            enctype="multipart"
-            editor={editor}
-            onChange={dto => this.props.onChange(false, dto)}
-            onSubmit={() => this.props.onChange(true, editor.data)}
-            qa="projectDocumentUpload"
-          >
-            <UploadForm.Fieldset>
-              <ACC.Renderers.SimpleString>
-                <ACC.Content value={x => x.projectDocuments.documentMessages.uploadInstruction} />
-              </ACC.Renderers.SimpleString>
-              <ACC.DocumentGuidance />
-              <UploadForm.MulipleFileUpload
-                labelContent={x => x.projectDocuments.documentLabels.uploadInputLabel}
-                name="attachment"
-                labelHidden={true}
-                value={data => data.files}
-                update={(dto, files) => (dto.files = files || [])}
-                validation={editor.validator.files}
-              />
-            </UploadForm.Fieldset>
-            <UploadForm.Submit styling="Secondary">
-              <ACC.Content value={x => x.projectDocuments.documentMessages.uploadTitle} />
-            </UploadForm.Submit>
-          </UploadForm.Form>
+          <EnumDocuments documentsToCheck={this.allowedProjectDocuments}>
+            {docs => (
+              <UploadForm.Form
+                enctype="multipart"
+                editor={editor}
+                onChange={dto => this.props.onChange(false, dto)}
+                onSubmit={() => this.props.onChange(true, editor.data)}
+                qa="projectDocumentUpload"
+              >
+                <UploadForm.Fieldset>
+                  <ACC.DocumentGuidance />
+
+                  <UploadForm.MulipleFileUpload
+                    labelContent={x => x.projectDocuments.documentLabels.uploadInputLabel}
+                    name="attachment"
+                    labelHidden={true}
+                    value={data => data.files}
+                    update={(dto, files) => (dto.files = files || [])}
+                    validation={editor.validator.files}
+                  />
+
+                  <UploadForm.DropdownList
+                    labelContent={x => x.claimDocuments.descriptionLabel}
+                    labelHidden={false}
+                    hasEmptyOption={true}
+                    placeholder="-- No description --"
+                    name="description"
+                    validation={editor.validator.files}
+                    options={docs}
+                    value={selectedOption => this.filterDropdownList(selectedOption, docs)}
+                    update={(dto, value) => (dto.description = value ? parseInt(value.id, 10) : undefined)}
+                  />
+                </UploadForm.Fieldset>
+
+                <UploadForm.Submit styling="Secondary">
+                  <ACC.Content value={x => x.projectDocuments.documentMessages.uploadDocumentsLabel} />
+                </UploadForm.Submit>
+                {this.renderDocumentsSection(documents, editor)}
+              </UploadForm.Form>
+            )}
+          </EnumDocuments>
         </ACC.Section>
-        {this.renderDocumentsSection(documents)}
       </ACC.Page>
     );
   }
 
-  private renderDocumentsSection(documents: DocumentSummaryDto[]) {
-    const filterText = this.state.filterBoxText;
-    const documentsToDisplay = filterText
-      ? documents.filter(document => {
-        const regex = new RegExp(filterText, "gi");
-        return regex.test(document.fileName);
-      })
-      : documents;
+  private renderDocumentsSection(
+    documents: DocumentSummaryDto[],
+    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
+  ) {
+    const { isClient } = this.props;
+    const documentFilterText = this.state.documentFilter;
+    const hasTextToFilter = !!documentFilterText.length;
 
-    if (documents.length === 0) {
-      return <ACC.ValidationMessage qa={"noDocuments"} message={<ACC.Content value={x => x.projectDocuments.documentMessages.noDocumentsUploaded} />} messageType="info" />;
-    }
+    const documentsToDisplay =
+      isClient && hasTextToFilter
+        ? documents.filter(document => new RegExp(documentFilterText, "gi").test(document.fileName))
+        : documents;
 
-    if (documentsToDisplay.length === 0) {
-      return (
-        <React.Fragment>
-          {this.renderDocumentsFilter()}
+    return (
+      <>
+        {isClient && this.renderDocumentsFilter(documents)}
+
+        {!documentsToDisplay.length && !!documents.length ? (
           <ACC.Renderers.SimpleString qa={"noDocuments"}>
             <ACC.Content value={x => x.projectDocuments.noMatchingDocumentsMessage} />
           </ACC.Renderers.SimpleString>
-        </React.Fragment>
+        ) : (
+          this.renderDocumentsTable(documentsEditor, documentsToDisplay)
+        )}
+      </>
+    );
+  }
+
+  private renderDocumentsFilter(documents: DocumentSummaryDto[]) {
+    if (documents.length === 0) {
+      return (
+        <ACC.ValidationMessage
+          qa={"noDocuments"}
+          message={<ACC.Content value={x => x.projectDocuments.documentMessages.noDocumentsUploaded} />}
+          messageType="info"
+        />
       );
     }
 
+    const FilterForm = ACC.TypedForm<ProjectDocumentState>();
+
+    const handleOnSearch = ({ documentFilter }: ProjectDocumentState) => {
+      const filteredQuery = documentFilter ? documentFilter.trim() : "";
+      const newValue = !!filteredQuery.length ? filteredQuery : "";
+
+      this.setState({ documentFilter: newValue });
+    };
+
     return (
-      <React.Fragment>
-        {this.renderDocumentsFilter()}
-        {this.renderDocumentsTable(documentsToDisplay)}
-      </React.Fragment>
+      <>
+        <ACC.Renderers.SimpleString>
+          {<ACC.Content value={x => x.projectDocuments.documentMessages.newWindow} />}
+        </ACC.Renderers.SimpleString>
+
+        <FilterForm.Form data={this.state} onSubmit={noop} onChange={handleOnSearch} qa="document-search-form">
+          <FilterForm.Search
+            name="document-filter"
+            labelHidden={true}
+            value={x => x.documentFilter}
+            update={(x, v) => (x.documentFilter = v || "")}
+            // TODO
+            placeholder={"Search documents"}
+          />
+        </FilterForm.Form>
+      </>
     );
   }
 
-  private renderDocumentsFilter() {
-    if (!this.props.isClient) return null;
-    const FilterForm = ACC.TypedForm<{ filterBoxText: string | null }>();
-
-    return (
-      <FilterForm.Form data={this.state} onSubmit={() => { return; }} onChange={x => this.setState(x)} qa="document-search-form">
-        <FilterForm.Search name="document-filter" labelHidden={true} value={x => x.filterBoxText} update={(x, v) => x.filterBoxText = v} placeholder="Search documents" />
-      </FilterForm.Form>
-    );
-  }
-
-  private renderDocumentsTable(documentsToDisplay: DocumentSummaryDto[]) {
-    const ProjectDocumentsTable = ACC.TypedTable<DocumentSummaryDto>();
-    return (
-      <ProjectDocumentsTable.Table data={documentsToDisplay} qa="project-documents">
-        <ProjectDocumentsTable.Custom headerContent={x => x.projectDocuments.documentLabels.fileNameLabel} qa="fileName" value={x => this.renderDocumentName(x)} />
-        <ProjectDocumentsTable.ShortDate headerContent={x => x.projectDocuments.documentLabels.dateUploadedLabel} qa="dateUploaded" value={x => x.dateCreated} />
-        <ProjectDocumentsTable.Custom headerContent={x => x.projectDocuments.documentLabels.fileSizeLabel} qa="fileSize" classSuffix="numeric" value={x => getFileSize(x.fileSize)} />
-        <ProjectDocumentsTable.String headerContent={x => x.projectDocuments.documentLabels.uploadedByLabel} qa="uploadedBy" value={x => x.uploadedBy} />
-      </ProjectDocumentsTable.Table>
-    );
-  }
-
-  private renderDocumentName(document: DocumentSummaryDto) {
-    return <a target={"_blank"} href={document.link} className="govuk-link">{document.fileName}</a>;
+  private renderDocumentsTable(
+    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
+    documents: DocumentSummaryDto[],
+  ) {
+    return documents.length ? (
+      <ACC.Section>
+        <ACC.DocumentTableWithDelete
+          onRemove={document => this.props.onDelete(documentsEditor.data, document)}
+          documents={documents}
+          qa="claim-supporting-documents"
+        />
+      </ACC.Section>
+    ) : null;
   }
 }
 
@@ -174,6 +250,9 @@ const ProjectDocumentsContainer = (props: ProjectDocumentPageParams & BaseProps)
           x.projectDocuments.documentMessages.getDocumentUploadedMessage(dto.files.length),
         );
         stores.projectDocuments.updateProjectDocumentsEditor(saving, props.projectId, dto, successMessage);
+      }}
+      onDelete={(dto, document) => {
+        stores.projectDocuments.deleteProjectDocument(props.projectId, dto, document);
       }}
     />
   );
