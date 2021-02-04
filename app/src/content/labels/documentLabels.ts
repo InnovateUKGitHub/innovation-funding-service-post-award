@@ -32,6 +32,22 @@ export class DocumentLabels extends ContentBase {
         return this.getContent("description.lmcMinutes");
       case DocumentDescription.ScheduleThree:
         return this.getContent("description.scheduleThree");
+      case DocumentDescription.ReviewMeeting:
+        return this.getContent("description.reviewMeeting");
+      case DocumentDescription.Plans:
+        return this.getContent("description.plans");
+      case DocumentDescription.CollaborationAgreement:
+        return this.getContent("description.collaborationAgreement");
+      case DocumentDescription.RiskRegister:
+        return this.getContent("description.riskRegister");
+      case DocumentDescription.AnnexThree:
+        return this.getContent("description.annexThree");
+      case DocumentDescription.Presentation:
+        return this.getContent("description.presentation");
+      case DocumentDescription.Email:
+        return this.getContent("description.email");
+      case DocumentDescription.MeetingAgenda:
+        return this.getContent("description.meetingAgenda");
       default:
         return this.getContent("description.unknown");
     }
