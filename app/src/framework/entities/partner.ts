@@ -28,7 +28,7 @@ export interface Partner {
   auditReportFrequency: string;
   auditReportFrequencyName: string;
   totalPrepayment: number;
-  postcode: string;
+  postcode: string | null;
   newForecastNeeded: boolean;
 
   // project setup
