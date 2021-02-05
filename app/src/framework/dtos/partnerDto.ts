@@ -80,7 +80,7 @@ export interface PartnerDto {
   id: string;
   type: string;
 
-  postcode: string;
+  postcode: string | null;
   isLead: boolean;
   isWithdrawn: boolean;
   projectRoleName: string;

@@ -6,6 +6,7 @@ import { ValidationError } from "@server/features/common";
 import { BankCheckStatusMapper, BankDetailsTaskStatusMapper, PartnerSpendProfileStatusMapper, PartnerStatusMapper } from "@server/features/partners/mapToPartnerDto";
 import { Partner } from "@framework/entities";
 
+// tslint:disable-next-line: no-big-function
 describe("updatePartnerCommand", () => {
   const setup = (updates?: Partial<Partner>) => {
     const context = new TestContext();
@@ -30,24 +31,84 @@ describe("updatePartnerCommand", () => {
     });
     return { context, partner };
   };
-  it("correctly updates the partner's postcode when the command is run", async () => {
-    const { context, partner } = setup({
-      participantStatus: new PartnerStatusMapper().mapToSalesforce(PartnerStatus.Pending) || "",
-      spendProfileStatus: new PartnerSpendProfileStatusMapper().mapToSalesforce(SpendProfileStatus.Complete) || "",
-      bankDetailsTaskStatus: new BankDetailsTaskStatusMapper().mapToSalesforce(BankDetailsTaskStatus.Complete) || "",
+
+  describe("validates a postcode", () => {
+    const postcodeSetup = () =>
+      setup({
+        participantStatus: new PartnerStatusMapper().mapToSalesforce(PartnerStatus.Pending) || "",
+        spendProfileStatus: new PartnerSpendProfileStatusMapper().mapToSalesforce(SpendProfileStatus.Complete) || "",
+        bankDetailsTaskStatus: new BankDetailsTaskStatusMapper().mapToSalesforce(BankDetailsTaskStatus.Complete) || "",
+      });
+
+    it("correctly updates partner when null value is passed", async () => {
+      const { context, partner } = postcodeSetup();
+
+      const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
+
+      const command = new UpdatePartnerCommand(expected);
+      await expect(context.runCommand(command)).resolves.toBe(true);
+
+      const result = await context.runQuery(new GetByIdQuery(partner.id));
+
+      expect(result).not.toBe(null);
+      expect(result.postcode).toEqual(expected.postcode);
     });
 
-    const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
+    it("correctly updates partner when a valid value is passed", async () => {
+      const { context, partner } = postcodeSetup();
 
-    const command = new UpdatePartnerCommand(expected);
-    await expect(context.runCommand(command)).resolves.toBe(true);
-    expected.partnerStatus = PartnerStatus.Active;
-    await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
-    expected.postcode = "BS1 1UU";
-    await context.runCommand(command);
-    const result = await context.runQuery(new GetByIdQuery(partner.id));
-    expect(result).not.toBe(null);
-    expect(result.postcode).toEqual(expected.postcode);
+      const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
+      expected.postcode = "BS1 1UU";
+
+      const command = new UpdatePartnerCommand(expected);
+
+      await expect(context.runCommand(command)).resolves.toBe(true);
+
+      const result = await context.runQuery(new GetByIdQuery(partner.id));
+
+      expect(result).not.toBe(null);
+      expect(result.postcode).toEqual(expected.postcode);
+    });
+
+    it("correctly throws and error when trying to update an empty postcode when a valid postcode is present", async () => {
+      const { context, partner } = postcodeSetup();
+
+      const initialStubPostcode = "BS1 1UU";
+
+      const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
+      expected.postcode = initialStubPostcode;
+
+      const command = new UpdatePartnerCommand(expected);
+      await expect(context.runCommand(command)).resolves.toBe(true);
+
+      expected.partnerStatus = PartnerStatus.Active;
+      expected.postcode = "";
+      await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+
+      const result = await context.runQuery(new GetByIdQuery(partner.id));
+
+      expect(result).not.toBe(null);
+      expect(result.postcode).toEqual(initialStubPostcode);
+    });
+
+    it("throws error when command receives an empty postcode", async () => {
+      const { context, partner } = postcodeSetup();
+
+      const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
+      const command = new UpdatePartnerCommand(expected);
+
+      expected.partnerStatus = PartnerStatus.Active;
+      expected.postcode = "";
+
+      await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+      expected.postcode = "BS1 1UU";
+
+      await context.runCommand(command);
+      const result = await context.runQuery(new GetByIdQuery(partner.id));
+
+      expect(result).not.toBe(null);
+      expect(result.postcode).toEqual(expected.postcode);
+    });
   });
 
   it("updates validation check fields when validation fails", async () => {

@@ -82,9 +82,11 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
         () => this.validateBankDetailsTaskStatus(),
       ));
 
-    public postcode = this.model.partnerStatus === PartnerStatus.Active ? Validation.all(this,
-        () => Validation.required(this, this.model.postcode, "Postcode field cannot be empty")
-    ) : Validation.valid(this);
+    public postcode = Validation.required(
+      this,
+      typeof this.model.postcode === "string" ? this.model.postcode : false,
+      "Postcode field cannot be empty",
+    );
 
     public bankCheckValidation = this.conditionallyValidateBankDetails(() => Validation.isFalse(this, !!this.options.failBankValidation, "Check your sort code and account number."));
 
