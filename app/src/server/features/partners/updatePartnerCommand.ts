@@ -47,7 +47,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     await context.repositories.partners.update({
       ...update,
       Id: this.partner.id,
-      Acc_Postcode__c: this.partner.postcode,
+      Acc_Postcode__c: this.partner.postcode || undefined,
       Acc_NewForecastNeeded__c: isBoolean(this.partner.newForecastNeeded) ? this.partner.newForecastNeeded : undefined,
       Acc_ParticipantStatus__c: new PartnerStatusMapper().mapToSalesforce(this.partner.partnerStatus),
       Acc_BankCheckCompleted__c: new BankDetailsTaskStatusMapper().mapToSalesforce(this.partner.bankDetailsTaskStatus),
