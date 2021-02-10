@@ -582,12 +582,34 @@
     },
     "pcr-create": {
       "title": "Start a new request",
-      "guidance-message": "Before you submit, you must:\n* ask all project partners to approve the changes\n* discuss this request with your monitoring officer",
+      "guidance-intro-message": "Before you submit, you must:",
+      "guidance-list": {
+        "row-1": "Ask all project partners to approve the changes",
+        "row-2": "Discuss this request with your monitoring officer"
+      },
       "select-request-types-title": "Select request types",
       "select-types-hint": "You can select more than one.",
       "back-link": "Back to project change requests",
       "button-create-request": "Create request",
-      "button-cancel-request": "Cancel"
+      "button-cancel-request": "Cancel",
+      "learn-more-title": "Learn more about request types",
+      "reallocate-costs-title": "Reallocate project costs",
+      "reallocate-costs-message": "This allows you to move costs from one category to another or from one partner to another.",
+      "remove-partner-title": "Remove a partner",
+      "remove-partner-message": "Use this when a partner is leaving the project and is ready to submit their final claim.",
+      "add-partner-title": "Add a partner",
+      "add-partner-message": "This allows you to add a new partner to a project. When adding a new partner to replace an existing one, also use 'Remove a partner' to remove the existing one.",
+      "change-scope-title": "Change project scope",
+      "change-scope-message": "Use this to update the public project description and the internal project summary.",
+      "change-duration-title": "Change project duration",
+      "change-duration-message": "You can extend a project by adding extra time. You cannot make a project shorter.",
+      "change-partners-name-title": "Change partner's name",
+      "change-partners-name-message": "Use when a partner organisation's name has changed. If a partner is being replaced, use 'Add a partner' and 'Remove a partner'.",
+      "put-project-on-hold-title": "Put a project on hold",
+      "put-project-on-hold-message": "This allows you to suspend a project for a specific period. You cannot submit any claims or raise project change requests when the project is on hold.",
+      "end-project-early-title": "End project early",
+      "end-project-early-message": "Use this when you believe you are entering your final claim period. Make a note to say your project is ending when you submit this request. You will then enter your final claim period and any other future claim periods will close."
+
     },
     "pcr-time-extension-step": {
       "existing-project-heading": "Existing project details",
