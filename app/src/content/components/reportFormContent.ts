@@ -1,6 +1,4 @@
 import { ContentBase } from "../contentBase";
-import { DocumentLabels } from "@content/labels/documentLabels";
-import { DocumentMessages } from "@content/messages/documentMessages";
 
 export class ReportFormContent extends ContentBase {
   constructor(parent: ContentBase, protected competitionType?: string) {

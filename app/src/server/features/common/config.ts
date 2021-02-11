@@ -140,25 +140,39 @@ const cookieKey = process.env.COOKIE_KEY!;
 
 const standardOverheadRate = parseFloat(process.env.STANDARD_OVERHEAD_RATE!) || 20;
 
-let permittedFileTypes = process.env.PERMITTED_FILE_TYPES && process.env.PERMITTED_FILE_TYPES
-    .split(",")
-    .map(x => x.trim())
-    .filter(x => !!x);
+let permittedFileTypes: IAppOptions["permittedFileTypes"] = process.env.PERMITTED_FILE_TYPES
+  ? process.env.PERMITTED_FILE_TYPES.split(",")
+      .map(x => x.trim())
+      .filter(x => !!x)
+  : [];
 
-if (!permittedFileTypes || !permittedFileTypes.length) {
-    permittedFileTypes = ["pdf", "xps", "doc", "docx", "rdf", "txt", "csv", "odt", "ppt", "pptx", "odp", "xls", "xlsx", "ods", "jpg", "jpeg", "png"];
+const pdfTypes = ["pdf", "xps"];
+const textTypes = ["doc", "docx", "rdf", "txt", "csv", "odt"];
+const presentationTypes = ["ppt", "pptx", "odp"];
+const spreadsheetTypes = ["xls", "xlsx", "ods"];
+const imageTypes = ["jpg", "jpeg", "png", "odg"];
+
+if (!permittedFileTypes.length) {
+  permittedFileTypes = [...pdfTypes, ...textTypes, ...presentationTypes, ...spreadsheetTypes, ...imageTypes];
 }
 
 const parsedBankCheckValidationRetries = parseInt(process.env.BANK_CHECK_VALIDATION_RETRIES!, 10);
 const options: IAppOptions = {
-    bankCheckAddressScorePass: parseInt(process.env.BANK_CHECK_ADDRESS_SCORE_PASS!, 10) || 6,
-    bankCheckValidationRetries: isNumber(parsedBankCheckValidationRetries) ? parsedBankCheckValidationRetries : 1,
-    bankCheckCompanyNameScorePass: parseInt(process.env.BANK_CHECK_COMPANY_NAME_SCORE_PASS!, 10) || 6,
-    permittedFileTypes,
-    maxUploadFileCount: parseInt(process.env.MAX_UPLOAD_FILE_COUNT!, 10) || 10,
-    maxFileSize: parseInt(process.env.MAX_FILE_SIZE_IN_BYTES!, 10) || 10485760, // 10MB
-    standardOverheadRate: parseFloat(process.env.STANDARD_OVERHEAD_RATE!) || 20,
-    numberOfProjectsToSearch: parseInt(process.env.FEATURE_SEARCH_NUMBER_PROJECTS!, 10) || 3,
+  bankCheckAddressScorePass: parseInt(process.env.BANK_CHECK_ADDRESS_SCORE_PASS!, 10) || 6,
+  bankCheckValidationRetries: isNumber(parsedBankCheckValidationRetries) ? parsedBankCheckValidationRetries : 1,
+  bankCheckCompanyNameScorePass: parseInt(process.env.BANK_CHECK_COMPANY_NAME_SCORE_PASS!, 10) || 6,
+  permittedFileTypes,
+  permittedTypes: {
+    pdfTypes,
+    textTypes,
+    presentationTypes,
+    spreadsheetTypes,
+    imageTypes,
+  },
+  maxUploadFileCount: parseInt(process.env.MAX_UPLOAD_FILE_COUNT!, 10) || 10,
+  maxFileSize: parseInt(process.env.MAX_FILE_SIZE_IN_BYTES!, 10) || 10485760, // 10MB
+  standardOverheadRate: parseFloat(process.env.STANDARD_OVERHEAD_RATE!) || 20,
+  numberOfProjectsToSearch: parseInt(process.env.FEATURE_SEARCH_NUMBER_PROJECTS!, 10) || 3,
 };
 
 const googleTagManagerCode = process.env.GOOGLE_TAG_MANAGER_CODE!;

@@ -3,6 +3,7 @@ import * as ACC from "@ui/components";
 import { Content } from "@content/content";
 import { DocumentMessages } from "@content/messages/documentMessages";
 import { useContent } from "@ui/hooks";
+import { useStores } from "@ui/redux";
 
 export const DocumentGuidance = (props: {}) => {
   const { getContent } = useContent();
@@ -51,11 +52,14 @@ interface DocumentGuidanceWithContentProps {
 }
 
 export const DocumentGuidanceWithContent = (props: DocumentGuidanceWithContentProps) => {
+  const stores = useStores();
+  const { permittedTypes } = stores.config.getConfig().options;
+
   return (
     <React.Fragment>
       <ACC.Content value={x => props.documentMessages(x).header} />
       <ACC.Info summary={<ACC.Content value={x => props.documentMessages(x).infoTitle} />}>
-        <ACC.Content value={x => props.documentMessages(x).infoContent} />
+        <ACC.Content value={x => props.documentMessages(x).infoContent(permittedTypes)} />
       </ACC.Info>
     </React.Fragment>
   );
