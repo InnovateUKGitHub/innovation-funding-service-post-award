@@ -1,3 +1,4 @@
+import { IAppOptions } from "@framework/types/IAppOptions";
 import { ContentBase } from "../contentBase";
 
 export class DocumentMessages extends ContentBase {
@@ -7,7 +8,9 @@ export class DocumentMessages extends ContentBase {
 
   public readonly header = this.getContent("header", { markdown: true });
   public readonly infoTitle = this.getContent("infoTitle");
-  public readonly infoContent = this.getContent("infoContent", { markdown: true });
+  public readonly infoContent = ( permittedTypes: IAppOptions["permittedTypes"]) => {
+    return this.getContent("infoContent", { markdown: true, ...permittedTypes });
+  }
   public readonly noDocumentsUploaded = this.getContent("no-documents-uploaded");
   public readonly documentsNotApplicable = this.getContent("documents-not-applicable");
   public readonly newWindow = this.getContent("new-window");
