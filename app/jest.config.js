@@ -7,6 +7,7 @@ module.exports = {
   coveragePathIgnorePatterns: ["/node_modules/"],
   collectCoverageFrom: [
     "src/server/features/**/*.{ts,tsx}",
+    "src/framework/util/*.{ts,tsx,json}",
     "src/ui/containers/**/*.{ts,tsx,json}",
     "src/ui/components/**/*.{ts,tsx,json}",
     "src/ui/hooks/**/*.{ts,tsx,json}",
