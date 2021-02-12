@@ -9,7 +9,12 @@ export class FinancialVirementEditPartnerLevelContent extends ContentPageBase {
 
   public readonly saveButton = this.getContent("save-button");
 
-  public readonly remainingGrantInfo = this.getContent("remaining-grant-info");
+  public readonly remainingGrantInfo = {
+    intro: this.getContent("remaining-grant-info.intro"),
+    checkRules: this.getContent("remaining-grant-info.check-rules"),
+    remainingGrant: this.getContent("remaining-grant-info.remaining-grant"),
+    fundingLevel: this.getContent("remaining-grant-info.funding-level"),
+  };
 
   public readonly labels = new FinancialVirementLabels(this, this.competitionType);
 }
