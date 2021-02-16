@@ -26,6 +26,13 @@
       "claims-messages": {
         "iar-required": "You must attach a schedule 3 to this claim.",
         "final-claim-guidance": "You need to complete the following tasks before we can approve your final claim and make your last payment: \n\n-   upload a Schedule 3 \n-   upload the LMC meeting's minutes or virtual approval\n-   complete your final report"
+      },
+      "financial-virement-edit": {
+        "edit-page-message": {
+          "intro": "The knowledge base partner may vire funds between the 'Travel and subsistence' and 'Consumables' cost categories. Funds can also be vired out of these 2 categories into the 'Associate development' category. Funds cannot be vired out of the 'Associate development' category.",
+          "virements": "Virements are subject to approval by the Local Management Committee (LMC).",
+          "requests": "Requests for virements must be submitted online using the Innovation Funding Service and must be approved before the related costs are incurred. These requests must not be submitted after the project partnership has ended."
+        }
       }
     }
   }
