@@ -1,10 +1,10 @@
 import _merge from "lodash.merge";
 
-import { ClaimDto, CostsSummaryForPeriodDto, PartnerDto, ProjectDto } from "@framework/dtos";
+import { ClaimDto, CostsSummaryForPeriodDto, PartnerDto, PCRSummaryDto, ProjectDto } from "@framework/dtos";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { ILinkInfo } from "@framework/types";
 
-type CreateDTO<DTO> = (objectToMerge?: DTO) => DTO;
+type CreateDTO<DTO> = (objectToMerge?: Partial<DTO>) => DTO;
 
 export const createProjectDto: CreateDTO<ProjectDto> = (objectToMerge?) => {
   const stubProject: ProjectDto = {
@@ -1219,6 +1219,25 @@ export const createClaim: CreateDTO<ClaimDto> = (objectToMerge?) => {
   };
 
   return _merge(stubClaim, objectToMerge);
+};
+
+export const createPCRSummaryDto: CreateDTO<PCRSummaryDto> = (objectToMerge?) => {
+  const stubPCRSummaryDto = {
+    id: "a0G0C000004OH0sUAG",
+    requestNumber: 12,
+    started: new Date(),
+    lastUpdated: new Date(),
+    status: 1,
+    statusName: "Draft",
+    projectId: "a0E0C000001zU2tUAE",
+    items: [
+      { type: 60, typeName: "Reallocate project costs", shortName: "Move partners’ costs" },
+      { type: 30, typeName: "Remove a partner", shortName: "Remove partner" },
+    ],
+  };
+
+  // Note: Don't worry about deep merge, we want to override `items` if needed 👍🏻
+  return { ...stubPCRSummaryDto, ...objectToMerge };
 };
 
 export const createClaimLink = () => (): ILinkInfo => ({
