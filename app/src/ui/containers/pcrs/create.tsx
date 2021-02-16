@@ -26,58 +26,32 @@ interface Callbacks {
 export function useCreatePcrContent() {
   const { getContent } = useContent();
 
-  const learnMoreAboutTitle = getContent(x => x.pcrCreate.learnMoreAboutTitle);
-  const reallocateCostsTitle = getContent(x => x.pcrCreate.reallocateCostsTitle);
-  const reallocateCostsMessage = getContent(x => x.pcrCreate.reallocateCostsMessage);
-  const removePartnerTitle = getContent(x => x.pcrCreate.removePartnerTitle);
-  const removePartnerMessage = getContent(x => x.pcrCreate.removePartnerMessage);
-  const addPartnerTitle = getContent(x => x.pcrCreate.addPartnerTitle);
-  const addPartnerMessage = getContent(x => x.pcrCreate.addPartnerMessage);
-  const changeScopeTitle = getContent(x => x.pcrCreate.changeScopeTitle);
-  const changeScopeMessage = getContent(x => x.pcrCreate.changeScopeMessage);
-  const changeDurationTitle = getContent(x => x.pcrCreate.changeDurationTitle);
-  const changeDurationMessage = getContent(x => x.pcrCreate.changeDurationMessage);
-  const changePartnersNameTitle = getContent(x => x.pcrCreate.changePartnersNameTitle);
-  const changePartnersNameMessage = getContent(x => x.pcrCreate.changePartnersNameMessage);
-  const putProjectOnHoldTitle = getContent(x => x.pcrCreate.putProjectOnHoldTitle);
-  const putProjectOnHoldMessage = getContent(x => x.pcrCreate.putProjectOnHoldMessage);
-  const endProjectEarlyTitle = getContent(x => x.pcrCreate.endProjectEarlyTitle);
-  const endProjectEarlyMessage = getContent(x => x.pcrCreate.endProjectEarlyMessage);
-  const selectTypesHint = getContent(x => x.pcrCreate.selectTypesHint);
-  const backLink = getContent(x => x.pcrCreate.backLink);
-  const selectRequestTypesTitle = getContent(x => x.pcrCreate.selectRequestTypesTitle);
-  const createRequestButton = getContent(x => x.pcrCreate.createRequestButton);
-  const cancelRequestButton = getContent(x => x.pcrCreate.cancelRequestButton);
-  const guidanceIntroMessage = getContent(x => x.pcrCreate.guidanceIntroMessage);
-  const guidanceListRow1 = getContent(x => x.pcrCreate.guidanceListRow1);
-  const guidanceListRow2 = getContent(x => x.pcrCreate.guidanceListRow2);
-
   return {
-    learnMoreAboutTitle,
-    reallocateCostsTitle,
-    reallocateCostsMessage,
-    removePartnerTitle,
-    removePartnerMessage,
-    addPartnerTitle,
-    addPartnerMessage,
-    changeScopeTitle,
-    changeScopeMessage,
-    changeDurationTitle,
-    changeDurationMessage,
-    changePartnersNameTitle,
-    changePartnersNameMessage,
-    putProjectOnHoldTitle,
-    putProjectOnHoldMessage,
-    endProjectEarlyTitle,
-    endProjectEarlyMessage,
-    selectTypesHint,
-    backLink,
-    selectRequestTypesTitle,
-    createRequestButton,
-    cancelRequestButton,
-    guidanceIntroMessage,
-    guidanceListRow1,
-    guidanceListRow2
+  learnMoreAboutTitle: getContent(x => x.pcrCreate.learnMoreAboutTitle),
+  reallocateCostsTitle: getContent(x => x.pcrCreate.reallocateCostsTitle),
+  reallocateCostsMessage: getContent(x => x.pcrCreate.reallocateCostsMessage),
+  removePartnerTitle: getContent(x => x.pcrCreate.removePartnerTitle),
+  removePartnerMessage: getContent(x => x.pcrCreate.removePartnerMessage),
+  addPartnerTitle: getContent(x => x.pcrCreate.addPartnerTitle),
+  addPartnerMessage: getContent(x => x.pcrCreate.addPartnerMessage),
+  changeScopeTitle: getContent(x => x.pcrCreate.changeScopeTitle),
+  changeScopeMessage: getContent(x => x.pcrCreate.changeScopeMessage),
+  changeDurationTitle: getContent(x => x.pcrCreate.changeDurationTitle),
+  changeDurationMessage: getContent(x => x.pcrCreate.changeDurationMessage),
+  changePartnersNameTitle: getContent(x => x.pcrCreate.changePartnersNameTitle),
+  changePartnersNameMessage: getContent(x => x.pcrCreate.changePartnersNameMessage),
+  putProjectOnHoldTitle: getContent(x => x.pcrCreate.putProjectOnHoldTitle),
+  putProjectOnHoldMessage: getContent(x => x.pcrCreate.putProjectOnHoldMessage),
+  endProjectEarlyTitle: getContent(x => x.pcrCreate.endProjectEarlyTitle),
+  endProjectEarlyMessage: getContent(x => x.pcrCreate.endProjectEarlyMessage),
+  selectTypesHint: getContent(x => x.pcrCreate.selectTypesHint),
+  backLink: getContent(x => x.pcrCreate.backLink),
+  selectRequestTypesTitle: getContent(x => x.pcrCreate.selectRequestTypesTitle),
+  createRequestButton: getContent(x => x.pcrCreate.createRequestButton),
+  cancelRequestButton: getContent(x => x.pcrCreate.cancelRequestButton),
+  guidanceIntroMessage: getContent(x => x.pcrCreate.guidanceIntroMessage),
+  guidanceListRow1: getContent(x => x.pcrCreate.guidanceListRow1),
+  guidanceListRow2: getContent(x => x.pcrCreate.guidanceListRow2)
   };
 }
 
