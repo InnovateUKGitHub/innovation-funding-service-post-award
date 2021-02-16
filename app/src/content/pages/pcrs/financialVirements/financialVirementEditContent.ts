@@ -11,4 +11,10 @@ export class FinancialVirementEditContent extends ContentPageBase {
 
   public readonly summaryTitle = this.getContent("summary-title");
   public readonly saveButton = this.getContent("save-button");
+
+  public readonly editPageMessage = {
+    intro: this.getContent("edit-page-message.intro"),
+    virements: this.getContent("edit-page-message.virements"),
+    requests: this.getContent("edit-page-message.requests"),
+  };
 }

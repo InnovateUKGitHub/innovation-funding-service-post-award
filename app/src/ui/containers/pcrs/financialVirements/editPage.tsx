@@ -1,5 +1,5 @@
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
+import { EditorStatus, IEditorStore, StoresConsumer, useStores } from "@ui/redux";
 import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
 import { CostCategoryVirementDto, FinancialVirementDto, PartnerDto, ProjectDto } from "@framework/dtos";
@@ -7,6 +7,37 @@ import { CostCategoryVirementDtoValidator, FinancialVirementDtoValidator } from 
 import { createDto } from "@framework/util/dtoHelpers";
 import { roundCurrency } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { projectCompetition, useContent } from "@ui/hooks";
+import { getAuthRoles } from "@framework/types";
+
+export function useEditPageContent() {
+  const { getContent } = useContent();
+
+  return {
+    summaryTitle: getContent(x => x.financialVirementEdit.summaryTitle),
+    saveButton: getContent(x => x.financialVirementEdit.saveButton),
+
+    introMessage: getContent(x => x.financialVirementEdit.editPageMessage.intro),
+    virementsMessage: getContent(x => x.financialVirementEdit.editPageMessage.virements),
+    requestsMessage: getContent(x => x.financialVirementEdit.editPageMessage.requests),
+
+    costCategoryName: getContent(x => x.financialVirementEdit.labels.costCategoryName),
+    costCategoryOriginalEligibleCosts: getContent(
+      x => x.financialVirementEdit.labels.costCategoryOriginalEligibleCosts,
+    ),
+    costCategoryCostsClaimed: getContent(x => x.financialVirementEdit.labels.costCategoryCostsClaimed),
+    costCategoryNewEligibleCosts: getContent(x => x.financialVirementEdit.labels.costCategoryNewEligibleCosts),
+    costCategoryDifferenceCosts: getContent(x => x.financialVirementEdit.labels.costCategoryDifferenceCosts),
+    partnerTotals: getContent(x => x.financialVirementEdit.labels.partnerTotals),
+    projectOriginalEligibleCosts: getContent(x => x.financialVirementEdit.labels.projectOriginalEligibleCosts),
+    projectNewEligibleCosts: getContent(x => x.financialVirementEdit.labels.projectNewEligibleCosts),
+    projectDifferenceCosts: getContent(x => x.financialVirementEdit.labels.projectDifferenceCosts),
+    projectOriginalRemainingGrant: getContent(x => x.financialVirementEdit.labels.projectOriginalRemainingGrant),
+    projectNewRemainingGrant: getContent(x => x.financialVirementEdit.labels.projectNewRemainingGrant),
+    projectDifferenceGrant: getContent(x => x.financialVirementEdit.labels.projectDifferenceGrant),
+    backToSummary: getContent(x => x.financialVirementEdit.labels.backToSummary),
+  };
+}
 
 export interface VirementCostsParams {
   projectId: string;
@@ -20,6 +51,7 @@ interface Props {
   partner: Pending<PartnerDto>;
   costCategories: Pending<CostCategoryDto[]>;
   editor: Pending<IEditorStore<FinancialVirementDto, FinancialVirementDtoValidator>>;
+  content: Record<string, string>;
   onChange: (saving: boolean, dto: FinancialVirementDto) => void;
 }
 
@@ -57,6 +89,10 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
     const VirementTable = ACC.TypedTable<typeof costCategoriesWithVirement[0]>();
     const SummaryTable = ACC.TypedTable<FinancialVirementDto>();
 
+    const { isPm } = getAuthRoles(project.roles);
+    const { isKTP } = projectCompetition(project.competitionType);
+    const  displayIntroMessage: boolean = isKTP && isPm;
+
     return (
       <ACC.Page
         backLink={this.getBackLink()}
@@ -64,29 +100,37 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
         error={editor.error}
         validator={partnerValidation}
       >
+        {displayIntroMessage && (
+          <>
+            <ACC.Renderers.SimpleString>{this.props.content.introMessage}</ACC.Renderers.SimpleString>
+            <ACC.Renderers.SimpleString>{this.props.content.virementsMessage}</ACC.Renderers.SimpleString>
+            <ACC.Renderers.SimpleString>{this.props.content.requestsMessage}</ACC.Renderers.SimpleString>
+          </>
+        )}
+
         <ACC.Section title={partner.name}>
           <VirementForm.Form editor={editor} onChange={(dto) => this.props.onChange(false, dto)} onSubmit={() => this.props.onChange(true, editor.data)} qa="virementForm">
             <VirementForm.Fieldset>
               <VirementTable.Table qa="partnerVirements" data={costCategoriesWithVirement} validationResult={validation}>
-                <VirementTable.String qa="costCategory" headerContent={x => x.financialVirementEdit.labels.costCategoryName} value={x => x.costCategory.name} footer={<ACC.Content value={x => x.financialVirementEdit.labels.partnerTotals} />} />
-                <VirementTable.Currency qa="originalEligibleCosts" headerContent={x => x.financialVirementEdit.labels.costCategoryOriginalEligibleCosts} value={x => x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={partnerVirements.originalEligibleCosts} />} />
-                <VirementTable.Currency qa="originalCostsClaimed" headerContent={x => x.financialVirementEdit.labels.costCategoryCostsClaimed} value={x => x.virement.costsClaimedToDate} footer={<ACC.Renderers.Currency value={partnerVirements.costsClaimedToDate} />} />
-                <VirementTable.Custom qa="newEligibleCosts" headerContent={x => x.financialVirementEdit.labels.costCategoryNewEligibleCosts} value={(x, i) => this.renderInput(partner, x.costCategory, x.virement, editor.status === EditorStatus.Saving, validation[i.row])} footer={<ACC.Renderers.Currency value={partnerVirements.newEligibleCosts} />} classSuffix={"numeric"} />
-                <VirementTable.Currency qa="difference" headerContent={x => x.financialVirementEdit.labels.costCategoryDifferenceCosts} value={x => x.virement.newEligibleCosts - x.virement.originalEligibleCosts} />
+                <VirementTable.String qa="costCategory" header={this.props.content.costCategoryName} value={x => x.costCategory.name} footer={this.props.content.partnerTotals} />
+                <VirementTable.Currency qa="originalEligibleCosts" header={this.props.content.costCategoryOriginalEligibleCosts} value={x => x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={partnerVirements.originalEligibleCosts} />} />
+                <VirementTable.Currency qa="originalCostsClaimed" header={this.props.content.costCategoryCostsClaimed} value={x => x.virement.costsClaimedToDate} footer={<ACC.Renderers.Currency value={partnerVirements.costsClaimedToDate} />} />
+                <VirementTable.Custom qa="newEligibleCosts" header={this.props.content.costCategoryNewEligibleCosts} value={(x, i) => this.renderInput(partner, x.costCategory, x.virement, editor.status === EditorStatus.Saving, validation[i.row])} footer={<ACC.Renderers.Currency value={partnerVirements.newEligibleCosts} />} classSuffix={"numeric"} />
+                <VirementTable.Currency qa="difference" header={this.props.content.costCategoryDifferenceCosts} value={x => x.virement.newEligibleCosts - x.virement.originalEligibleCosts} />
               </VirementTable.Table>
             </VirementForm.Fieldset>
-            <VirementForm.Fieldset headingContent={x => x.financialVirementEdit.summaryTitle}>
+            <VirementForm.Fieldset heading={this.props.content.summaryTitle}>
               <SummaryTable.Table qa="summary-table" data={[editor.data]}>
-                <SummaryTable.Currency qa="originalEligibleCosts" headerContent={x => x.financialVirementEdit.labels.projectOriginalEligibleCosts} value={x => x.originalEligibleCosts} />
-                <SummaryTable.Currency qa="newEligibleCosts" headerContent={x => x.financialVirementEdit.labels.projectNewEligibleCosts} value={x => x.newEligibleCosts} />
-                <SummaryTable.Currency qa="differenceEligibleCosts" headerContent={x => x.financialVirementEdit.labels.projectDifferenceCosts} value={x => x.newEligibleCosts - x.originalEligibleCosts} />
-                <SummaryTable.Currency qa="originalRemainingGrant" headerContent={x => x.financialVirementEdit.labels.projectOriginalRemainingGrant} value={x => x.originalRemainingGrant} />
-                <SummaryTable.Currency qa="newRemainingGrant" headerContent={x => x.financialVirementEdit.labels.projectNewRemainingGrant} value={x => x.newRemainingGrant} />
-                <SummaryTable.Currency qa="differenceRemainingGrant" headerContent={x => x.financialVirementEdit.labels.projectDifferenceGrant} value={x => x.newRemainingGrant - x.originalRemainingGrant} />
+                <SummaryTable.Currency qa="originalEligibleCosts" header={this.props.content.projectOriginalEligibleCosts} value={x => x.originalEligibleCosts} />
+                <SummaryTable.Currency qa="newEligibleCosts" header={this.props.content.projectNewEligibleCosts} value={x => x.newEligibleCosts} />
+                <SummaryTable.Currency qa="differenceEligibleCosts" header={this.props.content.projectDifferenceCosts} value={x => x.newEligibleCosts - x.originalEligibleCosts} />
+                <SummaryTable.Currency qa="originalRemainingGrant" header={this.props.content.projectOriginalRemainingGrant} value={x => x.originalRemainingGrant} />
+                <SummaryTable.Currency qa="newRemainingGrant" header={this.props.content.projectNewRemainingGrant} value={x => x.newRemainingGrant} />
+                <SummaryTable.Currency qa="differenceRemainingGrant" header={this.props.content.projectDifferenceGrant} value={x => x.newRemainingGrant - x.originalRemainingGrant} />
               </SummaryTable.Table>
             </VirementForm.Fieldset>
             <VirementForm.Fieldset>
-              <VirementForm.Submit><ACC.Content value={x => x.financialVirementEdit.saveButton} /></VirementForm.Submit>
+              <VirementForm.Submit>{this.props.content.saveButton}</VirementForm.Submit>
             </VirementForm.Fieldset>
           </VirementForm.Form>
         </ACC.Section>
@@ -150,27 +194,44 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
       itemId: this.props.itemId
     };
 
-    return <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)} preserveData={true}><ACC.Content value={x => x.financialVirementEdit.labels.backToSummary}/></ACC.BackLink>;
+    return <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)} preserveData={true}>{this.props.content.backToSummary}</ACC.BackLink>;
   }
 }
 
-const Container = (props: VirementCostsParams & BaseProps) => (
-  <StoresConsumer>
-    {
-      stores => (
-        <Component
-          project={stores.projects.getById(props.projectId)}
-          partner={stores.partners.getById(props.partnerId)}
-          costCategories={stores.costCategories.getAllForPartner(props.partnerId)}
-          editor={stores.financialVirements.getFiniancialVirementEditor(props.projectId, props.pcrId, props.itemId)}
-          onChange={(saving, dto) => stores.financialVirements.updateFiniancialVirementEditor(saving, props.projectId, props.pcrId, props.itemId, dto,false, () =>
-            stores.navigation.navigateTo(props.routes.pcrPrepareItem.getLink({ projectId: props.projectId, pcrId: props.pcrId, itemId: props.itemId }), true))}
-          {...props}
-        />
-      )
-    }
-  </StoresConsumer>
-);
+const Container = (props: VirementCostsParams & BaseProps) => {
+  const { projects, partners, costCategories, financialVirements, navigation } = useStores();
+  const editPageContent = useEditPageContent();
+
+  return (
+    <Component
+      content={editPageContent}
+      project={projects.getById(props.projectId)}
+      partner={partners.getById(props.partnerId)}
+      costCategories={costCategories.getAllForPartner(props.partnerId)}
+      editor={financialVirements.getFiniancialVirementEditor(props.projectId, props.pcrId, props.itemId)}
+      onChange={(saving, dto) =>
+        financialVirements.updateFiniancialVirementEditor(
+          saving,
+          props.projectId,
+          props.pcrId,
+          props.itemId,
+          dto,
+          false,
+          () =>
+            navigation.navigateTo(
+              props.routes.pcrPrepareItem.getLink({
+                projectId: props.projectId,
+                pcrId: props.pcrId,
+                itemId: props.itemId,
+              }),
+              true,
+            ),
+        )
+      }
+      {...props}
+    />
+  );
+};
 
 export const FinancialVirementEditRoute = defineRoute({
   // pm reallocates costs for participant at cost category level
