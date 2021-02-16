@@ -593,7 +593,7 @@
         "row-2": "Discuss this request with your monitoring officer"
       },
       "select-request-types-title": "Select request types",
-      "select-types-hint": "You can select more than one.",
+      "select-types-hint": "You can select more than one type of request. If an option is not selectable, then a PCR of that type has already been started. The current PCR must be deleted (if still in draft) or concluded by Innovate UK before you can start a new one.",
       "back-link": "Back to project change requests",
       "button-create-request": "Create request",
       "button-cancel-request": "Cancel",

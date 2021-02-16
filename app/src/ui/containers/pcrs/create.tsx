@@ -1,3 +1,4 @@
+import { PCRItemType, PCRStatus } from "@framework/types";
 import * as Dtos from "@framework/dtos";
 import * as ACC from "@ui/components";
 
@@ -17,28 +18,38 @@ interface CreatePcrProps extends CreatePcrParams, BaseProps {
   itemTypes: Pending<Dtos.PCRItemTypeDto[]>;
   editor: Pending<IEditorStore<Dtos.PCRDto, PCRDtoValidator>>;
   content: Record<string, string>;
+  pcrs: Pending<Dtos.PCRSummaryDto[]>;
   onChange: (saving: boolean, dto: Dtos.PCRDto) => void;
   createNewChangeRequestItem: (itemType: Dtos.PCRItemTypeDto) => Dtos.PCRItemDto;
 }
 
 function PCRCreateComponent({ content, ...props }: CreatePcrProps) {
-  const getPcrFromData = (editorItems: Dtos.PCRItemDto[], itemTypes: Dtos.PCRItemTypeDto[]) => {
+  const createPcrCheckboxItem = (item: Dtos.PCRItemTypeDto, disabledItems: PCRItemType[]) => {
+    const id = item.type;
+    const isOptionDisabled: boolean = disabledItems.includes(id);
+
+    return {
+      id: id.toString(),
+      value: item.displayName,
+      disabled: isOptionDisabled,
+    };
+  };
+
+  const getPcrFromData = (
+    editorItems: Dtos.PCRItemDto[],
+    itemTypes: Dtos.PCRItemTypeDto[],
+    disabledItems: PCRItemType[],
+  ) => {
     const filteredOptions = itemTypes.reduce<ACC.SelectOption[][]>(
-      (acc, item) => {
+      (allOptions, itemType) => {
         // Note: ignore values which are not enabled
-        if (!item.enabled) return acc;
+        if (!itemType.enabled) return allOptions;
 
-        const newOption = {
-          id: item.type.toString(),
-          value: item.displayName,
-          disabled: false,
-        };
-        const hasSelectedOption = editorItems.some(x => `${x.type}` === newOption.id);
+        const option = createPcrCheckboxItem(itemType, disabledItems);
+        const hasSelectedOption = editorItems.some(x => `${x.type}` === option.id);
 
-        const [allOptions, allSelectedItems] = acc;
-
-        const newOptions = [...allOptions, newOption];
-        const newSelectedOptions = hasSelectedOption ? [...allSelectedItems, newOption] : allSelectedItems;
+        const newOptions = [...allOptions[0], option];
+        const newSelectedOptions = hasSelectedOption ? [...allOptions[1], option] : allOptions[1];
 
         return [newOptions, newSelectedOptions];
       },
@@ -58,7 +69,7 @@ function PCRCreateComponent({ content, ...props }: CreatePcrProps) {
     model: Dtos.PCRDto,
     selectedValues: ACC.SelectOption[],
   ): Dtos.PCRItemDto[] => {
-    const filteredItems = options.filter(x => selectedValues.some(y => y.id === x.type.toString()));
+    const filteredItems = options.filter(x => selectedValues.some(y => y.id === `${x.type}`));
     return filteredItems.map(x => model.items.find(y => x.type === y.type) || props.createNewChangeRequestItem(x));
   };
 
@@ -66,12 +77,14 @@ function PCRCreateComponent({ content, ...props }: CreatePcrProps) {
     project: Dtos.ProjectDto,
     itemTypes: Dtos.PCRItemTypeDto[],
     editor: IEditorStore<Dtos.PCRDto, PCRDtoValidator>,
+    pcrs: Dtos.PCRSummaryDto[],
   ) => {
     const pcrDashboardLink = props.routes.pcrsDashboard.getLink({ projectId: props.projectId });
     const pcrDashboardBackLink = <ACC.BackLink route={pcrDashboardLink}>{content.backLink}</ACC.BackLink>;
 
     const PCRForm = ACC.TypedForm<Dtos.PCRDto>();
-    const { options, selected } = getPcrFromData(editor.data.items, itemTypes);
+    const disabledItemTypes = filterPcrsByItemType(pcrs);
+    const { options, selected } = getPcrFromData(editor.data.items, itemTypes, disabledItemTypes);
 
     const createGuidanceContent = [
       { header: content.reallocateCostsTitle, description: content.reallocateCostsMessage },
@@ -117,7 +130,6 @@ function PCRCreateComponent({ content, ...props }: CreatePcrProps) {
 
               <PCRForm.Checkboxes
                 name="types"
-                hint={content.selectTypesHint}
                 options={options}
                 validation={editor.validator.items}
                 value={() => selected}
@@ -146,9 +158,55 @@ function PCRCreateComponent({ content, ...props }: CreatePcrProps) {
     project: props.project,
     editor: props.editor,
     itemTypes: props.itemTypes,
+    pcrs: props.pcrs,
   });
 
-  return <ACC.PageLoader pending={combined} render={x => renderPage(x.project, x.itemTypes, x.editor)} />;
+  return <ACC.PageLoader pending={combined} render={x => renderPage(x.project, x.itemTypes, x.editor, x.pcrs)} />;
+}
+
+export function filterPcrsByItemType(pcrs: Dtos.PCRSummaryDto[]): PCRItemType[] {
+  // Note: Avoid wasting time upfront
+  if (!pcrs.length) return [];
+
+  const statusesToIgnore: PCRStatus[] = [
+    PCRStatus.Rejected,
+    PCRStatus.Withdrawn,
+    PCRStatus.Approved,
+    PCRStatus.Actioned,
+  ];
+
+  const filteredPcrs: Dtos.PCRSummaryDto[] = pcrs.filter(x => !statusesToIgnore.includes(x.status));
+
+  // Note: escape hatch if no available statuses found
+  if (!filteredPcrs.length) return [];
+
+  // Note: Matches business logic to prevent unneeded reconciliation with duplicate pcrs
+  const pcrDisabledMatrix: Record<PCRItemType, PCRItemType[]> = {
+    [PCRItemType.Unknown]: [],
+    [PCRItemType.AccountNameChange]: [],
+    [PCRItemType.PartnerAddition]: [],
+    [PCRItemType.PartnerWithdrawal]: [],
+    [PCRItemType.ProjectSuspension]: [],
+    [PCRItemType.ProjectTermination]: [],
+    [PCRItemType.MultiplePartnerFinancialVirement]: [PCRItemType.MultiplePartnerFinancialVirement],
+    [PCRItemType.SinglePartnerFinancialVirement]: [],
+    [PCRItemType.ScopeChange]: [PCRItemType.ScopeChange],
+    [PCRItemType.TimeExtension]: [PCRItemType.TimeExtension],
+    [PCRItemType.PeriodLengthChange]: [],
+  };
+
+  let matrixItems: PCRItemType[] = [];
+
+  for (const filteredPcr of filteredPcrs) {
+    const itemKeys = filteredPcr.items.map(x => x.type);
+
+    for (const key of itemKeys) {
+      matrixItems = [...matrixItems, ...pcrDisabledMatrix[key]];
+    }
+  }
+
+  // Note: Remove duplicates on final parse
+  return [...new Set([...matrixItems])];
 }
 
 export function useCreatePcrContent() {
@@ -195,6 +253,7 @@ function PCRCreateContainer(props: CreatePcrParams & BaseProps) {
       itemTypes={projectChangeRequests.getAllPcrTypes()}
       editor={projectChangeRequests.getPcrCreateEditor(props.projectId)}
       createNewChangeRequestItem={itemType => projectChangeRequests.createNewChangeRequestItem(itemType)}
+      pcrs={projectChangeRequests.getAllForProject(props.projectId)}
       onChange={(saving, dto) =>
         projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, created =>
           navigation.navigateTo(
