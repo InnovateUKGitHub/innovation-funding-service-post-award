@@ -5,7 +5,7 @@ import * as ACC from "@ui/components";
 import { State } from "router5";
 import { ClaimDetailsDto, ClaimDto, ClaimLineItemDto, ForecastDetailsDTO, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import classNames from "classnames";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { projectCompetition, useContent } from "@ui/hooks";
@@ -25,6 +25,7 @@ interface Data {
   forecastDetail: Pending<ForecastDetailsDTO>;
   documents: Pending<DocumentSummaryDto[]>;
   claim: Pending<ClaimDto>;
+  content: Record<string, string>;
 }
 
 interface CombinedData {
@@ -70,7 +71,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
         pageTitle={<ACC.Projects.Title {...project} />}
       >
         <ACC.Section>
-          <ClaimLineItemsTable lineItems={claimDetails.lineItems} forecastDetail={forecastDetail} />
+          <ClaimLineItemsTable lineItems={claimDetails.lineItems} forecastDetail={forecastDetail} content={this.props.content} />
         </ACC.Section>
         {this.getSupportingDocumentsSection(project.competitionType, documents, claimDetails)}
         {this.renderNavigationArrows(costCategories, project, partner, claim)}
@@ -79,20 +80,22 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private getSupportingDocumentsSection(competitionType: string, documents: DocumentSummaryDto[], claimDetails: ClaimDetailsDto) {
+    const { content } = this.props;
     const { isKTP } = projectCompetition(competitionType);
 
-    const supportingDocumentsTitle = <ACC.Content value={x => x.claimLineItems.supportingDocumentsTitle}/>;
-    const documentsInNewWindow = <ACC.Content value={x => x.claimLineItems.documentsInNewWindow}/>;
+    // Note: KTP projects submit evidence on the whole claim, not each cost category.
+    const displaySupportingDocs = !isKTP;
 
-    return isKTP && (
+    return displaySupportingDocs && (
       <>
         <ACC.Section
-          title={supportingDocumentsTitle}
-          subtitle={documents.length > 0 ? documentsInNewWindow : ""}
+          title={content.supportingDocumentsTitle}
+          subtitle={!!documents.length && content.documentsInNewWindow}
           qa="supporting-documents-section"
         >
           {this.renderDocumentList(documents)}
         </ACC.Section>
+
         {this.renderAdditionalInformation(claimDetails)}
       </>
     );
@@ -101,7 +104,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
   private renderDocumentList(documents: DocumentSummaryDto[]) {
     return documents.length > 0
       ? <ACC.DocumentTable documents={documents} qa="supporting-documents"/>
-      : <ACC.ValidationMessage message={<ACC.Content value={x => x.claimLineItems.noDocumentsUploaded}/>} messageType="info" />;
+      : <ACC.ValidationMessage message={this.props.content.noDocumentsUploaded} messageType="info" />;
   }
 
   // TODO - this is something which we do in at least two places so should be generic
@@ -161,7 +164,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     if (!claimDetail.comments) return null;
 
     return (
-      <ACC.Section title={<ACC.Content value={x => x.claimLineItems.additionalInfoTitle}/>} qa="additional-information">
+      <ACC.Section title={this.props.content.additionalInfoTitle} qa="additional-information">
         <ACC.Renderers.SimpleString>
           {claimDetail.comments}
         </ACC.Renderers.SimpleString>
@@ -170,30 +173,34 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
   }
 }
 
-const ClaimLineItemsTable: React.FunctionComponent<{ lineItems: ClaimLineItemDto[], forecastDetail: ForecastDetailsDTO }> = ({ lineItems, forecastDetail }) => {
+function ClaimLineItemsTable({ lineItems, forecastDetail, content }: {
+  lineItems: ClaimLineItemDto[];
+  forecastDetail: ForecastDetailsDTO;
+  content: Record<string, string>
+}) {
   const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
 
-  const { getContent } = useContent();
-  const noDataMessage = getContent(x=> x.claimLineItems.noDataMessage);
-
-  const renderFooterRow = (row: { key: string, title: string, value: React.ReactNode, qa: string, isBold?: boolean }) => (
+  const renderFooterRow = (row: {
+    key: string;
+    title: string;
+    value: React.ReactNode;
+    qa: string;
+    isBold?: boolean;
+  }) => (
     <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
       <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{row.title}</th>
-      <td className={classNames("govuk-table__cell", "govuk-table__cell--numeric", { "govuk-!-font-weight-bold": row.isBold })}>{row.value}</td>
-      <th className="govuk-table__cell"><ACC.Renderers.AccessibilityText>{noDataMessage}</ACC.Renderers.AccessibilityText></th>
+      <td className={classNames("govuk-table__cell", "govuk-table__cell--numeric", { "govuk-!-font-weight-bold": row.isBold })}>
+        {row.value}
+      </td>
+      <th className="govuk-table__cell">
+        <ACC.Renderers.AccessibilityText>{content.noDataMessage}</ACC.Renderers.AccessibilityText>
+      </th>
     </tr>
   );
 
   const total = lineItems.reduce((count, item) => count + (item.value || 0), 0);
   const forecast = forecastDetail.value;
-  const diff = 100 * (forecast - total) / forecast;
-
-  const totalCostTitle = getContent(x=> x.claimLineItems.totalCostTitle);
-  const forecastCostTitle = getContent(x=> x.claimLineItems.forecastCostTitle);
-  const differenceTitle = getContent(x=> x.claimLineItems.differenceTitle);
-  const descriptionHeader = getContent(x=> x.claimLineItems.descriptionHeader);
-  const costHeader = getContent(x=> x.claimLineItems.costHeader);
-  const lastUpdatedHeader = getContent(x=> x.claimLineItems.lastUpdatedHeader);
+  const diff = (100 * (forecast - total)) / forecast;
 
   return (
     <LineItemTable.Table
@@ -201,44 +208,91 @@ const ClaimLineItemsTable: React.FunctionComponent<{ lineItems: ClaimLineItemDto
       qa="current-claim-summary-table"
       footers={[
         renderFooterRow({
-          key: "1", title: totalCostTitle, qa: "footer-total-costs", isBold: true, value:
-            <ACC.Renderers.Currency value={total} />
+          key: "1",
+          title: content.totalCostTitle,
+          qa: "footer-total-costs",
+          isBold: true,
+          value: <ACC.Renderers.Currency value={total} />,
         }),
         renderFooterRow({
-          key: "2", title: forecastCostTitle, qa: "footer-forecast-costs", value:
-            <ACC.Renderers.Currency value={forecast} />
+          key: "2",
+          title: content.forecastCostTitle,
+          qa: "footer-forecast-costs",
+          value: <ACC.Renderers.Currency value={forecast} />,
         }),
         renderFooterRow({
-          key: "3", title: differenceTitle, qa: "footer-difference", value:
-            <ACC.Renderers.Percentage value={diff} />
-        })
+          key: "3",
+          title: content.differenceTitle,
+          qa: "footer-difference",
+          value: <ACC.Renderers.Percentage value={diff} />,
+        }),
       ]}
     >
-      <LineItemTable.String header={descriptionHeader} qa="cost-description" value={(x) => x.description} />
-      <LineItemTable.Currency header={costHeader} qa="cost-value" value={(x) => x.value} />
-      <LineItemTable.ShortDate colClassName={x => "govuk-table__header--numeric"} header={lastUpdatedHeader} qa="cost-last-updated" value={x => x.lastModifiedDate} />
+      <LineItemTable.String header={content.descriptionHeader} qa="cost-description" value={x => x.description} />
+      <LineItemTable.Currency header={content.costHeader} qa="cost-value" value={x => x.value} />
+      <LineItemTable.ShortDate
+        colClassName={x => "govuk-table__header--numeric"}
+        header={content.lastUpdatedHeader}
+        qa="cost-last-updated"
+        value={x => x.lastModifiedDate}
+      />
     </LineItemTable.Table>
   );
-};
+}
 
-const ClaimLineItemsContainer = (props: Params & BaseProps) => (
-  <StoresConsumer>
-    {
-      stores => (
-        <ClaimLineItemsComponent
-          project={stores.projects.getById(props.projectId)}
-          partner={stores.partners.getById(props.partnerId)}
-          claimDetails={stores.claimDetails.get(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
-          costCategories={stores.costCategories.getAll()}
-          forecastDetail={stores.forecastDetails.get(props.partnerId, props.periodId, props.costCategoryId)}
-          claim={stores.claims.get(props.partnerId, props.periodId)}
-          documents={stores.claimDetailDocuments.getClaimDetailDocuments(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
-          {...props}
-        />
-      )
-    }
-  </StoresConsumer>
-);
+export function useClaimLineItemsContent() {
+  const { getContent } = useContent();
+
+  const supportingDocumentsTitle = getContent(x => x.claimLineItems.supportingDocumentsTitle);
+  const documentsInNewWindow = getContent(x => x.claimLineItems.documentsInNewWindow);
+  const noDocumentsUploaded = getContent(x => x.claimLineItems.noDocumentsUploaded);
+  const additionalInfoTitle = getContent(x => x.claimLineItems.additionalInfoTitle);
+  const totalCostTitle = getContent(x => x.claimLineItems.totalCostTitle);
+  const forecastCostTitle = getContent(x => x.claimLineItems.forecastCostTitle);
+  const differenceTitle = getContent(x => x.claimLineItems.differenceTitle);
+  const descriptionHeader = getContent(x => x.claimLineItems.descriptionHeader);
+  const costHeader = getContent(x => x.claimLineItems.costHeader);
+  const lastUpdatedHeader = getContent(x => x.claimLineItems.lastUpdatedHeader);
+  const noDataMessage = getContent(x => x.claimLineItems.noDataMessage);
+
+  return {
+    supportingDocumentsTitle,
+    documentsInNewWindow,
+    noDocumentsUploaded,
+    additionalInfoTitle,
+    totalCostTitle,
+    forecastCostTitle,
+    differenceTitle,
+    descriptionHeader,
+    costHeader,
+    lastUpdatedHeader,
+    noDataMessage,
+  };
+}
+
+const ClaimLineItemsContainer = (props: Params & BaseProps) => {
+  const claimLineItemsContent = useClaimLineItemsContent();
+  const stores = useStores();
+
+  return (
+    <ClaimLineItemsComponent
+      {...props}
+      content={claimLineItemsContent}
+      project={stores.projects.getById(props.projectId)}
+      partner={stores.partners.getById(props.partnerId)}
+      claimDetails={stores.claimDetails.get(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
+      costCategories={stores.costCategories.getAll()}
+      forecastDetail={stores.forecastDetails.get(props.partnerId, props.periodId, props.costCategoryId)}
+      claim={stores.claims.get(props.partnerId, props.periodId)}
+      documents={stores.claimDetailDocuments.getClaimDetailDocuments(
+        props.projectId,
+        props.partnerId,
+        props.periodId,
+        props.costCategoryId,
+      )}
+    />
+  );
+};
 
 const getParams = (route: State): Params => ({
   projectId: route.params.projectId,
