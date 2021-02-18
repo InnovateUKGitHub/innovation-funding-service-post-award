@@ -43,7 +43,7 @@ export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
     this.file = Validation.all(
       this,
       () => Validation.required(this, model && model.file && model.file.fileName, "Choose a file to upload."),
-      () => validateFileName(this, model && model.file, config.validCharacters),
+      () => validateFileName(this, model && model.file),
       () => Validation.required(this, model && model.file && model.file.fileName, "Choose a file to upload."),
       () =>
         Validation.isTrue(
@@ -121,7 +121,7 @@ export class FileDtoValidator extends Results<IFileWrapper> {
   // TODO: when this branch is merged with the odg branch, we should take in one config options instead of maxFileSize/permittedFileTypes
   constructor(
     file: IFileWrapper,
-    { maxFileSize, validCharacters, permittedFileTypes }: IAppOptions,
+    { maxFileSize, permittedFileTypes }: IAppOptions,
     showValidationErrors: boolean,
   ) {
     // file is deliberately not a private field so it isn't logged....
@@ -131,7 +131,7 @@ export class FileDtoValidator extends Results<IFileWrapper> {
     this.file = Validation.all(
       this,
       () => Validation.required(this, file.fileName, "Select a file to upload."),
-      () => validateFileName(this, file, validCharacters),
+      () => validateFileName(this, file),
       () => Validation.isTrue(this, file.size <= maxFileSize, fileTooBigErrorMessage(file, maxFileSize)),
       () => Validation.isFalse(this, file.size === 0, fileEmptyErrorMessage(file)),
       () => validateFileExtension(this, file, permittedFileTypes),
@@ -150,14 +150,17 @@ function validateFileExtension(results: Results<{}>, file: IFileWrapper | null, 
   );
 }
 
-function validateFileName(results: Results<{}>, file: IFileWrapper | null, permittedCharacters: RegExp): Result {
+function validateFileName(results: Results<{}>, file: IFileWrapper | null): Result {
+  // TODO: this needs to be moved to config
+  const validCharacters = /^[\w\d\s\\.\-\(\)]+$/;
+
   if (!file) {
     return Validation.inValid(results, "File does not exist");
   } else {
     const fileName = file.fileName;
     const name = getFileName(fileName);
 
-    const isValidName = permittedCharacters.test(name);
-    return Validation.isTrue(results, isValidName, invalidCharacterInFileName(fileName));
+    const hasValidName: boolean = validCharacters.test(name);
+    return Validation.isTrue(results, hasValidName, invalidCharacterInFileName(fileName));
   }
 }
