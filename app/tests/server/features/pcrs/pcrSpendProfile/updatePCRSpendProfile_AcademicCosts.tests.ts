@@ -1,13 +1,10 @@
-// tslint:disable:no-duplicate-string
-// tslint:disable:no-big-function
-
-import { setup as commonSetup } from "./helpers";
 import { PCRItemStatus, PCRPartnerType, PCRProjectRole } from "@framework/constants";
 import { CostCategoryType } from "@framework/entities";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
 import { ValidationError } from "@server/features/common";
+import { setup as commonSetup } from "./helpers";
 
 describe("UpdatePCRSpendProfileCommand", () => {
     const setup = async () => {

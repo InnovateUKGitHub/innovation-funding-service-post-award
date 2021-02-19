@@ -1,11 +1,11 @@
 import React from "react";
 import * as ACC from "@ui/components";
-import { standardItemStepNames } from "./workflow";
 import { StoresConsumer } from "@ui/redux";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRStandardItemDto } from "@framework/dtos";
 import { PCRStandardItemDtoValidator } from "@ui/validators";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { standardItemStepNames } from "./workflow";
 
 interface Props {
   documents: DocumentSummaryDto[];

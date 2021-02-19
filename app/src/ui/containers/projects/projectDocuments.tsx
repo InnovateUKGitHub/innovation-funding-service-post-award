@@ -8,8 +8,8 @@ import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUplo
 import { DocumentSummaryDto, MultipleDocumentUploadDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { noop } from "@ui/helpers/noop";
 import { DocumentDescription } from "@framework/types";
-import { EnumDocuments } from "../claims/components";
 import { DropdownOption } from "@ui/components";
+import { EnumDocuments } from "../claims/components";
 
 export interface ProjectDocumentPageParams {
   projectId: string;
@@ -117,7 +117,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<
                   <UploadForm.MulipleFileUpload
                     labelContent={x => x.projectDocuments.documentLabels.uploadInputLabel}
                     name="attachment"
-                    labelHidden={true}
+                    labelHidden
                     value={data => data.files}
                     update={(dto, files) => (dto.files = files || [])}
                     validation={editor.validator.files}
@@ -126,7 +126,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<
                   <UploadForm.DropdownList
                     labelContent={x => x.claimDocuments.descriptionLabel}
                     labelHidden={false}
-                    hasEmptyOption={true}
+                    hasEmptyOption
                     placeholder="-- No description --"
                     name="description"
                     validation={editor.validator.files}
@@ -191,7 +191,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<
 
     const handleOnSearch = ({ documentFilter }: ProjectDocumentState) => {
       const filteredQuery = documentFilter ? documentFilter.trim() : "";
-      const newValue = !!filteredQuery.length ? filteredQuery : "";
+      const newValue = filteredQuery.length ? filteredQuery : "";
 
       this.setState({ documentFilter: newValue });
     };
@@ -205,7 +205,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<
         <FilterForm.Form data={this.state} onSubmit={noop} onChange={handleOnSearch} qa="document-search-form">
           <FilterForm.Search
             name="document-filter"
-            labelHidden={true}
+            labelHidden
             value={x => x.documentFilter}
             update={(x, v) => (x.documentFilter = v || "")}
             // TODO

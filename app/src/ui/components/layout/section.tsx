@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
-import { SimpleString } from "../renderers/simpleString";
 import { ContentSelector } from "@content/content";
+import { SimpleString } from "../renderers/simpleString";
 import { Content } from "../content";
 
 interface Props {

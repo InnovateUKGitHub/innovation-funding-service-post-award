@@ -1,4 +1,3 @@
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
 import { TestBed, TestBedContent, TestBedStore } from "@shared/TestBed";

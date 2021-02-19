@@ -1,6 +1,6 @@
-import { BackLink } from "../links";
 import { ProjectDto } from "@framework/dtos";
 import { IRoutes } from "@ui/routing";
+import { BackLink } from "../links";
 
 interface Props {
   project: ProjectDto;

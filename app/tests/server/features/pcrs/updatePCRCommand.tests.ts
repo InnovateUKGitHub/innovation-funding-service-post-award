@@ -1,29 +1,23 @@
-// tslint:disable
 import { DateTime } from "luxon";
-import { TestContext } from "../../testContextProvider";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { ValidationError } from "@server/features/common";
 import {
   Authorisation,
-  PCRContactRole,
   PCRDto,
   PCRItemForAccountNameChangeDto,
   PCRItemForMultiplePartnerFinancialVirementDto,
-  PCRItemForPartnerAdditionDto,
   PCRItemForPartnerWithdrawalDto,
   PCRItemForProjectSuspensionDto,
   PCRItemForScopeChangeDto,
   PCRItemForTimeExtensionDto,
-  PCRParticipantSize,
-  PCRPartnerType,
-  PCRProjectRole,
   PCRStandardItemDto,
   ProjectRole
 } from "@framework/types";
 import { getAllEnumValues } from "@shared/enumHelper";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants";
+import { TestContext } from "../../testContextProvider";
 
 describe("UpdatePCRCommand", () => {
   describe("Access control", () => {
@@ -196,7 +190,7 @@ describe("UpdatePCRCommand", () => {
       await context.runCommand(command);
 
       expect(pcr.items.length).toBe(3);
-    })
+    });
 
     it("does not allow duplicate item types", async () => {
       const context = new TestContext();
@@ -237,7 +231,7 @@ describe("UpdatePCRCommand", () => {
 
       const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
       dto.status = PCRStatus.SubmittedToMonitoringOfficer;
-      dto.comments = "Expected Comments"
+      dto.comments = "Expected Comments";
 
       await context.runCommand(new UpdatePCRCommand(pcr.projectId, pcr.id, dto));
 
@@ -267,7 +261,7 @@ describe("UpdatePCRCommand", () => {
 
       const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
       dto.status = PCRStatus.SubmittedToInnovateUK;
-      dto.comments = "Expected Comments"
+      dto.comments = "Expected Comments";
 
       await context.runCommand(new UpdatePCRCommand(pcr.projectId, pcr.id, dto));
 
@@ -466,7 +460,7 @@ describe("UpdatePCRCommand", () => {
       const updated = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const updatedItem = updated.items[0] as PCRItemForTimeExtensionDto;
       await expect(updatedItem.additionalMonths).toEqual(5);
-    })
+    });
 
     it("correctly updates the project duration", async () => {
       const context = new TestContext();
@@ -486,7 +480,7 @@ describe("UpdatePCRCommand", () => {
 
       const updatedItem = context.repositories.projectChangeRequests.Items.find(x => x.id === projectChangeRequest.id)!.items.find(x => x.id === item.id)!;
       await expect(updatedItem.projectDuration).toEqual(item.additionalMonths + item.projectDurationSnapshot);
-    })
+    });
   });
 
   describe("Project Suspension", () => {
@@ -593,7 +587,7 @@ describe("UpdatePCRCommand", () => {
       const updatedItem = updated.items[0] as PCRItemForProjectSuspensionDto;
       await expect(updatedItem.suspensionStartDate!.toISOString()).toEqual(startDate.toISOString());
       await expect(updatedItem.suspensionEndDate!.toISOString()).toEqual(endDate.toISOString());
-    })
+    });
   });
 
   describe("Account Name Change", () => {
@@ -796,7 +790,9 @@ describe("UpdatePCRCommand", () => {
     test("returns a bad request if removal period greater than project periods", async () => {
       const context = new TestContext();
 
-      const project = context.testData.createProject(x => {x.Acc_StartDate__c = "2020-01-01"; x.Acc_ClaimFrequency__c = "Monthly"});
+      const project = context.testData.createProject(x => {
+x.Acc_StartDate__c = "2020-01-01"; x.Acc_ClaimFrequency__c = "Monthly";
+});
       const partner = context.testData.createPartner(project);
       context.testData.createCurrentUserAsProjectManager(project);
       const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });

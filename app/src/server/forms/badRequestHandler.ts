@@ -1,7 +1,7 @@
 import express from "express";
-import { IFormHandler } from "./formHandlerBase";
-import { BadRequestError, NotFoundError } from "../features/common/appError";
 import { Logger } from "@server/features/common";
+import { BadRequestError, NotFoundError } from "../features/common/appError";
+import { IFormHandler } from "./formHandlerBase";
 
 export class BadRequestHandler implements IFormHandler {
   public routePath = "*";
@@ -14,8 +14,7 @@ export class BadRequestHandler implements IFormHandler {
 
       new Logger().error("No handler for", req.url, buttons);
       next(new BadRequestError());
-    }
-    else {
+    } else {
       next(new NotFoundError());
     }
   }

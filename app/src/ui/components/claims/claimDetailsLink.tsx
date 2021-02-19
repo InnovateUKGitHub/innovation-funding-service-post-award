@@ -1,7 +1,7 @@
 import { ClaimDto, ClaimStatus, PartnerDto, PartnerStatus, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import { IRoutes } from "@ui/routing";
-import { Link } from "../links";
 import { useContent } from "@ui/hooks";
+import { Link } from "../links";
 
 export interface ClaimDetailsLinkProps {
   claim: ClaimDto;
@@ -32,7 +32,7 @@ export const ClaimDetailsLink: React.FunctionComponent<ClaimDetailsLinkRoutes> =
   }
 };
 
-export const getClaimDetailsLinkType = (props: {claim: ClaimDto; project: ProjectDto; partner: PartnerDto;}): "edit" | "review" | "view" | "nothing" => {
+export const getClaimDetailsLinkType = (props: {claim: ClaimDto; project: ProjectDto; partner: PartnerDto}): "edit" | "review" | "view" | "nothing" => {
 
   if (props.project.status === ProjectStatus.OnHold) return "view";
   if (props.partner.partnerStatus === PartnerStatus.OnHold) return "view";
@@ -40,19 +40,16 @@ export const getClaimDetailsLinkType = (props: {claim: ClaimDto; project: Projec
     case ClaimStatus.DRAFT:
       if (props.partner.roles & ProjectRole.FinancialContact) {
         return "edit";
-      }
-      else if (props.project.roles & ProjectRole.MonitoringOfficer) {
+      } else if (props.project.roles & ProjectRole.MonitoringOfficer) {
         return "view";
-      }
-      else {
+      } else {
         return "nothing";
       }
     case ClaimStatus.MO_QUERIED:
     case ClaimStatus.INNOVATE_QUERIED:
       if (props.partner.roles & ProjectRole.FinancialContact) {
         return "edit";
-      }
-      else {
+      } else {
         return "view";
       }
     case ClaimStatus.SUBMITTED:

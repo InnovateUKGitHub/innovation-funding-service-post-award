@@ -63,7 +63,7 @@ class Component extends React.Component<
             <UploadForm.MulipleFileUpload
               labelContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.uploadInputLabel}
               name="attachment"
-              labelHidden={true}
+              labelHidden
               value={data => data.files}
               update={(dto, files) => {
                 dto.files = files || [];
@@ -150,7 +150,7 @@ export const AgreementToPCRStep = (
                 // show message if remaining on page
                 const successMessage = isSaving
                   ? dto.files.length === 1
-                    ? `Your document has been uploaded.`
+                    ? "Your document has been uploaded."
                     : `${dto.files.length} documents have been uploaded.`
                   : undefined;
                 stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(

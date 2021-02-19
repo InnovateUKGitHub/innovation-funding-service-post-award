@@ -11,7 +11,7 @@ import { healthCheck } from "./healthCheck";
 
 // Set up New Relic to monitor app when deployed
 if (process.env.NEW_RELIC_ENABLED === "true") {
-  require("newrelic"); // tslint:disable-line:no-var-requires
+  require("newrelic");
   setInterval(healthCheck, 60000);
 }
 

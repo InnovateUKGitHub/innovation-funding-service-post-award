@@ -48,7 +48,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     return (
       <ACC.Section>
         <ACC.LinksList
-          openNewWindow={true}
+          openNewWindow
           links={itemType.files.map(x => ({ url: x.relativeUrl, textContent: (content: Content) => content.pcrAddPartnerStateAidEligibilityContent.labels.deMinimisDeclarationForm }))}
         />
       </ACC.Section>
@@ -75,7 +75,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
             <UploadForm.MulipleFileUpload
               labelContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.uploadInputLabel}
               name="attachment"
-              labelHidden={true}
+              labelHidden
               value={data => data.files}
               update={(dto, files) => {
                 dto.files = files || [];
@@ -136,7 +136,7 @@ export const DeMinimisStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, 
               onFileChange={(isSaving, dto) => {
                 stores.messages.clearMessages();
                 // show message if remaining on page
-                const successMessage = isSaving ? dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.` : undefined;
+                const successMessage = isSaving ? dto.files.length === 1 ? "Your document has been uploaded." : `${dto.files.length} documents have been uploaded.` : undefined;
                 stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(isSaving, props.project.id, props.pcrItem.id, dto, isSaving, successMessage);
               }}
               onFileDelete={(dto, document) => {

@@ -1,9 +1,8 @@
-// tslint:disable
-import { TestContext } from "../../testContextProvider";
 import { CreateMonitoringReportCommand } from "@server/features/monitoringReports/createMonitoringReport";
 import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringReports/getMonitoringReportActiveQuestions";
 import { MonitoringReportDto } from "@framework/types";
 import { MonitoringReportStatus } from "@framework/constants";
+import { TestContext } from "../../testContextProvider";
 
 describe("createMonitoringReports", () => {
 
@@ -89,10 +88,10 @@ async function getCreateDto(context: TestContext, startDate?: string, endDate?: 
     x.Acc_CurrentPeriodNumber__c = 1;
   });
   const partner = context.testData.createPartner(project);
-  context.testData.createProfileTotalPeriod(partner, 1, x => {
-    startDate && (x.Acc_ProjectPeriodStartDate__c = startDate);
-    endDate && (x.Acc_ProjectPeriodEndDate__c = endDate);
-  });
+  context.testData.createProfileTotalPeriod(partner, 1, x => (
+    startDate && (x.Acc_ProjectPeriodStartDate__c = startDate),
+    endDate && (x.Acc_ProjectPeriodEndDate__c = endDate)
+  ));
 
   return {
     projectId: project.Id,

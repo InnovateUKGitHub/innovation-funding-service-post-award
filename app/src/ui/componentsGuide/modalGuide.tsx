@@ -44,7 +44,7 @@ export const modalGuide: IGuide = {
       "</Modal>",
     render: () => (
       <div>
-        <ModalLink open={true} modalId="modal1" styling={"PrimaryButton"}>Open Modal</ModalLink>
+        <ModalLink open modalId="modal1" styling={"PrimaryButton"}>Open Modal</ModalLink>
         <ModalProvider value={new ModalRegister()}>
           <Modal id="modal1">
             <Section title={"Modal demo"}>

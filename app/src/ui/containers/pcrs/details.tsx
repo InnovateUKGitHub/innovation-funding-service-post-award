@@ -1,12 +1,12 @@
 
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { ProjectDto, ProjectRole } from "@framework/types";
 
-import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { StoresConsumer } from "@ui/redux";
 import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants";
+import * as ACC from "../../components";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 interface Params {
   projectId: string;
@@ -95,7 +95,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     if ((project.roles & ProjectRole.MonitoringOfficer) && projectChangeRequest.comments && (projectChangeRequest.status === PCRStatus.Draft || projectChangeRequest.status === PCRStatus.QueriedByMonitoringOfficer)) {
       return (
         <ACC.Section title="Comments" qa="additionalComments">
-          <ACC.Renderers.SimpleString multiline={true}>
+          <ACC.Renderers.SimpleString multiline>
             {projectChangeRequest.comments}
           </ACC.Renderers.SimpleString>
         </ACC.Section>

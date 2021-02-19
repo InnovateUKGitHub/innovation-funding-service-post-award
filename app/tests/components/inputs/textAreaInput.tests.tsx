@@ -1,4 +1,3 @@
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
 import { TextAreaInput } from "../../../src/ui/components/inputs/textAreaInput";
@@ -20,7 +19,7 @@ describe("TextAreaInput", () => {
   });
 
   it("Renders as disabled", () => {
-    const wrapper = mount(<TextAreaInput name="testName" disabled={true}/>);
+    const wrapper = mount(<TextAreaInput name="testName" disabled/>);
     expect(wrapper.childAt(0).prop("disabled")).toBe(true);
   });
 

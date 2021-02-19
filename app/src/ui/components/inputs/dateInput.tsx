@@ -1,12 +1,9 @@
-// tslint:disable no-duplicate-string
 import React from "react";
-import { BaseInput } from "./baseInput";
 import { DateTime } from "luxon";
 import classNames from "classnames";
+import { BaseInput } from "./baseInput";
 
-interface FullDateInputProps extends InputProps<Date> {
-
-}
+interface FullDateInputProps extends InputProps<Date> {}
 
 interface FullDateState {
   day: string;
@@ -25,8 +22,7 @@ export class FullDateInput extends BaseInput<FullDateInputProps, FullDateState> 
         month: val.toFormat("MM"),
         year: val.toFormat("yyyy")
       };
-    }
-    else {
+    } else {
       this.state = {
         day: "",
         month: "",
@@ -121,11 +117,9 @@ export class FullDateInput extends BaseInput<FullDateInputProps, FullDateState> 
 
       if (result.isValid) {
         this.props.onChange(result.toJSDate());
-      }
-      else if (day !== "" || month !== "" || year !== "") {
+      } else if (day !== "" || month !== "" || year !== "") {
         this.props.onChange(new Date(NaN));
-      }
-      else {
+      } else {
         this.props.onChange(null);
       }
     }
@@ -152,8 +146,7 @@ export class MonthYearInput extends BaseInput<MonthYearInputProps, MonthYearStat
         month: val.toFormat("MM"),
         year: val.toFormat("yyyy")
       };
-    }
-    else {
+    } else {
       this.state = {
         month: "",
         year: ""
@@ -226,11 +219,9 @@ export class MonthYearInput extends BaseInput<MonthYearInputProps, MonthYearStat
 
       if (result.isValid) {
         this.props.onChange(result.toJSDate());
-      }
-      else if (month !== "" || year !== "") {
+      } else if (month !== "" || year !== "") {
         this.props.onChange(new Date(NaN));
-      }
-      else {
+      } else {
         this.props.onChange(null);
       }
     }

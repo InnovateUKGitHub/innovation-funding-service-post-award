@@ -1,5 +1,3 @@
-import { SyncCommandBase } from "../common/commandBase";
-import { SalesforceProjectRole } from "../../repositories/partnersRepository";
 import {
     BankCheckStatus,
     BankDetailsTaskStatus,
@@ -10,6 +8,8 @@ import {
     SpendProfileStatus
 } from "@framework/types";
 import { Partner } from "@framework/entities";
+import { SyncCommandBase } from "../common/commandBase";
+import { SalesforceProjectRole } from "../../repositories/partnersRepository";
 
 export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
     constructor(

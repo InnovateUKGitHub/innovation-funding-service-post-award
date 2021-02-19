@@ -1,4 +1,3 @@
-// tslint:disable-next-line: import-blacklist
 import { ReactWrapper } from "enzyme";
 
 export function getColumnValues(wrapper: ReactWrapper, tableQA: string, columnQA: string): ReactWrapper[] {
@@ -52,5 +51,5 @@ export function getColumnTextValues(container: Element, dataQa: string, index: n
   const columnValue = getRowElements(container, dataQa, index);
 
   // Note: Check textContent is defined
-  return columnValue.reduce<string[]>((acc, txt) => (!!txt.textContent ? [...acc, txt.textContent] : acc), []);
+  return columnValue.reduce<string[]>((acc, txt) => (txt.textContent ? [...acc, txt.textContent] : acc), []);
 }

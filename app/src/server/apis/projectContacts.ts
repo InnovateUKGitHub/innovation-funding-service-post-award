@@ -1,7 +1,7 @@
-import {ApiParams, ControllerBase} from "./controllerBase";
+import { ProjectContactDto } from "@framework/dtos";
 import contextProvider from "../features/common/contextProvider";
 import {GetAllForProjectQuery} from "../features/projectContacts/getAllForProjectQuery";
-import { ProjectContactDto } from "@framework/dtos";
+import {ApiParams, ControllerBase} from "./controllerBase";
 
 export interface IProjectContactsApi {
   getAllByProjectId: (params: ApiParams<{projectId: string}>) => Promise<ProjectContactDto[]>;

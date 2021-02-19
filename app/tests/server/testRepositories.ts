@@ -1,5 +1,5 @@
+/* eslint-disable no-underscore-dangle */
 import { Stream } from "stream";
-import { TestRepository } from "./testRepository";
 import * as Repositories from "@server/repositories";
 import { FileTypeNotAllowedError } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
@@ -13,21 +13,22 @@ import {
   PCRStatus,
   TypeOfAid
 } from "@framework/types";
-import { TestFileWrapper } from "./testData";
 import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
 import * as Entities from "@framework/entities";
 import { PicklistEntry } from "jsforce";
 import { getAllEnumValues } from "@shared/enumHelper";
-import { PCRStatusesPicklist } from "../server/features/pcrs/pcrStatusesPicklist";
-import { PCRProjectRolesPicklist } from "./features/pcrs/pcrProjectRolesPicklist";
-import { PCRPartnerTypesPicklist } from "./features/pcrs/pcrPartnerTypesPicklist";
-import { PCRParticipantSizePicklist } from "./features/pcrs/pcrParticipantSizePicklist";
 import { DocumentDescriptionMapper, SalesforceDocumentMapper } from "@server/repositories/mappers/documentMapper";
 import { DocumentEntity } from "@framework/entities/document";
 import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
 import { PcrSpendProfileEntity } from "@framework/entities/pcrSpendProfile";
 import { PcrSpendProfileEntityForCreate } from "@framework/entities";
+import { PCRStatusesPicklist } from "../server/features/pcrs/pcrStatusesPicklist";
+import { PCRParticipantSizePicklist } from "./features/pcrs/pcrParticipantSizePicklist";
+import { PCRPartnerTypesPicklist } from "./features/pcrs/pcrPartnerTypesPicklist";
+import { PCRProjectRolesPicklist } from "./features/pcrs/pcrProjectRolesPicklist";
+import { TestFileWrapper } from "./testData";
+import { TestRepository } from "./testRepository";
 import { PCRProjectLocationPicklist } from "./features/pcrs/pcrProjectLocationPicklist";
 import { PCRSpendProfileCapitalUsageTypePicklist } from "./features/pcrs/pcrSpendProfileCapitalUsageTypesPicklist";
 import { PCRSpendProfileOverheadRatePicklist } from "./features/pcrs/pcrSpendProfileOverheadsRateOptionsPicklist";
@@ -51,7 +52,6 @@ class PartnerTestRepository extends TestRepository<Entities.Partner> implements 
     return super.getOne(x => x.id === partnerId);
   }
 
-  // tslint:disable-next-line: cognitive-complexity
   update(updatedPartner: Repositories.ISalesforcePartner) {
     const item = this.Items.find(x => x.id === updatedPartner.Id);
     if (item) {
@@ -178,7 +178,7 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
   }
 
   insert(item: Partial<Repositories.ISalesforceClaimDetails>): Promise<string> {
-    const newId: string = `ClaimDetails-${this.Items.length}`;
+    const newId = `ClaimDetails-${this.Items.length}`;
     this.Items.push({ ...item, Id: newId } as Repositories.ISalesforceClaimDetails);
     return Promise.resolve(newId);
   }
@@ -407,7 +407,7 @@ class ProfileDetailsTestRepository extends TestRepository<Repositories.ISalesfor
     updates.forEach(update => {
       const item = this.Items.find(x => x.Id === update.Id);
 
-      if (!!item) {
+      if (item) {
         Object.assign(item, update);
       }
     });
@@ -574,6 +574,7 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
     const id = `ProjectChangeRequest${(this.Items.length)}`;
     const items = this.mapItemsForCreate(id, projectChangeRequest, projectChangeRequest.items);
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const insertPayload: Entities.ProjectChangeRequestEntity = { id, items, ...projectChangeRequest };
 
@@ -592,31 +593,31 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
   }
 
   getPcrChangeStatuses(): Promise<PicklistEntry[]> {
-    const picklistEntry: PicklistEntry[] = new Array();
+    const picklistEntry: PicklistEntry[] = [];
     PCRStatusesPicklist.forEach(x => picklistEntry.push(x));
     return Promise.resolve(picklistEntry);
   }
 
   getProjectRoles(): Promise<PicklistEntry[]> {
-    const picklistEntry: PicklistEntry[] = new Array();
+    const picklistEntry: PicklistEntry[] = [];
     PCRProjectRolesPicklist.forEach(x => picklistEntry.push(x));
     return Promise.resolve(picklistEntry);
   }
 
   getPartnerTypes(): Promise<PicklistEntry[]> {
-    const picklistEntry: PicklistEntry[] = new Array();
+    const picklistEntry: PicklistEntry[] = [];
     PCRPartnerTypesPicklist.forEach(x => picklistEntry.push(x));
     return Promise.resolve(picklistEntry);
   }
 
   getParticipantSizes(): Promise<PicklistEntry[]> {
-    const picklistEntry: PicklistEntry[] = new Array();
+    const picklistEntry: PicklistEntry[] = [];
     PCRParticipantSizePicklist.forEach(x => picklistEntry.push(x));
     return Promise.resolve(picklistEntry);
   }
 
   getProjectLocations(): Promise<PicklistEntry[]> {
-    const picklistEntry: PicklistEntry[] = new Array();
+    const picklistEntry: PicklistEntry[] = [];
     PCRProjectLocationPicklist.forEach(x => picklistEntry.push(x));
     return Promise.resolve(picklistEntry);
   }
@@ -638,7 +639,7 @@ class PcrSpendProfileTestRepository extends TestRepository<PcrSpendProfileEntity
   updateSpendProfiles(updates: PcrSpendProfileEntity[]) {
     updates.forEach(update => {
       const item = this.Items.find(x => x.id === update.id);
-      if (!!item) Object.assign(item, update);
+      if (item) Object.assign(item, update);
     });
     return Promise.resolve(true);
   }
@@ -648,13 +649,13 @@ class PcrSpendProfileTestRepository extends TestRepository<PcrSpendProfileEntity
   }
 
   getCapitalUsageTypes(): Promise<PicklistEntry[]> {
-    const picklistEntry: PicklistEntry[] = new Array();
+    const picklistEntry: PicklistEntry[] = [];
     PCRSpendProfileCapitalUsageTypePicklist.forEach(x => picklistEntry.push(x));
     return Promise.resolve(picklistEntry);
   }
 
   getOverheadRateOptions(): Promise<IPicklistEntry[]> {
-    const picklistEntry: IPicklistEntry[] = new Array();
+    const picklistEntry: IPicklistEntry[] = [];
     PCRSpendProfileOverheadRatePicklist.forEach(x => picklistEntry.push(x));
     return Promise.resolve(picklistEntry);
   }

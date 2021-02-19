@@ -1,6 +1,6 @@
-import { IValidationResult, NestedResult, Result, Results } from "../validation";
 import { flatten } from "@framework/util/arrayHelpers";
 import { useContent } from "@ui/hooks";
+import { IValidationResult, NestedResult, Result, Results } from "../validation";
 
 interface Props {
   validation?: IValidationResult | null;
@@ -39,13 +39,11 @@ export function ValidationSummary({ validation, compressed }: Props) {
       if (x instanceof NestedResult && compressed !== true && x.results.length) {
         if (!x.listValidation.isValid) {
           results.push(x.listValidation);
-        }
-        else {
+        } else {
           const childErrors = flatten((x as NestedResult<Results<{}>>).results.filter(y => !y.isValid).map(y => y.errors));
           childErrors.forEach(e => results.push(e));
         }
-      }
-      else {
+      } else {
         results.push(x);
       }
     });

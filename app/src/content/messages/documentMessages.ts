@@ -10,7 +10,7 @@ export class DocumentMessages extends ContentBase {
   public readonly infoTitle = this.getContent("infoTitle");
   public readonly infoContent = ( permittedTypes: IAppOptions["permittedTypes"]) => {
     return this.getContent("infoContent", { markdown: true, ...permittedTypes });
-  }
+  };
   public readonly noDocumentsUploaded = this.getContent("no-documents-uploaded");
   public readonly documentsNotApplicable = this.getContent("documents-not-applicable");
   public readonly newWindow = this.getContent("new-window");

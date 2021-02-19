@@ -13,7 +13,7 @@ export class TestUser implements IClientUser {
     public roleInfo: {};
     public csrf: string;
 
-    public set(user: Partial<{email: string, name: string}>) {
+    public set(user: Partial<{email: string; name: string}>) {
         this.email = user.email || this.email;
         this.name = user.name || this.name;
     }

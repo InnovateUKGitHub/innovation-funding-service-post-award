@@ -11,7 +11,6 @@ import { DashboardProjectProps, ProjectProps } from "./Dashboard.interface";
 
 import * as ACC from "../../../components";
 
-// tslint:disable-next-line: cognitive-complexity
 export function DashboardProject({ routes, ...props }: DashboardProjectProps) {
   const isActionRequired = ({ section, project, partner }: ProjectProps): boolean => {
     if (section === "archived" || section === "upcoming") {

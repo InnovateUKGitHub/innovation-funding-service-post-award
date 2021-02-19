@@ -1,9 +1,9 @@
-import { Configuration, IConfig, QueryBase } from "../common";
 import { PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { IContext } from "@framework/types";
-import { GetAllRecordTypesQuery } from "../general/getAllRecordTypesQuery";
 import { PCRItemType } from "@framework/constants";
 import { RecordType } from "@framework/entities";
+import { GetAllRecordTypesQuery } from "../general/getAllRecordTypesQuery";
+import { IConfig, QueryBase } from "../common";
 
 interface IMetaValue {
   type: PCRItemType;
@@ -32,8 +32,8 @@ const singlePartnerFinancialVirementGuidance = `You need to submit a reallocate 
 
 You must not:
 
-*  increase the combined grant funding within the collaboration
-*  exceed any individual partner’s award rate limit
+* increase the combined grant funding within the collaboration
+* exceed any individual partner’s award rate limit
 
 You should not increase the overhead percentage rate.
 `;
@@ -42,8 +42,8 @@ const multiplePartnerFinancialVirementGuidance = `You need to submit a reallocat
 
 You must not:
 
-*  increase the combined grant funding within the collaboration
-*  exceed any individual partner’s award rate limit
+* increase the combined grant funding within the collaboration
+* exceed any individual partner’s award rate limit
 
 You should not increase the overhead percentage rate.
 `;

@@ -1,8 +1,8 @@
 import * as ACC from "@ui/components";
-import { suspendProjectSteps } from "./workflow";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForProjectSuspensionDto } from "@framework/dtos";
 import { PCRProjectSuspensionItemDtoValidator } from "@ui/validators";
+import { suspendProjectSteps } from "./workflow";
 
 export const SuspendProjectSummary = (props: PcrSummaryProps<PCRItemForProjectSuspensionDto, PCRProjectSuspensionItemDtoValidator, suspendProjectSteps>) => {
   return (

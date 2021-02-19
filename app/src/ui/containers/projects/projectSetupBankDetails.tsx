@@ -49,7 +49,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
             qa="bank-details-form"
           >
             <Form.Fieldset headingContent={x => x.projectSetupBankDetails.organisationInfoFieldsetTitle}>
-              <ACC.Renderers.SimpleString bold={true}>{editor.data.name}</ACC.Renderers.SimpleString>
+              <ACC.Renderers.SimpleString bold>{editor.data.name}</ACC.Renderers.SimpleString>
               <Form.String
                 name="companyNumber"
                 width={"one-third"}

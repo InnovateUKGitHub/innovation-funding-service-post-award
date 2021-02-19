@@ -93,7 +93,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
             onSubmit={handleSubmit}
             qa="claim-forecast-form"
           >
-            <ACC.Claims.ForecastTable data={combined} editor={editor} isSubmitting={true} />
+            <ACC.Claims.ForecastTable data={combined} editor={editor} isSubmitting />
             <Form.Fieldset qa="last-saved">
               {combined.partner.forecastLastModifiedDate && <ACC.Claims.ClaimLastModified modifiedDate={combined.partner.forecastLastModifiedDate} />}
             </Form.Fieldset>

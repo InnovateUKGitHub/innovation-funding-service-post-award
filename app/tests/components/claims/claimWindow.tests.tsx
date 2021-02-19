@@ -1,12 +1,8 @@
-// tslint:disable:no-identical-functions no-duplicate-string
-// tslint:disable-next-line: import-blacklist
-import Enzyme, { mount, shallow } from "enzyme";
-
+import { mount } from "enzyme";
 import { DateTime, Settings } from "luxon";
-import { ClaimWindow } from "../../../src/ui/components/claims/claimWindow";
 import { TestBed, TestBedContent } from "@shared/TestBed";
+import { ClaimWindow } from "../../../src/ui/components/claims/claimWindow";
 import { findByQa } from "../helpers/find-by-qa";
-import { text } from "body-parser";
 
 describe("Claim Window", () => {
 

@@ -65,7 +65,7 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data> {
     );
   }
 
-  private renderFooterRow(row: { key: string, title: React.ReactNode, value: React.ReactNode, numberOfColumns: number, qa: string, isBold?: boolean }) {
+  private renderFooterRow(row: { key: string; title: React.ReactNode; value: React.ReactNode; numberOfColumns: number; qa: string; isBold?: boolean }) {
     return (
       <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
         <th colSpan={row.numberOfColumns-1} className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{row.title}</th>

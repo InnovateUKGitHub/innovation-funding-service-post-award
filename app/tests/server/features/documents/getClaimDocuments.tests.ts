@@ -1,7 +1,7 @@
-import { TestContext } from "../../testContextProvider";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
 import { DocumentDescription } from "@framework/constants";
 import { Authorisation, ProjectRole } from "@framework/types";
+import { TestContext } from "../../testContextProvider";
 
 describe("GetClaimDocumentQuery", () => {
   it("should return all the documents when there is no filter", async () => {

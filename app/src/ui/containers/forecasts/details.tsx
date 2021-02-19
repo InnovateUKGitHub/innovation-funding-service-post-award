@@ -1,10 +1,10 @@
 import * as ACC from "@ui/components";
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { ClaimDto, PartnerDto, PartnerStatus, ProjectDto, ProjectRole, ProjectStatus } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { PrepareClaimRoute } from "@ui/containers";
 import { StoresConsumer } from "@ui/redux";
 import { PartnerName } from "@ui/components";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
 
 interface Params {

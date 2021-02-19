@@ -1,3 +1,4 @@
+/* global JSX */
 /**
  * Each component guide is in the structure of IGuide where 'name' is the name of the component or set of components being described and 'options' is an array of IGuideOptions.
  */

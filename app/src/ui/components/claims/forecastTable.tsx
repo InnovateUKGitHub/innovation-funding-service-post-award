@@ -72,7 +72,7 @@ export class ForecastTable extends React.Component<Props> {
 
   private getPeriodId(project: ProjectDto, claims: ClaimDto[], draftClaim: ClaimDto | null) {
     // If there is a draft claim in progress then return the smallest of the claim period and the project period
-    if (!!draftClaim) return Math.min(project.periodId, draftClaim.periodId);
+    if (draftClaim) return Math.min(project.periodId, draftClaim.periodId);
     // Sort a copy of the claims array so the original array is not affected
     const approvedClaims = [...claims].filter(x => x.isApproved).sort((a, b) => numberComparator(b.periodId, a.periodId));
     // If there are no approved claims then we must be in period 1 ie, claim period 0
@@ -81,7 +81,6 @@ export class ForecastTable extends React.Component<Props> {
     return approvedClaims[0].periodId;
   }
 
-  // tslint:disable-next-line: cognitive-complexity
   public render() {
     const { data, hideValidation, isSubmitting, editor } = this.props;
     const periodId = this.getPeriodId(data.project, data.claims, data.claim);
@@ -134,16 +133,16 @@ export class ForecastTable extends React.Component<Props> {
           isDivider={i === forecasts.length - 1 ? "bold" : undefined}
         />)}
 
-        <Table.Currency colClassName={() => "sticky-col sticky-col-right-3"} header="No data" hideHeader={true} value={x => x.total} qa="category-total" isDivider="normal" />
-        <Table.Currency colClassName={() => "sticky-col sticky-col-right-2"} header="No data" hideHeader={true} value={x => x.golCosts} qa="category-gol-costs" isDivider="normal" />
-        <Table.Percentage colClassName={() => "sticky-col sticky-col-right-1"} header="No data" hideHeader={true} value={x => x.difference} qa="category-difference" />
+        <Table.Currency colClassName={() => "sticky-col sticky-col-right-3"} header="No data" hideHeader value={x => x.total} qa="category-total" isDivider="normal" />
+        <Table.Currency colClassName={() => "sticky-col sticky-col-right-2"} header="No data" hideHeader value={x => x.golCosts} qa="category-gol-costs" isDivider="normal" />
+        <Table.Percentage colClassName={() => "sticky-col sticky-col-right-1"} header="No data" hideHeader value={x => x.difference} qa="category-difference" />
       </Table.Table>
     );
   }
 
   private parseClaimData(data: ForecastData, editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator> | undefined, periodId: number, numberOfPeriods: number | null) {
     const tableRows: TableRow[] = [];
-    const forecasts = !!editor ? editor.data : data.forecastDetails;
+    const forecasts = editor ? editor.data : data.forecastDetails;
     const costCategories = data.costCategories.filter(x => x.competitionType === data.project.competitionType && x.organisationType === data.partner.organisationType);
 
     costCategories.forEach(category => {
@@ -177,7 +176,7 @@ export class ForecastTable extends React.Component<Props> {
       }
 
       const gol = data.golCosts.find(x => x.costCategoryId === category.id);
-      row.golCosts = !!gol ? gol.value : 0;
+      row.golCosts = gol ? gol.value : 0;
       row.difference = this.calculateDifference(row.golCosts, row.total);
 
       tableRows.push(row);
@@ -191,8 +190,7 @@ export class ForecastTable extends React.Component<Props> {
     if (detail) {
       row.claims[periodId] = detail.value;
       row.total += detail.value;
-    }
-    else {
+    } else {
       row.claims[periodId] = 0;
     }
   }
@@ -202,8 +200,7 @@ export class ForecastTable extends React.Component<Props> {
     if (forecast) {
       row.forecasts[periodId] = forecast.value;
       row.total += forecast.value;
-    }
-    else {
+    } else {
       row.forecasts[periodId] = 0;
     }
   }
@@ -252,7 +249,7 @@ export class ForecastTable extends React.Component<Props> {
   private updateItem(data: ForecastDetailsDTO[], categoryId: string, periodId: number, update: (item: ForecastDetailsDTO) => void) {
     const cell = data.find(x => x.costCategoryId === categoryId && x.periodId === periodId);
 
-    if (!!cell) {
+    if (cell) {
       const { partner, project, costCategories } = this.props.data;
 
       update(cell);
@@ -282,7 +279,7 @@ export class ForecastTable extends React.Component<Props> {
       }
     }
 
-    if (!!this.props.onChange) {
+    if (this.props.onChange) {
       this.props.onChange(data);
     }
   }
@@ -363,7 +360,7 @@ export class ForecastTable extends React.Component<Props> {
     <td key={key} className={`govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular ${className}`}>
       <Currency data-qa={qa} value={total} />
     </td>
-  )
+  );
 }
 
 function getOverheadRate(

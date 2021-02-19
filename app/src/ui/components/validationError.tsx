@@ -1,5 +1,10 @@
-import { Result } from "../validation/result";
+/* eslint-disable jsx-a11y/anchor-has-content */
+// TODO: This should be a button since we supply no href
+/* eslint-disable jsx-a11y/anchor-is-valid */
+
+import React from "react";
 import { NestedResult, Results } from "@ui/validation";
+import { Result } from "../validation/result";
 
 interface Props {
   error: Result | null | undefined;
@@ -60,5 +65,6 @@ export const ValidationError: React.FunctionComponent<Props> = ({ error, hideMes
 };
 
 const ValidationErrorAnchor: React.FunctionComponent<{ result: Result }> = ({ result }) => {
+  // TODO: this shouldn't be an anchor without an href, a styled button will do
   return <a id={result.key} key={result.key} aria-hidden="true" />;
 };

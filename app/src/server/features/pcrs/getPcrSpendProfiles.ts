@@ -143,7 +143,6 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     }));
   }
 
-  /* tslint:disable-next-line:no-identical-functions */
   private mapOtherCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Other_Costs): PCRSpendProfileOtherCostsDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),

@@ -12,7 +12,7 @@ export const ReadonlyLabel: React.FunctionComponent<Props> = ({ qa, label, label
   return (
     <span>
       <h3 className="govuk-heading-m" data-qa={`label-${qa}`}>
-        {!!labelContent ? <Content value={labelContent}/> : label}
+        {labelContent ? <Content value={labelContent}/> : label}
       </h3>
       {children}
     </span>

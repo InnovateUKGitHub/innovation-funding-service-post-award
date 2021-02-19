@@ -1,10 +1,10 @@
-import * as Acc from "../../components";
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
-import { Pending } from "../../../shared/pending";
 import { DateTime } from "luxon";
 import { getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
 import { StoresConsumer } from "@ui/redux";
+import { Pending } from "../../../shared/pending";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
+import * as Acc from "../../components";
 
 export interface ClaimDashboardPageParams {
   projectId: string;
@@ -83,7 +83,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
       return this.renderClaimsTable(currentClaims, tableQa, project, partner, "Open");
     }
 
-    if (!!project.periodEndDate) {
+    if (project.periodEndDate) {
       return this.renderNoCurrentClaimsMessage(project.periodEndDate, previousClaims);
     }
 
@@ -122,7 +122,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
           qa="date"
           value={(x) => (x.paidDate || x.approvedDate || x.lastModifiedDate)}
         />
-        <ClaimTable.Custom header={<Acc.Content value={x => x.claimsDashboard.labels.actionHeader}/>} hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} routes={this.props.routes} />} />
+        <ClaimTable.Custom header={<Acc.Content value={x => x.claimsDashboard.labels.actionHeader}/>} hideHeader qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} routes={this.props.routes} />} />
       </ClaimTable.Table>
     );
   }

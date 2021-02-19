@@ -1,6 +1,6 @@
+import { ClaimMessages } from "@content/messages/claimMessages";
 import { ContentPageBase } from "../../contentPageBase";
 import { Content } from "../../content";
-import { ClaimMessages } from "@content/messages/claimMessages";
 
 export class ClaimForecastContent extends ContentPageBase {
   constructor(private readonly content: Content, protected competitionType?: string) {

@@ -1,10 +1,10 @@
-import * as ACC from "../../components";
 import { ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { Pending } from "@shared/pending";
 import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { StoresConsumer } from "@ui/redux";
 import { PCRStatus } from "@framework/constants";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
+import * as ACC from "../../components";
 
 interface Params {
   projectId: string;
@@ -64,7 +64,7 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
     const PCRTable = ACC.TypedTable<PCRSummaryDto>();
 
     if (!pcrs.length) {
-      return <ACC.Renderers.SimpleString children={message}/>;
+      return <ACC.Renderers.SimpleString>{message}</ACC.Renderers.SimpleString>;
     }
 
     return (
@@ -74,23 +74,21 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
         <PCRTable.ShortDate qa="started" header="Started" value={x => x.started} />
         <PCRTable.String qa="stauts" header="Status" value={x => x.statusName} />
         <PCRTable.ShortDate qa="lastUpdated" header="Last updated" value={x => x.lastUpdated} />
-        <PCRTable.Custom qa="actions" header="Actions" hideHeader={true} value={x => this.renderLinks(project, x)} />
+        <PCRTable.Custom qa="actions" header="Actions" hideHeader value={x => this.renderLinks(project, x)} />
       </PCRTable.Table>
     );
   }
 
   private renderLinks(project: ProjectDto, pcr: PCRSummaryDto): React.ReactNode {
-    const links: { route: ILinkInfo, text: string, qa: string; }[] = [];
+    const links: { route: ILinkInfo; text: string; qa: string }[] = [];
 
     const prepareStatus = [PCRStatus.Draft, PCRStatus.QueriedByMonitoringOfficer, PCRStatus.QueriedByInnovateUK];
 
     if(prepareStatus.indexOf(pcr.status) >= 0 && project.roles & ProjectRole.ProjectManager) {
       links.push({route: this.props.routes.pcrPrepare.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Edit", qa:"pcrPrepareLink"});
-    }
-    else if(pcr.status === PCRStatus.SubmittedToMonitoringOfficer && project.roles & ProjectRole.MonitoringOfficer) {
+    } else if(pcr.status === PCRStatus.SubmittedToMonitoringOfficer && project.roles & ProjectRole.MonitoringOfficer) {
       links.push({route: this.props.routes.pcrReview.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Review", qa:"pcrReviewLink"});
-    }
-    else if((project.roles & ProjectRole.ProjectManager | project.roles & ProjectRole.MonitoringOfficer)) {
+    } else if((project.roles & ProjectRole.ProjectManager | project.roles & ProjectRole.MonitoringOfficer)) {
       links.push({route: this.props.routes.pcrDetails.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "View", qa:"pcrViewLink"});
     }
 
@@ -108,7 +106,7 @@ const PCRsDashboardContainer = (props: Params & BaseProps) => (
       stores => (
         <PCRsDashboardComponent
           project={stores.projects.getById(props.projectId)}
-          pcrs={ stores.projectChangeRequests.getAllForProject(props.projectId)}
+          pcrs={stores.projectChangeRequests.getAllForProject(props.projectId)}
           {...props}
         />
       )

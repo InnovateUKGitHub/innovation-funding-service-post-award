@@ -58,7 +58,7 @@ class Component extends React.Component<Props> {
     );
   }
 
-  private renderPrepareTable(data: { partner: PartnerDto, partnerVirement: PartnerVirementsDto }[], dto: FinancialVirementDto) {
+  private renderPrepareTable(data: { partner: PartnerDto; partnerVirement: PartnerVirementsDto }[], dto: FinancialVirementDto) {
     const Table = ACC.TypedTable<typeof data[0]>();
     return (
       <Table.Table qa="partners" data={data}>
@@ -73,7 +73,7 @@ class Component extends React.Component<Props> {
     );
   }
 
-  private renderReviewTable(data: { partner: PartnerDto, partnerVirement: PartnerVirementsDto }[], dto: FinancialVirementDto) {
+  private renderReviewTable(data: { partner: PartnerDto; partnerVirement: PartnerVirementsDto }[], dto: FinancialVirementDto) {
     const Table = ACC.TypedTable<typeof data[0]>();
     return (
       <Table.Table qa="partners" data={data} headerRowClass="govuk-body-s" bodyRowClass={x => "govuk-body-s"} footerRowClass="govuk-body-s">
@@ -104,8 +104,8 @@ class Component extends React.Component<Props> {
       ;
 
     return (
-      <ACC.Link preserveData={true} route={route}>
-        <ACC.PartnerName partner={partner} showIsLead={true} />
+      <ACC.Link preserveData route={route}>
+        <ACC.PartnerName partner={partner} showIsLead />
       </ACC.Link>
     );
   }

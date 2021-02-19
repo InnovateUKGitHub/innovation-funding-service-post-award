@@ -1,9 +1,7 @@
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
-
+import TestBed, { TestBedContent } from "@shared/TestBed";
 import { DocumentSingle, DocumentSingleProps } from "../../src/ui/components";
 import { findByQa } from "./helpers/find-by-qa";
-import TestBed, { TestBedContent } from "@shared/TestBed";
 
 type AnchorWithDataQa = { "data-qa": string } & React.DetailedHTMLProps<
   React.AnchorHTMLAttributes<HTMLAnchorElement>,
@@ -50,9 +48,9 @@ describe("DocumentSingle", () => {
   it("should render valid link", () => {
     const { linkElementProps, messageElement } = setup();
 
-    // tslint:disable: object-literal-key-quotes
     const expectedProps = {
       href: defaultProps.document.link,
+      rel: undefined,
       children: defaultProps.document.fileName,
       target: undefined,
       "data-qa": undefined,

@@ -1,9 +1,8 @@
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 import { ErrorSummary, ErrorSummaryProps } from "@ui/components";
-import { findByQa } from "./helpers/find-by-qa";
 import { ErrorCode } from "@framework/types";
 import TestBed, { TestBedContent } from "@shared/TestBed";
+import { findByQa } from "./helpers/find-by-qa";
 
 describe("<ErrorSummary />", () => {
   const unAuthenticatedError: ErrorSummaryProps = { code: ErrorCode.UNAUTHENTICATED_ERROR };

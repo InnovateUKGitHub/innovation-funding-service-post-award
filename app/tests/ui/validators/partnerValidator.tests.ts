@@ -1,4 +1,3 @@
-import { TestContext } from "../../server/testContextProvider";
 import { GetByIdQuery } from "@server/features/partners";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import { BankCheckStatus, BankDetailsTaskStatus, PartnerStatus, SpendProfileStatus } from "@framework/dtos";
@@ -11,8 +10,8 @@ import {
 import { getAllEnumValues } from "@shared/enumHelper";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { DocumentDescription } from "@framework/constants";
+import { TestContext } from "../../server/testContextProvider";
 
-// tslint:disable-next-line:no-big-function
 describe("Partner Validator", () => {
   describe("partnerStatus", () => {
     it("should validate partner status transitions", async () => {

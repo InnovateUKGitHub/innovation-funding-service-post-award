@@ -1,5 +1,5 @@
-import { SalesforceRepositoryBaseWithMapping, Updatable } from "./salesforceRepositoryBase";
 import { Partner } from "@framework/entities/partner";
+import { SalesforceRepositoryBaseWithMapping, Updatable } from "./salesforceRepositoryBase";
 import { SalesforcePartnerMapper } from "./mappers/partnerMapper";
 
 export enum SalesforceProjectRole {
@@ -18,8 +18,8 @@ export interface ISalesforcePartner {
   Acc_ProjectRole__c: string;
   ProjectRoleName: string;
   Acc_ProjectId__r: {
-    Id: string,
-    Acc_CompetitionType__c: string,
+    Id: string;
+    Acc_CompetitionType__c: string;
   };
   Acc_TotalParticipantCosts__c: number;
   Acc_TotalApprovedCosts__c: number;

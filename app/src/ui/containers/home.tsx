@@ -1,11 +1,11 @@
-import { Link, Modal, PageTitle, TypedForm } from "../components";
-import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute, } from "./containerBase";
-import { SimpleString } from "../components/renderers";
 import { Authorisation } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { StoresConsumer } from "@ui/redux";
 import { ContentConsumer } from "@ui/redux/contentProvider";
 import * as ACC from "@ui/components";
+import { SimpleString } from "../components/renderers";
+import { Link, Modal, PageTitle, TypedForm } from "../components";
+import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute, } from "./containerBase";
 
 interface Data {
   userEmail: string;
@@ -31,7 +31,7 @@ class Component extends ContainerBaseWithState<{}, Data, {}, State> {
           <div className="govuk-grid-column-full">
             <h2><ACC.Content value={x => x.home.currentUserHeading}/></h2>
             <CurrentUserForm.Form data={formData} qa={"currentUser"} onChange={v => this.setState(v)}>
-              <CurrentUserForm.String label="user" labelHidden={true} name="user" value={x => x.email} update={(x, v) => x.email = v || ""} />
+              <CurrentUserForm.String label="user" labelHidden name="user" value={x => x.email} update={(x, v) => x.email = v || ""} />
               <CurrentUserForm.Submit><ACC.Content value={x => x.home.changeUserMessage}/></CurrentUserForm.Submit>
               <CurrentUserForm.Button name="reset"><ACC.Content value={x => x.home.resetUserMessage}/></CurrentUserForm.Button>
             </CurrentUserForm.Form>

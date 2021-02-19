@@ -1,4 +1,3 @@
-// tslint:disable: no-duplicate-string no-identical-functions
 import { ForecastDetailsDTO } from "@framework/dtos";
 import { getArrayFromPeriod } from "@ui/containers/claims/utils/claimForecastUtils";
 

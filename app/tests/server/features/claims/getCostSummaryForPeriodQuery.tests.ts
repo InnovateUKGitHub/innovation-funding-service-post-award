@@ -1,8 +1,7 @@
-import { TestContext } from "../../testContextProvider";
 import { GetCostsSummaryForPeriodQuery } from "@server/features/claimDetails";
 import { Authorisation, ProjectRole } from "@framework/types";
+import { TestContext } from "../../testContextProvider";
 
-// tslint:disable-next-line:no-big-function
 describe("GetCostSummaryForPeriodQuery", () => {
   it("when valid then returns all cost categories", async () => {
     const context = new TestContext();

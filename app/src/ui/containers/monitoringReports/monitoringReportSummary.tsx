@@ -1,10 +1,10 @@
 import React from "react";
-import * as ACC from "../../components";
 import * as Dtos from "@framework/types";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { MonitoringReportDtoValidator, QuestionValidator } from "@ui/validators";
 import { Pending } from "@shared/pending";
 import { MonitoringReportReportSummaryProps } from "@ui/containers/monitoringReports/monitoringReportWorkflowDef";
+import * as ACC from "../../components";
 
 interface InnerProps {
   statusChanges: Pending<Dtos.MonitoringReportStatusChangeDto[]>;
@@ -79,7 +79,7 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
       <span id={validation.score.key}>
         <ACC.Link
           id={validation.comments.key}
-          replace={true}
+          replace
           route={this.props.getEditLink(`question-${question.displayOrder}`)}
         >
           <ACC.Content value={(x) => x.monitoringReportsSummary.editItemButton} />
@@ -110,7 +110,7 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
         label="Comments"
         content={question.comments || ""}
         qa={`question-${question.displayOrder}-comments`}
-        /*Put the action on the second item if not showing the first*/
+        /* Put the action on the second item if not showing the first*/
         action={!question.isScored && this.getAction(validation, question)}
       />
     );
@@ -120,14 +120,14 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
     const validation = editor && editor.validator.periodId;
     return (
       <ACC.Section>
-        <ACC.SummaryList qa={`summary-period`}>
+        <ACC.SummaryList qa={"summary-period"}>
           <ACC.SummaryListItem
             validation={validation}
             label={<ACC.Content value={(x) => x.monitoringReportsSummary.periodLabel}/>}
             content={editor.data.periodId}
-            qa={`period`}
-            /*Put the action on the second item if not showing the first*/
-            action={this.props.mode === "prepare" && <ACC.Link id={validation.key} replace={true} route={this.props.routes.monitoringReportPreparePeriod.getLink({projectId: this.props.projectId, id: this.props.id})}><ACC.Content value={(x) => x.monitoringReportsSummary.editItemButton} /></ACC.Link>}
+            qa={"period"}
+            /* Put the action on the second item if not showing the first*/
+            action={this.props.mode === "prepare" && <ACC.Link id={validation.key} replace route={this.props.routes.monitoringReportPreparePeriod.getLink({projectId: this.props.projectId, id: this.props.id})}><ACC.Content value={(x) => x.monitoringReportsSummary.editItemButton} /></ACC.Link>}
           />
         </ACC.SummaryList>
       </ACC.Section>

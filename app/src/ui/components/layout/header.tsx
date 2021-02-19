@@ -15,7 +15,7 @@ export interface HeaderProps {
   navigationItems?: NavigationItem[];
 }
 
-export const useHeader = (domainUrl: string, content: HeaderContent): HeaderProps => {
+export const getHeaderProps = (domainUrl: string, content: HeaderContent): HeaderProps => {
   const getIfsLink = (value: string) => domainUrl + value;
 
   const siteLink = getIfsLink("/competition/search");
@@ -105,14 +105,12 @@ export function Header({ navigationItems, siteLink }: HeaderProps) {
             <div className="govuk-header__logo">{renderLogo()}</div>
 
             <div className="govuk-header__content">
-              {/* tslint:disable-next-line:react-a11y-anchors */}
               <a href={siteLink} className="govuk-header__link govuk-header__link--service-name" data-qa="service-name">
                 {content.header.siteName}
               </a>
 
               <button
                 type="button"
-                role="button"
                 className="govuk-header__menu-button govuk-js-header-toggle"
                 aria-controls="navigation"
                 aria-label="Show or hide Top Level Navigation"

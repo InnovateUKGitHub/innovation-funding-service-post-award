@@ -1,10 +1,10 @@
-import { ApiParams, ControllerBase } from "./controllerBase";
+import { CostsSummaryForPeriodDto } from "@framework/dtos";
 import { GetCostsSummaryForPeriodQuery } from "../features/claimDetails";
 import contextProvider from "../features/common/contextProvider";
-import { CostsSummaryForPeriodDto } from "@framework/dtos";
+import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface ICostsSummaryApi {
-  getAllByPartnerIdForPeriod: (params: ApiParams<{ projectId: string, partnerId: string, periodId: number }>) => Promise<CostsSummaryForPeriodDto[]>;
+  getAllByPartnerIdForPeriod: (params: ApiParams<{ projectId: string; partnerId: string; periodId: number }>) => Promise<CostsSummaryForPeriodDto[]>;
 }
 
 class Controller extends ControllerBase<CostsSummaryForPeriodDto> implements ICostsSummaryApi {
@@ -18,7 +18,7 @@ class Controller extends ControllerBase<CostsSummaryForPeriodDto> implements ICo
     }), (p) => this.getAllByPartnerIdForPeriod(p));
   }
 
-  public async getAllByPartnerIdForPeriod(params: ApiParams<{ projectId: string, partnerId: string, periodId: number }>) {
+  public async getAllByPartnerIdForPeriod(params: ApiParams<{ projectId: string; partnerId: string; periodId: number }>) {
     const query = new GetCostsSummaryForPeriodQuery(params.projectId, params.partnerId, params.periodId);
     return contextProvider.start(params).runQuery(query);
   }

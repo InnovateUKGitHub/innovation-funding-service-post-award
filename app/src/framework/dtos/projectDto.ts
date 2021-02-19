@@ -1,4 +1,3 @@
-// tslint:disable:no-bitwise
 import { ClaimFrequency } from "./claimFrequency";
 
 export enum ProjectStatus {

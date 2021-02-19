@@ -7,18 +7,18 @@ export interface EmailProps extends AnchorAttr {
   qa?: string;
 }
 
-export function Email({ href, className, qa, ...props }: EmailProps) {
-  if (!props.children.length) return null;
-
-  const fallbackHref = props.children.trim();
+export function Email({ href, className, qa, children, ...props }: EmailProps) {
+  const fallbackHref = children.trim();
+  if (!children.length) return null;
 
   return (
-    // tslint:disable-next-line: react-a11y-anchors
     <a
       href={`mailto:${href || fallbackHref}`}
       data-qa={qa}
       className={cx("govuk-link govuk-!-font-size-19", className)}
       {...props}
-    />
+    >
+      {children}
+    </a>
   );
 }

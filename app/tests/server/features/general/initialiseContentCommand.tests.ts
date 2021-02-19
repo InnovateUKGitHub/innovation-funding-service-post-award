@@ -1,6 +1,5 @@
-// tslint:disable:no-duplicate-string
-import { TestContext } from "../../testContextProvider";
 import { InitialiseContentCommand } from "@server/features/general/initialiseContentCommand";
+import { TestContext } from "../../testContextProvider";
 
 describe("InitialiseContentCommand", () => {
   it("sets content using default file content", async () => {

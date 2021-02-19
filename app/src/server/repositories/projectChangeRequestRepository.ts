@@ -6,8 +6,10 @@ import {
   ProjectChangeRequestItemEntity,
   ProjectChangeRequestItemForCreateEntity,
 } from "@framework/entities";
-import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 import { ILogger } from "@server/features/common/logger";
+import { NotFoundError } from "@server/features/common";
+import { PCRItemStatus, PCRStatus } from "@framework/constants";
+import { IPicklistEntry } from "@framework/types";
 import {
   PcrContactRoleMapper,
   PcrParticipantSizeMapper,
@@ -16,9 +18,7 @@ import {
   PcrProjectRoleMapper,
   SalesforcePCRMapper
 } from "./mappers/projectChangeRequestMapper";
-import { NotFoundError } from "@server/features/common";
-import { PCRItemStatus, PCRStatus } from "@framework/constants";
-import { IPicklistEntry } from "@framework/types";
+import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface IProjectChangeRequestRepository {
   createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity): Promise<string>;
@@ -52,8 +52,8 @@ export interface ISalesforcePCR {
     Acc_Project__r: {
       Acc_CompetitionId__r: {
         Acc_TypeofAid__c: string;
-      }
-    }
+      };
+    };
   };
   // careful there is a typo in the salesforce setup
   // will probably change to Acc_MarkedAsComplete__c in the future!!

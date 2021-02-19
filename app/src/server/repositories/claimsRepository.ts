@@ -1,6 +1,6 @@
-import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
-import { NotFoundError } from "../features/common/appError";
 import { IPicklistEntry } from "@framework/types";
+import { NotFoundError } from "../features/common/appError";
+import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 
 export interface ISalesforceClaim {
   Id: string;
@@ -11,7 +11,7 @@ export interface ISalesforceClaim {
     Acc_ProjectId__c: string;
     Acc_AccountId__r: {
       Name: string;
-    }
+    };
   };
   LastModifiedDate: string;
   Acc_ClaimStatus__c: string;

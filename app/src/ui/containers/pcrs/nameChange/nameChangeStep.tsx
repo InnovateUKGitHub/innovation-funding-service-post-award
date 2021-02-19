@@ -42,7 +42,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRA
           <Form.String
             labelContent={x => x.pcrNameChange.labels.enterName}
             hint={props.getRequiredToCompleteMessage()}
-            labelHidden={true}
+            labelHidden
             name="accountName"
             value={x => x.accountName}
             update={(x, value) => x.accountName = value}

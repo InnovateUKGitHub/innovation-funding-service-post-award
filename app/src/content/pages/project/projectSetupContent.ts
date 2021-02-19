@@ -1,7 +1,7 @@
 import { ContentPageBase } from "@content/contentPageBase";
-import { Content } from "../../content";
 import { ProjectMessages } from "@content/messages/projectMessages";
 import { TaskListContent } from "@content/components/taskListContent";
+import { Content } from "../../content";
 
 export class ProjectSetupContent extends ContentPageBase {
   constructor(content: Content, protected competitionType?: string) {

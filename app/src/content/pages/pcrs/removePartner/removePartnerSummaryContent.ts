@@ -1,7 +1,7 @@
-import { ContentPageBase } from "../../../contentPageBase";
-import { Content } from "../../../content";
 import { PCRRemovePartnerLabels } from "@content/labels/pcrRemovePartnerLabels";
 import { DocumentMessages } from "@content/messages/documentMessages";
+import { ContentPageBase } from "../../../contentPageBase";
+import { Content } from "../../../content";
 
 export class PCRRemovePartnerSummaryContent extends ContentPageBase {
   constructor(content: Content, protected competitionType?: string) {

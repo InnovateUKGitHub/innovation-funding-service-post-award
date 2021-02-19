@@ -1,9 +1,9 @@
-import { ContentPageBase } from "../../../contentPageBase";
-import { Content } from "../../../content";
-import { PCRItem } from "../pcrItem";
 import { PCRAddPartnerLabels } from "@content/labels/pcrAddPartnerLabels";
 import { DocumentLabels } from "@content/labels/documentLabels";
 import { DocumentMessages } from "@content/messages/documentMessages";
+import { ContentPageBase } from "../../../contentPageBase";
+import { Content } from "../../../content";
+import { PCRItem } from "../pcrItem";
 
 export class PCRAddPartnerAgreementToPCRContent extends ContentPageBase {
   constructor(private readonly content: Content, protected competitionType?: string) {

@@ -1,4 +1,3 @@
-// tslint:disable: no-duplicate-string no-identical-functions
 import { isNumber, parseNumber, roundCurrency, sum } from "@framework/util/numberHelper";
 
 describe("numberHelper", () => {

@@ -1,6 +1,6 @@
 import { createRouter } from "router5";
-import { IRoutes, RouteKeys } from "./routeConfig";
 import browserPluginFactory from "router5/plugins/browser";
+import { IRoutes, RouteKeys } from "./routeConfig";
 
 export function configureRouter(routes: IRoutes) {
   const mapped = Object.keys(routes)

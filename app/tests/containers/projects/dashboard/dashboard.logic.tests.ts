@@ -172,7 +172,6 @@ const createStubData = (uid: string, project: ProjectDto, partner: PartnerDto): 
   },
 ];
 
-// tslint:disable: no-duplicate-string no-big-function
 describe("generateFilteredProjects()", () => {
   describe("returns totalProjects", () => {
     test.each`

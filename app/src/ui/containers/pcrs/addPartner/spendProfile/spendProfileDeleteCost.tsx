@@ -21,7 +21,6 @@ import {
 } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryType } from "@framework/entities";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { PcrAddSpendProfileCostParams } from "./spendProfilePrepareCost";
 import {
   DeleteCapitalUsageCostFormComponent,
   DeleteLabourCostFormComponent,
@@ -30,6 +29,7 @@ import {
   DeleteSubcontractingCostFormComponent,
   DeleteTravelAndSubsCostFormComponent
 } from "@ui/containers/pcrs/addPartner/spendProfile";
+import { PcrAddSpendProfileCostParams } from "./spendProfilePrepareCost";
 
 export interface PcrDeleteSpendProfileCostParams extends PcrAddSpendProfileCostParams {
   costId: string;

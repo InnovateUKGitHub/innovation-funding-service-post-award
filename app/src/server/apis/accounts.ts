@@ -1,7 +1,7 @@
-import { ApiParams, ControllerBase } from "./controllerBase";
-import contextProvider from "../features/common/contextProvider";
 import { AccountDto } from "@framework/dtos";
 import { GetAccountsQuery } from "@server/features/accounts/getAccounts";
+import contextProvider from "../features/common/contextProvider";
+import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface IAccountsApi {
   getAll: (params: ApiParams<{}>) => Promise<AccountDto[]>;

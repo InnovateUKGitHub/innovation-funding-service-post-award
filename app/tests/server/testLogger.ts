@@ -1,5 +1,5 @@
-import { ILogger, Logger } from "../../src/server/features/common/logger";
 import { LogLevel } from "@framework/types/logLevel";
+import { ILogger, Logger } from "../../src/server/features/common/logger";
 
 export class TestLogger implements ILogger {
   private readonly innerLogger = new Logger(undefined, LogLevel.DEBUG, true);

@@ -1,9 +1,9 @@
-import { StoreBase } from "./storeBase";
 import { ApiClient } from "@ui/apiClient";
 import { LoadingStatus, Pending } from "@shared/pending";
 import { NotFoundError } from "@server/features/common";
 import { RootState } from "../reducers";
 import { RootActionsOrThunk } from "../actions/root";
+import { StoreBase } from "./storeBase";
 import { PartnersStore } from "./partnersStore";
 
 export class CostCategoriesStore extends StoreBase {

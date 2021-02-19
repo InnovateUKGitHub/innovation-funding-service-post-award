@@ -1,9 +1,9 @@
-import { TestContext } from "../../testContextProvider";
 import { Authorisation, ProjectRole } from "@framework/types";
 import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteProjectChangeRequestCommand";
 import { BadRequestError, NotFoundError } from "@server/features/common";
 import { getAllEnumValues } from "@shared/enumHelper";
 import { PCRStatus } from "@framework/constants";
+import { TestContext } from "../../testContextProvider";
 
 describe("DeleteProjectChangeRequestCommand", () => {
   describe("authorisation", () => {
@@ -15,11 +15,11 @@ describe("DeleteProjectChangeRequestCommand", () => {
 
       const command = new DeleteProjectChangeRequestCommand(project.Id, pcr.id);
 
-      const auth    = new Authorisation({
+      const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.ProjectManager,
-          partnerRoles: {}
-        }
+          partnerRoles: {},
+        },
       });
 
       expect(await context.runAccessControl(auth, command)).toBe(true);
@@ -33,18 +33,18 @@ describe("DeleteProjectChangeRequestCommand", () => {
 
       const command = new DeleteProjectChangeRequestCommand(project.Id, pcr.id);
 
-      const auth    = new Authorisation({
+      const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer,
-          partnerRoles: {}
-        }
+          partnerRoles: {},
+        },
       });
 
       expect(await context.runAccessControl(auth, command)).toBe(false);
     });
   });
 
-  it("should throw error if pcr not found", async () => {
+  test("should throw error if pcr not found", async () => {
     const context = new TestContext();
 
     const project = context.testData.createProject();
@@ -54,7 +54,7 @@ describe("DeleteProjectChangeRequestCommand", () => {
     await expect(context.runCommand(command)).rejects.toThrow(NotFoundError);
   });
 
-  it("should throw error if pcr for different project", async () => {
+  test("should throw error if pcr for different project", async () => {
     const context = new TestContext();
 
     const project1 = context.testData.createProject();
@@ -66,11 +66,11 @@ describe("DeleteProjectChangeRequestCommand", () => {
     await expect(context.runCommand(command)).rejects.toThrow(NotFoundError);
   });
 
-  it("should delete pcr if valid request", async () => {
+  test("should delete pcr if valid request", async () => {
     const context = new TestContext();
 
     const project = context.testData.createProject();
-    const pcr = context.testData.createPCR(project, {status: PCRStatus.Draft});
+    const pcr = context.testData.createPCR(project, { status: PCRStatus.Draft });
 
     const command = new DeleteProjectChangeRequestCommand(project.Id, pcr.id);
 
@@ -81,17 +81,17 @@ describe("DeleteProjectChangeRequestCommand", () => {
     expect(context.repositories.projectChangeRequests.Items.length).toBe(0);
   });
 
-  const allStatusNotDraft = getAllEnumValues<PCRStatus>(PCRStatus).filter(x => x !== PCRStatus.Draft && x !== PCRStatus.Unknown);
+  const draftItemsToExclude = [PCRStatus.Draft, PCRStatus.Unknown];
+  const filteredPcrStates = getAllEnumValues<PCRStatus>(PCRStatus).filter(x => !draftItemsToExclude.includes(x));
 
-  // TODO: FIX this!!
-  // @ts-ignore
-  it.each(allStatusNotDraft.map(x => [PCRStatus[x], x]))("cannot delete pcr in %s status", async (_statusName: string, status: PCRStatus) => {
-    const context = new TestContext();
-    const pcr = context.testData.createPCR(undefined, {status});
+  filteredPcrStates.forEach(status => {
+    test(`cannot delete pcr in ${PCRStatus[status]} status`, async () => {
+      const context = new TestContext();
+      const pcr = context.testData.createPCR(undefined, { status });
 
-    const command = new DeleteProjectChangeRequestCommand(pcr.projectId, pcr.id);
+      const command = new DeleteProjectChangeRequestCommand(pcr.projectId, pcr.id);
 
-    await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
+      await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
+    });
   });
-
 });

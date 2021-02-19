@@ -255,7 +255,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
       <ACC.AccordionItem title={content.default.forecastItemTitle} qa="forecast-accordion">
         <ACC.Loader
           pending={pendingForecastData}
-          render={forecastData => <ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />}
+          render={forecastData => <ACC.Claims.ForecastTable data={forecastData} hideValidation />}
         />
       </ACC.AccordionItem>
     );
@@ -293,7 +293,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
             value={dto => options.find(x => x.id === dto.status)}
             update={(dto, val) => this.updateStatus(dto, val)}
             validation={data.editor.validator.status}
-            inline={true}
+            inline
           />
 
           {this.renderFormHiddenSection(data.editor, Form, data.project)}
@@ -344,7 +344,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
                 <UploadForm.MulipleFileUpload
                   label={this.props.content.default.uploadInputLabel}
                   name="attachment"
-                  labelHidden={true}
+                  labelHidden
                   value={x => x.files}
                   update={(dto, files) => (dto.files = files || [])}
                   validation={documentsEditor.validator.files}
@@ -353,7 +353,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
                 <UploadForm.DropdownList
                   label={this.props.content.default.descriptionLabel}
                   labelHidden={false}
-                  hasEmptyOption={true}
+                  hasEmptyOption
                   placeholder="-- No description --"
                   name="description"
                   validation={documentsEditor.validator.files}
@@ -416,7 +416,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
 
     const handleOnSearch = ({ documentFilter }: ReviewState) => {
       const filteredQuery = documentFilter.trim();
-      const newValue = !!filteredQuery.length ? filteredQuery : "";
+      const newValue = filteredQuery.length ? filteredQuery : "";
 
       this.setState({ documentFilter: newValue });
     };
@@ -427,7 +427,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
         <FilterForm.Form data={this.state} onSubmit={noop} onChange={handleOnSearch} qa="document-mo-search-form">
           <FilterForm.Search
             name="document-filter"
-            labelHidden={true}
+            labelHidden
             value={x => x.documentFilter}
             update={(x, v) => (x.documentFilter = v || "")}
             placeholder={this.props.content.default.searchDocumentsMessage}
@@ -512,7 +512,6 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
     // Note: <Fieldset> has not got got support for React.Fragment
     return [
       // Returning array here instead of React.Fragment as Fieldset data will not persist through Fragment,
-      // tslint:disable-next-line: jsx-wrap-multiline
       <Form.Fieldset
         key="form"
         heading={this.props.content.default.additionalInfoSectionTitle}
@@ -521,7 +520,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
       >
         <Form.MultilineString
           label={this.props.content.default.additionalInfoLabel}
-          labelHidden={true}
+          labelHidden
           hint={hintValue}
           name="comments"
           value={m => m.comments}
@@ -532,7 +531,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
       </Form.Fieldset>,
       declarationMessage,
       reminderMessage,
-      !!submitButtonLabel ? <Form.Submit key="button">{submitButtonLabel}</Form.Submit> : null,
+      submitButtonLabel ? <Form.Submit key="button">{submitButtonLabel}</Form.Submit> : null,
     ];
   }
 

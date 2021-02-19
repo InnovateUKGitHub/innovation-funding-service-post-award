@@ -59,7 +59,7 @@ export class LabourFormComponent extends Component<SpendProfileCostFormProps<PCR
           {this.props.isClient && <Form.Custom
             labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.totalCost}
             hintContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.totalCostHint}
-            labelBold={true}
+            labelBold
             name="totalCost"
             value={dto => <ACC.Renderers.SimpleString><ACC.Renderers.Currency value={dto.value}/></ACC.Renderers.SimpleString>}
             update={() => null}

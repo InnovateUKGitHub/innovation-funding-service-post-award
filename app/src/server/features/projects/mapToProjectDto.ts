@@ -1,7 +1,6 @@
-// tslint:disable:no-bitwise
-import {ISalesforceProject} from "../../repositories/projectsRepository";
 import { ClaimFrequency, IContext, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import {dayComparator, isNumber} from "@framework/util";
+import {ISalesforceProject} from "../../repositories/projectsRepository";
 
 export const mapToProjectDto = (
   context: IContext,

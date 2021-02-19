@@ -1,5 +1,5 @@
-import { IClientUser } from "./IUser";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
+import { IClientUser } from "./IUser";
 
 export interface ILinkInfo {
     routeName: string;

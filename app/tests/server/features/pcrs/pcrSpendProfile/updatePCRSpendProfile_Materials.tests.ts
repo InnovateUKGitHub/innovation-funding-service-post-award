@@ -1,4 +1,3 @@
-// tslint:disable:no-duplicate-string
 import { ValidationError } from "@server/features/common";
 import { PCRPartnerType, PCRProjectRole, } from "@framework/types";
 import { PCRItemStatus } from "@framework/constants";

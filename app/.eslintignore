@@ -1,6 +1,10 @@
+# Generated Directories
 dashboard/
 node_modules/
+
+# Static Assets
 .vscode/
+public/
 public/
 security/
 scripts/

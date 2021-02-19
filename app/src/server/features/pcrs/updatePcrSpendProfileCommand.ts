@@ -1,4 +1,3 @@
-/* tslint:disable:no-identical-functions */
 import { Option, ProjectRole } from "@framework/dtos";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import {
@@ -154,6 +153,10 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   }
 
   private getOverheadsCostValue(overheadsCostDto: PCRSpendProfileOverheadsCostDto, costCategories: CostCategoryDto[], items: PcrSpendProfileEntity[]) {
+    const labourCostCategory = costCategories.find(x => x.type === CostCategoryType.Labour)!;
+    const labourCosts = items
+      .filter(x => x.costCategoryId === labourCostCategory.id)
+      .reduce((acc, item) => acc + (item.value || 0), 0);
     switch (overheadsCostDto.overheadRate) {
       case PCRSpendProfileOverheadRate.Unknown:
         return null;
@@ -162,17 +165,12 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
       case PCRSpendProfileOverheadRate.Zero:
         return 0;
       case PCRSpendProfileOverheadRate.Twenty:
-        const labourCostCategory = costCategories.find(x => x.type === CostCategoryType.Labour)!;
-        const labourCosts = items
-          .filter(x => x.costCategoryId === labourCostCategory.id)
-          .reduce((acc, item) => acc + (item.value || 0), 0);
         return roundCurrency(labourCosts * 20 / 100);
       default:
         return null;
     }
   }
 
-  // tslint:disable-next-line:cognitive-complexity
   private getUpdatedCosts(originalCost: PcrSpendProfileEntity, cost: PcrSpendProfileEntity, costCategories: CostCategoryDto[]) {
     // Value and description are shared by all cost categories so if either has changed we can be sure that the cost needs updating.
     if (originalCost.value !== cost.value || originalCost.description !== cost.description) return cost;

@@ -1,6 +1,6 @@
 import { IContext, PCRSpendProfileCapitalUsageType } from "@framework/types";
-import { OptionsQueryBase } from "../common/optionsQueryBase";
 import { PcrSpendProfileCapitalUsageTypeMapper } from "@server/repositories/mappers/pcrSpendProfileMapper";
+import { OptionsQueryBase } from "../common/optionsQueryBase";
 
 export class GetPcrSpendProfileCapitalUsageTypesQuery extends OptionsQueryBase<PCRSpendProfileCapitalUsageType> {
   constructor() {

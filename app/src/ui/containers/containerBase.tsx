@@ -16,9 +16,7 @@ export interface BaseProps {
 
 export type ContainerProps<TParams, TData, TCallbacks> = TParams & TData & TCallbacks & BaseProps;
 
-export interface ContainerBaseClass<TParams, TData, TCallbacks> {
-    new(props: TParams & TData & TCallbacks & BaseProps, context?: any): ContainerBase<TParams, TData, TCallbacks>;
-}
+export type ContainerBaseClass<TParams, TData, TCallbacks> = new(props: TParams & TData & TCallbacks & BaseProps, context?: any) => ContainerBase<TParams, TData, TCallbacks>;
 
 export abstract class ContainerBaseWithState<TParams = {}, TData = {}, TCallbacks = {}, TState = {}> extends React.Component<ContainerProps<TParams, TData, TCallbacks>, TState> {
     constructor(props: ContainerProps<TParams, TData, TCallbacks>) {
@@ -38,7 +36,7 @@ interface IRouteOptions<TParams> {
     container: React.FunctionComponent<TParams & BaseProps>;
     getParams: (route: RouteState) => TParams;
     accessControl?: (auth: Authorisation, params: TParams, config: IClientConfig) => boolean;
-    getTitle: (getTitleArgs: { params: TParams, stores: IStores, content: Content }) => {
+    getTitle: (getTitleArgs: { params: TParams; stores: IStores; content: Content }) => {
         htmlTitle: string;
         displayTitle: string;
     };

@@ -1,6 +1,4 @@
-import React from "react";
-
-import { useEditPageContent, useEditPartnerLevelContent } from "@ui/containers";
+import { useEditPageContent } from "@ui/containers";
 import { renderHook } from "@testing-library/react-hooks";
 import { hookTestBed, TestBedContent } from "@shared/TestBed";
 

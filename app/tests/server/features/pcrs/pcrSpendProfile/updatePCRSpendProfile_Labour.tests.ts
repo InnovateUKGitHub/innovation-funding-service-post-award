@@ -1,10 +1,10 @@
-import { setup } from "./helpers";
 import { PCRItemStatus, PCRPartnerType, PCRProjectRole } from "@framework/constants";
 import { CostCategoryType } from "@framework/entities";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import { PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
 import { ValidationError } from "@server/features/common";
+import { setup } from "./helpers";
 
 describe("UpdatePCRSpendProfileCommand", () => {
     describe("Labour", () => {

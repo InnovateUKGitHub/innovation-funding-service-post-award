@@ -1,6 +1,6 @@
 import React from "react";
-import { BaseInput } from "./baseInput";
 import classNames from "classnames";
+import { BaseInput } from "./baseInput";
 
 interface CheckboxOptionProps {
   id: string;
@@ -9,7 +9,7 @@ interface CheckboxOptionProps {
   qa?: string;
 }
 
-interface CheckboxListProps extends InputProps<{ id: string, value: React.ReactNode }[]> {
+interface CheckboxListProps extends InputProps<{ id: string; value: React.ReactNode }[]> {
   options: CheckboxOptionProps[];
 }
 
@@ -26,7 +26,7 @@ export class CheckboxList extends BaseInput<CheckboxListProps, {}> {
   renderOption(name: string, item: CheckboxOptionProps, index: number): any {
     const selected = this.props.value ? !!this.props.value.find(x => x.id === item.id) : false;
     return (
-      <div className="govuk-checkboxes__item" key={`option` + index}>
+      <div className="govuk-checkboxes__item" key={"option" + index}>
         <input
           data-qa={item.qa}
           className="govuk-checkboxes__input"
@@ -44,7 +44,7 @@ export class CheckboxList extends BaseInput<CheckboxListProps, {}> {
     );
   }
 
-  private onChange(item: { id: string; value: React.ReactNode; }, checked: boolean) {
+  private onChange(item: { id: string; value: React.ReactNode }, checked: boolean) {
     const original = this.props.value || [];
     if (this.props.onChange) {
       const values = this.props.options.filter(x => x.id === item.id ? checked : !!original.find(y => y.id === x.id));

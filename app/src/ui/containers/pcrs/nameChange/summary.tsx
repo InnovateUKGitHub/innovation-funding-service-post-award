@@ -1,11 +1,11 @@
 import React from "react";
 import { PCRItemForAccountNameChangeDto } from "@framework/types";
-import * as ACC from "../../../components";
 import { StoresConsumer } from "@ui/redux";
 import { PCRAccountNameChangeItemDtoValidator } from "@ui/validators";
-import { accountNameChangeStepNames } from "./accountNameChangeWorkflow";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import * as ACC from "../../../components";
+import { accountNameChangeStepNames } from "./accountNameChangeWorkflow";
 
 interface InnerProps {
   documents: DocumentSummaryDto[];

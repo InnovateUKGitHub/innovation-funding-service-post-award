@@ -1,5 +1,5 @@
 import * as ACC from "@ui/components";
-import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { ClaimDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore, useStores } from "@ui/redux";
@@ -214,7 +214,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
               <ACC.DocumentGuidance />
               <UploadForm.MulipleFileUpload
                 label={content.default.uploadDocumentsLabel}
-                labelHidden={true}
+                labelHidden
                 name="attachment"
                 validation={editor.validator.files}
                 value={data => data.files}
@@ -223,7 +223,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
               <UploadForm.DropdownList
                 label={content.default.descriptionLabel}
                 labelHidden={false}
-                hasEmptyOption={true}
+                hasEmptyOption
                 placeholder="-- No description --"
                 name="description"
                 validation={editor.validator.description}
@@ -234,7 +234,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
                 update={(dto, value) => (dto.description = value ? parseInt(value.id, 10) : undefined)}
               />
             </UploadForm.Fieldset>
-            {/*TODO @documents-content make button label consistent*/}
+            {/* TODO: @documents-content make button label consistent*/}
             <UploadForm.Button styling="Secondary" name="upload" onClick={() => this.props.onChange(true, editor.data)}>
               {content.default.uploadDocumentsLabel}
             </UploadForm.Button>

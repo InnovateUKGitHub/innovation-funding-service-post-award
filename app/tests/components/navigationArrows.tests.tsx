@@ -1,14 +1,12 @@
-// tslint:disable:no-duplicate-string
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
-import { NavigationArrows } from "../../src/ui/components";
 import { createStore } from "redux";
-import { rootReducer } from "../../src/ui/redux/reducers";
 import { IClientUser, ProjectRole } from "@framework/types";
 import { routeConfig } from "@ui/routing";
 import TestBed from "@shared/TestBed";
 import { IStores } from "@ui/redux/storesProvider";
+import { rootReducer } from "../../src/ui/redux/reducers";
+import { NavigationArrows } from "../../src/ui/components";
 
 const routes = routeConfig;
 

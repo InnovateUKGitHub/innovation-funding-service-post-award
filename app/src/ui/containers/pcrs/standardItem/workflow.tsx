@@ -1,8 +1,8 @@
 import { PCRStandardItemDto } from "@framework/dtos";
 import { PCRStandardItemDtoValidator } from "@ui/validators";
+import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { FilesStep } from "./filesStep";
 import { Summary } from "./summary";
-import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 
 export type standardItemStepNames = "filesStep";
 

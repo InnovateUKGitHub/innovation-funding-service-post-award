@@ -1,4 +1,3 @@
-// tslint:disable: no-duplicate-string
 import { DateTime } from "luxon";
 import * as Validators from "@ui/validators/common";
 import { Results } from "@ui/validation";

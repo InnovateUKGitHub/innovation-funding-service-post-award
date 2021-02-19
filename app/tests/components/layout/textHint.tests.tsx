@@ -1,4 +1,3 @@
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
 import { GOVUK_SECONDARY_TEXT_COLOUR } from "@ui/styles/colours";

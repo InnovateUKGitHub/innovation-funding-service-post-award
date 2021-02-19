@@ -3,7 +3,7 @@ import { IAppOptions } from "@framework/types/IAppOptions";
 import { isNumber } from "@framework/util";
 import { IFeatureFlags } from "@framework/types";
 
-const defaultCacheTimeout: number = 720;
+const defaultCacheTimeout = 720;
 
 export interface IConfig {
 
@@ -52,11 +52,11 @@ export interface IConfig {
     };
 
     readonly sil: {
-      bankCheckUrl: string,
-      bankCheckPort: number | undefined,
-      companiesHouseSearchUrl: string,
-      username: string,
-      password: string,
+      bankCheckUrl: string;
+      bankCheckPort: number | undefined;
+      companiesHouseSearchUrl: string;
+      username: string;
+      password: string;
     };
 
     readonly urls: {
@@ -70,10 +70,10 @@ export interface IConfig {
     readonly googleTagManagerCode: string;
 
     readonly s3Account: {
-        accessKeyId: string,
-        secretAccessKey: string,
-        contentBucket: string,
-        customContentPath: string,
+        accessKeyId: string;
+        secretAccessKey: string;
+        contentBucket: string;
+        customContentPath: string;
     };
 
 }

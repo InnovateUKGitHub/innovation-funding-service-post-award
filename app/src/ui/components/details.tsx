@@ -111,17 +111,17 @@ export class FieldComponent<T> extends React.Component<InternalFieldProps<T>, {}
 }
 
 const CustomField = <T extends {}>(props: ExternalFieldProps<T, React.ReactNode>) => {
-  const TypedField = FieldComponent as { new (): FieldComponent<T> };
+  const TypedField = FieldComponent as new () => FieldComponent<T>;
   return <TypedField {...props} render={item => props.value(item)} />;
 };
 
 const StringField = <T extends {}>(props: ExternalFieldProps<T, string>) => {
-  const TypedField = FieldComponent as { new (): FieldComponent<T> };
+  const TypedField = FieldComponent as new () => FieldComponent<T>;
   return <TypedField {...props} render={item => <p className="govuk-body">{props.value(item)}</p>} />;
 };
 
 const MultilineStringField = <T extends {}>(props: ExternalFieldProps<T, string>) => {
-  const TypedField = FieldComponent as { new (): FieldComponent<T> };
+  const TypedField = FieldComponent as new () => FieldComponent<T>;
   const splitString = (v: string | null) => (v || "").split("\n").filter(x => !!x);
   return (
     <TypedField
@@ -138,7 +138,7 @@ const MultilineStringField = <T extends {}>(props: ExternalFieldProps<T, string>
 };
 
 const DateField = <T extends {}>(props: ExternalFieldProps<T, Date>) => {
-  const TypedField = FieldComponent as { new (): FieldComponent<T> };
+  const TypedField = FieldComponent as new () => FieldComponent<T>;
   return (
     <TypedField
       {...props}
@@ -152,7 +152,7 @@ const DateField = <T extends {}>(props: ExternalFieldProps<T, Date>) => {
 };
 
 const DateTimeField = <T extends {}>(props: ExternalFieldProps<T, Date>) => {
-  const TypedField = FieldComponent as { new (): FieldComponent<T> };
+  const TypedField = FieldComponent as new () => FieldComponent<T>;
   return (
     <TypedField
       {...props}
@@ -166,12 +166,12 @@ const DateTimeField = <T extends {}>(props: ExternalFieldProps<T, Date>) => {
 };
 
 const NumberField = <T extends {}>(props: ExternalFieldProps<T, number>) => {
-  const TypedField = FieldComponent as { new (): FieldComponent<T> };
+  const TypedField = FieldComponent as new () => FieldComponent<T>;
   return <TypedField {...props} render={item => <p className="govuk-body">{props.value(item)}</p>} />;
 };
 
 const CurrencyField = <T extends {}>(props: ExternalFieldProps<T, number> & { fractionDigits?: number }) => {
-  const TypedField = FieldComponent as { new (): FieldComponent<T> };
+  const TypedField = FieldComponent as new () => FieldComponent<T>;
   return (
     <TypedField
       {...props}
@@ -185,7 +185,7 @@ const CurrencyField = <T extends {}>(props: ExternalFieldProps<T, number> & { fr
 };
 
 const PercentageField = <T extends {}>(props: ExternalFieldProps<T, number> & { fractionDigits?: number }) => {
-  const TypedField = FieldComponent as { new (): FieldComponent<T> };
+  const TypedField = FieldComponent as new () => FieldComponent<T>;
   return (
     <TypedField
       {...props}

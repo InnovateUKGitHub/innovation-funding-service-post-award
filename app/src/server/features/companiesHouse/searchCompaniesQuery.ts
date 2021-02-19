@@ -1,6 +1,6 @@
-import { QueryBase } from "../common";
 import { IContext } from "@framework/types";
 import { CompanyDto } from "@framework/dtos/companyDto";
+import { QueryBase } from "../common";
 
 export class SearchCompaniesQuery extends QueryBase<CompanyDto[]> {
   constructor(private readonly searchString: string, private readonly itemsPerPage?: number, private readonly startIndex?: number) {

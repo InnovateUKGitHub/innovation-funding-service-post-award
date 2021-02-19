@@ -1,5 +1,3 @@
-// tslint:disable:no-identical-functions no-duplicate-string
-import { TestContext } from "../../testContextProvider";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { SalesforceProjectRole } from "@server/repositories";
 import {
@@ -11,8 +9,8 @@ import {
   ProjectRole,
   SpendProfileStatus
 } from "@framework/types";
+import { TestContext } from "../../testContextProvider";
 
-// tslint:disable-next-line:no-big-function
 describe("getAllForProjectQuery", () => {
   it("when partner exists is mapped to DTO", async () => {
     const context = new TestContext();
@@ -161,9 +159,15 @@ describe("getAllForProjectQuery", () => {
   it("sets isWithdrawn correctly", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
-    const partnerInvoluntaryWithdrawal = context.testData.createPartner(project, x => {x.participantStatus = "Involuntary Withdrawal";});
-    const partnerVoluntaryWithdrawal = context.testData.createPartner(project, x => {x.participantStatus = "Voluntary Withdrawal";});
-    const partnerActive = context.testData.createPartner(project, x => {x.participantStatus = "Active";});
+    const partnerInvoluntaryWithdrawal = context.testData.createPartner(project, x => {
+      x.participantStatus = "Involuntary Withdrawal";
+    });
+    const partnerVoluntaryWithdrawal = context.testData.createPartner(project, x => {
+      x.participantStatus = "Voluntary Withdrawal";
+    });
+    const partnerActive = context.testData.createPartner(project, x => {
+      x.participantStatus = "Active";
+    });
     expect((await context.runQuery(new GetByIdQuery(partnerInvoluntaryWithdrawal.id))).isWithdrawn).toBe(true);
     expect((await context.runQuery(new GetByIdQuery(partnerVoluntaryWithdrawal.id))).isWithdrawn).toBe(true);
     expect((await context.runQuery(new GetByIdQuery(partnerActive.id))).isWithdrawn).toBe(false);

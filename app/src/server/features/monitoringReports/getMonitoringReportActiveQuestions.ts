@@ -1,7 +1,7 @@
-import { QueryBase } from "../common";
 import { ISalesforceMonitoringReportQuestions } from "@server/repositories";
 import { IContext } from "@framework/types";
 import { MonitoringReportQuestionDto } from "@framework/dtos";
+import { QueryBase } from "../common";
 
 export class GetMonitoringReportActiveQuestions extends QueryBase<MonitoringReportQuestionDto[]> {
 

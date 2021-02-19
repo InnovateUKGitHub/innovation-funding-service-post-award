@@ -1,5 +1,5 @@
-import { QueryBase } from "../common/queryBase";
 import { IContext, MonitoringReportStatus } from "@framework/types";
+import { QueryBase } from "../common/queryBase";
 import { OptionsQueryBase } from "../common/optionsQueryBase";
 import { mapMonitoringReportStatus } from "./mapMonitoringReportStatus";
 

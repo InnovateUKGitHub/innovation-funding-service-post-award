@@ -1,6 +1,6 @@
 import { IContext, PCRParticipantSize } from "@framework/types";
-import { OptionsQueryBase } from "../common/optionsQueryBase";
 import { PcrParticipantSizeMapper } from "@server/repositories/mappers/projectChangeRequestMapper";
+import { OptionsQueryBase } from "../common/optionsQueryBase";
 
 export class GetPcrParticipantSizesQuery extends OptionsQueryBase<PCRParticipantSize> {
   constructor() {

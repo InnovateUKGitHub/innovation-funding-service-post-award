@@ -1,10 +1,10 @@
-import { ApiParams, ControllerBase } from "./controllerBase";
-import contextProvider from "../features/common/contextProvider";
 import { CompanyDto } from "@framework/dtos/companyDto";
 import { SearchCompaniesQuery } from "@server/features/companiesHouse/searchCompaniesQuery";
+import contextProvider from "../features/common/contextProvider";
+import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface ICompaniesApi {
-  searchCompany: (params: ApiParams<{ searchString: string, itemsPerPage?: number, startIndex?: number }>) => Promise<CompanyDto[]>;
+  searchCompany: (params: ApiParams<{ searchString: string; itemsPerPage?: number; startIndex?: number }>) => Promise<CompanyDto[]>;
 }
 
 class Controller extends ControllerBase<CompanyDto> implements ICompaniesApi {
@@ -18,7 +18,7 @@ class Controller extends ControllerBase<CompanyDto> implements ICompaniesApi {
     }), (p) => this.searchCompany(p));
   }
 
-  public async searchCompany(params: ApiParams<{ searchString: string, itemsPerPage?: number, startIndex?: number }>) {
+  public async searchCompany(params: ApiParams<{ searchString: string; itemsPerPage?: number; startIndex?: number }>) {
     const {searchString, startIndex, itemsPerPage} = params;
     const query = new SearchCompaniesQuery(searchString, itemsPerPage, startIndex);
     return contextProvider.start(params).runQuery(query);

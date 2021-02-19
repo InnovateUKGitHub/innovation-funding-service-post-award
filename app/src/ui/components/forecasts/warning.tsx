@@ -1,4 +1,3 @@
-import { ValidationMessage } from "../validationMessage";
 import {
   ClaimDetailsSummaryDto,
   ClaimDto,
@@ -10,8 +9,9 @@ import {
 } from "@framework/dtos";
 import { IEditorStore } from "@ui/redux";
 import { ForecastDetailsDtosValidator } from "@ui/validators";
-import { AriaLive } from "../renderers/ariaLive";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { AriaLive } from "../renderers/ariaLive";
+import { ValidationMessage } from "../validationMessage";
 import { Content } from "../content";
 
 interface Props {
@@ -30,7 +30,7 @@ export const Warning = (props: Props) => <AriaLive>{renderWarningMessage(props)}
 const renderWarningMessage = (props: Props) => {
   const categories: string[] = [];
   const currentPeriod = props.claims.reduce((prev, item) => (item.periodId > prev ? item.periodId : prev), 0);
-  const forecasts = !!props.editor ? props.editor.data : props.forecastDetails;
+  const forecasts = props.editor ? props.editor.data : props.forecastDetails;
 
   props.costCategories
     .filter(

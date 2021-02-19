@@ -1,6 +1,6 @@
-import { BaseProps, defineRoute } from "./containerBase";
 import { StandardErrorPage } from "../components/standardErrorPage";
 import { NotFoundErrorPage } from "../components/notFoundErrorPage";
+import { BaseProps, defineRoute } from "./containerBase";
 
 interface Props {
   errorType: "standard" | "notFound";

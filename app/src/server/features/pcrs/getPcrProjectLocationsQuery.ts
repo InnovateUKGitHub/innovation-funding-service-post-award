@@ -1,6 +1,6 @@
 import { IContext, PCRProjectLocation } from "@framework/types";
-import { OptionsQueryBase } from "../common/optionsQueryBase";
 import { PCRProjectLocationMapper } from "@server/repositories/mappers/projectChangeRequestMapper";
+import { OptionsQueryBase } from "../common/optionsQueryBase";
 
 export class GetPcrProjectLocationsQuery extends OptionsQueryBase<PCRProjectLocation> {
   constructor() {

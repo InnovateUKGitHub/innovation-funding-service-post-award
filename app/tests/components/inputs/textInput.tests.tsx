@@ -1,4 +1,3 @@
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
 import { TextInput, TextInputProps } from "../../../src/ui/components/inputs/textInput";

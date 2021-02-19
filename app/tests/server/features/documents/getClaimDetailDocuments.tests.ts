@@ -1,6 +1,6 @@
-import { TestContext } from "../../testContextProvider";
 import { GetClaimDetailDocumentsQuery } from "@server/features/documents/getClaimDetailDocumentsSummary";
 import { Authorisation, ProjectRole } from "@framework/types";
+import { TestContext } from "../../testContextProvider";
 
 describe("GetClaimDetailDocumentsQuery", () => {
   it("returns objects of correct shape", async () => {

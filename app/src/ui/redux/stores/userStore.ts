@@ -1,5 +1,5 @@
-import { StoreBase } from "./storeBase";
 import { Authorisation } from "@framework/types";
+import { StoreBase } from "./storeBase";
 
 export class UserStore extends StoreBase {
 

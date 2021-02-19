@@ -1,7 +1,7 @@
-import { QueryBase } from "../common/queryBase";
-import { ISalesforcePartner, ISalesforceProjectContact, SalesforceProjectRole, SalesforceRole } from "../../repositories";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { Partner } from "@framework/entities";
+import { QueryBase } from "../common/queryBase";
+import { ISalesforcePartner, ISalesforceProjectContact, SalesforceProjectRole, SalesforceRole } from "../../repositories";
 
 export interface IRoleInfo {
   projectRoles: ProjectRole;
@@ -14,11 +14,9 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
 
     if (!email) {
       return new Authorisation({});
-    }
-    else if (email === context.config.salesforce.serivceUsername) {
+    } else if (email === context.config.salesforce.serivceUsername) {
       return new Authorisation(await context.caches.projectRoles.fetchAsync(email, () => this.getServiceAccountRoles(context)));
-    }
-    else {
+    } else {
       return new Authorisation(await context.caches.projectRoles.fetchAsync(email, () => this.getProjectRoles(email, context)));
     }
   }

@@ -39,7 +39,7 @@ export const summaryListGuide: IGuide = {
           <SummaryListItem label="Contact details" content="07700 900457" qa="contact"/>
         </SummaryList>`,
       render: () => (
-        <SummaryList noBorders={true} qa="list-example">
+        <SummaryList noBorders qa="list-example">
           <SummaryListItem label="Contact details" content="07700 900457" qa="contact"/>
         </SummaryList>
       )

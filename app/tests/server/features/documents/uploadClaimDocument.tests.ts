@@ -1,10 +1,9 @@
-// tslint:disable: no-big-function
-import { TestContext } from "../../testContextProvider";
 import { UploadClaimDocumentCommand } from "@server/features/documents/uploadClaimDocument";
 import { BadRequestError, ValidationError } from "@server/features/common/appError";
 import { ClaimStatus, DocumentDescription } from "@framework/constants";
 import { Authorisation, ProjectRole } from "@framework/types";
 import { DocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { TestContext } from "../../testContextProvider";
 
 const validStatus = [
   ClaimStatus.DRAFT,

@@ -1,7 +1,7 @@
-import { TestContext } from "../../testContextProvider";
 import { GetProjectDocumentsQuery } from "@server/features/documents/getProjectDocumentsSummary";
 import { Authorisation, DocumentDescription, ProjectRole } from "@framework/types";
 import { DateTime } from "luxon";
+import { TestContext } from "../../testContextProvider";
 
 describe("GetProjectDocumentsQuery", () => {
   it("should return all documents associated with the project", async () => {

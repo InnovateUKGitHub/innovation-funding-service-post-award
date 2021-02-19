@@ -144,11 +144,9 @@ const onComplete = (
   // validation error occurred so add it into store as validation error
   if (error && error.code === ErrorCode.VALIDATION_ERROR) {
     store.dispatch(Actions.updateEditorAction(error.key, error.store, error.dto, error.error.results!));
-  }
-
-  // some other validation error occurred so add it into store as actual error
-  // need to pair with the submit action to keep count in sync
-  else if (error) {
+  } else if (error) {
+    // some other validation error occurred so add it into store as actual error
+    // need to pair with the submit action to keep count in sync
     store.dispatch(Actions.handleEditorSubmit(error.key, error.store, error.dto, error.result));
     store.dispatch(
       Actions.handleEditorError({

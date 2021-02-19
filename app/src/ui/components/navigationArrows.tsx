@@ -1,6 +1,6 @@
 import React from "react";
-import { Link } from "./links";
 import { ILinkInfo } from "@framework/types";
+import { Link } from "./links";
 import { ArrowLeft } from "./svg/arrowLeft";
 
 interface LinkProps {
@@ -25,7 +25,7 @@ export class NavigationArrows extends React.Component<Props> {
   private renderLink(linkType: LinkProps | null | undefined, name: string, qa: string) {
     if (!linkType) return null;
     return (
-      <Link route={linkType.route} replace={true} className="govuk-navigation-arrows__button">
+      <Link route={linkType.route} replace className="govuk-navigation-arrows__button">
         <ArrowLeft className="govuk-navigation-arrows__button__arrow" />
         <div data-qa={qa} className="govuk-navigation-arrows__button__label">
           <span>{name}</span>

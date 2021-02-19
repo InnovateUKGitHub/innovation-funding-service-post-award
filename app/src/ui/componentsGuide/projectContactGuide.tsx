@@ -1,7 +1,7 @@
-import { ProjectContact } from "../components/projectContact";
 import { PartnerDto, ProjectContactDto } from "@framework/dtos";
 import { createDto } from "@framework/util";
 import { IGuide } from "@framework/types";
+import { ProjectContact } from "../components/projectContact";
 
 const partner = createDto<PartnerDto>({ name: "aTestOrganisation"});
 

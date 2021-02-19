@@ -1,11 +1,8 @@
-// tslint:disable:no-identical-functions no-duplicate-string
-
-import { TestContext } from "../../testContextProvider";
 import { ClaimFrequency, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import { mapToProjectDto } from "@server/features/projects";
 import { DateTime } from "luxon";
+import { TestContext } from "../../testContextProvider";
 
-// tslint:disable:no-big-function
 describe("mapToProjectDto", () => {
 
   it("when valid expect mapping",  () => {
@@ -114,11 +111,17 @@ describe("mapToProjectDto", () => {
     expect(result.grantOfferLetterUrl).toBe("https://ifs.application.url/grantletter/competition/30000/project/1");
   });
 
-  it("should return hasEnded correctly",() => {
+  it("should return hasEnded correctly", () => {
     const context = new TestContext();
-    const projectNow = context.testData.createProject(x => {x.Acc_EndDate__c = DateTime.fromJSDate(new Date()).toFormat("yyyy-MM-dd");});
-    const projectTomorrow = context.testData.createProject(x => {x.Acc_EndDate__c = DateTime.fromJSDate(new Date()).plus({days: 1}).toFormat("yyyy-MM-dd");});
-    const projectYesterday = context.testData.createProject(x => {x.Acc_EndDate__c = DateTime.fromJSDate(new Date()).minus({days: 1}).toFormat("yyyy-MM-dd");});
+    const projectNow = context.testData.createProject(x => {
+      x.Acc_EndDate__c = DateTime.fromJSDate(new Date()).toFormat("yyyy-MM-dd");
+    });
+    const projectTomorrow = context.testData.createProject(x => {
+      x.Acc_EndDate__c = DateTime.fromJSDate(new Date()).plus({ days: 1 }).toFormat("yyyy-MM-dd");
+    });
+    const projectYesterday = context.testData.createProject(x => {
+      x.Acc_EndDate__c = DateTime.fromJSDate(new Date()).minus({ days: 1 }).toFormat("yyyy-MM-dd");
+    });
     expect(mapToProjectDto(context, projectNow, ProjectRole.Unknown).isPastEndDate).toBe(false);
     expect(mapToProjectDto(context, projectTomorrow, ProjectRole.Unknown).isPastEndDate).toBe(false);
     expect(mapToProjectDto(context, projectYesterday, ProjectRole.Unknown).isPastEndDate).toBe(true);

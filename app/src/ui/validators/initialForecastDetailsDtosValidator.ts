@@ -1,6 +1,3 @@
-import * as Validation from "./common";
-import { Results } from "../validation/results";
-import { Result } from "../validation/result";
 import { groupBy, isNumber, sum } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import {
@@ -10,6 +7,9 @@ import {
   IForecastDetailsDtoValidator
 } from "@ui/validators/forecastDetailsDtosValidator";
 import { ForecastDetailsDTO, GOLCostDto } from "@framework/dtos";
+import { Result } from "../validation/result";
+import { Results } from "../validation/results";
+import * as Validation from "./common";
 
 export class InitialForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> implements IForecastDetailsDtosValidator {
 

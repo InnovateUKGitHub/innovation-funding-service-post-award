@@ -9,21 +9,21 @@ export class PcrSpendProfileMessages extends ContentBase {
   public readonly costGuidance = (costCategory: CostCategoryType) => {
     switch (costCategory) {
       case CostCategoryType.Labour:
-        return this.getContent(`cost-guidance-labour`, { markdown: true });
+        return this.getContent("cost-guidance-labour", { markdown: true });
       case CostCategoryType.Overheads:
-        return this.getContent(`cost-guidance-overheads`, { markdown: true });
+        return this.getContent("cost-guidance-overheads", { markdown: true });
       case CostCategoryType.Materials:
-        return this.getContent(`cost-guidance-materials`, { markdown: true });
+        return this.getContent("cost-guidance-materials", { markdown: true });
       case CostCategoryType.Subcontracting:
-        return this.getContent(`cost-guidance-subcontracting`, { markdown: true });
+        return this.getContent("cost-guidance-subcontracting", { markdown: true });
       case CostCategoryType.Capital_Usage:
-        return this.getContent(`cost-guidance-capital-usage`, { markdown: true });
+        return this.getContent("cost-guidance-capital-usage", { markdown: true });
       case CostCategoryType.Travel_And_Subsistence:
-        return this.getContent(`cost-guidance-travel-and-subs`, { markdown: true });
+        return this.getContent("cost-guidance-travel-and-subs", { markdown: true });
       case CostCategoryType.Other_Costs:
         return this.getContent("cost-guidance-other-costs", { markdown: true });
       default:
-        return this.getContent(`cost-guidance-default`, { markdown: true });
+        return this.getContent("cost-guidance-default", { markdown: true });
     }
   };
   public readonly overHeadsCalculatedGuidance = this.getContent("calculated-guidance-overheads");

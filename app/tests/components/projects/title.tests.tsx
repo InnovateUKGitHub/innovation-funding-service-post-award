@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 
-import { Title, TitleProps } from "../../../src/ui/components/projects/title";
 import TestBed from "@shared/TestBed";
+import { Title, TitleProps } from "../../../src/ui/components/projects/title";
 
 describe("<Title />", () => {
   const setup = (props: TitleProps) =>

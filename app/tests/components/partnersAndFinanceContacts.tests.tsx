@@ -1,15 +1,11 @@
-// tslint:disable:no-duplicate-string
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
 import { PartnersAndFinanceContacts } from "@ui/components/partnersAndFinanceContacts";
-import { getColumnValues } from "./helpers/tableHelpers";
 import { PartnerDto, ProjectContactDto } from "@framework/types";
 import { ProjectContactLabels } from "@content/labels/projectContactLabels";
-import { ContentResult } from "@content/contentBase";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { StoresProvider } from "@ui/redux";
-import { Content } from "@content/content";
+import { getColumnValues } from "./helpers/tableHelpers";
 
 const testPartnerData: PartnerDto[] = [
   {

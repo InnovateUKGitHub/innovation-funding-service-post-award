@@ -1,9 +1,8 @@
-// tslint:disable:no-identical-functions no-duplicate-string
-import { TestContext } from "../../testContextProvider";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { DateTime } from "luxon";
 import { PCRItemType, PCRStatus } from "@framework/constants";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
+import { TestContext } from "../../testContextProvider";
 
 describe("GetAllPCRsQuery", () => {
   test("when project has no pcrs then empty list returned", async () => {

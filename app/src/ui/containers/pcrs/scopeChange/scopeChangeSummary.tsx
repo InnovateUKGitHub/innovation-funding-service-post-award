@@ -1,9 +1,9 @@
-import * as ACC from "../../../components";
 import { SimpleString } from "@ui/components/renderers";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForScopeChangeDto } from "@framework/dtos";
 import { PCRScopeChangeItemDtoValidator } from "@ui/validators";
 import { scopeChangeStepNames } from "@ui/containers/pcrs/scopeChange/scopeChangeWorkflow";
+import * as ACC from "../../../components";
 
 export const ScopeChangeSummary = (props: PcrSummaryProps<PCRItemForScopeChangeDto, PCRScopeChangeItemDtoValidator, scopeChangeStepNames>) => {
   const { pcrItem, validator } = props;
@@ -13,14 +13,14 @@ export const ScopeChangeSummary = (props: PcrSummaryProps<PCRItemForScopeChangeD
         <ACC.SummaryListItem
           labelContent={x => x.pcrScopeChangeSummary.labels.existingDescription}
           content={
-            <SimpleString multiline={true}>{pcrItem.publicDescriptionSnapshot}</SimpleString>
+            <SimpleString multiline>{pcrItem.publicDescriptionSnapshot}</SimpleString>
           }
           qa="currentPublicDescription"
         />
         <ACC.SummaryListItem
           labelContent={x => x.pcrScopeChangeSummary.labels.newDescription}
           content={
-            <SimpleString multiline={true}>{pcrItem.publicDescription}</SimpleString>
+            <SimpleString multiline>{pcrItem.publicDescription}</SimpleString>
           }
           qa="newPublicDescription"
           validation={validator.publicDescription}
@@ -29,14 +29,14 @@ export const ScopeChangeSummary = (props: PcrSummaryProps<PCRItemForScopeChangeD
         <ACC.SummaryListItem
           labelContent={x => x.pcrScopeChangeSummary.labels.existingSummary}
           content={
-            <SimpleString multiline={true}>{pcrItem.projectSummarySnapshot}</SimpleString>
+            <SimpleString multiline>{pcrItem.projectSummarySnapshot}</SimpleString>
           }
           qa="currentProjectSummary"
         />
         <ACC.SummaryListItem
           labelContent={x => x.pcrScopeChangeSummary.labels.newSummary}
           content={
-            <SimpleString multiline={true}>{pcrItem.projectSummary}</SimpleString>}
+            <SimpleString multiline>{pcrItem.projectSummary}</SimpleString>}
           qa="newProjectSummary"
           validation={validator.projectSummary}
           action={props.getEditLink("projectSummaryStep", validator.projectSummary)}

@@ -7,7 +7,7 @@ export const PeriodLengthChangeSummary = (props: PcrSummaryProps<PCRItemForPerio
   const monthlyContent = <ACC.Content value={(x) => x.pcrPeriodLengthChangeContent.periodLengthMonthly}/>;
   const quarterlyContent = <ACC.Content value={(x) => x.pcrPeriodLengthChangeContent.periodLengthQuarterly}/>;
   return (
-    /*TODO look at title sizing*/
+    /* TODO: look at title sizing*/
     <ACC.Section title="">
       <ACC.Section qa="guidance">
         <ACC.Content value={(x) => x.pcrPeriodLengthChangeContent.guidance}/>

@@ -1,4 +1,5 @@
-// tslint:disable:no-duplicate-string no-identical-functions
+import { mount, shallow } from "enzyme";
+import { DateTime } from "luxon";
 import {
   CondensedDateRange,
   Duration,
@@ -12,10 +13,6 @@ import {
   ShortDateRangeFromDuration,
   ShortDateTime
 } from "../../../src/ui/components/renderers/date";
-
-// tslint:disable-next-line: import-blacklist
-import { mount, shallow } from "enzyme";
-import { DateTime } from "luxon";
 
 const date = new Date("1993/01/07 09:02:01");
 const afternoonDate = new Date("1993/01/07 21:02:01");

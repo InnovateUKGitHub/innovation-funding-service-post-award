@@ -1,7 +1,7 @@
 import { Authorisation, ClaimKey, IContext, ProjectRole } from "@framework/types";
-import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
 import { DocumentEntity } from "@framework/entities/document";
 import { DocumentFilter } from "@framework/types/DocumentFilter";
+import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
 
 export class GetClaimDocumentsQuery extends DocumentsSummaryQueryBase {
   constructor(private readonly claimKey: ClaimKey, filter?: DocumentFilter) {

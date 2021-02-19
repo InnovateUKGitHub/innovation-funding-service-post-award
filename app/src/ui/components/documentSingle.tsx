@@ -24,9 +24,11 @@ export function DocumentSingle({ message, document, openNewWindow, qa, removeEle
       )}
 
       <div className="govuk-!-padding-bottom-3">
+        {/* eslint-disable-next-line react/jsx-no-target-blank */}
         <a
           className="govuk-link govuk-!-font-size-19"
           target={openNewWindow ? "_blank" : undefined}
+          rel={openNewWindow ? "noreferrer" : undefined}
           style={{ paddingRight: 20 }}
           href={document.link}
           data-qa={qa}

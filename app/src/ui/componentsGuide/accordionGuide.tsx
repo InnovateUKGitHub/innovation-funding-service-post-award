@@ -16,8 +16,8 @@ export const accordionGuide: IGuide = {
       comments: "Renders a single accordion item",
       example:`
       <Accordion>
-        <AccordionItem title=\"Section 1\">
-            <DocumentList documents={documents} qa=\"documentList\"/>
+        <AccordionItem title="Section 1">
+            <DocumentList documents={documents} qa="documentList"/>
         </AccordionItem>
       </Accordion>`,
       render: () => (
@@ -36,11 +36,11 @@ export const accordionGuide: IGuide = {
       comments: "Renders multiple accordions items",
       example:`
       <Accordion>
-        <AccordionItem title=\"Section 1\">
-            <DocumentList documents={documents} qa=\"documentList\"/>
+        <AccordionItem title="Section 1">
+            <DocumentList documents={documents} qa="documentList"/>
         </AccordionItem>
-        <AccordionItem title=\"Section 2\">
-            <ProjectContact contact={{name: \"Ms A Bloggs\", email: \"a.bloggs@tem\", role: \"Team lead\"}} qa=\"teamMember\"/>
+        <AccordionItem title="Section 2">
+            <ProjectContact contact={{name: "Ms A Bloggs", email: "a.bloggs@tem", role: "Team lead"}} qa="teamMember"/>
         </AccordionItem>
       </Accordion>`,
       render: () => (

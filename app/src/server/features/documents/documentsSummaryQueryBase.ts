@@ -1,10 +1,10 @@
 import { IContext } from "@framework/types";
-import { QueryBase } from "../common";
-import { mapToDocumentSummaryDto } from "./mapToDocumentSummaryDto";
 import { dateComparator } from "@framework/util";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { DocumentEntity } from "@framework/entities/document";
 import { DocumentFilter } from "@framework/types/DocumentFilter";
+import { QueryBase } from "../common";
+import { mapToDocumentSummaryDto } from "./mapToDocumentSummaryDto";
 
 export abstract class DocumentsSummaryQueryBase extends QueryBase<DocumentSummaryDto[]> {
   constructor(protected readonly filter?: DocumentFilter) {

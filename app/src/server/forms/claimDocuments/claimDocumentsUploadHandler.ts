@@ -1,5 +1,3 @@
-import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "../formHandlerBase";
-import { ClaimDocumentsPageParams, ClaimDocumentsRoute } from "../../../ui/containers";
 import { IContext } from "@framework/types/IContext";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { Configuration } from "@server/features/common";
@@ -9,6 +7,8 @@ import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDescription } from "@framework/constants";
 import { IFileWrapper } from "@framework/types";
+import { ClaimDocumentsPageParams, ClaimDocumentsRoute } from "../../../ui/containers";
+import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "../formHandlerBase";
 
 export class ClaimDocumentsUploadHandler extends MultipleFileFormHandlerBase<ClaimDocumentsPageParams, "multipleDocuments"> {
   constructor() {

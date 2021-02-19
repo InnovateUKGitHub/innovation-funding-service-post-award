@@ -12,7 +12,7 @@ const csrfProtection = csrf();
 
 router.use("/api", apiRoutes);
 router.use("/components", componentGuideRender);
-/*form posts*/
+/* form posts*/
 router.post("*", configureFormRouter(csrfProtection));
 
 router.get("*", csrfProtection, (req, res) => serverRender(req, res));

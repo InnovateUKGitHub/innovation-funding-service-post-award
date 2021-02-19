@@ -1,13 +1,12 @@
-// tslint:disable
 import { actionTypes } from "redux-router5";
 import { editorsReducer, EditorStatus, IEditorStore } from "@ui/redux/reducers";
 import { ClaimDtoValidator } from "@ui/validators";
 import { ClaimDto, IAppError, ErrorCode } from "@framework/types";
+import { EditorResetAction, UpdateEditorAction, EditorSubmitAction, EditorSuccessAction, EditorErrorAction } from "@ui/redux/actions/common/editorActions";
+import { Results } from "@ui/validation";
 import createCostCategory from "../stores/createCostCategory";
 import getRootState from "../stores/getRootState";
 import createClaim from "../stores/createClaim";
-import { EditorResetAction, UpdateEditorAction, EditorSubmitAction, EditorSuccessAction, EditorErrorAction } from "@ui/redux/actions/common/editorActions";
-import { Results } from "@ui/validation";
 
 const setupInitialState = (update?: (data: IEditorStore<ClaimDto, ClaimDtoValidator>) => void) => {
   const state = getRootState();
@@ -207,7 +206,7 @@ describe("editorsReducer", () => {
       const newState = editorsReducer("claim")(originalState.editors.claim, action);
       expect(newState["1"]).toBeUndefined();
 
-    })
+    });
 
     it("should not delete other editors if reset", () => {
       const originalState = setupInitialState();

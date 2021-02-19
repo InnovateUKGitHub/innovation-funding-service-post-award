@@ -1,6 +1,6 @@
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
-import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
 import { DocumentEntity } from "@framework/entities/document";
+import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
 
 export class GetPartnerDocumentsQuery extends DocumentsSummaryQueryBase {
   constructor(private readonly projectId: string, private readonly partnerId: string) {

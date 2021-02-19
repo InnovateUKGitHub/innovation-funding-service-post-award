@@ -1,4 +1,3 @@
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
 import {
@@ -54,7 +53,7 @@ describe("Hash Tabs", () => {
     const wrapper = setup(tabStub);
 
     expect(wrapper.html()).toContain(
-      `<a href="#pcr" class="govuk-tabs__tab" aria-selected="false" role="tab">Project change requests</a>`
+      "<a href=\"#pcr\" class=\"govuk-tabs__tab\" aria-selected=\"false\" role=\"tab\">Project change requests</a>"
     );
   });
 

@@ -1,5 +1,5 @@
-import { calculateOverheadCell } from "../../../src/ui/components/claims/forecastTable";
 import { ForecastDetailsDTO } from "@framework/dtos/forecastDetailsDto";
+import { calculateOverheadCell } from "../../../src/ui/components/claims/forecastTable";
 
 describe("calculateOverheadCell()", () => {
   const stubCell: ForecastDetailsDTO = {

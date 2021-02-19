@@ -1,7 +1,5 @@
-import { Section } from "../../../src/ui/components/layout/section";
-
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
+import { Section } from "../../../src/ui/components/layout/section";
 
 describe("Section", () => {
 

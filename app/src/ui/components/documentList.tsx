@@ -1,11 +1,10 @@
-import React from "react";
 import { stringComparator } from "@framework/util/comparator";
-import { LinksList } from "./linksList";
-import { TypedForm } from "./form";
 import { ITypedTable, TableChild, TypedTable } from "@ui/components/table";
-import { getFileSize } from "../../framework/util/files";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { Content } from "@ui/components/content";
+import { getFileSize } from "../../framework/util/files";
+import { TypedForm } from "./form";
+import { LinksList } from "./linksList";
 
 interface Props {
   documents: DocumentSummaryDto[];
@@ -23,7 +22,7 @@ export const DocumentList: React.FunctionComponent<Props> = ({ documents = [], q
   documents.sort((a,b) => stringComparator(a.fileName, b.fileName));
   return (
     <div data-qa={qa}>
-      <LinksList openNewWindow={true} links={documents.map(mapDocumentToLink)}/>
+      <LinksList openNewWindow links={documents.map(mapDocumentToLink)}/>
     </div>
   );
 };
@@ -42,7 +41,7 @@ export const DocumentListWithDelete: React.FunctionComponent<PropsWithRemove> = 
       <Form.Form data={documents}>
         {documents.map((dto, i) => (
           <div className="govuk-!-padding-bottom-4" key={`document-${i}`} data-qa={`row-document-${i}`}>
-            <a target={"_blank"} href={dto.link} className="govuk-link govuk-!-font-size-19" data-qa={`document-${i}`}>{dto.fileName}</a>
+            <a target="_blank" rel="noreferrer" href={dto.link} className="govuk-link govuk-!-font-size-19" data-qa={`document-${i}`}>{dto.fileName}</a>
             <Form.Button
               name="delete"
               styling="Link"
@@ -61,7 +60,7 @@ export const DocumentListWithDelete: React.FunctionComponent<PropsWithRemove> = 
 };
 
 const renderDocumentName = (document: DocumentSummaryDto) => {
-  return <a target={"_blank"} href={document.link} className="govuk-link">{document.fileName}</a>;
+  return <a target="_blank" rel="noreferrer" href={document.link} className="govuk-link">{document.fileName}</a>;
 };
 
 interface DocumentTableWithDeleteProps extends Props {

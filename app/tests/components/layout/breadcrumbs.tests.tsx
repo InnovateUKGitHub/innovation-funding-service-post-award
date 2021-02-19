@@ -1,12 +1,11 @@
+import { mount } from "enzyme";
+import TestBed from "@shared/TestBed";
 import {
   Breadcrumbs,
   BreadcrumbsProps,
 } from "../../../src/ui/components/layout/breadcrumbs";
-// tslint:disable-next-line: import-blacklist
-import { mount } from "enzyme";
 
 import { findByQa } from "../helpers/find-by-qa";
-import TestBed from "@shared/TestBed";
 
 describe("Breadcrumbs", () => {
   const testID = 5;

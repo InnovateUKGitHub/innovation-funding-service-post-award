@@ -1,4 +1,3 @@
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
 import { FileUpload } from "../../../src/ui/components/inputs/fileUpload";
@@ -15,7 +14,7 @@ describe("FileInput", () => {
   });
 
   it("Renders as disabled when the disabled flag is set to true", () => {
-    const wrapper = mount(<FileUpload name="testName" value={null} onChange={(x) => x} disabled={true}/>);
+    const wrapper = mount(<FileUpload name="testName" value={null} onChange={(x) => x} disabled/>);
     expect(wrapper.childAt(0).prop("disabled")).toBe(true);
   });
 

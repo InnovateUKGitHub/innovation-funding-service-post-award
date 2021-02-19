@@ -1,6 +1,6 @@
 import React from "react";
-import { BaseInput } from "./baseInput";
 import classNames from "classnames";
+import { BaseInput } from "./baseInput";
 
 interface RadioOptionProps {
   id: string;
@@ -8,7 +8,7 @@ interface RadioOptionProps {
   qa?: string;
 }
 
-interface RadioListProps extends InputProps<{ id: string, value: React.ReactNode }> {
+interface RadioListProps extends InputProps<{ id: string; value: React.ReactNode }> {
   options: RadioOptionProps[];
   inline: boolean;
 }
@@ -26,7 +26,7 @@ export class RadioList extends BaseInput<RadioListProps, {}> {
   renderOption(name: string, item: RadioOptionProps, index: number): any {
     const selected = this.props.value ? this.props.value.id === item.id : false;
     return (
-      <div className="govuk-radios__item" key={`option` + index}>
+      <div className="govuk-radios__item" key={"option" + index}>
         <input
           data-qa={item.qa}
           className="govuk-radios__input"
@@ -44,7 +44,7 @@ export class RadioList extends BaseInput<RadioListProps, {}> {
     );
   }
 
-  private onChange(item: { id: string; value: React.ReactNode; }) {
+  private onChange(item: { id: string; value: React.ReactNode }) {
     if (this.props.onChange) {
       this.props.onChange(item);
     }

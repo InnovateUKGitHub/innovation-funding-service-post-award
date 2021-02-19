@@ -1,3 +1,7 @@
+// TODO: address these when we upgrade @testing-library/user-event
+/* eslint-disable jsx-a11y/interactive-supports-focus */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+
 import React, { useEffect, useState } from "react";
 import cx from "classnames";
 
@@ -61,7 +65,7 @@ export function AccordionItem({ qa, titleContent, title, children }: AccordionIt
   };
 
   const titleMessage = titleContent ? getContent(titleContent) : title && getContent(title);
-  const noTitleAvailable: boolean = !(titleMessage && titleMessage.length);
+  const noTitleAvailable = !(titleMessage && titleMessage.length);
 
   if (noTitleAvailable) return null;
 

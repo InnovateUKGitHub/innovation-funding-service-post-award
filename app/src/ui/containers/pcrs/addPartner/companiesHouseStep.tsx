@@ -86,7 +86,7 @@ class Component extends React.Component<
             <Form.Search
               name="searchCompaniesHouse"
               hintContent={x => x.pcrAddPartnerCompanyHouse.hint}
-              labelHidden={true}
+              labelHidden
               value={() => this.state.queryString}
               update={(dto, val) => this.setState({ searchTerm: val })}
             />
@@ -190,7 +190,6 @@ class Component extends React.Component<
   private displayCompany(company: CompanyDto) {
     return (
       <>
-        {/* tslint:disable-next-line: no-duplicate-string */}
         <SimpleString className={"govuk-!-margin-bottom-0"}>{company.title}</SimpleString>
         <SimpleString className={"govuk-!-margin-bottom-0"}>{company.companyNumber}</SimpleString>
         <SimpleString className={"govuk-!-margin-bottom-0"}>

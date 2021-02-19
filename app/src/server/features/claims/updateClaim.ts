@@ -1,10 +1,10 @@
 import { CommandBase, ValidationError } from "@server/features/common";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Authorisation, ClaimDto, ClaimStatus, IContext, ProjectRole } from "@framework/types";
-import { GetCostsSummaryForPeriodQuery } from "../claimDetails";
 import { GetCostCategoriesQuery } from "@server/features/claims/getCostCategoriesQuery";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
 import { mapToClaimStatus } from "@server/features/claims/mapClaim";
+import { GetCostsSummaryForPeriodQuery } from "../claimDetails";
 
 export class UpdateClaimCommand extends CommandBase<boolean> {
   constructor(private readonly projectId: string, private readonly claimDto: ClaimDto) {
@@ -41,8 +41,7 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
         Acc_ExternalComment__c: this.claimDto.comments,
         Acc_ParticipantVisibility__c: this.getChangeStatusVisibility(mapToClaimStatus(existingStatus), this.claimDto)
       });
-    }
-    else {
+    } else {
       await context.repositories.claims.update({
         Id: this.claimDto.id,
         Acc_ClaimStatus__c: this.claimDto.status,

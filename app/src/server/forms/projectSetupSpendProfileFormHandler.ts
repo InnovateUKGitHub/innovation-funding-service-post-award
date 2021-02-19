@@ -1,10 +1,5 @@
 import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
-import { UpdateInitialForecastDetailsCommand } from "../features/forecastDetails";
-import { GetByIdQuery } from "../features/projects";
 import { IContext } from "@framework/types/IContext";
-import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
-import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 import { Params } from "@ui/containers/forecasts/update";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ProjectSetupRoute, ProjectSetupSpendProfileParams, ProjectSetupSpendProfileRoute } from "@ui/containers";
@@ -12,6 +7,11 @@ import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecast
 import { InitialForecastDetailsDtosValidator } from "@ui/validators/initialForecastDetailsDtosValidator";
 import { isNumber } from "@framework/util";
 import { ForecastDetailsDTO } from "@framework/dtos";
+import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
+import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
+import { GetByIdQuery } from "../features/projects";
+import { UpdateInitialForecastDetailsCommand } from "../features/forecastDetails";
+import { IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
 
 // need to store isComplete in dto but as dto is an array the solution is to store isComplete on every entry
 interface Dto extends ForecastDetailsDTO {
@@ -24,7 +24,7 @@ export class ProjectSetupSpendProfileFormHandler extends StandardFormHandlerBase
     super(ProjectSetupSpendProfileRoute, ["default"], "initialForecastDetails");
   }
 
-  protected async getDto(context: IContext, params: Params, button: IFormButton, body: { [key: string]: string; }): Promise<Dto[]> {
+  protected async getDto(context: IContext, params: Params, button: IFormButton, body: { [key: string]: string }): Promise<Dto[]> {
     const dto = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(params.partnerId));
     const project = await context.runQuery(new GetByIdQuery(params.projectId));
     const partner = await context.runQuery(new GetPartnerByIdQuery(params.partnerId));

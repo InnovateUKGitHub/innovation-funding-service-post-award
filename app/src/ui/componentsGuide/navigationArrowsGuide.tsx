@@ -1,11 +1,11 @@
-import {NavigationArrows} from "../components";
 import {Provider} from "react-redux";
 import {createStore} from "redux";
-import {rootReducer} from "../redux/reducers";
 import { RouterProvider } from "react-router5";
 import createRouter from "router5";
 import browserPluginFactory from "router5/plugins/browser";
 import { IGuide, ILinkInfo } from "@framework/types";
+import {NavigationArrows} from "../components";
+import {rootReducer} from "../redux/reducers";
 
 const route = { name: "test", path: "/components" } as any;
 const router = createRouter([route]).usePlugin(browserPluginFactory({ useHash: false }));

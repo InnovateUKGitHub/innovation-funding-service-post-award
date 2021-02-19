@@ -1,4 +1,6 @@
 import express from "express";
+import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
+import { NotFoundError } from "../features/common/appError";
 import * as accounts from "./accounts";
 import * as claims from "./claims";
 import * as claimDetails from "./claimDetails";
@@ -18,8 +20,6 @@ import * as projectContacts from "./projectContacts";
 import * as users from "./users";
 
 import { ControllerBase } from "./controllerBase";
-import { NotFoundError } from "../features/common/appError";
-import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
 
 export interface IApiClient {
   accounts: accounts.IAccountsApi;

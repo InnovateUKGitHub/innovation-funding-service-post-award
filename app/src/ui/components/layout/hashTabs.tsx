@@ -46,7 +46,7 @@ export class HashTabs extends React.PureComponent<TabProps, State> {
 
   setHash = () => {
     this.setState({hash: window.location.hash});
-  }
+  };
 
   render() {
     const { tabList, qa } = this.props;

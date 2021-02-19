@@ -1,11 +1,11 @@
 import React from "react";
 import { PCRItemForPartnerWithdrawalDto } from "@framework/types";
-import * as ACC from "../../../components";
 import { StoresConsumer } from "@ui/redux";
 import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { removePartnerStepNames } from "@ui/containers/pcrs/removePartner/removePartnerWorkflow";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import * as ACC from "../../../components";
 
 interface InnerProps {
   documents: DocumentSummaryDto[];

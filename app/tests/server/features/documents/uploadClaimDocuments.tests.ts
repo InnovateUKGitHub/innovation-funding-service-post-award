@@ -1,8 +1,8 @@
-import { TestContext } from "../../testContextProvider";
 import { ValidationError } from "@server/features/common/appError";
 import { DocumentDescription } from "@framework/constants";
 import { Authorisation, ProjectRole } from "@framework/types";
 import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
+import { TestContext } from "../../testContextProvider";
 
 describe("UploadClaimDocumentsCommand", () => {
   it("should upload a single document ", async () => {

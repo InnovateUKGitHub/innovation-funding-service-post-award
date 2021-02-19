@@ -1,5 +1,5 @@
-import {Updatable} from "../../src/server/repositories/salesforceRepositoryBase";
 import { NotFoundError } from "@server/features/common";
+import {Updatable} from "../../src/server/repositories/salesforceRepositoryBase";
 
 export abstract class TestRepository<T> {
   Items: T[] = [];
@@ -9,8 +9,7 @@ export abstract class TestRepository<T> {
       const found = this.Items.find(x => conditional(x));
       if (found) {
         resolve(found);
-      }
-      else {
+      } else {
         reject(new NotFoundError("NOT FOUND"));
       }
     });
@@ -21,8 +20,7 @@ export abstract class TestRepository<T> {
       const found = this.Items.find(x => conditional(x));
       if (found) {
         resolve(found);
-      }
-      else {
+      } else {
         resolve(null);
       }
     });

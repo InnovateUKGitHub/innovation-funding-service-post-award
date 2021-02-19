@@ -1,9 +1,8 @@
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
 import { PhaseBanner } from "@ui/components";
-import { findByQa } from "../helpers/find-by-qa";
 import { TestBed, TestBedContent } from "@shared/TestBed";
+import { findByQa } from "../helpers/find-by-qa";
 
 describe("<PhaseBanner />", () => {
   const stubContent = {

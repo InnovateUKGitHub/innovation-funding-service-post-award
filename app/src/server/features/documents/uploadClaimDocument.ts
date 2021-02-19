@@ -4,8 +4,8 @@ import { DocumentUploadDtoValidator } from "@ui/validators/documentUploadValidat
 import { Authorisation, ClaimDto, ClaimKey, ClaimStatus, DocumentDescription, IContext, ProjectRole } from "@framework/types";
 import mapClaim from "@server/features/claims/mapClaim";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
-import { UpdateClaimCommand } from "../claims";
 import { DocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { UpdateClaimCommand } from "../claims";
 
 export class UploadClaimDocumentCommand extends CommandDocumentBase<string> {
 

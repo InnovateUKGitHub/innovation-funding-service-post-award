@@ -5,13 +5,13 @@ import {
   UpdateForecastDetailsCommand,
 } from "@server/features/forecastDetails";
 import { processDto } from "@shared/processResponse";
-import { ApiParams, ControllerBase } from "./controllerBase";
 import { ForecastDetailsDTO } from "@framework/dtos";
+import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface IForecastDetailsApi {
   getAllByPartnerId: (params: ApiParams<{ partnerId: string }>) => Promise<ForecastDetailsDTO[]>;
-  get: (params: ApiParams<{partnerId: string, periodId: number, costCategoryId: string}>) => Promise<ForecastDetailsDTO>;
-  update: (params: ApiParams<{projectId: string, partnerId: string, forecasts: ForecastDetailsDTO[], submit: boolean }>) => Promise<ForecastDetailsDTO[]>;
+  get: (params: ApiParams<{partnerId: string; periodId: number; costCategoryId: string}>) => Promise<ForecastDetailsDTO>;
+  update: (params: ApiParams<{projectId: string; partnerId: string; forecasts: ForecastDetailsDTO[]; submit: boolean }>) => Promise<ForecastDetailsDTO[]>;
 }
 
 class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecastDetailsApi {
@@ -42,12 +42,12 @@ class Controller extends ControllerBase<ForecastDetailsDTO> implements IForecast
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async get(params: ApiParams<{ partnerId: string, periodId: number, costCategoryId: string }>) {
+  public async get(params: ApiParams<{ partnerId: string; periodId: number; costCategoryId: string }>) {
     const query = new GetForecastDetailQuery(params.partnerId, params.periodId, params.costCategoryId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async update(params: ApiParams<{ projectId: string, partnerId: string, forecasts: ForecastDetailsDTO[], submit: boolean }>) {
+  public async update(params: ApiParams<{ projectId: string; partnerId: string; forecasts: ForecastDetailsDTO[]; submit: boolean }>) {
     const context = contextProvider.start(params);
     const forecastCmd = new UpdateForecastDetailsCommand(params.projectId, params.partnerId, params.forecasts, params.submit);
     await context.runCommand(forecastCmd);

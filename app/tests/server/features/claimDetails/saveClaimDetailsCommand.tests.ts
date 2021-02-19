@@ -1,10 +1,10 @@
-import { TestContext } from "../../testContextProvider";
 import { BadRequestError, ValidationError } from "@server/features/common/appError";
 import { Authorisation, ClaimDetailsDto, ClaimLineItemDto, ProjectRole } from "@framework/types";
 import { mapClaimDetails } from "@server/features/claimDetails/mapClaimDetails";
 import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetailsCommand";
 import { ISalesforceClaimDetails } from "@server/repositories";
 import { CostCategory, Partner } from "@framework/entities";
+import { TestContext } from "../../testContextProvider";
 
 const createNewLineItemDto = (detail: ClaimDetailsDto, value?: number, description?: string): ClaimLineItemDto => {
   return ({
@@ -41,7 +41,6 @@ const createDto = (context: TestContext, claimDetails: ISalesforceClaimDetails) 
   return mapClaimDetails(claimDetails, lineItems, context);
 };
 
-// tslint:disable-next-line:no-big-function
 describe("SaveClaimDetails", () => {
 
   it("should save the comments field", async () => {

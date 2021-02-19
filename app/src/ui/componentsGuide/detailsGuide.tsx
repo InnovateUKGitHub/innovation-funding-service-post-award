@@ -1,5 +1,5 @@
-import { DualDetails, TypedDetails } from "../components/details";
 import { IGuide } from "@framework/types";
+import { DualDetails, TypedDetails } from "../components/details";
 
 export const detailsGuide: IGuide = {
     name: "Details",

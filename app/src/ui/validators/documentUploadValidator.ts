@@ -1,6 +1,3 @@
-import * as Validation from "./common";
-import { Result } from "../validation/result";
-import { Results } from "../validation/results";
 import { FileTypeNotAllowedError } from "@server/repositories";
 import { NestedResult } from "@ui/validation";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -9,6 +6,9 @@ import { DocumentDescription } from "@framework/constants";
 import { IAppOptions } from "@framework/types/IAppOptions";
 import { IFileWrapper } from "@framework/types";
 import { getFileExtension, getFileName, getFileSize } from "@framework/util";
+import { Results } from "../validation/results";
+import { Result } from "../validation/result";
+import * as Validation from "./common";
 
 const invalidCharacterInFileName = (fileName: string) => {
   return `You cannot upload '${fileName}' because it contains forbidden characters.`;
@@ -152,7 +152,7 @@ function validateFileExtension(results: Results<{}>, file: IFileWrapper | null, 
 
 function validateFileName(results: Results<{}>, file: IFileWrapper | null): Result {
   // TODO: this needs to be moved to config
-  const validCharacters = /^[\w\d\s\\.\-\(\)]+$/;
+  const validCharacters = /^[\w\d\s\\.\-()]+$/;
 
   if (!file) {
     return Validation.inValid(results, "File does not exist");

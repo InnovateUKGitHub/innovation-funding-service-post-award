@@ -105,7 +105,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
             <UploadForm.MulipleFileUpload
               labelContent={x => x.projectSetupBankStatement.documentLabels.uploadInputLabel}
               name="attachment"
-              labelHidden={true}
+              labelHidden
               value={data => data.files}
               update={(dto, files) => {
                 dto.files = files || [];

@@ -1,5 +1,3 @@
-import { ClaimsStore } from "../../../src/ui/redux/stores/claimsStore";
-import { TestContext } from "../../server/testContextProvider";
 import {
   ClaimDocumentsStore,
   CostCategoriesStore,
@@ -8,6 +6,8 @@ import {
   PartnersStore
 } from "@ui/redux/stores";
 import { ClaimStatus } from "@framework/constants";
+import { ClaimsStore } from "../../../src/ui/redux/stores/claimsStore";
+import { TestContext } from "../../server/testContextProvider";
 
 describe("claims by project", () => {
   describe("getAllClaimsForProject", () => {

@@ -1,9 +1,7 @@
-import { Authorisation } from "./authorisation";
 import * as Repositories from "@server/repositories";
 import { IRoleInfo } from "@server/features/projects/getAllProjectRolesForUser";
 import { QueryBase, SyncQueryBase } from "@server/features/common/queryBase";
 import { CommandBase, NonAuthorisedCommandBase, SyncCommandBase } from "@server/features/common/commandBase";
-import { ISessionUser } from "./IUser";
 import { Cache, IClock, IConfig, ILogger } from "@server/features/common";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { RecordType } from "@framework/entities/recordType";
@@ -14,6 +12,8 @@ import { ICompaniesHouse } from "@server/resources/companiesHouse";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { IBankCheckService } from "@server/resources/bankCheckService";
 import { ICompetitionContentStore } from "@server/resources/competitionContentStore";
+import { ISessionUser } from "./IUser";
+import { Authorisation } from "./authorisation";
 
 export interface IRepositories {
   readonly accounts: Repositories.IAccountsRepository;

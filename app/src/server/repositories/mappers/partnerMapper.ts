@@ -1,6 +1,6 @@
-import { SalesforceBaseMapper } from "./saleforceMapperBase";
-import { ISalesforcePartner } from "../partnersRepository";
 import { Partner } from "@framework/entities";
+import { ISalesforcePartner } from "../partnersRepository";
+import { SalesforceBaseMapper } from "./saleforceMapperBase";
 
 export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePartner, Partner> {
   public map(item: ISalesforcePartner): Partner {

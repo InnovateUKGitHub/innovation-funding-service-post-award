@@ -9,7 +9,7 @@ export class ProjectContactLabels extends ContentBase {
     const contentLabel = isNonFunded ? "nonFundedLabel" : "fundedLabel";
 
     return this.getContent(contentLabel);
-  }
+  };
 
   public readonly contactName = this.getContent("contactName");
   public readonly roleName = this.getContent("roleName");

@@ -1,9 +1,9 @@
-import jsforce from "jsforce";
 import fs from "fs";
+import jsforce from "jsforce";
 import jwt from "jsonwebtoken";
+import { LogLevel } from "@framework/types/logLevel";
 import { Cache } from "../features/common/cache";
 import { Configuration } from "../features/common";
-import { LogLevel } from "@framework/types/logLevel";
 import { SalesforceTokenError } from "./errors";
 
 export interface ISalesforceTokenDetails {
@@ -38,8 +38,7 @@ export const salesforceConnectionWithUsernameAndPassword = (connectionDetails: I
     connection.login(connectionDetails.serviceUsername, connectionDetails.servicePassword + connectionDetails.serviceToken, (err, conn) => {
       if (err) {
         reject(err);
-      }
-      else {
+      } else {
         resolve(connection);
       }
     });
@@ -70,8 +69,7 @@ const getToken = (username: string, clientId: string, connectionUrl: string): Pr
     .then(r => {
       if (r.ok) {
         return r.json();
-      }
-      else {
+      } else {
         return r.text().then(x => {
           throw new SalesforceTokenError(`Unable to get token or json error: url- ${r.url}: status: -${r.status} originalUrl- ${connectionUrl}: ${x}`, r.status);
         });

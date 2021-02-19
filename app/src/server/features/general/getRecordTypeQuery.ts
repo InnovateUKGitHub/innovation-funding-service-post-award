@@ -1,6 +1,6 @@
-import { BadRequestError, QueryBase } from "../common";
 import { IContext } from "@framework/types";
 import { RecordType } from "@framework/entities/recordType";
+import { BadRequestError, QueryBase } from "../common";
 import { GetAllRecordTypesQuery } from "./getAllRecordTypesQuery";
 
 export class GetRecordTypeQuery extends QueryBase<RecordType> {

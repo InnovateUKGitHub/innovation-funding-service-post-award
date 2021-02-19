@@ -1,5 +1,3 @@
-import { Results } from "../validation";
-import * as Validation from "./common";
 import {
   PCRSpendProfileAcademicCostDto,
   PCRSpendProfileCapitalUsageCostDto,
@@ -15,6 +13,8 @@ import {
 import { CostCategoryType } from "@framework/entities";
 import { PCRSpendProfileOverheadRate } from "@framework/constants";
 import { hasNoDuplicates } from "@framework/util/arrayHelpers";
+import { Results } from "../validation";
+import * as Validation from "./common";
 
 export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
 
@@ -89,6 +89,7 @@ interface StringKeys {
 }
 
 export class PCROtherFundingDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileOtherFundingDto> implements StringKeys {
+  // eslint-disable-next-line no-undef
   [k: string]: any;
   public description = Validation.required(this, this.model.description, "Source of funding is required");
   public dateSecured = Validation.all(this,

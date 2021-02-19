@@ -5,7 +5,7 @@ const increment = (state: number) => state > 0 ? state + 1 : 1;
 const decrement = (state: number) => state > 0 ? state - 1 : 0;
 
 /// A reducer that monitors data loading to set a global variable that the selenium test framework can use to watch for pages to be ready to test
-export const loadStatusReducer = (state: number = 0, action: DataLoadAction | EditorSubmitAction | EditorSuccessAction | EditorErrorAction) => {
+export const loadStatusReducer = (state = 0, action: DataLoadAction | EditorSubmitAction | EditorSuccessAction | EditorErrorAction) => {
     if (action.type === "DATA_LOAD" && action.payload.status === LoadingStatus.Loading) {
         return increment(state);
     }

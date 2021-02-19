@@ -1,12 +1,12 @@
-import { StoreBase } from "./storeBase";
-import { RootState } from "../reducers";
 import { ApiClient } from "@ui/apiClient";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PartnerDto } from "@framework/dtos";
-import { dataLoadAction } from "../actions";
 import { LoadingStatus } from "@shared/pending";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import { PartnerDocumentsStore } from "@ui/redux/stores/partnerDocumentsStore";
+import { dataLoadAction } from "../actions";
+import { RootState } from "../reducers";
+import { StoreBase } from "./storeBase";
 
 interface UpdatePartnerOptions {
   onComplete?: (result: PartnerDto) => void;

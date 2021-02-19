@@ -1,6 +1,6 @@
-import { BadRequestError, CommandBase } from "../common";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { PCRStatus } from "@framework/constants";
+import { BadRequestError, CommandBase } from "../common";
 
 export class DeleteProjectChangeRequestCommand extends CommandBase<boolean> {
   constructor(private readonly projectId: string, private readonly pcrId: string) {

@@ -1,5 +1,5 @@
-import { ValidationSummary } from "../components/validationSummary";
 import { IGuide } from "@framework/types";
+import { ValidationSummary } from "../components/validationSummary";
 import { Results } from "../validation/results";
 import * as Validation from "../validators/common";
 

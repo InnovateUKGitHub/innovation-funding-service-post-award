@@ -1,5 +1,5 @@
-import { QueryBase } from "../common";
 import { AccountDto, IContext } from "@framework/types";
+import { QueryBase } from "../common";
 import { mapToAccountDto } from "./mapToAccountDto";
 
 export class GetAccountsQuery extends QueryBase<AccountDto[]> {

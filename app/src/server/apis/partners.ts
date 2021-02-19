@@ -1,15 +1,15 @@
-import { ApiParams, ControllerBase } from "./controllerBase";
-import contextProvider from "../features/common/contextProvider";
-import { GetAllForProjectQuery, GetAllQuery, GetByIdQuery } from "../features/partners";
 import { PartnerDto } from "@framework/types";
 import { processDto } from "@shared/processResponse";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
+import { GetAllForProjectQuery, GetAllQuery, GetByIdQuery } from "../features/partners";
+import contextProvider from "../features/common/contextProvider";
+import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface IPartnersApi {
   getAll: (params: ApiParams<{}>) => Promise<PartnerDto[]>;
   getAllByProjectId: (params: ApiParams<{ projectId: string }>) => Promise<PartnerDto[]>;
   get: (params: ApiParams<{ partnerId: string }>) => Promise<PartnerDto>;
-  updatePartner: (params: ApiParams<{ partnerId: string, partnerDto: PartnerDto, validateBankDetails?: boolean, verifyBankDetails?: boolean }>) => Promise<PartnerDto>;
+  updatePartner: (params: ApiParams<{ partnerId: string; partnerDto: PartnerDto; validateBankDetails?: boolean; verifyBankDetails?: boolean }>) => Promise<PartnerDto>;
 }
 
 class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {
@@ -39,7 +39,7 @@ class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async updatePartner(params: ApiParams<{ partnerId: string, partnerDto: PartnerDto, validateBankDetails?: boolean, verifyBankDetails?: boolean }>) {
+  public async updatePartner(params: ApiParams<{ partnerId: string; partnerDto: PartnerDto; validateBankDetails?: boolean; verifyBankDetails?: boolean }>) {
     const context = contextProvider.start(params);
     await context.runCommand(new UpdatePartnerCommand(params.partnerDto, params.validateBankDetails, params.verifyBankDetails));
 

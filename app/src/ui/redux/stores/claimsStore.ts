@@ -1,14 +1,14 @@
-import { StoreBase } from "./storeBase";
 import { ApiClient } from "@ui/apiClient";
 import { ClaimDtoValidator } from "@ui/validators";
 import { ClaimDto } from "@framework/dtos";
+import { Pending } from "@shared/pending";
+import { ClaimDocumentsStore } from "@ui/redux/stores/claimDocumentsStore";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { messageSuccess, RootActionsOrThunk } from "../actions";
 import { RootState } from "../reducers";
 import { CostSummariesStore } from "./costsSummariesStore";
 import { CostCategoriesStore } from "./costCategoriesStore";
-import { Pending } from "@shared/pending";
-import { ClaimDocumentsStore } from "@ui/redux/stores/claimDocumentsStore";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { StoreBase } from "./storeBase";
 
 export class ClaimsStore extends StoreBase {
   constructor(private readonly costsSummariesStore: CostSummariesStore, private readonly  costCategoriesStore: CostCategoriesStore, private readonly claimDocumentsStore: ClaimDocumentsStore, getState: () => RootState, queue: (action: RootActionsOrThunk) => void) {

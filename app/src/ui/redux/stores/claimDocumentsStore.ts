@@ -1,12 +1,12 @@
 import { ApiClient } from "@ui/apiClient";
 import { Pending } from "@shared/pending";
-import { RootActionsOrThunk } from "../actions";
-import { PartnersStore } from "./partnersStore";
-import { RootState } from "../reducers";
-import { DocumentsStoreBase } from "./documentsStoreBase";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { RootActionsOrThunk } from "../actions";
+import { RootState } from "../reducers";
+import { PartnersStore } from "./partnersStore";
+import { DocumentsStoreBase } from "./documentsStoreBase";
 
 export class ClaimDocumentsStore extends DocumentsStoreBase {
 

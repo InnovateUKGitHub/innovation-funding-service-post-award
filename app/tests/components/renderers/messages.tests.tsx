@@ -1,5 +1,4 @@
 
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
 import { IMessagesProps, Messages } from "@ui/components/renderers";

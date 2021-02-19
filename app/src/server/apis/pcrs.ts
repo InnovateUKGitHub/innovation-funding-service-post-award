@@ -1,6 +1,4 @@
-// tslint:disable:no-duplicate-string
 import contextProvider from "@server/features/common/contextProvider";
-import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
 import { PCRDto, PCRItemTypeDto, PCRSummaryDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
@@ -25,15 +23,16 @@ import { GetPcrParticipantSizesQuery } from "@server/features/pcrs/getPcrPartici
 import { GetPcrProjectLocationsQuery } from "@server/features/pcrs/getPcrProjectLocationsQuery";
 import { GetPcrSpendProfileCapitalUsageTypesQuery } from "@server/features/pcrs/getPcrSpendProfileCapitalUsageTypesQuery";
 import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
+import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
 
 export interface IPCRsApi {
-  create: (params: ApiParams<{ projectId: string, projectChangeRequestDto: PCRDto }>) => Promise<PCRDto>;
+  create: (params: ApiParams<{ projectId: string; projectChangeRequestDto: PCRDto }>) => Promise<PCRDto>;
   getAll: (params: ApiParams<{ projectId: string }>) => Promise<PCRSummaryDto[]>;
-  get: (params: ApiParams<{ projectId: string, id: string }>) => Promise<PCRDto>;
+  get: (params: ApiParams<{ projectId: string; id: string }>) => Promise<PCRDto>;
   getTypes: (params: ApiParams<{}>) => Promise<PCRItemTypeDto[]>;
-  update: (params: ApiParams<{projectId: string; id: string; pcr: PCRDto;}>) => Promise<PCRDto>;
-  delete: (params: ApiParams<{projectId: string; id: string; }>) => Promise<boolean>;
-  getStatusChanges: (params: ApiParams<{projectId: string, projectChangeRequestId: string }>) => Promise<ProjectChangeRequestStatusChangeDto[]>;
+  update: (params: ApiParams<{projectId: string; id: string; pcr: PCRDto}>) => Promise<PCRDto>;
+  delete: (params: ApiParams<{projectId: string; id: string }>) => Promise<boolean>;
+  getStatusChanges: (params: ApiParams<{projectId: string; projectChangeRequestId: string }>) => Promise<ProjectChangeRequestStatusChangeDto[]>;
   getPcrProjectRoles: (params: ApiParams<{}>) => Promise<Option<PCRProjectRole>[]>;
   getPcrPartnerTypes: (params: ApiParams<{}>) => Promise<Option<PCRPartnerType>[]>;
   getParticipantSizes: (params: ApiParams<{}>) => Promise<Option<PCRParticipantSize>[]>;
@@ -66,12 +65,12 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
     return contextProvider.start(params).runQuery(query);
   }
 
-  get(params: ApiParams<{ projectId: string, id: string }>): Promise<PCRDto> {
+  get(params: ApiParams<{ projectId: string; id: string }>): Promise<PCRDto> {
     const query = new GetPCRByIdQuery(params.projectId, params.id);
     return contextProvider.start(params).runQuery(query);
   }
 
-  async create(params: ApiParams<{ projectId: string, projectChangeRequestDto: PCRDto}>): Promise<PCRDto> {
+  async create(params: ApiParams<{ projectId: string; projectChangeRequestDto: PCRDto}>): Promise<PCRDto> {
     const context = contextProvider.start(params);
     const id = await context.runCommand(new CreateProjectChangeRequestCommand(params.projectId, params.projectChangeRequestDto));
     return context.runQuery(new GetPCRByIdQuery(params.projectId, id));
@@ -82,18 +81,18 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
     return contextProvider.start(params).runQuery(query);
   }
 
-  async update(params: ApiParams<{ projectId: string; id: string; pcr: PCRDto; }>): Promise<PCRDto> {
+  async update(params: ApiParams<{ projectId: string; id: string; pcr: PCRDto }>): Promise<PCRDto> {
     const context = contextProvider.start(params);
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.id, params.pcr));
     return context.runQuery(new GetPCRByIdQuery(params.projectId, params.id));
   }
 
-  delete(params: ApiParams<{ projectId: string, id: string }>): Promise<boolean> {
+  delete(params: ApiParams<{ projectId: string; id: string }>): Promise<boolean> {
     const command = new DeleteProjectChangeRequestCommand(params.projectId, params.id);
     return contextProvider.start(params).runCommand(command);
   }
 
-  public getStatusChanges(params: ApiParams<{ projectId: string, projectChangeRequestId: string }>) {
+  public getStatusChanges(params: ApiParams<{ projectId: string; projectChangeRequestId: string }>) {
     const query = new GetProjectChangeRequestStatusChanges(params.projectId, params.projectChangeRequestId);
     return contextProvider.start(params).runQuery(query);
   }

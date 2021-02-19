@@ -1,10 +1,9 @@
 
 import { DateTime } from "luxon";
-import { TestContext } from "../../testContextProvider";
 import { GetClaim } from "@server/features/claims";
 import { SALESFORCE_DATE_FORMAT } from "@server/features/common";
 import { ClaimStatus } from "@framework/types";
-// tslint:disable: no-big-function
+import { TestContext } from "../../testContextProvider";
 describe("GetClaim", () => {
   it("returns correct claim values", async () => {
     const context  = new TestContext();

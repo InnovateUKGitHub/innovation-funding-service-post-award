@@ -28,7 +28,7 @@ export const OtherFundingStep = (props: PcrStepProps<PCRItemForPartnerAdditionDt
           <Form.Radio
             name="hasOtherFunding"
             labelContent={x => x.pcrAddPartnerOtherFunding.questionLabel}
-            labelHidden={true}
+            labelHidden
             options={options}
             inline={false}
             value={(dto) => {

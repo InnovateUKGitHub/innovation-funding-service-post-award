@@ -1,8 +1,8 @@
+import { DocumentMessages } from "@content/messages/documentMessages";
+import { DocumentLabels } from "@content/labels/documentLabels";
 import { ContentPageBase } from "../../../contentPageBase";
 import { Content } from "../../../content";
 import { PCRItem } from "../pcrItem";
-import { DocumentMessages } from "@content/messages/documentMessages";
-import { DocumentLabels } from "@content/labels/documentLabels";
 
 export class PCRReasoningPrepareFilesContent extends ContentPageBase {
   constructor(content: Content, protected competitionType?: string) {

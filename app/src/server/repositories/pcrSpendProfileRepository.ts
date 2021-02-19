@@ -1,11 +1,11 @@
 import { Connection } from "jsforce";
-import SalesforceRepositoryBase, {
-  Insertable
-} from "./salesforceRepositoryBase";
 import { ILogger } from "@server/features/common/logger";
 import { PcrSpendProfileEntity, PcrSpendProfileEntityForCreate } from "@framework/entities/pcrSpendProfile";
 import { SalesforcePcrSpendProfileMapper } from "@server/repositories/mappers/pcrSpendProfileMapper";
 import { IPicklistEntry } from "@framework/types";
+import SalesforceRepositoryBase, {
+  Insertable
+} from "./salesforceRepositoryBase";
 
 export interface ISalesforcePcrSpendProfile {
   Id: string;

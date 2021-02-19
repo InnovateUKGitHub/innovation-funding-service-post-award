@@ -8,13 +8,13 @@ export interface IValidationResult {
 
 export class Results<T> implements IValidationResult {
   public readonly errors = new Array<Result>();
-  public isValid: boolean = true;
+  public isValid = true;
 
   constructor(public model: T, public readonly showValidationErrors: boolean, results: Result[] = []) {
     results.forEach(x => this.add(x));
   }
 
-  public isRequired: boolean = false;
+  public isRequired = false;
 
   /* internal dont use directly in normal behaviour as a Result adds itself to the parent Results validator */
   protected add(result: Result) {

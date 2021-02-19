@@ -1,8 +1,8 @@
-import { Email } from "./renderers/email";
 import { PartnerDto, ProjectContactDto } from "@framework/dtos";
 import { PartnerName } from "@ui/components/partners";
 import { Section } from "@ui/components/layout";
 import { SimpleString } from "@ui/components/renderers";
+import { Email } from "./renderers/email";
 
 interface IProjectContact {
   contact?: ProjectContactDto;

@@ -1,10 +1,10 @@
 import { QueryBase } from "@server/features/common";
 import { Authorisation, IContext, PCRStatus, ProjectChangeRequestStatusChangeDto, ProjectRole } from "@framework/types";
 import { dateComparator } from "@framework/util";
-import { GetAllProjectRolesForUser } from "../projects";
 import { ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
-import { GetPcrStatusesQuery } from "./getPcrStatusesQuery";
 import { Option} from "@framework/types";
+import { GetAllProjectRolesForUser } from "../projects";
+import { GetPcrStatusesQuery } from "./getPcrStatusesQuery";
 
 export class GetProjectChangeRequestStatusChanges extends QueryBase<ProjectChangeRequestStatusChangeDto[]> {
   constructor( private readonly projectId: string, private readonly projectChangeRequestId: string ) {

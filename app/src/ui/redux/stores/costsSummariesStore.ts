@@ -1,6 +1,6 @@
-import { StoreBase } from "./storeBase";
 import { ApiClient } from "@ui/apiClient";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { StoreBase } from "./storeBase";
 
 export class CostSummariesStore extends StoreBase {
   public getForPeriod(projectId: string, partnerId: string, periodId: number) {

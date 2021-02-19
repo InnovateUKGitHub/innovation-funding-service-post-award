@@ -1,7 +1,7 @@
-import { SalesforceBaseMapper } from "./saleforceMapperBase";
-import { ISalesforcePermissionGroup } from "../permissionGroupsRepository";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
+import { ISalesforcePermissionGroup } from "../permissionGroupsRepository";
+import { SalesforceBaseMapper } from "./saleforceMapperBase";
 
 export class SalesforcePermissionGroupMapper extends SalesforceBaseMapper<ISalesforcePermissionGroup, PermissionGroup> {
 

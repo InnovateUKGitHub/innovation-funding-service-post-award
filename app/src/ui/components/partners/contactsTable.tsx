@@ -1,9 +1,9 @@
-import { TypedTable } from "../table";
 import { Content as IContent } from "@content/content";
 import { ProjectContactLabels } from "@content/labels/projectContactLabels";
+import { ProjectContactDto } from "@framework/dtos";
+import { TypedTable } from "../table";
 import { SimpleString } from "../renderers";
 import { Content } from "../content";
-import { ProjectContactDto } from "@framework/dtos";
 
 export interface IContactsTable {
   contacts: ProjectContactDto[];

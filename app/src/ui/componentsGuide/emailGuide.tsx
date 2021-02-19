@@ -1,5 +1,5 @@
-import { Email } from "../components/renderers";
 import { IGuide } from "@framework/types";
+import { Email } from "../components/renderers";
 
 export const emailGuide: IGuide = {
     name: "Email",

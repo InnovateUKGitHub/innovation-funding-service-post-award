@@ -1,5 +1,3 @@
-// tslint:disable:no-duplicate-string no-identical-functions
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
 import { DropdownList } from "@ui/components/inputs";
@@ -28,7 +26,7 @@ describe("Dropdown list", () => {
   });
 
   it("Renders with empty options if specified", () => {
-    const wrapper = mount(<DropdownList name="testName" hasEmptyOption={true} options={dropdownOptions} />);
+    const wrapper = mount(<DropdownList name="testName" hasEmptyOption options={dropdownOptions} />);
     expect(wrapper.find("option").length).toBe(4);
     const emptyOption = wrapper.find("option").first();
     expect(emptyOption.props().value).toBe("");
@@ -36,7 +34,7 @@ describe("Dropdown list", () => {
   });
 
   it("Specifies empty option as selected if nothing selected", () => {
-    const wrapper = mount(<DropdownList name="testName" hasEmptyOption={true} options={dropdownOptions} />);
+    const wrapper = mount(<DropdownList name="testName" hasEmptyOption options={dropdownOptions} />);
 
     expect(wrapper.find("select").first().props().value).toBe("");
     expect(wrapper.find("option").first().getDOMNode().getAttribute("aria-selected")).toBe("true");
@@ -70,7 +68,7 @@ describe("Dropdown list", () => {
   it("Fires change if value cleared", () => {
     const onChange = jest.fn();
 
-    const wrapper = mount(<DropdownList name="testName" hasEmptyOption={true} options={dropdownOptions} onChange={onChange} value={dropdownOptions[1]} />);
+    const wrapper = mount(<DropdownList name="testName" hasEmptyOption options={dropdownOptions} onChange={onChange} value={dropdownOptions[1]} />);
 
     const select = wrapper.find("select").first();
     select.simulate("change", { target: { value: "" } });

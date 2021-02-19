@@ -1,5 +1,5 @@
-import { ContentBase } from "../contentBase";
 import { DateFormat, formatDate } from "@framework/util";
+import { ContentBase } from "../contentBase";
 
 export class ClaimMessages extends ContentBase {
   constructor(parent: ContentBase, protected competitionType?: string) {

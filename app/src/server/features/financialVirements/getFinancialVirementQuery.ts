@@ -8,13 +8,13 @@ import {
   ProjectRole,
 } from "@framework/types";
 import { CostCategoryFinancialVirement, PartnerFinancialVirement } from "@framework/entities";
-import { GetCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import {
   calculateNewEligibleCosts,
   calculateNewRemainingGrant,
 } from "@server/features/financialVirements/financialVirementsCalculations";
 import { roundCurrency, sum } from "@framework/util";
+import { GetCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
 
 export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
   constructor(private readonly projectId: string, private readonly pcrId: string, private readonly pcrItemId: string) {

@@ -1,9 +1,8 @@
-// tslint:disable:no-duplicate-string no-big-function
-import { TestContext } from "../../testContextProvider";
 import { SaveMonitoringReport } from "@server/features/monitoringReports/saveMonitoringReport";
 import { BadRequestError, ValidationError } from "@server/features/common";
 import * as Repositories from "@server/repositories";
 import { GetMonitoringReportById } from "@server/features/monitoringReports/getMonitoringReport";
+import { TestContext } from "../../testContextProvider";
 
 const createMonitoringReportTestData = (context: TestContext, periodId: number, update?: Partial<Repositories.ISalesforceMonitoringReportHeader>): Repositories.ISalesforceMonitoringReportHeader => {
   const project = context.testData.createProject(x => x.Acc_CurrentPeriodNumber__c = 10);

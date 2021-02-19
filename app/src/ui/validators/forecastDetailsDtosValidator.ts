@@ -1,9 +1,9 @@
-import * as Validation from "./common";
-import { Results } from "../validation/results";
-import { Result } from "../validation/result";
 import { ClaimDetailsSummaryDto, ClaimDto, ForecastDetailsDTO, GOLCostDto, PartnerDto } from "@framework/types";
 import { NestedResult } from "@ui/validation";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { Result } from "../validation/result";
+import { Results } from "../validation/results";
+import * as Validation from "./common";
 
 export interface IForecastDetailsDtosValidator extends Results<ForecastDetailsDTO[]> {
   items: NestedResult<IForecastDetailsDtoValidator>;

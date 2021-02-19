@@ -1,8 +1,8 @@
-import { StoreBase } from "./storeBase";
 import { ApiClient } from "@ui/apiClient";
 import { ClaimDetailsValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ClaimDetailsDto } from "@framework/dtos";
+import { StoreBase } from "./storeBase";
 
 export class ClaimsDetailsStore extends StoreBase {
   private getKey(partnerId: string, periodId: number, costCategoryId: string) {

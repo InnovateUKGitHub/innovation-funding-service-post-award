@@ -58,7 +58,7 @@ class Component extends React.Component<SpendProfileCostFormProps<PCRSpendProfil
           {this.renderFormHiddenSection(data, Form, validator, documents, editor)}
           {this.props.isClient && <Form.Custom
             labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.overheads.totalCost}
-            labelBold={true}
+            labelBold
             name="totalCost"
             value={dto => <ACC.Renderers.SimpleString><ACC.Renderers.Currency value={dto.value}/></ACC.Renderers.SimpleString>}
             update={() => null}
@@ -102,6 +102,9 @@ class Component extends React.Component<SpendProfileCostFormProps<PCRSpendProfil
   }
 
   private getOverheadsCostValue(overheadsCostDto: PCRSpendProfileOverheadsCostDto, costs: PCRSpendProfileCostDto[]) {
+    const labourCosts = costs
+      .filter(x => x.costCategory === CostCategoryType.Labour)
+      .reduce((acc, item) => acc + (item.value || 0), 0);
     switch (overheadsCostDto.overheadRate) {
       case PCRSpendProfileOverheadRate.Unknown:
         return null;
@@ -110,9 +113,6 @@ class Component extends React.Component<SpendProfileCostFormProps<PCRSpendProfil
       case PCRSpendProfileOverheadRate.Zero:
         return 0;
       case PCRSpendProfileOverheadRate.Twenty:
-        const labourCosts = costs
-          .filter(x => x.costCategory === CostCategoryType.Labour)
-          .reduce((acc, item) => acc + (item.value || 0), 0);
         return roundCurrency(labourCosts * 20 / 100);
       default:
         return null;

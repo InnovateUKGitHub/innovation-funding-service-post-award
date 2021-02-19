@@ -1,9 +1,9 @@
 
 import { useContent } from "@ui/hooks";
+import { PageTitle } from "@ui/components/layout";
 import { Page } from "./layout/page";
 import { Section } from "./layout/section";
 import { SimpleString } from "./renderers/simpleString";
-import { PageTitle } from "@ui/components/layout";
 import { ExternalLink } from "./renderers";
 
 const innovateUKLink = "https://www.gov.uk/government/organisations/innovate-uk";
@@ -22,7 +22,7 @@ export function NotFoundErrorPage() {
   // prettier-ignore
   const errorContent = (
     <>
-      {errorMessage} <ExternalLink href={dashboardLink}>{yourDashBoardMessage}</ExternalLink> {goBackMessage} <ExternalLink href={innovateUKLink}>{homepage}</ExternalLink>.
+      {errorMessage} <ExternalLink href={dashboardLink} alt="go to Dashboard">{yourDashBoardMessage}</ExternalLink> {goBackMessage} <ExternalLink href={innovateUKLink} alt="go to Dashboard">{homepage}</ExternalLink>.
     </>
   );
 

@@ -1,11 +1,11 @@
-import { IFormBody, IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
-import { AllClaimsDashboardRoute, ReviewClaimParams, ReviewClaimRoute, } from "../../ui/containers";
 import { ClaimDto, ClaimStatus } from "@framework/types";
-import { GetClaim, UpdateClaimCommand } from "../features/claims";
-import { ClaimDtoValidator } from "../../ui/validators";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { ClaimDtoValidator } from "../../ui/validators";
+import { GetClaim, UpdateClaimCommand } from "../features/claims";
+import { AllClaimsDashboardRoute, ReviewClaimParams, ReviewClaimRoute, } from "../../ui/containers";
+import { IFormBody, IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
 
 export class ReviewClaimFormHandler extends StandardFormHandlerBase<ReviewClaimParams, "claim"> {
     constructor() {
@@ -17,8 +17,7 @@ export class ReviewClaimFormHandler extends StandardFormHandlerBase<ReviewClaimP
 
         if (body.status === ClaimStatus.MO_QUERIED) {
             claim.status = ClaimStatus.MO_QUERIED;
-        }
-        else if (body.status === ClaimStatus.AWAITING_IUK_APPROVAL) {
+        } else if (body.status === ClaimStatus.AWAITING_IUK_APPROVAL) {
             claim.status = ClaimStatus.AWAITING_IUK_APPROVAL;
         }
 

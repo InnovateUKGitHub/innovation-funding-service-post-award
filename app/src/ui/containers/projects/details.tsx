@@ -1,8 +1,8 @@
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
 import { PartnerDto, ProjectContactDto, ProjectDto, ProjectRole } from "@framework/types";
 import { StoresConsumer } from "@ui/redux";
+import * as ACC from "../../components";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { Content, PartnerName } from "../../components";
 
 interface Data {
@@ -121,7 +121,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                         <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.endDate} qa="end-date" content={<ACC.Renderers.FullDate value={project.endDate}/>}/>
                         <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.duration} qa="duration" content={`${project.durationInMonths} ${project.durationInMonths === 1 ? "month" : "months"}`}/>
                         <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.numberOfPeriods} qa="periods" content={project.numberOfPeriods}/>
-                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.scope} qa="scope" content={<ACC.Renderers.SimpleString multiline={true}>{project.summary}</ACC.Renderers.SimpleString>}/>
+                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.scope} qa="scope" content={<ACC.Renderers.SimpleString multiline>{project.summary}</ACC.Renderers.SimpleString>}/>
                     </ACC.SummaryList>
                 </ACC.Section>
             </ACC.Page>
@@ -148,7 +148,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     private renderPartnerName(partner: PartnerDto) {
         return (
             <ACC.Link route={this.props.routes.partnerDetails.getLink({id: this.props.id, partnerId: partner.id})}>
-                <PartnerName partner={partner} showIsLead={true}/>
+                <PartnerName partner={partner} showIsLead/>
             </ACC.Link>
         );
     }

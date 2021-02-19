@@ -1,5 +1,5 @@
-import { TestContext } from "../../testContextProvider";
 import { GetAllRecordTypesQuery } from "@server/features/general/getAllRecordTypesQuery";
+import { TestContext } from "../../testContextProvider";
 
 describe("GetAllRecordTypesQuery", () => {
   it("returns all record types", async () => {
