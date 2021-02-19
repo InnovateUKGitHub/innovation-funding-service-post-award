@@ -38,7 +38,7 @@ export abstract class ContentBase {
       const fullKey = parts.join(".");
       const contentResult = this.getCustomContent(fullKey, options);
 
-      if (!!contentResult) return contentResult;
+      if (contentResult) return contentResult;
       parts.shift();
     }
 

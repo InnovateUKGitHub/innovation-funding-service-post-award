@@ -1,4 +1,3 @@
-// tslint:disable-next-line: import-blacklist
 import { mount, shallow } from "enzyme";
 
 import { NumberInput } from "@ui/components/inputs";
@@ -47,7 +46,7 @@ describe("NumberInput", () => {
   });
 
   it("Renders as disabled", () => {
-    const output = shallow(<NumberInput name="number test" disabled={true} />);
+    const output = shallow(<NumberInput name="number test" disabled />);
     expect(output.prop("disabled")).toBe(true);
   });
 

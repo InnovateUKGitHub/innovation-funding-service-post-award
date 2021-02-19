@@ -1,4 +1,3 @@
-import { Markdown } from "./renderers/markdown";
 import { useContent } from "@ui/hooks";
 import { ContentSelector } from "@content/content";
 import { useStores } from "@ui/redux";
@@ -6,6 +5,7 @@ import { Modal } from "@ui/components/modal";
 import { Section } from "@ui/components/layout";
 import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
 import { ModalLink } from "@ui/components/links";
+import { Markdown } from "./renderers/markdown";
 
 interface IContentProps {
   value: ContentSelector;
@@ -19,7 +19,7 @@ export const Content = ({ value, styles }: IContentProps) => {
   const config = stores.config.getConfig().features;
   const { key, content, markdown } = getResultByQuery(value);
 
-  const displayValue: string | JSX.Element = markdown ? (
+  const displayValue: string | React.ReactElement = markdown ? (
     <Markdown style={styles && { color: styles.color }} value={content} />
   ) : (
     content
@@ -35,7 +35,8 @@ export const Content = ({ value, styles }: IContentProps) => {
           aria-label="Open content modal dialogue"
           role="button"
           className="content-prompt__icon"
-          onClick={(e) => {
+          tabIndex={0}
+          onKeyDown={(e) => {
             e.preventDefault();
             e.stopPropagation();
             window.location.hash = `#${modalId}`;
@@ -44,9 +45,9 @@ export const Content = ({ value, styles }: IContentProps) => {
         <Modal id={modalId}>
           <Section title="Content hint">
             <SummaryList qa="content_info">
-              <SummaryListItem hideAction={true} label="Current value" content={displayValue} qa="current_value" />
+              <SummaryListItem hideAction label="Current value" content={displayValue} qa="current_value" />
 
-              <SummaryListItem hideAction={true} label="Content key" content={key} qa="current_value" />
+              <SummaryListItem hideAction label="Content key" content={key} qa="current_value" />
             </SummaryList>
 
             <ModalLink styling="PrimaryButton" modalId={modalId} open={false}>

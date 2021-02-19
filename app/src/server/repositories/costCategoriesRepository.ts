@@ -1,5 +1,5 @@
-import { SalesforceRepositoryBaseWithMapping } from "./salesforceRepositoryBase";
 import { CostCategory } from "@framework/entities";
+import { SalesforceRepositoryBaseWithMapping } from "./salesforceRepositoryBase";
 import { SalesforceCostCategoryMapper } from "./mappers/costCategoryMapper";
 
 export interface ISalesforceCostCategory {

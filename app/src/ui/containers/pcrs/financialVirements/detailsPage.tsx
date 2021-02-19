@@ -68,7 +68,7 @@ class Component extends ContainerBase<Params, Props, {}> {
     }
     return (
       <ACC.Info summary="Reasoning for the request" qa="reasoning_for_the_request">
-        <ACC.Renderers.SimpleString multiline={true}>{pcr.reasoningComments}</ACC.Renderers.SimpleString>
+        <ACC.Renderers.SimpleString multiline>{pcr.reasoningComments}</ACC.Renderers.SimpleString>
       </ACC.Info>
     );
   }
@@ -81,9 +81,9 @@ class Component extends ContainerBase<Params, Props, {}> {
     };
 
     if (this.props.mode === "review") {
-      return <ACC.BackLink route={this.props.routes.pcrReviewItem.getLink(params)} preserveData={true}><ACC.Content value={x => x.financialVirementDetails.labels.backToSummary}/></ACC.BackLink>;
+      return <ACC.BackLink route={this.props.routes.pcrReviewItem.getLink(params)} preserveData><ACC.Content value={x => x.financialVirementDetails.labels.backToSummary}/></ACC.BackLink>;
     }
-    return <ACC.BackLink route={this.props.routes.pcrViewItem.getLink(params)} preserveData={true}><ACC.Content value={x => x.financialVirementDetails.labels.backToSummary}/></ACC.BackLink>;
+    return <ACC.BackLink route={this.props.routes.pcrViewItem.getLink(params)} preserveData><ACC.Content value={x => x.financialVirementDetails.labels.backToSummary}/></ACC.BackLink>;
   }
 }
 

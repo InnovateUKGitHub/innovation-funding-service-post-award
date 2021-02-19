@@ -1,10 +1,6 @@
-import { BadRequestError, CommandBase, ValidationError } from "../common";
 import { PCRDto, PCRItemDto, PCRItemForPartnerAdditionDto, ProjectRole } from "@framework/dtos";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { Authorisation, IContext, PCRItemType } from "@framework/types";
-import { GetAllProjectRolesForUser, GetByIdQuery } from "../projects";
-import { mapToPcrDto } from "./mapToPCRDto";
-import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
 import {
   CostCategoryType,
   ProjectChangeRequestItemEntity,
@@ -14,6 +10,10 @@ import { GetAllForProjectQuery } from "@server/features/partners";
 import { PCRStatus } from "@framework/constants";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
 import { sum } from "@framework/util";
+import { GetAllProjectRolesForUser, GetByIdQuery } from "../projects";
+import { BadRequestError, CommandBase, ValidationError } from "../common";
+import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
+import { mapToPcrDto } from "./mapToPCRDto";
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
   constructor(private readonly projectId: string, private readonly projectChangeRequestId: string, private readonly pcr: PCRDto) {
@@ -103,7 +103,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
 
     if (auth.forProject(this.projectId).hasRole(ProjectRole.ProjectManager)) {
       const partnerAdditionItemDto = this.pcr.items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
-      if (!!partnerAdditionItemDto) {
+      if (partnerAdditionItemDto) {
         await context.runCommand(new UpdatePCRSpendProfileCommand(this.projectId, partnerAdditionItemDto.id, partnerAdditionItemDto.spendProfile));
       }
     }
@@ -111,7 +111,6 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     return true;
   }
 
-  // tslint:disable-next-line:cognitive-complexity
   private getItemUpdates(item: ProjectChangeRequestItemEntity, dto: PCRItemDto): Partial<ProjectChangeRequestItemEntity> | null {
     const init = item.status !== dto.status ? { status: dto.status } : null;
 

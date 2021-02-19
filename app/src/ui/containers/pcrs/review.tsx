@@ -1,5 +1,4 @@
 
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "@ui/components";
@@ -12,6 +11,7 @@ import {
   PCRItemType,
   PCRStatus
 } from "@framework/constants";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 export interface PCRReviewParams {
   projectId: string;
@@ -101,7 +101,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
             validation={editor.validator.status}
           />
         </Form.Fieldset>
-        <Form.Fieldset heading="Add your comments" isSubQuestion={true}>
+        <Form.Fieldset heading="Add your comments" isSubQuestion>
           <Form.MultilineString
             name="comments"
             label=""

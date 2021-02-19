@@ -1,11 +1,11 @@
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { PCRItemDto, PCRItemStatus, PCRItemType, PCRStatus, ProjectDto, ProjectRole } from "@framework/types";
-import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
 import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
+import * as ACC from "../../components";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: string;
@@ -35,11 +35,9 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     const dto = editor.data;
     if (submit && original.status === PCRStatus.QueriedByInnovateUK) {
       dto.status = PCRStatus.SubmittedToInnovateUK;
-    }
-    else if (submit) {
+    } else if (submit) {
       dto.status = PCRStatus.SubmittedToMonitoringOfficer;
-    }
-    else {
+    } else {
       // not submitting so set status to the original status
       dto.status = original.status;
     }

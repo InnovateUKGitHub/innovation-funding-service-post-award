@@ -64,7 +64,8 @@ export class CompaniesHouse implements ICompaniesHouse {
         }
         throw new Error(`Failed get request to ${url}`);
       })
-      .then(resp => { if (resp.results) {
+      .then(resp => {
+ if (resp.results) {
         // SIL does not currently handle the itemsPerPage query param so this is a temp measure until it does
         if (itemsPerPage) {
           resp.results.items.splice(1, itemsPerPage);
@@ -83,6 +84,7 @@ export class CompaniesHouse implements ICompaniesHouse {
         }));
       } else {
         return [];
-      }} );
+      }
+} );
   }
 }

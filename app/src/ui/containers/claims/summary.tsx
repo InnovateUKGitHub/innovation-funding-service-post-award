@@ -263,9 +263,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
   }
   private getBackLink(project: ProjectDto) {
     const isPmOrMo = (project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
-    // tslint:disable-next-line: prefer-immediate-return
-    const backLink = isPmOrMo ? this.props.routes.allClaimsDashboard.getLink({ projectId: project.id }) : this.props.routes.claimsDashboard.getLink({ projectId: project.id, partnerId: this.props.partnerId });
-    return backLink;
+    return isPmOrMo ? this.props.routes.allClaimsDashboard.getLink({ projectId: project.id }) : this.props.routes.claimsDashboard.getLink({ projectId: project.id, partnerId: this.props.partnerId });
   }
 }
 

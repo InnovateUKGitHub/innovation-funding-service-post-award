@@ -159,7 +159,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             <LineItemTable.Custom headerContent={x => x.editClaimLineItems.costHeader} qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, validationResults[i.row], editor)} width={30} />
             <LineItemTable.ShortDate headerContent={x => x.editClaimLineItems.lastUpdatedHeader} qa="cost-last-updated" value={x => x.lastModifiedDate} />
             {this.state.showAddRemove ?
-              <LineItemTable.Custom headerContent={x => x.editClaimLineItems.actionHeader} hideHeader={true} qa="remove" value={(x, i) => <a href="" className="govuk-link" role="button" onClick={e => this.removeItem(x, i, e, editor)}><ACC.Content value={y => y.editClaimLineItems.removeButton}/></a>} width={1}/>
+              <LineItemTable.Custom headerContent={x => x.editClaimLineItems.actionHeader} hideHeader qa="remove" value={(x, i) => <a href="" className="govuk-link" role="button" onClick={e => this.removeItem(x, i, e, editor)}><ACC.Content value={y => y.editClaimLineItems.removeButton}/></a>} width={1}/>
               : null}
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
@@ -190,7 +190,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
           <LineItemForm.MultilineString
             label={<ACC.Content value={x => x.editClaimLineItems.additionalInfo} />}
             hintContent={x => x.editClaimLineItems.additionalInformationHint}
-            labelHidden={true}
+            labelHidden
             name="comments"
             value={() => editor.data.comments}
             update={(dto, v) => (dto.comments = v)}
@@ -223,7 +223,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
           <LineItemForm.MultilineString
             label={<ACC.Content value={x => x.editClaimLineItems.additionalInfo} />}
             hintContent={x => x.editClaimLineItems.additionalInformationHint}
-            labelHidden={true}
+            labelHidden
             name="comments"
             value={() => editor.data.comments}
             update={(data, v) => (data.comments = v)}
@@ -243,7 +243,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     );
   }
 
-  renderCost(item: ClaimLineItemDto, index: { column: number; row: number; }, validation: ClaimLineItemDtoValidator, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
+  renderCost(item: ClaimLineItemDto, index: { column: number; row: number }, validation: ClaimLineItemDtoValidator, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
     return (
       <span>
         <ACC.ValidationError error={validation.cost} />
@@ -287,7 +287,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     );
 }
 
-  renderDescription(item: ClaimLineItemDto, index: { column: number; row: number; }, validation: ClaimLineItemDtoValidator, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
+  renderDescription(item: ClaimLineItemDto, index: { column: number; row: number }, validation: ClaimLineItemDtoValidator, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
     return (
       <span>
         <ACC.ValidationError error={validation.description} />
@@ -303,7 +303,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     );
   }
 
-  removeItem(item: ClaimLineItemDto, i: { column: number; row: number; }, e: React.SyntheticEvent<HTMLAnchorElement>, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
+  removeItem(item: ClaimLineItemDto, i: { column: number; row: number }, e: React.SyntheticEvent<HTMLAnchorElement>, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
     e.preventDefault();
     const dto = editor.data;
     dto.lineItems.splice(i.row, 1);
@@ -321,7 +321,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     this.props.onUpdate(false, dto);
   }
 
-  updateItem(i: { column: number; row: number; }, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>, update: (item: ClaimLineItemDto) => void) {
+  updateItem(i: { column: number; row: number }, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>, update: (item: ClaimLineItemDto) => void) {
     const dto = editor.data;
     update(dto.lineItems[i.row]);
     this.props.onUpdate(false, dto);
@@ -380,8 +380,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
 const getDestination = (props: EditClaimDetailsParams & BaseProps, goToUpload: boolean|undefined) => {
   if(goToUpload) {
     return props.routes.claimDetailDocuments.getLink({projectId: props.projectId, partnerId: props.partnerId, periodId: props.periodId, costCategoryId: props.costCategoryId});
-  }
-  else {
+  } else {
     return props.routes.prepareClaim.getLink({projectId: props.projectId, partnerId: props.partnerId, periodId: props.periodId});
   }
 };

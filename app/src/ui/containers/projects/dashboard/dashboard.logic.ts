@@ -56,7 +56,6 @@ export function getPartnerOnProject(project: ProjectDto, partners: PartnerDto[])
   });
 }
 
-// tslint:disable-next-line: cognitive-complexity
 export function getProjectSection(project: ProjectDto, partner?: PartnerDto): Section {
   // A pending participant status should override any project status, so check that first
   if (partner && partner.partnerStatus === PartnerStatus.Pending && getAuthRoles(partner.roles).isFc) {

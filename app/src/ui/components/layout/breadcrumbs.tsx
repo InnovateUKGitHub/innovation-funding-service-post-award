@@ -19,7 +19,7 @@ export function Breadcrumbs({ children, links }: BreadcrumbsProps) {
         ))}
 
         <li
-          key={`breadcrumb-current`}
+          key="breadcrumb-current"
           data-qa="breadcrumb-current-item"
           className="govuk-breadcrumbs__list-item"
           aria-current="page"

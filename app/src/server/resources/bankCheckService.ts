@@ -1,3 +1,5 @@
+import * as https from "https";
+import { RequestOptions } from "https";
 import { Configuration, ConfigurationError } from "@server/features/common";
 import {
   AccountDetails,
@@ -6,8 +8,6 @@ import {
   BankCheckVerificationResult,
   BankDetails
  } from "@framework/types/bankCheck";
-import * as https from "https";
-import { RequestOptions } from "https";
 
 export interface IVerifyBankCheckInputs {
   companyName: string;
@@ -82,7 +82,7 @@ export class BankCheckService implements IBankCheckService {
       hostname,
       path,
       headers: {
-        "Accept": "application/json",
+        Accept: "application/json",
         "Content-Type": "application/json",
       }
     };

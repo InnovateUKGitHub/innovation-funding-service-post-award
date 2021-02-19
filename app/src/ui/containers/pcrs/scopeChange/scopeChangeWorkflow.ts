@@ -1,11 +1,11 @@
 import { PCRItemForScopeChangeDto } from "@framework/dtos";
-import { PublicDescriptionChangeStep } from "./publicDescriptionChangeStep";
-import { ProjectSummaryChangeStep } from "./projectSummaryChangeStep";
 import { PCRScopeChangeItemDtoValidator } from "@ui/validators";
-import { ScopeChangeSummary } from "./scopeChangeSummary";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { CombinedResultValidator } from "@ui/validation";
 import { PCRItemType } from "@framework/constants";
+import { ScopeChangeSummary } from "./scopeChangeSummary";
+import { ProjectSummaryChangeStep } from "./projectSummaryChangeStep";
+import { PublicDescriptionChangeStep } from "./publicDescriptionChangeStep";
 
 export type scopeChangeStepNames = "publicDescriptionStep" | "projectSummaryStep";
 

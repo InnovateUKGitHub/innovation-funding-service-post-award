@@ -1,5 +1,5 @@
-import { NonAuthorisedCommandBase } from "../common/commandBase";
 import { IContext } from "@framework/types";
+import { NonAuthorisedCommandBase } from "../common/commandBase";
 
 const defaultContentMarker = new Date("1970/01/01");
 

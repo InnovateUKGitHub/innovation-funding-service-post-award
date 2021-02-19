@@ -7,7 +7,7 @@ const render = (value: Date | null, format: DateFormat) => {
     return date ? <span>{date}</span> : null;
 };
 
-const renderDateRange = ( start: DateTime | null, end: DateTime | null, format: string, isCondensed: boolean = false )=> {
+const renderDateRange = ( start: DateTime | null, end: DateTime | null, format: string, isCondensed = false )=> {
     if (!start || !start.isValid || !end || !end.isValid) {
         return null;
     }
@@ -33,15 +33,15 @@ const renderDateRange = ( start: DateTime | null, end: DateTime | null, format: 
     );
 };
 
-export const CondensedDateRange: React.FunctionComponent<{ start: Date | null, end: Date | null }> = props => {
+export const CondensedDateRange: React.FunctionComponent<{ start: Date | null; end: Date | null }> = props => {
     return renderDateRange(convertDateAndTime(props.start), convertDateAndTime(props.end), "MMM", true);
 };
 
-export const LongDateRange: React.FunctionComponent<{ start: Date | null, end: Date | null }> = props => {
+export const LongDateRange: React.FunctionComponent<{ start: Date | null; end: Date | null }> = props => {
     return renderDateRange(convertDateAndTime(props.start), convertDateAndTime(props.end), "d MMMM");
 };
 
-export const ShortDateRange: React.FunctionComponent<{ start: Date | null, end: Date | null }> = props => {
+export const ShortDateRange: React.FunctionComponent<{ start: Date | null; end: Date | null }> = props => {
     return renderDateRange(convertDateAndTime(props.start), convertDateAndTime(props.end), "d MMM");
 };
 
@@ -77,7 +77,7 @@ export const ShortDateTime: React.FunctionComponent<{ value: Date | null }> = ({
     return render(value, DateFormat.SHORT_DATE_TIME);
 };
 
-export const Duration: React.FunctionComponent<{ startDate: Date | null, endDate: Date | null }> = (props) => {
+export const Duration: React.FunctionComponent<{ startDate: Date | null; endDate: Date | null }> = (props) => {
     const startDateLuxon = convertDateAndTime(props.startDate);
     const endDateLuxon = convertDateAndTime(props.endDate);
 
@@ -101,7 +101,7 @@ export const Months: React.FunctionComponent<{months: number | null }> = (props)
     return null;
 };
 
-export const ShortDateRangeFromDuration = (props: { startDate: Date|null, months: number|null}) => {
+export const ShortDateRangeFromDuration = (props: { startDate: Date|null; months: number|null}) => {
     const startDateLuxon = convertDateAndTime(props.startDate);
     const isValidDuration = (props.months) && Number.isInteger(props.months);
     const endDate = startDateLuxon && isValidDuration ? startDateLuxon.plus({months: props.months! - 1}).endOf("month").toJSDate() : null;

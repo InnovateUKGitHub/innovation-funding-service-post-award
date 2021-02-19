@@ -1,4 +1,3 @@
-// tslint:disable: no-duplicate-string no-big-function
 import _merge from "lodash.merge";
 
 import { ClaimDto, CostsSummaryForPeriodDto, PartnerDto, ProjectDto } from "@framework/dtos";

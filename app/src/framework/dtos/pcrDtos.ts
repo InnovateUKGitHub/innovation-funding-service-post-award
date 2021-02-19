@@ -157,7 +157,7 @@ export interface PCRItemTypeDto {
   displayName: string;
   recordTypeId: string;
   enabled: boolean;
-  files: { name: string, relativeUrl: string}[];
+  files: { name: string; relativeUrl: string}[];
 }
 
 export interface ProjectChangeRequestStatusChangeDto {

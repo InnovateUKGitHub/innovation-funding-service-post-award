@@ -1,19 +1,19 @@
 import express, { RequestHandler } from "express";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { IContext } from "@framework/types/IContext";
+import { EditorState, EditorStateKeys } from "@ui/redux";
+import { InferEditorStoreDto, InferEditorStoreValidator } from "@ui/redux/stores/storeBase";
+import { IFileWrapper } from "@framework/types";
 import { ISession, ServerFileWrapper } from "../apis/controllerBase";
 import { configureRouter, routeConfig } from "../../ui/routing";
 import contextProvider from "../features/common/contextProvider";
 import { FormHandlerError } from "../features/common/appError";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { IContext } from "@framework/types/IContext";
 import { upload } from "./memoryStorage";
-import { EditorState, EditorStateKeys } from "@ui/redux";
-import { InferEditorStoreDto, InferEditorStoreValidator } from "@ui/redux/stores/storeBase";
-import { IFileWrapper } from "@framework/types";
 
 interface RouteInfo<TParams> {
   routeName: string;
   routePath: string;
-  getParams: (route: { name: string, path: string, params: any }) => TParams;
+  getParams: (route: { name: string; path: string; params: any }) => TParams;
 }
 
 export interface IFormHandler {
@@ -40,7 +40,7 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
   public readonly routePath: string;
   public readonly routeName: string;
   public readonly buttons: string[];
-  private readonly getParams: (route: { name: string, path: string, params: any }) => TParams;
+  private readonly getParams: (route: { name: string; path: string; params: any }) => TParams;
 
   public async handle(req: express.Request, res: express.Response, next: express.NextFunction): Promise<void> {
     // Used by BadRequestHandler to determine that the route has been matched
@@ -63,8 +63,7 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
     let dto: InferEditorStoreDto<EditorState[TStore][string]>;
     try {
       dto = (await this.createDto(context, params, button, body, req)) || {} as InferEditorStoreDto<EditorState[TStore][string]>;
-    }
-    catch (error) {
+    } catch (error) {
       context.logger.error("Error creating dto in form submission", error);
       dto = {} as InferEditorStoreDto<EditorState[TStore][string]>;
     }
@@ -73,8 +72,7 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
       const link = await this.run(context, params, button, dto);
       this.redirect(link, res);
       return;
-    }
-    catch (error) {
+    } catch (error) {
       context.logger.error("Error handling form submission", error);
       const key = this.getStoreKey(params, dto);
       throw new FormHandlerError(key, this.store, dto, this.createValidationResult(params, dto, button), error);

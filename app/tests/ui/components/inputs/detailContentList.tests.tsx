@@ -1,4 +1,3 @@
-import React from "react";
 import { render } from "@testing-library/react";
 import TestBed from "@shared/TestBed";
 import { DetailContentList, DetailContentListProps } from "@ui/components/inputs/detailContentList";

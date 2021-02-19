@@ -1,8 +1,8 @@
 
 import { DateTime } from "luxon";
+import { Authorisation, ProjectRole } from "@framework/types";
 import { TestContext } from "../../testContextProvider";
 import { GetClaimDetailsQuery } from "../../../../src/server/features/claimDetails";
-import { Authorisation, ProjectRole } from "@framework/types";
 
 describe("GetClaimDetailsQuery", () => {
   it("returns single result", async () => {

@@ -1,9 +1,8 @@
-import { TestContext } from "../../testContextProvider";
 import { GetClaimStatusChangesQuery } from "@server/features/claims/getClaimStatusChangesQuery";
 import { ClaimStatus, ClaimStatusChangeDto } from "@framework/types";
 import { DateTime } from "luxon";
+import { TestContext } from "../../testContextProvider";
 
-// tslint:disable: no-big-function
 describe("GetClaimStatusChanges", () => {
   it("returns empty array if no data for claim", async () => {
     const context = new TestContext();

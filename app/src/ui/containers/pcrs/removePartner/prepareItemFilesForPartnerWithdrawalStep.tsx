@@ -47,7 +47,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawal
             <UploadForm.MulipleFileUpload
               label="Upload files"
               name="attachment"
-              labelHidden={true}
+              labelHidden
               value={data => data.files}
               update={(dto, files) => dto.files = files || []}
               validation={documentsEditor.validator.files}
@@ -90,7 +90,7 @@ export const PCRPrepareItemFilesForPartnerWithdrawalStep = (props: PcrStepProps<
               onFileChange={(saving, dto) => {
                 stores.messages.clearMessages();
                 // show message if remaining on page
-                const successMessage = saving === "SaveAndRemain" ? dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.` : undefined;
+                const successMessage = saving === "SaveAndRemain" ? dto.files.length === 1 ? "Your document has been uploaded." : `${dto.files.length} documents have been uploaded.` : undefined;
                 stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(saving !== "DontSave", props.project.id, props.pcrItem.id, dto, saving === "SaveAndRemain", successMessage, () => {
                   if (saving === "SaveAndContinue") {
                     props.onSave();

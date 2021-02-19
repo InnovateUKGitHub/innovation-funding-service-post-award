@@ -1,7 +1,7 @@
-import { TestContext } from "../../testContextProvider";
 import { GetPermissionGroupQuery } from "@server/features/general/getPermissionGroupsQuery";
 import { BadRequestError } from "@server/features/common";
 import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
+import { TestContext } from "../../testContextProvider";
 
 describe("GetPermissionGroupQuery", () => {
   it("returns error if asking for unknown group", async () => {

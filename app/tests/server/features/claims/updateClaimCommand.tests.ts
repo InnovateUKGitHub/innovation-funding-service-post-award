@@ -1,10 +1,9 @@
-// tslint:disable: no-big-function
-import { TestContext } from "../../testContextProvider";
 import { UpdateClaimCommand } from "@server/features/claims/updateClaim";
 import mapClaim from "@server/features/claims/mapClaim";
 import { ClaimStatus } from "@framework/constants";
 import { ValidationError } from "@server/features/common/appError";
 import { Authorisation, ProjectRole } from "@framework/types";
+import { TestContext } from "../../testContextProvider";
 
 describe("UpdateClaimCommand", () => {
   test("accessControl - Project Monitoring Officer passes", async () => {
@@ -271,15 +270,19 @@ describe("UpdateClaimCommand", () => {
   });
 
   it("when claim is over limits for any cost category expect exception", async () => {
-    const context      = new TestContext();
-    const testData     = context.testData;
-    const project      = testData.createProject();
-    const partner      = testData.createPartner();
-    const claim        = testData.createClaim(partner, 2);
+    const context = new TestContext();
+    const testData = context.testData;
+    const project = testData.createProject();
+    const partner = testData.createPartner();
+    const claim = testData.createClaim(partner, 2);
     const costCategory = testData.createCostCategory();
 
-    testData.createClaimDetail(project, costCategory, partner, 1, (x) => { x.Acc_PeriodCostCategoryTotal__c = 1000000;});
-    testData.createClaimDetail(project, costCategory, partner, 2, (x) => { x.Acc_PeriodCostCategoryTotal__c = 1000000;});
+    testData.createClaimDetail(project, costCategory, partner, 1, x => {
+      x.Acc_PeriodCostCategoryTotal__c = 1000000;
+    });
+    testData.createClaimDetail(project, costCategory, partner, 2, x => {
+      x.Acc_PeriodCostCategoryTotal__c = 1000000;
+    });
 
     const dto = mapClaim(context)(claim);
     const command = new UpdateClaimCommand(project.Id, dto);

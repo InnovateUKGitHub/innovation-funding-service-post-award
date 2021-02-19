@@ -1,7 +1,7 @@
+import { ProjectLabels } from "@content/labels/projectLabels";
 import { ContentPageBase } from "../../contentPageBase";
 import { Content } from "../../content";
 import { ProjectMessages } from "../../messages/projectMessages";
-import { ProjectLabels } from "@content/labels/projectLabels";
 
 export class ProjectOverviewContent extends ContentPageBase {
   constructor(content: Content, protected competitionType?: string) {

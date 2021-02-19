@@ -1,4 +1,3 @@
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
 import { SectionPanel } from "../../../src/ui/components/layout/sectionPanel";

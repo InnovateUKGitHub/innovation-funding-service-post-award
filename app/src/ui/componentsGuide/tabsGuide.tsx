@@ -1,5 +1,5 @@
-import { Tabs } from "../components/layout/tabs";
 import { IGuide } from "@framework/types";
+import { Tabs } from "../components/layout/tabs";
 
 const tabs = [
     {text: "Claims", url: "#"},

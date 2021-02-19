@@ -1,7 +1,7 @@
-import contextProvider from "../features/common/contextProvider";
-import {ApiParams, ControllerBase} from "./controllerBase";
-import {GetCostCategoriesQuery} from "../features/claims";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import contextProvider from "../features/common/contextProvider";
+import {GetCostCategoriesQuery} from "../features/claims";
+import {ApiParams, ControllerBase} from "./controllerBase";
 
 export interface ICostCategoriesApi {
   getAll: (params: ApiParams<{}>) => Promise<CostCategoryDto[]>;

@@ -1,10 +1,10 @@
-import { TestContext } from "../../testContextProvider";
 import { UpdateInitialForecastDetailsCommand } from "@server/features/forecastDetails";
 import { BadRequestError, ValidationError } from "@server/features/common/appError";
 import { ISalesforceProfileDetails } from "@server/repositories";
 import { GetByIdQuery } from "@server/features/partners";
 import { ForecastDetailsDTO, ProjectRole, SpendProfileStatus } from "@framework/dtos";
 import { Authorisation } from "@framework/types";
+import { TestContext } from "../../testContextProvider";
 
 const mapProfileValue = (item: ISalesforceProfileDetails, value?: number): ForecastDetailsDTO => {
   return {
@@ -17,7 +17,6 @@ const mapProfileValue = (item: ISalesforceProfileDetails, value?: number): Forec
   };
 };
 
-// tslint:disable-next-line:no-big-function
 describe("UpdateInitialForecastDetailsCommand", () => {
   it("when id not set expect validation exception", async () => {
     const context = new TestContext();
@@ -84,7 +83,6 @@ describe("UpdateInitialForecastDetailsCommand", () => {
     await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
   });
 
-  // tslint:disable-next-line:no-identical-functions
   it("throws a validation error if total costs are less than gol costs when submitting", async () => {
     const context = new TestContext();
     const testData = context.testData;

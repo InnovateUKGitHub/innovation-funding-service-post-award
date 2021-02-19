@@ -1,12 +1,12 @@
 
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { ProjectDto, ProjectRole } from "@framework/types";
 
-import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
+import * as ACC from "../../components";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 export interface PCRDeleteParams {
   projectId: string;

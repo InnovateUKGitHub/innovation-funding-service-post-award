@@ -1,6 +1,6 @@
-import { TestContext } from "../../testContextProvider";
 import { GetRecordTypeQuery } from "@server/features/general/getRecordTypeQuery";
 import { BadRequestError } from "@server/features/common";
+import { TestContext } from "../../testContextProvider";
 
 describe("GetAllRecordTypesQuery", () => {
   it("returns record type", async () => {

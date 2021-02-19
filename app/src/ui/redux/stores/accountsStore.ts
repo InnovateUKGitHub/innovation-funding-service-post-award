@@ -1,8 +1,8 @@
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ApiClient } from "../../apiClient";
 import { RootState } from "../reducers";
-import { StoreBase } from "./storeBase";
 import { RootActionsOrThunk } from "../actions";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { StoreBase } from "./storeBase";
 
 export class AccountsStore extends StoreBase {
   constructor(getState: () => RootState, dispatch: (action: RootActionsOrThunk) => void) {

@@ -1,4 +1,3 @@
-import React from "react";
 import { render } from "@testing-library/react";
 
 import TestBed from "@shared/TestBed";
@@ -57,7 +56,7 @@ describe("<EnumDocuments />", () => {
     const { getByTestId } = setupComponent();
 
     const result = getByTestId(elementId);
-    const renderPropsDocumentCount: number = Number(result.innerHTML);
+    const renderPropsDocumentCount = Number(result.innerHTML);
 
     expect(renderPropsDocumentCount).toBe(expectedDocLength);
   });

@@ -5,7 +5,7 @@ import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { PCRContactRole } from "@framework/constants";
 
-const useFinanceContactDetails = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => {
+const getFinanceContactDetails = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => {
   const dto = props.pcrItem;
   dto.contact2Forename = dto.contact1Forename;
   dto.contact2Surname = dto.contact1Surname;
@@ -27,7 +27,7 @@ export const ProjectManagerDetailsStep = (props: PcrStepProps<PCRItemForPartnerA
         onChange={dto => props.onChange(dto)}
       >
         <Form.Fieldset headingContent={x => x.pcrAddPartnerProjectContacts.labels.projectLeadContactHeading}>
-          {props.isClient && <Form.Button name="useFinanceContactDetails" onClick={() => useFinanceContactDetails(props)}><ACC.Content value={x => x.pcrAddPartnerProjectContacts.useFinanceDetails}/></Form.Button>}
+          {props.isClient && <Form.Button name="useFinanceContactDetails" onClick={() => getFinanceContactDetails(props)}><ACC.Content value={x => x.pcrAddPartnerProjectContacts.useFinanceDetails}/></Form.Button>}
           <Form.Hidden name="contact2ProjectRole" value={x => x.contact2ProjectRole = PCRContactRole.ProjectManager}/>
           <Form.String
             labelContent={x => x.pcrAddPartnerProjectContacts.labels.contactFirstNameHeading}

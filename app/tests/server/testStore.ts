@@ -1,16 +1,16 @@
-import getRootState from "../redux/stores/getRootState";
 import { applyMiddleware, createStore } from "redux";
 import { rootReducer, RootState } from "@ui/redux";
 import { LoadingStatus } from "@shared/pending";
 import { dataLoadAction, RootActionsOrThunk } from "@ui/redux/actions";
 import * as Repositories from "@server/repositories";
-import { TestContext } from "./testContextProvider";
 import { GetAllQuery as GetAllProjects, GetByIdQuery as GetProjectById } from "@server/features/projects";
 import { GetAllQuery as GetAllPartners, GetByIdQuery as GetPartnerById } from "@server/features/partners";
 import { GetAllClaimsForProjectQuery, GetAllForPartnerQuery as GetAllClaimsForPartner } from "@server/features/claims";
 import thunk from "redux-thunk";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import * as Entities from "@framework/entities";
+import getRootState from "../redux/stores/getRootState";
+import { TestContext } from "./testContextProvider";
 
 export class TestStore {
 

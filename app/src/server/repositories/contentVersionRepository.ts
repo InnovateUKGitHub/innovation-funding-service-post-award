@@ -1,8 +1,8 @@
 import { Stream } from "stream";
-import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 import { ServerFileWrapper } from "@server/apis/controllerBase";
 import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { IFileWrapper } from "@framework/types";
+import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface ISalesforceDocument {
   Id: string;
@@ -19,7 +19,7 @@ export interface ISalesforceDocument {
   CreatedDate: string;
   Acc_LastModifiedByAlias__c: string;
   Owner: {
-    Username: string
+    Username: string;
   };
 }
 

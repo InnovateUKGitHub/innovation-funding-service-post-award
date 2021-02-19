@@ -1,5 +1,4 @@
 import React from "react";
-import * as ACC from "../../../components";
 import { StoresConsumer } from "@ui/redux";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
@@ -7,6 +6,7 @@ import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { DocumentDescription, PCROrganisationType, PCRProjectRole } from "@framework/constants";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import * as ACC from "../../../components";
 
 interface InnerProps {
   documents: DocumentSummaryDto[];
@@ -43,7 +43,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
             { isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.organisationNameHeading} content={pcrItem.organisationName} validation={validator.companyHouseOrganisationName} qa="organisationName" action={this.props.getEditLink("companiesHouseStep", validator.companyHouseOrganisationName)}/> }
             { isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.registrationNumberHeading} content={pcrItem.registrationNumber} validation={validator.registrationNumber} qa="registrationNumber" action={this.props.getEditLink("companiesHouseStep", validator.registrationNumber)}/> }
             { isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.registeredAddressHeading} content={pcrItem.registeredAddress} validation={validator.registeredAddress} qa="registeredAddress" action={this.props.getEditLink("companiesHouseStep", validator.registeredAddress)}/> }
-            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.organisationSizeHeading} content={pcrItem.participantSizeLabel} validation={validator.participantSize} qa="participantSize" action={isIndustrial ? this.props.getEditLink("organisationDetailsStep", validator.participantSize) : null }/>
+            <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.organisationSizeHeading} content={pcrItem.participantSizeLabel} validation={validator.participantSize} qa="participantSize" action={isIndustrial ? this.props.getEditLink("organisationDetailsStep", validator.participantSize) : null}/>
             { isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.employeeCountHeading} content={pcrItem.numberOfEmployees} validation={validator.numberOfEmployees} qa="numberOfEmployees" action={this.props.getEditLink("organisationDetailsStep", validator.numberOfEmployees)}/> }
             { isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.financialYearEndHeading} content={<ACC.Renderers.MonthYear value={pcrItem.financialYearEndDate}/>} validation={validator.financialYearEndDate} qa="financialYearEndDate" action={this.props.getEditLink("financeDetailsStep", validator.financialYearEndDate)}/> }
             { isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.turnoverHeading} content={<ACC.Renderers.Currency value={pcrItem.financialYearEndTurnover}/>} validation={validator.financialYearEndTurnover} qa="financialYearEndTurnover" action={this.props.getEditLink("financeDetailsStep", validator.financialYearEndTurnover)}/> }

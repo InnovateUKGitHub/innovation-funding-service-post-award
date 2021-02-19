@@ -1,4 +1,3 @@
-// tslint:disable: object-literal-key-quotes
 import React from "react";
 import { Store } from "redux";
 import { Params, State as RouteState } from "router5";
@@ -11,7 +10,7 @@ import { updatePageTitle } from "@ui/redux/actions";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 
-import { Footer, GovWidthContainer, Header, PhaseBanner, PrivateModal, useHeader } from "@ui/components";
+import { Footer, getHeaderProps, GovWidthContainer, Header, PhaseBanner, PrivateModal } from "@ui/components";
 import { StandardErrorPage } from "@ui/components/standardErrorPage";
 import { FooterLinks } from "@ui/components/layout/footer.config";
 
@@ -83,7 +82,7 @@ class AppView extends React.Component<IAppProps> {
       isClient,
     };
 
-    const headerProps = useHeader(config.ifsRoot, content.header);
+    const headerProps = getHeaderProps(config.ifsRoot, content.header);
     const RouteContainer = currentRoute.container;
 
     return (

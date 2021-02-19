@@ -24,7 +24,6 @@ export enum DateFormat {
 
 export const formatDate = (jsDate: Date | null | undefined, format: DateFormat) => {
   if (!jsDate) return null;
-  // tslint:disable:no-small-switch
   const date = convertDateAndTime(jsDate);
   if (!date || !date.isValid) return "INVALID DATE FORMAT";
 

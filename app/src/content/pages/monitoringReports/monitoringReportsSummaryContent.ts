@@ -1,7 +1,7 @@
-import { ContentPageBase } from "../../contentPageBase";
-import { Content } from "../../content";
 import { MonitoringReportsMessages } from "@content/messages/monitoringReportsMessages";
 import { MonitoringReportsLabels } from "@content/labels/monitoringReportsLabels";
+import { ContentPageBase } from "../../contentPageBase";
+import { Content } from "../../content";
 
 export class MonitoringReportsSummaryContent extends ContentPageBase {
   constructor(private readonly content: Content, protected competitionType?: string) {

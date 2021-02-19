@@ -1,5 +1,5 @@
-import { ValidationMessage} from "../components";
 import { IGuide } from "@framework/types";
+import { ValidationMessage} from "../components";
 
 export const validationMessageGuide: IGuide = {
     name: "Validation Message",

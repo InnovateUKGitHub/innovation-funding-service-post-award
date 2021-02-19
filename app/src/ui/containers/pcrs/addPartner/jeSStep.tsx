@@ -53,7 +53,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
             <UploadForm.MulipleFileUpload
               labelContent={x => x.pcrAddPartnerJeS.documentLabels.uploadInputLabel}
               name="attachment"
-              labelHidden={true}
+              labelHidden
               value={data => data.files}
               update={(dto, files) => {
                 dto.files = files || [];
@@ -105,7 +105,7 @@ export const JeSStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
               onFileChange={(isSaving, dto) => {
                 stores.messages.clearMessages();
                 // show message if remaining on page
-                const successMessage = isSaving ? dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.` : undefined;
+                const successMessage = isSaving ? dto.files.length === 1 ? "Your document has been uploaded." : `${dto.files.length} documents have been uploaded.` : undefined;
                 stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(isSaving, props.project.id, props.pcrItem.id, dto, isSaving, successMessage);
               }}
               onFileDelete={(dto, document) => {

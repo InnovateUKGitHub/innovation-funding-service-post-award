@@ -1,7 +1,7 @@
-import { ContentPageBase } from "../../contentPageBase";
-import { Content } from "../../content";
 import { ForecastsLabels } from "@content/labels/forecastsLabels";
 import { ForecastsMessages } from "@content/messages/forecastsMessages";
+import { ContentPageBase } from "../../contentPageBase";
+import { Content } from "../../content";
 
 export class ForecastsUpdateContent extends ContentPageBase {
   constructor(private readonly content: Content, protected competitionType?: string) {

@@ -1,4 +1,7 @@
+// TODO: This should be a button since we supply no href
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react";
+
 import { SvgCrown } from "@ui/components/svg/crownSvg";
 import { GOVUK_COLOUR_WHITE } from "@ui/styles/colours";
 import { ModalConsumer, ModalRegister } from "@ui/redux";
@@ -44,10 +47,9 @@ export class PrivateModal extends React.Component<{id: string}> {
     return (
       <div id={this.props.id} className={"govuk-modal-dialogue"} data-module="govuk-modal-dialogue">
         <div className="govuk-modal-dialogue__wrapper">
-          <dialog id="timeout" className="govuk-modal-dialogue__box" aria-labelledby="timeout-title" aria-describedby="timeout-description" aria-modal="true" role="alertdialog" tabIndex={0}>
+          <dialog id="timeout" className="govuk-modal-dialogue__box" aria-labelledby="timeout-title" aria-describedby="timeout-description" aria-modal="true" role="alertdialog">
             <div className="govuk-modal-dialogue__header">
               <SvgCrown colour={GOVUK_COLOUR_WHITE}/>
-              {/*tslint:disable-next-line: react-a11y-anchors*/}
               <a href="#" role="button" className="govuk-button govuk-modal-dialogue__close" data-module="govuk-button" aria-label="Close modal dialogue">×</a>
             </div>
             <div className="govuk-modal-dialogue__content">

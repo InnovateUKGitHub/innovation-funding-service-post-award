@@ -1,6 +1,6 @@
+import { useContent } from "@ui/hooks";
 import { TypedTable } from "../table";
 import { ClaimProps, ClaimTableRow, createTableData } from "./utils/costCategoryTableHelper";
-import { useContent } from "@ui/hooks";
 
 export function ClaimReviewTable(props: ClaimProps) {
   const { getContent } = useContent();

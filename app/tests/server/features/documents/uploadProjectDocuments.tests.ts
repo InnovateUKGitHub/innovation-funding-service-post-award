@@ -1,10 +1,7 @@
-// tslint:disable: no-identical-functions
-
-import { TestContext } from "../../testContextProvider";
 import { UploadProjectDocumentCommand } from "@server/features/documents/uploadProjectDocument";
 import { ValidationError } from "@server/features/common/appError";
-import { Authorisation, DocumentDescription, IFileWrapper, ProjectRole } from "@framework/types";
-import { TestFileWrapper } from "../../testData";
+import { Authorisation, DocumentDescription, ProjectRole } from "@framework/types";
+import { TestContext } from "../../testContextProvider";
 
 describe("UploadProjectDocumentCommand", () => {
   it("should upload a project document", async () => {

@@ -1,5 +1,3 @@
-// tslint:disable: no-identical-functions no-big-function no-duplicate-string
-
 import { render } from "@testing-library/react";
 
 import {
@@ -12,10 +10,10 @@ import {
 } from "@framework/util/stubDtos";
 import TestBed, { TestBedContent } from "@shared/TestBed";
 
+import { ClaimProps } from "@ui/components/claims/utils/costCategoryTableHelper";
 import { getColumnTextValues } from "../helpers/tableHelpers";
 
 import { ClaimTable } from "../../../src/ui/components/claims/claimTable";
-import { ClaimProps } from "@ui/components/claims/utils/costCategoryTableHelper";
 
 describe("<ClaimTable />", () => {
   const defaultStubData: ClaimProps = {

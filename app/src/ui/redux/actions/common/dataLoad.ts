@@ -1,7 +1,7 @@
-import { AsyncThunk, createAction } from "./createAction";
+import { IClientUser } from "@framework/types";
 import { LoadingStatus } from "../../../../shared/pending";
 import { IDataSelector } from "../../selectors/common";
-import { IClientUser } from "@framework/types";
+import { AsyncThunk, createAction } from "./createAction";
 
 type DataLoadThunk = typeof dataLoadAction;
 export type DataLoadAction = ReturnType<DataLoadThunk>;
@@ -41,8 +41,7 @@ export function conditionalLoad<T>(
         .catch(err => {
           dispatch(dataLoadAction(id, store, LoadingStatus.Failed, null, err));
         });
-    }
-    else {
+    } else {
       return Promise.resolve();
     }
   };

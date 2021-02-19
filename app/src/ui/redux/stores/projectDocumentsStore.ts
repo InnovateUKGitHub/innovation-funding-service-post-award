@@ -1,9 +1,9 @@
 import { ApiClient } from "@ui/apiClient";
 import { Pending } from "@shared/pending";
-import { DocumentsStoreBase } from "./documentsStoreBase";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos";
+import { DocumentsStoreBase } from "./documentsStoreBase";
 
 export class ProjectDocumentsStore extends DocumentsStoreBase {
   private getProjectDocumentsKey(projectId: string) {

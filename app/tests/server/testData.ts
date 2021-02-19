@@ -1,4 +1,3 @@
-// tslint:disable:no-duplicate-string
 import { DateTime } from "luxon";
 import * as Repositories from "@server/repositories";
 import * as Entities from "@framework/entities";
@@ -17,10 +16,10 @@ import {
   PCRProjectRole,
   TypeOfAid
 } from "@framework/types";
-import { ITestRepositories } from "./testRepositories";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 import { PCRItemStatus, PCRParticipantSize, PCRStatus } from "@framework/constants";
 import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
+import { ITestRepositories } from "./testRepositories";
 
 export class TestData {
   constructor(private readonly repositories: ITestRepositories, private readonly getCurrentUser: () => IClientUser) {
@@ -47,7 +46,7 @@ export class TestData {
       isCalculated: false
     };
 
-    if (!!update) Object.assign(newItem, update);
+    if (update) Object.assign(newItem, update);
 
     this.repositories.costCategories.Items.push(newItem);
 
@@ -89,7 +88,7 @@ export class TestData {
       Acc_CurrentPeriodEndDate__c: "2020-06-30",
     };
 
-    if (!!update) update(newItem);
+    if (update) update(newItem);
 
     this.repositories.projects.Items.push(newItem);
 
@@ -171,7 +170,7 @@ export class TestData {
       isNonFunded: true
     };
 
-    if (!!update) update(newItem);
+    if (update) update(newItem);
 
     this.repositories.partners.Items.push(newItem);
 
@@ -251,7 +250,6 @@ export class TestData {
     });
   }
 
-  // tslint:disable-next-line
   public createProjectManager(project?: Repositories.ISalesforceProject, partner?: Entities.Partner, update?: (item: Repositories.ISalesforceProjectContact) => void) {
     project = project || this.createProject();
     partner = partner || this.createPartner(project);
@@ -265,11 +263,11 @@ export class TestData {
     });
   }
 
-  public createMonitoringReportQuestionSet(displayOrder: number, noOptions: number = 3, isActive: boolean = true): Repositories.ISalesforceMonitoringReportQuestions[] {
+  public createMonitoringReportQuestionSet(displayOrder: number, noOptions = 3, isActive = true): Repositories.ISalesforceMonitoringReportQuestions[] {
     return range(noOptions).map(() => this.createMonitoringReportQuestion(displayOrder, isActive, true));
   }
 
-  public createMonitoringReportQuestion(displayOrder: number, isActive: boolean = true, isScored: boolean = true): Repositories.ISalesforceMonitoringReportQuestions {
+  public createMonitoringReportQuestion(displayOrder: number, isActive = true, isScored = true): Repositories.ISalesforceMonitoringReportQuestions {
 
     const seed = this.repositories.monitoringReportQuestions.Items.length + 1;
     const score = this.repositories.monitoringReportQuestions.Items.filter(x => x.Acc_DisplayOrder__c === displayOrder).length + 1;
@@ -290,7 +288,7 @@ export class TestData {
     return newQuestion;
   }
 
-  public createMonitoringReportHeader(project?: Repositories.ISalesforceProject, periodId: number = 1, update?: Partial<Repositories.ISalesforceMonitoringReportHeader>): Repositories.ISalesforceMonitoringReportHeader {
+  public createMonitoringReportHeader(project?: Repositories.ISalesforceProject, periodId = 1, update?: Partial<Repositories.ISalesforceMonitoringReportHeader>): Repositories.ISalesforceMonitoringReportHeader {
     const seed = this.repositories.monitoringReportHeader.Items.length + 1;
 
     if (!project) {
@@ -531,10 +529,10 @@ export class TestData {
 
   public createDocument(
     entityId: string,
-    title: string = "cat",
+    title = "cat",
     fileType: string | null = "jpg",
-    uploadedBy: string = "Catwoman",
-    content: string = "",
+    uploadedBy = "Catwoman",
+    content = "",
     description?: string,
     update?: (item: ISalesforceDocument) => void
   ) {
@@ -558,7 +556,7 @@ export class TestData {
       }
     };
 
-    if (!!update) {
+    if (update) {
       update(item);
     }
 
@@ -583,7 +581,7 @@ export class TestData {
       Id: this.repositories.profileTotalCostCategory.Items.length + 1 + ""
     };
 
-    if (!!update) {
+    if (update) {
       update(newItem);
     }
 
@@ -608,7 +606,7 @@ export class TestData {
       LastModifiedDate: new Date().toISOString()
     };
 
-    if (!!update) {
+    if (update) {
       update(newItem);
     }
 
@@ -617,7 +615,7 @@ export class TestData {
     return newItem;
   }
 
-  public createFile(content: string = "Test File Content", fileName: string = "testFile.csv", description?: DocumentDescription): TestFileWrapper {
+  public createFile(content = "Test File Content", fileName = "testFile.csv", description?: DocumentDescription): TestFileWrapper {
     return new TestFileWrapper(fileName, content, description);
   }
 
@@ -730,7 +728,7 @@ export class TestData {
     return newItem;
   }
 
-  public async createPcrSpendProfile(options: {pcrItem?: Entities.ProjectChangeRequestItemEntity, costCategory?: Entities.CostCategory, update?: Partial<Entities.PcrSpendProfileEntityForCreate>}): Promise<string[]> {
+  public async createPcrSpendProfile(options: {pcrItem?: Entities.ProjectChangeRequestItemEntity; costCategory?: Entities.CostCategory; update?: Partial<Entities.PcrSpendProfileEntityForCreate>}): Promise<string[]> {
     const pcrItem = options.pcrItem ? options.pcrItem : this.createPCRItem();
     const costCategory = options.costCategory ? options.costCategory : this.createCostCategory();
     const newItem: Entities.PcrSpendProfileEntityForCreate = {
@@ -788,5 +786,7 @@ export class TestFileWrapper implements IFileWrapper {
   constructor(public fileName: string, public content: string, public description?: DocumentDescription) {
   }
 
-  public get size(): number { return this.content && this.content.length || 0; }
+  public get size(): number {
+ return this.content && this.content.length || 0;
+}
 }

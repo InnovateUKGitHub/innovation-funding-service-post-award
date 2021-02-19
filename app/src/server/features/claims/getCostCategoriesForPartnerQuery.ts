@@ -1,7 +1,7 @@
-import { QueryBase } from "../common/queryBase";
 import { IContext, PartnerDto, ProjectDto } from "@framework/types";
-import { GetCostCategoriesQuery } from "./getCostCategoriesQuery";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { QueryBase } from "../common/queryBase";
+import { GetCostCategoriesQuery } from "./getCostCategoriesQuery";
 
 export class GetCostCategoriesForPartnerQuery extends QueryBase<CostCategoryDto[]> {
 

@@ -1,4 +1,3 @@
-import React from "react";
 import { renderToString } from "react-dom/server";
 import { Request, Response } from "express";
 import { combineReducers, createStore } from "redux";

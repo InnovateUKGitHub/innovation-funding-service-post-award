@@ -1,15 +1,10 @@
+import React from "react";
 import { Result, Results } from "@ui/validation";
 import { PCRDto, PCRItemDto, PCRItemTypeDto, ProjectDto } from "@framework/dtos";
 import { EditorStatus, IEditorStore } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { IFeatureFlags, ILinkInfo, PCRItemType } from "@framework/types";
-import { accountNameChangeWorkflow } from "./nameChange";
-import { scopeChangeWorkflow } from "./scopeChange/scopeChangeWorkflow";
-import { standardItemWorkflow } from "./standardItem/workflow";
 import { timeExtensionItemWorkflow } from "@ui/containers/pcrs/timeExtension/timeExtensionWorkflow";
-import { suspendProjectWorkflow } from "./suspendProject/workflow";
-import { financialVirementWorkflow } from "./financialVirements/workflow";
-import { BaseProps } from "../containerBase";
 import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
 import { removePartnerWorkflow } from "@ui/containers/pcrs/removePartner";
 import { PCRWorkflowValidator } from "@ui/validators/pcrWorkflowValidator";
@@ -17,6 +12,12 @@ import { getAddPartnerWorkflow } from "@ui/containers/pcrs/addPartner/addPartner
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IRoutes } from "@ui/routing";
 import { periodLengthChangeWorkflow } from "@ui/containers/pcrs/periodLengthChange/periodLengthChangeWorkflow";
+import { BaseProps } from "../containerBase";
+import { financialVirementWorkflow } from "./financialVirements/workflow";
+import { suspendProjectWorkflow } from "./suspendProject/workflow";
+import { standardItemWorkflow } from "./standardItem/workflow";
+import { scopeChangeWorkflow } from "./scopeChange/scopeChangeWorkflow";
+import { accountNameChangeWorkflow } from "./nameChange";
 
 export interface PcrStepProps<TDto, TVal> extends IStepProps {
   project: ProjectDto;

@@ -1,10 +1,10 @@
-import { StoreBase } from "./storeBase";
 import { ILinkInfo } from "@framework/types";
-import { navigateTo } from "../actions";
 import { createRouteNodeSelector } from "redux-router5";
+import { navigateTo } from "../actions";
+import { StoreBase } from "./storeBase";
 
 export class NavigationStore extends StoreBase {
-  navigateTo(routeInfo: ILinkInfo, replace: boolean = false) {
+  navigateTo(routeInfo: ILinkInfo, replace = false) {
     this.queue(navigateTo(routeInfo, replace));
   }
 

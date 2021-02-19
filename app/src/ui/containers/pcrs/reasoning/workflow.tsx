@@ -1,8 +1,6 @@
 
-import { BaseProps, ContainerBase, defineRoute } from "../../containerBase";
 import { ILinkInfo, PCRItemStatus, ProjectDto, ProjectRole } from "@framework/types";
 
-import * as ACC from "../../../components";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
@@ -10,6 +8,8 @@ import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/valida
 import { PCRReasoningSummary } from "@ui/containers/pcrs/reasoning/summary";
 import { IReasoningWorkflowMetadata, reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import * as ACC from "../../../components";
+import { BaseProps, ContainerBase, defineRoute } from "../../containerBase";
 
 export interface ProjectChangeRequestPrepareReasoningParams {
   projectId: string;

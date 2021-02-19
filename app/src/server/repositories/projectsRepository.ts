@@ -78,6 +78,6 @@ export class ProjectRepository extends SalesforceRepositoryBase<ISalesforceProje
   }
 
   getAll() {
-    return super.where(`Acc_ProjectStatus__c != 'Not set' AND Acc_ProjectStatus__c != 'PCL Creation Complete'`);
+    return super.where("Acc_ProjectStatus__c != 'Not set' AND Acc_ProjectStatus__c != 'PCL Creation Complete'");
   }
 }

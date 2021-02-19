@@ -1,5 +1,5 @@
-import { Content } from "../../content";
 import { ContentPageBase } from "@content/contentPageBase";
+import { Content } from "../../content";
 
 export class FooterContent extends ContentPageBase {
   constructor(private readonly content: Content) {

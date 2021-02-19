@@ -1,4 +1,4 @@
-// tslint:disable-next-line: import-blacklist
+/* eslint-disable @typescript-eslint/quotes */
 import Enzyme from "enzyme";
 
 import { TabItem, Tabs } from "../../../src/ui/components/layout/tabs";

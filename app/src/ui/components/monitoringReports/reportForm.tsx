@@ -2,9 +2,9 @@ import { IEditorStore } from "@ui/redux";
 import * as Dtos from "@framework/dtos";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import React, { Component } from "react";
+import { SimpleString } from "@ui/components/renderers";
 import { TypedForm } from "../form";
 import { Section } from "../layout/section";
-import { SimpleString } from "@ui/components/renderers";
 import { Content } from "../content";
 
 interface PeriodProps {
@@ -28,7 +28,7 @@ export class MonitoringReportPeriodFormComponent extends Component<PeriodProps> 
           <ReportForm.Form editor={editor} onChange={(dto) => this.props.onChange(dto)} qa="monitoringReportCreateForm">
             <ReportForm.Numeric
               label="Period"
-              labelBold={true}
+              labelBold
               width={3}
               name="period"
               value={(x) => x.periodId}

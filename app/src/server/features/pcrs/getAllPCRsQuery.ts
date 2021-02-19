@@ -1,8 +1,8 @@
-import { QueryBase } from "../common";
 import { PCRItemTypeDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { numberComparator } from "@framework/util";
 import { ProjectChangeRequestEntity } from "@framework/entities";
+import { QueryBase } from "../common";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
 
 export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {

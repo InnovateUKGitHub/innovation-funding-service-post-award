@@ -1,5 +1,3 @@
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import { Pending } from "../../../shared/pending";
 import * as ACC from "@ui/components";
 import { State } from "router5";
 import { ClaimDetailsDto, ClaimDto, ClaimLineItemDto, ForecastDetailsDTO, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
@@ -8,6 +6,8 @@ import { useStores } from "@ui/redux";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { projectCompetition, useContent } from "@ui/hooks";
+import { Pending } from "../../../shared/pending";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 interface Params {
   projectId: string;
@@ -157,7 +157,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     if (navigationLinks === null) return null;
 
     return navigationLinks ? <ACC.NavigationArrows {...navigationLinks} /> : null;
-  }
+  };
 
   private readonly renderAdditionalInformation = (claimDetail: ClaimDetailsDto) => {
     if (!claimDetail.comments) return null;
@@ -169,13 +169,13 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
         </ACC.Renderers.SimpleString>
       </ACC.Section>
     );
-  }
+  };
 }
 
 function ClaimLineItemsTable({ lineItems, forecastDetail, content }: {
   lineItems: ClaimLineItemDto[];
   forecastDetail: ForecastDetailsDTO;
-  content: Record<string, string>
+  content: Record<string, string>;
 }) {
   const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
 

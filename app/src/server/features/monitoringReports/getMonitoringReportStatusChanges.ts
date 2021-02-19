@@ -2,9 +2,9 @@ import { QueryBase } from "@server/features/common";
 import { mapMonitoringReportStatus } from "@server/features/monitoringReports/mapMonitoringReportStatus";
 import { Authorisation, IContext, MonitoringReportStatus, MonitoringReportStatusChangeDto, ProjectRole } from "@framework/types";
 import { dateComparator } from "@framework/util";
-import { GetMonitoringReportStatusesQuery } from "./getMonitoringReportStatusesQuery";
 import { ISalesforceMonitoringReportStatusChange } from "@server/repositories/monitoringReportStatusChangeRepository";
 import { Option} from "@framework/types";
+import { GetMonitoringReportStatusesQuery } from "./getMonitoringReportStatusesQuery";
 
 export class GetMonitoringReportStatusChanges extends QueryBase<MonitoringReportStatusChangeDto[]> {
   constructor(

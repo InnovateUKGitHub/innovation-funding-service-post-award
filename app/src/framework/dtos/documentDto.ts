@@ -1,7 +1,8 @@
+/* global NodeJS */
 import { DocumentDescription } from "@framework/constants";
 
 interface IStream {
-  pipe<T extends NodeJS.WritableStream>(destination: T, options?: { end?: boolean; }): T;
+  pipe<T extends NodeJS.WritableStream>(destination: T, options?: { end?: boolean }): T;
 }
 
 export interface DocumentSummaryDto {

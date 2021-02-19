@@ -1,14 +1,14 @@
-import { StoreBase } from "./storeBase";
-import { ProjectsStore } from "./projectsStore";
-import { RootState } from "../reducers";
 import { scrollToTheTopSmoothly } from "@framework/util";
 import { ApiClient } from "@ui/apiClient";
 import { LoadingStatus, Pending } from "@shared/pending";
 import { MonitoringReportDto, MonitoringReportSummaryDto } from "@framework/dtos";
 import { MonitoringReportStatus } from "@framework/types";
-import { dataLoadAction, messageSuccess } from "../actions";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { dataLoadAction, messageSuccess } from "../actions";
+import { RootState } from "../reducers";
+import { ProjectsStore } from "./projectsStore";
+import { StoreBase } from "./storeBase";
 
 export class MonitoringReportsStore extends StoreBase {
   constructor(private readonly projectStore: ProjectsStore, protected getState: () => RootState, protected queue: (action: any) => void) {
@@ -97,8 +97,7 @@ export class MonitoringReportsStore extends StoreBase {
       (p) => {
         if(dto.headerId) {
           return ApiClient.monitoringReports.saveMonitoringReport({ monitoringReportDto: dto, submit: isSubmitting, ...p });
-        }
-        else {
+        } else {
           return ApiClient.monitoringReports.createMonitoringReport({ monitoringReportDto: dto, submit: isSubmitting, ...p });
         }
       },

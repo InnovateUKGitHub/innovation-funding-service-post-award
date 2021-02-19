@@ -30,7 +30,7 @@ export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBa
     }));
 
     const addPartnerItem = items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
-    if (!!addPartnerItem) {
+    if (addPartnerItem) {
       addPartnerItem.spendProfile = { costs: [], funds: [], pcrItemId: addPartnerItem.id };
     }
 

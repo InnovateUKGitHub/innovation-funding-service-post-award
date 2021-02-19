@@ -1,7 +1,7 @@
-import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
-import { ILogger } from "../features/common";
-import { IRecordTypeRepository } from "./recordTypeRepository";
 import { Connection } from "jsforce";
+import { ILogger } from "../features/common";
+import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
+import { IRecordTypeRepository } from "./recordTypeRepository";
 
 export interface ISalesforceMonitoringReportResponse {
   Id: string;

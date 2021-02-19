@@ -86,7 +86,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
                 this.props.onChange(pcrItem);
               }}
               startOrEnd="start"
-              hideLabel={true}
+              hideLabel
               validation={this.getCostValidation(i.row, "dateSecured")}
             />
           )}
@@ -108,7 +108,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
         />
         {this.props.isClient ? <Table.Custom
           header="Action"
-          hideHeader={true}
+          hideHeader
           qa="remove"
           value={dto => (
             <a data-qa="remove-fund" href="" className="govuk-link" role="button" onClick={e => this.removeItem(e, pcrItem, dto)}>

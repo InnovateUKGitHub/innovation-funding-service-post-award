@@ -1,8 +1,4 @@
 import i18next from "i18next";
-import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
-import * as Repositories from "../../repositories";
-import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationError } from "./appError";
-import * as Salesforce from "../../repositories/salesforceConnection";
 import * as Common from "@server/features/common";
 import * as Framework from "@framework/types";
 import * as Entities from "@framework/entities";
@@ -13,6 +9,10 @@ import { CompaniesHouse } from "@server/resources/companiesHouse";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { BankCheckService } from "@server/resources/bankCheckService";
 import { CompetitionContentStore } from "@server/resources/competitionContentStore";
+import * as Salesforce from "../../repositories/salesforceConnection";
+import * as Repositories from "../../repositories";
+import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
+import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationError } from "./appError";
 
 // obvs needs to be singleton
 const cachesImplementation: Framework.ICaches = {
@@ -145,16 +145,14 @@ export class Context implements Framework.IContext {
       }
       // await the run because of the finally
       return await runnable.Run(this);
-    }
-    catch (e) {
+    } catch (e) {
       this.logger.warn("Failed query", runnable.LogMessage(), e);
       if (e instanceof ValidationError) {
         this.logger.debug("Validation Error", e.results && e.results.log());
       }
       if (runnable.handleRepositoryError) runnable.handleRepositoryError(this, e);
       throw constructErrorResponse(e);
-    }
-    finally {
+    } finally {
       timer.finish();
     }
   }
@@ -163,12 +161,10 @@ export class Context implements Framework.IContext {
     const timer = this.startTimer(runnable.constructor.name);
     try {
       return runnable.Run(this);
-    }
-    catch (e) {
+    } catch (e) {
       this.logger.warn("Failed query", runnable.LogMessage(), e);
       throw constructErrorResponse(e);
-    }
-    finally {
+    } finally {
       timer.finish();
     }
   }

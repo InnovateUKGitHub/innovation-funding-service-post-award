@@ -1,8 +1,8 @@
+import { UnauthenticatedError } from "@server/features/common/appError";
+import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IApiClient } from "../server/apis";
 import { processResponse } from "../shared/processResponse";
 import { ClientFileWrapper } from "./clientFileWrapper";
-import { UnauthenticatedError } from "@server/features/common/appError";
-import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 const clientApi: IApiClient = {
   accounts: {
@@ -69,14 +69,14 @@ const clientApi: IApiClient = {
     getAllForProject: (params) => ajax(`/api/monitoring-reports/?projectId=${params.projectId}`),
     saveMonitoringReport: (params) => ajaxPut(`/api/monitoring-reports?submit=${params.submit}`, params.monitoringReportDto),
     deleteMonitoringReport: (params) => ajax(`/api/monitoring-reports/${params.projectId}/${params.reportId}`, { method: "DELETE" }),
-    getActiveQuestions: (params) => ajax(`/api/monitoring-reports/questions`),
+    getActiveQuestions: (params) => ajax("/api/monitoring-reports/questions"),
     getStatusChanges: (params) => ajax(`/api/monitoring-reports/status-changes/${params.projectId}/${params.reportId}`),
   },
   pcrs: {
     create: (params) => ajaxPost(`/api/pcrs/${params.projectId}`, params.projectChangeRequestDto),
     getAll: (params) => ajax(`/api/pcrs?projectId=${params.projectId}`),
     get: (params) => ajax(`/api/pcrs/${params.projectId}/${params.id}`),
-    getTypes: (params) => ajax(`/api/pcrs/types`),
+    getTypes: (params) => ajax("/api/pcrs/types"),
     update: (params) => ajaxPut(`/api/pcrs/${params.projectId}/${params.id}`, params.pcr),
     delete: (params) => ajaxDelete(`/api/pcrs/${params.projectId}/${params.id}`),
     getStatusChanges: (params) => ajax(`/api/pcrs/status-changes/${params.projectId}/${params.projectChangeRequestId}`),
@@ -96,12 +96,12 @@ const clientApi: IApiClient = {
   },
   partners: {
     get: (params) => ajaxJson(`/api/partners/${params.partnerId}`),
-    getAll:(params) => ajaxJson(`/api/partners`),
+    getAll:(params) => ajaxJson("/api/partners"),
     getAllByProjectId: (params) => ajaxJson(`/api/partners?projectId=${params.projectId}`),
     updatePartner: (params) => ajaxPut(`/api/partners/${params.partnerId}?validateBankDetails=${params.validateBankDetails}&verifyBankDetails=${params.verifyBankDetails}`, params.partnerDto)
   },
   users: {
-    getCurrent: () => ajaxJson(`/api/users/current`)
+    getCurrent: () => ajaxJson("/api/users/current")
   },
 };
 
@@ -126,8 +126,7 @@ const ajax = <T>(url: string, opts?: RequestInit): Promise<T> => {
       return new Promise<T>(() => {
         // Nothing to return as we never want to use this result!
       });
-    }
-    else if(response.status === 401) {
+    } else if(response.status === 401) {
       return Promise.reject(new UnauthenticatedError());
     }
 
@@ -188,7 +187,6 @@ const ajaxPostFormData = <T>(url: string, formData: FormData, opts?: RequestInit
   return ajax<T>(url, options);
 };
 
-// tslint:disable: no-identical-functions
 const ajaxPut = <T>(url: string, body: {}, opts?: RequestInit) => {
   const options: RequestInit = Object.assign({}, opts, {
     method: "PUT",

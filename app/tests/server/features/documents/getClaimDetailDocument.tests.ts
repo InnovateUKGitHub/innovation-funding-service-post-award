@@ -1,6 +1,6 @@
-import { TestContext } from "../../testContextProvider";
 import { Authorisation, ProjectRole } from "@framework/types";
 import { GetClaimDetailDocumentQuery } from "@server/features/documents/getClaimDetailDocument";
+import { TestContext } from "../../testContextProvider";
 
 describe("GetClaimDetailDocumentQuery", () => {
   it("should return result if document exists", async () => {

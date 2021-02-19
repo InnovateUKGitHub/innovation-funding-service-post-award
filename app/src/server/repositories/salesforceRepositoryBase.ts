@@ -1,12 +1,12 @@
-import { Connection, DescribeSObjectResult, Field, Query, RecordResult } from "jsforce";
 import { Stream } from "stream";
+import { Connection, DescribeSObjectResult, Field, Query, RecordResult } from "jsforce";
 import * as Errors from "@server/repositories/errors";
 import { BadRequestError, ILogger } from "@server/features/common";
-import { ISalesforceMapper } from "./mappers/saleforceMapperBase";
 import { IPicklistEntry } from "@framework/types";
+import { ISalesforceMapper } from "./mappers/saleforceMapperBase";
 
 export type Updatable<T> = Partial<T> & {
-  Id: string
+  Id: string;
 };
 
 export type Insertable<T> = Pick<T, Exclude<keyof T, "Id">>;
@@ -17,18 +17,17 @@ export type Insertable<T> = Pick<T, Exclude<keyof T, "Id">>;
 export abstract class RepositoryBase {
   public constructor(
     protected readonly getSalesforceConnection: () => Promise<Connection>,
-    protected readonly logger: ILogger
-  ) {
-  }
+    protected readonly logger: ILogger,
+  ) {}
 
   protected constructError(e: any) {
     this.logger.error("Salesforce Error: ", e.errorCode, e.message);
 
     if (e.errorCode === "ERROR_HTTP_503") {
-      throw new Errors.SalesforceUnavilableError(`Salesforce unavailable`);
+      throw new Errors.SalesforceUnavilableError("Salesforce unavailable");
     }
     if (e.errorCode === "INVALID_QUERY_FILTER_OPERATOR") {
-      throw new Errors.SalesforceInvalidFilterError(`Salesforce filter error`);
+      throw new Errors.SalesforceInvalidFilterError("Salesforce filter error");
     }
     if (e.errorCode === "FILE_EXTENSION_NOT_ALLOWED") {
       throw new Errors.FileTypeNotAllowedError(e.message);
@@ -42,10 +41,9 @@ export abstract class RepositoryBase {
       query.execute(undefined, (err, records) => {
         if (err) {
           rej(this.constructError(err));
-        }
-        else {
+        } else {
           // there is an error in the typings of result so need to cast here
-          res(records as any as T[]);
+          res((records as any) as T[]);
         }
       });
     });
@@ -56,10 +54,7 @@ export abstract class RepositoryBase {
  * Generic Base class with mapping and helpers to retrieve salesforce objects
  */
 export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> extends RepositoryBase {
-  public constructor(
-    getSalesforceConnection: () => Promise<Connection>,
-    logger: ILogger
-  ) {
+  public constructor(getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
     super(getSalesforceConnection, logger);
   }
 
@@ -72,12 +67,10 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
       const conn = await this.getSalesforceConnection();
       const salesforce = await conn.sobject<TSalesforce>(this.salesforceObjectName).retrieve(id);
       return salesforce && this.mapper.map(salesforce);
-    }
-    catch (e) {
+    } catch (e) {
       if (e.errorCode === "MALFORMED_ID" || e.errorCode === "NOT_FOUND") {
         return null;
-      }
-      else {
+      } else {
         throw this.constructError(e);
       }
     }
@@ -85,29 +78,30 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
 
   protected async all(): Promise<TEntity[]> {
     const conn = await this.getSalesforceConnection();
-    const result = await conn.sobject(this.salesforceObjectName)
+    const result = await conn
+      .sobject(this.salesforceObjectName)
       .select(this.salesforceFieldNames)
       .execute()
       .then(x => this.map(x))
-      .catch(e => { throw this.constructError(e); })
-      ;
-
+      .catch(e => {
+        throw this.constructError(e);
+      });
     return result as TEntity[];
   }
 
   protected async getBlob(id: string, fieldName: string): Promise<Stream> {
     const conn = await this.getSalesforceConnection();
-    return conn.sobject(this.salesforceObjectName)
-      .record(id)
-      .blob(fieldName)
-      ;
+    return conn.sobject(this.salesforceObjectName).record(id).blob(fieldName);
   }
 
   private async getMetadata(): Promise<DescribeSObjectResult> {
     const conn = await this.getSalesforceConnection();
-    return conn.sobject(this.salesforceObjectName)
+    return conn
+      .sobject(this.salesforceObjectName)
       .describe()
-      .catch(e => { throw this.constructError(e); });
+      .catch(e => {
+        throw this.constructError(e);
+      });
   }
 
   private async getFieldMetadata(field: string): Promise<Field> {
@@ -131,14 +125,15 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
 
   protected async where(filter: Partial<TSalesforce> | string): Promise<TEntity[]> {
     const conn = await this.getSalesforceConnection();
-    const result = await conn.sobject(this.salesforceObjectName)
+    const result = await conn
+      .sobject(this.salesforceObjectName)
       .select(this.salesforceFieldNames)
       .where(filter)
       .execute()
       .then(x => this.map(x))
-      .catch(e => { throw this.constructError(e); })
-      ;
-
+      .catch(e => {
+        throw this.constructError(e);
+      });
     return result as TEntity[];
   }
 
@@ -152,15 +147,16 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
 
   protected async filterOne(filter: Partial<TSalesforce> | string): Promise<TEntity | null> {
     const conn = await this.getSalesforceConnection();
-    const result = await conn.sobject(this.salesforceObjectName)
+    const result = await conn
+      .sobject(this.salesforceObjectName)
       .select(this.salesforceFieldNames)
       .where(filter)
       .limit(1)
       .execute()
       .then(x => this.map(x).pop())
-      .catch(e => { throw this.constructError(e); })
-      ;
-
+      .catch(e => {
+        throw this.constructError(e);
+      });
     return result as TEntity;
   }
 
@@ -169,21 +165,26 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   }
 
   private getDataChangeErrorMessages(results: RecordResult[]): string[] {
-    return results.map(x => !x.success ? x.errors : []).reduce<string[]>((a, b) => a.concat(b), []);
+    return results.map(x => (!x.success ? x.errors : [])).reduce<string[]>((a, b) => a.concat(b), []);
   }
 
   protected async insertItem(inserts: Partial<TSalesforce>): Promise<string> {
     const conn = await this.getSalesforceConnection();
-    return conn.sobject(this.salesforceObjectName)
+    return conn
+      .sobject(this.salesforceObjectName)
       .insert(inserts)
-      .then((result) => {
+      .then(result => {
         if (result.success) {
           return result.id;
         }
-        throw new Errors.SalesforceDataChangeError("Failed to insert to salesforce", this.getDataChangeErrorMessage(result));
+        throw new Errors.SalesforceDataChangeError(
+          "Failed to insert to salesforce",
+          this.getDataChangeErrorMessage(result),
+        );
       })
-      .catch(e => { throw this.constructError(e); })
-      ;
+      .catch(e => {
+        throw this.constructError(e);
+      });
   }
 
   protected async insertAll(inserts: Partial<TSalesforce>[]): Promise<string[]> {
@@ -192,30 +193,40 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
     }
 
     const conn = await this.getSalesforceConnection();
-    return conn.sobject<Partial<TSalesforce>>(this.salesforceObjectName)
+    return conn
+      .sobject<Partial<TSalesforce>>(this.salesforceObjectName)
       .insert(inserts)
       .then(results => {
         if (results.every(x => x.success)) {
-          return results.map(x => x.success ? x.id.toString() : "");
+          return results.map(x => (x.success ? x.id.toString() : ""));
         }
-        throw new Errors.SalesforceDataChangeError("Failed to insert to salesforce", this.getDataChangeErrorMessages(results));
+        throw new Errors.SalesforceDataChangeError(
+          "Failed to insert to salesforce",
+          this.getDataChangeErrorMessages(results),
+        );
       })
-      .catch(e => { throw this.constructError(e); })
-      ;
+      .catch(e => {
+        throw this.constructError(e);
+      });
   }
 
   protected async updateItem(updates: Updatable<TSalesforce>): Promise<boolean> {
     const conn = await this.getSalesforceConnection();
-    return conn.sobject(this.salesforceObjectName)
+    return conn
+      .sobject(this.salesforceObjectName)
       .update(updates)
       .then(results => {
         if (results.success) {
           return true;
         }
-        throw new Errors.SalesforceDataChangeError("Failed to update salesforce", this.getDataChangeErrorMessage(results));
+        throw new Errors.SalesforceDataChangeError(
+          "Failed to update salesforce",
+          this.getDataChangeErrorMessage(results),
+        );
       })
-      .catch(e => { throw this.constructError(e); })
-      ;
+      .catch(e => {
+        throw this.constructError(e);
+      });
   }
 
   protected async updateAll(updates: Updatable<TSalesforce>[]): Promise<boolean> {
@@ -224,16 +235,21 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
     }
 
     const conn = await this.getSalesforceConnection();
-    return conn.sobject<TSalesforce>(this.salesforceObjectName)
+    return conn
+      .sobject<TSalesforce>(this.salesforceObjectName)
       .update(updates)
       .then(results => {
         if (results.every(x => x.success)) {
           return true;
         }
-        throw new Errors.SalesforceDataChangeError("Failed to update salesforce", this.getDataChangeErrorMessages(results));
+        throw new Errors.SalesforceDataChangeError(
+          "Failed to update salesforce",
+          this.getDataChangeErrorMessages(results),
+        );
       })
-      .catch(e => { throw this.constructError(e); })
-      ;
+      .catch(e => {
+        throw this.constructError(e);
+      });
   }
 
   protected async deleteAll(ids: string[]): Promise<void> {
@@ -242,27 +258,41 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
     }
     const conn = await this.getSalesforceConnection();
 
-    return conn.sobject(this.salesforceObjectName).delete(ids)
+    return conn
+      .sobject(this.salesforceObjectName)
+      .delete(ids)
       .then(result => {
         if (result.every(x => x.success)) {
           return;
         }
-        throw new Errors.SalesforceDataChangeError("Failed to delete from salesforce", this.getDataChangeErrorMessages(result));
+        throw new Errors.SalesforceDataChangeError(
+          "Failed to delete from salesforce",
+          this.getDataChangeErrorMessages(result),
+        );
       })
-      .catch(e => { throw this.constructError(e); });
+      .catch(e => {
+        throw this.constructError(e);
+      });
   }
 
   protected async deleteItem(id: string): Promise<void> {
     const conn = await this.getSalesforceConnection();
 
-    return conn.sobject(this.salesforceObjectName).delete(id)
+    return conn
+      .sobject(this.salesforceObjectName)
+      .delete(id)
       .then(result => {
         if (result.success) {
           return;
         }
-        throw new Errors.SalesforceDataChangeError("Failed to delete from salesforce", this.getDataChangeErrorMessage(result));
+        throw new Errors.SalesforceDataChangeError(
+          "Failed to delete from salesforce",
+          this.getDataChangeErrorMessage(result),
+        );
       })
-      .catch(e => { throw this.constructError(e); });
+      .catch(e => {
+        throw this.constructError(e);
+      });
   }
 
   private map(result: Partial<{}>[]): TEntity[] {
@@ -272,7 +302,9 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
 }
 
 class DefaultMapper<T> implements ISalesforceMapper<T, T> {
-  map(item: T) { return item; }
+  map(item: T) {
+    return item;
+  }
 }
 
 /**

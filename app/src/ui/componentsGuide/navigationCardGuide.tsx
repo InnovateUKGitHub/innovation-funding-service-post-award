@@ -13,7 +13,7 @@ const router = createRouter([route]).usePlugin(browserPluginFactory({ useHash: f
 const dummyLink: ILinkInfo = {
   routeName: route.name,
   routeParams: {},
-  accessControl: () => true
+  accessControl: () => true,
 };
 
 export const navigationCardGuide: IGuide = {
@@ -29,7 +29,7 @@ export const navigationCardGuide: IGuide = {
             <NavigationCard route={dummyLink} label="The link" qa="example" />
           </RouterProvider>
         </Provider>
-      )
+      ),
     },
     {
       name: "Dashboard",
@@ -49,7 +49,15 @@ export const navigationCardGuide: IGuide = {
         <Provider store={createStore(rootReducer)}>
           <RouterProvider router={router}>
             <NavigationCardsGrid>
-              <NavigationCard route={dummyLink} label="Row 1 column 1" qa="row-1-column-1" messages={[{message: "Custom Message 1", qa: "row-1-column-1-message-1"}, {message: "Custom Message 2", qa: "row-1-column-1-message-2"} ]} />
+              <NavigationCard
+                route={dummyLink}
+                label="Row 1 column 1"
+                qa="row-1-column-1"
+                messages={[
+                  { message: "Custom Message 1", qa: "row-1-column-1-message-1" },
+                  { message: "Custom Message 2", qa: "row-1-column-1-message-2" },
+                ]}
+              />
               <NavigationCard route={dummyLink} label="Row 1 column 2" qa="row-1-column-2" />
               <NavigationCard route={dummyLink} label="Row 1 column 3" qa="row-1-column-3" />
               <NavigationCard route={dummyLink} label="Row 2 column 1" qa="row-2-column-1" />
@@ -59,7 +67,7 @@ export const navigationCardGuide: IGuide = {
             </NavigationCardsGrid>
           </RouterProvider>
         </Provider>
-      )
-    }
-  ]
+      ),
+    },
+  ],
 };

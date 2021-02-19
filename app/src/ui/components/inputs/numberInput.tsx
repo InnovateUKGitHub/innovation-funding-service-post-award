@@ -73,15 +73,12 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
     let value: string | null = null;
     if (props.value === null || props.value === undefined || isNaN(props.value)) {
       value = "";
-    }
-    else if (Number.isInteger(props.value)) {
+    } else if (Number.isInteger(props.value)) {
       value = props.value.toString();
-    }
-    else if (Number(props.value)) {
+    } else if (Number(props.value)) {
       // handle floating point numbers
       value = Number(props.value.toFixed(6)).toString();
-    }
-    else {
+    } else {
       value = props.value.toString();
     }
 

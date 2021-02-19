@@ -1,9 +1,7 @@
-import { SalesforceBaseMapper } from "./saleforceMapperBase";
 import {
   ProjectChangeRequestEntity,
   ProjectChangeRequestItemEntity
 } from "@framework/entities";
-import { ISalesforcePCR } from "../projectChangeRequestRepository";
 import {
   getPCROrganisationType,
   PCRContactRole,
@@ -15,6 +13,8 @@ import {
   PCRStatus
 } from "@framework/constants";
 import { TypeOfAid } from "@framework/dtos";
+import { ISalesforcePCR } from "../projectChangeRequestRepository";
+import { SalesforceBaseMapper } from "./saleforceMapperBase";
 
 export const mapToPCRStatus = ((status: string) => {
   switch (status) {

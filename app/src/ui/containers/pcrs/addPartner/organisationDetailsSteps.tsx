@@ -47,7 +47,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
           <Form.Numeric
             name="numberOfEmployees"
             width={4}
-            value={m => m.numberOfEmployees }
+            value={m => m.numberOfEmployees}
             update={(m, val) => m.numberOfEmployees = val}
             validation={props.validator.numberOfEmployees}
           />

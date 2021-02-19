@@ -1,4 +1,3 @@
-// tslint:disable: object-literal-key-quotes
 import React from "react";
 import { useContent } from "@ui/hooks";
 

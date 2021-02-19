@@ -99,7 +99,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
             <UploadForm.MulipleFileUpload
               labelContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.uploadInputLabel}
               name="attachment"
-              labelHidden={true}
+              labelHidden
               value={data => data.files}
               update={(dto, files) => {
                 dto.files = files || [];
@@ -154,7 +154,7 @@ const OverheadDocumentContainer = (props: OverheadDocumentsPageParams & BaseProp
           onFileChange={(isSaving, dto) => {
             stores.messages.clearMessages();
             // show message if remaining on page
-            const successMessage = isSaving ? dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.` : undefined;
+            const successMessage = isSaving ? dto.files.length === 1 ? "Your document has been uploaded." : `${dto.files.length} documents have been uploaded.` : undefined;
             stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(isSaving, props.projectId, props.itemId, dto, true, successMessage);
           }}
           onFileDelete={(dto, document) => {

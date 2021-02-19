@@ -79,7 +79,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
       if (project.status === ProjectStatus.Terminated || project.status === ProjectStatus.Closed) {
         return (
           <Acc.Renderers.SimpleString qa="theFinalClaimApprovedNotificationMessage">
-            <Acc.Content value={ x => x.allClaimsDashboard.messages.noRemainingClaims}/>
+            <Acc.Content value={x => x.allClaimsDashboard.messages.noRemainingClaims}/>
           </Acc.Renderers.SimpleString>
         );
       }
@@ -88,7 +88,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
       const date = DateTime.fromJSDate(project.periodEndDate).plus({ days: 1 }).toJSDate();
       return (
         <Acc.Renderers.SimpleString qa="notificationMessage">
-          <Acc.Content value={ x => x.allClaimsDashboard.messages.noOpenClaimsMessage(date)}/>
+          <Acc.Content value={x => x.allClaimsDashboard.messages.noOpenClaimsMessage(date)}/>
         </Acc.Renderers.SimpleString>
       );
     }
@@ -100,7 +100,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
     const ClaimTable = Acc.TypedTable<ClaimDto>();
     const renderPartnerName = (x: ClaimDto) => {
       const p = partners.filter(y => y.id === x.partnerId)[0];
-      if (p) return <Acc.PartnerName partner={p} showIsLead={true}/>;
+      if (p) return <Acc.PartnerName partner={p} showIsLead/>;
       return null;
     };
 
@@ -118,7 +118,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
           <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.difference} qa="diff" value={(x) => x.forecastCost - x.totalCost} />
           <ClaimTable.String headerContent={x => x.allClaimsDashboard.labels.status} qa="status" value={(x) => x.statusLabel} />
           <ClaimTable.ShortDate headerContent={x => x.allClaimsDashboard.labels.lastUpdated} qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate} />
-          <ClaimTable.Custom header={<Acc.Content value={x => x.allClaimsDashboard.labels.actionHeader}/>} hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partners.find(p => p.id === x.partnerId)!} routes={this.props.routes} />} />
+          <ClaimTable.Custom header={<Acc.Content value={x => x.allClaimsDashboard.labels.actionHeader}/>} hideHeader qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partners.find(p => p.id === x.partnerId)!} routes={this.props.routes} />} />
         </ClaimTable.Table>
       </Acc.Section>
     );
@@ -168,7 +168,7 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
           <ClaimTable.Currency headerContent={x => x.allClaimsDashboard.labels.difference} qa="diff" value={(x) => x.forecastCost - x.totalCost} />
           <ClaimTable.String headerContent={x => x.allClaimsDashboard.labels.status} qa="status" value={(x) => x.statusLabel} />
           <ClaimTable.ShortDate headerContent={x => x.allClaimsDashboard.labels.lastUpdated} qa="last-update" value={x => x.paidDate || x.approvedDate || x.lastModifiedDate} />
-          <ClaimTable.Custom header={<Acc.Content value={x => x.allClaimsDashboard.labels.actionHeader}/>} hideHeader={true} qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} routes={this.props.routes} />} />
+          <ClaimTable.Custom header={<Acc.Content value={x => x.allClaimsDashboard.labels.actionHeader}/>} hideHeader qa="link" value={(x) => <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} routes={this.props.routes} />} />
         </ClaimTable.Table>
       </div>
     );

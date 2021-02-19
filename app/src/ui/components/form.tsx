@@ -1,10 +1,12 @@
 import React, { CSSProperties } from "react";
-import { TextAreaInput } from "./inputs/textAreaInput";
 import { Result } from "@ui/validation";
 import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
+import classNames from "classnames";
+import { ContentSelector } from "@content/content";
+import { IFileWrapper } from "@framework/types";
+import { TextAreaInput } from "./inputs/textAreaInput";
 import { ValidationError } from "./validationError";
 import { TextInput } from "./inputs/textInput";
-import classNames from "classnames";
 import { NumberInput } from "./inputs/numberInput";
 import { RadioList } from "./inputs/radioList";
 import { CheckboxList } from "./inputs/checkboxList";
@@ -14,9 +16,7 @@ import { Button } from "./styledButton";
 import { SearchInput } from "./inputs/searchInput";
 import { FormInputWidths } from "./inputs/baseInput";
 import { DropdownList } from "./inputs";
-import { ContentSelector } from "@content/content";
 import { Content } from "./content";
-import { IFileWrapper } from "@framework/types";
 
 interface SharedFormProps<T> {
   onChange?: (data: T) => void;
@@ -192,7 +192,7 @@ const handleChange = <TDto extends {}, TValue extends {}>(props: ExternalFieldPr
   const data = formProps.formData;
   props.update(data, value);
 
-  if (!!formProps.onChange) {
+  if (formProps.onChange) {
     formProps.onChange(data);
   }
 };
@@ -236,7 +236,7 @@ interface NumericFieldProps<T> extends ExternalFieldProps<T, number> {
 }
 
 const NumericField = <T extends {}>(props: NumericFieldProps<T> & InternalFieldProps<T>) => {
-  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, number> };
+  const TypedFieldComponent = FieldComponent as new() => FieldComponent<T, number>;
 
   return (
     <TypedFieldComponent
@@ -257,7 +257,7 @@ interface RadioFieldProps<T extends {}> extends ExternalFieldProps<T, SelectOpti
 }
 
 const RadioOptionsField = <T extends {}>(props: RadioFieldProps<T> & InternalFieldProps<T>) => {
-  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, SelectOption> };
+  const TypedFieldComponent = FieldComponent as new() => FieldComponent<T, SelectOption>;
 
   return (
     <TypedFieldComponent
@@ -272,7 +272,7 @@ interface CheckboxFieldProps<T extends {}> extends ExternalFieldProps<T, SelectO
 }
 
 const CheckboxOptionsField = <T extends {}>(props: CheckboxFieldProps<T> & InternalFieldProps<T>) => {
-  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, SelectOption[]> };
+  const TypedFieldComponent = FieldComponent as new() => FieldComponent<T, SelectOption[]>;
 
   return (
     <TypedFieldComponent
@@ -293,7 +293,7 @@ interface DropdownFieldProps<T extends {}> extends ExternalFieldProps<T, Dropdow
 }
 
 const DropdownListField = <T extends {}>(props: DropdownFieldProps<T> & InternalFieldProps<T>) => {
-  const TypedFieldComponent = FieldComponent as { new(): FieldComponent<T, DropdownOption> };
+  const TypedFieldComponent = FieldComponent as new() => FieldComponent<T, DropdownOption>;
 
   return (
     <TypedFieldComponent
@@ -416,8 +416,8 @@ const CustomComponent = <T extends {}>(props: ExternalFieldProps<T, React.ReactN
 };
 
 export interface FormBuilder<T> {
-  Form: { new(): FormComponent<T> };
-  Fieldset: { new(): FieldsetComponent<T> };
+  Form: new() => FormComponent<T>;
+  Fieldset: new() => FieldsetComponent<T>;
   String: React.FunctionComponent<StringFieldProps<T>>;
   Search: React.FunctionComponent<SearchFieldProps<T>>;
   MultilineString: React.FunctionComponent<MultiStringFieldProps<T>>;
@@ -436,8 +436,8 @@ export interface FormBuilder<T> {
 }
 
 export const TypedForm = <T extends {}>(): FormBuilder<T> => ({
-  Form: FormComponent as { new(): FormComponent<T> },
-  Fieldset: FieldsetComponent as { new(): FieldsetComponent<T> },
+  Form: FormComponent as new() => FormComponent<T>,
+  Fieldset: FieldsetComponent as new() => FieldsetComponent<T>,
   String: StringField as React.FunctionComponent<StringFieldProps<T>>,
   Search: SearchField as React.FunctionComponent<SearchFieldProps<T>>,
   MultilineString: MultiStringField as React.FunctionComponent<MultiStringFieldProps<T>>,

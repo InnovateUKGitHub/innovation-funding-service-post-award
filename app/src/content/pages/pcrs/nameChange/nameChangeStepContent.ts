@@ -1,7 +1,7 @@
+import { PCRNameChangeLabels } from "@content/labels/pcrNameChangeLabels";
 import { ContentPageBase } from "../../../contentPageBase";
 import { Content } from "../../../content";
 import { PCRItem } from "../pcrItem";
-import { PCRNameChangeLabels } from "@content/labels/pcrNameChangeLabels";
 
 export class PCRNameChangeContent extends ContentPageBase {
   constructor(content: Content, protected competitionType?: string) {

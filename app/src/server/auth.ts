@@ -1,7 +1,7 @@
+import fs from "fs";
 import express from "express";
 import passport from "passport";
 import passportSaml from "passport-saml";
-import fs from "fs";
 import cookieSession from "cookie-session";
 import { Configuration } from "../server/features/common/config";
 import { noCache } from "./cacheHeaders";
@@ -30,7 +30,7 @@ const shibConfig: passportSaml.SamlConfig = {
   issuer: Configuration.serverUrl,
   callbackUrl: `${Configuration.serverUrl}/auth/success`,
   // the info we're asking for
-  identifierFormat: `urn:oasis:names:tc:SAML:1.1:nameid-format:persistent`,
+  identifierFormat: "urn:oasis:names:tc:SAML:1.1:nameid-format:persistent",
   disableRequestedAuthnContext: true,
   decryptionPvk: fs.readFileSync(Configuration.certificates.shibboleth, "utf-8"),
   acceptedClockSkewMs: -1,
@@ -89,28 +89,24 @@ router.post("/auth/success", (req, res, next) => passport.authenticate("shibbole
 router.use((req, res, next) => {
   if (Configuration.sso.enabled && req.url === "/") {
     res.redirect("/projects/dashboard");
-  }
-  // if user is logged in continue
-  else if (req.session && req.session.user && req.session.user.email) {
+  } else if (req.session && req.session.user && req.session.user.email) {
+    // if user is logged in continue
     req.session.last_reset = getCookieTimestamp();
     next();
-  }
-  // if user not logged in but we arent using sso then set default user
-  else if (!Configuration.sso.enabled) {
+  } else if (!Configuration.sso.enabled) {
+    // if user not logged in but we arent using sso then set default user
     req.session = req.session || {};
     req.session.user = req.session.user || {};
     req.session.user.email = Configuration.salesforce.serivceUsername;
     next();
-  }
-  // if not logged in and not api request or login request (ie somethings gone wrong)
-  // then then store url in session and redirect to login enpoint that will in turn redirect to sso
-  else if (!req.url.startsWith("/api") && !req.url.startsWith("/login")) {
+  } else if (!req.url.startsWith("/api") && !req.url.startsWith("/login")) {
+    // if not logged in and not api request or login request (ie somethings gone wrong)
+    // then then store url in session and redirect to login enpoint that will in turn redirect to sso
     req.session = req.session || {};
     req.session.redirect = req.url;
-    res.redirect(`/login`);
-  }
-  // not logged and api request throw 401 exception
-  else {
+    res.redirect("/login");
+  } else {
+    // not logged and api request throw 401 exception
     res.sendStatus(401);
   }
 });

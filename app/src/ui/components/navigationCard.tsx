@@ -17,7 +17,7 @@ export interface NavigationCardProps {
 
 // TODO: Refactor this component to be consumed via parent. E.G NavigationCardsGrid.Item = NavigationCard (Consume as <NavigationCardsGrid.Item ... />)
 export function NavigationCard({ qa, label, route, messages = [] }: NavigationCardProps) {
-  const hasMessages: boolean = !!messages.length;
+  const hasMessages = !!messages.length;
 
   return (
     <div className="card-link" data-qa={qa}>

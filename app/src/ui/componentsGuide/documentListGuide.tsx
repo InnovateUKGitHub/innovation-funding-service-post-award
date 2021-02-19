@@ -1,5 +1,5 @@
-import { DocumentList } from "../components";
 import { IGuide } from "@framework/types";
+import { DocumentList } from "../components";
 
 const documents = [
   { link: "https://www.google.com/", fileName: "LABOUR_COSTS_Q3_2017-11-05.pdf", id: "1", fileSize: 3, dateCreated: new Date(), owner: "owner1@ownder.com", uploadedBy: "Bubbles" },

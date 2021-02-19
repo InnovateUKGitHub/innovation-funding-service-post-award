@@ -1,14 +1,14 @@
 import { combineReducers } from "redux";
 import { router5Reducer, RouterState } from "redux-router5";
+import { IClientUser } from "@framework/types/IUser";
+import { historyReducer } from "@ui/redux/reducers/historyReducer";
 import { dataReducer } from "./dataReducer";
 import { loadStatusReducer } from "./loadStatusReducer";
 import { editorReducer } from "./editorsReducer";
 import { userReducer } from "./userReducer";
 import { messagesReducer } from "./messagesReducer";
-import { IClientUser } from "@framework/types/IUser";
 import { configReducer, IClientConfig } from "./configReducer";
 import { pageTitleReducer, PageTitleState } from "./pageTitleReducer";
-import { historyReducer } from "@ui/redux/reducers/historyReducer";
 
 export type DataState = ReturnType<typeof dataReducer>;
 export type DataStateKeys = keyof DataState;
@@ -37,7 +37,7 @@ export const rootReducer = combineReducers<RootState>({
   loadStatus: loadStatusReducer,
   messages: messagesReducer,
   user: userReducer,
-  isClient: (state: boolean = false) => state,
+  isClient: (state = false) => state,
   config: configReducer,
   title: pageTitleReducer
 });

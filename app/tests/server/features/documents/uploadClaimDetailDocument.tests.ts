@@ -1,7 +1,7 @@
-import { TestContext } from "../../testContextProvider";
 import { UploadClaimDetailDocumentCommand } from "@server/features/documents/uploadClaimDetailDocument";
 import { BadRequestError, ValidationError } from "@server/features/common/appError";
 import { Authorisation, ProjectRole } from "@framework/types";
+import { TestContext } from "../../testContextProvider";
 
 describe("UploadClaimDetailDocumentCommand", () => {
   it("should upload a claim detail document", async () => {

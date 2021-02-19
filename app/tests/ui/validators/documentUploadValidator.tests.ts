@@ -3,7 +3,7 @@ import { Configuration } from "@server/features/common";
 import { FileDtoValidator } from "@ui/validators";
 
 describe("Document upload validator", () => {
-  const createFile = (extension: string, givenSize: number = 10000, fileName: string = "test"): IFileWrapper => ({
+  const createFile = (extension: string, givenSize = 10000, fileName = "test"): IFileWrapper => ({
     fileName: fileName + "." + extension,
     size: givenSize,
   });

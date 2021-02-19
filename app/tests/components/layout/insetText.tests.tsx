@@ -1,4 +1,3 @@
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
 import { InsetText } from "../../../src/ui/components/layout/insetText";

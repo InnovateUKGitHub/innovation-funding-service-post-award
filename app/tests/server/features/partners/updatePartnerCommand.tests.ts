@@ -1,12 +1,11 @@
-import { TestContext } from "../../testContextProvider";
-import { UpdatePartnerCommand } from "../../../../src/server/features/partners/updatePartnerCommand";
 import { BankCheckStatus, BankDetailsTaskStatus, PartnerDto, PartnerStatus, SpendProfileStatus } from "@framework/dtos";
 import { GetByIdQuery } from "@server/features/partners";
 import { ValidationError } from "@server/features/common";
 import { BankCheckStatusMapper, BankDetailsTaskStatusMapper, PartnerSpendProfileStatusMapper, PartnerStatusMapper } from "@server/features/partners/mapToPartnerDto";
 import { Partner } from "@framework/entities";
+import { UpdatePartnerCommand } from "../../../../src/server/features/partners/updatePartnerCommand";
+import { TestContext } from "../../testContextProvider";
 
-// tslint:disable-next-line: no-big-function
 describe("updatePartnerCommand", () => {
   const setup = (updates?: Partial<Partner>) => {
     const context = new TestContext();

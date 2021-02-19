@@ -1,10 +1,10 @@
 import { ILinkInfo } from "@framework/types";
 import { Result } from "@ui/validation";
 import classNames from "classnames";
-import { ValidationError } from "./validationError";
-import { Link } from "./links";
 import { Content } from "@ui/components/content";
 import { ContentSelector } from "@content/content";
+import { ValidationError } from "./validationError";
+import { Link } from "./links";
 
 export type TaskStatus = "To do" | "Complete" | "Incomplete";
 interface ITask {
@@ -31,7 +31,7 @@ export const Task: React.FunctionComponent<ITask> = ({ route, name, nameContent,
   });
   const hasError = validation && validation.find(x => !x.isValid);
 
-  const link = !!nameContent ? <Content value={nameContent}/> : name;
+  const link = nameContent ? <Content value={nameContent}/> : name;
   return (
     <li className={classNames("app-task-list__item", { "app-task-list__item--error": hasError })}>
       {validation && validation.map((v) => <ValidationError error={v} key={v.key}/>)}
@@ -47,7 +47,7 @@ export const TaskListSection: React.FunctionComponent<ITaskListItem> = ({ step, 
   return (
     <li key={step} data-qa={qa}>
       <h2 className="app-task-list__section"><span className="app-task-list__section-number">{step}.</span>&nbsp;{
-        !!titleContent ? <Content value={titleContent}/> : title
+        titleContent ? <Content value={titleContent}/> : title
       }</h2>
       <ul className="app-task-list__items">
         {validation && validation.map((v) => <ValidationError error={v} key={v.key}/>)}
@@ -57,7 +57,7 @@ export const TaskListSection: React.FunctionComponent<ITaskListItem> = ({ step, 
   );
 };
 
-export const TaskList: React.FunctionComponent<{qa?: string;}> = ({ qa, children }) => {
+export const TaskList: React.FunctionComponent<{qa?: string}> = ({ qa, children }) => {
   return (
     <ol className="app-task-list" data-qa={qa}>
       {children}

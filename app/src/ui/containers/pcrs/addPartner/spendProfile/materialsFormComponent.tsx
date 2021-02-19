@@ -49,7 +49,7 @@ export class MaterialsFormComponent extends Component<SpendProfileCostFormProps<
           />
           {this.props.isClient && <Form.Custom
             labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.materials.totalCost}
-            labelBold={true}
+            labelBold
             name="totalCost"
             value={dto => <ACC.Renderers.SimpleString><ACC.Renderers.Currency value={dto.value}/></ACC.Renderers.SimpleString>}
             update={() => null}

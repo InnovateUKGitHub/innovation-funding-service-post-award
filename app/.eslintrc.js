@@ -37,6 +37,12 @@ module.exports = {
       },
     },
     {
+      files: ["./src/ui/componentsGuide/*.tsx"],
+      rules: {
+        "@typescript-eslint/quotes": "off",
+      },
+    },
+    {
       files: [
         "**/details.tests.tsx",
         "**/documentSingle.tests.tsx",
@@ -106,31 +112,6 @@ module.exports = {
   ],
   rules: {
     "@typescript-eslint/ban-types": "off", // TODO: switch back to error
-    // "@typescript-eslint/ban-types": [
-    //   "warn",
-    //   {
-    //     types: {
-    //       Object: {
-    //         message: "Avoid using the `Object` type. Did you mean `object`?",
-    //       },
-    //       Function: {
-    //         message: "Avoid using the `Function` type. Prefer a specific function type, like `() => void`.",
-    //       },
-    //       Boolean: {
-    //         message: "Avoid using the `Boolean` type. Did you mean `boolean`?",
-    //       },
-    //       Number: {
-    //         message: "Avoid using the `Number` type. Did you mean `number`?",
-    //       },
-    //       String: {
-    //         message: "Avoid using the `String` type. Did you mean `string`?",
-    //       },
-    //       Symbol: {
-    //         message: "Avoid using the `Symbol` type. Did you mean `symbol`?",
-    //       },
-    //     },
-    //   },
-    // ],
     "@typescript-eslint/explicit-module-boundary-types": "off", // TODO: switch back to error
     "@typescript-eslint/no-non-null-assertion": "off", // TODO: switch back to error
     "@typescript-eslint/naming-convention": "off", // TODO: switch back to error

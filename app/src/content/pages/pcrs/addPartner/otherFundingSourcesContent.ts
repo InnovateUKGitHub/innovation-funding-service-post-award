@@ -1,7 +1,7 @@
+import { PCRAddPartnerLabels } from "@content/labels/pcrAddPartnerLabels";
 import { ContentPageBase } from "../../../contentPageBase";
 import { Content } from "../../../content";
 import { PCRItem } from "../pcrItem";
-import { PCRAddPartnerLabels } from "@content/labels/pcrAddPartnerLabels";
 
 export class PCRAddPartnerOtherFundingSourcesContent extends ContentPageBase {
   constructor(private readonly content: Content, protected competitionType?: string) {

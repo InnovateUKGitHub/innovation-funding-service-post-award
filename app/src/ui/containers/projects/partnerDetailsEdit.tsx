@@ -1,9 +1,9 @@
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import * as ACC from "../../components";
-import { Pending } from "../../../shared/pending";
 import { PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
+import * as ACC from "../../components";
+import { Pending } from "../../../shared/pending";
 interface Data {
     project: Pending<ProjectDto>;
     partner: Pending<PartnerDto>;

@@ -1,10 +1,10 @@
 import { LoadingStatus, Pending } from "@shared/pending";
-import { DataState, DataStateKeys, EditorState, EditorStateKeys, EditorStatus, IDataStore, IEditorStore, RootState } from "../reducers";
 import { IClientUser, ILinkInfo } from "@framework/types";
-import { DataLoadAction, dataLoadAction, EditorErrorAction, EditorSubmitAction, EditorSuccessAction, handleEditorError, handleEditorSubmit, handleEditorSuccess, navigateTo, resetEditor, RootActions, RootActionsOrThunk, UpdateEditorAction, updateEditorAction } from "../actions";
 import { scrollToTheTopSmoothly } from "@framework/util";
 import { processDto } from "@shared/processResponse";
 import { AnyAction } from "redux";
+import { DataLoadAction, dataLoadAction, EditorErrorAction, EditorSubmitAction, EditorSuccessAction, handleEditorError, handleEditorSubmit, handleEditorSuccess, navigateTo, resetEditor, RootActions, RootActionsOrThunk, UpdateEditorAction, updateEditorAction } from "../actions";
+import { DataState, DataStateKeys, EditorState, EditorStateKeys, EditorStatus, IDataStore, IEditorStore, RootState } from "../reducers";
 
 type InferDataStore<T> = T extends IDataStore<infer U> ? U : never;
 export type InferEditorStoreDto<T> = T extends IEditorStore<infer U, infer V> ? U : never;
@@ -47,8 +47,7 @@ const conditionalSave = <T extends EditorStateKeys, K extends string, TDto exten
     dispatch(updateEditorAction(key, store, dto, validator));
     if (saving && !validator.isValid) {
       scrollToTheTopSmoothly();
-    }
-    else if (saving) {
+    } else if (saving) {
       dispatch(handleEditorSubmit(key, store, dto, validator));
       saveCall({ user: getState().user })
         .then((x) => {

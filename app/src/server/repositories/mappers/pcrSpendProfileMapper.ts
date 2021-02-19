@@ -1,9 +1,9 @@
-import { SalesforceBaseMapper } from "./saleforceMapperBase";
 import { ISalesforcePcrSpendProfile } from "@server/repositories";
 import { PcrSpendProfileEntity, PcrSpendProfileEntityForCreate } from "@framework/entities/pcrSpendProfile";
 import { Insertable } from "@server/repositories/salesforceRepositoryBase";
 import { PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/constants";
 import { isNumber } from "@framework/util";
+import { SalesforceBaseMapper } from "./saleforceMapperBase";
 
 export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISalesforcePcrSpendProfile, PcrSpendProfileEntity> {
   public constructor(private readonly recordTypeId: string) {

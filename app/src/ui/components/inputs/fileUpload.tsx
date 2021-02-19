@@ -1,8 +1,7 @@
 import React from "react";
 import classNames from "classnames";
-import { BaseInput } from "./baseInput";
-import { ClientFileWrapper } from "../../../client/clientFileWrapper";
 import { IFileWrapper } from "@framework/types";
+import { ClientFileWrapper } from "../../../client/clientFileWrapper";
 
 interface FileUploadProps {
   name: string;
@@ -15,7 +14,8 @@ interface FileUploadProps {
 export class FileUpload extends React.Component<FileUploadProps, { value: File | null }> {
   private fileInput: HTMLInputElement | null = null;
 
-  public componentWillReceiveProps(nextProps: FileUploadProps) {
+  // TODO: refactor deprecated react methods
+  public UNSAFE_componentWillReceiveProps(nextProps: FileUploadProps) {
     if (nextProps.value !== this.props.value && nextProps.value === null && this.fileInput) {
       this.fileInput.value = "";
     }
@@ -55,7 +55,8 @@ interface MultipleFileUploadProps {
 export class MulipleFileUpload extends React.Component<MultipleFileUploadProps> {
   private fileInput: HTMLInputElement | null = null;
 
-  public componentWillReceiveProps(nextProps: MultipleFileUploadProps) {
+  // TODO: refactor deprecated react methods
+  public UNSAFE_componentWillReceiveProps(nextProps: MultipleFileUploadProps) {
     if (this.fileInput && this.fileInput.value && (!nextProps.value || !nextProps.value.length)) {
       this.fileInput.value = "";
     }
@@ -71,7 +72,7 @@ export class MulipleFileUpload extends React.Component<MultipleFileUploadProps> 
         disabled={this.props.disabled}
         onChange={e => this.handleChange(e)}
         onBlur={e => this.handleChange(e)}
-        multiple={true}
+        multiple
         ref={ref => this.fileInput = ref}
       />
     );

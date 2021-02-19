@@ -1,11 +1,11 @@
 import { IAppError, PartnerDto, PartnerStatus, ProjectDto, ProjectStatus } from "@framework/types";
 import { CombinedResultsValidator, Results } from "@ui/validation";
+import { useContent } from "@ui/hooks";
 import { AriaLive } from "../renderers/ariaLive";
 import { ErrorSummary } from "../errorSummary";
-import { Section } from "./section";
 import { ValidationSummary } from "../validationSummary";
 import { ValidationMessage } from "../validationMessage";
-import { useContent } from "@ui/hooks";
+import { Section } from "./section";
 
 export type PageValidationProjectStatus = ProjectDto["status"];
 export type PageValidationPartnerStatus = PartnerDto["partnerStatus"];

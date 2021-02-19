@@ -25,12 +25,11 @@ export abstract class BaseInput<TProps extends { debounce?: boolean }, TState> e
         }
     }
 
-    protected debounce(action: () => void, allowDebounce: boolean, timeout: number = 250) {
+    protected debounce(action: () => void, allowDebounce: boolean, timeout = 250) {
         this.cancelTimeout();
         if (allowDebounce === false || this.props.debounce === false) {
             action();
-        }
-        else {
+        } else {
             this.timeoutId = window.setTimeout(action, timeout);
         }
     }

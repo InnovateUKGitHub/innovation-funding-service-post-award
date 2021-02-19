@@ -1,5 +1,4 @@
 import { chunks, NavigationCard, NavigationCardProps, NavigationCardsGrid } from "@ui/components";
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 import TestBed from "@shared/TestBed";
 import { findByQa } from "./helpers/find-by-qa";

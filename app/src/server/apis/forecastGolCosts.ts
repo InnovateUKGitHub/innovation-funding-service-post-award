@@ -1,7 +1,7 @@
-import { ApiParams, ControllerBase } from "./controllerBase";
+import { GOLCostDto } from "@framework/dtos";
 import { GetAllForecastsGOLCostsQuery } from "../features/claims/getAllForecastGOLCostsQuery";
 import contextProvider from "../features/common/contextProvider";
-import { GOLCostDto } from "@framework/dtos";
+import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface IForecastGolCostsApi {
   getAllByPartnerId: (params: ApiParams<{partnerId: string}>) => Promise<GOLCostDto[]>;

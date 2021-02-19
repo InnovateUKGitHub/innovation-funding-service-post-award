@@ -1,6 +1,6 @@
 import { ClaimDto, PartnerDto } from "@framework/types";
-import { ShortDateRange } from "../renderers/date";
 import { getPartnerName, PartnerName } from "@ui/components";
+import { ShortDateRange } from "../renderers/date";
 
 export interface ClaimPeriodProps {
   claim: Pick<ClaimDto, "periodId" | "periodStartDate" | "periodEndDate">;

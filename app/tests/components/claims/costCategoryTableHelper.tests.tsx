@@ -1,4 +1,3 @@
-// tslint:disable: no-duplicate-string no-big-function
 import {
   CategoryInfoProps,
   ClaimInfoProps,

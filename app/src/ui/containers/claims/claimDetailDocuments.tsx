@@ -1,4 +1,3 @@
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { DocumentDescription, ProjectDto, ProjectRole } from "@framework/types";
@@ -9,6 +8,7 @@ import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { useContent } from "@ui/hooks";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 export interface ClaimDetailDocumentsPageParams {
   projectId: string;
@@ -98,7 +98,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
               <UploadForm.Hidden name="description" value={dto => dto.description}/>
               <UploadForm.MulipleFileUpload
                 labelContent={x => x.claimDetailDocuments.documentMessages.uploadDocumentsLabel}
-                labelHidden={true}
+                labelHidden
                 name="attachment"
                 validation={editor.validator.files}
                 value={(data) => data.files}

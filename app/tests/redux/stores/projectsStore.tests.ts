@@ -1,6 +1,6 @@
-import { TestContext } from "../../server/testContextProvider";
 import { SalesforceProjectRole } from "@server/repositories";
 import { ProjectsStore } from "@ui/redux/stores";
+import { TestContext } from "../../server/testContextProvider";
 
 const createTestData = async (context: TestContext) => {
   const testStore = context.testStore;
@@ -57,7 +57,6 @@ describe("Projects Store", () => {
       expect(projects).toHaveLength(1);
       expect(projects[0].id).toBe(testData[1].project.Id);
     });
-    // tslint:disable-next-line:no-identical-functions
     it("should ignore case",  async () => {
       const context = new TestContext();
       const testData = await createTestData(context);
@@ -74,7 +73,6 @@ describe("Projects Store", () => {
       expect(projects).toHaveLength(1);
       expect(projects[0].id).toBe(testData[2].project.Id);
     });
-    // tslint:disable-next-line:no-identical-functions
     it("should filter by lead partner name",  async () => {
       const context = new TestContext();
       const testData = await createTestData(context);
@@ -83,7 +81,6 @@ describe("Projects Store", () => {
       expect(projects).toHaveLength(1);
       expect(projects[0].id).toBe(testData[0].project.Id);
     });
-    // tslint:disable-next-line:no-identical-functions
     it("should return no results if there are no matches",  async () => {
       const context = new TestContext();
       await createTestData(context);
@@ -91,8 +88,7 @@ describe("Projects Store", () => {
       const projects = projectsStore.getProjectsFilter("Zelda").data!;
       expect(projects).toHaveLength(0);
     });
-    // tslint:disable-next-line:no-identical-functions
-    it("should return all the results if no search string is passed in",  async () => {
+    it("should return all the results if no search string is passed in", async () => {
       const context = new TestContext();
       await createTestData(context);
       const projectsStore = new ProjectsStore(context.testStore.getState, context.testStore.dispatch);

@@ -6,7 +6,6 @@ import * as hooksModule from "@ui/hooks";
 import { Accordion, AccordionItem, AccordionProps } from "../../src/ui/components";
 
 // TODO: Add this to linting config, tests are naturally going to be verbose to make this easier to read
-// tslint:disable: no-duplicate-string
 describe("<Accordion />", () => {
   const isClientSpy = jest.spyOn(hooksModule, "useIsClient");
 

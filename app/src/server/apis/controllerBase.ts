@@ -1,3 +1,4 @@
+/* global Express */
 import mimeTypes from "mime-types";
 import multer from "multer";
 import express, { Request, Response } from "express";
@@ -134,7 +135,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
   private executeMethod<TParams, TResponse>(successStatus: number, getParams: InnerGetParams<TParams>, run: Run<TParams, TResponse | null>, allowNulls: boolean) {
     return async (req: Request, resp: Response) => {
 
-      const p = Object.assign({ user: req.session!.user as ISessionUser }, getParams(req.params || {}, req.query || {}, req.body || {}, req));
+      const p = Object.assign({ user: req.session!.user as ISessionUser }, getParams(req.params || {}, req.query as RequestQueryParams || {}, req.body || {}, req));
 
       run(p)
         .then(result => {
@@ -149,7 +150,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
 
   private attachmentHandler<TParams>(successStatus: number, getParams: GetParams<TParams>, run: Run<TParams, DocumentDto | null>) {
     return async (req: Request, resp: Response) => {
-      const p = Object.assign({ user: req.session!.user as ISessionUser }, getParams(req.params || {}, req.query || {}, req.body || {}));
+      const p = Object.assign({ user: req.session!.user as ISessionUser }, getParams(req.params || {}, req.query as RequestQueryParams|| {}, req.body || {}));
       run(p)
         .then(result => {
           if (result === null || result === undefined) {

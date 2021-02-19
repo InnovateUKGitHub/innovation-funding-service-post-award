@@ -1,9 +1,9 @@
-import * as Validation from "./common";
-import { Results } from "../validation/results";
 import { BankCheckStatus, BankDetailsTaskStatus, PartnerDto, PartnerStatus, SpendProfileStatus } from "@framework/dtos";
 import { Result } from "@ui/validation";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { DocumentDescription } from "@framework/constants";
+import { Results } from "../validation/results";
+import * as Validation from "./common";
 
 export class PartnerDtoValidator extends Results<PartnerDto> {
 
@@ -12,9 +12,9 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
         private readonly original: PartnerDto,
         private readonly partnerDocuments: DocumentSummaryDto[],
         private readonly options: {
-            showValidationErrors: boolean,
-            validateBankDetails?: boolean,
-            failBankValidation?: boolean
+            showValidationErrors: boolean;
+            validateBankDetails?: boolean;
+            failBankValidation?: boolean;
         }
     ) {
         super(model, options.showValidationErrors);
@@ -100,7 +100,7 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
         () => Validation.accountNumber(this, this.model.bankDetails.accountNumber, "Please enter a valid account number")
     ), this.original.bankCheckStatus === BankCheckStatus.NotValidated);
 
-    private conditionallyValidateBankDetails(test: () => Result, condition: boolean = true) {
+    private conditionallyValidateBankDetails(test: () => Result, condition = true) {
         if (condition && this.options.validateBankDetails) {
             return test();
         }

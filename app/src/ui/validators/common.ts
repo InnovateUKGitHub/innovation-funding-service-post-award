@@ -1,9 +1,8 @@
-// tslint:disable:no-duplicate-string
 import { DateTime } from "luxon";
+import { dayComparator, isNumber } from "@framework/util";
 import { Results } from "../validation/results";
 import { Result } from "../validation/result";
 import { Nested, NestedResult } from "../validation/nestedResult";
-import { dayComparator, isNumber } from "@framework/util";
 
 // A helper for creating validation rules
 function rule<T>(test: (value: T | null) => boolean, defaultMessage: string, isRequired?: boolean): (results: Results<{}>, value: T | null, message?: string) => Result {
@@ -102,7 +101,7 @@ export function accountNumber(results: Results<{}>, value: string | null, messag
 
 export function email(results: Results<{}>, value: string, message?: string) {
   // http://stackoverflow.com/questions/46155/validate-email-address-in-javascript
-  const regex = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+  const regex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
   return isTrue(results, (!value) || regex.test(value), message || "Invalid email address");
 }
 
@@ -122,17 +121,17 @@ export function isPositiveFloat(results: Results<{}>,value: number | null, messa
   return isPositiveInteger(results, isCurrencyValue, message || "You must put a positive currency value");
 }
 
-// tslint:disable-next-line: no-identical-functions
 export function isPercentage(results: Results<{}>, value: number | null, message?: string) {
   const regex = /^[0-9]+(\.[0-9]{1,2})?$/i;
-  if (value === null || value === undefined || value === 0) { return valid(results); }
+  if (value === null || value === undefined || value === 0) {
+ return valid(results);
+}
   return isTrue(results, !isNaN(value) && regex.test(value.toString()), message || "You must enter a number with up to 2 decimal places");
 }
 
 // Accepts an array of delegates. Runs until it finds a failure. EG, Not empty, length < 100, no spaces. Will fail fast.
 export function all(resultSet: Results<{}>, ...results: (() => Result)[]): Result {
   let isRequired = false;
-  // tslint:disable-next-line
   for (let i = 0; i < results.length; i++) {
     const result = results[i]();
     // this logic presumes that the "isRequired" is set as the first validation. If it is the last one it won't be shown until prev are valid
@@ -212,7 +211,6 @@ export class ChildValidators<T> {
 
   public all(...results: (() => Result)[]) {
     let isRequired = false;
-    // tslint:disable-next-line
     for (let i = 0; i < results.length; i++) {
       const result = results[i]();
       // this logic presumes that the is required is set as the first validation. If it sthe last one it wont be shown untill prev are valid

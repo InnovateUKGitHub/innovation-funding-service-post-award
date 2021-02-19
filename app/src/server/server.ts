@@ -1,8 +1,16 @@
-import express from "express";
 import https from "https";
 import fs from "fs";
+import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
+import { IContext, PermissionGroupIdenfifier } from "@framework/types";
+import { GetClaimStatusesQuery } from "@server/features/claims/getClaimStatusesQuery";
+import { GetPcrProjectRolesQuery } from "@server/features/pcrs/getPcrProjectRolesQuery";
+import { GetPcrPartnerTypesQuery } from "@server/features/pcrs/getPcrPartnerTypesQuery";
+import { GetPcrParticipantSizesQuery } from "@server/features/pcrs/getPcrParticipantSizesQuery";
+import { GetPcrProjectLocationsQuery } from "@server/features/pcrs/getPcrProjectLocationsQuery";
+import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
+import { v4 as uuidv4 } from "uuid";
 import { Configuration, Logger } from "./features/common";
 import { allowCache, noCache, setOwaspHeaders } from "./cacheHeaders";
 import { router as healthRouter } from "./health";
@@ -11,21 +19,13 @@ import { router as authRouter } from "./auth";
 import { router } from "./router";
 import contextProvider from "./features/common/contextProvider";
 import { GetPermissionGroupQuery } from "./features/general/getPermissionGroupsQuery";
-import { IContext, PermissionGroupIdenfifier } from "@framework/types";
 import { GetAllRecordTypesQuery } from "./features/general/getAllRecordTypesQuery";
 import { GetCostCategoriesQuery } from "./features/claims";
-import { GetClaimStatusesQuery } from "@server/features/claims/getClaimStatusesQuery";
 import { GetMonitoringReportStatusesQuery } from "./features/monitoringReports/getMonitoringReportStatusesQuery";
 import { GetPcrStatusesQuery } from "./features/pcrs/getPcrStatusesQuery";
 import { initInternationalisation, internationalisationRouter } from "./internationalisation";
 import { InitialiseContentCommand } from "./features/general/initialiseContentCommand";
-import { GetPcrProjectRolesQuery } from "@server/features/pcrs/getPcrProjectRolesQuery";
-import { GetPcrPartnerTypesQuery } from "@server/features/pcrs/getPcrPartnerTypesQuery";
-import { GetPcrParticipantSizesQuery } from "@server/features/pcrs/getPcrParticipantSizesQuery";
-import { GetPcrProjectLocationsQuery } from "@server/features/pcrs/getPcrProjectLocationsQuery";
 import { GetPcrSpendProfileCapitalUsageTypesQuery } from "./features/pcrs/getPcrSpendProfileCapitalUsageTypesQuery";
-import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
-import { v4 as uuidv4 } from "uuid";
 
 export class Server {
   private readonly app: express.Express;
@@ -94,7 +94,7 @@ export class Server {
   private readonly requestLogger = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     this.log.debug("request", req.url, req.method);
     next();
-  }
+  };
 
   private readonly handleGetWithPlus = (req: express.Request, res: express.Response, next: express.NextFunction) => {
     /// pluses don't get handled by router 5 when round tripped
@@ -102,11 +102,10 @@ export class Server {
     /// when js is enabled router 5 handles it
     if (req.method === "GET" && req.url.match(/\+/)) {
       res.redirect(req.url.replace(/\+/g, "%20"));
-    }
-    else {
+    } else {
       next();
     }
-  }
+  };
 
   private routing() {
     this.app.use((req, res, next) => {

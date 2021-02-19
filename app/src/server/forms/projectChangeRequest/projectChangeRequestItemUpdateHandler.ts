@@ -77,15 +77,13 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       if (body.suspensionStartDate_month || body.suspensionStartDate_year) {
         const suspensionStartDate = DateTime.fromFormat(`${body.suspensionStartDate_month}/${body.suspensionStartDate_year}`, "M/yyyy").startOf("month").startOf("day");
         item.suspensionStartDate = suspensionStartDate.toJSDate();
-      }
-      else {
+      } else {
         item.suspensionStartDate = null;
       }
       if (body.suspensionEndDate_month || body.suspensionEndDate_year) {
         const suspensionEndDate = DateTime.fromFormat(`${body.suspensionEndDate_month}/${body.suspensionEndDate_year}`, "M/yyyy").endOf("month").startOf("day");
         item.suspensionEndDate = suspensionEndDate.toJSDate();
-      }
-      else {
+      } else {
         item.suspensionEndDate = null;
       }
     }
@@ -153,7 +151,6 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     }
   }
 
-  // tslint:disable-next-line:cognitive-complexity
   private updatePartnerAddition(project: ProjectDto, costCategories: CostCategoryDto[], item: PCRItemForPartnerAdditionDto, body: IFormBody, stepName: addPartnerStepNames | null) {
     if (stepName === "roleAndOrganisationStep") {
       item.projectRole = parseInt(body.projectRole, 10);

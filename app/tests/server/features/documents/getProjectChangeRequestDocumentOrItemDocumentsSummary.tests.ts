@@ -1,4 +1,3 @@
-// tslint:disable no-duplicate-string
 import * as Entites from "@framework/entities";
 import { Authorisation, DocumentDescription, ProjectRole } from "@framework/types";
 import { GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery } from "@server/features/documents/getProjectChangeRequestDocumentOrItemDocumentsSummary";

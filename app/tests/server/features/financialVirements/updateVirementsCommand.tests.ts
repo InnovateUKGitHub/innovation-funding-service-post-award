@@ -1,8 +1,8 @@
 
+import { ValidationError } from "@server/features/common";
 import { TestContext } from "../../testContextProvider";
 import { GetFinancialVirementQuery } from "../../../../src/server/features/financialVirements/getFinancialVirementQuery";
 import { UpdateFinancialVirementCommand } from "../../../../src/server/features/financialVirements/updateFinancialVirementCommand";
-import { ValidationError } from "@server/features/common";
 
 describe("UpdateFinancialVirementCommand", () => {
   it("handles no changes", async () => {

@@ -49,7 +49,7 @@ export class TravelAndSubsFormComponent extends Component<SpendProfileCostFormPr
           />
           {this.props.isClient && <Form.Custom
             labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.totalCost}
-            labelBold={true}
+            labelBold
             name="totalCost"
             value={dto => <ACC.Renderers.SimpleString><ACC.Renderers.Currency value={dto.value}/></ACC.Renderers.SimpleString>}
             update={() => null}

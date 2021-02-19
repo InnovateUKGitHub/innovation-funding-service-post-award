@@ -58,7 +58,6 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
 
     return displayBackLink ? (
       // Note: This has been added as the content component cannot infer the static string length of min 4 characters
-      // tslint:disable-next-line: react-a11y-anchors
       <a className="govuk-back-link" href={`${config.ifsRoot}/dashboard-selection`}>
         <ACC.Content value={x => x.projectsDashboard.backToDashboard} />
       </a>

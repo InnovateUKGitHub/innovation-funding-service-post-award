@@ -90,7 +90,7 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
     );
   }
 
-  private renderFooterRow(row: { key: string, title: React.ReactNode, value: React.ReactNode, qa: string, isBold?: boolean }) {
+  private renderFooterRow(row: { key: string; title: React.ReactNode; value: React.ReactNode; qa: string; isBold?: boolean }) {
     return (
       <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
         <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{row.title}</th>
@@ -121,13 +121,13 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
       <Table.Table qa="costs" data={costs} footers={footers}>
         <Table.String headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels.description} value={x => x.description} qa={"description"}/>
         <Table.Currency headerContent={x => x.pcrSpendProfileCostsSummaryContent.labels.cost} value={x => x.value} qa={"cost"}/>
-        <Table.Custom qa="links" header="Links" hideHeader={true} value={x => this.renderLinks(this.props.itemId, x.id, this.props.costCategoryId, this.props.projectId, this.props.pcrId)} />
+        <Table.Custom qa="links" header="Links" hideHeader value={x => this.renderLinks(this.props.itemId, x.id, this.props.costCategoryId, this.props.projectId, this.props.pcrId)} />
       </Table.Table>
     );
   }
 
   private renderLinks(itemId: string, costId: string, costCategoryId: string, projectId: string, pcrId: string) {
-    const links: { route: ILinkInfo, text: React.ReactNode, qa: string; }[] = [];
+    const links: { route: ILinkInfo; text: React.ReactNode; qa: string }[] = [];
     links.push({route: this.props.routes.pcrPrepareSpendProfileEditCost.getLink({itemId, costId, costCategoryId, projectId, pcrId}), text: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.editCostButton} />, qa:"edit"});
     links.push({route: this.props.routes.pcrPrepareSpendProfileDeleteCost.getLink({itemId, costId, costCategoryId, projectId, pcrId}), text: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.removeCostButton} />, qa:"remove"});
 

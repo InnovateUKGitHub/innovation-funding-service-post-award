@@ -19,6 +19,7 @@ export class VirementPartnerCostsUpdateHandler extends StandardFormHandlerBase<F
     }
 
     virementDto.partners.forEach(partner => {
+      // eslint-disable-next-line no-prototype-builtins
       if (!body.hasOwnProperty(partner.partnerId)) return;
 
       const val = parseFloat(body[partner.partnerId]);

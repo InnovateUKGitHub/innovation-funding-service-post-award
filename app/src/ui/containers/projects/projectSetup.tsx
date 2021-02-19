@@ -1,10 +1,10 @@
 import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import * as ACC from "../../components";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import * as Dtos from "@framework/dtos";
 import { BankCheckStatus, BankDetailsTaskStatus, PartnerStatus } from "@framework/dtos";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
+import * as ACC from "../../components";
 
 export interface ProjectSetupParams {
   projectId: string;

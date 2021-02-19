@@ -1,18 +1,17 @@
-// tslint:disable:max-classes-per-file
 import React from "react";
+import classNames from "classnames";
+import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { ContentSelector } from "@content/content";
+import { Result } from "@ui/validation";
+import * as colour from "../styles/colours";
+import { Results } from "../validation/results";
 import { FullDate, ShortDate, ShortDateTime } from "./renderers/date";
 import { Email } from "./renderers/email";
 import { Currency } from "./renderers/currency";
-import classNames from "classnames";
 import { Percentage } from "./renderers/percentage";
 import { Link } from "./links";
-import * as colour from "../styles/colours";
-import { Results } from "../validation/results";
-import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { AccessibilityText } from "./renderers/accessibilityText";
-import { ContentSelector } from "@content/content";
 import { Content } from "./content";
-import { Result } from "@ui/validation";
 
 export type dividerTypes = "normal" | "bold";
 type columnMode = "cell" | "header" | "footer" | "col";
@@ -22,9 +21,9 @@ interface InternalColumnProps<T> {
   dataItem?: T;
   footer?: React.ReactNode;
   classSuffix?: "numeric";
-  cellClassName?: (data: T, index: { column: number, row: number }) => string | null | undefined;
+  cellClassName?: (data: T, index: { column: number; row: number }) => string | null | undefined;
   colClassName?: (col: number) => string;
-  renderCell: (data: T, index: { column: number, row: number }) => React.ReactNode;
+  renderCell: (data: T, index: { column: number; row: number }) => React.ReactNode;
   mode?: columnMode;
   rowIndex?: number;
   columnIndex?: number;
@@ -39,8 +38,8 @@ interface InternalColumnProps<T> {
 interface ExternalColumnProps<T, TResult> {
   header?: React.ReactNode;
   headerContent?: ContentSelector;
-  value: (item: T, index: { column: number, row: number }) => TResult;
-  cellClassName?: (data: T, index: { column: number, row: number }) => string | null | undefined;
+  value: (item: T, index: { column: number; row: number }) => TResult;
+  cellClassName?: (data: T, index: { column: number; row: number }) => string | null | undefined;
   colClassName?: (col: number) => string;
   footer?: React.ReactNode;
   qa: string;
@@ -129,7 +128,7 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
   }
 }
 
-const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; validationResult?: Results<{}>[]; }) => {
+const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; validationResult?: Results<{}>[] }) => {
   const standardRowCssClass = "govuk-table__row";
   // loop through the colums cloning them and assigning the props required
   const children = React.Children.toArray(props.children).filter(x => !!x);
@@ -177,7 +176,7 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
   return (
     <div data-qa={props.qa} style={{ overflowX: "auto" }}>
       <table className={classNames("govuk-table", props.className)}>
-        {!!props.caption ? <caption className="govuk-visually-hidden">{props.caption}</caption> : null}
+        {props.caption ? <caption className="govuk-visually-hidden">{props.caption}</caption> : null}
         <colgroup>
           {cols}
         </colgroup>
@@ -199,37 +198,37 @@ const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; valida
 };
 
 const CustomColumn = <T extends {}>(props: ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }) => {
-  const TypedColumn = TableColumn as { new(): TableColumn<T> };
+  const TypedColumn = TableColumn as new() => TableColumn<T>;
   return <TypedColumn paddingRight={props.paddingRight} renderCell={(data, index) => props.value(data, index)} {...props} />;
 };
 
 const StringColumn = <T extends {}>(props: ExternalColumnProps<T, string | null>) => {
-  const TypedColumn = TableColumn as { new(): TableColumn<T> };
+  const TypedColumn = TableColumn as new() => TableColumn<T>;
   return <TypedColumn renderCell={(data, index) => props.value(data, index)} {...props} />;
 };
 
 const NumberColumn = <T extends {}>(props: ExternalColumnProps<T, number | null>) => {
-  const TypedColumn = TableColumn as { new(): TableColumn<T> };
+  const TypedColumn = TableColumn as new() => TableColumn<T>;
   return <TypedColumn classSuffix="numeric" renderCell={(data, index) => props.value(data, index)} {...props} />;
 };
 
 const FullDateColumn = <T extends {}>(props: ExternalColumnProps<T, Date | null>) => {
-  const TypedColumn = TableColumn as { new(): TableColumn<T> };
+  const TypedColumn = TableColumn as new() => TableColumn<T>;
   return <TypedColumn renderCell={(data, index) => <FullDate value={props.value(data, index)} />} {...props} />;
 };
 
 const ShortDateColumn = <T extends {}>(props: ExternalColumnProps<T, Date | null>) => {
-  const TypedColumn = TableColumn as { new(): TableColumn<T> };
+  const TypedColumn = TableColumn as new() => TableColumn<T>;
   return <TypedColumn renderCell={(data, index) => <ShortDate value={props.value(data, index)} />} {...props} />;
 };
 
 const ShortDateTimeColumn = <T extends {}>(props: ExternalColumnProps<T, Date | null>) => {
-  const TypedColumn = TableColumn as { new(): TableColumn<T> };
+  const TypedColumn = TableColumn as new() => TableColumn<T>;
   return <TypedColumn renderCell={(data, index) => <ShortDateTime value={props.value(data, index)} />} {...props} />;
 };
 
 const EmailColumn = <T extends {}>(props: ExternalColumnProps<T, string | null>) => {
-  const TypedColumn = TableColumn as { new (): TableColumn<T> };
+  const TypedColumn = TableColumn as new () => TableColumn<T>;
 
   return (
     <TypedColumn
@@ -243,12 +242,12 @@ const EmailColumn = <T extends {}>(props: ExternalColumnProps<T, string | null>)
 };
 
 const CurrencyColumn = <T extends {}>(props: ExternalColumnProps<T, number | null> & { fractionDigits?: number }) => {
-  const TypedColumn = TableColumn as { new(): TableColumn<T> };
+  const TypedColumn = TableColumn as new() => TableColumn<T>;
   return <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Currency value={props.value(data, index)} fractionDigits={props.fractionDigits} />} {...props} />;
 };
 
 const PercentageColumn = <T extends {}>(props: ExternalColumnProps<T, number | null> & { fractionDigits?: number }) => {
-  const TypedColumn = TableColumn as { new(): TableColumn<T> };
+  const TypedColumn = TableColumn as new() => TableColumn<T>;
   return <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Percentage value={props.value(data, index)} fractionDigits={props.fractionDigits} />} {...props} />;
 };
 
@@ -257,7 +256,7 @@ interface LinkColumnProps<T> extends ExternalColumnProps<T, ILinkInfo> {
 }
 
 const LinkColumn = <T extends {}>(props: LinkColumnProps<T>) => {
-  const TypedColumn = TableColumn as { new(): TableColumn<T> };
+  const TypedColumn = TableColumn as new() => TableColumn<T>;
   return <TypedColumn renderCell={(data, index) => <Link route={props.value(data, index)} >{props.content}</Link>} {...props} />;
 };
 

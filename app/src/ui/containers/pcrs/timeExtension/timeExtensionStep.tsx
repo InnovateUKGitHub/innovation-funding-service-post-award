@@ -6,7 +6,7 @@ import { PCRTimeExtensionItemDtoValidator } from "@ui/validators";
 import { useContent } from "@ui/hooks";
 
 export const TimeExtensionStep = (props: PcrStepProps<PCRItemForTimeExtensionDto, PCRTimeExtensionItemDtoValidator>) => {
-  const { getContent } = useContent();
+  const {getContent} = useContent();
 
   const Form = ACC.TypedForm<PCRItemForTimeExtensionDto>();
   const newProjectDuration = props.pcrItem.additionalMonths || props.pcrItem.additionalMonths === 0 ? props.pcrItem.additionalMonths + props.pcrItem.projectDurationSnapshot : null;
@@ -28,20 +28,74 @@ export const TimeExtensionStep = (props: PcrStepProps<PCRItemForTimeExtensionDto
         qa="itemStatus"
       >
         <Form.Fieldset heading={existingProjectHeading}>
-        <Form.Custom label={dateLabel} name="currentDates" value={(m) => <ACC.Renderers.SimpleString><ACC.Renderers.ShortDateRangeFromDuration startDate={props.project.startDate} months={m.projectDurationSnapshot} /></ACC.Renderers.SimpleString>} update={() => { return; }} />
-          <Form.Custom label={durationLabel} name="currentDuration" value={(m) => <ACC.Renderers.SimpleString><ACC.Renderers.Months months={m.projectDurationSnapshot} /></ACC.Renderers.SimpleString>} update={() => { return; }} />
+          <Form.Custom
+            label={dateLabel}
+            name="currentDates"
+            value={m => (
+              <ACC.Renderers.SimpleString>
+                <ACC.Renderers.ShortDateRangeFromDuration
+                  startDate={props.project.startDate}
+                  months={m.projectDurationSnapshot}
+                />
+              </ACC.Renderers.SimpleString>
+            )}
+            update={() => {
+              return;
+            }}
+          />
+          <Form.Custom
+            label={durationLabel}
+            name="currentDuration"
+            value={m => (
+              <ACC.Renderers.SimpleString>
+                <ACC.Renderers.Months months={m.projectDurationSnapshot} />
+              </ACC.Renderers.SimpleString>
+            )}
+            update={() => {
+              return;
+            }}
+          />
         </Form.Fieldset>
         <Form.Fieldset heading={proposedProjectHeading}>
           <Form.Numeric
             name="timeExtension"
             hint={props.getRequiredToCompleteMessage(timeExtensionHint)}
             width={3}
-            value={m => m.additionalMonths }
-            update={(m, val) => m.additionalMonths = val}
+            value={m => m.additionalMonths}
+            update={(m, val) => (m.additionalMonths = val)}
             validation={props.validator.additionalMonths}
           />
-        {props.isClient && <Form.Custom label={dateLabel} name="proposedDates" value={() => <ACC.Renderers.SimpleString><ACC.Renderers.ShortDateRangeFromDuration startDate={props.project.startDate} months={newProjectDuration} /></ACC.Renderers.SimpleString>} update={() => { return; }} />}
-          {props.isClient && <Form.Custom label={durationLabel} name="proposedDuration" value={() => <ACC.Renderers.SimpleString><ACC.Renderers.Months months={newProjectDuration} /></ACC.Renderers.SimpleString>} update={() => { return; }} />}
+          {props.isClient && (
+            <Form.Custom
+              label={dateLabel}
+              name="proposedDates"
+              value={() => (
+                <ACC.Renderers.SimpleString>
+                  <ACC.Renderers.ShortDateRangeFromDuration
+                    startDate={props.project.startDate}
+                    months={newProjectDuration}
+                  />
+                </ACC.Renderers.SimpleString>
+              )}
+              update={() => {
+                return;
+              }}
+            />
+          )}
+          {props.isClient && (
+            <Form.Custom
+              label={durationLabel}
+              name="proposedDuration"
+              value={() => (
+                <ACC.Renderers.SimpleString>
+                  <ACC.Renderers.Months months={newProjectDuration} />
+                </ACC.Renderers.SimpleString>
+              )}
+              update={() => {
+                return;
+              }}
+            />
+          )}
         </Form.Fieldset>
         <Form.Fieldset>
           <Form.Submit>{saveAndContinue}</Form.Submit>

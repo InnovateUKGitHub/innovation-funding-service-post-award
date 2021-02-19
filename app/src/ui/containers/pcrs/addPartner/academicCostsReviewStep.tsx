@@ -30,7 +30,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           costDto: this.props.pcrItem.spendProfile.costs.find(x => x.costCategoryId === costCategory.id) as PCRSpendProfileAcademicCostDto
         };
       }).filter(x => !!x);
-    const total = sum(data, x => (!!x.costDto ? x.costDto.value : 0) || 0);
+    const total = sum(data, x => (x.costDto ? x.costDto.value : 0) || 0);
 
     const Table = ACC.TypedTable<Data>();
 

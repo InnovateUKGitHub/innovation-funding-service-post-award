@@ -1,5 +1,5 @@
-import { StoreBase } from "./storeBase";
 import { removeMessages } from "../actions";
+import { StoreBase } from "./storeBase";
 
 export class MessagesStore extends StoreBase {
   public messages() {

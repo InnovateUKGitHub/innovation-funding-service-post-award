@@ -1,7 +1,7 @@
-import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
-import { ILogger } from "../features/common";
 import { Connection } from "jsforce";
 import { IPicklistEntry } from "@framework/types";
+import { ILogger } from "../features/common";
+import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 
 export type ISalesforceMonitoringReportStatus = "New" | "Draft" | "Awaiting IUK Approval" | "Approved" | "IUK Queried";
 export interface ISalesforceMonitoringReportHeader {

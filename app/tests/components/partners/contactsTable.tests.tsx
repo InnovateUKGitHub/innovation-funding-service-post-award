@@ -1,8 +1,5 @@
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
-import { getColumnValues } from "../helpers/tableHelpers";
-import { findByQa } from "../helpers/find-by-qa";
 import { ProjectContactLabels } from "@content/labels/projectContactLabels";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { StoresProvider } from "@ui/redux";
@@ -11,6 +8,8 @@ import {
   IContactsTable,
 } from "@ui/components/partners/contactsTable";
 import { ProjectContactDto } from "@framework/dtos";
+import { findByQa } from "../helpers/find-by-qa";
+import { getColumnValues } from "../helpers/tableHelpers";
 
 const TestProviders: React.FunctionComponent = (props) => {
   const testStores = {

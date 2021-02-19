@@ -1,6 +1,6 @@
+import { PCRScopeChangeLabels } from "@content/labels/pcrScopeChangeLabels";
 import { ContentPageBase } from "../../../contentPageBase";
 import { Content } from "../../../content";
-import { PCRScopeChangeLabels } from "@content/labels/pcrScopeChangeLabels";
 
 export class PCRScopeChangeSummaryContent extends ContentPageBase {
   constructor(content: Content, protected competitionType?: string) {

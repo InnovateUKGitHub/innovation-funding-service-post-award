@@ -1,5 +1,5 @@
-import { TestContext } from "../../testContextProvider";
 import { GetCostCategoriesForPartnerQuery } from "@server/features/claims/getCostCategoriesForPartnerQuery";
+import { TestContext } from "../../testContextProvider";
 
 describe("GetCostCategoriesForPartnerQuery", () => {
   it("returns cost categories filtered by project competitionType", async () => {

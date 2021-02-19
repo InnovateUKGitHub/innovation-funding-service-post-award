@@ -1,7 +1,6 @@
-// tslint:disable:no-identical-functions no-duplicate-string
-import { TestContext } from "../../testContextProvider";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { PCRItemType } from "@framework/constants";
+import { TestContext } from "../../testContextProvider";
 
 describe("GetPCRItemTypesQuery", () => {
   test("returns all item types", async () => {

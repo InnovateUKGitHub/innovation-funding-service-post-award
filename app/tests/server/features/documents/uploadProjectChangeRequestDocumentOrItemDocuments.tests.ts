@@ -1,4 +1,3 @@
-// tslint:disable: no-identical-functions no-duplicate-string
 import * as Entites from "@framework/entities";
 import { Authorisation, ProjectRole } from "@framework/types";
 import { DocumentDescription } from "@framework/constants";

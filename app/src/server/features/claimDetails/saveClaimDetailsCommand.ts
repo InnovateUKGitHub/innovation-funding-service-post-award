@@ -27,8 +27,7 @@ export class SaveClaimDetails extends CommandBase<boolean> {
     const costCategory = await context.runQuery(new GetCostCategoriesQuery()).then(x => x.find(y => y.id === this.costCategoryId));
     if (!costCategory) {
       throw new BadRequestError("Invalid cost category specified");
-    }
-    else if (costCategory.isCalculated) {
+    } else if (costCategory.isCalculated) {
       throw new BadRequestError("Invalid calculated cost category specified");
     }
 
@@ -108,8 +107,7 @@ export class SaveClaimDetails extends CommandBase<boolean> {
         Acc_CostCategory__c: this.costCategoryId,
         Acc_PeriodCostCategoryTotal__c: 0
       });
-    }
-    else if (existing.Acc_ReasonForDifference__c !== claimDetail.comments) {
+    } else if (existing.Acc_ReasonForDifference__c !== claimDetail.comments) {
       context.logger.info("Updating existing claim detail", key, existing.Id);
       await context.repositories.claimDetails.update({
         Id: existing.Id,

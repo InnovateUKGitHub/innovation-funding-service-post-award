@@ -1,7 +1,7 @@
 import React from "react";
 import cx from "classnames";
-import { GovWidthContainer } from "./GovWidthContainer";
 import { ExternalLink } from "../renderers";
+import { GovWidthContainer } from "./GovWidthContainer";
 import { CrownCopyrightLogo } from "./crownCopyrightLogo";
 
 import { FooterLinks, useExternalContent } from "./footer.config";
@@ -18,7 +18,7 @@ export const Footer = ({ links }: FooterProps) => {
       <GovWidthContainer>
         <div className="govuk-footer__meta">
           <div className="govuk-footer__meta-item govuk-footer__meta-item--grow">
-            <h2 className="govuk-visually-hidden" {...content.title} />
+            <h2 className="govuk-visually-hidden" {...content.title}>{content.title.children}</h2>
 
             <ul className="govuk-footer__inline-list">
               {links.map(({ text, ...linkProps }) => (
@@ -60,8 +60,7 @@ export const Footer = ({ links }: FooterProps) => {
   );
 };
 
-type FooterLink = React.AnchorHTMLAttributes<{}>;
-
-function FooterLink({ className, ...props }: FooterLink) {
+// TODO: this typing issue needs to be addressed
+function FooterLink({ className, ...props }: any) {
   return <ExternalLink className={cx("govuk-footer__link", className)} {...props} />;
 }

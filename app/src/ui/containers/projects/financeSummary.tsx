@@ -64,14 +64,14 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data, Callbacks> {
       <>
         <ACC.Section title={costToDateTitle}>
           <FinanceSummaryTable.Table data={partnersToShow} qa="ProjectCostsToDate" footers={this.renderTotalValueFooters(project, partners)}>
-            <FinanceSummaryTable.Custom headerContent={x => x.financeSummary.projectLabels.partner} hideHeader={true} qa="Partner" value={x => <ACC.PartnerName partner={x} showIsLead={true} />} />
+            <FinanceSummaryTable.Custom headerContent={x => x.financeSummary.projectLabels.partner} hideHeader qa="Partner" value={x => <ACC.PartnerName partner={x} showIsLead />} />
             <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalEligibleCosts} qa="TotalEligibleCosts" value={x => x.totalParticipantGrant} />
             <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalEligibleCostsClaimed} qa="CostsClaimedToDate" value={x => x.totalCostsSubmitted} />
             <FinanceSummaryTable.Percentage headerContent={x => x.financeSummary.projectLabels.percentageEligibleCostsClaimed} qa="PercentageOfCostsClaimedToDate" value={x => x.percentageParticipantCostsSubmitted} />
           </FinanceSummaryTable.Table>
           <ACC.Section title={partnerFinanceDetailsTitle}>
             <FinanceSummaryTable.Table data={partnersToShow} qa="PartnerFinanceDetails">
-              <FinanceSummaryTable.Custom headerContent={x => x.financeSummary.projectLabels.partner} hideHeader={true} qa="Partner" value={x => <ACC.PartnerName partner={x} showIsLead={true} />} />
+              <FinanceSummaryTable.Custom headerContent={x => x.financeSummary.projectLabels.partner} hideHeader qa="Partner" value={x => <ACC.PartnerName partner={x} showIsLead />} />
               <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalEligibleCosts} qa="TotalEligibleCosts" value={x => x.totalParticipantGrant} />
               <FinanceSummaryTable.Percentage headerContent={x => x.financeSummary.projectLabels.awardRate} qa="FundingLevel" value={x => x.awardRate} />
               <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalGrant} qa="TotalGrant" value={x => x.totalGrantApproved} />
@@ -81,8 +81,8 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data, Callbacks> {
             </FinanceSummaryTable.Table>
             <ACC.Section title={accountantsReportTitle}>
               <FinanceSummaryTable.Table data={partnersToShow} qa="WhenAnIarIsNeeded" >
-                <FinanceSummaryTable.Custom headerContent={x => x.financeSummary.projectLabels.partner} hideHeader={true} value={x => <ACC.PartnerName partner={x} showIsLead={true} />} qa="Partner" />
-                <FinanceSummaryTable.String headerContent={x => x.financeSummary.projectLabels.auditReportFrequency} hideHeader={true} value={x => x.auditReportFrequencyName} qa="Frequency" />
+                <FinanceSummaryTable.Custom headerContent={x => x.financeSummary.projectLabels.partner} hideHeader value={x => <ACC.PartnerName partner={x} showIsLead />} qa="Partner" />
+                <FinanceSummaryTable.String headerContent={x => x.financeSummary.projectLabels.auditReportFrequency} hideHeader value={x => x.auditReportFrequencyName} qa="Frequency" />
               </FinanceSummaryTable.Table>
             </ACC.Section>
           </ACC.Section>
@@ -112,8 +112,7 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data, Callbacks> {
           {this.renderTableFooter(<ACC.Renderers.Percentage value={percentageParticipantCostsSubmittedTotal} />, 3)}
         </tr>
       )];
-    }
-    else {
+    } else {
       return [];
     }
   }
@@ -141,7 +140,7 @@ const FinanceSummaryContainer = (props: Params & BaseProps) => (
 
 export const FinanceSummaryRoute = defineRoute({
   routeName: "FinanceSummary",
-  routePath: `/projects/:projectId/finance-summary/:partnerId`,
+  routePath: "/projects/:projectId/finance-summary/:partnerId",
   container: FinanceSummaryContainer,
   getParams: (route) => ({
     projectId: route.params.projectId,

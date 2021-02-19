@@ -1,6 +1,6 @@
+import { FinancialVirementLabels } from "@content/labels/financialVirementLabels";
 import { ContentPageBase } from "../../../contentPageBase";
 import { Content } from "../../../content";
-import { FinancialVirementLabels } from "@content/labels/financialVirementLabels";
 
 export class FinancialVirementEditPartnerLevelContent extends ContentPageBase {
   constructor(content: Content, protected competitionType?: string) {

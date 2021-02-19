@@ -1,8 +1,8 @@
 import { IContext, PCRSpendProfileOverheadRate } from "@framework/types";
-import { OptionsQueryBase } from "../common/optionsQueryBase";
 import {
   PcrSpendProfileOverheadRateMapper
 } from "@server/repositories/mappers/pcrSpendProfileMapper";
+import { OptionsQueryBase } from "../common/optionsQueryBase";
 
 export class GetPcrSpendProfileOverheadRateOptionsQuery extends OptionsQueryBase<PCRSpendProfileOverheadRate> {
   constructor() {

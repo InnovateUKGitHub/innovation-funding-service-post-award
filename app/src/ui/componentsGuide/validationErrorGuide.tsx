@@ -1,6 +1,6 @@
+import { IGuide } from "@framework/types";
 import { ValidationError } from "../components/validationError";
 import { Result } from "../validation/result";
-import { IGuide } from "@framework/types";
 
 const validationError = new Result(null, true, false, "This is a error message for demo purposes", false);
 

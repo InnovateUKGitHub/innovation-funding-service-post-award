@@ -1,21 +1,21 @@
 import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
-import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "../features/forecastDetails";
-import { GetByIdQuery } from "../features/projects";
-import { ForecastDetailsDtosValidator } from "../../ui/validators";
 import { IContext } from "@framework/types/IContext";
-import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
-import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 import { Params, UpdateForecastRoute } from "@ui/containers/forecasts/update";
 import { ForecastDetailsRoute } from "@ui/containers/forecasts/details";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ForecastDetailsDTO } from "@framework/dtos";
+import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "../features/forecastDetails";
+import { GetByIdQuery } from "../features/projects";
+import { ForecastDetailsDtosValidator } from "../../ui/validators";
+import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
+import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
+import { IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
 
 export class UpdateForecastFormHandler extends StandardFormHandlerBase<Params, "forecastDetails"> {
   constructor() {
     super(UpdateForecastRoute, ["default"], "forecastDetails");
   }
-  protected async getDto(context: IContext, params: Params, button: IFormButton, body: { [key: string]: string; }): Promise<ForecastDetailsDTO[]> {
+  protected async getDto(context: IContext, params: Params, button: IFormButton, body: { [key: string]: string }): Promise<ForecastDetailsDTO[]> {
     const dto = await context.runQuery(new GetAllForecastsForPartnerQuery(params.partnerId));
     const project = await context.runQuery(new GetByIdQuery(params.projectId));
     const partner = await context.runQuery(new GetPartnerByIdQuery(params.partnerId));

@@ -135,7 +135,7 @@ class EditPartnerLevelComponent extends ContainerBase<FinancialVirementParams, P
       itemId: this.props.itemId
     };
 
-    return <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)} preserveData={true}>{this.props.content.backToSummary}</ACC.BackLink>;
+    return <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)} preserveData>{this.props.content.backToSummary}</ACC.BackLink>;
   }
 }
 

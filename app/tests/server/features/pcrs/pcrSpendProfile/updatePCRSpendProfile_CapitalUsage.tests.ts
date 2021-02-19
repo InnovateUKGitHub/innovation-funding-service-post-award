@@ -1,5 +1,3 @@
-// tslint:disable:no-duplicate-string
-// tslint:disable:no-big-function
 import { ValidationError } from "@server/features/common";
 import { PCRPartnerType, PCRProjectRole, } from "@framework/types";
 import { PCRItemStatus, PCRSpendProfileCapitalUsageType } from "@framework/constants";

@@ -1,10 +1,10 @@
-import { ApiClient } from "../../apiClient";
-import { RootState } from "../reducers";
-import { StoreBase } from "./storeBase";
-import { RootActionsOrThunk } from "../actions";
 import { ProjectDto } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { ApiClient } from "../../apiClient";
+import { RootState } from "../reducers";
+import { RootActionsOrThunk } from "../actions";
+import { StoreBase } from "./storeBase";
 
 export class ProjectsStore extends StoreBase {
   constructor(getState: () => RootState, dispatch: (action: RootActionsOrThunk) => void) {

@@ -1,5 +1,5 @@
-import { LinksList } from "../components";
 import { IGuide } from "@framework/types";
+import { LinksList } from "../components";
 
 const links = [
     { url: "test1", text: "Innovate UK" },

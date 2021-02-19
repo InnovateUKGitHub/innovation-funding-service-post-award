@@ -1,7 +1,7 @@
-import { DocumentSingle, DocumentSingleProps } from "../components";
 import { ClaimDto } from "@framework/types";
-import * as ACC from "../components";
 import { IGuide } from "@framework/types";
+import { DocumentSingle, DocumentSingleProps } from "../components";
+import * as ACC from "../components";
 
 const document: DocumentSingleProps["document"] = {
   link: "https://www.ukri.org",
@@ -24,7 +24,7 @@ export const documentSingleGuide: IGuide = {
           document={document}
           qa={"qa"}
           removeElement={button}
-          openNewWindow={true}
+          openNewWindow
         />
       ),
     },

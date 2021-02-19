@@ -1,5 +1,3 @@
-// tslint:disable:no-duplicate-string
-import { TestContext } from "../../testContextProvider";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { ValidationError } from "@server/features/common";
@@ -16,6 +14,7 @@ import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery
 import { PCRItemStatus, PCROrganisationType, PCRStatus } from "@framework/constants";
 import { CostCategoryType, ProjectChangeRequestItemEntity } from "@framework/entities";
 import { DateTime } from "luxon";
+import { TestContext } from "../../testContextProvider";
 
 const createCompleteIndustrialPcrItem: () => Partial<ProjectChangeRequestItemEntity> = () => ({
   status: PCRItemStatus.Incomplete,
@@ -68,7 +67,6 @@ const createCompleteAcademicPcrItem: () => Partial<ProjectChangeRequestItemEntit
   tsbReference: "12345ABCDE",
 });
 
-// tslint:disable-next-line:no-big-function
 describe("UpdatePCRCommand - Partner addition", () => {
   const setup = () => {
     const context = new TestContext();

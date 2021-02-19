@@ -1,7 +1,7 @@
-import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 import { Connection } from "jsforce";
 import { ILogger } from "@server/features/common";
 import { ClaimDetailKey } from "@framework/types";
+import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 
 export interface ISalesforceClaimDetails {
   Id: string;
@@ -93,7 +93,7 @@ export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforce
       Acc_PeriodCostCategoryTotal__c: number;
       Acc_ProjectPeriodNumber__c: number;
       Acc_ReasonForDifference__c: string|null;
-      RecordTypeId: string
+      RecordTypeId: string;
     }> = {
       Acc_ProjectParticipant__c: item.Acc_ProjectParticipant__r && item.Acc_ProjectParticipant__r.Id,
       Acc_CostCategory__c: item.Acc_CostCategory__c,

@@ -1,6 +1,6 @@
-import {TestContext} from "../../testContextProvider";
 import {DeleteClaimDocumentCommand} from "@server/features/documents/deleteClaimDocument";
 import {Authorisation, ProjectRole} from "@framework/types";
+import {TestContext} from "../../testContextProvider";
 
 describe("DeleteClaimDocumentCommand", () => {
     it("should upload and then delete a document", async () => {

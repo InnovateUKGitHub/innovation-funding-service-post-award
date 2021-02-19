@@ -1,6 +1,3 @@
-import * as ACC from "../../components";
-import { Pending } from "../../../shared/pending";
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import {
   ClaimDto,
   ClaimStatus,
@@ -11,9 +8,12 @@ import {
   ProjectDto,
   ProjectRole,
 } from "@framework/types";
-
 import { StoresConsumer } from "@ui/redux";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import * as ACC from "../../components";
+import { Pending } from "../../../shared/pending";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
+
 
 interface Params {
   projectId: string;
@@ -128,7 +128,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     if (project.roles & ProjectRole.MonitoringOfficer && (claim.status === ClaimStatus.DRAFT || claim.status === ClaimStatus.MO_QUERIED) && claim.comments) {
       return (
         <ACC.Section titleContent={x => x.claimDetails.commentsSectionTitle} qa="additionalComments">
-          <ACC.Renderers.SimpleString multiline={true}>
+          <ACC.Renderers.SimpleString multiline>
             {claim.comments}
           </ACC.Renderers.SimpleString>
         </ACC.Section>
@@ -171,7 +171,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         <ACC.Loader
           pending={pendingForecastData}
           render={(forecastData) => (
-            <ACC.Claims.ForecastTable data={forecastData} hideValidation={true} />
+            <ACC.Claims.ForecastTable data={forecastData} hideValidation />
           )}
         />
       </ACC.AccordionItem>

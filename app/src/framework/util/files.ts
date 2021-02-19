@@ -7,7 +7,7 @@ const options = {
 
 export function getFileSize(
   size: number,
-  unitNotation: string = "B",
+  unitNotation = "B",
   units: string[] = ["B", "KB", "MB", "GB"],
 ): string {
   if (size < 1000 || unitNotation === "GB") {

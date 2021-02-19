@@ -1,4 +1,3 @@
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import {
   ILinkInfo,
   PCRItemDto,
@@ -7,7 +6,6 @@ import {
   ProjectDto,
   ProjectRole
 } from "@framework/types";
-import * as ACC from "../../components";
 import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { EditorStatus, IEditorStore, IStores, StoresConsumer } from "@ui/redux";
@@ -19,10 +17,12 @@ import { Result } from "@ui/validation/result";
 import { PcrStepProps, PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { Results } from "@ui/validation";
 import { PCRWorkflowValidator } from "@ui/validators/pcrWorkflowValidator";
-import { GrantMovingOverFinancialYearForm } from "./financialVirements/financialVirementsSummary";
 import { NavigationArrowsForPCRs } from "@ui/containers/pcrs/navigationArrows";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { ForbiddenError } from "@server/features/common";
+import * as ACC from "../../components";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
+import { GrantMovingOverFinancialYearForm } from "./financialVirements/financialVirementsSummary";
 
 export interface ProjectChangeRequestPrepareItemParams {
   projectId: string;
@@ -84,14 +84,14 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     if (this.props.mode !== "prepare") {
       return null;
     }
-    return <ACC.Link id={validation ? validation.key : undefined} replace={true} route={this.getStepLink(workflow, stepName)}>Edit</ACC.Link>;
+    return <ACC.Link id={validation ? validation.key : undefined} replace route={this.getStepLink(workflow, stepName)}>Edit</ACC.Link>;
   }
 
   private getViewLink(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, stepName: string) {
     if (this.props.mode !== "review") {
       return null;
     }
-    return <ACC.Link replace={true} route={this.getStepReviewLink(workflow, stepName)}>View</ACC.Link>;
+    return <ACC.Link replace route={this.getStepReviewLink(workflow, stepName)}>View</ACC.Link>;
   }
 
   private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, pcr: PCRDto, pcrItem: PCRItemDto, pcrItemType: PCRItemTypeDto, editableItemTypes: PCRItemType[]) {
@@ -252,7 +252,7 @@ class Component extends ContainerBase<ProjectChangeRequestPrepareItemParams, Dat
     this.props.onChange(dto);
   }
 
-  private onSave(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, dto: PCRDto, skipToSummary: boolean = false) {
+  private onSave(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, dto: PCRDto, skipToSummary = false) {
 
     const item = dto.items.find(x => x.id === this.props.itemId)!;
 

@@ -1,7 +1,6 @@
-// tslint:disable:no-bitwise
-import { TestContext } from "../../testContextProvider";
 import { GetByIdQuery } from "@server/features/projects/getDetailsByIdQuery";
 import { ProjectRole } from "@framework/types";
+import { TestContext } from "../../testContextProvider";
 
 describe("ProjectsGetDetailsByIdQuery", () => {
     it("when exists expect item", async () => {
@@ -10,10 +9,10 @@ describe("ProjectsGetDetailsByIdQuery", () => {
         const expectedId = "Expected Id";
         const expectedName = "Expected Name";
 
-        const project = context.testData.createProject(x => {
+        const project = context.testData.createProject(x => (
             x.Id = expectedId,
-            x.Acc_ProjectTitle__c = expectedName;
-        });
+            x.Acc_ProjectTitle__c = expectedName
+        ));
 
         const result = (await context.runQuery(new GetByIdQuery(project.Id)));
 

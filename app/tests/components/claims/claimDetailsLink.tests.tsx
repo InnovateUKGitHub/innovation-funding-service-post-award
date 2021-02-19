@@ -1,17 +1,15 @@
-// tslint:disable:no-duplicate-string
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 import { ProjectRole } from "@framework/dtos";
 import { ClaimStatus } from "@framework/constants";
 import { createStore } from "redux";
-import { rootReducer } from "../../../src/ui/redux/reducers";
-import { IClientUser, ILinkInfo } from "@framework/types";
+import { IClientUser } from "@framework/types";
 import { routeConfig } from "@ui/routing/routeConfig";
 import { ClaimDetailsLink, ClaimDetailsLinkProps } from "@ui/components/claims/claimDetailsLink";
 import { TestBed, TestBedContent } from "@shared/TestBed";
 import { IStores } from "@ui/redux";
 import createRouter from "router5";
 import browserPluginFactory from "router5/plugins/browser";
+import { rootReducer } from "../../../src/ui/redux/reducers";
 
 const route = { name: "test", path: "/test" };
 const router = createRouter([route]).usePlugin(browserPluginFactory({ useHash: false }));

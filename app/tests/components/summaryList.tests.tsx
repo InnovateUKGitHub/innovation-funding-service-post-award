@@ -1,11 +1,10 @@
-// tslint:disable-next-line: import-blacklist
 import { mount, shallow } from "enzyme";
 import { SummaryList, SummaryListItem } from "@ui/components/summaryList";
 
 describe("SummaryList", () => {
   it("Renders without borders", () => {
     const output = shallow(
-      <SummaryList noBorders={true} qa="test-list">
+      <SummaryList noBorders qa="test-list">
         <SummaryListItem label="Label" content="Content" qa="test-item" />
       </SummaryList>,
     );

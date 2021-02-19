@@ -1,5 +1,5 @@
-import { InsetText } from "../components/layout/insetText";
 import { IGuide } from "@framework/types";
+import { InsetText } from "../components/layout/insetText";
 
 export const insetText: IGuide = {
     name: "InsetText",

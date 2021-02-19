@@ -1,10 +1,9 @@
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
 import { IValidationMessageProps, ValidationMessage } from "@ui/components";
 import { Content } from "@content/content";
-import { findByQa } from "./helpers/find-by-qa";
 import TestBed from "@shared/TestBed";
+import { findByQa } from "./helpers/find-by-qa";
 
 describe("ValidationMessage", () => {
   const setup = (props: IValidationMessageProps) => {

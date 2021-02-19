@@ -1,9 +1,8 @@
-// tslint:disable
+import { IGuide } from "@framework/types";
 import { range } from "../../shared/range";
 import { TypedTable } from "../components/table";
 import { FullDateTime } from "../components/renderers";
 import { Currency } from "../components/renderers/currency";
-import { IGuide } from "@framework/types";
 
 const exampleDataItem = (seed: number) => {
     const date = new Date();
@@ -81,7 +80,7 @@ export const tableGuide: IGuide = {
                         <ExampleTable.String header="Id" qa="id" value={(x) => x.id} />
                         <ExampleTable.Custom
                             header="The custom column"
-                            qa="custom" 
+                            qa="custom"
                             value={(x) => <span>This is the custom column with tags: <i>{x.name}</i> on <FullDateTime value={x.created} /></span>}
                         />
                     </ExampleTable.Table>

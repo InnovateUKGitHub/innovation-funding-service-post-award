@@ -23,6 +23,7 @@ import {
 import { Polyfill } from "./polyfill";
 
 // get servers store to initialise client store
+// eslint-disable-next-line no-underscore-dangle
 const serverState = processDto((window as any).__PRELOADED_STATE__);
 
 serverState.isClient = true;

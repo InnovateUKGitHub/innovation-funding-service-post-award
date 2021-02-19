@@ -47,7 +47,7 @@ class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & 
             <UploadForm.MulipleFileUpload
               labelContent={x => x.pcrReasoningPrepareFiles.documentLabels.uploadInputLabel}
               name="attachment"
-              labelHidden={true}
+              labelHidden
               value={data => data.files}
               update={(dto, files) => dto.files = files || []}
               validation={documentsEditor.validator.files}
@@ -87,7 +87,7 @@ export const PCRPrepareReasoningFilesStep = (props: ReasoningStepProps) => (
           onFileChange={(saving, dto) => {
             stores.messages.clearMessages();
             // show message if remaining on page
-            const successMessage = saving === "SaveAndRemain" ? dto.files.length === 1 ? `Your document has been uploaded.` : `${dto.files.length} documents have been uploaded.` : undefined;
+            const successMessage = saving === "SaveAndRemain" ? dto.files.length === 1 ? "Your document has been uploaded." : `${dto.files.length} documents have been uploaded.` : undefined;
             stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(saving !== "DontSave", props.projectId, props.pcrId, dto, saving === "SaveAndRemain", successMessage, () => {
               if (saving === "SaveAndContinue") {
                 props.onSave(props.editor.data);

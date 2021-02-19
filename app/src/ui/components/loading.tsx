@@ -1,8 +1,8 @@
 import React, { Fragment } from "react";
-import { LoadingStatus, Pending } from "../../shared/pending";
-import { ErrorSummary } from "./errorSummary";
 import { ErrorCode, IAppError } from "@framework/types/IAppError";
 import { useContent } from "@ui/hooks";
+import { LoadingStatus, Pending } from "../../shared/pending";
+import { ErrorSummary } from "./errorSummary";
 import { StandardErrorPage } from "./standardErrorPage";
 import { NotFoundErrorPage } from "./notFoundErrorPage";
 import { SimpleString } from "./renderers";
@@ -19,7 +19,7 @@ export function Loader<T>({ pending, render, renderError, renderLoading }: Loadi
   const pendingWaiting = () => {
     const loadingElement = (renderLoading && renderLoading()) || <LoadingMessage />;
 
-    return !!pending.data ? render(pending.data, true) : loadingElement;
+    return pending.data ? render(pending.data, true) : loadingElement;
   };
 
   const pendingError = (error?: IAppError) => {

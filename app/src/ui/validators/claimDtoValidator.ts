@@ -1,9 +1,9 @@
-import * as Validation from "./common";
-import { Results } from "../validation/results";
-import { Result } from "../validation/result";
 import { ClaimDto, ClaimStatus, CostsSummaryForPeriodDto } from "@framework/types";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { Result } from "../validation/result";
+import { Results } from "../validation/results";
+import * as Validation from "./common";
 
 const COMMENTS_LENGTH_MAX = 1000;
 
@@ -20,7 +20,7 @@ export class ClaimDtoValidator extends Results<ClaimDto>  {
 
         const permittedStatus = [ClaimStatus.DRAFT, ClaimStatus.SUBMITTED, ClaimStatus.MO_QUERIED, ClaimStatus.AWAITING_IUK_APPROVAL, ClaimStatus.INNOVATE_QUERIED];
 
-        this.status = Validation.isTrue(this, !this.model.status || permittedStatus.indexOf(this.model.status) !== -1, `Set a valid status`);
+        this.status = Validation.isTrue(this, !this.model.status || permittedStatus.indexOf(this.model.status) !== -1, "Set a valid status");
     }
 
     private readonly iarRequiredStatus = new Map<ClaimStatus, ClaimStatus[]>([

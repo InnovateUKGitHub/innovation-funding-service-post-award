@@ -1,5 +1,5 @@
-import { QueryBase } from "../common";
 import { GOLCostDto, IContext } from "@framework/types";
+import { QueryBase } from "../common";
 import { GetCostCategoriesQuery } from "./getCostCategoriesQuery";
 
 export class GetAllForecastsGOLCostsQuery extends QueryBase<GOLCostDto[]> {

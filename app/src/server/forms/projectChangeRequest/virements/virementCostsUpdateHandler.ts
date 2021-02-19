@@ -31,6 +31,7 @@ export class VirementCostsUpdateHandler extends StandardFormHandlerBase<Virement
     const calculatedCostCategoryIds = costCategories.filter(y => y.isCalculated).map(y => y.id) || [];
 
     partnerVirementDto.virements.forEach(x => {
+      // eslint-disable-next-line no-prototype-builtins
       if (!body.hasOwnProperty(x.costCategoryId)) return;
 
       const newEligibleCosts = parseFloat(body[x.costCategoryId]);

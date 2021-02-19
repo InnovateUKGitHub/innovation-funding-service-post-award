@@ -1,5 +1,5 @@
-import { Context } from "./context";
 import { IContext, ISessionUser } from "@framework/types";
+import { Context } from "./context";
 
 class ContextProvider {
   start(params: { user: ISessionUser }): IContext {

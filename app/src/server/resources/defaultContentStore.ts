@@ -10,8 +10,7 @@ export class DefaultContentStore implements IDefaultContentStore {
       fs.readFile("./src/content/defaultContent.en.json", { encoding: "utf-8", }, (err, data) => {
         if (err) {
           reject(err);
-        }
-        else {
+        } else {
           resolve(data);
         }
       });

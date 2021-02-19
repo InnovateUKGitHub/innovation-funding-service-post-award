@@ -1,4 +1,5 @@
 import { actions as router5Actions } from "redux-router5";
+import { RootState } from "../reducers";
 import {
   ActionsUnion,
   DataLoadAction,
@@ -8,7 +9,6 @@ import {
 
 import { SetPageTitleAction } from "./pageTitle";
 import { InitaliseAction } from "./initalise";
-import { RootState } from "../reducers";
 
 type RouterActions = ActionsUnion<typeof router5Actions>;
 

@@ -1,9 +1,4 @@
 import {
-  IFormBody,
-  IFormButton,
-  StandardFormHandlerBase,
-} from "./formHandlerBase";
-import {
   PartnerDetailsEditRoute,
   PartnerDetailsParams,
   PartnerDetailsRoute,
@@ -13,6 +8,11 @@ import { GetByIdQuery } from "@server/features/partners";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
+import {
+  IFormBody,
+  IFormButton,
+  StandardFormHandlerBase,
+} from "./formHandlerBase";
 
 export class PartnerDetailsEditFormHandler extends StandardFormHandlerBase<
   PartnerDetailsParams,

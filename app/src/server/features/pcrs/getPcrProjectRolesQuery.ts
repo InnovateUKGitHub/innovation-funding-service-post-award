@@ -1,6 +1,6 @@
 import { IContext, PCRProjectRole } from "@framework/types";
-import { OptionsQueryBase } from "../common/optionsQueryBase";
 import { PcrProjectRoleMapper } from "@server/repositories/mappers/projectChangeRequestMapper";
+import { OptionsQueryBase } from "../common/optionsQueryBase";
 
 export class GetPcrProjectRolesQuery extends OptionsQueryBase<PCRProjectRole> {
   constructor() {

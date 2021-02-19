@@ -43,11 +43,10 @@ class DashboardComponent extends ContainerBase<Params&Props, Data, Callbacks> {
   private renderContents(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[], reports: Dtos.MonitoringReportSummaryDto[]) {
     // loop though reports splitting them into open or archived
     const inital = { open: [], archived: [] };
-    const reportSections = reports.reduce<{ open: Dtos.MonitoringReportSummaryDto[], archived: Dtos.MonitoringReportSummaryDto[] }>((result, report) => {
+    const reportSections = reports.reduce<{ open: Dtos.MonitoringReportSummaryDto[]; archived: Dtos.MonitoringReportSummaryDto[] }>((result, report) => {
       if (this.currentStatuses.indexOf(report.status) > -1) {
         result.open.push(report);
-      }
-      else {
+      } else {
         result.archived.push(report);
       }
       return result;
@@ -69,12 +68,12 @@ class DashboardComponent extends ContainerBase<Params&Props, Data, Callbacks> {
         />
 
         <ACC.Link route={this.props.routes.monitoringReportCreate.getLink({ projectId: this.props.projectId })} className="govuk-button"><ACC.Content value={(x) => x.monitoringReportsDashboard.buttonNewMonitoringReport}/></ACC.Link>
-        <ACC.Section title={ < ACC.Content value={x => x.monitoringReportsDashboard.sectionTitleOpen} /> } >
+        <ACC.Section title={< ACC.Content value={x => x.monitoringReportsDashboard.sectionTitleOpen} />} >
           {reportSections.open.length ? this.renderTable(project, reportSections.open, "current") : null}
 
           {!reportSections.open.length ? <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsDashboard.messages.noOpenReportsMessage}/></ACC.Renderers.SimpleString> : null}
         </ACC.Section>
-        <ACC.Section title={ < ACC.Content value={x => x.monitoringReportsDashboard.sectionTitleArchived} /> } >
+        <ACC.Section title={< ACC.Content value={x => x.monitoringReportsDashboard.sectionTitleArchived} />} >
           {reportSections.archived.length ? this.renderTable(project, reportSections.archived, "previous") : null}
           {!reportSections.archived.length ? <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsDashboard.messages.noArchivedReportsMessage}/></ACC.Renderers.SimpleString> : null}
         </ACC.Section>
@@ -94,18 +93,17 @@ class DashboardComponent extends ContainerBase<Params&Props, Data, Callbacks> {
         <ReportsTable.Custom header={<ACC.Content value={x => x.monitoringReportsDashboard.titleHeader}/>} qa="title" value={x => <ACC.PeriodTitle periodId={x.periodId} periodStartDate={x.startDate} periodEndDate={x.endDate} />} />
         <ReportsTable.String header={<ACC.Content value={x => x.monitoringReportsDashboard.statusHeader}/>} qa="status" value={x => x.statusName} />
         <ReportsTable.ShortDateTime header={<ACC.Content value={x => x.monitoringReportsDashboard.dateUploadedHeader}/>} qa="dateUpdated" value={x => x.lastUpdated} />
-        <ReportsTable.Custom header={<ACC.Content value={x => x.monitoringReportsDashboard.actionHeader}/>} hideHeader={true} qa="link" value={x => this.renderLinks(x)} />
+        <ReportsTable.Custom header={<ACC.Content value={x => x.monitoringReportsDashboard.actionHeader}/>} hideHeader qa="link" value={x => this.renderLinks(x)} />
       </ReportsTable.Table>
     );
   }
 
   private renderLinks(report: Dtos.MonitoringReportSummaryDto) {
-    const links: { route: ILinkInfo, titleContent: ContentSelector, qa: string; }[] = [];
+    const links: { route: ILinkInfo; titleContent: ContentSelector; qa: string }[] = [];
 
     if (this.editStatuses.indexOf(report.status) > -1) {
       links.push({ route: this.props.routes.monitoringReportWorkflow.getLink({ projectId: report.projectId, id: report.headerId, mode: "prepare", step: undefined }), titleContent: (content) => content.monitoringReportsDashboard.linkEditMonitoringReport, qa: "editLink" });
-    }
-    else {
+    } else {
       links.push({ route: this.props.routes.monitoringReportWorkflow.getLink({ projectId: report.projectId, id: report.headerId, mode: "view", step: undefined }), titleContent: (content) => content.monitoringReportsDashboard.linkViewMonitoringReport, qa: "viewLink" });
     }
 

@@ -55,7 +55,6 @@ const accordionItemQa = {
   noJsTitle: "accordion-item-nojs-title",
 };
 
-// tslint:disable-next-line: no-big-function
 describe("AccordionItem", () => {
   const isClientSpy = jest.spyOn(hooksModule, "useIsClient");
 

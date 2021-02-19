@@ -1,6 +1,7 @@
+/* eslint-disable import/order */
 import React from "react";
 
-import { Header, useHeader } from "../components/layout/header";
+import { Header } from "../components/layout/header";
 
 import { accordionGuide } from "./accordionGuide";
 import { buttonGuide } from "./styledButtonGuide";

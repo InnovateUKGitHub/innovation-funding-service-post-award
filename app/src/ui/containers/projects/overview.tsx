@@ -1,4 +1,3 @@
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { IClientUser, PartnerClaimStatus, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
@@ -8,6 +7,7 @@ import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { StoresConsumer } from "@ui/redux";
 import { IRoutes } from "@ui/routing";
 import { Content } from "@content/content";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 interface Data {
   projectDetails: Pending<Dtos.ProjectDto>;
@@ -258,13 +258,11 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
 
   private getPcrMessages(project: ProjectDto) {
     const result: ACC.NavigationCardMessage[] = [];
-    if (project.roles & ProjectRole.ProjectManager) {
-      if (project.pcrsQueried > 0) {
-        result.push({
-          message: <ACC.Content value={x => x.projectOverview.messages.pcrQueried} />,
-          qa: "message-pcrQueried",
-        });
-      }
+    if ((project.roles & ProjectRole.ProjectManager) && project.pcrsQueried > 0) {
+      result.push({
+        message: <ACC.Content value={x => x.projectOverview.messages.pcrQueried} />,
+        qa: "message-pcrQueried",
+      });
     }
     if (project.roles & ProjectRole.MonitoringOfficer) {
       result.push({
@@ -278,13 +276,8 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
   private getForecastMessages(partner: PartnerDto) {
     const result: ACC.NavigationCardMessage[] = [];
 
-    if (partner && partner.roles & ProjectRole.FinancialContact) {
-      if (partner.newForecastNeeded) {
-        result.push({
-          message: <ACC.Content value={x => x.projectOverview.messages.checkForecast} />,
-          qa: "message-newForecastNeeded",
-        });
-      }
+    if ((partner.roles & ProjectRole.FinancialContact) && partner.newForecastNeeded) {
+        result.push({ message: <ACC.Content value={x => x.projectOverview.messages.checkForecast} />, qa: "message-newForecastNeeded"});
     }
 
     return result;

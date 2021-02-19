@@ -1,9 +1,9 @@
 import { ApiClient } from "@ui/apiClient";
-import { RootActionsOrThunk } from "../actions";
-import { PartnersStore } from "./partnersStore";
-import { RootState } from "../reducers";
-import { StoreBase } from "./storeBase";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { RootActionsOrThunk } from "../actions";
+import { RootState } from "../reducers";
+import { PartnersStore } from "./partnersStore";
+import { StoreBase } from "./storeBase";
 
 export class CompaniesStore extends StoreBase {
 

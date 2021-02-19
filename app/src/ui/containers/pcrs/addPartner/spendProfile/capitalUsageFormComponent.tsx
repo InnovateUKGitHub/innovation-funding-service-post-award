@@ -85,7 +85,7 @@ class Component extends React.Component<SpendProfileCostFormProps<PCRSpendProfil
           />
           {this.props.isClient && <Form.Custom
             labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.capitalUsage.netCost}
-            labelBold={true}
+            labelBold
             name="netCost"
             value={dto => <ACC.Renderers.SimpleString><ACC.Renderers.Currency value={dto.value}/></ACC.Renderers.SimpleString>}
             update={() => null}

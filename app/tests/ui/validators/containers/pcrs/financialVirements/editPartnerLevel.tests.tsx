@@ -1,5 +1,3 @@
-import React from "react";
-
 import { useEditPartnerLevelContent } from "@ui/containers";
 import { renderHook } from "@testing-library/react-hooks";
 import { hookTestBed, TestBedContent } from "@shared/TestBed";

@@ -1,7 +1,7 @@
-import { BadRequestError, QueryBase } from "../common";
 import { IContext } from "@framework/types";
 import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
+import { BadRequestError, QueryBase } from "../common";
 
 export class GetPermissionGroupQuery extends QueryBase<PermissionGroup> {
 

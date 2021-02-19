@@ -1,6 +1,6 @@
-import { QueryBase } from "./queryBase";
 import { IContext, IPicklistEntry } from "@framework/types";
 import { Option } from "@framework/dtos/option";
+import { QueryBase } from "./queryBase";
 
 export abstract class OptionsQueryBase<T extends (string | number)> extends QueryBase<Option<T>[]> {
   protected constructor(private readonly key: string) {

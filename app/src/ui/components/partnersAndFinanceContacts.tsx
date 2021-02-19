@@ -1,8 +1,8 @@
-import { TypedTable } from "./table";
 import { PartnerDto, ProjectContactDto } from "@framework/types";
 import { PartnerName } from "@ui/components/partners";
 import { Content } from "@content/content";
 import { ProjectContactLabels } from "@content/labels/projectContactLabels";
+import { TypedTable } from "./table";
 
 interface Props {
   partners: PartnerDto[];
@@ -20,7 +20,7 @@ export const PartnersAndFinanceContacts: React.FunctionComponent<Props> = (props
   return (
     <PartnersTable.Table qa="finance-contact-details" data={partnersAndContactsData}>
       <PartnersTable.String headerContent={x => props.projectContactLabels(x).contactName} value={x => x.financeContact && x.financeContact.name || ""} qa="fc-name" />
-      <PartnersTable.Custom headerContent={x => props.projectContactLabels(x).partnerName} value={x => <PartnerName partner={x.partner} showIsLead={true}/>} qa="partner-name"/>
+      <PartnersTable.Custom headerContent={x => props.projectContactLabels(x).partnerName} value={x => <PartnerName partner={x.partner} showIsLead/>} qa="partner-name"/>
       <PartnersTable.Email headerContent={x => props.projectContactLabels(x).contactEmail} value={x => x.financeContact && x.financeContact.email || ""} qa="fc-email" />
     </PartnersTable.Table>
   );

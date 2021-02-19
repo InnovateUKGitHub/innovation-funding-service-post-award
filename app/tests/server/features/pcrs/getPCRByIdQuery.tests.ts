@@ -1,5 +1,3 @@
-// tslint:disable:no-identical-functions no-duplicate-string no-big-function
-import { TestContext } from "../../testContextProvider";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { DateTime } from "luxon";
 import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
@@ -13,7 +11,7 @@ import {
 import { PCRItemType, PCRPartnerType, PCRProjectRole } from "@framework/constants";
 import { CostCategoryType } from "@framework/entities";
 import { PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
-import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
+import { TestContext } from "../../testContextProvider";
 
 describe("GetPCRByIdQuery", () => {
   test("when id not found then exception is thrown", async () => {

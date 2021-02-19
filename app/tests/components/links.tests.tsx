@@ -1,6 +1,3 @@
-// tslint:disable:no-identical-functions
-import * as Links from "../../src/ui/components/links";
-// tslint:disable-next-line: import-blacklist
 import { mount } from "enzyme";
 
 import { RouterProvider } from "react-router5";
@@ -8,6 +5,7 @@ import { createRouter } from "router5";
 import browserPluginFactory from "router5/plugins/browser";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
+import * as Links from "../../src/ui/components/links";
 import { rootReducer } from "../../src/ui/redux/reducers";
 
 const route = { routeName: "test", routeParams: { id : "exampleId"}, accessControl: () => true};

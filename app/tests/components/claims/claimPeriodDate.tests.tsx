@@ -1,4 +1,3 @@
-// tslint:disable:no-duplicate-string
 import { render } from "@testing-library/react";
 import { ClaimPeriodDate, ClaimPeriodProps } from "../../../src/ui/components/claims/claimPeriodDate";
 

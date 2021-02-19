@@ -14,6 +14,6 @@ export class Timer implements ITimer {
       info: this.message,
       duration: finished.getTime() - this.start.getTime(),
     };
-    this.logger.debug(`Finished Timer`, args);
+    this.logger.debug("Finished Timer", args);
   }
 }

@@ -1,7 +1,7 @@
-import { ContainerBase } from "../../containerBase";
-import * as ACC from "../../../components";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { ReasoningStepProps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
+import { ContainerBase } from "../../containerBase";
+import * as ACC from "../../../components";
 
 export class PCRPrepareReasoningStep extends ContainerBase<ReasoningStepProps, {}> {
   render() {
@@ -18,7 +18,7 @@ export class PCRPrepareReasoningStep extends ContainerBase<ReasoningStepProps, {
             <PCRForm.MultilineString
               name="reasoningComments"
               labelContent={x => x.pcrPrepareReasoning.reasoningHeading}
-              labelHidden={true}
+              labelHidden
               hintContent={x => x.pcrPrepareReasoning.hint}
               qa="reason"
               value={m => m.reasoningComments}

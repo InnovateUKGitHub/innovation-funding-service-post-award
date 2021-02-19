@@ -1,7 +1,7 @@
 import { BaseInput } from "./baseInput";
 
-interface DropdownListProps extends InputProps<{ id: string, value: string | number }> {
-  options: { id: string, value: string | number }[];
+interface DropdownListProps extends InputProps<{ id: string; value: string | number }> {
+  options: { id: string; value: string | number }[];
   hasEmptyOption?: boolean;
 }
 

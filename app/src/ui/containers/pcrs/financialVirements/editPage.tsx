@@ -194,7 +194,7 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
       itemId: this.props.itemId
     };
 
-    return <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)} preserveData={true}>{this.props.content.backToSummary}</ACC.BackLink>;
+    return <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)} preserveData><ACC.Content value={x => x.financialVirementEdit.labels.backToSummary}/></ACC.BackLink>;
   }
 }
 

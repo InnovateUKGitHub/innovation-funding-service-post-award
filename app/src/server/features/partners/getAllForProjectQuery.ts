@@ -1,7 +1,7 @@
-import { QueryBase } from "../common";
-import { MapToPartnerDtoCommand } from "./mapToPartnerDto";
-import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
 import { IContext, PartnerDto } from "@framework/types";
+import { QueryBase } from "../common";
+import { GetAllProjectRolesForUser } from "../projects/getAllProjectRolesForUser";
+import { MapToPartnerDtoCommand } from "./mapToPartnerDto";
 import { sortPartners } from "./sortPartners";
 
 export class GetAllForProjectQuery extends QueryBase<PartnerDto[]> {

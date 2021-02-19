@@ -1,9 +1,9 @@
-import { SalesforceRepositoryBaseWithMapping } from "./salesforceRepositoryBase";
 import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
-import { SalesforcePermissionGroupMapper } from "./mappers/permissionGroupMapper";
 import { ILogger } from "@server/features/common";
 import { Connection } from "jsforce";
+import { SalesforcePermissionGroupMapper } from "./mappers/permissionGroupMapper";
+import { SalesforceRepositoryBaseWithMapping } from "./salesforceRepositoryBase";
 
 export interface ISalesforcePermissionGroup {
   Id: string;
@@ -22,6 +22,7 @@ const SalesforcePermisionGroups: {[key: string]: PermissionGroupIdenfifier} = {
 
 /**
  * Gets the permission groups ids that objects can be assigned to...
+ *
  * @todo Remove this...no longer needed
  */
 export class PermissionGroupRepository extends SalesforceRepositoryBaseWithMapping<ISalesforcePermissionGroup, PermissionGroup> implements IPermissionGroupRepository {
@@ -30,7 +31,7 @@ export class PermissionGroupRepository extends SalesforceRepositoryBaseWithMappi
     super(getSalesforceConnection, logger);
   }
 
-  protected salesforceObjectName: string = "Group";
+  protected salesforceObjectName = "Group";
 
   protected salesforceFieldNames: string[] = ["Id", "DeveloperName"];
 

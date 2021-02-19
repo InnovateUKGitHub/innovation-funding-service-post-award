@@ -1,7 +1,5 @@
 import { combineReducers } from "redux";
 import { ActionTransitionSuccess, actionTypes } from "redux-router5";
-import { DataLoadAction } from "../actions/common";
-import { LoadingStatus } from "../../../shared/pending";
 import * as Dtos from "@framework/dtos";
 import {
   ClaimDetailsDto,
@@ -23,6 +21,8 @@ import {
 import { State } from "router5";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { LoadingStatus } from "../../../shared/pending";
+import { DataLoadAction } from "../actions/common";
 
 export interface IDataStore<T> {
   status: LoadingStatus;
@@ -62,7 +62,7 @@ const dataStoreReducer = <TData extends {}>(storeKey: string) => (state: { [key:
   return state;
 };
 
-function getRouteTransitionOptions(payload: { route: State, previousRoute: State }) {
+function getRouteTransitionOptions(payload: { route: State; previousRoute: State }) {
   const hasPreviousRoute = payload.previousRoute !== null;
   const options = payload && payload.route && payload.route.meta && payload.route.meta.options || {};
 

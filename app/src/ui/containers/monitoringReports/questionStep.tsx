@@ -42,25 +42,27 @@ export class MonitoringReportQuestionStep extends React.Component<Props> {
       ? (q.options || []).map(y => ({ id: y.id, value: `${y.questionScore} - ${y.questionText}`, qa:`question-${q.displayOrder}-score-${y.questionScore}` }))
       : [];
     return (
-      <ReportForm.Fieldset heading={q.title} >
+      <ReportForm.Fieldset heading={q.title}>
         <ACC.Renderers.SimpleString className="govuk-hint">{q.description}</ACC.Renderers.SimpleString>
-        <ReportForm.Hidden name={`questionDisplayOrder`} value={x => questionNumber} />
-        { !!radioOptions.length && (
-            <ReportForm.Radio
-              name={`question_${q.displayOrder}_options`}
-              label={``}
-              inline={false}
-              options={radioOptions}
-              value={() => radioOptions.find(x => !!q.optionId && x.id === q.optionId)}
-              update={(x, value) => x.questions[i].optionId = value && value.id}
-              validation={validator.responses.results[i].score}
-            />
-          ) }
+        <ReportForm.Hidden name={"questionDisplayOrder"} value={x => questionNumber} />
+        {!!radioOptions.length && (
+          <ReportForm.Radio
+            name={`question_${q.displayOrder}_options`}
+            label
+            inline={false}
+            options={radioOptions}
+            value={() => radioOptions.find(x => !!q.optionId && x.id === q.optionId)}
+            update={(x, value) => (x.questions[i].optionId = value && value.id)}
+            validation={validator.responses.results[i].score}
+          />
+        )}
         <ReportForm.MultilineString
           name={`question_${q.displayOrder}_comments`}
-          label={<ACC.Content value={(x) => x.monitoringReportsQuestionStep.commentLabel}/>}
+          label={<ACC.Content value={x => x.monitoringReportsQuestionStep.commentLabel} />}
           value={x => q.comments}
-          update={(x, value) => { x.questions[i].comments = value; }}
+          update={(x, value) => {
+            x.questions[i].comments = value;
+          }}
           validation={validator.responses.results[i].comments}
         />
       </ReportForm.Fieldset>

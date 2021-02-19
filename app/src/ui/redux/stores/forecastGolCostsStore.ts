@@ -1,6 +1,6 @@
-import { StoreBase } from "./storeBase";
 import { ApiClient } from "@ui/apiClient";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { StoreBase } from "./storeBase";
 
 export class ForecastGolCostsStore extends StoreBase {
   public getAllByPartner(partnerId: string) {

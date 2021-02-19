@@ -1,6 +1,4 @@
-import { BaseProps, ContainerBase } from "../../containerBase";
 import { ILinkInfo, PCRItemStatus, PCRItemType, ProjectDto } from "@framework/types";
-import * as ACC from "../../../components";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
@@ -8,6 +6,8 @@ import { PCRDtoValidator } from "@ui/validators";
 import { NavigationArrowsForPCRs } from "@ui/containers/pcrs/navigationArrows";
 import { IReasoningWorkflowMetadata } from "@ui/containers/pcrs/reasoning/workflowMetadata";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import * as ACC from "../../../components";
+import { BaseProps, ContainerBase } from "../../containerBase";
 
 export interface Props {
   projectId: string;
@@ -54,7 +54,7 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
             <ACC.SummaryListItem
               labelContent={x => x.pcrReasoningSummary.labels.comments}
               content={
-                <ACC.Renderers.SimpleString multiline={true}>{pcr.reasoningComments}</ACC.Renderers.SimpleString>
+                <ACC.Renderers.SimpleString multiline>{pcr.reasoningComments}</ACC.Renderers.SimpleString>
               }
               qa="comments"
               validation={editor.validator.reasoningComments}

@@ -1,6 +1,4 @@
 import { DateTime } from "luxon";
-import { Result, Results } from "../validation";
-import * as Validation from "./common";
 import {
   PartnerDto,
   PCRDto,
@@ -22,6 +20,8 @@ import {
 import { PCRItemStatus, PCRItemType, PCROrganisationType, PCRProjectRole, PCRStatus } from "@framework/constants";
 import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 import { IFeatureFlags } from "@framework/types";
+import { Result, Results } from "../validation";
+import * as Validation from "./common";
 
 export class PCRDtoValidator extends Results<PCRDto> {
 
@@ -128,7 +128,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
     }
 
     return Validation.all(this,
-      () => Validation.permitedValues(this, this.model.status, permittedStatus, `Set a valid status`),
+      () => Validation.permitedValues(this, this.model.status, permittedStatus, "Set a valid status"),
     );
   }
 
@@ -442,52 +442,52 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
 
   contact1ProjectRole = Validation.all(this,
     () => this.requiredIfComplete(this.model.contact1ProjectRole, "Select a finance contact project role"),
-    () => this.hasPermissionToEdit(this.model.contact1ProjectRole, this.original && this.original.contact1ProjectRole, `Role cannot be changed`),
+    () => this.hasPermissionToEdit(this.model.contact1ProjectRole, this.original && this.original.contact1ProjectRole, "Role cannot be changed"),
   );
 
   contact1Forename = Validation.all(this,
     () => this.requiredIfComplete(this.model.contact1Forename, "Enter a finance contact name"),
-    () => this.hasPermissionToEdit(this.model.contact1Forename, this.original && this.original.contact1Forename, `Name cannot be changed`),
+    () => this.hasPermissionToEdit(this.model.contact1Forename, this.original && this.original.contact1Forename, "Name cannot be changed"),
   );
 
   contact1Surname = Validation.all(this,
     () => this.requiredIfComplete(this.model.contact1Surname, "Enter a finance contact surname"),
-    () => this.hasPermissionToEdit(this.model.contact1Surname, this.original && this.original.contact1Surname, `Surname cannot be changed`),
+    () => this.hasPermissionToEdit(this.model.contact1Surname, this.original && this.original.contact1Surname, "Surname cannot be changed"),
   );
 
   contact1Phone = Validation.all(this,
     () => this.requiredIfComplete(this.model.contact1Phone, "Enter a finance contact phone number"),
-    () => this.hasPermissionToEdit(this.model.contact1Phone, this.original && this.original.contact1Phone, `Phone number cannot be changed`),
+    () => this.hasPermissionToEdit(this.model.contact1Phone, this.original && this.original.contact1Phone, "Phone number cannot be changed"),
   );
 
   contact1Email = Validation.all(this,
     () => this.requiredIfComplete(this.model.contact1Email, "Enter a finance contact email address"),
-    () => this.hasPermissionToEdit(this.model.contact1Email, this.original && this.original.contact1Email, `Email address cannot be changed`),
+    () => this.hasPermissionToEdit(this.model.contact1Email, this.original && this.original.contact1Email, "Email address cannot be changed"),
   );
 
   contact2ProjectRole = Validation.all(this,
     () => this.validateProjectManagerDetailsRequired(this.model.contact2ProjectRole, "Select a project manager project role"),
-    () => this.hasPermissionToEdit(this.model.contact2ProjectRole, this.original && this.original.contact2ProjectRole, `Role cannot be changed`),
+    () => this.hasPermissionToEdit(this.model.contact2ProjectRole, this.original && this.original.contact2ProjectRole, "Role cannot be changed"),
   );
 
   contact2Forename = Validation.all(this,
     () => this.validateProjectManagerDetailsRequired(this.model.contact2Forename, "Enter a project manager name"),
-    () => this.hasPermissionToEdit(this.model.contact2Forename, this.original && this.original.contact2Forename, `Name cannot be changed`),
+    () => this.hasPermissionToEdit(this.model.contact2Forename, this.original && this.original.contact2Forename, "Name cannot be changed"),
   );
 
   contact2Surname = Validation.all(this,
     () => this.validateProjectManagerDetailsRequired(this.model.contact2Surname, "Enter a project manager surname"),
-    () => this.hasPermissionToEdit(this.model.contact2Surname, this.original && this.original.contact2Surname, `Surname cannot be changed`),
+    () => this.hasPermissionToEdit(this.model.contact2Surname, this.original && this.original.contact2Surname, "Surname cannot be changed"),
   );
 
   contact2Phone = Validation.all(this,
     () => this.validateProjectManagerDetailsRequired(this.model.contact2Phone, "Enter a project manager phone number"),
-    () => this.hasPermissionToEdit(this.model.contact2Phone, this.original && this.original.contact2Phone, `Phone number cannot be changed`),
+    () => this.hasPermissionToEdit(this.model.contact2Phone, this.original && this.original.contact2Phone, "Phone number cannot be changed"),
   );
 
   contact2Email = Validation.all(this,
     () => this.validateProjectManagerDetailsRequired(this.model.contact2Email, "Enter a project manager email address"),
-    () => this.hasPermissionToEdit(this.model.contact2Email, this.original && this.original.contact2Email, `Email address cannot be changed`),
+    () => this.hasPermissionToEdit(this.model.contact2Email, this.original && this.original.contact2Email, "Email address cannot be changed"),
   );
 
   projectLocation = Validation.all(this,
@@ -600,7 +600,6 @@ export class PCRPartnerWithdrawalItemDtoValidator extends PCRBaseItemDtoValidato
     );
   }
 
-  // tslint:disable-next-line:no-identical-functions
   private validatePartnerId() {
     if (!this.canEdit) {
       return Validation.isUnchanged(this, this.model.partnerId, this.original && this.original.partnerId, "Partner cannot be changed.");

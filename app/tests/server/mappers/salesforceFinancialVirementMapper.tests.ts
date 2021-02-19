@@ -1,4 +1,3 @@
-// tslint:disable:no-duplicate-string
 import { SalesforceFinancialVirementMapper } from "@server/repositories/mappers/financialVirementMapper";
 import { ISalesforceFinancialVirement } from "@server/repositories";
 import { createDto } from "@framework/util/dtoHelpers";
