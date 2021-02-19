@@ -1,0 +1,7 @@
+dashboard/
+node_modules/
+.vscode/
+public/
+security/
+scripts/
+dist/
