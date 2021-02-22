@@ -4,7 +4,7 @@ import { DocumentMessages } from "@content/messages/documentMessages";
 import { useContent } from "@ui/hooks";
 import { useStores } from "@ui/redux";
 
-export const DocumentGuidance = (props: {}) => {
+export function DocumentGuidance() {
   const { getContent } = useContent();
   const uploadGuidance = getContent(x => x.components.documentGuidance.uploadGuidance);
   const fileSizeGuidance = getContent(x => x.components.documentGuidance.fileSize);
@@ -21,7 +21,7 @@ export const DocumentGuidance = (props: {}) => {
   return (
     <>
       <ACC.Info summary={fileTypesQuestion}>
-        <ACC.Renderers.SimpleString>{uploadGuidance}:</ACC.Renderers.SimpleString>
+        <ACC.Renderers.SimpleString>{uploadGuidance}</ACC.Renderers.SimpleString>
 
         <ACC.UnorderedList>
           <li>{fileSizeGuidance}</li>
@@ -30,7 +30,7 @@ export const DocumentGuidance = (props: {}) => {
 
         <ACC.Renderers.SimpleString>{noFilesNumberLimitMessage}</ACC.Renderers.SimpleString>
 
-        <ACC.Renderers.SimpleString>{fileTypesUploadMessage}:</ACC.Renderers.SimpleString>
+        <ACC.Renderers.SimpleString>{fileTypesUploadMessage}</ACC.Renderers.SimpleString>
 
         <ACC.UnorderedList>
           <li>{pdf}</li>
@@ -38,11 +38,11 @@ export const DocumentGuidance = (props: {}) => {
           <li>{presentation}</li>
           <li>{spreadsheet}</li>
           <li>{availableImageExtensions}</li>
-          </ACC.UnorderedList>
+        </ACC.UnorderedList>
       </ACC.Info>
     </>
   );
-};
+}
 
 export type IDocumentMessages = (x: Content) => DocumentMessages;
 

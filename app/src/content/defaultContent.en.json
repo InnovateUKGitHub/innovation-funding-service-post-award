@@ -57,11 +57,11 @@
       "newWindow": "opens in a new window"
     },
     "documentGuidance": {
-      "uploadGuidance": "You can upload up to 10 documents at a time. Each document must",
+      "uploadGuidance": "You can upload up to 10 documents at a time. Each document must:",
       "fileSize": "be less than 10MB in file size",
       "uniqueFileName": "have a unique file name that describes its contents",
       "noFilesNumberLimit": "There is no limit to the number of files you can upload in total.",
-      "fileTypesUpload": "You can upload these file types",
+      "fileTypesUpload": "You can upload these file types:",
       "pdfFiles": "PDF (pdf, xps)",
       "textFiles": "text (doc, docx, rdf, txt, csv, odt)",
       "presentationFiles": "presentation (ppt, pptx, odp)",
