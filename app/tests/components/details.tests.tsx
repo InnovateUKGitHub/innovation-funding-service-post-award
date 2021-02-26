@@ -56,8 +56,8 @@ describe("Details", () => {
       const example = { cost: 12.22 };
       const DTest = TypedDetails<typeof example>();
       const output = shallow(<DTest.Details data={example}><DTest.Currency fractionDigits={2} label="Cost" qa="cost" value={x => x.cost} /></DTest.Details>).html();
-      expect(output).toContain("<p class=\"govuk-heading-s\">Cost</p>");
-      expect(output).toContain("<p class=\"govuk-body\"><span style=\"white-space:nowrap\">£12.22</span></p>");
+      expect(output).toContain("Cost");
+      expect(output).toContain("£12.22");
     });
   });
 

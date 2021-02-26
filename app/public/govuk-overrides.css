@@ -12,6 +12,16 @@
   flex: 1 1 100%;
 }
 
+/*
+ * Table validation
+*/
+.highlight--error {
+  color: #d4351c;
+}
+.highlight--info {
+  color: #1d70b8;
+}
+
 .govuk-table__cell:not(:first-child):not(:last-child),
 .govuk-table__header:not(:first-child):not(:last-child) {
   padding: 10px 10px;

@@ -22,7 +22,6 @@ export class PartnerVirementsDtoValidator extends Results<PartnerVirementsDto> {
 
   public readonly newRemainingGrant = Validation.all(this,
     () => Validation.required(this, this.model.newRemainingGrant, "New remaining grant is required"),
-    () => Validation.isTrue(this, this.model.newRemainingGrant <= this.model.originalRemainingGrant, "The total grant cannot exceed the remaining grant"),
     () => Validation.isTrue(this, this.model.newRemainingGrant >= 0, "Grant cannot be less zero"),
   );
 }

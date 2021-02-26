@@ -396,7 +396,8 @@
       }
     },
     "financial-virement-summary": {
-      "guidance": "If the ‘New remaining grant’ project total is higher than the ‘Remaining grant’ project total after reallocating costs, you can change each partner’s remaining grant to reduce the project total to the amount agreed.",
+      "available-grant-message": "Your 'Remaining grant' has a surplus of {{grantDifference}}. You must either reduce it or allocate these funds to other partners.",
+      "unavailable-grant-message": "You must reduce your 'New remaining grant' project total to {{totalOriginalGrant}} or less, because you have exceeded it by {{grantDifference}}. You can change each partner’s 'Remaining grant' to reduce the project total to the amount agreed.",
       "link-change-grant": "Change remaining grant",
       "heading-year-end-grant-value": "<b>Grant value moving over<br />the financial year end</b>"
     },
@@ -606,7 +607,6 @@
       "put-project-on-hold-message": "This allows you to suspend a project for a specific period. You cannot submit any claims or raise project change requests when the project is on hold.",
       "end-project-early-title": "End project early",
       "end-project-early-message": "Use this when you believe you are entering your final claim period. Make a note to say your project is ending when you submit this request. You will then enter your final claim period and any other future claim periods will close."
-
     },
     "pcr-time-extension-step": {
       "existing-project-heading": "Existing project details",

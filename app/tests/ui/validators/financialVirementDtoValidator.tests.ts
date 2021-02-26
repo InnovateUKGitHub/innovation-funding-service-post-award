@@ -30,18 +30,19 @@ describe("financialVirementDtoValidator", () => {
 
     describe("partner remaining grant", () => {
       test.each`
-        name                                       | newRemainingGrant | isValid
-        ${"given null"}                            | ${null}           | ${false}
-        ${"given value lower than original grant"} | ${2_100}          | ${true}
-        ${"given negative value"}                  | ${-15}            | ${false}
-      `("$name", ({ newRemainingGrant, isValid }) => {
+        name                         | newRemainingGrant | expectedResult
+        ${"given null"}              | ${null}           | ${false}
+        ${"given negative value"}    | ${-10}            | ${false}
+        ${"given value is zero"}     | ${0}              | ${true}
+        ${"given number above zero"} | ${10}             | ${true}
+      `("$name", ({ newRemainingGrant, expectedResult }) => {
         const stubPartnerVirements = {
           originalRemainingGrant: 2_500,
           newRemainingGrant,
         } as PartnerVirementsDto;
 
         const validation = new PartnerVirementsDtoValidator(stubPartnerVirements, false);
-        expect(validation.newRemainingGrant.isValid).toBe(isValid);
+        expect(validation.newRemainingGrant.isValid).toBe(expectedResult);
       });
     });
 
