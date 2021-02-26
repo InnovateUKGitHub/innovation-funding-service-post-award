@@ -1,23 +1,42 @@
+import React from "react";
+import cx from "classnames";
+
 import { isNumber } from "@framework/util";
 
-interface Props {
+interface CurrentArgs {
   value: number | null;
   fractionDigits?: number;
 }
 
-export const Currency: React.FunctionComponent<Props> = ({ value, fractionDigits = 2 }) => {
-  const options = {
+export interface CurrencyProps extends CurrentArgs {
+  className?: string | false;
+  style?: React.CSSProperties;
+}
+
+/**
+ * @description Returns a primitive data type not a JSX.Element. Please use <Currency /> to support whiteSpace!
+ */
+export function getCurrency(value: CurrentArgs["value"], fractionDigits: CurrentArgs["fractionDigits"] = 2): string {
+  const currentLocale = "en-GB";
+  const currencyOptions = {
     style: "currency",
     currency: "GBP",
     minimumFractionDigits: fractionDigits,
-    maximumFractionDigits: fractionDigits
+    maximumFractionDigits: fractionDigits,
   };
 
-  if (!isNumber(value)) {
-    const zeroValue = new Intl.NumberFormat("en-GB", options).format(0);
-    return <span style={{ whiteSpace: "nowrap" }}>{zeroValue}</span>;
-  }
+  const currencyValue = new Intl.NumberFormat(currentLocale, currencyOptions);
+  const formatValue = isNumber(value) ? value : 0;
 
-  const valToRender = new Intl.NumberFormat("en-GB", options).format(value);
-  return <span style={{ whiteSpace: "nowrap" }}>{valToRender}</span>;
-};
+  return currencyValue.format(formatValue);
+}
+
+export function Currency({ value, fractionDigits = 2, className, ...props }: CurrencyProps) {
+  const formattedValue = getCurrency(value, fractionDigits);
+
+  return (
+    <span {...props} className={cx("currency", className)} style={{ ...props.style, whiteSpace: "nowrap" }}>
+      {formattedValue}
+    </span>
+  );
+}
