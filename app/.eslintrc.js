@@ -58,7 +58,6 @@ module.exports = {
         "**/tableHelpers.ts",
         "**/validationMessage.tests.tsx",
         "**/claimDetailsLink.tests.tsx",
-        "**/claimWindow.tests.tsx",
         "**/find-by-qa.ts",
         "**/tableHelpers.tests.tsx",
         "**/dateInput.tests.tsx",
