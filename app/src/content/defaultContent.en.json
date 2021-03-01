@@ -72,14 +72,6 @@
     "claimLastModified": {
       "message": "Changes last saved"
     },
-    "claimWindow": {
-      "nextClaimPeriod": "Next claim period",
-      "begins": "Begins",
-      "end": "Ends",
-      "daysOutstanding": "days left of claim period",
-      "deadline": "deadline",
-      "daysOverdue": "days past claim period"
-    },
     "forecastTable": {
       "costsClaimedHeader": "Costs claimed",
       "costsClaimingHeader": "Costs you are claiming",

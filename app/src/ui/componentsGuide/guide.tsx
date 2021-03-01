@@ -5,7 +5,6 @@ import { Header } from "../components/layout/header";
 
 import { accordionGuide } from "./accordionGuide";
 import { buttonGuide } from "./styledButtonGuide";
-import { claimWindowGuide } from "./claimWindowGuide";
 import { datesGuide } from "./datesGuide";
 import { detailsGuide } from "./detailsGuide";
 import { documentListGuide } from "./documentListGuide";
@@ -46,7 +45,6 @@ const guides: IGuide[] = [
   accordionGuide,
   buttonGuide,
   breadcrumbsGuide,
-  claimWindowGuide,
   currencyGuide,
   datesGuide,
   detailsGuide,

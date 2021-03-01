@@ -92,7 +92,6 @@ import { LoadingContent } from "./components/loadingContent";
 import { DocumentSingleContent } from "./components/documentSingleContent";
 import { DocumentGuidanceContent } from "./components/documentGuidanceContent";
 import { ClaimLastModifiedContent } from "./components/claimLastModifiedContent";
-import { ClaimWindowContent } from "./components/claimWindowContent";
 import { ForecastTableContent } from "./components/forecastTableContent";
 import { ReportFormContent } from "./components/reportFormContent";
 import { ForecastDetailsContent } from "./components/forecastDetailsContent";
@@ -217,7 +216,6 @@ export class Content extends ContentBase {
     documentSingle: DocumentSingleContent;
     documentGuidance: DocumentGuidanceContent;
     claimLastModified: ClaimLastModifiedContent;
-    claimWindow: ClaimWindowContent;
     forecastTable: ForecastTableContent;
     reportForm: ReportFormContent;
     forecastDetails: ForecastDetailsContent;
@@ -344,7 +342,6 @@ export class Content extends ContentBase {
       documentSingle: new DocumentSingleContent(this, competitionType),
       documentGuidance: new DocumentGuidanceContent(this, competitionType),
       claimLastModified: new ClaimLastModifiedContent(this, competitionType),
-      claimWindow: new ClaimWindowContent(this, competitionType),
       forecastTable: new ForecastTableContent(this, competitionType),
       reportForm: new ReportFormContent(this, competitionType),
       forecastDetails: new ForecastDetailsContent(this, competitionType),
