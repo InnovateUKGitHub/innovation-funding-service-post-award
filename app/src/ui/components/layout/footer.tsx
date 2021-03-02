@@ -1,5 +1,6 @@
 import React from "react";
 import cx from "classnames";
+import { UL } from "@ui/components/layout/list";
 import { ExternalLink } from "../renderers";
 import { GovWidthContainer } from "./GovWidthContainer";
 import { CrownCopyrightLogo } from "./crownCopyrightLogo";
@@ -12,6 +13,11 @@ export interface FooterProps {
 
 export const Footer = ({ links }: FooterProps) => {
   const content = useExternalContent();
+  const footerLinks = links.map(({ text, ...linkProps }) => (
+    <li key={text} className="govuk-footer__inline-list-item">
+      <FooterLink {...linkProps}>{text}</FooterLink>
+    </li>
+  ));
 
   return (
     <footer className="govuk-footer" role="contentinfo" data-qa="pageFooter">
@@ -20,21 +26,14 @@ export const Footer = ({ links }: FooterProps) => {
           <div className="govuk-footer__meta-item govuk-footer__meta-item--grow">
             <h2 className="govuk-visually-hidden" {...content.title}>{content.title.children}</h2>
 
-            <ul className="govuk-footer__inline-list">
-              {links.map(({ text, ...linkProps }) => (
-                <li key={text} className="govuk-footer__inline-list-item">
-                  <FooterLink {...linkProps}>{text}</FooterLink>
-                </li>
-              ))}
-            </ul>
+            <UL className="govuk-footer__inline-list">{footerLinks}</UL>
 
-            <ul className="govuk-footer__inline-list">
+            <UL className="govuk-footer__inline-list">
               <li className="govuk-footer__inline-list-item" {...content.usesCookie} />
-
               <li className="govuk-footer__inline-list-item">
                 <FooterLink {...content.moreAboutCookies} />.
               </li>
-            </ul>
+            </UL>
 
             <CrownCopyrightLogo
               className="govuk-footer__licence-logo"

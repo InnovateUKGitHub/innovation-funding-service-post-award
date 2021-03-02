@@ -1,4 +1,4 @@
-import { Task, TaskList, TaskListSection } from "@ui/components/taskList";
+import { Task, TaskListSection, OL } from "@ui/components";
 import { HomeRoute } from "@ui/containers";
 import createRouter from "router5";
 import browserPluginFactory from "router5/plugins/browser";
@@ -19,7 +19,7 @@ export const taskListGuide: IGuide = {
       name: "Simple, without validation",
       comments: "Renders information in a summary list, with action",
       example: `
-      <TaskList>
+      <OL>
               <TaskListSection step={1} title={"Scope Change"}>
                 <Task
                   name="View files"
@@ -39,41 +39,29 @@ export const taskListGuide: IGuide = {
                   route={HomeRoute.getLink({})}
                 />
               </TaskListSection>
-            </TaskList>
+            </OL>
       `,
       render: () => (
         <Provider store={createStore(rootReducer)}>
           <RouterProvider router={router}>
-            <TaskList>
+            <OL className="app-task-list">
               <TaskListSection step={1} title={"Scope Change"}>
-                <Task
-                  name="View files"
-                  status="Complete"
-                  route={HomeRoute.getLink({})}
-                />
-                <Task
-                  name="View reasoning"
-                  status="To do"
-                  route={HomeRoute.getLink({})}
-                />
+                <Task name="View files" status="Complete" route={HomeRoute.getLink({})} />
+                <Task name="View reasoning" status="To do" route={HomeRoute.getLink({})} />
               </TaskListSection>
               <TaskListSection step={2} title={"Partner change"}>
-                <Task
-                  name="View files"
-                  status="To do"
-                  route={HomeRoute.getLink({})}
-                />
+                <Task name="View files" status="To do" route={HomeRoute.getLink({})} />
               </TaskListSection>
-            </TaskList>
+            </OL>
           </RouterProvider>
         </Provider>
-      )
+      ),
     },
     {
       name: "With validation",
       comments: "Renders information in a summary list, with action and validation results",
       example: `
-       <TaskList>
+       <OL>
               <TaskListSection
                 step={1}
                 title={"Scope Change"}
@@ -85,27 +73,23 @@ export const taskListGuide: IGuide = {
                   route={HomeRoute.getLink({})}
                 />
               </TaskListSection>
-            </TaskList>
+            </OL>
       `,
       render: () => (
         <Provider store={createStore(rootReducer)}>
           <RouterProvider router={router}>
-            <TaskList>
+            <OL className="app-task-list">
               <TaskListSection
                 step={1}
                 title={"Scope Change"}
                 validation={[new Result(null, true, false, "You must upload a file plz", false)]}
               >
-                <Task
-                  name="View files"
-                  status="To do"
-                  route={HomeRoute.getLink({})}
-                />
+                <Task name="View files" status="To do" route={HomeRoute.getLink({})} />
               </TaskListSection>
-            </TaskList>
+            </OL>
           </RouterProvider>
         </Provider>
-      )
-    }
-  ]
+      ),
+    },
+  ],
 };

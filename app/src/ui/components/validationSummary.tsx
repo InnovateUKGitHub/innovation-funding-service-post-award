@@ -1,6 +1,7 @@
 import { flatten } from "@framework/util/arrayHelpers";
 import { useContent } from "@ui/hooks";
 import { IValidationResult, NestedResult, Result, Results } from "../validation";
+import { UL } from "./layout";
 
 interface Props {
   validation?: IValidationResult | null;
@@ -31,37 +32,54 @@ export function ValidationSummary({ validation, compressed }: Props) {
   const {getContent} = useContent();
 
   const results: Result[] = [];
-  if (validation && validation.errors) {
-    validation.errors.filter(x => !x.isValid && x.showValidationErrors).forEach(x => {
-      // nested results have collection of items that may have errored
-      // if we are not compressed we want to show each of them
-      // need to find all invalid children and flatten them
-      if (x instanceof NestedResult && compressed !== true && x.results.length) {
-        if (!x.listValidation.isValid) {
-          results.push(x.listValidation);
-        } else {
-          const childErrors = flatten((x as NestedResult<Results<{}>>).results.filter(y => !y.isValid).map(y => y.errors));
-          childErrors.forEach(e => results.push(e));
-        }
-      } else {
-        results.push(x);
-      }
-    });
-  }
+  populateResults();
   if (!results.length) {
     return null;
   }
 
-  const title = getContent(x => x.components.validationSummary.validationsTitle);
-
   return (
-    <div className="govuk-error-summary" aria-labelledby="error-summary-title" role="alert" tabIndex={-1} data-module="govuk-error-summary" data-qa="validation-summary">
-      <h2 className="govuk-error-summary__title" id="error-summary-title">{title}</h2>
+    <div
+      className="govuk-error-summary"
+      aria-labelledby="error-summary-title"
+      role="alert"
+      tabIndex={-1}
+      data-module="govuk-error-summary"
+      data-qa="validation-summary"
+    >
+      <h2 className="govuk-error-summary__title" id="error-summary-title">
+        {getContent(x => x.components.validationSummary.validationsTitle)}
+      </h2>
       <div className="govuk-error-summary__body">
-        <ul className="govuk-list govuk-error-summary__list">
-          {results.map(x => <li key={`error${x.key}`}><a href={`#${x.key}`}>{prepareMessage(x.errorMessage)}</a></li>)}
-        </ul>
+        <UL className="govuk-error-summary__list">{createResultsLinks(results)}</UL>
       </div>
     </div>
   );
+
+  function populateResults(): void {
+    if (validation && validation.errors) {
+      validation.errors.filter(x => !x.isValid && x.showValidationErrors).forEach(x => {
+        // nested results have collection of items that may have errored
+        // if we are not compressed we want to show each of them
+        // need to find all invalid children and flatten them
+        if (x instanceof NestedResult && compressed !== true && x.results.length) {
+          if (!x.listValidation.isValid) {
+            results.push(x.listValidation);
+          } else {
+            const childErrors = flatten((x as NestedResult<Results<{}>>).results.filter(y => !y.isValid).map(y => y.errors));
+            childErrors.forEach(e => results.push(e));
+          }
+        } else {
+          results.push(x);
+        }
+      });
+    }
+  }
+
+  function createResultsLinks(res: Result[]): JSX.Element[] {
+    return res.map(x => (
+      <li key={`error${x.key}`}>
+        <a href={`#${x.key}`}>{prepareMessage(x.errorMessage)}</a>
+      </li>
+    ));
+  }
 }

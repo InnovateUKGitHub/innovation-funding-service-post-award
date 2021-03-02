@@ -74,10 +74,10 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
 
   private renderTasks(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
     return (
-      <ACC.TaskList qa="taskList">
+      <ACC.UL qa="taskList">
         {this.renderTaskListActions(projectChangeRequest, editor, editableItemTypes)}
         {this.renderTaskListReasoning(projectChangeRequest, editor, editableItemTypes)}
-      </ACC.TaskList>
+      </ACC.UL>
     );
   }
 

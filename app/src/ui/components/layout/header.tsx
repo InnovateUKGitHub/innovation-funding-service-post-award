@@ -2,6 +2,7 @@ import { ContentConsumer } from "@ui/redux";
 import { getContentFromResult, useGovFrontend } from "@ui/hooks";
 import { ContentResult } from "@content/contentBase";
 import { HeaderContent } from "@content/general-content/HeaderContent";
+import { UL } from "@ui/components/layout/list";
 import { GovWidthContainer } from "./GovWidthContainer";
 
 interface NavigationItem {
@@ -53,7 +54,12 @@ export function Header({ navigationItems, siteLink }: HeaderProps) {
 
     return (
       <nav>
-        <ul id="navigation" className="govuk-header__navigation" aria-label="Top Level Navigation" aria-hidden="false">
+        <UL
+          id="navigation"
+          className="govuk-header__navigation"
+          aria-label="Top Level Navigation"
+          aria-hidden={false}
+        >
           {navigationItems.map(({ text, qa, ...item }) => (
             <li key={text} className="govuk-header__navigation-item" data-qa="header-navigation-item">
               <a {...item} className="govuk-header__link" data-qa={qa}>
@@ -61,7 +67,7 @@ export function Header({ navigationItems, siteLink }: HeaderProps) {
               </a>
             </li>
           ))}
-        </ul>
+        </UL>
       </nav>
     );
   };

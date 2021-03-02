@@ -13,6 +13,7 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { AriaLive } from "../renderers/ariaLive";
 import { ValidationMessage } from "../validationMessage";
 import { Content } from "../content";
+import { UL } from "../layout";
 
 interface Props {
   project: ProjectDto;
@@ -51,12 +52,12 @@ const renderWarningMessage = (props: Props) => {
       }
     });
 
+  const lowerCaseCategories = categories.map((x) => (
+    <li key={x}>{x.toLocaleLowerCase()}</li>
+  ));
+
   const categoriesList = (
-    <ul>
-      {categories.map((x) => (
-        <li key={x}>{x.toLocaleLowerCase()}</li>
-      ))}
-    </ul>
+    <UL>{lowerCaseCategories}</UL>
   );
   const isFC = (props.partner.roles & ProjectRole.FinancialContact) === ProjectRole.FinancialContact;
 
@@ -67,7 +68,9 @@ const renderWarningMessage = (props: Props) => {
       messageType="info"
       message={
         <div>
-         <Content value={(x) => x.components.warningContent.amountRequestMessage} /><ul>{categoriesList}</ul><Content value={(x) => x.components.warningContent.contactmessage} />
+          <Content value={x => x.components.warningContent.amountRequestMessage} />
+          <UL>{categoriesList}</UL>
+          <Content value={x => x.components.warningContent.contactmessage} />
         </div>
       }
       qa="forecasts-warning-fc"
@@ -77,7 +80,8 @@ const renderWarningMessage = (props: Props) => {
       messageType="info"
       message={
         <div>
-          <Content value={(x) => x.components.warningContent.MOPMmessage} /><ul>{categoriesList}</ul>
+          <Content value={x => x.components.warningContent.MOPMmessage} />
+          <UL>{categoriesList}</UL>
         </div>
       }
       qa="forecasts-warning-mo-pm"
