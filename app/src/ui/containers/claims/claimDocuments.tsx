@@ -10,6 +10,7 @@ import { DocumentDescriptionDto, DocumentSummaryDto } from "@framework/dtos/docu
 import { DropdownOption } from "@ui/components";
 import { getAllEnumValues } from "@shared/enumHelper";
 import { projectCompetition, useContent } from "@ui/hooks";
+import { OL } from "@ui/components";
 
 export interface ClaimDocumentsPageParams {
   projectId: string;
@@ -140,11 +141,11 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
 
         <ACC.Renderers.SimpleString>{ktpContent.uploadGuidanceMessage}</ACC.Renderers.SimpleString>
 
-        <ol className="govuk-list gov-uk--number govuk-!-margin-bottom-10">
+        <OL className="govuk-!-margin-bottom-10">
           {introList.map(item => (
             <li key={item}>{item}</li>
           ))}
-        </ol>
+        </OL>
 
         <ACC.Renderers.SimpleString>{ktpContent.schedule3ReminderMessage}</ACC.Renderers.SimpleString>
       </>

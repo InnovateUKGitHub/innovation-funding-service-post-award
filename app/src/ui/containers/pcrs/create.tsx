@@ -107,10 +107,10 @@ function PCRCreateComponent({ content, ...props }: CreatePcrProps) {
       >
         <ACC.Renderers.SimpleString>{content.guidanceIntroMessage}</ACC.Renderers.SimpleString>
 
-        <ACC.UnorderedList>
+        <ACC.UL>
           <li>{content.guidanceListRow1}</li>
           <li>{content.guidanceListRow2}</li>
-        </ACC.UnorderedList>
+        </ACC.UL>
 
         <ACC.Section qa="pcr-create">
           <PCRForm.Form

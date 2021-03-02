@@ -1,5 +1,7 @@
 import { Link, LinkProps } from "react-router5";
 
+import { OL } from "@ui/components";
+
 interface BreadcrumbItem extends LinkProps {
   text: string;
 }
@@ -9,24 +11,27 @@ export interface BreadcrumbsProps {
 }
 
 export function Breadcrumbs({ children, links }: BreadcrumbsProps) {
+  const breadcrumbLinks = links.map(({ text, ...routeProps }) => (
+    <li key={text} data-qa="breadcrumb-item" className="govuk-breadcrumbs__list-item">
+      <Link {...routeProps}>{text}</Link>
+    </li>
+  ));
+  const breadcrumbCurrent = (
+    <li
+      key="breadcrumb-current"
+      data-qa="breadcrumb-current-item"
+      className="govuk-breadcrumbs__list-item"
+      aria-current="page"
+    >
+      {children}
+    </li>
+  );
   return (
     <div className="govuk-breadcrumbs">
-      <ol className="govuk-breadcrumbs__list">
-        {links.map(({ text, ...routeProps }) => (
-          <li key={text} data-qa="breadcrumb-item" className="govuk-breadcrumbs__list-item">
-            <Link {...routeProps}>{text}</Link>
-          </li>
-        ))}
-
-        <li
-          key="breadcrumb-current"
-          data-qa="breadcrumb-current-item"
-          className="govuk-breadcrumbs__list-item"
-          aria-current="page"
-        >
-          {children}
-        </li>
-      </ol>
+      <OL className="govuk-breadcrumbs__list">
+        {breadcrumbLinks}
+        {breadcrumbCurrent}
+      </OL>
     </div>
   );
 }

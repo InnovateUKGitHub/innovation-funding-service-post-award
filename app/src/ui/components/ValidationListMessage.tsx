@@ -1,3 +1,4 @@
+import { UL } from "./layout";
 import { SimpleString } from "./renderers";
 import { ValidationMessage } from "./validationMessage";
 
@@ -10,16 +11,12 @@ export interface ValidationListMessageProps<MessageContent = JSX.Element | strin
 export function ValidationListMessage({ before, items = [], after, ...props }: ValidationListMessageProps) {
   if (!items.length) return null;
 
+  const messages = items.map(item => <li key={item}>{item}</li>);
+
   const markup = (
     <>
       <SimpleString>{before}</SimpleString>
-
-      <ul>
-        {items.map(item => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
-
+      <UL>{messages}</UL>
       {after && <SimpleString>{after}</SimpleString>}
     </>
   );

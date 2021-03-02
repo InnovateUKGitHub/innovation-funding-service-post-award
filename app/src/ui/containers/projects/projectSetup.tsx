@@ -58,7 +58,7 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
             <ACC.Content value={x => x.projectSetup.projectMessages.setupGuidance}/>
           </ACC.Renderers.SimpleString>
         </ACC.Section>
-        <ACC.TaskList qa="taskList">
+        <ACC.UL qa="taskList">
           <ACC.TaskListSection step={1} titleContent={x => x.projectSetup.taskList.sectionTitleEnterInfo} qa="WhatDoYouWantToDo">
             <ACC.Task
               nameContent={x => x.projectSetup.setSpendProfile}
@@ -73,7 +73,7 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
               validation={[editor.validator.bankDetailsTaskStatus]}
             />
           </ACC.TaskListSection>
-        </ACC.TaskList>
+        </ACC.UL>
         <Form.Form
             data={partner}
             editor={editor}

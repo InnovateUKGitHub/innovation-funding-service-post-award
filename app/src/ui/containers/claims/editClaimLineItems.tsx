@@ -3,7 +3,7 @@ import { Pending } from "@shared/pending";
 import { ClaimDetailsDto, ClaimLineItemDto, ForecastDetailsDTO, ProjectDto, ProjectRole } from "@framework/types";
 import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
-import { ValidationMessage } from "@ui/components";
+import { UL, ValidationMessage } from "@ui/components";
 import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators/claimDetailsValidator";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
@@ -259,33 +259,23 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
   }
 
   private renderNegativeClaimWarning(editor: ClaimDetailsDto) {
-    const errorItems = editor.lineItems.reduce<string[]>(
-      (acc, i) => i.value < 0 ? [...acc, i.description] : acc,
-      []
-    );
+    const errorItems = editor.lineItems.reduce<string[]>((acc, i) => (i.value < 0 ? [...acc, i.description] : acc), []);
 
     if (!errorItems.length) return null;
 
+    const errorItemsList = errorItems.map(costCategory => <li key={costCategory}>{costCategory}</li>);
     const markup = (
       <>
         <ACC.Renderers.SimpleString>
-          <ACC.Content value={(content) => content.editClaimLineItems.messages.negativeClaimWarning} />
+          <ACC.Content value={content => content.editClaimLineItems.messages.negativeClaimWarning} />
         </ACC.Renderers.SimpleString>
 
-        <ul>
-          {errorItems.map((costCategory) => <li key={costCategory}>{costCategory}</li>)}
-        </ul>
+        <UL>{errorItemsList}</UL>
       </>
     );
 
-    return (
-      <ACC.ValidationMessage
-        messageType="info"
-        qa="claim-warning"
-        message={markup}
-      />
-    );
-}
+    return <ACC.ValidationMessage messageType="info" qa="claim-warning" message={markup} />;
+  }
 
   renderDescription(item: ClaimLineItemDto, index: { column: number; row: number }, validation: ClaimLineItemDtoValidator, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
     return (

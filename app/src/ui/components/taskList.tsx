@@ -1,8 +1,9 @@
 import { ILinkInfo } from "@framework/types";
 import { Result } from "@ui/validation";
 import classNames from "classnames";
-import { Content } from "@ui/components/content";
+import { Content, UL } from "@ui/components";
 import { ContentSelector } from "@content/content";
+import React from "react";
 import { ValidationError } from "./validationError";
 import { Link } from "./links";
 
@@ -31,36 +32,35 @@ export const Task: React.FunctionComponent<ITask> = ({ route, name, nameContent,
   });
   const hasError = validation && validation.find(x => !x.isValid);
 
-  const link = nameContent ? <Content value={nameContent}/> : name;
+  const link = nameContent ? <Content value={nameContent} /> : name;
   return (
     <li className={classNames("app-task-list__item", { "app-task-list__item--error": hasError })}>
-      {validation && validation.map((v) => <ValidationError error={v} key={v.key}/>)}
-      <span className="app-task-list__task-name">
-        {route ? <Link route={route}>{link}</Link> : link}
-      </span>
+      {validation && validation.map(v => <ValidationError error={v} key={v.key} />)}
+      <span className="app-task-list__task-name">{route ? <Link route={route}>{link}</Link> : link}</span>
       <span className={actionClasses}>{status}</span>
     </li>
   );
 };
 
-export const TaskListSection: React.FunctionComponent<ITaskListItem> = ({ step, title, titleContent, validation, children, qa}) => {
+export const TaskListSection: React.FunctionComponent<ITaskListItem> = ({
+  step,
+  title,
+  titleContent,
+  validation,
+  children,
+  qa,
+}) => {
+  const validationErrors = validation && validation.map(v => <ValidationError error={v} key={v.key} />);
   return (
     <li key={step} data-qa={qa}>
-      <h2 className="app-task-list__section"><span className="app-task-list__section-number">{step}.</span>&nbsp;{
-        titleContent ? <Content value={titleContent}/> : title
-      }</h2>
-      <ul className="app-task-list__items">
-        {validation && validation.map((v) => <ValidationError error={v} key={v.key}/>)}
+      <h2 className="app-task-list__section">
+        <span className="app-task-list__section-number">{step}.</span>&nbsp;
+        {titleContent ? <Content value={titleContent} /> : title}
+      </h2>
+      <UL className="app-task-list__items">
+        {validationErrors}
         {children}
-      </ul>
+      </UL>
     </li>
-  );
-};
-
-export const TaskList: React.FunctionComponent<{qa?: string}> = ({ qa, children }) => {
-  return (
-    <ol className="app-task-list" data-qa={qa}>
-      {children}
-    </ol>
   );
 };

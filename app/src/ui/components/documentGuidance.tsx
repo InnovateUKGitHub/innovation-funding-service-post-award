@@ -23,22 +23,22 @@ export function DocumentGuidance() {
       <ACC.Info summary={fileTypesQuestion}>
         <ACC.Renderers.SimpleString>{uploadGuidance}</ACC.Renderers.SimpleString>
 
-        <ACC.UnorderedList>
+        <ACC.UL>
           <li>{fileSizeGuidance}</li>
           <li>{fileNameGuidance}</li>
-        </ACC.UnorderedList>
+        </ACC.UL>
 
         <ACC.Renderers.SimpleString>{noFilesNumberLimitMessage}</ACC.Renderers.SimpleString>
 
         <ACC.Renderers.SimpleString>{fileTypesUploadMessage}</ACC.Renderers.SimpleString>
 
-        <ACC.UnorderedList>
+        <ACC.UL>
           <li>{pdf}</li>
           <li>{text}</li>
           <li>{presentation}</li>
           <li>{spreadsheet}</li>
           <li>{availableImageExtensions}</li>
-        </ACC.UnorderedList>
+        </ACC.UL>
       </ACC.Info>
     </>
   );

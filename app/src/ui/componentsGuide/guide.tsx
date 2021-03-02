@@ -36,10 +36,10 @@ import { currencyGuide } from "@ui/componentsGuide/currencyGuide";
 import { percentageGuide } from "@ui/componentsGuide/percentageGuide";
 import { breadcrumbsGuide } from "@ui/componentsGuide/breadcrumbsGuide";
 import { modalGuide } from "@ui/componentsGuide/modalGuide";
-import { listGuide } from "@ui/componentsGuide/listGuide";
+import { ulGuide, olGuide } from "@ui/componentsGuide/listGuide";
 import { readonlyLabel } from "@ui/componentsGuide/readonlyLabelGuide";
 import { IGuide } from "@framework/types";
-import { GovWidthContainer } from "@ui/components/layout";
+import { GovWidthContainer, UL } from "@ui/components";
 
 const guides: IGuide[] = [
   accordionGuide,
@@ -55,7 +55,8 @@ const guides: IGuide[] = [
   info,
   insetText,
   linksListGuide,
-  listGuide,
+  ulGuide,
+  olGuide,
   logsGuide,
   modalGuide,
   navigationArrowsGuide,
@@ -106,18 +107,20 @@ export const Guide: React.FunctionComponent<GuideProps> = props => {
 
           <div className="govuk-grid-row">
             <div className="govuk-grid-column-one-quarter">
-              <ul>
-                <li>
-                  <a className="govuk-link" href="/components#all">
-                    Show All
-                  </a>
-                </li>
+              <UL>
+                {
+                  <li>
+                    <a className="govuk-link" href="/components#all">
+                      Show All
+                    </a>
+                  </li>
+                }
                 {guides.map((x, i) => (
                   <li className="govuk-link" key={`guide-menu-${i}`}>
                     <a href={`/components?guide=${x.name}`}>{x.name}</a>
                   </li>
                 ))}
-              </ul>
+              </UL>
             </div>
 
             <div className="govuk-grid-column-three-quarters">

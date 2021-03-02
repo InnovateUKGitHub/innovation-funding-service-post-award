@@ -1,5 +1,6 @@
 import React from "react";
 import cn from "classnames";
+import { UL } from "@ui/components/layout/list";
 import { Messages } from "../renderers/messages";
 
 export interface HashTabItem {
@@ -20,7 +21,6 @@ interface State {
 }
 
 export class HashTabs extends React.PureComponent<TabProps, State> {
-
   constructor(props: TabProps) {
     super(props);
     this.state = {
@@ -28,13 +28,13 @@ export class HashTabs extends React.PureComponent<TabProps, State> {
     };
   }
 
-  private elem: HTMLElement|null = null;
+  private elem: HTMLElement | null = null;
 
   componentDidMount() {
     this.setHash();
     window.addEventListener("hashchange", this.setHash, false);
     const govFrontend = window && (window as any).GOVUKFrontend;
-    if(this.elem && govFrontend) {
+    if (this.elem && govFrontend) {
       // call gov design js to init behaviour
       new govFrontend.Tabs(this.elem).init();
     }
@@ -45,37 +45,39 @@ export class HashTabs extends React.PureComponent<TabProps, State> {
   }
 
   setHash = () => {
-    this.setState({hash: window.location.hash});
+    this.setState({ hash: window.location.hash });
   };
 
   render() {
     const { tabList, qa } = this.props;
-    if (tabList === null || !tabList.length) return null;
 
-    const selected = this.findSelectedItem();
-    return (
-      <div className="govuk-tabs" data-module="govuk-tabs" ref={(e) => this.elem = e}>
-        <h2 className="govuk-tabs__title">
-          Contents
-        </h2>
-        <ul className="govuk-tabs__list" data-qa={qa} role="tablist">
-          {tabList.map((item) => this.renderTabItem(item, selected.hash === item.hash))}
-        </ul>
-        {tabList.map((item) => this.renderTabContents(item, selected.hash === item.hash))}
-      </div>
-    );
+    if (tabList !== null && tabList.length) {
+      const selected = this.findSelectedItem();
+      const tabs = tabList.map(item => this.createTab(item, selected.hash === item.hash));
+      return (
+        <div className="govuk-tabs" data-module="govuk-tabs" ref={e => (this.elem = e)}>
+          <h2 className="govuk-tabs__title">Contents</h2>
+          <UL className="govuk-tabs__list" qa={qa} role="tablist">
+            {tabs}
+          </UL>
+          {tabList.map(item => this.renderTabContents(item, selected.hash === item.hash))}
+        </div>
+      );
+    }
+    return null;
   }
 
-  private renderTabItem(item: HashTabItem, selected: boolean) {
-    const tab = this.renderTab(item, selected);
+  private createTab(item: HashTabItem, selected: boolean) {
+    const tab = (
+      <a href={`#${item.hash}`} className={cn("govuk-tabs__tab")} aria-selected={selected} role="tab">
+        {item.text}
+      </a>
+    );
     if (!tab) return null;
 
-    const classes = cn(
-      "govuk-tabs__list-item",
-      {
-        "govuk-tabs__list-item--selected": selected
-      }
-    );
+    const classes = cn("govuk-tabs__list-item", {
+      "govuk-tabs__list-item--selected": selected,
+    });
 
     return (
       <li key={`tab-${item.text}`} role="presentation" data-qa={item.qa} className={classes}>
@@ -84,16 +86,11 @@ export class HashTabs extends React.PureComponent<TabProps, State> {
     );
   }
 
-  private renderTab(item: HashTabItem, selected: boolean) {
-    const classes = cn("govuk-tabs__tab");
-    return <a href={`#${item.hash}`} className={classes} aria-selected={selected} role="tab">{item.text}</a>;
-  }
-
   private renderTabContents(item: HashTabItem, selected: boolean) {
-    const classes = cn("govuk-tabs__panel", {"govuk-tabs__panel--hidden": !selected});
+    const classes = cn("govuk-tabs__panel", { "govuk-tabs__panel--hidden": !selected });
     return (
       <section key={item.hash} id={item.hash} className={classes}>
-        {this.props.messages && <Messages messages={this.props.messages}/>}
+        {this.props.messages && <Messages messages={this.props.messages} />}
         {item.content}
       </section>
     );
