@@ -201,36 +201,40 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     );
   }
 
-  private getCompetitionRenderTableDocumentContent(competitionType: string, documents: DocumentSummaryDto[], editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
-    const { isKTP } = projectCompetition(competitionType);
+  private getCompetitionRenderTableDocumentContent(
+    competitionType: string,
+    documents: DocumentSummaryDto[],
+    editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>,
+  ) {
     const LineItemForm = ACC.TypedForm<ClaimDetailsDto>();
+    const { isKTP } = projectCompetition(competitionType);
 
-    return isKTP ? (
-        ""
-      ) : (
-      <>
-        <LineItemForm.Fieldset>{this.renderDocuments(documents)}</LineItemForm.Fieldset>
-        <LineItemForm.Fieldset>
-          <LineItemForm.Button name="upload" onClick={() => this.props.onUpdate(true, editor.data, true)}>
-            <ACC.Content value={x => x.editClaimLineItems.uploadAndRemoveDocumentsButton} />
-          </LineItemForm.Button>
-        </LineItemForm.Fieldset>
-        <LineItemForm.Fieldset
-          headingContent={x => x.editClaimLineItems.additionalInformationHeading}
-          qa="additional-info-form"
-          headingQa="additional-info-heading"
-        >
-          <LineItemForm.MultilineString
-            label={<ACC.Content value={x => x.editClaimLineItems.additionalInfo} />}
-            hintContent={x => x.editClaimLineItems.additionalInformationHint}
-            labelHidden
-            name="comments"
-            value={() => editor.data.comments}
-            update={(data, v) => (data.comments = v)}
-            qa="info-text-area"
-          />
-        </LineItemForm.Fieldset>
-      </>
+    return (
+      !isKTP && (
+        <>
+          <LineItemForm.Fieldset>{this.renderDocuments(documents)}</LineItemForm.Fieldset>
+          <LineItemForm.Fieldset>
+            <LineItemForm.Button name="upload" onClick={() => this.props.onUpdate(true, editor.data, true)}>
+              <ACC.Content value={x => x.editClaimLineItems.uploadAndRemoveDocumentsButton} />
+            </LineItemForm.Button>
+          </LineItemForm.Fieldset>
+          <LineItemForm.Fieldset
+            headingContent={x => x.editClaimLineItems.additionalInformationHeading}
+            qa="additional-info-form"
+            headingQa="additional-info-heading"
+          >
+            <LineItemForm.MultilineString
+              label={<ACC.Content value={x => x.editClaimLineItems.additionalInfo} />}
+              hintContent={x => x.editClaimLineItems.additionalInformationHint}
+              labelHidden
+              name="comments"
+              value={() => editor.data.comments}
+              update={(data, v) => (editor.data.comments = v)}
+              qa="info-text-area"
+            />
+          </LineItemForm.Fieldset>
+        </>
+      )
     );
   }
 

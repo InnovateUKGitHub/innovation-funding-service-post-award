@@ -56,6 +56,7 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
       onSubmit: this.props.onSubmit
     });
 
+    // TODO: as part of the ticket ACC-7480, we discovered that this function doesn't handle any form components nested within react fragments, we should check if the child is a fragment and if so, traverse it's chidren recursively
     const childrenWithData = React.Children.map(this.props.children, (child, index) => child && React.cloneElement(child as any, childProps(index)));
     return (
       <StoresConsumer>
