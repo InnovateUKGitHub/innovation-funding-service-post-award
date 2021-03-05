@@ -968,7 +968,15 @@
       "agreementToPCR": "Agreement to PCR",
       "unknown": "Unknown",
       "lmcMinutes": "LMC documents",
-      "scheduleThree": "Schedule 3"
+      "scheduleThree": "Schedule 3",
+      "reviewMeeting": "Review meeting",
+      "plans": "Plans",
+      "collaborationAgreement": "Collaboration agreement",
+      "riskRegister": "Risk register",
+      "annexThree": "Annex 3",
+      "presentation": "Presentation",
+      "email": "Email",
+      "meetingAgenda": "Meeting agenda"
     },
     "uploadInputLabel": "Upload files",
     "fileNameLabel": "File name",
