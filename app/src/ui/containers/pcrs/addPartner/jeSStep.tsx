@@ -1,121 +1,203 @@
-import React from "react";
 import * as ACC from "@ui/components";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
-import { MultipleDocumentUpdloadDtoValidator, PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
-import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import * as Dtos from "@framework/dtos";
 import { DocumentDescription } from "@framework/constants";
+import { useContent } from "@ui/hooks";
+import { useStores } from "@ui/redux";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
+import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 
-interface InnerProps {
-  documents: DocumentSummaryDto[];
-  onSubmit: (dto: MultipleDocumentUploadDto) => void;
-  onFileChange: (isSaving: boolean, dto: MultipleDocumentUploadDto) => void;
-  onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
+export type BasePcrProps = PcrStepProps<Dtos.PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>;
+
+export interface JesStepUIProps extends BasePcrProps {
+  documents: Dtos.DocumentSummaryDto[];
+  onSubmit: (dto: Dtos.MultipleDocumentUploadDto) => void;
+  onFileChange: (isSaving: boolean, dto: Dtos.MultipleDocumentUploadDto) => void;
+  onFileDelete: (dto: Dtos.MultipleDocumentUploadDto, document: Dtos.DocumentSummaryDto) => void;
 }
 
-class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & InnerProps> {
-  render() {
-    const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
-    const { documents, documentsEditor } = this.props;
-    return (
-      <>
-        {this.renderForm(documentsEditor)}
-        {this.renderFiles(documentsEditor, documents)}
-        <Form.Form qa="saveAndContinue" data={this.props.pcrItem} onSubmit={() => this.props.onSave()}>
-          <Form.Fieldset>
-            <Form.Submit><ACC.Content value={x => x.pcrAddPartnerJeS.pcrItem.submitButton}/></Form.Submit>
-            <Form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerJeS.pcrItem.returnToSummaryButton}/></Form.Button>
-          </Form.Fieldset>
-        </Form.Form>
-      </>
-    );
-  }
+export function JesStepUI({ documents, documentsEditor, ...props }: JesStepUIProps) {
+  const { getContent } = useContent();
 
-  private renderForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>): React.ReactNode {
-    const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
+  const jesWebsiteLinkAlt = getContent(x => x.pcrAddPartnerJeS.jesWebsiteLinkAlt);
+  const jesApplyingViaSystemLinkAlt = getContent(x => x.pcrAddPartnerJeS.jesListItem1LinkAlt);
+  const jesApplyingViaSystemLinkContent = getContent(x => x.pcrAddPartnerJeS.jesListItem1LinkContent);
+  const jesListProcessItem2 = getContent(x => x.pcrAddPartnerJeS.jesListItem2);
+  const jesWebsiteLinkContent = getContent(x => x.pcrAddPartnerJeS.jesWebsiteLinkContent);
+  const jesIntroduction = getContent(x => x.pcrAddPartnerJeS.jesIntroduction);
+  const jesUploadSupport = getContent(x => x.pcrAddPartnerJeS.jesUploadSupport);
+  const submitButton = getContent(x => x.pcrAddPartnerJeS.pcrItem.submitButton);
+  const returnToSummaryButton = getContent(x => x.pcrAddPartnerJeS.pcrItem.returnToSummaryButton);
+  const jesHeading = getContent(x => x.pcrAddPartnerJeS.labels.jesHeading);
+  const uploadInputLabel = getContent(x => x.pcrAddPartnerJeS.documentLabels.uploadInputLabel);
+  const filesUploadedTitle = getContent(x => x.pcrAddPartnerJeS.documentLabels.filesUploadedTitle);
+  const filesUploadedSubtitle = getContent(x => x.pcrAddPartnerJeS.documentLabels.filesUploadedSubtitle);
+  const uploadTitle = getContent(x => x.pcrAddPartnerJeS.documentMessages.uploadTitle);
+
+  const renderForm = () => {
+    const academicsApplicationLink = (
+      <ACC.Renderers.ExternalLink
+        href="https://www.gov.uk/government/publications/innovate-uk-completing-your-application-project-costs-guidance/guidance-for-academics-applying-via-the-je-s-system\"
+        alt={jesApplyingViaSystemLinkAlt}
+      >
+        {jesApplyingViaSystemLinkContent}
+      </ACC.Renderers.ExternalLink>
+    );
+
+    const externalJesLink = (
+      <ACC.Renderers.ExternalLink href="https://je-s.rcuk.ac.uk" alt={jesWebsiteLinkAlt}>
+        {jesWebsiteLinkContent}
+      </ACC.Renderers.ExternalLink>
+    );
+
+    const UploadForm = ACC.TypedForm<Dtos.MultipleDocumentUploadDto>();
+
     return (
       <ACC.Section>
+        <ACC.H2>{jesHeading}</ACC.H2>
+
+        <ACC.Renderers.SimpleString>{jesIntroduction}</ACC.Renderers.SimpleString>
+
+        <ACC.UL>
+          <li>{academicsApplicationLink}</li>
+          <li>
+            {jesListProcessItem2} {externalJesLink}
+          </li>
+        </ACC.UL>
+
+        <ACC.Renderers.SimpleString>{jesUploadSupport}</ACC.Renderers.SimpleString>
+
         <UploadForm.Form
           enctype="multipart"
-          editor={documentsEditor}
-          onSubmit={() => this.props.onSubmit(documentsEditor.data)}
-          onChange={(dto) => this.props.onFileChange(false, dto)}
           qa="projectChangeRequestItemUpload"
+          editor={documentsEditor}
+          onSubmit={() => props.onSubmit(documentsEditor.data)}
+          onChange={dto => props.onFileChange(false, dto)}
         >
-          <UploadForm.Fieldset headingContent={x => x.pcrAddPartnerJeS.labels.jesFormHeading}>
-            <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerJeS.guidance}/></ACC.Renderers.SimpleString>
-          </UploadForm.Fieldset>
           <UploadForm.Fieldset qa="documentUpload">
-            <UploadForm.Hidden name="description" value={x => DocumentDescription.JeSForm} />
+            <UploadForm.Hidden name="description" value={() => DocumentDescription.JeSForm} />
+
             <ACC.DocumentGuidance />
+
             <UploadForm.MulipleFileUpload
-              labelContent={x => x.pcrAddPartnerJeS.documentLabels.uploadInputLabel}
-              name="attachment"
               labelHidden
+              name="attachment"
+              validation={documentsEditor.validator.files}
+              label={uploadInputLabel}
               value={data => data.files}
               update={(dto, files) => {
                 dto.files = files || [];
                 dto.description = DocumentDescription.JeSForm;
               }}
-              validation={documentsEditor.validator.files}
             />
           </UploadForm.Fieldset>
+
           <UploadForm.Fieldset>
-            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}><ACC.Content value={x => x.pcrAddPartnerJeS.documentMessages.uploadTitle}/></UploadForm.Button>
+            <UploadForm.Button
+              name="uploadFile"
+              styling="Secondary"
+              onClick={() => props.onFileChange(true, documentsEditor.data)}
+            >
+              {uploadTitle}
+            </UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
       </ACC.Section>
     );
-  }
+  };
 
-  private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
-    if (documents.length) {
-      return (
-        <ACC.Section titleContent={x => x.pcrAddPartnerJeS.documentLabels.filesUploadedTitle} subtitleContent={x => x.pcrAddPartnerJeS.documentLabels.filesUploadedSubtitle}>
-          {documents.length ? <ACC.DocumentTableWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="je-s-document"/> : null}
+  const Form = ACC.TypedForm<Dtos.PCRItemForPartnerAdditionDto>();
+
+  return (
+    <>
+      {renderForm()}
+
+      {documents.length ? (
+        <ACC.Section title={filesUploadedTitle} subtitle={filesUploadedSubtitle}>
+          <ACC.DocumentTableWithDelete
+            onRemove={document => props.onFileDelete(documentsEditor.data, document)}
+            documents={documents}
+            qa="je-s-document"
+          />
         </ACC.Section>
-      );
-    }
-    return (
-      <ACC.Section titleContent={x => x.pcrAddPartnerJeS.documentLabels.filesUploadedTitle}>
-        <ACC.ValidationMessage message={x => x.pcrAddPartnerJeS.documentMessages.noDocumentsUploaded} messageType="info" />
-      </ACC.Section>
-    );
-  }
+      ) : (
+        <ACC.Section title={filesUploadedTitle}>
+          <ACC.ValidationMessage
+            messageType="info"
+            // TODO: Refactor <ValidationMessage /> to return styles on a primate string's not ContentResult
+            message={x => x.pcrAddPartnerJeS.documentMessages.noDocumentsUploaded}
+          />
+        </ACC.Section>
+      )}
+
+      <Form.Form qa="saveAndContinue" data={props.pcrItem} onSubmit={() => props.onSave()}>
+        <Form.Fieldset>
+          <Form.Submit>{submitButton}</Form.Submit>
+
+          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
+            {returnToSummaryButton}
+          </Form.Button>
+        </Form.Fieldset>
+      </Form.Form>
+    </>
+  );
 }
 
-export const JeSStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => (
-  <StoresConsumer>
-    {
-      stores => {
-        return <ACC.Loader
-          pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.project.id, props.pcrItem.id)}
-          render={documents => (
-            <Component
-              {...props}
-              documents={documents}
-              onSubmit={(dto) => {
-                stores.messages.clearMessages();
-                stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(true, props.project.id, props.pcrItem.id, dto, false, undefined, () => {
-                   { props.onSave(); }
-                });
-              }}
-              onFileChange={(isSaving, dto) => {
-                stores.messages.clearMessages();
-                // show message if remaining on page
-                const successMessage = isSaving ? dto.files.length === 1 ? "Your document has been uploaded." : `${dto.files.length} documents have been uploaded.` : undefined;
-                stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(isSaving, props.project.id, props.pcrItem.id, dto, isSaving, successMessage);
-              }}
-              onFileDelete={(dto, document) => {
-                stores.messages.clearMessages();
-                stores.projectChangeRequestDocuments.deletePcrOrPcrItemDocumentsEditor(props.project.id, props.pcrItem.id, dto, document, "Your document has been removed.");
-              }}
-            />
-          )}
-        />;
-      }
-    }
-  </StoresConsumer>
-);
+export const JeSStep = (props: BasePcrProps) => {
+  const stores = useStores();
+  const pendingPayload = stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.project.id, props.pcrItem.id);
+
+  return (
+    <ACC.Loader
+      pending={pendingPayload}
+      render={documents => (
+        <JesStepUI
+          {...props}
+          documents={documents}
+          onSubmit={dto => {
+            stores.messages.clearMessages();
+            stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(
+              true,
+              props.project.id,
+              props.pcrItem.id,
+              dto,
+              false,
+              undefined,
+              () => {
+                {
+                  props.onSave();
+                }
+              },
+            );
+          }}
+          onFileChange={(isSaving, dto) => {
+            stores.messages.clearMessages();
+            // show message if remaining on page
+            const successMessage = isSaving
+              ? dto.files.length === 1
+                ? "Your document has been uploaded."
+                : `${dto.files.length} documents have been uploaded.`
+              : undefined;
+            stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(
+              isSaving,
+              props.project.id,
+              props.pcrItem.id,
+              dto,
+              isSaving,
+              successMessage,
+            );
+          }}
+          onFileDelete={(dto, document) => {
+            stores.messages.clearMessages();
+            stores.projectChangeRequestDocuments.deletePcrOrPcrItemDocumentsEditor(
+              props.project.id,
+              props.pcrItem.id,
+              dto,
+              document,
+              "Your document has been removed.",
+            );
+          }}
+        />
+      )}
+    />
+  );
+};

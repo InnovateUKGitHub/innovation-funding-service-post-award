@@ -32,7 +32,7 @@ export class PCRAddPartnerLabels extends ContentBase {
   public readonly townOrCityHeading = this.getContent("town-or-city-heading");
   public readonly postcodeHeading = this.getContent("postcode-heading");
 
-  public readonly jesFormHeading = this.getContent("jes-form-heading");
+  public readonly jesHeading = this.getContent("jes-heading");
 
   public readonly tsbReferenceHeading = this.getContent("tsb-reference-heading");
 

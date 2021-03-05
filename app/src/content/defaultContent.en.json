@@ -674,7 +674,13 @@
       "heading-turnover": "Turnover (£)"
     },
     "pcr-add-partner-jes": {
-      "guidance": "Your new academic partner must apply for funding through the Je-S system. To find out more about the Je-S requirements and processes please go to:\n\n* <a href=\"https://www.gov.uk/government/publications/innovate-uk-completing-your-application-project-costs-guidance/guidance-for-academics-applying-via-the-je-s-system\" rel=\"noopener noreferrer\" target=\"_blank\" >guidance from Innovate UK for academics applying via the Je-S system (opens in a new window)</a>\n\n* the <a href=\"https://je-s.rcuk.ac.uk/\" rel=\"noopener noreferrer\" target=\"_blank\" >e-S website (opens in a new window)</a> \n\n\n\nUpload a pdf copy of the completed Je-S output form, once the new partner has a status of 'With Council'. If there is information outstanding or the partner is not at this status, your request will be rejected."
+      "jes-introduction": "Your new academic partner must apply for funding through the Je-S system. To find out more about the Je-S requirements and processes please go to:",
+      "jes-list-item-1-link-alt": "Applying via the Je-s system - Government link",
+      "jes-list-item-1-link-content": "Guidance from Innovate UK for academics applying via the Je-S system (opens in a new window)",
+      "jes-list-item-2-before-link": "The",
+      "jes-website-link-alt": "Je-s external website link",
+      "jes-website-link-content": "Je-S website (opens in a new window)",
+      "jes-upload-support": "Upload a pdf copy of the completed Je-S output form, once the new partner has a status of 'With Council'. If there is information outstanding or the partner is not at this status, your request will be rejected."
     },
     "pcr-add-partner-organisation-details": {
       "section-title": "Organisation details",
@@ -1069,7 +1075,7 @@
     "contact-last-name-heading": "Last name",
     "contact-phone-number-heading": "Phone number",
     "contact-email-heading": "Email",
-    "jes-form-heading": "Je-S form",
+    "jes-heading": "Je-S form",
     "tsb-reference-heading": "TSB reference",
     "project-costs-heading": "Project costs for new partner",
     "other-funding-sources-heading": "Other sources of funding?",
