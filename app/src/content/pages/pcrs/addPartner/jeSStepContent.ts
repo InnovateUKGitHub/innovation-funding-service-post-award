@@ -15,5 +15,13 @@ export class PCRAddPartnerJeSContent extends ContentPageBase {
   public readonly documentLabels = new DocumentLabels(this, this.competitionType);
   public readonly documentMessages = new DocumentMessages(this, this.competitionType);
 
-  public readonly guidance = this.getContent("guidance", { markdown: true });
+  public readonly jesWebsiteLinkAlt = this.getContent("jes-website-link-alt");
+  public readonly jesWebsiteLinkContent = this.getContent("jes-website-link-content");
+
+  public readonly jesIntroduction = this.getContent("jes-introduction");
+  public readonly jesUploadSupport = this.getContent("jes-upload-support");
+
+  public readonly jesListItem1LinkAlt = this.getContent("jes-list-item-1-link-alt");
+  public readonly jesListItem1LinkContent = this.getContent("jes-list-item-1-link-content");
+  public readonly jesListItem2 = this.getContent("jes-list-item-2-before-link");
 }

@@ -87,7 +87,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
     return (
       <ACC.Section titleContent={x => x.pcrAddPartnerSummary.labels.fundingSectionTitle} qa="add-partner-summary-funding">
         <ACC.SummaryList qa="add-partner-summary-list-funding">
-          { !isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.jesFormHeading} content={this.renderDocuments(documents, DocumentDescription.JeSForm)} qa="supportingDocumentsJes" action={this.props.getEditLink("jeSStep", null)} /> }
+          { !isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.jesHeading} content={this.renderDocuments(documents, DocumentDescription.JeSForm)} qa="supportingDocumentsJes" action={this.props.getEditLink("jeSStep", null)} /> }
           { !isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.tsbReferenceHeading} content={pcrItem.tsbReference} validation={validator.tsbReference} qa="tsbReference" action={this.props.getEditLink("academicCostsStep", validator.tsbReference)} /> }
           { isIndustrial && <ACC.SummaryListItem
             labelContent={x => x.pcrAddPartnerSummary.labels.projectCostsHeading}
