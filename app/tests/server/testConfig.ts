@@ -2,8 +2,9 @@ import { IConfig } from "@server/features/common";
 import { LogLevel } from "@framework/types/logLevel";
 
 export class TestConfig implements IConfig {
-
   public build = `test${Date.now()}`;
+
+  public disableCsp = false;
 
   public timeouts = {
     costCategories: 720,
@@ -12,7 +13,7 @@ export class TestConfig implements IConfig {
     recordTypes: 720,
     cookie: 1,
     token: 1,
-    contentRefreshSeconds: 0
+    contentRefreshSeconds: 0,
   };
 
   public certificates = {
@@ -24,7 +25,7 @@ export class TestConfig implements IConfig {
     changePeriodLengthWorkflow: false,
     contentHint: true,
     customContent: true,
-    displayOtherContacts: true
+    displayOtherContacts: true,
   };
 
   public logLevel = LogLevel.DEBUG;
@@ -32,7 +33,25 @@ export class TestConfig implements IConfig {
   public options = {
     maxFileSize: 100000,
     maxUploadFileCount: 10,
-    permittedFileTypes: ["pdf", "xps", "doc", "docx", "rdf", "txt", "csv", "odt", "ppt", "pptx", "odp", "xls", "xlsx", "ods", "jpg", "jpeg", "png"], // TODO: deprecated list
+    permittedFileTypes: [
+      "pdf",
+      "xps",
+      "doc",
+      "docx",
+      "rdf",
+      "txt",
+      "csv",
+      "odt",
+      "ppt",
+      "pptx",
+      "odp",
+      "xls",
+      "xlsx",
+      "ods",
+      "jpg",
+      "jpeg",
+      "png",
+    ], // TODO: deprecated list
     permittedTypes: {}, // TODO: test when we deprecate the permittedFileTypes field
     bankCheckValidationRetries: 2,
     bankCheckPersonalDetailsScorePass: 6,
@@ -65,7 +84,7 @@ export class TestConfig implements IConfig {
     bankCheckPort: undefined,
     companiesHouseSearchUrl: "",
     username: "",
-    password: ""
+    password: "",
   };
 
   public urls = {
@@ -80,7 +99,7 @@ export class TestConfig implements IConfig {
 
   public s3Account = {
     accessKeyId: "",
-    secretAccessKey:  "",
+    secretAccessKey: "",
     contentBucket: "",
     customContentPath: "",
   };
