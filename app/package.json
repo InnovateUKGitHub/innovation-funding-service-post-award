@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "External frontend for innovate uk acc system",
   "scripts": {
+    "script:check-node": "node ./scripts/validate-node-version.js",
     "clean": "rimraf ./dist ./public/build",
     "start:server": "node ./dist/src/server/index.js",
     "start:dev": "nodemon ./dist/src/server/index.js --watch ./dist/src/ --watch ./.env --watch ./public/build/",
@@ -11,7 +12,7 @@
     "build:client": "webpack --config webpack.client.prod.js",
     "build:client:dev": "webpack --config webpack.client.dev.js",
     "watch:client": "npm run build:client:dev -- --watch",
-    "watch": "npm-run-all --parallel watch:client watch:server",
+    "watch": "npm-run-all --parallel script:check-node watch:client watch:server",
     "watch:all": "npm-run-all --parallel watch:client watch:server start:dev",
     "build": "npm run build:server && npm run build:client",
     "build:dev": "npm run build:server && npm run build:client:dev",

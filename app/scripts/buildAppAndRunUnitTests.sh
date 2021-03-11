@@ -5,6 +5,7 @@ set -e
 
 export NODE_OPTIONS=--max_old_space_size=4096
 
+npm run script:check-node
 npm ci
 npm run build
 npm run lint
