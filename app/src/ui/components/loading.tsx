@@ -3,8 +3,7 @@ import { ErrorCode, IAppError } from "@framework/types/IAppError";
 import { useContent } from "@ui/hooks";
 import { LoadingStatus, Pending } from "../../shared/pending";
 import { ErrorSummary } from "./errorSummary";
-import { StandardErrorPage } from "./standardErrorPage";
-import { NotFoundErrorPage } from "./notFoundErrorPage";
+import { ErrorContainer, ErrorContainerProps } from "./errors";
 import { SimpleString } from "./renderers";
 
 export interface LoadingProps<T> {
@@ -70,9 +69,14 @@ function LoadingMessage() {
 
 export function PageLoader<T>(props: LoadingProps<T>) {
   const handleError: LoadingProps<T>["renderError"] = e => {
-    const hasRequestError = e && e.code === ErrorCode.REQUEST_ERROR;
+    const hasRequestError = e?.code === ErrorCode.REQUEST_ERROR;
 
-    return hasRequestError ? <NotFoundErrorPage /> : <StandardErrorPage />;
+    const errorProps: ErrorContainerProps = {
+      errorCode: e?.code,
+      errorType: hasRequestError ? "NOT_FOUND" : e?.message,
+    };
+
+    return <ErrorContainer {...errorProps} />;
   };
 
   return <Loader renderError={handleError} {...props} />;

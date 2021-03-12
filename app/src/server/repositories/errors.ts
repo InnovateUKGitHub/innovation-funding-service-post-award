@@ -1,8 +1,7 @@
-
 export class SalesforceUnavilableError extends Error {
-    constructor(message: string) {
-      super(message);
-    }
+  constructor(message: string) {
+    super(message);
+  }
 }
 
 export class FileTypeNotAllowedError extends Error {
@@ -24,7 +23,7 @@ export class SalesforceDataChangeError extends Error {
 }
 
 export class SalesforceTokenError extends Error {
-  constructor(message: string, public status: number) {
-    super(message);
+  constructor(public status: number) {
+    super("AUTHENTICATION_ERROR");
   }
 }

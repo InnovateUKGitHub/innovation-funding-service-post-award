@@ -1,6 +1,7 @@
 import React from "react";
 import { Store } from "redux";
 import { Params, State as RouteState } from "router5";
+import { ErrorBoundary } from "react-error-boundary";
 
 import { Content } from "@content/content";
 import { useCompetitionType } from "@ui/hooks";
@@ -11,7 +12,7 @@ import { ContentProvider } from "@ui/redux/contentProvider";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 
 import { Footer, getHeaderProps, GovWidthContainer, Header, PhaseBanner, PrivateModal } from "@ui/components";
-import { StandardErrorPage } from "@ui/components/standardErrorPage";
+import { ErrorContainer, ErrorContainerProps, ErrorBoundaryFallback } from "@ui/components/errors";
 import { FooterLinks } from "@ui/components/layout/footer.config";
 
 import { BaseProps } from "./containerBase";
@@ -74,7 +75,7 @@ class AppView extends React.Component<IAppProps> {
 
     const hasAccess = this.accessControl(currentRoute, params);
 
-    const requiredRouteProps: BaseProps = {
+    const baseProps: BaseProps = {
       messages,
       route,
       config,
@@ -93,7 +94,15 @@ class AppView extends React.Component<IAppProps> {
           <GovWidthContainer className="app-content" data-page-qa={currentRoute.routeName}>
             <PhaseBanner />
 
-            {hasAccess ? <RouteContainer {...requiredRouteProps} {...params} /> : <StandardErrorPage />}
+            {hasAccess ? (
+              <ErrorBoundary
+                fallbackRender={errorProps => <ErrorBoundaryFallback {...baseProps} {...(errorProps as any)} />}
+              >
+                <RouteContainer {...baseProps} {...params} />
+              </ErrorBoundary>
+            ) : (
+              <ErrorContainer {...(route.params as ErrorContainerProps)} />
+            )}
           </GovWidthContainer>
 
           <Footer links={footerLinks} />

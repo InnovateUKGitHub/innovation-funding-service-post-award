@@ -13,6 +13,7 @@ export const routeConfig = {
   claimLineItems: Containers.ClaimLineItemsRoute,
   claimSummary: Containers.ClaimSummaryRoute,
   error: Containers.ErrorRoute,
+  errorNotFound: Containers.ErrorNotFoundRoute,
   financeSummary: Containers.FinanceSummaryRoute,
   failedBankCheckConfirmation: Containers.FailedBankCheckConfirmationRoute,
   home: Containers.HomeRoute,

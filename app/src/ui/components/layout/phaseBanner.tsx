@@ -11,7 +11,6 @@ export function PhaseBanner() {
 
   const dashboardLink = (
     <ExternalLink
-      alt="go to Dashboard"
       className="govuk-link"
       href="https://www.surveymonkey.co.uk/r/IFSPostAwardFeedback"
       data-qa="phase-banner-link"

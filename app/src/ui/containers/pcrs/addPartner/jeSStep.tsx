@@ -18,8 +18,6 @@ export interface JesStepUIProps extends BasePcrProps {
 export function JesStepUI({ documents, documentsEditor, ...props }: JesStepUIProps) {
   const { getContent } = useContent();
 
-  const jesWebsiteLinkAlt = getContent(x => x.pcrAddPartnerJeS.jesWebsiteLinkAlt);
-  const jesApplyingViaSystemLinkAlt = getContent(x => x.pcrAddPartnerJeS.jesListItem1LinkAlt);
   const jesApplyingViaSystemLinkContent = getContent(x => x.pcrAddPartnerJeS.jesListItem1LinkContent);
   const jesListProcessItem2 = getContent(x => x.pcrAddPartnerJeS.jesListItem2);
   const jesWebsiteLinkContent = getContent(x => x.pcrAddPartnerJeS.jesWebsiteLinkContent);
@@ -34,19 +32,14 @@ export function JesStepUI({ documents, documentsEditor, ...props }: JesStepUIPro
   const uploadTitle = getContent(x => x.pcrAddPartnerJeS.documentMessages.uploadTitle);
 
   const renderForm = () => {
+    const applicationUrl =
+      "https://www.gov.uk/government/publications/innovate-uk-completing-your-application-project-costs-guidance/guidance-for-academics-applying-via-the-je-s-system";
     const academicsApplicationLink = (
-      <ACC.Renderers.ExternalLink
-        href="https://www.gov.uk/government/publications/innovate-uk-completing-your-application-project-costs-guidance/guidance-for-academics-applying-via-the-je-s-system\"
-        alt={jesApplyingViaSystemLinkAlt}
-      >
-        {jesApplyingViaSystemLinkContent}
-      </ACC.Renderers.ExternalLink>
+      <ACC.Renderers.ExternalLink href={applicationUrl}>{jesApplyingViaSystemLinkContent}</ACC.Renderers.ExternalLink>
     );
 
     const externalJesLink = (
-      <ACC.Renderers.ExternalLink href="https://je-s.rcuk.ac.uk" alt={jesWebsiteLinkAlt}>
-        {jesWebsiteLinkContent}
-      </ACC.Renderers.ExternalLink>
+      <ACC.Renderers.ExternalLink href="https://je-s.rcuk.ac.uk">{jesWebsiteLinkContent}</ACC.Renderers.ExternalLink>
     );
 
     const UploadForm = ACC.TypedForm<Dtos.MultipleDocumentUploadDto>();

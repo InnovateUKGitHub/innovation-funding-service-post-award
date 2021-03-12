@@ -7,50 +7,31 @@ import { LoadingStatus, Pending } from "../../src/shared/pending";
 
 const stubContent = {
   errors: {
+    genericFallback: {
+      standardError: { content: "stub-standardError" },
+      dashboardText: { content: "stub-dashboardText" },
+    },
+    unauthenticated: {
+      contactUsPreLinkContent: { content: "stub-contactUsPreLinkContent" },
+      contactUsLinkTextContent: { content: "stub-contactUsLinkTextContent" },
+      contactUsPostLinkContent: { content: "stub-contactUsPostLinkContent" },
+    },
     notfound: {
-      errorTitle: {
-        content: "stub-notfound-errorTitle",
-      },
-    },
-    unexpected: {
-      errorTitle: {
-        content: "stub-unexpected-errorTitle",
-      },
-    },
-  },
-  components: {
-    notFoundErrorPage: {
       notFoundError: { content: "stub-notFoundError" },
       goBackMessage: { content: "stub-goBackMessage" },
       innovateUKMessage: { content: "stub-innovateUKMessage" },
       yourDashboardMessage: { content: "stub-yourDashboardMessage" },
     },
-    standardErrorPage: {
-      dashboardText: {
-        content: "stub-dashboardText",
-      },
-      standardError: {
-        content: "stub-standardError",
-      },
-    },
+  },
+  components: {
     errorSummary: {
-      errorTitle: {
-        content: "stub-errorContent",
-      },
-      expiredMessageContent: {
-        content: "stub-expiredMessageContent",
-      },
-      unsavedWarningContent: {
-        content: "stub-unsavedWarningContent",
-      },
-      somethingGoneWrongContent: {
-        content: "stub-somethingGoneWrongContent",
-      },
+      errorTitle: { content: "stub-errorContent" },
+      expiredMessageContent: { content: "stub-expiredMessageContent" },
+      unsavedWarningContent: { content: "stub-unsavedWarningContent" },
+      somethingGoneWrongContent: { content: "stub-somethingGoneWrongContent" },
     },
     loading: {
-      message: {
-        content: "stub-loading-message",
-      },
+      message: { content: "stub-loading-message" },
     },
   },
 };
@@ -64,24 +45,14 @@ describe("<PageLoader />", () => {
     );
 
   describe("@renders", () => {
-    it("with <NotFoundErrorPage />", () => {
+    it("with error UI", () => {
       const stubRender = jest.fn();
-      const { getByText } = setup({
+      const { queryByTestId } = setup({
         render: stubRender,
         pending: new Pending(LoadingStatus.Failed, {}, { code: ErrorCode.REQUEST_ERROR }),
       });
 
-      const targetElement = getByText(stubContent.errors.notfound.errorTitle.content);
-
-      expect(targetElement).toBeInTheDocument();
-      expect(stubRender).toBeCalledTimes(0);
-    });
-
-    it("with <StandardErrorPage />", () => {
-      const stubRender = jest.fn();
-      const { getByText } = setup({ render: stubRender, pending: new Pending(LoadingStatus.Failed) });
-
-      const targetElement = getByText(stubContent.errors.unexpected.errorTitle.content);
+      const targetElement = queryByTestId("not-found");
 
       expect(targetElement).toBeInTheDocument();
       expect(stubRender).toBeCalledTimes(0);

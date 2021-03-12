@@ -1,7 +1,6 @@
 import React from "react";
 
 export interface ExternalLinkProps extends React.AnchorHTMLAttributes<{}> {
-  alt: string;
   href: string;
   children: string | React.ReactElement;
 }

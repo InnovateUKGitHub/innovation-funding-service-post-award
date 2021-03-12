@@ -1,27 +1,27 @@
-import { StandardErrorPage } from "../components/standardErrorPage";
-import { NotFoundErrorPage } from "../components/notFoundErrorPage";
+import { ErrorContainer, ErrorContainerProps, NotFoundError } from "../components/errors";
 import { BaseProps, defineRoute } from "./containerBase";
 
-interface Props {
-  errorType: "standard" | "notFound";
-}
+function ErrorRouteContainer(props: BaseProps) {
+  const errorProps: ErrorContainerProps = {
+    errorCode: props.route.params.errorProps,
+    errorType: props.route.params.errorType,
+  };
 
-const ErrorContainer = (props: Props & BaseProps) => (
-  props.errorType === "notFound" ? <NotFoundErrorPage /> : <StandardErrorPage />
-);
+  return <ErrorContainer {...props} {...errorProps} />;
+}
 
 export const ErrorRoute = defineRoute<{}>({
   routeName: "error",
   routePath: "/error",
-  container: (params) => <ErrorContainer errorType="standard" {...params}/>,
+  container: ErrorRouteContainer,
   getParams: () => ({}),
-  getTitle: ({content}) => content.errors.unexpected.title()
+  getTitle: ({ content }) => content.errors.genericFallback.title(),
 });
 
 export const ErrorNotFoundRoute = defineRoute<{}>({
   routeName: "errorNotFound",
   routePath: "/error-not-found",
-  container: (params) => <ErrorContainer errorType="notFound" {...params}/>,
+  container: NotFoundError,
   getParams: () => ({}),
-  getTitle: ({content}) => content.errors.notfound.title()
+  getTitle: ({ content }) => content.errors.notfound.title(),
 });

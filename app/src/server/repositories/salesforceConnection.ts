@@ -78,20 +78,13 @@ const getToken = async ({ currentUsername, clientId, connectionUrl }: ISalesforc
 
   const request = await fetch(`${connectionUrl}/services/oauth2/token`, { method: "POST", body });
 
-  if (!request.ok) {
-    const payload = await request.text();
+  if (!request.ok) throw new SalesforceTokenError(request.status);
 
-    throw new SalesforceTokenError(
-      `Unable to get token or json error: url- ${request.url}: status: -${request.status} originalUrl- ${connectionUrl}: ${payload}`,
-      request.status,
-    );
-  }
-
-  const token: ISalesforceTokenPayload = await request.json();
+  const payload: ISalesforceTokenPayload = await request.json();
 
   return {
-    url: token.sfdc_community_url,
-    accessToken: token.access_token,
+    url: payload.sfdc_community_url,
+    accessToken: payload.access_token,
   };
 };
 
