@@ -1,3 +1,4 @@
+import React from "react";
 import { IAppError, PartnerDto, PartnerStatus, ProjectDto, ProjectStatus } from "@framework/types";
 import { CombinedResultsValidator, Results } from "@ui/validation";
 import { useContent } from "@ui/hooks";
@@ -17,11 +18,11 @@ export const usePageValidationMessage = (
   const { getContent } = useContent();
 
   if (projectStatus === ProjectStatus.OnHold) {
-    return getContent((x) => x.components.onHoldContent.projectOnHoldMessage);
+    return getContent(x => x.components.onHoldContent.projectOnHoldMessage);
   }
 
   if (partnerStatus === PartnerStatus.OnHold) {
-    return getContent((x) => x.components.onHoldContent.partnerOnHoldMessage);
+    return getContent(x => x.components.onHoldContent.partnerOnHoldMessage);
   }
 
   return null;
@@ -35,9 +36,10 @@ export interface PageProps {
   validator?: Results<{}> | Results<{}>[] | null;
   project?: ProjectDto;
   partner?: PartnerDto;
+  qa?: string;
 }
 
-export function Page({ pageTitle, backLink, error, children, project, partner, validator }: PageProps) {
+export function Page({ pageTitle, backLink, error, children, project, partner, validator, qa }: PageProps) {
   const validation = validator && Array.isArray(validator) ? new CombinedResultsValidator(...validator) : validator;
   const displayAriaLive: boolean = !!error || !!validation;
 
@@ -47,7 +49,7 @@ export function Page({ pageTitle, backLink, error, children, project, partner, v
   const pageErrorMessage = usePageValidationMessage(projectStatus, partnerStatus);
 
   return (
-    <div>
+    <div data-qa={qa}>
       {backLink && (
         <div className="govuk-grid-row">
           <div className="govuk-grid-column-full" data-qa="page-backlink">

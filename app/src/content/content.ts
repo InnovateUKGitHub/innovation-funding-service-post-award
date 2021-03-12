@@ -35,7 +35,6 @@ import { ProjectDetailsContent } from "./pages/project/projectDetailsContent";
 import { ProjectSetupSpendProfileContent } from "./pages/project/projectSetupSpendProfileContent";
 import { FinanceSummaryContent } from "./pages/financeSummaryContent";
 import { ProjectDocumentsContent } from "./pages/project/projectDocumentsContent";
-import { NotFoundContent, UnexpectedErrorContent } from "./pages/errorsContent";
 import { FinancialVirementSummaryContent } from "./pages/pcrs/financialVirements/financialVirementSummaryContent";
 import { FinancialVirementEditContent } from "./pages/pcrs/financialVirements/financialVirementEditContent";
 import { FinancialVirementEditPartnerLevelContent } from "./pages/pcrs/financialVirements/financialVirementEditPartnerLevelContent";
@@ -85,8 +84,8 @@ import { PCRScopeChangeProjectSummaryChangeContent } from "./pages/pcrs/scopeCha
 import { PCRScopeChangePublicDescriptionChangeContent } from "./pages/pcrs/scopeChange/scopeChangePublicDescriptionChangeStepContent";
 import { PCRScopeChangeSummaryContent } from "./pages/pcrs/scopeChange/scopeChangeSummaryContent";
 
-import { StandardErrorPageContent } from "./components/standardErrorPageContent";
-import { NotFoundErrorPageContent } from "./components/notFoundErrorPageContent";
+import { GenericFallbackErrorContent, UnauthenticatedErrorContent, NotFoundErrorContent } from "./pages/errors";
+
 import { LogsContent } from "./components/logsContent";
 import { LoadingContent } from "./components/loadingContent";
 import { DocumentSingleContent } from "./components/documentSingleContent";
@@ -200,8 +199,9 @@ export class Content extends ContentBase {
   public readonly pcrScopeChangeSummary: PCRScopeChangeSummaryContent;
 
   public readonly errors: {
-    notfound: NotFoundContent;
-    unexpected: UnexpectedErrorContent;
+    notfound: NotFoundErrorContent;
+    unauthenticated: UnauthenticatedErrorContent;
+    genericFallback: GenericFallbackErrorContent;
   };
 
   public readonly components: {
@@ -209,8 +209,6 @@ export class Content extends ContentBase {
     taskList: TaskListContent;
     validationSummary: ValidationSummaryContent;
     errorSummary: ErrorSummaryContent;
-    standardErrorPage: StandardErrorPageContent;
-    notFoundErrorPage: NotFoundErrorPageContent;
     logs: LogsContent;
     loading: LoadingContent;
     documentSingle: DocumentSingleContent;
@@ -327,16 +325,16 @@ export class Content extends ContentBase {
     this.pcrScopeChangeSummary = new PCRScopeChangeSummaryContent(this, competitionType);
 
     this.errors = {
-      notfound: new NotFoundContent(this, competitionType),
-      unexpected: new UnexpectedErrorContent(this, competitionType),
+      notfound: new NotFoundErrorContent(this),
+      unauthenticated: new UnauthenticatedErrorContent(this),
+      genericFallback: new GenericFallbackErrorContent(this),
     };
+
     this.components = {
       documents: new DocumentsContent(this, competitionType),
       taskList: new TaskListContent(this, competitionType),
       validationSummary: new ValidationSummaryContent(this, competitionType),
       errorSummary: new ErrorSummaryContent(this, competitionType),
-      standardErrorPage: new StandardErrorPageContent(this, competitionType),
-      notFoundErrorPage: new NotFoundErrorPageContent(this, competitionType),
       logs: new LogsContent(this, competitionType),
       loading: new LoadingContent(this, competitionType),
       documentSingle: new DocumentSingleContent(this, competitionType),

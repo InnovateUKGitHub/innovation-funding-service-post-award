@@ -22,6 +22,7 @@ import {
   setupMiddleware,
   StoresProvider,
 } from "@ui/redux";
+import { createErrorPayload } from "@shared/create-error-payload";
 
 import contextProvider from "./features/common/contextProvider";
 import { ForbiddenError, FormHandlerError, NotFoundError } from "./features/common/appError";
@@ -34,13 +35,14 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
   const content = new Content();
   const nonce = res.locals.nonce;
 
+  const routes = routeConfig;
+  const router = configureRouter(routes);
+
   try {
     if (error && !(error instanceof FormHandlerError)) {
       throw error;
     }
 
-    const routes = routeConfig;
-    const router = configureRouter(routes);
     const route = await startRouter(req, router);
 
     if (route.name === routerConstants.UNKNOWN_ROUTE) {
@@ -78,33 +80,29 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     onComplete(store, stores, content, matched, params, error);
 
     res.send(renderApp(router, nonce, store, stores, routes, modalRegister));
-  } catch (e) {
-    // TODO capture stack trace for logs
-    new Logger(req.session && req.session.user).error("Unable to render", e);
+  } catch (renderError) {
+    // Note: capture stack trace for logs
+    new Logger(req.session?.user).error("Unable to render", renderError);
 
-    const routeState: State = {
-      name: e instanceof NotFoundError ? "errorNotFound" : "error",
-      params: {},
-      path: "",
-    };
+    const isInvalidRoute = renderError instanceof NotFoundError;
+    const errorRoute: State = createErrorPayload(renderError, isInvalidRoute);
 
-    const initalState = {
-      router: { route: routeState },
-    };
+    const initialState = { router: { route: errorRoute } };
+    const store = createStore(rootReducer, initialState);
 
-    const routes = routeConfig;
-    const router = configureRouter(routes);
-    const store = createStore(rootReducer, initalState);
     const stores = createStores(
       () => store.getState(),
       action => process.nextTick(() => store.dispatch(action as AnyAction)),
     );
 
-    const matched = matchRoute(routeState);
+    const matched = matchRoute(errorRoute);
 
-    store.dispatch(Actions.setPageTitle(matched.getTitle({ params: routeState.params, stores, content })));
+    store.dispatch(Actions.setPageTitle(matched.getTitle({ params: errorRoute.params, stores, content })));
 
-    res.status(getErrorStatus(e)).send(renderApp(router, nonce, store, stores, routes, new ModalRegister()));
+    const errorStatusCode = getErrorStatus(renderError);
+    const errorHtml = renderApp(router, nonce, store, stores, routes, new ModalRegister());
+
+    res.status(errorStatusCode).send(errorHtml);
   }
 }
 

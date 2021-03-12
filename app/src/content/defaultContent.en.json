@@ -34,16 +34,6 @@
       "unsavedWarning": "Anything you have not already saved will be lost.",
       "somethingGoneWrong": "Something has gone wrong at our end and we were unable to complete the action. Try submitting the page again."
     },
-    "standardErrorPage": {
-      "message": "You can either go back to the page you were previously on or go back to your",
-      "dashboardText": "dashboard"
-    },
-    "notFoundErrorPage": {
-      "errorMessage": "Please check the web address or search term you entered for any errors. You can return to",
-      "goBackMessage": "or go back to the",
-      "yourDashBoard": "your dashboard",
-      "innovateUKMessage": "Innovate UK homepage"
-    },
     "logs": {
       "noChangesMessage": "There are no changes.",
       "columnHeaderDate": "Date and time",
@@ -117,6 +107,33 @@
     }
   },
   "pages": {
+    "generic-fallback-error": {
+      "title": {
+        "html": "Error",
+        "display": "Something has gone wrong at our end"
+      },
+      "message": "You can either go back to the page you were previously on or go back to your",
+      "dashboardText": "dashboard"
+    },
+    "unauthenticated-error": {
+      "title": {
+        "html": "There is a problem.",
+        "display": "There is a problem."
+      },
+      "preLinkContent": "Please ",
+      "linkTextContent": "contact us",
+      "postLinkContent": "to fix your account permissions."
+    },
+    "not-found-error": {
+      "title": {
+        "html": "Page not found",
+        "display": "Page not found"
+      },
+      "errorMessage": "Please check the web address or search term you entered for any errors. You can return to",
+      "goBackMessage": "or go back to the",
+      "yourDashBoard": "your dashboard",
+      "innovateUKMessage": "Innovate UK homepage"
+    },
     "home": {
       "title": "Home",
       "current-user-heading": "Current user",
@@ -124,15 +141,6 @@
       "reset-user-message": "Reset user",
       "projects-heading": "Projects",
       "projects-dashboard-heading": "Projects dashboard"
-    },
-    "error-not-found": {
-      "title": "Page not found"
-    },
-    "error-unexpected": {
-      "title": {
-        "html": "Error",
-        "display": "Something has gone wrong at our end"
-      }
     },
     "projects-dashboard": {
       "title": "Projects",
@@ -675,10 +683,8 @@
     },
     "pcr-add-partner-jes": {
       "jes-introduction": "Your new academic partner must apply for funding through the Je-S system. To find out more about the Je-S requirements and processes please go to:",
-      "jes-list-item-1-link-alt": "Applying via the Je-s system - Government link",
       "jes-list-item-1-link-content": "Guidance from Innovate UK for academics applying via the Je-S system (opens in a new window)",
       "jes-list-item-2-before-link": "The",
-      "jes-website-link-alt": "Je-s external website link",
       "jes-website-link-content": "Je-S website (opens in a new window)",
       "jes-upload-support": "Upload a pdf copy of the completed Je-S output form, once the new partner has a status of 'With Council'. If there is information outstanding or the partner is not at this status, your request will be rejected."
     },

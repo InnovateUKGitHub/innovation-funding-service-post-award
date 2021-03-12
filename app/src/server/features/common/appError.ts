@@ -10,45 +10,37 @@ export class AppError extends Error implements IAppError {
 }
 
 export class NotFoundError extends AppError {
-  constructor(
-    details?: string,
-    readonly original?: Error
-  ) {
+  constructor(details?: string, readonly original?: Error) {
     super(ErrorCode.REQUEST_ERROR, details || "Not Found", original);
   }
 }
 
 export class ForbiddenError extends AppError {
-  constructor(
-    details?: string,
-    readonly original?: Error
-  ) {
+  constructor(details?: string, readonly original?: Error) {
     super(ErrorCode.FORBIDDEN_ERROR, details || "Forbidden", original);
   }
 }
 
 export class FormHandlerError extends AppError {
   constructor(
-    public key: string, public store: string, public dto: {}, public result: Results<{}>, public error: IAppError
+    public key: string,
+    public store: string,
+    public dto: {},
+    public result: Results<{}>,
+    public error: IAppError,
   ) {
     super(error.code, error.message || "Not Found");
   }
 }
 
 export class BadRequestError extends AppError {
-  constructor(
-    details?: string,
-    readonly original?: Error
-  ) {
+  constructor(details?: string, readonly original?: Error) {
     super(ErrorCode.BAD_REQUEST_ERROR, details || "Invalid Request", original);
   }
 }
 
 export class ValidationError extends AppError {
-  constructor(
-    results: Results<{}>,
-    readonly original?: Error
-  ) {
+  constructor(results: Results<{}>, readonly original?: Error) {
     super(ErrorCode.VALIDATION_ERROR, "Validation Error", original);
     this.results = results;
   }

@@ -53,12 +53,10 @@ describe("<JesStepUI />", () => {
         uploadTitle: { content: "stub-uploadTitle" },
         noDocumentsUploaded: { content: "stub-noDocumentsUploaded" },
       },
-      jesWebsiteLinkAlt: { content: "stub-jesWebsiteLinkAlt" },
       jesWebsiteLinkContent: { content: "stub-jesWebsiteLinkContent" },
       jesIntroduction: { content: "stub-jesIntroduction" },
       jesListItem2: { content: "stub-jesListItem2" },
       jesUploadSupport: { content: "stub-jesUploadSupport" },
-      jesListItem1LinkAlt: { content: "stub-jesListItem1LinkAlt" },
       jesListItem1LinkContent: { content: "stub-jesListItem1LinkContent" },
     },
   };
@@ -120,24 +118,10 @@ describe("<JesStepUI />", () => {
 
     describe("returns content", () => {
       const contentToCheck = generateContentArray(stubContent.pcrAddPartnerJeS);
-      const altProps = ["jesWebsiteLinkAlt", "jesListItem1LinkAlt"];
-
-      describe("when content is derives from alt text", () => {
-        const matchingAltContent = contentToCheck.filter(([key]) => altProps.includes(key));
-
-        test.each(matchingAltContent)("with %s", (_key, value) => {
-          const { container } = setup();
-
-          const contentElement = container.querySelector(`a[alt="${value}"]`);
-
-          expect(contentElement).toBeInTheDocument();
-        });
-      });
 
       describe("without any conditional logic", () => {
-        const unconditionalContent = contentToCheck.filter(
-          ([key]) => ![...altProps, "filesUploadedSubtitle"].includes(key),
-        );
+        const conditionalContentToExclude = ["filesUploadedSubtitle"];
+        const unconditionalContent = contentToCheck.filter(([key]) => !conditionalContentToExclude.includes(key));
 
         test.each(unconditionalContent)("with %s", (_key, value) => {
           const { queryByText } = setup();

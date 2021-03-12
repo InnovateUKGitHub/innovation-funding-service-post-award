@@ -117,6 +117,13 @@ describe("<Page />", () => {
 
       expect(queryByTestId(backlinkElementQa)).toBeInTheDocument();
     });
+
+    it("with a qa", () => {
+      const stubQa = "stub-qa";
+      const { queryByTestId } = setup({ qa: stubQa });
+
+      expect(queryByTestId(stubQa)).toBeInTheDocument();
+    });
   });
 
   it("with an <ErrorSummary />", () => {
