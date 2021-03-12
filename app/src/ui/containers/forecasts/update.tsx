@@ -6,11 +6,13 @@ import { Pending } from "@shared/pending";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { ForecastDetailsDtosValidator } from "@ui/validators";
 import { useContent } from "@ui/hooks";
+import { getArrayFromPeriod } from "../claims/utils/claimForecastUtils";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
 
 export interface Params {
   projectId: string;
   partnerId: string;
+  periodId: number;
 }
 
 interface Data {
@@ -34,7 +36,12 @@ class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
   ) {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
 
-    const { partnerId, projectId, routes, onChange } = this.props;
+    const { partnerId, projectId, periodId, routes, onChange } = this.props;
+
+    const handleSubmit = () => {
+      const forecasts = getArrayFromPeriod(editor.data, periodId, combined.project.numberOfPeriods);
+      return this.props.onChange(true, forecasts);
+    };
 
     const allClaimsDashboardLink = routes.allClaimsDashboard.getLink({ projectId });
 
@@ -63,7 +70,7 @@ class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
           <Form.Form
             editor={editor}
             onChange={data => onChange(false, data)}
-            onSubmit={() => onChange(true, editor.data)}
+            onSubmit={handleSubmit}
             qa="partner-forecast-form"
           >
             <ACC.Claims.ForecastTable data={combined} editor={editor} />
@@ -139,11 +146,12 @@ const UpdateForecastContainer = (props: Params & BaseProps) => {
 
 export const UpdateForecastRoute = defineRoute({
   routeName: "updateForecast",
-  routePath: "/projects/:projectId/claims/:partnerId/updateForecast",
+  routePath: "/projects/:projectId/claims/:partnerId/updateForecast/:periodId",
   container: UpdateForecastContainer,
   getParams: route => ({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,
+    periodId: parseInt(route.params.periodId, 10),
   }),
   getTitle: ({ content }) => content.forecastsUpdate.title(),
   accessControl: (auth, { projectId, partnerId }) =>

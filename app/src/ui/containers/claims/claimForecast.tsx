@@ -4,7 +4,7 @@ import { isNumber } from "@framework/util";
 import { ClaimDetailsSummaryDto, ClaimDto, ForecastDetailsDTO, GOLCostDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { ForecastDetailsDtosValidator } from "@ui/validators";
-import { IEditorStore, StoresConsumer, useStores } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { useContent } from "@ui/hooks";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { getArrayFromPeriod } from "./utils/claimForecastUtils";
@@ -61,15 +61,22 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
 
     const periodId = combined.project.periodId;
     const handleSubmit = () => {
-      const forecasts = getArrayFromPeriod(editor.data, periodId);
       return this.props.onUpdate(
         true,
-        forecasts,
+        getArrayFromPeriod(editor.data, periodId, combined.project.numberOfPeriods),
         this.props.routes.claimSummary.getLink({
           projectId: this.props.projectId,
           partnerId: this.props.partnerId,
           periodId: this.props.periodId,
         }),
+      );
+    };
+
+    const onFormSave = () =>{
+      this.props.onUpdate(
+        true,
+        getArrayFromPeriod(editor.data, periodId, combined.project.numberOfPeriods),
+        this.getBackLink(combined.project),
       );
     };
 
@@ -99,7 +106,11 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
             </Form.Fieldset>
             <Form.Fieldset qa="save-and-continue">
               <Form.Submit><ACC.Content value={x => x.claimForecast.continueToSummaryButton} /></Form.Submit>
-              <Form.Button name="save" onClick={() => this.props.onUpdate(true, editor.data, this.getBackLink(combined.project))}><ACC.Content value={x => x.claimForecast.saveAndReturnButton} /></Form.Button>
+              <Form.Button
+                name="save"
+                onClick={onFormSave}
+              >
+              <ACC.Content value={x => x.claimForecast.saveAndReturnButton} /></Form.Button>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
@@ -156,10 +167,15 @@ export const ClaimForecastRoute = defineRoute({
   routeName: "claimForecast",
   routePath: "/projects/:projectId/claims/:partnerId/forecast/:periodId",
   container: ClaimForcastContainer,
-  getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
-  accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+  getParams: route => ({
+    projectId: route.params.projectId,
+    partnerId: route.params.partnerId,
+    periodId: parseInt(route.params.periodId, 10),
+  }),
+  accessControl: (auth, { projectId, partnerId }) =>
+    auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
   getTitle: () => ({
     htmlTitle: "Update forecast",
-    displayTitle: "Update forecast"
-  })
+    displayTitle: "Update forecast",
+  }),
 });

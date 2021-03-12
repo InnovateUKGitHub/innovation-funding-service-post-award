@@ -140,7 +140,11 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
       <ACC.Link
         id="update-forecast"
         styling="PrimaryButton"
-        route={this.props.routes.forecastUpdate.getLink({ projectId: project.id, partnerId: partner.id })}
+        route={this.props.routes.forecastUpdate.getLink({
+          projectId: project.id,
+          partnerId: partner.id,
+          periodId: project.periodId,
+        })}
       >
         <ACC.Content value={x => x.forecastsDetails.updateForecastLink} />
       </ACC.Link>
