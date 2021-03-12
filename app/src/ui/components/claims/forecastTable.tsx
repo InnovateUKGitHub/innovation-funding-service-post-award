@@ -84,12 +84,14 @@ export class ForecastTable extends React.Component<Props> {
   public render() {
     const { data, hideValidation, isSubmitting, editor } = this.props;
     const periodId = this.getPeriodId(data.project, data.claims, data.claim);
-    const parsed = this.parseClaimData(data, editor, periodId, data.project.numberOfPeriods);
-    const Table = TypedTable<typeof parsed[0]>();
     const intervals = this.calculateClaimPeriods(data);
-    const claims = Object.keys(parsed[0].claims);
-    const forecasts = Object.keys(parsed[0].forecasts);
+    const tableRows = this.parseClaimData(data, editor, periodId, data.project.numberOfPeriods);
+
+    const firstRow = tableRows[0];
+    const claims = Object.keys(firstRow.claims);
+    const forecasts = Object.keys(firstRow.forecasts);
     const periods = claims.concat(forecasts);
+    const Table = TypedTable<typeof firstRow>();
 
     const isDivider = (i: number) => {
       // always show a divider on the right hand side of the last claim
@@ -102,10 +104,10 @@ export class ForecastTable extends React.Component<Props> {
 
     return (
       <Table.Table
-        data={parsed}
+        data={tableRows}
         qa="forecast-table"
         headers={this.renderTableHeaders(periods, periodId, data.claim)}
-        footers={this.renderTableFooters(periods, parsed, this.props.hideValidation !== true && editor ? editor.validator : undefined)}
+        footers={this.renderTableFooters(periods, tableRows, hideValidation !== true && editor ? editor.validator : undefined)}
         headerRowClass="govuk-body-s govuk-table__header--light"
         bodyRowClass={x => classNames("govuk-body-s", {
           "table__row--warning": !hideValidation && x.total > x.golCosts,
