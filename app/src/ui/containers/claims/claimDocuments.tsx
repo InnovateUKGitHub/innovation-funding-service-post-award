@@ -313,7 +313,6 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
       <ACC.Section subtitle={content.default.newWindow}>
         {documents.length ? (
           <ACC.DocumentTableWithDelete
-            hideRemove={x => this.allowedDocuments.indexOf(x.description!) < 0}
             onRemove={document => this.props.onDelete(editor.data, document)}
             documents={documents}
             qa="claim-supporting-documents"
