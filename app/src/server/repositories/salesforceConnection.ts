@@ -1,10 +1,21 @@
 import fs from "fs";
 import jsforce from "jsforce";
 import jwt from "jsonwebtoken";
+
+import { SalesforceTokenError } from "@server/repositories/errors";
+import { Cache } from "@server/features/common/cache";
+import { Configuration } from "@server/features/common";
 import { LogLevel } from "@framework/types/logLevel";
-import { Cache } from "../features/common/cache";
-import { Configuration } from "../features/common";
-import { SalesforceTokenError } from "./errors";
+
+interface ISalesforceTokenPayload {
+  access_token: string;
+  sfdc_community_url: string;
+  sfdc_community_id: string;
+  scope: string;
+  instance_url: string;
+  id: string;
+  token_type: "Bearer";
+}
 
 export interface ISalesforceTokenDetails {
   currentUsername: string;
@@ -25,76 +36,75 @@ interface ITokenInfo {
 
 const tokenCache = new Cache<ITokenInfo>(Configuration.timeouts.token);
 
-export const salesforceConnectionWithUsernameAndPassword = (connectionDetails: ISalesforceConnectionDetails) => {
-  const connection = new jsforce.Connection({
+export const salesforceConnectionWithUsernameAndPassword = ({
+  serviceUsername,
+  servicePassword,
+  serviceToken,
+}: ISalesforceConnectionDetails) => {
+  const jsforceConfig = {
     loginUrl: "https://test.salesforce.com",
-    logLevel: Configuration.logLevel === LogLevel.VERBOSE ? "DEBUG" : undefined
-  });
+    logLevel: Configuration.logLevel === LogLevel.VERBOSE ? "DEBUG" : undefined,
+  };
+
+  const connection = new jsforce.Connection(jsforceConfig);
 
   return new Promise<jsforce.Connection>((resolve, reject) => {
-    if (!connectionDetails.serviceUsername || !connectionDetails.servicePassword || !connectionDetails.serviceToken) {
-      throw new Error(`Invalid connection details username:${connectionDetails.serviceUsername}, password:${connectionDetails.servicePassword}, token:${connectionDetails.serviceToken}`);
+    if (!serviceUsername || !servicePassword || !serviceToken) {
+      const invalidConnectionError = `Invalid connection details username: ${serviceUsername}, password: ${servicePassword}, token: ${serviceToken}`;
+      throw new Error(invalidConnectionError);
     }
-    connection.login(connectionDetails.serviceUsername, connectionDetails.servicePassword + connectionDetails.serviceToken, (err, conn) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(connection);
-      }
-    });
+
+    connection.login(serviceUsername, `${servicePassword}${serviceToken}`, connectionError =>
+      connectionError ? reject(connectionError) : resolve(connection),
+    );
   });
 };
 
-const getToken = (username: string, clientId: string, connectionUrl: string): Promise<ITokenInfo> => {
+const getToken = async ({ currentUsername, clientId, connectionUrl }: ISalesforceTokenDetails): Promise<ITokenInfo> => {
   const privateKey = fs.readFileSync(Configuration.certificates.salesforce, "utf8");
-
-  const claimSet = {
-    prn: username
-  };
-
-  const options = {
+  const jwtPayload = { prn: currentUsername };
+  const jwtOptions = {
     issuer: clientId,
     audience: connectionUrl,
     expiresIn: 10,
-    algorithm: "RS256"
+    algorithm: "RS256",
   };
 
-  const signedToken = jwt.sign(claimSet, privateKey, options);
+  const jwtToken = jwt.sign(jwtPayload, privateKey, jwtOptions);
 
   const body = new FormData();
   body.append("grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer");
-  body.append("assertion", signedToken);
+  body.append("assertion", jwtToken);
 
-  return fetch(connectionUrl + "/services/oauth2/token", { method: "POST", body })
-    .then(r => {
-      if (r.ok) {
-        return r.json();
-      } else {
-        return r.text().then(x => {
-          throw new SalesforceTokenError(`Unable to get token or json error: url- ${r.url}: status: -${r.status} originalUrl- ${connectionUrl}: ${x}`, r.status);
-        });
-      }
-    })
-    .then<ITokenInfo>((token: ISalesforceTokenPayload) => ({ url: token.sfdc_community_url, accessToken: token.access_token }))
-    ;
+  const request = await fetch(`${connectionUrl}/services/oauth2/token`, { method: "POST", body });
 
+  if (!request.ok) {
+    const payload = await request.text();
+
+    throw new SalesforceTokenError(
+      `Unable to get token or json error: url- ${request.url}: status: -${request.status} originalUrl- ${connectionUrl}: ${payload}`,
+      request.status,
+    );
+  }
+
+  const token: ISalesforceTokenPayload = await request.json();
+
+  return {
+    url: token.sfdc_community_url,
+    accessToken: token.access_token,
+  };
 };
 
-export const salesforceConnectionWithToken = async ({ currentUsername, clientId, connectionUrl }: ISalesforceTokenDetails): Promise<jsforce.Connection> => {
-  const token = await tokenCache.fetchAsync(currentUsername, () => getToken(currentUsername, clientId, connectionUrl));
+export const salesforceConnectionWithToken = async (
+  salesforceDetails: ISalesforceTokenDetails,
+): Promise<jsforce.Connection> => {
+  const fetchToken = async () => await getToken(salesforceDetails);
+  const signedToken = await tokenCache.fetchAsync(salesforceDetails.currentUsername, fetchToken);
 
-  return new jsforce.Connection({
-    accessToken: token.accessToken,
-    serverUrl: token.url
-  });
+  const jsforceConfig = {
+    accessToken: signedToken.accessToken,
+    serverUrl: signedToken.url,
+  };
+
+  return new jsforce.Connection(jsforceConfig);
 };
-
-interface ISalesforceTokenPayload {
-  access_token: string;
-  sfdc_community_url: string;
-  sfdc_community_id: string;
-  scope: string;
-  instance_url: string;
-  id: string;
-  token_type: "Bearer";
-}
