@@ -17,6 +17,7 @@ export * from "./documentList";
 export * from "./documentSingle";
 export * from "./errorSummary";
 export * from "./form";
+export * from "./FullHeight";
 export * from "./layout";
 export * from "./links";
 export * from "./linksList";

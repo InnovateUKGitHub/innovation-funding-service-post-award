@@ -12,6 +12,18 @@
   flex: 1 1 100%;
 }
 
+/* FullHeight Components */
+.full-height-container {
+  display: table;
+  width: 100%;
+  height: 100%;
+}
+
+.full-height-content {
+  display: table-row;
+  height: 100%;
+}
+
 /*
  * Table validation
 */

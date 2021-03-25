@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FullHeight Components <FullHeight.Container /> @renders as default 1`] = `
+<div
+  class="full-height-container"
+>
+  <p>
+    stub content
+  </p>
+</div>
+`;
+
+exports[`FullHeight Components <FullHeight.Content /> @renders as default 1`] = `
+<div
+  class="full-height-content"
+>
+  <p>
+    stub content
+  </p>
+</div>
+`;
