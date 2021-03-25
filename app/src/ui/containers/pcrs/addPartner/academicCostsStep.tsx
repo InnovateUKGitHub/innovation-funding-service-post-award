@@ -140,7 +140,7 @@ export const AcademicCostsStep = (props: PcrStepProps<PCRItemForPartnerAdditionD
     {
       stores => {
         // Get list of academic cost categories, and add a cost item for each one (if not already there).
-        const costCategories = stores.costCategories.getAll().then(allCostCategories => {
+        const costCategories = stores.costCategories.getAllUnfiltered().then(allCostCategories => {
           const academicCostCategories = allCostCategories.filter(costCategory =>
             costCategory.organisationType === PCROrganisationType.Academic
             && costCategory.competitionType === props.project.competitionType);

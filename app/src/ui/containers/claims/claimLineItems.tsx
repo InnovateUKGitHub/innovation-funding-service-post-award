@@ -280,7 +280,7 @@ const ClaimLineItemsContainer = (props: Params & BaseProps) => {
       project={stores.projects.getById(props.projectId)}
       partner={stores.partners.getById(props.partnerId)}
       claimDetails={stores.claimDetails.get(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
-      costCategories={stores.costCategories.getAll()}
+      costCategories={stores.costCategories.getAllFiltered(props.partnerId)}
       forecastDetail={stores.forecastDetails.get(props.partnerId, props.periodId, props.costCategoryId)}
       claim={stores.claims.get(props.partnerId, props.periodId)}
       documents={stores.claimDetailDocuments.getClaimDetailDocuments(

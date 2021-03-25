@@ -91,7 +91,7 @@ export const SpendProfileStep = (props: PcrStepProps<PCRItemForPartnerAdditionDt
     {
       stores => {
         return <ACC.Loader
-          pending={stores.costCategories.getAll()}
+          pending={stores.costCategories.getAllUnfiltered()}
           render={x => <Component costCategories={x} {...props} />}
         />;
       }

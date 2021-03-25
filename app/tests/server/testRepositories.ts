@@ -393,6 +393,9 @@ class ClaimTotalCostTestRepository extends TestRepository<Repositories.ISalesfor
 }
 
 class ProfileDetailsTestRepository extends TestRepository<Repositories.ISalesforceProfileDetails> implements Repositories.IProfileDetailsRepository {
+  getRequiredCategories(partnerId: string): Promise<Repositories.ISalesforceProfileDetails[]> {
+    return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
+  }
   getAllByPartner(partnerId: string) {
     return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
   }

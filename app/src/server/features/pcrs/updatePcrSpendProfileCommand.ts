@@ -16,7 +16,7 @@ import {
 import { CostCategoryType, PcrSpendProfileEntity } from "@framework/entities";
 import { Authorisation, IContext, PCRSpendProfileOverheadRate } from "@framework/types";
 import { isNumber, roundCurrency } from "@framework/util";
-import { GetCostCategoriesQuery } from "@server/features/claims";
+import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
 import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 import { BadRequestError, CommandBase, ValidationError } from "../common";
@@ -229,7 +229,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     }
 
     const originalSpendProfiles = await context.repositories.pcrSpendProfile.getAllForPcr(this.pcrItemId);
-    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
     const overheadsRates = await context.runQuery(new GetPcrSpendProfileOverheadRateOptionsQuery());
 
     const mappedEntities = [...this.spendProfileDto.costs, ...this.spendProfileDto.funds]

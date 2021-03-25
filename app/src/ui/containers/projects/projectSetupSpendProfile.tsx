@@ -90,7 +90,7 @@ const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams
             partner: stores.partners.getById(props.partnerId),
             forecastDetails: stores.forecastDetails.getAllInitialByPartner(props.partnerId),
             golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
-            costCategories: stores.costCategories.getAll(),
+            costCategories: stores.costCategories.getAllUnfiltered(),
             // Initial forecast so happens before claims
             claim: Pending.done(null),
             claims: Pending.done([]),

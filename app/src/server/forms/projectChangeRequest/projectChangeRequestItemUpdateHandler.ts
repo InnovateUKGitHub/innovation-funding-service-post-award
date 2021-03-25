@@ -17,7 +17,7 @@ import { scopeChangeStepNames } from "@ui/containers/pcrs/scopeChange/scopeChang
 import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { parseNumber } from "@framework/util";
 import { CostCategoryType } from "@framework/entities";
-import { GetCostCategoriesQuery } from "@server/features/claims";
+import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { GetByIdQuery } from "@server/features/projects";
@@ -36,7 +36,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       throw new BadRequestError();
     }
 
-    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
     const projectDto = await context.runQuery(new GetByIdQuery(params.projectId));
 
     item.status = body.itemStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;

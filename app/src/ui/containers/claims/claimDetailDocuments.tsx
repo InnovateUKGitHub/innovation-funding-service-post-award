@@ -147,7 +147,7 @@ const ClaimDetailDocumentsContainer = (props: ClaimDetailDocumentsPageParams & B
   return (
     <ClaimDetailDocumentsComponent
       project={stores.projects.getById(props.projectId)}
-      costCategories={stores.costCategories.getAll()}
+      costCategories={stores.costCategories.getAllFiltered(props.partnerId)}
       documents={stores.claimDetailDocuments.getClaimDetailDocuments(
         props.projectId,
         props.partnerId,

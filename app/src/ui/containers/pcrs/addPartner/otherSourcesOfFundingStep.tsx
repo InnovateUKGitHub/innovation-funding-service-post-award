@@ -189,7 +189,7 @@ export const OtherSourcesOfFundingStep = (props: PcrStepProps<PCRItemForPartnerA
   <StoresConsumer>
     {
       stores => {
-        const costCategoriesPending = stores.costCategories.getAll();
+        const costCategoriesPending = stores.costCategories.getAllUnfiltered();
         const fundsPending = costCategoriesPending.chain(costCategories => {
           const funds = props.pcrItem.spendProfile.funds.filter(x => x.costCategory === CostCategoryType.Other_Funding);
           if (props.isClient) {

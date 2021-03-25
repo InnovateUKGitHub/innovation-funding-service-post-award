@@ -82,7 +82,7 @@ export class ClaimsStore extends StoreBase {
     const originalStatus = this.get(partnerId, periodId).then(x => x.status);
     const details = this.costsSummariesStore.getForPeriod(projectId, partnerId, periodId);
     const documents = this.claimDocumentsStore.getClaimDocuments(projectId, partnerId, periodId).data || [];
-    const costCategories = this.costCategoriesStore.getAll();
+    const costCategories = this.costCategoriesStore.getAllFiltered(partnerId);
 
     return Pending.combine({
       originalStatus,

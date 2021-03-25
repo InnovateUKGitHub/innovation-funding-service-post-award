@@ -1,6 +1,6 @@
 import { GOLCostDto, IContext } from "@framework/types";
 import { QueryBase } from "../common";
-import { GetCostCategoriesQuery } from "./getCostCategoriesQuery";
+import { GetUnfilteredCostCategoriesQuery } from "./getCostCategoriesQuery";
 
 export class GetAllForecastsGOLCostsQuery extends QueryBase<GOLCostDto[]> {
   constructor(private readonly partnerId: string) {
@@ -8,7 +8,7 @@ export class GetAllForecastsGOLCostsQuery extends QueryBase<GOLCostDto[]> {
   }
 
   protected async Run(context: IContext) {
-    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
     const costCategoriesOrder = costCategories.map(y => y.id);
 
     const results = await context.repositories.profileTotalCostCategory.getAllByPartnerId(this.partnerId);

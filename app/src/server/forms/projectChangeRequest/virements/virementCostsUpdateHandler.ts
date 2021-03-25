@@ -7,7 +7,7 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { GetFinancialVirementQuery } from "@server/features/financialVirements/getFinancialVirementQuery";
 import { UpdateFinancialVirementCommand } from "@server/features/financialVirements/updateFinancialVirementCommand";
 import { roundCurrency } from "@framework/util";
-import { GetCostCategoriesQuery } from "@server/features/claims";
+import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 import { GetByIdQuery } from "@server/features/partners";
 
 export class VirementCostsUpdateHandler extends StandardFormHandlerBase<VirementCostsParams, "financialVirement"> {
@@ -27,7 +27,7 @@ export class VirementCostsUpdateHandler extends StandardFormHandlerBase<Virement
     }
 
     const partner = await context.runQuery(new GetByIdQuery(params.partnerId));
-    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
     const calculatedCostCategoryIds = costCategories.filter(y => y.isCalculated).map(y => y.id) || [];
 
     partnerVirementDto.virements.forEach(x => {

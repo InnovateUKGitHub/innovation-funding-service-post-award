@@ -1,7 +1,7 @@
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
 import { ISalesforceProfileDetails } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery, GetCostCategoriesQuery, UpdateClaimCommand } from "@server/features/claims";
+import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery, GetUnfilteredCostCategoriesQuery, UpdateClaimCommand } from "@server/features/claims";
 import { GetAllClaimDetailsByPartner } from "@server/features/claimDetails";
 import { GetByIdQuery as GetProjectById } from "@server/features/projects";
 import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
@@ -48,7 +48,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
 
   private async ignoreCalculatedCostCategories(context: IContext, dtos: ForecastDetailsDTO[]) {
     // check to see if there are any calculated cost categories
-    const calculatedCostCategoryIds = await context.runQuery(new GetCostCategoriesQuery())
+    const calculatedCostCategoryIds = await context.runQuery(new GetUnfilteredCostCategoriesQuery())
       .then(costCategories =>  costCategories.filter(x => x.isCalculated).map(x => x.id));
 
     return dtos.filter(forecast => calculatedCostCategoryIds.indexOf(forecast.costCategoryId) === -1);

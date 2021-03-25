@@ -155,7 +155,7 @@ const ClaimForcastContainer = (props: ClaimForecastParams & BaseProps) => {
       claimDetails={stores.claimDetails.getAllByPartner(props.partnerId)}
       forecastDetails={stores.forecastDetails.getAllByPartner(props.partnerId)}
       golCosts={stores.forecastGolCosts.getAllByPartner(props.partnerId)}
-      costCategories={stores.costCategories.getAll()}
+      costCategories={stores.costCategories.getAllFiltered(props.partnerId)}
       editor={stores.forecastDetails.getForecastEditor(props.partnerId)}
       onUpdate={handleOnUpdate}
       {...props}

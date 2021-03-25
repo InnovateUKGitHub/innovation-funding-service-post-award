@@ -203,7 +203,7 @@ const ClaimsDetailsContainer = (props: Params & BaseProps) => (
 
         const project = stores.projects.getById(props.projectId);
         const partner = stores.partners.getById(props.partnerId);
-        const costCategories = stores.costCategories.getAll();
+        const costCategories = stores.costCategories.getAllFiltered(props.partnerId);
         const claim = stores.claims.get(props.partnerId, props.periodId);
 
         const forecastData: Pending<ACC.Claims.ForecastData> | null = isMoOrPM && !isFC ? Pending.combine({

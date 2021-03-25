@@ -119,7 +119,7 @@ const UpdateForecastContainer = (props: Params & BaseProps) => {
             claimDetails: stores.claimDetails.getAllByPartner(props.partnerId),
             forecastDetails: stores.forecastDetails.getAllByPartner(props.partnerId),
             golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
-            costCategories: stores.costCategories.getAll(),
+            costCategories: stores.costCategories.getAllFiltered(props.partnerId),
           })}
           editor={stores.forecastDetails.getForecastEditor(props.partnerId)}
           onChange={(saving, dto) => {

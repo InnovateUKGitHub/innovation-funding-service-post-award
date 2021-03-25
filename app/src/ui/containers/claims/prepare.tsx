@@ -123,7 +123,7 @@ const PrepareContainer = (props: PrepareClaimParams & BaseProps) => (
         <PrepareComponent
           project={stores.projects.getById(props.projectId)}
           partner={stores.partners.getById(props.partnerId)}
-          costCategories={stores.costCategories.getAll()}
+          costCategories={stores.costCategories.getAllFiltered(props.partnerId)}
           claim={stores.claims.get(props.partnerId, props.periodId)}
           costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}
           statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}

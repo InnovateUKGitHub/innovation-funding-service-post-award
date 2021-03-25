@@ -1,6 +1,6 @@
 import { CostCategoryType } from "@framework/entities";
 import { InitialForecastDetailsDtosValidator } from "@ui/validators/initialForecastDetailsDtosValidator";
-import { GetAllForecastsGOLCostsQuery, GetCostCategoriesQuery } from "@server/features/claims";
+import { GetAllForecastsGOLCostsQuery, GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
 import { TestContext } from "../../server/testContextProvider";
 
@@ -20,7 +20,7 @@ describe("InitialForecastDetailsValidator", () => {
 
       const forecasts = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(partner.id));
       const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(partner.id));
-      const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+      const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
 
       const validation = new InitialForecastDetailsDtosValidator(forecasts, golCosts, costCategories, false, true);
 
@@ -43,7 +43,7 @@ describe("InitialForecastDetailsValidator", () => {
 
       const forecasts = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(partner.id));
       const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(partner.id));
-      const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+      const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
 
       const validation = new InitialForecastDetailsDtosValidator(forecasts, golCosts, costCategories, true, true);
 
@@ -80,7 +80,7 @@ describe("InitialForecastDetailsValidator", () => {
 
       const forecasts = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(partner.id));
       const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(partner.id));
-      const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+      const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
 
       const validation = new InitialForecastDetailsDtosValidator(forecasts, golCosts, costCategories, true, true);
 
