@@ -20,7 +20,7 @@ import { router } from "./router";
 import contextProvider from "./features/common/contextProvider";
 import { GetPermissionGroupQuery } from "./features/general/getPermissionGroupsQuery";
 import { GetAllRecordTypesQuery } from "./features/general/getAllRecordTypesQuery";
-import { GetCostCategoriesQuery } from "./features/claims";
+import { GetUnfilteredCostCategoriesQuery } from "./features/claims";
 import { GetMonitoringReportStatusesQuery } from "./features/monitoringReports/getMonitoringReportStatusesQuery";
 import { GetPcrStatusesQuery } from "./features/pcrs/getPcrStatusesQuery";
 import { initInternationalisation, internationalisationRouter } from "./internationalisation";
@@ -128,7 +128,7 @@ export class Server {
       // calls to query that prime caches doe as service user
       this.primeCache(context, "Permission group cache", () => context.runQuery(new GetPermissionGroupQuery(PermissionGroupIdenfifier.ClaimsTeam)));
       this.primeCache(context, "Record type cache", () => context.runQuery(new GetAllRecordTypesQuery()));
-      this.primeCache(context, "Cost Categories cache", () => context.runQuery(new GetCostCategoriesQuery()));
+      this.primeCache(context, "Cost Categories cache", () => context.runQuery(new GetUnfilteredCostCategoriesQuery()));
       this.primeCache(context, "Claim Statuses cache", () => context.runQuery(new GetClaimStatusesQuery()));
       this.primeCache(context, "Monitoring Report Status cache", () => context.runQuery(new GetMonitoringReportStatusesQuery()));
       this.primeCache(context, "Project Change Request Status cache", () => context.runQuery(new GetPcrStatusesQuery()));

@@ -69,7 +69,7 @@ export const AcademicCostsReviewStep = (props: PcrStepProps<PCRItemForPartnerAdd
   <StoresConsumer>
     {
       stores => {
-        const costCategories = stores.costCategories.getAll().then(allCostCategories => allCostCategories.filter(costCategory =>
+        const costCategories = stores.costCategories.getAllUnfiltered().then(allCostCategories => allCostCategories.filter(costCategory =>
           costCategory.organisationType === PCROrganisationType.Academic
           && costCategory.competitionType === props.project.competitionType));
 

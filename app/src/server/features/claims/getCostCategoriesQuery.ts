@@ -1,6 +1,9 @@
 import { IContext } from "@framework/types";
 import { numberComparator } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { CostCategory } from "@framework/entities";
+import { ISalesforceProfileDetails } from "@server/repositories";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { QueryBase } from "../common/queryBase";
 
 /**
@@ -11,7 +14,7 @@ import { QueryBase } from "../common/queryBase";
  * **Uses a cache to improve performance**
  *
  */
-export class GetCostCategoriesQuery extends QueryBase<CostCategoryDto[]> {
+export class GetUnfilteredCostCategoriesQuery extends QueryBase<CostCategoryDto[]> {
   protected async Run(context: IContext) {
     return context.caches.costCategories.fetchAsync("All", () => this.executeQuery(context));
   }
@@ -24,6 +27,36 @@ export class GetCostCategoriesQuery extends QueryBase<CostCategoryDto[]> {
     return data.map(x => {
       const { displayOrder, ...rest } = x;
       return rest;
+    });
+  }
+}
+
+export class GetFilteredCostCategoriesQuery extends QueryBase<CostCategoryDto[]> {
+  constructor(private readonly partnerId: string) {
+    super();
+  }
+
+  protected async Run(context: IContext) {
+    return context.caches.costCategories.fetchAsync(storeKeys.getCostCategoryKey(this.partnerId), () => this.executeQuery(context));
+  }
+
+  private async executeQuery(context: IContext) {
+    const allCategories = await context.repositories.costCategories.getAll();
+    const requiredCategories = await context.repositories.profileDetails.getRequiredCategories(this.partnerId);
+
+    const filteredCategories = this.filterCostCategories(allCategories, requiredCategories);
+    filteredCategories.sort((a, b) => numberComparator(a.displayOrder, b.displayOrder));
+
+    return filteredCategories.map(x => {
+      const { displayOrder, ...rest } = x;
+      return rest;
+    });
+  }
+
+  private filterCostCategories(costCategories: CostCategory[], baseCategories: ISalesforceProfileDetails[]) {
+    return costCategories.filter(category => {
+      const isValidCategory = !!category.name;
+      return isValidCategory && baseCategories.find(c => c.Acc_CostCategory__c === category.id);
     });
   }
 }

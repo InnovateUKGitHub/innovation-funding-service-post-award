@@ -22,7 +22,7 @@ import {
 import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus, PCRSpendProfileCapitalUsageType } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { GetCostCategoriesQuery } from "@server/features/claims";
+import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 import { CostCategoryType } from "@framework/entities";
 import {
   PCRSpendProfileCapitalUsageCostDto, PCRSpendProfileCostDto,
@@ -57,7 +57,7 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
 
     item.status = body.itemStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
 
-    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
     const costCategory = costCategories.find(x => x.id === params.costCategoryId);
 
     if (!costCategory) {
@@ -145,7 +145,7 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
   protected async run(context: IContext, params: PcrEditSpendProfileCostParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
 
-    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
     const costCategoryDto = costCategories.find(x => x.id === params.costCategoryId)!;
 
     if (costCategoryDto.type === CostCategoryType.Overheads) {

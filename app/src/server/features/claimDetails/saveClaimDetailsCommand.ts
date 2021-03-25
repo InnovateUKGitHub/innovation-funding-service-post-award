@@ -4,7 +4,7 @@ import { ClaimDetailsValidator } from "@ui/validators";
 import { isNumber } from "@framework/util";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { ISalesforceClaimLineItem } from "@server/repositories";
-import { GetCostCategoriesQuery } from "../claims";
+import { GetUnfilteredCostCategoriesQuery } from "../claims";
 
 export class SaveClaimDetails extends CommandBase<boolean> {
   constructor(
@@ -24,7 +24,7 @@ export class SaveClaimDetails extends CommandBase<boolean> {
   protected async Run(context: IContext) {
     this.validateRequest();
 
-    const costCategory = await context.runQuery(new GetCostCategoriesQuery()).then(x => x.find(y => y.id === this.costCategoryId));
+    const costCategory = await context.runQuery(new GetUnfilteredCostCategoriesQuery()).then(x => x.find(y => y.id === this.costCategoryId));
     if (!costCategory) {
       throw new BadRequestError("Invalid cost category specified");
     } else if (costCategory.isCalculated) {

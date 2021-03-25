@@ -1,7 +1,7 @@
 import { CommandBase, ValidationError } from "@server/features/common";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Authorisation, ClaimDto, ClaimStatus, IContext, ProjectRole } from "@framework/types";
-import { GetCostCategoriesQuery } from "@server/features/claims/getCostCategoriesQuery";
+import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims/getCostCategoriesQuery";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
 import { mapToClaimStatus } from "@server/features/claims/mapClaim";
 import { GetCostsSummaryForPeriodQuery } from "../claimDetails";
@@ -18,7 +18,7 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
 
   protected async Run(context: IContext) {
     const existingStatus = await context.repositories.claims.get(this.claimDto.partnerId, this.claimDto.periodId).then(x => x.Acc_ClaimStatus__c);
-    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
     const details = await context.runQuery(new GetCostsSummaryForPeriodQuery(this.projectId, this.claimDto.partnerId, this.claimDto.periodId));
     const documents = await context.runQuery(
       new GetClaimDocumentsQuery({ projectId: this.projectId, partnerId: this.claimDto.partnerId, periodId: this.claimDto.periodId})

@@ -15,6 +15,7 @@ export interface ISalesforceProfileDetails {
 export interface IProfileDetailsRepository {
   getAllByPartner(partnerId: string): Promise<ISalesforceProfileDetails[]>;
   getById(partnerId: string, periodId: number, costCategoryId: string): Promise<ISalesforceProfileDetails>;
+  getRequiredCategories(partnerId: string): Promise<ISalesforceProfileDetails[]>;
   update(profileDetails: Updatable<ISalesforceProfileDetails>[]): Promise<boolean>;
 }
 
@@ -28,6 +29,7 @@ export interface IProfileDetailsRepository {
 export class ProfileDetailsRepository extends SalesforceRepositoryBase<ISalesforceProfileDetails> implements IProfileDetailsRepository {
 
   private readonly recordType: string = "Profile Detail";
+  private readonly requiredCategoryType: string = "Total Cost Category";
 
   protected readonly salesforceObjectName = "Acc_Profile__c";
 
@@ -55,6 +57,14 @@ export class ProfileDetailsRepository extends SalesforceRepositoryBase<ISalesfor
       AND Acc_CostCategory__c = '${costCategoryId}'
     `;
     return super.where(filter).then((res) => res && res[0] || null);
+  }
+
+  public async getRequiredCategories(partnerId: string): Promise<ISalesforceProfileDetails[]> {
+    const filter = `
+      Acc_ProjectParticipant__c = '${partnerId}'
+      AND RecordType.Name = '${this.requiredCategoryType}'
+    `;
+    return super.where(filter);
   }
 
   public async update(profileDetails: Updatable<ForecastDetailsDTO>[]) {

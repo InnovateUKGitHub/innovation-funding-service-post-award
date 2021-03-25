@@ -14,7 +14,7 @@ import {
   calculateNewRemainingGrant,
 } from "@server/features/financialVirements/financialVirementsCalculations";
 import { roundCurrency, sum } from "@framework/util";
-import { GetCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
+import { GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
 
 export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
   constructor(private readonly projectId: string, private readonly pcrId: string, private readonly pcrItemId: string) {
@@ -26,7 +26,7 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
   }
 
   protected async Run(context: IContext): Promise<FinancialVirementDto> {
-    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
 
     const data = await context.repositories.financialVirements.getAllForPcr(this.pcrItemId);
 

@@ -386,7 +386,7 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
         <EditClaimLineItemsComponent
           project={stores.projects.getById(props.projectId)}
           claimDetails={stores.claimDetails.get(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
-          costCategories={stores.costCategories.getAll()}
+          costCategories={stores.costCategories.getAllFiltered(props.partnerId)}
           forecastDetail={stores.forecastDetails.get(props.partnerId, props.periodId, props.costCategoryId)}
           documents={stores.claimDetailDocuments.getClaimDetailDocuments(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
           editor={stores.claimDetails.getClaimDetailsEditor(props.projectId, props.partnerId, props.periodId, props.costCategoryId, (dto: ClaimDetailsDto) => {

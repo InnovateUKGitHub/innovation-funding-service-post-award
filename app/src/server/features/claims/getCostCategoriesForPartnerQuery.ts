@@ -1,7 +1,7 @@
 import { IContext, PartnerDto, ProjectDto } from "@framework/types";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { QueryBase } from "../common/queryBase";
-import { GetCostCategoriesQuery } from "./getCostCategoriesQuery";
+import { GetUnfilteredCostCategoriesQuery } from "./getCostCategoriesQuery";
 
 export class GetCostCategoriesForPartnerQuery extends QueryBase<CostCategoryDto[]> {
 
@@ -10,7 +10,7 @@ export class GetCostCategoriesForPartnerQuery extends QueryBase<CostCategoryDto[
   }
 
   protected async Run(context: IContext) {
-    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
     return costCategories.filter(x => x.competitionType === this.project.competitionType && x.organisationType === this.partner.organisationType);
   }
 }

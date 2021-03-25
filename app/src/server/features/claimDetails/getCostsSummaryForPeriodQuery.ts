@@ -1,5 +1,5 @@
 import { QueryBase } from "@server/features/common";
-import { GetCostCategoriesQuery } from "@server/features/claims";
+import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 import { Authorisation, CostsSummaryForPeriodDto, IContext, ProjectRole } from "@framework/types";
 
 export class GetCostsSummaryForPeriodQuery extends QueryBase<CostsSummaryForPeriodDto[]> {
@@ -21,7 +21,7 @@ export class GetCostsSummaryForPeriodQuery extends QueryBase<CostsSummaryForPeri
     const allClaimDetails = await context.repositories.claimDetails.getAllByPartner(this.partnerId);
     const allForecastDetails = await context.repositories.profileDetails.getAllByPartner(this.partnerId);
     const totalForecastResults = await context.repositories.profileTotalCostCategory.getAllByPartnerId(this.partnerId);
-    const costCategories = await context.runQuery(new GetCostCategoriesQuery()).then(x => x.filter(y => y.organisationType === partner.organisationType && y.competitionType === partner.competitionType));
+    const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery()).then(x => x.filter(y => y.organisationType === partner.organisationType && y.competitionType === partner.competitionType));
 
     return costCategories.map(costCategory => {
 

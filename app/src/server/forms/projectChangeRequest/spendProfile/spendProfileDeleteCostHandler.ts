@@ -11,7 +11,7 @@ import {
 import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { GetCostCategoriesQuery } from "@server/features/claims";
+import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 
 export class ProjectChangeRequestSpendProfileDeleteCostHandler extends StandardFormHandlerBase<PcrDeleteSpendProfileCostParams, "pcr"> {
   constructor() {
@@ -32,7 +32,7 @@ export class ProjectChangeRequestSpendProfileDeleteCostHandler extends StandardF
 
     item.status = body.itemStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
 
-    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
     const costCategory = costCategories.find(x => x.id === params.costCategoryId);
 
     if (!costCategory) {

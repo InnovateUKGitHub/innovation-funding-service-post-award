@@ -147,7 +147,7 @@ const OverheadDocumentContainer = (props: OverheadDocumentsPageParams & BaseProp
       stores => (
         <OverheadDocumentsComponent
           project={stores.projects.getById(props.projectId)}
-          costCategories={stores.costCategories.getAll()}
+          costCategories={stores.costCategories.getAllUnfiltered()}
           pcrItem={stores.projectChangeRequests.getItemById(props.projectId, props.pcrId, props.itemId) as Pending<PCRItemForPartnerAdditionDto>}
           documents={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.itemId)}
           editor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.itemId)}

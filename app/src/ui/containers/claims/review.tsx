@@ -586,7 +586,7 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => {
       content={reviewContent}
       project={stores.projects.getById(props.projectId)}
       partner={stores.partners.getById(props.partnerId)}
-      costCategories={stores.costCategories.getAll()}
+      costCategories={stores.costCategories.getAllFiltered(props.partnerId)}
       claim={stores.claims.get(props.partnerId, props.periodId)}
       claims={stores.claims.getAllClaimsForPartner(props.partnerId)}
       costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}

@@ -1,7 +1,7 @@
 import { QueryBase } from "@server/features/common";
 import { IContext, PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/types";
 import { CostCategoryType, PcrSpendProfileEntity } from "@framework/entities";
-import { GetCostCategoriesQuery } from "@server/features/claims";
+import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { isNumber } from "@framework/util";
 import {
@@ -24,7 +24,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
 
   protected async Run(context: IContext): Promise<PcrSpendProfileDto> {
     const spendProfiles = await context.repositories.pcrSpendProfile.getAllForPcr(this.pcrItemId);
-    const costCategories = await context.runQuery(new GetCostCategoriesQuery());
+    const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
     return {
       pcrItemId: this.pcrItemId,
       costs: costCategories

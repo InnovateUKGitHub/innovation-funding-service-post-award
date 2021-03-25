@@ -3,7 +3,6 @@ import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 export interface ISalesforceProfileTotalCostCategory {
   Id: string;
   Acc_CostCategory__c: string;
-  // Acc_CostCategoryTotal__c: number;
   Acc_CostCategoryGOLCost__c: number;
   Acc_ProjectParticipant__c: string;
 }
@@ -17,11 +16,11 @@ export interface IProfileTotalCostCategoryRepository {
  *
  * ie amount a partner expects to spend in that cost category for the hole project calculated from the detail for that period
  * Effectively holds the grant letter offer for each cost category
- *
  * Stored in "Acc_Profile__c" table with record type of "Total Cost Category"
+ *
+ * @todo - Deprecate class and favour -> ProfileDetailsRepository as it already uses the same Table in SF (getAllByPartnerId() can be replaced with getRequiredCategories()), make sure we migrate "Acc_CostCategoryGOLCost__c" to the other repository
  */
 export class ProfileTotalCostCategoryRepository extends SalesforceRepositoryBase<ISalesforceProfileTotalCostCategory> implements IProfileTotalCostCategoryRepository {
-
   private readonly recordType: string = "Total Cost Category";
 
   protected readonly salesforceObjectName = "Acc_Profile__c";
