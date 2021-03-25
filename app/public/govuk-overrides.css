@@ -1,15 +1,11 @@
 /*
  * <App />
 */
-.app-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-}
-
-.app-content {
-  width: 100%;
-  flex: 1 1 100%;
+html,
+body,
+#root {
+  /* Enforce full height on page nodes and app entrypoint */
+  height: 100%;
 }
 
 /* FullHeight Components */

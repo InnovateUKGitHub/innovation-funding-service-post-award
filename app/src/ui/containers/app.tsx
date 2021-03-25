@@ -11,7 +11,15 @@ import { updatePageTitle } from "@ui/redux/actions";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 
-import { Footer, getHeaderProps, GovWidthContainer, Header, PhaseBanner, PrivateModal } from "@ui/components";
+import {
+  Footer,
+  FullHeight,
+  getHeaderProps,
+  GovWidthContainer,
+  Header,
+  PhaseBanner,
+  PrivateModal,
+} from "@ui/components";
 import { ErrorContainer, ErrorContainerProps, ErrorBoundaryFallback } from "@ui/components/errors";
 import { FooterLinks } from "@ui/components/layout/footer.config";
 
@@ -88,29 +96,31 @@ class AppView extends React.Component<IAppProps> {
 
     return (
       <ContentProvider value={content}>
-        <div className="app-container">
+        <FullHeight.Container>
           <Header {...headerProps} />
 
-          <GovWidthContainer className="app-content" data-page-qa={currentRoute.routeName}>
-            <PhaseBanner />
+          <FullHeight.Content>
+            <GovWidthContainer data-page-qa={currentRoute.routeName}>
+              <PhaseBanner />
 
-            {hasAccess ? (
-              <ErrorBoundary
-                fallbackRender={errorProps => <ErrorBoundaryFallback {...baseProps} {...(errorProps as any)} />}
-              >
-                <RouteContainer {...baseProps} {...params} />
-              </ErrorBoundary>
-            ) : (
-              <ErrorContainer {...(route.params as ErrorContainerProps)} />
-            )}
-          </GovWidthContainer>
+              {hasAccess ? (
+                <ErrorBoundary
+                  fallbackRender={errorProps => <ErrorBoundaryFallback {...baseProps} {...(errorProps as any)} />}
+                >
+                  <RouteContainer {...baseProps} {...params} />
+                </ErrorBoundary>
+              ) : (
+                <ErrorContainer {...(route.params as ErrorContainerProps)} />
+              )}
+            </GovWidthContainer>
+          </FullHeight.Content>
 
           <Footer links={footerLinks} />
 
           {modalRegister.getModals().map(modal => (
             <PrivateModal key={`modal-${modal.id}`} {...modal} />
           ))}
-        </div>
+        </FullHeight.Container>
       </ContentProvider>
     );
   }
