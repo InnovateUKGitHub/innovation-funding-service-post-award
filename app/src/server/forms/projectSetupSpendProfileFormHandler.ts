@@ -9,7 +9,6 @@ import { isNumber } from "@framework/util";
 import { ForecastDetailsDTO } from "@framework/dtos";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
-import { GetByIdQuery } from "../features/projects";
 import { UpdateInitialForecastDetailsCommand } from "../features/forecastDetails";
 import { IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
 
@@ -26,9 +25,8 @@ export class ProjectSetupSpendProfileFormHandler extends StandardFormHandlerBase
 
   protected async getDto(context: IContext, params: Params, button: IFormButton, body: { [key: string]: string }): Promise<Dto[]> {
     const dto = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(params.partnerId));
-    const project = await context.runQuery(new GetByIdQuery(params.projectId));
     const partner = await context.runQuery(new GetPartnerByIdQuery(params.partnerId));
-    const costCategories = await context.runQuery(new GetCostCategoriesForPartnerQuery(project, partner));
+    const costCategories = await context.runQuery(new GetCostCategoriesForPartnerQuery(partner));
 
     return dto
       .filter(x => costCategories.find(c => c.id === x.costCategoryId))

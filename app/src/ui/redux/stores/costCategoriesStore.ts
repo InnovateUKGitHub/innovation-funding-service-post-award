@@ -16,20 +16,21 @@ export class CostCategoriesStore extends StoreBase {
     super(getState, queue);
   }
 
+  /**
+   * @todo deprecate this api in favour of getAllFiltered()
+   */
   public getAllForPartner(partnerId: string) {
     const competitionType = this.partnerStore.getById(partnerId).then(x => x.competitionType);
     const organisationType = this.partnerStore.getById(partnerId).then(x => x.organisationType);
-    const costCategories = this.getAllUnfiltered();
+    const costCategories = this.getAllFiltered(partnerId);
 
     return Pending.combine({
       competitionType,
       organisationType,
       costCategories,
-    }).then(combined =>
-      combined.costCategories.filter(
-        costCategory =>
-          costCategory.competitionType === combined.competitionType &&
-          costCategory.organisationType === combined.organisationType,
+    }).then(res =>
+      res.costCategories.filter(
+        x => x.competitionType === res.competitionType && x.organisationType === res.organisationType,
       ),
     );
   }
@@ -38,6 +39,9 @@ export class CostCategoriesStore extends StoreBase {
     return this.getData("costCategories", "all", p => ApiClient.costCategories.getAll(p));
   }
 
+  /**
+   * @todo Add support for filtering (competitionType, organisationType)
+   */
   public getAllFiltered(partnerId: string) {
     return this.getData("costCategories", storeKeys.getCostCategoryKey(partnerId), p =>
       ApiClient.costCategories.getAllFiltered({ ...p, partnerId }),
