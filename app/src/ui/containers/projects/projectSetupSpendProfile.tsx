@@ -24,28 +24,42 @@ interface Callbacks {
 }
 
 class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendProfileParams, Data, Callbacks> {
-
   public render() {
-    const combined = Pending.combine({ data: this.props.data, editor: this.props.editor, partnerEditor: this.props.partnerEditor });
+    const combined = Pending.combine({
+      data: this.props.data,
+      editor: this.props.editor,
+      partnerEditor: this.props.partnerEditor,
+    });
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.data, x.editor, x.partnerEditor)} />;
   }
-  public renderContents(combined: ACC.Claims.ForecastData, editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>, partnerEditor: IEditorStore<PartnerDto, PartnerDtoValidator>) {
+  public renderContents(
+    combined: ACC.Claims.ForecastData,
+    editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>,
+    partnerEditor: IEditorStore<PartnerDto, PartnerDtoValidator>,
+  ) {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
-    const readyToSubmitMessage = <ACC.Content value={x => x.projectSetupSpendProfile.readyToSubmitMessage}/>;
-    const markAsComplete = <ACC.Content value={x => x.projectSetupSpendProfile.markAsComplete}/>;
+    const readyToSubmitMessage = <ACC.Content value={x => x.projectSetupSpendProfile.readyToSubmitMessage} />;
+    const markAsComplete = <ACC.Content value={x => x.projectSetupSpendProfile.markAsComplete} />;
 
-    const options: ACC.SelectOption[] = [
-      { id: "true", value: readyToSubmitMessage }
-    ];
+    const options: ACC.SelectOption[] = [{ id: "true", value: readyToSubmitMessage }];
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.projectSetup.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}><ACC.Content value={(x) => x.projectSetupSpendProfile.backLink} /></ACC.BackLink>}
+        backLink={
+          <ACC.BackLink
+            route={this.props.routes.projectSetup.getLink({
+              projectId: this.props.projectId,
+              partnerId: this.props.partnerId,
+            })}
+          >
+            <ACC.Content value={x => x.projectSetupSpendProfile.backLink} />
+          </ACC.BackLink>
+        }
         error={editor.error}
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title {...combined.project} />}
       >
-        <ACC.Section qa="project-setup-spend-profile" >
+        <ACC.Section qa="project-setup-spend-profile">
           {this.renderGuidance()}
           <Form.Form
             editor={editor}
@@ -53,7 +67,13 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
               this.props.onChangePartner(partnerEditor.data);
               this.props.onChange(false, partnerEditor.data.spendProfileStatus === SpendProfileStatus.Complete, data);
             }}
-            onSubmit={() => this.props.onChange(true, partnerEditor.data.spendProfileStatus === SpendProfileStatus.Complete, editor.data)}
+            onSubmit={() =>
+              this.props.onChange(
+                true,
+                partnerEditor.data.spendProfileStatus === SpendProfileStatus.Complete,
+                editor.data,
+              )
+            }
             qa="project-setup-spend-profile-form"
           >
             <ACC.Claims.ForecastTable data={combined} editor={editor} />
@@ -61,10 +81,17 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
               <Form.Checkboxes
                 name="isComplete"
                 options={options}
-                value={_ => partnerEditor.data.spendProfileStatus === SpendProfileStatus.Complete ? options : []}
-                update={(_, value) => partnerEditor.data.spendProfileStatus = (value && value.some(y => y.id === "true")) ? SpendProfileStatus.Complete : SpendProfileStatus.Incomplete}
+                value={_ => (partnerEditor.data.spendProfileStatus === SpendProfileStatus.Complete ? options : [])}
+                update={(_, value) =>
+                  (partnerEditor.data.spendProfileStatus =
+                    value && value.some(y => y.id === "true")
+                      ? SpendProfileStatus.Complete
+                      : SpendProfileStatus.Incomplete)
+                }
               />
-              <Form.Submit><ACC.Content value={x => x.projectSetupSpendProfile.submitButton}/></Form.Submit>
+              <Form.Submit>
+                <ACC.Content value={x => x.projectSetupSpendProfile.submitButton} />
+              </Form.Submit>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
@@ -73,24 +100,28 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
   }
 
   private renderGuidance() {
-    return <ACC.Renderers.SimpleString qa="guidance"><ACC.Content value={x => x.projectSetupSpendProfile.guidanceMessage}/></ACC.Renderers.SimpleString>;
+    return (
+      <ACC.Renderers.SimpleString qa="guidance">
+        <ACC.Content value={x => x.projectSetupSpendProfile.guidanceMessage} />
+      </ACC.Renderers.SimpleString>
+    );
   }
 }
 
 const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams & BaseProps) => {
   const { getContent } = useContent();
-  const spendProfileUpdatedMessage = getContent((x) => x.projectSetupSpendProfile.spendProfileUpdatedMessage);
+  const spendProfileUpdatedMessage = getContent(x => x.projectSetupSpendProfile.spendProfileUpdatedMessage);
 
   return (
     <StoresConsumer>
-      {(stores) => (
+      {stores => (
         <ProjectSetupSpendProfileComponent
           data={Pending.combine({
             project: stores.projects.getById(props.projectId),
             partner: stores.partners.getById(props.partnerId),
             forecastDetails: stores.forecastDetails.getAllInitialByPartner(props.partnerId),
             golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
-            costCategories: stores.costCategories.getAllUnfiltered(),
+            costCategories: stores.costCategories.getAllFiltered(props.partnerId),
             // Initial forecast so happens before claims
             claim: Pending.done(null),
             claims: Pending.done([]),
@@ -113,7 +144,7 @@ const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams
               },
             );
           }}
-          onChangePartner={(dto) => {
+          onChangePartner={dto => {
             stores.partners.updatePartner(false, props.partnerId, dto);
           }}
           {...props}
@@ -127,10 +158,11 @@ export const ProjectSetupSpendProfileRoute = defineRoute({
   routeName: "projectSetupSpendProfile",
   routePath: "/projects/:projectId/setup/:partnerId/projectSetupSpendProfile",
   container: ProjectSetupSpendProfileContainer,
-  getParams: (route) => ({
+  getParams: route => ({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,
   }),
   getTitle: ({ content }) => content.projectSetupSpendProfile.title(),
-  accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+  accessControl: (auth, { projectId, partnerId }) =>
+    auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
 });

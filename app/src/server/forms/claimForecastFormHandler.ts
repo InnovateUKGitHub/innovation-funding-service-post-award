@@ -23,7 +23,7 @@ export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForec
     const dto = await context.runQuery(new GetAllForecastsForPartnerQuery(params.partnerId));
     const project = await context.runQuery(new GetByIdQuery(params.projectId));
     const partner = await context.runQuery(new GetPartnerByIdQuery(params.partnerId));
-    const costCategories = await context.runQuery(new GetCostCategoriesForPartnerQuery(project, partner));
+    const costCategories = await context.runQuery(new GetCostCategoriesForPartnerQuery(partner));
 
     const costCategoriesIdsToUpdate = costCategories
       .filter(x => !x.isCalculated)
