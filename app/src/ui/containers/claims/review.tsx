@@ -382,7 +382,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
     const hasTextToFilter = !!documentFilterText.length;
 
     const documentsToDisplay =
-    isClient && hasTextToFilter
+      isClient && hasTextToFilter
         ? documents.filter(document => new RegExp(documentFilterText, "gi").test(document.fileName))
         : documents;
 
@@ -441,7 +441,6 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
     documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
     documents: DocumentSummaryDto[],
   ) {
-
     return documents.length ? (
       <ACC.Section>
         <ACC.DocumentTableWithDelete
@@ -506,8 +505,11 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
     const submitButtonLabel = this.getSubmitButtonLabel(editor);
 
     const hintValue = this.getCompetitionHintContent(project.competitionType);
-    const declarationMessage = this.getMODeclarationMessage(project.competitionType);
-    const reminderMessage = this.getMOReminderMessage(project.competitionType);
+
+    const displaySupportingContent = !this.props.isClient || editor.data.status === ClaimStatus.AWAITING_IUK_APPROVAL;
+
+    const declarationMessage = displaySupportingContent && this.getMODeclarationMessage(project.competitionType);
+    const reminderMessage = displaySupportingContent && this.getMOReminderMessage(project.competitionType);
 
     // Note: <Fieldset> has not got got support for React.Fragment
     return [
