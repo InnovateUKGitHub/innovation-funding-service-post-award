@@ -29,15 +29,18 @@ export function useGovFrontend(module: keyof GDSModules) {
 
   const hasWindow: boolean = config.isClient && typeof window !== "undefined";
   const gdsWindow: false | WindowWithGDSLoaded = hasWindow && ((window as unknown) as WindowWithGDSLoaded);
-  const govFrontend = gdsWindow && gdsWindow.GOVUKFrontend;
 
-  const setRef = useCallback((node: HTMLElement | null) => {
-    if (govFrontend && node) {
-      const gdsModule = new govFrontend[module](node);
+  const setRef = useCallback(
+    (node: HTMLElement | null) => {
+      const govFrontend = gdsWindow && gdsWindow.GOVUKFrontend;
+      if (govFrontend && node) {
+        const gdsModule = new govFrontend[module](node);
 
-      gdsModule.init();
-    }
-  }, []);
+        gdsModule.init();
+      }
+    },
+    [gdsWindow, module],
+  );
 
   return { setRef };
 }
