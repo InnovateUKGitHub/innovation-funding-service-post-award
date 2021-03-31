@@ -7,7 +7,8 @@ module.exports = {
     "jest/globals": true,
   },
   globals: {
-    jsx: true,
+    JSX: true,
+    React: true
   },
   parser: "@typescript-eslint/parser",
   overrides: [
@@ -120,7 +121,7 @@ module.exports = {
     "no-unused-vars": "off", // TODO: delete this (since it's already turned on in the recommended config for eslint)
     "id-blacklist": "off", // TODO: switch back to error "warn", "any", "Number", "number", "String", "string", "Boolean", "boolean", "Undefined", "undefined"
     "prefer-arrow/prefer-arrow-functions": "off", // TODO: switch back to error
-    "react/prop-types": "warn", // TODO: maybe switch off
+    "react/prop-types": "off", // Note: We use typescript not needed
     "@typescript-eslint/adjacent-overload-signatures": "error",
     "@typescript-eslint/array-type": [
       "error",
