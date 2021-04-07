@@ -4,13 +4,15 @@ import { ProjectRole } from ".";
 type AvailableAuthRoles = "isPm" | "isPmOrMo" | "isFc" | "isMo";
 
 export function getAuthRoles(role: ProjectRole): { [key in AvailableAuthRoles]: boolean } {
-  const isMo = !!(role & ProjectRole.MonitoringOfficer);
   const isFc = !!(role & ProjectRole.FinancialContact);
+
   const isPm = !!(role & ProjectRole.ProjectManager);
+  const isMo = !!(role & ProjectRole.MonitoringOfficer);
+  const isPmOrMo = (role & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
 
   return {
     isPm,
-    isPmOrMo: isPm || isMo,
+    isPmOrMo,
     isFc,
     isMo,
   };

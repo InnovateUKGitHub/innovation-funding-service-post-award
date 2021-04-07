@@ -1,22 +1,17 @@
 import * as ACC from "@ui/components";
 import { ClaimDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { Pending } from "@shared/pending";
-import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore, useStores } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { DocumentDescription } from "@framework/constants";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDescriptionDto, DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { getAuthRoles } from "@framework/types";
 import { DropdownOption } from "@ui/components";
 import { getAllEnumValues } from "@shared/enumHelper";
 import { projectCompetition, useContent } from "@ui/hooks";
 import { OL } from "@ui/components";
-
-export interface ClaimDocumentsPageParams {
-  projectId: string;
-  periodId: number;
-  partnerId: string;
-}
 
 type DefaultIntroKeys =
   | "backLink"
@@ -86,49 +81,40 @@ export function useClaimDocumentContent(): ClaimDocumentContent {
   };
 }
 
-interface Data {
+export interface ClaimDocumentsPageParams {
+  projectId: string;
+  periodId: number;
+  partnerId: string;
+}
+
+interface ClaimDocumentsComponentProps extends ClaimDocumentsPageParams, BaseProps {
   content: ClaimDocumentContent;
   project: Pending<ProjectDto>;
   editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
   documents: Pending<DocumentSummaryDto[]>;
   claim: Pending<ClaimDto>;
   documentDescriptions: Pending<DocumentDescriptionDto[]>;
-}
-
-interface Callbacks {
   onChange: (saving: boolean, dto: MultipleDocumentUploadDto) => void;
   onDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
-class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Data, Callbacks> {
-  render() {
-    const combined = Pending.combine({
-      project: this.props.project,
-      editor: this.props.editor,
-      documents: this.props.documents,
-      claim: this.props.claim,
-      documentDescriptions: this.props.documentDescriptions,
-    });
+const allowedClaimDocuments: Readonly<DocumentDescription[]> = [
+  DocumentDescription.Evidence,
+  DocumentDescription.EndOfProjectSurvey,
+  DocumentDescription.IAR,
+  DocumentDescription.LMCMinutes,
+  DocumentDescription.ScheduleThree,
+  DocumentDescription.StatementOfExpenditure,
+];
 
-    return (
-      <ACC.PageLoader
-        pending={combined}
-        render={x => this.renderContents(x.project, x.editor, x.documents, x.claim, x.documentDescriptions)}
-      />
-    );
-  }
-
-  private readonly allowedDocuments = [
-    DocumentDescription.Evidence,
-    DocumentDescription.EndOfProjectSurvey,
-    DocumentDescription.IAR,
-    DocumentDescription.LMCMinutes,
-    DocumentDescription.ScheduleThree,
-    DocumentDescription.StatementOfExpenditure,
-  ];
-
-  private getIntroMessage(competitionType: string) {
-    const { content } = this.props;
+const ClaimDocumentsComponent = ({
+  content,
+  projectId,
+  partnerId,
+  periodId,
+  ...props
+}: ClaimDocumentsComponentProps) => {
+  const getIntroMessage = (competitionType: string) => {
     const ktpContent = content.getCompetitionContent(competitionType);
 
     if (!ktpContent) return null;
@@ -150,41 +136,35 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
         <ACC.Renderers.SimpleString>{ktpContent.schedule3ReminderMessage}</ACC.Renderers.SimpleString>
       </>
     );
-  }
+  };
 
-  private renderContents(
+  const renderContents = (
     project: ProjectDto,
     editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
     documents: DocumentSummaryDto[],
     claim: ClaimDto,
     documentDescriptions: DocumentDescriptionDto[],
-  ) {
+  ) => {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
-    const { content } = this.props;
-    const ktpIntroContent = this.getIntroMessage(project.competitionType);
+    const ktpIntroContent = getIntroMessage(project.competitionType);
 
     const documentTypeOptions: DropdownOption[] = documentDescriptions
-      .filter(x => this.allowedDocuments.indexOf(x.id) >= 0)
-      .map(x => ({ id: x.id.toString(), value: x.label }));
+      .filter(x => allowedClaimDocuments.indexOf(x.id) >= 0)
+      .map(x => ({ id: `${x.id}`, value: x.label }));
 
+    const claimLinkParams = { projectId, partnerId, periodId };
+
+    const prepareClaimLink = (
+      <ACC.BackLink route={props.routes.prepareClaim.getLink(claimLinkParams)}>{content.default.backLink}</ACC.BackLink>
+    );
     return (
       <ACC.Page
         pageTitle={<ACC.Projects.Title {...project} />}
         error={editor.error}
         validator={editor.validator}
-        backLink={
-          <ACC.BackLink
-            route={this.props.routes.prepareClaim.getLink({
-              projectId: this.props.projectId,
-              partnerId: this.props.partnerId,
-              periodId: this.props.periodId,
-            })}
-          >
-            {content.default.backLink}
-          </ACC.BackLink>
-        }
+        backLink={prepareClaimLink}
       >
-        <ACC.Renderers.Messages messages={this.props.messages} />
+        <ACC.Renderers.Messages messages={props.messages} />
 
         {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={content.default.finalClaim} />}
 
@@ -209,10 +189,11 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
             enctype="multipart"
             editor={editor}
             qa="claimDocumentsForm"
-            onChange={dto => this.props.onChange(false, dto)}
+            onChange={dto => props.onChange(false, dto)}
           >
             <UploadForm.Fieldset>
               <ACC.DocumentGuidance />
+
               <UploadForm.MulipleFileUpload
                 label={content.default.uploadDocumentsLabel}
                 labelHidden
@@ -221,6 +202,7 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
                 value={data => data.files}
                 update={(dto, files) => (dto.files = files || [])}
               />
+
               <UploadForm.DropdownList
                 label={content.default.descriptionLabel}
                 labelHidden={false}
@@ -235,131 +217,121 @@ class ClaimDocumentsComponent extends ContainerBase<ClaimDocumentsPageParams, Da
                 update={(dto, value) => (dto.description = value ? parseInt(value.id, 10) : undefined)}
               />
             </UploadForm.Fieldset>
+
             {/* TODO: @documents-content make button label consistent*/}
-            <UploadForm.Button styling="Secondary" name="upload" onClick={() => this.props.onChange(true, editor.data)}>
+            <UploadForm.Button styling="Secondary" name="upload" onClick={() => props.onChange(true, editor.data)}>
               {content.default.uploadDocumentsLabel}
             </UploadForm.Button>
           </UploadForm.Form>
         </ACC.Section>
+
         <ACC.Section title={content.default.documentsListSectionTitle}>
-          {this.renderDocuments(editor, documents)}
+          {documents.length ? (
+            <ACC.Section subtitle={content.default.newWindow}>
+              <ACC.DocumentTableWithDelete
+                qa="claim-supporting-documents"
+                documents={documents}
+                onRemove={document => props.onDelete(editor.data, document)}
+              />
+            </ACC.Section>
+          ) : (
+            <ACC.Section>
+              <ACC.ValidationMessage message={content.default.noDocumentsUploaded} messageType="info" />
+            </ACC.Section>
+          )}
         </ACC.Section>
+
         <ACC.Section qa="buttons">
-          {this.renderNextStepLink(claim)}
-          <ACC.Link styling="SecondaryButton" id="save-claim" route={this.getDashboardLink(project)}>
+          {claim.isFinalClaim ? (
+            <ACC.Link
+              styling="PrimaryButton"
+              id="continue-claim"
+              route={props.routes.claimSummary.getLink(claimLinkParams)}
+            >
+              {content.default.saveAndContinueToSummaryButton}
+            </ACC.Link>
+          ) : (
+            <ACC.Link
+              styling="PrimaryButton"
+              id="continue-claim"
+              route={props.routes.claimForecast.getLink(claimLinkParams)}
+            >
+              {content.default.saveAndContinueToForecastButton}
+            </ACC.Link>
+          )}
+
+          <ACC.Link styling="SecondaryButton" id="save-claim" route={getDashboardLink(project)}>
             {content.default.saveAndReturnButton}
           </ACC.Link>
         </ACC.Section>
       </ACC.Page>
     );
-  }
+  };
 
-  private renderNextStepLink(claim: ClaimDto) {
-    const { content } = this.props;
+  const getDashboardLink = (project: ProjectDto) => {
+    const { isPmOrMo } = getAuthRoles(project.roles);
 
-    if (claim.isFinalClaim) {
-      return (
-        <ACC.Link
-          styling="PrimaryButton"
-          id="continue-claim"
-          route={this.props.routes.claimSummary.getLink({
-            projectId: this.props.projectId,
-            partnerId: this.props.partnerId,
-            periodId: this.props.periodId,
-          })}
-        >
-          {content.default.saveAndContinueToSummaryButton}
-        </ACC.Link>
-      );
-    }
-    return (
-      <ACC.Link
-        styling="PrimaryButton"
-        id="continue-claim"
-        route={this.props.routes.claimForecast.getLink({
-          projectId: this.props.projectId,
-          partnerId: this.props.partnerId,
-          periodId: this.props.periodId,
-        })}
-      >
-        {content.default.saveAndContinueToForecastButton}
-      </ACC.Link>
-    );
-  }
-
-  private getDashboardLink(project: ProjectDto) {
-    const isPmOrMo =
-      (project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
     return isPmOrMo
-      ? this.props.routes.allClaimsDashboard.getLink({ projectId: project.id })
-      : this.props.routes.claimsDashboard.getLink({ projectId: project.id, partnerId: this.props.partnerId });
-  }
+      ? props.routes.allClaimsDashboard.getLink({ projectId })
+      : props.routes.claimsDashboard.getLink({ projectId, partnerId });
+  };
 
-  private renderDocuments(
-    editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
-    documents: DocumentSummaryDto[],
-  ) {
-    const { content } = this.props;
+  const combined = Pending.combine({
+    project: props.project,
+    editor: props.editor,
+    documents: props.documents,
+    claim: props.claim,
+    documentDescriptions: props.documentDescriptions,
+  });
 
-    if (!documents.length) {
-      return (
-        <ACC.Section>
-          <ACC.ValidationMessage message={content.default.noDocumentsUploaded} messageType="info" />
-        </ACC.Section>
-      );
-    }
-
-    return (
-      <ACC.Section subtitle={content.default.newWindow}>
-        {documents.length ? (
-          <ACC.DocumentTableWithDelete
-            onRemove={document => this.props.onDelete(editor.data, document)}
-            documents={documents}
-            qa="claim-supporting-documents"
-          />
-        ) : null}
-      </ACC.Section>
-    );
-  }
-}
+  return (
+    <ACC.PageLoader
+      pending={combined}
+      render={x => renderContents(x.project, x.editor, x.documents, x.claim, x.documentDescriptions)}
+    />
+  );
+};
 
 const ClaimDocumentsContainer = (props: ClaimDocumentsPageParams & BaseProps) => {
   const stores = useStores();
-  const { content } = useContent();
   const claimDocumentContent = useClaimDocumentContent();
+  const { getContent } = useContent();
 
   return (
     <ClaimDocumentsComponent
+      {...props}
       content={claimDocumentContent}
       project={stores.projects.getById(props.projectId)}
       editor={stores.claimDocuments.getClaimDocumentsEditor(props.projectId, props.partnerId, props.periodId)}
       documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
       // TODO temporary measure until we get the description types from SF
       documentDescriptions={Pending.done(
-        getAllEnumValues(DocumentDescription).map(x => ({
-          id: x,
-          label: content.claimDocuments.documents.labels.documentDescriptionLabel(x).content,
+        getAllEnumValues(DocumentDescription).map(description => ({
+          id: description,
+          label: getContent(x => x.claimDocuments.documents.labels.documentDescriptionLabel(description)),
         })),
       )}
       claim={stores.claims.get(props.partnerId, props.periodId)}
       onChange={(saving, dto) => {
         stores.messages.clearMessages();
-        const successMessage = content.claimDocuments.documentMessages.getDocumentUploadedMessage(dto.files.length)
-          .content;
+
+        const successfullyUploadedMessage = getContent(x =>
+          x.claimDocuments.documentMessages.getDocumentUploadedMessage(dto.files.length),
+        );
+
         stores.claimDocuments.updateClaimDocumentsEditor(
           saving,
           props.projectId,
           props.partnerId,
           props.periodId,
           dto,
-          successMessage,
+          successfullyUploadedMessage,
         );
       }}
       onDelete={(dto, document) => {
         stores.messages.clearMessages();
         stores.claimDocuments.deleteClaimDocument(props.projectId, props.partnerId, props.periodId, dto, document);
       }}
-      {...props}
     />
   );
 };
