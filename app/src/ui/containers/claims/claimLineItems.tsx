@@ -78,32 +78,32 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     );
   }
 
-  private getSupportingDocumentsSection(competitionType: string, documents: DocumentSummaryDto[], claimDetails: ClaimDetailsDto) {
+  private getSupportingDocumentsSection(
+    competitionType: string,
+    documents: DocumentSummaryDto[],
+    claimDetails: ClaimDetailsDto,
+  ) {
     const { content } = this.props;
     const { isKTP } = projectCompetition(competitionType);
 
     // Note: KTP projects submit evidence on the whole claim, not each cost category.
     const displaySupportingDocs = !isKTP;
 
-    return displaySupportingDocs && (
-      <>
-        <ACC.Section
-          title={content.supportingDocumentsTitle}
-          subtitle={!!documents.length && content.documentsInNewWindow}
-          qa="supporting-documents-section"
-        >
-          {this.renderDocumentList(documents)}
-        </ACC.Section>
+    return (
+      displaySupportingDocs && (
+        <>
+          <ACC.Section
+            title={content.supportingDocumentsTitle}
+            subtitle={!!documents.length && content.documentsInNewWindow}
+            qa="supporting-documents-section"
+          >
+            <ACC.DocumentView documents={documents} validationMessage={this.props.content.noDocumentsUploaded} />
+          </ACC.Section>
 
-        {this.renderAdditionalInformation(claimDetails)}
-      </>
+          {this.renderAdditionalInformation(claimDetails)}
+        </>
+      )
     );
-  }
-
-  private renderDocumentList(documents: DocumentSummaryDto[]) {
-    return documents.length > 0
-      ? <ACC.DocumentTable documents={documents} qa="supporting-documents"/>
-      : <ACC.ValidationMessage message={this.props.content.noDocumentsUploaded} messageType="info" />;
   }
 
   // TODO - this is something which we do in at least two places so should be generic

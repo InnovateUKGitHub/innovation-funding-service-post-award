@@ -3,7 +3,7 @@ import { Pending } from "@shared/pending";
 import { ClaimDetailsDto, ClaimLineItemDto, ForecastDetailsDTO, ProjectDto, ProjectRole } from "@framework/types";
 import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
-import { UL, ValidationMessage } from "@ui/components";
+import { UL } from "@ui/components";
 import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators/claimDetailsValidator";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
@@ -240,9 +240,16 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
 
   private renderDocuments(documents: DocumentSummaryDto[]) {
     return (
-      <ACC.Section titleContent={x => x.editClaimLineItems.supportingDocumentsHeader} subtitle={documents.length > 0 ? <ACC.Content value={x => x.editClaimLineItems.documentMessages.newWindow}/> : ""} qa="supporting-documents-section">
-        <ACC.Renderers.SimpleString><ACC.Content value={x => x.editClaimLineItems.messages.editClaimLineItemDocumentGuidance}/></ACC.Renderers.SimpleString>
-        {documents.length > 0 ? <ACC.DocumentTable documents={documents} qa="supporting-documents"/> : <ValidationMessage message={x => x.editClaimLineItems.documentMessages.noDocumentsUploaded} messageType="info" />}
+      <ACC.Section
+        titleContent={x => x.editClaimLineItems.supportingDocumentsHeader}
+        subtitle={!!documents.length && <ACC.Content value={x => x.editClaimLineItems.documentMessages.newWindow} />}
+        qa="supporting-documents-section"
+      >
+        <ACC.Renderers.SimpleString>
+          <ACC.Content value={x => x.editClaimLineItems.messages.editClaimLineItemDocumentGuidance} />
+        </ACC.Renderers.SimpleString>
+
+        <ACC.DocumentView documents={documents} />
       </ACC.Section>
     );
   }

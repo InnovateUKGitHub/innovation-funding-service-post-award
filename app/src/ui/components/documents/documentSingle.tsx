@@ -1,6 +1,6 @@
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { useContent } from "@ui/hooks";
-import { SimpleString } from "./renderers";
+import { SimpleString } from "../renderers";
 
 export interface DocumentSingleProps {
   document: Pick<DocumentSummaryDto, "link" | "fileName">;

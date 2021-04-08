@@ -59,6 +59,9 @@
       "availableImageExtensions": "images (jpg, jpeg, png)",
       "fileTypesQuestion": "Learn more about files you can upload"
     },
+    "documentView": {
+      "fallback-validation-message": "No documents uploaded."
+    },
     "claimLastModified": {
       "message": "Changes last saved"
     },
@@ -813,6 +816,8 @@
     "actual-costs": "Actual costs for period",
     "difference": "Difference",
     "status": "Status",
+    "document-list-title": "Supporting documents",
+    "no-documents-uploaded": "No documents uploaded.",
     "last-updated-date": "Date of last update",
     "costs-claimed": "Costs claimed",
     "costs-approved": "Costs approved",

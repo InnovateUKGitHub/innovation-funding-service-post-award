@@ -8,13 +8,11 @@ import * as Partners from "./partners";
 
 export { Claims, Inputs, Forecasts, MonitoringReports, Projects, Renderers, Partners };
 
+export * from "./documents";
 export * from "./typography";
 export * from "./accordion";
 export * from "./content";
 export * from "./details";
-export * from "./documentGuidance";
-export * from "./documentList";
-export * from "./documentSingle";
 export * from "./errorSummary";
 export * from "./form";
 export * from "./FullHeight";
