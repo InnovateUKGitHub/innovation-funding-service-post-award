@@ -5,94 +5,42 @@ import { hookTestBed, TestBedContent } from "@shared/TestBed";
 
 const stubContent = {
   claimReview: {
-    additionalInfoHint: {
-      content: "stub-additionalInfoHint",
-    },
-    backLink: {
-      content: "stub-backLink",
-    },
-    queryClaimOption: {
-      content: "stub-queryClaimOption",
-    },
-    approveClaimOption: {
-      content: "stub-approveClaimOption",
-    },
-    howToProceedSectionTitle: {
-      content: "stub-howToProceedSectionTitle",
-    },
-    submitButton: {
-      content: "stub-submitButton",
-    },
-    sendQueryButton: {
-      content: "stub-sendQueryButton",
-    },
-    uploadSupportingDocumentsFormAccordionTitle: {
-      content: "stub-uploadSupportingDocumentsFormAccordionTitle",
-    },
-    uploadInputLabel: {
-      content: "stub-uploadInputLabel",
-    },
-    uploadButton: {
-      content: "stub-uploadButton",
-    },
-    claimReviewDeclaration: {
-      content: "stub-claimReviewDeclaration",
-    },
-    monitoringReportReminder: {
-      content: "stub-monitoringReportReminder",
-    },
-    additionalInfoSectionTitle: {
-      content: "stub-additionalInfoSectionTitle",
-    },
-    additionalInfoLabel: {
-      content: "stub-additionalInfoLabel",
-    },
-    additionalInfoHintIfYou: {
-      content: "stub-additionalInfoHintIfYou",
-    },
-    additionalInfoHintQueryClaim: {
-      content: "stub-additionalInfoHintQueryClaim",
-    },
-    additionalInfoHintSubmitClaim: {
-      content: "stub-additionalInfoHintSubmitClaim",
-    },
+    additionalInfoHint: { content: "stub-additionalInfoHint" },
+    backLink: { content: "stub-backLink" },
+    queryClaimOption: { content: "stub-queryClaimOption" },
+    approveClaimOption: { content: "stub-approveClaimOption" },
+    howToProceedSectionTitle: { content: "stub-howToProceedSectionTitle" },
+    submitButton: { content: "stub-submitButton" },
+    sendQueryButton: { content: "stub-sendQueryButton" },
+    uploadSupportingDocumentsFormAccordionTitle: { content: "stub-uploadSupportingDocumentsFormAccordionTitle" },
+    uploadInputLabel: { content: "stub-uploadInputLabel" },
+    uploadButton: { content: "stub-uploadButton" },
+    claimReviewDeclaration: { content: "stub-claimReviewDeclaration" },
+    monitoringReportReminder: { content: "stub-monitoringReportReminder" },
+    additionalInfoSectionTitle: { content: "stub-additionalInfoSectionTitle" },
+    additionalInfoLabel: { content: "stub-additionalInfoLabel" },
+    additionalInfoHintIfYou: { content: "stub-additionalInfoHintIfYou" },
+    additionalInfoHintQueryClaim: { content: "stub-additionalInfoHintQueryClaim" },
+    additionalInfoHintSubmitClaim: { content: "stub-additionalInfoHintSubmitClaim" },
     labels: {
-      forecastAccordionTitle: {
-        content: "stub-forecastAccordionTitle",
-      },
-      claimLogAccordionTitle: {
-        content: "stub-claimLogAccordionTitle",
-      },
+      forecastAccordionTitle: { content: "stub-forecastAccordionTitle" },
+      claimLogAccordionTitle: { content: "stub-claimLogAccordionTitle" },
     },
     documentMessages: {
-      uploadInstruction: {
-        content: "stub-uploadInstruction",
-      },
-      noDocumentsUploaded: {
-        content: "stub-noDocumentsUploaded",
-      },
-      newWindow: {
-        content: "stub-newWindow"
-      }
+      uploadInstruction: { content: "stub-uploadInstruction" },
+      noDocumentsUploaded: { content: "stub-noDocumentsUploaded" },
+      newWindow: { content: "stub-newWindow" },
     },
     messages: {
-      finalClaim: {
-        content: "stub-finalClaim",
-      },
+      finalClaimMessage: { content: "stub-finalClaimMessage" },
     },
   },
   claimDocuments: {
-    descriptionLabel: {
-      content: "stub-descriptionLabel",
-    },
+    descriptionLabel: { content: "stub-descriptionLabel" },
   },
   projectDocuments: {
-    noMatchingDocumentsMessage: {
-      content: "stub-noMatchingDocumentsMessage",
-    },
-    searchDocumentsMessage: {
-      content: "stub-searchDocumentsMessage",
-    },
+    noMatchingDocumentsMessage: { content: "stub-noMatchingDocumentsMessage" },
+    searchDocumentsMessage: { content: "stub-searchDocumentsMessage" },
   },
 } as any;
 
@@ -127,8 +75,8 @@ describe("useReviewContent()", () => {
   });
 
   test.each`
-    name                     | property
-    ${"isFinalClaimMessage"} | ${"finalClaim"}
+    name                   | property
+    ${"finalClaimMessage"} | ${"finalClaimMessage"}
   `("with message $property", ({ name, property }: Record<"name" | "property", string>) => {
     const { result } = renderPageContent();
 
@@ -166,8 +114,8 @@ describe("useReviewContent()", () => {
   });
 
   test.each`
-    name                            | property
-    ${"descriptionLabel"}           | ${"descriptionLabel"}
+    name                  | property
+    ${"descriptionLabel"} | ${"descriptionLabel"}
   `("with claimDocuments $property ", ({ name, property }: Record<"name" | "property", string>) => {
     const { result } = renderPageContent();
 
@@ -202,8 +150,12 @@ describe("getCompetitionContent()", () => {
     }
 
     expect(ktpContent.additionalInfoHintIfYou).toEqual(stubContent.claimReview.additionalInfoHintIfYou.content);
-    expect(ktpContent.additionalInfoHintQueryClaim).toEqual(stubContent.claimReview.additionalInfoHintQueryClaim.content);
-    expect(ktpContent.additionalInfoHintSubmitClaim).toEqual(stubContent.claimReview.additionalInfoHintSubmitClaim.content);
+    expect(ktpContent.additionalInfoHintQueryClaim).toEqual(
+      stubContent.claimReview.additionalInfoHintQueryClaim.content,
+    );
+    expect(ktpContent.additionalInfoHintSubmitClaim).toEqual(
+      stubContent.claimReview.additionalInfoHintSubmitClaim.content,
+    );
   });
 
   test("with no matching value", () => {
