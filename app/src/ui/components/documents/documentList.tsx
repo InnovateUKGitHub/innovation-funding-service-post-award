@@ -2,9 +2,11 @@ import { stringComparator } from "@framework/util/comparator";
 import { ITypedTable, TableChild, TypedTable } from "@ui/components/table";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { Content } from "@ui/components/content";
-import { getFileSize } from "../../framework/util/files";
-import { TypedForm } from "./form";
-import { LinksList } from "./linksList";
+import { useContent } from "@ui/hooks";
+import { getFileSize } from "../../../framework/util/files";
+import { TypedForm } from ".././form";
+import { LinksList } from ".././linksList";
+import { ValidationMessage } from "../validationMessage";
 
 interface Props {
   documents: DocumentSummaryDto[];
@@ -106,5 +108,22 @@ export const DocumentTable: React.FunctionComponent<DocumentTableProps> = ({ doc
         <ProjectDocumentsTable.String header="Uploaded by" qa="uploadedBy" value={x => x.uploadedBy} />
         {customContent ? customContent(ProjectDocumentsTable) : null}
       </ProjectDocumentsTable.Table>
+  );
+};
+
+export interface DocumentViewProps {
+  documents: DocumentSummaryDto[];
+  validationMessage?: string;
+}
+
+export const DocumentView = (props: DocumentViewProps) => {
+  const { getContent } = useContent();
+  const defaultMessage =
+    props.validationMessage || getContent(x => x.components.documentView.fallbackValidationMessage);
+
+  return props.documents.length ? (
+    <DocumentTable documents={props.documents} qa="supporting-documents" />
+  ) : (
+    <ValidationMessage message={defaultMessage} messageType="info" />
   );
 };

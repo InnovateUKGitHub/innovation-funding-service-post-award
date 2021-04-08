@@ -3,6 +3,8 @@ import {
   ClaimStatus,
   ClaimStatusChangeDto,
   CostsSummaryForPeriodDto,
+  DocumentSummaryDto,
+  getAuthRoles,
   ILinkInfo,
   PartnerDto,
   ProjectDto,
@@ -10,10 +12,9 @@ import {
 } from "@framework/types";
 import { StoresConsumer } from "@ui/redux";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import * as ACC from "../../components";
+import * as ACC from "@ui/components";
 import { Pending } from "../../../shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-
 
 interface Params {
   projectId: string;
@@ -26,6 +27,7 @@ interface Data {
   partner: Pending<PartnerDto>;
   costCategories: Pending<CostCategoryDto[]>;
   claim: Pending<ClaimDto>;
+  documents: Pending<DocumentSummaryDto[]>;
   costsSummaryForPeriod: Pending<CostsSummaryForPeriodDto[]>;
   forecastData: Pending<ACC.Claims.ForecastData> | null;
   statusChanges: Pending<ClaimStatusChangeDto[]>;
@@ -36,6 +38,7 @@ interface CombinedData {
   partner: PartnerDto;
   costCategories: CostCategoryDto[];
   claim: ClaimDto;
+  documents: DocumentSummaryDto[];
   claimDetails: CostsSummaryForPeriodDto[];
 }
 
@@ -47,6 +50,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       partner: this.props.partner,
       costCategories: this.props.costCategories,
       claim: this.props.claim,
+      documents: this.props.documents,
       claimDetails: this.props.costsSummaryForPeriod,
     });
 
@@ -112,13 +116,18 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
   private renderAccordionSection(data: CombinedData) {
     const isArchived = data.claim.status === ClaimStatus.PAID || data.claim.status === ClaimStatus.APPROVED || ClaimStatus.PAYMENT_REQUESTED;
-    const isMO = data.project.roles & ProjectRole.MonitoringOfficer;
-    const showForecast = this.props.forecastData && !(isArchived && isMO);
+    const { isMo } = getAuthRoles(data.project.roles);
+    const showForecast = this.props.forecastData && !(isArchived && isMo);
     return (
       <ACC.Section>
         <ACC.Accordion>
           {showForecast && this.renderForecastItem(this.props.forecastData!)}
           {this.renderLogsItem()}
+          {isMo && (
+            <ACC.AccordionItem title={x => x.claimDetails.labels.documentsTitle} qa="documents-list-accordion">
+              <ACC.DocumentView documents={data.documents} />
+            </ACC.AccordionItem>
+          )}
         </ACC.Accordion>
       </ACC.Section>
     );
@@ -180,13 +189,11 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
   private renderLogsItem() {
     return (
-      <ACC.AccordionItem titleContent={x => x.claimDetails.labels.claimLogAccordionTitle} qa="claim-status-change-accordion">
+      <ACC.AccordionItem title={x => x.claimDetails.labels.claimLogAccordionTitle} qa="claim-status-change-accordion">
         {/* Keeping logs inside loader because accordion defaults to closed*/}
         <ACC.Loader
           pending={this.props.statusChanges}
-          render={(statusChanges) => (
-            <ACC.Logs qa="claim-status-change-table" data={statusChanges} />
-          )}
+          render={statusChanges => <ACC.Logs qa="claim-status-change-table" data={statusChanges} />}
         />
       </ACC.AccordionItem>
     );
@@ -223,6 +230,7 @@ const ClaimsDetailsContainer = (props: Params & BaseProps) => (
             partner={partner}
             costCategories={costCategories}
             claim={claim}
+            documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
             forecastData={forecastData}
             statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
             costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}

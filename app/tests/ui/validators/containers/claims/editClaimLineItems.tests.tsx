@@ -1,5 +1,10 @@
 import { render } from "@testing-library/react";
-import { EditClaimDetailsParams, EditClaimLineItemsCallbacks, EditClaimLineItemsComponent, EditClaimLineItemsData } from "@ui/containers";
+import {
+  EditClaimDetailsParams,
+  EditClaimLineItemsCallbacks,
+  EditClaimLineItemsComponent,
+  EditClaimLineItemsData,
+} from "@ui/containers";
 import { BaseProps, ContainerProps } from "@ui/containers/containerBase";
 import { LoadingStatus, Pending } from "@shared/pending";
 import { ClaimDetailsDto, DocumentSummaryDto, ForecastDetailsDTO, ProjectDto } from "@framework/dtos";
@@ -82,7 +87,12 @@ const contentStub = {
       },
     },
   },
-};
+  components: {
+    documentView: {
+      fallbackValidationMessage: "fallback-validation-message-stub",
+    },
+  },
+} as any;
 
 const stubBaseProps = {
   routes: {
@@ -130,7 +140,9 @@ const stubProps = {
 } as ContainerProps<EditClaimDetailsParams, EditClaimLineItemsData, EditClaimLineItemsCallbacks>;
 
 describe("editClaimLineItems", () => {
-  const setup = (props: ContainerProps<EditClaimDetailsParams, EditClaimLineItemsData, EditClaimLineItemsCallbacks>) => {
+  const setup = (
+    props: ContainerProps<EditClaimDetailsParams, EditClaimLineItemsData, EditClaimLineItemsCallbacks>,
+  ) => {
     return render(
       <TestBed content={contentStub as TestBedContent}>
         <EditClaimLineItemsComponent {...props} />
@@ -158,8 +170,8 @@ describe("editClaimLineItems", () => {
           data: {
             ...stubProps.project.data,
             competitionType: "KTP",
-          } as Partial<ProjectDto>
-        } as Pending<ProjectDto>
+          } as Partial<ProjectDto>,
+        } as Pending<ProjectDto>,
       };
       const uploadAndRemoveDocumentsButton = contentStub.editClaimLineItems.uploadAndRemoveDocumentsButton.content;
       const additionalInformationHeading = contentStub.editClaimLineItems.additionalInformationHeading.content;
