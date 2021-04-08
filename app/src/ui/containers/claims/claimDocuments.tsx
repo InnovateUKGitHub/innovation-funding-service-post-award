@@ -1,3 +1,5 @@
+import React from "react";
+
 import * as ACC from "@ui/components";
 import { ClaimDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { Pending } from "@shared/pending";
@@ -11,39 +13,39 @@ import { getAuthRoles } from "@framework/types";
 import { DropdownOption } from "@ui/components";
 import { getAllEnumValues } from "@shared/enumHelper";
 import { projectCompetition, useContent } from "@ui/hooks";
-import { OL } from "@ui/components";
 
-type DefaultIntroKeys =
+type ClaimDocumentContentKeys =
   | "backLink"
-  | "finalClaim"
+  | "finalClaimMessage"
   | "uploadDocumentsLabel"
   | "descriptionLabel"
   | "documentsListSectionTitle"
   | "saveAndReturnButton"
   | "saveAndContinueToSummaryButton"
-  | "finalClaimGuidance"
+  | "finalClaimGuidanceParagraph1"
+  | "finalClaimGuidanceParagraph2"
+  | "finalClaimStep1"
+  | "finalClaimStep2"
+  | "finalClaimStep3"
+  | "iarRequiredAdvice"
+  | "finalClaimIarAdvice"
+  | "finalClaimNonIarAdvice"
+  | "usefulTip"
+  | "requiredUploadAdvice"
+  | "requiredUploadStep1"
+  | "requiredUploadStep2"
   | "iarRequired"
   | "noDocumentsUploaded"
   | "newWindow"
   | "saveAndContinueToForecastButton"
   | "uploadTitle";
 
-type IntroContentKeys =
-  | "uploadAndStoreMessage"
-  | "uploadGuidanceMessage"
-  | "schedule3ReminderMessage"
-  | "virtualApprovalMessage"
-  | "lmcMinutesMessage";
-
-interface ClaimDocumentContent {
-  default: Record<DefaultIntroKeys, string>;
-  getCompetitionContent: (competitionType: string) => Record<IntroContentKeys, string> | undefined;
-}
+type ClaimDocumentContent = Record<ClaimDocumentContentKeys, string>;
 
 export function useClaimDocumentContent(): ClaimDocumentContent {
   const { getContent } = useContent();
 
-  const defaultContent = {
+  return {
     backLink: getContent(x => x.claimDocuments.backLink),
     descriptionLabel: getContent(x => x.claimDocuments.descriptionLabel),
     documentsListSectionTitle: getContent(x => x.claimDocuments.documentsListSectionTitle),
@@ -51,33 +53,26 @@ export function useClaimDocumentContent(): ClaimDocumentContent {
     saveAndContinueToSummaryButton: getContent(x => x.claimDocuments.saveAndContinueToSummaryButton),
     saveAndContinueToForecastButton: getContent(x => x.claimDocuments.saveAndContinueToForecastButton),
 
-    finalClaim: getContent(x => x.claimDocuments.messages.finalClaim),
-    finalClaimGuidance: getContent(x => x.claimDocuments.messages.finalClaimGuidance),
     iarRequired: getContent(x => x.claimDocuments.messages.iarRequired),
+    finalClaimMessage: getContent(x => x.claimDocuments.messages.finalClaimMessage),
+    finalClaimGuidanceParagraph1: getContent(x => x.claimDocuments.messages.finalClaimGuidanceParagraph1),
+    finalClaimGuidanceParagraph2: getContent(x => x.claimDocuments.messages.finalClaimGuidanceParagraph2),
+    finalClaimStep1: getContent(x => x.claimDocuments.messages.finalClaimStep1),
+    finalClaimStep2: getContent(x => x.claimDocuments.messages.finalClaimStep2),
+    finalClaimStep3: getContent(x => x.claimDocuments.messages.finalClaimStep3),
+
+    iarRequiredAdvice: getContent(x => x.claimDocuments.messages.iarRequiredAdvice),
+    finalClaimIarAdvice: getContent(x => x.claimDocuments.messages.finalClaimIarAdvice),
+    finalClaimNonIarAdvice: getContent(x => x.claimDocuments.messages.finalClaimNonIarAdvice),
+    usefulTip: getContent(x => x.claimDocuments.messages.usefulTip),
+    requiredUploadAdvice: getContent(x => x.claimDocuments.messages.requiredUploadAdvice),
+    requiredUploadStep1: getContent(x => x.claimDocuments.messages.requiredUploadStep1),
+    requiredUploadStep2: getContent(x => x.claimDocuments.messages.requiredUploadStep2),
 
     uploadTitle: getContent(x => x.claimDocuments.documentMessages.uploadTitle),
     uploadDocumentsLabel: getContent(x => x.claimDocuments.documentMessages.uploadDocumentsLabel),
     noDocumentsUploaded: getContent(x => x.claimDocuments.documentMessages.noDocumentsUploaded),
     newWindow: getContent(x => x.claimDocuments.documentMessages.newWindow),
-  };
-
-  const ktpContent = {
-    uploadAndStoreMessage: getContent(x => x.claimDocuments.introMessage.uploadAndStoreMessage),
-    uploadGuidanceMessage: getContent(x => x.claimDocuments.introMessage.uploadGuidanceMessage),
-    schedule3ReminderMessage: getContent(x => x.claimDocuments.introMessage.schedule3ReminderMessage),
-    lmcMinutesMessage: getContent(x => x.claimDocuments.lmcMinutesMessage),
-    virtualApprovalMessage: getContent(x => x.claimDocuments.virtualApprovalMessage),
-  };
-
-  const getCompetitionContent = (competitionType: string) => {
-    const { isKTP } = projectCompetition(competitionType);
-
-    return isKTP ? ktpContent : undefined;
-  };
-
-  return {
-    default: defaultContent,
-    getCompetitionContent,
   };
 }
 
@@ -114,30 +109,6 @@ const ClaimDocumentsComponent = ({
   periodId,
   ...props
 }: ClaimDocumentsComponentProps) => {
-  const getIntroMessage = (competitionType: string) => {
-    const ktpContent = content.getCompetitionContent(competitionType);
-
-    if (!ktpContent) return null;
-
-    const introList = [ktpContent.lmcMinutesMessage, ktpContent.virtualApprovalMessage];
-
-    return (
-      <>
-        <ACC.Renderers.SimpleString>{ktpContent.uploadAndStoreMessage}</ACC.Renderers.SimpleString>
-
-        <ACC.Renderers.SimpleString>{ktpContent.uploadGuidanceMessage}</ACC.Renderers.SimpleString>
-
-        <OL className="govuk-!-margin-bottom-10">
-          {introList.map(item => (
-            <li key={item}>{item}</li>
-          ))}
-        </OL>
-
-        <ACC.Renderers.SimpleString>{ktpContent.schedule3ReminderMessage}</ACC.Renderers.SimpleString>
-      </>
-    );
-  };
-
   const renderContents = (
     project: ProjectDto,
     editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
@@ -146,7 +117,6 @@ const ClaimDocumentsComponent = ({
     documentDescriptions: DocumentDescriptionDto[],
   ) => {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
-    const ktpIntroContent = getIntroMessage(project.competitionType);
 
     const documentTypeOptions: DropdownOption[] = documentDescriptions
       .filter(x => allowedClaimDocuments.indexOf(x.id) >= 0)
@@ -155,8 +125,9 @@ const ClaimDocumentsComponent = ({
     const claimLinkParams = { projectId, partnerId, periodId };
 
     const prepareClaimLink = (
-      <ACC.BackLink route={props.routes.prepareClaim.getLink(claimLinkParams)}>{content.default.backLink}</ACC.BackLink>
+      <ACC.BackLink route={props.routes.prepareClaim.getLink(claimLinkParams)}>{content.backLink}</ACC.BackLink>
     );
+
     return (
       <ACC.Page
         pageTitle={<ACC.Projects.Title {...project} />}
@@ -166,25 +137,13 @@ const ClaimDocumentsComponent = ({
       >
         <ACC.Renderers.Messages messages={props.messages} />
 
-        {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={content.default.finalClaim} />}
+        {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={content.finalClaimMessage} />}
 
-        {claim.isIarRequired && (
-          <ACC.Section>
-            {claim.isFinalClaim ? (
-              <span data-qa="iarText">
-                <ACC.Content value={x => x.claimDocuments.messages.finalClaimGuidance} />
-              </span>
-            ) : (
-              <ACC.Renderers.SimpleString qa="iarText">
-                <ACC.Content value={x => x.claimDocuments.messages.iarRequired} />
-              </ACC.Renderers.SimpleString>
-            )}
-          </ACC.Section>
-        )}
+        <ACC.Section>
+          <ClaimDocumentAdvice {...claim} content={content} competitionType={project.competitionType} />
+        </ACC.Section>
 
-        <ACC.Renderers.SimpleString>{ktpIntroContent}</ACC.Renderers.SimpleString>
-
-        <ACC.Section title={content.default.uploadTitle}>
+        <ACC.Section title={content.uploadTitle}>
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
@@ -195,7 +154,7 @@ const ClaimDocumentsComponent = ({
               <ACC.DocumentGuidance />
 
               <UploadForm.MulipleFileUpload
-                label={content.default.uploadDocumentsLabel}
+                label={content.uploadDocumentsLabel}
                 labelHidden
                 name="attachment"
                 validation={editor.validator.files}
@@ -204,7 +163,7 @@ const ClaimDocumentsComponent = ({
               />
 
               <UploadForm.DropdownList
-                label={content.default.descriptionLabel}
+                label={content.descriptionLabel}
                 labelHidden={false}
                 hasEmptyOption
                 placeholder="-- No description --"
@@ -220,14 +179,14 @@ const ClaimDocumentsComponent = ({
 
             {/* TODO: @documents-content make button label consistent*/}
             <UploadForm.Button styling="Secondary" name="upload" onClick={() => props.onChange(true, editor.data)}>
-              {content.default.uploadDocumentsLabel}
+              {content.uploadDocumentsLabel}
             </UploadForm.Button>
           </UploadForm.Form>
         </ACC.Section>
 
-        <ACC.Section title={content.default.documentsListSectionTitle}>
+        <ACC.Section title={content.documentsListSectionTitle}>
           {documents.length ? (
-            <ACC.Section subtitle={content.default.newWindow}>
+            <ACC.Section subtitle={content.newWindow}>
               <ACC.DocumentTableWithDelete
                 qa="claim-supporting-documents"
                 documents={documents}
@@ -236,7 +195,7 @@ const ClaimDocumentsComponent = ({
             </ACC.Section>
           ) : (
             <ACC.Section>
-              <ACC.ValidationMessage message={content.default.noDocumentsUploaded} messageType="info" />
+              <ACC.ValidationMessage message={content.noDocumentsUploaded} messageType="info" />
             </ACC.Section>
           )}
         </ACC.Section>
@@ -248,7 +207,7 @@ const ClaimDocumentsComponent = ({
               id="continue-claim"
               route={props.routes.claimSummary.getLink(claimLinkParams)}
             >
-              {content.default.saveAndContinueToSummaryButton}
+              {content.saveAndContinueToSummaryButton}
             </ACC.Link>
           ) : (
             <ACC.Link
@@ -256,12 +215,12 @@ const ClaimDocumentsComponent = ({
               id="continue-claim"
               route={props.routes.claimForecast.getLink(claimLinkParams)}
             >
-              {content.default.saveAndContinueToForecastButton}
+              {content.saveAndContinueToForecastButton}
             </ACC.Link>
           )}
 
           <ACC.Link styling="SecondaryButton" id="save-claim" route={getDashboardLink(project)}>
-            {content.default.saveAndReturnButton}
+            {content.saveAndReturnButton}
           </ACC.Link>
         </ACC.Section>
       </ACC.Page>
@@ -349,3 +308,88 @@ export const ClaimDocumentsRoute = defineRoute({
     auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
   getTitle: ({ content }) => content.claimDocuments.title(),
 });
+
+export interface ClaimDocumentAdviceProps extends Pick<ClaimDto, "isIarRequired" | "isFinalClaim"> {
+  content: Pick<
+    ClaimDocumentContent,
+    | "iarRequiredAdvice"
+    | "finalClaimIarAdvice"
+    | "usefulTip"
+    | "requiredUploadAdvice"
+    | "requiredUploadStep1"
+    | "requiredUploadStep2"
+    | "finalClaimGuidanceParagraph1"
+    | "finalClaimGuidanceParagraph2"
+    | "finalClaimStep1"
+    | "finalClaimStep2"
+    | "finalClaimStep3"
+    | "iarRequired"
+  >;
+  competitionType: string;
+}
+
+// Note: Consider recactoring to an object loop based on competitionType if this grows in complexitity
+export function ClaimDocumentAdvice({
+  content,
+  isFinalClaim,
+  isIarRequired,
+  competitionType,
+}: ClaimDocumentAdviceProps) {
+  const { isKTP } = projectCompetition(competitionType);
+
+  const getAdvise = () => {
+    if (isKTP) {
+      return (
+        <>
+          {isIarRequired ? (
+            <>
+              <ACC.Renderers.SimpleString>{content.iarRequiredAdvice}</ACC.Renderers.SimpleString>
+
+              {isFinalClaim && <ACC.Renderers.SimpleString>{content.finalClaimIarAdvice}</ACC.Renderers.SimpleString>}
+            </>
+          ) : (
+            <>
+              {isFinalClaim && <ACC.Renderers.SimpleString>{content.finalClaimIarAdvice}</ACC.Renderers.SimpleString>}
+            </>
+          )}
+
+          <ACC.Renderers.SimpleString>{content.usefulTip}</ACC.Renderers.SimpleString>
+
+          <ACC.Renderers.SimpleString>{content.requiredUploadAdvice}</ACC.Renderers.SimpleString>
+
+          <ACC.UL>
+            <li>{content.requiredUploadStep1}</li>
+            <li>{content.requiredUploadStep2}</li>
+          </ACC.UL>
+        </>
+      );
+    }
+
+    // Note: Final claim message is irrevent if no iar is required - bail out early
+    if (!isIarRequired) return null;
+
+    return (
+      <>
+        {isFinalClaim ? (
+          <>
+            <ACC.Renderers.SimpleString>{content.finalClaimGuidanceParagraph1}</ACC.Renderers.SimpleString>
+
+            <ACC.Renderers.SimpleString>{content.finalClaimGuidanceParagraph2}</ACC.Renderers.SimpleString>
+
+            <ACC.OL>
+              <li>{content.finalClaimStep1}</li>
+              <li>{content.finalClaimStep2}</li>
+              <li>{content.finalClaimStep3}</li>
+            </ACC.OL>
+          </>
+        ) : (
+          <ACC.Renderers.SimpleString qa="iarText">{content.iarRequired}</ACC.Renderers.SimpleString>
+        )}
+      </>
+    );
+  };
+
+  const adviceContent = getAdvise();
+
+  return adviceContent ? <div data-qa="iarText">{adviceContent}</div> : null;
+}

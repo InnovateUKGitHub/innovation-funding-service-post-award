@@ -60,7 +60,7 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title {...data.project} />}
       >
-        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={x => x.claimPrepare.messages.finalClaim}/>}
+        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={x => x.claimPrepare.messages.finalClaimMessage}/>}
         {this.renderDetailsSection(data)}
       </ACC.Page>
     );

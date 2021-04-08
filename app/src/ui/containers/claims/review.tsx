@@ -52,7 +52,7 @@ interface ReviewData {
 
 type ReviewContentKeys =
   | "backlinkMessage"
-  | "isFinalClaimMessage"
+  | "finalClaimMessage"
   | "logItemTitle"
   | "additionalInfoHint"
   | "forecastItemTitle"
@@ -106,7 +106,7 @@ export function useReviewContent(): ReviewContent {
     monitoringReportReminder: getContent(x => x.claimReview.monitoringReportReminder),
     additionalInfoSectionTitle: getContent(x => x.claimReview.additionalInfoSectionTitle),
     additionalInfoLabel: getContent(x => x.claimReview.additionalInfoLabel),
-    isFinalClaimMessage: getContent(x => x.claimReview.messages.finalClaim),
+    finalClaimMessage: getContent(x => x.claimReview.messages.finalClaimMessage),
     forecastItemTitle: getContent(x => x.claimReview.labels.forecastAccordionTitle),
     logItemTitle: getContent(x => x.claimReview.labels.claimLogAccordionTitle),
     uploadInstruction: getContent(x => x.claimReview.documentMessages.uploadInstruction),
@@ -205,7 +205,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
         <ACC.Renderers.Messages messages={this.props.messages} />
 
         {data.claim.isFinalClaim && (
-          <ACC.ValidationMessage messageType="info" message={this.props.content.default.isFinalClaimMessage} />
+          <ACC.ValidationMessage messageType="info" message={this.props.content.default.finalClaimMessage} />
         )}
 
         {this.renderClaimReviewSection(data)}

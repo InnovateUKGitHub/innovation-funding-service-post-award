@@ -78,7 +78,7 @@ class ClaimSummaryComponent extends ContainerBase<ClaimSummaryParams, Data, Call
           {data.claim.isFinalClaim && (
             <ACC.ValidationMessage
               messageType="info"
-              message={<ACC.Content value={(x) => x.claimPrepareSummary.messages.finalClaim} />}
+              message={<ACC.Content value={(x) => x.claimPrepareSummary.messages.finalClaimMessage} />}
             />
           )}
           {this.renderCostsPaidSummary(data, totalCostsClaimed)}

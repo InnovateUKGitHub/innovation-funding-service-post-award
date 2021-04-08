@@ -1,5 +1,14 @@
 {
   "KTP": {
+    "claims-messages": {
+      "iar-required-advice": "You must upload a Schedule 3 with this claim.",
+      "final-claim-iar-advice": "You also need to complete your final report on the KTP Portal before we can make your final payment.",
+      "final-claim-non-iar-advice": "You need to complete your final report on the KTP Portal before we can make your final payment.",
+      "useful-tip": "Useful tip: you can use this page to upload and store all your claim support documents for this project.",
+      "required-upload-advice": "For KTP claims, you must upload one of these claim approval documents:",
+      "required-upload-step-1": "LMC minutes - from the local management committee (LMC) meeting where your claim was approved",
+      "required-upload-step-2": "LMC virtual approval - an email approval saved as a PDF document or screenshot image, which clearly shows the date and time the email was sent"
+    },
     "pages": {
       "claim-review": {
         "additional-info-hint-if-you": "If you:",
@@ -13,15 +22,6 @@
       "claim-prepare-summary": {
         "add-comments-heading": "Supporting statement",
         "add-comments-hint": "You must write a supporting statement for your claim. All supporting information for your monitoring officer and Innovate UK must be included here."
-      },
-      "claim-documents": {
-        "introMessage": {
-          "uploadAndStoreMessage": "You can upload and store all your claim support documents for this project here.",
-          "uploadGuidanceMessage": "For KTP claims, you must upload one of these claim approval documents:",
-          "lmcMinutesMessage": "1. LMC minutes - from the local management committee (LMC) meeting where your claim was approved.",
-          "virtualApprovalMessage": "2. Virtual approval - an email approval saved as a PDF document or screenshot image clearly showing the date and time the email was sent.",
-          "schedule3ReminderMessage": "You must also upload a Schedule 3 for your final KTP claim"
-        }
       },
       "claims-messages": {
         "iar-required": "You must attach a schedule 3 to this claim.",
