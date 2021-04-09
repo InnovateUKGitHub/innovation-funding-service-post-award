@@ -25,6 +25,7 @@ export class ClaimPrepareSummaryContent extends ContentPageBase {
   public readonly noDocumentsUploadedMessage = this.getContent("no-documents-uploaded-message");
   public readonly claimDocumentsTitle = this.getContent("claim-documents-title");
   public readonly editClaimDocuments = this.getContent("edit-claim-documents");
+  public readonly finalClaimSupportingDocumentMessage = this.getContent("final-claim-supporting-document-message");
   public readonly eligibleCostsLabel = this.getContent("eligible-costs-label");
   public readonly forecastLabel = this.getContent("forecast-label");
   public readonly differenceLabel = this.getContent("difference-label");

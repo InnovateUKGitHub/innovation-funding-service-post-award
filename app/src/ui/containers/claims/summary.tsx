@@ -1,3 +1,5 @@
+import { useStores } from "@ui/redux";
+import { useContent } from "@ui/hooks";
 import * as ACC from "@ui/components";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
@@ -15,8 +17,6 @@ import {
   ProjectDto,
   ProjectRole,
 } from "@framework/types";
-import { useStores } from "@ui/redux";
-import { useContent } from "@ui/hooks";
 
 export interface ClaimSummaryParams {
   projectId: string;
@@ -46,7 +46,14 @@ interface ClaimSummaryComponentProps extends ClaimSummaryParams, BaseProps {
 }
 
 function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
+  const getClaimLinkProps = (data: CombinedData) => ({
+    projectId: data.project.id,
+    partnerId: data.partner.id,
+    periodId: props.periodId,
+  });
+
   const renderContents = (data: CombinedData) => {
+    const linkProps = getClaimLinkProps(data);
     const totalCostsClaimed: number = data.claimDetails.reduce(
       (totalCost, claimDetail) => totalCost + claimDetail.costsClaimedThisPeriod,
       0,
@@ -102,14 +109,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
             </ACC.SummaryList>
 
             <ACC.Renderers.SimpleString>
-              <ACC.Link
-                id="editCostsToBeClaimedLink"
-                route={props.routes.prepareClaim.getLink({
-                  projectId: data.project.id,
-                  partnerId: data.partner.id,
-                  periodId: props.periodId,
-                })}
-              >
+              <ACC.Link id="editCostsToBeClaimedLink" route={props.routes.prepareClaim.getLink(linkProps)}>
                 <ACC.Content value={x => x.claimPrepareSummary.editCostsMessage} />
               </ACC.Link>
             </ACC.Renderers.SimpleString>
@@ -119,30 +119,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
             title={<ACC.Content value={x => x.claimPrepareSummary.claimDocumentsTitle} />}
             qa="claim-documents-summary"
           >
-            {/* TODO: Refactor with <DocumentView /> */}
-            {data.documents.length ? (
-              <ACC.Section subtitle={<ACC.Content value={x => x.claimPrepareSummary.documentMessages.newWindow} />}>
-                <ACC.DocumentList documents={data.documents} qa="claim-documents-list" />
-              </ACC.Section>
-            ) : (
-              <ACC.ValidationMessage
-                message={<ACC.Content value={x => x.claimPrepareSummary.noDocumentsUploadedMessage} />}
-                messageType="info"
-              />
-            )}
-
-            <ACC.Renderers.SimpleString>
-              <ACC.Link
-                id="claimDocumentsLink"
-                route={props.routes.claimDocuments.getLink({
-                  projectId: data.project.id,
-                  partnerId: data.partner.id,
-                  periodId: props.periodId,
-                })}
-              >
-                <ACC.Content value={x => x.claimPrepareSummary.editClaimDocuments} />
-              </ACC.Link>
-            </ACC.Renderers.SimpleString>
+            {renderDocumentValidation(data)}
           </ACC.Section>
 
           {!data.claim.isFinalClaim && renderForecastSummary(data)}
@@ -153,12 +130,52 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
     );
   };
 
+  const renderDocumentValidation = (data: CombinedData) => {
+    const linkProps = getClaimLinkProps(data);
+    const displayDocumentError = data.claim.isIarRequired && !data.documents.length;
+
+    const editDocumentLink = (
+      <ACC.Renderers.SimpleString>
+        <ACC.Link id="claimDocumentsLink" route={props.routes.claimDocuments.getLink(linkProps)}>
+          <ACC.Content value={x => x.claimPrepareSummary.editClaimDocuments} />
+        </ACC.Link>
+      </ACC.Renderers.SimpleString>
+    );
+
+    return displayDocumentError ? (
+      <ACC.ValidationMessage
+        messageType="error"
+        message={
+          <>
+            <ACC.Renderers.SimpleString>
+              <ACC.Content value={x => x.claimPrepareSummary.finalClaimSupportingDocumentMessage} />
+            </ACC.Renderers.SimpleString>
+
+            {editDocumentLink}
+          </>
+        }
+      />
+    ) : (
+      // TODO: Refactor with <DocumentView />
+      <>
+        {data.documents.length ? (
+          <ACC.Section subtitle={<ACC.Content value={x => x.claimPrepareSummary.documentMessages.newWindow} />}>
+            <ACC.DocumentList documents={data.documents} qa="claim-documents-list" />
+          </ACC.Section>
+        ) : (
+          <ACC.ValidationMessage
+            message={<ACC.Content value={x => x.claimPrepareSummary.noDocumentsUploadedMessage} />}
+            messageType="info"
+          />
+        )}
+
+        {editDocumentLink}
+      </>
+    );
+  };
+
   const renderBackLink = (data: CombinedData) => {
-    const linkProps = {
-      projectId: data.project.id,
-      partnerId: data.partner.id,
-      periodId: props.periodId,
-    };
+    const linkProps = getClaimLinkProps(data);
 
     return data.claim.isFinalClaim ? (
       <ACC.BackLink route={props.routes.claimDocuments.getLink(linkProps)}>
@@ -229,6 +246,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
   };
 
   const renderForecastSummary = (data: CombinedData) => {
+    const linkProps = getClaimLinkProps(data);
     const totalEligibleCosts = data.partner.totalParticipantGrant || 0;
     const totalForecastsAndCosts =
       (data.partner.totalFutureForecastsForParticipants || 0) +
@@ -271,14 +289,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
         </ACC.SummaryList>
 
         <ACC.Renderers.SimpleString>
-          <ACC.Link
-            id="editForecastLink"
-            route={props.routes.claimForecast.getLink({
-              projectId: data.project.id,
-              partnerId: data.partner.id,
-              periodId: props.periodId,
-            })}
-          >
+          <ACC.Link id="editForecastLink" route={props.routes.claimForecast.getLink(linkProps)}>
             {editForecastMessage}
           </ACC.Link>
         </ACC.Renderers.SimpleString>
