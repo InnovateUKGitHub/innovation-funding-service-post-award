@@ -3,14 +3,25 @@ import { OL, UL, List, ListProps } from "@ui/components/layout/list";
 
 describe("UI Lists", () => {
   const requiredProps: ListProps = {
-    type: "bullet",
     children: <li>Yolo stub here!</li>,
   };
 
   describe("<List />", () => {
-    const setup = (props: Partial<ListProps>) => render(<List {...requiredProps} {...props} />);
+    const setup = (props?: Partial<ListProps>) => render(<List {...requiredProps} {...props} />);
 
     describe("@renders", () => {
+      test("in default state without <li> symbol", () => {
+        const { container } = setup();
+
+        const targetElement = container.querySelector(".govuk-list");
+
+        if (!targetElement) throw Error("No element found!");
+
+        expect(targetElement).toBeInTheDocument();
+        expect(targetElement).not.toHaveClass("govuk-list--bullet");
+        expect(targetElement).not.toHaveClass("govuk-list--number");
+      });
+
       test("with qa", () => {
         const stubQa = "stub-qa";
         const { queryByTestId } = setup({ qa: stubQa });
