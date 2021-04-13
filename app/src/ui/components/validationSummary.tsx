@@ -1,7 +1,7 @@
 import { flatten } from "@framework/util/arrayHelpers";
 import { useContent } from "@ui/hooks";
 import { IValidationResult, NestedResult, Result, Results } from "../validation";
-import { UL } from "./layout";
+import { List } from "./layout";
 
 interface Props {
   validation?: IValidationResult | null;
@@ -20,16 +20,14 @@ const prepareMessage = (errorMessage: string | null | undefined): React.ReactNod
       }
       result.push(current);
       return result;
-    },
-      []
-    );
+    }, []);
   }
 
   return null;
 };
 
 export function ValidationSummary({ validation, compressed }: Props) {
-  const {getContent} = useContent();
+  const { getContent } = useContent();
 
   const results: Result[] = [];
   populateResults();
@@ -50,28 +48,32 @@ export function ValidationSummary({ validation, compressed }: Props) {
         {getContent(x => x.components.validationSummary.validationsTitle)}
       </h2>
       <div className="govuk-error-summary__body">
-        <UL className="govuk-error-summary__list">{createResultsLinks(results)}</UL>
+        <List className="govuk-error-summary__list">{createResultsLinks(results)}</List>
       </div>
     </div>
   );
 
   function populateResults(): void {
     if (validation && validation.errors) {
-      validation.errors.filter(x => !x.isValid && x.showValidationErrors).forEach(x => {
-        // nested results have collection of items that may have errored
-        // if we are not compressed we want to show each of them
-        // need to find all invalid children and flatten them
-        if (x instanceof NestedResult && compressed !== true && x.results.length) {
-          if (!x.listValidation.isValid) {
-            results.push(x.listValidation);
+      validation.errors
+        .filter(x => !x.isValid && x.showValidationErrors)
+        .forEach(x => {
+          // nested results have collection of items that may have errored
+          // if we are not compressed we want to show each of them
+          // need to find all invalid children and flatten them
+          if (x instanceof NestedResult && compressed !== true && x.results.length) {
+            if (!x.listValidation.isValid) {
+              results.push(x.listValidation);
+            } else {
+              const childErrors = flatten(
+                (x as NestedResult<Results<{}>>).results.filter(y => !y.isValid).map(y => y.errors),
+              );
+              childErrors.forEach(e => results.push(e));
+            }
           } else {
-            const childErrors = flatten((x as NestedResult<Results<{}>>).results.filter(y => !y.isValid).map(y => y.errors));
-            childErrors.forEach(e => results.push(e));
+            results.push(x);
           }
-        } else {
-          results.push(x);
-        }
-      });
+        });
     }
   }
 
