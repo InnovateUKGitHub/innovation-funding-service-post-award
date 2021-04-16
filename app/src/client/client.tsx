@@ -2,8 +2,9 @@ import React from "react";
 import { hydrate } from "react-dom";
 import i18next from "i18next";
 import { Provider } from "react-redux";
-import { AnyAction, createStore } from "redux";
 import { RouterProvider } from "react-router5";
+import { AnyAction, createStore } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
 
 import * as Actions from "@ui/redux/actions";
 import { configureRouter, routeConfig } from "@ui/routing";
@@ -30,7 +31,7 @@ serverState.isClient = true;
 
 const routes = routeConfig;
 const router = configureRouter(routes);
-const middleware = setupMiddleware(router, true);
+const middleware = composeWithDevTools(setupMiddleware(router, true));
 const store = createStore(rootReducer, serverState, middleware);
 
 // factory to make the stores for the provider
