@@ -308,25 +308,52 @@ const HiddenField = <T extends {}>(props: HiddenFieldProps<T> & InternalFieldPro
   <input type="hidden" value={props.value((props as any as InternalFieldProps<T>).formData) || ""} />
 );
 
-interface SubmitProps {
+const buttonContentConfig = {
+  SAVE_AND_CONTINUE: "Save and continue",
+};
+
+interface SubmitPropsBase {
   className?: string;
   style?: CSSProperties;
   styling?: "Link" | "Secondary" | "Primary";
 }
 
-const SubmitComponent = <T extends {}>(props: SubmitProps & InternalFieldProps<T>) => (
-  <Button
-    type="submit"
-    name="button_default"
-    className={props.className}
-    disabled={props.disabled}
-    style={props.style}
-    styling={props.styling || "Primary"}
-    onClick={(e) => handleSubmit(props, e)}
-  >
-    {(props as any).children}
-  </Button>
-);
+interface SubmitPropsWithType {
+  children?: never;
+  type: keyof typeof buttonContentConfig;
+}
+
+interface SubmitPropsWithoutType {
+  type?: never;
+  // Note: <ACC.Content> returns an element not a string :(
+  children: string | React.ReactElement;
+}
+
+type SubmitProps = SubmitPropsBase & (SubmitPropsWithType | SubmitPropsWithoutType);
+
+const SubmitComponent = <T extends {}>(props: SubmitProps & InternalFieldProps<T>) => {
+  const content = props.type ? buttonContentConfig[props.type] : props.children;
+
+  return (
+    <Button
+      type="submit"
+      name="button_default"
+      className={props.className}
+      disabled={props.disabled}
+      style={props.style}
+      styling={props.styling || "Primary"}
+      onClick={e => handleSubmit(props, e)}
+    >
+      {content}
+    </Button>
+  );
+};
+
+function SubmitAndContinueComponent<T extends {}>(props: SubmitPropsBase & InternalFieldProps<T>) {
+  return (
+    <SubmitComponent {...props} type="SAVE_AND_CONTINUE" />
+  );
+}
 
 interface ButtonProps {
   name: string;
@@ -428,6 +455,7 @@ export interface FormBuilder<T> {
   Checkboxes: React.FunctionComponent<CheckboxFieldProps<T>>;
   Hidden: React.FunctionComponent<HiddenFieldProps<T>>;
   Submit: React.FunctionComponent<SubmitProps>;
+  SubmitAndContinue: React.FunctionComponent<SubmitPropsBase>;
   Button: React.FunctionComponent<ButtonProps>;
   FileUpload: React.FunctionComponent<ExternalFieldProps<T, IFileWrapper>>;
   MulipleFileUpload: React.FunctionComponent<ExternalFieldProps<T, IFileWrapper[]>>;
@@ -448,6 +476,7 @@ export const TypedForm = <T extends {}>(): FormBuilder<T> => ({
   Checkboxes: CheckboxOptionsField as React.FunctionComponent<CheckboxFieldProps<T>>,
   Hidden: HiddenField as React.FunctionComponent<HiddenFieldProps<T>>,
   Submit: SubmitComponent as React.FunctionComponent<SubmitProps>,
+  SubmitAndContinue: SubmitAndContinueComponent as React.FunctionComponent<SubmitPropsBase>,
   Button: ButtonComponent as React.FunctionComponent<ButtonProps>,
   FileUpload: FileUploadComponent as React.FunctionComponent<ExternalFieldProps<T, IFileWrapper>>,
   MulipleFileUpload: MulipleFileUploadComponent as React.FunctionComponent<ExternalFieldProps<T, IFileWrapper[]>>,
