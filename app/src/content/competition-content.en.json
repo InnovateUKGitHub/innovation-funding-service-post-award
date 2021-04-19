@@ -14,7 +14,8 @@
         "additional-info-hint-if-you": "If you:",
         "additional-info-hint-query-claim": "query the claim, you must explain what the partner needs to change",
         "additional-info-hint-submit-claim": "submit the claim for approval, you can write a supporting statement to Innovate UK",
-        "monitoring-report-reminder": "You must submit a monitoring officer report for this period. We cannot pay the approved claim before we receive your report."
+        "claim-review-declaration": "I am satisfied that the costs claimed appear to comply with the terms and conditions of the awarded grant and eligible costs agreed by the Innovate UK Project Finance Team. This is based on evidence provided both in reports and at Local Management Committee meetings (LMC).",
+        "monitoring-report-reminder": "You must submit a monitoring report for this period before the approved claim can be paid."
       },
       "finance-summary": {
         "accountants-report-title": "When a schedule 3 is needed"
