@@ -471,11 +471,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
     );
   }
 
-  private getMODeclarationMessage(competitionType: string) {
-    const { isKTP } = projectCompetition(competitionType);
-
-    if (isKTP) return null;
-
+  private getMODeclarationMessage() {
     return (
       <ACC.Renderers.SimpleString key="declaration">
         {this.props.content.default.claimReviewDeclaration}
@@ -484,14 +480,15 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
   }
 
   private getMOReminderMessage(competitionType: string) {
-    const { isKTP } = projectCompetition(competitionType);
-    const reminderMessage = this.props.content.default.monitoringReportReminder;
+    const { content } = this.props;
 
-    if (isKTP) {
-      return <ACC.ValidationMessage qa="ktp-mo-report-reminder" messageType="info" message={reminderMessage} />;
-    }
+    const reminderByCompetion = `${competitionType.toLowerCase()}-reminder`;
 
-    return <ACC.Renderers.SimpleString key="reminder">{reminderMessage}</ACC.Renderers.SimpleString>;
+    return (
+      <ACC.Renderers.SimpleString key={reminderByCompetion} qa={reminderByCompetion}>
+        {content.default.monitoringReportReminder}
+      </ACC.Renderers.SimpleString>
+    );
   }
 
   private renderFormHiddenSection(
@@ -511,7 +508,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
 
     const displaySupportingContent = !this.props.isClient || editor.data.status === ClaimStatus.AWAITING_IUK_APPROVAL;
 
-    const declarationMessage = displaySupportingContent && this.getMODeclarationMessage(project.competitionType);
+    const declarationMessage = displaySupportingContent && this.getMODeclarationMessage();
     const reminderMessage = displaySupportingContent && this.getMOReminderMessage(project.competitionType);
 
     // Note: <Fieldset> has not got got support for React.Fragment
