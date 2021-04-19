@@ -19,7 +19,8 @@ export class DocumentMessages extends ContentBase {
   public readonly uploadDocumentsLabel = this.getContent("upload-documents");
   public readonly documentsTitle = this.getContent("documents-title");
   public readonly claimDocumentsTitle = this.getContent("claim-documents-title");
-  public readonly uploadInstruction = this.getContent("upload-instruction");
+  public readonly uploadInstruction1 = this.getContent("upload-instruction-1");
+  public readonly uploadInstruction2 = this.getContent("upload-instruction-2");
 
   public readonly documentsIntroMessage = {
     storingDocumentsMessage: this.getContent("documentsIntroMessage.storing-documents-message"),

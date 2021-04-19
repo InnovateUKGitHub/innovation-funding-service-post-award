@@ -68,7 +68,8 @@ type ReviewContentKeys =
   | "monitoringReportReminder"
   | "additionalInfoSectionTitle"
   | "additionalInfoLabel"
-  | "uploadInstruction"
+  | "uploadInstruction1"
+  | "uploadInstruction2"
   | "noDocumentsUploaded"
   | "descriptionLabel"
   | "newWindow"
@@ -109,7 +110,8 @@ export function useReviewContent(): ReviewContent {
     finalClaimMessage: getContent(x => x.claimReview.messages.finalClaimMessage),
     forecastItemTitle: getContent(x => x.claimReview.labels.forecastAccordionTitle),
     logItemTitle: getContent(x => x.claimReview.labels.claimLogAccordionTitle),
-    uploadInstruction: getContent(x => x.claimReview.documentMessages.uploadInstruction),
+    uploadInstruction1: getContent(x => x.claimReview.documentMessages.uploadInstruction1),
+    uploadInstruction2: getContent(x => x.claimReview.documentMessages.uploadInstruction2),
     noDocumentsUploaded: getContent(x => x.claimReview.documentMessages.noDocumentsUploaded),
     newWindow: getContent(x => x.claimReview.documentMessages.newWindow),
     descriptionLabel: getContent(x => x.claimDocuments.descriptionLabel),
@@ -337,7 +339,8 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
               qa="projectDocumentUpload"
             >
               <UploadForm.Fieldset>
-                <ACC.Renderers.SimpleString>{this.props.content.default.uploadInstruction}</ACC.Renderers.SimpleString>
+                <ACC.Renderers.SimpleString>{this.props.content.default.uploadInstruction1}</ACC.Renderers.SimpleString>
+                <ACC.Renderers.SimpleString>{this.props.content.default.uploadInstruction2}</ACC.Renderers.SimpleString>
 
                 <ACC.DocumentGuidance />
 

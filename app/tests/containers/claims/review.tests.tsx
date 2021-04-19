@@ -27,7 +27,8 @@ const stubContent = {
       claimLogAccordionTitle: { content: "stub-claimLogAccordionTitle" },
     },
     documentMessages: {
-      uploadInstruction: { content: "stub-uploadInstruction" },
+      uploadInstruction1: { content: "stub-uploadInstruction1" },
+      uploadInstruction2: { content: "stub-uploadInstruction2" },
       noDocumentsUploaded: { content: "stub-noDocumentsUploaded" },
       newWindow: { content: "stub-newWindow" },
     },
@@ -101,7 +102,8 @@ describe("useReviewContent()", () => {
 
   test.each`
     name                     | property
-    ${"uploadInstruction"}   | ${"uploadInstruction"}
+    ${"uploadInstruction1"}  | ${"uploadInstruction1"}
+    ${"uploadInstruction2"}  | ${"uploadInstruction2"}
     ${"noDocumentsUploaded"} | ${"noDocumentsUploaded"}
     ${"newWindow"}           | ${"newWindow"}
   `("with documentMessages $property", ({ name, property }: Record<"name" | "property", string>) => {
