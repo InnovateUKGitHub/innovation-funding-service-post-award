@@ -83,6 +83,7 @@ import { PCRRemovePartnerSummaryContent } from "./pages/pcrs/removePartner/remov
 import { PCRScopeChangeProjectSummaryChangeContent } from "./pages/pcrs/scopeChange/scopeChangeProjectSummaryChangeStepContent";
 import { PCRScopeChangePublicDescriptionChangeContent } from "./pages/pcrs/scopeChange/scopeChangePublicDescriptionChangeStepContent";
 import { PCRScopeChangeSummaryContent } from "./pages/pcrs/scopeChange/scopeChangeSummaryContent";
+import { PCRScopeChangeProjectContent } from "./pages/pcrs/suspendProjectDetails/suspendProjectDetailsChangeStepContent";
 
 import { GenericFallbackErrorContent, UnauthenticatedErrorContent, NotFoundErrorContent } from "./pages/errors";
 
@@ -181,6 +182,7 @@ export class Content extends ContentBase {
   public readonly pcrSpendProfilePrepareCostContent: PcrSpendProfilePrepareCostContent;
   public readonly pcrSpendProfileDeleteCostContent: PcrSpendProfileDeleteCostContent;
   public readonly pcrSpendProfileOverheadDocumentContent: PcrSpendProfileOverheadDocumentContent;
+  public readonly pcrScopeChangeProjectContent: PCRScopeChangeProjectContent;
 
   public readonly pcrNameChange: PCRNameChangeContent;
   public readonly pcrNameChangePrepareItemFiles: PCRNameChangePrepareItemFilesContent;
@@ -305,6 +307,7 @@ export class Content extends ContentBase {
     this.pcrSpendProfilePrepareCostContent = new PcrSpendProfilePrepareCostContent(this, competitionType);
     this.pcrSpendProfileDeleteCostContent = new PcrSpendProfileDeleteCostContent(this, competitionType);
     this.pcrSpendProfileOverheadDocumentContent = new PcrSpendProfileOverheadDocumentContent(this, competitionType);
+    this.pcrScopeChangeProjectContent = new PCRScopeChangeProjectContent(this);
 
     this.pcrNameChange = new PCRNameChangeContent(this, competitionType);
     this.pcrNameChangePrepareItemFiles = new PCRNameChangePrepareItemFilesContent(this, competitionType);
