@@ -89,6 +89,7 @@ export interface PartnerDto {
   name: string;
   organisationType: string;
   competitionType: string;
+  competitionName?: string;
   totalParticipantGrant: number | null;
   totalParticipantCostsClaimed: number | null;
   totalPaidCosts: number | null;
