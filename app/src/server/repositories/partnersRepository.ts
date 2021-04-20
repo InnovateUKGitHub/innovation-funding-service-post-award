@@ -20,7 +20,6 @@ export interface ISalesforcePartner {
   Acc_ProjectId__r: {
     Id: string;
     Acc_CompetitionType__c: string;
-    ACC_CompetitionID__c: string;
     Acc_CompetitionId__r: {
       Name: string;
     };

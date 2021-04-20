@@ -15,6 +15,8 @@ export class ProjectLabels extends ContentBase {
   public readonly financeContacts = this.getContent("financeContacts");
   public readonly otherContacts = this.getContent("otherContacts");
   public readonly projectInformation = this.getContent("projectInformation");
+  public readonly competitionNameLabel = this.getContent("competition-name");
+  public readonly competitionTypeLabel = this.getContent("competition-type");
   public readonly startDate = this.getContent("startDate");
   public readonly endDate = this.getContent("endDate");
   public readonly duration = this.getContent("duration");
