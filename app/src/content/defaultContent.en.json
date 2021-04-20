@@ -937,6 +937,8 @@
     "totalEligibleCostsClaimedLabel": "Eligible costs claimed to date",
     "percentageEligibleCostsClaimedLabel": "Percentage of eligible costs claimed to date",
     "projectInformation": "Project information",
+    "competition-name": "Competition name",
+    "competition-type": "Competition type",
     "startDate": "Project start date",
     "endDate": "Project end date",
     "duration": "Duration",

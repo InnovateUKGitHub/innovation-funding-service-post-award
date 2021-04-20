@@ -1,7 +1,7 @@
 import { Pending } from "@shared/pending";
 import { PartnerDto, ProjectContactDto, ProjectDto, ProjectRole } from "@framework/types";
-import { StoresConsumer } from "@ui/redux";
-import * as ACC from "../../components";
+import { useStores } from "@ui/redux";
+import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { Content, PartnerName } from "../../components";
 
@@ -90,6 +90,9 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     }
 
     private renderContents({project, partners, contacts}: CombinedData) {
+        // Note: Partners is reused avoid destructing - all partners will have the same competitionName at this UI
+        const competitionName = partners[0].competitionName;
+
         return (
             <ACC.Page
                 backLink={<ACC.Projects.ProjectBackLink project={project} routes={this.props.routes}/>}
@@ -117,6 +120,8 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
                 <ACC.Section title={<ACC.Content value={x => x.projectDetails.projectLabels.projectInformation}/>} qa="project-details">
                     <ACC.SummaryList qa="project-information">
+                        {competitionName && <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.competitionNameLabel} qa="competition-name" content={<ACC.Renderers.SimpleString>{competitionName}</ACC.Renderers.SimpleString>}/>}
+                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.competitionTypeLabel} qa="competition-type" content={<ACC.Renderers.SimpleString>{project.competitionType}</ACC.Renderers.SimpleString>}/>
                         <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.startDate} qa="start-date" content={<ACC.Renderers.FullDate value={project.startDate}/>}/>
                         <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.endDate} qa="end-date" content={<ACC.Renderers.FullDate value={project.endDate}/>}/>
                         <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.duration} qa="duration" content={`${project.durationInMonths} ${project.durationInMonths === 1 ? "month" : "months"}`}/>
@@ -154,26 +159,27 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     }
 }
 
-const ProjectDetailsContainer = (props: Params & BaseProps) => (
-    <StoresConsumer>
-        {
-            stores => (
-                <ProjectDetailsComponent
-                    projectDetails={stores.projects.getById(props.id)}
-                    partners={stores.partners.getPartnersForProject(props.id)}
-                    contacts={stores.contacts.getAllByProjectId(props.id)}
-                    {...props}
-                />
-            )
-        }
-    </StoresConsumer>
-);
+const ProjectDetailsContainer = (props: Params & BaseProps) => {
+  const stores = useStores();
+
+  return (
+    <ProjectDetailsComponent
+      {...props}
+      projectDetails={stores.projects.getById(props.id)}
+      partners={stores.partners.getPartnersForProject(props.id)}
+      contacts={stores.contacts.getAllByProjectId(props.id)}
+    />
+  );
+};
 
 export const ProjectDetailsRoute = defineRoute({
-    routeName: "projectDetails",
-    routePath: "/projects/:id/details",
-    container: ProjectDetailsContainer,
-    getParams: (r) => ({id: r.params.id}),
-    getTitle: ({content}) => content.projectDetails.title(),
-    accessControl: (auth, {id}) => auth.forProject(id).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
+  routeName: "projectDetails",
+  routePath: "/projects/:id/details",
+  container: ProjectDetailsContainer,
+  getParams: r => ({ id: r.params.id }),
+  getTitle: x => x.content.projectDetails.title(),
+  accessControl: (auth, params) =>
+    auth
+      .forProject(params.id)
+      .hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
 });

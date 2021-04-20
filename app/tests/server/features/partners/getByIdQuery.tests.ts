@@ -7,7 +7,7 @@ import {
   PartnerDto,
   PartnerStatus,
   ProjectRole,
-  SpendProfileStatus
+  SpendProfileStatus,
 } from "@framework/types";
 import { TestContext } from "../../testContextProvider";
 
@@ -19,7 +19,6 @@ describe("getAllForProjectQuery", () => {
 
     const partner = context.testData.createPartner(project, x => {
       x.name = "Expected name";
-      x.competitionName = "stub-competition-name";
       x.totalParticipantCosts = 125000;
       x.totalApprovedCosts = 17474;
       x.totalPaidCosts = 25555;
@@ -89,7 +88,6 @@ describe("getAllForProjectQuery", () => {
       projectId: "Project1",
       organisationType: "Industrial",
       competitionType: "SBRI",
-      competitionName: "stub-competition-name",
       totalPaidCosts: 25555,
       totalParticipantGrant: 125000,
       totalParticipantCostsClaimed: 17474,
@@ -152,7 +150,7 @@ describe("getAllForProjectQuery", () => {
         verificationConditionsCode: "2",
         verificationConditionsDesc: "A warning about a verification thing",
       },
-      isNonFunded: true
+      isNonFunded: true,
     };
 
     expect(result).toEqual(expected);
@@ -175,6 +173,32 @@ describe("getAllForProjectQuery", () => {
     expect((await context.runQuery(new GetByIdQuery(partnerActive.id))).isWithdrawn).toBe(false);
   });
 
+  describe("with competitionName", () => {
+    it("with undefined value", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+
+      const partnerNoCompetitionName = context.testData.createPartner(project);
+      const queriedPartner = await context.runQuery(new GetByIdQuery(partnerNoCompetitionName.id));
+
+      expect(queriedPartner.competitionName).toBeUndefined();
+    });
+
+    it("with defined value", async () => {
+      const stubCompetitionName = "stub-competitionName";
+
+      const context = new TestContext();
+      const project = context.testData.createProject();
+
+      const partnerWithCompetitionName = context.testData.createPartner(project, x => {
+        x.competitionName = stubCompetitionName;
+      });
+      const queriedPartner = await context.runQuery(new GetByIdQuery(partnerWithCompetitionName.id));
+
+      expect(queriedPartner.competitionName).toBe(stubCompetitionName);
+    });
+  });
+
   it("calculated cost claimed percentage", async () => {
     const context = new TestContext();
 
@@ -190,7 +214,7 @@ describe("getAllForProjectQuery", () => {
     const projectManger = context.testData.createProjectManager(project);
     context.user.set({ email: projectManger.Acc_ContactId__r.Email });
 
-    const result = (await context.runQuery(new GetByIdQuery(partner.id)));
+    const result = await context.runQuery(new GetByIdQuery(partner.id));
 
     expect(result.percentageParticipantCostsClaimed).toBe(10);
   });
@@ -210,7 +234,7 @@ describe("getAllForProjectQuery", () => {
     const projectManger = context.testData.createProjectManager(project);
     context.user.set({ email: projectManger.Acc_ContactId__r.Email });
 
-    const result = (await context.runQuery(new GetByIdQuery(partner.id)));
+    const result = await context.runQuery(new GetByIdQuery(partner.id));
 
     expect(result.percentageParticipantCostsClaimed).toBe(null);
   });
@@ -230,7 +254,7 @@ describe("getAllForProjectQuery", () => {
     const projectManger = context.testData.createProjectManager(project);
     context.user.set({ email: projectManger.Acc_ContactId__r.Email });
 
-    const result = (await context.runQuery(new GetByIdQuery(partner.id)));
+    const result = await context.runQuery(new GetByIdQuery(partner.id));
     expect(result.percentageParticipantCostsClaimed).toBe(0);
   });
 
@@ -248,8 +272,16 @@ describe("getAllForProjectQuery", () => {
       x.projectRoleName = SalesforceProjectRole.ProjectLead;
     });
 
-    const projectContact1 = context.testData.createFinanceContact(project, partner, x => x.Acc_ContactId__r.Email = "financecontact@test.com");
-    const projectContact2 = context.testData.createProjectManager(project, partner, x => x.Acc_ContactId__r.Email = "projectManager@test.com");
+    const projectContact1 = context.testData.createFinanceContact(
+      project,
+      partner,
+      x => (x.Acc_ContactId__r.Email = "financecontact@test.com"),
+    );
+    const projectContact2 = context.testData.createProjectManager(
+      project,
+      partner,
+      x => (x.Acc_ContactId__r.Email = "projectManager@test.com"),
+    );
 
     // now set user to the finance contact
     context.user.set({ email: projectContact1.Acc_ContactId__r.Email });
