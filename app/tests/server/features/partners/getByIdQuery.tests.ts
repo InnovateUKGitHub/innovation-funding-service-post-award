@@ -19,6 +19,7 @@ describe("getAllForProjectQuery", () => {
 
     const partner = context.testData.createPartner(project, x => {
       x.name = "Expected name";
+      x.competitionName = "stub-competition-name";
       x.totalParticipantCosts = 125000;
       x.totalApprovedCosts = 17474;
       x.totalPaidCosts = 25555;
@@ -88,6 +89,7 @@ describe("getAllForProjectQuery", () => {
       projectId: "Project1",
       organisationType: "Industrial",
       competitionType: "SBRI",
+      competitionName: "stub-competition-name",
       totalPaidCosts: 25555,
       totalParticipantGrant: 125000,
       totalParticipantCostsClaimed: 17474,

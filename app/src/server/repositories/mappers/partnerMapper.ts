@@ -4,12 +4,16 @@ import { SalesforceBaseMapper } from "./saleforceMapperBase";
 
 export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePartner, Partner> {
   public map(item: ISalesforcePartner): Partner {
+    const competitionType = item.Acc_ProjectId__r?.Acc_CompetitionType__c || "";
+    const competitionName = item.Acc_ProjectId__r?.Acc_CompetitionId__r?.Name ?? undefined;
+
     return {
       id: item.Id,
-      accountId: item.Acc_AccountId__r && item.Acc_AccountId__r.Id || "",
-      name: item.Acc_AccountId__r && item.Acc_AccountId__r.Name || "",
-      projectId: item.Acc_ProjectId__r && item.Acc_ProjectId__r.Id || "",
-      competitionType: item.Acc_ProjectId__r && item.Acc_ProjectId__r.Acc_CompetitionType__c || "",
+      accountId: (item.Acc_AccountId__r && item.Acc_AccountId__r.Id) || "",
+      name: (item.Acc_AccountId__r && item.Acc_AccountId__r.Name) || "",
+      projectId: (item.Acc_ProjectId__r && item.Acc_ProjectId__r.Id) || "",
+      competitionType,
+      competitionName,
       organisationType: item.Acc_OrganisationType__c,
       participantType: item.Acc_ParticipantType__c,
       participantSize: item.Acc_ParticipantType__c,
@@ -65,7 +69,7 @@ export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePar
       verificationConditionsDesc: item.Acc_VerificationConditionsDesc__c,
       totalGrantApproved: item.Acc_TotalGrantApproved__c,
       remainingParticipantGrant: item.Acc_RemainingParticipantGrant__c,
-      isNonFunded: item.Acc_NonfundedParticipant__c
+      isNonFunded: item.Acc_NonfundedParticipant__c,
     };
   }
 }

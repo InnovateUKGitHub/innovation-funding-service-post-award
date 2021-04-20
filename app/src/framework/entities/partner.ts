@@ -9,6 +9,7 @@ export interface Partner {
   projectRoleName: string;
   projectId: string;
   competitionType: string;
+  competitionName?: string;
   totalParticipantCosts: number;
   totalApprovedCosts: number;
   capLimit: number;

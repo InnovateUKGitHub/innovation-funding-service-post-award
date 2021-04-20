@@ -3,7 +3,7 @@ import { SalesforceRepositoryBaseWithMapping, Updatable } from "./salesforceRepo
 import { SalesforcePartnerMapper } from "./mappers/partnerMapper";
 
 export enum SalesforceProjectRole {
-  ProjectLead = "Lead"
+  ProjectLead = "Lead",
 }
 
 export interface ISalesforcePartner {
@@ -20,6 +20,10 @@ export interface ISalesforcePartner {
   Acc_ProjectId__r: {
     Id: string;
     Acc_CompetitionType__c: string;
+    ACC_CompetitionID__c: string;
+    Acc_CompetitionId__r: {
+      Name: string;
+    };
   };
   Acc_TotalParticipantCosts__c: number;
   Acc_TotalApprovedCosts__c: number;
@@ -92,7 +96,9 @@ export interface IPartnerRepository {
  * Total grant and approved costs etc are rolled up to this level
  * A Sum of the number of outstanding claims etc are also de-normalised at this level
  */
-export class PartnerRepository extends SalesforceRepositoryBaseWithMapping<ISalesforcePartner, Partner> implements IPartnerRepository {
+export class PartnerRepository
+  extends SalesforceRepositoryBaseWithMapping<ISalesforcePartner, Partner>
+  implements IPartnerRepository {
   protected readonly salesforceObjectName = "Acc_ProjectParticipant__c";
 
   protected readonly salesforceFieldNames = [
@@ -110,6 +116,7 @@ export class PartnerRepository extends SalesforceRepositoryBaseWithMapping<ISale
     "toLabel(Acc_ProjectRole__c) ProjectRoleName",
     "Acc_ProjectId__r.Id",
     "Acc_ProjectId__r.Acc_CompetitionType__c",
+    "Acc_ProjectId__r.Acc_CompetitionId__r.Name",
     "Acc_TotalPaidCosts__c",
     "Acc_TotalFutureForecastsForParticipant__c",
     "Acc_ForecastLastModifiedDate__c",
@@ -156,7 +163,7 @@ export class PartnerRepository extends SalesforceRepositoryBaseWithMapping<ISale
     "Acc_VerificationConditionsDesc__c",
     "Acc_TotalGrantApproved__c",
     "Acc_RemainingParticipantGrant__c",
-    "Acc_NonfundedParticipant__c"
+    "Acc_NonfundedParticipant__c",
   ];
 
   mapper = new SalesforcePartnerMapper();
@@ -175,7 +182,7 @@ export class PartnerRepository extends SalesforceRepositoryBaseWithMapping<ISale
 
   getAll() {
     return super.where(
-      "Acc_ProjectId__r.Acc_ProjectStatus__c != 'Not set' AND Acc_ProjectId__r.Acc_ProjectStatus__c != 'PCL Creation Complete'"
+      "Acc_ProjectId__r.Acc_ProjectStatus__c != 'Not set' AND Acc_ProjectId__r.Acc_ProjectStatus__c != 'PCL Creation Complete'",
     );
   }
 }

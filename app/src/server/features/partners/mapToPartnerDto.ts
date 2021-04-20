@@ -26,6 +26,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
 
     Run(): PartnerDto {
         const partnerStatus = new PartnerStatusMapper().mapFromSalesforce(this.item.participantStatus);
+
         return {
             id: this.item.id,
             name: this.item.name,
@@ -34,6 +35,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             postcode: this.item.postcode,
             organisationType: this.item.organisationType,
             competitionType: this.item.competitionType,
+            competitionName: this.item.competitionName,
             // There is always one lead partner on the project
             isLead: this.item.projectRole === SalesforceProjectRole.ProjectLead,
             projectRoleName: this.item.projectRoleName,
