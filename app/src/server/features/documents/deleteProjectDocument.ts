@@ -9,7 +9,7 @@ export class DeleteProjectDocumentCommand extends CommandBase<void> {
     async accessControl(auth: Authorisation, context: IContext) {
         const documentExists = await context.repositories.documents.isExistingDocument(this.documentId, this.projectId);
         if (!documentExists) return false;
-        return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
+        return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
     }
 
     protected async Run(context: IContext) {
