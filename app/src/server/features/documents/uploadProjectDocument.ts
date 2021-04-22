@@ -20,7 +20,7 @@ export class UploadProjectDocumentCommand extends CommandMultipleDocumentBase<st
   }
 
   protected async accessControl(auth: Authorisation) {
-    return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
+    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
   }
 
   protected async Run(context: IContext) {

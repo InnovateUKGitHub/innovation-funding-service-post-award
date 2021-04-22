@@ -55,7 +55,7 @@ describe("GetProjectDocumentQuery", () => {
       expect(await context.runAccessControl(auth, query)).toBe(true);
     });
 
-    it("should not allow PM of project to run", async () => {
+    it("should allow PM of project to run", async () => {
       const context = new TestContext();
 
       const project = context.testData.createProject();
@@ -64,7 +64,7 @@ describe("GetProjectDocumentQuery", () => {
       const query = new GetProjectDocumentQuery(project.Id, document.Id);
 
       const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.ProjectManager, partnerRoles: {} } });
-      expect(await context.runAccessControl(auth, query)).toBe(false);
+      expect(await context.runAccessControl(auth, query)).toBe(true);
     });
 
     it("should not allow FC of project to run", async () => {
