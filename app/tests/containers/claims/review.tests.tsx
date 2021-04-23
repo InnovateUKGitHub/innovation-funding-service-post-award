@@ -4,6 +4,12 @@ import { useReviewContent } from "@ui/containers";
 import { hookTestBed, TestBedContent } from "@shared/TestBed";
 
 const stubContent = {
+  projectDetails: {
+    projectLabels: {
+      competitionNameLabel: { content: "stub-competitionNameLabel" },
+      competitionTypeLabel: { content: "stub-competitionTypeLabel" },
+    },
+  },
   claimReview: {
     additionalInfoHint: { content: "stub-additionalInfoHint" },
     backLink: { content: "stub-backLink" },
@@ -50,6 +56,19 @@ const renderPageContent = () => {
 };
 
 describe("useReviewContent()", () => {
+  test.each`
+    name                      | property
+    ${"competitionNameLabel"} | ${"competitionNameLabel"}
+    ${"competitionTypeLabel"} | ${"competitionTypeLabel"}
+  `("with message $property", ({ name, property }: Record<"name" | "property", string>) => {
+    const { result } = renderPageContent();
+
+    const content = (result.current.default as any)[name];
+    const expectedContent = stubContent.projectDetails.projectLabels[property].content;
+
+    expect(content).toBe(expectedContent);
+  });
+
   test.each`
     name                                             | property
     ${"additionalInfoHint"}                          | ${"additionalInfoHint"}

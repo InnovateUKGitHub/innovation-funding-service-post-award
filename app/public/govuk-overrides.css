@@ -21,6 +21,14 @@ body,
 }
 
 /*
+ * Margin Overrides
+*/
+.margin-bottom-none {
+  margin-bottom: 0 !important;
+}
+
+
+/*
  * Table validation
 */
 .highlight--error {
