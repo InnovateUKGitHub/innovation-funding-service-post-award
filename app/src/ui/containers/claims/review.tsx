@@ -51,6 +51,8 @@ interface ReviewData {
 }
 
 type ReviewContentKeys =
+  | "competitionNameLabel"
+  | "competitionTypeLabel"
   | "backlinkMessage"
   | "finalClaimMessage"
   | "logItemTitle"
@@ -91,6 +93,8 @@ export function useReviewContent(): ReviewContent {
   const { getContent } = useContent();
 
   const defaultContent = {
+    competitionNameLabel: getContent(x => x.projectDetails.projectLabels.competitionNameLabel),
+    competitionTypeLabel: getContent(x => x.projectDetails.projectLabels.competitionTypeLabel),
     additionalInfoHint: getContent(x => x.claimReview.additionalInfoHint),
     backlinkMessage: getContent(x => x.claimReview.backLink),
     queryClaimOption: getContent(x => x.claimReview.queryClaimOption),
@@ -209,6 +213,18 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
         {data.claim.isFinalClaim && (
           <ACC.ValidationMessage messageType="info" message={this.props.content.default.finalClaimMessage} />
         )}
+
+        {data.partner.competitionName && (
+          <ACC.Renderers.SimpleString className="margin-bottom-none">
+            <span className="govuk-!-font-weight-bold">{content.default.competitionNameLabel}:</span>{" "}
+            {data.partner.competitionName}
+          </ACC.Renderers.SimpleString>
+        )}
+
+        <ACC.Renderers.SimpleString>
+          <span className="govuk-!-font-weight-bold">{content.default.competitionTypeLabel}:</span>{" "}
+          {data.partner.competitionType}
+        </ACC.Renderers.SimpleString>
 
         {this.renderClaimReviewSection(data)}
 
