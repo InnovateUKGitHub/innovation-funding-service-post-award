@@ -1,4 +1,3 @@
-
 import { ContentBase } from "@content/contentBase";
 import i18next from "i18next";
 
@@ -40,7 +39,6 @@ class ParentTestContent extends ContentBase {
   }
 
   child = new NamedTestContent(this);
-
 }
 
 const addResources = (resourceBundle: any) => {
@@ -49,18 +47,19 @@ const addResources = (resourceBundle: any) => {
 
 const resources = {
   example1: {
-    example2: "The full path"
+    example2: "The full path",
   },
   example2: "The sub path",
   named: {
-    example2: "The named path"
+    example2: "The named path",
   },
   parent: {
     named: {
-      example2: "The parent named path"
-    }
+      example2: "The parent named path",
+    },
   },
-  interpolated: "This is the interpolated value with '{{value}}'."
+  interpolated: "This is the interpolated value with '{{value}}'.",
+  conditionalValue: "type - {{key}}",
 };
 
 describe("Content", () => {
@@ -72,6 +71,32 @@ describe("Content", () => {
     });
 
     addResources(resources);
+  });
+
+  describe("with conditional grant/contact logic", () => {
+    test.each`
+      name                | competitionType | expectedContent
+      ${"with CR&D"}      | ${"CR&D"}       | ${"type - grant"}
+      ${"with KTP"}       | ${"KTP"}        | ${"type - grant"}
+      ${"with Contracts"} | ${"CONTRACTS"}  | ${"type - grant"}
+      ${"with Catapults"} | ${"CATAPULTS"}  | ${"type - grant"}
+      ${"with Loans"}     | ${"LOANS"}      | ${"type - grant"}
+      ${"with SBRI"}      | ${"SBRI"}       | ${"type - contract"}
+      ${"with SBRI IFS"}  | ${"SBRI IFS"}   | ${"type - contract"}
+    `("$name", ({ competitionType, expectedContent }) => {
+      class ConditionalCompetitionTestContent extends ContentBase {
+        constructor() {
+          super(null, null, competitionType);
+        }
+
+        public testPath(path: string) {
+          return this.getContent(path, { key: this.getGrantOrContract() });
+        }
+      }
+
+      const result = new ConditionalCompetitionTestContent().testPath("conditionalValue");
+      expect(result.content).toEqual(expectedContent);
+    });
   });
 
   it("uses full path", () => {

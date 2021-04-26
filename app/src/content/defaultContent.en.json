@@ -89,9 +89,11 @@
       "finalClaimDueMessageMO": "is due to submit their final claim so cannot change their forecast."
     },
     "warningContent": {
-      "amountRequestMessage": "The amount you are requesting is more than the grant offered for:",
+      "grantAmountRequestMessage": "The amount you are requesting is more than the grant offered for:",
+      "contractAmountRequestMessage": "The amount you are requesting is more than the maximum contract value offered for:",
       "contactmessage": "Your Monitoring Officer will let you know if they have any concerns.",
-      "MOPMmessage": "The partner is requesting an amount more than the grant offered for:"
+      "advisoryGrantMoPmMessage": "The partner is requesting an amount more than the grant offered for:",
+      "advisoryContractMoPmMessage": "The partner is requesting an amount more than the maximum contract value offered for:"
     },
     "onHoldContent": {
       "projectOnHoldMessage": "This project is on hold. Contact Innovate UK for more information.",
@@ -950,11 +952,14 @@
     "partners": "Partner information",
     "partner": "Partner",
     "awardRate": "Funding level",
-    "totalGrant": "Total grant approved",
-    "totalPrepayment": "Total grant paid in advance",
+    "totalGrantPaid": "Total grant paid in advance",
+    "totalContractPaid": "Total contract value approved",
+    "totalGrantPrepayment": "Total grant paid in advance",
+    "totalContractPrepayment": "Total contract value paid in advance",
     "capLimit": "Claim cap",
     "auditReportFrequency": "Audit frequency",
-    "remainingGrant": "Remaining grant"
+    "remainingGrantValue": "Remaining grant",
+    "remainingContractValue": "Remaining contract value"
   },
   "partner-labels": {
     "organisation-name": "Organisation name",
