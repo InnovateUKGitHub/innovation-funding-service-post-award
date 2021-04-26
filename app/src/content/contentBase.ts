@@ -1,5 +1,7 @@
 import i18next from "i18next";
 
+import { projectCompetition } from "@ui/hooks";
+
 export interface ContentResult {
   readonly key: string;
   readonly content: string;
@@ -70,5 +72,11 @@ export abstract class ContentBase {
         markdown: markdown || false,
       };
     }
+  }
+
+  protected getGrantOrContract() {
+    const { isCombinationOfSBRI } = projectCompetition(this.competitionType || "");
+
+    return isCombinationOfSBRI ? "contract" : "grant";
   }
 }

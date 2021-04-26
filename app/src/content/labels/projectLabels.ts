@@ -1,4 +1,4 @@
-import { ContentBase } from "../contentBase";
+import { ContentBase } from "@content/contentBase";
 
 export class ProjectLabels extends ContentBase {
   constructor(parent: ContentBase, protected competitionType?: string) {
@@ -24,9 +24,20 @@ export class ProjectLabels extends ContentBase {
   public readonly scope = this.getContent("scope");
   public readonly partners = this.getContent("partners");
   public readonly awardRate = this.getContent("awardRate");
-  public readonly totalGrant = this.getContent("totalGrant");
-  public readonly totalPrepayment = this.getContent("totalPrepayment");
   public readonly capLimit = this.getContent("capLimit");
   public readonly auditReportFrequency = this.getContent("auditReportFrequency");
-  public readonly remainingGrant = this.getContent("remainingGrant");
+
+  private readonly remainingGrantValue = this.getContent("remainingGrantValue");
+  private readonly remainingContractValue = this.getContent("remainingContractValue");
+  public readonly remainingValue =
+    this.getGrantOrContract() === "grant" ? this.remainingGrantValue : this.remainingContractValue;
+
+  private readonly totalGrantPaid = this.getContent("totalGrantPaid");
+  private readonly totalContractPaid = this.getContent("totalContractPaid");
+  public readonly totalApproved = this.getGrantOrContract() === "grant" ? this.totalGrantPaid : this.totalContractPaid;
+
+  private readonly totalGrantPrepayment = this.getContent("totalGrantPrepayment");
+  private readonly totalContractPrepayment = this.getContent("totalContractPrepayment");
+  public readonly totalPrepayment =
+    this.getGrantOrContract() === "grant" ? this.totalGrantPrepayment : this.totalContractPrepayment;
 }

@@ -80,7 +80,7 @@ const renderWarningMessage = (props: Props) => {
       messageType="info"
       message={
         <div>
-          <Content value={x => x.components.warningContent.MOPMmessage} />
+          <Content value={x => x.components.warningContent.advisoryMoPmMessage} />
           <UL>{categoriesList}</UL>
         </div>
       }
