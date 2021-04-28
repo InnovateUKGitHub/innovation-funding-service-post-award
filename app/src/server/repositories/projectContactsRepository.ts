@@ -29,7 +29,9 @@ export interface IProjectContactsRepository {
  *
  * Stored in Acc_ProjectContactLink__c and the role is a pick list Acc_Role__c
  */
-export class ProjectContactsRepository extends SalesforceRepositoryBase<ISalesforceProjectContact> implements IProjectContactsRepository {
+export class ProjectContactsRepository
+  extends SalesforceRepositoryBase<ISalesforceProjectContact>
+  implements IProjectContactsRepository {
   protected readonly salesforceObjectName = "Acc_ProjectContactLink__c";
 
   protected readonly salesforceFieldNames = [
@@ -42,7 +44,7 @@ export class ProjectContactsRepository extends SalesforceRepositoryBase<ISalesfo
     "Acc_ContactId__r.Id",
     "Acc_ContactId__r.Name",
     "Acc_ContactId__r.Email",
-    "Acc_UserId__r.Name"
+    "Acc_UserId__r.Name",
   ];
 
   getAllByProjectId(projectId: string): Promise<ISalesforceProjectContact[]> {
@@ -51,12 +53,14 @@ export class ProjectContactsRepository extends SalesforceRepositoryBase<ISalesfo
 
   async getAllForUser(email: string): Promise<ISalesforceProjectContact[]> {
     const conn = await this.getSalesforceConnection();
-    const userResult: {ContactId: string} = await conn.sobject("User")
+
+    const userResult = (await conn
+      .sobject("User")
       .select(["ContactId"])
-      .where(`Username = '${email}'`)
+      .where({ Username: email })
       .execute()
-      .then(x => x.pop() as {ContactId: string})
-      .catch(e => this.constructError(e)) as any;
+      .then(x => x.pop() as { ContactId: string })
+      .catch(e => this.constructError(e))) as any;
 
     return this.where(`Acc_ContactId__c = '${userResult.ContactId}'`);
   }
