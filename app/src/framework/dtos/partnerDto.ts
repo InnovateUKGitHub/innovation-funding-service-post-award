@@ -42,6 +42,12 @@ export enum BankDetailsTaskStatus {
   Complete = 30
 }
 
+export enum PostcodeTaskStatus {
+  Unknown = 0,
+  ToDo = 10,
+  Complete = 30
+}
+
 interface ValidationResponse {
   validationCheckPassed: boolean;
   iban: string | null;
@@ -81,6 +87,8 @@ export interface PartnerDto {
   type: string;
 
   postcode: string | null;
+  postcodeStatusLabel: string | null;
+  postcodeStatus: PostcodeTaskStatus;
   isLead: boolean;
   isWithdrawn: boolean;
   projectRoleName: string;

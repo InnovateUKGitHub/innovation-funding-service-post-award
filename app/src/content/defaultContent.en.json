@@ -181,6 +181,7 @@
       "back-link": "Back to projects",
       "set-spend-profile": "Set spend profile",
       "provide-bank-details": "Provide your bank details",
+      "provide-project-location": "Provide your project location postcode",
       "complete": "Complete project setup"
     },
     "project-overview": {
@@ -207,6 +208,14 @@
       "title": "Project documents",
       "noMatchingDocumentsMessage": "No documents match.",
       "searchDocumentsMessage": "Search documents"
+    },
+    "project-setup-postcode-details": {
+      "title": {
+        "html": "Edit your project location postcode",
+        "display": "Provide your project location postcode"
+      },
+      "back-link": "Back to set up your project",
+      "save-and-return": "Save and return to project setup"
     },
     "project-setup-bank-details": {
       "title": "Provide your bank details",

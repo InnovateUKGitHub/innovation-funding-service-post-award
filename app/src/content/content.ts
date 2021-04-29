@@ -1,4 +1,3 @@
-import { ProjectSetupContent } from "@content/pages/project/projectSetupContent";
 import { AllClaimsDashboardContent } from "@content/pages/claims/allClaimsDashboardContent";
 import { ClaimsDashboardContent } from "@content/pages/claims/claimsDashboardContent";
 import { ClaimDocumentsContent } from "@content/pages/claims/claimDocumentsContent";
@@ -16,11 +15,14 @@ import { PCRAddPartnerOtherFundingContent } from "@content/pages/pcrs/addPartner
 import { PCRAddPartnerAcademicCostsContent } from "@content/pages/pcrs/addPartner/academicCostsStepContent";
 import { PCRAddPartnerStateAidEligibilityContent } from "@content/pages/pcrs/addPartner/stateAidEligibilityStepContent";
 import { PCRAddPartnerOtherFundingSourcesContent } from "@content/pages/pcrs/addPartner/otherFundingSourcesContent";
-import { ProjectSetupBankDetailsContent } from "@content/pages/project/projectSetupBankDetailsContent";
-import { ProjectSetupBankDetailsVerifyContent } from "@content/pages/project/projectSetupBankDetailsVerifyContent";
-import { ProjectSetupBankStatementContent } from "@content/pages/project/projectSetupBankStatementContent";
+
 import { ValidationSummaryContent } from "@content/components/validationSummaryContent";
 import { ErrorSummaryContent } from "@content/components/errorSummaryContent";
+import { ProjectSetupBankDetailsContent } from "@content/pages/project/setup/projectSetupBankDetailsContent";
+import { ProjectSetupContent } from "@content/pages/project/setup/projectSetupContent";
+import { ProjectSetupBankDetailsVerifyContent } from "@content/pages/project/setup/projectSetupBankDetailsVerifyContent";
+import { ProjectSetupBankStatementContent } from "@content/pages/project/setup/projectSetupBankStatementContent";
+import { ProjectSetupPartnerPostcodeContent } from "./pages/project/setup/projectSetupPostcodeContent";
 import { ContentBase, ContentResult } from "./contentBase";
 
 // General
@@ -103,6 +105,7 @@ import { PhaseBannerContent } from "./components/phaseBannerContent";
 import { PCRTimeExtensionStepContent } from "./pages/pcrs/pcrTimeExtensionStepContent";
 import { ClaimLineItemsContent } from "./pages/claims/claimLineItemsContent";
 import { ClaimsComponentsContent } from "./pages/claims/components/claimsComponentsContent";
+import { PostcodeContent } from "./pages/project/postcodeContent";
 
 export type ContentSelector = (content: Content) => ContentResult;
 
@@ -121,6 +124,7 @@ export class Content extends ContentBase {
   public readonly projectSetupBankDetails: ProjectSetupBankDetailsContent;
   public readonly projectSetupBankStatement: ProjectSetupBankStatementContent;
   public readonly projectSetupBankDetailsVerify: ProjectSetupBankDetailsVerifyContent;
+  public readonly projectSetupPostcode: ProjectSetupPartnerPostcodeContent;
 
   public readonly financeSummary: FinanceSummaryContent;
 
@@ -201,6 +205,10 @@ export class Content extends ContentBase {
   public readonly pcrScopeChangePublicDescriptionChange: PCRScopeChangePublicDescriptionChangeContent;
   public readonly pcrScopeChangeSummary: PCRScopeChangeSummaryContent;
 
+  public readonly features: {
+    postcode: PostcodeContent;
+  };
+
   public readonly errors: {
     notfound: NotFoundErrorContent;
     unauthenticated: UnauthenticatedErrorContent;
@@ -245,6 +253,11 @@ export class Content extends ContentBase {
     this.projectSetupBankDetails = new ProjectSetupBankDetailsContent(this, competitionType);
     this.projectSetupBankStatement = new ProjectSetupBankStatementContent(this, competitionType);
     this.projectSetupBankDetailsVerify = new ProjectSetupBankDetailsVerifyContent(this, competitionType);
+    this.projectSetupPostcode = new ProjectSetupPartnerPostcodeContent(this, competitionType);
+
+    this.features = {
+      postcode: new PostcodeContent(this),
+    };
 
     this.financeSummary = new FinanceSummaryContent(this, competitionType);
 

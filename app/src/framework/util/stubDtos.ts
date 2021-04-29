@@ -52,6 +52,8 @@ export const createPartnerDto: CreateDTO<PartnerDto> = (objectToMerge?) => {
     accountId: "0010C00000AtnOAQAZ",
     type: "Business",
     postcode: "BS1 6AC",
+    postcodeStatusLabel: "To do",
+    postcodeStatus: 10,
     organisationType: "Industrial",
     competitionType: "CR&D",
     isLead: true,

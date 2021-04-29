@@ -10,7 +10,7 @@ interface Data {
 }
 
 interface Params {
-    id: string;
+    projectId: string;
     partnerId: string;
 }
 
@@ -42,7 +42,7 @@ class PartnerDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
         return (
             <ACC.Page
-                backLink={<ACC.BackLink route={this.props.routes.projectDetails.getLink({ id: this.props.id })}>{backToProjectDetailsLink}</ACC.BackLink>}
+                backLink={<ACC.BackLink route={this.props.routes.projectDetails.getLink({ id: this.props.projectId })}>{backToProjectDetailsLink}</ACC.BackLink>}
                 pageTitle={<ACC.Projects.Title {...project} />}
                 project={project}
                 partner={partner}
@@ -63,7 +63,7 @@ class PartnerDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                             labelContent={x => x.partnerDetails.contactLabels.partnerPostcode}
                             qa="partner-postcode"
                             content={<ACC.Renderers.SimpleString>{partner.postcode}</ACC.Renderers.SimpleString>}
-                            action={isFC || isPM ? <ACC.Link styling={"Link"} route={this.props.routes.partnerDetailsEdit.getLink({ id: this.props.id, partnerId: this.props.partnerId })}>{editLink}</ACC.Link> : null}
+                            action={isFC || isPM ? <ACC.Link styling={"Link"} route={this.props.routes.partnerDetailsEdit.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}>{editLink}</ACC.Link> : null}
                         />
                     </ACC.SummaryList>
                 </ACC.Section>
@@ -77,7 +77,7 @@ const PartnerDetailsContainer = (props: Params & BaseProps) => (
         {
             stores => (
                 <PartnerDetailsComponent
-                    project={stores.projects.getById(props.id)}
+                    project={stores.projects.getById(props.projectId)}
                     partner={stores.partners.getById(props.partnerId)}
                     {...props}
                 />
@@ -88,9 +88,9 @@ const PartnerDetailsContainer = (props: Params & BaseProps) => (
 
 export const PartnerDetailsRoute = defineRoute<Params>({
     routeName: "partnerDetails",
-    routePath: "/projects/:id/details/:partnerId",
+    routePath: "/projects/:projectId/details/:partnerId",
     container: (props) => <PartnerDetailsContainer {...props} />,
-    getParams: (r) => ({ id: r.params.id, partnerId: r.params.partnerId }),
+    getParams: (r) => ({ projectId: r.params.projectId, partnerId: r.params.partnerId }),
     getTitle: ({ content }) => content.partnerDetails.title(),
-    accessControl: (auth, { id }) => auth.forProject(id).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
+    accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });

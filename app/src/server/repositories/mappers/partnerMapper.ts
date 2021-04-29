@@ -39,6 +39,8 @@ export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePar
       auditReportFrequencyName: item.AuditReportFrequencyName,
       totalPrepayment: item.Acc_TotalPrepayment__c,
       postcode: item.Acc_Postcode__c,
+      postcodeStatusLabel: item.Acc_Postcode__c, // TODO: need this label adding on the backend
+      postcodeStatus: item.Acc_Postcode__c, // TODO: need this status adding on the backend
       newForecastNeeded: item.Acc_NewForecastNeeded__c,
       spendProfileStatus: item.Acc_SpendProfileCompleted__c,
       spendProfileStatusLabel: item.SpendProfileStatusLabel,

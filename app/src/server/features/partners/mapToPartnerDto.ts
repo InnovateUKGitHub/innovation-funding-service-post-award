@@ -4,6 +4,7 @@ import {
     PartnerClaimStatus,
     PartnerDto,
     PartnerStatus,
+    PostcodeTaskStatus,
     ProjectRole,
     SpendProfileStatus
 } from "@framework/types";
@@ -33,6 +34,8 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
             accountId: this.item.accountId,
             type: this.item.participantType,
             postcode: this.item.postcode,
+            postcodeStatus: new PostcodeStatusMapper().mapFromSalesforce(this.item.postcode),
+            postcodeStatusLabel: this.item.postcodeStatusLabel,
             organisationType: this.item.organisationType,
             competitionType: this.item.competitionType,
             competitionName: this.item.competitionName,
@@ -182,6 +185,26 @@ export class BankDetailsTaskStatusMapper {
             case BankDetailsTaskStatus.ToDo: return this.options.toDo;
             case BankDetailsTaskStatus.Incomplete: return this.options.incomplete;
             case BankDetailsTaskStatus.Complete: return this.options.complete;
+            default: return undefined;
+        }
+    });
+}
+
+export class PostcodeStatusMapper {
+    private readonly options = {
+        toDo: "To Do",
+        complete: "Complete",
+    };
+
+    // TODO: fix this when we have a postcodeStatus in SF
+    public mapFromSalesforce = ((postcode: string | null): PostcodeTaskStatus => {
+        return postcode ? PostcodeTaskStatus.Complete : PostcodeTaskStatus.ToDo;
+    });
+
+    public mapToSalesforce = ((option?: PostcodeTaskStatus) => {
+        switch (option) {
+            case PostcodeTaskStatus.ToDo: return this.options.toDo;
+            case PostcodeTaskStatus.Complete: return this.options.complete;
             default: return undefined;
         }
     });
