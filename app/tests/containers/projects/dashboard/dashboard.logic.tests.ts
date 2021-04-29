@@ -10,6 +10,7 @@ import {
   PartnerClaimStatus,
   PartnerDto,
   PartnerStatus,
+  PostcodeTaskStatus,
   ProjectDto,
   ProjectRole,
   ProjectStatus,
@@ -74,6 +75,8 @@ const stubPartner: PartnerDto = {
   type: "stub-type",
 
   postcode: "stub-postcode",
+  postcodeStatusLabel: "stub-postcode-status-label",
+  postcodeStatus: PostcodeTaskStatus.Unknown,
   isLead: true,
   isWithdrawn: false,
   projectRoleName: "stub-projectRoleName",

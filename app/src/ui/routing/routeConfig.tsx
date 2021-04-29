@@ -55,6 +55,7 @@ export const routeConfig = {
   projectSetup: Containers.ProjectSetupRoute,
   projectSetupSpendProfile: Containers.ProjectSetupSpendProfileRoute,
   projectSetupBankDetails: Containers.ProjectSetupBankDetailsRoute,
+  projectSetupPostcode: Containers.ProjectSetupPartnerPostcodeRoute,
   projectSetupBankStatement: Containers.ProjectSetupBankStatementRoute,
   projectSetupBankDetailsVerify: Containers.ProjectSetupBankDetailsVerifyRoute,
   reviewClaim: Containers.ReviewClaimRoute,

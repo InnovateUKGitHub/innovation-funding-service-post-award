@@ -45,6 +45,7 @@ import { VirementPartnerCostsUpdateHandler } from "./projectChangeRequest/vireme
 import { upload } from "./memoryStorage";
 import { ProjectSetupSpendProfileFormHandler } from "./projectSetupSpendProfileFormHandler";
 import { ReviewClaimFormHandler } from "./reviewClaimFormHandler";
+import { ProjectSetupPartnerPostcodeFormHandler } from "./projectSetupPartnerPostcodeFormHandler";
 
 export const standardFormHandlers: (StandardFormHandlerBase<{}, EditorStateKeys>)[] = [
   new ClaimForecastFormHandler(),
@@ -80,6 +81,7 @@ export const standardFormHandlers: (StandardFormHandlerBase<{}, EditorStateKeys>
   new ProjectSetupFormHandler(),
   new PartnerDetailsEditFormHandler(),
   new ProjectSetupSpendProfileFormHandler(),
+  new ProjectSetupPartnerPostcodeFormHandler(),
 ];
 
 export const singleFileFormHandlers: (SingleFileFormHandlerBase<{}, EditorStateKeys>)[] = [

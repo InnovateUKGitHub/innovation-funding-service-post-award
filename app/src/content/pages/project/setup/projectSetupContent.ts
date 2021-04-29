@@ -1,7 +1,7 @@
 import { ContentPageBase } from "@content/contentPageBase";
 import { ProjectMessages } from "@content/messages/projectMessages";
 import { TaskListContent } from "@content/components/taskListContent";
-import { Content } from "../../content";
+import { Content } from "../../../content";
 
 export class ProjectSetupContent extends ContentPageBase {
   constructor(content: Content, protected competitionType?: string) {
@@ -13,5 +13,6 @@ export class ProjectSetupContent extends ContentPageBase {
   public readonly taskList = new TaskListContent(this, this.competitionType);
   public readonly setSpendProfile = this.getContent("set-spend-profile");
   public readonly provideBankDetails = this.getContent("provide-bank-details");
+  public readonly providePostcode = this.getContent("provide-project-location");
   public readonly complete = this.getContent("complete");
 }

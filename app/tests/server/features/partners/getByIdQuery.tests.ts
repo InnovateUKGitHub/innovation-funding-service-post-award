@@ -6,6 +6,7 @@ import {
   PartnerClaimStatus,
   PartnerDto,
   PartnerStatus,
+  PostcodeTaskStatus,
   ProjectRole,
   SpendProfileStatus,
 } from "@framework/types";
@@ -83,6 +84,8 @@ describe("getAllForProjectQuery", () => {
       accountId: "AccountId1",
       type: "Accedemic",
       postcode: "BS1 1AA",
+      postcodeStatusLabel: "",
+      postcodeStatus: PostcodeTaskStatus.Complete,
       isLead: true,
       projectRoleName: "Lead",
       projectId: "Project1",

@@ -1,4 +1,4 @@
-import { BankCheckStatus, BankDetailsTaskStatus, PartnerDto, PartnerStatus, SpendProfileStatus } from "@framework/dtos";
+import { BankCheckStatus, BankDetailsTaskStatus, PartnerDto, PartnerStatus, PostcodeTaskStatus, SpendProfileStatus } from "@framework/dtos";
 import { Result } from "@ui/validation";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { DocumentDescription } from "@framework/constants";
@@ -76,17 +76,17 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
     public spendProfileStatus = this.validateForPartnerStatus(PartnerStatus.Pending, () =>
       Validation.isTrue(this, this.model.partnerStatus !== PartnerStatus.Active || this.model.spendProfileStatus === SpendProfileStatus.Complete, "You must complete your spend profile"));
 
-    public bankDetailsTaskStatus = this.validateForPartnerStatus(PartnerStatus.Pending, () =>
-      Validation.all(this,
-        () => Validation.isTrue(this, this.model.partnerStatus !== PartnerStatus.Active || this.model.bankDetailsTaskStatus === BankDetailsTaskStatus.Complete, "You must provide your bank details"),
-        () => this.validateBankDetailsTaskStatus(),
-      ));
+      public bankDetailsTaskStatus = this.validateForPartnerStatus(PartnerStatus.Pending, () =>
+        Validation.all(this,
+          () => Validation.isTrue(this, this.model.partnerStatus !== PartnerStatus.Active || this.model.bankDetailsTaskStatus === BankDetailsTaskStatus.Complete, "You must provide your bank details"),
+          () => this.validateBankDetailsTaskStatus(),
+        ));
 
-    public postcode = Validation.required(
-      this,
-      typeof this.model.postcode === "string" ? this.model.postcode : false,
-      "Postcode field cannot be empty",
+    public postcodeSetupStatus = this.validateForPartnerStatus(PartnerStatus.Pending, () =>
+      Validation.isTrue(this, this.model.partnerStatus !== PartnerStatus.Active || !!this.model.postcode?.length, "You must provide your project location postcode")
     );
+
+    public postcodeEditStatus = this.model.postcodeStatus !== PostcodeTaskStatus.ToDo ? Validation.isTrue(this, !!this.model.postcode?.length, "You must provide your project location postcode"): Validation.valid(this);
 
     public bankCheckValidation = this.conditionallyValidateBankDetails(() => Validation.isFalse(this, !!this.options.failBankValidation, "Check your sort code and account number."));
 

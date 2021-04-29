@@ -4,7 +4,7 @@ import { IEditorStore, StoresConsumer } from "@ui/redux";
 import * as Dtos from "@framework/dtos";
 import { BankCheckStatus, BankDetailsTaskStatus, PartnerStatus } from "@framework/dtos";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
-import * as ACC from "../../components";
+import * as ACC from "@ui/components";
 
 export interface ProjectSetupParams {
   projectId: string;
@@ -72,6 +72,12 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
               route={this.getBankDetailsLink(partner)}
               validation={[editor.validator.bankDetailsTaskStatus]}
             />
+            <ACC.Task
+              nameContent={x => x.projectSetup.providePostcode}
+              status={this.isPostcodeComplete(partner.postcode)}
+              route={this.props.routes.projectSetupPostcode.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}
+              validation={[editor.validator.postcodeSetupStatus]}
+            />
           </ACC.TaskListSection>
         </ACC.UL>
         <Form.Form
@@ -89,6 +95,11 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
         </Form.Form>
       </ACC.Page>
     );
+  }
+
+  // TODO: remove this temporary solution when we have added the postcodeStatusLabel in SF
+  private isPostcodeComplete(postcode: string | null): ACC.TaskStatus {
+    return postcode ? "Complete": "To do";
   }
 
   private getBankDetailsLink(partner: Dtos.PartnerDto) {

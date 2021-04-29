@@ -1,7 +1,13 @@
-import { BankCheckStatus, BankDetailsTaskStatus, PartnerDto, PartnerStatus, SpendProfileStatus } from "@framework/dtos";
+import { BankCheckStatus, BankDetailsTaskStatus, PartnerDto, PartnerStatus, PostcodeTaskStatus, SpendProfileStatus } from "@framework/dtos";
 import { GetByIdQuery } from "@server/features/partners";
 import { ValidationError } from "@server/features/common";
-import { BankCheckStatusMapper, BankDetailsTaskStatusMapper, PartnerSpendProfileStatusMapper, PartnerStatusMapper } from "@server/features/partners/mapToPartnerDto";
+import {
+  BankCheckStatusMapper,
+  BankDetailsTaskStatusMapper,
+  PartnerSpendProfileStatusMapper,
+  PartnerStatusMapper,
+  PostcodeStatusMapper,
+} from "@server/features/partners/mapToPartnerDto";
 import { Partner } from "@framework/entities";
 import { UpdatePartnerCommand } from "../../../../src/server/features/partners/updatePartnerCommand";
 import { TestContext } from "../../testContextProvider";
@@ -11,11 +17,12 @@ describe("updatePartnerCommand", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project, item => {
-      item.postcode = null as any;
+      item.postcode = "SY23 5TU";
       item.participantStatus = new PartnerStatusMapper().mapToSalesforce(PartnerStatus.Pending) || "";
       item.spendProfileStatus = new PartnerSpendProfileStatusMapper().mapToSalesforce(SpendProfileStatus.ToDo) || "";
       item.bankDetailsTaskStatus = new BankDetailsTaskStatusMapper().mapToSalesforce(BankDetailsTaskStatus.ToDo) || "";
       item.bankCheckStatus = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.NotValidated) || "";
+      item.postcodeStatus = new PostcodeStatusMapper().mapToSalesforce(PostcodeTaskStatus.Complete) || "";
       item.sortCode = "123456";
       item.accountNumber = "12345678";
       item.firstName = "First";
@@ -204,7 +211,7 @@ describe("updatePartnerCommand", () => {
   });
 
   it("should update the partner's verify response bank details", async () => {
-    const { context, partner } =setup({
+    const { context, partner } = setup({
       bankCheckStatus: new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.ValidationPassed) || "",
     });
 

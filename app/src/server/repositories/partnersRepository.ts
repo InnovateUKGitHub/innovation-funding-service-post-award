@@ -132,6 +132,7 @@ export class PartnerRepository
     "toLabel(Acc_AuditReportFrequency__c) AuditReportFrequencyName",
     "Acc_TotalPrepayment__c",
     "Acc_Postcode__c",
+    // "toLabel(Acc_LocationCheckCompleted__c) LocationCheckStatusLabel", // TODO: waiting on SF implementation
     "Acc_NewForecastNeeded__c",
     "Acc_SpendProfileCompleted__c",
     "toLabel(Acc_SpendProfileCompleted__c) SpendProfileStatusLabel",

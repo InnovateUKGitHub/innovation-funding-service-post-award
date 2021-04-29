@@ -57,7 +57,7 @@ export class PartnersStore extends StoreBase {
       partnerDto,
       () => new PartnerDtoValidator(partnerDto, partnerDto, partnerDocuments || [], {
         showValidationErrors: true,
-        validateBankDetails: options && options.validateBankDetails
+        validateBankDetails: options?.validateBankDetails,
       }),
       p => ApiClient.partners.updatePartner({ partnerId, partnerDto, validateBankDetails: options && options.validateBankDetails, verifyBankDetails: options && options.verifyBankDetails, ...p }),
       (result) => {

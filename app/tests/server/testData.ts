@@ -137,6 +137,8 @@ export class TestData {
       totalCostsAwarded: 100000,
       totalPrepayment: 500,
       postcode: "BS1 1AA",
+      postcodeStatusLabel: "",
+      postcodeStatus: "",
       newForecastNeeded: false,
       spendProfileStatus: "",
       spendProfileStatusLabel: "",

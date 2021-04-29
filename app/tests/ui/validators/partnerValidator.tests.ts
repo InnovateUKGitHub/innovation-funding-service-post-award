@@ -14,7 +14,7 @@ import { TestContext } from "../../server/testContextProvider";
 
 describe("Partner Validator", () => {
   describe("partnerStatus", () => {
-    it("should validate partner status transitions", async () => {
+    test("should validate partner status transitions", async () => {
       const context = new TestContext();
       const statuses = getAllEnumValues(PartnerStatus).filter(x => x !== PartnerStatus.Unknown);
       for (const status of statuses) {
@@ -37,8 +37,9 @@ describe("Partner Validator", () => {
       }
     });
   });
+
   describe("spendProfileStatus", () => {
-    it("should only allow the partner to be made active if the spend profile status is complete", async () => {
+    test("should only allow the partner to be made active if the spend profile status is complete", async () => {
       const context = new TestContext();
       const partner = context.testData.createPartner(undefined, x => {
         x.participantStatus = new PartnerStatusMapper().mapToSalesforce(PartnerStatus.Pending) || "";
@@ -53,8 +54,9 @@ describe("Partner Validator", () => {
       expect(validate().spendProfileStatus.isValid).toBe(true);
     });
   });
+
   describe("bankDetailsTaskStatus", () => {
-    it("should only allow the partner to be made active if the bankDetailsTaskStatus is complete", async () => {
+    test("should only allow the partner to be made active if the bankDetailsTaskStatus is complete", async () => {
       const context = new TestContext();
       const partner = context.testData.createPartner(undefined, x => {
         x.participantStatus = new PartnerStatusMapper().mapToSalesforce(PartnerStatus.Pending) || "";
@@ -69,7 +71,7 @@ describe("Partner Validator", () => {
       partnerDto.bankDetailsTaskStatus = BankDetailsTaskStatus.Complete;
       expect(validate().bankDetailsTaskStatus.isValid).toBe(true);
     });
-    it("Should allow same state transitions", async () => {
+    test("Should allow same state transitions", async () => {
       const context = new TestContext();
       const partner = context.testData.createPartner(undefined, x => {
         x.participantStatus = new PartnerStatusMapper().mapToSalesforce(PartnerStatus.Pending) || "";
@@ -84,7 +86,7 @@ describe("Partner Validator", () => {
       partnerDto.bankDetailsTaskStatus = BankDetailsTaskStatus.Incomplete;
       expect(validate().bankDetailsTaskStatus.isValid).toBe(true);
     });
-    it("Should require a bank statement if the bank validation status is failed", async () => {
+    test("Should require a bank statement if the bank validation status is failed", async () => {
       const context = new TestContext();
       const partner = context.testData.createPartner(undefined, x => {
         x.participantStatus = new PartnerStatusMapper().mapToSalesforce(PartnerStatus.Pending) || "";
@@ -112,7 +114,7 @@ describe("Partner Validator", () => {
       document.description = DocumentDescription.BankStatement;
       expect(validate([document]).bankDetailsTaskStatus.isValid).toBe(true);
     });
-    it("Should require a bank statement if the bank verification status is failed", async () => {
+    test("Should require a bank statement if the bank verification status is failed", async () => {
       const context = new TestContext();
       const partner = context.testData.createPartner(undefined, x => {
         x.participantStatus = new PartnerStatusMapper().mapToSalesforce(PartnerStatus.Pending) || "";
@@ -140,7 +142,7 @@ describe("Partner Validator", () => {
       document.description = DocumentDescription.BankStatement;
       expect(validate([document]).bankDetailsTaskStatus.isValid).toBe(true);
     });
-    it("should require the verification to pass before the bank details task can be completed", async () => {
+    test("should require the verification to pass before the bank details task can be completed", async () => {
       const context = new TestContext();
       const partner = context.testData.createPartner(undefined, x => {
         x.participantStatus = new PartnerStatusMapper().mapToSalesforce(PartnerStatus.Pending) || "";
@@ -159,20 +161,8 @@ describe("Partner Validator", () => {
   });
 
   describe("postcode", () => {
-    it("should validate with a withheld postcode", async () => {
-      const context = new TestContext();
-      const partner = context.testData.createPartner(undefined, x => {
-        x.participantStatus = "Active";
-        x.postcode = null;
-      });
 
-      const partnerDto = await context.runQuery(new GetByIdQuery(partner.id));
-      const validate = () => new PartnerDtoValidator(partnerDto, partnerDto, [], { showValidationErrors: true });
-
-      expect(validate().postcode.isValid).toBe(true);
-    });
-
-    it("should validate with populated string", async () => {
+    test("should validate with populated string", async () => {
       const context = new TestContext();
       const partner = context.testData.createPartner(undefined, x => {
         x.participantStatus = "Active";
@@ -182,10 +172,10 @@ describe("Partner Validator", () => {
       const partnerDto = await context.runQuery(new GetByIdQuery(partner.id));
       const validate = () => new PartnerDtoValidator(partnerDto, partnerDto, [], { showValidationErrors: true });
 
-      expect(validate().postcode.isValid).toBe(true);
+      expect(validate().postcodeEditStatus.isValid).toBe(true);
     });
 
-    it("should throw error with empty postcode", async () => {
+    test("should throw error with empty postcode", async () => {
       const context = new TestContext();
       const partner = context.testData.createPartner(undefined, x => {
         x.participantStatus = "Active";
@@ -195,17 +185,17 @@ describe("Partner Validator", () => {
       const partnerDto = await context.runQuery(new GetByIdQuery(partner.id));
       const validate = () => new PartnerDtoValidator(partnerDto, partnerDto, [], { showValidationErrors: true });
 
-      expect(validate().postcode.isValid).toBe(true);
+      expect(validate().postcodeEditStatus.isValid).toBe(true);
 
       partnerDto.postcode = "";
 
-      expect(validate().postcode.isValid).toBe(false);
-      expect(validate().postcode.errorMessage).toBe("Postcode field cannot be empty");
+      expect(validate().postcodeEditStatus.isValid).toBe(false);
+      expect(validate().postcodeEditStatus.errorMessage).toBe("You must provide your project location postcode");
     });
   });
 
   describe("bank details", () => {
-    it("should validate the bank details", async () => {
+    test("should validate the bank details", async () => {
       const context = new TestContext();
       const partner = context.testData.createPartner(undefined, x => {
         x.participantStatus = "Pending";
@@ -235,7 +225,7 @@ describe("Partner Validator", () => {
       partnerDto.bankDetails.sortCode = "123222";
       expect(validate(true).sortCode.isValid).toBe(true);
     });
-    it("should not validate the account number and postcode if the bank check validation has passed", async () => {
+    test("should not validate the account number and postcode if the bank check validation has passed", async () => {
       const context = new TestContext();
       const partner = context.testData.createPartner(undefined, x => {
         x.bankCheckStatus = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.VerificationPassed) || "";
