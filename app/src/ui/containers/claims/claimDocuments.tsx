@@ -35,6 +35,11 @@ type ClaimDocumentContentKeys =
   | "requiredUploadStep1"
   | "requiredUploadStep2"
   | "iarRequired"
+  | "sbriDocumentAdvice"
+  | "sbriInvoiceBullet1"
+  | "sbriInvoiceBullet2"
+  | "sbriInvoiceBullet3"
+  | "sbriMoAdvice"
   | "noDocumentsUploaded"
   | "newWindow"
   | "saveAndContinueToForecastButton"
@@ -54,6 +59,11 @@ export function useClaimDocumentContent(): ClaimDocumentContent {
     saveAndContinueToForecastButton: getContent(x => x.claimDocuments.saveAndContinueToForecastButton),
 
     iarRequired: getContent(x => x.claimDocuments.messages.iarRequired),
+    sbriDocumentAdvice: getContent(x => x.claimDocuments.messages.sbriDocumentAdvice),
+    sbriInvoiceBullet1: getContent(x => x.claimDocuments.messages.sbriInvoiceBullet1),
+    sbriInvoiceBullet2: getContent(x => x.claimDocuments.messages.sbriInvoiceBullet2),
+    sbriInvoiceBullet3: getContent(x => x.claimDocuments.messages.sbriInvoiceBullet3),
+    sbriMoAdvice: getContent(x => x.claimDocuments.messages.sbriMoAdvice),
     finalClaimMessage: getContent(x => x.claimDocuments.messages.finalClaimMessage),
     finalClaimGuidanceParagraph1: getContent(x => x.claimDocuments.messages.finalClaimGuidanceParagraph1),
     finalClaimGuidanceParagraph2: getContent(x => x.claimDocuments.messages.finalClaimGuidanceParagraph2),
@@ -96,6 +106,7 @@ interface ClaimDocumentsComponentProps extends ClaimDocumentsPageParams, BasePro
 const allowedClaimDocuments: Readonly<DocumentDescription[]> = [
   DocumentDescription.Evidence,
   DocumentDescription.EndOfProjectSurvey,
+  DocumentDescription.Invoice,
   DocumentDescription.IAR,
   DocumentDescription.LMCMinutes,
   DocumentDescription.ScheduleThree,
@@ -324,6 +335,11 @@ export interface ClaimDocumentAdviceProps extends Pick<ClaimDto, "isIarRequired"
     | "finalClaimStep2"
     | "finalClaimStep3"
     | "iarRequired"
+    | "sbriDocumentAdvice"
+    | "sbriInvoiceBullet1"
+    | "sbriInvoiceBullet2"
+    | "sbriInvoiceBullet3"
+    | "sbriMoAdvice"
   >;
   competitionType: string;
 }
@@ -335,7 +351,7 @@ export function ClaimDocumentAdvice({
   isIarRequired,
   competitionType,
 }: ClaimDocumentAdviceProps) {
-  const { isKTP } = projectCompetition(competitionType);
+  const { isKTP, isCombinationOfSBRI } = projectCompetition(competitionType);
 
   const getAdvise = () => {
     if (isKTP) {
@@ -361,6 +377,24 @@ export function ClaimDocumentAdvice({
             <li>{content.requiredUploadStep1}</li>
             <li>{content.requiredUploadStep2}</li>
           </ACC.UL>
+        </>
+      );
+    }
+
+    if (isCombinationOfSBRI) {
+      const competition = competitionType.replace(" ", "-").toLowerCase();
+
+      return (
+        <>
+          <ACC.Renderers.SimpleString qa={`${competition}-document-advice`}>{content.sbriDocumentAdvice}</ACC.Renderers.SimpleString>
+
+          <ACC.UL>
+            <li>{content.sbriInvoiceBullet1}</li>
+            <li>{content.sbriInvoiceBullet2}</li>
+            <li>{content.sbriInvoiceBullet3}</li>
+          </ACC.UL>
+
+          <ACC.Renderers.SimpleString qa={`${competition}-mo-advice`}>{content.sbriMoAdvice}</ACC.Renderers.SimpleString>
         </>
       );
     }

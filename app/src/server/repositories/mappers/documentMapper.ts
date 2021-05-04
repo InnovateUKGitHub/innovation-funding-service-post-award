@@ -26,6 +26,7 @@ export class SalesforceDocumentMapper extends SalesforceBaseMapper<ISalesforceDo
 export class DocumentDescriptionMapper {
   // These are what the documents get saved as in Salesforce so these names must not change
   private readonly types = {
+    Invoice: "Invoice",
     IAR: "IAR",
     Evidence: "Evidence",
     ClaimValidationForm: "ClaimValidationForm",
@@ -50,6 +51,7 @@ export class DocumentDescriptionMapper {
 
   public mapFromSalesforceDocumentDescription = ((documentType: string | null | undefined): DocumentDescription | null => {
     switch (documentType) {
+      case this.types.Invoice: return DocumentDescription.Invoice;
       case this.types.IAR: return DocumentDescription.IAR;
       case this.types.Evidence: return DocumentDescription.Evidence;
       case this.types.ClaimValidationForm: return DocumentDescription.ClaimValidationForm;
@@ -76,6 +78,7 @@ export class DocumentDescriptionMapper {
 
   public mapToSalesforceDocumentDescription = ((documentType: DocumentDescription | undefined) => {
     switch (documentType) {
+      case DocumentDescription.Invoice: return this.types.Invoice;
       case DocumentDescription.IAR: return this.types.IAR;
       case DocumentDescription.Evidence: return this.types.Evidence;
       case DocumentDescription.ClaimValidationForm: return this.types.ClaimValidationForm;

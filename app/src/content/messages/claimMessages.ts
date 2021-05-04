@@ -15,6 +15,11 @@ export class ClaimMessages extends ContentBase {
   public readonly finalClaimMessage = this.getContent("final-claim");
   public readonly iarRequired = this.getContent("iar-required");
   public readonly iarRequiredAdvice = this.getContent("iar-required-advice");
+  public readonly sbriDocumentAdvice = this.getContent("sbri-document-advice");
+  public readonly sbriInvoiceBullet1 = this.getContent("sbri-invoice-bullet-1");
+  public readonly sbriInvoiceBullet2 = this.getContent("sbri-invoice-bullet-2");
+  public readonly sbriInvoiceBullet3 = this.getContent("sbri-invoice-bullet-3");
+  public readonly sbriMoAdvice = this.getContent("sbri-mo-advice");
   public readonly claimQueried = this.getContent("claim-queried");
   public readonly claimApproved = this.getContent("claim-approved");
   public readonly finalClaimIarAdvice = this.getContent("final-claim-iar-advice");
