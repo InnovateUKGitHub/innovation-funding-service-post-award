@@ -45,7 +45,12 @@
       "edit-claim-line-item-upload-evidence": "Upload evidence of costs claimed against this cost category here.",
       "edit-claim-line-item-claim-documents": "Do not upload supporting documents for the whole claim here. You can upload them in the 'Claim documents' section later.",
       "sbri-document-detail-guidance": "Only upload evidence of costs claimed against this cost category '{{costCategoryName}}' on this page.",
-      "sbri-supporting-document-guidance": "Do not upload supporting documents for the whole claim here. You can upload them in the 'Claim documents' section later."
+      "sbri-supporting-document-guidance": "Do not upload supporting documents for the whole claim here. You can upload them in the 'Claim documents' section later.",
+      "sbri-document-advice": "You need to upload the following documents here:",
+      "sbri-invoice-bullet-1": "VAT invoices with every claim by partners registered for value-added tax (VAT)",
+      "sbri-invoice-bullet-2": "non-VAT invoices with every claim by partners not registered for VAT",
+      "sbri-invoice-bullet-3": "any documents requested by your monitoring officer to support a claim",
+      "sbri-mo-advice": "Contact your monitoring officer for more information about what you need to provide."
     },
     "pages": {
       "claim-review": {
@@ -67,7 +72,12 @@
       "edit-claim-line-item-upload-evidence": "Upload evidence of costs claimed against this cost category here.",
       "edit-claim-line-item-claim-documents": "Do not upload supporting documents for the whole claim here. You can upload them in the 'Claim documents' section later.",
       "sbri-document-detail-guidance": "Only upload evidence of costs claimed against this cost category '{{costCategoryName}}' on this page.",
-      "sbri-supporting-document-guidance": "Do not upload supporting documents for the whole claim here. You can upload them in the 'Claim documents' section later."
+      "sbri-supporting-document-guidance": "Do not upload supporting documents for the whole claim here. You can upload them in the 'Claim documents' section later.",
+      "sbri-document-advice": "You need to upload the following documents here:",
+      "sbri-invoice-bullet-1": "VAT invoices with every claim by partners registered for value-added tax (VAT)",
+      "sbri-invoice-bullet-2": "non-VAT invoices with every claim by partners not registered for VAT",
+      "sbri-invoice-bullet-3": "any documents requested by your monitoring officer to support a claim",
+      "sbri-mo-advice": "Contact your monitoring officer for more information about what you need to provide."
     },
     "pages": {
       "claim-review": {

@@ -1002,6 +1002,7 @@
   },
   "document-labels": {
     "description": {
+      "invoice": "Invoice",
       "iAR": "Independent accountant’s report",
       "evidence": "Claim evidence",
       "endOfProjectSurvey": "End-of-project survey",

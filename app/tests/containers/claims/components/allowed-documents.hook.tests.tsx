@@ -14,6 +14,7 @@ enum stubDocumentDescriptions {
 }
 
 const claimAllowedDocuments: DocumentDescription[] = [
+  DocumentDescription.Invoice,
   DocumentDescription.IAR,
   DocumentDescription.Evidence,
   DocumentDescription.EndOfProjectSurvey,
@@ -29,6 +30,7 @@ const stubLabels: Record<number, string | undefined> = {
   60: "StatementOfExpenditure",
   110: "LMCMinutes",
   120: "ScheduleThree",
+  210: "Invoice",
 };
 const stubUnknownDocumentLabel = "description.unknown";
 

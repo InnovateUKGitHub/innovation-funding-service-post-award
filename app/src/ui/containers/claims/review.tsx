@@ -329,6 +329,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
   }
 
   private readonly claimAllowedDocuments: DocumentDescription[] = [
+    DocumentDescription.Invoice,
     DocumentDescription.IAR,
     DocumentDescription.Evidence,
     DocumentDescription.EndOfProjectSurvey,

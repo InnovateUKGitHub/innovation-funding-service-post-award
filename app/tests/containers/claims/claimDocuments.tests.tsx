@@ -32,6 +32,11 @@ describe("useClaimDocumentContent()", () => {
         finalClaimStep1: { content: "stub-finalClaimStep1" },
         finalClaimStep2: { content: "stub-finalClaimStep2" },
         finalClaimStep3: { content: "stub-finalClaimStep3" },
+        sbriDocumentAdvice: { content: "stub-sbriInvoice" },
+        sbriInvoiceBullet1: { content: "stub-sbriInvoice-bullet-1" },
+        sbriInvoiceBullet2: { content: "stub-sbriInvoice-bullet-2" },
+        sbriInvoiceBullet3: { content: "stub-sbriInvoice-bullet-3" },
+        sbriMoAdvice: { content: "stub-sbriInvoice2" },
       },
       documentMessages: {
         uploadTitle: { content: "stub-uploadTitle" },
@@ -118,6 +123,11 @@ describe("<ClaimDocumentAdvice />", () => {
     finalClaimStep2: "stub-finalClaimStep2",
     finalClaimStep3: "stub-finalClaimStep3",
     iarRequired: "stub-iarRequired",
+    sbriDocumentAdvice: "stub-sbriInvoice",
+    sbriInvoiceBullet1: "stub-sbriInvoice-bullet-1",
+    sbriInvoiceBullet2: "stub-sbriInvoice-bullet-2",
+    sbriInvoiceBullet3: "stub-sbriInvoice-bullet-3",
+    sbriMoAdvice: "stub-sbriInvoice2",
   };
 
   const setup = (props: ClaimDocumentAdviceProps) => render(<ClaimDocumentAdvice {...props} />);
@@ -229,6 +239,27 @@ describe("<ClaimDocumentAdvice />", () => {
         expect(queryByText(stubContent.requiredUploadAdvice)).toBeInTheDocument();
         expect(queryByText(stubContent.requiredUploadStep1)).toBeInTheDocument();
         expect(queryByText(stubContent.requiredUploadStep2)).toBeInTheDocument();
+      });
+    });
+
+    describe("with sbri content", () => {
+      test.each`
+        name                                 | competitionType
+        ${"with 'SBRI' competition type"}    | ${"SBRI"}
+        ${"with 'SBRI IFS' competiton type"} | ${"SBRI IFS"}
+      `("$name", ({ competitionType }) => {
+        const { queryByText } = setup({
+          competitionType,
+          isIarRequired: false,
+          isFinalClaim: false,
+          content: stubContent,
+        });
+
+        expect(queryByText(stubContent.sbriDocumentAdvice)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriInvoiceBullet1)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriInvoiceBullet2)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriInvoiceBullet3)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriMoAdvice)).toBeInTheDocument();
       });
     });
   });
