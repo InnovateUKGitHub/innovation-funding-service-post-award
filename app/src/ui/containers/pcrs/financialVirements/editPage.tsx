@@ -109,24 +109,90 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
         )}
 
         <ACC.Section title={partner.name}>
-          <VirementForm.Form editor={editor} onChange={(dto) => this.props.onChange(false, dto)} onSubmit={() => this.props.onChange(true, editor.data)} qa="virementForm">
+          <VirementForm.Form
+            editor={editor}
+            onChange={dto => this.props.onChange(false, dto)}
+            onSubmit={() => this.props.onChange(true, editor.data)}
+            qa="virementForm"
+          >
             <VirementForm.Fieldset>
-              <VirementTable.Table qa="partnerVirements" data={costCategoriesWithVirement} validationResult={validation}>
-                <VirementTable.String qa="costCategory" header={this.props.content.costCategoryName} value={x => x.costCategory.name} footer={this.props.content.partnerTotals} />
-                <VirementTable.Currency qa="originalEligibleCosts" header={this.props.content.costCategoryOriginalEligibleCosts} value={x => x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={partnerVirements.originalEligibleCosts} />} />
-                <VirementTable.Currency qa="originalCostsClaimed" header={this.props.content.costCategoryCostsClaimed} value={x => x.virement.costsClaimedToDate} footer={<ACC.Renderers.Currency value={partnerVirements.costsClaimedToDate} />} />
-                <VirementTable.Custom qa="newEligibleCosts" header={this.props.content.costCategoryNewEligibleCosts} value={(x, i) => this.renderInput(partner, x.costCategory, x.virement, editor.status === EditorStatus.Saving, validation[i.row])} footer={<ACC.Renderers.Currency value={partnerVirements.newEligibleCosts} />} classSuffix={"numeric"} />
-                <VirementTable.Currency qa="difference" header={this.props.content.costCategoryDifferenceCosts} value={x => x.virement.newEligibleCosts - x.virement.originalEligibleCosts} />
+              <VirementTable.Table
+                qa="partnerVirements"
+                data={costCategoriesWithVirement}
+                validationResult={validation}
+              >
+                <VirementTable.String
+                  qa="costCategory"
+                  header={this.props.content.costCategoryName}
+                  value={x => x.costCategory.name}
+                  footer={this.props.content.partnerTotals}
+                />
+                <VirementTable.Currency
+                  qa="originalEligibleCosts"
+                  header={this.props.content.costCategoryOriginalEligibleCosts}
+                  value={x => x.virement.originalEligibleCosts}
+                  footer={<ACC.Renderers.Currency value={partnerVirements.originalEligibleCosts} />}
+                />
+                <VirementTable.Currency
+                  qa="originalCostsClaimed"
+                  header={this.props.content.costCategoryCostsClaimed}
+                  value={x => x.virement.costsClaimedToDate}
+                  footer={<ACC.Renderers.Currency value={partnerVirements.costsClaimedToDate} />}
+                />
+                <VirementTable.Custom
+                  qa="newEligibleCosts"
+                  header={this.props.content.costCategoryNewEligibleCosts}
+                  value={(x, i) =>
+                    this.renderInput(
+                      partner,
+                      x.costCategory,
+                      x.virement,
+                      editor.status === EditorStatus.Saving,
+                      validation[i.row],
+                    )
+                  }
+                  footer={<ACC.Renderers.Currency value={partnerVirements.newEligibleCosts} />}
+                  classSuffix={"numeric"}
+                />
+                <VirementTable.Currency
+                  qa="difference"
+                  header={this.props.content.costCategoryDifferenceCosts}
+                  value={x => x.virement.newEligibleCosts - x.virement.originalEligibleCosts}
+                />
               </VirementTable.Table>
             </VirementForm.Fieldset>
             <VirementForm.Fieldset heading={this.props.content.summaryTitle}>
               <SummaryTable.Table qa="summary-table" data={[editor.data]}>
-                <SummaryTable.Currency qa="originalEligibleCosts" header={this.props.content.projectOriginalEligibleCosts} value={x => x.originalEligibleCosts} />
-                <SummaryTable.Currency qa="newEligibleCosts" header={this.props.content.projectNewEligibleCosts} value={x => x.newEligibleCosts} />
-                <SummaryTable.Currency qa="differenceEligibleCosts" header={this.props.content.projectDifferenceCosts} value={x => x.newEligibleCosts - x.originalEligibleCosts} />
-                <SummaryTable.Currency qa="originalRemainingGrant" header={this.props.content.projectOriginalRemainingGrant} value={x => x.originalRemainingGrant} />
-                <SummaryTable.Currency qa="newRemainingGrant" header={this.props.content.projectNewRemainingGrant} value={x => x.newRemainingGrant} />
-                <SummaryTable.Currency qa="differenceRemainingGrant" header={this.props.content.projectDifferenceGrant} value={x => x.newRemainingGrant - x.originalRemainingGrant} />
+                <SummaryTable.Currency
+                  qa="originalEligibleCosts"
+                  header={this.props.content.projectOriginalEligibleCosts}
+                  value={x => x.originalEligibleCosts}
+                />
+                <SummaryTable.Currency
+                  qa="newEligibleCosts"
+                  header={this.props.content.projectNewEligibleCosts}
+                  value={x => x.newEligibleCosts}
+                />
+                <SummaryTable.Currency
+                  qa="differenceEligibleCosts"
+                  header={this.props.content.projectDifferenceCosts}
+                  value={x => x.newEligibleCosts - x.originalEligibleCosts}
+                />
+                <SummaryTable.Currency
+                  qa="originalRemainingGrant"
+                  header={this.props.content.projectOriginalRemainingGrant}
+                  value={x => x.originalRemainingGrant}
+                />
+                <SummaryTable.Currency
+                  qa="newRemainingGrant"
+                  header={this.props.content.projectNewRemainingGrant}
+                  value={x => x.newRemainingGrant}
+                />
+                <SummaryTable.Currency
+                  qa="differenceRemainingGrant"
+                  header={this.props.content.projectDifferenceGrant}
+                  value={x => x.newRemainingGrant - x.originalRemainingGrant}
+                />
               </SummaryTable.Table>
             </VirementForm.Fieldset>
             <VirementForm.Fieldset>
@@ -148,7 +214,7 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
             name={virement.costCategoryId}
             value={virement.newEligibleCosts}
             onChange={(val) => this.updateValue(partner, costCategory, val)}
-            width={4}
+            width="full"
             ariaLabel={virement.costCategoryName}
             disabled={disabled}
           />
