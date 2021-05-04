@@ -167,7 +167,7 @@ export function GrantMovingOverFinancialYearForm({ form: Form, editor }: GrantMo
 
       <Form.Numeric
         name="grantMovingOverFinancialYear"
-        width={5}
+        width={10}
         value={() => itemPcr.grantMovingOverFinancialYear}
         update={(_m, val) => (itemPcr.grantMovingOverFinancialYear = val!)}
         validation={itemValidator.grantMovingOverFinancialYear}

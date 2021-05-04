@@ -173,7 +173,7 @@ function EditPartnerLevelComponent(props: EditPartnerLevelProps & FinancialVirem
                             name={x.virement.partnerId}
                             value={x.virement.newRemainingGrant}
                             onChange={val => updateValue(x.partner, val)}
-                            width={4}
+                            width="full"
                             ariaLabel={x.partner.name}
                             disabled={editor.status === EditorStatus.Saving}
                           />
