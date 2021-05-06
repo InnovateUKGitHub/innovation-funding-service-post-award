@@ -42,6 +42,9 @@ const contentStub = {
     additionalInformationHint: {
       content: "stub-additionalInformationHint",
     },
+    sbriAdditionalInformationHint: {
+      content: "stub-sbriAdditionalInformationHint",
+    },
     actionHeader: {
       content: "stub-actionHeader",
     },
@@ -70,6 +73,15 @@ const contentStub = {
       negativeClaimWarning: {
         content: "stub-negativeClaimWarning",
       },
+      editClaimLineItemContactMo: {
+        content: "stub-editClaimLineItemContactMo",
+      },
+      editClaimLineItemUploadEvidence: {
+        content: "stub-editClaimLineItemUploadEvidence",
+      },
+      editClaimLineItemClaimDocuments: {
+        content: "stub-editClaimLineItemClaimDocuments",
+      },
     },
     documentMessages: {
       noDocumentsUploaded: {
@@ -84,6 +96,9 @@ const contentStub = {
       },
       editClaimLineItemCurrencyGbp: {
         content: "stub-editClaimLineItemCurrencyGbp",
+      },
+      editClaimLineItemOtherCostsTotal: {
+        content: "stub-editClaimLineItemOtherCostsTotal",
       },
     },
   },
@@ -183,6 +198,36 @@ describe("editClaimLineItems", () => {
       expect(queryByText(additionalInformationHeading)).not.toBeInTheDocument();
       expect(queryByText(additionalInfo)).not.toBeInTheDocument();
       expect(queryByText(additionalInformationHint)).not.toBeInTheDocument();
+    });
+
+    describe("with sbri content", () => {
+      test.each`
+        name                                 | competitionType
+        ${"with 'SBRI' competition type"}    | ${"SBRI"}
+        ${"with 'SBRI IFS' competiton type"} | ${"SBRI IFS"}
+      `("$name", ({ competitionType }) => {
+        const stubSbriProps = {
+          ...stubProps,
+          project: {
+            ...stubProps.project,
+            data: {
+              ...stubProps.project.data,
+              competitionType,
+            } as Partial<ProjectDto>,
+          } as Pending<ProjectDto>,
+        };
+        const { queryByText } = setup(stubSbriProps);
+
+        const sbriAdditionalInformationHint = contentStub.editClaimLineItems.sbriAdditionalInformationHint.content;
+        const editClaimLineItemContactMo = contentStub.editClaimLineItems.messages.editClaimLineItemContactMo.content;
+        const editClaimLineItemUploadEvidence = contentStub.editClaimLineItems.messages.editClaimLineItemUploadEvidence.content;
+        const editClaimLineItemClaimDocuments = contentStub.editClaimLineItems.messages.editClaimLineItemClaimDocuments.content;
+
+        expect(queryByText(sbriAdditionalInformationHint)).toBeInTheDocument();
+        expect(queryByText(editClaimLineItemContactMo)).toBeInTheDocument();
+        expect(queryByText(editClaimLineItemUploadEvidence)).toBeInTheDocument();
+        expect(queryByText(editClaimLineItemClaimDocuments)).toBeInTheDocument();
+      });
     });
   });
 });

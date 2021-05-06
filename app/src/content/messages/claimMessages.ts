@@ -37,6 +37,16 @@ export class ClaimMessages extends ContentBase {
   public readonly interimClaimMessage = this.getContent("interim-claim-message", { markdown: true });
   public readonly editClaimLineItemGuidance = this.getContent("edit-claim-line-item-guidance");
   public readonly editClaimLineItemCurrencyGbp = this.getContent("edit-claim-line-item-convert-gbp");
+
+  public readonly sbriDocumentDetailGuidance = (costCategoryName: string) =>
+    this.getContent("sbri-document-detail-guidance", { costCategoryName });
+  public readonly sbriSupportingDocumentGuidance = this.getContent("sbri-supporting-document-guidance");
+  public readonly editClaimLineItemOtherCostsTotal = this.getContent("edit-claim-line-item-other-costs-total-costs");
+  public readonly editClaimLineItemVatRegistered = this.getContent("edit-claim-line-item-vat-registered");
+  public readonly editClaimLineItemContactMo = this.getContent("edit-claim-line-item-contact-mo");
+  public readonly editClaimLineItemUploadEvidence = this.getContent("edit-claim-line-item-upload-evidence");
+  public readonly editClaimLineItemClaimDocuments = this.getContent("edit-claim-line-item-claim-documents");
+
   public readonly editClaimLineItemDocumentGuidance = this.getContent("edit-claim-line-item-document-guidance");
   public readonly negativeClaimWarning = this.getContent("negative-claim-warning");
   public readonly claimSummaryWarning = this.getContent("claim-summary-warning");

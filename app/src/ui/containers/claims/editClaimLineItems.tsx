@@ -9,6 +9,8 @@ import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { range } from "@shared/range";
 import { projectCompetition } from "@ui/hooks";
+import { Content } from "@content/content";
+import { CostCategoryName } from "@framework/entities";
 
 export interface EditClaimDetailsParams {
   projectId: string;
@@ -66,29 +68,70 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     const back = this.props.routes.prepareClaim.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
 
-    const { isKTP } = projectCompetition(project.competitionType);
+    const { isKTP, isCombinationOfSBRI } = projectCompetition(project.competitionType);
     const editClaimLineItemGuidance = <ACC.Content value={(x) => x.claimDocuments.messages.editClaimLineItemGuidance} />;
+
+    const editClaimLineItemVat = (
+      <>
+        <ACC.Renderers.SimpleString qa="vat-registered">
+          <ACC.Content value={x => x.claimDocuments.messages.editClaimLineItemVatRegistered} />
+        </ACC.Renderers.SimpleString>
+        <ACC.Renderers.SimpleString qa="vat-contact-mo">
+          <ACC.Content value={x => x.claimDocuments.messages.editClaimLineItemContactMo} />
+        </ACC.Renderers.SimpleString>
+      </>
+    );
+
+    const isOtherCosts = costCategory.name === CostCategoryName.Other_Costs;
+    const isVAT = costCategory.name === CostCategoryName.VAT;
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={back}><ACC.Content value={x => x.editClaimLineItems.backLink}/></ACC.BackLink>}
+        backLink={
+          <ACC.BackLink route={back}>
+            <ACC.Content value={x => x.editClaimLineItems.backLink} />
+          </ACC.BackLink>
+        }
         error={editor.error}
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title {...project} />}
       >
         {this.renderNegativeClaimWarning(editor.data)}
 
-        <ACC.Renderers.SimpleString qa="guidance-message">
-          {!isKTP && editClaimLineItemGuidance}
-        </ACC.Renderers.SimpleString>
-        <ACC.Renderers.SimpleString qa="guidance-currency-message">
-          <ACC.Content value={(x) => x.claimDocuments.messages.editClaimLineItemCurrencyGbp} />
-        </ACC.Renderers.SimpleString>
+        <>
+          {isCombinationOfSBRI ? (
+            <>
+              {isOtherCosts && (
+                <>
+                  <ACC.Renderers.SimpleString qa="other-costs-guidance-message">
+                    <ACC.Content value={x => x.claimDocuments.messages.editClaimLineItemOtherCostsTotal} />
+                  </ACC.Renderers.SimpleString>
+                  {editClaimLineItemVat}
+                </>
+              )}
+              {isVAT && editClaimLineItemVat}
+            </>
+          ) : (
+            !isKTP && (
+              <ACC.Renderers.SimpleString qa="guidance-message">{editClaimLineItemGuidance}</ACC.Renderers.SimpleString>
+            )
+          )}
+          <ACC.Renderers.SimpleString qa="guidance-currency-message">
+            <ACC.Content value={x => x.claimDocuments.messages.editClaimLineItemCurrencyGbp} />
+          </ACC.Renderers.SimpleString>
+        </>
 
         <ACC.Section>
           {costCategory.hintText && <ACC.TextHint>{costCategory.hintText}</ACC.TextHint>}
           {costCategory.isCalculated
-            ? this.renderCalculated(costCategory, claimDetails, forecastDetail, documents, editor, project.competitionType)
+            ? this.renderCalculated(
+                costCategory,
+                claimDetails,
+                forecastDetail,
+                documents,
+                editor,
+                project.competitionType,
+              )
             : this.renderTable(editor, forecastDetail, documents, project.competitionType)}
         </ACC.Section>
       </ACC.Page>
@@ -170,13 +213,13 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
   }
 
   private getCompetitionRenderCalculatedDocumentSection(competitionType: string, documents: DocumentSummaryDto[], editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
-    const { isKTP } = projectCompetition(competitionType);
+    const { isKTP, isCombinationOfSBRI } = projectCompetition(competitionType);
 
     const LineItemForm = ACC.TypedForm<ClaimDetailsDto>();
 
     return !isKTP && (
       <>
-        <LineItemForm.Fieldset>{this.renderDocuments(documents)}</LineItemForm.Fieldset>
+        <LineItemForm.Fieldset>{this.renderDocuments(documents, isCombinationOfSBRI)}</LineItemForm.Fieldset>
         <LineItemForm.Fieldset>
           <LineItemForm.Button name="upload" onClick={() => this.props.onUpdate(true, editor.data, true)}>
             <ACC.Content value={x => x.editClaimLineItems.uploadAndRemoveDocumentsButton} />
@@ -189,7 +232,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         >
           <LineItemForm.MultilineString
             label={<ACC.Content value={x => x.editClaimLineItems.additionalInfo} />}
-            hintContent={x => x.editClaimLineItems.additionalInformationHint}
+            hintContent={this.getHintContent(isKTP, isCombinationOfSBRI)}
             labelHidden
             name="comments"
             value={() => editor.data.comments}
@@ -207,47 +250,71 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>,
   ) {
     const LineItemForm = ACC.TypedForm<ClaimDetailsDto>();
-    const { isKTP } = projectCompetition(competitionType);
+    const { isKTP, isCombinationOfSBRI } = projectCompetition(competitionType);
 
-    return (
-      !isKTP && (
-        <>
-          <LineItemForm.Fieldset>{this.renderDocuments(documents)}</LineItemForm.Fieldset>
-          <LineItemForm.Fieldset>
-            <LineItemForm.Button name="upload" onClick={() => this.props.onUpdate(true, editor.data, true)}>
-              <ACC.Content value={x => x.editClaimLineItems.uploadAndRemoveDocumentsButton} />
-            </LineItemForm.Button>
-          </LineItemForm.Fieldset>
-          <LineItemForm.Fieldset
-            headingContent={x => x.editClaimLineItems.additionalInformationHeading}
-            qa="additional-info-form"
-            headingQa="additional-info-heading"
-          >
-            <LineItemForm.MultilineString
-              label={<ACC.Content value={x => x.editClaimLineItems.additionalInfo} />}
-              hintContent={x => x.editClaimLineItems.additionalInformationHint}
-              labelHidden
-              name="comments"
-              value={() => editor.data.comments}
-              update={(data, v) => (editor.data.comments = v)}
-              qa="info-text-area"
-            />
-          </LineItemForm.Fieldset>
-        </>
-      )
+    return !isKTP && (
+      <>
+        <LineItemForm.Fieldset>{this.renderDocuments(documents, isCombinationOfSBRI)}</LineItemForm.Fieldset>
+        <LineItemForm.Fieldset>
+          <LineItemForm.Button name="upload" onClick={() => this.props.onUpdate(true, editor.data, true)}>
+            <ACC.Content value={x => x.editClaimLineItems.uploadAndRemoveDocumentsButton} />
+          </LineItemForm.Button>
+        </LineItemForm.Fieldset>
+        <LineItemForm.Fieldset
+          headingContent={x => x.editClaimLineItems.additionalInformationHeading}
+          qa="additional-info-form"
+          headingQa="additional-info-heading"
+        >
+          <LineItemForm.MultilineString
+            label={<ACC.Content value={x => x.editClaimLineItems.additionalInfo} />}
+            hintContent={this.getHintContent(isKTP, isCombinationOfSBRI)}
+            labelHidden
+            name="comments"
+            value={() => editor.data.comments}
+            update={(data, v) => (editor.data.comments = v)}
+            qa="info-text-area"
+          />
+        </LineItemForm.Fieldset>
+      </>
     );
   }
 
-  private renderDocuments(documents: DocumentSummaryDto[]) {
+  private getHintContent(isKTP: boolean, isCombinationOfSBRI: boolean) {
+    if (!isKTP && !isCombinationOfSBRI) {
+      return (x: Content) => x.editClaimLineItems.additionalInformationHint;
+    } else if (isCombinationOfSBRI) {
+      return (x: Content) => x.editClaimLineItems.sbriAdditionalInformationHint;
+    } else {
+      return undefined;
+    }
+  }
+
+  private renderDocuments(documents: DocumentSummaryDto[], isCombinationOfSBRI: boolean) {
     return (
-      <ACC.Section
-        titleContent={x => x.editClaimLineItems.supportingDocumentsHeader}
-        subtitle={!!documents.length && <ACC.Content value={x => x.editClaimLineItems.documentMessages.newWindow} />}
-        qa="supporting-documents-section"
-      >
-        <ACC.Renderers.SimpleString>
-          <ACC.Content value={x => x.editClaimLineItems.messages.editClaimLineItemDocumentGuidance} />
-        </ACC.Renderers.SimpleString>
+      <ACC.Section titleContent={x => x.editClaimLineItems.supportingDocumentsHeader} qa="supporting-documents-section">
+        {isCombinationOfSBRI ? (
+          <>
+            <ACC.Renderers.SimpleString>
+              <ACC.Content value={x => x.editClaimLineItems.messages.editClaimLineItemUploadEvidence} />
+            </ACC.Renderers.SimpleString>
+            <ACC.Renderers.SimpleString>
+              <ACC.Content value={x => x.editClaimLineItems.messages.editClaimLineItemClaimDocuments} />
+            </ACC.Renderers.SimpleString>
+            <ACC.Renderers.SimpleString>
+              <ACC.Content value={x => x.editClaimLineItems.messages.editClaimLineItemContactMo} />
+            </ACC.Renderers.SimpleString>
+          </>
+        ) : (
+          <ACC.Renderers.SimpleString>
+            <ACC.Content value={x => x.editClaimLineItems.messages.editClaimLineItemDocumentGuidance} />
+          </ACC.Renderers.SimpleString>
+        )}
+
+        {!!documents.length && (
+          <ACC.Renderers.SimpleString>
+            <ACC.Content value={x => x.editClaimLineItems.documentMessages.newWindow} />
+          </ACC.Renderers.SimpleString>
+        )}
 
         <ACC.DocumentView documents={documents} />
       </ACC.Section>

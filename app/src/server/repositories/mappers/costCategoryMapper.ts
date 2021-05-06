@@ -1,24 +1,32 @@
-import { CostCategory, CostCategoryType } from "@framework/entities";
+import { CostCategory, CostCategoryName, CostCategoryType } from "@framework/entities";
 import { ISalesforceCostCategory } from "../costCategoriesRepository";
 import { SalesforceBaseMapper } from "./saleforceMapperBase";
 
 export class SalesforceCostCategoryMapper extends SalesforceBaseMapper<ISalesforceCostCategory, CostCategory> {
-
   private typeMapper(costCategory: ISalesforceCostCategory): CostCategoryType {
-    if (costCategory.Acc_OrganisationType__c === "Academic") {
+    if (costCategory.Acc_OrganisationType__c === CostCategoryName.Academic) {
       return CostCategoryType.Academic;
     }
     // @TODO: get from SF -- this is nasty but no solution provided as yet from salesforce
-    switch(costCategory.Acc_CostCategoryName__c) {
-      case "Other public sector funding": return CostCategoryType.Other_Funding;
-      case "Labour": return CostCategoryType.Labour;
-      case "Overheads": return CostCategoryType.Overheads;
-      case "Materials": return CostCategoryType.Materials;
-      case "Capital usage": return CostCategoryType.Capital_Usage;
-      case "Subcontracting": return CostCategoryType.Subcontracting;
-      case "Travel and subsistence": return CostCategoryType.Travel_And_Subsistence;
-      case "Other costs": return CostCategoryType.Other_Costs;
-      default: return CostCategoryType.Unknown;
+    switch (costCategory.Acc_CostCategoryName__c) {
+      case CostCategoryName.Other_Public_Sector_Funding:
+        return CostCategoryType.Other_Funding;
+      case CostCategoryName.Labour:
+        return CostCategoryType.Labour;
+      case CostCategoryName.Overheads:
+        return CostCategoryType.Overheads;
+      case CostCategoryName.Materials:
+        return CostCategoryType.Materials;
+      case CostCategoryName.Capital_Usage:
+        return CostCategoryType.Capital_Usage;
+      case CostCategoryName.Subcontracting:
+        return CostCategoryType.Subcontracting;
+      case CostCategoryName.Travel_And_Subsistence:
+        return CostCategoryType.Travel_And_Subsistence;
+      case CostCategoryName.Other_Costs:
+        return CostCategoryType.Other_Costs;
+      default:
+        return CostCategoryType.Unknown;
     }
   }
 
@@ -34,7 +42,7 @@ export class SalesforceCostCategoryMapper extends SalesforceBaseMapper<ISalesfor
       hasRelated: false,
       description: x.Acc_CostCategoryDescription__c,
       hintText: x.Acc_HintText__c,
-      displayOrder: x.Acc_DisplayOrder__c
+      displayOrder: x.Acc_DisplayOrder__c,
     };
   }
 }

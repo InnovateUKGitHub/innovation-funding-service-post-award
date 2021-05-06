@@ -38,22 +38,46 @@
     }
   },
   "SBRI": {
+    "claims-messages": {
+      "edit-claim-line-item-other-costs-total-costs": "Enter your total costs on this page, (excluding VAT from your invoice if you are VAT registered).",
+      "edit-claim-line-item-vat-registered": "If you are VAT registered you must enter all VAT from your invoice on the 'VAT' cost category page.",
+      "edit-claim-line-item-contact-mo": "Contact your monitoring officer for more information about the level of detail you need to provide.",
+      "edit-claim-line-item-upload-evidence": "Upload evidence of costs claimed against this cost category here.",
+      "edit-claim-line-item-claim-documents": "Do not upload supporting documents for the whole claim here. You can upload them in the 'Claim documents' section later.",
+      "sbri-document-detail-guidance": "Only upload evidence of costs claimed against this cost category '{{costCategoryName}}' on this page.",
+      "sbri-supporting-document-guidance": "Do not upload supporting documents for the whole claim here. You can upload them in the 'Claim documents' section later."
+    },
     "pages": {
       "claim-review": {
         "claim-review-declaration": "By pressing submit, I have satisfied myself that, based on limited sampling of financial information, and on such evidence as presented at project review meetings and in reports, the costs claimed appear commensurate with the progress reported by the project, and evidence presented is attributable to project activity."
       },
       "all-claims-dashboard": {
         "sbri-guidance-message": "You must upload an invoice with every claim. VAT invoices are required from partners registered for value-added tax (VAT)."
+      },
+      "edit-claim-line-items": {
+        "sbri-hint-additional-information": "Explain any difference between the forecast (payment schedule) costs and the total costs, including the actions you are taking as a result of the difference. For example, updating the project plan or financial forecast."
       }
     }
   },
   "SBRI IFS": {
+    "claims-messages": {
+      "edit-claim-line-item-other-costs-total-costs": "Enter your total costs on this page, (excluding VAT from your invoice if you are VAT registered).",
+      "edit-claim-line-item-vat-registered": "If you are VAT registered you must enter all VAT from your invoice on the 'VAT' cost category page.",
+      "edit-claim-line-item-contact-mo": "Contact your monitoring officer for more information about the level of detail you need to provide.",
+      "edit-claim-line-item-upload-evidence": "Upload evidence of costs claimed against this cost category here.",
+      "edit-claim-line-item-claim-documents": "Do not upload supporting documents for the whole claim here. You can upload them in the 'Claim documents' section later.",
+      "sbri-document-detail-guidance": "Only upload evidence of costs claimed against this cost category '{{costCategoryName}}' on this page.",
+      "sbri-supporting-document-guidance": "Do not upload supporting documents for the whole claim here. You can upload them in the 'Claim documents' section later."
+    },
     "pages": {
       "claim-review": {
         "claim-review-declaration": "By pressing submit, I have satisfied myself that, based on limited sampling of financial information, and on such evidence as presented at project review meetings and in reports, the costs claimed appear commensurate with the progress reported by the project, and evidence presented is attributable to project activity."
       },
       "all-claims-dashboard": {
         "sbri-guidance-message": "You must upload an invoice with every claim. VAT invoices are required from partners registered for value-added tax (VAT)."
+      },
+      "edit-claim-line-items": {
+        "sbri-hint-additional-information": "Explain any difference between the forecast (payment schedule) costs and the total costs, including the actions you are taking as a result of the difference. For example, updating the project plan or financial forecast."
       }
     }
   }

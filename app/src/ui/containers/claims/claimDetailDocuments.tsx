@@ -3,11 +3,11 @@ import { Pending } from "@shared/pending";
 import { DocumentDescription, ProjectDto, ProjectRole } from "@framework/types";
 import { IEditorStore } from "@ui/redux/reducers";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
-import { StoresConsumer, useStores } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { useContent } from "@ui/hooks";
+import { projectCompetition, useContent } from "@ui/hooks";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 export interface ClaimDetailDocumentsPageParams {
@@ -74,6 +74,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
     });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
+    const { isCombinationOfSBRI } = projectCompetition(project.competitionType);
 
     return (
       <ACC.Page
@@ -82,7 +83,22 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title {...project} />}
       >
-        <ACC.Renderers.SimpleString qa="guidanceText"><ACC.Content value={x => x.claimDetailDocuments.messages.documentDetailGuidance}/></ACC.Renderers.SimpleString>
+
+        {isCombinationOfSBRI ? (
+          <>
+            <ACC.Renderers.SimpleString qa="sbriDocumentGuidance">
+              <ACC.Content value={x => x.claimDetailDocuments.messages.sbriDocumentDetailGuidance(costCategory.name)} />
+            </ACC.Renderers.SimpleString>
+            <ACC.Renderers.SimpleString qa="sbriSupportingDocumentGuidance">
+              <ACC.Content value={x => x.claimDetailDocuments.messages.sbriSupportingDocumentGuidance} />
+            </ACC.Renderers.SimpleString>
+          </>
+          ) : (
+          <ACC.Renderers.SimpleString qa="guidanceText">
+            <ACC.Content value={x => x.claimDetailDocuments.messages.documentDetailGuidance} />
+          </ACC.Renderers.SimpleString>
+        )}
+
         <ACC.Renderers.Messages messages={this.props.messages} />
         {this.renderDocuments(editor, documents)}
         <ACC.Section titleContent={x => x.claimDetailDocuments.documentMessages.uploadTitle}>

@@ -19,6 +19,7 @@ export class EditClaimLineItemsContent extends ContentPageBase {
   public readonly supportingDocumentsHeader = this.getContent("header-supporting-documents");
   public readonly uploadAndRemoveDocumentsButton = this.getContent("button-upload-and-remove-documents");
   public readonly additionalInformationHint = this.getContent("hint-additional-information");
+  public readonly sbriAdditionalInformationHint = this.getContent("sbri-hint-additional-information");
   public readonly removeButton = this.getContent("button-remove");
   public readonly noData = this.getContent("no-data");
   public readonly totalCosts = this.getContent("total-costs");

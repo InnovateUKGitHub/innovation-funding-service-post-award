@@ -24,3 +24,17 @@ export enum CostCategoryType {
   Travel_And_Subsistence = 60,
   Other_Costs = 70,
 }
+
+export enum CostCategoryName {
+  Other_Funding = "Other funding",
+  Academic = "Academic",
+  Labour = "Labour",
+  Overheads = "Overheads",
+  Materials = "Materials",
+  Capital_Usage = "Capital usage",
+  Subcontracting = "Subcontracting",
+  Travel_And_Subsistence = "Travel and subsistence",
+  Other_Costs = "Other costs",
+  Other_Public_Sector_Funding = "Other public sector funding",
+  VAT = "VAT",
+}
