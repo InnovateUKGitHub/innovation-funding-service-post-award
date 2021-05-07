@@ -8,6 +8,12 @@ const defaultCacheTimeout = 720;
 export interface IConfig {
   readonly build: string;
 
+  /**
+   * @returns 195
+   * @description The "Real limit" is 200 but there appears to be socket issues with SalesForce :(
+   */
+  readonly salesforceQueryLimit: number;
+
   readonly disableCsp: boolean;
 
   readonly timeouts: {
@@ -79,6 +85,8 @@ export interface IConfig {
 }
 
 const build = process.env.BUILD || `${Date.now()}`;
+
+const salesforceQueryLimit: Readonly<number> = 195;
 
 const timeouts = {
   costCategories: parseFloat(process.env.COST_CAT_TIMEOUT_MINUTES!) || defaultCacheTimeout,
@@ -195,6 +203,7 @@ const sil = {
 
 export const Configuration: IConfig = {
   build,
+  salesforceQueryLimit,
   disableCsp,
   cookieKey,
   timeouts,

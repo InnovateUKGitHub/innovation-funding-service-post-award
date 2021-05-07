@@ -12,13 +12,6 @@ export interface ISalesforceProfileDetails {
   Acc_ProjectPeriodEndDate__c: string;
 }
 
-export interface IProfileDetailsRepository {
-  getAllByPartner(partnerId: string): Promise<ISalesforceProfileDetails[]>;
-  getById(partnerId: string, periodId: number, costCategoryId: string): Promise<ISalesforceProfileDetails>;
-  getRequiredCategories(partnerId: string): Promise<ISalesforceProfileDetails[]>;
-  update(profileDetails: Updatable<ISalesforceProfileDetails>[]): Promise<boolean>;
-}
-
 /**
  * Forecast Details for partner per cost category per period
  *
@@ -26,8 +19,7 @@ export interface IProfileDetailsRepository {
  *
  * Stored in "Acc_Profile__c" table with record type of "Profile Detail"
  */
-export class ProfileDetailsRepository extends SalesforceRepositoryBase<ISalesforceProfileDetails> implements IProfileDetailsRepository {
-
+export class ProfileDetailsRepository extends SalesforceRepositoryBase<ISalesforceProfileDetails> {
   private readonly recordType: string = "Profile Detail";
   private readonly requiredCategoryType: string = "Total Cost Category";
 
@@ -44,19 +36,23 @@ export class ProfileDetailsRepository extends SalesforceRepositoryBase<ISalesfor
     "Acc_ProjectPeriodEndDate__c",
   ];
 
-  public async getAllByPartner(partnerId: string) {
+  public async getAllByPartner(partnerId: string): Promise<ISalesforceProfileDetails[]> {
     const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}'`;
     return super.where(filter);
   }
 
-  public async getById(partnerId: string, periodId: number, costCategoryId: string): Promise<ISalesforceProfileDetails> {
+  public async getById(
+    partnerId: string,
+    periodId: number,
+    costCategoryId: string,
+  ): Promise<ISalesforceProfileDetails> {
     const filter = `
       Acc_ProjectParticipant__c = '${partnerId}'
       AND RecordType.Name = '${this.recordType}'
       AND Acc_ProjectPeriodNumber__c >= ${periodId}
       AND Acc_CostCategory__c = '${costCategoryId}'
     `;
-    return super.where(filter).then((res) => res && res[0] || null);
+    return super.where(filter).then(res => (res && res[0]) || null);
   }
 
   public async getRequiredCategories(partnerId: string): Promise<ISalesforceProfileDetails[]> {
@@ -67,7 +63,12 @@ export class ProfileDetailsRepository extends SalesforceRepositoryBase<ISalesfor
     return super.where(filter);
   }
 
-  public async update(profileDetails: Updatable<ForecastDetailsDTO>[]) {
+  public async update(profileDetails: Updatable<ForecastDetailsDTO>[]): Promise<boolean> {
     return super.updateAll(profileDetails);
   }
 }
+
+export type IProfileDetailsRepository = Pick<
+  ProfileDetailsRepository,
+  "getAllByPartner" | "getById" | "getRequiredCategories" | "update"
+>;

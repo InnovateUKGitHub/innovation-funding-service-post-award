@@ -32,7 +32,8 @@
       "title": "There is a problem",
       "expiredMessage": "Your session has expired. You must reload the page before trying again.",
       "unsavedWarning": "Anything you have not already saved will be lost.",
-      "somethingGoneWrong": "Something has gone wrong at our end and we were unable to complete the action. Try submitting the page again."
+      "somethingGoneWrong": "Something has gone wrong at our end and we were unable to complete the action. Try submitting the page again.",
+      "updateAllFailure": "Something went wrong and we could not update your forecast. Please click ‘Save and return to project setup’ again."
     },
     "logs": {
       "noChangesMessage": "There are no changes.",

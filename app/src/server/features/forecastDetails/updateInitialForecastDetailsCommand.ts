@@ -1,21 +1,29 @@
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
-import { ISalesforceProfileDetails } from "@server/repositories";
+import { ISalesforcePartner, ISalesforceProfileDetails } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { GetAllForecastsGOLCostsQuery } from "@server/features/claims";
-import { Authorisation, ForecastDetailsDTO, IContext, PartnerDto, PartnerStatus, ProjectRole, SpendProfileStatus } from "@framework/types";
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
-import { GetByIdQuery } from "@server/features/partners";
-import { InitialForecastDetailsDtosValidator } from "@ui/validators/initialForecastDetailsDtosValidator";
 import { GetCostCategoriesForPartnerQuery } from "@server/features/claims/getCostCategoriesForPartnerQuery";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PartnerSpendProfileStatusMapper } from "@server/features/partners/mapToPartnerDto";
+import { GetByIdQuery } from "@server/features/partners";
+import { GetAllForecastsGOLCostsQuery } from "@server/features/claims";
+import {
+  Authorisation,
+  ForecastDetailsDTO,
+  IContext,
+  PartnerDto,
+  PartnerStatus,
+  ProjectRole,
+  SpendProfileStatus,
+} from "@framework/types";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { InitialForecastDetailsDtosValidator } from "@ui/validators/initialForecastDetailsDtosValidator";
 
 export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
     private readonly projectId: string,
     private readonly partnerId: string,
     private readonly forecasts: ForecastDetailsDTO[],
-    private readonly submit: boolean,
+    private readonly isSubmitting: boolean,
   ) {
     super();
   }
@@ -26,14 +34,21 @@ export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
 
   protected async Run(context: IContext) {
     const partner = await context.runQuery(new GetByIdQuery(this.partnerId));
-    const costCategories = await context.runQuery(new GetCostCategoriesForPartnerQuery(partner));
 
     if (partner.partnerStatus !== PartnerStatus.Pending) {
       throw new BadRequestError("Cannot update partner initial forecast");
     }
 
+    const costCategories = await context.runQuery(new GetCostCategoriesForPartnerQuery(partner));
     const golCosts = await context.runQuery(new GetAllForecastsGOLCostsQuery(this.partnerId));
-    const validation = new InitialForecastDetailsDtosValidator(this.forecasts, golCosts, costCategories, this.submit, true);
+
+    const validation = new InitialForecastDetailsDtosValidator(
+      this.forecasts,
+      golCosts,
+      costCategories,
+      this.isSubmitting,
+      true,
+    );
 
     if (!validation.isValid) {
       throw new ValidationError(validation);
@@ -43,8 +58,8 @@ export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
 
     const preparedForecasts = await this.ignoreCalculatedCostCategories(costCategories, this.forecasts);
 
-    await this.updateProfileDetails(context, preparedForecasts, existing, this.submit);
-    await this.updatePartner(context, partner, this.submit);
+    await this.updateProfileDetails(context, preparedForecasts, existing, this.isSubmitting);
+    await this.updatePartner(context, partner, this.isSubmitting);
 
     return true;
   }
@@ -57,35 +72,46 @@ export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
 
   private hasChanged(item: ForecastDetailsDTO, existing: ForecastDetailsDTO[]): boolean {
     const existingItem = existing.find(x => x.id === item.id);
+
+    // TODO: Check this logic
     return !existingItem || item.value !== existingItem.value;
   }
 
-  private async updatePartner(context: IContext, partnerDto: PartnerDto, submit: boolean) {
-    if (submit) {
-      partnerDto.spendProfileStatus = SpendProfileStatus.Complete;
-    } else {
-      partnerDto.spendProfileStatus = SpendProfileStatus.Incomplete;
-    }
-    // Calling repo directly here as it's the only place we can check that the spend profile transition is valid
-    await context.repositories.partners.update({
-      Id: partnerDto.id,
-      Acc_SpendProfileCompleted__c: new PartnerSpendProfileStatusMapper().mapToSalesforce(partnerDto.spendProfileStatus),
-    });
-  }
-
-  private async updateProfileDetails(context: IContext, forecasts: ForecastDetailsDTO[], existing: ForecastDetailsDTO[], submit: boolean) {
-    const updates = submit
+  private async updateProfileDetails(
+    context: IContext,
+    forecasts: ForecastDetailsDTO[],
+    existing: ForecastDetailsDTO[],
+    isSubmitting: boolean,
+  ): Promise<boolean> {
+    // TODO: Reduce iteration count in this Loop (consider for-loop/reduce)
+    const updates: Updatable<ISalesforceProfileDetails>[] = isSubmitting
       ? forecasts.map<Updatable<ISalesforceProfileDetails>>(x => ({
-        Id: x.id,
-        Acc_InitialForecastCost__c: x.value,
-        Acc_LatestForecastCost__c: x.value,
-      }))
-      : forecasts.filter(x => this.hasChanged(x, existing)).map<Updatable<ISalesforceProfileDetails>>(x => ({
-        Id: x.id,
-        Acc_InitialForecastCost__c: x.value
-      }));
+          Id: x.id,
+          Acc_InitialForecastCost__c: x.value,
+          Acc_LatestForecastCost__c: x.value,
+        }))
+      : forecasts
+          .filter(x => this.hasChanged(x, existing))
+          .map<Updatable<ISalesforceProfileDetails>>(x => ({
+            Id: x.id,
+            Acc_InitialForecastCost__c: x.value,
+          }));
+
+    if (!updates.length) return true;
 
     return context.repositories.profileDetails.update(updates);
   }
 
+  private async updatePartner(context: IContext, partnerDto: PartnerDto, isSubmitting: boolean): Promise<void> {
+    const updatedStatus = SpendProfileStatus[isSubmitting ? "Complete" : "Incomplete"];
+    const updatedSpendProfile = new PartnerSpendProfileStatusMapper().mapToSalesforce(updatedStatus);
+
+    const updatedPartner: Updatable<ISalesforcePartner> = {
+      Id: partnerDto.id,
+      Acc_SpendProfileCompleted__c: updatedSpendProfile,
+    };
+
+    // Note: Update the partner spend profile - This state is used as part of a workflow
+    await context.repositories.partners.update(updatedPartner);
+  }
 }

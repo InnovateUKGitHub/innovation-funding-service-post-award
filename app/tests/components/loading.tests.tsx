@@ -29,6 +29,7 @@ const stubContent = {
       expiredMessageContent: { content: "stub-expiredMessageContent" },
       unsavedWarningContent: { content: "stub-unsavedWarningContent" },
       somethingGoneWrongContent: { content: "stub-somethingGoneWrongContent" },
+      updateAllFailure: { content: "stub-updateAllFailure" },
     },
     loading: {
       message: { content: "stub-loading-message" },
