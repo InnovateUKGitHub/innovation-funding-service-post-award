@@ -2,7 +2,7 @@ import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { ForecastDetailsDTO, PartnerDto, ProjectRole, SpendProfileStatus } from "@framework/types";
 import { Pending } from "@shared/pending";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import { IForecastDetailsDtosValidator } from "@ui/validators";
 import { useContent } from "@ui/hooks";
@@ -109,48 +109,47 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
 }
 
 const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams & BaseProps) => {
+  const stores = useStores();
   const { getContent } = useContent();
-  const spendProfileUpdatedMessage = getContent(x => x.projectSetupSpendProfile.spendProfileUpdatedMessage);
+
+  const navigateToProjectSetup = () => {
+    const projectSetupParams = {
+      projectId: props.projectId,
+      partnerId: props.partnerId,
+    };
+
+    stores.navigation.navigateTo(props.routes.projectSetup.getLink(projectSetupParams));
+  };
 
   return (
-    <StoresConsumer>
-      {stores => (
-        <ProjectSetupSpendProfileComponent
-          data={Pending.combine({
-            project: stores.projects.getById(props.projectId),
-            partner: stores.partners.getById(props.partnerId),
-            forecastDetails: stores.forecastDetails.getAllInitialByPartner(props.partnerId),
-            golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
-            costCategories: stores.costCategories.getAllFiltered(props.partnerId),
-            // Initial forecast so happens before claims
-            claim: Pending.done(null),
-            claims: Pending.done([]),
-            claimDetails: Pending.done([]),
-          })}
-          editor={stores.forecastDetails.getInitialForecastEditor(props.partnerId)}
-          partnerEditor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
-          onChange={(saving, submit, dto) => {
-            stores.forecastDetails.updateInitialForcastEditor(
-              saving,
-              props.projectId,
-              props.partnerId,
-              dto,
-              submit,
-              spendProfileUpdatedMessage,
-              () => {
-                stores.navigation.navigateTo(
-                  props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }),
-                );
-              },
-            );
-          }}
-          onChangePartner={dto => {
-            stores.partners.updatePartner(false, props.partnerId, dto);
-          }}
-          {...props}
-        />
-      )}
-    </StoresConsumer>
+    <ProjectSetupSpendProfileComponent
+      {...props}
+      data={Pending.combine({
+        project: stores.projects.getById(props.projectId),
+        partner: stores.partners.getById(props.partnerId),
+        forecastDetails: stores.forecastDetails.getAllInitialByPartner(props.partnerId),
+        golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
+        costCategories: stores.costCategories.getAllFiltered(props.partnerId),
+        // Initial forecast so happens before claims
+        claim: Pending.done(null),
+        claims: Pending.done([]),
+        claimDetails: Pending.done([]),
+      })}
+      editor={stores.forecastDetails.getInitialForecastEditor(props.partnerId)}
+      partnerEditor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
+      onChange={(saving, submit, payload) => {
+        stores.forecastDetails.updateInitialForcastEditor(
+          saving,
+          props.projectId,
+          props.partnerId,
+          payload,
+          submit,
+          getContent(x => x.projectSetupSpendProfile.spendProfileUpdatedMessage),
+          navigateToProjectSetup,
+        );
+      }}
+      onChangePartner={dto => stores.partners.updatePartner(false, props.partnerId, dto)}
+    />
   );
 };
 

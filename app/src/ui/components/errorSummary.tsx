@@ -1,11 +1,12 @@
-import { ErrorCode } from "@framework/types/IAppError";
+import { ErrorCode, IAppError } from "@framework/types/IAppError";
 import { useContent } from "@ui/hooks";
 
 export interface ErrorSummaryProps {
-  code: ErrorCode;
+  code: IAppError["code"];
+  message?: IAppError["message"];
 }
 
-export function ErrorSummary({ code }: ErrorSummaryProps) {
+export function ErrorSummary({ code, message }: ErrorSummaryProps) {
   const { getContent } = useContent();
   const isUnauthenticated = code === ErrorCode.UNAUTHENTICATED_ERROR;
 
@@ -13,6 +14,14 @@ export function ErrorSummary({ code }: ErrorSummaryProps) {
   const expiredMessage = getContent(x => x.components.errorSummary.expiredMessageContent);
   const unsavedWarning = getContent(x => x.components.errorSummary.unsavedWarningContent);
   const somethingGoneWrong = getContent(x => x.components.errorSummary.somethingGoneWrongContent);
+
+  // Unique Errors
+  const authErrorMessages = {
+    SF_UPDATE_ALL_FAILURE: getContent(x => x.components.errorSummary.updateAllFailure),
+  };
+
+  const authWMessage = !isUnauthenticated && message && authErrorMessages[message as keyof typeof authErrorMessages];
+  const errorMessage = authWMessage || somethingGoneWrong;
 
   return (
     <div
@@ -34,7 +43,7 @@ export function ErrorSummary({ code }: ErrorSummaryProps) {
             <p data-qa="error-summary-unsaved-mssg">{unsavedWarning}</p>
           </>
         ) : (
-          <p data-qa="error-summary-general-mssg">{somethingGoneWrong}</p>
+          <p data-qa="error-summary-general-mssg">{errorMessage}</p>
         )}
       </div>
     </div>

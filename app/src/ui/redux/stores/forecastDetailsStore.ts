@@ -20,21 +20,28 @@ export class ForecastDetailsStore extends StoreBase {
     private readonly golCostsStore: ForecastGolCostsStore,
     private readonly partnersStore: PartnersStore,
     private readonly costCategoriesStore: CostCategoriesStore,
-    getState: () => RootState, queue: (action: RootActionsOrThunk) => void
+    getState: () => RootState,
+    queue: (action: RootActionsOrThunk) => void,
   ) {
     super(getState, queue);
   }
 
   public get(partnerId: string, periodId: number, costCategoryId: string) {
-    return this.getData("forecastDetail", storeKeys.getForecastDetailKey(partnerId, periodId, costCategoryId), p => ApiClient.forecastDetails.get({partnerId, periodId, costCategoryId, ...p}));
+    return this.getData("forecastDetail", storeKeys.getForecastDetailKey(partnerId, periodId, costCategoryId), p =>
+      ApiClient.forecastDetails.get({ partnerId, periodId, costCategoryId, ...p }),
+    );
   }
 
   public getAllByPartner(partnerId: string) {
-    return this.getData("forecastDetails", storeKeys.getPartnerKey(partnerId), p => ApiClient.forecastDetails.getAllByPartnerId({ partnerId, ...p }));
+    return this.getData("forecastDetails", storeKeys.getPartnerKey(partnerId), p =>
+      ApiClient.forecastDetails.getAllByPartnerId({ partnerId, ...p }),
+    );
   }
 
   public getAllInitialByPartner(partnerId: string) {
-    return this.getData("initialForecastDetails", storeKeys.getPartnerKey(partnerId), p => ApiClient.initialForecastDetails.getAllByPartnerId({ partnerId, ...p }));
+    return this.getData("initialForecastDetails", storeKeys.getPartnerKey(partnerId), p =>
+      ApiClient.initialForecastDetails.getAllByPartnerId({ partnerId, ...p }),
+    );
   }
 
   private getValidator(partnerId: string, dto: ForecastDetailsDTO[], showValidationErrors: boolean) {
@@ -42,17 +49,28 @@ export class ForecastDetailsStore extends StoreBase {
       claims: this.claimsStore.getAllClaimsForPartner(partnerId),
       claimDetails: this.claimDetailsStore.getAllByPartner(partnerId),
       golCosts: this.golCostsStore.getAllByPartner(partnerId),
-      partner: this.partnersStore.getById(partnerId)
+      partner: this.partnersStore.getById(partnerId),
     });
-    return combined.then(x => new ForecastDetailsDtosValidator(dto, x.claims, x.claimDetails, x.golCosts, x.partner, showValidationErrors));
+
+    return combined.then(
+      x => new ForecastDetailsDtosValidator(dto, x.claims, x.claimDetails, x.golCosts, x.partner, showValidationErrors),
+    );
   }
 
-  private getInitialValidator(partnerId: string, dto: ForecastDetailsDTO[], submit: boolean, showValidationErrors: boolean) {
+  private getInitialValidator(
+    partnerId: string,
+    dto: ForecastDetailsDTO[],
+    submit: boolean,
+    showValidationErrors: boolean,
+  ) {
     const combined = Pending.combine({
       costCategories: this.costCategoriesStore.getAllForPartner(partnerId),
       colCosts: this.golCostsStore.getAllByPartner(partnerId),
     });
-    return combined.then(x => new InitialForecastDetailsDtosValidator(dto, x.colCosts, x.costCategories, submit, showValidationErrors));
+
+    return combined.then(
+      x => new InitialForecastDetailsDtosValidator(dto, x.colCosts, x.costCategories, submit, showValidationErrors),
+    );
   }
 
   public getForecastEditor(partnerId: string, init?: (data: ForecastDetailsDTO[]) => void) {
@@ -61,7 +79,7 @@ export class ForecastDetailsStore extends StoreBase {
       storeKeys.getPartnerKey(partnerId),
       () => this.getAllByPartner(partnerId),
       init,
-      (dto) => this.getValidator(partnerId, dto, false)
+      dto => this.getValidator(partnerId, dto, false),
     );
   }
 
@@ -71,18 +89,26 @@ export class ForecastDetailsStore extends StoreBase {
       storeKeys.getPartnerKey(partnerId),
       () => this.getAllInitialByPartner(partnerId),
       init,
-      (dto) => this.getInitialValidator(partnerId, dto, false, false)
+      dto => this.getInitialValidator(partnerId, dto, false, false),
     );
   }
 
-  public updateForcastEditor(saving: boolean, projectId: string, partnerId: string, dto: ForecastDetailsDTO[], submitClaim: boolean, message?: string, onComplete?: () => void) {
+  public updateForcastEditor(
+    saving: boolean,
+    projectId: string,
+    partnerId: string,
+    dtos: ForecastDetailsDTO[],
+    submitClaim: boolean,
+    message?: string,
+    onComplete?: () => void,
+  ) {
     super.updateEditor(
       saving,
       "forecastDetails",
       storeKeys.getPartnerKey(partnerId),
-      dto,
-      (show) => this.getValidator(partnerId, dto, show),
-      (p) => ApiClient.forecastDetails.update({ projectId, partnerId, submit: submitClaim, forecasts: dto, ...p }),
+      dtos,
+      show => this.getValidator(partnerId, dtos, show),
+      p => ApiClient.forecastDetails.update({ ...p, projectId, partnerId, submit: submitClaim, forecasts: dtos }),
       () => {
         if (message) {
           this.queue(messageSuccess(message));
@@ -90,18 +116,26 @@ export class ForecastDetailsStore extends StoreBase {
         if (onComplete) {
           onComplete();
         }
-      }
+      },
     );
   }
 
-  public updateInitialForcastEditor(saving: boolean, projectId: string, partnerId: string, dto: ForecastDetailsDTO[], submit: boolean, message?: string, onComplete?: () => void) {
+  public updateInitialForcastEditor(
+    saving: boolean,
+    projectId: string,
+    partnerId: string,
+    payload: ForecastDetailsDTO[],
+    submit: boolean,
+    message?: string,
+    onComplete?: () => void,
+  ) {
     super.updateEditor(
       saving,
       "initialForecastDetails",
       storeKeys.getPartnerKey(partnerId),
-      dto,
-      (show) => this.getInitialValidator(partnerId, dto, submit, show),
-      (p) => ApiClient.initialForecastDetails.update({ projectId, partnerId, submit, forecasts: dto, ...p }),
+      payload,
+      show => this.getInitialValidator(partnerId, payload, submit, show),
+      p => ApiClient.initialForecastDetails.update({ ...p, projectId, partnerId, submit, forecasts: payload }),
       () => {
         if (message) {
           this.queue(messageSuccess(message));
@@ -109,7 +143,7 @@ export class ForecastDetailsStore extends StoreBase {
         if (onComplete) {
           onComplete();
         }
-      }
+      },
     );
   }
 }

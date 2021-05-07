@@ -4,6 +4,8 @@ import { LogLevel } from "@framework/types/logLevel";
 export class TestConfig implements IConfig {
   public build = `test${Date.now()}`;
 
+  public salesforceQueryLimit = 195;
+
   public disableCsp = false;
 
   public timeouts = {

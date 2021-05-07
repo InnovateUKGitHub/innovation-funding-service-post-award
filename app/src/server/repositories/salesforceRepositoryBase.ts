@@ -1,15 +1,25 @@
 import { Stream } from "stream";
 import { Connection, DescribeSObjectResult, Field, Query, RecordResult } from "jsforce";
+
 import * as Errors from "@server/repositories/errors";
-import { BadRequestError, ILogger } from "@server/features/common";
+import { ISalesforceMapper } from "@server/repositories/mappers/saleforceMapperBase";
+import { BadRequestError, Configuration, ILogger } from "@server/features/common";
 import { IPicklistEntry } from "@framework/types";
-import { ISalesforceMapper } from "./mappers/saleforceMapperBase";
+import { createBatch } from "@shared/create-batch";
 
 export type Updatable<T> = Partial<T> & {
   Id: string;
 };
 
 export type Insertable<T> = Pick<T, Exclude<keyof T, "Id">>;
+
+// Note: The interface states a string[] but we actually get an Array<object> back
+// https://github.com/DefinitelyTyped/DefinitelyTyped/blob/f7ec78508c6797e42f87a4390735bc2c650a1bfd/types/jsforce/record-result.d.ts
+interface UpdatedErrorResult {
+  statusCode: string;
+  message: string;
+  fields: any[];
+}
 
 /**
  * Base class for all salesforce repositories
@@ -19,6 +29,11 @@ export abstract class RepositoryBase {
     protected readonly getSalesforceConnection: () => Promise<Connection>,
     protected readonly logger: ILogger,
   ) {}
+
+  protected readonly payloadErrors = {
+    UNABLE_TO_LOCK_ROW: "SF_UPDATE_ALL_FAILURE",
+    FALLBACK_QUERY_ERROR: "FALLBACK_QUERY_ERROR",
+  };
 
   protected constructError(e: any) {
     this.logger.error("Salesforce Error: ", e.errorCode, e.message);
@@ -229,27 +244,30 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
       });
   }
 
-  protected async updateAll(updates: Updatable<TSalesforce>[]): Promise<boolean> {
-    if (!updates.length) {
-      return true;
-    }
+  protected async updateAll(payload: Updatable<TSalesforce>[]): Promise<boolean> {
+    if (!payload.length) return true;
 
-    const conn = await this.getSalesforceConnection();
-    return conn
-      .sobject<TSalesforce>(this.salesforceObjectName)
-      .update(updates)
-      .then(results => {
-        if (results.every(x => x.success)) {
-          return true;
-        }
-        throw new Errors.SalesforceDataChangeError(
-          "Failed to update salesforce",
-          this.getDataChangeErrorMessages(results),
-        );
-      })
-      .catch(e => {
-        throw this.constructError(e);
-      });
+    const sfConnection = await this.getSalesforceConnection();
+
+    return this.batchRequest<Updatable<TSalesforce>[]>(payload, batch =>
+      sfConnection
+        .sobject<TSalesforce>(this.salesforceObjectName)
+        .update(batch)
+        .then(results => {
+          return results.reduce<boolean>((_, result) => {
+            if (!result.success && !!result.errors.length) {
+              const errorMessage = this.getErrorFromPayload(result.errors);
+
+              throw new Errors.SalesforceDataChangeError(errorMessage, this.getDataChangeErrorMessages(results));
+            }
+
+            return true;
+          }, false);
+        })
+        .catch(e => {
+          throw this.constructError(e);
+        }),
+    );
   }
 
   protected async deleteAll(ids: string[]): Promise<void> {
@@ -298,6 +316,49 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   private map(result: Partial<{}>[]): TEntity[] {
     const salesforce = result as TSalesforce[];
     return salesforce.map(x => this.mapper.map(x));
+  }
+
+  /**
+   * @description Provide an escape hatch from the default error message, so we can show unique error messages
+   */
+  private getErrorFromPayload(errors: (UpdatedErrorResult | string)[]) {
+    // Note: Iterate over errors and check for sfPayloadErrors keys
+    const uniqueError = errors.find(err =>
+      Object.keys(this.payloadErrors).find(errorKey => errorKey === this.getPayloadErrorStatusCode(err)),
+    );
+
+    if (!uniqueError) return this.payloadErrors.FALLBACK_QUERY_ERROR;
+
+    const payloadErrorKey = this.getPayloadErrorStatusCode(uniqueError);
+
+    throw Error(payloadErrorKey);
+  }
+
+  /**
+   * @description It is unclear what payload format we are getting from Salesforce
+   */
+  private getPayloadErrorStatusCode(error: UpdatedErrorResult | string): string {
+    return typeof error === "string" ? error : error.statusCode;
+  }
+
+  /**
+   * @description Receive a payload, split into batches. Then invoke the param on each batch.
+   *
+   * A batch is determined from a config value. This config has been set to the max payload size SF can handle on each request, thus removing SF query errors.
+   *
+   */
+  private batchRequest<T extends any[]>(payload: T, request: (batchPayload: T) => Promise<boolean>): Promise<boolean> {
+    const generatedBatches = createBatch<T>(payload, Configuration.salesforceQueryLimit);
+    const combinedRequests = Promise.all(generatedBatches.map(request));
+
+    // eslint-disable-next-line sonarjs/prefer-immediate-return
+    const isSuccessfulQuery = combinedRequests
+      .then(x => x.every(Boolean))
+      .catch(e => {
+        throw e;
+      });
+
+    return isSuccessfulQuery;
   }
 }
 

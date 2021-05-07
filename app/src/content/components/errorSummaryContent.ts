@@ -10,4 +10,7 @@ export class ErrorSummaryContent extends ContentPageBase {
   public readonly expiredMessageContent = this.getContent("components.errorSummary.expiredMessage");
   public readonly unsavedWarningContent = this.getContent("components.errorSummary.unsavedWarning");
   public readonly somethingGoneWrongContent = this.getContent("components.errorSummary.somethingGoneWrong");
+
+  // Unique Errors
+  public readonly updateAllFailure = this.getContent("components.errorSummary.updateAllFailure");
 }

@@ -68,9 +68,8 @@ describe("<Page />", () => {
         errorTitle: { content: "stub-errorTitle" },
         expiredMessageContent: { content: "stub-expiredMessageContent" },
         unsavedWarningContent: { content: "stub-unsavedWarningContent" },
-        somethingGoneWrongContent: {
-          content: "stub-somethingGoneWrongContent",
-        },
+        somethingGoneWrongContent: { content: "stub-somethingGoneWrongContent" },
+        updateAllFailure: { content: "stub-updateAllFailure" },
       },
       onHoldContent: {
         projectOnHoldMessage: { content: "stub-projectOnHoldMessage" },
