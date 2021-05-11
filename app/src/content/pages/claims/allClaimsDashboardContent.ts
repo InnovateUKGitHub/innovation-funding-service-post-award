@@ -9,4 +9,5 @@ export class AllClaimsDashboardContent extends ContentPageBase {
   }
   public readonly messages = new ClaimMessages(this, this.competitionType);
   public readonly labels = new ClaimsLabels(this, this.competitionType);
+  public readonly sbriGuidanceMessage = this.getContent("sbri-guidance-message");
 }

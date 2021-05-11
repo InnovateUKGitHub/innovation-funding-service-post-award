@@ -6,19 +6,20 @@ import { DateTime } from "luxon";
 import { StoresConsumer } from "@ui/redux";
 import { getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
 import { getPartnerName } from "@ui/components";
+import { projectCompetition } from "@ui/hooks";
 
 export interface AllClaimsDashboardParams {
   projectId: string;
 }
 
-interface Data {
+interface AllClaimsDashboardData {
   projectDetails: Pending<ProjectDto>;
   partners: Pending<PartnerDto[]>;
   currentClaims: Pending<ClaimDto[]>;
   previousClaims: Pending<ClaimDto[]>;
 }
 
-class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
+class AllClaimsDashboardComponent extends ContainerBase<AllClaimsDashboardParams, AllClaimsDashboardData, {}> {
 
   render() {
     const combined = Pending.combine({
@@ -32,13 +33,15 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
   }
 
   renderContents(projectDetails: ProjectDto, partners: PartnerDto[], currentClaims: ClaimDto[], previousClaims: ClaimDto[]) {
+    const { isCombinationOfSBRI } = projectCompetition(projectDetails.competitionType);
+
     return (
       <Acc.Page
         pageTitle={<Acc.Projects.Title {...projectDetails} />}
         backLink={<Acc.Projects.ProjectBackLink project={projectDetails} routes={this.props.routes} />}
         project={projectDetails}
       >
-        {this.renderGuidanceMessage(projectDetails)}
+        {this.renderGuidanceMessage(projectDetails, isCombinationOfSBRI)}
         <Acc.Renderers.Messages messages={this.props.messages} />
         <Acc.Section qa="current-claims-section" titleContent={x => x.allClaimsDashboard.labels.openSectionTitle}>
           {this.renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)}
@@ -50,13 +53,21 @@ class Component extends ContainerBase<AllClaimsDashboardParams, Data, {}> {
     );
   }
 
-  private renderGuidanceMessage(projectDetails: ProjectDto) {
+  private renderGuidanceMessage(projectDetails: ProjectDto, isCombinationOfSBRI: boolean) {
     const isFC = projectDetails.roles & ProjectRole.FinancialContact;
-    if (isFC) {
-      return <Acc.ValidationMessage qa="guidance-message" messageType="info" message={x => x.allClaimsDashboard.messages.guidanceMessage}/>;
-    }
+    if (!isFC) return null;
 
-    return null;
+    return isCombinationOfSBRI ? (
+      <Acc.Renderers.SimpleString qa="theFinalClaimApprovedNotificationMessage">
+        <Acc.Content value={x => x.allClaimsDashboard.sbriGuidanceMessage} />
+      </Acc.Renderers.SimpleString>
+    ) : (
+      <Acc.ValidationMessage
+        qa="guidance-message"
+        messageType="info"
+        message={x => x.allClaimsDashboard.messages.guidanceMessage}
+      />
+    );
   }
 
   groupClaimsByPeriod(claims: ClaimDto[]) {
@@ -186,7 +197,7 @@ const Container = (props: AllClaimsDashboardParams & BaseProps) => (
     {
       stores => {
         return (
-          <Component
+          <AllClaimsDashboardComponent
             projectDetails={stores.projects.getById(props.projectId)}
             partners={stores.partners.getPartnersForProject(props.projectId)}
             currentClaims={stores.claims.getActiveClaimsForProject(props.projectId)}
