@@ -41,6 +41,9 @@
     "pages": {
       "claim-review": {
         "claim-review-declaration": "By pressing submit, I have satisfied myself that, based on limited sampling of financial information, and on such evidence as presented at project review meetings and in reports, the costs claimed appear commensurate with the progress reported by the project, and evidence presented is attributable to project activity."
+      },
+      "all-claims-dashboard": {
+        "sbri-guidance-message": "You must upload an invoice with every claim. VAT invoices are required from partners registered for value-added tax (VAT)."
       }
     }
   },
@@ -48,6 +51,9 @@
     "pages": {
       "claim-review": {
         "claim-review-declaration": "By pressing submit, I have satisfied myself that, based on limited sampling of financial information, and on such evidence as presented at project review meetings and in reports, the costs claimed appear commensurate with the progress reported by the project, and evidence presented is attributable to project activity."
+      },
+      "all-claims-dashboard": {
+        "sbri-guidance-message": "You must upload an invoice with every claim. VAT invoices are required from partners registered for value-added tax (VAT)."
       }
     }
   }
