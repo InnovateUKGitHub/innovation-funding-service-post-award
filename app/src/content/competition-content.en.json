@@ -50,7 +50,13 @@
       "sbri-invoice-bullet-1": "VAT invoices with every claim by partners registered for value-added tax (VAT)",
       "sbri-invoice-bullet-2": "non-VAT invoices with every claim by partners not registered for VAT",
       "sbri-invoice-bullet-3": "any documents requested by your monitoring officer to support a claim",
-      "sbri-mo-advice": "Contact your monitoring officer for more information about what you need to provide."
+      "sbri-mo-advice": "Contact your monitoring officer for more information about what you need to provide.",
+      "milestone-contract-achievement": "You need to approve costs based on the participant's achievement of the milestones listed in the contract.",
+      "milestone-to-do": "You must:",
+      "milestone-bullet-1": "approve costs for 100% of the milestone payment, if the participant has achieved all their milestones",
+      "milestone-bullet-2": "only approve costs for the retention payment percentages specified in the contract, if the participant has partially achieved their milestones",
+      "milestone-bullet-3": "approve costs for 0% of the milestone payment and invoice for £0, if the participant has failed to achieve their milestones",
+      "milestone-bullet-4": "query the claim if the participant needs to make amendments"
     },
     "pages": {
       "claim-review": {
@@ -77,7 +83,13 @@
       "sbri-invoice-bullet-1": "VAT invoices with every claim by partners registered for value-added tax (VAT)",
       "sbri-invoice-bullet-2": "non-VAT invoices with every claim by partners not registered for VAT",
       "sbri-invoice-bullet-3": "any documents requested by your monitoring officer to support a claim",
-      "sbri-mo-advice": "Contact your monitoring officer for more information about what you need to provide."
+      "sbri-mo-advice": "Contact your monitoring officer for more information about what you need to provide.",
+      "milestone-contract-achievement": "You need to approve costs based on the participant's achievement of the milestones listed in the contract.",
+      "milestone-to-do": "You must:",
+      "milestone-bullet-1": "approve costs for 100% of the milestone payment, if the participant has achieved all their milestones",
+      "milestone-bullet-2": "only approve costs for the retention payment percentages specified in the contract, if the participant has partially achieved their milestones",
+      "milestone-bullet-3": "approve costs for 0% of the milestone payment and invoice for £0, if the participant has failed to achieve their milestones",
+      "milestone-bullet-4": "query the claim if the participant needs to make amendments"
     },
     "pages": {
       "claim-review": {

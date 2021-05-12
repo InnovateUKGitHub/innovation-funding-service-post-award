@@ -56,4 +56,10 @@ export class ClaimMessages extends ContentBase {
   public readonly negativeClaimWarning = this.getContent("negative-claim-warning");
   public readonly claimSummaryWarning = this.getContent("claim-summary-warning");
   public readonly claimSavedMessage = this.getContent("claim-saved-message");
+  public readonly milestoneContractAchievement = this.getContent("milestone-contract-achievement");
+  public readonly milestoneToDo = this.getContent("milestone-to-do");
+  public readonly milestoneBullet1 = this.getContent("milestone-bullet-1");
+  public readonly milestoneBullet2 = this.getContent("milestone-bullet-2");
+  public readonly milestoneBullet3 = this.getContent("milestone-bullet-3");
+  public readonly milestoneBullet4 = this.getContent("milestone-bullet-4");
 }

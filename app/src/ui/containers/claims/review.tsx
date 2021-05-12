@@ -11,6 +11,7 @@ import {
   CostsSummaryForPeriodDto,
   DocumentDescription,
   ForecastDetailsDTO,
+  getAuthRoles,
   GOLCostDto,
   PartnerDto,
   ProjectDto,
@@ -194,6 +195,8 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
 
   private renderContents(data: CombinedData) {
     const { content } = this.props;
+    const { isCombinationOfSBRI } = projectCompetition(data.project.competitionType);
+    const { isMo } = getAuthRoles(data.project.roles);
 
     const backLinkElement = (
       <ACC.BackLink route={this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}>
@@ -225,6 +228,31 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
           <span className="govuk-!-font-weight-bold">{content.default.competitionTypeLabel}:</span>{" "}
           {data.partner.competitionType}
         </ACC.Renderers.SimpleString>
+
+        {isMo && isCombinationOfSBRI && (
+          <>
+            <ACC.Renderers.SimpleString>
+              <ACC.Content value={x => x.claimReview.messages.milestoneContractAchievement} />
+            </ACC.Renderers.SimpleString>
+            <ACC.Renderers.SimpleString>
+              <ACC.Content value={x => x.claimReview.messages.milestoneToDo} />
+            </ACC.Renderers.SimpleString>
+            <ACC.UL>
+              <li>
+                <ACC.Content value={x => x.claimReview.messages.milestoneBullet1} />
+              </li>
+              <li>
+                <ACC.Content value={x => x.claimReview.messages.milestoneBullet2} />
+              </li>
+              <li>
+                <ACC.Content value={x => x.claimReview.messages.milestoneBullet3} />
+              </li>
+              <li>
+                <ACC.Content value={x => x.claimReview.messages.milestoneBullet4} />
+              </li>
+            </ACC.UL>
+          </>
+        )}
 
         {this.renderClaimReviewSection(data)}
 
