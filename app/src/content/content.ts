@@ -107,7 +107,7 @@ import { ClaimLineItemsContent } from "./pages/claims/claimLineItemsContent";
 import { ClaimsComponentsContent } from "./pages/claims/components/claimsComponentsContent";
 import { PostcodeContent } from "./pages/project/postcodeContent";
 
-export type ContentSelector = (content: Content) => ContentResult;
+export type ContentSelector = (content: Content) => ContentResult | undefined;
 
 export class Content extends ContentBase {
   public readonly header: HeaderContent;

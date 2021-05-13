@@ -1,10 +1,11 @@
 import { renderHook } from "@testing-library/react-hooks";
 import { hookTestBed } from "@shared/TestBed";
 import { ContentResult } from "@content/contentBase";
+import { Content } from "@content/content";
 import { getContentFromResult, useContent } from "@ui/hooks";
 
 describe("getContentFromResult()", () => {
-  it("should get content from result", () => {
+  test("should get content from result", () => {
     const stubResult: ContentResult = {
       key: "stub-key",
       content: "stub-content",
@@ -19,45 +20,69 @@ describe("getContentFromResult()", () => {
 
 describe("useContent()", () => {
   const stubTestContent = {
-    test1: {
-      content: "stub-test2",
-    },
-    test2: {
-      content: "stub-test2",
-    },
+    test1: { content: "stub-test1" },
+    test2: { content: "stub-test2" },
   };
 
-  const render = (testContent?: object) => renderHook(useContent, hookTestBed({ content: testContent }));
+  const render = (testContent = {}) => renderHook(useContent, hookTestBed({ content: testContent }));
 
-  it("should throw error without provider", () => {
+  test("should throw error without provider", () => {
     // Note: render() is not used here, I do not want a provider as I want to test error
     const { result } = renderHook(() => useContent());
 
     expect(result.error).toEqual(Error("useContent() must be used within a <ContentProvider />"));
   });
 
-  it("should return content", () => {
+  test("should return content", () => {
     const { result } = render(stubTestContent);
 
     expect(result.current.content).toStrictEqual(stubTestContent);
   });
 
   describe("with getContent()", () => {
-    it("using a ContentSelector", () => {
-      const stubContent = {
-        header: {
-          dashboard: {
-            content: "stub-dashboard",
+    describe("using a ContentSelector", () => {
+      test("with valid query", () => {
+        const stubContent = {
+          header: {
+            dashboard: {
+              content: "stub-dashboard",
+            },
           },
-        },
-      };
+        };
 
-      const { getContent } = render(stubContent).result.current;
+        const { getContent } = render(stubContent).result.current;
 
-      expect(getContent((x) => x.header.dashboard)).toBe(stubContent.header.dashboard.content);
+        expect(getContent(x => x.header.dashboard)).toBe(stubContent.header.dashboard.content);
+      });
+
+      test("with missing nested property", () => {
+        const stubContent = {
+          header: {},
+        };
+
+        const { getContent } = render(stubContent).result.current;
+
+        const stubQuery = (x: Content) => x.header.dashboard;
+
+        const contentError = () => getContent(stubQuery);
+
+        expect(contentError).toThrow(
+          `It appears 'dashboard' is not available within the 'header' property. There is a problem with your available content object. Query => ${stubQuery.toString()}`,
+        );
+      });
+
+      test("with missing parent property", () => {
+        const { getContent } = render().result.current;
+
+        const stubQuery = (x: Content) => x.header.dashboard;
+
+        const contentError = () => getContent(stubQuery);
+
+        expect(contentError).toThrow(`It appears the following query did not find a result -> ${stubQuery.toString()}`);
+      });
     });
 
-    it("using a string", () => {
+    test("using a string", () => {
       const stubContentString = "some-content";
       const { getContent } = render().result.current;
 
@@ -65,7 +90,7 @@ describe("useContent()", () => {
     });
   });
 
-  it("should return getResultByQuery", () => {
+  test("should return getResultByQuery", () => {
     const stubContent = {
       header: {
         profile: {
@@ -78,14 +103,14 @@ describe("useContent()", () => {
 
     const { getResultByQuery } = render(stubContent).result.current;
 
-    const content = getResultByQuery((x) => x.header.profile);
+    const content = getResultByQuery(x => x.header.profile);
 
     expect(content.key).toBe(stubContent.header.profile.key);
     expect(content.content).toBe(stubContent.header.profile.content);
     expect(content.markdown).toBe(stubContent.header.profile.markdown);
   });
 
-  it("should return getContentFromResult", () => {
+  test("should return getContentFromResult", () => {
     const stubContent = {
       header: {
         profile: {
