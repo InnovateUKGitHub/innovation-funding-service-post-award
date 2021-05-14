@@ -11,7 +11,13 @@ const getClaimDetailKey = (partnerId: string, periodId: number, costCategoryId: 
 const getForecastDetailKey = (partnerId: string, periodId: number, costCategoryId: string) => getKey("forecastDetailKey", "partner", partnerId, "period", periodId, "costCategory", costCategoryId);
 const getMonitoringReportKey = (projectId: string, id?: string) => getKey("monitoringReportKey", "project", projectId, "report", id || "new");
 const getPcrKey = (projectId: string, id?: string) => getKey("pcrKey", "project", projectId, "request", id || "new");
-const getFinancialVirementKey = (projectId: string, pcrId: string, itemId: string) => getKey("financialVirementKey", "project", projectId, "request", pcrId, "itemId", itemId);
+const getFinancialVirementKey = (projectId: string, pcrId: string, itemId: string, partnerId?: string) => {
+  if (partnerId) {
+    return getKey("financialVirementKey", "project", projectId, "request", pcrId, "itemId", itemId, "partnerId", partnerId);
+  }
+
+  return getKey("financialVirementKey", "project", projectId, "request", pcrId, "itemId", itemId);
+};
 const getPcrTypesKey = () => getKey("pcrTypesKey", "all");
 const getPcrProjectRolesKey = () => getKey("pcrProjectRolesKey", "all");
 const getPcrPartnerTypesKey = () => getKey("pcrPartnerTypesTypesKey", "all");

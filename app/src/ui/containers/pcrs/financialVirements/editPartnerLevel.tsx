@@ -216,9 +216,9 @@ const Container = (props: FinancialVirementParams & BaseProps) => {
       content={editPartnerLevelContent}
       project={projects.getById(props.projectId)}
       partners={partners.getPartnersForProject(props.projectId)}
-      editor={financialVirements.getFiniancialVirementEditor(props.projectId, props.pcrId, props.itemId)}
+      editor={financialVirements.getFinancialVirementEditor(props.projectId, props.pcrId, props.itemId)}
       onChange={(saving, dto) =>
-        financialVirements.updateFiniancialVirementEditor(
+        financialVirements.updateFinancialVirementEditor(
           saving,
           props.projectId,
           props.pcrId,

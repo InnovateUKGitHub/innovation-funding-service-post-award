@@ -12,6 +12,8 @@ export interface FinancialVirementDto {
   newFundingLevel: number;
   newRemainingGrant: number;
 
+  currentPartnerId?: string;
+
   partners: PartnerVirementsDto[];
 }
 

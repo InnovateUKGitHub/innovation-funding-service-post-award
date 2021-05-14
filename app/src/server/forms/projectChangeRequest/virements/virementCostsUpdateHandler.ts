@@ -16,7 +16,7 @@ export class VirementCostsUpdateHandler extends StandardFormHandlerBase<Virement
   }
 
   protected async getDto(context: IContext, params: VirementCostsParams, button: IFormButton, body: IFormBody): Promise<FinancialVirementDto> {
-    const virementDto = await context.runQuery(new GetFinancialVirementQuery(params.projectId, params.pcrId, params.itemId));
+    const virementDto = await context.runQuery(new GetFinancialVirementQuery(params.projectId, params.pcrId, params.itemId, params.partnerId));
     if (!virementDto) {
       throw new BadRequestError("Virement not found");
     }

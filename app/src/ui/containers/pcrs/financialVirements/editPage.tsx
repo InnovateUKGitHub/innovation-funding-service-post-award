@@ -1,5 +1,5 @@
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { EditorStatus, IEditorStore, StoresConsumer, useStores } from "@ui/redux";
+import { EditorStatus, IEditorStore, useStores } from "@ui/redux";
 import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
 import { CostCategoryVirementDto, FinancialVirementDto, PartnerDto, ProjectDto } from "@framework/dtos";
@@ -55,7 +55,7 @@ interface Props {
   onChange: (saving: boolean, dto: FinancialVirementDto) => void;
 }
 
-class Component extends ContainerBase<VirementCostsParams, Props, {}> {
+class EditPageComponent extends ContainerBase<VirementCostsParams, Props, {}> {
   render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -68,13 +68,13 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
   }
 
   private renderPage(project: ProjectDto, partner: PartnerDto, costCategories: CostCategoryDto[], editor: IEditorStore<FinancialVirementDto, FinancialVirementDtoValidator>) {
-    const partnerVirements = editor.data.partners.find(x => x.partnerId === this.props.partnerId)!;
-    const partnerValidation = editor.validator.partners.results.find(x => x.model.partnerId === this.props.partnerId);
+    const currentPartnerVirement = editor.data.partners.find(x => x.partnerId === this.props.partnerId)!;
+    const partnerVirementsValidator = editor.validator.partners.results.find(x => x.model.partnerId === this.props.partnerId);
 
     const costCategoriesWithVirement = costCategories
       .map(x => ({
         costCategory: x,
-        virement: partnerVirements.virements.find(y => y.costCategoryId === x.id) || createDto<CostCategoryVirementDto>({
+        virement: currentPartnerVirement.virements.find(y => y.costCategoryId === x.id) || createDto<CostCategoryVirementDto>({
           costCategoryId: x.id,
           costCategoryName: x.name,
         })
@@ -82,7 +82,7 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
       ;
 
     const validation = costCategories
-      .map(x => (partnerValidation && partnerValidation.virements.results.find(y => y.model.costCategoryId === x.id)) || null)
+      .map(x => (partnerVirementsValidator?.virements.results.find(y => y.model.costCategoryId === x.id)) || null)
       ;
 
     const VirementForm = ACC.TypedForm<FinancialVirementDto>();
@@ -98,7 +98,7 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
         backLink={this.getBackLink()}
         pageTitle={<ACC.Projects.Title {...project} />}
         error={editor.error}
-        validator={partnerValidation}
+        validator={partnerVirementsValidator}
       >
         {displayIntroMessage && (
           <>
@@ -131,13 +131,13 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
                   qa="originalEligibleCosts"
                   header={this.props.content.costCategoryOriginalEligibleCosts}
                   value={x => x.virement.originalEligibleCosts}
-                  footer={<ACC.Renderers.Currency value={partnerVirements.originalEligibleCosts} />}
+                  footer={<ACC.Renderers.Currency value={currentPartnerVirement.originalEligibleCosts} />}
                 />
                 <VirementTable.Currency
                   qa="originalCostsClaimed"
                   header={this.props.content.costCategoryCostsClaimed}
                   value={x => x.virement.costsClaimedToDate}
-                  footer={<ACC.Renderers.Currency value={partnerVirements.costsClaimedToDate} />}
+                  footer={<ACC.Renderers.Currency value={currentPartnerVirement.costsClaimedToDate} />}
                 />
                 <VirementTable.Custom
                   qa="newEligibleCosts"
@@ -151,7 +151,7 @@ class Component extends ContainerBase<VirementCostsParams, Props, {}> {
                       validation[i.row],
                     )
                   }
-                  footer={<ACC.Renderers.Currency value={partnerVirements.newEligibleCosts} />}
+                  footer={<ACC.Renderers.Currency value={currentPartnerVirement.newEligibleCosts} />}
                   classSuffix={"numeric"}
                 />
                 <VirementTable.Currency
@@ -269,14 +269,14 @@ const Container = (props: VirementCostsParams & BaseProps) => {
   const editPageContent = useEditPageContent();
 
   return (
-    <Component
+    <EditPageComponent
       content={editPageContent}
       project={projects.getById(props.projectId)}
       partner={partners.getById(props.partnerId)}
       costCategories={costCategories.getAllForPartner(props.partnerId)}
-      editor={financialVirements.getFiniancialVirementEditor(props.projectId, props.pcrId, props.itemId)}
+      editor={financialVirements.getFinancialVirementEditor(props.projectId, props.pcrId, props.itemId, props.partnerId)}
       onChange={(saving, dto) =>
-        financialVirements.updateFiniancialVirementEditor(
+        financialVirements.updateFinancialVirementEditor(
           saving,
           props.projectId,
           props.pcrId,
@@ -292,6 +292,7 @@ const Container = (props: VirementCostsParams & BaseProps) => {
               }),
               true,
             ),
+          props.partnerId
         )
       }
       {...props}
