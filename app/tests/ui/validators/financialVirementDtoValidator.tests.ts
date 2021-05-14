@@ -46,6 +46,36 @@ describe("financialVirementDtoValidator", () => {
       });
     });
 
+    describe("validate single partner", () => {
+      test.each`
+        name                          | currentPartnerId      | expectedLength
+        ${"given no current partner"} | ${undefined}          | ${4}
+        ${"given current partnerId"}  | ${"stub-partnerId-3"} | ${1}
+        ${"given invalid partnerId"}  | ${"stub-partnerId-5"} | ${4}
+      `("$name", ({ currentPartnerId, expectedLength }) => {
+        const stubFinancialVirement = {
+          currentPartnerId,
+          partners: [
+            {
+              partnerId: "stub-partnerId-1",
+            },
+            {
+              partnerId: "stub-partnerId-2",
+            },
+            {
+              partnerId: "stub-partnerId-3",
+            },
+            {
+              partnerId: "stub-partnerId-4",
+            },
+          ] as PartnerVirementsDto[],
+        } as FinancialVirementDto;
+
+        const validation = new FinancialVirementDtoValidator(stubFinancialVirement, false, true);
+        expect(validation.partners.results).toHaveLength(expectedLength);
+      });
+    });
+
     describe("total remaining grant", () => {
       test.each`
         name                                                       | newRemainingGrant | isValid  | submit

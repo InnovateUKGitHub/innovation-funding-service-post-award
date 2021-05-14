@@ -17,11 +17,16 @@ import { roundCurrency, sum } from "@framework/util";
 import { GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
 
 export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
-  constructor(private readonly projectId: string, private readonly pcrId: string, private readonly pcrItemId: string) {
+  constructor(
+    private readonly projectId: string,
+    private readonly pcrId: string,
+    private readonly pcrItemId: string,
+    private readonly partnerId?: string,
+  ) {
     super();
   }
 
-  protected async accessControl(auth: Authorisation, context: IContext) {
+  protected async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
   }
 
@@ -54,6 +59,7 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
       newRemainingCosts,
       newRemainingGrant,
       newFundingLevel,
+      currentPartnerId: this.partnerId,
       partners,
     };
   }

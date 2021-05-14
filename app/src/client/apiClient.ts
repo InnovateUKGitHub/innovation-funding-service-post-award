@@ -97,10 +97,10 @@ const clientApi: IApiClient = {
       ajaxPostFiles(`/api/documents/partners/${projectId}/${partnerId}`, documents),
   },
   financialVirements: {
-    get: params => ajaxJson(`/api/financial-virements/${params.projectId}/${params.pcrId}/${params.pcrItemId}`),
+    get: params => ajaxJson(`/api/financial-virements/${params.projectId}/${params.pcrId}/${params.pcrItemId}/${params.partnerId}`),
     update: params =>
       ajaxPut(
-        `/api/financial-virements/${params.projectId}/${params.pcrId}/${params.pcrItemId}?submit=${params.submit}`,
+        `/api/financial-virements/${params.projectId}/${params.pcrId}/${params.pcrItemId}/${params.partnerId}?submit=${params.submit}`,
         params.financialVirment,
       ),
   },
