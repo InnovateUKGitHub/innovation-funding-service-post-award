@@ -1,4 +1,4 @@
-import { groupBy, isNumber, sum } from "@framework/util";
+import { groupBy, isNumber, sum, roundCurrency } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import {
   CostCategoryForecast,
@@ -65,24 +65,36 @@ export class InitialForecastDetailsDtoValidator
   );
 }
 
-class InitialForecastDetailsDtoCostCategoryValidator
+export class InitialForecastDetailsDtoCostCategoryValidator
   extends Results<CostCategoryForecast>
   implements IForecastDetailsDtoCostCategoryValidator {
-  constructor(forecast: CostCategoryForecast, private readonly submit: boolean, showValidationErrors: boolean) {
+  constructor(
+    public readonly forecast: CostCategoryForecast,
+    public readonly submit: boolean,
+    public readonly showValidationErrors: boolean,
+  ) {
     super(forecast, showValidationErrors);
   }
-
   private validateCostCategory() {
-    if (!this.submit) return Validation.valid(this);
+    /**
+     * Note:
+     *
+     * 1) Ignore validation when not submitting
+     * 2) Skip validation on calculated forecasts to support non-js form submissions
+     */
+    const shouldNotValidate = !this.submit || this.model.costCategory.isCalculated;
 
-    // Don't validate calculated forecasts to support non-js form submission
-    if (this.model.costCategory.isCalculated) return Validation.valid(this);
+    if (shouldNotValidate) return Validation.valid(this);
 
-    const totalValueFromForecasts = sum(this.model.forecasts, x => (isNumber(x.value) ? x.value : 0));
-    const isValid = totalValueFromForecasts === this.model.golCost.value;
+    const accumulatedForecastTotals = sum(this.model.forecasts, x => (isNumber(x.value) ? x.value : 0));
+    const totalCategoryForecast = roundCurrency(accumulatedForecastTotals);
 
-    const message = `The total forecasts for ${this.model.costCategory.name.toLocaleLowerCase()} must be the same as the total eligible costs`;
-    return Validation.isTrue(this, isValid, message);
+    const isValid = totalCategoryForecast === this.model.golCost.value;
+
+    const categoryNameLowerCase = this.model.costCategory.name.toLocaleLowerCase();
+    const costCategoryErrorMessage = `The total forecasts for ${categoryNameLowerCase} must be the same as the total eligible costs`;
+
+    return Validation.isTrue(this, isValid, costCategoryErrorMessage);
   }
 
   public value = this.validateCostCategory();
