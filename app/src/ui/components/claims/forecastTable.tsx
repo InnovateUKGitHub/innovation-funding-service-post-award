@@ -1,13 +1,18 @@
 import React from "react";
-import { ClaimDetailsSummaryDto, ClaimDto, ForecastDetailsDTO, GOLCostDto, PartnerDto, PartnerStatus, ProjectDto } from "@framework/dtos";
+import {
+  ClaimDetailsSummaryDto,
+  ClaimDto,
+  ForecastDetailsDTO,
+  GOLCostDto,
+  PartnerDto,
+  PartnerStatus,
+  ProjectDto,
+} from "@framework/dtos";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { CostCategoryType } from "@framework/entities";
-import { numberComparator } from "@framework/util/comparator";
+import { roundCurrency, numberComparator } from "@framework/util";
 import { EditorStatus, IEditorStore } from "@ui/redux";
-import {
-  IForecastDetailsDtosValidator,
-  IForecastDetailsDtoValidator
-} from "@ui/validators";
+import { IForecastDetailsDtosValidator, IForecastDetailsDtoValidator } from "@ui/validators";
 import classNames from "classnames";
 import { NumberInput } from "../inputs/numberInput";
 import { AccessibilityText } from "../renderers/accessibilityText";
@@ -16,7 +21,6 @@ import { CondensedDateRange } from "../renderers/date";
 import { Percentage } from "../renderers/percentage";
 import { TypedTable } from "../table";
 import { Content } from "../content";
-
 export interface ForecastData {
   project: ProjectDto;
   partner: PartnerDto;
@@ -65,8 +69,8 @@ export class ForecastTable extends React.Component<Props> {
       const width1 = col1[0].getBoundingClientRect().width;
       const width2 = col2[0].getBoundingClientRect().width;
 
-      Array.from(col2).forEach((x: any) => x.style.right = `${width1}px`);
-      Array.from(col3).forEach((x: any) => x.style.right = `${width1 + width2}px`);
+      Array.from(col2).forEach((x: any) => (x.style.right = `${width1}px`));
+      Array.from(col3).forEach((x: any) => (x.style.right = `${width1 + width2}px`));
     });
   }
 
@@ -74,7 +78,9 @@ export class ForecastTable extends React.Component<Props> {
     // If there is a draft claim in progress then return the smallest of the claim period and the project period
     if (draftClaim) return Math.min(project.periodId, draftClaim.periodId);
     // Sort a copy of the claims array so the original array is not affected
-    const approvedClaims = [...claims].filter(x => x.isApproved).sort((a, b) => numberComparator(b.periodId, a.periodId));
+    const approvedClaims = [...claims]
+      .filter(x => x.isApproved)
+      .sort((a, b) => numberComparator(b.periodId, a.periodId));
     // If there are no approved claims then we must be in period 1 ie, claim period 0
     if (approvedClaims.length === 0) return 0;
     // If there are previously approved claims then return most recent
@@ -107,7 +113,11 @@ export class ForecastTable extends React.Component<Props> {
         data={tableRows}
         qa="forecast-table"
         headers={this.renderTableHeaders(periods, periodId, data.claim)}
-        footers={this.renderTableFooters(periods, tableRows, hideValidation !== true && editor ? editor.validator : undefined)}
+        footers={this.renderTableFooters(
+          periods,
+          tableRows,
+          hideValidation !== true && editor ? editor.validator : undefined,
+        )}
         headerRowClass="govuk-body-s govuk-table__header--light"
         bodyRowClass={x => classNames("govuk-body-s", {
           "table__row--warning": !hideValidation && x.total > x.golCosts,
@@ -117,23 +127,29 @@ export class ForecastTable extends React.Component<Props> {
       >
         <Table.String header="Month" value={x => x.categoryName} colClassName={() => "sticky-col sticky-col-left-1"} qa="category-name" />
 
-        {claims.map((p, i) => <Table.Currency
-          key={p}
-          header={intervals[p]}
-          value={x => x.claims[p]}
-          qa={(!!data.claim && i === claims.length - 1) ? "current-claim" : "category-claim" + i}
-          isDivider={isDivider(i) ? "normal" : undefined}
-        />)}
+        {claims.map((p, i) => (
+          <Table.Currency
+            key={p}
+            header={intervals[p]}
+            value={x => x.claims[p]}
+            qa={!!data.claim && i === claims.length - 1 ? "current-claim" : "category-claim" + i}
+            isDivider={isDivider(i) ? "normal" : undefined}
+          />
+        ))}
 
-        {forecasts.map((p, i) => <Table.Custom
-          key={p}
-          header={intervals[p]}
-          value={(x, index) => this.renderForecastCell(x, parseInt(p, 10), index, data, editor, isSubmitting || false)}
-          cellClassName={() => "govuk-table__cell--numeric"}
-          classSuffix="numeric"
-          qa={"category-forecast" + i}
-          isDivider={i === forecasts.length - 1 ? "bold" : undefined}
-        />)}
+        {forecasts.map((p, i) => (
+          <Table.Custom
+            key={p}
+            header={intervals[p]}
+            value={(x, index) =>
+              this.renderForecastCell(x, parseInt(p, 10), index, data, editor, isSubmitting || false)
+            }
+            cellClassName={() => "govuk-table__cell--numeric"}
+            classSuffix="numeric"
+            qa={"category-forecast" + i}
+            isDivider={i === forecasts.length - 1 ? "bold" : undefined}
+          />
+        ))}
 
         <Table.Currency colClassName={() => "sticky-col sticky-col-right-3"} header="No data" hideHeader value={x => x.total} qa="category-total" isDivider="normal" />
         <Table.Currency colClassName={() => "sticky-col sticky-col-right-2"} header="No data" hideHeader value={x => x.golCosts} qa="category-gol-costs" isDivider="normal" />
@@ -142,15 +158,24 @@ export class ForecastTable extends React.Component<Props> {
     );
   }
 
-  private parseClaimData(data: ForecastData, editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator> | undefined, periodId: number, numberOfPeriods: number | null) {
+  private parseClaimData(
+    data: ForecastData,
+    editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator> | undefined,
+    periodId: number,
+    numberOfPeriods: number | null,
+  ) {
     const tableRows: TableRow[] = [];
     const forecasts = editor ? editor.data : data.forecastDetails;
-    const costCategories = data.costCategories.filter(x => x.competitionType === data.project.competitionType && x.organisationType === data.partner.organisationType);
+    const costCategories = data.costCategories.filter(
+      x => x.competitionType === data.project.competitionType && x.organisationType === data.partner.organisationType,
+    );
 
     costCategories.forEach(category => {
-      const validators = editor && editor.validator.items.results
-        .filter(x => x.model.costCategoryId === category.id)
-        .sort((a, b) => a.model.periodId - b.model.periodId);
+      const validators =
+        editor &&
+        editor.validator.items.results
+          .filter(x => x.model.costCategoryId === category.id)
+          .sort((a, b) => a.model.periodId - b.model.periodId);
 
       const row: TableRow = {
         categoryId: category.id,
@@ -160,7 +185,7 @@ export class ForecastTable extends React.Component<Props> {
         golCosts: 0,
         total: 0,
         difference: 0,
-        validators: validators || []
+        validators: validators || [],
       };
 
       let currentPeriodId = 1;
@@ -187,21 +212,31 @@ export class ForecastTable extends React.Component<Props> {
     return tableRows;
   }
 
-  private addClaimDetailInfoToRow(periodId: number, costCategory: CostCategoryDto, claimDetails: ClaimDetailsSummaryDto[], row: TableRow) {
+  private addClaimDetailInfoToRow(
+    periodId: number,
+    costCategory: CostCategoryDto,
+    claimDetails: ClaimDetailsSummaryDto[],
+    row: TableRow,
+  ) {
     const detail = claimDetails.find(x => x.costCategoryId === costCategory.id && x.periodId === periodId);
     if (detail) {
       row.claims[periodId] = detail.value;
-      row.total += detail.value;
+      row.total = roundCurrency(row.total + detail.value);
     } else {
       row.claims[periodId] = 0;
     }
   }
 
-  private addForecastInfoToRow(periodId: number, costCategory: CostCategoryDto, forecasts: ForecastDetailsDTO[], row: TableRow) {
+  private addForecastInfoToRow(
+    periodId: number,
+    costCategory: CostCategoryDto,
+    forecasts: ForecastDetailsDTO[],
+    row: TableRow,
+  ) {
     const forecast = forecasts.find(x => x.costCategoryId === costCategory.id && x.periodId === periodId);
     if (forecast) {
       row.forecasts[periodId] = forecast.value;
-      row.total += forecast.value;
+      row.total = roundCurrency(row.total + forecast.value);
     } else {
       row.forecasts[periodId] = 0;
     }
@@ -213,8 +248,8 @@ export class ForecastTable extends React.Component<Props> {
 
   private calculateClaimPeriods(data: ForecastData) {
     const periods: { [k: string]: React.ReactNode } = {};
-    data.claimDetails.forEach(x => periods[x.periodId] = this.renderDateRange(x));
-    data.forecastDetails.forEach(x => periods[x.periodId] = this.renderDateRange(x));
+    data.claimDetails.forEach(x => (periods[x.periodId] = this.renderDateRange(x)));
+    data.forecastDetails.forEach(x => (periods[x.periodId] = this.renderDateRange(x)));
     return periods;
   }
 
@@ -222,14 +257,26 @@ export class ForecastTable extends React.Component<Props> {
     return <CondensedDateRange start={details.periodStart} end={details.periodEnd} />;
   }
 
-  private renderForecastCell(forecastRow: TableRow, periodId: number, index: Index, data: ForecastData, editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator> | undefined, isSubmitting: boolean) {
+  private renderForecastCell(
+    forecastRow: TableRow,
+    periodId: number,
+    index: Index,
+    data: ForecastData,
+    editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator> | undefined,
+    isSubmitting: boolean,
+  ) {
     const value = forecastRow.forecasts[periodId];
     const costCategory = data.costCategories.find(x => x.id === forecastRow.categoryId);
     const validator = forecastRow.validators[index.column - 1];
     const error = validator && validator.value;
     const isPending = data.partner.partnerStatus === PartnerStatus.Pending;
 
-    if ((costCategory && costCategory.isCalculated) || !editor || (periodId < data.project.periodId && !isPending) || (periodId === data.project.periodId && !isPending && !isSubmitting)) {
+    if (
+      (costCategory && costCategory.isCalculated) ||
+      !editor ||
+      (periodId < data.project.periodId && !isPending) ||
+      (periodId === data.project.periodId && !isPending && !isSubmitting)
+    ) {
       return <Currency value={value} />;
     }
 
@@ -240,7 +287,7 @@ export class ForecastTable extends React.Component<Props> {
           name={`value_${periodId}_${forecastRow.categoryId}`}
           value={value}
           ariaLabel={`${forecastRow.categoryName} Period ${periodId}`}
-          onChange={val => this.updateItem(editor.data, forecastRow.categoryId, periodId, dto => dto.value = val!)}
+          onChange={val => this.updateItem(editor.data, forecastRow.categoryId, periodId, dto => (dto.value = val!))}
           className="govuk-!-font-size-16"
           disabled={editor.status === EditorStatus.Saving}
         />
@@ -248,7 +295,12 @@ export class ForecastTable extends React.Component<Props> {
     );
   }
 
-  private updateItem(data: ForecastDetailsDTO[], categoryId: string, periodId: number, update: (item: ForecastDetailsDTO) => void) {
+  private updateItem(
+    data: ForecastDetailsDTO[],
+    categoryId: string,
+    periodId: number,
+    update: (item: ForecastDetailsDTO) => void,
+  ) {
     const cell = data.find(x => x.costCategoryId === categoryId && x.periodId === periodId);
 
     if (cell) {
@@ -256,25 +308,14 @@ export class ForecastTable extends React.Component<Props> {
 
       update(cell);
 
-      const overheadRates = getOverheadRate(
-        partner,
-        project,
-        costCategories,
-        cell,
-        data
-      );
+      const overheadRates = getOverheadRate(partner, project, costCategories, cell, data);
 
-      if (
-        overheadRates &&
-        overheadRates.overheadsData &&
-        overheadRates.labourCategory &&
-        partner.overheadRate
-      ) {
+      if (overheadRates && overheadRates.overheadsData && overheadRates.labourCategory && partner.overheadRate) {
         const updatedValue = calculateOverheadCell(
           partner.overheadRate,
           overheadRates.labourCategory.id,
           overheadRates.overheadsData.value,
-          cell
+          cell,
         );
 
         overheadRates.overheadsData.value = updatedValue;
@@ -332,15 +373,21 @@ export class ForecastTable extends React.Component<Props> {
     )];
   }
 
-  private renderTableFooters(periods: string[], parsed: TableRow[], validator: IForecastDetailsDtosValidator | undefined) {
+  private renderTableFooters(
+    periods: string[],
+    parsed: TableRow[],
+    validator: IForecastDetailsDtosValidator | undefined,
+  ) {
     const cells = [];
     const costTotal = parsed.reduce((total, item) => total + item.total, 0);
     const golTotal = parsed.reduce((total, item) => total + item.golCosts, 0);
-    const totals = periods.map(p => parsed.reduce((total, item) => {
-      const claim = item.claims[p];
-      const value = (isNaN(claim) ? item.forecasts[p] : claim) || 0;
-      return total + value;
-    }, 0));
+    const totals = periods.map(p =>
+      parsed.reduce((total, item) => {
+        const claim = item.claims[p];
+        const value = (isNaN(claim) ? item.forecasts[p] : claim) || 0;
+        return total + value;
+      }, 0),
+    );
 
     const warning = !!validator && validator.showValidationErrors && !validator.totalCosts.isValid;
     const warningId = !!validator && warning ? validator.totalCosts.key : "";
@@ -370,21 +417,23 @@ function getOverheadRate(
   project: ForecastData["project"],
   costCategories: ForecastData["costCategories"],
   cell: ForecastDetailsDTO,
-  data: ForecastDetailsDTO[]
+  data: ForecastDetailsDTO[],
 ) {
   const { overheadRate, organisationType } = partner;
 
   if (!overheadRate) return null;
 
-  const filteredCostCategories = costCategories.filter((x) => x.competitionType === project.competitionType && x.organisationType === organisationType);
+  const filteredCostCategories = costCategories.filter(
+    x => x.competitionType === project.competitionType && x.organisationType === organisationType,
+  );
 
-  const overheadsCategory = filteredCostCategories.find((x) => x.type === CostCategoryType.Overheads);
+  const overheadsCategory = filteredCostCategories.find(x => x.type === CostCategoryType.Overheads);
 
   if (!overheadsCategory) return null;
 
-  const labourCategory = filteredCostCategories.find((x) => x.type === CostCategoryType.Labour);
+  const labourCategory = filteredCostCategories.find(x => x.type === CostCategoryType.Labour);
 
-  const overheadsData = data.find((x) => x.costCategoryId === overheadsCategory.id && x.periodId === cell.periodId);
+  const overheadsData = data.find(x => x.costCategoryId === overheadsCategory.id && x.periodId === cell.periodId);
 
   return {
     labourCategory,
@@ -396,7 +445,7 @@ export function calculateOverheadCell(
   overheadRate: number,
   labourCategoryId: string,
   currentValue: number,
-  cell: ForecastDetailsDTO
+  cell: ForecastDetailsDTO,
 ): number {
   const editingLabourCategory = cell.costCategoryId === labourCategoryId;
 
