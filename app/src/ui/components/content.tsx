@@ -45,9 +45,9 @@ export const Content = ({ value, styles }: IContentProps) => {
         <Modal id={modalId}>
           <Section title="Content hint">
             <SummaryList qa="content_info">
-              <SummaryListItem hideAction label="Current value" content={displayValue} qa="current_value" />
+              <SummaryListItem label="Current value" content={displayValue} qa="current_value" />
 
-              <SummaryListItem hideAction label="Content key" content={key} qa="current_value" />
+              <SummaryListItem label="Content key" content={key} qa="current_value" />
             </SummaryList>
 
             <ModalLink styling="PrimaryButton" modalId={modalId} open={false}>
