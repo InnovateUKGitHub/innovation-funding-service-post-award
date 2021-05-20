@@ -1146,7 +1146,7 @@
     "enter-name": "Enter new name",
     "existing-name": "Existing name",
     "proposed-name": "Proposed name",
-    "certificate": "Change of anme certificate"
+    "certificate": "Change of name certificate"
   },
   "pcr-reasoning-labels": {
     "request-number": "Request number",
