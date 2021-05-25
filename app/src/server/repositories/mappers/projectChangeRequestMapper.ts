@@ -30,6 +30,10 @@ export const mapToPCRStatus = ((status: string) => {
       return PCRStatus.SubmittedToInnovationLead;
     case "Queried by Innovate UK":
       return PCRStatus.QueriedByInnovateUK;
+    case "Queried by Innovation Lead":
+      return PCRStatus.QueriedByInnovationLead;
+    case "In Review with Project Finance":
+      return PCRStatus.InReviewWithProjectFinance;
     case "In External Review":
       return PCRStatus.InExternalReview;
     case "In Review with Innovate UK":
@@ -42,9 +46,6 @@ export const mapToPCRStatus = ((status: string) => {
       return PCRStatus.Approved;
     case "Actioned":
       return PCRStatus.Actioned;
-    case "Queried by Innovation Lead":
-      // This PCR Status is currently not intended for ACC, as it is meant only for Innovate internal use;
-      return PCRStatus.InExternalReview;
     default:
       return PCRStatus.Unknown;
   }

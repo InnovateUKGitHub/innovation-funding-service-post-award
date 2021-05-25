@@ -341,6 +341,10 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
         return "Submitted to Innovate UK";
       case PCRStatus.QueriedByInnovateUK:
         return "Queried by Innovate UK";
+      case PCRStatus.QueriedByInnovationLead:
+        return "Queried by Innovation Lead";
+      case PCRStatus.InReviewWithProjectFinance:
+        return "In Review with Project Finance";
       case PCRStatus.InExternalReview:
         return "In External Review";
       case PCRStatus.InReviewWithInnovateUK:
