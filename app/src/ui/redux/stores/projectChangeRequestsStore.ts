@@ -71,6 +71,10 @@ export class ProjectChangeRequestStore extends StoreBase {
     return this.getData("pcrTypes", storeKeys.getPcrTypesKey(), p => ApiClient.pcrs.getTypes({ ...p }));
   }
 
+  public getAllAvailablePcrTypes(projectId: string) {
+    return this.getData("pcrAvailableTypes", storeKeys.pcrAvailableTypesKey(projectId), p => ApiClient.pcrs.getAvailableTypes({ ...p, projectId }));
+  }
+
   public getPcrProjectRoles() {
     return this.getData("pcrProjectRoles", storeKeys.getPcrProjectRolesKey(), p => ApiClient.pcrs.getPcrProjectRoles({ ...p }));
   }

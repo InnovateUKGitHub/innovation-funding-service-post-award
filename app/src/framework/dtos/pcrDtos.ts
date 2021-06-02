@@ -7,7 +7,7 @@ import {
   PCRPartnerType,
   PCRProjectLocation,
   PCRProjectRole,
-  PCRStatus
+  PCRStatus,
 } from "@framework/constants";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
 import { TypeOfAid } from "@framework/dtos/projectDto";
@@ -48,16 +48,16 @@ interface PCRItemBaseDto extends PCRItemSummaryDto {
 }
 
 export type PCRItemDto =
-  PCRStandardItemDto |
-  PCRItemForTimeExtensionDto |
-  PCRItemForScopeChangeDto |
-  PCRItemForProjectSuspensionDto |
-  PCRItemForAccountNameChangeDto |
-  PCRItemForProjectTerminationDto |
-  PCRItemForPartnerAdditionDto |
-  PCRItemForPartnerWithdrawalDto |
-  PCRItemForMultiplePartnerFinancialVirementDto |
-  PCRItemForPeriodLengthChangeDto;
+  | PCRStandardItemDto
+  | PCRItemForTimeExtensionDto
+  | PCRItemForScopeChangeDto
+  | PCRItemForProjectSuspensionDto
+  | PCRItemForAccountNameChangeDto
+  | PCRItemForProjectTerminationDto
+  | PCRItemForPartnerAdditionDto
+  | PCRItemForPartnerWithdrawalDto
+  | PCRItemForMultiplePartnerFinancialVirementDto
+  | PCRItemForPeriodLengthChangeDto;
 
 export type ProjectChangeRequestStandardItemTypes = PCRItemType.SinglePartnerFinancialVirement;
 
@@ -156,8 +156,13 @@ export interface PCRItemTypeDto {
   type: PCRItemType;
   displayName: string;
   recordTypeId: string;
+  /**
+   * @todo Refactor this to reduce confusion around the inverse of "disabled"
+   * @description This refers to whether it should be available to the end user (visually available), consider renaming to isAvailable.
+   */
   enabled: boolean;
-  files: { name: string; relativeUrl: string}[];
+  disabled: boolean;
+  files: { name: string; relativeUrl: string }[];
 }
 
 export interface ProjectChangeRequestStatusChangeDto {

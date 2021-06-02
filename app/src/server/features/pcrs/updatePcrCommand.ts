@@ -4,11 +4,12 @@ import { Authorisation, IContext, PCRItemType } from "@framework/types";
 import {
   CostCategoryType,
   ProjectChangeRequestItemEntity,
-  ProjectChangeRequestItemForCreateEntity
+  ProjectChangeRequestItemForCreateEntity,
 } from "@framework/entities";
 import { GetAllForProjectQuery } from "@server/features/partners";
 import { PCRStatus } from "@framework/constants";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
+import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { sum } from "@framework/util";
 import { GetAllProjectRolesForUser, GetByIdQuery } from "../projects";
 import { BadRequestError, CommandBase, ValidationError } from "../common";
@@ -16,24 +17,34 @@ import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
 import { mapToPcrDto } from "./mapToPCRDto";
 
 export class UpdatePCRCommand extends CommandBase<boolean> {
-  constructor(private readonly projectId: string, private readonly projectChangeRequestId: string, private readonly pcr: PCRDto) {
+  constructor(
+    private readonly projectId: string,
+    private readonly projectChangeRequestId: string,
+    private readonly pcr: PCRDto,
+  ) {
     super();
   }
 
-  protected async accessControl(auth: Authorisation, context: IContext) {
+  protected async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer);
   }
 
-  private async insertStatusChange(context: IContext, projectChangeRequestId: string, comments: string, originalStatus: PCRStatus, newStatus: PCRStatus): Promise<void> {
+  private async insertStatusChange(
+    context: IContext,
+    projectChangeRequestId: string,
+    comments: string,
+    originalStatus: PCRStatus,
+    newStatus: PCRStatus,
+  ): Promise<void> {
     const shouldPmSee =
-      newStatus === PCRStatus.SubmittedToMonitoringOfficer
-      || newStatus === PCRStatus.QueriedByMonitoringOfficer
-      || (newStatus === PCRStatus.SubmittedToInnovateUK && originalStatus === PCRStatus.QueriedByInnovateUK);
+      newStatus === PCRStatus.SubmittedToMonitoringOfficer ||
+      newStatus === PCRStatus.QueriedByMonitoringOfficer ||
+      (newStatus === PCRStatus.SubmittedToInnovateUK && originalStatus === PCRStatus.QueriedByInnovateUK);
 
     await context.repositories.projectChangeRequestStatusChange.createStatusChange({
       Acc_ProjectChangeRequest__c: projectChangeRequestId,
       Acc_ExternalComment__c: comments,
-      Acc_ParticipantVisibility__c: shouldPmSee
+      Acc_ParticipantVisibility__c: shouldPmSee,
     });
   }
 
@@ -49,10 +60,21 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     const entityToUpdate = await context.repositories.projectChangeRequests.getById(this.pcr.projectId, this.pcr.id);
     const partners = await context.runQuery(new GetAllForProjectQuery(this.projectId));
     const project = await context.runQuery(new GetByIdQuery(this.projectId));
+    const allPcrs = await context.runQuery(new GetAllPCRsQuery(this.projectId));
 
     const originalDto = mapToPcrDto(entityToUpdate, itemTypes);
 
-    const validationResult = new PCRDtoValidator(this.pcr, projectRoles, itemTypes, true, project, context.config.features, originalDto, partners);
+    const validationResult = new PCRDtoValidator(
+      this.pcr,
+      projectRoles,
+      itemTypes,
+      true,
+      project,
+      context.config.features,
+      originalDto,
+      partners,
+      allPcrs,
+    );
 
     if (!validationResult.isValid) {
       throw new ValidationError(validationResult);
@@ -65,12 +87,18 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     await context.repositories.projectChangeRequests.updateProjectChangeRequest(entityToUpdate);
 
     if (originalDto.status !== this.pcr.status) {
-      await this.insertStatusChange(context, this.projectChangeRequestId, this.pcr.comments, originalDto.status, this.pcr.status);
+      await this.insertStatusChange(
+        context,
+        this.projectChangeRequestId,
+        this.pcr.comments,
+        originalDto.status,
+        this.pcr.status,
+      );
     }
 
     const paired = this.pcr.items.map(item => ({
       item,
-      originalItem: entityToUpdate.items.find(x => x.id === item.id)
+      originalItem: entityToUpdate.items.find(x => x.id === item.id),
     }));
 
     const itemsToUpdate = paired
@@ -83,9 +111,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       })
       // filter those that need updating
       .filter(x => !!x)
-      .map<ProjectChangeRequestItemEntity>(x => x!)
-      ;
-
+      .map<ProjectChangeRequestItemEntity>(x => x!);
     if (itemsToUpdate.length) {
       await context.repositories.projectChangeRequests.updateItems(entityToUpdate, itemsToUpdate);
     }
@@ -102,22 +128,37 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     }
 
     if (auth.forProject(this.projectId).hasRole(ProjectRole.ProjectManager)) {
-      const partnerAdditionItemDto = this.pcr.items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
+      const partnerAdditionItemDto = this.pcr.items.find(
+        x => x.type === PCRItemType.PartnerAddition,
+      ) as PCRItemForPartnerAdditionDto;
       if (partnerAdditionItemDto) {
-        await context.runCommand(new UpdatePCRSpendProfileCommand(this.projectId, partnerAdditionItemDto.id, partnerAdditionItemDto.spendProfile));
+        await context.runCommand(
+          new UpdatePCRSpendProfileCommand(
+            this.projectId,
+            partnerAdditionItemDto.id,
+            partnerAdditionItemDto.spendProfile,
+          ),
+        );
       }
     }
 
     return true;
   }
 
-  private getItemUpdates(item: ProjectChangeRequestItemEntity, dto: PCRItemDto): Partial<ProjectChangeRequestItemEntity> | null {
+  private getItemUpdates(
+    item: ProjectChangeRequestItemEntity,
+    dto: PCRItemDto,
+  ): Partial<ProjectChangeRequestItemEntity> | null {
     const init = item.status !== dto.status ? { status: dto.status } : null;
 
     switch (dto.type) {
       case PCRItemType.TimeExtension:
         if (item.additionalMonths !== dto.additionalMonths) {
-          return { ...init, additionalMonths: dto.additionalMonths, projectDuration: dto.additionalMonths ? dto.additionalMonths + dto.projectDurationSnapshot : null };
+          return {
+            ...init,
+            additionalMonths: dto.additionalMonths,
+            projectDuration: dto.additionalMonths ? dto.additionalMonths + dto.projectDurationSnapshot : null,
+          };
         }
         break;
       case PCRItemType.ScopeChange:
@@ -142,33 +183,33 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
         break;
       case PCRItemType.PartnerAddition:
         if (
-          item.contact1ProjectRole !== dto.contact1ProjectRole
-          || item.contact1Forename !== dto.contact1Forename
-          || item.contact1Surname !== dto.contact1Surname
-          || item.contact1Phone !== dto.contact1Phone
-          || item.contact1Email !== dto.contact1Email
-          || item.financialYearEndTurnover !== dto.financialYearEndTurnover
-          || item.financialYearEndDate !== dto.financialYearEndDate
-          || item.organisationName !== dto.organisationName
-          || item.registeredAddress !== dto.registeredAddress
-          || item.registrationNumber !== dto.registrationNumber
-          || item.projectRole !== dto.projectRole
-          || item.partnerType !== dto.partnerType
-          || item.isCommercialWork !== dto.isCommercialWork
-          || item.projectLocation !== dto.projectLocation
-          || item.projectCity !== dto.projectCity
-          || item.projectPostcode !== dto.projectPostcode
-          || item.participantSize !== dto.participantSize
-          || item.numberOfEmployees !== dto.numberOfEmployees
-          || item.contact2ProjectRole !== dto.contact2ProjectRole
-          || item.contact2Forename !== dto.contact2Forename
-          || item.contact2Surname !== dto.contact2Surname
-          || item.contact2Phone !== dto.contact2Phone
-          || item.contact2Email !== dto.contact2Email
-          || item.awardRate !== dto.awardRate
-          || item.hasOtherFunding !== dto.hasOtherFunding
-          || item.totalOtherFunding !== this.calculateTotalOtherFunding(dto)
-          || item.tsbReference !== dto.tsbReference
+          item.contact1ProjectRole !== dto.contact1ProjectRole ||
+          item.contact1Forename !== dto.contact1Forename ||
+          item.contact1Surname !== dto.contact1Surname ||
+          item.contact1Phone !== dto.contact1Phone ||
+          item.contact1Email !== dto.contact1Email ||
+          item.financialYearEndTurnover !== dto.financialYearEndTurnover ||
+          item.financialYearEndDate !== dto.financialYearEndDate ||
+          item.organisationName !== dto.organisationName ||
+          item.registeredAddress !== dto.registeredAddress ||
+          item.registrationNumber !== dto.registrationNumber ||
+          item.projectRole !== dto.projectRole ||
+          item.partnerType !== dto.partnerType ||
+          item.isCommercialWork !== dto.isCommercialWork ||
+          item.projectLocation !== dto.projectLocation ||
+          item.projectCity !== dto.projectCity ||
+          item.projectPostcode !== dto.projectPostcode ||
+          item.participantSize !== dto.participantSize ||
+          item.numberOfEmployees !== dto.numberOfEmployees ||
+          item.contact2ProjectRole !== dto.contact2ProjectRole ||
+          item.contact2Forename !== dto.contact2Forename ||
+          item.contact2Surname !== dto.contact2Surname ||
+          item.contact2Phone !== dto.contact2Phone ||
+          item.contact2Email !== dto.contact2Email ||
+          item.awardRate !== dto.awardRate ||
+          item.hasOtherFunding !== dto.hasOtherFunding ||
+          item.totalOtherFunding !== this.calculateTotalOtherFunding(dto) ||
+          item.tsbReference !== dto.tsbReference
         ) {
           return {
             ...init,
@@ -212,6 +253,9 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
   }
 
   private calculateTotalOtherFunding(dto: PCRItemForPartnerAdditionDto) {
-    return sum(dto.spendProfile.funds.filter(x => x.costCategory === CostCategoryType.Other_Funding), fund => fund.value || 0);
+    return sum(
+      dto.spendProfile.funds.filter(x => x.costCategory === CostCategoryType.Other_Funding),
+      fund => fund.value || 0,
+    );
   }
 }

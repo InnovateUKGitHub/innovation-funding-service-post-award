@@ -1,3 +1,5 @@
+import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
+
 export enum PCRStatus {
   Unknown = 0,
   Draft = 1,
@@ -98,3 +100,48 @@ export const getPCROrganisationType = (partnerType: PCRPartnerType): PCROrganisa
   }
   return PCROrganisationType.Unknown;
 };
+
+export function getUnavailablePcrItemsMatrix(pcrs: PCRSummaryDto[]): PCRItemType[] {
+  // Note: Avoid wasting time upfront
+  if (!pcrs.length) return [];
+
+  const statusesToIgnore: PCRStatus[] = [
+    PCRStatus.Rejected,
+    PCRStatus.Withdrawn,
+    PCRStatus.Approved,
+    PCRStatus.Actioned,
+  ];
+
+  const filteredPcrs: PCRSummaryDto[] = pcrs.filter(x => !statusesToIgnore.includes(x.status));
+
+  // Note: escape hatch if no available statuses found
+  if (!filteredPcrs.length) return [];
+
+  // Note: Matches business logic to prevent unneeded reconciliation with duplicate pcrs
+  const pcrDisabledMatrix: Record<PCRItemType, PCRItemType[]> = {
+    [PCRItemType.Unknown]: [],
+    [PCRItemType.AccountNameChange]: [],
+    [PCRItemType.PartnerAddition]: [],
+    [PCRItemType.PartnerWithdrawal]: [],
+    [PCRItemType.ProjectSuspension]: [],
+    [PCRItemType.ProjectTermination]: [],
+    [PCRItemType.MultiplePartnerFinancialVirement]: [PCRItemType.MultiplePartnerFinancialVirement],
+    [PCRItemType.SinglePartnerFinancialVirement]: [],
+    [PCRItemType.ScopeChange]: [PCRItemType.ScopeChange],
+    [PCRItemType.TimeExtension]: [PCRItemType.TimeExtension],
+    [PCRItemType.PeriodLengthChange]: [],
+  };
+
+  let matrixItems: PCRItemType[] = [];
+
+  for (const filteredPcr of filteredPcrs) {
+    const itemKeys = filteredPcr.items.map(x => x.type);
+
+    for (const key of itemKeys) {
+      matrixItems = [...matrixItems, ...pcrDisabledMatrix[key]];
+    }
+  }
+
+  // Note: Remove duplicates on final parse
+  return [...new Set([...matrixItems])];
+}

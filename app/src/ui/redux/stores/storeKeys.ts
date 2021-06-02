@@ -19,6 +19,7 @@ const getFinancialVirementKey = (projectId: string, pcrId: string, itemId: strin
   return getKey("financialVirementKey", "project", projectId, "request", pcrId, "itemId", itemId);
 };
 const getPcrTypesKey = () => getKey("pcrTypesKey", "all");
+const pcrAvailableTypesKey = (projectId: string) => getKey("pcrAvailableTypesKey", "project", projectId);
 const getPcrProjectRolesKey = () => getKey("pcrProjectRolesKey", "all");
 const getPcrPartnerTypesKey = () => getKey("pcrPartnerTypesTypesKey", "all");
 const getPcrParticipantSizesKey = () => getKey("pcrParticipantSizesKey", "all");
@@ -41,6 +42,7 @@ export const storeKeys = {
   getPcrKey,
   getFinancialVirementKey,
   getPcrTypesKey,
+  pcrAvailableTypesKey,
   getPcrProjectRolesKey,
   getPcrPartnerTypesKey,
   getPcrParticipantSizesKey,

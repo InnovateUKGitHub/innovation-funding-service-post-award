@@ -1,10 +1,9 @@
-
 import * as ACC from "@ui/components";
 import * as Dtos from "@framework/dtos";
+
 import { Pending } from "@shared/pending";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import { PCRItemType } from "@framework/constants";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 export interface ProjectChangeRequestAddTypeParams {
@@ -16,47 +15,93 @@ interface Data {
   project: Pending<Dtos.ProjectDto>;
   itemTypes: Pending<Dtos.PCRItemTypeDto[]>;
   editor: Pending<IEditorStore<Dtos.PCRDto, PCRDtoValidator>>;
-  projectChangeRequest: Pending<Dtos.PCRDto>;
 }
 
 interface Callbacks {
   onChange: (saving: boolean, dto: Dtos.PCRDto) => void;
-  createNewChangeRequestItem: (itemType: Dtos.PCRItemTypeDto) => (Dtos.PCRItemDto);
+  createNewChangeRequestItem: (itemType: Dtos.PCRItemTypeDto) => Dtos.PCRItemDto;
 }
 
 class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParams, Data, Callbacks> {
-
   render() {
-    const combined = Pending.combine({ project: this.props.project, editor: this.props.editor, projectChangeRequest: this.props.projectChangeRequest, itemTypes: this.props.itemTypes });
-    return <ACC.PageLoader pending={combined} render={d => this.renderContents(d.project, d.editor, d.projectChangeRequest, d.itemTypes)} />;
+    const combined = Pending.combine({
+      project: this.props.project,
+      editor: this.props.editor,
+      itemTypes: this.props.itemTypes,
+    });
+
+    return <ACC.PageLoader pending={combined} render={d => this.renderContents(d.project, d.editor, d.itemTypes)} />;
   }
 
-  private renderContents(project: Dtos.ProjectDto, editor: IEditorStore<Dtos.PCRDto, PCRDtoValidator>, original: Dtos.PCRDto, itemTypes: Dtos.PCRItemTypeDto[]) {
+  private renderContents(
+    project: Dtos.ProjectDto,
+    editor: IEditorStore<Dtos.PCRDto, PCRDtoValidator>,
+    itemTypes: Dtos.PCRItemTypeDto[],
+  ) {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.projectChangeRequestId })}>Back to requests</ACC.BackLink>}
+        backLink={
+          <ACC.BackLink
+            route={this.props.routes.pcrPrepare.getLink({
+              projectId: this.props.projectId,
+              pcrId: this.props.projectChangeRequestId,
+            })}
+          >
+            Back to requests
+          </ACC.BackLink>
+        }
         pageTitle={<ACC.Projects.Title {...project} />}
         project={project}
         validator={editor.validator}
         error={editor.error}
       >
-        <ACC.Section qa="pcr-AddType">
-          {this.renderForm(editor, original, itemTypes)}
-        </ACC.Section>
+        <ACC.Section qa="pcr-AddType">{this.renderForm(editor, itemTypes)}</ACC.Section>
       </ACC.Page>
     );
   }
 
-  private renderForm(pcrEditor: IEditorStore<Dtos.PCRDto, PCRDtoValidator>, original: Dtos.PCRDto, itemTypes: Dtos.PCRItemTypeDto[]): React.ReactNode {
+  private getListData(editorItems: Dtos.PCRItemDto[], itemTypes: Dtos.PCRItemTypeDto[]) {
+    const filteredOptions = itemTypes.reduce<ACC.SelectOption[][]>(
+      (allOptions, itemType) => {
+        const id = `${itemType.type}`;
+        const hasSelectedOption = editorItems.some(x => `${x.type}` === id);
+
+        const option = {
+          id,
+          value: itemType.displayName,
+          disabled: itemType.disabled,
+        };
+
+        const newOptions = [...allOptions[0], option];
+        const newSelectedOptions = hasSelectedOption ? [...allOptions[1], option] : allOptions[1];
+
+        return [newOptions, newSelectedOptions];
+      },
+      [[], []],
+    );
+
+    const [options, selected] = filteredOptions;
+
+    return {
+      options,
+      selected,
+    };
+  }
+
+  private renderForm(
+    pcrEditor: IEditorStore<Dtos.PCRDto, PCRDtoValidator>,
+    itemTypes: Dtos.PCRItemTypeDto[],
+  ): React.ReactNode {
     const PCRForm = ACC.TypedForm<Dtos.PCRDto>();
-    const preselectedItems: PCRItemType[] = original.items.map(x => x.type);
-    const options = itemTypes
-      .filter(x => x.enabled)
-      .map<ACC.SelectOption>(x => ({ id: x.type.toString(), value: x.displayName, disabled: preselectedItems.indexOf(x.type) >= 0 }));
-    const selected = options.filter(x => pcrEditor.data.items.some(y => y.type.toString() === x.id));
+    const { options, selected } = this.getListData(pcrEditor.data.items, itemTypes);
 
     return (
-      <PCRForm.Form editor={pcrEditor} onSubmit={() => this.props.onChange(true, pcrEditor.data)} onChange={dto => this.props.onChange(false, dto)} qa="pcr-AddTypeForm">
+      <PCRForm.Form
+        qa="pcr-AddTypeForm"
+        editor={pcrEditor}
+        onSubmit={() => this.props.onChange(true, pcrEditor.data)}
+        onChange={dto => this.props.onChange(false, dto)}
+      >
         <PCRForm.Fieldset heading="Select request types">
           <PCRForm.Checkboxes
             hint="You can select more than one."
@@ -71,42 +116,59 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
             }}
           />
         </PCRForm.Fieldset>
+
         <PCRForm.Fieldset>
           <PCRForm.Submit>Add to request</PCRForm.Submit>
-          <ACC.Link styling="SecondaryButton" route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.projectChangeRequestId })}>Cancel</ACC.Link>
+
+          <ACC.Link
+            styling="SecondaryButton"
+            route={this.props.routes.pcrPrepare.getLink({
+              projectId: this.props.projectId,
+              pcrId: this.props.projectChangeRequestId,
+            })}
+          >
+            Cancel
+          </ACC.Link>
         </PCRForm.Fieldset>
       </PCRForm.Form>
     );
   }
 }
 
-const PCRAddTypeContainer = (props: ProjectChangeRequestAddTypeParams & BaseProps) => (
-  <StoresConsumer>
-    {stores => (
-      <PCRAddTypeComponent
-        project={stores.projects.getById(props.projectId)}
-        itemTypes={stores.projectChangeRequests.getAllPcrTypes()}
-        projectChangeRequest={stores.projectChangeRequests.getById(props.projectId, props.projectChangeRequestId)}
-        editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.projectChangeRequestId)}
-        onChange={(saving, dto) => stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, () => stores.navigation.navigateTo(props.routes.pcrPrepare.getLink({ projectId: props.projectId, pcrId: props.projectChangeRequestId })))}
-        createNewChangeRequestItem={(itemType: Dtos.PCRItemTypeDto) => stores.projectChangeRequests.createNewChangeRequestItem(itemType)}
-        {...props}
-      />
-    )}
-  </StoresConsumer>
-);
+const PCRAddTypeContainer = (props: ProjectChangeRequestAddTypeParams & BaseProps) => {
+  const stores = useStores();
+
+  return (
+    <PCRAddTypeComponent
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      itemTypes={stores.projectChangeRequests.getAllAvailablePcrTypes(props.projectId)}
+      editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.projectChangeRequestId)}
+      onChange={(saving, dto) =>
+        stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, () =>
+          stores.navigation.navigateTo(
+            props.routes.pcrPrepare.getLink({ projectId: props.projectId, pcrId: props.projectChangeRequestId }),
+          ),
+        )
+      }
+      createNewChangeRequestItem={(itemType: Dtos.PCRItemTypeDto) =>
+        stores.projectChangeRequests.createNewChangeRequestItem(itemType)
+      }
+    />
+  );
+};
 
 export const ProjectChangeRequestAddTypeRoute = defineRoute({
   routeName: "projectChangeRequestAddType",
   routePath: "/projects/:projectId/pcrs/:projectChangeRequestId/prepare/add",
   container: PCRAddTypeContainer,
-  getParams: (route) => ({
+  getParams: route => ({
     projectId: route.params.projectId,
     projectChangeRequestId: route.params.projectChangeRequestId,
   }),
   getTitle: () => ({
     htmlTitle: "Add types",
-    displayTitle: "Add types"
+    displayTitle: "Add types",
   }),
-  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasRole(Dtos.ProjectRole.ProjectManager)
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(Dtos.ProjectRole.ProjectManager),
 });

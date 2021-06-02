@@ -1,12 +1,12 @@
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import { CreatePcrParams, PCRCreateRoute, ProjectChangeRequestPrepareRoute, } from "@ui/containers";
+import { CreatePcrParams, PCRCreateRoute, ProjectChangeRequestPrepareRoute } from "@ui/containers";
 import {
   PCRDto,
   PCRItemDto,
   PCRItemForPartnerAdditionDto,
   PCRStandardItemDto,
   ProjectDto,
-  ProjectRole
+  ProjectRole,
 } from "@framework/dtos";
 import { IContext, ILinkInfo, PCRItemType } from "@framework/types";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
@@ -20,9 +20,13 @@ export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBa
     super(PCRCreateRoute, ["default"], "pcr");
   }
 
-  protected async getDto(context: IContext, params: CreatePcrParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
-
-    const types: string[] = body.types ? Array.isArray(body.types) ? body.types : [body.types] : [];
+  protected async getDto(
+    context: IContext,
+    params: CreatePcrParams,
+    button: IFormButton,
+    body: IFormBody & { types?: string | string[] },
+  ): Promise<PCRDto> {
+    const types: string[] = body.types ? (Array.isArray(body.types) ? body.types : [body.types]) : [];
 
     const items: Partial<PCRItemDto>[] = types.map((x: string) => ({
       type: parseInt(x, 10),
@@ -30,23 +34,35 @@ export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBa
     }));
 
     const addPartnerItem = items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
+
     if (addPartnerItem) {
-      addPartnerItem.spendProfile = { costs: [], funds: [], pcrItemId: addPartnerItem.id };
+      const initialSpendProfile = {
+        costs: [],
+        funds: [],
+        pcrItemId: addPartnerItem.id,
+      };
+
+      addPartnerItem.spendProfile = initialSpendProfile;
     }
 
     const dto: Partial<PCRDto> = {
       status: PCRStatus.Draft,
       reasoningStatus: PCRItemStatus.ToDo,
       projectId: params.projectId,
-      items: items as PCRStandardItemDto[]
+      items: items as PCRStandardItemDto[],
     };
 
     return dto as PCRDto;
   }
 
-  protected async run(context: IContext, params: CreatePcrParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
+  protected async run(
+    context: IContext,
+    params: CreatePcrParams,
+    button: IFormButton,
+    dto: PCRDto,
+  ): Promise<ILinkInfo> {
     const id = await context.runCommand(new CreateProjectChangeRequestCommand(params.projectId, dto));
-    return ProjectChangeRequestPrepareRoute.getLink({projectId: params.projectId, pcrId: id});
+    return ProjectChangeRequestPrepareRoute.getLink({ projectId: params.projectId, pcrId: id });
   }
 
   protected getStoreKey(params: CreatePcrParams) {
