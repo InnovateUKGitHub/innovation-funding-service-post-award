@@ -63,28 +63,39 @@ export const PCRRecordTypeMetaValues: IMetaValue[] = [
 ];
 
 export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
-  protected async Run(context: IContext) {
-    const recordTypes = (await context.runQuery(new GetAllRecordTypesQuery()))
-      .filter(x => x.parent === "Acc_ProjectChangeRequest__c");
+  protected async Run(context: IContext): Promise<PCRItemTypeDto[]> {
+    const allRecordTypes = await context.runQuery(new GetAllRecordTypesQuery());
+    const pcrRecordTypes = allRecordTypes.filter(x => x.parent === "Acc_ProjectChangeRequest__c");
 
     /// meta values controls order
-    return PCRRecordTypeMetaValues
-      .map<PCRItemTypeDto>(metaInfo => ({
-        type: metaInfo.type,
-        displayName: metaInfo.displayName || metaInfo.typeName,
-        enabled: this.getEnabledStatus(metaInfo, context.config),
-        recordTypeId: this.findRecordType(metaInfo.typeName, recordTypes),
-        files: metaInfo.files && metaInfo.files.map(file => ({ name: file, relativeUrl: `/assets/pcr_templates/${file}` })) || []
-      }));
+    return PCRRecordTypeMetaValues.map<PCRItemTypeDto>(metaInfo => ({
+      type: metaInfo.type,
+      displayName: metaInfo.displayName || metaInfo.typeName,
+      enabled: this.getEnabledStatus(metaInfo, context.config),
+      disabled: false,
+      recordTypeId: this.findRecordType(metaInfo.typeName, pcrRecordTypes),
+      files: this.getPCRFiles(metaInfo.files),
+    }));
+  }
+
+  private getPCRFiles(metaInfoFiles: IMetaValue["files"]): PCRItemTypeDto["files"] {
+    if (!metaInfoFiles?.length) return [];
+
+    return metaInfoFiles.map(file => ({
+      name: file,
+      relativeUrl: `/assets/pcr_templates/${file}`,
+    }));
   }
 
   private getEnabledStatus(metaInfo: IMetaValue, config: IConfig): boolean {
     if (metaInfo.type === PCRItemType.SinglePartnerFinancialVirement) {
       return false;
     }
+
     if (metaInfo.type === PCRItemType.MultiplePartnerFinancialVirement) {
       return true;
     }
+
     if (metaInfo.type === PCRItemType.PeriodLengthChange) {
       return config.features.changePeriodLengthWorkflow;
     }
@@ -92,7 +103,7 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
   }
 
   private findRecordType(typeName: string, recordTypes: RecordType[]): string {
-    const result = recordTypes.find(y => y.type === typeName);
-    return result && result.id || "Unknown";
+    const recordType = recordTypes.find(y => y.type === typeName);
+    return recordType?.id || "Unknown";
   }
 }

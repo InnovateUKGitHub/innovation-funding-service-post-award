@@ -60,6 +60,7 @@ export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHand
       displayName: "",
       recordTypeId: "",
       enabled: false,
+      disabled: false,
       files:[]
     }];
     return new PCRDtoValidator(dto, ProjectRole.Unknown, projectChangeRequestItemTypes, false, {} as ProjectDto, Configuration.features, dto);

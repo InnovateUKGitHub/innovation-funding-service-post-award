@@ -97,7 +97,8 @@ const clientApi: IApiClient = {
       ajaxPostFiles(`/api/documents/partners/${projectId}/${partnerId}`, documents),
   },
   financialVirements: {
-    get: params => ajaxJson(`/api/financial-virements/${params.projectId}/${params.pcrId}/${params.pcrItemId}/${params.partnerId}`),
+    get: params =>
+      ajaxJson(`/api/financial-virements/${params.projectId}/${params.pcrId}/${params.pcrItemId}/${params.partnerId}`),
     update: params =>
       ajaxPut(
         `/api/financial-virements/${params.projectId}/${params.pcrId}/${params.pcrItemId}/${params.partnerId}?submit=${params.submit}`,
@@ -141,6 +142,7 @@ const clientApi: IApiClient = {
     getAll: params => ajax(`/api/pcrs?projectId=${params.projectId}`),
     get: params => ajax(`/api/pcrs/${params.projectId}/${params.id}`),
     getTypes: () => ajax("/api/pcrs/types"),
+    getAvailableTypes: params => ajax(`/api/pcrs/available-types?projectId=${params.projectId}`),
     update: params => ajaxPut(`/api/pcrs/${params.projectId}/${params.id}`, params.pcr),
     delete: params => ajaxDelete(`/api/pcrs/${params.projectId}/${params.id}`),
     getStatusChanges: params => ajax(`/api/pcrs/status-changes/${params.projectId}/${params.projectChangeRequestId}`),

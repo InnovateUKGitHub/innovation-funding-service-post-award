@@ -15,11 +15,12 @@ import {
   PCRItemTypeDto,
   PCRStandardItemDto,
   ProjectDto,
-  ProjectRole
+  ProjectRole,
+  PCRSummaryDto
 } from "@framework/dtos";
 import { PCRItemStatus, PCRItemType, PCROrganisationType, PCRProjectRole, PCRStatus } from "@framework/constants";
 import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
-import { IFeatureFlags } from "@framework/types";
+import { IFeatureFlags, getUnavailablePcrItemsMatrix } from "@framework/types";
 import { Result, Results } from "../validation";
 import * as Validation from "./common";
 
@@ -33,7 +34,8 @@ export class PCRDtoValidator extends Results<PCRDto> {
     private readonly project: ProjectDto,
     private readonly featureFlags: IFeatureFlags,
     private readonly original?: PCRDto,
-    private readonly partners?: PartnerDto[]
+    private readonly partners?: PartnerDto[],
+    private readonly projectPcrs?: PCRSummaryDto[],
   ) {
     super(model, showValidationErrors);
   }
@@ -176,6 +178,23 @@ export class PCRDtoValidator extends Results<PCRDto> {
     }
   }
 
+  private getExistingPcrItemError(invalidTypes: PCRItemType[]): string {
+    // Note: Extract invalid displayNames from inbound payload
+    const errorTypes = this.recordTypes.reduce<string[]>((acc, x) => {
+      if (!invalidTypes.includes(x.type)) return acc;
+
+      return acc.concat(x.displayName);
+    }, []);
+
+    if (errorTypes.length === 1) {
+      return `You can only have one '${errorTypes[0]}' change in progress at a time.`;
+    }
+
+    const errorValues = `'${errorTypes.join("', '")}'`;
+
+    return `You cannot have more than one of each of these types of change in progress at one time: ${errorValues}.`;
+  }
+
   public comments = this.validateComments();
   public status = this.validateStatus();
   public reasoningComments = this.validateReasoningComments();
@@ -185,10 +204,24 @@ export class PCRDtoValidator extends Results<PCRDto> {
     this,
     this.model.items,
     item => this.getItemValidator(item),
-    children => children.all(
-      () => children.required("You must select at least one of the types"),
-      () => children.hasNoDuplicates(x => x.type, "No duplicate items allowed")
-    )
+    children =>
+      children.all(
+        () => children.required("You must select at least one of the types"),
+        () => children.hasNoDuplicates(x => x.type, "No duplicate items allowed"),
+        () => {
+          if (!this.projectPcrs?.length) {
+            return children.valid();
+          }
+
+          const allPcrsExceptDto = this.projectPcrs.filter(x => x.id !== this.model.id);
+
+          return children.hasMatchingValue(
+            getUnavailablePcrItemsMatrix(allPcrsExceptDto),
+            x => x.type,
+            rejectedItemTypes => this.getExistingPcrItemError(rejectedItemTypes),
+          );
+        },
+      ),
   );
 }
 

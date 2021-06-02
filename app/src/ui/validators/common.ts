@@ -200,6 +200,20 @@ export class ChildValidators<T> {
     return this.expected(test, false, message || "Should be false");
   }
 
+  public hasMatchingValue<TCompare = T>(
+    expectedValue: TCompare | TCompare[],
+    getComparison: (item: T) => TCompare,
+    errorMessage: (itemComparison: TCompare[]) => string,
+  ): Result {
+    const listToCheck = this.items.map(getComparison);
+    const crossCheckList = Array.isArray(expectedValue) ? expectedValue : [expectedValue];
+    const inValidMatchingList = listToCheck.filter(valueToCheck => crossCheckList.includes(valueToCheck));
+
+    const hasNoMatchingItems = !inValidMatchingList.length;
+
+    return this.isTrue(() => hasNoMatchingItems, errorMessage(inValidMatchingList));
+  }
+
   public hasNoDuplicates<TCompare = T>(getComparison?: (item: T) => TCompare, message?: string) {
     const test = (items: T[]) => {
       const mapped = this.items.map(x => getComparison ? getComparison(x) : x);
