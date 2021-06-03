@@ -1,4 +1,4 @@
-import { isNumber, parseNumber, roundCurrency, sum } from "@framework/util/numberHelper";
+import { diffAsPercentage, isNumber, parseNumber, roundCurrency, sum } from "@framework/util/numberHelper";
 
 describe("numberHelper", () => {
   describe("isNumber()", () => {
@@ -59,6 +59,25 @@ describe("numberHelper", () => {
 
         expect(roundedNumber).toBe(negativeExpectedValue);
       });
+    });
+  });
+
+  describe("diffAsPercentage()", () => {
+    test.each`
+      name                                      | startingValue | secondValue | expectedValue
+      ${"with no difference"}                   | ${15}         | ${15}       | ${0}
+      ${"with percentage is negative"}          | ${40000}      | ${27000}    | ${-32.5}
+      ${"with numbers as floats"}               | ${5000}       | ${20000}    | ${300}
+      ${"with numbers as integers"}             | ${40000}      | ${17123.78} | ${-57.19}
+      ${"with 100% increase"}                   | ${2100}       | ${4200}     | ${100}
+      ${"with common js rounding bug"}          | ${0.1}        | ${0.2}      | ${100}
+      ${"with common js rounding bug inverted"} | ${0.2}        | ${0.1}      | ${-50}
+      ${"with negative difference"}             | ${2100}       | ${0}        | ${-100}
+      ${"with incalculable difference"}         | ${0}          | ${100}      | ${0}
+    `("$name value", ({ startingValue, secondValue, expectedValue }) => {
+      const value = diffAsPercentage(startingValue, secondValue);
+
+      expect(value).toBe(expectedValue);
     });
   });
 

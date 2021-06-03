@@ -5,6 +5,7 @@ import * as ACC from "@ui/components";
 import { CostCategoryVirementDto, PartnerDto, PartnerVirementsDto, PCRDto, ProjectDto, ProjectRole } from "@framework/dtos";
 import { createDto } from "@framework/util/dtoHelpers";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { roundCurrency } from "@framework/util";
 
 interface Params {
   projectId: string;
@@ -45,17 +46,38 @@ class Component extends ContainerBase<Params, Props, {}> {
 
     const VirementTable = ACC.TypedTable<typeof data[0]>();
     return (
-      <ACC.Page
-        backLink={this.getBackLink()}
-        pageTitle={<ACC.Projects.Title {...project} />}
-      >
+      <ACC.Page backLink={this.getBackLink()} pageTitle={<ACC.Projects.Title {...project} />}>
         <ACC.Section title={partner.name}>
           {this.renderReasoning(project, pcr)}
           <VirementTable.Table qa="partnerVirements" data={data}>
-            <VirementTable.String qa="costCategory" headerContent={x => x.financialVirementDetails.labels.costCategoryName} value={x => x.costCategory.name} footer={<ACC.Content value={x => x.financialVirementDetails.labels.partnerTotals} />} />
-            <VirementTable.Currency qa="originalEligibleCosts" headerContent={x => x.financialVirementDetails.labels.costCategoryOriginalEligibleCosts} value={x => x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.originalEligibleCosts} />} />
-            <VirementTable.Currency qa="newEligibleCosts" headerContent={x => x.financialVirementDetails.labels.costCategoryNewEligibleCosts} value={x => x.virement.newEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.newEligibleCosts} />} />
-            <VirementTable.Currency qa="difference" headerContent={x => x.financialVirementDetails.labels.costCategoryDifferenceCosts} value={x => x.virement.newEligibleCosts - x.virement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={financialVirements.newEligibleCosts - financialVirements.originalEligibleCosts} />} />
+            <VirementTable.String
+              qa="costCategory"
+              headerContent={x => x.financialVirementDetails.labels.costCategoryName}
+              value={x => x.costCategory.name}
+              footer={<ACC.Content value={x => x.financialVirementDetails.labels.partnerTotals} />}
+            />
+            <VirementTable.Currency
+              qa="originalEligibleCosts"
+              headerContent={x => x.financialVirementDetails.labels.costCategoryOriginalEligibleCosts}
+              value={x => x.virement.originalEligibleCosts}
+              footer={<ACC.Renderers.Currency value={financialVirements.originalEligibleCosts} />}
+            />
+            <VirementTable.Currency
+              qa="newEligibleCosts"
+              headerContent={x => x.financialVirementDetails.labels.costCategoryNewEligibleCosts}
+              value={x => x.virement.newEligibleCosts}
+              footer={<ACC.Renderers.Currency value={financialVirements.newEligibleCosts} />}
+            />
+            <VirementTable.Currency
+              qa="difference"
+              headerContent={x => x.financialVirementDetails.labels.costCategoryDifferenceCosts}
+              value={x => roundCurrency(x.virement.newEligibleCosts - x.virement.originalEligibleCosts)}
+              footer={
+                <ACC.Renderers.Currency
+                  value={roundCurrency(financialVirements.newEligibleCosts - financialVirements.originalEligibleCosts)}
+                />
+              }
+            />
           </VirementTable.Table>
         </ACC.Section>
       </ACC.Page>

@@ -11,6 +11,7 @@ import { range } from "@shared/range";
 import { projectCompetition } from "@ui/hooks";
 import { Content } from "@content/content";
 import { CostCategoryName } from "@framework/entities";
+import { diffAsPercentage } from "@framework/util/numberHelper";
 
 export interface EditClaimDetailsParams {
   projectId: string;
@@ -399,7 +400,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     const total = data.reduce((t, item) => t + (item.value || 0), 0);
     // @TODO remove multiply by 100
     const forecast = forecastDetail.value;
-    const diff = 100 * (forecast - total) / forecast;
+    const diff = diffAsPercentage(forecast, total);
 
     const footers: JSX.Element[] = [];
 

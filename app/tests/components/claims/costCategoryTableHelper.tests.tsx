@@ -507,7 +507,7 @@ describe("createTableData()", () => {
       expect(typeof firstLineItem.label).toBe("object");
       expect(firstLineItem.isTotal).toBe(false);
       expect(firstLineItem.differenceInPounds).toBe(6500);
-      expect(firstLineItem.diffPercentage).toBe(65);
+      expect(firstLineItem.diffPercentage).toBe(-65);
       expect(firstLineItem.category).toStrictEqual(stubData.costCategories[0]);
       expect(firstLineItem.cost).toStrictEqual(stubData.claimDetails[0]);
     });
@@ -562,7 +562,7 @@ describe("createTableData()", () => {
       expect(typeof row1.label).toBe("object");
       expect(row1.isTotal).toBe(false);
       expect(row1.differenceInPounds).toBe(6500);
-      expect(row1.diffPercentage).toBe(65);
+      expect(row1.diffPercentage).toBe(-65);
       expect(row1.category).toStrictEqual(stubData.costCategories[0]);
       expect(row1.cost).toStrictEqual(stubData.claimDetails[0]);
 
@@ -634,7 +634,7 @@ describe("createTableData()", () => {
 
       expect(totalRow.label).toBe("Total");
       expect(totalRow.differenceInPounds).toBe(7800);
-      expect(totalRow.diffPercentage).toBe(65);
+      expect(totalRow.diffPercentage).toBe(-65);
       expect(totalRow.cost.offerTotal).toBe(36000);
       expect(totalRow.cost.costsClaimedToDate).toBe(6000);
       expect(totalRow.cost.forecastThisPeriod).toBe(12000);

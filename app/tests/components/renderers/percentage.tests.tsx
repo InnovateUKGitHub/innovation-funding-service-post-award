@@ -2,9 +2,9 @@ import { mount } from "enzyme";
 import { Percentage } from "../../../src/ui/components/renderers";
 
 describe("Percentage", () => {
-  it("should render the percentage with 1 decimal place by default", () => {
+  it("should render the percentage with 2 decimal place by default", () => {
     const wrapper = mount(<Percentage value={100}/>);
-    expect(wrapper.text()).toEqual("100.0%");
+    expect(wrapper.text()).toEqual("100.00%");
   });
 
   it("should render the percentage with 5 decimal places", () => {
