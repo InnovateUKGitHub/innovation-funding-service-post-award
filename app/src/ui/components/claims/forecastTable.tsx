@@ -14,6 +14,7 @@ import { roundCurrency, numberComparator } from "@framework/util";
 import { EditorStatus, IEditorStore } from "@ui/redux";
 import { IForecastDetailsDtosValidator, IForecastDetailsDtoValidator } from "@ui/validators";
 import classNames from "classnames";
+import { diffAsPercentage } from "@framework/util/numberHelper";
 import { NumberInput } from "../inputs/numberInput";
 import { AccessibilityText } from "../renderers/accessibilityText";
 import { Currency } from "../renderers/currency";
@@ -204,7 +205,7 @@ export class ForecastTable extends React.Component<Props> {
 
       const gol = data.golCosts.find(x => x.costCategoryId === category.id);
       row.golCosts = gol ? gol.value : 0;
-      row.difference = this.calculateDifference(row.golCosts, row.total);
+      row.difference = diffAsPercentage(row.golCosts, row.total);
 
       tableRows.push(row);
     });
@@ -240,10 +241,6 @@ export class ForecastTable extends React.Component<Props> {
     } else {
       row.forecasts[periodId] = 0;
     }
-  }
-
-  private calculateDifference(a: number, b: number) {
-    return ((a - b) / Math.max(1, a)) * 100;
   }
 
   private calculateClaimPeriods(data: ForecastData) {
@@ -398,7 +395,7 @@ export class ForecastTable extends React.Component<Props> {
     cells.push(this.renderTableFooterCell(golTotal, totals.length + 2, "sticky-col sticky-col-right-2"));
     cells.push((
       <td key="total_diff" className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular sticky-col sticky-col-right-1">
-        <Percentage value={this.calculateDifference(golTotal, costTotal)} />
+        <Percentage value={diffAsPercentage(golTotal, costTotal)} />
       </td>
     ));
 

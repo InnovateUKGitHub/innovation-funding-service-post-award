@@ -157,7 +157,7 @@ class EditPageComponent extends ContainerBase<VirementCostsParams, Props, {}> {
                 <VirementTable.Currency
                   qa="difference"
                   header={this.props.content.costCategoryDifferenceCosts}
-                  value={x => x.virement.newEligibleCosts - x.virement.originalEligibleCosts}
+                  value={x => roundCurrency(x.virement.newEligibleCosts - x.virement.originalEligibleCosts)}
                 />
               </VirementTable.Table>
             </VirementForm.Fieldset>
@@ -176,7 +176,7 @@ class EditPageComponent extends ContainerBase<VirementCostsParams, Props, {}> {
                 <SummaryTable.Currency
                   qa="differenceEligibleCosts"
                   header={this.props.content.projectDifferenceCosts}
-                  value={x => x.newEligibleCosts - x.originalEligibleCosts}
+                  value={x => roundCurrency(x.newEligibleCosts - x.originalEligibleCosts)}
                 />
                 <SummaryTable.Currency
                   qa="originalRemainingGrant"
@@ -191,7 +191,7 @@ class EditPageComponent extends ContainerBase<VirementCostsParams, Props, {}> {
                 <SummaryTable.Currency
                   qa="differenceRemainingGrant"
                   header={this.props.content.projectDifferenceGrant}
-                  value={x => x.newRemainingGrant - x.originalRemainingGrant}
+                  value={x => roundCurrency(x.newRemainingGrant - x.originalRemainingGrant)}
                 />
               </SummaryTable.Table>
             </VirementForm.Fieldset>

@@ -6,7 +6,7 @@ import { ILinkInfo } from "@framework/types/ILinkInfo";
 
 import { Link } from "@ui/components";
 import { Result } from "@ui/validation";
-import { diffAsPercentage, diffAsPounds } from "@ui/helpers/currency";
+import { roundCurrency, diffAsPercentage } from "@framework/util";
 
 export interface ClaimProps {
   project: ProjectDto;
@@ -14,7 +14,7 @@ export interface ClaimProps {
   costCategories: CostCategoryDto[];
   claim: ClaimDto;
   claimDetails: CostsSummaryForPeriodDto[];
-  standardOverheadRate: number;
+  standardOverheadRate: number; // TODO - doesn't look like we're using this anywhere for calculations/display purposes
   getLink: (costCategoryId: string) => ILinkInfo | null;
   validation?: Result;
 }
@@ -114,7 +114,7 @@ function calculateTotalRow(claimDetails: ClaimProps["claimDetails"]): ClaimTable
   return {
     ...staticTotalRowData,
     cost: totalRowCosts,
-    differenceInPounds: diffAsPounds(totalRowCosts.forecastThisPeriod, totalRowCosts.costsClaimedThisPeriod),
+    differenceInPounds: roundCurrency(totalRowCosts.forecastThisPeriod - totalRowCosts.costsClaimedThisPeriod),
     diffPercentage: diffAsPercentage(totalRowCosts.forecastThisPeriod, totalRowCosts.costsClaimedThisPeriod),
   };
 }
@@ -133,7 +133,7 @@ function createRow(category: CostCategoryDto, claimItem: ClaimProps) {
     isTotal: false,
     category,
     cost: item || emptyCostsSummaryForPeriodDto,
-    differenceInPounds: item ? diffAsPounds(item.forecastThisPeriod, item.costsClaimedThisPeriod) : 0,
+    differenceInPounds: item ? roundCurrency(item.forecastThisPeriod - item.costsClaimedThisPeriod) : 0,
     diffPercentage: item ? diffAsPercentage(item.forecastThisPeriod, item.costsClaimedThisPeriod) : 0,
   };
 

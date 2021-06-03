@@ -20,6 +20,18 @@ export function roundCurrency(value: number) {
   return roundedValue / 100;
 }
 
+export function diffAsPercentage<T extends number>(startingValue: T, secondValue: T) {
+  if (startingValue === 0) return 0;
+
+  const roundedStarting = roundCurrency(startingValue);
+  const roundedSecond = roundCurrency(secondValue);
+
+  const roundedDiff = (roundedSecond - roundedStarting);
+  const unRoundedPercentage = (roundedDiff * 100) / roundedStarting;
+
+  return roundCurrency(unRoundedPercentage);
+}
+
 /**
  * @description Converts a string to a number where possible.
  * - If the object passed in is empty, will return null.

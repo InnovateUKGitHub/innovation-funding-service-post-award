@@ -17,6 +17,7 @@ import {
   ProjectDto,
   ProjectRole,
 } from "@framework/types";
+import { roundCurrency } from "@framework/util";
 
 export interface ClaimSummaryParams {
   projectId: string;
@@ -253,7 +254,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
       (data.partner.totalParticipantCostsClaimed || 0) +
       (data.claim.totalCost || 0);
 
-    const difference = totalEligibleCosts - totalForecastsAndCosts;
+    const difference = roundCurrency(totalEligibleCosts - totalForecastsAndCosts);
     const differencePercentage = totalEligibleCosts > 0 ? (difference * 100) / totalEligibleCosts : 0;
     const eligibleCostsLabel = <ACC.Content value={x => x.claimPrepareSummary.eligibleCostsLabel} />;
     const forecastLabel = <ACC.Content value={x => x.claimPrepareSummary.forecastLabel} />;
