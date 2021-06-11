@@ -1,5 +1,5 @@
 import { Stream } from "stream";
-import { Connection, DescribeSObjectResult, Field, Query, RecordResult } from "jsforce";
+import { Connection, DescribeSObjectResult, Field, Query, RecordResult, SuccessResult } from "jsforce";
 
 import * as Errors from "@server/repositories/errors";
 import { ISalesforceMapper } from "@server/repositories/mappers/saleforceMapperBase";
@@ -79,9 +79,14 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
 
   protected async retrieve(id: string): Promise<TEntity | null> {
     try {
-      const conn = await this.getSalesforceConnection();
-      const salesforce = await conn.sobject<TSalesforce>(this.salesforceObjectName).retrieve(id);
-      return salesforce && this.mapper.map(salesforce);
+      const connection = await this.getSalesforceConnection();
+      const targetObject = await connection.sobject<TSalesforce>(this.salesforceObjectName).retrieve(id);
+
+      if (!targetObject) {
+        throw new Errors.SalesforceInvalidFilterError(`No items was found using "${id}"`);
+      }
+
+      return this.mapper.map(targetObject);
     } catch (e) {
       if (e.errorCode === "MALFORMED_ID" || e.errorCode === "NOT_FOUND") {
         return null;
@@ -92,87 +97,105 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   }
 
   protected async all(): Promise<TEntity[]> {
-    const conn = await this.getSalesforceConnection();
-    const result = await conn
-      .sobject(this.salesforceObjectName)
-      .select(this.salesforceFieldNames)
-      .execute()
-      .then(x => this.map(x))
-      .catch(e => {
-        throw this.constructError(e);
-      });
-    return result as TEntity[];
+    const connection = await this.getSalesforceConnection();
+    const targetObject = connection.sobject(this.salesforceObjectName);
+
+    try {
+      const allItems = await targetObject.select(this.salesforceFieldNames).execute();
+
+      return this.map(allItems);
+    } catch (error) {
+      throw this.constructError(error);
+    }
   }
 
   protected async getBlob(id: string, fieldName: string): Promise<Stream> {
-    const conn = await this.getSalesforceConnection();
-    return conn.sobject(this.salesforceObjectName).record(id).blob(fieldName);
+    const connection = await this.getSalesforceConnection();
+    const targetObject = connection.sobject(this.salesforceObjectName);
+    const record = targetObject.record(id);
+
+    return record.blob(fieldName);
   }
 
   private async getMetadata(): Promise<DescribeSObjectResult> {
-    const conn = await this.getSalesforceConnection();
-    return conn
-      .sobject(this.salesforceObjectName)
-      .describe()
-      .catch(e => {
-        throw this.constructError(e);
-      });
+    const connection = await this.getSalesforceConnection();
+    const targetObject = connection.sobject(this.salesforceObjectName);
+
+    try {
+      return targetObject.describe();
+    } catch (error) {
+      throw this.constructError(error);
+    }
   }
 
   private async getFieldMetadata(field: string): Promise<Field> {
     const metadata = await this.getMetadata();
     const fieldDescription = metadata.fields.find(x => x.name === field);
+
     if (!fieldDescription) {
       throw new BadRequestError(`Bad field description: ${field}`);
     }
+
     return fieldDescription;
   }
 
   // Using own return type and not jsforce PicklistEntry so we can omit unwanted fields like "defaultValue".
   // "defaultValue" is ignored because it is used internally in SF and not intended to drive the UI
   protected async getPicklist(field: string): Promise<IPicklistEntry[]> {
-    const fieldMetadata = await this.getFieldMetadata(field);
-    if (!fieldMetadata.picklistValues) {
+    const { picklistValues } = await this.getFieldMetadata(field);
+
+    if (!picklistValues) {
       throw new BadRequestError(`Field is not a pick-list: ${field}`);
     }
-    return fieldMetadata.picklistValues;
+
+    return picklistValues;
   }
 
   protected async where(filter: Partial<TSalesforce> | string): Promise<TEntity[]> {
-    const conn = await this.getSalesforceConnection();
-    const result = await conn
-      .sobject(this.salesforceObjectName)
-      .select(this.salesforceFieldNames)
-      .where(filter)
-      .execute()
-      .then(x => this.map(x))
-      .catch(e => {
-        throw this.constructError(e);
-      });
-    return result as TEntity[];
+    const connection = await this.getSalesforceConnection();
+
+    try {
+      const filteredQuery = connection.sobject(this.salesforceObjectName).select(this.salesforceFieldNames);
+      const filteredResponse = await filteredQuery.where(filter).execute();
+
+      if (!filteredResponse.length) {
+        throw new Errors.SalesforceInvalidFilterError("Filter did not return any items");
+      }
+
+      return this.map(filteredResponse);
+    } catch (error) {
+      throw this.constructError(error);
+    }
   }
 
   protected async loadItem(filter: Partial<TSalesforce> | string): Promise<TEntity> {
-    const result = await this.filterOne(filter);
-    if (!result) {
+    const filteredResult = await this.filterOne(filter);
+
+    if (!filteredResult) {
       throw new Errors.SalesforceInvalidFilterError("Filter did not return a single item");
     }
-    return result;
+
+    return filteredResult;
   }
 
-  protected async filterOne(filter: Partial<TSalesforce> | string): Promise<TEntity | null> {
-    const conn = await this.getSalesforceConnection();
-    const result = await conn
-      .sobject(this.salesforceObjectName)
-      .select(this.salesforceFieldNames)
-      .where(filter)
-      .limit(1)
-      .execute()
-      .then(x => this.map(x).pop())
-      .catch(e => {
-        throw this.constructError(e);
-      });
-    return result as TEntity;
+  protected async filterOne<Payload extends Partial<TSalesforce> | string>(filter: Payload): Promise<TEntity | null> {
+    const connection = await this.getSalesforceConnection();
+
+    try {
+      const filteredQuery = connection.sobject(this.salesforceObjectName).select(this.salesforceFieldNames);
+      const filteredResponse = await filteredQuery.where(filter).limit(1).execute();
+
+      if (!filteredResponse.length) {
+        throw new Errors.SalesforceInvalidFilterError("Filter did not return any items");
+      }
+
+      // Note: we limit only 1 item above, so we can return this object from the array
+      const [item] = this.map(filteredResponse);
+
+      return item;
+    } catch (error) {
+      throw this.constructError(error);
+    }
   }
 
   private getDataChangeErrorMessage(result: RecordResult): string[] {
@@ -183,134 +206,138 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
     return results.map(x => (!x.success ? x.errors : [])).reduce<string[]>((a, b) => a.concat(b), []);
   }
 
-  protected async insertItem(inserts: Partial<TSalesforce>): Promise<string> {
-    const conn = await this.getSalesforceConnection();
-    return conn
-      .sobject(this.salesforceObjectName)
-      .insert(inserts)
-      .then(result => {
-        if (result.success) {
-          return result.id;
-        }
-        throw new Errors.SalesforceDataChangeError(
-          "Failed to insert to salesforce",
-          this.getDataChangeErrorMessage(result),
-        );
-      })
-      .catch(e => {
-        throw this.constructError(e);
-      });
-  }
+  protected async insertItem<Payload extends Partial<TSalesforce>>(inserts: Payload): Promise<string> {
+    const connection = await this.getSalesforceConnection();
+    const targetObject = connection.sobject<Payload>(this.salesforceObjectName);
 
-  protected async insertAll(inserts: Partial<TSalesforce>[]): Promise<string[]> {
-    if (!inserts.length) {
-      return [];
+    try {
+      const result = await targetObject.insert(inserts);
+
+      if (result.success) return result.id;
+
+      throw new Errors.SalesforceDataChangeError(
+        "Failed to insert to salesforce",
+        this.getDataChangeErrorMessage(result),
+      );
+    } catch (error) {
+      throw this.constructError(error);
     }
-
-    const conn = await this.getSalesforceConnection();
-    return conn
-      .sobject<Partial<TSalesforce>>(this.salesforceObjectName)
-      .insert(inserts)
-      .then(results => {
-        if (results.every(x => x.success)) {
-          return results.map(x => (x.success ? x.id.toString() : ""));
-        }
-        throw new Errors.SalesforceDataChangeError(
-          "Failed to insert to salesforce",
-          this.getDataChangeErrorMessages(results),
-        );
-      })
-      .catch(e => {
-        throw this.constructError(e);
-      });
   }
 
-  protected async updateItem(updates: Updatable<TSalesforce>): Promise<boolean> {
-    const conn = await this.getSalesforceConnection();
-    return conn
-      .sobject(this.salesforceObjectName)
-      .update(updates)
-      .then(results => {
-        if (results.success) {
+  protected async insertAll<Payload extends Partial<TSalesforce>[]>(insertPayload: Payload): Promise<string[]> {
+    if (!insertPayload.length) return [];
+
+    const connection = await this.getSalesforceConnection();
+    const targetObject = connection.sobject<Partial<TSalesforce>>(this.salesforceObjectName);
+
+    const insertedIds: string[] = [];
+
+    this.batchRequest<Payload>(insertPayload, async batch => {
+      try {
+        const batchResults = await targetObject.insert(batch);
+        const validPayload = batchResults.every(x => x.success);
+
+        if (validPayload) {
+          const successfulBatch = batchResults as SuccessResult[];
+          const insertedItems = successfulBatch.map(x => `${x.id}`);
+
+          insertedIds.concat(insertedItems);
+        }
+
+        throw new Errors.SalesforceDataChangeError(
+          "Failed to insert to salesforce",
+          this.getDataChangeErrorMessages(batchResults),
+        );
+      } catch (error) {
+        throw this.constructError(error);
+      }
+    });
+
+    return insertedIds;
+  }
+
+  protected async updateItem<Payload extends Updatable<TSalesforce>>(updates: Payload): Promise<boolean> {
+    const connection = await this.getSalesforceConnection();
+    const targetObject = connection.sobject<Payload>(this.salesforceObjectName);
+
+    try {
+      const batchResult = await targetObject.update(updates);
+
+      if (batchResult.success) return true;
+
+      throw new Errors.SalesforceDataChangeError(
+        "Failed to update salesforce",
+        this.getDataChangeErrorMessage(batchResult),
+      );
+    } catch (error) {
+      throw this.constructError(error);
+    }
+  }
+
+  protected async updateAll<Payload extends Updatable<TSalesforce>[]>(updatePayload: Payload): Promise<boolean> {
+    if (!updatePayload.length) return true;
+
+    const connection = await this.getSalesforceConnection();
+    const targetObject = connection.sobject<TSalesforce>(this.salesforceObjectName);
+
+    return this.batchRequest<Payload>(updatePayload, async batch => {
+      try {
+        const batchResults = await targetObject.update(batch);
+
+        // Note: If we find any errors any batch response, throw it!
+        return batchResults.reduce<boolean>((_, result) => {
+          if (!result.success && !!result.errors.length) {
+            const errorMessage = this.getErrorFromPayload(result.errors);
+
+            throw new Errors.SalesforceDataChangeError(errorMessage, this.getDataChangeErrorMessages(batchResults));
+          }
+
           return true;
-        }
-        throw new Errors.SalesforceDataChangeError(
-          "Failed to update salesforce",
-          this.getDataChangeErrorMessage(results),
-        );
-      })
-      .catch(e => {
-        throw this.constructError(e);
-      });
+        }, false);
+      } catch (error) {
+        throw this.constructError(error);
+      }
+    });
   }
 
-  protected async updateAll(payload: Updatable<TSalesforce>[]): Promise<boolean> {
-    if (!payload.length) return true;
+  protected async deleteAll<Payload extends string[]>(deleteIds: Payload): Promise<void> {
+    if (!deleteIds.length) return;
 
-    const sfConnection = await this.getSalesforceConnection();
+    const connection = await this.getSalesforceConnection();
+    const targetObject = connection.sobject<Payload>(this.salesforceObjectName);
 
-    return this.batchRequest<Updatable<TSalesforce>[]>(payload, batch =>
-      sfConnection
-        .sobject<TSalesforce>(this.salesforceObjectName)
-        .update(batch)
-        .then(results => {
-          return results.reduce<boolean>((_, result) => {
-            if (!result.success && !!result.errors.length) {
-              const errorMessage = this.getErrorFromPayload(result.errors);
+    this.batchRequest<Payload>(deleteIds, async batch => {
+      try {
+        const result = await targetObject.delete(batch);
 
-              throw new Errors.SalesforceDataChangeError(errorMessage, this.getDataChangeErrorMessages(results));
-            }
+        if (result.every(x => x.success)) return true;
 
-            return true;
-          }, false);
-        })
-        .catch(e => {
-          throw this.constructError(e);
-        }),
-    );
-  }
-
-  protected async deleteAll(ids: string[]): Promise<void> {
-    if (!ids.length) {
-      return;
-    }
-    const conn = await this.getSalesforceConnection();
-
-    return conn
-      .sobject(this.salesforceObjectName)
-      .delete(ids)
-      .then(result => {
-        if (result.every(x => x.success)) {
-          return;
-        }
         throw new Errors.SalesforceDataChangeError(
           "Failed to delete from salesforce",
           this.getDataChangeErrorMessages(result),
         );
-      })
-      .catch(e => {
-        throw this.constructError(e);
-      });
+      } catch (error) {
+        throw this.constructError(error);
+      }
+    });
   }
 
-  protected async deleteItem(id: string): Promise<void> {
-    const conn = await this.getSalesforceConnection();
+  protected async deleteItem<Payload extends string>(id: Payload): Promise<void> {
+    const connection = await this.getSalesforceConnection();
+    const targetObject = connection.sobject<Payload>(this.salesforceObjectName);
 
-    return conn
-      .sobject(this.salesforceObjectName)
-      .delete(id)
-      .then(result => {
-        if (result.success) {
-          return;
-        }
-        throw new Errors.SalesforceDataChangeError(
-          "Failed to delete from salesforce",
-          this.getDataChangeErrorMessage(result),
-        );
-      })
-      .catch(e => {
-        throw this.constructError(e);
-      });
+    try {
+      const result = await targetObject.delete(id);
+
+      if (result.success) return;
+
+      throw new Errors.SalesforceDataChangeError(
+        "Failed to delete from salesforce",
+        this.getDataChangeErrorMessage(result),
+      );
+    } catch (error) {
+      throw this.constructError(error);
+    }
   }
 
   private map(result: Partial<{}>[]): TEntity[] {
