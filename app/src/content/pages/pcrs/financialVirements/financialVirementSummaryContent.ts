@@ -8,9 +8,11 @@ export class FinancialVirementSummaryContent extends ContentPageBase {
   }
 
   public readonly labels = new FinancialVirementLabels(this, this.competitionType);
+  public readonly grantAdvice = this.getContent("grant-advice");
 
   public readonly availableGrantMessage = (grantDifference: string) =>
-    this.getContent("available-grant-message", { markdown: true, grantDifference });
+    this.getContent("available-grant-message", { grantDifference });
+
   public readonly unavailableGrantMessage = (x: Record<"grantDifference" | "totalOriginalGrant", string>) => {
     return this.getContent("unavailable-grant-message", { markdown: true, ...x });
   };

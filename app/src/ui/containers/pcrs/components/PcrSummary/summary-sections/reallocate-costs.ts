@@ -32,10 +32,10 @@ export function partnerSummaryData(data: SummaryLogicProps): PcrSummaryMultipleP
   };
 }
 
-function findPartnersWithVirements({ partners, virement }: SummaryLogicProps) {
-  const initialState: PcrSummaryMultiplePartnerFinancialVirement["data"]["projectCostsOfPartners"] = [];
+type IPartnerMatchingVirements = PcrSummaryMultiplePartnerFinancialVirement["data"]["projectCostsOfPartners"];
 
-  return partners.reduce((tableRows, partner) => {
+function findPartnersWithVirements({ partners, virement }: SummaryLogicProps) {
+  return partners.reduce<IPartnerMatchingVirements>((tableRows, partner) => {
     const partnerVirement = virement.partners.find(x => x.partnerId === partner.id);
 
     // Note: Remove partners with no virement
@@ -48,5 +48,5 @@ function findPartnersWithVirements({ partners, virement }: SummaryLogicProps) {
         partnerVirement,
       },
     ];
-  }, initialState);
+  }, []);
 }
