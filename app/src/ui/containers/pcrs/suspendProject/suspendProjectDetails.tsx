@@ -14,13 +14,16 @@ export function SuspendProjectDetails(
 
   const Form = ACC.TypedForm<PCRItemForProjectSuspensionDto>();
 
+  const suspendProjectIntro = getContent(x => x.pcrScopeChangeProjectContent.suspendProjectIntro);
+  const firstDayOfPauseTitle = getContent(x => x.pcrScopeChangeProjectContent.firstDayOfPauseTitle);
+  const lastDayOfPauseTitle = getContent(x => x.pcrScopeChangeProjectContent.lastDayOfPauseTitle);
+  const lastDayOfPauseHint = getContent(x => x.pcrScopeChangeProjectContent.lastDayOfPauseHint);
+
   return (
     <>
       {isPm && (
         <ACC.Section>
-          <ACC.Renderers.SimpleString>
-            {getContent(x => x.pcrScopeChangeProjectContent.suspendProjectIntro)}
-          </ACC.Renderers.SimpleString>
+          <ACC.Renderers.SimpleString>{suspendProjectIntro}</ACC.Renderers.SimpleString>
         </ACC.Section>
       )}
 
@@ -32,27 +35,25 @@ export function SuspendProjectDetails(
           onSubmit={() => props.onSave()}
           qa="projectSuspension"
         >
-          <Form.Fieldset headingContent={x => x.pcrScopeChangeProjectContent.firstDayOfPauseTitle}>
+          <Form.Fieldset heading={firstDayOfPauseTitle}>
             <Form.MonthYear
               name="suspensionStartDate"
               startOrEnd="start"
               value={m => m.suspensionStartDate}
               validation={props.validator.suspensionStartDate}
               update={(m, v) => (m.suspensionStartDate = v)}
-              hint={props.getRequiredToCompleteMessage(
-                getContent(x => x.pcrScopeChangeProjectContent.firstDayOfPauseHint),
-              )}
+              hint={props.getRequiredToCompleteMessage()}
             />
           </Form.Fieldset>
 
-          <Form.Fieldset headingContent={x => x.pcrScopeChangeProjectContent.firstDayOfPauseTitle}>
+          <Form.Fieldset heading={lastDayOfPauseTitle}>
             <Form.MonthYear
               name="suspensionEndDate"
               startOrEnd="end"
               value={m => m.suspensionEndDate}
               validation={props.validator.suspensionEndDate}
               update={(m, v) => (m.suspensionEndDate = v)}
-              hint={getContent(x => x.pcrScopeChangeProjectContent.lastDayOfPauseHint)}
+              hint={lastDayOfPauseHint}
             />
           </Form.Fieldset>
 

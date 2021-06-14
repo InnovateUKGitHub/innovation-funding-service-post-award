@@ -9,7 +9,6 @@ export class PCRScopeChangeProjectContent extends ContentPageBase {
   public readonly suspendProjectIntro = this.getContent("suspend-project-intro");
 
   public readonly firstDayOfPauseTitle = this.getContent("first-day-of-pause-title");
-  public readonly firstDayOfPauseHint = this.getContent("first-day-of-pause-hint");
 
   public readonly lastDayOfPauseTitle = this.getContent("last-day-of-pause-title");
   public readonly lastDayOfPauseHint = this.getContent("last-day-of-pause-hint");

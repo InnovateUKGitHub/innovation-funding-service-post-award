@@ -2,14 +2,42 @@ import * as ACC from "@ui/components";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForProjectSuspensionDto } from "@framework/dtos";
 import { PCRProjectSuspensionItemDtoValidator } from "@ui/validators";
+import { useContent } from "@ui/hooks";
+
 import { suspendProjectSteps } from "./workflow";
 
-export const SuspendProjectSummary = (props: PcrSummaryProps<PCRItemForProjectSuspensionDto, PCRProjectSuspensionItemDtoValidator, suspendProjectSteps>) => {
+export const SuspendProjectSummary = (
+  props: PcrSummaryProps<PCRItemForProjectSuspensionDto, PCRProjectSuspensionItemDtoValidator, suspendProjectSteps>,
+) => {
+  const { getContent } = useContent();
+
+  const firstDayOfPauseTitle = getContent(x => x.pcrScopeChangeProjectContent.firstDayOfPauseTitle);
+  const lastDayOfPauseTitle = getContent(x => x.pcrScopeChangeProjectContent.lastDayOfPauseTitle);
+
+  const lastDayContent = props.pcrItem.suspensionEndDate ? (
+    <ACC.Renderers.ShortDate value={props.pcrItem.suspensionEndDate} />
+  ) : (
+    "Not set"
+  );
+
   return (
-    <ACC.Section title="">
+    <ACC.Section>
       <ACC.SummaryList qa="projectSuspension">
-        <ACC.SummaryListItem label="First day of pause" validation={props.validator.suspensionStartDate} content={<ACC.Renderers.ShortDate value={props.pcrItem.suspensionStartDate} />} qa="startDate" action={props.getEditLink("details", props.validator.suspensionStartDate)} />
-        <ACC.SummaryListItem label="Last day of pause (if known)" validation={props.validator.suspensionEndDate} content={props.pcrItem.suspensionEndDate ? <ACC.Renderers.ShortDate value={props.pcrItem.suspensionEndDate} /> : "Not set"} qa="endDate" action={props.getEditLink("details", props.validator.suspensionEndDate)}/>
+        <ACC.SummaryListItem
+          qa="startDate"
+          label={firstDayOfPauseTitle}
+          validation={props.validator.suspensionStartDate}
+          content={<ACC.Renderers.ShortDate value={props.pcrItem.suspensionStartDate} />}
+          action={props.getEditLink("details", props.validator.suspensionStartDate)}
+        />
+
+        <ACC.SummaryListItem
+          qa="endDate"
+          label={lastDayOfPauseTitle}
+          validation={props.validator.suspensionEndDate}
+          content={lastDayContent}
+          action={props.getEditLink("details", props.validator.suspensionEndDate)}
+        />
       </ACC.SummaryList>
     </ACC.Section>
   );

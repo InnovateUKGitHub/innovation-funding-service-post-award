@@ -791,7 +791,6 @@
     "pcr-suspend-project-details": {
       "suspend-project-intro": "You will not be able to perform any normal activities while this project is on hold, for example you cannot raise project change requests (PCR's), update forecasts, or create and submit claims.",
       "first-day-of-pause-title": "First day of pause",
-      "first-day-of-pause-hint": "This is required to complete this request.",
       "last-day-of-pause-title": "Last day of pause (if known)",
       "last-day-of-pause-hint": "This will happen on the last day of the month."
     }
