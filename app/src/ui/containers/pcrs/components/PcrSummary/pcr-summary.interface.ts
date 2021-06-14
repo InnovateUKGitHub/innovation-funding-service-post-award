@@ -20,7 +20,7 @@ export interface PcrSummaryMultiplePartnerFinancialVirement {
     totalNewGrant: number;
     hasAvailableGrant: boolean;
     hasMatchingGrant: boolean;
-    newGrantDifference?: number;
+    newGrantDifference: number;
     projectCostsOfPartners: ProjectReallocationCosts[];
   };
 }
