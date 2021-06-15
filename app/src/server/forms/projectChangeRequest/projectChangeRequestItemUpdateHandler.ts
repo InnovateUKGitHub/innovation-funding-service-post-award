@@ -40,7 +40,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     const projectDto = await context.runQuery(new GetByIdQuery(params.projectId));
 
     item.status = body.itemStatus === "true" ? PCRItemStatus.Complete : PCRItemStatus.Incomplete;
-    const workflow = PcrWorkflow.getWorkflow(item, params.step, Configuration.features);
+    const workflow = PcrWorkflow.getWorkflow(item, params.step);
     const stepName = workflow && workflow.getCurrentStepName();
     switch (item.type) {
       case PCRItemType.TimeExtension:
@@ -106,7 +106,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   protected async run(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, dto: Dtos.PCRDto): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
 
-    const workflow = PcrWorkflow.getWorkflow(dto.items.find(x => x.id === params.itemId), params.step, Configuration.features);
+    const workflow = PcrWorkflow.getWorkflow(dto.items.find(x => x.id === params.itemId), params.step);
 
     if (!workflow || workflow.isOnSummary()) {
       return ProjectChangeRequestPrepareRoute.getLink(params);

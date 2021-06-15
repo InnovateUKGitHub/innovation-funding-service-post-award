@@ -1,6 +1,5 @@
 import { IAppOptions } from "@framework/types/IAppOptions";
 import { IFeatureFlags } from "@framework/types";
-import { RootActions } from "../actions/root";
 
 export interface IClientConfig {
   ifsRoot: string;
@@ -9,7 +8,7 @@ export interface IClientConfig {
   ssoEnabled: boolean;
 }
 
-export const configReducer = (state: IClientConfig  = {} as IClientConfig , action: RootActions) => {
+export const configReducer = (state: IClientConfig  = {} as IClientConfig) => {
   // no update on client side this is initialised from server
   return state;
 };

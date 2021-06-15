@@ -1,4 +1,5 @@
 import { BaseInput } from "./baseInput";
+import { InputProps } from "./common";
 
 interface DropdownListProps extends InputProps<{ id: string; value: string | number }> {
   options: { id: string; value: string | number }[];
@@ -16,7 +17,7 @@ export class DropdownList extends BaseInput<DropdownListProps, {}> {
         onChange={(e) => this.onChange(e.target.value)}
       >
         {this.props.hasEmptyOption ? <option key="option-empty" aria-selected={!this.props.value} value="">{this.props.placeholder}</option> : null}
-        {this.props.options.map((item, i) => <option key={`option-${item.id}`} value={item.id} aria-selected={!!(this.props.value && this.props.value.id === item.id)} >{item.value}</option>)}
+        {this.props.options.map((item) => <option key={`option-${item.id}`} value={item.id} aria-selected={!!(this.props.value && this.props.value.id === item.id)} >{item.value}</option>)}
       </select>
     );
   }

@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { BaseInput } from "./baseInput";
+import { InputProps } from "./common";
 
 interface RadioOptionProps {
   id: string;
@@ -34,7 +35,7 @@ export class RadioList extends BaseInput<RadioListProps, {}> {
           name={this.props.name}
           type="radio"
           value={item.id}
-          onChange={e => this.onChange(item)}
+          onChange={() => this.onChange(item)}
           checked={selected}
           aria-checked={selected}
           disabled={this.props.disabled}

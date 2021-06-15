@@ -192,11 +192,11 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data> {
     // You need to have a workflow to find a step number by name
     // so getting a workflow with undefined step first
     // allowing me to find the step name and get the workflow with the correct step
-    const summaryWorkflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined, this.props.config.features);
+    const summaryWorkflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined);
     if (!summaryWorkflow) return null;
     const stepName: addPartnerStepNames = "spendProfileStep";
     const spendProfileStep = summaryWorkflow.findStepNumberByName(stepName);
-    return PcrWorkflow.getWorkflow(addPartnerItem, spendProfileStep, this.props.config.features);
+    return PcrWorkflow.getWorkflow(addPartnerItem, spendProfileStep);
   }
 }
 
@@ -224,5 +224,5 @@ export const PCRSpendProfileReviewCostsSummaryRoute = defineRoute<PcrSpendProfil
     costCategoryId: route.params.costCategoryId,
   }),
   getTitle: ({ content }) => (content.pcrSpendProfileCostsSummaryContent.title()),
-  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer)
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer)
 });

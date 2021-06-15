@@ -2,6 +2,7 @@ import React from "react";
 import { DateTime } from "luxon";
 import classNames from "classnames";
 import { BaseInput } from "./baseInput";
+import { InputProps } from "./common";
 
 interface FullDateInputProps extends InputProps<Date> {}
 

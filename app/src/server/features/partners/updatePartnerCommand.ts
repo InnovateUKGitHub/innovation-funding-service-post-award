@@ -17,7 +17,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation, context: IContext) {
+  protected async accessControl(auth: Authorisation) {
     return auth.forPartner(this.partner.projectId, this.partner.id).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.FinancialContact);
   }
 

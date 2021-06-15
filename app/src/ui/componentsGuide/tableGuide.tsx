@@ -18,7 +18,7 @@ const exampleDataItem = (seed: number) => {
 
 type ExampleData = ReturnType<typeof exampleDataItem>;
 
-const exampleData: ExampleData[] = range(3).map((seed, i) => exampleDataItem(seed));
+const exampleData: ExampleData[] = range(3).map((seed) => exampleDataItem(seed));
 
 export const tableGuide: IGuide = {
     name: "Table",

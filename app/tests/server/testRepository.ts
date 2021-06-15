@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */ // Note: due to this file being extended, it's okay for there to be unused params as they're required for children
 import { NotFoundError } from "@server/features/common";
 import {Updatable} from "../../src/server/repositories/salesforceRepositoryBase";
 
@@ -16,7 +17,7 @@ export abstract class TestRepository<T> {
   }
 
   protected filterOne(conditional: (item: T) => boolean): Promise<T|null> {
-    return new Promise<T|null>((resolve, reject) => {
+    return new Promise<T|null>((resolve) => {
       const found = this.Items.find(x => conditional(x));
       if (found) {
         resolve(found);

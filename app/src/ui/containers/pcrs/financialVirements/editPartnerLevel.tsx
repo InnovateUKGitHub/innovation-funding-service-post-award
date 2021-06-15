@@ -148,7 +148,7 @@ function EditPartnerLevelComponent(props: EditPartnerLevelProps & FinancialVirem
                     <VirementTable.Percentage
                       qa="fundingLevel"
                       header={props.content.originalFundingLevel}
-                      value={(x, i) => x.virement.originalFundingLevel}
+                      value={(x) => x.virement.originalFundingLevel}
                       footer={<ACC.Renderers.Percentage value={editor.data.originalFundingLevel} />}
                       isDivider="normal"
                     />
@@ -190,7 +190,7 @@ function EditPartnerLevelComponent(props: EditPartnerLevelProps & FinancialVirem
                     <VirementTable.Percentage
                       qa="newLevel"
                       header={props.content.newFundingLevel}
-                      value={(x, i) => x.virement.newFundingLevel}
+                      value={(x) => x.virement.newFundingLevel}
                       footer={<ACC.Renderers.Percentage value={editor.data.newFundingLevel} />}
                     />
                   </VirementTable.Table>

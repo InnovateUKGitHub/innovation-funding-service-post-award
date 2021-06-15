@@ -10,7 +10,7 @@ export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
     super();
   }
 
-  public async accessControl(auth: Authorisation, context: IContext) {
+  public async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager, ProjectRole.FinancialContact);
   }
 

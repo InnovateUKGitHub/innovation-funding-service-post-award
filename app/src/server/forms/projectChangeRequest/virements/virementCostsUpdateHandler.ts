@@ -48,12 +48,12 @@ export class VirementCostsUpdateHandler extends StandardFormHandlerBase<Virement
     return virementDto;
   }
 
-  protected async run(context: IContext, { projectId, itemId, partnerId, pcrId }: VirementCostsParams, button: IFormButton, dto: FinancialVirementDto): Promise<ILinkInfo> {
+  protected async run(context: IContext, { projectId, itemId, pcrId }: VirementCostsParams, button: IFormButton, dto: FinancialVirementDto): Promise<ILinkInfo> {
     await context.runCommand(new UpdateFinancialVirementCommand(projectId, pcrId, itemId, dto, false));
     return PCRPrepareItemRoute.getLink({ projectId, pcrId, itemId });
   }
 
-  protected getStoreKey({ projectId, itemId, partnerId, pcrId }: VirementCostsParams) {
+  protected getStoreKey({ projectId, itemId, pcrId }: VirementCostsParams) {
     return storeKeys.getFinancialVirementKey(projectId, pcrId, itemId);
   }
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */ // Note: due to this file being extended, it's okay for there to be unused params as they're required for children
 import { Authorisation, IContext } from "@framework/types";
 import { ValidationError } from "@server/features/common/appError";
 import { DocumentUploadDtoValidator, MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
@@ -35,7 +36,13 @@ export abstract class CommandMultipleDocumentBase<T> extends CommandBase<T> {
   protected abstract showValidationErrors: boolean;
   protected handleRepositoryError(context: IContext, error: FileTypeNotAllowedError | null) {
     if (error instanceof FileTypeNotAllowedError) {
-      const result = new MultipleDocumentUpdloadDtoValidator(this.documents, context.config.options, this.filesRequired, this.showValidationErrors, error);
+      const result = new MultipleDocumentUpdloadDtoValidator(
+        this.documents,
+        context.config.options,
+        this.filesRequired,
+        this.showValidationErrors,
+        error,
+      );
       if (!result.isValid) {
         throw new ValidationError(result);
       }
@@ -48,7 +55,12 @@ export abstract class CommandDocumentBase<T> extends CommandBase<T> {
   protected abstract showValidationErrors: boolean;
   protected handleRepositoryError(context: IContext, error: FileTypeNotAllowedError | null) {
     if (error instanceof FileTypeNotAllowedError) {
-      const result = new DocumentUploadDtoValidator(this.document, context.config.options, this.showValidationErrors, error);
+      const result = new DocumentUploadDtoValidator(
+        this.document,
+        context.config.options,
+        this.showValidationErrors,
+        error,
+      );
       if (!result.isValid) {
         throw new ValidationError(result);
       }

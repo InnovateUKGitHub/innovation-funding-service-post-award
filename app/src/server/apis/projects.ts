@@ -14,7 +14,7 @@ class Controller extends ControllerBase<ProjectDto> implements IProjectsApi {
     super("projects");
 
     super.getItem("/:projectId", p => ({ projectId: p.projectId }), (p) => this.get(p));
-    super.getItems("/", p => ({}), (p) => this.getAll(p));
+    super.getItems("/", () => ({}), (p) => this.getAll(p));
   }
 
   public async get(params: ApiParams<{ projectId: string }>) {

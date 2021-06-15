@@ -3,7 +3,7 @@ import { Result, Results } from "@ui/validation";
 import { PCRDto, PCRItemDto, PCRItemTypeDto, ProjectDto } from "@framework/dtos";
 import { EditorStatus, IEditorStore } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { IFeatureFlags, ILinkInfo, PCRItemType } from "@framework/types";
+import { ILinkInfo, PCRItemType } from "@framework/types";
 import { timeExtensionItemWorkflow } from "@ui/containers/pcrs/timeExtension/timeExtensionWorkflow";
 import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
 import { removePartnerWorkflow } from "@ui/containers/pcrs/removePartner";
@@ -55,7 +55,7 @@ export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<string
     super(definition, stepNumber);
   }
 
-  private static getWorkflowType(pcrItem: PCRItemDto, step: number | undefined, features: IFeatureFlags) {
+  private static getWorkflowType(pcrItem: PCRItemDto, step: number | undefined) {
     switch (pcrItem.type) {
       case PCRItemType.AccountNameChange:
         return new PcrWorkflow(accountNameChangeWorkflow, step);
@@ -80,10 +80,10 @@ export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<string
     }
   }
 
-  public static getWorkflow(pcrItem: PCRItemDto | undefined, step: number | undefined, features: IFeatureFlags): PcrWorkflow<PCRItemDto, Results<PCRItemDto>> | null {
+  public static getWorkflow(pcrItem: PCRItemDto | undefined, step: number | undefined): PcrWorkflow<PCRItemDto, Results<PCRItemDto>> | null {
     if (!pcrItem) {
       return null;
     }
-    return this.getWorkflowType(pcrItem, step, features) as PcrWorkflow<PCRItemDto, Results<PCRItemDto>>;
+    return this.getWorkflowType(pcrItem, step) as PcrWorkflow<PCRItemDto, Results<PCRItemDto>>;
   }
 }

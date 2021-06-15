@@ -15,7 +15,7 @@ export class GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery extends 
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer);
   }
 
-  protected getRecordId(context: IContext) {
+  protected getRecordId() {
     return Promise.resolve(this.projectChangeRequestIdOrItemId);
   }
 

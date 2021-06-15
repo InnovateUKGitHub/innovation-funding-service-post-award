@@ -32,7 +32,7 @@ export class OverheadDocumentsUploadHandler extends MultipleFileFormHandlerBase<
         });
     }
 
-    protected getStoreKey(params: OverheadDocumentsPageParams, dto: MultipleDocumentUploadDto): string {
+    protected getStoreKey(params: OverheadDocumentsPageParams): string {
         return storeKeys.getPcrKey(params.projectId, params.pcrId);
     }
 

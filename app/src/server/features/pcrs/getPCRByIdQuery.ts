@@ -10,7 +10,7 @@ export class GetPCRByIdQuery extends QueryBase<PCRDto> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation, context: IContext) {
+  protected async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
   }
 

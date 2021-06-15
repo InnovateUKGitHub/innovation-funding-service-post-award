@@ -2,7 +2,7 @@ import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { BankDetailsTaskStatus, DocumentDescription, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
-import { IEditorStore, StoresConsumer, useStores } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
@@ -100,7 +100,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
           qa="partnerDocumentUpload"
         >
           <UploadForm.Fieldset qa="documentGuidance">
-            <UploadForm.Hidden name="description" value={x => DocumentDescription.BankStatement} />
+            <UploadForm.Hidden name="description" value={() => DocumentDescription.BankStatement} />
             <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
               labelContent={x => x.projectSetupBankStatement.documentLabels.uploadInputLabel}
@@ -141,7 +141,7 @@ const ProjectSetupBankStatementContainer = (props: ProjectSetupBankStatementPara
 
   const handleOnChange: Callbacks["onChange"] = (submit, dto) => {
     stores.partners.updatePartner(submit, props.partnerId, dto, {
-      onComplete: (resp) => {
+      onComplete: () => {
         stores.navigation.navigateTo(
           props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }),
         );

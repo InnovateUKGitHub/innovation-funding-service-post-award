@@ -37,9 +37,9 @@ export class ProjectChangeRequestSpendProfileCostsSummaryHandler extends Standar
 
     const addPartnerItem = dto.items.find(x => x.id === params.itemId) as PCRItemForPartnerAdditionDto;
 
-    const summaryWorkflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined, Configuration.features);
+    const summaryWorkflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined);
     const spendProfileS = summaryWorkflow!.findStepNumberByName("spendProfileStep");
-    const addPartnerWorkflow = PcrWorkflow.getWorkflow(addPartnerItem, spendProfileS, Configuration.features);
+    const addPartnerWorkflow = PcrWorkflow.getWorkflow(addPartnerItem, spendProfileS);
     const spendProfileStep = addPartnerWorkflow && addPartnerWorkflow.getCurrentStepInfo();
 
     return PCRPrepareItemRoute.getLink({

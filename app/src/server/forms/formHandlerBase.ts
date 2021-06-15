@@ -1,4 +1,4 @@
-import express, { RequestHandler } from "express";
+import express from "express";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { EditorState, EditorStateKeys } from "@ui/redux";
@@ -8,7 +8,6 @@ import { ISession, ServerFileWrapper } from "../apis/controllerBase";
 import { configureRouter, routeConfig } from "../../ui/routing";
 import contextProvider from "../features/common/contextProvider";
 import { FormHandlerError } from "../features/common/appError";
-import { upload } from "./memoryStorage";
 
 interface RouteInfo<TParams> {
   routeName: string;
@@ -96,7 +95,7 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
 
 export abstract class StandardFormHandlerBase<TParams, TStore extends EditorStateKeys> extends FormHandlerBase<TParams, TStore> {
 
-  protected async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody, req: express.Request): Promise<InferEditorStoreDto<EditorState[TStore][string]>> {
+  protected async createDto(context: IContext, params: TParams, button: IFormButton, body: IFormBody): Promise<InferEditorStoreDto<EditorState[TStore][string]>> {
     return this.getDto(context, params, button, body);
   }
 

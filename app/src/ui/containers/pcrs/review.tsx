@@ -96,7 +96,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
             name="status"
             inline={false}
             options={options}
-            value={x => selected}
+            value={() => selected}
             update={(m, v) => m.status = parseInt(v && v.id || "", 10) || PCRStatus.Unknown}
             validation={editor.validator.status}
           />
@@ -216,5 +216,5 @@ export const PCRReviewRoute = defineRoute({
     htmlTitle: "Request",
     displayTitle: "Request"
   }),
-  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
 });

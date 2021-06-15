@@ -1,4 +1,3 @@
-import React from "react";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { CostCategoryType } from "@framework/entities";
 import { ClaimDto, CostsSummaryForPeriodDto, PartnerDto, ProjectDto } from "@framework/types";
@@ -120,7 +119,7 @@ function calculateTotalRow(claimDetails: ClaimProps["claimDetails"]): ClaimTable
 }
 
 function createRow(category: CostCategoryDto, claimItem: ClaimProps) {
-  const { project, partner, claimDetails, ...restClaimProps } = claimItem;
+  const { claimDetails, ...restClaimProps } = claimItem;
 
   // TODO: ID will always be present... 🤷🏻‍♂️
   // Note: This function may not have context of any claim details, so we provide a default

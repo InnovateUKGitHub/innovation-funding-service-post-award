@@ -12,7 +12,7 @@ class Controller extends ControllerBase<AccountDto> implements IAccountsApi {
   constructor() {
     super("accounts");
 
-    super.getItems("/", p => ({}), (p) => this.getAll(p));
+    super.getItems("/", () => ({}), (p) => this.getAll(p));
   }
 
   public async getAll(params: ApiParams<{}>) {

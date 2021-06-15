@@ -4,7 +4,7 @@ import { StoresConsumer } from "@ui/redux";
 import { ContentConsumer } from "@ui/redux/contentProvider";
 import * as ACC from "@ui/components";
 import { SimpleString } from "../components/renderers";
-import { Link, Modal, PageTitle, TypedForm } from "../components";
+import { Link, PageTitle, TypedForm } from "../components";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute, } from "./containerBase";
 
 interface Data {
@@ -44,7 +44,7 @@ class Component extends ContainerBaseWithState<{}, Data, {}, State> {
           </div>
           <ContentConsumer>
             {
-              content => (
+              () => (
                 <div className="govuk-grid-column-one-third">
                   <h2><ACC.Content value={x => x.home.exampleContentTitle} /></h2>
                   <SimpleString><ACC.Content value={x => x.home.exampleContent} /></SimpleString>

@@ -1,6 +1,6 @@
 import { IContext, ILinkInfo } from "@framework/types";
 import { DeleteProjectChangeRequestDocumentOrItemDocument } from "@server/features/documents/deleteProjectChangeRequestDocumentOrItemDocument";
-import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
+import { IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import { PCRPrepareReasoningRoute, ProjectChangeRequestPrepareReasoningParams } from "@ui/containers";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { Configuration } from "@server/features/common";
@@ -16,7 +16,7 @@ export class ProjectChangeRequestReasoningDocumentDeleteHandler extends Standard
     super(PCRPrepareReasoningRoute, ["delete"], "multipleDocuments");
   }
 
-  protected getDto(context: IContext, params: ProjectChangeRequestPrepareReasoningParams, button: IFormButton, body: IFormBody) {
+  protected getDto(context: IContext, params: ProjectChangeRequestPrepareReasoningParams, button: IFormButton) {
     return Promise.resolve({id: button.value, files: []});
   }
 

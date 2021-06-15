@@ -8,7 +8,7 @@ export class GetClaimDocumentsQuery extends DocumentsSummaryQueryBase {
     super(filter);
   }
 
-  protected async accessControl(auth: Authorisation, context: IContext) {
+  protected async accessControl(auth: Authorisation) {
       return auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasRole(ProjectRole.FinancialContact)
         || auth.forProject(this.claimKey.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
   }

@@ -166,9 +166,9 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             footers={this.renderFooters(mockItems, forecastDetail, false, editor)}
             qa="current-claim-summary-table"
           >
-            <LineItemTable.String headerContent={x => x.editClaimLineItems.descriptionHeader} qa="cost-description" value={(x, i) => x.description} />
-            <LineItemTable.ShortDate headerContent={x => x.editClaimLineItems.lastUpdatedHeader} qa="cost-last-updated" value={(x, i) => x.lastModifiedDate} />
-            <LineItemTable.Currency headerContent={x => x.editClaimLineItems.costHeader} qa="cost-value" value={(x, i) => x.value} width={30} />
+            <LineItemTable.String headerContent={x => x.editClaimLineItems.descriptionHeader} qa="cost-description" value={(x) => x.description} />
+            <LineItemTable.ShortDate headerContent={x => x.editClaimLineItems.lastUpdatedHeader} qa="cost-last-updated" value={(x) => x.lastModifiedDate} />
+            <LineItemTable.Currency headerContent={x => x.editClaimLineItems.costHeader} qa="cost-value" value={(x) => x.value} width={30} />
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
         {supportingDocumentContent}

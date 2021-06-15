@@ -529,7 +529,7 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
     });
   }
 
-  updateProjectChangeRequest(pcr: Entities.ProjectChangeRequestEntity): Promise<void> {
+  updateProjectChangeRequest(): Promise<void> {
     return Promise.resolve();
   }
 

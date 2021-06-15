@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { BaseInput } from "./baseInput";
+import { InputProps, InputState } from "./common";
 
 interface TextAreaInputProps extends InputProps<string> {
   maxLength?: number;

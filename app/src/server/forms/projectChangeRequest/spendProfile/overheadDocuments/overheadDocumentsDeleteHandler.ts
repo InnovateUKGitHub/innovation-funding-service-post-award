@@ -1,5 +1,4 @@
 import {
-    IFormBody,
     IFormButton,
     StandardFormHandlerBase
 } from "@server/forms/formHandlerBase";
@@ -19,7 +18,7 @@ export class OverheadDocumentsDeleteHandler extends StandardFormHandlerBase<Over
         super(PCRSpendProfileOverheadDocumentRoute, ["delete"], "multipleDocuments");
     }
 
-    protected getDto(context: IContext, params: OverheadDocumentsPageParams, button: IFormButton, body: IFormBody): Promise<Dto> {
+    protected getDto(context: IContext, params: OverheadDocumentsPageParams, button: IFormButton): Promise<Dto> {
         return Promise.resolve({ id: button.value, files: [] });
     }
 
@@ -34,7 +33,7 @@ export class OverheadDocumentsDeleteHandler extends StandardFormHandlerBase<Over
         });
     }
 
-    protected getStoreKey(params: OverheadDocumentsPageParams, dto: MultipleDocumentUploadDto): string {
+    protected getStoreKey(params: OverheadDocumentsPageParams): string {
         return storeKeys.getPcrKey(params.projectId, params.pcrId);
     }
 

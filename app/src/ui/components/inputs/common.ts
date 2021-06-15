@@ -1,9 +1,9 @@
 
-interface InputState {
+export interface InputState {
     value: string;
 }
 
-interface InputProps<T> {
+export interface InputProps<T> {
     value?: T|null;
     name: string;
     disabled?: boolean;

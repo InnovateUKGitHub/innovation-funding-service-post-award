@@ -16,7 +16,7 @@ export class GetClaimStatusChangesQuery extends QueryBase<ClaimStatusChangeDto[]
     super();
   }
 
-  public async accessControl(auth: Authorisation, context: IContext) {
+  public async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager)
       || auth.forPartner(this.projectId, this.partnerId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.FinancialContact);
   }

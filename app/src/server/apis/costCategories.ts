@@ -12,7 +12,7 @@ class Controller extends ControllerBase<CostCategoryDto> implements ICostCategor
 
   constructor() {
     super("cost-categories");
-    this.getItems("/", p => ({}),  (p) => this.getAll(p));
+    this.getItems("/", () => ({}),  (p) => this.getAll(p));
     this.getItems(
       "/filtered/:partnerId",
       p => ({ partnerId: p.partnerId }),

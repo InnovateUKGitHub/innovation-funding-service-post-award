@@ -33,7 +33,7 @@ describe("ProjectsGetAllQuery", () => {
     const email = "test@test.com";
     context.user.set({ email });
 
-    const projects = context.testData.range(5, x => context.testData.createProject());
+    const projects = context.testData.range(5, () => context.testData.createProject());
 
     const expectedRoles = [
       ProjectRole.Unknown,
