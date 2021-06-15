@@ -63,7 +63,7 @@ describe("UploadProjectDocumentCommand", () => {
     const documents = await Promise.all(documentIds.map(x => context.repositories.documents.getDocumentMetadata(x)));
     expect(documents.map(x => x.versionData)).toEqual(files.map(f => f.content));
     expect(documents.map(x => x.pathOnClient)).toEqual(files.map(f => f.fileName));
-    expect(documents.map(x => x.description)).toEqual(files.map(f => expectedDescription));
+    expect(documents.map(x => x.description)).toEqual(files.map(() => expectedDescription));
   });
 
   it("should upload throw validation error if file has no content", async () => {

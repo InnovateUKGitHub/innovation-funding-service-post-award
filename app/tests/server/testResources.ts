@@ -106,7 +106,7 @@ class TestBankCheckService implements IBankCheckService {
     },
   };
 
-  private validateResult(sortcode: string, accountNumber: string) {
+  private validateResult(sortcode: string) {
     if (sortcode === "111111") return Promise.resolve(this.failValidation);
 
     return Promise.resolve(this.passValidation);
@@ -118,6 +118,6 @@ class TestBankCheckService implements IBankCheckService {
     return Promise.resolve(this.passVerify);
   }
 
-  public validate = (sortcode: string, accountNumber: string) => this.validateResult(sortcode, accountNumber);
+  public validate = (sortcode: string) => this.validateResult(sortcode);
   public verify = (accountDetails: IVerifyBankCheckInputs) => this.verifyResult(accountDetails);
 }

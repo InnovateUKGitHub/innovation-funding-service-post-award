@@ -15,68 +15,64 @@ import { TestResources } from "./testResources";
 import { TestInternationalisation } from "./testInternationalisation";
 
 export class TestContext implements IContext {
-    constructor() {
-        this.repositories = createTestRepositories();
-        this.testData = new TestData(this.repositories, () => this.user);
-        this.testStore = new TestStore(this);
-    }
+  constructor() {
+    this.repositories = createTestRepositories();
+    this.testData = new TestData(this.repositories, () => this.user);
+    this.testStore = new TestStore(this);
+  }
 
-    public clock = new TestClock();
-    public logger = new TestLogger();
-    public repositories: ITestRepositories;
-    public user = new TestUser();
-    public testData: TestData;
-    public testStore: TestStore;
+  public clock = new TestClock();
+  public logger = new TestLogger();
+  public repositories: ITestRepositories;
+  public user = new TestUser();
+  public testData: TestData;
+  public testStore: TestStore;
 
-    public internationalisation = new TestInternationalisation();
+  public internationalisation = new TestInternationalisation();
 
-    public resources = new TestResources();
+  public resources = new TestResources();
 
-    public startTimer = (message: string) => {
-        return {
-            finish: () => {
-              return;
-            }
-        };
+  public startTimer = () => {
+    return {
+      finish: () => {
+        return;
+      },
     };
+  };
 
-    public config = new TestConfig();
+  public config = new TestConfig();
 
-    public caches = new TestCaches();
+  public caches = new TestCaches();
 
-    public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
-        return ((query as any) as IAsyncRunnable<TResult>)
-            .Run(this)
-            ;
-    }
+  public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
+    return (query as any as IAsyncRunnable<TResult>).Run(this);
+  }
 
-    public runCommand<TResult>(command: CommandBase<TResult> | NonAuthorisedCommandBase<TResult>): Promise<TResult> {
-        const runnable = (command as any) as IAsyncRunnable<TResult>;
-        return runnable
-            .Run(this)
-            .catch(e => {
-                if (e instanceof ValidationError) {
-                    this.logger.debug("Validation ERROR", [e.results]);
-                }
-                if (runnable.handleRepositoryError) runnable.handleRepositoryError(this, e);
-                throw e;
-            });
-    }
+  public runCommand<TResult>(command: CommandBase<TResult> | NonAuthorisedCommandBase<TResult>): Promise<TResult> {
+    const runnable = command as any as IAsyncRunnable<TResult>;
+    return runnable.Run(this).catch(e => {
+      if (e instanceof ValidationError) {
+        this.logger.debug("Validation ERROR", [e.results]);
+      }
+      if (runnable.handleRepositoryError) runnable.handleRepositoryError(this, e);
+      throw e;
+    });
+  }
 
-    public runSyncQuery<TResult>(query: SyncQueryBase<TResult>): TResult {
-        return ((query as any) as ISyncRunnable<TResult>).Run(this);
-    }
+  public runSyncQuery<TResult>(query: SyncQueryBase<TResult>): TResult {
+    return (query as any as ISyncRunnable<TResult>).Run(this);
+  }
 
-    public runSyncCommand<TResult>(command: SyncCommandBase<TResult>): TResult {
-        return ((command as any) as ISyncRunnable<TResult>).Run(this);
-    }
+  public runSyncCommand<TResult>(command: SyncCommandBase<TResult>): TResult {
+    return (command as any as ISyncRunnable<TResult>).Run(this);
+  }
 
-    // handle access control separate to running the commands to keep tests focused on single areas
-    public runAccessControl(auth: Authorisation, runnable: QueryBase<any> | CommandBase<any>): Promise<boolean> {
-        return (runnable as any as IAsyncRunnable<any>).accessControl!(auth, this);
-    }
+  // handle access control separate to running the commands to keep tests focused on single areas
+  public runAccessControl(auth: Authorisation, runnable: QueryBase<any> | CommandBase<any>): Promise<boolean> {
+    return (runnable as any as IAsyncRunnable<any>).accessControl!(auth, this);
+  }
 
-    public asSystemUser() {
-        return this;
-    }
+  public asSystemUser() {
+    return this;
+  }
 }

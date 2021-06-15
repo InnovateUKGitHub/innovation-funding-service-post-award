@@ -1,6 +1,5 @@
 import { MonitoringReportsMessages } from "@content/messages/monitoringReportsMessages";
 import { MonitoringReportsLabels } from "@content/labels/monitoringReportsLabels";
-import { ContentBase } from "@content/contentBase";
 import { Content } from "../../content";
 import { ContentPageBase } from "../../contentPageBase";
 

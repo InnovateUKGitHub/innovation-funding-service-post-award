@@ -3,7 +3,7 @@ import * as ACC from "@ui/components";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator, PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRItemForPartnerAdditionDto, PCRItemTypeDto, ProjectDto } from "@framework/dtos";
+import { PCRItemForPartnerAdditionDto, PCRItemTypeDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { DocumentDescription } from "@framework/constants";
@@ -70,7 +70,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
             {this.renderTemplateLinks(this.props.pcrItemType)}
           </UploadForm.Fieldset>
           <UploadForm.Fieldset headingContent={x => x.pcrAddPartnerStateAidEligibilityContent.uploadDeclarationSectionTitle} qa="documentGuidance">
-            <UploadForm.Hidden name="description" value={x => DocumentDescription.DeMinimisDeclarationForm} />
+            <UploadForm.Hidden name="description" value={() => DocumentDescription.DeMinimisDeclarationForm} />
             <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
               labelContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.uploadInputLabel}

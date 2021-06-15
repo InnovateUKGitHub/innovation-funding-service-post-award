@@ -166,6 +166,6 @@ export const PCRSpendProfileDeleteCostRoute = defineRoute<PcrDeleteSpendProfileC
     costCategoryId: route.params.costCategoryId,
     costId: route.params.costId
   }),
-  getTitle: ({ params, stores, content }) => content.pcrSpendProfileDeleteCostContent.title(),
-  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  getTitle: ({ content }) => content.pcrSpendProfileDeleteCostContent.title(),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });

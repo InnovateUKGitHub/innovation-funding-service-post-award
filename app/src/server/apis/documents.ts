@@ -75,7 +75,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
 
     this.getAttachment(
       "/claims/:projectId/:partnerId/:periodId/:documentId/content",
-      (p, q) => ({ projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), documentId: p.documentId }),
+      (p) => ({ projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), documentId: p.documentId }),
       p => this.getClaimDocument(p)
     );
 
@@ -141,13 +141,13 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
 
     this.postAttachments(
       "/claim-details/:projectId/:partnerId/:periodId/:costCategoryId",
-      (p, q, b) => ({ claimDetailKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId }}),
+      (p) => ({ claimDetailKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId }}),
       p => this.uploadClaimDetailDocuments(p)
     );
 
     this.postAttachment(
       "/claims/:projectId/:partnerId/:periodId",
-      (p, q, b) => ({ claimKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) } }),
+      (p) => ({ claimKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) } }),
       p => this.uploadClaimDocument(p)
     );
 
@@ -159,13 +159,13 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
 
     this.postAttachments(
       "/projects/:projectId",
-      (p, q, b) => ({ projectId: p.projectId }),
+      (p) => ({ projectId: p.projectId }),
       p => this.uploadProjectDocument(p)
     );
 
     this.postAttachments(
       "/partners/:projectId/:partnerId",
-      (p, q, b) => ({ projectId: p.projectId, partnerId: p.partnerId }),
+      (p) => ({ projectId: p.projectId, partnerId: p.partnerId }),
       p => this.uploadPartnerDocument(p)
     );
 

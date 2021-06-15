@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { BaseInput } from "./baseInput";
+import { InputProps } from "./common";
 
 interface CheckboxOptionProps {
   id: string;

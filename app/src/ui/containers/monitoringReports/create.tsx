@@ -62,7 +62,7 @@ const Container = (props: MonitoringReportCreateParams&BaseProps) => (
     {
       stores => (
         <ContentConsumer>{
-          content => (
+          () => (
             <Component
               project={stores.projects.getById(props.projectId)}
               editor={stores.monitoringReports.getCreateMonitoringReportEditor(props.projectId)}

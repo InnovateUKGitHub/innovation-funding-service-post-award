@@ -1,7 +1,6 @@
-import { AnyAction, Dispatch, MiddlewareAPI } from "redux";
-import { RootState } from "../reducers/rootReducer";
+import { AnyAction, Dispatch } from "redux";
 
-export const loggingMiddleware = (store: MiddlewareAPI<Dispatch, RootState>) => (next: Dispatch) => (action: AnyAction) => {
+export const loggingMiddleware = () => (next: Dispatch) => (action: AnyAction) => {
   console.log("Running action", action.type, action.payload);
   next(action);
 };

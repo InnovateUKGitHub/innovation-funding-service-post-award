@@ -1,4 +1,4 @@
-import { ILinkInfo, PCRItemStatus, PCRItemType, ProjectDto } from "@framework/types";
+import { ILinkInfo, PCRItemStatus, PCRItemType } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";

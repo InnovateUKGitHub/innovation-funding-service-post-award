@@ -28,7 +28,7 @@ class MarkdownGuide extends React.Component<{}, { markdownContent: string }> {
       fetch("https://raw.githubusercontent.com/facebook/react/master/README.md")
         .then(response => response.text())
         .then(markdownContent => this.setState({ markdownContent }))
-        .catch(e => this.setState({ markdownContent: "Failed" }));
+        .catch(() => this.setState({ markdownContent: "Failed" }));
     }
   }
 

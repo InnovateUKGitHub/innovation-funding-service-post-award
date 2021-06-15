@@ -73,9 +73,9 @@ describe("GetClaimStatusChanges", () => {
     const claim2 = context.testData.createClaim(partner, 2);
     const claim3 = context.testData.createClaim(partner, 2);
 
-    context.testData.range(10, i => context.testData.createClaimStatusChange(claim1));
-    const claim2Existing = context.testData.range(10, i => context.testData.createClaimStatusChange(claim2));
-    context.testData.range(10, i => context.testData.createClaimStatusChange(claim3));
+    context.testData.range(10, () => context.testData.createClaimStatusChange(claim1));
+    const claim2Existing = context.testData.range(10, () => context.testData.createClaimStatusChange(claim2));
+    context.testData.range(10, () => context.testData.createClaimStatusChange(claim3));
 
     const query = new GetClaimStatusChangesQuery(partner.projectId, partner.id, 2);
 
@@ -83,7 +83,7 @@ describe("GetClaimStatusChanges", () => {
 
     const expected = claim2Existing.map(x => x.Id).reverse();
 
-    expect(result.map(x => x.claimId)).toEqual(context.testData.range(10, _ => claim2.Id));
+    expect(result.map(x => x.claimId)).toEqual(context.testData.range(10, () => claim2.Id));
     expect(result.map(x => x.id)).toEqual(expected);
   });
 
@@ -94,9 +94,9 @@ describe("GetClaimStatusChanges", () => {
     const partner = context.testData.createPartner(project);
     const claim = context.testData.createClaim(partner, 1);
     // create records visible to partner
-    const existingPartnerVisible = context.testData.range(3, i => context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: true }));
+    const existingPartnerVisible = context.testData.range(3, () => context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: true }));
     // create records not visible to partner
-    const existingPartnerNotVisible = context.testData.range(3, i => context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: false }));
+    const existingPartnerNotVisible = context.testData.range(3, () => context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: false }));
 
     context.testData.createCurrentUserAsMonitoringOfficer(project);
 
@@ -150,7 +150,7 @@ describe("GetClaimStatusChanges", () => {
 
     const result = await context.runQuery(query);
 
-    const expected = [...existingPartnerVisible, ...existingPartnerNotVisible].map(x => "");
+    const expected = [...existingPartnerVisible, ...existingPartnerNotVisible].map(() => "");
 
     expect(result.map(x => x.comments)).toEqual(expected);
   });
@@ -162,9 +162,9 @@ describe("GetClaimStatusChanges", () => {
     const partner = context.testData.createPartner(project);
     const claim = context.testData.createClaim(partner, 1);
     // create records visible to partner
-    const existingPartnerVisible = context.testData.range(3, i => context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: true }));
+    const existingPartnerVisible = context.testData.range(3, () => context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: true }));
     // create records not visible to partner
-    const existingPartnerNotVisible = context.testData.range(3, i => context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: false }));
+    const existingPartnerNotVisible = context.testData.range(3, () => context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: false }));
 
     context.testData.createCurrentUserAsFinanceContact(project, partner);
 

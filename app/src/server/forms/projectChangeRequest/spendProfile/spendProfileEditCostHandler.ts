@@ -136,7 +136,7 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
   }
 
   private getSpendProfileStep(context: IContext, pcrItem: PCRItemForPartnerAdditionDto) {
-    const workflow = PcrWorkflow.getWorkflow(pcrItem, undefined, context.config.features);
+    const workflow = PcrWorkflow.getWorkflow(pcrItem, undefined);
     if (!workflow) return null;
     const stepName: addPartnerStepNames = "spendProfileStep";
     return workflow.findStepNumberByName(stepName);

@@ -48,12 +48,12 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
     super("pcrs");
 
     super.getItems("/", (p, q) => ({ projectId: q.projectId }), (p) => this.getAll(p));
-    super.getItem("/:projectId/:id", (p, q) => ({ projectId: p.projectId, id: p.id }), (p) => this.get(p));
+    super.getItem("/:projectId/:id", (p) => ({ projectId: p.projectId, id: p.id }), (p) => this.get(p));
     super.postItem("/:projectId", (p, q, b) => ({ projectId: p.projectId, projectChangeRequestDto: processDto(b) }), (p) => this.create(p));
     super.getCustom("/types", () => ({}), p => this.getTypes(p));
     super.getCustom("/available-types", (p, q) => ({ projectId: q.projectId }), (p) => this.getAvailableTypes(p));
     super.putItem("/:projectId/:id", (p, q, b) => ({ projectId: p.projectId, id: p.id, pcr: processDto(b) }), (p) => this.update(p));
-    super.deleteItem("/:projectId/:id", (p, q) => ({ projectId: p.projectId, id: p.id }), (p) => this.delete(p));
+    super.deleteItem("/:projectId/:id", (p) => ({ projectId: p.projectId, id: p.id }), (p) => this.delete(p));
     this.getCustom("/status-changes/:projectId/:projectChangeRequestId", (p) => ({projectId: p.projectId, projectChangeRequestId: p.projectChangeRequestId}), p => this.getStatusChanges(p));
     this.getCustom("/project-roles", () => ({}), (p) => this.getPcrProjectRoles(p));
     this.getCustom("/partner-types", () => ({}), (p) => this.getPcrPartnerTypes(p));

@@ -125,5 +125,5 @@ export const PCRsDashboardRoute = defineRoute({
     htmlTitle: "Project change requests",
     displayTitle: "Project change requests"
   }),
-  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });

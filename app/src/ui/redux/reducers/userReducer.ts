@@ -1,7 +1,6 @@
 import { IClientUser } from "@framework/types/IUser";
-import { RootActions } from "../actions/root";
 
-export const userReducer = (state = {} as IClientUser, action: RootActions) => {
+export const userReducer = (state = {} as IClientUser) => {
   // no update on client side this is initialised from server
   return state;
 };

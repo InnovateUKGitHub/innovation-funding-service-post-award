@@ -142,7 +142,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
     pcrItemType: PCRItemTypeDto,
     editableItemTypes: PCRItemType[],
   ) {
-    const workflow = PcrWorkflow.getWorkflow(pcrItem, this.props.step, this.props.config.features);
+    const workflow = PcrWorkflow.getWorkflow(pcrItem, this.props.step);
     const validation = workflow
       ? workflow.getValidation(new PCRWorkflowValidator(editor.validator, documentsEditor.validator))
       : [editor.validator, documentsEditor.validator];

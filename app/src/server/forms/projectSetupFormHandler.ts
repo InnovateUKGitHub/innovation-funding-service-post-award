@@ -17,7 +17,7 @@ export class ProjectSetupFormHandler extends StandardFormHandlerBase<ProjectSetu
   constructor() {
     super(ProjectSetupRoute, ["default"], "partner");
   }
-  protected async getDto(context: IContext, params: Params, button: IFormButton, body: { [key: string]: string }): Promise<PartnerDto> {
+  protected async getDto(context: IContext, params: Params): Promise<PartnerDto> {
     return context.runQuery(new GetPartnerByIdQuery(params.partnerId));
   }
 

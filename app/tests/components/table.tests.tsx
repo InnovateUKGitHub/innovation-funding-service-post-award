@@ -47,7 +47,7 @@ describe("Table", () => {
 
     const { queryByText } = render(
       <TableComponent.Table data={data} qa="">
-        <TableComponent.String header={stubHeader} value={x => "Content"} qa="val" />
+        <TableComponent.String header={stubHeader} value={() => "Content"} qa="val" />
       </TableComponent.Table>,
     );
     expect(queryByText(stubHeader)).toBeInTheDocument();
@@ -60,7 +60,7 @@ describe("Table", () => {
 
     const { queryByText } = render(
       <TableComponent.Table data={data} qa="">
-        <TableComponent.String header={stubHiddenHeader} hideHeader value={x => "Content"} qa="val" />
+        <TableComponent.String header={stubHiddenHeader} hideHeader value={() => "Content"} qa="val" />
       </TableComponent.Table>,
     );
     expect(queryByText(stubHiddenHeader)).toBeInTheDocument();

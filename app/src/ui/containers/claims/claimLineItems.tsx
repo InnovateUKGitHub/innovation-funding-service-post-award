@@ -231,7 +231,7 @@ function ClaimLineItemsTable({ lineItems, forecastDetail, content }: {
       <LineItemTable.String header={content.descriptionHeader} qa="cost-description" value={x => x.description} />
       <LineItemTable.Currency header={content.costHeader} qa="cost-value" value={x => x.value} />
       <LineItemTable.ShortDate
-        colClassName={x => "govuk-table__header--numeric"}
+        colClassName={() => "govuk-table__header--numeric"}
         header={content.lastUpdatedHeader}
         qa="cost-last-updated"
         value={x => x.lastModifiedDate}

@@ -34,7 +34,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     super();
   }
 
-  protected async accessControl(auth: Authorisation, context: IContext) {
+  protected async accessControl(auth: Authorisation) {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager);
   }
 

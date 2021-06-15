@@ -88,7 +88,7 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
   }
 }
 
-interface FieldsetProps<T> {
+interface FieldsetProps {
   heading?: React.ReactNode;
   headingContent?: ContentSelector;
   qa?: string;
@@ -96,9 +96,9 @@ interface FieldsetProps<T> {
   isSubQuestion?: boolean;
 }
 
-class FieldsetComponent<T> extends React.Component<FieldsetProps<T>, []> {
+class FieldsetComponent<T> extends React.Component<FieldsetProps, []> {
   render() {
-    const props = this.props as any as FieldsetProps<T> & FormChildProps<T>;
+    const props = this.props as any as FieldsetProps & FormChildProps<T>;
     const parentKey = "fieldset";
     const childProps = (index: number): FormChildProps<T> => ({
       key: parentKey + "child" + index,

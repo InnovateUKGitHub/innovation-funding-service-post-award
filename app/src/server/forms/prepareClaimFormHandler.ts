@@ -13,14 +13,14 @@ import {
 import { ClaimDtoValidator } from "../../ui/validators/claimDtoValidator";
 import { GetAllProjectRolesForUser } from "../features/projects";
 import { UpdateClaimCommand } from "../features/claims/updateClaim";
-import { IFormBody, IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
+import { IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
 
 export class PrepareClaimFormHandler extends StandardFormHandlerBase<PrepareClaimParams, "claim"> {
   constructor() {
     super(PrepareClaimRoute, ["default", "save"], "claim");
   }
 
-  protected getDto(context: IContext, params: PrepareClaimParams, button: IFormButton, body: IFormBody): Promise<ClaimDto> {
+  protected getDto(context: IContext, params: PrepareClaimParams): Promise<ClaimDto> {
     return context.runQuery(new GetClaim(params.partnerId, params.periodId));
   }
 

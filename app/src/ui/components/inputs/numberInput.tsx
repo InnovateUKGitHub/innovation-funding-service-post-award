@@ -1,5 +1,6 @@
 import classNames from "classnames";
 import { BaseInput, FormInputWidths } from "./baseInput";
+import { InputProps, InputState } from "./common";
 
 interface NumberInputProps extends InputProps<number> {
   id?: string;

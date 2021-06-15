@@ -156,7 +156,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
         name="sortCode"
         value={x => <ACC.Renderers.SimpleString>{x.bankDetails.sortCode}</ACC.Renderers.SimpleString>}
         labelContent={x => x.projectSetupBankDetails.partnerLabels.sortCode}
-        update={_ => null}
+        update={() => null}
       />
     );
   }
@@ -180,7 +180,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
           name="accountNumber"
           value={x => <ACC.Renderers.SimpleString>{x.bankDetails.accountNumber}</ACC.Renderers.SimpleString>}
           labelContent={x => x.projectSetupBankDetails.partnerLabels.accountNumber}
-          update={_ => null}
+          update={() => null}
         />
     );
   }

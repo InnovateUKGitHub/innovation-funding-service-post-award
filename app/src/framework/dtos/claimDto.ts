@@ -1,4 +1,3 @@
-import { Option } from "@framework/dtos/option";
 import { ClaimStatus } from "../constants";
 
 export interface ClaimDto {

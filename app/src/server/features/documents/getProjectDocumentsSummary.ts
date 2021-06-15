@@ -1,4 +1,4 @@
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
+import { Authorisation, ProjectRole } from "@framework/types";
 import { DocumentEntity } from "@framework/entities/document";
 import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
 
@@ -11,7 +11,7 @@ export class GetProjectDocumentsQuery extends DocumentsSummaryQueryBase {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
   }
 
-  protected getRecordId(context: IContext) {
+  protected getRecordId() {
     return Promise.resolve(this.projectId);
   }
 

@@ -1,6 +1,5 @@
 
 import { ILinkInfo, PCRItemStatus, ProjectDto, ProjectRole } from "@framework/types";
-
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
@@ -104,7 +103,7 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
             <ACC.SummaryListItem labelContent={x => x.pcrReasoningWorkflow.labels.types} content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.shortName)}/>} qa="typesRow"/>
           </ACC.SummaryList>
         </ACC.Section>
-        { stepNumber === 1 && this.renderGuidanceSection(editor.data) }
+        { stepNumber === 1 && this.renderGuidanceSection() }
         {step.stepRender({
           ...this.props,
           onChange: (dto: PCRDto) => this.props.onChange(dto),
@@ -129,7 +128,7 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
     );
   }
 
-  private renderGuidanceSection(pcr: PCRDto) {
+  private renderGuidanceSection() {
     return null;
     // ToDo clarify what guidance on a reasoning page should be.
     // if (!pcr.guidance) return null;
@@ -195,7 +194,7 @@ export const PCRViewReasoningRoute = defineRoute<ProjectChangeRequestPrepareReas
   }),
   container: (props) => <PCRReasoningWorkflowContainer mode="view" {...props}/>,
   getTitle: ({content}) => content.pcrReasoningWorkflow.title(),
-  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
 });
 
 export const PCRReviewReasoningRoute = defineRoute<ProjectChangeRequestPrepareReasoningParams>({
@@ -207,7 +206,7 @@ export const PCRReviewReasoningRoute = defineRoute<ProjectChangeRequestPrepareRe
     pcrId: route.params.pcrId
   }),
   getTitle: ({content}) => content.pcrReasoningWorkflow.title(),
-  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer)
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer)
 });
 
 export const PCRPrepareReasoningRoute = defineRoute<ProjectChangeRequestPrepareReasoningParams>({
@@ -220,5 +219,5 @@ export const PCRPrepareReasoningRoute = defineRoute<ProjectChangeRequestPrepareR
     step: parseInt(route.params.step, 10)
   }),
   getTitle: ({content}) => content.pcrPrepareReasoning.title(),
-  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });

@@ -94,7 +94,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
             {this.renderTemplateLink()}
           </UploadForm.Fieldset>
           <UploadForm.Fieldset qa="documentUpload" headingContent={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadHeading}>
-            <UploadForm.Hidden name="description" value={x => DocumentDescription.OverheadCalculationSpreadsheet} />
+            <UploadForm.Hidden name="description" value={() => DocumentDescription.OverheadCalculationSpreadsheet} />
             <ACC.DocumentGuidance />
             <UploadForm.MulipleFileUpload
               labelContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.uploadInputLabel}
@@ -180,6 +180,6 @@ export const PCRSpendProfileOverheadDocumentRoute = defineRoute<OverheadDocument
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,
   }),
-  getTitle: ({ params, stores, content }) => content.pcrSpendProfileOverheadDocumentContent.title(),
-  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  getTitle: ({ content }) => content.pcrSpendProfileOverheadDocumentContent.title(),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });

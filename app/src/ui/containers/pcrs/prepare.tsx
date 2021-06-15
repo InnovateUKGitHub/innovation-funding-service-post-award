@@ -145,7 +145,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
 
   private getItemTasks(item: PCRItemDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, index: number) {
     const validationErrors = editor.validator.items.results[index].errors;
-    const workflow = PcrWorkflow.getWorkflow(item, 1, this.props.config.features);
+    const workflow = PcrWorkflow.getWorkflow(item, 1);
     return (
       <ACC.Task
         name={item.typeName}
@@ -222,5 +222,5 @@ export const ProjectChangeRequestPrepareRoute = defineRoute({
     htmlTitle: "Request",
     displayTitle: "Request"
   }),
-  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });

@@ -1,4 +1,4 @@
-import { DocumentDescription, IContext, IFileWrapper, ILinkInfo } from "@framework/types";
+import { IContext, IFileWrapper, ILinkInfo } from "@framework/types";
 import { Configuration } from "@server/features/common";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
@@ -32,7 +32,7 @@ export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileF
 
     if (button.name === "uploadFileAndContinue") {
       const itemDto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId)).then(pcr => pcr.items.find(item => item.id === params.itemId)!);
-      const workflow = PcrWorkflow.getWorkflow(itemDto, params.step, Configuration.features);
+      const workflow = PcrWorkflow.getWorkflow(itemDto, params.step);
       if (workflow) {
         const nextStep = workflow.getNextStepInfo();
         return PCRPrepareItemRoute.getLink({

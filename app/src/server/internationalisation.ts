@@ -8,7 +8,7 @@ export const initInternationalisation = async () => {
     fallbackLng: "en",
     defaultNS: "default",
     interpolation: {
-      format: (value: string, format, lng) => {
+      format: (value: string, format) => {
         if (format === "lowercase") return value.toLocaleLowerCase();
         return value;
       }

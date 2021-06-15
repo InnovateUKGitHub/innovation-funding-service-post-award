@@ -3,7 +3,7 @@ import { BadRequestError, CommandBase, ValidationError } from "@server/features/
 import { GetByIdQuery } from "@server/features/projects";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { Authorisation, IContext } from "@framework/types";
-import { MonitoringReportDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { MonitoringReportDto, ProjectRole } from "@framework/dtos";
 import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQuestions";
 
 export class CreateMonitoringReportCommand extends CommandBase<string> {
@@ -24,7 +24,7 @@ export class CreateMonitoringReportCommand extends CommandBase<string> {
     });
   }
 
-  private async insertMonitoringReportHeader(context: IContext, project: ProjectDto): Promise<string> {
+  private async insertMonitoringReportHeader(context: IContext): Promise<string> {
     const periodId = this.monitoringReportDto.periodId;
 
     const profile = await context.repositories.profileTotalPeriod
@@ -89,7 +89,7 @@ export class CreateMonitoringReportCommand extends CommandBase<string> {
       throw new ValidationError(validationResult);
     }
 
-    const headerId = await this.insertMonitoringReportHeader(context, project);
+    const headerId = await this.insertMonitoringReportHeader(context);
     await this.insertStatusChange(context, headerId); // Insert status change for Draft
     await this.insertResponse(context, headerId);
     await this.updateMonitoringReportHeader(context, headerId);

@@ -60,7 +60,7 @@ const Container = (props: MonitoringReportPreparePeriodParams & BaseProps) => (
       stores => (
         <ContentConsumer>
           {
-            content => (
+            () => (
               <Component
                 project={stores.projects.getById(props.projectId)}
                 editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}

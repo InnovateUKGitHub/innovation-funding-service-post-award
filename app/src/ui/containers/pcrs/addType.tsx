@@ -108,7 +108,7 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
             options={options}
             name="types"
             validation={pcrEditor.validator.items}
-            value={x => selected}
+            value={() => selected}
             update={(model, selectedValue) => {
               model.items = itemTypes
                 .filter(x => (selectedValue || []).some(y => y.id === x.type.toString()))

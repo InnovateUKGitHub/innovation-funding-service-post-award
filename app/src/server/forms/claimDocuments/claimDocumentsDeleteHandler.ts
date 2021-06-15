@@ -6,7 +6,7 @@ import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { ClaimDocumentsPageParams, ClaimDocumentsRoute } from "../../../ui/containers";
-import { IFormBody, IFormButton, StandardFormHandlerBase } from "../formHandlerBase";
+import { IFormButton, StandardFormHandlerBase } from "../formHandlerBase";
 
 interface Document extends MultipleDocumentUploadDto {
   id: string;
@@ -18,7 +18,7 @@ export class ClaimDocumentsDeleteHandler extends StandardFormHandlerBase<ClaimDo
     super(ClaimDocumentsRoute, ["delete"], "multipleDocuments");
   }
 
-  protected getDto(context: IContext, params: ClaimDocumentsPageParams, button: IFormButton, body: IFormBody) {
+  protected getDto(context: IContext, params: ClaimDocumentsPageParams, button: IFormButton) {
     return Promise.resolve({ id: button.value, files: [] });
   }
   protected createValidationResult(params: ClaimDocumentsPageParams, dto: Document) {

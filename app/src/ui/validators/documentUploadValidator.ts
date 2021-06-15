@@ -106,7 +106,7 @@ export class MultipleDocumentUpdloadDtoValidator extends Results<MultipleDocumen
         children.all(
           () =>
             filesRequired
-              ? children.isTrue(x => !!(filteredFiles && filteredFiles.length), "Select a file to upload.")
+              ? children.isTrue(() => !!(filteredFiles && filteredFiles.length), "Select a file to upload.")
               : children.valid(),
           () => children.isTrue(x => x.length <= maxUploadFileCount, maxCountMessage),
         ),

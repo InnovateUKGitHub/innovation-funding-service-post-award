@@ -12,7 +12,7 @@ class Controller extends ControllerBase<UserDto> implements IUserApi {
   constructor() {
     super("users");
 
-    super.getItem("/current", p => ({}), (p) => this.getCurrent(p));
+    super.getItem("/current", () => ({}), (p) => this.getCurrent(p));
   }
 
   getCurrent(params: ApiParams<{}>) {

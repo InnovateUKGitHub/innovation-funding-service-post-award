@@ -1,4 +1,4 @@
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
+import { Authorisation, ProjectRole } from "@framework/types";
 import { DocumentQueryBase } from "./documentQueryBase";
 
 export class GetPartnerDocumentQuery extends DocumentQueryBase {
@@ -10,7 +10,7 @@ export class GetPartnerDocumentQuery extends DocumentQueryBase {
     return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
-  protected getRecordId(context: IContext): Promise<string | null> {
+  protected getRecordId(): Promise<string | null> {
     return Promise.resolve(this.partnerId);
   }
 }

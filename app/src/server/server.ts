@@ -42,7 +42,7 @@ export class Server {
 
   public async start(secure: boolean) {
     await initInternationalisation()
-      .then(_ => this.initaliseCustomContent(false))
+      .then(() => this.initaliseCustomContent(false))
       .catch(e => {
         console.log("Failed to initialize internationalization", e);
         throw e;
@@ -142,7 +142,7 @@ export class Server {
   private primeCache(context: IContext, message: string, perform: () => Promise<{}>) {
     context.logger.info("Priming cache", message);
     perform()
-      .then(x => context.logger.info("Successfully primed cache", message))
+      .then(() => context.logger.info("Successfully primed cache", message))
       .catch(e => context.logger.error("Unable to primed cache", message, e));
   }
 

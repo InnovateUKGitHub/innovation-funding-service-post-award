@@ -1,4 +1,4 @@
-import SalesforceRepositoryBase, { SalesforceRepositoryBaseWithMapping } from "@server/repositories/salesforceRepositoryBase";
+import { SalesforceRepositoryBaseWithMapping } from "@server/repositories/salesforceRepositoryBase";
 import { ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
 import { PCRStatusChangeMapper } from "./mappers/pcrStatusChangeMapper";
 

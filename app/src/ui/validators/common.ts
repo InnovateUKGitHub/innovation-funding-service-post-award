@@ -185,11 +185,11 @@ export class ChildValidators<T> {
   }
 
   public valid() {
-    return this.expected(x => true, true, "");
+    return this.expected(() => true, true, "");
   }
 
   public invalid(message: string) {
-    return this.expected(x => false, true, message);
+    return this.expected(() => false, true, message);
   }
 
   public isTrue(test: (items: T[]) => boolean, message?: string): Result {
@@ -215,7 +215,7 @@ export class ChildValidators<T> {
   }
 
   public hasNoDuplicates<TCompare = T>(getComparison?: (item: T) => TCompare, message?: string) {
-    const test = (items: T[]) => {
+    const test = () => {
       const mapped = this.items.map(x => getComparison ? getComparison(x) : x);
       return mapped.every((val, i) => mapped.indexOf(val) === i);
     };

@@ -1,4 +1,4 @@
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
+import { Authorisation, ProjectRole } from "@framework/types";
 import { DocumentQueryBase } from "./documentQueryBase";
 
 export class GetProjectDocumentQuery extends DocumentQueryBase {
@@ -10,7 +10,7 @@ export class GetProjectDocumentQuery extends DocumentQueryBase {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
   }
 
-  protected getRecordId(context: IContext): Promise<string | null> {
+  protected getRecordId(): Promise<string | null> {
     return Promise.resolve(this.projectId);
   }
 }

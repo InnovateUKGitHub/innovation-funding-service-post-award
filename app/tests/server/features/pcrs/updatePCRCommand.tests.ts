@@ -294,7 +294,7 @@ describe("UpdatePCRCommand", () => {
           status: PCRStatus.Draft,
           reasoningStatus: PCRItemStatus.Complete,
         });
-        const recordTypes = context.testData.range(3, x =>
+        const recordTypes = context.testData.range(3, () =>
           context.testData.createRecordType({ parent: "Acc_ProjectChangeRequest__c" }),
         );
         recordTypes[0].type = "Remove a partner";
@@ -1261,7 +1261,6 @@ describe("UpdatePCRCommand", () => {
         const context = new TestContext();
 
         const project = context.testData.createProject();
-        const partner = context.testData.createPartner(project);
         context.testData.createCurrentUserAsProjectManager(project);
         const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
         const recordTypes = context.testData.createPCRRecordTypes();

@@ -7,7 +7,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const context = new TestContext();
 
     const partner = context.testData.createPartner();
-    const costCategories = context.testData.range(5, _ => context.testData.createCostCategory({ organisationType: "Industrial" }));
+    const costCategories = context.testData.range(5, () => context.testData.createCostCategory({ organisationType: "Industrial" }));
 
     const project = context.testData.createProject();
 
@@ -49,8 +49,8 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const context = new TestContext();
 
     const partner = context.testData.createPartner();
-    context.testData.range(3, _ => context.testData.createCostCategory({ organisationType: "Academic" }));
-    const costCategories = context.testData.range(5, _ => context.testData.createCostCategory({ organisationType: "Industrial"}));
+    context.testData.range(3, () => context.testData.createCostCategory({ organisationType: "Academic" }));
+    const costCategories = context.testData.range(5, () => context.testData.createCostCategory({ organisationType: "Industrial"}));
 
     const project = context.testData.createProject();
 
@@ -178,19 +178,19 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);
 
-    const expectedCostCategories = context.testData.range(3, i => context.testData.createCostCategory({
+    const expectedCostCategories = context.testData.range(3, () => context.testData.createCostCategory({
       competitionType: project.Acc_CompetitionType__c,
       organisationType: partner.organisationType,
     }));
 
     // not expected cost categories as diff org
-    context.testData.range(3, i => context.testData.createCostCategory({
+    context.testData.range(3, () => context.testData.createCostCategory({
       competitionType: project.Acc_CompetitionType__c,
       organisationType: partner.organisationType + "_",
     }));
 
     // not expected cost categories as diff comp
-    context.testData.range(3, i => context.testData.createCostCategory({
+    context.testData.range(3, () => context.testData.createCostCategory({
       competitionType: project.Acc_CompetitionType__c + "_",
       organisationType: partner.organisationType,
     }));

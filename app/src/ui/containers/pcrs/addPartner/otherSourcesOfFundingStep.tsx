@@ -59,11 +59,11 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           qa="cost-description"
           value={(x, i) => (
             <>
-              <Form.Hidden value={_dontUse => funds[i.row].id} name={`item_${i.row}_id`} />
+              <Form.Hidden value={() => funds[i.row].id} name={`item_${i.row}_id`} />
               <Form.String
                 name={`item_${i.row}_description`}
                 // the dto "_dontUse" should not be used here because the form as is doesn't support deeply nested form child elements
-                value={_dontUse => funds[i.row].description}
+                value={() => funds[i.row].description}
                 update={(_dontUse, val) => {
                   funds[i.row].description = val;
                   // onChange needs to be called here because the form as is doesn't support deeply nested form child elements
@@ -80,7 +80,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           value={(x, i) => (
             <Form.MonthYear
               name={`item_${i.row}_date`}
-              value={_dontUse => funds[i.row].dateSecured}
+              value={() => funds[i.row].dateSecured}
               update={(_dontUse, val) => {
                 funds[i.row].dateSecured = val;
                 this.props.onChange(pcrItem);
@@ -97,7 +97,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           value={(x, i) => (
             <Form.Numeric
               name={`item_${i.row}_value`}
-              value={_dontUse => funds[i.row].value}
+              value={() => funds[i.row].value}
               update={(_dontUse, val) => {
                 funds[i.row].value = val;
                 this.props.onChange(pcrItem);

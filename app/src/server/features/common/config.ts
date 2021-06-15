@@ -109,8 +109,6 @@ const getFeatureFlagValue = (value: string | undefined, defaultValue: boolean) =
 
 const disableCsp = getFeatureFlagValue(process.env.DISABLE_CSP, false);
 
-const defaultFeatureFlag = getFeatureFlagValue(process.env.FEATURE_DEFAULT, false);
-
 const features: IFeatureFlags = {
   changePeriodLengthWorkflow: getFeatureFlagValue(process.env.FEATURE_CHANGE_PERIOD_LENGTH, false),
   contentHint: getFeatureFlagValue(process.env.FEATURE_CONTENT_HINT, false),
@@ -146,8 +144,6 @@ const urls = {
 };
 
 const cookieKey = process.env.COOKIE_KEY!;
-
-const standardOverheadRate = parseFloat(process.env.STANDARD_OVERHEAD_RATE!) || 20;
 
 let permittedFileTypes: IAppOptions["permittedFileTypes"] = process.env.PERMITTED_FILE_TYPES
   ? process.env.PERMITTED_FILE_TYPES.split(",")

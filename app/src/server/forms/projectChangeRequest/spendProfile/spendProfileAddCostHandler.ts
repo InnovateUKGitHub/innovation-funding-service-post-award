@@ -1,6 +1,6 @@
 import {
   IContext,
-  ILinkInfo, Option,
+  ILinkInfo,
   PCRDto,
   PCRItemForPartnerAdditionDto, PCRItemType,
   PCRSpendProfileCapitalUsageType,
@@ -88,7 +88,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
       case CostCategoryType.Subcontracting: return this.getSubcontractingCost(baseCostDto, costCategory.type, body);
       case CostCategoryType.Capital_Usage: return this.getCapitalUsageCost(baseCostDto, costCategory.type, body);
       case CostCategoryType.Travel_And_Subsistence: return this.getTravelAndSubsCost(baseCostDto, costCategory.type, body);
-      case CostCategoryType.Other_Costs: return this.getOtherCost(baseCostDto, costCategory.type, body);
+      case CostCategoryType.Other_Costs: return this.getOtherCost(baseCostDto, costCategory.type);
     }
   }
 
@@ -152,7 +152,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
     };
   }
 
-  private getOtherCost(baseCostDto: IBaseCost, costCategory: CostCategoryType.Other_Costs, body: IFormBody): PCRSpendProfileOtherCostsDto {
+  private getOtherCost(baseCostDto: IBaseCost, costCategory: CostCategoryType.Other_Costs): PCRSpendProfileOtherCostsDto {
     return {
       ...baseCostDto,
       costCategory,
@@ -160,7 +160,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
   }
 
   private getSpendProfileStep(context: IContext, pcrItem: PCRItemForPartnerAdditionDto) {
-    const workflow = PcrWorkflow.getWorkflow(pcrItem, undefined, context.config.features);
+    const workflow = PcrWorkflow.getWorkflow(pcrItem, undefined);
     if (!workflow) return null;
     const stepName: addPartnerStepNames = "spendProfileStep";
     return workflow.findStepNumberByName(stepName);

@@ -81,7 +81,7 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
               <Form.Checkboxes
                 name="isComplete"
                 options={options}
-                value={_ => (partnerEditor.data.spendProfileStatus === SpendProfileStatus.Complete ? options : [])}
+                value={() => (partnerEditor.data.spendProfileStatus === SpendProfileStatus.Complete ? options : [])}
                 update={(_, value) =>
                   (partnerEditor.data.spendProfileStatus =
                     value && value.some(y => y.id === "true")

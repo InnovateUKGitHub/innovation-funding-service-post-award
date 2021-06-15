@@ -19,7 +19,7 @@ export class UploadClaimDocumentCommand extends CommandDocumentBase<string> {
     return [this.constructor.name, this.claimKey, this.document && this.document.file && this.document.file.fileName];
   }
 
-  protected async accessControl(auth: Authorisation, context: IContext) {
+  protected async accessControl(auth: Authorisation) {
       return auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 

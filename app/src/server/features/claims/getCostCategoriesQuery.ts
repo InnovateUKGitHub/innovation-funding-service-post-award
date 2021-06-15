@@ -25,7 +25,7 @@ export class GetUnfilteredCostCategoriesQuery extends QueryBase<CostCategoryDto[
     data.sort((a, b) => numberComparator(a.displayOrder, b.displayOrder));
 
     return data.map(x => {
-      const { displayOrder, ...rest } = x;
+      const { ...rest } = x;
       return rest;
     });
   }
@@ -48,7 +48,7 @@ export class GetFilteredCostCategoriesQuery extends QueryBase<CostCategoryDto[]>
     filteredCategories.sort((a, b) => numberComparator(a.displayOrder, b.displayOrder));
 
     return filteredCategories.map(x => {
-      const { displayOrder, ...rest } = x;
+      const { ...rest } = x;
       return rest;
     });
   }

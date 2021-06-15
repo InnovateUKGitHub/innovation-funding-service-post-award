@@ -151,7 +151,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   }
 
   private getSpendProfileStep(addPartnerItem: PCRItemForPartnerAdditionDto) {
-    const workflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined, this.props.config.features);
+    const workflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined);
     if (!workflow) return null;
     const stepName: addPartnerStepNames = "spendProfileStep";
     return workflow.findStepNumberByName(stepName);
@@ -263,8 +263,8 @@ export const PCRSpendProfileAddCostRoute = defineRoute<PcrAddSpendProfileCostPar
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,
   }),
-  getTitle: ({ params, stores, content }) => content.pcrSpendProfilePrepareCostContent.title(),
-  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  getTitle: ({ content }) => content.pcrSpendProfilePrepareCostContent.title(),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });
 
 export const PCRSpendProfileEditCostRoute = defineRoute<PcrEditSpendProfileCostParams>({
@@ -278,6 +278,6 @@ export const PCRSpendProfileEditCostRoute = defineRoute<PcrEditSpendProfileCostP
     costCategoryId: route.params.costCategoryId,
     costId: route.params.costId
   }),
-  getTitle: ({ params, stores, content }) => content.pcrSpendProfilePrepareCostContent.title(),
-  accessControl: (auth, { projectId }, config) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  getTitle: ({ content }) => content.pcrSpendProfilePrepareCostContent.title(),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
 });

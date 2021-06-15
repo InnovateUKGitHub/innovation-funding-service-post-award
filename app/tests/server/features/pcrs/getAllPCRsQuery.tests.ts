@@ -44,31 +44,6 @@ describe("GetAllPCRsQuery", () => {
     expect(result.map(x => x.id)).toEqual(expected.map(x => x.id).reverse());
   });
 
-  test("pcrs files are returned as expected", async () => {
-    const context = new TestContext();
-
-    const expected = context.testData.createPCR(undefined, {
-      id: "Expected Id",
-      started: DateTime.fromFormat("1 april 2013", "d MMM yyyy").toJSDate(),
-      updated: DateTime.fromFormat("1 october 2013", "d MMM yyyy").toJSDate(),
-      number: 531,
-      status: 55 as PCRStatus,
-      statusName: "Expected Status"
-    });
-
-    const query = new GetAllPCRsQuery(expected.projectId);
-
-    const result = await context.runQuery(query).then(x => x[0]);
-
-    expect(result.id).toEqual(expected.id);
-    expect(result.started).toEqual(expected.started);
-    expect(result.lastUpdated).toEqual(expected.updated);
-    expect(result.requestNumber).toEqual(expected.number);
-    expect(result.status).toEqual(expected.status);
-    expect(result.statusName).toEqual(expected.statusName);
-    expect(result.items).toEqual([]);
-  });
-
   test("pcrs fields are returned as expected", async () => {
     const context = new TestContext();
 

@@ -1,5 +1,5 @@
 import { ClaimDto, PartnerDto } from "@framework/types";
-import { getPartnerName, PartnerName } from "@ui/components";
+import { getPartnerName } from "@ui/components";
 import { ShortDateRange } from "../renderers/date";
 
 export interface ClaimPeriodProps {

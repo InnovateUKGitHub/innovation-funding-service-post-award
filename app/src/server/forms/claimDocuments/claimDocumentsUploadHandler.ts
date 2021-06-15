@@ -5,7 +5,6 @@ import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadCl
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { DocumentDescription } from "@framework/constants";
 import { IFileWrapper } from "@framework/types";
 import { ClaimDocumentsPageParams, ClaimDocumentsRoute } from "../../../ui/containers";
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "../formHandlerBase";

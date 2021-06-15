@@ -9,7 +9,7 @@ import {
   ClaimDetailDocumentsPageParams,
   ClaimDetailDocumentsRoute
 } from "../../../ui/containers";
-import { IFormBody, IFormButton, StandardFormHandlerBase } from "../formHandlerBase";
+import { IFormButton, StandardFormHandlerBase } from "../formHandlerBase";
 
 interface Document extends MultipleDocumentUploadDto {
   id: string;
@@ -21,7 +21,7 @@ export class ClaimDetailDocumentDeleteHandler extends StandardFormHandlerBase<Cl
     super(ClaimDetailDocumentsRoute, ["delete"], "multipleDocuments");
   }
 
-  protected getDto(context: IContext, params: ClaimDetailDocumentsPageParams, button: IFormButton, body: IFormBody) {
+  protected getDto(context: IContext, params: ClaimDetailDocumentsPageParams, button: IFormButton) {
     return Promise.resolve({ id: button.value, files: [] });
   }
   protected createValidationResult(params: ClaimDetailDocumentsPageParams, dto: Document) {

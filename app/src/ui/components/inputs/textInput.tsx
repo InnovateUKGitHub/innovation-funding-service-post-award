@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { BaseInput, FormInputWidths } from "./baseInput";
+import { InputProps, InputState } from "./common";
 
 export interface TextInputProps extends InputProps<string> {
   maxLength?: number;

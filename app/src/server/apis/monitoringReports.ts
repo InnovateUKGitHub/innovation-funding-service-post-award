@@ -36,7 +36,7 @@ class Controller extends ControllerBaseWithSummary<MonitoringReportSummaryDto, M
     this.putItem("/", (p, q, b) => ({ monitoringReportDto: processDto(b), submit: q.submit === "true" }), (p) => this.saveMonitoringReport(p));
     this.deleteItem("/:projectId/:reportId", (p) => ({ projectId: p.projectId, reportId: p.reportId }), p => this.deleteMonitoringReport(p));
     this.getCustom("/status-changes/:projectId/:reportId", (p) => ({ projectId: p.projectId, reportId: p.reportId}), p => this.getStatusChanges(p));
-    this.getCustom("/questions", (p) => ({}), p => this.getActiveQuestions(p));
+    this.getCustom("/questions", () => ({}), p => this.getActiveQuestions(p));
   }
 
   public async get(params: ApiParams<{ projectId: string; reportId: string }>) {
