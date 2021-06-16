@@ -225,7 +225,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
       },
       {
         textContent: (x: Content) => x.projectOverview.links.details,
-        link: routes.projectDetails.getLink({ id: projectId }),
+        link: routes.projectDetails.getLink({ projectId }),
       },
       {
         textContent: (x: Content) => x.projectOverview.links.summary,

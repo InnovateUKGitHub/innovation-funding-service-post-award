@@ -1,72 +1,23 @@
 import { renderHook } from "@testing-library/react-hooks";
 
 import { hookTestBed } from "@shared/TestBed";
-import { useCompetitionType, projectCompetition, useCompetitionTypeArgs } from "@ui/hooks";
+import { useCompetitionType, projectCompetition } from "@ui/hooks";
 import { LoadingStatus, Pending } from "@shared/pending";
 
 describe("useCompetitionType()", () => {
   beforeEach(jest.clearAllMocks);
 
   describe("@returns", () => {
-    describe("with errors", () => {
-      test("when a project has an error loading", () => {
-        const mockLoadingError = jest.fn().mockReturnValue(new Pending(LoadingStatus.Failed));
-        const stubProjectId = "123456";
-
-        const { result } = renderHook(
-          () => useCompetitionType({ projectId: stubProjectId }),
-          hookTestBed({
-            stores: {
-              projects: {
-                getById: mockLoadingError,
-              } as any,
-            },
-          }),
-        );
-
-        expect(mockLoadingError).toHaveBeenCalledTimes(1);
-        expect(() => result.current).toThrowError(
-          new Error(
-            `There was an error fetching your project using id '${stubProjectId}', a competition type could not be used.`,
-          ),
-        );
-      });
-
-      test("when a request contains errors", () => {
-        const mockLoadingError = jest.fn().mockReturnValue(new Pending(LoadingStatus.Done, {}, "There is an error"));
-        const stubProjectId = "123456";
-
-        const { result } = renderHook(
-          () => useCompetitionType({ projectId: stubProjectId }),
-          hookTestBed({
-            stores: {
-              projects: {
-                getById: mockLoadingError,
-              } as any,
-            },
-          }),
-        );
-
-        expect(mockLoadingError).toHaveBeenCalledTimes(1);
-        expect(() => result.current).toThrowError(
-          new Error(
-            `There was an error fetching your project using id '${stubProjectId}', a competition type could not be used.`,
-          ),
-        );
-      });
-    });
-
     describe("with valid response", () => {
-      const mockCompetitionType = "stub-competitionType";
-      const mockGetById = jest.fn().mockReturnValue({
-        data: {
-          competitionType: mockCompetitionType,
-        },
-      });
+      test("with valid payload", () => {
+        const stubProjectId = "123456";
+        const mockCompetitionType = "stub-competitionType";
+        const mockGetById = jest
+          .fn()
+          .mockReturnValue(new Pending(LoadingStatus.Done, { competitionType: mockCompetitionType }));
 
-      const setup = (params: useCompetitionTypeArgs) => {
-        return renderHook(
-          () => useCompetitionType(params),
+        const { result } = renderHook(
+          () => useCompetitionType(stubProjectId),
           hookTestBed({
             stores: {
               projects: {
@@ -75,17 +26,100 @@ describe("useCompetitionType()", () => {
             },
           }),
         );
-      };
 
-      test.each`
-        name                                  | inboundParams              | expectedValue
-        ${"with params containing projectId"} | ${{ projectId: "123456" }} | ${mockCompetitionType}
-        ${"with params containing id"}        | ${{ id: "123456" }}        | ${mockCompetitionType}
-      `("$name", ({ inboundParams, expectedValue }) => {
-        const { result } = setup(inboundParams);
-
-        expect(result.current).toBe(expectedValue);
+        expect(result.current).toBe(mockCompetitionType);
         expect(mockGetById).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe("with no competitionType response", () => {
+      describe("with no errors", () => {
+        test("with no projectId", () => {
+          const mockLoadingError = jest.fn();
+          const stubProjectId = undefined;
+
+          const { result } = renderHook(
+            () => useCompetitionType(stubProjectId),
+            hookTestBed({
+              stores: {
+                projects: {
+                  getById: mockLoadingError,
+                } as any,
+              },
+            }),
+          );
+
+          expect(mockLoadingError).toHaveBeenCalledTimes(0);
+          expect(result.current).toBeUndefined();
+        });
+
+        test("with no valid response from a pending", () => {
+          const mockBadResponse = jest.fn().mockReturnValue(new Pending(LoadingStatus.Done, { competitionType: null }));
+          const stubProjectId = "1234";
+
+          const { result } = renderHook(
+            () => useCompetitionType(stubProjectId),
+            hookTestBed({
+              stores: {
+                projects: {
+                  getById: mockBadResponse,
+                } as any,
+              },
+            }),
+          );
+
+          expect(mockBadResponse).toHaveBeenCalledTimes(1);
+          expect(result.current).toBeUndefined();
+        });
+      });
+
+      describe("with errors", () => {
+        test("when a project query returns as failed", () => {
+          const stubProjectId = "123456";
+          const mockLoadingError = jest
+            .fn()
+            .mockReturnValue(new Pending(LoadingStatus.Failed, { competitionType: stubProjectId }));
+
+          const { result } = renderHook(
+            () => useCompetitionType(stubProjectId),
+            hookTestBed({
+              stores: {
+                projects: {
+                  getById: mockLoadingError,
+                } as any,
+              },
+            }),
+          );
+
+          expect(mockLoadingError).toHaveBeenCalledTimes(1);
+
+          expect(() => result.current).toThrowError(
+            new Error(`There was an error getting the competitionType from projectId - ${stubProjectId}`),
+          );
+        });
+
+        test("when a project query contains an error", () => {
+          const stubProjectId = "123456";
+          const mockLoadingError = jest
+            .fn()
+            .mockReturnValue(new Pending(LoadingStatus.Done, { competitionType: stubProjectId }, "There is an error"));
+
+          const { result } = renderHook(
+            () => useCompetitionType(stubProjectId),
+            hookTestBed({
+              stores: {
+                projects: {
+                  getById: mockLoadingError,
+                } as any,
+              },
+            }),
+          );
+
+          expect(mockLoadingError).toHaveBeenCalledTimes(1);
+          expect(() => result.current).toThrowError(
+            new Error(`There was an error getting the competitionType from projectId - ${stubProjectId}`),
+          );
+        });
       });
     });
   });

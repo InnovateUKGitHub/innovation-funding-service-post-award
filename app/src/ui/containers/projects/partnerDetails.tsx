@@ -42,7 +42,7 @@ class PartnerDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
         return (
             <ACC.Page
-                backLink={<ACC.BackLink route={this.props.routes.projectDetails.getLink({ id: this.props.projectId })}>{backToProjectDetailsLink}</ACC.BackLink>}
+                backLink={<ACC.BackLink route={this.props.routes.projectDetails.getLink({ projectId: this.props.projectId })}>{backToProjectDetailsLink}</ACC.BackLink>}
                 pageTitle={<ACC.Projects.Title {...project} />}
                 project={project}
                 partner={partner}
@@ -89,7 +89,7 @@ const PartnerDetailsContainer = (props: Params & BaseProps) => (
 export const PartnerDetailsRoute = defineRoute<Params>({
     routeName: "partnerDetails",
     routePath: "/projects/:projectId/details/:partnerId",
-    container: (props) => <PartnerDetailsContainer {...props} />,
+    container: PartnerDetailsContainer,
     getParams: (r) => ({ projectId: r.params.projectId, partnerId: r.params.partnerId }),
     getTitle: ({ content }) => content.partnerDetails.title(),
     accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
