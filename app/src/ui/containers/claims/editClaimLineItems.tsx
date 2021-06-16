@@ -199,16 +199,46 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             footers={this.renderFooters(editor.data.lineItems, forecastDetail, this.state.showAddRemove, editor)}
             qa="current-claim-summary-table"
           >
-            <LineItemTable.Custom headerContent={x => x.editClaimLineItems.descriptionHeader} qa="cost-description" value={(x, i) => this.renderDescription(x, i, validationResults[i.row], editor)} />
-            <LineItemTable.Custom headerContent={x => x.editClaimLineItems.costHeader} qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, validationResults[i.row], editor)} width={30} />
-            <LineItemTable.ShortDate headerContent={x => x.editClaimLineItems.lastUpdatedHeader} qa="cost-last-updated" value={x => x.lastModifiedDate} />
-            {this.state.showAddRemove ?
-              <LineItemTable.Custom headerContent={x => x.editClaimLineItems.actionHeader} hideHeader qa="remove" value={(x, i) => <a href="" className="govuk-link" role="button" onClick={e => this.removeItem(x, i, e, editor)}><ACC.Content value={y => y.editClaimLineItems.removeButton}/></a>} width={1}/>
-              : null}
+            <LineItemTable.Custom
+              headerContent={x => x.editClaimLineItems.descriptionHeader}
+              qa="cost-description"
+              value={(x, i) => this.renderDescription(x, i, validationResults[i.row], editor)}
+            />
+            <LineItemTable.Custom
+              headerContent={x => x.editClaimLineItems.costHeader}
+              qa="cost-value"
+              classSuffix="numeric"
+              value={(x, i) => this.renderCost(x, i, validationResults[i.row], editor)}
+              width={30}
+            />
+            <LineItemTable.ShortDate
+              headerContent={x => x.editClaimLineItems.lastUpdatedHeader}
+              qa="cost-last-updated"
+              value={x => x.lastModifiedDate}
+            />
+            {this.state.showAddRemove ? (
+              <LineItemTable.Custom
+                headerContent={x => x.editClaimLineItems.actionHeader}
+                hideHeader
+                qa="remove"
+                value={(x, i) => (
+                  <button
+                    data-module="govuk-button"
+                    className="govuk-link"
+                    onClick={e => this.removeItem(x, i, e, editor)}
+                  >
+                    <ACC.Content value={y => y.editClaimLineItems.removeButton} />
+                  </button>
+                )}
+                width={1}
+              />
+            ) : null}
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
         {documentSection}
-        <LineItemForm.Submit><ACC.Content value={x => x.editClaimLineItems.saveAndReturnButton}/></LineItemForm.Submit>
+        <LineItemForm.Submit>
+          <ACC.Content value={x => x.editClaimLineItems.saveAndReturnButton} />
+        </LineItemForm.Submit>
       </LineItemForm.Form>
     );
   }
@@ -372,14 +402,14 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     );
   }
 
-  removeItem(item: ClaimLineItemDto, i: { column: number; row: number }, e: React.SyntheticEvent<HTMLAnchorElement>, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
+  removeItem(item: ClaimLineItemDto, i: { column: number; row: number }, e: React.MouseEvent<HTMLButtonElement, MouseEvent>, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
     e.preventDefault();
     const dto = editor.data;
     dto.lineItems.splice(i.row, 1);
     this.props.onUpdate(false, dto);
   }
 
-  addItem(e: React.SyntheticEvent<HTMLAnchorElement>, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
+  addItem(e: React.MouseEvent<HTMLButtonElement, MouseEvent>, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
     e.preventDefault();
     const dto = editor.data;
     dto.lineItems.push({
@@ -407,8 +437,17 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     if (showAddRemove) {
       footers.push(
         <tr key={1} className="govuk-table__row">
-          <td className="govuk-table__cell" colSpan={4}><a href="" className="govuk-link" role="button" onClick={(e) => this.addItem(e, editor)} data-qa="add-cost"><ACC.Content value={x => x.editClaimLineItems.addCost}/></a></td>
-        </tr>
+          <td className="govuk-table__cell" colSpan={4}>
+            <button
+              data-module="govuk-button"
+              className="govuk-link"
+              onClick={e => this.addItem(e, editor)}
+              data-qa="add-cost"
+            >
+              <ACC.Content value={x => x.editClaimLineItems.addCost} />
+            </button>
+          </td>
+        </tr>,
       );
     }
 
