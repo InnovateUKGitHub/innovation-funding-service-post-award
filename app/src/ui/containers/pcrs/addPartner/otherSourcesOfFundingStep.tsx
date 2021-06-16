@@ -106,22 +106,29 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
             />
           )}
         />
-        {this.props.isClient ? <Table.Custom
-          header="Action"
-          hideHeader
-          qa="remove"
-          value={dto => (
-            <a data-qa="remove-fund" href="" className="govuk-link" role="button" onClick={e => this.removeItem(e, pcrItem, dto)}>
-              <ACC.Content value={x => x.pcrAddPartnerOtherFundingSources.removeButton} />
-            </a>
-          )}
-          width={1}
-        /> : null}
+        {this.props.isClient ? (
+          <Table.Custom
+            header="Action"
+            hideHeader
+            qa="remove"
+            value={dto => (
+              <button
+                data-module="govuk-button"
+                data-qa="remove-fund"
+                className="govuk-link"
+                onClick={e => this.removeItem(e, pcrItem, dto)}
+              >
+                <ACC.Content value={x => x.pcrAddPartnerOtherFundingSources.removeButton} />
+              </button>
+            )}
+            width={1}
+          />
+        ) : null}
       </Table.Table>
     );
   }
 
-  private addItem(e: React.SyntheticEvent<HTMLAnchorElement>, dto: PCRItemForPartnerAdditionDto) {
+  private addItem(e: React.MouseEvent<HTMLButtonElement, MouseEvent>, dto: PCRItemForPartnerAdditionDto) {
     e.preventDefault();
     const otherFundingCostCategory = this.props.costCategories.find(x => x.type === CostCategoryType.Other_Funding)!;
     dto.spendProfile.funds.push({
@@ -143,7 +150,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     return result ? result[field] : undefined;
   }
 
-  private removeItem(e: React.SyntheticEvent<HTMLAnchorElement>, pcrItemDto: PCRItemForPartnerAdditionDto, dto: PCRSpendProfileOtherFundingDto) {
+  private removeItem(e: React.MouseEvent<HTMLButtonElement, MouseEvent>, pcrItemDto: PCRItemForPartnerAdditionDto, dto: PCRSpendProfileOtherFundingDto) {
     e.preventDefault();
     const index = pcrItemDto.spendProfile.funds.findIndex(x => x === dto);
     pcrItemDto.spendProfile.funds.splice(index, 1);
@@ -161,11 +168,16 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
       footers.push(
         <tr key={1} className="govuk-table__row">
           <td colSpan={4} className="govuk-table__cell">
-            <a href="" className="govuk-link" role="button" onClick={(e) => this.addItem(e, pcrItemDto)} data-qa="add-fund">
+            <button
+              data-module="govuk-button"
+              data-qa="add-fund"
+              className="govuk-link"
+              onClick={e => this.addItem(e, pcrItemDto)}
+            >
               <ACC.Content value={x => x.pcrAddPartnerOtherFundingSources.addButton} />
-            </a>
+            </button>
           </td>
-        </tr>
+        </tr>,
       );
     }
 
