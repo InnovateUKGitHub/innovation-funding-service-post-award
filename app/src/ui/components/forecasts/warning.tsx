@@ -5,15 +5,14 @@ import {
   GOLCostDto,
   PartnerDto,
   ProjectDto,
-  ProjectRole,
 } from "@framework/dtos";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { getAuthRoles } from "@framework/types";
 import { IEditorStore } from "@ui/redux";
 import { ForecastDetailsDtosValidator } from "@ui/validators";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { AriaLive } from "../renderers/ariaLive";
-import { ValidationMessage } from "../validationMessage";
-import { Content } from "../content";
-import { UL } from "../layout";
+
+import { Content, UL, ValidationMessage } from "@ui/components";
+import { AriaLive } from "@ui/components/renderers";
 
 interface Props {
   project: ProjectDto;
@@ -28,63 +27,62 @@ interface Props {
 
 export const Warning = (props: Props) => <AriaLive>{renderWarningMessage(props)}</AriaLive>;
 
-const renderWarningMessage = (props: Props) => {
+const renderWarningMessage = ({
+  costCategories,
+  claims,
+  editor,
+  forecastDetails,
+  golCosts,
+  claimDetails,
+  partner,
+}: Props) => {
+  const forecasts = editor?.data || forecastDetails;
+  const currentPeriod = claims.reduce(
+    (periodValue, { periodId }) => (periodId > periodValue ? periodId : periodValue),
+    0,
+  );
+
+  // TODO: Refactor this to something more readable
   const categories: string[] = [];
-  const currentPeriod = props.claims.reduce((prev, item) => (item.periodId > prev ? item.periodId : prev), 0);
-  const forecasts = props.editor ? props.editor.data : props.forecastDetails;
 
-  props.costCategories
-    .filter(
-      (x) =>
-        x.competitionType === props.project.competitionType && x.organisationType === props.partner.organisationType,
-    )
-    .forEach((category) => {
-      let total = 0;
-      const gol = props.golCosts.find((x) => x.costCategoryId === category.id);
+  costCategories.forEach(category => {
+    let total = 0;
+    const gol = golCosts.find(x => x.costCategoryId === category.id);
 
-      props.claimDetails.forEach(
-        (x) => (total += x.costCategoryId === category.id && x.periodId <= currentPeriod ? x.value : 0),
-      );
-      forecasts.forEach((x) => (total += x.costCategoryId === category.id && x.periodId > currentPeriod ? x.value : 0));
+    claimDetails.forEach(x => (total += x.costCategoryId === category.id && x.periodId <= currentPeriod ? x.value : 0));
+    forecasts.forEach(x => (total += x.costCategoryId === category.id && x.periodId > currentPeriod ? x.value : 0));
 
-      if (gol && gol.value < total) {
-        categories.push(category.name);
-      }
-    });
+    if (gol && gol.value < total) {
+      categories.push(category.name);
+    }
+  });
 
-  const lowerCaseCategories = categories.map((x) => (
-    <li key={x}>{x.toLocaleLowerCase()}</li>
-  ));
+  if (!categories.length) return null;
+
+  const { isFc } = getAuthRoles(partner.roles);
 
   const categoriesList = (
-    <UL>{lowerCaseCategories}</UL>
+    <UL className="govuk-!-margin-top-4">
+      {categories.map(x => (
+        <li key={x}>{x.toLocaleLowerCase()}</li>
+      ))}
+    </UL>
   );
-  const isFC = (props.partner.roles & ProjectRole.FinancialContact) === ProjectRole.FinancialContact;
 
-  if (categories.length === 0) return null;
+  const qaValue = isFc ? "forecasts-warning-fc" : "forecasts-warning-mo-pm";
 
-  return isFC ? (
-    <ValidationMessage
-      messageType="info"
-      message={
-        <div>
-          <Content value={x => x.components.warningContent.amountRequestMessage} />
-          <UL>{categoriesList}</UL>
-          <Content value={x => x.components.warningContent.contactmessage} />
-        </div>
-      }
-      qa="forecasts-warning-fc"
-    />
+  const warningContent = isFc ? (
+    <>
+      <Content value={x => x.components.warningContent.amountRequestMessage} />
+      {categoriesList}
+      <Content value={x => x.components.warningContent.contactmessage} />
+    </>
   ) : (
-    <ValidationMessage
-      messageType="info"
-      message={
-        <div>
-          <Content value={x => x.components.warningContent.advisoryMoPmMessage} />
-          <UL>{categoriesList}</UL>
-        </div>
-      }
-      qa="forecasts-warning-mo-pm"
-    />
+    <>
+      <Content value={x => x.components.warningContent.advisoryMoPmMessage} />
+      {categoriesList}
+    </>
   );
+
+  return <ValidationMessage messageType="info" qa={qaValue} message={warningContent} />;
 };
