@@ -137,9 +137,9 @@ export function App(props: AppRoute) {
 
   const getRoute = stores.navigation.getRoute();
   const currentRoute = matchRoute(getRoute);
-  const params: Params = currentRoute.getParams(getRoute);
+  const params: Params & { projectId?: string } = currentRoute.getParams(getRoute);
 
-  const competitionType = useCompetitionType(params);
+  const competitionType = useCompetitionType(params.projectId);
 
   return (
     <AppView

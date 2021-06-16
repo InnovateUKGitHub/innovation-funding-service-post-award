@@ -12,7 +12,7 @@ interface Data {
 }
 
 interface Params {
-    id: string;
+    projectId: string;
 }
 
 interface Callbacks {
@@ -152,7 +152,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
     private renderPartnerName(partner: PartnerDto) {
         return (
-            <ACC.Link route={this.props.routes.partnerDetails.getLink({projectId: this.props.id, partnerId: partner.id})}>
+            <ACC.Link route={this.props.routes.partnerDetails.getLink({projectId: this.props.projectId, partnerId: partner.id})}>
                 <PartnerName partner={partner} showIsLead/>
             </ACC.Link>
         );
@@ -165,21 +165,21 @@ const ProjectDetailsContainer = (props: Params & BaseProps) => {
   return (
     <ProjectDetailsComponent
       {...props}
-      projectDetails={stores.projects.getById(props.id)}
-      partners={stores.partners.getPartnersForProject(props.id)}
-      contacts={stores.contacts.getAllByProjectId(props.id)}
+      projectDetails={stores.projects.getById(props.projectId)}
+      partners={stores.partners.getPartnersForProject(props.projectId)}
+      contacts={stores.contacts.getAllByProjectId(props.projectId)}
     />
   );
 };
 
 export const ProjectDetailsRoute = defineRoute({
   routeName: "projectDetails",
-  routePath: "/projects/:id/details",
+  routePath: "/projects/:projectId/details",
   container: ProjectDetailsContainer,
-  getParams: r => ({ id: r.params.id }),
+  getParams: r => ({ projectId: r.params.projectId }),
   getTitle: x => x.content.projectDetails.title(),
   accessControl: (auth, params) =>
     auth
-      .forProject(params.id)
+      .forProject(params.projectId)
       .hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
 });

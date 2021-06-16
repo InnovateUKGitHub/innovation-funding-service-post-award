@@ -1,28 +1,22 @@
 import { LoadingStatus } from "@shared/pending";
 import { useStores } from "@ui/redux";
 
-export type useCompetitionTypeArgs = Record<string, any>;
-
-export function useCompetitionType(params: useCompetitionTypeArgs): string | undefined {
+export function useCompetitionType(projectId?: string): string | undefined {
   const { projects } = useStores();
 
-  // TODO: Throw error when projectID is not available - content solution requires param.projectId some containers call this param.id
-  const selectedProjectId: string | undefined = params.projectId || params.id;
+  // Note: bail out as we can assume that were on a non-project specific page
+  if (!projectId) return undefined;
 
-  if (!selectedProjectId) {
-    // Note: Some pages have no projectId param to derive from
-    return undefined;
+  const { state, error, data: projectPayload } = projects.getById(projectId).then(x => x.competitionType);
+
+  // Note: In first sever renders the payload as null (we bail out since it gets re-rendered)
+  if (!projectPayload) return undefined;
+
+  if (error || state === LoadingStatus.Failed) {
+    throw new Error(`There was an error getting the competitionType from projectId - ${projectId}`);
   }
 
-  const projectPayload = projects.getById(selectedProjectId);
-
-  if (projectPayload.error || projectPayload.state === LoadingStatus.Failed) {
-    throw new Error(
-      `There was an error fetching your project using id '${selectedProjectId}', a competition type could not be used.`,
-    );
-  }
-
-  return projectPayload?.data?.competitionType;
+  return projectPayload;
 }
 
 export function projectCompetition(competition: string) {
