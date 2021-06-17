@@ -1,0 +1,96 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Footer config footerLinks as default 1`] = `
+Array [
+  Object {
+    "content": "Innovate UK",
+    "href": "https://www.gov.uk/government/organisations/innovate-uk",
+    "id": "innovate-uk",
+  },
+  Object {
+    "content": "Innovation funding advice",
+    "href": "https://www.gov.uk/guidance/innovation-apply-for-a-funding-award",
+    "id": "innovation-funding-advice",
+  },
+  Object {
+    "content": "Connect to innovation experts",
+    "href": "https://www.gov.uk/guidance/innovation-get-support-and-advice",
+    "id": "connect-to-innovation-experts",
+  },
+  Object {
+    "content": "Events",
+    "href": "https://connect.innovateuk.org/events",
+    "id": "events",
+  },
+  Object {
+    "content": "Innovate UK blog",
+    "href": "https://innovateuk.blog.gov.uk/",
+    "id": "innovate-uk-blog",
+  },
+  Object {
+    "content": "GOV.UK accessibility",
+    "href": "https://www.gov.uk/help/accessibility",
+    "id": "gov.uk-accessibility",
+  },
+  Object {
+    "content": "Terms and conditions",
+    "href": "https://apply-for-innovation-funding.service.gov.uk/info/terms-and-conditions",
+    "id": "terms-and-conditions",
+  },
+  Object {
+    "content": "Contact us",
+    "href": "https://apply-for-innovation-funding.service.gov.uk/info/contact",
+    "id": "contact-us",
+  },
+  Object {
+    "content": "Sign up for competition updates",
+    "href": "http://info.innovateuk.org/emailpref",
+    "id": "sign-up-for-competition-updates",
+  },
+  Object {
+    "content": "Latest funding opportunities",
+    "href": "https://apply-for-innovation-funding.service.gov.uk/competition/search",
+    "id": "latest-funding-opportunities",
+  },
+]
+`;
+
+exports[`Footer config useFooterExternalContent should return with content 1`] = `
+Object {
+  "externalContent": Object {
+    "govLicenseLinkPart1": Object {
+      "content": "stub-content-govLicenseLinkPart1",
+      "id": "govLicenseLinkPart1",
+    },
+    "govLicenseLinkPart3": Object {
+      "content": "stub-content-govLicenseLinkPart3",
+      "id": "govLicenseLinkPart3",
+    },
+    "title": Object {
+      "content": "stub-content-supportLinks",
+      "id": "footer-title",
+    },
+    "usesCookie": Object {
+      "content": "stub-content-explainCookies",
+      "id": "uses-cookies",
+    },
+  },
+  "externalLinks": Object {
+    "crownCopyrightLink": Object {
+      "content": "stub-content-crownCopyright",
+      "href": "https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/",
+      "id": "crown-copyright-link",
+    },
+    "govLicenseLinkPart2": Object {
+      "content": "stub-content-govLicenseLinkPart2",
+      "href": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+      "id": "license-link",
+    },
+    "moreAboutCookies": Object {
+      "content": "stub-content-cookieFindOutMore",
+      "href": "https://apply-for-innovation-funding.service.gov.uk/info/cookies",
+      "id": "more-about-cookies-text",
+    },
+  },
+}
+`;

@@ -1,99 +1,97 @@
 import { mount } from "enzyme";
 import { Footer, FooterProps } from "@ui/components/layout/footer";
-import * as footerConfig from "@ui/components/layout/footer.config";
 
 import { findByQa } from "../helpers/find-by-qa";
 
 describe("Footer", () => {
-  const stubDataContext = {
-    title: {
-      "data-qa": "stub-qa-title",
-      children: "stub-title",
-    },
-    usesCookie: {
-      "data-qa": "stub-qa-usesCookie",
-      children: "stub-usesCookie",
-    },
-    crownCopyrightLink: {
-      "data-qa": "stub-qa-crownCopyrightLink",
-      href: "stub-href-crownCopyrightLink",
-      children: "stub-crownCopyrightLink",
-    },
-    moreAboutCookies: {
-      "data-qa": "stub-qa-moreAboutCookies",
-      href: "stub-href-moreAboutCookies",
-      children: "stub-moreAboutCookies",
-    },
-    govLicenseLinkPart1: {
-      "data-qa": "stub-qa-govLicenseLinkPart1",
-      children: "stub-govLicenseLinkPart1",
-    },
-    govLicenseLinkPart2: {
-      "data-qa": "stub-qa-govLicenseLinkPart2",
-      href: "stub-href-govLicenseLinkPart2",
-      children: "stub-govLicenseLinkPart2",
-    },
-    govLicenseLinkPart3: {
-      "data-qa": "stub-qa-govLicenseLinkPart3",
-      children: "stub-govLicenseLinkPart3",
+  const stubData: FooterProps = {
+    supportingLinks: [
+      {
+        id: "link-1",
+        href: "https://www.gov.uk/link-1",
+        content: "Link 1",
+      },
+      {
+        id: "link-2",
+        href: "https://www.gov.uk/link-2",
+        content: "Link 2",
+      },
+    ],
+    footerContent: {
+      externalContent: {
+        title: {
+          id: "stub-qa-title",
+          content: "stub-title",
+        },
+        usesCookie: {
+          id: "stub-qa-usesCookie",
+          content: "stub-usesCookie",
+        },
+        govLicenseLinkPart1: {
+          id: "stub-qa-govLicenseLinkPart1",
+          content: "stub-govLicenseLinkPart1",
+        },
+        govLicenseLinkPart3: {
+          id: "stub-qa-govLicenseLinkPart3",
+          content: "stub-govLicenseLinkPart3",
+        },
+      },
+      externalLinks: {
+        crownCopyrightLink: {
+          id: "stub-qa-crownCopyrightLink",
+          href: "stub-href-crownCopyrightLink",
+          content: "stub-crownCopyrightLink",
+        },
+        moreAboutCookies: {
+          id: "stub-qa-moreAboutCookies",
+          href: "stub-href-moreAboutCookies",
+          content: "stub-moreAboutCookies",
+        },
+        govLicenseLinkPart2: {
+          id: "stub-qa-govLicenseLinkPart2",
+          href: "stub-href-govLicenseLinkPart2",
+          content: "stub-govLicenseLinkPart2",
+        },
+      },
     },
   };
 
-  beforeEach(() => {
-    jest
-      .spyOn(footerConfig, "useExternalContent")
-      .mockReturnValue(stubDataContext as any);
-  });
+  const setup = (props?: Partial<FooterProps>) => mount(<Footer {...stubData} {...props} />);
 
-  const stubLinks: footerConfig.FooterLinks = [
-    {
-      "data-qa": "link-1",
-      text: "Link 1",
-      href: "https://www.gov.uk/link-1",
-    },
-    {
-      "data-qa": "link-2",
-      text: "Link 2",
-      href: "https://www.gov.uk/link-2",
-    },
-  ];
-
-  const setup = (props?: FooterProps) =>
-    mount(<Footer links={stubLinks} {...props} />);
-
-  it("should render links", () => {
+  test("should render links", () => {
     const wrapper = setup();
 
-    stubLinks.forEach((stubLink) => {
+    stubData.supportingLinks.forEach(stubLink => {
       // Note: get link by qa then grab item by array index
-      const footerLink = findByQa(wrapper, stubLink["data-qa"]);
-      expect(footerLink.text()).toBe(stubLink.text);
+      const footerLink = findByQa(wrapper, stubLink.id);
+      expect(footerLink.text()).toBe(stubLink.content);
     });
   });
 
   test.each`
     name                                         | link
-    ${"title"}                                   | ${stubDataContext.title}
-    ${"GOV.UK uses cookies"}                     | ${stubDataContext.usesCookie}
-    ${"external government license link part 1"} | ${stubDataContext.govLicenseLinkPart1}
-    ${"external government license link part 3"} | ${stubDataContext.govLicenseLinkPart3}
+    ${"title"}                                   | ${stubData.footerContent.externalContent.title}
+    ${"GOV.UK uses cookies"}                     | ${stubData.footerContent.externalContent.usesCookie}
+    ${"external government license link part 1"} | ${stubData.footerContent.externalContent.govLicenseLinkPart1}
+    ${"external government license link part 3"} | ${stubData.footerContent.externalContent.govLicenseLinkPart3}
   `("should find $name content", ({ link }) => {
     const wrapper = setup();
 
-    const footerContent = findByQa(wrapper, link["data-qa"]);
-    expect(footerContent.text()).toBe(link.children);
+    const footerContent = findByQa(wrapper, link.id);
+    expect(footerContent.text()).toBe(link.content);
   });
 
   test.each`
     name                                    | link
-    ${"crown copyright"}                    | ${stubDataContext.crownCopyrightLink}
-    ${"more about cookies"}                 | ${stubDataContext.moreAboutCookies}
-    ${"external government license part 2"} | ${stubDataContext.govLicenseLinkPart2}
+    ${"crown copyright"}                    | ${stubData.footerContent.externalLinks.crownCopyrightLink}
+    ${"more about cookies"}                 | ${stubData.footerContent.externalLinks.moreAboutCookies}
+    ${"external government license part 2"} | ${stubData.footerContent.externalLinks.govLicenseLinkPart2}
   `("should find $name link", ({ link }) => {
     const wrapper = setup();
 
-    const footerLink = findByQa(wrapper, link["data-qa"]);
-    expect(footerLink.text()).toBe(link.children);
+    const footerLink = findByQa(wrapper, link.id);
+
+    expect(footerLink.text()).toBe(link.content);
     expect(footerLink.prop("href")).toBe(link.href);
   });
 });

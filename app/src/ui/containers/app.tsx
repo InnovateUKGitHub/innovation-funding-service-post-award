@@ -11,6 +11,9 @@ import { updatePageTitle } from "@ui/redux/actions";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 
+import { FooterExternalContent, footerLinks } from "@ui/containers/app/footer.config";
+import { BaseProps } from "@ui/containers/containerBase";
+
 import {
   Footer,
   FullHeight,
@@ -21,24 +24,7 @@ import {
   PrivateModal,
 } from "@ui/components";
 import { ErrorContainer, ErrorContainerProps, ErrorBoundaryFallback } from "@ui/components/errors";
-import { FooterLinks } from "@ui/components/layout/footer.config";
 
-import { BaseProps } from "./containerBase";
-
-// TODO: This needs to be an external file, preferably near a config directory. The href values domain name need to be generated from config
-// prettier-ignore
-const footerLinks: FooterLinks = [
-  {"data-qa": "innovate-uk", text: "Innovate UK", href: "https://www.gov.uk/government/organisations/innovate-uk"},
-  {"data-qa": "innovation-funding-advice", text: "Innovation funding advice", href: "https://www.gov.uk/guidance/innovation-apply-for-a-funding-award"},
-  {"data-qa": "connect-to-innovation-experts", text: "Connect to innovation experts", href: "https://www.gov.uk/guidance/innovation-get-support-and-advice"},
-  {"data-qa": "events", text: "Events", href: "https://connect.innovateuk.org/events"},
-  {"data-qa": "innovate-uk-blog", text: "Innovate UK blog", href: "https://innovateuk.blog.gov.uk/"},
-  {"data-qa": "gov.uk-accessibility", text: "GOV.UK accessibility", href: "https://www.gov.uk/help/accessibility"},
-  {"data-qa": "terms-and-conditions", text: "Terms and conditions", href: "https://apply-for-innovation-funding.service.gov.uk/info/terms-and-conditions"},
-  {"data-qa": "contact-us", text: "Contact us", href: "https://apply-for-innovation-funding.service.gov.uk/info/contact"},
-  {"data-qa": "sign-up-for-competition-updates", text: "Sign up for competition updates", href: "http://info.innovateuk.org/emailpref"},
-  {"data-qa": "latest-funding-opportunities", text: "Latest funding opportunities", href: "https://apply-for-innovation-funding.service.gov.uk/competition/search"}
-];
 interface IAppProps {
   // @todo see if we can remove and replace with a callback to set page title
   dispatch: any;
@@ -115,7 +101,9 @@ class AppView extends React.Component<IAppProps> {
             </GovWidthContainer>
           </FullHeight.Content>
 
-          <Footer links={footerLinks} />
+          <FooterExternalContent>
+            {payload => <Footer supportingLinks={footerLinks} footerContent={payload} />}
+          </FooterExternalContent>
 
           {modalRegister.getModals().map(modal => (
             <PrivateModal key={`modal-${modal.id}`} {...modal} />

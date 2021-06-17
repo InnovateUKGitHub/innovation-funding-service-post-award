@@ -1,10 +1,16 @@
 import { renderHook } from "@testing-library/react-hooks";
-import { useExternalContent } from "@ui/components/layout/footer.config";
 import { hookTestBed } from "@shared/TestBed";
-import { Content } from "../../../src/content";
+import { footerLinks, useFooterExternalContent } from "@ui/containers/app/footer.config";
+import { Content } from "@content/content";
 
 describe("Footer config", () => {
-  describe("useExternalContent", () => {
+  describe("footerLinks", () => {
+    test("as default", () => {
+      expect(footerLinks).toMatchSnapshot();
+    });
+  });
+
+  describe("useFooterExternalContent", () => {
     const setup = () => {
       const stubContent = {
         footer: {
@@ -18,15 +24,12 @@ describe("Footer config", () => {
         },
       } as Partial<Content>;
 
-      const { result } = renderHook(
-        useExternalContent,
-        hookTestBed({ content: stubContent })
-      );
+      const { result } = renderHook(useFooterExternalContent, hookTestBed({ content: stubContent }));
 
       return result.current;
     };
 
-    it("should return with content", () => {
+    test("should return with content", () => {
       const footerContent = setup();
 
       expect(footerContent).toMatchSnapshot();
