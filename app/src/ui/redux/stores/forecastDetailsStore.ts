@@ -109,14 +109,7 @@ export class ForecastDetailsStore extends StoreBase {
       dtos,
       show => this.getValidator(partnerId, dtos, show),
       p => ApiClient.forecastDetails.update({ ...p, projectId, partnerId, submit: submitClaim, forecasts: dtos }),
-      () => {
-        if (message) {
-          this.queue(messageSuccess(message));
-        }
-        if (onComplete) {
-          onComplete();
-        }
-      },
+      () => this.handleError(message, () => onComplete),
     );
   }
 
@@ -136,14 +129,16 @@ export class ForecastDetailsStore extends StoreBase {
       payload,
       show => this.getInitialValidator(partnerId, payload, submit, show),
       p => ApiClient.initialForecastDetails.update({ ...p, projectId, partnerId, submit, forecasts: payload }),
-      () => {
-        if (message) {
-          this.queue(messageSuccess(message));
-        }
-        if (onComplete) {
-          onComplete();
-        }
-      },
+      () => this.handleError(message, () => onComplete),
     );
+  }
+
+  private handleError(message: string | undefined, onComplete: () => void): any {
+    if (message) {
+      this.queue(messageSuccess(message));
+    }
+    if (onComplete) {
+      onComplete();
+    }
   }
 }

@@ -21,6 +21,15 @@ import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants";
 import { TestContext } from "../../testContextProvider";
 
 describe("UpdatePCRCommand", () => {
+
+  function mapStatusChanges(): (
+    value: { from: PCRStatus; to: PCRStatus },
+    index: number,
+    array: { from: PCRStatus; to: PCRStatus }[],
+  ) => [string, string, PCRStatus, PCRStatus] {
+    return x => [PCRStatus[x.from], PCRStatus[x.to], x.from, x.to];
+  }
+
   describe("with access control", () => {
     const setAccessControl = (role: ProjectRole) => {
       const context = new TestContext();
@@ -164,35 +173,31 @@ describe("UpdatePCRCommand", () => {
         { from: PCRStatus.QueriedByInnovateUK, to: PCRStatus.SubmittedToInnovateUK },
       ];
 
-      test.each(
-        validStatusChanges.map<[string, string, PCRStatus, PCRStatus]>(x => [
-          PCRStatus[x.from],
-          PCRStatus[x.to],
-          x.from,
-          x.to,
-        ]),
-      )("can update from %s to %s", async (fromString, toString, from: PCRStatus, to: PCRStatus) => {
-        const context = new TestContext();
+      test.each(validStatusChanges.map<[string, string, PCRStatus, PCRStatus]>(mapStatusChanges()))(
+        "can update from %s to %s",
+        async (fromString, toString, from: PCRStatus, to: PCRStatus) => {
+          const context = new TestContext();
 
-        const project = context.testData.createProject();
-        const pcr = context.testData.createPCR(project, { status: from });
-        const recordTypes = context.testData.createPCRRecordTypes();
-        const projectTerminationType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.ProjectTermination)!;
-        const recordType = recordTypes.find(x => x.type === projectTerminationType.typeName);
+          const project = context.testData.createProject();
+          const pcr = context.testData.createPCR(project, { status: from });
+          const recordTypes = context.testData.createPCRRecordTypes();
+          const projectTerminationType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.ProjectTermination)!;
+          const recordType = recordTypes.find(x => x.type === projectTerminationType.typeName);
 
-        context.testData.createPCRItem(pcr, recordType);
+          context.testData.createPCRItem(pcr, recordType);
 
-        context.testData.createCurrentUserAsProjectManager(project);
+          context.testData.createCurrentUserAsProjectManager(project);
 
-        const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
-        dto.status = to;
+          const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
+          dto.status = to;
 
-        const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
+          const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
 
-        await context.runCommand(command);
+          await context.runCommand(command);
 
-        expect(pcr.status).toBe(dto.status);
-      });
+          expect(pcr.status).toBe(dto.status);
+        },
+      );
 
       const validEditStatus = [PCRStatus.Draft, PCRStatus.QueriedByInnovateUK, PCRStatus.QueriedByMonitoringOfficer];
 
@@ -505,32 +510,28 @@ describe("UpdatePCRCommand", () => {
         { from: PCRStatus.SubmittedToMonitoringOfficer, to: PCRStatus.SubmittedToInnovateUK },
       ];
 
-      test.each(
-        statusChanges.map<[string, string, PCRStatus, PCRStatus]>(x => [
-          PCRStatus[x.from],
-          PCRStatus[x.to],
-          x.from,
-          x.to,
-        ]),
-      )("can update from %s to %s", async (fromString, toString, from: PCRStatus, to: PCRStatus) => {
-        const context = new TestContext();
+      test.each(statusChanges.map<[string, string, PCRStatus, PCRStatus]>(mapStatusChanges()))(
+        "can update from %s to %s",
+        async (fromString, toString, from: PCRStatus, to: PCRStatus) => {
+          const context = new TestContext();
 
-        const project = context.testData.createProject();
-        const pcr = context.testData.createPCR(project, { status: from });
-        context.testData.createPCRItem(pcr);
+          const project = context.testData.createProject();
+          const pcr = context.testData.createPCR(project, { status: from });
+          context.testData.createPCRItem(pcr);
 
-        context.testData.createCurrentUserAsMonitoringOfficer(project);
+          context.testData.createCurrentUserAsMonitoringOfficer(project);
 
-        const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
-        dto.status = to;
-        dto.comments = "Some comments";
+          const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
+          dto.status = to;
+          dto.comments = "Some comments";
 
-        const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
+          const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
 
-        await context.runCommand(command);
+          await context.runCommand(command);
 
-        expect(pcr.status).toBe(dto.status);
-      });
+          expect(pcr.status).toBe(dto.status);
+        },
+      );
 
       const validEditStatus = [PCRStatus.SubmittedToMonitoringOfficer];
 

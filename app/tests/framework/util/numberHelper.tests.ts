@@ -36,17 +36,13 @@ describe("numberHelper", () => {
         ${"positive trailing digit"} | ${1.005}   | ${1.01}
         ${"negative trailing digit"} | ${-1.005}  | ${-1}
       `("with a $name number", ({ inputValue, expectedValue }) => {
-        const roundedNumber = roundCurrency(inputValue);
-
-        expect(roundedNumber).toBe(expectedValue);
+        expect(roundCurrency(inputValue)).toBe(expectedValue);
       });
     });
 
     describe("positive currency value", () => {
       testCases("with a $name number", ({ inputValue, expectedValue }) => {
-        const roundedNumber = roundCurrency(inputValue);
-
-        expect(roundedNumber).toBe(expectedValue);
+        expect(roundCurrency(inputValue)).toBe(expectedValue);
       });
     });
 

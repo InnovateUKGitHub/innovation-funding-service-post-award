@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-identical-functions */
 import { QueryBase } from "@server/features/common";
 import { IContext, PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/types";
 import { CostCategoryType, PcrSpendProfileEntity } from "@framework/entities";
