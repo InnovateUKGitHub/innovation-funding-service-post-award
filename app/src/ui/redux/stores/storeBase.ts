@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { LoadingStatus, Pending } from "@shared/pending";
 import { IClientUser, ILinkInfo } from "@framework/types";
 import { scrollToTheTopSmoothly } from "@framework/util";
