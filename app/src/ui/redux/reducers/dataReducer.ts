@@ -31,7 +31,7 @@ export interface IDataStore<T> {
 }
 
 const dataStoreReducer = <TData extends {}>(storeKey: string) => (state: { [key: string]: IDataStore<TData> } = {}, action: DataLoadAction | ActionTransitionSuccess) => {
-  if (action.type === "DATA_LOAD" && action.payload.store === storeKey) {
+  if (action.type === "DATA_LOAD" && action.payload?.store === storeKey) {
     const existing = state[action.payload.id];
     const err = action.payload.error;
 
