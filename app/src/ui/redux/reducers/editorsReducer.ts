@@ -3,7 +3,7 @@ import { actionTypes } from "redux-router5";
 import * as Validators from "@ui/validators";
 import { RootActions } from "@ui/redux/actions";
 import { Results } from "@ui/validation/results";
-import { ClaimDetailsDto, ClaimDto, FinancialVirementDto, ForecastDetailsDTO, IAppError, MonitoringReportDto, PartnerDto } from "@framework/types";
+import { ClaimDetailsDto, ClaimDto, ErrorCode, FinancialVirementDto, ForecastDetailsDTO, IAppError, MonitoringReportDto, PartnerDto } from "@framework/types";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
@@ -33,7 +33,7 @@ const getNewStateWithoutErrors = <TDto extends {}, TValidator extends Results<TD
 };
 
 export const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>>(store: string) => (state: State<TDto, TValidator> = {}, action: RootActions) => {
-  if (action.type === "EDITOR_UPDATE" && action.payload.store === store) {
+  if (action.type === "EDITOR_UPDATE" && action.payload?.store === store) {
     const result = { ...state };
     const originalEditor = result[action.payload.id];
     const newEditor: IEditorStore<TDto, TValidator> = {
@@ -47,7 +47,7 @@ export const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>
     return result;
   }
 
-  if (action.type === "EDITOR_SUBMIT" && action.payload.store === store) {
+  if (action.type === "EDITOR_SUBMIT" && action.payload?.store === store) {
     const result = { ...state };
     const originalEditor = result[action.payload.id];
     const newEditor: IEditorStore<TDto, TValidator> = {
@@ -63,7 +63,7 @@ export const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>
 
   if (action.type === "EDITOR_SUBMIT_SUCCESS") {
     const result = getNewStateWithoutErrors(state);
-    if (action.payload.store === store) {
+    if (action.payload?.store === store) {
       const originalEditor = result[action.payload.id];
       const newEditor: IEditorStore<TDto, TValidator> = {
         ...originalEditor,
@@ -76,21 +76,21 @@ export const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>
 
   if (action.type === "EDITOR_SUBMIT_ERROR") {
     const result = getNewStateWithoutErrors(state);
-    const err = action.payload.error;
-    if (action.payload.store === store) {
-      const originalEditor = result[action.payload.id];
+    const err = action.payload?.error;
+    if (action.payload?.store === store) {
+      const originalEditor = result[action.payload?.id];
       const newEditor: IEditorStore<TDto, TValidator> = {
         ...originalEditor,
-        data: action.payload.dto as TDto,
+        data: action.payload?.dto as TDto,
         status: EditorStatus.Editing,
-        error: { code: err.code, message: err.message, results: err.results }
+        error: { code: err?.code || ErrorCode.UNKNOWN_ERROR, message: err?.message || "", results: err?.results },
       };
-      result[action.payload.id] = newEditor;
+      result[action.payload?.id] = newEditor;
     }
     return result;
   }
 
-  if (action.type === "EDITOR_RESET" && action.payload.store === store) {
+  if (action.type === "EDITOR_RESET" && action.payload?.store === store) {
     const result = getNewStateWithoutErrors(state);
     delete result[action.payload.id];
     return result;

@@ -16,8 +16,8 @@ export const messagesReducer = (state: Message[] = [], action: RootActions) => {
     return [];
   }
 
-  if(action.type === "MESSAGE_SUCCESS") {
-    const message = { message: action.payload, ttl: 1 };
+  if (action.type === "MESSAGE_SUCCESS") {
+    const message = { message: action.payload || "", ttl: 1 };
     return state.concat(message);
   }
 
