@@ -46,6 +46,7 @@ export function AccordionItem({ qa, titleContent, title, children }: AccordionIt
 
     // Note: Open by default to support SSR
     setIsOpen(false);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
