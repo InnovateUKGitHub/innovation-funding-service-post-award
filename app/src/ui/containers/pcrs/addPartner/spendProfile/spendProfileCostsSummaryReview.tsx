@@ -29,7 +29,7 @@ interface Data {
   pcr: Pending<PCRDto>;
 }
 
-class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data> {
+class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProfileCostSummaryParams, Data> {
   render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -200,10 +200,10 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data> {
   }
 }
 
-const Container = (props: PcrSpendProfileCostSummaryParams & BaseProps) => (
+const SpendProfileCostsSummaryReviewContainer = (props: PcrSpendProfileCostSummaryParams & BaseProps) => (
   <StoresConsumer>
     {stores => (
-      <Component
+      <SpendProfileCostsSummaryReviewComponent
         project={stores.projects.getById(props.projectId)}
         costCategory={stores.costCategories.get(props.costCategoryId)}
         pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
@@ -216,7 +216,7 @@ const Container = (props: PcrSpendProfileCostSummaryParams & BaseProps) => (
 export const PCRSpendProfileReviewCostsSummaryRoute = defineRoute<PcrSpendProfileCostSummaryParams>({
   routeName: "pcrSpendProfileReviewCostsSummary",
   routePath: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId/spendProfile/:costCategoryId",
-  container: (props) => <Container {...props} />,
+  container: SpendProfileCostsSummaryReviewContainer,
   getParams: (route) => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,

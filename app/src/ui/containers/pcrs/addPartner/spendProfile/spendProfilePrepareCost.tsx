@@ -256,7 +256,7 @@ const ContainerEdit = (props: PcrEditSpendProfileCostParams & BaseProps) => (
 export const PCRSpendProfileAddCostRoute = defineRoute<PcrAddSpendProfileCostParams>({
   routeName: "pcrPrepareSpendProfileAddCost",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId/cost",
-  container: (props) => <ContainerAdd {...props} />,
+  container: ContainerAdd,
   getParams: (route) => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
@@ -270,7 +270,7 @@ export const PCRSpendProfileAddCostRoute = defineRoute<PcrAddSpendProfileCostPar
 export const PCRSpendProfileEditCostRoute = defineRoute<PcrEditSpendProfileCostParams>({
   routeName: "pcrPrepareSpendProfileEditCost",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId/cost/:costId",
-  container: (props) => <ContainerEdit {...props} />,
+  container: ContainerEdit,
   getParams: (route) => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,

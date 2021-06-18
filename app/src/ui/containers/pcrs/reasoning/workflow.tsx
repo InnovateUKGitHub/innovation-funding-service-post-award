@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 
 import { ILinkInfo, PCRItemStatus, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";

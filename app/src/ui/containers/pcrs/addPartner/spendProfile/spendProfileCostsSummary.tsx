@@ -36,7 +36,7 @@ interface Callbacks {
   onSave: (dto: PCRDto, link: ILinkInfo) => void;
 }
 
-class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Callbacks> {
+class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -146,10 +146,10 @@ class Component extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Ca
   }
 }
 
-const Container = (props: PcrSpendProfileCostSummaryParams & BaseProps) => (
+const SpendProfileCostsSummaryContainer = (props: PcrSpendProfileCostSummaryParams & BaseProps) => (
   <StoresConsumer>
     {stores => (
-      <Component
+      <SpendProfileCostsSummaryComponent
         project={stores.projects.getById(props.projectId)}
         costCategory={stores.costCategories.get(props.costCategoryId)}
         editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId, (dto) => {
@@ -174,7 +174,7 @@ const Container = (props: PcrSpendProfileCostSummaryParams & BaseProps) => (
 export const PCRSpendProfileCostsSummaryRoute = defineRoute<PcrSpendProfileCostSummaryParams>({
   routeName: "pcrSpendProfileCostsSummary",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId",
-  container: (props) => <Container {...props} />,
+  container: SpendProfileCostsSummaryContainer,
   getParams: (route) => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,

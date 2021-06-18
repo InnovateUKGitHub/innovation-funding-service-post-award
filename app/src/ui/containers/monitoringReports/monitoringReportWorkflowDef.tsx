@@ -36,6 +36,7 @@ const getQuestionSteps = (dto: Dtos.MonitoringReportDto, startingStepNumber: num
     displayName: x.title,
     stepNumber: i + startingStepNumber,
     validation: (val: MonitoringReportDtoValidator) => val.responses.results.find(response => response.question.displayOrder === x.displayOrder)!,
+    // eslint-disable-next-line react/display-name
     stepRender: (props: MonitoringReportReportStepProps) =>
       <MonitoringReportQuestionStep questionNumber={x.displayOrder} {...props}/>
   }));
