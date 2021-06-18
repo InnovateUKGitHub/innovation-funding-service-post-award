@@ -82,9 +82,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
       const connection = await this.getSalesforceConnection();
       const targetObject = await connection.sobject<TSalesforce>(this.salesforceObjectName).retrieve(id);
 
-      if (!targetObject) {
-        throw new Errors.SalesforceInvalidFilterError(`No items was found using "${id}"`);
-      }
+      if (!targetObject) return null;
 
       return this.mapper.map(targetObject);
     } catch (e) {
@@ -97,10 +95,9 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   }
 
   protected async all(): Promise<TEntity[]> {
-    const connection = await this.getSalesforceConnection();
-    const targetObject = connection.sobject(this.salesforceObjectName);
-
     try {
+      const connection = await this.getSalesforceConnection();
+      const targetObject = connection.sobject(this.salesforceObjectName);
       const allItems = await targetObject.select(this.salesforceFieldNames).execute();
 
       return this.map(allItems);
@@ -110,18 +107,22 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   }
 
   protected async getBlob(id: string, fieldName: string): Promise<Stream> {
-    const connection = await this.getSalesforceConnection();
-    const targetObject = connection.sobject(this.salesforceObjectName);
-    const record = targetObject.record(id);
+    try {
+      const connection = await this.getSalesforceConnection();
+      const targetObject = connection.sobject(this.salesforceObjectName);
+      const record = targetObject.record(id);
 
-    return record.blob(fieldName);
+      return record.blob(fieldName);
+    } catch (error) {
+      throw this.constructError(error);
+    }
   }
 
   private async getMetadata(): Promise<DescribeSObjectResult> {
-    const connection = await this.getSalesforceConnection();
-    const targetObject = connection.sobject(this.salesforceObjectName);
-
     try {
+      const connection = await this.getSalesforceConnection();
+      const targetObject = connection.sobject(this.salesforceObjectName);
+
       return targetObject.describe();
     } catch (error) {
       throw this.constructError(error);
@@ -152,15 +153,12 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   }
 
   protected async where(filter: Partial<TSalesforce> | string): Promise<TEntity[]> {
-    const connection = await this.getSalesforceConnection();
-
     try {
+      const connection = await this.getSalesforceConnection();
       const filteredQuery = connection.sobject(this.salesforceObjectName).select(this.salesforceFieldNames);
       const filteredResponse = await filteredQuery.where(filter).execute();
 
-      if (!filteredResponse.length) {
-        throw new Errors.SalesforceInvalidFilterError("Filter did not return any items");
-      }
+      if (!filteredResponse.length) return [];
 
       return this.map(filteredResponse);
     } catch (error) {
@@ -179,9 +177,8 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   }
 
   protected async filterOne<Payload extends Partial<TSalesforce> | string>(filter: Payload): Promise<TEntity | null> {
-    const connection = await this.getSalesforceConnection();
-
     try {
+      const connection = await this.getSalesforceConnection();
       const filteredQuery = connection.sobject(this.salesforceObjectName).select(this.salesforceFieldNames);
       const filteredResponse = await filteredQuery.where(filter).limit(1).execute();
 
@@ -207,10 +204,9 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   }
 
   protected async insertItem<Payload extends Partial<TSalesforce>>(inserts: Payload): Promise<string> {
-    const connection = await this.getSalesforceConnection();
-    const targetObject = connection.sobject<Payload>(this.salesforceObjectName);
-
     try {
+      const connection = await this.getSalesforceConnection();
+      const targetObject = connection.sobject<Payload>(this.salesforceObjectName);
       const result = await targetObject.insert(inserts);
 
       if (result.success) return result.id;
@@ -227,13 +223,13 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   protected async insertAll<Payload extends Partial<TSalesforce>[]>(insertPayload: Payload): Promise<string[]> {
     if (!insertPayload.length) return [];
 
-    const connection = await this.getSalesforceConnection();
-    const targetObject = connection.sobject<Partial<TSalesforce>>(this.salesforceObjectName);
+    try {
+      const connection = await this.getSalesforceConnection();
+      const targetObject = connection.sobject<Partial<TSalesforce>>(this.salesforceObjectName);
 
-    const insertedIds: string[] = [];
+      const insertedIds: string[] = [];
 
-    this.batchRequest<Payload>(insertPayload, async batch => {
-      try {
+      this.batchRequest<Payload>(insertPayload, async batch => {
         const batchResults = await targetObject.insert(batch);
         const validPayload = batchResults.every(x => x.success);
 
@@ -248,19 +244,18 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
           "Failed to insert to salesforce",
           this.getDataChangeErrorMessages(batchResults),
         );
-      } catch (error) {
-        throw this.constructError(error);
-      }
-    });
+      });
 
-    return insertedIds;
+      return insertedIds;
+    } catch (error) {
+      throw this.constructError(error);
+    }
   }
 
   protected async updateItem<Payload extends Updatable<TSalesforce>>(updates: Payload): Promise<boolean> {
-    const connection = await this.getSalesforceConnection();
-    const targetObject = connection.sobject<Payload>(this.salesforceObjectName);
-
     try {
+      const connection = await this.getSalesforceConnection();
+      const targetObject = connection.sobject<Payload>(this.salesforceObjectName);
       const batchResult = await targetObject.update(updates);
 
       if (batchResult.success) return true;
@@ -277,11 +272,11 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   protected async updateAll<Payload extends Updatable<TSalesforce>[]>(updatePayload: Payload): Promise<boolean> {
     if (!updatePayload.length) return true;
 
-    const connection = await this.getSalesforceConnection();
-    const targetObject = connection.sobject<TSalesforce>(this.salesforceObjectName);
+    try {
+      const connection = await this.getSalesforceConnection();
+      const targetObject = connection.sobject<TSalesforce>(this.salesforceObjectName);
 
-    return this.batchRequest<Payload>(updatePayload, async batch => {
-      try {
+      return this.batchRequest<Payload>(updatePayload, async batch => {
         const batchResults = await targetObject.update(batch);
 
         // Note: If we find any errors any batch response, throw it!
@@ -294,20 +289,20 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
 
           return true;
         }, false);
-      } catch (error) {
-        throw this.constructError(error);
-      }
-    });
+      });
+    } catch (error) {
+      throw this.constructError(error);
+    }
   }
 
   protected async deleteAll<Payload extends string[]>(deleteIds: Payload): Promise<void> {
     if (!deleteIds.length) return;
 
-    const connection = await this.getSalesforceConnection();
-    const targetObject = connection.sobject<Payload>(this.salesforceObjectName);
+    try {
+      const connection = await this.getSalesforceConnection();
+      const targetObject = connection.sobject<Payload>(this.salesforceObjectName);
 
-    this.batchRequest<Payload>(deleteIds, async batch => {
-      try {
+      this.batchRequest<Payload>(deleteIds, async batch => {
         const result = await targetObject.delete(batch);
 
         if (result.every(x => x.success)) return true;
@@ -316,17 +311,16 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
           "Failed to delete from salesforce",
           this.getDataChangeErrorMessages(result),
         );
-      } catch (error) {
-        throw this.constructError(error);
-      }
-    });
+      });
+    } catch (error) {
+      throw this.constructError(error);
+    }
   }
 
   protected async deleteItem<Payload extends string>(id: Payload): Promise<void> {
-    const connection = await this.getSalesforceConnection();
-    const targetObject = connection.sobject<Payload>(this.salesforceObjectName);
-
     try {
+      const connection = await this.getSalesforceConnection();
+      const targetObject = connection.sobject<Payload>(this.salesforceObjectName);
       const result = await targetObject.delete(id);
 
       if (result.success) return;
