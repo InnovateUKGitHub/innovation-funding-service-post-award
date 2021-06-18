@@ -116,7 +116,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   }
 }
 
-const Container = (props: PcrDeleteSpendProfileCostParams & BaseProps) => (
+const SpendProfileDeleteCostContainer = (props: PcrDeleteSpendProfileCostParams & BaseProps) => (
   <StoresConsumer>
     {stores => {
       const costCategoryPending = stores.costCategories.get(props.costCategoryId);
@@ -158,7 +158,7 @@ const Container = (props: PcrDeleteSpendProfileCostParams & BaseProps) => (
 export const PCRSpendProfileDeleteCostRoute = defineRoute<PcrDeleteSpendProfileCostParams>({
   routeName: "pcrPrepareSpendProfileDeleteCost",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId/cost/:costId/delete",
-  container: (props) => <Container {...props} />,
+  container: SpendProfileDeleteCostContainer,
   getParams: (route) => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,

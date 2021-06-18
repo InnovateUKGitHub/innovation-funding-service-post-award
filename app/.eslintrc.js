@@ -38,9 +38,16 @@ module.exports = {
       },
     },
     {
+      files: ["./src/shared/*.tsx"],
+      rules: {
+        "react/display-name": "off",
+      },
+    },
+    {
       files: ["./src/ui/componentsGuide/*.tsx"],
       rules: {
         "@typescript-eslint/quotes": "off",
+        "react/display-name": "off",
       },
     },
     {
