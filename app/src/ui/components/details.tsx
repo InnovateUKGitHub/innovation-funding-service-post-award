@@ -1,19 +1,12 @@
-import React from "react";
-import classnames from "classnames";
-import { Currency } from "./renderers/currency";
-import { FullDate, FullDateTime } from "./renderers/date";
-import { Percentage } from "./renderers/percentage";
+import React, { cloneElement } from "react";
+import cx from "classnames";
 
-interface DetailsProps {
-  displayDensity?: "Compact" | "Comfortable";
-  labelWidth?: "Wide" | "Narrow";
-  qa?: string;
-  title?: React.ReactNode;
-}
+import { H3, H4 } from "@ui/components";
+import { Currency, FullDate, FullDateTime, Percentage } from "@ui/components/renderers";
 
 interface InternalFieldProps<T> {
   label: React.ReactNode;
-  render: (item: T) => React.ReactNode;
+  children: (item: T) => React.ReactElement | React.ReactElement[] | null;
   labelClass?: string;
   valueClass?: string;
   data?: T;
@@ -25,196 +18,228 @@ interface ExternalFieldProps<T, TValue> {
   value: (item: T) => TValue | null;
 }
 
-interface ExternalHeadingProps<T> {
+interface ExternalHeadingProps {
   label: React.ReactNode;
   qa: string;
 }
 
-const DetailsComponent = <T extends {}>(props: DetailsProps & { data: T } & { children?: React.ReactNode }) => {
-  // distribute children accross array adding props
-  const { displayDensity = "Comfortable", qa, labelWidth, data, children } = props;
+interface DetailsComponentProps<T> {
+  data: T;
+  qa?: string;
+  children?: React.ReactElement | React.ReactElement[];
+  displayDensity?: "Compact" | "Comfortable";
+  labelWidth?: "Wide" | "Narrow";
+  title?: React.ReactNode;
+}
 
-  const rows = React.Children.toArray(children).map(field => {
-    const newProps = {
-      data,
-      labelClass: classnames({
-        "govuk-grid-column-one-quarter": labelWidth === "Narrow",
-        "govuk-grid-column-three-quarters": labelWidth === "Wide",
-        "govuk-grid-column-one-half": !labelWidth,
-      }),
-      valueClass: classnames({
-        "govuk-grid-column-one-quarter": labelWidth === "Wide",
-        "govuk-grid-column-three-quarters": labelWidth === "Narrow",
-        "govuk-grid-column-one-half": !labelWidth,
-      }),
-    };
-    return React.cloneElement(field as React.ReactElement<any>, newProps);
-  });
+function DetailsComponent<T extends {}>({
+  displayDensity = "Comfortable",
+  qa,
+  labelWidth,
+  data,
+  children,
+}: DetailsComponentProps<T>) {
+  const newClassNameProps = {
+    labelClass: cx({
+      "govuk-grid-column-one-quarter": labelWidth === "Narrow",
+      "govuk-grid-column-three-quarters": labelWidth === "Wide",
+      "govuk-grid-column-one-half": !labelWidth,
+    }),
+    valueClass: cx({
+      "govuk-grid-column-one-quarter": labelWidth === "Wide",
+      "govuk-grid-column-three-quarters": labelWidth === "Narrow",
+      "govuk-grid-column-one-half": !labelWidth,
+    }),
+  };
 
-  const rowClasses = classnames({
-    "govuk-grid-row": true,
-    "govuk-!-margin-top-4": displayDensity === "Comfortable",
-  });
+  const childElements = React.Children.toArray(children);
+  const detailItems = childElements.map(field =>
+    React.cloneElement(field as React.ReactElement, { data, ...newClassNameProps }),
+  );
+
   return (
     <>
-      {rows.map((x, i) => (
-        <div data-qa={`${qa}-${x.props.qa}`} className={rowClasses} key={`details-row-${i}`}>
-          {x}
-        </div>
-      ))}
+      {detailItems.map((detail, i) => {
+        const qaValue = qa ? `${qa}-${detail.props.qa}` : detail.props.qa;
+
+        return (
+          <div
+            key={i}
+            data-qa={qaValue}
+            className={cx("govuk-grid-row", {
+              "govuk-!-margin-top-4": displayDensity === "Comfortable",
+            })}
+          >
+            {detail}
+          </div>
+        );
+      })}
     </>
   );
-};
+}
 
-export const DualDetails: React.FunctionComponent<DetailsProps> = ({ children, ...rest }) => {
-  const columns = React.Children.toArray(children).map(field => {
-    return React.cloneElement(field as React.ReactElement<any>, rest);
-  });
+type DualDetailsChild = React.ReactElement<{ title?: string }>;
 
-  const titles = !columns.every(x => !x.props.title) && columns.map(x => x.props.title);
+export interface DualDetailsProps {
+  children: DualDetailsChild | DualDetailsChild[];
+}
 
-  const header = titles ? (
-    <div className="govuk-grid-row">
-      {titles.map((x, i) => (
-        <div key={`dual-details-title-${i}`} className="govuk-grid-column-one-half">
-          <h2 className="govuk-heading-m govuk-!-margin-bottom-6">{x}</h2>
-        </div>
-      ))}
-    </div>
-  ) : null;
+export function DualDetails({ children }: DualDetailsProps) {
+  const elementChildren = React.Children.toArray(children) as DualDetailsChild[];
+  const clonedChildren = elementChildren.map(field => cloneElement(field));
+
+  // Note: TSC is not smart enough to infer title is always defined due to .every former check, hence therefore I have to use the non-null "!"
+  const titles: string[] = clonedChildren.every(x => x.props.title) ? clonedChildren.map(x => x.props.title!) : [];
 
   return (
     <>
-      {header}
+      {titles.length > 0 && (
+        <div className="govuk-grid-row">
+          {titles.map((columnTitle, i) => (
+            <div key={i} className="govuk-grid-column-one-half">
+              <H3 as="h2" className="govuk-!-margin-bottom-6">
+                {columnTitle}
+              </H3>
+            </div>
+          ))}
+        </div>
+      )}
+
       <div className="govuk-grid-row">
-        {columns.map((column, i) => (
-          <div key={`dual-details-row-${i}`} className="govuk-grid-column-one-half">
+        {clonedChildren.map((column, i) => (
+          <div key={i} className="govuk-grid-column-one-half">
             {column}
           </div>
         ))}
       </div>
     </>
   );
-};
+}
 
 export class FieldComponent<T> extends React.Component<InternalFieldProps<T>, {}> {
   render() {
+    const { labelClass, label, valueClass, children, data } = this.props;
+
+    const value = children(data!);
+
     return (
       <>
-        <div className={this.props.labelClass}>
-          <p className="govuk-heading-s">{this.props.label}</p>
+        <div className={labelClass}>
+          <H4 as="p">{label}</H4>
         </div>
-        <div className={this.props.valueClass}>{this.props.render(this.props.data!)}</div>
+
+        <div className={valueClass}>{value}</div>
       </>
     );
   }
 }
 
-const CustomField = <T extends {}>(props: ExternalFieldProps<T, React.ReactNode>) => {
+function CustomField<T extends {}>(props: ExternalFieldProps<T, React.ReactElement>) {
   const TypedField = FieldComponent as new () => FieldComponent<T>;
-  return <TypedField {...props} render={item => props.value(item)} />;
-};
 
-const StringField = <T extends {}>(props: ExternalFieldProps<T, string>) => {
+  return <TypedField {...props}>{item => (item ? props.value(item) : null)}</TypedField>;
+}
+
+function StringOrNumberField<T extends {}, Value extends string | number>(props: ExternalFieldProps<T, Value>) {
   const TypedField = FieldComponent as new () => FieldComponent<T>;
-  return <TypedField {...props} render={item => <p className="govuk-body">{props.value(item)}</p>} />;
-};
 
-const MultilineStringField = <T extends {}>(props: ExternalFieldProps<T, string>) => {
+  return <TypedField {...props}>{item => <p className="govuk-body">{props.value(item)}</p>}</TypedField>;
+}
+
+function MultilineStringField<T extends {}>(props: ExternalFieldProps<T, string>) {
   const TypedField = FieldComponent as new () => FieldComponent<T>;
   const splitString = (v: string | null) => (v || "").split("\n").filter(x => !!x);
+
   return (
-    <TypedField
-      {...props}
-      render={item =>
+    <TypedField {...props}>
+      {item =>
         splitString(props.value(item)).map((line, index) => (
           <p className="govuk-body" key={index}>
             {line}
           </p>
         ))
       }
-    />
+    </TypedField>
   );
-};
+}
 
-const DateField = <T extends {}>(props: ExternalFieldProps<T, Date>) => {
+function DateField<T extends {}>(props: ExternalFieldProps<T, Date>) {
   const TypedField = FieldComponent as new () => FieldComponent<T>;
+
   return (
-    <TypedField
-      {...props}
-      render={item => (
+    <TypedField {...props}>
+      {item => (
         <p className="govuk-body">
           <FullDate value={props.value(item)} />
         </p>
       )}
-    />
+    </TypedField>
   );
-};
+}
 
-const DateTimeField = <T extends {}>(props: ExternalFieldProps<T, Date>) => {
+function DateTimeField<T extends {}>(props: ExternalFieldProps<T, Date>) {
   const TypedField = FieldComponent as new () => FieldComponent<T>;
+
   return (
-    <TypedField
-      {...props}
-      render={item => (
+    <TypedField {...props}>
+      {item => (
         <p className="govuk-body">
           <FullDateTime value={props.value(item)} />
         </p>
       )}
-    />
+    </TypedField>
   );
-};
+}
 
-const NumberField = <T extends {}>(props: ExternalFieldProps<T, number>) => {
-  const TypedField = FieldComponent as new () => FieldComponent<T>;
-  return <TypedField {...props} render={item => <p className="govuk-body">{props.value(item)}</p>} />;
-};
+type CurrencyFieldProps<T> = ExternalFieldProps<T, number> & { fractionDigits?: number };
 
-const CurrencyField = <T extends {}>(props: ExternalFieldProps<T, number> & { fractionDigits?: number }) => {
+function CurrencyField<T extends {}>(props: CurrencyFieldProps<T>) {
   const TypedField = FieldComponent as new () => FieldComponent<T>;
+
   return (
-    <TypedField
-      {...props}
-      render={item => (
+    <TypedField {...props}>
+      {item => (
         <p className="govuk-body">
           <Currency fractionDigits={props.fractionDigits} value={props.value(item)} />
         </p>
       )}
-    />
+    </TypedField>
   );
-};
+}
 
-const PercentageField = <T extends {}>(props: ExternalFieldProps<T, number> & { fractionDigits?: number }) => {
+type PercentageFieldProps<T> = ExternalFieldProps<T, number> & { fractionDigits?: number };
+
+function PercentageField<T extends {}>(props: PercentageFieldProps<T>) {
   const TypedField = FieldComponent as new () => FieldComponent<T>;
+
   return (
-    <TypedField
-      {...props}
-      render={item => (
+    <TypedField {...props}>
+      {item => (
         <p className="govuk-body">
           <Percentage fractionDigits={props.fractionDigits} value={props.value(item)} />
         </p>
       )}
-    />
+    </TypedField>
   );
-};
+}
 
-const HeadingField = (props: ExternalHeadingProps<React.ReactNode>) => {
+function HeadingField({ label, qa }: ExternalHeadingProps) {
   return (
-    <div className={"govuk-grid-column-full"} data-qa={props.qa}>
-      <h4 className="govuk-heading-s">{props.label}</h4>
+    <div className={"govuk-grid-column-full"} data-qa={qa}>
+      <H4>{label}</H4>
     </div>
   );
-};
+}
 
 export const TypedDetails = <T extends {}>() => ({
-  Details: DetailsComponent as React.FunctionComponent<DetailsProps & { data: T }>,
-  String: StringField as React.FunctionComponent<ExternalFieldProps<T, string>>,
+  Details: DetailsComponent as React.FunctionComponent<DetailsComponentProps<T>>,
+  String: StringOrNumberField as React.FunctionComponent<ExternalFieldProps<T, string>>,
+  Number: StringOrNumberField as React.FunctionComponent<ExternalFieldProps<T, number>>,
   MultilineString: MultilineStringField as React.FunctionComponent<ExternalFieldProps<T, string>>,
   Date: DateField as React.FunctionComponent<ExternalFieldProps<T, Date>>,
   DateTime: DateTimeField as React.FunctionComponent<ExternalFieldProps<T, Date>>,
-  Number: NumberField as React.FunctionComponent<ExternalFieldProps<T, number>>,
-  Currency: CurrencyField as React.FunctionComponent<ExternalFieldProps<T, number> & { fractionDigits?: number }>,
-  Percentage: PercentageField as React.FunctionComponent<ExternalFieldProps<T, number> & { fractionDigits?: number }>,
+  Currency: CurrencyField as React.FunctionComponent<CurrencyFieldProps<T>>,
+  Percentage: PercentageField as React.FunctionComponent<PercentageFieldProps<T>>,
   Custom: CustomField as React.FunctionComponent<ExternalFieldProps<T, React.ReactNode>>,
-  Heading: HeadingField as React.FunctionComponent<ExternalHeadingProps<React.ReactNode>>,
+  Heading: HeadingField as React.FunctionComponent<ExternalHeadingProps>,
 });
