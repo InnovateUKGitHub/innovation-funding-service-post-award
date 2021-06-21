@@ -102,18 +102,20 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
           </>
         }
       >
-        <ACC.DualDetails displayDensity="Compact">
+        <ACC.DualDetails>
           <PartnerSummaryDetails.Details qa="claims-totals-col-0" data={partner}>
             <PartnerSummaryDetails.Currency
               label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCosts} />}
               qa="gol-costs"
               value={x => x.totalParticipantGrant}
             />
+
             <PartnerSummaryDetails.Currency
               label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCostsClaimed} />}
               qa="claimed-costs"
               value={x => x.totalParticipantCostsClaimed || 0}
             />
+
             <PartnerSummaryDetails.Percentage
               label={<ACC.Content value={x => x.projectOverview.labels.percentageEligibleCostsClaimed} />}
               qa="percentage-costs"
@@ -258,7 +260,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
 
   private getPcrMessages(project: ProjectDto) {
     const result: ACC.NavigationCardMessage[] = [];
-    if ((project.roles & ProjectRole.ProjectManager) && project.pcrsQueried > 0) {
+    if (project.roles & ProjectRole.ProjectManager && project.pcrsQueried > 0) {
       result.push({
         message: <ACC.Content value={x => x.projectOverview.messages.pcrQueried} />,
         qa: "message-pcrQueried",
@@ -276,8 +278,11 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
   private getForecastMessages(partner: PartnerDto) {
     const result: ACC.NavigationCardMessage[] = [];
 
-    if ((partner.roles & ProjectRole.FinancialContact) && partner.newForecastNeeded) {
-        result.push({ message: <ACC.Content value={x => x.projectOverview.messages.checkForecast} />, qa: "message-newForecastNeeded"});
+    if (partner.roles & ProjectRole.FinancialContact && partner.newForecastNeeded) {
+      result.push({
+        message: <ACC.Content value={x => x.projectOverview.messages.checkForecast} />,
+        qa: "message-newForecastNeeded",
+      });
     }
 
     return result;

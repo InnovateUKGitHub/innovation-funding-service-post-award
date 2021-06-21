@@ -93,6 +93,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
               <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.costsApproved} />} qa="costs-approved" value={x => x.totalCostsApproved} />
               <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.costsDeferred} />} qa="costs-deferred" value={x => x.totalDeferredAmount} />
             </ClaimSummaryDetails.Details>
+
             <ClaimSummaryDetails.Details data={data.claim} qa="claim-grant-summary">
               <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.totalGrantPaid} />} qa="total-grant-paid" value={x => x.periodCostsToBePaid} />
             </ClaimSummaryDetails.Details>
