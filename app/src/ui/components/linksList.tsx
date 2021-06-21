@@ -1,35 +1,55 @@
-
+import { useContent } from "@ui/hooks";
 import { ContentSelector } from "@content/content";
-import { Content } from "@ui/components/content";
 
 interface Link {
-  url?: string | null;
-  text?: string;
-  textContent?: ContentSelector;
+  url: string;
+  text: string | ContentSelector;
   qa?: string;
 }
+// Note: The filtered list just wants a string
+type InternalLink = Link & { text: string };
 
-interface Props {
+export interface LinksListProps {
   links: Link[];
   openNewWindow?: boolean;
   renderAfterLink?: (x: number) => React.ReactNode;
 }
 
-export const LinksList: React.FunctionComponent<Props> = (props) => {
-  const { links = [], openNewWindow = false, renderAfterLink } = props;
+export function LinksList({ links = [], openNewWindow = false, renderAfterLink }: LinksListProps) {
+  const { getContent } = useContent();
 
-  const list = !Array.isArray(links) ? null : links
-    .filter(x => !!x.url)
-    .map(x => ({ text: x.text, textContent: x.textContent, url: x.url!, qa: x.qa }))
-    .map((x, i) => (
-      <div className="govuk-!-padding-bottom-4" key={`link-${i}`}>
-        {/* eslint-disable-next-line react/jsx-no-target-blank */}
-        <a target={openNewWindow ? "_blank" : ""} rel={openNewWindow ? "noreferrer" : ""} href={x.url} className="govuk-link govuk-!-font-size-19" data-qa={x.qa}>
-          {x.textContent ? <Content value={x.textContent}/> : x.text}
-        </a>
-        {renderAfterLink && renderAfterLink(i)}
-      </div>
-    ));
+  if (!links?.length) return null;
 
-  return <>{list}</>;
-};
+  const filteredList = links.reduce<InternalLink[]>(
+    (allLinks, link) => [
+      ...allLinks,
+      {
+        text: getContent(link.text),
+        url: link.url!,
+        qa: link.qa,
+      },
+    ],
+    [],
+  );
+
+  return (
+    <>
+      {filteredList.map((link, i) => (
+        <div className="govuk-!-padding-bottom-4" key={link.text}>
+          {/* eslint-disable-next-line react/jsx-no-target-blank */}
+          <a
+            target={openNewWindow ? "_blank" : ""}
+            rel={openNewWindow ? "noreferrer" : ""}
+            className="govuk-link govuk-!-font-size-19"
+            href={link.url}
+            data-qa={link.qa}
+          >
+            {getContent(link.text)}
+          </a>
+
+          {renderAfterLink?.(i)}
+        </div>
+      ))}
+    </>
+  );
+}
