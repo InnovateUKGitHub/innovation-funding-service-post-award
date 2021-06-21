@@ -44,9 +44,6 @@
     "loading": {
       "message": "Loading..."
     },
-    "documentSingle": {
-      "newWindow": "opens in a new window"
-    },
     "documentGuidance": {
       "uploadGuidance": "You can upload up to 10 documents at a time. Each document must:",
       "fileSize": "be less than 10MB in file size",

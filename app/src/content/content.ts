@@ -91,7 +91,6 @@ import { GenericFallbackErrorContent, UnauthenticatedErrorContent, NotFoundError
 
 import { LogsContent } from "./components/logsContent";
 import { LoadingContent } from "./components/loadingContent";
-import { DocumentSingleContent } from "./components/documentSingleContent";
 import { DocumentGuidanceContent } from "./components/documentGuidanceContent";
 import { DocumentViewContent } from "./components/documentViewContent";
 import { ClaimLastModifiedContent } from "./components/claimLastModifiedContent";
@@ -222,7 +221,6 @@ export class Content extends ContentBase {
     errorSummary: ErrorSummaryContent;
     logs: LogsContent;
     loading: LoadingContent;
-    documentSingle: DocumentSingleContent;
     documentGuidance: DocumentGuidanceContent;
     documentView: DocumentViewContent;
     claimLastModified: ClaimLastModifiedContent;
@@ -355,7 +353,6 @@ export class Content extends ContentBase {
       errorSummary: new ErrorSummaryContent(this, competitionType),
       logs: new LogsContent(this, competitionType),
       loading: new LoadingContent(this, competitionType),
-      documentSingle: new DocumentSingleContent(this, competitionType),
       documentGuidance: new DocumentGuidanceContent(this, competitionType),
       documentView: new DocumentViewContent(this),
       claimLastModified: new ClaimLastModifiedContent(this, competitionType),

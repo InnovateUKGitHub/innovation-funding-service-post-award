@@ -8,7 +8,6 @@ import { buttonGuide } from "./styledButtonGuide";
 import { datesGuide } from "./datesGuide";
 import { detailsGuide } from "./detailsGuide";
 import { documentListGuide } from "./documentListGuide";
-import { documentSingleGuide } from "./documentSingleGuide";
 import { emailGuide } from "./emailGuide";
 import { formGuide } from "./formGuide";
 import { hashTabsGuide } from "./hashTabsGuide";
@@ -49,7 +48,6 @@ const guides: IGuide[] = [
   datesGuide,
   detailsGuide,
   documentListGuide,
-  documentSingleGuide,
   emailGuide,
   formGuide,
   info,

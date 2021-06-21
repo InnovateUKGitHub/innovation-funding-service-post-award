@@ -46,7 +46,6 @@ module.exports = {
     {
       files: [
         "**/details.tests.tsx",
-        "**/documentSingle.tests.tsx",
         "**/errorSummary.tests.tsx",
         "**/links.tests.tsx",
         "**/linksList.tests.tsx",
