@@ -1,98 +1,128 @@
-import { mount } from "enzyme";
-
 import { RouterProvider } from "react-router5";
 import { createRouter } from "router5";
 import browserPluginFactory from "router5/plugins/browser";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
-import * as Links from "../../src/ui/components/links";
-import { rootReducer } from "../../src/ui/redux/reducers";
+import { render } from "@testing-library/react";
 
-const route = { routeName: "test", routeParams: { id : "exampleId"}, accessControl: () => true};
-const router = createRouter([{name: route.routeName, path: "/test/:id" }]).usePlugin(browserPluginFactory({ useHash: false }));
-const expectedPath = "/test/exampleId";
+import * as Links from "@ui/components/links";
+import { rootReducer } from "@ui/redux/reducers";
 
-describe("Links", () => {
-  describe("Link", () => {
-    it("should render a link with correct path", () => {
+const route = { routeName: "test", routeParams: { id: "exampleId" }, accessControl: () => true };
+const router = createRouter([{ name: route.routeName, path: "/test/:id" }]).usePlugin(
+  browserPluginFactory({ useHash: false }),
+);
+
+const expectedPath = `/${route.routeName}/${route.routeParams.id}`;
+
+describe("<Link />", () => {
+  describe("@returns", () => {
+    test("with path", () => {
       const linkText = "someLinkText";
-      const result = (
+      const { container } = render(
         <Provider store={createStore(rootReducer)}>
           <RouterProvider router={router}>
             <Links.Link route={route}>{linkText}</Links.Link>
           </RouterProvider>
-        </Provider>
+        </Provider>,
       );
-      const wrapper = mount(result);
-      const html = wrapper.html();
-      expect(html).toContain("/test/exampleId");
+
+      const expectedLink = container.querySelector("a");
+
+      if (!expectedLink) throw Error("Link not found to check href value!");
+
+      const linkProps = expectedLink.getAttribute("href");
+
+      expect(linkProps).toBe(expectedPath);
     });
 
-    it("should render a link with correct class", () => {
-      const linkText = "someLinkText";
-      const result = (
+    test("with defined link", () => {
+      const expectedGovLink = "govuk-link";
+
+      const { container } = render(
         <Provider store={createStore(rootReducer)}>
           <RouterProvider router={router}>
-            <Links.Link route={route}>{linkText}</Links.Link>
+            <Links.Link route={route}>stub-link</Links.Link>
           </RouterProvider>
-        </Provider>
+        </Provider>,
       );
-      const wrapper = mount(result);
-      const html = wrapper.html();
-      expect(html).toContain("govuk-link");
+
+      const expectedLink = container.querySelector(`.${expectedGovLink}`);
+
+      if (!expectedLink) throw Error("Gov link not found to check className value!");
+
+      const govClassName = expectedLink.classList.contains(expectedGovLink);
+
+      expect(govClassName).toBeTruthy();
     });
 
-    it("should render a link with correct children", () => {
+    test("with children", () => {
       const linkText = "someLinkText";
-      const result = (
+      const { queryByText } = render(
         <Provider store={createStore(rootReducer)}>
           <RouterProvider router={router}>
             <Links.Link route={route}>{linkText}</Links.Link>
           </RouterProvider>
-        </Provider>
+        </Provider>,
       );
-      const wrapper = mount(result);
-      const html = wrapper.html();
-      expect(html).toContain(linkText);
+
+      expect(queryByText(linkText)).toBeInTheDocument();
     });
   });
+});
 
-  describe("BackLink", () => {
-    it("should render a link with correct path", () => {
+describe("<BackLink />", () => {
+  describe("@returns", () => {
+    test("with path", () => {
       const linkText = "someLinkText";
-      const result = (
-        <RouterProvider router={router}>
-          <Links.BackLink route={route}>{linkText}</Links.BackLink>
-        </RouterProvider>
+      const { container } = render(
+        <Provider store={createStore(rootReducer)}>
+          <RouterProvider router={router}>
+            <Links.BackLink route={route}>{linkText}</Links.BackLink>
+          </RouterProvider>
+        </Provider>,
       );
-      const wrapper = mount(result);
-      const html = wrapper.html();
-      expect(html).toContain(expectedPath);
+
+      const expectedLink = container.querySelector("a");
+
+      if (!expectedLink) throw Error("Link not found to check href value!");
+
+      const linkProps = expectedLink.getAttribute("href");
+
+      expect(linkProps).toBe(expectedPath);
     });
 
-    it("should render a link with correct class", () => {
-      const linkText = "someLinkText";
-      const result = (
-        <RouterProvider router={router}>
-          <Links.BackLink route={route}>{linkText}</Links.BackLink>
-        </RouterProvider>
+    test("with defined link", () => {
+      const expectedGovLink = "govuk-back-link";
+
+      const { container } = render(
+        <Provider store={createStore(rootReducer)}>
+          <RouterProvider router={router}>
+            <Links.BackLink route={route}>stub-link</Links.BackLink>
+          </RouterProvider>
+        </Provider>,
       );
-      const wrapper = mount(result);
-      const html = wrapper.html();
-      expect(html).toContain("govuk-back-link");
+
+      const expectedLink = container.querySelector(`.${expectedGovLink}`);
+
+      if (!expectedLink) throw Error("Gov link not found to check className value!");
+
+      const govClassName = expectedLink.classList.contains(expectedGovLink);
+
+      expect(govClassName).toBeTruthy();
     });
 
-    it("should render a link with correct children", () => {
+    test("with children", () => {
       const linkText = "someLinkText";
-      const result = (
-        <RouterProvider router={router}>
-          <Links.BackLink route={route}>{linkText}</Links.BackLink>
-        </RouterProvider>
+      const { queryByText } = render(
+        <Provider store={createStore(rootReducer)}>
+          <RouterProvider router={router}>
+            <Links.BackLink route={route}>{linkText}</Links.BackLink>
+          </RouterProvider>
+        </Provider>,
       );
-      const wrapper = mount(result);
-      const html = wrapper.html();
-      expect(html).toContain(linkText);
+
+      expect(queryByText(linkText)).toBeInTheDocument();
     });
   });
-
 });
