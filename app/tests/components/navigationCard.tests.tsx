@@ -1,7 +1,7 @@
+import { render } from "@testing-library/react";
+
 import { chunks, NavigationCard, NavigationCardProps, NavigationCardsGrid } from "@ui/components";
-import { mount } from "enzyme";
-import TestBed from "@shared/TestBed";
-import { findByQa } from "./helpers/find-by-qa";
+import { TestBed } from "@shared/TestBed";
 
 const createRoute = (uid: string) => ({
   routeName: `${uid}-routeName`,
@@ -53,63 +53,60 @@ describe("<NavigationCard>", () => {
   };
 
   const setup = (props?: Partial<NavigationCardProps>) => {
-    const wrapper = mount(
+    return render(
       <TestBed>
         <NavigationCard {...defaultProps} {...props} />
       </TestBed>,
     );
-
-    const labelElement = findByQa(wrapper, "navigation-card-label");
-    const listElement = findByQa(wrapper, "navigation-card-list");
-
-    return {
-      wrapper,
-      labelElement,
-      listElement,
-    };
   };
 
   it("should render with default props", () => {
-    const { labelElement, listElement } = setup();
+    const { container, queryByText } = setup();
 
-    expect(labelElement.exists()).toBe(true);
-    expect(listElement.exists()).toBe(false);
+    const labelElement = queryByText(defaultProps.label);
+    const querylistElement = container.querySelector(".card-link__messages");
+
+    expect(labelElement).toBeInTheDocument();
+    expect(querylistElement).not.toBeInTheDocument();
   });
 
   describe("should render label", () => {
     it("as a string", () => {
-      const { labelElement } = setup();
+      const { queryByText } = setup();
 
-      expect(labelElement.text()).toBe(defaultProps.label);
+      const labelElement = queryByText(defaultProps.label);
+
+      expect(labelElement).toBeInTheDocument();
     });
 
     it("as a react element", () => {
-      const stubLabel = <span>label as node</span>;
-      const { labelElement } = setup({ label: stubLabel });
+      const stubComponentText = "label as node";
+      const StubLabelComponent = () => <span>{stubComponentText}</span>;
+      const { queryByText } = setup({ label: <StubLabelComponent /> });
 
-      const labelElementType = labelElement.children().type();
+      const reactElementContent = queryByText(stubComponentText);
 
-      expect(labelElementType).toBe(stubLabel.type);
+      expect(reactElementContent).toBeInTheDocument();
     });
   });
 
   it("should render with one message", () => {
     const stubMessage = { message: "stub-message-1", qa: "stub-message-1-qa" };
-    const { wrapper } = setup({ messages: [stubMessage] });
+    const { queryByTestId } = setup({ messages: [stubMessage] });
 
-    const firstMessage = findByQa(wrapper, stubMessage.qa);
+    const firstMessage = queryByTestId(stubMessage.qa);
 
-    expect(firstMessage.exists()).toBe(true);
+    expect(firstMessage).toBeInTheDocument();
   });
 
   it("should render with multiple messages", () => {
     const stubMessages = createMessages(2, "stub-multiple-message-test");
-    const { wrapper } = setup({ messages: stubMessages });
+    const { queryByTestId } = setup({ messages: stubMessages });
 
-    stubMessages.forEach((mssg) => {
-      const firstMessage = findByQa(wrapper, mssg.qa);
+    stubMessages.forEach(mssg => {
+      const firstMessage = queryByTestId(mssg.qa);
 
-      expect(firstMessage.text()).toBe(mssg.message);
+      expect(firstMessage?.innerHTML).toBe(mssg.message);
     });
   });
 });
@@ -117,7 +114,7 @@ describe("<NavigationCard>", () => {
 describe("<NavigationCardsGrid>", () => {
   const setup = (totalChildren: number) => {
     const stubNavigation = createStubData(totalChildren);
-    const wrapper = mount(
+    const { container } = render(
       <TestBed>
         <NavigationCardsGrid>
           {stubNavigation.map((navItem, i) => (
@@ -127,11 +124,10 @@ describe("<NavigationCardsGrid>", () => {
       </TestBed>,
     );
 
-    const navGroupElement = findByQa(wrapper, "navigation-group");
-    const navGroupItemElement = findByQa(wrapper, "navigation-group-item");
+    const navGroupElement = container.querySelectorAll(".govuk-grid-row");
+    const navGroupItemElement = container.querySelectorAll(".govuk-grid-column-one-third");
 
     return {
-      wrapper,
       navGroupElement,
       navGroupItemElement,
     };
@@ -147,7 +143,7 @@ describe("<NavigationCardsGrid>", () => {
   `("should render $name", ({ totalItems, totalGroups }) => {
     const { navGroupElement, navGroupItemElement } = setup(totalItems);
 
-    expect(navGroupItemElement.length).toBe(totalItems);
-    expect(navGroupElement.length).toBe(totalGroups);
+    expect(navGroupItemElement).toHaveLength(totalItems);
+    expect(navGroupElement).toHaveLength(totalGroups);
   });
 });

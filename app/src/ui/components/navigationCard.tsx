@@ -16,9 +16,7 @@ export interface NavigationCardProps {
 }
 
 // TODO: Refactor this component to be consumed via parent. E.G NavigationCardsGrid.Item = NavigationCard (Consume as <NavigationCardsGrid.Item ... />)
-export function NavigationCard({ qa, label, route, messages = [] }: NavigationCardProps) {
-  const hasMessages = !!messages.length;
-
+export function NavigationCard({ qa, label, route, messages }: NavigationCardProps) {
   return (
     <div className="card-link" data-qa={qa}>
       <Link className="card-link__link" route={route}>
@@ -26,7 +24,7 @@ export function NavigationCard({ qa, label, route, messages = [] }: NavigationCa
           {label}
         </h2>
 
-        {hasMessages && (
+        {!!messages?.length && (
           <div className="card-link__messages" data-qa="navigation-card-list">
             {messages.map(x => (
               <SimpleString key={x.qa} {...x} className="card-link__message">
@@ -58,13 +56,9 @@ export function NavigationCardsGrid({ children }: NavigationCardsGridProps) {
         const groupUid = `group-${groupIndex}`;
 
         return (
-          <div key={groupUid} className="govuk-grid-row card-link-grid" data-qa="navigation-group">
+          <div key={groupUid} className="govuk-grid-row card-link-grid">
             {group.map((navCard, rowIndex) => (
-              <div
-                key={`${groupUid}-row-${rowIndex}`}
-                className="govuk-grid-column-one-third"
-                data-qa="navigation-group-item"
-              >
+              <div key={`${groupUid}-row-${rowIndex}`} className="govuk-grid-column-one-third">
                 {navCard}
               </div>
             ))}
