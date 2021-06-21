@@ -15,7 +15,7 @@ export class GetMonitoringReportsForProject extends QueryBase<MonitoringReportSu
     return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 
-  protected async Run(context: IContext): Promise<MonitoringReportSummaryDto[]> {
+  protected async run(context: IContext): Promise<MonitoringReportSummaryDto[]> {
     const headers = await context.repositories.monitoringReportHeader.getAllForProject(this.projectId);
     return headers.map<MonitoringReportSummaryDto>(x => ({
       headerId: x.Id,

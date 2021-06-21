@@ -9,6 +9,7 @@ import {
   ProjectRole,
   FinancialVirementDto,
 } from "@framework/types";
+import { EditorStatus } from "@ui/constants/enums";
 
 import { ForbiddenError } from "@server/features/common";
 
@@ -18,7 +19,7 @@ import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { Results } from "@ui/validation";
 import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
 import { PCRWorkflowValidator } from "@ui/validators/pcrWorkflowValidator";
-import { EditorStatus, IEditorStore, IStores, useStores } from "@ui/redux";
+import { IEditorStore, IStores, useStores } from "@ui/redux";
 import { Result } from "@ui/validation/result";
 
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";

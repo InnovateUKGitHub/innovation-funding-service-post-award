@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { LoadingStatus, Pending } from "@shared/pending";
-import { IClientUser, ILinkInfo } from "@framework/types";
+import { Pending } from "@shared/pending";
+import { IClientUser, ILinkInfo, LoadingStatus } from "@framework/types";
+import { EditorStatus } from "@ui/constants/enums";
 import { scrollToTheTopSmoothly } from "@framework/util";
 import { processDto } from "@shared/processResponse";
 import { AnyAction } from "redux";
@@ -24,7 +25,6 @@ import {
   DataStateKeys,
   EditorState,
   EditorStateKeys,
-  EditorStatus,
   IDataStore,
   IEditorStore,
   RootState,

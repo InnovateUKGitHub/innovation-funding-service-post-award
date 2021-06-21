@@ -21,7 +21,7 @@ import {
   StoresProvider,
 } from "@ui/redux";
 
-import { Polyfill } from "./polyfill";
+import { getPolyfills } from "./polyfill";
 
 // get servers store to initialise client store
 // eslint-disable-next-line no-underscore-dangle
@@ -80,7 +80,7 @@ class AppWithContent extends React.Component<{ stores: IStores; store: typeof st
   }
 }
 
-Polyfill()
+getPolyfills()
   .then(() =>
     i18next.init({
       lng: "en",

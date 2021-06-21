@@ -7,7 +7,7 @@ export class GetAllInitialForecastsForPartnerQuery extends QueryBase<ForecastDet
     super();
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const results = await context.repositories.profileDetails.getAllByPartner(this.partnerId);
     return results.map(mapInitialForecastDetail(context));
   }

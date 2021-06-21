@@ -4,14 +4,10 @@ import * as Validators from "@ui/validators";
 import { RootActions } from "@ui/redux/actions";
 import { Results } from "@ui/validation/results";
 import { ClaimDetailsDto, ClaimDto, ErrorCode, FinancialVirementDto, ForecastDetailsDTO, IAppError, MonitoringReportDto, PartnerDto } from "@framework/types";
+import { EditorStatus } from "@ui/constants/enums";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-
-export enum EditorStatus {
-  Editing = 1,
-  Saving = 2
-}
 
 export interface IEditorStore<TDto, TValidator> {
   data: TDto;

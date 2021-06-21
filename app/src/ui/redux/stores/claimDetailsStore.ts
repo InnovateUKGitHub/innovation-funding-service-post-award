@@ -1,4 +1,4 @@
-import { ApiClient } from "@ui/apiClient";
+import { apiClient } from "@ui/apiClient";
 import { ClaimDetailsValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ClaimDetailsDto } from "@framework/dtos";
@@ -10,11 +10,11 @@ export class ClaimsDetailsStore extends StoreBase {
   }
 
   public getAllByPartner(partnerId: string) {
-    return this.getData("claimDetails", storeKeys.getPartnerKey(partnerId), p => ApiClient.claimDetails.getAllByPartner({partnerId, ...p}));
+    return this.getData("claimDetails", storeKeys.getPartnerKey(partnerId), p => apiClient.claimDetails.getAllByPartner({partnerId, ...p}));
   }
 
   public get(projectId: string, partnerId: string, periodId: number, costCategoryId: string) {
-    return this.getData("claimDetail", this.getKey(partnerId, periodId, costCategoryId), p => ApiClient.claimDetails.get({projectId, partnerId, periodId, costCategoryId, ...p}));
+    return this.getData("claimDetail", this.getKey(partnerId, periodId, costCategoryId), p => apiClient.claimDetails.get({projectId, partnerId, periodId, costCategoryId, ...p}));
   }
 
   public getClaimDetailsEditor(projectId: string, partnerId: string, periodId: number, costCategoryId: string, init?: (dto: ClaimDetailsDto) => void) {
@@ -34,7 +34,7 @@ export class ClaimsDetailsStore extends StoreBase {
       this.getKey(partnerId, periodId, costCategoryId),
       dto,
       (show) => new ClaimDetailsValidator(dto, show),
-      p => ApiClient.claimDetails.saveClaimDetails({projectId, partnerId, periodId, costCategoryId, claimDetails: dto, ...p}),
+      p => apiClient.claimDetails.saveClaimDetails({projectId, partnerId, periodId, costCategoryId, claimDetails: dto, ...p}),
       (result) => {
         this.markStale("claimDetail", this.getKey(partnerId, periodId, costCategoryId), result);
         if(onComplete) {

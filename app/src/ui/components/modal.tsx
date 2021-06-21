@@ -3,7 +3,7 @@
 import React from "react";
 
 import { SvgCrown } from "@ui/components/svg/crownSvg";
-import { GOVUK_COLOUR_WHITE } from "@ui/styles/colours";
+import { govukColourWhite } from "@ui/styles/colours";
 import { ModalConsumer, ModalRegister } from "@ui/redux";
 
 interface Props {
@@ -49,7 +49,7 @@ export class PrivateModal extends React.Component<{id: string}> {
         <div className="govuk-modal-dialogue__wrapper">
           <dialog id="timeout" className="govuk-modal-dialogue__box" aria-labelledby="timeout-title" aria-describedby="timeout-description" aria-modal="true" role="alertdialog">
             <div className="govuk-modal-dialogue__header">
-              <SvgCrown colour={GOVUK_COLOUR_WHITE}/>
+              <SvgCrown colour={govukColourWhite}/>
               <a href="#" role="button" className="govuk-button govuk-modal-dialogue__close" data-module="govuk-button" aria-label="Close modal dialogue">×</a>
             </div>
             <div className="govuk-modal-dialogue__content">

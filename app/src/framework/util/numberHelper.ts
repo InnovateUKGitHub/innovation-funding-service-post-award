@@ -1,4 +1,4 @@
-const EPISILON = Math.pow(2, -52);
+const epsilon = Math.pow(2, -52);
 
 export const isNumber = (value?: number | null): value is number => {
   // Note: JS treats Zero as false 👀
@@ -14,7 +14,7 @@ export const isNumber = (value?: number | null): value is number => {
  * @description Added an Epsilon cover edge cases such as 1.005 to round correctly
  */
 export function roundCurrency(value: number) {
-  const valueToBeRounded = (value + EPISILON) * 100;
+  const valueToBeRounded = (value + epsilon) * 100;
   const roundedValue = Math.round(valueToBeRounded);
 
   return roundedValue / 100;

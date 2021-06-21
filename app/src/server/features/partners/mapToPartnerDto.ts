@@ -8,9 +8,9 @@ import {
     ProjectRole,
     SpendProfileStatus
 } from "@framework/types";
+import { SalesforceProjectRole } from "@server/constants/enums";
 import { Partner } from "@framework/entities";
 import { SyncCommandBase } from "../common/commandBase";
-import { SalesforceProjectRole } from "../../repositories/partnersRepository";
 
 export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
     constructor(
@@ -25,7 +25,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
         return (total) ? 100 * (claimed || 0) / total : null;
     }
 
-    Run(): PartnerDto {
+    run(): PartnerDto {
         const partnerStatus = new PartnerStatusMapper().mapFromSalesforce(this.item.participantStatus);
 
         return {

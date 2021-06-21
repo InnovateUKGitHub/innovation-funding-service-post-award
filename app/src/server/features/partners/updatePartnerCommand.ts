@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
 import { Authorisation, BankCheckStatus, BankDetailsTaskStatus, IContext, PartnerDto, PartnerStatus, ProjectRole } from "@framework/types";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
@@ -21,7 +22,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     return auth.forPartner(this.partner.projectId, this.partner.id).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.FinancialContact);
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
 
     const originalDto = await context.runQuery(new GetByIdQuery(this.partner.id));
     const partnerDocuments = await context.runQuery(new GetPartnerDocumentsQuery(this.partner.projectId, this.partner.id));
@@ -76,7 +77,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
 
     const bankCheckValidateResult = await context.resources.bankCheckService.validate(bankDetails.sortCode, bankDetails.accountNumber);
 
-    const validationResult = bankCheckValidateResult.ValidationResult;
+    const validationResult = bankCheckValidateResult.validationResult;
 
     if (!validationResult.checkPassed) {
       if (this.partner.bankCheckRetryAttempts < context.config.options.bankCheckValidationRetries) {
@@ -123,32 +124,32 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
       },
     };
     const bankCheckVerifyResult = await context.resources.bankCheckService.verify(verifyInputs);
-    const { VerificationResult } = bankCheckVerifyResult;
+    const { verificationResult } = bankCheckVerifyResult;
 
-    if (!this.validateVerifyResponse(VerificationResult, context)) {
+    if (!this.validateVerifyResponse(verificationResult, context)) {
       update.Acc_BankCheckState__c = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.VerificationFailed);
     } else {
       update.Acc_BankCheckState__c = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.VerificationPassed);
       this.partner.bankDetailsTaskStatus = BankDetailsTaskStatus.Complete;
     }
 
-    update.Acc_AddressScore__c = VerificationResult.addressScore;
-    update.Acc_CompanyNameScore__c = VerificationResult.companyNameScore;
-    update.Acc_PersonalDetailsScore__c = VerificationResult.personalDetailsScore;
-    update.Acc_RegNumberScore__c = VerificationResult.regNumberScore;
-    update.Acc_VerificationConditionsSeverity__c = VerificationResult.conditions.severity;
-    update.Acc_VerificationConditionsCode__c = VerificationResult.conditions.code ? VerificationResult.conditions.code.toString() : "";
-    update.Acc_VerificationConditionsDesc__c = VerificationResult.conditions.description;
+    update.Acc_AddressScore__c = verificationResult.addressScore;
+    update.Acc_CompanyNameScore__c = verificationResult.companyNameScore;
+    update.Acc_PersonalDetailsScore__c = verificationResult.personalDetailsScore;
+    update.Acc_RegNumberScore__c = verificationResult.regNumberScore;
+    update.Acc_VerificationConditionsSeverity__c = verificationResult.conditions.severity;
+    update.Acc_VerificationConditionsCode__c = verificationResult.conditions.code ? verificationResult.conditions.code.toString() : "";
+    update.Acc_VerificationConditionsDesc__c = verificationResult.conditions.description;
   }
 
-  private validateVerifyResponse(VerificationResult: BankCheckVerificationResultFields, context: IContext) {
+  private validateVerifyResponse(verificationResult: BankCheckVerificationResultFields, context: IContext) {
     // Only checking against address and company name scores as personal details score will always fail.
-    if ((!isNumber(VerificationResult.addressScore) || VerificationResult.addressScore < context.config.options.bankCheckAddressScorePass)
-    || (!isNumber(VerificationResult.companyNameScore) || VerificationResult.companyNameScore < context.config.options.bankCheckCompanyNameScorePass)) {
+    if ((!isNumber(verificationResult.addressScore) || verificationResult.addressScore < context.config.options.bankCheckAddressScorePass)
+    || (!isNumber(verificationResult.companyNameScore) || verificationResult.companyNameScore < context.config.options.bankCheckCompanyNameScorePass)) {
       return false;
     }
     if (this.partner.organisationType === "Industrial") {
-      return VerificationResult.regNumberScore && VerificationResult.regNumberScore === "Match";
+      return verificationResult.regNumberScore && verificationResult.regNumberScore === "Match";
     }
     return true;
   }

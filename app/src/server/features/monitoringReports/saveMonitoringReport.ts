@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import {
   Authorisation,
   IContext,
@@ -85,7 +86,7 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
     ]);
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const header = await context.repositories.monitoringReportHeader.getById(this.monitoringReportDto.headerId);
 
     if (header.Acc_Project__c !== this.monitoringReportDto.projectId) {

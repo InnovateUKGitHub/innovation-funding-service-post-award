@@ -1,13 +1,13 @@
-import { PCRDto, PCRItemDto, PCRItemForPartnerAdditionDto, ProjectRole } from "@framework/dtos";
+/* eslint-disable @typescript-eslint/naming-convention */
+import { PCRDto, PCRItemDto, PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { Authorisation, IContext, PCRItemType } from "@framework/types";
 import {
-  CostCategoryType,
   ProjectChangeRequestItemEntity,
   ProjectChangeRequestItemForCreateEntity,
 } from "@framework/entities";
 import { GetAllForProjectQuery } from "@server/features/partners";
-import { PCRStatus } from "@framework/constants";
+import { CostCategoryType, PCRStatus, ProjectRole } from "@framework/constants";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { sum } from "@framework/util";
@@ -48,7 +48,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     });
   }
 
-  protected async Run(context: IContext): Promise<boolean> {
+  protected async run(context: IContext): Promise<boolean> {
     if (this.projectId !== this.pcr.projectId || this.projectChangeRequestId !== this.pcr.id) {
       throw new BadRequestError();
     }

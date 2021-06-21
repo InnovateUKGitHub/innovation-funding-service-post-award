@@ -12,7 +12,7 @@ export class DeletePartnerDocumentCommand extends CommandBase<void> {
         return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
     }
 
-    protected async Run(context: IContext) {
+    protected async run(context: IContext) {
         return context.repositories.documents.deleteDocument(this.documentId);
     }
 }

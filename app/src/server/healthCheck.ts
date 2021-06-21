@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { gzip } from "node-gzip";
 import { health } from "../server/health";
 import { Logger } from "./features/common";

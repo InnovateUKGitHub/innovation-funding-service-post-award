@@ -19,7 +19,7 @@ export class GetMonitoringReportStatusChanges extends QueryBase<MonitoringReport
     return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 
-  protected async Run(context: IContext): Promise<MonitoringReportStatusChangeDto[]> {
+  protected async run(context: IContext): Promise<MonitoringReportStatusChangeDto[]> {
     const statusChanges = await context.repositories.monitoringReportStatusChange.getStatusChanges(this.reportId);
     const statusLookup = await context.runQuery(new GetMonitoringReportStatusesQuery());
 

@@ -2,9 +2,9 @@ import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import * as Dtos from "@framework/dtos";
-import { BankCheckStatus, BankDetailsTaskStatus, PartnerStatus } from "@framework/dtos";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import * as ACC from "@ui/components";
+import { BankCheckStatus, BankDetailsTaskStatus, PartnerStatus, ProjectRole } from "@framework/constants";
 
 export interface ProjectSetupParams {
   projectId: string;
@@ -148,6 +148,6 @@ export const ProjectSetupRoute = defineRoute<ProjectSetupParams>({
   routePath: "/projects/:projectId/setup/:partnerId",
   getParams: (r) => ({ projectId: r.params.projectId, partnerId: r.params.partnerId }),
   container: ProjectSetupContainer,
-  accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(Dtos.ProjectRole.FinancialContact),
+  accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(ProjectRole.FinancialContact),
   getTitle: ({ content }) => content.projectSetup.title(),
 });

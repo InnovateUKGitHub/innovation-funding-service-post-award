@@ -1,8 +1,8 @@
-import { ApiClient } from "../../apiClient";
+import { apiClient } from "../../apiClient";
 import { StoreBase } from "./storeBase";
 
 export class ContactsStore extends StoreBase {
   public getAllByProjectId(projectId: string) {
-    return this.getData("projectContacts", projectId, p => ApiClient.projectContacts.getAllByProjectId({ projectId, ...p }));
+    return this.getData("projectContacts", projectId, p => apiClient.projectContacts.getAllByProjectId({ projectId, ...p }));
   }
 }

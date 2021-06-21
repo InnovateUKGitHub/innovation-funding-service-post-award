@@ -1,4 +1,4 @@
-import { ApiClient } from "@ui/apiClient";
+import { apiClient } from "@ui/apiClient";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { RootActionsOrThunk } from "../actions";
 import { RootState } from "../reducers";
@@ -16,7 +16,7 @@ export class CompaniesStore extends StoreBase {
   }
 
   public getCompanies(searchString: string, itemsPerPage?: number, startIndex?: number) {
-    return this.getData("companies", this.getKey(searchString, itemsPerPage, startIndex), p => ApiClient.companies.searchCompany({ searchString, itemsPerPage, startIndex, ...p }));
+    return this.getData("companies", this.getKey(searchString, itemsPerPage, startIndex), p => apiClient.companies.searchCompany({ searchString, itemsPerPage, startIndex, ...p }));
   }
 
 }

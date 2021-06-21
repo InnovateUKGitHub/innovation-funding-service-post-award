@@ -1,6 +1,5 @@
 import { applyMiddleware, createStore } from "redux";
 import { rootReducer, RootState } from "@ui/redux";
-import { LoadingStatus } from "@shared/pending";
 import { dataLoadAction, RootActionsOrThunk } from "@ui/redux/actions";
 import * as Repositories from "@server/repositories";
 import { GetAllQuery as GetAllProjects, GetByIdQuery as GetProjectById } from "@server/features/projects";
@@ -9,6 +8,7 @@ import { GetAllClaimsForProjectQuery, GetAllForPartnerQuery as GetAllClaimsForPa
 import thunk from "redux-thunk";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import * as Entities from "@framework/entities";
+import { LoadingStatus } from "@framework/constants";
 import getRootState from "../redux/stores/getRootState";
 import { TestContext } from "./testContextProvider";
 

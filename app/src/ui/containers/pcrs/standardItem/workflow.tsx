@@ -4,7 +4,7 @@ import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { FilesStep } from "./filesStep";
 import { Summary } from "./summary";
 
-export type standardItemStepNames = "filesStep";
+export type StandardItemStepNames = "filesStep";
 
 export const standardItemWorkflow: IPCRWorkflow<PCRStandardItemDto, PCRStandardItemDtoValidator> = {
   steps: [

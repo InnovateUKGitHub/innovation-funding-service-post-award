@@ -49,7 +49,7 @@ You should not increase the overhead percentage rate.
 `;
 
 // @TODO: this might sit better in the pcr repository (or constants?) ... leave for now
-export const PCRRecordTypeMetaValues: IMetaValue[] = [
+export const pcrRecordTypeMetaValues: IMetaValue[] = [
   { type: PCRItemType.SinglePartnerFinancialVirement, typeName: "Reallocate one partner's project costs", files: ["reallocate-project-costs.xlsx"], displayName: "Reallocate project costs", guidance: singlePartnerFinancialVirementGuidance },
   { type: PCRItemType.MultiplePartnerFinancialVirement, typeName: "Reallocate several partners' project cost", files: ["reallocate-project-costs.xlsx"], displayName: "Reallocate project costs", guidance: multiplePartnerFinancialVirementGuidance },
   { type: PCRItemType.PartnerWithdrawal, typeName: "Remove a partner" },
@@ -63,12 +63,12 @@ export const PCRRecordTypeMetaValues: IMetaValue[] = [
 ];
 
 export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
-  protected async Run(context: IContext): Promise<PCRItemTypeDto[]> {
+  protected async run(context: IContext): Promise<PCRItemTypeDto[]> {
     const allRecordTypes = await context.runQuery(new GetAllRecordTypesQuery());
     const pcrRecordTypes = allRecordTypes.filter(x => x.parent === "Acc_ProjectChangeRequest__c");
 
     /// meta values controls order
-    return PCRRecordTypeMetaValues.map<PCRItemTypeDto>(metaInfo => ({
+    return pcrRecordTypeMetaValues.map<PCRItemTypeDto>(metaInfo => ({
       type: metaInfo.type,
       displayName: metaInfo.displayName || metaInfo.typeName,
       enabled: this.getEnabledStatus(metaInfo, context.config),

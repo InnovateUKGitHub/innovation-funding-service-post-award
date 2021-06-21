@@ -3,17 +3,17 @@ import express from "express";
 import passport from "passport";
 import passportSaml from "passport-saml";
 import cookieSession from "cookie-session";
-import { Configuration } from "../server/features/common/config";
+import { configuration } from "../server/features/common/config";
 import { noCache } from "./cacheHeaders";
 import { Logger } from "./features/common";
 
 // definitions for URNs: https://commons.lbl.gov/display/IDMgmt/Attribute+Definitions
 const urnUid = "urn:oid:0.9.2342.19200300.100.1.1";
 const urnEmail = "urn:oid:0.9.2342.19200300.100.1.3";
-type URN_KEYS = typeof urnUid | typeof urnEmail;
+type URNKEYS = typeof urnUid | typeof urnEmail;
 
 type ShibbolethPayload = {
-  [K in URN_KEYS]: string;
+  [K in URNKEYS]: string;
 } & {
   issuer: string;
   sessionIndex: string;
@@ -26,13 +26,13 @@ type ShibbolethPayload = {
 };
 
 const shibConfig: passportSaml.SamlConfig = {
-  entryPoint: Configuration.sso.providerUrl,
-  issuer: Configuration.serverUrl,
-  callbackUrl: `${Configuration.serverUrl}/auth/success`,
+  entryPoint: configuration.sso.providerUrl,
+  issuer: configuration.serverUrl,
+  callbackUrl: `${configuration.serverUrl}/auth/success`,
   // the info we're asking for
   identifierFormat: "urn:oasis:names:tc:SAML:1.1:nameid-format:persistent",
   disableRequestedAuthnContext: true,
-  decryptionPvk: fs.readFileSync(Configuration.certificates.shibboleth, "utf-8"),
+  decryptionPvk: fs.readFileSync(configuration.certificates.shibboleth, "utf-8"),
   acceptedClockSkewMs: -1,
 };
 
@@ -43,8 +43,8 @@ router.use(cookieSession({
   secure: process.env.SERVER_URL !== "http://localhost:8080",
   httpOnly: true,
   name: cookieName,
-  secret: Configuration.cookieKey,
-  maxAge: 1000 * 60 * Configuration.timeouts.cookie
+  secret: configuration.cookieKey,
+  maxAge: 1000 * 60 * configuration.timeouts.cookie
 }));
 
 router.use(passport.initialize());
@@ -66,7 +66,7 @@ router.get("/logout", noCache, (req, res) => {
     secure: process.env.SERVER_URL !== "http://localhost:8080",
     httpOnly: true
   });
-  return res.redirect(Configuration.sso.enabled && Configuration.sso.signoutUrl || "/");
+  return res.redirect(configuration.sso.enabled && configuration.sso.signoutUrl || "/");
 });
 
 // Shiboleth makes user browser post back to our app with creds
@@ -82,22 +82,22 @@ router.post("/auth/success", (req, res, next) => passport.authenticate("shibbole
 
   // redirect to orignal locaion if it starts with a / otherwise use server root
   const redirect = req.session && req.session.redirect;
-  const validatedRedirect = redirect && redirect.startsWith("/") ? redirect : Configuration.serverUrl;
+  const validatedRedirect = redirect && redirect.startsWith("/") ? redirect : configuration.serverUrl;
   return res.redirect(validatedRedirect);
 })(req, res, next));
 
 router.use((req, res, next) => {
-  if (Configuration.sso.enabled && req.url === "/") {
+  if (configuration.sso.enabled && req.url === "/") {
     res.redirect("/projects/dashboard");
   } else if (req.session && req.session.user && req.session.user.email) {
     // if user is logged in continue
     req.session.last_reset = getCookieTimestamp();
     next();
-  } else if (!Configuration.sso.enabled) {
+  } else if (!configuration.sso.enabled) {
     // if user not logged in but we arent using sso then set default user
     req.session = req.session || {};
     req.session.user = req.session.user || {};
-    req.session.user.email = Configuration.salesforce.serivceUsername;
+    req.session.user.email = configuration.salesforce.serivceUsername;
     next();
   } else if (!req.url.startsWith("/api") && !req.url.startsWith("/login")) {
     // if not logged in and not api request or login request (ie somethings gone wrong)

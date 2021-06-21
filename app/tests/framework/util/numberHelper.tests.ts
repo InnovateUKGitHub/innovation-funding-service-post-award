@@ -32,17 +32,21 @@ describe("numberHelper", () => {
 
     describe("capture edge cases", () => {
       test.each`
-        name                         | inputValue | expectedValue
+        name                         | edgeCaseValue | expectedValue
         ${"positive trailing digit"} | ${1.005}   | ${1.01}
         ${"negative trailing digit"} | ${-1.005}  | ${-1}
-      `("with a $name number", ({ inputValue, expectedValue }) => {
-        expect(roundCurrency(inputValue)).toBe(expectedValue);
+      `("with a $name number", ({ edgeCaseValue, expectedValue }) => {
+        const roundedNumber = roundCurrency(edgeCaseValue);
+
+        expect(roundedNumber).toBe(expectedValue);
       });
     });
 
     describe("positive currency value", () => {
       testCases("with a $name number", ({ inputValue, expectedValue }) => {
-        expect(roundCurrency(inputValue)).toBe(expectedValue);
+        const roundedNumber = roundCurrency(inputValue);
+
+        expect(roundedNumber).toBe(expectedValue);
       });
     });
 

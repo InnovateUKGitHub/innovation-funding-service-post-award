@@ -11,7 +11,7 @@ export abstract class DocumentsSummaryQueryBase extends QueryBase<DocumentSummar
     super();
   }
 
-  protected async Run(context: IContext): Promise<DocumentSummaryDto[]> {
+  protected async run(context: IContext): Promise<DocumentSummaryDto[]> {
     const recordId = await this.getRecordId(context);
     if(!recordId) return [];
     const linkedDocs = await context.repositories.documents.getDocumentsMetedataByLinkedRecord(recordId, this.filter);

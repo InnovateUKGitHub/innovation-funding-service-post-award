@@ -7,7 +7,6 @@ export * from "./IContext";
 export * from "./ILinkInfo";
 export * from "./IPicklistEntry";
 export * from "./IUser";
-export * from "./permisionGroupIndentifier";
 export * from "./ICache";
 export * from "./ClaimDetailKey";
 export * from "./ClaimKey";

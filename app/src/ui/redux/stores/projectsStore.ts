@@ -1,7 +1,7 @@
 import { ProjectDto } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { ApiClient } from "../../apiClient";
+import { apiClient } from "../../apiClient";
 import { RootState } from "../reducers";
 import { RootActionsOrThunk } from "../actions";
 import { StoreBase } from "./storeBase";
@@ -12,7 +12,7 @@ export class ProjectsStore extends StoreBase {
   }
 
   public getProjects() {
-    return this.getData("projects", storeKeys.getProjectsKey(), p => ApiClient.projects.getAll(p));
+    return this.getData("projects", storeKeys.getProjectsKey(), p => apiClient.projects.getAll(p));
   }
 
   public getProjectsFilter(searchString?: string|null): Pending<ProjectDto[]> {
@@ -27,6 +27,6 @@ export class ProjectsStore extends StoreBase {
   }
 
   public getById(projectId: string) {
-    return this.getData("project", storeKeys.getProjectKey(projectId), p => ApiClient.projects.get({ projectId, ...p }));
+    return this.getData("project", storeKeys.getProjectKey(projectId), p => apiClient.projects.get({ projectId, ...p }));
   }
 }

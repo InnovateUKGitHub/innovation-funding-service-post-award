@@ -1,6 +1,5 @@
-import { PCRItemStatus, PCRPartnerType, PCRProjectRole } from "@framework/constants";
+import { CostCategoryType, PCRItemStatus, PCRPartnerType, PCRProjectRole } from "@framework/constants";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
-import { CostCategoryType } from "@framework/entities";
 import { DateTime } from "luxon";
 import { setup as commonSetup } from "./helpers";
 

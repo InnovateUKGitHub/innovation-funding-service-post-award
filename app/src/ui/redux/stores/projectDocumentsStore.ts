@@ -1,4 +1,4 @@
-import { ApiClient } from "@ui/apiClient";
+import { apiClient } from "@ui/apiClient";
 import { Pending } from "@shared/pending";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -10,7 +10,7 @@ export class ProjectDocumentsStore extends DocumentsStoreBase {
     return storeKeys.getProjectKey(projectId);
   }
   public getProjectDocuments(projectId: string) {
-    return this.getData("documents", this.getProjectDocumentsKey(projectId), p => ApiClient.documents.getProjectDocuments({ projectId, ...p }));
+    return this.getData("documents", this.getProjectDocumentsKey(projectId), p => apiClient.documents.getProjectDocuments({ projectId, ...p }));
   }
   public getProjectDocumentEditor(projectId: string, init?: (dto: MultipleDocumentUploadDto) => void) {
     return this.getEditor("multipleDocuments", this.getProjectDocumentsKey(projectId), () => Pending.done<MultipleDocumentUploadDto>({ files: [] }), init, (dto) => this.validateMultipleDocumentsDto(dto, false, true));
@@ -22,7 +22,7 @@ export class ProjectDocumentsStore extends DocumentsStoreBase {
       true,
       this.getProjectDocumentsKey(projectId),
       dto,
-      (p) => ApiClient.documents.uploadProjectDocument({ projectId, ...p }),
+      (p) => apiClient.documents.uploadProjectDocument({ projectId, ...p }),
       message,
       onComplete
     );
@@ -30,6 +30,6 @@ export class ProjectDocumentsStore extends DocumentsStoreBase {
 
   public deleteProjectDocument(projectId: string, dto: MultipleDocumentUploadDto, document: DocumentSummaryDto, message?: string, onComplete?: () => void) {
     const key = this.getProjectDocumentsKey(projectId);
-    return this.deleteEditor("multipleDocuments", key, dto, () => this.validateMultipleDocumentsDto(dto, false, true), p => ApiClient.documents.deleteProjectDocument({ documentId: document.id, projectId, ...p }), () => this.afterUpdate(key, message, onComplete));
+    return this.deleteEditor("multipleDocuments", key, dto, () => this.validateMultipleDocumentsDto(dto, false, true), p => apiClient.documents.deleteProjectDocument({ documentId: document.id, projectId, ...p }), () => this.afterUpdate(key, message, onComplete));
   }
 }

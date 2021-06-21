@@ -1,9 +1,10 @@
-import { ApiClient } from "@ui/apiClient";
-import { LoadingStatus, Pending } from "@shared/pending";
+import { apiClient } from "@ui/apiClient";
+import { Pending } from "@shared/pending";
 import { NotFoundError } from "@server/features/common";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { FinancialVirementDtoValidator } from "@ui/validators";
 import { FinancialVirementDto, PartnerVirementsDto } from "@framework/dtos";
+import { LoadingStatus } from "@framework/constants";
 import { IEditorStore } from "..";
 import { StoreBase } from "./storeBase";
 
@@ -14,7 +15,7 @@ export class FinancialVirementsStore extends StoreBase {
 
   public get(projectId: string, pcrId: string, pcrItemId: string, partnerId?: string): Pending<FinancialVirementDto> {
     return this.getData("financialVirement", this.getKey(projectId, pcrId, pcrItemId, partnerId), p =>
-      ApiClient.financialVirements.get({ projectId, pcrItemId, pcrId, partnerId, ...p }),
+      apiClient.financialVirements.get({ projectId, pcrItemId, pcrId, partnerId, ...p }),
     );
   }
 
@@ -65,7 +66,7 @@ export class FinancialVirementsStore extends StoreBase {
       this.getKey(projectId, pcrId, pcrItemId, partnerId),
       dto,
       showErrors => new FinancialVirementDtoValidator(dto, showErrors, submit),
-      p => ApiClient.financialVirements.update({ projectId, pcrId, pcrItemId, financialVirment: dto, submit, ...p }),
+      p => apiClient.financialVirements.update({ projectId, pcrId, pcrItemId, financialVirment: dto, submit, ...p }),
       result => {
         if (partnerId) this.markStale("financialVirement", this.getKey(projectId, pcrId, pcrItemId, partnerId), result);
         this.markStale("financialVirement", this.getKey(projectId, pcrId, pcrItemId), result);

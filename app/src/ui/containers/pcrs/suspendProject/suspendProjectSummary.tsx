@@ -4,10 +4,10 @@ import { PCRItemForProjectSuspensionDto } from "@framework/dtos";
 import { PCRProjectSuspensionItemDtoValidator } from "@ui/validators";
 import { useContent } from "@ui/hooks";
 
-import { suspendProjectSteps } from "./workflow";
+import { SuspendProjectSteps } from "./workflow";
 
 export const SuspendProjectSummary = (
-  props: PcrSummaryProps<PCRItemForProjectSuspensionDto, PCRProjectSuspensionItemDtoValidator, suspendProjectSteps>,
+  props: PcrSummaryProps<PCRItemForProjectSuspensionDto, PCRProjectSuspensionItemDtoValidator, SuspendProjectSteps>,
 ) => {
   const { getContent } = useContent();
 

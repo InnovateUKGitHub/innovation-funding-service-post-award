@@ -7,7 +7,7 @@ export class GetAllClaimDetailsByPartner extends QueryBase<ClaimDetailsSummaryDt
     super();
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const items = await context.repositories.claimDetails.getAllByPartner(this.partnerId);
     return items.map(claimDetail => mapClaimDetailsSummary(claimDetail, context));
   }

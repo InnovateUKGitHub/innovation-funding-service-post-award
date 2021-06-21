@@ -7,7 +7,7 @@ export abstract class DocumentQueryBase extends QueryBase<DocumentDto | null> {
     super();
   }
 
-  public async Run(context: IContext) {
+  public async run(context: IContext) {
     const id = await this.getRecordId(context);
 
     if(!id) return null;

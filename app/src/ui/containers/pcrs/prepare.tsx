@@ -66,7 +66,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
       <ACC.Section title="Details">
         <ACC.SummaryList qa="pcr-prepare">
           <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
-          <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />} action={<ACC.Link route={this.props.routes.ProjectChangeRequestAddType.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add types</ACC.Link>} qa="typesRow" />
+          <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />} action={<ACC.Link route={this.props.routes.projectChangeRequestAddType.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add types</ACC.Link>} qa="typesRow" />
         </ACC.SummaryList>
       </ACC.Section>
     );

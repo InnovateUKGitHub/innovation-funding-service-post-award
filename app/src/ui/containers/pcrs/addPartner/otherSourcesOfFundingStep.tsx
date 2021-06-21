@@ -1,15 +1,16 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { EditorStatus, StoresConsumer } from "@ui/redux";
+import { StoresConsumer } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
-import { CostCategoryType } from "@framework/entities";
 import { range } from "@shared/range";
 import { PCRSpendProfileOtherFundingDto } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { Pending } from "@shared/pending";
 import { PCROtherFundingDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
+import { CostCategoryType } from "@framework/constants";
+import { EditorStatus } from "@ui/constants/enums";
 
 interface ContainerProps {
   costCategories: CostCategoryDto[];
@@ -51,16 +52,16 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     );
   }
 
-  private renderTable(Form: ACC.FormBuilder<{}>, Table: ACC.ITypedTable<PCRSpendProfileOtherFundingDto>, funds: PCRSpendProfileOtherFundingDto[], pcrItem: PCRItemForPartnerAdditionDto) {
+  private renderTable(form: ACC.FormBuilder<{}>, table: ACC.ITypedTable<PCRSpendProfileOtherFundingDto>, funds: PCRSpendProfileOtherFundingDto[], pcrItem: PCRItemForPartnerAdditionDto) {
     return (
-      <Table.Table qa="otherFundingTable" data={funds} footers={this.renderFooters(pcrItem)}>
-        <Table.Custom
+      <table.Table qa="otherFundingTable" data={funds} footers={this.renderFooters(pcrItem)}>
+        <table.Custom
           headerContent={x => x.pcrAddPartnerOtherFundingSources.columnHeaderDescription}
           qa="cost-description"
           value={(x, i) => (
             <>
-              <Form.Hidden value={() => funds[i.row].id} name={`item_${i.row}_id`} />
-              <Form.String
+              <form.Hidden value={() => funds[i.row].id} name={`item_${i.row}_id`} />
+              <form.String
                 name={`item_${i.row}_description`}
                 // the dto "_dontUse" should not be used here because the form as is doesn't support deeply nested form child elements
                 value={() => funds[i.row].description}
@@ -74,11 +75,11 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
             </>
           )}
         />
-        <Table.Custom
+        <table.Custom
           headerContent={x => x.pcrAddPartnerOtherFundingSources.columnHeaderDate}
           qa="cost-date"
           value={(x, i) => (
-            <Form.MonthYear
+            <form.MonthYear
               name={`item_${i.row}_date`}
               value={() => funds[i.row].dateSecured}
               update={(_dontUse, val) => {
@@ -91,11 +92,11 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
             />
           )}
         />
-        <Table.Custom
+        <table.Custom
           headerContent={x => x.pcrAddPartnerOtherFundingSources.columnHeaderValue}
           qa="cost-value"
           value={(x, i) => (
-            <Form.Numeric
+            <form.Numeric
               name={`item_${i.row}_value`}
               value={() => funds[i.row].value}
               update={(_dontUse, val) => {
@@ -107,7 +108,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           )}
         />
         {this.props.isClient ? (
-          <Table.Custom
+          <table.Custom
             header="Action"
             hideHeader
             qa="remove"
@@ -124,7 +125,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
             width={1}
           />
         ) : null}
-      </Table.Table>
+      </table.Table>
     );
   }
 

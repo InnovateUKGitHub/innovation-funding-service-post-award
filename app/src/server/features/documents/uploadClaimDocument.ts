@@ -15,7 +15,7 @@ export class UploadClaimDocumentCommand extends CommandDocumentBase<string> {
     super();
   }
 
-  protected LogMessage() {
+  protected logMessage() {
     return [this.constructor.name, this.claimKey, this.document && this.document.file && this.document.file.fileName];
   }
 
@@ -45,7 +45,7 @@ export class UploadClaimDocumentCommand extends CommandDocumentBase<string> {
     await context.runCommand(command);
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const result = new DocumentUploadDtoValidator(this.document, context.config.options, this.showValidationErrors, null);
 
     if (!result.isValid) {

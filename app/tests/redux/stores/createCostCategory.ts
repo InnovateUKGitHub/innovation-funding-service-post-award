@@ -1,5 +1,5 @@
+import { CostCategoryType } from "@framework/constants";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { CostCategoryType } from "@framework/entities";
 
 export default (mod?: Partial<CostCategoryDto>): CostCategoryDto => {
   const template: CostCategoryDto = {

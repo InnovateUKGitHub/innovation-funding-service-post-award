@@ -1,4 +1,4 @@
-import { Option, ProjectRole } from "@framework/dtos";
+import { Option } from "@framework/dtos";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import {
   PCRSpendProfileAcademicCostDto,
@@ -13,8 +13,8 @@ import {
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
-import { CostCategoryType, PcrSpendProfileEntity } from "@framework/entities";
-import { Authorisation, IContext, PCRSpendProfileOverheadRate } from "@framework/types";
+import { PcrSpendProfileEntity } from "@framework/entities";
+import { Authorisation, CostCategoryType, IContext, PCRSpendProfileOverheadRate, ProjectRole } from "@framework/types";
 import { isNumber, roundCurrency } from "@framework/util";
 import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
@@ -217,7 +217,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     }
   }
 
-  protected async Run(context: IContext): Promise<boolean> {
+  protected async run(context: IContext): Promise<boolean> {
     if (this.pcrItemId !== this.spendProfileDto.pcrItemId) {
       throw new BadRequestError();
     }

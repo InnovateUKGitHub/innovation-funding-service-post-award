@@ -8,7 +8,7 @@ import { Content } from "@content/content";
 import { Guide } from "@ui/componentsGuide/guide";
 import { PageTitleState } from "@ui/redux/reducers/pageTitleReducer";
 import * as colour from "@ui/styles/colours";
-import { Configuration } from "./features/common";
+import { configuration } from "./features/common";
 
 export function componentGuideRender(req: Request, res: Response) {
   const exampleTitle: PageTitleState = {
@@ -41,10 +41,10 @@ const renderGuide = (html: string) => {
             <meta charset="utf-8" />
             <title>GOV.UK - Innovation Funding Service</title>
             <meta name="viewport" content="width=device-width, initial-scale=1">
-            <meta name="theme-color" content="${colour.GOVUK_COLOUR_BLACK}" />
+            <meta name="theme-color" content="${colour.govukColourBlack}" />
 
             <link rel="shortcut icon" href="/assets/images/favicon.ico" type="image/x-icon" />
-            <link rel="mask-icon" href="/assets/images/govuk-mask-icon.svg" color="${colour.GOVUK_TEXT_COLOUR}">
+            <link rel="mask-icon" href="/assets/images/govuk-mask-icon.svg" color="${colour.govukTextColour}">
             <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/govuk-apple-touch-icon-180x180.png">
             <link rel="apple-touch-icon" sizes="167x167" href="/assets/images/govuk-apple-touch-icon-167x167.png">
             <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/govuk-apple-touch-icon-152x152.png">
@@ -59,8 +59,8 @@ const renderGuide = (html: string) => {
             <link href="/govuk-frontend-ie8-3.0.0.min.css" rel="stylesheet" />
             <![endif]-->
 
-            <link href="/govuk-print.css?build=${Configuration.build}" rel="stylesheet" media="print"/>
-            <link href="/govuk-print-overrides.css?build=${Configuration.build}" rel="stylesheet" media="print"/>
+            <link href="/govuk-print.css?build=${configuration.build}" rel="stylesheet" media="print"/>
+            <link href="/govuk-print-overrides.css?build=${configuration.build}" rel="stylesheet" media="print"/>
 
             <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
         </head>
@@ -76,8 +76,8 @@ const renderGuide = (html: string) => {
             <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
             <div id="root">${html}</div>
             <script src="/govuk-frontend-3.0.0.min.js"></script>
-            <script src="/build/vendor.js?build=${Configuration.build}"></script>
-            <script src="/build/componentsGuide.js?build=${Configuration.build}"></script>
+            <script src="/build/vendor.js?build=${configuration.build}"></script>
+            <script src="/build/componentsGuide.js?build=${configuration.build}"></script>
         </body>
     </html>
     `;

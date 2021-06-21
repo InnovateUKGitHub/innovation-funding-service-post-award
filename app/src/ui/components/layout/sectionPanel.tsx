@@ -9,7 +9,7 @@ interface Props {
 export const SectionPanel: React.FunctionComponent<Props> = (props) => {
     const { qa, title, children } = props;
     const style = {
-        border: `1px solid ${colour.GOVUK_BORDER_COLOUR}`
+        border: `1px solid ${colour.govukBorderColour}`
     };
     return (
         <div className="govuk-!-padding-3" data-qa={qa} style={style} >

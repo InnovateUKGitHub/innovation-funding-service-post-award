@@ -1,5 +1,5 @@
+import { PermissionGroupIdenfifier } from "@framework/constants";
 import { SalesforcePermissionGroupMapper } from "@server/repositories/mappers/permissionGroupMapper";
-import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
 
 describe("SalesforcePermissionGroupMapper", () => {
   it("Maps id correctly", () => {

@@ -4,7 +4,7 @@ import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { SuspendProjectDetails } from "./suspendProjectDetails";
 import { SuspendProjectSummary } from "./suspendProjectSummary";
 
-export type suspendProjectSteps = "details";
+export type SuspendProjectSteps = "details";
 
 export const suspendProjectWorkflow: IPCRWorkflow<PCRItemForProjectSuspensionDto, PCRProjectSuspensionItemDtoValidator> = {
   steps:[

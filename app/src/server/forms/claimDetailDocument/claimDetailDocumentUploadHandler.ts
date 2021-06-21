@@ -1,7 +1,7 @@
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { Configuration } from "@server/features/common";
+import { configuration } from "@server/features/common";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IFileWrapper } from "@framework/types";
@@ -34,6 +34,6 @@ export class ClaimDetailDocumentUploadHandler extends MultipleFileFormHandlerBas
   }
 
   protected createValidationResult(params: ClaimDetailDocumentsPageParams, dto: MultipleDocumentUploadDto) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration.options, true, true, null);
+    return new MultipleDocumentUpdloadDtoValidator(dto, configuration.options, true, true, null);
   }
 }

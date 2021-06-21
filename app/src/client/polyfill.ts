@@ -2,7 +2,7 @@
  * handle polyfilling time-zones if required.
  * don't render react app until we're sure polyfill is done or unnecesssary
  */
-export const Polyfill = () => {
+export const getPolyfills = () => {
   return new Promise<void>(resolve => {
     try {
       const timeZone = "Europe/London";

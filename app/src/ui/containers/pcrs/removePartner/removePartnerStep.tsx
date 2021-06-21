@@ -1,9 +1,10 @@
 import * as ACC from "@ui/components";
 import { PartnerDto, PCRItemForPartnerWithdrawalDto } from "@framework/dtos";
-import { EditorStatus, StoresConsumer } from "@ui/redux";
+import { StoresConsumer } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
 import { PartnerName } from "@ui/components";
+import { EditorStatus } from "@ui/constants/enums";
 
 interface InnerProps {
   partners: PartnerDto[];

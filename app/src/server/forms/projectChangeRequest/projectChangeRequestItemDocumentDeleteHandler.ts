@@ -1,5 +1,5 @@
 import { IContext, ILinkInfo } from "@framework/types";
-import { Configuration } from "@server/features/common";
+import { configuration } from "@server/features/common";
 import { DeleteProjectChangeRequestDocumentOrItemDocument } from "@server/features/documents/deleteProjectChangeRequestDocumentOrItemDocument";
 import { IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import {
@@ -24,7 +24,7 @@ export class ProjectChangeRequestItemDocumentDeleteHandler extends StandardFormH
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: Document) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration.options, false, false, null);
+    return new MultipleDocumentUpdloadDtoValidator(dto, configuration.options, false, false, null);
   }
 
   protected getStoreKey(params: ProjectChangeRequestPrepareItemParams) {

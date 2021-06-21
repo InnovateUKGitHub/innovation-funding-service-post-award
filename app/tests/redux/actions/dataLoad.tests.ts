@@ -1,6 +1,6 @@
 
+import { LoadingStatus } from "@framework/constants";
 import { conditionalLoad, dataLoadAction } from "../../../src/ui/redux/actions";
-import { LoadingStatus } from "../../../src/shared/pending";
 
 describe("dataLoadAction", () => {
   test("action type is DATA_LOAD", () => {

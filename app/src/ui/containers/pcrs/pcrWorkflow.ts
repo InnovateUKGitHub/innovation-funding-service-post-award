@@ -1,9 +1,10 @@
 import React from "react";
 import { Result, Results } from "@ui/validation";
 import { PCRDto, PCRItemDto, PCRItemTypeDto, ProjectDto } from "@framework/dtos";
-import { EditorStatus, IEditorStore } from "@ui/redux";
+import { IEditorStore } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { ILinkInfo, PCRItemType } from "@framework/types";
+import { EditorStatus } from "@ui/constants/enums";
 import { timeExtensionItemWorkflow } from "@ui/containers/pcrs/timeExtension/timeExtensionWorkflow";
 import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
 import { removePartnerWorkflow } from "@ui/containers/pcrs/removePartner";

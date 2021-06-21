@@ -1,5 +1,5 @@
 import { IContext, ILinkInfo, PCRItemForPartnerAdditionDto, PCRParticipantSize, ProjectDto, ProjectRole } from "@framework/types";
-import { BadRequestError, Configuration } from "@server/features/common";
+import { BadRequestError, configuration } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
@@ -7,16 +7,15 @@ import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams, ProjectChan
 import { PCRDtoValidator } from "@ui/validators";
 import { DateTime } from "luxon";
 import * as Dtos from "@framework/dtos";
-import { getPCROrganisationType, PCRItemStatus, PCRItemType, PCROrganisationType } from "@framework/constants";
+import { CostCategoryType, getPCROrganisationType, PCRItemStatus, PCRItemType, PCROrganisationType } from "@framework/constants";
 import { accountNameChangeStepNames } from "@ui/containers/pcrs/nameChange/accountNameChangeWorkflow";
-import { suspendProjectSteps } from "@ui/containers/pcrs/suspendProject/workflow";
+import { SuspendProjectSteps } from "@ui/containers/pcrs/suspendProject/workflow";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { removePartnerStepNames } from "@ui/containers/pcrs/removePartner";
 import { scopeChangeStepNames } from "@ui/containers/pcrs/scopeChange/scopeChangeWorkflow";
-import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
+import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { parseNumber } from "@framework/util";
-import { CostCategoryType } from "@framework/entities";
 import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
@@ -50,7 +49,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
         this.updateScopeChange(item, body, stepName as scopeChangeStepNames);
         break;
       case PCRItemType.ProjectSuspension:
-        this.updateProjectSuspension(item, body, stepName as suspendProjectSteps);
+        this.updateProjectSuspension(item, body, stepName as SuspendProjectSteps);
         break;
       case PCRItemType.AccountNameChange:
         this.updateNameChange(item, body, stepName as accountNameChangeStepNames);
@@ -59,7 +58,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
         this.updatePartnerWithdrawal(item, body, stepName as removePartnerStepNames);
         break;
       case PCRItemType.PartnerAddition:
-        this.updatePartnerAddition(projectDto, costCategories, item, body, stepName as addPartnerStepNames);
+        this.updatePartnerAddition(projectDto, costCategories, item, body, stepName as AddPartnerStepNames);
         break;
       case PCRItemType.MultiplePartnerFinancialVirement:
         this.updateMultiplePartnerFinancialVirement(item, body, stepName);
@@ -72,7 +71,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     return dto;
   }
 
-  private updateProjectSuspension(item: Dtos.PCRItemForProjectSuspensionDto, body: IFormBody, stepName: suspendProjectSteps) {
+  private updateProjectSuspension(item: Dtos.PCRItemForProjectSuspensionDto, body: IFormBody, stepName: SuspendProjectSteps) {
     if (stepName === "details") {
       if (body.suspensionStartDate_month || body.suspensionStartDate_year) {
         const suspensionStartDate = DateTime.fromFormat(`${body.suspensionStartDate_month}/${body.suspensionStartDate_year}`, "M/yyyy").startOf("month").startOf("day");
@@ -151,7 +150,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     }
   }
 
-  private updatePartnerAddition(project: ProjectDto, costCategories: CostCategoryDto[], item: PCRItemForPartnerAdditionDto, body: IFormBody, stepName: addPartnerStepNames | null) {
+  private updatePartnerAddition(project: ProjectDto, costCategories: CostCategoryDto[], item: PCRItemForPartnerAdditionDto, body: IFormBody, stepName: AddPartnerStepNames | null) {
     if (stepName === "roleAndOrganisationStep") {
       item.projectRole = parseInt(body.projectRole, 10);
       item.partnerType = parseInt(body.partnerType, 10);
@@ -256,6 +255,6 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: Dtos.PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, Configuration.features, dto);
+    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, configuration.features, dto);
   }
 }

@@ -1,4 +1,5 @@
-import { BadRequestError, Configuration, ConfigurationError } from "@server/features/common";
+/* eslint-disable @typescript-eslint/naming-convention */
+import { BadRequestError, configuration, ConfigurationError } from "@server/features/common";
 import { CompanyEntity } from "@framework/entities/company";
 
 interface ICompany {
@@ -26,11 +27,11 @@ export interface ICompaniesHouse {
 export class CompaniesHouse implements ICompaniesHouse {
 
   private getConnection() {
-    if (!Configuration.sil.username || !Configuration.sil.password || !Configuration.sil.companiesHouseSearchUrl) {
+    if (!configuration.sil.username || !configuration.sil.password || !configuration.sil.companiesHouseSearchUrl) {
       throw new ConfigurationError("Companies house access not configured");
     }
-    const url = Configuration.sil.companiesHouseSearchUrl;
-    const auth = Buffer.from(`${Configuration.sil.username}:${Configuration.sil.password}`).toString("base64");
+    const url = configuration.sil.companiesHouseSearchUrl;
+    const auth = Buffer.from(`${configuration.sil.username}:${configuration.sil.password}`).toString("base64");
     return {url, auth};
   }
 

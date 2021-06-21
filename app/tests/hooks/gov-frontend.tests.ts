@@ -15,7 +15,7 @@ describe("useGovFrontend()", () => {
 
   const stubElement = document.createElement("div");
 
-  Object.assign(window, { GOVUKFrontend: subGDSLibrary });
+  Object.assign(window, { govukFrontend: subGDSLibrary });
 
   beforeEach(jest.clearAllMocks);
 

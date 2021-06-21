@@ -1,9 +1,9 @@
 import * as ACC from "@ui/components";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { EditorStatus } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { Content } from "@ui/components";
+import { EditorStatus } from "@ui/constants/enums";
 
 export const AwardRateStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => {
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();

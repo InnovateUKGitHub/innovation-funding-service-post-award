@@ -3,7 +3,6 @@ import { UpdateForecastDetailsCommand } from "@server/features/forecastDetails";
 import { BadRequestError, ValidationError } from "@server/features/common/appError";
 import { ClaimFrequency, ClaimStatus, ForecastDetailsDTO } from "@framework/types";
 import { ISalesforceProfileDetails } from "@server/repositories";
-import * as Repositories from "@server/repositories";
 import { TestContext } from "../../testContextProvider";
 
 const mapProfileValue = (item: ISalesforceProfileDetails, value?: number): ForecastDetailsDTO => {
@@ -18,35 +17,6 @@ const mapProfileValue = (item: ISalesforceProfileDetails, value?: number): Forec
 };
 
 describe("UpdateForecastDetailsCommand", () => {
-
-  function mapDtos(
-    projectStart: DateTime,
-  ): (
-    value: ISalesforceProfileDetails,
-    index: number,
-    array: ISalesforceProfileDetails[],
-  ) => { id: string; costCategoryId: string; periodId: number; periodStart: Date; periodEnd: Date; value: number } {
-    return (profileDetail, i) => ({
-      id: profileDetail.Id,
-      costCategoryId: profileDetail.Acc_CostCategory__c,
-      periodId: profileDetail.Acc_ProjectPeriodNumber__c,
-      periodStart: projectStart.plus({ months: i }).toJSDate(),
-      periodEnd: projectStart.plus({ months: i + 1, days: -1 }).toJSDate(),
-      value: profileDetail.Acc_LatestForecastCost__c,
-    });
-  }
-
-  function updateProject(
-    projectStart: DateTime,
-    projectEnd: DateTime,
-  ): ((item: Repositories.ISalesforceProject) => void) | undefined {
-    return x => {
-      x.Acc_StartDate__c = projectStart.toFormat("yyyy-MM-dd");
-      x.Acc_EndDate__c = projectEnd.toFormat("yyyy-MM-dd");
-      x.Acc_ClaimFrequency__c = ClaimFrequency[ClaimFrequency.Monthly];
-    };
-  }
-
   it("when id not set expect validation exception", async () => {
     const context = new TestContext();
 
@@ -420,7 +390,14 @@ describe("UpdateForecastDetailsCommand", () => {
     const profileDetail1 = context.testData.createProfileDetail(costCat, partner, 1, x => x.Acc_LatestForecastCost__c = 10);
     const profileDetail2 = context.testData.createProfileDetail(costCat, partner, 2, x => x.Acc_LatestForecastCost__c = 20);
 
-    const dtos = [profileDetail1, profileDetail2].map(mapDtos(projectStart));
+    const dtos = [profileDetail1, profileDetail2].map((profileDetail, i) => ({
+      id: profileDetail.Id,
+      costCategoryId: profileDetail.Acc_CostCategory__c,
+      periodId: profileDetail.Acc_ProjectPeriodNumber__c,
+      periodStart: projectStart.plus({ months: i }).toJSDate(),
+      periodEnd: projectStart.plus({ months: i + 1, days: -1 }).toJSDate(),
+      value: profileDetail.Acc_LatestForecastCost__c
+    }));
 
     dtos[0].value++;
 
@@ -436,7 +413,11 @@ describe("UpdateForecastDetailsCommand", () => {
     const projectStart = DateTime.local().set({ day: 1 });
     const projectEnd = projectStart.plus({ months: 2 }).minus({ days: 1 });
 
-    const project = context.testData.createProject(updateProject(projectStart, projectEnd));
+    const project = context.testData.createProject(x => {
+      x.Acc_StartDate__c = projectStart.toFormat("yyyy-MM-dd");
+      x.Acc_EndDate__c = projectEnd.toFormat("yyyy-MM-dd");
+      x.Acc_ClaimFrequency__c = ClaimFrequency[ClaimFrequency.Monthly];
+    });
 
     const partner = context.testData.createPartner(project);
     const costCat = context.testData.createCostCategory();
@@ -446,7 +427,14 @@ describe("UpdateForecastDetailsCommand", () => {
     const profileDetail1 = context.testData.createProfileDetail(costCat, partner, 1, x => x.Acc_LatestForecastCost__c = 10);
     const profileDetail2 = context.testData.createProfileDetail(costCat, partner, 2, x => x.Acc_LatestForecastCost__c = 20);
 
-    const dtos: ForecastDetailsDTO[] = [profileDetail1, profileDetail2].map(mapDtos(projectStart));
+    const dtos: ForecastDetailsDTO[] = [profileDetail1, profileDetail2].map((profileDetail, i) => ({
+      id: profileDetail.Id,
+      costCategoryId: profileDetail.Acc_CostCategory__c,
+      periodId: profileDetail.Acc_ProjectPeriodNumber__c,
+      periodStart: projectStart.plus({ months: i }).toJSDate(),
+      periodEnd: projectStart.plus({ months: i + 1, days: -1 }).toJSDate(),
+      value: profileDetail.Acc_LatestForecastCost__c
+    }));
 
     dtos[1].value++;
 
@@ -462,7 +450,11 @@ describe("UpdateForecastDetailsCommand", () => {
     const projectStart = DateTime.local().set({ day: 1 });
     const projectEnd = projectStart.plus({ months: 2 }).minus({ days: 1 });
 
-    const project = context.testData.createProject(updateProject(projectStart, projectEnd));
+    const project = context.testData.createProject(x => {
+      x.Acc_StartDate__c = projectStart.toFormat("yyyy-MM-dd");
+      x.Acc_EndDate__c = projectEnd.toFormat("yyyy-MM-dd");
+      x.Acc_ClaimFrequency__c = ClaimFrequency[ClaimFrequency.Monthly];
+    });
 
     const partner = context.testData.createPartner(project);
     const costCat = context.testData.createCostCategory();
@@ -472,7 +464,14 @@ describe("UpdateForecastDetailsCommand", () => {
     const profileDetail1 = context.testData.createProfileDetail(costCat, partner, 1, x => x.Acc_LatestForecastCost__c = 100);
     const profileDetail2 = context.testData.createProfileDetail(costCat, partner, 2, x => x.Acc_LatestForecastCost__c = 0);
 
-    const dtos: ForecastDetailsDTO[] = [profileDetail1, profileDetail2].map(mapDtos(projectStart));
+    const dtos: ForecastDetailsDTO[] = [profileDetail1, profileDetail2].map((profileDetail, i) => ({
+      id: profileDetail.Id,
+      costCategoryId: profileDetail.Acc_CostCategory__c,
+      periodId: profileDetail.Acc_ProjectPeriodNumber__c,
+      periodStart: projectStart.plus({ months: i }).toJSDate(),
+      periodEnd: projectStart.plus({ months: i + 1, days: -1 }).toJSDate(),
+      value: profileDetail.Acc_LatestForecastCost__c
+    }));
 
     dtos[1].value++;
 

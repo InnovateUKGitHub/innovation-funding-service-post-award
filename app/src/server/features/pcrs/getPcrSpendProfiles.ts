@@ -1,7 +1,7 @@
 /* eslint-disable sonarjs/no-identical-functions */
 import { QueryBase } from "@server/features/common";
-import { IContext, PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/types";
-import { CostCategoryType, PcrSpendProfileEntity } from "@framework/entities";
+import { CostCategoryType, IContext, PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/types";
+import { PcrSpendProfileEntity } from "@framework/entities";
 import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { isNumber } from "@framework/util";
@@ -23,7 +23,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     super();
   }
 
-  protected async Run(context: IContext): Promise<PcrSpendProfileDto> {
+  protected async run(context: IContext): Promise<PcrSpendProfileDto> {
     const spendProfiles = await context.repositories.pcrSpendProfile.getAllForPcr(this.pcrItemId);
     const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
     return {

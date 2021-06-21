@@ -1,6 +1,6 @@
-import { LogLevel } from "@framework/types/logLevel";
+import { LogLevel } from "@framework/constants";
 import { DateTime } from "luxon";
-import { Configuration } from "./config";
+import { configuration } from "./config";
 
 export interface ILogger {
   debug(message: string, ...params: any[]): void;
@@ -16,8 +16,8 @@ export class Logger implements ILogger {
 
   constructor(identifier?: string, logLevel?: LogLevel, pretty?: boolean) {
     this.identifier = identifier;
-    this.level = logLevel || Configuration.logLevel;
-    this.pretty = pretty !== undefined ? pretty : Configuration.prettyLogs;
+    this.level = logLevel || configuration.logLevel;
+    this.pretty = pretty !== undefined ? pretty : configuration.prettyLogs;
   }
 
   debug(message: string, ...params: any[]) {

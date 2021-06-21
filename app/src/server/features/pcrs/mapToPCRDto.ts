@@ -23,7 +23,7 @@ import {
   PCRProjectLocation,
   PCRProjectRole
 } from "@framework/constants";
-import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
+import { pcrRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
 import { isBoolean, isNumber } from "@framework/util";
 
 export const mapToPcrDto = (pcr: ProjectChangeRequestEntity, itemTypes: PCRItemTypeDto[]): PCRDto => ({
@@ -75,7 +75,7 @@ const mapItem = (pcr: ProjectChangeRequestItemEntity, itemType: PCRItemTypeDto) 
 
 const mapBaseItem = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType) => ({
   id: pcr.id,
-  guidance: PCRRecordTypeMetaValues.find(x => x.type === type)!.guidance,
+  guidance: pcrRecordTypeMetaValues.find(x => x.type === type)!.guidance,
   typeName,
   status: pcr.status,
   statusName: pcr.statusName,

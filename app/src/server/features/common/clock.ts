@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 
-export const SALESFORCE_DATE_FORMAT = "yyyy-MM-dd";
+export const salesforceDateFormat = "yyyy-MM-dd";
 
 export interface IClock {
   now(): Date;
@@ -21,7 +21,7 @@ export class Clock implements IClock {
 
   parseOptionalSalesforceDate(value: string| null): Date | null {
     if (!value) return null;
-    const result = DateTime.fromFormat(value, SALESFORCE_DATE_FORMAT).setZone("Europe/London");
+    const result = DateTime.fromFormat(value, salesforceDateFormat).setZone("Europe/London");
     if (!result.isValid) {
       throw new Error("Invalid Date: " + value);
     }
@@ -29,7 +29,7 @@ export class Clock implements IClock {
   }
 
   formatOptionalSalesforceDate(jsDate?: Date | null): string | null {
-    return jsDate ? DateTime.fromJSDate(jsDate).toFormat(SALESFORCE_DATE_FORMAT) : null;
+    return jsDate ? DateTime.fromJSDate(jsDate).toFormat(salesforceDateFormat) : null;
   }
 
   parseRequiredSalesforceDate(value: string): Date {

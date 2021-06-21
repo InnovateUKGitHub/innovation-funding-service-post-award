@@ -267,4 +267,4 @@ const ajaxPut = <T>(url: string, body: {}, opts?: RequestInit) => {
   return ajaxJson<T>(url, options);
 };
 
-export const ApiClient = clientApi;
+export const apiClient = clientApi;

@@ -11,7 +11,7 @@ export class GetForecastDetailQuery extends QueryBase<ForecastDetailsDTO> {
     super();
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const result = await context.repositories.profileDetails.getById(this.partnerId, this.periodId, this.costCategoryId);
 
     return result && mapLatestForecastDetail(context)(result) || {

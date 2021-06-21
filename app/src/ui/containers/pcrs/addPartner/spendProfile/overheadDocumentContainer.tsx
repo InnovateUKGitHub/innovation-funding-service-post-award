@@ -1,10 +1,10 @@
 import * as ACC from "@ui/components";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { PCRItemForPartnerAdditionDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { PCRItemForPartnerAdditionDto, ProjectDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { DocumentDescription } from "@framework/constants";
+import { DocumentDescription, ProjectRole } from "@framework/constants";
 import { Pending } from "@shared/pending";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";

@@ -9,7 +9,7 @@ export class GetAllForProjectQuery extends QueryBase<PartnerDto[]> {
         super();
     }
 
-    protected async Run(context: IContext) {
+    protected async run(context: IContext) {
         const results = await context.repositories.partners.getAllByProjectId(this.projectId);
         const roles = await context.runQuery(new GetAllProjectRolesForUser());
         const projectRoles = roles.forProject(this.projectId).getRoles();

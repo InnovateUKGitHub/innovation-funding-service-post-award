@@ -1,4 +1,4 @@
-import { SalesforceProjectRole } from "@server/repositories";
+import { SalesforceProjectRole } from "@server/constants/enums";
 import { ProjectsStore } from "@ui/redux/stores";
 import { TestContext } from "../../server/testContextProvider";
 

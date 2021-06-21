@@ -17,7 +17,7 @@ export class UploadClaimDetailDocumentCommand extends CommandMultipleDocumentBas
     super();
   }
 
-  protected LogMessage() {
+  protected logMessage() {
     return ["UploadClaimDetailDocumentCommand", this.claimDetailKey, this.documents && this.documents.files && this.documents.files.map(x => x.fileName)];
   }
 
@@ -25,7 +25,7 @@ export class UploadClaimDetailDocumentCommand extends CommandMultipleDocumentBas
     return auth.forPartner(this.claimDetailKey.projectId, this.claimDetailKey.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const claimDetail = await context.repositories.claimDetails.get(this.claimDetailKey);
 
     if (!claimDetail) {

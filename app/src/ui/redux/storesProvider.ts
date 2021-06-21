@@ -46,8 +46,9 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
 
 export type IStores = ReturnType<typeof createStores>;
 
-const StoresContext = createContext<IStores>(null as any);
+const storesContext = createContext<IStores>(null as any);
 
-export const StoresProvider = StoresContext.Provider;
-export const StoresConsumer = StoresContext.Consumer;
-export const useStores = () => useContext(StoresContext);
+/* eslint-disable @typescript-eslint/naming-convention */
+export const StoresProvider = storesContext.Provider;
+export const StoresConsumer = storesContext.Consumer;
+export const useStores = () => useContext(storesContext);

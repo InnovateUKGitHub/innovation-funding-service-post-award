@@ -15,7 +15,7 @@ export class UploadProjectDocumentCommand extends CommandMultipleDocumentBase<st
     super();
   }
 
-  protected LogMessage() {
+  protected logMessage() {
     return [this.constructor.name, { projectId: this.projectId }, this.documents && this.documents.files && this.documents.files.map(x => x.fileName)];
   }
 
@@ -23,7 +23,7 @@ export class UploadProjectDocumentCommand extends CommandMultipleDocumentBase<st
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const result = new MultipleDocumentUpdloadDtoValidator(this.documents, context.config.options, this.filesRequired, this.showValidationErrors, null);
 
     if (!result.isValid) {

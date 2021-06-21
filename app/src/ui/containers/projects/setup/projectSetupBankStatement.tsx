@@ -34,8 +34,8 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.documents, x.editor, x.documentsEditor)} />;
   }
   public renderContents(project: ProjectDto, documents: DocumentSummaryDto[], editor: IEditorStore<PartnerDto, PartnerDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>) {
-
     const Form = ACC.TypedForm<PartnerDto>();
+
     return (
       <ACC.Page
         backLink={
@@ -90,6 +90,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
 
   private renderDocumentsForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>): React.ReactNode {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
+
     return (
       <ACC.Section>
         <UploadForm.Form

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { CommandBase, ValidationError } from "@server/features/common";
 import { Authorisation, CostCategoryVirementDto, FinancialVirementDto, IContext, PartnerVirementsDto, ProjectRole } from "@framework/types";
 import { flatten } from "@framework/util/arrayHelpers";
@@ -19,7 +20,7 @@ export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager);
   }
 
-  protected async Run(context: IContext): Promise<boolean> {
+  protected async run(context: IContext): Promise<boolean> {
 
     const existingVirements = await context.repositories.financialVirements.getAllForPcr(this.pcrItemId);
 

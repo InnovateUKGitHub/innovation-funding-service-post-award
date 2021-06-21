@@ -1,6 +1,6 @@
 import { IContext } from "@framework/types/IContext";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { Configuration } from "@server/features/common";
+import { configuration } from "@server/features/common";
 import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
@@ -22,7 +22,7 @@ export class ClaimDocumentsDeleteHandler extends StandardFormHandlerBase<ClaimDo
     return Promise.resolve({ id: button.value, files: [] });
   }
   protected createValidationResult(params: ClaimDocumentsPageParams, dto: Document) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration.options, false, false, null);
+    return new MultipleDocumentUpdloadDtoValidator(dto, configuration.options, false, false, null);
   }
 
   protected getStoreKey(params: ClaimDocumentsPageParams) {

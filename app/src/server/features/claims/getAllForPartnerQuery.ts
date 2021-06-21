@@ -8,7 +8,7 @@ export class GetAllForPartnerQuery extends QueryBase<ClaimDto[]> {
         super();
     }
 
-    protected async Run(context: IContext) {
+    protected async run(context: IContext) {
         const claims = await context.repositories.claims.getAllByPartnerId(this.partnerId);
         const forecasts = await context.repositories.profileTotalPeriod.getAllByPartnerId(this.partnerId);
         const joined = claims.map(claim => ({ claim, forecast: forecasts.find(x => x.Acc_ProjectPeriodNumber__c === claim.Acc_ProjectPeriodNumber__c) }));

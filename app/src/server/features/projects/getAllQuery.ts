@@ -3,7 +3,7 @@ import { QueryBase } from "../common";
 import { GetAllProjectRolesForUser, mapToProjectDto } from "./";
 
 export class GetAllQuery extends QueryBase<ProjectDto[]> {
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const allRoles = await context.runQuery(new GetAllProjectRolesForUser());
     const items = await context.repositories.projects.getAll();
     return Promise.all (
@@ -16,7 +16,7 @@ export class GetAllQuery extends QueryBase<ProjectDto[]> {
     );
   }
 
-  protected LogMessage() {
+  protected logMessage() {
     return ["Projects.GetAllQuery"];
   }
 }

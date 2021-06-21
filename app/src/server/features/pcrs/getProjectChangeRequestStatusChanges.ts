@@ -15,7 +15,7 @@ export class GetProjectChangeRequestStatusChanges extends QueryBase<ProjectChang
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer);
   }
 
-  protected async Run(context: IContext): Promise<ProjectChangeRequestStatusChangeDto[]> {
+  protected async run(context: IContext): Promise<ProjectChangeRequestStatusChangeDto[]> {
     const statusChanges = await context.repositories.projectChangeRequestStatusChange.getStatusChanges(this.projectId, this.projectChangeRequestId);
     const statusLookup = await context.runQuery(new GetPcrStatusesQuery());
     const roles = await context.runQuery(new GetAllProjectRolesForUser());

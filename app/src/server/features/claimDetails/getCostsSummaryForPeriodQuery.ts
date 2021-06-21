@@ -16,7 +16,7 @@ export class GetCostsSummaryForPeriodQuery extends QueryBase<CostsSummaryForPeri
     || auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const partner = await context.repositories.partners.getById(this.partnerId);
     const allClaimDetails = await context.repositories.claimDetails.getAllByPartner(this.partnerId);
     const allForecastDetails = await context.repositories.profileDetails.getAllByPartner(this.partnerId);

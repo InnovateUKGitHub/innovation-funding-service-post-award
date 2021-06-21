@@ -1,4 +1,4 @@
-import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
+import { PermissionGroupIdenfifier } from "@framework/constants";
 
 export interface PermissionGroup {
   id: string;

@@ -1,5 +1,4 @@
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
-import { SalesforceProjectRole } from "@server/repositories";
 import {
   BankCheckStatus,
   BankDetailsTaskStatus,
@@ -10,6 +9,7 @@ import {
   ProjectRole,
   SpendProfileStatus,
 } from "@framework/types";
+import { SalesforceProjectRole } from "@server/constants/enums";
 import { TestContext } from "../../testContextProvider";
 
 describe("getAllForProjectQuery", () => {

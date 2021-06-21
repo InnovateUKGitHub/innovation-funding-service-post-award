@@ -6,7 +6,7 @@ import { QueryBase } from "@server/features/common";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 
-export class getAvailableItemTypesQuery extends QueryBase<Dtos.PCRItemTypeDto[]> {
+export class GetAvailableItemTypesQuery extends QueryBase<Dtos.PCRItemTypeDto[]> {
   constructor(private readonly projectId: string) {
     super();
   }
@@ -17,7 +17,7 @@ export class getAvailableItemTypesQuery extends QueryBase<Dtos.PCRItemTypeDto[]>
       .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager, ProjectRole.FinancialContact);
   }
 
-  protected async Run(context: IContext): Promise<Dtos.PCRItemTypeDto[]> {
+  protected async run(context: IContext): Promise<Dtos.PCRItemTypeDto[]> {
     const itemTypeDtos = await context.runQuery(new GetPCRItemTypesQuery());
 
     const projectPcrs = await context.runQuery(new GetAllPCRsQuery(this.projectId));

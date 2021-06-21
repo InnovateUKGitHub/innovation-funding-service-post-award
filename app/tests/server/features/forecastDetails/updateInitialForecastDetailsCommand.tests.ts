@@ -2,8 +2,8 @@ import { UpdateInitialForecastDetailsCommand } from "@server/features/forecastDe
 import { BadRequestError, ValidationError } from "@server/features/common/appError";
 import { ISalesforceProfileDetails } from "@server/repositories";
 import { GetByIdQuery } from "@server/features/partners";
-import { ForecastDetailsDTO, ProjectRole, SpendProfileStatus } from "@framework/dtos";
-import { Authorisation } from "@framework/types";
+import { ForecastDetailsDTO } from "@framework/dtos";
+import { Authorisation, ProjectRole, SpendProfileStatus } from "@framework/types";
 import { TestContext } from "../../testContextProvider";
 
 const mapProfileValue = (item: ISalesforceProfileDetails, value?: number): ForecastDetailsDTO => {

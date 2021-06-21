@@ -1,5 +1,6 @@
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import {
+  CostCategoryType,
   PCRItemForPartnerAdditionDto,
   PCRItemStatus,
   PCRItemType,
@@ -19,7 +20,6 @@ import {
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
-import { CostCategoryType } from "@framework/entities";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import {
   DeleteCapitalUsageCostFormComponent,

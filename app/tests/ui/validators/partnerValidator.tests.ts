@@ -1,6 +1,5 @@
 import { GetByIdQuery } from "@server/features/partners";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
-import { BankCheckStatus, BankDetailsTaskStatus, PartnerStatus, SpendProfileStatus } from "@framework/dtos";
 import {
   BankCheckStatusMapper,
   BankDetailsTaskStatusMapper,
@@ -9,7 +8,7 @@ import {
 } from "@server/features/partners/mapToPartnerDto";
 import { getAllEnumValues } from "@shared/enumHelper";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { DocumentDescription } from "@framework/constants";
+import { BankCheckStatus, BankDetailsTaskStatus, DocumentDescription, PartnerStatus, SpendProfileStatus } from "@framework/constants";
 import { TestContext } from "../../server/testContextProvider";
 
 describe("Partner Validator", () => {

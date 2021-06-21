@@ -1,11 +1,12 @@
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { EditorStatus, IEditorStore, useStores } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { FinancialVirementDtoValidator } from "@ui/validators";
 import { FinancialVirementDto, PartnerDto, ProjectDto } from "@framework/dtos";
 import { useContent } from "@ui/hooks";
 import { IRoutes } from "@ui/routing";
+import { EditorStatus } from "@ui/constants/enums";
 
 export function useEditPartnerLevelContent() {
   const { getContent } = useContent();

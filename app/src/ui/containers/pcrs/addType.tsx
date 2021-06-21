@@ -4,6 +4,7 @@ import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { IEditorStore, useStores } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
+import { ProjectRole } from "@framework/constants";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 export interface ProjectChangeRequestAddTypeParams {
@@ -170,5 +171,5 @@ export const ProjectChangeRequestAddTypeRoute = defineRoute({
     htmlTitle: "Add types",
     displayTitle: "Add types",
   }),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(Dtos.ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
 });

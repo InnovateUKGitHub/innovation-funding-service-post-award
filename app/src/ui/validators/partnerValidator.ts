@@ -1,7 +1,7 @@
-import { BankCheckStatus, BankDetailsTaskStatus, PartnerDto, PartnerStatus, PostcodeTaskStatus, SpendProfileStatus } from "@framework/dtos";
+import { PartnerDto } from "@framework/dtos";
 import { Result } from "@ui/validation";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { DocumentDescription } from "@framework/constants";
+import { BankCheckStatus, BankDetailsTaskStatus, DocumentDescription, PartnerStatus, PostcodeTaskStatus, SpendProfileStatus } from "@framework/constants";
 import { Results } from "../validation/results";
 import * as Validation from "./common";
 

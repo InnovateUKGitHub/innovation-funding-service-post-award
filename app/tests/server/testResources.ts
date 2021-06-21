@@ -71,7 +71,7 @@ class TestBankCheckService implements IBankCheckService {
   };
 
   private readonly passValidation = {
-    ValidationResult: {
+    validationResult: {
       checkPassed: true,
       iban: "123456",
       conditions: this.passConditions,
@@ -79,7 +79,7 @@ class TestBankCheckService implements IBankCheckService {
   };
 
   private readonly failValidation = {
-    ValidationResult: {
+    validationResult: {
       checkPassed: false,
       iban: null,
       conditions: this.failConditions,
@@ -87,7 +87,7 @@ class TestBankCheckService implements IBankCheckService {
   };
 
   private readonly passVerify = {
-    VerificationResult: {
+    verificationResult: {
       addressScore: 7 as Score,
       companyNameScore: 8 as Score,
       personalDetailsScore: 7 as Score,
@@ -97,7 +97,7 @@ class TestBankCheckService implements IBankCheckService {
   };
 
   private readonly failVerify = {
-    VerificationResult: {
+    verificationResult: {
       addressScore: 0 as Score,
       companyNameScore: 1 as Score,
       personalDetailsScore: 2 as Score,
@@ -106,7 +106,8 @@ class TestBankCheckService implements IBankCheckService {
     },
   };
 
-  private validateResult(sortcode: string) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private validateResult(sortcode: string, accountNumber: string) {
     if (sortcode === "111111") return Promise.resolve(this.failValidation);
 
     return Promise.resolve(this.passValidation);
@@ -118,6 +119,6 @@ class TestBankCheckService implements IBankCheckService {
     return Promise.resolve(this.passVerify);
   }
 
-  public validate = (sortcode: string) => this.validateResult(sortcode);
+  public validate = (sortcode: string, accountNumber: string) => this.validateResult(sortcode, accountNumber);
   public verify = (accountDetails: IVerifyBankCheckInputs) => this.verifyResult(accountDetails);
 }

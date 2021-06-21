@@ -1,12 +1,10 @@
-import React from "react";
-
 import * as ACC from "@ui/components";
-import { ClaimDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { ClaimDto, ProjectDto } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore, useStores } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { DocumentDescription } from "@framework/constants";
+import { DocumentDescription, ProjectRole } from "@framework/constants";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDescriptionDto, DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { getAuthRoles } from "@framework/types";

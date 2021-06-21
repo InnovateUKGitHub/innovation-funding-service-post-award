@@ -1,7 +1,8 @@
 import React, { Fragment } from "react";
-import { ErrorCode, IAppError } from "@framework/types/IAppError";
+import { IAppError } from "@framework/types/IAppError";
 import { useContent } from "@ui/hooks";
-import { LoadingStatus, Pending } from "../../shared/pending";
+import { ErrorCode, LoadingStatus } from "@framework/constants";
+import { Pending } from "../../shared/pending";
 import { ErrorSummary } from "./errorSummary";
 import { ErrorContainer, ErrorContainerProps } from "./errors";
 import { SimpleString } from "./renderers";

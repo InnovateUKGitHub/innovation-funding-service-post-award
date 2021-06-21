@@ -5,7 +5,7 @@ import { Result } from "../validation/result";
 import { Results } from "../validation/results";
 import * as Validation from "./common";
 
-const COMMENTS_LENGTH_MAX = 1000;
+const commentsLengthMax = 1000;
 
 export class ClaimDtoValidator extends Results<ClaimDto>  {
     constructor(
@@ -48,7 +48,7 @@ export class ClaimDtoValidator extends Results<ClaimDto>  {
 
     public comments = Validation.all(this,
       () => this.model.status === ClaimStatus.MO_QUERIED && this.originalStatus !== ClaimStatus.MO_QUERIED ? Validation.required(this, this.model.comments, "Comments are required if querying a claim") : Validation.valid(this),
-      () => Validation.maxLength(this, this.model.comments, COMMENTS_LENGTH_MAX, `Comments must be a maximum of ${COMMENTS_LENGTH_MAX} characters`)
+      () => Validation.maxLength(this, this.model.comments, commentsLengthMax, `Comments must be a maximum of ${commentsLengthMax} characters`)
     );
 
     public status: Result;

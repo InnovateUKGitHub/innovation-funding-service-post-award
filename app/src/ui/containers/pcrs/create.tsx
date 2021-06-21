@@ -7,6 +7,7 @@ import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks";
 import { IEditorStore, useStores } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
+import { ProjectRole } from "@framework/constants";
 
 export interface CreatePcrParams {
   projectId: string;
@@ -211,5 +212,5 @@ export const PCRCreateRoute = defineRoute({
   container: PCRCreateContainer,
   getParams: route => ({ projectId: route.params.projectId }),
   getTitle: ({ content }) => content.pcrCreate.title(),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(Dtos.ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager),
 });

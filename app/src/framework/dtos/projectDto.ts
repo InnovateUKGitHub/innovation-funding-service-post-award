@@ -1,14 +1,4 @@
-import { ClaimFrequency } from "./claimFrequency";
-
-export enum ProjectStatus {
-    Unknown = 0,
-    OfferLetterSent = 1,
-    Live = 2,
-    OnHold = 3,
-    FinalClaim = 4,
-    Closed = 5,
-    Terminated = 6
-}
+import { ClaimFrequency, ProjectRole, ProjectStatus } from "@framework/constants";
 
 export interface ProjectDto {
     id: string;
@@ -49,17 +39,4 @@ export interface ProjectDto {
     numberOfOpenClaims: number;
     durationInMonths: number;
     numberOfPeriods: number;
-}
-
-export enum ProjectRole {
-    Unknown = 0,
-    MonitoringOfficer = 1 << 0,
-    ProjectManager = 1 << 1,
-    FinancialContact = 1 << 2,
-}
-
-export enum TypeOfAid {
-    Unknown = 0,
-    StateAid = 10,
-    DeMinimisAid = 20,
 }

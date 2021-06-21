@@ -10,7 +10,7 @@ export class GetMonitoringReportAnsweredQuestions extends QueryBase<MonitoringRe
     super();
   }
 
-  public async Run(context: IContext): Promise<MonitoringReportQuestionDto[]> {
+  public async run(context: IContext): Promise<MonitoringReportQuestionDto[]> {
     return (await context.repositories.monitoringReportQuestions.getAll())
       .filter(q => this.questionIds.indexOf(q.Id) >= 0)
       .sort((a, b) => a.Acc_DisplayOrder__c - b.Acc_DisplayOrder__c)

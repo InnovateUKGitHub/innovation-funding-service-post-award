@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
 import { ISalesforceProfileDetails } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
@@ -24,7 +25,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const project = await context.runQuery(new GetProjectById(this.projectId));
     const existing = await context.runQuery(new GetAllForecastsForPartnerQuery(this.partnerId));
 

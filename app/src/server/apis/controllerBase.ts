@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* global Express */
 import mimeTypes from "mime-types";
 import multer from "multer";
@@ -6,7 +7,7 @@ import express, { Request, Response } from "express";
 import { IAppError, IFileWrapper, ISessionUser } from "@framework/types";
 import { NotFoundError } from "@server/features/common/appError";
 import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
-import { Configuration } from "@server/features/common";
+import { configuration } from "@server/features/common";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDto } from "@framework/dtos/documentDto";
 
@@ -94,7 +95,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
       return { ...p, documents };
     };
 
-    this.router.post(path, upload.array("attachment", Configuration.options.maxUploadFileCount), this.executeMethod(201, wrappedGetParams, run, false));
+    this.router.post(path, upload.array("attachment", configuration.options.maxUploadFileCount), this.executeMethod(201, wrappedGetParams, run, false));
   }
 
   protected putItem<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, TDto | null>) {

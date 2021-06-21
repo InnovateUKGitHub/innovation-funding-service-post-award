@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { ISalesforceMonitoringReportHeader, ISalesforceMonitoringReportResponse } from "@server/repositories";
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
 import { GetByIdQuery } from "@server/features/projects";
 import { MonitoringReportDtoValidator } from "@ui/validators";
-import { Authorisation, IContext } from "@framework/types";
-import { MonitoringReportDto, ProjectRole } from "@framework/dtos";
+import { Authorisation, IContext, ProjectRole } from "@framework/types";
+import { MonitoringReportDto } from "@framework/dtos";
 import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQuestions";
 
 export class CreateMonitoringReportCommand extends CommandBase<string> {
@@ -70,7 +71,7 @@ export class CreateMonitoringReportCommand extends CommandBase<string> {
     await context.repositories.monitoringReportResponse.insert(insertItems);
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
 
     if(this.monitoringReportDto.headerId) {
       throw new BadRequestError("Report has already been created");

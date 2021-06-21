@@ -1,4 +1,4 @@
-import { ApiClient } from "@ui/apiClient";
+import { apiClient } from "@ui/apiClient";
 import { Pending } from "@shared/pending";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -12,7 +12,7 @@ export class ClaimDetailDocumentsStore extends DocumentsStoreBase {
   }
 
   public getClaimDetailDocuments(projectId: string, partnerId: string, periodId: number, costCategoryId: string) {
-    return this.getData("documents", this.getKey(partnerId, periodId, costCategoryId), p => ApiClient.documents.getClaimDetailDocuments({ claimDetailKey: { projectId, partnerId, periodId, costCategoryId }, ...p }));
+    return this.getData("documents", this.getKey(partnerId, periodId, costCategoryId), p => apiClient.documents.getClaimDetailDocuments({ claimDetailKey: { projectId, partnerId, periodId, costCategoryId }, ...p }));
   }
 
   public getClaimDetailDocumentsEditor(projectId: string, partnerId: string, periodId: number, costCategoryId: string, init?: (dto: MultipleDocumentUploadDto) => void) {
@@ -26,7 +26,7 @@ export class ClaimDetailDocumentsStore extends DocumentsStoreBase {
       true,
       key,
       dto,
-      (p) => ApiClient.documents.uploadClaimDetailDocuments({ claimDetailKey: { projectId, partnerId, periodId, costCategoryId }, ...p }),
+      (p) => apiClient.documents.uploadClaimDetailDocuments({ claimDetailKey: { projectId, partnerId, periodId, costCategoryId }, ...p }),
       message,
       onComplete
     );
@@ -34,6 +34,6 @@ export class ClaimDetailDocumentsStore extends DocumentsStoreBase {
 
   public deleteClaimDetailDocumentsEditor(projectId: string, partnerId: string, periodId: number, costCategoryId: string, dto: MultipleDocumentUploadDto, document: DocumentSummaryDto, message?: string, onComplete?: () => void) {
     const key = this.getKey(partnerId, periodId, costCategoryId);
-    this.deleteEditor("multipleDocuments", key, dto, () => this.validateMultipleDocumentsDto(dto, false, true), (p) => ApiClient.documents.deleteClaimDetailDocument({ claimDetailKey: { projectId, partnerId, periodId, costCategoryId }, documentId: document.id, ...p }), () => this.afterUpdate(key, message, onComplete));
+    this.deleteEditor("multipleDocuments", key, dto, () => this.validateMultipleDocumentsDto(dto, false, true), (p) => apiClient.documents.deleteClaimDetailDocument({ claimDetailKey: { projectId, partnerId, periodId, costCategoryId }, documentId: document.id, ...p }), () => this.afterUpdate(key, message, onComplete));
   }
 }

@@ -1,6 +1,7 @@
-import { ApiClient } from "@ui/apiClient";
-import { LoadingStatus, Pending } from "@shared/pending";
+import { apiClient } from "@ui/apiClient";
+import { Pending } from "@shared/pending";
 import { NotFoundError } from "@server/features/common";
+import { LoadingStatus } from "@framework/constants";
 import { RootState } from "../reducers";
 import { RootActionsOrThunk } from "../actions/root";
 import { StoreBase } from "./storeBase";
@@ -36,7 +37,7 @@ export class CostCategoriesStore extends StoreBase {
   }
 
   public getAllUnfiltered() {
-    return this.getData("costCategories", "all", p => ApiClient.costCategories.getAll(p));
+    return this.getData("costCategories", "all", p => apiClient.costCategories.getAll(p));
   }
 
   /**
@@ -44,7 +45,7 @@ export class CostCategoriesStore extends StoreBase {
    */
   public getAllFiltered(partnerId: string) {
     return this.getData("costCategories", storeKeys.getCostCategoryKey(partnerId), p =>
-      ApiClient.costCategories.getAllFiltered({ ...p, partnerId }),
+      apiClient.costCategories.getAllFiltered({ ...p, partnerId }),
     );
   }
 

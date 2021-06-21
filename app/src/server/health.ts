@@ -1,6 +1,6 @@
 import express from "express";
 import { ErrorCode } from "@framework/types";
-import { Configuration } from "../server/features/common/config";
+import { configuration } from "../server/features/common/config";
 import { ILogger, Logger } from "../server/features/common/logger";
 import { salesforceConnectionWithToken } from "./repositories/salesforceConnection";
 import { CostCategoryRepository } from "./repositories";
@@ -15,9 +15,9 @@ type HealthCheckResult = "Success" | "Failed" | "Not Applicable";
 
 const checkSalesforce = (logger: ILogger) => {
   const getSalesforceConnection = () => salesforceConnectionWithToken({
-    clientId: Configuration.salesforce.clientId,
-    connectionUrl: Configuration.salesforce.connectionUrl,
-    currentUsername: Configuration.salesforce.serivceUsername
+    clientId: configuration.salesforce.clientId,
+    connectionUrl: configuration.salesforce.connectionUrl,
+    currentUsername: configuration.salesforce.serivceUsername
   });
 
   return new CostCategoryRepository(getSalesforceConnection, logger)
@@ -30,11 +30,11 @@ const checkSalesforce = (logger: ILogger) => {
 };
 
 const checkGoogleAnalytics = (logger: ILogger) => {
-  if (!Configuration.googleTagManagerCode) {
+  if (!configuration.googleTagManagerCode) {
     return Promise.resolve<HealthCheckResult>("Not Applicable");
   }
 
-  const url = `https://www.googletagmanager.com/ns.html?id=${Configuration.googleTagManagerCode}`;
+  const url = `https://www.googletagmanager.com/ns.html?id=${configuration.googleTagManagerCode}`;
   return fetch(url)
     .then<HealthCheckResult>((e) => {
       if (e.ok) {
@@ -85,7 +85,7 @@ router.get(`${endpoint}/details`, async (req, res) => {
 });
 
 // version endpoint
-router.get(`${endpoint}/version`, (req, res) => res.send(Configuration.build));
+router.get(`${endpoint}/version`, (req, res) => res.send(configuration.build));
 
 // general ok endpoint
 router.get(endpoint, (req, res) => res.send(true));

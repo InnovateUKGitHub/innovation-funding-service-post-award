@@ -21,7 +21,7 @@ type GDSModuleList =
 export type GDSModules = Record<GDSModuleList, GDSModule>;
 
 interface WindowWithGDSLoaded extends Window {
-  GOVUKFrontend: GDSModules;
+  govukFrontend: GDSModules;
 }
 
 export function useGovFrontend(module: keyof GDSModules) {
@@ -32,7 +32,7 @@ export function useGovFrontend(module: keyof GDSModules) {
 
   const setRef = useCallback(
     (node: HTMLElement | null) => {
-      const govFrontend = gdsWindow && gdsWindow.GOVUKFrontend;
+      const govFrontend = gdsWindow && gdsWindow.govukFrontend;
       if (govFrontend && node) {
         const gdsModule = new govFrontend[module](node);
 

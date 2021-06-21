@@ -1,5 +1,3 @@
-/* eslint-disable react/display-name */
-
 import { ILinkInfo, PCRItemStatus, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
@@ -186,6 +184,7 @@ const PCRReasoningWorkflowContainer = (props: ProjectChangeRequestPrepareReasoni
   </StoresConsumer>
 );
 
+/* eslint-disable react/display-name */
 export const PCRViewReasoningRoute = defineRoute<ProjectChangeRequestPrepareReasoningParams>({
   routeName: "pcrViewReasoning",
   routePath: "/projects/:projectId/pcrs/:pcrId/details/reasoning",

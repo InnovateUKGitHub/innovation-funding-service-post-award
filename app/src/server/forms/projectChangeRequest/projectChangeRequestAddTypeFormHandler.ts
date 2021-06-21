@@ -4,14 +4,14 @@ import {
   ProjectChangeRequestAddTypeRoute,
   ProjectChangeRequestPrepareRoute,
 } from "@ui/containers";
-import { PCRDto, PCRStandardItemDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { PCRDto, PCRStandardItemDto, ProjectDto } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
 import { PCRDtoValidator } from "@ui/validators";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
-import { PCRItemStatus } from "@framework/constants";
+import { PCRItemStatus, ProjectRole } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { Configuration } from "@server/features/common";
+import { configuration } from "@server/features/common";
 
 export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerBase<ProjectChangeRequestAddTypeParams, "pcr"> {
   constructor() {
@@ -48,6 +48,6 @@ export class ProjectChangeRequestAddTypeFormHandler extends StandardFormHandlerB
   }
 
   protected createValidationResult(params: ProjectChangeRequestAddTypeParams, dto: PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, Configuration.features, dto);
+    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, configuration.features, dto);
   }
 }

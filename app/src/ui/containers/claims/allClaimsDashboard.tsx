@@ -1,4 +1,4 @@
-import { ClaimDto, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/dtos";
+import { ClaimDto, PartnerDto, ProjectDto } from "@framework/dtos";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import * as Acc from "@ui/components";
 import { Pending } from "@shared/pending";
@@ -8,6 +8,7 @@ import { getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink"
 import { getPartnerName } from "@ui/components";
 import { projectCompetition } from "@ui/hooks";
 import { roundCurrency } from "@framework/util";
+import { ProjectRole, ProjectStatus } from "@framework/constants";
 
 export interface AllClaimsDashboardParams {
   projectId: string;

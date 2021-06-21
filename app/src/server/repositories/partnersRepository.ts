@@ -2,10 +2,6 @@ import { Partner } from "@framework/entities/partner";
 import { SalesforceRepositoryBaseWithMapping, Updatable } from "./salesforceRepositoryBase";
 import { SalesforcePartnerMapper } from "./mappers/partnerMapper";
 
-export enum SalesforceProjectRole {
-  ProjectLead = "Lead",
-}
-
 export interface ISalesforcePartner {
   Id: string;
   Acc_AccountId__r: {

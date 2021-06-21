@@ -7,7 +7,7 @@ export abstract class OptionsQueryBase<T extends (string | number)> extends Quer
     super();
   }
 
-  protected async Run(context: IContext): Promise<Option<T>[]> {
+  protected async run(context: IContext): Promise<Option<T>[]> {
     return context.caches.optionsLookup.fetchAsync(this.key, () => this.executeQuery(context));
   }
 

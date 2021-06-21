@@ -1,15 +1,8 @@
+import { LoadingStatus } from "@framework/constants";
+
 type MapPendings<T> = {
   [P in keyof T]: T[P] extends Pending<infer U> ? U : never;
 };
-
-export enum LoadingStatus {
-  Preload = 1, // State before a request is made to the server, may have partial data.
-  Loading = 2, // A request has been made to the server, waiting for data.
-  Done = 3,    // The server has responded, data ready to display.
-  Failed = 4,  // The server returned an error, data may be... in any state.
-  Stale = 5,   // The data is ready to display, but it is thought to be out of date.
-  Updated = 6  // The data has been updated and is upto date
-}
 
 /**
  * @class Pending

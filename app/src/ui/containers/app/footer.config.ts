@@ -122,6 +122,7 @@ export const useFooterExternalContent = (): ISupplementLinksOptions => {
  *
  * @deprecated This needs to be replaced with the direct usage of hook useFooterExternalContent()
  */
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export function FooterExternalContent({
   children,
 }: {

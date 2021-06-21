@@ -4,18 +4,10 @@ import {
   getProjectSection,
 } from "@ui/containers/projects/dashboard/dashboard.logic";
 import {
-  BankCheckStatus,
-  BankDetailsTaskStatus,
-  ClaimFrequency,
-  PartnerClaimStatus,
   PartnerDto,
-  PartnerStatus,
-  PostcodeTaskStatus,
   ProjectDto,
-  ProjectRole,
-  ProjectStatus,
-  SpendProfileStatus,
 } from "@framework/dtos";
+import { BankCheckStatus, BankDetailsTaskStatus, ClaimFrequency, PartnerClaimStatus, PartnerStatus, PostcodeTaskStatus, ProjectRole, ProjectStatus, SpendProfileStatus } from "@framework/constants";
 
 const validPartnerId = "stub-valid-id";
 

@@ -6,14 +6,13 @@ import {
   PCRItemForPartnerAdditionDto,
   PCRStandardItemDto,
   ProjectDto,
-  ProjectRole,
 } from "@framework/dtos";
 import { IContext, ILinkInfo, PCRItemType } from "@framework/types";
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
 import { PCRDtoValidator } from "@ui/validators";
-import { PCRItemStatus, PCRStatus } from "@framework/constants";
+import { PCRItemStatus, PCRStatus, ProjectRole } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { Configuration } from "@server/features/common";
+import { configuration } from "@server/features/common";
 
 export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBase<CreatePcrParams, "pcr"> {
   constructor() {
@@ -70,6 +69,6 @@ export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBa
   }
 
   protected createValidationResult(params: CreatePcrParams, dto: PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, Configuration.features, dto);
+    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, configuration.features, dto);
   }
 }

@@ -1,8 +1,7 @@
 import { Results } from "@ui/validation";
-import { ErrorCode } from "@framework/types";
+import { ErrorCode, LoadingStatus } from "@framework/types";
 import { DataLoadAction, EditorErrorAction, EditorSubmitAction, EditorSuccessAction } from "../../../src/ui/redux/actions/common";
 import { loadStatusReducer } from "../../../src/ui/redux/reducers/loadStatusReducer";
-import { LoadingStatus } from "../../../src/shared/pending";
 
 const createLoadDataAction = (status: LoadingStatus): DataLoadAction => {
     return {

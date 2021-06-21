@@ -1,6 +1,6 @@
 import { mount } from "enzyme";
 
-import { GOVUK_SECONDARY_TEXT_COLOUR } from "@ui/styles/colours";
+import { govukSecondaryTextColour } from "@ui/styles/colours";
 import { TextHint, TextHintReactProps } from "../../../src/ui/components/layout/textHint";
 import { findByQa } from "../helpers/find-by-qa";
 
@@ -25,7 +25,7 @@ describe("<TextHint />", () => {
     const { textElement } = setup("coloured-text");
     const inlineStyles = textElement.prop("style")!;
 
-    expect(inlineStyles.color).toEqual(GOVUK_SECONDARY_TEXT_COLOUR);
+    expect(inlineStyles.color).toEqual(govukSecondaryTextColour);
   });
 
   it("should render with the correct text", () => {

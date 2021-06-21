@@ -9,11 +9,12 @@ export interface IAccordionContext {
   subscribe: () => void;
 }
 
-const AccordionContext = createContext<IAccordionContext>({
+const accordionContext = createContext<IAccordionContext>({
   forceIsOpen: null,
   toggle: noop,
   subscribe: noop,
 });
 
-export const AccordionProvider = AccordionContext.Provider;
-export const useAccordion = () => useContext<IAccordionContext>(AccordionContext);
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export const AccordionProvider = accordionContext.Provider;
+export const useAccordion = () => useContext<IAccordionContext>(accordionContext);

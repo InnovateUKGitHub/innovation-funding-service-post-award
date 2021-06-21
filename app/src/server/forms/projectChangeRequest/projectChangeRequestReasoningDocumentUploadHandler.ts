@@ -1,5 +1,5 @@
 import { IContext, IFileWrapper, ILinkInfo } from "@framework/types";
-import { Configuration } from "@server/features/common";
+import { configuration } from "@server/features/common";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/forms/formHandlerBase";
 import { PCRPrepareReasoningRoute, ProjectChangeRequestPrepareReasoningParams } from "@ui/containers";
@@ -39,6 +39,6 @@ export class ProjectChangeRequestReasoningDocumentUploadHandler extends Multiple
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareReasoningParams, dto: MultipleDocumentUploadDto, button: IFormButton) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration.options, button.name === "uploadFile", true, null);
+    return new MultipleDocumentUpdloadDtoValidator(dto, configuration.options, button.name === "uploadFile", true, null);
   }
 }

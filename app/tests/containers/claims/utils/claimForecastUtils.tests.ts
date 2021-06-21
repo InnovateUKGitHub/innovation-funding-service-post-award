@@ -13,7 +13,7 @@ describe("claim forecast utils", () => {
       return forecastDetails;
     }
 
-    const STUB_END_PERIOD = 10;
+    const stubEndPeriod = 10;
     const multipleForecastDetails = createIncrementingPeriodData(10);
 
     const singleForecastDetail = multipleForecastDetails.slice(0, 1);
@@ -30,7 +30,7 @@ describe("claim forecast utils", () => {
           ${"with two entries"}  | ${twoForecastDetails}   | ${2}
           ${"with five entries"} | ${fiveForecastDetails}  | ${5}
         `("$name", ({ forecastDetails, expected }) => {
-          const futureForecasts = getArrayFromPeriod(forecastDetails, 1, STUB_END_PERIOD);
+          const futureForecasts = getArrayFromPeriod(forecastDetails, 1, stubEndPeriod);
           expect(futureForecasts).toHaveLength(expected);
         });
       });
@@ -43,7 +43,7 @@ describe("claim forecast utils", () => {
           ${"with two entries"}  | ${twoForecastDetails}   | ${1}
           ${"with five entries"} | ${fiveForecastDetails}  | ${4}
         `("$name", ({ forecastDetails, expected }) => {
-          const futureForecasts = getArrayFromPeriod(forecastDetails, 2, STUB_END_PERIOD);
+          const futureForecasts = getArrayFromPeriod(forecastDetails, 2, stubEndPeriod);
           expect(futureForecasts).toHaveLength(expected);
         });
       });
@@ -56,7 +56,7 @@ describe("claim forecast utils", () => {
           ${"with three entries"} | ${threeForecastDetails} | ${1}
           ${"with five entries"}  | ${fiveForecastDetails}  | ${3}
         `("$name", ({ forecastDetails, expected }) => {
-          const futureForecasts = getArrayFromPeriod(forecastDetails, 3, STUB_END_PERIOD);
+          const futureForecasts = getArrayFromPeriod(forecastDetails, 3, stubEndPeriod);
           expect(futureForecasts).toHaveLength(expected);
         });
       });
@@ -64,13 +64,13 @@ describe("claim forecast utils", () => {
 
     describe("returns correct payload", () => {
       test("should return no forecasts if inbound array is empty", () => {
-        const forecasts = getArrayFromPeriod([], 1, STUB_END_PERIOD);
+        const forecasts = getArrayFromPeriod([], 1, stubEndPeriod);
 
         expect(forecasts).toHaveLength(0);
       });
 
       test("should return only future forecast data", () => {
-        const forecasts = getArrayFromPeriod(fiveForecastDetails, 4, STUB_END_PERIOD);
+        const forecasts = getArrayFromPeriod(fiveForecastDetails, 4, stubEndPeriod);
 
         forecasts.forEach(x => {
           expect(x.periodId).toBeGreaterThanOrEqual(4);
