@@ -3,6 +3,7 @@ import cx from "classnames";
 
 export type GdsHeadingClasses = `govuk-heading-${"xl" | "l" | "m" | "s"}`;
 export type GdsHeadingTypes = `h${"1" | "2" | "3" | "4"}`;
+type HeadingAvailableElements = GdsHeadingTypes | "p";
 
 const gdsHeadingClasses: Record<GdsHeadingTypes, GdsHeadingClasses> = {
   h1: "govuk-heading-xl",
@@ -12,17 +13,18 @@ const gdsHeadingClasses: Record<GdsHeadingTypes, GdsHeadingClasses> = {
 };
 
 export interface HeadingBaseProps extends React.HTMLProps<HTMLHeadingElement> {
-  children: string | React.ReactElement;
+  children: string | React.ReactNode;
   className?: string;
   qa?: string;
+  as?: HeadingAvailableElements;
 }
 
 export interface HeadingProps extends HeadingBaseProps {
   type: GdsHeadingTypes;
 }
 
-export function Heading({ type, className, qa, ...props }: HeadingProps) {
-  const Element = type;
+export function Heading({ type, as, className, qa, ...props }: HeadingProps) {
+  const Element = as || type;
   const gdsHeadingClassName = gdsHeadingClasses[type];
 
   return <Element {...props} data-qa={qa} className={cx(gdsHeadingClassName, className)} />;

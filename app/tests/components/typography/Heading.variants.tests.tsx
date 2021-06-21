@@ -25,7 +25,9 @@ describe("Heading variants", () => {
   });
 
   describe("@renders", () => {
-    test.each(headingVariants)("with %s", variantKey => {
+    const testVariants = test.each(headingVariants);
+
+    testVariants("with %s", variantKey => {
       // Note: variant ("h1") => uppercase ("H1") => and cast as module for object look-up
       const moduleKey = variantKey.toUpperCase() as Uppercase<typeof variantKey>;
       const Variant = variantModule[moduleKey];
@@ -40,6 +42,20 @@ describe("Heading variants", () => {
 
       expect(expectedElement).toBeInTheDocument();
       expect(expectedElement).toHaveClass(expectVariants[variantKey]);
+    });
+
+    describe("when rendered 'as' another element", () => {
+      testVariants("with %s", variantKey => {
+        const moduleKey = variantKey.toUpperCase() as Uppercase<typeof variantKey>;
+        const HeadingVariant = variantModule[moduleKey];
+
+        const { container } = render(<HeadingVariant as="p">Look ma! I'm a Variant!</HeadingVariant>);
+
+        const expectedElement = container.querySelector("p");
+
+        expect(expectedElement).toBeInTheDocument();
+        expect(expectedElement).toHaveClass(expectVariants[variantKey]);
+      });
     });
   });
 });

@@ -61,5 +61,13 @@ describe("<Heading />", () => {
 
       expect(targetElement).toBeInTheDocument();
     });
+
+    test("with as", () => {
+      const { container } = setup({ as: "h2" });
+
+      const targetElement = container.querySelector("h2");
+
+      expect(targetElement).toBeInTheDocument();
+    });
   });
 });
