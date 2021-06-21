@@ -30,7 +30,7 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
   }
 
-  protected async Run(context: IContext): Promise<FinancialVirementDto> {
+  protected async run(context: IContext): Promise<FinancialVirementDto> {
     const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
 
     const data = await context.repositories.financialVirements.getAllForPcr(this.pcrItemId);

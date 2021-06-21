@@ -1,5 +1,4 @@
-import { CostCategoryType } from "@framework/entities";
-import { PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/types";
+import { CostCategoryType, PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/types";
 
 export interface PcrSpendProfileDto {
   costs: PCRSpendProfileCostDto[];

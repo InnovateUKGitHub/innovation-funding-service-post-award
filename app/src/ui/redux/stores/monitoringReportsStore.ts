@@ -1,8 +1,8 @@
 import { scrollToTheTopSmoothly } from "@framework/util";
-import { ApiClient } from "@ui/apiClient";
-import { LoadingStatus, Pending } from "@shared/pending";
+import { apiClient } from "@ui/apiClient";
+import { Pending } from "@shared/pending";
 import { MonitoringReportDto, MonitoringReportSummaryDto } from "@framework/dtos";
-import { MonitoringReportStatus } from "@framework/types";
+import { LoadingStatus, MonitoringReportStatus } from "@framework/types";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { dataLoadAction, messageSuccess } from "../actions";
@@ -23,7 +23,7 @@ export class MonitoringReportsStore extends StoreBase {
     return this.getData(
       "monitoringReportStatusChanges",
       this.getKey(projectId, reportId),
-      (p) => ApiClient.monitoringReports.getStatusChanges({ projectId, reportId, ...p })
+      (p) => apiClient.monitoringReports.getStatusChanges({ projectId, reportId, ...p })
     );
   }
 
@@ -31,7 +31,7 @@ export class MonitoringReportsStore extends StoreBase {
     return this.getData(
       "monitoringReports",
       storeKeys.getProjectKey(projectId),
-      p => ApiClient.monitoringReports.getAllForProject({ projectId, ...p })
+      p => apiClient.monitoringReports.getAllForProject({ projectId, ...p })
     );
   }
 
@@ -39,7 +39,7 @@ export class MonitoringReportsStore extends StoreBase {
     return this.getData(
       "monitoringReport",
       this.getKey(projectId, reportId),
-      (p) => ApiClient.monitoringReports.get({ projectId, reportId, ...p })
+      (p) => apiClient.monitoringReports.get({ projectId, reportId, ...p })
     );
   }
 
@@ -47,7 +47,7 @@ export class MonitoringReportsStore extends StoreBase {
     return this.getData(
       "monitoringReportQuestions",
       "all",
-      (p) => ApiClient.monitoringReports.getActiveQuestions({ ...p })
+      (p) => apiClient.monitoringReports.getActiveQuestions({ ...p })
     );
   }
 
@@ -96,9 +96,9 @@ export class MonitoringReportsStore extends StoreBase {
       (show) => this.getValidator(projectId, dto, isSubmitting, show),
       (p) => {
         if(dto.headerId) {
-          return ApiClient.monitoringReports.saveMonitoringReport({ monitoringReportDto: dto, submit: isSubmitting, ...p });
+          return apiClient.monitoringReports.saveMonitoringReport({ monitoringReportDto: dto, submit: isSubmitting, ...p });
         } else {
-          return ApiClient.monitoringReports.createMonitoringReport({ monitoringReportDto: dto, submit: isSubmitting, ...p });
+          return apiClient.monitoringReports.createMonitoringReport({ monitoringReportDto: dto, submit: isSubmitting, ...p });
         }
       },
       (result) => {
@@ -121,7 +121,7 @@ export class MonitoringReportsStore extends StoreBase {
       this.getKey(projectId, reportId),
       dto,
       () => this.getValidator(projectId, dto, false, false),
-      p => ApiClient.monitoringReports.deleteMonitoringReport({ reportId, projectId, ...p}),
+      p => apiClient.monitoringReports.deleteMonitoringReport({ reportId, projectId, ...p}),
       () => {
         this.queue(messageSuccess(message));
         onComplete();

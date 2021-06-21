@@ -14,7 +14,7 @@ export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager, ProjectRole.FinancialContact);
   }
 
-  protected async Run(context: IContext): Promise<PCRSummaryDto[]> {
+  protected async run(context: IContext): Promise<PCRSummaryDto[]> {
     const pcrItemTypes = await context.runQuery(new GetPCRItemTypesQuery());
     const data = await context.repositories.projectChangeRequests.getAllByProjectId(this.projectId);
     data.sort((a,b) => numberComparator(a.number,b.number) * -1);

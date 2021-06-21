@@ -1,4 +1,4 @@
-import { ApiClient } from "@ui/apiClient";
+import { apiClient } from "@ui/apiClient";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { StoreBase } from "./storeBase";
 
@@ -7,6 +7,6 @@ export class ForecastGolCostsStore extends StoreBase {
     return this.getData(
       "forecastGolCosts",
       storeKeys.getPartnerKey(partnerId),
-        p => ApiClient.forecastGolCosts.getAllByPartnerId({partnerId, ...p}));
+        p => apiClient.forecastGolCosts.getAllByPartnerId({partnerId, ...p}));
   }
 }

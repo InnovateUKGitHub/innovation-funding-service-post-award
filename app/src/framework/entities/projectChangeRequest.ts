@@ -6,9 +6,9 @@ import {
   PCRPartnerType,
   PCRProjectLocation,
   PCRProjectRole,
-  PCRStatus
+  PCRStatus,
+  TypeOfAid
 } from "@framework/constants";
-import { TypeOfAid } from "@framework/dtos";
 
 export interface ProjectChangeRequestForCreateEntity {
   projectId: string;

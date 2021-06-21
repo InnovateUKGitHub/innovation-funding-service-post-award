@@ -1,4 +1,4 @@
-import { LoadingStatus } from "@shared/pending";
+import { LoadingStatus } from "@framework/constants";
 import { useStores } from "@ui/redux";
 
 export function useCompetitionType(projectId?: string): string | undefined {
@@ -27,7 +27,8 @@ export function projectCompetition(competition: string) {
   const isLoans: boolean = competition === "LOANS";
 
   const isSBRI: boolean = competition === "SBRI";
-  const isSBRI_IFS: boolean = competition === "SBRI IFS";
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  const isSBRI_IFS: boolean = competition === "SBRI IFS"; // Note: this is a valid exception due to how hard it would be to read two i's in a row
   const isCombinationOfSBRI: boolean = isSBRI || isSBRI_IFS;
 
   return {

@@ -4,7 +4,7 @@ import { TimeExtensionStep } from "@ui/containers/pcrs/timeExtension/timeExtensi
 import { PCRTimeExtensionItemDtoValidator } from "@ui/validators";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 
-export type timeExtensionStepNames = "timeExtension";
+export type TimeExtensionStepNames = "timeExtension";
 
 export const timeExtensionItemWorkflow: IPCRWorkflow<PCRItemForTimeExtensionDto, PCRTimeExtensionItemDtoValidator> = {
   steps: [

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
 import { ISalesforcePartner, ISalesforceProfileDetails } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
@@ -32,7 +33,7 @@ export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
     return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const partner = await context.runQuery(new GetByIdQuery(this.partnerId));
 
     if (partner.partnerStatus !== PartnerStatus.Pending) {

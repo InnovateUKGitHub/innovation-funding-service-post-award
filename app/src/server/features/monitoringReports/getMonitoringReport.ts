@@ -1,7 +1,7 @@
 import { BadRequestError, QueryBase } from "@server/features/common";
 import { ISalesforceMonitoringReportHeader, ISalesforceMonitoringReportResponse, ISalesforceMonitoringReportStatus } from "@server/repositories";
-import { MonitoringReportDto, MonitoringReportQuestionDto, ProjectRole } from "@framework/dtos";
-import { Authorisation, IContext } from "@framework/types";
+import { MonitoringReportDto, MonitoringReportQuestionDto } from "@framework/dtos";
+import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQuestions";
 import { GetMonitoringReportAnsweredQuestions } from "./getMonitoringReportAnsweredQuestions";
 import { mapMonitoringReportStatus } from "./mapMonitoringReportStatus";
@@ -17,7 +17,7 @@ export class GetMonitoringReportById extends QueryBase<MonitoringReportDto> {
     return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 
-  protected async Run(context: IContext): Promise<MonitoringReportDto> {
+  protected async run(context: IContext): Promise<MonitoringReportDto> {
     const header = await context.repositories.monitoringReportHeader.getById(this.id);
 
     if(header.Acc_Project__c !== this.projectId) {

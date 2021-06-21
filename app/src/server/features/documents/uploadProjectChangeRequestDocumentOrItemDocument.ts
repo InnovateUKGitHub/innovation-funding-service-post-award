@@ -20,7 +20,7 @@ export class UploadProjectChangeRequestDocumentOrItemDocumentCommand extends Com
     return auth.forProject(this.projectId).hasRole(ProjectRole.ProjectManager);
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const result = new MultipleDocumentUpdloadDtoValidator(this.documents, context.config.options, this.filesRequired, this.showValidationErrors, null);
 
     if (!result.isValid) {

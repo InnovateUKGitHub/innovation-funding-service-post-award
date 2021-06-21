@@ -2,7 +2,6 @@ import { DateTime } from "luxon";
 import * as Repositories from "@server/repositories";
 import * as Entities from "@framework/entities";
 import {
-  CostCategoryType,
   PartnerFinancialVirement,
   ProjectChangeRequestStatusChangeEntity
 } from "@framework/entities";
@@ -16,8 +15,8 @@ import {
   PCRProjectRole,
   TypeOfAid
 } from "@framework/types";
-import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
-import { PCRItemStatus, PCRParticipantSize, PCRStatus } from "@framework/constants";
+import { pcrRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
+import { CostCategoryType, PCRItemStatus, PCRParticipantSize, PCRStatus } from "@framework/constants";
 import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
 import { ITestRepositories } from "./testRepositories";
 
@@ -642,7 +641,7 @@ export class TestData {
   }
 
   public createPCRRecordTypes() {
-    return PCRRecordTypeMetaValues.map(x => {
+    return pcrRecordTypeMetaValues.map(x => {
       const parent = "Acc_ProjectChangeRequest__c";
       const existing = this.repositories.recordTypes.Items.find(r => r.parent === parent && r.type === x.typeName);
       return existing || this.createRecordType({

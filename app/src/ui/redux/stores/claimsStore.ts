@@ -1,4 +1,4 @@
-import { ApiClient } from "@ui/apiClient";
+import { apiClient } from "@ui/apiClient";
 import { ClaimDtoValidator } from "@ui/validators";
 import { ClaimDto } from "@framework/dtos";
 import { Pending } from "@shared/pending";
@@ -20,11 +20,11 @@ export class ClaimsStore extends StoreBase {
   }
 
   public get(partnerId: string, periodId: number) {
-    return this.getData("claim", this.getKey(partnerId, periodId), p => ApiClient.claims.get({ partnerId, periodId, ...p }));
+    return this.getData("claim", this.getKey(partnerId, periodId), p => apiClient.claims.get({ partnerId, periodId, ...p }));
   }
 
   public getAllClaimsForProject(projectId: string): Pending<ClaimDto[]> {
-    return this.getData("claims", storeKeys.getProjectKey(projectId), p => ApiClient.claims.getAllByProjectId({ projectId, ...p }))
+    return this.getData("claims", storeKeys.getProjectKey(projectId), p => apiClient.claims.getAllByProjectId({ projectId, ...p }))
       .then(data => data, () => []);
   }
 
@@ -37,7 +37,7 @@ export class ClaimsStore extends StoreBase {
   }
 
   public getAllClaimsForPartner(partnerId: string) {
-    return this.getData("claims", storeKeys.getPartnerKey(partnerId), p => ApiClient.claims.getAllByPartnerId({ partnerId, ...p }))
+    return this.getData("claims", storeKeys.getPartnerKey(partnerId), p => apiClient.claims.getAllByPartnerId({ partnerId, ...p }))
       .then(data => data, () => []);
   }
 
@@ -66,7 +66,7 @@ export class ClaimsStore extends StoreBase {
       this.getKey(partnerId, periodId),
       dto,
       showErrors =>  this.validate(projectId, partnerId, periodId, dto, showErrors),
-      p => ApiClient.claims.update({projectId, partnerId, periodId, claim: dto, ...p}),
+      p => apiClient.claims.update({projectId, partnerId, periodId, claim: dto, ...p}),
       result => {
         this.markStale("claim", this.getKey(partnerId, periodId), result);
         if (message) {
@@ -92,7 +92,7 @@ export class ClaimsStore extends StoreBase {
   }
 
   public getStatusChanges(projectId: string, partnerId: string, periodId: number) {
-    return this.getData("claimStatusChanges", this.getKey(partnerId, periodId), p => ApiClient.claims.getStatusChanges({ projectId, partnerId, periodId, ...p }));
+    return this.getData("claimStatusChanges", this.getKey(partnerId, periodId), p => apiClient.claims.getStatusChanges({ projectId, partnerId, periodId, ...p }));
   }
 
 }

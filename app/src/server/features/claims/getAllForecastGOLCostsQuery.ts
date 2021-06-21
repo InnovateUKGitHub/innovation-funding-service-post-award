@@ -7,7 +7,7 @@ export class GetAllForecastsGOLCostsQuery extends QueryBase<GOLCostDto[]> {
     super();
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
     const costCategoriesOrder = costCategories.map(y => y.id);
 

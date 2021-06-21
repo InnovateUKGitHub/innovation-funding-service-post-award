@@ -1,11 +1,12 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { EditorStatus, StoresConsumer } from "@ui/redux";
+import { StoresConsumer } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { CostCategoryType } from "@framework/entities";
+import { CostCategoryType } from "@framework/constants";
+import { EditorStatus } from "@ui/constants/enums";
 
 interface ContainerProps {
   costCategories: CostCategoryDto[];

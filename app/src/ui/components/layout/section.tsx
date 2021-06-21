@@ -15,11 +15,11 @@ interface Props {
   className?: string;
 }
 
-type headerOptions = "h4"|"h3"|"h2"|"h1";
+type HeaderOptions = "h4"|"h3"|"h2"|"h1";
 
-export const SectionContext = React.createContext<headerOptions>("h2");
+export const SectionContext = React.createContext<HeaderOptions>("h2");
 
-const getNextHeader = (header: headerOptions) => {
+const getNextHeader = (header: HeaderOptions) => {
   switch (header) {
     case "h1": return "h2";
     case "h2": return "h3";
@@ -27,7 +27,7 @@ const getNextHeader = (header: headerOptions) => {
   }
 };
 
-const renderTitles = ({ title, titleContent, subtitle, subtitleContent, badge }: Props, isEmpty: boolean, header: headerOptions) => {
+const renderTitles = ({ title, titleContent, subtitle, subtitleContent, badge }: Props, isEmpty: boolean, header: HeaderOptions) => {
   // if nothing to render at top then we return null if there is a badge but no titles we still need to render the div with three quarters
   if (!title && !titleContent && !subtitle && !subtitleContent && !badge) return null;
 

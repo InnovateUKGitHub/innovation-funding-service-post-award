@@ -17,7 +17,7 @@ export class GetClaimDetailsQuery extends QueryBase<ClaimDetailsDto> {
     || auth.forPartner(this.projectId, this.partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager);
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const claimDetail = await context.repositories.claimDetails.get({ projectId: this.projectId, partnerId: this.partnerId, periodId: this.periodId, costCategoryId: this.costCategoryId });
     const lineItems = await context.repositories.claimLineItems.getAllForCategory(this.partnerId, this.costCategoryId, this.periodId) || [];
 

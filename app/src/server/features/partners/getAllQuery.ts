@@ -5,7 +5,7 @@ import { MapToPartnerDtoCommand } from "./mapToPartnerDto";
 import { sortPartners } from "./sortPartners";
 
 export class GetAllQuery extends QueryBase<PartnerDto[]> {
-  protected async Run(context: IContext): Promise<PartnerDto[]> {
+  protected async run(context: IContext): Promise<PartnerDto[]> {
       const results = await context.repositories.partners.getAll();
       const roles = await context.runQuery(new GetAllProjectRolesForUser());
 

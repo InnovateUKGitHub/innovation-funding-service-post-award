@@ -1,6 +1,5 @@
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { CostCategoryType } from "@framework/entities";
-import { ClaimDto, CostsSummaryForPeriodDto, PartnerDto, ProjectDto } from "@framework/types";
+import { ClaimDto, CostCategoryType, CostsSummaryForPeriodDto, PartnerDto, ProjectDto } from "@framework/types";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 
 import { Link } from "@ui/components";

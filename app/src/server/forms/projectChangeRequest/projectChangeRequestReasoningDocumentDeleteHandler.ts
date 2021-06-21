@@ -3,7 +3,7 @@ import { DeleteProjectChangeRequestDocumentOrItemDocument } from "@server/featur
 import { IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import { PCRPrepareReasoningRoute, ProjectChangeRequestPrepareReasoningParams } from "@ui/containers";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { Configuration } from "@server/features/common";
+import { configuration } from "@server/features/common";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
@@ -21,7 +21,7 @@ export class ProjectChangeRequestReasoningDocumentDeleteHandler extends Standard
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareReasoningParams, dto: Document) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, Configuration.options, false, false, null);
+    return new MultipleDocumentUpdloadDtoValidator(dto, configuration.options, false, false, null);
   }
 
   protected getStoreKey(params: ProjectChangeRequestPrepareReasoningParams) {

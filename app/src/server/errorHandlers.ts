@@ -2,7 +2,7 @@ import { ErrorCode, IAppError } from "@framework/types";
 import { Logger } from "./features/common/logger";
 import { ValidationError } from "./features/common";
 
-const Log = new Logger();
+const log = new Logger();
 
 export const getErrorStatus = (err?: IAppError) => {
   const code = err ? err.code : ErrorCode.UNKNOWN_ERROR;
@@ -11,23 +11,23 @@ export const getErrorStatus = (err?: IAppError) => {
 
   switch (code) {
     case ErrorCode.VALIDATION_ERROR:
-      Log.info("BAD_REQUEST_ERROR", message);
+      log.info("BAD_REQUEST_ERROR", message);
       return 400;
     case ErrorCode.BAD_REQUEST_ERROR:
-      Log.info("BAD_REQUEST_ERROR", err);
+      log.info("BAD_REQUEST_ERROR", err);
       return 400;
     case ErrorCode.FORBIDDEN_ERROR:
-      Log.warn("FORBIDDEN_ERROR", err);
+      log.warn("FORBIDDEN_ERROR", err);
       return 403;
     case ErrorCode.REQUEST_ERROR:
-      Log.info("REQUEST_ERROR", err);
+      log.info("REQUEST_ERROR", err);
       return 404;
     case ErrorCode.SECURITY_ERROR:
-      Log.error("SECURITY_ERROR", err);
+      log.error("SECURITY_ERROR", err);
       return 503;
     case ErrorCode.UNKNOWN_ERROR:
     default:
-      Log.error("UNKNOWN_ERROR", err);
+      log.error("UNKNOWN_ERROR", err);
       return 500;
   }
 };

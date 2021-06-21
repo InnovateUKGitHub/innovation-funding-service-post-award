@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { CommandBase, ValidationError } from "@server/features/common";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Authorisation, ClaimDto, ClaimStatus, IContext, ProjectRole } from "@framework/types";
@@ -16,7 +17,7 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
       || auth.forPartner(this.projectId, this.claimDto.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const existingStatus = await context.repositories.claims.get(this.claimDto.partnerId, this.claimDto.periodId).then(x => x.Acc_ClaimStatus__c);
     const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
     const details = await context.runQuery(new GetCostsSummaryForPeriodQuery(this.projectId, this.claimDto.partnerId, this.claimDto.periodId));

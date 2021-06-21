@@ -1,4 +1,4 @@
-import { LogLevel } from "@framework/types/logLevel";
+import { LogLevel } from "@framework/constants";
 import { ILogger, Logger } from "../../src/server/features/common/logger";
 
 export class TestLogger implements ILogger {

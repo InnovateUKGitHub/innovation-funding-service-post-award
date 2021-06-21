@@ -3,9 +3,9 @@ import { SalesforcePcrSpendProfileMapper } from "@server/repositories/mappers/pc
 import { PcrSpendProfileEntity } from "@framework/entities";
 import { PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/constants";
 import { DateTime } from "luxon";
-import { SALESFORCE_DATE_FORMAT } from "@server/features/common";
+import { salesforceDateFormat } from "@server/features/common";
 
-const PCR_SPEND_PROFILE_TYPE = "PCR_SPEND_PROFILE_TYPE";
+const pcrSpendProfileType = "PCR_SPEND_PROFILE_TYPE";
 
 describe("SalesforcePcrSpendProfileMapper", () => {
   it("Maps spend profile correctly to entity", () => {
@@ -15,7 +15,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
       pcrItemId: "pcrItemId1",
       value: 50,
       description: "A description",
-      dateOtherFundingSecured: DateTime.local(2010, 10, 28).toFormat(SALESFORCE_DATE_FORMAT),
+      dateOtherFundingSecured: DateTime.local(2010, 10, 28).toFormat(salesforceDateFormat),
       grossCostOfRole: 10,
       daysSpentOnProject: 11,
       ratePerDay: 12,
@@ -36,7 +36,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
 
     const pcrSpendProfile: ISalesforcePcrSpendProfile = {
       Id: expectedEntity.id,
-      RecordTypeId: PCR_SPEND_PROFILE_TYPE,
+      RecordTypeId: pcrSpendProfileType,
       Acc_CostCategoryID__c: expectedEntity.costCategoryId,
       Acc_ProjectChangeRequest__c: expectedEntity.pcrItemId,
       Acc_DateSecured__c: expectedEntity.dateOtherFundingSecured,
@@ -59,7 +59,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
       Acc_Utilisation__c: expectedEntity.utilisation,
       NewOrExistingLabel: expectedEntity.typeLabel,
     };
-    const mapped = new SalesforcePcrSpendProfileMapper(PCR_SPEND_PROFILE_TYPE).map(pcrSpendProfile);
+    const mapped = new SalesforcePcrSpendProfileMapper(pcrSpendProfileType).map(pcrSpendProfile);
     expect(mapped).toStrictEqual(expectedEntity);
   });
   it("Maps spend profile entity correctly to sf record", () => {
@@ -69,7 +69,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
       pcrItemId: "pcrItemId1",
       value: 50,
       description: "A description",
-      dateOtherFundingSecured: DateTime.local(2010, 10, 28).toFormat(SALESFORCE_DATE_FORMAT),
+      dateOtherFundingSecured: DateTime.local(2010, 10, 28).toFormat(salesforceDateFormat),
       grossCostOfRole: 10,
       daysSpentOnProject: 11,
       ratePerDay: 12,
@@ -89,7 +89,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
     };
     const sfRecord: ISalesforcePcrSpendProfile = {
       Id: entity.id,
-      RecordTypeId: PCR_SPEND_PROFILE_TYPE,
+      RecordTypeId: pcrSpendProfileType,
       Acc_CostCategoryID__c: entity.costCategoryId,
       Acc_ProjectChangeRequest__c: entity.pcrItemId,
       Acc_TotalCost__c: entity.value,
@@ -111,7 +111,7 @@ describe("SalesforcePcrSpendProfileMapper", () => {
       Acc_ResidualValue__c: entity.residualValue,
       Acc_Utilisation__c: entity.utilisation,
     };
-    const mapped = new SalesforcePcrSpendProfileMapper(PCR_SPEND_PROFILE_TYPE).mapToSalesforce(entity);
+    const mapped = new SalesforcePcrSpendProfileMapper(pcrSpendProfileType).mapToSalesforce(entity);
     expect(mapped).toStrictEqual(sfRecord);
   });
 });

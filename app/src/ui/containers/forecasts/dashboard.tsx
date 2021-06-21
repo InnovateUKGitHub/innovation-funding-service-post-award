@@ -1,7 +1,8 @@
 import { Pending } from "@shared/pending";
-import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { ClaimDto, PartnerDto, ProjectDto } from "@framework/dtos";
 import { StoresConsumer } from "@ui/redux";
 import { roundCurrency } from "@framework/util";
+import { ProjectRole } from "@framework/constants";
 import * as ACC from "../../components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 

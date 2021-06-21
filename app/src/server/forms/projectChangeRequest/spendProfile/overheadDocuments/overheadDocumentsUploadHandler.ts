@@ -5,7 +5,7 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import {UploadProjectChangeRequestDocumentOrItemDocumentCommand} from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import {MultipleDocumentUpdloadDtoValidator} from "@ui/validators";
-import { Configuration } from "@server/features/common";
+import { configuration } from "@server/features/common";
 import { IFileWrapper, ILinkInfo } from "@framework/types";
 
 export class OverheadDocumentsUploadHandler extends MultipleFileFormHandlerBase<OverheadDocumentsPageParams, "multipleDocuments"> {
@@ -37,6 +37,6 @@ export class OverheadDocumentsUploadHandler extends MultipleFileFormHandlerBase<
     }
 
     protected createValidationResult(params: OverheadDocumentsPageParams, dto: MultipleDocumentUploadDto) {
-        return new MultipleDocumentUpdloadDtoValidator(dto, Configuration.options, true, true, null);
+        return new MultipleDocumentUpdloadDtoValidator(dto, configuration.options, true, true, null);
     }
 }

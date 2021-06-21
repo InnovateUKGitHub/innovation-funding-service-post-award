@@ -1,7 +1,7 @@
-import { ProjectRole } from "@framework/dtos";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { getContentFromResult, useContent } from "@ui/hooks";
 import { useStores } from "@ui/redux";
+import { ProjectRole } from "@framework/constants";
 import { PartnerDetailsEditComponent, PartnerDetailsParams } from "../partnerDetailsEdit";
 import * as ACC from "../../../components";
 

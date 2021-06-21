@@ -1,5 +1,6 @@
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import {
+  CostCategoryType,
   PCRItemForPartnerAdditionDto,
   PCRItemType,
   ProjectDto,
@@ -10,7 +11,7 @@ import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { StoresConsumer } from "@ui/redux";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
+import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import classNames from "classnames";
 import {
@@ -20,7 +21,6 @@ import {
   PCRSpendProfileMaterialsCostDto, PCRSpendProfileOtherCostsDto,
   PCRSpendProfileSubcontractingCostDto, PCRSpendProfileTravelAndSubsCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
-import { CostCategoryType } from "@framework/entities";
 import { PcrSpendProfileCostSummaryParams } from "@ui/containers";
 
 interface Data {
@@ -194,7 +194,7 @@ class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProf
     // allowing me to find the step name and get the workflow with the correct step
     const summaryWorkflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined);
     if (!summaryWorkflow) return null;
-    const stepName: addPartnerStepNames = "spendProfileStep";
+    const stepName: AddPartnerStepNames = "spendProfileStep";
     const spendProfileStep = summaryWorkflow.findStepNumberByName(stepName);
     return PcrWorkflow.getWorkflow(addPartnerItem, spendProfileStep);
   }

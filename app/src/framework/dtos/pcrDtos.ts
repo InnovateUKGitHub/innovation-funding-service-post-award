@@ -8,9 +8,9 @@ import {
   PCRProjectLocation,
   PCRProjectRole,
   PCRStatus,
+  TypeOfAid,
 } from "@framework/constants";
 import { PcrSpendProfileDto } from "@framework/dtos/pcrSpendProfileDto";
-import { TypeOfAid } from "@framework/dtos/projectDto";
 
 interface PCRBaseDto {
   id: string;

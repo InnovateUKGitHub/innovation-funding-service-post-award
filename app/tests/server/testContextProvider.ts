@@ -45,12 +45,12 @@ export class TestContext implements IContext {
   public caches = new TestCaches();
 
   public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
-    return (query as any as IAsyncRunnable<TResult>).Run(this);
+    return (query as any as IAsyncRunnable<TResult>).run(this);
   }
 
   public runCommand<TResult>(command: CommandBase<TResult> | NonAuthorisedCommandBase<TResult>): Promise<TResult> {
     const runnable = command as any as IAsyncRunnable<TResult>;
-    return runnable.Run(this).catch(e => {
+    return runnable.run(this).catch(e => {
       if (e instanceof ValidationError) {
         this.logger.debug("Validation ERROR", [e.results]);
       }
@@ -60,11 +60,11 @@ export class TestContext implements IContext {
   }
 
   public runSyncQuery<TResult>(query: SyncQueryBase<TResult>): TResult {
-    return (query as any as ISyncRunnable<TResult>).Run(this);
+    return (query as any as ISyncRunnable<TResult>).run(this);
   }
 
   public runSyncCommand<TResult>(command: SyncCommandBase<TResult>): TResult {
-    return (command as any as ISyncRunnable<TResult>).Run(this);
+    return (command as any as ISyncRunnable<TResult>).run(this);
   }
 
   // handle access control separate to running the commands to keep tests focused on single areas

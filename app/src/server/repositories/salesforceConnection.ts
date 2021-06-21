@@ -4,8 +4,8 @@ import jwt from "jsonwebtoken";
 
 import { SalesforceTokenError } from "@server/repositories/errors";
 import { Cache } from "@server/features/common/cache";
-import { Configuration } from "@server/features/common";
-import { LogLevel } from "@framework/types/logLevel";
+import { configuration } from "@server/features/common";
+import { LogLevel } from "@framework/constants";
 
 interface ISalesforceTokenPayload {
   access_token: string;
@@ -34,7 +34,7 @@ interface ITokenInfo {
   url: string;
 }
 
-const tokenCache = new Cache<ITokenInfo>(Configuration.timeouts.token);
+const tokenCache = new Cache<ITokenInfo>(configuration.timeouts.token);
 
 export const salesforceConnectionWithUsernameAndPassword = ({
   serviceUsername,
@@ -43,7 +43,7 @@ export const salesforceConnectionWithUsernameAndPassword = ({
 }: ISalesforceConnectionDetails) => {
   const jsforceConfig = {
     loginUrl: "https://test.salesforce.com",
-    logLevel: Configuration.logLevel === LogLevel.VERBOSE ? "DEBUG" : undefined,
+    logLevel: configuration.logLevel === LogLevel.VERBOSE ? "DEBUG" : undefined,
   };
 
   const connection = new jsforce.Connection(jsforceConfig);
@@ -61,7 +61,7 @@ export const salesforceConnectionWithUsernameAndPassword = ({
 };
 
 const getToken = async ({ currentUsername, clientId, connectionUrl }: ISalesforceTokenDetails): Promise<ITokenInfo> => {
-  const privateKey = fs.readFileSync(Configuration.certificates.salesforce, "utf8");
+  const privateKey = fs.readFileSync(configuration.certificates.salesforce, "utf8");
   const jwtPayload = { prn: currentUsername };
   const jwtOptions = {
     issuer: clientId,

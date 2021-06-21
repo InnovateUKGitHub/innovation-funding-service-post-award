@@ -1,4 +1,4 @@
-import { ApiClient } from "@ui/apiClient";
+import { apiClient } from "@ui/apiClient";
 import { Pending } from "@shared/pending";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -12,7 +12,7 @@ export class ProjectChangeRequestDocumentsStore extends DocumentsStoreBase {
   }
 
   public pcrOrPcrItemDocuments(projectId: string, projectChangeRequestIdOrItemId: string) {
-    return this.getData("documents", this.getKey(projectId, projectChangeRequestIdOrItemId), p => ApiClient.documents.getProjectChangeRequestDocumentsOrItemDocuments({ projectId, projectChangeRequestIdOrItemId, ...p }));
+    return this.getData("documents", this.getKey(projectId, projectChangeRequestIdOrItemId), p => apiClient.documents.getProjectChangeRequestDocumentsOrItemDocuments({ projectId, projectChangeRequestIdOrItemId, ...p }));
   }
 
   public getPcrOrPcrItemDocumentsEditor(projectId: string, projectChangeRequestIdOrItemId: string, init?: (dto: MultipleDocumentUploadDto) => void) {
@@ -26,7 +26,7 @@ export class ProjectChangeRequestDocumentsStore extends DocumentsStoreBase {
       filesRequired,
       key,
       dto,
-      (p) => ApiClient.documents.uploadProjectChangeRequestDocumentOrItemDocument({ projectId, projectChangeRequestIdOrItemId, ...p }),
+      (p) => apiClient.documents.uploadProjectChangeRequestDocumentOrItemDocument({ projectId, projectChangeRequestIdOrItemId, ...p }),
       message,
       onComplete
     );
@@ -39,7 +39,7 @@ export class ProjectChangeRequestDocumentsStore extends DocumentsStoreBase {
       key,
       dto,
       () => this.validateMultipleDocumentsDto(dto, false, true),
-      (p) => ApiClient.documents.deleteProjectChangeRequestDocumentOrItemDocument({ projectId, projectChangeRequestIdOrItemId, documentId: document.id, ...p }),
+      (p) => apiClient.documents.deleteProjectChangeRequestDocumentOrItemDocument({ projectId, projectChangeRequestIdOrItemId, documentId: document.id, ...p }),
       () => this.afterUpdate(key, message, onComplete)
     );
   }

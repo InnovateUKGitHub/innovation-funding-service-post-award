@@ -1,9 +1,10 @@
 import * as ACC from "@ui/components";
 import { Option, PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { EditorStatus, StoresConsumer } from "@ui/redux";
+import { StoresConsumer } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { PCRProjectLocation } from "@framework/types";
+import { EditorStatus } from "@ui/constants/enums";
 
 interface InnerProps {
   pcrProjectLocation: Option<PCRProjectLocation>[];

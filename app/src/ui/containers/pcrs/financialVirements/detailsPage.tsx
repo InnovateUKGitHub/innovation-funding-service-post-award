@@ -2,10 +2,11 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import { StoresConsumer } from "@ui/redux";
 import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
-import { CostCategoryVirementDto, PartnerDto, PartnerVirementsDto, PCRDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { CostCategoryVirementDto, PartnerDto, PartnerVirementsDto, PCRDto, ProjectDto } from "@framework/dtos";
 import { createDto } from "@framework/util/dtoHelpers";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { roundCurrency } from "@framework/util";
+import { ProjectRole } from "@framework/constants";
 
 interface Params {
   projectId: string;

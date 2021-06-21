@@ -1,9 +1,10 @@
 import React, { CSSProperties } from "react";
 import { Result } from "@ui/validation";
-import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, StoresConsumer } from "@ui/redux";
 import classNames from "classnames";
 import { ContentSelector } from "@content/content";
 import { IFileWrapper } from "@framework/types";
+import { EditorStatus } from "@ui/constants/enums";
 import { TextAreaInput } from "./inputs/textAreaInput";
 import { ValidationError } from "./validationError";
 import { TextInput } from "./inputs/textInput";

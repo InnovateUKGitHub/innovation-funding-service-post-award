@@ -1,4 +1,4 @@
-import { BankCheckStatus, BankDetailsTaskStatus, PartnerDto, PartnerStatus, PostcodeTaskStatus, SpendProfileStatus } from "@framework/dtos";
+import { PartnerDto } from "@framework/dtos";
 import { GetByIdQuery } from "@server/features/partners";
 import { ValidationError } from "@server/features/common";
 import {
@@ -9,6 +9,7 @@ import {
   PostcodeStatusMapper,
 } from "@server/features/partners/mapToPartnerDto";
 import { Partner } from "@framework/entities";
+import { BankCheckStatus, BankDetailsTaskStatus, PartnerStatus, PostcodeTaskStatus, SpendProfileStatus } from "@framework/constants";
 import { UpdatePartnerCommand } from "../../../../src/server/features/partners/updatePartnerCommand";
 import { TestContext } from "../../testContextProvider";
 

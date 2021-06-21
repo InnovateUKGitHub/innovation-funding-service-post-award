@@ -1,6 +1,6 @@
+import { LoadingStatus } from "@framework/constants";
 import { actionTypes } from "redux-router5";
 import { dataReducer } from "../../../src/ui/redux/reducers";
-import { LoadingStatus } from "../../../src/shared/pending";
 
 const navigate = (): any => ({ type: actionTypes.TRANSITION_SUCCESS, payload: { previousRoute: "" } });
 const replaceNavigation = (): any => ({ type: actionTypes.TRANSITION_SUCCESS, payload: { previousRoute: "", route: { meta: { options: { replace: true } } } } });

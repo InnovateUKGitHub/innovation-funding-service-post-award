@@ -17,7 +17,7 @@ export class DeleteProjectChangeRequestDocumentOrItemDocument extends CommandBas
     return auth.forProject(this.projectId).hasRole(ProjectRole.ProjectManager);
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     return context.repositories.documents.deleteDocument(this.documentId);
   }
 }

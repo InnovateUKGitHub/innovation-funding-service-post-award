@@ -10,18 +10,19 @@ import {
   GOLCostDto,
   IAppError,
   IContact,
+  LoadingStatus,
   PCRParticipantSize,
   PCRPartnerType,
   PCRProjectLocation,
   PCRProjectRole,
   PCRSpendProfileCapitalUsageType,
   PCRSpendProfileOverheadRate,
-  ProjectContactDto
+  ProjectContactDto,
+  ProjectRole
 } from "@framework/types";
 import { State } from "router5";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { LoadingStatus } from "../../../shared/pending";
 import { DataLoadAction } from "../actions/common";
 
 export interface IDataStore<T> {
@@ -110,5 +111,5 @@ export const dataReducer = combineReducers({
   projects: dataStoreReducer<Dtos.ProjectDto[]>("projects"),
   projectChangeRequestStatusChanges: dataStoreReducer<Dtos.ProjectChangeRequestStatusChangeDto[]>("projectChangeRequestStatusChanges"),
   projectContacts: dataStoreReducer<ProjectContactDto[]>("projectContacts"),
-  user: dataStoreReducer<{ [key: string]: Dtos.ProjectRole }>("user")
+  user: dataStoreReducer<{ [key: string]: ProjectRole }>("user")
 });

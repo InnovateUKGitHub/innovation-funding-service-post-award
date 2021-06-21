@@ -1,5 +1,4 @@
-import { IClientUser } from "@framework/types";
-import { LoadingStatus } from "../../../../shared/pending";
+import { IClientUser, LoadingStatus } from "@framework/types";
 import { IDataSelector } from "../../selectors/common";
 import { AsyncThunk, createAction } from "./createAction";
 

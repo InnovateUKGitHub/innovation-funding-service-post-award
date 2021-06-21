@@ -10,8 +10,7 @@ import {
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
-import { CostCategoryType } from "@framework/entities";
-import { PCRSpendProfileOverheadRate } from "@framework/constants";
+import { CostCategoryType, PCRSpendProfileOverheadRate } from "@framework/constants";
 import { hasNoDuplicates } from "@framework/util/arrayHelpers";
 import { Results } from "../validation";
 import * as Validation from "./common";

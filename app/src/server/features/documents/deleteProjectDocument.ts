@@ -12,7 +12,7 @@ export class DeleteProjectDocumentCommand extends CommandBase<void> {
         return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
     }
 
-    protected async Run(context: IContext) {
+    protected async run(context: IContext) {
         return context.repositories.documents.deleteDocument(this.documentId);
     }
 }

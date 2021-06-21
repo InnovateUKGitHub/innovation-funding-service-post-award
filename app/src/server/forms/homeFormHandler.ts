@@ -1,7 +1,7 @@
 import express from "express";
 import { configureRouter, routeConfig } from "../../ui/routing";
 import { HomeRoute } from "../../ui/containers";
-import { Configuration } from "../features/common/config";
+import { configuration } from "../features/common/config";
 import { IFormHandler } from "./formHandlerBase";
 
 // @TODO: Remove as provides a back door to set the current user.....
@@ -18,7 +18,7 @@ export class HomeFormHandler implements IFormHandler {
     }
 
     if (dto.isReset) {
-      req.session!.user.email = Configuration.salesforce.serivceUsername;
+      req.session!.user.email = configuration.salesforce.serivceUsername;
     } else if (dto.user) {
       req.session!.user.email = dto.user;
     }

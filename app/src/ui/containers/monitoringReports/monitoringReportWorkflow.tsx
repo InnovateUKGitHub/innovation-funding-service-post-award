@@ -3,8 +3,8 @@ import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { ContentConsumer, IEditorStore, StoresConsumer } from "@ui/redux";
-import { ILinkInfo } from "@framework/types";
+import { IEditorStore, useStores } from "@ui/redux";
+import { ILinkInfo, ProjectRole } from "@framework/types";
 import { MonitoringReportWorkflowDef } from "@ui/containers/monitoringReports/monitoringReportWorkflowDef";
 
 export interface MonitoringReportWorkflowParams {
@@ -106,36 +106,27 @@ class Component extends ContainerBase<MonitoringReportWorkflowParams, Data, Call
   }
 }
 
-const Container = (props: MonitoringReportWorkflowParams & BaseProps) => (
-  <StoresConsumer>
-    {
-      stores => (
-        <ContentConsumer>
-          {
-            () => (
-              <Component
-                project={stores.projects.getById(props.projectId)}
-                editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
-                onChange={(save, dto, submit, link) => {
-                  stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
-                    if (link) stores.navigation.navigateTo(link);
-                  });
-                }}
-                {...props}
-              />
-            )
-          }
-        </ContentConsumer>
-      )
-    }
-  </StoresConsumer>
-);
+const Container = (props: MonitoringReportWorkflowParams & BaseProps) => {
+  const stores = useStores();
+  return (
+    <Component
+      project={stores.projects.getById(props.projectId)}
+      editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
+      onChange={(save, dto, submit, link) => {
+        stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
+          if (link) stores.navigation.navigateTo(link);
+        });
+      }}
+      {...props}
+    />
+  );
+};
 
 export const MonitoringReportWorkflowRoute = defineRoute({
   routeName: "monitoringReportPrepare",
   routePath: "/projects/:projectId/monitoring-reports/:id/:mode<(prepare|view){1}>?:step",
   container: Container,
   getParams: (r) => ({ projectId: r.params.projectId, id: r.params.id, mode: r.params.mode, step: parseInt(r.params.step, 10) }),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(Dtos.ProjectRole.MonitoringOfficer),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
   getTitle: ({ params, content }) => (params.mode === "view" ? content.monitoringReportsWorkflow.viewMode.title() : content.monitoringReportsWorkflow.editMode.title()),
 });

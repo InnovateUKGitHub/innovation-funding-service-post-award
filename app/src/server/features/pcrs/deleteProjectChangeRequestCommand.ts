@@ -11,7 +11,7 @@ export class DeleteProjectChangeRequestCommand extends CommandBase<boolean> {
     return auth.forProject(this.projectId).hasRole(ProjectRole.ProjectManager);
   }
 
-  protected async Run(context: IContext): Promise<boolean> {
+  protected async run(context: IContext): Promise<boolean> {
     const existing = await context.repositories.projectChangeRequests.getById(this.projectId, this.pcrId);
 
     if(existing.status !== PCRStatus.Draft) {

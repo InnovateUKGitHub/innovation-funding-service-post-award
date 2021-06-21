@@ -1,7 +1,8 @@
 import { actionTypes } from "redux-router5";
-import { editorsReducer, EditorStatus, IEditorStore } from "@ui/redux/reducers";
+import { editorsReducer, IEditorStore } from "@ui/redux/reducers";
 import { ClaimDtoValidator } from "@ui/validators";
 import { ClaimDto, IAppError, ErrorCode } from "@framework/types";
+import { EditorStatus } from "@ui/constants/enums";
 import { EditorResetAction, UpdateEditorAction, EditorSubmitAction, EditorSuccessAction, EditorErrorAction } from "@ui/redux/actions/common/editorActions";
 import { Results } from "@ui/validation";
 import createCostCategory from "../stores/createCostCategory";

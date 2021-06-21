@@ -2,21 +2,21 @@
 import { Authorisation, IContext } from "@framework/types";
 
 export abstract class QueryBase<T> {
-  protected abstract Run(context: IContext): Promise<T>;
+  protected abstract run(context: IContext): Promise<T>;
 
   protected accessControl(auth: Authorisation, context: IContext): Promise<boolean> {
     return Promise.resolve(true);
   }
 
-  protected LogMessage(): any {
+  protected logMessage(): any {
     return [this.constructor.name, this];
   }
 }
 
 export abstract class SyncQueryBase<T> {
-  protected abstract Run(context: IContext): T;
+  protected abstract run(context: IContext): T;
 
-  protected LogMessage(): any {
+  protected logMessage(): any {
     return [this.constructor.name, this];
   }
 }

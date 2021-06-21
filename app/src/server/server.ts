@@ -11,7 +11,7 @@ import { GetPcrParticipantSizesQuery } from "@server/features/pcrs/getPcrPartici
 import { GetPcrProjectLocationsQuery } from "@server/features/pcrs/getPcrProjectLocationsQuery";
 import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
 import { v4 as uuidv4 } from "uuid";
-import { Configuration, Logger } from "./features/common";
+import { configuration, Logger } from "./features/common";
 import { allowCache, noCache, setOwaspHeaders } from "./cacheHeaders";
 import { router as healthRouter } from "./health";
 import { router as cspRouter } from "./csp";
@@ -55,16 +55,16 @@ export class Server {
     }
 
     this.log.info(`Listening at ${process.env.SERVER_URL}`);
-    this.log.info("Configuration", Configuration);
+    this.log.info("Configuration", configuration);
 
     setTimeout(() => this.primeCaches());
 
-    if (Configuration.features.customContent) {
+    if (configuration.features.customContent) {
 
       setTimeout(() => this.initaliseCustomContent(true));
 
-      if (Configuration.timeouts.contentRefreshSeconds) {
-        setInterval(() => this.initaliseCustomContent(true), Configuration.timeouts.contentRefreshSeconds * 1000);
+      if (configuration.timeouts.contentRefreshSeconds) {
+        setInterval(() => this.initaliseCustomContent(true), configuration.timeouts.contentRefreshSeconds * 1000);
       }
     }
   }
@@ -120,7 +120,7 @@ export class Server {
   }
 
   private primeCaches() {
-    const context = contextProvider.start({ user: { email: Configuration.salesforce.serivceUsername } });
+    const context = contextProvider.start({ user: { email: configuration.salesforce.serivceUsername } });
     // if developing dont prime as will mean too many calls if watching build, presuming that prod urls all start with https:// and dev http://
     if (context.config.serverUrl.startsWith("https://")) {
       // calls to query that prime caches doe as service user
@@ -147,7 +147,7 @@ export class Server {
   }
 
   private initaliseCustomContent(loadCustom: boolean) {
-    const context = contextProvider.start({ user: { email: Configuration.salesforce.serivceUsername } });
+    const context = contextProvider.start({ user: { email: configuration.salesforce.serivceUsername } });
     return context.runCommand(new InitialiseContentCommand(loadCustom))
       .then(updated => {
         if (updated) {

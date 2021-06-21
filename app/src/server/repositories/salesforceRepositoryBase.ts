@@ -3,7 +3,7 @@ import { Connection, DescribeSObjectResult, Field, Query, RecordResult, SuccessR
 
 import * as Errors from "@server/repositories/errors";
 import { ISalesforceMapper } from "@server/repositories/mappers/saleforceMapperBase";
-import { BadRequestError, Configuration, ILogger } from "@server/features/common";
+import { BadRequestError, configuration, ILogger } from "@server/features/common";
 import { IPicklistEntry } from "@framework/types";
 import { createBatch } from "@shared/create-batch";
 
@@ -380,7 +380,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
     payload: BatchType,
     request: (batchPayload: BatchType) => Promise<Response>,
   ): Promise<Response[]> {
-    const generatedBatches = createBatch<BatchType>(payload, Configuration.salesforceQueryLimit);
+    const generatedBatches = createBatch<BatchType>(payload, configuration.salesforceQueryLimit);
     const promisedBatches = generatedBatches.map(x => request(x));
 
     return Promise.all(promisedBatches);

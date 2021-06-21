@@ -10,9 +10,9 @@ import {
   PCRPartnerType,
   PCRProjectLocation,
   PCRProjectRole,
-  PCRStatus
+  PCRStatus,
+  TypeOfAid
 } from "@framework/constants";
-import { TypeOfAid } from "@framework/dtos";
 import { ISalesforcePCR } from "../projectChangeRequestRepository";
 import { SalesforceBaseMapper } from "./saleforceMapperBase";
 

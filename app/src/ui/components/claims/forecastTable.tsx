@@ -5,16 +5,16 @@ import {
   ForecastDetailsDTO,
   GOLCostDto,
   PartnerDto,
-  PartnerStatus,
   ProjectDto,
 } from "@framework/dtos";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { CostCategoryType } from "@framework/entities";
 import { roundCurrency, numberComparator } from "@framework/util";
-import { EditorStatus, IEditorStore } from "@ui/redux";
+import { IEditorStore } from "@ui/redux";
 import { IForecastDetailsDtosValidator, IForecastDetailsDtoValidator } from "@ui/validators";
 import classNames from "classnames";
 import { diffAsPercentage } from "@framework/util/numberHelper";
+import { CostCategoryType, PartnerStatus } from "@framework/constants";
+import { EditorStatus } from "@ui/constants/enums";
 import { NumberInput } from "../inputs/numberInput";
 import { AccessibilityText } from "../renderers/accessibilityText";
 import { Currency } from "../renderers/currency";
@@ -22,6 +22,7 @@ import { CondensedDateRange } from "../renderers/date";
 import { Percentage } from "../renderers/percentage";
 import { TypedTable } from "../table";
 import { Content } from "../content";
+
 export interface ForecastData {
   project: ProjectDto;
   partner: PartnerDto;

@@ -13,7 +13,7 @@ export class DeleteMonitoringReportCommand extends CommandBase<void> {
     return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const header = await context.repositories.monitoringReportHeader.getById(this.reportId);
 
     if (header.Acc_MonitoringReportStatus__c !== "Draft") {

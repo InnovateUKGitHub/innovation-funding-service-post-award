@@ -1,5 +1,5 @@
 import React from "react";
-import {createContext, useContext} from "react";
+import { createContext, useContext } from "react";
 
 interface IModal {
   id: string;
@@ -28,8 +28,9 @@ export class ModalRegister {
   }
 }
 
-const ModalContext = createContext<ModalRegister>(null as any);
+const modalContext = createContext<ModalRegister>(null as any);
 
-export const ModalProvider = ModalContext.Provider;
-export const ModalConsumer = ModalContext.Consumer;
-export const useModal = () => useContext(ModalContext);
+/* eslint-disable @typescript-eslint/naming-convention */
+export const ModalProvider = modalContext.Provider;
+export const ModalConsumer = modalContext.Consumer;
+export const useModal = () => useContext(modalContext);

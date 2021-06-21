@@ -1,6 +1,6 @@
 import { useContext } from "react";
 
-import { ContentContext } from "@ui/redux/contentProvider";
+import { contentContext } from "@ui/redux/contentProvider";
 import { Content, ContentSelector } from "@content/content";
 import { ContentResult } from "@content/contentBase";
 
@@ -53,7 +53,7 @@ const getContentResult = (queryFn: Function, contentPayload: Content): ContentRe
 export const getContentFromResult: IUseContent["getContentFromResult"] = ({ content }) => content;
 
 export const useContent = (): IUseContent => {
-  const appContent = useContext(ContentContext);
+  const appContent = useContext(contentContext);
 
   if (!appContent) {
     throw new Error("useContent() must be used within a <ContentProvider />");

@@ -7,7 +7,7 @@ export class GetAccountsQuery extends QueryBase<AccountDto[]> {
     super();
   }
 
-  async Run(context: IContext) {
+  async run(context: IContext) {
     const items = await context.repositories.accounts.getAccounts();
     return items.map(account => mapToAccountDto(context, account));
   }

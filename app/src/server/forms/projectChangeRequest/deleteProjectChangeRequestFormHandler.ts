@@ -1,12 +1,12 @@
 import { StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import { PCRDeleteParams, PCRDeleteRoute, PCRsDashboardRoute, } from "@ui/containers";
-import { PCRDto, ProjectDto, ProjectRole } from "@framework/dtos";
-import { IContext, ILinkInfo } from "@framework/types";
+import { PCRDto, ProjectDto } from "@framework/dtos";
+import { IContext, ILinkInfo, ProjectRole } from "@framework/types";
 import { PCRDtoValidator } from "@ui/validators";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteProjectChangeRequestCommand";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { Configuration } from "@server/features/common";
+import { configuration } from "@server/features/common";
 
 export class ProjectChangeRequestDeleteFormHandler extends StandardFormHandlerBase<PCRDeleteParams, "pcr"> {
   constructor() {
@@ -27,6 +27,6 @@ export class ProjectChangeRequestDeleteFormHandler extends StandardFormHandlerBa
   }
 
   protected createValidationResult(params: PCRDeleteParams, dto: PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, Configuration.features, dto);
+    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, configuration.features, dto);
   }
 }

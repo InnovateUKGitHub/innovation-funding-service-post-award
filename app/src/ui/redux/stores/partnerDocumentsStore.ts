@@ -1,4 +1,4 @@
-import { ApiClient } from "@ui/apiClient";
+import { apiClient } from "@ui/apiClient";
 import { Pending } from "@shared/pending";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -10,7 +10,7 @@ export class PartnerDocumentsStore extends DocumentsStoreBase {
     return storeKeys.getPartnerKey(partnerId);
   }
   public getPartnerDocuments(projectId: string, partnerId: string) {
-    return this.getData("documents", this.getKey(partnerId), p => ApiClient.documents.getPartnerDocuments({ projectId, partnerId, ...p }));
+    return this.getData("documents", this.getKey(partnerId), p => apiClient.documents.getPartnerDocuments({ projectId, partnerId, ...p }));
   }
   public getPartnerDocumentEditor(partnerId: string, init?: (dto: MultipleDocumentUploadDto) => void) {
     return this.getEditor("multipleDocuments", this.getKey(partnerId), () => Pending.done<MultipleDocumentUploadDto>({ files: [] }), init, (dto) => this.validateMultipleDocumentsDto(dto, false, true));
@@ -22,7 +22,7 @@ export class PartnerDocumentsStore extends DocumentsStoreBase {
       true,
       this.getKey(partnerId),
       dto,
-      (p) => ApiClient.documents.uploadPartnerDocument({ projectId, partnerId, ...p }),
+      (p) => apiClient.documents.uploadPartnerDocument({ projectId, partnerId, ...p }),
       message,
       onComplete
     );
@@ -35,7 +35,7 @@ export class PartnerDocumentsStore extends DocumentsStoreBase {
       key,
       dto,
       () => this.validateMultipleDocumentsDto(dto, false, true),
-      (p) => ApiClient.documents.deletePartnerDocument({ projectId, partnerId, documentId: document.id, ...p }),
+      (p) => apiClient.documents.deletePartnerDocument({ projectId, partnerId, documentId: document.id, ...p }),
       () => this.afterUpdate(key, message, onComplete)
     );
   }

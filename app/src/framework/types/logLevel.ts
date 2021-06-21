@@ -1,10 +1,4 @@
-export enum LogLevel {
-  VERBOSE = 1,
-  DEBUG,
-  INFO,
-  WARN,
-  ERROR
-}
+import { LogLevel } from "@framework/constants";
 
 export function parseLogLevel(value: string) {
   switch ((value || "").toUpperCase()) {

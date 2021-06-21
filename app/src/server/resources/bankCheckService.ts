@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import * as https from "https";
 import { RequestOptions } from "https";
-import { Configuration, ConfigurationError } from "@server/features/common";
+import { configuration, ConfigurationError } from "@server/features/common";
 import {
   AccountDetails,
   BankCheckResult,
@@ -34,11 +35,11 @@ export interface IBankCheckService {
 export class BankCheckService implements IBankCheckService {
 
   private getConnection() {
-    if (!Configuration.sil.bankCheckUrl) {
+    if (!configuration.sil.bankCheckUrl) {
       throw new ConfigurationError("Bank checking service not configured");
     }
-    const bankCheckUrl = Configuration.sil.bankCheckUrl;
-    const bankCheckPort = Configuration.sil.bankCheckPort;
+    const bankCheckUrl = configuration.sil.bankCheckUrl;
+    const bankCheckPort = configuration.sil.bankCheckPort;
     return {bankCheckUrl, bankCheckPort};
   }
 

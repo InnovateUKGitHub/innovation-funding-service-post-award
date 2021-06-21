@@ -1,13 +1,13 @@
 import React from "react";
 import * as ACC from "@ui/components";
-import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { Option, PCRDto, PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRSpendProfileCostDto, PCRSpendProfileOverheadsCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { PCROverheadsCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 import { SpendProfileCostFormProps } from "@ui/containers";
-import { PCRItemType, PCRSpendProfileOverheadRate } from "@framework/types";
+import { CostCategoryType, PCRItemType, PCRSpendProfileOverheadRate } from "@framework/types";
+import { EditorStatus } from "@ui/constants/enums";
 import { roundCurrency } from "@framework/util";
-import { CostCategoryType } from "@framework/entities";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { Pending } from "@shared/pending";
 import { PCRDtoValidator } from "@ui/validators";

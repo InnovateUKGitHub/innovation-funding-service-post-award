@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
 import { Authorisation, ClaimDetailKey, ClaimDetailsDto, ClaimLineItemDto, IContext, ProjectRole } from "@framework/types";
 import { ClaimDetailsValidator } from "@ui/validators";
@@ -21,7 +22,7 @@ export class SaveClaimDetails extends CommandBase<boolean> {
     return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     this.validateRequest();
 
     const costCategory = await context.runQuery(new GetUnfilteredCostCategoriesQuery()).then(x => x.find(y => y.id === this.costCategoryId));

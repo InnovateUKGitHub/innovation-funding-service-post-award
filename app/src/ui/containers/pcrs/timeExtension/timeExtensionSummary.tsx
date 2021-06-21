@@ -3,9 +3,9 @@ import * as ACC from "@ui/components";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForTimeExtensionDto } from "@framework/dtos";
 import { PCRTimeExtensionItemDtoValidator } from "@ui/validators";
-import { timeExtensionStepNames } from "./timeExtensionWorkflow";
+import { TimeExtensionStepNames } from "./timeExtensionWorkflow";
 
-export const TimeExtensionSummary = (props: PcrSummaryProps<PCRItemForTimeExtensionDto, PCRTimeExtensionItemDtoValidator, timeExtensionStepNames>) => {
+export const TimeExtensionSummary = (props: PcrSummaryProps<PCRItemForTimeExtensionDto, PCRTimeExtensionItemDtoValidator, TimeExtensionStepNames>) => {
   const newProjectDuration = (x: Dtos.PCRItemForTimeExtensionDto) => !!x.additionalMonths || x.additionalMonths === 0 ? x.additionalMonths + x.projectDurationSnapshot : null;
 
   return (

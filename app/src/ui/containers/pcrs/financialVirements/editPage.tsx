@@ -1,5 +1,5 @@
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { EditorStatus, IEditorStore, useStores } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
 import { CostCategoryVirementDto, FinancialVirementDto, PartnerDto, ProjectDto } from "@framework/dtos";
@@ -9,6 +9,7 @@ import { roundCurrency } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { projectCompetition, useContent } from "@ui/hooks";
 import { getAuthRoles } from "@framework/types";
+import { EditorStatus } from "@ui/constants/enums";
 
 export function useEditPageContent() {
   const { getContent } = useContent();

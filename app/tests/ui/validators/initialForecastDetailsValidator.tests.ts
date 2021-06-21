@@ -1,4 +1,3 @@
-import { CostCategoryType } from "@framework/entities";
 import {
   InitialForecastDetailsDtosValidator,
   InitialForecastDetailsDtoCostCategoryValidator,
@@ -6,6 +5,7 @@ import {
 import { GetAllForecastsGOLCostsQuery, GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
 import { CostCategoryForecast } from "@ui/validators";
+import { CostCategoryType } from "@framework/constants";
 import { TestContext } from "../../server/testContextProvider";
 
 describe("InitialForecastDetailsDtoCostCategoryValidator()", () => {

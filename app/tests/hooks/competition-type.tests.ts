@@ -2,7 +2,8 @@ import { renderHook } from "@testing-library/react-hooks";
 
 import { hookTestBed } from "@shared/TestBed";
 import { useCompetitionType, projectCompetition } from "@ui/hooks";
-import { LoadingStatus, Pending } from "@shared/pending";
+import { Pending } from "@shared/pending";
+import { LoadingStatus } from "@framework/constants";
 
 describe("useCompetitionType()", () => {
   beforeEach(jest.clearAllMocks);

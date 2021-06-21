@@ -21,7 +21,7 @@ import { Option } from "@framework/dtos";
 import { GetPcrPartnerTypesQuery } from "@server/features/pcrs/getPcrPartnerTypesQuery";
 import { GetPcrParticipantSizesQuery } from "@server/features/pcrs/getPcrParticipantSizesQuery";
 import { GetPcrProjectLocationsQuery } from "@server/features/pcrs/getPcrProjectLocationsQuery";
-import { getAvailableItemTypesQuery } from "@server/features/pcrs/getAvailableItemTypesQuery";
+import { GetAvailableItemTypesQuery } from "@server/features/pcrs/getAvailableItemTypesQuery";
 import { GetPcrSpendProfileCapitalUsageTypesQuery } from "@server/features/pcrs/getPcrSpendProfileCapitalUsageTypesQuery";
 import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
@@ -85,7 +85,7 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
   }
 
   getAvailableTypes(params: ApiParams<{ projectId: string }>): Promise<PCRItemTypeDto[]> {
-    const query = new getAvailableItemTypesQuery(params.projectId);
+    const query = new GetAvailableItemTypesQuery(params.projectId);
     return contextProvider.start(params).runQuery(query);
   }
 

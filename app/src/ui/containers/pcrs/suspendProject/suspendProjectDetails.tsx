@@ -1,5 +1,5 @@
-import { EditorStatus } from "@ui/redux";
 import { getAuthRoles } from "@framework/types";
+import { EditorStatus } from "@ui/constants/enums";
 import { PCRItemForProjectSuspensionDto } from "@framework/dtos";
 import * as ACC from "@ui/components";
 import { useContent } from "@ui/hooks";

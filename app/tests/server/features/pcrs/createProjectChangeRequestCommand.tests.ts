@@ -1,9 +1,9 @@
 import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createProjectChangeRequestCommand";
-import { PCRDto, PCRItemDto, ProjectRole } from "@framework/dtos";
+import { PCRDto, PCRItemDto } from "@framework/dtos";
 import { ValidationError } from "@server/features/common";
 import { Authorisation } from "@framework/types";
-import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
-import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants";
+import { pcrRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
+import { PCRItemStatus, PCRItemType, PCRStatus, ProjectRole } from "@framework/constants";
 import { TestContext } from "../../testContextProvider";
 
 describe("Create PCR Command", () => {
@@ -20,7 +20,7 @@ describe("Create PCR Command", () => {
 
         // Note: Were getting all the data we need based on the PCR Item and ensuring validity
         const recordsToCreate = pcrItemsToCheck.map(pcrItem => {
-          const metaValue = PCRRecordTypeMetaValues.find(x => x.type === pcrItem);
+          const metaValue = pcrRecordTypeMetaValues.find(x => x.type === pcrItem);
 
           if (!metaValue) {
             throw new Error(`PCRRecordTypeMetaValues item was not found: ${pcrItem}`);
@@ -152,7 +152,7 @@ describe("Create PCR Command", () => {
     const project = context.testData.createProject();
     context.testData.createCurrentUserAsProjectManager(project);
     const partner = context.testData.createPartner(project);
-    const itemType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.SinglePartnerFinancialVirement)!;
+    const itemType = pcrRecordTypeMetaValues.find(x => x.type === PCRItemType.SinglePartnerFinancialVirement)!;
 
     const command = new CreateProjectChangeRequestCommand(project.Id, ({
       projectId: project.Id,
@@ -178,7 +178,7 @@ describe("Create PCR Command", () => {
     const partner = context.testData.createPartner(project);
     const recordTypes = context.testData.createPCRRecordTypes();
 
-    const itemType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange)!;
+    const itemType = pcrRecordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange)!;
 
     const command = new CreateProjectChangeRequestCommand(project.Id, ({
       projectId: project.Id,

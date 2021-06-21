@@ -1,11 +1,12 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { CompanyDto, PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { EditorStatus, StoresConsumer } from "@ui/redux";
+import { StoresConsumer } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { Pending } from "@shared/pending";
 import { SimpleString } from "@ui/components/renderers";
+import { EditorStatus } from "@ui/constants/enums";
 
 interface State {
   searchTerm: string | null;
@@ -113,19 +114,19 @@ class Component extends React.Component<
   }
 
   private renderPendingResults(
-    Form: ACC.FormBuilder<PCRItemForPartnerAdditionDto>,
+    form: ACC.FormBuilder<PCRItemForPartnerAdditionDto>,
     pendingSearchResults: Pending<CompanyDto[]> | null,
     pcrItem: PCRItemForPartnerAdditionDto,
   ) {
     return !pendingSearchResults ? (
-      this.renderResults(Form, null, pcrItem)
+      this.renderResults(form, null, pcrItem)
     ) : (
-      <ACC.Loader pending={pendingSearchResults} render={x => this.renderResults(Form, x, pcrItem)} />
+      <ACC.Loader pending={pendingSearchResults} render={x => this.renderResults(form, x, pcrItem)} />
     );
   }
 
   private renderResults(
-    Form: ACC.FormBuilder<PCRItemForPartnerAdditionDto>,
+    form: ACC.FormBuilder<PCRItemForPartnerAdditionDto>,
     searchResults: CompanyDto[] | null,
     pcrItem: PCRItemForPartnerAdditionDto,
   ) {
@@ -146,15 +147,15 @@ class Component extends React.Component<
 
       return (
         <ACC.Section qa="company-house-search-results">
-          <Form.Fieldset headingContent={x => x.pcrAddPartnerCompanyHouse.searchResultsHeading} qa="searchResults">
-            <Form.Radio
+          <form.Fieldset headingContent={x => x.pcrAddPartnerCompanyHouse.searchResultsHeading} qa="searchResults">
+            <form.Radio
               name="searchResults"
               inline={false}
               options={companiesOptions}
               value={() => selectedCompany}
               update={(x, val) => this.onCompanySelectUpdate(val, searchResults, pcrItem)}
             />
-          </Form.Fieldset>
+          </form.Fieldset>
           <SimpleString>
             <ACC.Content value={x => x.pcrAddPartnerCompanyHouse.resultNotShowing} />
           </SimpleString>

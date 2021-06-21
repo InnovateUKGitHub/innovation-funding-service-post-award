@@ -1,9 +1,9 @@
 import * as ACC from "@ui/components";
-import { EditorStatus } from "@ui/redux";
 import { PCRSpendProfileOtherCostsDto } from "@framework/dtos/pcrSpendProfileDto";
 import { PCROtherCostsDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
-import React, { Component } from "react";
+import { Component } from "react";
 import { SpendProfileCostFormProps } from "@ui/containers";
+import { EditorStatus } from "@ui/constants/enums";
 
 export class OtherCostsFormComponent extends Component<SpendProfileCostFormProps<PCRSpendProfileOtherCostsDto, PCROtherCostsDtoValidator>> {
   render() {

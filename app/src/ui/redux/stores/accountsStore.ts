@@ -1,5 +1,5 @@
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { ApiClient } from "../../apiClient";
+import { apiClient } from "../../apiClient";
 import { RootState } from "../reducers";
 import { RootActionsOrThunk } from "../actions";
 import { StoreBase } from "./storeBase";
@@ -10,6 +10,6 @@ export class AccountsStore extends StoreBase {
   }
 
   public getAccounts() {
-    return this.getData("accounts", storeKeys.getAccountKey(), p => ApiClient.accounts.getAll(p));
+    return this.getData("accounts", storeKeys.getAccountKey(), p => apiClient.accounts.getAll(p));
   }
 }

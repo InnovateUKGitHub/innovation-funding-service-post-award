@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
-import { PCRDto, PCRItemDto, PCRItemTypeDto, ProjectRole } from "@framework/dtos";
+import { PCRDto, PCRItemDto, PCRItemTypeDto } from "@framework/dtos";
 import { Authorisation, IContext } from "@framework/types";
 import { ProjectChangeRequestItemForCreateEntity } from "@framework/entities";
 import { PCRDtoValidator } from "@ui/validators";
 import { GetAllProjectRolesForUser, GetByIdQuery } from "@server/features/projects";
-import { PCRItemType } from "@framework/constants";
-import { getAvailableItemTypesQuery } from "./getAvailableItemTypesQuery";
+import { PCRItemType, ProjectRole } from "@framework/constants";
+import { GetAvailableItemTypesQuery } from "./getAvailableItemTypesQuery";
 import { GetAllPCRsQuery } from "./getAllPCRsQuery";
 
 export class CreateProjectChangeRequestCommand extends CommandBase<string> {
@@ -41,7 +42,7 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
     await context.repositories.projectChangeRequestStatusChange.createStatusChange(pcrToBeChanged);
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     if (this.projectChangeRequestDto.id) {
       throw new BadRequestError("Project change request has already been created");
     }
@@ -50,7 +51,7 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
       throw new BadRequestError("Project type does not match change request project type");
     }
 
-    const itemTypes = await context.runQuery(new getAvailableItemTypesQuery(this.projectId));
+    const itemTypes = await context.runQuery(new GetAvailableItemTypesQuery(this.projectId));
     const projectRoles = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.forProject(this.projectId).getRoles());
     const projectDto = await context.runQuery(new GetByIdQuery(this.projectId));
     const projectPcrs = await context.runQuery(new GetAllPCRsQuery(this.projectId));

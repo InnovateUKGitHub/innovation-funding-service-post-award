@@ -1,9 +1,9 @@
 import * as ACC from "@ui/components";
 import { PCRItemForTimeExtensionDto } from "@framework/dtos";
-import { EditorStatus } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRTimeExtensionItemDtoValidator } from "@ui/validators";
 import { useContent } from "@ui/hooks";
+import { EditorStatus } from "@ui/constants/enums";
 
 export const TimeExtensionStep = (props: PcrStepProps<PCRItemForTimeExtensionDto, PCRTimeExtensionItemDtoValidator>) => {
   const {getContent} = useContent();

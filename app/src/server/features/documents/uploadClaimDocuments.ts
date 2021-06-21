@@ -11,7 +11,7 @@ export class UploadClaimDocumentsCommand extends CommandMultipleDocumentBase<str
     super();
   }
 
-  protected LogMessage() {
+  protected logMessage() {
     return [this.constructor.name, this.claimKey, this.documents && this.documents.files && this.documents.files.map(x => x.fileName)];
   }
 
@@ -19,7 +19,7 @@ export class UploadClaimDocumentsCommand extends CommandMultipleDocumentBase<str
     return auth.forProject(this.claimKey.projectId).hasRole(ProjectRole.MonitoringOfficer) || auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const claim = await context.repositories.claims.get(this.claimKey.partnerId, this.claimKey.periodId);
 
     if (!claim) {

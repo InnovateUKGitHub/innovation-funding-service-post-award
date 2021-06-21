@@ -1,7 +1,8 @@
 import { QueryBase } from "@server/features/common";
-import { ISalesforceClaim, SalesforceProjectRole } from "@server/repositories";
+import { ISalesforceClaim } from "@server/repositories";
 import { IComparer } from "@framework/util/comparator";
 import { ClaimDto, IContext } from "@framework/types";
+import { SalesforceProjectRole } from "@server/constants/enums";
 import mapClaim from "./mapClaim";
 
 export class GetAllClaimsForProjectQuery extends QueryBase<ClaimDto[]> {
@@ -9,7 +10,7 @@ export class GetAllClaimsForProjectQuery extends QueryBase<ClaimDto[]> {
     super();
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const claims = await context.repositories.claims.getAllByProjectId(this.projectId);
     const forecasts = await context.repositories.profileTotalPeriod.getAllByProjectId(this.projectId);
     const joined = claims.map(claim => ({

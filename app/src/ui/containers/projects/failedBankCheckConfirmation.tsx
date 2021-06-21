@@ -1,6 +1,7 @@
 import {StoresConsumer} from "@ui/redux";
-import {ProjectDto, ProjectRole} from "@framework/dtos";
+import {ProjectDto} from "@framework/dtos";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { ProjectRole } from "@framework/constants";
 import * as ACC from "../../components";
 
 export interface FailedBankCheckConfirmationParams {

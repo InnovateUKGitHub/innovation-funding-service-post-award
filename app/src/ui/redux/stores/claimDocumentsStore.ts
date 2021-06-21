@@ -1,4 +1,4 @@
-import { ApiClient } from "@ui/apiClient";
+import { apiClient } from "@ui/apiClient";
 import { Pending } from "@shared/pending";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -19,7 +19,7 @@ export class ClaimDocumentsStore extends DocumentsStoreBase {
   }
 
   public getClaimDocuments(projectId: string, partnerId: string, periodId: number) {
-    return this.getData("documents", this.getKey(partnerId, periodId), p => ApiClient.documents.getClaimDocuments({ projectId, partnerId, periodId, ...p }));
+    return this.getData("documents", this.getKey(partnerId, periodId), p => apiClient.documents.getClaimDocuments({ projectId, partnerId, periodId, ...p }));
   }
 
   public getClaimDocumentsEditor(projectId: string, partnerId: string, periodId: number, init?: (dto: MultipleDocumentUploadDto) => void) {
@@ -33,7 +33,7 @@ export class ClaimDocumentsStore extends DocumentsStoreBase {
       true,
       key,
       dto,
-      p => ApiClient.documents.uploadClaimDocuments({ claimKey: { projectId, partnerId, periodId }, ...p }),
+      p => apiClient.documents.uploadClaimDocuments({ claimKey: { projectId, partnerId, periodId }, ...p }),
       message,
       onComplete
     );
@@ -41,7 +41,7 @@ export class ClaimDocumentsStore extends DocumentsStoreBase {
 
   public deleteClaimDocument(projectId: string, partnerId: string, periodId: number, dto: MultipleDocumentUploadDto, document: DocumentSummaryDto, message?: string, onComplete?: () => void) {
     const key = this.getKey(partnerId, periodId);
-    return this.deleteEditor("multipleDocuments", key, dto, () => this.validateMultipleDocumentsDto(dto, false, true), p => ApiClient.documents.deleteClaimDocument({ claimKey: { projectId, partnerId, periodId }, documentId: document.id, ...p }), () => this.afterUpdate(key, message, onComplete));
+    return this.deleteEditor("multipleDocuments", key, dto, () => this.validateMultipleDocumentsDto(dto, false, true), p => apiClient.documents.deleteClaimDocument({ claimKey: { projectId, partnerId, periodId }, documentId: document.id, ...p }), () => this.afterUpdate(key, message, onComplete));
   }
 
 }

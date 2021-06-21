@@ -1,4 +1,4 @@
-import { ApiClient } from "@ui/apiClient";
+import { apiClient } from "@ui/apiClient";
 import { ForecastDetailsDtosValidator } from "@ui/validators";
 import { Pending } from "@shared/pending";
 import { RootState } from "@ui/redux";
@@ -28,19 +28,19 @@ export class ForecastDetailsStore extends StoreBase {
 
   public get(partnerId: string, periodId: number, costCategoryId: string) {
     return this.getData("forecastDetail", storeKeys.getForecastDetailKey(partnerId, periodId, costCategoryId), p =>
-      ApiClient.forecastDetails.get({ partnerId, periodId, costCategoryId, ...p }),
+      apiClient.forecastDetails.get({ partnerId, periodId, costCategoryId, ...p }),
     );
   }
 
   public getAllByPartner(partnerId: string) {
     return this.getData("forecastDetails", storeKeys.getPartnerKey(partnerId), p =>
-      ApiClient.forecastDetails.getAllByPartnerId({ partnerId, ...p }),
+      apiClient.forecastDetails.getAllByPartnerId({ partnerId, ...p }),
     );
   }
 
   public getAllInitialByPartner(partnerId: string) {
     return this.getData("initialForecastDetails", storeKeys.getPartnerKey(partnerId), p =>
-      ApiClient.initialForecastDetails.getAllByPartnerId({ partnerId, ...p }),
+      apiClient.initialForecastDetails.getAllByPartnerId({ partnerId, ...p }),
     );
   }
 
@@ -108,7 +108,7 @@ export class ForecastDetailsStore extends StoreBase {
       storeKeys.getPartnerKey(partnerId),
       dtos,
       show => this.getValidator(partnerId, dtos, show),
-      p => ApiClient.forecastDetails.update({ ...p, projectId, partnerId, submit: submitClaim, forecasts: dtos }),
+      p => apiClient.forecastDetails.update({ ...p, projectId, partnerId, submit: submitClaim, forecasts: dtos }),
       () => this.handleError(message, () => onComplete),
     );
   }
@@ -128,17 +128,14 @@ export class ForecastDetailsStore extends StoreBase {
       storeKeys.getPartnerKey(partnerId),
       payload,
       show => this.getInitialValidator(partnerId, payload, submit, show),
-      p => ApiClient.initialForecastDetails.update({ ...p, projectId, partnerId, submit, forecasts: payload }),
+      p => apiClient.initialForecastDetails.update({ ...p, projectId, partnerId, submit, forecasts: payload }),
       () => this.handleError(message, () => onComplete),
     );
   }
 
-  private handleError(message: string | undefined, onComplete: () => void): any {
-    if (message) {
-      this.queue(messageSuccess(message));
-    }
-    if (onComplete) {
-      onComplete();
-    }
+  private handleError(message?: string, onComplete?: () => void): void {
+    if (message) this.queue(messageSuccess(message));
+
+    onComplete?.();
   }
 }

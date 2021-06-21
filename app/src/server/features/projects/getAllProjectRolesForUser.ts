@@ -1,7 +1,8 @@
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
+import { SalesforceProjectRole } from "@server/constants/enums";
 import { Partner } from "@framework/entities";
 import { QueryBase } from "../common/queryBase";
-import { ISalesforceProjectContact, SalesforceProjectRole, SalesforceRole } from "../../repositories";
+import { ISalesforceProjectContact, SalesforceRole } from "../../repositories";
 
 export interface IRoleInfo {
   projectRoles: ProjectRole;
@@ -9,7 +10,7 @@ export interface IRoleInfo {
 }
 
 export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
-  public async Run(context: IContext): Promise<Authorisation> {
+  public async run(context: IContext): Promise<Authorisation> {
     const email = context.user && context.user.email;
 
     if (!email) {

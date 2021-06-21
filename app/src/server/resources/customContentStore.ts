@@ -1,4 +1,5 @@
-import { Configuration, ConfigurationError } from "@server/features/common";
+/* eslint-disable @typescript-eslint/naming-convention */
+import { configuration, ConfigurationError } from "@server/features/common";
 import aws from "aws-sdk";
 
 export interface ICustomContentStore {
@@ -8,21 +9,21 @@ export interface ICustomContentStore {
 
 export class CustomContentStore implements ICustomContentStore {
   private getConnection() {
-    if (!Configuration.s3Account.accessKeyId || !Configuration.s3Account.secretAccessKey) {
+    if (!configuration.s3Account.accessKeyId || !configuration.s3Account.secretAccessKey) {
       throw new ConfigurationError("S3 Access not configured");
     }
-    return new aws.S3({ credentials: { accessKeyId: Configuration.s3Account.accessKeyId, secretAccessKey: Configuration.s3Account.secretAccessKey } });
+    return new aws.S3({ credentials: { accessKeyId: configuration.s3Account.accessKeyId, secretAccessKey: configuration.s3Account.secretAccessKey } });
   }
 
   async getInfo() {
     const connection = this.getConnection();
 
-    if (!Configuration.s3Account.contentBucket || !Configuration.s3Account.customContentPath) {
+    if (!configuration.s3Account.contentBucket || !configuration.s3Account.customContentPath) {
       throw new ConfigurationError("S3 Bucket not configured");
     }
 
     return connection
-      .headObject({ Bucket: Configuration.s3Account.contentBucket, Key: Configuration.s3Account.customContentPath })
+      .headObject({ Bucket: configuration.s3Account.contentBucket, Key: configuration.s3Account.customContentPath })
       .promise()
       .then(x => ({ lastModified: x.LastModified! }));
   }
@@ -30,12 +31,12 @@ export class CustomContentStore implements ICustomContentStore {
   async getContent() {
 
     const connection = this.getConnection();
-    if (!Configuration.s3Account.contentBucket || !Configuration.s3Account.customContentPath) {
+    if (!configuration.s3Account.contentBucket || !configuration.s3Account.customContentPath) {
       throw new ConfigurationError("S3 Bucket not configured");
     }
 
     return connection
-      .getObject({ Bucket: Configuration.s3Account.contentBucket, Key: Configuration.s3Account.customContentPath })
+      .getObject({ Bucket: configuration.s3Account.contentBucket, Key: configuration.s3Account.customContentPath })
       .promise()
       .then(x => (x.Body && x.Body.toString() || ""))
       ;

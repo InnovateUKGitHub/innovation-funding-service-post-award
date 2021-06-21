@@ -24,37 +24,37 @@ const validationStyles: {
     className: "acc-message__info",
     text: "Info",
     styles: {
-      borderColor: colours.GOVUK_COLOUR_BLUE,
+      borderColor: colours.govukColourBlue,
     },
   },
   error: {
     className: "acc-message__error",
     text: "Error",
     styles: {
-      borderColor: colours.GOVUK_ERROR_COLOUR,
+      borderColor: colours.govukErrorColour,
     },
   },
   success: {
     className: "acc-message__success",
     text: "Success",
     styles: {
-      borderColor: colours.GOVUK_COLOUR_GREEN,
-      color: colours.GOVUK_COLOUR_GREEN,
+      borderColor: colours.govukColourGreen,
+      color: colours.govukColourGreen,
     },
   },
   warning: {
     className: "acc-message__warning",
     text: "Warning",
     styles: {
-      borderColor: colours.GOVUK_COLOUR_BLACK,
+      borderColor: colours.govukColourBlack,
     },
   },
   alert: {
     className: "acc-message__alert",
     text: "Alert",
     styles: {
-      borderColor: colours.GOVUK_ERROR_COLOUR,
-      color: colours.GOVUK_ERROR_COLOUR,
+      borderColor: colours.govukErrorColour,
+      color: colours.govukErrorColour,
     },
   },
 };

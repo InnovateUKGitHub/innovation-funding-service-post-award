@@ -5,10 +5,10 @@ import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import * as ACC from "@ui/components";
 import { sum } from "@framework/util";
-import { EditorStatus, StoresConsumer } from "@ui/redux";
+import { StoresConsumer } from "@ui/redux";
 import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
-import { CostCategoryType } from "@framework/entities";
-import { PCROrganisationType } from "@framework/constants";
+import { CostCategoryType, PCROrganisationType } from "@framework/constants";
+import { EditorStatus } from "@ui/constants/enums";
 import { Pending } from "@shared/pending";
 import { PCRAcademicCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 import { Content, FormBuilder } from "@ui/components";
@@ -44,10 +44,10 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     );
   }
 
-  private renderTsb(Form: FormBuilder<PCRItemForPartnerAdditionDto>) {
+  private renderTsb(form: FormBuilder<PCRItemForPartnerAdditionDto>) {
     return (
-      <Form.Fieldset headingContent={x => x.pcrAddPartnerAcademicCosts.labels.tsbReferenceHeading}>
-        <Form.String
+      <form.Fieldset headingContent={x => x.pcrAddPartnerAcademicCosts.labels.tsbReferenceHeading}>
+        <form.String
           labelContent={x => x.pcrAddPartnerAcademicCosts.tsbLabel}
           width={"one-third"}
           name="tsbReference"
@@ -55,11 +55,11 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           update={(x, val) => x.tsbReference = val}
           validation={this.props.validator.tsbReference}
         />
-      </Form.Fieldset>
+      </form.Fieldset>
     );
   }
 
-  private renderCosts(Form: FormBuilder<PCRItemForPartnerAdditionDto>, costCategories: CostCategoryDto[]) {
+  private renderCosts(form: FormBuilder<PCRItemForPartnerAdditionDto>, costCategories: CostCategoryDto[]) {
     const data = costCategories.map(
       costCategory => {
         return {
@@ -72,7 +72,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     const Table = ACC.TypedTable<Data>();
 
     return (
-      <Form.Fieldset headingContent={x => x.pcrAddPartnerAcademicCosts.costsSectionTitle}>
+      <form.Fieldset headingContent={x => x.pcrAddPartnerAcademicCosts.costsSectionTitle}>
         <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.costsGuidance}/></ACC.Renderers.SimpleString>
         <Table.Table qa="costsTable" data={data}>
           <Table.String
@@ -90,20 +90,20 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
             footer={this.props.isClient && <ACC.Renderers.Currency value={total}/>}
           />
         </Table.Table>
-      </Form.Fieldset>
+      </form.Fieldset>
     );
   }
 
-  private renderSaveButtons(Form: FormBuilder<PCRItemForPartnerAdditionDto>) {
+  private renderSaveButtons(form: FormBuilder<PCRItemForPartnerAdditionDto>) {
     return (
-      <Form.Fieldset qa="save-and-continue">
-        <Form.Submit>
+      <form.Fieldset qa="save-and-continue">
+        <form.Submit>
           <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.pcrItem.submitButton}/>
-        </Form.Submit>
-        <Form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}>
+        </form.Submit>
+        <form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}>
           <Content value={x => x.pcrAddPartnerAcademicCosts.pcrItem.returnToSummaryButton}/>
-        </Form.Button>
-      </Form.Fieldset>
+        </form.Button>
+      </form.Fieldset>
     );
   }
 

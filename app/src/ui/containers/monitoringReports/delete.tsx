@@ -2,9 +2,10 @@ import * as ACC from "@ui/components";
 import * as Dtos from "@framework/dtos";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
-import { ContentConsumer, IEditorStore } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { Pending } from "@shared/pending";
-import { StoresConsumer } from "@ui/redux";
+import { ProjectRole } from "@framework/constants";
+import { useContent } from "@ui/hooks";
 
 interface Callbacks {
   delete: (dto: Dtos.MonitoringReportDto) => void;
@@ -59,26 +60,28 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
   }
 }
 
-const DeleteVerificationContainer = (props: MonitoringReportDeleteParams&BaseProps) => (
-  <StoresConsumer>
-    {
-      stores => (
-        <ContentConsumer>
-          {
-            content => (
-              <DeleteVerificationComponent
-                project={stores.projects.getById(props.projectId)}
-                editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
-                delete={(dto) => stores.monitoringReports.deleteReport(props.projectId, props.id, dto, content.monitoringReportsDelete.messages.onDeleteMonitoringReportMessage.content, () => stores.navigation.navigateTo(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId })))}
-                {...props}
-              />
-            )
-          }
-        </ContentConsumer>
-      )
-    }
-  </StoresConsumer>
-);
+const DeleteVerificationContainer = (props: MonitoringReportDeleteParams&BaseProps) => {
+  const stores = useStores();
+  const { getContent } = useContent();
+
+  return (
+    <DeleteVerificationComponent
+      project={stores.projects.getById(props.projectId)}
+      editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
+      delete={dto =>
+        stores.monitoringReports.deleteReport(
+          props.projectId,
+          props.id,
+          dto,
+          getContent(x => x.monitoringReportsDelete.messages.onDeleteMonitoringReportMessage),
+          () =>
+            stores.navigation.navigateTo(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId })),
+        )
+      }
+      {...props}
+    />
+  );
+};
 
 export const MonitoringReportDeleteRoute = defineRoute({
   routeName: "monitoringReportDeleteVerification",
@@ -89,5 +92,5 @@ export const MonitoringReportDeleteRoute = defineRoute({
     id: route.params.id
   }),
   getTitle: ({content}) => content.monitoringReportsDelete.title(),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(Dtos.ProjectRole.MonitoringOfficer),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
 });

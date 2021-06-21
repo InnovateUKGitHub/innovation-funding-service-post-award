@@ -85,13 +85,13 @@ export interface ICaches {
 }
 
 export interface IAsyncRunnable<T> {
-  Run: (context: IContext) => Promise<T>;
-  LogMessage: () => any[];
+  run: (context: IContext) => Promise<T>;
+  logMessage: () => any[];
   handleRepositoryError?: (context: IContext, error: any) => void;
   accessControl?: (auth: Authorisation, context: IContext) => Promise<boolean>;
 }
 
 export interface ISyncRunnable<T> {
-  Run: (context: IContext) => T;
-  LogMessage: () => any[];
+  run: (context: IContext) => T;
+  logMessage: () => any[];
 }

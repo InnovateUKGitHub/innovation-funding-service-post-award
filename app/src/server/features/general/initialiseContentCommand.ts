@@ -8,7 +8,7 @@ export class InitialiseContentCommand extends NonAuthorisedCommandBase<boolean> 
     super();
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const useCustomContent = this.loadCustom && context.config.features.customContent;
 
     // if we have never set default content then contentStoreLastUpdated will be null

@@ -1,6 +1,6 @@
 import { GetPermissionGroupQuery } from "@server/features/general/getPermissionGroupsQuery";
 import { BadRequestError } from "@server/features/common";
-import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
+import { PermissionGroupIdenfifier } from "@framework/constants";
 import { TestContext } from "../../testContextProvider";
 
 describe("GetPermissionGroupQuery", () => {

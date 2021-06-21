@@ -1,4 +1,4 @@
-import { CostCategoryType } from "@framework/entities";
+import { CostCategoryType } from "@framework/constants";
 
 export interface CostCategoryDto {
   id: string;

@@ -22,7 +22,7 @@ import { PartnerDetailsEditFormHandler } from "@server/forms/partnerDetailsEditF
 import { OverheadDocumentsUploadHandler } from "@server/forms/projectChangeRequest/spendProfile/overheadDocuments/overheadDocumentsUploadHandler";
 import { OverheadDocumentsDeleteHandler } from "@server/forms/projectChangeRequest/spendProfile/overheadDocuments/overheadDocumentsDeleteHandler";
 import { serverRender } from "../serverRender";
-import { Configuration } from "../features/common";
+import { configuration } from "../features/common";
 import { ProjectChangeRequestReviewFormHandler } from "./projectChangeRequest/reviewProjectChangeRequestFormHandler";
 import { ProjectChangeRequestPrepareFormHandler } from "./projectChangeRequest/prepareProjectChangeRequestFormHandler";
 import { ProjectChangeRequestDeleteFormHandler } from "./projectChangeRequest/deleteProjectChangeRequestFormHandler";
@@ -134,7 +134,7 @@ export const configureFormRouter = (csrfProtection: RequestHandler) => {
     result.post(getRoute(x), csrfProtection, handlePost(x), handleError);
   });
 
-  if (!Configuration.sso.enabled) {
+  if (!configuration.sso.enabled) {
     const homeFormHandler = new HomeFormHandler();
     result.post(getRoute(homeFormHandler), csrfProtection, homeFormHandler.handle, handleError);
   }

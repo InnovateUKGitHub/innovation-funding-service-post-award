@@ -27,8 +27,8 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor)} />;
   }
   public renderContents(project: ProjectDto, editor: IEditorStore<PartnerDto, PartnerDtoValidator>) {
-
     const Form = ACC.TypedForm<PartnerDto>();
+
     return (
       <ACC.Page
         backLink={

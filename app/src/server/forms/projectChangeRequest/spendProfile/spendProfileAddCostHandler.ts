@@ -8,7 +8,7 @@ import {
   ProjectDto,
   ProjectRole
 } from "@framework/types";
-import { BadRequestError, Configuration } from "@server/features/common";
+import { BadRequestError, configuration } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
@@ -20,10 +20,9 @@ import {
   PCRSpendProfileOverheadDocumentRoute
 } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators";
-import { PCRItemStatus } from "@framework/constants";
+import { CostCategoryType, PCRItemStatus } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
-import { CostCategoryType } from "@framework/entities";
 import {
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileLabourCostDto,
@@ -36,7 +35,7 @@ import {
 import { parseNumber } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
+import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 
 interface IBaseCost {
   id: string;
@@ -162,7 +161,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
   private getSpendProfileStep(context: IContext, pcrItem: PCRItemForPartnerAdditionDto) {
     const workflow = PcrWorkflow.getWorkflow(pcrItem, undefined);
     if (!workflow) return null;
-    const stepName: addPartnerStepNames = "spendProfileStep";
+    const stepName: AddPartnerStepNames = "spendProfileStep";
     return workflow.findStepNumberByName(stepName);
   }
 
@@ -204,6 +203,6 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
   }
 
   protected createValidationResult(params: PcrAddSpendProfileCostParams, dto: PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, Configuration.features, dto);
+    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, configuration.features, dto);
   }
 }

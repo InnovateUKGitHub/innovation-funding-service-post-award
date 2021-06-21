@@ -1,4 +1,5 @@
-import { ErrorCode, IAppError } from "@framework/types/IAppError";
+import { ErrorCode } from "@framework/constants";
+import { IAppError } from "@framework/types/IAppError";
 import { useContent } from "@ui/hooks";
 
 export interface ErrorSummaryProps {

@@ -1,5 +1,5 @@
-import { PCRItemType } from "@framework/types";
-import { Pending, LoadingStatus } from "@shared/pending";
+import { LoadingStatus, PCRItemType } from "@framework/types";
+import { Pending } from "@shared/pending";
 import { TestBed, TestBedStore, TestBedContent } from "@shared/TestBed";
 import { render } from "@testing-library/react";
 

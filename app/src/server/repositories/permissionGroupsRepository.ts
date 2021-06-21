@@ -1,4 +1,4 @@
-import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
+import { PermissionGroupIdenfifier } from "@framework/constants";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { ILogger } from "@server/features/common";
 import { Connection } from "jsforce";

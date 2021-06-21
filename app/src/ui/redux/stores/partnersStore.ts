@@ -1,9 +1,9 @@
-import { ApiClient } from "@ui/apiClient";
+import { apiClient } from "@ui/apiClient";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PartnerDto } from "@framework/dtos";
-import { LoadingStatus } from "@shared/pending";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import { PartnerDocumentsStore } from "@ui/redux/stores/partnerDocumentsStore";
+import { LoadingStatus } from "@framework/constants";
 import { dataLoadAction } from "../actions";
 import { RootState } from "../reducers";
 import { StoreBase } from "./storeBase";
@@ -21,15 +21,15 @@ export class PartnersStore extends StoreBase {
   }
 
   public getAll() {
-    return this.getData("partners", storeKeys.getPartnersKey(), p => ApiClient.partners.getAll({ ...p }));
+    return this.getData("partners", storeKeys.getPartnersKey(), p => apiClient.partners.getAll({ ...p }));
   }
 
   public getPartnersForProject(projectId: string) {
-    return this.getData("partners", storeKeys.getProjectKey(projectId), p => ApiClient.partners.getAllByProjectId({ projectId, ...p }));
+    return this.getData("partners", storeKeys.getProjectKey(projectId), p => apiClient.partners.getAllByProjectId({ projectId, ...p }));
   }
 
   public getById(partnerId: string) {
-    return this.getData("partner", storeKeys.getPartnerKey(partnerId), p => ApiClient.partners.get({ partnerId, ...p }));
+    return this.getData("partner", storeKeys.getPartnerKey(partnerId), p => apiClient.partners.get({ partnerId, ...p }));
   }
 
   public getLeadPartner(projectId: string) {
@@ -59,7 +59,7 @@ export class PartnersStore extends StoreBase {
         showValidationErrors: true,
         validateBankDetails: options?.validateBankDetails,
       }),
-      p => ApiClient.partners.updatePartner({ partnerId, partnerDto, validateBankDetails: options && options.validateBankDetails, verifyBankDetails: options && options.verifyBankDetails, ...p }),
+      p => apiClient.partners.updatePartner({ partnerId, partnerDto, validateBankDetails: options && options.validateBankDetails, verifyBankDetails: options && options.verifyBankDetails, ...p }),
       (result) => {
         this.queue(dataLoadAction(storeKeys.getPartnerKey(partnerId), "partner", LoadingStatus.Updated, result));
         if(options && options.onComplete) {

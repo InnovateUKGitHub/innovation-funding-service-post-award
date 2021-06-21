@@ -1,5 +1,4 @@
-import { IContext } from "@framework/types";
-import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
+import { IContext, PermissionGroupIdenfifier } from "@framework/types";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { BadRequestError, QueryBase } from "../common";
 
@@ -9,7 +8,7 @@ export class GetPermissionGroupQuery extends QueryBase<PermissionGroup> {
     super();
   }
 
-  protected async Run(context: IContext): Promise<PermissionGroup> {
+  protected async run(context: IContext): Promise<PermissionGroup> {
 
     const all = await context.caches.permissionGroups.fetchAsync("all", () => this.getData(context));
 

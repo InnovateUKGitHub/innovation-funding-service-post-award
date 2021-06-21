@@ -1,9 +1,9 @@
 import { QueryBase } from "@server/features/common";
 import { GetAllProjectRolesForUser } from "@server/features/projects";
 import { ISalesforceClaimStatusChange } from "@server/repositories";
-import { ClaimStatusChangeDto, ProjectRole } from "@framework/dtos";
+import { ClaimStatusChangeDto } from "@framework/dtos";
 import { dateComparator, stringComparator } from "@framework/util/comparator";
-import { Authorisation, ClaimStatus, IContext, Option } from "@framework/types";
+import { Authorisation, ClaimStatus, IContext, Option, ProjectRole } from "@framework/types";
 import { GetClaimStatusesQuery } from "@server/features/claims/getClaimStatusesQuery";
 import { mapToClaimStatus } from "@server/features/claims/mapClaim";
 
@@ -21,7 +21,7 @@ export class GetClaimStatusChangesQuery extends QueryBase<ClaimStatusChangeDto[]
       || auth.forPartner(this.projectId, this.partnerId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.FinancialContact);
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const roles = await context.runQuery(new GetAllProjectRolesForUser());
     const isMo = roles.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
     const isFCPM = roles.forPartner(this.projectId, this.partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager);

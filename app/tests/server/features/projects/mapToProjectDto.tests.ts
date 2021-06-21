@@ -1,6 +1,5 @@
 import { ClaimFrequency, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import { mapToProjectDto } from "@server/features/projects";
-import * as Repositories from "@server/repositories";
 import { DateTime } from "luxon";
 import { TestContext } from "../../testContextProvider";
 
@@ -87,7 +86,11 @@ describe("mapToProjectDto", () => {
     const context = new TestContext();
     context.config.urls.ifsApplicationUrl = "https://ifs.application.url/application/competition/<<Acc_ProjectNumber__c>>/project/<<Acc_IFSApplicationId__c>>";
 
-    const salesforce = context.testData.createProject(updateProject());
+    const salesforce = context.testData.createProject(x => {
+      x.Acc_ProjectSource__c = "IFS";
+      x.Acc_IFSApplicationId__c = 1;
+      x.Acc_ProjectNumber__c = "30000";
+    });
 
     const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
 
@@ -98,7 +101,11 @@ describe("mapToProjectDto", () => {
     const context = new TestContext();
     context.config.urls.ifsGrantLetterUrl = "https://ifs.application.url/grantletter/competition/<<Acc_ProjectNumber__c>>/project/<<Acc_IFSApplicationId__c>>";
 
-    const project = context.testData.createProject(updateProject());
+    const project = context.testData.createProject(x => {
+      x.Acc_ProjectSource__c = "IFS";
+      x.Acc_IFSApplicationId__c = 1;
+      x.Acc_ProjectNumber__c = "30000";
+    });
     const result = mapToProjectDto(context, project, ProjectRole.Unknown);
 
     expect(result.grantOfferLetterUrl).toBe("https://ifs.application.url/grantletter/competition/30000/project/1");
@@ -164,12 +171,3 @@ describe("mapToProjectDto", () => {
 
   });
 });
-
-function updateProject(): ((item: Repositories.ISalesforceProject) => void) | undefined {
-  return x => {
-    x.Acc_ProjectSource__c = "IFS";
-    x.Acc_IFSApplicationId__c = 1;
-    x.Acc_ProjectNumber__c = "30000";
-  };
-}
-

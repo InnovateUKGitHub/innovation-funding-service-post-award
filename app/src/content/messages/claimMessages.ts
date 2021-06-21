@@ -1,4 +1,5 @@
-import { DateFormat, formatDate } from "@framework/util";
+import { DateFormat } from "@framework/constants";
+import { formatDate } from "@framework/util";
 import { ContentBase } from "../contentBase";
 
 export class ClaimMessages extends ContentBase {

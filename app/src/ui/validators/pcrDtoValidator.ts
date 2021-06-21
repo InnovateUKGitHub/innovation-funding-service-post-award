@@ -15,10 +15,9 @@ import {
   PCRItemTypeDto,
   PCRStandardItemDto,
   ProjectDto,
-  ProjectRole,
   PCRSummaryDto
 } from "@framework/dtos";
-import { PCRItemStatus, PCRItemType, PCROrganisationType, PCRProjectRole, PCRStatus } from "@framework/constants";
+import { PCRItemStatus, PCRItemType, PCROrganisationType, PCRProjectRole, PCRStatus, ProjectRole } from "@framework/constants";
 import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 import { IFeatureFlags, getUnavailablePcrItemsMatrix } from "@framework/types";
 import { Result, Results } from "../validation";

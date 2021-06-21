@@ -1,5 +1,5 @@
 import { IContext, ILinkInfo, PCRDto, PCRItemForPartnerAdditionDto, ProjectDto, ProjectRole } from "@framework/types";
-import { BadRequestError, Configuration } from "@server/features/common";
+import { BadRequestError, configuration } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
@@ -55,6 +55,6 @@ export class ProjectChangeRequestSpendProfileCostsSummaryHandler extends Standar
   }
 
   protected createValidationResult(params: PcrSpendProfileCostSummaryParams, dto: PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, Configuration.features, dto);
+    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, configuration.features, dto);
   }
 }

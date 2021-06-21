@@ -1,5 +1,6 @@
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import {
+  CostCategoryType,
   ILinkInfo,
   PCRItemForPartnerAdditionDto,
   PCRItemStatus,
@@ -21,7 +22,6 @@ import {
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto
 } from "@framework/dtos/pcrSpendProfileDto";
-import { CostCategoryType } from "@framework/entities";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import {
   PCRBaseCostDtoValidator,
@@ -35,7 +35,7 @@ import {
   PCRTravelAndSubsCostDtoValidator
 } from "@ui/validators/pcrSpendProfileDtoValidator";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
+import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import {
   CapitalUsageFormComponent,
   LabourFormComponent,
@@ -153,7 +153,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   private getSpendProfileStep(addPartnerItem: PCRItemForPartnerAdditionDto) {
     const workflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined);
     if (!workflow) return null;
-    const stepName: addPartnerStepNames = "spendProfileStep";
+    const stepName: AddPartnerStepNames = "spendProfileStep";
     return workflow.findStepNumberByName(stepName);
   }
 

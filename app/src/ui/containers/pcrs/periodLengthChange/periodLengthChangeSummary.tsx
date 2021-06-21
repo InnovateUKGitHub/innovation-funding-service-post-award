@@ -1,7 +1,8 @@
 import * as ACC from "@ui/components";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
-import { ClaimFrequency, PCRItemForPeriodLengthChangeDto } from "@framework/dtos";
+import { PCRItemForPeriodLengthChangeDto } from "@framework/dtos";
 import { PCRPeriodLengthChangeItemDtoValidator } from "@ui/validators";
+import { ClaimFrequency } from "@framework/constants";
 
 export const PeriodLengthChangeSummary = (props: PcrSummaryProps<PCRItemForPeriodLengthChangeDto, PCRPeriodLengthChangeItemDtoValidator, "">) => {
   const monthlyContent = <ACC.Content value={(x) => x.pcrPeriodLengthChangeContent.periodLengthMonthly}/>;

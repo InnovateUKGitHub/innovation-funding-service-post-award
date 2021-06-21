@@ -1,6 +1,7 @@
 import React from "react";
 import { DateTime } from "luxon";
-import { convertDateAndTime, DateFormat, formatDate } from "@framework/util";
+import { convertDateAndTime, formatDate } from "@framework/util";
+import { DateFormat } from "@framework/constants";
 
 const render = (value: Date | null, format: DateFormat) => {
     const date = formatDate(value, format);

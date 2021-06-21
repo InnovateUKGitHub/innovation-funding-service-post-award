@@ -7,7 +7,7 @@ export class SearchCompaniesQuery extends QueryBase<CompanyDto[]> {
     super();
   }
 
-  protected Run(context: IContext): Promise<CompanyDto[]> {
+  protected run(context: IContext): Promise<CompanyDto[]> {
     return context.resources.companiesHouse.searchCompany(this.searchString, this.itemsPerPage, this.startIndex);
   }
 }

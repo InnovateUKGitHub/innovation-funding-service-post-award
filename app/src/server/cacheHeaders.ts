@@ -1,5 +1,5 @@
 import Express from "express";
-import { Configuration, getContentSecurityPolicy } from "./features/common";
+import { configuration, getContentSecurityPolicy } from "./features/common";
 
 export const allowCache = (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
   const tenYears = 10 * 31536000;
@@ -23,7 +23,7 @@ export const setOwaspHeaders = (_req: Express.Request, res: Express.Response, ne
   // Documentation https://developers.google.com/tag-manager/web/csp
   // Test using https://csp-evaluator.withgoogle.com/
   const cspValue = getContentSecurityPolicy(res.locals.nonce);
-  const cspPolicyHeader = Configuration.disableCsp ? "Content-Security-Policy-Report-Only" : "Content-Security-Policy";
+  const cspPolicyHeader = configuration.disableCsp ? "Content-Security-Policy-Report-Only" : "Content-Security-Policy";
 
   res.setHeader(cspPolicyHeader, cspValue);
 

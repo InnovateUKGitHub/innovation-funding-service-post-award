@@ -1,9 +1,10 @@
 import * as ACC from "@ui/components";
-import { PartnerDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { PartnerDto, ProjectDto } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { TypedTable } from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { StoresConsumer } from "@ui/redux";
+import { ProjectRole } from "@framework/constants";
 
 interface Data {
   project: Pending<ProjectDto>;
@@ -15,11 +16,7 @@ interface Params {
   partnerId: string;
 }
 
-interface Callbacks {
-
-}
-
-class FinanceSummaryComponent extends ContainerBase<Params, Data, Callbacks> {
+class FinanceSummaryComponent extends ContainerBase<Params, Data> {
   render() {
     const combined = Pending.combine({
       project: this.props.project,

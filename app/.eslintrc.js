@@ -8,7 +8,7 @@ module.exports = {
   },
   globals: {
     JSX: true,
-    React: true
+    React: true,
   },
   parser: "@typescript-eslint/parser",
   overrides: [
@@ -27,20 +27,39 @@ module.exports = {
     {
       files: ["*.tsx"],
       rules: {
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            selector: "function",
+            // Note: React likes jsx elements to be pascal case, since there is no clear way to checking it verses regular function we have allow all.
+            format: ["PascalCase", "camelCase"],
+          },
+        ],
+      },
+    },
+    {
+      files: ["./src/server/repositories/**"],
+      rules: {
+        "@typescript-eslint/naming-convention": "off",
+      },
+    },
+    {
+      files: ["*.tsx"],
+      rules: {
         "no-undef": "warn",
-        "react/react-in-jsx-scope": "off"
+        "react/react-in-jsx-scope": "off",
+      },
+    },
+    {
+      files: ["./src/shared/*.tsx", "*.tests.tsx", "*.tests.ts"],
+      rules: {
+        "react/display-name": "off",
       },
     },
     {
       files: ["*.tests.tsx", "*.tests.ts"],
       rules: {
-        "react/display-name": "off",
-      },
-    },
-    {
-      files: ["./src/shared/*.tsx"],
-      rules: {
-        "react/display-name": "off",
+        "sonarjs/no-identical-functions": "off",
       },
     },
     {
@@ -120,13 +139,24 @@ module.exports = {
     "@typescript-eslint/ban-types": "off", // TODO: switch back to error
     "@typescript-eslint/explicit-module-boundary-types": "off", // TODO: switch back to error
     "@typescript-eslint/no-non-null-assertion": "off", // TODO: switch back to error
-    "@typescript-eslint/naming-convention": "off", // TODO: switch back to error
     "sonarjs/no-duplicate-string": "off", // TODO: switch back to error
     "sonarjs/cognitive-complexity": "off", /// TODO: switch back to error
     "sonarjs/no-unused-collection": "off", // TODO: switch back to error
     "no-unused-vars": "off", // TODO: delete this (since it's already turned on in the recommended config for eslint)
     "id-blacklist": "off", // TODO: switch back to error "warn", "any", "Number", "number", "String", "string", "Boolean", "boolean", "Undefined", "undefined"
     "prefer-arrow/prefer-arrow-functions": "off", // TODO: switch back to error
+    "@typescript-eslint/naming-convention": [
+      "warn", // TODO: Change me to error after fixing errors
+      {
+        selector: "function",
+
+        format: ["camelCase"],
+      },
+      {
+        selector: "variable",
+        format: ["camelCase"],
+      },
+    ],
     "react/prop-types": "off", // Note: We use typescript not needed
     "@typescript-eslint/adjacent-overload-signatures": "error",
     "@typescript-eslint/array-type": [
@@ -201,7 +231,7 @@ module.exports = {
     "sonarjs/no-collection-size-mischeck": "error",
     "sonarjs/no-duplicated-branches": "error",
     "sonarjs/no-identical-conditions": "error",
-    "sonarjs/no-identical-functions": "warn",
+    "sonarjs/no-identical-functions": "error",
     "sonarjs/no-inverted-boolean-check": "error",
     "sonarjs/no-redundant-boolean": "error",
     "sonarjs/no-redundant-jump": "error",

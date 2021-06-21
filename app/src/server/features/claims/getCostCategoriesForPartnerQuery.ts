@@ -8,7 +8,7 @@ export class GetCostCategoriesForPartnerQuery extends QueryBase<CostCategoryDto[
     super();
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const costCategories = await context.runQuery(new GetFilteredCostCategoriesQuery(this.partner.id));
 
     // TODO: Remove (competitionType , organisationType) duplicate logic and refactor into GetFilteredCostCategoriesQuery()

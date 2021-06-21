@@ -7,13 +7,14 @@ import {
   ProjectDto,
   ProjectRole
 } from "@framework/types";
+import { EditorStatus } from "@ui/constants/enums";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { EditorStatus, IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
+import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import classNames from "classnames";
 import { PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
@@ -140,7 +141,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
     // allowing me to find the step name and get the workflow with the correct step
     const summaryWorkflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined);
     if (!summaryWorkflow) return null;
-    const stepName: addPartnerStepNames = "spendProfileStep";
+    const stepName: AddPartnerStepNames = "spendProfileStep";
     const spendProfileStep = summaryWorkflow.findStepNumberByName(stepName);
     return PcrWorkflow.getWorkflow(addPartnerItem, spendProfileStep);
   }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-underscore-dangle */
 import { Stream } from "stream";
 import * as Repositories from "@server/repositories";
@@ -11,9 +12,9 @@ import {
   IRepositories,
   MonitoringReportStatus,
   PCRStatus,
+  PermissionGroupIdenfifier,
   TypeOfAid
 } from "@framework/types";
-import { PermissionGroupIdenfifier } from "@framework/types/permisionGroupIndentifier";
 import * as Entities from "@framework/entities";
 import { PicklistEntry } from "jsforce";
 import { getAllEnumValues } from "@shared/enumHelper";
@@ -23,15 +24,15 @@ import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
 import { PcrSpendProfileEntity } from "@framework/entities/pcrSpendProfile";
 import { PcrSpendProfileEntityForCreate } from "@framework/entities";
-import { PCRStatusesPicklist } from "../server/features/pcrs/pcrStatusesPicklist";
-import { PCRParticipantSizePicklist } from "./features/pcrs/pcrParticipantSizePicklist";
-import { PCRPartnerTypesPicklist } from "./features/pcrs/pcrPartnerTypesPicklist";
-import { PCRProjectRolesPicklist } from "./features/pcrs/pcrProjectRolesPicklist";
+import { pcrStatusesPicklist } from "../server/features/pcrs/pcrStatusesPicklist";
+import { pcrParticipantSizePicklist } from "./features/pcrs/pcrParticipantSizePicklist";
+import { pcrPartnerTypesPicklist } from "./features/pcrs/pcrPartnerTypesPicklist";
+import { pcrProjectRolesPicklist } from "./features/pcrs/pcrProjectRolesPicklist";
 import { TestFileWrapper } from "./testData";
 import { TestRepository } from "./testRepository";
-import { PCRProjectLocationPicklist } from "./features/pcrs/pcrProjectLocationPicklist";
-import { PCRSpendProfileCapitalUsageTypePicklist } from "./features/pcrs/pcrSpendProfileCapitalUsageTypesPicklist";
-import { PCRSpendProfileOverheadRatePicklist } from "./features/pcrs/pcrSpendProfileOverheadsRateOptionsPicklist";
+import { pcrProjectLocationPicklist } from "./features/pcrs/pcrProjectLocationPicklist";
+import { pcrSpendProfileCapitalUsageTypePicklist } from "./features/pcrs/pcrSpendProfileCapitalUsageTypesPicklist";
+import { pcrSpendProfileOverheadRatePicklist } from "./features/pcrs/pcrSpendProfileOverheadsRateOptionsPicklist";
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
@@ -597,31 +598,31 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
 
   getPcrChangeStatuses(): Promise<PicklistEntry[]> {
     const picklistEntry: PicklistEntry[] = [];
-    PCRStatusesPicklist.forEach(x => picklistEntry.push(x));
+    pcrStatusesPicklist.forEach(x => picklistEntry.push(x));
     return Promise.resolve(picklistEntry);
   }
 
   getProjectRoles(): Promise<PicklistEntry[]> {
     const picklistEntry: PicklistEntry[] = [];
-    PCRProjectRolesPicklist.forEach(x => picklistEntry.push(x));
+    pcrProjectRolesPicklist.forEach(x => picklistEntry.push(x));
     return Promise.resolve(picklistEntry);
   }
 
   getPartnerTypes(): Promise<PicklistEntry[]> {
     const picklistEntry: PicklistEntry[] = [];
-    PCRPartnerTypesPicklist.forEach(x => picklistEntry.push(x));
+    pcrPartnerTypesPicklist.forEach(x => picklistEntry.push(x));
     return Promise.resolve(picklistEntry);
   }
 
   getParticipantSizes(): Promise<PicklistEntry[]> {
     const picklistEntry: PicklistEntry[] = [];
-    PCRParticipantSizePicklist.forEach(x => picklistEntry.push(x));
+    pcrParticipantSizePicklist.forEach(x => picklistEntry.push(x));
     return Promise.resolve(picklistEntry);
   }
 
   getProjectLocations(): Promise<PicklistEntry[]> {
     const picklistEntry: PicklistEntry[] = [];
-    PCRProjectLocationPicklist.forEach(x => picklistEntry.push(x));
+    pcrProjectLocationPicklist.forEach(x => picklistEntry.push(x));
     return Promise.resolve(picklistEntry);
   }
 }
@@ -653,13 +654,13 @@ class PcrSpendProfileTestRepository extends TestRepository<PcrSpendProfileEntity
 
   getCapitalUsageTypes(): Promise<PicklistEntry[]> {
     const picklistEntry: PicklistEntry[] = [];
-    PCRSpendProfileCapitalUsageTypePicklist.forEach(x => picklistEntry.push(x));
+    pcrSpendProfileCapitalUsageTypePicklist.forEach(x => picklistEntry.push(x));
     return Promise.resolve(picklistEntry);
   }
 
   getOverheadRateOptions(): Promise<IPicklistEntry[]> {
     const picklistEntry: IPicklistEntry[] = [];
-    PCRSpendProfileOverheadRatePicklist.forEach(x => picklistEntry.push(x));
+    pcrSpendProfileOverheadRatePicklist.forEach(x => picklistEntry.push(x));
     return Promise.resolve(picklistEntry);
   }
 }

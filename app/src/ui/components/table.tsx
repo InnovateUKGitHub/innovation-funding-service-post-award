@@ -13,8 +13,8 @@ import { Link } from "./links";
 import { AccessibilityText } from "./renderers/accessibilityText";
 import { Content } from "./content";
 
-export type dividerTypes = "normal" | "bold";
-type columnMode = "cell" | "header" | "footer" | "col";
+export type DividerTypes = "normal" | "bold";
+type ColumnMode = "cell" | "header" | "footer" | "col";
 interface InternalColumnProps<T> {
   header?: React.ReactNode;
   headerContent?: ContentSelector;
@@ -24,13 +24,13 @@ interface InternalColumnProps<T> {
   cellClassName?: (data: T, index: { column: number; row: number }) => string | null | undefined;
   colClassName?: (col: number) => string;
   renderCell: (data: T, index: { column: number; row: number }) => React.ReactNode;
-  mode?: columnMode;
+  mode?: ColumnMode;
   rowIndex?: number;
   columnIndex?: number;
   qa: string;
   width?: number;
   validation?: Results<{}>;
-  isDivider?: dividerTypes;
+  isDivider?: DividerTypes;
   paddingRight?: string;
   hideHeader?: boolean;
 }
@@ -44,7 +44,7 @@ interface ExternalColumnProps<T, TResult> {
   footer?: React.ReactNode;
   qa: string;
   width?: number;
-  isDivider?: dividerTypes;
+  isDivider?: DividerTypes;
   paddingRight?: string;
   hideHeader?: boolean;
 }
@@ -118,9 +118,9 @@ export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
 
     if (this.props.isDivider) {
       if (this.props.isDivider === "normal") {
-        style.borderRight = "1px solid " + colour.GOVUK_BORDER_COLOUR;
+        style.borderRight = "1px solid " + colour.govukBorderColour;
       } else {
-        style.borderRight = "3px solid " + colour.GOVUK_COLOUR_BLACK;
+        style.borderRight = "3px solid " + colour.govukColourBlack;
       }
     }
 

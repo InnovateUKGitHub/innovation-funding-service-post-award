@@ -8,7 +8,7 @@ export class GetClaim extends QueryBase<ClaimDto> {
     super();
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const result   = await context.repositories.claims.get(this.partnerId, this.periodId);
     const forecast = await context.repositories.profileTotalPeriod.get(this.partnerId, this.periodId);
     return result && mapClaim(context)(result, forecast);

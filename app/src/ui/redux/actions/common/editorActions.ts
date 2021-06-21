@@ -1,6 +1,7 @@
 import { Results } from "@ui/validation/results";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
-import { ErrorCode, IAppError } from "@framework/types/IAppError";
+import { IAppError } from "@framework/types/IAppError";
+import { ErrorCode } from "@framework/constants";
 import { createAction } from "./createAction";
 
 export type UpdateEditorAction = ReturnType<typeof updateEditorAction>;

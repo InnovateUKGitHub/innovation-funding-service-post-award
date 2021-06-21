@@ -7,7 +7,7 @@ export class GetAllForecastsForPartnerQuery extends QueryBase<ForecastDetailsDTO
     super();
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const results = await context.repositories.profileDetails.getAllByPartner(this.partnerId);
     return results.map(mapLatestForecastDetail(context));
   }

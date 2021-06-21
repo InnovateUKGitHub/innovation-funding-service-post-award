@@ -16,16 +16,16 @@ interface InnerProps {
 class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRPartnerWithdrawalItemDtoValidator> & InnerProps> {
   render(): React.ReactNode {
     const { documents, documentsEditor } = this.props;
-    const form = ACC.TypedForm<PCRItemForPartnerWithdrawalDto>();
+    const Form = ACC.TypedForm<PCRItemForPartnerWithdrawalDto>();
     return (
       <>
         {this.renderForm(documentsEditor)}
         {this.renderFiles(documentsEditor, documents)}
-        <form.Form qa="saveAndContinue" data={this.props.pcrItem} onSubmit={() => this.props.onSave()}>
-          <form.Fieldset>
-            <form.Button name="default" styling="Primary"><ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.pcrItem.submitButton}/></form.Button>
-          </form.Fieldset>
-        </form.Form>
+        <Form.Form qa="saveAndContinue" data={this.props.pcrItem} onSubmit={() => this.props.onSave()}>
+          <Form.Fieldset>
+            <Form.Button name="default" styling="Primary"><ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.pcrItem.submitButton}/></Form.Button>
+          </Form.Fieldset>
+        </Form.Form>
       </>
     );
   }

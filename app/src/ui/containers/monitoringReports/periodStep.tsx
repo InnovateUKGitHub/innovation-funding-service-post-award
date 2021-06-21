@@ -3,8 +3,8 @@ import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { ContentConsumer, IEditorStore, StoresConsumer } from "@ui/redux";
-import { ILinkInfo } from "@framework/types";
+import { IEditorStore, useStores } from "@ui/redux";
+import { ILinkInfo, ProjectRole } from "@framework/types";
 
 export interface MonitoringReportPreparePeriodParams {
   projectId: string;
@@ -54,38 +54,29 @@ class Component extends ContainerBase<MonitoringReportPreparePeriodParams, Data,
   }
 }
 
-const Container = (props: MonitoringReportPreparePeriodParams & BaseProps) => (
-  <StoresConsumer>
-    {
-      stores => (
-        <ContentConsumer>
-          {
-            () => (
-              <Component
-                project={stores.projects.getById(props.projectId)}
-                editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
-                onChange={(save, dto, submit, link) => {
-                  stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
-                    if(link) {
-                      stores.navigation.navigateTo(link);
-                    }
-                  });
-                }}
-                {...props}
-              />
-            )
+const Container = (props: MonitoringReportPreparePeriodParams & BaseProps) => {
+  const stores = useStores();
+  return (
+    <Component
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
+      onChange={(save, dto, submit, link) => {
+        stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
+          if (link) {
+            stores.navigation.navigateTo(link);
           }
-        </ContentConsumer>
-      )
-    }
-  </StoresConsumer>
-);
+        });
+      }}
+    />
+  );
+};
 
 export const MonitoringReportPreparePeriodRoute = defineRoute({
   routeName: "monitoringReportPreparePeriod",
   routePath: "/projects/:projectId/monitoring-reports/:id/prepare-period",
   container: Container,
   getParams: (r) => ({ projectId: r.params.projectId, id: r.params.id }),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(Dtos.ProjectRole.MonitoringOfficer),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
   getTitle: ({content}) => content.monitoringReportsPeriodStep.title(),
 });

@@ -1,7 +1,7 @@
-import { PCRItemForPartnerAdditionDto, TypeOfAid } from "@framework/dtos";
+import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { PCRItemType, PCROrganisationType, PCRProjectRole } from "@framework/constants";
+import { PCRItemType, PCROrganisationType, PCRProjectRole, TypeOfAid } from "@framework/constants";
 import {
   AcademicCostsStep,
   AcademicOrganisationStep,
@@ -26,7 +26,7 @@ import { OtherSourcesOfFundingStep } from "@ui/containers/pcrs/addPartner/otherS
 import { AcademicCostsReviewStep } from "@ui/containers/pcrs/addPartner/academicCostsReviewStep";
 import { AgreementToPCRStep } from "./agreementToPcrStep";
 
-export type addPartnerStepNames =
+export type AddPartnerStepNames =
   "roleAndOrganisationStep"
   | "aidEligibilityStep"
   | "academicCostsStep"

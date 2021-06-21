@@ -1,9 +1,9 @@
 import * as ACC from "@ui/components";
-import { EditorStatus } from "@ui/redux";
 import { PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { PCRLabourCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
-import React, { Component } from "react";
+import { Component } from "react";
 import { SpendProfileCostFormProps } from "@ui/containers";
+import { EditorStatus } from "@ui/constants/enums";
 
 export class LabourFormComponent extends Component<SpendProfileCostFormProps<PCRSpendProfileLabourCostDto, PCRLabourCostDtoValidator>> {
   render() {

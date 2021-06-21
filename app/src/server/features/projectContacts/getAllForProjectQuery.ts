@@ -7,7 +7,7 @@ export class GetAllForProjectQuery extends QueryBase<ProjectContactDto[]> {
     super();
   }
 
-  protected async Run(context: IContext) {
+  protected async run(context: IContext) {
     const results = await context.repositories.projectContacts.getAllByProjectId(this.projectId);
     return results.map(this.map);
   }

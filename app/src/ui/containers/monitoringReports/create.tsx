@@ -3,8 +3,8 @@ import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { ContentConsumer, IEditorStore, StoresConsumer } from "@ui/redux";
-import { ILinkInfo } from "@framework/types";
+import { IEditorStore, useStores } from "@ui/redux";
+import { ILinkInfo, ProjectRole } from "@framework/types";
 
 export interface MonitoringReportCreateParams {
   projectId: string;
@@ -57,36 +57,29 @@ class Component extends ContainerBase<MonitoringReportCreateParams, Data, Callba
   }
 }
 
-const Container = (props: MonitoringReportCreateParams&BaseProps) => (
-  <StoresConsumer>
-    {
-      stores => (
-        <ContentConsumer>{
-          () => (
-            <Component
-              project={stores.projects.getById(props.projectId)}
-              editor={stores.monitoringReports.getCreateMonitoringReportEditor(props.projectId)}
-              onChange={(save, dto, submit, getLink) => {
-                stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, (newDto) => {
-                  if(getLink) {
-                    return stores.navigation.navigateTo(getLink(newDto.headerId));
-                  }
-                });
-              }}
-              {...props}
-            />
-          )}
-        </ContentConsumer>
-      )
-    }
-  </StoresConsumer>
-);
+const Container = (props: MonitoringReportCreateParams&BaseProps) => {
+  const stores = useStores();
+  return (
+    <Component
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      editor={stores.monitoringReports.getCreateMonitoringReportEditor(props.projectId)}
+      onChange={(save, dto, submit, getLink) => {
+        stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, newDto => {
+          if (getLink) {
+            return stores.navigation.navigateTo(getLink(newDto.headerId));
+          }
+        });
+      }}
+    />
+  );
+};
 
 export const MonitoringReportCreateRoute = defineRoute({
   routeName: "monitoringReportCreate",
   routePath: "/projects/:projectId/monitoring-reports/create",
   container: Container,
   getParams: (r) => ({ projectId: r.params.projectId }),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(Dtos.ProjectRole.MonitoringOfficer),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
   getTitle: ({content}) => content.monitoringReportsCreate.title(),
 });

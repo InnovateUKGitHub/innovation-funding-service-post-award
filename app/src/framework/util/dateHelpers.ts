@@ -1,3 +1,4 @@
+import { DateFormat } from "@framework/constants";
 import { DateTime } from "luxon";
 
 export const convertDateAndTime = (jsDate: Date | null): DateTime | null => {
@@ -10,17 +11,6 @@ const appendMeridian = (date: DateTime | null, format: string) => {
   }
   return format;
 };
-
-export enum DateFormat {
-  FULL_DATE,
-  SHORT_DATE,
-  FULL_DATE_TIME,
-  SHORT_DATE_TIME,
-  SHORT_MONTH,
-  DAY_AND_LONG_MONTH,
-  LONG_YEAR,
-  MONTH_YEAR,
-}
 
 export const formatDate = (jsDate: Date | null | undefined, format: DateFormat) => {
   if (!jsDate) return null;

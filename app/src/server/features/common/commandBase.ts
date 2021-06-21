@@ -7,15 +7,15 @@ import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/do
 
 // TODO this should become AuthorisedCommandBase and extend CommandBase
 export abstract class NonAuthorisedCommandBase<T> {
-  protected abstract Run(context: IContext): Promise<T>;
+  protected abstract run(context: IContext): Promise<T>;
 
-  protected LogMessage(): any {
+  protected logMessage(): any {
     return [this.constructor.name, this];
   }
 }
 
 export abstract class CommandBase<T> {
-  protected abstract Run(context: IContext): Promise<T>;
+  protected abstract run(context: IContext): Promise<T>;
 
   protected accessControl(auth: Authorisation, context: IContext) {
     return Promise.resolve(true);
@@ -25,7 +25,7 @@ export abstract class CommandBase<T> {
     return;
   }
 
-  protected LogMessage(): any {
+  protected logMessage(): any {
     return [this.constructor.name, this];
   }
 }
@@ -69,9 +69,9 @@ export abstract class CommandDocumentBase<T> extends CommandBase<T> {
 }
 
 export abstract class SyncCommandBase<T> {
-  protected abstract Run(context: IContext): T;
+  protected abstract run(context: IContext): T;
 
-  protected LogMessage(): any {
+  protected logMessage(): any {
     return [this.constructor.name, this];
   }
 }

@@ -5,9 +5,9 @@ import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
 
-import { DocumentSummaryDto, MultipleDocumentUploadDto, ProjectDto, ProjectRole } from "@framework/dtos";
+import { DocumentSummaryDto, MultipleDocumentUploadDto, ProjectDto } from "@framework/dtos";
 import { noop } from "@ui/helpers/noop";
-import { DocumentDescription } from "@framework/types";
+import { DocumentDescription, ProjectRole } from "@framework/types";
 import { DropdownOption } from "@ui/components";
 import { EnumDocuments } from "../claims/components";
 

@@ -3,7 +3,7 @@ import { StoresConsumer } from "@ui/redux";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
-import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
+import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { DocumentDescription, PCROrganisationType, PCRProjectRole } from "@framework/constants";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import * as ACC from "../../../components";
@@ -12,7 +12,7 @@ interface InnerProps {
   documents: DocumentSummaryDto[];
 }
 
-class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator, addPartnerStepNames> & InnerProps> {
+class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator, AddPartnerStepNames> & InnerProps> {
   render() {
     const { pcrItem, validator, documents } = this.props;
     // Used to determine items displayed for industrial org vs academic org
@@ -125,7 +125,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
   }
 }
 
-export const AddPartnerSummary = (props: PcrSummaryProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator, addPartnerStepNames>) => (
+export const AddPartnerSummary = (props: PcrSummaryProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator, AddPartnerStepNames>) => (
   <StoresConsumer>
     {
       stores => {

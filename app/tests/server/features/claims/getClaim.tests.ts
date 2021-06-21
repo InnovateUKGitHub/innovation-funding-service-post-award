@@ -1,7 +1,7 @@
 
 import { DateTime } from "luxon";
 import { GetClaim } from "@server/features/claims";
-import { SALESFORCE_DATE_FORMAT } from "@server/features/common";
+import { salesforceDateFormat } from "@server/features/common";
 import { ClaimStatus } from "@framework/types";
 import { TestContext } from "../../testContextProvider";
 describe("GetClaim", () => {
@@ -28,8 +28,8 @@ describe("GetClaim", () => {
     expect(result.isIarRequired).toBe(claim.Acc_IARRequired__c);
     expect(result.isApproved).toBe(false);
     expect(result.overheadRate).toBe(claim.Acc_ProjectParticipant__r.Acc_OverheadRate__c);
-    expect(result.periodStartDate).toEqual(context.clock.parse(claim.Acc_ProjectPeriodStartDate__c, SALESFORCE_DATE_FORMAT));
-    expect(result.periodEndDate).toEqual(context.clock.parse(claim.Acc_ProjectPeriodEndDate__c, SALESFORCE_DATE_FORMAT));
+    expect(result.periodStartDate).toEqual(context.clock.parse(claim.Acc_ProjectPeriodStartDate__c, salesforceDateFormat));
+    expect(result.periodEndDate).toEqual(context.clock.parse(claim.Acc_ProjectPeriodEndDate__c, salesforceDateFormat));
     expect(result.isFinalClaim).toBe(claim.Acc_FinalClaim__c);
   });
 
@@ -60,7 +60,7 @@ describe("GetClaim", () => {
     const query  = new GetClaim(partner.id, period);
     const result = await context.runQuery(query);
 
-    expect(result.approvedDate).toEqual(context.clock.parse(claim.Acc_ApprovedDate__c!, SALESFORCE_DATE_FORMAT));
+    expect(result.approvedDate).toEqual(context.clock.parse(claim.Acc_ApprovedDate__c!, salesforceDateFormat));
   });
 
   it("calculates correct paidDate", async () => {
@@ -74,7 +74,7 @@ describe("GetClaim", () => {
     const query  = new GetClaim(partner.id, period);
     const result = await context.runQuery(query);
 
-    expect(result.paidDate).toEqual(context.clock.parse(claim.Acc_PaidDate__c!, SALESFORCE_DATE_FORMAT));
+    expect(result.paidDate).toEqual(context.clock.parse(claim.Acc_PaidDate__c!, salesforceDateFormat));
   });
 
   it("calculates isApproved true if ClaimStatus is Approved", async () => {

@@ -10,9 +10,9 @@ import {
   PCRProjectLocation,
   PCRProjectRole,
 } from "@framework/types";
-import { PCRRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
-import { PCRItemStatus, PCROrganisationType, PCRStatus } from "@framework/constants";
-import { CostCategoryType, ProjectChangeRequestItemEntity } from "@framework/entities";
+import { pcrRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
+import { CostCategoryType, PCRItemStatus, PCROrganisationType, PCRStatus } from "@framework/constants";
+import { ProjectChangeRequestItemEntity } from "@framework/entities";
 import { DateTime } from "luxon";
 import { TestContext } from "../../testContextProvider";
 
@@ -74,7 +74,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     context.testData.createCurrentUserAsProjectManager(project);
     const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
     const recordTypes = context.testData.createPCRRecordTypes();
-    const projectSuspensionType = PCRRecordTypeMetaValues.find(x => x.type === PCRItemType.PartnerAddition)!;
+    const projectSuspensionType = pcrRecordTypeMetaValues.find(x => x.type === PCRItemType.PartnerAddition)!;
     const recordType = recordTypes.find(x => x.type === projectSuspensionType.typeName);
     return {context, recordType, projectChangeRequest, project};
   };

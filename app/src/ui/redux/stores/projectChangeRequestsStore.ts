@@ -1,10 +1,12 @@
 import * as Dtos from "@framework/dtos";
-import { PCRDto, TypeOfAid } from "@framework/dtos";
+import { PCRDto } from "@framework/dtos";
 import { PCRDtoValidator, PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
-import { ApiClient } from "@ui/apiClient";
-import { LoadingStatus, Pending } from "@shared/pending";
+import { apiClient } from "@ui/apiClient";
+import { Pending } from "@shared/pending";
 import { NotFoundError } from "@server/features/common";
 import {
+  CostCategoryType,
+  LoadingStatus,
   PCRContactRole,
   PCRItemStatus,
   PCRItemType,
@@ -13,11 +15,11 @@ import {
   PCRPartnerType,
   PCRProjectLocation,
   PCRProjectRole,
-  PCRStatus
+  PCRStatus,
+  TypeOfAid
 } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ConfigStore } from "@ui/redux/stores/configStore";
-import { CostCategoryType } from "@framework/entities";
 import { PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PCRSpendProfileCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
@@ -36,7 +38,7 @@ export class ProjectChangeRequestStore extends StoreBase {
   }
 
   public getById(projectId: string, pcrId: string) {
-    return this.getData("pcr", this.getKeyForRequest(projectId, pcrId), p => ApiClient.pcrs.get({ projectId, id: pcrId, ...p }));
+    return this.getData("pcr", this.getKeyForRequest(projectId, pcrId), p => apiClient.pcrs.get({ projectId, id: pcrId, ...p }));
   }
 
   public getItemById(projectId: string, pcrId: string, itemId: string) {
@@ -64,39 +66,39 @@ export class ProjectChangeRequestStore extends StoreBase {
   }
 
   public getAllForProject(projectId: string) {
-    return this.getData("pcrs", storeKeys.getProjectKey(projectId), p => ApiClient.pcrs.getAll({ projectId, ...p }));
+    return this.getData("pcrs", storeKeys.getProjectKey(projectId), p => apiClient.pcrs.getAll({ projectId, ...p }));
   }
 
   public getAllPcrTypes() {
-    return this.getData("pcrTypes", storeKeys.getPcrTypesKey(), p => ApiClient.pcrs.getTypes({ ...p }));
+    return this.getData("pcrTypes", storeKeys.getPcrTypesKey(), p => apiClient.pcrs.getTypes({ ...p }));
   }
 
   public getAllAvailablePcrTypes(projectId: string) {
-    return this.getData("pcrAvailableTypes", storeKeys.pcrAvailableTypesKey(projectId), p => ApiClient.pcrs.getAvailableTypes({ ...p, projectId }));
+    return this.getData("pcrAvailableTypes", storeKeys.pcrAvailableTypesKey(projectId), p => apiClient.pcrs.getAvailableTypes({ ...p, projectId }));
   }
 
   public getPcrProjectRoles() {
-    return this.getData("pcrProjectRoles", storeKeys.getPcrProjectRolesKey(), p => ApiClient.pcrs.getPcrProjectRoles({ ...p }));
+    return this.getData("pcrProjectRoles", storeKeys.getPcrProjectRolesKey(), p => apiClient.pcrs.getPcrProjectRoles({ ...p }));
   }
 
   public getPcrPartnerTypes() {
-    return this.getData("pcrPartnerTypes", storeKeys.getPcrPartnerTypesKey(), p => ApiClient.pcrs.getPcrPartnerTypes({ ...p }));
+    return this.getData("pcrPartnerTypes", storeKeys.getPcrPartnerTypesKey(), p => apiClient.pcrs.getPcrPartnerTypes({ ...p }));
   }
 
   public getPcrParticipantSizes() {
-    return this.getData("pcrParticipantSizes", storeKeys.getPcrParticipantSizesKey(), p => ApiClient.pcrs.getParticipantSizes({ ...p }));
+    return this.getData("pcrParticipantSizes", storeKeys.getPcrParticipantSizesKey(), p => apiClient.pcrs.getParticipantSizes({ ...p }));
   }
 
   public getPcrProjectLocations() {
-    return this.getData("pcrProjectLocations", storeKeys.getPcrProjectLocationsKey(), p => ApiClient.pcrs.getProjectLocations({ ...p }));
+    return this.getData("pcrProjectLocations", storeKeys.getPcrProjectLocationsKey(), p => apiClient.pcrs.getProjectLocations({ ...p }));
   }
 
   public getPcrSpendProfileCapitalUsageType() {
-    return this.getData("pcrSpendProfileCapitalUsageTypes", storeKeys.getPcrSpendProfileCapitalUsageTypesKey(), p => ApiClient.pcrs.getCapitalUsageTypes({ ...p }));
+    return this.getData("pcrSpendProfileCapitalUsageTypes", storeKeys.getPcrSpendProfileCapitalUsageTypesKey(), p => apiClient.pcrs.getCapitalUsageTypes({ ...p }));
   }
 
   public getPcrSpendProfileOverheadRateOptions() {
-    return this.getData("pcrSpendProfileOverheadRateOptions", storeKeys.getPcrSpendProfileOverheadRateOptionsKey(), p => ApiClient.pcrs.getOverheadRateOptions({ ...p }));
+    return this.getData("pcrSpendProfileOverheadRateOptions", storeKeys.getPcrSpendProfileOverheadRateOptionsKey(), p => apiClient.pcrs.getOverheadRateOptions({ ...p }));
   }
 
   public getPcrTypeForItem(projectId: string, pcrId: string, itemId: string) {
@@ -172,7 +174,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       this.getKeyForRequest(projectId, dto.id),
       dto,
       (showErrors) => this.getValidator(projectId, dto, showErrors),
-      p => dto.id ? ApiClient.pcrs.update({ projectId, id: dto.id, pcr: dto, ...p }) : ApiClient.pcrs.create({ projectId, projectChangeRequestDto: dto, ...p }),
+      p => dto.id ? apiClient.pcrs.update({ projectId, id: dto.id, pcr: dto, ...p }) : apiClient.pcrs.create({ projectId, projectChangeRequestDto: dto, ...p }),
       (result) => {
         this.queue(dataLoadAction(this.getKeyForRequest(projectId, result.id), "pcr", LoadingStatus.Updated, result));
         if (message) {
@@ -320,7 +322,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       this.getKeyForRequest(projectId, pcrId),
       dto,
       () => this.getValidator(projectId, dto, false),
-      (p) => ApiClient.pcrs.delete({ projectId, id: pcrId, ...p }),
+      (p) => apiClient.pcrs.delete({ projectId, id: pcrId, ...p }),
       () => {
         if (message) {
           this.queue(messageSuccess(message));
@@ -333,7 +335,7 @@ export class ProjectChangeRequestStore extends StoreBase {
   }
 
   public getStatusChanges(projectId: string, projectChangeRequestId: string) {
-    return this.getData("projectChangeRequestStatusChanges", this.getKeyForRequest(projectId, projectChangeRequestId), p => ApiClient.pcrs.getStatusChanges({ projectId, projectChangeRequestId, ...p }));
+    return this.getData("projectChangeRequestStatusChanges", this.getKeyForRequest(projectId, projectChangeRequestId), p => apiClient.pcrs.getStatusChanges({ projectId, projectChangeRequestId, ...p }));
   }
 
 }

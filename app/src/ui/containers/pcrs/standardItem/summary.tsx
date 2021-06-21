@@ -5,14 +5,14 @@ import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRStandardItemDto } from "@framework/dtos";
 import { PCRStandardItemDtoValidator } from "@ui/validators";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { standardItemStepNames } from "./workflow";
+import { StandardItemStepNames } from "./workflow";
 
 interface Props {
   documents: DocumentSummaryDto[];
 }
 
 class SummaryComponent extends React.Component<
-  PcrSummaryProps<PCRStandardItemDto, PCRStandardItemDtoValidator, standardItemStepNames> & Props
+  PcrSummaryProps<PCRStandardItemDto, PCRStandardItemDtoValidator, StandardItemStepNames> & Props
 > {
   public render() {
     return (
@@ -39,7 +39,7 @@ class SummaryComponent extends React.Component<
 }
 
 export const Summary = (
-  props: PcrSummaryProps<PCRStandardItemDto, PCRStandardItemDtoValidator, standardItemStepNames>,
+  props: PcrSummaryProps<PCRStandardItemDto, PCRStandardItemDtoValidator, StandardItemStepNames>,
 ) => (
   <StoresConsumer>
     {stores => {

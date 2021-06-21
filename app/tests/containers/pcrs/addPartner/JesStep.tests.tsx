@@ -5,7 +5,7 @@ import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { MultipleDocumentUploadDto } from "@framework/dtos";
 import { TestBed, TestBedContent } from "@shared/TestBed";
 
-import { Configuration } from "@server/features/common";
+import { configuration } from "@server/features/common";
 import { JesStepUI, JesStepUIProps, BasePcrProps } from "@ui/containers/pcrs/addPartner/jeSStep";
 import { generateContentArray } from "../../../test-utils/generate-content-array";
 
@@ -79,7 +79,7 @@ describe("<JesStepUI />", () => {
       pcrItemType: null as any,
       documentsEditor: {
         data: { files: [] },
-        validator: new MultipleDocumentUpdloadDtoValidator(stubFiles, Configuration.options, false, true, null),
+        validator: new MultipleDocumentUpdloadDtoValidator(stubFiles, configuration.options, false, true, null),
         status: 1,
         error: null,
       },

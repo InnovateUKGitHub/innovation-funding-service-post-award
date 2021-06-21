@@ -6,13 +6,14 @@ import {
   PartnerDto,
   ProjectDto,
 } from "@framework/dtos";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { getAuthRoles } from "@framework/types";
 import { IEditorStore } from "@ui/redux";
 import { ForecastDetailsDtosValidator } from "@ui/validators";
-
-import { Content, UL, ValidationMessage } from "@ui/components";
-import { AriaLive } from "@ui/components/renderers";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { AriaLive } from "../renderers/ariaLive";
+import { ValidationMessage } from "../validationMessage";
+import { Content } from "../content";
+import { UL } from "../layout";
 
 interface Props {
   project: ProjectDto;

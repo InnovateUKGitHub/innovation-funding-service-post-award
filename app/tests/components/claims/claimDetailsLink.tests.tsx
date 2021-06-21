@@ -1,8 +1,7 @@
 import { render } from "@testing-library/react";
 
 import { TestBed, TestBedContent } from "@shared/TestBed";
-import { PartnerStatus, ProjectRole, ProjectStatus } from "@framework/dtos";
-import { ClaimStatus } from "@framework/constants";
+import { ClaimStatus, ProjectRole, PartnerStatus, ProjectStatus } from "@framework/constants";
 import { routeConfig } from "@ui/routing/routeConfig";
 
 import { ClaimDetailsLink, ClaimDetailsLinkRoutes } from "@ui/components/claims/claimDetailsLink";

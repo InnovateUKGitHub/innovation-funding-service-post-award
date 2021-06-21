@@ -6,10 +6,11 @@ import {
   EditClaimLineItemsData,
 } from "@ui/containers";
 import { BaseProps, ContainerProps } from "@ui/containers/containerBase";
-import { LoadingStatus, Pending } from "@shared/pending";
+import { Pending } from "@shared/pending";
 import { ClaimDetailsDto, DocumentSummaryDto, ForecastDetailsDTO, ProjectDto } from "@framework/dtos";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { TestBed, TestBedContent } from "@shared/TestBed";
+import { LoadingStatus } from "@framework/constants";
 
 const projectId = "test-id";
 

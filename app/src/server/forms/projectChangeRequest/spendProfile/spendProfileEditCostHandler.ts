@@ -8,7 +8,7 @@ import {
   ProjectDto,
   ProjectRole
 } from "@framework/types";
-import { BadRequestError, Configuration } from "@server/features/common";
+import { BadRequestError, configuration } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
@@ -20,10 +20,9 @@ import {
   PCRSpendProfileOverheadDocumentRoute
 } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators";
-import { PCRItemStatus, PCRSpendProfileCapitalUsageType } from "@framework/constants";
+import { CostCategoryType, PCRItemStatus, PCRSpendProfileCapitalUsageType } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
-import { CostCategoryType } from "@framework/entities";
 import {
   PCRSpendProfileCapitalUsageCostDto, PCRSpendProfileCostDto,
   PCRSpendProfileLabourCostDto,
@@ -36,7 +35,7 @@ import {
 import { parseNumber } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { addPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
+import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 
 export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFormHandlerBase<PcrEditSpendProfileCostParams, "pcr"> {
   constructor() {
@@ -138,7 +137,7 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
   private getSpendProfileStep(context: IContext, pcrItem: PCRItemForPartnerAdditionDto) {
     const workflow = PcrWorkflow.getWorkflow(pcrItem, undefined);
     if (!workflow) return null;
-    const stepName: addPartnerStepNames = "spendProfileStep";
+    const stepName: AddPartnerStepNames = "spendProfileStep";
     return workflow.findStepNumberByName(stepName);
   }
 
@@ -180,6 +179,6 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
   }
 
   protected createValidationResult(params: PcrEditSpendProfileCostParams, dto: PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, Configuration.features, dto);
+    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, configuration.features, dto);
   }
 }

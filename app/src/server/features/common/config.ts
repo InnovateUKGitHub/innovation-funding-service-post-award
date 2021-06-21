@@ -1,7 +1,7 @@
-import { LogLevel, parseLogLevel } from "@framework/types/logLevel";
+import { parseLogLevel } from "@framework/types/logLevel";
 import { IAppOptions } from "@framework/types/IAppOptions";
 import { isNumber } from "@framework/util";
-import { IFeatureFlags } from "@framework/types";
+import { IFeatureFlags, LogLevel } from "@framework/types";
 
 const defaultCacheTimeout = 720;
 
@@ -197,7 +197,7 @@ const sil = {
   password: process.env.SIL_PASSWORD!,
 };
 
-export const Configuration: IConfig = {
+export const configuration: IConfig = {
   build,
   salesforceQueryLimit,
   disableCsp,

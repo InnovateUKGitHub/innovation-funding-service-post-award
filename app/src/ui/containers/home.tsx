@@ -1,7 +1,6 @@
 import { Authorisation } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { StoresConsumer } from "@ui/redux";
-import { ContentConsumer } from "@ui/redux/contentProvider";
 import * as ACC from "@ui/components";
 import { SimpleString } from "../components/renderers";
 import { Link, PageTitle, TypedForm } from "../components";
@@ -42,16 +41,10 @@ class Component extends ContainerBaseWithState<{}, Data, {}, State> {
             <h2><Link route={this.props.routes.projectDashboard.getLink({})}><ACC.Content value={x => x.home.projectsHeading}/></Link></h2>
             <SimpleString><ACC.Content value={x => x.home.projectsDashboardHeading}/></SimpleString>
           </div>
-          <ContentConsumer>
-            {
-              () => (
-                <div className="govuk-grid-column-one-third">
-                  <h2><ACC.Content value={x => x.home.exampleContentTitle} /></h2>
-                  <SimpleString><ACC.Content value={x => x.home.exampleContent} /></SimpleString>
-                </div>
-              )
-            }
-          </ContentConsumer>
+          <div className="govuk-grid-column-one-third">
+            <h2><ACC.Content value={x => x.home.exampleContentTitle} /></h2>
+            <SimpleString><ACC.Content value={x => x.home.exampleContent} /></SimpleString>
+          </div>
         </div>
       </div>
     );

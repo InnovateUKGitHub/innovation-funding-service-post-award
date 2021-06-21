@@ -1,7 +1,6 @@
 import { ValidationError } from "@server/features/common";
 import { PCRPartnerType, PCRProjectRole, PCRSpendProfileOverheadRate, } from "@framework/types";
-import { PCRItemStatus } from "@framework/constants";
-import { CostCategoryType } from "@framework/entities";
+import { CostCategoryType, PCRItemStatus } from "@framework/constants";
 import {
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileOtherCostsDto,
@@ -10,7 +9,7 @@ import {
 import { roundCurrency } from "@framework/util";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
-import { PCRSpendProfileOverheadRatePicklist } from "../pcrSpendProfileOverheadsRateOptionsPicklist";
+import { pcrSpendProfileOverheadRatePicklist } from "../pcrSpendProfileOverheadsRateOptionsPicklist";
 import { setup } from "./helpers";
 
 describe("UpdatePCRSpendProfileCommand", () => {
@@ -26,7 +25,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         value: null,
         costCategoryId: costCategory.id,
         costCategory: CostCategoryType.Overheads,
-        description: PCRSpendProfileOverheadRatePicklist.get(PCRSpendProfileOverheadRate.Zero)!.label || null,
+        description: pcrSpendProfileOverheadRatePicklist.get(PCRSpendProfileOverheadRate.Zero)!.label || null,
         overheadRate: PCRSpendProfileOverheadRate.Zero,
       };
       spendProfileDto.costs.push(cost);
@@ -47,7 +46,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         value: null,
         costCategoryId: costCategoryOverheads.id,
         costCategory: CostCategoryType.Overheads,
-        description: PCRSpendProfileOverheadRatePicklist.get(PCRSpendProfileOverheadRate.Twenty)!.label || null,
+        description: pcrSpendProfileOverheadRatePicklist.get(PCRSpendProfileOverheadRate.Twenty)!.label || null,
         overheadRate: PCRSpendProfileOverheadRate.Twenty,
       };
       const labourCosts: PCRSpendProfileLabourCostDto[] = [{
@@ -96,7 +95,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         value: 30,
         costCategoryId: costCategoryOverheads.id,
         costCategory: CostCategoryType.Overheads,
-        description: PCRSpendProfileOverheadRatePicklist.get(PCRSpendProfileOverheadRate.Calculated)!.label || null,
+        description: pcrSpendProfileOverheadRatePicklist.get(PCRSpendProfileOverheadRate.Calculated)!.label || null,
         overheadRate: PCRSpendProfileOverheadRate.Calculated,
       };
       spendProfileDto.costs.push(cost);
@@ -115,14 +114,14 @@ describe("UpdatePCRSpendProfileCommand", () => {
         value: 30,
         costCategoryId: costCategoryOverheads.id,
         costCategory: CostCategoryType.Overheads,
-        description: PCRSpendProfileOverheadRatePicklist.get(PCRSpendProfileOverheadRate.Calculated)!.label || null,
+        description: pcrSpendProfileOverheadRatePicklist.get(PCRSpendProfileOverheadRate.Calculated)!.label || null,
         overheadRate: PCRSpendProfileOverheadRate.Calculated,
       }, {
         id: "",
         value: 40,
         costCategoryId: costCategoryOverheads.id,
         costCategory: CostCategoryType.Overheads,
-        description: PCRSpendProfileOverheadRatePicklist.get(PCRSpendProfileOverheadRate.Calculated)!.label || null,
+        description: pcrSpendProfileOverheadRatePicklist.get(PCRSpendProfileOverheadRate.Calculated)!.label || null,
         overheadRate: PCRSpendProfileOverheadRate.Calculated,
       }];
       const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
@@ -143,7 +142,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         value: 50,
         costCategoryId: costCategory.id,
         costCategory: CostCategoryType.Overheads,
-        description: PCRSpendProfileOverheadRatePicklist.get(PCRSpendProfileOverheadRate.Calculated)!.label || null,
+        description: pcrSpendProfileOverheadRatePicklist.get(PCRSpendProfileOverheadRate.Calculated)!.label || null,
         overheadRate: PCRSpendProfileOverheadRate.Calculated,
       } as PCRSpendProfileOverheadsCostDto);
       await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto));
@@ -155,7 +154,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       expect(context.repositories.pcrSpendProfile.Items).toHaveLength(1);
       const updatedCost = context.repositories.pcrSpendProfile.Items[0];
       expect(updatedCost.value).toBe(60);
-      expect(updatedCost.description).toBe(PCRSpendProfileOverheadRatePicklist.get(PCRSpendProfileOverheadRate.Calculated)!.label || null);
+      expect(updatedCost.description).toBe(pcrSpendProfileOverheadRatePicklist.get(PCRSpendProfileOverheadRate.Calculated)!.label || null);
     });
     it("should update overheads spend profile costs when a labour cost is added", async () => {
       const {context, projectChangeRequest, recordType, project} = setup();
@@ -168,7 +167,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
         value: null,
         costCategoryId: costCategoryOverheads.id,
         costCategory: CostCategoryType.Overheads,
-        description: PCRSpendProfileOverheadRatePicklist.get(PCRSpendProfileOverheadRate.Twenty)!.label || null,
+        description: pcrSpendProfileOverheadRatePicklist.get(PCRSpendProfileOverheadRate.Twenty)!.label || null,
         overheadRate: PCRSpendProfileOverheadRate.Twenty,
       };
       const labourCosts: PCRSpendProfileLabourCostDto[] = [{
