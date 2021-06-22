@@ -4,24 +4,43 @@ import { Content } from "@content/content";
 import { ProjectContactLabels } from "@content/labels/projectContactLabels";
 import { TypedTable } from "./table";
 
-interface Props {
+export interface PartnersAndFinanceContactsProps {
   partners: PartnerDto[];
   contacts: ProjectContactDto[];
   projectContactLabels: (content: Content) => ProjectContactLabels;
 }
 
-export const PartnersAndFinanceContacts: React.FunctionComponent<Props> = (props) => {
-  const partnersAndContactsData = props.partners.map(partner => ({
+export function PartnersAndFinanceContacts({
+  contacts,
+  partners,
+  projectContactLabels,
+}: PartnersAndFinanceContactsProps) {
+  const partnersAndContactsData = partners.map(partner => ({
     partner,
-    financeContact: props.contacts.find(x => x.accountId === partner.accountId && x.role === "Finance contact")
+    financeContact: contacts.find(x => x.accountId === partner.accountId && x.role === "Finance contact"),
   }));
+
   const PartnersTable = TypedTable<typeof partnersAndContactsData[0]>();
 
   return (
     <PartnersTable.Table qa="finance-contact-details" data={partnersAndContactsData}>
-      <PartnersTable.String headerContent={x => props.projectContactLabels(x).contactName} value={x => x.financeContact && x.financeContact.name || ""} qa="fc-name" />
-      <PartnersTable.Custom headerContent={x => props.projectContactLabels(x).partnerName} value={x => <PartnerName partner={x.partner} showIsLead/>} qa="partner-name"/>
-      <PartnersTable.Email headerContent={x => props.projectContactLabels(x).contactEmail} value={x => x.financeContact && x.financeContact.email || ""} qa="fc-email" />
+      <PartnersTable.String
+        qa="fc-name"
+        headerContent={x => projectContactLabels(x).contactName}
+        value={x => x.financeContact?.name || ""}
+      />
+
+      <PartnersTable.Custom
+        qa="partner-name"
+        headerContent={x => projectContactLabels(x).partnerName}
+        value={x => <PartnerName partner={x.partner} showIsLead />}
+      />
+
+      <PartnersTable.Email
+        qa="fc-email"
+        headerContent={x => projectContactLabels(x).contactEmail}
+        value={x => x.financeContact?.email || ""}
+      />
     </PartnersTable.Table>
   );
-};
+}
