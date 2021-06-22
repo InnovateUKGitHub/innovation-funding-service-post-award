@@ -1,11 +1,10 @@
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
 
-import { IValidationMessageProps, ValidationMessage } from "@ui/components";
+import { TestBed } from "@shared/TestBed";
 import { Content } from "@content/content";
-import TestBed from "@shared/TestBed";
-import { findByQa } from "./helpers/find-by-qa";
+import { IValidationMessageProps, ValidationMessage } from "@ui/components";
 
-describe("ValidationMessage", () => {
+describe("<ValidationMessage />", () => {
   const setup = (props: IValidationMessageProps) => {
     const stubCopy = {
       home: {
@@ -15,60 +14,53 @@ describe("ValidationMessage", () => {
       },
     } as Partial<Content>;
 
-    const wrapper = mount(
+    return render(
       <TestBed content={stubCopy}>
         <ValidationMessage {...props} />
       </TestBed>,
     );
-
-    const assistiveMessage = findByQa(wrapper, "validation-message-assistive");
-    const messageElement = findByQa(wrapper, "validation-message-content");
-
-    return {
-      wrapper,
-      assistiveMessage,
-      messageElement,
-    };
   };
 
   const StubComponentContent = () => <div>custom component</div>;
 
   describe("@renders", () => {
-    it("when message is empty should render null", () => {
-      const { wrapper } = setup({ message: "", messageType: "success" });
-      expect(wrapper.html()).toBe(null);
+    it("when message is empty", () => {
+      const { container } = setup({ message: "", messageType: "success" });
+      expect(container.firstChild).toBeNull();
+    });
+
+    describe("with different message data types", () => {
+      test.each`
+        name                  | message                                             | expected
+        ${"react component"}  | ${(<StubComponentContent />)}                       | ${"div"}
+        ${"react element"}    | ${(<div>content within div</div>)}                  | ${"div"}
+        ${"react fragment"}   | ${(<>content within a react shorthand fragment</>)} | ${"div"}
+        ${"content solution"} | ${(x: Content) => x.home.exampleContentTitle}       | ${"span"}
+        ${"string"}           | ${"stub string"}                                    | ${"span"}
+        ${"number"}           | ${100}                                              | ${"span"}
+      `("with a $name within a $expected", ({ message, expected }) => {
+        const { getByTestId } = setup({ message, messageType: "info" });
+
+        const messageElement = getByTestId("validation-message-content");
+
+        expect(messageElement.tagName.toLowerCase()).toBe(expected);
+      });
     });
 
     test.each`
-      name                 | message                                             | expected
-      ${"react component"} | ${(<StubComponentContent />)}                       | ${"div"}
-      ${"react element"}   | ${(<div>content within div</div>)}                  | ${"div"}
-      ${"react fragment"}  | ${(<>content within a react shorthand fragment</>)} | ${"div"}
-      ${"string"}          | ${"stub string"}                                    | ${"span"}
-      ${"number"}          | ${100}                                              | ${"span"}
-    `("should render a $name within a $expected", ({ message, expected }) => {
-      const { messageElement } = setup({ message, messageType: "info" });
+      name              | props
+      ${"with info"}    | ${{ message: "Info message", messageType: "info" }}
+      ${"with error"}   | ${{ message: "Error message", messageType: "error" }}
+      ${"with success"} | ${{ message: "Success message", messageType: "success" }}
+      ${"with warning"} | ${{ message: "Warning message", messageType: "warning" }}
+    `("with $name state", ({ props }) => {
+      const { getByTestId } = setup(props);
 
-      expect(messageElement.type()).toBe(expected);
-    });
+      const messageElement = getByTestId("validation-message-content");
+      const assistiveMessage = getByTestId("validation-message-assistive");
 
-    it("when message is a content lookup render within a <span>", () => {
-      const { messageElement } = setup({ message: x => x.home.exampleContentTitle, messageType: "success" });
-
-      expect(messageElement.type()).toBe("span");
-    });
-
-    test.each`
-      name                                  | props
-      ${"should render an info message"}    | ${{ message: "Info message", messageType: "info" }}
-      ${"should render an error message"}   | ${{ message: "Error message", messageType: "error" }}
-      ${"should render an success message"} | ${{ message: "Success message", messageType: "success" }}
-      ${"should render an warning message"} | ${{ message: "Warning message", messageType: "warning" }}
-    `("$name", ({ props }) => {
-      const { assistiveMessage, messageElement } = setup(props);
-
-      expect(assistiveMessage.text().toLowerCase()).toBe(props.messageType);
-      expect(messageElement.text()).toBe(props.message);
+      expect(messageElement.innerHTML).toBe(props.message);
+      expect(assistiveMessage.innerHTML.toLowerCase()).toBe(props.messageType);
     });
   });
 });
