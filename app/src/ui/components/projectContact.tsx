@@ -1,20 +1,15 @@
 import { PartnerDto, ProjectContactDto } from "@framework/dtos";
-import { PartnerName } from "@ui/components/partners";
-import { Section } from "@ui/components/layout";
-import { SimpleString } from "@ui/components/renderers";
-import { Email } from "./renderers/email";
 
-interface IProjectContact {
+import { Section, getPartnerName } from "@ui/components";
+import { SimpleString, Email } from "@ui/components/renderers";
+
+export interface ProjectContactProps {
   contact?: ProjectContactDto;
   partner?: PartnerDto;
   qa: string;
 }
 
-export const ProjectContact: React.FunctionComponent<IProjectContact> = ({
-  contact,
-  partner,
-  qa,
-}) => {
+export function ProjectContact({ contact, partner, qa }: ProjectContactProps) {
   if (!contact) return null;
 
   return (
@@ -25,13 +20,11 @@ export const ProjectContact: React.FunctionComponent<IProjectContact> = ({
 
       {partner && (
         <SimpleString className="govuk-!-margin-bottom-0" qa={`${qa}-name`}>
-          <PartnerName partner={partner} />
+          {getPartnerName(partner)}
         </SimpleString>
       )}
 
       <Email qa={`${qa}-email`}>{contact.email}</Email>
     </Section>
   );
-};
-
-ProjectContact.displayName = "ProjectContact";
+}

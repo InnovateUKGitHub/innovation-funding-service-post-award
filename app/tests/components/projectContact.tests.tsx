@@ -1,41 +1,66 @@
-import { mount, shallow } from "enzyme";
+import { render } from "@testing-library/react";
+
 import { PartnerDto, ProjectContactDto } from "@framework/dtos";
 import { createDto } from "@framework/util";
-import { ProjectContact } from "../../src/ui/components/projectContact";
+import { ProjectContact, ProjectContactProps } from "@ui/components/projectContact";
 
 describe("ProjectMember", () => {
-    const aProjectContact = createDto<ProjectContactDto>({ role: "Project Manager", name: "aTestName", email: "testemail@email.com", roleName: "aTestRole" });
-    const aPartner = createDto<PartnerDto>({ name: "aTestOrganisation"});
+  const stubPartner = createDto<PartnerDto>({ name: "aTestOrganisation" });
+  const stubContact = createDto<ProjectContactDto>({
+    role: "Project Manager",
+    name: "aTestName",
+    email: "testemail@email.com",
+    roleName: "aTestRole",
+  });
 
-    it("should render partner name if present", () => {
-        const wrapper = shallow(<ProjectContact contact={aProjectContact} partner={aPartner} qa="member-a" />);
-        expect(wrapper.html()).toContain("aTestOrganisation");
+  const setup = (props?: Partial<ProjectContactProps>) => render(<ProjectContact {...props} qa="member-a" />);
+
+  describe("@returns", () => {
+    it("with partner name if present", () => {
+      const { queryByText } = setup({
+        contact: stubContact,
+        partner: stubPartner,
+      });
+
+      const partnerName = queryByText(stubPartner.name);
+
+      expect(partnerName).toBeInTheDocument();
     });
 
-    it("should render role name if present", () => {
-        const wrapper = shallow(<ProjectContact contact={aProjectContact} qa="member-a" />);
-        expect(wrapper.html()).toContain("aTestRole");
+    it("with role name if present", () => {
+      const { queryByText } = setup({
+        contact: stubContact,
+        partner: stubPartner,
+      });
+
+      const roleName = queryByText(stubContact.roleName);
+
+      expect(roleName).toBeInTheDocument();
     });
 
-    it("should return null when ProjectContact has no contact set", () => {
-        const result = shallow(<ProjectContact qa="member-a" />);
-        expect(result.html()).toBeNull();
+    it("when ProjectContact has no contact set", () => {
+      const { container } = setup();
+
+      expect(container.firstChild).toBeNull();
     });
 
-    it("should render member's name ", () => {
-        const wrapper = shallow(<ProjectContact contact={aProjectContact} qa="member-a" />);
-        expect(wrapper.html()).toContain("aTestName");
+    it("with member's name ", () => {
+      const { queryByText } = setup({
+        contact: stubContact,
+        partner: stubPartner,
+      });
+
+      const contactName = queryByText(stubContact.name);
+
+      expect(contactName).toBeInTheDocument();
     });
 
-    it("should render member's email ", () => {
-        const wrapper = mount(<ProjectContact contact={aProjectContact} qa="member-a" />);
-        const html = wrapper.html();
-        expect(html).toContain("testemail@email.com");
-        expect(wrapper
-            .containsMatchingElement(
-                <a href="mailto:testemail@email.com" className="govuk-link govuk-!-font-size-19">
-                    testemail@email.com
-                </a>
-            )).toBeTruthy();
+    it("with member's email ", () => {
+      const { queryByText } = setup({ contact: stubContact });
+
+      const contactEmail = queryByText(stubContact.email);
+
+      expect(contactEmail).toBeInTheDocument();
     });
+  });
 });
