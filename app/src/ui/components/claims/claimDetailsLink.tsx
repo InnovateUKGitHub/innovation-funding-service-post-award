@@ -1,61 +1,82 @@
-import { ClaimDto, ClaimStatus, PartnerDto, PartnerStatus, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
+import {
+  ClaimDto,
+  ClaimStatus,
+  getAuthRoles,
+  PartnerDto,
+  PartnerStatus,
+  ProjectDto,
+  ProjectStatus,
+} from "@framework/types";
 import { IRoutes } from "@ui/routing";
 import { useContent } from "@ui/hooks";
 import { Link } from "../links";
 
-export interface ClaimDetailsLinkProps {
-  claim: ClaimDto;
-  project: ProjectDto;
-  partner: PartnerDto;
+export interface ClaimDetailsBaseProps {
+  claim: Pick<ClaimDto, "status" | "periodId">;
+  project: Pick<ProjectDto, "id" | "status" | "roles">;
+  partner: Pick<PartnerDto, "id" | "roles" | "partnerStatus">;
 }
 
-interface ClaimDetailsLinkRoutes extends ClaimDetailsLinkProps {
+interface ClaimDetailsLinkRoutes extends ClaimDetailsBaseProps {
   routes: IRoutes;
 }
 
-export const ClaimDetailsLink: React.FunctionComponent<ClaimDetailsLinkRoutes> = (props) => {
-  const linkProps = { projectId: props.project.id, partnerId: props.partner.id, periodId: props.claim.periodId };
+export function ClaimDetailsLink(props: ClaimDetailsLinkRoutes) {
   const { getContent } = useContent();
 
-  switch (getClaimDetailsLinkType(props)) {
-    case "edit":
-      return <Link route={props.routes.prepareClaim.getLink(linkProps)}>{getContent(x => x.components.claimDetailsLinkContent.editClaimText)}</Link>;
+  const linkProps = {
+    projectId: props.project.id,
+    partnerId: props.partner.id,
+    periodId: props.claim.periodId,
+  };
 
-    case "review":
-      return <Link route={props.routes.reviewClaim.getLink(linkProps)}>{getContent(x => x.components.claimDetailsLinkContent.reviewClaimText)}</Link>;
+  const linkType = getClaimDetailsLinkType(props);
 
-    case "view":
-      return <Link route={props.routes.claimDetails.getLink(linkProps)}>{getContent(x => x.components.claimDetailsLinkContent.viewClaimText)}</Link>;
+  if (!linkType) return null;
+
+  const linkTypeOptions = {
+    edit: {
+      route: props.routes.prepareClaim.getLink(linkProps),
+      children: getContent(x => x.components.claimDetailsLinkContent.editClaimText),
+    },
+    review: {
+      route: props.routes.reviewClaim.getLink(linkProps),
+      children: getContent(x => x.components.claimDetailsLinkContent.reviewClaimText),
+    },
+    view: {
+      route: props.routes.claimDetails.getLink(linkProps),
+      children: getContent(x => x.components.claimDetailsLinkContent.viewClaimText),
+    },
+  };
+
+  return <Link {...linkTypeOptions[linkType]} />;
+}
+
+type LinkTypeResponse = "edit" | "review" | "view" | null;
+
+export function getClaimDetailsLinkType({ project, partner, claim }: ClaimDetailsBaseProps): LinkTypeResponse {
+  if (project.status === ProjectStatus.OnHold) return "view";
+  if (partner.partnerStatus === PartnerStatus.OnHold) return "view";
+
+  const isProjectMo = getAuthRoles(project.roles).isMo;
+  const isPartnerFc = getAuthRoles(partner.roles).isFc;
+
+  switch (claim.status) {
+    case ClaimStatus.DRAFT:
+      if (isPartnerFc) return "edit";
+      if (isProjectMo) return "view";
+
+      return null;
+    case ClaimStatus.MO_QUERIED:
+
+    case ClaimStatus.INNOVATE_QUERIED:
+      if (isPartnerFc) return "edit";
+
+      return "view";
+    case ClaimStatus.SUBMITTED:
+      if (isProjectMo) return "review";
 
     default:
-      return null;
+      return "view";
   }
-};
-
-export const getClaimDetailsLinkType = (props: {claim: ClaimDto; project: ProjectDto; partner: PartnerDto}): "edit" | "review" | "view" | "nothing" => {
-
-  if (props.project.status === ProjectStatus.OnHold) return "view";
-  if (props.partner.partnerStatus === PartnerStatus.OnHold) return "view";
-  switch (props.claim.status) {
-    case ClaimStatus.DRAFT:
-      if (props.partner.roles & ProjectRole.FinancialContact) {
-        return "edit";
-      } else if (props.project.roles & ProjectRole.MonitoringOfficer) {
-        return "view";
-      } else {
-        return "nothing";
-      }
-    case ClaimStatus.MO_QUERIED:
-    case ClaimStatus.INNOVATE_QUERIED:
-      if (props.partner.roles & ProjectRole.FinancialContact) {
-        return "edit";
-      } else {
-        return "view";
-      }
-    case ClaimStatus.SUBMITTED:
-      if (props.project.roles & ProjectRole.MonitoringOfficer) {
-        return "review";
-      }
-  }
-  return "view";
-};
+}
