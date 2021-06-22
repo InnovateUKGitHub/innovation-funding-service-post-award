@@ -3,12 +3,26 @@ import { Result } from "@ui/validation";
 import { ContentSelector } from "@content/content";
 import { Content } from "./content";
 
-interface ListProps {
+export interface SummaryListProps {
+  children: React.ReactNode;
   noBorders?: boolean;
   qa: string;
 }
 
-interface ItemProps {
+export function SummaryList({ qa, noBorders, ...props }: SummaryListProps) {
+  return (
+    <dl
+      data-qa={qa}
+      className={cn({
+        "govuk-summary-list": true,
+        "govuk-summary-list--no-border": noBorders,
+      })}
+      {...props}
+    />
+  );
+}
+
+interface SummaryListItemProps {
   label?: React.ReactNode;
   labelContent?: ContentSelector;
   content: React.ReactNode;
@@ -16,31 +30,21 @@ interface ItemProps {
   validation?: Result;
   qa: string;
 }
+export function SummaryListItem({ content, action, qa, validation, labelContent, label }: SummaryListItemProps) {
+  const labelValue = labelContent ? <Content value={labelContent} /> : label;
 
-export const SummaryList: React.FunctionComponent<ListProps> = (props) => {
-  const classNames = cn({
-    "govuk-summary-list": true,
-    "govuk-summary-list--no-border": props.noBorders,
-  });
+  const displaySummaryError = validation && !validation.isValid && validation.showValidationErrors;
 
   return (
-    <dl className={classNames} data-qa={props.qa}>
-      {props.children}
-    </dl>
-  );
-};
-
-export const SummaryListItem: React.FunctionComponent<ItemProps> = (props) => {
-  const classNames = cn({
-    "govuk-summary-list__row": true,
-    "govuk-summary-list__row--error": props.validation && !props.validation.isValid && props.validation.showValidationErrors
-  });
-  const label = props.labelContent ? <Content value={props.labelContent} /> : props.label;
-  return (
-    <div className={classNames} data-qa={props.qa}>
-      <dt className="govuk-summary-list__key">{label}</dt>
-      <dd className="govuk-summary-list__value">{props.content}</dd>
-      <dd className="govuk-summary-list__actions">{props.action}</dd>
+    <div
+      data-qa={qa}
+      className={cn("govuk-summary-list__row", {
+        "govuk-summary-list__row--error": displaySummaryError,
+      })}
+    >
+      <dt className="govuk-summary-list__key">{labelValue}</dt>
+      <dd className="govuk-summary-list__value">{content}</dd>
+      <dd className="govuk-summary-list__actions">{action}</dd>
     </div>
   );
-};
+}
