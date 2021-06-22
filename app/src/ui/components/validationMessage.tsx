@@ -66,15 +66,12 @@ export interface IValidationMessageProps {
 }
 
 export function ValidationMessage({ message, messageType, qa = "validation-message" }: IValidationMessageProps) {
-  const isString = typeof message === "string";
+  if (typeof message === "string" && !message.length) return null;
 
-  if (isString && !(message as string).length) return null;
+  const isBlockElement = !["string", "number", "function"].includes(typeof message);
+  const ElementType = isBlockElement ? "div" : "span";
 
   const ui = validationStyles[messageType];
-
-  // TODO: Replace this with .includes
-  const isBlockElement = ["string", "number", "function"].indexOf(typeof message) === -1;
-  const ElementType = isBlockElement ? "div" : "span";
 
   return (
     <div
