@@ -1,11 +1,9 @@
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
 
-import { PartnersAndFinanceContacts } from "@ui/components/partnersAndFinanceContacts";
+import { TestBed, TestBedStore } from "@shared/TestBed";
 import { PartnerDto, ProjectContactDto } from "@framework/types";
+import { PartnersAndFinanceContacts, PartnersAndFinanceContactsProps } from "@ui/components/partnersAndFinanceContacts";
 import { ProjectContactLabels } from "@content/labels/projectContactLabels";
-import { ContentProvider } from "@ui/redux/contentProvider";
-import { StoresProvider } from "@ui/redux";
-import { getColumnValues } from "./helpers/tableHelpers";
 
 const testPartnerData: PartnerDto[] = [
   {
@@ -28,7 +26,7 @@ const testPartnerData: PartnerDto[] = [
     projectId: "456",
     accountId: "832",
     name: "Driverless Cars",
-  }
+  },
 ] as PartnerDto[];
 
 const testContactData: ProjectContactDto[] = [
@@ -48,7 +46,7 @@ const testContactData: ProjectContactDto[] = [
     roleName: "Project Manager",
     email: "davedeveloper@nowhere.com",
     accountId: "312",
-    projectId: "456"
+    projectId: "456",
   },
   {
     id: "102",
@@ -57,7 +55,7 @@ const testContactData: ProjectContactDto[] = [
     roleName: "Finance Contact",
     email: "joebloggs@nowhere.com",
     accountId: "312",
-    projectId: "456"
+    projectId: "456",
   },
   {
     id: "103",
@@ -67,51 +65,69 @@ const testContactData: ProjectContactDto[] = [
     email: "bobbaker@nowhere.com",
     accountId: "832",
     projectId: "456",
-  }
+  },
 ];
 
-const labels = {
-  contactEmail: {
-    content: "Email"
-  },
-  contactName: {
-    content: "Name"
-  },
-  partnerName: {
-    content: "Partner"
-  },
-} as ProjectContactLabels;
+describe("<PartnersAndFinanceContacts />", () => {
+  const setup = () => {
+    const testStores = {
+      config: {
+        getConfig: () => ({
+          features: {},
+        }),
+      },
+    };
 
-const testStores = {
-  config : {
-    getConfig: () => ({
-      features: ({
+    const stubLabels = {
+      contactEmail: { content: "Email" },
+      contactName: { content: "Name" },
+      partnerName: { content: "Partner" },
+    } as ProjectContactLabels;
 
-      })
-    })
-  }
-};
+    const defaultProps: PartnersAndFinanceContactsProps = {
+      partners: testPartnerData,
+      contacts: testContactData,
+      projectContactLabels: () => stubLabels,
+    };
 
-const TestProviders: React.FunctionComponent = (props) => <StoresProvider value={testStores as any}><ContentProvider value={{} as any}>{props.children}</ContentProvider></StoresProvider>;
-
-describe("Partners Table", () => {
-  const testForCorrectTableEntries = (expectedA: string, expectedB: string, expectedC: string, columnQA: string) => {
-    const wrapper = mount(<TestProviders><PartnersAndFinanceContacts partners={testPartnerData} contacts={testContactData} projectContactLabels={() => labels} /></TestProviders>);
-    const columnValues = getColumnValues(wrapper, "finance-contact-details", columnQA).map(x => x.text());
-    expect(columnValues[0]).toBe(expectedA);
-    expect(columnValues[1]).toBe(expectedB);
-    expect(columnValues[2]).toBe(expectedC);
+    return render(
+      <TestBed stores={testStores as TestBedStore}>
+        <PartnersAndFinanceContacts {...defaultProps} />
+      </TestBed>,
+    );
   };
 
-  it("should display partner names with Steel Manufacturing as the lead", () => {
-    testForCorrectTableEntries("Steel Manufacturing (Lead)", "University of Life", "Driverless Cars", "col-partner-name");
-  });
+  describe("@renders", () => {
+    test("with partners names and Steel Manufacturing as the lead", () => {
+      const { queryByText } = setup();
 
-  it("should display the correct Finance Contact for each project", () => {
-    testForCorrectTableEntries("Ted Tester", "Joe Bloggs", "Bob Baker", "col-fc-name");
-  });
+      const partnerNames = [
+        queryByText("Steel Manufacturing (Lead)"),
+        queryByText("University of Life"),
+        queryByText("Driverless Cars"),
+      ];
 
-  it("should display the email for each Finance Contact", () => {
-    testForCorrectTableEntries("tedtester@nowhere.com", "joebloggs@nowhere.com", "bobbaker@nowhere.com", "col-fc-email");
+      partnerNames.forEach(partnerName => expect(partnerName).toBeInTheDocument());
+    });
+
+    test("with Finance Contacts", () => {
+      const { queryByText } = setup();
+
+      const financeContacts = [queryByText("Ted Tester"), queryByText("Joe Bloggs"), queryByText("Bob Baker")];
+
+      financeContacts.forEach(fcContact => expect(fcContact).toBeInTheDocument());
+    });
+
+    test("with emails of all Finance Contact", () => {
+      const { queryByText } = setup();
+
+      const fcContactEmails = [
+        queryByText("tedtester@nowhere.com"),
+        queryByText("joebloggs@nowhere.com"),
+        queryByText("bobbaker@nowhere.com"),
+      ];
+
+      fcContactEmails.forEach(partnerName => expect(partnerName).toBeInTheDocument());
+    });
   });
 });
