@@ -179,17 +179,19 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   protected async filterOne<Payload extends Partial<TSalesforce> | string>(filter: Payload): Promise<TEntity | null> {
     try {
       const connection = await this.getSalesforceConnection();
-      const filteredQuery = connection.sobject(this.salesforceObjectName).select(this.salesforceFieldNames);
-      const filteredResponse = await filteredQuery.where(filter).limit(1).execute();
+      const query = await connection
+        .sobject(this.salesforceObjectName)
+        .select(this.salesforceFieldNames)
+        .where(filter)
+        .limit(1)
+        .execute();
 
-      if (!filteredResponse.length) {
-        throw new Errors.SalesforceInvalidFilterError("Filter did not return any items");
-      }
+      if (!query.length) return null;
 
       // Note: we limit only 1 item above, so we can return this object from the array
-      const [item] = this.map(filteredResponse);
+      const [onlyFilteredItem] = this.map(query);
 
-      return item;
+      return onlyFilteredItem;
     } catch (error) {
       throw this.constructError(error);
     }
@@ -227,17 +229,13 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
       const connection = await this.getSalesforceConnection();
       const targetObject = connection.sobject<Partial<TSalesforce>>(this.salesforceObjectName);
 
-      const insertedIds: string[] = [];
-
-      this.batchRequest<Payload>(insertPayload, async batch => {
+      const insertedBatchIds = await this.batchRequest<Payload, string[]>(insertPayload, async batch => {
         const batchResults = await targetObject.insert(batch);
         const validPayload = batchResults.every(x => x.success);
 
         if (validPayload) {
           const successfulBatch = batchResults as SuccessResult[];
-          const insertedItems = successfulBatch.map(x => `${x.id}`);
-
-          insertedIds.concat(insertedItems);
+          return successfulBatch.map(x => `${x.id}`);
         }
 
         throw new Errors.SalesforceDataChangeError(
@@ -246,7 +244,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
         );
       });
 
-      return insertedIds;
+      return insertedBatchIds.flat();
     } catch (error) {
       throw this.constructError(error);
     }
@@ -274,12 +272,11 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
 
     try {
       const connection = await this.getSalesforceConnection();
-      const targetObject = connection.sobject<TSalesforce>(this.salesforceObjectName);
 
-      return this.batchRequest<Payload>(updatePayload, async batch => {
-        const batchResults = await targetObject.update(batch);
+      const updateBatchConfirmations = await this.batchRequest<Payload, boolean>(updatePayload, async batch => {
+        const updateQuery = await connection.sobject<TSalesforce>(this.salesforceObjectName);
+        const batchResults = await updateQuery.update(batch);
 
-        // Note: If we find any errors any batch response, throw it!
         return batchResults.reduce<boolean>((_, result) => {
           if (!result.success && !!result.errors.length) {
             const errorMessage = this.getErrorFromPayload(result.errors);
@@ -290,6 +287,8 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
           return true;
         }, false);
       });
+
+      return updateBatchConfirmations.every(Boolean);
     } catch (error) {
       throw this.constructError(error);
     }
@@ -302,7 +301,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
       const connection = await this.getSalesforceConnection();
       const targetObject = connection.sobject<Payload>(this.salesforceObjectName);
 
-      this.batchRequest<Payload>(deleteIds, async batch => {
+      const deleteQuery = await this.batchRequest<Payload, boolean>(deleteIds, async batch => {
         const result = await targetObject.delete(batch);
 
         if (result.every(x => x.success)) return true;
@@ -312,6 +311,15 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
           this.getDataChangeErrorMessages(result),
         );
       });
+
+      const allIdsDeleted: boolean = deleteQuery.every(Boolean);
+
+      // Note: Ensure all items are deleted
+      if (!allIdsDeleted) {
+        const deleteStatus = deleteQuery.map((x, i) => `ID: ${deleteIds[i]}, Status: ${x}`);
+
+        throw new Errors.SalesforceDataChangeError("Failed to delete from salesforce", deleteStatus);
+      }
     } catch (error) {
       throw this.constructError(error);
     }
@@ -368,18 +376,14 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
    * A batch is determined from a config value. This config has been set to the max payload size SF can handle on each request, thus removing SF query errors.
    *
    */
-  private batchRequest<T extends any[]>(payload: T, request: (batchPayload: T) => Promise<boolean>): Promise<boolean> {
-    const generatedBatches = createBatch<T>(payload, Configuration.salesforceQueryLimit);
-    const combinedRequests = Promise.all(generatedBatches.map(request));
+  private batchRequest<BatchType extends any[], Response extends any>(
+    payload: BatchType,
+    request: (batchPayload: BatchType) => Promise<Response>,
+  ): Promise<Response[]> {
+    const generatedBatches = createBatch<BatchType>(payload, Configuration.salesforceQueryLimit);
+    const promisedBatches = generatedBatches.map(x => request(x));
 
-    // eslint-disable-next-line sonarjs/prefer-immediate-return
-    const isSuccessfulQuery = combinedRequests
-      .then(x => x.every(Boolean))
-      .catch(e => {
-        throw e;
-      });
-
-    return isSuccessfulQuery;
+    return Promise.all(promisedBatches);
   }
 }
 
