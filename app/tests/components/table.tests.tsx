@@ -1,50 +1,81 @@
-import { shallow } from "enzyme";
-import { TypedTable } from "../../src/ui/components/table";
+import { render } from "@testing-library/react";
+
+import { TypedTable } from "@ui/components/table";
 
 describe("Table", () => {
   it("should render <td> with given number", () => {
+    const stubNumber = 12345;
 
     const NumericTable = TypedTable<number>();
-    const wrapper = shallow(<NumericTable.Table data={[1]} qa=""><NumericTable.Number header="" value={x => x} qa="val"/></NumericTable.Table>);
-    expect(wrapper.html()).toContain("<td class=\"govuk-table__cell govuk-table__cell--numeric\">1</td>");
+    const { queryByText } = render(
+      <NumericTable.Table data={[stubNumber]} qa="">
+        <NumericTable.Number header="" value={x => x} qa="val" />
+      </NumericTable.Table>,
+    );
+    expect(queryByText(stubNumber)).toBeInTheDocument();
   });
 
   it("should render <td> with given string", () => {
+    const stubData = "stub-data";
     const StringTable = TypedTable<string>();
-    const wrapper = shallow(<StringTable.Table data={["aBc"]} qa=""><StringTable.String header="" value={x => x} qa="val"/></StringTable.Table>);
-    expect(wrapper.html()).toContain("<td class=\"govuk-table__cell\">aBc</td>");
+    const { queryByText } = render(
+      <StringTable.Table data={[stubData]} qa="">
+        <StringTable.String header="" value={x => x} qa="val" />
+      </StringTable.Table>,
+    );
+    expect(queryByText(stubData)).toBeInTheDocument();
   });
 
   it("should render <tr> with number nodes", () => {
-    const rows    = [1,2,3];
-    const NumberTable  = TypedTable<number>();
-    const wrapper = shallow(<NumberTable.Table data={rows} qa=""><NumberTable.Number header="" value={x => x} qa="val"/></NumberTable.Table>);
-    expect(wrapper.html()).toContain("<td class=\"govuk-table__cell govuk-table__cell--numeric\">1</td>");
-    expect(wrapper.html()).toContain("<td class=\"govuk-table__cell govuk-table__cell--numeric\">2</td>");
-    expect(wrapper.html()).toContain("<td class=\"govuk-table__cell govuk-table__cell--numeric\">3</td>");
+    const rows = [1, 2, 3];
+    const NumberTable = TypedTable<number>();
+    const { queryByText } = render(
+      <NumberTable.Table data={rows} qa="">
+        <NumberTable.Number header="" value={x => x} qa="val" />
+      </NumberTable.Table>,
+    );
+
+    rows.forEach(x => {
+      expect(queryByText(x)).toBeInTheDocument();
+    });
   });
 
   it("should render th with given content", () => {
+    const stubHeader = "stub-header";
     const data = ["Item"];
-    const TableComponent  = TypedTable<string>();
+    const TableComponent = TypedTable<string>();
 
-    const wrapper = shallow(<TableComponent.Table data={data} qa=""><TableComponent.String header="The header" value={x => "Content"} qa="val"/></TableComponent.Table>);
-    expect(wrapper.html()).toContain("<th class=\"govuk-table__header\" scope=\"col\">The header</th>");
+    const { queryByText } = render(
+      <TableComponent.Table data={data} qa="">
+        <TableComponent.String header={stubHeader} value={x => "Content"} qa="val" />
+      </TableComponent.Table>,
+    );
+    expect(queryByText(stubHeader)).toBeInTheDocument();
   });
 
   it("should render hidden header with given content", () => {
+    const stubHiddenHeader = "stub-hidden-header";
     const data = ["Item"];
-    const TableComponent  = TypedTable<string>();
+    const TableComponent = TypedTable<string>();
 
-    const wrapper = shallow(<TableComponent.Table data={data} qa=""><TableComponent.String header="The header" hideHeader value={x => "Content"} qa="val"/></TableComponent.Table>);
-    expect(wrapper.html()).toContain("<th class=\"govuk-table__header\" scope=\"col\"><span class=\"govuk-visually-hidden\">The header</span></th>");
+    const { queryByText } = render(
+      <TableComponent.Table data={data} qa="">
+        <TableComponent.String header={stubHiddenHeader} hideHeader value={x => "Content"} qa="val" />
+      </TableComponent.Table>,
+    );
+    expect(queryByText(stubHiddenHeader)).toBeInTheDocument();
   });
 
   it("should render tr as expected", () => {
-    const data = ["Item"];
-    const TableComponent  = TypedTable<string>();
+    const stubTrItem = "stub-tr-item";
+    const data = [stubTrItem];
+    const TableComponent = TypedTable<string>();
 
-    const wrapper = shallow(<TableComponent.Table data={data} qa=""><TableComponent.String header="The header" value={x => x} qa="val"/></TableComponent.Table>);
-    expect(wrapper.html()).toContain("<tr class=\"govuk-table__row\"><td class=\"govuk-table__cell\">Item</td></tr>");
+    const { queryByText } = render(
+      <TableComponent.Table data={data} qa="">
+        <TableComponent.String header="The header" value={x => x} qa="val" />
+      </TableComponent.Table>,
+    );
+    expect(queryByText(stubTrItem)).toBeInTheDocument();
   });
 });
