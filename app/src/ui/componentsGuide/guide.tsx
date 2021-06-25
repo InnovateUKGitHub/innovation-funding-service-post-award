@@ -33,7 +33,6 @@ import { validationMessageGuide } from "./validationMessageGuide";
 import { validationSummaryGuide } from "./validationSummaryGuide";
 import { currencyGuide } from "@ui/componentsGuide/currencyGuide";
 import { percentageGuide } from "@ui/componentsGuide/percentageGuide";
-import { breadcrumbsGuide } from "@ui/componentsGuide/breadcrumbsGuide";
 import { modalGuide } from "@ui/componentsGuide/modalGuide";
 import { ulGuide, olGuide } from "@ui/componentsGuide/listGuide";
 import { readonlyLabel } from "@ui/componentsGuide/readonlyLabelGuide";
@@ -43,7 +42,6 @@ import { GovWidthContainer, UL } from "@ui/components";
 const guides: IGuide[] = [
   accordionGuide,
   buttonGuide,
-  breadcrumbsGuide,
   currencyGuide,
   datesGuide,
   detailsGuide,

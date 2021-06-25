@@ -1,4 +1,3 @@
-export * from "./breadcrumbs";
 export * from "./footer";
 export * from "./hashTabs";
 export * from "./header";
