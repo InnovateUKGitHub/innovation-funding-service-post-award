@@ -11,28 +11,28 @@ import { IRoutes } from "@ui/routing";
 import { useContent } from "@ui/hooks";
 import { Link } from "../links";
 
-export interface ClaimDetailsBaseProps {
+interface ClaimDetailsBaseProps {
   claim: Pick<ClaimDto, "status" | "periodId">;
   project: Pick<ProjectDto, "id" | "status" | "roles">;
   partner: Pick<PartnerDto, "id" | "roles" | "partnerStatus">;
 }
 
-interface ClaimDetailsLinkRoutes extends ClaimDetailsBaseProps {
+export interface ClaimDetailsLinkRoutes extends ClaimDetailsBaseProps {
   routes: IRoutes;
 }
 
 export function ClaimDetailsLink(props: ClaimDetailsLinkRoutes) {
   const { getContent } = useContent();
 
+  const linkType = getClaimDetailsLinkType(props);
+
+  if (!linkType) return null;
+
   const linkProps = {
     projectId: props.project.id,
     partnerId: props.partner.id,
     periodId: props.claim.periodId,
   };
-
-  const linkType = getClaimDetailsLinkType(props);
-
-  if (!linkType) return null;
 
   const linkTypeOptions = {
     edit: {
@@ -52,13 +52,15 @@ export function ClaimDetailsLink(props: ClaimDetailsLinkRoutes) {
   return <Link {...linkTypeOptions[linkType]} />;
 }
 
-type LinkTypeResponse = "edit" | "review" | "view" | null;
-
-export function getClaimDetailsLinkType({ project, partner, claim }: ClaimDetailsBaseProps): LinkTypeResponse {
+export function getClaimDetailsLinkType({
+  project,
+  partner,
+  claim,
+}: ClaimDetailsBaseProps): "edit" | "review" | "view" | null {
   if (project.status === ProjectStatus.OnHold) return "view";
   if (partner.partnerStatus === PartnerStatus.OnHold) return "view";
 
-  const isProjectMo = getAuthRoles(project.roles).isMo;
+  const { isMo: isProjectMo, isPm: isProjectPm } = getAuthRoles(project.roles);
   const isPartnerFc = getAuthRoles(partner.roles).isFc;
 
   switch (claim.status) {
@@ -68,11 +70,11 @@ export function getClaimDetailsLinkType({ project, partner, claim }: ClaimDetail
 
       return null;
     case ClaimStatus.MO_QUERIED:
+      return isProjectMo && !isProjectPm ? "view" : "edit";
 
     case ClaimStatus.INNOVATE_QUERIED:
-      if (isPartnerFc) return "edit";
+      return isPartnerFc ? "edit" : "view";
 
-      return "view";
     case ClaimStatus.SUBMITTED:
       if (isProjectMo) return "review";
 
