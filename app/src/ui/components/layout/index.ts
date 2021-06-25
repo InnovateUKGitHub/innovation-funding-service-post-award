@@ -1,5 +1,4 @@
 export * from "./footer";
-export * from "./hashTabs";
 export * from "./header";
 export * from "./info";
 export * from "./insetText";

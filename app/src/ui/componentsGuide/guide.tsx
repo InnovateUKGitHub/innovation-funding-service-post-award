@@ -10,7 +10,6 @@ import { detailsGuide } from "./detailsGuide";
 import { documentListGuide } from "./documentListGuide";
 import { emailGuide } from "./emailGuide";
 import { formGuide } from "./formGuide";
-import { hashTabsGuide } from "./hashTabsGuide";
 import { insetText } from "./insetTextGuide";
 import { info } from "./infoGuide";
 import { linksListGuide } from "./linksListGuide";
@@ -67,7 +66,6 @@ const guides: IGuide[] = [
   sectionPanelGuide,
   summaryListGuide,
   tabsGuide,
-  hashTabsGuide,
   tableGuide,
   taskListGuide,
   textHint,

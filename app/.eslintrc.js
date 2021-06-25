@@ -95,7 +95,6 @@ module.exports = {
         "**/textInput.tests.tsx",
         "**/breadcrumbs.tests.tsx",
         "**/footer.tests.tsx",
-        "**/hashTabs.tests.tsx",
         "**/header.tests.tsx",
         "**/insetText.tests.tsx",
         "**/phaseBanner.tests.tsx",
