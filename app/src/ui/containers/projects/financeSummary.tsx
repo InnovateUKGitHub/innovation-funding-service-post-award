@@ -1,14 +1,33 @@
-import * as ACC from "@ui/components";
+import { getAuthRoles, ProjectRole } from "@framework/types";
 import { PartnerDto, ProjectDto } from "@framework/dtos";
+import { roundCurrency } from "@framework/util";
 import { Pending } from "@shared/pending";
-import { TypedTable } from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { StoresConsumer } from "@ui/redux";
-import { ProjectRole } from "@framework/constants";
+import { useStores } from "@ui/redux";
+import { useContent } from "@ui/hooks";
+
+import * as ACC from "@ui/components";
 
 interface Data {
   project: Pending<ProjectDto>;
   partners: Pending<PartnerDto[]>;
+  content: {
+    backToProjectOverview: string;
+    partnerFinanceDetailsTitle: string;
+    accountantsReportTitle: string;
+    totalsFooterLabel: string;
+    partnerProjectLabel: string;
+    projectCostsLabel: string;
+    totalEligibleCostsLabel: string;
+    totalEligibleCostsClaimedLabel: string;
+    percentageEligibleCostsClaimedLabel: string;
+    awardRateLabel: string;
+    totalApprovedLabel: string;
+    remainingValueLabel: string;
+    totalPrepaymentLabel: string;
+    capLimitLabel: string;
+    auditReportFrequencyLabel: string;
+  };
 }
 
 interface Params {
@@ -20,131 +39,216 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data> {
   render() {
     const combined = Pending.combine({
       project: this.props.project,
-      partners: this.props.partners
+      partners: this.props.partners,
     });
 
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.partners)} />;
   }
 
   private renderContents(project: ProjectDto, partners: PartnerDto[]) {
-    const backLinkTitle = <ACC.Content value={x => x.financeSummary.backToProjectOverview}/>;
+    const { content, partnerId, routes } = this.props;
+
+    const { isPmOrMo } = getAuthRoles(project.roles);
+
+    const FinanceSummaryTable = ACC.TypedTable<PartnerDto>();
+    const partnersToShow = isPmOrMo ? partners : partners.filter(x => x.id === partnerId);
+    const footerTotalValues = isPmOrMo ? this.renderTotalValueFooters(partners) : [];
+
+    const backLink = (
+      <ACC.BackLink route={routes.projectOverview.getLink({ projectId: this.props.projectId })}>
+        {content.backToProjectOverview}
+      </ACC.BackLink>
+    );
+
+    const currentPeriodTitle = (
+      <ACC.Content
+        value={x => x.financeSummary.projectMessages.currentPeriodInfo(project.periodId, project.numberOfPeriods)}
+      />
+    );
 
     return (
-      <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.projectOverview.getLink({ projectId: this.props.projectId })}>{backLinkTitle}</ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title {...project} />}
-        project={project}
-      >
+      <ACC.Page backLink={backLink} pageTitle={<ACC.Projects.Title {...project} />} project={project}>
         <ACC.Section
-          title={<ACC.Content value={x => x.financeSummary.projectMessages.currentPeriodInfo(project.periodId, project.numberOfPeriods)} />}
+          title={currentPeriodTitle}
           subtitle={<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />}
           qa="financeSummarySection"
         >
-          {this.renderFinanceSummary(project, partners)}
+          <ACC.Section title={content.projectCostsLabel}>
+            <FinanceSummaryTable.Table data={partnersToShow} qa="ProjectCostsToDate" footers={footerTotalValues}>
+              <FinanceSummaryTable.Custom
+                hideHeader
+                qa="Partner"
+                header={content.partnerProjectLabel}
+                value={x => <ACC.PartnerName partner={x} showIsLead />}
+              />
+
+              <FinanceSummaryTable.Currency
+                qa="TotalEligibleCosts"
+                header={content.totalEligibleCostsLabel}
+                value={x => x.totalParticipantGrant}
+              />
+
+              <FinanceSummaryTable.Currency
+                qa="CostsClaimedToDate"
+                header={content.totalEligibleCostsClaimedLabel}
+                value={x => x.totalCostsSubmitted}
+              />
+
+              <FinanceSummaryTable.Percentage
+                qa="PercentageOfCostsClaimedToDate"
+                header={content.percentageEligibleCostsClaimedLabel}
+                value={x => x.percentageParticipantCostsSubmitted}
+              />
+            </FinanceSummaryTable.Table>
+
+            <ACC.Section title={content.partnerFinanceDetailsTitle}>
+              <FinanceSummaryTable.Table data={partnersToShow} qa="PartnerFinanceDetails">
+                <FinanceSummaryTable.Custom
+                  hideHeader
+                  qa="Partner"
+                  value={x => ACC.getPartnerName(x, true)}
+                  header={content.partnerProjectLabel}
+                />
+
+                <FinanceSummaryTable.Currency
+                  qa="TotalEligibleCosts"
+                  header={content.totalEligibleCostsLabel}
+                  value={x => x.totalParticipantGrant}
+                />
+
+                <FinanceSummaryTable.Percentage
+                  qa="FundingLevel"
+                  header={content.awardRateLabel}
+                  value={x => x.awardRate}
+                />
+
+                <FinanceSummaryTable.Currency
+                  qa="TotalGrant"
+                  header={content.totalApprovedLabel}
+                  value={x => x.totalGrantApproved}
+                />
+
+                <FinanceSummaryTable.Currency
+                  qa="RemainingGrant"
+                  header={content.remainingValueLabel}
+                  value={x => x.remainingParticipantGrant}
+                />
+
+                <FinanceSummaryTable.Currency
+                  qa="TotalGrantPaidInAdvance"
+                  header={content.totalPrepaymentLabel}
+                  value={x => x.totalPrepayment}
+                />
+
+                <FinanceSummaryTable.Percentage qa="ClaimCap" header={content.capLimitLabel} value={x => x.capLimit} />
+              </FinanceSummaryTable.Table>
+
+              <ACC.Section title={content.accountantsReportTitle}>
+                <FinanceSummaryTable.Table qa="WhenAnIarIsNeeded" data={partnersToShow}>
+                  <FinanceSummaryTable.Custom
+                    qa="Partner"
+                    hideHeader
+                    header={content.partnerProjectLabel}
+                    value={x => ACC.getPartnerName(x, true)}
+                  />
+
+                  <FinanceSummaryTable.String
+                    qa="Frequency"
+                    header={content.auditReportFrequencyLabel}
+                    hideHeader
+                    value={x => x.auditReportFrequencyName}
+                  />
+                </FinanceSummaryTable.Table>
+              </ACC.Section>
+            </ACC.Section>
+          </ACC.Section>
         </ACC.Section>
       </ACC.Page>
     );
   }
 
-  private renderFinanceSummary(project: ProjectDto, partners: PartnerDto[]) {
-    const FinanceSummaryTable = TypedTable<PartnerDto>();
-    const partnersToShow =
-      (project.roles & ProjectRole.ProjectManager || project.roles & ProjectRole.MonitoringOfficer)
-        ? partners
-        : partners.filter(x => x.id === this.props.partnerId);
-
-    const costToDateTitle = <ACC.Content value={x => x.financeSummary.projectLabels.projectCosts}/>;
-    const partnerFinanceDetailsTitle = <ACC.Content value={x => x.financeSummary.partnerFinanceDetailsTitle}/>;
-    const accountantsReportTitle = <ACC.Content value={x => x.financeSummary.accountantsReportTitle}/>;
-
-    return (
-      <>
-        <ACC.Section title={costToDateTitle}>
-          <FinanceSummaryTable.Table data={partnersToShow} qa="ProjectCostsToDate" footers={this.renderTotalValueFooters(project, partners)}>
-            <FinanceSummaryTable.Custom headerContent={x => x.financeSummary.projectLabels.partner} hideHeader qa="Partner" value={x => <ACC.PartnerName partner={x} showIsLead />} />
-            <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalEligibleCosts} qa="TotalEligibleCosts" value={x => x.totalParticipantGrant} />
-            <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalEligibleCostsClaimed} qa="CostsClaimedToDate" value={x => x.totalCostsSubmitted} />
-            <FinanceSummaryTable.Percentage headerContent={x => x.financeSummary.projectLabels.percentageEligibleCostsClaimed} qa="PercentageOfCostsClaimedToDate" value={x => x.percentageParticipantCostsSubmitted} />
-          </FinanceSummaryTable.Table>
-
-          <ACC.Section title={partnerFinanceDetailsTitle}>
-            <FinanceSummaryTable.Table data={partnersToShow} qa="PartnerFinanceDetails">
-              <FinanceSummaryTable.Custom headerContent={x => x.financeSummary.projectLabels.partner} hideHeader qa="Partner" value={x => <ACC.PartnerName partner={x} showIsLead />} />
-              <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalEligibleCosts} qa="TotalEligibleCosts" value={x => x.totalParticipantGrant} />
-              <FinanceSummaryTable.Percentage headerContent={x => x.financeSummary.projectLabels.awardRate} qa="FundingLevel" value={x => x.awardRate} />
-              <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalApproved} qa="TotalGrant" value={x => x.totalGrantApproved} />
-              <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.remainingValue} qa="RemainingGrant" value={x => x.remainingParticipantGrant} />
-              <FinanceSummaryTable.Currency headerContent={x => x.financeSummary.projectLabels.totalPrepayment} qa="TotalGrantPaidInAdvance" value={x => x.totalPrepayment} />
-              <FinanceSummaryTable.Percentage headerContent={x => x.financeSummary.projectLabels.capLimit} qa="ClaimCap" value={x => x.capLimit} />
-            </FinanceSummaryTable.Table>
-
-            <ACC.Section title={accountantsReportTitle}>
-              <FinanceSummaryTable.Table data={partnersToShow} qa="WhenAnIarIsNeeded" >
-                <FinanceSummaryTable.Custom headerContent={x => x.financeSummary.projectLabels.partner} hideHeader value={x => <ACC.PartnerName partner={x} showIsLead />} qa="Partner" />
-                <FinanceSummaryTable.String headerContent={x => x.financeSummary.projectLabels.auditReportFrequency} hideHeader value={x => x.auditReportFrequencyName} qa="Frequency" />
-              </FinanceSummaryTable.Table>
-            </ACC.Section>
-          </ACC.Section>
-        </ACC.Section>
-      </>
+  private renderTotalValueFooters(partners: PartnerDto[]) {
+    const totalParticipantGrantTotal = partners.reduce<number>(
+      (val, partner) => roundCurrency(val + (partner.totalParticipantGrant || 0)),
+      0,
     );
-  }
+    const totalCostsSubmittedTotal = partners.reduce<number>(
+      (val, partner) => roundCurrency(val + (partner.totalCostsSubmitted || 0)),
+      0,
+    );
 
-  private renderTotalValueFooters(project: ProjectDto, partners: PartnerDto[]) {
-    if (project.roles & ProjectRole.ProjectManager || project.roles & ProjectRole.MonitoringOfficer) {
-      const totalParticipantGrantTotal = partners.reduce((val, partner) => {
-        return val + (partner.totalParticipantGrant || 0);
-      }, 0);
+    const percentageParticipantCostsSubmittedTotal = totalParticipantGrantTotal
+      ? (100 * (totalCostsSubmittedTotal || 0)) / totalParticipantGrantTotal
+      : null;
 
-      const totalCostsSubmittedTotal = partners.reduce((val, partner) => {
-        return val + (partner.totalCostsSubmitted || 0);
-      }, 0);
-
-      const percentageParticipantCostsSubmittedTotal = (totalParticipantGrantTotal) ? 100 * (totalCostsSubmittedTotal || 0) / totalParticipantGrantTotal : null;
-      return [(
-        <tr key={1}>
-          <th key="th" className="govuk-table__cell acc-table__cell-top-border">
-            <ACC.Content value={x => x.financeSummary.totalsFooterLabel} />
-          </th>
-          {this.renderTableFooter(<ACC.Renderers.Currency value={totalParticipantGrantTotal} />, 1)}
-          {this.renderTableFooter(<ACC.Renderers.Currency value={totalCostsSubmittedTotal} />, 2)}
-          {this.renderTableFooter(<ACC.Renderers.Percentage value={percentageParticipantCostsSubmittedTotal} />, 3)}
-        </tr>
-      )];
-    } else {
-      return [];
-    }
-  }
-
-  private renderTableFooter(child: React.ReactElement<any>, key: number) {
-    return (
-      <td key={key} className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border">
-        {child}
+    const footerColumns = [
+      // eslint-disable-next-line react/jsx-key
+      <ACC.Renderers.Currency value={totalParticipantGrantTotal} />,
+      // eslint-disable-next-line react/jsx-key
+      <ACC.Renderers.Currency value={totalCostsSubmittedTotal} />,
+      // eslint-disable-next-line react/jsx-key
+      <ACC.Renderers.Percentage value={percentageParticipantCostsSubmittedTotal} />,
+    ].map((x, i) => (
+      <td key={i} className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border">
+        {x}
       </td>
-    );
+    ));
+
+    return [
+      <tr key={1}>
+        <th key="th" className="govuk-table__cell acc-table__cell-top-border">
+          {this.props.content.totalsFooterLabel}
+        </th>
+
+        {...footerColumns}
+      </tr>,
+    ];
   }
 }
 
-const FinanceSummaryContainer = (props: Params & BaseProps) => (
-  <StoresConsumer>
-    {stores => (
-      <FinanceSummaryComponent
-        project={stores.projects.getById(props.projectId)}
-        partners={stores.partners.getPartnersForProject(props.projectId)}
-        {...props}
-      />
-    )}
-  </StoresConsumer>
-);
+function FinanceSummaryContainer(props: Params & BaseProps) {
+  const stores = useStores();
+  const { getContent } = useContent();
+
+  const financeSummaryContent = {
+    backToProjectOverview: getContent(x => x.financeSummary.backToProjectOverview),
+    partnerFinanceDetailsTitle: getContent(x => x.financeSummary.partnerFinanceDetailsTitle),
+    accountantsReportTitle: getContent(x => x.financeSummary.accountantsReportTitle),
+    totalsFooterLabel: getContent(x => x.financeSummary.totalsFooterLabel),
+    auditReportFrequencyLabel: getContent(x => x.financeSummary.projectLabels.auditReportFrequency),
+    partnerProjectLabel: getContent(x => x.financeSummary.projectLabels.partner),
+    projectCostsLabel: getContent(x => x.financeSummary.projectLabels.projectCosts),
+    totalEligibleCostsLabel: getContent(x => x.financeSummary.projectLabels.totalEligibleCosts),
+    totalEligibleCostsClaimedLabel: getContent(x => x.financeSummary.projectLabels.totalEligibleCostsClaimed),
+    percentageEligibleCostsClaimedLabel: getContent(x => x.financeSummary.projectLabels.percentageEligibleCostsClaimed),
+    awardRateLabel: getContent(x => x.financeSummary.projectLabels.awardRate),
+    totalApprovedLabel: getContent(x => x.financeSummary.projectLabels.totalApproved),
+    remainingValueLabel: getContent(x => x.financeSummary.projectLabels.remainingValue),
+    totalPrepaymentLabel: getContent(x => x.financeSummary.projectLabels.totalPrepayment),
+    capLimitLabel: getContent(x => x.financeSummary.projectLabels.capLimit),
+  };
+
+  return (
+    <FinanceSummaryComponent
+      {...props}
+      content={financeSummaryContent}
+      project={stores.projects.getById(props.projectId)}
+      partners={stores.partners.getPartnersForProject(props.projectId)}
+    />
+  );
+}
 
 export const FinanceSummaryRoute = defineRoute({
   routeName: "FinanceSummary",
   routePath: "/projects/:projectId/finance-summary/:partnerId",
   container: FinanceSummaryContainer,
-  getParams: (route) => ({
-    projectId: route.params.projectId,
-    partnerId: route.params.partnerId
+  getParams: x => ({
+    projectId: x.params.projectId,
+    partnerId: x.params.partnerId,
   }),
-  accessControl: (auth, params) => auth.forProject(params.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer, ProjectRole.FinancialContact),
-  getTitle: ({ content }) => content.financeSummary.title()
+  accessControl: (auth, params) =>
+    auth
+      .forProject(params.projectId)
+      .hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer, ProjectRole.FinancialContact),
+  getTitle: x => x.content.financeSummary.title(),
 });
