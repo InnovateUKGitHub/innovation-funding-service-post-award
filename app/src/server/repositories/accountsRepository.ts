@@ -1,23 +1,23 @@
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface ISalesforceAccount {
+  Id: string;
   Name: string;
+  JES_Organisation__c: string;
 }
 
-export interface IAccountsRepository {
-  getAccounts(): Promise<ISalesforceAccount[]>;
-}
+export type IAccountsRepository = Pick<AccountsRepository, "getAllByJesName">;
 
-export class AccountsRepository extends SalesforceRepositoryBase<ISalesforceAccount> implements IAccountsRepository {
+export class AccountsRepository extends SalesforceRepositoryBase<ISalesforceAccount> {
+  private jesEnabled = "Yes";
 
   protected readonly salesforceObjectName = "Account";
+  protected readonly salesforceFieldNames = ["Id", "Name", "JES_Organisation__c"];
 
-  protected readonly salesforceFieldNames = [
-    "Name"
-  ];
+  getAllByJesName(searchString?: string): Promise<ISalesforceAccount[]> {
+    const jesFilter = `JES_Organisation__c = '${this.jesEnabled}'`;
+    const jesQuery = searchString ? `${jesFilter} AND Name LIKE '%${searchString}%'` : jesFilter;
 
-  getAccounts(): Promise<ISalesforceAccount[]> {
-    // TODO: Once available, this will need to be updated to only return accounts where the account is listed as registered with Je-S
-    return super.all();
+    return super.where(jesQuery);
   }
 }
