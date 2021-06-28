@@ -1,95 +1,103 @@
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
 
 import { TestBed, TestBedContent, TestBedStore } from "@shared/TestBed";
 import { Header, HeaderProps } from "@ui/components/layout/header";
-import { getDataQA } from "../../test-utils/getQaRef";
 
 describe("Header", () => {
-  const setup = (props: Partial<HeaderProps> = {}) => {
-    // Testbed
-    const stubProvider = {
-      header: {
-        siteName: "stub-siteName",
-        mobileNavigationLabel: {
-          content: "stub-mobileNavigationLabel",
-        },
+  const stubContent = {
+    header: {
+      siteName: "stub-siteName",
+      mobileNavigationLabel: {
+        content: "stub-mobileNavigationLabel",
       },
-    };
+    },
+  };
 
-    const stubStore = {
-      config: {
-        isClient: true,
-      },
-    } as any;
-
-    // Stub Data
-    const stubUrl = "www.google.com";
-    const stubNavItems = Array.from({ length: 3 }, (_, i) => ({
+  const getStubItems = (totalNumberOfItems: number) =>
+    Array.from({ length: totalNumberOfItems }, (_, i) => ({
       text: `text-${i}`,
       href: `href-${i}`,
       qa: `qa-${i}`,
     }));
 
-    const wrapper = mount(
-      <TestBed content={stubProvider as TestBedContent} stores={stubStore as TestBedStore}>
-        <Header siteLink={stubUrl} navigationItems={stubNavItems} {...props} />
+  const stubStore = {
+    config: { isClient: true },
+  } as any;
+
+  const defaultProps = {
+    siteLink: "www.google.com",
+  };
+
+  const setup = (props?: Partial<HeaderProps>) =>
+    render(
+      <TestBed content={stubContent as TestBedContent} stores={stubStore as TestBedStore}>
+        <Header {...defaultProps} {...props} />
       </TestBed>,
     );
 
-    return {
-      wrapper,
-      stubUrl,
-      stubNavItems,
-      stubProvider,
-    };
-  };
-
-  describe("@data", () => {
-    it("should return content from context", () => {
-      const { wrapper, stubProvider } = setup();
-
-      const siteName = getDataQA(wrapper, "service-name");
-      const mobileNavToggle = getDataQA(wrapper, "mobile-nav-toggle");
-
-      expect(siteName.text()).toBe(stubProvider.header.siteName);
-      expect(mobileNavToggle.text()).toBe(stubProvider.header.mobileNavigationLabel.content);
-    });
-  });
-
   describe("@renders", () => {
-    it("renders no navigation items", () => {
-      const { wrapper } = setup({ navigationItems: [] });
+    it("should return site link", () => {
+      const stubSiteLink = "https://www.ukri.org/";
+      const { getByText } = setup({ siteLink: stubSiteLink });
 
-      const navItems = getDataQA(wrapper, "header-navigation-item");
+      const siteLink = getByText(stubContent.header.siteName);
 
-      expect(navItems.length).toBe(0);
+      expect(siteLink).toHaveAttribute("href", stubSiteLink);
     });
 
-    it("renders navigation items", () => {
-      const { wrapper, stubNavItems } = setup();
+    it("should return content from context", () => {
+      const { queryByText } = setup();
 
-      const navItems = getDataQA(wrapper, "header-navigation-item");
-
-      // Note: check object renders with expected properties
-      stubNavItems.forEach(stubItem => {
-        const item = getDataQA(wrapper, stubItem.qa);
-        expect(item.text()).toBe(stubItem.text);
-        expect(item.prop("href")).toBe(stubItem.href);
-      });
-
-      expect(navItems.length).toBe(stubNavItems.length);
+      expect(queryByText(stubContent.header.siteName)).toBeInTheDocument();
+      expect(queryByText(stubContent.header.mobileNavigationLabel.content)).toBeInTheDocument();
     });
 
-    describe("renders required elements", () => {
-      const { wrapper } = setup();
-
+    describe("with required elements", () => {
       test.each`
         name                        | qa
         ${"with logo"}              | ${"logo"}
         ${"with mobile-nav-toggle"} | ${"mobile-nav-toggle"}
       `("$name", ({ qa }) => {
-        expect(getDataQA(wrapper, qa)).toBeDefined();
+        const { queryByTestId } = setup();
+        expect(queryByTestId(qa)).toBeInTheDocument();
       });
+    });
+
+    describe("without navigation items", () => {
+      it("with no items", () => {
+        const { queryAllByTestId } = setup({ navigationItems: [] });
+
+        const navItems = queryAllByTestId("header-navigation-item");
+
+        expect(navItems).toHaveLength(0);
+      });
+
+      it("when a value is falsy", () => {
+        const { queryAllByTestId } = setup({ navigationItems: undefined });
+
+        const navItems = queryAllByTestId("header-navigation-item");
+
+        expect(navItems).toHaveLength(0);
+      });
+    });
+
+    it("with navigation items", () => {
+      const stubNavItems = getStubItems(2);
+      const { queryByTestId, queryAllByTestId } = setup({ navigationItems: stubNavItems });
+
+      const expectedNavItems = queryAllByTestId("header-navigation-item");
+
+      expect(expectedNavItems).toHaveLength(stubNavItems.length);
+
+      // Note: check object renders with expected properties
+      for (const stubItem of stubNavItems) {
+        const item = queryByTestId(stubItem.qa);
+
+        if (!item) throw Error(`${stubItem.qa} was not found!`);
+
+        expect(item).toBeInTheDocument();
+        expect(item.getAttribute("href")).toBe(stubItem.href);
+      }
     });
   });
 });
