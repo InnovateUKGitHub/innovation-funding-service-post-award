@@ -1,7 +1,6 @@
 export * from "./footer";
 export * from "./header";
 export * from "./info";
-export * from "./insetText";
 export * from "./page";
 export * from "./pageTitle";
 export * from "./phaseBanner";
