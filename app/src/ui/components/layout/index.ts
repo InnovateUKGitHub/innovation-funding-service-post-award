@@ -9,7 +9,6 @@ export * from "./sectionPanel";
 export * from "./textHint";
 export * from "./listItem";
 export * from "./readonlyLabel";
-export * from "./tabs";
 export * from "./GovWidthContainer";
 export * from "./crownCopyrightLogo";
 export * from "./list";

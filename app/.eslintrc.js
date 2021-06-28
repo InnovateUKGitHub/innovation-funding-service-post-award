@@ -99,7 +99,6 @@ module.exports = {
         "**/phaseBanner.tests.tsx",
         "**/section.tests.tsx",
         "**/sectionPanel.tests.tsx",
-        "**/tabs.tests.tsx",
         "**/textHint.tests.tsx",
         "**/contactsTable.tests.tsx",
         "**/partnerName.tests.tsx",
