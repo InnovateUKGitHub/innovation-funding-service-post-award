@@ -6,7 +6,7 @@ import { ClientFileWrapper } from "./clientFileWrapper";
 
 const clientApi: IApiClient = {
   accounts: {
-    getAll: () => ajaxJson("/api/accounts"),
+    getAllByJesName: params => ajaxJson(`/api/jes-accounts?search=${params.searchString}`),
   },
   claims: {
     getAllByProjectId: params => ajaxJson(`/api/claims/?projectId=${params.projectId}`),

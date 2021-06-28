@@ -9,7 +9,9 @@ export class AccountsStore extends StoreBase {
     super(getState, dispatch);
   }
 
-  public getAccounts() {
-    return this.getData("accounts", storeKeys.getAccountKey(), p => apiClient.accounts.getAll(p));
+  public getJesAccountsByName(searchString: string) {
+    return this.getData("jesOnlyAccounts", storeKeys.getAccountKey(), p =>
+      apiClient.accounts.getAllByJesName({ ...p, searchString }),
+    );
   }
 }

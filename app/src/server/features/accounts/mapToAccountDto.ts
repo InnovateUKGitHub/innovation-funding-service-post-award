@@ -1,11 +1,8 @@
-import { AccountDto, IContext } from "@framework/types";
+import { AccountDto } from "@framework/types";
 import { ISalesforceAccount } from "@server/repositories/accountsRepository";
 
-export const mapToAccountDto = (
-  context: IContext,
-  item: ISalesforceAccount,
-): AccountDto => {
-  return {
-    companyName: item.Name,
-  };
-};
+export const mapToAccountDto = (item: ISalesforceAccount): AccountDto => ({
+  id: item.Id,
+  companyName: item.Name,
+  jesEnabled: item.JES_Organisation__c === "Yes",
+});

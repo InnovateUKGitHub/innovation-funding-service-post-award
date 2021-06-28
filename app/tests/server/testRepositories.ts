@@ -24,6 +24,7 @@ import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
 import { PcrSpendProfileEntity } from "@framework/entities/pcrSpendProfile";
 import { PcrSpendProfileEntityForCreate } from "@framework/entities";
+import { BadRequestError } from "@server/features/common";
 import { pcrStatusesPicklist } from "../server/features/pcrs/pcrStatusesPicklist";
 import { pcrParticipantSizePicklist } from "./features/pcrs/pcrParticipantSizePicklist";
 import { pcrPartnerTypesPicklist } from "./features/pcrs/pcrPartnerTypesPicklist";
@@ -715,9 +716,14 @@ class FinancialVirementsTestRepository extends TestRepository<Entities.PartnerFi
   }
 }
 
-class AccountsTestRepository extends TestRepository<Repositories.ISalesforceAccount> implements Repositories.IAccountsRepository {
-  getAccounts() {
-    return super.getAll();
+class AccountsTestRepository
+  extends TestRepository<Repositories.ISalesforceAccount>
+  implements Repositories.IAccountsRepository {
+  getAllByJesName(searchString = "") {
+    if (searchString?.length && searchString.length < 3) {
+      throw new BadRequestError("You must include at least 3 characters to filter on.");
+    }
+    return super.getWhere(x => x.JES_Organisation__c === "Yes" && x.Name.includes(searchString));
   }
 }
 

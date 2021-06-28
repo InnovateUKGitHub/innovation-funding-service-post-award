@@ -52,6 +52,24 @@ export class TestData {
     return newItem;
   }
 
+  public createAccount(item?: Repositories.ISalesforceAccount) {
+    const seed = this.repositories.accounts.Items.length + 1;
+
+    const newItem: Repositories.ISalesforceAccount = {
+      Id: `id_${seed}`,
+      Name: `test_name${seed}`,
+      JES_Organisation__c: "No",
+    };
+
+
+    this.repositories.accounts.Items.push({
+      ...newItem,
+      ...item
+    });
+
+    return newItem;
+  }
+
   public createProject(update?: (item: Repositories.ISalesforceProject) => void) {
     const seed = this.repositories.projects.Items.length + 1;
 
