@@ -10,7 +10,6 @@ import { detailsGuide } from "./detailsGuide";
 import { documentListGuide } from "./documentListGuide";
 import { emailGuide } from "./emailGuide";
 import { formGuide } from "./formGuide";
-import { insetText } from "./insetTextGuide";
 import { info } from "./infoGuide";
 import { linksListGuide } from "./linksListGuide";
 import { logsGuide } from "./logsGuide";
@@ -48,7 +47,6 @@ const guides: IGuide[] = [
   emailGuide,
   formGuide,
   info,
-  insetText,
   linksListGuide,
   ulGuide,
   olGuide,

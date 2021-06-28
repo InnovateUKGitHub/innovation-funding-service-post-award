@@ -96,7 +96,6 @@ module.exports = {
         "**/breadcrumbs.tests.tsx",
         "**/footer.tests.tsx",
         "**/header.tests.tsx",
-        "**/insetText.tests.tsx",
         "**/phaseBanner.tests.tsx",
         "**/section.tests.tsx",
         "**/sectionPanel.tests.tsx",
