@@ -14,8 +14,7 @@ type GDSModuleList =
   | "Details"
   | "ErrorSummary"
   | "Header"
-  | "Radios"
-  | "Tabs";
+  | "Radios";
 
 // Note: These were taken from "window", I can't see any docs on this GDS library
 export type GDSModules = Record<GDSModuleList, GDSModule>;

@@ -23,7 +23,6 @@ import { sectionGuide } from "./sectionGuide";
 import { sectionPanelGuide } from "./sectionPanelGuide";
 import { summaryListGuide } from "./summaryListGuide";
 import { tableGuide } from "./tableGuide";
-import { tabsGuide } from "./tabsGuide";
 import { taskListGuide } from "./taskListGuide";
 import { textHint } from "./textHintGuide";
 import { validationErrorGuide } from "./validationErrorGuide";
@@ -63,7 +62,6 @@ const guides: IGuide[] = [
   sectionGuide,
   sectionPanelGuide,
   summaryListGuide,
-  tabsGuide,
   tableGuide,
   taskListGuide,
   textHint,
