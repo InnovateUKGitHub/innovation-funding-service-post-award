@@ -1,42 +1,50 @@
-import { mount } from "enzyme";
-import { Section } from "../../../src/ui/components/layout/section";
+import { render } from "@testing-library/react";
+
+import { Section, SectionProps } from "@ui/components/layout/section";
 
 describe("Section", () => {
+  const setup = (props: SectionProps) => render(<Section {...props} />);
 
-    it("should the render the title", () => {
-        const title = "a test title";
+  it("should the render the title", () => {
+    const stubTitle = "stub-title";
+    const { getByRole } = setup({ title: stubTitle });
 
-        const wrapper = mount(<Section title={title} />);
+    const titleElement = getByRole("heading", { name: new RegExp(stubTitle) });
 
-        expect(wrapper.text()).toContain(title);
-    });
+    expect(titleElement).toBeInTheDocument();
+  });
 
-    it("should the render the sub title", () => {
-        const subtitle = "a test sub title";
+  it("should the render the sub title", () => {
+    const stubSubTitle = "stub-sub-title";
+    const { getByText } = setup({ subtitle: stubSubTitle });
 
-        const wrapper = mount(<Section subtitle={subtitle} />);
+    const subTitleElement = getByText(stubSubTitle);
 
-        expect(wrapper.text()).toContain(subtitle);
-    });
+    expect(subTitleElement).toBeInTheDocument();
+  });
 
-    it("should the render the content", () => {
-        const content = "a test content";
+  it("should the render the content", () => {
+    const stubContent = "stub-content";
 
-        const wrapper = mount(<Section>{content}</Section>);
+    const { queryByText } = setup({ children: stubContent });
 
-        expect(wrapper.text()).toContain(content);
-    });
+    expect(queryByText(stubContent)).toBeInTheDocument();
+  });
 
-    it("should the render the badge", () => {
-        const badge = "a test badge";
+  it("should the render the badge", () => {
+    const stubBadge = "stub-badge";
 
-        const wrapper = mount(<Section badge={badge} />);
+    const { queryByText } = setup({ badge: <p>{stubBadge}</p> });
 
-        expect(wrapper.text()).toContain(badge);
-    });
+    expect(queryByText(stubBadge)).toBeInTheDocument();
+  });
 
-    it("should the render h2 subsection", () => {
-        const output = mount(<Section title={"aTitle"}/>).html();
-        expect(output).toContain("<h2");
-    });
+  it("should the render h2 subsection", () => {
+    const stubTitle = "stub-title";
+    const { getByRole } = setup({ title: stubTitle });
+
+    const titleElement = getByRole("heading", { name: new RegExp(stubTitle) });
+
+    expect(titleElement.nodeName).toBe("H2");
+  });
 });
