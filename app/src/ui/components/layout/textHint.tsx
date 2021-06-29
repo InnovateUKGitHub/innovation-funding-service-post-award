@@ -1,4 +1,5 @@
 import * as colour from "../../styles/colours";
+import { SimpleString } from "../renderers";
 
 export interface TextHintReactProps {
   children: string;
@@ -6,10 +7,10 @@ export interface TextHintReactProps {
   className?: never;
 }
 
+const textHintStyles = { color: colour.govukSecondaryTextColour };
+
 export function TextHint(props: TextHintReactProps) {
   if (!props.children.length) return null;
 
-  return (
-    <p {...props} data-qa="text-hint" className="govuk-body" style={{ color: colour.govukSecondaryTextColour }} />
-  );
+  return <SimpleString {...props} style={textHintStyles} />;
 }

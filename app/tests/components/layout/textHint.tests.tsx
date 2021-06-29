@@ -1,43 +1,32 @@
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
 
 import { govukSecondaryTextColour } from "@ui/styles/colours";
-import { TextHint, TextHintReactProps } from "../../../src/ui/components/layout/textHint";
-import { findByQa } from "../helpers/find-by-qa";
+import { TextHint, TextHintReactProps } from "@ui/components/layout/textHint";
 
 describe("<TextHint />", () => {
-  const setup = (text: TextHintReactProps["children"]) => {
-    const wrapper = mount(<TextHint>{text}</TextHint>);
-    const textElement = findByQa(wrapper, "text-hint");
-
-    return {
-      wrapper,
-      textElement,
-    };
-  };
+  const setup = (props: TextHintReactProps) => render(<TextHint {...props} />);
 
   it("should render as a <p> tag", () => {
-    const { textElement } = setup("show-me-a-p");
+    const stubContent = "show-me-a-p";
+    const { getByText } = setup({ children: stubContent });
 
-    expect(textElement.type()).toEqual("p");
+    const paragraphElement = getByText(stubContent, { selector: "p" });
+
+    expect(paragraphElement).toHaveTextContent(stubContent);
   });
 
-  it("should render with unique color", () => {
-    const { textElement } = setup("coloured-text");
-    const inlineStyles = textElement.prop("style")!;
+  it("should render with expected text color", () => {
+    const stubContent = "show-me-coloured-text";
+    const { getByText } = setup({ children: stubContent });
 
-    expect(inlineStyles.color).toEqual(govukSecondaryTextColour);
-  });
+    const paragraphElement = getByText(stubContent);
 
-  it("should render with the correct text", () => {
-    const stubText = "stub-text";
-    const { textElement } = setup(stubText);
-
-    expect(textElement.text()).toEqual(stubText);
+    expect(paragraphElement).toHaveStyle(`color: ${govukSecondaryTextColour}`);
   });
 
   it("should render null if no text is given", () => {
-    const { textElement } = setup("");
+    const { container } = setup({ children: "" });
 
-    expect(textElement.exists()).toBe(false);
+    expect(container.firstChild).toBeNull();
   });
 });
