@@ -1,21 +1,22 @@
 import classNames from "classnames";
 
-interface Props {
+type ParagraphAttributes = React.HTMLAttributes<HTMLParagraphElement>;
+
+interface SimpleStringProps extends ParagraphAttributes {
   qa?: string;
-  className?: string;
   multiline?: boolean;
   bold?: boolean;
 }
 
-export const SimpleString: React.FunctionComponent<Props> = (props) => {
-  const className = classNames(
-    "govuk-body",
-    {
-      "govuk-body--multiline": props.multiline || false,
-      "govuk-!-font-weight-bold": props.bold || false
-    },
-    props.className
+export function SimpleString({ qa, className, multiline, bold, ...props }: SimpleStringProps) {
+  return (
+    <p
+      {...props}
+      data-qa={qa}
+      className={classNames(className, "govuk-body", {
+        "govuk-body--multiline": multiline,
+        "govuk-!-font-weight-bold": bold,
+      })}
+    />
   );
-
-  return (<p className={className} data-qa={props.qa}>{props.children}</p>);
-};
+}
