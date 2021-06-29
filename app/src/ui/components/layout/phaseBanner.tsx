@@ -4,6 +4,7 @@ import { ExternalLink } from "../renderers";
 
 export function PhaseBanner() {
   const { getContent } = useContent();
+
   const newServiceMessage = getContent(x => x.components.phaseBannerContent.newServiceMessage);
   const feedbackMessage = getContent(x => x.components.phaseBannerContent.feedbackMessage);
   const helpImproveMessage = getContent(x => x.components.phaseBannerContent.helpImprove);
@@ -18,14 +19,13 @@ export function PhaseBanner() {
       {feedbackMessage}
     </ExternalLink>
   );
+
   return (
     <div className="govuk-phase-banner">
       <p className="govuk-phase-banner__content">
-        <strong className="govuk-tag govuk-phase-banner__content__tag" data-qa="phase-banner">
-          {betaText}
-        </strong>
+        <strong className="govuk-tag govuk-phase-banner__content__tag">{betaText}</strong>
 
-        <span className="govuk-phase-banner__text" data-qa="phase-text">
+        <span className="govuk-phase-banner__text" data-qa="banner-message">
           {newServiceMessage} {dashboardLink} {helpImproveMessage}
         </span>
       </p>
