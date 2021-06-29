@@ -1,20 +1,29 @@
 import React from "react";
-import * as colour from "../../styles/colours";
 
-interface Props {
-    title?: React.ReactNode;
-    qa?: string;
+import { H3 } from "@ui/components";
+import { govukBorderColour } from "@ui/styles/colours";
+
+export interface SectionPanelProps {
+  children: React.ReactElement;
+  title?: React.ReactNode;
+  qa?: string;
+  styles?: never;
 }
 
-export const SectionPanel: React.FunctionComponent<Props> = (props) => {
-    const { qa, title, children } = props;
-    const style = {
-        border: `1px solid ${colour.govukBorderColour}`
-    };
-    return (
-        <div className="govuk-!-padding-3" data-qa={qa} style={style} >
-            {title ? <h2 className="govuk-heading-m govuk-!-margin-bottom-6">{title}</h2> : null}
-            {children}
-        </div>
-    );
+const SectionPanelStyles = {
+  border: `1px solid ${govukBorderColour}`,
 };
+
+export function SectionPanel({ qa, title, children }: SectionPanelProps) {
+  return (
+    <div className="govuk-!-padding-3" data-qa={qa} style={SectionPanelStyles}>
+      {title && (
+        <H3 as="h2" className="govuk-!-margin-bottom-6">
+          {title}
+        </H3>
+      )}
+
+      {children}
+    </div>
+  );
+}
