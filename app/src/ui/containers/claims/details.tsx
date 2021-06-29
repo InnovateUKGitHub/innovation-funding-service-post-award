@@ -137,7 +137,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
   private renderCommentsFromFC(project: ProjectDto, claim: ClaimDto) {
     if (project.roles & ProjectRole.MonitoringOfficer && (claim.status === ClaimStatus.DRAFT || claim.status === ClaimStatus.MO_QUERIED) && claim.comments) {
       return (
-        <ACC.Section titleContent={x => x.claimDetails.commentsSectionTitle} qa="additionalComments">
+        <ACC.Section title={x => x.claimDetails.commentsSectionTitle} qa="additionalComments">
           <ACC.Renderers.SimpleString multiline>
             {claim.comments}
           </ACC.Renderers.SimpleString>

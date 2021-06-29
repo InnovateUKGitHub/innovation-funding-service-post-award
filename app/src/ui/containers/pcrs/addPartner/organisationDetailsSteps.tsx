@@ -20,7 +20,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
   const selectedSizeOption = props.pcrItem.participantSize && sizeOptions.find(x => parseInt(x.id, 10) === props.pcrItem.participantSize);
 
   return (
-    <ACC.Section titleContent={x => x.pcrAddPartnerOrganisationDetails.sectionTitle}>
+    <ACC.Section title={x => x.pcrAddPartnerOrganisationDetails.sectionTitle}>
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}

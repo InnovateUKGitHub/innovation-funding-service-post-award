@@ -110,7 +110,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
         error={editor.error}
       >
         <ACC.Renderers.Messages messages={this.props.messages}/>
-        <ACC.Section titleContent={x => x.pcrSpendProfilePrepareCostContent.costSectionTitle(costCategory.name)}>
+        <ACC.Section title={x => x.pcrSpendProfilePrepareCostContent.costSectionTitle(costCategory.name)}>
           {this.renderGuidance(costCategory)}
           {this.renderForm(costCategory, editor, validator, cost, routes, params)}
         </ACC.Section>

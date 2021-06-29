@@ -121,7 +121,7 @@ class Component extends React.Component<SpendProfileCostFormProps<PCRSpendProfil
   private renderDocuments(documents: DocumentSummaryDto[]) {
     return (
       <ACC.Section
-        titleContent={x => x.pcrSpendProfilePrepareCostContent.documentLabels.filesUploadedTitle}
+        title={x => x.pcrSpendProfilePrepareCostContent.documentLabels.filesUploadedTitle}
         qa="supporting-documents-section"
       >
         {documents.length && (

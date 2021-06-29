@@ -293,7 +293,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
 
   private renderDocuments(documents: DocumentSummaryDto[], isCombinationOfSBRI: boolean) {
     return (
-      <ACC.Section titleContent={x => x.editClaimLineItems.supportingDocumentsHeader} qa="supporting-documents-section">
+      <ACC.Section title={x => x.editClaimLineItems.supportingDocumentsHeader} qa="supporting-documents-section">
         {isCombinationOfSBRI ? (
           <>
             <ACC.Renderers.SimpleString>

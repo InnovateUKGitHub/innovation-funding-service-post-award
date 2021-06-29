@@ -19,7 +19,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
   const selectedProjectLocationOption = props.pcrItem.projectLocation && projectLocationOptions.find(x => parseInt(x.id, 10) === props.pcrItem.projectLocation);
 
   return (
-    <ACC.Section titleContent={x => x.pcrAddPartnerProjectLocationContent.labels.projectLocationHeading}>
+    <ACC.Section title={x => x.pcrAddPartnerProjectLocationContent.labels.projectLocationHeading}>
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}

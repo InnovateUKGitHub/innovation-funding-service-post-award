@@ -22,7 +22,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
         { this.renderOrganisationSection(pcrItem, validator, documents, isIndustrial) }
         { this.renderProjectContacts(pcrItem, validator) }
         { this.renderFundingSection(pcrItem, validator, documents, isIndustrial) }
-        <ACC.Section titleContent={x => x.pcrAddPartnerSummary.labels.agreementSectionTitle} qa="add-partner-summary-agreement">
+        <ACC.Section title={x => x.pcrAddPartnerSummary.labels.agreementSectionTitle} qa="add-partner-summary-agreement">
           <ACC.SummaryList qa="add-partner-summary-list-agreement">
             <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.agreementToPcrHeading} content={this.renderDocuments(documents, DocumentDescription.AgreementToPCR)} qa="agreementToPcrDocument" action={this.props.getEditLink("agreementToPcrStep", null)} />
           </ACC.SummaryList>
@@ -33,7 +33,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
 
   private renderOrganisationSection(pcrItem: PCRItemForPartnerAdditionDto, validator: PCRPartnerAdditionItemDtoValidator, documents: DocumentSummaryDto[], isIndustrial: boolean) {
     return (
-        <ACC.Section titleContent={x => x.pcrAddPartnerSummary.labels.organisationSectionTitle} qa="add-partner-summary-organisation">
+        <ACC.Section title={x => x.pcrAddPartnerSummary.labels.organisationSectionTitle} qa="add-partner-summary-organisation">
           <ACC.SummaryList qa="add-partner-summary-list-organisation">
             <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.roleHeading} content={pcrItem.projectRoleLabel} validation={validator.projectRole} qa="projectRole" />
             <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.commercialWorkSummaryHeading} content={<ACC.Content value={x => pcrItem.isCommercialWork ? x.pcrAddPartnerSummary.labels.commercialWorkYes : x.pcrAddPartnerSummary.labels.commercialWorkNo}/>} validation={validator.isCommercialWork} qa="isCommercialWork" />
@@ -57,8 +57,8 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
 
   private renderProjectContacts(pcrItem: PCRItemForPartnerAdditionDto, validator: PCRPartnerAdditionItemDtoValidator) {
     return (
-      <ACC.Section titleContent={x => x.pcrAddPartnerSummary.labels.contactsSectiontitle} qa="add-partner-summary-contacts">
-        <ACC.Section titleContent={x => x.pcrAddPartnerSummary.labels.financeContactHeading}>
+      <ACC.Section title={x => x.pcrAddPartnerSummary.labels.contactsSectiontitle} qa="add-partner-summary-contacts">
+        <ACC.Section title={x => x.pcrAddPartnerSummary.labels.financeContactHeading}>
           <ACC.SummaryList qa="add-partner-summary-list-contacts-finance-contact">
             <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.contactFirstNameHeading} content={pcrItem.contact1Forename} validation={validator.contact1Forename} qa="contact1Forename" action={this.props.getEditLink("financeContactStep", validator.contact1Forename)}/>
             <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.contactLastNameHeading} content={pcrItem.contact1Surname} validation={validator.contact1Surname} qa="contact1Surname" action={this.props.getEditLink("financeContactStep", validator.contact1Surname)}/>
@@ -66,7 +66,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
             <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.contactEmailHeading} content={pcrItem.contact1Email} validation={validator.contact1Email} qa="contact1Email" action={this.props.getEditLink("financeContactStep", validator.contact1Email)}/>
           </ACC.SummaryList>
         </ACC.Section>
-        { pcrItem.projectRole === PCRProjectRole.ProjectLead && <ACC.Section titleContent={x => x.pcrAddPartnerSummary.labels.projectLeadContactHeading}>
+        { pcrItem.projectRole === PCRProjectRole.ProjectLead && <ACC.Section title={x => x.pcrAddPartnerSummary.labels.projectLeadContactHeading}>
           <ACC.SummaryList qa="add-partner-summary-list-contacts-project-manager">
             <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.contactFirstNameHeading} content={pcrItem.contact2Forename} validation={validator.contact2Forename} qa="contact2Forename" action={this.props.getEditLink("projectManagerDetailsStep", validator.contact2Forename)}/>
             <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.contactLastNameHeading} content={pcrItem.contact2Surname} validation={validator.contact2Surname} qa="contact2Surname" action={this.props.getEditLink("projectManagerDetailsStep", validator.contact2Surname)}/>
@@ -85,7 +85,7 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
     const partnerContribution = nonFundedCosts - fundingSought;
 
     return (
-      <ACC.Section titleContent={x => x.pcrAddPartnerSummary.labels.fundingSectionTitle} qa="add-partner-summary-funding">
+      <ACC.Section title={x => x.pcrAddPartnerSummary.labels.fundingSectionTitle} qa="add-partner-summary-funding">
         <ACC.SummaryList qa="add-partner-summary-list-funding">
           { !isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.jesHeading} content={this.renderDocuments(documents, DocumentDescription.JeSForm)} qa="supportingDocumentsJes" action={this.props.getEditLink("jeSStep", null)} /> }
           { !isIndustrial && <ACC.SummaryListItem labelContent={x => x.pcrAddPartnerSummary.labels.tsbReferenceHeading} content={pcrItem.tsbReference} validation={validator.tsbReference} qa="tsbReference" action={this.props.getEditLink("academicCostsStep", validator.tsbReference)} /> }

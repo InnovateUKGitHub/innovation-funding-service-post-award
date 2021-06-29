@@ -1,50 +1,198 @@
 import { render } from "@testing-library/react";
 
+import { TestBed, TestBedContent } from "@shared/TestBed";
 import { Section, SectionProps } from "@ui/components/layout/section";
 
-describe("Section", () => {
-  const setup = (props: SectionProps) => render(<Section {...props} />);
+describe("<Section />", () => {
+  const stubContent = {
+    stubCategory: {
+      stubValue: { content: "stub-content-solution-value" },
+    },
+  } as any;
 
-  it("should the render the title", () => {
-    const stubTitle = "stub-title";
-    const { getByRole } = setup({ title: stubTitle });
+  const setup = (props?: SectionProps) =>
+    render(
+      <TestBed content={stubContent as TestBedContent}>
+        <Section {...props} />
+      </TestBed>,
+    );
 
-    const titleElement = getByRole("heading", { name: new RegExp(stubTitle) });
+  describe("with edge cases", () => {
+    test("should render null when no data is passed", () => {
+      const { container } = setup();
 
-    expect(titleElement).toBeInTheDocument();
+      expect(container.firstChild).toBeNull();
+    });
   });
 
-  it("should the render the sub title", () => {
-    const stubSubTitle = "stub-sub-title";
-    const { getByText } = setup({ subtitle: stubSubTitle });
+  describe("with a title", () => {
+    test("as a string", () => {
+      const stubTitle = "stub-title";
+      const { getByRole } = setup({ title: stubTitle });
 
-    const subTitleElement = getByText(stubSubTitle);
+      const titleElement = getByRole("heading", { name: new RegExp(stubTitle) });
 
-    expect(subTitleElement).toBeInTheDocument();
+      expect(titleElement).toBeInTheDocument();
+    });
+
+    test("as a content solution", () => {
+      const stubTitleContentSolution = (x: any) => x.stubCategory.stubValue;
+      const { queryByText } = setup({ title: stubTitleContentSolution });
+
+      const titleElement = queryByText(stubContent.stubCategory.stubValue.content);
+
+      expect(titleElement).toBeInTheDocument();
+    });
+
+    test("with no value", () => {
+      const { queryByTestId } = setup();
+
+      const subTitleElement = queryByTestId("section-title");
+
+      expect(subTitleElement).not.toBeInTheDocument();
+    });
   });
 
-  it("should the render the content", () => {
-    const stubContent = "stub-content";
+  describe("with a subtitle", () => {
+    test("as a string", () => {
+      const stubSubTitle = "stub-sub-title";
+      const { getByText } = setup({ subtitle: stubSubTitle });
 
-    const { queryByText } = setup({ children: stubContent });
+      const subTitleElement = getByText(stubSubTitle);
 
-    expect(queryByText(stubContent)).toBeInTheDocument();
+      expect(subTitleElement).toBeInTheDocument();
+    });
+
+    test("as a content solution", () => {
+      const stubSubTitleContentSolution = (x: any) => x.stubCategory.stubValue;
+      const { queryByText } = setup({ subtitle: stubSubTitleContentSolution });
+
+      const subTitleElement = queryByText(stubContent.stubCategory.stubValue.content);
+
+      expect(subTitleElement).toBeInTheDocument();
+    });
+
+    test("with no value", () => {
+      const { queryByTestId } = setup();
+
+      const subTitleElement = queryByTestId("section-subtitle");
+
+      expect(subTitleElement).not.toBeInTheDocument();
+    });
   });
 
-  it("should the render the badge", () => {
-    const stubBadge = "stub-badge";
+  describe("with content", () => {
+    test("with a node", () => {
+      const stubContentValue = "stub-content";
 
-    const { queryByText } = setup({ badge: <p>{stubBadge}</p> });
+      const { queryByText } = setup({ children: <p>{stubContentValue}</p> });
 
-    expect(queryByText(stubBadge)).toBeInTheDocument();
+      expect(queryByText(stubContentValue)).toBeInTheDocument();
+    });
+
+    test("with no value", () => {
+      const { queryByTestId } = setup({ title: "defined-tile-to-show-content" });
+
+      expect(queryByTestId("section-content")).not.toBeInTheDocument();
+    });
   });
 
-  it("should the render h2 subsection", () => {
-    const stubTitle = "stub-title";
-    const { getByRole } = setup({ title: stubTitle });
+  describe("with badge", () => {
+    test("when node", () => {
+      const stubBadge = "stub-badge";
 
-    const titleElement = getByRole("heading", { name: new RegExp(stubTitle) });
+      const { queryByText } = setup({ badge: <p>{stubBadge}</p> });
 
-    expect(titleElement.nodeName).toBe("H2");
+      expect(queryByText(stubBadge)).toBeInTheDocument();
+    });
+
+    test("with no value", () => {
+      const { queryByTestId } = setup({ children: <p>some content</p> });
+
+      expect(queryByTestId("section-badge")).not.toBeInTheDocument();
+    });
+  });
+
+  describe("with correct nested heading elements", () => {
+    test("with first level returns h2", () => {
+      const stubTitle = "stub-title-level-1";
+      const { getByRole } = setup({ title: stubTitle });
+
+      const titleElement = getByRole("heading", { name: new RegExp(stubTitle) });
+
+      expect(titleElement.nodeName).toBe("H2");
+    });
+
+    test("with second level returns h3", () => {
+      const stubTitleLevel1 = "stub-title-level-1";
+      const stubTitleLevel2 = "stub-title-level-2";
+
+      const { getByRole } = render(
+        <TestBed content={stubContent as TestBedContent}>
+          <Section title={stubTitleLevel1}>
+            <Section title={stubTitleLevel2} />
+          </Section>
+        </TestBed>,
+      );
+
+      const titleLevel1 = getByRole("heading", { name: new RegExp(stubTitleLevel1) });
+      const titleLevel2 = getByRole("heading", { name: new RegExp(stubTitleLevel2) });
+
+      expect(titleLevel1.nodeName).toBe("H2");
+      expect(titleLevel2.nodeName).toBe("H3");
+    });
+
+    test("with third level returns h4", () => {
+      const stubTitleLevel1 = "stub-title-level-1";
+      const stubTitleLevel2 = "stub-title-level-2";
+      const stubTitleLevel3 = "stub-title-level-3";
+
+      const { getByRole } = render(
+        <TestBed content={stubContent as TestBedContent}>
+          <Section title={stubTitleLevel1}>
+            <Section title={stubTitleLevel2}>
+              <Section title={stubTitleLevel3} />
+            </Section>
+          </Section>
+        </TestBed>,
+      );
+
+      const titleLevel1 = getByRole("heading", { name: new RegExp(stubTitleLevel1) });
+      const titleLevel2 = getByRole("heading", { name: new RegExp(stubTitleLevel2) });
+      const titleLevel3 = getByRole("heading", { name: new RegExp(stubTitleLevel3) });
+
+      expect(titleLevel1.nodeName).toBe("H2");
+      expect(titleLevel2.nodeName).toBe("H3");
+      expect(titleLevel3.nodeName).toBe("H4");
+    });
+
+    test("with forth level and onwards returns h4", () => {
+      const stubTitleLevel1 = "stub-title-level-1";
+      const stubTitleLevel2 = "stub-title-level-2";
+      const stubTitleLevel3 = "stub-title-level-3";
+      const stubTitleLevel4 = "stub-title-level-4";
+
+      const { getByRole } = render(
+        <TestBed content={stubContent as TestBedContent}>
+          <Section title={stubTitleLevel1}>
+            <Section title={stubTitleLevel2}>
+              <Section title={stubTitleLevel3}>
+                <Section title={stubTitleLevel4} />
+              </Section>
+            </Section>
+          </Section>
+        </TestBed>,
+      );
+
+      const titleLevel1 = getByRole("heading", { name: new RegExp(stubTitleLevel1) });
+      const titleLevel2 = getByRole("heading", { name: new RegExp(stubTitleLevel2) });
+      const titleLevel3 = getByRole("heading", { name: new RegExp(stubTitleLevel3) });
+      const titleLevel4 = getByRole("heading", { name: new RegExp(stubTitleLevel4) });
+
+      expect(titleLevel1.nodeName).toBe("H2");
+      expect(titleLevel2.nodeName).toBe("H3");
+      expect(titleLevel3.nodeName).toBe("H4");
+      expect(titleLevel4.nodeName).toBe("H4");
+    });
   });
 });

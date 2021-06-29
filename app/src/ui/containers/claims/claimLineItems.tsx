@@ -95,7 +95,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
         <>
           <ACC.Section
             title={content.supportingDocumentsTitle}
-            subtitle={!!documents.length && content.documentsInNewWindow}
+            subtitle={documents.length ? content.documentsInNewWindow : undefined}
             qa="supporting-documents-section"
           >
             <ACC.DocumentView documents={documents} validationMessage={this.props.content.noDocumentsUploaded} />

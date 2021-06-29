@@ -46,7 +46,7 @@ class Component extends React.Component<
   ) {
     const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
     return (
-      <ACC.Section qa="company-house" titleContent={x => x.pcrAddPartnerCompanyHouse.sectionTitle}>
+      <ACC.Section qa="company-house" title={x => x.pcrAddPartnerCompanyHouse.sectionTitle}>
         <Form.Form
           qa="addPartnerForm"
           data={this.props.pcrItem}

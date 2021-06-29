@@ -1,5 +1,6 @@
 import { render } from "@testing-library/react";
 
+import { TestBed } from "@shared/TestBed";
 import { PartnerDto, ProjectContactDto } from "@framework/dtos";
 import { createDto } from "@framework/util";
 import { ProjectContact, ProjectContactProps } from "@ui/components/projectContact";
@@ -13,7 +14,12 @@ describe("ProjectMember", () => {
     roleName: "aTestRole",
   });
 
-  const setup = (props?: Partial<ProjectContactProps>) => render(<ProjectContact {...props} qa="member-a" />);
+  const setup = (props?: Partial<ProjectContactProps>) =>
+    render(
+      <TestBed>
+        <ProjectContact {...props} qa="member-a" />
+      </TestBed>,
+    );
 
   describe("@returns", () => {
     it("with partner name if present", () => {

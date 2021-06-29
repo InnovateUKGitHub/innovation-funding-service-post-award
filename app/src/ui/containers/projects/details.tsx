@@ -83,7 +83,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         const otherContacts = contacts.filter(x => excludedOtherRoles.indexOf(x.role) === -1);
 
         return (
-            <ACC.Section titleContent={x => x.projectDetails.projectLabels.otherContacts} qa="other-contacts-table">
+            <ACC.Section title={x => x.projectDetails.projectLabels.otherContacts} qa="other-contacts-table">
                 <ACC.Partners.ContactsTable contacts={otherContacts} projectContactLabels={x => x.projectDetails.contactLabels} />
             </ACC.Section>
         );
@@ -102,14 +102,14 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
                 <ACC.Section
                     qa="period-information"
-                    titleContent={x => x.projectDetails.projectMessages.currentPeriodInfo(project.periodId, project.numberOfPeriods)}
+                    title={x => x.projectDetails.projectMessages.currentPeriodInfo(project.periodId, project.numberOfPeriods)}
                     subtitle={<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate}/>}
                 />
 
-                <ACC.Section titleContent={x => x.projectDetails.projectLabels.projectMembers}>
+                <ACC.Section title={x => x.projectDetails.projectLabels.projectMembers}>
                     {this.renderPrimaryContacts(partners, contacts)}
 
-                    <ACC.Section titleContent={x => x.projectDetails.projectLabels.financeContacts}>
+                    <ACC.Section title={x => x.projectDetails.projectLabels.financeContacts}>
                         <ACC.PartnersAndFinanceContacts contacts={contacts} partners={partners} projectContactLabels={x => x.projectDetails.contactLabels} />
                     </ACC.Section>
 
@@ -138,7 +138,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         const isMoPm = !!(project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
 
         return (
-            <ACC.Section titleContent={x => x.projectDetails.projectLabels.partners}>
+            <ACC.Section title={x => x.projectDetails.projectLabels.partners}>
                 <PartnersTable.Table qa="partner-information" data={partners}>
                     <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.partnerName} value={x => this.renderPartnerName(x)} qa="partner-name"/>
                     <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.partnerType} value={x => x.type} qa="partner-type"/>

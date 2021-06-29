@@ -17,7 +17,7 @@ const getFinanceContactDetails = (props: PcrStepProps<PCRItemForPartnerAdditionD
 export const ProjectManagerDetailsStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => {
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
   return (
-    <ACC.Section titleContent={x => x.pcrAddPartnerProjectContacts.sectionTitle}>
+    <ACC.Section title={x => x.pcrAddPartnerProjectContacts.sectionTitle}>
       <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerProjectContacts.guidance}/></ACC.Renderers.SimpleString>
       <Form.Form
         qa="addPartnerForm"

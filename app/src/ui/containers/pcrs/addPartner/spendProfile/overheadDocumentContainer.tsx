@@ -128,13 +128,13 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
   private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (documents.length) {
       return (
-        <ACC.Section titleContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedTitle} subtitleContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedSubtitle}>
+        <ACC.Section title={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedTitle} subtitle={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedSubtitle}>
           <ACC.DocumentTableWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="overhead-calculation-document"/>
         </ACC.Section>
       );
     }
     return (
-      <ACC.Section titleContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedTitle}>
+      <ACC.Section title={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedTitle}>
         <ACC.ValidationMessage message={x => x.pcrSpendProfileOverheadDocumentContent.messages.noDocumentsUploaded} messageType="info" />
       </ACC.Section>
     );

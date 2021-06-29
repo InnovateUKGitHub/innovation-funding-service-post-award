@@ -74,15 +74,15 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
     if (documents.length) {
       return (
         <ACC.Section
-          titleContent={x => x.projectSetupBankStatement.documentLabels.filesUploadedTitle}
-          subtitleContent={x => x.projectSetupBankStatement.documentLabels.filesUploadedSubtitle}
+          title={x => x.projectSetupBankStatement.documentLabels.filesUploadedTitle}
+          subtitle={x => x.projectSetupBankStatement.documentLabels.filesUploadedSubtitle}
         >
           <ACC.DocumentTableWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="partner-document"/>
         </ACC.Section>
       );
     }
     return (
-      <ACC.Section titleContent={x => x.projectSetupBankStatement.documentLabels.filesUploadedTitle}>
+      <ACC.Section title={x => x.projectSetupBankStatement.documentLabels.filesUploadedTitle}>
         <ACC.ValidationMessage message={x => x.projectSetupBankStatement.documentMessages.noDocumentsUploaded} messageType="info" />
       </ACC.Section>
     );

@@ -38,7 +38,7 @@ class FilesStepComponent extends React.Component<PcrStepProps<PCRStandardItemDto
 
   private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
     return (
-      <ACC.Section title="Files uploaded" subtitle={documents.length ? "All documents open in a new window." : null}>
+      <ACC.Section title="Files uploaded" subtitle={documents.length ? "All documents open in a new window." : undefined}>
         {documents.length ?
           <ACC.DocumentListWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="supporting-documents" /> :
           <ACC.ValidationMessage message="No documents uploaded." messageType="info" />

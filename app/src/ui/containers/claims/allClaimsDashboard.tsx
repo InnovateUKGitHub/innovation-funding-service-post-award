@@ -45,10 +45,10 @@ class AllClaimsDashboardComponent extends ContainerBase<AllClaimsDashboardParams
       >
         {this.renderGuidanceMessage(projectDetails, isCombinationOfSBRI)}
         <Acc.Renderers.Messages messages={this.props.messages} />
-        <Acc.Section qa="current-claims-section" titleContent={x => x.allClaimsDashboard.labels.openSectionTitle}>
+        <Acc.Section qa="current-claims-section" title={x => x.allClaimsDashboard.labels.openSectionTitle}>
           {this.renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)}
         </Acc.Section>
-        <Acc.Section qa="closed-claims-section" titleContent={x => x.allClaimsDashboard.labels.closedSectionTitle}>
+        <Acc.Section qa="closed-claims-section" title={x => x.allClaimsDashboard.labels.closedSectionTitle}>
           {this.renderPreviousClaimsSections(projectDetails, partners, previousClaims)}
         </Acc.Section>
       </Acc.Page>

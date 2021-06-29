@@ -59,7 +59,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
     }
 
     return (
-      <ACC.Section subtitleContent={x => x.claimDetailDocuments.documentMessages.newWindow}>
+      <ACC.Section subtitle={x => x.claimDetailDocuments.documentMessages.newWindow}>
         <ACC.DocumentTableWithDelete onRemove={(document) => this.props.onDelete(editor.data, document)} documents={documents} qa="supporting-documents"/>
       </ACC.Section>
     );
@@ -101,7 +101,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
 
         <ACC.Renderers.Messages messages={this.props.messages} />
         {this.renderDocuments(editor, documents)}
-        <ACC.Section titleContent={x => x.claimDetailDocuments.documentMessages.uploadTitle}>
+        <ACC.Section title={x => x.claimDetailDocuments.documentMessages.uploadTitle}>
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
