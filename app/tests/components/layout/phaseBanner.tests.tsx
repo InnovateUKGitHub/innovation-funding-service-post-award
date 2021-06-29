@@ -1,8 +1,7 @@
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
 
 import { PhaseBanner } from "@ui/components";
 import { TestBed, TestBedContent } from "@shared/TestBed";
-import { findByQa } from "../helpers/find-by-qa";
 
 describe("<PhaseBanner />", () => {
   const stubContent = {
@@ -11,31 +10,46 @@ describe("<PhaseBanner />", () => {
         newServiceMessage: { content: "stub-newServiceMessage" },
         feedbackMessage: { content: "stub-feedback" },
         helpImprove: { content: "stub-helpImprove" },
-        betaText: {content: "stub-betaText" }
+        betaText: { content: "stub-betaText" },
       },
     },
   };
+
   const setup = () =>
-    mount(
+    render(
       <TestBed content={stubContent as TestBedContent}>
         <PhaseBanner />
       </TestBed>,
     );
 
   describe("@renders", () => {
-    it("a beta element", () => {
-      const wrapper = setup();
-      const target = findByQa(wrapper, "phase-banner");
+    it("with beta element", () => {
+      const { queryByText } = setup();
 
-      expect(target.text()).toBe(stubContent.components.phaseBannerContent.betaText.content);
+      const betaTextElement = queryByText(stubContent.components.phaseBannerContent.betaText.content);
+
+      expect(betaTextElement).toBeInTheDocument();
     });
 
-    it("a link", () => {
-      const wrapper = setup();
-      const target = findByQa(wrapper, "phase-banner-link");
+    it("with feedback link", () => {
+      const { getByRole } = setup();
 
-      expect(target.prop("href")).toBe("https://www.surveymonkey.co.uk/r/IFSPostAwardFeedback");
-      expect(target.text()).toBe(stubContent.components.phaseBannerContent.feedbackMessage.content);
+      const feedbackLink = getByRole("link", {
+        name: stubContent.components.phaseBannerContent.feedbackMessage.content,
+      });
+
+      expect(feedbackLink).toHaveAttribute("href", "https://www.surveymonkey.co.uk/r/IFSPostAwardFeedback");
+    });
+
+    it("with composed message", () => {
+      const { queryByTestId } = setup();
+
+      const { newServiceMessage, feedbackMessage, helpImprove } = stubContent.components.phaseBannerContent;
+      const expectedRenderedMessage = `${newServiceMessage.content} ${feedbackMessage.content} ${helpImprove.content}`;
+
+      const bannerMessageElement = queryByTestId("banner-message");
+
+      expect(bannerMessageElement).toHaveTextContent(new RegExp(expectedRenderedMessage));
     });
   });
 });
