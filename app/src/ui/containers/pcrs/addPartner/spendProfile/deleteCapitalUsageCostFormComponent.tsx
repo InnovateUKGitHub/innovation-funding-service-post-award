@@ -7,7 +7,7 @@ import { SpendProfileDeleteFormProps } from "@ui/containers";
 export const DeleteCapitalUsageCostFormComponent = (props: SpendProfileDeleteFormProps<PCRSpendProfileCapitalUsageCostDto>) => {
   const { data, costCategory } = props;
   return (
-    <ACC.Section titleContent={x => x.pcrSpendProfileDeleteCostContent.costSectionTitle(costCategory.name)}>
+    <ACC.Section title={x => x.pcrSpendProfileDeleteCostContent.costSectionTitle(costCategory.name)}>
       <ACC.ValidationMessage messageType="alert" message={x => x.pcrSpendProfileDeleteCostContent.deleteGuidance} />
       <ACC.SummaryList qa="deleteCapitalUsageCost">
         <ACC.SummaryListItem labelContent={x => x.pcrSpendProfileDeleteCostContent.labels.capitalUsage.description} content={data.description} qa="description" />

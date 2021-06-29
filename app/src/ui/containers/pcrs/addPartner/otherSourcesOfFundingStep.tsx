@@ -27,7 +27,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     const Table = ACC.TypedTable<PCRSpendProfileOtherFundingDto>();
 
     return (
-      <ACC.Section titleContent={x => x.pcrAddPartnerOtherFundingSources.formSectionTitle}>
+      <ACC.Section title={x => x.pcrAddPartnerOtherFundingSources.formSectionTitle}>
         <ACC.Content value={x => x.pcrAddPartnerOtherFundingSources.guidance} />
         <Form.Form
           qa="addPartnerForm"

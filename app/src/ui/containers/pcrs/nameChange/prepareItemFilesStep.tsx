@@ -58,13 +58,13 @@ class Component extends React.Component<PcrStepProps<PCRItemForAccountNameChange
   private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (documents.length) {
       return (
-        <ACC.Section titleContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.filesUploadedTitle} subtitleContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.filesUploadedSubtitle}>
+        <ACC.Section title={x => x.pcrNameChangePrepareItemFiles.documentLabels.filesUploadedTitle} subtitle={x => x.pcrNameChangePrepareItemFiles.documentLabels.filesUploadedSubtitle}>
           <ACC.DocumentListWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="supporting-documents" />
         </ACC.Section>
       );
     }
     return (
-      <ACC.Section titleContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.filesUploadedTitle}>
+      <ACC.Section title={x => x.pcrNameChangePrepareItemFiles.documentLabels.filesUploadedTitle}>
         <ACC.ValidationMessage message={x => x.pcrNameChangePrepareItemFiles.documentMessages.noDocumentsUploaded} messageType="info" />
       </ACC.Section>
     );

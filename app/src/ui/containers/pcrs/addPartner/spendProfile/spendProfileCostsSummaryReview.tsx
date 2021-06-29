@@ -58,7 +58,7 @@ class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProf
         project={project}
       >
         <ACC.Renderers.Messages messages={this.props.messages}/>
-        <ACC.Section titleContent={x => x.pcrSpendProfileCostsSummaryContent.costsSectionTitle(costCategory.name)}>
+        <ACC.Section title={x => x.pcrSpendProfileCostsSummaryContent.costsSectionTitle(costCategory.name)}>
           {this.renderViewTable(costs, costCategory)}
         </ACC.Section>
       </ACC.Page>

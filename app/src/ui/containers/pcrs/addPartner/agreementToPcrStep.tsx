@@ -93,8 +93,8 @@ class Component extends React.Component<
     if (documents.length) {
       return (
         <ACC.Section
-          titleContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.filesUploadedTitle}
-          subtitleContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.filesUploadedSubtitle}
+          title={x => x.pcrAddPartnerAgreementToPcr.documentLabels.filesUploadedTitle}
+          subtitle={x => x.pcrAddPartnerAgreementToPcr.documentLabels.filesUploadedSubtitle}
         >
           {documents.length ? (
             <ACC.DocumentTableWithDelete
@@ -107,7 +107,7 @@ class Component extends React.Component<
       );
     }
     return (
-      <ACC.Section titleContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.filesUploadedTitle}>
+      <ACC.Section title={x => x.pcrAddPartnerAgreementToPcr.documentLabels.filesUploadedTitle}>
         <ACC.ValidationMessage
           message={x => x.pcrAddPartnerAgreementToPcr.documentMessages.noDocumentsUploaded}
           messageType="info"

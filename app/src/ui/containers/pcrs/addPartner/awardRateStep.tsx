@@ -9,7 +9,7 @@ export const AwardRateStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, 
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
 
   return (
-    <ACC.Section titleContent={x => x.pcrAddPartnerAwardRate.formSectionTitle}>
+    <ACC.Section title={x => x.pcrAddPartnerAwardRate.formSectionTitle}>
       <Content value={x => x.pcrAddPartnerAwardRate.guidance} />
       <Form.Form
         qa="addPartnerForm"

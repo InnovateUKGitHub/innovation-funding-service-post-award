@@ -7,7 +7,7 @@ export const StateAidEligibilityStep = (props: PcrStepProps<PCRItemForPartnerAdd
     const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
     return (
       <>
-        <ACC.Section qa="state-aid" titleContent={x => x.pcrAddPartnerStateAidEligibilityContent.stateAidTitle}>
+        <ACC.Section qa="state-aid" title={x => x.pcrAddPartnerStateAidEligibilityContent.stateAidTitle}>
           <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.stateAidGuidance}/>
         </ACC.Section>
         <Form.Form qa="saveAndContinue" data={props.pcrItem} onSubmit={() => props.onSave()}>

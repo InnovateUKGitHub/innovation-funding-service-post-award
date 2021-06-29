@@ -26,7 +26,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
     const isFc = !!(data.partner.roles & ProjectRole.FinancialContact);
     // MO, PM & FC/PM should see partner name
     const isMoPm = !!(data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
-    const partnerName = isMoPm ? <PartnerName partner={data.partner}/> : null;
+    const partnerName = isMoPm ? <PartnerName partner={data.partner}/> : undefined;
     const backLink = isMoPm ? this.props.routes.forecastDashboard.getLink({ projectId: data.project.id }) : this.props.routes.projectOverview.getLink({ projectId: data.project.id });
     const backText = isMoPm ? <ACC.Content value={x => x.forecastsDetails.moOrPmBackLink}/> : <ACC.Content value={x => x.forecastsDetails.backLink}/>;
 

@@ -43,10 +43,10 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
       >
         {this.renderGuidanceMessage()}
         <Acc.Renderers.Messages messages={this.props.messages} />
-        <Acc.Section qa="current-claims-section" titleContent={x => x.claimsDashboard.labels.openSectionTitle}>
+        <Acc.Section qa="current-claims-section" title={x => x.claimsDashboard.labels.openSectionTitle}>
           {this.renderCurrentClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project, partner, previousClaims)}
         </Acc.Section>
-        <Acc.Section qa="previous-claims-section" titleContent={x => x.claimsDashboard.labels.closedSectionTitle}>
+        <Acc.Section qa="previous-claims-section" title={x => x.claimsDashboard.labels.closedSectionTitle}>
           {this.renderPreviousClaims(previousClaims, "previous-claims-table", project, partner)}
         </Acc.Section>
       </Acc.Page>

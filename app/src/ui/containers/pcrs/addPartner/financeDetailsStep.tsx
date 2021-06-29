@@ -7,7 +7,7 @@ import { EditorStatus } from "@ui/constants/enums";
 export const FinanceDetailsStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => {
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
   return (
-    <ACC.Section titleContent={x => x.pcrAddPartnerFinanceDetails.sectionTitle}>
+    <ACC.Section title={x => x.pcrAddPartnerFinanceDetails.sectionTitle}>
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}

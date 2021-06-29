@@ -1,110 +1,94 @@
-import React from "react";
-import classNames from "classnames";
+import React, { isValidElement, useContext, createContext } from "react";
+import cx from "classnames";
+
+import { useContent } from "@ui/hooks";
 import { ContentSelector } from "@content/content";
-import { SimpleString } from "../renderers/simpleString";
-import { Content } from "../content";
-import { GdsHeadingTypes } from "../typography";
+import { SimpleString } from "@ui/components/renderers/simpleString";
+import * as typographyModule from "@ui/components/typography";
 
 export interface SectionProps {
   children?: React.ReactNode;
   id?: string;
-  title?: React.ReactNode;
-  titleContent?: ContentSelector;
-  subtitle?: React.ReactNode;
-  subtitleContent?: ContentSelector;
+  title?: string | React.ReactElement | ContentSelector;
+  subtitle?: string | React.ReactElement | ContentSelector;
   qa?: string;
   badge?: React.ReactNode;
   className?: string;
 }
 
-export const SectionContext = React.createContext<GdsHeadingTypes>("h2");
+type SectionTypes = Exclude<typographyModule.GdsHeadingTypes, "h1">;
 
-const getNextHeader = (header: GdsHeadingTypes) => {
-  switch (header) {
-    case "h1":
-      return "h2";
-    case "h2":
-      return "h3";
-    default:
-      return "h4";
-  }
-};
+export const sectionContext = createContext<SectionTypes>("h2");
+export const SectionProvider = sectionContext.Provider;
+const useSection = () => useContext(sectionContext);
 
-const renderTitles = (
-  { title, titleContent, subtitle, subtitleContent, badge }: SectionProps,
-  isEmpty: boolean,
-  header: GdsHeadingTypes,
-) => {
-  // if nothing to render at top then we return null if there is a badge but no titles we still need to render the div with three quarters
-  if (!title && !titleContent && !subtitle && !subtitleContent && !badge) return null;
+export function Section({ id, qa, title, subtitle, badge, className, children }: SectionProps) {
+  const { getContent } = useContent();
+  const header = useSection();
 
-  const Header = header;
-  const headerClasses = classNames({
-    "acc-section-title": true,
-    "govuk-heading-xl": header === "h1",
-    "govuk-heading-l": header === "h2",
-    "govuk-heading-m": header === "h3",
-    "govuk-heading-s": header === "h4",
-    "govuk-!-margin-bottom-2": !!subtitle,
-    "govuk-!-margin-bottom-0": !subtitle,
-  });
+  const hasNoTitlesOrBadge = !title && !subtitle && !badge;
 
-  const classes = classNames({
-    "govuk-grid-column-full": !badge,
-    "govuk-grid-column-three-quarters": !!badge,
-    "govuk-!-margin-bottom-5": !isEmpty,
-  });
+  // Note: bail out if no content!
+  if (hasNoTitlesOrBadge && !children) return null;
+
+  const getNextHeader = () => {
+    if (!title) return header;
+
+    return header === "h2" ? "h3" : "h4";
+  };
+
+  const headingVariant = header.toUpperCase() as Uppercase<typeof header>;
+  const Header = typographyModule[headingVariant];
 
   return (
-    <div className={classes}>
-      {!!title || !!titleContent ? (
-        <Header className={headerClasses}>{titleContent ? <Content value={titleContent} /> : title}</Header>
-      ) : null}
-      {!!subtitle || subtitleContent ? (
-        <SimpleString className="acc-section-subtitle">
-          {subtitleContent ? <Content value={subtitleContent} /> : subtitle}
-        </SimpleString>
-      ) : null}
-    </div>
-  );
-};
-
-const renderBadge = ({ badge }: SectionProps) =>
-  !badge ? null : <div className={classNames("govuk-grid-column-one-quarter", "govuk-!-margin-bottom-5")}>{badge}</div>;
-
-const renderContents = (children: React.ReactNode) =>
-  !children ? null : <div className="govuk-grid-column-full">{children}</div>;
-
-export function Section(props: SectionProps) {
-  const { title, titleContent, subtitle, badge, id, children, qa, className } = props;
-
-  // Note: bail if no content!
-  if (!title && !titleContent && !subtitle && !badge && !children) return null;
-
-  return (
-    <SectionContext.Consumer>
-      {header => (
+    <div
+      id={id}
+      data-qa={qa}
+      className={cx(className, "govuk-grid-row", "acc-section", {
+        "govuk-!-margin-bottom-6": header !== "h4",
+      })}
+    >
+      {!hasNoTitlesOrBadge && (
         <div
-          id={id}
-          className={classNames(
-            "govuk-grid-row",
-            "acc-section",
-            {
-              "govuk-!-margin-bottom-6": header === "h2" || header === "h3",
-            },
-            className,
-          )}
-          data-qa={qa}
+          className={cx({
+            "govuk-grid-column-full": !badge,
+            "govuk-grid-column-three-quarters": !!badge,
+            "govuk-!-margin-bottom-5": children,
+          })}
         >
-          {renderTitles(props, !children, header)}
+          {title && (
+            <Header
+              data-qa="section-title"
+              className={cx({
+                "govuk-!-margin-bottom-2": !!subtitle,
+                "govuk-!-margin-bottom-0": !subtitle,
+              })}
+            >
+              {typeof title === "string" || !isValidElement(title) ? getContent(title) : title}
+            </Header>
+          )}
 
-          {renderBadge(props)}
-
-          <SectionContext.Provider value={!title && !titleContent ? header : getNextHeader(header)}>
-            {renderContents(children)}
-          </SectionContext.Provider>
+          {subtitle && (
+            <SimpleString data-qa="section-subtitle">
+              {typeof subtitle === "string" || !isValidElement(subtitle) ? getContent(subtitle) : subtitle}
+            </SimpleString>
+          )}
         </div>
       )}
-    </SectionContext.Consumer>
+
+      {badge && (
+        <div data-qa="section-badge" className="govuk-grid-column-one-quarter govuk-!-margin-bottom-5">
+          {badge}
+        </div>
+      )}
+
+      {children && (
+        <SectionProvider value={getNextHeader()}>
+          <div data-qa="section-content" className="govuk-grid-column-full">
+            {children}
+          </div>
+        </SectionProvider>
+      )}
+    </div>
   );
 }

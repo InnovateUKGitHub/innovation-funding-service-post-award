@@ -26,7 +26,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
       id: "false", value: <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkNo}/>
     }];
     return (
-      <ACC.Section qa="role-and-partner-type" titleContent={x => x.pcrAddPartnerRoleAndOrganisation.formSectionTitle}>
+      <ACC.Section qa="role-and-partner-type" title={x => x.pcrAddPartnerRoleAndOrganisation.formSectionTitle}>
         <Form.Form
           qa="addPartnerForm"
           data={this.props.pcrItem}

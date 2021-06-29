@@ -27,7 +27,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     const {costCategories} = this.props;
     const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
     return (
-      <ACC.Section titleContent={x => x.pcrAddPartnerAcademicCosts.labels.projectCostsHeading}>
+      <ACC.Section title={x => x.pcrAddPartnerAcademicCosts.labels.projectCostsHeading}>
         <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.stepGuidance}/></ACC.Renderers.SimpleString>
         <Form.Form
           data={this.props.pcrItem}

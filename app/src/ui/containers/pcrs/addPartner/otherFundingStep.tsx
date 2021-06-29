@@ -16,7 +16,7 @@ export const OtherFundingStep = (props: PcrStepProps<PCRItemForPartnerAdditionDt
   }];
 
   return (
-    <ACC.Section titleContent={x => x.pcrAddPartnerOtherFunding.formSectionTitle}>
+    <ACC.Section title={x => x.pcrAddPartnerOtherFunding.formSectionTitle}>
       <Content value={x => x.pcrAddPartnerOtherFunding.guidance} />
       <Form.Form
         qa="addPartnerForm"

@@ -64,7 +64,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
         error={editor.error}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        <ACC.Section titleContent={x => x.pcrSpendProfileCostsSummaryContent.costsSectionTitle(costCategory.name)}>
+        <ACC.Section title={x => x.pcrSpendProfileCostsSummaryContent.costsSectionTitle(costCategory.name)}>
           {this.renderGuidance(costCategory)}
           {this.renderTable(costs, costCategory)}
           <Form.Form

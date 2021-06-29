@@ -22,7 +22,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
     return (
       <>
-        <ACC.Section qa="de-minimis" titleContent={x => x.pcrAddPartnerStateAidEligibilityContent.deMinimisTitle}>
+        <ACC.Section qa="de-minimis" title={x => x.pcrAddPartnerStateAidEligibilityContent.deMinimisTitle}>
           <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.deMinimisGuidance}/>
           {this.renderDeMinimisForm(documentsEditor)}
           {this.renderDeMinimisFiles(documentsEditor, documents)}
@@ -98,8 +98,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     if (documents.length) {
       return (
         <ACC.Section
-          titleContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.filesUploadedTitle}
-          subtitleContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.filesUploadedSubtitle}
+          title={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.filesUploadedTitle}
+          subtitle={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.filesUploadedSubtitle}
         >
           {
             documents.length
@@ -110,7 +110,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
       );
     }
     return (
-      <ACC.Section titleContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.filesUploadedTitle}>
+      <ACC.Section title={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.filesUploadedTitle}>
         <ACC.ValidationMessage message={x => x.pcrAddPartnerStateAidEligibilityContent.documentMessages.noDocumentsUploaded} messageType="info" />
       </ACC.Section>
     );

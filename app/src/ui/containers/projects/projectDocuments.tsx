@@ -101,7 +101,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<
             <ACC.Content value={x => x.projectDocuments.documentMessages.documentsIntroMessage.notForClaimsMessage} />
           </ACC.Renderers.SimpleString>
         </>
-        <ACC.Section titleContent={x => x.projectDocuments.documentMessages.uploadTitle}>
+        <ACC.Section title={x => x.projectDocuments.documentMessages.uploadTitle}>
           <EnumDocuments documentsToCheck={this.allowedProjectDocuments}>
             {docs => (
               <UploadForm.Form
