@@ -23,6 +23,6 @@ export function getClaimPeriodDate({ claim, partner }: ClaimPeriodProps) {
 /**
  * @deprecated Please use getClaimPeriodDate()
  */
-export const ClaimPeriodDate: React.FunctionComponent<ClaimPeriodProps> = (props) => {
+export const ClaimPeriodDate: React.FunctionComponent<ClaimPeriodProps> = props => {
   return getClaimPeriodDate(props);
 };

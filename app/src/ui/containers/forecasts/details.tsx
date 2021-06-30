@@ -1,10 +1,9 @@
 import * as ACC from "@ui/components";
+import { PartnerStatus, ProjectRole, ProjectStatus } from "@framework/types";
 import { ClaimDto, PartnerDto, ProjectDto } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { PrepareClaimRoute } from "@ui/containers";
 import { StoresConsumer } from "@ui/redux";
-import { PartnerName } from "@ui/components";
-import { PartnerStatus, ProjectRole, ProjectStatus } from "@framework/constants";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
 
@@ -26,7 +25,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
     const isFc = !!(data.partner.roles & ProjectRole.FinancialContact);
     // MO, PM & FC/PM should see partner name
     const isMoPm = !!(data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
-    const partnerName = isMoPm ? <PartnerName partner={data.partner}/> : undefined;
+    const partnerName = isMoPm ? ACC.getPartnerName(data.partner) : undefined;
     const backLink = isMoPm ? this.props.routes.forecastDashboard.getLink({ projectId: data.project.id }) : this.props.routes.projectOverview.getLink({ projectId: data.project.id });
     const backText = isMoPm ? <ACC.Content value={x => x.forecastsDetails.moOrPmBackLink}/> : <ACC.Content value={x => x.forecastsDetails.backLink}/>;
 
@@ -113,8 +112,8 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
     if (isPm) return null;
 
     return finalClaim.isApproved
-      ? <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={<><PartnerName partner={data.partner}/><ACC.Content value={x => x.components.forecastDetails.finalClaimMessageMO} /></>}/>
-      : <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={<><PartnerName partner={data.partner}/><ACC.Content value={x => x.components.forecastDetails.finalClaimDueMessageMO} /></>}/>;
+      ? <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={<>{ACC.getPartnerName(data.partner)}<ACC.Content value={x => x.components.forecastDetails.finalClaimMessageMO} /></>}/>
+      : <ACC.ValidationMessage qa="final-claim-message-MO" messageType="info" message={<>{ACC.getPartnerName(data.partner)}<ACC.Content value={x => x.components.forecastDetails.finalClaimDueMessageMO} /></>}/>;
     }
 
   private renderOverheadsRate(overheadRate: number | null) {

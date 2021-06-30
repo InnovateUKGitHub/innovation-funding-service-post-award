@@ -2,7 +2,6 @@ import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { IClientUser, PartnerClaimStatus, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import * as ACC from "@ui/components";
-import { PartnerName } from "@ui/components";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { StoresConsumer } from "@ui/redux";
 import { IRoutes } from "@ui/routing";
@@ -92,13 +91,14 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
 
   private renderFCOverviewDetails(partner: PartnerDto) {
     const PartnerSummaryDetails = ACC.TypedDetails<PartnerDto>();
+    const partnerName = ACC.getPartnerName(partner);
 
     return (
       <ACC.SectionPanel
         qa="claims-totals"
         title={
           <>
-            <PartnerName partner={partner} /> {<ACC.Content value={x => x.projectOverview.costsToDateMessage} />}
+            {partnerName} {<ACC.Content value={x => x.projectOverview.costsToDateMessage} />}
           </>
         }
       >
@@ -159,7 +159,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
             data={partner}
             title={
               <>
-                <ACC.PartnerName partner={partner} />{" "}
+                {ACC.getPartnerName(partner)}{" "}
                 {<ACC.Content value={x => x.projectOverview.costsToDateMessage} />}
               </>
             }

@@ -3,7 +3,6 @@ import { PartnerDto, ProjectContactDto, ProjectDto, ProjectRole } from "@framewo
 import { useStores } from "@ui/redux";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
-import { Content, PartnerName } from "../../components";
 
 interface Data {
     projectDetails: Pending<ProjectDto>;
@@ -143,7 +142,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                     <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.partnerName} value={x => this.renderPartnerName(x)} qa="partner-name"/>
                     <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.partnerType} value={x => x.type} qa="partner-type"/>
                     {isMoPm ? <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.statusLabel} value={x => x.partnerStatusLabel} qa="partner-status"/> : null}
-                    {isMoPm ? <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.fundingLabel} value={x => <Content value={content => content.partnerDetails.contactLabels.fundingState(x.isNonFunded)}/>} qa="partner-funding"/> : null}
+                    {isMoPm ? <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.fundingLabel} value={x => <ACC.Content value={content => content.partnerDetails.contactLabels.fundingState(x.isNonFunded)}/>} qa="partner-funding"/> : null}
                     <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.partnerPostcode} value={x => x.postcode} qa="partner-postcode"/>
                 </PartnersTable.Table>
             </ACC.Section>
@@ -151,9 +150,11 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     }
 
     private renderPartnerName(partner: PartnerDto) {
+        const partnerName = ACC.getPartnerName(partner, true);
+
         return (
             <ACC.Link route={this.props.routes.partnerDetails.getLink({projectId: this.props.projectId, partnerId: partner.id})}>
-                <PartnerName partner={partner} showIsLead/>
+                {partnerName}
             </ACC.Link>
         );
     }
