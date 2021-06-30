@@ -1,34 +1,18 @@
-interface Props {
-  partner: { name: string; isWithdrawn: boolean; isLead: boolean } | null | undefined;
-  showWithdrawn?: boolean;
-  showIsLead?: boolean;
-}
+import { PartnerDto } from "@framework/dtos";
 
-export function getPartnerName(
-  partner: Props["partner"],
-  showIsLead: Props["showIsLead"] = false,
-  showWithdrawn: Props["showWithdrawn"] = true,
-) {
+export type PartnerNameValues = Pick<PartnerDto, "name" | "isWithdrawn" | "isLead">;
+
+export function getPartnerName(partner?: PartnerNameValues | null, showIsLead = false, showWithdrawn = true) {
   if (!partner) return "";
 
-  let name = partner.name;
+  let finalName = partner.name;
 
   if (showWithdrawn && partner.isWithdrawn) {
-    name += " (withdrawn)";
+    finalName += " (withdrawn)";
   }
   if (showIsLead && partner.isLead) {
-    name += " (Lead)";
+    finalName += " (Lead)";
   }
-  return name;
+
+  return finalName;
 }
-
-/**
- * @deprecated Please use getPartnerName()
- */
-export const PartnerName: React.FunctionComponent<Props> = ({ partner, showIsLead = false, showWithdrawn = true }) => {
-  const name = getPartnerName(partner, showIsLead, showWithdrawn);
-
-  if (!partner) return null;
-
-  return <>{name}</>;
-};

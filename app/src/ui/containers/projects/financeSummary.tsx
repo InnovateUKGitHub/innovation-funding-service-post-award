@@ -79,7 +79,7 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data> {
                 hideHeader
                 qa="Partner"
                 header={content.partnerProjectLabel}
-                value={x => <ACC.PartnerName partner={x} showIsLead />}
+                value={x => ACC.getPartnerName(x, true)}
               />
 
               <FinanceSummaryTable.Currency

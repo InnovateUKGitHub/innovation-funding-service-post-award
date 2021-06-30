@@ -43,7 +43,7 @@ class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
           <Table.Table data={partners} qa="partner-table">
             <Table.Custom
               headerContent={x => x.forecastsDashboard.partnerHeader}
-              value={x => <ACC.PartnerName partner={x} showIsLead />}
+              value={x => ACC.getPartnerName(x, true)}
               qa="partner"
             />
             <Table.Currency

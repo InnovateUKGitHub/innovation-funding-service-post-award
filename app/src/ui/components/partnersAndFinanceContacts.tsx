@@ -1,5 +1,5 @@
 import { PartnerDto, ProjectContactDto } from "@framework/types";
-import { PartnerName } from "@ui/components/partners";
+import { getPartnerName } from "@ui/components/partners";
 import { Content } from "@content/content";
 import { ProjectContactLabels } from "@content/labels/projectContactLabels";
 import { TypedTable } from "./table";
@@ -33,7 +33,7 @@ export function PartnersAndFinanceContacts({
       <PartnersTable.Custom
         qa="partner-name"
         headerContent={x => projectContactLabels(x).partnerName}
-        value={x => <PartnerName partner={x.partner} showIsLead />}
+        value={x => getPartnerName(x.partner, true)}
       />
 
       <PartnersTable.Email

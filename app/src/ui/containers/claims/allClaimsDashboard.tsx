@@ -113,7 +113,7 @@ class AllClaimsDashboardComponent extends ContainerBase<AllClaimsDashboardParams
     const ClaimTable = Acc.TypedTable<ClaimDto>();
     const renderPartnerName = (x: ClaimDto) => {
       const p = partners.filter(y => y.id === x.partnerId)[0];
-      if (p) return <Acc.PartnerName partner={p} showIsLead/>;
+      if (p) return Acc.getPartnerName(p, true);
       return null;
     };
 
