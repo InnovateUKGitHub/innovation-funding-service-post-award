@@ -1,122 +1,141 @@
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
 
-import { ProjectContactLabels } from "@content/labels/projectContactLabels";
-import { ContentProvider } from "@ui/redux/contentProvider";
-import { StoresProvider } from "@ui/redux";
-import {
-  ContactsTable,
-  IContactsTable,
-} from "@ui/components/partners/contactsTable";
+import { TestBed, TestBedStore } from "@shared/TestBed";
 import { ProjectContactDto } from "@framework/dtos";
-import { findByQa } from "../helpers/find-by-qa";
+import { ProjectContactLabels } from "@content/labels/projectContactLabels";
+
+import { ContactsTable, IContactsTable } from "@ui/components/partners/contactsTable";
+
 import { getColumnValues } from "../helpers/tableHelpers";
 
-const TestProviders: React.FunctionComponent = (props) => {
-  const testStores = {
+describe("<ContactsTable />", () => {
+  const stubStores = {
     config: {
-      getConfig: () => ({
-        features: {},
-      }),
+      getConfig: () => ({ features: {} }),
     },
   };
 
-  return (
-    <StoresProvider value={testStores as any}>
-      <ContentProvider value={{} as any}>{props.children}</ContentProvider>
-    </StoresProvider>
-  );
-};
+  const stubProjectLabels = {
+    contactName: { content: "Contact" },
+    roleName: { content: "Name" },
+    contactEmail: { content: "Partner" },
+    noContactsMessage: { content: "No contacts exist." },
+  } as ProjectContactLabels;
 
-describe("Contacts Table", () => {
-  const testContacts: ProjectContactDto[] = [
-    {
-      id: "100",
-      name: "Ted Tester",
-      role: "Finance contact",
-      roleName: "Finance Contact",
-      email: "tedtester@nowhere.com",
-      accountId: "321",
-      projectId: "456",
-    },
-    {
-      id: "101",
-      name: "Dave Developer",
-      role: "Project Manager",
-      roleName: "Project Manager",
-      email: "davedeveloper@nowhere.com",
-      accountId: "312",
-      projectId: "456",
-    },
-  ];
-
-  const setupTest = (contacts: IContactsTable["contacts"]) => {
-
-    const testLabels = {
-      contactName: {
-        content: "Contact"
-      },
-      roleName: {
-        content: "Name"
-      },
-      contactEmail: {
-        content: "Partner"
-      },
-      noContactsMessage: {
-        content: "No contacts exist."
-      },
-    } as ProjectContactLabels;
-
-    const wrapper = mount(
-      <TestProviders>
-        <ContactsTable
-          contacts={contacts}
-          projectContactLabels={() => testLabels}
-        />
-      </TestProviders>
-    );
-
-    const getValueByColumnName = (columnName: string) =>
-      getColumnValues(wrapper, "contacts-table-details", columnName).map((x) =>
-        x.text()
-      );
-
-    return {
-      wrapper,
-      getValueByColumnName,
+  const setup = (props?: Omit<IContactsTable, "projectContactLabels">) => {
+    const defaultProps: IContactsTable = {
+      contacts: [],
+      projectContactLabels: () => stubProjectLabels,
     };
+
+    return render(
+      <TestBed stores={stubStores as TestBedStore}>
+        <ContactsTable {...defaultProps} {...props} />
+      </TestBed>,
+    );
   };
 
-  it("should return message when no contacts provided", () => {
-    const { wrapper } = setupTest([]);
+  describe("@returns", () => {
+    it("when no contacts message", () => {
+      const { queryByText } = setup();
 
-    const emptyContactElement = findByQa(wrapper, "no-contacts-exist");
-    const emptyTextMessage = emptyContactElement.text();
+      const noContactsElement = queryByText(stubProjectLabels.noContactsMessage.content);
 
-    expect(emptyContactElement).toBeDefined();
-    expect(emptyTextMessage).toBe("No contacts exist.");
-  });
+      expect(noContactsElement).toBeInTheDocument();
+    });
 
-  it("should return form data when contacts provided", () => {
-    const { wrapper } = setupTest(testContacts);
-    const contactTableElement = findByQa(wrapper, "contacts-table-details");
+    it("when contacts are provided", () => {
+      const stubContacts: ProjectContactDto[] = [
+        {
+          id: "100",
+          name: "Ted Tester",
+          role: "Finance contact",
+          roleName: "Finance Contact",
+          email: "tedtester@nowhere.com",
+          accountId: "321",
+          projectId: "456",
+        },
+        {
+          id: "101",
+          name: "Dave Developer",
+          role: "Project Manager",
+          roleName: "Project Manager",
+          email: "davedeveloper@nowhere.com",
+          accountId: "312",
+          projectId: "456",
+        },
+      ];
 
-    expect(contactTableElement).toBeDefined();
-  });
+      const { queryByText, queryByTestId } = setup({ contacts: stubContacts });
 
-  it("should return valid form data", () => {
-    const { getValueByColumnName } = setupTest(testContacts);
+      const noContactsElement = queryByText(stubProjectLabels.noContactsMessage.content);
+      const contactsTable = queryByTestId("contacts-table-details");
 
-    const col1 = getValueByColumnName("col-partner-name");
-    const col2 = getValueByColumnName("col-partner-roleName");
-    const col3 = getValueByColumnName("col-partner-email");
+      expect(contactsTable).toBeInTheDocument();
+      expect(noContactsElement).not.toBeInTheDocument();
+    });
 
-    expect(col1[0]).toBe(testContacts[0].name);
-    expect(col1[1]).toBe(testContacts[1].name);
+    it("with valid form data", () => {
+      const stubContacts: ProjectContactDto[] = [
+        {
+          id: "100",
+          name: "Ted Tester",
+          role: "Finance contact",
+          roleName: "Finance Contact",
+          email: "tedtester@nowhere.com",
+          accountId: "321",
+          projectId: "456",
+        },
+      ];
 
-    expect(col2[0]).toBe(testContacts[0].roleName);
-    expect(col2[1]).toBe(testContacts[1].roleName);
+      const { queryByText } = setup({ contacts: stubContacts });
 
-    expect(col3[0]).toBe(testContacts[0].email);
-    expect(col3[1]).toBe(testContacts[1].email);
+      for (const contact of stubContacts) {
+        expect(queryByText(contact.name)).toBeInTheDocument();
+        expect(queryByText(contact.roleName)).toBeInTheDocument();
+        expect(queryByText(contact.email)).toBeInTheDocument();
+      }
+    });
+
+    it("with correct table layout", () => {
+      const stubContacts: ProjectContactDto[] = [
+        {
+          id: "100",
+          name: "Ted Tester",
+          role: "Finance contact",
+          roleName: "Finance Contact",
+          email: "tedtester@nowhere.com",
+          accountId: "321",
+          projectId: "456",
+        },
+        {
+          id: "101",
+          name: "Dave Developer",
+          role: "Project Manager",
+          roleName: "Project Manager",
+          email: "davedeveloper@nowhere.com",
+          accountId: "312",
+          projectId: "456",
+        },
+      ];
+
+      const { container } = setup({ contacts: stubContacts });
+
+      const getValueByColumnName = (columnName: string) =>
+        getColumnValues(container, "contacts-table-details", columnName).map(x => x.innerHTML);
+
+      const column1PartnerName = getValueByColumnName("col-partner-name");
+      const column2PartnerRoleName = getValueByColumnName("col-partner-roleName");
+      const column3Email = getValueByColumnName("col-partner-email");
+
+      // Note: Loop every stub item and check column matches record
+      for (let index = 0; index < stubContacts.length; index++) {
+        const stubContact = stubContacts[index];
+
+        expect(column1PartnerName[index]).toBe(stubContact.name);
+        expect(column2PartnerRoleName[index]).toBe(stubContact.roleName);
+        expect(column3Email[index]).toContain(stubContact.email);
+      }
+    });
   });
 });
