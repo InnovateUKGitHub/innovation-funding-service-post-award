@@ -10,23 +10,36 @@ export interface IContactsTable {
   projectContactLabels: (content: IContent) => ProjectContactLabels;
 }
 
-export const ContactsTable: React.FunctionComponent<IContactsTable> = ({
-  contacts,
-  projectContactLabels,
-}) => {
+export function ContactsTable({ contacts, projectContactLabels }: IContactsTable) {
+  if (!contacts.length) {
+    return (
+      <SimpleString className="govuk-!-margin-bottom-0" qa="no-contacts-exist">
+        <Content value={x => projectContactLabels(x).noContactsMessage} />
+      </SimpleString>
+    );
+  }
+
   const ContactsUI = TypedTable<ProjectContactDto>();
 
-  return contacts.length ? (
+  return (
     <ContactsUI.Table qa="contacts-table-details" data={contacts}>
-      <ContactsUI.String headerContent={x => projectContactLabels(x).contactName} value={x => x.name} qa="partner-name" />
-      <ContactsUI.String headerContent={x => projectContactLabels(x).roleName} value={x => x.roleName} qa="partner-roleName" />
-      <ContactsUI.Email headerContent={x => projectContactLabels(x).contactEmail} value={x => x.email} qa="partner-email" />
-    </ContactsUI.Table>
-  ) : (
-    <SimpleString className="govuk-!-margin-bottom-0" qa="no-contacts-exist">
-      <Content value={x => projectContactLabels(x).noContactsMessage} />
-    </SimpleString>
-  );
-};
+      <ContactsUI.String
+        qa="partner-name"
+        headerContent={x => projectContactLabels(x).contactName}
+        value={x => x.name}
+      />
 
-ContactsTable.displayName = "ContactsTable";
+      <ContactsUI.String
+        qa="partner-roleName"
+        headerContent={x => projectContactLabels(x).roleName}
+        value={x => x.roleName}
+      />
+
+      <ContactsUI.Email
+        qa="partner-email"
+        headerContent={x => projectContactLabels(x).contactEmail}
+        value={x => x.email}
+      />
+    </ContactsUI.Table>
+  );
+}
