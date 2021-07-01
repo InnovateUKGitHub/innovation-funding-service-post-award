@@ -1,19 +1,32 @@
-import { mount } from "enzyme";
-import { Percentage } from "../../../src/ui/components/renderers";
+import { render } from "@testing-library/react";
 
-describe("Percentage", () => {
-  it("should render the percentage with 2 decimal place by default", () => {
-    const wrapper = mount(<Percentage value={100}/>);
-    expect(wrapper.text()).toEqual("100.00%");
-  });
+import { Percentage, Props } from "@ui/components/renderers";
 
-  it("should render the percentage with 5 decimal places", () => {
-    const wrapper = mount(<Percentage value={100} fractionDigits={5}/>);
-    expect(wrapper.text()).toEqual("100.00000%");
-  });
+describe("<Percentage />", () => {
+  describe("@renders", () => {
+    const setup = (props: Props) => render(<Percentage {...props} />);
 
-  it("should not render if no value is entered", () => {
-    const wrapper = mount(<Percentage value={null}/>);
-    expect(wrapper.html()).toBeNull();
+    it("with no value", () => {
+      const { container } = setup({ value: null });
+      expect(container.firstChild).toBeNull();
+    });
+
+    it("without minus sign with -0.0", () => {
+      const { queryByText } = setup({ value: -0.0 });
+      const targetElement = queryByText("0.00%");
+      expect(targetElement).toBeInTheDocument();
+    });
+
+    it("with 2 decimal places as default", () => {
+      const { queryByText } = setup({ value: 100 });
+      const targetElement = queryByText("100.00%");
+      expect(targetElement).toBeInTheDocument();
+    });
+
+    it("with 5 decimal places", () => {
+      const { queryByText } = setup({ value: 100, fractionDigits: 5 });
+      const targetElement = queryByText("100.00000%");
+      expect(targetElement).toBeInTheDocument();
+    });
   });
 });
