@@ -1,47 +1,47 @@
-
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
 
 import { IMessagesProps, Messages } from "@ui/components/renderers";
-import { findByQa } from "../helpers/find-by-qa";
 
-describe("Messages", () => {
-  const setup = (props: IMessagesProps) => {
-    const wrapper = mount(<Messages {...props} />);
-    const validationMessage = findByQa(wrapper, "validation-message-content");
+describe("<Messages />", () => {
+  const setup = (props: IMessagesProps) => render(<Messages {...props} />);
 
-    return {
-      wrapper,
-      validationMessage,
-    };
-  };
+  describe("@renders", () => {
+    it("should render single message", () => {
+      const stubMessage = "stub-message";
+      const { queryByText } = setup({ messages: [stubMessage] });
 
-  it("should render given message", () => {
-    const { validationMessage } = setup({ messages: ["first"] });
+      const targetElement = queryByText(stubMessage);
 
-    expect(validationMessage.text()).toBe("first");
-  });
+      expect(targetElement).toBeInTheDocument();
+    });
 
-  it("should render an aria live", () => {
-    const { wrapper } = setup({ messages: ["first"] });
+    it("should render multiple messages", () => {
+      const stubFirstMessage = "stub-first-message";
+      const stubSecondMessage = "stub-second-message";
 
-    const ariaComponent = wrapper.find("AriaLive").hostNodes();
+      const stubMessages = [stubFirstMessage, stubSecondMessage];
 
-    expect(ariaComponent).toBeDefined();
-  });
+      const { queryByText } = setup({ messages: stubMessages });
 
-  it("should render total messages correctly", () => {
-    const stubMessages = ["first", "second"];
-    const { validationMessage } = setup({ messages: stubMessages });
+      const firstMessage = queryByText(stubFirstMessage);
+      const secondMessage = queryByText(stubSecondMessage);
 
-    expect(validationMessage.length).toBe(stubMessages.length);
-  });
+      expect(firstMessage).toBeInTheDocument();
+      expect(secondMessage).toBeInTheDocument();
+    });
 
-  it("should render validation messages correctly", () => {
-    const stubMessages = ["first", "second"];
-    const { validationMessage } = setup({ messages: stubMessages });
+    it("should always render aria-live element", () => {
+      const { container } = setup({ messages: [] });
 
-    stubMessages.forEach((_, i) => {
-      expect(validationMessage.at(i).text()).toBe(stubMessages[i]);
+      expect(container.firstChild).toBeEmptyDOMElement();
+      expect(container.firstChild).toHaveAttribute("aria-live", "polite");
+    });
+
+    it("should render an aria live", () => {
+      const stubMessage = "stub-message";
+      const { container } = setup({ messages: [stubMessage] });
+
+      expect(container.firstChild).toHaveAttribute("aria-live", "polite");
     });
   });
 });
