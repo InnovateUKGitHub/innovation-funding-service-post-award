@@ -10,12 +10,5 @@ export function Markdown({ value, ...props }: IMarkdownProps) {
 
   const dangerousHTML = Marked(value);
 
-  return (
-    <span
-      {...props}
-      data-qa="markdown"
-      className="govuk-body markdown"
-      dangerouslySetInnerHTML={{ __html: dangerousHTML }}
-    />
-  );
+  return <span {...props} className="govuk-body markdown" dangerouslySetInnerHTML={{ __html: dangerousHTML }} />;
 }
