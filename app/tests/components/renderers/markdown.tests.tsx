@@ -1,65 +1,74 @@
-import { mount } from "enzyme";
+import { render } from "@testing-library/react";
+
 import { IMarkdownProps, Markdown } from "@ui/components/renderers/markdown";
-import { findByQa } from "../helpers/find-by-qa";
 
 describe("Markdown", () => {
-  const setup = (props: IMarkdownProps) => mount(<Markdown {...props} />);
-
-  const stubString = "content";
+  const setup = (props: IMarkdownProps) => render(<Markdown {...props} />);
 
   const stubMarkdownHeading = `
 Heading Test
 ------------
 `;
-  const stubUnOrderedList = `
-* Item 1
-* Item 2
-  `;
-
-  const stubOrderedList = `
-1. Item 1
-1. Item 2
-  `;
 
   describe("@renders", () => {
     it("should wrap content in <span>", () => {
-      const wrapper = setup({ value: stubString });
+      const { container } = setup({ value: "some-valid-string" });
 
-      const spanElement = wrapper.getDOMNode();
-      expect(spanElement.tagName).toBe("SPAN");
-      expect(spanElement).toHaveProperty("className", "govuk-body markdown");
+      if (!container.firstChild) {
+        throw Error("First child not found!");
+      }
+
+      expect(container.firstChild.nodeName).toBe("SPAN");
+    });
+
+    it("should have markdown class for style overrides", () => {
+      const { container } = setup({ value: "some-valid-string" });
+
+      if (!container.firstChild) {
+        throw Error("First child not found!");
+      }
+
+      expect(container.firstChild).toHaveClass("markdown");
     });
 
     it("should return null when empty string is passed", () => {
-      const emptyString = "";
-      const wrapper = setup({ value: emptyString });
+      const { container } = setup({ value: "" });
 
-      expect(wrapper.html()).toBe(null);
-    });
-
-    test.each`
-      name                         | markdown               | expected
-      ${"handle normal strings"}   | ${stubString}          | ${"content"}
-      ${"convert string"}          | ${stubString}          | ${"<p>content</p>"}
-      ${"convert headings"}        | ${stubMarkdownHeading} | ${'<h2 id="heading-test">Heading Test</h2></span>'}
-      ${"convert unordered lists"} | ${stubUnOrderedList}   | ${"<ul><li>Item 1</li><li>Item 2</li></ul>"}
-      ${"convert unordered lists"} | ${stubOrderedList}     | ${"<ol><li>Item 1</li><li>Item 2</li></ol>"}
-    `("should $name", ({ markdown, expected }) => {
-      const wrapper = setup({ value: markdown });
-
-      // Note: added easily assert single line string
-      const htmlWithoutLineBreaks = wrapper.html().replace(/\n/g, "");
-
-      expect(htmlWithoutLineBreaks).toContain(expected);
+      expect(container.firstChild).toBeNull();
     });
 
     it("should return styles", () => {
-      const stubStyles = { color: "red" };
-      const wrapper = setup({ value: "non-empty-string", style: stubStyles });
+      const stubColorStyleValue = "red";
 
-      const element = findByQa(wrapper, "markdown").prop("style");
+      const { container } = setup({ value: "non-empty-string", style: { color: stubColorStyleValue } });
 
-      expect(element).toMatchObject(stubStyles);
+      expect(container.firstChild).toHaveStyle(`color: ${stubColorStyleValue}`);
+    });
+
+    describe("with converted markdown parsed correctly", () => {
+      test.each`
+        name                      | markdown                   | parsedNodes     | expected
+        ${"with string"}          | ${"stub-content"}          | ${["p"]}        | ${"<p>stub-content</p>"}
+        ${"with headings"}        | ${stubMarkdownHeading}     | ${["h2"]}       | ${'<h2 id="heading-test">Heading Test</h2></span>'}
+        ${"with ordered lists"}   | ${"1. stub-ordered-item"}  | ${["ol", "li"]} | ${"<ol><li>stub-ordered-item</li></ol>"}
+        ${"with unordered lists"} | ${"* stub-unordered-item"} | ${["ul", "li"]} | ${"<ul><li>stub-unordered-item</li></ul>"}
+      `("$name", ({ markdown, parsedNodes, expected }) => {
+        const { queryByText, container } = setup({ value: markdown });
+
+        // Note: This is a simple parser, mutlitple elements will fail. Consider testing refactor to cater to more scenarios!
+        const parseHtmlToExpectedText = expected.replace(/<[^>]+>/g, "");
+        const targetElement = queryByText(parseHtmlToExpectedText);
+
+        expect(targetElement).toBeInTheDocument();
+
+        for (const node of parsedNodes) {
+          const targetNode = container.querySelector(node);
+
+          if (!targetNode) throw Error(`It appears "${node}" was not found!`);
+
+          expect(targetNode).toBeInTheDocument();
+        }
+      });
     });
   });
 });
