@@ -2,7 +2,7 @@ import { ContentBase } from "@content/contentBase";
 import { CostCategoryType } from "@framework/constants";
 
 export class PcrSpendProfileMessages extends ContentBase {
-  constructor(parent: ContentBase, protected competitionType?: string) {
+  constructor(parent: ContentBase, competitionType?: string) {
     super(parent, "spend-profile-messages", competitionType);
   }
 

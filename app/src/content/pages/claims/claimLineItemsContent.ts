@@ -1,8 +1,8 @@
-import { ContentPageBase } from "../../contentPageBase";
-import { Content } from "../../content";
+import { Content } from "@content/content";
+import { ContentPageBase } from "@content/contentPageBase";
 
 export class ClaimLineItemsContent extends ContentPageBase {
-  constructor(private readonly content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "claim-line-items", competitionType);
   }
 

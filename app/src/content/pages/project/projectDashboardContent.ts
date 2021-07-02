@@ -1,9 +1,9 @@
-import { ContentPageBase } from "../../contentPageBase";
-import { Content } from "../../content";
-import { ProjectMessages } from "../../messages/projectMessages";
+import { Content } from "@content/content";
+import { ContentPageBase } from "@content/contentPageBase";
+import { ProjectMessages } from "@content/messages/projectMessages";
 
 export class ProjectDashboardContent extends ContentPageBase {
-  constructor(content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "projects-dashboard", competitionType);
   }
 

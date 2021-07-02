@@ -1,5 +1,5 @@
+import { Content } from "@content/content";
 import { ContentPageBase } from "@content/contentPageBase";
-import { Content } from "../../../content";
 
 export class PostcodeContent extends ContentPageBase {
   constructor(content: Content) {

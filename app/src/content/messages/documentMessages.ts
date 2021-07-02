@@ -1,8 +1,8 @@
+import { ContentBase } from "@content/contentBase";
 import { IAppOptions } from "@framework/types/IAppOptions";
-import { ContentBase } from "../contentBase";
 
 export class DocumentMessages extends ContentBase {
-  constructor(parent: ContentBase, protected competitionType?: string) {
+  constructor(parent: ContentBase, competitionType?: string) {
     super(parent, "document-messages", competitionType);
   }
 

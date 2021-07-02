@@ -1,7 +1,7 @@
-import { ContentBase } from "../contentBase";
+import { ContentBase } from "@content/contentBase";
 
 export class PartnerLabels extends ContentBase {
-  constructor(parent: ContentBase, protected competitionType?: string) {
+  constructor(parent: ContentBase, competitionType?: string) {
     super(parent, "partner-labels", competitionType);
   }
 

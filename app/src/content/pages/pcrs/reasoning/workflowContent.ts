@@ -1,9 +1,9 @@
+import { Content } from "@content/content";
+import { ContentPageBase } from "@content/contentPageBase";
 import { PCRReasoningLabels } from "@content/labels/pcrReasoningLabels";
-import { ContentPageBase } from "../../../contentPageBase";
-import { Content } from "../../../content";
 
 export class PCRReasoningWorkflowContent extends ContentPageBase {
-  constructor(content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "pcr-reasoning-workflow", competitionType);
   }
 

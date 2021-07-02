@@ -1,8 +1,8 @@
-import { ContentPageBase } from "../../contentPageBase";
-import { Content } from "../../content";
+import { Content } from "@content/content";
+import { ContentPageBase } from "@content/contentPageBase";
 
 export class ForecastsComponentsContent extends ContentPageBase {
-  constructor(private readonly content: Content) {
+  constructor(content: Content) {
     super(content, "forecasts-components");
   }
 

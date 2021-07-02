@@ -1,10 +1,10 @@
 import { ClaimMessages } from "@content/messages/claimMessages";
 import { ClaimsLabels } from "@content/labels/claimsLabels";
-import { ContentPageBase } from "../../contentPageBase";
-import { Content } from "../../content";
+import { Content } from "@content/content";
+import { ContentPageBase } from "@content/contentPageBase";
 
 export class ClaimsDashboardContent extends ContentPageBase {
-  constructor(private readonly content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "claims-dashboard", competitionType);
   }
   public readonly messages = new ClaimMessages(this, this.competitionType);

@@ -1,7 +1,7 @@
 import { ContentBase } from "@content/contentBase";
 
 export class PCRNameChangeLabels extends ContentBase {
-  constructor(parent: ContentBase, protected competitionType?: string) {
+  constructor(parent: ContentBase, competitionType?: string) {
     super(parent, "pcr-name-change-labels", competitionType);
   }
 

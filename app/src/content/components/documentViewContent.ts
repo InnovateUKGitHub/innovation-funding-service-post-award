@@ -1,5 +1,5 @@
-import { ContentPageBase } from "../contentPageBase";
-import { Content } from "../content";
+import { Content } from "@content/content";
+import { ContentPageBase } from "@content/contentPageBase";
 
 export class DocumentViewContent extends ContentPageBase {
   constructor(content: Content) {

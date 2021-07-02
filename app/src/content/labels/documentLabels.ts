@@ -1,8 +1,8 @@
+import { ContentBase } from "@content/contentBase";
 import { DocumentDescription } from "@framework/constants";
-import { ContentBase } from "../contentBase";
 
 export class DocumentLabels extends ContentBase {
-  constructor(parent: ContentBase, protected competitionType?: string) {
+  constructor(parent: ContentBase, competitionType?: string) {
     super(parent, "document-labels", competitionType);
   }
 

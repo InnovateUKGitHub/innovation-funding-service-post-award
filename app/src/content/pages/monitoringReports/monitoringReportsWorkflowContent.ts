@@ -1,10 +1,10 @@
 import { MonitoringReportsMessages } from "@content/messages/monitoringReportsMessages";
 import { MonitoringReportsLabels } from "@content/labels/monitoringReportsLabels";
-import { Content } from "../../content";
-import { ContentPageBase } from "../../contentPageBase";
+import { Content } from "@content/content";
+import { ContentPageBase } from "@content/contentPageBase";
 
 export class MonitoringReportsWorkflowContent extends ContentPageBase {
-  constructor(private readonly content: Content, protected competitionType?: string) {
+  constructor(private content: Content, competitionType?: string) {
     super(content, "monitoring-reports-workflow", competitionType);
   }
 

@@ -1,7 +1,7 @@
-import { ContentBase } from "../contentBase";
+import { ContentBase } from "@content/contentBase";
 
 export class MonitoringReportsLabels extends ContentBase {
-  constructor(parent: ContentBase, protected competitionType?: string) {
+  constructor(parent: ContentBase, competitionType?: string) {
     super(parent, "monitoring-reports-labels", competitionType);
   }
 

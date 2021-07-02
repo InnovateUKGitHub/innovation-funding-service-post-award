@@ -1,11 +1,11 @@
+import { Content } from "@content/content";
+import { ContentPageBase } from "@content/contentPageBase";
 import { DocumentLabels } from "@content/labels/documentLabels";
 import { DocumentMessages } from "@content/messages/documentMessages";
-import { ContentPageBase } from "../../../contentPageBase";
-import { Content } from "../../../content";
 import { PCRItem } from "../pcrItem";
 
 export class PCRNameChangePrepareItemFilesContent extends ContentPageBase {
-  constructor(content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "pcr-name-change-prepare-item-files", competitionType);
   }
 

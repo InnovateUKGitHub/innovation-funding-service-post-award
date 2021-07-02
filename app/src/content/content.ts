@@ -233,7 +233,7 @@ export class Content extends ContentBase {
     phaseBannerContent: PhaseBannerContent;
   };
 
-  constructor(protected competitionType?: string) {
+  constructor(competitionType?: string) {
     super(null, null);
 
     this.header = new HeaderContent(this);

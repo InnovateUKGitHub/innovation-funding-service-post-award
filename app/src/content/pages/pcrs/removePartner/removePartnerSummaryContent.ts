@@ -1,10 +1,10 @@
+import { Content } from "@content/content";
+import { ContentPageBase } from "@content/contentPageBase";
 import { PCRRemovePartnerLabels } from "@content/labels/pcrRemovePartnerLabels";
 import { DocumentMessages } from "@content/messages/documentMessages";
-import { ContentPageBase } from "../../../contentPageBase";
-import { Content } from "../../../content";
 
 export class PCRRemovePartnerSummaryContent extends ContentPageBase {
-  constructor(content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "pcr-remove-partner-summary", competitionType);
   }
 

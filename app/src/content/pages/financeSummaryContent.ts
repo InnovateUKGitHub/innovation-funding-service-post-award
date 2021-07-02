@@ -1,10 +1,10 @@
+import { Content } from "@content/content";
+import { ContentPageBase } from "@content/contentPageBase";
 import { ProjectLabels } from "@content/labels/projectLabels";
-import { ContentPageBase } from "../contentPageBase";
-import { Content } from "../content";
-import { ProjectMessages } from "../messages/projectMessages";
+import { ProjectMessages } from "@content/messages/projectMessages";
 
 export class FinanceSummaryContent extends ContentPageBase {
-  constructor(content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "finance-summary", competitionType);
   }
 

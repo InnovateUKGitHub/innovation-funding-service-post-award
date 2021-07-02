@@ -1,9 +1,9 @@
 import i18next from "i18next";
-import { ContentBase } from "./contentBase";
 import { Content } from "./content";
+import { ContentBase } from "./contentBase";
 
 export abstract class ContentPageBase extends ContentBase {
-  protected constructor(parent: Content, pageName: string, protected competitionType?: string) {
+  protected constructor(parent: Content, pageName: string, competitionType?: string) {
     super(parent, `pages.${pageName}`, competitionType);
   }
 
