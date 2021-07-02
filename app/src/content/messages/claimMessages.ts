@@ -1,9 +1,9 @@
+import { ContentBase } from "@content/contentBase";
 import { DateFormat } from "@framework/constants";
 import { formatDate } from "@framework/util";
-import { ContentBase } from "../contentBase";
 
 export class ClaimMessages extends ContentBase {
-  constructor(parent: ContentBase, protected competitionType?: string) {
+  constructor(parent: ContentBase, competitionType?: string) {
     super(parent, "claims-messages", competitionType);
   }
 

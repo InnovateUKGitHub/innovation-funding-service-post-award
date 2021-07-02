@@ -1,8 +1,8 @@
-import { ContentPageBase } from "../contentPageBase";
-import { Content } from "../content";
+import { Content } from "@content/content";
+import { ContentPageBase } from "@content/contentPageBase";
 
 export class HomePageContent extends ContentPageBase {
-  constructor(content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "home", competitionType);
   }
 

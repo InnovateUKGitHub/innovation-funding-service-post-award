@@ -16,11 +16,7 @@ export interface DataOption {
 }
 
 export abstract class ContentBase {
-  constructor(
-    private readonly parent: ContentBase | null,
-    private readonly name: string | null,
-    protected competitionType?: string,
-  ) {}
+  constructor(private parent: ContentBase | null, private name: string | null, protected competitionType?: string) {}
 
   protected getNameParts(): string[] {
     const result = this.parent ? this.parent.getNameParts() : [];

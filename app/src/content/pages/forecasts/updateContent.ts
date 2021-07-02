@@ -1,10 +1,10 @@
 import { ForecastsLabels } from "@content/labels/forecastsLabels";
 import { ForecastsMessages } from "@content/messages/forecastsMessages";
-import { ContentPageBase } from "../../contentPageBase";
-import { Content } from "../../content";
+import { Content } from "@content/content";
+import { ContentPageBase } from "@content/contentPageBase";
 
 export class ForecastsUpdateContent extends ContentPageBase {
-  constructor(private readonly content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "forecasts-update", competitionType);
   }
 

@@ -3,7 +3,7 @@ import { Content } from "@content/content";
 import { PcrSpendProfileLabels } from "@content/labels/pcrSpendProfileLabels";
 
 export class PcrSpendProfileDeleteCostContent extends ContentPageBase {
-  constructor(content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "pcr-spend-profile-delete-cost", competitionType);
   }
 

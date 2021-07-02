@@ -3,7 +3,7 @@ import { ProjectContactLabels } from "@content/labels/projectContactLabels";
 import { Content } from "@content/content";
 
 export class PartnerDetailsEditContent extends ContentPageBase {
-  constructor(content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "partner-details-edit", competitionType);
   }
 

@@ -2,10 +2,10 @@ import { ContentPageBase } from "@content/contentPageBase";
 import { ProjectMessages } from "@content/messages/projectMessages";
 import { ProjectLabels } from "@content/labels/projectLabels";
 import { ProjectContactLabels } from "@content/labels/projectContactLabels";
-import { Content } from "../../content";
+import { Content } from "@content/content";
 
 export class ProjectDetailsContent extends ContentPageBase {
-  constructor(content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "project-details", competitionType);
   }
 

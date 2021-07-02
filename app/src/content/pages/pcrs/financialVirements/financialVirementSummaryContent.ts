@@ -1,9 +1,9 @@
+import { Content } from "@content/content";
+import { ContentPageBase } from "@content/contentPageBase";
 import { FinancialVirementLabels } from "@content/labels/financialVirementLabels";
-import { ContentPageBase } from "../../../contentPageBase";
-import { Content } from "../../../content";
 
 export class FinancialVirementSummaryContent extends ContentPageBase {
-  constructor(content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "financial-virement-summary", competitionType);
   }
 

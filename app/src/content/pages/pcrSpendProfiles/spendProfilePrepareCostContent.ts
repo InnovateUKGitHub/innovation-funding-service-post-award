@@ -6,7 +6,7 @@ import { DocumentLabels } from "@content/labels/documentLabels";
 import { DocumentMessages } from "@content/messages/documentMessages";
 
 export class PcrSpendProfilePrepareCostContent extends ContentPageBase {
-  constructor(content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "pcr-spend-profile-prepare-cost", competitionType);
   }
 

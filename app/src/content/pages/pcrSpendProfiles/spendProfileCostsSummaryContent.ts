@@ -4,7 +4,7 @@ import { PcrSpendProfileLabels } from "@content/labels/pcrSpendProfileLabels";
 import { PcrSpendProfileMessages } from "@content/messages/pcrSpendProfileMessages";
 
 export class PcrSpendProfileCostsSummaryContent extends ContentPageBase {
-  constructor(content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "pcr-spend-profile-costs-summary", competitionType);
   }
 

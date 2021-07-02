@@ -1,11 +1,11 @@
 import { DocumentMessages } from "@content/messages/documentMessages";
 import { DocumentLabels } from "@content/labels/documentLabels";
-import { ContentPageBase } from "../../../contentPageBase";
-import { Content } from "../../../content";
+import { ContentPageBase } from "@content/contentPageBase";
+import { Content } from "@content/content";
 import { PCRItem } from "../pcrItem";
 
 export class PCRPrepareItemFilesForPartnerWithrawelContent extends ContentPageBase {
-  constructor(content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "pcr-prepare-item-files-for-partner-withdrawel", competitionType);
   }
 

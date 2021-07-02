@@ -4,7 +4,7 @@ import { Content } from "../../../content";
 import { PCRItem } from "../pcrItem";
 
 export class PCRAddPartnerOrganisationDetailsContent extends ContentPageBase {
-  constructor(private readonly content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "pcr-add-partner-organisation-details", competitionType);
   }
 

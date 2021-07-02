@@ -1,7 +1,7 @@
-import { ContentBase } from "../contentBase";
+import { ContentBase } from "@content/contentBase";
 
 export class TaskListContent extends ContentBase {
-  constructor(parent: ContentBase, protected competitionType?: string) {
+  constructor(parent: ContentBase, competitionType?: string) {
     super(parent, "task-list", competitionType);
   }
 

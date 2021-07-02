@@ -1,8 +1,8 @@
+import { Content } from "@content/content";
 import { ContentPageBase } from "@content/contentPageBase";
-import { Content } from "../../content";
 
 export class ProjectSetupSpendProfileContent extends ContentPageBase {
-  constructor(content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "project-setup-spend-profile", competitionType);
   }
 

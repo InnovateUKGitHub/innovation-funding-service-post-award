@@ -1,7 +1,7 @@
 import { ContentBase } from "@content/contentBase";
 
 export class PCRPeriodLengthChangeLabels extends ContentBase {
-  constructor(parent: ContentBase, protected competitionType?: string) {
+  constructor(parent: ContentBase, competitionType?: string) {
     super(parent, "pcr-period-length-change-labels", competitionType);
   }
 

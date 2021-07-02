@@ -4,7 +4,7 @@ import { DocumentLabels } from "@content/labels/documentLabels";
 import { DocumentMessages } from "@content/messages/documentMessages";
 
 export class PcrSpendProfileOverheadDocumentContent extends ContentPageBase {
-  constructor(content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "pcr-spend-profile-overhead-documents", competitionType);
   }
 

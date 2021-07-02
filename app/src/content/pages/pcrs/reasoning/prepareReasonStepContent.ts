@@ -1,9 +1,9 @@
-import { ContentPageBase } from "../../../contentPageBase";
-import { Content } from "../../../content";
+import { Content } from "@content/content";
+import { ContentPageBase } from "@content/contentPageBase";
 import { PCRItem } from "../pcrItem";
 
 export class PCRReasoningPrepareReasoningContent extends ContentPageBase {
-  constructor(content: Content, protected competitionType?: string) {
+  constructor(content: Content, competitionType?: string) {
     super(content, "pcr-reasoning-prepare-reasoning", competitionType);
   }
 

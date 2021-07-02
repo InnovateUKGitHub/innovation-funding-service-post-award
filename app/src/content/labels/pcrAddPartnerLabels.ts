@@ -1,7 +1,7 @@
 import { ContentBase } from "@content/contentBase";
 
 export class PCRAddPartnerLabels extends ContentBase {
-  constructor(parent: ContentBase, protected competitionType?: string) {
+  constructor(parent: ContentBase, competitionType?: string) {
     super(parent, "pcr-add-partner-labels", competitionType);
   }
   public readonly roleHeading = this.getContent("role-heading");
