@@ -1,5 +1,6 @@
-import { mount, shallow } from "enzyme";
+import { render } from "@testing-library/react";
 import { DateTime } from "luxon";
+
 import {
   CondensedDateRange,
   Duration,
@@ -11,72 +12,74 @@ import {
   ShortDate,
   ShortDateRange,
   ShortDateRangeFromDuration,
-  ShortDateTime
-} from "../../../src/ui/components/renderers/date";
+  ShortDateTime,
+} from "@ui/components/renderers/date";
+
+import { findByTextContent } from "../../util/rtl-helpers";
 
 const date = new Date("1993/01/07 09:02:01");
 const afternoonDate = new Date("1993/01/07 21:02:01");
 
 describe("FullDate", () => {
   it("should render the date as 7 January 1993 1993", () => {
-    const wrapper = shallow(<FullDate value={date} />);
-    expect(wrapper.text()).toEqual("7 January 1993");
+    const { queryByText } = render(<FullDate value={date} />);
+    expect(queryByText("7 January 1993")).toBeInTheDocument();
   });
 
   it("should return null when a null prop is passed in", () => {
-    const wrapper = shallow(<FullDate value={null} />);
-    expect(wrapper.html()).toBeNull();
+    const { container } = render(<FullDate value={null} />);
+    expect(container.firstChild).toBeNull();
   });
 });
 
 describe("FullDateTime", () => {
   it("should render the date in moning as 7 January 1993 09:02 9:02am", () => {
-    const wrapper = shallow(<FullDateTime value={date} />);
-    expect(wrapper.text()).toEqual("7 January 1993, 9:02am");
+    const { queryByText } = render(<FullDateTime value={date} />);
+    expect(queryByText("7 January 1993, 9:02am")).toBeInTheDocument();
   });
 
   it("should render the date in moning as 7 January 1993 09:02 9:02pm", () => {
-    const wrapper = shallow(<FullDateTime value={afternoonDate} />);
-    expect(wrapper.text()).toEqual("7 January 1993, 9:02pm");
+    const { queryByText } = render(<FullDateTime value={afternoonDate} />);
+    expect(queryByText("7 January 1993, 9:02pm")).toBeInTheDocument();
   });
 
   it("should return null when a null prop is passed in", () => {
-    const wrapper = shallow(<FullDateTime value={null} />);
-    expect(wrapper.html()).toBeNull();
+    const { container } = render(<FullDateTime value={null} />);
+    expect(container.firstChild).toBeNull();
   });
 });
 
 describe("ShortDate", () => {
   it("should render the date as 7 Jan 1993", () => {
-    const wrapper = shallow(<ShortDate value={date} />);
-    expect(wrapper.text()).toEqual("7 Jan 1993");
+    const { queryByText } = render(<ShortDate value={date} />);
+    expect(queryByText("7 Jan 1993")).toBeInTheDocument();
   });
 
   it("should return null when a null prop is passed in", () => {
-    const wrapper = shallow(<ShortDate value={null} />);
-    expect(wrapper.html()).toBeNull();
+    const { container } = render(<ShortDate value={null} />);
+    expect(container.firstChild).toBeNull();
   });
 });
 
 describe("ShortDateTime", () => {
   it("should render the morning date as 7 Jan 1993 9:02am", () => {
-    const wrapper = shallow(<ShortDateTime value={date} />);
-    expect(wrapper.text()).toEqual("7 Jan 1993, 9:02am");
+    const { queryByText } = render(<ShortDateTime value={date} />);
+    expect(queryByText("7 Jan 1993, 9:02am")).toBeInTheDocument();
   });
 
   it("should render the afternoon date as 7 Jan 1993 9:02pm", () => {
-    const wrapper = shallow(<ShortDateTime value={afternoonDate} />);
-    expect(wrapper.text()).toEqual("7 Jan 1993, 9:02pm");
+    const { queryByText } = render(<ShortDateTime value={afternoonDate} />);
+    expect(queryByText("7 Jan 1993, 9:02pm")).toBeInTheDocument();
   });
 
   it("should render the midday date as 7 Jan 1993 12:00pm", () => {
-    const wrapper = shallow(<ShortDateTime value={new Date("1993/01/07 12:00:00")} />);
-    expect(wrapper.text()).toEqual("7 Jan 1993, 12:00pm");
+    const { queryByText } = render(<ShortDateTime value={new Date("1993/01/07 12:00:00")} />);
+    expect(queryByText("7 Jan 1993, 12:00pm")).toBeInTheDocument();
   });
 
   it("should return null when a null prop is passed in", () => {
-    const wrapper = shallow(<ShortDateTime value={null} />);
-    expect(wrapper.html()).toBeNull();
+    const { container } = render(<ShortDateTime value={null} />);
+    expect(container.firstChild).toBeNull();
   });
 });
 
@@ -88,38 +91,44 @@ describe("CondensedDateRange", () => {
   const endDateNextYear = new Date("1994/02/08 09:02:01");
 
   it("should render null if invalid start date is given", () => {
-    const wrapper = shallow(<CondensedDateRange start={invalidStartDate} end={endDate} />);
-    expect(wrapper.html()).toBeNull();
+    const { container } = render(<CondensedDateRange start={invalidStartDate} end={endDate} />);
+    expect(container.firstChild).toBeNull();
   });
 
   it("should render null if invalid end date is given", () => {
-    const wrapper = shallow(<CondensedDateRange start={date} end={invalidEndDate} />);
-    expect(wrapper.html()).toBeNull();
+    const { container } = render(<CondensedDateRange start={date} end={invalidEndDate} />);
+    expect(container.firstChild).toBeNull();
   });
 
   it("should render null if no start date is given", () => {
-    const wrapper = shallow(<CondensedDateRange start={null} end={endDate} />);
-    expect(wrapper.html()).toBeNull();
+    const { container } = render(<CondensedDateRange start={null} end={endDate} />);
+    expect(container.firstChild).toBeNull();
   });
 
   it("should render null if no end date is given", () => {
-    const wrapper = shallow(<CondensedDateRange start={date} end={null} />);
-    expect(wrapper.html()).toBeNull();
+    const { container } = render(<CondensedDateRange start={date} end={null} />);
+    expect(container.firstChild).toBeNull();
   });
 
   it("should render the date with one month and one year", () => {
-    const wrapper = shallow(<CondensedDateRange start={date} end={endDate} />);
-    expect(wrapper.text()).toEqual("Jan 1993");
+    const { queryByText } = render(<CondensedDateRange start={date} end={endDate} />);
+    expect(queryByText("Jan 1993")).toBeInTheDocument();
   });
 
-  it("should render the date range with two months and one year", () => {
-    const wrapper = shallow(<CondensedDateRange start={date} end={endDateNextMonth} />);
-    expect(wrapper.text()).toEqual("Jan to Feb 1993");
+  it("should render the date range with two months and one year", async () => {
+    render(<CondensedDateRange start={date} end={endDateNextMonth} />);
+
+    const expectedDate = await findByTextContent("Jan to Feb 1993");
+
+    expect(expectedDate).toBeInTheDocument();
   });
 
-  it("should render the date range with two months and two years", () => {
-    const wrapper = shallow(<CondensedDateRange start={date} end={endDateNextYear} />);
-    expect(wrapper.text()).toEqual("Jan 1993 to Feb 1994");
+  it("should render the date range with two months and two years", async () => {
+    render(<CondensedDateRange start={date} end={endDateNextYear} />);
+
+    const expectedDate = await findByTextContent("Jan 1993 to Feb 1994");
+
+    expect(expectedDate).toBeInTheDocument();
   });
 });
 
@@ -130,33 +139,39 @@ describe("LongDateRange", () => {
   const endDateNextYear = new Date("1994/02/08 09:02:01");
 
   it("should render null if invalid start date is given", () => {
-    const wrapper = shallow(<LongDateRange start={invalidStartDate} end={endDate} />);
-    expect(wrapper.html()).toBeNull();
+    const { container } = render(<LongDateRange start={invalidStartDate} end={endDate} />);
+    expect(container.firstChild).toBeNull();
   });
 
   it("should render null if invalid end date is given", () => {
-    const wrapper = shallow(<LongDateRange start={date} end={invalidEndDate} />);
-    expect(wrapper.html()).toBeNull();
+    const { container } = render(<LongDateRange start={date} end={invalidEndDate} />);
+    expect(container.firstChild).toBeNull();
   });
 
   it("should render null if no start date is given", () => {
-    const wrapper = shallow(<LongDateRange start={null} end={endDate} />);
-    expect(wrapper.html()).toBeNull();
+    const { container } = render(<LongDateRange start={null} end={endDate} />);
+    expect(container.firstChild).toBeNull();
   });
 
   it("should render null if no end date is given", () => {
-    const wrapper = shallow(<LongDateRange start={date} end={null} />);
-    expect(wrapper.html()).toBeNull();
+    const { container } = render(<LongDateRange start={date} end={null} />);
+    expect(container.firstChild).toBeNull();
   });
 
-  it("should render the full date range with long months and one year", () => {
-    const wrapper = shallow(<LongDateRange start={date} end={endDate} />);
-    expect(wrapper.text()).toEqual("7 January to 8 February 1993");
+  it("should render the full date range with long months and one year", async () => {
+    render(<LongDateRange start={date} end={endDate} />);
+
+    const expectedDate = await findByTextContent("7 January to 8 February 1993");
+
+    expect(expectedDate).toBeInTheDocument();
   });
 
-  it("should render the full date range with long months and two years", () => {
-    const wrapper = shallow(<LongDateRange start={date} end={endDateNextYear} />);
-    expect(wrapper.text()).toEqual("7 January 1993 to 8 February 1994");
+  it("should render the full date range with long months and two years", async () => {
+    render(<LongDateRange start={date} end={endDateNextYear} />);
+
+    const expectedDate = await findByTextContent("7 January 1993 to 8 February 1994");
+
+    expect(expectedDate).toBeInTheDocument();
   });
 });
 
@@ -167,33 +182,39 @@ describe("ShortDateRange", () => {
   const endDateNextYear = new Date("1994/02/08 09:02:01");
 
   it("should render null if invalid start date is given", () => {
-    const wrapper = shallow(<ShortDateRange start={invalidStartDate} end={endDate} />);
-    expect(wrapper.html()).toBeNull();
+    const { container } = render(<ShortDateRange start={invalidStartDate} end={endDate} />);
+    expect(container.firstChild).toBeNull();
   });
 
   it("should render null if invalid end date is given", () => {
-    const wrapper = shallow(<ShortDateRange start={date} end={invalidEndDate} />);
-    expect(wrapper.html()).toBeNull();
+    const { container } = render(<ShortDateRange start={date} end={invalidEndDate} />);
+    expect(container.firstChild).toBeNull();
   });
 
   it("should render null if no start date is given", () => {
-    const wrapper = shallow(<ShortDateRange start={null} end={endDate} />);
-    expect(wrapper.html()).toBeNull();
+    const { container } = render(<ShortDateRange start={null} end={endDate} />);
+    expect(container.firstChild).toBeNull();
   });
 
   it("should render null if no end date is given", () => {
-    const wrapper = shallow(<ShortDateRange start={date} end={null} />);
-    expect(wrapper.html()).toBeNull();
+    const { container } = render(<ShortDateRange start={date} end={null} />);
+    expect(container.firstChild).toBeNull();
   });
 
-  it("should render the full date range with short months and one year", () => {
-    const wrapper = shallow(<ShortDateRange start={date} end={endDate} />);
-    expect(wrapper.text()).toEqual("7 Jan to 8 Feb 1993");
+  it("should render the full date range with short months and one year", async () => {
+    render(<ShortDateRange start={date} end={endDate} />);
+
+    const expectedDate = await findByTextContent("7 Jan to 8 Feb 1993");
+
+    expect(expectedDate).toBeInTheDocument();
   });
 
-  it("should render the full date range with short months and two years", () => {
-    const wrapper = shallow(<ShortDateRange start={date} end={endDateNextYear} />);
-    expect(wrapper.text()).toEqual("7 Jan 1993 to 8 Feb 1994");
+  it("should render the full date range with short months and two years", async () => {
+    render(<ShortDateRange start={date} end={endDateNextYear} />);
+
+    const expectedDate = await findByTextContent("7 Jan 1993 to 8 Feb 1994");
+
+    expect(expectedDate).toBeInTheDocument();
   });
 });
 
@@ -202,157 +223,166 @@ describe("Duration", () => {
     const start = new Date("Sun Sep 01 2019 00:00:00 GMT+0100 (British Summer Time)");
     const end = new Date("Tue Sep 30 2019 00:00:00 GMT+0100 (Greenwich Mean Time)");
 
-    const wrapper = shallow(<Duration startDate={start} endDate={end} />);
-    expect(wrapper.text()).toEqual("1 month");
+    const { queryByText } = render(<Duration startDate={start} endDate={end} />);
+    expect(queryByText("1 month")).toBeInTheDocument();
   });
 
   it("should render correct duration over summer time", () => {
     const start = new Date("Sun Sep 01 2019 00:00:00 GMT+0100 (British Summer Time)");
     const end = new Date("Tue Dec 31 2019 00:00:00 GMT+0000 (Greenwich Mean Time)");
 
-    const wrapper = shallow(<Duration startDate={start} endDate={end} />);
-    expect(wrapper.text()).toEqual("4 months");
+    const { queryByText } = render(<Duration startDate={start} endDate={end} />);
+    expect(queryByText("4 months")).toBeInTheDocument();
   });
 
   it("should render correctly if difference is between a shorter month & a longer month", () => {
     const start = new Date("2019/02/01");
     const end = new Date("2019/10/31");
 
-    const wrapper = shallow(<Duration startDate={start} endDate={end} />);
-    expect(wrapper.text()).toEqual("9 months");
+    const { queryByText } = render(<Duration startDate={start} endDate={end} />);
+    expect(queryByText("9 months")).toBeInTheDocument();
   });
 
   it("should render correctly if difference is between a longer month & a shorter month", () => {
     const start = new Date("2019/10/01");
     const end = new Date("2020/02/28");
 
-    const wrapper = shallow(<Duration startDate={start} endDate={end} />);
-    expect(wrapper.text()).toEqual("5 months");
+    const { queryByText } = render(<Duration startDate={start} endDate={end} />);
+    expect(queryByText("5 months")).toBeInTheDocument();
   });
 
   it("should render correctly if difference is between a shorter month & a longer month, over a really long time period", () => {
     const start = new Date("2019/02/01");
     const end = new Date("3019/10/31");
 
-    const wrapper = shallow(<Duration startDate={start} endDate={end} />);
-    expect(wrapper.text()).toEqual("12009 months");
+    const { queryByText } = render(<Duration startDate={start} endDate={end} />);
+    expect(queryByText("12009 months")).toBeInTheDocument();
   });
 
   it("should render correctly if difference is between a longer month & a shorter month, over a really long time period", () => {
     const start = new Date("2019/10/01");
     const end = new Date("3020/02/28");
 
-    const wrapper = shallow(<Duration startDate={start} endDate={end} />);
-    expect(wrapper.text()).toEqual("12005 months");
+    const { queryByText } = render(<Duration startDate={start} endDate={end} />);
+    expect(queryByText("12005 months")).toBeInTheDocument();
   });
 
   it("should round up if more than 0.5 months", () => {
     const start = new Date("Sun Sep 01 2019 00:00:00 GMT+0100 (British Summer Time)");
     const end = new Date("Tue Dec 25 2019 00:00:00 GMT+0000 (Greenwich Mean Time)");
 
-    const wrapper = shallow(<Duration startDate={start} endDate={end} />);
-    expect(wrapper.text()).toEqual("4 months");
+    const { queryByText } = render(<Duration startDate={start} endDate={end} />);
+    expect(queryByText("4 months")).toBeInTheDocument();
   });
 
   it("should round up if less than 0.5 months", () => {
     const start = new Date("Sun Sep 01 2019 00:00:00 GMT+0100 (British Summer Time)");
     const end = new Date("Tue Dec 10 2019 00:00:00 GMT+0000 (Greenwich Mean Time)");
 
-    const wrapper = shallow(<Duration startDate={start} endDate={end} />);
-    expect(wrapper.text()).toEqual("4 months");
+    const { queryByText } = render(<Duration startDate={start} endDate={end} />);
+    expect(queryByText("4 months")).toBeInTheDocument();
   });
 
   it("should give 13 months if the dates are exactly 1 year apart", () => {
     const start = new Date("2019/01/01");
     const end = new Date("2020/01/01");
 
-    const wrapper = shallow(<Duration startDate={start} endDate={end} />);
-    expect(wrapper.text()).toEqual("13 months");
+    const { queryByText } = render(<Duration startDate={start} endDate={end} />);
+    expect(queryByText("13 months")).toBeInTheDocument();
   });
 });
 
 describe("Months", () => {
   it("should render null if months not provided", () => {
-    const wrapper = mount(<Months months={null}/>);
-    expect(wrapper.text()).toBeNull();
+    const { container } = render(<Months months={null} />);
+    expect(container.firstChild).toBeNull();
   });
 
   it("should render null if months is NaN", () => {
-    const wrapper = mount(<Months months={NaN}/>);
-    expect(wrapper.text()).toBeNull();
+    const { container } = render(<Months months={NaN} />);
+    expect(container.firstChild).toBeNull();
   });
 
   it("should render 0 months", () => {
-    const wrapper = mount(<Months months={0}/>);
-    expect(wrapper.text()).toContain("0 months");
+    const { queryByText } = render(<Months months={0} />);
+    expect(queryByText("0 months")).toBeInTheDocument();
   });
 
   it("should render 1 month", () => {
-    const wrapper = mount(<Months months={1}/>);
-    expect(wrapper.text()).toContain("1 month");
+    const { queryByText } = render(<Months months={1} />);
+    expect(queryByText("1 month")).toBeInTheDocument();
   });
 
   it("should render 2 months", () => {
-    const wrapper = mount(<Months months={2}/>);
-    expect(wrapper.text()).toContain("2 months");
+    const { queryByText } = render(<Months months={2} />);
+    expect(queryByText("2 months")).toBeInTheDocument();
   });
 });
 
 describe("MonthYear", () => {
   it("should render null if date not provided", () => {
-    const wrapper = mount(<MonthYear value={null as any}/>);
-    expect(wrapper.text()).toBeNull();
+    const { container } = render(<MonthYear value={null as any} />);
+    expect(container.firstChild).toBeNull();
   });
 
   it("should show that invalid date is provided", () => {
-    const wrapper = mount(<MonthYear value={"hello world" as any}/>);
-    expect(wrapper.text()).toEqual("INVALID DATE FORMAT");
+    const { queryByText } = render(<MonthYear value={"hello world" as any} />);
+    expect(queryByText("INVALID DATE FORMAT")).toBeInTheDocument();
   });
 
   it("should render the month and the year", () => {
-    const wrapper = mount(<MonthYear value={DateTime.local(2030, 2).toJSDate()}/>);
-    expect(wrapper.text()).toContain("February 2030");
+    const { queryByText } = render(<MonthYear value={DateTime.local(2030, 2).toJSDate()} />);
+    expect(queryByText("February 2030")).toBeInTheDocument();
   });
 });
 
 describe("ShortDateRangeFromDuration", () => {
   it("should render null if start date not provided", () => {
-    const wrapper = mount(<ShortDateRangeFromDuration startDate={null} months={1}/>);
-    expect(wrapper.text()).toBeNull();
+    const { container } = render(<ShortDateRangeFromDuration startDate={null} months={1} />);
+    expect(container.firstChild).toBeNull();
   });
 
   it("should render null if start date invalid", () => {
-    const wrapper = mount(<ShortDateRangeFromDuration startDate={new Date("invalid")} months={1}/>);
-    expect(wrapper.text()).toBeNull();
+    const { container } = render(<ShortDateRangeFromDuration startDate={new Date("invalid")} months={1} />);
+    expect(container.firstChild).toBeNull();
   });
 
   it("should render null if months not provided", () => {
-    const wrapper = mount(<ShortDateRangeFromDuration startDate={new Date()} months={null}/>);
-    expect(wrapper.text()).toBeNull();
+    const { container } = render(<ShortDateRangeFromDuration startDate={new Date()} months={null} />);
+    expect(container.firstChild).toBeNull();
   });
 
   it("should render null if months is invalid", () => {
-    const wrapper = mount(<ShortDateRangeFromDuration startDate={new Date()} months={NaN}/>);
-    expect(wrapper.text()).toBeNull();
+    const { container } = render(<ShortDateRangeFromDuration startDate={new Date()} months={NaN} />);
+    expect(container.firstChild).toBeNull();
   });
 
   it("should render null if months is 0", () => {
-    const wrapper = mount(<ShortDateRangeFromDuration startDate={new Date("2012/09/1")} months={0}/>);
-    expect(wrapper.text()).toBeNull();
+    const { container } = render(<ShortDateRangeFromDuration startDate={new Date("2012/09/1")} months={0} />);
+    expect(container.firstChild).toBeNull();
   });
 
-  it("should render correct date range if months is 1", () => {
-    const wrapper = mount(<ShortDateRangeFromDuration startDate={new Date("2012/09/1")} months={1}/>);
-    expect(wrapper.text()).toEqual("1 Sep to 30 Sep 2012");
+  it("should render correct date range if months is 1", async () => {
+    render(<ShortDateRangeFromDuration startDate={new Date("2012/09/1")} months={1} />);
+
+    const expectedDate = await findByTextContent("1 Sep to 30 Sep 2012");
+
+    expect(expectedDate).toBeInTheDocument();
   });
 
-  it("should render correct date range if months is 12", () => {
-    const wrapper = mount(<ShortDateRangeFromDuration startDate={new Date("2012/09/1")} months={12}/>);
-    expect(wrapper.text()).toEqual("1 Sep 2012 to 31 Aug 2013");
+  it("should render correct date range if months is 12", async () => {
+    render(<ShortDateRangeFromDuration startDate={new Date("2012/09/1")} months={12} />);
+
+    const expectedDate = await findByTextContent("1 Sep 2012 to 31 Aug 2013");
+
+    expect(expectedDate).toBeInTheDocument();
   });
 
-  it("should render correct date range if months is 4", () => {
-    const wrapper = mount(<ShortDateRangeFromDuration startDate={new Date("2012/09/1")} months={4}/>);
-    expect(wrapper.text()).toEqual("1 Sep to 31 Dec 2012");
+  it("should render correct date range if months is 4", async () => {
+    render(<ShortDateRangeFromDuration startDate={new Date("2012/09/1")} months={4} />);
+
+    const expectedDate = await findByTextContent("1 Sep to 31 Dec 2012");
+
+    expect(expectedDate).toBeInTheDocument();
   });
 });
