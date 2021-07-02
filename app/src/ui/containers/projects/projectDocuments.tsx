@@ -260,8 +260,7 @@ export const ProjectDocumentsRoute = defineRoute({
   routeName: "projectDocuments",
   routePath: "/projects/:projectId/documents",
   container: ProjectDocumentsContainer,
-  getParams: route => ({ projectId: route.params.projectId }),
+  getParams: (route) => ({ projectId: route.params.projectId }),
   getTitle: ({ content }) => content.projectDocuments.title(),
-  accessControl: (auth, { projectId }) =>
-    auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
 });

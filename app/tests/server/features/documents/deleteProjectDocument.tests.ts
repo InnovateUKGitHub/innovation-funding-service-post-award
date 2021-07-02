@@ -70,7 +70,7 @@ describe("DeleteProjectDocumentCommand()", () => {
         },
       });
 
-      expect(await context.runAccessControl(auth, deleteDocumentCommand)).toBe(true);
+      expect(await context.runAccessControl(auth, deleteDocumentCommand)).toBe(false);
     });
 
     test("when set to Unknown", async () => {
