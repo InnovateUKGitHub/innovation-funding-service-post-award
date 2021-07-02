@@ -7,7 +7,7 @@ export class GetProjectDocumentQuery extends DocumentQueryBase {
   }
 
   protected async accessControl(auth: Authorisation) {
-    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
+    return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 
   protected getRecordId(): Promise<string | null> {

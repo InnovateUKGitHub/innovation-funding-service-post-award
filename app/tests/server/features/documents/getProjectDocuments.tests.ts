@@ -94,27 +94,13 @@ describe("GetProjectDocumentsQuery", () => {
     expect(await context.runAccessControl(auth, command)).toBe(true);
   });
 
-  test("accessControl - Project manager officer passes", async () => {
-    const context = new TestContext();
-    const project = context.testData.createProject();
-    const command = new GetProjectDocumentsQuery(project.Id);
-    const auth    = new Authorisation({
-      [project.Id]: {
-        projectRoles: ProjectRole.ProjectManager,
-        partnerRoles: {}
-      }
-    });
-
-    expect(await context.runAccessControl(auth, command)).toBe(true);
-  });
-
   test("accessControl - all other roles fail", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const command = new GetProjectDocumentsQuery(project.Id);
     const auth    = new Authorisation({
       [project.Id]: {
-        projectRoles: ProjectRole.FinancialContact,
+        projectRoles: ProjectRole.FinancialContact | ProjectRole.ProjectManager,
         partnerRoles: {}
       }
     });

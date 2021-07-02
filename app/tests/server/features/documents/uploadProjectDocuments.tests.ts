@@ -160,27 +160,13 @@ describe("UploadProjectDocumentCommand", () => {
     expect(await context.runAccessControl(auth, command)).toBe(true);
   });
 
-  test("accessControl - Project Manager passes", async () => {
-    const context = new TestContext();
-    const project = context.testData.createProject();
-    const command = new UploadProjectDocumentCommand(project.Id, { files: [context.testData.createFile()] });
-    const auth = new Authorisation({
-      [project.Id]: {
-        projectRoles: ProjectRole.ProjectManager,
-        partnerRoles: {}
-      }
-    });
-
-    expect(await context.runAccessControl(auth, command)).toBe(true);
-  });
-
   test("accessControl - all other roles fail", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const command = new UploadProjectDocumentCommand(project.Id, { files: [context.testData.createFile()] });
     const auth = new Authorisation({
       [project.Id]: {
-        projectRoles: ProjectRole.FinancialContact,
+        projectRoles: ProjectRole.FinancialContact | ProjectRole.ProjectManager,
         partnerRoles: {}
       }
     });
