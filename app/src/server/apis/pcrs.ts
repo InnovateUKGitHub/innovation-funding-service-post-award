@@ -31,7 +31,7 @@ export interface IPCRsApi {
   getAll: (params: ApiParams<{ projectId: string }>) => Promise<PCRSummaryDto[]>;
   get: (params: ApiParams<{ projectId: string; id: string }>) => Promise<PCRDto>;
   getTypes: (params: ApiParams<{}>) => Promise<PCRItemTypeDto[]>;
-  getAvailableTypes: (params: ApiParams<{ projectId: string }>) => Promise<PCRItemTypeDto[]>;
+  getAvailableTypes: (params: ApiParams<{ projectId: string; pcrId?: string }>) => Promise<PCRItemTypeDto[]>;
   update: (params: ApiParams<{projectId: string; id: string; pcr: PCRDto}>) => Promise<PCRDto>;
   delete: (params: ApiParams<{projectId: string; id: string }>) => Promise<boolean>;
   getStatusChanges: (params: ApiParams<{projectId: string; projectChangeRequestId: string }>) => Promise<ProjectChangeRequestStatusChangeDto[]>;
@@ -51,7 +51,7 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
     super.getItem("/:projectId/:id", (p) => ({ projectId: p.projectId, id: p.id }), (p) => this.get(p));
     super.postItem("/:projectId", (p, q, b) => ({ projectId: p.projectId, projectChangeRequestDto: processDto(b) }), (p) => this.create(p));
     super.getCustom("/types", () => ({}), p => this.getTypes(p));
-    super.getCustom("/available-types", (p, q) => ({ projectId: q.projectId }), (p) => this.getAvailableTypes(p));
+    super.getCustom("/available-types", (p, q) => ({ projectId: q.projectId, pcrId: q.pcrId }), (p) => this.getAvailableTypes(p));
     super.putItem("/:projectId/:id", (p, q, b) => ({ projectId: p.projectId, id: p.id, pcr: processDto(b) }), (p) => this.update(p));
     super.deleteItem("/:projectId/:id", (p) => ({ projectId: p.projectId, id: p.id }), (p) => this.delete(p));
     this.getCustom("/status-changes/:projectId/:projectChangeRequestId", (p) => ({projectId: p.projectId, projectChangeRequestId: p.projectChangeRequestId}), p => this.getStatusChanges(p));
@@ -84,8 +84,8 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
     return contextProvider.start(params).runQuery(query);
   }
 
-  getAvailableTypes(params: ApiParams<{ projectId: string }>): Promise<PCRItemTypeDto[]> {
-    const query = new GetAvailableItemTypesQuery(params.projectId);
+  getAvailableTypes(params: ApiParams<{ projectId: string; pcrId?: string }>): Promise<PCRItemTypeDto[]> {
+    const query = new GetAvailableItemTypesQuery(params.projectId, params.pcrId);
     return contextProvider.start(params).runQuery(query);
   }
 
