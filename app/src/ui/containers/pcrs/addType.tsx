@@ -143,7 +143,7 @@ const PCRAddTypeContainer = (props: ProjectChangeRequestAddTypeParams & BaseProp
     <PCRAddTypeComponent
       {...props}
       project={stores.projects.getById(props.projectId)}
-      itemTypes={stores.projectChangeRequests.getAllAvailablePcrTypes(props.projectId)}
+      itemTypes={stores.projectChangeRequests.getAllAvailablePcrTypes(props.projectId, props.projectChangeRequestId)}
       editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.projectChangeRequestId)}
       onChange={(saving, dto) =>
         stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, () =>

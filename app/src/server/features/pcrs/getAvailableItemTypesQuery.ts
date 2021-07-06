@@ -7,7 +7,7 @@ import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 
 export class GetAvailableItemTypesQuery extends QueryBase<Dtos.PCRItemTypeDto[]> {
-  constructor(private readonly projectId: string) {
+  constructor(private readonly projectId: string, private readonly pcrId?: string) {
     super();
   }
 
@@ -19,16 +19,20 @@ export class GetAvailableItemTypesQuery extends QueryBase<Dtos.PCRItemTypeDto[]>
 
   protected async run(context: IContext): Promise<Dtos.PCRItemTypeDto[]> {
     const itemTypeDtos = await context.runQuery(new GetPCRItemTypesQuery());
-
     const projectPcrs = await context.runQuery(new GetAllPCRsQuery(this.projectId));
-    const disabledItemTypes = getUnavailablePcrItemsMatrix(projectPcrs);
+
+    const editingPcr = projectPcrs.find(pcr => pcr.id === this.pcrId);
+
+    const disabledMatrixTypes = getUnavailablePcrItemsMatrix(projectPcrs);
+    const currentPcrItemTypes = editingPcr?.items.map(x => x.type) || [];
+
+    const disabledTypes = [...currentPcrItemTypes, ...disabledMatrixTypes];
 
     return itemTypeDtos.reduce<Dtos.PCRItemTypeDto[]>((validPcrItems, pcrItem) => {
       // Note: Include items that are only true
       if (!pcrItem.enabled) return validPcrItems;
 
-      // Note: Update disabled state if it matches the matrix
-      const disabled = disabledItemTypes.some(disabledType => disabledType === pcrItem.type);
+      const disabled = disabledTypes.some(disabledType => disabledType === pcrItem.type);
 
       return validPcrItems.concat({ ...pcrItem, disabled });
     }, []);
