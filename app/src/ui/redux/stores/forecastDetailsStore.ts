@@ -109,7 +109,7 @@ export class ForecastDetailsStore extends StoreBase {
       dtos,
       show => this.getValidator(partnerId, dtos, show),
       p => apiClient.forecastDetails.update({ ...p, projectId, partnerId, submit: submitClaim, forecasts: dtos }),
-      () => this.handleError(message, () => onComplete),
+      () => this.handleError(message, onComplete),
     );
   }
 
@@ -129,7 +129,7 @@ export class ForecastDetailsStore extends StoreBase {
       payload,
       show => this.getInitialValidator(partnerId, payload, submit, show),
       p => apiClient.initialForecastDetails.update({ ...p, projectId, partnerId, submit, forecasts: payload }),
-      () => this.handleError(message, () => onComplete),
+      () => this.handleError(message, onComplete),
     );
   }
 
