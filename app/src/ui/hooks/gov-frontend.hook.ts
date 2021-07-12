@@ -26,7 +26,7 @@ interface WindowWithGDSLoaded extends Window {
 export function useGovFrontend(module: keyof GDSModules) {
   const { config } = useStores();
 
-  const hasWindow: boolean = config.isClient && typeof window !== "undefined";
+  const hasWindow: boolean = config.isClient() && typeof window !== "undefined";
   const gdsWindow: false | WindowWithGDSLoaded = hasWindow && ((window as unknown) as WindowWithGDSLoaded);
 
   const setRef = useCallback(

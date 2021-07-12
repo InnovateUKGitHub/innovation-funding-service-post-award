@@ -1,8 +1,12 @@
-const webpack = require("webpack");
 const path = require("path");
 
+const NormalModuleReplacementPlugin = require("webpack").NormalModuleReplacementPlugin;
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const TsConfigPathsPlugin = require("awesome-typescript-loader").TsConfigPathsPlugin;
 
+const getPath = (relativePath, replacementPath = "") => path.resolve(__dirname, relativePath, replacementPath);
+
+// TODO: Create separate Webpack configs deriving from one base config (babel presets, etc...)
 module.exports = function pack(env) {
   if (env !== "production" && env !== "development") {
     throw Error('Invalid env: Please use "development" or "production"');
@@ -10,17 +14,26 @@ module.exports = function pack(env) {
 
   process.env.BABEL_ENV = env;
 
-  const appEntryPoint = path.resolve(__dirname, "src/client/client.tsx");
-  const componentGuidesEntryPoint = path.resolve(__dirname, "src/client/componentsGuide.tsx");
+  const isDev = env === "development";
 
-  const buildOutput = path.resolve(__dirname, "public/build");
+  const appEntryPoint = getPath("src/client/client.tsx");
+  const componentGuidesEntryPoint = getPath("src/client/componentsGuide.tsx");
+
+  const buildOutput = getPath("public/build");
 
   const apiTargetFile = "apiClient.ts";
   const apiServerTarget = new RegExp(apiTargetFile);
-  const apiClientTarget = path.resolve(__dirname, "src/client", apiTargetFile);
+  const apiClientTarget = getPath("src/client", apiTargetFile);
 
+  const bundlerAnalyser = new BundleAnalyzerPlugin();
   // Note: For the client we swap the required file to client endpoints
-  const ReplaceApiModule = new webpack.NormalModuleReplacementPlugin(apiServerTarget, apiClientTarget);
+  const replaceApiModule = new NormalModuleReplacementPlugin(apiServerTarget, apiClientTarget);
+
+  const plugins = [replaceApiModule];
+
+  if (isDev) {
+    plugins.push(bundlerAnalyser);
+  }
 
   return [
     {
@@ -37,9 +50,6 @@ module.exports = function pack(env) {
       output: {
         filename: "[name].js",
         path: buildOutput,
-      },
-      resolve: {
-        extensions: [".ts", ".tsx", ".js", ".jsx"],
       },
       devtool: "source-map",
       module: {
@@ -100,7 +110,7 @@ module.exports = function pack(env) {
         extensions: [".tsx", ".ts", ".jsx", ".js"],
         plugins: [new TsConfigPathsPlugin()],
       },
-      plugins: [ReplaceApiModule],
+      plugins,
     },
   ];
 };

@@ -97,7 +97,7 @@ router.use((req, res, next) => {
     // if user not logged in but we arent using sso then set default user
     req.session = req.session || {};
     req.session.user = req.session.user || {};
-    req.session.user.email = configuration.salesforce.serivceUsername;
+    req.session.user.email = configuration.salesforce.serviceUsername;
     next();
   } else if (!req.url.startsWith("/api") && !req.url.startsWith("/login")) {
     // if not logged in and not api request or login request (ie somethings gone wrong)

@@ -21,11 +21,16 @@ const cachesImplementation: Framework.ICaches = {
   projectRoles: new Common.Cache<{ [key: string]: IRoleInfo }>(Common.configuration.timeouts.projectRoles),
   permissionGroups: new Common.Cache<Entities.PermissionGroup[]>(0 /* permanant cache */),
   recordTypes: new Common.Cache<Entities.RecordType[]>(Common.configuration.timeouts.recordTypes),
-  contentStoreLastUpdated: null
+  contentStoreLastUpdated: null,
 };
 
 const constructErrorResponse = <E extends Error>(error: E): AppError => {
-  if (error instanceof ValidationError || error instanceof ForbiddenError || error instanceof BadRequestError || error instanceof NotFoundError) {
+  if (
+    error instanceof ValidationError ||
+    error instanceof ForbiddenError ||
+    error instanceof BadRequestError ||
+    error instanceof NotFoundError
+  ) {
     return error;
   }
 
@@ -52,12 +57,13 @@ export class Context implements Framework.IContext {
     const salesforceConfig = {
       clientId: this.config.salesforce.clientId,
       connectionUrl: this.config.salesforce.connectionUrl,
-      servicePassword: this.config.salesforce.serivcePassword,
-      serviceUsername: this.config.salesforce.serivceUsername,
-      serviceToken: this.config.salesforce.serivceToken,
+      serviceUsername: this.config.salesforce.serviceUsername,
     };
 
-    this.salesforceConnectionDetails = Object.assign(salesforceConfig, { currentUsername: this.user && this.user.email });
+    this.salesforceConnectionDetails = {
+      ...salesforceConfig,
+      currentUsername: this.user?.email,
+    };
 
     this.logger = new Common.Logger(user && user.email);
 
@@ -196,7 +202,7 @@ export class Context implements Framework.IContext {
   // allows context to be escalated to the system user
   // use with discretion!!!
   public asSystemUser(): Framework.IContext {
-    const serviceUser = this.config.salesforce.serivceUsername;
+    const serviceUser = this.config.salesforce.serviceUsername;
     if (this.user.email !== serviceUser) {
       this.logger.info("Escalating to service user", this.user.email, serviceUser);
       return new Context({ email: serviceUser });

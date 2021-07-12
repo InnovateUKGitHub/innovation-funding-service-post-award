@@ -120,7 +120,7 @@ export class Server {
   }
 
   private primeCaches() {
-    const context = contextProvider.start({ user: { email: configuration.salesforce.serivceUsername } });
+    const context = contextProvider.start({ user: { email: configuration.salesforce.serviceUsername } });
     // if developing dont prime as will mean too many calls if watching build, presuming that prod urls all start with https:// and dev http://
     if (context.config.serverUrl.startsWith("https://")) {
       // calls to query that prime caches doe as service user
@@ -147,7 +147,7 @@ export class Server {
   }
 
   private initaliseCustomContent(loadCustom: boolean) {
-    const context = contextProvider.start({ user: { email: configuration.salesforce.serivceUsername } });
+    const context = contextProvider.start({ user: { email: configuration.salesforce.serviceUsername } });
     return context.runCommand(new InitialiseContentCommand(loadCustom))
       .then(updated => {
         if (updated) {

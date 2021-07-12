@@ -19,10 +19,10 @@ describe("useGovFrontend()", () => {
 
   beforeEach(jest.clearAllMocks);
 
-  const setup = (isClient: boolean) => {
+  const setup = (clientValue: boolean) => {
     const stubStore = {
       config: {
-        isClient,
+        isClient: () => clientValue,
       },
     } as any;
 

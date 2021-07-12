@@ -66,11 +66,9 @@ export class TestConfig implements IConfig {
   public prettyLogs = false;
 
   public salesforce = {
-    serivcePassword: "",
-    serivceToken: "",
     clientId: "",
     connectionUrl: "",
-    serivceUsername: "",
+    serviceUsername: "",
   };
 
   public serverUrl = "http://localhost:8080";

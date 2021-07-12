@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 
-import { TestBed, TestBedContent, TestBedStore } from "@shared/TestBed";
+import { TestBed, TestBedContent } from "@shared/TestBed";
 import { Header, HeaderProps } from "@ui/components/layout/header";
 
 describe("Header", () => {
@@ -20,17 +20,13 @@ describe("Header", () => {
       qa: `qa-${i}`,
     }));
 
-  const stubStore = {
-    config: { isClient: true },
-  } as any;
-
   const defaultProps = {
     siteLink: "www.google.com",
   };
 
   const setup = (props?: Partial<HeaderProps>) =>
     render(
-      <TestBed content={stubContent as TestBedContent} stores={stubStore as TestBedStore}>
+      <TestBed content={stubContent as TestBedContent}>
         <Header {...defaultProps} {...props} />
       </TestBed>,
     );
