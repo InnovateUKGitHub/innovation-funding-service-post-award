@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 import { SalesforceTokenError } from "@server/repositories/errors";
 import { Cache } from "@server/features/common/cache";
 import { configuration } from "@server/features/common";
-import { LogLevel } from "@framework/constants";
 
 interface ISalesforceTokenPayload {
   access_token: string;
@@ -25,8 +24,6 @@ export interface ISalesforceTokenDetails {
 
 export interface ISalesforceConnectionDetails extends ISalesforceTokenDetails {
   serviceUsername: string;
-  servicePassword: string;
-  serviceToken: string;
 }
 
 interface ITokenInfo {
@@ -36,31 +33,7 @@ interface ITokenInfo {
 
 const tokenCache = new Cache<ITokenInfo>(configuration.timeouts.token);
 
-export const salesforceConnectionWithUsernameAndPassword = ({
-  serviceUsername,
-  servicePassword,
-  serviceToken,
-}: ISalesforceConnectionDetails) => {
-  const jsforceConfig = {
-    loginUrl: "https://test.salesforce.com",
-    logLevel: configuration.logLevel === LogLevel.VERBOSE ? "DEBUG" : undefined,
-  };
-
-  const connection = new jsforce.Connection(jsforceConfig);
-
-  return new Promise<jsforce.Connection>((resolve, reject) => {
-    if (!serviceUsername || !servicePassword || !serviceToken) {
-      const invalidConnectionError = `Invalid connection details username: ${serviceUsername}, password: ${servicePassword}, token: ${serviceToken}`;
-      throw new Error(invalidConnectionError);
-    }
-
-    connection.login(serviceUsername, `${servicePassword}${serviceToken}`, connectionError =>
-      connectionError ? reject(connectionError) : resolve(connection),
-    );
-  });
-};
-
-const getToken = async ({ currentUsername, clientId, connectionUrl }: ISalesforceTokenDetails): Promise<ITokenInfo> => {
+export const getSalesforceAccessToken = async ({ currentUsername, clientId, connectionUrl }: ISalesforceTokenDetails): Promise<ITokenInfo> => {
   const privateKey = fs.readFileSync(configuration.certificates.salesforce, "utf8");
   const jwtPayload = { prn: currentUsername };
   const jwtOptions = {
@@ -91,7 +64,7 @@ const getToken = async ({ currentUsername, clientId, connectionUrl }: ISalesforc
 export const salesforceConnectionWithToken = async (
   salesforceDetails: ISalesforceTokenDetails,
 ): Promise<jsforce.Connection> => {
-  const fetchToken = async () => await getToken(salesforceDetails);
+  const fetchToken = async () => await getSalesforceAccessToken(salesforceDetails);
   const signedToken = await tokenCache.fetchAsync(salesforceDetails.currentUsername, fetchToken);
 
   const jsforceConfig = {

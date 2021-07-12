@@ -43,11 +43,7 @@ export interface IConfig {
     readonly clientId: string;
     readonly connectionUrl: string;
     // @TODO: Remove
-    readonly serivcePassword: string;
-    // @TODO: Remove
-    readonly serivceToken: string;
-    // @TODO: Remove
-    readonly serivceUsername: string;
+    readonly serviceUsername: string;
   };
 
   readonly serverUrl: string;
@@ -122,9 +118,7 @@ const prettyLogs = process.env.PRETTY_LOGS === "true";
 const salesforce = {
   clientId: process.env.SALESFORCE_CLIENT_ID!,
   connectionUrl: process.env.SALESFORCE_CONNECTION_URL!,
-  serivcePassword: process.env.SALESFORCE_PASSWORD! || process.env.SALESFORCEPASSWORD!,
-  serivceToken: process.env.SALESFORCE_TOKEN! || process.env.SALESFORCETOKEN!,
-  serivceUsername: process.env.SALESFORCE_USERNAME! || process.env.SALESFORCEUSERNAME!,
+  serviceUsername: process.env.SALESFORCE_USERNAME! || process.env.SALESFORCEUSERNAME!,
 };
 
 const serverUrl = process.env.SERVER_URL!;

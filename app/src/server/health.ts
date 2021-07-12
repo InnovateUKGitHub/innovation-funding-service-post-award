@@ -1,91 +1,100 @@
-import express from "express";
-import { ErrorCode } from "@framework/types";
-import { configuration } from "../server/features/common/config";
-import { ILogger, Logger } from "../server/features/common/logger";
-import { salesforceConnectionWithToken } from "./repositories/salesforceConnection";
-import { CostCategoryRepository } from "./repositories";
-import { AppError } from "./features/common";
-import { CompaniesHouse } from "./resources/companiesHouse";
+import Express from "express";
 
-export const router = express.Router();
+import { ErrorCode } from "@framework/types";
+import { configuration, ILogger, Logger, AppError } from "@server/features/common";
+import { getSalesforceAccessToken } from "@server/repositories/salesforceConnection";
+import { CompaniesHouse } from "@server/resources/companiesHouse";
+
+export const router = Express.Router();
 
 const endpoint = "/api/health";
 
 type HealthCheckResult = "Success" | "Failed" | "Not Applicable";
 
-const checkSalesforce = (logger: ILogger) => {
-  const getSalesforceConnection = () => salesforceConnectionWithToken({
+const checkSalesforce = async (logger: ILogger) => {
+  const tokenPayload = {
     clientId: configuration.salesforce.clientId,
     connectionUrl: configuration.salesforce.connectionUrl,
-    currentUsername: configuration.salesforce.serivceUsername
-  });
+    currentUsername: configuration.salesforce.serviceUsername,
+  };
 
-  return new CostCategoryRepository(getSalesforceConnection, logger)
-    .getAll()
-    .then<HealthCheckResult>(() => "Success")
-    .catch<HealthCheckResult>(e => {
-      logger.error("SALESFORCE HEALTH CHECK", new AppError(ErrorCode.UNKNOWN_ERROR, e.message, e));
-      return "Failed";
-    });
+  try {
+    await getSalesforceAccessToken(tokenPayload);
+
+    return Promise.resolve<HealthCheckResult>("Success");
+  } catch (error) {
+    logger.error("SALESFORCE HEALTH CHECK", new AppError(ErrorCode.UNKNOWN_ERROR, error.message, error));
+
+    return Promise.resolve<HealthCheckResult>("Failed");
+  }
 };
 
-const checkGoogleAnalytics = (logger: ILogger) => {
+const checkGoogleAnalytics = async (logger: ILogger) => {
   if (!configuration.googleTagManagerCode) {
     return Promise.resolve<HealthCheckResult>("Not Applicable");
   }
 
-  const url = `https://www.googletagmanager.com/ns.html?id=${configuration.googleTagManagerCode}`;
-  return fetch(url)
-    .then<HealthCheckResult>((e) => {
-      if (e.ok) {
-        return "Success";
-      }
-      throw new Error(`Failed get request to ${url}`);
-    })
-    .catch<HealthCheckResult>(e => {
-      logger.error("GOOGLE ANALYTICS HEALTH CHECK", new AppError(ErrorCode.UNKNOWN_ERROR, e.message, e));
-      return "Failed";
-    });
+  try {
+    const tagManagerEndpoint = `https://www.googletagmanager.com/ns.html?id=${configuration.googleTagManagerCode}`;
+    const response = await fetch(tagManagerEndpoint);
+
+    if (!response.ok) throw new Error(`Failed get request to ${tagManagerEndpoint}`);
+
+    return "Success";
+  } catch (error) {
+    logger.error("GOOGLE ANALYTICS HEALTH CHECK", new AppError(ErrorCode.UNKNOWN_ERROR, error.message, error));
+
+    return "Failed";
+  }
 };
 
-const checkCompaniesHouse = (logger: ILogger) => {
-  return new CompaniesHouse().searchCompany("test")
-    .then<HealthCheckResult>(() => "Success")
-    .catch<HealthCheckResult>(e => {
-      logger.error("COMPANIES HOUSE HEALTH CHECK", new AppError(ErrorCode.UNKNOWN_ERROR, e.message, e));
-      return "Failed";
-    });
+const checkCompaniesHouse = async (logger: ILogger) => {
+  try {
+    await new CompaniesHouse().searchCompany("test");
+
+    return "Success";
+  } catch (error) {
+    logger.error("COMPANIES HOUSE HEALTH CHECK", new AppError(ErrorCode.UNKNOWN_ERROR, error.message, error));
+
+    return "Failed";
+  }
 };
 
 export const health = async (logger: ILogger) => {
-  const salesforce = checkSalesforce(logger);
-  const googleAnalytics = checkGoogleAnalytics(logger);
-  const companiesHouse = checkCompaniesHouse(logger);
+  const healthEndpoints: Promise<HealthCheckResult>[] = [
+    checkSalesforce(logger),
+    checkGoogleAnalytics(logger),
+    checkCompaniesHouse(logger),
+  ];
 
-  const results = await Promise.all<HealthCheckResult>([salesforce, googleAnalytics, companiesHouse]);
+  const response = await Promise.all<HealthCheckResult>(healthEndpoints);
+  const [salesforce, googleAnalytics, companiesHouse] = response;
 
-  // awaits in response are required to get result but will have already run in promise all
-  // status calculated from if all results are true or null (ie not applied)
+  const hasInvalidResponse = response.some(x => x === "Failed");
+
   return {
-    status: results.some(x => x === "Failed") ? 500 : 200,
+    status: hasInvalidResponse ? 500 : 200,
     response: {
-      salesforce: await salesforce,
-      googleAnalytics: await googleAnalytics,
-      companiesHouse: await companiesHouse,
-    }
+      salesforce,
+      googleAnalytics,
+      companiesHouse,
+    },
   };
 };
 
 // health check endpoint tests dependencies ie salesforce connection
-router.get(`${endpoint}/details`, async (req, res) => {
+router.get(`${endpoint}/details`, async (_req, res) => {
   const logger = new Logger("Health check");
-  const result = await health(logger);
-  logger.debug("HEALTH CHECK COMPLETE", result);
-  return res.status(result.status).send(result.response);
+
+  const { status, response } = await health(logger);
+
+  logger.debug("HEALTH CHECK COMPLETE", { status, response });
+
+  return res.status(status).send(response);
 });
 
 // version endpoint
-router.get(`${endpoint}/version`, (req, res) => res.send(configuration.build));
+router.get(`${endpoint}/version`, (_req, res) => res.send(configuration.build));
 
 // general ok endpoint
-router.get(endpoint, (req, res) => res.send(true));
+router.get(endpoint, (_req, res) => res.send(true));

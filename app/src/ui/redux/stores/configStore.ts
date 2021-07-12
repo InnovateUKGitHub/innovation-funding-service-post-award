@@ -5,7 +5,7 @@ export class ConfigStore extends StoreBase {
     return this.getState().config;
   }
 
-  public isClient() {
+  public isClient(): boolean {
     return this.getState().isClient;
   }
 
