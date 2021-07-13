@@ -1,13 +1,12 @@
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { isNumber } from "@framework/util";
+import { getArrayFromPeriod, isNumber } from "@framework/util";
 import { ClaimDetailsSummaryDto, ClaimDto, ForecastDetailsDTO, GOLCostDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { ForecastDetailsDtosValidator } from "@ui/validators";
 import { IEditorStore, useStores } from "@ui/redux";
 import { useContent } from "@ui/hooks";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { getArrayFromPeriod } from "./utils/claimForecastUtils";
 
 export interface ClaimForecastParams {
   projectId: string;

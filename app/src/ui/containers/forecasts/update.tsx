@@ -1,12 +1,11 @@
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { ForecastDetailsDTO, ProjectRole } from "@framework/types";
-import { isNumber } from "@framework/util";
+import { getArrayFromPeriod, isNumber } from "@framework/util";
 import { Pending } from "@shared/pending";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { ForecastDetailsDtosValidator } from "@ui/validators";
 import { useContent } from "@ui/hooks";
-import { getArrayFromPeriod } from "../claims/utils/claimForecastUtils";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
 
 export interface Params {
