@@ -103,12 +103,12 @@ interface ClaimDocumentsComponentProps extends ClaimDocumentsPageParams, BasePro
 
 const allowedClaimDocuments: Readonly<DocumentDescription[]> = [
   DocumentDescription.Evidence,
-  DocumentDescription.EndOfProjectSurvey,
   DocumentDescription.Invoice,
   DocumentDescription.IAR,
   DocumentDescription.LMCMinutes,
   DocumentDescription.ScheduleThree,
   DocumentDescription.StatementOfExpenditure,
+  DocumentDescription.ProjectCompletionForm,
 ];
 
 const ClaimDocumentsComponent = ({
@@ -128,7 +128,7 @@ const ClaimDocumentsComponent = ({
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     const documentTypeOptions: DropdownOption[] = documentDescriptions
-      .filter(x => allowedClaimDocuments.indexOf(x.id) >= 0)
+      .filter(x => allowedClaimDocuments.includes(x.id))
       .map(x => ({ id: `${x.id}`, value: x.label }));
 
     const claimLinkParams = { projectId, partnerId, periodId };
@@ -260,6 +260,19 @@ const ClaimDocumentsComponent = ({
   );
 };
 
+// TODO Refactor and consume this via an api from SF
+function useClaimDocumentDescriptions(): Pending<DocumentDescriptionDto[]> {
+  const { getContent } = useContent();
+  const documentValues = getAllEnumValues(DocumentDescription);
+
+  const claimDocumentDescriptions = documentValues.map(description => ({
+    id: description,
+    label: getContent(x => x.claimDocuments.documents.labels.documentDescriptionLabel(description)),
+  }));
+
+  return Pending.done(claimDocumentDescriptions);
+}
+
 const ClaimDocumentsContainer = (props: ClaimDocumentsPageParams & BaseProps) => {
   const stores = useStores();
   const claimDocumentContent = useClaimDocumentContent();
@@ -272,13 +285,7 @@ const ClaimDocumentsContainer = (props: ClaimDocumentsPageParams & BaseProps) =>
       project={stores.projects.getById(props.projectId)}
       editor={stores.claimDocuments.getClaimDocumentsEditor(props.projectId, props.partnerId, props.periodId)}
       documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
-      // TODO temporary measure until we get the description types from SF
-      documentDescriptions={Pending.done(
-        getAllEnumValues(DocumentDescription).map(description => ({
-          id: description,
-          label: getContent(x => x.claimDocuments.documents.labels.documentDescriptionLabel(description)),
-        })),
-      )}
+      documentDescriptions={useClaimDocumentDescriptions()}
       claim={stores.claims.get(props.partnerId, props.periodId)}
       onChange={(saving, dto) => {
         stores.messages.clearMessages();
@@ -384,7 +391,9 @@ export function ClaimDocumentAdvice({
 
       return (
         <>
-          <ACC.Renderers.SimpleString qa={`${competition}-document-advice`}>{content.sbriDocumentAdvice}</ACC.Renderers.SimpleString>
+          <ACC.Renderers.SimpleString qa={`${competition}-document-advice`}>
+            {content.sbriDocumentAdvice}
+          </ACC.Renderers.SimpleString>
 
           <ACC.UL>
             <li>{content.sbriInvoiceBullet1}</li>
@@ -392,7 +401,9 @@ export function ClaimDocumentAdvice({
             <li>{content.sbriInvoiceBullet3}</li>
           </ACC.UL>
 
-          <ACC.Renderers.SimpleString qa={`${competition}-mo-advice`}>{content.sbriMoAdvice}</ACC.Renderers.SimpleString>
+          <ACC.Renderers.SimpleString qa={`${competition}-mo-advice`}>
+            {content.sbriMoAdvice}
+          </ACC.Renderers.SimpleString>
         </>
       );
     }
