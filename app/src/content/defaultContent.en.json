@@ -1020,7 +1020,8 @@
       "annexThree": "Annex 3",
       "presentation": "Presentation",
       "email": "Email",
-      "meetingAgenda": "Meeting agenda"
+      "meetingAgenda": "Meeting agenda",
+      "projectCompletionForm": "Project completion form"
     },
     "uploadInputLabel": "Upload files",
     "fileNameLabel": "File name",

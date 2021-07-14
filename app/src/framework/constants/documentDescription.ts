@@ -19,5 +19,6 @@ export enum DocumentDescription {
   Presentation = 180,
   Email = 190,
   MeetingAgenda = 200,
-  Invoice = 210
+  Invoice = 210,
+  ProjectCompletionForm = 220,
 }

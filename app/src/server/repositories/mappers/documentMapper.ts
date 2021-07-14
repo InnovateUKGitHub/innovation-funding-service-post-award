@@ -46,7 +46,8 @@ export class DocumentDescriptionMapper {
     AnnexThree: "AnnexThree",
     Presentation: "Presentation",
     Email: "Email",
-    MeetingAgenda: "MeetingAgenda"
+    MeetingAgenda: "MeetingAgenda",
+    ProjectCompletionForm: "ProjectCompletionForm",
   };
 
   public mapFromSalesforceDocumentDescription = ((documentType: string | null | undefined): DocumentDescription | null => {
@@ -72,6 +73,7 @@ export class DocumentDescriptionMapper {
       case this.types.Presentation: return DocumentDescription.Presentation;
       case this.types.Email: return DocumentDescription.Email;
       case this.types.MeetingAgenda: return DocumentDescription.MeetingAgenda;
+      case this.types.ProjectCompletionForm: return DocumentDescription.ProjectCompletionForm;
       default: return null;
     }
   });
@@ -99,6 +101,7 @@ export class DocumentDescriptionMapper {
       case DocumentDescription.Presentation: return this.types.Presentation;
       case DocumentDescription.Email: return this.types.Email;
       case DocumentDescription.MeetingAgenda: return this.types.MeetingAgenda;
+      case DocumentDescription.ProjectCompletionForm: return this.types.ProjectCompletionForm;
       default: return null;
     }
   });
