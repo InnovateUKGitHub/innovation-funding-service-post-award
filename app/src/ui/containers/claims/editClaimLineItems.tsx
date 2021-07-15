@@ -11,7 +11,7 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { range } from "@shared/range";
 import { projectCompetition } from "@ui/hooks";
 import { Content } from "@content/content";
-import { diffAsPercentage } from "@framework/util/numberHelper";
+import { diffAsPercentage, sum } from "@framework/util/numberHelper";
 import { EditorStatus } from "@ui/constants/enums";
 
 export interface EditClaimDetailsParams {
@@ -398,7 +398,8 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
   }
 
   private renderFooters(data: ClaimLineItemDto[], forecastDetail: ForecastDetailsDTO, showAddRemove: boolean, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
-    const total = data.reduce((t, item) => t + (item.value || 0), 0);
+    const total: number = sum(data, item => item.value);
+
     // @TODO remove multiply by 100
     const forecast = forecastDetail.value;
     const diff = diffAsPercentage(forecast, total);
