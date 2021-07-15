@@ -1,9 +1,10 @@
-import { ClaimStatus } from "../constants";
+import { ReceivedStatus } from "@framework/entities";
+import { ClaimStatus } from "@framework/constants";
 
 export interface ClaimDto {
   allowIarEdit: boolean;
-  approvedDate: Date|null;
-  comments: string|null;
+  approvedDate: Date | null;
+  comments: string | null;
   id: string;
   isApproved: boolean;
   isFinalClaim: boolean;
@@ -11,11 +12,13 @@ export interface ClaimDto {
   forecastCost: number;
   lastModifiedDate: Date;
   overheadRate: number;
-  paidDate: Date|null;
+  paidDate: Date | null;
   partnerId: string;
   periodEndDate: Date;
   periodId: number;
   periodStartDate: Date;
+  pcfStatus: ReceivedStatus;
+  iarStatus: ReceivedStatus;
   status: ClaimStatus;
   statusLabel: string;
   totalCost: number;

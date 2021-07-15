@@ -4,8 +4,9 @@ import { ClaimDtoValidator } from "@ui/validators";
 import { ClaimDto, IAppError, ErrorCode } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
 import { EditorResetAction, UpdateEditorAction, EditorSubmitAction, EditorSuccessAction, EditorErrorAction } from "@ui/redux/actions/common/editorActions";
+import { createPartnerDto } from "@framework/util/stubDtos";
 import { Results } from "@ui/validation";
-import createCostCategory from "../stores/createCostCategory";
+
 import getRootState from "../stores/getRootState";
 import createClaim from "../stores/createClaim";
 
@@ -155,7 +156,8 @@ describe("editorsReducer", () => {
 
     it("should preserve the editor validation", () => {
       const claimDto = createClaim();
-      const validator = new ClaimDtoValidator(claimDto, claimDto.status, [], [createCostCategory()], [], true);
+      const partner = createPartnerDto();
+      const validator = new ClaimDtoValidator(claimDto, claimDto.status, [], [], true, partner.competitionType);
       const originalState = setupInitialState(x => x.validator = validator);
 
       const action: EditorErrorAction = {

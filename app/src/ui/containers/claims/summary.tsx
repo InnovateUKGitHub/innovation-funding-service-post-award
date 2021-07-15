@@ -322,9 +322,10 @@ const ClaimSummaryContainer = (props: ClaimSummaryParams & BaseProps) => {
       costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}
       statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
       documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
-      editor={stores.claims.getClaimEditor(props.projectId, props.partnerId, props.periodId)}
+      editor={stores.claims.getClaimEditor(true, props.projectId, props.partnerId, props.periodId)}
       onUpdate={(saving, dto, link) =>
         stores.claims.updateClaimEditor(
+          true,
           saving,
           props.projectId,
           props.partnerId,

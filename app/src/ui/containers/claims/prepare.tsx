@@ -127,9 +127,9 @@ const PrepareContainer = (props: PrepareClaimParams & BaseProps) => (
           claim={stores.claims.get(props.partnerId, props.periodId)}
           costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}
           statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
-          editor={stores.claims.getClaimEditor(props.projectId, props.partnerId, props.periodId)}
+          editor={stores.claims.getClaimEditor(false, props.projectId, props.partnerId, props.periodId)}
           onUpdate={(saving, dto, link) =>
-            stores.claims.updateClaimEditor(saving, props.projectId, props.partnerId, props.periodId, dto, undefined, () =>
+            stores.claims.updateClaimEditor(false, saving, props.projectId, props.partnerId, props.periodId, dto, undefined, () =>
               link && stores.navigation.navigateTo(link))}
           {...props}
         />

@@ -16,6 +16,8 @@ export default (mod?: Partial<ClaimDto>): ClaimDto => {
     periodEndDate: new Date(),
     periodId: 1,
     periodStartDate: new Date(),
+    pcfStatus: "Not Received",
+    iarStatus: "Not Received",
     status: ClaimStatus.DRAFT,
     statusLabel: ClaimStatus.DRAFT,
     totalCost: 0,
@@ -24,8 +26,8 @@ export default (mod?: Partial<ClaimDto>): ClaimDto => {
     totalCostsSubmitted: 100,
     totalCostsApproved: 100,
     totalDeferredAmount: 100,
-    periodCostsToBePaid: 100
-
+    periodCostsToBePaid: 100,
   };
+
   return { ...template, ...mod };
 };
