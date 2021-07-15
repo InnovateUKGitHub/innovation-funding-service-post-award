@@ -6,7 +6,7 @@ import { useStores } from "@ui/redux";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { projectCompetition, useContent } from "@ui/hooks";
-import { diffAsPercentage } from "@framework/util/numberHelper";
+import { diffAsPercentage, sum } from "@framework/util/numberHelper";
 import { Pending } from "../../../shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
@@ -198,7 +198,8 @@ function ClaimLineItemsTable({ lineItems, forecastDetail, content }: {
     </tr>
   );
 
-  const total = lineItems.reduce((count, item) => count + (item.value || 0), 0);
+  const total: number = sum(lineItems, item => item.value);
+
   const forecast = forecastDetail.value;
   const diff = diffAsPercentage(forecast, total);
 

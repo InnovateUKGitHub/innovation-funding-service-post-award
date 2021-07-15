@@ -17,7 +17,7 @@ import {
   ProjectDto,
   ProjectRole,
 } from "@framework/types";
-import { roundCurrency } from "@framework/util";
+import { roundCurrency, sum } from "@framework/util";
 
 export interface ClaimSummaryParams {
   projectId: string;
@@ -55,10 +55,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
 
   const renderContents = (data: CombinedData) => {
     const linkProps = getClaimLinkProps(data);
-    const totalCostsClaimed: number = data.claimDetails.reduce(
-      (totalCost, claimDetail) => totalCost + claimDetail.costsClaimedThisPeriod,
-      0,
-    );
+    const totalCostsClaimed: number = sum(data.claimDetails, claimDetails => claimDetails.costsClaimedThisPeriod);
 
     const totalCostsPaid = totalCostsClaimed * (data.partner.awardRate! / 100);
 
