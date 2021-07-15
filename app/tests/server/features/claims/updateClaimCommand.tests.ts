@@ -6,48 +6,50 @@ import { Authorisation, ProjectRole } from "@framework/types";
 import { TestContext } from "../../testContextProvider";
 
 describe("UpdateClaimCommand", () => {
-  test("accessControl - Project Monitoring Officer passes", async () => {
-    const context = new TestContext();
-    const project = context.testData.createProject();
-    const command = new UpdateClaimCommand(project.Id, {} as any);
-    const auth    = new Authorisation({
-      [project.Id]: {
-        projectRoles: ProjectRole.MonitoringOfficer,
-        partnerRoles: {}
-      }
+  describe("with accessControl", () => {
+    test("with project MO passes", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+      const command = new UpdateClaimCommand(project.Id, {} as any);
+      const auth = new Authorisation({
+        [project.Id]: {
+          projectRoles: ProjectRole.MonitoringOfficer,
+          partnerRoles: {},
+        },
+      });
+
+      expect(await context.runAccessControl(auth, command)).toBe(true);
     });
 
-    expect(await context.runAccessControl(auth, command)).toBe(true);
-  });
+    test("with partner FC passes", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+      const claimDto = { partnerId: "abc" };
+      const command = new UpdateClaimCommand(project.Id, claimDto as any);
+      const auth = new Authorisation({
+        [project.Id]: {
+          projectRoles: ProjectRole.Unknown,
+          partnerRoles: { [claimDto.partnerId]: ProjectRole.FinancialContact },
+        },
+      });
 
-  test("accessControl - Partner Financial Contact passes", async () => {
-    const context  = new TestContext();
-    const project  = context.testData.createProject();
-    const claimDto = { partnerId: "abc" };
-    const command  = new UpdateClaimCommand(project.Id, claimDto as any);
-    const auth     = new Authorisation({
-      [project.Id]: {
-        projectRoles: ProjectRole.Unknown,
-        partnerRoles: { [claimDto.partnerId]: ProjectRole.FinancialContact }
-      }
+      expect(await context.runAccessControl(auth, command)).toBe(true);
     });
 
-    expect(await context.runAccessControl(auth, command)).toBe(true);
-  });
+    test("with other roles should fail", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+      const claimDto = { partnerId: "abc" };
+      const command = new UpdateClaimCommand(project.Id, claimDto as any);
+      const auth = new Authorisation({
+        [project.Id]: {
+          projectRoles: ProjectRole.FinancialContact | ProjectRole.ProjectManager,
+          partnerRoles: { [claimDto.partnerId]: ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager },
+        },
+      });
 
-  test("accessControl - all other roles fail", async () => {
-    const context  = new TestContext();
-    const project  = context.testData.createProject();
-    const claimDto = { partnerId: "abc" };
-    const command  = new UpdateClaimCommand(project.Id, claimDto as any);
-    const auth     = new Authorisation({
-      [project.Id]: {
-        projectRoles: ProjectRole.FinancialContact | ProjectRole.ProjectManager,
-        partnerRoles: { [claimDto.partnerId]: ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager }
-      }
+      expect(await context.runAccessControl(auth, command)).toBe(false);
     });
-
-    expect(await context.runAccessControl(auth, command)).toBe(false);
   });
 
   it("when claim id not set expect validation exception", async () => {
@@ -61,7 +63,7 @@ describe("UpdateClaimCommand", () => {
 
   it("when status updated to draft expect item updated", async () => {
     const context = new TestContext();
-    const claim = context.testData.createClaim(undefined, undefined, x => x.Acc_ClaimStatus__c = "New" as any);
+    const claim = context.testData.createClaim(undefined, undefined, x => (x.Acc_ClaimStatus__c = "New" as any));
     const dto = mapClaim(context)(claim);
     const project = context.testData.createProject();
 
@@ -75,7 +77,7 @@ describe("UpdateClaimCommand", () => {
 
   it("when status updated to submitted expect item updated", async () => {
     const context = new TestContext();
-    const claim = context.testData.createClaim(undefined, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
+    const claim = context.testData.createClaim(undefined, undefined, x => (x.Acc_ClaimStatus__c = ClaimStatus.DRAFT));
     const dto = mapClaim(context)(claim);
     const project = context.testData.createProject();
 
@@ -152,7 +154,7 @@ describe("UpdateClaimCommand", () => {
 
   it("when status updated to approved expect item updated", async () => {
     const context = new TestContext();
-    const claim = context.testData.createClaim(undefined, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
+    const claim = context.testData.createClaim(undefined, undefined, x => (x.Acc_ClaimStatus__c = ClaimStatus.DRAFT));
     const dto = mapClaim(context)(claim);
     const project = context.testData.createProject();
 
@@ -166,7 +168,7 @@ describe("UpdateClaimCommand", () => {
 
   it("when status updated to queried expect item updated", async () => {
     const context = new TestContext();
-    const claim = context.testData.createClaim(undefined, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
+    const claim = context.testData.createClaim(undefined, undefined, x => (x.Acc_ClaimStatus__c = ClaimStatus.DRAFT));
     const dto = mapClaim(context)(claim);
     const project = context.testData.createProject();
 
@@ -181,7 +183,7 @@ describe("UpdateClaimCommand", () => {
 
   it("when status updated to something other than draft or submitted expect error", async () => {
     const context = new TestContext();
-    const claim = context.testData.createClaim(undefined, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.DRAFT);
+    const claim = context.testData.createClaim(undefined, undefined, x => (x.Acc_ClaimStatus__c = ClaimStatus.DRAFT));
     const dto = mapClaim(context)(claim);
     const project = context.testData.createProject();
 
@@ -193,7 +195,11 @@ describe("UpdateClaimCommand", () => {
 
   it("can update when status is Innovate Queried", async () => {
     const context = new TestContext();
-    const claim = context.testData.createClaim(undefined, undefined, x => x.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED);
+    const claim = context.testData.createClaim(
+      undefined,
+      undefined,
+      x => (x.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED),
+    );
     const dto = mapClaim(context)(claim);
     const project = context.testData.createProject();
     const command = new UpdateClaimCommand(project.Id, dto);
@@ -204,7 +210,11 @@ describe("UpdateClaimCommand", () => {
 
   it("when message updated expect item updated", async () => {
     const context = new TestContext();
-    const claim = context.testData.createClaim(undefined, undefined, x => x.Acc_ReasonForDifference__c = "Original Message");
+    const claim = context.testData.createClaim(
+      undefined,
+      undefined,
+      x => (x.Acc_ReasonForDifference__c = "Original Message"),
+    );
     const dto = mapClaim(context)(claim);
     const project = context.testData.createProject();
 
@@ -348,7 +358,6 @@ describe("UpdateClaimCommand", () => {
     expect(context.repositories.claimStatusChanges.Items.length).toBe(1);
     expect(context.repositories.claimStatusChanges.Items[0].Acc_ExternalComment__c).toBe("Orignal Comments");
     expect(claim.Acc_ReasonForDifference__c).toBe("");
-
   });
 
   test("when status has changed to AWAITING_IUK_APPROVAL expect comment to not be external", async () => {
@@ -402,7 +411,7 @@ describe("UpdateClaimCommand", () => {
     const dto = mapClaim(context)(claim);
 
     dto.status = ClaimStatus.MO_QUERIED;
-    dto.comments= "Claim Queried";
+    dto.comments = "Claim Queried";
 
     const command = new UpdateClaimCommand(project.Id, dto);
 
@@ -412,4 +421,71 @@ describe("UpdateClaimCommand", () => {
     expect(context.repositories.claimStatusChanges.Items[0].Acc_ParticipantVisibility__c).toBe(true);
   });
 
+  describe("when isClaimSummary is true", () => {
+    it("should ignore validation when not the final claim", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner();
+      const claim = context.testData.createClaim(partner, 2, x => (x.Acc_FinalClaim__c = false));
+
+      claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+
+      const dto = mapClaim(context)(claim);
+
+      const command = new UpdateClaimCommand(project.Id, dto, true);
+
+      await expect(context.runCommand(command)).resolves.toEqual(true);
+    });
+
+    it("should ignore validation when project is KTP", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner(project, x => (x.competitionType = "KTP"));
+      const claim = context.testData.createClaim(partner, 2);
+
+      claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+
+      const dto = mapClaim(context)(claim);
+
+      const command = new UpdateClaimCommand(project.Id, dto, true);
+
+      await expect(context.runCommand(command)).resolves.toEqual(true);
+    });
+
+    it("should pass validation when PCF status is Received", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner();
+      const claim = context.testData.createClaim(partner, 2, x => {
+        x.Acc_FinalClaim__c = true;
+        x.Acc_PCF_Status__c = "Received";
+      });
+
+      claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+
+      const dto = mapClaim(context)(claim);
+
+      const command = new UpdateClaimCommand(project.Id, dto, true);
+
+      await expect(context.runCommand(command)).resolves.toEqual(true);
+    });
+
+    it("should pass validation when PCF status is Not Received", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner();
+      const claim = context.testData.createClaim(partner, 2, x => {
+        x.Acc_FinalClaim__c = true;
+        x.Acc_PCF_Status__c = "Not Received";
+      });
+
+      claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+
+      const dto = mapClaim(context)(claim);
+
+      const command = new UpdateClaimCommand(project.Id, dto, true);
+
+      await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+    });
+  });
 });

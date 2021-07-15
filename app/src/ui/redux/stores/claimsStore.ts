@@ -1,17 +1,23 @@
+import { Pending } from "@shared/pending";
+import { ClaimDto } from "@framework/dtos";
 import { apiClient } from "@ui/apiClient";
 import { ClaimDtoValidator } from "@ui/validators";
-import { ClaimDto } from "@framework/dtos";
-import { Pending } from "@shared/pending";
-import { ClaimDocumentsStore } from "@ui/redux/stores/claimDocumentsStore";
+
+import { StoreBase } from "@ui/redux/stores/storeBase";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { messageSuccess, RootActionsOrThunk } from "../actions";
-import { RootState } from "../reducers";
-import { CostSummariesStore } from "./costsSummariesStore";
-import { CostCategoriesStore } from "./costCategoriesStore";
-import { StoreBase } from "./storeBase";
+import { messageSuccess, RootActionsOrThunk } from "@ui/redux/actions";
+import { RootState } from "@ui/redux/reducers";
+
+import { ClaimDocumentsStore, CostSummariesStore, PartnersStore } from "@ui/redux/stores";
 
 export class ClaimsStore extends StoreBase {
-  constructor(private readonly costsSummariesStore: CostSummariesStore, private readonly  costCategoriesStore: CostCategoriesStore, private readonly claimDocumentsStore: ClaimDocumentsStore, getState: () => RootState, queue: (action: RootActionsOrThunk) => void) {
+  constructor(
+    private readonly costsSummariesStore: CostSummariesStore,
+    private readonly claimDocumentsStore: ClaimDocumentsStore,
+    private readonly partnersStore: PartnersStore,
+    getState: () => RootState,
+    queue: (action: RootActionsOrThunk) => void,
+  ) {
     super(getState, queue);
   }
 
@@ -20,12 +26,18 @@ export class ClaimsStore extends StoreBase {
   }
 
   public get(partnerId: string, periodId: number) {
-    return this.getData("claim", this.getKey(partnerId, periodId), p => apiClient.claims.get({ partnerId, periodId, ...p }));
+    return this.getData("claim", this.getKey(partnerId, periodId), p =>
+      apiClient.claims.get({ partnerId, periodId, ...p }),
+    );
   }
 
   public getAllClaimsForProject(projectId: string): Pending<ClaimDto[]> {
-    return this.getData("claims", storeKeys.getProjectKey(projectId), p => apiClient.claims.getAllByProjectId({ projectId, ...p }))
-      .then(data => data, () => []);
+    return this.getData("claims", storeKeys.getProjectKey(projectId), p =>
+      apiClient.claims.getAllByProjectId({ projectId, ...p }),
+    ).then(
+      data => data,
+      () => [],
+    );
   }
 
   public getInactiveClaimsForProject(projectId: string) {
@@ -37,8 +49,12 @@ export class ClaimsStore extends StoreBase {
   }
 
   public getAllClaimsForPartner(partnerId: string) {
-    return this.getData("claims", storeKeys.getPartnerKey(partnerId), p => apiClient.claims.getAllByPartnerId({ partnerId, ...p }))
-      .then(data => data, () => []);
+    return this.getData("claims", storeKeys.getPartnerKey(partnerId), p =>
+      apiClient.claims.getAllByPartnerId({ partnerId, ...p }),
+    ).then(
+      data => data,
+      () => [],
+    );
   }
 
   public getActiveClaimForPartner(partnerId: string) {
@@ -49,50 +65,74 @@ export class ClaimsStore extends StoreBase {
     return this.getAllClaimsForPartner(partnerId).then(x => x.filter(y => y.isApproved) || null);
   }
 
-  public getClaimEditor(projectId: string, partnerId: string, periodId: number, init?: (dto: ClaimDto) => void) {
+  public getClaimEditor(isClaimSummary: boolean, projectId: string, partnerId: string, periodId: number, init?: (dto: ClaimDto) => void) {
     return this.getEditor(
       "claim",
       this.getKey(partnerId, periodId),
       () => this.get(partnerId, periodId),
       init,
-      (dto) => this.validate(projectId, partnerId, periodId, dto, false)
+      dto => this.validate(projectId, partnerId, periodId, dto, false, isClaimSummary),
     );
   }
 
-  public updateClaimEditor(saving: boolean, projectId: string, partnerId: string, periodId: number, dto: ClaimDto, message?: string, onComplete?: (result: ClaimDto) => void): void {
+  public updateClaimEditor(
+    isClaimSummary: boolean,
+    saving: boolean,
+    projectId: string,
+    partnerId: string,
+    periodId: number,
+    dto: ClaimDto,
+    message?: string,
+    onComplete?: (result: ClaimDto) => void,
+  ): void {
     this.updateEditor(
       saving,
       "claim",
       this.getKey(partnerId, periodId),
       dto,
-      showErrors =>  this.validate(projectId, partnerId, periodId, dto, showErrors),
-      p => apiClient.claims.update({projectId, partnerId, periodId, claim: dto, ...p}),
+      showErrors => this.validate(projectId, partnerId, periodId, dto, showErrors, isClaimSummary),
+      p => apiClient.claims.update({ projectId, partnerId, periodId, claim: dto, ...p }),
       result => {
         this.markStale("claim", this.getKey(partnerId, periodId), result);
         if (message) {
           this.queue(messageSuccess(message));
         }
-        if(onComplete) {
+        if (onComplete) {
           onComplete(result);
         }
-      });
+      },
+    );
   }
 
-  private validate(projectId: string, partnerId: string, periodId: number, claim: ClaimDto, showErrors: boolean) {
+  private validate(projectId: string, partnerId: string, periodId: number, claim: ClaimDto, showErrors: boolean, isClaimSummary?: boolean) {
     const originalStatus = this.get(partnerId, periodId).then(x => x.status);
+    const partners = this.partnersStore.getById(partnerId);
     const details = this.costsSummariesStore.getForPeriod(projectId, partnerId, periodId);
     const documents = this.claimDocumentsStore.getClaimDocuments(projectId, partnerId, periodId).data || [];
-    const costCategories = this.costCategoriesStore.getAllFiltered(partnerId);
 
-    return Pending.combine({
+    const validatePendings = Pending.combine({
       originalStatus,
       details,
-      costCategories
-    }).then(x => new ClaimDtoValidator(claim, x.originalStatus, x.details, x.costCategories, documents, showErrors));
+      partners,
+    });
+
+    return validatePendings.then(
+      x =>
+        new ClaimDtoValidator(
+          claim,
+          x.originalStatus,
+          x.details,
+          documents,
+          showErrors,
+          x.partners.competitionType,
+          isClaimSummary,
+        ),
+    );
   }
 
   public getStatusChanges(projectId: string, partnerId: string, periodId: number) {
-    return this.getData("claimStatusChanges", this.getKey(partnerId, periodId), p => apiClient.claims.getStatusChanges({ projectId, partnerId, periodId, ...p }));
+    return this.getData("claimStatusChanges", this.getKey(partnerId, periodId), p =>
+      apiClient.claims.getStatusChanges({ projectId, partnerId, periodId, ...p }),
+    );
   }
-
 }

@@ -640,7 +640,7 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => {
       forecastDetails={stores.forecastDetails.getAllByPartner(props.partnerId)}
       golCosts={stores.forecastGolCosts.getAllByPartner(props.partnerId)}
       statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
-      editor={stores.claims.getClaimEditor(props.projectId, props.partnerId, props.periodId, initEditor)}
+      editor={stores.claims.getClaimEditor(false, props.projectId, props.partnerId, props.periodId, initEditor)}
       documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
       documentsEditor={stores.claimDocuments.getClaimDocumentsEditor(props.projectId, props.partnerId, props.periodId)}
       onUpdate={(saving, dto) => {
@@ -650,6 +650,7 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => {
             ? content.claimReview.messages.claimQueried
             : content.claimReview.messages.claimApproved;
         stores.claims.updateClaimEditor(
+          false,
           saving,
           props.projectId,
           props.partnerId,

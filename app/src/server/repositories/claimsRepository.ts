@@ -14,6 +14,8 @@ export interface ISalesforceClaim {
     };
   };
   LastModifiedDate: string;
+  Acc_PCF_Status__c: string;
+  Acc_IAR_Status__c: string;
   Acc_ClaimStatus__c: string;
   ClaimStatusLabel: string;
   Acc_ProjectPeriodStartDate__c: string;
@@ -62,6 +64,8 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     "Acc_ProjectParticipant__r.Acc_ProjectRole__c",
     "Acc_ProjectParticipant__r.Acc_AccountId__r.Name",
     "LastModifiedDate",
+    "Acc_PCF_Status__c",
+    "Acc_IAR_Status__c",
     "Acc_ClaimStatus__c",
     "toLabel(Acc_ClaimStatus__c) ClaimStatusLabel",
     "Acc_ProjectPeriodStartDate__c",

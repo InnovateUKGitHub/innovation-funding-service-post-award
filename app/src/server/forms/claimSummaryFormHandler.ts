@@ -19,12 +19,19 @@ export class ClaimSummaryFormHandler extends StandardFormHandlerBase<PrepareClai
     super(ClaimSummaryRoute, ["default", "save"], "claim");
   }
 
-  protected async getDto(context: IContext, params: PrepareClaimParams, button: IFormButton, body: IFormBody): Promise<ClaimDto> {
+  protected async getDto(
+    context: IContext,
+    params: PrepareClaimParams,
+    button: IFormButton,
+    body: IFormBody,
+  ): Promise<ClaimDto> {
     const claim = await context.runQuery(new GetClaim(params.partnerId, params.periodId));
 
     claim.comments = body.comments;
 
-    if (button.name === "default" && (claim.status === ClaimStatus.DRAFT || claim.status === ClaimStatus.MO_QUERIED)) {
+    const validSubmittedStatuses = claim.status === ClaimStatus.DRAFT || claim.status === ClaimStatus.MO_QUERIED;
+
+    if (button.name === "default" && validSubmittedStatuses) {
       claim.status = ClaimStatus.SUBMITTED;
     } else if (button.name === "default" && claim.status === ClaimStatus.INNOVATE_QUERIED) {
       claim.status = ClaimStatus.AWAITING_IUK_APPROVAL;
@@ -33,8 +40,13 @@ export class ClaimSummaryFormHandler extends StandardFormHandlerBase<PrepareClai
     return claim;
   }
 
-  protected async run(context: IContext, params: PrepareClaimParams, button: IFormButton, dto: ClaimDto): Promise<ILinkInfo> {
-    await context.runCommand(new UpdateClaimCommand(params.projectId, dto));
+  protected async run(
+    context: IContext,
+    params: PrepareClaimParams,
+    button: IFormButton,
+    dto: ClaimDto,
+  ): Promise<ILinkInfo> {
+    await context.runCommand(new UpdateClaimCommand(params.projectId, dto, true));
 
     // if pm as well as fc then go to all claims route
     const roles = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.forProject(params.projectId));
@@ -50,6 +62,6 @@ export class ClaimSummaryFormHandler extends StandardFormHandlerBase<PrepareClai
   }
 
   protected createValidationResult(params: PrepareClaimParams, dto: ClaimDto) {
-    return new ClaimDtoValidator(dto, ClaimStatus.UNKNOWN, [], [], [], false);
+    return new ClaimDtoValidator(dto, ClaimStatus.UNKNOWN, [], [], false, "", true);
   }
 }

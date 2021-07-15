@@ -10,6 +10,7 @@ export * from "./documentDto";
 export * from "./documentUploadDto";
 export * from "./claimDetailsDto";
 export * from "./claimLineItemDto";
+export * from "./costCategoryDto";
 export * from "./contact";
 export * from "./costsSummaryForPeriodDto";
 export * from "./finacialVirementDto";
