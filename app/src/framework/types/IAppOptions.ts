@@ -11,4 +11,5 @@ export interface IAppOptions {
   readonly bankCheckCompanyNameScorePass: number;
   readonly standardOverheadRate: number;
   readonly numberOfProjectsToSearch: number;
+  readonly maxClaimLineItems: number;
 }

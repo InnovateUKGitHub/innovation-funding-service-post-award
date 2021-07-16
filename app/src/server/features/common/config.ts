@@ -155,6 +155,17 @@ if (!permittedFileTypes.length) {
   permittedFileTypes = [...pdfTypes, ...textTypes, ...presentationTypes, ...spreadsheetTypes, ...imageTypes];
 }
 
+const maxClaimLineItems = () => {
+  const maxNumber = process.env.FEATURE_MAX_CLAIM_LINE_ITEMS;
+  const parsedMaxNumber = maxNumber && Math.abs(Number(maxNumber)) || 120;
+
+  if (parsedMaxNumber > 120) {
+    throw Error(`FEATURE_MAX_CLAIM_LINE_ITEMS = ${parsedMaxNumber}, please enter a value below 120`);
+  }
+
+  return parsedMaxNumber;
+};
+
 const parsedBankCheckValidationRetries = parseInt(process.env.BANK_CHECK_VALIDATION_RETRIES!, 10);
 const options: IAppOptions = {
   bankCheckAddressScorePass: parseInt(process.env.BANK_CHECK_ADDRESS_SCORE_PASS!, 10) || 6,
@@ -172,6 +183,7 @@ const options: IAppOptions = {
   maxFileSize: parseInt(process.env.MAX_FILE_SIZE_IN_BYTES!, 10) || 10485760, // 10MB
   standardOverheadRate: parseFloat(process.env.STANDARD_OVERHEAD_RATE!) || 20,
   numberOfProjectsToSearch: parseInt(process.env.FEATURE_SEARCH_NUMBER_PROJECTS!, 10) || 3,
+  maxClaimLineItems: maxClaimLineItems(),
 };
 
 const googleTagManagerCode = process.env.GOOGLE_TAG_MANAGER_CODE!;

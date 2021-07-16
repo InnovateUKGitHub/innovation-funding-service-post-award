@@ -3,7 +3,6 @@ import browserPluginFactory from "router5/plugins/browser";
 import { RouterProvider } from "react-router5";
 import _merge from "lodash.merge";
 
-import { IFeatureFlags } from "@framework/types";
 import { Content } from "@content/content";
 import { ContentProvider, IStores, StoresProvider } from "@ui/redux";
 
@@ -13,25 +12,6 @@ const router = createRouter([route]).usePlugin(browserPluginFactory({ useHash: f
 export type TestBedContent = Partial<Content>;
 export type TestBedStore = Partial<IStores>;
 
-export const stubStores = {
-  users: {
-    getCurrentUser: () => ({ csrf: "stub-csrf" }),
-  },
-  config: {
-    getConfig: () => ({
-      features: {
-        contentHint: false,
-      } as IFeatureFlags,
-    }),
-    isClient: () => true,
-  },
-  navigation: {
-    getPageTitle: () => ({
-      displayTitle: "stub-displayTitle",
-    }),
-  },
-};
-
 export interface ITestBedProps {
   children: React.ReactElement<{}>;
   content?: TestBedContent;
@@ -40,6 +20,28 @@ export interface ITestBedProps {
 
 // Note: When testing a component that consumes <Content />, it expects a provider to be present.
 export function TestBed({ stores, content = {}, children }: ITestBedProps) {
+  const stubStores = {
+    users: {
+      getCurrentUser: () => ({ csrf: "stub-csrf" }),
+    },
+    config: {
+      getConfig: () => ({
+        options: {
+          maxClaimLineItems: 120
+        },
+        features: {
+          contentHint: false,
+        },
+      }),
+      isClient: () => true,
+    },
+    navigation: {
+      getPageTitle: () => ({
+        displayTitle: "stub-displayTitle",
+      }),
+    },
+  } as TestBedStore;
+
   const storesValue = _merge(stubStores, stores);
 
   return (
