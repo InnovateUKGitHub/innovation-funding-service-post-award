@@ -121,6 +121,7 @@ const stubBaseProps = {
 } as Partial<BaseProps>;
 
 const stubProps = {
+  ...stubBaseProps,
   project: {
     data: { id: projectId } as Partial<ProjectDto>,
     state: LoadingStatus.Done,
@@ -152,7 +153,6 @@ const stubProps = {
     data: {},
     state: LoadingStatus.Done,
   } as Pending<DocumentSummaryDto[]>,
-  ...stubBaseProps,
 } as ContainerProps<EditClaimDetailsParams, EditClaimLineItemsData, EditClaimLineItemsCallbacks>;
 
 describe("editClaimLineItems", () => {

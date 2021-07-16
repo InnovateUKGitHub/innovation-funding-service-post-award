@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 
-import TestBed, { stubStores, TestBedStore } from "@shared/TestBed";
+import TestBed, { TestBedStore } from "@shared/TestBed";
 import { PageTitle, PageTitleProps } from "../../../src/ui/components/layout/pageTitle";
 
 describe("<PageTitle />", () => {
@@ -42,7 +42,6 @@ describe("<PageTitle />", () => {
         ${"returns title prop in favour of context"} | ${"stub-favour-title"} | ${"stub-custom-context-title"}
       `("$name", ({ title, contextTitle }) => {
         const stubTestBedStore = {
-          ...stubStores,
           navigation: {
             getPageTitle: () => ({
               displayTitle: contextTitle,
@@ -59,7 +58,6 @@ describe("<PageTitle />", () => {
       test("returns context title when title prop is not defined", () => {
         const stubContextTitle = "stub-context-title";
         const stubTestBedStore = {
-          ...stubStores,
           navigation: {
             getPageTitle: () => ({
               displayTitle: stubContextTitle,
@@ -87,7 +85,6 @@ describe("<PageTitle />", () => {
 
     test("should render null when title is empty", () => {
       const stubTestBedStore = {
-        ...stubStores,
         navigation: {
           getPageTitle: () => ({
             displayTitle: "",
@@ -102,7 +99,7 @@ describe("<PageTitle />", () => {
         stubTestBedStore as TestBedStore,
       );
 
-      expect(container).toBeEmpty();
+      expect(container.firstChild).toBeNull();
     });
   });
 });

@@ -2,7 +2,7 @@
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { ClaimDetailsDto, ClaimLineItemDto, CostCategoryName, ForecastDetailsDTO, ProjectDto, ProjectRole } from "@framework/types";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
 import { UL } from "@ui/components";
 import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators/claimDetailsValidator";
@@ -28,6 +28,7 @@ export interface EditClaimLineItemsData {
   editor: Pending<IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>>;
   forecastDetail: Pending<ForecastDetailsDTO>;
   documents: Pending<DocumentSummaryDto[]>;
+  maxClaimLineItems: number;
 }
 
 interface CombinedData {
@@ -403,14 +404,19 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     // @TODO remove multiply by 100
     const forecast = forecastDetail.value;
     const diff = diffAsPercentage(forecast, total);
+    const lengthWithinBoundary = data.length < this.props.maxClaimLineItems;
 
     const footers: JSX.Element[] = [];
 
-    if (showAddRemove) {
+    if (showAddRemove && lengthWithinBoundary) {
       footers.push(
         <tr key={1} className="govuk-table__row">
-          <td className="govuk-table__cell" colSpan={4}><a href="" className="govuk-link" role="button" onClick={(e) => this.addItem(e, editor)} data-qa="add-cost"><ACC.Content value={x => x.editClaimLineItems.addCost}/></a></td>
-        </tr>
+          <td className="govuk-table__cell" colSpan={4}>
+            <a href="" className="govuk-link" role="button" onClick={e => this.addItem(e, editor)} data-qa="add-cost">
+              <ACC.Content value={x => x.editClaimLineItems.addCost} />
+            </a>
+          </td>
+        </tr>,
       );
     }
 
@@ -456,39 +462,58 @@ const getDestination = (props: EditClaimDetailsParams & BaseProps, goToUpload: b
   }
 };
 
-const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) => (
-  <StoresConsumer>
-    {
-      stores => (
-        <EditClaimLineItemsComponent
-          project={stores.projects.getById(props.projectId)}
-          claimDetails={stores.claimDetails.get(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
-          costCategories={stores.costCategories.getAllFiltered(props.partnerId)}
-          forecastDetail={stores.forecastDetails.get(props.partnerId, props.periodId, props.costCategoryId)}
-          documents={stores.claimDetailDocuments.getClaimDetailDocuments(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
-          editor={stores.claimDetails.getClaimDetailsEditor(props.projectId, props.partnerId, props.periodId, props.costCategoryId, (dto: ClaimDetailsDto) => {
-            if (props.isClient) return;
-            const itemsNumber = dto.lineItems.length;
-            // Add extra rows. If existing items are less than 7 then add up to ten rows in total otherwise add extra 3.
-            const extraRows = itemsNumber <= 7 ? 10 - itemsNumber : 3;
-            const extraLineItems: ClaimLineItemDto[] = range(extraRows).map(() => ({
-              costCategoryId: props.costCategoryId,
-              partnerId: props.partnerId,
-              periodId: props.periodId,
-              id: "",
-              description: "",
-              value: null as any,
-              lastModifiedDate: null as any
-            }));
-            dto.lineItems.push(...extraLineItems);
-          })}
-          onUpdate={(saving, dto, goToUpload) => stores.claimDetails.updateClaimDetailsEditor(saving, props.projectId, props.partnerId, props.periodId, props.costCategoryId, dto, () => stores.navigation.navigateTo(getDestination(props, goToUpload)))}
-          {...props}
-        />
-      )
-    }
-  </StoresConsumer>
-);
+const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) => {
+  const stores = useStores();
+  return (
+    <EditClaimLineItemsComponent
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      claimDetails={stores.claimDetails.get(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
+      costCategories={stores.costCategories.getAllFiltered(props.partnerId)}
+      forecastDetail={stores.forecastDetails.get(props.partnerId, props.periodId, props.costCategoryId)}
+      documents={stores.claimDetailDocuments.getClaimDetailDocuments(
+        props.projectId,
+        props.partnerId,
+        props.periodId,
+        props.costCategoryId,
+      )}
+      editor={stores.claimDetails.getClaimDetailsEditor(
+        props.projectId,
+        props.partnerId,
+        props.periodId,
+        props.costCategoryId,
+        (dto: ClaimDetailsDto) => {
+          if (props.isClient) return;
+          const itemsNumber = dto.lineItems.length;
+          // Add extra rows. If existing items are less than 7 then add up to ten rows in total otherwise add extra 3.
+          const extraRows = itemsNumber <= 7 ? 10 - itemsNumber : 3;
+          const extraLineItems: ClaimLineItemDto[] = range(extraRows).map(() => ({
+            costCategoryId: props.costCategoryId,
+            partnerId: props.partnerId,
+            periodId: props.periodId,
+            id: "",
+            description: "",
+            value: null as any,
+            lastModifiedDate: null as any,
+          }));
+          dto.lineItems.push(...extraLineItems);
+        },
+      )}
+      onUpdate={(saving, dto, goToUpload) =>
+        stores.claimDetails.updateClaimDetailsEditor(
+          saving,
+          props.projectId,
+          props.partnerId,
+          props.periodId,
+          props.costCategoryId,
+          dto,
+          () => stores.navigation.navigateTo(getDestination(props, goToUpload)),
+        )
+      }
+      maxClaimLineItems={stores.config.getConfig().options.maxClaimLineItems} // TODO when this is refactored to a function component, we can replace this param with useStores inside the component
+    />
+  );
+};
 
 export const EditClaimLineItemsRoute = defineRoute({
   routeName: "claimLineItemEdit",
@@ -498,7 +523,7 @@ export const EditClaimLineItemsRoute = defineRoute({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,
     costCategoryId: route.params.costCategoryId,
-    periodId: parseInt(route.params.periodId, 10)
+    periodId: parseInt(route.params.periodId, 10),
   }),
   accessControl: (auth, params) => auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact),
   getTitle: ({ params, stores }) => {

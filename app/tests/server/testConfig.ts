@@ -61,6 +61,7 @@ export class TestConfig implements IConfig {
     bankCheckCompanyNameScorePass: 6,
     numberOfProjectsToSearch: 3,
     standardOverheadRate: 20,
+    maxClaimLineItems: 120
   };
 
   public prettyLogs = false;
