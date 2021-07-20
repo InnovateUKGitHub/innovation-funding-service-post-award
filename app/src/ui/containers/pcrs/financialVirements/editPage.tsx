@@ -7,7 +7,8 @@ import { CostCategoryVirementDtoValidator, FinancialVirementDtoValidator } from 
 import { createDto } from "@framework/util/dtoHelpers";
 import { roundCurrency } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { projectCompetition, useContent } from "@ui/hooks";
+import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
+import { useContent } from "@ui/hooks";
 import { getAuthRoles } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
 
@@ -91,7 +92,7 @@ class EditPageComponent extends ContainerBase<VirementCostsParams, Props, {}> {
     const SummaryTable = ACC.TypedTable<FinancialVirementDto>();
 
     const { isPm } = getAuthRoles(project.roles);
-    const { isKTP } = projectCompetition(project.competitionType);
+    const { isKTP } = checkProjectCompetition(project.competitionType);
     const  displayIntroMessage: boolean = isKTP && isPm;
 
     return (

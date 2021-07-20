@@ -10,7 +10,8 @@ import { DocumentDescriptionDto, DocumentSummaryDto } from "@framework/dtos/docu
 import { getAuthRoles } from "@framework/types";
 import { DropdownOption } from "@ui/components";
 import { getAllEnumValues } from "@shared/enumHelper";
-import { projectCompetition, useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks";
+import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 
 type ClaimDocumentContentKeys =
   | "backLink"
@@ -356,7 +357,7 @@ export function ClaimDocumentAdvice({
   isIarRequired,
   competitionType,
 }: ClaimDocumentAdviceProps) {
-  const { isKTP, isCombinationOfSBRI } = projectCompetition(competitionType);
+  const { isKTP, isCombinationOfSBRI } = checkProjectCompetition(competitionType);
 
   const getAdvise = () => {
     if (isKTP) {

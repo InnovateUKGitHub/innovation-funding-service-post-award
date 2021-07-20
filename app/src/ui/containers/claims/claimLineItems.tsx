@@ -5,7 +5,8 @@ import classNames from "classnames";
 import { useStores } from "@ui/redux";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { projectCompetition, useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks";
+import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { diffAsPercentage, sum } from "@framework/util/numberHelper";
 import { Pending } from "../../../shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
@@ -85,7 +86,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     claimDetails: ClaimDetailsDto,
   ) {
     const { content } = this.props;
-    const { isKTP } = projectCompetition(competitionType);
+    const { isKTP } = checkProjectCompetition(competitionType);
 
     // Note: KTP projects submit evidence on the whole claim, not each cost category.
     const displaySupportingDocs = !isKTP;

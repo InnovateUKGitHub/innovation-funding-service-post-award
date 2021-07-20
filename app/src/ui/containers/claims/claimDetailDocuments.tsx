@@ -7,7 +7,8 @@ import { useStores } from "@ui/redux";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { projectCompetition, useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks";
+import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 export interface ClaimDetailDocumentsPageParams {
@@ -74,7 +75,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
     });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
-    const { isCombinationOfSBRI } = projectCompetition(project.competitionType);
+    const { isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
 
     return (
       <ACC.Page

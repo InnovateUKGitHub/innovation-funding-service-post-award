@@ -6,7 +6,7 @@ import { DateTime } from "luxon";
 import { StoresConsumer } from "@ui/redux";
 import { getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
 import { getPartnerName } from "@ui/components";
-import { projectCompetition } from "@ui/hooks";
+import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { roundCurrency } from "@framework/util";
 import { ProjectRole, ProjectStatus } from "@framework/constants";
 
@@ -35,7 +35,7 @@ class AllClaimsDashboardComponent extends ContainerBase<AllClaimsDashboardParams
   }
 
   renderContents(projectDetails: ProjectDto, partners: PartnerDto[], currentClaims: ClaimDto[], previousClaims: ClaimDto[]) {
-    const { isCombinationOfSBRI } = projectCompetition(projectDetails.competitionType);
+    const { isCombinationOfSBRI } = checkProjectCompetition(projectDetails.competitionType);
 
     return (
       <Acc.Page

@@ -1,6 +1,6 @@
 import i18next from "i18next";
 
-import { projectCompetition } from "@ui/hooks";
+import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 
 export interface ContentResult {
   readonly key: string;
@@ -71,7 +71,7 @@ export abstract class ContentBase {
   }
 
   protected getGrantOrContract() {
-    const { isCombinationOfSBRI } = projectCompetition(this.competitionType || "");
+    const { isCombinationOfSBRI } = checkProjectCompetition(this.competitionType || "");
 
     return isCombinationOfSBRI ? "contract" : "grant";
   }

@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react-hooks";
 
 import { hookTestBed } from "@shared/TestBed";
-import { useCompetitionType, projectCompetition } from "@ui/hooks";
+import { useCompetitionType } from "@ui/hooks";
 import { Pending } from "@shared/pending";
 import { LoadingStatus } from "@framework/constants";
 
@@ -122,37 +122,6 @@ describe("useCompetitionType()", () => {
           );
         });
       });
-    });
-  });
-});
-
-describe("projectCompetition()", () => {
-  const stubResponse = {
-    isCRandD: false,
-    isContracts: false,
-    isSBRI: false,
-    isSBRI_IFS: false,
-    isCombinationOfSBRI: false,
-    isKTP: false,
-    isCatapults: false,
-    isLoans: false,
-  };
-
-  describe("@returns", () => {
-    test.each`
-      name                                       | inboundCompetition | expectedPayload
-      ${"when no competition value is supplied"} | ${""}              | ${stubResponse}
-      ${"with CR&D"}                             | ${"CR&D"}          | ${{ ...stubResponse, isCRandD: true }}
-      ${"with KTP"}                              | ${"KTP"}           | ${{ ...stubResponse, isKTP: true }}
-      ${"with Contracts"}                        | ${"CONTRACTS"}     | ${{ ...stubResponse, isContracts: true }}
-      ${"with Catapults"}                        | ${"CATAPULTS"}     | ${{ ...stubResponse, isCatapults: true }}
-      ${"with Loans"}                            | ${"LOANS"}         | ${{ ...stubResponse, isLoans: true }}
-      ${"with SBRI"}                             | ${"SBRI"}          | ${{ ...stubResponse, isCombinationOfSBRI: true, isSBRI: true }}
-      ${"with SBRI IFS"}                         | ${"SBRI IFS"}      | ${{ ...stubResponse, isCombinationOfSBRI: true, isSBRI_IFS: true }}
-    `("$name", ({ inboundCompetition, expectedPayload }) => {
-      const competitionPayload = projectCompetition(inboundCompetition);
-
-      expect(competitionPayload).toStrictEqual(expectedPayload);
     });
   });
 });
