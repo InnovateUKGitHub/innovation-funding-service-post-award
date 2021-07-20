@@ -21,7 +21,8 @@ import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { projectCompetition, useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks";
+import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { Content } from "@content/content";
 import { DropdownOption, IDocumentMessages } from "@ui/components";
 import { noop } from "@ui/helpers/noop";
@@ -133,7 +134,7 @@ export function useReviewContent(): ReviewContent {
   };
 
   const getCompetitionContent = (competitionType: string) => {
-    const { isKTP } = projectCompetition(competitionType);
+    const { isKTP } = checkProjectCompetition(competitionType);
 
     return isKTP ? ktpContent : undefined;
   };
@@ -195,7 +196,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
 
   private renderContents(data: CombinedData) {
     const { content } = this.props;
-    const { isCombinationOfSBRI } = projectCompetition(data.project.competitionType);
+    const { isCombinationOfSBRI } = checkProjectCompetition(data.project.competitionType);
     const { isMo } = getAuthRoles(data.project.roles);
 
     const backLinkElement = (

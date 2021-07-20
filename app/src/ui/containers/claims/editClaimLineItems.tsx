@@ -9,7 +9,7 @@ import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { range } from "@shared/range";
-import { projectCompetition } from "@ui/hooks";
+import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { Content } from "@content/content";
 import { diffAsPercentage, sum } from "@framework/util/numberHelper";
 import { EditorStatus } from "@ui/constants/enums";
@@ -71,7 +71,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     const back = this.props.routes.prepareClaim.getLink({ projectId: project.id, partnerId: this.props.partnerId, periodId: this.props.periodId });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
 
-    const { isKTP, isCombinationOfSBRI } = projectCompetition(project.competitionType);
+    const { isKTP, isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
     const editClaimLineItemGuidance = <ACC.Content value={(x) => x.claimDocuments.messages.editClaimLineItemGuidance} />;
 
     const editClaimLineItemVat = (
@@ -216,7 +216,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
   }
 
   private getCompetitionRenderCalculatedDocumentSection(competitionType: string, documents: DocumentSummaryDto[], editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
-    const { isKTP, isCombinationOfSBRI } = projectCompetition(competitionType);
+    const { isKTP, isCombinationOfSBRI } = checkProjectCompetition(competitionType);
 
     const LineItemForm = ACC.TypedForm<ClaimDetailsDto>();
 
@@ -253,7 +253,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>,
   ) {
     const LineItemForm = ACC.TypedForm<ClaimDetailsDto>();
-    const { isKTP, isCombinationOfSBRI } = projectCompetition(competitionType);
+    const { isKTP, isCombinationOfSBRI } = checkProjectCompetition(competitionType);
 
     return !isKTP && (
       <>
