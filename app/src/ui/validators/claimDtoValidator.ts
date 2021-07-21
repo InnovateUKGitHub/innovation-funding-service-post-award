@@ -37,23 +37,20 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
 
   public status: Result;
 
-  // private readonly iarRequiredStatus = new Map<ClaimStatus, ClaimStatus[]>([
-  //   [ClaimStatus.DRAFT, [ClaimStatus.SUBMITTED]],
-  //   [ClaimStatus.MO_QUERIED, [ClaimStatus.SUBMITTED]],
-  //   [ClaimStatus.INNOVATE_QUERIED, [ClaimStatus.AWAITING_IUK_APPROVAL]],
-  // ]);
+  private readonly isKtpCompetition: boolean = checkProjectCompetition(this.competitionType).isKTP;
+  private readonly hasValidIarStatusWithDocs = !!this.documents.length && this.model.iarStatus === "Received";
 
   public id = this.validateId();
   public isFinalClaim = this.validateFinalClaim();
   public totalCosts = this.validateTotalCosts();
   public comments = this.validateComments();
-  // public iar = this.validateIar();
+  public iar = this.validateIarStatus();
 
-  private validateId() {
+  private validateId(): Result {
     return Validation.required(this, this.model.id, "Id is required");
   }
 
-  private validateComments() {
+  private validateComments(): Result {
     return Validation.all(
       this,
       () =>
@@ -69,7 +66,8 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
         ),
     );
   }
-  private validateTotalCosts() {
+
+  private validateTotalCosts(): Result {
     const remainingOfferCosts = this.details.reduce((total, item) => total + item.remainingOfferCosts, 0);
 
     return Validation.isPositiveFloat(
@@ -79,32 +77,39 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
     );
   }
 
-  // TODO: Reinstate with additional logic in later ticket
-  // private validateIar() {
-  //   const iarRequiredStatus = this.iarRequiredStatus.get(this.originalStatus);
-  //   const isIarRequired = this.model.isIarRequired && iarRequiredStatus?.includes(this.model.status);
-
-  //   return Validation.isTrue(
-  //     this,
-  //     !isIarRequired || this.documents.length > 0,
-  //     "You must upload a supporting document before you can submit this claim.",
-  //   );
-  // }
-
-  private validateFinalClaim() {
-    if (!this.isClaimSummary) return Validation.valid(this);
-
-    const { isKTP } = checkProjectCompetition(this.competitionType);
-    const isNotFinalClaim = !this.model.isFinalClaim;
-
-    if (isNotFinalClaim || isKTP) return Validation.valid(this);
-
-    const isValid = this.model.pcfStatus === "Received";
+  private validateIarStatus(): Result {
+    // Note: Bail from validation if your not KTP as iar validation is only associated with KTP projects
+    if (!this.isClaimSummary || !this.isKtpCompetition || !this.model.isIarRequired) {
+      return Validation.valid(this);
+    }
 
     return Validation.isTrue(
       this,
-      isValid,
-      "You must upload a project completion form before you can submit this claim.",
+      this.hasValidIarStatusWithDocs,
+      "You must upload a schedule 3 before you can submit this claim.",
     );
+  }
+
+  private validateFinalClaim(): Result {
+    // Note: Disallow KTP from these checks as they validate from validateIarStatus()
+    if (!this.isClaimSummary || this.isKtpCompetition) {
+      return Validation.valid(this);
+    }
+
+    if (this.model.isFinalClaim) {
+      const isPcfStatusValid = this.model.pcfStatus === "Received";
+
+      return Validation.isTrue(
+        this,
+        isPcfStatusValid,
+        "You must upload a project completion form before you can submit this claim.",
+      );
+    } else {
+      return Validation.isTrue(
+        this,
+        this.hasValidIarStatusWithDocs,
+        "You must upload an independent accountant's report before you can submit this claim.",
+      );
+    }
   }
 }

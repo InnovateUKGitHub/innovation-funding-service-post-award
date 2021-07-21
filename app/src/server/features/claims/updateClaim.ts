@@ -23,9 +23,7 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
   }
 
   protected async run(context: IContext) {
-    const existingStatus = await context.repositories.claims
-      .get(this.claimDto.partnerId, this.claimDto.periodId)
-      .then(x => x.Acc_ClaimStatus__c);
+    const existingStatus = await context.repositories.claims.get(this.claimDto.partnerId, this.claimDto.periodId).then(x => x.Acc_ClaimStatus__c);
     const partner = await context.runQuery(new GetByIdQuery(this.claimDto.partnerId));
     const details = await context.runQuery(
       new GetCostsSummaryForPeriodQuery(this.projectId, this.claimDto.partnerId, this.claimDto.periodId),
@@ -38,9 +36,11 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
       }),
     );
 
+    const originalStatus = mapToClaimStatus(existingStatus);
+
     const result = new ClaimDtoValidator(
       this.claimDto,
-      mapToClaimStatus(existingStatus),
+      originalStatus,
       details,
       documents,
       true,
@@ -62,7 +62,7 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
       await context.repositories.claimStatusChanges.create({
         Acc_Claim__c: this.claimDto.id,
         Acc_ExternalComment__c: this.claimDto.comments,
-        Acc_ParticipantVisibility__c: this.getChangeStatusVisibility(mapToClaimStatus(existingStatus), this.claimDto),
+        Acc_ParticipantVisibility__c: this.getChangeStatusVisibility(originalStatus, this.claimDto),
       });
     } else {
       await context.repositories.claims.update({
@@ -83,9 +83,13 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
   ];
 
   private getChangeStatusVisibility(existingStatus: ClaimStatus, claimDto: ClaimDto): boolean {
-    return (
-      this.participantVisibleStatus.indexOf(claimDto.status) !== -1 ||
-      (existingStatus === ClaimStatus.INNOVATE_QUERIED && claimDto.status === ClaimStatus.AWAITING_IUK_APPROVAL)
-    );
+    const hasVisibleStatus = this.participantVisibleStatus.includes(claimDto.status);
+
+    if (hasVisibleStatus) return true;
+
+    const currentlyQueried = existingStatus === ClaimStatus.INNOVATE_QUERIED;
+    const updateStateIsAwaiting = claimDto.status === ClaimStatus.AWAITING_IUK_APPROVAL;
+
+    return currentlyQueried && updateStateIsAwaiting;
   }
 }
