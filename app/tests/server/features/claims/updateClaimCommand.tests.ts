@@ -89,51 +89,6 @@ describe("UpdateClaimCommand", () => {
     expect(claim.Acc_ClaimStatus__c).toBe(ClaimStatus.SUBMITTED);
   });
 
-  it("throws a validation error if an iar is required when the claim is submitted and status is DRAFT", async () => {
-    const context = new TestContext();
-    const claim = context.testData.createClaim(undefined, undefined, x => {
-      x.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
-      x.Acc_IARRequired__c = true;
-    });
-    const dto = mapClaim(context)(claim);
-    const project = context.testData.createProject();
-
-    dto.status = ClaimStatus.SUBMITTED;
-
-    const command = new UpdateClaimCommand(project.Id, dto);
-    expect(context.runCommand(command)).rejects.toThrow(ValidationError);
-  });
-
-  it("throws a validation error if an iar is required when the claim is submitted and status is MO_QUERIED", async () => {
-    const context = new TestContext();
-    const claim = context.testData.createClaim(undefined, undefined, x => {
-      x.Acc_ClaimStatus__c = ClaimStatus.MO_QUERIED;
-      x.Acc_IARRequired__c = true;
-    });
-    const dto = mapClaim(context)(claim);
-    const project = context.testData.createProject();
-
-    dto.status = ClaimStatus.SUBMITTED;
-
-    const command = new UpdateClaimCommand(project.Id, dto);
-    expect(context.runCommand(command)).rejects.toThrow(ValidationError);
-  });
-
-  it("throws a validation error if an iar is required when the claim is AWAITING_IUK_APPROVAL and status is INNOVATE_QUERIED", async () => {
-    const context = new TestContext();
-    const claim = context.testData.createClaim(undefined, undefined, x => {
-      x.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED;
-      x.Acc_IARRequired__c = true;
-    });
-    const dto = mapClaim(context)(claim);
-    const project = context.testData.createProject();
-
-    dto.status = ClaimStatus.AWAITING_IUK_APPROVAL;
-
-    const command = new UpdateClaimCommand(project.Id, dto);
-    expect(context.runCommand(command)).rejects.toThrow(ValidationError);
-  });
-
   it("updates the status to submitted if an iar is required and there are claim documents uploaded", async () => {
     const context = new TestContext();
     const claim = context.testData.createClaim(undefined, undefined, x => {
@@ -421,71 +376,215 @@ describe("UpdateClaimCommand", () => {
     expect(context.repositories.claimStatusChanges.Items[0].Acc_ParticipantVisibility__c).toBe(true);
   });
 
-  describe("when isClaimSummary is true", () => {
-    it("should ignore validation when not the final claim", async () => {
-      const context = new TestContext();
-      const project = context.testData.createProject();
-      const partner = context.testData.createPartner();
-      const claim = context.testData.createClaim(partner, 2, x => (x.Acc_FinalClaim__c = false));
+  describe("when iar required", () => {
+    const isClaimSummaryTrue = true;
+    const isIarRequiredState = true;
 
-      claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+    describe("with valid submission", () => {
+      it("with an invalid competitionType", async () => {
+        const invalidCompetitionType = "CR&D";
 
-      const dto = mapClaim(context)(claim);
+        const context = new TestContext();
+        const project = context.testData.createProject();
+        const partner = context.testData.createPartner(project, x => (x.competitionType = invalidCompetitionType));
+        const claim = context.testData.createClaim(partner, undefined, x => {
+          x.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED;
+          x.Acc_IARRequired__c = isIarRequiredState;
+          x.Acc_IAR_Status__c = "Received";
+        });
+        const dto = mapClaim(context)(claim);
 
-      const command = new UpdateClaimCommand(project.Id, dto, true);
-
-      await expect(context.runCommand(command)).resolves.toEqual(true);
-    });
-
-    it("should ignore validation when project is KTP", async () => {
-      const context = new TestContext();
-      const project = context.testData.createProject();
-      const partner = context.testData.createPartner(project, x => (x.competitionType = "KTP"));
-      const claim = context.testData.createClaim(partner, 2);
-
-      claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
-
-      const dto = mapClaim(context)(claim);
-
-      const command = new UpdateClaimCommand(project.Id, dto, true);
-
-      await expect(context.runCommand(command)).resolves.toEqual(true);
-    });
-
-    it("should pass validation when PCF status is Received", async () => {
-      const context = new TestContext();
-      const project = context.testData.createProject();
-      const partner = context.testData.createPartner();
-      const claim = context.testData.createClaim(partner, 2, x => {
-        x.Acc_FinalClaim__c = true;
-        x.Acc_PCF_Status__c = "Received";
+        const command = new UpdateClaimCommand(project.Id, dto);
+        await expect(context.runCommand(command)).resolves.toEqual(true);
       });
 
-      claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+      it("with iar required is false", async () => {
+        const iarRequiredIsFalse = false;
 
-      const dto = mapClaim(context)(claim);
+        const context = new TestContext();
+        const project = context.testData.createProject();
+        const partner = context.testData.createPartner(project, x => (x.competitionType = "KTP"));
+        const claim = context.testData.createClaim(partner, undefined, x => {
+          x.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED;
+          x.Acc_IARRequired__c = iarRequiredIsFalse;
+          x.Acc_IAR_Status__c = "Received";
+        });
+        const dto = mapClaim(context)(claim);
 
-      const command = new UpdateClaimCommand(project.Id, dto, true);
-
-      await expect(context.runCommand(command)).resolves.toEqual(true);
-    });
-
-    it("should pass validation when PCF status is Not Received", async () => {
-      const context = new TestContext();
-      const project = context.testData.createProject();
-      const partner = context.testData.createPartner();
-      const claim = context.testData.createClaim(partner, 2, x => {
-        x.Acc_FinalClaim__c = true;
-        x.Acc_PCF_Status__c = "Not Received";
+        const command = new UpdateClaimCommand(project.Id, dto, isClaimSummaryTrue);
+        await expect(context.runCommand(command)).resolves.toEqual(true);
       });
 
-      claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+      it("when not a claim summary", async () => {
+        const isNotClaimSummary = false;
 
-      const dto = mapClaim(context)(claim);
+        const context = new TestContext();
+        const project = context.testData.createProject();
+        const claim = context.testData.createClaim();
 
-      const command = new UpdateClaimCommand(project.Id, dto, true);
+        const dto = mapClaim(context)(claim);
 
-      await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+        const command = new UpdateClaimCommand(project.Id, dto, isNotClaimSummary);
+        await expect(context.runCommand(command)).resolves.toEqual(true);
+      });
+    });
+
+    describe("throws a validation error", () => {
+      it("when documents are missing from a valid a valid request", async () => {
+        const validCompetitionType = "KTP";
+        const validIarStatus = "Received";
+
+        const context = new TestContext();
+        const project = context.testData.createProject();
+        const partner = context.testData.createPartner(project, x => (x.competitionType = validCompetitionType));
+        // Note: no testData createDocument() is created!
+        const claim = context.testData.createClaim(partner, undefined, x => {
+          x.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED;
+          x.Acc_IARRequired__c = isIarRequiredState;
+          x.Acc_IAR_Status__c = validIarStatus;
+        });
+        const dto = mapClaim(context)(claim);
+
+        const command = new UpdateClaimCommand(project.Id, dto, isClaimSummaryTrue);
+        await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+      });
+
+      it("when iar status is invalid but the request with documents is valid", async () => {
+        const validCompetitionType = "KTP";
+        const invalidIarStatus = "Not Received";
+
+        const context = new TestContext();
+        const project = context.testData.createProject();
+        const partner = context.testData.createPartner(project, x => (x.competitionType = validCompetitionType));
+        const claim = context.testData.createClaim(partner, undefined, x => {
+          x.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED;
+          x.Acc_IARRequired__c = isIarRequiredState;
+          x.Acc_IAR_Status__c = invalidIarStatus;
+        });
+        context.testData.createDocument(claim.Id, "stub-document.docx");
+        const dto = mapClaim(context)(claim);
+
+        const command = new UpdateClaimCommand(project.Id, dto, isClaimSummaryTrue);
+        await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+      });
+    });
+  });
+
+  describe("with validateFinalClaim", () => {
+    describe("when isClaimSummary is false", () => {
+      const isNotClaimSummary = false;
+
+      it("should pass validation when command is not on summary", async () => {
+        const context = new TestContext();
+        const project = context.testData.createProject();
+        const claim = context.testData.createClaim();
+
+        const dto = mapClaim(context)(claim);
+
+        const command = new UpdateClaimCommand(project.Id, dto, isNotClaimSummary);
+
+        await expect(context.runCommand(command)).resolves.toEqual(true);
+      });
+
+      it("should pass validation when competitionType is KTP", async () => {
+        const validCompetitionType = "KTP";
+
+        const context = new TestContext();
+        const project = context.testData.createProject();
+        context.testData.createPartner(project, x => (x.competitionType = validCompetitionType));
+        const claim = context.testData.createClaim();
+
+        const dto = mapClaim(context)(claim);
+
+        const command = new UpdateClaimCommand(project.Id, dto, isNotClaimSummary);
+
+        await expect(context.runCommand(command)).resolves.toEqual(true);
+      });
+    });
+
+    describe("when isClaimSummary is true", () => {
+      it("should fail validation with missing documents when not the final claim", async () => {
+        const context = new TestContext();
+        const project = context.testData.createProject();
+        const partner = context.testData.createPartner();
+        // Note: no testData createDocument() is created!
+        const claim = context.testData.createClaim(partner, 2, x => (x.Acc_FinalClaim__c = false));
+
+        claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+
+        const dto = mapClaim(context)(claim);
+
+        const command = new UpdateClaimCommand(project.Id, dto, true);
+
+        await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+      });
+
+      it("should fail validation when not the final claim and has documents attached", async () => {
+        const context = new TestContext();
+        const project = context.testData.createProject();
+        const partner = context.testData.createPartner();
+        const claim = context.testData.createClaim(partner, 2, x => (x.Acc_FinalClaim__c = false));
+        context.testData.createDocument(claim.Id, "stub-document.docx");
+
+        claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+
+        const dto = mapClaim(context)(claim);
+
+        const command = new UpdateClaimCommand(project.Id, dto, true);
+
+        await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+      });
+
+      it("should ignore validation when project is KTP", async () => {
+        const context = new TestContext();
+        const project = context.testData.createProject();
+        const partner = context.testData.createPartner(project, x => (x.competitionType = "KTP"));
+        const claim = context.testData.createClaim(partner, 2);
+
+        claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+
+        const dto = mapClaim(context)(claim);
+
+        const command = new UpdateClaimCommand(project.Id, dto, true);
+
+        await expect(context.runCommand(command)).resolves.toEqual(true);
+      });
+
+      it("should pass validation when PCF status is Received", async () => {
+        const context = new TestContext();
+        const project = context.testData.createProject();
+        const partner = context.testData.createPartner();
+        const claim = context.testData.createClaim(partner, 2, x => {
+          x.Acc_FinalClaim__c = true;
+          x.Acc_PCF_Status__c = "Received";
+        });
+
+        claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+
+        const dto = mapClaim(context)(claim);
+
+        const command = new UpdateClaimCommand(project.Id, dto, true);
+
+        await expect(context.runCommand(command)).resolves.toEqual(true);
+      });
+
+      it("should pass validation when PCF status is Not Received", async () => {
+        const context = new TestContext();
+        const project = context.testData.createProject();
+        const partner = context.testData.createPartner();
+        const claim = context.testData.createClaim(partner, 2, x => {
+          x.Acc_FinalClaim__c = true;
+          x.Acc_PCF_Status__c = "Not Received";
+        });
+
+        claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
+
+        const dto = mapClaim(context)(claim);
+
+        const command = new UpdateClaimCommand(project.Id, dto, true);
+
+        await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
+      });
     });
   });
 });
