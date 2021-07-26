@@ -144,7 +144,19 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<
 
           {documents.length ? (
             <>
-              {this.props.isClient && this.renderDocumentsFilter()}
+              {this.props.isClient && (
+                <>
+                  <ACC.Renderers.SimpleString>
+                    <ACC.Content value={x => x.projectDocuments.documentMessages.newWindow} />
+                  </ACC.Renderers.SimpleString>
+
+                  <ACC.DocumentFilter
+                    name="document-filter"
+                    qa="document-search-form"
+                    onSearch={documentFilter => this.setState({ documentFilter })}
+                  />
+                </>
+              )}
 
               {this.renderDocumentsSection(documents, editor)}
             </>
@@ -186,36 +198,6 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<
             <ACC.Content value={x => x.projectDocuments.noMatchingDocumentsMessage} />
           </ACC.Renderers.SimpleString>
         )}
-      </>
-    );
-  }
-
-  private renderDocumentsFilter() {
-    const FilterForm = ACC.TypedForm<ProjectDocumentState>();
-
-    const handleOnSearch = ({ documentFilter }: ProjectDocumentState) => {
-      const filteredQuery = documentFilter ? documentFilter.trim() : "";
-      const newValue = filteredQuery.length ? filteredQuery : "";
-
-      this.setState({ documentFilter: newValue });
-    };
-
-    return (
-      <>
-        <ACC.Renderers.SimpleString>
-          {<ACC.Content value={x => x.projectDocuments.documentMessages.newWindow} />}
-        </ACC.Renderers.SimpleString>
-
-        <FilterForm.Form data={this.state} onSubmit={noop} onChange={handleOnSearch} qa="document-search-form">
-          <FilterForm.Search
-            name="document-filter"
-            labelHidden
-            value={x => x.documentFilter}
-            update={(x, v) => (x.documentFilter = v || "")}
-            // TODO
-            placeholder={"Search documents"}
-          />
-        </FilterForm.Form>
       </>
     );
   }
