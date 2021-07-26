@@ -18,8 +18,6 @@ export class DocumentLabels extends ContentBase {
         return this.getContent("description.invoice");
       case DocumentDescription.DeMinimisDeclarationForm:
         return this.getContent("description.deMinimisDeclarationForm");
-      case DocumentDescription.EndOfProjectSurvey:
-        return this.getContent("description.endOfProjectSurvey");
       case DocumentDescription.StatementOfExpenditure:
         return this.getContent("description.statementOfExpenditure");
       case DocumentDescription.JeSForm:
@@ -52,6 +50,8 @@ export class DocumentLabels extends ContentBase {
         return this.getContent("description.meetingAgenda");
       case DocumentDescription.ProjectCompletionForm:
         return this.getContent("description.projectCompletionForm");
+      case DocumentDescription.EndOfProjectSurvey:
+        return this.getContent("description.endOfProjectSurvey");
       default:
         return this.getContent("description.unknown");
     }

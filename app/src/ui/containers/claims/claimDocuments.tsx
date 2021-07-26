@@ -4,7 +4,7 @@ import { Pending } from "@shared/pending";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore, useStores } from "@ui/redux";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { DocumentDescription, ProjectRole } from "@framework/constants";
+import { allowedClaimDocuments, DocumentDescription, ProjectRole } from "@framework/constants";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDescriptionDto, DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { getAuthRoles } from "@framework/types";
@@ -101,16 +101,6 @@ interface ClaimDocumentsComponentProps extends ClaimDocumentsPageParams, BasePro
   onChange: (saving: boolean, dto: MultipleDocumentUploadDto) => void;
   onDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
-
-const allowedClaimDocuments: Readonly<DocumentDescription[]> = [
-  DocumentDescription.Evidence,
-  DocumentDescription.Invoice,
-  DocumentDescription.IAR,
-  DocumentDescription.LMCMinutes,
-  DocumentDescription.ScheduleThree,
-  DocumentDescription.StatementOfExpenditure,
-  DocumentDescription.ProjectCompletionForm,
-];
 
 const ClaimDocumentsComponent = ({
   content,
