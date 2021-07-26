@@ -58,7 +58,6 @@ export class DocumentDescriptionMapper {
       case this.types.ClaimValidationForm: return DocumentDescription.ClaimValidationForm;
       case this.types.DeMinimisDeclartionForm: return DocumentDescription.DeMinimisDeclarationForm;
       case this.types.StatementOfExpenditure: return DocumentDescription.StatementOfExpenditure;
-      case this.types.EndOfProjectSurvey: return DocumentDescription.EndOfProjectSurvey;
       case this.types.JeSForm: return DocumentDescription.JeSForm;
       case this.types.OverheadCalculationSpreadsheet: return DocumentDescription.OverheadCalculationSpreadsheet;
       case this.types.BankStatement: return DocumentDescription.BankStatement;
@@ -74,6 +73,7 @@ export class DocumentDescriptionMapper {
       case this.types.Email: return DocumentDescription.Email;
       case this.types.MeetingAgenda: return DocumentDescription.MeetingAgenda;
       case this.types.ProjectCompletionForm: return DocumentDescription.ProjectCompletionForm;
+      case this.types.EndOfProjectSurvey: return DocumentDescription.EndOfProjectSurvey;
       default: return null;
     }
   });
@@ -85,7 +85,6 @@ export class DocumentDescriptionMapper {
       case DocumentDescription.Evidence: return this.types.Evidence;
       case DocumentDescription.ClaimValidationForm: return this.types.ClaimValidationForm;
       case DocumentDescription.DeMinimisDeclarationForm: return this.types.DeMinimisDeclartionForm;
-      case DocumentDescription.EndOfProjectSurvey: return this.types.EndOfProjectSurvey;
       case DocumentDescription.StatementOfExpenditure: return this.types.StatementOfExpenditure;
       case DocumentDescription.JeSForm: return this.types.JeSForm;
       case DocumentDescription.OverheadCalculationSpreadsheet: return this.types.OverheadCalculationSpreadsheet;
@@ -102,6 +101,7 @@ export class DocumentDescriptionMapper {
       case DocumentDescription.Email: return this.types.Email;
       case DocumentDescription.MeetingAgenda: return this.types.MeetingAgenda;
       case DocumentDescription.ProjectCompletionForm: return this.types.ProjectCompletionForm;
+      case DocumentDescription.EndOfProjectSurvey: return this.types.EndOfProjectSurvey;
       default: return null;
     }
   });

@@ -4,6 +4,7 @@ import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
 import {
+  allowedClaimDocuments,
   ClaimDetailsSummaryDto,
   ClaimDto,
   ClaimStatus,
@@ -357,21 +358,11 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
     return documents.find(x => x.id === targetId);
   }
 
-  private readonly claimAllowedDocuments: DocumentDescription[] = [
-    DocumentDescription.Invoice,
-    DocumentDescription.IAR,
-    DocumentDescription.Evidence,
-    DocumentDescription.EndOfProjectSurvey,
-    DocumentDescription.StatementOfExpenditure,
-    DocumentDescription.LMCMinutes,
-    DocumentDescription.ScheduleThree,
-  ];
-
   renderSupportingDocumentsItem({ documentsEditor, documents }: CombinedData): React.ReactNode {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     return (
-      <EnumDocuments documentsToCheck={this.claimAllowedDocuments}>
+      <EnumDocuments documentsToCheck={allowedClaimDocuments}>
         {docs => (
           <ACC.AccordionItem
             title={this.props.content.default.uploadSupportingDocumentsFormAccordionTitle}

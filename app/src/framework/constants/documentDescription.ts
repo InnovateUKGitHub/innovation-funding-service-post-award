@@ -3,6 +3,9 @@ export enum DocumentDescription {
   ClaimValidationForm = 20,
   Evidence = 30,
   DeMinimisDeclarationForm = 40,
+  /**
+   * @deprecated - This will be removed. We now favour the new "ProjectCompletionForm" workflow.
+   **/
   EndOfProjectSurvey = 50,
   StatementOfExpenditure = 60,
   JeSForm = 70,
@@ -22,3 +25,13 @@ export enum DocumentDescription {
   Invoice = 210,
   ProjectCompletionForm = 220,
 }
+
+export const allowedClaimDocuments: Readonly<DocumentDescription[]> = [
+  DocumentDescription.Invoice,
+  DocumentDescription.IAR,
+  DocumentDescription.Evidence,
+  DocumentDescription.ProjectCompletionForm,
+  DocumentDescription.StatementOfExpenditure,
+  DocumentDescription.LMCMinutes,
+  DocumentDescription.ScheduleThree,
+];

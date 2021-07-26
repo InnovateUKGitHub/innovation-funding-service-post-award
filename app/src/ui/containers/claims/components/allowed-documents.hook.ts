@@ -1,8 +1,12 @@
+import { DocumentDescription } from "@framework/constants";
 import { getAllEnumValues } from "@shared/enumHelper";
 import { DropdownOption } from "@ui/components";
 import { useContent } from "@ui/hooks";
 
-export function useEnumDocuments(enumDocuments: object, documentsToCheck: any[]): DropdownOption[] {
+export function useEnumDocuments(
+  enumDocuments: object,
+  documentsToCheck: Readonly<DocumentDescription[]>,
+): DropdownOption[] {
   const { getContent } = useContent();
   const getRawDocs: number[] = getAllEnumValues(enumDocuments);
 
