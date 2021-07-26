@@ -35,6 +35,7 @@ import { UpdateForecastFormHandler } from "./updateForecastFormHandler";
 import { IFormHandler, MultipleFileFormHandlerBase, SingleFileFormHandlerBase, StandardFormHandlerBase } from "./formHandlerBase";
 import { ClaimDetailDocumentDeleteHandler } from "./claimDetailDocument/claimDetailDocumentDeleteHandler";
 import { ClaimDetailDocumentUploadHandler } from "./claimDetailDocument/claimDetailDocumentUploadHandler";
+import { ProjectDocumentDeleteHandler } from "./ProjectDocumentDeleteHandler";
 import { ProjectDocumentUploadHandler } from "./projectDocumentFormHandler";
 import { MonitoringReportCreateFormHandler } from "./monitoringReport/monitoringReportCreateFormHandler";
 import { MonitoringReportDeleteFormHandler } from "./monitoringReport/monitoringReportDeleteFormHandler";
@@ -62,6 +63,7 @@ export const standardFormHandlers: (StandardFormHandlerBase<{}, EditorStateKeys>
   new MonitoringReportPreparePeriodFormHandler(),
   new MonitoringReportSummaryFormHandler(),
   new OverheadDocumentsDeleteHandler(),
+  new ProjectDocumentDeleteHandler(),
   new ProjectChangeRequestAddTypeFormHandler(),
   new ProjectChangeRequestCreateFormHandler(),
   new ProjectChangeRequestDeleteFormHandler(),

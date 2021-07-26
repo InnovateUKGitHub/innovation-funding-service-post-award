@@ -91,16 +91,15 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<
         project={project}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        <>
-          <ACC.Renderers.SimpleString>
-            <ACC.Content
-              value={x => x.projectDocuments.documentMessages.documentsIntroMessage.storingDocumentsMessage}
-            />
-          </ACC.Renderers.SimpleString>
-          <ACC.Renderers.SimpleString>
-            <ACC.Content value={x => x.projectDocuments.documentMessages.documentsIntroMessage.notForClaimsMessage} />
-          </ACC.Renderers.SimpleString>
-        </>
+
+        <ACC.Renderers.SimpleString>
+          <ACC.Content value={x => x.projectDocuments.documentMessages.documentsIntroMessage.storingDocumentsMessage} />
+        </ACC.Renderers.SimpleString>
+
+        <ACC.Renderers.SimpleString>
+          <ACC.Content value={x => x.projectDocuments.documentMessages.documentsIntroMessage.notForClaimsMessage} />
+        </ACC.Renderers.SimpleString>
+
         <ACC.Section title={x => x.projectDocuments.documentMessages.uploadTitle}>
           <EnumDocuments documentsToCheck={this.allowedProjectDocuments}>
             {docs => (
@@ -139,10 +138,23 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<
                 <UploadForm.Submit styling="Secondary">
                   <ACC.Content value={x => x.projectDocuments.documentMessages.uploadDocumentsLabel} />
                 </UploadForm.Submit>
-                {this.renderDocumentsSection(documents, editor)}
               </UploadForm.Form>
             )}
           </EnumDocuments>
+
+          {documents.length ? (
+            <>
+              {this.props.isClient && this.renderDocumentsFilter()}
+
+              {this.renderDocumentsSection(documents, editor)}
+            </>
+          ) : (
+            <ACC.ValidationMessage
+              messageType="info"
+              qa="noDocuments"
+              message={<ACC.Content value={x => x.projectDocuments.documentMessages.noDocumentsUploaded} />}
+            />
+          )}
         </ACC.Section>
       </ACC.Page>
     );
@@ -163,30 +175,22 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<
 
     return (
       <>
-        {isClient && this.renderDocumentsFilter(documents)}
-
-        {!documentsToDisplay.length && !!documents.length ? (
-          <ACC.Renderers.SimpleString qa={"noDocuments"}>
+        {documentsToDisplay.length ? (
+          <ACC.DocumentTableWithDelete
+            onRemove={document => this.props.onDelete(documentsEditor.data, document)}
+            documents={documents}
+            qa="claim-supporting-documents"
+          />
+        ) : (
+          <ACC.Renderers.SimpleString qa="noDocuments">
             <ACC.Content value={x => x.projectDocuments.noMatchingDocumentsMessage} />
           </ACC.Renderers.SimpleString>
-        ) : (
-          this.renderDocumentsTable(documentsEditor, documentsToDisplay)
         )}
       </>
     );
   }
 
-  private renderDocumentsFilter(documents: DocumentSummaryDto[]) {
-    if (documents.length === 0) {
-      return (
-        <ACC.ValidationMessage
-          qa={"noDocuments"}
-          message={<ACC.Content value={x => x.projectDocuments.documentMessages.noDocumentsUploaded} />}
-          messageType="info"
-        />
-      );
-    }
-
+  private renderDocumentsFilter() {
     const FilterForm = ACC.TypedForm<ProjectDocumentState>();
 
     const handleOnSearch = ({ documentFilter }: ProjectDocumentState) => {
@@ -214,21 +218,6 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<
         </FilterForm.Form>
       </>
     );
-  }
-
-  private renderDocumentsTable(
-    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
-    documents: DocumentSummaryDto[],
-  ) {
-    return documents.length ? (
-      <ACC.Section>
-        <ACC.DocumentTableWithDelete
-          onRemove={document => this.props.onDelete(documentsEditor.data, document)}
-          documents={documents}
-          qa="claim-supporting-documents"
-        />
-      </ACC.Section>
-    ) : null;
   }
 }
 
@@ -260,7 +249,7 @@ export const ProjectDocumentsRoute = defineRoute({
   routeName: "projectDocuments",
   routePath: "/projects/:projectId/documents",
   container: ProjectDocumentsContainer,
-  getParams: (route) => ({ projectId: route.params.projectId }),
+  getParams: route => ({ projectId: route.params.projectId }),
   getTitle: ({ content }) => content.projectDocuments.title(),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
 });
