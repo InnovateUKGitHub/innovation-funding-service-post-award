@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { stringComparator } from "@framework/util/comparator";
 import { ITypedTable, TableChild, TypedTable } from "@ui/components/table";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { Content } from "@ui/components/content";
 import { useContent } from "@ui/hooks";
+import { noop } from "@ui/helpers/noop";
 import { getFileSize } from "../../../framework/util/files";
 import { TypedForm } from ".././form";
 import { LinksList } from ".././linksList";
@@ -127,3 +129,47 @@ export const DocumentView = (props: DocumentViewProps) => {
     <ValidationMessage message={defaultMessage} messageType="info" />
   );
 };
+
+interface DocumentFilterProps {
+  name: string;
+  qa: string;
+  onSearch: (filteredText: string) => void;
+  intitialFilter?: string;
+  placeholder?: string;
+}
+
+// Note: TypedForm enforces an object shaped payload, so this can't a single primitive string
+interface DocumentFilterState {
+  filteredText: string;
+}
+
+export function DocumentFilter({
+  name,
+  qa,
+  placeholder = "Search documents",
+  intitialFilter,
+  onSearch,
+}: DocumentFilterProps) {
+  const [filteredText, setFilteredText] = useState<string>(intitialFilter || "");
+
+  const handleOnSearch = (newState: DocumentFilterState): void => {
+    const newFilteredValue = newState.filteredText.trim();
+
+    setFilteredText(newFilteredValue);
+    onSearch(newFilteredValue);
+  };
+
+  const FilterForm = TypedForm<DocumentFilterState>();
+
+  return (
+    <FilterForm.Form qa={qa} data={{ filteredText }} onSubmit={noop} onChange={handleOnSearch}>
+      <FilterForm.Search
+        name={name}
+        labelHidden
+        placeholder={placeholder}
+        value={x => x.filteredText}
+        update={(x, v) => (x.filteredText = v || "")}
+      />
+    </FilterForm.Form>
+  );
+}
