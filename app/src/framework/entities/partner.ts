@@ -18,6 +18,7 @@ export interface Partner {
   totalFutureForecastsForParticipant: number;
   forecastLastModifiedDate: Date | null;
   claimsForReview: number;
+  overdueProject: boolean;
   claimsOverdue: number;
   claimsUnderQuery: number;
   trackingClaims: string;

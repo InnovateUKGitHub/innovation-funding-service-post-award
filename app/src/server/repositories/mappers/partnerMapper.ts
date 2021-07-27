@@ -27,6 +27,7 @@ export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePar
       totalFutureForecastsForParticipant: item.Acc_TotalFutureForecastsForParticipant__c,
       forecastLastModifiedDate: this.clock.parseOptionalSalesforceDateTime(item.Acc_ForecastLastModifiedDate__c),
       claimsForReview: item.Acc_ClaimsForReview__c,
+      overdueProject: parseSalesForceWarningFlagUI(item.Acc_Overdue_Project__c),
       claimsOverdue: item.Acc_ClaimsOverdue__c,
       claimsUnderQuery: item.Acc_ClaimsUnderQuery__c,
       trackingClaims: item.Acc_TrackingClaims__c,
@@ -74,4 +75,25 @@ export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePar
       isNonFunded: item.Acc_NonfundedParticipant__c,
     };
   }
+}
+
+function parseSalesForceWarningFlagUI(flagAsImageString: string): boolean {
+  /**
+   * Note: This field returns a string with an html img element :(
+   *
+   * We have to parse and validate based on 2 types of src values.
+   */
+  const validFlagsRegex = /\w*ACC_Red_Flag|Acc_ClearImage/;
+
+  const selectedFlag = flagAsImageString.match(validFlagsRegex);
+
+  if (!selectedFlag) {
+    throw Error(
+      "Could not parse HTML Img src value! The image does not contain the expected flags in validFlagsRegex.",
+    );
+  }
+
+  const flagImageOptions = new Set(selectedFlag);
+
+  return flagImageOptions.has("ACC_Red_Flag");
 }

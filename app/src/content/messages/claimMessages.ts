@@ -8,6 +8,12 @@ export class ClaimMessages extends ContentBase {
   }
 
   public readonly guidanceMessage = this.getContent("guidance-message", { markdown: true });
+
+  public readonly overdueGuidanceMessage1 = this.getContent("overdue-guidance-message.message-1");
+  public readonly overdueGuidanceMessage2 = this.getContent("overdue-guidance-message.message-2");
+  public readonly overdueGuidanceMessage3 = this.getContent("overdue-guidance-message.message-3");
+  public readonly overdueGuidanceMessage4 = this.getContent("overdue-guidance-message.message-4");
+
   public readonly submitClaimConfirmation = this.getContent("submit-claim-confirmation");
   public readonly noOpenClaimsMessage = (nextClaimStartDate: Date) =>
     this.getContent("no-open-claims", { nextClaimStartDate: formatDate(nextClaimStartDate, DateFormat.FULL_DATE) });

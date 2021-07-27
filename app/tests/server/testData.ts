@@ -139,6 +139,7 @@ export class TestData {
       forecastLastModifiedDate: null,
       organisationType: "Industrial",
       overheadRate: 20,
+      overdueProject: false,
       claimsForReview: 0,
       claimsOverdue: 0,
       claimsUnderQuery: 0,

@@ -39,6 +39,7 @@
   },
   "SBRI": {
     "claims-messages": {
+      "guidance-message": "You must upload an invoice with every claim. VAT invoices are required from partners registered for value-added tax (VAT).",
       "edit-claim-line-item-other-costs-total-costs": "Enter your total costs on this page, (excluding VAT from your invoice if you are VAT registered).",
       "edit-claim-line-item-vat-registered": "If you are VAT registered you must enter all VAT from your invoice on the 'VAT' cost category page.",
       "edit-claim-line-item-contact-mo": "Contact your monitoring officer for more information about the level of detail you need to provide.",
@@ -72,6 +73,7 @@
   },
   "SBRI IFS": {
     "claims-messages": {
+      "guidance-message": "You must upload an invoice with every claim. VAT invoices are required from partners registered for value-added tax (VAT).",
       "edit-claim-line-item-other-costs-total-costs": "Enter your total costs on this page, (excluding VAT from your invoice if you are VAT registered).",
       "edit-claim-line-item-vat-registered": "If you are VAT registered you must enter all VAT from your invoice on the 'VAT' cost category page.",
       "edit-claim-line-item-contact-mo": "Contact your monitoring officer for more information about the level of detail you need to provide.",

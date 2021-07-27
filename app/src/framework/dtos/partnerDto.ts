@@ -60,6 +60,7 @@ export interface PartnerDto {
   totalCostsSubmitted: number | null;
   roles: ProjectRole;
   forecastLastModifiedDate: Date | null;
+  overdueProject: boolean;
   claimsOverdue: number | null;
   claimsWithParticipant: number | null;
   claimStatus: PartnerClaimStatus;

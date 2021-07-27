@@ -69,6 +69,7 @@ export const createPartnerDto: CreateDTO<PartnerDto> = (objectToMerge?) => {
     totalCostsSubmitted: 37000,
     roles: 7,
     forecastLastModifiedDate: new Date(),
+    overdueProject: false,
     claimsOverdue: 0,
     claimsWithParticipant: 1,
     claimStatus: 3,
