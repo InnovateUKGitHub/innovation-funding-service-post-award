@@ -19,6 +19,7 @@ export function ErrorSummary({ code, message }: ErrorSummaryProps) {
   // Unique Errors
   const authErrorMessages = {
     SF_UPDATE_ALL_FAILURE: getContent(x => x.components.errorSummary.updateAllFailure),
+    INSUFFICIENT_ACCESS_OR_READONLY: getContent(x => x.components.errorSummary.insufficienceAccessRights),
   };
 
   const authWMessage = !isUnauthenticated && message && authErrorMessages[message as keyof typeof authErrorMessages];

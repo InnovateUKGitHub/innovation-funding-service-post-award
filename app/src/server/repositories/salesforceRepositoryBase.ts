@@ -32,6 +32,7 @@ export abstract class RepositoryBase {
 
   protected readonly payloadErrors = {
     UNABLE_TO_LOCK_ROW: "SF_UPDATE_ALL_FAILURE",
+    INSUFFICIENT_ACCESS_OR_READONLY: "INSUFFICIENT_ACCESS_OR_READONLY",
     FALLBACK_QUERY_ERROR: "FALLBACK_QUERY_ERROR",
   };
 
@@ -299,24 +300,28 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
 
     try {
       const connection = await this.getSalesforceConnection();
-      const targetObject = connection.sobject<Payload>(this.salesforceObjectName);
 
-      const deleteQuery = await this.batchRequest<Payload, boolean>(deleteIds, async batch => {
-        const result = await targetObject.delete(batch);
+      const deleteBatchConfirmations = await this.batchRequest<Payload, boolean>(deleteIds, async batch => {
+        const deleteQuery = connection.sobject<Payload>(this.salesforceObjectName);
+        const batchResults = await deleteQuery.delete(batch);
 
-        if (result.every(x => x.success)) return true;
+        // eslint-disable-next-line sonarjs/no-identical-functions
+        return batchResults.reduce<boolean>((_, result) => {
+          if (!result.success && !!result.errors.length) {
+            const errorMessage = this.getErrorFromPayload(result.errors);
 
-        throw new Errors.SalesforceDataChangeError(
-          "Failed to delete from salesforce",
-          this.getDataChangeErrorMessages(result),
-        );
+            throw new Errors.SalesforceDataChangeError(errorMessage, this.getDataChangeErrorMessages(batchResults));
+          }
+
+          return true;
+        }, false);
       });
 
-      const allIdsDeleted: boolean = deleteQuery.every(Boolean);
+      const allIdsDeleted: boolean = deleteBatchConfirmations.every(Boolean);
 
       // Note: Ensure all items are deleted
       if (!allIdsDeleted) {
-        const deleteStatus = deleteQuery.map((x, i) => `ID: ${deleteIds[i]}, Status: ${x}`);
+        const deleteStatus = deleteBatchConfirmations.map((x, i) => `ID: ${deleteIds[i]}, Status: ${x}`);
 
         throw new Errors.SalesforceDataChangeError("Failed to delete from salesforce", deleteStatus);
       }
