@@ -28,6 +28,7 @@ export interface ISalesforcePartner {
   Acc_TotalFutureForecastsForParticipant__c: number;
   Acc_ForecastLastModifiedDate__c: string;
   Acc_ClaimsForReview__c: number;
+  Acc_Overdue_Project__c: string;
   Acc_ClaimsOverdue__c: number;
   Acc_ClaimsUnderQuery__c: number;
   Acc_TrackingClaims__c: string;
@@ -116,6 +117,7 @@ export class PartnerRepository
     "Acc_TotalFutureForecastsForParticipant__c",
     "Acc_ForecastLastModifiedDate__c",
     "Acc_ClaimsForReview__c",
+    "Acc_Overdue_Project__c",
     "Acc_ClaimsOverdue__c",
     "Acc_ClaimsUnderQuery__c",
     "Acc_TrackingClaims__c",

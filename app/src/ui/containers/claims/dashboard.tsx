@@ -1,11 +1,13 @@
 import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { DateTime } from "luxon";
 import { getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { roundCurrency } from "@framework/util";
 import { Pending } from "../../../shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as Acc from "../../components";
+
+import { ClaimsDashboardGuidance } from "./components";
 
 export interface ClaimDashboardPageParams {
   projectId: string;
@@ -33,7 +35,6 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
   }
 
   private renderContents(project: ProjectDto, partner: PartnerDto, currentClaim: ClaimDto | null, previousClaims: ClaimDto[], ) {
-
     return (
       <Acc.Page
         pageTitle={<Acc.Projects.Title {...project} />}
@@ -41,7 +42,8 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
         project={project}
         partner={partner}
       >
-        {this.renderGuidanceMessage()}
+        <ClaimsDashboardGuidance {...partner} />
+
         <Acc.Renderers.Messages messages={this.props.messages} />
         <Acc.Section qa="current-claims-section" title={x => x.claimsDashboard.labels.openSectionTitle}>
           {this.renderCurrentClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project, partner, previousClaims)}
@@ -53,15 +55,6 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
     );
   }
 
-  private renderGuidanceMessage() {
-    return (
-      <Acc.ValidationMessage
-        qa="guidance-message"
-        messageType="info"
-        message={x => x.claimsDashboard.messages.guidanceMessage}
-      />
-    );
-  }
   private renderNoCurrentClaimsMessage(endDate: Date, previousClaims: ClaimDto[]) {
     const date = DateTime.fromJSDate(endDate).plus({ days: 1 }).toJSDate();
     // If the final claim has been approved
@@ -156,24 +149,24 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
   }
 }
 
-const Container = (props: ClaimDashboardPageParams & BaseProps) => (
-  <StoresConsumer>
-    {stores => (
-      <Component
-        projectDetails={stores.projects.getById(props.projectId)}
-        partnerDetails={stores.partners.getById(props.partnerId)}
-        previousClaims={stores.claims.getInactiveClaimsForPartner(props.partnerId)}
-        currentClaim={stores.claims.getActiveClaimForPartner(props.partnerId)}
-        {...props}
-      />
-    )}
-  </StoresConsumer>
-);
+const ClaimsDashboardRouteContainer = (props: ClaimDashboardPageParams & BaseProps) => {
+  const stores = useStores();
+
+  return (
+    <Component
+      {...props}
+      projectDetails={stores.projects.getById(props.projectId)}
+      partnerDetails={stores.partners.getById(props.partnerId)}
+      previousClaims={stores.claims.getInactiveClaimsForPartner(props.partnerId)}
+      currentClaim={stores.claims.getActiveClaimForPartner(props.partnerId)}
+    />
+  );
+};
 
 export const ClaimsDashboardRoute = defineRoute({
   routeName: "claimsDashboard",
   routePath: "/projects/:projectId/claims/?partnerId",
-  container: Container,
+  container: ClaimsDashboardRouteContainer,
   getParams: (route) => ({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId

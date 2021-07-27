@@ -87,6 +87,7 @@ const stubPartner: PartnerDto = {
   totalCostsSubmitted: null,
   roles: ProjectRole.FinancialContact,
   forecastLastModifiedDate: null,
+  overdueProject: false,
   claimsOverdue: null,
   claimsWithParticipant: null,
   claimStatus: PartnerClaimStatus.Unknown,

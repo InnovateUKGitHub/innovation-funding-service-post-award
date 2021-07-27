@@ -102,6 +102,7 @@ describe("getAllForProjectQuery", () => {
       roles: ProjectRole.ProjectManager,
       forecastLastModifiedDate: null,
       claimsWithParticipant: 20,
+      overdueProject: false,
       claimsOverdue: 30,
       claimStatus: PartnerClaimStatus.ClaimDue,
       statusName: "Claim Due",
@@ -157,6 +158,29 @@ describe("getAllForProjectQuery", () => {
     };
 
     expect(result).toEqual(expected);
+  });
+
+  describe("sets overdueProject correctly", () => {
+    test.each`
+      name                                                    | overdueState | participantStatus         | expectedState
+      ${"when not overdue with a valid status"}               | ${false}     | ${"On Hold"}              | ${false}
+      ${"when not overdue with an invalid status"}            | ${false}     | ${"Active"}               | ${false}
+      ${"when overdue with a status of Voluntary Withdrawal"} | ${true}      | ${"Voluntary Withdrawal"} | ${false}
+      ${"when overdue with a status of Active"}               | ${true}      | ${"Active"}               | ${false}
+      ${"when overdue with a status of On Hold"}              | ${true}      | ${"On Hold"}              | ${true}
+    `("$name", async ({ overdueState, participantStatus, expectedState }) => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+
+      const { id } = context.testData.createPartner(project, x => {
+        x.overdueProject = overdueState;
+        x.participantStatus = participantStatus;
+      });
+
+      const expectedPartner = await context.runQuery(new GetByIdQuery(id));
+
+      expect(expectedPartner.overdueProject).toBe(expectedState);
+    });
   });
 
   it("sets isWithdrawn correctly", async () => {

@@ -3,12 +3,15 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import * as Acc from "@ui/components";
 import { Pending } from "@shared/pending";
 import { DateTime } from "luxon";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
 import { getPartnerName } from "@ui/components";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { roundCurrency } from "@framework/util";
 import { ProjectRole, ProjectStatus } from "@framework/constants";
+import { getAuthRoles } from "@framework/types";
+
+import { ClaimsDashboardGuidance } from "./components";
 
 export interface AllClaimsDashboardParams {
   projectId: string;
@@ -22,20 +25,30 @@ interface AllClaimsDashboardData {
 }
 
 class AllClaimsDashboardComponent extends ContainerBase<AllClaimsDashboardParams, AllClaimsDashboardData, {}> {
-
   render() {
     const combined = Pending.combine({
       projectDetails: this.props.projectDetails,
       partners: this.props.partners,
       currentClaims: this.props.currentClaims,
-      previousClaims: this.props.previousClaims
+      previousClaims: this.props.previousClaims,
     });
 
-    return <Acc.PageLoader pending={combined} render={x => this.renderContents(x.projectDetails, x.partners, x.currentClaims, x.previousClaims)} />;
+    return (
+      <Acc.PageLoader
+        pending={combined}
+        render={x => this.renderContents(x.projectDetails, x.partners, x.currentClaims, x.previousClaims)}
+      />
+    );
   }
 
-  renderContents(projectDetails: ProjectDto, partners: PartnerDto[], currentClaims: ClaimDto[], previousClaims: ClaimDto[]) {
+  renderContents(
+    projectDetails: ProjectDto,
+    partners: PartnerDto[],
+    currentClaims: ClaimDto[],
+    previousClaims: ClaimDto[],
+  ) {
     const { isCombinationOfSBRI } = checkProjectCompetition(projectDetails.competitionType);
+    const { isFc } = getAuthRoles(projectDetails.roles);
 
     return (
       <Acc.Page
@@ -43,7 +56,8 @@ class AllClaimsDashboardComponent extends ContainerBase<AllClaimsDashboardParams
         backLink={<Acc.Projects.ProjectBackLink project={projectDetails} routes={this.props.routes} />}
         project={projectDetails}
       >
-        {this.renderGuidanceMessage(projectDetails, isCombinationOfSBRI)}
+        {isFc && this.renderGuidanceMessage(isCombinationOfSBRI, partners)}
+
         <Acc.Renderers.Messages messages={this.props.messages} />
         <Acc.Section qa="current-claims-section" title={x => x.allClaimsDashboard.labels.openSectionTitle}>
           {this.renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)}
@@ -55,32 +69,30 @@ class AllClaimsDashboardComponent extends ContainerBase<AllClaimsDashboardParams
     );
   }
 
-  private renderGuidanceMessage(projectDetails: ProjectDto, isCombinationOfSBRI: boolean) {
-    const isFC = projectDetails.roles & ProjectRole.FinancialContact;
-    if (!isFC) return null;
+  private renderGuidanceMessage(isCombinationOfSBRI: boolean, partners: PartnerDto[]) {
+    // Note: we can ensure that the PM as we can check isLead as only one FC can have this
+    const isCurrentOverduePartner = partners.find(x => x.isLead && x.overdueProject);
 
-    return isCombinationOfSBRI ? (
-      <Acc.Renderers.SimpleString qa="theFinalClaimApprovedNotificationMessage">
-        <Acc.Content value={x => x.allClaimsDashboard.sbriGuidanceMessage} />
-      </Acc.Renderers.SimpleString>
-    ) : (
-      <Acc.ValidationMessage
-        qa="guidance-message"
-        messageType="info"
-        message={x => x.allClaimsDashboard.messages.guidanceMessage}
-      />
-    );
+    if (!isCurrentOverduePartner && isCombinationOfSBRI) {
+      return (
+        <Acc.Renderers.SimpleString qa="theFinalClaimApprovedNotificationMessage">
+          <Acc.Content value={x => x.allClaimsDashboard.sbriGuidanceMessage} />
+        </Acc.Renderers.SimpleString>
+      );
+    }
+
+    return <ClaimsDashboardGuidance overdueProject={!!isCurrentOverduePartner?.overdueProject} />;
   }
 
   groupClaimsByPeriod(claims: ClaimDto[]) {
     const distinctPeriods = [...new Set(claims.map(x => x.periodId))].sort((a, b) => a - b);
-    return distinctPeriods.map((period) => {
+    return distinctPeriods.map(period => {
       const periodClaims = claims.filter(x => x.periodId === period);
       return {
         periodId: period,
         claims: periodClaims,
         start: periodClaims[0].periodStartDate,
-        end: periodClaims[0].periodEndDate
+        end: periodClaims[0].periodEndDate,
       };
     });
   }
@@ -88,11 +100,10 @@ class AllClaimsDashboardComponent extends ContainerBase<AllClaimsDashboardParams
   private renderCurrentClaimsPerPeriod(claims: ClaimDto[], project: ProjectDto, partners: PartnerDto[]) {
     const groupedClaims = this.groupClaimsByPeriod(claims);
     if (groupedClaims.length === 0) {
-
       if (project.status === ProjectStatus.Terminated || project.status === ProjectStatus.Closed) {
         return (
           <Acc.Renderers.SimpleString qa="theFinalClaimApprovedNotificationMessage">
-            <Acc.Content value={x => x.allClaimsDashboard.messages.noRemainingClaims}/>
+            <Acc.Content value={x => x.allClaimsDashboard.messages.noRemainingClaims} />
           </Acc.Renderers.SimpleString>
         );
       }
@@ -101,15 +112,29 @@ class AllClaimsDashboardComponent extends ContainerBase<AllClaimsDashboardParams
       const date = DateTime.fromJSDate(project.periodEndDate).plus({ days: 1 }).toJSDate();
       return (
         <Acc.Renderers.SimpleString qa="notificationMessage">
-          <Acc.Content value={x => x.allClaimsDashboard.messages.noOpenClaimsMessage(date)}/>
+          <Acc.Content value={x => x.allClaimsDashboard.messages.noOpenClaimsMessage(date)} />
         </Acc.Renderers.SimpleString>
       );
     }
-    return groupedClaims.map((x, i) => this.renderCurrentClaims(x.periodId, x.start, x.end, x.claims, project, partners, i));
+    return groupedClaims.map((x, i) =>
+      this.renderCurrentClaims(x.periodId, x.start, x.end, x.claims, project, partners, i),
+    );
   }
 
-  private renderCurrentClaims(periodId: number, start: Date, end: Date, claims: ClaimDto[], project: ProjectDto, partners: PartnerDto[], index: number) {
-    const title = <>Period {periodId}: <Acc.Renderers.ShortDateRange start={start} end={end} /></>;
+  private renderCurrentClaims(
+    periodId: number,
+    start: Date,
+    end: Date,
+    claims: ClaimDto[],
+    project: ProjectDto,
+    partners: PartnerDto[],
+    index: number,
+  ) {
+    const title = (
+      <>
+        Period {periodId}: <Acc.Renderers.ShortDateRange start={start} end={end} />
+      </>
+    );
     const ClaimTable = Acc.TypedTable<ClaimDto>();
     const renderPartnerName = (x: ClaimDto) => {
       const p = partners.filter(y => y.id === x.partnerId)[0];
@@ -202,7 +227,9 @@ class AllClaimsDashboardComponent extends ContainerBase<AllClaimsDashboardParams
   private previousClaimsSection(project: ProjectDto, partner: PartnerDto, previousClaims: ClaimDto[]) {
     if (previousClaims.length === 0) {
       return (
-        <Acc.Renderers.SimpleString qa={`noClosedClaims-${partner.accountId}`}><Acc.Content value={x => x.allClaimsDashboard.messages.noClosedClaims}/></Acc.Renderers.SimpleString>
+        <Acc.Renderers.SimpleString qa={`noClosedClaims-${partner.accountId}`}>
+          <Acc.Content value={x => x.allClaimsDashboard.messages.noClosedClaims} />
+        </Acc.Renderers.SimpleString>
       );
     }
     const ClaimTable = Acc.TypedTable<ClaimDto>();
@@ -251,37 +278,32 @@ class AllClaimsDashboardComponent extends ContainerBase<AllClaimsDashboardParams
   }
 
   private renderClosedPeriodColumn(claim: ClaimDto) {
-    return (
-      <Acc.Claims.ClaimPeriodDate claim={claim} />
-    );
+    return <Acc.Claims.ClaimPeriodDate claim={claim} />;
   }
 }
 
-const Container = (props: AllClaimsDashboardParams & BaseProps) => (
-  <StoresConsumer>
-    {
-      stores => {
-        return (
-          <AllClaimsDashboardComponent
-            projectDetails={stores.projects.getById(props.projectId)}
-            partners={stores.partners.getPartnersForProject(props.projectId)}
-            currentClaims={stores.claims.getActiveClaimsForProject(props.projectId)}
-            previousClaims={stores.claims.getInactiveClaimsForProject(props.projectId)}
-            {...props}
-          />
-        );
-      }
-    }
-  </StoresConsumer>
-);
+const AllClaimsDashboardContainer = (props: AllClaimsDashboardParams & BaseProps) => {
+  const stores = useStores();
+
+  return (
+    <AllClaimsDashboardComponent
+      {...props}
+      projectDetails={stores.projects.getById(props.projectId)}
+      partners={stores.partners.getPartnersForProject(props.projectId)}
+      currentClaims={stores.claims.getActiveClaimsForProject(props.projectId)}
+      previousClaims={stores.claims.getInactiveClaimsForProject(props.projectId)}
+    />
+  );
+};
 
 export const AllClaimsDashboardRoute = defineRoute({
   routeName: "allClaimsDashboard",
   routePath: "/projects/:projectId/claims/dashboard",
-  container: Container,
-  getParams: (route) => ({
+  container: AllClaimsDashboardContainer,
+  getParams: route => ({
     projectId: route.params.projectId,
   }),
   getTitle: ({ content }) => content.allClaimsDashboard.title(),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
+  accessControl: (auth, { projectId }) =>
+    auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
 });
