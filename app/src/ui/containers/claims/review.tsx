@@ -10,7 +10,6 @@ import {
   ClaimStatus,
   ClaimStatusChangeDto,
   CostsSummaryForPeriodDto,
-  DocumentDescription,
   ForecastDetailsDTO,
   getAuthRoles,
   GOLCostDto,

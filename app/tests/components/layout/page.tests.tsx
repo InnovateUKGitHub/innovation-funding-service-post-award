@@ -69,6 +69,7 @@ describe("<Page />", () => {
         unsavedWarningContent: { content: "stub-unsavedWarningContent" },
         somethingGoneWrongContent: { content: "stub-somethingGoneWrongContent" },
         updateAllFailure: { content: "stub-updateAllFailure" },
+        insufficienceAccessRights: { content: "stub-insufficienceAccessRights" },
       },
       onHoldContent: {
         projectOnHoldMessage: { content: "stub-projectOnHoldMessage" },
