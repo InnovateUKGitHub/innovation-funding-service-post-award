@@ -1,13 +1,10 @@
 import { ErrorContainer, ErrorContainerProps, NotFoundError } from "../components/errors";
 import { BaseProps, defineRoute } from "./containerBase";
 
-function ErrorRouteContainer(props: BaseProps) {
-  const errorProps: ErrorContainerProps = {
-    errorCode: props.route.params.errorProps,
-    errorType: props.route.params.errorType,
-  };
+function ErrorRouteContainer({ route }: BaseProps) {
+  const errorProps = route.params as ErrorContainerProps;
 
-  return <ErrorContainer {...props} {...errorProps} />;
+  return <ErrorContainer {...errorProps} />;
 }
 
 export const ErrorRoute = defineRoute<{}>({

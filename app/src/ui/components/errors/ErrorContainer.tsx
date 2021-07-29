@@ -1,17 +1,16 @@
 import { IAppError } from "@framework/types";
-import { createErrorPayload } from "@shared/create-error-payload";
+import { ErrorPayload, createErrorPayload } from "@shared/create-error-payload";
+
 import { errorPages, internalErrorFallback, InternalErrorTypes } from "./error.config";
 
-export interface ErrorContainerProps {
-  errorType?: string | InternalErrorTypes;
-  errorCode?: number;
-}
+export type ErrorContainerProps = ErrorPayload["params"];
 
 /**
  * Error hoc which switches between UI based on errorType
  */
-export const ErrorContainer = ({ errorType, ...props }: ErrorContainerProps) => {
-  const predefinedError = errorType && errorPages[errorType as InternalErrorTypes];
+export const ErrorContainer = (props: ErrorContainerProps) => {
+  const predefinedError = errorPages[props.errorType as InternalErrorTypes];
+
   const ErrorUI = predefinedError || internalErrorFallback;
 
   return <ErrorUI {...props} />;

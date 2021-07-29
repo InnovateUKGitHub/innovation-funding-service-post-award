@@ -13,7 +13,7 @@ export type ErrorTypes = InternalErrorTypes & "INTERNAL_ERROR_FALLBACK";
 
 type ErrorConfig = Record<InternalErrorTypes, React.ElementType>;
 
-export const internalErrorFallback: React.ElementType = GenericFallbackError;
+export const internalErrorFallback: typeof GenericFallbackError = GenericFallbackError;
 
 export const errorPages: ErrorConfig = {
   AUTHENTICATION_ERROR: UnauthenticatedError,

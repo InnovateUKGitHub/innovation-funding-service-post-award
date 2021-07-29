@@ -5,4 +5,5 @@ export interface IAppError {
   code: ErrorCode;
   message: string;
   results?: Results<{}> | null;
+  stack?: string;
 }

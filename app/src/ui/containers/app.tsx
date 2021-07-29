@@ -90,9 +90,7 @@ class AppView extends React.Component<IAppProps> {
               <PhaseBanner />
 
               {hasAccess ? (
-                <ErrorBoundary
-                  fallbackRender={errorProps => <ErrorBoundaryFallback {...baseProps} {...(errorProps as any)} />}
-                >
+                <ErrorBoundary fallbackRender={errorProps => <ErrorBoundaryFallback {...(errorProps as any)} />}>
                   <RouteContainer {...baseProps} {...params} />
                 </ErrorBoundary>
               ) : (

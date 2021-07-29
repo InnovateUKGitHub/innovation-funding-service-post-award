@@ -28,6 +28,7 @@ import contextProvider from "./features/common/contextProvider";
 import { ForbiddenError, FormHandlerError, NotFoundError } from "./features/common/appError";
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
 import { Logger } from "./features/common/logger";
+import { configuration } from "./features/common";
 import { getErrorStatus } from "./errorHandlers";
 import { renderHtml } from "./html";
 
@@ -68,7 +69,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     const matched = matchRoute(route);
     const params = matched.getParams(route);
 
-    if (matched.accessControl && !matched.accessControl(auth, params, clientConfig)) {
+    if (!matched.accessControl?.(auth, params, clientConfig)) {
       throw new ForbiddenError();
     }
 
@@ -87,7 +88,12 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     const isInvalidRoute = renderError instanceof NotFoundError;
     const errorRoute: State = createErrorPayload(renderError, isInvalidRoute);
 
-    const initialState = { router: { route: errorRoute } };
+    // Note: Were rendering only errors! Working on suppling least data as possible
+    const initialState = {
+      router: { route: errorRoute },
+      config: { ssoEnabled: configuration.sso.enabled },
+    } as RootState;
+
     const store = createStore(rootReducer, initialState);
 
     const stores = createStores(

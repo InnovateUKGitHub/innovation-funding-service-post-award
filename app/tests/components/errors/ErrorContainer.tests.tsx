@@ -2,6 +2,7 @@ import { render } from "@testing-library/react";
 
 import { TestBed, TestBedContent } from "@shared/TestBed";
 import { ErrorContainer, ErrorContainerProps } from "@ui/components/errors";
+import { ErrorCode } from "@framework/constants";
 
 describe("<ErrorContainer />", () => {
   describe("@renders", () => {
@@ -33,16 +34,11 @@ describe("<ErrorContainer />", () => {
       );
 
     describe("with fallback error", () => {
-      test("when no errorType is supplied", () => {
-        const { queryByTestId } = setup({ errorType: undefined });
-
-        const targetElement = queryByTestId("fallback-error");
-
-        expect(targetElement).toBeInTheDocument();
-      });
-
-      test("when no errorType matches a custom component", () => {
-        const { queryByTestId } = setup({ errorType: "I_SHOULD_NOT_MATCH_ANY_OBJECT_CONFIG" });
+      test("when no errorType matches a value in error config", () => {
+        const { queryByTestId } = setup({
+          errorType: "THIS_SHOULD_NEVER_MATCH",
+          errorCode: ErrorCode.UNKNOWN_ERROR,
+        });
 
         const targetElement = queryByTestId("fallback-error");
 
@@ -50,20 +46,28 @@ describe("<ErrorContainer />", () => {
       });
     });
 
-    test("when not found", () => {
-      const { queryByTestId } = setup({ errorType: "NOT_FOUND" });
+    describe("with internal errors", () => {
+      test("when not found", () => {
+        const { queryByTestId } = setup({
+          errorType: "NOT_FOUND",
+          errorCode: ErrorCode.UNKNOWN_ERROR,
+        });
 
-      const targetElement = queryByTestId("not-found");
+        const targetElement = queryByTestId("not-found");
 
-      expect(targetElement).toBeInTheDocument();
-    });
+        expect(targetElement).toBeInTheDocument();
+      });
 
-    test("when authentication fails", () => {
-      const { queryByTestId } = setup({ errorType: "AUTHENTICATION_ERROR" });
+      test("when authentication fails", () => {
+        const { queryByTestId } = setup({
+          errorType: "AUTHENTICATION_ERROR",
+          errorCode: ErrorCode.UNKNOWN_ERROR,
+        });
 
-      const targetElement = queryByTestId("unauthenticated-error");
+        const targetElement = queryByTestId("unauthenticated-error");
 
-      expect(targetElement).toBeInTheDocument();
+        expect(targetElement).toBeInTheDocument();
+      });
     });
   });
 });
