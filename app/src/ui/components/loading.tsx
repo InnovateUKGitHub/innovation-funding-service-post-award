@@ -1,43 +1,47 @@
 import React, { Fragment } from "react";
+
+import { AppError } from "@server/features/common";
+import { createErrorPayload } from "@shared/create-error-payload";
+import { Pending } from "@shared/pending";
 import { IAppError } from "@framework/types/IAppError";
-import { useContent } from "@ui/hooks";
 import { ErrorCode, LoadingStatus } from "@framework/constants";
-import { Pending } from "../../shared/pending";
-import { ErrorSummary } from "./errorSummary";
-import { ErrorContainer, ErrorContainerProps } from "./errors";
-import { SimpleString } from "./renderers";
+
+import { useContent } from "@ui/hooks";
+import { ErrorSummary } from "@ui/components/errorSummary";
+import { ErrorContainer } from "@ui/components/errors";
+import { SimpleString } from "@ui/components/renderers";
 
 export interface LoadingProps<T> {
   pending: Pending<T>;
   // TODO: Investigate a stricter type which has to return an element / null
   render: (data: T, loading?: boolean) => React.ReactNode;
-  renderError?: (error?: IAppError) => JSX.Element;
+  renderError?: (error: IAppError) => JSX.Element;
   renderLoading?: () => JSX.Element;
 }
 
 export function Loader<T>({ pending, render, renderError, renderLoading }: LoadingProps<T>) {
-  const pendingWaiting = () => {
-    const loadingElement = (renderLoading && renderLoading()) || <LoadingMessage />;
+  const fallbackPendingError = new AppError(ErrorCode.UNKNOWN_ERROR, "An error has occurred while fetching data.");
 
-    return pending.data ? render(pending.data, true) : loadingElement;
+  const handleWaiting = () => {
+    const loadingUi = renderLoading?.() || <LoadingMessage />;
+
+    return pending.data ? render(pending.data, true) : loadingUi;
   };
 
-  const pendingError = (error?: IAppError) => {
-    const hasRenderError = renderError && renderError(error);
-
-    return hasRenderError || (error && <ErrorSummary {...error} />);
+  const handleError = (error: IAppError = fallbackPendingError) => {
+    return renderError?.(error) || <ErrorSummary {...error} />;
   };
 
   let pendingElement: React.ReactNode;
 
   switch (pending.state) {
     case LoadingStatus.Failed:
-      pendingElement = pendingError(pending.error);
+      pendingElement = handleError(pending.error);
       break;
 
     case LoadingStatus.Stale:
     case LoadingStatus.Loading:
-      pendingElement = pendingWaiting();
+      pendingElement = handleWaiting();
       break;
 
     case LoadingStatus.Done:
@@ -50,8 +54,7 @@ export function Loader<T>({ pending, render, renderError, renderLoading }: Loadi
       pendingElement = null;
   }
 
-  // TODO: Update this to .includes during tsc upgrade
-  const isTextElement = ["string", "number"].indexOf(typeof pendingElement) !== -1;
+  const isTextElement = ["string", "number"].includes(typeof pendingElement);
   const LoadingElement = isTextElement ? "span" : Fragment;
 
   return <LoadingElement>{pendingElement}</LoadingElement>;
@@ -69,15 +72,16 @@ function LoadingMessage() {
 }
 
 export function PageLoader<T>(props: LoadingProps<T>) {
-  const handleError: LoadingProps<T>["renderError"] = e => {
-    const hasRequestError = e?.code === ErrorCode.REQUEST_ERROR;
+  const handleError: LoadingProps<T>["renderError"] = renderError => {
+    const hasRequestError = renderError.code === ErrorCode.REQUEST_ERROR;
 
-    const errorProps: ErrorContainerProps = {
-      errorCode: e?.code,
-      errorType: hasRequestError ? "NOT_FOUND" : e?.message,
-    };
+    if (hasRequestError) {
+      renderError.message = "NOT_FOUND";
+    }
 
-    return <ErrorContainer {...errorProps} />;
+    const error = createErrorPayload(renderError, hasRequestError).params;
+
+    return <ErrorContainer {...error} />;
   };
 
   return <Loader renderError={handleError} {...props} />;

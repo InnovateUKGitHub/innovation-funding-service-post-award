@@ -81,7 +81,7 @@ describe("<Loader />", () => {
   const pendingDone = new Pending(LoadingStatus.Done, {});
   const pendingPreload = new Pending(LoadingStatus.Preload, {});
   const pendingLoading = new Pending(LoadingStatus.Loading, null);
-  const pendingFailed = new Pending(LoadingStatus.Failed, {});
+  const pendingFailed = new Pending(LoadingStatus.Failed, null);
 
   const setup = <T extends unknown>(props: LoadingProps<T>) =>
     render(
@@ -167,35 +167,44 @@ describe("<Loader />", () => {
     });
 
     describe("should render with Failed state", () => {
+      it("with error summary", () => {
+        const { queryByTestId } = setup({
+          render: jest.fn(),
+          pending: pendingFailed,
+        });
+
+        const errorElement = queryByTestId("error-summary");
+
+        expect(errorElement).toBeDefined();
+      });
+
       describe("should render renderError", () => {
         it("with no error code", () => {
-          const stubWithoutErrorCodeQa = "renderError()-without-errorCode";
-          const { getByTestId } = setup({
+          const errorWitoutCode = new Pending(LoadingStatus.Failed, null);
+
+          const { queryByText } = setup({
             render: jest.fn(),
-            pending: pendingFailed,
-            renderError: e => (
-              <div data-qa={e && e.code ? "renderError()-with-code" : stubWithoutErrorCodeQa}>renderError test</div>
-            ),
+            pending: errorWitoutCode,
+            renderError: e => <div>{e.message}</div>,
           });
 
-          const errorElement = getByTestId(stubWithoutErrorCodeQa);
+          const errorMessage = queryByText("An error has occurred while fetching data.");
 
-          expect(errorElement).toBeDefined();
+          expect(errorMessage).toBeInTheDocument();
         });
 
         it("with an error code", () => {
-          const stubWithoutErrorCodeQa = "renderError()-with-errorCode";
-          const { getByTestId } = setup({
+          const stubPendingError = "stub-inbound-pending-error";
+
+          const { queryByText } = setup({
             render: jest.fn(),
-            pending: new Pending(LoadingStatus.Failed, {}, { code: "stub-error" }),
-            renderError: e => (
-              <div data-qa={e && e.code ? stubWithoutErrorCodeQa : "renderError-no-code"}>renderError test</div>
-            ),
+            pending: new Pending(LoadingStatus.Failed, null, { code: stubPendingError }),
+            renderError: e => <div>{e.code}</div>,
           });
 
-          const errorElement = getByTestId(stubWithoutErrorCodeQa);
+          const errorElement = queryByText(stubPendingError);
 
-          expect(errorElement).toBeDefined();
+          expect(errorElement).toBeInTheDocument();
         });
       });
 

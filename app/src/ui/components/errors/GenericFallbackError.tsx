@@ -1,27 +1,43 @@
+import { ErrorPayload } from "@shared/create-error-payload";
 import { PageTitle } from "@ui/components/layout";
 import { useContent } from "@ui/hooks";
+import { useStores } from "@ui/redux";
 
 import { Page } from "../layout/page";
 import { Section } from "../layout/section";
+import { H2 } from "../typography";
 import { ExternalLink } from "../renderers";
 import { SimpleString } from "../renderers/simpleString";
 
-export const GenericFallbackError = () => {
-  const { getContent } = useContent();
+export type GenericFallbackErrorProps = ErrorPayload["params"];
 
-  const errorMessage = getContent(x => x.errors.genericFallback.standardError);
-  const dashboardText = getContent(x => x.errors.genericFallback.dashboardText);
+export const GenericFallbackError = ({ errorStack, errorMessage }: GenericFallbackErrorProps) => {
+  const { getContent } = useContent();
+  const { ssoEnabled } = useStores().config.getConfig();
+
+  const errorMessageMessage = getContent(x => x.errors.genericFallback.standardError);
+  const dashboardTextMessage = getContent(x => x.errors.genericFallback.dashboardText);
 
   const dashboardLink = "/projects/dashboard";
-  const goToDashboardLink = <ExternalLink href={dashboardLink}>{dashboardText}</ExternalLink>;
+  const goToDashboardLink = <ExternalLink href={dashboardLink}>{dashboardTextMessage}</ExternalLink>;
+
+  const internalError = !ssoEnabled && (errorStack || errorMessage);
 
   return (
     <Page qa="fallback-error" pageTitle={<PageTitle />}>
       <Section>
         <SimpleString>
-          {errorMessage} {goToDashboardLink}.
+          {errorMessageMessage} {goToDashboardLink}.
         </SimpleString>
       </Section>
+
+      {internalError && (
+        <Section>
+          <H2>Internal Developer Error</H2>
+
+          <pre style={{ whiteSpace: "pre-wrap" }}>{internalError}</pre>
+        </Section>
+      )}
     </Page>
   );
 };

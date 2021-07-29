@@ -1,69 +1,71 @@
+import { useState } from "react";
+
 import { Authorisation } from "@framework/types";
+import { useStores } from "@ui/redux";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
-import { StoresConsumer } from "@ui/redux";
+
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import * as ACC from "@ui/components";
-import { SimpleString } from "../components/renderers";
-import { Link, PageTitle, TypedForm } from "../components";
-import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute, } from "./containerBase";
+import { useContent } from "@ui/hooks";
 
-interface Data {
-  userEmail: string;
-}
+function DevHomePage(props: BaseProps) {
+  const { getContent } = useContent();
+  const initialEmailState = useStores().users.getCurrentUser().email;
 
-interface State {
-  email: string;
-}
+  const [userEmail, setUserEmail] = useState<string>(initialEmailState);
 
-class Component extends ContainerBaseWithState<{}, Data, {}, State> {
-  constructor(props: ContainerProps<{}, Data, {}>) {
-    super(props);
-    this.state = { email: props.userEmail };
-  }
+  const formData = { email: userEmail };
+  const CurrentUserForm = ACC.TypedForm<typeof formData>();
 
-  render() {
-    const formData = ({ email: this.state && this.state.email });
-    const CurrentUserForm = TypedForm<typeof formData>();
-    return (
-      <div>
-        <PageTitle />
-        <div className="govuk-grid-row">
-          <div className="govuk-grid-column-full">
-            <h2><ACC.Content value={x => x.home.currentUserHeading}/></h2>
-            <CurrentUserForm.Form data={formData} qa={"currentUser"} onChange={v => this.setState(v)}>
-              <CurrentUserForm.String label="user" labelHidden name="user" value={x => x.email} update={(x, v) => x.email = v || ""} />
-              <CurrentUserForm.Submit><ACC.Content value={x => x.home.changeUserMessage}/></CurrentUserForm.Submit>
-              <CurrentUserForm.Button name="reset"><ACC.Content value={x => x.home.resetUserMessage}/></CurrentUserForm.Button>
-            </CurrentUserForm.Form>
-          </div>
-        </div>
-        <div className="govuk-grid-row">
-          <div className="govuk-grid-column-one-third">
-            <h2><Link route={this.props.routes.projectDashboard.getLink({})}><ACC.Content value={x => x.home.projectsHeading}/></Link></h2>
-            <SimpleString><ACC.Content value={x => x.home.projectsDashboardHeading}/></SimpleString>
-          </div>
-          <div className="govuk-grid-column-one-third">
-            <h2><ACC.Content value={x => x.home.exampleContentTitle} /></h2>
-            <SimpleString><ACC.Content value={x => x.home.exampleContent} /></SimpleString>
-          </div>
+  return (
+    <>
+      <ACC.PageTitle />
+      <div className="govuk-grid-row">
+        <div className="govuk-grid-column-full">
+          <ACC.H3 as="h2">{getContent(x => x.home.currentUserHeading)}</ACC.H3>
+
+          <CurrentUserForm.Form data={formData} qa="currentUser" onChange={v => setUserEmail(v.email)}>
+            <CurrentUserForm.String
+              label="user"
+              name="user"
+              labelHidden
+              value={x => x.email}
+              update={(x, v) => (x.email = v || "")}
+            />
+
+            <CurrentUserForm.Submit>{getContent(x => x.home.changeUserMessage)}</CurrentUserForm.Submit>
+
+            <CurrentUserForm.Button name="reset">{getContent(x => x.home.resetUserMessage)}</CurrentUserForm.Button>
+          </CurrentUserForm.Form>
         </div>
       </div>
-    );
-  }
-}
 
-const HomeContainer = (props: BaseProps) => (
-  <StoresConsumer>
-    {
-      stores => <Component userEmail={stores.users.getCurrentUser().email} {...props} />
-    }
-  </StoresConsumer>
-);
+      <div className="govuk-grid-row">
+        <div className="govuk-grid-column-one-third">
+          <ACC.H3>
+            <ACC.Link route={props.routes.projectDashboard.getLink({})}>
+              {getContent(x => x.home.projectsHeading)}
+            </ACC.Link>
+          </ACC.H3>
+
+          <ACC.Renderers.SimpleString>{getContent(x => x.home.projectsDashboardHeading)}</ACC.Renderers.SimpleString>
+        </div>
+
+        <div className="govuk-grid-column-one-third">
+          <ACC.H3>{getContent(x => x.home.exampleContentTitle)}</ACC.H3>
+
+          <ACC.Renderers.SimpleString>{getContent(x => x.home.exampleContent)}</ACC.Renderers.SimpleString>
+        </div>
+      </div>
+    </>
+  );
+}
 
 export const HomeRoute = defineRoute({
   routeName: "home",
   routePath: "/",
-  container: HomeContainer,
+  container: DevHomePage,
   getParams: () => ({}),
   accessControl: (auth: Authorisation, params: {}, config: IClientConfig) => !config.ssoEnabled,
-  getTitle: ({ content }) => content.home.title()
+  getTitle: x => x.content.home.title(),
 });
