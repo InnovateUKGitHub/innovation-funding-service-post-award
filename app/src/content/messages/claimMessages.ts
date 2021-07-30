@@ -20,7 +20,6 @@ export class ClaimMessages extends ContentBase {
   public readonly noRemainingClaims = this.getContent("no-remaining-claims");
   public readonly noClosedClaims = this.getContent("no-closed-claims");
   public readonly finalClaimMessage = this.getContent("final-claim");
-  public readonly iarRequired = this.getContent("iar-required");
   public readonly iarRequiredAdvice = this.getContent("iar-required-advice");
   public readonly sbriDocumentAdvice = this.getContent("sbri-document-advice");
   public readonly sbriInvoiceBullet1 = this.getContent("sbri-invoice-bullet-1");
@@ -32,10 +31,9 @@ export class ClaimMessages extends ContentBase {
   public readonly finalClaimIarAdvice = this.getContent("final-claim-iar-advice");
   public readonly finalClaimNonIarAdvice = this.getContent("final-claim-non-iar-advice");
   public readonly finalClaimGuidanceParagraph1 = this.getContent("final-claim-guidance-content-1");
-  public readonly finalClaimGuidanceParagraph2 = this.getContent("final-claim-guidance-content-2");
   public readonly finalClaimStep1 = this.getContent("final-claim-step-1");
   public readonly finalClaimStep2 = this.getContent("final-claim-step-2");
-  public readonly finalClaimStep3 = this.getContent("final-claim-step-3");
+  public readonly iarRequired = this.getContent("iar-required");
   public readonly usefulTip = this.getContent("useful-tip");
   public readonly requiredUploadAdvice = this.getContent("required-upload-advice");
   public readonly requiredUploadStep1 = this.getContent("required-upload-step-1");
