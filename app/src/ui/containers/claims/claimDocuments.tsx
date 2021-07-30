@@ -22,10 +22,8 @@ type ClaimDocumentContentKeys =
   | "saveAndReturnButton"
   | "saveAndContinueToSummaryButton"
   | "finalClaimGuidanceParagraph1"
-  | "finalClaimGuidanceParagraph2"
   | "finalClaimStep1"
   | "finalClaimStep2"
-  | "finalClaimStep3"
   | "iarRequiredAdvice"
   | "finalClaimIarAdvice"
   | "finalClaimNonIarAdvice"
@@ -57,18 +55,17 @@ export function useClaimDocumentContent(): ClaimDocumentContent {
     saveAndContinueToSummaryButton: getContent(x => x.claimDocuments.saveAndContinueToSummaryButton),
     saveAndContinueToForecastButton: getContent(x => x.claimDocuments.saveAndContinueToForecastButton),
 
-    iarRequired: getContent(x => x.claimDocuments.messages.iarRequired),
     sbriDocumentAdvice: getContent(x => x.claimDocuments.messages.sbriDocumentAdvice),
     sbriInvoiceBullet1: getContent(x => x.claimDocuments.messages.sbriInvoiceBullet1),
     sbriInvoiceBullet2: getContent(x => x.claimDocuments.messages.sbriInvoiceBullet2),
     sbriInvoiceBullet3: getContent(x => x.claimDocuments.messages.sbriInvoiceBullet3),
     sbriMoAdvice: getContent(x => x.claimDocuments.messages.sbriMoAdvice),
     finalClaimMessage: getContent(x => x.claimDocuments.messages.finalClaimMessage),
+
     finalClaimGuidanceParagraph1: getContent(x => x.claimDocuments.messages.finalClaimGuidanceParagraph1),
-    finalClaimGuidanceParagraph2: getContent(x => x.claimDocuments.messages.finalClaimGuidanceParagraph2),
     finalClaimStep1: getContent(x => x.claimDocuments.messages.finalClaimStep1),
     finalClaimStep2: getContent(x => x.claimDocuments.messages.finalClaimStep2),
-    finalClaimStep3: getContent(x => x.claimDocuments.messages.finalClaimStep3),
+    iarRequired: getContent(x => x.claimDocuments.messages.iarRequired),
 
     iarRequiredAdvice: getContent(x => x.claimDocuments.messages.iarRequiredAdvice),
     finalClaimIarAdvice: getContent(x => x.claimDocuments.messages.finalClaimIarAdvice),
@@ -326,10 +323,8 @@ export interface ClaimDocumentAdviceProps extends Pick<ClaimDto, "isIarRequired"
     | "requiredUploadStep1"
     | "requiredUploadStep2"
     | "finalClaimGuidanceParagraph1"
-    | "finalClaimGuidanceParagraph2"
     | "finalClaimStep1"
     | "finalClaimStep2"
-    | "finalClaimStep3"
     | "iarRequired"
     | "sbriDocumentAdvice"
     | "sbriInvoiceBullet1"
@@ -382,6 +377,19 @@ export function ClaimDocumentAdvice({
 
       return (
         <>
+          {isFinalClaim && (
+            <>
+              <ACC.Renderers.SimpleString>{content.finalClaimGuidanceParagraph1}</ACC.Renderers.SimpleString>
+
+              <ACC.UL>
+                <li>{content.finalClaimStep1}</li>
+                <li>{content.finalClaimStep2}</li>
+              </ACC.UL>
+            </>
+          )}
+
+          {isIarRequired && <ACC.Renderers.SimpleString>{content.iarRequired}</ACC.Renderers.SimpleString>}
+
           <ACC.Renderers.SimpleString qa={`${competition}-document-advice`}>
             {content.sbriDocumentAdvice}
           </ACC.Renderers.SimpleString>
@@ -400,7 +408,7 @@ export function ClaimDocumentAdvice({
     }
 
     // Note: Final claim message is irrevent if no iar is required - bail out early
-    if (!isIarRequired) return null;
+    if (!isIarRequired && !isFinalClaim) return null;
 
     return (
       <>
@@ -408,13 +416,12 @@ export function ClaimDocumentAdvice({
           <>
             <ACC.Renderers.SimpleString>{content.finalClaimGuidanceParagraph1}</ACC.Renderers.SimpleString>
 
-            <ACC.Renderers.SimpleString>{content.finalClaimGuidanceParagraph2}</ACC.Renderers.SimpleString>
-
             <ACC.OL>
               <li>{content.finalClaimStep1}</li>
               <li>{content.finalClaimStep2}</li>
-              <li>{content.finalClaimStep3}</li>
             </ACC.OL>
+
+            {isIarRequired && <ACC.Renderers.SimpleString>{content.iarRequired}</ACC.Renderers.SimpleString>}
           </>
         ) : (
           <ACC.Renderers.SimpleString qa="iarText">{content.iarRequired}</ACC.Renderers.SimpleString>

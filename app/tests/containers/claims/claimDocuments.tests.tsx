@@ -28,10 +28,8 @@ describe("useClaimDocumentContent()", () => {
         requiredUploadStep2: { content: "stub-requiredUploadStep2" },
         finalClaimMessage: { content: "stub-finalClaimMessage" },
         finalClaimGuidanceParagraph1: { content: "stub-finalClaimGuidanceParagraph1" },
-        finalClaimGuidanceParagraph2: { content: "stub-finalClaimGuidanceParagraph2" },
         finalClaimStep1: { content: "stub-finalClaimStep1" },
         finalClaimStep2: { content: "stub-finalClaimStep2" },
-        finalClaimStep3: { content: "stub-finalClaimStep3" },
         sbriDocumentAdvice: { content: "stub-sbriInvoice" },
         sbriInvoiceBullet1: { content: "stub-sbriInvoice-bullet-1" },
         sbriInvoiceBullet2: { content: "stub-sbriInvoice-bullet-2" },
@@ -80,10 +78,8 @@ describe("useClaimDocumentContent()", () => {
     ${"requiredUploadStep2"}          | ${"requiredUploadStep2"}
     ${"finalClaimMessage"}            | ${"finalClaimMessage"}
     ${"finalClaimGuidanceParagraph1"} | ${"finalClaimGuidanceParagraph1"}
-    ${"finalClaimGuidanceParagraph2"} | ${"finalClaimGuidanceParagraph2"}
     ${"finalClaimStep1"}              | ${"finalClaimStep1"}
     ${"finalClaimStep2"}              | ${"finalClaimStep2"}
-    ${"finalClaimStep3"}              | ${"finalClaimStep3"}
   `("with $property", ({ name, property }: Record<"name" | "property", string>) => {
     const { result } = renderPageContent();
 
@@ -118,10 +114,8 @@ describe("<ClaimDocumentAdvice />", () => {
     requiredUploadStep1: "stub-requiredUploadStep1",
     requiredUploadStep2: "stub-requiredUploadStep2",
     finalClaimGuidanceParagraph1: "stub-finalClaimGuidanceParagraph1",
-    finalClaimGuidanceParagraph2: "stub-finalClaimGuidanceParagraph2",
     finalClaimStep1: "stub-finalClaimStep1",
     finalClaimStep2: "stub-finalClaimStep2",
-    finalClaimStep3: "stub-finalClaimStep3",
     iarRequired: "stub-iarRequired",
     sbriDocumentAdvice: "stub-sbriInvoice",
     sbriInvoiceBullet1: "stub-sbriInvoice-bullet-1",
@@ -165,10 +159,22 @@ describe("<ClaimDocumentAdvice />", () => {
         });
 
         expect(queryByText(stubContent.finalClaimGuidanceParagraph1)).toBeInTheDocument();
-        expect(queryByText(stubContent.finalClaimGuidanceParagraph2)).toBeInTheDocument();
         expect(queryByText(stubContent.finalClaimStep1)).toBeInTheDocument();
         expect(queryByText(stubContent.finalClaimStep2)).toBeInTheDocument();
-        expect(queryByText(stubContent.finalClaimStep3)).toBeInTheDocument();
+        expect(queryByText(stubContent.iarRequired)).toBeInTheDocument();
+      });
+
+      test("when iar is not required and final claim is true", () => {
+        const { queryByText } = setup({
+          competitionType: "no-matching-value",
+          isIarRequired: false,
+          isFinalClaim: true,
+          content: stubContent,
+        });
+
+        expect(queryByText(stubContent.finalClaimGuidanceParagraph1)).toBeInTheDocument();
+        expect(queryByText(stubContent.finalClaimStep1)).toBeInTheDocument();
+        expect(queryByText(stubContent.finalClaimStep2)).toBeInTheDocument();
       });
     });
 
@@ -243,17 +249,67 @@ describe("<ClaimDocumentAdvice />", () => {
     });
 
     describe("with sbri content", () => {
-      test.each`
-        name                                 | competitionType
-        ${"with 'SBRI' competition type"}    | ${"SBRI"}
-        ${"with 'SBRI IFS' competiton type"} | ${"SBRI IFS"}
-      `("$name", ({ competitionType }) => {
+      test("when iar is required and final claim is true", () => {
         const { queryByText } = setup({
-          competitionType,
+          competitionType: "SBRI",
+          isIarRequired: true,
+          isFinalClaim: true,
+          content: stubContent,
+        });
+
+        expect(queryByText(stubContent.finalClaimGuidanceParagraph1)).toBeInTheDocument();
+        expect(queryByText(stubContent.finalClaimStep1)).toBeInTheDocument();
+        expect(queryByText(stubContent.finalClaimStep2)).toBeInTheDocument();
+
+        expect(queryByText(stubContent.iarRequired)).toBeInTheDocument();
+
+        expect(queryByText(stubContent.sbriDocumentAdvice)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriInvoiceBullet1)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriInvoiceBullet2)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriInvoiceBullet3)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriMoAdvice)).toBeInTheDocument();
+      });
+
+      test("when iar is required and final claim is false", () => {
+        const { queryByText } = setup({
+          competitionType: "SBRI",
+          isIarRequired: true,
+          isFinalClaim: false,
+          content: stubContent,
+        });
+        expect(queryByText(stubContent.iarRequired)).toBeInTheDocument();
+
+        expect(queryByText(stubContent.sbriDocumentAdvice)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriInvoiceBullet1)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriInvoiceBullet2)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriInvoiceBullet3)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriMoAdvice)).toBeInTheDocument();
+      });
+
+      test("when iar is not required and final claim is false", () => {
+        const { queryByText } = setup({
+          competitionType: "SBRI",
           isIarRequired: false,
           isFinalClaim: false,
           content: stubContent,
         });
+        expect(queryByText(stubContent.sbriDocumentAdvice)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriInvoiceBullet1)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriInvoiceBullet2)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriInvoiceBullet3)).toBeInTheDocument();
+        expect(queryByText(stubContent.sbriMoAdvice)).toBeInTheDocument();
+      });
+
+      test("when iar is not required and final claim is true", () => {
+        const { queryByText } = setup({
+          competitionType: "SBRI",
+          isIarRequired: false,
+          isFinalClaim: true,
+          content: stubContent,
+        });
+        expect(queryByText(stubContent.finalClaimGuidanceParagraph1)).toBeInTheDocument();
+        expect(queryByText(stubContent.finalClaimStep1)).toBeInTheDocument();
+        expect(queryByText(stubContent.finalClaimStep2)).toBeInTheDocument();
 
         expect(queryByText(stubContent.sbriDocumentAdvice)).toBeInTheDocument();
         expect(queryByText(stubContent.sbriInvoiceBullet1)).toBeInTheDocument();
