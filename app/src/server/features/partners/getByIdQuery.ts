@@ -9,10 +9,10 @@ export class GetByIdQuery extends QueryBase<PartnerDto> {
   }
 
   async run(context: IContext) {
-      const result = await context.repositories.partners.getById(this.partnerId);
+      const partner = await context.repositories.partners.getById(this.partnerId);
       const roles = await context.runQuery(new GetAllProjectRolesForUser());
-      const projectRoleInfo = roles.forProject(result.projectId).getRoles();
-      const partnerRoleInfo = roles.forPartner(result.projectId, result.id).getRoles();
-      return context.runSyncCommand(new MapToPartnerDtoCommand(result, partnerRoleInfo, projectRoleInfo));
+      const projectRoleInfo = roles.forProject(partner.projectId).getRoles();
+      const partnerRoleInfo = roles.forPartner(partner.projectId, partner.id).getRoles();
+      return context.runSyncCommand(new MapToPartnerDtoCommand(partner, partnerRoleInfo, projectRoleInfo));
   }
 }

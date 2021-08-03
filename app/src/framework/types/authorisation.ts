@@ -63,6 +63,7 @@ export class Authorisation {
     const roles = this.getRolesForPartner(projectId, partnerId);
     return new RoleChecker(roles);
   }
+
   public forProject(projectId: string) {
     const roles = this.getRolesForProject(projectId);
     return new RoleChecker(roles);

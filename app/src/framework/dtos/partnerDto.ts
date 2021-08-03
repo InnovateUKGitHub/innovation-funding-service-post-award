@@ -25,7 +25,7 @@ interface AccountAddress {
   accountTownOrCity: string | null;
 }
 
-interface BankDetails {
+export interface BankDetails {
   companyNumber: string | null;
   sortCode: string | null;
   accountNumber: string | null;
