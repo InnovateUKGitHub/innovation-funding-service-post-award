@@ -1,6 +1,7 @@
 import {
   BankCheckStatus,
   BankDetailsTaskStatus,
+  getAuthRoles,
   PartnerClaimStatus,
   PartnerDto,
   PartnerStatus,
@@ -22,7 +23,8 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
   }
 
   calcPercentageClaimed(total: number, claimed: number) {
-    return (total) ? 100 * (claimed || 0) / total : null;
+    if (!total) return null;
+    return (100 * (claimed || 0)) / total;
   }
 
   run(): PartnerDto {
@@ -132,13 +134,9 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
   }
 
   private valueIfPermission(value: number | null) {
-    if (
-      this.projectLevelRoles & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager) ||
-      this.partnerLevelRoles & ProjectRole.FinancialContact
-    ) {
-      return value;
-    }
-    return null;
+    const { isPmOrMo } = getAuthRoles(this.projectLevelRoles);
+    const isPartnerFC = getAuthRoles(this.partnerLevelRoles).isFc;
+    return isPmOrMo || isPartnerFC ? value : null;
   }
 }
 
