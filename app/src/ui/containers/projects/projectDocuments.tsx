@@ -6,7 +6,6 @@ import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
 
 import { DocumentSummaryDto, MultipleDocumentUploadDto, ProjectDto } from "@framework/dtos";
-import { noop } from "@ui/helpers/noop";
 import { DocumentDescription, ProjectRole } from "@framework/types";
 import { DropdownOption } from "@ui/components";
 import { EnumDocuments } from "../claims/components";
