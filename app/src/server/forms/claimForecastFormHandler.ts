@@ -19,18 +19,24 @@ export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForec
     super(ClaimForecastRoute, ["default", "save"], "forecastDetails");
   }
 
-  protected async getDto(context: IContext, params: ClaimForecastParams, button: IFormButton, body: IFormBody): Promise<ForecastDetailsDTO[]> {
+  protected async getDto(
+    context: IContext,
+    params: ClaimForecastParams,
+    button: IFormButton,
+    body: IFormBody,
+  ): Promise<ForecastDetailsDTO[]> {
     const dto = await context.runQuery(new GetAllForecastsForPartnerQuery(params.partnerId));
     const project = await context.runQuery(new GetByIdQuery(params.projectId));
     const partner = await context.runQuery(new GetPartnerByIdQuery(params.partnerId));
     const costCategories = await context.runQuery(new GetCostCategoriesForPartnerQuery(partner));
 
-    const costCategoriesIdsToUpdate = costCategories
-      .filter(x => !x.isCalculated)
-      .map(x => x.id);
+    const costCategoriesIdsToUpdate = costCategories.filter(x => !x.isCalculated).map(x => x.id);
 
     dto.forEach(x => {
-      if (x.periodId > project.periodId && costCategoriesIdsToUpdate.indexOf(x.costCategoryId) >= 0) {
+      const notPriorPeriod = x.periodId >= project.periodId;
+      const isValidCategory = costCategoriesIdsToUpdate.includes(x.costCategoryId);
+
+      if (notPriorPeriod && isValidCategory) {
         x.value = parseFloat(body[`value_${x.periodId}_${x.costCategoryId}`]);
       }
     });
@@ -38,7 +44,12 @@ export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForec
     return dto;
   }
 
-  protected async run(context: IContext, params: ClaimForecastParams, button: IFormButton, dto: ForecastDetailsDTO[]): Promise<ILinkInfo> {
+  protected async run(
+    context: IContext,
+    params: ClaimForecastParams,
+    button: IFormButton,
+    dto: ForecastDetailsDTO[],
+  ): Promise<ILinkInfo> {
     await context.runCommand(new UpdateForecastDetailsCommand(params.projectId, params.partnerId, dto, false));
 
     if (button.name === "default") {
@@ -52,7 +63,6 @@ export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForec
     }
 
     return ClaimsDashboardRoute.getLink(params);
-
   }
 
   protected getStoreKey(params: ClaimForecastParams) {
@@ -62,5 +72,4 @@ export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForec
   protected createValidationResult(params: ClaimForecastParams, dto: ForecastDetailsDTO[]) {
     return new ForecastDetailsDtosValidator(dto, [], [], [], undefined, false);
   }
-
 }
