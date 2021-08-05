@@ -89,7 +89,10 @@ describe("arrayHelpers", () => {
       });
 
       describe("when no lastPeriod provided", () => {
-        test("should fallback to array.length", () => {
+        test("should respect from filter period", () => {
+          const noPeriods = getArrayFromPeriod([], 1);
+          expect(noPeriods).toHaveLength(0);
+
           const futurePeriods = getArrayFromPeriod(listWithPeriodId, 1);
           expect(futurePeriods).toHaveLength(listWithPeriodId.length);
         });
