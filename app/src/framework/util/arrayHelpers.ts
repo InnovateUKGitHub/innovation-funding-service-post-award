@@ -23,10 +23,13 @@ export const getArrayFromPeriod = <T extends any[]>(
   currentPeriod: number,
   lastPeriodId?: number,
 ): T => {
-  const totalLength = originalArray.length;
+  if (!originalArray.length) return originalArray;
 
-  if (totalLength === 0) return originalArray;
-  return originalArray.filter(
-    forecast => forecast.periodId >= currentPeriod && forecast.periodId <= (lastPeriodId || totalLength),
-  ) as T;
+  return originalArray.filter(item => {
+    const notPreviousPeriod = item.periodId >= currentPeriod;
+
+    if (!lastPeriodId) return notPreviousPeriod;
+
+    return notPreviousPeriod && item.periodId <= lastPeriodId;
+  }) as T;
 };

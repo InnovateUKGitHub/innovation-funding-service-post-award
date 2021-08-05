@@ -1,18 +1,21 @@
+import { getArrayFromPeriod } from "@framework/util";
 import { ForecastDetailsDTO, IContext, ILinkInfo, ProjectRole } from "@framework/types";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
+
+import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "@server/features/forecastDetails";
+import { GetAllProjectRolesForUser, GetByIdQuery } from "@server/features/projects";
+import { GetByIdQuery as GetPartnerByIdQuery } from "@server/features/partners";
+import { GetCostCategoriesForPartnerQuery } from "@server/features/claims/getCostCategoriesForPartnerQuery";
+import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
+
 import {
   AllClaimsDashboardRoute,
   ClaimForecastParams,
   ClaimForecastRoute,
   ClaimsDashboardRoute,
   ClaimSummaryRoute,
-} from "../../ui/containers";
-import { ForecastDetailsDtosValidator } from "../../ui/validators";
-import { GetAllForecastsForPartnerQuery, UpdateForecastDetailsCommand } from "../features/forecastDetails";
-import { GetAllProjectRolesForUser, GetByIdQuery } from "../features/projects";
-import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
-import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
-import { IFormBody, IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
+} from "@ui/containers";
+import { ForecastDetailsDtosValidator } from "@ui/validators";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForecastParams, "forecastDetails"> {
   constructor() {
@@ -22,7 +25,7 @@ export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForec
   protected async getDto(
     context: IContext,
     params: ClaimForecastParams,
-    button: IFormButton,
+    _button: IFormButton,
     body: IFormBody,
   ): Promise<ForecastDetailsDTO[]> {
     const dto = await context.runQuery(new GetAllForecastsForPartnerQuery(params.partnerId));
@@ -31,17 +34,9 @@ export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForec
     const costCategories = await context.runQuery(new GetCostCategoriesForPartnerQuery(partner));
 
     const costCategoriesIdsToUpdate = costCategories.filter(x => !x.isCalculated).map(x => x.id);
+    const unClaimedForecasts = getArrayFromPeriod(dto, project.periodId, project.numberOfPeriods);
 
-    dto.forEach(x => {
-      const notPriorPeriod = x.periodId >= project.periodId;
-      const isValidCategory = costCategoriesIdsToUpdate.includes(x.costCategoryId);
-
-      if (notPriorPeriod && isValidCategory) {
-        x.value = parseFloat(body[`value_${x.periodId}_${x.costCategoryId}`]);
-      }
-    });
-
-    return dto;
+    return this.getChangesToForecasts(unClaimedForecasts, costCategoriesIdsToUpdate, body);
   }
 
   protected async run(
@@ -71,5 +66,23 @@ export class ClaimForecastFormHandler extends StandardFormHandlerBase<ClaimForec
 
   protected createValidationResult(params: ClaimForecastParams, dto: ForecastDetailsDTO[]) {
     return new ForecastDetailsDtosValidator(dto, [], [], [], undefined, false);
+  }
+
+  private getChangesToForecasts(
+    unClaimedForecasts: ForecastDetailsDTO[],
+    costCategoriesIdsToUpdate: string[],
+    body: IFormBody,
+  ): ForecastDetailsDTO[] {
+    return unClaimedForecasts.reduce<ForecastDetailsDTO[]>((allForecasts, forecast) => {
+      const shouldNotUpdateForecast = !costCategoriesIdsToUpdate.includes(forecast.costCategoryId);
+      const formValue = body[`value_${forecast.periodId}_${forecast.costCategoryId}`];
+
+      if (shouldNotUpdateForecast || !formValue) return allForecasts;
+
+      // Note: We know input value is available and needs to update SF
+      forecast.value = Number(formValue);
+
+      return [...allForecasts, forecast];
+    }, []);
   }
 }
