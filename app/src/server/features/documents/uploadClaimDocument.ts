@@ -2,7 +2,7 @@ import { BadRequestError, CommandDocumentBase, ValidationError } from "@server/f
 import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
 import { DocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 import { Authorisation, ClaimDto, ClaimKey, ClaimStatus, DocumentDescription, IContext, ProjectRole } from "@framework/types";
-import mapClaim from "@server/features/claims/mapClaim";
+import { mapClaim } from "@server/features/claims/mapClaim";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
 import { DocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { UpdateClaimCommand } from "../claims";
@@ -52,7 +52,10 @@ export class UploadClaimDocumentCommand extends CommandDocumentBase<string> {
       throw new ValidationError(result);
     }
 
-    const claim = await context.repositories.claims.get(this.claimKey.partnerId, this.claimKey.periodId).then(mapClaim(context));
+    const partner = await context.repositories.partners.getById(this.claimKey.partnerId);
+    const claim = await context.repositories.claims
+      .get(this.claimKey.partnerId, this.claimKey.periodId)
+      .then(x => mapClaim(context)(x, partner.competitionType));
 
     if (this.document.description === DocumentDescription.IAR) await this.preIarUpload(context, claim);
 

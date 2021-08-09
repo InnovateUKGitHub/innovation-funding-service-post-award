@@ -909,6 +909,7 @@
     "claimQueriedMessage": "Claim queried",
     "claimSubmittedMessage": "Claim submitted",
     "iarRequiredMessage": "IAR required",
+    "schedule3RequiredMessage": "Schedule 3 required",
     "claimsToReviewMessage": "Claims to review: {{numberOfClaims}}",
     "claimToSubmitMessage": "You need to submit your claim.",
     "claimRequestMissingDocument": "You need to submit your claim report.",

@@ -3,12 +3,83 @@ import { ClaimDto, CostsSummaryForPeriodDto, DocumentSummaryDto } from "@framewo
 import { ClaimDtoValidator } from "@ui/validators";
 
 describe("claimDtoValidator()", () => {
-  const stubClaimDto = { id: "stub-id" } as ClaimDto;
+  const stubClaimDto = { id: "stub-id", status: ClaimStatus.UNKNOWN } as ClaimDto;
   const stubOriginalStatus = ClaimStatus.DRAFT;
   const stubDocument = { fileName: "stub-fileName" } as DocumentSummaryDto;
   const stubShowErrors = true;
   const stubCompetitionType = "CR&D";
   const stubIsFinalSummary = true;
+
+  describe("with status", () => {
+    type ClaimStatusKeys = keyof typeof ClaimStatus;
+
+    // Note: Convert enum to array like data structure
+    const claimStatusKeys = Object.values(ClaimStatus);
+    const forbiddenStatuses: ClaimStatus[] = claimStatusKeys.filter(
+      x => !ClaimDtoValidator.permittedStatuses.includes(x),
+    );
+
+    // Note: Create quick look map for quick assignment
+    const claimStatusKeyValuePairs = Object.entries(ClaimStatus) as [ClaimStatusKeys, ClaimStatus][];
+    const claimStatusMap = new Map<ClaimStatus, ClaimStatusKeys>(
+      claimStatusKeyValuePairs.map(([key, value]) => [value, key]),
+    );
+
+    // Note: Create automatically generated collections to test on. If a new item is added this update based validator
+    const permittedClaimStatuses = new Map<ClaimStatus, ClaimStatusKeys>();
+    const forbiddenClaimStatuses = new Map<ClaimStatus, ClaimStatusKeys>();
+
+    // Note: Populate collections based on validator static instance
+    for (const statusKey of claimStatusKeys) {
+      const isInvalidStatus = forbiddenStatuses.includes(statusKey);
+      const mapToUpdate = isInvalidStatus ? forbiddenClaimStatuses : permittedClaimStatuses;
+      const statusValue = claimStatusMap.get(statusKey) as ClaimStatusKeys;
+
+      mapToUpdate.set(statusKey, statusValue);
+    }
+
+    describe("when invalid claim status", () => {
+      forbiddenClaimStatuses.forEach((value, key) => {
+        const claimKey = key || "Unknown";
+
+        test(`when ${claimKey}`, () => {
+          const claimWithInValidStatus: ClaimDto = { ...stubClaimDto, status: ClaimStatus[value] };
+
+          const { status } = new ClaimDtoValidator(
+            claimWithInValidStatus,
+            stubOriginalStatus,
+            [],
+            [],
+            stubShowErrors,
+            stubCompetitionType,
+          );
+
+          expect(status.isValid).toBeFalsy();
+
+          expect(status.errorMessage).toBe(`The claim status '${claimKey}' is not permitted to continue.`);
+        });
+      });
+    });
+
+    describe("with a valid status", () => {
+      permittedClaimStatuses.forEach((value, key) => {
+        test(`when ${key}`, () => {
+          const claimWithValidStatus: ClaimDto = { ...stubClaimDto, status: ClaimStatus[value] };
+
+          const { status } = new ClaimDtoValidator(
+            claimWithValidStatus,
+            stubOriginalStatus,
+            [],
+            [],
+            stubShowErrors,
+            stubCompetitionType,
+          );
+
+          expect(status.isValid).toBeTruthy();
+        });
+      });
+    });
+  });
 
   describe("with id", () => {
     test("when valid", () => {

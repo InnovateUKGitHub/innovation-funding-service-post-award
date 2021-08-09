@@ -1,9 +1,11 @@
 import * as Dtos from "@framework/dtos";
+import { getAuthRoles } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { IClientUser, PartnerClaimStatus, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import * as ACC from "@ui/components";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { StoresConsumer } from "@ui/redux";
+import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { IRoutes } from "@ui/routing";
 import { Content } from "@content/content";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
@@ -52,7 +54,8 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
         />
       );
 
-    const subtitle = isProjectClosed ? undefined : project.isPastEndDate || this.isPartnerWithdrawn(project, partners) ? (
+    const subtitle = isProjectClosed ? undefined : project.isPastEndDate ||
+      this.isPartnerWithdrawn(project, partners) ? (
       <ACC.Content value={x => x.projectOverview.messages.finalClaimPeriod} />
     ) : (
       <ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />
@@ -159,8 +162,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
             data={partner}
             title={
               <>
-                {ACC.getPartnerName(partner)}{" "}
-                {<ACC.Content value={x => x.projectOverview.costsToDateMessage} />}
+                {ACC.getPartnerName(partner)} {<ACC.Content value={x => x.projectOverview.costsToDateMessage} />}
               </>
             }
             qa="lead-partner-summary"
@@ -289,9 +291,12 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private getClaimMessages(project: ProjectDto, partner: PartnerDto) {
+    const { isFc, isMo } = getAuthRoles(project.roles);
+    const { isKTP } = checkProjectCompetition(partner.competitionType);
+
     const result: ACC.NavigationCardMessage[] = [];
 
-    if (project.roles & ProjectRole.FinancialContact) {
+    if (isFc) {
       switch (partner.claimStatus) {
         case PartnerClaimStatus.NoClaimsDue:
           result.push({
@@ -323,15 +328,25 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
             qa: "message-ClaimSubmitted",
           });
           break;
-        case PartnerClaimStatus.IARRequired:
-          result.push({
-            message: <ACC.Content value={x => x.projectOverview.messages.iarRequired} />,
-            qa: "message-IARRequired",
-          });
+        case PartnerClaimStatus.IARRequired: {
+          if (isKTP) {
+            result.push({
+              message: <ACC.Content value={x => x.projectOverview.messages.schedule3Required} />,
+              qa: "message-Schedule3Required",
+            });
+          } else {
+            result.push({
+              message: <ACC.Content value={x => x.projectOverview.messages.iarRequired} />,
+              qa: "message-IARRequired",
+            });
+          }
+
+          break;
+        }
       }
     }
 
-    if (project.roles & ProjectRole.MonitoringOfficer) {
+    if (isMo) {
       result.push({
         message: <ACC.Content value={x => x.projectOverview.messages.claimsToReview(project.claimsToReview)} />,
         qa: "message-claimsToReview",

@@ -3,7 +3,7 @@ import { ISalesforceClaim } from "@server/repositories";
 import { IComparer } from "@framework/util/comparator";
 import { ClaimDto, IContext } from "@framework/types";
 import { SalesforceProjectRole } from "@server/constants/enums";
-import mapClaim from "./mapClaim";
+import { mapClaim } from "./mapClaim";
 
 export class GetAllClaimsForProjectQuery extends QueryBase<ClaimDto[]> {
   constructor(private readonly projectId: string) {
@@ -11,15 +11,17 @@ export class GetAllClaimsForProjectQuery extends QueryBase<ClaimDto[]> {
   }
 
   protected async run(context: IContext) {
+    const project = await context.repositories.projects.getById(this.projectId);
     const claims = await context.repositories.claims.getAllByProjectId(this.projectId);
     const forecasts = await context.repositories.profileTotalPeriod.getAllByProjectId(this.projectId);
     const joined = claims.map(claim => ({
       claim,
       forecast: forecasts.find(x => x.Acc_ProjectParticipant__c === claim.Acc_ProjectParticipant__r.Id && x.Acc_ProjectPeriodNumber__c === claim.Acc_ProjectPeriodNumber__c)
     }));
+
     joined.sort(claimSorter);
 
-    return joined.map(x => mapClaim(context)(x.claim, x.forecast));
+    return joined.map(x => mapClaim(context)(x.claim, project.Acc_CompetitionType__c, x.forecast));
   }
 }
 

@@ -1,9 +1,90 @@
 import { GetClaimStatusChangesQuery } from "@server/features/claims/getClaimStatusChangesQuery";
-import { ClaimStatus, ClaimStatusChangeDto } from "@framework/types";
+import { Authorisation, ClaimStatus, ClaimStatusChangeDto, PartnerDto, ProjectRole } from "@framework/types";
 import { DateTime } from "luxon";
 import { TestContext } from "../../testContextProvider";
 
-describe("GetClaimStatusChanges", () => {
+describe("GetClaimStatusChangesQuery", () => {
+  describe("with access control", () => {
+    function accessControlSetup() {
+      const context = new TestContext();
+      const partner = context.testData.createPartner();
+      const claim = context.testData.createClaim(partner);
+
+      const command = new GetClaimStatusChangesQuery(partner.projectId, partner.id, claim.Acc_ProjectPeriodNumber__c);
+
+      return { context, partner, command };
+    }
+
+    describe("with project", () => {
+      test("with Mo passes", async () => {
+        const { context, partner, command } = accessControlSetup();
+
+        const auth = new Authorisation({
+          [partner.projectId]: {
+            projectRoles: ProjectRole.MonitoringOfficer,
+            partnerRoles: {},
+          },
+        });
+
+        expect(await context.runAccessControl(auth, command)).toBeTruthy();
+      });
+
+      test("with Pm passes", async () => {
+        const { context, partner, command } = accessControlSetup();
+
+        const auth = new Authorisation({
+          [partner.projectId]: {
+            projectRoles: ProjectRole.ProjectManager,
+            partnerRoles: {},
+          },
+        });
+
+        expect(await context.runAccessControl(auth, command)).toBeTruthy();
+      });
+    });
+
+    describe("with partner", () => {
+      test("with Fc passes", async () => {
+        const { context, partner, command } = accessControlSetup();
+
+        const auth = new Authorisation({
+          [partner.projectId]: {
+            projectRoles: ProjectRole.Unknown,
+            partnerRoles: { [partner.id]: ProjectRole.FinancialContact },
+          },
+        });
+
+        expect(await context.runAccessControl(auth, command)).toBeTruthy();
+      });
+
+      test("with Pm passes", async () => {
+        const { context, partner, command } = accessControlSetup();
+
+        const auth = new Authorisation({
+          [partner.projectId]: {
+            projectRoles: ProjectRole.Unknown,
+            partnerRoles: { [partner.id]: ProjectRole.ProjectManager },
+          },
+        });
+
+        expect(await context.runAccessControl(auth, command)).toBeTruthy();
+      });
+
+      test("with Mo should fail", async () => {
+        const { context, partner, command } = accessControlSetup();
+
+        const auth = new Authorisation({
+          [partner.projectId]: {
+            projectRoles: ProjectRole.Unknown,
+            partnerRoles: { [partner.id]: ProjectRole.MonitoringOfficer },
+          },
+        });
+
+        expect(await context.runAccessControl(auth, command)).toBeFalsy();
+      });
+    });
+  });
+
   it("returns empty array if no data for claim", async () => {
     const context = new TestContext();
 
@@ -53,7 +134,13 @@ describe("GetClaimStatusChanges", () => {
     const partner = context.testData.createPartner();
     const claim = context.testData.createClaim(partner);
 
-    const existing = context.testData.range(10, i => context.testData.createClaimStatusChange(claim, { CreatedDate: DateTime.fromString("2000-01-01", "yyyy-MM-dd").plus({ days: i * 10 }).toISO() }));
+    const existing = context.testData.range(10, i =>
+      context.testData.createClaimStatusChange(claim, {
+        CreatedDate: DateTime.fromString("2000-01-01", "yyyy-MM-dd")
+          .plus({ days: i * 10 })
+          .toISO(),
+      }),
+    );
 
     const query = new GetClaimStatusChangesQuery(partner.projectId, partner.id, claim.Acc_ProjectPeriodNumber__c);
 
@@ -87,6 +174,43 @@ describe("GetClaimStatusChanges", () => {
     expect(result.map(x => x.id)).toEqual(expected);
   });
 
+  describe("returns correct newStatusLabel with IAR label logic", () => {
+    async function newStatusLabelSetup(competitionType: PartnerDto["competitionType"]) {
+      const context = new TestContext();
+
+      const project = context.testData.createProject(item => (item.Acc_CompetitionType__c = competitionType));
+      const partner = context.testData.createPartner(project);
+      const claim = context.testData.createClaim(partner, 1);
+
+      context.testData.createClaimStatusChange(claim, {
+        Acc_NewClaimStatus__c: ClaimStatus.AWAITING_IAR,
+      });
+
+      const query = new GetClaimStatusChangesQuery(partner.projectId, partner.id, claim.Acc_ProjectPeriodNumber__c);
+
+      const results = await context.runQuery(query);
+
+      return {
+        results,
+      };
+    }
+
+    it("when not KTP competition", async () => {
+      const stubNotKtpCompetitionType = "CR&D";
+      const { results } = await newStatusLabelSetup(stubNotKtpCompetitionType);
+
+      expect(results).toHaveLength(1);
+      expect(results[0].newStatusLabel).toBe(ClaimStatus.AWAITING_IAR);
+    });
+
+    it("when a KTP competition", async () => {
+      const { results } = await newStatusLabelSetup("KTP");
+
+      expect(results).toHaveLength(1);
+      expect(results[0].newStatusLabel).toBe("Awaiting Schedule 3");
+    });
+  });
+
   it("if user is mo expect result to includes all comments", async () => {
     const context = new TestContext();
 
@@ -94,9 +218,13 @@ describe("GetClaimStatusChanges", () => {
     const partner = context.testData.createPartner(project);
     const claim = context.testData.createClaim(partner, 1);
     // create records visible to partner
-    const existingPartnerVisible = context.testData.range(3, () => context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: true }));
+    const existingPartnerVisible = context.testData.range(3, () =>
+      context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: true }),
+    );
     // create records not visible to partner
-    const existingPartnerNotVisible = context.testData.range(3, () => context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: false }));
+    const existingPartnerNotVisible = context.testData.range(3, () =>
+      context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: false }),
+    );
 
     context.testData.createCurrentUserAsMonitoringOfficer(project);
 
@@ -116,9 +244,19 @@ describe("GetClaimStatusChanges", () => {
     const partner = context.testData.createLeadPartner(project);
     const claim = context.testData.createClaim(partner, 1);
     // create records visible to partner
-    const existingPartnerVisible = context.testData.range(3, i => context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: true, Acc_ExternalComment__c: "Visible Comment " + i }));
+    const existingPartnerVisible = context.testData.range(3, i =>
+      context.testData.createClaimStatusChange(claim, {
+        Acc_ParticipantVisibility__c: true,
+        Acc_ExternalComment__c: "Visible Comment " + i,
+      }),
+    );
     // create records not visible to partner
-    const existingPartnerNotVisible = context.testData.range(3, i => context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: false, Acc_ExternalComment__c: "Not Visible Comment " + i }));
+    const existingPartnerNotVisible = context.testData.range(3, i =>
+      context.testData.createClaimStatusChange(claim, {
+        Acc_ParticipantVisibility__c: false,
+        Acc_ExternalComment__c: "Not Visible Comment " + i,
+      }),
+    );
 
     context.testData.createCurrentUserAsProjectManager(project, partner);
 
@@ -126,7 +264,9 @@ describe("GetClaimStatusChanges", () => {
 
     const result = await context.runQuery(query);
 
-    const expected = [...existingPartnerVisible, ...existingPartnerNotVisible].map(x => existingPartnerVisible.indexOf(x) >= 0 ? x.Acc_ExternalComment__c : "").reverse();
+    const expected = [...existingPartnerVisible, ...existingPartnerNotVisible]
+      .map(x => (existingPartnerVisible.indexOf(x) >= 0 ? x.Acc_ExternalComment__c : ""))
+      .reverse();
 
     expect(result.map(x => x.comments)).toEqual(expected);
   });
@@ -140,9 +280,19 @@ describe("GetClaimStatusChanges", () => {
 
     const claim = context.testData.createClaim(partner2, 1);
     // create records visible to partner
-    const existingPartnerVisible = context.testData.range(3, i => context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: true, Acc_ExternalComment__c: "Visible Comment " + i }));
+    const existingPartnerVisible = context.testData.range(3, i =>
+      context.testData.createClaimStatusChange(claim, {
+        Acc_ParticipantVisibility__c: true,
+        Acc_ExternalComment__c: "Visible Comment " + i,
+      }),
+    );
     // create records not visible to partner
-    const existingPartnerNotVisible = context.testData.range(3, i => context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: false, Acc_ExternalComment__c: "Not Visible Comment " + i }));
+    const existingPartnerNotVisible = context.testData.range(3, i =>
+      context.testData.createClaimStatusChange(claim, {
+        Acc_ParticipantVisibility__c: false,
+        Acc_ExternalComment__c: "Not Visible Comment " + i,
+      }),
+    );
 
     context.testData.createCurrentUserAsProjectManager(project, partner1);
 
@@ -162,9 +312,13 @@ describe("GetClaimStatusChanges", () => {
     const partner = context.testData.createPartner(project);
     const claim = context.testData.createClaim(partner, 1);
     // create records visible to partner
-    const existingPartnerVisible = context.testData.range(3, () => context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: true }));
+    const existingPartnerVisible = context.testData.range(3, () =>
+      context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: true }),
+    );
     // create records not visible to partner
-    const existingPartnerNotVisible = context.testData.range(3, () => context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: false }));
+    const existingPartnerNotVisible = context.testData.range(3, () =>
+      context.testData.createClaimStatusChange(claim, { Acc_ParticipantVisibility__c: false }),
+    );
 
     context.testData.createCurrentUserAsFinanceContact(project, partner);
 
@@ -172,7 +326,9 @@ describe("GetClaimStatusChanges", () => {
 
     const result = await context.runQuery(query);
 
-    const expected = [...existingPartnerVisible, ...existingPartnerNotVisible].map(x => existingPartnerVisible.indexOf(x) >= 0 ? x.Acc_ExternalComment__c : "").reverse();
+    const expected = [...existingPartnerVisible, ...existingPartnerNotVisible]
+      .map(x => (existingPartnerVisible.indexOf(x) >= 0 ? x.Acc_ExternalComment__c : ""))
+      .reverse();
 
     expect(result.map(x => x.comments)).toEqual(expected);
   });
