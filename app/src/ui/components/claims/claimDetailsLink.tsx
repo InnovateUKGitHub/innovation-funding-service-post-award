@@ -21,30 +21,30 @@ export interface ClaimDetailsLinkRoutes extends ClaimDetailsBaseProps {
   routes: IRoutes;
 }
 
-export function ClaimDetailsLink(props: ClaimDetailsLinkRoutes) {
+export function ClaimDetailsLink({ claim, partner, project, routes }: ClaimDetailsLinkRoutes) {
   const { getContent } = useContent();
 
-  const linkType = getClaimDetailsLinkType(props);
+  const linkType = getClaimDetailsLinkType({ claim, partner, project });
 
   if (!linkType) return null;
 
   const linkProps = {
-    projectId: props.project.id,
-    partnerId: props.partner.id,
-    periodId: props.claim.periodId,
+    projectId: project.id,
+    partnerId: partner.id,
+    periodId: claim.periodId,
   };
 
   const linkTypeOptions = {
     edit: {
-      route: props.routes.prepareClaim.getLink(linkProps),
+      route: routes.prepareClaim.getLink(linkProps),
       children: getContent(x => x.components.claimDetailsLinkContent.editClaimText),
     },
     review: {
-      route: props.routes.reviewClaim.getLink(linkProps),
+      route: routes.reviewClaim.getLink(linkProps),
       children: getContent(x => x.components.claimDetailsLinkContent.reviewClaimText),
     },
     view: {
-      route: props.routes.claimDetails.getLink(linkProps),
+      route: routes.claimDetails.getLink(linkProps),
       children: getContent(x => x.components.claimDetailsLinkContent.viewClaimText),
     },
   };
@@ -65,10 +65,13 @@ export function getClaimDetailsLinkType({
 
   switch (claim.status) {
     case ClaimStatus.DRAFT:
+    case ClaimStatus.AWAITING_IAR: {
       if (isPartnerFc) return "edit";
       if (isProjectMo) return "view";
 
       return null;
+    }
+
     case ClaimStatus.MO_QUERIED:
       return isProjectMo && !isProjectPm ? "view" : "edit";
 

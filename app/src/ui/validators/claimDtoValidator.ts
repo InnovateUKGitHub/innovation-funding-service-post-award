@@ -19,32 +19,38 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
     private readonly isClaimSummary?: boolean,
   ) {
     super(dto, showErrors);
-
-    const permittedStatus = [
-      ClaimStatus.DRAFT,
-      ClaimStatus.SUBMITTED,
-      ClaimStatus.MO_QUERIED,
-      ClaimStatus.AWAITING_IUK_APPROVAL,
-      ClaimStatus.INNOVATE_QUERIED,
-    ];
-
-    this.status = Validation.isTrue(
-      this,
-      !this.model.status || permittedStatus.includes(this.model.status),
-      "Set a valid status",
-    );
   }
 
-  public status: Result;
+  static permittedStatuses: Readonly<ClaimStatus[]> = [
+    ClaimStatus.DRAFT,
+    ClaimStatus.AWAITING_IAR,
+    ClaimStatus.SUBMITTED,
+    ClaimStatus.MO_QUERIED,
+    ClaimStatus.AWAITING_IUK_APPROVAL,
+    ClaimStatus.INNOVATE_QUERIED,
+  ];
 
   private readonly isKtpCompetition: boolean = checkProjectCompetition(this.competitionType).isKTP;
   private readonly hasValidIarStatusWithDocs = !!this.documents.length && this.model.iarStatus === "Received";
 
+  public status = this.validateStatus();
   public id = this.validateId();
   public isFinalClaim = this.validateFinalClaim();
   public totalCosts = this.validateTotalCosts();
   public comments = this.validateComments();
   public iar = this.validateIarStatus();
+
+  private validateStatus(): Result {
+    const isValidStatus = this.model.status.length
+      ? ClaimDtoValidator.permittedStatuses.includes(this.model.status)
+      : false;
+
+    return Validation.isTrue(
+      this,
+      isValidStatus,
+      `The claim status '${this.model.status || "Unknown"}' is not permitted to continue.`,
+    );
+  }
 
   private validateId(): Result {
     return Validation.required(this, this.model.id, "Id is required");

@@ -1,5 +1,5 @@
 import { UpdateClaimCommand } from "@server/features/claims/updateClaim";
-import mapClaim from "@server/features/claims/mapClaim";
+import { mapClaim } from "@server/features/claims/mapClaim";
 import { ClaimStatus } from "@framework/constants";
 import { ValidationError } from "@server/features/common/appError";
 import { Authorisation, ProjectRole } from "@framework/types";
@@ -54,7 +54,8 @@ describe("UpdateClaimCommand", () => {
 
   it("when claim id not set expect validation exception", async () => {
     const context = new TestContext();
-    const dto = mapClaim(context)(context.testData.createClaim());
+    const partner = context.testData.createPartner();
+    const dto = mapClaim(context)(context.testData.createClaim(), partner.competitionType);
     dto.id = null!;
     const project = context.testData.createProject();
     const command = new UpdateClaimCommand(project.Id, dto);
@@ -64,7 +65,8 @@ describe("UpdateClaimCommand", () => {
   it("when status updated to draft expect item updated", async () => {
     const context = new TestContext();
     const claim = context.testData.createClaim(undefined, undefined, x => (x.Acc_ClaimStatus__c = "New" as any));
-    const dto = mapClaim(context)(claim);
+    const partner = context.testData.createPartner();
+    const dto = mapClaim(context)(claim, partner.competitionType);
     const project = context.testData.createProject();
 
     dto.status = ClaimStatus.DRAFT;
@@ -78,7 +80,8 @@ describe("UpdateClaimCommand", () => {
   it("when status updated to submitted expect item updated", async () => {
     const context = new TestContext();
     const claim = context.testData.createClaim(undefined, undefined, x => (x.Acc_ClaimStatus__c = ClaimStatus.DRAFT));
-    const dto = mapClaim(context)(claim);
+    const partner = context.testData.createPartner();
+    const dto = mapClaim(context)(claim, partner.competitionType);
     const project = context.testData.createProject();
 
     dto.status = ClaimStatus.SUBMITTED;
@@ -96,7 +99,8 @@ describe("UpdateClaimCommand", () => {
       x.Acc_IARRequired__c = true;
     });
     context.testData.createDocument(claim.Id, "cats_are_the_best.txt");
-    const dto = mapClaim(context)(claim);
+    const partner = context.testData.createPartner();
+    const dto = mapClaim(context)(claim, partner.competitionType);
     const project = context.testData.createProject();
 
     dto.status = ClaimStatus.SUBMITTED;
@@ -110,7 +114,8 @@ describe("UpdateClaimCommand", () => {
   it("when status updated to approved expect item updated", async () => {
     const context = new TestContext();
     const claim = context.testData.createClaim(undefined, undefined, x => (x.Acc_ClaimStatus__c = ClaimStatus.DRAFT));
-    const dto = mapClaim(context)(claim);
+    const partner = context.testData.createPartner();
+    const dto = mapClaim(context)(claim, partner.competitionType);
     const project = context.testData.createProject();
 
     dto.status = ClaimStatus.AWAITING_IUK_APPROVAL;
@@ -124,7 +129,8 @@ describe("UpdateClaimCommand", () => {
   it("when status updated to queried expect item updated", async () => {
     const context = new TestContext();
     const claim = context.testData.createClaim(undefined, undefined, x => (x.Acc_ClaimStatus__c = ClaimStatus.DRAFT));
-    const dto = mapClaim(context)(claim);
+    const partner = context.testData.createPartner();
+    const dto = mapClaim(context)(claim, partner.competitionType);
     const project = context.testData.createProject();
 
     dto.status = ClaimStatus.MO_QUERIED;
@@ -139,7 +145,8 @@ describe("UpdateClaimCommand", () => {
   it("when status updated to something other than draft or submitted expect error", async () => {
     const context = new TestContext();
     const claim = context.testData.createClaim(undefined, undefined, x => (x.Acc_ClaimStatus__c = ClaimStatus.DRAFT));
-    const dto = mapClaim(context)(claim);
+    const partner = context.testData.createPartner();
+    const dto = mapClaim(context)(claim, partner.competitionType);
     const project = context.testData.createProject();
 
     dto.status = ClaimStatus.PAID;
@@ -155,7 +162,8 @@ describe("UpdateClaimCommand", () => {
       undefined,
       x => (x.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED),
     );
-    const dto = mapClaim(context)(claim);
+    const partner = context.testData.createPartner();
+    const dto = mapClaim(context)(claim, partner.competitionType);
     const project = context.testData.createProject();
     const command = new UpdateClaimCommand(project.Id, dto);
     await context.runCommand(command);
@@ -170,7 +178,8 @@ describe("UpdateClaimCommand", () => {
       undefined,
       x => (x.Acc_ReasonForDifference__c = "Original Message"),
     );
-    const dto = mapClaim(context)(claim);
+    const partner = context.testData.createPartner();
+    const dto = mapClaim(context)(claim, partner.competitionType);
     const project = context.testData.createProject();
 
     dto.comments = "A New Message";
@@ -184,7 +193,8 @@ describe("UpdateClaimCommand", () => {
   it("when message is over 1000 characters expect expection", async () => {
     const context = new TestContext();
     const claim = context.testData.createClaim();
-    const dto = mapClaim(context)(claim);
+    const partner = context.testData.createPartner();
+    const dto = mapClaim(context)(claim, partner.competitionType);
     const project = context.testData.createProject();
 
     dto.comments = "a".repeat(1001);
@@ -196,7 +206,8 @@ describe("UpdateClaimCommand", () => {
   it("when message is 1000 characters expect no exception", async () => {
     const context = new TestContext();
     const claim = context.testData.createClaim();
-    const dto = mapClaim(context)(claim);
+    const partner = context.testData.createPartner();
+    const dto = mapClaim(context)(claim, partner.competitionType);
     const project = context.testData.createProject();
 
     dto.comments = "a".repeat(1000);
@@ -210,7 +221,7 @@ describe("UpdateClaimCommand", () => {
     const partner = context.testData.createPartner();
     const claim = context.testData.createClaim(partner);
 
-    const dto = mapClaim(context)(claim);
+    const dto = mapClaim(context)(claim, partner.competitionType);
     dto.status = ClaimStatus.MO_QUERIED;
     dto.comments = "";
 
@@ -227,7 +238,7 @@ describe("UpdateClaimCommand", () => {
     const claim = context.testData.createClaim(partner);
     claim.Acc_ClaimStatus__c = ClaimStatus.MO_QUERIED;
 
-    const dto = mapClaim(context)(claim);
+    const dto = mapClaim(context)(claim, partner.competitionType);
     dto.status = ClaimStatus.MO_QUERIED;
     dto.comments = "";
 
@@ -238,7 +249,7 @@ describe("UpdateClaimCommand", () => {
     const context = new TestContext();
     const testData = context.testData;
     const project = testData.createProject();
-    const partner = testData.createPartner();
+    const partner = context.testData.createPartner();
     const claim = testData.createClaim(partner, 2);
     const costCategory = testData.createCostCategory();
 
@@ -249,7 +260,7 @@ describe("UpdateClaimCommand", () => {
       x.Acc_PeriodCostCategoryTotal__c = 1000000;
     });
 
-    const dto = mapClaim(context)(claim);
+    const dto = mapClaim(context)(claim, partner.competitionType);
     const command = new UpdateClaimCommand(project.Id, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
@@ -261,7 +272,7 @@ describe("UpdateClaimCommand", () => {
     const claim = context.testData.createClaim(partner, 2);
     claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
 
-    const dto = mapClaim(context)(claim);
+    const dto = mapClaim(context)(claim, partner.competitionType);
 
     dto.status = ClaimStatus.SUBMITTED;
 
@@ -285,7 +296,7 @@ describe("UpdateClaimCommand", () => {
     const claim = context.testData.createClaim(partner, 2);
     claim.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED;
 
-    const dto = mapClaim(context)(claim);
+    const dto = mapClaim(context)(claim, partner.competitionType);
 
     const command = new UpdateClaimCommand(project.Id, dto);
 
@@ -302,7 +313,7 @@ describe("UpdateClaimCommand", () => {
     claim.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED;
     claim.Acc_ReasonForDifference__c = "Orignal Comments";
 
-    const dto = mapClaim(context)(claim);
+    const dto = mapClaim(context)(claim, partner.competitionType);
 
     dto.status = ClaimStatus.MO_QUERIED;
 
@@ -323,7 +334,7 @@ describe("UpdateClaimCommand", () => {
 
     claim.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED;
 
-    const dto = mapClaim(context)(claim);
+    const dto = mapClaim(context)(claim, partner.competitionType);
 
     dto.status = ClaimStatus.AWAITING_IUK_APPROVAL;
 
@@ -343,7 +354,7 @@ describe("UpdateClaimCommand", () => {
 
     claim.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED;
 
-    const dto = mapClaim(context)(claim);
+    const dto = mapClaim(context)(claim, partner.competitionType);
 
     dto.status = ClaimStatus.AWAITING_IUK_APPROVAL;
 
@@ -363,7 +374,7 @@ describe("UpdateClaimCommand", () => {
 
     claim.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED;
 
-    const dto = mapClaim(context)(claim);
+    const dto = mapClaim(context)(claim, partner.competitionType);
 
     dto.status = ClaimStatus.MO_QUERIED;
     dto.comments = "Claim Queried";
@@ -392,7 +403,7 @@ describe("UpdateClaimCommand", () => {
           x.Acc_IARRequired__c = isIarRequiredState;
           x.Acc_IAR_Status__c = "Received";
         });
-        const dto = mapClaim(context)(claim);
+        const dto = mapClaim(context)(claim, partner.competitionType);
 
         const command = new UpdateClaimCommand(project.Id, dto);
         await expect(context.runCommand(command)).resolves.toEqual(true);
@@ -409,7 +420,7 @@ describe("UpdateClaimCommand", () => {
           x.Acc_IARRequired__c = iarRequiredIsFalse;
           x.Acc_IAR_Status__c = "Received";
         });
-        const dto = mapClaim(context)(claim);
+        const dto = mapClaim(context)(claim, partner.competitionType);
 
         const command = new UpdateClaimCommand(project.Id, dto, isClaimSummaryTrue);
         await expect(context.runCommand(command)).resolves.toEqual(true);
@@ -422,7 +433,8 @@ describe("UpdateClaimCommand", () => {
         const project = context.testData.createProject();
         const claim = context.testData.createClaim();
 
-        const dto = mapClaim(context)(claim);
+        const partner = context.testData.createPartner();
+        const dto = mapClaim(context)(claim, partner.competitionType);
 
         const command = new UpdateClaimCommand(project.Id, dto, isNotClaimSummary);
         await expect(context.runCommand(command)).resolves.toEqual(true);
@@ -443,7 +455,7 @@ describe("UpdateClaimCommand", () => {
           x.Acc_IARRequired__c = isIarRequiredState;
           x.Acc_IAR_Status__c = validIarStatus;
         });
-        const dto = mapClaim(context)(claim);
+        const dto = mapClaim(context)(claim, partner.competitionType);
 
         const command = new UpdateClaimCommand(project.Id, dto, isClaimSummaryTrue);
         await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
@@ -462,7 +474,7 @@ describe("UpdateClaimCommand", () => {
           x.Acc_IAR_Status__c = invalidIarStatus;
         });
         context.testData.createDocument(claim.Id, "stub-document.docx");
-        const dto = mapClaim(context)(claim);
+        const dto = mapClaim(context)(claim, partner.competitionType);
 
         const command = new UpdateClaimCommand(project.Id, dto, isClaimSummaryTrue);
         await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
@@ -479,7 +491,8 @@ describe("UpdateClaimCommand", () => {
         const project = context.testData.createProject();
         const claim = context.testData.createClaim();
 
-        const dto = mapClaim(context)(claim);
+        const partner = context.testData.createPartner();
+        const dto = mapClaim(context)(claim, partner.competitionType);
 
         const command = new UpdateClaimCommand(project.Id, dto, isNotClaimSummary);
 
@@ -494,7 +507,8 @@ describe("UpdateClaimCommand", () => {
         context.testData.createPartner(project, x => (x.competitionType = validCompetitionType));
         const claim = context.testData.createClaim();
 
-        const dto = mapClaim(context)(claim);
+        const partner = context.testData.createPartner();
+        const dto = mapClaim(context)(claim, partner.competitionType);
 
         const command = new UpdateClaimCommand(project.Id, dto, isNotClaimSummary);
 
@@ -512,7 +526,7 @@ describe("UpdateClaimCommand", () => {
 
         claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
 
-        const dto = mapClaim(context)(claim);
+        const dto = mapClaim(context)(claim, partner.competitionType);
 
         const command = new UpdateClaimCommand(project.Id, dto, true);
 
@@ -528,7 +542,7 @@ describe("UpdateClaimCommand", () => {
 
         claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
 
-        const dto = mapClaim(context)(claim);
+        const dto = mapClaim(context)(claim, partner.competitionType);
 
         const command = new UpdateClaimCommand(project.Id, dto, true);
 
@@ -543,7 +557,7 @@ describe("UpdateClaimCommand", () => {
 
         claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
 
-        const dto = mapClaim(context)(claim);
+        const dto = mapClaim(context)(claim, partner.competitionType);
 
         const command = new UpdateClaimCommand(project.Id, dto, true);
 
@@ -561,7 +575,7 @@ describe("UpdateClaimCommand", () => {
 
         claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
 
-        const dto = mapClaim(context)(claim);
+        const dto = mapClaim(context)(claim, partner.competitionType);
 
         const command = new UpdateClaimCommand(project.Id, dto, true);
 
@@ -579,7 +593,7 @@ describe("UpdateClaimCommand", () => {
 
         claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
 
-        const dto = mapClaim(context)(claim);
+        const dto = mapClaim(context)(claim, partner.competitionType);
 
         const command = new UpdateClaimCommand(project.Id, dto, true);
 
