@@ -18,7 +18,7 @@ describe("<DashboardProject />", () => {
         checkForecast: { content: "stub-checkForecast" },
         claimToSubmit: { content: "stub-claimToSubmit" },
         claimQueried: { content: "stub-claimQueried" },
-        claimRequiresIAR: { content: "stub-claimRequiresIAR" },
+        claimRequestMissingDocument: { content: "stub-claimRequestMissingDocument" },
         pcrQueried: { content: "stub-pcrQueried" },
         projectEnded: { content: "stub-projectEnded" },
         claimsToReview: jest.fn().mockReturnValue({ content: "stub-claimsToReview" }),
@@ -300,7 +300,7 @@ describe("<DashboardProject />", () => {
                 name                    | claimStatus                        | expectedMessage
                 ${"with claim due"}     | ${PartnerClaimStatus.ClaimDue}     | ${stubContent.projectsDashboard.messages.claimToSubmit.content}
                 ${"with claim queried"} | ${PartnerClaimStatus.ClaimQueried} | ${stubContent.projectsDashboard.messages.claimQueried.content}
-                ${"with IAR required"}  | ${PartnerClaimStatus.IARRequired}  | ${stubContent.projectsDashboard.messages.claimRequiresIAR.content}
+                ${"with IAR required"}  | ${PartnerClaimStatus.IARRequired}  | ${stubContent.projectsDashboard.messages.claimRequestMissingDocument.content}
               `("$name", ({ claimStatus, expectedMessage }) => {
                 const stubProject = createProjectDto({
                   status: ProjectStatus.Live,

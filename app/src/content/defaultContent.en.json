@@ -911,7 +911,7 @@
     "iarRequiredMessage": "IAR required",
     "claimsToReviewMessage": "Claims to review: {{numberOfClaims}}",
     "claimToSubmitMessage": "You need to submit your claim.",
-    "claimRequiresRequiresIARMessage": "You need to submit your IAR.",
+    "claimRequestMissingDocument": "You need to submit your claim report.",
     "projectEndedMessage": "Project ended",
     "finalClaimPeriodMessage": "Final claim period",
     "currentPeriodInfo": "Project period {{currentPeriod}} of {{numberOfPeriods}}",

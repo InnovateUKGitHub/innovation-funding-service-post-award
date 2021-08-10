@@ -8,8 +8,7 @@ export class ProjectMessages extends ContentBase {
   public readonly checkForecast = this.getContent("checkForecast");
   public readonly claimQueried = this.getContent("claimQueriedMessage");
   public readonly claimToSubmit = this.getContent("claimToSubmitMessage");
-  public readonly claimRequiresIAR = this.getContent("claimRequiresIARMessage");
-
+  public readonly claimRequestMissingDocument = this.getContent("claimRequestMissingDocument");
   public readonly claimDue = this.getContent("claimDueMessage");
   public readonly claimOverdue = this.getContent("claimOverdueMessage");
   public readonly claimSubmitted = this.getContent("claimSubmittedMessage");
