@@ -76,7 +76,7 @@ const useProjectActions = ({ section, project, partner }: ProjectProps): string[
           messages.push(getContent(x => x.projectsDashboard.messages.claimQueried));
           break;
         case PartnerClaimStatus.IARRequired:
-          messages.push(getContent(x => x.projectsDashboard.messages.claimRequiresIAR));
+          messages.push(getContent(x => x.projectsDashboard.messages.claimRequestMissingDocument));
           break;
       }
     }
