@@ -4,7 +4,8 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import { Pending } from "@shared/pending";
 import { ILinkInfo, ProjectRole } from "@framework/types";
 import * as ACC from "@ui/components";
-import { ContentConsumer, StoresConsumer } from "@ui/redux";
+import { useContent } from "@ui/hooks";
+import { useStores } from "@ui/redux";
 import { MonitoringReportsDashboardContent } from "@content/pages/monitoringReports/monitoringReportsDashboardContent";
 import { ContentSelector } from "@content/content";
 
@@ -115,23 +116,20 @@ class DashboardComponent extends ContainerBase<Params&Props, Data, Callbacks> {
   }
 }
 
-const DashboardContainer = (props: Params & BaseProps) => (
-  <StoresConsumer>
-    {stores => (
-      <ContentConsumer>{
-        content => (
-        <DashboardComponent
-          project={stores.projects.getById(props.projectId)}
-          partners={stores.partners.getPartnersForProject(props.projectId)}
-          reports={stores.monitoringReports.getAllForProject(props.projectId)}
-          content={content.monitoringReportsDashboard}
-          {...props}
-        />
-        )}
-      </ContentConsumer>
-    )}
-  </StoresConsumer>
-);
+const DashboardContainer = (props: Params & BaseProps) => {
+  const stores = useStores();
+  const { content } = useContent();
+
+  return (
+    <DashboardComponent
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      partners={stores.partners.getPartnersForProject(props.projectId)}
+      reports={stores.monitoringReports.getAllForProject(props.projectId)}
+      content={content.monitoringReportsDashboard}
+    />
+  );
+};
 
 export const MonitoringReportDashboardRoute = defineRoute({
   routeName: "monitoringReportDashboard",

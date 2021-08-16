@@ -4,7 +4,7 @@ import { Params, State as RouteState } from "router5";
 import { ErrorBoundary } from "react-error-boundary";
 
 import { Content } from "@content/content";
-import { useCompetitionType } from "@ui/hooks";
+import { getContentFromResult, useCompetitionType } from "@ui/hooks";
 import { IRoutes, MatchedRoute, matchRoute } from "@ui/routing";
 import { IStores, ModalRegister, useModal, useStores } from "@ui/redux";
 import { updatePageTitle } from "@ui/redux/actions";
@@ -14,15 +14,7 @@ import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { FooterExternalContent, footerLinks } from "@ui/containers/app/footer.config";
 import { BaseProps } from "@ui/containers/containerBase";
 
-import {
-  Footer,
-  FullHeight,
-  getHeaderProps,
-  GovWidthContainer,
-  Header,
-  PhaseBanner,
-  PrivateModal,
-} from "@ui/components";
+import { Footer, FullHeight, GovWidthContainer, Header, PhaseBanner, PrivateModal } from "@ui/components";
 import { ErrorContainer, ErrorContainerProps, ErrorBoundaryFallback } from "@ui/components/errors";
 
 interface IAppProps {
@@ -77,13 +69,30 @@ class AppView extends React.Component<IAppProps> {
       isClient,
     };
 
-    const headerProps = getHeaderProps(config.ifsRoot, content.header);
     const RouteContainer = currentRoute.container;
+
+    const appMenuItems = [
+      {
+        qa: "nav-dashboard",
+        href: `${config.ifsRoot}/dashboard-selection`,
+        text: getContentFromResult(content.header.dashboard),
+      },
+      {
+        qa: "nav-profile",
+        href: `${config.ifsRoot}/profile/view`,
+        text: getContentFromResult(content.header.profile),
+      },
+      {
+        qa: "nav-sign-out",
+        href: "/logout",
+        text: getContentFromResult(content.header.signOut),
+      },
+    ];
 
     return (
       <ContentProvider value={content}>
         <FullHeight.Container>
-          <Header {...headerProps} />
+          <Header headingLink={`${config.ifsRoot}/competition/search`} menuItems={appMenuItems} />
 
           <FullHeight.Content>
             <GovWidthContainer data-page-qa={currentRoute.routeName}>
