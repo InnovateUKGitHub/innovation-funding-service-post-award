@@ -76,14 +76,13 @@ interface GuideProps {
 }
 
 export const Guide: React.FunctionComponent<GuideProps> = props => {
-  const componentDirectory = `${process.env.SERVER_URL}/components`;
   const guidesToRender = guides
     .map((guide, originalIndex) => ({ guide, originalIndex }))
     .filter(x => !props.filter || x.guide.name === props.filter);
 
   return (
     <div>
-      <Header siteLink={componentDirectory} />
+      <Header headingLink={`${process.env.SERVER_URL}/components`} />
 
       <GovWidthContainer style={{ maxWidth: "100%" }}>
         <main
@@ -98,13 +97,12 @@ export const Guide: React.FunctionComponent<GuideProps> = props => {
           <div className="govuk-grid-row">
             <div className="govuk-grid-column-one-quarter">
               <UL>
-                {
-                  <li>
-                    <a className="govuk-link" href="/components#all">
-                      Show All
-                    </a>
-                  </li>
-                }
+                <li>
+                  <a className="govuk-link" href="/components#all">
+                    Show All
+                  </a>
+                </li>
+
                 {guides.map((x, i) => (
                   <li className="govuk-link" key={`guide-menu-${i}`}>
                     <a href={`/components?guide=${x.name}`}>{x.name}</a>

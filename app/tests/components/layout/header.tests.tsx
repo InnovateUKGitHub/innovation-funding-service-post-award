@@ -13,15 +13,16 @@ describe("Header", () => {
     },
   };
 
-  const getStubItems = (totalNumberOfItems: number) =>
-    Array.from({ length: totalNumberOfItems }, (_, i) => ({
+  const getStubItems = (totalNumberOfItems: number): NonNullable<HeaderProps["menuItems"]> => {
+    return Array.from({ length: totalNumberOfItems }, (_, i) => ({
       text: `text-${i}`,
       href: `href-${i}`,
       qa: `qa-${i}`,
     }));
+  };
 
-  const defaultProps = {
-    siteLink: "www.google.com",
+  const defaultProps: HeaderProps = {
+    headingLink: "https://www.ukri.org/",
   };
 
   const setup = (props?: Partial<HeaderProps>) =>
@@ -32,20 +33,21 @@ describe("Header", () => {
     );
 
   describe("@renders", () => {
-    it("should return site link", () => {
-      const stubSiteLink = "https://www.ukri.org/";
-      const { getByText } = setup({ siteLink: stubSiteLink });
+    it("should return heading link", () => {
+      const stubHeadingLink = "https://stub-link.me";
+      const { getByText } = setup({ headingLink: stubHeadingLink });
 
       const siteLink = getByText(stubContent.header.siteName);
 
-      expect(siteLink).toHaveAttribute("href", stubSiteLink);
+      expect(siteLink).toHaveAttribute("href", stubHeadingLink);
     });
 
-    it("should return content from context", () => {
+    it("should return mobile navigation label", () => {
       const { queryByText } = setup();
 
-      expect(queryByText(stubContent.header.siteName)).toBeInTheDocument();
-      expect(queryByText(stubContent.header.mobileNavigationLabel.content)).toBeInTheDocument();
+      const mobileNavigationLabel = queryByText(stubContent.header.mobileNavigationLabel.content);
+
+      expect(mobileNavigationLabel).toBeInTheDocument();
     });
 
     describe("with required elements", () => {
@@ -60,16 +62,16 @@ describe("Header", () => {
     });
 
     describe("without navigation items", () => {
-      it("with no items", () => {
-        const { queryAllByTestId } = setup({ navigationItems: [] });
+      it("with defined list but no items", () => {
+        const { queryAllByTestId } = setup({ menuItems: [] });
 
         const navItems = queryAllByTestId("header-navigation-item");
 
         expect(navItems).toHaveLength(0);
       });
 
-      it("when a value is falsy", () => {
-        const { queryAllByTestId } = setup({ navigationItems: undefined });
+      it("when no list is provided", () => {
+        const { queryAllByTestId } = setup();
 
         const navItems = queryAllByTestId("header-navigation-item");
 
@@ -79,7 +81,7 @@ describe("Header", () => {
 
     it("with navigation items", () => {
       const stubNavItems = getStubItems(2);
-      const { queryByTestId, queryAllByTestId } = setup({ navigationItems: stubNavItems });
+      const { queryByTestId, queryAllByTestId } = setup({ menuItems: stubNavItems });
 
       const expectedNavItems = queryAllByTestId("header-navigation-item");
 
