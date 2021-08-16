@@ -1,7 +1,7 @@
 import { IRoutes } from "@ui/routing";
 import { ProjectData } from "./Dashboard.interface";
 import { useContent } from "@ui/hooks";
-import { DashboardProject } from "./DashboardProject";
+import { MemoizedDashboardProject as DashboardProject } from "./DashboardProject";
 import { SimpleString } from "@ui/components/renderers";
 
 interface ProjectListProps {
