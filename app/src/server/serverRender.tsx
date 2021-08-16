@@ -69,7 +69,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     const matched = matchRoute(route);
     const params = matched.getParams(route);
 
-    if (!matched.accessControl?.(auth, params, clientConfig)) {
+    if (matched.accessControl?.(auth, params, clientConfig) === false) {
       throw new ForbiddenError();
     }
 
