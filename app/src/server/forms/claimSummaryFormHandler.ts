@@ -29,12 +29,19 @@ export class ClaimSummaryFormHandler extends StandardFormHandlerBase<PrepareClai
 
     claim.comments = body.comments;
 
-    const validSubmittedStatuses = claim.status === ClaimStatus.DRAFT || claim.status === ClaimStatus.MO_QUERIED;
+    // Note: Not submitted so we only care about comments being updated
+    if (button.name !== "default") return claim;
 
-    if (button.name === "default" && validSubmittedStatuses) {
-      claim.status = ClaimStatus.SUBMITTED;
-    } else if (button.name === "default" && claim.status === ClaimStatus.INNOVATE_QUERIED) {
-      claim.status = ClaimStatus.AWAITING_IUK_APPROVAL;
+    switch (claim.status) {
+      case ClaimStatus.DRAFT:
+      case ClaimStatus.MO_QUERIED:
+        claim.status = ClaimStatus.SUBMITTED;
+        break;
+
+      case ClaimStatus.AWAITING_IAR:
+      case ClaimStatus.INNOVATE_QUERIED:
+        claim.status = ClaimStatus.AWAITING_IUK_APPROVAL;
+        break;
     }
 
     return claim;

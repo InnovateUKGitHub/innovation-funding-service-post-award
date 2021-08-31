@@ -31,14 +31,17 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
   ];
 
   private readonly isKtpCompetition: boolean = checkProjectCompetition(this.competitionType).isKTP;
-  private readonly hasValidIarStatusWithDocs = !!this.documents.length && this.model.iarStatus === "Received";
+  private readonly hasDocuments: boolean = !!this.documents.length;
+  private readonly isPcfStatusValid = this.model.pcfStatus === "Received";
+
+  private readonly isReceivedIarStatus: boolean = this.model.iarStatus === "Received";
+  private readonly isIarStatusWithDocsValid: boolean = this.hasDocuments && this.isReceivedIarStatus;
 
   public status = this.validateStatus();
   public id = this.validateId();
-  public isFinalClaim = this.validateFinalClaim();
+  public claimState = this.getClaimValidation();
   public totalCosts = this.validateTotalCosts();
   public comments = this.validateComments();
-  public iar = this.validateIarStatus();
 
   private validateStatus(): Result {
     const isValidStatus = this.model.status.length
@@ -57,10 +60,15 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
   }
 
   private validateComments(): Result {
+    const isNotOriginallyMoQueried = this.originalStatus !== ClaimStatus.MO_QUERIED;
+    const isCurrentlyMoQueried = this.model.status === ClaimStatus.MO_QUERIED;
+
+    const shouldValidateComments = isCurrentlyMoQueried && isNotOriginallyMoQueried;
+
     return Validation.all(
       this,
       () =>
-        this.model.status === ClaimStatus.MO_QUERIED && this.originalStatus !== ClaimStatus.MO_QUERIED
+        shouldValidateComments
           ? Validation.required(this, this.model.comments, "Comments are required if querying a claim")
           : Validation.valid(this),
       () =>
@@ -84,38 +92,52 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
   }
 
   private validateIarStatus(): Result {
-    // Note: Bail from validation if your not KTP as iar validation is only associated with KTP projects
-    if (!this.isClaimSummary || !this.isKtpCompetition || !this.model.isIarRequired) {
-      return Validation.valid(this);
-    }
+    // Note: ignore validation when is not required
+    if (!this.model.isIarRequired) return Validation.valid(this);
 
+    const iarStatusError: string = this.isKtpCompetition
+      ? "You must upload a schedule 3 before you can submit this claim."
+      : "You must upload an independent accountant's report before you can submit this claim.";
+
+    return Validation.isTrue(this, this.isIarStatusWithDocsValid, iarStatusError);
+  }
+
+  private validatePcfStatus(): Result {
     return Validation.isTrue(
       this,
-      this.hasValidIarStatusWithDocs,
-      "You must upload a schedule 3 before you can submit this claim.",
+      this.isPcfStatusValid,
+      "You must upload a project completion form before you can submit this claim.",
     );
   }
 
-  private validateFinalClaim(): Result {
-    // Note: Disallow KTP from these checks as they validate from validateIarStatus()
-    if (!this.isClaimSummary || this.isKtpCompetition) {
-      return Validation.valid(this);
-    }
+  private getClaimValidation(): Result {
+    // Note: We only validate the claim state on the summary page
+    if (!this.isClaimSummary) return Validation.valid(this);
 
-    if (this.model.isFinalClaim) {
-      const isPcfStatusValid = this.model.pcfStatus === "Received";
+    const hasOriginalAwaitingIarClaim: boolean = this.originalStatus === ClaimStatus.AWAITING_IAR;
 
-      return Validation.isTrue(
+    return hasOriginalAwaitingIarClaim ? this.validateAwaitingIarClaim() : this.validateDefaultClaim();
+  }
+
+  private validateAwaitingIarClaim(): Result {
+    const hasInvalidStatuses = !this.isIarStatusWithDocsValid && !this.isPcfStatusValid;
+
+    // Note: Auto-fail and combine both (pcf + iar) errors in one when not valid
+    if (this.model.isFinalClaim && hasInvalidStatuses) {
+      return Validation.inValid(
         this,
-        isPcfStatusValid,
-        "You must upload a project completion form before you can submit this claim.",
-      );
-    } else {
-      return Validation.isTrue(
-        this,
-        this.hasValidIarStatusWithDocs,
-        "You must upload an independent accountant's report before you can submit this claim.",
+        "You must upload an independent accountant's report and a project completion form before you can submit this claim.",
       );
     }
+
+    return Validation.all(
+      this,
+      () => this.validateIarStatus(),
+      () => (this.model.isFinalClaim ? this.validatePcfStatus() : Validation.valid(this)),
+    );
+  }
+
+  private validateDefaultClaim(): Result {
+    return this.model.isFinalClaim ? this.validatePcfStatus() : this.validateIarStatus();
   }
 }

@@ -1,5 +1,5 @@
 import { ClaimStatus } from "@framework/constants";
-import { ClaimDto, CostsSummaryForPeriodDto, DocumentSummaryDto } from "@framework/dtos";
+import { ClaimDto, DocumentSummaryDto } from "@framework/dtos";
 import { ClaimDtoValidator } from "@ui/validators";
 
 describe("claimDtoValidator()", () => {
@@ -9,6 +9,7 @@ describe("claimDtoValidator()", () => {
   const stubShowErrors = true;
   const stubCompetitionType = "CR&D";
   const stubIsFinalSummary = true;
+  const stubIsNotFinalSummary = false;
 
   describe("with status", () => {
     type ClaimStatusKeys = keyof typeof ClaimStatus;
@@ -112,509 +113,311 @@ describe("claimDtoValidator()", () => {
     });
   });
 
-  describe("with isFinalClaim", () => {
-    describe("should bail from validation", () => {
-      test("when not a final claim", () => {
-        const notFinalClaim = false;
+  describe("with claimState", () => {
+    describe("as default", () => {
+      describe("should bail from validation", () => {
+        test.each`
+          name                         | inboundCompetitionType | inboundIsClaimSummary
+          ${"when not a final claim"}  | ${"CR&D"}              | ${false}
+          ${"when competition is KTP"} | ${"KTP"}               | ${true}
+        `("$name", ({ inboundCompetitionType, inboundIsClaimSummary }) => {
+          const { claimState } = new ClaimDtoValidator(
+            stubClaimDto,
+            stubOriginalStatus,
+            [],
+            [],
+            stubShowErrors,
+            inboundCompetitionType,
+            inboundIsClaimSummary,
+          );
 
-        const { isFinalClaim } = new ClaimDtoValidator(
-          stubClaimDto,
-          stubOriginalStatus,
-          [],
-          [],
-          stubShowErrors,
-          stubCompetitionType,
-          notFinalClaim,
-        );
+          expect(claimState.isValid).toBeTruthy();
+        });
 
-        expect(isFinalClaim.isValid).toBeTruthy();
+        test("when IAR Required is not set / false", () => {
+          const stubNotKtpCompetition = "CR&D";
+          const stubNoIarClaim = { ...stubClaimDto, isIarRequired: false } as ClaimDto;
+
+          const { claimState } = new ClaimDtoValidator(
+            stubNoIarClaim,
+            stubOriginalStatus,
+            [],
+            [],
+            stubShowErrors,
+            stubNotKtpCompetition,
+            stubIsFinalSummary,
+          );
+
+          expect(claimState.isValid).toBeTruthy();
+        });
       });
 
-      test("when competition is KTP", () => {
-        const isKtpCompetition = "KTP";
-        const validFinalClaim = true;
+      describe("when claim is a final claim", () => {
+        test.each`
+          name                            | stubClaim                                            | expectedError
+          ${"when pcf status is valid"}   | ${{ isFinalClaim: true, pcfStatus: "Received" }}     | ${null}
+          ${"when pcf status is invalid"} | ${{ isFinalClaim: true, pcfStatus: "Not Received" }} | ${"You must upload a project completion form before you can submit this claim."}
+        `("$name", ({ stubClaim, expectedError }) => {
+          const hasNoError: boolean = expectedError === null;
+          const stubFinalClaim = { ...stubClaimDto, ...stubClaim } as ClaimDto;
 
-        const { isFinalClaim } = new ClaimDtoValidator(
-          stubClaimDto,
-          stubOriginalStatus,
-          [],
-          [],
-          stubShowErrors,
-          isKtpCompetition,
-          validFinalClaim,
-        );
+          const { claimState } = new ClaimDtoValidator(
+            stubFinalClaim,
+            stubOriginalStatus,
+            [],
+            [],
+            stubShowErrors,
+            stubCompetitionType,
+            true,
+          );
 
-        expect(isFinalClaim.isValid).toBeTruthy();
-      });
-    });
+          expect(claimState.isValid).toBe(hasNoError);
 
-    describe("when claim is a final claim", () => {
-      test("when pcf status is valid", () => {
-        const stubFinalClaim = { ...stubClaimDto, isFinalClaim: true, pcfStatus: "Received" } as ClaimDto;
-
-        const { isFinalClaim } = new ClaimDtoValidator(
-          stubFinalClaim,
-          stubOriginalStatus,
-          [],
-          [],
-          stubShowErrors,
-          stubCompetitionType,
-          true,
-        );
-
-        expect(isFinalClaim.isValid).toBeTruthy();
+          if (!hasNoError) {
+            expect(claimState.errorMessage).toBe(expectedError);
+          }
+        });
       });
 
-      test("when pcf status is invalid", () => {
-        const stubFinalClaim = { ...stubClaimDto, isFinalClaim: true, pcfStatus: "Not Received" } as ClaimDto;
+      describe("when claim not a final claim", () => {
+        test.each`
+          name                                           | stubClaim                        | stubDocuments     | expectedToBeValid
+          ${"with valid pcf status with documents"}      | ${{ iarStatus: "Received" }}     | ${[stubDocument]} | ${true}
+          ${"with valid pcf status without documents"}   | ${{ iarStatus: "Received" }}     | ${[]}             | ${false}
+          ${"with invalid pcf status with documents"}    | ${{ iarStatus: "Not Received" }} | ${[stubDocument]} | ${false}
+          ${"with invalid pcf status without documents"} | ${{ iarStatus: "Not Received" }} | ${[]}             | ${false}
+        `("$name", ({ stubClaim, stubDocuments, expectedToBeValid }) => {
+          const stubFinalClaim = {
+            ...stubClaimDto,
+            ...stubClaim,
+            isFinalClaim: false,
+            isIarRequired: true,
+          } as ClaimDto;
 
-        const { isFinalClaim } = new ClaimDtoValidator(
-          stubFinalClaim,
-          stubOriginalStatus,
-          [],
-          [],
-          stubShowErrors,
-          stubCompetitionType,
-          true,
-        );
+          const { claimState } = new ClaimDtoValidator(
+            stubFinalClaim,
+            stubOriginalStatus,
+            [],
+            stubDocuments,
+            stubShowErrors,
+            stubCompetitionType,
+            true,
+          );
 
-        expect(isFinalClaim.isValid).toBeFalsy();
-        expect(isFinalClaim.errorMessage).toBe(
-          "You must upload a project completion form before you can submit this claim.",
-        );
-      });
-    });
+          expect(claimState.isValid).toBe(expectedToBeValid);
 
-    describe("when claim not a final claim", () => {
-      test("when pcf status is valid with documents", () => {
-        const stubFinalClaim = { ...stubClaimDto, isFinalClaim: false, iarStatus: "Received" } as ClaimDto;
+          if (!expectedToBeValid) {
+            expect(claimState.errorMessage).toBe(
+              "You must upload an independent accountant's report before you can submit this claim.",
+            );
+          }
+        });
 
-        const { isFinalClaim } = new ClaimDtoValidator(
-          stubFinalClaim,
-          stubOriginalStatus,
-          [],
-          [stubDocument],
-          stubShowErrors,
-          stubCompetitionType,
-          true,
-        );
+        describe("with iar required states", () => {
+          describe("should bail from validation", () => {
+            test.each`
+              name                                | testClaimDto                | competitionTypeArg     | isFinalClaimArg | expectedState
+              ${"when not a final claim summary"} | ${{}}                       | ${stubCompetitionType} | ${false}        | ${true}
+              ${"when not a KTP competition"}     | ${{}}                       | ${"LOANS"}             | ${true}         | ${true}
+              ${"when not iar required"}          | ${{ isIarRequired: false }} | ${stubCompetitionType} | ${true}         | ${true}
+            `("$name", ({ testClaimDto, competitionTypeArg, isFinalClaimArg, expectedState }) => {
+              const stubIarClaim = { ...stubClaimDto, ...testClaimDto } as ClaimDto;
 
-        expect(isFinalClaim.isValid).toBeTruthy();
-      });
+              const { claimState } = new ClaimDtoValidator(
+                stubIarClaim,
+                stubOriginalStatus,
+                [],
+                [],
+                stubShowErrors,
+                competitionTypeArg,
+                isFinalClaimArg,
+              );
 
-      test("when pcf status is valid without documents", () => {
-        const stubFinalClaim = { ...stubClaimDto, isFinalClaim: false, iarStatus: "Received" } as ClaimDto;
+              expect(claimState.isValid).toBe(expectedState);
+            });
+          });
 
-        const { isFinalClaim } = new ClaimDtoValidator(
-          stubFinalClaim,
-          stubOriginalStatus,
-          [],
-          [],
-          stubShowErrors,
-          stubCompetitionType,
-          true,
-        );
+          describe("with correct validation", () => {
+            const isKtpCompetition = "KTP";
 
-        expect(isFinalClaim.isValid).toBeFalsy();
-        expect(isFinalClaim.errorMessage).toBe(
-          "You must upload an independent accountant's report before you can submit this claim.",
-        );
-      });
+            test.each`
+              name                                          | testClaimDto                                          | testDocuments     | expectedState
+              ${"with valid iar claim with documents"}      | ${{ isIarRequired: true, iarStatus: "Received" }}     | ${[stubDocument]} | ${true}
+              ${"with valid iar claim without documents"}   | ${{ isIarRequired: true, iarStatus: "Received" }}     | ${[]}             | ${false}
+              ${"with invalid iar claim with documents"}    | ${{ isIarRequired: true, iarStatus: "Not Received" }} | ${[stubDocument]} | ${false}
+              ${"with invalid iar claim without documents"} | ${{ isIarRequired: true, iarStatus: "Not Received" }} | ${[]}             | ${false}
+            `("$name", ({ testClaimDto, testDocuments, expectedState }) => {
+              const stubIarClaim = { ...stubClaimDto, ...testClaimDto } as ClaimDto;
 
-      test("when pcf status is invalid with documents", () => {
-        const stubFinalClaim = { ...stubClaimDto, isFinalClaim: false, iarStatus: "Not Received" } as ClaimDto;
+              const { claimState } = new ClaimDtoValidator(
+                stubIarClaim,
+                stubOriginalStatus,
+                [],
+                testDocuments,
+                stubShowErrors,
+                isKtpCompetition,
+                true,
+              );
 
-        const { isFinalClaim } = new ClaimDtoValidator(
-          stubFinalClaim,
-          stubOriginalStatus,
-          [],
-          [stubDocument],
-          stubShowErrors,
-          stubCompetitionType,
-          true,
-        );
+              expect(claimState.isValid).toBe(expectedState);
 
-        expect(isFinalClaim.isValid).toBeFalsy();
-        expect(isFinalClaim.errorMessage).toBe(
-          "You must upload an independent accountant's report before you can submit this claim.",
-        );
-      });
-
-      test("when pcf status is valid without documents", () => {
-        const stubFinalClaim = { ...stubClaimDto, isFinalClaim: false, iarStatus: "Not Received" } as ClaimDto;
-
-        const { isFinalClaim } = new ClaimDtoValidator(
-          stubFinalClaim,
-          stubOriginalStatus,
-          [],
-          [],
-          stubShowErrors,
-          stubCompetitionType,
-          true,
-        );
-
-        expect(isFinalClaim.isValid).toBeFalsy();
-        expect(isFinalClaim.errorMessage).toBe(
-          "You must upload an independent accountant's report before you can submit this claim.",
-        );
-      });
-    });
-  });
-
-  describe("with iar", () => {
-    describe("should bail from validation", () => {
-      test("when not a final claim summary", () => {
-        const { iar } = new ClaimDtoValidator(
-          stubClaimDto,
-          stubOriginalStatus,
-          [],
-          [],
-          stubShowErrors,
-          stubCompetitionType,
-          false,
-        );
-
-        expect(iar.isValid).toBeTruthy();
-      });
-
-      test("when not a KTP competition", () => {
-        const notKtpCompetition = "CR&D";
-
-        const { iar } = new ClaimDtoValidator(
-          stubClaimDto,
-          stubOriginalStatus,
-          [],
-          [],
-          stubShowErrors,
-          notKtpCompetition,
-          true,
-        );
-
-        expect(iar.isValid).toBeTruthy();
-      });
-
-      test("when not iar required", () => {
-        const iarNotRequired = { ...stubClaimDto, isIarRequired: false };
-
-        const { iar } = new ClaimDtoValidator(
-          iarNotRequired,
-          stubOriginalStatus,
-          [],
-          [stubDocument],
-          stubShowErrors,
-          stubCompetitionType,
-          true,
-        );
-
-        expect(iar.isValid).toBeTruthy();
+              if (!expectedState) {
+                expect(claimState.errorMessage).toBe("You must upload a schedule 3 before you can submit this claim.");
+              }
+            });
+          });
+        });
       });
     });
 
-    describe("with correct validation", () => {
-      const isKtpCompetition = "KTP";
+    describe("when status is awaiting IAR", () => {
+      const stubAwaitingIarStatus = ClaimStatus.AWAITING_IAR;
+      const stubFinalAwaitingIarClaim = { ...stubClaimDto, status: ClaimStatus.AWAITING_IAR } as ClaimDto;
 
-      test("with valid iar claim with documents", () => {
-        const iarRequiredWithReceivedStatus = {
-          ...stubClaimDto,
-          isIarRequired: true,
-          iarStatus: "Received",
-        } as ClaimDto;
+      describe("when the final claim", () => {
+        test.each`
+          name                                       | testClaimDto                                                | expectedState
+          ${"with iar status is valid and not pcf"}  | ${{ iarStatus: "Received", pcfStatus: "Not Received" }}     | ${false}
+          ${"with pcf status is valid and not iar"}  | ${{ iarStatus: "Not Received", pcfStatus: "Received" }}     | ${false}
+          ${"with iar and pcf statuses are invalid"} | ${{ iarStatus: "Not Received", pcfStatus: "Not Received" }} | ${false}
+          ${"with iar and pcf statuses are valid"}   | ${{ iarStatus: "Received", pcfStatus: "Received" }}         | ${true}
+        `("$name", ({ testClaimDto, expectedState }) => {
+          const stubFinalClaim = {
+            ...stubFinalAwaitingIarClaim,
+            ...testClaimDto,
+            isFinalClaim: true,
+            isIarRequired: true,
+          } as ClaimDto;
 
-        const { iar } = new ClaimDtoValidator(
-          iarRequiredWithReceivedStatus,
-          stubOriginalStatus,
-          [],
-          [stubDocument],
-          stubShowErrors,
-          isKtpCompetition,
-          stubIsFinalSummary,
-        );
+          const { claimState } = new ClaimDtoValidator(
+            stubFinalClaim,
+            stubAwaitingIarStatus,
+            [],
+            [stubDocument],
+            stubShowErrors,
+            stubCompetitionType,
+            true,
+          );
 
-        expect(iar.isValid).toBeTruthy();
+          expect(claimState.isValid).toBe(expectedState);
+        });
       });
 
-      test("with valid iar claim without documents", () => {
-        const iarRequiredWithReceivedStatus = {
-          ...stubClaimDto,
-          isIarRequired: true,
-          iarStatus: "Received",
-        } as ClaimDto;
+      describe("when not the final claim", () => {
+        test.each`
+          name                                                   | testClaimDto                     | testCompetitionType    | expectedState
+          ${"with iar status is valid"}                          | ${{ iarStatus: "Received" }}     | ${stubCompetitionType} | ${true}
+          ${"with iar statuses is invalid when not KTP project"} | ${{ iarStatus: "Not Received" }} | ${stubCompetitionType} | ${false}
+          ${"with iar statuses is invalid when a KTP project"}   | ${{ iarStatus: "Not Received" }} | ${"KTP"}               | ${false}
+        `("$name", ({ testClaimDto, testCompetitionType, expectedState }) => {
+          const stubFinalClaim = {
+            ...stubFinalAwaitingIarClaim,
+            ...testClaimDto,
+            isFinalClaim: false,
+            isIarRequired: true,
+          } as ClaimDto;
 
-        const { iar } = new ClaimDtoValidator(
-          iarRequiredWithReceivedStatus,
-          stubOriginalStatus,
-          [],
-          [],
-          stubShowErrors,
-          isKtpCompetition,
-          stubIsFinalSummary,
-        );
+          const { claimState } = new ClaimDtoValidator(
+            stubFinalClaim,
+            stubAwaitingIarStatus,
+            [],
+            [stubDocument],
+            stubShowErrors,
+            testCompetitionType,
+            true,
+          );
 
-        expect(iar.isValid).toBeFalsy();
-        expect(iar.errorMessage).toBe("You must upload a schedule 3 before you can submit this claim.");
-      });
-
-      test("with invalid iar claim with documents", () => {
-        const iarRequiredWithoutReceivedStatus = {
-          ...stubClaimDto,
-          isIarRequired: true,
-          iarStatus: "Not Received",
-        } as ClaimDto;
-
-        const { iar } = new ClaimDtoValidator(
-          iarRequiredWithoutReceivedStatus,
-          stubOriginalStatus,
-          [],
-          [stubDocument],
-          stubShowErrors,
-          isKtpCompetition,
-          stubIsFinalSummary,
-        );
-
-        expect(iar.isValid).toBeFalsy();
-        expect(iar.errorMessage).toBe("You must upload a schedule 3 before you can submit this claim.");
-      });
-
-      test("with invalid iar claim without documents", () => {
-        const iarRequiredWithoutReceivedStatus = {
-          ...stubClaimDto,
-          isIarRequired: true,
-          iarStatus: "Not Received",
-        } as ClaimDto;
-
-        const { iar } = new ClaimDtoValidator(
-          iarRequiredWithoutReceivedStatus,
-          stubOriginalStatus,
-          [],
-          [],
-          stubShowErrors,
-          isKtpCompetition,
-          stubIsFinalSummary,
-        );
-
-        expect(iar.isValid).toBeFalsy();
-        expect(iar.errorMessage).toBe("You must upload a schedule 3 before you can submit this claim.");
+          expect(claimState.isValid).toBe(expectedState);
+        });
       });
     });
   });
 
   describe("with comments", () => {
     describe("with correct claim status", () => {
-      test("with correct status and original status", () => {
-        const validClaimStatus = {
-          ...stubClaimDto,
-          status: ClaimStatus.MO_QUERIED,
-          comments: "must-contain-a-value",
-        } as ClaimDto;
-        const draftOriginalStatus = ClaimStatus.DRAFT;
+      test.each`
+        name                                                                    | testClaimDto                                                            | testOriginalStatus        | expectedToBeValid
+        ${"with correct status and original status"}                            | ${{ status: ClaimStatus.MO_QUERIED, comments: "must-contain-a-value" }} | ${ClaimStatus.DRAFT}      | ${true}
+        ${"with an incorrect status and valid original status but no comments"} | ${{ status: ClaimStatus.DRAFT, comments: "must-contain-a-value" }}      | ${ClaimStatus.DRAFT}      | ${true}
+        ${"with correct status and original status but no comments"}            | ${{ status: ClaimStatus.MO_QUERIED, comments: "" }}                     | ${ClaimStatus.DRAFT}      | ${false}
+        ${"with correct status and original status but no comments"}            | ${{ status: ClaimStatus.MO_QUERIED, comments: "must-contain-a-value" }} | ${ClaimStatus.MO_QUERIED} | ${true}
+      `("$name", ({ testClaimDto, testOriginalStatus, expectedToBeValid }) => {
+        const stubCommentsClaim = { ...stubClaimDto, ...testClaimDto } as ClaimDto;
 
         const { comments } = new ClaimDtoValidator(
-          validClaimStatus,
-          draftOriginalStatus,
+          stubCommentsClaim,
+          testOriginalStatus,
           [],
           [],
           stubShowErrors,
           stubCompetitionType,
-          stubIsFinalSummary,
+          stubIsNotFinalSummary,
         );
 
-        expect(comments.isValid).toBeTruthy();
-      });
+        expect(comments.isValid).toBe(expectedToBeValid);
 
-      test("with an incorrect status and valid original status but no comments", () => {
-        const invalidCommentClaim = {
-          ...stubClaimDto,
-          status: ClaimStatus.DRAFT,
-          comments: "must-contain-a-value",
-        } as ClaimDto;
-        const draftOriginalStatus = ClaimStatus.DRAFT;
-
-        const { comments } = new ClaimDtoValidator(
-          invalidCommentClaim,
-          draftOriginalStatus,
-          [],
-          [],
-          stubShowErrors,
-          stubCompetitionType,
-          stubIsFinalSummary,
-        );
-
-        expect(comments.isValid).toBeTruthy();
-      });
-
-      test("with correct status and original status but no comments", () => {
-        const invalidCommentClaim = {
-          ...stubClaimDto,
-          status: ClaimStatus.MO_QUERIED,
-          comments: "",
-        } as ClaimDto;
-        const draftOriginalStatus = ClaimStatus.DRAFT;
-
-        const { comments } = new ClaimDtoValidator(
-          invalidCommentClaim,
-          draftOriginalStatus,
-          [],
-          [],
-          stubShowErrors,
-          stubCompetitionType,
-          stubIsFinalSummary,
-        );
-
-        expect(comments.isValid).toBeFalsy();
-        expect(comments.errorMessage).toBe("Comments are required if querying a claim");
-      });
-
-      test("with correct status but not original status", () => {
-        const validClaimStatus = {
-          ...stubClaimDto,
-          status: ClaimStatus.MO_QUERIED,
-          comments: "must-contain-a-value",
-        } as ClaimDto;
-        const draftOriginalStatus = ClaimStatus.MO_QUERIED;
-
-        const { comments } = new ClaimDtoValidator(
-          validClaimStatus,
-          draftOriginalStatus,
-          [],
-          [],
-          stubShowErrors,
-          stubCompetitionType,
-          stubIsFinalSummary,
-        );
-
-        expect(comments.isValid).toBeTruthy();
+        if (!expectedToBeValid) {
+          expect(comments.errorMessage).toBe("Comments are required if querying a claim");
+        }
       });
     });
 
     describe("with correct length validation", () => {
-      test("with max comment length of 1000", () => {
-        const stub1000Chars = "_".repeat(1000);
-
-        const validClaimStatus = {
+      test.each`
+        name                                      | testCommentValue    | expectedToBeValid
+        ${"with max comment length of 1000"}      | ${"_".repeat(1000)} | ${true}
+        ${"with an exceeding max comment length"} | ${"_".repeat(1001)} | ${false}
+      `("$name", ({ testCommentValue, expectedToBeValid }) => {
+        const stubCommentClaim = {
           ...stubClaimDto,
           status: ClaimStatus.MO_QUERIED,
-          comments: stub1000Chars,
+          comments: testCommentValue,
         } as ClaimDto;
 
         const { comments } = new ClaimDtoValidator(
-          validClaimStatus,
+          stubCommentClaim,
           stubOriginalStatus,
           [],
           [],
           stubShowErrors,
           stubCompetitionType,
-          stubIsFinalSummary,
+          stubIsNotFinalSummary,
         );
 
-        expect(comments.isValid).toBeTruthy();
-      });
+        expect(comments.isValid).toBe(expectedToBeValid);
 
-      test("with an exceeding max comment length", () => {
-        const stub1001Chars = "_".repeat(1001);
-
-        const validClaimStatus = {
-          ...stubClaimDto,
-          status: ClaimStatus.MO_QUERIED,
-          comments: stub1001Chars,
-        } as ClaimDto;
-
-        const { comments } = new ClaimDtoValidator(
-          validClaimStatus,
-          stubOriginalStatus,
-          [],
-          [],
-          stubShowErrors,
-          stubCompetitionType,
-          stubIsFinalSummary,
-        );
-
-        expect(comments.isValid).toBeFalsy();
-        expect(comments.errorMessage).toBe("Comments must be a maximum of 1000 characters");
+        if (!expectedToBeValid) {
+          expect(comments.errorMessage).toBe("Comments must be a maximum of 1000 characters");
+        }
       });
     });
   });
 
   describe("with totalCosts", () => {
-    test("when total costs are valid", () => {
-      const stubDefinedRemainingOfferDetail = { remainingOfferCosts: 1 } as CostsSummaryForPeriodDto;
-
+    test.each`
+      name                                                     | testClaimDetails                                              | expectedToBeValid
+      ${"when total costs are valid"}                          | ${[{ remainingOfferCosts: 1 }]}                               | ${true}
+      ${"when all total costs accumulate to a positive total"} | ${[{ remainingOfferCosts: 5 }, { remainingOfferCosts: 5 }]}   | ${true}
+      ${"when total costs are zero"}                           | ${[{ remainingOfferCosts: 0 }]}                               | ${true}
+      ${"when total costs are negative"}                       | ${[{ remainingOfferCosts: -1 }]}                              | ${false}
+      ${"when all total costs accumulate to a negative total"} | ${[{ remainingOfferCosts: 5 }, { remainingOfferCosts: -10 }]} | ${false}
+    `("$name", ({ testClaimDetails, expectedToBeValid }) => {
       const { totalCosts } = new ClaimDtoValidator(
         stubClaimDto,
         stubOriginalStatus,
-        [stubDefinedRemainingOfferDetail],
+        testClaimDetails,
         [],
         stubShowErrors,
         stubCompetitionType,
       );
 
-      expect(totalCosts.isValid).toBeTruthy();
-    });
+      expect(totalCosts.isValid).toBe(expectedToBeValid);
 
-    test("when all total costs accumulate to a positive total", () => {
-      const stubPositiveRemainingOfferDetail = { remainingOfferCosts: 5 } as CostsSummaryForPeriodDto;
-
-      const { totalCosts } = new ClaimDtoValidator(
-        stubClaimDto,
-        stubOriginalStatus,
-        [stubPositiveRemainingOfferDetail, stubPositiveRemainingOfferDetail],
-        [],
-        stubShowErrors,
-        stubCompetitionType,
-      );
-
-      expect(totalCosts.isValid).toBeTruthy();
-    });
-
-    test("when total costs are zero", () => {
-      const stubEmptyRemainingOfferDetail = { remainingOfferCosts: 0 } as CostsSummaryForPeriodDto;
-
-      const { totalCosts } = new ClaimDtoValidator(
-        stubClaimDto,
-        stubOriginalStatus,
-        [stubEmptyRemainingOfferDetail],
-        [],
-        stubShowErrors,
-        stubCompetitionType,
-      );
-
-      expect(totalCosts.isValid).toBeTruthy();
-    });
-
-    test("when total costs are negative", () => {
-      const stubEmptyRemainingOfferDetail = { remainingOfferCosts: -1 } as CostsSummaryForPeriodDto;
-
-      const { totalCosts } = new ClaimDtoValidator(
-        stubClaimDto,
-        stubOriginalStatus,
-        [stubEmptyRemainingOfferDetail],
-        [],
-        stubShowErrors,
-        stubCompetitionType,
-      );
-
-      expect(totalCosts.isValid).toBeFalsy();
-      expect(totalCosts.errorMessage).toBe(
-        "You must reduce your claim to ensure the remaining eligible costs are zero or higher.",
-      );
-    });
-
-    test("when all total costs accumulate to a negative total", () => {
-      const stubPositiveRemainingOfferDetail = { remainingOfferCosts: 5 } as CostsSummaryForPeriodDto;
-      const stubNegativeRemainingOfferDetail = { remainingOfferCosts: -10 } as CostsSummaryForPeriodDto;
-
-      const { totalCosts } = new ClaimDtoValidator(
-        stubClaimDto,
-        stubOriginalStatus,
-        [stubPositiveRemainingOfferDetail, stubNegativeRemainingOfferDetail],
-        [],
-        stubShowErrors,
-        stubCompetitionType,
-      );
-
-      expect(totalCosts.isValid).toBeFalsy();
-      expect(totalCosts.errorMessage).toBe(
-        "You must reduce your claim to ensure the remaining eligible costs are zero or higher.",
-      );
+      if (!expectedToBeValid) {
+        expect(totalCosts.errorMessage).toBe(
+          "You must reduce your claim to ensure the remaining eligible costs are zero or higher.",
+        );
+      }
     });
   });
 });
