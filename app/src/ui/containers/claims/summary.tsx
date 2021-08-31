@@ -231,13 +231,21 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
 
     const dto = editor.data;
 
-    if (submit && (original.status === ClaimStatus.DRAFT || original.status === ClaimStatus.MO_QUERIED)) {
-      dto.status = ClaimStatus.SUBMITTED;
-    } else if (submit && original.status === ClaimStatus.INNOVATE_QUERIED) {
-      dto.status = ClaimStatus.AWAITING_IUK_APPROVAL;
-    } else {
-      // not submitting so set status to the original status
-      dto.status = original.status;
+    // Note: We set the default claim status, then update only if user wants to submit.
+    dto.status = original.status;
+
+    if (submit) {
+      switch (original.status) {
+        case ClaimStatus.DRAFT:
+        case ClaimStatus.MO_QUERIED:
+          dto.status = ClaimStatus.SUBMITTED;
+          break;
+
+        case ClaimStatus.AWAITING_IAR:
+        case ClaimStatus.INNOVATE_QUERIED:
+          dto.status = ClaimStatus.AWAITING_IUK_APPROVAL;
+          break;
+      }
     }
 
     props.onUpdate(true, dto, updateLink);

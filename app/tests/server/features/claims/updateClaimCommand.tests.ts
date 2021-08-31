@@ -451,7 +451,7 @@ describe("UpdateClaimCommand", () => {
         const partner = context.testData.createPartner(project, x => (x.competitionType = validCompetitionType));
         // Note: no testData createDocument() is created!
         const claim = context.testData.createClaim(partner, undefined, x => {
-          x.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED;
+          x.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
           x.Acc_IARRequired__c = isIarRequiredState;
           x.Acc_IAR_Status__c = validIarStatus;
         });
@@ -469,7 +469,7 @@ describe("UpdateClaimCommand", () => {
         const project = context.testData.createProject();
         const partner = context.testData.createPartner(project, x => (x.competitionType = validCompetitionType));
         const claim = context.testData.createClaim(partner, undefined, x => {
-          x.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED;
+          x.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
           x.Acc_IARRequired__c = isIarRequiredState;
           x.Acc_IAR_Status__c = invalidIarStatus;
         });
@@ -522,7 +522,10 @@ describe("UpdateClaimCommand", () => {
         const project = context.testData.createProject();
         const partner = context.testData.createPartner();
         // Note: no testData createDocument() is created!
-        const claim = context.testData.createClaim(partner, 2, x => (x.Acc_FinalClaim__c = false));
+        const claim = context.testData.createClaim(partner, 2, x => {
+          x.Acc_FinalClaim__c = false;
+          x.Acc_IARRequired__c = true;
+        });
 
         claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
 
@@ -537,7 +540,10 @@ describe("UpdateClaimCommand", () => {
         const context = new TestContext();
         const project = context.testData.createProject();
         const partner = context.testData.createPartner();
-        const claim = context.testData.createClaim(partner, 2, x => (x.Acc_FinalClaim__c = false));
+        const claim = context.testData.createClaim(partner, 2, x => {
+          x.Acc_FinalClaim__c = false;
+          x.Acc_IARRequired__c = true;
+        });
         context.testData.createDocument(claim.Id, "stub-document.docx");
 
         claim.Acc_ClaimStatus__c = ClaimStatus.DRAFT;
