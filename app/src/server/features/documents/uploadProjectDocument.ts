@@ -32,7 +32,8 @@ export class UploadProjectDocumentCommand extends CommandMultipleDocumentBase<st
 
     const results: string[] = [];
 
-    for (const document of this.documents.files.filter(x => x.fileName && x.size)) {
+    const filteredDocuments = this.documents.files.filter(x => x.fileName && x.size);
+    for (const document of filteredDocuments) {
       const id = await context.repositories.documents.insertDocument(document, this.projectId, this.documents.description);
       results.push(id);
     }

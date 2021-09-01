@@ -82,8 +82,8 @@ export class Server {
   private middleware() {
     this.app.use([
       cors({ origin: true }),
-      bodyParser.urlencoded({ extended: false, limit: "5mb", parameterLimit: 100000 }),
-      bodyParser.json({type: ["application/json", "application/csp-report"], limit: "5mb" }),
+      bodyParser.urlencoded({ extended: false, limit: "32mb", parameterLimit: 100000 }),
+      bodyParser.json({type: ["application/json", "application/csp-report"], limit: "32mb" }),
       this.handleGetWithPlus,
       this.requestLogger
     ]);

@@ -6,7 +6,9 @@ export class DocumentMessages extends ContentBase {
     super(parent, "document-messages", competitionType);
   }
 
-  public readonly header = this.getContent("header", { markdown: true });
+  public readonly header = ( maxFileSize: IAppOptions["maxFileSize"]) => {
+    return this.getContent("header", { markdown: true, maxFileSize });
+  };
   public readonly infoTitle = this.getContent("infoTitle");
   public readonly infoContent = ( permittedTypes: IAppOptions["permittedTypes"]) => {
     return this.getContent("infoContent", { markdown: true, ...permittedTypes });

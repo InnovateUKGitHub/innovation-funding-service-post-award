@@ -1,12 +1,14 @@
+import bytes from "bytes";
 import { render } from "@testing-library/react";
 
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
 
 import { MultipleDocumentUploadDto } from "@framework/dtos";
-import { TestBed, TestBedContent } from "@shared/TestBed";
+import { TestBed, TestBedContent, TestBedStore } from "@shared/TestBed";
 
 import { configuration } from "@server/features/common";
 import { JesStepUI, JesStepUIProps, BasePcrProps } from "@ui/containers/pcrs/addPartner/jeSStep";
+import { ContentResult } from "@content/contentBase";
 import { generateContentArray } from "../../../test-utils/generate-content-array";
 
 describe("<JesStepUI />", () => {
@@ -20,8 +22,11 @@ describe("<JesStepUI />", () => {
       },
       documentGuidance: {
         uploadGuidance: { content: "stub-uploadGuidance" },
-        fileSize: { content: "stub-fileSize" },
-        uniqueFilename: { content: "stub-uniqueFilename" },
+        fileSize: (size: number): ContentResult => ({
+          key: "test-key",
+          content: `stub-fileSize: ${bytes(size)}`,
+          markdown: false,
+        }),        uniqueFilename: { content: "stub-uniqueFilename" },
         noFilesNumberLimit: { content: "stub-noFilesNumberLimit" },
         fileTypesUpload: { content: "stub-fileTypesUpload" },
         pdfFiles: { content: "stub-pdfFiles" },
@@ -60,6 +65,22 @@ describe("<JesStepUI />", () => {
       jesListItem1LinkContent: { content: "stub-jesListItem1LinkContent" },
     },
   };
+
+  const stubStore = {
+    config: {
+      getConfig: () => ({
+        options: {
+          maxFileSize: 1024,
+        },
+        features: {
+          contentHint: false,
+        },
+      }),
+    },
+    users: {
+      getCurrentUser: jest.fn().mockReturnValue({ csrf: "stub-csrf" }),
+    },
+  } as any;
 
   const setup = (props?: Partial<JesStepUIProps>) => {
     const stubFiles: MultipleDocumentUploadDto = {
@@ -101,7 +122,7 @@ describe("<JesStepUI />", () => {
     };
 
     return render(
-      <TestBed content={(stubContent as unknown) as TestBedContent}>
+      <TestBed content={(stubContent as unknown) as TestBedContent} stores={stubStore as TestBedStore}>
         <JesStepUI {...stubBasePcrProps} {...requiredJesStepUIProps} {...props} />
       </TestBed>,
     );

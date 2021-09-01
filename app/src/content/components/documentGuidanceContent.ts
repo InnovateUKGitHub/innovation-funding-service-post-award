@@ -1,13 +1,21 @@
-import { Content } from "@content/content";
+import bytes from "bytes";
+
+import { IAppOptions } from "@framework/types/IAppOptions";
 import { ContentPageBase } from "@content/contentPageBase";
+import { Content } from "@content/content";
 
 export class DocumentGuidanceContent extends ContentPageBase {
   constructor(content: Content, competitionType?: string) {
     super(content, "documentGuidance", competitionType);
   }
 
+  public readonly fileSize = (sizeInBytes: IAppOptions["maxFileSize"]) => {
+    const maxFileSize = bytes(sizeInBytes);
+
+    return this.getContent("components.documentGuidance.fileSize", { maxFileSize });
+  };
+
   public readonly uploadGuidance = this.getContent("components.documentGuidance.uploadGuidance");
-  public readonly fileSize = this.getContent("components.documentGuidance.fileSize");
   public readonly uniqueFilename = this.getContent("components.documentGuidance.uniqueFileName");
   public readonly noFilesNumberLimit = this.getContent("components.documentGuidance.noFilesNumberLimit");
   public readonly fileTypesUpload = this.getContent("components.documentGuidance.fileTypesUpload");
