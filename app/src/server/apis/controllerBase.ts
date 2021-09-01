@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /* global Express */
 import mimeTypes from "mime-types";
-import multer from "multer";
 import express, { Request, Response } from "express";
 
 import { IAppError, IFileWrapper, ISessionUser } from "@framework/types";
@@ -10,9 +9,7 @@ import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
 import { configuration } from "@server/features/common";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDto } from "@framework/dtos/documentDto";
-
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
+import { upload } from "../forms/memoryStorage";
 
 export class ServerFileWrapper implements IFileWrapper {
   constructor(file: Express.Multer.File) {

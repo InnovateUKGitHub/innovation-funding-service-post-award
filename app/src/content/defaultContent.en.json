@@ -47,7 +47,7 @@
     },
     "documentGuidance": {
       "uploadGuidance": "You can upload up to 10 documents at a time. Each document must:",
-      "fileSize": "be less than 10MB in file size",
+      "fileSize": "be less than {{maxFileSize}} in file size",
       "uniqueFileName": "have a unique file name that describes its contents",
       "noFilesNumberLimit": "There is no limit to the number of files you can upload in total.",
       "fileTypesUpload": "You can upload these file types:",
@@ -1039,7 +1039,7 @@
     "filesUploadedSubtitle": "All documents uploaded during this request will be shown here. All documents open in a new window."
   },
   "document-messages": {
-    "header": "You can upload up to 10 documents at a time. Each document must:\n\n* be less than 10MB in file size\n* have a unique file name that describes its contents\n\nThere is no limit to the number of files you can upload in total.",
+    "header": "You can upload up to 10 documents at a time. Each document must:\n\n* be less than {{maxFileSize}} in file size\n* have a unique file name that describes its contents\n\nThere is no limit to the number of files you can upload in total.",
     "infoTitle": "What file types can I upload?",
     "infoContent": "You can upload these file types:\n\n* PDF ({{pdfTypes}})\n* text ({{textTypes}})\n* presentation ({{presentationTypes}})\n* spreadsheet ({{spreadsheetTypes}})\n* image ({{imageTypes}})",
     "uploaded-document": "Your document has been uploaded.",

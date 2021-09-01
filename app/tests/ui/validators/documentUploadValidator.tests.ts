@@ -54,7 +54,7 @@ describe("Document upload validator", () => {
 
       const validator = new FileDtoValidator(file, configuration.options, false);
       expect(validator.errors[0].errorMessage).toEqual(
-        "You cannot upload 'test.pdf' because it must be smaller than 10MB.",
+        "You cannot upload 'test.pdf' because it must be smaller than 32MB.",
       );
     });
 

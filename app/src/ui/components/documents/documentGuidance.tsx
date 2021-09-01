@@ -6,8 +6,11 @@ import { useStores } from "@ui/redux";
 
 export function DocumentGuidance() {
   const { getContent } = useContent();
+  const stores = useStores();
+  const { maxFileSize } = stores.config.getConfig().options;
+
   const uploadGuidance = getContent(x => x.components.documentGuidance.uploadGuidance);
-  const fileSizeGuidance = getContent(x => x.components.documentGuidance.fileSize);
+  const fileSizeGuidance = getContent(x => x.components.documentGuidance.fileSize(maxFileSize));
   const fileNameGuidance = getContent(x => x.components.documentGuidance.uniqueFilename);
   const noFilesNumberLimitMessage = getContent(x => x.components.documentGuidance.noFilesNumberLimit);
   const fileTypesUploadMessage = getContent(x => x.components.documentGuidance.fileTypesUpload);
@@ -52,11 +55,11 @@ interface DocumentGuidanceWithContentProps {
 
 export const DocumentGuidanceWithContent = (props: DocumentGuidanceWithContentProps) => {
   const stores = useStores();
-  const { permittedTypes } = stores.config.getConfig().options;
+  const { maxFileSize, permittedTypes } = stores.config.getConfig().options;
 
   return (
     <>
-      <ACC.Content value={x => props.documentMessages(x).header} />
+      <ACC.Content value={x => props.documentMessages(x).header(maxFileSize)} />
       <ACC.Info summary={<ACC.Content value={x => props.documentMessages(x).infoTitle} />}>
         <ACC.Content value={x => props.documentMessages(x).infoContent(permittedTypes)} />
       </ACC.Info>
