@@ -247,7 +247,7 @@ export class Content extends ContentBase {
     this.projectDetails = new ProjectDetailsContent(this, competitionType);
     this.projectDocuments = new ProjectDocumentsContent(this, competitionType);
     this.projectSetupSpendProfile = new ProjectSetupSpendProfileContent(this, competitionType);
-    this.failedBankCheckConfirmation = new FailedBankCheckConfirmationContent(this, competitionType);
+    this.failedBankCheckConfirmation = new FailedBankCheckConfirmationContent(this);
     this.projectSetupBankDetails = new ProjectSetupBankDetailsContent(this, competitionType);
     this.projectSetupBankStatement = new ProjectSetupBankStatementContent(this, competitionType);
     this.projectSetupBankDetailsVerify = new ProjectSetupBankDetailsVerifyContent(this, competitionType);
