@@ -190,10 +190,6 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
     return <ACC.PageLoader pending={combined} render={data => this.renderContents(data)} />;
   }
 
-  private getClaimPeriodTitle(data: CombinedData) {
-    return <ACC.Claims.ClaimPeriodDate claim={data.claim} partner={data.partner} />;
-  }
-
   private renderContents(data: CombinedData) {
     const { content } = this.props;
     const { isCombinationOfSBRI } = checkProjectCompetition(data.project.competitionType);
@@ -255,7 +251,14 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
           </>
         )}
 
-        {this.renderClaimReviewSection(data)}
+        <ACC.Section title={<ACC.Claims.ClaimPeriodDate {...data} />}>
+          <ACC.Claims.ClaimReviewTable
+            {...data}
+            standardOverheadRate={this.props.config.options.standardOverheadRate}
+            validation={data.editor.validator.totalCosts}
+            getLink={costCategoryId => this.getClaimLineItemLink(costCategoryId)}
+          />
+        </ACC.Section>
 
         <ACC.Section>
           <ACC.Accordion>
@@ -272,21 +275,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
     );
   }
 
-  private renderClaimReviewSection(data: CombinedData) {
-    return (
-      <ACC.Section title={this.getClaimPeriodTitle(data)}>
-        <ACC.Claims.ClaimReviewTable
-          {...data}
-          standardOverheadRate={this.props.config.options.standardOverheadRate}
-          validation={data.editor.validator.totalCosts}
-          getLink={costCategoryId => this.getClaimLineItemLink(costCategoryId)}
-        />
-      </ACC.Section>
-    );
-  }
-
   private renderForecastItem() {
-    const { content } = this.props;
     const pendingForecastData: Pending<ACC.Claims.ForecastData> = Pending.combine({
       project: this.props.project,
       partner: this.props.partner,
@@ -299,10 +288,10 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
     });
 
     return (
-      <ACC.AccordionItem title={content.default.forecastItemTitle} qa="forecast-accordion">
+      <ACC.AccordionItem qa="forecast-accordion" title={this.props.content.default.forecastItemTitle}>
         <ACC.Loader
           pending={pendingForecastData}
-          render={forecastData => <ACC.Claims.ForecastTable data={forecastData} hideValidation />}
+          render={forecastData => <ACC.Claims.ForecastTable hideValidation data={forecastData} />}
         />
       </ACC.AccordionItem>
     );
@@ -402,7 +391,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
                 />
               </UploadForm.Fieldset>
 
-              <UploadForm.Submit styling="Secondary">{this.props.content.default.uploadButton}</UploadForm.Submit>
+              <UploadForm.Submit name="reviewDocuments" styling="Secondary">{this.props.content.default.uploadButton}</UploadForm.Submit>
             </UploadForm.Form>
 
             {this.renderDocumentsFilterSection(documents, documentsEditor)}
