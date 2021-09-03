@@ -1,0 +1,51 @@
+import { configuration } from "@server/features/common";
+import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { IContext, IFileWrapper, ILinkInfo } from "@framework/types";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { ProjectSetupBankStatementParams, ProjectSetupBankStatementRoute } from "@ui/containers";
+import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/forms/formHandlerBase";
+import { UploadPartnerDocumentCommand } from "@server/features/documents/uploadPartnerDocument";
+
+export class BankSetupStatementDocumentUploadHandler extends MultipleFileFormHandlerBase<
+  ProjectSetupBankStatementParams,
+  "multipleDocuments"
+> {
+  constructor() {
+    super(ProjectSetupBankStatementRoute, ["uploadFile"], "multipleDocuments");
+  }
+
+  protected getDto(
+    _context: IContext,
+    _params: ProjectSetupBankStatementParams,
+    _button: IFormButton,
+    _body: IFormBody,
+    files: IFileWrapper[],
+  ): Promise<MultipleDocumentUploadDto> {
+    return Promise.resolve({
+      files,
+    });
+  }
+
+  protected async run(
+    context: IContext,
+    params: ProjectSetupBankStatementParams,
+    _button: IFormButton,
+    dto: MultipleDocumentUploadDto,
+  ): Promise<ILinkInfo> {
+    await context.runCommand(new UploadPartnerDocumentCommand(params.projectId, params.partnerId, dto));
+
+    return ProjectSetupBankStatementRoute.getLink(params);
+  }
+
+  protected getStoreKey(params: ProjectSetupBankStatementParams) {
+    return storeKeys.getProjectKey(params.projectId);
+  }
+
+  protected createValidationResult(
+    _params: ProjectSetupBankStatementParams,
+    dto: MultipleDocumentUploadDto,
+  ): MultipleDocumentUpdloadDtoValidator {
+    return new MultipleDocumentUpdloadDtoValidator(dto, configuration.options, true, false, null);
+  }
+}
