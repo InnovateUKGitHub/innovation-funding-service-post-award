@@ -48,7 +48,10 @@ import { ProjectSetupSpendProfileFormHandler } from "./projectSetupSpendProfileF
 import { ReviewClaimFormHandler } from "./reviewClaimFormHandler";
 import { ProjectSetupPartnerPostcodeFormHandler } from "./projectSetupPartnerPostcodeFormHandler";
 
-export const standardFormHandlers: (StandardFormHandlerBase<{}, EditorStateKeys>)[] = [
+import { BankSetupStatementDocumentUploadHandler } from "./project/setup/BankSetupStatementDocumentUploadHandler";
+import { BankSetupStatementDocumentDeleteHandler } from "./project/setup/BankSetupStatementDocumentDeleteHandler";
+
+export const standardFormHandlers: StandardFormHandlerBase<{}, EditorStateKeys>[] = [
   new ClaimForecastFormHandler(),
   new EditClaimLineItemsFormHandler(),
   new ClaimSummaryFormHandler(),
@@ -84,18 +87,19 @@ export const standardFormHandlers: (StandardFormHandlerBase<{}, EditorStateKeys>
   new PartnerDetailsEditFormHandler(),
   new ProjectSetupSpendProfileFormHandler(),
   new ProjectSetupPartnerPostcodeFormHandler(),
+  new BankSetupStatementDocumentDeleteHandler(),
 ];
 
-export const singleFileFormHandlers: (SingleFileFormHandlerBase<{}, EditorStateKeys>)[] = [
-];
+export const singleFileFormHandlers: SingleFileFormHandlerBase<{}, EditorStateKeys>[] = [];
 
-export const multiFileFormHandlers: (MultipleFileFormHandlerBase<{}, EditorStateKeys>)[] = [
+export const multiFileFormHandlers: MultipleFileFormHandlerBase<{}, EditorStateKeys>[] = [
   new ClaimDetailDocumentUploadHandler(),
   new ClaimDocumentsUploadHandler(),
   new OverheadDocumentsUploadHandler(),
   new ProjectChangeRequestReasoningDocumentUploadHandler(),
   new ProjectChangeRequestItemDocumentUploadHandler(),
   new ProjectDocumentUploadHandler(),
+  new BankSetupStatementDocumentUploadHandler(),
 ];
 
 const getRoute = (handler: IFormHandler) => {
@@ -103,7 +107,11 @@ const getRoute = (handler: IFormHandler) => {
   return handler.routePath.replace(/(<|>)/g, "");
 };
 
-const handlePost = (handler: IFormHandler) => async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+const handlePost = (handler: IFormHandler) => async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+) => {
   try {
     await handler.handle(req, res, next);
   } catch (e) {

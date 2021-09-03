@@ -28,108 +28,135 @@ interface Callbacks {
 }
 
 class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankStatementParams, Data, Callbacks> {
-
   public render() {
-    const combined = Pending.combine({ project: this.props.project, editor: this.props.editor, documents: this.props.documents, documentsEditor: this.props.documentsEditor });
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.documents, x.editor, x.documentsEditor)} />;
-  }
-  public renderContents(project: ProjectDto, documents: DocumentSummaryDto[], editor: IEditorStore<PartnerDto, PartnerDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>) {
-    const Form = ACC.TypedForm<PartnerDto>();
+    const combined = Pending.combine({
+      project: this.props.project,
+      editor: this.props.editor,
+      documents: this.props.documents,
+      documentsEditor: this.props.documentsEditor,
+    });
 
     return (
+      <ACC.PageLoader
+        pending={combined}
+        render={x => this.renderContents(x.project, x.documents, x.editor, x.documentsEditor)}
+      />
+    );
+  }
+
+  public renderContents(
+    project: ProjectDto,
+    documents: DocumentSummaryDto[],
+    editor: IEditorStore<PartnerDto, PartnerDtoValidator>,
+    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
+  ) {
+    const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
+    const BankStatementForm = ACC.TypedForm<PartnerDto>();
+
+    const projectSetupParams = { projectId: this.props.projectId, partnerId: this.props.partnerId };
+    const projectSetupRoute = this.props.routes.projectSetup.getLink(projectSetupParams);
+
+    const backLinkElement = (
+      <ACC.BackLink route={projectSetupRoute}>
+        <ACC.Content value={x => x.projectSetupBankStatement.backLink} />
+      </ACC.BackLink>
+    );
+    return (
       <ACC.Page
-        backLink={
-          <ACC.BackLink route={this.props.routes.projectSetup.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}>
-            <ACC.Content value={(x) => x.projectSetupBankStatement.backLink} />
-          </ACC.BackLink>
-        }
+        backLink={backLinkElement}
         error={editor.error}
         validator={[editor.validator, documentsEditor.validator]}
         pageTitle={<ACC.Projects.Title {...project} />}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        {this.renderGuidance()}
-        {this.renderDocumentsForm(documentsEditor)}
-        {this.renderFiles(documentsEditor, documents)}
-        <ACC.Section qa="submit-bank-statement" >
-          <Form.Form
+
+        <ACC.Section qa="guidance">
+          <ACC.Content value={x => x.projectSetupBankStatement.guidanceMessage} />
+        </ACC.Section>
+
+        <ACC.Section>
+          <UploadForm.Form
+            enctype="multipart"
+            editor={documentsEditor}
+            onSubmit={() => this.props.onFileChange(true, documentsEditor.data)}
+            onChange={dto => this.props.onFileChange(false, dto)}
+            qa="partnerDocumentUpload"
+          >
+            <UploadForm.Fieldset qa="documentGuidance">
+              <UploadForm.Hidden name="description" value={() => DocumentDescription.BankStatement} />
+
+              <ACC.DocumentGuidance />
+
+              <UploadForm.MulipleFileUpload
+                labelContent={x => x.projectSetupBankStatement.documentLabels.uploadInputLabel}
+                name="attachment"
+                labelHidden
+                value={data => data.files}
+                update={(dto, files) => {
+                  dto.files = files || [];
+                  dto.description = DocumentDescription.BankStatement;
+                }}
+                validation={documentsEditor.validator.files}
+              />
+            </UploadForm.Fieldset>
+
+            <UploadForm.Fieldset>
+              <UploadForm.Button
+                name="uploadFile"
+                styling="Secondary"
+                onClick={() => this.props.onFileChange(true, documentsEditor.data)}
+              >
+                <ACC.Content value={x => x.projectSetupBankStatement.documentMessages.uploadTitle} />
+              </UploadForm.Button>
+            </UploadForm.Fieldset>
+          </UploadForm.Form>
+        </ACC.Section>
+
+        {documents.length ? (
+          <ACC.Section
+            title={x => x.projectSetupBankStatement.documentLabels.filesUploadedTitle}
+            subtitle={x => x.projectSetupBankStatement.documentLabels.filesUploadedSubtitle}
+          >
+            <ACC.DocumentTableWithDelete
+              onRemove={document => this.props.onFileDelete(documentsEditor.data, document)}
+              documents={documents}
+              qa="partner-document"
+            />
+          </ACC.Section>
+        ) : (
+          <ACC.Section title={x => x.projectSetupBankStatement.documentLabels.filesUploadedTitle}>
+            <ACC.ValidationMessage
+              message={x => x.projectSetupBankStatement.documentMessages.noDocumentsUploaded}
+              messageType="info"
+            />
+          </ACC.Section>
+        )}
+
+        <ACC.Section qa="submit-bank-statement">
+          <BankStatementForm.Form
             editor={editor}
             onChange={() => this.props.onChange(false, editor.data)}
             onSubmit={() => this.props.onChange(true, editor.data)}
             qa="submit-bank-statement-form"
           >
-            <Form.Fieldset>
-              <Form.Submit><ACC.Content value={x => x.projectSetupBankStatement.submitButton}/></Form.Submit>
-              <ACC.Link styling="SecondaryButton" route={this.props.routes.projectSetup.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId})}>
-                <ACC.Content value={x => x.projectSetupBankStatement.returnButton}/>
+            <BankStatementForm.Fieldset>
+              <BankStatementForm.Submit>
+                <ACC.Content value={x => x.projectSetupBankStatement.submitButton} />
+              </BankStatementForm.Submit>
+
+              <ACC.Link
+                styling="SecondaryButton"
+                route={this.props.routes.projectSetup.getLink({
+                  projectId: this.props.projectId,
+                  partnerId: this.props.partnerId,
+                })}
+              >
+                <ACC.Content value={x => x.projectSetupBankStatement.returnButton} />
               </ACC.Link>
-            </Form.Fieldset>
-          </Form.Form>
+            </BankStatementForm.Fieldset>
+          </BankStatementForm.Form>
         </ACC.Section>
       </ACC.Page>
-    );
-  }
-
-  private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
-    if (documents.length) {
-      return (
-        <ACC.Section
-          title={x => x.projectSetupBankStatement.documentLabels.filesUploadedTitle}
-          subtitle={x => x.projectSetupBankStatement.documentLabels.filesUploadedSubtitle}
-        >
-          <ACC.DocumentTableWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="partner-document"/>
-        </ACC.Section>
-      );
-    }
-    return (
-      <ACC.Section title={x => x.projectSetupBankStatement.documentLabels.filesUploadedTitle}>
-        <ACC.ValidationMessage message={x => x.projectSetupBankStatement.documentMessages.noDocumentsUploaded} messageType="info" />
-      </ACC.Section>
-    );
-  }
-
-  private renderDocumentsForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>): React.ReactNode {
-    const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
-
-    return (
-      <ACC.Section>
-        <UploadForm.Form
-          enctype="multipart"
-          editor={documentsEditor}
-          onSubmit={() => this.props.onFileChange(true, documentsEditor.data)}
-          onChange={(dto) => this.props.onFileChange(false, dto)}
-          qa="partnerDocumentUpload"
-        >
-          <UploadForm.Fieldset qa="documentGuidance">
-            <UploadForm.Hidden name="description" value={() => DocumentDescription.BankStatement} />
-            <ACC.DocumentGuidance />
-            <UploadForm.MulipleFileUpload
-              labelContent={x => x.projectSetupBankStatement.documentLabels.uploadInputLabel}
-              name="attachment"
-              labelHidden
-              value={data => data.files}
-              update={(dto, files) => {
-                dto.files = files || [];
-                dto.description = DocumentDescription.BankStatement;
-              }}
-              validation={documentsEditor.validator.files}
-            />
-          </UploadForm.Fieldset>
-          <UploadForm.Fieldset>
-            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}>
-              <ACC.Content value={x => x.projectSetupBankStatement.documentMessages.uploadTitle} />
-            </UploadForm.Button>
-          </UploadForm.Fieldset>
-        </UploadForm.Form>
-      </ACC.Section>
-    );
-  }
-
-  private renderGuidance() {
-    return (
-      <ACC.Section qa={"guidance"}>
-        <ACC.Content value={x => x.projectSetupBankStatement.guidanceMessage}/>
-      </ACC.Section>
     );
   }
 }
@@ -138,66 +165,61 @@ const ProjectSetupBankStatementContainer = (props: ProjectSetupBankStatementPara
   const stores = useStores();
   const { getContent } = useContent();
 
-  const documentsRemovedMessage = getContent(x => x.projectSetupBankStatement.documentsRemovedMessage);
-
-  const handleOnChange: Callbacks["onChange"] = (submit, dto) => {
-    stores.partners.updatePartner(submit, props.partnerId, dto, {
-      onComplete: () => {
-        stores.navigation.navigateTo(
-          props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }),
-        );
-      },
-    });
-  };
-
-  const handleOnFileChange: Data["onFileChange"] = (isSaving, dto) => {
-    stores.messages.clearMessages();
-    // show message if remaining on page
-    const successMessage = getContent(x => x.projectSetupBankStatement.documentMessages.getDocumentUploadedMessage(dto.files.length));
-    stores.partnerDocuments.updatePartnerDocumentsEditor(
-      isSaving,
-      props.projectId,
-      props.partnerId,
-      dto,
-      successMessage,
-    );
-  };
-
-  const handleOnFileDelete: Data["onFileDelete"] = (dto, document) => {
-    stores.messages.clearMessages();
-    stores.partnerDocuments.deletePartnerDocumentsEditor(
-      props.projectId,
-      props.partnerId,
-      dto,
-      document,
-      documentsRemovedMessage,
-    );
-  };
-
   return (
-        <ProjectSetupBankStatementComponent
-          project={stores.projects.getById(props.projectId)}
-          editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId, (dto) => {
-            dto.bankDetailsTaskStatus = BankDetailsTaskStatus.Complete;
-          })}
-          documents={stores.partnerDocuments.getPartnerDocuments(props.projectId, props.partnerId)}
-          documentsEditor={stores.partnerDocuments.getPartnerDocumentEditor(props.partnerId)}
-          onChange={handleOnChange}
-          onFileChange={handleOnFileChange}
-          onFileDelete={handleOnFileDelete}
-          {...props}
-        />
+    <ProjectSetupBankStatementComponent
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      documents={stores.partnerDocuments.getPartnerDocuments(props.projectId, props.partnerId)}
+      documentsEditor={stores.partnerDocuments.getPartnerDocumentEditor(props.partnerId)}
+      onFileChange={(isSaving, dto) => {
+        stores.messages.clearMessages();
+        // show message if remaining on page
+        const successMessage = getContent(x =>
+          x.projectSetupBankStatement.documentMessages.getDocumentUploadedMessage(dto.files.length),
+        );
+        stores.partnerDocuments.updatePartnerDocumentsEditor(
+          isSaving,
+          props.projectId,
+          props.partnerId,
+          dto,
+          successMessage,
+        );
+      }}
+      onFileDelete={(dto, document) => {
+        stores.messages.clearMessages();
+        stores.partnerDocuments.deletePartnerDocumentsEditor(
+          props.projectId,
+          props.partnerId,
+          dto,
+          document,
+          getContent(x => x.projectSetupBankStatement.documentsRemovedMessage),
+        );
+      }}
+      editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId, dto => {
+        dto.bankDetailsTaskStatus = BankDetailsTaskStatus.Complete;
+      })}
+      onChange={(submit, dto) => {
+        stores.partners.updatePartner(submit, props.partnerId, dto, {
+          onComplete: () => {
+            stores.navigation.navigateTo(
+              props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }),
+            );
+          },
+        });
+      }}
+    />
   );
 };
 
-export const ProjectSetupBankStatementRoute = defineRoute({
+export const ProjectSetupBankStatementRoute = defineRoute<ProjectSetupBankStatementParams>({
   routeName: "projectSetupBankStatement",
   routePath: "/projects/:projectId/setup/:partnerId/bank-statement",
   container: ProjectSetupBankStatementContainer,
-  getParams: (route) => ({
+  getParams: route => ({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,
   }),
-  getTitle: ({ content }) => content.projectSetupBankStatement.title(),
-  accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+  getTitle: x => x.content.projectSetupBankStatement.title(),
+  accessControl: (auth, { projectId, partnerId }) =>
+    auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
 });
