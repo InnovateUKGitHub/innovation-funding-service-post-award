@@ -314,6 +314,7 @@ const buttonContentConfig = {
 };
 
 interface SubmitPropsBase {
+  name?: string;
   className?: string;
   style?: CSSProperties;
   styling?: "Link" | "Secondary" | "Primary";
@@ -332,13 +333,15 @@ interface SubmitPropsWithoutType {
 
 type SubmitProps = SubmitPropsBase & (SubmitPropsWithType | SubmitPropsWithoutType);
 
-const SubmitComponent = <T extends {}>(props: SubmitProps & InternalFieldProps<T>) => {
+const SubmitComponent = <T extends {}>({ name, ...props }: SubmitProps & InternalFieldProps<T>) => {
   const content = props.type ? buttonContentConfig[props.type] : props.children;
+
+  const nameValue = `button_${name || "default"}`;
 
   return (
     <Button
       type="submit"
-      name="button_default"
+      name={nameValue}
       className={props.className}
       disabled={props.disabled}
       style={props.style}

@@ -7,8 +7,12 @@ import { ProjectChangeRequestCreateFormHandler } from "@server/forms/projectChan
 import { ProjectChangeRequestAddTypeFormHandler } from "@server/forms/projectChangeRequest/projectChangeRequestAddTypeFormHandler";
 import express, { RequestHandler } from "express";
 import { ProjectChangeRequestItemDocumentUploadHandler } from "@server/forms/projectChangeRequest/projectChangeRequestItemDocumentUploadHandler";
+
 import { ClaimDocumentsDeleteHandler } from "@server/forms/claimDocuments/claimDocumentsDeleteHandler";
 import { ClaimDocumentsUploadHandler } from "@server/forms/claimDocuments/claimDocumentsUploadHandler";
+import { ClaimReviewDocumentsDeleteHandler } from "@server/forms/claimDocuments/claimReviewDocumentsDeleteHandler";
+import { ClaimReviewDocumentsUploadHandler } from "@server/forms/claimDocuments/claimReviewDocumentsUploadHandler";
+
 import { ClaimSummaryFormHandler } from "@server/forms/claimSummaryFormHandler";
 import { MonitoringReportPreparePeriodFormHandler } from "@server/forms/monitoringReport/monitoringReportPreparePeriodFormHandler";
 import { VirementCostsUpdateHandler } from "@server/forms/projectChangeRequest/virements/virementCostsUpdateHandler";
@@ -60,6 +64,7 @@ export const standardFormHandlers: StandardFormHandlerBase<{}, EditorStateKeys>[
   new UpdateForecastFormHandler(),
   new ClaimDetailDocumentDeleteHandler(),
   new ClaimDocumentsDeleteHandler(),
+  new ClaimReviewDocumentsDeleteHandler(),
   new MonitoringReportCreateFormHandler(),
   new MonitoringReportDeleteFormHandler(),
   new MonitoringReportPrepareFormHandler(),
@@ -95,6 +100,7 @@ export const singleFileFormHandlers: SingleFileFormHandlerBase<{}, EditorStateKe
 export const multiFileFormHandlers: MultipleFileFormHandlerBase<{}, EditorStateKeys>[] = [
   new ClaimDetailDocumentUploadHandler(),
   new ClaimDocumentsUploadHandler(),
+  new ClaimReviewDocumentsUploadHandler(),
   new OverheadDocumentsUploadHandler(),
   new ProjectChangeRequestReasoningDocumentUploadHandler(),
   new ProjectChangeRequestItemDocumentUploadHandler(),
