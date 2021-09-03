@@ -2,8 +2,8 @@ import { Content } from "@content/content";
 import { ContentPageBase } from "@content/contentPageBase";
 
 export class PCRCreateContent extends ContentPageBase {
-  constructor(content: Content, competitionType?: string) {
-    super(content, "pcr-create", competitionType);
+  constructor(content: Content) {
+    super(content, "pcr-create");
   }
 
   public readonly guidanceIntroMessage = this.getContent("guidance-intro-message");

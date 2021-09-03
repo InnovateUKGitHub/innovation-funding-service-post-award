@@ -8,6 +8,7 @@ import { useContent } from "@ui/hooks";
 import { IEditorStore, useStores } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import { ProjectRole } from "@framework/constants";
+import { PcrTypesGuidance } from "./components/PcrTypesGuidance";
 
 export interface CreatePcrParams {
   projectId: string;
@@ -71,17 +72,6 @@ function PCRCreateComponent({ content, ...props }: CreatePcrProps) {
     const PCRForm = ACC.TypedForm<Dtos.PCRDto>();
     const { options, selected } = getListData(editor.data.items, itemTypes);
 
-    const createGuidanceContent = [
-      { header: content.reallocateCostsTitle, description: content.reallocateCostsMessage },
-      { header: content.removePartnerTitle, description: content.removePartnerMessage },
-      { header: content.addPartnerTitle, description: content.addPartnerMessage },
-      { header: content.changeScopeTitle, description: content.changeScopeMessage },
-      { header: content.changeDurationTitle, description: content.changeDurationMessage },
-      { header: content.changePartnersNameTitle, description: content.changePartnersNameMessage },
-      { header: content.putProjectOnHoldTitle, description: content.putProjectOnHoldMessage },
-      { header: content.endProjectEarlyTitle, description: content.endProjectEarlyMessage },
-    ];
-
     return (
       <ACC.Page
         backLink={pcrDashboardBackLink}
@@ -105,13 +95,7 @@ function PCRCreateComponent({ content, ...props }: CreatePcrProps) {
             onChange={dto => props.onChange(false, dto)}
           >
             <PCRForm.Fieldset heading={content.selectRequestTypesTitle}>
-              <ACC.Renderers.SimpleString className="govuk-hint">{content.selectTypesHint}</ACC.Renderers.SimpleString>
-
-              <ACC.Inputs.FormGuidanceExpander
-                title={content.learnMoreAboutTitle}
-                items={createGuidanceContent}
-                qa="pcr-create-guidance"
-              />
+              <PcrTypesGuidance qa="create" />
 
               <PCRForm.Checkboxes
                 name="types"
@@ -152,23 +136,6 @@ export function useCreatePcrContent() {
   const { getContent } = useContent();
 
   return {
-    learnMoreAboutTitle: getContent(x => x.pcrCreate.learnMoreAboutTitle),
-    reallocateCostsTitle: getContent(x => x.pcrCreate.reallocateCostsTitle),
-    reallocateCostsMessage: getContent(x => x.pcrCreate.reallocateCostsMessage),
-    removePartnerTitle: getContent(x => x.pcrCreate.removePartnerTitle),
-    removePartnerMessage: getContent(x => x.pcrCreate.removePartnerMessage),
-    addPartnerTitle: getContent(x => x.pcrCreate.addPartnerTitle),
-    addPartnerMessage: getContent(x => x.pcrCreate.addPartnerMessage),
-    changeScopeTitle: getContent(x => x.pcrCreate.changeScopeTitle),
-    changeScopeMessage: getContent(x => x.pcrCreate.changeScopeMessage),
-    changeDurationTitle: getContent(x => x.pcrCreate.changeDurationTitle),
-    changeDurationMessage: getContent(x => x.pcrCreate.changeDurationMessage),
-    changePartnersNameTitle: getContent(x => x.pcrCreate.changePartnersNameTitle),
-    changePartnersNameMessage: getContent(x => x.pcrCreate.changePartnersNameMessage),
-    putProjectOnHoldTitle: getContent(x => x.pcrCreate.putProjectOnHoldTitle),
-    putProjectOnHoldMessage: getContent(x => x.pcrCreate.putProjectOnHoldMessage),
-    endProjectEarlyTitle: getContent(x => x.pcrCreate.endProjectEarlyTitle),
-    endProjectEarlyMessage: getContent(x => x.pcrCreate.endProjectEarlyMessage),
     selectTypesHint: getContent(x => x.pcrCreate.selectTypesHint),
     backLink: getContent(x => x.pcrCreate.backLink),
     selectRequestTypesTitle: getContent(x => x.pcrCreate.selectRequestTypesTitle),

@@ -293,7 +293,7 @@ export class Content extends ContentBase {
     this.partnerDetails = new PartnerDetailsContent(this, competitionType);
     this.partnerDetailsEdit = new PartnerDetailsEditContent(this, competitionType);
 
-    this.pcrCreate = new PCRCreateContent(this, competitionType);
+    this.pcrCreate = new PCRCreateContent(this);
 
     this.pcrTimeExtensionStepContent = new PCRTimeExtensionStepContent(this, competitionType);
 
