@@ -6,6 +6,7 @@ import { IEditorStore, useStores } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { ProjectRole } from "@framework/constants";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
+import { PcrTypesGuidance } from "./components/PcrTypesGuidance";
 
 export interface ProjectChangeRequestAddTypeParams {
   projectId: string;
@@ -104,6 +105,8 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
         onChange={dto => this.props.onChange(false, dto)}
       >
         <PCRForm.Fieldset heading="Select request types">
+          <PcrTypesGuidance qa="addType" />
+
           <PCRForm.Checkboxes
             hint="You can select more than one."
             options={options}
