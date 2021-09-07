@@ -2,40 +2,63 @@ import { ClaimDto, ClaimStatus } from "@framework/types";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { ClaimDtoValidator } from "../../ui/validators";
-import { GetClaim, UpdateClaimCommand } from "../features/claims";
-import { AllClaimsDashboardRoute, ReviewClaimParams, ReviewClaimRoute, } from "../../ui/containers";
-import { IFormBody, IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
+import { ClaimDtoValidator } from "@ui/validators";
+import { AllClaimsDashboardRoute, ReviewClaimParams, ReviewClaimRoute } from "@ui/containers";
+import { GetClaim, UpdateClaimCommand } from "@server/features/claims";
+import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 
 export class ReviewClaimFormHandler extends StandardFormHandlerBase<ReviewClaimParams, "claim"> {
-    constructor() {
-        super(ReviewClaimRoute, ["default"], "claim");
+  constructor() {
+    super(ReviewClaimRoute, ["default"], "claim");
+  }
+
+  protected async getDto(
+    context: IContext,
+    params: ReviewClaimParams,
+    _button: IFormButton,
+    body: IFormBody,
+  ): Promise<ClaimDto> {
+    const claim = await context.runQuery(new GetClaim(params.partnerId, params.periodId));
+
+    claim.comments = body.comments;
+
+    // Note: Prepare claim for the next status
+    switch (body.status) {
+      case ClaimStatus.MO_QUERIED:
+        claim.status = ClaimStatus.MO_QUERIED;
+        break;
+
+      case ClaimStatus.AWAITING_IUK_APPROVAL: {
+        const isIarReceived: boolean = claim.iarStatus !== "Received";
+        const isNotReceivedIar: boolean = !!claim.isIarRequired && isIarReceived;
+
+        claim.status = isNotReceivedIar ? ClaimStatus.AWAITING_IAR : ClaimStatus.AWAITING_IUK_APPROVAL;
+        break;
+      }
+
+      default:
+        break;
     }
 
-    protected async getDto(context: IContext, params: ReviewClaimParams, button: IFormButton, body: IFormBody): Promise<ClaimDto> {
-        const claim = await context.runQuery(new GetClaim(params.partnerId, params.periodId));
+    return claim;
+  }
 
-        if (body.status === ClaimStatus.MO_QUERIED) {
-            claim.status = ClaimStatus.MO_QUERIED;
-        } else if (body.status === ClaimStatus.AWAITING_IUK_APPROVAL) {
-            claim.status = ClaimStatus.AWAITING_IUK_APPROVAL;
-        }
+  protected async run(
+    context: IContext,
+    params: ReviewClaimParams,
+    _button: IFormButton,
+    dto: ClaimDto,
+  ): Promise<ILinkInfo> {
+    await context.runCommand(new UpdateClaimCommand(params.projectId, dto));
 
-        claim.comments = body.comments;
+    return AllClaimsDashboardRoute.getLink(params);
+  }
 
-        return claim;
-    }
+  protected getStoreKey(params: ReviewClaimParams) {
+    return storeKeys.getClaimKey(params.partnerId, params.periodId);
+  }
 
-    protected async run(context: IContext, params: ReviewClaimParams, button: IFormButton, dto: ClaimDto): Promise<ILinkInfo> {
-        await context.runCommand(new UpdateClaimCommand(params.projectId, dto));
-        return AllClaimsDashboardRoute.getLink(params);
-    }
-
-    protected getStoreKey(params: ReviewClaimParams) {
-        return storeKeys.getClaimKey(params.partnerId, params.periodId);
-    }
-
-    protected createValidationResult(params: ReviewClaimParams, dto: ClaimDto) {
-        return new ClaimDtoValidator(dto, ClaimStatus.UNKNOWN, [], [], false, "");
-    }
+  protected createValidationResult(_params: ReviewClaimParams, dto: ClaimDto) {
+    return new ClaimDtoValidator(dto, ClaimStatus.UNKNOWN, [], [], false, "");
+  }
 }
