@@ -1,4 +1,5 @@
 import { ContentBase } from "@content/contentBase";
+import { DocumentSummaryDto } from "@framework/dtos";
 import { IAppOptions } from "@framework/types/IAppOptions";
 
 export class DocumentMessages extends ContentBase {
@@ -6,11 +7,11 @@ export class DocumentMessages extends ContentBase {
     super(parent, "document-messages", competitionType);
   }
 
-  public readonly header = ( maxFileSize: IAppOptions["maxFileSize"]) => {
+  public readonly header = (maxFileSize: IAppOptions["maxFileSize"]) => {
     return this.getContent("header", { markdown: true, maxFileSize });
   };
   public readonly infoTitle = this.getContent("infoTitle");
-  public readonly infoContent = ( permittedTypes: IAppOptions["permittedTypes"]) => {
+  public readonly infoContent = (permittedTypes: IAppOptions["permittedTypes"]) => {
     return this.getContent("infoContent", { markdown: true, ...permittedTypes });
   };
   public readonly noDocumentsUploaded = this.getContent("no-documents-uploaded");
@@ -30,6 +31,9 @@ export class DocumentMessages extends ContentBase {
   };
 
   public readonly backLink = (previousPage: string) => this.getContent("back-link", { previousPage });
+
+  public documentDeleted = (documentToDelete: DocumentSummaryDto) =>
+    this.getContent("deleted-document", { deletedFileName: documentToDelete.fileName });
 
   public getDocumentUploadedMessage(totalFiles: number) {
     const contentKey = totalFiles === 1 ? "uploaded-document" : "uploaded-documents";

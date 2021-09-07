@@ -65,7 +65,17 @@ export class ClaimsStore extends StoreBase {
     return this.getAllClaimsForPartner(partnerId).then(x => x.filter(y => y.isApproved) || null);
   }
 
-  public getClaimEditor(isClaimSummary: boolean, projectId: string, partnerId: string, periodId: number, init?: (dto: ClaimDto) => void) {
+  public markClaimAsStale(partnerId: string, periodId: number): void {
+    this.markStale("claim", this.getKey(partnerId, periodId), undefined);
+  }
+
+  public getClaimEditor(
+    isClaimSummary: boolean,
+    projectId: string,
+    partnerId: string,
+    periodId: number,
+    init?: (dto: ClaimDto) => void,
+  ) {
     return this.getEditor(
       "claim",
       this.getKey(partnerId, periodId),
@@ -104,7 +114,14 @@ export class ClaimsStore extends StoreBase {
     );
   }
 
-  private validate(projectId: string, partnerId: string, periodId: number, claim: ClaimDto, showErrors: boolean, isClaimSummary?: boolean) {
+  private validate(
+    projectId: string,
+    partnerId: string,
+    periodId: number,
+    claim: ClaimDto,
+    showErrors: boolean,
+    isClaimSummary?: boolean,
+  ) {
     const originalStatus = this.get(partnerId, periodId).then(x => x.status);
     const partners = this.partnersStore.getById(partnerId);
     const details = this.costsSummariesStore.getForPeriod(projectId, partnerId, periodId);

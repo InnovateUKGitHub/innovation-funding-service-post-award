@@ -22,19 +22,22 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
     return hasMoRole || hasFcRole;
   }
 
-  protected async run(context: IContext) {
-    const existingStatus = await context.repositories.claims.get(this.claimDto.partnerId, this.claimDto.periodId).then(x => x.Acc_ClaimStatus__c);
-    const partner = await context.runQuery(new GetByIdQuery(this.claimDto.partnerId));
-    const details = await context.runQuery(
-      new GetCostsSummaryForPeriodQuery(this.projectId, this.claimDto.partnerId, this.claimDto.periodId),
+  protected async run(context: IContext): Promise<true> {
+    const partnerQuery = new GetByIdQuery(this.claimDto.partnerId);
+    const documentQuery = new GetClaimDocumentsQuery({ ...this.claimDto, projectId: this.projectId });
+    const costSummaryQuery = new GetCostsSummaryForPeriodQuery(
+      this.projectId,
+      this.claimDto.partnerId,
+      this.claimDto.periodId,
     );
-    const documents = await context.runQuery(
-      new GetClaimDocumentsQuery({
-        projectId: this.projectId,
-        partnerId: this.claimDto.partnerId,
-        periodId: this.claimDto.periodId,
-      }),
-    );
+
+    const existingClaim = await context.repositories.claims.get(this.claimDto.partnerId, this.claimDto.periodId);
+    const existingStatus = existingClaim.Acc_ClaimStatus__c;
+    const hasChangedClaimStatus = existingStatus !== this.claimDto.status;
+
+    const partner = await context.runQuery(partnerQuery);
+    const details = await context.runQuery(costSummaryQuery);
+    const documents = await context.runQuery(documentQuery);
 
     const originalStatus = mapToClaimStatus(existingStatus);
 
@@ -52,7 +55,7 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
       throw new ValidationError(result);
     }
 
-    if (existingStatus !== this.claimDto.status) {
+    if (hasChangedClaimStatus) {
       await context.repositories.claims.update({
         Id: this.claimDto.id,
         Acc_ClaimStatus__c: this.claimDto.status,
