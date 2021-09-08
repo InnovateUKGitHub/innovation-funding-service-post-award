@@ -1,7 +1,7 @@
 import { ProjectRole } from "@framework/constants";
 import { IRoleInfo } from "@server/features/projects/getAllProjectRolesForUser";
 
-type AvailableAuthRoles = "isPm" | "isPmOrMo" | "isFc" | "isMo";
+type AvailableAuthRoles = "isPm" | "isPmOrMo" | "isPmAndFc" | "isFc" | "isMo";
 
 export function getAuthRoles(role: ProjectRole): { [key in AvailableAuthRoles]: boolean } {
   const isFc = !!(role & ProjectRole.FinancialContact);
@@ -9,10 +9,12 @@ export function getAuthRoles(role: ProjectRole): { [key in AvailableAuthRoles]: 
   const isPm = !!(role & ProjectRole.ProjectManager);
   const isMo = !!(role & ProjectRole.MonitoringOfficer);
   const isPmOrMo = (role & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
+  const isPmAndFc = !isMo && isFc && isPm;
 
   return {
     isPm,
     isPmOrMo,
+    isPmAndFc,
     isFc,
     isMo,
   };
