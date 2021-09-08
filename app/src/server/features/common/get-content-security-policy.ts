@@ -36,7 +36,7 @@ export const policyConfig = (nonce: string): Record<CspPolicySources, (string | 
     "https://www.gstatic.com",
   ],
   "connect-src": ["self", "https://www.google-analytics.com"],
-  "font-src": ["self", "https://fonts.gstatic.com"],
+  "font-src": ["self", "https://assets.publishing.service.gov.uk/frontend/", "https://fonts.gstatic.com"],
   "report-uri": ["/api/csp/violation-report"],
 });
 

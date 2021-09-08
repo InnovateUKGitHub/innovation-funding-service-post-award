@@ -101,7 +101,7 @@ describe("<FinancialVirementSummary />", () => {
         disabled: false,
         recordTypeId: "0124I000000FZOEQA4",
         files: [
-          { name: "reallocate-project-costs.xlsx", relativeUrl: "/assets/pcr_templates/reallocate-project-costs.xlsx" },
+          { name: "reallocate-project-costs.xlsx", relativeUrl: "/ifspa-assets/pcr_templates/reallocate-project-costs.xlsx" },
         ],
       },
       {
@@ -111,7 +111,7 @@ describe("<FinancialVirementSummary />", () => {
         disabled: false,
         recordTypeId: "0124I000000FZOFQA4",
         files: [
-          { name: "reallocate-project-costs.xlsx", relativeUrl: "/assets/pcr_templates/reallocate-project-costs.xlsx" },
+          { name: "reallocate-project-costs.xlsx", relativeUrl: "/ifspa-assets/pcr_templates/reallocate-project-costs.xlsx" },
         ],
       },
       {
@@ -129,7 +129,7 @@ describe("<FinancialVirementSummary />", () => {
         disabled: false,
         recordTypeId: "0124I000000FZO6QAO",
         files: [
-          { name: "de-minimis-declaration.odt", relativeUrl: "/assets/pcr_templates/de-minimis-declaration.odt" },
+          { name: "de-minimis-declaration.odt", relativeUrl: "/ifspa-assets/pcr_templates/de-minimis-declaration.odt" },
         ],
       },
       {

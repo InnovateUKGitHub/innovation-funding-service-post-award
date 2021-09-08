@@ -8,6 +8,7 @@ import { Content } from "@content/content";
 import { Guide } from "@ui/componentsGuide/guide";
 import { PageTitleState } from "@ui/redux/reducers/pageTitleReducer";
 import * as colour from "@ui/styles/colours";
+import * as pkg from "../../package.json";
 import { configuration } from "./features/common";
 
 export function componentGuideRender(req: Request, res: Response) {
@@ -34,6 +35,8 @@ export function componentGuideRender(req: Request, res: Response) {
 }
 
 const renderGuide = (html: string) => {
+  const govukFrontendVersion = pkg.devDependencies["govuk-frontend"].replace(/[^0-9/.]/, "");
+
   return `
     <!DOCTYPE html>
     <html>
@@ -49,18 +52,12 @@ const renderGuide = (html: string) => {
             <link rel="apple-touch-icon" sizes="167x167" href="/assets/images/govuk-apple-touch-icon-167x167.png">
             <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/govuk-apple-touch-icon-152x152.png">
             <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png">
-            <!--[if !IE 8]><!-->
-            <link href="/govuk-frontend-3.0.0.min.css" rel="stylesheet" />
-            <!--<![endif]-->
-            <link href="/govuk-overrides.css" rel="stylesheet" />
-            <link href="/govuk-overrides-modal.css" rel="stylesheet" />
 
-            <!--[if IE 8]>
-            <link href="/govuk-frontend-ie8-3.0.0.min.css" rel="stylesheet" />
-            <![endif]-->
+            <link href="/govuk-frontend-${govukFrontendVersion}.min.css" rel="stylesheet" />
+            <link href="/ifspa-govuk-overrides.css" rel="stylesheet" />
+            <link href="/ifspa-govuk-overrides-modal.css" rel="stylesheet" />
 
-            <link href="/govuk-print.css?build=${configuration.build}" rel="stylesheet" media="print"/>
-            <link href="/govuk-print-overrides.css?build=${configuration.build}" rel="stylesheet" media="print"/>
+            <link href="/ifspa-govuk-print-overrides.css?build=${configuration.build}" rel="stylesheet" media="print"/>
 
             <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
         </head>
@@ -75,7 +72,7 @@ const renderGuide = (html: string) => {
             </script>
             <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
             <div id="root">${html}</div>
-            <script src="/govuk-frontend-3.0.0.min.js"></script>
+            <script src="/govuk-frontend-${govukFrontendVersion}.min.js"></script>
             <script src="/build/vendor.js?build=${configuration.build}"></script>
             <script src="/build/componentsGuide.js?build=${configuration.build}"></script>
         </body>

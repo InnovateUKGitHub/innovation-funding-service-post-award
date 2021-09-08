@@ -117,7 +117,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
   }
 
   private renderTemplateLink() {
-    const links = [{ text: "Overhead calculation spreadsheet", url: "/assets/pcr_templates/overheads.ods" }];
+    const links = [{ text: "Overhead calculation spreadsheet", url: "/ifspa-assets/pcr_templates/overheads.ods" }];
     return (
       <ACC.Section>
         <ACC.LinksList data-qa="template-link" links={links} />

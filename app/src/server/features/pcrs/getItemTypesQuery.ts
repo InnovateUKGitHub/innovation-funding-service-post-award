@@ -83,7 +83,7 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
 
     return metaInfoFiles.map(file => ({
       name: file,
-      relativeUrl: `/assets/pcr_templates/${file}`,
+      relativeUrl: `/ifspa-assets/pcr_templates/${file}`,
     }));
   }
 
