@@ -1,6 +1,6 @@
 import { configuration } from "@server/features/common";
 import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
-import { IContext, IFileWrapper, ILinkInfo } from "@framework/types";
+import { DocumentDescription, IContext, IFileWrapper, ILinkInfo } from "@framework/types";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { ProjectSetupBankStatementParams, ProjectSetupBankStatementRoute } from "@ui/containers";
@@ -24,6 +24,7 @@ export class BankSetupStatementDocumentUploadHandler extends MultipleFileFormHan
   ): Promise<MultipleDocumentUploadDto> {
     return Promise.resolve({
       files,
+      description: DocumentDescription.BankStatement
     });
   }
 
