@@ -1,7 +1,11 @@
 import * as colour from "../ui/styles/colours";
 import { configuration } from "../server/features/common";
 
+import * as pkg from "../../package.json";
+
 export function renderHtml(html: string, htmlTitle: string, preloadedState: any = {}, nonce: string) {
+  const govukFrontendVersion = pkg.devDependencies["govuk-frontend"].replace(/[^0-9/.]/, "");
+
   return `
   <!DOCTYPE html>
   <html lang="en">
@@ -18,25 +22,21 @@ export function renderHtml(html: string, htmlTitle: string, preloadedState: any 
           <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/govuk-apple-touch-icon-152x152.png">
           <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png">
 
-          <!--[if !IE 8]><!-->
-          <link href="/govuk-frontend-3.0.0.min.css" rel="stylesheet" />
-          <!--<![endif]-->
+          <link href="/govuk-frontend-${govukFrontendVersion}.min.css?build=${configuration.build}" rel="stylesheet" />
 
-          <!--[if IE 8]>
-          <link href="/govuk-frontend-ie8-3.0.0.min.css" rel="stylesheet" />
-          <![endif]-->
-          <link href="/govuk-overrides.css?build=${configuration.build}" rel="stylesheet" />
-          <link href="/govuk-overrides-modal.css?build=${configuration.build}" rel="stylesheet" />
-          <link href="/govuk-print.css?build=${configuration.build}" rel="stylesheet" media="print"/>
-          <link href="/govuk-print-overrides.css?build=${configuration.build}" rel="stylesheet" media="print"/>
+          <link href="/ifspa-govuk-overrides.css?build=${configuration.build}" rel="stylesheet" />
+          <link href="/ifspa-govuk-overrides-modal.css?build=${configuration.build}" rel="stylesheet" />
+          <link href="/ifspa-govuk-print-overrides.css?build=${configuration.build}" rel="stylesheet" media="print"/>
 
           <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
-
       </head>
       <body class="govuk-template__body">
           <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+
           <div id="root">${html}</div>
+
           ${renderJSGoogleTagManager(configuration.googleTagManagerCode, nonce)}
+
           <script nonce=${nonce}>
             // if js enabled then hide page for moment to allow any difference from server v client rendering to be sorted
             document.body.style.visibility = "hidden";
@@ -46,7 +46,8 @@ export function renderHtml(html: string, htmlTitle: string, preloadedState: any 
             document.body.className = document.body.className + ' js-enabled';
             window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, "\\u003c")}
           </script>
-          <script nonce=${nonce} src="/govuk-frontend-3.0.0.min.js"></script>
+
+          <script nonce=${nonce} src="/govuk-frontend-${govukFrontendVersion}.min.js"></script>
           <script nonce=${nonce} src="/build/vendor.js?build=${configuration.build}"></script>
           <script nonce=${nonce} src="/build/bundle.js?build=${configuration.build}"></script>
           ${renderNonJSGoogleTagManager(configuration.googleTagManagerCode)}

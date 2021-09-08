@@ -14,6 +14,7 @@ Object {
   ],
   "font-src": Array [
     "self",
+    "https://assets.publishing.service.gov.uk/frontend/",
     "https://fonts.gstatic.com",
   ],
   "img-src": Array [
@@ -48,4 +49,4 @@ Object {
 }
 `;
 
-exports[`getContentSecurityPolicy() @returns with correct formatting 1`] = `"default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' 'unsafe-inline' 'strict-dynamic' 'nonce-STUB_UNIQUE_NONCE_VALUE' https://www.googletagmanager.com https://tagmanager.google.com https://www.google-analytics.com https://ssl.google-analytics.com; style-src 'self' 'unsafe-inline' https://tagmanager.google.com https://fonts.googleapis.com; img-src 'self' www.googletagmanager.com https://www.google-analytics.com https://ssl.gstatic.com https://www.gstatic.com; connect-src 'self' https://www.google-analytics.com; font-src 'self' https://fonts.gstatic.com; report-uri /api/csp/violation-report;"`;
+exports[`getContentSecurityPolicy() @returns with correct formatting 1`] = `"default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' 'unsafe-inline' 'strict-dynamic' 'nonce-STUB_UNIQUE_NONCE_VALUE' https://www.googletagmanager.com https://tagmanager.google.com https://www.google-analytics.com https://ssl.google-analytics.com; style-src 'self' 'unsafe-inline' https://tagmanager.google.com https://fonts.googleapis.com; img-src 'self' www.googletagmanager.com https://www.google-analytics.com https://ssl.gstatic.com https://www.gstatic.com; connect-src 'self' https://www.google-analytics.com; font-src 'self' https://assets.publishing.service.gov.uk/frontend/ https://fonts.gstatic.com; report-uri /api/csp/violation-report;"`;

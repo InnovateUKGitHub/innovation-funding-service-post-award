@@ -94,7 +94,7 @@ body,
 }
 
 .govuk-table__row.table__row--info.table__row--icon {
-  background-image: url("/assets/images/icon-edit.png");
+  background-image: url("/ifspa-assets/images/icon-edit.png");
 }
 
 .govuk-table__row.table__row--info.table__row--icon td:first-child,
@@ -151,19 +151,19 @@ body,
 }
 
 .acc-message__info {
-  background-image: url("/assets/images/icon-info.png");
+  background-image: url("/ifspa-assets/images/icon-info.png");
 }
 .acc-message__error {
-  background-image: url("/assets/images/icon-alert.png");
+  background-image: url("/ifspa-assets/images/icon-alert.png");
 }
 .acc-message__warning {
-  background-image: url("/assets/images/icon-warning.png");
+  background-image: url("/ifspa-assets/images/icon-warning.png");
 }
 .acc-message__alert {
-  background-image: url("/assets/images/icon-alert.png");
+  background-image: url("/ifspa-assets/images/icon-alert.png");
 }
 .acc-message__success {
-  background-image: url("/assets/images/icon-tick.png");
+  background-image: url("/ifspa-assets/images/icon-tick.png");
 }
 
 .acc-message__error.govuk-grid-row {
@@ -533,7 +533,7 @@ p.govuk-body--multiline {
   width: 20px;
   height: 20px;
   background-size: 20px 20px;
-  background-image: url("/assets/images/icon-edit.png");
+  background-image: url("/ifspa-assets/images/icon-edit.png");
   display: inline-block;
   background-position: 0 0;
   background-repeat: no-repeat;
