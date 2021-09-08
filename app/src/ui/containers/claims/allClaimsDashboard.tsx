@@ -11,6 +11,7 @@ import { roundCurrency } from "@framework/util";
 import { ProjectRole, ProjectStatus } from "@framework/constants";
 import { IRoutes } from "@ui/routing";
 import { getAuthRoles } from "@framework/types";
+import { getLeadPartner } from "@framework/util/partnerHelper";
 import { ClaimsDashboardGuidance } from "./components";
 
 export interface AllClaimsDashboardParams {
@@ -37,11 +38,15 @@ export function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & Al
     const { isCombinationOfSBRI } = checkProjectCompetition(projectDetails.competitionType);
     const { isFc } = getAuthRoles(projectDetails.roles);
 
+    const leadPartner = getLeadPartner(partners);
+    const isLeadPartnerFc = leadPartner && getAuthRoles(leadPartner.roles).isFc;
+
     return (
       <Acc.Page
         pageTitle={<Acc.Projects.Title {...projectDetails} />}
         backLink={<Acc.Projects.ProjectBackLink project={projectDetails} routes={props.routes} />}
         project={projectDetails}
+        partner={isLeadPartnerFc ? leadPartner : undefined}
       >
         {isFc && renderGuidanceMessage(isCombinationOfSBRI, partners)}
         <Acc.Renderers.Messages messages={props.messages} />
