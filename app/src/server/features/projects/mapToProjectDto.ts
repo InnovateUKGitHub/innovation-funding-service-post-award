@@ -1,12 +1,8 @@
 import { ClaimFrequency, IContext, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
-import {dayComparator, isNumber} from "@framework/util";
-import {ISalesforceProject} from "../../repositories/projectsRepository";
+import { dayComparator, isNumber, roundCurrency } from "@framework/util";
+import { ISalesforceProject } from "../../repositories/projectsRepository";
 
-export const mapToProjectDto = (
-  context: IContext,
-  item: ISalesforceProject,
-  roles: ProjectRole
-): ProjectDto => {
+export const mapToProjectDto = (context: IContext, item: ISalesforceProject, roles: ProjectRole): ProjectDto => {
   const claimFrequency = mapFrequencyToEnum(item.Acc_ClaimFrequency__c);
   // TODO change this to parseRequiredSalesforceDate and update tests to pass
   const startDate = context.clock.parseOptionalSalesforceDate(item.Acc_StartDate__c)!;
@@ -26,7 +22,9 @@ export const mapToProjectDto = (
     grantOfferLetterCosts: item.Acc_GOLTotalCostAwarded__c,
     costsClaimedToDate: item.Acc_TotalProjectCosts__c,
     competitionType: item.Acc_CompetitionType__c,
-    claimedPercentage: item.Acc_GOLTotalCostAwarded__c ? 100 * item.Acc_TotalProjectCosts__c / item.Acc_GOLTotalCostAwarded__c : null,
+    claimedPercentage: item.Acc_GOLTotalCostAwarded__c
+      ? roundCurrency((100 * item.Acc_TotalProjectCosts__c) / item.Acc_GOLTotalCostAwarded__c)
+      : null,
     startDate,
     endDate,
     periodId: item.Acc_CurrentPeriodNumber__c,
