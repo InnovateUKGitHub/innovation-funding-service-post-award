@@ -60,14 +60,14 @@ export function getClaimDetailsLinkType({
   if (project.status === ProjectStatus.OnHold) return "view";
   if (partner.partnerStatus === PartnerStatus.OnHold) return "view";
 
-  const { isMo: isProjectMo, isPm: isProjectPm } = getAuthRoles(project.roles);
+  const { isMo: isProjectMo, isPm: isProjectPm, isPmOrMo: isProjectPmOrMo} = getAuthRoles(project.roles);
   const isPartnerFc = getAuthRoles(partner.roles).isFc;
 
   switch (claim.status) {
     case ClaimStatus.DRAFT:
     case ClaimStatus.AWAITING_IAR: {
       if (isPartnerFc) return "edit";
-      if (isProjectMo) return "view";
+      if (isProjectPmOrMo) return "view";
 
       return null;
     }

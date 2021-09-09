@@ -66,13 +66,13 @@ describe("<ClaimDetailsLink />", () => {
   });
 
   describe("when ClaimStatus.DRAFT", () => {
-    const claimState = ClaimStatus.DRAFT;
+    const draftClaimState = ClaimStatus.DRAFT;
 
     test("when partner is FC returns edit link", () => {
       const partnerRole = ProjectRole.FinancialContact;
 
       const draftProps: ClaimDetailsLinkWithoutRoutes = {
-        claim: { periodId: 3, status: claimState },
+        claim: { periodId: 3, status: draftClaimState },
         project: { id: projectId, roles: ProjectRole.MonitoringOfficer, status: ProjectStatus.Live },
         partner: { id: partnerId, roles: partnerRole, partnerStatus: PartnerStatus.Active },
       };
@@ -86,7 +86,7 @@ describe("<ClaimDetailsLink />", () => {
       const projectRole = ProjectRole.MonitoringOfficer;
 
       const draftProps: ClaimDetailsLinkWithoutRoutes = {
-        claim: { periodId: 3, status: claimState },
+        claim: { periodId: 3, status: draftClaimState },
         project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
         partner: { id: partnerId, roles: ProjectRole.MonitoringOfficer, partnerStatus: PartnerStatus.Active },
       };
@@ -101,7 +101,7 @@ describe("<ClaimDetailsLink />", () => {
       const partnerRole = ProjectRole.MonitoringOfficer;
 
       const draftProps: ClaimDetailsLinkWithoutRoutes = {
-        claim: { periodId: 3, status: claimState },
+        claim: { periodId: 3, status: draftClaimState },
         project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
         partner: { id: partnerId, roles: partnerRole, partnerStatus: PartnerStatus.Active },
       };
@@ -113,13 +113,13 @@ describe("<ClaimDetailsLink />", () => {
   });
 
   describe("when ClaimStatus.MO_QUERIED", () => {
-    const claimState = ClaimStatus.MO_QUERIED;
+    const moQueriedClaimState = ClaimStatus.MO_QUERIED;
 
     test("when project role is MO returns view link", () => {
       const projectRole = ProjectRole.MonitoringOfficer;
 
       const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
-        claim: { periodId: 3, status: claimState },
+        claim: { periodId: 3, status: moQueriedClaimState },
         project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
         partner: { id: partnerId, roles: ProjectRole.FinancialContact, partnerStatus: PartnerStatus.Active },
       };
@@ -134,7 +134,7 @@ describe("<ClaimDetailsLink />", () => {
         const projectRole = ProjectRole.ProjectManager;
 
         const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
-          claim: { periodId: 3, status: claimState },
+          claim: { periodId: 3, status: moQueriedClaimState },
           project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
           partner: { id: partnerId, roles: ProjectRole.MonitoringOfficer, partnerStatus: PartnerStatus.Active },
         };
@@ -148,7 +148,7 @@ describe("<ClaimDetailsLink />", () => {
         const projectRole = ProjectRole.FinancialContact;
 
         const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
-          claim: { periodId: 3, status: claimState },
+          claim: { periodId: 3, status: moQueriedClaimState },
           project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
           partner: { id: partnerId, roles: ProjectRole.MonitoringOfficer, partnerStatus: PartnerStatus.Active },
         };
@@ -161,13 +161,13 @@ describe("<ClaimDetailsLink />", () => {
   });
 
   describe("when ClaimStatus.INNOVATE_QUERIED", () => {
-    const claimState = ClaimStatus.INNOVATE_QUERIED;
+    const innovateQueriedClaimState = ClaimStatus.INNOVATE_QUERIED;
 
     test("when partner FC returns edit link", () => {
       const partnerRole = ProjectRole.FinancialContact;
 
       const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
-        claim: { periodId: 3, status: claimState },
+        claim: { periodId: 3, status: innovateQueriedClaimState },
         project: { id: projectId, roles: ProjectRole.MonitoringOfficer, status: ProjectStatus.Live },
         partner: { id: partnerId, roles: partnerRole, partnerStatus: PartnerStatus.Active },
       };
@@ -181,7 +181,7 @@ describe("<ClaimDetailsLink />", () => {
       const partnerRole = ProjectRole.MonitoringOfficer;
 
       const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
-        claim: { periodId: 3, status: claimState },
+        claim: { periodId: 3, status: innovateQueriedClaimState },
         project: { id: projectId, roles: ProjectRole.MonitoringOfficer, status: ProjectStatus.Live },
         partner: { id: partnerId, roles: partnerRole, partnerStatus: PartnerStatus.Active },
       };
@@ -193,13 +193,13 @@ describe("<ClaimDetailsLink />", () => {
   });
 
   describe("when ClaimStatus.SUBMITTED", () => {
-    const claimState = ClaimStatus.SUBMITTED;
+    const submittedClaimState = ClaimStatus.SUBMITTED;
 
     test("when project role is MO returns view link", () => {
       const projectRole = ProjectRole.MonitoringOfficer;
 
       const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
-        claim: { periodId: 3, status: claimState },
+        claim: { periodId: 3, status: submittedClaimState },
         project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
         partner: { id: partnerId, roles: ProjectRole.FinancialContact, partnerStatus: PartnerStatus.Active },
       };
@@ -213,12 +213,32 @@ describe("<ClaimDetailsLink />", () => {
       const projectRole = ProjectRole.FinancialContact;
 
       const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
-        claim: { periodId: 3, status: claimState },
+        claim: { periodId: 3, status: submittedClaimState },
         project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
         partner: { id: partnerId, roles: ProjectRole.MonitoringOfficer, partnerStatus: PartnerStatus.Active },
       };
 
       const { queryByText } = setup(moQueriedProps);
+
+      expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaimText.content)).toBeInTheDocument();
+    });
+  });
+
+  describe("when ClaimStatus.AWAITING_IAR", () => {
+    const iarClaimState = ClaimStatus.AWAITING_IAR;
+
+    test.each`
+      name                                           | projectRole
+      ${"when project role is MO returns view link"} | ${ProjectRole.MonitoringOfficer}
+      ${"when project role is not FC returns view link"}  | ${ProjectRole.ProjectManager}
+    `("$name", ({ projectRole }) => {
+      const awaitingIarProps: ClaimDetailsLinkWithoutRoutes = {
+        claim: { periodId: 3, status: iarClaimState },
+        project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
+        partner: { id: partnerId, roles: ProjectRole.ProjectManager, partnerStatus: PartnerStatus.Active },
+      };
+
+      const { queryByText } = setup(awaitingIarProps);
 
       expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaimText.content)).toBeInTheDocument();
     });
