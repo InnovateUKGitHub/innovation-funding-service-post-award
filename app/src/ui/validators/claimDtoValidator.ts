@@ -111,11 +111,13 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
         "You must upload a project completion form before you can submit this claim.",
       );
     } else {
-      return Validation.isTrue(
-        this,
-        this.hasValidIarStatusWithDocs,
-        "You must upload an independent accountant's report before you can submit this claim.",
-      );
+      return this.model.isIarRequired
+        ? Validation.isTrue(
+            this,
+            this.hasValidIarStatusWithDocs,
+            "You must upload an independent accountant's report before you can submit this claim.",
+          )
+        : Validation.valid(this);
     }
   }
 }

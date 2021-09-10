@@ -186,11 +186,13 @@ describe("claimDtoValidator()", () => {
     });
 
     describe("when claim not a final claim", () => {
-      test("when pcf status is valid with documents", () => {
-        const stubFinalClaim = { ...stubClaimDto, isFinalClaim: false, iarStatus: "Received" } as ClaimDto;
+      const stubNotFinalClaim = { ...stubClaimDto, isFinalClaim: false } as ClaimDto;
+
+      test("when IAR is not required claim should be valid", () => {
+        const stubNotIarClaim = { ...stubNotFinalClaim, isIarRequired: false, iarStatus: "Received" } as ClaimDto;
 
         const { isFinalClaim } = new ClaimDtoValidator(
-          stubFinalClaim,
+          stubNotIarClaim,
           stubOriginalStatus,
           [],
           [stubDocument],
@@ -202,11 +204,27 @@ describe("claimDtoValidator()", () => {
         expect(isFinalClaim.isValid).toBeTruthy();
       });
 
-      test("when pcf status is valid without documents", () => {
-        const stubFinalClaim = { ...stubClaimDto, isFinalClaim: false, iarStatus: "Received" } as ClaimDto;
+      test("when IAR status is valid with documents", () => {
+        const stubIsIarClaim = { ...stubNotFinalClaim, isIarRequired: true, iarStatus: "Received" } as ClaimDto;
 
         const { isFinalClaim } = new ClaimDtoValidator(
-          stubFinalClaim,
+          stubIsIarClaim,
+          stubOriginalStatus,
+          [],
+          [stubDocument],
+          stubShowErrors,
+          stubCompetitionType,
+          true,
+        );
+
+        expect(isFinalClaim.isValid).toBeTruthy();
+      });
+
+      test("when IAR status is valid without documents", () => {
+        const stubIsIarClaim = { ...stubNotFinalClaim, isIarRequired: true, iarStatus: "Received" } as ClaimDto;
+
+        const { isFinalClaim } = new ClaimDtoValidator(
+          stubIsIarClaim,
           stubOriginalStatus,
           [],
           [],
@@ -221,11 +239,15 @@ describe("claimDtoValidator()", () => {
         );
       });
 
-      test("when pcf status is invalid with documents", () => {
-        const stubFinalClaim = { ...stubClaimDto, isFinalClaim: false, iarStatus: "Not Received" } as ClaimDto;
+      test("when IAR status is invalid with documents", () => {
+        const stubIsIarClaimNotIarReceived = {
+          ...stubNotFinalClaim,
+          isIarRequired: true,
+          iarStatus: "Not Received",
+        } as ClaimDto;
 
         const { isFinalClaim } = new ClaimDtoValidator(
-          stubFinalClaim,
+          stubIsIarClaimNotIarReceived,
           stubOriginalStatus,
           [],
           [stubDocument],
@@ -240,11 +262,15 @@ describe("claimDtoValidator()", () => {
         );
       });
 
-      test("when pcf status is valid without documents", () => {
-        const stubFinalClaim = { ...stubClaimDto, isFinalClaim: false, iarStatus: "Not Received" } as ClaimDto;
+      test("when IAR status is invalid without documents", () => {
+        const stubIsIarClaimNotIarReceived = {
+          ...stubNotFinalClaim,
+          isIarRequired: true,
+          iarStatus: "Not Received",
+        } as ClaimDto;
 
         const { isFinalClaim } = new ClaimDtoValidator(
-          stubFinalClaim,
+          stubIsIarClaimNotIarReceived,
           stubOriginalStatus,
           [],
           [],
