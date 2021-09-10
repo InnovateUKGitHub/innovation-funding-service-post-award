@@ -60,7 +60,6 @@ export class Server {
     setTimeout(() => this.primeCaches());
 
     if (configuration.features.customContent) {
-
       setTimeout(() => this.initaliseCustomContent(true));
 
       if (configuration.timeouts.contentRefreshSeconds) {
@@ -79,14 +78,22 @@ export class Server {
     httpsServer.listen(this.port);
   }
 
+  private bodyParserLimits() {
+    return [
+      bodyParser.urlencoded({ extended: false, limit: "50mb", parameterLimit: 100000 }),
+      bodyParser.json({ type: ["application/json", "application/csp-report"], limit: "50mb" }),
+    ];
+  }
+
   private middleware() {
-    this.app.use([
+    const middlewareFns = [
       cors({ origin: true }),
-      bodyParser.urlencoded({ extended: false, limit: "32mb", parameterLimit: 100000 }),
-      bodyParser.json({type: ["application/json", "application/csp-report"], limit: "32mb" }),
-      this.handleGetWithPlus,
-      this.requestLogger
-    ]);
+      ...this.bodyParserLimits(),
+      this.handleRouter5GetWithPlus,
+      this.requestLogger,
+    ];
+
+    this.app.use(middlewareFns);
   }
 
   private readonly requestLogger = (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -94,7 +101,11 @@ export class Server {
     next();
   };
 
-  private readonly handleGetWithPlus = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+  private readonly handleRouter5GetWithPlus = (
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction,
+  ) => {
     /// pluses don't get handled by router 5 when round tripped
     /// with js disabled form submits values with + rather then %20
     /// when js is enabled router 5 handles it
@@ -148,7 +159,9 @@ export class Server {
 
   private initaliseCustomContent(loadCustom: boolean) {
     const context = contextProvider.start({ user: { email: configuration.salesforce.serviceUsername } });
-    return context.runCommand(new InitialiseContentCommand(loadCustom))
+
+    return context
+      .runCommand(new InitialiseContentCommand(loadCustom))
       .then(updated => {
         if (updated) {
           context.logger.info("Successfully initialised content");
