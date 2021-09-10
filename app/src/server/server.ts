@@ -2,7 +2,7 @@ import https from "https";
 import fs from "fs";
 import express from "express";
 import cors from "cors";
-import bodyParser from "body-parser";
+
 import { IContext, PermissionGroupIdenfifier } from "@framework/types";
 import { GetClaimStatusesQuery } from "@server/features/claims/getClaimStatusesQuery";
 import { GetPcrProjectRolesQuery } from "@server/features/pcrs/getPcrProjectRolesQuery";
@@ -78,17 +78,17 @@ export class Server {
     httpsServer.listen(this.port);
   }
 
-  private bodyParserLimits() {
+  private parserLimits() {
     return [
-      bodyParser.urlencoded({ extended: false, limit: "50mb", parameterLimit: 100000 }),
-      bodyParser.json({ type: ["application/json", "application/csp-report"], limit: "50mb" }),
+      express.urlencoded({ extended: false, limit: "50mb", parameterLimit: 100000 }),
+      express.json({ type: ["application/json", "application/csp-report"], limit: "50mb" }),
     ];
   }
 
   private middleware() {
     const middlewareFns = [
       cors({ origin: true }),
-      ...this.bodyParserLimits(),
+      ...this.parserLimits(),
       this.handleRouter5GetWithPlus,
       this.requestLogger,
     ];
