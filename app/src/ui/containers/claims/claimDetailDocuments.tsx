@@ -2,7 +2,7 @@ import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { DocumentDescription, ProjectDto, ProjectRole } from "@framework/types";
 import { IEditorStore } from "@ui/redux/reducers";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 import { useStores } from "@ui/redux";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
@@ -22,14 +22,14 @@ interface Data {
   project: Pending<ProjectDto>;
   costCategories: Pending<CostCategoryDto[]>;
   documents: Pending<DocumentSummaryDto[]>;
-  editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
+  editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;
 }
 
 interface CombinedData {
   project: ProjectDto;
   costCategories: CostCategoryDto[];
   documents: DocumentSummaryDto[];
-  editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
+  editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
 }
 
 interface Callbacks {
@@ -50,7 +50,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
     return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)}/>;
   }
 
-  private renderDocuments(editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
+  private renderDocuments(editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (!documents.length) {
       return (
         <ACC.Section>

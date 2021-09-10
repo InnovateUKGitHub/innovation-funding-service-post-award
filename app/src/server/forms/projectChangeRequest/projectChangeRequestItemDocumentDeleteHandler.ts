@@ -6,7 +6,7 @@ import {
   PCRPrepareItemRoute,
   ProjectChangeRequestPrepareItemParams
 } from "@ui/containers";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
@@ -24,7 +24,7 @@ export class ProjectChangeRequestItemDocumentDeleteHandler extends StandardFormH
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: Document) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, configuration.options, false, false, null);
+    return new MultipleDocumentUploadDtoValidator(dto, configuration.options, false, false, null);
   }
 
   protected getStoreKey(params: ProjectChangeRequestPrepareItemParams) {

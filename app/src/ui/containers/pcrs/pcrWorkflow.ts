@@ -2,7 +2,7 @@ import React from "react";
 import { Result, Results } from "@ui/validation";
 import { PCRDto, PCRItemDto, PCRItemTypeDto, ProjectDto } from "@framework/dtos";
 import { IEditorStore } from "@ui/redux";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { ILinkInfo, PCRItemType } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
 import { timeExtensionItemWorkflow } from "@ui/containers/pcrs/timeExtension/timeExtensionWorkflow";
@@ -25,7 +25,7 @@ export interface PcrStepProps<TDto, TVal> extends IStepProps {
   pcr: PCRDto;
   pcrItem: TDto;
   pcrItemType: PCRItemTypeDto;
-  documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
+  documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
   validator: TVal;
   status: EditorStatus;
   onChange: (dto: TDto) => void;

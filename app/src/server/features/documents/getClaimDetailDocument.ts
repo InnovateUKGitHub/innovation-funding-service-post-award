@@ -6,9 +6,13 @@ export class GetClaimDetailDocumentQuery extends DocumentQueryBase {
     super(documentId);
   }
 
-  protected async accessControl(auth: Authorisation) {
-    return auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager)
-    || auth.forProject(this.claimKey.projectId).hasRole(ProjectRole.MonitoringOfficer);
+  protected async accessControl(auth: Authorisation): Promise<boolean> {
+    return (
+      auth
+        .forPartner(this.claimKey.projectId, this.claimKey.partnerId)
+        .hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager) ||
+      auth.forProject(this.claimKey.projectId).hasRole(ProjectRole.MonitoringOfficer)
+    );
   }
 
   protected getRecordId(context: IContext): Promise<string | null> {

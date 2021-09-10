@@ -1,7 +1,7 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
-import { MultipleDocumentUpdloadDtoValidator, PCRAccountNameChangeItemDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator, PCRAccountNameChangeItemDtoValidator } from "@ui/validators";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForAccountNameChangeDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -24,7 +24,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForAccountNameChange
     );
   }
 
-  private renderForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>): React.ReactNode {
+  private renderForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>): React.ReactNode {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
     return (
       <ACC.Section>
@@ -55,7 +55,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForAccountNameChange
     );
   }
 
-  private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
+  private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (documents.length) {
       return (
         <ACC.Section title={x => x.pcrNameChangePrepareItemFiles.documentLabels.filesUploadedTitle} subtitle={x => x.pcrNameChangePrepareItemFiles.documentLabels.filesUploadedSubtitle}>

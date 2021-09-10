@@ -7,15 +7,15 @@ export class GetPartnerDocumentsQuery extends DocumentsSummaryQueryBase {
     super();
   }
 
-  protected async accessControl(auth: Authorisation) {
+  protected async accessControl(auth: Authorisation): Promise<boolean> {
     return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
-  protected getRecordId() {
+  protected getRecordId(): Promise<string> {
     return Promise.resolve(this.partnerId);
   }
 
-  protected getUrl(document: DocumentEntity) {
+  protected getUrl(document: DocumentEntity): string {
     return `/api/documents/partners/${this.projectId}/${this.partnerId}/${document.id}/content`;
   }
 }

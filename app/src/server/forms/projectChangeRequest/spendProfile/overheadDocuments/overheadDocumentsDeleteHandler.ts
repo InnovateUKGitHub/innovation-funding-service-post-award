@@ -7,7 +7,7 @@ import { IContext } from "@framework/types/IContext";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import {MultipleDocumentUpdloadDtoValidator} from "@ui/validators";
+import {MultipleDocumentUploadDtoValidator} from "@ui/validators";
 import { configuration } from "@server/features/common";
 import { DeleteProjectChangeRequestDocumentOrItemDocument } from "@server/features/documents/deleteProjectChangeRequestDocumentOrItemDocument";
 
@@ -38,6 +38,6 @@ export class OverheadDocumentsDeleteHandler extends StandardFormHandlerBase<Over
     }
 
     protected createValidationResult(params: OverheadDocumentsPageParams, dto: MultipleDocumentUploadDto) {
-        return new MultipleDocumentUpdloadDtoValidator(dto, configuration.options, false, false, null);
+        return new MultipleDocumentUploadDtoValidator(dto, configuration.options, false, false, null);
     }
 }

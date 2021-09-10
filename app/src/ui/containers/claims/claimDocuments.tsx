@@ -3,7 +3,7 @@ import { ClaimDto, ProjectDto } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore, useStores } from "@ui/redux";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { allowedClaimDocuments, DocumentDescription, ProjectRole } from "@framework/constants";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDescriptionDto, DocumentSummaryDto } from "@framework/dtos/documentDto";
@@ -91,7 +91,7 @@ export interface ClaimDocumentsPageParams {
 interface ClaimDocumentsComponentProps extends ClaimDocumentsPageParams, BaseProps {
   content: ClaimDocumentContent;
   project: Pending<ProjectDto>;
-  editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
+  editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;
   documents: Pending<DocumentSummaryDto[]>;
   claim: Pending<ClaimDto>;
   documentDescriptions: Pending<DocumentDescriptionDto[]>;
@@ -108,7 +108,7 @@ const ClaimDocumentsComponent = ({
 }: ClaimDocumentsComponentProps) => {
   const renderContents = (
     project: ProjectDto,
-    editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
+    editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
     documents: DocumentSummaryDto[],
     claim: ClaimDto,
     documentDescriptions: DocumentDescriptionDto[],

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */ // Note: due to this file being extended, it's okay for there to be unused params as they're required for children
 import { Authorisation, IContext } from "@framework/types";
 import { ValidationError } from "@server/features/common/appError";
-import { DocumentUploadDtoValidator, MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { DocumentUploadDtoValidator, MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { FileTypeNotAllowedError } from "@server/repositories";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
@@ -36,7 +36,7 @@ export abstract class CommandMultipleDocumentBase<T> extends CommandBase<T> {
   protected abstract showValidationErrors: boolean;
   protected handleRepositoryError(context: IContext, error: FileTypeNotAllowedError | null) {
     if (error instanceof FileTypeNotAllowedError) {
-      const result = new MultipleDocumentUpdloadDtoValidator(
+      const result = new MultipleDocumentUploadDtoValidator(
         this.documents,
         context.config.options,
         this.filesRequired,

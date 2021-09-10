@@ -1,14 +1,21 @@
 import { BadRequestError, CommandDocumentBase, ValidationError } from "@server/features/common";
 import { DeleteClaimDocumentCommand } from "@server/features/documents/deleteClaimDocument";
 import { DocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
-import { Authorisation, ClaimDto, ClaimKey, ClaimStatus, DocumentDescription, IContext, ProjectRole } from "@framework/types";
+import {
+  Authorisation,
+  ClaimDto,
+  ClaimKey,
+  ClaimStatus,
+  DocumentDescription,
+  IContext,
+  ProjectRole,
+} from "@framework/types";
 import { mapClaim } from "@server/features/claims/mapClaim";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
 import { DocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { UpdateClaimCommand } from "../claims";
 
 export class UploadClaimDocumentCommand extends CommandDocumentBase<string> {
-
   protected showValidationErrors = true;
 
   constructor(private readonly claimKey: ClaimKey, protected readonly document: DocumentUploadDto) {
@@ -19,34 +26,43 @@ export class UploadClaimDocumentCommand extends CommandDocumentBase<string> {
     return [this.constructor.name, this.claimKey, this.document && this.document.file && this.document.file.fileName];
   }
 
-  protected async accessControl(auth: Authorisation) {
-      return auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasRole(ProjectRole.FinancialContact);
+  protected async accessControl(auth: Authorisation): Promise<boolean> {
+    return auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 
-  private validateIarUpload(claim: ClaimDto) {
+  private async preIarUpload(context: IContext, claim: ClaimDto): Promise<void> {
     if (!claim.isIarRequired || !claim.allowIarEdit) {
       throw new BadRequestError("IAR is not required for this claim " + claim.id);
     }
+
+    const claimDocumentQuery = new GetClaimDocumentsQuery(this.claimKey, { description: DocumentDescription.IAR });
+
+    const iarDocuments = await context.runQuery(claimDocumentQuery);
+
+    const iarPromisedDocuments = iarDocuments.map(doc =>
+      context.runCommand(new DeleteClaimDocumentCommand(doc.id, this.claimKey)),
+    );
+
+    await Promise.all(iarPromisedDocuments);
   }
 
-  private async preIarUpload(context: IContext, claim: ClaimDto) {
-    this.validateIarUpload(claim);
-    const iarDocuments = await context.runQuery(new GetClaimDocumentsQuery(this.claimKey, { description: DocumentDescription.IAR }));
-    await Promise.all(iarDocuments.map(doc => context.runCommand(new DeleteClaimDocumentCommand(doc.id, this.claimKey))));
-  }
-
-  private async postIarUpload(context: IContext, claim: ClaimDto) {
+  private async postIarUpload(context: IContext, claim: ClaimDto): Promise<void> {
     if (claim.status !== ClaimStatus.AWAITING_IAR) return;
 
     claim.status = ClaimStatus.AWAITING_IUK_APPROVAL;
 
-    const command = new  UpdateClaimCommand(this.claimKey.projectId, claim);
+    const command = new UpdateClaimCommand(this.claimKey.projectId, claim);
 
     await context.runCommand(command);
   }
 
-  protected async run(context: IContext) {
-    const result = new DocumentUploadDtoValidator(this.document, context.config.options, this.showValidationErrors, null);
+  protected async run(context: IContext): Promise<string> {
+    const result = new DocumentUploadDtoValidator(
+      this.document,
+      context.config.options,
+      this.showValidationErrors,
+      null,
+    );
 
     if (!result.isValid) {
       throw new ValidationError(result);
@@ -59,7 +75,11 @@ export class UploadClaimDocumentCommand extends CommandDocumentBase<string> {
 
     if (this.document.description === DocumentDescription.IAR) await this.preIarUpload(context, claim);
 
-    const documentId = await context.repositories.documents.insertDocument(this.document.file!, claim.id, this.document.description);
+    const documentId = await context.repositories.documents.insertDocument(
+      this.document.file!,
+      claim.id,
+      this.document.description,
+    );
 
     if (this.document.description === DocumentDescription.IAR) await this.postIarUpload(context, claim);
 

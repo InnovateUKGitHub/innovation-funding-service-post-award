@@ -8,18 +8,22 @@ export class GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery extends 
     super();
   }
 
-  protected async accessControl(auth: Authorisation, context: IContext) {
-    const projectChangeRequestExists = await context.repositories.projectChangeRequests.isExisting(this.projectId, this.projectChangeRequestIdOrItemId);
+  protected async accessControl(auth: Authorisation, context: IContext): Promise<boolean> {
+    const projectChangeRequestExists = await context.repositories.projectChangeRequests.isExisting(
+      this.projectId,
+      this.projectChangeRequestIdOrItemId,
+    );
+
     if (!projectChangeRequestExists) return false;
 
     return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer);
   }
 
-  protected getRecordId() {
+  protected getRecordId(): Promise<string> {
     return Promise.resolve(this.projectChangeRequestIdOrItemId);
   }
 
-  protected getUrl(document: DocumentEntity) {
+  protected getUrl(document: DocumentEntity): string {
     return `/api/documents/projectChangeRequests/${this.projectId}/${this.projectChangeRequestIdOrItemId}/${document.id}/content`;
   }
 }

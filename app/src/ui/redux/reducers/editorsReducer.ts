@@ -110,7 +110,7 @@ export const editorReducer = combineReducers({
   initialForecastDetails: editorsReducer<ForecastDetailsDTO[], Results<ForecastDetailsDTO[]>>("initialForecastDetails"),
   financialVirement: editorsReducer<FinancialVirementDto, Validators.FinancialVirementDtoValidator>("financialVirement"),
   documents: editorsReducer<DocumentUploadDto, Validators.DocumentUploadDtoValidator>("documents"),
-  multipleDocuments: editorsReducer<MultipleDocumentUploadDto, Validators.MultipleDocumentUpdloadDtoValidator>("multipleDocuments"),
+  multipleDocuments: editorsReducer<MultipleDocumentUploadDto, Validators.MultipleDocumentUploadDtoValidator>("multipleDocuments"),
   documentSummary: editorsReducer<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>("documentSummary"),
   monitoringReport: editorsReducer<MonitoringReportDto, Validators.MonitoringReportDtoValidator>("monitoringReport"),
   pcr: editorsReducer<PCRDto, Results<PCRDto>>("pcr"),

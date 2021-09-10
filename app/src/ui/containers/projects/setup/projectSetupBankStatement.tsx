@@ -5,7 +5,7 @@ import { Pending } from "@shared/pending";
 import { IEditorStore, useStores } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { useContent } from "@ui/hooks";
 
@@ -18,7 +18,7 @@ interface Data {
   project: Pending<ProjectDto>;
   editor: Pending<IEditorStore<PartnerDto, PartnerDtoValidator>>;
   documents: Pending<DocumentSummaryDto[]>;
-  documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
+  documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;
   onFileChange: (isSaving: boolean, dto: MultipleDocumentUploadDto) => void;
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
@@ -48,7 +48,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
     project: ProjectDto,
     documents: DocumentSummaryDto[],
     editor: IEditorStore<PartnerDto, PartnerDtoValidator>,
-    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
+    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
   ) {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
     const BankStatementForm = ACC.TypedForm<PartnerDto>();

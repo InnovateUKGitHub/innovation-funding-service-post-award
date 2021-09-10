@@ -3,7 +3,7 @@ import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { configuration } from "@server/features/common";
 import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IFileWrapper } from "@framework/types";
 import { ClaimDocumentsPageParams, ClaimDocumentsRoute } from "../../../ui/containers";
@@ -17,7 +17,7 @@ export class ClaimDocumentsUploadHandler extends MultipleFileFormHandlerBase<Cla
   protected async getDto(context: IContext, params: ClaimDocumentsPageParams, button: IFormButton, body: IFormBody, files: IFileWrapper[]): Promise<MultipleDocumentUploadDto> {
     return {
       files,
-      description: parseInt(body.description, 10)
+      description: Number(body.description) || undefined
     };
   }
 
@@ -34,6 +34,6 @@ export class ClaimDocumentsUploadHandler extends MultipleFileFormHandlerBase<Cla
   }
 
   protected createValidationResult(params: ClaimDocumentsPageParams, dto: MultipleDocumentUploadDto) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, configuration.options, true, true, null);
+    return new MultipleDocumentUploadDtoValidator(dto, configuration.options, true, true, null);
   }
 }

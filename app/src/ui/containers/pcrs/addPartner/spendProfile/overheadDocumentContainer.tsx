@@ -1,6 +1,6 @@
 import * as ACC from "@ui/components";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { PCRItemForPartnerAdditionDto, ProjectDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
@@ -21,7 +21,7 @@ interface Data {
   pcrItem: Pending<PCRItemForPartnerAdditionDto>;
   costCategories: Pending<CostCategoryDto[]>;
   documents: Pending<DocumentSummaryDto[]>;
-  editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
+  editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;
 }
 
 interface CombinedData {
@@ -29,7 +29,7 @@ interface CombinedData {
   pcrItem: PCRItemForPartnerAdditionDto;
   costCategories: CostCategoryDto[];
   documents: DocumentSummaryDto[];
-  editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
+  editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
 }
 
 interface Callbacks {
@@ -77,7 +77,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
     );
   }
 
-  private renderForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>): React.ReactNode {
+  private renderForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>): React.ReactNode {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
     return (
       <ACC.Section>
@@ -125,7 +125,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
     );
   }
 
-  private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
+  private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (documents.length) {
       return (
         <ACC.Section title={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedTitle} subtitle={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedSubtitle}>

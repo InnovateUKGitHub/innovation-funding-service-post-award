@@ -74,9 +74,11 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
       const p = getParams(params, query, body);
 
       const file: IFileWrapper | null = req.file && new ServerFileWrapper(req.file);
-      const document: DocumentUploadDto | null = file && { file, description: parseInt(body.description, 10) };
+      const description = Number(body.description) || undefined;
 
-      return { ...p, document };
+      const document: DocumentUploadDto | null = file && { file, description };
+
+      return { document, ...p };
     };
 
     this.router.post(path, upload.single("attachment"), this.executeMethod(201, wrappedGetParams, run, false));
@@ -87,9 +89,11 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
       const p = getParams(params, query, body);
 
       const files: IFileWrapper[] = Array.isArray(req.files) ? req.files.map(x => new ServerFileWrapper(x)) : [];
-      const documents: MultipleDocumentUploadDto = { files, description: parseInt(body.description, 10) };
+      const description = Number(body.description) || undefined;
 
-      return { ...p, documents };
+      const documents: MultipleDocumentUploadDto = { files, description };
+
+      return { documents, ...p };
     };
 
     this.router.post(path, upload.array("attachment", configuration.options.maxUploadFileCount), this.executeMethod(201, wrappedGetParams, run, false));

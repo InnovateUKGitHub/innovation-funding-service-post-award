@@ -6,17 +6,21 @@ export class DeleteClaimDetailDocumentCommand extends CommandBase<void> {
     super();
   }
 
-  async accessControl(auth: Authorisation, context: IContext) {
+  async accessControl(auth: Authorisation, context: IContext): Promise<boolean> {
     const claimDetail = await context.repositories.claimDetails.get(this.claimDetailKey);
+
     if (!claimDetail) return false;
 
     const documentExists = await context.repositories.documents.isExistingDocument(this.documentId, claimDetail.Id);
+
     if (!documentExists) return false;
 
-    return auth.forPartner(this.claimDetailKey.projectId, this.claimDetailKey.partnerId).hasRole(ProjectRole.FinancialContact);
+    return auth
+      .forPartner(this.claimDetailKey.projectId, this.claimDetailKey.partnerId)
+      .hasRole(ProjectRole.FinancialContact);
   }
 
-  protected async run(context: IContext) {
+  protected async run(context: IContext): Promise<void> {
     return context.repositories.documents.deleteDocument(this.documentId);
   }
 }
