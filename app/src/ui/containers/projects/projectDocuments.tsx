@@ -3,7 +3,7 @@ import { IEditorStore, useStores } from "@ui/redux";
 import { useContent } from "@ui/hooks";
 import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 
 import { DocumentSummaryDto, MultipleDocumentUploadDto, ProjectDto } from "@framework/dtos";
 import { DocumentDescription, ProjectRole } from "@framework/types";
@@ -17,14 +17,14 @@ export interface ProjectDocumentPageParams {
 interface ProjectDocumentData {
   project: Pending<ProjectDto>;
   documents: Pending<DocumentSummaryDto[]>;
-  editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
+  editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;
   isClient: boolean;
 }
 
 interface CombinedData {
   project: ProjectDto;
   documents: DocumentSummaryDto[];
-  editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
+  editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
 }
 
 interface Callbacks {
@@ -127,7 +127,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<
                     hasEmptyOption
                     placeholder="-- No description --"
                     name="description"
-                    validation={editor.validator.files}
+                    validation={editor.validator.description}
                     options={docs}
                     value={selectedOption => this.filterDropdownList(selectedOption, docs)}
                     update={(dto, value) => (dto.description = value ? parseInt(value.id, 10) : undefined)}
@@ -173,7 +173,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<
 
   private renderDocumentsSection(
     documents: DocumentSummaryDto[],
-    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
+    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
   ) {
     const { isClient } = this.props;
     const documentFilterText = this.state.documentFilter;

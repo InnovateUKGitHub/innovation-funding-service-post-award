@@ -4,7 +4,7 @@ import { IContext } from "@framework/types/IContext";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import {UploadProjectChangeRequestDocumentOrItemDocumentCommand} from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
-import {MultipleDocumentUpdloadDtoValidator} from "@ui/validators";
+import {MultipleDocumentUploadDtoValidator} from "@ui/validators";
 import { configuration } from "@server/features/common";
 import { IFileWrapper, ILinkInfo } from "@framework/types";
 
@@ -16,7 +16,7 @@ export class OverheadDocumentsUploadHandler extends MultipleFileFormHandlerBase<
     protected async getDto(context: IContext, params: OverheadDocumentsPageParams, button: IFormButton, body: IFormBody, files: IFileWrapper[]): Promise<MultipleDocumentUploadDto> {
         return {
             files,
-            description: parseInt(body.description, 10)
+            description: Number(body.description) || undefined
         };
     }
 
@@ -37,6 +37,6 @@ export class OverheadDocumentsUploadHandler extends MultipleFileFormHandlerBase<
     }
 
     protected createValidationResult(params: OverheadDocumentsPageParams, dto: MultipleDocumentUploadDto) {
-        return new MultipleDocumentUpdloadDtoValidator(dto, configuration.options, true, true, null);
+        return new MultipleDocumentUploadDtoValidator(dto, configuration.options, true, true, null);
     }
 }

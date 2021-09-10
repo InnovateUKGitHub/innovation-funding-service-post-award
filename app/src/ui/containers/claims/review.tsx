@@ -17,7 +17,7 @@ import {
   ProjectDto,
   ProjectRole,
 } from "@framework/types";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
@@ -49,7 +49,7 @@ interface ReviewData {
   statusChanges: Pending<ClaimStatusChangeDto[]>;
   editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
   documents: Pending<DocumentSummaryDto[]>;
-  documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
+  documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;
 }
 
 type ReviewContentKeys =
@@ -160,7 +160,7 @@ interface CombinedData {
   claimDetails: CostsSummaryForPeriodDto[];
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
   documents: DocumentSummaryDto[];
-  documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>;
+  documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
 }
 
 interface ReviewState {
@@ -421,7 +421,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
 
   private renderDocumentsFilterSection(
     documents: DocumentSummaryDto[],
-    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
+    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
   ) {
     const { isClient } = this.props;
     const documentFilterText = this.state.documentFilter;
@@ -484,7 +484,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
   }
 
   private renderDocumentResultsTable(
-    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
+    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
     documents: DocumentSummaryDto[],
   ) {
     return documents.length ? (

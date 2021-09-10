@@ -2,7 +2,7 @@ import { ILinkInfo, PCRItemStatus, ProjectDto, ProjectRole } from "@framework/ty
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
-import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator, PCRDtoValidator } from "@ui/validators";
 import { PCRReasoningSummary } from "@ui/containers/pcrs/reasoning/summary";
 import { IReasoningWorkflowMetadata, reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -19,7 +19,7 @@ interface Data {
   project: Pending<ProjectDto>;
   pcr: Pending<PCRDto>;
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
-  documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
+  documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;
   mode: "prepare" | "review" | "view";
 }
 
@@ -64,7 +64,7 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
     });
   }
 
-  private renderContents(project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>) {
+  private renderContents(project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>) {
     return (
       <ACC.Page
         backLink={this.getBackLink()}
@@ -92,7 +92,7 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
     return <ACC.BackLink route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}><ACC.Content value={x => x.pcrReasoningWorkflow.backLink}/></ACC.BackLink>;
   }
 
-  private renderStep(stepNumber: number, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>) {
+  private renderStep(stepNumber: number, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>) {
     const step = this.findStepByNumber(stepNumber);
     return (
       <>

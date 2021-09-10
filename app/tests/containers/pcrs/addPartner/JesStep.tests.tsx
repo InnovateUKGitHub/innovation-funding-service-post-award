@@ -1,7 +1,7 @@
 import bytes from "bytes";
 import { render } from "@testing-library/react";
 
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 
 import { MultipleDocumentUploadDto } from "@framework/dtos";
 import { TestBed, TestBedContent, TestBedStore } from "@shared/TestBed";
@@ -100,7 +100,7 @@ describe("<JesStepUI />", () => {
       pcrItemType: null as any,
       documentsEditor: {
         data: { files: [] },
-        validator: new MultipleDocumentUpdloadDtoValidator(stubFiles, configuration.options, false, true, null),
+        validator: new MultipleDocumentUploadDtoValidator(stubFiles, configuration.options, false, true, null),
         status: 1,
         error: null,
       },

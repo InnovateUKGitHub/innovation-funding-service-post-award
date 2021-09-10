@@ -6,11 +6,11 @@ export class GetProjectDocumentQuery extends DocumentQueryBase {
     super(documentId);
   }
 
-  protected async accessControl(auth: Authorisation) {
+  protected async accessControl(auth: Authorisation): Promise<boolean> {
     return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
   }
 
-  protected getRecordId(): Promise<string | null> {
+  protected getRecordId(): Promise<string> {
     return Promise.resolve(this.projectId);
   }
 }

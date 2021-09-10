@@ -1,7 +1,7 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
-import { MultipleDocumentUpdloadDtoValidator, PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator, PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForPartnerAdditionDto, PCRItemTypeDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -55,7 +55,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     );
   }
 
-  private renderDeMinimisForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>): React.ReactNode {
+  private renderDeMinimisForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>): React.ReactNode {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
     return (
       <ACC.Section>
@@ -94,7 +94,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     );
   }
 
-  private renderDeMinimisFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
+  private renderDeMinimisFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (documents.length) {
       return (
         <ACC.Section

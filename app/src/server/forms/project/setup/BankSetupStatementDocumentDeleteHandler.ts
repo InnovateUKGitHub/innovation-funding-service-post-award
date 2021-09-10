@@ -5,7 +5,7 @@ import { configuration } from "@server/features/common";
 import { IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 
 import { ProjectSetupBankStatementParams, ProjectSetupBankStatementRoute } from "@ui/containers";
 import { DeletePartnerDocumentCommand } from "@server/features/documents/deletePartnerDocument";
@@ -42,6 +42,6 @@ export class BankSetupStatementDocumentDeleteHandler extends StandardFormHandler
   }
 
   protected createValidationResult(params: ProjectSetupBankStatementParams, dto: Document) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, configuration.options, false, false, null);
+    return new MultipleDocumentUploadDtoValidator(dto, configuration.options, false, false, null);
   }
 }

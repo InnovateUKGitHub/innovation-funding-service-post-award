@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import * as ACC from "@ui/components";
 
 import { IEditorStore, StoresConsumer } from "@ui/redux";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { Pending } from "@shared/pending";
 import { ReasoningStepProps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -30,7 +30,7 @@ class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & 
     );
   }
 
-  private renderForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>): React.ReactNode {
+  private renderForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>): React.ReactNode {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     return (
@@ -62,7 +62,7 @@ class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & 
     );
   }
 
-  private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
+  private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (documents.length) {
       return (
         <ACC.Section title={x => x.pcrReasoningPrepareFiles.documentLabels.filesUploadedTitle} subtitle={x => x.pcrReasoningPrepareFiles.documentLabels.filesUploadedSubtitle}>

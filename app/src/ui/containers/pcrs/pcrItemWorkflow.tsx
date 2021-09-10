@@ -17,7 +17,7 @@ import { PCRDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
 import { Results } from "@ui/validation";
-import { MultipleDocumentUpdloadDtoValidator, PCRDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator, PCRDtoValidator } from "@ui/validators";
 import { PCRWorkflowValidator } from "@ui/validators/pcrWorkflowValidator";
 import { IEditorStore, IStores, useStores } from "@ui/redux";
 import { Result } from "@ui/validation/result";
@@ -47,7 +47,7 @@ interface Data {
   pcrItem: Pending<PCRItemDto>;
   pcrItemType: Pending<PCRItemTypeDto>;
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
-  documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>>;
+  documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;
   editableItemTypes: Pending<PCRItemType[]>;
   mode: "prepare" | "review" | "view";
 }
@@ -138,7 +138,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
     partners: PartnerDto[],
     virement: FinancialVirementDto,
     editor: IEditorStore<PCRDto, PCRDtoValidator>,
-    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
+    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
     pcr: PCRDto,
     pcrItem: PCRItemDto,
     pcrItemType: PCRItemTypeDto,
@@ -211,7 +211,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
     pcrItem: PCRItemDto,
     pcrItemType: PCRItemTypeDto,
     editor: IEditorStore<PCRDto, PCRDtoValidator>,
-    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
+    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
     editableItemTypes: PCRItemType[],
   ) {
     return (
@@ -242,7 +242,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
     pcrItem: PCRItemDto,
     pcrItemType: PCRItemTypeDto,
     editor: IEditorStore<PCRDto, PCRDtoValidator>,
-    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>,
+    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
   ) {
     const validator = editor.validator.items.results.find(x => x.model.id === pcrItem.id)!;
     const status = editor.status || EditorStatus.Editing;

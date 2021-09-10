@@ -3,7 +3,7 @@ import { configuration } from "@server/features/common";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/forms/formHandlerBase";
 import { PCRPrepareReasoningRoute, ProjectChangeRequestPrepareReasoningParams } from "@ui/containers";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -16,7 +16,7 @@ export class ProjectChangeRequestReasoningDocumentUploadHandler extends Multiple
   protected async getDto(context: IContext, params: ProjectChangeRequestPrepareReasoningParams, button: IFormButton, body: IFormBody, files: IFileWrapper[]): Promise<MultipleDocumentUploadDto> {
     return {
       files,
-      description: parseInt(body.description, 10)
+      description: Number(body.description) || undefined
     };
   }
 
@@ -39,6 +39,6 @@ export class ProjectChangeRequestReasoningDocumentUploadHandler extends Multiple
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareReasoningParams, dto: MultipleDocumentUploadDto, button: IFormButton) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, configuration.options, button.name === "uploadFile", true, null);
+    return new MultipleDocumentUploadDtoValidator(dto, configuration.options, button.name === "uploadFile", true, null);
   }
 }

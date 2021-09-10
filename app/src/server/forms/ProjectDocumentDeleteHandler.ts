@@ -6,7 +6,7 @@ import { IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerB
 import { DeleteProjectDocumentCommand } from "@server/features/documents/deleteProjectDocument";
 
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 
 import { ProjectDocumentPageParams, ProjectDocumentsRoute } from "@ui/containers";
 
@@ -42,6 +42,6 @@ export class ProjectDocumentDeleteHandler extends StandardFormHandlerBase<
   }
 
   protected createValidationResult(params: ProjectDocumentPageParams, dto: Document) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, configuration.options, false, false, null);
+    return new MultipleDocumentUploadDtoValidator(dto, configuration.options, false, false, null);
   }
 }

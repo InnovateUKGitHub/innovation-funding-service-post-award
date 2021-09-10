@@ -7,7 +7,7 @@ import {
   PCRPrepareItemRoute,
   ProjectChangeRequestPrepareItemParams
 } from "@ui/containers";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -20,7 +20,7 @@ export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileF
   protected async getDto(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, body: IFormBody, files: IFileWrapper[]): Promise<MultipleDocumentUploadDto> {
     return {
       files,
-      description: parseInt(body.description, 10)
+      description: Number(body.description) || undefined
     };
   }
 
@@ -52,6 +52,6 @@ export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileF
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: MultipleDocumentUploadDto, button: IFormButton) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, configuration.options, button.name === "uploadFile", true, null);
+    return new MultipleDocumentUploadDtoValidator(dto, configuration.options, button.name === "uploadFile", true, null);
   }
 }

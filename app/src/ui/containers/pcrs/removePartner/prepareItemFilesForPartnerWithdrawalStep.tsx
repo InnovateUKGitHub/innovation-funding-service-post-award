@@ -1,7 +1,7 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
-import { MultipleDocumentUpdloadDtoValidator, PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator, PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForPartnerWithdrawalDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -30,7 +30,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawal
     );
   }
 
-  private renderForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>): React.ReactNode {
+  private renderForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>): React.ReactNode {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
     return (
       <ACC.Section>
@@ -61,7 +61,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawal
     );
   }
 
-  private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
+  private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>, documents: DocumentSummaryDto[]) {
     if (documents.length) {
       return (
         <ACC.Section title={x => x.pcrRemovePartnerPrepareItemFiles.documentLabels.filesUploadedTitle} subtitle={x => x.pcrRemovePartnerPrepareItemFiles.documentLabels.filesUploadedSubtitle}>

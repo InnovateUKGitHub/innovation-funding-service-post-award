@@ -65,7 +65,7 @@ export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
   }
 }
 
-export class MultipleDocumentUpdloadDtoValidator extends Results<MultipleDocumentUploadDto> {
+export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocumentUploadDto> {
   public readonly description: Result;
   constructor(
     model: MultipleDocumentUploadDto,

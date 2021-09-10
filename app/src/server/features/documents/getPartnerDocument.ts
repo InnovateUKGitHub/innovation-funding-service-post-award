@@ -6,7 +6,7 @@ export class GetPartnerDocumentQuery extends DocumentQueryBase {
     super(documentId);
   }
 
-  protected async accessControl(auth: Authorisation) {
+  protected async accessControl(auth: Authorisation): Promise<boolean> {
     return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
   }
 

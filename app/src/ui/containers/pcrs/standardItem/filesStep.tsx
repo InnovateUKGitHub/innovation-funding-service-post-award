@@ -1,5 +1,5 @@
 import React from "react";
-import { MultipleDocumentUpdloadDtoValidator, PCRStandardItemDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator, PCRStandardItemDtoValidator } from "@ui/validators";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import * as ACC from "@ui/components";
 import { PCRItemTypeDto, PCRStandardItemDto } from "@framework/dtos";
@@ -36,7 +36,7 @@ class FilesStepComponent extends React.Component<PcrStepProps<PCRStandardItemDto
     );
   }
 
-  private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>, documents: DocumentSummaryDto[]) {
+  private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>, documents: DocumentSummaryDto[]) {
     return (
       <ACC.Section title="Files uploaded" subtitle={documents.length ? "All documents open in a new window." : undefined}>
         {documents.length ?
@@ -47,7 +47,7 @@ class FilesStepComponent extends React.Component<PcrStepProps<PCRStandardItemDto
     );
   }
 
-  private renderForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUpdloadDtoValidator>) {
+  private renderForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>) {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
     return (
       <ACC.Section>

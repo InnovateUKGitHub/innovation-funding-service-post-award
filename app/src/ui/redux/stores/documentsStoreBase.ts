@@ -1,5 +1,5 @@
 import { scrollToTheTopSmoothly } from "@framework/util";
-import { DocumentUploadDtoValidator, MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { DocumentUploadDtoValidator, MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { IClientUser } from "@framework/types";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { messageSuccess } from "../actions";
@@ -8,7 +8,7 @@ import { StoreBase } from "./storeBase";
 export abstract class DocumentsStoreBase extends StoreBase {
 
   protected validateMultipleDocumentsDto(dto: MultipleDocumentUploadDto, showErrors: boolean, filesRequired: boolean) {
-    return new MultipleDocumentUpdloadDtoValidator(dto, this.getState().config.options, filesRequired, showErrors, null);
+    return new MultipleDocumentUploadDtoValidator(dto, this.getState().config.options, filesRequired, showErrors, null);
   }
 
   protected validateDocumentUploadDto(dto: DocumentUploadDto, showErrors: boolean) {

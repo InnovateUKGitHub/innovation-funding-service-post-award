@@ -1,6 +1,6 @@
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { CommandMultipleDocumentBase, ValidationError } from "@server/features/common";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 // Uses either project change request Id or project change request item Id, as both cn be used as the entity Id of the document
 
@@ -21,7 +21,7 @@ export class UploadProjectChangeRequestDocumentOrItemDocumentCommand extends Com
   }
 
   protected async run(context: IContext) {
-    const result = new MultipleDocumentUpdloadDtoValidator(this.documents, context.config.options, this.filesRequired, this.showValidationErrors, null);
+    const result = new MultipleDocumentUploadDtoValidator(this.documents, context.config.options, this.filesRequired, this.showValidationErrors, null);
 
     if (!result.isValid) {
       throw new ValidationError(result);

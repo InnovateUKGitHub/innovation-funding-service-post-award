@@ -1,5 +1,5 @@
 import { configuration } from "@server/features/common";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { DocumentDescription, IContext, IFileWrapper, ILinkInfo } from "@framework/types";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -46,7 +46,7 @@ export class BankSetupStatementDocumentUploadHandler extends MultipleFileFormHan
   protected createValidationResult(
     _params: ProjectSetupBankStatementParams,
     dto: MultipleDocumentUploadDto,
-  ): MultipleDocumentUpdloadDtoValidator {
-    return new MultipleDocumentUpdloadDtoValidator(dto, configuration.options, true, false, null);
+  ): MultipleDocumentUploadDtoValidator {
+    return new MultipleDocumentUploadDtoValidator(dto, configuration.options, true, false, null);
   }
 }

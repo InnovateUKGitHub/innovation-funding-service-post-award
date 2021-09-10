@@ -1,5 +1,5 @@
 import { BadRequestError, CommandMultipleDocumentBase, ValidationError } from "@server/features/common";
-import { MultipleDocumentUpdloadDtoValidator } from "@ui/validators/documentUploadValidator";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 import { Authorisation, ClaimKey, IContext, ProjectRole } from "@framework/types";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
@@ -12,28 +12,40 @@ export class UploadClaimDocumentsCommand extends CommandMultipleDocumentBase<str
   }
 
   protected logMessage() {
-    return [this.constructor.name, this.claimKey, this.documents && this.documents.files && this.documents.files.map(x => x.fileName)];
+    return [this.constructor.name, this.claimKey, this.documents?.files?.map(x => x.fileName)];
   }
 
-  protected async accessControl(auth: Authorisation) {
-    return auth.forProject(this.claimKey.projectId).hasRole(ProjectRole.MonitoringOfficer) || auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasRole(ProjectRole.FinancialContact);
+  protected async accessControl(auth: Authorisation): Promise<boolean> {
+    return (
+      auth.forProject(this.claimKey.projectId).hasRole(ProjectRole.MonitoringOfficer) ||
+      auth.forPartner(this.claimKey.projectId, this.claimKey.partnerId).hasRole(ProjectRole.FinancialContact)
+    );
   }
 
-  protected async run(context: IContext) {
+  protected async run(context: IContext): Promise<string[]> {
     const claim = await context.repositories.claims.get(this.claimKey.partnerId, this.claimKey.periodId);
 
     if (!claim) {
       throw new BadRequestError("No Claim");
     }
 
-    const result = new MultipleDocumentUpdloadDtoValidator(this.documents, context.config.options, this.filesRequired, this.showValidationErrors, null);
+    const result = new MultipleDocumentUploadDtoValidator(
+      this.documents,
+      context.config.options,
+      this.filesRequired,
+      this.showValidationErrors,
+      null,
+    );
 
     if (!result.isValid) {
       throw new ValidationError(result);
     }
-    return Promise.all(
-      this.documents.files.filter(x => x.fileName && x.size)
-        .map(async (document) => await context.repositories.documents.insertDocument(document, claim.Id, this.documents.description))
+
+    const docsWithNameAndSize = this.documents.files.filter(x => x.fileName && x.size);
+    const promisedDocs: Promise<string>[] = docsWithNameAndSize.map(document =>
+      context.repositories.documents.insertDocument(document, claim.Id, this.documents.description),
     );
+
+    return await Promise.all(promisedDocs);
   }
 }
