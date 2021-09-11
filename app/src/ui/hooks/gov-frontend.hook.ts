@@ -19,26 +19,23 @@ type GDSModuleList =
 // Note: These were taken from "window", I can't see any docs on this GDS library
 export type GDSModules = Record<GDSModuleList, GDSModule>;
 
-interface WindowWithGDSLoaded extends Window {
-  govukFrontend: GDSModules;
-}
+type WindowWithGDSLoaded = typeof window & {
+  GOVUKFrontend: GDSModules;
+};
 
 export function useGovFrontend(module: keyof GDSModules) {
   const { config } = useStores();
 
-  const hasWindow: boolean = config.isClient() && typeof window !== "undefined";
-  const gdsWindow: false | WindowWithGDSLoaded = hasWindow && ((window as unknown) as WindowWithGDSLoaded);
+  const hasGovFrontendLoaded: boolean = config.isClient() ? "GOVUKFrontend" in window : false;
+  const govFrontend = hasGovFrontendLoaded ? (window as WindowWithGDSLoaded).GOVUKFrontend : null;
 
   const setRef = useCallback(
     (node: HTMLElement | null) => {
-      const govFrontend = gdsWindow && gdsWindow.govukFrontend;
-      if (govFrontend && node) {
-        const gdsModule = new govFrontend[module](node);
+      if (!govFrontend || !node) return;
 
-        gdsModule.init();
-      }
+      new govFrontend[module](node).init();
     },
-    [gdsWindow, module],
+    [govFrontend, module],
   );
 
   return { setRef };
