@@ -152,7 +152,7 @@ describe("claimDtoValidator()", () => {
         });
       });
 
-      describe("when claim is a final claim", () => {
+      describe("when claim is a final claim non-ktp competition type", () => {
         test.each`
           name                            | stubClaim                                            | expectedError
           ${"when pcf status is valid"}   | ${{ isFinalClaim: true, pcfStatus: "Received" }}     | ${null}
@@ -177,21 +177,57 @@ describe("claimDtoValidator()", () => {
             expect(claimState.errorMessage).toBe(expectedError);
           }
         });
+
+        describe("when IAR is not required", () => {
+          test.each`
+            name                                                     | stubClaim                                                   | expectedError
+            ${"when IAR + PCF status is not received"}               | ${{ iarStatus: "Not Received", pcfStatus: "Not Received" }} | ${"You must upload a project completion form before you can submit this claim."}
+            ${"when IAR is not received and PCF status is received"} | ${{ iarStatus: "Not Received", pcfStatus: "Received" }}     | ${null}
+            ${"when IAR is received and PCF status is not received"} | ${{ iarStatus: "Received", pcfStatus: "Not Received" }}     | ${"You must upload a project completion form before you can submit this claim."}
+          `("$name", ({ stubClaim, expectedError }) => {
+            const hasNoError: boolean = expectedError === null;
+            const stubFinalClaim = {
+              ...stubClaimDto,
+              ...stubClaim,
+              isIarRequired: false,
+              isFinalClaim: true,
+            } as ClaimDto;
+
+            const { claimState } = new ClaimDtoValidator(
+              stubFinalClaim,
+              stubOriginalStatus,
+              [],
+              [],
+              stubShowErrors,
+              stubCompetitionType,
+              true,
+            );
+
+            expect(claimState.isValid).toBe(hasNoError);
+
+            if (!hasNoError) {
+              expect(claimState.errorMessage).toBe(expectedError);
+            }
+          });
+        });
       });
 
-      describe("when claim not a final claim", () => {
+      describe("when claim is a final claim and is a Ktp competition", () => {
+        const ktpCompetitionType = "KTP";
+
         test.each`
-          name                                           | stubClaim                        | stubDocuments     | expectedToBeValid
-          ${"with valid pcf status with documents"}      | ${{ iarStatus: "Received" }}     | ${[stubDocument]} | ${true}
-          ${"with valid pcf status without documents"}   | ${{ iarStatus: "Received" }}     | ${[]}             | ${false}
-          ${"with invalid pcf status with documents"}    | ${{ iarStatus: "Not Received" }} | ${[stubDocument]} | ${false}
-          ${"with invalid pcf status without documents"} | ${{ iarStatus: "Not Received" }} | ${[]}             | ${false}
-        `("$name", ({ stubClaim, stubDocuments, expectedToBeValid }) => {
+          name                                                                           | stubClaim                                              | stubDocuments     | expectedToBeValid | expectedErrorMessage
+          ${"with not required IAR and not received valid IAR status with documents"}    | ${{ isIarRequired: false, iarStatus: "Not Received" }} | ${[stubDocument]} | ${true}           | ${null}
+          ${"with not required IAR and not received valid IAR status without documents"} | ${{ isIarRequired: false, iarStatus: "Not Received" }} | ${[]}             | ${true}           | ${null}
+          ${"with required IAR and valid IAR status with documents"}                     | ${{ isIarRequired: true, iarStatus: "Received" }}      | ${[stubDocument]} | ${true}           | ${null}
+          ${"with required IAR and valid IAR status without documents"}                  | ${{ isIarRequired: true, iarStatus: "Received" }}      | ${[]}             | ${false}          | ${"You must upload a schedule 3 before you can submit this claim."}
+          ${"with required IAR and invalid IAR status with documents"}                   | ${{ isIarRequired: true, iarStatus: "Not Received" }}  | ${[stubDocument]} | ${false}          | ${"You must upload a schedule 3 before you can submit this claim."}
+          ${"with required IAR and invalid IAR status without documents"}                | ${{ isIarRequired: true, iarStatus: "Not Received" }}  | ${[]}             | ${false}          | ${"You must upload a schedule 3 before you can submit this claim."}
+        `("$name as KTP competition", ({ stubClaim, stubDocuments, expectedToBeValid, expectedErrorMessage }) => {
           const stubFinalClaim = {
             ...stubClaimDto,
             ...stubClaim,
-            isFinalClaim: false,
-            isIarRequired: true,
+            isFinalClaim: true,
           } as ClaimDto;
 
           const { claimState } = new ClaimDtoValidator(
@@ -200,16 +236,54 @@ describe("claimDtoValidator()", () => {
             [],
             stubDocuments,
             stubShowErrors,
-            stubCompetitionType,
+            ktpCompetitionType,
             true,
           );
 
           expect(claimState.isValid).toBe(expectedToBeValid);
 
-          if (!expectedToBeValid) {
-            expect(claimState.errorMessage).toBe(
-              "You must upload an independent accountant's report before you can submit this claim.",
-            );
+          if (!claimState.isValid || expectedErrorMessage) {
+            expect(claimState.errorMessage).toBe(expectedErrorMessage);
+          }
+        });
+      });
+
+      describe("when claim not a final claim", () => {
+        const ktpCompetitionType = "KTP";
+
+        test.each`
+          name                                                                                       | stubClaim                                             | stubDocuments     | testCompetitionType    | expectedToBeValid | expectedErrorMessage
+          ${"with required IAR and valid IAR status with documents as non-KTP competition"}          | ${{ isIarRequired: true, iarStatus: "Received" }}     | ${[stubDocument]} | ${stubCompetitionType} | ${true}           | ${null}
+          ${"with required IAR and valid IAR status without documents as non-KTP competition"}       | ${{ isIarRequired: true, iarStatus: "Received" }}     | ${[]}             | ${stubCompetitionType} | ${false}          | ${"You must upload an independent accountant's report before you can submit this claim."}
+          ${"with required IAR and invalid IAR status with documents as non-KTP competition"}        | ${{ isIarRequired: true, iarStatus: "Not Received" }} | ${[stubDocument]} | ${stubCompetitionType} | ${false}          | ${"You must upload an independent accountant's report before you can submit this claim."}
+          ${"with required IAR and invalid IAR status without documents as non-KTP competition"}     | ${{ isIarRequired: true, iarStatus: "Not Received" }} | ${[]}             | ${stubCompetitionType} | ${false}          | ${"You must upload an independent accountant's report before you can submit this claim."}
+          ${"with non required IAR and a valid IAR status without documents as non-KTP competition"} | ${{ isIarRequired: false, iarStatus: "Received" }}    | ${[]}             | ${stubCompetitionType} | ${true}           | ${null}
+          ${"with non required IAR and a valid IAR status with documents as non-KTP competition"}    | ${{ isIarRequired: false, iarStatus: "Received" }}    | ${[stubDocument]} | ${stubCompetitionType} | ${true}           | ${null}
+          ${"with required IAR and valid IAR status with documents as KTP competition"}              | ${{ isIarRequired: true, iarStatus: "Received" }}     | ${[stubDocument]} | ${ktpCompetitionType}  | ${true}           | ${null}
+          ${"with required IAR and valid IAR status without documents as KTP competition"}           | ${{ isIarRequired: true, iarStatus: "Received" }}     | ${[]}             | ${ktpCompetitionType}  | ${false}          | ${"You must upload a schedule 3 before you can submit this claim."}
+          ${"with required IAR and invalid IAR status with documents as KTP competition"}            | ${{ isIarRequired: true, iarStatus: "Not Received" }} | ${[stubDocument]} | ${ktpCompetitionType}  | ${false}          | ${"You must upload a schedule 3 before you can submit this claim."}
+          ${"with required IAR and invalid IAR status without documents as KTP competition"}         | ${{ isIarRequired: true, iarStatus: "Not Received" }} | ${[]}             | ${ktpCompetitionType}  | ${false}          | ${"You must upload a schedule 3 before you can submit this claim."}
+        `("$name", ({ stubClaim, stubDocuments, testCompetitionType, expectedToBeValid, expectedErrorMessage }) => {
+          const stubFinalClaim = {
+            ...stubClaimDto,
+            ...stubClaim,
+            isFinalClaim: false,
+          } as ClaimDto;
+
+          const { claimState } = new ClaimDtoValidator(
+            stubFinalClaim,
+            stubOriginalStatus,
+            [],
+            stubDocuments,
+            stubShowErrors,
+            testCompetitionType,
+            true,
+          );
+
+          expect(claimState.isValid).toBe(expectedToBeValid);
+
+          if (!claimState.isValid || expectedErrorMessage) {
+            expect(claimState.errorMessage).toBe(expectedErrorMessage);
           }
         });
 
@@ -236,36 +310,6 @@ describe("claimDtoValidator()", () => {
               expect(claimState.isValid).toBe(expectedState);
             });
           });
-
-          describe("with correct validation", () => {
-            const isKtpCompetition = "KTP";
-
-            test.each`
-              name                                          | testClaimDto                                          | testDocuments     | expectedState
-              ${"with valid iar claim with documents"}      | ${{ isIarRequired: true, iarStatus: "Received" }}     | ${[stubDocument]} | ${true}
-              ${"with valid iar claim without documents"}   | ${{ isIarRequired: true, iarStatus: "Received" }}     | ${[]}             | ${false}
-              ${"with invalid iar claim with documents"}    | ${{ isIarRequired: true, iarStatus: "Not Received" }} | ${[stubDocument]} | ${false}
-              ${"with invalid iar claim without documents"} | ${{ isIarRequired: true, iarStatus: "Not Received" }} | ${[]}             | ${false}
-            `("$name", ({ testClaimDto, testDocuments, expectedState }) => {
-              const stubIarClaim = { ...stubClaimDto, ...testClaimDto } as ClaimDto;
-
-              const { claimState } = new ClaimDtoValidator(
-                stubIarClaim,
-                stubOriginalStatus,
-                [],
-                testDocuments,
-                stubShowErrors,
-                isKtpCompetition,
-                true,
-              );
-
-              expect(claimState.isValid).toBe(expectedState);
-
-              if (!expectedState) {
-                expect(claimState.errorMessage).toBe("You must upload a schedule 3 before you can submit this claim.");
-              }
-            });
-          });
         });
       });
     });
@@ -275,41 +319,124 @@ describe("claimDtoValidator()", () => {
       const stubFinalAwaitingIarClaim = { ...stubClaimDto, status: ClaimStatus.AWAITING_IAR } as ClaimDto;
 
       describe("when the final claim", () => {
-        test.each`
-          name                                       | testClaimDto                                                | expectedState
-          ${"with iar status is valid and not pcf"}  | ${{ iarStatus: "Received", pcfStatus: "Not Received" }}     | ${false}
-          ${"with pcf status is valid and not iar"}  | ${{ iarStatus: "Not Received", pcfStatus: "Received" }}     | ${false}
-          ${"with iar and pcf statuses are invalid"} | ${{ iarStatus: "Not Received", pcfStatus: "Not Received" }} | ${false}
-          ${"with iar and pcf statuses are valid"}   | ${{ iarStatus: "Received", pcfStatus: "Received" }}         | ${true}
-        `("$name", ({ testClaimDto, expectedState }) => {
-          const stubFinalClaim = {
-            ...stubFinalAwaitingIarClaim,
-            ...testClaimDto,
-            isFinalClaim: true,
-            isIarRequired: true,
-          } as ClaimDto;
+        describe("when not KTP", () => {
+          const nonKtpCompetitionType = "CATAPULTS";
 
-          const { claimState } = new ClaimDtoValidator(
-            stubFinalClaim,
-            stubAwaitingIarStatus,
-            [],
-            [stubDocument],
-            stubShowErrors,
-            stubCompetitionType,
-            true,
-          );
+          test.each`
+            name                                                                  | testClaimDto                                                                      | expectedState | expectedErrorMessage
+            ${"with required IAR with IAR status is valid and not PCF"}           | ${{ isIarRequired: true, iarStatus: "Received", pcfStatus: "Not Received" }}      | ${false}      | ${"You must upload a project completion form before you can submit this claim."}
+            ${"with required IAR with PCF status is valid and not iar"}           | ${{ isIarRequired: true, iarStatus: "Not Received", pcfStatus: "Received" }}      | ${false}      | ${"You must upload an independent accountant's report before you can submit this claim."}
+            ${"with required IAR with IAR and PCF statuses are invalid"}          | ${{ isIarRequired: true, iarStatus: "Not Received", pcfStatus: "Not Received" }}  | ${false}      | ${"You must upload an independent accountant's report and a project completion form before you can submit this claim."}
+            ${"with required IAR with IAR and PCF statuses are valid"}            | ${{ isIarRequired: true, iarStatus: "Received", pcfStatus: "Received" }}          | ${true}       | ${null}
+            ${"with non required IAR with IAR and PCF statuses are not received"} | ${{ isIarRequired: false, iarStatus: "Not Received", pcfStatus: "Not Received" }} | ${false}      | ${"You must upload a project completion form before you can submit this claim."}
+            ${"with non required IAR with PCF received but not IAR"}              | ${{ isIarRequired: false, iarStatus: "Not Received", pcfStatus: "Received" }}     | ${true}       | ${null}
+            ${"with non required IAR with IAR and PCF received"}                  | ${{ isIarRequired: false, iarStatus: "Received", pcfStatus: "Received" }}         | ${true}       | ${null}
+            ${"with non required IAR with IAR received but not PCF"}              | ${{ isIarRequired: false, iarStatus: "Received", pcfStatus: "Not Received" }}     | ${false}      | ${"You must upload a project completion form before you can submit this claim."}
+          `("$name", ({ testClaimDto, expectedState, expectedErrorMessage }) => {
+            const stubFinalClaim = {
+              ...stubFinalAwaitingIarClaim,
+              ...testClaimDto,
+              isFinalClaim: true,
+            } as ClaimDto;
 
-          expect(claimState.isValid).toBe(expectedState);
+            const { claimState } = new ClaimDtoValidator(
+              stubFinalClaim,
+              stubAwaitingIarStatus,
+              [],
+              [stubDocument],
+              stubShowErrors,
+              nonKtpCompetitionType,
+              true,
+            );
+
+            expect(claimState.isValid).toBe(expectedState);
+
+            if (expectedErrorMessage) {
+              expect(claimState.errorMessage).toBe(expectedErrorMessage);
+            }
+          });
+        });
+
+        describe("when KTP", () => {
+          const ktpCompetitionType = "KTP";
+
+          test.each`
+            name                                                             | testClaimDto                                                                      | expectedState | expectedErrorMessage
+            ${"with IAR required when iar status is valid and not pcf"}      | ${{ isIarRequired: true, iarStatus: "Received", pcfStatus: "Not Received" }}      | ${true}       | ${null}
+            ${"with IAR required when iar and pcf statuses are valid"}       | ${{ isIarRequired: true, iarStatus: "Received", pcfStatus: "Received" }}          | ${true}       | ${null}
+            ${"with IAR required when iar and pcf statuses are invalid"}     | ${{ isIarRequired: true, iarStatus: "Not Received", pcfStatus: "Not Received" }}  | ${false}      | ${"You must upload a schedule 3 before you can submit this claim."}
+            ${"with IAR required when pcf status is valid and not iar"}      | ${{ isIarRequired: true, iarStatus: "Not Received", pcfStatus: "Received" }}      | ${false}      | ${"You must upload a schedule 3 before you can submit this claim."}
+            ${"with IAR not required when iar status is valid and not pcf"}  | ${{ isIarRequired: false, iarStatus: "Received", pcfStatus: "Not Received" }}     | ${true}       | ${null}
+            ${"with IAR not required when iar and pcf statuses are valid"}   | ${{ isIarRequired: false, iarStatus: "Received", pcfStatus: "Received" }}         | ${true}       | ${null}
+            ${"with IAR not required when iar and pcf statuses are invalid"} | ${{ isIarRequired: false, iarStatus: "Not Received", pcfStatus: "Not Received" }} | ${true}       | ${null}
+            ${"with IAR not required when pcf status is valid and not iar"}  | ${{ isIarRequired: false, iarStatus: "Not Received", pcfStatus: "Received" }}     | ${true}       | ${null}
+          `("$name", ({ testClaimDto, expectedState, expectedErrorMessage }) => {
+            const stubFinalClaim = {
+              ...stubFinalAwaitingIarClaim,
+              ...testClaimDto,
+              isFinalClaim: true,
+            } as ClaimDto;
+
+            const { claimState } = new ClaimDtoValidator(
+              stubFinalClaim,
+              stubAwaitingIarStatus,
+              [],
+              [stubDocument],
+              stubShowErrors,
+              ktpCompetitionType,
+              true,
+            );
+
+            expect(claimState.isValid).toBe(expectedState);
+
+            if (!claimState.isValid || expectedErrorMessage) {
+              expect(claimState.errorMessage).toBe(expectedErrorMessage);
+            }
+          });
+        });
+
+        describe("when ktp project competition", () => {
+          test.each`
+            name              | testClaimDto                     | expectedState | expectedError
+            ${"when valid"}   | ${{ iarStatus: "Received" }}     | ${true}       | ${""}
+            ${"when invalid"} | ${{ iarStatus: "Not Received" }} | ${false}      | ${"You must upload a schedule 3 before you can submit this claim."}
+          `("when iar required and status $name", ({ testClaimDto, expectedState, expectedError }) => {
+            const stubKtpCompetition = "KTP";
+            const stubFinalClaim = {
+              ...stubFinalAwaitingIarClaim,
+              ...testClaimDto,
+              isFinalClaim: true,
+              isIarRequired: true,
+            } as ClaimDto;
+
+            const { claimState } = new ClaimDtoValidator(
+              stubFinalClaim,
+              stubAwaitingIarStatus,
+              [],
+              [stubDocument],
+              stubShowErrors,
+              stubKtpCompetition,
+              true,
+            );
+
+            expect(claimState.isValid).toBe(expectedState);
+
+            if (expectedError) {
+              expect(claimState.errorMessage).toBe(expectedError);
+            }
+          });
         });
       });
 
       describe("when not the final claim", () => {
+        const ktpCompetitionType = "KTP";
+
         test.each`
-          name                                                   | testClaimDto                     | testCompetitionType    | expectedState
-          ${"with iar status is valid"}                          | ${{ iarStatus: "Received" }}     | ${stubCompetitionType} | ${true}
-          ${"with iar statuses is invalid when not KTP project"} | ${{ iarStatus: "Not Received" }} | ${stubCompetitionType} | ${false}
-          ${"with iar statuses is invalid when a KTP project"}   | ${{ iarStatus: "Not Received" }} | ${"KTP"}               | ${false}
-        `("$name", ({ testClaimDto, testCompetitionType, expectedState }) => {
+          name                                                                     | testClaimDto                     | testCompetitionType    | expectedState | expectedErrorMessage
+          ${"when IAR required with IAR status is valid"}                          | ${{ iarStatus: "Received" }}     | ${stubCompetitionType} | ${true}       | ${null}
+          ${"when IAR required with IAR statuses is invalid when not KTP project"} | ${{ iarStatus: "Not Received" }} | ${stubCompetitionType} | ${false}      | ${"You must upload an independent accountant's report before you can submit this claim."}
+          ${"when IAR required with IAR statuses is invalid when a KTP project"}   | ${{ iarStatus: "Not Received" }} | ${ktpCompetitionType}  | ${false}      | ${"You must upload a schedule 3 before you can submit this claim."}
+        `("$name", ({ testClaimDto, testCompetitionType, expectedState, expectedErrorMessage }) => {
           const stubFinalClaim = {
             ...stubFinalAwaitingIarClaim,
             ...testClaimDto,
@@ -328,6 +455,10 @@ describe("claimDtoValidator()", () => {
           );
 
           expect(claimState.isValid).toBe(expectedState);
+
+          if (!claimState.isValid || expectedErrorMessage) {
+            expect(claimState.errorMessage).toBe(expectedErrorMessage);
+          }
         });
       });
     });
