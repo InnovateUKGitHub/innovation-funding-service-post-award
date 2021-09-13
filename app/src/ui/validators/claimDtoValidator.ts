@@ -33,6 +33,7 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
   private readonly isKtpCompetition: boolean = checkProjectCompetition(this.competitionType).isKTP;
   private readonly hasDocuments: boolean = !!this.documents.length;
   private readonly isPcfStatusValid = this.model.pcfStatus === "Received";
+  private readonly shouldValidatePcf = !this.isKtpCompetition && this.model.isFinalClaim;
 
   private readonly isReceivedIarStatus: boolean = this.model.iarStatus === "Received";
   private readonly isIarStatusWithDocsValid: boolean = this.hasDocuments && this.isReceivedIarStatus;
@@ -92,8 +93,11 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
   }
 
   private validateIarStatus(): Result {
+    const notIarRequired = !this.model.isIarRequired;
+    const ktpAndNotIarRequired = this.isKtpCompetition && notIarRequired;
+
     // Note: ignore validation when is not required
-    if (!this.model.isIarRequired) return Validation.valid(this);
+    if (notIarRequired || ktpAndNotIarRequired) return Validation.valid(this);
 
     const iarStatusError: string = this.isKtpCompetition
       ? "You must upload a schedule 3 before you can submit this claim."
@@ -103,6 +107,9 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
   }
 
   private validatePcfStatus(): Result {
+    // Note: For the time being ignore all ktp validation here
+    if (this.isKtpCompetition) return Validation.valid(this);
+
     return Validation.isTrue(
       this,
       this.isPcfStatusValid,
@@ -123,7 +130,7 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
     const hasInvalidStatuses = !this.isIarStatusWithDocsValid && !this.isPcfStatusValid;
 
     // Note: Auto-fail and combine both (pcf + iar) errors in one when not valid
-    if (this.model.isFinalClaim && hasInvalidStatuses) {
+    if (this.shouldValidatePcf && this.model.isIarRequired && hasInvalidStatuses) {
       return Validation.inValid(
         this,
         "You must upload an independent accountant's report and a project completion form before you can submit this claim.",
@@ -133,11 +140,12 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
     return Validation.all(
       this,
       () => this.validateIarStatus(),
-      () => (this.model.isFinalClaim ? this.validatePcfStatus() : Validation.valid(this)),
+      () => (this.shouldValidatePcf ? this.validatePcfStatus() : Validation.valid(this)),
     );
   }
 
   private validateDefaultClaim(): Result {
-    return this.model.isFinalClaim ? this.validatePcfStatus() : this.validateIarStatus();
+    // Note: KTP will only every require IAR validation not PCF
+    return this.shouldValidatePcf ? this.validatePcfStatus() : this.validateIarStatus();
   }
 }
