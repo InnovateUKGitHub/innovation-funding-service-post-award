@@ -1,5 +1,5 @@
 import { Pending } from "@shared/pending";
-import { PartnerDto, ProjectContactDto, ProjectDto, ProjectRole } from "@framework/types";
+import { getAuthRoles, PartnerDto, ProjectContactDto, ProjectDto, ProjectRole } from "@framework/types";
 import { useStores } from "@ui/redux";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
@@ -134,18 +134,44 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
     private renderPartnerInformationTable(partners: CombinedData["partners"], project: CombinedData["project"]) {
         const PartnersTable = ACC.TypedTable<PartnerDto>();
-        const isMoPm = !!(project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
+        const { isPmOrMo } = getAuthRoles(project.roles);
 
         return (
-            <ACC.Section title={x => x.projectDetails.projectLabels.partners}>
-                <PartnersTable.Table qa="partner-information" data={partners}>
-                    <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.partnerName} value={x => this.renderPartnerName(x)} qa="partner-name"/>
-                    <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.partnerType} value={x => x.type} qa="partner-type"/>
-                    {isMoPm ? <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.statusLabel} value={x => x.partnerStatusLabel} qa="partner-status"/> : null}
-                    {isMoPm ? <PartnersTable.Custom headerContent={x => x.partnerDetails.contactLabels.fundingLabel} value={x => <ACC.Content value={content => content.partnerDetails.contactLabels.fundingState(x.isNonFunded)}/>} qa="partner-funding"/> : null}
-                    <PartnersTable.String headerContent={x => x.partnerDetails.contactLabels.partnerPostcode} value={x => x.postcode} qa="partner-postcode"/>
-                </PartnersTable.Table>
-            </ACC.Section>
+          <ACC.Section title={x => x.projectDetails.projectLabels.partners}>
+            <PartnersTable.Table qa="partner-information" data={partners}>
+              <PartnersTable.Custom
+                headerContent={x => x.partnerDetails.contactLabels.partnerName}
+                value={x => this.renderPartnerName(x)}
+                qa="partner-name"
+              />
+              <PartnersTable.String
+                headerContent={x => x.partnerDetails.contactLabels.partnerType}
+                value={x => x.type}
+                qa="partner-type"
+              />
+              {isPmOrMo ? (
+                <PartnersTable.String
+                  headerContent={x => x.partnerDetails.contactLabels.statusLabel}
+                  value={x => x.partnerStatusLabel}
+                  qa="partner-status"
+                />
+              ) : null}
+              {isPmOrMo ? (
+                <PartnersTable.Custom
+                  headerContent={x => x.partnerDetails.contactLabels.fundingLabel}
+                  value={x => (
+                    <ACC.Content value={content => content.partnerDetails.contactLabels.fundingState(x.isNonFunded)} />
+                  )}
+                  qa="partner-funding"
+                />
+              ) : null}
+              <PartnersTable.String
+                headerContent={x => x.partnerDetails.contactLabels.partnerPostcode}
+                value={x => x.postcode}
+                qa="partner-postcode"
+              />
+            </PartnersTable.Table>
+          </ACC.Section>
         );
     }
 

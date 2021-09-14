@@ -6,7 +6,7 @@ import { CostCategoryVirementDto, PartnerDto, PartnerVirementsDto, PCRDto, Proje
 import { createDto } from "@framework/util/dtoHelpers";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { roundCurrency } from "@framework/util";
-import { ProjectRole } from "@framework/constants";
+import { getAuthRoles } from "@framework/types";
 
 interface Params {
   projectId: string;
@@ -86,9 +86,11 @@ class Component extends ContainerBase<Params, Props, {}> {
   }
 
   private renderReasoning(project: ProjectDto, pcr: PCRDto) {
-    if (!(project.roles & ProjectRole.MonitoringOfficer) || !pcr.reasoningComments) {
-      return null;
-    }
+    const { isMo } = getAuthRoles(project.roles);
+    const inValidReason = !isMo || !pcr.reasoningComments;
+
+    if (inValidReason) return null;
+
     return (
       <ACC.Info summary="Reasoning for the request" qa="reasoning_for_the_request">
         <ACC.Renderers.SimpleString multiline>{pcr.reasoningComments}</ACC.Renderers.SimpleString>

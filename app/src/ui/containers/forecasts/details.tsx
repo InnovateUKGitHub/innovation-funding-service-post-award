@@ -1,5 +1,5 @@
 import * as ACC from "@ui/components";
-import { PartnerStatus, ProjectRole, ProjectStatus } from "@framework/types";
+import { getAuthRoles, PartnerStatus, ProjectRole, ProjectStatus } from "@framework/types";
 import { ClaimDto, PartnerDto, ProjectDto } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { PrepareClaimRoute } from "@ui/containers";
@@ -22,12 +22,13 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
   }
 
   public renderContents(data: ACC.Claims.ForecastData) {
-    const isFc = !!(data.partner.roles & ProjectRole.FinancialContact);
+    const { isFc : isPartnerFc } = getAuthRoles(data.partner.roles);
     // MO, PM & FC/PM should see partner name
-    const isMoPm = !!(data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer));
-    const partnerName = isMoPm ? ACC.getPartnerName(data.partner) : undefined;
-    const backLink = isMoPm ? this.props.routes.forecastDashboard.getLink({ projectId: data.project.id }) : this.props.routes.projectOverview.getLink({ projectId: data.project.id });
-    const backText = isMoPm ? <ACC.Content value={x => x.forecastsDetails.moOrPmBackLink}/> : <ACC.Content value={x => x.forecastsDetails.backLink}/>;
+
+    const { isPmOrMo: isProjectPmOrMo } = getAuthRoles(data.project.roles);
+    const partnerName = isProjectPmOrMo ? ACC.getPartnerName(data.partner) : undefined;
+    const backLink = isProjectPmOrMo ? this.props.routes.forecastDashboard.getLink({ projectId: data.project.id }) : this.props.routes.projectOverview.getLink({ projectId: data.project.id });
+    const backText = isProjectPmOrMo ? <ACC.Content value={x => x.forecastsDetails.moOrPmBackLink}/> : <ACC.Content value={x => x.forecastsDetails.backLink}/>;
 
     const allClaimsDashboardLink = this.props.routes.allClaimsDashboard.getLink({ projectId: this.props.projectId });
 
@@ -40,14 +41,14 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
       >
         <ForecastClaimAdvice claimLink={allClaimsDashboardLink} />
 
-        {this.renderFinalClaimMessage(data, isFc)}
+        {this.renderFinalClaimMessage(data, isPartnerFc)}
 
         <ACC.Section title={partnerName} qa="partner-name" className="govuk-!-padding-bottom-3">
           <ACC.Renderers.Messages messages={this.props.messages} />
 
           <ACC.Forecasts.Warning {...data} />
 
-          {isFc && data.partner.newForecastNeeded && (
+          {isPartnerFc && data.partner.newForecastNeeded && (
             <ACC.ValidationMessage
               qa="period-change-warning"
               messageType="info"
@@ -57,7 +58,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
 
           {this.renderOverheadsRate(data.partner.overheadRate)}
 
-          <ACC.Claims.ForecastTable data={data} hideValidation={isMoPm} />
+          <ACC.Claims.ForecastTable data={data} hideValidation={isProjectPmOrMo} />
         </ACC.Section>
 
         <ACC.Section qa="viewForecastUpdate">
@@ -107,7 +108,7 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
       );
     }
 
-    const isPm = data.project.roles & ProjectRole.ProjectManager;
+    const { isPm } = getAuthRoles(data.project.roles);
 
     if (isPm) return null;
 
@@ -128,10 +129,11 @@ class ViewForecastComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private renderUpdateSection(project: ProjectDto, partner: PartnerDto, claims: ClaimDto[]) {
+    const { isFc: isPartnerFc } = getAuthRoles(partner.roles);
     const finalClaim = claims.find(x => x.isFinalClaim);
 
     if (project.status === ProjectStatus.OnHold) return null;
-    if (!(partner.roles & ProjectRole.FinancialContact)) return null;
+    if (!isPartnerFc) return null;
     if (partner.isWithdrawn) return null;
     if (finalClaim) return null;
     if (partner.partnerStatus === PartnerStatus.OnHold) return null;

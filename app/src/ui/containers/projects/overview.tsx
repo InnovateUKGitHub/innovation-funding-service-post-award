@@ -8,6 +8,7 @@ import { StoresConsumer } from "@ui/redux";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { IRoutes } from "@ui/routing";
 import { Content } from "@content/content";
+import { getLeadPartner } from "@framework/util/partnerHelper";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 interface Data {
@@ -32,8 +33,9 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private isPartnerWithdrawn(project: Dtos.ProjectDto, partners: Dtos.PartnerDto[]) {
-    if (project.roles & ProjectRole.ProjectManager) {
-      const leadPartner = partners.find(x => x.isLead);
+    const { isPm } = getAuthRoles(project.roles);
+    if (isPm) {
+      const leadPartner = getLeadPartner(partners);
       return leadPartner && leadPartner.isWithdrawn;
     }
     return partners.some(p => !!(p.roles & ProjectRole.FinancialContact) && p.isWithdrawn);
@@ -81,13 +83,10 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private renderProjectOverviewDetails(project: ProjectDto, partner: PartnerDto) {
-    if (project.roles & ProjectRole.ProjectManager && partner) {
-      return this.renderPMOverviewDetails(project, partner);
-    }
+    const { isPm, isFc } = getAuthRoles(project.roles);
 
-    if (project.roles & ProjectRole.FinancialContact && partner) {
-      return this.renderFCOverviewDetails(partner);
-    }
+    if (partner && isPm)  return this.renderPMOverviewDetails(project, partner);
+    if (partner && isFc) return this.renderFCOverviewDetails(partner);
 
     return null;
   }
@@ -189,8 +188,8 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private renderLinks(project: ProjectDto, partner: PartnerDto, routes: IRoutes) {
+    const { isPmOrMo } = getAuthRoles(project.roles);
     const projectId = project.id;
-    const projectRole = project.roles;
     const partnerId = partner.id;
 
     let links = [
@@ -241,7 +240,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     links = links.filter(x => x.link.accessControl(this.props.user, this.props.config));
 
     // special case if not fc shouldn't have link to ViewForecastRoute from this page... the view forecast route has permission from the project forecasts route
-    if (projectRole & (ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager)) {
+    if (isPmOrMo) {
       links = links.filter(x => x.link.routeName !== routes.forecastDetails.routeName);
     }
 
@@ -261,14 +260,16 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private getPcrMessages(project: ProjectDto) {
+    const { isPm, isMo } = getAuthRoles(project.roles);
     const result: ACC.NavigationCardMessage[] = [];
-    if (project.roles & ProjectRole.ProjectManager && project.pcrsQueried > 0) {
+
+    if (isPm && project.pcrsQueried > 0) {
       result.push({
         message: <ACC.Content value={x => x.projectOverview.messages.pcrQueried} />,
         qa: "message-pcrQueried",
       });
     }
-    if (project.roles & ProjectRole.MonitoringOfficer) {
+    if (isMo) {
       result.push({
         message: <ACC.Content value={x => x.projectOverview.messages.pcrsToReview(project.pcrsToReview)} />,
         qa: "message-pcrsToReview",
@@ -278,9 +279,10 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private getForecastMessages(partner: PartnerDto) {
+    const { isFc } = getAuthRoles(partner.roles);
     const result: ACC.NavigationCardMessage[] = [];
 
-    if (partner.roles & ProjectRole.FinancialContact && partner.newForecastNeeded) {
+    if (isFc && partner.newForecastNeeded) {
       result.push({
         message: <ACC.Content value={x => x.projectOverview.messages.checkForecast} />,
         qa: "message-newForecastNeeded",

@@ -1,7 +1,7 @@
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { getArrayFromPeriod, isNumber } from "@framework/util";
-import { ClaimDetailsSummaryDto, ClaimDto, ForecastDetailsDTO, GOLCostDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { ClaimDetailsSummaryDto, ClaimDto, ForecastDetailsDTO, getAuthRoles, GOLCostDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { ForecastDetailsDtosValidator } from "@ui/validators";
 import { IEditorStore, useStores } from "@ui/redux";
@@ -118,7 +118,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
   }
 
   private getBackLink(project: ProjectDto) {
-    const isPmOrMo = (project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
+    const { isPmOrMo } = getAuthRoles(project.roles);
     return isPmOrMo
       ? this.props.routes.allClaimsDashboard.getLink({ projectId: project.id })
       : this.props.routes.claimsDashboard.getLink({ projectId: project.id, partnerId: this.props.partnerId });

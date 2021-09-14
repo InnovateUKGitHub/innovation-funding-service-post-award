@@ -1,5 +1,5 @@
 
-import { ProjectDto, ProjectRole } from "@framework/types";
+import { getAuthRoles, ProjectDto, ProjectRole } from "@framework/types";
 
 import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
@@ -92,12 +92,16 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderCommentsFromPM(project: ProjectDto, projectChangeRequest: PCRDto) {
-    if ((project.roles & ProjectRole.MonitoringOfficer) && projectChangeRequest.comments && (projectChangeRequest.status === PCRStatus.Draft || projectChangeRequest.status === PCRStatus.QueriedByMonitoringOfficer)) {
+    const { isMo } = getAuthRoles(project.roles);
+    if (
+      isMo &&
+      projectChangeRequest.comments &&
+      (projectChangeRequest.status === PCRStatus.Draft ||
+        projectChangeRequest.status === PCRStatus.QueriedByMonitoringOfficer)
+    ) {
       return (
         <ACC.Section title="Comments" qa="additionalComments">
-          <ACC.Renderers.SimpleString multiline>
-            {projectChangeRequest.comments}
-          </ACC.Renderers.SimpleString>
+          <ACC.Renderers.SimpleString multiline>{projectChangeRequest.comments}</ACC.Renderers.SimpleString>
         </ACC.Section>
       );
     }
