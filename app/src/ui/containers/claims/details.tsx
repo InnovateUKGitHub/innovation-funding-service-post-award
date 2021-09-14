@@ -58,8 +58,10 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private renderContents(data: CombinedData) {
-    const isPmOrMo = (data.project.roles & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
-    const backLink = isPmOrMo ? this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id }) : this.props.routes.claimsDashboard.getLink({ projectId: data.project.id, partnerId: data.partner.id });
+    const { isPmOrMo } = getAuthRoles(data.project.roles);
+    const backLink = isPmOrMo
+      ? this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })
+      : this.props.routes.claimsDashboard.getLink({ projectId: data.project.id, partnerId: data.partner.id });
 
     return (
       <ACC.Page
@@ -78,7 +80,8 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private renderCostsAndGrantSummary(data: CombinedData) {
-    if (!(data.project.roles & ProjectRole.FinancialContact) || !data.claim || !data.claim.isApproved) {
+    const { isFc } = getAuthRoles(data.project.roles);
+    if (!isFc || !data.claim || !data.claim.isApproved) {
       return null;
     }
 
@@ -135,12 +138,11 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private renderCommentsFromFC(project: ProjectDto, claim: ClaimDto) {
-    if (project.roles & ProjectRole.MonitoringOfficer && (claim.status === ClaimStatus.DRAFT || claim.status === ClaimStatus.MO_QUERIED) && claim.comments) {
+    const { isMo } = getAuthRoles(project.roles);
+    if (isMo && (claim.status === ClaimStatus.DRAFT || claim.status === ClaimStatus.MO_QUERIED) && claim.comments) {
       return (
         <ACC.Section title={x => x.claimDetails.commentsSectionTitle} qa="additionalComments">
-          <ACC.Renderers.SimpleString multiline>
-            {claim.comments}
-          </ACC.Renderers.SimpleString>
+          <ACC.Renderers.SimpleString multiline>{claim.comments}</ACC.Renderers.SimpleString>
         </ACC.Section>
       );
     }
@@ -149,26 +151,33 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private renderTable(data: CombinedData) {
-    const isFC = (data.partner.roles & ProjectRole.FinancialContact) === ProjectRole.FinancialContact;
+    const { isFc } = getAuthRoles(data.partner.roles);
 
-    if (isFC) {
-      return <ACC.Claims.ClaimTable getLink={x => this.getLink(x, data.project, data.partner)} standardOverheadRate={this.props.config.options.standardOverheadRate} {...data} />;
-    }
-
-    return <ACC.Claims.ClaimReviewTable getLink={x => this.getLink(x, data.project, data.partner)} standardOverheadRate={this.props.config.options.standardOverheadRate} {...data} />;
+    return isFc ? (
+      <ACC.Claims.ClaimTable
+        getLink={x => this.getLink(x, data.project, data.partner)}
+        standardOverheadRate={this.props.config.options.standardOverheadRate}
+        {...data}
+      />
+    ) : (
+      <ACC.Claims.ClaimReviewTable
+        getLink={x => this.getLink(x, data.project, data.partner)}
+        standardOverheadRate={this.props.config.options.standardOverheadRate}
+        {...data}
+      />
+    );
   }
 
   private getLink(costCategoryId: string, project: ProjectDto, partner: PartnerDto): ILinkInfo | null {
     // can only link if monitoring officer for project or, pm or fc at partner level
     // ie pm can not see other partners line items but can see own
-    const isMo = !!(project.roles & ProjectRole.MonitoringOfficer);
-    const isPartnerPM = !!(partner.roles & ProjectRole.ProjectManager);
-    const isFC = !!(partner.roles & ProjectRole.FinancialContact);
+    const { isMo: isProjectMo } = getAuthRoles(project.roles);
+    const { isPm: isPartnerPm, isFc: isPartnerFc } = getAuthRoles(partner.roles);
+    const partnerHasCorrectRole = isProjectMo || isPartnerPm || isPartnerFc;
 
-    if (isMo || isPartnerPM || isFC) {
-      return this.props.routes.claimLineItems.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId });
-    }
-    return null;
+    if (!partnerHasCorrectRole) return null;
+
+    return this.props.routes.claimLineItems.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId });
   }
 
   private getClaimPeriodTitle(data: CombinedData) {

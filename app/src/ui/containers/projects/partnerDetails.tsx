@@ -1,4 +1,4 @@
-import { PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { getAuthRoles, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { StoresConsumer } from "@ui/redux";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as ACC from "../../components";
@@ -30,8 +30,7 @@ class PartnerDetailsComponent extends ContainerBase<Params, Data> {
   }
 
   private renderContents({ partner, project }: CombinedData) {
-    const isFC = (partner.roles & ProjectRole.FinancialContact) === ProjectRole.FinancialContact;
-    const isPM = (partner.roles & ProjectRole.ProjectManager) === ProjectRole.ProjectManager;
+    const { isFc, isPm } = getAuthRoles(partner.roles);
 
     const backToProjectDetailsLink = <ACC.Content value={x => x.partnerDetails.backToProjectDetails} />;
     const editLink = <ACC.Content value={x => x.partnerDetails.editLink} />;
@@ -64,7 +63,7 @@ class PartnerDetailsComponent extends ContainerBase<Params, Data> {
               qa="partner-postcode"
               content={<ACC.Renderers.SimpleString>{partner.postcode}</ACC.Renderers.SimpleString>}
               action={
-                isFC || isPM ? (
+                isFc || isPm ? (
                   <ACC.Link
                     styling={"Link"}
                     route={this.props.routes.partnerDetailsEdit.getLink({

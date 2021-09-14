@@ -1,4 +1,4 @@
-import { ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
+import { getAuthRoles, ILinkInfo, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { PCRSummaryDto } from "@framework/dtos/pcrDtos";
 import { StoresConsumer } from "@ui/redux";
@@ -51,7 +51,7 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderStartANewRequestLink(project: ProjectDto) {
-    const isPm = !!(project.roles & ProjectRole.ProjectManager);
+    const { isPm } = getAuthRoles(project.roles);
 
     if (!isPm) return null;
 
@@ -80,23 +80,45 @@ class PCRsDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderLinks(project: ProjectDto, pcr: PCRSummaryDto): React.ReactNode {
+    const { isPm, isMo, isPmOrMo } = getAuthRoles(project.roles);
     const links: { route: ILinkInfo; text: string; qa: string }[] = [];
+    const pcrLinkArgs = { pcrId: pcr.id, projectId: pcr.projectId };
 
     const prepareStatus = [PCRStatus.Draft, PCRStatus.QueriedByMonitoringOfficer, PCRStatus.QueriedByInnovateUK];
 
-    if(prepareStatus.indexOf(pcr.status) >= 0 && project.roles & ProjectRole.ProjectManager) {
-      links.push({route: this.props.routes.pcrPrepare.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Edit", qa:"pcrPrepareLink"});
-    } else if(pcr.status === PCRStatus.SubmittedToMonitoringOfficer && project.roles & ProjectRole.MonitoringOfficer) {
-      links.push({route: this.props.routes.pcrReview.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Review", qa:"pcrReviewLink"});
-    } else if((project.roles & ProjectRole.ProjectManager | project.roles & ProjectRole.MonitoringOfficer)) {
-      links.push({route: this.props.routes.pcrDetails.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "View", qa:"pcrViewLink"});
+    if (prepareStatus.indexOf(pcr.status) >= 0 && isPm) {
+      links.push({
+        route: this.props.routes.pcrPrepare.getLink(pcrLinkArgs),
+        text: "Edit",
+        qa: "pcrPrepareLink",
+      });
+    } else if (pcr.status === PCRStatus.SubmittedToMonitoringOfficer && isMo) {
+      links.push({
+        route: this.props.routes.pcrReview.getLink(pcrLinkArgs),
+        text: "Review",
+        qa: "pcrReviewLink",
+      });
+    } else if (isPmOrMo) {
+      links.push({
+        route: this.props.routes.pcrDetails.getLink(pcrLinkArgs),
+        text: "View",
+        qa: "pcrViewLink",
+      });
     }
 
-    if(pcr.status === PCRStatus.Draft && project.roles & ProjectRole.ProjectManager) {
-      links.push({route: this.props.routes.pcrDelete.getLink({pcrId: pcr.id, projectId: pcr.projectId}), text: "Delete", qa:"pcrDeleteLink"});
+    if(pcr.status === PCRStatus.Draft && isPm) {
+      links.push({
+        route: this.props.routes.pcrDelete.getLink(pcrLinkArgs),
+        text: "Delete",
+        qa: "pcrDeleteLink",
+      });
     }
 
-    return links.map((x,i) => <div key={i} data-qa={x.qa}><ACC.Link route={x.route}>{x.text}</ACC.Link></div>);
+    return links.map((x, i) => (
+      <div key={i} data-qa={x.qa}>
+        <ACC.Link route={x.route}>{x.text}</ACC.Link>
+      </div>
+    ));
   }
 }
 

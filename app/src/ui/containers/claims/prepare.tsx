@@ -3,7 +3,7 @@ import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerB
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
-import { ClaimDto, ClaimStatusChangeDto, CostsSummaryForPeriodDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { ClaimDto, ClaimStatusChangeDto, CostsSummaryForPeriodDto, getAuthRoles, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { StoresConsumer } from "@ui/redux";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
@@ -94,7 +94,7 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
   }
 
   private getBackLink(project: ProjectDto, partner: PartnerDto) {
-    const isPm = (project.roles & ProjectRole.ProjectManager) !== ProjectRole.Unknown;
+    const { isPm } = getAuthRoles(project.roles);
     return isPm ? this.props.routes.allClaimsDashboard.getLink({ projectId: project.id }) : this.props.routes.claimsDashboard.getLink({ projectId: project.id, partnerId: partner.id });
   }
 
