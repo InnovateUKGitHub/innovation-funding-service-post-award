@@ -27,7 +27,7 @@ export class BankSetupStatementDocumentDeleteHandler extends StandardFormHandler
   }
 
   protected getStoreKey(params: ProjectSetupBankStatementParams) {
-    return storeKeys.getProjectKey(params.projectId);
+    return storeKeys.getPartnerKey(params.partnerId);
   }
 
   protected async run(
