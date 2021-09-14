@@ -1,4 +1,4 @@
-import { ClaimFrequency, IContext, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
+import { ClaimFrequency, getAuthRoles, IContext, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import { dayComparator, isNumber, roundCurrency } from "@framework/util";
 import { ISalesforceProject } from "../../repositories/projectsRepository";
 
@@ -65,16 +65,13 @@ const getProjectStatus = (salesforceProjectStatus: string): ProjectStatus => {
 };
 
 const getRoleTitles = (roles: ProjectRole) => {
+  const { isMo, isPm, isFc } = getAuthRoles(roles);
   const results: string[] = [];
-  if ((roles & ProjectRole.MonitoringOfficer) === ProjectRole.MonitoringOfficer) {
-    results.push("Monitoring Officer");
-  }
-  if ((roles & ProjectRole.ProjectManager) === ProjectRole.ProjectManager) {
-    results.push("Project Manager");
-  }
-  if ((roles & ProjectRole.FinancialContact) === ProjectRole.FinancialContact) {
-    results.push("Finance Contact");
-  }
+
+  if (isMo) results.push("Monitoring Officer");
+  if (isPm) results.push("Project Manager");
+  if (isFc) results.push("Finance Contact");
+
   return results;
 };
 

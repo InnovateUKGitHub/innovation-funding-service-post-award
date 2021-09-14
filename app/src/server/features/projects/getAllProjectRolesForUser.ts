@@ -1,4 +1,4 @@
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
+import { Authorisation, getAuthRoles, IContext, ProjectRole } from "@framework/types";
 import { SalesforceProjectRole } from "@server/constants/enums";
 import { Partner } from "@framework/entities";
 import { QueryBase } from "../common/queryBase";
@@ -28,18 +28,18 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
 
     // get all rows grouped by project into lookup
     return contacts.reduce<{ [key: string]: IRoleInfo }>((allRoles, contact) => {
-      const newRole = this.getProjectRole(contact.Acc_Role__c);
+      const newProjectRole = this.getProjectRole(contact.Acc_Role__c);
 
       // get contact for project and if null initalise to empty and assign to allRoles
       const roleInfo = allRoles[contact.Acc_ProjectId__c] = (allRoles[contact.Acc_ProjectId__c] || this.getEmptyRoleInfo());
 
-      roleInfo.projectRoles = roleInfo.projectRoles | newRole;
+      roleInfo.projectRoles = roleInfo.projectRoles | newProjectRole;
 
       partners.forEach(partner => {
         roleInfo.partnerRoles[partner.id] = roleInfo.partnerRoles[partner.id] | ProjectRole.Unknown;
         // if this is a partner level contact then add it at the partner level too
-        if (this.isPartnerContact(contact, partner) && this.isPartnerLevelRole(newRole, partner)) {
-          roleInfo.partnerRoles[partner.id] = roleInfo.partnerRoles[partner.id] | newRole;
+        if (this.isPartnerContact(contact, partner) && this.isPartnerLevelRole(newProjectRole, partner)) {
+          roleInfo.partnerRoles[partner.id] = roleInfo.partnerRoles[partner.id] | newProjectRole;
         }
       });
 
@@ -51,8 +51,10 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
     return !!(contact.Acc_AccountId__c && partner.accountId === contact.Acc_AccountId__c);
   }
 
-  private isPartnerLevelRole(role: ProjectRole, partner: Partner): boolean {
-    return role === ProjectRole.FinancialContact || (role === ProjectRole.ProjectManager && partner.projectRole === SalesforceProjectRole.ProjectLead);
+  private isPartnerLevelRole(projectRole: ProjectRole, partner: Partner): boolean {
+    const { isFc, isPm } = getAuthRoles(projectRole);
+
+    return isFc || (isPm && partner.projectRole === SalesforceProjectRole.ProjectLead);
   }
 
   private async getServiceAccountRoles(context: IContext): Promise<{ [key: string]: IRoleInfo }> {
