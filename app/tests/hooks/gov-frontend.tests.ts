@@ -24,9 +24,9 @@ describe("useGovFrontend()", () => {
       config: {
         isClient: () => clientValue,
       },
-    } as any;
+    } as TestBedStore;
 
-    return renderHook(() => useGovFrontend("Header"), hookTestBed({ stores: stubStore as TestBedStore }));
+    return renderHook(() => useGovFrontend("Header"), hookTestBed({ stores: stubStore }));
   };
 
   test("should call when a node is available", () => {

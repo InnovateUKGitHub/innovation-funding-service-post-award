@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { combineReducers, createStore } from "redux";
 import { Provider } from "react-redux";
 
-import TestBed from "@shared/TestBed";
+import { TestBed, TestBedStore } from "@shared/TestBed";
 import { Content } from "@content/content";
 import { Guide } from "@ui/componentsGuide/guide";
 import { PageTitleState } from "@ui/redux/reducers/pageTitleReducer";
@@ -12,6 +12,8 @@ import * as pkg from "../../package.json";
 import { configuration } from "./features/common";
 
 export function componentGuideRender(req: Request, res: Response) {
+  const nonce = res.locals.nonce;
+
   const exampleTitle: PageTitleState = {
     displayTitle: "Component guide example title",
     htmlTitle: "Display title",
@@ -23,18 +25,25 @@ export function componentGuideRender(req: Request, res: Response) {
 
   const store = createStore(reducer, { title: exampleTitle });
 
+  // The default state for testbed is true - we have to override
+  const serverStore = {
+    config: {
+      isClient: () => false,
+    } as TestBedStore["config"],
+  };
+
   const html = renderToString(
     <Provider store={store}>
-      <TestBed content={new Content()}>
+      <TestBed stores={serverStore as TestBedStore} content={new Content()}>
         <Guide source="server" filter={req.query.guide} />
       </TestBed>
     </Provider>,
   );
 
-  res.send(renderGuide(html));
+  res.send(renderGuide(nonce, html));
 }
 
-const renderGuide = (html: string) => {
+const renderGuide = (nonce: string, html: string) => {
   const govukFrontendVersion = pkg.devDependencies["govuk-frontend"].replace(/[^0-9/.]/, "");
 
   return `
@@ -53,7 +62,7 @@ const renderGuide = (html: string) => {
             <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/govuk-apple-touch-icon-152x152.png">
             <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png">
 
-            <link href="/govuk-frontend-${govukFrontendVersion}.min.css" rel="stylesheet" />
+            <link href="/govuk-frontend-${govukFrontendVersion}.min.css?build=${configuration.build}" rel="stylesheet" />
             <link href="/ifspa-govuk-overrides.css" rel="stylesheet" />
             <link href="/ifspa-govuk-overrides-modal.css" rel="stylesheet" />
 
@@ -62,7 +71,7 @@ const renderGuide = (html: string) => {
             <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
         </head>
         <body class="govuk-template__body ">
-            <script>
+            <script nonce="${nonce}">
                 // if js enabled then hide page for moment to allow any difference from server v client rendering to be sorted
                 document.body.style.visibility = "hidden";
                 setTimeout(() => {
@@ -70,11 +79,14 @@ const renderGuide = (html: string) => {
                 }, 10);
                 document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');
             </script>
+
             <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
+
             <div id="root">${html}</div>
-            <script src="/govuk-frontend-${govukFrontendVersion}.min.js"></script>
-            <script src="/build/vendor.js?build=${configuration.build}"></script>
-            <script src="/build/componentsGuide.js?build=${configuration.build}"></script>
+
+            <script nonce="${nonce}" src="/govuk-frontend-${govukFrontendVersion}.min.js"></script>
+            <script nonce="${nonce}" src="/build/vendor.js?build=${configuration.build}"></script>
+            <script nonce="${nonce}" src="/build/componentsGuide.js?build=${configuration.build}"></script>
         </body>
     </html>
     `;
