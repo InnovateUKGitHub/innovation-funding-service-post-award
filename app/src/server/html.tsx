@@ -37,7 +37,7 @@ export function renderHtml(html: string, htmlTitle: string, preloadedState: any 
 
           ${renderJSGoogleTagManager(configuration.googleTagManagerCode, nonce)}
 
-          <script nonce=${nonce}>
+          <script nonce="${nonce}">
             // if js enabled then hide page for moment to allow any difference from server v client rendering to be sorted
             document.body.style.visibility = "hidden";
             setTimeout(function () {
@@ -47,9 +47,9 @@ export function renderHtml(html: string, htmlTitle: string, preloadedState: any 
             window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, "\\u003c")}
           </script>
 
-          <script nonce=${nonce} src="/govuk-frontend-${govukFrontendVersion}.min.js"></script>
-          <script nonce=${nonce} src="/build/vendor.js?build=${configuration.build}"></script>
-          <script nonce=${nonce} src="/build/bundle.js?build=${configuration.build}"></script>
+          <script nonce="${nonce}" src="/govuk-frontend-${govukFrontendVersion}.min.js?build=${configuration.build}"></script>
+          <script nonce="${nonce}" src="/build/vendor.js?build=${configuration.build}"></script>
+          <script nonce="${nonce}" src="/build/bundle.js?build=${configuration.build}"></script>
           ${renderNonJSGoogleTagManager(configuration.googleTagManagerCode)}
       </body>
   </html>
