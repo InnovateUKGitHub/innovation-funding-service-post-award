@@ -48,21 +48,27 @@ describe("<NavigationArrows />", () => {
 
   describe("@returns", () => {
     test("with next link only", () => {
-      const { queryByText } = setup(<NavigationArrows nextLink={nextLink} />);
+      const { queryByTestId, queryByText } = setup(<NavigationArrows nextLink={nextLink} />);
 
-      expect(queryByText("Next")).toBeInTheDocument();
-      expect(queryByText(nextLink.label)).toBeInTheDocument();
+      const nextArrow = queryByTestId("govuk-navigation-arrow-right");
 
       expect(queryByText("Previous")).not.toBeInTheDocument();
+      expect(queryByText("Next")).toBeInTheDocument();
+      expect(nextArrow).toBeInTheDocument();
+
+      expect(queryByText(nextLink.label)).toBeInTheDocument();
     });
 
     test("with previous link only", () => {
-      const { queryByText } = setup(<NavigationArrows previousLink={previousLink} />);
+      const { queryByTestId, queryByText } = setup(<NavigationArrows previousLink={previousLink} />);
 
-      expect(queryByText("Previous")).toBeInTheDocument();
-      expect(queryByText(previousLink.label)).toBeInTheDocument();
+      const previousArrow = queryByTestId("govuk-navigation-arrow-left");
 
       expect(queryByText("Next")).not.toBeInTheDocument();
+      expect(queryByText("Previous")).toBeInTheDocument();
+      expect(previousArrow).toBeInTheDocument();
+
+      expect(queryByText(previousLink.label)).toBeInTheDocument();
     });
 
     test("with both previous and next link concurrently", () => {

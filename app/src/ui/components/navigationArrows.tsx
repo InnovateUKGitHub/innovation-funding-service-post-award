@@ -1,7 +1,8 @@
-import React from "react";
+import cx from "classnames";
 import { ILinkInfo } from "@framework/types";
-import { Link } from "./links";
-import { ArrowLeft } from "./svg/arrowLeft";
+
+import { Link } from "@ui/components/links";
+import { ArrowLeft, ArrowRight } from "@ui/components/svg/arrows";
 
 interface LinkProps {
   label: string;
@@ -18,22 +19,30 @@ export function NavigationArrows({ previousLink, nextLink }: NavigationArrowsPro
 
   return (
     <div className="govuk-navigation-arrows">
-      {previousLink && <NavigationArrow {...previousLink} name="Previous" qa="arrow-right" />}
+      {previousLink && <NavigationArrow {...previousLink} direction="left" name="Previous" qa="arrow-right" />}
 
-      {nextLink && <NavigationArrow {...nextLink} name="Next" qa="arrow-left" />}
+      {nextLink && <NavigationArrow {...nextLink} direction="right" name="Next" qa="arrow-left" />}
     </div>
   );
 }
 
 type NavigationArrowProps = LinkProps & {
   name: string;
+  direction: "left" | "right";
   qa?: string;
 };
 
-function NavigationArrow({ label, route, name, qa }: NavigationArrowProps) {
+const directionOptions: Record<NavigationArrowProps["direction"], typeof ArrowLeft | typeof ArrowRight> = {
+  left: ArrowLeft,
+  right: ArrowRight,
+};
+
+function NavigationArrow({ direction, label, route, name, qa }: NavigationArrowProps) {
+  const Icon = directionOptions[direction];
+
   return (
     <Link route={route} replace className="govuk-navigation-arrows__button">
-      <ArrowLeft className="govuk-navigation-arrows__button__arrow" />
+      <Icon data-qa={`govuk-navigation-arrow-${direction}`} className="govuk-navigation-arrows__button__arrow" />
 
       <div data-qa={qa} className="govuk-navigation-arrows__button__label">
         <span>{name}</span>
