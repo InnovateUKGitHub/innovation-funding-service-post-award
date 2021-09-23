@@ -16,8 +16,9 @@ import {
   PartnerDto,
   ProjectDto,
   ProjectRole,
+  TotalCosts,
 } from "@framework/types";
-import { roundCurrency, sum } from "@framework/util";
+import { roundCurrency } from "@framework/util";
 
 export interface ClaimSummaryParams {
   projectId: string;
@@ -33,6 +34,7 @@ interface CombinedData {
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
   statusChanges: ClaimStatusChangeDto[];
   documents: DocumentSummaryDto[];
+  totalCosts: TotalCosts;
 }
 
 interface ClaimSummaryComponentProps extends ClaimSummaryParams, BaseProps {
@@ -43,21 +45,19 @@ interface ClaimSummaryComponentProps extends ClaimSummaryParams, BaseProps {
   editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
   statusChanges: Pending<ClaimStatusChangeDto[]>;
   documents: Pending<DocumentSummaryDto[]>;
+  totalCosts: Pending<TotalCosts>;
   onUpdate: (saving: boolean, dto: ClaimDto, next: ILinkInfo) => void;
 }
 
 function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
-  const getClaimLinkProps = (data: CombinedData) => ({
+  const getClaimLinkProps = (data: Pick<CombinedData, "project" | "partner">) => ({
     projectId: data.project.id,
     partnerId: data.partner.id,
     periodId: props.periodId,
   });
 
-  const renderContents = (data: CombinedData) => {
+  const renderContents = ({ totalCosts, ...data }: CombinedData) => {
     const linkProps = getClaimLinkProps(data);
-    const totalCostsClaimed: number = sum(data.claimDetails, claimDetails => claimDetails.costsClaimedThisPeriod);
-
-    const totalCostsPaid = totalCostsClaimed * (data.partner.awardRate! / 100);
 
     return (
       <ACC.Page
@@ -66,7 +66,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title {...data.project} />}
       >
-        {totalCostsClaimed < 0 && (
+        {totalCosts.totalCostsClaimed < 0 && (
           <ACC.ValidationMessage
             qa="summary-warning"
             messageType="info"
@@ -86,10 +86,15 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
             title={<ACC.Content value={x => x.claimPrepareSummary.costsTitle} />}
             qa="costs-to-be-claimed-summary"
           >
+            {data.project.isNonFec && (
+              <ACC.Renderers.SimpleString>
+                <ACC.Content value={x => x.claimPrepareSummary.nonFecCalculationMessage} />
+              </ACC.Renderers.SimpleString>
+            )}
             <ACC.SummaryList qa="costs-to-be-claimed-summary-list">
               <ACC.SummaryListItem
                 label={<ACC.Content value={x => x.claimPrepareSummary.costClaimedLabel} />}
-                content={<ACC.Renderers.Currency value={totalCostsClaimed} />}
+                content={<ACC.Renderers.Currency value={totalCosts.totalCostsClaimed} />}
                 qa="totalCostsClaimed"
               />
 
@@ -101,7 +106,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
 
               <ACC.SummaryListItem
                 label={<ACC.Content value={x => x.claimPrepareSummary.costsToBePaidLabel} />}
-                content={<ACC.Renderers.Currency value={totalCostsPaid} />}
+                content={<ACC.Renderers.Currency value={totalCosts.totalCostsPaid} />}
                 qa="totalCostsPaid"
               />
             </ACC.SummaryList>
@@ -128,7 +133,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
     );
   };
 
-  const renderDocumentValidation = (data: CombinedData) => {
+  const renderDocumentValidation = (data: Pick<CombinedData, "claim" | "documents" | "partner" | "project">) => {
     const linkProps = getClaimLinkProps(data);
     const displayDocumentError = data.claim.isIarRequired && !data.documents.length;
 
@@ -172,7 +177,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
     );
   };
 
-  const renderBackLink = (data: CombinedData) => {
+  const renderBackLink = (data: Pick<CombinedData, "claim" | "project" | "partner">) => {
     const linkProps = getClaimLinkProps(data);
 
     return data.claim.isFinalClaim ? (
@@ -186,7 +191,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
     );
   };
 
-  const renderClaimForm = ({ editor, claim, project }: CombinedData) => {
+  const renderClaimForm = ({ editor, claim, project }: Pick<CombinedData, "editor" | "claim" | "project">) => {
     const Form = ACC.TypedForm<ClaimDto>();
 
     return (
@@ -251,7 +256,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
     props.onUpdate(true, dto, updateLink);
   };
 
-  const renderForecastSummary = (data: CombinedData) => {
+  const renderForecastSummary = (data: Pick<CombinedData, "project" | "partner" | "claim">) => {
     const linkProps = getClaimLinkProps(data);
     const totalEligibleCosts = data.partner.totalParticipantGrant || 0;
     const totalForecastsAndCosts =
@@ -311,6 +316,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
     editor: props.editor,
     statusChanges: props.statusChanges,
     documents: props.documents,
+    totalCosts: props.totalCosts,
   });
 
   return <ACC.PageLoader pending={combined} render={renderContents} />;
@@ -331,6 +337,7 @@ const ClaimSummaryContainer = (props: ClaimSummaryParams & BaseProps) => {
       statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
       documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
       editor={stores.claims.getClaimEditor(true, props.projectId, props.partnerId, props.periodId)}
+      totalCosts={stores.claims.getTotalCosts(props.projectId, props.partnerId, props.periodId)}
       onUpdate={(saving, dto, link) =>
         stores.claims.updateClaimEditor(
           true,

@@ -5,4 +5,5 @@ export interface CostsSummaryForPeriodDto {
     costsClaimedToDate: number;
     costsClaimedThisPeriod: number;
     remainingOfferCosts: number;
+    overrideAwardRate?: number;
 }

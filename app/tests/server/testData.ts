@@ -42,7 +42,7 @@ export class TestData {
       description: `Cost Category description ${seed}`,
       hintText: `Cost Category hint ${seed}`,
       hasRelated: false,
-      isCalculated: false
+      isCalculated: false,
     };
 
     if (update) Object.assign(newItem, update);
@@ -103,6 +103,7 @@ export class TestData {
       Acc_Duration__c: 15,
       Acc_CurrentPeriodStartDate__c: "2020-06-01",
       Acc_CurrentPeriodEndDate__c: "2020-06-30",
+      Acc_NonFEC__c: false,
     };
 
     if (update) update(newItem);

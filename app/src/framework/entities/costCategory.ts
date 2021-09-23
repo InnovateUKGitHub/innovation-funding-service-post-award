@@ -11,4 +11,5 @@ export interface CostCategory {
   description: string;
   hintText: string;
   displayOrder: number;
+  overrideAwardRate?: number;
 }

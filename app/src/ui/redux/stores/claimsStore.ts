@@ -21,12 +21,12 @@ export class ClaimsStore extends StoreBase {
     super(getState, queue);
   }
 
-  private getKey(partnerId: string, periodId: number) {
+  private getClaimKey(partnerId: string, periodId: number) {
     return storeKeys.getClaimKey(partnerId, periodId);
   }
 
   public get(partnerId: string, periodId: number) {
-    return this.getData("claim", this.getKey(partnerId, periodId), p =>
+    return this.getData("claim", this.getClaimKey(partnerId, periodId), p =>
       apiClient.claims.get({ partnerId, periodId, ...p }),
     );
   }
@@ -66,7 +66,7 @@ export class ClaimsStore extends StoreBase {
   }
 
   public markClaimAsStale(partnerId: string, periodId: number): void {
-    this.markStale("claim", this.getKey(partnerId, periodId), undefined);
+    this.markStale("claim", this.getClaimKey(partnerId, periodId), undefined);
   }
 
   public getClaimEditor(
@@ -78,7 +78,7 @@ export class ClaimsStore extends StoreBase {
   ) {
     return this.getEditor(
       "claim",
-      this.getKey(partnerId, periodId),
+      this.getClaimKey(partnerId, periodId),
       () => this.get(partnerId, periodId),
       init,
       dto => this.validate(projectId, partnerId, periodId, dto, false, isClaimSummary),
@@ -98,12 +98,12 @@ export class ClaimsStore extends StoreBase {
     this.updateEditor(
       saving,
       "claim",
-      this.getKey(partnerId, periodId),
+      this.getClaimKey(partnerId, periodId),
       dto,
       showErrors => this.validate(projectId, partnerId, periodId, dto, showErrors, isClaimSummary),
       p => apiClient.claims.update({ projectId, partnerId, periodId, claim: dto, ...p }),
       result => {
-        this.markStale("claim", this.getKey(partnerId, periodId), result);
+        this.markStale("claim", this.getClaimKey(partnerId, periodId), result);
         if (message) {
           this.queue(messageSuccess(message));
         }
@@ -148,8 +148,14 @@ export class ClaimsStore extends StoreBase {
   }
 
   public getStatusChanges(projectId: string, partnerId: string, periodId: number) {
-    return this.getData("claimStatusChanges", this.getKey(partnerId, periodId), p =>
+    return this.getData("claimStatusChanges", this.getClaimKey(partnerId, periodId), p =>
       apiClient.claims.getStatusChanges({ projectId, partnerId, periodId, ...p }),
+    );
+  }
+
+  public getTotalCosts(projectId: string, partnerId: string, periodId: number) {
+    return this.getData("claimTotalCosts", storeKeys.getClaimTotalCostsKey(projectId, partnerId, periodId), p =>
+      apiClient.claims.getTotalCosts({ partnerId, projectId, periodId, ...p }),
     );
   }
 }

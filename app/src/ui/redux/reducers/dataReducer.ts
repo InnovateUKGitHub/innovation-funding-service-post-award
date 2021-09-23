@@ -18,7 +18,8 @@ import {
   PCRSpendProfileCapitalUsageType,
   PCRSpendProfileOverheadRate,
   ProjectContactDto,
-  ProjectRole
+  ProjectRole,
+  TotalCosts
 } from "@framework/types";
 import { State } from "router5";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
@@ -78,6 +79,7 @@ export const dataReducer = combineReducers({
   jesOnlyAccounts: dataStoreReducer<Dtos.AccountDto[]>("jesOnlyAccounts"),
   claims: dataStoreReducer<Dtos.ClaimDto[]>("claims"),
   claim: dataStoreReducer<Dtos.ClaimDto>("claim"),
+  claimTotalCosts: dataStoreReducer<TotalCosts>("claimTotalCosts"),
   claimDetail: dataStoreReducer<ClaimDetailsDto>("claimDetail"),
   claimDetails: dataStoreReducer<ClaimDetailsSummaryDto[]>("claimDetails"),
   claimStatusChanges: dataStoreReducer<Dtos.ClaimStatusChangeDto[]>("claimStatusChanges"),

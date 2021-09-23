@@ -44,6 +44,7 @@ export class SalesforceCostCategoryMapper extends SalesforceBaseMapper<ISalesfor
       description: x.Acc_CostCategoryDescription__c,
       hintText: x.Acc_HintText__c,
       displayOrder: x.Acc_DisplayOrder__c,
+      overrideAwardRate: x.Acc_OverrideAwardRate__c,
     };
   }
 }

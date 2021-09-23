@@ -50,6 +50,7 @@ const stubProject: ProjectDto = {
   numberOfOpenClaims: 0,
   durationInMonths: 0,
   numberOfPeriods: 0,
+  isNonFec: false,
 };
 
 const stubProjectStatusUnknown: ProjectDto = {

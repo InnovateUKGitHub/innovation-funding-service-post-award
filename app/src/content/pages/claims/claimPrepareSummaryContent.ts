@@ -31,5 +31,6 @@ export class ClaimPrepareSummaryContent extends ContentPageBase {
   public readonly differenceLabel = this.getContent("difference-label");
   public readonly editForecastMessage = this.getContent("edit-forecast-message");
   public readonly costsTitle = this.getContent("costs-title");
+  public readonly nonFecCalculationMessage = this.getContent("non-fec-calculation-message");
   public readonly forecastTitle = this.getContent("forecast-title");
 }

@@ -11,7 +11,7 @@ export default (mod?: Partial<CostCategoryDto>): CostCategoryDto => {
     isCalculated: false,
     hasRelated: false,
     hintText: "",
-    organisationType: "Industrial" as any
+    organisationType: "Industrial" as any,
   };
   return { ...template, ...mod };
 };

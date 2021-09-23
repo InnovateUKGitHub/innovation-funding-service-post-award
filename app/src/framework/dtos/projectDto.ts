@@ -39,4 +39,5 @@ export interface ProjectDto {
     numberOfOpenClaims: number;
     durationInMonths: number;
     numberOfPeriods: number;
+    isNonFec: boolean;
 }
