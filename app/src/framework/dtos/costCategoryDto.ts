@@ -10,4 +10,5 @@ export interface CostCategoryDto {
   hasRelated: boolean;
   description: string;
   hintText: string;
+  overrideAwardRate?: number;
 }

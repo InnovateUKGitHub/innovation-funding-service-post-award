@@ -42,6 +42,7 @@ export const mapToProjectDto = (context: IContext, item: ISalesforceProject, rol
     numberOfOpenClaims: item.Acc_NumberOfOpenClaims__c,
     durationInMonths: item.Acc_Duration__c,
     numberOfPeriods: isNumber(item.Acc_NumberofPeriods__c) ? item.Acc_NumberofPeriods__c : 0,
+    isNonFec: item.Acc_NonFEC__c,
   };
 };
 

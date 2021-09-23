@@ -47,7 +47,8 @@ describe("mapToProjectDto", () => {
       statusName: "Live",
       numberOfOpenClaims: 10,
       numberOfPeriods: 5,
-      durationInMonths: 15
+      durationInMonths: 15,
+      isNonFec: false,
     };
 
     const project = context.testData.createProject(x => {
@@ -75,6 +76,7 @@ describe("mapToProjectDto", () => {
       x.Acc_CurrentPeriodEndDate__c = periodEndDate.toFormat("yyyy-MM-dd");
       x.Acc_Duration__c = expected.durationInMonths;
       x.Acc_LeadParticipantName__c = expected.leadPartnerName;
+      x.Acc_NonFEC__c = expected.isNonFec;
     });
 
     const result = mapToProjectDto(context, project, ProjectRole.Unknown);
@@ -169,5 +171,18 @@ describe("mapToProjectDto", () => {
 
     expect(result.costsClaimedToDate).toBe(500000);
 
+  });
+
+  it("Non-FEC should be returned", () => {
+    const context = new TestContext();
+    const stubIsNonFec = true;
+
+    const salesforce = context.testData.createProject(x => {
+      x.Acc_NonFEC__c = stubIsNonFec;
+    });
+
+    const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+
+    expect(result.isNonFec).toBeTruthy();
   });
 });

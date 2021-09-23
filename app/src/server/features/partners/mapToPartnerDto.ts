@@ -69,7 +69,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
       auditReportFrequencyName: this.item.auditReportFrequencyName,
       totalPrepayment: this.item.totalPrepayment,
       percentageParticipantCostsSubmitted: this.valueIfPermission(this.calcPercentageClaimed(this.item.totalParticipantCosts, this.item.totalCostsSubmitted)),
-      totalFundingDueToReceive: this.valueIfPermission(this.item.totalParticipantCosts * (this.item.awardRate / 100)),
+      totalFundingDueToReceive: this.valueIfPermission(this.item.totalParticipantCosts * (this.item.awardRate / 100)), // TODO update calc here?
       newForecastNeeded: this.item.newForecastNeeded,
       // For active partners initialise these as complete as they may not have come through the acc ui and therefore not be set correctly
       spendProfileStatus: partnerStatus === PartnerStatus.Active ? SpendProfileStatus.Complete : new PartnerSpendProfileStatusMapper().mapFromSalesforce(this.item.spendProfileStatus),

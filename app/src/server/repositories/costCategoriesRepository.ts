@@ -10,6 +10,7 @@ export interface ISalesforceCostCategory {
   Acc_CompetitionType__c: string;
   Acc_CostCategoryDescription__c: string;
   Acc_HintText__c: string;
+  Acc_OverrideAwardRate__c: number;
 }
 
 export interface ICostCategoryRepository {
@@ -34,7 +35,8 @@ export class CostCategoryRepository extends SalesforceRepositoryBaseWithMapping<
     "Acc_OrganisationType__c",
     "Acc_CompetitionType__c",
     "Acc_CostCategoryDescription__c",
-    "Acc_HintText__c"
+    "Acc_HintText__c",
+    "Acc_OverrideAwardRate__c",
   ];
 
   protected mapper = new SalesforceCostCategoryMapper();

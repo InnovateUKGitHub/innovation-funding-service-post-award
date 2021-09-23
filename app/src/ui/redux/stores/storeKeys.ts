@@ -7,6 +7,7 @@ const getPartnerKey = (partnerId: string) => getKey("partnerKey", "partner", par
 const getPartnersKey = () => getKey("partnersKey", "partner", "all");
 const getCostCategoryKey = (partnerId: string) => getKey("costCategoryKey", "filtered", partnerId);
 const getClaimKey = (partnerId: string, periodId: number) => getKey("claimKey", "partner", partnerId, "period", periodId);
+const getClaimTotalCostsKey = (partnerId: string, projectId: string, periodId: number) => getKey("claimTotalCosts", "project", projectId, "partner", partnerId, "period", periodId);
 const getClaimDetailKey = (partnerId: string, periodId: number, costCategoryId: string) => getKey("claimDetailsKey", "partner", partnerId, "period", periodId, "costCategory", costCategoryId);
 const getForecastDetailKey = (partnerId: string, periodId: number, costCategoryId: string) => getKey("forecastDetailKey", "partner", partnerId, "period", periodId, "costCategory", costCategoryId);
 const getMonitoringReportKey = (projectId: string, id?: string) => getKey("monitoringReportKey", "project", projectId, "report", id || "new");
@@ -36,6 +37,7 @@ export const storeKeys = {
   getPartnersKey,
   getCostCategoryKey,
   getClaimKey,
+  getClaimTotalCostsKey,
   getClaimDetailKey,
   getForecastDetailKey,
   getMonitoringReportKey,

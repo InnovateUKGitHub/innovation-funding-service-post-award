@@ -10,7 +10,8 @@ const createSalesforceRecord = (update?: Partial<ISalesforceCostCategory>): ISal
     Acc_CompetitionType__c: "Test_Competition",
     Acc_CostCategoryDescription__c: "Test_Description",
     Acc_HintText__c: "Test_Hint",
-    };
+    Acc_OverrideAwardRate__c: 0,
+  };
 
   if(update) Object.assign(item, update);
 
@@ -99,5 +100,14 @@ describe("SalesforceCostCategoryMapper", () => {
 
     expect(result1.isCalculated).toEqual(false);
     expect(result2.isCalculated).toEqual(false);
+  });
+
+  it("Maps overrideAwardRate correctly", () => {
+    const overrideAwardRate = 35;
+    const mapper = new SalesforceCostCategoryMapper();
+
+    const expected = mapper.map(createSalesforceRecord({ Acc_OverrideAwardRate__c : overrideAwardRate }));
+
+    expect(expected.overrideAwardRate).toEqual(overrideAwardRate);
   });
 });
