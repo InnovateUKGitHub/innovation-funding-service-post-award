@@ -1,7 +1,6 @@
 import https from "https";
 import fs from "fs";
 import express from "express";
-import cors from "cors";
 
 import { IContext, PermissionGroupIdenfifier } from "@framework/types";
 import { GetClaimStatusesQuery } from "@server/features/claims/getClaimStatusesQuery";
@@ -87,7 +86,6 @@ export class Server {
 
   private middleware() {
     const middlewareFns = [
-      cors({ origin: true }),
       ...this.parserLimits(),
       this.handleRouter5GetWithPlus,
       this.requestLogger,
