@@ -77,7 +77,7 @@ export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePar
   }
 }
 
-function parseSalesForceWarningFlagUI(flagAsImageString: string): boolean {
+export function parseSalesForceWarningFlagUI(flagAsImageString: string): boolean {
   /**
    * Note: This field returns a string with an html img element :(
    *
