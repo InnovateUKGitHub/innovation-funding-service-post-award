@@ -18,13 +18,16 @@ interface LinkProps extends StyledLinkProps {
 }
 
 const getClassNames = (styling: TStyling, className?: string) => {
-  return classNames({
-    "govuk-link": styling === "Link",
-    "govuk-button": styling === "PrimaryButton" || styling === "SecondaryButton",
-    "govuk-!-margin-right-1": styling === "PrimaryButton" || styling === "SecondaryButton",
-    "govuk-button--secondary": styling === "SecondaryButton",
-    "govuk-back-link": styling === "BackLink"
-  }, className);
+  return classNames(
+    {
+      "govuk-link": styling === "Link",
+      "govuk-button": styling === "PrimaryButton" || styling === "SecondaryButton",
+      "govuk-!-margin-right-1": styling === "PrimaryButton" || styling === "SecondaryButton",
+      "govuk-button--secondary": styling === "SecondaryButton",
+      "govuk-back-link": styling === "BackLink",
+    },
+    className,
+  );
 };
 
 export class Link extends React.Component<LinkProps> {
@@ -35,7 +38,7 @@ export class Link extends React.Component<LinkProps> {
 
     const options = {
       replace: this.props.replace || false,
-      preserveData: this.props.preserveData || false
+      preserveData: this.props.preserveData || false,
     };
 
     return (
@@ -64,10 +67,32 @@ export class ModalLink extends React.Component<ModalLinkProps> {
     const { modalId, children } = this.props;
     const styling = this.props.styling || "Link";
     const className = getClassNames(styling, this.props.className);
-    return <a href={this.props.open ? `#${modalId}` : "#"} className={className}>{children}</a>;
+
+    return (
+      <a href={this.props.open ? `#${modalId}` : "#"} className={className}>
+        {children}
+      </a>
+    );
   }
 }
 
-export const BackLink: React.FunctionComponent<LinkProps> = (props) => (
-  <Link styling="BackLink" {...props}>{props.children}</Link>
+export const BackLink: React.FunctionComponent<LinkProps> = props => (
+  <Link styling="BackLink" {...props}>
+    {props.children}
+  </Link>
 );
+
+interface GovLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  children: string | React.ReactNode;
+}
+
+export const GovLink = React.forwardRef<HTMLAnchorElement, GovLinkProps>(function GovLinkWithoutRef(
+  { children, className, ...props }: GovLinkProps,
+  ref,
+) {
+  return (
+    <a ref={ref} {...props} className={classNames("govuk-link", className)}>
+      {children}
+    </a>
+  );
+});

@@ -42,7 +42,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
         <ACC.Section title={x => x.pcrAddPartnerAcademicCosts.costsSectionTitle}>
           <Table.Table qa="costsTable" data={data}>
             <Table.String
-              headerContent={x => x.pcrAddPartnerAcademicCosts.categoryHeading}
+              header={x => x.pcrAddPartnerAcademicCosts.categoryHeading}
               qa="category"
               value={x => x.costCategory.name}
               footer={this.props.isClient &&
@@ -51,7 +51,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
               </ACC.Renderers.SimpleString>}
             />
             <Table.Currency
-              headerContent={x => x.pcrAddPartnerAcademicCosts.costHeading}
+              header={x => x.pcrAddPartnerAcademicCosts.costHeading}
               qa="cost"
               value={x => x.costDto? x.costDto.value : 0}
               width={30}

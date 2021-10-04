@@ -168,9 +168,9 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             footers={this.renderFooters(mockItems, forecastDetail, false, editor)}
             qa="current-claim-summary-table"
           >
-            <LineItemTable.String headerContent={x => x.editClaimLineItems.descriptionHeader} qa="cost-description" value={(x) => x.description} />
-            <LineItemTable.ShortDate headerContent={x => x.editClaimLineItems.lastUpdatedHeader} qa="cost-last-updated" value={(x) => x.lastModifiedDate} />
-            <LineItemTable.Currency headerContent={x => x.editClaimLineItems.costHeader} qa="cost-value" value={(x) => x.value} width={30} />
+            <LineItemTable.String header={x => x.editClaimLineItems.descriptionHeader} qa="cost-description" value={(x) => x.description} />
+            <LineItemTable.ShortDate header={x => x.editClaimLineItems.lastUpdatedHeader} qa="cost-last-updated" value={(x) => x.lastModifiedDate} />
+            <LineItemTable.Currency header={x => x.editClaimLineItems.costHeader} qa="cost-value" value={(x) => x.value} width={30} />
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
         {supportingDocumentContent}
@@ -201,11 +201,11 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             footers={this.renderFooters(editor.data.lineItems, forecastDetail, this.state.showAddRemove, editor)}
             qa="current-claim-summary-table"
           >
-            <LineItemTable.Custom headerContent={x => x.editClaimLineItems.descriptionHeader} qa="cost-description" value={(x, i) => this.renderDescription(x, i, validationResults[i.row], editor)} />
-            <LineItemTable.Custom headerContent={x => x.editClaimLineItems.costHeader} qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, validationResults[i.row], editor)} width={30} />
-            <LineItemTable.ShortDate headerContent={x => x.editClaimLineItems.lastUpdatedHeader} qa="cost-last-updated" value={x => x.lastModifiedDate} />
+            <LineItemTable.Custom header={x => x.editClaimLineItems.descriptionHeader} qa="cost-description" value={(x, i) => this.renderDescription(x, i, validationResults[i.row], editor)} />
+            <LineItemTable.Custom header={x => x.editClaimLineItems.costHeader} qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, validationResults[i.row], editor)} width={30} />
+            <LineItemTable.ShortDate header={x => x.editClaimLineItems.lastUpdatedHeader} qa="cost-last-updated" value={x => x.lastModifiedDate} />
             {this.state.showAddRemove ?
-              <LineItemTable.Custom headerContent={x => x.editClaimLineItems.actionHeader} hideHeader qa="remove" value={(x, i) => <a href="" className="govuk-link" role="button" onClick={e => this.removeItem(x, i, e, editor)}><ACC.Content value={y => y.editClaimLineItems.removeButton}/></a>} width={1}/>
+              <LineItemTable.Custom header={x => x.editClaimLineItems.actionHeader} hideHeader qa="remove" value={(x, i) => <a href="" className="govuk-link" role="button" onClick={e => this.removeItem(x, i, e, editor)}><ACC.Content value={y => y.editClaimLineItems.removeButton}/></a>} width={1}/>
               : null}
           </LineItemTable.Table>
         </LineItemForm.Fieldset>

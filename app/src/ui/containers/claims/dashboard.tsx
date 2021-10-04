@@ -22,7 +22,6 @@ interface Data {
 }
 
 class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
-
   public render() {
     const combined = Pending.combine({
       project: this.props.projectDetails,
@@ -31,10 +30,20 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
       currentClaim: this.props.currentClaim,
     });
 
-    return <Acc.PageLoader pending={combined} render={(x) => this.renderContents(x.project, x.partner, x.currentClaim, x.previousClaims)} />;
+    return (
+      <Acc.PageLoader
+        pending={combined}
+        render={x => this.renderContents(x.project, x.partner, x.currentClaim, x.previousClaims)}
+      />
+    );
   }
 
-  private renderContents(project: ProjectDto, partner: PartnerDto, currentClaim: ClaimDto | null, previousClaims: ClaimDto[], ) {
+  private renderContents(
+    project: ProjectDto,
+    partner: PartnerDto,
+    currentClaim: ClaimDto | null,
+    previousClaims: ClaimDto[],
+  ) {
     return (
       <Acc.Page
         pageTitle={<Acc.Projects.Title {...project} />}
@@ -46,7 +55,13 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
 
         <Acc.Renderers.Messages messages={this.props.messages} />
         <Acc.Section qa="current-claims-section" title={x => x.claimsDashboard.labels.openSectionTitle}>
-          {this.renderCurrentClaims(currentClaim ? [currentClaim] : [], "current-claims-table", project, partner, previousClaims)}
+          {this.renderCurrentClaims(
+            currentClaim ? [currentClaim] : [],
+            "current-claims-table",
+            project,
+            partner,
+            previousClaims,
+          )}
         </Acc.Section>
         <Acc.Section qa="previous-claims-section" title={x => x.claimsDashboard.labels.closedSectionTitle}>
           {this.renderPreviousClaims(previousClaims, "previous-claims-table", project, partner)}
@@ -61,18 +76,24 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
     if (previousClaims && previousClaims.find(x => x.isFinalClaim)) {
       return (
         <Acc.Renderers.SimpleString qa="yourFinalClaimApprovedNotificationMessage">
-          <Acc.Content value={x => x.claimsDashboard.messages.noRemainingClaims}/>
+          <Acc.Content value={x => x.claimsDashboard.messages.noRemainingClaims} />
         </Acc.Renderers.SimpleString>
       );
     }
     return (
       <Acc.Renderers.SimpleString>
-        <Acc.Content value={x => x.claimsDashboard.messages.noOpenClaimsMessage(date)}/>
+        <Acc.Content value={x => x.claimsDashboard.messages.noOpenClaimsMessage(date)} />
       </Acc.Renderers.SimpleString>
     );
   }
 
-  private renderCurrentClaims(currentClaims: ClaimDto[], tableQa: string, project: ProjectDto, partner: PartnerDto, previousClaims: ClaimDto[]) {
+  private renderCurrentClaims(
+    currentClaims: ClaimDto[],
+    tableQa: string,
+    project: ProjectDto,
+    partner: PartnerDto,
+    previousClaims: ClaimDto[],
+  ) {
     if (currentClaims.length) {
       return this.renderClaimsTable(currentClaims, tableQa, project, partner, "Open");
     }
@@ -89,10 +110,20 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
       return this.renderClaimsTable(data, tableQa, project, partner, "Closed");
     }
 
-    return <Acc.Renderers.SimpleString><Acc.Content value={x => x.claimsDashboard.messages.noClosedClaims}/></Acc.Renderers.SimpleString>;
+    return (
+      <Acc.Renderers.SimpleString>
+        <Acc.Content value={x => x.claimsDashboard.messages.noClosedClaims} />
+      </Acc.Renderers.SimpleString>
+    );
   }
 
-  private renderClaimsTable(data: ClaimDto[], tableQa: string, project: ProjectDto, partner: PartnerDto, tableCaption?: string) {
+  private renderClaimsTable(
+    data: ClaimDto[],
+    tableQa: string,
+    project: ProjectDto,
+    partner: PartnerDto,
+    tableCaption?: string,
+  ) {
     const ClaimTable = Acc.TypedTable<ClaimDto>();
 
     return (
@@ -103,41 +134,37 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
         caption={tableCaption}
       >
         <ClaimTable.Custom
-          headerContent={x => x.claimsDashboard.labels.period}
+          header={x => x.claimsDashboard.labels.period}
           qa="period"
           value={x => <Acc.Claims.ClaimPeriodDate claim={x} />}
         />
         <ClaimTable.Currency
-          headerContent={x => x.claimsDashboard.labels.forecastCosts}
-          header={<Acc.Content value={x => x.claimsDashboard.labels.forecastCosts} />}
+          header={x => x.claimsDashboard.labels.forecastCosts}
           qa="forecast-cost"
           value={x => x.forecastCost}
         />
         <ClaimTable.Currency
-          headerContent={x => x.claimsDashboard.labels.actualCosts}
-          header={<Acc.Content value={x => x.claimsDashboard.labels.actualCosts} />}
+          header={x => x.claimsDashboard.labels.actualCosts}
           qa="actual-cost"
           value={x => x.totalCost}
         />
         <ClaimTable.Currency
-          headerContent={x => x.claimsDashboard.labels.difference}
-          header={<Acc.Content value={x => x.claimsDashboard.labels.difference} />}
+          header={x => x.claimsDashboard.labels.difference}
           qa="diff"
           value={x => roundCurrency(x.forecastCost - x.totalCost)}
         />
         <ClaimTable.Custom
-          headerContent={x => x.claimsDashboard.labels.status}
-          header={<Acc.Content value={x => x.claimsDashboard.labels.status} />}
+          header={x => x.claimsDashboard.labels.status}
           qa="status"
           value={x => x.statusLabel}
         />
         <ClaimTable.ShortDate
-          header={<Acc.Content value={x => x.claimsDashboard.labels.lastUpdated} />}
+          header={x => x.claimsDashboard.labels.lastUpdated}
           qa="date"
           value={x => x.paidDate || x.approvedDate || x.lastModifiedDate}
         />
         <ClaimTable.Custom
-          header={<Acc.Content value={x => x.claimsDashboard.labels.actionHeader} />}
+          header={x => x.claimsDashboard.labels.actionHeader}
           hideHeader
           qa="link"
           value={x => (
@@ -167,15 +194,17 @@ export const ClaimsDashboardRoute = defineRoute({
   routeName: "claimsDashboard",
   routePath: "/projects/:projectId/claims/?partnerId",
   container: ClaimsDashboardRouteContainer,
-  getParams: (route) => ({
+  getParams: route => ({
     projectId: route.params.projectId,
-    partnerId: route.params.partnerId
+    partnerId: route.params.partnerId,
   }),
   accessControl: (auth, params) => {
     const isFC = auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact);
-    const isMoOrPm = auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
+    const isMoOrPm = auth
+      .forProject(params.projectId)
+      .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
 
     return isFC && !isMoOrPm;
   },
-  getTitle: ({ content }) => content.claimsDashboard.title()
+  getTitle: ({ content }) => content.claimsDashboard.title(),
 });

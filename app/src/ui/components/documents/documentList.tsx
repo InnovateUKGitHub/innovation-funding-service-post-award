@@ -9,6 +9,7 @@ import { getFileSize } from "../../../framework/util/files";
 import { TypedForm } from ".././form";
 import { LinksList } from ".././linksList";
 import { ValidationMessage } from "../validationMessage";
+import { GovLink } from "../links";
 
 interface Props {
   documents: DocumentSummaryDto[];
@@ -21,12 +22,10 @@ const mapDocumentToLink = (document: DocumentSummaryDto, i: number) => ({
   qa: `document-${i}`,
 });
 
-export const DocumentList: React.FunctionComponent<Props> = ({ documents = [], qa}: Props) => {
-  // @TODO: should server not do this?
-  documents.sort((a,b) => stringComparator(a.fileName, b.fileName));
+export const DocumentList: React.FunctionComponent<Props> = ({ documents = [], qa }: Props) => {
   return (
     <div data-qa={qa}>
-      <LinksList openNewWindow links={documents.map(mapDocumentToLink)}/>
+      <LinksList openNewWindow links={documents.map(mapDocumentToLink)} />
     </div>
   );
 };
@@ -35,22 +34,29 @@ interface PropsWithRemove extends Props {
   onRemove: (d: DocumentSummaryDto) => void;
 }
 
-export const DocumentListWithDelete: React.FunctionComponent<PropsWithRemove> = ({ documents = [], qa, onRemove }: PropsWithRemove) => {
-  // @TODO: should server not do this?
-  documents.sort((a,b) => stringComparator(a.fileName, b.fileName));
-
+export function DocumentListWithDelete({ documents = [], qa, onRemove }: PropsWithRemove) {
   const Form = TypedForm<DocumentSummaryDto[]>();
+
   return (
     <div data-qa={qa}>
       <Form.Form data={documents}>
         {documents.map((dto, i) => (
-          <div className="govuk-!-padding-bottom-4" key={`document-${i}`} data-qa={`row-document-${i}`}>
-            <a target="_blank" rel="noreferrer" href={dto.link} className="govuk-link govuk-!-font-size-19" data-qa={`document-${i}`}>{dto.fileName}</a>
+          <div key={`document-${i}`} className="govuk-!-padding-bottom-4" data-qa={`row-document-${i}`}>
+            <GovLink
+              data-qa={`document-${i}`}
+              className="govuk-!-font-size-19"
+              href={dto.link}
+              target="_blank"
+              rel="noreferrer"
+            >
+              {dto.fileName}
+            </GovLink>
+
             <Form.Button
               name="delete"
               styling="Link"
               className="govuk-!-font-size-19"
-              style={({ marginLeft: "15px" })}
+              style={{ marginLeft: "15px" }}
               onClick={() => onRemove(dto)}
               value={dto.id}
             >
@@ -61,19 +67,15 @@ export const DocumentListWithDelete: React.FunctionComponent<PropsWithRemove> = 
       </Form.Form>
     </div>
   );
-};
-
-const renderDocumentName = (document: DocumentSummaryDto) => {
-  return <a target="_blank" rel="noreferrer" href={document.link} className="govuk-link">{document.fileName}</a>;
-};
+}
 
 interface DocumentTableWithDeleteProps extends Props {
-  hideRemove?: (d: DocumentSummaryDto) => boolean;
   onRemove: (d: DocumentSummaryDto) => void;
 }
 
-export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithDeleteProps> = ({ documents = [], qa, hideRemove, onRemove }: DocumentTableWithDeleteProps) => {
+export function DocumentTableWithDelete({ documents = [], qa, onRemove }: DocumentTableWithDeleteProps) {
   const Form = TypedForm<DocumentSummaryDto[]>();
+
   return (
     <Form.Form data={documents}>
       <DocumentTable
@@ -82,53 +84,97 @@ export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithD
         customContent={table => (
           <table.Custom
             qa="delete"
-            value={(x) => {
-              if (hideRemove && hideRemove(x)) return null;
-              return (
-                <Form.Button name="delete" styling="Link" className="govuk-!-font-size-19" style={({ marginLeft: "15px" })} onClick={() => onRemove(x)} value={x.id}>
-                  Remove
-                </Form.Button>);
-            }}
-          />)}
+            value={x => (
+              <Form.Button
+                name="delete"
+                styling="Link"
+                className="govuk-!-font-size-19"
+                style={{ marginLeft: "15px" }}
+                onClick={() => onRemove(x)}
+                value={x.id}
+              >
+                Remove
+              </Form.Button>
+            )}
+          />
+        )}
       />
-    </Form.Form>);
-};
+    </Form.Form>
+  );
+}
 
 interface DocumentTableProps extends Props {
   customContent?: (table: ITypedTable<DocumentSummaryDto>) => TableChild<DocumentSummaryDto>;
 }
 
-export const DocumentTable: React.FunctionComponent<DocumentTableProps> = ({ documents = [], qa, customContent }: DocumentTableProps) => {
-  documents.sort((a,b) => stringComparator(a.fileName, b.fileName));
+export function DocumentTable({ documents = [], qa, customContent }: DocumentTableProps) {
   const ProjectDocumentsTable = TypedTable<DocumentSummaryDto>();
+
   return (
-      <ProjectDocumentsTable.Table data={documents} qa={qa}>
-        <ProjectDocumentsTable.Custom header="File name" qa="fileName" value={x => renderDocumentName(x)} />
-        <ProjectDocumentsTable.Custom header="Type" qa="fileType" value={x => x.description ? <Content value={c => c.components.documents.labels.documentDescriptionLabel(x.description!)}/> : null} />
-        <ProjectDocumentsTable.ShortDate header="Date uploaded" qa="dateUploaded" value={x => x.dateCreated} />
-        <ProjectDocumentsTable.Custom header="Size" qa="fileSize" classSuffix="numeric" value={x => getFileSize(x.fileSize)} />
-        <ProjectDocumentsTable.String header="Uploaded by" qa="uploadedBy" value={x => x.uploadedBy} />
-        {customContent ? customContent(ProjectDocumentsTable) : null}
-      </ProjectDocumentsTable.Table>
+    <ProjectDocumentsTable.Table data={documents} qa={qa}>
+      <ProjectDocumentsTable.Custom
+        sortByKey="fileName"
+        header="File name"
+        qa="fileName"
+        value={x => (
+          <GovLink target="_blank" rel="noreferrer" href={x.link}>
+            {x.fileName}
+          </GovLink>
+        )}
+      />
+
+      <ProjectDocumentsTable.Custom
+        header="Type"
+        qa="fileType"
+        value={x =>
+          x.description ? (
+            <Content value={c => c.components.documents.labels.documentDescriptionLabel(x.description!)} />
+          ) : null
+        }
+      />
+
+      <ProjectDocumentsTable.ShortDate
+        sortByKey="dateCreated"
+        header="Date uploaded"
+        qa="dateUploaded"
+        value={x => x.dateCreated}
+      />
+
+      <ProjectDocumentsTable.Custom
+        sortByKey="fileSize"
+        header="Size"
+        qa="fileSize"
+        classSuffix="numeric"
+        value={x => getFileSize(x.fileSize)}
+      />
+
+      <ProjectDocumentsTable.String
+        sortByKey="uploadedBy"
+        header="Uploaded by"
+        qa="uploadedBy"
+        value={x => x.uploadedBy}
+      />
+
+      {customContent?.(ProjectDocumentsTable) || null}
+    </ProjectDocumentsTable.Table>
   );
-};
+}
 
 export interface DocumentViewProps {
   documents: DocumentSummaryDto[];
   validationMessage?: string;
 }
 
-export const DocumentView = (props: DocumentViewProps) => {
+export function DocumentView({ documents, validationMessage }: DocumentViewProps) {
   const { getContent } = useContent();
-  const defaultMessage =
-    props.validationMessage || getContent(x => x.components.documentView.fallbackValidationMessage);
+  const defaultMessage = validationMessage || getContent(x => x.components.documentView.fallbackValidationMessage);
 
-  return props.documents.length ? (
-    <DocumentTable documents={props.documents} qa="supporting-documents" />
+  return documents.length ? (
+    <DocumentTable documents={documents} qa="supporting-documents" />
   ) : (
     <ValidationMessage message={defaultMessage} messageType="info" />
   );
-};
+}
 
 interface DocumentFilterProps {
   name: string;
@@ -138,8 +184,8 @@ interface DocumentFilterProps {
   placeholder?: string;
 }
 
-// Note: TypedForm enforces an object shaped payload, so this can't a single primitive string
 interface DocumentFilterState {
+  // Note: TypedForm enforces an object shaped payload, so this can't a single primitive string :(
   filteredText: string;
 }
 

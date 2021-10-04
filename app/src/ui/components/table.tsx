@@ -1,23 +1,31 @@
-import React from "react";
-import classNames from "classnames";
+import React, { cloneElement, isValidElement, useMemo } from "react";
+import cx from "classnames";
+import _isPlainObject from "lodash.isplainobject";
+
 import { ILinkInfo } from "@framework/types/ILinkInfo";
+import { Result, Results } from "@ui/validation";
+import { Link } from "@ui/components/links";
+import {
+  FullDate,
+  ShortDate,
+  ShortDateTime,
+  Email,
+  Currency,
+  Percentage,
+  AccessibilityText,
+} from "@ui/components/renderers";
+import * as colour from "@ui/styles/colours";
 import { ContentSelector } from "@content/content";
-import { Result } from "@ui/validation";
-import * as colour from "../styles/colours";
-import { Results } from "../validation/results";
-import { FullDate, ShortDate, ShortDateTime } from "./renderers/date";
-import { Email } from "./renderers/email";
-import { Currency } from "./renderers/currency";
-import { Percentage } from "./renderers/percentage";
-import { Link } from "./links";
-import { AccessibilityText } from "./renderers/accessibilityText";
-import { Content } from "./content";
+import { useContent } from "@ui/hooks";
+
+import { TableSortKey, useTableSorter } from "./documents/table-sorter";
 
 export type DividerTypes = "normal" | "bold";
 type ColumnMode = "cell" | "header" | "footer" | "col";
 interface InternalColumnProps<T> {
-  header?: React.ReactNode;
-  headerContent?: ContentSelector;
+  header?: string | ContentSelector | React.ReactElement<unknown>; // Note: Some currency components return values as element not strings
+  onSortClick?: () => void;
+  "aria-sort"?: "none" | "ascending" | "descending";
   dataItem?: T;
   footer?: React.ReactNode;
   classSuffix?: "numeric";
@@ -36,8 +44,8 @@ interface InternalColumnProps<T> {
 }
 
 interface ExternalColumnProps<T, TResult> {
-  header?: React.ReactNode;
-  headerContent?: ContentSelector;
+  header?: string | ContentSelector | React.ReactElement<unknown>; // Note: Some currency components return values as element not strings
+  sortByKey?: T extends object ? keyof T : undefined;
   value: (item: T, index: { column: number; row: number }) => TResult;
   cellClassName?: (data: T, index: { column: number; row: number }) => string | null | undefined;
   colClassName?: (col: number) => string;
@@ -66,198 +74,294 @@ interface TableProps<T> {
   footerRowClass?: string;
 }
 
-export class TableColumn<T> extends React.Component<InternalColumnProps<T>> {
-  render() {
-    switch (this.props.mode) {
-      case "cell":
-        return this.renderCell(this.props.dataItem!, this.props.columnIndex!, this.props.rowIndex!);
-      case "header":
-        return this.renderHeader(this.props.columnIndex!);
-      case "footer":
-        return this.renderFooter(this.props.columnIndex!);
-      case "col":
-        return this.renderCol(this.props.columnIndex!);
-    }
-    return null;
-  }
-
-  renderHeader(column: number) {
-    const className = classNames(
-      "govuk-table__header",
-      this.props.colClassName && this.props.colClassName(column),
-      { ["govuk-table__header--" + this.props.classSuffix]: !!this.props.classSuffix }
-    );
-    return <th className={className} scope="col" key={column}>{this.renderHeaderElement()}</th>;
-  }
-
-  renderHeaderElement() {
-    const header = this.props.headerContent ? <Content value={x => this.props.headerContent!(x)} /> : this.props.header;
-    return this.props.hideHeader ? <AccessibilityText>{header}</AccessibilityText> : header;
-  }
-
-  renderFooter(column: number) {
-    const className = classNames("govuk-table__header", { ["govuk-table__header--" + this.props.classSuffix]: !!this.props.classSuffix });
-    return <td className={className} key={column}>{this.props.footer}</td>;
-  }
-
-  renderCell(data: T, column: number, row: number) {
-    const className = classNames(
-      "govuk-table__cell",
-      this.props.cellClassName && this.props.cellClassName(data, { column, row }),
-      this.props.colClassName && this.props.colClassName(column),
-      { ["govuk-table__cell--" + this.props.classSuffix]: !!this.props.classSuffix }
-    );
-    return <td style={{ paddingRight: this.props.paddingRight }} className={className} key={column}>{this.props.renderCell(data, { column, row })}</td>;
-  }
-
-  renderCol(column: number) {
-    const style: React.CSSProperties = {};
-    if (this.props.width) {
-      style.width = this.props.width + "%";
-    }
-
-    if (this.props.isDivider) {
-      if (this.props.isDivider === "normal") {
-        style.borderRight = "1px solid " + colour.govukBorderColour;
-      } else {
-        style.borderRight = "3px solid " + colour.govukColourBlack;
-      }
-    }
-
-    return <col key={column} data-qa={`col-${this.props.qa || column.toString()}`} style={style} />;
-  }
+interface SortButtonProps {
+  children: React.ReactNode;
+  isSortable: boolean;
 }
 
-const TableComponent = <T extends {}>(props: TableProps<T> & { data: T[]; validationResult?: Results<{}>[] }) => {
-  const standardRowCssClass = "govuk-table__row";
-  // loop through the colums cloning them and assigning the props required
-  const children = React.Children.toArray(props.children).filter(x => !!x);
-  const customHeaders = props.headers && props.headers.length ? props.headers : null;
-  const headers = children.map((column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "header", columnIndex }));
-  const cols = children.map((column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "col", columnIndex }));
-  const contents = props.data.map((dataItem, rowIndex) => children.map((column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "cell", rowIndex, columnIndex, dataItem, validation: props.validationResult && props.validationResult[rowIndex] })));
-  const footerColumns = children.some((x: any) => x.props && x.props.footer)
-    ? children.map((column, columnIndex) => React.cloneElement(column as React.ReactElement<any>, { mode: "footer", columnIndex }))
+function SortButton({ isSortable, ...props }: SortButtonProps) {
+  if (!isSortable) return <>{props.children}</>;
+
+  return <button {...props} type="button" className="table-sort-button" />;
+}
+
+export function TableColumn<T>({
+  header,
+  columnIndex,
+  classSuffix,
+  paddingRight,
+  "aria-sort": ariaSort,
+  ...props
+}: InternalColumnProps<T>) {
+  const { getContent } = useContent();
+  if (!props.mode) return null;
+
+  const renderHeader = (column: number): JSX.Element => {
+    const headerValue: string | JSX.Element = isValidElement(header) ? header : getContent(header || "");
+    const noHeaderValue: boolean = typeof headerValue === "string" ? !headerValue.length : false;
+
+    const HeadingContainer = props.hideHeader || noHeaderValue ? AccessibilityText : SortButton;
+
+    return (
+      <th
+        key={column}
+        onClick={props.onSortClick}
+        aria-sort={ariaSort}
+        scope="col"
+        className={cx("govuk-table__header", props.colClassName?.(column), {
+          [`govuk-table__header--${classSuffix}`]: !!classSuffix,
+        })}
+      >
+        <HeadingContainer isSortable={!!ariaSort}>{headerValue}</HeadingContainer>
+      </th>
+    );
+  };
+
+  const renderFooter = (column: number) => (
+    <td
+      key={column}
+      className={cx("govuk-table__header", {
+        [`govuk-table__header--${classSuffix}`]: !!classSuffix,
+      })}
+    >
+      {props.footer}
+    </td>
+  );
+
+  const renderCell = (data: T, column: number, row: number) => {
+    const renderedValue = props.renderCell(data, { column, row });
+
+    return (
+      <td
+        key={column}
+        style={{ paddingRight }}
+        className={cx("govuk-table__cell", props.cellClassName?.(data, { column, row }), props.colClassName?.(column), {
+          ["govuk-table__cell--" + classSuffix]: !!classSuffix,
+        })}
+      >
+        {renderedValue}
+      </td>
+    );
+  };
+
+  const renderCol = (column: number): JSX.Element => {
+    const qaValue = `col-${props.qa || column}`;
+    const styles: React.CSSProperties = {};
+
+    if (props.width) {
+      styles.width = `${props.width}%`;
+    }
+
+    if (props.isDivider) {
+      const hasStandardBorder = props.isDivider === "normal";
+      const border = hasStandardBorder ? colour.govukBorderColour : colour.govukColourBlack;
+
+      styles.borderRight = `1px solid ${border}`;
+    }
+
+    return <col key={column} data-qa={qaValue} style={styles} />;
+  };
+
+  const tableColumnOptions: Record<ColumnMode, () => JSX.Element> = {
+    header: () => renderHeader(columnIndex!),
+    footer: () => renderFooter(columnIndex!),
+    col: () => renderCol(columnIndex!),
+    cell: () => renderCell(props.dataItem!, columnIndex!, props.rowIndex!),
+  };
+
+  return tableColumnOptions[props.mode]();
+}
+
+const rowClassesStates: Record<"warning" | "error" | "info" | "edit", string> = {
+  warning: "table__row--warning",
+  error: "table__row--error",
+  info: "table__row--info",
+  edit: "table__row--info",
+};
+
+const standardRowCssClass = "govuk-table__row";
+
+function getSortKeys<T>(items: TableChild<T>[]): TableSortKey[] {
+  // Note: We check all data items are an object as we need keys to sort from
+  const isSortableHeader: boolean = items.every(_isPlainObject);
+
+  if (!isSortableHeader) {
+    return Array(items.length).fill(null);
+  }
+
+  return items.map(x => (x?.props.sortByKey ? `${x.props.sortByKey}` : null));
+}
+
+const TableComponent = <T extends {}>({
+  children: unflattenedChildren,
+  validationResult,
+  data,
+  footers,
+  qa,
+  className,
+  caption,
+  ...props
+}: TableProps<T> & { validationResult?: Results<{}>[] }) => {
+  const { getContent } = useContent();
+  const children = useMemo(() => React.Children.toArray(unflattenedChildren).filter(Boolean) as TableChild<T>[], [
+    unflattenedChildren,
+  ]);
+
+  const { handleSort, getColumnOption, sortedRows } = useTableSorter(getSortKeys(children), data);
+
+  const headers = children.map((column, columnIndex) =>
+    cloneElement(column as React.ReactElement<any>, {
+      mode: "header",
+      columnIndex,
+      header: isValidElement(column?.props.header) ? column?.props.header : getContent(column?.props.header || ""),
+      "aria-sort": getColumnOption?.(columnIndex),
+      onSortClick: () => handleSort(columnIndex),
+    }),
+  );
+
+  const cols = children.map((column, columnIndex) =>
+    cloneElement(column as React.ReactElement<any>, { mode: "col", columnIndex }),
+  );
+
+  const contents = sortedRows.map((dataItem, rowIndex) =>
+    children.map((column, columnIndex) =>
+      cloneElement(column as React.ReactElement<any>, {
+        mode: "cell",
+        rowIndex,
+        columnIndex,
+        dataItem,
+        validation: validationResult?.[rowIndex],
+      }),
+    ),
+  );
+
+  const rowClass = data.map((dataItem, rowIndex) => props.bodyRowClass?.(dataItem, rowIndex) || "");
+
+  const rowFlags = data.map((dataItem, rowIndex) => {
+    const validation = validationResult?.[rowIndex];
+    const hasError = validation?.showValidationErrors && !validation.isValid;
+
+    if (hasError) return "error";
+
+    return props.bodyRowFlag?.(dataItem, rowIndex) || null;
+  });
+
+  const rowIds = data.map((_, rowIndex) => {
+    const validation = validationResult?.[rowIndex];
+
+    return validation?.showValidationErrors && !validation.isValid ? validation.errors[0].key : undefined;
+  });
+
+  const rowClasses = rowFlags.map(x => (x ? rowClassesStates[x] : ""));
+
+  const childColumnsHasFooters = children.some(x => x!.props.footer);
+
+  const footerColumns = childColumnsHasFooters
+    ? children.map((column, columnIndex) =>
+        cloneElement(column as React.ReactElement<any>, { mode: "footer", columnIndex }),
+      )
     : [];
-  const footers = footerColumns.length ? [<tr key="standardFooter" className={classNames(standardRowCssClass, props.footerRowClass)}>{footerColumns}</tr>] : [];
-  (props.footers || []).forEach(customFooter => footers.push(customFooter));
-
-  const rowClass = props.data.map((dataItem, rowIndex) => (props.bodyRowClass && props.bodyRowClass(dataItem, rowIndex)) || "");
-
-  const rowFlags = props.data.map((dataItem, rowIndex) => {
-    const validation = props.validationResult && props.validationResult[rowIndex];
-    if (validation && validation.showValidationErrors && !validation.isValid) {
-      return "error";
-    }
-    if (props.bodyRowFlag) {
-      return props.bodyRowFlag(dataItem, rowIndex);
-    }
-    return null;
-  });
-
-  const rowIds = props.data.map((dataItem, rowIndex) => {
-    const validation = props.validationResult && props.validationResult[rowIndex];
-    if (validation && validation.showValidationErrors && !validation.isValid) {
-      return validation.errors[0].key;
-    }
-    return undefined;
-  });
-
-  const rowClasses = rowFlags.map(x => {
-    switch (x) {
-      case "warning": return "table__row--warning";
-      case "error": return "table__row--error";
-      case "info": return "table__row--info";
-      case "edit": return "table__row--info";
-      default: return "";
-    }
-  });
+  const hasFooterColumns = !!footerColumns.length;
+  const displayFooter = hasFooterColumns || !!footers?.length;
 
   return (
-    <div data-qa={props.qa} style={{ overflowX: "auto" }}>
-      <table className={classNames("govuk-table", props.className)}>
-        {props.caption ? <caption className="govuk-visually-hidden">{props.caption}</caption> : null}
-        <colgroup>
-          {cols}
-        </colgroup>
+    <div className="govuk-table-wrapper" data-qa={qa}>
+      <table className={cx("govuk-table", className)}>
+        {caption && <caption className="govuk-visually-hidden">{caption}</caption>}
+
+        <colgroup>{cols}</colgroup>
+
         <thead className="govuk-table__head">
-          {customHeaders}
-          <tr className={classNames(standardRowCssClass, props.headerRowClass)}>
-            {headers}
-          </tr>
+          {!!props.headers?.length && props.headers}
+
+          <tr className={cx(standardRowCssClass, props.headerRowClass)}>{headers}</tr>
         </thead>
+
         <tbody className="govuk-table__body">
-          {
-            contents.map((row, rowIndex) => <tr id={rowIds[rowIndex]} className={classNames(standardRowCssClass, rowClass[rowIndex], rowClasses[rowIndex])} key={rowIndex}>{row}</tr>)
-          }
+          {contents.map((row, rowIndex) => (
+            <tr
+              key={rowIndex}
+              id={rowIds[rowIndex]}
+              className={cx(standardRowCssClass, rowClass[rowIndex], rowClasses[rowIndex])}
+            >
+              {row}
+            </tr>
+          ))}
         </tbody>
-        {footers.length ? <tfoot>{footers}</tfoot> : null}
+
+        {displayFooter && (
+          <tfoot>
+            {hasFooterColumns && (
+              <tr key="standardFooter" className={cx(standardRowCssClass, props.footerRowClass)}>
+                {footerColumns}
+              </tr>
+            )}
+
+            {footers || null}
+          </tfoot>
+        )}
       </table>
     </div>
   );
 };
 
-const CustomColumn = <T extends {}>(props: ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }) => {
-  const TypedColumn = TableColumn as new() => TableColumn<T>;
-  return <TypedColumn paddingRight={props.paddingRight} renderCell={(data, index) => props.value(data, index)} {...props} />;
-};
+function CustomColumn<T extends {}>(props: ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }) {
+  return <TableColumn<T> {...props} renderCell={(data, index) => props.value(data, index)} />;
+}
 
-const StringColumn = <T extends {}>(props: ExternalColumnProps<T, string | null>) => {
-  const TypedColumn = TableColumn as new() => TableColumn<T>;
-  return <TypedColumn renderCell={(data, index) => props.value(data, index)} {...props} />;
-};
+function StringColumn<T extends {}>(props: ExternalColumnProps<T, string | null>) {
+  return <TableColumn<T> {...props} renderCell={(data, index) => props.value(data, index)} />;
+}
 
-const NumberColumn = <T extends {}>(props: ExternalColumnProps<T, number | null>) => {
-  const TypedColumn = TableColumn as new() => TableColumn<T>;
-  return <TypedColumn classSuffix="numeric" renderCell={(data, index) => props.value(data, index)} {...props} />;
-};
+function NumberColumn<T extends {}>(props: ExternalColumnProps<T, number | null>) {
+  return <TableColumn<T> {...props} classSuffix="numeric" renderCell={(data, index) => props.value(data, index)} />;
+}
 
-const FullDateColumn = <T extends {}>(props: ExternalColumnProps<T, Date | null>) => {
-  const TypedColumn = TableColumn as new() => TableColumn<T>;
-  return <TypedColumn renderCell={(data, index) => <FullDate value={props.value(data, index)} />} {...props} />;
-};
+function FullDateColumn<T extends {}>(props: ExternalColumnProps<T, Date | null>) {
+  return <TableColumn<T> {...props} renderCell={(data, index) => <FullDate value={props.value(data, index)} />} />;
+}
 
-const ShortDateColumn = <T extends {}>(props: ExternalColumnProps<T, Date | null>) => {
-  const TypedColumn = TableColumn as new() => TableColumn<T>;
-  return <TypedColumn renderCell={(data, index) => <ShortDate value={props.value(data, index)} />} {...props} />;
-};
+function ShortDateColumn<T extends {}>(props: ExternalColumnProps<T, Date | null>) {
+  return <TableColumn<T> {...props} renderCell={(data, index) => <ShortDate value={props.value(data, index)} />} />;
+}
 
-const ShortDateTimeColumn = <T extends {}>(props: ExternalColumnProps<T, Date | null>) => {
-  const TypedColumn = TableColumn as new() => TableColumn<T>;
-  return <TypedColumn renderCell={(data, index) => <ShortDateTime value={props.value(data, index)} />} {...props} />;
-};
+function ShortDateTimeColumn<T extends {}>(props: ExternalColumnProps<T, Date | null>) {
+  return <TableColumn<T> {...props} renderCell={(data, index) => <ShortDateTime value={props.value(data, index)} />} />;
+}
 
-const EmailColumn = <T extends {}>(props: ExternalColumnProps<T, string | null>) => {
-  const TypedColumn = TableColumn as new () => TableColumn<T>;
+function EmailColumn<T extends {}>(props: ExternalColumnProps<T, string>) {
+  return <TableColumn<T> {...props} renderCell={(data, index) => <Email>{props.value(data, index)}</Email>} />;
+}
 
+function CurrencyColumn<T extends {}>(props: ExternalColumnProps<T, number | null> & { fractionDigits?: number }) {
   return (
-    <TypedColumn
+    <TableColumn<T>
       {...props}
-      renderCell={(data, index) => {
-        const emailValue = props.value(data, index);
-        return emailValue && <Email>{emailValue}</Email>;
-      }}
+      classSuffix="numeric"
+      renderCell={(data, index) => <Currency value={props.value(data, index)} fractionDigits={props.fractionDigits} />}
+    />
+  );
+}
+
+const PercentageColumn = <T extends {}>(props: ExternalColumnProps<T, number | null> & { fractionDigits?: number }) => {
+  return (
+    <TableColumn<T>
+      {...props}
+      classSuffix="numeric"
+      renderCell={(data, index) => (
+        <Percentage value={props.value(data, index)} fractionDigits={props.fractionDigits} />
+      )}
     />
   );
 };
 
-const CurrencyColumn = <T extends {}>(props: ExternalColumnProps<T, number | null> & { fractionDigits?: number }) => {
-  const TypedColumn = TableColumn as new() => TableColumn<T>;
-  return <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Currency value={props.value(data, index)} fractionDigits={props.fractionDigits} />} {...props} />;
-};
-
-const PercentageColumn = <T extends {}>(props: ExternalColumnProps<T, number | null> & { fractionDigits?: number }) => {
-  const TypedColumn = TableColumn as new() => TableColumn<T>;
-  return <TypedColumn classSuffix="numeric" renderCell={(data, index) => <Percentage value={props.value(data, index)} fractionDigits={props.fractionDigits} />} {...props} />;
-};
-
-interface LinkColumnProps<T> extends ExternalColumnProps<T, ILinkInfo> {
-  content: React.ReactNode;
-}
-
-const LinkColumn = <T extends {}>(props: LinkColumnProps<T>) => {
-  const TypedColumn = TableColumn as new() => TableColumn<T>;
-  return <TypedColumn renderCell={(data, index) => <Link route={props.value(data, index)} >{props.content}</Link>} {...props} />;
+const LinkColumn = <T extends {}>(props: ExternalColumnProps<T, ILinkInfo> & { content: React.ReactNode }) => {
+  return (
+    <TableColumn<T>
+      {...props}
+      renderCell={(data, index) => <Link route={props.value(data, index)}>{props.content}</Link>}
+    />
+  );
 };
 
 export interface ITypedTable<T extends {}> {
@@ -270,8 +374,8 @@ export interface ITypedTable<T extends {}> {
   FullDate: React.FunctionComponent<ExternalColumnProps<T, Date | null>>;
   ShortDate: React.FunctionComponent<ExternalColumnProps<T, Date | null>>;
   ShortDateTime: React.FunctionComponent<ExternalColumnProps<T, Date | null>>;
-  Email: React.FunctionComponent<ExternalColumnProps<T, string | null>>;
-  Link: React.FunctionComponent<LinkColumnProps<T>>;
+  Email: React.FunctionComponent<ExternalColumnProps<T, string>>;
+  Link: React.FunctionComponent<ExternalColumnProps<T, ILinkInfo> & { content: React.ReactNode }>;
 }
 
 export const TypedTable = <T extends {}>(): ITypedTable<T> => ({
@@ -284,6 +388,6 @@ export const TypedTable = <T extends {}>(): ITypedTable<T> => ({
   FullDate: FullDateColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
   ShortDate: ShortDateColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
   ShortDateTime: ShortDateTimeColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
-  Email: EmailColumn as React.FunctionComponent<ExternalColumnProps<T, string | null>>,
-  Link: LinkColumn as React.FunctionComponent<LinkColumnProps<T>>
+  Email: EmailColumn as React.FunctionComponent<ExternalColumnProps<T, string>>,
+  Link: LinkColumn as React.FunctionComponent<ExternalColumnProps<T, ILinkInfo> & { content: React.ReactNode }>,
 });

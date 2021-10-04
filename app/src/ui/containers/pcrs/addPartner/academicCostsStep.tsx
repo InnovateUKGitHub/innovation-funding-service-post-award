@@ -76,13 +76,13 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
         <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.costsGuidance}/></ACC.Renderers.SimpleString>
         <Table.Table qa="costsTable" data={data}>
           <Table.String
-            headerContent={x => x.pcrAddPartnerAcademicCosts.categoryHeading}
+            header={x => x.pcrAddPartnerAcademicCosts.categoryHeading}
             qa="category"
             value={x => x.costCategory.name}
             footer={this.props.isClient && <ACC.Renderers.SimpleString className={"govuk-!-font-weight-bold"}><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.totalCosts}/></ACC.Renderers.SimpleString>}
           />
           <Table.Custom
-            headerContent={x => x.pcrAddPartnerAcademicCosts.costHeading}
+            header={x => x.pcrAddPartnerAcademicCosts.costHeading}
             qa="cost-value"
             classSuffix="numeric"
             value={x => this.renderCost(x)}
