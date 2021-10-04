@@ -113,7 +113,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
             <UploadForm.Fieldset>
               <ACC.DocumentGuidance/>
               <UploadForm.Hidden name="description" value={dto => dto.description}/>
-              <UploadForm.MulipleFileUpload
+              <UploadForm.MultipleFileUpload
                 labelContent={x => x.claimDetailDocuments.documentMessages.uploadDocumentsLabel}
                 labelHidden
                 name="attachment"

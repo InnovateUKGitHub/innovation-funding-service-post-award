@@ -11,7 +11,7 @@ import { TextInput } from "./inputs/textInput";
 import { NumberInput } from "./inputs/numberInput";
 import { RadioList } from "./inputs/radioList";
 import { CheckboxList } from "./inputs/checkboxList";
-import { FileUpload, MulipleFileUpload } from "./inputs/fileUpload";
+import { MultipleFileUpload } from "./inputs/fileUpload";
 import { FullDateInput, MonthYearInput } from "./inputs/dateInput";
 import { Button } from "./styledButton";
 import { SearchInput } from "./inputs/searchInput";
@@ -287,6 +287,7 @@ const CheckboxOptionsField = <T extends {}>(props: CheckboxFieldProps<T> & Inter
 export interface DropdownOption {
   id: string;
   value: string | number;
+  qa?: string;
 }
 
 interface DropdownFieldProps<T extends {}> extends ExternalFieldProps<T, DropdownOption> {
@@ -300,7 +301,17 @@ const DropdownListField = <T extends {}>(props: DropdownFieldProps<T> & Internal
   return (
     <TypedFieldComponent
       {...props}
-      field={(data, disabled) => <DropdownList placeholder={props.placeholder} options={props.options} name={props.name} hasEmptyOption={props.hasEmptyOption} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} disabled={disabled} />}
+      field={(data, disabled) => (
+        <DropdownList
+          placeholder={props.placeholder}
+          options={props.options}
+          name={props.name}
+          hasEmptyOption={props.hasEmptyOption}
+          value={props.value(data, disabled)}
+          onChange={val => handleChange(props, val)}
+          disabled={disabled}
+        />
+      )}
     />
   );
 };
@@ -383,17 +394,10 @@ const ButtonComponent = <T extends {}>(props: ButtonProps & InternalFieldProps<T
   </Button>
 );
 
-const FileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, IFileWrapper> & InternalFieldProps<T>) => (
+const MultipleFileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, IFileWrapper[]> & InternalFieldProps<T>) => (
   <FieldComponent
     {...props}
-    field={((data, disabled, hasError) => <FileUpload value={props.value(data, disabled)} name={props.name} onChange={(val) => handleChange(props, val)} disabled={disabled} error={hasError} />)}
-  />
-);
-
-const MulipleFileUploadComponent = <T extends {}>(props: ExternalFieldProps<T, IFileWrapper[]> & InternalFieldProps<T>) => (
-  <FieldComponent
-    {...props}
-    field={((data, disabled, hasError) => <MulipleFileUpload value={props.value(data, disabled)} name={props.name} onChange={(val) => handleChange(props, val)} disabled={disabled} error={hasError} />)}
+    field={((data, disabled, hasError) => <MultipleFileUpload value={props.value(data, disabled)} name={props.name} onChange={(val) => handleChange(props, val)} disabled={disabled} error={hasError} />)}
   />
 );
 
@@ -461,8 +465,7 @@ export interface FormBuilder<T> {
   Submit: React.FunctionComponent<SubmitProps>;
   SubmitAndContinue: React.FunctionComponent<SubmitPropsBase>;
   Button: React.FunctionComponent<ButtonProps>;
-  FileUpload: React.FunctionComponent<ExternalFieldProps<T, IFileWrapper>>;
-  MulipleFileUpload: React.FunctionComponent<ExternalFieldProps<T, IFileWrapper[]>>;
+  MultipleFileUpload: React.FunctionComponent<ExternalFieldProps<T, IFileWrapper[]>>;
   Date: React.FunctionComponent<ExternalFieldProps<T, Date>>;
   MonthYear: React.FunctionComponent<MonthYearProps<T, Date>>;
   Custom: React.FunctionComponent<ExternalFieldProps<T, React.ReactNode>>;
@@ -482,8 +485,7 @@ export const TypedForm = <T extends {}>(): FormBuilder<T> => ({
   Submit: SubmitComponent as React.FunctionComponent<SubmitProps>,
   SubmitAndContinue: SubmitAndContinueComponent as React.FunctionComponent<SubmitPropsBase>,
   Button: ButtonComponent as React.FunctionComponent<ButtonProps>,
-  FileUpload: FileUploadComponent as React.FunctionComponent<ExternalFieldProps<T, IFileWrapper>>,
-  MulipleFileUpload: MulipleFileUploadComponent as React.FunctionComponent<ExternalFieldProps<T, IFileWrapper[]>>,
+  MultipleFileUpload: MultipleFileUploadComponent as React.FunctionComponent<ExternalFieldProps<T, IFileWrapper[]>>,
   Date: FullDateComponent as React.FunctionComponent<ExternalFieldProps<T, Date>>,
   MonthYear: MonthYearComponent as React.FunctionComponent<MonthYearProps<T, Date>>,
   Custom: CustomComponent as React.FunctionComponent<ExternalFieldProps<T, React.ReactNode>>

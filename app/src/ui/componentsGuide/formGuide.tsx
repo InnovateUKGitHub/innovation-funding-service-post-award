@@ -22,7 +22,7 @@ export const formGuide: IGuide = {
             <ExampleForm.Radio label="Radio option" name="option" hint="The option value" inline={true} options={this.options} value={dto => dto.option} update={(dto, option) => dto.option = option}/>
             <ExampleForm.DropdownList label="Drop down list option" name="option" hint="The option value" hasEmptyOption={true} options={this.options} value={dto => dto.option} update={(dto, option) => dto.option = option}/>
             <ExampleForm.Checkboxes label="Checkbox option" name="option" hint="The option value" options={this.multiOptions} value={dto => dto.mulipleOptions} update={(dto, options) => dto.mulipleOptions = options}/>
-            <ExampleForm.FileUpload value={dto => dto.file} label="Upload file" name="upload file" hint="select file" update={(dto, file) => dto.file = file}/>
+            <ExampleForm.MultipleFileUpload value={dto => dto.file} label="Upload file" name="upload file" hint="select file" update={(dto, file) => dto.file = file}/>
         </ExampleForm.Fieldset>
         <ExampleForm.Submit>Save</ExampleForm.Submit>
     </ExampleForm.Form>
@@ -41,7 +41,7 @@ interface ISimpleEditorDto {
   dropdownOption: { value: string | number; id: string } | null;
   mulipleOptions: { value: React.ReactNode; id: string }[] | null;
   dropdownOptions: { value: string | number; id: string }[] | null;
-  file: IFileWrapper | null;
+  file: IFileWrapper[] | null;
 }
 
 class SimpleForm extends React.Component<{}, { original: ISimpleEditorDto; editor: ISimpleEditorDto }> {
@@ -138,7 +138,7 @@ class SimpleForm extends React.Component<{}, { original: ISimpleEditorDto; edito
               value={dto => dto.mulipleOptions}
               update={(dto, options) => (dto.mulipleOptions = options)}
             />
-            <ExampleForm.FileUpload
+            <ExampleForm.MultipleFileUpload
               value={dto => dto.file}
               label="Upload file"
               name="upload file"

@@ -112,7 +112,7 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<
                 <UploadForm.Fieldset>
                   <ACC.DocumentGuidance />
 
-                  <UploadForm.MulipleFileUpload
+                  <UploadForm.MultipleFileUpload
                     labelContent={x => x.projectDocuments.documentLabels.uploadInputLabel}
                     name="attachment"
                     labelHidden

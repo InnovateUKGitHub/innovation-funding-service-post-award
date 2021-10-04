@@ -96,7 +96,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
           <UploadForm.Fieldset qa="documentUpload" headingContent={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadHeading}>
             <UploadForm.Hidden name="description" value={() => DocumentDescription.OverheadCalculationSpreadsheet} />
             <ACC.DocumentGuidance />
-            <UploadForm.MulipleFileUpload
+            <UploadForm.MultipleFileUpload
               labelContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.uploadInputLabel}
               name="attachment"
               labelHidden

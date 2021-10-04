@@ -37,7 +37,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForAccountNameChange
         >
           <UploadForm.Fieldset headingContent={x => x.pcrNameChangePrepareItemFiles.uploadCertificateHeading}>
             <ACC.DocumentGuidance/>
-            <UploadForm.MulipleFileUpload
+            <UploadForm.MultipleFileUpload
               labelContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.uploadInputLabel}
               name="attachment"
               labelHidden

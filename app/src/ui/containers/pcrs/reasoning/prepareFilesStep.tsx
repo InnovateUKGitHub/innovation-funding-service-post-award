@@ -44,7 +44,7 @@ class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & 
         >
           <UploadForm.Fieldset headingContent={x => x.pcrReasoningPrepareFiles.documentMessages.uploadDocumentsLabel}>
           <ACC.DocumentGuidance />
-            <UploadForm.MulipleFileUpload
+            <UploadForm.MultipleFileUpload
               labelContent={x => x.pcrReasoningPrepareFiles.documentLabels.uploadInputLabel}
               name="attachment"
               labelHidden
