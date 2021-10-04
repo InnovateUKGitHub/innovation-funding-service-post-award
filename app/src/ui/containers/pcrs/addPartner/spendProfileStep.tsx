@@ -55,8 +55,8 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     return (
       <ACC.Section>
         <Table.Table qa="costsTable" data={data}>
-          <Table.Custom headerContent={x => x.pcrAddPartnerSpendProfile.categoryHeading} qa="category" value={x => x.costCategory.name} footer={<ACC.Renderers.SimpleString className={"govuk-!-font-weight-bold"}><ACC.Content value={x => x.pcrAddPartnerSpendProfile.totalCosts}/></ACC.Renderers.SimpleString>} />
-          <Table.Currency headerContent={x => x.pcrAddPartnerSpendProfile.costHeading} qa="cost" value={x => x.cost} footer={<ACC.Renderers.Currency value={total} />} />
+          <Table.Custom header={x => x.pcrAddPartnerSpendProfile.categoryHeading} qa="category" value={x => x.costCategory.name} footer={<ACC.Renderers.SimpleString className={"govuk-!-font-weight-bold"}><ACC.Content value={x => x.pcrAddPartnerSpendProfile.totalCosts}/></ACC.Renderers.SimpleString>} />
+          <Table.Currency header={x => x.pcrAddPartnerSpendProfile.costHeading} qa="cost" value={x => x.cost} footer={<ACC.Renderers.Currency value={total} />} />
           <Table.Custom value={x => this.getLinkToCostSummary(x)} qa="view-or-edit-cost"/>
         </Table.Table>
       </ACC.Section>

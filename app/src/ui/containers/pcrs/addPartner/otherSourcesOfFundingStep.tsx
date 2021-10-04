@@ -56,7 +56,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     return (
       <table.Table qa="otherFundingTable" data={funds} footers={this.renderFooters(pcrItem)}>
         <table.Custom
-          headerContent={x => x.pcrAddPartnerOtherFundingSources.columnHeaderDescription}
+          header={x => x.pcrAddPartnerOtherFundingSources.columnHeaderDescription}
           qa="cost-description"
           value={(x, i) => (
             <>
@@ -76,7 +76,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           )}
         />
         <table.Custom
-          headerContent={x => x.pcrAddPartnerOtherFundingSources.columnHeaderDate}
+          header={x => x.pcrAddPartnerOtherFundingSources.columnHeaderDate}
           qa="cost-date"
           value={(x, i) => (
             <form.MonthYear
@@ -93,7 +93,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           )}
         />
         <table.Custom
-          headerContent={x => x.pcrAddPartnerOtherFundingSources.columnHeaderValue}
+          header={x => x.pcrAddPartnerOtherFundingSources.columnHeaderValue}
           qa="cost-value"
           value={(x, i) => (
             <form.Numeric

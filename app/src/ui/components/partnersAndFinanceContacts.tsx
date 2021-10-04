@@ -26,19 +26,19 @@ export function PartnersAndFinanceContacts({
     <PartnersTable.Table qa="finance-contact-details" data={partnersAndContactsData}>
       <PartnersTable.String
         qa="fc-name"
-        headerContent={x => projectContactLabels(x).contactName}
+        header={x => projectContactLabels(x).contactName}
         value={x => x.financeContact?.name || ""}
       />
 
       <PartnersTable.Custom
         qa="partner-name"
-        headerContent={x => projectContactLabels(x).partnerName}
+        header={x => projectContactLabels(x).partnerName}
         value={x => getPartnerName(x.partner, true)}
       />
 
       <PartnersTable.Email
         qa="fc-email"
-        headerContent={x => projectContactLabels(x).contactEmail}
+        header={x => projectContactLabels(x).contactEmail}
         value={x => x.financeContact?.email || ""}
       />
     </PartnersTable.Table>

@@ -45,6 +45,10 @@ body,
   color: #1d70b8;
 }
 
+.govuk-table-wrapper {
+  overflow-x: auto;
+}
+
 .govuk-table__cell:not(:first-child):not(:last-child),
 .govuk-table__header:not(:first-child):not(:last-child) {
   padding: 10px 10px;
@@ -123,6 +127,75 @@ body,
 
 .acc-table__cell-top-border {
   border-top: black 3px solid;
+}
+
+/* Table Sort button Styles */
+
+.table-sort-button,
+.table-sort-button:hover {
+  background-color: transparent;
+  border-width: 0;
+  -webkit-box-shadow: 0 0 0 0;
+  -moz-box-shadow: 0 0 0 0;
+  box-shadow: 0 0 0 0;
+  color: #005ea5;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  padding: 0 10px 0 0;
+  position: relative;
+  text-align: inherit;
+  font-size: 1em;
+  margin: 0;
+}
+
+.table-sort-button:focus {
+  background-color: #fd0;
+  color: #0b0c0c;
+  box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
+  outline: none;
+}
+
+.table-sort-button:first-child button {
+  right: auto;
+}
+
+.table-sort-button:before {
+  content: " \25bc";
+  position: absolute;
+  right: -1px;
+  top: 9px;
+  font-size: 0.5em;
+}
+
+.table-sort-button:after {
+  content: " \25b2";
+  position: absolute;
+  right: -1px;
+  top: 1px;
+  font-size: 0.5em;
+}
+
+[aria-sort="ascending"] .table-sort-button:before,
+[aria-sort="descending"] .table-sort-button:before {
+  content: none;
+}
+
+[aria-sort="ascending"] .table-sort-button:after {
+  content: " \25b2";
+  font-size: 0.8em;
+  position: absolute;
+  right: -5px;
+  top: 2px;
+}
+
+[aria-sort="descending"] .table-sort-button:after {
+  content: " \25bc";
+  font-size: 0.8em;
+  position: absolute;
+  right: -5px;
+  top: 2px;
 }
 
 .acc-list-item {

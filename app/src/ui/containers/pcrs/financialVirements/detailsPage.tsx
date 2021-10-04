@@ -53,25 +53,25 @@ class Component extends ContainerBase<Params, Props, {}> {
           <VirementTable.Table qa="partnerVirements" data={data}>
             <VirementTable.String
               qa="costCategory"
-              headerContent={x => x.financialVirementDetails.labels.costCategoryName}
+              header={x => x.financialVirementDetails.labels.costCategoryName}
               value={x => x.costCategory.name}
               footer={<ACC.Content value={x => x.financialVirementDetails.labels.partnerTotals} />}
             />
             <VirementTable.Currency
               qa="originalEligibleCosts"
-              headerContent={x => x.financialVirementDetails.labels.costCategoryOriginalEligibleCosts}
+              header={x => x.financialVirementDetails.labels.costCategoryOriginalEligibleCosts}
               value={x => x.virement.originalEligibleCosts}
               footer={<ACC.Renderers.Currency value={financialVirements.originalEligibleCosts} />}
             />
             <VirementTable.Currency
               qa="newEligibleCosts"
-              headerContent={x => x.financialVirementDetails.labels.costCategoryNewEligibleCosts}
+              header={x => x.financialVirementDetails.labels.costCategoryNewEligibleCosts}
               value={x => x.virement.newEligibleCosts}
               footer={<ACC.Renderers.Currency value={financialVirements.newEligibleCosts} />}
             />
             <VirementTable.Currency
               qa="difference"
-              headerContent={x => x.financialVirementDetails.labels.costCategoryDifferenceCosts}
+              header={x => x.financialVirementDetails.labels.costCategoryDifferenceCosts}
               value={x => roundCurrency(x.virement.newEligibleCosts - x.virement.originalEligibleCosts)}
               footer={
                 <ACC.Renderers.Currency

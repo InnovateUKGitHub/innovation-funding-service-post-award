@@ -140,25 +140,25 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
           <ACC.Section title={x => x.projectDetails.projectLabels.partners}>
             <PartnersTable.Table qa="partner-information" data={partners}>
               <PartnersTable.Custom
-                headerContent={x => x.partnerDetails.contactLabels.partnerName}
+                header={x => x.partnerDetails.contactLabels.partnerName}
                 value={x => this.renderPartnerName(x)}
                 qa="partner-name"
               />
               <PartnersTable.String
-                headerContent={x => x.partnerDetails.contactLabels.partnerType}
+                header={x => x.partnerDetails.contactLabels.partnerType}
                 value={x => x.type}
                 qa="partner-type"
               />
               {isPmOrMo ? (
                 <PartnersTable.String
-                  headerContent={x => x.partnerDetails.contactLabels.statusLabel}
+                  header={x => x.partnerDetails.contactLabels.statusLabel}
                   value={x => x.partnerStatusLabel}
                   qa="partner-status"
                 />
               ) : null}
               {isPmOrMo ? (
                 <PartnersTable.Custom
-                  headerContent={x => x.partnerDetails.contactLabels.fundingLabel}
+                  header={x => x.partnerDetails.contactLabels.fundingLabel}
                   value={x => (
                     <ACC.Content value={content => content.partnerDetails.contactLabels.fundingState(x.isNonFunded)} />
                   )}
@@ -166,7 +166,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                 />
               ) : null}
               <PartnersTable.String
-                headerContent={x => x.partnerDetails.contactLabels.partnerPostcode}
+                header={x => x.partnerDetails.contactLabels.partnerPostcode}
                 value={x => x.postcode}
                 qa="partner-postcode"
               />

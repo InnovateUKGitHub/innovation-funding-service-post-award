@@ -245,7 +245,7 @@ export class ForecastTable extends React.Component<Props> {
   }
 
   private calculateClaimPeriods(data: ForecastData) {
-    const periods: { [k: string]: React.ReactNode } = {};
+    const periods: { [k: string]: React.ReactElement<typeof CondensedDateRange> } = {};
     data.claimDetails.forEach(x => (periods[x.periodId] = this.renderDateRange(x)));
     data.forecastDetails.forEach(x => (periods[x.periodId] = this.renderDateRange(x)));
     return periods;
