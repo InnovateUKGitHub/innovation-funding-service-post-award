@@ -72,7 +72,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           <UploadForm.Fieldset headingContent={x => x.pcrAddPartnerStateAidEligibilityContent.uploadDeclarationSectionTitle} qa="documentGuidance">
             <UploadForm.Hidden name="description" value={() => DocumentDescription.DeMinimisDeclarationForm} />
             <ACC.DocumentGuidance />
-            <UploadForm.MulipleFileUpload
+            <UploadForm.MultipleFileUpload
               labelContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.uploadInputLabel}
               name="attachment"
               labelHidden

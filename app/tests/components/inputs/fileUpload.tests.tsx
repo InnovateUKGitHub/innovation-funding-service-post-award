@@ -1,57 +1,104 @@
-import { mount } from "enzyme";
+import TestBed from "@shared/TestBed";
+import { fireEvent, render } from "@testing-library/react";
+import { noop } from "@ui/helpers/noop";
 
-import { FileUpload } from "../../../src/ui/components/inputs/fileUpload";
+import { MultipleFileUpload, MultipleFileUploadProps } from "../../../src/ui/components/inputs/fileUpload";
 
-describe("FileInput", () => {
-  it("Renders with correct name", () => {
-    const wrapper = mount(<FileUpload name="testName" value={null} onChange={(x) => x} />);
-    expect(wrapper.childAt(0).prop("name")).toContain("testName");
-  });
+describe("<MultipleFileUpload />", () => {
+  const defaultProps: MultipleFileUploadProps = {
+    name: "stub-name",
+    value: null,
+    onChange: noop,
+  };
+  const testQa = "multiple-file-upload";
 
-  it("Renders as enabled when the disabled flag is set to false", () => {
-    const wrapper = mount(<FileUpload name="testName" value={null} onChange={(x) => x} disabled={false}/>);
-    expect(wrapper.childAt(0).prop("disabled")).toBe(false);
-  });
+  const setup = (props?: Partial<MultipleFileUploadProps>) => {
+    return render(
+      <TestBed>
+        <MultipleFileUpload {...defaultProps} {...props} />
+      </TestBed>,
+    );
+  };
 
-  it("Renders as disabled when the disabled flag is set to true", () => {
-    const wrapper = mount(<FileUpload name="testName" value={null} onChange={(x) => x} disabled/>);
-    expect(wrapper.childAt(0).prop("disabled")).toBe(true);
-  });
+  describe("@renders", () => {
+    test("as enabled when disabled flag is false", () => {
+      const { queryByTestId } = setup({ disabled: false });
 
-  it("Calls onChange when a file is selected", () => {
-    const onChange = jest.fn();
-    const wrapper = mount(<FileUpload name="testName" value={null} onChange={onChange}/>);
-
-    wrapper.find("input").simulate("change", {
-      target: {
-        files: ["TextFile.txt"]
-      }
+      const targetElement = queryByTestId(testQa);
+      expect(targetElement).not.toHaveAttribute("disabled");
     });
 
-    expect(onChange).toHaveBeenCalledTimes(1);
-    expect(onChange).toHaveBeenCalledWith({ file: "TextFile.txt" });
+    test("as given qa", () => {
+      const { queryByTestId } = setup({ qa: "stub-qa" });
+
+      const targetElement = queryByTestId("stub-qa");
+      expect(targetElement).toBeInTheDocument();
+    });
+
+    test("as disabled when disabled flag is true", () => {
+      const { queryByTestId } = setup({ disabled: true });
+
+      const targetElement = queryByTestId(testQa);
+      expect(targetElement).toHaveAttribute("disabled");
+    });
+
+    test("with error", () => {
+      const { queryByTestId } = setup({ error: true });
+
+      const targetElement = queryByTestId(testQa);
+      expect(targetElement).toHaveClass("govuk-file-upload--error");
+    });
+
+    test("with no error", () => {
+      const { queryByTestId } = setup({ error: false });
+
+      const targetElement = queryByTestId(testQa);
+      expect(targetElement).not.toHaveClass("govuk-file-upload--error");
+    });
   });
 
-  it("Calls onChange on blur", () => {
-    const onChange = jest.fn();
-    const wrapper = mount(<FileUpload name="testName" value={null} onChange={onChange}/>);
+  describe("@events", () => {
+    test("calls onChange when a file is selected", () => {
+      const onChange = jest.fn();
 
-    wrapper.simulate("blur");
+      const { getByTestId } = setup({ onChange });
 
-    expect(onChange).toHaveBeenCalledTimes(1);
-  });
+      expect(onChange).toHaveBeenCalledTimes(0);
+      fireEvent.change(getByTestId(testQa), {
+        target: {
+          files: ["TextFile.txt"],
+        },
+      });
+      expect(onChange).toHaveBeenCalledTimes(1);
+      expect(onChange).toHaveBeenCalledWith([{ file: "TextFile.txt", fileName: undefined, size: undefined }]);
+    });
 
-  it("doesn't use default value prop when a value is passed", () => {
-    const wrapper = mount(<FileUpload name="test" value={"testfile" as any} onChange={jest.fn()} />);
-    expect(wrapper.find("input").prop("value")).toBe(undefined);
-  });
+    test("calls onChange on blur with file", () => {
+      const onChange = jest.fn();
+      const { getByTestId } = setup({ onChange });
 
-  it("Will unset selected file when props value changes to null", () => {
-    const wrapper = mount(<FileUpload name="testName" value={"test" as any} onChange={jest.fn()}/>);
-    wrapper.setProps({value: "string"});
-    expect(wrapper.prop("value")).toBe("string");
+      const targetElement = getByTestId(testQa);
+      fireEvent.blur(targetElement, {
+        target: {
+          files: ["TextFile.txt"],
+        },
+      });
+      expect(onChange).toHaveBeenCalledTimes(1);
+      expect(onChange).toHaveBeenCalledWith([{ file: "TextFile.txt", fileName: undefined, size: undefined }]);
+    });
 
-    wrapper.setProps({value: null});
-    expect(wrapper.find("input").prop("value")).toBe(undefined);
+    test("calls onChange on blur with empty files", () => {
+      const onChange = jest.fn();
+      const { getByTestId } = setup({ onChange });
+
+      const targetElement = getByTestId(testQa);
+      fireEvent.blur(targetElement, {
+        target: {
+          files: [],
+        },
+      });
+      expect(onChange).toHaveBeenCalledTimes(1);
+      expect(onChange).toHaveBeenCalledWith([]);
+    });
   });
 });

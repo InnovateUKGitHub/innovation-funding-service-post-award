@@ -117,7 +117,7 @@ const ClaimDocumentsComponent = ({
 
     const documentTypeOptions: DropdownOption[] = documentDescriptions
       .filter(x => allowedClaimDocuments.includes(x.id))
-      .map(x => ({ id: `${x.id}`, value: x.label }));
+      .map(x => ({ id: `${x.id}`, value: x.label}));
 
     const claimLinkParams = { projectId, partnerId, periodId };
 
@@ -150,7 +150,7 @@ const ClaimDocumentsComponent = ({
             <UploadForm.Fieldset>
               <ACC.DocumentGuidance />
 
-              <UploadForm.MulipleFileUpload
+              <UploadForm.MultipleFileUpload
                 label={content.uploadDocumentsLabel}
                 labelHidden
                 name="attachment"

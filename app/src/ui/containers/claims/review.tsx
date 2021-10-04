@@ -385,7 +385,7 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
 
                 <ACC.DocumentGuidance />
 
-                <UploadForm.MulipleFileUpload
+                <UploadForm.MultipleFileUpload
                   label={this.props.content.default.uploadInputLabel}
                   name="attachment"
                   labelHidden

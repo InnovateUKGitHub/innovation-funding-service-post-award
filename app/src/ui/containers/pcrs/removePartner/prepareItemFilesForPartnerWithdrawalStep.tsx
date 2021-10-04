@@ -44,7 +44,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerWithdrawal
           <UploadForm.Fieldset headingContent={x => x.pcrRemovePartnerPrepareItemFiles.guidanceHeading}>
             <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.guidance}/></ACC.Renderers.SimpleString>
             <ACC.DocumentGuidance/>
-            <UploadForm.MulipleFileUpload
+            <UploadForm.MultipleFileUpload
               label="Upload files"
               name="attachment"
               labelHidden

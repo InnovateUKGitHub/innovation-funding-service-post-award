@@ -60,7 +60,7 @@ class Component extends React.Component<
           <UploadForm.Fieldset qa="documentUpload">
             <UploadForm.Hidden name="description" value={() => DocumentDescription.AgreementToPCR} />
             <ACC.DocumentGuidance />
-            <UploadForm.MulipleFileUpload
+            <UploadForm.MultipleFileUpload
               labelContent={x => x.pcrAddPartnerAgreementToPcr.documentLabels.uploadInputLabel}
               name="attachment"
               labelHidden

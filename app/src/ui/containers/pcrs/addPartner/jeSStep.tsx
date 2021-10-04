@@ -71,7 +71,7 @@ export function JesStepUI({ documents, documentsEditor, ...props }: JesStepUIPro
 
             <ACC.DocumentGuidance />
 
-            <UploadForm.MulipleFileUpload
+            <UploadForm.MultipleFileUpload
               labelHidden
               name="attachment"
               validation={documentsEditor.validator.files}

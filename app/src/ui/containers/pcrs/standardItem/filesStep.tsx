@@ -60,7 +60,7 @@ class FilesStepComponent extends React.Component<PcrStepProps<PCRStandardItemDto
         >
           <UploadForm.Fieldset heading="Upload">
             <ACC.DocumentGuidance />
-            <UploadForm.MulipleFileUpload
+            <UploadForm.MultipleFileUpload
               label="Upload files"
               name="attachment"
               labelHidden
