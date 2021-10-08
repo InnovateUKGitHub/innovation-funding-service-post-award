@@ -1,11 +1,5 @@
-import { useEffect, useState } from "react";
+import { useStores } from "@ui/redux";
 
 export function useIsClient() {
-  const [canEditDom, setCanEdit] = useState<boolean>(false);
-
-  useEffect(() => {
-    setCanEdit(true);
-  }, []);
-
-  return canEditDom;
+  return useStores().config.isClient();
 }
