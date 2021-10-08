@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { OL, UL, List, ListProps } from "@ui/components/layout/list";
+import { OL, UL, List, ListProps, PlainList } from "@ui/components/layout/list";
 
 describe("UI Lists", () => {
   const requiredProps: ListProps = {
@@ -20,6 +20,7 @@ describe("UI Lists", () => {
         expect(targetElement).toBeInTheDocument();
         expect(targetElement).not.toHaveClass("govuk-list--bullet");
         expect(targetElement).not.toHaveClass("govuk-list--number");
+        expect(targetElement).not.toHaveClass("govuk-list--plain");
       });
 
       test("with qa", () => {
@@ -76,6 +77,16 @@ describe("UI Lists", () => {
       const { container } = render(<OL>{requiredProps.children}</OL>);
 
       const targetElement = container.querySelector(".govuk-list--number");
+
+      expect(targetElement).toBeInTheDocument();
+    });
+  });
+
+  describe("<PlainList />", () => {
+    test("returns correctly", () => {
+      const { container } = render(<PlainList>{requiredProps.children}</PlainList>);
+
+      const targetElement = container.querySelector(".govuk-list--plain");
 
       expect(targetElement).toBeInTheDocument();
     });

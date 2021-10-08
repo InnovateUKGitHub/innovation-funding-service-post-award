@@ -18,11 +18,12 @@ interface ITask {
 }
 
 export interface ITaskListItem {
-  step: number;
+  step?: number;
   title?: string;
   titleContent?: ContentSelector;
   validation?: Result[];
   qa?: string;
+  children: React.ReactElement<ITask> | React.ReactElement<ITask>[];
 }
 
 export const Task: React.FunctionComponent<ITask> = ({ route, name, nameContent, status, validation }) => {
@@ -42,19 +43,19 @@ export const Task: React.FunctionComponent<ITask> = ({ route, name, nameContent,
   );
 };
 
-export const TaskListSection: React.FunctionComponent<ITaskListItem> = ({
+export const TaskListSection = ({
   step,
   title,
   titleContent,
   validation,
   children,
   qa,
-}) => {
+}: ITaskListItem) => {
   const validationErrors = validation && validation.map(v => <ValidationError error={v} key={v.key} />);
   return (
-    <li key={step} data-qa={qa}>
+    <li data-qa={qa}>
       <h2 className="app-task-list__section">
-        <span className="app-task-list__section-number">{step}.</span>&nbsp;
+        {step && <span className="app-task-list__section-number">{step}.</span>}&nbsp;
         {titleContent ? <Content value={titleContent} /> : title}
       </h2>
       <UL className="app-task-list__items">
