@@ -31,7 +31,7 @@ import { validationSummaryGuide } from "./validationSummaryGuide";
 import { currencyGuide } from "@ui/componentsGuide/currencyGuide";
 import { percentageGuide } from "@ui/componentsGuide/percentageGuide";
 import { modalGuide } from "@ui/componentsGuide/modalGuide";
-import { ulGuide, olGuide } from "@ui/componentsGuide/listGuide";
+import { listGuide } from "@ui/componentsGuide/listGuide";
 import { readonlyLabel } from "@ui/componentsGuide/readonlyLabelGuide";
 import { IGuide } from "@framework/types";
 import { GovWidthContainer, UL } from "@ui/components";
@@ -47,8 +47,7 @@ const guides: IGuide[] = [
   formGuide,
   info,
   linksListGuide,
-  ulGuide,
-  olGuide,
+  listGuide,
   logsGuide,
   modalGuide,
   navigationArrowsGuide,

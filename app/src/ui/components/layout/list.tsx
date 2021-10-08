@@ -10,6 +10,7 @@ export interface ListBaseProps {
 const listOptions: Record<string, "ol" | "ul"> = {
   number: "ol",
   bullet: "ul",
+  plain: "ul",
 };
 export interface ListProps extends ListBaseProps {
   type?: keyof typeof listOptions;
@@ -35,4 +36,8 @@ export function UL(props: ListBaseProps & React.HTMLProps<HTMLUListElement>) {
 
 export function OL(props: ListBaseProps & React.HTMLProps<HTMLOListElement>) {
   return <List {...props} type="number" />;
+}
+
+export function PlainList(props: ListBaseProps & React.HTMLProps<HTMLOListElement>) {
+  return <List {...props} type="plain" />;
 }

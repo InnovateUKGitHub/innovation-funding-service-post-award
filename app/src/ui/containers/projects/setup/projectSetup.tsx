@@ -28,7 +28,6 @@ interface CombinedData {
 }
 
 class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Callbacks> {
-
   render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -36,7 +35,7 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
       editor: this.props.editor,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)}/>;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)} />;
   }
 
   private renderContents({ project, partner, editor }: CombinedData) {
@@ -44,9 +43,11 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.projectDashboard.getLink({})}>
-          <ACC.Content value={x => x.projectSetup.backLink} />
-        </ACC.BackLink>}
+        backLink={
+          <ACC.BackLink route={this.props.routes.projectDashboard.getLink({})}>
+            <ACC.Content value={x => x.projectSetup.backLink} />
+          </ACC.BackLink>
+        }
         pageTitle={<ACC.Projects.Title {...project} />}
         error={editor.error}
         validator={editor.validator}
@@ -55,15 +56,18 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
       >
         <ACC.Section qa="guidance">
           <ACC.Renderers.SimpleString>
-            <ACC.Content value={x => x.projectSetup.projectMessages.setupGuidance}/>
+            <ACC.Content value={x => x.projectSetup.projectMessages.setupGuidance} />
           </ACC.Renderers.SimpleString>
         </ACC.Section>
         <ACC.UL qa="taskList">
-          <ACC.TaskListSection step={1} titleContent={x => x.projectSetup.taskList.sectionTitleEnterInfo} qa="WhatDoYouWantToDo">
+          <ACC.TaskListSection titleContent={x => x.projectSetup.taskList.sectionTitleEnterInfo} qa="WhatDoYouWantToDo">
             <ACC.Task
               nameContent={x => x.projectSetup.setSpendProfile}
               status={partner.spendProfileStatusLabel as ACC.TaskStatus}
-              route={this.props.routes.projectSetupSpendProfile.getLink({partnerId: partner.id, projectId: project.id})}
+              route={this.props.routes.projectSetupSpendProfile.getLink({
+                partnerId: partner.id,
+                projectId: project.id,
+              })}
               validation={[editor.validator.spendProfileStatus]}
             />
             <ACC.Task
@@ -75,22 +79,27 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
             <ACC.Task
               nameContent={x => x.projectSetup.providePostcode}
               status={this.isPostcodeComplete(partner.postcode)}
-              route={this.props.routes.projectSetupPostcode.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}
+              route={this.props.routes.projectSetupPostcode.getLink({
+                projectId: this.props.projectId,
+                partnerId: this.props.partnerId,
+              })}
               validation={[editor.validator.postcodeSetupStatus]}
             />
           </ACC.TaskListSection>
         </ACC.UL>
         <Form.Form
-            data={partner}
-            editor={editor}
-            onSubmit={() => {
-              editor.data.partnerStatus = PartnerStatus.Active;
-              this.props.onUpdate(true, editor.data);
-            }}
-            qa="projectSetupForm"
+          data={partner}
+          editor={editor}
+          onSubmit={() => {
+            editor.data.partnerStatus = PartnerStatus.Active;
+            this.props.onUpdate(true, editor.data);
+          }}
+          qa="projectSetupForm"
         >
           <Form.Fieldset>
-            <Form.Submit><ACC.Content value={x => x.projectSetup.complete}/></Form.Submit>
+            <Form.Submit>
+              <ACC.Content value={x => x.projectSetup.complete} />
+            </Form.Submit>
           </Form.Fieldset>
         </Form.Form>
       </ACC.Page>
@@ -99,54 +108,64 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
 
   // TODO: remove this temporary solution when we have added the postcodeStatusLabel in SF
   private isPostcodeComplete(postcode: string | null): ACC.TaskStatus {
-    return postcode ? "Complete": "To do";
+    return postcode ? "Complete" : "To do";
   }
 
   private getBankDetailsLink(partner: Dtos.PartnerDto) {
     if (partner.bankDetailsTaskStatus === BankDetailsTaskStatus.Complete) {
       return null;
     }
-    switch(partner.bankCheckStatus) {
+    switch (partner.bankCheckStatus) {
       case BankCheckStatus.NotValidated: {
-        return this.props.routes.projectSetupBankDetails.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId});
+        return this.props.routes.projectSetupBankDetails.getLink({
+          partnerId: this.props.partnerId,
+          projectId: this.props.projectId,
+        });
       }
       case BankCheckStatus.ValidationFailed:
       case BankCheckStatus.VerificationFailed: {
-        return this.props.routes.projectSetupBankStatement.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId});
+        return this.props.routes.projectSetupBankStatement.getLink({
+          partnerId: this.props.partnerId,
+          projectId: this.props.projectId,
+        });
       }
       case BankCheckStatus.ValidationPassed: {
-        return this.props.routes.projectSetupBankDetailsVerify.getLink({partnerId: this.props.partnerId, projectId: this.props.projectId});
+        return this.props.routes.projectSetupBankDetailsVerify.getLink({
+          partnerId: this.props.partnerId,
+          projectId: this.props.projectId,
+        });
       }
       case BankCheckStatus.VerificationPassed: {
         return null;
       }
-      default: return null;
+      default:
+        return null;
     }
   }
 }
 
 const ProjectSetupContainer = (props: ProjectSetupParams & BaseProps) => (
   <StoresConsumer>
-    {
-      stores => (
-        <ProjectSetupComponent
-          project={stores.projects.getById(props.projectId)}
-          partner={stores.partners.getById(props.partnerId)}
-          editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
-          onUpdate={(saving, dto) =>
-              stores.partners.updatePartner(saving, props.partnerId, dto, {onComplete: () =>
-                stores.navigation.navigateTo(props.routes.projectDashboard.getLink({}))})}
-          {...props}
-        />
-      )
-    }
+    {stores => (
+      <ProjectSetupComponent
+        project={stores.projects.getById(props.projectId)}
+        partner={stores.partners.getById(props.partnerId)}
+        editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
+        onUpdate={(saving, dto) =>
+          stores.partners.updatePartner(saving, props.partnerId, dto, {
+            onComplete: () => stores.navigation.navigateTo(props.routes.projectDashboard.getLink({})),
+          })
+        }
+        {...props}
+      />
+    )}
   </StoresConsumer>
 );
 
 export const ProjectSetupRoute = defineRoute<ProjectSetupParams>({
   routeName: "projectSetup",
   routePath: "/projects/:projectId/setup/:partnerId",
-  getParams: (r) => ({ projectId: r.params.projectId, partnerId: r.params.partnerId }),
+  getParams: r => ({ projectId: r.params.projectId, partnerId: r.params.partnerId }),
   container: ProjectSetupContainer,
   accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(ProjectRole.FinancialContact),
   getTitle: ({ content }) => content.projectSetup.title(),

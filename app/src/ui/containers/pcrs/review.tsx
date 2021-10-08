@@ -67,10 +67,10 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
 
   private renderTasks(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
     return (
-      <ACC.UL qa="taskList">
+      <ACC.List qa="taskList">
         {this.renderTaskListActions(projectChangeRequest, editor, editableItemTypes)}
         {this.renderTaskListReasoning(projectChangeRequest, editableItemTypes)}
-      </ACC.UL>
+      </ACC.List>
     );
   }
 

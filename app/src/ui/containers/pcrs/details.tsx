@@ -58,10 +58,10 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
   private renderTasks(projectChangeRequest: PCRDto, editableItemTypes: PCRItemType[]) {
     return (
-      <ACC.UL qa="taskList">
+      <ACC.List qa="taskList">
         {this.renderTaskListActions(projectChangeRequest, editableItemTypes)}
         {this.renderTaskListReasoning(projectChangeRequest, editableItemTypes)}
-      </ACC.UL>
+      </ACC.List>
     );
   }
 
