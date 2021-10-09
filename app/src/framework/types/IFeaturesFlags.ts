@@ -3,4 +3,5 @@ export interface IFeatureFlags {
   readonly contentHint: boolean;
   readonly customContent: boolean;
   readonly displayOtherContacts: boolean;
+  readonly searchDocsMinThreshold: number;
 }

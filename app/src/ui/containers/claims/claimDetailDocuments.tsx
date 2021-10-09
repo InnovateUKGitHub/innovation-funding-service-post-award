@@ -38,7 +38,6 @@ interface Callbacks {
 }
 
 export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocumentsPageParams, Data, Callbacks> {
-
   public render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -47,23 +46,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
       editor: this.props.editor,
     });
 
-    return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)}/>;
-  }
-
-  private renderDocuments(editor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>, documents: DocumentSummaryDto[]) {
-    if (!documents.length) {
-      return (
-        <ACC.Section>
-          <ACC.ValidationMessage message={x => x.claimDetailDocuments.messages.documentValidationMessage} messageType="info" />
-        </ACC.Section>
-      );
-    }
-
-    return (
-      <ACC.Section subtitle={x => x.claimDetailDocuments.documentMessages.newWindow}>
-        <ACC.DocumentTableWithDelete onRemove={(document) => this.props.onDelete(editor.data, document)} documents={documents} qa="supporting-documents"/>
-      </ACC.Section>
-    );
+    return <ACC.PageLoader pending={combined} render={data => this.renderContents(data)} />;
   }
 
   private renderContents({ project, costCategories, documents, editor }: CombinedData) {
@@ -71,7 +54,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
       projectId: project.id,
       partnerId: this.props.partnerId,
       periodId: this.props.periodId,
-      costCategoryId: this.props.costCategoryId
+      costCategoryId: this.props.costCategoryId,
     });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
@@ -79,12 +62,15 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={back}><ACC.Content value={x => x.claimDetailDocuments.documentMessages.backLink(costCategory.name)}/></ACC.BackLink>}
-        error={(editor.error)}
+        backLink={
+          <ACC.BackLink route={back}>
+            <ACC.Content value={x => x.claimDetailDocuments.documentMessages.backLink(costCategory.name)} />
+          </ACC.BackLink>
+        }
+        error={editor.error}
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title {...project} />}
       >
-
         {isCombinationOfSBRI ? (
           <>
             <ACC.Renderers.SimpleString qa="sbriDocumentGuidance">
@@ -94,36 +80,49 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
               <ACC.Content value={x => x.claimDetailDocuments.messages.sbriSupportingDocumentGuidance} />
             </ACC.Renderers.SimpleString>
           </>
-          ) : (
+        ) : (
           <ACC.Renderers.SimpleString qa="guidanceText">
             <ACC.Content value={x => x.claimDetailDocuments.messages.documentDetailGuidance} />
           </ACC.Renderers.SimpleString>
         )}
 
         <ACC.Renderers.Messages messages={this.props.messages} />
-        {this.renderDocuments(editor, documents)}
+
         <ACC.Section title={x => x.claimDetailDocuments.documentMessages.uploadTitle}>
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
             onSubmit={() => this.props.onChange(true, editor.data)}
-            onChange={(dto) => this.props.onChange(false, dto)}
+            onChange={dto => this.props.onChange(false, dto)}
             qa="claimDetailDocuments"
           >
             <UploadForm.Fieldset>
-              <ACC.DocumentGuidance/>
-              <UploadForm.Hidden name="description" value={dto => dto.description}/>
+              <ACC.DocumentGuidance />
+
+              <UploadForm.Hidden name="description" value={dto => dto.description} />
+
               <UploadForm.MultipleFileUpload
                 labelContent={x => x.claimDetailDocuments.documentMessages.uploadDocumentsLabel}
                 labelHidden
                 name="attachment"
                 validation={editor.validator.files}
-                value={(data) => data.files}
-                update={(dto, files) => dto.files = files || []}
+                value={data => data.files}
+                update={(dto, files) => (dto.files = files || [])}
               />
             </UploadForm.Fieldset>
-            <UploadForm.Submit><ACC.Content value={x => x.claimDetailDocuments.documentMessages.uploadDocumentsLabel}/></UploadForm.Submit>
+
+            <UploadForm.Submit>
+              <ACC.Content value={x => x.claimDetailDocuments.documentMessages.uploadDocumentsLabel} />
+            </UploadForm.Submit>
           </UploadForm.Form>
+        </ACC.Section>
+
+        <ACC.Section className="govuk-!-margin-bottom-4">
+          <ACC.DocumentEdit
+            qa="supporting-documents"
+            onRemove={document => this.props.onDelete(editor.data, document)}
+            documents={documents}
+          />
         </ACC.Section>
       </ACC.Page>
     );
@@ -136,7 +135,9 @@ const ClaimDetailDocumentsContainer = (props: ClaimDetailDocumentsPageParams & B
 
   const handleOnChange: Callbacks["onChange"] = (saving, dto) => {
     stores.messages.clearMessages();
-    const successMessage = getContent(x => x.claimDetailDocuments.documentMessages.getDocumentUploadedMessage(dto.files.length));
+    const successMessage = getContent(x =>
+      x.claimDetailDocuments.documentMessages.getDocumentUploadedMessage(dto.files.length),
+    );
 
     stores.claimDetailDocuments.updateClaimDetailDocumentsEditor(
       saving,
@@ -176,7 +177,7 @@ const ClaimDetailDocumentsContainer = (props: ClaimDetailDocumentsPageParams & B
         props.partnerId,
         props.periodId,
         props.costCategoryId,
-        (dto) => (dto.description = DocumentDescription.Evidence),
+        dto => (dto.description = DocumentDescription.Evidence),
       )}
       onChange={handleOnChange}
       onDelete={handleOnDelete}
@@ -189,18 +190,19 @@ export const ClaimDetailDocumentsRoute = defineRoute({
   routeName: "claimDetailDocuments",
   routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId/costs/:costCategoryId/documents",
   container: ClaimDetailDocumentsContainer,
-  getParams: (route) => ({
+  getParams: route => ({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,
     costCategoryId: route.params.costCategoryId,
-    periodId: parseInt(route.params.periodId, 10)
+    periodId: parseInt(route.params.periodId, 10),
   }),
-  accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+  accessControl: (auth, { projectId, partnerId }) =>
+    auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
   getTitle: ({ params, stores }) => {
     const costCatName = stores.costCategories.get(params.costCategoryId).then(x => x.name).data;
     return {
       htmlTitle: costCatName ? `Add documents for ${costCatName}` : "Add documents",
-      displayTitle: costCatName ? `${costCatName} documents` : "Claim documents"
+      displayTitle: costCatName ? `${costCatName} documents` : "Claim documents",
     };
   },
 });

@@ -22,7 +22,6 @@ export class ClaimPrepareSummaryContent extends ContentPageBase {
   public readonly fundingLevelLabel = this.getContent("funding-level-label");
   public readonly costsToBePaidLabel = this.getContent("costs-to-be-paid-label");
   public readonly editCostsMessage = this.getContent("edit-costs-message");
-  public readonly noDocumentsUploadedMessage = this.getContent("no-documents-uploaded-message");
   public readonly claimDocumentsTitle = this.getContent("claim-documents-title");
   public readonly editClaimDocuments = this.getContent("edit-claim-documents");
   public readonly finalClaimSupportingDocumentMessage = this.getContent("final-claim-supporting-document-message");

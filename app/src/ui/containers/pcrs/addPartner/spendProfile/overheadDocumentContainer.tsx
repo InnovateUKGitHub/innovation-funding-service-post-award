@@ -38,7 +38,6 @@ interface Callbacks {
 }
 
 export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsPageParams, Data, Callbacks> {
-
   public render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -48,7 +47,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
       editor: this.props.editor,
     });
 
-    return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
+    return <ACC.PageLoader pending={combined} render={data => this.renderContents(data)} />;
   }
 
   private renderContents({ project, costCategories, documents, editor, pcrItem }: CombinedData) {
@@ -58,42 +57,67 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
       pcrId: this.props.pcrId,
       itemId: this.props.itemId,
       costCategoryId: this.props.costCategoryId,
-      costId: cost!.id
+      costId: cost!.id,
     });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={back}><ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.backLink(costCategory.name)}/></ACC.BackLink>}
-        error={(editor.error)}
+        backLink={
+          <ACC.BackLink route={back}>
+            <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.backLink(costCategory.name)} />
+          </ACC.BackLink>
+        }
+        error={editor.error}
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title {...project} />}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
+
         {this.renderForm(editor)}
-        {this.renderFiles(editor, documents)}
-        <ACC.Link styling="PrimaryButton" route={back}><ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.submitButton}/></ACC.Link>
+
+        <ACC.Section>
+          <ACC.DocumentEdit
+            qa="overhead-calculation-document"
+            onRemove={document => this.props.onFileDelete(editor.data, document)}
+            documents={documents}
+          />
+        </ACC.Section>
+        <ACC.Link styling="PrimaryButton" route={back}>
+          <ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.submitButton} />
+        </ACC.Link>
       </ACC.Page>
     );
   }
 
-  private renderForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>): React.ReactNode {
+  private renderForm(
+    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
+  ): React.ReactNode {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
     return (
+      <>
+      <ACC.Section title={x => x.pcrSpendProfileOverheadDocumentContent.guidanceHeading}>
+        <ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadGuidance} />
+      </ACC.Section>
+
       <ACC.Section>
         <UploadForm.Form
           enctype="multipart"
           editor={documentsEditor}
-          onChange={(dto) => this.props.onFileChange(false, dto)}
+          onChange={dto => this.props.onFileChange(false, dto)}
           qa="projectChangeRequestItemUpload"
         >
-          <UploadForm.Fieldset headingContent={x => x.pcrSpendProfileOverheadDocumentContent.guidanceHeading}>
-            <ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadGuidance}/>
-          </UploadForm.Fieldset>
-          <UploadForm.Fieldset headingContent={x => x.pcrSpendProfileOverheadDocumentContent.templateHeading} qa="template">
+          <UploadForm.Fieldset
+            headingContent={x => x.pcrSpendProfileOverheadDocumentContent.templateHeading}
+            qa="template"
+          >
             {this.renderTemplateLink()}
           </UploadForm.Fieldset>
-          <UploadForm.Fieldset qa="documentUpload" headingContent={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadHeading}>
+
+          <UploadForm.Fieldset
+            qa="documentUpload"
+            headingContent={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadHeading}
+          >
             <UploadForm.Hidden name="description" value={() => DocumentDescription.OverheadCalculationSpreadsheet} />
             <ACC.DocumentGuidance />
             <UploadForm.MultipleFileUpload
@@ -109,10 +133,17 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
             />
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
-            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange(true, documentsEditor.data)}><ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.messages.uploadTitle}/></UploadForm.Button>
+            <UploadForm.Button
+              name="uploadFile"
+              styling="Secondary"
+              onClick={() => this.props.onFileChange(true, documentsEditor.data)}
+            >
+              <ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.messages.uploadTitle} />
+            </UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
       </ACC.Section>
+      </>
     );
   }
 
@@ -124,47 +155,51 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
       </ACC.Section>
     );
   }
-
-  private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>, documents: DocumentSummaryDto[]) {
-    if (documents.length) {
-      return (
-        <ACC.Section title={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedTitle} subtitle={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedSubtitle}>
-          <ACC.DocumentTableWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="overhead-calculation-document"/>
-        </ACC.Section>
-      );
-    }
-    return (
-      <ACC.Section title={x => x.pcrSpendProfileOverheadDocumentContent.labels.filesUploadedTitle}>
-        <ACC.ValidationMessage message={x => x.pcrSpendProfileOverheadDocumentContent.messages.noDocumentsUploaded} messageType="info" />
-      </ACC.Section>
-    );
-  }
 }
 
 const OverheadDocumentContainer = (props: OverheadDocumentsPageParams & BaseProps) => (
   <StoresConsumer>
-    {
-      stores => (
-        <OverheadDocumentsComponent
-          project={stores.projects.getById(props.projectId)}
-          costCategories={stores.costCategories.getAllUnfiltered()}
-          pcrItem={stores.projectChangeRequests.getItemById(props.projectId, props.pcrId, props.itemId) as Pending<PCRItemForPartnerAdditionDto>}
-          documents={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.itemId)}
-          editor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.itemId)}
-          onFileChange={(isSaving, dto) => {
-            stores.messages.clearMessages();
-            // show message if remaining on page
-            const successMessage = isSaving ? dto.files.length === 1 ? "Your document has been uploaded." : `${dto.files.length} documents have been uploaded.` : undefined;
-            stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(isSaving, props.projectId, props.itemId, dto, true, successMessage);
-          }}
-          onFileDelete={(dto, document) => {
-            stores.messages.clearMessages();
-            stores.projectChangeRequestDocuments.deletePcrOrPcrItemDocumentsEditor(props.projectId, props.itemId, dto, document, "Your document has been removed.");
-          }}
-          {...props}
-        />
-      )
-    }
+    {stores => (
+      <OverheadDocumentsComponent
+        project={stores.projects.getById(props.projectId)}
+        costCategories={stores.costCategories.getAllUnfiltered()}
+        pcrItem={
+          stores.projectChangeRequests.getItemById(props.projectId, props.pcrId, props.itemId) as Pending<
+            PCRItemForPartnerAdditionDto
+          >
+        }
+        documents={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.itemId)}
+        editor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.itemId)}
+        onFileChange={(isSaving, dto) => {
+          stores.messages.clearMessages();
+          // show message if remaining on page
+          const successMessage = isSaving
+            ? dto.files.length === 1
+              ? "Your document has been uploaded."
+              : `${dto.files.length} documents have been uploaded.`
+            : undefined;
+          stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(
+            isSaving,
+            props.projectId,
+            props.itemId,
+            dto,
+            true,
+            successMessage,
+          );
+        }}
+        onFileDelete={(dto, document) => {
+          stores.messages.clearMessages();
+          stores.projectChangeRequestDocuments.deletePcrOrPcrItemDocumentsEditor(
+            props.projectId,
+            props.itemId,
+            dto,
+            document,
+            "Your document has been removed.",
+          );
+        }}
+        {...props}
+      />
+    )}
   </StoresConsumer>
 );
 
@@ -174,12 +209,12 @@ export const PCRSpendProfileOverheadDocumentRoute = defineRoute<OverheadDocument
   // However the page itself is currently closely tied to overhead costs. This could be adapted if required.
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId/cost/documents",
   container: OverheadDocumentContainer,
-  getParams: (route) => ({
+  getParams: route => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,
   }),
   getTitle: ({ content }) => content.pcrSpendProfileOverheadDocumentContent.title(),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
 });

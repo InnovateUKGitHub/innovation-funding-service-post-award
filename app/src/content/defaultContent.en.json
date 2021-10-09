@@ -59,9 +59,6 @@
       "availableImageExtensions": "images (jpg, jpeg, png)",
       "fileTypesQuestion": "Learn more about files you can upload"
     },
-    "documentView": {
-      "fallback-validation-message": "No documents uploaded."
-    },
     "claimLastModified": {
       "message": "Changes last saved"
     },
@@ -308,12 +305,15 @@
     },
     "claim-documents": {
       "title": "Claim documents",
-      "section-title-document-list": "List of documents",
+      "section-title-document-list": "Files uploaded",
       "back-link": "Back to costs to be claimed",
       "button-save-and-return": "Save and return to claims",
       "button-save-and-continue-to-summary": "Continue to summary",
       "button-save-and-continue-to-forecast": "Continue to update forecast",
       "description-label": "Description"
+    },
+    "claim-detail-documents": {
+      "title": "Upload and removed documents"
     },
     "claim-details": {
       "title": {
@@ -332,8 +332,6 @@
     },
     "claim-line-items": {
       "supporting-documents-title": "Supporting documents",
-      "documents-in-new-window": "Documents open in a new window",
-      "no-documents-uploaded": "No documents uploaded.",
       "additional-info-title": "Additional information",
       "no-data-message": "No data",
       "total-cost-title": "Total costs",
@@ -379,7 +377,6 @@
       "funding-level-label": "Funding level",
       "costs-to-be-paid-label": "Total costs to be paid",
       "edit-costs-message": "Edit costs to be claimed",
-      "no-documents-uploaded-message": "No documents uploaded.",
       "claim-documents-title": "Claim documents",
       "edit-claim-documents": "Edit claim documents",
       "final-claim-supporting-document-message": "You must upload a supporting document before you can submit this claim.",
@@ -829,7 +826,6 @@
     "last-chance-to-change-forecast": "This is your last chance to change the forecast for period {{periodId}}",
     "document-detail-guidance": "Evidence for each expenditure might include, but is not limited to, invoices, timesheets, receipts and spreadsheets for capital usage.",
     "document-disclaimer-message": "Do not remove any documents for previous months' costs.",
-    "document-validation-message": "No documents uploaded.",
     "interim-claim-message": "When adding costs for last month, you must:\n\n* use a new line for every cost each month\n\n* name the month in the description\n\n* not alter any information for previous months' costs",
     "edit-claim-line-item-guidance": "You must break down your total costs and upload evidence for each expenditure you are claiming for. Contact your monitoring officer for more information about the level of detail you are required to provide.",
     "edit-claim-line-item-convert-gbp": "You can enter up to 120 separate lines of costs and you must convert any foreign currency amounts to pounds sterling (GBP) before you enter them into your claim.",
@@ -852,7 +848,6 @@
     "difference": "Difference",
     "status": "Status",
     "document-list-title": "Supporting documents",
-    "no-documents-uploaded": "No documents uploaded.",
     "last-updated-date": "Date of last update",
     "costs-claimed": "Costs claimed",
     "costs-approved": "Costs approved",
@@ -1018,6 +1013,13 @@
     "noContactsMessage": "No contacts exist."
   },
   "document-labels": {
+    "documentDisplayTitle": "Files uploaded",
+    "documentDisplaySubTitle": "All documents uploaded will be shown here. All documents open in a new window.",
+    "uploadInputLabel": "Upload files",
+    "fileNameLabel": "File name",
+    "dateUploadedLabel": "Date uploaded",
+    "fileSizeLabel": "File size",
+    "uploadedByLabel": "Uploaded by",
     "description": {
       "invoice": "Invoice",
       "iAR": "Independent accountant’s report",
@@ -1042,16 +1044,10 @@
       "email": "Email",
       "meetingAgenda": "Meeting agenda",
       "projectCompletionForm": "Project completion form"
-    },
-    "uploadInputLabel": "Upload files",
-    "fileNameLabel": "File name",
-    "dateUploadedLabel": "Date uploaded",
-    "fileSizeLabel": "File size",
-    "uploadedByLabel": "Uploaded by",
-    "filesUploadedTitle": "Files uploaded",
-    "filesUploadedSubtitle": "All documents uploaded during this request will be shown here. All documents open in a new window."
+    }
   },
   "document-messages": {
+    "document-title": "List of documents",
     "header": "You can upload up to 10 documents at a time. Each document must:\n\n* be less than {{maxFileSize}} in file size\n* have a unique file name that describes its contents\n\nThere is no limit to the number of files you can upload in total.",
     "infoTitle": "What file types can I upload?",
     "infoContent": "You can upload these file types:\n\n* PDF ({{pdfTypes}})\n* text ({{textTypes}})\n* presentation ({{presentationTypes}})\n* spreadsheet ({{spreadsheetTypes}})\n* image ({{imageTypes}})",

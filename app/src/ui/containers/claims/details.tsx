@@ -126,10 +126,12 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       <ACC.Section>
         <ACC.Accordion>
           {showForecast && this.renderForecastItem(this.props.forecastData!)}
+
           {this.renderLogsItem()}
+
           {isMo && (
-            <ACC.AccordionItem title={x => x.claimDetails.labels.documentsTitle} qa="documents-list-accordion">
-              <ACC.DocumentView documents={data.documents} />
+            <ACC.AccordionItem qa="documents-list-accordion" title={x => x.claimDetails.labels.documentsTitle}>
+              <ACC.DocumentView hideHeader qa="claim-detail-documents" documents={data.documents} />
             </ACC.AccordionItem>
           )}
         </ACC.Accordion>

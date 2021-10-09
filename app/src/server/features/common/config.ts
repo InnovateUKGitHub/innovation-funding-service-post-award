@@ -111,6 +111,7 @@ const features: IFeatureFlags = {
   contentHint: getFeatureFlagValue(process.env.FEATURE_CONTENT_HINT, false),
   customContent: getFeatureFlagValue(process.env.FEATURE_CUSTOM_CONTENT, false),
   displayOtherContacts: getFeatureFlagValue(process.env.FEATURE_OTHER_CONTACTS, false),
+  searchDocsMinThreshold: Number(process.env.SEARCH_DOCS_MIN_THRESHOLD) || 5,
 };
 
 const logLevel = parseLogLevel(process.env.LOG_LEVEL! || process.env.LOGLEVEL!);
@@ -158,7 +159,7 @@ if (!permittedFileTypes.length) {
 
 const maxClaimLineItems = () => {
   const maxNumber = process.env.FEATURE_MAX_CLAIM_LINE_ITEMS;
-  const parsedMaxNumber = maxNumber && Math.abs(Number(maxNumber)) || 120;
+  const parsedMaxNumber = (maxNumber && Math.abs(Number(maxNumber))) || 120;
 
   if (parsedMaxNumber > 120) {
     throw Error(`FEATURE_MAX_CLAIM_LINE_ITEMS = ${parsedMaxNumber}, please enter a value below 120`);

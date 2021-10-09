@@ -1,6 +1,6 @@
 import * as ACC from "@ui/components";
 import { IEditorStore, useStores } from "@ui/redux";
-import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
 import {
@@ -25,7 +25,6 @@ import { useContent } from "@ui/hooks";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { Content } from "@content/content";
 import { DropdownOption, IDocumentMessages } from "@ui/components";
-import { noop } from "@ui/helpers/noop";
 
 import { EnumDocuments } from "./components";
 
@@ -76,7 +75,6 @@ type ReviewContentKeys =
   | "uploadInstruction2"
   | "noDocumentsUploaded"
   | "descriptionLabel"
-  | "newWindow"
   | "noMatchingDocumentsMessage"
   | "searchDocumentsMessage";
 
@@ -119,7 +117,6 @@ export function useReviewContent(): ReviewContent {
     uploadInstruction1: getContent(x => x.claimReview.documentMessages.uploadInstruction1),
     uploadInstruction2: getContent(x => x.claimReview.documentMessages.uploadInstruction2),
     noDocumentsUploaded: getContent(x => x.claimReview.documentMessages.noDocumentsUploaded),
-    newWindow: getContent(x => x.claimReview.documentMessages.newWindow),
     descriptionLabel: getContent(x => x.claimDocuments.descriptionLabel),
     noMatchingDocumentsMessage: getContent(x => x.projectDocuments.noMatchingDocumentsMessage),
     searchDocumentsMessage: getContent(x => x.projectDocuments.searchDocumentsMessage),
@@ -163,18 +160,7 @@ interface CombinedData {
   documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
 }
 
-interface ReviewState {
-  documentFilter: string;
-}
-
-class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewData, ReviewCallbacks, ReviewState> {
-  constructor(props: ContainerProps<ReviewClaimParams, ReviewData, ReviewCallbacks>) {
-    super(props);
-    this.state = {
-      documentFilter: "",
-    };
-  }
-
+class ReviewComponent extends ContainerBase<ReviewClaimParams, ReviewData, ReviewCallbacks> {
   public render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -412,90 +398,17 @@ class ReviewComponent extends ContainerBaseWithState<ReviewClaimParams, ReviewDa
               </UploadForm.Submit>
             </UploadForm.Form>
 
-            {this.renderDocumentsFilterSection(documents, documentsEditor)}
+            <ACC.Section>
+              <ACC.DocumentEdit
+                qa="claim-supporting-documents"
+                onRemove={document => this.props.onDelete(documentsEditor.data, document)}
+                documents={documents}
+              />
+            </ACC.Section>
           </ACC.AccordionItem>
         )}
       </EnumDocuments>
     );
-  }
-
-  private renderDocumentsFilterSection(
-    documents: DocumentSummaryDto[],
-    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
-  ) {
-    const { isClient } = this.props;
-    const documentFilterText = this.state.documentFilter;
-    const hasTextToFilter = !!documentFilterText.length;
-
-    const documentsToDisplay =
-      isClient && hasTextToFilter
-        ? documents.filter(document => new RegExp(documentFilterText, "gi").test(document.fileName))
-        : documents;
-
-    return (
-      <>
-        {isClient && this.renderDocumentSearchField(documents)}
-
-        {!documentsToDisplay.length && !!documents.length ? (
-          <ACC.Renderers.SimpleString qa="noDocuments">
-            {this.props.content.default.noMatchingDocumentsMessage}
-          </ACC.Renderers.SimpleString>
-        ) : (
-          this.renderDocumentResultsTable(documentsEditor, documentsToDisplay)
-        )}
-      </>
-    );
-  }
-
-  private renderDocumentSearchField(documents: DocumentSummaryDto[]) {
-    if (documents.length === 0) {
-      return (
-        <ACC.ValidationMessage
-          qa={"noDocuments"}
-          message={<ACC.Content value={x => x.projectDocuments.documentMessages.noDocumentsUploaded} />}
-          messageType="info"
-        />
-      );
-    }
-
-    const FilterForm = ACC.TypedForm<ReviewState>();
-
-    const handleOnSearch = ({ documentFilter }: ReviewState) => {
-      const filteredQuery = documentFilter.trim();
-      const newValue = filteredQuery.length ? filteredQuery : "";
-
-      this.setState({ documentFilter: newValue });
-    };
-
-    return (
-      <>
-        <ACC.Renderers.SimpleString>{this.props.content.default.newWindow}</ACC.Renderers.SimpleString>
-        <FilterForm.Form data={this.state} onSubmit={noop} onChange={handleOnSearch} qa="document-mo-search-form">
-          <FilterForm.Search
-            name="document-filter"
-            labelHidden
-            value={x => x.documentFilter}
-            update={(x, v) => (x.documentFilter = v || "")}
-            placeholder={this.props.content.default.searchDocumentsMessage}
-          />
-        </FilterForm.Form>
-      </>
-    );
-  }
-
-  private renderDocumentResultsTable(
-    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
-    documents: DocumentSummaryDto[],
-  ) {
-    return documents.length ? (
-      <ACC.Section>
-        <ACC.DocumentTableWithDelete
-          onRemove={document => this.props.onDelete(documentsEditor.data, document)}
-          documents={documents}
-          qa="claim-supporting-documents"
-        />
-      </ACC.Section>
-    ) : null;
   }
 
   private getCompetitionHintContent(competitionType: string) {

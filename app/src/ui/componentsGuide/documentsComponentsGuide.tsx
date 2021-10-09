@@ -2,7 +2,7 @@ import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import { DocumentSummaryDto, IGuide } from "@framework/types";
-import { Button, DocumentTableWithDelete, TypedTable } from "@ui/components";
+import { Button, DocumentEdit, DocumentView } from "@ui/components";
 
 const initialDocs: DocumentSummaryDto[] = [
   {
@@ -60,21 +60,27 @@ function DemoDocsWithDelete() {
         Reset demo
       </Button>
 
-      <DocumentTableWithDelete
-        documents={undeletedDocs}
+      <DocumentEdit
         qa="document-list-with-delete"
+        documents={undeletedDocs}
         onRemove={deleteDoc => setDocs(x => x.filter(y => y.id !== deleteDoc.id))}
       />
     </>
   );
 }
 
-export const documentWithDelete: IGuide = {
-  name: "Document View",
+export const documentComponents: IGuide = {
+  name: "Document Components",
   options: [
     {
+      name: "View only",
+      comments: "Used to view documents.",
+      example: '<DocumentView qa="document-list-with-delete" documents={docs} />',
+      render: () => <DocumentView qa="document-list-with-delete" documents={initialDocs} />,
+    },
+    {
       name: "With delete",
-      comments: "Used to delete documents.",
+      comments: "Used to view and delete documents.",
       example:
         '<DocumentTableWithDelete documents={documents} fileName="Supporting documents" qa="document-list" onRemove="(documentToDelete) => ..."/>',
       render: DemoDocsWithDelete,

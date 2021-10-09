@@ -159,17 +159,14 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
         }
       />
     ) : (
-      // TODO: Refactor with <DocumentView />
+      // TODO: Speak with business about refactoring to document table UI
       <>
         {data.documents.length ? (
           <ACC.Section subtitle={<ACC.Content value={x => x.claimPrepareSummary.documentMessages.newWindow} />}>
             <ACC.DocumentList documents={data.documents} qa="claim-documents-list" />
           </ACC.Section>
         ) : (
-          <ACC.ValidationMessage
-            message={<ACC.Content value={x => x.claimPrepareSummary.noDocumentsUploadedMessage} />}
-            messageType="info"
-          />
+          <ACC.DocumentsUnavailable />
         )}
 
         {editDocumentLink}

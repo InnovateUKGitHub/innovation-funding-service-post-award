@@ -2,7 +2,7 @@ import * as ACC from "@ui/components";
 import { IEditorStore, useStores } from "@ui/redux";
 import { useContent } from "@ui/hooks";
 import { Pending } from "@shared/pending";
-import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators/documentUploadValidator";
 
 import { DocumentSummaryDto, MultipleDocumentUploadDto, ProjectDto } from "@framework/dtos";
@@ -32,23 +32,7 @@ interface Callbacks {
   onDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
-interface ProjectDocumentState {
-  documentFilter: string;
-}
-
-class ProjectDocumentsComponent extends ContainerBaseWithState<
-  ProjectDocumentPageParams,
-  ProjectDocumentData,
-  Callbacks,
-  ProjectDocumentState
-> {
-  constructor(props: ContainerProps<ProjectDocumentPageParams, ProjectDocumentData, Callbacks>) {
-    super(props);
-    this.state = {
-      documentFilter: "",
-    };
-  }
-
+class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams, ProjectDocumentData, Callbacks> {
   render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -141,63 +125,13 @@ class ProjectDocumentsComponent extends ContainerBaseWithState<
             )}
           </EnumDocuments>
 
-          {documents.length ? (
-            <>
-              {this.props.isClient && (
-                <>
-                  <ACC.Renderers.SimpleString>
-                    <ACC.Content value={x => x.projectDocuments.documentMessages.newWindow} />
-                  </ACC.Renderers.SimpleString>
-
-                  <ACC.DocumentFilter
-                    name="document-filter"
-                    qa="document-search-form"
-                    onSearch={documentFilter => this.setState({ documentFilter })}
-                  />
-                </>
-              )}
-
-              {this.renderDocumentsSection(documents, editor)}
-            </>
-          ) : (
-            <ACC.ValidationMessage
-              messageType="info"
-              qa="noDocuments"
-              message={<ACC.Content value={x => x.projectDocuments.documentMessages.noDocumentsUploaded} />}
-            />
-          )}
+          <ACC.DocumentEdit
+            qa="project-documents"
+            onRemove={document => this.props.onDelete(editor.data, document)}
+            documents={documents}
+          />
         </ACC.Section>
       </ACC.Page>
-    );
-  }
-
-  private renderDocumentsSection(
-    documents: DocumentSummaryDto[],
-    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
-  ) {
-    const { isClient } = this.props;
-    const documentFilterText = this.state.documentFilter;
-    const hasTextToFilter = !!documentFilterText.length;
-
-    const documentsToDisplay =
-      isClient && hasTextToFilter
-        ? documents.filter(document => new RegExp(documentFilterText, "gi").test(document.fileName))
-        : documents;
-
-    return (
-      <>
-        {documentsToDisplay.length ? (
-          <ACC.DocumentTableWithDelete
-            onRemove={document => this.props.onDelete(documentsEditor.data, document)}
-            documents={documents}
-            qa="claim-supporting-documents"
-          />
-        ) : (
-          <ACC.Renderers.SimpleString qa="noDocuments">
-            <ACC.Content value={x => x.projectDocuments.noMatchingDocumentsMessage} />
-          </ACC.Renderers.SimpleString>
-        )}
-      </>
     );
   }
 }

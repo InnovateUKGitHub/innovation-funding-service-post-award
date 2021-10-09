@@ -112,25 +112,13 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
           </UploadForm.Form>
         </ACC.Section>
 
-        {documents.length ? (
-          <ACC.Section
-            title={x => x.projectSetupBankStatement.documentLabels.filesUploadedTitle}
-            subtitle={x => x.projectSetupBankStatement.documentLabels.filesUploadedSubtitle}
-          >
-            <ACC.DocumentTableWithDelete
-              onRemove={document => this.props.onFileDelete(documentsEditor.data, document)}
-              documents={documents}
-              qa="partner-document"
-            />
-          </ACC.Section>
-        ) : (
-          <ACC.Section title={x => x.projectSetupBankStatement.documentLabels.filesUploadedTitle}>
-            <ACC.ValidationMessage
-              message={x => x.projectSetupBankStatement.documentMessages.noDocumentsUploaded}
-              messageType="info"
-            />
-          </ACC.Section>
-        )}
+        <ACC.Section>
+          <ACC.DocumentEdit
+            qa="setup-bank-statement-documents"
+            onRemove={document => this.props.onFileDelete(documentsEditor.data, document)}
+            documents={documents}
+          />
+        </ACC.Section>
 
         <ACC.Section qa="submit-bank-statement">
           <BankStatementForm.Form

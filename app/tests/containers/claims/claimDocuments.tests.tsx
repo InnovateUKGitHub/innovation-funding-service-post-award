@@ -10,6 +10,17 @@ import { hookTestBed, TestBedContent } from "@shared/TestBed";
 
 describe("useClaimDocumentContent()", () => {
   const stubContent = {
+    components: {
+      documents: {
+        labels: {
+          documentDisplayTitle: { content: "stub-documentDisplayTitle" },
+          documentDisplaySubTitle: { content: "stub-documentDisplaySubTitle" },
+        },
+        messages: {
+          noDocumentsUploaded: { content: "stub-noDocumentsUploaded" },
+        },
+      },
+    },
     claimDocuments: {
       backLink: { content: "stub-backLink" },
       descriptionLabel: { content: "stub-descriptionLabel" },
@@ -40,7 +51,6 @@ describe("useClaimDocumentContent()", () => {
         uploadTitle: { content: "stub-uploadTitle" },
         uploadDocumentsLabel: { content: "stub-uploadDocumentsLabel" },
         noDocumentsUploaded: { content: "stub-noDocumentsUploaded" },
-        newWindow: { content: "stub-newWindow" },
       },
     },
   } as any;
@@ -53,7 +63,6 @@ describe("useClaimDocumentContent()", () => {
     name                                 | property
     ${"backLink"}                        | ${"backLink"}
     ${"descriptionLabel"}                | ${"descriptionLabel"}
-    ${"documentsListSectionTitle"}       | ${"documentsListSectionTitle"}
     ${"saveAndReturnButton"}             | ${"saveAndReturnButton"}
     ${"saveAndContinueToSummaryButton"}  | ${"saveAndContinueToSummaryButton"}
     ${"saveAndContinueToForecastButton"} | ${"saveAndContinueToForecastButton"}
@@ -94,7 +103,6 @@ describe("useClaimDocumentContent()", () => {
     ${"uploadTitle"}          | ${"uploadTitle"}
     ${"uploadDocumentsLabel"} | ${"uploadDocumentsLabel"}
     ${"noDocumentsUploaded"}  | ${"noDocumentsUploaded"}
-    ${"newWindow"}            | ${"newWindow"}
   `("with $property", ({ name, property }: Record<"name" | "property", string>) => {
     const { result } = renderPageContent();
 
