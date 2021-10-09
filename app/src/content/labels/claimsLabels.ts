@@ -11,7 +11,6 @@ export class ClaimsLabels extends ContentBase {
   public readonly actualCosts = this.getContent("actual-costs");
   public readonly difference = this.getContent("difference");
   public readonly documentsTitle = this.getContent("document-list-title");
-  public readonly noDocumentsUploaded = this.getContent("no-documents-uploaded");
   public readonly status = this.getContent("status");
   public readonly lastUpdated = this.getContent("last-updated-date");
   public readonly openSectionTitle = this.getContent("open-section-title");

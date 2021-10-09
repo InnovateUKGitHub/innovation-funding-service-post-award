@@ -1,58 +1,74 @@
+import { render } from "@testing-library/react";
+
+import { DocumentSummaryDto } from "@framework/dtos";
 import * as ACC from "@ui/components";
 import TestBed, { TestBedContent } from "@shared/TestBed";
-import { render } from "@testing-library/react";
 import { DocumentViewProps } from "@ui/components";
 
 describe("<DocumentView />", () => {
   const stubContent = {
     components: {
-      documentView: {
-        fallbackValidationMessage: {
-          content: "stub-fallback-validation-message",
+      documents: {
+        labels: {
+          documentDisplayTitle: { content: "stub-documentDisplayTitle" },
+          documentDisplaySubTitle: { content: "stub-documentDisplaySubTitle" },
+        },
+        messages: {
+          noDocumentsUploaded: { content: "stub-noDocumentsUploaded" },
         },
       },
     },
   };
 
-  const setup = (props: DocumentViewProps) => {
+  const defaultProps: DocumentViewProps = {
+    documents: [],
+    qa: "stub-qa",
+  };
+
+  const setup = (props?: Partial<DocumentViewProps>) => {
     return render(
       <TestBed content={stubContent as TestBedContent}>
-        <ACC.DocumentView {...props} />
+        <ACC.DocumentView {...defaultProps} {...props} />
       </TestBed>,
     );
   };
 
   describe("@renders", () => {
     test("with default validation message", () => {
-      const props = {
-        documents: [],
-      } as DocumentViewProps;
-      const wrapper = setup(props);
+      const wrapper = setup();
 
-      expect(wrapper.getByText(stubContent.components.documentView.fallbackValidationMessage.content)).toBeInTheDocument();
+      const fallbackContent = stubContent.components.documents.messages.noDocumentsUploaded.content;
+
+      expect(wrapper.getByText(fallbackContent)).toBeInTheDocument();
     });
 
     test("with validationMessage", () => {
-      const props = {
-        documents: [],
-        validationMessage: "stub-validation-message",
-      } as DocumentViewProps;
-      const wrapper = setup(props);
+      const stubValidationMessage = "stub-validation-message";
 
-      expect(wrapper.getByText("stub-validation-message")).toBeInTheDocument();
+      const wrapper = setup({
+        validationMessage: stubValidationMessage,
+      });
+
+      expect(wrapper.getByText(stubValidationMessage)).toBeInTheDocument();
     });
 
     test("with documents list", () => {
-      const props = {
-        documents: [
-          { fileName: "first-document-file-name" },
-        ],
-      } as DocumentViewProps;
-      const wrapper = setup(props);
-      const tableEl = wrapper.queryByTestId("supporting-documents");
+      const stubDocument: DocumentSummaryDto = {
+        fileName: "stub-filename",
+        link: "stub-link",
+        id: "stub-id",
+        fileSize: 1024,
+        dateCreated: new Date(Date.UTC(2021, 10, 1)),
+        uploadedBy: "stub-uploadedBy",
+        isOwner: true
+      };
 
-      expect(tableEl).toBeInTheDocument();
-      expect(wrapper.queryByText(stubContent.components.documentView.fallbackValidationMessage.content)).not.toBeInTheDocument();
+      const { queryByTestId, queryByText } = setup({ documents: [stubDocument], qa: "docs-list" });
+
+      const fallbackContent = stubContent.components.documents.messages.noDocumentsUploaded.content;
+
+      expect(queryByTestId("docs-list-container")).toBeInTheDocument();
+      expect(queryByText(fallbackContent)).not.toBeInTheDocument();
     });
   });
 });

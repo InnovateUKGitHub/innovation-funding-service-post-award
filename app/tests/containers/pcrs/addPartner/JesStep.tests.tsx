@@ -17,7 +17,12 @@ describe("<JesStepUI />", () => {
     components: {
       documents: {
         labels: {
+          documentDisplayTitle: { content: "stub-documentDisplayTitle" },
+          documentDisplaySubTitle: { content: "stub-documentDisplaySubTitle" },
           documentDescriptionLabel: jest.fn().mockReturnValue({ content: "stub-documentDescriptionLabel" }),
+        },
+        messages: {
+          noDocumentsUploaded: { content: "stub-noDocumentsUploaded" },
         },
       },
       documentGuidance: {
@@ -26,7 +31,8 @@ describe("<JesStepUI />", () => {
           key: "test-key",
           content: `stub-fileSize: ${bytes(size)}`,
           markdown: false,
-        }),        uniqueFilename: { content: "stub-uniqueFilename" },
+        }),
+        uniqueFilename: { content: "stub-uniqueFilename" },
         noFilesNumberLimit: { content: "stub-noFilesNumberLimit" },
         fileTypesUpload: { content: "stub-fileTypesUpload" },
         pdfFiles: { content: "stub-pdfFiles" },
@@ -51,8 +57,8 @@ describe("<JesStepUI />", () => {
       },
       documentLabels: {
         uploadInputLabel: { content: "stub-uploadInputLabel" },
-        filesUploadedTitle: { content: "stub-filesUploadedTitle" },
-        filesUploadedSubtitle: { content: "stub-filesUploadedSubtitle" }, // TODO: Conditional test
+        documentDisplayTitle: { content: "stub-documentDisplayTitle" },
+        documentDisplaySubTitle: { content: "stub-documentDisplaySubTitle" },
       },
       documentMessages: {
         uploadTitle: { content: "stub-uploadTitle" },
@@ -141,7 +147,7 @@ describe("<JesStepUI />", () => {
       const contentToCheck = generateContentArray(stubContent.pcrAddPartnerJeS);
 
       describe("without any conditional logic", () => {
-        const conditionalContentToExclude = ["filesUploadedSubtitle"];
+        const conditionalContentToExclude = ["documentDisplaySubTitle"];
         const unconditionalContent = contentToCheck.filter(([key]) => !conditionalContentToExclude.includes(key));
 
         test.each(unconditionalContent)("with %s", (_key, value) => {
@@ -155,7 +161,7 @@ describe("<JesStepUI />", () => {
 
       describe("with conditional logic", () => {
         test("when documents are available", () => {
-          const conditionalText = stubContent.pcrAddPartnerJeS.documentLabels.filesUploadedSubtitle.content;
+          const conditionalText = stubContent.pcrAddPartnerJeS.documentLabels.documentDisplaySubTitle.content;
           const availableDocument: JesStepUIProps["documents"][0] = {
             link: "stub-link",
             fileName: "stub-filename",

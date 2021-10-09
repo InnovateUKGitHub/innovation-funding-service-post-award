@@ -92,7 +92,6 @@ import { GenericFallbackErrorContent, UnauthenticatedErrorContent, NotFoundError
 import { LogsContent } from "./components/logsContent";
 import { LoadingContent } from "./components/loadingContent";
 import { DocumentGuidanceContent } from "./components/documentGuidanceContent";
-import { DocumentViewContent } from "./components/documentViewContent";
 import { ClaimLastModifiedContent } from "./components/claimLastModifiedContent";
 import { ForecastTableContent } from "./components/forecastTableContent";
 import { ReportFormContent } from "./components/reportFormContent";
@@ -222,7 +221,6 @@ export class Content extends ContentBase {
     logs: LogsContent;
     loading: LoadingContent;
     documentGuidance: DocumentGuidanceContent;
-    documentView: DocumentViewContent;
     claimLastModified: ClaimLastModifiedContent;
     forecastTable: ForecastTableContent;
     reportForm: ReportFormContent;
@@ -354,7 +352,6 @@ export class Content extends ContentBase {
       logs: new LogsContent(this, competitionType),
       loading: new LoadingContent(this, competitionType),
       documentGuidance: new DocumentGuidanceContent(this, competitionType),
-      documentView: new DocumentViewContent(this),
       claimLastModified: new ClaimLastModifiedContent(this, competitionType),
       forecastTable: new ForecastTableContent(this, competitionType),
       reportForm: new ReportFormContent(this, competitionType),

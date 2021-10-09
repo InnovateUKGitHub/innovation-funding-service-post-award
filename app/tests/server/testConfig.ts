@@ -28,6 +28,7 @@ export class TestConfig implements IConfig {
     contentHint: true,
     customContent: true,
     displayOtherContacts: true,
+    searchDocsMinThreshold: 3,
   };
 
   public logLevel = LogLevel.DEBUG;

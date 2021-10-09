@@ -16,78 +16,35 @@ const projectId = "test-id";
 
 const contentStub = {
   editClaimLineItems: {
-    saveAndReturnButton: {
-      content: "stub-saveAndReturnButton",
-    },
-    backLink: {
-      content: "stub-backLink",
-    },
-    descriptionHeader: {
-      content: "stub-descriptionHeader",
-    },
-    lastUpdatedHeader: {
-      content: "stub-lastUpdatedHeader",
-    },
-    costHeader: {
-      content: "stub-costHeader",
-    },
-    uploadAndRemoveDocumentsButton: {
-      content: "stub-uploadAndRemoveDocumentsButton",
-    },
-    additionalInformationHeading: {
-      content: "stub-additionalInformationHeading",
-    },
-    additionalInfo: {
-      content: "stub-additionalInfo",
-    },
-    additionalInformationHint: {
-      content: "stub-additionalInformationHint",
-    },
-    sbriAdditionalInformationHint: {
-      content: "stub-sbriAdditionalInformationHint",
-    },
-    actionHeader: {
-      content: "stub-actionHeader",
-    },
-    supportingDocumentsHeader: {
-      content: "stub-supportingDocumentsHeader",
-    },
-    totalCosts: {
-      content: "stub-totalCosts",
-    },
-    noData: {
-      content: "stub-noData",
-    },
-    addCost: {
-      content: "stub-addCost",
-    },
-    forecastCosts: {
-      content: "stub-forecastCosts",
-    },
-    difference: {
-      content: "stub-difference",
-    },
+    saveAndReturnButton: { content: "stub-saveAndReturnButton" },
+    backLink: { content: "stub-backLink" },
+    descriptionHeader: { content: "stub-descriptionHeader" },
+    lastUpdatedHeader: { content: "stub-lastUpdatedHeader" },
+    costHeader: { content: "stub-costHeader" },
+    uploadAndRemoveDocumentsButton: { content: "stub-uploadAndRemoveDocumentsButton" },
+    additionalInformationHeading: { content: "stub-additionalInformationHeading" },
+    additionalInfo: { content: "stub-additionalInfo" },
+    additionalInformationHint: { content: "stub-additionalInformationHint" },
+    sbriAdditionalInformationHint: { content: "stub-sbriAdditionalInformationHint" },
+    actionHeader: { content: "stub-actionHeader" },
+    supportingDocumentsHeader: { content: "stub-supportingDocumentsHeader" },
+    totalCosts: { content: "stub-totalCosts" },
+    noData: { content: "stub-noData" },
+    addCost: { content: "stub-addCost" },
+    forecastCosts: { content: "stub-forecastCosts" },
+    difference: { content: "stub-difference" },
     messages: {
-      editClaimLineItemDocumentGuidance: {
-        content: "stub-editClaimLineItemDocumentGuidance",
-      },
-      negativeClaimWarning: {
-        content: "stub-negativeClaimWarning",
-      },
-      editClaimLineItemContactMo: {
-        content: "stub-editClaimLineItemContactMo",
-      },
-      editClaimLineItemUploadEvidence: {
-        content: "stub-editClaimLineItemUploadEvidence",
-      },
-      editClaimLineItemClaimDocuments: {
-        content: "stub-editClaimLineItemClaimDocuments",
-      },
+      editClaimLineItemDocumentGuidance: { content: "stub-editClaimLineItemDocumentGuidance" },
+      negativeClaimWarning: { content: "stub-negativeClaimWarning" },
+      editClaimLineItemContactMo: { content: "stub-editClaimLineItemContactMo" },
+      editClaimLineItemUploadEvidence: { content: "stub-editClaimLineItemUploadEvidence" },
+      editClaimLineItemClaimDocuments: { content: "stub-editClaimLineItemClaimDocuments" },
+    },
+    documentLabels: {
+      documentDisplayTitle: { content: "stub-documentDisplayTitle" },
     },
     documentMessages: {
-      noDocumentsUploaded: {
-        content: "stub-noDocumentsUploaded",
-      },
+      noDocumentsUploaded: { content: "stub-noDocumentsUploaded" },
     },
   },
   claimDocuments: {
@@ -107,8 +64,14 @@ const contentStub = {
     },
   },
   components: {
-    documentView: {
-      fallbackValidationMessage: "fallback-validation-message-stub",
+    documents: {
+      labels: {
+        documentDisplayTitle: { content: "stub-documentDisplayTitle" },
+        documentDisplaySubTitle: { content: "stub-documentDisplaySubTitle" },
+      },
+      messages: {
+        noDocumentsUploaded: { content: "stub-noDocumentsUploaded" },
+      },
     },
   },
 } as any;
@@ -232,8 +195,10 @@ describe("editClaimLineItems", () => {
 
         const sbriAdditionalInformationHint = contentStub.editClaimLineItems.sbriAdditionalInformationHint.content;
         const editClaimLineItemContactMo = contentStub.editClaimLineItems.messages.editClaimLineItemContactMo.content;
-        const editClaimLineItemUploadEvidence = contentStub.editClaimLineItems.messages.editClaimLineItemUploadEvidence.content;
-        const editClaimLineItemClaimDocuments = contentStub.editClaimLineItems.messages.editClaimLineItemClaimDocuments.content;
+        const editClaimLineItemUploadEvidence =
+          contentStub.editClaimLineItems.messages.editClaimLineItemUploadEvidence.content;
+        const editClaimLineItemClaimDocuments =
+          contentStub.editClaimLineItems.messages.editClaimLineItemClaimDocuments.content;
 
         expect(queryByText(sbriAdditionalInformationHint)).toBeInTheDocument();
         expect(queryByText(editClaimLineItemContactMo)).toBeInTheDocument();

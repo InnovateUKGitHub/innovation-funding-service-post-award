@@ -8,7 +8,7 @@ import { allowedClaimDocuments, DocumentDescription, ProjectRole } from "@framew
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDescriptionDto, DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { getAuthRoles } from "@framework/types";
-import { DropdownOption } from "@ui/components";
+import { DocumentEdit, DropdownOption } from "@ui/components";
 import { getAllEnumValues } from "@shared/enumHelper";
 import { useContent } from "@ui/hooks";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
@@ -38,7 +38,6 @@ type ClaimDocumentContentKeys =
   | "sbriInvoiceBullet3"
   | "sbriMoAdvice"
   | "noDocumentsUploaded"
-  | "newWindow"
   | "saveAndContinueToForecastButton"
   | "uploadTitle";
 
@@ -50,8 +49,8 @@ export function useClaimDocumentContent(): ClaimDocumentContent {
   return {
     backLink: getContent(x => x.claimDocuments.backLink),
     descriptionLabel: getContent(x => x.claimDocuments.descriptionLabel),
-    documentsListSectionTitle: getContent(x => x.claimDocuments.documentsListSectionTitle),
     saveAndReturnButton: getContent(x => x.claimDocuments.saveAndReturnButton),
+    documentsListSectionTitle: getContent(x => x.claimDocuments.documentsListSectionTitle),
     saveAndContinueToSummaryButton: getContent(x => x.claimDocuments.saveAndContinueToSummaryButton),
     saveAndContinueToForecastButton: getContent(x => x.claimDocuments.saveAndContinueToForecastButton),
 
@@ -78,7 +77,6 @@ export function useClaimDocumentContent(): ClaimDocumentContent {
     uploadTitle: getContent(x => x.claimDocuments.documentMessages.uploadTitle),
     uploadDocumentsLabel: getContent(x => x.claimDocuments.documentMessages.uploadDocumentsLabel),
     noDocumentsUploaded: getContent(x => x.claimDocuments.documentMessages.noDocumentsUploaded),
-    newWindow: getContent(x => x.claimDocuments.documentMessages.newWindow),
   };
 }
 
@@ -117,7 +115,7 @@ const ClaimDocumentsComponent = ({
 
     const documentTypeOptions: DropdownOption[] = documentDescriptions
       .filter(x => allowedClaimDocuments.includes(x.id))
-      .map(x => ({ id: `${x.id}`, value: x.label}));
+      .map(x => ({ id: `${x.id}`, value: x.label }));
 
     const claimLinkParams = { projectId, partnerId, periodId };
 
@@ -182,19 +180,12 @@ const ClaimDocumentsComponent = ({
         </ACC.Section>
 
         <ACC.Section title={content.documentsListSectionTitle}>
-          {documents.length ? (
-            <ACC.Section subtitle={content.newWindow}>
-              <ACC.DocumentTableWithDelete
-                qa="claim-supporting-documents"
-                documents={documents}
-                onRemove={document => props.onDelete(editor.data, document)}
-              />
-            </ACC.Section>
-          ) : (
-            <ACC.Section>
-              <ACC.ValidationMessage message={content.noDocumentsUploaded} messageType="info" />
-            </ACC.Section>
-          )}
+          <DocumentEdit
+            hideHeader
+            qa="claim-supporting-documents"
+            documents={documents}
+            onRemove={document => props.onDelete(editor.data, document)}
+          />
         </ACC.Section>
 
         <ACC.Section qa="buttons">

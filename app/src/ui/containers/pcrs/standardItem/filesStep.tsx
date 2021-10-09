@@ -1,6 +1,6 @@
 import React from "react";
+import { IEditorStore, useStores } from "@ui/redux";
 import { MultipleDocumentUploadDtoValidator, PCRStandardItemDtoValidator } from "@ui/validators";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
 import * as ACC from "@ui/components";
 import { PCRItemTypeDto, PCRStandardItemDto } from "@framework/dtos";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
@@ -11,15 +11,24 @@ interface FileStepsProps {
   documents: DocumentSummaryDto[];
   onFileChange: (saving: "DontSave" | "SaveAndRemain" | "SaveAndContinue", dto: MultipleDocumentUploadDto) => void;
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
-
 }
 
-class FilesStepComponent extends React.Component<PcrStepProps<PCRStandardItemDto, PCRStandardItemDtoValidator> & FileStepsProps> {
+class FilesStepComponent extends React.Component<
+  PcrStepProps<PCRStandardItemDto, PCRStandardItemDtoValidator> & FileStepsProps
+> {
   render() {
     return (
       <>
         {this.renderTemplateLinks(this.props.pcrItemType)}
-        {this.renderFiles(this.props.documentsEditor, this.props.documents)}
+
+        <ACC.Section>
+          <ACC.DocumentEdit
+            qa="pcr-files-step-documents"
+            onRemove={document => this.props.onFileDelete(this.props.documentsEditor.data, document)}
+            documents={this.props.documents}
+          />
+        </ACC.Section>
+
         {this.renderForm(this.props.documentsEditor)}
       </>
     );
@@ -36,26 +45,16 @@ class FilesStepComponent extends React.Component<PcrStepProps<PCRStandardItemDto
     );
   }
 
-  private renderFiles(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>, documents: DocumentSummaryDto[]) {
-    return (
-      <ACC.Section title="Files uploaded" subtitle={documents.length ? "All documents open in a new window." : undefined}>
-        {documents.length ?
-          <ACC.DocumentListWithDelete onRemove={(document) => this.props.onFileDelete(documentsEditor.data, document)} documents={documents} qa="supporting-documents" /> :
-          <ACC.ValidationMessage message="No documents uploaded." messageType="info" />
-        }
-      </ACC.Section>
-    );
-  }
-
   private renderForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>) {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
+
     return (
       <ACC.Section>
         <UploadForm.Form
           enctype="multipart"
           editor={documentsEditor}
           onSubmit={() => this.props.onFileChange("SaveAndContinue", documentsEditor.data)}
-          onChange={(dto) => this.props.onFileChange("DontSave", dto)}
+          onChange={dto => this.props.onFileChange("DontSave", dto)}
           qa="projectChangeRequestItemUpload"
         >
           <UploadForm.Fieldset heading="Upload">
@@ -65,13 +64,21 @@ class FilesStepComponent extends React.Component<PcrStepProps<PCRStandardItemDto
               name="attachment"
               labelHidden
               value={data => data.files}
-              update={(dto, files) => dto.files = files || []}
+              update={(dto, files) => (dto.files = files || [])}
               validation={documentsEditor.validator.files}
             />
           </UploadForm.Fieldset>
           <UploadForm.Fieldset>
-            <UploadForm.Button name="uploadFile" styling="Secondary" onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}>Upload documents</UploadForm.Button>
-            <UploadForm.Button name="uploadFileAndContinue" styling="Primary">Save and continue</UploadForm.Button>
+            <UploadForm.Button
+              name="uploadFile"
+              styling="Secondary"
+              onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}
+            >
+              Upload documents
+            </UploadForm.Button>
+            <UploadForm.Button name="uploadFileAndContinue" styling="Primary">
+              Save and continue
+            </UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
       </ACC.Section>
@@ -79,36 +86,51 @@ class FilesStepComponent extends React.Component<PcrStepProps<PCRStandardItemDto
   }
 }
 
-export const FilesStep = (props: PcrStepProps<PCRStandardItemDto, PCRStandardItemDtoValidator>) => (
-  <StoresConsumer>
-    {
-      stores => {
-        return (
-          <ACC.Loader
-            pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.project.id, props.pcrItem.id)}
-            render={documents => (
-              <FilesStepComponent
-                documents={documents}
-                onFileChange={(saving, dto) => {
-                  stores.messages.clearMessages();
-                  // show message if remaining on page
-                  const successMessage = saving === "SaveAndRemain" ? dto.files.length === 1 ? "Your document has been uploaded." : `${dto.files.length} documents have been uploaded.` : undefined;
-                  stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(saving !== "DontSave", props.project.id, props.pcrItem.id, dto, saving === "SaveAndRemain", successMessage, () => {
-                    if (saving === "SaveAndContinue") {
-                      props.onSave();
-                    }
-                  });
-                }}
-                onFileDelete={(dto, document) => {
-                  stores.messages.clearMessages();
-                  stores.projectChangeRequestDocuments.deletePcrOrPcrItemDocumentsEditor(props.project.id, props.pcrItem.id, dto, document, "Your document has been removed.");
-                }}
-                {...props}
-              />
-            )}
-          />
-        );
-      }
-    }
-  </StoresConsumer>
-);
+export const FilesStep = (props: PcrStepProps<PCRStandardItemDto, PCRStandardItemDtoValidator>) => {
+  const stores = useStores();
+
+  return (
+    <ACC.Loader
+      pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.project.id, props.pcrItem.id)}
+      render={documents => (
+        <FilesStepComponent
+          {...props}
+          documents={documents}
+          onFileChange={(saving, dto) => {
+            stores.messages.clearMessages();
+            // show message if remaining on page
+            const successMessage =
+              saving === "SaveAndRemain"
+                ? dto.files.length === 1
+                  ? "Your document has been uploaded."
+                  : `${dto.files.length} documents have been uploaded.`
+                : undefined;
+            stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(
+              saving !== "DontSave",
+              props.project.id,
+              props.pcrItem.id,
+              dto,
+              saving === "SaveAndRemain",
+              successMessage,
+              () => {
+                if (saving === "SaveAndContinue") {
+                  props.onSave();
+                }
+              },
+            );
+          }}
+          onFileDelete={(dto, document) => {
+            stores.messages.clearMessages();
+            stores.projectChangeRequestDocuments.deletePcrOrPcrItemDocumentsEditor(
+              props.project.id,
+              props.pcrItem.id,
+              dto,
+              document,
+              "Your document has been removed.",
+            );
+          }}
+        />
+      )}
+    />
+  );
+};

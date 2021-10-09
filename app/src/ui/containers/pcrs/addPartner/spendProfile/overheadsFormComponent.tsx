@@ -87,7 +87,11 @@ class Component extends React.Component<SpendProfileCostFormProps<PCRSpendProfil
       <form.Fieldset>
         <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.messages.overHeadsCalculatedGuidance} /></ACC.Renderers.SimpleString>
         <form.Button name="calculateOverheadsDocuments" onClick={() => this.props.onSave(editor.data, this.getUploadDocumentsLink())}><ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.labels.overheads.uploadDocumentsLink} /></form.Button>
-        {this.renderDocuments(documents)}
+
+        <ACC.Section qa="overheads-form-section">
+          <ACC.DocumentView hideHeader qa="overheads-documents" documents={documents} />
+        </ACC.Section>
+
         <form.Numeric
           labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.overheads.calculatedCost}
           width="one-quarter"
@@ -116,22 +120,6 @@ class Component extends React.Component<SpendProfileCostFormProps<PCRSpendProfil
       default:
         return null;
     }
-  }
-
-  private renderDocuments(documents: DocumentSummaryDto[]) {
-    return (
-      <ACC.Section
-        title={x => x.pcrSpendProfilePrepareCostContent.documentLabels.filesUploadedTitle}
-        qa="supporting-documents-section"
-      >
-        {documents.length && (
-          <ACC.Renderers.SimpleString>
-            <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.documentLabels.filesUploadedSubtitle} />
-          </ACC.Renderers.SimpleString>
-        )}
-        <ACC.DocumentView documents={documents} />
-      </ACC.Section>
-    );
   }
 
   private onChange(dto: PCRSpendProfileOverheadsCostDto) {

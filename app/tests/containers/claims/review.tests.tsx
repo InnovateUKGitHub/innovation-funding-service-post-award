@@ -36,7 +36,6 @@ const stubContent = {
       uploadInstruction1: { content: "stub-uploadInstruction1" },
       uploadInstruction2: { content: "stub-uploadInstruction2" },
       noDocumentsUploaded: { content: "stub-noDocumentsUploaded" },
-      newWindow: { content: "stub-newWindow" },
     },
     messages: {
       finalClaimMessage: { content: "stub-finalClaimMessage" },
@@ -124,7 +123,6 @@ describe("useReviewContent()", () => {
     ${"uploadInstruction1"}  | ${"uploadInstruction1"}
     ${"uploadInstruction2"}  | ${"uploadInstruction2"}
     ${"noDocumentsUploaded"} | ${"noDocumentsUploaded"}
-    ${"newWindow"}           | ${"newWindow"}
   `("with documentMessages $property", ({ name, property }: Record<"name" | "property", string>) => {
     const { result } = renderPageContent();
 

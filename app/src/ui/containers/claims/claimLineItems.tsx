@@ -101,12 +101,8 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
     return (
       displaySupportingDocs && (
         <>
-          <ACC.Section
-            title={content.supportingDocumentsTitle}
-            subtitle={documents.length ? content.documentsInNewWindow : undefined}
-            qa="supporting-documents-section"
-          >
-            <ACC.DocumentView documents={documents} validationMessage={this.props.content.noDocumentsUploaded} />
+          <ACC.Section qa="supporting-documents-section" title={content.supportingDocumentsTitle}>
+            <ACC.DocumentView hideHeader qa="claim-line-item-documents" documents={documents} />
           </ACC.Section>
 
           {this.renderAdditionalInformation(claimDetails)}
@@ -253,8 +249,6 @@ export function useClaimLineItemsContent() {
   const { getContent } = useContent();
 
   const supportingDocumentsTitle = getContent(x => x.claimLineItems.supportingDocumentsTitle);
-  const documentsInNewWindow = getContent(x => x.claimLineItems.documentsInNewWindow);
-  const noDocumentsUploaded = getContent(x => x.claimLineItems.noDocumentsUploaded);
   const additionalInfoTitle = getContent(x => x.claimLineItems.additionalInfoTitle);
   const totalCostTitle = getContent(x => x.claimLineItems.totalCostTitle);
   const forecastCostTitle = getContent(x => x.claimLineItems.forecastCostTitle);
@@ -266,8 +260,6 @@ export function useClaimLineItemsContent() {
 
   return {
     supportingDocumentsTitle,
-    documentsInNewWindow,
-    noDocumentsUploaded,
     additionalInfoTitle,
     totalCostTitle,
     forecastCostTitle,

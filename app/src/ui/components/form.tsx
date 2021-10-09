@@ -95,6 +95,7 @@ interface FieldsetProps {
   qa?: string;
   headingQa?: string;
   isSubQuestion?: boolean;
+  className?: string;
 }
 
 class FieldsetComponent<T> extends React.Component<FieldsetProps, []> {
@@ -120,7 +121,7 @@ class FieldsetComponent<T> extends React.Component<FieldsetProps, []> {
     const Header = this.props.isSubQuestion ? "h3" : "h2";
     const headerContent = this.props.headingContent ? <Content value={this.props.headingContent} /> : this.props.heading;
     return (
-      <fieldset className="govuk-fieldset" data-qa={this.props.qa}>
+      <fieldset className={classNames("govuk-fieldset", this.props.className)} data-qa={this.props.qa}>
         <legend className={legendClassName}>
           {headerContent ? <Header className="govuk-fieldset__heading" data-qa={this.props.headingQa}>{headerContent}</Header> : null}
         </legend>

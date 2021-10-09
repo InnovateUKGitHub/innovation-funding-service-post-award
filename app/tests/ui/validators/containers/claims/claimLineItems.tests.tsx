@@ -8,8 +8,6 @@ describe("claimLineItems", () => {
     const stubContent = {
       claimLineItems: {
         supportingDocumentsTitle: { content: "stub-supportingDocumentsTitle" },
-        documentsInNewWindow: { content: "stub-documentsInNewWindow" },
-        noDocumentsUploaded: { content: "stub-noDocumentsUploaded" },
         additionalInfoTitle: { content: "stub-additionalInfoTitle" },
         totalCostTitle: { content: "stub-totalCostTitle" },
         forecastCostTitle: { content: "stub-forecastCostTitle" },

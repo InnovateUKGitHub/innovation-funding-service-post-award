@@ -27,8 +27,6 @@ export function JesStepUI({ documents, documentsEditor, ...props }: JesStepUIPro
   const returnToSummaryButton = getContent(x => x.pcrAddPartnerJeS.pcrItem.returnToSummaryButton);
   const jesHeading = getContent(x => x.pcrAddPartnerJeS.labels.jesHeading);
   const uploadInputLabel = getContent(x => x.pcrAddPartnerJeS.documentLabels.uploadInputLabel);
-  const filesUploadedTitle = getContent(x => x.pcrAddPartnerJeS.documentLabels.filesUploadedTitle);
-  const filesUploadedSubtitle = getContent(x => x.pcrAddPartnerJeS.documentLabels.filesUploadedSubtitle);
   const uploadTitle = getContent(x => x.pcrAddPartnerJeS.documentMessages.uploadTitle);
 
   const renderForm = () => {
@@ -104,23 +102,13 @@ export function JesStepUI({ documents, documentsEditor, ...props }: JesStepUIPro
     <>
       {renderForm()}
 
-      {documents.length ? (
-        <ACC.Section title={filesUploadedTitle} subtitle={filesUploadedSubtitle}>
-          <ACC.DocumentTableWithDelete
-            onRemove={document => props.onFileDelete(documentsEditor.data, document)}
-            documents={documents}
-            qa="je-s-document"
-          />
-        </ACC.Section>
-      ) : (
-        <ACC.Section title={filesUploadedTitle}>
-          <ACC.ValidationMessage
-            messageType="info"
-            // TODO: Refactor <ValidationMessage /> to return styles on a primate string's not ContentResult
-            message={x => x.pcrAddPartnerJeS.documentMessages.noDocumentsUploaded}
-          />
-        </ACC.Section>
-      )}
+      <ACC.Section>
+        <ACC.DocumentEdit
+          qa="je-s-document"
+          onRemove={document => props.onFileDelete(documentsEditor.data, document)}
+          documents={documents}
+        />
+      </ACC.Section>
 
       <Form.Form qa="saveAndContinue" data={props.pcrItem} onSubmit={() => props.onSave()}>
         <Form.Fieldset>

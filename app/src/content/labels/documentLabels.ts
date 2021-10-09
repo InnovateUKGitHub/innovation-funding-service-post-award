@@ -6,6 +6,9 @@ export class DocumentLabels extends ContentBase {
     super(parent, "document-labels", competitionType);
   }
 
+  public readonly documentDisplayTitle = this.getContent("documentDisplayTitle");
+  public readonly documentDisplaySubTitle = this.getContent("documentDisplaySubTitle");
+
   private getDocumentDescriptionLabel(documentDescription: DocumentDescription | null) {
     switch (documentDescription) {
       case DocumentDescription.ClaimValidationForm:
@@ -64,6 +67,4 @@ export class DocumentLabels extends ContentBase {
   public readonly dateUploadedLabel = this.getContent("dateUploadedLabel");
   public readonly fileSizeLabel = this.getContent("fileSizeLabel");
   public readonly uploadedByLabel = this.getContent("uploadedByLabel");
-  public readonly filesUploadedTitle = this.getContent("filesUploadedTitle");
-  public readonly filesUploadedSubtitle = this.getContent("filesUploadedSubtitle");
 }
