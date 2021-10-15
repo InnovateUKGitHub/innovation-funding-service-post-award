@@ -1,22 +1,17 @@
+import bytes from "bytes";
 import sanitize from "sanitize-filename";
 
-const options = {
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 2,
-};
+const bytesInOneMb = bytes("1mb"); // Note: this is in base 2 (i.e. 1kb = 1024 bytes)
 
-export function getFileSize(
-  size: number,
-  unitNotation = "B",
-  units: string[] = ["B", "KB", "MB", "GB"],
-): string {
-  if (size < 1000 || unitNotation === "GB") {
-    const numFormat = new Intl.NumberFormat("en-GB", options).format(size);
-    return `${numFormat}${unitNotation}`;
-  }
+export function getFileSize(fileSizeBytes: number): string {
+  const displayMb = fileSizeBytes >= bytesInOneMb;
+  const unit = displayMb ? "MB" : "KB"; // Note: we don't need to support Bytes/GB
 
-  const nextUnit = units[units.indexOf(unitNotation) + 1];
-  return getFileSize(size / 1024, nextUnit);
+  return bytes.format(fileSizeBytes, {
+    decimalPlaces: 3,
+    thousandsSeparator: ",",
+    unit,
+  });
 }
 
 export function getFileExtension(fullFileName: string): string {
