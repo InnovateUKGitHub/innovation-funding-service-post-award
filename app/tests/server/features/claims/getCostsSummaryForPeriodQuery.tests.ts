@@ -15,6 +15,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
 
     costCategories.forEach(x => {
       context.testData.createClaimDetail(project, x, partner, 1);
+      context.testData.createProfileDetail(x, partner);
     });
 
     const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.id, 1);
@@ -40,6 +41,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
 
     costCategories.forEach(x => {
       context.testData.createClaimDetail(project, x, partner, 1);
+      context.testData.createProfileDetail(x, partner);
     });
 
     const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.id, 1);
@@ -59,7 +61,9 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const context = new TestContext();
 
     const partner = context.testData.createPartner();
+
     context.testData.range(3, () => context.testData.createCostCategory({ organisationType: "Academic" }));
+
     const costCategories = context.testData.range(5, () =>
       context.testData.createCostCategory({ organisationType: "Industrial" }),
     );
@@ -68,6 +72,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
 
     costCategories.forEach(x => {
       context.testData.createClaimDetail(project, x, partner, 1);
+      context.testData.createProfileDetail(x, partner);
     });
 
     const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.id, 1);
@@ -84,10 +89,12 @@ describe("GetCostSummaryForPeriodQuery", () => {
 
     const costCategory = context.testData.createCostCategory({ organisationType: "Industrial" });
     const partner = context.testData.createPartner();
+
     const periodId = 1;
 
     const project = context.testData.createProject();
 
+    context.testData.createProfileDetail(costCategory, partner, periodId);
     context.testData.createClaimDetail(
       project,
       costCategory,
@@ -115,7 +122,11 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const costCategory2 = context.testData.createCostCategory({ organisationType: "Industrial" });
 
     const partner = context.testData.createPartner();
+
     const periodId = 1;
+
+    context.testData.createProfileDetail(costCategory1, partner, periodId);
+    context.testData.createProfileDetail(costCategory2, partner, periodId);
 
     const project = context.testData.createProject();
 
@@ -187,6 +198,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const partner = context.testData.createPartner();
     const project = context.testData.createProject();
     const costCategory = context.testData.createCostCategory();
+    context.testData.createProfileDetail(costCategory, partner, periodId);
 
     context.testData.createClaimDetail(
       project,
@@ -209,6 +221,8 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const partner = context.testData.createPartner();
     const project = context.testData.createProject();
     const costCategory = context.testData.createCostCategory();
+    context.testData.createProfileDetail(costCategory, partner, periodId1);
+    context.testData.createProfileDetail(costCategory, partner, periodId2);
 
     context.testData.createClaimDetail(
       project,
@@ -244,6 +258,10 @@ describe("GetCostSummaryForPeriodQuery", () => {
       }),
     );
 
+    expectedCostCategories.forEach(costCategory => {
+      context.testData.createProfileDetail(costCategory, partner);
+    });
+
     // not expected cost categories as diff org
     context.testData.range(3, () =>
       context.testData.createCostCategory({
@@ -278,10 +296,13 @@ describe("GetCostSummaryForPeriodQuery", () => {
       organisationType: partner.organisationType,
       overrideAwardRate,
     });
-    context.testData.createCostCategory({
+    context.testData.createProfileDetail(overrideAwardRateCostCategory, partner);
+
+    const costCategory = context.testData.createCostCategory({
       competitionType: project.Acc_CompetitionType__c,
       organisationType: partner.organisationType,
     });
+    context.testData.createProfileDetail(costCategory, partner);
 
     const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.id, 1);
     const result = await context.runQuery(query);
