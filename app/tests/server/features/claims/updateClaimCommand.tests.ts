@@ -253,6 +253,8 @@ describe("UpdateClaimCommand", () => {
     const claim = testData.createClaim(partner, 2);
     const costCategory = testData.createCostCategory();
 
+    testData.createProfileDetail(costCategory, partner);
+
     testData.createClaimDetail(project, costCategory, partner, 1, x => {
       x.Acc_PeriodCostCategoryTotal__c = 1000000;
     });
