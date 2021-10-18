@@ -99,7 +99,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   }
 
   private updateTimeExtension(item: Dtos.PCRItemForTimeExtensionDto, body: IFormBody) {
-    item.additionalMonths = body.timeExtension ? Number(body.timeExtension) : null;
+    item.offsetMonths = Number(body.timeExtension) ?? 0;
   }
 
   protected async run(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, dto: Dtos.PCRDto): Promise<ILinkInfo> {

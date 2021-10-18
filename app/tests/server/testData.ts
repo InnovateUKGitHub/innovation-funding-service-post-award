@@ -722,7 +722,7 @@ export class TestData {
       recordTypeId: recordType.id,
       projectId: pcr.projectId,
       typeOfAid: TypeOfAid.Unknown,
-      additionalMonths: null,
+      offsetMonths: 0,
       projectDurationSnapshot: null,
       projectSummary: "",
       publicDescription: "",

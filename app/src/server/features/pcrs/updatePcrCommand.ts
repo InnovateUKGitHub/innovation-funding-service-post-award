@@ -153,11 +153,11 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
 
     switch (dto.type) {
       case PCRItemType.TimeExtension:
-        if (item.additionalMonths !== dto.additionalMonths) {
+        if (item.offsetMonths !== dto.offsetMonths) {
           return {
             ...init,
-            additionalMonths: dto.additionalMonths,
-            projectDuration: dto.additionalMonths ? dto.additionalMonths + dto.projectDurationSnapshot : null,
+            offsetMonths: dto.offsetMonths,
+            projectDuration: dto.offsetMonths ? dto.offsetMonths + dto.projectDurationSnapshot : null,
           };
         }
         break;

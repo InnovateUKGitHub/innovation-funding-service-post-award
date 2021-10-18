@@ -99,7 +99,7 @@ const mapItemForPeriodLengthChange = (pcr: ProjectChangeRequestItemEntity, typeN
 
 const mapItemForTimeExtension = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.TimeExtension): PCRItemForTimeExtensionDto => ({
   ...mapBaseItem(pcr, typeName, type),
-  additionalMonths: pcr.additionalMonths || null,
+  offsetMonths: pcr.offsetMonths ?? 0,
   projectDurationSnapshot: pcr.projectDurationSnapshot || 0,
   type
 });

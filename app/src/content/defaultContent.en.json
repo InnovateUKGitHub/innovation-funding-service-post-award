@@ -645,8 +645,12 @@
       "date-label": "Start and end date",
       "duration-label": "Duration",
       "proposed-project-heading": "Proposed project details",
-      "time-extension-hint": "Enter the number of months you want to extend your project by.",
-      "save-and-continue": "Save and continue"
+      "change-project-duration-hint": "Use this page to request an extension or reduction to your project’s duration. Values are set by month.",
+      "change-project-duration-hint-2": "Select the new project end date you require.",
+      "change-project-duration-hint-3": "Project durations cannot be reduced beyond the current month.",
+      "loading-time-extension-options": "Loading duration options...",
+      "save-and-continue": "Save and continue",
+      "current-project-end-date": "Current project end date"
     },
     "pcr-add-partner-role-and-organisation": {
       "form-section-title": "New partner information",

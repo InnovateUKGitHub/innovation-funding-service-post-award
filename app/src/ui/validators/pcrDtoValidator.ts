@@ -417,23 +417,46 @@ export class MultiplePartnerFinancialVirementDtoValidator extends PCRBaseItemDto
 }
 
 export class PCRTimeExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForTimeExtensionDto> {
-  private validateAdditionalMonths() {
+  private validateOffsetMonths(): Result {
+    const { offsetMonths } = this.model;
+
     if (!this.canEdit) {
-      return Validation.isUnchanged(this, this.model.additionalMonths, this.original && this.original.additionalMonths, "Project duration cannot be changed.");
+      return Validation.isUnchanged(
+        this,
+        offsetMonths,
+        this.original?.offsetMonths,
+        "Project duration cannot be changed.",
+      );
     }
 
     const isComplete = this.model.status === PCRItemStatus.Complete;
-    const hasValue = this.model.additionalMonths || this.model.additionalMonths === 0;
 
-    return Validation.all(this,
-      () => isComplete ? Validation.required(this, this.model.additionalMonths, "Please enter the number of months you want to extend your project by") : Validation.valid(this),
-      () => Validation.number(this, this.model.additionalMonths, "Please enter a number of months you want to extend your project by"),
-      () => hasValue ? Validation.isTrue(this, this.model.additionalMonths! > 0, "Please enter a number that increases the project duration") : Validation.valid(this),
-      () => hasValue ? Validation.isTrue(this, Number.isInteger(this.model.additionalMonths!), "Please enter a whole number of months") : Validation.valid(this)
+    return Validation.all(
+      this,
+      () =>
+        isComplete
+          ? Validation.all(
+            this,
+            () => Validation.required(
+              this,
+              offsetMonths,
+              "Please select the number of months you want to extend your project by",
+            ),
+            () => Validation.isTrue(
+              this,
+              offsetMonths !== 0,
+              "You must either increase or decrease the project duration. You cannot select your current end date.",
+            ),
+          )
+          : Validation.valid(this),
+      () =>
+        offsetMonths
+          ? Validation.integer(this, offsetMonths, `You need to supply a whole number in months, you have supplied '${offsetMonths}'.`)
+          : Validation.valid(this),
     );
   }
 
-  additionalMonths = this.validateAdditionalMonths();
+  offsetMonthsResult = this.validateOffsetMonths();
 }
 
 export class PCRProjectTerminationItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForProjectTerminationDto> {
