@@ -167,7 +167,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
   }
 
   private getItemValidator(item: PCRItemDto) {
-    const isPm = getAuthRoles(this.role);
+    const { isPm } = getAuthRoles(this.role);
     const canEdit = isPm ? this.projectManagerCanEdit : false;
     const originalItem = this.original && this.original.items.find(x => x.id === item.id);
     switch (item.type) {
