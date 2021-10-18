@@ -1,5 +1,5 @@
 import contextProvider from "@server/features/common/contextProvider";
-import { PCRDto, PCRItemTypeDto, PCRSummaryDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
+import { PCRDto, PCRItemTypeDto, PCRSummaryDto, PCRTimeExtensionOption, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
@@ -24,6 +24,8 @@ import { GetPcrProjectLocationsQuery } from "@server/features/pcrs/getPcrProject
 import { GetAvailableItemTypesQuery } from "@server/features/pcrs/getAvailableItemTypesQuery";
 import { GetPcrSpendProfileCapitalUsageTypesQuery } from "@server/features/pcrs/getPcrSpendProfileCapitalUsageTypesQuery";
 import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
+import { GetTimeExtensionOptionsQuery } from "@server/features/pcrs/getTimeExtensionOptionsQuery";
+
 import { ApiParams, ControllerBaseWithSummary } from "./controllerBase";
 
 export interface IPCRsApi {
@@ -32,6 +34,7 @@ export interface IPCRsApi {
   get: (params: ApiParams<{ projectId: string; id: string }>) => Promise<PCRDto>;
   getTypes: (params: ApiParams<{}>) => Promise<PCRItemTypeDto[]>;
   getAvailableTypes: (params: ApiParams<{ projectId: string; pcrId?: string }>) => Promise<PCRItemTypeDto[]>;
+  getTimeExtensionOptions: (params: ApiParams<{ projectId: string }>) => Promise<PCRTimeExtensionOption[]>;
   update: (params: ApiParams<{projectId: string; id: string; pcr: PCRDto}>) => Promise<PCRDto>;
   delete: (params: ApiParams<{projectId: string; id: string }>) => Promise<boolean>;
   getStatusChanges: (params: ApiParams<{projectId: string; projectChangeRequestId: string }>) => Promise<ProjectChangeRequestStatusChangeDto[]>;
@@ -52,6 +55,7 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
     super.postItem("/:projectId", (p, q, b) => ({ projectId: p.projectId, projectChangeRequestDto: processDto(b) }), (p) => this.create(p));
     super.getCustom("/types", () => ({}), p => this.getTypes(p));
     super.getCustom("/available-types", (p, q) => ({ projectId: q.projectId, pcrId: q.pcrId }), (p) => this.getAvailableTypes(p));
+    super.getCustom("/time-extension-options", (p, q) => ({ projectId: q.projectId }), this.getTimeExtensionOptions);
     super.putItem("/:projectId/:id", (p, q, b) => ({ projectId: p.projectId, id: p.id, pcr: processDto(b) }), (p) => this.update(p));
     super.deleteItem("/:projectId/:id", (p) => ({ projectId: p.projectId, id: p.id }), (p) => this.delete(p));
     this.getCustom("/status-changes/:projectId/:projectChangeRequestId", (p) => ({projectId: p.projectId, projectChangeRequestId: p.projectChangeRequestId}), p => this.getStatusChanges(p));
@@ -86,6 +90,11 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
 
   getAvailableTypes(params: ApiParams<{ projectId: string; pcrId?: string }>): Promise<PCRItemTypeDto[]> {
     const query = new GetAvailableItemTypesQuery(params.projectId, params.pcrId);
+    return contextProvider.start(params).runQuery(query);
+  }
+
+  public getTimeExtensionOptions(params: ApiParams<{ projectId: string }>): Promise<PCRTimeExtensionOption[]> {
+    const query = new GetTimeExtensionOptionsQuery(params.projectId);
     return contextProvider.start(params).runQuery(query);
   }
 
