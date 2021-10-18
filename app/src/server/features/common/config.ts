@@ -112,6 +112,7 @@ const features: IFeatureFlags = {
   customContent: getFeatureFlagValue(process.env.FEATURE_CUSTOM_CONTENT, false),
   displayOtherContacts: getFeatureFlagValue(process.env.FEATURE_OTHER_CONTACTS, false),
   searchDocsMinThreshold: Number(process.env.SEARCH_DOCS_MIN_THRESHOLD) || 5,
+  futureTimeExtensionInYears: Number(process.env.FUTURE_TIME_EXTENSION_IN_YEARS) || 5,
 };
 
 const logLevel = parseLogLevel(process.env.LOG_LEVEL! || process.env.LOGLEVEL!);

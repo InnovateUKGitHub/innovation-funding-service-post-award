@@ -177,3 +177,8 @@ export interface ProjectChangeRequestStatusChangeDto {
   createdBy: string;
   comments: string | null;
 }
+
+export interface PCRTimeExtensionOption {
+  label: string;
+  offset: number;
+}

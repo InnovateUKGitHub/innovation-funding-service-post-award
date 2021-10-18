@@ -29,6 +29,7 @@ export class TestConfig implements IConfig {
     customContent: true,
     displayOtherContacts: true,
     searchDocsMinThreshold: 3,
+    futureTimeExtensionInYears: 5,
   };
 
   public logLevel = LogLevel.DEBUG;

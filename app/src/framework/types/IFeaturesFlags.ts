@@ -4,4 +4,5 @@ export interface IFeatureFlags {
   readonly customContent: boolean;
   readonly displayOtherContacts: boolean;
   readonly searchDocsMinThreshold: number;
+  readonly futureTimeExtensionInYears: number;
 }
