@@ -241,7 +241,7 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
       Id: x.id,
       Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
       Acc_NewProjectDuration__C: x.projectDuration,
-      Acc_AdditionalNumberofMonths__c: x.additionalMonths,
+      Acc_AdditionalNumberofMonths__c: x.offsetMonths,
       Acc_NewProjectSummary__c: x.projectSummary,
       Acc_NewPublicDescription__c: x.publicDescription,
       Acc_SuspensionStarts__c: this.toOptionalSFDate(x.suspensionStartDate),

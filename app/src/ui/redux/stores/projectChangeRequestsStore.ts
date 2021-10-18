@@ -77,6 +77,12 @@ export class ProjectChangeRequestStore extends StoreBase {
     return this.getData("pcrAvailableTypes", storeKeys.pcrAvailableTypesKey(projectId), p => apiClient.pcrs.getAvailableTypes({ ...p, projectId, pcrId }));
   }
 
+  public getTimeExtensionOptions(projectId: string) {
+    return this.getData("pcrTimeExtensionOptions", storeKeys.pcrTimeExtensionOptionsKey(projectId), p =>
+      apiClient.pcrs.getTimeExtensionOptions({ ...p, projectId }),
+    );
+  }
+
   public getPcrProjectRoles() {
     return this.getData("pcrProjectRoles", storeKeys.getPcrProjectRolesKey(), p => apiClient.pcrs.getPcrProjectRoles({ ...p }));
   }
@@ -272,7 +278,7 @@ export class ProjectChangeRequestStore extends StoreBase {
         return {
           ...baseFields,
           type: itemType.type,
-          additionalMonths: null,
+          offsetMonths: 0,
           projectDurationSnapshot: 0,
         };
       case PCRItemType.ScopeChange:

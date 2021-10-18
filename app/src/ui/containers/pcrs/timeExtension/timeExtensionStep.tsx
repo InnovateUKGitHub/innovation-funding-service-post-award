@@ -1,22 +1,58 @@
 import * as ACC from "@ui/components";
-import { PCRItemForTimeExtensionDto } from "@framework/dtos";
+import { PCRItemForTimeExtensionDto, PCRTimeExtensionOption } from "@framework/dtos";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRTimeExtensionItemDtoValidator } from "@ui/validators";
 import { useContent } from "@ui/hooks";
 import { EditorStatus } from "@ui/constants/enums";
+import { useStores } from "@ui/redux";
+import React from "react";
 
-export const TimeExtensionStep = (props: PcrStepProps<PCRItemForTimeExtensionDto, PCRTimeExtensionItemDtoValidator>) => {
-  const {getContent} = useContent();
+interface TimeExtensionProps {
+  timeExtensionOptions: PCRTimeExtensionOption[];
+}
+
+const TimeExtensionStep = (
+  props: PcrStepProps<PCRItemForTimeExtensionDto, PCRTimeExtensionItemDtoValidator> & TimeExtensionProps,
+) => {
+  const { getContent } = useContent();
 
   const Form = ACC.TypedForm<PCRItemForTimeExtensionDto>();
-  const newProjectDuration = props.pcrItem.additionalMonths || props.pcrItem.additionalMonths === 0 ? props.pcrItem.additionalMonths + props.pcrItem.projectDurationSnapshot : null;
-
   const existingProjectHeading = getContent(x => x.pcrTimeExtensionStepContent.existingProjectHeading);
   const dateLabel = getContent(x => x.pcrTimeExtensionStepContent.dateLabel);
   const durationLabel = getContent(x => x.pcrTimeExtensionStepContent.durationLabel);
   const proposedProjectHeading = getContent(x => x.pcrTimeExtensionStepContent.proposedProjectHeading);
-  const timeExtensionHint = getContent(x => x.pcrTimeExtensionStepContent.timeExtensionHint);
+  const changeProjectDurationHint = getContent(x => x.pcrTimeExtensionStepContent.changeProjectDurationHint);
+  const changeProjectDurationHint2 = getContent(x => x.pcrTimeExtensionStepContent.changeProjectDurationHint2);
+  const changeProjectDurationHint3 = getContent(x => x.pcrTimeExtensionStepContent.changeProjectDurationHint3);
   const saveAndContinue = getContent(x => x.pcrTimeExtensionStepContent.saveAndContinue);
+  const currentProjectEndDate = getContent(x => x.pcrTimeExtensionStepContent.currentProjectEndDate);
+
+  const timeExtensionDropdownOptions = React.useMemo(
+    () =>
+      props.timeExtensionOptions?.map(x => {
+        const isCurrent = x.offset === 0;
+        return {
+          id: x.offset.toString(),
+          value: isCurrent ? currentProjectEndDate : x.label,
+          selected: isCurrent,
+        };
+      }),
+    [props.timeExtensionOptions, currentProjectEndDate],
+  );
+
+  if (!timeExtensionDropdownOptions || timeExtensionDropdownOptions.length === 1) {
+    throw new Error("You are not able to change the project duration");
+  }
+
+  const getProjectEndOption = React.useCallback(
+    (offsetMonths: number) => timeExtensionDropdownOptions.find(x => x.id === offsetMonths.toString()),
+    [timeExtensionDropdownOptions],
+  );
+
+  const newProjectDuration =
+    props.pcrItem.offsetMonths || props.pcrItem.offsetMonths === 0
+      ? props.pcrItem.offsetMonths + props.pcrItem.projectDurationSnapshot
+      : null;
 
   return (
     <ACC.Section>
@@ -57,13 +93,22 @@ export const TimeExtensionStep = (props: PcrStepProps<PCRItemForTimeExtensionDto
           />
         </Form.Fieldset>
         <Form.Fieldset heading={proposedProjectHeading}>
-          <Form.Numeric
+          <Form.DropdownList
+            label={
+              <>
+                <ACC.Renderers.SimpleString>{changeProjectDurationHint}</ACC.Renderers.SimpleString>
+                <ACC.Renderers.SimpleString>{changeProjectDurationHint2}</ACC.Renderers.SimpleString>
+                <ACC.Renderers.SimpleString>{changeProjectDurationHint3}</ACC.Renderers.SimpleString>
+              </>
+            }
+            placeholder="-- Select end date --"
             name="timeExtension"
-            hint={props.getRequiredToCompleteMessage(timeExtensionHint)}
-            width={3}
-            value={m => m.additionalMonths}
-            update={(m, val) => (m.additionalMonths = val)}
-            validation={props.validator.additionalMonths}
+            validation={props.validator.offsetMonthsResult}
+            options={timeExtensionDropdownOptions}
+            value={m => getProjectEndOption(m.offsetMonths)}
+            update={(m, value) => {
+              return (m.offsetMonths = Number(value!.id));
+            }}
           />
           {props.isClient && (
             <Form.Custom
@@ -102,5 +147,27 @@ export const TimeExtensionStep = (props: PcrStepProps<PCRItemForTimeExtensionDto
         </Form.Fieldset>
       </Form.Form>
     </ACC.Section>
+  );
+};
+
+export const TimeExtensionStepContainer = (
+  props: PcrStepProps<PCRItemForTimeExtensionDto, PCRTimeExtensionItemDtoValidator>,
+) => {
+  const { projectChangeRequests } = useStores();
+  const pending = projectChangeRequests.getTimeExtensionOptions(props.pcr.projectId);
+
+  return (
+    <ACC.Loader
+      pending={pending}
+      render={(timeExtensionOptions, isLoading) =>
+        isLoading ? (
+          <ACC.Renderers.SimpleString qa="claimsLoadingMessage">
+            <ACC.Content value={x => x.pcrTimeExtensionStepContent.loadingTimeExtensionOptions} />
+          </ACC.Renderers.SimpleString>
+        ) : (
+          <TimeExtensionStep timeExtensionOptions={timeExtensionOptions} {...props} />
+        )
+      }
+    />
   );
 };

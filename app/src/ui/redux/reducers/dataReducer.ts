@@ -103,6 +103,7 @@ export const dataReducer = combineReducers({
   pcr: dataStoreReducer<Dtos.PCRDto>("pcr"),
   pcrTypes: dataStoreReducer<Dtos.PCRItemTypeDto[]>("pcrTypes"),
   pcrAvailableTypes: dataStoreReducer<Dtos.PCRItemTypeDto[]>("pcrAvailableTypes"),
+  pcrTimeExtensionOptions: dataStoreReducer<Dtos.PCRTimeExtensionOption[]>("pcrTimeExtensionOptions"),
   pcrParticipantSizes: dataStoreReducer<Dtos.Option<PCRParticipantSize>[]>("pcrParticipantSizes"),
   pcrProjectLocations: dataStoreReducer<Dtos.Option<PCRProjectLocation>[]>("pcrProjectLocations"),
   pcrProjectRoles: dataStoreReducer<Dtos.Option<PCRProjectRole>[]>("pcrProjectRoles"),

@@ -1,6 +1,6 @@
 import { PCRItemForTimeExtensionDto } from "@framework/dtos";
 import { TimeExtensionSummary } from "@ui/containers/pcrs/timeExtension/timeExtensionSummary";
-import { TimeExtensionStep } from "@ui/containers/pcrs/timeExtension/timeExtensionStep";
+import { TimeExtensionStepContainer } from "@ui/containers/pcrs/timeExtension/timeExtensionStep";
 import { PCRTimeExtensionItemDtoValidator } from "@ui/validators";
 import { IPCRWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 
@@ -13,7 +13,7 @@ export const timeExtensionItemWorkflow: IPCRWorkflow<PCRItemForTimeExtensionDto,
       displayName: "Time extension",
       stepNumber: 1,
       validation: (val) => val.pcr,
-      stepRender: TimeExtensionStep
+      stepRender: TimeExtensionStepContainer
     }
   ],
   summary: {

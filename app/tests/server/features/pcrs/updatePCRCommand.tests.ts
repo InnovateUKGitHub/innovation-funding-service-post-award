@@ -674,33 +674,6 @@ describe("UpdatePCRCommand", () => {
     });
 
     describe("Time extension", () => {
-      test("returns bad request if no project extension is sent", async () => {
-        const context = new TestContext();
-
-        const project = context.testData.createProject();
-        context.testData.createCurrentUserAsProjectManager(project);
-        const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
-        const recordTypes = context.testData.createPCRRecordTypes();
-        const recordType = recordTypes.find(x => x.type === "Change project duration");
-        context.testData.createPCRItem(projectChangeRequest, recordType);
-
-        const dto = await context.runQuery(
-          new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id),
-        );
-        const item = dto.items[0] as PCRItemForTimeExtensionDto;
-
-        item.additionalMonths = null;
-        await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
-        ).rejects.toThrow(ValidationError);
-
-        item.additionalMonths = 3;
-
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
-          true,
-        );
-      });
-
       test("returns bad request if invalid project extension is sent", async () => {
         const context = new TestContext();
 
@@ -716,20 +689,10 @@ describe("UpdatePCRCommand", () => {
         );
         const item = dto.items[0] as PCRItemForTimeExtensionDto;
 
-        item.additionalMonths = -5;
+        item.offsetMonths = 1.5;
         await expect(
           context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
         ).rejects.toThrow(ValidationError);
-
-        item.additionalMonths = 1.5;
-        await expect(
-          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
-        ).rejects.toThrow(ValidationError);
-
-        item.additionalMonths = 5;
-        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
-          true,
-        );
       });
 
       test("returns success if date sent is end of month", async () => {
@@ -747,7 +710,7 @@ describe("UpdatePCRCommand", () => {
         );
         const item = dto.items[0] as PCRItemForTimeExtensionDto;
 
-        item.additionalMonths = 5;
+        item.offsetMonths = 5;
         await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
           true,
         );
@@ -756,10 +719,10 @@ describe("UpdatePCRCommand", () => {
           new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id),
         );
         const updatedItem = updated.items[0] as PCRItemForTimeExtensionDto;
-        await expect(updatedItem.additionalMonths).toEqual(5);
+        await expect(updatedItem.offsetMonths).toEqual(5);
       });
 
-      it("correctly updates the project duration", async () => {
+      test("should error when given no additional months", async () => {
         const context = new TestContext();
 
         const project = context.testData.createProject();
@@ -774,7 +737,49 @@ describe("UpdatePCRCommand", () => {
         );
         const item = dto.items[0] as PCRItemForTimeExtensionDto;
 
-        item.additionalMonths = 5;
+        item.offsetMonths = 0;
+        await expect(
+          context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
+        ).rejects.toThrow(ValidationError);
+      });
+
+      test("correctly updates the project duration when given reduced months", async () => {
+        const context = new TestContext();
+
+        const project = context.testData.createProject();
+        context.testData.createCurrentUserAsProjectManager(project);
+        const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
+        const recordTypes = context.testData.createPCRRecordTypes();
+        const recordType = recordTypes.find(x => x.type === "Change project duration");
+        context.testData.createPCRItem(projectChangeRequest, recordType);
+
+        const dto = await context.runQuery(
+          new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id),
+        );
+        const item = dto.items[0] as PCRItemForTimeExtensionDto;
+
+        item.offsetMonths = -5;
+        await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
+          true,
+        );
+      });
+
+      test("correctly updates the project duration when given additional months", async () => {
+        const context = new TestContext();
+
+        const project = context.testData.createProject();
+        context.testData.createCurrentUserAsProjectManager(project);
+        const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
+        const recordTypes = context.testData.createPCRRecordTypes();
+        const recordType = recordTypes.find(x => x.type === "Change project duration");
+        context.testData.createPCRItem(projectChangeRequest, recordType);
+
+        const dto = await context.runQuery(
+          new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id),
+        );
+        const item = dto.items[0] as PCRItemForTimeExtensionDto;
+
+        item.offsetMonths = 5;
         await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
           true,
         );
@@ -782,7 +787,7 @@ describe("UpdatePCRCommand", () => {
         const updatedItem = context.repositories.projectChangeRequests.Items.find(
           x => x.id === projectChangeRequest.id,
         )!.items.find(x => x.id === item.id)!;
-        await expect(updatedItem.projectDuration).toEqual(item.additionalMonths + item.projectDurationSnapshot);
+        await expect(updatedItem.projectDuration).toEqual(item.offsetMonths + item.projectDurationSnapshot);
       });
     });
 

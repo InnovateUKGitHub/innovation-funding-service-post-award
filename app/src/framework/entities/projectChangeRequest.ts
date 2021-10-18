@@ -34,7 +34,7 @@ export interface ProjectChangeRequestItemForCreateEntity {
   status: PCRItemStatus;
   projectId: string;
   projectDuration?: number | null;
-  additionalMonths?: number | null;
+  offsetMonths?: number;
   publicDescription?: string | null;
   accountName?: string | null;
   projectSummary?: string | null;

@@ -72,7 +72,7 @@ export interface PCRItemForMultiplePartnerFinancialVirementDto extends PCRItemBa
 
 export interface PCRItemForTimeExtensionDto extends PCRItemBaseDto {
   type: PCRItemType.TimeExtension;
-  additionalMonths: number | null;
+  offsetMonths: number;
   projectDurationSnapshot: number;
 }
 

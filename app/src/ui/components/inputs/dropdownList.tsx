@@ -2,7 +2,7 @@ import { BaseInput } from "./baseInput";
 import { InputProps } from "./common";
 
 export interface DropdownListProps extends InputProps<{ id: string; value: string | number; qa?: string }> {
-  options: { id: string; value: string | number; qa?: string }[];
+  options: { id: string; value: string | number; qa?: string; selected?: boolean }[];
   hasEmptyOption?: boolean;
   qa?: string;
 }
@@ -26,6 +26,7 @@ export class DropdownList extends BaseInput<DropdownListProps, {}> {
         {this.props.options.map((item) => (
           <option
             key={item.id}
+            selected={item.selected ?? false}
             data-qa={item.qa || `option-${item.id}-qa`}
             value={item.id}
             aria-selected={this.props?.value?.id === item.id}
