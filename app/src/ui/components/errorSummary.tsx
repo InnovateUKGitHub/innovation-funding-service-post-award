@@ -20,6 +20,7 @@ export function ErrorSummary({ code, message }: ErrorSummaryProps) {
   const authErrorMessages = {
     SF_UPDATE_ALL_FAILURE: getContent(x => x.components.errorSummary.updateAllFailure),
     INSUFFICIENT_ACCESS_OR_READONLY: getContent(x => x.components.errorSummary.insufficienceAccessRights),
+    NOT_UPLOADED_FROM_OWNER: getContent(x => x.components.errorSummary.notUploadedByOwner),
   };
 
   const authWMessage = !isUnauthenticated && message && authErrorMessages[message as keyof typeof authErrorMessages];

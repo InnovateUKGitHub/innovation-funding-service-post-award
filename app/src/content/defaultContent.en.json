@@ -34,7 +34,8 @@
       "unsavedWarning": "Anything you have not already saved will be lost.",
       "somethingGoneWrong": "Something has gone wrong at our end and we were unable to complete the action. Try submitting the page again.",
       "updateAllFailure": "Something went wrong and we could not update your forecast. Please click ‘Save and return to project setup’ again.",
-      "insufficienceAccessRights": "We are unable to save the changes. Please click 'Back to claims' and click into the cost category again. For claim line items that you want to remove, set the value to zero and save."
+      "insufficienceAccessRights": "We are unable to save the changes. Please click 'Back to claims' and click into the cost category again. For claim line items that you want to remove, set the value to zero and save.",
+      "notUploadedByOwner": "You cannot remove this file as you did not upload it. You can only remove files that you have uploaded."
     },
     "logs": {
       "noChangesMessage": "There are no changes.",

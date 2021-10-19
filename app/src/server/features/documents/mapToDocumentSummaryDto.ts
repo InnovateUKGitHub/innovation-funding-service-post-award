@@ -12,5 +12,6 @@ export const mapToDocumentSummaryDto = (doc: DocumentEntity, link: string): Docu
     fileSize: doc.contentSize,
     dateCreated: doc.createdDate,
     uploadedBy: doc.lastModifiedBy,
+    isOwner: doc.isOwner,
   };
 };

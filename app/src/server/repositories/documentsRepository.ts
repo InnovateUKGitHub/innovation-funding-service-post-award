@@ -11,35 +11,33 @@ import { DocumentDescription } from "@framework/constants";
 import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { IFileWrapper } from "@framework/types";
 
-export interface IDocumentsRepository {
-  insertDocument(document: IFileWrapper, recordId: string, description?: DocumentDescription): Promise<string>;
-  deleteDocument(documentId: string): Promise<void>;
-  isExistingDocument(documentId: string, recordId: string): Promise<boolean>;
-  getDocumentContent(verionId: string): Promise<Stream>;
-  getDocumentMetadata(verionId: string): Promise<DocumentEntity>;
-  getDocumentMetadataForEntityDocument(entityId: string, verionId: string): Promise<DocumentEntity|null>;
-  getDocumentsMetadata(documentIds: string[], filter?: DocumentFilter): Promise<DocumentEntity[]>;
-  getDocumentsMetedataByLinkedRecord(recordId: string, filter?: DocumentFilter): Promise<DocumentEntity[]>;
-}
-
-export class DocumentsRepository implements IDocumentsRepository {
-
+export class DocumentsRepository {
   private readonly contentVersionRepository: ContentVersionRepository;
   private readonly contentDocumentLinkRepository: ContentDocumentLinkRepository;
   private readonly contentDocumentRepository: ContentDocumentRepository;
 
-  public constructor(
-    getSalesforceConnection: () => Promise<Connection>,
-    logger: ILogger
-  ) {
+  public constructor(getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
     this.contentVersionRepository = new ContentVersionRepository(getSalesforceConnection, logger);
     this.contentDocumentLinkRepository = new ContentDocumentLinkRepository(getSalesforceConnection, logger);
     this.contentDocumentRepository = new ContentDocumentRepository(getSalesforceConnection, logger);
   }
 
-  public async insertDocument(document: IFileWrapper, recordId: string, description?: DocumentDescription) {
+  private async canDeleteDocument(documentId: string): Promise<boolean> {
+    const [documentMetaData] = await this.getDocumentsMetadata([documentId]);
+
+    return documentMetaData.isOwner;
+  }
+
+  public async insertDocument(
+    document: IFileWrapper,
+    recordId: string,
+    description?: DocumentDescription,
+  ): Promise<string> {
     const sfDescription = new DocumentDescriptionMapper().mapToSalesforceDocumentDescription(description);
-    const contentVersionId = await this.contentVersionRepository.insertDocument(document as ServerFileWrapper, sfDescription);
+    const contentVersionId = await this.contentVersionRepository.insertDocument(
+      document as ServerFileWrapper,
+      sfDescription,
+    );
     const contentVersion = await this.contentVersionRepository.getDocument(contentVersionId);
     const documentId = contentVersion.ContentDocumentId;
 
@@ -47,17 +45,21 @@ export class DocumentsRepository implements IDocumentsRepository {
     return documentId;
   }
 
-  public deleteDocument(documentId: string) {
+  public async deleteDocument(documentId: string): Promise<void> {
+    const canDelete = await this.canDeleteDocument(documentId);
+
+    if (!canDelete) throw Error("NOT_UPLOADED_FROM_OWNER");
+
     return this.contentDocumentRepository.delete(documentId);
   }
 
-  public async getDocumentsMetadata(documentIds: string[], filter?: DocumentFilter) {
+  public async getDocumentsMetadata(documentIds: string[], filter?: DocumentFilter): Promise<DocumentEntity[]> {
     const documents = await this.contentVersionRepository.getDocuments(documentIds, filter);
     const mapper = new SalesforceDocumentMapper();
     return documents.map(x => mapper.map(x));
   }
 
-  public async getDocumentMetadata(versionId: string) {
+  public async getDocumentMetadata(versionId: string): Promise<DocumentEntity> {
     const document = await this.contentVersionRepository.getDocument(versionId);
     return new SalesforceDocumentMapper().map(document);
   }
@@ -67,24 +69,47 @@ export class DocumentsRepository implements IDocumentsRepository {
     return !!documentLink;
   }
 
-  public async getDocumentMetadataForEntityDocument(entityId: string, versionId: string) {
+  public async getDocumentMetadataForEntityDocument(
+    entityId: string,
+    versionId: string,
+  ): Promise<DocumentEntity | null> {
     // @TODO: try to improve this in terms of numbers of calls
     // however salesforce makes it difficult to do this !!!
-    const docIds = await this.contentDocumentLinkRepository.getAllForEntity(entityId).then(x => x.map(y => y.ContentDocumentId));
+    const docIds = await this.contentDocumentLinkRepository
+      .getAllForEntity(entityId)
+      .then(x => x.map(y => y.ContentDocumentId));
     const versions = await this.contentVersionRepository.getDocuments(docIds);
     const document = versions.find(x => x.Id === versionId) || null;
     return document ? new SalesforceDocumentMapper().map(document) : null;
   }
 
-  public async getDocumentsMetedataByLinkedRecord(recordId: string, filter?: DocumentFilter) {
+  public async getDocumentsMetadataByLinkedRecord(
+    recordId: string,
+    filter?: DocumentFilter,
+  ): Promise<DocumentEntity[]> {
     const linkedDocs = await this.contentDocumentLinkRepository.getAllForEntity(recordId);
     if (!linkedDocs || !linkedDocs.length) {
       return [];
     }
-    return this.getDocumentsMetadata(linkedDocs.map(x => x.ContentDocumentId), filter);
+    return this.getDocumentsMetadata(
+      linkedDocs.map(x => x.ContentDocumentId),
+      filter,
+    );
   }
 
-  public getDocumentContent(versionId: string) {
+  public getDocumentContent(versionId: string): Promise<Stream> {
     return this.contentVersionRepository.getDocumentData(versionId);
   }
 }
+
+export type IDocumentsRepository = Pick<
+  DocumentsRepository,
+  | "insertDocument"
+  | "deleteDocument"
+  | "isExistingDocument"
+  | "getDocumentContent"
+  | "getDocumentMetadata"
+  | "getDocumentMetadataForEntityDocument"
+  | "getDocumentsMetadata"
+  | "getDocumentsMetadataByLinkedRecord"
+>;

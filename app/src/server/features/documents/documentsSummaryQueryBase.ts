@@ -20,7 +20,7 @@ export abstract class DocumentsSummaryQueryBase extends QueryBase<DocumentSummar
 
     if (!recordId) return [];
 
-    const linkedDocs = await context.repositories.documents.getDocumentsMetedataByLinkedRecord(recordId, this.filter);
+    const linkedDocs = await context.repositories.documents.getDocumentsMetadataByLinkedRecord(recordId, this.filter);
 
     return linkedDocs
       .map(x => mapToDocumentSummaryDto(x, this.getUrl(x)))

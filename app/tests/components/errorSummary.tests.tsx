@@ -14,6 +14,7 @@ describe("<ErrorSummary />", () => {
         somethingGoneWrongContent: { content: "stub-somethingGoneWrongContent" },
         updateAllFailure: { content: "stub-updateAllFailure" },
         insufficienceAccessRights: { content: "stub-insufficienceAccessRights" },
+        notUploadedByOwner: { content: "stub-notUploadedByOwner" },
       },
     },
   };
@@ -49,10 +50,10 @@ describe("<ErrorSummary />", () => {
     describe("when authenticated", () => {
       type ArrayOfErrorCodes = ErrorSummaryProps["code"][];
       const availableErrorCodes = Object.keys(ErrorCode).filter(key => typeof ErrorCode[key as any] === "number");
-      const allAuthenticatedErrors = availableErrorCodes.filter(
+      const allAuthenticatedErrors = (availableErrorCodes.filter(
         // TODO: We coerce the error code to a "keyof ErrorCode", then check against what we don't want. Code open to improvement
         key => (ErrorCode[key as any] as any) !== ErrorCode.UNAUTHENTICATED_ERROR,
-      ) as unknown as ArrayOfErrorCodes;
+      ) as unknown) as ArrayOfErrorCodes;
 
       describe("with error codes", () => {
         test.each(allAuthenticatedErrors)("with %s", errorKey => {
@@ -68,9 +69,10 @@ describe("<ErrorSummary />", () => {
 
       describe("with error messages", () => {
         test.each`
-          name                                                     | errorMessage                         | expectedContent
-          ${"with an update all failure"}                          | ${"SF_UPDATE_ALL_FAILURE"}           | ${stubContent.components.errorSummary.updateAllFailure.content}
-          ${"with insufficient access to remove claim line items"} | ${"INSUFFICIENT_ACCESS_OR_READONLY"} | ${stubContent.components.errorSummary.insufficienceAccessRights.content}
+          name                                                          | errorMessage                         | expectedContent
+          ${"with an update all failure"}                               | ${"SF_UPDATE_ALL_FAILURE"}           | ${stubContent.components.errorSummary.updateAllFailure.content}
+          ${"with insufficient access to remove claim line items"}      | ${"INSUFFICIENT_ACCESS_OR_READONLY"} | ${stubContent.components.errorSummary.insufficienceAccessRights.content}
+          ${"when the document owner does not match original uploader"} | ${"NOT_UPLOADED_FROM_OWNER"}         | ${stubContent.components.errorSummary.notUploadedByOwner.content}
         `("$name", ({ errorMessage, expectedContent }) => {
           const { queryByText } = setup({ code: ErrorCode.UNKNOWN_ERROR, message: errorMessage });
 

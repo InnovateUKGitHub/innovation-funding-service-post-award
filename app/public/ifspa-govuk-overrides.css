@@ -441,6 +441,10 @@ button.govuk-link {
   box-sizing: unset;
 }
 
+button.govuk-link:disabled {
+  background-color: transparent;
+}
+
 button.govuk-link:focus {
   border-color: #fd0;
   color: #0b0c0c;

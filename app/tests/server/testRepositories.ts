@@ -211,6 +211,7 @@ class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocumen
       Description: new DocumentDescriptionMapper().mapToSalesforceDocumentDescription(description),
       CreatedDate: new Date().toISOString(),
       Acc_LastModifiedByAlias__c: "User",
+      Acc_UploadedByMe__c: false,
       Owner: {
         Username: "aUserName"
       }
@@ -218,8 +219,20 @@ class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocumen
     return newDocumentId;
   }
 
-  deleteDocument(documentId: string): Promise<void> {
-    return super.deleteItem(this.Items.find(x => x[1].Id === documentId));
+  async deleteDocument(documentId: string): Promise<void> {
+    const documentToDelete = this.Items.find(x => x[1].Id === documentId);
+
+    if (!documentToDelete) {
+      throw Error(`Document '${documentId}' does not exist to delete :(`);
+    }
+
+    const isOwner = documentToDelete[1].Acc_UploadedByMe__c;
+
+    if (!isOwner) {
+      throw Error(`Document '${documentId}' did not own the document to delete!`);
+    }
+
+    return super.deleteItem(documentToDelete);
   }
 
   async isExistingDocument(documentId: string, linkedEntityId: string): Promise<boolean> {
@@ -253,7 +266,7 @@ class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocumen
     return documents.map(x => new SalesforceDocumentMapper().map(x));
   }
 
-  async getDocumentsMetedataByLinkedRecord(recordId: string, filter?: DocumentFilter): Promise<DocumentEntity[]> {
+  async getDocumentsMetadataByLinkedRecord(recordId: string, filter?: DocumentFilter): Promise<DocumentEntity[]> {
     const sfDescription = filter && new DocumentDescriptionMapper().mapToSalesforceDocumentDescription(filter.description);
     const documents = await super.getWhere(x => x[0] === recordId && (!filter || x[1].Description === sfDescription)).then(x => x.map(y => y[1]));
     return documents.map(x => new SalesforceDocumentMapper().map(x));

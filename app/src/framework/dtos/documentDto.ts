@@ -13,6 +13,7 @@ export interface DocumentSummaryDto {
   fileSize: number;
   dateCreated: Date;
   uploadedBy: string;
+  isOwner: boolean;
 }
 
 export interface DocumentDescriptionDto {

@@ -31,6 +31,7 @@ const stubContent = {
       somethingGoneWrongContent: { content: "stub-somethingGoneWrongContent" },
       updateAllFailure: { content: "stub-updateAllFailure" },
       insufficienceAccessRights: { content: "stub-insufficienceAccessRights" },
+      notUploadedByOwner: { content: "stub-notUploadedByOwner" },
     },
     loading: {
       message: { content: "stub-loading-message" },

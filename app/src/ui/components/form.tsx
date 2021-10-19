@@ -373,6 +373,7 @@ function SubmitAndContinueComponent<T extends {}>(props: SubmitPropsBase & Inter
 interface ButtonProps {
   name: string;
   className?: string;
+  disabled?: boolean;
   style?: CSSProperties;
   styling?: "Link" | "Secondary" | "Primary" | "Warning";
   value?: string;
@@ -383,7 +384,7 @@ const ButtonComponent = <T extends {}>(props: ButtonProps & InternalFieldProps<T
   <Button
     type="submit"
     name={`button_${props.name}`}
-    className={props.className}
+    className={classNames(props.className, {["govuk-button--disabled"]: props.disabled})}
     disabled={props.disabled}
     style={props.style}
     styling={props.styling || "Secondary"}

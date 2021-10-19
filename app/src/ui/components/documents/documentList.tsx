@@ -59,6 +59,7 @@ export function DocumentListWithDelete({ documents = [], qa, onRemove }: PropsWi
               style={{ marginLeft: "15px" }}
               onClick={() => onRemove(dto)}
               value={dto.id}
+              disabled={!dto.isOwner}
             >
               Remove
             </Form.Button>
@@ -92,6 +93,7 @@ export function DocumentTableWithDelete({ documents = [], qa, onRemove }: Docume
                 style={{ marginLeft: "15px" }}
                 onClick={() => onRemove(x)}
                 value={x.id}
+                disabled={!x.isOwner}
               >
                 Remove
               </Form.Button>

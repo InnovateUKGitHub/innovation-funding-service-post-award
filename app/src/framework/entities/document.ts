@@ -14,4 +14,5 @@ export interface DocumentEntity {
   description: DocumentDescription | null;
   createdDate: Date;
   lastModifiedBy: string;
+  isOwner: boolean;
 }
