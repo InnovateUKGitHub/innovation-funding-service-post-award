@@ -12,6 +12,7 @@ const documents = [
     dateCreated: new Date(),
     owner: "owner1@ownder.com",
     uploadedBy: "Bubbles",
+    isOwner: false,
   },
   {
     link: "https://www.amazon.co.uk/",
@@ -21,6 +22,7 @@ const documents = [
     dateCreated: new Date(),
     owner: "owner2@ownder.com",
     uploadedBy: "Blossom",
+    isOwner: false,
   },
   {
     link: "https://www.bbc.co.uk/",
@@ -30,6 +32,7 @@ const documents = [
     dateCreated: new Date(),
     owner: "owner3@ownder.com",
     uploadedBy: "Buttercup",
+    isOwner: false,
   },
 ];
 

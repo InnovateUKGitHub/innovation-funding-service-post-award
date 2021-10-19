@@ -6,7 +6,7 @@ import { TestContext } from "../../testContextProvider";
 describe("DeleteProjectChangeRequestDocumentOrItemCommand", () => {
   it("should delete an item document", async () => {
     const context = new TestContext();
-    const document = context.testData.createDocument("3", "title", "jpg", "some content");
+    const document = context.testData.createDocument("3", "title", "jpg", "some content", undefined, undefined, x => (x.Acc_UploadedByMe__c = true));
     const project = context.testData.createProject();
     const projectChangeRequest = context.testData.createPCR(project);
     const recordType: Entites.RecordType = {
@@ -23,7 +23,7 @@ describe("DeleteProjectChangeRequestDocumentOrItemCommand", () => {
 
   it("should delete a project change request document", async () => {
     const context = new TestContext();
-    const document = context.testData.createDocument("3", "title", "jpg", "some content");
+    const document = context.testData.createDocument("3", "title", "jpg", "some content", undefined, undefined, x => (x.Acc_UploadedByMe__c = true));
     const project = context.testData.createProject();
     const projectChangeRequest = context.testData.createPCR(project);
 

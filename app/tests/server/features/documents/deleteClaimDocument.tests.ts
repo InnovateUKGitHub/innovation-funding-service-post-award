@@ -5,7 +5,7 @@ import {TestContext} from "../../testContextProvider";
 describe("DeleteClaimDocumentCommand", () => {
     it("should upload and then delete a document", async () => {
         const context = new TestContext();
-        const document = context.testData.createDocument("34", "hello", "txt", "hello");
+        const document = context.testData.createDocument("34", "hello", "txt", "hello", undefined, undefined, x => (x.Acc_UploadedByMe__c = true));
         const project = context.testData.createProject();
         const partner = context.testData.createPartner(project);
         expect(context.repositories.documents.Items).toHaveLength(1);

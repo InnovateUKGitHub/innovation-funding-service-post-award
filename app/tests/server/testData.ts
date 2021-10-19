@@ -573,6 +573,7 @@ export class TestData {
       VersionData: content,
       Description: description || null,
       Acc_LastModifiedByAlias__c: uploadedBy,
+      Acc_UploadedByMe__c: false,
       CreatedDate: new Date().toISOString(),
       Owner: {
         Username: "aUserId"

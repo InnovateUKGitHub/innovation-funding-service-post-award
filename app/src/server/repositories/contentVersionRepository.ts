@@ -18,6 +18,7 @@ export interface ISalesforceDocument {
   Description: string | null;
   CreatedDate: string;
   Acc_LastModifiedByAlias__c: string;
+  Acc_UploadedByMe__c: boolean;
   Owner: {
     Username: string;
   };
@@ -44,6 +45,7 @@ export class ContentVersionRepository extends SalesforceRepositoryBase<ISalesfor
     "Description",
     "CreatedDate",
     "Acc_LastModifiedByAlias__c",
+    "Acc_UploadedByMe__c",
     "Owner.Username"
   ];
 

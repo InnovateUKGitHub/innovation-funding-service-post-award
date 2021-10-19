@@ -13,6 +13,7 @@ const initialDocs: DocumentSummaryDto[] = [
     fileSize: 20635049,
     dateCreated: new Date(2021, 8, 26),
     uploadedBy: "Donald Duck",
+    isOwner: false
   },
   {
     link: "#",
@@ -22,6 +23,7 @@ const initialDocs: DocumentSummaryDto[] = [
     fileSize: 10635049,
     dateCreated: new Date(2020, 3, 22),
     uploadedBy: "John Lemon",
+    isOwner: false
   },
   {
     link: "#",
@@ -31,6 +33,7 @@ const initialDocs: DocumentSummaryDto[] = [
     fileSize: 18635049,
     dateCreated: new Date(2021, 9, 3),
     uploadedBy: "Fred Mango",
+    isOwner: false
   },
   {
     link: "#",
@@ -40,6 +43,7 @@ const initialDocs: DocumentSummaryDto[] = [
     fileSize: 12635049,
     dateCreated: new Date(2021, 10, 8),
     uploadedBy: "Bonny Banana",
+    isOwner: false
   },
 ];
 

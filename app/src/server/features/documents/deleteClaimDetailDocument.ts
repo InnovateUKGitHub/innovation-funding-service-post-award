@@ -21,6 +21,6 @@ export class DeleteClaimDetailDocumentCommand extends CommandBase<void> {
   }
 
   protected async run(context: IContext): Promise<void> {
-    return context.repositories.documents.deleteDocument(this.documentId);
+    return await context.repositories.documents.deleteDocument(this.documentId);
   }
 }

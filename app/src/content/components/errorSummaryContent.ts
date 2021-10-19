@@ -14,4 +14,5 @@ export class ErrorSummaryContent extends ContentPageBase {
   // Unique Errors
   public readonly updateAllFailure = this.getContent("components.errorSummary.updateAllFailure");
   public readonly insufficienceAccessRights = this.getContent("components.errorSummary.insufficienceAccessRights");
+  public readonly notUploadedByOwner = this.getContent("components.errorSummary.notUploadedByOwner");
 }

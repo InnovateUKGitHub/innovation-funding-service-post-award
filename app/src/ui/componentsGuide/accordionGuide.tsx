@@ -3,9 +3,36 @@ import { IGuide } from "@framework/types";
 import { Accordion, AccordionItem, DocumentList, ProjectContact } from "../components";
 
 const documents = [
-  { link: "https://www.google.com/", fileName: "LABOUR_COSTS_Q3_2017-11-05.pdf", id: "1", fileSize: 3, dateCreated: new Date(), owner: "owner1@ownder.com", uploadedBy: "Snap" },
-  { link: "https://www.amazon.co.uk/", fileName: "PAYMENT_RECEIPT_PROJECT_MANAGER_Q3_2017-11-05.pdf", id: "2",fileSize: 3, dateCreated: new Date(), owner: "owner2@ownder.com", uploadedBy: "Crackle" },
-  { link: "https://www.bbc.co.uk/", fileName: "PAYMENT_RECEIPT_ELECTRICIAN_Q3_2017-11-05.pdf", id: "3", fileSize: 3, dateCreated: new Date(), owner: "owner3@ownder.com", uploadedBy: "Pop" },
+  {
+    link: "https://www.google.com/",
+    fileName: "LABOUR_COSTS_Q3_2017-11-05.pdf",
+    id: "1",
+    fileSize: 3,
+    dateCreated: new Date(),
+    owner: "owner1@ownder.com",
+    uploadedBy: "Snap",
+    isOwner: false
+  },
+  {
+    link: "https://www.amazon.co.uk/",
+    fileName: "PAYMENT_RECEIPT_PROJECT_MANAGER_Q3_2017-11-05.pdf",
+    id: "2",
+    fileSize: 3,
+    dateCreated: new Date(),
+    owner: "owner2@ownder.com",
+    uploadedBy: "Crackle",
+    isOwner: false
+  },
+  {
+    link: "https://www.bbc.co.uk/",
+    fileName: "PAYMENT_RECEIPT_ELECTRICIAN_Q3_2017-11-05.pdf",
+    id: "3",
+    fileSize: 3,
+    dateCreated: new Date(),
+    owner: "owner3@ownder.com",
+    uploadedBy: "Pop",
+    isOwner: false
+  },
 ];
 
 export const accordionGuide: IGuide = {
@@ -14,7 +41,7 @@ export const accordionGuide: IGuide = {
     {
       name: "Single accordion",
       comments: "Renders a single accordion item",
-      example:`
+      example: `
       <Accordion>
         <AccordionItem title="Section 1">
             <DocumentList documents={documents} qa="documentList"/>
@@ -23,18 +50,18 @@ export const accordionGuide: IGuide = {
       render: () => (
         <Accordion>
           <AccordionItem title="Section 1" qa="Section1">
-            <DocumentList documents={documents} qa="documentList"/>
+            <DocumentList documents={documents} qa="documentList" />
           </AccordionItem>
           <AccordionItem title="Section 2" qa="Section2">
-            <DocumentList documents={documents} qa="documentList2"/>
+            <DocumentList documents={documents} qa="documentList2" />
           </AccordionItem>
         </Accordion>
-      )
+      ),
     },
     {
       name: "Multiple accordions",
       comments: "Renders multiple accordions items",
-      example:`
+      example: `
       <Accordion>
         <AccordionItem title="Section 1">
             <DocumentList documents={documents} qa="documentList"/>
@@ -46,13 +73,23 @@ export const accordionGuide: IGuide = {
       render: () => (
         <Accordion>
           <AccordionItem title="Item 1" qa="Item1">
-            <DocumentList documents={documents} qa="documentList"/>
+            <DocumentList documents={documents} qa="documentList" />
           </AccordionItem>
           <AccordionItem title="Item 2" qa="Item2">
-            <ProjectContact contact={{id:"1", role:"Finance contact", projectId:"1", name: "Ms A Bloggs", email: "a.bloggs@test.com", roleName: "Team lead" }} qa="teamMember"/>
+            <ProjectContact
+              contact={{
+                id: "1",
+                role: "Finance contact",
+                projectId: "1",
+                name: "Ms A Bloggs",
+                email: "a.bloggs@test.com",
+                roleName: "Team lead",
+              }}
+              qa="teamMember"
+            />
           </AccordionItem>
         </Accordion>
-      )
+      ),
     },
-  ]
+  ],
 };

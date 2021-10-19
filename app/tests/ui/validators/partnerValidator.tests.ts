@@ -106,6 +106,7 @@ describe("Partner Validator", () => {
         id: "",
         dateCreated: new Date(),
         uploadedBy: "",
+        isOwner: false
       };
       expect(validate([document]).bankDetailsTaskStatus.isValid).toBe(false);
       document.description = DocumentDescription.Evidence;
@@ -134,6 +135,7 @@ describe("Partner Validator", () => {
         id: "",
         dateCreated: new Date(),
         uploadedBy: "",
+        isOwner: false
       };
       expect(validate([document]).bankDetailsTaskStatus.isValid).toBe(false);
       document.description = DocumentDescription.Evidence;

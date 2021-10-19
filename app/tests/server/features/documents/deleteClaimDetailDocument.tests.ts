@@ -8,7 +8,7 @@ describe("DeleteClaimDetailDocumentCommand", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);
     const claimDetail = context.testData.createClaimDetail(project, undefined, partner);
-    const document = context.testData.createDocument(claimDetail.Id, "hello", "txt", "hello");
+    const document = context.testData.createDocument(claimDetail.Id, "hello", "txt", "hello", undefined, undefined, x => (x.Acc_UploadedByMe__c = true));
     expect(context.repositories.documents.Items).toHaveLength(1);
 
     const claimDetailKey = { projectId: project.Id, partnerId: partner.id, costCategoryId: claimDetail.Acc_CostCategory__c, periodId: claimDetail.Acc_ProjectPeriodNumber__c};

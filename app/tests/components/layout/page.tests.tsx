@@ -70,6 +70,7 @@ describe("<Page />", () => {
         somethingGoneWrongContent: { content: "stub-somethingGoneWrongContent" },
         updateAllFailure: { content: "stub-updateAllFailure" },
         insufficienceAccessRights: { content: "stub-insufficienceAccessRights" },
+        notUploadedByOwner: { content: "stub-notUploadedByOwner" },
       },
       onHoldContent: {
         projectOnHoldMessage: { content: "stub-projectOnHoldMessage" },

@@ -19,6 +19,6 @@ export class DeletePartnerDocumentCommand extends CommandBase<void> {
   }
 
   protected async run(context: IContext) {
-    return context.repositories.documents.deleteDocument(this.documentId);
+    return await context.repositories.documents.deleteDocument(this.documentId);
   }
 }

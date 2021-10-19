@@ -164,6 +164,7 @@ describe("<JesStepUI />", () => {
             fileSize: 279611,
             dateCreated: new Date(),
             uploadedBy: "Innovate UK",
+            isOwner: false,
           };
 
           const { queryByText } = setup({ documents: [availableDocument] });
