@@ -8,7 +8,7 @@ import { RecordType } from "@framework/entities/recordType";
 import { Option } from "@framework/types";
 import { IDefaultContentStore } from "@server/resources/defaultContentStore";
 import { ICustomContentStore } from "@server/resources/customContentStore";
-import { ICompaniesHouse } from "@server/resources/companiesHouse";
+import { ICompaniesHouseBase } from "@server/resources/companiesHouse";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { IBankCheckService } from "@server/resources/bankCheckService";
 import { ICompetitionContentStore } from "@server/resources/competitionContentStore";
@@ -20,6 +20,7 @@ export interface IRepositories {
   readonly claims: Repositories.IClaimRepository;
   readonly claimStatusChanges: Repositories.IClaimStatusChangeRepository;
   readonly claimDetails: Repositories.IClaimDetailsRepository;
+  readonly companies: Repositories.ICompaniesHouse;
   readonly costCategories: Repositories.ICostCategoryRepository;
   readonly documents: Repositories.IDocumentsRepository;
   readonly financialVirements: Repositories.IFinancialVirementRepository;
@@ -46,7 +47,7 @@ export interface IResources {
   readonly defaultContent: IDefaultContentStore;
   readonly competitionContent: ICompetitionContentStore;
   readonly customContent: ICustomContentStore;
-  readonly companiesHouse: ICompaniesHouse;
+  readonly companiesHouse: ICompaniesHouseBase;
   readonly bankCheckService: IBankCheckService;
 }
 
@@ -61,7 +62,7 @@ export interface IContext {
   config: IConfig;
   runQuery<TResult>(cmd: QueryBase<TResult>): Promise<TResult>;
   runSyncQuery<TResult>(cmd: SyncQueryBase<TResult>): TResult;
-  runCommand<TResult>(cmd: CommandBase<TResult>|NonAuthorisedCommandBase<TResult>): Promise<TResult>;
+  runCommand<TResult>(cmd: CommandBase<TResult> | NonAuthorisedCommandBase<TResult>): Promise<TResult>;
   runSyncCommand<TResult>(cmd: SyncCommandBase<TResult>): TResult;
   clock: IClock;
   logger: ILogger;
@@ -81,7 +82,7 @@ export interface ICaches {
   readonly permissionGroups: Cache<PermissionGroup[]>;
   readonly projectRoles: Cache<{ [key: string]: IRoleInfo }>;
   readonly recordTypes: Cache<RecordType[]>;
-  contentStoreLastUpdated: Date|null;
+  contentStoreLastUpdated: Date | null;
 }
 
 export interface IAsyncRunnable<T> {

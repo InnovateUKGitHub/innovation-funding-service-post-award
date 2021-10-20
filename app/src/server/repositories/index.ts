@@ -4,6 +4,7 @@ export * from "./claimLineItemRepository";
 export * from "./claimStatusChangeRepository";
 export * from "./claimTotalCostCategoryRepository";
 export * from "./claimsRepository";
+export * from "./companiesRepository";
 export * from "./costCategoriesRepository";
 export * from "./documentsRepository";
 export * from "./errors";

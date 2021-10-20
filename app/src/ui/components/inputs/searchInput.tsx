@@ -6,6 +6,7 @@ import { InputProps, InputState } from "./common";
 interface SearchInputProps extends InputProps<string> {
   maxLength?: number;
   width?: FormInputWidths;
+  autoComplete?: React.InputHTMLAttributes<{}>["autoComplete"];
 }
 
 export class SearchInput extends BaseInput<SearchInputProps, InputState> {
@@ -44,6 +45,7 @@ export class SearchInput extends BaseInput<SearchInputProps, InputState> {
         maxLength={this.props.maxLength}
         aria-label={this.props.ariaLabel}
         placeholder={this.props.placeholder}
+        autoComplete={this.props.autoComplete}
       />
     );
   }

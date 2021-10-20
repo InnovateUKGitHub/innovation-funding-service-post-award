@@ -3,7 +3,7 @@ export * from "./academicOrganisationStep";
 export * from "./addPartnerSummary";
 export * from "./agreementToPcrStep";
 export * from "./aidEligibilityStep";
-export * from "./companiesHouseStep";
+export * from "./CompaniesHouse";
 export * from "./financeContactStep";
 export * from "./financeDetailsStep";
 export * from "./jeSStep";

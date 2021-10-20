@@ -213,12 +213,13 @@ const StringField = <T extends {}>({ field, ...props }: StringFieldProps<T> & In
 
 interface SearchFieldProps<T> extends ExternalFieldProps<T, string> {
   width?: FormInputWidths;
+  autoComplete?: React.InputHTMLAttributes<T>["autoComplete"];
 }
 
-const SearchField = <T extends {}>({field, ...props}: SearchFieldProps<T> & InternalFieldProps<T>) => (
+const SearchField = <T extends {}>({field, autoComplete, ...props}: SearchFieldProps<T> & InternalFieldProps<T>) => (
   <FieldComponent
       {...props}
-      field={field || ((data, disabled) => <SearchInput width={props.width} name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} placeholder={props.placeholder} disabled={disabled} />)}
+      field={field || ((data, disabled) => <SearchInput width={props.width} name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} placeholder={props.placeholder} disabled={disabled} autoComplete={autoComplete} />)}
   />
 );
 

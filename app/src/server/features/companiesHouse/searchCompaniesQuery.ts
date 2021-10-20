@@ -1,13 +1,20 @@
 import { IContext } from "@framework/types";
+
 import { CompanyDto } from "@framework/dtos/companyDto";
-import { QueryBase } from "../common";
+
+import { QueryBase } from "@server/features/common";
+import { ICompaniesHouseParams } from "@server/resources/companiesHouse";
+
+import { mapCompaniesHouse } from "./mapCompaniesHouse";
 
 export class SearchCompaniesQuery extends QueryBase<CompanyDto[]> {
-  constructor(private readonly searchString: string, private readonly itemsPerPage?: number, private readonly startIndex?: number) {
+  constructor(private readonly queryParams: ICompaniesHouseParams) {
     super();
   }
 
-  protected run(context: IContext): Promise<CompanyDto[]> {
-    return context.resources.companiesHouse.searchCompany(this.searchString, this.itemsPerPage, this.startIndex);
+  protected async run(context: IContext): Promise<CompanyDto[]> {
+    const companiesResults = await context.repositories.companies.searchCompany(this.queryParams);
+
+    return companiesResults.map(mapCompaniesHouse);
   }
 }

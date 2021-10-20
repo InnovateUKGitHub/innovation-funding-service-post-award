@@ -2,12 +2,10 @@ import { apiClient } from "@ui/apiClient";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { RootActionsOrThunk } from "../actions";
 import { RootState } from "../reducers";
-import { PartnersStore } from "./partnersStore";
 import { StoreBase } from "./storeBase";
 
 export class CompaniesStore extends StoreBase {
-
-  constructor(private readonly partnerStore: PartnersStore, getState: () => RootState, queue: (action: RootActionsOrThunk) => void) {
+  constructor(getState: () => RootState, queue: (action: RootActionsOrThunk) => void) {
     super(getState, queue);
   }
 
@@ -16,7 +14,8 @@ export class CompaniesStore extends StoreBase {
   }
 
   public getCompanies(searchString: string, itemsPerPage?: number, startIndex?: number) {
-    return this.getData("companies", this.getKey(searchString, itemsPerPage, startIndex), p => apiClient.companies.searchCompany({ searchString, itemsPerPage, startIndex, ...p }));
+    return this.getData("companies", this.getKey(searchString, itemsPerPage, startIndex), p =>
+      apiClient.companies.searchCompany({ ...p, searchString, itemsPerPage, startIndex }),
+    );
   }
-
 }

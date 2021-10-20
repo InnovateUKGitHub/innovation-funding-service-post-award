@@ -6,6 +6,10 @@ import { IFeatureFlags, LogLevel } from "@framework/types";
 
 const defaultCacheTimeout = 720;
 
+const getFeatureFlagValue = (value: string | undefined, defaultValue: boolean) => {
+  return value === "true" ?? defaultValue;
+};
+
 export interface IConfig {
   readonly build: string;
 
@@ -55,12 +59,14 @@ export interface IConfig {
     readonly signoutUrl: string;
   };
 
+  readonly companiesHouse: {
+    endpoint: string;
+    accessToken: string;
+  };
+
   readonly sil: {
     bankCheckUrl: string;
     bankCheckPort: number | undefined;
-    companiesHouseSearchUrl: string;
-    username: string;
-    password: string;
   };
 
   readonly urls: {
@@ -98,10 +104,6 @@ const timeouts = {
 const certificates = {
   salesforce: process.env.SALESFORCE_PRIVATE_KEY_FILE || "/etc/pki/AccPrivateKey.key",
   shibboleth: process.env.SHIBBOLETH_PRIVATE_KEY_FILE || "/etc/pki/AccPrivateKey.key",
-};
-
-const getFeatureFlagValue = (value: string | undefined, defaultValue: boolean) => {
-  return value === "true" ?? defaultValue;
 };
 
 const disableCsp = getFeatureFlagValue(process.env.DISABLE_CSP, false);
@@ -202,9 +204,11 @@ const s3Account = {
 const sil = {
   bankCheckUrl: process.env.SIL_EXPERIAN_URL!,
   bankCheckPort: process.env.SIL_EXPERIAN_PORT ? parseInt(process.env.SIL_EXPERIAN_PORT, 10) || undefined : undefined,
-  companiesHouseSearchUrl: process.env.SIL_COMPANIES_HOUSE_SEARCH_URL!,
-  username: process.env.SIL_USERNAME!,
-  password: process.env.SIL_PASSWORD!,
+};
+
+const companiesHouse = {
+  endpoint: process.env.COMPANIES_HOUSE_ENDPOINT!,
+  accessToken: process.env.COMPANIES_HOUSE_ACCESS_TOKEN!,
 };
 
 export const configuration: IConfig = {
@@ -220,6 +224,7 @@ export const configuration: IConfig = {
   prettyLogs,
   salesforce,
   serverUrl,
+  companiesHouse,
   sil,
   sso,
   urls,

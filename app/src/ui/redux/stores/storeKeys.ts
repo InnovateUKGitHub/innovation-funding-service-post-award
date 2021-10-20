@@ -1,3 +1,5 @@
+import { removeSpaces } from "@shared/string-helpers";
+
 const getKey = (...args: (string | number | boolean | "all")[]) => args.join("_");
 
 const getAccountKey = () => getKey("accountKey", "account", "all");
@@ -28,7 +30,7 @@ const getPcrParticipantSizesKey = () => getKey("pcrParticipantSizesKey", "all");
 const getPcrProjectLocationsKey = () => getKey("pcrProjectLocationsKey", "all");
 const getPcrSpendProfileCapitalUsageTypesKey = () => getKey("pcrSpendProfileCapitalUsageTypesKey", "all");
 const getPcrSpendProfileOverheadRateOptionsKey = () => getKey("pcrSpendProfileOverheadRateOptionsKey", "all");
-const getCompaniesKey = (searchString: string, itemsPerPage?: number, startIndex?: number) => getKey("companiesKey", "search", searchString, "items", itemsPerPage || "unspecified", "index", startIndex || "0");
+const getCompaniesKey = (searchString: string, itemsPerPage?: number, startIndex?: number) => getKey("companiesKey", "search", removeSpaces(searchString, "-"), "items", itemsPerPage || "unspecified", "index", startIndex || "0");
 
 export const storeKeys = {
   getAccountKey,

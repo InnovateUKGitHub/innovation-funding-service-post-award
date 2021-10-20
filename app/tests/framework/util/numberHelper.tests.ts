@@ -1,4 +1,4 @@
-import { diffAsPercentage, isNumber, parseNumber, roundCurrency, sum } from "@framework/util/numberHelper";
+import { diffAsPercentage, isNumber, parseNumber, roundCurrency, sum, withinRange } from "@framework/util/numberHelper";
 
 describe("numberHelper", () => {
   describe("isNumber()", () => {
@@ -33,8 +33,8 @@ describe("numberHelper", () => {
     describe("capture edge cases", () => {
       test.each`
         name                         | edgeCaseValue | expectedValue
-        ${"positive trailing digit"} | ${1.005}   | ${1.01}
-        ${"negative trailing digit"} | ${-1.005}  | ${-1}
+        ${"positive trailing digit"} | ${1.005}      | ${1.01}
+        ${"negative trailing digit"} | ${-1.005}     | ${-1}
       `("with a $name number", ({ edgeCaseValue, expectedValue }) => {
         const roundedNumber = roundCurrency(edgeCaseValue);
 
@@ -113,6 +113,21 @@ describe("numberHelper", () => {
       const totalSum = sum(inputValue, valueFn);
 
       expect(totalSum).toBe(expectedValue);
+    });
+  });
+
+  describe("withinRange()", () => {
+    test.each`
+      name                                   | inputValue | startValue | endValue | expectedValue
+      ${"when value is within tolerance"}    | ${5}       | ${1}       | ${10}    | ${true}
+      ${"when value is within start range"}  | ${1}       | ${1}       | ${10}    | ${true}
+      ${"when value is within end range"}    | ${10}      | ${1}       | ${10}    | ${true}
+      ${"when value is outside start range"} | ${0}       | ${1}       | ${10}    | ${false}
+      ${"when value is outside end range"}   | ${11}      | ${1}       | ${10}    | ${false}
+    `("$name", ({ inputValue, startValue, endValue, expectedValue }) => {
+      const isWithinRange = withinRange(inputValue, startValue, endValue);
+
+      expect(isWithinRange).toBe(expectedValue);
     });
   });
 });

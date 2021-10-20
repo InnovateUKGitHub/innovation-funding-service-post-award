@@ -86,9 +86,11 @@ export class TestConfig implements IConfig {
   public sil = {
     bankCheckUrl: "",
     bankCheckPort: undefined,
-    companiesHouseSearchUrl: "",
-    username: "",
-    password: "",
+  };
+
+  public companiesHouse = {
+    endpoint: "https://companiesHouse.com",
+    accessToken: "companiesHouse_access_token",
   };
 
   public urls = {

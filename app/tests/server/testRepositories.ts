@@ -104,6 +104,11 @@ class ProjectContactTestRepository extends TestRepository<Repositories.ISalesfor
   }
 }
 
+class CompaniesTestRepository implements Repositories.ICompaniesHouse {
+  searchCompany() {
+    return Promise.resolve([]);
+  }
+}
 class CostCategoriesTestRepository extends TestRepository<Entities.CostCategory> implements Repositories.ICostCategoryRepository {
   getAll() {
     return super.getAll();
@@ -780,6 +785,7 @@ export const createTestRepositories = (): ITestRepositories => {
     claimStatusChanges: new ClaimStatusChangeTestRepository(claimsRepository),
     claimDetails: new ClaimDetailsTestRepository(),
     claimLineItems: new ClaimLineItemsTestRepository(),
+    companies: new CompaniesTestRepository(),
     costCategories: new CostCategoriesTestRepository(),
     documents: new DocumentsTestRepository(),
     financialVirements: new FinancialVirementsTestRepository(),

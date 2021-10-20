@@ -1,5 +1,5 @@
 import { IResources } from "@framework/types/IContext";
-import { ICompaniesHouse } from "@server/resources/companiesHouse";
+import { ICompaniesHouseBase } from "@server/resources/companiesHouse";
 import { IBankCheckService, IVerifyBankCheckInputs } from "@server/resources/bankCheckService";
 import { BankCheckCondition } from "@framework/types/bankCheck";
 
@@ -36,22 +36,10 @@ class TestCustomContent {
   setInfo = (value: { lastModified: Date }) => (this.info = value);
 }
 
-class TestCompaniesHouse implements ICompaniesHouse {
-  private readonly results = [
-    {
-      title: "BJSS LIMITED",
-      companyNumber: "02777575",
-      address: {
-        addressLine1: "Queen Street",
-        addressLine2: "Queen Street 2",
-        region: "West Yorkshire",
-        premises: "First Floor Coronet House",
-        locality: "Leeds",
-        postalCode: "LS1 2TW",
-      },
-    },
-  ];
-  public searchCompany = () => Promise.resolve(this.results);
+class TestCompaniesHouse implements ICompaniesHouseBase {
+  public async queryCompaniesHouse<T>(): Promise<T> {
+    return Promise.resolve(([] as unknown) as T);
+  }
 }
 
 type Score = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | null;
