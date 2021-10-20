@@ -15,6 +15,7 @@ export class PCRAddPartnerCompanyHouseContent extends ContentPageBase {
   public readonly formHeading = this.getContent("heading-form");
   public readonly searchHeading = this.getContent("heading-search");
   public readonly searchButton = this.getContent("button-search");
+  public readonly resultsLoading = this.getContent("results-loading");
   public readonly resultNotShowing = this.getContent("result-not-showing");
   public readonly searchResultsHeading = this.getContent("heading-search-results");
   public readonly hint = this.getContent("hint");

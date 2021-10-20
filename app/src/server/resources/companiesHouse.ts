@@ -1,91 +1,58 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-import { BadRequestError, configuration, ConfigurationError } from "@server/features/common";
-import { CompanyEntity } from "@framework/entities/company";
+import { configuration, ConfigurationError } from "@server/features/common";
 
-interface ICompany {
-  address: {
-    "address_line_1": string;
-    "address_line_2": string;
-    "locality": string;
-    "postal_code": string;
-    "premises": string;
-    "region": string;
-  };
-  "company_number": string;
-  title: string;
+export interface ICompaniesHouseParams {
+  searchString: string;
+  itemsPerPage?: number;
+  startIndex?: number;
 }
 
-interface IResponse {
-  results: {
-    items: ICompany[];
-  };
-}
-export interface ICompaniesHouse {
-  searchCompany(searchString: string, itemsPerPage?: number, startIndex?: number): Promise<CompanyEntity[]>;
-}
+export class CompaniesHouseBase {
+  private getUrl(endpointSegment: string, inboundParams?: Record<string, string>): string {
+    const { companiesHouse } = configuration;
 
-export class CompaniesHouse implements ICompaniesHouse {
-
-  private getConnection() {
-    if (!configuration.sil.username || !configuration.sil.password || !configuration.sil.companiesHouseSearchUrl) {
-      throw new ConfigurationError("Companies house access not configured");
-    }
-    const url = configuration.sil.companiesHouseSearchUrl;
-    const auth = Buffer.from(`${configuration.sil.username}:${configuration.sil.password}`).toString("base64");
-    return {url, auth};
-  }
-
-  private getQueryParams(searchString: string, itemsPerPage?: number, startIndex?: number) {
-    const params: {[key: string]: string | undefined | number} = {
-      searchString,
-      items_per_page: itemsPerPage,
-      start_index: startIndex
-    };
-
-    return Object.keys(params)
-      .filter(x => params[x] !== undefined && params[x] !== null)
-      .map(x => `${x}=${params[x]}`)
-      .join("&");
-  }
-
-  public searchCompany(searchString: string, itemsPerPage?: number, startIndex?: number): Promise<CompanyEntity[]> {
-    const {url, auth} = this.getConnection();
-    const getOptions = { headers: { Authorization: `Basic ${auth}` } };
-
-    if (searchString === undefined || searchString === null) {
-      throw new BadRequestError("Need to pass a search string");
+    if (!companiesHouse.accessToken) {
+      throw new ConfigurationError("'companiesHouse.accessToken' has not been set!");
     }
 
-    const queryParams = this.getQueryParams(searchString, itemsPerPage, startIndex);
+    if (!companiesHouse.endpoint) {
+      throw new ConfigurationError("'companiesHouse.endpoint' has not been set!");
+    }
 
-    return fetch(`${url}?${queryParams}`, getOptions)
-      .then<IResponse>((result) => {
-        if (result.ok) {
-          return result.json();
-        }
-        throw new Error(`Failed get request to ${url}`);
-      })
-      .then(resp => {
- if (resp.results) {
-        // SIL does not currently handle the itemsPerPage query param so this is a temp measure until it does
-        if (itemsPerPage) {
-          resp.results.items.splice(1, itemsPerPage);
-        }
-        return resp.results.items.map(x => ({
-          address: {
-            addressLine1: x.address.address_line_1,
-            addressLine2: x.address.address_line_2,
-            locality: x.address.locality,
-            postalCode: x.address.postal_code,
-            premises: x.address.premises,
-            region: x.address.region
-          },
-          companyNumber: x.company_number,
-          title: x.title
-        }));
-      } else {
-        return [];
+    const apiEndpoint = `${companiesHouse.endpoint}${endpointSegment}`;
+
+    if (!inboundParams) return apiEndpoint;
+
+    const parsedParams = new URLSearchParams(inboundParams);
+
+    return `${apiEndpoint}?${parsedParams.toString()}`;
+  }
+
+  public async queryCompaniesHouse<T>(url: string, searchParams?: Record<string, string>): Promise<T> {
+    try {
+      const parsedUrl = this.getUrl(url, searchParams);
+
+      const fetchQuery = await fetch(parsedUrl, {
+        headers: {
+          Authorization: configuration.companiesHouse.accessToken,
+        },
+      });
+
+      if (!fetchQuery.ok) {
+        throw new Error(fetchQuery.statusText || "Bad Companies House request. Failed to get a positive response.");
       }
-} );
+
+      return await fetchQuery.json();
+    } catch (err) {
+      // Note: Add specific api failures here
+
+      if (err.message.includes("socket hang up")) {
+        // Note: Add this point we know to contact develop/escalate
+        throw new Error("COMPANIES_HOUSE_WHITELIST_ISSUE");
+      }
+
+      throw new Error(err);
+    }
   }
 }
+
+export type ICompaniesHouseBase = Pick<CompaniesHouseBase, "queryCompaniesHouse">;

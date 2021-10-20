@@ -5,10 +5,10 @@ import * as Entities from "@framework/entities";
 import { DefaultContentStore } from "@server/resources/defaultContentStore";
 import { IInternationalisation } from "@framework/types";
 import { CustomContentStore } from "@server/resources/customContentStore";
-import { CompaniesHouse } from "@server/resources/companiesHouse";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { BankCheckService } from "@server/resources/bankCheckService";
 import { CompetitionContentStore } from "@server/resources/competitionContentStore";
+import { CompaniesHouseBase } from "@server/resources/companiesHouse";
 import * as Salesforce from "../../repositories/salesforceConnection";
 import * as Repositories from "../../repositories";
 import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
@@ -78,6 +78,7 @@ export class Context implements Framework.IContext {
       claims: new Repositories.ClaimRepository(connectionCallback, this.logger),
       claimDetails: new Repositories.ClaimDetailsRepository(recordTypeCallback, connectionCallback, this.logger),
       claimStatusChanges: new Repositories.ClaimStatusChangeRepository(connectionCallback, this.logger),
+      companies: new Repositories.CompaniesHouse(),
       claimTotalCostCategory: new Repositories.ClaimTotalCostCategoryRepository(connectionCallback, this.logger),
       claimLineItems: new Repositories.ClaimLineItemRepository(recordTypeCallback, connectionCallback, this.logger),
       costCategories: new Repositories.CostCategoryRepository(connectionCallback, this.logger),
@@ -102,7 +103,7 @@ export class Context implements Framework.IContext {
 
     this.resources = {
       bankCheckService: new BankCheckService(),
-      companiesHouse: new CompaniesHouse(),
+      companiesHouse: new CompaniesHouseBase(),
       defaultContent: new DefaultContentStore(),
       competitionContent: new CompetitionContentStore(),
       customContent: new CustomContentStore()

@@ -693,8 +693,9 @@
       "section-title": "Company house",
       "heading-form": "Company details",
       "heading-search": "Search companies house",
-      "hint": "Enter your organisation name or registration number",
+      "hint": "Enter your organisation name or registration number. To filter your search by location e.g. find HSBC in London would be - hsbc location:'London'.",
       "button-search": "Search",
+      "results-loading": "Loading company results...",
       "result-not-showing": "Is your organisation not showing in these results? Check your spelling, or try searching again using a more specific company name or the registration number.",
       "heading-search-results": "Companies house search results"
     },

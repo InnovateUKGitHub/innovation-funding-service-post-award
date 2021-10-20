@@ -3,7 +3,7 @@ import Express from "express";
 import { ErrorCode } from "@framework/types";
 import { configuration, ILogger, Logger, AppError } from "@server/features/common";
 import { getSalesforceAccessToken } from "@server/repositories/salesforceConnection";
-import { CompaniesHouse } from "@server/resources/companiesHouse";
+import { CompaniesHouse } from "@server/repositories";
 
 export const router = Express.Router();
 
@@ -50,7 +50,7 @@ const checkGoogleAnalytics = async (logger: ILogger) => {
 
 const checkCompaniesHouse = async (logger: ILogger) => {
   try {
-    await new CompaniesHouse().searchCompany("test");
+    await new CompaniesHouse().searchCompany({ searchString: "test" });
 
     return "Success";
   } catch (error) {

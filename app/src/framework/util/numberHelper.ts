@@ -26,7 +26,7 @@ export function diffAsPercentage<T extends number>(startingValue: T, secondValue
   const roundedStarting = roundCurrency(startingValue);
   const roundedSecond = roundCurrency(secondValue);
 
-  const roundedDiff = (roundedSecond - roundedStarting);
+  const roundedDiff = roundedSecond - roundedStarting;
   const unRoundedPercentage = (roundedDiff * 100) / roundedStarting;
 
   return roundCurrency(unRoundedPercentage);
@@ -55,3 +55,10 @@ export function sum<T>(items: T[], value: (item: T) => number): number {
 
   return items.reduce((total, item) => total + value(item), 0);
 }
+
+export const withinRange = <T = number>(numberToCheck: T, startRange: T, endRange: T): boolean => {
+  const withinBottomRange: boolean = numberToCheck >= startRange;
+  const withinTopRange: boolean = numberToCheck <= endRange;
+
+  return withinBottomRange && withinTopRange;
+};
