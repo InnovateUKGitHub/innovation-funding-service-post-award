@@ -11,7 +11,7 @@ describe("<Title />", () => {
       </TestBed>,
     );
 
-  it("should render with required props", () => {
+  test("should render with required props", () => {
     const stubProject: TitleProps = {
       projectNumber: "000000",
       title: "stub-title",
@@ -21,5 +21,17 @@ describe("<Title />", () => {
     const expectedTitle = queryByText(`${stubProject.projectNumber} : ${stubProject.title}`);
 
     expect(expectedTitle).toBeTruthy();
+  });
+
+  test("should pass heading to PageTitle", () => {
+    const stubProject: TitleProps = {
+      projectNumber: "000000",
+      title: "stub-title",
+      heading: "stub-heading",
+    };
+    const { queryByText } = setup(stubProject);
+    const expectedHeading = queryByText("stub-heading");
+
+    expect(expectedHeading).toBeTruthy();
   });
 });

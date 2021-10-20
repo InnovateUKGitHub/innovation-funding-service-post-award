@@ -185,6 +185,7 @@ const options: IAppOptions = {
   standardOverheadRate: parseFloat(process.env.STANDARD_OVERHEAD_RATE!) || 20,
   numberOfProjectsToSearch: parseInt(process.env.FEATURE_SEARCH_NUMBER_PROJECTS!, 10) || 3,
   maxClaimLineItems: maxClaimLineItems(),
+  nonJsMaxClaimLineItems: parseInt(process.env.NON_JS_FEATURE_MAX_CLAIM_LINE_ITEMS!, 10) || 10,
 };
 
 const googleTagManagerCode = process.env.GOOGLE_TAG_MANAGER_CODE!;

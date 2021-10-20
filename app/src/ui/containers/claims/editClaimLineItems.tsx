@@ -97,7 +97,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
         }
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title {...project} />}
+        pageTitle={<ACC.Projects.Title {...project} heading={costCategory.name}/>}
       >
         {this.renderNegativeClaimWarning(editor.data)}
 
@@ -120,7 +120,13 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             )
           )}
           <ACC.Renderers.SimpleString qa="guidance-currency-message">
-            <ACC.Content value={x => x.claimDocuments.messages.editClaimLineItemCurrencyGbp} />
+            <ACC.Content
+              value={x =>
+                this.props.isClient
+                  ? x.claimDocuments.messages.editClaimLineItemCurrencyGbp
+                  : x.claimDocuments.messages.nonJsEditClaimLineItemCurrencyGbp
+              }
+            />
           </ACC.Renderers.SimpleString>
         </>
 
@@ -180,12 +186,18 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
 
   }
 
-  private renderTable(editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>, forecastDetail: ForecastDetailsDTO, documents: DocumentSummaryDto[], competitionType: string ) {
+  private renderTable(
+    editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>,
+    forecastDetail: ForecastDetailsDTO,
+    documents: DocumentSummaryDto[],
+    competitionType: string,
+  ) {
     const LineItemForm = ACC.TypedForm<ClaimDetailsDto>();
     const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
     const validationResults = editor.validator.items.results;
 
     const documentSection = this.getCompetitionRenderTableDocumentContent(competitionType, documents, editor);
+
 
     return (
       <LineItemForm.Form
@@ -201,16 +213,42 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
             footers={this.renderFooters(editor.data.lineItems, forecastDetail, this.state.showAddRemove, editor)}
             qa="current-claim-summary-table"
           >
-            <LineItemTable.Custom header={x => x.editClaimLineItems.descriptionHeader} qa="cost-description" value={(x, i) => this.renderDescription(x, i, validationResults[i.row], editor)} />
-            <LineItemTable.Custom header={x => x.editClaimLineItems.costHeader} qa="cost-value" classSuffix="numeric" value={(x, i) => this.renderCost(x, i, validationResults[i.row], editor)} width={30} />
-            <LineItemTable.ShortDate header={x => x.editClaimLineItems.lastUpdatedHeader} qa="cost-last-updated" value={x => x.lastModifiedDate} />
-            {this.state.showAddRemove ?
-              <LineItemTable.Custom header={x => x.editClaimLineItems.actionHeader} hideHeader qa="remove" value={(x, i) => <a href="" className="govuk-link" role="button" onClick={e => this.removeItem(x, i, e, editor)}><ACC.Content value={y => y.editClaimLineItems.removeButton}/></a>} width={1}/>
-              : null}
+            <LineItemTable.Custom
+              header={x => x.editClaimLineItems.descriptionHeader}
+              qa="cost-description"
+              value={(x, i) => this.renderDescription(x, i, validationResults[i.row], editor)}
+            />
+            <LineItemTable.Custom
+              header={x => x.editClaimLineItems.costHeader}
+              qa="cost-value"
+              classSuffix="numeric"
+              value={(x, i) => this.renderCost(x, i, validationResults[i.row], editor)}
+              width={30}
+            />
+            <LineItemTable.ShortDate
+              header={x => x.editClaimLineItems.lastUpdatedHeader}
+              qa="cost-last-updated"
+              value={x => x.lastModifiedDate}
+            />
+            {this.state.showAddRemove ? (
+              <LineItemTable.Custom
+                header={x => x.editClaimLineItems.actionHeader}
+                hideHeader
+                qa="remove"
+                value={(x, i) => (
+                  <a href="" className="govuk-link" role="button" onClick={e => this.removeItem(x, i, e, editor)}>
+                    <ACC.Content value={y => y.editClaimLineItems.removeButton} />
+                  </a>
+                )}
+                width={1}
+              />
+            ) : null}
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
         {documentSection}
-        <LineItemForm.Submit><ACC.Content value={x => x.editClaimLineItems.saveAndReturnButton}/></LineItemForm.Submit>
+        <LineItemForm.Submit>
+          <ACC.Content value={x => x.editClaimLineItems.saveAndReturnButton} />
+        </LineItemForm.Submit>
       </LineItemForm.Form>
     );
   }
@@ -324,7 +362,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     );
   }
 
-  renderCost(item: ClaimLineItemDto, index: { column: number; row: number }, validation: ClaimLineItemDtoValidator, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
+  private renderCost(item: ClaimLineItemDto, index: { column: number; row: number }, validation: ClaimLineItemDtoValidator, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
     return (
       <span>
         <ACC.ValidationError error={validation.cost} />
@@ -358,7 +396,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     return <ACC.ValidationMessage messageType="info" qa="claim-warning" message={markup} />;
   }
 
-  renderDescription(item: ClaimLineItemDto, index: { column: number; row: number }, validation: ClaimLineItemDtoValidator, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
+  private renderDescription(item: ClaimLineItemDto, index: { column: number; row: number }, validation: ClaimLineItemDtoValidator, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
     return (
       <span>
         <ACC.ValidationError error={validation.description} />
@@ -374,14 +412,14 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     );
   }
 
-  removeItem(item: ClaimLineItemDto, i: { column: number; row: number }, e: React.SyntheticEvent<HTMLAnchorElement>, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
+  private removeItem(item: ClaimLineItemDto, i: { column: number; row: number }, e: React.SyntheticEvent<HTMLAnchorElement>, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
     e.preventDefault();
     const dto = editor.data;
     dto.lineItems.splice(i.row, 1);
     this.props.onUpdate(false, dto);
   }
 
-  addItem(e: React.SyntheticEvent<HTMLAnchorElement>, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
+  private addItem(e: React.SyntheticEvent<HTMLAnchorElement>, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
     e.preventDefault();
     const dto = editor.data;
     dto.lineItems.push({
@@ -392,7 +430,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<EditClai
     this.props.onUpdate(false, dto);
   }
 
-  updateItem(i: { column: number; row: number }, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>, update: (item: ClaimLineItemDto) => void) {
+  private updateItem(i: { column: number; row: number }, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>, update: (item: ClaimLineItemDto) => void) {
     const dto = editor.data;
     update(dto.lineItems[i.row]);
     this.props.onUpdate(false, dto);
@@ -484,9 +522,10 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
         props.costCategoryId,
         (dto: ClaimDetailsDto) => {
           if (props.isClient) return;
-          const itemsNumber = dto.lineItems.length;
-          // Add extra rows. If existing items are less than 7 then add up to ten rows in total otherwise add extra 3.
-          const extraRows = itemsNumber <= 7 ? 10 - itemsNumber : 3;
+          const currentItemsLength = dto.lineItems.length;
+          const maximumItemsLength = stores.config.getConfig().options.nonJsMaxClaimLineItems;
+          const extraRows = maximumItemsLength - currentItemsLength;
+
           const extraLineItems: ClaimLineItemDto[] = range(extraRows).map(() => ({
             costCategoryId: props.costCategoryId,
             partnerId: props.partnerId,
