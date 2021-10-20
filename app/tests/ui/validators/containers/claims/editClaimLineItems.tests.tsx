@@ -98,6 +98,9 @@ const contentStub = {
       editClaimLineItemCurrencyGbp: {
         content: "stub-editClaimLineItemCurrencyGbp",
       },
+      nonJsEditClaimLineItemCurrencyGbp: {
+        content: "stub-nonJsEditClaimLineItemCurrencyGbp",
+      },
       editClaimLineItemOtherCostsTotal: {
         content: "stub-editClaimLineItemOtherCostsTotal",
       },
@@ -153,6 +156,7 @@ const stubProps = {
     data: {},
     state: LoadingStatus.Done,
   } as Pending<DocumentSummaryDto[]>,
+  isClient: true
 } as ContainerProps<EditClaimDetailsParams, EditClaimLineItemsData, EditClaimLineItemsCallbacks>;
 
 describe("editClaimLineItems", () => {
@@ -171,6 +175,13 @@ describe("editClaimLineItems", () => {
       test("with editClaimLineItemCurrencyGbp", () => {
         const stubMessage = contentStub.claimDocuments.messages.editClaimLineItemCurrencyGbp.content;
         const { queryByText } = setup(stubProps);
+
+        expect(queryByText(stubMessage)).toBeInTheDocument();
+      });
+
+      test("with nonJsEditClaimLineItemCurrencyGbp", () => {
+        const stubMessage = contentStub.claimDocuments.messages.nonJsEditClaimLineItemCurrencyGbp.content;
+        const { queryByText } = setup({ ...stubProps, isClient: false });
 
         expect(queryByText(stubMessage)).toBeInTheDocument();
       });

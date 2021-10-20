@@ -12,4 +12,5 @@ export interface IAppOptions {
   readonly standardOverheadRate: number;
   readonly numberOfProjectsToSearch: number;
   readonly maxClaimLineItems: number;
+  readonly nonJsMaxClaimLineItems: number;
 }

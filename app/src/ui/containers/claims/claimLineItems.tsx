@@ -66,13 +66,20 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       this.props.routes.reviewClaim.getLink(params) :
       this.props.routes.claimDetails.getLink(params);
 
+    // TODO: we get this twice which is not ideal, but this whole file should be refactored to a function component and we can address it then
+    const currentCostCategory = costCategories.find(x => x.id === this.props.costCategoryId);
+
     return (
       <ACC.Page
         backLink={<ACC.BackLink route={backLink}>Back to claim</ACC.BackLink>}
-        pageTitle={<ACC.Projects.Title {...project} />}
-      >
+        pageTitle={<ACC.Projects.Title {...project} heading={currentCostCategory?.name} />}
+        >
         <ACC.Section>
-          <ClaimLineItemsTable lineItems={claimDetails.lineItems} forecastDetail={forecastDetail} content={this.props.content} />
+          <ClaimLineItemsTable
+            lineItems={claimDetails.lineItems}
+            forecastDetail={forecastDetail}
+            content={this.props.content}
+          />
         </ACC.Section>
         {this.getSupportingDocumentsSection(project.competitionType, documents, claimDetails)}
         {this.renderNavigationArrows(costCategories, project, partner, claim)}

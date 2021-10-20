@@ -1,10 +1,12 @@
 import { ProjectDto } from "@framework/types";
 import { PageTitle } from "../layout/pageTitle";
 
-export type TitleProps = Pick<ProjectDto, "projectNumber" | "title">;
+export interface TitleProps extends Pick<ProjectDto, "projectNumber" | "title"> {
+  heading?: string;
+}
 
-export function Title({ projectNumber, title }: TitleProps) {
+export function Title({ projectNumber, title, heading }: TitleProps) {
   const captionValue = `${projectNumber} : ${title}`;
 
-  return <PageTitle caption={captionValue} />;
+  return <PageTitle caption={captionValue} title={heading} />;
 }
