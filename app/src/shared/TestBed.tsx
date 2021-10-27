@@ -31,6 +31,7 @@ export function TestBed({ stores, content = {}, children }: ITestBedProps) {
         },
         features: {
           contentHint: false,
+          searchDocsMinThreshold: 5
         },
       }),
       isClient: () => true,

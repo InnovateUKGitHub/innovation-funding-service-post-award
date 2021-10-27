@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback } from "react";
 
 import { noop } from "@ui/helpers/noop";
 import { TypedForm } from "@ui/components/form";
@@ -9,36 +9,27 @@ interface DocumentFilterState {
 }
 
 export interface DocumentFilterProps {
+  value: string;
   name?: string;
   qa: string;
   onSearch: (filteredText: string) => void;
-  intitialFilter?: string;
   placeholder?: string;
 }
 
-export function DocumentFilter({
-  name,
-  qa,
-  placeholder = "Search documents",
-  intitialFilter,
-  onSearch,
-}: DocumentFilterProps) {
-  const [filteredText, setFilteredText] = useState<string>(intitialFilter || "");
+export function DocumentFilter({ value, name, qa, placeholder = "Search documents", onSearch }: DocumentFilterProps) {
+  const handleOnSearch = useCallback((newState: DocumentFilterState): void => onSearch(newState.filteredText), [
+    onSearch,
+  ]);
 
-  const handleOnSearch = (newState: DocumentFilterState): void => {
-    const newFilteredValue = newState.filteredText.trim();
-
-    setFilteredText(newFilteredValue);
-    onSearch(newFilteredValue);
-  };
-
-  const FilterForm = TypedForm<DocumentFilterState>();
+  const formData: DocumentFilterState = { filteredText: value };
+  const FilterForm = TypedForm<typeof formData>();
 
   return (
-    <FilterForm.Form qa={qa} data={{ filteredText }} onSubmit={noop} onChange={handleOnSearch}>
+    <FilterForm.Form qa={qa} data={formData} onSubmit={noop} onChange={handleOnSearch}>
       <FilterForm.Search
         name={name || "filter-item"}
         labelHidden
+        autoComplete="off"
         placeholder={placeholder}
         value={x => x.filteredText}
         // Note: SearchInput will always return a string, form controls always return TValue | null poor generic defaults :(

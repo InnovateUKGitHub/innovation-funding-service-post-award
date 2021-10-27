@@ -216,10 +216,10 @@ interface SearchFieldProps<T> extends ExternalFieldProps<T, string> {
   autoComplete?: React.InputHTMLAttributes<T>["autoComplete"];
 }
 
-const SearchField = <T extends {}>({field, autoComplete, ...props}: SearchFieldProps<T> & InternalFieldProps<T>) => (
+const SearchField = <T extends {}>({field, ...props}: SearchFieldProps<T> & InternalFieldProps<T>) => (
   <FieldComponent
       {...props}
-      field={field || ((data, disabled) => <SearchInput width={props.width} name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} placeholder={props.placeholder} disabled={disabled} autoComplete={autoComplete} />)}
+      field={field || ((data, disabled) => <SearchInput {...props} disabled={disabled} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} />)}
   />
 );
 

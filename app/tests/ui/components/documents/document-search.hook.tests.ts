@@ -1,4 +1,5 @@
 import { renderHook, act } from "@testing-library/react-hooks";
+import { v4 as uuidv4 } from "uuid";
 
 import * as hooksModule from "@ui/hooks";
 import { hookTestBed, TestBedStore, TestBedContent } from "@shared/TestBed";
@@ -20,11 +21,11 @@ describe("useDocumentSearch()", () => {
   const stubBaseDocument: DocumentsBase["documents"][0] = {
     fileName: "stub-filename",
     link: "stub-link",
-    id: "stub-id",
+    id: uuidv4(),
     fileSize: 1024,
     dateCreated: new Date(Date.UTC(2021, 10, 1)),
     uploadedBy: "stub-uploadedBy",
-    isOwner: true
+    isOwner: true,
   };
 
   const isClientSpy = jest.spyOn(hooksModule, "useIsClient");
@@ -38,7 +39,7 @@ describe("useDocumentSearch()", () => {
 
         const { result } = setup(false, []);
 
-        expect(result.current.isSearchable).toBeFalsy();
+        expect(result.current.displaySearch).toBeFalsy();
       });
 
       describe("with document threshold", () => {
@@ -56,7 +57,7 @@ describe("useDocumentSearch()", () => {
           } as TestBedStore;
           const { result } = setup(false, [], stubStores);
 
-          expect(result.current.isSearchable).toBeFalsy();
+          expect(result.current.displaySearch).toBeFalsy();
         });
 
         it("when document length equals threshold", () => {
@@ -73,7 +74,7 @@ describe("useDocumentSearch()", () => {
           } as TestBedStore;
           const { result } = setup(false, [stubBaseDocument], stubStores);
 
-          expect(result.current.isSearchable).toBeTruthy();
+          expect(result.current.displaySearch).toBeTruthy();
         });
 
         it("when document length is above threshold", () => {
@@ -90,7 +91,7 @@ describe("useDocumentSearch()", () => {
           } as TestBedStore;
           const { result } = setup(false, [stubBaseDocument, stubBaseDocument], stubStores);
 
-          expect(result.current.isSearchable).toBeTruthy();
+          expect(result.current.displaySearch).toBeTruthy();
         });
       });
     });
@@ -116,7 +117,7 @@ describe("useDocumentSearch()", () => {
 
         const { result } = setup(false, [stubDocument]);
 
-        act(() => result.current.setFilterText(stubDocument.fileName));
+        act(() => result.current.filterConfig.onSearch(stubDocument.fileName));
 
         expect(result.current.hasDocuments).toBeTruthy();
       });
@@ -126,7 +127,7 @@ describe("useDocumentSearch()", () => {
         const stubDocument = { ...stubBaseDocument };
         const { result } = setup(false, [stubDocument]);
 
-        act(() => result.current.setFilterText("I_WILL_NEVER_MATCH"));
+        act(() => result.current.filterConfig.onSearch("I_WILL_NEVER_MATCH"));
 
         expect(result.current.hasDocuments).toBeFalsy();
       });
@@ -156,7 +157,7 @@ describe("useDocumentSearch()", () => {
 
           const { result } = setup(false, [stubDocument]);
 
-          act(() => result.current.setFilterText(stubDocument.fileName));
+          act(() => result.current.filterConfig.onSearch(stubDocument.fileName));
 
           expect(result.current.documents).toHaveLength(1);
         });
@@ -167,7 +168,7 @@ describe("useDocumentSearch()", () => {
 
           const { result } = setup(false, [stubDocument, stubDocument]);
 
-          act(() => result.current.setFilterText(stubDocument.fileName));
+          act(() => result.current.filterConfig.onSearch(stubDocument.fileName));
 
           expect(result.current.documents).toHaveLength(2);
         });
@@ -187,7 +188,7 @@ describe("useDocumentSearch()", () => {
 
             const { result } = setup(false, [stubDocument]);
 
-            act(() => result.current.setFilterText(queryString));
+            act(() => result.current.filterConfig.onSearch(queryString));
 
             expect(result.current.documents).toHaveLength(0);
           });
@@ -205,7 +206,7 @@ describe("useDocumentSearch()", () => {
 
             const { result } = setup(false, [stubDocument]);
 
-            act(() => result.current.setFilterText(queryCaseString));
+            act(() => result.current.filterConfig.onSearch(queryCaseString));
 
             expect(result.current.documents).toHaveLength(1);
             expect(result.current.documents[0].fileName).toBe(stubDocument.fileName);
@@ -223,7 +224,7 @@ describe("useDocumentSearch()", () => {
 
           const { result } = setup(true, [stubDocument, nonMatchingDocument]);
 
-          act(() => result.current.setFilterText(stubDocument.fileName));
+          act(() => result.current.filterConfig.onSearch(stubDocument.fileName));
 
           expect(result.current.documents).toHaveLength(2);
           expect(result.current.documents[0].fileName).toBe(stubDocument.fileName);
@@ -231,45 +232,178 @@ describe("useDocumentSearch()", () => {
         });
 
         it("with single result", () => {
+          const stubUnSearchableFileName = "I_AM_A_FILENAME_THAT_WILL_NEVER_BE_SEARCHED";
           isClientSpy.mockReturnValue(true);
-          const stubDocument = { ...stubBaseDocument };
 
-          const nonMatchingDocument = {
-            ...stubDocument,
-            fileName: "nonMatchingDocument",
-          };
+          const stubDocs = [
+            stubBaseDocument,
+            {
+              ...stubBaseDocument,
+              id: uuidv4(),
+              fileName: stubUnSearchableFileName,
+            },
+          ];
 
-          const { result } = setup(false, [stubDocument, nonMatchingDocument]);
+          const { result } = setup(false, stubDocs);
 
-          act(() => result.current.setFilterText(stubDocument.fileName));
+          act(() => result.current.filterConfig.onSearch(stubDocs[0].fileName));
 
           expect(result.current.documents).toHaveLength(1);
-          expect(result.current.documents[0].fileName).toBe(stubDocument.fileName);
+          expect(result.current.documents[0].fileName).toBe(stubDocs[0].fileName);
         });
 
         it("with multiple results", () => {
+          const stubCommonPartFileName = "testDoc";
+          const stubNonMatchingFileName = "I_AM_A_FILENAME_THAT_WILL_NEVER_BE_SEARCHED";
+
           isClientSpy.mockReturnValue(true);
-          const stubDocument = { ...stubBaseDocument };
 
-          const nonMatchingDocument = {
-            ...stubDocument,
-            fileName: "nonMatchingDocument",
-          };
+          const stubDocs = [
+            {
+              ...stubBaseDocument,
+              id: uuidv4(),
+              fileName: `${stubCommonPartFileName} 1`,
+            },
+            {
+              ...stubBaseDocument,
+              id: uuidv4(),
+              fileName: `${stubCommonPartFileName} 2`,
+            },
+            {
+              ...stubBaseDocument,
+              id: uuidv4(),
+              fileName: stubNonMatchingFileName,
+            },
+          ];
 
-          const { result } = setup(false, [stubDocument, stubDocument, nonMatchingDocument]);
+          const { result } = setup(false, stubDocs);
 
-          const searchValue = stubDocument.fileName.slice(0, 5);
-
-          act(() => result.current.setFilterText(searchValue));
+          act(() => result.current.filterConfig.onSearch(stubCommonPartFileName));
 
           expect(result.current.documents).toHaveLength(2);
-          expect(result.current.documents[0].fileName).toBe(stubDocument.fileName);
-          expect(result.current.documents[1].fileName).toBe(stubDocument.fileName);
+          expect(result.current.documents[0].fileName).toBe(stubDocs[0].fileName);
+          expect(result.current.documents[1].fileName).toBe(stubDocs[1].fileName);
 
           // Negative check - we should not have the non matching doc
-          const queryNonMatchingDoc = result.current.documents.find(x => x.fileName === nonMatchingDocument.fileName);
+          const queryNonMatchingDoc = result.current.documents.find(x => x.fileName === stubNonMatchingFileName);
 
           expect(queryNonMatchingDoc).toBeUndefined();
+        });
+
+        describe("with particular data sets", () => {
+          it("with date created", () => {
+            const stubCommonPartFileName = "2021";
+
+            isClientSpy.mockReturnValue(true);
+
+            const stubDocs = [
+              {
+                ...stubBaseDocument,
+                id: uuidv4(),
+                fileName: "Document 1",
+                dateCreated: new Date(Date.UTC(2021, 1)),
+              },
+              {
+                ...stubBaseDocument,
+                id: uuidv4(),
+                fileName: "Document 2",
+                dateCreated: new Date(Date.UTC(2021, 2)),
+              },
+              {
+                ...stubBaseDocument,
+                id: uuidv4(),
+                fileName: "Document 3",
+                dateCreated: new Date(Date.UTC(2020, 2)),
+              },
+            ];
+
+            const { result } = setup(false, stubDocs);
+
+            act(() => result.current.filterConfig.onSearch(stubCommonPartFileName));
+
+            expect(result.current.documents).toHaveLength(2);
+
+            // Negative check - we should not have the non matching doc
+            const queryNonMatchingDoc = result.current.documents.find(x => x.id === stubDocs[2].id);
+
+            expect(queryNonMatchingDoc).toBeUndefined();
+          });
+
+          it("with file size", () => {
+            const stubParsedFileSize = "12.167KB";
+
+            isClientSpy.mockReturnValue(true);
+
+            const stubDocs = [
+              {
+                ...stubBaseDocument,
+                id: uuidv4(),
+                fileName: "Document 1",
+                fileSize: 12459,
+              },
+              {
+                ...stubBaseDocument,
+                id: uuidv4(),
+                fileName: "Document 2",
+                fileSize: 12459,
+              },
+              {
+                ...stubBaseDocument,
+                id: uuidv4(),
+                fileName: "Document 3",
+                fileSize: 205732,
+              },
+            ];
+
+            const { result } = setup(false, stubDocs);
+
+            act(() => result.current.filterConfig.onSearch(stubParsedFileSize));
+
+            expect(result.current.documents).toHaveLength(2);
+
+            // Negative check - we should not have the non matching doc
+            const queryNonMatchingDoc = result.current.documents.find(x => x.id === stubDocs[2].id);
+
+            expect(queryNonMatchingDoc).toBeUndefined();
+          });
+
+          it("with uploaded by", () => {
+            const stubUploadedName = "Innovate UK";
+
+            isClientSpy.mockReturnValue(true);
+
+            const stubDocs = [
+              {
+                ...stubBaseDocument,
+                id: uuidv4(),
+                fileName: "Document 1",
+                uploadedBy: stubUploadedName,
+              },
+              {
+                ...stubBaseDocument,
+                id: uuidv4(),
+                fileName: "Document 2",
+                uploadedBy: stubUploadedName,
+              },
+              {
+                ...stubBaseDocument,
+                id: uuidv4(),
+                fileName: "Document 3",
+                uploadedBy: "Elton John",
+              },
+            ];
+
+            const { result } = setup(false, stubDocs);
+
+            act(() => result.current.filterConfig.onSearch(stubUploadedName));
+
+            expect(result.current.documents).toHaveLength(2);
+
+            // Negative check - we should not have the non matching doc
+            const queryNonMatchingDoc = result.current.documents.find(x => x.id === stubDocs[2].id);
+
+            expect(queryNonMatchingDoc).toBeUndefined();
+          });
         });
       });
     });
