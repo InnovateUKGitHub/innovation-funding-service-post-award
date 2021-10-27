@@ -7,13 +7,33 @@ import { Button, DocumentEdit, DocumentView } from "@ui/components";
 const initialDocs: DocumentSummaryDto[] = [
   {
     link: "#",
+    fileName: "document-6.docx",
+    id: uuidv4(),
+    description: 110,
+    fileSize: 20635049,
+    dateCreated: new Date(2021, 10, 26),
+    uploadedBy: "Elton John",
+    isOwner: true,
+  },
+  {
+    link: "#",
+    fileName: "document-5.docx",
+    id: uuidv4(),
+    description: 110,
+    fileSize: 20635049,
+    dateCreated: new Date(1990, 5, 6),
+    uploadedBy: "Mike Tyson",
+    isOwner: true,
+  },
+  {
+    link: "#",
     fileName: "document-4.docx",
     id: uuidv4(),
     description: 140,
     fileSize: 20635049,
     dateCreated: new Date(2021, 8, 26),
     uploadedBy: "Donald Duck",
-    isOwner: false
+    isOwner: true,
   },
   {
     link: "#",
@@ -23,7 +43,7 @@ const initialDocs: DocumentSummaryDto[] = [
     fileSize: 10635049,
     dateCreated: new Date(2020, 3, 22),
     uploadedBy: "John Lemon",
-    isOwner: false
+    isOwner: true,
   },
   {
     link: "#",
@@ -33,7 +53,7 @@ const initialDocs: DocumentSummaryDto[] = [
     fileSize: 18635049,
     dateCreated: new Date(2021, 9, 3),
     uploadedBy: "Fred Mango",
-    isOwner: false
+    isOwner: true,
   },
   {
     link: "#",
@@ -43,7 +63,7 @@ const initialDocs: DocumentSummaryDto[] = [
     fileSize: 12635049,
     dateCreated: new Date(2021, 10, 8),
     uploadedBy: "Bonny Banana",
-    isOwner: false
+    isOwner: true,
   },
 ];
 

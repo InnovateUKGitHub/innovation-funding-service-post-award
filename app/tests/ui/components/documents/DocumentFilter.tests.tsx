@@ -17,6 +17,7 @@ describe("<DocumentFilter />", () => {
   };
 
   const defaultProps: DocumentFilterProps = {
+    value: "stub-value",
     qa: "stub-qa",
     onSearch: jest.fn(),
   };
@@ -30,7 +31,7 @@ describe("<DocumentFilter />", () => {
 
     const getInputElement = () => rtl.getByPlaceholderText("Search documents");
 
-    const changeInputValue = async (value: string) => {
+    const changeInputValue = (value: string) => {
       const inputElement = getInputElement();
 
       fireEvent.change(inputElement, { target: { value } });
@@ -63,6 +64,22 @@ describe("<DocumentFilter />", () => {
 
       expect(targetElement).toBeInTheDocument();
     });
+
+    test("with value", () => {
+      const stubValue = "stub-value";
+      const { getInputElement } = setup({ value: stubValue });
+
+      const targetElement = getInputElement();
+
+      expect(targetElement).toHaveAttribute("value", stubValue);
+    });
+
+    test("with qa", () => {
+      const stubQa = "stub-qa";
+      const { queryByTestId } = setup({ qa: stubQa });
+
+      expect(queryByTestId(stubQa)).toBeInTheDocument();
+    });
   });
 
   describe("@events", () => {
@@ -75,36 +92,20 @@ describe("<DocumentFilter />", () => {
         expect(stubOnSeach).toHaveBeenCalledTimes(0);
       });
 
-      describe("with input change", () => {
-        beforeEach(() => jest.useFakeTimers());
+      test("with input change calls when a value is changed", () => {
+        const stubSearchValue = "stub-search-value";
 
-        test("calls when a value is changed", () => {
-          const stubSearchValue = "stub-search-value";
-          const stubOnSeach = jest.fn();
+        jest.useFakeTimers();
+        const stubOnSeach = jest.fn();
 
-          const { changeInputValue } = setup({ onSearch: stubOnSeach });
+        const { changeInputValue } = setup({ onSearch: stubOnSeach });
 
-          act(() => {
-            changeInputValue(stubSearchValue);
-          });
-
-          expect(stubOnSeach).toHaveBeenCalledTimes(1);
-          expect(stubOnSeach).toHaveBeenCalledWith(stubSearchValue);
+        act(() => {
+          changeInputValue(stubSearchValue);
         });
 
-        test("trims excess spacing when a value is changed", () => {
-          const stubSearchWithSpacesValue = "     stub-search-value with spaces   ";
-          const stubOnSeach = jest.fn();
-
-          const { changeInputValue } = setup({ onSearch: stubOnSeach });
-
-          act(() => {
-            changeInputValue(stubSearchWithSpacesValue);
-          });
-
-          expect(stubOnSeach).toHaveBeenCalledTimes(1);
-          expect(stubOnSeach).toHaveBeenCalledWith(stubSearchWithSpacesValue.trim());
-        });
+        expect(stubOnSeach).toHaveBeenCalledTimes(1);
+        expect(stubOnSeach).toHaveBeenCalledWith(stubSearchValue);
       });
     });
   });

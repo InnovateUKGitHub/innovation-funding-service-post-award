@@ -34,9 +34,7 @@ function DocumentDisplay({
   children,
 }: DocumentDisplayProps) {
   const { getContent } = useContent();
-  const { isSearchable, hasDocuments, documents, setFilterText } = useDocumentSearch(disableSearch, unCheckedDocuments);
-
-  const displaySearch = !disableSearch && isSearchable;
+  const { displaySearch, hasDocuments, documents, filterConfig } = useDocumentSearch(disableSearch, unCheckedDocuments);
 
   return (
     <>
@@ -46,7 +44,7 @@ function DocumentDisplay({
         <SimpleString>{getContent(x => x.components.documents.labels.documentDisplaySubTitle)}</SimpleString>
       )}
 
-      {displaySearch && <DocumentFilter qa="document-filter" onSearch={setFilterText} />}
+      {displaySearch && <DocumentFilter qa="document-filter" {...filterConfig} />}
 
       {hasDocuments ? (
         cloneElement(children, { ...children.props, documents })
