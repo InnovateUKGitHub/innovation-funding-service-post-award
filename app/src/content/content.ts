@@ -100,10 +100,12 @@ import { WarningContent } from "./components/warningContent";
 import { OnHoldContent } from "./components/onHoldContent";
 import { ClaimDetailsLinkContent } from "./components/claimDetailsLinkContent";
 import { PhaseBannerContent } from "./components/phaseBannerContent";
+import { BroadcastContent } from "./components/BroadcastsContent";
 import { PCRTimeExtensionStepContent } from "./pages/pcrs/pcrTimeExtensionStepContent";
 import { ClaimLineItemsContent } from "./pages/claims/claimLineItemsContent";
 import { ClaimsComponentsContent } from "./pages/claims/components/claimsComponentsContent";
 import { PostcodeContent } from "./pages/project/postcodeContent";
+import { BroadcastPage } from "./pages/broadcastPage";
 
 export type ContentSelector = (content: Content) => ContentResult | undefined;
 
@@ -112,6 +114,8 @@ export class Content extends ContentBase {
   public readonly footer: FooterContent;
   public readonly projectsDashboard: ProjectDashboardContent;
   public readonly home: HomePageContent;
+
+  public readonly broadcastPage: BroadcastPage;
 
   public readonly projectSetup: ProjectSetupContent;
   public readonly projectOverview: ProjectOverviewContent;
@@ -229,6 +233,7 @@ export class Content extends ContentBase {
     onHoldContent: OnHoldContent;
     claimDetailsLinkContent: ClaimDetailsLinkContent;
     phaseBannerContent: PhaseBannerContent;
+    broadcasts: BroadcastContent;
   };
 
   constructor(competitionType?: string) {
@@ -239,6 +244,8 @@ export class Content extends ContentBase {
 
     this.projectsDashboard = new ProjectDashboardContent(this, competitionType);
     this.home = new HomePageContent(this, competitionType);
+
+    this.broadcastPage = new BroadcastPage(this);
 
     this.projectSetup = new ProjectSetupContent(this, competitionType);
     this.projectOverview = new ProjectOverviewContent(this, competitionType);
@@ -360,6 +367,7 @@ export class Content extends ContentBase {
       onHoldContent: new OnHoldContent(this, competitionType),
       claimDetailsLinkContent: new ClaimDetailsLinkContent(this, competitionType),
       phaseBannerContent: new PhaseBannerContent(this, competitionType),
+      broadcasts: new BroadcastContent(this),
     };
   }
 }

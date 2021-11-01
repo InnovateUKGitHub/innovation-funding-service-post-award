@@ -5,6 +5,7 @@ export type RouteKeys = keyof IRoutes;
 
 export const routeConfig = {
   allClaimsDashboard: Containers.AllClaimsDashboardRoute,
+  BroadcastPage: Containers.BroadcastPageRoute,
   claimsDashboard: Containers.ClaimsDashboardRoute,
   claimDetails: Containers.ClaimsDetailsRoute,
   claimDetailDocuments: Containers.ClaimDetailDocumentsRoute,

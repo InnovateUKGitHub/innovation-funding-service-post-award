@@ -1,4 +1,5 @@
 import { BroadcastDto } from "@framework/dtos/BroadcastDto";
+import { NotFoundError } from "@server/features/common";
 import { BroadcastMapper } from "./mappers/broadcastMapper";
 import { SalesforceRepositoryBaseWithMapping } from "./salesforceRepositoryBase";
 
@@ -13,13 +14,7 @@ export interface ISalesforceBroadcast {
 export class BroadcastRepository extends SalesforceRepositoryBaseWithMapping<ISalesforceBroadcast, BroadcastDto> {
   protected readonly salesforceObjectName = "Acc_BroadcastMessage__c";
 
-  protected readonly salesforceFieldNames = [
-    "Id",
-    "Name",
-    "Acc_StartDate__c",
-    "Acc_EndDate__c",
-    "Acc_Message__c",
-  ];
+  protected readonly salesforceFieldNames = ["Id", "Name", "Acc_StartDate__c", "Acc_EndDate__c", "Acc_Message__c"];
 
   protected mapper = new BroadcastMapper();
 
@@ -31,6 +26,16 @@ export class BroadcastRepository extends SalesforceRepositoryBaseWithMapping<ISa
 
     return super.where(withinDateRange);
   }
+
+  public async get(broadcastId: string): Promise<BroadcastDto> {
+    const broadcast = await super.filterOne(`Id = '${broadcastId}'`);
+
+    if (!broadcast) {
+      throw new NotFoundError(`Broadcast '${broadcastId}' does not exist`);
+    }
+
+    return broadcast;
+  }
 }
 
-export type IBroadcastRepository = Pick<BroadcastRepository, "getAll">;
+export type IBroadcastRepository = Pick<BroadcastRepository, "getAll" | "get">;

@@ -7,6 +7,7 @@ export class ProjectDashboardContent extends ContentPageBase {
     super(content, "projects-dashboard", competitionType);
   }
 
+  public readonly projectsTitle = this.getContent("projectsTitle");
   public readonly searchTitle = this.getContent("searchTitle");
   public readonly searchHint = this.getContent("searchHint");
   public readonly searchLabel = this.getContent("searchLabel");

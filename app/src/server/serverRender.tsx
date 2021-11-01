@@ -21,6 +21,7 @@ import {
   setupInitialState,
   setupMiddleware,
   StoresProvider,
+  RoutesProvider
 } from "@ui/redux";
 import { createErrorPayload } from "@shared/create-error-payload";
 
@@ -193,7 +194,9 @@ function renderApp(
       <RouterProvider router={router}>
         <StoresProvider value={stores}>
           <ModalProvider value={modalRegister}>
-            <App store={store} routes={routes} />
+            <RoutesProvider value={routes}>
+              <App store={store} />
+            </RoutesProvider>
           </ModalProvider>
         </StoresProvider>
       </RouterProvider>

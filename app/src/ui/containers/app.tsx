@@ -6,7 +6,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Content } from "@content/content";
 import { getContentFromResult, useCompetitionType } from "@ui/hooks";
 import { IRoutes, MatchedRoute, matchRoute } from "@ui/routing";
-import { IStores, ModalRegister, useModal, useStores } from "@ui/redux";
+import { IStores, ModalRegister, useModal, useRoutes, useStores } from "@ui/redux";
 import { updatePageTitle } from "@ui/redux/actions";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
@@ -123,12 +123,12 @@ class AppView extends React.Component<IAppProps> {
 
 interface AppRoute {
   store: Store;
-  routes: IRoutes;
 }
 
 export function App(props: AppRoute) {
   const stores = useStores();
   const modalRegister = useModal();
+  const routes = useRoutes();
 
   const getRoute = stores.navigation.getRoute();
   const currentRoute = matchRoute(getRoute);
@@ -149,7 +149,7 @@ export function App(props: AppRoute) {
       params={params}
       currentRoute={currentRoute}
       dispatch={props.store.dispatch}
-      routes={props.routes}
+      routes={routes}
     />
   );
 }

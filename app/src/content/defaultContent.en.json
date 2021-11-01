@@ -106,6 +106,21 @@
       "feedbackMessage": "feedback",
       "helpImprove": "will help us to improve it.",
       "betaText": "beta"
+    },
+    "broadcastContent": {
+      "broadcastsTitle": "Broadcasts",
+      "broadcastTitle": "Broadcast",
+      "broadcastDetailsHeading": "Details",
+      "broadcastMessageHeading": "Message",
+      "loadingBroadcasts": "Loading your broadcasts...",
+      "loadingBroadcast": "Loading your broadcast...",
+      "errorBroadcasts": "There was an error when trying to get broadcasts.",
+      "errorBroadcast": "There was an error when trying to get the broadcast.",
+      "emptyBroadcasts": "There are no broadcasts available at this time.",
+      "emptyBroadcast": "Please try again or contact support.",
+      "readBroadcastLinkText": "Read more",
+      "broadcastLabelStartDate": "Start date:",
+      "broadcastLabelEndDate": "End date:"
     }
   },
   "pages": {
@@ -144,8 +159,14 @@
       "projects-heading": "Projects",
       "projects-dashboard-heading": "Projects dashboard"
     },
+    "broadcast-page": {
+      "title": {
+        "html": "View Broadcast"
+      }
+    },
     "projects-dashboard": {
-      "title": "Projects",
+      "title": "Dashboard",
+      "projectsTitle": "Projects",
       "searchTitle": "Search",
       "searchHint": "Project number, project or lead partner",
       "noLiveProjectsMessage": "You do not have any live projects.",
@@ -195,7 +216,7 @@
         "pcrQueried": "Request queried",
         "pcrToReview": "Requests to review: {{numberOfPcrs}}"
       },
-      "backToProjects": "Back to projects",
+      "backToProjects": "Back to Projects",
       "costsToDateMessage": "costs to date"
     },
     "project-details": {

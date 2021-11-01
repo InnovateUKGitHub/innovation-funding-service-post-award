@@ -30,22 +30,26 @@ interface DetailsComponentProps<T> {
   displayDensity?: "Compact" | "Comfortable";
   labelWidth?: "Wide" | "Narrow";
   title?: React.ReactNode;
+  labelClassName?: string;
+  valueClassName?: string;
 }
 
 function DetailsComponent<T extends {}>({
   displayDensity = "Comfortable",
   qa,
   labelWidth,
+  labelClassName,
+  valueClassName,
   data,
   children,
 }: DetailsComponentProps<T>) {
   const newClassNameProps = {
-    labelClass: cx({
+    labelClass: cx(labelClassName, {
       "govuk-grid-column-one-quarter": labelWidth === "Narrow",
       "govuk-grid-column-three-quarters": labelWidth === "Wide",
       "govuk-grid-column-one-half": !labelWidth,
     }),
-    valueClass: cx({
+    valueClass: cx(valueClassName, {
       "govuk-grid-column-one-quarter": labelWidth === "Wide",
       "govuk-grid-column-three-quarters": labelWidth === "Narrow",
       "govuk-grid-column-one-half": !labelWidth,

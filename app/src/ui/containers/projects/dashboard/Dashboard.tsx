@@ -1,15 +1,18 @@
-import * as ACC from "../../../components";
 import { PartnerDto, ProjectDto } from "@framework/types";
 import { useStores } from "@ui/redux";
 import { Pending } from "@shared/pending";
-import { BaseProps, ContainerBase, defineRoute } from "../../containerBase";
+import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { noop } from "@ui/helpers/noop";
+import * as ACC from "@ui/components";
 
 import { DashboardProjectList } from "./DashboardProjectList";
 import { DashboardProjectCount } from "./DashboardProjectCount";
 import { generateFilteredProjects } from "./dashboard.logic";
 
+import { BroadcastsViewer } from "../Broadcast/BroadcastsViewer";
+
 interface Params {
-  search?: string | null;
+  search?: string;
 }
 
 interface Data {
@@ -19,21 +22,21 @@ interface Data {
 }
 
 interface Callbacks {
-  onSearch: (search: string | null | undefined) => void;
+  onSearch: (search?: string) => void;
 }
 
 class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
   private renderSearch() {
     const formData = { projectSearchString: this.props.search };
+
     const Form = ACC.TypedForm<typeof formData>();
+
     return (
       <Form.Form
         data={formData}
         qa={"projectSearch"}
         isGet={true}
-        onSubmit={() => {
-          return;
-        }}
+        onSubmit={noop}
         onChange={v => this.props.onSearch(v.projectSearchString)}
       >
         <Form.Fieldset heading={<ACC.Content value={x => x.projectsDashboard.searchTitle} />}>
@@ -95,6 +98,12 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
 
           return (
             <ACC.Page backLink={backLinkElement} pageTitle={<ACC.PageTitle />}>
+              <BroadcastsViewer />
+
+              <ACC.H2>
+                <ACC.Content value={x => x.projectsDashboard.projectsTitle} />
+              </ACC.H2>
+
               {displaySearchUi && this.renderSearch()}
 
               <DashboardProjectCount curatedTotals={curatedTotals} totalProjectCount={totalProjects} />
@@ -131,15 +140,15 @@ class ProjectDashboardComponent extends ContainerBase<Params, Data, Callbacks> {
 }
 
 const ProjectDashboardContainer = (props: Params & BaseProps) => {
-  const { projects, partners, navigation } = useStores();
+  const stores = useStores();
 
   return (
     <ProjectDashboardComponent
       {...props}
-      projects={projects.getProjectsFilter(props.search)}
-      totalNumberOfProjects={projects.getProjects().then(x => x.length)}
-      partners={partners.getAll()}
-      onSearch={search => navigation.navigateTo(ProjectDashboardRoute.getLink({ search }), true)}
+      projects={stores.projects.getProjectsFilter(props.search)}
+      totalNumberOfProjects={stores.projects.getProjects().then(x => x.length)}
+      partners={stores.partners.getAll()}
+      onSearch={search => stores.navigation.navigateTo(ProjectDashboardRoute.getLink({ search }), true)}
     />
   );
 };
@@ -148,6 +157,8 @@ export const ProjectDashboardRoute = defineRoute({
   routeName: "projectDashboard",
   routePath: "/projects/dashboard?:search",
   container: ProjectDashboardContainer,
-  getParams: r => ({ search: r.params.search }),
+  getParams: r => ({
+    search: r.params.search,
+  }),
   getTitle: ({ content }) => content.projectsDashboard.title(),
 });

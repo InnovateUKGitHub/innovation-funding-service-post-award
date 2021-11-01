@@ -19,6 +19,7 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
 
   return {
     accounts: new Stores.AccountsStore(getState, dispatch),
+    broadcasts: new Stores.BroadcastsStore(getState, dispatch),
     claimDetailDocuments: new Stores.ClaimDetailDocumentsStore(getState, dispatch),
     claimDetails,
     claimDocuments,
