@@ -646,3 +646,41 @@ p.govuk-body--multiline {
 .markdown p:last-child {
   margin-bottom: 0 !important;
 }
+
+/* Broadcast - Components */
+
+/* Broadcast Detail */
+.broadcast-detail p {
+  margin-bottom: 5px;
+}
+
+.broadcast-detail_value {
+  width: auto;
+  padding-right: 0;
+}
+
+/* Broadcast - Page */
+.broadcast {
+  display: flex;
+  flex-direction: column;
+}
+
+.broadcast-highlight {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  background: #f3f2f1; /* govuk-colour("light-grey") */
+  border: 1px solid #b1b4b6; /* govuk-colour("mid-grey") */
+  border-left: 8px solid #5694ca; /* govuk-colour("light-blue") */
+}
+
+.broadcast-highlight:hover {
+  transition: border 250ms linear;
+  border-left-color: #1d70b8; /* govuk-colour("blue") */
+}
+
+.broadcast-highlight__link {
+  margin-left: 20px;
+  hyphens: none;
+  white-space: nowrap;
+}

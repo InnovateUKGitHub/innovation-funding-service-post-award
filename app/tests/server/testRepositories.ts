@@ -25,7 +25,7 @@ import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
 import { PcrSpendProfileEntity } from "@framework/entities/pcrSpendProfile";
 import { PcrSpendProfileEntityForCreate } from "@framework/entities";
-import { BadRequestError } from "@server/features/common";
+import { BadRequestError, NotFoundError } from "@server/features/common";
 import { BroadcastMapper } from "@server/repositories/mappers/broadcastMapper";
 import { pcrStatusesPicklist } from "../server/features/pcrs/pcrStatusesPicklist";
 import { pcrParticipantSizePicklist } from "./features/pcrs/pcrParticipantSizePicklist";
@@ -749,6 +749,20 @@ class AccountsTestRepository
 
 class BroadcastsTestRepository {
   private Items: Repositories.ISalesforceBroadcast[] = [];
+
+  get(broadcastId: string) {
+    return new Promise<BroadcastDto>(resolve => {
+      const broadcastItem = this.Items.find(x => x.Id === broadcastId);
+
+      if (!broadcastItem) {
+        throw new NotFoundError(`Broadcast '${broadcastId}' does not exist`);
+      }
+
+      const broadcast = new BroadcastMapper().map(broadcastItem);
+
+      resolve(broadcast);
+    });
+  }
 
   getAll() {
     return new Promise<BroadcastDto[]>(resolve => {

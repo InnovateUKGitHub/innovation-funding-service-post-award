@@ -1,3 +1,4 @@
+export * from "./bold";
 export * from "./accessibilityText";
 export * from "./ariaLive";
 export * from "./currency";

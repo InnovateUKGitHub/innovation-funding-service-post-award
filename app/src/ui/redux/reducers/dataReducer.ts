@@ -77,6 +77,8 @@ function getRouteTransitionOptions(payload: { route: State; previousRoute: State
 
 export const dataReducer = combineReducers({
   jesOnlyAccounts: dataStoreReducer<Dtos.AccountDto[]>("jesOnlyAccounts"),
+  broadcasts: dataStoreReducer<Dtos.BroadcastDto[]>("broadcasts"),
+  broadcast: dataStoreReducer<Dtos.BroadcastDto>("broadcast"),
   claims: dataStoreReducer<Dtos.ClaimDto[]>("claims"),
   claim: dataStoreReducer<Dtos.ClaimDto>("claim"),
   claimTotalCosts: dataStoreReducer<TotalCosts>("claimTotalCosts"),

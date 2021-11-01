@@ -16,6 +16,7 @@ import {
   ModalProvider,
   ModalRegister,
   rootReducer,
+  RoutesProvider,
   setupMiddleware,
   StoresConsumer,
   StoresProvider,
@@ -73,9 +74,11 @@ class AppWithContent extends React.Component<{ stores: IStores; store: typeof st
 
   render() {
     return (
-      <ModalProvider value={new ModalRegister()}>
-        <App store={store} routes={routes} />
-      </ModalProvider>
+      <RoutesProvider value={routes}>
+        <ModalProvider value={new ModalRegister()}>
+          <App store={store} />
+        </ModalProvider>
+      </RoutesProvider>
     );
   }
 }
