@@ -2,6 +2,7 @@ import express from "express";
 import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
 import { NotFoundError } from "../features/common/appError";
 import * as accounts from "./accounts";
+import * as broadcasts from "./broadcast";
 import * as claims from "./claims";
 import * as claimDetails from "./claimDetails";
 import * as companiesHouse from "./companies";
@@ -23,6 +24,7 @@ import { ControllerBase } from "./controllerBase";
 
 export interface IApiClient {
   accounts: accounts.IAccountsApi;
+  broadcasts: broadcasts.IBroadcastApi;
   claimDetails: claimDetails.IClaimDetailsApi;
   costsSummary: costsSummary.ICostsSummaryApi;
   companies: companiesHouse.ICompaniesApi;
@@ -41,8 +43,9 @@ export interface IApiClient {
   users: users.IUserApi;
 }
 
-export const serverApis: IApiClient & { [key: string]: ControllerBase<{}> } = {
+export const serverApis: IApiClient & Record<string, ControllerBase<{}>> = {
   accounts: accounts.controller,
+  broadcasts: broadcasts.controller,
   claims: claims.controller,
   claimDetails: claimDetails.controller,
   companies: companiesHouse.controller,

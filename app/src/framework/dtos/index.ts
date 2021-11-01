@@ -1,4 +1,5 @@
 export * from "./accountDto";
+export * from "./BroadcastDto";
 export * from "./claimDto";
 export * from "./companyDto";
 export * from "./monitoringReportDto";

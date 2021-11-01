@@ -8,13 +8,18 @@ const clientApi: IApiClient = {
   accounts: {
     getAllByJesName: params => ajaxJson(`/api/jes-accounts?search=${params.searchString}`),
   },
+  broadcasts: {
+    getAll: () => ajaxJson("/api/broadcasts"),
+  },
   claims: {
     getAllByProjectId: params => ajaxJson(`/api/claims/?projectId=${params.projectId}`),
     getAllByPartnerId: params => ajaxJson(`/api/claims/?partnerId=${params.partnerId}`),
     get: params => ajaxJson(`/api/claims/${params.partnerId}/${params.periodId}`),
     update: params => ajaxPut(`/api/claims/${params.projectId}/${params.partnerId}/${params.periodId}`, params.claim),
-    getStatusChanges: params => ajaxJson(`/api/claims/${params.projectId}/${params.partnerId}/${params.periodId}/status-changes`),
-    getTotalCosts: params => ajaxJson(`/api/claims/${params.projectId}/${params.partnerId}/${params.periodId}/total-costs`)
+    getStatusChanges: params =>
+      ajaxJson(`/api/claims/${params.projectId}/${params.partnerId}/${params.periodId}/status-changes`),
+    getTotalCosts: params =>
+      ajaxJson(`/api/claims/${params.projectId}/${params.partnerId}/${params.periodId}/total-costs`),
   },
   companies: {
     searchCompany: params =>
