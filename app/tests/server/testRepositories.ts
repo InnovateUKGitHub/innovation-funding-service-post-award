@@ -5,6 +5,7 @@ import * as Repositories from "@server/repositories";
 import { FileTypeNotAllowedError } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import {
+  BroadcastDto,
   ClaimDetailKey,
   ClaimStatus,
   DocumentDescription,
@@ -25,6 +26,7 @@ import { ISalesforceDocument } from "@server/repositories/contentVersionReposito
 import { PcrSpendProfileEntity } from "@framework/entities/pcrSpendProfile";
 import { PcrSpendProfileEntityForCreate } from "@framework/entities";
 import { BadRequestError } from "@server/features/common";
+import { BroadcastMapper } from "@server/repositories/mappers/broadcastMapper";
 import { pcrStatusesPicklist } from "../server/features/pcrs/pcrStatusesPicklist";
 import { pcrParticipantSizePicklist } from "./features/pcrs/pcrParticipantSizePicklist";
 import { pcrPartnerTypesPicklist } from "./features/pcrs/pcrPartnerTypesPicklist";
@@ -745,8 +747,23 @@ class AccountsTestRepository
   }
 }
 
+class BroadcastsTestRepository {
+  private Items: Repositories.ISalesforceBroadcast[] = [];
+
+  getAll() {
+    return new Promise<BroadcastDto[]>(resolve => {
+      const filteredItems = this.Items.filter(x => x.Acc_EndDate__c > "Today" && x.Acc_StartDate__c <= "Today");
+
+      const finalValues = filteredItems.map(new BroadcastMapper().map);
+
+      resolve(finalValues);
+    });
+  }
+}
+
 export interface ITestRepositories extends IRepositories {
   accounts: AccountsTestRepository;
+  broadcast: BroadcastsTestRepository;
   claims: ClaimsTestRepository;
   claimDetails: ClaimDetailsTestRepository;
   claimLineItems: ClaimLineItemsTestRepository;
@@ -781,6 +798,7 @@ export const createTestRepositories = (): ITestRepositories => {
 
   return ({
     accounts: new AccountsTestRepository(),
+    broadcast: new BroadcastsTestRepository(),
     claims: claimsRepository,
     claimStatusChanges: new ClaimStatusChangeTestRepository(claimsRepository),
     claimDetails: new ClaimDetailsTestRepository(),
