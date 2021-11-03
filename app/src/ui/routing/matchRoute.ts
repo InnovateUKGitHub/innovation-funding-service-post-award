@@ -17,6 +17,7 @@ export interface MatchedRoute {
   getTitle: (getTitleArgs: { params: {}; stores: IStores; content: Content }) => PageTitleState;
 }
 
+// Note: matchRoute doesn't check if the route is valid but the FormHandler is missing
 export function matchRoute(route: State | null | undefined): MatchedRoute {
   const matched = Object.keys(routeConfig)
     .map(x => x as RouteKeys)

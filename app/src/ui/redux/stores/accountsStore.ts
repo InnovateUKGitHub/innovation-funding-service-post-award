@@ -10,7 +10,7 @@ export class AccountsStore extends StoreBase {
   }
 
   public getJesAccountsByName(searchString: string) {
-    return this.getData("jesOnlyAccounts", storeKeys.getAccountKey(), p =>
+    return this.getData("jesOnlyAccounts", storeKeys.getJesAccountKey(searchString), p =>
       apiClient.accounts.getAllByJesName({ ...p, searchString }),
     );
   }

@@ -48,6 +48,10 @@ export class PCRAddPartnerLabels extends ContentBase {
   public readonly partnerContributionsHeading = this.getContent("partner-contributions-heading");
 
   public readonly organisationSectionTitle = this.getContent("organisation-section-title");
+  public readonly jesOrganisationSectionTitle = this.getContent("jes-organisation-section-title");
+  public readonly jesOrganisationSectionSubtitle = this.getContent("jes-organisation-section-subtitle");
+  public readonly jesOrganisationInfo = this.getContent("jes-organisation-info");
+  public readonly searchButton = this.getContent("search-button");
   public readonly commercialWorkSummaryHeading = this.getContent("commercial-work-summary-heading");
   public readonly aidEligibilityDeclaration = this.getContent("aid-eligibility-declaration");
   public readonly turnoverHeading = this.getContent("turnover-summary-heading");
