@@ -12,4 +12,7 @@ export class PCRAddPartnerAcademicOrganisationContent extends ContentPageBase {
   public readonly labels = new PCRAddPartnerLabels(this, this.competitionType);
 
   public readonly hint = this.getContent("hint");
+  public readonly loading = this.getContent("loading");
+  public readonly jesSearchResults = this.getContent("jes-search-results");
+  public readonly noResultsFound = this.getContent("no-results-found");
 }

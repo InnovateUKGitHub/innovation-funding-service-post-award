@@ -708,7 +708,10 @@
       "total-costs": "Total costs (£)"
     },
     "pcr-add-partner-academic-organisation": {
-      "hint": "Enter the name of the organisation that you work for."
+      "hint": "Enter the name of the organisation that you work for.",
+      "loading": "Loading Je-S organisations...",
+      "jes-search-results": "Je-S search results",
+      "no-results-found": "No results found"
     },
     "pcr-add-partner-company-house": {
       "section-title": "Company house",
@@ -1169,6 +1172,10 @@
     "funding-sought-heading": "Funding sought",
     "partner-contributions-heading": "Partner contribution to project",
     "organisation-section-title": "Organisation",
+    "jes-organisation-section-title": "Search for organisation",
+    "jes-organisation-section-subtitle": "Enter the name of the organisation that you work for.",
+    "jes-organisation-info": "Your organisation must be registered on Je-S before we will consider you to be a research organisation.",
+    "search-button": "Search",
     "commercial-work-summary-heading": "Commercial or economic project outputs?",
     "aid-eligibility-declaration": "Eligibility of aid declaration",
     "turnover-summary-heading": "Turnover",
