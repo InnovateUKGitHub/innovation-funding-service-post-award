@@ -5,15 +5,15 @@ import {
   PartnerDto,
   PartnerStatus,
   ProjectDto,
-  ProjectStatus,
 } from "@framework/types";
 import { IRoutes } from "@ui/routing";
 import { useContent } from "@ui/hooks";
+import { getIsProjectActive } from "@framework/util/projectHelper";
 import { Link } from "../links";
 
 interface ClaimDetailsBaseProps {
   claim: Pick<ClaimDto, "status" | "periodId">;
-  project: Pick<ProjectDto, "id" | "status" | "roles">;
+  project: Pick<ProjectDto, "id" | "status" | "roles" | "status">;
   partner: Pick<PartnerDto, "id" | "roles" | "partnerStatus">;
 }
 
@@ -57,7 +57,7 @@ export function getClaimDetailsLinkType({
   partner,
   claim,
 }: ClaimDetailsBaseProps): "edit" | "review" | "view" | null {
-  if (project.status === ProjectStatus.OnHold) return "view";
+  if (!getIsProjectActive(project)) return "view";
   if (partner.partnerStatus === PartnerStatus.OnHold) return "view";
 
   const { isMo: isProjectMo, isPm: isProjectPm, isPmOrMo: isProjectPmOrMo} = getAuthRoles(project.roles);

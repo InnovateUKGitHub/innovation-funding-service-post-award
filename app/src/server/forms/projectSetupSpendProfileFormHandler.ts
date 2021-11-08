@@ -1,6 +1,6 @@
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
-import { Params } from "@ui/containers/forecasts/update";
+import { ForecastUpdateParams } from "@ui/containers/forecasts/update";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ProjectSetupRoute, ProjectSetupSpendProfileParams, ProjectSetupSpendProfileRoute } from "@ui/containers";
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
@@ -23,7 +23,7 @@ export class ProjectSetupSpendProfileFormHandler extends StandardFormHandlerBase
     super(ProjectSetupSpendProfileRoute, ["default"], "initialForecastDetails");
   }
 
-  protected async getDto(context: IContext, params: Params, button: IFormButton, body: { [key: string]: string }): Promise<Dto[]> {
+  protected async getDto(context: IContext, params: ForecastUpdateParams, button: IFormButton, body: { [key: string]: string }): Promise<Dto[]> {
     const dto = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(params.partnerId));
     const partner = await context.runQuery(new GetPartnerByIdQuery(params.partnerId));
     const costCategories = await context.runQuery(new GetCostCategoriesForPartnerQuery(partner));
@@ -42,18 +42,18 @@ export class ProjectSetupSpendProfileFormHandler extends StandardFormHandlerBase
       });
   }
 
-  protected async run(context: IContext, params: Params, button: IFormButton, dto: Dto[]): Promise<ILinkInfo> {
+  protected async run(context: IContext, params: ForecastUpdateParams, button: IFormButton, dto: Dto[]): Promise<ILinkInfo> {
     // Can assume there is at least one profile detail and that isComplete is set to the same value on every profile detail
     const submit = dto[0].isComplete;
     await context.runCommand(new UpdateInitialForecastDetailsCommand(params.projectId, params.partnerId, dto, submit));
     return ProjectSetupRoute.getLink(params);
   }
 
-  protected getStoreKey(params: Params) {
+  protected getStoreKey(params: ForecastUpdateParams) {
     return storeKeys.getPartnerKey(params.partnerId);
   }
 
-  protected createValidationResult(params: Params, dto: Dto[]) {
+  protected createValidationResult(params: ForecastUpdateParams, dto: Dto[]) {
     return new InitialForecastDetailsDtosValidator(dto, [], [], false, false);
   }
 }

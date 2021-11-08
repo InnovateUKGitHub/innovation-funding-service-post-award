@@ -26,7 +26,9 @@ export class ProjectsStore extends StoreBase {
       });
   }
 
-  public getById(projectId: string) {
-    return this.getData("project", storeKeys.getProjectKey(projectId), p => apiClient.projects.get({ projectId, ...p }));
+  public getById(projectId: string): Pending<ProjectDto> {
+    return this.getData("project", storeKeys.getProjectKey(projectId), p =>
+      apiClient.projects.get({ projectId, ...p }),
+    );
   }
 }
