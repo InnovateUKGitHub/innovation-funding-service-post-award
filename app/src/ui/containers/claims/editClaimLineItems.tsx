@@ -670,6 +670,7 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
 export const EditClaimLineItemsRoute = defineRoute({
   routeName: "claimLineItemEdit",
   routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId/costs/:costCategoryId",
+  shouldErrorForInactiveProjects: true,
   container: EditClaimLineItemsContainer,
   getParams: route => ({
     projectId: route.params.projectId,

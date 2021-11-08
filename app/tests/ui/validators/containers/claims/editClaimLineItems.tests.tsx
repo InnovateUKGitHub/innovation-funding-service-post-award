@@ -73,6 +73,9 @@ const contentStub = {
         noDocumentsUploaded: { content: "stub-noDocumentsUploaded" },
       },
     },
+    projectInactiveContent: {
+      projectInactiveMessage: { content: "stub-projectInactiveMessage"}
+    }
   },
 } as any;
 

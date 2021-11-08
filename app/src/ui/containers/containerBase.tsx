@@ -40,6 +40,7 @@ interface IRouteOptions<TParams> {
         htmlTitle: string;
         displayTitle: string;
     };
+    shouldErrorForInactiveProjects?: boolean;
 }
 
 export interface IRouteDefinition<TParams> extends IRouteOptions<TParams> {

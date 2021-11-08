@@ -16,7 +16,7 @@ import {
 describe("usePageValidationMessage()", () => {
   const stubContent = {
     components: {
-      onHoldContent: {
+      projectInactiveContent: {
         projectOnHoldMessage: { content: "stub-projectOnHoldMessage" },
         partnerOnHoldMessage: { content: "stub-partnerOnHoldMessage" },
       },
@@ -39,13 +39,13 @@ describe("usePageValidationMessage()", () => {
   it("should return project hold message", () => {
     const { result } = renderPageContent(ProjectStatus.OnHold, PartnerStatus.Active);
 
-    expect(result.current).toBe(stubContent.components.onHoldContent.projectOnHoldMessage.content);
+    expect(result.current).toBe(stubContent.components.projectInactiveContent.projectOnHoldMessage.content);
   });
 
   it("should return partner hold message", () => {
     const { result } = renderPageContent(ProjectStatus.Live, PartnerStatus.OnHold);
 
-    expect(result.current).toBe(stubContent.components.onHoldContent.partnerOnHoldMessage.content);
+    expect(result.current).toBe(stubContent.components.projectInactiveContent.partnerOnHoldMessage.content);
   });
 });
 
@@ -72,7 +72,7 @@ describe("<Page />", () => {
         insufficienceAccessRights: { content: "stub-insufficienceAccessRights" },
         notUploadedByOwner: { content: "stub-notUploadedByOwner" },
       },
-      onHoldContent: {
+      projectInactiveContent: {
         projectOnHoldMessage: { content: "stub-projectOnHoldMessage" },
         partnerOnHoldMessage: { content: "stub-partnerOnHoldMessage" },
       },
@@ -163,8 +163,8 @@ describe("<Page />", () => {
   describe("renders a hold message", () => {
     test.each`
       name                | props                                                          | expectedMessage
-      ${"with a project"} | ${{ project: { status: ProjectStatus.OnHold } as any }}        | ${stubContent.components.onHoldContent.projectOnHoldMessage.content}
-      ${"with a partner"} | ${{ partner: { partnerStatus: PartnerStatus.OnHold } as any }} | ${stubContent.components.onHoldContent.partnerOnHoldMessage.content}
+      ${"with a project"} | ${{ project: { status: ProjectStatus.OnHold } as any }}        | ${stubContent.components.projectInactiveContent.projectOnHoldMessage.content}
+      ${"with a partner"} | ${{ partner: { partnerStatus: PartnerStatus.OnHold } as any }} | ${stubContent.components.projectInactiveContent.partnerOnHoldMessage.content}
     `("$name on hold", ({ props, expectedMessage }) => {
       const { holdMessageElementQa, queryByTestId } = setup(props);
 
