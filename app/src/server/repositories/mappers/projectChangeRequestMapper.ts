@@ -1,7 +1,4 @@
-import {
-  ProjectChangeRequestEntity,
-  ProjectChangeRequestItemEntity
-} from "@framework/entities";
+import { ProjectChangeRequestEntity, ProjectChangeRequestItemEntity } from "@framework/entities";
 import {
   getPCROrganisationType,
   PCRContactRole,
@@ -11,13 +8,13 @@ import {
   PCRProjectLocation,
   PCRProjectRole,
   PCRStatus,
-  TypeOfAid
+  TypeOfAid,
 } from "@framework/constants";
 import { ISalesforcePCR } from "../projectChangeRequestRepository";
 import { SalesforceBaseMapper } from "./saleforceMapperBase";
 
-export const mapToPCRStatus = ((status: string) => {
-  switch (status) {
+export const mapToPCRStatus = (statusLabel: string) => {
+  switch (statusLabel) {
     case "Draft":
       return PCRStatus.Draft;
     case "Submitted to Monitoring Officer":
@@ -49,7 +46,20 @@ export const mapToPCRStatus = ((status: string) => {
     default:
       return PCRStatus.Unknown;
   }
-});
+};
+
+export const mapToPCRItemStatus = (status: string): PCRItemStatus => {
+  switch (status) {
+    case "To Do":
+      return PCRItemStatus.ToDo;
+    case "Incomplete":
+      return PCRItemStatus.Incomplete;
+    case "Complete":
+      return PCRItemStatus.Complete;
+    default:
+      return PCRItemStatus.Unknown;
+  }
+};
 
 export class PcrProjectRoleMapper {
   private readonly roles = {
@@ -57,21 +67,27 @@ export class PcrProjectRoleMapper {
     projectLead: "Lead",
   };
 
-  public mapFromSalesforcePCRProjectRole = ((role: string | null): PCRProjectRole => {
+  public mapFromSalesforcePCRProjectRole = (role: string | null): PCRProjectRole => {
     switch (role) {
-      case this.roles.collaborator: return PCRProjectRole.Collaborator;
-      case this.roles.projectLead: return PCRProjectRole.ProjectLead;
-      default: return PCRProjectRole.Unknown;
+      case this.roles.collaborator:
+        return PCRProjectRole.Collaborator;
+      case this.roles.projectLead:
+        return PCRProjectRole.ProjectLead;
+      default:
+        return PCRProjectRole.Unknown;
     }
-  });
+  };
 
-  public mapToSalesforcePCRProjectRole = ((role: PCRProjectRole | undefined) => {
+  public mapToSalesforcePCRProjectRole = (role: PCRProjectRole | undefined) => {
     switch (role) {
-      case PCRProjectRole.Collaborator: return this.roles.collaborator;
-      case PCRProjectRole.ProjectLead: return this.roles.projectLead;
-      default: return null;
+      case PCRProjectRole.Collaborator:
+        return this.roles.collaborator;
+      case PCRProjectRole.ProjectLead:
+        return this.roles.projectLead;
+      default:
+        return null;
     }
-  });
+  };
 }
 
 export class PcrContactRoleMapper {
@@ -80,21 +96,27 @@ export class PcrContactRoleMapper {
     financeContact: "Finance Contact",
   };
 
-  public mapFromSalesforcePCRProjectRole = ((role: string | null): PCRContactRole => {
+  public mapFromSalesforcePCRProjectRole = (role: string | null): PCRContactRole => {
     switch (role) {
-      case this.roles.projectManager: return PCRContactRole.ProjectManager;
-      case this.roles.financeContact: return PCRContactRole.FinanceContact;
-      default: return PCRContactRole.Unknown;
+      case this.roles.projectManager:
+        return PCRContactRole.ProjectManager;
+      case this.roles.financeContact:
+        return PCRContactRole.FinanceContact;
+      default:
+        return PCRContactRole.Unknown;
     }
-  });
+  };
 
-  public mapToSalesforcePCRProjectRole = ((role: PCRContactRole | undefined) => {
+  public mapToSalesforcePCRProjectRole = (role: PCRContactRole | undefined) => {
     switch (role) {
-      case PCRContactRole.ProjectManager: return this.roles.projectManager;
-      case PCRContactRole.FinanceContact: return this.roles.financeContact;
-      default: return null;
+      case PCRContactRole.ProjectManager:
+        return this.roles.projectManager;
+      case PCRContactRole.FinanceContact:
+        return this.roles.financeContact;
+      default:
+        return null;
     }
-  });
+  };
 }
 
 const mapTypeOfAidToEnum = (typeOfAid: string): TypeOfAid => {
@@ -113,28 +135,38 @@ export class PcrPartnerTypeMapper {
     business: "Business",
     research: "Research",
     researchAndTechnology: "Research and Technology Organisation (RTO)",
-    other: "Public Sector, charity or non Je-S registered research organisation"
+    other: "Public Sector, charity or non Je-S registered research organisation",
   };
 
-  public mapFromSalesforcePCRPartnerType = ((partnerType: string | null) => {
+  public mapFromSalesforcePCRPartnerType = (partnerType: string | null) => {
     switch (partnerType) {
-      case this.partnerTypes.business: return PCRPartnerType.Business;
-      case this.partnerTypes.research: return PCRPartnerType.Research;
-      case this.partnerTypes.researchAndTechnology: return PCRPartnerType.ResearchAndTechnology;
-      case this.partnerTypes.other: return PCRPartnerType.Other;
-      default: return PCRPartnerType.Unknown;
+      case this.partnerTypes.business:
+        return PCRPartnerType.Business;
+      case this.partnerTypes.research:
+        return PCRPartnerType.Research;
+      case this.partnerTypes.researchAndTechnology:
+        return PCRPartnerType.ResearchAndTechnology;
+      case this.partnerTypes.other:
+        return PCRPartnerType.Other;
+      default:
+        return PCRPartnerType.Unknown;
     }
-  });
+  };
 
-  public mapToSalesforcePCRPartnerType = ((partnerType: PCRPartnerType | undefined) => {
+  public mapToSalesforcePCRPartnerType = (partnerType: PCRPartnerType | undefined) => {
     switch (partnerType) {
-      case PCRPartnerType.Business: return this.partnerTypes.business;
-      case PCRPartnerType.Research: return this.partnerTypes.research;
-      case PCRPartnerType.ResearchAndTechnology: return this.partnerTypes.researchAndTechnology;
-      case PCRPartnerType.Other: return this.partnerTypes.other;
-      default: return null;
+      case PCRPartnerType.Business:
+        return this.partnerTypes.business;
+      case PCRPartnerType.Research:
+        return this.partnerTypes.research;
+      case PCRPartnerType.ResearchAndTechnology:
+        return this.partnerTypes.researchAndTechnology;
+      case PCRPartnerType.Other:
+        return this.partnerTypes.other;
+      default:
+        return null;
     }
-  });
+  };
 }
 
 export class PcrParticipantSizeMapper {
@@ -145,25 +177,35 @@ export class PcrParticipantSizeMapper {
     large: "Large",
   };
 
-  public mapFromSalesforcePCRParticipantSize = ((participantSize: string | null): PCRParticipantSize => {
+  public mapFromSalesforcePCRParticipantSize = (participantSize: string | null): PCRParticipantSize => {
     switch (participantSize) {
-      case this.participantSizes.academic: return PCRParticipantSize.Academic;
-      case this.participantSizes.small: return PCRParticipantSize.Small;
-      case this.participantSizes.medium: return PCRParticipantSize.Medium;
-      case this.participantSizes.large: return PCRParticipantSize.Large;
-      default: return PCRParticipantSize.Unknown;
+      case this.participantSizes.academic:
+        return PCRParticipantSize.Academic;
+      case this.participantSizes.small:
+        return PCRParticipantSize.Small;
+      case this.participantSizes.medium:
+        return PCRParticipantSize.Medium;
+      case this.participantSizes.large:
+        return PCRParticipantSize.Large;
+      default:
+        return PCRParticipantSize.Unknown;
     }
-  });
+  };
 
-  public mapToSalesforcePCRParticipantSize = ((participantSize: PCRParticipantSize | undefined): string | null => {
+  public mapToSalesforcePCRParticipantSize = (participantSize: PCRParticipantSize | undefined): string | null => {
     switch (participantSize) {
-      case PCRParticipantSize.Academic: return this.participantSizes.academic;
-      case PCRParticipantSize.Small: return this.participantSizes.small;
-      case PCRParticipantSize.Medium: return this.participantSizes.medium;
-      case PCRParticipantSize.Large: return this.participantSizes.large;
-      default: return null;
+      case PCRParticipantSize.Academic:
+        return this.participantSizes.academic;
+      case PCRParticipantSize.Small:
+        return this.participantSizes.small;
+      case PCRParticipantSize.Medium:
+        return this.participantSizes.medium;
+      case PCRParticipantSize.Large:
+        return this.participantSizes.large;
+      default:
+        return null;
     }
-  });
+  };
 }
 
 export class PCRProjectLocationMapper {
@@ -172,21 +214,27 @@ export class PCRProjectLocationMapper {
     outsideTheUnitedKingdom: "Outside the United Kingdom",
   };
 
-  public mapFromSalesforecPCRProjectLocation = ((projectLocation: string | null): PCRProjectLocation => {
+  public mapFromSalesforecPCRProjectLocation = (projectLocation: string | null): PCRProjectLocation => {
     switch (projectLocation) {
-      case this.projectLocations.insideTheUnitedKingdom: return PCRProjectLocation.InsideTheUnitedKingdom;
-      case this.projectLocations.outsideTheUnitedKingdom: return PCRProjectLocation.OutsideTheUnitedKingdom;
-      default: return PCRProjectLocation.Unknown;
+      case this.projectLocations.insideTheUnitedKingdom:
+        return PCRProjectLocation.InsideTheUnitedKingdom;
+      case this.projectLocations.outsideTheUnitedKingdom:
+        return PCRProjectLocation.OutsideTheUnitedKingdom;
+      default:
+        return PCRProjectLocation.Unknown;
     }
-  });
+  };
 
-  public mapToSalesforcePCRProjectLocation = ((projectLocation: PCRProjectLocation | undefined): string| null => {
+  public mapToSalesforcePCRProjectLocation = (projectLocation: PCRProjectLocation | undefined): string | null => {
     switch (projectLocation) {
-      case PCRProjectLocation.InsideTheUnitedKingdom: return this.projectLocations.insideTheUnitedKingdom;
-      case PCRProjectLocation.OutsideTheUnitedKingdom: return this.projectLocations.outsideTheUnitedKingdom;
-      default: return null;
+      case PCRProjectLocation.InsideTheUnitedKingdom:
+        return this.projectLocations.insideTheUnitedKingdom;
+      case PCRProjectLocation.OutsideTheUnitedKingdom:
+        return this.projectLocations.outsideTheUnitedKingdom;
+      default:
+        return null;
     }
-  });
+  };
 }
 
 export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], ProjectChangeRequestEntity[]> {
@@ -209,7 +257,7 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       reasoningStatus: this.mapItemStatus(header.Acc_MarkedasComplete__c),
       reasoningStatusName: header.MarkedAsCompleteName,
       comments: header.Acc_Comments__c,
-      items: items.filter(x => x.Acc_RequestHeader__c === header.Id).map(x => this.mapItem(header, x))
+      items: items.filter(x => x.Acc_RequestHeader__c === header.Id).map(x => this.mapItem(header, x)),
     }));
   }
 
@@ -247,7 +295,9 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       organisationName: pcrItem.Acc_OrganisationName__c,
       registeredAddress: pcrItem.Acc_RegisteredAddress__c,
       registrationNumber: pcrItem.Acc_RegistrationNumber__c,
-      participantSize: new PcrParticipantSizeMapper().mapFromSalesforcePCRParticipantSize(pcrItem.Acc_ParticipantSize__c),
+      participantSize: new PcrParticipantSizeMapper().mapFromSalesforcePCRParticipantSize(
+        pcrItem.Acc_ParticipantSize__c,
+      ),
       participantSizeLabel: pcrItem.ParticipantSizeLabel,
       numberOfEmployees: pcrItem.Acc_Employees__c,
       financialYearEndDate: this.clock.parseOptionalSalesforceDate(pcrItem.Acc_TurnoverYearEnd__c),
@@ -256,12 +306,16 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       projectLocationLabel: pcrItem.ProjectLocationLabel,
       projectCity: pcrItem.Acc_ProjectCity__c,
       projectPostcode: pcrItem.Acc_ProjectPostcode__c,
-      contact1ProjectRole: new PcrContactRoleMapper().mapFromSalesforcePCRProjectRole(pcrItem.Acc_Contact1ProjectRole__c),
+      contact1ProjectRole: new PcrContactRoleMapper().mapFromSalesforcePCRProjectRole(
+        pcrItem.Acc_Contact1ProjectRole__c,
+      ),
       contact1Forename: pcrItem.Acc_Contact1Forename__c,
       contact1Surname: pcrItem.Acc_Contact1Surname__c,
       contact1Phone: pcrItem.Acc_Contact1Phone__c,
       contact1Email: pcrItem.Acc_Contact1EmailAddress__c,
-      contact2ProjectRole: new PcrContactRoleMapper().mapFromSalesforcePCRProjectRole(pcrItem.Acc_Contact2ProjectRole__c),
+      contact2ProjectRole: new PcrContactRoleMapper().mapFromSalesforcePCRProjectRole(
+        pcrItem.Acc_Contact2ProjectRole__c,
+      ),
       contact2Forename: pcrItem.Acc_Contact2Forename__c,
       contact2Surname: pcrItem.Acc_Contact2Surname__c,
       contact2Phone: pcrItem.Acc_Contact2Phone__c,
@@ -275,20 +329,11 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
     };
   }
 
-  private mapStatus(status: string): PCRStatus {
-    return mapToPCRStatus(status);
+  private mapStatus(statusLabel: string): PCRStatus {
+    return mapToPCRStatus(statusLabel);
   }
 
-  private mapItemStatus(status: string): PCRItemStatus {
-    switch (status) {
-      case "To Do":
-        return PCRItemStatus.ToDo;
-      case "Incomplete":
-        return PCRItemStatus.Incomplete;
-      case "Complete":
-        return PCRItemStatus.Complete;
-      default:
-        return PCRItemStatus.Unknown;
-    }
+  private mapItemStatus(statusLabel: string): PCRItemStatus {
+    return mapToPCRItemStatus(statusLabel);
   }
 }

@@ -16,7 +16,7 @@ import {
   PcrPartnerTypeMapper,
   PCRProjectLocationMapper,
   PcrProjectRoleMapper,
-  SalesforcePCRMapper
+  SalesforcePCRMapper,
 } from "./mappers/projectChangeRequestMapper";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
@@ -58,62 +58,110 @@ export interface ISalesforcePCR {
   // careful there is a typo in the salesforce setup
   // will probably change to Acc_MarkedAsComplete__c in the future!!
   Acc_MarkedasComplete__c: string;
-  Acc_NewOrganisationName__c: string|null;
-  Acc_NewProjectSummary__c: string|null;
-  Acc_NewPublicDescription__c: string|null;
+  Acc_NewOrganisationName__c: string | null;
+  Acc_NewProjectSummary__c: string | null;
+  Acc_NewPublicDescription__c: string | null;
   MarkedAsCompleteName: string;
   Acc_Comments__c: string;
   // careful there is a typo in the salesforce setup
   // will probably change to Acc_AdditionalNumberOfMonths__c in the future!!
-  Acc_AdditionalNumberofMonths__c: number|null;
-  Acc_NewProjectDuration__c: number|null;
-  Acc_RemovalPeriod__c: number|null;
-  Acc_ExistingProjectDuration__c: number|null;
-  Acc_SuspensionStarts__c: string|null;
-  Acc_SuspensionEnds__c: string|null;
-  Acc_PublicDescriptionSnapshot__c: string|null;
-  Acc_ProjectSummarySnapshot__c: string|null;
-  Acc_ExistingPartnerName__c: string|null;
-  Acc_Nickname__c: string|null;
+  Acc_AdditionalNumberofMonths__c: number | null;
+  Acc_NewProjectDuration__c: number | null;
+  Acc_RemovalPeriod__c: number | null;
+  Acc_ExistingProjectDuration__c: number | null;
+  Acc_SuspensionStarts__c: string | null;
+  Acc_SuspensionEnds__c: string | null;
+  Acc_PublicDescriptionSnapshot__c: string | null;
+  Acc_ProjectSummarySnapshot__c: string | null;
+  Acc_ExistingPartnerName__c: string | null;
+  Acc_Nickname__c: string | null;
 
   // Add partner
-  Acc_ProjectRole__c: string|null;
-  ProjectRoleLabel: string|null;
-  Acc_ParticipantType__c: string|null;
-  ParticipantTypeLabel: string|null;
-  Acc_OrganisationName__c: string|null;
-  Acc_RegisteredAddress__c: string|null;
-  Acc_RegistrationNumber__c: string|null;
-  Acc_ParticipantSize__c: string|null;
-  ParticipantSizeLabel: string|null;
-  Acc_Employees__c: number|null;
-  Acc_TurnoverYearEnd__c: string|null;
-  Acc_Turnover__c: number|null;
-  Acc_Location__c: string|null;
-  ProjectLocationLabel: string|null;
-  Acc_ProjectCity__c: string|null;
-  Acc_ProjectPostcode__c: string|null;
-  Acc_Contact1ProjectRole__c: string|null;
-  Contact1ProjectRoleLabel: string|null;
-  Acc_Contact1Forename__c: string|null;
-  Acc_Contact1Surname__c: string|null;
-  Acc_Contact1Phone__c: string|null;
-  Acc_Contact1EmailAddress__c: string|null;
-  Acc_Contact2ProjectRole__c: string|null;
-  Contact2ProjectRoleLabel: string|null;
-  Acc_Contact2Forename__c: string|null;
-  Acc_Contact2Surname__c: string|null;
-  Acc_Contact2Phone__c: string|null;
-  Acc_Contact2EmailAddress__c: string|null;
-  Acc_AwardRate__c: number|null;
-  Acc_OtherFunding__c: boolean|null;
-  Acc_TotalOtherFunding__c: number|null;
-  Acc_CommercialWork__c: boolean|null;
-  Acc_TSBReference__c: string|null;
+  Acc_ProjectRole__c: string | null;
+  ProjectRoleLabel: string | null;
+  Acc_ParticipantType__c: string | null;
+  ParticipantTypeLabel: string | null;
+  Acc_OrganisationName__c: string | null;
+  Acc_RegisteredAddress__c: string | null;
+  Acc_RegistrationNumber__c: string | null;
+  Acc_ParticipantSize__c: string | null;
+  ParticipantSizeLabel: string | null;
+  Acc_Employees__c: number | null;
+  Acc_TurnoverYearEnd__c: string | null;
+  Acc_Turnover__c: number | null;
+  Acc_Location__c: string | null;
+  ProjectLocationLabel: string | null;
+  Acc_ProjectCity__c: string | null;
+  Acc_ProjectPostcode__c: string | null;
+  Acc_Contact1ProjectRole__c: string | null;
+  Contact1ProjectRoleLabel: string | null;
+  Acc_Contact1Forename__c: string | null;
+  Acc_Contact1Surname__c: string | null;
+  Acc_Contact1Phone__c: string | null;
+  Acc_Contact1EmailAddress__c: string | null;
+  Acc_Contact2ProjectRole__c: string | null;
+  Contact2ProjectRoleLabel: string | null;
+  Acc_Contact2Forename__c: string | null;
+  Acc_Contact2Surname__c: string | null;
+  Acc_Contact2Phone__c: string | null;
+  Acc_Contact2EmailAddress__c: string | null;
+  Acc_AwardRate__c: number | null;
+  Acc_OtherFunding__c: boolean | null;
+  Acc_TotalOtherFunding__c: number | null;
+  Acc_CommercialWork__c: boolean | null;
+  Acc_TSBReference__c: string | null;
 
   // Virements related field
-  Acc_GrantMovingOverFinancialYear__c: number| null;
+  Acc_GrantMovingOverFinancialYear__c: number | null;
 }
+
+export const mapToPCRStatusLabel = (status: PCRStatus): string => {
+  switch (status) {
+    case PCRStatus.Draft:
+      return "Draft";
+    case PCRStatus.SubmittedToMonitoringOfficer:
+      return "Submitted to Monitoring Officer";
+    case PCRStatus.QueriedByMonitoringOfficer:
+      return "Queried by Monitoring Officer";
+    case PCRStatus.SubmittedToInnovationLead:
+      return "Submitted to Innovation Lead";
+    case PCRStatus.SubmittedToInnovateUK:
+      return "Submitted to Innovate UK";
+    case PCRStatus.QueriedByInnovateUK:
+      return "Queried by Innovate UK";
+    case PCRStatus.QueriedByInnovationLead:
+      return "Queried by Innovation Lead";
+    case PCRStatus.InReviewWithProjectFinance:
+      return "In Review with Project Finance";
+    case PCRStatus.InExternalReview:
+      return "In External Review";
+    case PCRStatus.InReviewWithInnovateUK:
+      return "In Review with Innovate UK";
+    case PCRStatus.Rejected:
+      return "Rejected";
+    case PCRStatus.Withdrawn:
+      return "Withdrawn";
+    case PCRStatus.Approved:
+      return "Approved";
+    case PCRStatus.Actioned:
+      return "Actioned";
+    default:
+      return "";
+  }
+};
+
+export const mapToPCRItemStatusLabel = (status?: PCRItemStatus): string => {
+  switch (status) {
+    case PCRItemStatus.ToDo:
+      return "To Do";
+    case PCRItemStatus.Incomplete:
+      return "Incomplete";
+    case PCRItemStatus.Complete:
+      return "Complete";
+    default:
+      return "";
+  }
+};
 
 /**
  * ProjectChangeRequests are stored in Acc_ProjectChangeRequest__c table
@@ -124,8 +172,14 @@ export interface ISalesforcePCR {
  * The mapper used will convert the list of all pcrs into a parent child relationship to support pcr item types
  *
  */
-export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISalesforcePCR> implements IProjectChangeRequestRepository {
-  constructor(private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+export class ProjectChangeRequestRepository
+  extends SalesforceRepositoryBase<ISalesforcePCR>
+  implements IProjectChangeRequestRepository {
+  constructor(
+    private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>,
+    getSalesforceConnection: () => Promise<Connection>,
+    logger: ILogger,
+  ) {
     super(getSalesforceConnection, logger);
   }
 
@@ -205,7 +259,9 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
   }
 
   async getById(projectId: string, id: string): Promise<ProjectChangeRequestEntity> {
-    const data = await super.where(`Acc_Project__c='${projectId}' AND (Id = '${id}' OR Acc_RequestHeader__c = '${id}')`);
+    const data = await super.where(
+      `Acc_Project__c='${projectId}' AND (Id = '${id}' OR Acc_RequestHeader__c = '${id}')`,
+    );
 
     const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
 
@@ -234,50 +290,53 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
   }
 
   // TODO maybe put in base class
-  private readonly toOptionalSFDate = (jsDate?: Date | null) => jsDate && DateTime.fromJSDate(jsDate).toFormat("yyyy-MM-dd");
+  private readonly toOptionalSFDate = (jsDate?: Date | null) =>
+    jsDate && DateTime.fromJSDate(jsDate).toFormat("yyyy-MM-dd");
 
   async updateItems(pcr: ProjectChangeRequestEntity, items: ProjectChangeRequestItemEntity[]) {
-    await super.updateAll(items.map(x => ({
-      Id: x.id,
-      Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
-      Acc_NewProjectDuration__C: x.projectDuration,
-      Acc_AdditionalNumberofMonths__c: x.offsetMonths,
-      Acc_NewProjectSummary__c: x.projectSummary,
-      Acc_NewPublicDescription__c: x.publicDescription,
-      Acc_SuspensionStarts__c: this.toOptionalSFDate(x.suspensionStartDate),
-      Acc_SuspensionEnds__c: this.toOptionalSFDate(x.suspensionEndDate),
-      Acc_NewOrganisationName__c: x.accountName,
-      Acc_RemovalPeriod__c: x.removalPeriod,
-      Acc_Project_Participant__c: x.partnerId,
-      Acc_ProjectRole__c: new PcrProjectRoleMapper().mapToSalesforcePCRProjectRole(x.projectRole),
-      Acc_ParticipantType__c: new PcrPartnerTypeMapper().mapToSalesforcePCRPartnerType(x.partnerType),
-      Acc_CommercialWork__c: x.isCommercialWork,
-      Acc_OrganisationName__c: x.organisationName,
-      Acc_RegisteredAddress__c: x.registeredAddress,
-      Acc_RegistrationNumber__c: x.registrationNumber,
-      Acc_ParticipantSize__c: new PcrParticipantSizeMapper().mapToSalesforcePCRParticipantSize(x.participantSize),
-      Acc_Employees__c: x.numberOfEmployees,
-      Acc_TurnoverYearEnd__c: this.toOptionalSFDate(x.financialYearEndDate),
-      Acc_Turnover__c: x.financialYearEndTurnover,
-      Acc_Location__c: new PCRProjectLocationMapper().mapToSalesforcePCRProjectLocation(x.projectLocation),
-      Acc_ProjectCity__c: x.projectCity,
-      Acc_ProjectPostcode__c: x.projectPostcode,
-      Acc_Contact1ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(x.contact1ProjectRole),
-      Acc_Contact1Forename__c: x.contact1Forename,
-      Acc_Contact1Surname__c: x.contact1Surname,
-      Acc_Contact1Phone__c: x.contact1Phone,
-      Acc_Contact1EmailAddress__c: x.contact1Email,
-      Acc_Contact2ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(x.contact2ProjectRole),
-      Acc_Contact2Forename__c: x.contact2Forename,
-      Acc_Contact2Surname__c: x.contact2Surname,
-      Acc_Contact2Phone__c: x.contact2Phone,
-      Acc_Contact2EmailAddress__c: x.contact2Email,
-      Acc_AwardRate__c: x.awardRate,
-      Acc_OtherFunding__c: x.hasOtherFunding,
-      Acc_TotalOtherFunding__c: x.totalOtherFunding,
-      Acc_TSBReference__c: x.tsbReference,
-      Acc_GrantMovingOverFinancialYear__c: x.grantMovingOverFinancialYear,
-    })));
+    await super.updateAll(
+      items.map(x => ({
+        Id: x.id,
+        Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
+        Acc_NewProjectDuration__C: x.projectDuration,
+        Acc_AdditionalNumberofMonths__c: x.offsetMonths,
+        Acc_NewProjectSummary__c: x.projectSummary,
+        Acc_NewPublicDescription__c: x.publicDescription,
+        Acc_SuspensionStarts__c: this.toOptionalSFDate(x.suspensionStartDate),
+        Acc_SuspensionEnds__c: this.toOptionalSFDate(x.suspensionEndDate),
+        Acc_NewOrganisationName__c: x.accountName,
+        Acc_RemovalPeriod__c: x.removalPeriod,
+        Acc_Project_Participant__c: x.partnerId,
+        Acc_ProjectRole__c: new PcrProjectRoleMapper().mapToSalesforcePCRProjectRole(x.projectRole),
+        Acc_ParticipantType__c: new PcrPartnerTypeMapper().mapToSalesforcePCRPartnerType(x.partnerType),
+        Acc_CommercialWork__c: x.isCommercialWork,
+        Acc_OrganisationName__c: x.organisationName,
+        Acc_RegisteredAddress__c: x.registeredAddress,
+        Acc_RegistrationNumber__c: x.registrationNumber,
+        Acc_ParticipantSize__c: new PcrParticipantSizeMapper().mapToSalesforcePCRParticipantSize(x.participantSize),
+        Acc_Employees__c: x.numberOfEmployees,
+        Acc_TurnoverYearEnd__c: this.toOptionalSFDate(x.financialYearEndDate),
+        Acc_Turnover__c: x.financialYearEndTurnover,
+        Acc_Location__c: new PCRProjectLocationMapper().mapToSalesforcePCRProjectLocation(x.projectLocation),
+        Acc_ProjectCity__c: x.projectCity,
+        Acc_ProjectPostcode__c: x.projectPostcode,
+        Acc_Contact1ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(x.contact1ProjectRole),
+        Acc_Contact1Forename__c: x.contact1Forename,
+        Acc_Contact1Surname__c: x.contact1Surname,
+        Acc_Contact1Phone__c: x.contact1Phone,
+        Acc_Contact1EmailAddress__c: x.contact1Email,
+        Acc_Contact2ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(x.contact2ProjectRole),
+        Acc_Contact2Forename__c: x.contact2Forename,
+        Acc_Contact2Surname__c: x.contact2Surname,
+        Acc_Contact2Phone__c: x.contact2Phone,
+        Acc_Contact2EmailAddress__c: x.contact2Email,
+        Acc_AwardRate__c: x.awardRate,
+        Acc_OtherFunding__c: x.hasOtherFunding,
+        Acc_TotalOtherFunding__c: x.totalOtherFunding,
+        Acc_TSBReference__c: x.tsbReference,
+        Acc_GrantMovingOverFinancialYear__c: x.grantMovingOverFinancialYear,
+      })),
+    );
   }
 
   async createProjectChangeRequest(projectChangeRequest: ProjectChangeRequestForCreateEntity) {
@@ -295,16 +354,18 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
   }
 
   async insertItems(headerId: string, items: ProjectChangeRequestItemForCreateEntity[]) {
-    await super.insertAll(items.map(x => ({
-      Acc_RequestHeader__c: headerId,
-      RecordTypeId: x.recordTypeId,
-      Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
-      Acc_Project__c: x.projectId,
-    })));
+    await super.insertAll(
+      items.map(x => ({
+        Acc_RequestHeader__c: headerId,
+        RecordTypeId: x.recordTypeId,
+        Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
+        Acc_Project__c: x.projectId,
+      })),
+    );
   }
 
   async delete(item: ProjectChangeRequestEntity) {
-    return super.deleteAll([item.id, ... item.items.map(x => x.id)]);
+    return super.deleteAll([item.id, ...item.items.map(x => x.id)]);
   }
 
   getPcrChangeStatuses(): Promise<IPicklistEntry[]> {
@@ -328,50 +389,10 @@ export class ProjectChangeRequestRepository extends SalesforceRepositoryBase<ISa
   }
 
   private mapStatus(status: PCRStatus): string {
-    switch (status) {
-      case PCRStatus.Draft:
-        return "Draft";
-      case PCRStatus.SubmittedToMonitoringOfficer:
-        return "Submitted to Monitoring Officer";
-      case PCRStatus.QueriedByMonitoringOfficer:
-        return "Queried by Monitoring Officer";
-      case PCRStatus.SubmittedToInnovationLead:
-        return "Submitted to Innovation Lead";
-      case PCRStatus.SubmittedToInnovateUK:
-        return "Submitted to Innovate UK";
-      case PCRStatus.QueriedByInnovateUK:
-        return "Queried by Innovate UK";
-      case PCRStatus.QueriedByInnovationLead:
-        return "Queried by Innovation Lead";
-      case PCRStatus.InReviewWithProjectFinance:
-        return "In Review with Project Finance";
-      case PCRStatus.InExternalReview:
-        return "In External Review";
-      case PCRStatus.InReviewWithInnovateUK:
-        return "In Review with Innovate UK";
-      case PCRStatus.Rejected:
-        return "Rejected";
-      case PCRStatus.Withdrawn:
-        return "Withdrawn";
-      case PCRStatus.Approved:
-        return "Approved";
-      case PCRStatus.Actioned:
-        return "Actioned";
-      default:
-        return "";
-    }
+    return mapToPCRStatusLabel(status);
   }
 
   private mapItemStatus(status?: PCRItemStatus): string {
-    switch (status) {
-      case PCRItemStatus.ToDo:
-        return "To Do";
-      case PCRItemStatus.Incomplete:
-        return "Incomplete";
-      case PCRItemStatus.Complete:
-        return "Complete";
-      default:
-        return "";
-    }
+    return mapToPCRItemStatusLabel(status);
   }
 }
