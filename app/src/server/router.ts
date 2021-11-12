@@ -1,7 +1,9 @@
 import { Router } from "express";
 import csrf from "csurf";
 
+import { healthRouter } from "@server/health";
 import { router as apiRoutes } from "@server/apis";
+
 import { configureFormRouter } from "@server/forms/formRouter";
 import { NotFoundError } from "@server/features/common/appError";
 import { serverRender } from "@server/serverRender";
@@ -11,6 +13,10 @@ export const router = Router();
 
 const csrfProtection = csrf();
 
+// Support routes
+router.use("/api/health", healthRouter);
+
+// App routes
 router.use("/api", apiRoutes);
 router.use("/components", csrfProtection, componentGuideRender);
 

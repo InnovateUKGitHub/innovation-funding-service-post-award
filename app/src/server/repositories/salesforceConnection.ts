@@ -1,10 +1,10 @@
-import fs from "fs";
 import jsforce from "jsforce";
 import jwt from "jsonwebtoken";
 
 import { SalesforceTokenError } from "@server/repositories/errors";
 import { Cache } from "@server/features/common/cache";
 import { configuration } from "@server/features/common";
+import { readFile } from "@framework/util/fileSystemHelper";
 
 interface ISalesforceTokenPayload {
   access_token: string;
@@ -15,6 +15,13 @@ interface ISalesforceTokenPayload {
   id: string;
   token_type: "Bearer";
 }
+
+interface ISalesforceTokenError {
+  error: string;
+  error_description: string;
+}
+
+type ISalesforceTokenQuery = ISalesforceTokenPayload | ISalesforceTokenError;
 
 export interface ISalesforceTokenDetails {
   currentUsername: string;
@@ -33,12 +40,12 @@ interface ITokenInfo {
 
 const tokenCache = new Cache<ITokenInfo>(configuration.timeouts.token);
 
-export const getSalesforceAccessToken = async ({ currentUsername, clientId, connectionUrl }: ISalesforceTokenDetails): Promise<ITokenInfo> => {
-  const privateKey = fs.readFileSync(configuration.certificates.salesforce, "utf8");
-  const jwtPayload = { prn: currentUsername };
+export const getSalesforceAccessToken = async (config: ISalesforceTokenDetails): Promise<ITokenInfo> => {
+  const privateKey = readFile(configuration.certificates.salesforce);
+  const jwtPayload = { prn: config.currentUsername };
   const jwtOptions = {
-    issuer: clientId,
-    audience: connectionUrl,
+    issuer: config.clientId,
+    audience: config.connectionUrl,
     expiresIn: 10,
     algorithm: "RS256",
   };
@@ -49,15 +56,15 @@ export const getSalesforceAccessToken = async ({ currentUsername, clientId, conn
   body.append("grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer");
   body.append("assertion", jwtToken);
 
-  const request = await fetch(`${connectionUrl}/services/oauth2/token`, { method: "POST", body });
+  const request = await fetch(`${config.connectionUrl}/services/oauth2/token`, { method: "POST", body });
+  const tokenQuery: ISalesforceTokenQuery = await request.json();
 
+  if ("error" in tokenQuery) throw new SalesforceTokenError(tokenQuery);
   if (!request.ok) throw new SalesforceTokenError(request.status);
 
-  const payload: ISalesforceTokenPayload = await request.json();
-
   return {
-    url: payload.sfdc_community_url,
-    accessToken: payload.access_token,
+    url: tokenQuery.sfdc_community_url,
+    accessToken: tokenQuery.access_token,
   };
 };
 

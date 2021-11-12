@@ -23,7 +23,7 @@ export class SalesforceDataChangeError extends Error {
 }
 
 export class SalesforceTokenError extends Error {
-  constructor(public status: number) {
+  constructor(public tokenError: unknown) {
     super("AUTHENTICATION_ERROR");
   }
 }
