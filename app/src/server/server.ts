@@ -12,10 +12,11 @@ import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcr
 import { v4 as uuidv4 } from "uuid";
 import { configuration, Logger } from "./features/common";
 import { allowCache, noCache, setOwaspHeaders } from "./cacheHeaders";
-import { router as healthRouter } from "./health";
+
 import { router as cspRouter } from "./csp";
 import { router as authRouter } from "./auth";
 import { router } from "./router";
+
 import contextProvider from "./features/common/contextProvider";
 import { GetPermissionGroupQuery } from "./features/general/getPermissionGroupsQuery";
 import { GetAllRecordTypesQuery } from "./features/general/getAllRecordTypesQuery";
@@ -120,7 +121,6 @@ export class Server {
       next();
     });
     this.app.use(setOwaspHeaders, allowCache, express.static("public"));
-    this.app.use(noCache, healthRouter);
     this.app.use(noCache, cspRouter);
     this.app.use(authRouter);
     this.app.use(internationalisationRouter);
