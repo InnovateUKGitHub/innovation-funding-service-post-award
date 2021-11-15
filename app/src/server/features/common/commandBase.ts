@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */ // Note: due to this file being extended, it's okay for there to be unused params as they're required for children
-import { Authorisation, IContext } from "@framework/types";
+import { Authorisation, IContext, IFileWrapper } from "@framework/types";
 import { ValidationError } from "@server/features/common/appError";
 import { DocumentUploadDtoValidator, MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { FileTypeNotAllowedError } from "@server/repositories";
@@ -34,6 +34,17 @@ export abstract class CommandMultipleDocumentBase<T> extends CommandBase<T> {
   protected abstract documents: MultipleDocumentUploadDto;
   protected abstract filesRequired: boolean;
   protected abstract showValidationErrors: boolean;
+
+  protected async dispatchAction<iDocs extends IFileWrapper[]>(
+    docs: iDocs,
+    action: (doc: iDocs[0]) => Promise<string>,
+  ): Promise<string[]> {
+    const docsWithNameAndSize = docs.filter(x => x.fileName && x.size);
+    const promisedDocs: Promise<string>[] = docsWithNameAndSize.map(action);
+
+    return await Promise.all(promisedDocs);
+  }
+
   protected handleRepositoryError(context: IContext, error: FileTypeNotAllowedError | null) {
     if (error instanceof FileTypeNotAllowedError) {
       const result = new MultipleDocumentUploadDtoValidator(

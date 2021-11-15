@@ -1,8 +1,9 @@
+/* eslint-disable sonarjs/no-identical-functions */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-underscore-dangle */
 import { Stream } from "stream";
 import * as Repositories from "@server/repositories";
-import { FileTypeNotAllowedError } from "@server/repositories";
+import { BadSalesforceQuery, FileTypeNotAllowedError } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import {
   BroadcastDto,
@@ -11,6 +12,8 @@ import {
   DocumentDescription,
   IPicklistEntry,
   IRepositories,
+  LoanDto,
+  LoanDtoWithTotals,
   MonitoringReportStatus,
   PCRStatus,
   PermissionGroupIdenfifier,
@@ -23,6 +26,7 @@ import { DocumentDescriptionMapper, SalesforceDocumentMapper } from "@server/rep
 import { DocumentEntity } from "@framework/entities/document";
 import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
+import { LoanMapper } from "@server/repositories/mappers/loanMapper";
 import { PcrSpendProfileEntity } from "@framework/entities/pcrSpendProfile";
 import { PcrSpendProfileEntityForCreate } from "@framework/entities";
 import { BadRequestError, NotFoundError } from "@server/features/common";
@@ -736,6 +740,49 @@ class FinancialVirementsTestRepository extends TestRepository<Entities.PartnerFi
   }
 }
 
+class LoansTestRepository {
+  private Items: Repositories.ISalesforceLoan[] = [];
+  private ItemsWithTotals: Repositories.ISalesforceLoanWithTotals[] = [];
+
+  getAll(projectId: string) {
+    const loans = this.Items.map(x => new LoanMapper().map(x));
+    return Promise.resolve(loans);
+  }
+
+  getWithTotals(loanId: string) {
+    return new Promise<LoanDtoWithTotals>(resolve => {
+      const loanItem = this.ItemsWithTotals.find(x => x.Id === loanId);
+
+      if (!loanItem) throw new BadSalesforceQuery();
+
+      const loan = new LoanMapper().mapWithTotals(loanItem);
+
+      resolve(loan);
+    });
+  }
+
+  getWithoutTotals(loanId: string) {
+    return new Promise<LoanDto>(resolve => {
+      const loanItem = this.Items.find(x => x.Id === loanId);
+
+      if (!loanItem) throw new BadSalesforceQuery();
+
+      const loan = new LoanMapper().map(loanItem);
+
+      resolve(loan);
+    });
+  }
+
+  update(item: Updatable<Repositories.ISalesforceLoan>): Promise<boolean> {
+    const index = this.Items.findIndex(x => x.Id === item.Id);
+    if (index >= 0) {
+      this.Items[index] = Object.assign(this.Items[index], item);
+      return Promise.resolve(true);
+    }
+    return Promise.resolve(false);
+  }
+}
+
 class AccountsTestRepository
   extends TestRepository<Repositories.ISalesforceAccount>
   implements Repositories.IAccountsRepository {
@@ -821,6 +868,7 @@ export const createTestRepositories = (): ITestRepositories => {
     costCategories: new CostCategoriesTestRepository(),
     documents: new DocumentsTestRepository(),
     financialVirements: new FinancialVirementsTestRepository(),
+    loans: new LoansTestRepository(),
     monitoringReportResponse: new MonitoringReportResponseTestRepository(),
     monitoringReportHeader: new MonitoringReportHeaderTestRepository(),
     monitoringReportQuestions: new MonitoringReportQuestionsRepository(),

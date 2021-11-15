@@ -13,6 +13,7 @@ import * as financialVirements from "./financialVirements";
 import * as forecastDetails from "./forecastDetails";
 import * as initialForecastDetails from "./initialForecastDetails";
 import * as forecastGolCosts from "./forecastGolCosts";
+import * as loans from "./loans";
 import * as monitoringReports from "./monitoringReports";
 import * as pcrs from "./pcrs";
 import * as partners from "./partners";
@@ -35,6 +36,7 @@ export interface IApiClient {
   forecastDetails: forecastDetails.IForecastDetailsApi;
   initialForecastDetails: initialForecastDetails.IInitialForecastDetailsApi;
   forecastGolCosts: forecastGolCosts.IForecastGolCostsApi;
+  loans: loans.ILoansApi;
   monitoringReports: monitoringReports.IMonitoringReportsApi;
   pcrs: pcrs.IPCRsApi;
   projects: projects.IProjectsApi;
@@ -56,6 +58,7 @@ export const serverApis: IApiClient & Record<string, ControllerBase<{}>> = {
   forecastDetails: forecastDetails.controller,
   initialForecastDetails: initialForecastDetails.controller,
   forecastGolCosts: forecastGolCosts.controller,
+  loans: loans.controller,
   monitoringReports: monitoringReports.controller,
   pcrs: pcrs.controller,
   partners: partners.controller,

@@ -14,6 +14,8 @@ export const isNumber = (value?: number | null): value is number => {
  * @description Added an Epsilon cover edge cases such as 1.005 to round correctly
  */
 export function roundCurrency(value: number) {
+  if (value === 0) return value;
+
   const valueToBeRounded = (value + epsilon) * 100;
   const roundedValue = Math.round(valueToBeRounded);
 

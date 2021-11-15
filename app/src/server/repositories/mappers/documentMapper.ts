@@ -50,6 +50,7 @@ export class DocumentDescriptionMapper {
     MeetingAgenda: "MeetingAgenda",
     ProjectCompletionForm: "ProjectCompletionForm",
     ProofOfSatisfiedConditions: "ProofOfSatisfiedConditions",
+    Loan: "Loan",
   };
 
   public mapFromSalesforceDocumentDescription = (
@@ -100,6 +101,8 @@ export class DocumentDescriptionMapper {
         return DocumentDescription.ProjectCompletionForm;
       case this.types.ProofOfSatisfiedConditions:
         return DocumentDescription.ProofOfSatisfiedConditions;
+      case this.types.Loan:
+        return DocumentDescription.Loan;
       case this.types.EndOfProjectSurvey:
         return DocumentDescription.EndOfProjectSurvey;
       default:
@@ -153,6 +156,8 @@ export class DocumentDescriptionMapper {
         return this.types.ProjectCompletionForm;
       case DocumentDescription.ProofOfSatisfiedConditions:
         return this.types.ProofOfSatisfiedConditions;
+      case DocumentDescription.Loan:
+        return this.types.Loan;
       case DocumentDescription.EndOfProjectSurvey:
         return this.types.EndOfProjectSurvey;
       default:

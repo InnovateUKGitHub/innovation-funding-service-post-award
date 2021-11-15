@@ -22,6 +22,8 @@ export abstract class DocumentsSummaryQueryBase extends QueryBase<DocumentSummar
 
     const linkedDocs = await context.repositories.documents.getDocumentsMetadataByLinkedRecord(recordId, this.filter);
 
+    if (!linkedDocs.length) return [];
+
     return linkedDocs
       .map(x => mapToDocumentSummaryDto(x, this.getUrl(x)))
       .sort((a, b) => dateComparator(a.dateCreated, b.dateCreated) * -1);

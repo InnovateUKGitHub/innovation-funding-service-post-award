@@ -39,6 +39,9 @@ export abstract class RepositoryBase {
   protected constructError(e: any) {
     this.logger.error("Salesforce Error: ", e.errorCode, e.message);
 
+    if (e.errorCode === "INVALID_FIELD") {
+      throw new Errors.BadSalesforceQuery(e.errorCode, e.errorCode);
+    }
     if (e.errorCode === "ERROR_HTTP_503") {
       throw new Errors.SalesforceUnavilableError("Salesforce unavailable");
     }
@@ -102,6 +105,19 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
       const allItems = await targetObject.select(this.salesforceFieldNames).execute();
 
       return this.map(allItems);
+    } catch (error) {
+      throw this.constructError(error);
+    }
+  }
+
+  protected async query<T>(salesforceQuery: string): Promise<T> {
+    try {
+      const connection = await this.getSalesforceConnection();
+      const query = await connection.query(salesforceQuery);
+
+      if (!query.done) throw new Errors.BadSalesforceQuery();
+
+      return (query.records as unknown) as T;
     } catch (error) {
       throw this.constructError(error);
     }
@@ -347,7 +363,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
     }
   }
 
-  private map(result: Partial<{}>[]): TEntity[] {
+  public map(result: Partial<{}>[]): TEntity[] {
     const salesforce = result as TSalesforce[];
     return salesforce.map(x => this.mapper.map(x));
   }
