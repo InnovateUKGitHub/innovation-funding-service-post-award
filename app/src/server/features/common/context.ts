@@ -89,6 +89,7 @@ export class Context implements Framework.IContext {
       monitoringReportResponse: new Repositories.MonitoringReportResponseRepository(recordTypeCallback, connectionCallback, this.logger),
       monitoringReportHeader: new Repositories.MonitoringReportHeaderRepository(recordTypeCallback, connectionCallback, this.logger),
       monitoringReportQuestions: new Repositories.MonitoringReportQuestionsRepository(connectionCallback, this.logger),
+      loans: new Repositories.LoanRepository(connectionCallback, this.logger),
       monitoringReportStatusChange: new Repositories.MonitoringReportStatusChangeRepository(connectionCallback, this.logger),
       projectChangeRequests: new Repositories.ProjectChangeRequestRepository(recordTypeCallback, connectionCallback, this.logger),
       profileDetails: new Repositories.ProfileDetailsRepository(connectionCallback, this.logger),

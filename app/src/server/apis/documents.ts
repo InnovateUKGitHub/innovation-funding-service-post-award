@@ -8,11 +8,17 @@ import { GetProjectDocumentQuery } from "@server/features/documents/getProjectDo
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { DocumentDto, DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { GetPartnerDocumentQuery } from "@server/features/documents/getPartnerDocument";
 import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummary";
 import { UploadPartnerDocumentCommand } from "@server/features/documents/uploadPartnerDocument";
 import { DeletePartnerDocumentCommand } from "@server/features/documents/deletePartnerDocument";
+
+import { GetLoanDocumentsQuery } from "@server/features/documents/getLoanDocuments";
+import { UploadLoanDocumentsCommand } from "@server/features/documents/uploadLoanDocument";
+import { GetLoanDocumentQuery } from "@server/features/documents/getLoanDocument";
+import { DeleteLoanDocument } from "@server/features/documents/deleteLoanDocument";
+
 import { ClaimDetailKey, ClaimKey } from "@framework/types";
 import { DeleteProjectDocumentCommand } from "@server/features/documents/deleteProjectDocument";
 import { UploadProjectDocumentCommand } from "../features/documents/uploadProjectDocument";
@@ -31,6 +37,7 @@ export interface IDocumentsApi {
   getClaimDetailDocuments: (params: ApiParams<{ claimDetailKey: ClaimDetailKey }>) => Promise<DocumentSummaryDto[]>;
   getProjectChangeRequestDocumentsOrItemDocuments: (params: ApiParams<{ projectId: string; projectChangeRequestIdOrItemId: string }>) => Promise<DocumentSummaryDto[]>;
   getProjectDocuments: (params: ApiParams<{ projectId: string }>) => Promise<DocumentSummaryDto[]>;
+  getLoanDocuments: (params: ApiParams<{ projectId: string; loanId: string }>) => Promise<DocumentSummaryDto[]>;
   getPartnerDocuments: (params: ApiParams<{ projectId: string; partnerId: string }>) => Promise<DocumentSummaryDto[]>;
   uploadClaimDetailDocuments: (params: ApiParams<{ claimDetailKey: ClaimDetailKey; documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
   uploadClaimDocument: (params: ApiParams<{ claimKey: ClaimKey; document: DocumentUploadDto }>) => Promise<{ documentId: string }>;
@@ -38,6 +45,8 @@ export interface IDocumentsApi {
   uploadProjectChangeRequestDocumentOrItemDocument: (params: ApiParams<{ projectId: string; projectChangeRequestIdOrItemId: string; documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
   uploadProjectDocument: (params: ApiParams<{ projectId: string; documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
   uploadPartnerDocument: (params: ApiParams<{ projectId: string; partnerId: string; documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
+  uploadLoanDocuments: (params: ApiParams<{ projectId: string; loanId: string; documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
+  deleteLoanDocument: (params: ApiParams<{ projectId: string; loanId: string; documentId: string }>) => Promise<boolean>;
   deleteClaimDetailDocument: (params: ApiParams<{ documentId: string; claimDetailKey: ClaimDetailKey }>) => Promise<boolean>;
   deleteClaimDocument: (params: ApiParams<{ documentId: string; claimKey: ClaimKey }>) => Promise<boolean>;
   deletePartnerDocument: (params: ApiParams<{ documentId: string; projectId: string; partnerId: string }>) => Promise<boolean>;
@@ -97,10 +106,30 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       p => this.deleteProjectDocument(p)
     );
 
+    this.getItems("/projects/:projectId", p => ({ projectId: p.projectId }), this.getProjectDocuments);
+
+    this.getAttachment(
+      "/loans/:projectId/:loanId/:documentId/content",
+      p => ({ projectId: p.projectId, loanId: p.loanId, documentId: p.documentId }),
+      this.getLoanDocument,
+    );
+
     this.getItems(
-      "/projects/:projectId",
-      (p) => ({ projectId: p.projectId }),
-      p => this.getProjectDocuments(p)
+      "/loans/:projectId/:loanId",
+      p => ({ projectId: p.projectId, loanId: p.loanId }),
+      this.getLoanDocuments,
+    );
+
+    this.postAttachments(
+      "/loans/:projectId/:loanId",
+      (p) => ({ projectId: p.projectId, loanId: p.loanId }),
+      this.uploadLoanDocuments
+    );
+
+    this.deleteItem(
+      "/loans/:projectId/:loanId/:documentId/content",
+      (p) => ({ projectId: p.projectId, loanId: p.loanId, documentId: p.documentId }),
+      this.deleteLoanDocument
     );
 
     this.getItems(
@@ -174,6 +203,29 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
       (p) => ({ projectId: p.projectId, projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId }),
       p => this.uploadProjectChangeRequestDocumentOrItemDocument(p)
     );
+  }
+
+  public async getLoanDocument(params: ApiParams<{ projectId: string; loanId: string; documentId: string }>): Promise<DocumentDto | null> {
+    const query = new GetLoanDocumentQuery(params.projectId, params.loanId, params.documentId);
+    return contextProvider.start(params).runQuery(query);
+  }
+
+  public async getLoanDocuments(params: ApiParams<{ projectId: string; loanId: string }>) {
+    const query = new GetLoanDocumentsQuery(params.projectId, params.loanId);
+    return contextProvider.start(params).runQuery(query);
+  }
+
+  public async uploadLoanDocuments(params: ApiParams<{ projectId: string; loanId: string; documents: MultipleDocumentUploadDto }>) {
+    const command = new UploadLoanDocumentsCommand(params.projectId, params.loanId, params.documents);
+    const insertedIDs = await contextProvider.start(params).runCommand(command);
+
+    return { documentIds: insertedIDs };
+  }
+
+  public async deleteLoanDocument(params: ApiParams<{ projectId: string; loanId: string; documentId: string }>) {
+    const command = new DeleteLoanDocument(params.documentId, params.projectId, params.loanId);
+    await contextProvider.start(params).runCommand(command);
+    return true;
   }
 
   public async getClaimDocuments(params: ApiParams<{ projectId: string; partnerId: string; periodId: number; description?: DocumentDescription }>) {

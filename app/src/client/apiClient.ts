@@ -51,6 +51,10 @@ const clientApi: IApiClient = {
     getAllFiltered: params => ajaxJson(`/api/cost-categories/filtered/${params.partnerId}`),
   },
   documents: {
+    getLoanDocuments: params => ajaxJson(`/api/documents/loans/${params.projectId}`),
+    uploadLoanDocuments: params => ajaxPostFiles(`/api/documents/loans/${params.projectId}`, params.documents),
+    deleteLoanDocument: p =>
+      ajaxJson(`/api/documents/loans/${p.projectId}/${p.loanId}/${p.documentId}/content`, { method: "DELETE" }),
     getClaimDocuments: params =>
       ajaxJson(
         `/api/documents/claims/${params.projectId}/${params.partnerId}/${params.periodId}/?description=${
@@ -130,6 +134,11 @@ const clientApi: IApiClient = {
   },
   forecastGolCosts: {
     getAllByPartnerId: params => ajaxJson(`/api/forecast-gol-costs/?partnerId=${params.partnerId}`),
+  },
+  loans: {
+    getAll: params => ajax(`/api/loans/${params.projectId}`),
+    get: params => ajax(`/api/loans/${params.projectId}/${params.loanId}?totals=${params.withTotals}`),
+    updateLoan: params => ajaxPut(`/api/loans/${params.projectId}/${params.loanId}`, params.loan),
   },
   monitoringReports: {
     createMonitoringReport: params =>

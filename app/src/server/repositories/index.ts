@@ -13,6 +13,7 @@ export * from "./financialVirementRepository";
 export * from "./monitoringReportHeaderRepository";
 export * from "./monitoringReportQuestionsRepository";
 export * from "./monitoringReportResponseRepository";
+export * from "./loanRepository";
 export * from "./monitoringReportStatusChangeRepository";
 export * from "./partnersRepository";
 export * from "./pcrSpendProfileRepository";

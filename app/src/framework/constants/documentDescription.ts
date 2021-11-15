@@ -24,7 +24,8 @@ export enum DocumentDescription {
   MeetingAgenda = 200,
   Invoice = 210,
   ProjectCompletionForm = 220,
-  ProofOfSatisfiedConditions = 230
+  ProofOfSatisfiedConditions = 230,
+  Loan = 230,
 }
 
 export const allowedClaimDocuments: Readonly<DocumentDescription[]> = [

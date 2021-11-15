@@ -25,6 +25,7 @@ describe("numberHelper", () => {
   describe("roundCurrency()", () => {
     const testCases = test.each`
       name               | inputValue    | expectedValue
+      ${"zero value"}    | ${0}          | ${0}
       ${"whole"}         | ${10}         | ${10}
       ${"short decimal"} | ${12.1312}    | ${12.13}
       ${"long decimal"}  | ${17.9873424} | ${17.99}

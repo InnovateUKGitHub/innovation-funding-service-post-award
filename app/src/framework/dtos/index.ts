@@ -19,3 +19,4 @@ export * from "./finacialVirementDto";
 export * from "./forecastDetailsDto";
 export * from "./golCostDto";
 export * from "./projectContactDto";
+export * from "./loanDto";
