@@ -8,8 +8,8 @@ import { Pending } from "@shared/pending";
 import { useCallback, useState } from "react";
 import { noop } from "@ui/helpers/noop";
 import { useContent } from "@ui/hooks";
-import { H2, Section, SelectOption, ValidationMessage } from "@ui/components";
-import { SimpleString } from "@ui/components/renderers";
+import { Section, ValidationMessage } from "@ui/components";
+import { JesSearchResults } from "./jesSearchResults";
 
 export const AcademicOrganisationStep = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
@@ -38,6 +38,12 @@ export const AcademicOrganisationStep = (
     props.onChange(props.pcrItem);
   };
 
+  const renderLoading = () => (
+    <ACC.Renderers.SimpleString>
+      {getContent(x => x.pcrAddPartnerAcademicOrganisation.loading)}
+    </ACC.Renderers.SimpleString>
+  );
+
   return (
     <ACC.Section>
       <Form.Form
@@ -56,7 +62,9 @@ export const AcademicOrganisationStep = (
           </Section>
           <Form.Search
             name="searchJesOrganisations"
-            hint={<ACC.Content value={x => x.pcrAddPartnerAcademicOrganisation.labels.jesOrganisationSectionSubtitle} />}
+            hint={
+              <ACC.Content value={x => x.pcrAddPartnerAcademicOrganisation.labels.jesOrganisationSectionSubtitle} />
+            }
             value={() => searchInputValue}
             update={(_, searchValue) => setSearchInputValue(searchValue?.trim() || "")}
           />
@@ -77,47 +85,22 @@ export const AcademicOrganisationStep = (
       >
         <ACC.Loader
           pending={getJesAccounts()}
-          renderLoading={() => (
-            <ACC.Renderers.SimpleString>
-              {getContent(x => x.pcrAddPartnerAcademicOrganisation.loading)}
-            </ACC.Renderers.SimpleString>
-          )}
+          renderLoading={() => renderLoading()}
           render={(jesAccounts, loading) => {
             const hasJesAccounts = jesAccounts.length > 0;
             const hasEmptySearchValue = typeof searchInputValue === "string" && searchInputValue.length === 0;
             const displayResultsLoading = hasEmptySearchValue && loading;
 
             if (displayResultsLoading) {
-              // TODO this is a duplicated dom node from above
-              return (
-                <ACC.Renderers.SimpleString>
-                  {getContent(x => x.pcrAddPartnerAcademicOrganisation.loading)}
-                </ACC.Renderers.SimpleString>
-              );
+              renderLoading();
             }
 
-            const jesAccountsOptions: SelectOption[] = jesAccounts.map(x => ({
-              id: x.id,
-              value: (
-                <ACC.Renderers.SimpleString className="govuk-!-margin-bottom-0">
-                  {x.companyName}
-                </ACC.Renderers.SimpleString>
-              ),
-            }));
-
             return hasJesAccounts ? (
-              <>
-                <H2>{getContent(x => x.pcrAddPartnerAcademicOrganisation.jesSearchResults)}</H2>
-                <Form.Fieldset qa="searchResults">
-                  <Form.Radio
-                    name="searchResults"
-                    inline={false}
-                    options={jesAccountsOptions}
-                    value={() => jesAccountsOptions.find(y => y.id === currentSelectedOption?.id)}
-                    update={(_, val) => updateOrganisationName(val?.id, jesAccounts)}
-                  />
-                </Form.Fieldset>
-              </>
+              <JesSearchResults
+                selected={currentSelectedOption}
+                jesAccounts={jesAccounts}
+                update={updateOrganisationName}
+              />
             ) : (
               <>
                 <ACC.Renderers.SimpleString>
