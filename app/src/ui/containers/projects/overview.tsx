@@ -198,6 +198,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private renderLinks(project: ProjectDto, partner: PartnerDto, routes: IRoutes) {
+    const { isLoans } = checkProjectCompetition(partner.competitionType);
     const { isPmOrMo } = getAuthRoles(project.roles);
     const projectId = project.id;
     const partnerId = partner.id;
@@ -245,6 +246,15 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
         link: routes.financeSummary.getLink({ projectId, partnerId }),
       },
     ];
+
+    if (isLoans) {
+      const loansSummary = {
+        textContent: (x: Content) => x.projectOverview.links.loans,
+        link: routes.loansSummary.getLink({ projectId }),
+      };
+
+      links = [loansSummary, ...links];
+    }
 
     // filter out links the current user doesn't have access to
     links = links.filter(x => x.link.accessControl(this.props.user, this.props.config));

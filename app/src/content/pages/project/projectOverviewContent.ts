@@ -9,6 +9,7 @@ export class ProjectOverviewContent extends ContentPageBase {
   }
 
   public readonly links = {
+    loans: this.getContent("loansLink"),
     claims: this.getContent("claimsLink"),
     monitoringReport: this.getContent("monitoringReportLink"),
     forecast: this.getContent("forecastLink"),

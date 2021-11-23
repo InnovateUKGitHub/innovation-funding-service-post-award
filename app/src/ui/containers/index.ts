@@ -6,3 +6,4 @@ export * from "./forecasts";
 export * from "./monitoringReports";
 export * from "./pcrs";
 export * from "./projects";
+export * from "./loans";

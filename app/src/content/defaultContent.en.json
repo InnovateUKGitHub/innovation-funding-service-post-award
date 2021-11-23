@@ -206,6 +206,7 @@
     "project-overview": {
       "title": "Project overview",
       "monitoringReportLink": "Monitoring reports",
+      "loansLink": "Drawdowns",
       "claimsLink": "Claims",
       "forecastLink": "Forecast",
       "forecastsLink": "Forecasts",
@@ -285,6 +286,12 @@
           "item2": "Account number",
           "item3": "Sort code"
         }
+      }
+    },
+    "loans-summary": {
+      "title": {
+        "html": "View Drawdowns",
+        "display": "Drawdowns"
       }
     },
     "finance-summary": {
