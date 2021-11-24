@@ -19,7 +19,7 @@ export const AcademicOrganisationStep = (
   const { accounts } = useStores();
   const { getContent } = useContent();
 
-  const [searchInputValue, setSearchInputValue] = useState<string>();
+  const [searchInputValue, setSearchInputValue] = useState<string>("");
   const [currentSelectedOption, setCurrentSelectedOption] = useState<AccountDto>();
 
   const getJesAccounts: () => Pending<AccountDto[]> = useCallback(
@@ -56,12 +56,13 @@ export const AcademicOrganisationStep = (
           <Section>
             <ValidationMessage
               messageType="info"
-              qa="on-hold-info-message"
+              qa="jes-organisation-info"
               message={x => x.pcrAddPartnerAcademicOrganisation.labels.jesOrganisationInfo}
             />
           </Section>
           <Form.Search
             name="searchJesOrganisations"
+            qa="input-search-jes-organisations"
             hint={
               <ACC.Content value={x => x.pcrAddPartnerAcademicOrganisation.labels.jesOrganisationSectionSubtitle} />
             }
@@ -69,7 +70,7 @@ export const AcademicOrganisationStep = (
             update={(_, searchValue) => setSearchInputValue(searchValue?.trim() || "")}
           />
           {!props.isClient && (
-            <Form.Button styling="Primary" name="jesOrganisationSearch">
+            <Form.Button qa="button-search-jes-organisations" styling="Primary" name="jesOrganisationSearch">
               {getContent(x => x.pcrAddPartnerAcademicOrganisation.labels.searchButton)}
             </Form.Button>
           )}
@@ -103,7 +104,7 @@ export const AcademicOrganisationStep = (
               />
             ) : (
               <>
-                <ACC.Renderers.SimpleString>
+                <ACC.Renderers.SimpleString qa="no-jes-results-found">
                   {getContent(x => x.pcrAddPartnerCompanyHouse.resultNotShowing)}
                 </ACC.Renderers.SimpleString>
               </>
@@ -114,7 +115,7 @@ export const AcademicOrganisationStep = (
           <Form.Submit>
             <ACC.Content value={x => x.pcrAddPartnerAcademicOrganisation.pcrItem.submitButton} />
           </Form.Submit>
-          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
+          <Form.Button qa="save-and-return-to-summary" name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
             <ACC.Content value={x => x.pcrAddPartnerAcademicOrganisation.pcrItem.returnToSummaryButton} />
           </Form.Button>
         </Form.Fieldset>

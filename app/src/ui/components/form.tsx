@@ -214,6 +214,7 @@ const StringField = <T extends {}>({ field, ...props }: StringFieldProps<T> & In
 interface SearchFieldProps<T> extends ExternalFieldProps<T, string> {
   width?: FormInputWidths;
   autoComplete?: React.InputHTMLAttributes<T>["autoComplete"];
+  qa?: string;
 }
 
 const SearchField = <T extends {}>({field, ...props}: SearchFieldProps<T> & InternalFieldProps<T>) => (
@@ -380,6 +381,7 @@ interface ButtonProps {
   styling?: "Link" | "Secondary" | "Primary" | "Warning";
   value?: string;
   onClick?: () => void;
+  qa?: string;
 }
 
 const ButtonComponent = <T extends {}>(props: ButtonProps & InternalFieldProps<T>) => (
@@ -392,6 +394,7 @@ const ButtonComponent = <T extends {}>(props: ButtonProps & InternalFieldProps<T
     styling={props.styling || "Secondary"}
     value={props.value}
     onClick={(e) => handleOtherButton(props, e)}
+    qa={props.qa}
   >
     {(props as any).children}
   </Button>

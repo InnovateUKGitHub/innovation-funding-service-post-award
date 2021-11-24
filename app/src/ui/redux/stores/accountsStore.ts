@@ -1,4 +1,6 @@
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { Pending } from "@shared/pending";
+import { AccountDto } from "@framework/dtos";
 import { apiClient } from "../../apiClient";
 import { RootState } from "../reducers";
 import { RootActionsOrThunk } from "../actions";
@@ -9,7 +11,7 @@ export class AccountsStore extends StoreBase {
     super(getState, dispatch);
   }
 
-  public getJesAccountsByName(searchString: string) {
+  public getJesAccountsByName(searchString: string): Pending<AccountDto[]> {
     return this.getData("jesOnlyAccounts", storeKeys.getJesAccountKey(searchString), p =>
       apiClient.accounts.getAllByJesName({ ...p, searchString }),
     );
