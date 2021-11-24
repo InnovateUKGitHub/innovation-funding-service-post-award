@@ -7,6 +7,7 @@ interface SearchInputProps extends InputProps<string> {
   maxLength?: number;
   width?: FormInputWidths;
   autoComplete?: React.InputHTMLAttributes<{}>["autoComplete"];
+  qa?: string;
 }
 
 export class SearchInput extends BaseInput<SearchInputProps, InputState> {
@@ -30,6 +31,7 @@ export class SearchInput extends BaseInput<SearchInputProps, InputState> {
     return (
       <input
         id={this.props.name}
+        data-qa={this.props.qa}
         type="search"
         className={classes}
         name={this.props.name}
