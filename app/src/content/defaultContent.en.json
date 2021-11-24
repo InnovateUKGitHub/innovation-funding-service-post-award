@@ -292,7 +292,9 @@
       "title": {
         "html": "View Drawdowns",
         "display": "Drawdowns"
-      }
+      },
+      "loadingDrawdowns": "Loading drawdowns...",
+      "rejectedDrawdownsError": "There was an error trying to fetch your drawdowns."
     },
     "finance-summary": {
       "title": "Finance summary",

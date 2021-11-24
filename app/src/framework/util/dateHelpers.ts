@@ -21,6 +21,9 @@ export const formatDate = (jsDate: Date | null | undefined, format: DateFormat) 
     case DateFormat.FULL_DATE: {
       return date.toFormat("d MMMM yyyy");
     }
+    case DateFormat.FULL_NUMERIC_DATE: {
+      return date.toFormat("dd/MM/yyyy");
+    }
     case DateFormat.SHORT_DATE: {
       return date.toFormat("d MMM yyyy");
     }

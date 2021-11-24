@@ -6,3 +6,4 @@ export * from "./permissionGroup";
 export * from "./projectChangeRequest";
 export * from "./recordType";
 export * from "./received-status";
+export * from "./loan-status";

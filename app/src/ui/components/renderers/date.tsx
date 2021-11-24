@@ -66,6 +66,10 @@ export const FullDate: React.FunctionComponent<{ value: Date | null }> = ({value
     return render(value, DateFormat.FULL_DATE);
 };
 
+export const FullNumericDate: React.FunctionComponent<{ value: Date | null }> = ({value}) => {
+    return render(value, DateFormat.FULL_NUMERIC_DATE);
+};
+
 export const FullDateTime: React.FunctionComponent<{ value: Date | null }> = ({value}) => {
     return render(value, DateFormat.FULL_DATE_TIME);
 };

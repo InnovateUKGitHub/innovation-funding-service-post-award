@@ -7,6 +7,7 @@ import { Result, Results } from "@ui/validation";
 import { Link } from "@ui/components/links";
 import {
   FullDate,
+  FullNumericDate,
   ShortDate,
   ShortDateTime,
   Email,
@@ -325,6 +326,10 @@ function FullDateColumn<T extends {}>(props: ExternalColumnProps<T, Date | null>
   return <TableColumn<T> {...props} renderCell={(data, index) => <FullDate value={props.value(data, index)} />} />;
 }
 
+function FullNumericDateColumn<T extends {}>(props: ExternalColumnProps<T, Date | null>) {
+  return <TableColumn<T> {...props} renderCell={(data, index) => <FullNumericDate value={props.value(data, index)} />} />;
+}
+
 function ShortDateColumn<T extends {}>(props: ExternalColumnProps<T, Date | null>) {
   return <TableColumn<T> {...props} renderCell={(data, index) => <ShortDate value={props.value(data, index)} />} />;
 }
@@ -376,6 +381,7 @@ export interface ITypedTable<T extends {}> {
   Currency: React.FunctionComponent<ExternalColumnProps<T, number | null> & { fractionDigits?: number }>;
   Percentage: React.FunctionComponent<ExternalColumnProps<T, number | null> & { fractionDigits?: number }>;
   FullDate: React.FunctionComponent<ExternalColumnProps<T, Date | null>>;
+  FullNumericDate: React.FunctionComponent<ExternalColumnProps<T, Date | null>>;
   ShortDate: React.FunctionComponent<ExternalColumnProps<T, Date | null>>;
   ShortDateTime: React.FunctionComponent<ExternalColumnProps<T, Date | null>>;
   Email: React.FunctionComponent<ExternalColumnProps<T, string>>;
@@ -396,6 +402,7 @@ export const TypedTable = <T extends {}>(): ITypedTable<T> => ({
     ExternalColumnProps<T, number | null> & { fractionDigits?: number }
   >,
   FullDate: FullDateColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
+  FullNumericDate: FullNumericDateColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
   ShortDate: ShortDateColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
   ShortDateTime: ShortDateTimeColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
   Email: EmailColumn as React.FunctionComponent<ExternalColumnProps<T, string>>,

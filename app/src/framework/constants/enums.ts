@@ -50,6 +50,7 @@ export enum CostCategoryName {
 
 export enum DateFormat {
   FULL_DATE,
+  FULL_NUMERIC_DATE,
   SHORT_DATE,
   FULL_DATE_TIME,
   SHORT_DATE_TIME,

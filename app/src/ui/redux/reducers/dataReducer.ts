@@ -117,5 +117,6 @@ export const dataReducer = combineReducers({
   projectChangeRequestStatusChanges: dataStoreReducer<Dtos.ProjectChangeRequestStatusChangeDto[]>("projectChangeRequestStatusChanges"),
   projectContacts: dataStoreReducer<ProjectContactDto[]>("projectContacts"),
   validate: dataStoreReducer<any>("validate"),
-  user: dataStoreReducer<{ [key: string]: ProjectRole }>("user")
+  user: dataStoreReducer<{ [key: string]: ProjectRole }>("user"),
+  loans: dataStoreReducer<Dtos.LoanDto[]>("loans")
 });
