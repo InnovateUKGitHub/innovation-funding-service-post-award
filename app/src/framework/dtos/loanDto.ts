@@ -1,7 +1,9 @@
+import { LoanStatus } from "@framework/entities";
+
 export interface LoanDto {
   id: string;
   period: number;
-  status: string;
+  status: LoanStatus;
   amount: number;
   requestDate: Date;
   comments: string;

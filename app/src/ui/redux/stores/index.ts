@@ -22,3 +22,4 @@ export * from "./projectDocumentsStore";
 export * from "./partnerDocumentsStore";
 export * from "./projectsStore";
 export * from "./userStore";
+export * from "./loanStore";

@@ -1,4 +1,5 @@
 import { LoanDto, LoanDtoWithTotals } from "@framework/dtos/loanDto";
+import { LoanStatus } from "@framework/entities";
 import { roundCurrency } from "@framework/util";
 
 import { ISalesforceLoan, ISalesforceLoanWithTotals } from "../loanRepository";
@@ -15,7 +16,7 @@ export class LoanMapper extends SalesforceBaseMapper<ISalesforceLoan, LoanDto> {
 
     return {
       id: item.Id,
-      status: item.Loan_DrawdownStatus__c,
+      status: LoanMapper.loanStatusFromSfMap(item.Loan_DrawdownStatus__c),
       period: item.Acc_PeriodNumber__c,
       requestDate,
       amount: item.Loan_LatestForecastDrawdown__c,
@@ -36,5 +37,31 @@ export class LoanMapper extends SalesforceBaseMapper<ISalesforceLoan, LoanDto> {
       totalPaidToDate,
       remainingLoan,
     };
+  }
+
+  static loanStatusToSfMap(status: LoanStatus): string {
+    if (status === LoanStatus.UNKNOWN) {
+      throw Error("You can't update with an invalid status");
+    }
+
+    const loanToSfStatusMap = {
+      [LoanStatus.PLANNED]: "Planned",
+      [LoanStatus.REQUESTED]: "Requested",
+      [LoanStatus.APPROVED]: "Approved",
+    };
+
+    return loanToSfStatusMap[status];
+  }
+
+  static loanStatusFromSfMap(fieldValue: string): LoanStatus {
+    const loanFromSfStatusMap = {
+      Planned: LoanStatus.PLANNED,
+      Requested: LoanStatus.REQUESTED,
+      Approved: LoanStatus.APPROVED,
+    };
+
+    const statusValueMatch = loanFromSfStatusMap[fieldValue as keyof typeof loanFromSfStatusMap];
+
+    return statusValueMatch || LoanStatus.UNKNOWN;
   }
 }

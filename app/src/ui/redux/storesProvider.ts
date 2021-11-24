@@ -16,6 +16,7 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
   const config = new Stores.ConfigStore(getState, dispatch);
   const forecastGolCosts = new Stores.ForecastGolCostsStore(getState, dispatch);
   const companies = new Stores.CompaniesStore(getState, dispatch);
+  const loans = new Stores.LoansStore(getState, dispatch);
 
   return {
     accounts: new Stores.AccountsStore(getState, dispatch),
@@ -42,6 +43,7 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
     projects,
     partners,
     users: new Stores.UserStore(getState, dispatch),
+    loans
   };
 };
 

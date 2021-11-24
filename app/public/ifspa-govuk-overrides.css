@@ -698,3 +698,19 @@ p.govuk-body--multiline {
   hyphens: none;
   white-space: nowrap;
 }
+
+/* Loan - Components */
+.loan-table_row > td:first-child {
+  /* TODO: Get table spacing value */
+  padding-left: 10px;
+}
+
+.loan-table_row--available > .govuk-table__cell:not(:last-child) {
+  /* TODO: Check GDS alignment */
+  padding-top: 16px;
+}
+
+.loan-table_row--locked {
+  /* TODO: Get GDS Colour */
+  background-color: #f3f2f1;
+}
