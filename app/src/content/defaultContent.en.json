@@ -86,7 +86,7 @@
       "finalClaimDueMessageMO": "is due to submit their final claim so cannot change their forecast."
     },
     "warningContent": {
-      "grantAmountRequestMessage": "The amount you are requesting is more than the grant offered for:",
+      "grantAmountRequestMessage": "The amount you are requesting is more than the agreed costs for:",
       "contractAmountRequestMessage": "The amount you are requesting is more than the maximum contract value offered for:",
       "contactmessage": "Your Monitoring Officer will let you know if they have any concerns.",
       "advisoryGrantMoPmMessage": "The partner is requesting an amount more than the grant offered for:",
