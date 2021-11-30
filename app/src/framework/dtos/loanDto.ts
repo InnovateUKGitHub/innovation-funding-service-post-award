@@ -5,6 +5,7 @@ export interface LoanDto {
   period: number;
   status: LoanStatus;
   amount: number;
+  forecastAmount: number;
   requestDate: Date;
   comments: string;
 }

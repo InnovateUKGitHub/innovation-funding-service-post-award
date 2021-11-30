@@ -52,6 +52,8 @@ export class DocumentLabels extends ContentBase {
         return this.getContent("description.email");
       case DocumentDescription.MeetingAgenda:
         return this.getContent("description.meetingAgenda");
+      case DocumentDescription.Loan:
+        return this.getContent("description.loan");
       case DocumentDescription.ProjectCompletionForm:
         return this.getContent("description.projectCompletionForm");
       case DocumentDescription.ProofOfSatisfiedConditions:

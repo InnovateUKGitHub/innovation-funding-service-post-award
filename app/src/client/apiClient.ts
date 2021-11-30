@@ -51,10 +51,10 @@ const clientApi: IApiClient = {
     getAllFiltered: params => ajaxJson(`/api/cost-categories/filtered/${params.partnerId}`),
   },
   documents: {
-    getLoanDocuments: params => ajaxJson(`/api/documents/loans/${params.projectId}`),
-    uploadLoanDocuments: params => ajaxPostFiles(`/api/documents/loans/${params.projectId}`, params.documents),
+    getLoanDocuments: params => ajaxJson(`/api/documents/loans/${params.projectId}/${params.loanId}`),
+    uploadLoanDocuments: params => ajaxPostFiles(`/api/documents/loans/${params.projectId}/${params.loanId}`, params.documents),
     deleteLoanDocument: p =>
-      ajaxJson(`/api/documents/loans/${p.projectId}/${p.loanId}/${p.documentId}/content`, { method: "DELETE" }),
+      ajaxJson(`/api/documents/loans/${p.projectId}/${p.loanId}/${p.documentId}`, { method: "DELETE" }),
     getClaimDocuments: params =>
       ajaxJson(
         `/api/documents/claims/${params.projectId}/${params.partnerId}/${params.periodId}/?description=${
@@ -138,7 +138,7 @@ const clientApi: IApiClient = {
   loans: {
     getAll: params => ajax(`/api/loans/${params.projectId}`),
     get: params => ajax(`/api/loans/${params.projectId}/${params.loanId}?totals=${params.withTotals}`),
-    updateLoan: params => ajaxPut(`/api/loans/${params.projectId}/${params.loanId}`, params.loan),
+    update: params => ajaxPut(`/api/loans/${params.projectId}/${params.loanId}`, params.loan),
   },
   monitoringReports: {
     createMonitoringReport: params =>

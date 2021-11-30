@@ -14,7 +14,15 @@ export interface LoansTableProps {
 export function LoansTable({ items, createLink }: LoansTableProps) {
   const Drawdown = ACC.TypedTable<typeof items[0]>();
 
-  const nextLoan = items.find(x => x.status === LoanStatus.PLANNED);
+  const nextLoanIndex = items.findIndex(x => x.status === LoanStatus.PLANNED);
+  const isFirstLoanRequest = nextLoanIndex === 0;
+  const nextLoan = items[nextLoanIndex];
+  const previousLoanItem = items[nextLoanIndex - 1];
+
+  const hasPreviousApprovedLoan = previousLoanItem?.status === LoanStatus.APPROVED;
+
+  // Note: The first request will always be available (when PLANNED)
+  const canRequestLoan = isFirstLoanRequest ? true : hasPreviousApprovedLoan;
 
   const getRowClassName = (loan: typeof items[0]) => {
     const isAvailable = nextLoan?.id === loan.id;
@@ -36,11 +44,11 @@ export function LoansTable({ items, createLink }: LoansTableProps) {
 
       <Drawdown.Custom
         header="Drawdown Amount"
-        qa="drawdown-amount"
+        qa="drawdown-forecast-amount"
         classSuffix="numeric"
         value={x => (
           <ACC.Renderers.Bold>
-            <ACC.Renderers.Currency fractionDigits={0} value={x.amount} />
+            <ACC.Renderers.Currency fractionDigits={0} value={x.forecastAmount} />
           </ACC.Renderers.Bold>
         )}
       />
@@ -49,14 +57,30 @@ export function LoansTable({ items, createLink }: LoansTableProps) {
 
       <Drawdown.Custom
         qa="drawdown-action"
-        value={({ id }) =>
-          nextLoan?.id === id && (
-            <ACC.Link styling="PrimaryButton" className="govuk-!-margin-bottom-0" route={createLink(nextLoan.id)}>
-              Request
-            </ACC.Link>
-          )
-        }
+        value={({ id }) => {
+          const nextPlannedLoan = nextLoan?.id === id;
+
+          return nextPlannedLoan && <LoanRequestButton route={createLink(nextLoan.id)} disabled={!canRequestLoan} />;
+        }}
       />
     </Drawdown.Table>
+  );
+}
+
+interface LoanRequestButtonProps {
+  disabled: boolean;
+  route: ILinkInfo;
+}
+
+function LoanRequestButton({ disabled, route }: LoanRequestButtonProps) {
+  const sharedProps = {
+    className: "govuk-!-margin-bottom-0",
+    children: "Request",
+  };
+
+  return disabled ? (
+    <ACC.Button disabled styling="Primary" {...sharedProps} />
+  ) : (
+    <ACC.Link route={route} styling="PrimaryButton" {...sharedProps} />
   );
 }

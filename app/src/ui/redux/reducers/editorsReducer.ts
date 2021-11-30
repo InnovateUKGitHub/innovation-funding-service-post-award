@@ -3,7 +3,7 @@ import { actionTypes } from "redux-router5";
 import * as Validators from "@ui/validators";
 import { RootActions } from "@ui/redux/actions";
 import { Results } from "@ui/validation/results";
-import { ClaimDetailsDto, ClaimDto, ErrorCode, FinancialVirementDto, ForecastDetailsDTO, IAppError, MonitoringReportDto, PartnerDto } from "@framework/types";
+import { ClaimDetailsDto, ClaimDto, ErrorCode, FinancialVirementDto, ForecastDetailsDTO, IAppError, LoanDto, MonitoringReportDto, PartnerDto } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -115,4 +115,5 @@ export const editorReducer = combineReducers({
   monitoringReport: editorsReducer<MonitoringReportDto, Validators.MonitoringReportDtoValidator>("monitoringReport"),
   pcr: editorsReducer<PCRDto, Results<PCRDto>>("pcr"),
   partner: editorsReducer<PartnerDto, Results<PartnerDto>>("partner"),
+  loan: editorsReducer<LoanDto, Results<LoanDto>>("loan")
 });

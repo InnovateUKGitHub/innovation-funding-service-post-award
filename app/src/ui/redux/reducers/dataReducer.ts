@@ -118,5 +118,6 @@ export const dataReducer = combineReducers({
   projectContacts: dataStoreReducer<ProjectContactDto[]>("projectContacts"),
   validate: dataStoreReducer<any>("validate"),
   user: dataStoreReducer<{ [key: string]: ProjectRole }>("user"),
-  loans: dataStoreReducer<Dtos.LoanDto[]>("loans")
+  loans: dataStoreReducer<Dtos.LoanDto[]>("loans"),
+  loan: dataStoreReducer<Dtos.LoanDto | Dtos.LoanDtoWithTotals>("loan")
 });

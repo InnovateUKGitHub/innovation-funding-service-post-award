@@ -6,6 +6,7 @@ export interface ISalesforceLoan {
   Id: string;
   Acc_PeriodNumber__c: number;
   Loan_DrawdownStatus__c: string;
+  Acc_GranttobePaid__c: number;
   Loan_LatestForecastDrawdown__c: number;
   Loan_PlannedDateForDrawdown__c: string;
   Loan_UserComments__c: string | null;
@@ -22,7 +23,7 @@ export interface ISalesforceLoanWithTotals extends Omit<ISalesforceLoan, "Acc_Pr
   };
 }
 
-export class LoanRepository extends SalesforceRepositoryBaseWithMapping<ISalesforceLoan, LoanDto> {
+export class LoanRepository extends SalesforceRepositoryBaseWithMapping<ISalesforceLoan, LoanDto | LoanDtoWithTotals> {
   protected readonly salesforceObjectName = "Acc_Prepayment__c";
   private readonly salesforcePrePaymentTable = "Pre_Payments__r";
 
@@ -30,6 +31,7 @@ export class LoanRepository extends SalesforceRepositoryBaseWithMapping<ISalesfo
     "Id",
     "Acc_PeriodNumber__c",
     "Loan_DrawdownStatus__c",
+    "Acc_GranttobePaid__c",
     "Loan_LatestForecastDrawdown__c",
     "Loan_PlannedDateForDrawdown__c",
     "Loan_UserComments__c",

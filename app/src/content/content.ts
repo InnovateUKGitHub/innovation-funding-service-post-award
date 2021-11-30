@@ -107,7 +107,7 @@ import { ClaimLineItemsContent } from "./pages/claims/claimLineItemsContent";
 import { ClaimsComponentsContent } from "./pages/claims/components/claimsComponentsContent";
 import { PostcodeContent } from "./pages/project/postcodeContent";
 import { BroadcastPage } from "./pages/broadcastPage";
-import { LoansSummary } from "./pages/loans";
+import { LoansSummary, LoanRequestContent } from "./pages/loans";
 
 export type ContentSelector = (content: Content) => ContentResult | undefined;
 
@@ -211,6 +211,7 @@ export class Content extends ContentBase {
   public readonly pcrScopeChangeSummary: PCRScopeChangeSummaryContent;
 
   public readonly loansSummary: LoansSummary;
+  public readonly loanRequest: LoanRequestContent;
 
   public readonly features: {
     postcode: PostcodeContent;
@@ -352,6 +353,7 @@ export class Content extends ContentBase {
     this.pcrScopeChangeSummary = new PCRScopeChangeSummaryContent(this, competitionType);
 
     this.loansSummary = new LoansSummary(this);
+    this.loanRequest = new LoanRequestContent(this);
 
     this.errors = {
       notfound: new NotFoundErrorContent(this),

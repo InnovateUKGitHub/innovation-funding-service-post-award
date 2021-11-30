@@ -36,6 +36,7 @@ describe("<LoansTable />", () => {
       status: LoanStatus.REQUESTED,
       period: 1,
       requestDate: new Date(Date.UTC(2021, 9, 1)),
+      forecastAmount: 10000,
       amount: 10000,
       comments: "",
     };
@@ -54,6 +55,7 @@ describe("<LoansTable />", () => {
         status: LoanStatus.PLANNED,
         period: 1,
         requestDate: new Date(Date.UTC(2021, 9, 1)),
+        forecastAmount: 10000,
         amount: 10000,
         comments: "This is a test comment for period 1\r\n\r\n45345456\r\n\r\n!@£$%^&*()",
       };
@@ -81,6 +83,7 @@ describe("<LoansTable />", () => {
         status: LoanStatus.REQUESTED,
         period: 1,
         requestDate: new Date(Date.UTC(2021, 9, 1)),
+        forecastAmount: 10000,
         amount: 10000,
         comments: "This is a test comment for period 1\r\n\r\n45345456\r\n\r\n!@£$%^&*()",
       };
@@ -90,6 +93,7 @@ describe("<LoansTable />", () => {
         status: LoanStatus.PLANNED,
         period: 2,
         requestDate: new Date(Date.UTC(2021, 7, 1)),
+        forecastAmount: 11000,
         amount: 11000,
         comments: "",
       };
@@ -137,6 +141,7 @@ describe("<LoansTable />", () => {
         status: LoanStatus.REQUESTED,
         period: 1,
         requestDate: new Date(Date.UTC(2021, 7, 1)),
+        forecastAmount: 11000,
         amount: 11000,
         comments: "",
       };
@@ -162,6 +167,7 @@ describe("<LoansTable />", () => {
         status: LoanStatus.PLANNED,
         period: 1,
         requestDate: new Date(Date.UTC(2021, 7, 1)),
+        forecastAmount: 11000,
         amount: 11000,
         comments: "",
       };

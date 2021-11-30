@@ -127,7 +127,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     );
 
     this.deleteItem(
-      "/loans/:projectId/:loanId/:documentId/content",
+      "/loans/:projectId/:loanId/:documentId",
       (p) => ({ projectId: p.projectId, loanId: p.loanId, documentId: p.documentId }),
       this.deleteLoanDocument
     );
@@ -216,7 +216,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
   }
 
   public async uploadLoanDocuments(params: ApiParams<{ projectId: string; loanId: string; documents: MultipleDocumentUploadDto }>) {
-    const command = new UploadLoanDocumentsCommand(params.projectId, params.loanId, params.documents);
+    const command = new UploadLoanDocumentsCommand(params.documents, params.projectId, params.loanId);
     const insertedIDs = await contextProvider.start(params).runCommand(command);
 
     return { documentIds: insertedIDs };

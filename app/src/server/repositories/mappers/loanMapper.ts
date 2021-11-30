@@ -19,7 +19,8 @@ export class LoanMapper extends SalesforceBaseMapper<ISalesforceLoan, LoanDto> {
       status: LoanMapper.loanStatusFromSfMap(item.Loan_DrawdownStatus__c),
       period: item.Acc_PeriodNumber__c,
       requestDate,
-      amount: item.Loan_LatestForecastDrawdown__c,
+      amount: item.Acc_GranttobePaid__c,
+      forecastAmount: item.Loan_LatestForecastDrawdown__c,
       comments,
     };
   }
@@ -29,7 +30,13 @@ export class LoanMapper extends SalesforceBaseMapper<ISalesforceLoan, LoanDto> {
 
     const totalLoan = item.Acc_TotalParticipantCosts__c;
     const totalPaidToDate = item.Acc_TotalGrantApproved__c;
-    const remainingLoan = roundCurrency(totalLoan - totalPaidToDate);
+
+    const totalRequestedIncForecast = roundCurrency(loanDetails.forecastAmount + totalPaidToDate);
+    const remainingLoan = roundCurrency(totalLoan - totalRequestedIncForecast);
+
+    const expectedTotal = loanDetails.forecastAmount + remainingLoan + totalPaidToDate;
+
+    if (totalLoan !== expectedTotal) throw Error("Totals do not match.");
 
     return {
       ...loanDetails,
