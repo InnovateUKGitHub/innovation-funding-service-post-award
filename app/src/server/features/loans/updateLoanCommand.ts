@@ -1,4 +1,4 @@
-import { LoanDtoWithTotals } from "@framework/dtos";
+import { LoanDto } from "@framework/dtos";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { GetLoan } from "@server/features/loans/getLoan";
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
@@ -6,13 +6,10 @@ import { LoanDtoValidator } from "@ui/validators/loanValidator";
 import { GetLoanDocumentsQuery } from "@server/features/documents/getLoanDocuments";
 import { ISalesforceLoan } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
+import { LoanStatus } from "@framework/entities";
 
 export class UpdateLoanCommand extends CommandBase<boolean> {
-  constructor(
-    private readonly projectId: string,
-    private readonly loanId: string,
-    private readonly loan: LoanDtoWithTotals,
-  ) {
+  constructor(private readonly projectId: string, private readonly loanId: string, private readonly loan: LoanDto) {
     super();
   }
 
@@ -35,14 +32,19 @@ export class UpdateLoanCommand extends CommandBase<boolean> {
       throw new ValidationError(validationResult);
     }
 
-    if (this.loan.comments.length) {
-      const entityToUpdate: Updatable<ISalesforceLoan> = {
-        Id: existingLoan.id,
-        Loan_UserComments__c: this.loan.comments,
-      };
+    const entityToUpdate: Updatable<ISalesforceLoan> = {
+      Id: existingLoan.id,
+    };
 
-      await context.repositories.loans.update(entityToUpdate);
+    if (existingLoan.status === LoanStatus.PLANNED) {
+      entityToUpdate.Loan_DrawdownStatus__c = LoanStatus.REQUESTED;
     }
+
+    if (this.loan.comments.length > 0) {
+      entityToUpdate.Loan_UserComments__c = this.loan.comments;
+    }
+
+    await context.repositories.loans.update(entityToUpdate);
 
     return true;
   }

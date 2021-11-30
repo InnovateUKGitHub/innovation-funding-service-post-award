@@ -8,9 +8,9 @@ export class UploadLoanDocumentsCommand extends CommandMultipleDocumentBase<stri
   protected showValidationErrors = true;
 
   constructor(
+    protected readonly documents: MultipleDocumentUploadDto,
     private readonly projectId: string,
     private readonly loanId: string,
-    protected readonly documents: MultipleDocumentUploadDto,
   ) {
     super();
   }

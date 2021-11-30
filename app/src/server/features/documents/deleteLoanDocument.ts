@@ -3,9 +3,9 @@ import { CommandBase } from "@server/features/common";
 
 export class DeleteLoanDocument extends CommandBase<void> {
   constructor(
+    private readonly documentId: string,
     private readonly projectId: string,
     private readonly loanId: string,
-    private readonly documentId: string,
   ) {
     super();
   }

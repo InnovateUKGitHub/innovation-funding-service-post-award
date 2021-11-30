@@ -8,7 +8,7 @@ import { GetLoan } from "@server/features/loans/getLoan";
 import { UpdateLoanCommand } from "@server/features/loans/updateLoanCommand";
 import { processDto } from "@shared/processResponse";
 
-class LoansApi extends ControllerBase<LoanDto> {
+class LoansApi extends ControllerBase<LoanDto | LoanDtoWithTotals> {
   constructor() {
     super("loans");
 
@@ -16,18 +16,14 @@ class LoansApi extends ControllerBase<LoanDto> {
 
     this.getItem(
       "/:projectId/:loanId",
-      (p, q) => ({
-        withTotals: q.totals === "true",
-        projectId: p.projectId,
-        loanId: p.loanId,
-      }),
+      (p, q) => ({ withTotals: q.totals === "true", projectId: p.projectId, loanId: p.loanId }),
       this.get,
     );
 
     super.putItem(
       "/:projectId/:loanId",
       (p, q, b) => ({ projectId: p.projectId, loanId: p.loanId, loan: processDto(b) }),
-      this.updateLoan,
+      this.update,
     );
   }
 
@@ -36,14 +32,17 @@ class LoansApi extends ControllerBase<LoanDto> {
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async get(params: ApiParams<{ withTotals: boolean; projectId: string; loanId: string }>): Promise<LoanDto> {
+  public async get<T extends boolean>(
+    params: ApiParams<{ withTotals: T; projectId: string; loanId: string }>,
+  ): Promise<T extends true ? LoanDtoWithTotals : LoanDto> {
     const loanQuery = new GetLoan(params.withTotals, params.projectId, params.loanId);
 
-    return contextProvider.start(params).runQuery(loanQuery);
+    // TODO: Address this, loanQuery is not smart enough to return = T extends true ? LoanDtoWithTotals : LoanDto
+    return contextProvider.start(params).runQuery(loanQuery as any);
   }
 
-  public async updateLoan(
-    params: ApiParams<{ projectId: string; loanId: string; loan: LoanDtoWithTotals }>,
+  public async update(
+    params: ApiParams<{ projectId: string; loanId: string; loan: LoanDto }>,
   ): Promise<LoanDto> {
     const context = contextProvider.start(params);
 
@@ -58,4 +57,4 @@ class LoansApi extends ControllerBase<LoanDto> {
 
 export const controller = new LoansApi();
 
-export type ILoansApi = Pick<LoansApi, "getAll" | "get" | "updateLoan">;
+export type ILoansApi = Pick<LoansApi, "getAll" | "get" | "update">;

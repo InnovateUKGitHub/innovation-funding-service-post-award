@@ -3,6 +3,7 @@ import { removeSpaces } from "@shared/string-helpers";
 const getKey = (...args: (string | number | boolean | "all")[]) => args.join("_");
 
 const getLoansKey = (projectId: string) => getKey("loansKey", "loans", projectId);
+const getLoanKey = (projectId: string, loanId: string) => getKey("loanKey", "loan", "project", projectId, "loan", loanId);
 const getAccountKey = () => getKey("accountKey", "account", "all");
 const getBroadcastsKey = () => getKey("broadcastsKey", "broadcast", "all");
 const getBroadcastKey = (broadcastId: string) => getKey("broadcastKey", "broadcast", broadcastId);
@@ -39,6 +40,7 @@ const getCompaniesKey = (searchString: string, itemsPerPage?: number, startIndex
 
 export const storeKeys = {
   getLoansKey,
+  getLoanKey,
   getAccountKey,
   getBroadcastsKey,
   getBroadcastKey,

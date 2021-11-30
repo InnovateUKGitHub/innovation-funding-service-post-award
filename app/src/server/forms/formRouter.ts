@@ -55,6 +55,9 @@ import { ProjectSetupPartnerPostcodeFormHandler } from "./projectSetupPartnerPos
 import { BankSetupStatementDocumentUploadHandler } from "./project/setup/BankSetupStatementDocumentUploadHandler";
 import { BankSetupStatementDocumentDeleteHandler } from "./project/setup/BankSetupStatementDocumentDeleteHandler";
 
+import { LoanRequestDocumentDeleteHandler, LoanRequestDocumentUploadHandler } from "./loan";
+import { LoanRequestFormHandler } from "./loan/LoanRequestFormHandler";
+
 export const standardFormHandlers: StandardFormHandlerBase<{}, EditorStateKeys>[] = [
   new ClaimForecastFormHandler(),
   new EditClaimLineItemsFormHandler(),
@@ -71,6 +74,7 @@ export const standardFormHandlers: StandardFormHandlerBase<{}, EditorStateKeys>[
   new MonitoringReportPreparePeriodFormHandler(),
   new MonitoringReportSummaryFormHandler(),
   new OverheadDocumentsDeleteHandler(),
+  new LoanRequestFormHandler(),
   new ProjectDocumentDeleteHandler(),
   new ProjectChangeRequestAddTypeFormHandler(),
   new ProjectChangeRequestCreateFormHandler(),
@@ -93,6 +97,7 @@ export const standardFormHandlers: StandardFormHandlerBase<{}, EditorStateKeys>[
   new ProjectSetupSpendProfileFormHandler(),
   new ProjectSetupPartnerPostcodeFormHandler(),
   new BankSetupStatementDocumentDeleteHandler(),
+  new LoanRequestDocumentDeleteHandler(),
 ];
 
 export const singleFileFormHandlers: SingleFileFormHandlerBase<{}, EditorStateKeys>[] = [];
@@ -106,6 +111,7 @@ export const multiFileFormHandlers: MultipleFileFormHandlerBase<{}, EditorStateK
   new ProjectChangeRequestItemDocumentUploadHandler(),
   new ProjectDocumentUploadHandler(),
   new BankSetupStatementDocumentUploadHandler(),
+  new LoanRequestDocumentUploadHandler(),
 ];
 
 const getRoute = (handler: IFormHandler) => {

@@ -1,13 +1,19 @@
 import { LoadingStatus } from "@framework/constants/enums";
 import { Pending } from "@shared/pending";
+import { isEmpty } from "./is-empty";
 
 type IPendingStatus = "IDLE" | "LOADING" | "RESOLVED" | "REJECTED";
 
-export function getPending<T>({ state, data, error }: Pending<T>) {
+export function getPending<T>({ state, data, error = undefined }: Pending<T>) {
+  const shouldCheckData = state === LoadingStatus.Loading || state === LoadingStatus.Stale;
+
+  // Note: We coerce this as an object as that is what is returned -> new Pending()
+  const displayLoading = shouldCheckData ? isEmpty((data as unknown) as object) : false;
+
   const newPendingStatusWorkflow: Record<LoadingStatus, IPendingStatus> = {
     [LoadingStatus.Preload]: "IDLE",
-    [LoadingStatus.Loading]: data ? "RESOLVED" : "LOADING",
-    [LoadingStatus.Stale]: data ? "RESOLVED" : "LOADING",
+    [LoadingStatus.Loading]: displayLoading ? "LOADING" : "RESOLVED",
+    [LoadingStatus.Stale]: displayLoading ? "LOADING" : "RESOLVED",
     [LoadingStatus.Done]: "RESOLVED",
     [LoadingStatus.Failed]: "REJECTED",
     [LoadingStatus.Updated]: "RESOLVED",
@@ -25,7 +31,7 @@ export function getPending<T>({ state, data, error }: Pending<T>) {
 
   return {
     payload,
-    error: error ?? undefined,
+    error,
     isIdle,
     isLoading: isLoading || isIdle,
     isResolved,
