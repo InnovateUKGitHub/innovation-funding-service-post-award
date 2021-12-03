@@ -31,6 +31,7 @@ describe("getAllForProjectQuery", () => {
       x.claimsForReview = 10;
       x.claimsUnderQuery = 20;
       x.claimsOverdue = 30;
+      x.competitionType = "SBRI";
       x.trackingClaims = "Claim Due";
       x.participantStatus = "On Hold";
       x.participantStatusLabel = "On Hold";

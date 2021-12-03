@@ -2,7 +2,7 @@ import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createP
 import { PCRDto, PCRItemDto } from "@framework/dtos";
 import { ValidationError } from "@server/features/common";
 import { Authorisation } from "@framework/types";
-import { pcrRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
+import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { PCRItemStatus, PCRItemType, PCRStatus, ProjectRole } from "@framework/constants";
 import { TestContext } from "../../testContextProvider";
 
@@ -20,10 +20,10 @@ describe("Create PCR Command", () => {
 
         // Note: Were getting all the data we need based on the PCR Item and ensuring validity
         const recordsToCreate = pcrItemsToCheck.map(pcrItem => {
-          const metaValue = pcrRecordTypeMetaValues.find(x => x.type === pcrItem);
+          const metaValue = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === pcrItem);
 
           if (!metaValue) {
-            throw new Error(`PCRRecordTypeMetaValues item was not found: ${pcrItem}`);
+            throw new Error(`recordTypeMetaValues item was not found: ${pcrItem}`);
           }
 
           const recordType = allRecordTypes.find(x => x.type === metaValue.typeName);
@@ -152,7 +152,6 @@ describe("Create PCR Command", () => {
     const project = context.testData.createProject();
     context.testData.createCurrentUserAsProjectManager(project);
     const partner = context.testData.createPartner(project);
-    const itemType = pcrRecordTypeMetaValues.find(x => x.type === PCRItemType.SinglePartnerFinancialVirement)!;
 
     const command = new CreateProjectChangeRequestCommand(project.Id, ({
       projectId: project.Id,
@@ -160,7 +159,10 @@ describe("Create PCR Command", () => {
       reasoningStatus: PCRItemStatus.ToDo,
       items: [
         {
-          type: itemType.type,
+          // TODO: This code needs to be refactored
+          // Note: This find query will never work since we have remove all matching competitions
+          // type: GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.SinglePartnerFinancialVirement),
+          type: PCRItemType.SinglePartnerFinancialVirement,
           status: PCRItemStatus.ToDo,
           accountName: "Pocahontas",
           partnerId: partner.id,
@@ -178,7 +180,7 @@ describe("Create PCR Command", () => {
     const partner = context.testData.createPartner(project);
     const recordTypes = context.testData.createPCRRecordTypes();
 
-    const itemType = pcrRecordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange)!;
+    const itemType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange)!;
 
     const command = new CreateProjectChangeRequestCommand(project.Id, ({
       projectId: project.Id,

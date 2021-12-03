@@ -18,7 +18,7 @@ export class GetAvailableItemTypesQuery extends QueryBase<Dtos.PCRItemTypeDto[]>
   }
 
   protected async run(context: IContext): Promise<Dtos.PCRItemTypeDto[]> {
-    const itemTypeDtos = await context.runQuery(new GetPCRItemTypesQuery());
+    const itemTypeDtos = await context.runQuery(new GetPCRItemTypesQuery(this.projectId));
     const projectPcrs = await context.runQuery(new GetAllPCRsQuery(this.projectId));
 
     const editingPcr = projectPcrs.find(pcr => pcr.id === this.pcrId);

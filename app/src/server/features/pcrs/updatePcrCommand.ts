@@ -2,10 +2,7 @@
 import { PCRDto, PCRItemDto, PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { Authorisation, IContext, PCRItemType } from "@framework/types";
-import {
-  ProjectChangeRequestItemEntity,
-  ProjectChangeRequestItemForCreateEntity,
-} from "@framework/entities";
+import { ProjectChangeRequestItemEntity, ProjectChangeRequestItemForCreateEntity } from "@framework/entities";
 import { GetAllForProjectQuery } from "@server/features/partners";
 import { CostCategoryType, PCRStatus, ProjectRole } from "@framework/constants";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
@@ -36,10 +33,12 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     originalStatus: PCRStatus,
     newStatus: PCRStatus,
   ): Promise<void> {
-    const shouldPmSee =
-      newStatus === PCRStatus.SubmittedToMonitoringOfficer ||
-      newStatus === PCRStatus.QueriedByMonitoringOfficer ||
-      (newStatus === PCRStatus.SubmittedToInnovateUK && originalStatus === PCRStatus.QueriedByInnovateUK);
+    const nowSubmittedToMo = newStatus === PCRStatus.SubmittedToMonitoringOfficer;
+    const nowQueriedToMo = newStatus === PCRStatus.QueriedByMonitoringOfficer;
+    const nowQueriedToInnovateUk = newStatus === PCRStatus.SubmittedToInnovateUK;
+    const previouslyQueriedByInnovateUk = originalStatus === PCRStatus.QueriedByInnovateUK;
+
+    const shouldPmSee = nowSubmittedToMo || nowQueriedToMo || (nowQueriedToInnovateUk && previouslyQueriedByInnovateUk);
 
     await context.repositories.projectChangeRequestStatusChange.createStatusChange({
       Acc_ProjectChangeRequest__c: projectChangeRequestId,
@@ -49,13 +48,14 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
   }
 
   protected async run(context: IContext): Promise<boolean> {
-    if (this.projectId !== this.pcr.projectId || this.projectChangeRequestId !== this.pcr.id) {
-      throw new BadRequestError();
-    }
+    const hasMismatchProjectId = this.projectId !== this.pcr.projectId;
+    const hasMismatchPcrId = this.projectChangeRequestId !== this.pcr.id;
+
+    if (hasMismatchProjectId || hasMismatchPcrId) throw new BadRequestError();
 
     const auth = await context.runQuery(new GetAllProjectRolesForUser());
     const projectRoles = auth.forProject(this.projectId).getRoles();
-    const itemTypes = await context.runQuery(new GetPCRItemTypesQuery());
+    const itemTypes = await context.runQuery(new GetPCRItemTypesQuery(this.projectId));
 
     const entityToUpdate = await context.repositories.projectChangeRequests.getById(this.pcr.projectId, this.pcr.id);
     const partners = await context.runQuery(new GetAllForProjectQuery(this.projectId));
@@ -70,7 +70,6 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       itemTypes,
       true,
       project,
-      context.config.features,
       originalDto,
       partners,
       allPcrs,
@@ -112,9 +111,11 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       // filter those that need updating
       .filter(x => !!x)
       .map<ProjectChangeRequestItemEntity>(x => x!);
+
     if (itemsToUpdate.length) {
       await context.repositories.projectChangeRequests.updateItems(entityToUpdate, itemsToUpdate);
     }
+
     const itemsToInsert: ProjectChangeRequestItemForCreateEntity[] = paired
       .filter(x => !x.originalItem)
       .map(x => ({
@@ -245,7 +246,10 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
         break;
       case PCRItemType.MultiplePartnerFinancialVirement:
         if (item.grantMovingOverFinancialYear !== dto.grantMovingOverFinancialYear) {
-          return { ...init, grantMovingOverFinancialYear: dto.grantMovingOverFinancialYear };
+          return {
+            ...init,
+            grantMovingOverFinancialYear: dto.grantMovingOverFinancialYear,
+          };
         }
     }
 

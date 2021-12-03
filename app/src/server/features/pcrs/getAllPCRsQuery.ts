@@ -15,14 +15,14 @@ export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
   }
 
   protected async run(context: IContext): Promise<PCRSummaryDto[]> {
-    const pcrItemTypes = await context.runQuery(new GetPCRItemTypesQuery());
+    const pcrItemTypes = await context.runQuery(new GetPCRItemTypesQuery(this.projectId));
     const data = await context.repositories.projectChangeRequests.getAllByProjectId(this.projectId);
     data.sort((a,b) => numberComparator(a.number,b.number) * -1);
     return data.map(x => this.map(x, pcrItemTypes));
   }
 
   private map(pcr: ProjectChangeRequestEntity, pcrItemTypes: PCRItemTypeDto[]): PCRSummaryDto {
-    // find the item types to inculde
+    // find the item types to include
     const filteredItemTypes = pcrItemTypes
       .map(pcrItemType => ({ itemType: pcrItemType, item: pcr.items.find((x => x.recordTypeId === pcrItemType.recordTypeId))}))
       .filter(x => !!x.item)

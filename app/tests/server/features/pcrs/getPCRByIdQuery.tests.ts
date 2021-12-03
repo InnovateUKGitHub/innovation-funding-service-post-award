@@ -1,12 +1,12 @@
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { DateTime } from "luxon";
-import { pcrRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
+import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import {
   PCRItemForAccountNameChangeDto,
   PCRItemForPartnerAdditionDto,
   PCRItemForProjectSuspensionDto,
   PCRItemForScopeChangeDto,
-  PCRItemForTimeExtensionDto
+  PCRItemForTimeExtensionDto,
 } from "@framework/dtos";
 import { CostCategoryType, PCRItemType, PCRPartnerType, PCRProjectRole, TypeOfAid } from "@framework/constants";
 import { PCRSpendProfileLabourCostDto } from "@framework/dtos/pcrSpendProfileDto";
@@ -48,7 +48,7 @@ describe("GetPCRByIdQuery", () => {
       started: expectedStartDate,
       updated: expectedUpdatedDate,
       status: 33,
-      statusName: "Expected Status name"
+      statusName: "Expected Status name",
     });
 
     const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
@@ -72,14 +72,19 @@ describe("GetPCRByIdQuery", () => {
     const recordTypes = context.testData.createPCRRecordTypes();
 
     const pcr = context.testData.createPCR();
-    const items = context.testData.range(3, (x,i) => context.testData.createPCRItem(pcr, recordTypes[i]));
+
+    // Avoid using Reallocate items - due to conditional logic
+    const items = [
+      context.testData.createPCRItem(pcr, recordTypes[2]),
+      context.testData.createPCRItem(pcr, recordTypes[3]),
+      context.testData.createPCRItem(pcr, recordTypes[4])
+    ];
 
     const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
     const result = await context.runQuery(query);
 
     expect(result.items.length).toBe(items.length);
     expect(result.items.map(x => x.id)).toEqual(items.map(x => x.id));
-
   });
 
   test("maps all item fields", async () => {
@@ -99,18 +104,25 @@ describe("GetPCRByIdQuery", () => {
     const result = await context.runQuery(query).then(x => x.items[0]);
 
     expect(result.id).toBe(item.id);
-    expect(result.guidance).toBe(pcrRecordTypeMetaValues.find(x => x.type === PCRItemType.ScopeChange)!.guidance);
+    expect(result.guidance).toBe(
+      GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.ScopeChange)!.guidance,
+    );
     expect(result.type).toBe(PCRItemType.ScopeChange);
     expect(result.typeName).toBe(recordType!.type);
     expect(result.status).toBe(98);
     expect(result.statusName).toBe("Expected Status");
-    expect(result.shortName).toBe("If a nickname is what people call you for short, then your full name is your nicholas name");
+    expect(result.shortName).toBe(
+      "If a nickname is what people call you for short, then your full name is your nicholas name",
+    );
   });
 
   it("returns the item short name if available", async () => {
     const context = new TestContext();
-    const pcrItemType = pcrRecordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal)!;
-    const recordType = context.testData.createRecordType({type: pcrItemType.typeName, parent: "Acc_ProjectChangeRequest__c"});
+    const pcrItemType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal)!;
+    const recordType = context.testData.createRecordType({
+      type: pcrItemType.typeName,
+      parent: "Acc_ProjectChangeRequest__c",
+    });
     const pcr = context.testData.createPCR();
     context.testData.createPCRItem(pcr, recordType, { shortName: "Get rid" });
     const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
@@ -120,8 +132,11 @@ describe("GetPCRByIdQuery", () => {
 
   it("returns the item type name if short name is not available", async () => {
     const context = new TestContext();
-    const pcrItemType = pcrRecordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal)!;
-    const recordType = context.testData.createRecordType({type: pcrItemType.typeName, parent: "Acc_ProjectChangeRequest__c"});
+    const pcrItemType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal)!;
+    const recordType = context.testData.createRecordType({
+      type: pcrItemType.typeName,
+      parent: "Acc_ProjectChangeRequest__c",
+    });
     const pcr = context.testData.createPCR();
     context.testData.createPCRItem(pcr, recordType, { shortName: undefined });
     const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
@@ -132,7 +147,9 @@ describe("GetPCRByIdQuery", () => {
   test("maps fields for time extension", async () => {
     const context = new TestContext();
 
-    const timeExtensionType = pcrRecordTypeMetaValues.find(x => x.type === PCRItemType.TimeExtension)!;
+    const timeExtensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
+      x => x.type === PCRItemType.TimeExtension,
+    )!;
     const recordType = context.testData.createPCRRecordTypes().find(x => x.type === timeExtensionType.typeName);
 
     const pcr = context.testData.createPCR();
@@ -154,7 +171,7 @@ describe("GetPCRByIdQuery", () => {
   test("maps fields for scope change", async () => {
     const context = new TestContext();
 
-    const scopeChangeType = pcrRecordTypeMetaValues.find(x => x.type === PCRItemType.ScopeChange)!;
+    const scopeChangeType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.ScopeChange)!;
     const recordType = context.testData.createPCRRecordTypes().find(x => x.type === scopeChangeType.typeName);
 
     const pcr = context.testData.createPCR();
@@ -179,13 +196,17 @@ describe("GetPCRByIdQuery", () => {
     expect(result.publicDescription).toBe(publicDescription);
     expect(result.publicDescriptionSnapshot).toBe(publicDescriptionSnapshot);
     expect(result.projectSummarySnapshot).toBe(projectSummarySnapshot);
-    expect(result.guidance).toBe(pcrRecordTypeMetaValues.find(x => x.type === PCRItemType.ScopeChange)!.guidance);
+    expect(result.guidance).toBe(
+      GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.ScopeChange)!.guidance,
+    );
   });
 
   test("maps fields for account name change", async () => {
     const context = new TestContext();
 
-    const accountNameChangeType = pcrRecordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange)!;
+    const accountNameChangeType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
+      x => x.type === PCRItemType.AccountNameChange,
+    )!;
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);
     const recordType = context.testData.createPCRRecordTypes().find(x => x.type === accountNameChangeType.typeName);
@@ -208,13 +229,17 @@ describe("GetPCRByIdQuery", () => {
     expect(result.accountName).toBe(accountName);
     expect(result.partnerNameSnapshot).toBe(partnerNameSnapshot);
     expect(result.partnerId).toBe(partner.id);
-    expect(result.guidance).toBe((pcrRecordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange)!.guidance));
+    expect(result.guidance).toBe(
+      GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange)!.guidance,
+    );
   });
 
   test("maps fields for project suspension", async () => {
     const context = new TestContext();
 
-    const projectSuspensionType = pcrRecordTypeMetaValues.find(x => x.type === PCRItemType.ProjectSuspension)!;
+    const projectSuspensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
+      x => x.type === PCRItemType.ProjectSuspension,
+    )!;
     const recordType = context.testData.createPCRRecordTypes().find(x => x.type === projectSuspensionType.typeName);
 
     const pcr = context.testData.createPCR();
@@ -224,7 +249,7 @@ describe("GetPCRByIdQuery", () => {
 
     const item = context.testData.createPCRItem(pcr, recordType, {
       suspensionStartDate,
-      suspensionEndDate
+      suspensionEndDate,
     });
 
     const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
@@ -239,7 +264,9 @@ describe("GetPCRByIdQuery", () => {
     test("maps fields for partner addition pcr item", async () => {
       const context = new TestContext();
 
-      const partnerAdditionType = pcrRecordTypeMetaValues.find(x => x.type === PCRItemType.PartnerAddition)!;
+      const partnerAdditionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
+        x => x.type === PCRItemType.PartnerAddition,
+      )!;
       const recordType = context.testData.createPCRRecordTypes().find(x => x.type === partnerAdditionType.typeName);
 
       const pcr = context.testData.createPCR();
@@ -251,7 +278,14 @@ describe("GetPCRByIdQuery", () => {
       const awardRate = 35;
       const typeOfAid = TypeOfAid.DeMinimisAid;
 
-      const item = context.testData.createPCRItem(pcr, recordType, { projectRole, partnerType, projectCity, projectPostcode, awardRate, typeOfAid });
+      const item = context.testData.createPCRItem(pcr, recordType, {
+        projectRole,
+        partnerType,
+        projectCity,
+        projectPostcode,
+        awardRate,
+        typeOfAid,
+      });
 
       const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
       const result = await context.runQuery(query).then(x => x.items[0] as PCRItemForPartnerAdditionDto);
@@ -268,10 +302,12 @@ describe("GetPCRByIdQuery", () => {
     test("maps fields for partner addition pcr spend profile for Labour", async () => {
       const context = new TestContext();
 
-      const partnerAdditionType = pcrRecordTypeMetaValues.find(x => x.type === PCRItemType.PartnerAddition)!;
+      const partnerAdditionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
+        x => x.type === PCRItemType.PartnerAddition,
+      )!;
       const recordType = context.testData.createPCRRecordTypes().find(x => x.type === partnerAdditionType.typeName);
       const pcr = context.testData.createPCR();
-      const costCategoryLabour = context.testData.createCostCategory({name: "Labour", type: CostCategoryType.Labour});
+      const costCategoryLabour = context.testData.createCostCategory({ name: "Labour", type: CostCategoryType.Labour });
 
       const projectRole = PCRProjectRole.Collaborator;
       const partnerType = PCRPartnerType.ResearchAndTechnology;
@@ -281,8 +317,8 @@ describe("GetPCRByIdQuery", () => {
         costCategory: costCategoryLabour,
         pcrItem: item,
         update: {
-          value: 50
-        }
+          value: 50,
+        },
       });
 
       const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);

@@ -15,7 +15,7 @@ import {
   PCRProjectRole,
   TypeOfAid
 } from "@framework/types";
-import { pcrRecordTypeMetaValues } from "@server/features/pcrs/getItemTypesQuery";
+import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { CostCategoryType, PCRItemStatus, PCRParticipantSize, PCRStatus } from "@framework/constants";
 import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
 import { ITestRepositories } from "./testRepositories";
@@ -76,7 +76,7 @@ export class TestData {
     const newItem: Repositories.ISalesforceProject = {
       Id: "Project" + seed,
       Acc_ProjectTitle__c: "Project " + seed,
-      Acc_CompetitionType__c: "SBRI",
+      Acc_CompetitionType__c: "CR&D",
       Acc_StartDate__c: "",
       Acc_EndDate__c: "",
       Acc_ClaimFrequency__c: "Quarterly",
@@ -664,7 +664,7 @@ export class TestData {
   }
 
   public createPCRRecordTypes() {
-    return pcrRecordTypeMetaValues.map(x => {
+    return GetPCRItemTypesQuery.recordTypeMetaValues.map(x => {
       const parent = "Acc_ProjectChangeRequest__c";
       const existing = this.repositories.recordTypes.Items.find(r => r.parent === parent && r.type === x.typeName);
       return existing || this.createRecordType({

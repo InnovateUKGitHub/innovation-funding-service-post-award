@@ -4,8 +4,10 @@ import { PCRItemType } from "@framework/constants";
 import { RecordType } from "@framework/entities";
 import { GetAllRecordTypesQuery } from "../general/getAllRecordTypesQuery";
 import { IConfig, QueryBase } from "../common";
+import { GetByIdQuery } from "../projects";
 
 interface IMetaValue {
+  competitions: string[];
   type: PCRItemType;
   typeName: string;
   displayName?: string;
@@ -48,27 +50,22 @@ You must not:
 You should not increase the overhead percentage rate.
 `;
 
-// @TODO: this might sit better in the pcr repository (or constants?) ... leave for now
-export const pcrRecordTypeMetaValues: IMetaValue[] = [
-  { type: PCRItemType.SinglePartnerFinancialVirement, typeName: "Reallocate one partner's project costs", files: ["reallocate-project-costs.xlsx"], displayName: "Reallocate project costs", guidance: singlePartnerFinancialVirementGuidance },
-  { type: PCRItemType.MultiplePartnerFinancialVirement, typeName: "Reallocate several partners' project cost", files: ["reallocate-project-costs.xlsx"], displayName: "Reallocate project costs", guidance: multiplePartnerFinancialVirementGuidance },
-  { type: PCRItemType.PartnerWithdrawal, typeName: "Remove a partner" },
-  { type: PCRItemType.PartnerAddition, typeName: "Add a partner", files: ["de-minimis-declaration.odt"], guidance: partnerAdditionGuidance },
-  { type: PCRItemType.ScopeChange, typeName: "Change project scope", guidance: scopeChangeGuidance },
-  { type: PCRItemType.TimeExtension, typeName: "Change project duration" },
-  { type: PCRItemType.PeriodLengthChange, typeName: "Change period length" },
-  { type: PCRItemType.AccountNameChange, typeName: "Change a partner's name", guidance: nameChangeGuidance },
-  { type: PCRItemType.ProjectSuspension, typeName: "Put project on hold" },
-  { type: PCRItemType.ProjectTermination, typeName: "End the project early" },
-];
-
 export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
-  protected async run(context: IContext): Promise<PCRItemTypeDto[]> {
-    const allRecordTypes = await context.runQuery(new GetAllRecordTypesQuery());
-    const pcrRecordTypes = allRecordTypes.filter(x => x.parent === "Acc_ProjectChangeRequest__c");
+  constructor(public readonly projectId: string) {
+    super();
+  }
 
-    /// meta values controls order
-    return pcrRecordTypeMetaValues.map<PCRItemTypeDto>(metaInfo => ({
+  protected async run(context: IContext): Promise<PCRItemTypeDto[]> {
+    const project = await context.runQuery(new GetByIdQuery(this.projectId));
+    const recordTypes = await context.runQuery(new GetAllRecordTypesQuery());
+
+    const recordMetaValues = GetPCRItemTypesQuery.recordTypeMetaValues.filter(x =>
+      x.competitions.includes(project.competitionType),
+    );
+
+    const pcrRecordTypes = recordTypes.filter(x => x.parent === "Acc_ProjectChangeRequest__c");
+
+    return recordMetaValues.map<PCRItemTypeDto>(metaInfo => ({
       type: metaInfo.type,
       displayName: metaInfo.displayName || metaInfo.typeName,
       enabled: this.getEnabledStatus(metaInfo, context.config),
@@ -88,6 +85,7 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
   }
 
   private getEnabledStatus(metaInfo: IMetaValue, config: IConfig): boolean {
+    // TODO: Raise ticket to remove this PCRItemType since we use 'MultiplePartnerFinancialVirement' in replacement
     if (metaInfo.type === PCRItemType.SinglePartnerFinancialVirement) {
       return false;
     }
@@ -96,6 +94,7 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
       return true;
     }
 
+    // TODO: Raise ticket to remove this... Currently we have no matching competitions for this PCRItemType
     if (metaInfo.type === PCRItemType.PeriodLengthChange) {
       return config.features.changePeriodLengthWorkflow;
     }
@@ -106,4 +105,76 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
     const recordType = recordTypes.find(y => y.type === typeName);
     return recordType?.id || "Unknown";
   }
+
+  /**
+   * @description The DB does not support filtering by competition, so we introduce support here on this static array via 'competitions'.
+   *
+   * To be clear, the PCR items types will adhere to this order. If the db has an entry but it is not defined here then it will not be available through the api.
+   */
+  static readonly recordTypeMetaValues: IMetaValue[] = [
+    {
+      type: PCRItemType.SinglePartnerFinancialVirement,
+      competitions: [],
+      // competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "SBRI", "SBRI IFS"],
+      typeName: "Reallocate one partner's project costs",
+      files: ["reallocate-project-costs.xlsx"],
+      displayName: "Reallocate project costs",
+      guidance: singlePartnerFinancialVirementGuidance,
+    },
+    {
+      type: PCRItemType.MultiplePartnerFinancialVirement,
+      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "SBRI", "SBRI IFS"],
+      typeName: "Reallocate several partners' project cost",
+      files: ["reallocate-project-costs.xlsx"],
+      displayName: "Reallocate project costs",
+      guidance: multiplePartnerFinancialVirementGuidance,
+    },
+    {
+      type: PCRItemType.PartnerWithdrawal,
+      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "SBRI", "SBRI IFS"],
+      typeName: "Remove a partner",
+    },
+    {
+      type: PCRItemType.PartnerAddition,
+      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "SBRI", "SBRI IFS"],
+      typeName: "Add a partner",
+      files: ["de-minimis-declaration.odt"],
+      guidance: partnerAdditionGuidance,
+    },
+    {
+      type: PCRItemType.ScopeChange,
+      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "SBRI", "SBRI IFS"],
+      typeName: "Change project scope",
+      guidance: scopeChangeGuidance,
+    },
+    {
+      type: PCRItemType.TimeExtension,
+      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "SBRI", "SBRI IFS"],
+      typeName: "Change project duration",
+    },
+    {
+      type: PCRItemType.PeriodLengthChange,
+      competitions: [],
+      typeName: "Change period length",
+    },
+    {
+      type: PCRItemType.AccountNameChange,
+      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "SBRI", "SBRI IFS"],
+      typeName: "Change a partner's name",
+      guidance: nameChangeGuidance,
+    },
+    {
+      type: PCRItemType.ProjectSuspension,
+      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "SBRI", "SBRI IFS"],
+      typeName: "Put project on hold",
+    },
+    {
+      type: PCRItemType.ProjectTermination,
+      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "SBRI", "SBRI IFS"],
+      typeName: "End the project early",
+    },
+  ].filter(x => {
+    // Note: Filter any non-competitions
+    return x.competitions.length > 0;
+  });
 }
