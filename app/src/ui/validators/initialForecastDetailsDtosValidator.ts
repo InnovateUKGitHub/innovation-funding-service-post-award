@@ -24,23 +24,35 @@ export class InitialForecastDetailsDtosValidator
     super(forecasts, showErrors);
   }
 
-  public readonly items = Validation.optionalChild(
-    this,
-    this.model,
-    x => new InitialForecastDetailsDtoValidator(x, this.showValidationErrors),
-  );
-  public readonly costCategoryForecasts = Validation.optionalChild(
-    this,
-    this.mapCostCategoryForecasts(),
-    x => new InitialForecastDetailsDtoCostCategoryValidator(x, this.submit, this.showValidationErrors),
-  );
+  public readonly items = this.validateItems();
+  public readonly costCategoryForecasts = this.validateCategoryForecasts();
   public readonly totalCosts: Result = Validation.valid(this);
 
+  private validateItems() {
+    return Validation.optionalChild(
+      this,
+      this.model,
+      x => new InitialForecastDetailsDtoValidator(x, this.showValidationErrors),
+    );
+  }
+
+  private validateCategoryForecasts() {
+    const costCategoryForecasts = this.mapCostCategoryForecasts();
+
+    return Validation.optionalChild(
+      this,
+      costCategoryForecasts,
+      x => new InitialForecastDetailsDtoCostCategoryValidator(x, this.submit, this.showValidationErrors),
+    );
+  }
+
   private mapCostCategoryForecasts(): CostCategoryForecast[] {
-    const groupedForecasts = Array.from(groupBy(this.forecasts, dto => dto.costCategoryId).entries());
+    const groupedCostCategories = groupBy(this.forecasts, dto => dto.costCategoryId);
+    const groupedForecasts = Array.from(groupedCostCategories.entries());
 
     return this.costCategories.map(costCategory => {
       const entry = groupedForecasts.find(x => x[0] === costCategory.id)!;
+
       return {
         golCost: this.golCosts.find(gol => gol.costCategoryId === costCategory.id)!,
         costCategory,

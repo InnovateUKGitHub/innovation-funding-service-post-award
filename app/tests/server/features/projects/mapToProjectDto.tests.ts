@@ -69,6 +69,7 @@ describe("mapToProjectDto", () => {
       x.Acc_ClaimsOverdue__c = expected.claimsOverdue;
       x.Acc_ClaimsUnderQuery__c = expected.claimsWithParticipant;
       x.Acc_ClaimsForReview__c = expected.claimsToReview;
+      x.Acc_CompetitionType__c = expected.competitionType;
       x.Acc_NumberOfOpenClaims__c = expected.numberOfOpenClaims;
       x.Acc_NumberofPeriods__c = expected.numberOfPeriods;
       x.Acc_CurrentPeriodNumber__c = expected.periodId;

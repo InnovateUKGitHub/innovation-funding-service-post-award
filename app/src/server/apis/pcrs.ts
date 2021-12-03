@@ -32,7 +32,7 @@ export interface IPCRsApi {
   create: (params: ApiParams<{ projectId: string; projectChangeRequestDto: PCRDto }>) => Promise<PCRDto>;
   getAll: (params: ApiParams<{ projectId: string }>) => Promise<PCRSummaryDto[]>;
   get: (params: ApiParams<{ projectId: string; id: string }>) => Promise<PCRDto>;
-  getTypes: (params: ApiParams<{}>) => Promise<PCRItemTypeDto[]>;
+  getTypes: (params: ApiParams<{ projectId: string }>) => Promise<PCRItemTypeDto[]>;
   getAvailableTypes: (params: ApiParams<{ projectId: string; pcrId?: string }>) => Promise<PCRItemTypeDto[]>;
   getTimeExtensionOptions: (params: ApiParams<{ projectId: string }>) => Promise<PCRTimeExtensionOption[]>;
   update: (params: ApiParams<{projectId: string; id: string; pcr: PCRDto}>) => Promise<PCRDto>;
@@ -50,21 +50,27 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
   constructor() {
     super("pcrs");
 
-    super.getItems("/", (p, q) => ({ projectId: q.projectId }), (p) => this.getAll(p));
-    super.getItem("/:projectId/:id", (p) => ({ projectId: p.projectId, id: p.id }), (p) => this.get(p));
-    super.postItem("/:projectId", (p, q, b) => ({ projectId: p.projectId, projectChangeRequestDto: processDto(b) }), (p) => this.create(p));
-    super.getCustom("/types", () => ({}), p => this.getTypes(p));
-    super.getCustom("/available-types", (p, q) => ({ projectId: q.projectId, pcrId: q.pcrId }), (p) => this.getAvailableTypes(p));
-    super.getCustom("/time-extension-options", (p, q) => ({ projectId: q.projectId }), this.getTimeExtensionOptions);
-    super.putItem("/:projectId/:id", (p, q, b) => ({ projectId: p.projectId, id: p.id, pcr: processDto(b) }), (p) => this.update(p));
-    super.deleteItem("/:projectId/:id", (p) => ({ projectId: p.projectId, id: p.id }), (p) => this.delete(p));
-    this.getCustom("/status-changes/:projectId/:projectChangeRequestId", (p) => ({projectId: p.projectId, projectChangeRequestId: p.projectChangeRequestId}), p => this.getStatusChanges(p));
-    this.getCustom("/project-roles", () => ({}), (p) => this.getPcrProjectRoles(p));
-    this.getCustom("/partner-types", () => ({}), (p) => this.getPcrPartnerTypes(p));
-    this.getCustom("/participant-sizes", () => ({}), (p) => this.getParticipantSizes(p));
-    this.getCustom("/project-locations", () => ({}), (p) => this.getProjectLocations(p));
-    this.getCustom("/capital-usage-types", () => ({}), (p) => this.getCapitalUsageTypes(p));
-    this.getCustom("/overhead-rate-options", () => ({}), (p) => this.getOverheadRateOptions(p));
+    this.getItems("/", (_, q) => ({ projectId: q.projectId }), this.getAll);
+
+    this.getCustom("/all-types/:projectId", p => ({ projectId: p.projectId }), this.getTypes);
+    this.getCustom("/available-types", (_, q) => ({ projectId: q.projectId, pcrId: q.pcrId }), this.getAvailableTypes);
+    this.getCustom("/time-extension-options", (_, q) => ({ projectId: q.projectId }), this.getTimeExtensionOptions);
+
+    this.getCustom("/status-changes/:projectId/:projectChangeRequestId", (p) => ({projectId: p.projectId, projectChangeRequestId: p.projectChangeRequestId}), this.getStatusChanges);
+    this.getCustom("/project-roles", () => ({}), this.getPcrProjectRoles);
+    this.getCustom("/partner-types", () => ({}), this.getPcrPartnerTypes);
+    this.getCustom("/participant-sizes", () => ({}), this.getParticipantSizes);
+    this.getCustom("/project-locations", () => ({}), this.getProjectLocations);
+    this.getCustom("/capital-usage-types", () => ({}), this.getCapitalUsageTypes);
+    this.getCustom("/overhead-rate-options", () => ({}), this.getOverheadRateOptions);
+
+    this.getItem("/:projectId/:id", (p) => ({ projectId: p.projectId, id: p.id }), this.get);
+
+    this.postItem("/:projectId", (p, _, b) => ({ projectId: p.projectId, projectChangeRequestDto: processDto(b) }), this.create);
+
+    this.putItem("/:projectId/:id", (p, _, b) => ({ projectId: p.projectId, id: p.id, pcr: processDto(b) }), this.update);
+
+    this.deleteItem("/:projectId/:id", (p) => ({ projectId: p.projectId, id: p.id }), this.delete);
   }
 
   getAll(params: ApiParams<{ projectId: string }>): Promise<PCRSummaryDto[]> {
@@ -83,8 +89,8 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
     return context.runQuery(new GetPCRByIdQuery(params.projectId, id));
   }
 
-  getTypes(params: ApiParams<{}>): Promise<PCRItemTypeDto[]> {
-    const query = new GetPCRItemTypesQuery();
+  public getTypes(params: ApiParams<{ projectId: string }>): Promise<PCRItemTypeDto[]> {
+    const query = new GetPCRItemTypesQuery(params.projectId);
     return contextProvider.start(params).runQuery(query);
   }
 

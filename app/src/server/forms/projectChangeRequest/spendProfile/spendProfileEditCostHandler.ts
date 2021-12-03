@@ -179,6 +179,6 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
   }
 
   protected createValidationResult(params: PcrEditSpendProfileCostParams, dto: PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, configuration.features, dto);
+    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, dto);
   }
 }

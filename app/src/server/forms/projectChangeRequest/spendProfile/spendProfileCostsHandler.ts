@@ -55,6 +55,6 @@ export class ProjectChangeRequestSpendProfileCostsSummaryHandler extends Standar
   }
 
   protected createValidationResult(params: PcrSpendProfileCostSummaryParams, dto: PCRDto) {
-    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, configuration.features, dto);
+    return new PCRDtoValidator(dto, ProjectRole.Unknown, [], false, {} as ProjectDto, dto);
   }
 }

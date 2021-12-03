@@ -15,7 +15,7 @@ export class GetPCRByIdQuery extends QueryBase<PCRDto> {
   }
 
   protected async run(context: IContext): Promise<PCRDto> {
-    const itemTypes = await context.runQuery(new GetPCRItemTypesQuery());
+    const itemTypes = await context.runQuery(new GetPCRItemTypesQuery(this.projectId));
     const item = await context.repositories.projectChangeRequests.getById(this.projectId, this.id);
     const pcrDto = mapToPcrDto(item, itemTypes);
     const addPartnerItem = pcrDto.items.find(x => x.type === PCRItemType.PartnerAddition);

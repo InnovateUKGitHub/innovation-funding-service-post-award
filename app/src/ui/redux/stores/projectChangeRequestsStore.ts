@@ -55,7 +55,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     ];
 
     if (!projectChangeRequestId) {
-      return this.getAllPcrTypes()
+      return this.getAllPcrTypes(projectId)
         .then(x => x.map(y => y.type))
         .then(x => x.filter(y => nonEditableTypes.indexOf(y) === -1));
     }
@@ -69,8 +69,8 @@ export class ProjectChangeRequestStore extends StoreBase {
     return this.getData("pcrs", storeKeys.getProjectKey(projectId), p => apiClient.pcrs.getAll({ projectId, ...p }));
   }
 
-  public getAllPcrTypes() {
-    return this.getData("pcrTypes", storeKeys.getPcrTypesKey(), p => apiClient.pcrs.getTypes({ ...p }));
+  public getAllPcrTypes(projectId: string) {
+    return this.getData("pcrTypes", storeKeys.getPcrTypesKey(), p => apiClient.pcrs.getTypes({ ...p, projectId }));
   }
 
   public getAllAvailablePcrTypes(projectId: string, pcrId?: string) {
@@ -109,7 +109,7 @@ export class ProjectChangeRequestStore extends StoreBase {
 
   public getPcrTypeForItem(projectId: string, pcrId: string, itemId: string) {
     const data = Pending.combine({
-      itemTypes: this.getAllPcrTypes(),
+      itemTypes: this.getAllPcrTypes(projectId),
       pcrItem: this.getItemById(projectId, pcrId, itemId)
     });
 
@@ -317,9 +317,9 @@ export class ProjectChangeRequestStore extends StoreBase {
     return Pending.combine({
       projectRoles: this.projectStore.getById(projectId).then(x => x.roles),
       original: dto.id ? this.getById(projectId, dto.id) : Pending.done(undefined),
-      itemTypes: this.getAllPcrTypes(),
+      itemTypes: this.getAllPcrTypes(projectId),
       project: this.projectStore.getById(projectId)
-    }).then(x => new PCRDtoValidator(dto, x.projectRoles, x.itemTypes, showErrors, x.project, this.configStore.getConfig().features, x.original));
+    }).then(x => new PCRDtoValidator(dto, x.projectRoles, x.itemTypes, showErrors, x.project, x.original));
   }
 
   public deletePcr(projectId: string, pcrId: string, dto: PCRDto, message?: string, onComplete?: () => void): void {
