@@ -105,7 +105,7 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
         onChange={dto => this.props.onChange(false, dto)}
       >
         <PCRForm.Fieldset heading="Select request types">
-          <PcrTypesGuidance qa="addType" />
+          <PcrTypesGuidance qa="addType" types={itemTypes}/>
 
           <PCRForm.Checkboxes
             hint="You can select more than one."
