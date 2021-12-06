@@ -95,7 +95,7 @@ function PCRCreateComponent({ content, ...props }: CreatePcrProps) {
             onChange={dto => props.onChange(false, dto)}
           >
             <PCRForm.Fieldset heading={content.selectRequestTypesTitle}>
-              <PcrTypesGuidance qa="create" />
+              <PcrTypesGuidance qa="create" types={itemTypes}/>
 
               <PCRForm.Checkboxes
                 name="types"
