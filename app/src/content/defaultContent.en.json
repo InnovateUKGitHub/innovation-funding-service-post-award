@@ -92,7 +92,8 @@
       "advisoryGrantMoPmMessage": "The partner is requesting an amount more than the grant offered for:",
       "advisoryContractMoPmMessage": "The partner is requesting an amount more than the maximum contract value offered for:"
     },
-    "onHoldContent": {
+    "projectInactiveContent": {
+      "projectInactiveMessage": "This project is currently inactive, you can't edit this project so you have been prevented from viewing this page.",
       "projectOnHoldMessage": "This project is on hold. Contact Innovate UK for more information.",
       "partnerOnHoldMessage": "Partner is on hold. Contact Innovate UK for more information."
     },

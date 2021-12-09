@@ -1,31 +1,34 @@
-import { ProjectDto } from "@framework/types";
-import { GetAllQuery, GetByIdQuery } from "../features/projects";
-import contextProvider from "../features/common/contextProvider";
-import { ApiParams, ControllerBase } from "./controllerBase";
+import { ProjectDto, ProjectStatusDto } from "@framework/types";
+import { ApiParams, ControllerBase } from "@server/apis/controllerBase";
 
-export interface IProjectsApi {
-  get: (params: ApiParams<{ projectId: string }>) => Promise<ProjectDto>;
-  getAll: (params: ApiParams<{}>) => Promise<ProjectDto[]>;
-}
+import contextProvider from "@server/features/common/contextProvider";
+import { GetAllQuery, GetByIdQuery, GetProjectStatusQuery } from "@server/features/projects";
 
 class Controller extends ControllerBase<ProjectDto> implements IProjectsApi {
-
   constructor() {
     super("projects");
 
-    super.getItem("/:projectId", p => ({ projectId: p.projectId }), (p) => this.get(p));
-    super.getItems("/", () => ({}), (p) => this.getAll(p));
+    this.getCustom("/project-active/:projectId", p => ({ projectId: p.projectId }), this.isProjectActive);
+    this.getItem("/:projectId", p => ({ projectId: p.projectId }), this.get);
+    this.getItems("/", () => ({}), this.getAll);
   }
 
-  public async get(params: ApiParams<{ projectId: string }>) {
+  public async isProjectActive(params: ApiParams<{ projectId: string }>): Promise<ProjectStatusDto> {
+    const query = new GetProjectStatusQuery(params.projectId);
+    return contextProvider.start(params).runQuery(query);
+  }
+
+  public async get(params: ApiParams<{ projectId: string }>): Promise<ProjectDto> {
     const query = new GetByIdQuery(params.projectId);
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getAll(params: ApiParams<{}>) {
+  public async getAll(params: ApiParams<{}>): Promise<ProjectDto[]> {
     const query = new GetAllQuery();
     return contextProvider.start(params).runQuery(query);
   }
 }
 
 export const controller = new Controller();
+
+export type IProjectsApi = Pick<Controller, "get" | "getAll" | "isProjectActive">;

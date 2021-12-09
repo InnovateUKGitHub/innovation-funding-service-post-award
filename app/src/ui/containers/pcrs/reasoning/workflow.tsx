@@ -186,6 +186,7 @@ const PCRReasoningWorkflowContainer = (props: ProjectChangeRequestPrepareReasoni
 
 /* eslint-disable react/display-name */
 export const PCRViewReasoningRoute = defineRoute<ProjectChangeRequestPrepareReasoningParams>({
+  allowRouteInActiveAccess: true,
   routeName: "pcrViewReasoning",
   routePath: "/projects/:projectId/pcrs/:pcrId/details/reasoning",
   getParams: (route) => ({

@@ -1,6 +1,6 @@
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
-import { Params, UpdateForecastRoute } from "@ui/containers/forecasts/update";
+import { ForecastUpdateParams, UpdateForecastRoute } from "@ui/containers/forecasts/update";
 import { ForecastDetailsRoute } from "@ui/containers/forecasts/details";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ForecastDetailsDTO } from "@framework/dtos";
@@ -11,19 +11,22 @@ import { GetByIdQuery as GetPartnerByIdQuery } from "../features/partners";
 import { GetCostCategoriesForPartnerQuery } from "../features/claims/getCostCategoriesForPartnerQuery";
 import { IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
 
-export class UpdateForecastFormHandler extends StandardFormHandlerBase<Params, "forecastDetails"> {
+export class UpdateForecastFormHandler extends StandardFormHandlerBase<ForecastUpdateParams, "forecastDetails"> {
   constructor() {
     super(UpdateForecastRoute, ["default"], "forecastDetails");
   }
-  protected async getDto(context: IContext, params: Params, button: IFormButton, body: { [key: string]: string }): Promise<ForecastDetailsDTO[]> {
+  protected async getDto(
+    context: IContext,
+    params: ForecastUpdateParams,
+    button: IFormButton,
+    body: { [key: string]: string },
+  ): Promise<ForecastDetailsDTO[]> {
     const dto = await context.runQuery(new GetAllForecastsForPartnerQuery(params.partnerId));
     const project = await context.runQuery(new GetByIdQuery(params.projectId));
     const partner = await context.runQuery(new GetPartnerByIdQuery(params.partnerId));
     const costCategories = await context.runQuery(new GetCostCategoriesForPartnerQuery(partner));
 
-    const costCategoriesIdsToUpdate = costCategories
-      .filter(x => !x.isCalculated)
-      .map(x => x.id);
+    const costCategoriesIdsToUpdate = costCategories.filter(x => !x.isCalculated).map(x => x.id);
 
     dto.forEach(x => {
       if (x.periodId > project.periodId && costCategoriesIdsToUpdate.indexOf(x.costCategoryId) >= 0) {
@@ -34,16 +37,21 @@ export class UpdateForecastFormHandler extends StandardFormHandlerBase<Params, "
     return dto;
   }
 
-  protected async run(context: IContext, params: Params, button: IFormButton, dto: ForecastDetailsDTO[]): Promise<ILinkInfo> {
+  protected async run(
+    context: IContext,
+    params: ForecastUpdateParams,
+    button: IFormButton,
+    dto: ForecastDetailsDTO[],
+  ): Promise<ILinkInfo> {
     await context.runCommand(new UpdateForecastDetailsCommand(params.projectId, params.partnerId, dto, false));
     return ForecastDetailsRoute.getLink(params);
   }
 
-  protected getStoreKey(params: Params) {
+  protected getStoreKey(params: ForecastUpdateParams) {
     return storeKeys.getPartnerKey(params.partnerId);
   }
 
-  protected createValidationResult(params: Params, dto: ForecastDetailsDTO[]) {
+  protected createValidationResult(params: ForecastUpdateParams, dto: ForecastDetailsDTO[]) {
     return new ForecastDetailsDtosValidator(dto, [], [], [], undefined, false);
   }
 }

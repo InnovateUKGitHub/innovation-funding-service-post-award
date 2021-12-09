@@ -88,7 +88,7 @@ export class TestData {
       Acc_NumberOfOpenClaims__c: 0,
       Acc_ProjectNumber__c: seed.toString(),
       Acc_ProjectSource__c: "",
-      Acc_ProjectStatus__c: "",
+      Acc_ProjectStatus__c: "Live",
       ProjectStatusName: "",
       Acc_PCRsForReview__c: 0,
       Acc_PCRsUnderQuery__c: 0,

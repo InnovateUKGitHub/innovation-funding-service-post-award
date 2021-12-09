@@ -375,6 +375,7 @@ const ProjectOverviewContainer = (props: Params & BaseProps) => {
 };
 
 export const ProjectOverviewRoute = defineRoute({
+  allowRouteInActiveAccess: true,
   routeName: "projectOverview",
   routePath: "/projects/:projectId/overview",
   getParams: r => ({ projectId: r.params.projectId }),

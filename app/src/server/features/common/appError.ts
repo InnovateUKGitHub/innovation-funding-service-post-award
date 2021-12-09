@@ -21,6 +21,12 @@ export class ForbiddenError extends AppError {
   }
 }
 
+export class InActiveProjectError extends ForbiddenError {
+  constructor(readonly original?: Error) {
+    super("Project must be active to proceed.", original);
+  }
+}
+
 export class FormHandlerError extends AppError {
   constructor(
     public key: string,

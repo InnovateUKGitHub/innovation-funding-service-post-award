@@ -123,6 +123,7 @@ const Container = (props: MonitoringReportWorkflowParams & BaseProps) => {
 };
 
 export const MonitoringReportWorkflowRoute = defineRoute({
+  allowRouteInActiveAccess: true,
   routeName: "monitoringReportPrepare",
   routePath: "/projects/:projectId/monitoring-reports/:id/:mode<(prepare|view){1}>?:step",
   container: Container,

@@ -1,6 +1,6 @@
 import { PartnerDto } from "@framework/dtos";
 import { GetByIdQuery } from "@server/features/partners";
-import { ValidationError } from "@server/features/common";
+import { InActiveProjectError, ValidationError } from "@server/features/common";
 import {
   BankCheckStatusMapper,
   BankDetailsTaskStatusMapper,
@@ -36,6 +36,7 @@ describe("updatePartnerCommand", () => {
       item.accountBuilding = "Building";
       Object.assign(item, updates);
     });
+
     return { context, partner };
   };
 
@@ -46,6 +47,18 @@ describe("updatePartnerCommand", () => {
         spendProfileStatus: new PartnerSpendProfileStatusMapper().mapToSalesforce(SpendProfileStatus.Complete) || "",
         bankDetailsTaskStatus: new BankDetailsTaskStatusMapper().mapToSalesforce(BankDetailsTaskStatus.Complete) || "",
       });
+
+    it("throws error when project is inactive", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject(x => x.Acc_ProjectStatus__c = "On Hold");
+      const partner = context.testData.createPartner(project);
+
+      const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
+
+      const command = new UpdatePartnerCommand(expected);
+
+      await expect(context.runCommand(command)).rejects.toThrow(InActiveProjectError);
+    });
 
     it("correctly updates partner when null value is passed", async () => {
       const { context, partner } = postcodeSetup();

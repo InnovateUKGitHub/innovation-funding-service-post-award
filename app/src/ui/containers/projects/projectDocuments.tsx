@@ -161,6 +161,7 @@ const ProjectDocumentsContainer = (props: ProjectDocumentPageParams & BaseProps)
 };
 
 export const ProjectDocumentsRoute = defineRoute({
+  allowRouteInActiveAccess: true,
   routeName: "projectDocuments",
   routePath: "/projects/:projectId/documents",
   container: ProjectDocumentsContainer,

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
+import { BadRequestError, CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
 import { Authorisation, BankCheckStatus, BankDetailsTaskStatus, IContext, PartnerDto, PartnerStatus, ProjectRole } from "@framework/types";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import { BankCheckStatusMapper, BankDetailsTaskStatusMapper, PartnerStatusMapper } from "@server/features/partners/mapToPartnerDto";
@@ -8,6 +8,7 @@ import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummary";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { BankCheckVerificationResultFields } from "@framework/types/bankCheck";
+import { GetProjectStatusQuery } from "../projects";
 
 export class UpdatePartnerCommand extends CommandBase<boolean> {
   constructor(
@@ -23,6 +24,11 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
   }
 
   protected async run(context: IContext) {
+    const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.partner.projectId));
+
+    if (!isProjectActive) {
+      throw new InActiveProjectError();
+    }
 
     const originalDto = await context.runQuery(new GetByIdQuery(this.partner.id));
     const partnerDocuments = await context.runQuery(new GetPartnerDocumentsQuery(this.partner.projectId, this.partner.id));

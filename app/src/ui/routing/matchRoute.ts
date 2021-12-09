@@ -15,15 +15,16 @@ export interface MatchedRoute {
   getParams: (route: State) => {};
   container: React.FunctionComponent<any>;
   getTitle: (getTitleArgs: { params: {}; stores: IStores; content: Content }) => PageTitleState;
+  allowRouteInActiveAccess?: true;
 }
 
 // Note: matchRoute doesn't check if the route is valid but the FormHandler is missing
-export function matchRoute(route: State | null | undefined): MatchedRoute {
-  const matched = Object.keys(routeConfig)
-    .map(x => x as RouteKeys)
-    .map(x => routeConfig[x] as IRouteDefinition<{}>)
-    .find(x => x.routeName === (route && route.name))
-    ;
+export function matchRoute(routeToCheck: State | null | undefined): MatchedRoute {
+  if (!routeToCheck) return ErrorNotFoundRoute;
 
-  return matched || ErrorNotFoundRoute;
+  const routesKeys = Object.keys(routeConfig) as RouteKeys[];
+  const availableRoutes = routesKeys.map(x => routeConfig[x] as IRouteDefinition<{}>);
+  const foundRoute = availableRoutes.find(x => x.routeName === routeToCheck.name);
+
+  return foundRoute ?? ErrorNotFoundRoute;
 }

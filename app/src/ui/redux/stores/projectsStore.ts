@@ -1,4 +1,4 @@
-import { ProjectDto } from "@framework/dtos";
+import { ProjectDto, ProjectStatusDto } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { apiClient } from "../../apiClient";
@@ -12,21 +12,36 @@ export class ProjectsStore extends StoreBase {
   }
 
   public getProjects() {
-    return this.getData("projects", storeKeys.getProjectsKey(), p => apiClient.projects.getAll(p));
+    return this.getData("projects", storeKeys.getProjectsKey(), apiClient.projects.getAll);
   }
 
-  public getProjectsFilter(searchString?: string|null): Pending<ProjectDto[]> {
+  public getProjectsFilter(searchString?: string | null): Pending<ProjectDto[]> {
     return this.getProjects().then(projects => {
-        if (!searchString) return projects;
-        return projects.filter(project =>
-          project.projectNumber && project.projectNumber.toString().indexOf(searchString.toLocaleLowerCase()) >= 0
-          || project.title && project.title.toLocaleLowerCase().indexOf(searchString.toLocaleLowerCase()) >= 0
-          || project.leadPartnerName && project.leadPartnerName.toLocaleLowerCase().indexOf(searchString.toLocaleLowerCase()) >= 0
-        );
+      if (!searchString) return projects;
+
+      return projects.filter(project => {
+        const localeSearchValue = searchString.toLocaleLowerCase();
+
+        const itemsToSearch = [
+          project.projectNumber?.toString(),
+          project.title?.toLocaleLowerCase(),
+          project.leadPartnerName?.toLocaleLowerCase(),
+        ].filter(Boolean);
+
+        return itemsToSearch.some(searchItem => searchItem.includes(localeSearchValue));
       });
+    });
   }
 
-  public getById(projectId: string) {
-    return this.getData("project", storeKeys.getProjectKey(projectId), p => apiClient.projects.get({ projectId, ...p }));
+  public getById(projectId: string): Pending<ProjectDto> {
+    return this.getData("project", storeKeys.getProjectKey(projectId), p =>
+      apiClient.projects.get({ ...p, projectId }),
+    );
+  }
+
+  public isValidProject(projectId: string): Pending<ProjectStatusDto> {
+    return this.getData("validate", storeKeys.getValidProjectStatusKey(projectId), p =>
+      apiClient.projects.isProjectActive({ ...p, projectId }),
+    );
   }
 }

@@ -3,187 +3,241 @@ import { getAuthRoles, PartnerDto, ProjectContactDto, ProjectDto, ProjectRole } 
 import { useStores } from "@ui/redux";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
+import { GetProjectStatus } from "../app/project-active";
 
 interface Data {
-    projectDetails: Pending<ProjectDto>;
-    partners: Pending<PartnerDto[]>;
-    contacts: Pending<ProjectContactDto[]>;
+  projectDetails: Pending<ProjectDto>;
+  partners: Pending<PartnerDto[]>;
+  contacts: Pending<ProjectContactDto[]>;
 }
 
 interface Params {
-    projectId: string;
+  projectId: string;
 }
 
-interface Callbacks {
-}
+interface Callbacks {}
 
 interface CombinedData {
-    project: ProjectDto;
-    partners: PartnerDto[];
-    contacts: ProjectContactDto[];
+  project: ProjectDto;
+  partners: PartnerDto[];
+  contacts: ProjectContactDto[];
 }
 
 type ProjectContactRole = ProjectContactDto["role"];
 
 class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
-    render() {
-        const combined = Pending.combine({
-            project: this.props.projectDetails,
-            partners: this.props.partners,
-            contacts: this.props.contacts,
-        });
+  render() {
+    const combined = Pending.combine({
+      project: this.props.projectDetails,
+      partners: this.props.partners,
+      contacts: this.props.contacts,
+    });
 
-        return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)} />;
+    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x)} />;
+  }
+
+  private getRoles() {
+    const primaryRoles: ProjectContactRole[] = ["Monitoring officer", "Project Manager"];
+
+    if (this.props.config.features.displayOtherContacts) {
+      primaryRoles.push("Innovation lead", "IPM");
     }
 
-    private getRoles() {
-        const primaryRoles: ProjectContactRole[] = ["Monitoring officer", "Project Manager"];
+    // Note: Excluded roles are already rendered elsewhere on page
+    const excludedOtherRoles: ProjectContactRole[] = [...primaryRoles, "Finance contact"];
 
-        if (this.props.config.features.displayOtherContacts) {
-            primaryRoles.push("Innovation lead", "IPM");
-        }
+    return {
+      primaryRoles,
+      excludedOtherRoles,
+    };
+  }
 
-        // Note: Excluded roles are already rendered elsewhere on page
-        const excludedOtherRoles: ProjectContactRole[] = [...primaryRoles, "Finance contact"];
+  private renderPrimaryContacts(partners: CombinedData["partners"], contacts: CombinedData["contacts"]) {
+    const { primaryRoles } = this.getRoles();
 
-        return {
-            primaryRoles,
-            excludedOtherRoles
-        };
-    }
+    const projectContacts = primaryRoles.map((role: ProjectContactRole) => {
+      // Note: kebabCase the role name, this saves manually crafting a string
+      const qa = role.replace(/\s+/g, "-").toLowerCase();
+      const contact = contacts.find(x => x.role === role);
+      const partner = contact && partners.find(x => x.accountId === contact.accountId);
 
-    private renderPrimaryContacts(partners: CombinedData["partners"], contacts: CombinedData["contacts"]) {
-        const { primaryRoles } = this.getRoles();
+      return {
+        qa,
+        contact,
+        partner,
+      };
+    });
 
-        const projectContacts = primaryRoles.map((role: ProjectContactRole) => {
-            // Note: kebabCase the role name, this saves manually crafting a string
-            const qa = role.replace(/\s+/g, "-").toLowerCase();
-            const contact = contacts.find(x => x.role === role);
-            const partner = contact && partners.find(x => x.accountId === contact.accountId);
+    return (
+      <>
+        {projectContacts.map(contact => (
+          <ACC.ProjectContact key={contact.qa} {...contact} />
+        ))}
+      </>
+    );
+  }
 
-            return {
-                qa,
-                contact,
-                partner
-            };
-        });
+  private renderOtherContacts(contacts: CombinedData["contacts"]) {
+    if (!this.props.config.features.displayOtherContacts) return null;
 
-        return (
-            <>
-                {projectContacts.map(contact => <ACC.ProjectContact key={contact.qa} {...contact} />)}
-            </>
-        );
-    }
+    const { excludedOtherRoles } = this.getRoles();
+    const otherContacts = contacts.filter(x => excludedOtherRoles.indexOf(x.role) === -1);
 
-    private renderOtherContacts(contacts: CombinedData["contacts"]) {
-        if (!this.props.config.features.displayOtherContacts) return null;
+    return (
+      <ACC.Section title={x => x.projectDetails.projectLabels.otherContacts} qa="other-contacts-table">
+        <ACC.Partners.ContactsTable
+          contacts={otherContacts}
+          projectContactLabels={x => x.projectDetails.contactLabels}
+        />
+      </ACC.Section>
+    );
+  }
 
-        const { excludedOtherRoles } = this.getRoles();
-        const otherContacts = contacts.filter(x => excludedOtherRoles.indexOf(x.role) === -1);
+  private renderContents({ project, partners, contacts }: CombinedData) {
+    // Note: Partners is reused avoid destructing - all partners will have the same competitionName at this UI
+    const competitionName = partners[0].competitionName;
 
-        return (
-            <ACC.Section title={x => x.projectDetails.projectLabels.otherContacts} qa="other-contacts-table">
-                <ACC.Partners.ContactsTable contacts={otherContacts} projectContactLabels={x => x.projectDetails.contactLabels} />
-            </ACC.Section>
-        );
-    }
+    return (
+      <ACC.Page
+        backLink={<ACC.Projects.ProjectBackLink project={project} routes={this.props.routes} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
+        project={project}
+      >
+        <ACC.Section
+          qa="period-information"
+          title={x => x.projectDetails.projectMessages.currentPeriodInfo(project.periodId, project.numberOfPeriods)}
+          subtitle={<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />}
+        />
 
-    private renderContents({project, partners, contacts}: CombinedData) {
-        // Note: Partners is reused avoid destructing - all partners will have the same competitionName at this UI
-        const competitionName = partners[0].competitionName;
+        <ACC.Section title={x => x.projectDetails.projectLabels.projectMembers}>
+          {this.renderPrimaryContacts(partners, contacts)}
 
-        return (
-            <ACC.Page
-                backLink={<ACC.Projects.ProjectBackLink project={project} routes={this.props.routes}/>}
-                pageTitle={<ACC.Projects.Title {...project}/>}
-                project={project}
-            >
-
-                <ACC.Section
-                    qa="period-information"
-                    title={x => x.projectDetails.projectMessages.currentPeriodInfo(project.periodId, project.numberOfPeriods)}
-                    subtitle={<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate}/>}
-                />
-
-                <ACC.Section title={x => x.projectDetails.projectLabels.projectMembers}>
-                    {this.renderPrimaryContacts(partners, contacts)}
-
-                    <ACC.Section title={x => x.projectDetails.projectLabels.financeContacts}>
-                        <ACC.PartnersAndFinanceContacts contacts={contacts} partners={partners} projectContactLabels={x => x.projectDetails.contactLabels} />
-                    </ACC.Section>
-
-                    {this.renderOtherContacts(contacts)}
-                </ACC.Section>
-
-                {this.renderPartnerInformationTable(partners, project)}
-
-                <ACC.Section title={<ACC.Content value={x => x.projectDetails.projectLabels.projectInformation}/>} qa="project-details">
-                    <ACC.SummaryList qa="project-information">
-                        {competitionName && <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.competitionNameLabel} qa="competition-name" content={<ACC.Renderers.SimpleString>{competitionName}</ACC.Renderers.SimpleString>}/>}
-                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.competitionTypeLabel} qa="competition-type" content={<ACC.Renderers.SimpleString>{project.competitionType}</ACC.Renderers.SimpleString>}/>
-                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.startDate} qa="start-date" content={<ACC.Renderers.FullDate value={project.startDate}/>}/>
-                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.endDate} qa="end-date" content={<ACC.Renderers.FullDate value={project.endDate}/>}/>
-                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.duration} qa="duration" content={`${project.durationInMonths} ${project.durationInMonths === 1 ? "month" : "months"}`}/>
-                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.numberOfPeriods} qa="periods" content={project.numberOfPeriods}/>
-                        <ACC.SummaryListItem labelContent={x => x.projectDetails.projectLabels.scope} qa="scope" content={<ACC.Renderers.SimpleString multiline>{project.summary}</ACC.Renderers.SimpleString>}/>
-                    </ACC.SummaryList>
-                </ACC.Section>
-            </ACC.Page>
-        );
-    }
-
-    private renderPartnerInformationTable(partners: CombinedData["partners"], project: CombinedData["project"]) {
-        const PartnersTable = ACC.TypedTable<PartnerDto>();
-        const { isPmOrMo } = getAuthRoles(project.roles);
-
-        return (
-          <ACC.Section title={x => x.projectDetails.projectLabels.partners}>
-            <PartnersTable.Table qa="partner-information" data={partners}>
-              <PartnersTable.Custom
-                header={x => x.partnerDetails.contactLabels.partnerName}
-                value={x => this.renderPartnerName(x)}
-                qa="partner-name"
-              />
-              <PartnersTable.String
-                header={x => x.partnerDetails.contactLabels.partnerType}
-                value={x => x.type}
-                qa="partner-type"
-              />
-              {isPmOrMo ? (
-                <PartnersTable.String
-                  header={x => x.partnerDetails.contactLabels.statusLabel}
-                  value={x => x.partnerStatusLabel}
-                  qa="partner-status"
-                />
-              ) : null}
-              {isPmOrMo ? (
-                <PartnersTable.Custom
-                  header={x => x.partnerDetails.contactLabels.fundingLabel}
-                  value={x => (
-                    <ACC.Content value={content => content.partnerDetails.contactLabels.fundingState(x.isNonFunded)} />
-                  )}
-                  qa="partner-funding"
-                />
-              ) : null}
-              <PartnersTable.String
-                header={x => x.partnerDetails.contactLabels.partnerPostcode}
-                value={x => x.postcode}
-                qa="partner-postcode"
-              />
-            </PartnersTable.Table>
+          <ACC.Section title={x => x.projectDetails.projectLabels.financeContacts}>
+            <ACC.PartnersAndFinanceContacts
+              contacts={contacts}
+              partners={partners}
+              projectContactLabels={x => x.projectDetails.contactLabels}
+            />
           </ACC.Section>
-        );
-    }
 
-    private renderPartnerName(partner: PartnerDto) {
-        const partnerName = ACC.getPartnerName(partner, true);
+          {this.renderOtherContacts(contacts)}
+        </ACC.Section>
 
-        return (
-            <ACC.Link route={this.props.routes.partnerDetails.getLink({projectId: this.props.projectId, partnerId: partner.id})}>
-                {partnerName}
+        {this.renderPartnerInformationTable(partners, project)}
+
+        <ACC.Section
+          title={<ACC.Content value={x => x.projectDetails.projectLabels.projectInformation} />}
+          qa="project-details"
+        >
+          <ACC.SummaryList qa="project-information">
+            {competitionName && (
+              <ACC.SummaryListItem
+                labelContent={x => x.projectDetails.projectLabels.competitionNameLabel}
+                qa="competition-name"
+                content={<ACC.Renderers.SimpleString>{competitionName}</ACC.Renderers.SimpleString>}
+              />
+            )}
+            <ACC.SummaryListItem
+              labelContent={x => x.projectDetails.projectLabels.competitionTypeLabel}
+              qa="competition-type"
+              content={<ACC.Renderers.SimpleString>{project.competitionType}</ACC.Renderers.SimpleString>}
+            />
+            <ACC.SummaryListItem
+              labelContent={x => x.projectDetails.projectLabels.startDate}
+              qa="start-date"
+              content={<ACC.Renderers.FullDate value={project.startDate} />}
+            />
+            <ACC.SummaryListItem
+              labelContent={x => x.projectDetails.projectLabels.endDate}
+              qa="end-date"
+              content={<ACC.Renderers.FullDate value={project.endDate} />}
+            />
+            <ACC.SummaryListItem
+              labelContent={x => x.projectDetails.projectLabels.duration}
+              qa="duration"
+              content={`${project.durationInMonths} ${project.durationInMonths === 1 ? "month" : "months"}`}
+            />
+            <ACC.SummaryListItem
+              labelContent={x => x.projectDetails.projectLabels.numberOfPeriods}
+              qa="periods"
+              content={project.numberOfPeriods}
+            />
+            <ACC.SummaryListItem
+              labelContent={x => x.projectDetails.projectLabels.scope}
+              qa="scope"
+              content={<ACC.Renderers.SimpleString multiline>{project.summary}</ACC.Renderers.SimpleString>}
+            />
+          </ACC.SummaryList>
+        </ACC.Section>
+      </ACC.Page>
+    );
+  }
+
+  private renderPartnerInformationTable(partners: CombinedData["partners"], project: CombinedData["project"]) {
+    const PartnersTable = ACC.TypedTable<PartnerDto>();
+    const { isPmOrMo } = getAuthRoles(project.roles);
+
+    return (
+      <ACC.Section title={x => x.projectDetails.projectLabels.partners}>
+        <PartnersTable.Table qa="partner-information" data={partners}>
+          <PartnersTable.Custom
+            header={x => x.partnerDetails.contactLabels.partnerName}
+            value={x => this.renderPartnerName(x)}
+            qa="partner-name"
+          />
+          <PartnersTable.String
+            header={x => x.partnerDetails.contactLabels.partnerType}
+            value={x => x.type}
+            qa="partner-type"
+          />
+          {isPmOrMo ? (
+            <PartnersTable.String
+              header={x => x.partnerDetails.contactLabels.statusLabel}
+              value={x => x.partnerStatusLabel}
+              qa="partner-status"
+            />
+          ) : null}
+          {isPmOrMo ? (
+            <PartnersTable.Custom
+              header={x => x.partnerDetails.contactLabels.fundingLabel}
+              value={x => (
+                <ACC.Content value={content => content.partnerDetails.contactLabels.fundingState(x.isNonFunded)} />
+              )}
+              qa="partner-funding"
+            />
+          ) : null}
+          <PartnersTable.String
+            header={x => x.partnerDetails.contactLabels.partnerPostcode}
+            value={x => x.postcode}
+            qa="partner-postcode"
+          />
+        </PartnersTable.Table>
+      </ACC.Section>
+    );
+  }
+
+  private renderPartnerName(partner: PartnerDto) {
+    const partnerName = ACC.getPartnerName(partner, true);
+
+    return (
+      <GetProjectStatus>
+        {x =>
+          x.isActive ? (
+            <ACC.Link
+              route={this.props.routes.partnerDetails.getLink({
+                projectId: this.props.projectId,
+                partnerId: partner.id,
+              })}
+            >
+              {partnerName}
             </ACC.Link>
-        );
-    }
+          ) : (
+            <>{partnerName}</>
+          )
+        }
+      </GetProjectStatus>
+    );
+  }
 }
 
 const ProjectDetailsContainer = (props: Params & BaseProps) => {
@@ -200,6 +254,7 @@ const ProjectDetailsContainer = (props: Params & BaseProps) => {
 };
 
 export const ProjectDetailsRoute = defineRoute({
+  allowRouteInActiveAccess: true,
   routeName: "projectDetails",
   routePath: "/projects/:projectId/details",
   container: ProjectDetailsContainer,

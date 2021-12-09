@@ -1,10 +1,11 @@
-import { CommandBase, ValidationError } from "@server/features/common";
+import { CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
 import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Authorisation, ClaimDto, ClaimStatus, IContext, ProjectRole } from "@framework/types";
 import { GetClaimDocumentsQuery } from "@server/features/documents/getClaimDocumentsSummary";
 import { mapToClaimStatus } from "@server/features/claims/mapClaim";
 import { GetCostsSummaryForPeriodQuery } from "@server/features/claimDetails";
 import { GetByIdQuery } from "@server/features/partners";
+import { GetProjectStatusQuery } from "../projects";
 
 export class UpdateClaimCommand extends CommandBase<boolean> {
   constructor(
@@ -23,6 +24,12 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
   }
 
   protected async run(context: IContext): Promise<true> {
+    const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.projectId));
+
+    if (!isProjectActive) {
+      throw new InActiveProjectError();
+    }
+
     const partnerQuery = new GetByIdQuery(this.claimDto.partnerId);
     const documentQuery = new GetClaimDocumentsQuery({ ...this.claimDto, projectId: this.projectId });
     const costSummaryQuery = new GetCostsSummaryForPeriodQuery(
@@ -39,11 +46,11 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
     const details = await context.runQuery(costSummaryQuery);
     const documents = await context.runQuery(documentQuery);
 
-    const originalStatus = mapToClaimStatus(existingStatus);
+    const originalClaimStatus = mapToClaimStatus(existingStatus);
 
     const result = new ClaimDtoValidator(
       this.claimDto,
-      originalStatus,
+      originalClaimStatus,
       details,
       documents,
       true,
@@ -65,7 +72,7 @@ export class UpdateClaimCommand extends CommandBase<boolean> {
       await context.repositories.claimStatusChanges.create({
         Acc_Claim__c: this.claimDto.id,
         Acc_ExternalComment__c: this.claimDto.comments,
-        Acc_ParticipantVisibility__c: this.getChangeStatusVisibility(originalStatus, this.claimDto),
+        Acc_ParticipantVisibility__c: this.getChangeStatusVisibility(originalClaimStatus, this.claimDto),
       });
     } else {
       await context.repositories.claims.update({

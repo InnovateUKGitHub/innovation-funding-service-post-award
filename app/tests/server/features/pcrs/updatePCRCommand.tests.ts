@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
-import { ValidationError } from "@server/features/common";
+import { InActiveProjectError, ValidationError } from "@server/features/common";
 import {
   Authorisation,
   PCRDto,
@@ -21,6 +21,21 @@ import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants";
 import { TestContext } from "../../testContextProvider";
 
 describe("UpdatePCRCommand", () => {
+  test("throws an error when the project is inactive", async () => {
+    const context = new TestContext();
+
+    const project = context.testData.createProject(x => (x.Acc_ProjectStatus__c = "On Hold"));
+    context.testData.createCurrentUserAsProjectManager(project);
+    const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
+
+    const pcrDtoQuery = new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id);
+    const dto = await context.runQuery(pcrDtoQuery);
+
+    const command = context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto));
+
+    await expect(command).rejects.toThrow(InActiveProjectError);
+  });
+
   describe("with access control", () => {
     const setAccessControl = (role: ProjectRole) => {
       const context = new TestContext();

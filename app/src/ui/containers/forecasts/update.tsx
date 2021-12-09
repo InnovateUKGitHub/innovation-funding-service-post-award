@@ -1,45 +1,58 @@
 import * as ACC from "@ui/components";
-import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { ForecastDetailsDTO, ProjectRole } from "@framework/types";
 import { getArrayFromPeriod, isNumber } from "@framework/util";
 import { Pending } from "@shared/pending";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { ForecastDetailsDtosValidator } from "@ui/validators";
-import { useContent } from "@ui/hooks";
+import { useContent, useProjectStatus } from "@ui/hooks";
+import { ForecastData } from "@ui/components/claims";
 import { ForecastClaimAdvice } from "./components/ForecastClaimAdvice";
 
-export interface Params {
+export interface ForecastUpdateParams {
   projectId: string;
   partnerId: string;
   periodId: number;
 }
 
-interface Data {
+interface ForecastUpdateData {
   data: Pending<ACC.Claims.ForecastData>;
   editor: Pending<IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>>;
-}
-
-interface Callbacks {
   onChange: (saving: boolean, dto: ForecastDetailsDTO[]) => void;
 }
 
-class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
-  public render() {
-    const combined = Pending.combine({ data: this.props.data, editor: this.props.editor });
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.data, x.editor)} />;
-  }
+function UpdateForecastComponent(props: ForecastUpdateParams & ForecastUpdateData & BaseProps) {
+  const { isActive: isProjectActive } = useProjectStatus();
 
-  public renderContents(
-    combined: ACC.Claims.ForecastData,
+  const combined = Pending.combine({
+    data: props.data,
+    editor: props.editor,
+  });
+
+  const renderContents = (
+    forecastData: ForecastData,
     editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>,
-  ) {
+  ) => {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
-
-    const { partnerId, projectId, periodId, routes, onChange } = this.props;
+    const { partnerId, projectId, periodId, routes, onChange } = props;
+    const { project, claim, partner } = forecastData;
 
     const handleSubmit = () => {
-      const forecasts = getArrayFromPeriod(editor.data, periodId, combined.project.numberOfPeriods);
-      return this.props.onChange(true, forecasts);
+      if (isProjectActive) return;
+
+      const forecasts = getArrayFromPeriod(editor.data, periodId, project.numberOfPeriods);
+      return props.onChange(true, forecasts);
+    };
+
+    const renderOverheadsRate = (overheadRate: number | null) => {
+      if (!isNumber(overheadRate)) return null;
+
+      return (
+        <ACC.Renderers.SimpleString qa="overhead-costs">
+          <ACC.Content value={x => x.forecastsUpdate.labels.overheadCosts} />
+          <ACC.Renderers.Percentage value={overheadRate} />
+        </ACC.Renderers.SimpleString>
+      );
     };
 
     const allClaimsDashboardLink = routes.allClaimsDashboard.getLink({ projectId });
@@ -53,30 +66,30 @@ class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
         }
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title {...combined.project} />}
+        pageTitle={<ACC.Projects.Title {...project} />}
       >
         <ForecastClaimAdvice claimLink={allClaimsDashboardLink} />
 
-        {combined.claim && combined.claim.isFinalClaim && (
+        {claim && claim.isFinalClaim && (
           <ACC.ValidationMessage messageType="info" message={x => x.forecastsUpdate.messages.finalClaim} />
         )}
 
         <ACC.Section title="" qa="partner-forecast">
-          <ACC.Forecasts.Warning {...combined} editor={editor} />
+          <ACC.Forecasts.Warning {...forecastData} editor={editor} />
 
-          {this.renderOverheadsRate(combined.partner.overheadRate)}
+          {renderOverheadsRate(partner.overheadRate)}
 
           <Form.Form
             editor={editor}
-            onChange={data => onChange(false, data)}
+            onChange={forecastDetail => onChange(false, forecastDetail)}
             onSubmit={handleSubmit}
             qa="partner-forecast-form"
           >
-            <ACC.Claims.ForecastTable data={combined} editor={editor} />
+            <ACC.Claims.ForecastTable data={forecastData} editor={editor} />
 
             <Form.Fieldset>
-              {combined.partner.forecastLastModifiedDate && (
-                <ACC.Claims.ClaimLastModified modifiedDate={combined.partner.forecastLastModifiedDate} />
+              {partner.forecastLastModifiedDate && (
+                <ACC.Claims.ClaimLastModified modifiedDate={partner.forecastLastModifiedDate} />
               )}
 
               <Form.Submit>
@@ -87,63 +100,51 @@ class UpdateForecastComponent extends ContainerBase<Params, Data, Callbacks> {
         </ACC.Section>
       </ACC.Page>
     );
-  }
-
-  private renderOverheadsRate(overheadRate: number | null) {
-    if (!isNumber(overheadRate)) return null;
-
-    return (
-      <ACC.Renderers.SimpleString qa="overhead-costs">
-        <ACC.Content value={x => x.forecastsUpdate.labels.overheadCosts} />
-        <ACC.Renderers.Percentage value={overheadRate} />
-      </ACC.Renderers.SimpleString>
-    );
-  }
+  };
+  return <ACC.PageLoader pending={combined} render={x => renderContents(x.data, x.editor)} />;
 }
 
-const UpdateForecastContainer = (props: Params & BaseProps) => {
+const UpdateForecastContainer = (props: ForecastUpdateParams & BaseProps) => {
   const { getContent } = useContent();
+  const stores = useStores();
 
   const forecastUpdatedMessage = getContent(x => x.forecastsUpdate.messages.forecastUpdated);
 
   return (
-    <StoresConsumer>
-      {stores => (
-        <UpdateForecastComponent
-          data={Pending.combine({
-            project: stores.projects.getById(props.projectId),
-            partner: stores.partners.getById(props.partnerId),
-            claim: stores.claims.getActiveClaimForPartner(props.partnerId),
-            claims: stores.claims.getAllClaimsForPartner(props.partnerId),
-            claimDetails: stores.claimDetails.getAllByPartner(props.partnerId),
-            forecastDetails: stores.forecastDetails.getAllByPartner(props.partnerId),
-            golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
-            costCategories: stores.costCategories.getAllFiltered(props.partnerId),
-          })}
-          editor={stores.forecastDetails.getForecastEditor(props.partnerId)}
-          onChange={(saving, dto) => {
-            stores.forecastDetails.updateForcastEditor(
-              saving,
-              props.projectId,
-              props.partnerId,
-              dto,
-              false,
-              forecastUpdatedMessage,
-              () => {
-                stores.navigation.navigateTo(
-                  props.routes.forecastDetails.getLink({ projectId: props.projectId, partnerId: props.partnerId }),
-                );
-              },
+    <UpdateForecastComponent
+      {...props}
+      data={Pending.combine({
+        project: stores.projects.getById(props.projectId),
+        partner: stores.partners.getById(props.partnerId),
+        claim: stores.claims.getActiveClaimForPartner(props.partnerId),
+        claims: stores.claims.getAllClaimsForPartner(props.partnerId),
+        claimDetails: stores.claimDetails.getAllByPartner(props.partnerId),
+        forecastDetails: stores.forecastDetails.getAllByPartner(props.partnerId),
+        golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
+        costCategories: stores.costCategories.getAllFiltered(props.partnerId),
+      })}
+      editor={stores.forecastDetails.getForecastEditor(props.partnerId)}
+      onChange={(saving, dto) => {
+        stores.forecastDetails.updateForcastEditor(
+          saving,
+          props.projectId,
+          props.partnerId,
+          dto,
+          false,
+          forecastUpdatedMessage,
+          () => {
+            stores.navigation.navigateTo(
+              props.routes.forecastDetails.getLink({ projectId: props.projectId, partnerId: props.partnerId }),
             );
-          }}
-          {...props}
-        />
-      )}
-    </StoresConsumer>
+          },
+        );
+      }}
+    />
   );
 };
 
 export const UpdateForecastRoute = defineRoute({
+  allowRouteInActiveAccess: true,
   routeName: "updateForecast",
   routePath: "/projects/:projectId/claims/:partnerId/updateForecast/:periodId",
   container: UpdateForecastContainer,

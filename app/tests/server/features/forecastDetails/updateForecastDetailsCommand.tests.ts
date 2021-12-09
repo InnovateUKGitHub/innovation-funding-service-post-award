@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import { UpdateForecastDetailsCommand } from "@server/features/forecastDetails";
-import { BadRequestError, ValidationError } from "@server/features/common/appError";
+import { BadRequestError, InActiveProjectError, ValidationError } from "@server/features/common/appError";
 import { ClaimFrequency, ClaimStatus, ForecastDetailsDTO } from "@framework/types";
 import { ISalesforceProfileDetails } from "@server/repositories";
 import { TestContext } from "../../testContextProvider";
@@ -17,6 +17,25 @@ const mapProfileValue = (item: ISalesforceProfileDetails, value?: number): Forec
 };
 
 describe("UpdateForecastDetailsCommand", () => {
+  it("throws an error when a project is inactive", async () => {
+    const context = new TestContext();
+
+    const profileDetail = context.testData.createProfileDetail();
+    const project = context.testData.createProject(x => x.Acc_ProjectStatus__c = "On Hold");
+    const partnerId = profileDetail.Acc_ProjectParticipant__c;
+    const dto: ForecastDetailsDTO[] = [{
+      id: null,
+      costCategoryId: profileDetail.Acc_CostCategory__c,
+      periodId: parseInt(profileDetail.Acc_CostCategory__c, 10),
+      periodStart: new Date(profileDetail.Acc_ProjectPeriodStartDate__c),
+      periodEnd: new Date(profileDetail.Acc_ProjectPeriodEndDate__c),
+      value: 123
+    } as any];
+
+    const command = new UpdateForecastDetailsCommand(project.Id, partnerId, dto, false);
+    await expect(context.runCommand(command)).rejects.toThrow(InActiveProjectError);
+  });
+
   it("when id not set expect validation exception", async () => {
     const context = new TestContext();
 

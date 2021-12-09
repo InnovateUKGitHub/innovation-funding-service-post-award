@@ -5,6 +5,7 @@ import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { IStores } from "@ui/redux";
 import { IRoutes } from "@ui/routing/routeConfig";
 import { Content } from "@content/content";
+import { MatchedRoute } from "@ui/routing";
 
 export interface BaseProps {
     messages: string[];
@@ -30,7 +31,8 @@ export abstract class ContainerBase<TParams = {}, TData = {}, TCallbacks = {}> e
     }
 }
 
-interface IRouteOptions<TParams> {
+// TODO: Remove duplication between MatchedRoute and IRouteOptions
+interface IRouteOptions<TParams> extends Pick<MatchedRoute, "allowRouteInActiveAccess"> {
     routeName: string;
     routePath: string;
     container: React.FunctionComponent<TParams & BaseProps>;

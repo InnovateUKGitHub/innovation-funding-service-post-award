@@ -6,6 +6,7 @@ export * from "./monitoringReportDto";
 export * from "./partnerDto";
 export * from "./pcrDtos";
 export * from "./projectDto";
+export * from "./projectStatusDto";
 export * from "./option";
 export * from "./documentDto";
 export * from "./documentUploadDto";

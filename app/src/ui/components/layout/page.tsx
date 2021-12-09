@@ -2,10 +2,12 @@ import React from "react";
 import { IAppError, PartnerDto, PartnerStatus, ProjectDto, ProjectStatus } from "@framework/types";
 import { CombinedResultsValidator, Results } from "@ui/validation";
 import { useContent } from "@ui/hooks";
+import { useProjectStatus } from "@ui/hooks/project-status.hook";
 import { AriaLive } from "../renderers/ariaLive";
 import { ErrorSummary } from "../errorSummary";
 import { ValidationSummary } from "../validationSummary";
 import { ValidationMessage } from "../validationMessage";
+import { ProjectInactive } from "../ProjectInactive";
 import { Section } from "./section";
 
 export type PageValidationProjectStatus = ProjectDto["status"];
@@ -18,11 +20,11 @@ export const usePageValidationMessage = (
   const { getContent } = useContent();
 
   if (projectStatus === ProjectStatus.OnHold) {
-    return getContent(x => x.components.onHoldContent.projectOnHoldMessage);
+    return getContent(x => x.components.projectInactiveContent.projectOnHoldMessage);
   }
 
   if (partnerStatus === PartnerStatus.OnHold) {
-    return getContent(x => x.components.onHoldContent.partnerOnHoldMessage);
+    return getContent(x => x.components.projectInactiveContent.partnerOnHoldMessage);
   }
 
   return null;
@@ -43,10 +45,10 @@ export function Page({ pageTitle, backLink, error, children, project, partner, v
   const validation = validator && Array.isArray(validator) ? new CombinedResultsValidator(...validator) : validator;
   const displayAriaLive: boolean = !!error || !!validation;
 
-  const projectStatus = project && project.status;
-  const partnerStatus = partner && partner.partnerStatus;
+  const pageErrorMessage = usePageValidationMessage(project?.status, partner?.partnerStatus);
+  const projectState = useProjectStatus();
 
-  const pageErrorMessage = usePageValidationMessage(projectStatus, partnerStatus);
+  const displayActiveUi: boolean = projectState.overrideAccess || projectState.isActive;
 
   return (
     <div data-qa={qa}>
@@ -59,22 +61,28 @@ export function Page({ pageTitle, backLink, error, children, project, partner, v
       )}
 
       <main className="govuk-main-wrapper" id="main-content" role="main">
-        {displayAriaLive && (
-          <AriaLive>
-            {error && <ErrorSummary {...error} />}
-            {validation && <ValidationSummary validation={validation} compressed={false} />}
-          </AriaLive>
+        {displayActiveUi ? (
+          <>
+            {displayAriaLive && (
+              <AriaLive>
+                {error && <ErrorSummary {...error} />}
+                {validation && <ValidationSummary validation={validation} compressed={false} />}
+              </AriaLive>
+            )}
+
+            {pageTitle}
+
+            {pageErrorMessage && (
+              <Section>
+                <ValidationMessage messageType="info" qa="on-hold-info-message" message={pageErrorMessage} />
+              </Section>
+            )}
+
+            {children}
+          </>
+        ) : (
+          <ProjectInactive />
         )}
-
-        {pageTitle}
-
-        {pageErrorMessage && (
-          <Section>
-            <ValidationMessage messageType="info" qa="on-hold-info-message" message={pageErrorMessage} />
-          </Section>
-        )}
-
-        {children}
       </main>
     </div>
   );

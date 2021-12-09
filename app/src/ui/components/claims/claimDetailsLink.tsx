@@ -1,14 +1,6 @@
-import {
-  ClaimDto,
-  ClaimStatus,
-  getAuthRoles,
-  PartnerDto,
-  PartnerStatus,
-  ProjectDto,
-  ProjectStatus,
-} from "@framework/types";
+import { ClaimDto, ClaimStatus, getAuthRoles, PartnerDto, PartnerStatus, ProjectDto } from "@framework/types";
 import { IRoutes } from "@ui/routing";
-import { useContent } from "@ui/hooks";
+import { useContent, useProjectStatus } from "@ui/hooks";
 import { Link } from "../links";
 
 interface ClaimDetailsBaseProps {
@@ -23,8 +15,9 @@ export interface ClaimDetailsLinkRoutes extends ClaimDetailsBaseProps {
 
 export function ClaimDetailsLink({ claim, partner, project, routes }: ClaimDetailsLinkRoutes) {
   const { getContent } = useContent();
+  const { isActive: isProjectActive } = useProjectStatus();
 
-  const linkType = getClaimDetailsLinkType({ claim, partner, project });
+  const linkType = isProjectActive ? getClaimDetailsLinkType({ claim, partner, project }) : "view";
 
   if (!linkType) return null;
 
@@ -57,10 +50,9 @@ export function getClaimDetailsLinkType({
   partner,
   claim,
 }: ClaimDetailsBaseProps): "edit" | "review" | "view" | null {
-  if (project.status === ProjectStatus.OnHold) return "view";
   if (partner.partnerStatus === PartnerStatus.OnHold) return "view";
 
-  const { isMo: isProjectMo, isPm: isProjectPm, isPmOrMo: isProjectPmOrMo} = getAuthRoles(project.roles);
+  const { isMo: isProjectMo, isPm: isProjectPm, isPmOrMo: isProjectPmOrMo } = getAuthRoles(project.roles);
   const isPartnerFc = getAuthRoles(partner.roles).isFc;
 
   switch (claim.status) {

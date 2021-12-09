@@ -19,7 +19,8 @@ import { isNumber, roundCurrency } from "@framework/util";
 import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
 import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
-import { BadRequestError, CommandBase, ValidationError } from "../common";
+import { BadRequestError, CommandBase, InActiveProjectError, ValidationError } from "../common";
+import { GetProjectStatusQuery } from "../projects";
 
 interface BaseEntityFields {
   id: string;
@@ -220,6 +221,12 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   protected async run(context: IContext): Promise<boolean> {
     if (this.pcrItemId !== this.spendProfileDto.pcrItemId) {
       throw new BadRequestError();
+    }
+
+    const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.projectId));
+
+    if (!isProjectActive) {
+      throw new InActiveProjectError();
     }
 
     const validationResult = new PCRSpendProfileDtoValidator(this.spendProfileDto, true);

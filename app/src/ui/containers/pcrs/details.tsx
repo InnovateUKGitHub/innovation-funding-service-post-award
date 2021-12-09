@@ -161,6 +161,7 @@ const PCRDetailsContainer = (props: Params & BaseProps) => (
 );
 
 export const PCRDetailsRoute = defineRoute({
+  allowRouteInActiveAccess: true,
   routeName: "pcrDetails",
   routePath: "/projects/:projectId/pcrs/:pcrId/details",
   container: PCRDetailsContainer,

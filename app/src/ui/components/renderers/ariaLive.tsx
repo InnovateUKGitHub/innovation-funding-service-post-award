@@ -1,8 +1,7 @@
+interface AriaLiveProps {
+  children: React.ReactNode;
+}
 
-export const AriaLive: React.FunctionComponent = (props) => {
-  return (
-    <div aria-live="polite">
-      {props.children}
-    </div>
-  );
-};
+export function AriaLive(props: AriaLiveProps) {
+  return <div aria-live="polite" {...props} />;
+}

@@ -96,6 +96,7 @@ const ForecastDashboardContainer = (props: Params & BaseProps) => (
 );
 
 export const ForecastDashboardRoute = defineRoute({
+  allowRouteInActiveAccess: true,
   routeName: "projectForecasts",
   routePath: "/projects/:projectId/forecasts",
   container: ForecastDashboardContainer,

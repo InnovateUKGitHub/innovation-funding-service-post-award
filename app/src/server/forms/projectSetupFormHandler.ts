@@ -1,6 +1,6 @@
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
-import { Params } from "@ui/containers/forecasts/update";
+
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import {
   ProjectDashboardRoute,
@@ -17,20 +17,20 @@ export class ProjectSetupFormHandler extends StandardFormHandlerBase<ProjectSetu
   constructor() {
     super(ProjectSetupRoute, ["default"], "partner");
   }
-  protected async getDto(context: IContext, params: Params): Promise<PartnerDto> {
+  protected async getDto(context: IContext, params: ProjectSetupParams): Promise<PartnerDto> {
     return context.runQuery(new GetPartnerByIdQuery(params.partnerId));
   }
 
-  protected async run(context: IContext, params: Params, button: IFormButton, dto: PartnerDto): Promise<ILinkInfo> {
+  protected async run(context: IContext, params: ProjectSetupParams, button: IFormButton, dto: PartnerDto): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePartnerCommand(dto));
     return ProjectDashboardRoute.getLink({});
   }
 
-  protected getStoreKey(params: Params) {
+  protected getStoreKey(params: ProjectSetupParams) {
     return storeKeys.getPartnerKey(params.partnerId);
   }
 
-  protected createValidationResult(params: Params, dto: PartnerDto) {
+  protected createValidationResult(params: ProjectSetupParams, dto: PartnerDto) {
     return new PartnerDtoValidator(dto, dto, [], {showValidationErrors: false});
   }
 }

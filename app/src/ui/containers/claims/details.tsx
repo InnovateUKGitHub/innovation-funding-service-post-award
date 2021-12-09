@@ -255,6 +255,7 @@ const ClaimsDetailsContainer = (props: Params & BaseProps) => (
 );
 
 export const ClaimsDetailsRoute = defineRoute({
+  allowRouteInActiveAccess: true,
   routeName: "claimDetails",
   routePath: "/projects/:projectId/claims/:partnerId/details/:periodId",
   container: ClaimsDetailsContainer,

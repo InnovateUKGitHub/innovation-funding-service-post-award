@@ -239,6 +239,7 @@ function FinanceSummaryContainer(props: Params & BaseProps) {
 }
 
 export const FinanceSummaryRoute = defineRoute({
+  allowRouteInActiveAccess: true,
   routeName: "FinanceSummary",
   routePath: "/projects/:projectId/finance-summary/:partnerId",
   container: FinanceSummaryContainer,

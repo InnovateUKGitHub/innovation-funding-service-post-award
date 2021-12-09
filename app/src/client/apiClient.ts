@@ -163,6 +163,7 @@ const clientApi: IApiClient = {
   projects: {
     get: params => ajaxJson(`/api/projects/${params.projectId}`),
     getAll: () => ajaxJson("/api/projects"),
+    isProjectActive: params => ajaxJson(`/api/projects/project-active/${params.projectId}`),
   },
   projectContacts: {
     getAllByProjectId: params => ajaxJson(`/api/project-contacts?projectId=${params.projectId}`),
