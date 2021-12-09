@@ -1,7 +1,7 @@
 import { UpdateClaimCommand } from "@server/features/claims/updateClaim";
 import { mapClaim } from "@server/features/claims/mapClaim";
 import { ClaimStatus } from "@framework/constants";
-import { ValidationError } from "@server/features/common/appError";
+import { InActiveProjectError, ValidationError } from "@server/features/common/appError";
 import { Authorisation, ProjectRole } from "@framework/types";
 import { TestContext } from "../../testContextProvider";
 
@@ -485,6 +485,19 @@ describe("UpdateClaimCommand", () => {
   });
 
   describe("with validateFinalClaim", () => {
+    it.only("should pass validation when command is not on summary", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject(x => (x.Acc_ProjectStatus__c = "On Hold"));
+      const claim = context.testData.createClaim();
+
+      const partner = context.testData.createPartner();
+      const dto = mapClaim(context)(claim, partner.competitionType);
+
+      const command = new UpdateClaimCommand(project.Id, dto, false);
+
+      await expect(context.runCommand(command)).rejects.toThrow(InActiveProjectError);
+    });
+
     describe("when isClaimSummary is false", () => {
       const isNotClaimSummary = false;
 

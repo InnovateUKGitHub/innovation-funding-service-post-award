@@ -8,7 +8,8 @@ const getBroadcastKey = (broadcastId: string) => getKey("broadcastKey", "broadca
 const getJesAccountKey = (searchString: string) => getKey("jesAccountKey", "account", searchString);
 const getProjectKey = (projectId: string) => getKey("projectKey", "project", projectId);
 const getProjectsKey = () => getKey("projectsKey", "project", "all");
-const getPartnerKey = (partnerId: string) => getKey("partnerKey", "partner", partnerId);
+const getValidProjectStatusKey = (projectId: string) => getKey("validProjectStatus", getProjectKey(projectId));
+const getPartnerKey = (partnerId: string) => getKey("validProjectStatus", "partner", partnerId);
 const getPartnersKey = () => getKey("partnersKey", "partner", "all");
 const getCostCategoryKey = (partnerId: string) => getKey("costCategoryKey", "filtered", partnerId);
 const getClaimKey = (partnerId: string, periodId: number) => getKey("claimKey", "partner", partnerId, "period", periodId);
@@ -42,6 +43,7 @@ export const storeKeys = {
   getJesAccountKey,
   getProjectKey,
   getProjectsKey,
+  getValidProjectStatusKey,
   getPartnerKey,
   getPartnersKey,
   getCostCategoryKey,

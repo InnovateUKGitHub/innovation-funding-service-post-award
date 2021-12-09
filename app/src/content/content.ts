@@ -97,7 +97,7 @@ import { ForecastTableContent } from "./components/forecastTableContent";
 import { ReportFormContent } from "./components/reportFormContent";
 import { ForecastDetailsContent } from "./components/forecastDetailsContent";
 import { WarningContent } from "./components/warningContent";
-import { OnHoldContent } from "./components/onHoldContent";
+import { ProjectInactiveContent } from "./components/projectInactiveContent";
 import { ClaimDetailsLinkContent } from "./components/claimDetailsLinkContent";
 import { PhaseBannerContent } from "./components/phaseBannerContent";
 import { BroadcastContent } from "./components/BroadcastsContent";
@@ -230,7 +230,7 @@ export class Content extends ContentBase {
     reportForm: ReportFormContent;
     forecastDetails: ForecastDetailsContent;
     warningContent: WarningContent;
-    onHoldContent: OnHoldContent;
+    projectInactiveContent: ProjectInactiveContent;
     claimDetailsLinkContent: ClaimDetailsLinkContent;
     phaseBannerContent: PhaseBannerContent;
     broadcasts: BroadcastContent;
@@ -364,7 +364,7 @@ export class Content extends ContentBase {
       reportForm: new ReportFormContent(this, competitionType),
       forecastDetails: new ForecastDetailsContent(this, competitionType),
       warningContent: new WarningContent(this, competitionType),
-      onHoldContent: new OnHoldContent(this, competitionType),
+      projectInactiveContent: new ProjectInactiveContent(this),
       claimDetailsLinkContent: new ClaimDetailsLinkContent(this, competitionType),
       phaseBannerContent: new PhaseBannerContent(this, competitionType),
       broadcasts: new BroadcastContent(this),

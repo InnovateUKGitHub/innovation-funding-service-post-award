@@ -17,6 +17,9 @@ import { BaseProps } from "@ui/containers/containerBase";
 import { Footer, FullHeight, GovWidthContainer, Header, PhaseBanner, PrivateModal } from "@ui/components";
 import { ErrorContainer, ErrorContainerProps, ErrorBoundaryFallback } from "@ui/components/errors";
 
+import { useAppMount } from "./app/app-mount.hook";
+import { ProjectStatusCheck } from "./app/project-active";
+
 interface IAppProps {
   // @todo see if we can remove and replace with a callback to set page title
   dispatch: any;
@@ -100,7 +103,9 @@ class AppView extends React.Component<IAppProps> {
 
               {hasAccess ? (
                 <ErrorBoundary fallbackRender={errorProps => <ErrorBoundaryFallback {...(errorProps as any)} />}>
-                  <RouteContainer {...baseProps} {...params} />
+                  <ProjectStatusCheck projectId={params.projectId} overrideAccess={!!currentRoute.allowRouteInActiveAccess}>
+                    <RouteContainer {...baseProps} {...params} />
+                  </ProjectStatusCheck>
                 </ErrorBoundary>
               ) : (
                 <ErrorContainer {...(route.params as ErrorContainerProps)} />
@@ -132,7 +137,10 @@ export function App(props: AppRoute) {
 
   const getRoute = stores.navigation.getRoute();
   const currentRoute = matchRoute(getRoute);
+
   const params: Params & { projectId?: string } = currentRoute.getParams(getRoute);
+
+  useAppMount(params.projectId);
 
   const competitionType = useCompetitionType(params.projectId);
 

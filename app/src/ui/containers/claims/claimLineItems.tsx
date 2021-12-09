@@ -303,6 +303,7 @@ const getParams = (route: State): Params => ({
 });
 
 export const ClaimLineItemsRoute = defineRoute({
+  allowRouteInActiveAccess: true,
   routeName: "claimLineItemsView",
   routePath: "/projects/:projectId/claims/:partnerId/details/:periodId/costs/:costCategoryId",
   container: ClaimLineItemsContainer,

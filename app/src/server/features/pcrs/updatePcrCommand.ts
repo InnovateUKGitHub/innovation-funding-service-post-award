@@ -8,8 +8,8 @@ import { CostCategoryType, PCRStatus, ProjectRole } from "@framework/constants";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { sum } from "@framework/util";
-import { GetAllProjectRolesForUser, GetByIdQuery } from "../projects";
-import { BadRequestError, CommandBase, ValidationError } from "../common";
+import { GetAllProjectRolesForUser, GetByIdQuery, GetProjectStatusQuery } from "../projects";
+import { BadRequestError, CommandBase, InActiveProjectError, ValidationError } from "../common";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
 import { mapToPcrDto } from "./mapToPCRDto";
 
@@ -52,6 +52,12 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     const hasMismatchPcrId = this.projectChangeRequestId !== this.pcr.id;
 
     if (hasMismatchProjectId || hasMismatchPcrId) throw new BadRequestError();
+
+    const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.projectId));
+
+    if (!isProjectActive) {
+      throw new InActiveProjectError();
+    }
 
     const auth = await context.runQuery(new GetAllProjectRolesForUser());
     const projectRoles = auth.forProject(this.projectId).getRoles();

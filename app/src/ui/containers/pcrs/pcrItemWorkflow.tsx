@@ -491,6 +491,7 @@ const getTitle = (defaultTitle: string, params: ProjectChangeRequestPrepareItemP
 };
 
 export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
+  allowRouteInActiveAccess: true,
   routeName: "pcrViewItem",
   routePath: "/projects/:projectId/pcrs/:pcrId/details/item/:itemId",
   getParams: route => ({

@@ -1,10 +1,25 @@
 
-import { ValidationError } from "@server/features/common";
+import { ValidationError, InActiveProjectError } from "@server/features/common";
+import { GetFinancialVirementQuery } from "@server/features/financialVirements/getFinancialVirementQuery";
+import { UpdateFinancialVirementCommand } from "@server/features/financialVirements/updateFinancialVirementCommand";
 import { TestContext } from "../../testContextProvider";
-import { GetFinancialVirementQuery } from "../../../../src/server/features/financialVirements/getFinancialVirementQuery";
-import { UpdateFinancialVirementCommand } from "../../../../src/server/features/financialVirements/updateFinancialVirementCommand";
 
 describe("UpdateFinancialVirementCommand", () => {
+  it("throws an error when inactive project", async () => {
+    const testContext = new TestContext();
+
+    const project = testContext.testData.createProject(x => (x.Acc_ProjectStatus__c = "On Hold"));
+    const partner = testContext.testData.createPartner(project);
+    const pcrItem = testContext.testData.createPCRItem();
+
+    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.pcrId, pcrItem.id));
+
+    testContext.testData.createFinancialVirement(pcrItem, partner);
+    const command = new UpdateFinancialVirementCommand(partner.projectId, pcrItem.pcrId, pcrItem.id, dto, true);
+
+    await expect(testContext.runCommand(command)).rejects.toThrow(InActiveProjectError);
+  });
+
   it("handles no changes", async () => {
     const testContext = new TestContext();
     const { testData } = testContext;
@@ -177,5 +192,4 @@ describe("UpdateFinancialVirementCommand", () => {
 
     await expect(testContext.runCommand(new UpdateFinancialVirementCommand(partner.projectId, pcrItem.pcrId, pcrItem.id, dto, true))).rejects.toThrow(ValidationError);
   });
-
 });

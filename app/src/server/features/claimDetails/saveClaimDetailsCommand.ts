@@ -1,11 +1,19 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
-import { Authorisation, ClaimDetailKey, ClaimDetailsDto, ClaimLineItemDto, IContext, ProjectRole } from "@framework/types";
+import { BadRequestError, CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
+import {
+  Authorisation,
+  ClaimDetailKey,
+  ClaimDetailsDto,
+  ClaimLineItemDto,
+  IContext,
+  ProjectRole,
+} from "@framework/types";
 import { ClaimDetailsValidator } from "@ui/validators";
 import { isNumber } from "@framework/util";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { ISalesforceClaimLineItem } from "@server/repositories";
 import { GetUnfilteredCostCategoriesQuery } from "../claims";
+import { GetProjectStatusQuery } from "../projects";
 
 export class SaveClaimDetails extends CommandBase<boolean> {
   constructor(
@@ -13,7 +21,7 @@ export class SaveClaimDetails extends CommandBase<boolean> {
     private readonly partnerId: string,
     private readonly periodId: number,
     private readonly costCategoryId: string,
-    private readonly claimDetails: ClaimDetailsDto
+    private readonly claimDetails: ClaimDetailsDto,
   ) {
     super();
   }
@@ -23,9 +31,12 @@ export class SaveClaimDetails extends CommandBase<boolean> {
   }
 
   protected async run(context: IContext) {
-    this.validateRequest();
+    await this.validateRequest(context);
 
-    const costCategory = await context.runQuery(new GetUnfilteredCostCategoriesQuery()).then(x => x.find(y => y.id === this.costCategoryId));
+    const costCategoryQuery = new GetUnfilteredCostCategoriesQuery();
+    const costCategories = await context.runQuery(costCategoryQuery);
+    const costCategory = costCategories.find(y => y.id === this.costCategoryId);
+
     if (!costCategory) {
       throw new BadRequestError("Invalid cost category specified");
     } else if (costCategory.isCalculated) {
@@ -43,18 +54,40 @@ export class SaveClaimDetails extends CommandBase<boolean> {
     return true;
   }
 
-  private validateRequest() {
+  private async validateRequest(context: IContext): Promise<void> {
     const validParams = this.projectId && this.partnerId && this.costCategoryId && this.periodId;
-    const validDto = this.claimDetails.partnerId === this.partnerId && this.claimDetails.periodId === this.periodId && this.claimDetails.costCategoryId === this.costCategoryId;
-    const validLineItems = this.claimDetails.lineItems.every(x => x.periodId === this.periodId && x.partnerId === this.partnerId && x.costCategoryId === this.costCategoryId);
+
+    const validClaimByPartnerId = this.claimDetails.partnerId === this.partnerId;
+    const validClaimByPeriodId = this.claimDetails.periodId === this.periodId;
+    const validClaimByCostCategoryId = this.claimDetails.costCategoryId === this.costCategoryId;
+
+    const validDto = validClaimByPartnerId && validClaimByPeriodId && validClaimByCostCategoryId;
+
+    const validLineItems = this.claimDetails.lineItems.every(x => {
+      const isValidPeriodId = x.periodId === this.periodId;
+      const isValidPartnerId = x.partnerId === this.partnerId;
+      const isValidCostCategoryId = x.costCategoryId === this.costCategoryId;
+
+      return isValidPeriodId && isValidPartnerId && isValidCostCategoryId;
+    });
 
     if (!validParams || !validDto || !validLineItems) {
       throw new BadRequestError("Request is missing required fields");
     }
+
+    const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.projectId));
+
+    if (!isProjectActive) {
+      throw new InActiveProjectError();
+    }
   }
 
   private async saveLineItems(context: IContext, lineItems: ClaimLineItemDto[]) {
-    const existingLineItems = await context.repositories.claimLineItems.getAllForCategory(this.partnerId, this.costCategoryId, this.periodId);
+    const existingLineItems = await context.repositories.claimLineItems.getAllForCategory(
+      this.partnerId,
+      this.costCategoryId,
+      this.periodId,
+    );
 
     const filtered = lineItems.filter(x => !!x.description || isNumber(x.value));
 
@@ -68,13 +101,16 @@ export class SaveClaimDetails extends CommandBase<boolean> {
 
         if (!originalItem) throw new BadRequestError("Line item not found");
 
+        const hasValueChanged = originalItem.Acc_LineItemCost__c !== x.value;
+        const hasDescriptionChanged = originalItem.Acc_LineItemDescription__c !== x.description;
+
         // If line item is unchanged then don't include it in the updates
-        return originalItem.Acc_LineItemCost__c !== x.value || originalItem.Acc_LineItemDescription__c !== x.description;
+        return hasValueChanged || hasDescriptionChanged;
       })
       .map(x => ({
         Id: x.id,
         Acc_LineItemDescription__c: x.description,
-        Acc_LineItemCost__c: x.value
+        Acc_LineItemCost__c: x.value,
       }));
 
     const insertItems: Partial<ISalesforceClaimLineItem>[] = insertDtos.map(x => ({
@@ -82,7 +118,7 @@ export class SaveClaimDetails extends CommandBase<boolean> {
       Acc_LineItemCost__c: x.value,
       Acc_ProjectParticipant__c: x.partnerId,
       Acc_ProjectPeriodNumber__c: x.periodId,
-      Acc_CostCategory__c: x.costCategoryId
+      Acc_CostCategory__c: x.costCategoryId,
     }));
 
     const deleteItems = existingLineItems.filter(x => !updateDtos.some(y => x.Id === y.id)).map(x => x.Id);
@@ -93,7 +129,12 @@ export class SaveClaimDetails extends CommandBase<boolean> {
   }
 
   private async saveClaimDetail(context: IContext, claimDetail: ClaimDetailsDto) {
-    const key: ClaimDetailKey = { projectId: this.projectId, partnerId: this.partnerId, periodId: this.periodId, costCategoryId: this.costCategoryId };
+    const key: ClaimDetailKey = {
+      projectId: this.projectId,
+      partnerId: this.partnerId,
+      periodId: this.periodId,
+      costCategoryId: this.costCategoryId,
+    };
     const existing = await context.repositories.claimDetails.get(key);
 
     if (!existing) {
@@ -102,11 +143,11 @@ export class SaveClaimDetails extends CommandBase<boolean> {
         Acc_ReasonForDifference__c: claimDetail.comments,
         Acc_ProjectParticipant__r: {
           Id: this.partnerId,
-          Acc_ProjectId__c: this.projectId
+          Acc_ProjectId__c: this.projectId,
         },
         Acc_ProjectPeriodNumber__c: this.periodId,
         Acc_CostCategory__c: this.costCategoryId,
-        Acc_PeriodCostCategoryTotal__c: 0
+        Acc_PeriodCostCategoryTotal__c: 0,
       });
     } else if (existing.Acc_ReasonForDifference__c !== claimDetail.comments) {
       context.logger.info("Updating existing claim detail", key, existing.Id);

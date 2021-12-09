@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
+import { BadRequestError, CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
 import { ISalesforcePartner, ISalesforceProfileDetails } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
@@ -18,6 +18,7 @@ import {
 } from "@framework/types";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { InitialForecastDetailsDtosValidator } from "@ui/validators/initialForecastDetailsDtosValidator";
+import { GetProjectStatusQuery } from "../projects";
 
 export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
   constructor(
@@ -34,6 +35,12 @@ export class UpdateInitialForecastDetailsCommand extends CommandBase<boolean> {
   }
 
   protected async run(context: IContext) {
+    const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.projectId));
+
+    if (!isProjectActive) {
+      throw new InActiveProjectError();
+    }
+
     const partner = await context.runQuery(new GetByIdQuery(this.partnerId));
 
     if (partner.partnerStatus !== PartnerStatus.Pending) {

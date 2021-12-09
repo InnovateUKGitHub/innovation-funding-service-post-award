@@ -12,6 +12,7 @@ import { ProjectRole, ProjectStatus } from "@framework/constants";
 import { IRoutes } from "@ui/routing";
 import { getAuthRoles } from "@framework/types";
 import { getLeadPartner } from "@framework/util/partnerHelper";
+import { useProjectStatus } from "@ui/hooks";
 import { ClaimsDashboardGuidance } from "./components";
 
 export interface AllClaimsDashboardParams {
@@ -27,7 +28,9 @@ interface AllClaimsDashboardData {
   messages: string[];
 }
 
-export function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaimsDashboardData) {
+function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaimsDashboardData & BaseProps) {
+  const { isActive: isProjectActive } = useProjectStatus();
+
   const combined = Pending.combine({
     projectDetails: props.projectDetails,
     partners: props.partners,
@@ -150,11 +153,7 @@ export function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & Al
           caption={<Acc.Content value={x => x.allClaimsDashboard.labels.openCaption} />}
           qa="current-claims-table"
         >
-          <ClaimTable.Custom
-            header={x => x.allClaimsDashboard.labels.partner}
-            qa="partner"
-            value={renderPartnerName}
-          />
+          <ClaimTable.Custom header={x => x.allClaimsDashboard.labels.partner} qa="partner" value={renderPartnerName} />
           <ClaimTable.Currency
             header={x => x.allClaimsDashboard.labels.forecastCosts}
             qa="forecast-cost"
@@ -170,11 +169,7 @@ export function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & Al
             qa="diff"
             value={x => roundCurrency(x.forecastCost - x.totalCost)}
           />
-          <ClaimTable.String
-            header={x => x.allClaimsDashboard.labels.status}
-            qa="status"
-            value={x => x.statusLabel}
-          />
+          <ClaimTable.String header={x => x.allClaimsDashboard.labels.status} qa="status" value={x => x.statusLabel} />
           <ClaimTable.ShortDate
             header={x => x.allClaimsDashboard.labels.lastUpdated}
             qa="last-update"
@@ -199,10 +194,13 @@ export function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & Al
   };
 
   const getBodyRowFlag = (claim: ClaimDto, project: ProjectDto, partners: PartnerDto[]) => {
+    if (isProjectActive) return false;
+
     const partner = partners.find(x => x.id === claim.partnerId);
     if (!partner) return false;
 
     const linkType = getClaimDetailsLinkType({ claim, project, partner });
+
     return linkType === "edit" || linkType === "review";
   };
 
@@ -254,11 +252,7 @@ export function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & Al
             qa="diff"
             value={x => roundCurrency(x.forecastCost - x.totalCost)}
           />
-          <ClaimTable.String
-            header={x => x.allClaimsDashboard.labels.status}
-            qa="status"
-            value={x => x.statusLabel}
-          />
+          <ClaimTable.String header={x => x.allClaimsDashboard.labels.status} qa="status" value={x => x.statusLabel} />
           <ClaimTable.ShortDate
             header={x => x.allClaimsDashboard.labels.lastUpdated}
             qa="last-update"
@@ -281,9 +275,7 @@ export function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & Al
     return <Acc.Claims.ClaimPeriodDate claim={claim} />;
   };
 
-  return (
-    <Acc.PageLoader pending={combined} render={x => renderContents(x.projectDetails, x.partners, x.previousClaims)} />
-  );
+  return <Acc.PageLoader pending={combined} render={x => renderContents(x.projectDetails, x.partners, x.previousClaims)} />;
 }
 
 const AllClaimsDashboardContainer = (props: AllClaimsDashboardParams & BaseProps) => {
@@ -301,6 +293,7 @@ const AllClaimsDashboardContainer = (props: AllClaimsDashboardParams & BaseProps
 };
 
 export const AllClaimsDashboardRoute = defineRoute({
+  allowRouteInActiveAccess: true,
   routeName: "allClaimsDashboard",
   routePath: "/projects/:projectId/claims/dashboard",
   container: AllClaimsDashboardContainer,

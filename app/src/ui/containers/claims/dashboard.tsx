@@ -7,6 +7,7 @@ import { Pending } from "../../../shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as Acc from "../../components";
 
+import { GetProjectStatus } from "../app/project-active";
 import { ClaimsDashboardGuidance } from "./components";
 
 export interface ClaimDashboardPageParams {
@@ -127,52 +128,62 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
     const ClaimTable = Acc.TypedTable<ClaimDto>();
 
     return (
-      <ClaimTable.Table
-        data={data}
-        bodyRowFlag={x => (getClaimDetailsLinkType({ claim: x, project, partner }) === "edit" ? "edit" : null)}
-        qa={tableQa}
-        caption={tableCaption}
-      >
-        <ClaimTable.Custom
-          header={x => x.claimsDashboard.labels.period}
-          qa="period"
-          value={x => <Acc.Claims.ClaimPeriodDate claim={x} />}
-        />
-        <ClaimTable.Currency
-          header={x => x.claimsDashboard.labels.forecastCosts}
-          qa="forecast-cost"
-          value={x => x.forecastCost}
-        />
-        <ClaimTable.Currency
-          header={x => x.claimsDashboard.labels.actualCosts}
-          qa="actual-cost"
-          value={x => x.totalCost}
-        />
-        <ClaimTable.Currency
-          header={x => x.claimsDashboard.labels.difference}
-          qa="diff"
-          value={x => roundCurrency(x.forecastCost - x.totalCost)}
-        />
-        <ClaimTable.Custom
-          header={x => x.claimsDashboard.labels.status}
-          qa="status"
-          value={x => x.statusLabel}
-        />
-        <ClaimTable.ShortDate
-          header={x => x.claimsDashboard.labels.lastUpdated}
-          qa="date"
-          value={x => x.paidDate || x.approvedDate || x.lastModifiedDate}
-        />
-        <ClaimTable.Custom
-          header={x => x.claimsDashboard.labels.actionHeader}
-          hideHeader
-          qa="link"
-          value={x => (
-            <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} routes={this.props.routes} />
-          )}
-        />
-      </ClaimTable.Table>
+      <GetProjectStatus>
+        {projectStatus => (
+          <ClaimTable.Table
+            data={data}
+            bodyRowFlag={claim => (projectStatus.isActive ? this.hasBodyRowFlag(claim, project, partner) : null)}
+            qa={tableQa}
+            caption={tableCaption}
+          >
+            <ClaimTable.Custom
+              header={x => x.claimsDashboard.labels.period}
+              qa="period"
+              value={x => <Acc.Claims.ClaimPeriodDate claim={x} />}
+            />
+
+            <ClaimTable.Currency
+              header={x => x.claimsDashboard.labels.forecastCosts}
+              qa="forecast-cost"
+              value={x => x.forecastCost}
+            />
+
+            <ClaimTable.Currency
+              header={x => x.claimsDashboard.labels.actualCosts}
+              qa="actual-cost"
+              value={x => x.totalCost}
+            />
+
+            <ClaimTable.Currency
+              header={x => x.claimsDashboard.labels.difference}
+              qa="diff"
+              value={x => roundCurrency(x.forecastCost - x.totalCost)}
+            />
+            <ClaimTable.Custom header={x => x.claimsDashboard.labels.status} qa="status" value={x => x.statusLabel} />
+
+            <ClaimTable.ShortDate
+              header={x => x.claimsDashboard.labels.lastUpdated}
+              qa="date"
+              value={x => x.paidDate || x.approvedDate || x.lastModifiedDate}
+            />
+            <ClaimTable.Custom
+              header={x => x.claimsDashboard.labels.actionHeader}
+              hideHeader
+              qa="link"
+              value={x => (
+                <Acc.Claims.ClaimDetailsLink claim={x} project={project} partner={partner} routes={this.props.routes} />
+              )}
+            />
+          </ClaimTable.Table>
+        )}
+      </GetProjectStatus>
     );
+  }
+
+  private hasBodyRowFlag(claim: ClaimDto, project: ProjectDto, partner: PartnerDto) {
+    const linkType = getClaimDetailsLinkType({ claim, project, partner });
+
+    return linkType === "edit" ? "edit" : null;
   }
 }
 
@@ -191,6 +202,7 @@ const ClaimsDashboardRouteContainer = (props: ClaimDashboardPageParams & BasePro
 };
 
 export const ClaimsDashboardRoute = defineRoute({
+  allowRouteInActiveAccess: true,
   routeName: "claimsDashboard",
   routePath: "/projects/:projectId/claims/?partnerId",
   container: ClaimsDashboardRouteContainer,

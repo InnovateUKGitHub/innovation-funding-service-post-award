@@ -76,6 +76,7 @@ const Container = (props: MonitoringReportCreateParams&BaseProps) => {
 };
 
 export const MonitoringReportCreateRoute = defineRoute({
+  allowRouteInActiveAccess: true,
   routeName: "monitoringReportCreate",
   routePath: "/projects/:projectId/monitoring-reports/create",
   container: Container,

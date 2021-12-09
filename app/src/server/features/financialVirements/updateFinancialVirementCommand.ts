@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { CommandBase, ValidationError } from "@server/features/common";
+import { CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
 import { Authorisation, CostCategoryVirementDto, FinancialVirementDto, IContext, PartnerVirementsDto, ProjectRole } from "@framework/types";
 import { flatten } from "@framework/util/arrayHelpers";
 import { ISalesforceFinancialVirement } from "@server/repositories";
@@ -10,6 +10,7 @@ import {
   calculateNewEligibleCosts,
   calculateNewRemainingGrant
 } from "@server/features/financialVirements/financialVirementsCalculations";
+import { GetProjectStatusQuery } from "../projects";
 
 export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
   constructor(private readonly projectId: string, private readonly pcrId: string, private readonly pcrItemId: string, private readonly data: FinancialVirementDto, private readonly submit: boolean) {
@@ -21,6 +22,11 @@ export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
   }
 
   protected async run(context: IContext): Promise<boolean> {
+    const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.projectId));
+
+    if (!isProjectActive) {
+      throw new InActiveProjectError();
+    }
 
     const existingVirements = await context.repositories.financialVirements.getAllForPcr(this.pcrItemId);
 

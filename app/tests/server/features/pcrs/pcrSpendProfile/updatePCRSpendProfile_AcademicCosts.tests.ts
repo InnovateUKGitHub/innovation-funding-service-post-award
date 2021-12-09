@@ -2,7 +2,7 @@ import { CostCategoryType, PCRItemStatus, PCRPartnerType, PCRProjectRole } from 
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
-import { ValidationError } from "@server/features/common";
+import { InActiveProjectError, ValidationError } from "@server/features/common";
 import { setup as commonSetup } from "./helpers";
 
 describe("UpdatePCRSpendProfileCommand", () => {
@@ -20,6 +20,18 @@ describe("UpdatePCRSpendProfileCommand", () => {
         const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(pcrItem.id));
         return {context, project, pcrItem, spendProfileDto};
     };
+
+    test("should throw error when project is inactive", async () => {
+        const { context, project } = commonSetup("On Hold");
+        const pcrItem = context.testData.createPCRItem();
+        await context.runQuery(new GetPcrSpendProfilesQuery(pcrItem.id));
+
+        const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(pcrItem.id));
+        const command = new UpdatePCRSpendProfileCommand(project.Id, pcrItem.id, spendProfileDto);
+
+        await expect(context.runCommand(command)).rejects.toThrow(InActiveProjectError);
+    });
+
     describe("Academic costs", () => {
         it("should save a academic cost", async () => {
             const {context, project, pcrItem, spendProfileDto} = await setup();

@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
+import { BadRequestError, CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
 import { ISalesforceProfileDetails } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery, GetUnfilteredCostCategoriesQuery, UpdateClaimCommand } from "@server/features/claims";
 import { GetAllClaimDetailsByPartner } from "@server/features/claimDetails";
-import { GetByIdQuery as GetProjectById } from "@server/features/projects";
+import { GetByIdQuery as GetProjectById, GetProjectStatusQuery } from "@server/features/projects";
 import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
 import { Authorisation, ClaimDetailsSummaryDto, ClaimDto, ClaimStatus, ForecastDetailsDTO, GOLCostDto, IContext, PartnerDto, ProjectRole } from "@framework/types";
 import { GetByIdQuery } from "@server/features/partners";
@@ -26,6 +26,12 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
   }
 
   protected async run(context: IContext) {
+    const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.projectId));
+
+    if (!isProjectActive) {
+      throw new InActiveProjectError();
+    }
+
     const project = await context.runQuery(new GetProjectById(this.projectId));
     const existing = await context.runQuery(new GetAllForecastsForPartnerQuery(this.partnerId));
 
