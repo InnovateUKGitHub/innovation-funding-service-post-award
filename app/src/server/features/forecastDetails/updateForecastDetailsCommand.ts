@@ -70,15 +70,14 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     }
   }
 
-  private async testPastForecastPeriodsHaveNotBeenUpdated(periodId: number, forecasts: ForecastDetailsDTO[], existing: ForecastDetailsDTO[]) {
-    const allUpdatesAllowed = forecasts.every(x => {
-      if (x.periodId >= periodId) {
-        return true;
-      }
-      return !this.hasChanged(x, existing);
+  private async testPastForecastPeriodsHaveNotBeenUpdated(currentPeriodId: number, forecasts: ForecastDetailsDTO[], existing: ForecastDetailsDTO[]): Promise<void> {
+    const hasAllForecastedUnSubmitted = forecasts.every(x => {
+      const hasPeriodElapsed = x.periodId >= currentPeriodId;
+
+      return hasPeriodElapsed || !this.hasChanged(x, existing);
     });
 
-    if (!allUpdatesAllowed) {
+    if (!hasAllForecastedUnSubmitted) {
       throw new BadRequestError("You can't update the forecast of approved periods.");
     }
   }

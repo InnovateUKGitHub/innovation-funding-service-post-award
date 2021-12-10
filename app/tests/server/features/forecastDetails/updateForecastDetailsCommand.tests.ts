@@ -348,15 +348,17 @@ describe("UpdateForecastDetailsCommand", () => {
     expect(currentProfileDetail.Acc_LatestForecastCost__c).toEqual(246);
   });
 
-  // TODO fix it so forecast can't be updated
-  it.skip("when project has ended then a forecast detail cannot be updated", async () => {
+  it("when project has ended then a forecast detail cannot be updated", async () => {
+    const stubCurrentPeriodForecast = 2;
+    const stubForecastPeriod = 1;
 
     const context = new TestContext();
 
     const projectStart = DateTime.local().set({ day: 1 }).minus({ months: 2 });
-    const projectEnd = projectStart.plus({ months: 1 }).minus({day: 1});
+    const projectEnd = projectStart.plus({ months: 1 }).minus({ day: 1 });
 
     const project = context.testData.createProject(x => {
+      x.Acc_CurrentPeriodNumber__c = stubCurrentPeriodForecast;
       x.Acc_StartDate__c = projectStart.toFormat("yyyy-MM-dd");
       x.Acc_EndDate__c = projectEnd.toFormat("yyyy-MM-dd");
       x.Acc_ClaimFrequency__c = "Monthly";
@@ -367,20 +369,20 @@ describe("UpdateForecastDetailsCommand", () => {
 
     context.testData.createProfileTotalCostCategory(costCat, partner, 1000000);
 
-    const profileDetail = context.testData.createProfileDetail(costCat, partner, 1, x => x.Acc_LatestForecastCost__c = 1);
+    const profileDetail = context.testData.createProfileDetail(costCat, partner, stubForecastPeriod, x => x.Acc_LatestForecastCost__c = 1);
 
-    const update = [{
+    const stubForecast = {
       id: profileDetail.Id,
       costCategoryId: profileDetail.Acc_CostCategory__c,
       periodId: profileDetail.Acc_ProjectPeriodNumber__c,
       periodStart: projectStart.toJSDate(),
-      periodEnd: projectStart.plus({ months: 1 }).minus({day: 1}).toJSDate(),
+      periodEnd: projectEnd.toJSDate(),
       value: profileDetail.Acc_LatestForecastCost__c + 1
-    }];
+    };
 
-    const command = new UpdateForecastDetailsCommand(partner.projectId, partner.id, update, false);
+    const command = new UpdateForecastDetailsCommand(partner.projectId, partner.id, [stubForecast], false);
+
     await expect(context.runCommand(command)).rejects.toMatchObject(new BadRequestError("You can't update the forecast of approved periods."));
-
   });
 
   it("when project in period 2 and period 1 updated expect exception", async () => {
