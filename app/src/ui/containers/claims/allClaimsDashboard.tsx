@@ -19,7 +19,7 @@ export interface AllClaimsDashboardParams {
 }
 
 interface AllClaimsDashboardData {
-  project: Pending<ProjectDto>;
+  projectDetails: Pending<ProjectDto>;
   partners: Pending<PartnerDto[]>;
   currentClaims: Pending<ClaimDto[]>;
   previousClaims: Pending<ClaimDto[]>;
@@ -27,25 +27,25 @@ interface AllClaimsDashboardData {
   messages: string[];
 }
 
-function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaimsDashboardData & BaseProps) {
+export function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaimsDashboardData) {
   const combined = Pending.combine({
-    project: props.project,
+    projectDetails: props.projectDetails,
     partners: props.partners,
     previousClaims: props.previousClaims,
   });
 
-  const renderContents = (project: ProjectDto, partners: PartnerDto[], previousClaims: ClaimDto[]) => {
-    const { isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
-    const { isFc } = getAuthRoles(project.roles);
+  const renderContents = (projectDetails: ProjectDto, partners: PartnerDto[], previousClaims: ClaimDto[]) => {
+    const { isCombinationOfSBRI } = checkProjectCompetition(projectDetails.competitionType);
+    const { isFc } = getAuthRoles(projectDetails.roles);
 
     const leadPartner = getLeadPartner(partners);
     const isLeadPartnerFc = leadPartner && getAuthRoles(leadPartner.roles).isFc;
 
     return (
       <Acc.Page
-        pageTitle={<Acc.Projects.Title {...project} />}
-        backLink={<Acc.Projects.ProjectBackLink project={project} routes={props.routes} />}
-        project={project}
+        pageTitle={<Acc.Projects.Title {...projectDetails} />}
+        backLink={<Acc.Projects.ProjectBackLink project={projectDetails} routes={props.routes} />}
+        project={projectDetails}
         partner={isLeadPartnerFc ? leadPartner : undefined}
       >
         {isFc && renderGuidanceMessage(isCombinationOfSBRI, partners)}
@@ -59,13 +59,13 @@ function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaims
                   <Acc.Content value={x => x.allClaimsDashboard.messages.loadingClaims} />
                 </Acc.Renderers.SimpleString>
               ) : (
-                renderCurrentClaimsPerPeriod(currentClaims, project, partners)
+                renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)
               )
             }
           />
         </Acc.Section>
         <Acc.Section qa="closed-claims-section" title={x => x.allClaimsDashboard.labels.closedSectionTitle}>
-          {renderPreviousClaimsSections(project, partners, previousClaims)}
+          {renderPreviousClaimsSections(projectDetails, partners, previousClaims)}
         </Acc.Section>
       </Acc.Page>
     );
@@ -282,7 +282,7 @@ function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaims
   };
 
   return (
-    <Acc.PageLoader pending={combined} render={x => renderContents(x.project, x.partners, x.previousClaims)} />
+    <Acc.PageLoader pending={combined} render={x => renderContents(x.projectDetails, x.partners, x.previousClaims)} />
   );
 }
 
@@ -292,7 +292,7 @@ const AllClaimsDashboardContainer = (props: AllClaimsDashboardParams & BaseProps
   return (
     <AllClaimsDashboardComponent
       {...props}
-      project={stores.projects.getById(props.projectId)}
+      projectDetails={stores.projects.getById(props.projectId)}
       partners={stores.partners.getPartnersForProject(props.projectId)}
       currentClaims={stores.claims.getActiveClaimsForProject(props.projectId)}
       previousClaims={stores.claims.getInactiveClaimsForProject(props.projectId)}

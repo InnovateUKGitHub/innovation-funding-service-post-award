@@ -17,19 +17,12 @@ export const usePageValidationMessage = (
 ) => {
   const { getContent } = useContent();
 
-  switch (projectStatus) {
-    case ProjectStatus.OnHold:
-      return getContent(x => x.components.projectInactiveContent.projectOnHoldMessage);
-    case ProjectStatus.Terminated:
-      return getContent(x => x.components.projectInactiveContent.projectTerminatedMessage);
-    case ProjectStatus.Closed:
-      return getContent(x => x.components.projectInactiveContent.projectClosedMessage);
-    default:
-      break;
+  if (projectStatus === ProjectStatus.OnHold) {
+    return getContent(x => x.components.onHoldContent.projectOnHoldMessage);
   }
 
   if (partnerStatus === PartnerStatus.OnHold) {
-    return getContent(x => x.components.projectInactiveContent.partnerOnHoldMessage);
+    return getContent(x => x.components.onHoldContent.partnerOnHoldMessage);
   }
 
   return null;

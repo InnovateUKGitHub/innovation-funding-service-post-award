@@ -78,7 +78,6 @@ const Container = (props: MonitoringReportCreateParams&BaseProps) => {
 export const MonitoringReportCreateRoute = defineRoute({
   routeName: "monitoringReportCreate",
   routePath: "/projects/:projectId/monitoring-reports/create",
-  shouldErrorForInactiveProjects: true,
   container: Container,
   getParams: (r) => ({ projectId: r.params.projectId }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
