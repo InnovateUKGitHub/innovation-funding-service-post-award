@@ -16,9 +16,6 @@ import { BaseProps } from "@ui/containers/containerBase";
 
 import { Footer, FullHeight, GovWidthContainer, Header, PhaseBanner, PrivateModal } from "@ui/components";
 import { ErrorContainer, ErrorContainerProps, ErrorBoundaryFallback } from "@ui/components/errors";
-import { ProjectInactive } from "@ui/components/ProjectInactive";
-import { getIsProjectActive } from "@framework/util/projectHelper";
-import { getPending } from "@ui/helpers/get-pending";
 
 interface IAppProps {
   // @todo see if we can remove and replace with a callback to set page title
@@ -34,7 +31,6 @@ interface IAppProps {
   content: Content;
   params: Params;
   currentRoute: MatchedRoute;
-  isProjectActive: boolean;
 }
 
 class AppView extends React.Component<IAppProps> {
@@ -61,8 +57,7 @@ class AppView extends React.Component<IAppProps> {
   }
 
   public render() {
-    const { modalRegister, messages, route, config, routes, isClient, content, currentRoute, params, isProjectActive } = this.props;
-    const shouldInactiveProjectsError = currentRoute.shouldErrorForInactiveProjects;
+    const { modalRegister, messages, route, config, routes, isClient, content, currentRoute, params } = this.props;
 
     const hasAccess = this.accessControl(currentRoute, params);
 
@@ -104,13 +99,9 @@ class AppView extends React.Component<IAppProps> {
               <PhaseBanner />
 
               {hasAccess ? (
-                !isProjectActive && shouldInactiveProjectsError ? (
-                  <ProjectInactive />
-                ) : (
-                  <ErrorBoundary fallbackRender={errorProps => <ErrorBoundaryFallback {...(errorProps as any)} />}>
-                    <RouteContainer {...baseProps} {...params} />
-                  </ErrorBoundary>
-                )
+                <ErrorBoundary fallbackRender={errorProps => <ErrorBoundaryFallback {...(errorProps as any)} />}>
+                  <RouteContainer {...baseProps} {...params} />
+                </ErrorBoundary>
               ) : (
                 <ErrorContainer {...(route.params as ErrorContainerProps)} />
               )}
@@ -143,14 +134,6 @@ export function App(props: AppRoute) {
   const currentRoute = matchRoute(getRoute);
   const params: Params & { projectId?: string } = currentRoute.getParams(getRoute);
 
-  let isProjectActive = false;
-  if (params.projectId) {
-    const { isResolved, payload } = getPending(stores.projects.getById(params.projectId));
-    if (isResolved && payload) {
-      isProjectActive = getIsProjectActive(payload);
-    }
-  }
-
   const competitionType = useCompetitionType(params.projectId);
 
   return (
@@ -167,7 +150,6 @@ export function App(props: AppRoute) {
       currentRoute={currentRoute}
       dispatch={props.store.dispatch}
       routes={routes}
-      isProjectActive={isProjectActive}
     />
   );
 }

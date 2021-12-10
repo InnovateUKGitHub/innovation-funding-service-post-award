@@ -15,7 +15,6 @@ export interface MatchedRoute {
   getParams: (route: State) => {};
   container: React.FunctionComponent<any>;
   getTitle: (getTitleArgs: { params: {}; stores: IStores; content: Content }) => PageTitleState;
-  shouldErrorForInactiveProjects?: boolean;
 }
 
 // Note: matchRoute doesn't check if the route is valid but the FormHandler is missing
