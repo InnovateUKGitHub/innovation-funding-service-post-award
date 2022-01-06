@@ -109,6 +109,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
             value={m => m.comments}
             update={(m, v) => m.comments = (v || "")}
             validation={editor.validator.comments}
+            characterCountOptions={{ type: "descending", maxValue: PCRDtoValidator.maxCommentsLength }}
           />
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-submit">

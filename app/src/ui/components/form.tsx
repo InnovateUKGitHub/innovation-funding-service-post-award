@@ -5,7 +5,7 @@ import classNames from "classnames";
 import { ContentSelector } from "@content/content";
 import { IFileWrapper } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
-import { TextAreaInput } from "./inputs/textAreaInput";
+import { TextAreaInput, TextAreaInputProps } from "./inputs/textAreaInput";
 import { ValidationError } from "./validationError";
 import { TextInput } from "./inputs/textInput";
 import { NumberInput } from "./inputs/numberInput";
@@ -224,15 +224,26 @@ const SearchField = <T extends {}>({field, ...props}: SearchFieldProps<T> & Inte
   />
 );
 
-interface MultiStringFieldProps<T> extends ExternalFieldProps<T, string> {
-  rows?: number;
-  qa?: string;
-}
+type MultiStringFieldProps<T> = ExternalFieldProps<T, string> & Omit<TextAreaInputProps, "value">;
 
-const MultiStringField = <T extends {}>({field, ...props}: MultiStringFieldProps<T> & InternalFieldProps<T>) => (
+const MultiStringField = <T extends {}>({ field, ...props }: MultiStringFieldProps<T> & InternalFieldProps<T>) => (
   <FieldComponent
-      {...props}
-      field={field || ((data, disabled) => <TextAreaInput name={props.name} value={props.value(data, disabled)} onChange={(val) => handleChange(props, val)} rows={props.rows} qa={props.qa} ariaDescribedBy={props.hint ? createFieldHintId(props) : undefined} disabled={disabled} />)}
+    {...props}
+    field={
+      field ||
+      ((data, disabled) => (
+        <TextAreaInput
+          name={props.name}
+          value={props.value(data, disabled)}
+          onChange={val => handleChange(props, val)}
+          rows={props.rows}
+          qa={props.qa}
+          ariaDescribedBy={props.hint ? createFieldHintId(props) : undefined}
+          disabled={disabled}
+          characterCountOptions={props.characterCountOptions}
+        />
+      ))
+    }
   />
 );
 

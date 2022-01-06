@@ -67,7 +67,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
   private readonly monitoringOfficerCanEdit =
     this.original && !!this.monitoringOfficerPermittedStatus.get(this.original.status);
 
-  private readonly maxCommentsLength = 1000;
+  static readonly maxCommentsLength = 1000;
 
   public comments = this.validateComments();
   public status = this.validateStatus();
@@ -96,8 +96,8 @@ export class PCRDtoValidator extends Results<PCRDto> {
           Validation.maxLength(
             this,
             this.model.comments,
-            this.maxCommentsLength,
-            `Comments can be a maximum of ${this.maxCommentsLength} characters`,
+            PCRDtoValidator.maxCommentsLength,
+            `Comments can be a maximum of ${PCRDtoValidator.maxCommentsLength} characters`,
           ),
       );
     }
@@ -123,8 +123,8 @@ export class PCRDtoValidator extends Results<PCRDto> {
           Validation.maxLength(
             this,
             this.model.reasoningComments,
-            this.maxCommentsLength,
-            `Reasoning can be a maximum of ${this.maxCommentsLength} characters`,
+            PCRDtoValidator.maxCommentsLength,
+            `Reasoning can be a maximum of ${PCRDtoValidator.maxCommentsLength} characters`,
           ),
       );
     }

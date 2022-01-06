@@ -6,7 +6,7 @@ import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { Results, Result } from "@ui/validation";
 import * as Validation from "@ui/validators/common";
 
-const commentsLengthMax = 1000;
+export const claimCommentsMaxLength = 1000;
 
 export class ClaimDtoValidator extends Results<ClaimDto> {
   constructor(
@@ -76,8 +76,8 @@ export class ClaimDtoValidator extends Results<ClaimDto> {
         Validation.maxLength(
           this,
           this.model.comments,
-          commentsLengthMax,
-          `Comments must be a maximum of ${commentsLengthMax} characters`,
+          claimCommentsMaxLength,
+          `Comments must be a maximum of ${claimCommentsMaxLength} characters`,
         ),
     );
   }

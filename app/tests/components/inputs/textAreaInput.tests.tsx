@@ -1,81 +1,174 @@
-import { mount } from "enzyme";
+import { render, fireEvent } from "@testing-library/react";
 
-import { TextAreaInput } from "../../../src/ui/components/inputs/textAreaInput";
+import { TestBed, TestBedStore } from "@shared/TestBed";
+import { TextAreaInput, TextAreaInputProps } from "@ui/components/inputs/textAreaInput";
+import { defaultInputDebounceTimeout } from "@ui/components/inputs/baseInput";
 
 describe("TextAreaInput", () => {
-  it("Renders with correct class", () => {
-    const wrapper = mount(<TextAreaInput name="testName" />);
-    expect(wrapper.childAt(0).prop("className")).toContain("govuk-textarea");
+  const defaultProps: TextAreaInputProps = {
+    name: "stub-name",
+  };
+
+  const stubStore = {
+    config: {
+      isClient: () => true,
+    } as TestBedStore["config"],
+  };
+
+  const setup = (props?: Partial<TextAreaInputProps>) => {
+    const rtl = render(
+      <TestBed stores={stubStore as TestBedStore}>
+        <TextAreaInput {...defaultProps} {...props} />
+      </TestBed>,
+    );
+
+    const textarea = rtl.container.querySelector("textarea");
+    if (!textarea) throw Error("No textarea was found");
+
+    return { ...rtl, textarea };
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.useFakeTimers();
   });
 
-  it("Renders with correct name", () => {
-    const wrapper = mount(<TextAreaInput name="testName" />);
-    expect(wrapper.childAt(0).prop("name")).toContain("testName");
+  describe("@renders", () => {
+    test("with correct class", () => {
+      const { textarea } = setup();
+
+      expect(textarea).toHaveClass("govuk-textarea");
+    });
+
+    test("with correct name", () => {
+      const stubName = "stub-name";
+
+      const { textarea } = setup({ name: stubName });
+
+      expect(textarea).toHaveAttribute("name", stubName);
+    });
+
+    test("with enabled by default", () => {
+      const { textarea } = setup();
+
+      expect(textarea).not.toBeDisabled();
+    });
+
+    test("with as disabled", () => {
+      const { textarea } = setup({ disabled: true });
+
+      expect(textarea).toBeDisabled();
+    });
+
+    test("with no initial text", () => {
+      const { textarea } = setup();
+
+      expect(textarea).toHaveValue("");
+    });
+
+    test("with correct text", () => {
+      const stubValue = "stub-value";
+
+      const { getByText } = setup({ value: stubValue });
+      const expectedElementWithText = getByText(stubValue);
+
+      expect(expectedElementWithText).toBeInTheDocument();
+    });
+
+    test("with correct qa", () => {
+      const stubQaValue = "stub-qa";
+
+      const { getByTestId } = setup({ qa: stubQaValue });
+      const expectedQaElement = getByTestId(stubQaValue);
+
+      expect(expectedQaElement).toBeInTheDocument();
+    });
+
+    test("with correct maxLength attribute", () => {
+      const stubMaxLegth = 20;
+
+      const { textarea } = setup({ maxLength: stubMaxLegth });
+
+      expect(textarea).toHaveAttribute("maxLength", `${stubMaxLegth}`);
+    });
+
+    test("with updates when props are updated", () => {
+      const startingValue = "stub-starting-value";
+      const updatedValue = "new-value";
+
+      const { rerender, textarea } = setup({ value: startingValue });
+
+      expect(textarea).toHaveValue(startingValue);
+
+      rerender(
+        // Note: setup() can't be used. The original instance is not available to be mutated (we have re-produce component + props)
+        <TestBed stores={stubStore as TestBedStore}>
+          <TextAreaInput {...defaultProps} value={updatedValue} />
+        </TestBed>,
+      );
+
+      expect(textarea).toHaveValue(updatedValue);
+    });
   });
 
-  it("Renders enabled by default", () => {
-    const wrapper = mount(<TextAreaInput name="testName" />);
-    expect(wrapper.childAt(0).prop("disabled")).toBe(false);
-  });
+  describe("@events", () => {
+    test("calls on blur", () => {
+      const stubOnChange = jest.fn();
 
-  it("Renders as disabled", () => {
-    const wrapper = mount(<TextAreaInput name="testName" disabled/>);
-    expect(wrapper.childAt(0).prop("disabled")).toBe(true);
-  });
+      const { textarea } = setup({ onChange: stubOnChange });
 
-  it("Renders with no text", () => {
-    const wrapper = mount(<TextAreaInput name="testName" />);
-    expect(wrapper.find("textarea").text()).toBe("");
-  });
+      // Note: Ensure no calls are make without changes
+      expect(stubOnChange).toHaveBeenCalledTimes(0);
 
-  it("Renders with correct text", () => {
-    const wrapper = mount(<TextAreaInput name="testName" value="Test value" />);
-    expect(wrapper.find("textarea").text()).toBe("Test value");
-  });
+      fireEvent.blur(textarea);
 
-  it("Renders with correct qa", () => {
-    const wrapper = mount(<TextAreaInput name="testName" qa="testQa"/>);
-    expect(wrapper.find("textarea").prop("data-qa")).toEqual("testQa");
-  });
+      // Note: Trick input base debounce
+      jest.advanceTimersByTime(defaultInputDebounceTimeout);
 
-  it("Renders with correct maxLength attribute", () => {
-    const wrapper = mount(<TextAreaInput name="testName" maxLength={20} />);
-    expect(wrapper.find("textarea").prop("maxLength")).toEqual(20);
-  });
+      expect(stubOnChange).toHaveBeenCalledTimes(0);
+    });
 
-  it("Should update state when props change", () => {
-    const wrapper = mount(<TextAreaInput name="testName" maxLength={20} value="" />);
-    wrapper.setProps({value: "test"});
+    test("calls on change", () => {
+      const stubChangedValue = "changed-value";
+      const stubOnChange = jest.fn();
 
-    expect(wrapper.state("value")).toBe("test");
-  });
+      const { textarea } = setup({ onChange: stubOnChange });
 
-  it("Should update state on blur", () => {
-    const onChange = jest.fn();
-    const wrapper = mount(<TextAreaInput name="testName" maxLength={20} value="" onChange={onChange} />);
+      // Note: Ensure no calls are make without changes
+      expect(stubOnChange).toHaveBeenCalledTimes(0);
 
-    (wrapper.find("textarea").instance() as any).value = "1";
-    wrapper.simulate("blur");
+      fireEvent.change(textarea, { target: { value: stubChangedValue } });
 
-    expect(onChange).toHaveBeenCalledWith("1");
-  });
+      // Note: Trick input base debounce
+      jest.advanceTimersByTime(defaultInputDebounceTimeout);
 
-  it("Debounces onChange calls", async (done) => {
-    const onChange = jest.fn();
-    const wrapper = mount(<TextAreaInput name="testName" onChange={onChange} />);
+      expect(stubOnChange).toHaveBeenCalledTimes(1);
+      expect(stubOnChange).toHaveBeenCalledWith(stubChangedValue);
+    });
 
-    (wrapper.find("textarea").instance() as any).value = "1";
-    wrapper.simulate("change");
-    (wrapper.find("textarea").instance() as any).value = "2";
-    wrapper.simulate("change");
-    (wrapper.find("textarea").instance() as any).value = "3";
-    wrapper.simulate("change");
+    test("debounces correctly calls", () => {
+      // Note: This quick input value advances the time below threshold
+      const quickInputInMs: number = defaultInputDebounceTimeout * 0.25;
+      const stubOnChange = jest.fn();
 
-    await new Promise<void>(resolve => setTimeout(resolve, 500));
+      const { textarea } = setup({ onChange: stubOnChange });
 
-    expect(wrapper.state("value")).toBe("3");
-    expect(onChange).toHaveBeenCalledTimes(1);
-    expect(onChange).toHaveBeenCalledWith("3");
-    done();
+      // Note: Ensure no calls are make without changes
+      expect(stubOnChange).toHaveBeenCalledTimes(0);
+
+      fireEvent.change(textarea, { target: { value: "first-change" } });
+      jest.advanceTimersByTime(quickInputInMs);
+
+      fireEvent.change(textarea, { target: { value: "second-change" } });
+      jest.advanceTimersByTime(quickInputInMs);
+
+      fireEvent.change(textarea, { target: { value: "third-change" } });
+
+      jest.advanceTimersByTime(defaultInputDebounceTimeout);
+
+      // Note: Since we only elapse the initial timeout one! We only expect one onChange() to be fired!
+      expect(stubOnChange).toHaveBeenCalledTimes(1);
+      expect(textarea).toHaveValue("third-change");
+    });
   });
 });
