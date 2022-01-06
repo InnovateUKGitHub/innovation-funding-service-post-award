@@ -98,6 +98,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
             value={x => x.comments}
             update={(m, v) => m.comments = v || ""}
             validation={editor.validator.comments}
+            characterCountOptions={{ type: "descending", maxValue: PCRDtoValidator.maxCommentsLength }}
             qa="info-text-area"
           />
         </Form.Fieldset>

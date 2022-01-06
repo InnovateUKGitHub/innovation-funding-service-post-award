@@ -1,5 +1,6 @@
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { ReasoningStepProps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
+import { PCRDtoValidator } from "@ui/validators";
 import { ContainerBase } from "../../containerBase";
 import * as ACC from "../../../components";
 
@@ -24,6 +25,7 @@ export class PCRPrepareReasoningStep extends ContainerBase<ReasoningStepProps, {
               value={m => m.reasoningComments}
               update={(m, v) => m.reasoningComments = v || ""}
               validation={editor.validator.reasoningComments}
+              characterCountOptions={{ type: "descending", maxValue: PCRDtoValidator.maxCommentsLength }}
               rows={15}
             />
           </PCRForm.Fieldset>

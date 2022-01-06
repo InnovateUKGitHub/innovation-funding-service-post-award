@@ -1,7 +1,7 @@
 import * as ACC from "@ui/components";
 import { IEditorStore, useStores } from "@ui/redux";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
+import { claimCommentsMaxLength, ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
 import {
   allowedClaimDocuments,
@@ -469,6 +469,7 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, ReviewData, Revie
           value={m => m.comments}
           update={(m, v) => (m.comments = v)}
           validation={editor.validator.comments}
+          characterCountOptions={{ type: "descending", maxValue: claimCommentsMaxLength }}
           qa="info-text-area"
         />
       </Form.Fieldset>,

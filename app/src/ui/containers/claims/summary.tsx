@@ -3,7 +3,7 @@ import { useContent } from "@ui/hooks";
 import * as ACC from "@ui/components";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore } from "@ui/redux/reducers/editorsReducer";
-import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
+import { ClaimDtoValidator, claimCommentsMaxLength } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import {
@@ -200,6 +200,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
             value={x => x.comments}
             update={(m, v) => (m.comments = v || "")}
             validation={editor.validator.comments}
+            characterCountOptions={{ type: "descending", maxValue: claimCommentsMaxLength }}
             qa="info-text-area"
           />
         </Form.Fieldset>

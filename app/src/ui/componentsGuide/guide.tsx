@@ -36,6 +36,7 @@ import { listGuide } from "@ui/componentsGuide/listGuide";
 import { readonlyLabel } from "@ui/componentsGuide/readonlyLabelGuide";
 import { IGuide } from "@framework/types";
 import { GovWidthContainer, UL } from "@ui/components";
+import { textareaInputGuide } from "./textareaInputGuide";
 
 const guides: IGuide[] = [
   accordionGuide,
@@ -55,6 +56,7 @@ const guides: IGuide[] = [
   navigationArrowsGuide,
   navigationCardGuide,
   numericInputGuide,
+  textareaInputGuide,
   projectContactGuide,
   pageTitleGuide,
   percentageGuide,
