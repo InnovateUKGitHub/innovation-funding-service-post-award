@@ -14,6 +14,7 @@ import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { FooterExternalContent, footerLinks } from "@ui/containers/app/footer.config";
 import { BaseProps } from "@ui/containers/containerBase";
 
+import { ProjectParticipantProvider } from "@ui/features/project-participants";
 import { Footer, FullHeight, GovWidthContainer, Header, PhaseBanner, PrivateModal } from "@ui/components";
 import { ErrorContainer, ErrorContainerProps, ErrorBoundaryFallback } from "@ui/components/errors";
 
@@ -32,7 +33,7 @@ interface IAppProps {
   route: RouteState;
   routes: IRoutes;
   content: Content;
-  params: Params;
+  params: { projectId?: string } & Params;
   currentRoute: MatchedRoute;
 }
 
@@ -103,9 +104,14 @@ class AppView extends React.Component<IAppProps> {
 
               {hasAccess ? (
                 <ErrorBoundary fallbackRender={errorProps => <ErrorBoundaryFallback {...(errorProps as any)} />}>
-                  <ProjectStatusCheck projectId={params.projectId} overrideAccess={!!currentRoute.allowRouteInActiveAccess}>
-                    <RouteContainer {...baseProps} {...params} />
-                  </ProjectStatusCheck>
+                  <ProjectParticipantProvider projectId={params.projectId}>
+                    <ProjectStatusCheck
+                      projectId={params.projectId}
+                      overrideAccess={!!currentRoute.allowRouteInActiveAccess}
+                    >
+                      <RouteContainer {...baseProps} {...params} />
+                    </ProjectStatusCheck>
+                  </ProjectParticipantProvider>
                 </ErrorBoundary>
               ) : (
                 <ErrorContainer {...(route.params as ErrorContainerProps)} />

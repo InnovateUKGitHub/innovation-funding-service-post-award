@@ -10,5 +10,7 @@ export function useAppMount(projectId?: string): void {
 
   if (projectId) {
     stores.projects.isValidProject(projectId);
+
+    stores.partners.getPartnersForProject(projectId);
   }
 }
