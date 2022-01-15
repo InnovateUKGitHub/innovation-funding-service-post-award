@@ -10,6 +10,7 @@ module.exports = {
     "src/framework/util/*.{ts,tsx,json}",
     "src/ui/containers/**/*.{ts,tsx,json}",
     "src/ui/components/**/*.{ts,tsx,json}",
+    "src/ui/features/**/*.{ts,tsx,json}",
     "src/ui/hooks/**/*.{ts,tsx,json}",
     "src/ui/helpers/**/*.{ts,tsx,json}",
     "src/ui/styles/**/*.{ts,tsx,json}",
