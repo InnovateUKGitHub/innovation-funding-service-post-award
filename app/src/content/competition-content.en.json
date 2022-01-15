@@ -104,5 +104,16 @@
         "sbri-hint-additional-information": "Explain any difference between the forecast (payment schedule) costs and the total costs, including the actions you are taking as a result of the difference. For example, updating the project plan or financial forecast."
       }
     }
+  },
+  "LOANS": {
+    "pages": {
+      "project-overview": {
+        "claimsLink": "Project Costs"
+      }
+    },
+    "project-labels": {
+      "totalEligibleCostsClaimedLabel": "Eligible costs to date",
+      "percentageEligibleCostsClaimedLabel": "Percentage of eligible costs to date"
+    }
   }
 }

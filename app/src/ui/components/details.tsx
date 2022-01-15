@@ -43,22 +43,21 @@ function DetailsComponent<T extends {}>({
   data,
   children,
 }: DetailsComponentProps<T>) {
-  const newClassNameProps = {
-    labelClass: cx(labelClassName, {
-      "govuk-grid-column-one-quarter": labelWidth === "Narrow",
-      "govuk-grid-column-three-quarters": labelWidth === "Wide",
-      "govuk-grid-column-one-half": !labelWidth,
-    }),
-    valueClass: cx(valueClassName, {
-      "govuk-grid-column-one-quarter": labelWidth === "Wide",
-      "govuk-grid-column-three-quarters": labelWidth === "Narrow",
-      "govuk-grid-column-one-half": !labelWidth,
-    }),
-  };
-
   const childElements = React.Children.toArray(children);
   const detailItems = childElements.map(field =>
-    React.cloneElement(field as React.ReactElement, { data, ...newClassNameProps }),
+    React.cloneElement(field as React.ReactElement, {
+      data,
+      labelClass: cx(labelClassName, {
+        "govuk-grid-column-one-quarter": labelWidth === "Narrow",
+        "govuk-grid-column-three-quarters": labelWidth === "Wide",
+        "govuk-grid-column-one-half": !labelWidth,
+      }),
+      valueClass: cx(valueClassName, {
+        "govuk-grid-column-one-quarter": labelWidth === "Wide",
+        "govuk-grid-column-three-quarters": labelWidth === "Narrow",
+        "govuk-grid-column-one-half": !labelWidth,
+      }),
+    }),
   );
 
   return (
@@ -82,10 +81,13 @@ function DetailsComponent<T extends {}>({
   );
 }
 
+// Note: This was added as ternary's or shortcuts will return falsy values
+type OptionalChild<T> = null | false | T;
+
 type DualDetailsChild = React.ReactElement<{ title?: string }>;
 
 export interface DualDetailsProps {
-  children: DualDetailsChild | DualDetailsChild[];
+  children: OptionalChild<DualDetailsChild> | OptionalChild<DualDetailsChild>[];
 }
 
 export function DualDetails({ children }: DualDetailsProps) {

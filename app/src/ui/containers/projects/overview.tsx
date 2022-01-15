@@ -4,8 +4,9 @@ import { Pending } from "@shared/pending";
 import { IClientUser, PartnerClaimStatus, PartnerDto, ProjectDto, ProjectRole, ProjectStatus } from "@framework/types";
 import * as ACC from "@ui/components";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
+import { ProjectParticipantsHoc } from "@ui/features/project-participants";
 import { IRoutes } from "@ui/routing";
 import { Content } from "@content/content";
 import { getLeadPartner } from "@framework/util/partnerHelper";
@@ -85,7 +86,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
   private renderProjectOverviewDetails(project: ProjectDto, partner: PartnerDto) {
     const { isPm, isFc } = getAuthRoles(project.roles);
 
-    if (partner && isPm)  return this.renderPMOverviewDetails(project, partner);
+    if (partner && isPm) return this.renderPMOverviewDetails(project, partner);
     if (partner && isFc) return this.renderFCOverviewDetails(partner);
 
     return null;
@@ -134,56 +135,65 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     const PartnerSummaryDetails = ACC.TypedDetails<PartnerDto>();
 
     return (
-      <ACC.SectionPanel qa="claims-summary">
-        <ACC.DualDetails>
-          <ProjectSummaryDetails.Details
-            title={<ACC.Content value={x => x.projectOverview.labels.projectCosts} />}
-            data={project}
-            qa="project-summary"
-          >
-            <ProjectSummaryDetails.Currency
-              label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCosts} />}
-              qa="gol-costs"
-              value={x => x.grantOfferLetterCosts}
-            />
-            <ProjectSummaryDetails.Currency
-              label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCostsClaimed} />}
-              qa="claimed-costs"
-              value={x => x.costsClaimedToDate || 0}
-            />
-            <ProjectSummaryDetails.Percentage
-              label={<ACC.Content value={x => x.projectOverview.labels.percentageEligibleCostsClaimed} />}
-              qa="claimed-percentage"
-              value={x => x.claimedPercentage}
-            />
-          </ProjectSummaryDetails.Details>
-          <PartnerSummaryDetails.Details
-            data={partner}
-            title={
-              <>
-                {ACC.getPartnerName(partner)} {<ACC.Content value={x => x.projectOverview.costsToDateMessage} />}
-              </>
-            }
-            qa="lead-partner-summary"
-          >
-            <PartnerSummaryDetails.Currency
-              label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCosts} />}
-              qa="gol-costs"
-              value={x => x.totalParticipantGrant}
-            />
-            <PartnerSummaryDetails.Currency
-              label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCostsClaimed} />}
-              qa="claimed-costs"
-              value={x => x.totalParticipantCostsClaimed || 0}
-            />
-            <PartnerSummaryDetails.Percentage
-              label={<ACC.Content value={x => x.projectOverview.labels.percentageEligibleCostsClaimed} />}
-              qa="claimed-percentage"
-              value={x => x.percentageParticipantCostsClaimed}
-            />
-          </PartnerSummaryDetails.Details>
-        </ACC.DualDetails>
-      </ACC.SectionPanel>
+      <ProjectParticipantsHoc>
+        {state => (
+          <ACC.SectionPanel qa="claims-summary">
+            <ACC.DualDetails>
+              <ProjectSummaryDetails.Details
+                title={<ACC.Content value={x => x.projectOverview.labels.projectCosts} />}
+                data={project}
+                qa="project-summary"
+              >
+                <ProjectSummaryDetails.Currency
+                  label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCosts} />}
+                  qa="gol-costs"
+                  value={x => x.grantOfferLetterCosts}
+                />
+
+                <ProjectSummaryDetails.Currency
+                  label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCostsClaimed} />}
+                  qa="claimed-costs"
+                  value={x => x.costsClaimedToDate || 0}
+                />
+
+                <ProjectSummaryDetails.Percentage
+                  label={<ACC.Content value={x => x.projectOverview.labels.percentageEligibleCostsClaimed} />}
+                  qa="claimed-percentage"
+                  value={x => x.claimedPercentage}
+                />
+              </ProjectSummaryDetails.Details>
+
+              {state.isMultipleParticipants && (
+                <PartnerSummaryDetails.Details
+                  data={partner}
+                  title={
+                    <>
+                      {ACC.getPartnerName(partner)} {<ACC.Content value={x => x.projectOverview.costsToDateMessage} />}
+                    </>
+                  }
+                  qa="lead-partner-summary"
+                >
+                  <PartnerSummaryDetails.Currency
+                    label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCosts} />}
+                    qa="gol-costs"
+                    value={x => x.totalParticipantGrant}
+                  />
+                  <PartnerSummaryDetails.Currency
+                    label={<ACC.Content value={x => x.projectOverview.labels.totalEligibleCostsClaimed} />}
+                    qa="claimed-costs"
+                    value={x => x.totalParticipantCostsClaimed || 0}
+                  />
+                  <PartnerSummaryDetails.Percentage
+                    label={<ACC.Content value={x => x.projectOverview.labels.percentageEligibleCostsClaimed} />}
+                    qa="claimed-percentage"
+                    value={x => x.percentageParticipantCostsClaimed}
+                  />
+                </PartnerSummaryDetails.Details>
+              )}
+            </ACC.DualDetails>
+          </ACC.SectionPanel>
+        )}
+      </ProjectParticipantsHoc>
     );
   }
 
@@ -359,20 +369,18 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
   }
 }
 
-const ProjectOverviewContainer = (props: Params & BaseProps) => {
+function ProjectOverviewContainer(props: Params & BaseProps) {
+  const stores = useStores();
+
   return (
-    <StoresConsumer>
-      {stores => (
-        <ProjectOverviewComponent
-          projectDetails={stores.projects.getById(props.projectId)}
-          partners={stores.partners.getPartnersForProject(props.projectId)}
-          user={stores.users.getCurrentUser()}
-          {...props}
-        />
-      )}
-    </StoresConsumer>
+    <ProjectOverviewComponent
+      {...props}
+      projectDetails={stores.projects.getById(props.projectId)}
+      partners={stores.partners.getPartnersForProject(props.projectId)}
+      user={stores.users.getCurrentUser()}
+    />
   );
-};
+}
 
 export const ProjectOverviewRoute = defineRoute({
   allowRouteInActiveAccess: true,
