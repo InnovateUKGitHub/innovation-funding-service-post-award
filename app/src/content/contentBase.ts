@@ -55,7 +55,7 @@ export abstract class ContentBase {
       if (i18next.exists(fullKeyWithCompetitionType)) {
         return {
           key: fullKeyWithCompetitionType,
-          content: i18next.t(fullKeyWithCompetitionType, i18tOptions),
+          content: i18next.t(fullKeyWithCompetitionType, i18tOptions) || fullKeyWithCompetitionType,
           markdown: markdown || false,
         };
       }
@@ -64,7 +64,7 @@ export abstract class ContentBase {
     if (i18next.exists(fullKey)) {
       return {
         key: fullKey,
-        content: i18next.t(fullKey, i18tOptions),
+        content: i18next.t(fullKey, i18tOptions) || fullKey,
         markdown: markdown || false,
       };
     }

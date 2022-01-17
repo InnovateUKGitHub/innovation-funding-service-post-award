@@ -12,7 +12,7 @@ import { routeConfig, RouteKeys } from "./routeConfig";
 export interface MatchedRoute {
   routeName: string;
   accessControl?: (auth: Authorisation, params: {}, config: IClientConfig) => boolean;
-  getParams: (route: State) => {};
+  getParams: (route: State) => State["params"];
   container: React.FunctionComponent<any>;
   getTitle: (getTitleArgs: { params: {}; stores: IStores; content: Content }) => PageTitleState;
   allowRouteInActiveAccess?: true;

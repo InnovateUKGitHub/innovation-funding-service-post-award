@@ -109,6 +109,9 @@
     "pages": {
       "project-overview": {
         "claimsLink": "Project Costs"
+      },
+      "all-claims-dashboard": {
+        "title": "Project costs"
       }
     },
     "project-labels": {
