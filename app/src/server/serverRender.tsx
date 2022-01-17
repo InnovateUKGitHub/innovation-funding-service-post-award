@@ -21,10 +21,9 @@ import {
   setupInitialState,
   setupMiddleware,
   StoresProvider,
-  RoutesProvider
+  RoutesProvider,
 } from "@ui/redux";
 import { createErrorPayload } from "@shared/create-error-payload";
-
 import contextProvider from "./features/common/contextProvider";
 import { ForbiddenError, FormHandlerError, NotFoundError } from "./features/common/appError";
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
@@ -34,7 +33,8 @@ import { getErrorStatus } from "./errorHandlers";
 import { renderHtml } from "./html";
 
 export async function serverRender(req: Request, res: Response, error?: IAppError): Promise<void> {
-  const content = new Content();
+  let content: Content;
+
   const nonce = res.locals.nonce;
 
   const routes = routeConfig;
@@ -79,12 +79,18 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
       renderApp(router, nonce, store, stores, routes, modalRegister);
     });
 
+    // Note: Attempt competitionType query if available
+    content ??= getContent(stores, route);
+
     onComplete(store, stores, content, matched, params, error);
 
     res.send(renderApp(router, nonce, store, stores, routes, modalRegister));
   } catch (renderError) {
     // Note: capture stack trace for logs
     new Logger(req.session?.user).error("Unable to render", renderError);
+
+    // Note: Error could return at any time, competitionType could never be available
+    content ??= new Content();
 
     const isInvalidRoute = renderError instanceof NotFoundError;
     const errorRoute: State = createErrorPayload(renderError, isInvalidRoute);
@@ -215,4 +221,18 @@ function getClientConfig(context: IContext): IClientConfig {
     ssoEnabled: context.config.sso.enabled,
     options: context.config.options,
   };
+}
+
+// Note: This has to be ran after store has been populated as it will never return a 'competitionType' value
+function getContent(stores: ReturnType<typeof createStores>, resolvedRoute: State): Content {
+  const { projectId } = resolvedRoute.params;
+
+  if (!projectId) return new Content();
+
+  const projectPending = stores.projects.getById(projectId);
+  const resolvedPendingCompetition = projectPending.then(x => x.competitionType).data;
+
+  const competitionTypeValue = resolvedPendingCompetition ?? undefined;
+
+  return new Content(competitionTypeValue);
 }

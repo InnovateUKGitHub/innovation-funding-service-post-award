@@ -9,27 +9,31 @@ export abstract class ContentPageBase extends ContentBase {
 
   public title() {
     const prefix = super.getNameParts().join(".");
-    const htmlKey = `${prefix}.title.html`;
-    const displayKey = `${prefix}.title.display`;
 
-    const html = i18next.exists(htmlKey) ? i18next.t(htmlKey) : null;
-    const display = i18next.exists(displayKey) ? i18next.t(displayKey) : null;
+    const originalHtmlKey = `${prefix}.title.html`;
+    const originalDisplayKey = `${prefix}.title.display`;
 
-    if (html || display) {
+    // Note: We check he if the dev has custom html/display object keys
+    const hasCustomDisplay = i18next.exists(originalHtmlKey) || i18next.exists(originalDisplayKey);
+
+    if (hasCustomDisplay) {
+      const { key: htmlKey, content: htmlContent } = this.getContent(originalHtmlKey);
+      const { key: displayKey, content: displayContent } = this.getContent(originalDisplayKey);
+
       return {
-        htmlTitle: html || htmlKey,
+        htmlTitle: htmlContent,
         htmlTitleKey: htmlKey,
-        displayTitle: display || displayKey,
+        displayTitle: displayContent,
         displayTitleKey: displayKey,
       };
     }
 
-    const generalKey = `${prefix}.title`;
-    const general = i18next.exists(generalKey) ? i18next.t(generalKey) : null;
+    const { key: generalKey, content: generalContent } = this.getContent(`${prefix}.title`);
+
     return {
-      htmlTitle: general || generalKey,
+      htmlTitle: generalContent,
       htmlTitleKey: generalKey,
-      displayTitle: general || generalKey,
+      displayTitle: generalContent,
       displayTitleKey: generalKey,
     };
   }
