@@ -13,6 +13,7 @@ import { IRoutes } from "@ui/routing";
 import { getAuthRoles } from "@framework/types";
 import { getLeadPartner } from "@framework/util/partnerHelper";
 import { useProjectStatus } from "@ui/hooks";
+import { useProjectParticipants } from "@ui/features/project-participants";
 import { ClaimsDashboardGuidance } from "./components";
 
 export interface AllClaimsDashboardParams {
@@ -29,6 +30,8 @@ interface AllClaimsDashboardData {
 }
 
 function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaimsDashboardData & BaseProps) {
+  const { isMultipleParticipants } = useProjectParticipants();
+
   const { isActive: isProjectActive } = useProjectStatus();
 
   const combined = Pending.combine({
@@ -51,8 +54,10 @@ function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaims
         project={projectDetails}
         partner={isLeadPartnerFc ? leadPartner : undefined}
       >
-        {isFc && renderGuidanceMessage(isCombinationOfSBRI, partners)}
+        {isMultipleParticipants && isFc && renderGuidanceMessage(isCombinationOfSBRI, partners)}
+
         <Acc.Renderers.Messages messages={props.messages} />
+
         <Acc.Section qa="current-claims-section" title={x => x.allClaimsDashboard.labels.openSectionTitle}>
           <Acc.Loader
             pending={props.currentClaims}
@@ -67,6 +72,7 @@ function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaims
             }
           />
         </Acc.Section>
+
         <Acc.Section qa="closed-claims-section" title={x => x.allClaimsDashboard.labels.closedSectionTitle}>
           {renderPreviousClaimsSections(projectDetails, partners, previousClaims)}
         </Acc.Section>
@@ -275,7 +281,9 @@ function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaims
     return <Acc.Claims.ClaimPeriodDate claim={claim} />;
   };
 
-  return <Acc.PageLoader pending={combined} render={x => renderContents(x.projectDetails, x.partners, x.previousClaims)} />;
+  return (
+    <Acc.PageLoader pending={combined} render={x => renderContents(x.projectDetails, x.partners, x.previousClaims)} />
+  );
 }
 
 const AllClaimsDashboardContainer = (props: AllClaimsDashboardParams & BaseProps) => {

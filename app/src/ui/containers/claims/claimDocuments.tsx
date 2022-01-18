@@ -111,10 +111,16 @@ const ClaimDocumentsComponent = ({
     claim: ClaimDto,
     documentDescriptions: DocumentDescriptionDto[],
   ) => {
+    const { isLoans } = checkProjectCompetition(project.competitionType);
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     const documentTypeOptions: DropdownOption[] = documentDescriptions
-      .filter(x => allowedClaimDocuments.includes(x.id))
+      .filter(x => {
+        const isLoanOption = isLoans && x.id === DocumentDescription.ProofOfSatisfiedConditions;
+        const isAllowedClaimDocument = allowedClaimDocuments.includes(x.id);
+
+        return isLoanOption || isAllowedClaimDocument;
+      })
       .map(x => ({ id: `${x.id}`, value: x.label }));
 
     const claimLinkParams = { projectId, partnerId, periodId };

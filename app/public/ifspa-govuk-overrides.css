@@ -656,6 +656,11 @@ p.govuk-body--multiline {
   margin-bottom: 0 !important;
 }
 
+/* ClaimDetailsLink */
+.claim-details-link-wrapper {
+  min-width: 80px;
+}
+
 /* Broadcast - Components */
 
 /* Broadcast Detail */

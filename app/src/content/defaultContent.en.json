@@ -98,9 +98,9 @@
       "partnerOnHoldMessage": "Partner is on hold. Contact Innovate UK for more information."
     },
     "claimDetailsLinkContent": {
-      "editClaim": "Edit claim",
-      "reviewClaim": "Review claim",
-      "viewClaim": "View claim"
+      "editClaim": "Edit",
+      "reviewClaim": "Review",
+      "viewClaim": "View"
     },
     "phaseBannerContent": {
       "newServiceMessage": "This is a new service – your",
@@ -351,6 +351,9 @@
       "button-save-and-return": "Save and return to claims",
       "button-continue-to-summary": "Continue to summary",
       "overheads-costs": "Overheads costs: "
+    },
+    "claim-summary": {
+      "title": "Claim summary"
     },
     "claim-line-items": {
       "supporting-documents-title": "Supporting documents",
@@ -1073,7 +1076,8 @@
       "presentation": "Presentation",
       "email": "Email",
       "meetingAgenda": "Meeting agenda",
-      "projectCompletionForm": "Project completion form"
+      "projectCompletionForm": "Project completion form",
+      "proofOfSatisfiedConditions": "Proof of satisfied conditions"
     }
   },
   "document-messages": {

@@ -9,6 +9,7 @@ export class DocumentLabels extends ContentBase {
   public readonly documentDisplayTitle = this.getContent("documentDisplayTitle");
   public readonly documentDisplaySubTitle = this.getContent("documentDisplaySubTitle");
 
+  // Note: Ensure that 'documentMapper.ts' gets updated for the server to return description. Otherwise 'null' will be returned
   private getDocumentDescriptionLabel(documentDescription: DocumentDescription | null) {
     switch (documentDescription) {
       case DocumentDescription.ClaimValidationForm:
@@ -53,6 +54,8 @@ export class DocumentLabels extends ContentBase {
         return this.getContent("description.meetingAgenda");
       case DocumentDescription.ProjectCompletionForm:
         return this.getContent("description.projectCompletionForm");
+      case DocumentDescription.ProofOfSatisfiedConditions:
+        return this.getContent("description.proofOfSatisfiedConditions");
       case DocumentDescription.EndOfProjectSurvey:
         return this.getContent("description.endOfProjectSurvey");
       default:

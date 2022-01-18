@@ -3,6 +3,7 @@ import { DateTime } from "luxon";
 import { getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
 import { useStores } from "@ui/redux";
 import { roundCurrency } from "@framework/util";
+import { ProjectParticipantsHoc } from "@ui/features/project-participants";
 import { Pending } from "../../../shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as Acc from "../../components";
@@ -52,7 +53,9 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
         project={project}
         partner={partner}
       >
-        <ClaimsDashboardGuidance {...partner} />
+        <ProjectParticipantsHoc>
+          {state => state.isMultipleParticipants && <ClaimsDashboardGuidance {...partner} />}
+        </ProjectParticipantsHoc>
 
         <Acc.Renderers.Messages messages={this.props.messages} />
         <Acc.Section qa="current-claims-section" title={x => x.claimsDashboard.labels.openSectionTitle}>

@@ -112,7 +112,51 @@
       },
       "all-claims-dashboard": {
         "title": "Project costs"
+      },
+      "claim-prepare-summary": {
+        "costs-title": "Costs for period",
+        "costs-claimed-label": "Total costs for period",
+        "edit-costs-message": "Edit costs for this period",
+        "claim-documents-title": "Supporting evidence",
+        "edit-claim-documents": "Edit supporting evidence",
+        "submit-claim-message": "Submit costs",
+        "save-and-return-message": "Save and return to project costs"
+      },
+      "claim-prepare": {
+        "title": "Costs for this period",
+        "button-save-and-return": "Save and return to project costs",
+        "button-save-and-continue": "Continue to costs documents"
+      },
+      "claim-summary": {
+        "title": "Costs summary"
+      },
+      "claim-documents": {
+        "title": "Supporting evidence",
+        "button-save-and-return": "Save and return to project costs"
+      },
+      "claims-components": {
+        "eligible-costs-claimed-to-date": "Eligible costs to date",
+        "costs-claimed-this-period": "Eligible costs this period"
+      },
+      "edit-claim-line-items": {
+        "button-save-and-return": "Save and return to project costs"
+      },
+      "claim-forecast": {
+        "back-link": "Back to claims documents",
+        "button-save-and-return": "Save and return to project costs"
       }
+    },
+    "claims-messages": {
+      "edit-claim-line-item-document-guidance": "Upload evidence of the costs for your monitoring officer to review. Contact them for advice on which documents to provide.",
+      "edit-claim-line-item-guidance": "You must break down your total costs and upload evidence for each expenditure. Contact your monitoring officer for more information about the level of detail you are required to provide.",
+      "edit-claim-line-item-convert-gbp": "You can enter up to 120 separate lines of costs and you must convert any foreign currency amounts to pounds sterling (GBP) before you enter them.",
+      "nonjs-edit-claim-line-item-convert-gbp": "You can enter up to 10 separate lines of costs and you must convert any foreign currency amounts to pounds sterling (GBP) before you enter them.",
+      "submit-claim-confirmation": "I confirm that the information I have provided for this period is correct, complete and contains only eligible costs on an actual basis, which we confirm have been incurred and defrayed. I understand and accept that if I knowingly withhold information, or provide false or misleading information, this may result in funding being withdrawn, termination of the loan, recovery of loan proceeds and outstanding interest, civil action and where there is evidence of fraud, criminal prosecution.",
+      "claim-saved-message": "You have saved your project costs.",
+      "loading-claims": "Loading project costs..."
+    },
+    "project-messages": {
+      "claimsToReviewMessage": "Costs to review: {{numberOfClaims}}"
     },
     "project-labels": {
       "totalEligibleCostsClaimedLabel": "Eligible costs to date",

@@ -19,6 +19,7 @@ import {
   TotalCosts,
 } from "@framework/types";
 import { roundCurrency } from "@framework/util";
+import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 
 export interface ClaimSummaryParams {
   projectId: string;
@@ -57,6 +58,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
   });
 
   const renderContents = ({ totalCosts, ...data }: CombinedData) => {
+    const { isLoans } = checkProjectCompetition(data.project.competitionType);
     const linkProps = getClaimLinkProps(data);
 
     return (
@@ -104,11 +106,13 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
                 qa="fundingLevel"
               />
 
-              <ACC.SummaryListItem
-                label={<ACC.Content value={x => x.claimPrepareSummary.costsToBePaidLabel} />}
-                content={<ACC.Renderers.Currency value={totalCosts.totalCostsPaid} />}
-                qa="totalCostsPaid"
-              />
+              {!isLoans && (
+                <ACC.SummaryListItem
+                  label={<ACC.Content value={x => x.claimPrepareSummary.costsToBePaidLabel} />}
+                  content={<ACC.Renderers.Currency value={totalCosts.totalCostsPaid} />}
+                  qa="totalCostsPaid"
+                />
+              )}
             </ACC.SummaryList>
 
             <ACC.Renderers.SimpleString>
@@ -363,8 +367,5 @@ export const ClaimSummaryRoute = defineRoute({
   }),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
-  getTitle: () => ({
-    htmlTitle: "Claim summary",
-    displayTitle: "Claim summary",
-  }),
+  getTitle: ({ content }) => content.claimSummary.title(),
 });

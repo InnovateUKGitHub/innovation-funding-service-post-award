@@ -55,6 +55,7 @@ import { PCRAddPartnerRoleAndOrganisationContent } from "./pages/pcrs/addPartner
 import { PcrSpendProfileDeleteCostContent } from "./pages/pcrSpendProfiles/spendProfileDeleteCostContent";
 import { PcrSpendProfileOverheadDocumentContent } from "./pages/pcrSpendProfiles/overheadDocumentContainerContent";
 import { ClaimForecastContent } from "./pages/claims/claimForecastContent";
+import { ClaimSummaryContent } from "./pages/claims/claimSummaryContent";
 import { PCRAddPartnerSummaryContent } from "./pages/pcrs/addPartner/addPartnerSummaryContent";
 import { FailedBankCheckConfirmationContent } from "./pages/project/failedBankCheckConfirmationContent";
 import { ClaimDetailDocumentsContent } from "./pages/claims/claimDetailDocumentsContent";
@@ -137,6 +138,7 @@ export class Content extends ContentBase {
   public readonly claimDetails: ClaimDetailsContent;
   public readonly claimDetailDocuments: ClaimDetailDocumentsContent;
   public readonly claimForecast: ClaimForecastContent;
+  public readonly claimSummary: ClaimSummaryContent;
   public readonly editClaimLineItems: EditClaimLineItemsContent;
   public readonly claimPrepare: ClaimPrepareContent;
   public readonly claimPrepareSummary: ClaimPrepareSummaryContent;
@@ -271,6 +273,7 @@ export class Content extends ContentBase {
     this.claimDetails = new ClaimDetailsContent(this, competitionType);
     this.claimDetailDocuments = new ClaimDetailDocumentsContent(this, competitionType);
     this.claimForecast = new ClaimForecastContent(this, competitionType);
+    this.claimSummary = new ClaimSummaryContent(this, competitionType);
     this.editClaimLineItems = new EditClaimLineItemsContent(this, competitionType);
     this.claimPrepare = new ClaimPrepareContent(this, competitionType);
     this.claimPrepareSummary = new ClaimPrepareSummaryContent(this, competitionType);

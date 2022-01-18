@@ -42,7 +42,7 @@ export function ClaimDetailsLink({ claim, partner, project, routes }: ClaimDetai
     },
   };
 
-  return <Link {...linkTypeOptions[linkType]} />;
+  return <div className="claim-details-link-wrapper"><Link {...linkTypeOptions[linkType]} /></div>;
 }
 
 export function getClaimDetailsLinkType({
