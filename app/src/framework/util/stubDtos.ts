@@ -41,6 +41,10 @@ export const createProjectDto: CreateDTO<ProjectDto> = (objectToMerge?) => {
     durationInMonths: 9,
     numberOfPeriods: 3,
     isNonFec: false,
+    loanEndDate: new Date(),
+    loanAvailabilityPeriodLength: 0,
+    loanExtensionPeriodLength: 0,
+    loanRepaymentPeriodLength: 0,
   };
 
   return _merge(stubProject, objectToMerge || {});

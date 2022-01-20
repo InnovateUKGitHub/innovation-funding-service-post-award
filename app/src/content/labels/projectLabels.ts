@@ -26,6 +26,9 @@ export class ProjectLabels extends ContentBase {
   public readonly awardRate = this.getContent("awardRate");
   public readonly capLimit = this.getContent("capLimit");
   public readonly auditReportFrequency = this.getContent("auditReportFrequency");
+  public readonly loanAvailabilityPeriod = this.getContent("availabilityPeriod");
+  public readonly loanExtensionPeriod = this.getContent("extensionPeriod");
+  public readonly loanRepaymentPeriod = this.getContent("repaymentPeriod");
 
   private readonly remainingGrantValue = this.getContent("remainingGrantValue");
   private readonly remainingContractValue = this.getContent("remainingContractValue");

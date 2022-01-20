@@ -7,6 +7,7 @@ export const mapToProjectDto = (context: IContext, item: ISalesforceProject, rol
   // TODO change this to parseRequiredSalesforceDate and update tests to pass
   const startDate = context.clock.parseOptionalSalesforceDate(item.Acc_StartDate__c)!;
   const endDate = context.clock.parseOptionalSalesforceDate(item.Acc_EndDate__c)!;
+
   return {
     id: item.Id,
     title: item.Acc_ProjectTitle__c,
@@ -43,6 +44,11 @@ export const mapToProjectDto = (context: IContext, item: ISalesforceProject, rol
     durationInMonths: item.Acc_Duration__c,
     numberOfPeriods: isNumber(item.Acc_NumberofPeriods__c) ? item.Acc_NumberofPeriods__c : 0,
     isNonFec: item.Acc_NonFEC__c,
+
+    loanEndDate: context.clock.parseOptionalSalesforceDate(item.Loan_LoanEndDate__c),
+    loanAvailabilityPeriodLength: item.Loan_LoanAvailabilityPeriodLength__c ?? null,
+    loanExtensionPeriodLength: item.Loan_LoanExtensionPeriodLength__c ?? null,
+    loanRepaymentPeriodLength: item.Loan_LoanRepaymentPeriodLength__c ?? null,
   };
 };
 

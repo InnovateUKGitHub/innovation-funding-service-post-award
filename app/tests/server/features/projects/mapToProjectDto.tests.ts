@@ -4,8 +4,14 @@ import { DateTime } from "luxon";
 import { TestContext } from "../../testContextProvider";
 
 describe("mapToProjectDto", () => {
+  const midnight = {
+    hour: 0,
+    minute: 0,
+    second: 0,
+    millisecond: 0,
+  };
 
-  it("when valid expect mapping",  () => {
+  it("when valid expect mapping", () => {
     const context = new TestContext();
 
     context.clock.setDate("2009/01/15");
@@ -14,8 +20,6 @@ describe("mapToProjectDto", () => {
     const projectEndDate = DateTime.fromFormat("2010-12-31", "yyyy-MM-dd");
     const periodStartDate = DateTime.fromFormat("2009-01-01", "yyyy-MM-dd");
     const periodEndDate = DateTime.fromFormat("2009-03-31", "yyyy-MM-dd");
-
-    const midnight = { hour: 0, minute: 0, second: 0, millisecond: 0 };
 
     const expected: ProjectDto = {
       id: "Expected Id",
@@ -49,6 +53,10 @@ describe("mapToProjectDto", () => {
       numberOfPeriods: 5,
       durationInMonths: 15,
       isNonFec: false,
+      loanEndDate: null,
+      loanAvailabilityPeriodLength: null,
+      loanExtensionPeriodLength: null,
+      loanRepaymentPeriodLength: null,
     };
 
     const project = context.testData.createProject(x => {
@@ -78,6 +86,10 @@ describe("mapToProjectDto", () => {
       x.Acc_Duration__c = expected.durationInMonths;
       x.Acc_LeadParticipantName__c = expected.leadPartnerName;
       x.Acc_NonFEC__c = expected.isNonFec;
+      x.Loan_LoanEndDate__c = null;
+      x.Loan_LoanAvailabilityPeriodLength__c = null;
+      x.Loan_LoanExtensionPeriodLength__c = null;
+      x.Loan_LoanRepaymentPeriodLength__c = null;
     });
 
     const result = mapToProjectDto(context, project, ProjectRole.Unknown);
@@ -87,7 +99,8 @@ describe("mapToProjectDto", () => {
 
   it("when ifs application url configured expect full url", async () => {
     const context = new TestContext();
-    context.config.urls.ifsApplicationUrl = "https://ifs.application.url/application/competition/<<Acc_ProjectNumber__c>>/project/<<Acc_IFSApplicationId__c>>";
+    context.config.urls.ifsApplicationUrl =
+      "https://ifs.application.url/application/competition/<<Acc_ProjectNumber__c>>/project/<<Acc_IFSApplicationId__c>>";
 
     const salesforce = context.testData.createProject(x => {
       x.Acc_ProjectSource__c = "IFS";
@@ -100,9 +113,10 @@ describe("mapToProjectDto", () => {
     expect(result.applicationUrl).toBe("https://ifs.application.url/application/competition/30000/project/1");
   });
 
-  it("when ifs grant letter url configured expect full url",() => {
+  it("when ifs grant letter url configured expect full url", () => {
     const context = new TestContext();
-    context.config.urls.ifsGrantLetterUrl = "https://ifs.application.url/grantletter/competition/<<Acc_ProjectNumber__c>>/project/<<Acc_IFSApplicationId__c>>";
+    context.config.urls.ifsGrantLetterUrl =
+      "https://ifs.application.url/grantletter/competition/<<Acc_ProjectNumber__c>>/project/<<Acc_IFSApplicationId__c>>";
 
     const project = context.testData.createProject(x => {
       x.Acc_ProjectSource__c = "IFS";
@@ -130,7 +144,7 @@ describe("mapToProjectDto", () => {
     expect(mapToProjectDto(context, projectYesterday, ProjectRole.Unknown).isPastEndDate).toBe(true);
   });
 
-  it("ClaimFrequency should map correct - Quarterly",() => {
+  it("ClaimFrequency should map correct - Quarterly", () => {
     const context = new TestContext();
     const salesforce = context.testData.createProject(x => {
       x.Acc_ClaimFrequency__c = "Quarterly";
@@ -139,7 +153,7 @@ describe("mapToProjectDto", () => {
     expect(result.claimFrequency).toBe(ClaimFrequency.Quarterly);
   });
 
-  it("ClaimFrequency should map correct - Monthly",() => {
+  it("ClaimFrequency should map correct - Monthly", () => {
     const context = new TestContext();
     const salesforce = context.testData.createProject(x => {
       x.Acc_ClaimFrequency__c = "Monthly";
@@ -148,7 +162,7 @@ describe("mapToProjectDto", () => {
     expect(result.claimFrequency).toBe(ClaimFrequency.Monthly);
   });
 
-  it("Gol Costs should be returned",() => {
+  it("Gol Costs should be returned", () => {
     const context = new TestContext();
 
     const salesforce = context.testData.createProject(x => {
@@ -158,10 +172,9 @@ describe("mapToProjectDto", () => {
     const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
 
     expect(result.grantOfferLetterCosts).toBe(100000);
-
   });
 
-  it("Claimed Costs should be returned",() => {
+  it("Claimed Costs should be returned", () => {
     const context = new TestContext();
 
     const salesforce = context.testData.createProject(x => {
@@ -171,7 +184,6 @@ describe("mapToProjectDto", () => {
     const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
 
     expect(result.costsClaimedToDate).toBe(500000);
-
   });
 
   it("Non-FEC should be returned", () => {
@@ -185,5 +197,114 @@ describe("mapToProjectDto", () => {
     const result = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
 
     expect(result.isNonFec).toBeTruthy();
+  });
+
+  describe("with project loan fields", () => {
+    describe("with loanEndDate", () => {
+      it("with date", () => {
+        const stubDate = DateTime.fromFormat("2009-03-31", "yyyy-MM-dd");
+        const expectedDate = stubDate.set(midnight).toJSDate();
+
+        const context = new TestContext();
+
+        const salesforce = context.testData.createProject(x => {
+          x.Loan_LoanEndDate__c = stubDate.toFormat("yyyy-MM-dd");
+        });
+
+        const { loanEndDate } = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+
+        expect(loanEndDate).toStrictEqual(expectedDate);
+      });
+
+      it("without date", () => {
+        const context = new TestContext();
+
+        const salesforce = context.testData.createProject(x => {
+          x.Loan_LoanEndDate__c = null;
+        });
+
+        const { loanEndDate } = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+
+        expect(loanEndDate).toStrictEqual(null);
+      });
+    });
+
+    describe("with loanAvailabilityPeriodLength", () => {
+      it("with value", () => {
+        const context = new TestContext();
+
+        const salesforce = context.testData.createProject(x => {
+          x.Loan_LoanAvailabilityPeriodLength__c = 1;
+        });
+
+        const { loanAvailabilityPeriodLength } = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+
+        expect(loanAvailabilityPeriodLength).toBe(1);
+      });
+
+      it("without value", () => {
+        const context = new TestContext();
+
+        const salesforce = context.testData.createProject(x => {
+          x.Loan_LoanAvailabilityPeriodLength__c = null;
+        });
+
+        const { loanAvailabilityPeriodLength } = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+
+        expect(loanAvailabilityPeriodLength).toBeNull();
+      });
+    });
+
+    describe("with loanExtensionPeriodLength", () => {
+      it("with value", () => {
+        const context = new TestContext();
+
+        const salesforce = context.testData.createProject(x => {
+          x.Loan_LoanExtensionPeriodLength__c = 1;
+        });
+
+        const { loanExtensionPeriodLength } = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+
+        expect(loanExtensionPeriodLength).toBe(1);
+      });
+
+      it("without value", () => {
+        const context = new TestContext();
+
+        const salesforce = context.testData.createProject(x => {
+          x.Loan_LoanExtensionPeriodLength__c = null;
+        });
+
+        const { loanExtensionPeriodLength } = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+
+        expect(loanExtensionPeriodLength).toBeNull();
+      });
+    });
+
+    describe("with loanRepaymentPeriodLength", () => {
+      it("with value", () => {
+        const context = new TestContext();
+
+        const salesforce = context.testData.createProject(x => {
+          x.Loan_LoanRepaymentPeriodLength__c = 1;
+        });
+
+        const { loanRepaymentPeriodLength } = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+
+        expect(loanRepaymentPeriodLength).toBe(1);
+      });
+
+      it("without value", () => {
+        const context = new TestContext();
+
+        const salesforce = context.testData.createProject(x => {
+          x.Loan_LoanRepaymentPeriodLength__c = null;
+        });
+
+        const { loanRepaymentPeriodLength } = mapToProjectDto(context, salesforce, ProjectRole.Unknown);
+
+        expect(loanRepaymentPeriodLength).toBeNull();
+      });
+    });
   });
 });

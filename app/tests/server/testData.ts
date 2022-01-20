@@ -104,6 +104,10 @@ export class TestData {
       Acc_CurrentPeriodStartDate__c: "2020-06-01",
       Acc_CurrentPeriodEndDate__c: "2020-06-30",
       Acc_NonFEC__c: false,
+      Loan_LoanEndDate__c: null,
+      Loan_LoanAvailabilityPeriodLength__c: null,
+      Loan_LoanExtensionPeriodLength__c: null,
+      Loan_LoanRepaymentPeriodLength__c: null,
     };
 
     if (update) update(newItem);
