@@ -51,6 +51,11 @@ const stubProject: ProjectDto = {
   durationInMonths: 0,
   numberOfPeriods: 0,
   isNonFec: false,
+
+  loanEndDate: new Date(),
+  loanAvailabilityPeriodLength: 0,
+  loanExtensionPeriodLength: 0,
+  loanRepaymentPeriodLength: 0,
 };
 
 const stubProjectStatusUnknown: ProjectDto = {

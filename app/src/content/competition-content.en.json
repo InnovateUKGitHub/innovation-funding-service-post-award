@@ -113,7 +113,12 @@
     },
     "project-labels": {
       "totalEligibleCostsClaimedLabel": "Eligible costs to date",
-      "percentageEligibleCostsClaimedLabel": "Percentage of eligible costs to date"
+      "percentageEligibleCostsClaimedLabel": "Percentage of eligible costs to date",
+      "startDate": "Availability start date",
+      "endDate": "Repayment end date",
+      "availabilityPeriod": "Availability period",
+      "extensionPeriod": "Extension period",
+      "repaymentPeriod": "Repayment period"
     }
   }
 }

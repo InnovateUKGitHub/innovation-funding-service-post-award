@@ -31,6 +31,10 @@ export interface ISalesforceProject {
   Acc_CurrentPeriodStartDate__c: string;
   Acc_CurrentPeriodEndDate__c: string;
   Acc_NonFEC__c: boolean;
+  Loan_LoanEndDate__c: string | null;
+  Loan_LoanAvailabilityPeriodLength__c: number | null;
+  Loan_LoanExtensionPeriodLength__c: number | null;
+  Loan_LoanRepaymentPeriodLength__c: number | null;
 }
 
 export interface IProjectRepository {
@@ -39,7 +43,6 @@ export interface IProjectRepository {
 }
 
 export class ProjectRepository extends SalesforceRepositoryBase<ISalesforceProject> implements IProjectRepository {
-
   protected readonly salesforceObjectName = "Acc_Project__c";
 
   protected readonly salesforceFieldNames = [
@@ -72,7 +75,11 @@ export class ProjectRepository extends SalesforceRepositoryBase<ISalesforceProje
     "Acc_CurrentPeriodNumber__c",
     "Acc_CurrentPeriodStartDate__c",
     "Acc_CurrentPeriodEndDate__c",
-    "Acc_NonFEC__c"
+    "Acc_NonFEC__c",
+    "Loan_LoanEndDate__c",
+    "Loan_LoanAvailabilityPeriodLength__c",
+    "Loan_LoanExtensionPeriodLength__c",
+    "Loan_LoanRepaymentPeriodLength__c",
   ];
 
   getById(id: string) {

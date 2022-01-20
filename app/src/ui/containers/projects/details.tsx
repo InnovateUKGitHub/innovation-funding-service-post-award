@@ -2,6 +2,8 @@ import { Pending } from "@shared/pending";
 import { getAuthRoles, PartnerDto, ProjectContactDto, ProjectDto, ProjectRole } from "@framework/types";
 import { useStores } from "@ui/redux";
 import * as ACC from "@ui/components";
+import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
+import { getPlural } from "@ui/helpers/plurals";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import { GetProjectStatus } from "../app/project-active";
 
@@ -94,6 +96,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 
   private renderContents({ project, partners, contacts }: CombinedData) {
+    const { isLoans } = checkProjectCompetition(project.competitionType);
     // Note: Partners is reused avoid destructing - all partners will have the same competitionName at this UI
     const competitionName = partners[0].competitionName;
 
@@ -137,31 +140,71 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                 content={<ACC.Renderers.SimpleString>{competitionName}</ACC.Renderers.SimpleString>}
               />
             )}
+
             <ACC.SummaryListItem
               labelContent={x => x.projectDetails.projectLabels.competitionTypeLabel}
               qa="competition-type"
               content={<ACC.Renderers.SimpleString>{project.competitionType}</ACC.Renderers.SimpleString>}
             />
+
             <ACC.SummaryListItem
               labelContent={x => x.projectDetails.projectLabels.startDate}
               qa="start-date"
               content={<ACC.Renderers.FullDate value={project.startDate} />}
             />
+
             <ACC.SummaryListItem
               labelContent={x => x.projectDetails.projectLabels.endDate}
               qa="end-date"
-              content={<ACC.Renderers.FullDate value={project.endDate} />}
+              content={<ACC.Renderers.FullDate value={isLoans ? project.loanEndDate : project.endDate} />}
             />
-            <ACC.SummaryListItem
-              labelContent={x => x.projectDetails.projectLabels.duration}
-              qa="duration"
-              content={`${project.durationInMonths} ${project.durationInMonths === 1 ? "month" : "months"}`}
-            />
-            <ACC.SummaryListItem
-              labelContent={x => x.projectDetails.projectLabels.numberOfPeriods}
-              qa="periods"
-              content={project.numberOfPeriods}
-            />
+
+            {isLoans ? (
+              <>
+                <ACC.SummaryListItem
+                  qa="availability-period"
+                  labelContent={x => x.projectDetails.projectLabels.loanAvailabilityPeriod}
+                  content={
+                    <ACC.Renderers.SimpleString>
+                      {getPlural("month", project.loanAvailabilityPeriodLength)}
+                    </ACC.Renderers.SimpleString>
+                  }
+                />
+                <ACC.SummaryListItem
+                  qa="extension-period"
+                  labelContent={x => x.projectDetails.projectLabels.loanExtensionPeriod}
+                  content={
+                    <ACC.Renderers.SimpleString>
+                      {getPlural("month", project.loanExtensionPeriodLength)}
+                    </ACC.Renderers.SimpleString>
+                  }
+                />
+                <ACC.SummaryListItem
+                  qa="repayment-period"
+                  labelContent={x => x.projectDetails.projectLabels.loanRepaymentPeriod}
+                  content={
+                    <ACC.Renderers.SimpleString>
+                      {getPlural("month", project.loanRepaymentPeriodLength)}
+                    </ACC.Renderers.SimpleString>
+                  }
+                />
+              </>
+            ) : (
+              <>
+                <ACC.SummaryListItem
+                  labelContent={x => x.projectDetails.projectLabels.duration}
+                  qa="duration"
+                  content={getPlural("month", project.durationInMonths)}
+                />
+
+                <ACC.SummaryListItem
+                  labelContent={x => x.projectDetails.projectLabels.numberOfPeriods}
+                  qa="periods"
+                  content={project.numberOfPeriods}
+                />
+              </>
+            )}
+
             <ACC.SummaryListItem
               labelContent={x => x.projectDetails.projectLabels.scope}
               qa="scope"
