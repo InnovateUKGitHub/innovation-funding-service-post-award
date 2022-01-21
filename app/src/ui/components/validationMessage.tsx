@@ -4,6 +4,7 @@ import { ContentSelector } from "@content/content";
 import { Content } from "@ui/components/content";
 
 import * as colours from "../styles/colours";
+import { SimpleString } from "./renderers";
 
 type MessageType = "info" | "error" | "success" | "warning" | "alert";
 
@@ -69,7 +70,7 @@ export function ValidationMessage({ message, messageType, qa = "validation-messa
   if (typeof message === "string" && !message.length) return null;
 
   const isBlockElement = !["string", "number", "function"].includes(typeof message);
-  const ElementType = isBlockElement ? "div" : "span";
+  const elementType = isBlockElement ? "div" : "span";
 
   const ui = validationStyles[messageType];
 
@@ -84,9 +85,9 @@ export function ValidationMessage({ message, messageType, qa = "validation-messa
         {ui.text}
       </span>
 
-      <ElementType data-qa={`${qa}-content`}>
+      <SimpleString as={elementType} qa={`${qa}-content`} style={{ color: ui.styles.color }}>
         {isContentSolution(message) ? <Content styles={ui.styles} value={message} /> : message}
-      </ElementType>
+      </SimpleString>
     </div>
   );
 }

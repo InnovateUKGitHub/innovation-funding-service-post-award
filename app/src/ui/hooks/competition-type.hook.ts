@@ -1,20 +1,17 @@
-import { LoadingStatus } from "@framework/constants";
+import { getPending } from "@ui/helpers/get-pending";
 import { useStores } from "@ui/redux";
 
-export function useCompetitionType(projectId?: string): string | undefined {
+export function useCompetitionType(projectId: string | undefined): string | undefined {
   const { projects } = useStores();
 
-  // Note: bail out as we can assume that were on a non-project specific page
+  // Note: It is likely that the visitor is on a non-project page or dev has forgotten 'projectId' in getParams()
   if (!projectId) return undefined;
 
-  const { state, error, data: projectPayload } = projects.getById(projectId).then(x => x.competitionType);
+  const { isRejected, payload, error } = getPending(projects.getById(projectId));
 
-  // Note: In first sever renders the payload as null (we bail out since it gets re-rendered)
-  if (!projectPayload) return undefined;
-
-  if (error || state === LoadingStatus.Failed) {
-    throw new Error(`There was an error getting the competitionType from projectId - ${projectId}`);
+  if (isRejected) {
+    throw new Error(error ?? `There was an error getting the competitionType from projectId - ${projectId}`);
   }
 
-  return projectPayload;
+  return payload?.competitionType ?? undefined;
 }

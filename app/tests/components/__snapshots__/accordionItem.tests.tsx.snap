@@ -1,0 +1,141 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AccordionItem @renders with isOpen when false 1`] = `
+<div
+  class="govuk-accordion__section"
+  data-qa="stub-qa"
+>
+  <div
+    class="govuk-accordion__section-header"
+  >
+    <h2
+      class="govuk-accordion__section-heading"
+    >
+      <button
+        aria-controls="accordion-default-content-stub-qa"
+        aria-expanded="false"
+        class="govuk-accordion__section-button"
+        data-qa="accordion-toggle"
+        type="button"
+      >
+        <span
+          class="govuk-accordion__section-heading-text"
+          id="accordion-default-heading-stub-qa"
+        >
+          <span
+            class="govuk-accordion__section-heading-text-focus"
+          >
+            stub-title-as-string
+          </span>
+        </span>
+        <span
+          class="govuk-visually-hidden govuk-accordion__section-heading-divider"
+        >
+          , 
+        </span>
+        <span
+          class="govuk-accordion__section-toggle"
+        >
+          <span
+            class="govuk-accordion__section-toggle-focus"
+          >
+            <span
+              class="govuk-accordion-nav__chevron govuk-accordion-nav__chevron--down"
+            />
+            <span
+              class="govuk-accordion__section-toggle-text"
+            >
+              Show
+               
+              <span
+                class="govuk-visually-hidden"
+              >
+                this section
+              </span>
+            </span>
+          </span>
+        </span>
+      </button>
+    </h2>
+  </div>
+  <div
+    aria-labelledby="accordion-default-heading-stub-qa"
+    class="govuk-accordion__section-content"
+    id="accordion-default-content-stub-qa"
+  >
+    <p>
+      stub-children
+    </p>
+  </div>
+</div>
+`;
+
+exports[`AccordionItem @renders with isOpen when true 1`] = `
+<div
+  class="govuk-accordion__section govuk-accordion__section--expanded"
+  data-qa="stub-qa"
+>
+  <div
+    class="govuk-accordion__section-header"
+  >
+    <h2
+      class="govuk-accordion__section-heading"
+    >
+      <button
+        aria-controls="accordion-default-content-stub-qa"
+        aria-expanded="true"
+        class="govuk-accordion__section-button"
+        data-qa="accordion-toggle"
+        type="button"
+      >
+        <span
+          class="govuk-accordion__section-heading-text"
+          id="accordion-default-heading-stub-qa"
+        >
+          <span
+            class="govuk-accordion__section-heading-text-focus"
+          >
+            stub-title-as-string
+          </span>
+        </span>
+        <span
+          class="govuk-visually-hidden govuk-accordion__section-heading-divider"
+        >
+          , 
+        </span>
+        <span
+          class="govuk-accordion__section-toggle"
+        >
+          <span
+            class="govuk-accordion__section-toggle-focus"
+          >
+            <span
+              class="govuk-accordion-nav__chevron"
+            />
+            <span
+              class="govuk-accordion__section-toggle-text"
+            >
+              Hide
+               
+              <span
+                class="govuk-visually-hidden"
+              >
+                this section
+              </span>
+            </span>
+          </span>
+        </span>
+      </button>
+    </h2>
+  </div>
+  <div
+    aria-labelledby="accordion-default-heading-stub-qa"
+    class="govuk-accordion__section-content"
+    id="accordion-default-content-stub-qa"
+  >
+    <p>
+      stub-children
+    </p>
+  </div>
+</div>
+`;

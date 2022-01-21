@@ -24,7 +24,6 @@ export interface RootState {
   loadStatus: number;
   messages: MessagesState;
   user: IClientUser;
-  isClient: boolean;
   config: IClientConfig;
   title: PageTitleState;
 }
@@ -37,7 +36,6 @@ export const rootReducer = combineReducers<RootState>({
   loadStatus: loadStatusReducer,
   messages: messagesReducer,
   user: userReducer,
-  isClient: (state = false) => state,
   config: configReducer,
   title: pageTitleReducer
 });

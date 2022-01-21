@@ -3,6 +3,7 @@ import { PCRItemForTimeExtensionDto, PCRTimeExtensionOption } from "@framework/d
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRTimeExtensionItemDtoValidator } from "@ui/validators";
 import { useContent } from "@ui/hooks";
+import { useMounted } from "@ui/features";
 import { EditorStatus } from "@ui/constants/enums";
 import { useStores } from "@ui/redux";
 import React from "react";
@@ -15,6 +16,7 @@ const TimeExtensionStep = (
   props: PcrStepProps<PCRItemForTimeExtensionDto, PCRTimeExtensionItemDtoValidator> & TimeExtensionProps,
 ) => {
   const { getContent } = useContent();
+  const { isClient } = useMounted();
 
   const Form = ACC.TypedForm<PCRItemForTimeExtensionDto>();
   const existingProjectHeading = getContent(x => x.pcrTimeExtensionStepContent.existingProjectHeading);
@@ -110,7 +112,7 @@ const TimeExtensionStep = (
               return (m.offsetMonths = Number(value!.id));
             }}
           />
-          {props.isClient && (
+          {isClient && (
             <Form.Custom
               label={dateLabel}
               name="proposedDates"
@@ -127,7 +129,7 @@ const TimeExtensionStep = (
               }}
             />
           )}
-          {props.isClient && (
+          {isClient && (
             <Form.Custom
               label={durationLabel}
               name="proposedDuration"

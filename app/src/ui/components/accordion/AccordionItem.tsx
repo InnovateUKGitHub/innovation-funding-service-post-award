@@ -1,114 +1,79 @@
-// TODO: address these when we upgrade @testing-library/user-event
-/* eslint-disable jsx-a11y/interactive-supports-focus */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-
-import React, { useEffect, useState } from "react";
+import React from "react";
 import cx from "classnames";
 
-import { useContent, useIsClient } from "@ui/hooks";
+import { useContent } from "@ui/hooks";
+import { useMounted } from "@ui/features";
 import { ContentSelector } from "@content/content";
-import { useAccordion } from "./accordion-context";
+import { removeSpaces } from "@shared/string-helpers";
+
+import { AccessibilityText } from "../renderers";
+import { AccordionToggle } from "./AccordionToggle";
 
 // TODO: Merge props.titleContent into props.title
 export interface AccordionItemProps {
   children: React.ReactNode;
   qa: string;
-  // TODO: Remove optional property when titleContent is removed
-  title?: string | ContentSelector;
-  /**
-   * @deprecated The method should not be used, please use props.title instead
-   */
-  titleContent?: ContentSelector;
+  title: string | ContentSelector;
+  isOpen?: boolean;
+  onClick?: () => void;
 }
 
-const gdsClasses = {
-  section: "govuk-accordion__section",
-  sectionExpanded: "govuk-accordion__section--expanded",
-  heading: "govuk-accordion__section-heading",
-  header: "govuk-accordion__section-header",
-  // TODO: Investigate if this is being used during GDS Upgrade
-  headerFocused: "govuk-accordion__section-header--focused",
-  button: "govuk-accordion__section-button",
-  icon: "govuk-accordion__icon",
-  content: "govuk-accordion__section-content",
-};
-
-export function AccordionItem({ qa, titleContent, title, children }: AccordionItemProps) {
-  const [isOpen, setIsOpen] = useState<boolean>(true);
-  const [isFocused, setIsFocused] = useState<boolean>(false);
-
-  const { forceIsOpen, ...context } = useAccordion();
+export function AccordionItem({ qa, children, isOpen = false, onClick, ...props }: AccordionItemProps) {
+  const { isClient } = useMounted();
   const { getContent } = useContent();
-  const jsEnabled = useIsClient();
 
-  useEffect(() => {
-    context.subscribe();
+  const uid = removeSpaces(qa.toLowerCase());
+  const accordionHeadingId = `accordion-default-heading-${uid}`;
+  const accordionContentId = `accordion-default-content-${uid}`;
 
-    // Note: Open by default to support SSR
-    setIsOpen(false);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (forceIsOpen === null) return;
-
-    setIsOpen(forceIsOpen);
-  }, [forceIsOpen]);
-
-  const handleBlur = () => setIsFocused(false);
-  const handleFocus = () => setIsFocused(true);
-
-  const handleClick = () => {
-    const newState = !isOpen;
-
-    context.toggle(newState);
-    setIsOpen(newState);
-  };
-
-  const titleMessage = titleContent ? getContent(titleContent) : title && getContent(title);
-  const noTitleAvailable = !(titleMessage && titleMessage.length);
-
-  if (noTitleAvailable) return null;
+  const title = getContent(props.title);
 
   return (
     <div
       data-qa={qa}
-      className={cx(gdsClasses.section, {
-        [gdsClasses.sectionExpanded]: isOpen,
+      className={cx("govuk-accordion__section", {
+        "govuk-accordion__section--expanded": isOpen,
       })}
     >
-      <div
-        role="button"
-        aria-pressed={isOpen}
-        onClick={handleClick}
-        data-qa="accordion-item-header"
-        className={cx(gdsClasses.header, {
-          [gdsClasses.headerFocused]: isFocused,
-        })}
-      >
-        <p className={gdsClasses.heading}>
-          {jsEnabled ? (
+      <div className="govuk-accordion__section-header">
+        <h2 className="govuk-accordion__section-heading">
+          {isClient ? (
             <button
-              data-module="govuk-button"
-              data-qa="accordion-item-js-title"
               type="button"
-              className={gdsClasses.button}
+              aria-controls={accordionContentId}
+              className="govuk-accordion__section-button"
               aria-expanded={isOpen}
-              onBlur={handleBlur}
-              onFocus={handleFocus}
+              onClick={onClick}
+              data-qa="accordion-toggle"
             >
-              {titleMessage}
-              <span className={gdsClasses.icon} aria-hidden={!isOpen} />
+              <span className="govuk-accordion__section-heading-text" id={accordionHeadingId}>
+                <span className="govuk-accordion__section-heading-text-focus">{title}</span>
+              </span>
+
+              {/* prettier-ignore */}
+              <AccessibilityText as="span" className="govuk-accordion__section-heading-divider">, </AccessibilityText>
+
+              <span className="govuk-accordion__section-toggle">
+                <span className="govuk-accordion__section-toggle-focus">
+                  <AccordionToggle isOpen={isOpen} />
+
+                  <span className="govuk-accordion__section-toggle-text">
+                    {isOpen ? "Hide" : "Show"} <AccessibilityText as="span">this section</AccessibilityText>
+                  </span>
+                </span>
+              </span>
             </button>
           ) : (
-            <span data-qa="accordion-item-nojs-title" className={gdsClasses.button}>
-              {titleMessage}
+            <span className="govuk-accordion__section-button" id={accordionHeadingId}>
+              {title}
             </span>
           )}
-        </p>
+        </h2>
       </div>
 
-      <div className={gdsClasses.content}>{children}</div>
+      <div id={accordionContentId} className="govuk-accordion__section-content" aria-labelledby={accordionHeadingId}>
+        {children}
+      </div>
     </div>
   );
 }

@@ -1,25 +1,25 @@
-import { AccessibilityText } from "../renderers";
+import { AccordionToggle } from "./AccordionToggle";
 
 export interface AccordionControlsProps {
-  onClick: () => void;
+  onClick: (openAllNodes: boolean) => void;
   isOpen: boolean;
 }
 
 export function AccordionControls({ isOpen, onClick }: AccordionControlsProps) {
-  const toggleText = isOpen ? "Close all" : "Open all";
-  const ariaText = "sections";
+  const showAllText = isOpen ? "Hide all sections" : "Show all sections";
 
   return (
     <div className="govuk-accordion__controls">
       <button
         type="button"
-        data-module="govuk-button"
-        data-qa="accordion-toggle"
-        className="govuk-accordion__open-all"
-        onClick={onClick}
+        data-qa="all-accordion-toggle"
+        className="govuk-accordion__show-all"
         aria-expanded={isOpen}
+        onClick={() => onClick(!isOpen)}
       >
-        {toggleText} <AccessibilityText>{ariaText}</AccessibilityText>
+        <AccordionToggle isOpen={isOpen} />
+
+        <span className="govuk-accordion__show-all-text">{showAllText}</span>
       </button>
     </div>
   );

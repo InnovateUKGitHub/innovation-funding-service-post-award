@@ -1,6 +1,6 @@
 import * as ACC from "@ui/components";
 import { IEditorStore, useStores } from "@ui/redux";
-import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { claimCommentsMaxLength, ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
 import {
@@ -22,6 +22,7 @@ import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { useContent } from "@ui/hooks";
+import { useMounted } from "@ui/features";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { Content } from "@content/content";
 import { DropdownOption, IDocumentMessages } from "@ui/components";
@@ -160,29 +161,15 @@ interface CombinedData {
   documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
 }
 
-class ReviewComponent extends ContainerBase<ReviewClaimParams, ReviewData, ReviewCallbacks> {
-  public render() {
-    const combined = Pending.combine({
-      project: this.props.project,
-      partner: this.props.partner,
-      costCategories: this.props.costCategories,
-      claim: this.props.claim,
-      claimDetails: this.props.costsSummaryForPeriod,
-      editor: this.props.editor,
-      documents: this.props.documents,
-      documentsEditor: this.props.documentsEditor,
-    });
+function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData & ReviewCallbacks & BaseProps) {
+  const { isClient } = useMounted();
 
-    return <ACC.PageLoader pending={combined} render={data => this.renderContents(data)} />;
-  }
-
-  private renderContents(data: CombinedData) {
-    const { content } = this.props;
+  const renderContents = (data: CombinedData) => {
     const { isCombinationOfSBRI } = checkProjectCompetition(data.project.competitionType);
     const { isMo } = getAuthRoles(data.project.roles);
 
     const backLinkElement = (
-      <ACC.BackLink route={this.props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}>
+      <ACC.BackLink route={props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}>
         {content.default.backlinkMessage}
       </ACC.BackLink>
     );
@@ -194,10 +181,10 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, ReviewData, Revie
         validator={[data.editor.validator, data.documentsEditor.validator]}
         pageTitle={<ACC.Projects.Title {...data.project} />}
       >
-        <ACC.Renderers.Messages messages={this.props.messages} />
+        <ACC.Renderers.Messages messages={props.messages} />
 
         {data.claim.isFinalClaim && (
-          <ACC.ValidationMessage messageType="info" message={this.props.content.default.finalClaimMessage} />
+          <ACC.ValidationMessage messageType="info" message={content.default.finalClaimMessage} />
         )}
 
         {data.partner.competitionName && (
@@ -240,66 +227,65 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, ReviewData, Revie
         <ACC.Section title={<ACC.Claims.ClaimPeriodDate {...data} />}>
           <ACC.Claims.ClaimReviewTable
             {...data}
-            standardOverheadRate={this.props.config.options.standardOverheadRate}
+            standardOverheadRate={props.config.options.standardOverheadRate}
             validation={data.editor.validator.totalCosts}
-            getLink={costCategoryId => this.getClaimLineItemLink(costCategoryId)}
+            getLink={costCategoryId => getClaimLineItemLink(costCategoryId)}
           />
         </ACC.Section>
 
         <ACC.Section>
           <ACC.Accordion>
-            {this.renderForecastItem()}
+            {renderForecastItem()}
 
-            <ACC.AccordionItem title={this.props.content.default.logItemTitle} qa="log-accordion">
+            <ACC.AccordionItem title={content.default.logItemTitle} qa="log-accordion">
               {/* Keeping logs inside loader because accordion defaults to closed*/}
               <ACC.Loader
-                pending={this.props.statusChanges}
+                pending={props.statusChanges}
                 render={statusChanges => <ACC.Logs qa="claim-status-change-table" data={statusChanges} />}
               />
             </ACC.AccordionItem>
 
-            {this.renderSupportingDocumentsItem(data)}
+            {renderSupportingDocumentsItem(data)}
           </ACC.Accordion>
         </ACC.Section>
 
-        {this.renderForm(data)}
+        {renderForm(data)}
       </ACC.Page>
     );
-  }
+  };
 
-  private renderForecastItem() {
+  const renderForecastItem = () => {
     const pendingForecastData: Pending<ACC.Claims.ForecastData> = Pending.combine({
-      project: this.props.project,
-      partner: this.props.partner,
-      claim: this.props.claim,
-      claims: this.props.claims,
-      claimDetails: this.props.claimDetails,
-      forecastDetails: this.props.forecastDetails,
-      golCosts: this.props.golCosts,
-      costCategories: this.props.costCategories,
+      project: props.project,
+      partner: props.partner,
+      claim: props.claim,
+      claims: props.claims,
+      claimDetails: props.claimDetails,
+      forecastDetails: props.forecastDetails,
+      golCosts: props.golCosts,
+      costCategories: props.costCategories,
     });
 
     return (
-      <ACC.AccordionItem qa="forecast-accordion" title={this.props.content.default.forecastItemTitle}>
+      <ACC.AccordionItem qa="forecast-accordion" title={content.default.forecastItemTitle}>
         <ACC.Loader
           pending={pendingForecastData}
           render={forecastData => <ACC.Claims.ForecastTable hideValidation data={forecastData} />}
         />
       </ACC.AccordionItem>
     );
-  }
+  };
 
-  private getClaimLineItemLink(costCategoryId: string) {
-    return this.props.routes.reviewClaimLineItems.getLink({
-      partnerId: this.props.partnerId,
-      projectId: this.props.projectId,
-      periodId: this.props.periodId,
+  const getClaimLineItemLink = (costCategoryId: string) => {
+    return props.routes.reviewClaimLineItems.getLink({
+      partnerId: props.partnerId,
+      projectId: props.projectId,
+      periodId: props.periodId,
       costCategoryId,
     });
-  }
+  };
 
-  private renderForm(data: CombinedData): JSX.Element {
-    const { content } = this.props;
+  const renderForm = (data: CombinedData): JSX.Element => {
     const Form = ACC.TypedForm<ClaimDto>();
 
     const options: ACC.SelectOption[] = [
@@ -312,16 +298,17 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, ReviewData, Revie
       ClaimStatus.AWAITING_IAR,
       ClaimStatus.AWAITING_IUK_APPROVAL,
     ];
+
     const isValidStatus = validSubmittedClaimStatus.includes(data.editor.data.status);
-    const isInteractive = this.props.isClient && !data.editor.data.status;
+    const isInteractive = isClient && !data.editor.data.status;
 
     const displayInteractiveForm = isValidStatus || !isInteractive;
 
     return (
       <Form.Form
         editor={data.editor}
-        onSubmit={() => this.handleSubmit(data)}
-        onChange={dto => this.props.onUpdate(false, dto)}
+        onSubmit={() => handleSubmit(data)}
+        onChange={dto => props.onUpdate(false, dto)}
         qa="review-form"
       >
         <Form.Fieldset heading={content.default.howToProceedSectionTitle}>
@@ -329,50 +316,50 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, ReviewData, Revie
             name="status"
             options={options}
             value={dto => options.find(x => x.id === dto.status)}
-            update={(dto, val) => this.updateStatus(dto, val)}
+            update={(dto, val) => updateStatus(dto, val)}
             validation={data.editor.validator.status}
             inline
           />
 
-          {displayInteractiveForm && this.renderFormHiddenSection(data.editor, Form, data.project)}
+          {displayInteractiveForm && renderFormHiddenSection(data.editor, Form, data.project)}
         </Form.Fieldset>
       </Form.Form>
     );
-  }
+  };
 
-  private filterDropdownList(selectedDocument: MultipleDocumentUploadDto, documents: DropdownOption[]) {
+  const filterDropdownList = (selectedDocument: MultipleDocumentUploadDto, documents: DropdownOption[]) => {
     if (!documents.length || !selectedDocument.description) return undefined;
 
     const targetId = selectedDocument.description.toString();
 
     return documents.find(x => x.id === targetId);
-  }
+  };
 
-  private renderSupportingDocumentsItem({ documentsEditor, documents }: CombinedData): React.ReactNode {
+  const renderSupportingDocumentsItem = ({ documentsEditor, documents }: CombinedData) => {
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     return (
       <EnumDocuments documentsToCheck={allowedClaimDocuments}>
         {docs => (
           <ACC.AccordionItem
-            title={this.props.content.default.uploadSupportingDocumentsFormAccordionTitle}
+            title={content.default.uploadSupportingDocumentsFormAccordionTitle}
             qa="upload-supporting-documents-form-accordion"
           >
             <UploadForm.Form
               enctype="multipart"
               editor={documentsEditor}
-              onChange={dto => this.props.onUpload(false, dto)}
-              onSubmit={() => this.props.onUpload(true, documentsEditor.data)}
+              onChange={dto => props.onUpload(false, dto)}
+              onSubmit={() => props.onUpload(true, documentsEditor.data)}
               qa="projectDocumentUpload"
             >
               <UploadForm.Fieldset>
-                <ACC.Renderers.SimpleString>{this.props.content.default.uploadInstruction1}</ACC.Renderers.SimpleString>
-                <ACC.Renderers.SimpleString>{this.props.content.default.uploadInstruction2}</ACC.Renderers.SimpleString>
+                <ACC.Renderers.SimpleString>{content.default.uploadInstruction1}</ACC.Renderers.SimpleString>
+                <ACC.Renderers.SimpleString>{content.default.uploadInstruction2}</ACC.Renderers.SimpleString>
 
                 <ACC.DocumentGuidance />
 
                 <UploadForm.MultipleFileUpload
-                  label={this.props.content.default.uploadInputLabel}
+                  label={content.default.uploadInputLabel}
                   name="attachment"
                   labelHidden
                   value={x => x.files}
@@ -381,27 +368,27 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, ReviewData, Revie
                 />
 
                 <UploadForm.DropdownList
-                  label={this.props.content.default.descriptionLabel}
+                  label={content.default.descriptionLabel}
                   labelHidden={false}
                   hasEmptyOption
                   placeholder="-- No description --"
                   name="description"
                   validation={documentsEditor.validator.files}
                   options={docs}
-                  value={selectedOption => this.filterDropdownList(selectedOption, docs)}
+                  value={selectedOption => filterDropdownList(selectedOption, docs)}
                   update={(dto, value) => (dto.description = value ? parseInt(value.id, 10) : undefined)}
                 />
               </UploadForm.Fieldset>
 
               <UploadForm.Submit name="reviewDocuments" styling="Secondary">
-                {this.props.content.default.uploadButton}
+                {content.default.uploadButton}
               </UploadForm.Submit>
             </UploadForm.Form>
 
             <ACC.Section>
               <ACC.DocumentEdit
                 qa="claim-supporting-documents"
-                onRemove={document => this.props.onDelete(documentsEditor.data, document)}
+                onRemove={document => props.onDelete(documentsEditor.data, document)}
                 documents={documents}
               />
             </ACC.Section>
@@ -409,11 +396,9 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, ReviewData, Revie
         )}
       </EnumDocuments>
     );
-  }
+  };
 
-  private getCompetitionHintContent(competitionType: string) {
-    const { content } = this.props;
-
+  const getCompetitionHintContent = (competitionType: string) => {
     const ktpContent = content.getCompetitionContent(competitionType);
 
     return ktpContent ? (
@@ -425,11 +410,9 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, ReviewData, Revie
     ) : (
       content.default.additionalInfoHint
     );
-  }
+  };
 
-  private getMOReminderMessage(competitionType: string) {
-    const { content } = this.props;
-
+  const getMOReminderMessage = (competitionType: string) => {
     const reminderByCompetion = `${competitionType.toLowerCase()}-reminder`;
 
     return (
@@ -437,18 +420,18 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, ReviewData, Revie
         {content.default.monitoringReportReminder}
       </ACC.Renderers.SimpleString>
     );
-  }
+  };
 
-  private renderFormHiddenSection(
+  const renderFormHiddenSection = (
     editor: IEditorStore<ClaimDto, ClaimDtoValidator>,
     Form: ACC.FormBuilder<ClaimDto>,
     project: ProjectDto,
-  ) {
-    const moReminderElement = this.getMOReminderMessage(project.competitionType);
-    const submitButtonElement = <Form.Submit key="button">{this.getSubmitButtonLabel(editor)}</Form.Submit>;
+  ) => {
+    const moReminderElement = getMOReminderMessage(project.competitionType);
+    const submitButtonElement = <Form.Submit key="button">{getSubmitButtonLabel(editor)}</Form.Submit>;
     const declarationElement = (
       <ACC.Renderers.SimpleString key="declaration">
-        {this.props.content.default.claimReviewDeclaration}
+        {content.default.claimReviewDeclaration}
       </ACC.Renderers.SimpleString>
     );
 
@@ -457,14 +440,14 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, ReviewData, Revie
       // Returning array here instead of React.Fragment as Fieldset data will not persist through Fragment,
       <Form.Fieldset
         key="form"
-        heading={this.props.content.default.additionalInfoSectionTitle}
+        heading={content.default.additionalInfoSectionTitle}
         qa="additional-info-form"
         headingQa="additional-info-heading"
       >
         <Form.MultilineString
-          label={this.props.content.default.additionalInfoLabel}
+          label={content.default.additionalInfoLabel}
           labelHidden
-          hint={this.getCompetitionHintContent(project.competitionType)}
+          hint={getCompetitionHintContent(project.competitionType)}
           name="comments"
           value={m => m.comments}
           update={(m, v) => (m.comments = v)}
@@ -477,22 +460,22 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, ReviewData, Revie
       moReminderElement,
       submitButtonElement,
     ];
-  }
+  };
 
-  private getSubmitButtonLabel(editor: IEditorStore<ClaimDto, ClaimDtoValidator>): string {
+  const getSubmitButtonLabel = (editor: IEditorStore<ClaimDto, ClaimDtoValidator>): string => {
     const showQueryLabel = editor.data.status === ClaimStatus.MO_QUERIED;
 
     // Note: With SSR remove dynamic text
-    return showQueryLabel ? this.props.content.default.sendQueryButton : this.props.content.default.submitButton;
-  }
+    return showQueryLabel ? content.default.sendQueryButton : content.default.submitButton;
+  };
 
-  private updateStatus(dto: ClaimDto, option: ACC.SelectOption | null | undefined) {
+  const updateStatus = (dto: ClaimDto, option: ACC.SelectOption | null | undefined) => {
     if (option && (option.id === ClaimStatus.MO_QUERIED || option.id === ClaimStatus.AWAITING_IUK_APPROVAL)) {
       dto.status = option.id;
     }
-  }
+  };
 
-  private prepareClaimAwaitingIukApproval = (claimToUpdate: ClaimDto): ClaimDto => {
+  const prepareClaimAwaitingIukApproval = (claimToUpdate: ClaimDto): ClaimDto => {
     const isIarReceived: boolean = claimToUpdate.iarStatus !== "Received";
     const isNotReceivedIar: boolean = !!claimToUpdate.isIarRequired && isIarReceived;
 
@@ -503,15 +486,28 @@ class ReviewComponent extends ContainerBase<ReviewClaimParams, ReviewData, Revie
     return claimToUpdate;
   };
 
-  private handleSubmit = (payload: CombinedData): void => {
+  const handleSubmit = (payload: CombinedData): void => {
     let claimToUpdate = payload.editor.data;
 
     if (claimToUpdate.status === ClaimStatus.AWAITING_IUK_APPROVAL) {
-      claimToUpdate = this.prepareClaimAwaitingIukApproval(claimToUpdate);
+      claimToUpdate = prepareClaimAwaitingIukApproval(claimToUpdate);
     }
 
-    this.props.onUpdate(true, claimToUpdate);
+    props.onUpdate(true, claimToUpdate);
   };
+
+  const combined = Pending.combine({
+    project: props.project,
+    partner: props.partner,
+    costCategories: props.costCategories,
+    claim: props.claim,
+    claimDetails: props.costsSummaryForPeriod,
+    editor: props.editor,
+    documents: props.documents,
+    documentsEditor: props.documentsEditor,
+  });
+
+  return <ACC.PageLoader pending={combined} render={data => renderContents(data)} />;
 }
 
 const initEditor = (dto: ClaimDto) => {

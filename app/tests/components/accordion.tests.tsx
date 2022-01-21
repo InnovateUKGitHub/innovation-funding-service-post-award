@@ -2,16 +2,12 @@ import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import TestBed from "@shared/TestBed";
-import * as hooksModule from "@ui/hooks";
 import { Accordion, AccordionItem, AccordionProps } from "../../src/ui/components";
 
-// TODO: Add this to linting config, tests are naturally going to be verbose to make this easier to read
 describe("<Accordion />", () => {
-  const isClientSpy = jest.spyOn(hooksModule, "useIsClient");
-
-  const createAccordionItem = (uid: string) => (
-    <AccordionItem qa={`${uid}-accordion-test`} title={`${uid}-title`}>
-      <p>{uid} Some content</p>
+  const createAccordionItem = (uid: string | number, content?: string) => (
+    <AccordionItem key={`${uid}`} qa={`${uid}`} title={`${uid}-title`}>
+      <p>{content || `${uid} stub content`}</p>
     </AccordionItem>
   );
 
@@ -19,18 +15,41 @@ describe("<Accordion />", () => {
     children: createAccordionItem("default-props"),
   };
 
-  const setup = (props?: Partial<AccordionProps>) =>
-    render(
-      <TestBed>
+  const setup = (props?: Partial<AccordionProps>, isServer?: boolean) => {
+    const rtl = render(
+      <TestBed isServer={isServer}>
         <Accordion {...defaultProps} {...props} />
       </TestBed>,
     );
 
+    const getToggleContainer = (textToQuery: string): HTMLElement => {
+      const toggleContainer = rtl.getByText(textToQuery).parentElement;
+
+      if (!toggleContainer) throw Error(`Can't find container for '${textToQuery}'`);
+
+      const accordionNode = toggleContainer.parentElement;
+
+      if (!accordionNode) throw Error(`Can't find accordion node for '${textToQuery}'`);
+
+      return accordionNode;
+    };
+
+    const queryAccordionIsOpen = (textToQuery: string) => {
+      const node = getToggleContainer(textToQuery);
+      return node.classList.contains("govuk-accordion__section--expanded");
+    };
+
+    return {
+      ...rtl,
+      queryAccordionIsOpen,
+    };
+  };
+
   beforeEach(jest.clearAllMocks);
 
   describe("@renders", () => {
-    describe("qa", () => {
-      it("as default", () => {
+    describe("with qa", () => {
+      test("as default", () => {
         const { queryByTestId } = setup();
 
         const targetElement = queryByTestId("accordion-container");
@@ -38,7 +57,7 @@ describe("<Accordion />", () => {
         expect(targetElement).toBeTruthy();
       });
 
-      it("with custom value", () => {
+      test("with custom value", () => {
         const stubQa = "stub-qa";
         const { queryByTestId } = setup({ qa: stubQa });
 
@@ -48,156 +67,123 @@ describe("<Accordion />", () => {
       });
     });
 
-    describe("controls", () => {
-      it("should be available when jsEnabled is true", () => {
-        isClientSpy.mockReturnValue(true);
+    describe("with condition controls (when mounting)", () => {
+      test("should be available when on the client", () => {
         const { queryByTestId } = setup();
 
-        const toggleElement = queryByTestId("accordion-toggle");
+        const toggleElement = queryByTestId("all-accordion-toggle");
 
         expect(toggleElement).toBeInTheDocument();
       });
 
-      it("should be unavailable when jsEnabled is false", () => {
-        isClientSpy.mockReturnValue(false);
-        const { queryByTestId } = setup();
+      test("should be unavailable when rendered on the server", () => {
+        const { queryByTestId } = setup(undefined, true);
 
-        const toggleElement = queryByTestId("accordion-toggle");
+        const toggleElement = queryByTestId("all-accordion-toggle");
 
         expect(toggleElement).not.toBeInTheDocument();
       });
     });
   });
 
-  describe("@context", () => {
-    describe("handleClick()", () => {
-      it("should close all items", () => {
-        isClientSpy.mockReturnValue(true);
-        const { getByTestId } = setup();
+  describe("@actions", () => {
+    describe("calls show/hide", () => {
+      test("when clicked many times", () => {
+        const stubFirstContent = "stub-1";
+        const stubSecondContent = "stub-2";
 
-        const toggleBtn = getByTestId("accordion-toggle");
+        const stubNodes = [createAccordionItem(1, stubFirstContent), createAccordionItem(2, stubSecondContent)];
 
-        // Open all
+        const { queryByText, getByTestId, queryAccordionIsOpen } = setup({ children: stubNodes });
+
+        const toggleBtn = getByTestId("all-accordion-toggle");
+
+        expect(queryByText("Hide all sections")).not.toBeInTheDocument();
+        expect(queryByText("Show all sections")).toBeInTheDocument();
+        expect(queryAccordionIsOpen(stubFirstContent)).toBeFalsy();
+        expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
+
+        // Open all nodes
         userEvent.click(toggleBtn);
 
-        // Close all
+        expect(queryByText("Hide all sections")).toBeInTheDocument();
+        expect(queryByText("Show all sections")).not.toBeInTheDocument();
+        expect(queryAccordionIsOpen(stubFirstContent)).toBeTruthy();
+        expect(queryAccordionIsOpen(stubSecondContent)).toBeTruthy();
+
+        // Close all nodes
         userEvent.click(toggleBtn);
 
-        expect(toggleBtn).toHaveTextContent("Open all sections");
-      });
-
-      it("should open all items, with one <AccordionItem />", () => {
-        isClientSpy.mockReturnValue(true);
-        const { getByTestId } = setup();
-
-        const toggleBtn = getByTestId("accordion-toggle");
-
-        userEvent.click(toggleBtn);
-
-        expect(toggleBtn).toHaveTextContent("Close all sections");
-      });
-
-      it("should open all items, with multiple <AccordionItem />", () => {
-        isClientSpy.mockReturnValue(true);
-        const stubMultipleItems = (
-          <>
-            {createAccordionItem("item-1")}
-            {createAccordionItem("item-2")}
-          </>
-        );
-        const { getByTestId } = setup({ children: stubMultipleItems });
-
-        const toggleBtn = getByTestId("accordion-toggle");
-
-        expect(toggleBtn).toHaveTextContent("Open all sections");
-
-        userEvent.click(toggleBtn);
-
-        expect(toggleBtn).toHaveTextContent("Close all sections");
+        expect(queryByText("Hide all sections")).not.toBeInTheDocument();
+        expect(queryByText("Show all sections")).toBeInTheDocument();
+        expect(queryAccordionIsOpen(stubFirstContent)).toBeFalsy();
+        expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
       });
     });
-    describe("toggle()", () => {
-      it("should call toggle on one item in a multiple list", () => {
-        isClientSpy.mockReturnValue(true);
-        const stubMultipleItems = (
-          <>
-            {createAccordionItem("item-1")}
-            {createAccordionItem("item-2")}
-          </>
-        );
-        const { getAllByTestId, getByTestId } = setup({ children: stubMultipleItems });
 
-        const toggleBtn = getByTestId("accordion-toggle");
-        const [firstItem, secondItem] = getAllByTestId("accordion-item-header");
+    describe("calls toggle on child nodes", () => {
+      test("calls toggle on one item in the list", () => {
+        const stubFirstContent = "stub-1";
+        const stubSecondContent = "stub-2";
 
-        expect(toggleBtn).toHaveTextContent("Open all sections");
+        const stubNodes = [createAccordionItem(1, stubFirstContent), createAccordionItem(2, stubSecondContent)];
 
-        expect(firstItem).toHaveAttribute("aria-pressed", "false");
-        expect(secondItem).toHaveAttribute("aria-pressed", "false");
+        const { getAllByTestId, queryAccordionIsOpen } = setup({ children: stubNodes });
 
-        userEvent.click(firstItem);
+        const [firstToggle] = getAllByTestId("accordion-toggle");
 
-        expect(firstItem).toHaveAttribute("aria-pressed", "true");
-        expect(secondItem).toHaveAttribute("aria-pressed", "false");
+        expect(queryAccordionIsOpen(stubFirstContent)).toBeFalsy();
+        expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
 
-        // Not items are open!
-        expect(toggleBtn).toHaveTextContent("Open all sections");
+        // Open
+        userEvent.click(firstToggle);
+
+        expect(queryAccordionIsOpen(stubFirstContent)).toBeTruthy();
+        expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
+
+        // Close
+        userEvent.click(firstToggle);
+
+        expect(queryAccordionIsOpen(stubFirstContent)).toBeFalsy();
+        expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
       });
 
-      it("should call toggle on all items in a list", () => {
-        isClientSpy.mockReturnValue(true);
-        const stubMultipleItems = (
-          <>
-            {createAccordionItem("item-1")}
-            {createAccordionItem("item-2")}
-          </>
-        );
-        const { getAllByTestId, getByTestId } = setup({ children: stubMultipleItems });
+      test("calls toggle in the correct order (open/closes first node, then second...)", () => {
+        const stubFirstContent = "stub-1";
+        const stubSecondContent = "stub-2";
 
-        const [firstItem, secondItem] = getAllByTestId("accordion-item-header");
-        const toggleBtn = getByTestId("accordion-toggle");
+        const stubNodes = [createAccordionItem(1, stubFirstContent), createAccordionItem(2, stubSecondContent)];
 
-        expect(toggleBtn).toHaveTextContent("Open all sections");
+        const { getAllByTestId, queryAccordionIsOpen } = setup({ children: stubNodes });
 
-        expect(firstItem).toHaveAttribute("aria-pressed", "false");
-        expect(secondItem).toHaveAttribute("aria-pressed", "false");
+        const [firstToggle, secondToggle] = getAllByTestId("accordion-toggle");
 
-        userEvent.click(firstItem);
-        userEvent.click(secondItem);
+        expect(queryAccordionIsOpen(stubFirstContent)).toBeFalsy();
+        expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
 
-        expect(firstItem).toHaveAttribute("aria-pressed", "true");
-        expect(secondItem).toHaveAttribute("aria-pressed", "true");
+        // Open - first
+        userEvent.click(firstToggle);
 
-        // Should trigger button to update since all items are open ^^
-        expect(toggleBtn).toHaveTextContent("Close all sections");
-      });
+        expect(queryAccordionIsOpen(stubFirstContent)).toBeTruthy();
+        expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
 
-      it("should call toggle and close when all are open", () => {
-        isClientSpy.mockReturnValue(true);
-        const stubMultipleItems = (
-          <>
-            {createAccordionItem("item-1")}
-            {createAccordionItem("item-2")}
-          </>
-        );
-        const { getAllByTestId, getByTestId } = setup({ children: stubMultipleItems });
+        // Close - first
+        userEvent.click(firstToggle);
 
-        const [firstItem, secondItem] = getAllByTestId("accordion-item-header");
-        const toggleBtn = getByTestId("accordion-toggle");
+        expect(queryAccordionIsOpen(stubFirstContent)).toBeFalsy();
+        expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
 
-        expect(toggleBtn).toHaveTextContent("Open all sections");
+        // Open - second
+        userEvent.click(secondToggle);
 
-        userEvent.click(firstItem);
-        userEvent.click(secondItem);
+        expect(queryAccordionIsOpen(stubFirstContent)).toBeFalsy();
+        expect(queryAccordionIsOpen(stubSecondContent)).toBeTruthy();
 
-        // Should only close the first item
-        userEvent.click(firstItem);
+        // Close - second
+        userEvent.click(secondToggle);
 
-        expect(firstItem).toHaveAttribute("aria-pressed", "false");
-        expect(secondItem).toHaveAttribute("aria-pressed", "true");
-
-        // Should trigger button to update since all items are open ^^
-        expect(toggleBtn).toHaveTextContent("Open all sections");
+        expect(queryAccordionIsOpen(stubFirstContent)).toBeFalsy();
+        expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
       });
     });
   });

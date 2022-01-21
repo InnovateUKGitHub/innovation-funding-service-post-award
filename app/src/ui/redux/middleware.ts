@@ -1,26 +1,25 @@
 import thunk from "redux-thunk";
-import { AnyAction, applyMiddleware, Dispatch } from "redux";
+import { applyMiddleware } from "redux";
 import { router5Middleware } from "redux-router5";
 import { Router } from "router5";
-import { loadStatusMiddleware } from "./middleware/loadStatusMiddleware";
-import { loggingMiddleware } from "./middleware/loggingMiddleware";
-import { cancelHashNavigation } from "./middleware/cancelHashNavigation";
-import { cancelInitialNavigation } from "./middleware/cancelInitialNavigation";
-import { messagesMiddleware } from "./middleware/messagesMiddleware";
-import { htmlTitleMiddleware } from "./middleware/htmlTitleMiddleware";
 
-// used as replacement for optional middleware
-const noopMiddleware = () => (next: Dispatch) => (action: AnyAction) => next(action);
+import { loadStatusMiddleware } from "@ui/redux/middleware/loadStatusMiddleware";
+import { loggingMiddleware } from "@ui/redux/middleware/loggingMiddleware";
+import { cancelHashNavigation } from "@ui/redux/middleware/cancelHashNavigation";
+import { cancelInitialNavigation } from "@ui/redux/middleware/cancelInitialNavigation";
+import { messagesMiddleware } from "@ui/redux/middleware/messagesMiddleware";
+import { htmlTitleMiddleware } from "@ui/redux/middleware/htmlTitleMiddleware";
 
-export function setupMiddleware(router: Router, isClient: boolean) {
-  return applyMiddleware(
-    thunk,
-    cancelInitialNavigation,
-    cancelHashNavigation,
-    isClient ? loggingMiddleware : noopMiddleware,
+const baseMiddleWares = [thunk, cancelInitialNavigation, cancelHashNavigation];
+
+export const setupServerMiddleware = (router: Router) => applyMiddleware(...baseMiddleWares, router5Middleware(router));
+
+export const setupClientMiddleware = (router: Router) =>
+  applyMiddleware(
+    ...baseMiddleWares,
+    loggingMiddleware,
     router5Middleware(router),
-    isClient ? messagesMiddleware : noopMiddleware,
-    isClient ? loadStatusMiddleware : noopMiddleware,
-    isClient? htmlTitleMiddleware : noopMiddleware,
+    messagesMiddleware,
+    loadStatusMiddleware,
+    htmlTitleMiddleware,
   );
-}

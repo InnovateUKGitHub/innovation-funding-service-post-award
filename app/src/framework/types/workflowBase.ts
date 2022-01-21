@@ -10,13 +10,13 @@ export interface IStep<TStepName extends string, TStepProps extends IStepProps, 
   displayName: string;
   stepNumber: number;
   validation: (val: TVal) => Results<any>;
-  stepRender: (props: TStepProps) => React.ReactNode;
-  readonlyStepRender?: (props: TStepProps) => React.ReactNode;
+  stepRender: (props: TStepProps) => React.ReactElement;
+  readonlyStepRender?: (props: TStepProps) => React.ReactElement;
 }
 
 interface ISummary<TSummaryProps, TVal extends Results<{}>> {
   validation: (val: TVal) => Results<any>;
-  summaryRender: (props: TSummaryProps) => React.ReactNode;
+  summaryRender: (props: TSummaryProps) => React.ReactElement;
 }
 export interface IWorkflow<TStepName extends string, TStepProps extends IStepProps, TSummaryProps extends ISummaryProps, TVal extends Results<{}>> {
   steps: IStep<TStepName, TStepProps, TVal>[];

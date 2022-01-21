@@ -1,17 +1,10 @@
 import { render } from "@testing-library/react";
 
-import { GdsHeadingClasses, GdsHeadingTypes } from "@ui/components/typography/Heading";
+import { gdsHeadingClasses, GdsHeadingTypes } from "@ui/components/typography/Heading";
 import * as variantModule from "@ui/components/typography/Heading.variants";
 
 describe("Heading variants", () => {
-  const expectVariants: Record<GdsHeadingTypes, GdsHeadingClasses> = {
-    h1: "govuk-heading-xl",
-    h2: "govuk-heading-l",
-    h3: "govuk-heading-m",
-    h4: "govuk-heading-s",
-  };
-
-  const headingVariants = Object.keys(expectVariants) as GdsHeadingTypes[];
+  const headingVariants = Object.keys(gdsHeadingClasses) as GdsHeadingTypes[];
 
   test("returns with correct variant total count", () => {
     /*
@@ -41,7 +34,7 @@ describe("Heading variants", () => {
       const expectedElement = container.querySelector(Variant.name);
 
       expect(expectedElement).toBeInTheDocument();
-      expect(expectedElement).toHaveClass(expectVariants[variantKey]);
+      expect(expectedElement).toHaveClass(gdsHeadingClasses[variantKey]);
     });
 
     describe("when rendered 'as' another element", () => {
@@ -54,7 +47,7 @@ describe("Heading variants", () => {
         const expectedElement = container.querySelector("p");
 
         expect(expectedElement).toBeInTheDocument();
-        expect(expectedElement).toHaveClass(expectVariants[variantKey]);
+        expect(expectedElement).toHaveClass(gdsHeadingClasses[variantKey]);
       });
     });
   });

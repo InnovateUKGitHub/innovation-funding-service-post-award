@@ -2,7 +2,7 @@ import cx from "classnames";
 
 import { IExternalAsLink, ISupplementLinksOptions } from "@ui/containers/app/footer.config";
 
-import { UL, GovWidthContainer, CrownCopyrightLogo } from "@ui/components";
+import { H3, UL, GovWidthContainer, CrownCopyrightLogo } from "@ui/components";
 import { ExternalLink, ExternalLinkProps } from "@ui/components/renderers";
 
 export interface FooterProps {
@@ -14,22 +14,28 @@ export function Footer({ supportingLinks, footerContent }: FooterProps) {
   const { externalContent, externalLinks } = footerContent;
 
   return (
-    <footer className="govuk-footer" role="contentinfo" data-qa="pageFooter">
+    <footer className="govuk-footer" role="contentinfo">
       <GovWidthContainer>
-        <div className="govuk-footer__meta">
-          <div className="govuk-footer__meta-item govuk-footer__meta-item--grow">
-            <h2 className="govuk-visually-hidden" data-qa={externalContent.title.id}>
+        <div className="govuk-footer__navigation">
+          <div className="govuk-footer__section govuk-grid-column-two-thirds">
+            <H3 as="h2" className="govuk-footer__heading">
               {externalContent.title.content}
-            </h2>
+            </H3>
 
-            <UL className="govuk-footer__inline-list">
+            <ul className="govuk-footer__list govuk-footer__list--columns-2">
               {supportingLinks.map(({ content, ...linkProps }) => (
-                <li key={linkProps.id} className="govuk-footer__inline-list-item">
+                <li key={linkProps.id} className="govuk-footer__list-item">
                   <FooterLink {...linkProps}>{content}</FooterLink>
                 </li>
               ))}
-            </UL>
+            </ul>
+          </div>
+        </div>
 
+        <hr className="govuk-footer__section-break" />
+
+        <div className="govuk-footer__meta">
+          <div className="govuk-footer__meta-item govuk-footer__meta-item--grow">
             <UL className="govuk-footer__inline-list">
               <li className="govuk-footer__inline-list-item" data-qa={externalContent.usesCookie.id}>
                 {externalContent.usesCookie.content}
@@ -69,7 +75,6 @@ export function Footer({ supportingLinks, footerContent }: FooterProps) {
               </span>
             </span>
           </div>
-
           <div className="govuk-footer__meta-item">
             <FooterLink
               className="govuk-footer__copyright-logo"

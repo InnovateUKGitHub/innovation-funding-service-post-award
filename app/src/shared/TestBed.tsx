@@ -3,8 +3,10 @@ import browserPluginFactory from "router5/plugins/browser";
 import { RouterProvider } from "react-router5";
 import _merge from "lodash.merge";
 
+import { mountedContext } from "@ui/features";
 import { Content } from "@content/content";
 import { ContentProvider, IStores, StoresProvider } from "@ui/redux";
+import React from "react";
 
 const route = { name: "test", path: "/test" } as any;
 const router = createRouter([route]).usePlugin(browserPluginFactory({ useHash: false }));
@@ -16,10 +18,11 @@ export interface ITestBedProps {
   children: React.ReactElement<{}>;
   content?: TestBedContent;
   stores?: TestBedStore;
+  isServer?: boolean;
 }
 
 // Note: When testing a component that consumes <Content />, it expects a provider to be present.
-export function TestBed({ stores, content = {}, children }: ITestBedProps) {
+export function TestBed({ isServer = false, stores, content = {}, children }: ITestBedProps) {
   const stubStores = {
     users: {
       getCurrentUser: () => ({ csrf: "stub-csrf" }),
@@ -27,14 +30,13 @@ export function TestBed({ stores, content = {}, children }: ITestBedProps) {
     config: {
       getConfig: () => ({
         options: {
-          maxClaimLineItems: 120
+          maxClaimLineItems: 120,
         },
         features: {
           contentHint: false,
-          searchDocsMinThreshold: 5
+          searchDocsMinThreshold: 5,
         },
       }),
-      isClient: () => true,
     },
     navigation: {
       getPageTitle: () => ({
@@ -45,12 +47,17 @@ export function TestBed({ stores, content = {}, children }: ITestBedProps) {
 
   const storesValue = _merge(stubStores, stores);
 
+  // Note: We need a way of upfront toggling this can use 'MountedProvider'
+  const testBedMountState = { isServer, isClient: !isServer };
+
   return (
-    <RouterProvider router={router}>
-      <StoresProvider value={storesValue as any}>
-        <ContentProvider value={content as any}>{children}</ContentProvider>
-      </StoresProvider>
-    </RouterProvider>
+    <mountedContext.Provider value={testBedMountState}>
+      <RouterProvider router={router}>
+        <StoresProvider value={storesValue as any}>
+          <ContentProvider value={content as any}>{children}</ContentProvider>
+        </StoresProvider>
+      </RouterProvider>
+    </mountedContext.Provider>
   );
 }
 

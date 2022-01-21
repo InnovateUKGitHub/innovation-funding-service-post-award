@@ -17,6 +17,7 @@ import { BaseProps } from "@ui/containers/containerBase";
 import { ProjectParticipantProvider } from "@ui/features/project-participants";
 import { Footer, FullHeight, GovWidthContainer, Header, PhaseBanner, PrivateModal } from "@ui/components";
 import { ErrorContainer, ErrorContainerProps, ErrorBoundaryFallback } from "@ui/components/errors";
+import { MountedProvider } from "@ui/features";
 
 import { useAppMount } from "./app/app-mount.hook";
 import { ProjectStatusCheck } from "./app/project-active";
@@ -28,7 +29,6 @@ interface IAppProps {
   config: IClientConfig;
   messages: string[];
   modalRegister: ModalRegister;
-  isClient: boolean;
   stores: IStores;
   route: RouteState;
   routes: IRoutes;
@@ -61,7 +61,7 @@ class AppView extends React.Component<IAppProps> {
   }
 
   public render() {
-    const { modalRegister, messages, route, config, routes, isClient, content, currentRoute, params } = this.props;
+    const { modalRegister, messages, route, config, routes, content, currentRoute, params } = this.props;
 
     const hasAccess = this.accessControl(currentRoute, params);
 
@@ -70,7 +70,6 @@ class AppView extends React.Component<IAppProps> {
       route,
       config,
       routes,
-      isClient,
     };
 
     const RouteContainer = currentRoute.container;
@@ -94,40 +93,46 @@ class AppView extends React.Component<IAppProps> {
     ];
 
     return (
-      <ContentProvider value={content}>
-        <FullHeight.Container>
-          <Header headingLink={`${config.ifsRoot}/competition/search`} menuItems={appMenuItems} />
+      <MountedProvider>
+        <ContentProvider value={content}>
+          <FullHeight.Container>
+            <a href="#main-content" className="govuk-skip-link">
+              Skip to main content
+            </a>
 
-          <FullHeight.Content>
-            <GovWidthContainer data-page-qa={currentRoute.routeName}>
-              <PhaseBanner />
+            <Header headingLink={`${config.ifsRoot}/competition/search`} menuItems={appMenuItems} />
 
-              {hasAccess ? (
-                <ErrorBoundary fallbackRender={errorProps => <ErrorBoundaryFallback {...(errorProps as any)} />}>
-                  <ProjectParticipantProvider projectId={params.projectId}>
-                    <ProjectStatusCheck
-                      projectId={params.projectId}
-                      overrideAccess={!!currentRoute.allowRouteInActiveAccess}
-                    >
-                      <RouteContainer {...baseProps} {...params} />
-                    </ProjectStatusCheck>
-                  </ProjectParticipantProvider>
-                </ErrorBoundary>
-              ) : (
-                <ErrorContainer {...(route.params as ErrorContainerProps)} />
-              )}
-            </GovWidthContainer>
-          </FullHeight.Content>
+            <FullHeight.Content>
+              <GovWidthContainer data-page-qa={currentRoute.routeName}>
+                <PhaseBanner />
 
-          <FooterExternalContent>
-            {payload => <Footer supportingLinks={footerLinks} footerContent={payload} />}
-          </FooterExternalContent>
+                {hasAccess ? (
+                  <ErrorBoundary fallbackRender={errorProps => <ErrorBoundaryFallback {...(errorProps as any)} />}>
+                    <ProjectParticipantProvider projectId={params.projectId}>
+                      <ProjectStatusCheck
+                        projectId={params.projectId}
+                        overrideAccess={!!currentRoute.allowRouteInActiveAccess}
+                      >
+                        <RouteContainer {...baseProps} {...params} />
+                      </ProjectStatusCheck>
+                    </ProjectParticipantProvider>
+                  </ErrorBoundary>
+                ) : (
+                  <ErrorContainer {...(route.params as ErrorContainerProps)} />
+                )}
+              </GovWidthContainer>
+            </FullHeight.Content>
 
-          {modalRegister.getModals().map(modal => (
-            <PrivateModal key={`modal-${modal.id}`} {...modal} />
-          ))}
-        </FullHeight.Container>
-      </ContentProvider>
+            <FooterExternalContent>
+              {payload => <Footer supportingLinks={footerLinks} footerContent={payload} />}
+            </FooterExternalContent>
+
+            {modalRegister.getModals().map(modal => (
+              <PrivateModal key={`modal-${modal.id}`} {...modal} />
+            ))}
+          </FullHeight.Container>
+        </ContentProvider>
+      </MountedProvider>
     );
   }
 }
@@ -157,7 +162,6 @@ export function App(props: AppRoute) {
       modalRegister={modalRegister}
       loadStatus={stores.navigation.getLoadStatus()}
       config={stores.config.getConfig()}
-      isClient={stores.config.isClient()}
       messages={stores.messages.messages()}
       route={getRoute}
       params={params}

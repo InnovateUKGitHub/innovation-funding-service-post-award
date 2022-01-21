@@ -12,7 +12,6 @@ export interface BaseProps {
     route: RouteState;
     config: IClientConfig;
     routes: IRoutes;
-    isClient: boolean;
 }
 
 export type ContainerProps<TParams, TData, TCallbacks> = TParams & TData & TCallbacks & BaseProps;

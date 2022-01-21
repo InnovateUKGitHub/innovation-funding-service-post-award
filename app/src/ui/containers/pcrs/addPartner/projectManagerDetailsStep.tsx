@@ -4,8 +4,11 @@ import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { PCRContactRole } from "@framework/constants";
 import { EditorStatus } from "@ui/constants/enums";
+import { useMounted } from "@ui/features";
 
-const getFinanceContactDetails = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => {
+const getFinanceContactDetails = (
+  props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
+) => {
   const dto = props.pcrItem;
   dto.contact2Forename = dto.contact1Forename;
   dto.contact2Surname = dto.contact1Surname;
@@ -14,11 +17,18 @@ const getFinanceContactDetails = (props: PcrStepProps<PCRItemForPartnerAdditionD
   props.onChange(dto);
 };
 
-export const ProjectManagerDetailsStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => {
+export const ProjectManagerDetailsStep = (
+  props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
+) => {
+  const { isClient } = useMounted();
+
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
+
   return (
     <ACC.Section title={x => x.pcrAddPartnerProjectContacts.sectionTitle}>
-      <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerProjectContacts.guidance}/></ACC.Renderers.SimpleString>
+      <ACC.Renderers.SimpleString>
+        <ACC.Content value={x => x.pcrAddPartnerProjectContacts.guidance} />
+      </ACC.Renderers.SimpleString>
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
@@ -27,8 +37,17 @@ export const ProjectManagerDetailsStep = (props: PcrStepProps<PCRItemForPartnerA
         onChange={dto => props.onChange(dto)}
       >
         <Form.Fieldset headingContent={x => x.pcrAddPartnerProjectContacts.labels.projectLeadContactHeading}>
-          {props.isClient && <Form.Button name="useFinanceContactDetails" onClick={() => getFinanceContactDetails(props)}><ACC.Content value={x => x.pcrAddPartnerProjectContacts.useFinanceDetails}/></Form.Button>}
-          <Form.Hidden name="contact2ProjectRole" value={x => x.contact2ProjectRole = PCRContactRole.ProjectManager}/>
+          {isClient && (
+            <Form.Button name="useFinanceContactDetails" onClick={() => getFinanceContactDetails(props)}>
+              <ACC.Content value={x => x.pcrAddPartnerProjectContacts.useFinanceDetails} />
+            </Form.Button>
+          )}
+
+          <Form.Hidden
+            name="contact2ProjectRole"
+            value={x => (x.contact2ProjectRole = PCRContactRole.ProjectManager)}
+          />
+
           <Form.String
             labelContent={x => x.pcrAddPartnerProjectContacts.labels.contactFirstNameHeading}
             name="contact2Forename"
@@ -38,6 +57,7 @@ export const ProjectManagerDetailsStep = (props: PcrStepProps<PCRItemForPartnerA
             }}
             validation={props.validator.contact2Forename}
           />
+
           <Form.String
             labelContent={x => x.pcrAddPartnerProjectContacts.labels.contactLastNameHeading}
             name="contact2Surname"
@@ -47,6 +67,7 @@ export const ProjectManagerDetailsStep = (props: PcrStepProps<PCRItemForPartnerA
             }}
             validation={props.validator.contact2Surname}
           />
+
           <Form.String
             labelContent={x => x.pcrAddPartnerProjectContacts.labels.contactPhoneNumberHeading}
             hintContent={x => x.pcrAddPartnerProjectContacts.phoneNumberHint}
@@ -57,6 +78,7 @@ export const ProjectManagerDetailsStep = (props: PcrStepProps<PCRItemForPartnerA
             }}
             validation={props.validator.contact2Phone}
           />
+
           <Form.String
             labelContent={x => x.pcrAddPartnerProjectContacts.labels.contactEmailHeading}
             name="contact2Email"
@@ -68,8 +90,12 @@ export const ProjectManagerDetailsStep = (props: PcrStepProps<PCRItemForPartnerA
           />
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
-          <Form.Submit><ACC.Content value={x => x.pcrAddPartnerProjectContacts.pcrItem.submitButton}/></Form.Submit>
-          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerProjectContacts.pcrItem.returnToSummaryButton}/></Form.Button>
+          <Form.Submit>
+            <ACC.Content value={x => x.pcrAddPartnerProjectContacts.pcrItem.submitButton} />
+          </Form.Submit>
+          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
+            <ACC.Content value={x => x.pcrAddPartnerProjectContacts.pcrItem.returnToSummaryButton} />
+          </Form.Button>
         </Form.Fieldset>
       </Form.Form>
     </ACC.Section>

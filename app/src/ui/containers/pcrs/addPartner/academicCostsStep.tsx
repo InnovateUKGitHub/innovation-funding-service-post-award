@@ -12,6 +12,7 @@ import { EditorStatus } from "@ui/constants/enums";
 import { Pending } from "@shared/pending";
 import { PCRAcademicCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 import { Content, FormBuilder } from "@ui/components";
+import { MountedHoc } from "@ui/features";
 
 interface ContainerProps {
   costCategories: CostCategoryDto[];
@@ -73,23 +74,36 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
 
     return (
       <form.Fieldset headingContent={x => x.pcrAddPartnerAcademicCosts.costsSectionTitle}>
-        <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.costsGuidance}/></ACC.Renderers.SimpleString>
-        <Table.Table qa="costsTable" data={data}>
-          <Table.String
-            header={x => x.pcrAddPartnerAcademicCosts.categoryHeading}
-            qa="category"
-            value={x => x.costCategory.name}
-            footer={this.props.isClient && <ACC.Renderers.SimpleString className={"govuk-!-font-weight-bold"}><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.totalCosts}/></ACC.Renderers.SimpleString>}
-          />
-          <Table.Custom
-            header={x => x.pcrAddPartnerAcademicCosts.costHeading}
-            qa="cost-value"
-            classSuffix="numeric"
-            value={x => this.renderCost(x)}
-            width={30}
-            footer={this.props.isClient && <ACC.Renderers.Currency value={total}/>}
-          />
-        </Table.Table>
+        <ACC.Renderers.SimpleString>
+          <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.costsGuidance} />
+        </ACC.Renderers.SimpleString>
+
+        <MountedHoc>
+          {state => (
+            <Table.Table qa="costsTable" data={data}>
+              <Table.String
+                header={x => x.pcrAddPartnerAcademicCosts.categoryHeading}
+                qa="category"
+                value={x => x.costCategory.name}
+                footer={
+                  state.isClient && (
+                    <ACC.Renderers.SimpleString className={"govuk-!-font-weight-bold"}>
+                      <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.totalCosts} />
+                    </ACC.Renderers.SimpleString>
+                  )
+                }
+              />
+              <Table.Custom
+                header={x => x.pcrAddPartnerAcademicCosts.costHeading}
+                qa="cost-value"
+                classSuffix="numeric"
+                value={x => this.renderCost(x)}
+                width={30}
+                footer={state.isClient && <ACC.Renderers.Currency value={total} />}
+              />
+            </Table.Table>
+          )}
+        </MountedHoc>
       </form.Fieldset>
     );
   }

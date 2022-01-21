@@ -28,21 +28,21 @@ const NameChangeSummaryContainer = (
     <ACC.Section qa="name-change-summary">
       <ACC.SummaryList qa="name-change-summary-list">
         <ACC.SummaryListItem
-          labelContent={x => x.pcrNameChangeSummary.labels.exisitingName}
+          label={x => x.pcrNameChangeSummary.labels.exisitingName}
           content={pcrItem.partnerNameSnapshot}
           validation={validator.partnerId}
           qa="currentPartnerName"
           action={multiplePartnerProject && getEditLink("partnerNameStep", validator.partnerId)}
         />
         <ACC.SummaryListItem
-          labelContent={x => x.pcrNameChangeSummary.labels.proposedName}
+          label={x => x.pcrNameChangeSummary.labels.proposedName}
           content={pcrItem.accountName}
           validation={validator.accountName}
           qa="newPartnerName"
           action={getEditLink("partnerNameStep", validator.accountName)}
         />
         <ACC.SummaryListItem
-          labelContent={x => x.pcrNameChangeSummary.labels.certificate}
+          label={x => x.pcrNameChangeSummary.labels.certificate}
           content={
             documents.length > 0 ? (
               <ACC.DocumentList documents={documents} qa="documentsList" />

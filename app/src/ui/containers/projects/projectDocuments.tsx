@@ -18,7 +18,6 @@ interface ProjectDocumentData {
   project: Pending<ProjectDto>;
   documents: Pending<DocumentSummaryDto[]>;
   editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;
-  isClient: boolean;
 }
 
 interface CombinedData {

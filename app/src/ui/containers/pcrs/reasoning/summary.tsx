@@ -42,17 +42,17 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
         <ACC.Section>
           <ACC.SummaryList qa="pcr_reasoning">
             <ACC.SummaryListItem
-              labelContent={x => x.pcrReasoningSummary.labels.requestNumber}
+              label={x => x.pcrReasoningSummary.labels.requestNumber}
               content={pcr.requestNumber}
               qa="numberRow"
             />
             <ACC.SummaryListItem
-              labelContent={x => x.pcrReasoningSummary.labels.types}
+              label={x => x.pcrReasoningSummary.labels.types}
               content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.shortName)} />}
               qa="typesRow"
             />
             <ACC.SummaryListItem
-              labelContent={x => x.pcrReasoningSummary.labels.comments}
+              label={x => x.pcrReasoningSummary.labels.comments}
               content={
                 <ACC.Renderers.SimpleString multiline>{pcr.reasoningComments}</ACC.Renderers.SimpleString>
               }
@@ -67,7 +67,7 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
               }
             />
             <ACC.SummaryListItem
-              labelContent={x => x.pcrReasoningSummary.labels.files}
+              label={x => x.pcrReasoningSummary.labels.files}
               content={
                 documents.length ? (
                   <ACC.DocumentList documents={documents} qa="docs" />

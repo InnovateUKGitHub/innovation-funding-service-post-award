@@ -135,26 +135,26 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
           <ACC.SummaryList qa="project-information">
             {competitionName && (
               <ACC.SummaryListItem
-                labelContent={x => x.projectDetails.projectLabels.competitionNameLabel}
+                label={x => x.projectDetails.projectLabels.competitionNameLabel}
                 qa="competition-name"
                 content={<ACC.Renderers.SimpleString>{competitionName}</ACC.Renderers.SimpleString>}
               />
             )}
 
             <ACC.SummaryListItem
-              labelContent={x => x.projectDetails.projectLabels.competitionTypeLabel}
+              label={x => x.projectDetails.projectLabels.competitionTypeLabel}
               qa="competition-type"
               content={<ACC.Renderers.SimpleString>{project.competitionType}</ACC.Renderers.SimpleString>}
             />
 
             <ACC.SummaryListItem
-              labelContent={x => x.projectDetails.projectLabels.startDate}
+              label={x => x.projectDetails.projectLabels.startDate}
               qa="start-date"
               content={<ACC.Renderers.FullDate value={project.startDate} />}
             />
 
             <ACC.SummaryListItem
-              labelContent={x => x.projectDetails.projectLabels.endDate}
+              label={x => x.projectDetails.projectLabels.endDate}
               qa="end-date"
               content={<ACC.Renderers.FullDate value={isLoans ? project.loanEndDate : project.endDate} />}
             />
@@ -163,7 +163,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
               <>
                 <ACC.SummaryListItem
                   qa="availability-period"
-                  labelContent={x => x.projectDetails.projectLabels.loanAvailabilityPeriod}
+                  label={x => x.projectDetails.projectLabels.loanAvailabilityPeriod}
                   content={
                     <ACC.Renderers.SimpleString>
                       {getPlural("month", project.loanAvailabilityPeriodLength)}
@@ -172,7 +172,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                 />
                 <ACC.SummaryListItem
                   qa="extension-period"
-                  labelContent={x => x.projectDetails.projectLabels.loanExtensionPeriod}
+                  label={x => x.projectDetails.projectLabels.loanExtensionPeriod}
                   content={
                     <ACC.Renderers.SimpleString>
                       {getPlural("month", project.loanExtensionPeriodLength)}
@@ -181,7 +181,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                 />
                 <ACC.SummaryListItem
                   qa="repayment-period"
-                  labelContent={x => x.projectDetails.projectLabels.loanRepaymentPeriod}
+                  label={x => x.projectDetails.projectLabels.loanRepaymentPeriod}
                   content={
                     <ACC.Renderers.SimpleString>
                       {getPlural("month", project.loanRepaymentPeriodLength)}
@@ -192,13 +192,13 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
             ) : (
               <>
                 <ACC.SummaryListItem
-                  labelContent={x => x.projectDetails.projectLabels.duration}
+                  label={x => x.projectDetails.projectLabels.duration}
                   qa="duration"
                   content={getPlural("month", project.durationInMonths)}
                 />
 
                 <ACC.SummaryListItem
-                  labelContent={x => x.projectDetails.projectLabels.numberOfPeriods}
+                  label={x => x.projectDetails.projectLabels.numberOfPeriods}
                   qa="periods"
                   content={project.numberOfPeriods}
                 />
@@ -206,7 +206,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
             )}
 
             <ACC.SummaryListItem
-              labelContent={x => x.projectDetails.projectLabels.scope}
+              label={x => x.projectDetails.projectLabels.scope}
               qa="scope"
               content={<ACC.Renderers.SimpleString multiline>{project.summary}</ACC.Renderers.SimpleString>}
             />

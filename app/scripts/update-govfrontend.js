@@ -4,6 +4,8 @@ const fs = require("fs");
 
 const { minify } = require("terser");
 
+const govFrontendPackageJson = require(require.resolve("govuk-frontend/package.json"));
+
 async function minifyJS(content) {
   try {
     const output = await minify(content, { mangle: true, compress: { passes: 3 } });
@@ -38,9 +40,6 @@ async function copyFolder(from, to) {
 }
 
 async function createGovukStyles() {
-  // Get Sass directory to parse
-  const govFrontendPackageJson = require(require.resolve("govuk-frontend/package.json"));
-
   // Check location exists in newer versions
   if (!govFrontendPackageJson.sass) {
     throw Error("Cannot find the sass path to govuk-frontend");
@@ -78,9 +77,6 @@ async function createGovukStyles() {
 }
 
 async function getGovukMainScript() {
-  // Get Sass directory to parse
-  const govFrontendPackageJson = require(require.resolve("govuk-frontend/package.json"));
-
   // Check location exists in newer versions
   if (!govFrontendPackageJson.main) {
     throw Error("Cannot find the main JS path to govuk-frontend");
@@ -129,6 +125,30 @@ async function getGovukImagesAndFonts() {
   return Promise.resolve();
 }
 
+function deleteOldVersions() {
+  const publicDir = path.resolve(process.cwd(), "public");
+  const files = fs.readdirSync(publicDir);
+
+  if (files.length === 0) {
+    console.log("No old versions to delete!");
+    return;
+  }
+
+  for (const fileName of files) {
+    const pathToDelete = path.resolve(process.cwd(), "public", fileName);
+
+    const isFile = fs.lstatSync(pathToDelete).isFile();
+    const isGeneratedFile = fileName.includes("govuk-frontend");
+    const isNotCurrentVersion = !fileName.includes(govFrontendPackageJson.version);
+
+    const shouldDelete = isFile && isGeneratedFile && isNotCurrentVersion;
+
+    if (shouldDelete) {
+      fs.unlinkSync(pathToDelete);
+    }
+  }
+}
+
 async function updateGovukFrontend() {
   const workflowItems = [createGovukStyles(), getGovukMainScript(), getGovukImagesAndFonts()];
 
@@ -136,6 +156,9 @@ async function updateGovukFrontend() {
     await Promise.all(workflowItems);
   } catch (error) {
     console.log("updateGovukFrontend: There was an error", error);
+  } finally {
+    // Note: Tidy up old versions and remove them from the filesystem
+    deleteOldVersions();
   }
 }
 

@@ -1,33 +1,26 @@
 import React from "react";
 import cx from "classnames";
 
-export interface ListBaseProps {
+type ListItemAttr = React.HTMLAttributes<HTMLOListElement | HTMLUListElement>;
+
+export interface ListBaseProps extends ListItemAttr {
   children: React.ReactNode | React.ReactChild[];
-  className?: string;
   qa?: string;
 }
 
-const listOptions: Record<string, "ol" | "ul"> = {
-  number: "ol",
-  bullet: "ul",
-  plain: "ul",
+const listOptions: Record<string, ["ol" | "ul", string]> = {
+  number: ["ol", "govuk-list--number"],
+  bullet: ["ul", "govuk-list--bullet"],
+  plain: ["ul", "govuk-list--plain"],
 };
 export interface ListProps extends ListBaseProps {
   type?: keyof typeof listOptions;
 }
 
-export function List({ type, qa, className, ...rest }: ListProps) {
-  const Element = type ? listOptions[type] : "ul";
+export function List({ type, qa, className, ...props }: ListProps) {
+  const [Element = "ul", gdsStyle] = type ? listOptions[type] : [];
 
-  return (
-    <Element
-      {...rest}
-      data-qa={qa}
-      className={cx("govuk-list", className, {
-        [`govuk-list--${type}`]: type,
-      })}
-    />
-  );
+  return <Element {...props} data-qa={qa} className={cx("govuk-list", gdsStyle, className)} />;
 }
 
 export function UL(props: ListBaseProps & React.HTMLProps<HTMLUListElement>) {

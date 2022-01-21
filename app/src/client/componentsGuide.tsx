@@ -6,7 +6,7 @@ import { Content } from "@content/content";
 import { PageTitleState } from "@ui/redux/reducers/pageTitleReducer";
 import { Guide } from "@ui/componentsGuide/guide";
 
-import { TestBed, TestBedStore } from "@shared/TestBed";
+import { TestBed } from "@shared/TestBed";
 
 const exampleTitle: PageTitleState = {
   displayTitle: "Component guide example title",
@@ -28,6 +28,7 @@ const ClientGuide = () => {
     if (!query) return "";
 
     query = query.substring(1);
+
     return query
       .split("&")
       .map(x => {
@@ -41,15 +42,9 @@ const ClientGuide = () => {
       .map(x => x.value)[0];
   }
 
-  const clientStore = {
-    config: {
-      isClient: () => true,
-    } as TestBedStore["config"],
-  };
-
   return (
     <Provider store={store}>
-      <TestBed stores={clientStore} content={new Content()}>
+      <TestBed content={new Content()}>
         <Guide source="client" filter={getGuide()} />
       </TestBed>
     </Provider>

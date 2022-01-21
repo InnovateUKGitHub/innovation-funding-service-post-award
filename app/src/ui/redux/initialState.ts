@@ -10,7 +10,6 @@ export function setupInitialState(route: RouterState | undefined, user: IClientU
     data: {
     },
     loadStatus: 0,
-    isClient: false,
     config
   } as RootState;
 }

@@ -31,7 +31,6 @@ export interface PcrStepProps<TDto, TVal> extends IStepProps {
   onChange: (dto: TDto) => void;
   onSave: (skipToSummary?: boolean) => void;
   getRequiredToCompleteMessage: (additionalMessage?: string) => React.ReactNode;
-  isClient: boolean;
   routes: IRoutes;
   mode: "prepare" | "review" | "view";
 }

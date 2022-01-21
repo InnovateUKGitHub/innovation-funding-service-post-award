@@ -1,6 +1,5 @@
 import { render, fireEvent } from "@testing-library/react";
 
-import { TestBed, TestBedStore } from "@shared/TestBed";
 import { TextAreaInput, TextAreaInputProps } from "@ui/components/inputs/textAreaInput";
 import { defaultInputDebounceTimeout } from "@ui/components/inputs/baseInput";
 
@@ -9,18 +8,8 @@ describe("TextAreaInput", () => {
     name: "stub-name",
   };
 
-  const stubStore = {
-    config: {
-      isClient: () => true,
-    } as TestBedStore["config"],
-  };
-
   const setup = (props?: Partial<TextAreaInputProps>) => {
-    const rtl = render(
-      <TestBed stores={stubStore as TestBedStore}>
-        <TextAreaInput {...defaultProps} {...props} />
-      </TestBed>,
-    );
+    const rtl = render(<TextAreaInput {...defaultProps} {...props} />);
 
     const textarea = rtl.container.querySelector("textarea");
     if (!textarea) throw Error("No textarea was found");
@@ -102,9 +91,7 @@ describe("TextAreaInput", () => {
 
       rerender(
         // Note: setup() can't be used. The original instance is not available to be mutated (we have re-produce component + props)
-        <TestBed stores={stubStore as TestBedStore}>
-          <TextAreaInput {...defaultProps} value={updatedValue} />
-        </TestBed>,
+        <TextAreaInput {...defaultProps} value={updatedValue} />,
       );
 
       expect(textarea).toHaveValue(updatedValue);

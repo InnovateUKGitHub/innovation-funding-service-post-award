@@ -1,5 +1,4 @@
 import { useContent, useGovFrontend } from "@ui/hooks";
-import { UL } from "@ui/components/layout/list";
 
 import { GovWidthContainer } from "./GovWidthContainer";
 import { Logo } from "./Logo";
@@ -33,25 +32,19 @@ export function Header({ headingLink, menuItems }: HeaderProps) {
             {content.header.siteName}
           </a>
 
-          <button
-            type="button"
-            className="govuk-header__menu-button govuk-js-header-toggle"
-            aria-controls="navigation"
-            aria-label="Show or hide Top Level Navigation"
-            data-qa="mobile-nav-toggle"
-          >
-            {getContent(x => x.header.mobileNavigationLabel)}
-          </button>
-
           {!!menuItems?.length && (
-            <nav>
-              <UL
-                id="navigation"
-                className="govuk-header__navigation"
-                aria-label="Top Level Navigation"
-                data-qa="header-navigation"
-                aria-hidden={false}
+            <nav aria-label="Menu" className="govuk-header__navigation">
+              <button
+                type="button"
+                className="govuk-header__menu-button govuk-js-header-toggle"
+                aria-controls="navigation"
+                aria-label="Show or hide Top Level Navigation"
+                data-qa="mobile-nav-toggle"
               >
+                {getContent(x => x.header.mobileNavigationLabel)}
+              </button>
+
+              <ul id="navigation" className="govuk-header__navigation-list">
                 {menuItems.map(({ text, qa, ...props }) => (
                   <li key={text} className="govuk-header__navigation-item" data-qa="header-navigation-item">
                     <a {...props} className="govuk-header__link" data-qa={qa}>
@@ -59,7 +52,7 @@ export function Header({ headingLink, menuItems }: HeaderProps) {
                     </a>
                   </li>
                 ))}
-              </UL>
+              </ul>
             </nav>
           )}
         </div>

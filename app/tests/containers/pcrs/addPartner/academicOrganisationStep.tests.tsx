@@ -13,7 +13,10 @@ describe("<AcademicOrganisationStep />", () => {
 
   const getJesStub = jest.fn();
 
-  const setup = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => {
+  const setup = (
+    props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
+    isServer?: boolean,
+  ) => {
     const stubContent = {
       pcrAddPartnerAcademicOrganisation: {
         labels: {
@@ -64,7 +67,7 @@ describe("<AcademicOrganisationStep />", () => {
     } as any;
 
     return render(
-      <TestBed content={stubContent as TestBedContent} stores={stubStore as TestBedStore}>
+      <TestBed isServer={isServer} content={stubContent as TestBedContent} stores={stubStore as TestBedStore}>
         <AcademicOrganisationStep {...props} />
       </TestBed>,
     );
@@ -94,24 +97,28 @@ describe("<AcademicOrganisationStep />", () => {
 
     describe("with js disabled", () => {
       test("should display search button", () => {
-        const { queryByTestId } = setup({ ...stubProps, isClient: false });
+        const { queryByTestId } = setup(stubProps, true);
 
         const jsDisabledSearchButton = queryByTestId("button-search-jes-organisations");
+
         expect(jsDisabledSearchButton).toBeInTheDocument();
       });
     });
 
     test("search jes organisations", () => {
       jest.useFakeTimers();
+
       const { queryByTestId, getByTestId } = setup(stubProps);
 
       expect(queryByTestId("jesSearchResults")).not.toBeInTheDocument();
 
       const jesSearch = getByTestId("input-search-jes-organisations");
+
       act(() => {
         fireEvent.change(jesSearch, { target: { value: "test" } });
         jest.advanceTimersByTime(250);
       });
+
       expect(getByTestId("jesSearchResults")).toBeInTheDocument();
     });
   });

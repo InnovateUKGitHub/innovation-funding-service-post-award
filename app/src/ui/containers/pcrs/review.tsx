@@ -6,12 +6,9 @@ import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
-import {
-  PCRItemStatus,
-  PCRItemType,
-  PCRStatus
-} from "@framework/constants";
+import { PCRItemType, PCRStatus } from "@framework/constants";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
+import { getPcrItemTaskStatus } from "./utils/get-pcr-item-task-status";
 
 export interface PCRReviewParams {
   projectId: string;
@@ -138,7 +135,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
       <ACC.TaskListSection step={stepCount} title="Explain why you want to make the changes" qa="reasoning">
         <ACC.Task
           name="Reasoning for Innovate UK"
-          status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}
+          status={getPcrItemTaskStatus(projectChangeRequest.reasoningStatus)}
           route={this.props.routes.pcrReviewReasoning.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
         />
       </ACC.TaskListSection>
@@ -150,23 +147,11 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
     return (
       <ACC.Task
         name={item.typeName}
-        status={this.getTaskStatus(item.status)}
+        status={getPcrItemTaskStatus(item.status)}
         route={this.props.routes.pcrReviewItem.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
         validation={validationErrors}
       />
     );
-  }
-
-  private getTaskStatus(status: PCRItemStatus): "To do" | "Complete" | "Incomplete" {
-    switch (status) {
-      case PCRItemStatus.Complete:
-        return "Complete";
-      case PCRItemStatus.Incomplete:
-        return "Incomplete";
-      case PCRItemStatus.ToDo:
-      default:
-        return "To do";
-    }
   }
 
   private renderLog() {

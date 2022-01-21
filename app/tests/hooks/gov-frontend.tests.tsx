@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react-hooks";
 
 import { GDSModules, useGovFrontend } from "@ui/hooks";
-import { hookTestBed, TestBedStore } from "@shared/TestBed";
+import { hookTestBed } from "@shared/TestBed";
 
 describe("useGovFrontend()", () => {
   const stubGdsInit = jest.fn();
@@ -19,18 +19,10 @@ describe("useGovFrontend()", () => {
 
   beforeEach(jest.clearAllMocks);
 
-  const setup = (clientValue: boolean) => {
-    const stubStore = {
-      config: {
-        isClient: () => clientValue,
-      },
-    } as TestBedStore;
-
-    return renderHook(() => useGovFrontend("Header"), hookTestBed({ stores: stubStore }));
-  };
+  const setup = (isServer: boolean) => renderHook(() => useGovFrontend("Header"), hookTestBed({ isServer }));
 
   test("should call when a node is available", () => {
-    const { result } = setup(true);
+    const { result } = setup(false);
 
     result.current.setRef(stubElement);
 
@@ -41,12 +33,12 @@ describe("useGovFrontend()", () => {
 
   describe("should not invoke gds library", () => {
     test.each`
-      name                               | targetNode     | isClient
-      ${"with client with node as null"} | ${null}        | ${true}
-      ${"with server with node as null"} | ${null}        | ${false}
-      ${"with server with a valid node"} | ${stubElement} | ${false}
-    `("rendering $name", ({ targetNode, isClient }) => {
-      const { result } = setup(isClient);
+      name                               | targetNode     | isServer
+      ${"with client with node as null"} | ${null}        | ${false}
+      ${"with server with node as null"} | ${null}        | ${true}
+      ${"with server with a valid node"} | ${stubElement} | ${true}
+    `("rendering $name", ({ targetNode, isServer }) => {
+      const { result } = setup(isServer);
 
       result.current.setRef(targetNode);
 

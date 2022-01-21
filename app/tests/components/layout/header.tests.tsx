@@ -42,22 +42,23 @@ describe("Header", () => {
       expect(siteLink).toHaveAttribute("href", stubHeadingLink);
     });
 
-    it("should return mobile navigation label", () => {
-      const { queryByText } = setup();
-
-      const mobileNavigationLabel = queryByText(stubContent.header.mobileNavigationLabel.content);
-
-      expect(mobileNavigationLabel).toBeInTheDocument();
-    });
-
     describe("with required elements", () => {
-      test.each`
-        name                        | qa
-        ${"with logo"}              | ${"logo"}
-        ${"with mobile-nav-toggle"} | ${"mobile-nav-toggle"}
-      `("$name", ({ qa }) => {
+      it("with logo", () => {
         const { queryByTestId } = setup();
-        expect(queryByTestId(qa)).toBeInTheDocument();
+
+        expect(queryByTestId("logo")).toBeInTheDocument();
+      });
+
+      it("with mobile toggle and label", () => {
+        // No items no menu or toggle is shown
+        const stubMenuItems = getStubItems(1);
+        const { queryByTestId, queryByText } = setup({ menuItems: stubMenuItems });
+
+        const mobileNavigationLabel = queryByText(stubContent.header.mobileNavigationLabel.content);
+
+        expect(mobileNavigationLabel).toBeInTheDocument();
+
+        expect(queryByTestId("mobile-nav-toggle")).toBeInTheDocument();
       });
     });
 

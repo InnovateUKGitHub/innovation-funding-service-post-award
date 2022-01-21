@@ -1,1 +1,1 @@
-export const removeSpaces = (value: string, replacementValue = "") => value.replace(/\s/g, replacementValue);
+export const removeSpaces = (value: string, replacementValue = "") => value.trim().replace(/\s/g, replacementValue);

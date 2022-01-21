@@ -11,5 +11,8 @@ build/
 test-report.html
 .idea
 
+# System Defaults
+.DS_Store
+
 # Generated files
 /dashboard/

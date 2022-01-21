@@ -188,7 +188,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
   private renderForecastItem(pendingForecastData: Pending<ACC.Claims.ForecastData>) {
     return (
-      <ACC.AccordionItem titleContent={x => x.claimDetails.labels.forecastAccordionTitle} qa="forecast-accordion">
+      <ACC.AccordionItem title={x => x.claimDetails.labels.forecastAccordionTitle} qa="forecast-accordion">
         <ACC.Loader
           pending={pendingForecastData}
           render={(forecastData) => (
