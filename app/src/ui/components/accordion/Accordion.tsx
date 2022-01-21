@@ -1,48 +1,72 @@
 import React, { useState } from "react";
 
-import { useIsClient } from "@ui/hooks";
-import { AccordionForceOptions, AccordionProvider, IAccordionContext } from "./accordion-context";
+import { useMounted } from "@ui/features";
 import { AccordionControls } from "./AccordionControls";
-import { AccordionItem } from "./AccordionItem";
+import { AccordionItem, AccordionItemProps } from "./AccordionItem";
+
+type AccordionNodes = React.ReactElement<AccordionItemProps>;
+
+// Note: Consumers using ternarys or shortcuts will hit type errors 'React.Children.toArray' removes falsy values
+type ConsumerAccordionNodes = AccordionNodes | false | null;
 
 export interface AccordionProps {
-  children: React.ReactNode;
+  children: ConsumerAccordionNodes | ConsumerAccordionNodes[];
   qa?: string;
 }
 
+type AccordionState = Map<number, boolean>;
 export function Accordion({ qa, children }: AccordionProps) {
-  const jsEnabled = useIsClient();
-  const [forceIsOpen, setForceState] = useState<AccordionForceOptions>(null);
-  const [openCount, setOpenCount] = useState<number>(0);
-  const [subscribedCount, setSubscribedCount] = useState<number>(0);
+  const { isClient } = useMounted();
 
-  const isAllOpen = subscribedCount === openCount;
+  const accordionItems = React.Children.toArray(children) as AccordionNodes[];
 
-  const subscribe = () => setSubscribedCount((state) => state + 1);
+  const [state, setState] = useState<AccordionState>(() => {
+    const initialState = new Map();
 
-  const handleClick = () => {
-    setForceState(!isAllOpen);
-    setOpenCount(isAllOpen ? 0 : subscribedCount);
-  };
+    accordionItems.forEach((_, nodeIndex) => initialState.set(nodeIndex, false));
 
-  const toggle = (isOpen: boolean) => {
-    setForceState(null);
-    setOpenCount((state) => (isOpen ? state + 1 : state - 1));
-  };
+    return initialState;
+  });
 
-  const context: IAccordionContext = {
-    forceIsOpen,
-    subscribe,
-    toggle,
-  };
+  const toggleAllNodes = React.useCallback((openAllNodes: boolean) => {
+    const newState = new Map();
+
+    setState(currentState => {
+      const currentStateKeys = [...currentState.keys()];
+
+      currentStateKeys.forEach((_, nodeIndex) => newState.set(nodeIndex, openAllNodes));
+
+      return newState;
+    });
+  }, []);
+
+  const handleNode = React.useCallback((uid: number, newState: boolean) => {
+    setState(x => new Map(x.set(uid, newState)));
+  }, []);
+
+  const isAllNodesOpen: boolean = [...state.values()].every(Boolean);
 
   const qaValue = qa ? qa + "-accordion-container" : "accordion-container";
 
   return (
     <div className="govuk-accordion" data-qa={qaValue}>
-      {jsEnabled && <AccordionControls isOpen={isAllOpen} onClick={handleClick} />}
+      {isClient ? (
+        <>
+          <AccordionControls isOpen={isAllNodesOpen} onClick={toggleAllNodes} />
 
-      <AccordionProvider value={context}>{children}</AccordionProvider>
+          {React.Children.map(accordionItems, (node, nodeIndex) => {
+            const isOpen = state.get(nodeIndex);
+
+            return React.cloneElement(node, {
+              ...node.props,
+              isOpen,
+              onClick: () => handleNode(nodeIndex, !isOpen),
+            });
+          })}
+        </>
+      ) : (
+        accordionItems
+      )}
     </div>
   );
 }

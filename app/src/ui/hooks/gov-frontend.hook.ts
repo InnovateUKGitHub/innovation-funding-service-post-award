@@ -1,5 +1,6 @@
-import { useStores } from "@ui/redux";
 import { useCallback } from "react";
+
+import { useMounted } from "@ui/features";
 
 // Note: There is no available interface for this module, this is an interim type
 type GDSModule = new (node: HTMLElement) => {
@@ -24,9 +25,9 @@ type WindowWithGDSLoaded = typeof window & {
 };
 
 export function useGovFrontend(module: keyof GDSModules) {
-  const { config } = useStores();
+  const { isClient } = useMounted();
 
-  const hasGovFrontendLoaded: boolean = config.isClient() ? "GOVUKFrontend" in window : false;
+  const hasGovFrontendLoaded: boolean = isClient ? "GOVUKFrontend" in window : false;
   const govFrontend = hasGovFrontendLoaded ? (window as WindowWithGDSLoaded).GOVUKFrontend : null;
 
   const setRef = useCallback(

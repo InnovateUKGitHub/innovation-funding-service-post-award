@@ -148,7 +148,7 @@ export function FinancialVirementSummaryComponent({ mode, ...props }: FinancialV
                   <ACC.SummaryList qa="pcr_financial-virement">
                     <ACC.SummaryListItem
                       qa="grantValueYearEnd"
-                      labelContent={x => x.financialVirementSummary.grantValueMovingOverHeading}
+                      label={x => x.financialVirementSummary.grantValueMovingOverHeading}
                       content={<ACC.Renderers.Currency value={props.pcrItem.grantMovingOverFinancialYear} />}
                     />
                   </ACC.SummaryList>

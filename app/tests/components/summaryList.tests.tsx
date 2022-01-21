@@ -1,8 +1,15 @@
-import { SummaryList, SummaryListItem, SummaryListProps } from "@ui/components/summaryList";
 import { render } from "@testing-library/react";
 
+import { TestBed } from "@shared/TestBed";
+import { SummaryList, SummaryListItem, SummaryListProps } from "@ui/components/summaryList";
+
 describe("<SummaryList />", () => {
-  const setup = (props: SummaryListProps) => render(<SummaryList {...props} />);
+  const setup = (props: SummaryListProps) =>
+    render(
+      <TestBed>
+        <SummaryList {...props} />
+      </TestBed>,
+    );
 
   describe("@returns", () => {
     it("without borders", () => {

@@ -3,14 +3,15 @@ import classNames from "classnames";
 type ParagraphAttributes = React.HTMLAttributes<HTMLParagraphElement>;
 
 interface SimpleStringProps extends ParagraphAttributes {
+  as?: "p" | "span" | "div";
   qa?: string;
   multiline?: boolean;
   bold?: boolean;
 }
 
-export function SimpleString({ qa, className, multiline, bold, ...props }: SimpleStringProps) {
+export function SimpleString({ as: Element = "p", qa, className, multiline, bold, ...props }: SimpleStringProps) {
   return (
-    <p
+    <Element
       {...props}
       data-qa={qa}
       className={classNames(className, "govuk-body", {

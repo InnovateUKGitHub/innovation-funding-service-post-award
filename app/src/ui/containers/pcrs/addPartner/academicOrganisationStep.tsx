@@ -8,6 +8,7 @@ import { Pending } from "@shared/pending";
 import { useCallback, useState } from "react";
 import { noop } from "@ui/helpers/noop";
 import { useContent } from "@ui/hooks";
+import { useMounted } from "@ui/features";
 import { Section, ValidationMessage } from "@ui/components";
 import { JesSearchResults } from "./jesSearchResults";
 
@@ -18,6 +19,7 @@ export const AcademicOrganisationStep = (
 
   const { accounts } = useStores();
   const { getContent } = useContent();
+  const { isServer } = useMounted();
 
   const [searchInputValue, setSearchInputValue] = useState<string>("");
   const [currentSelectedOption, setCurrentSelectedOption] = useState<AccountDto>();
@@ -69,7 +71,8 @@ export const AcademicOrganisationStep = (
             value={() => searchInputValue}
             update={(_, searchValue) => setSearchInputValue(searchValue?.trim() || "")}
           />
-          {!props.isClient && (
+
+          {isServer && (
             <Form.Button qa="button-search-jes-organisations" styling="Primary" name="jesOrganisationSearch">
               {getContent(x => x.pcrAddPartnerAcademicOrganisation.labels.searchButton)}
             </Form.Button>

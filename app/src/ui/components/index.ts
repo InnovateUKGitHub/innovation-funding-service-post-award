@@ -32,6 +32,7 @@ export * from "./partners";
 export * from "./styledButton";
 export * from "./summaryList";
 export * from "./table";
+export * from "./Tag";
 export * from "./taskList";
 export * from "./validationError";
 export * from "./validationMessage";

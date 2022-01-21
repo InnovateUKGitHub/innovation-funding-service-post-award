@@ -25,6 +25,7 @@ import { sectionPanelGuide } from "./sectionPanelGuide";
 import { summaryListGuide } from "./summaryListGuide";
 import { tableGuide } from "./tableGuide";
 import { taskListGuide } from "./taskListGuide";
+import { tagGuide } from "./tagGuide";
 import { textHint } from "./textHintGuide";
 import { validationErrorGuide } from "./validationErrorGuide";
 import { validationMessageGuide } from "./validationMessageGuide";
@@ -37,6 +38,7 @@ import { readonlyLabel } from "@ui/componentsGuide/readonlyLabelGuide";
 import { IGuide } from "@framework/types";
 import { GovWidthContainer, UL } from "@ui/components";
 import { textareaInputGuide } from "./textareaInputGuide";
+import { SimpleString } from "@ui/components/renderers";
 
 const guides: IGuide[] = [
   accordionGuide,
@@ -67,6 +69,7 @@ const guides: IGuide[] = [
   summaryListGuide,
   tableGuide,
   taskListGuide,
+  tagGuide,
   textHint,
   validationMessageGuide,
   validationErrorGuide,
@@ -123,10 +126,11 @@ export const Guide: React.FunctionComponent<GuideProps> = props => {
                     <div className="govuk-!-margin-bottom-9" key={`component-option-${originalIndex}-${optionIndex}`}>
                       <h3 className="govuk-heading-s">{option.name}</h3>
                       <div style={{ padding: "5px", border: "dashed grey 1px" }}>
-                        <p className="govuk-body">
+                        <SimpleString>
                           <i>{option.comments}</i>
-                        </p>
-                        <div style={{ backgroundColor: "lightGrey" }}>
+                        </SimpleString>
+
+                        <div style={{ backgroundColor: "lightGrey", overflowX: "auto" }}>
                           <pre>{option.example}</pre>
                         </div>
                         <div style={{ background: "white" }}>{option.render()}</div>

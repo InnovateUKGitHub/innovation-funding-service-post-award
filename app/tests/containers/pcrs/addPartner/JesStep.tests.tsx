@@ -115,7 +115,6 @@ describe("<JesStepUI />", () => {
       onChange: jest.fn(),
       onSave: jest.fn(),
       getRequiredToCompleteMessage: jest.fn(),
-      isClient: true,
       routes: {} as any,
       mode: "prepare",
     };

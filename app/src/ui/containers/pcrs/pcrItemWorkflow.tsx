@@ -257,13 +257,13 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
       project,
       validator,
       status,
-      isClient: this.props.isClient,
       routes: this.props.routes,
       mode,
       onChange: itemDto => this.onChange(editor.data, itemDto),
       onSave: skipToSummary => this.onSave(workflow, editor.data, skipToSummary),
       getRequiredToCompleteMessage: message => {
         const standardMessage = "This is required to complete this request.";
+
         if (message) {
           return (
             <span>
@@ -273,6 +273,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
             </span>
           );
         }
+
         return standardMessage;
       },
     };
@@ -312,7 +313,6 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
       getViewLink: stepName => this.getViewLink(workflow, stepName),
       mode,
       config: this.props.config,
-      isClient: this.props.isClient,
       messages: this.props.messages,
       route: this.props.route,
       routes: this.props.routes,

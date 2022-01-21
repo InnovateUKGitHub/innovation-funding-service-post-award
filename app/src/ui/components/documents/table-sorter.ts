@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 
-import { useIsClient } from "@ui/hooks";
+import { useMounted } from "@ui/features";
 import { dateComparator, numberComparator, stringComparator } from "@framework/util";
 import { devLogger } from "@ui/helpers/dev-logger";
 
@@ -49,7 +49,7 @@ interface ColumnSortState {
 const initialSortState: SortOptions = "none";
 
 export function useTableSorter(sortKeys: TableSortKey[], tableRows: any[]) {
-  const isClient = useIsClient();
+  const { isServer } = useMounted();
   const [sortColumn, setSortColumn] = useState<ColumnSortState>({ sortDirection: initialSortState });
 
   const sortedRows = useMemo(() => sortRowsFromKey(sortColumn, tableRows), [sortColumn, tableRows]);
@@ -57,7 +57,7 @@ export function useTableSorter(sortKeys: TableSortKey[], tableRows: any[]) {
   const handleSort = (clickedIndex: number): void => {
     const sortKey = sortKeys[clickedIndex];
 
-    if (!isClient || !sortKey) return;
+    if (isServer || !sortKey) return;
 
     setSortColumn(currentState => {
       const isDifferentSortKey = currentState.sortKey !== sortKey;
@@ -74,7 +74,7 @@ export function useTableSorter(sortKeys: TableSortKey[], tableRows: any[]) {
   const getColumnOption = (columnIndex: number): SortOptions | undefined => {
     const sortKey = sortKeys[columnIndex];
 
-    if (!isClient || !sortColumn || !sortKey) return undefined;
+    if (isServer || !sortColumn || !sortKey) return undefined;
 
     return sortColumn.sortKey === sortKey ? sortColumn.sortDirection : "none";
   };

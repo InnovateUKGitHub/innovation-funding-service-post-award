@@ -2,7 +2,7 @@ import React, { cloneElement } from "react";
 import cx from "classnames";
 
 import { H3, H4 } from "@ui/components";
-import { Currency, FullDate, FullDateTime, Percentage } from "@ui/components/renderers";
+import { Currency, FullDate, FullDateTime, Percentage, SimpleString } from "@ui/components/renderers";
 
 interface InternalFieldProps<T> {
   label: React.ReactNode;
@@ -149,7 +149,7 @@ function CustomField<T extends {}>(props: ExternalFieldProps<T, React.ReactEleme
 function StringOrNumberField<T extends {}, Value extends string | number>(props: ExternalFieldProps<T, Value>) {
   const TypedField = FieldComponent as new () => FieldComponent<T>;
 
-  return <TypedField {...props}>{item => <p className="govuk-body">{props.value(item)}</p>}</TypedField>;
+  return <TypedField {...props}>{item => <SimpleString>{props.value(item)}</SimpleString>}</TypedField>;
 }
 
 function MultilineStringField<T extends {}>(props: ExternalFieldProps<T, string>) {
@@ -160,9 +160,9 @@ function MultilineStringField<T extends {}>(props: ExternalFieldProps<T, string>
     <TypedField {...props}>
       {item =>
         splitString(props.value(item)).map((line, index) => (
-          <p className="govuk-body" key={index}>
+          <SimpleString key={index}>
             {line}
-          </p>
+          </SimpleString>
         ))
       }
     </TypedField>
@@ -175,9 +175,9 @@ function DateField<T extends {}>(props: ExternalFieldProps<T, Date>) {
   return (
     <TypedField {...props}>
       {item => (
-        <p className="govuk-body">
+        <SimpleString>
           <FullDate value={props.value(item)} />
-        </p>
+        </SimpleString>
       )}
     </TypedField>
   );
@@ -189,9 +189,9 @@ function DateTimeField<T extends {}>(props: ExternalFieldProps<T, Date>) {
   return (
     <TypedField {...props}>
       {item => (
-        <p className="govuk-body">
+        <SimpleString>
           <FullDateTime value={props.value(item)} />
-        </p>
+        </SimpleString>
       )}
     </TypedField>
   );
@@ -205,9 +205,9 @@ function CurrencyField<T extends {}>(props: CurrencyFieldProps<T>) {
   return (
     <TypedField {...props}>
       {item => (
-        <p className="govuk-body">
+        <SimpleString>
           <Currency fractionDigits={props.fractionDigits} value={props.value(item)} />
-        </p>
+        </SimpleString>
       )}
     </TypedField>
   );
@@ -221,9 +221,9 @@ function PercentageField<T extends {}>(props: PercentageFieldProps<T>) {
   return (
     <TypedField {...props}>
       {item => (
-        <p className="govuk-body">
+        <SimpleString>
           <Percentage fractionDigits={props.fractionDigits} value={props.value(item)} />
-        </p>
+        </SimpleString>
       )}
     </TypedField>
   );

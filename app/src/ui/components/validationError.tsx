@@ -16,7 +16,10 @@ const alignTextLeftStyle: React.CSSProperties = {
   textAlign: "left",
 };
 
-const prepareMessage = (overrideMessage: string | null | undefined, errorMessage: string | null | undefined): React.ReactNode => {
+const prepareMessage = (
+  overrideMessage: string | null | undefined,
+  errorMessage: string | null | undefined,
+): React.ReactNode => {
   if (overrideMessage) {
     return overrideMessage;
   }
@@ -32,9 +35,7 @@ const prepareMessage = (overrideMessage: string | null | undefined, errorMessage
       }
       result.push(current);
       return result;
-    },
-      []
-    );
+    }, []);
   }
 
   return null;
@@ -49,17 +50,28 @@ export const ValidationError: React.FunctionComponent<Props> = ({ error, hideMes
   // if nested there are the results and summary errors to add as well
   const children = error instanceof NestedResult ? (error as NestedResult<Results<{}>>).results : [];
   const associated = error instanceof NestedResult ? (error as NestedResult<Results<{}>>).listValidation : null;
-  const validations = children.filter(x => !x.isValid && x.showValidationErrors).map(x => x.errors).reduce((a, b) => a.concat(b), []);
+  const validations = children
+    .filter(x => !x.isValid && x.showValidationErrors)
+    .map(x => x.errors)
+    .reduce((a, b) => a.concat(b), []);
 
   if (associated && !associated.isValid && associated.showValidationErrors) {
     validations.push(associated);
   }
+
   validations.push(error);
 
   return (
     <>
-      {validations.map((r) => <ValidationErrorAnchor result={r} key={r.key} />)}
-      {!hideMessage ? <span style={alignTextLeftStyle} className="govuk-error-message">{prepareMessage(overrideMessage, error.errorMessage)}</span> : null}
+      {validations.map(r => (
+        <ValidationErrorAnchor key={r.key} result={r} />
+      ))}
+
+      {!hideMessage && (
+        <p style={alignTextLeftStyle} className="govuk-error-message">
+          {prepareMessage(overrideMessage, error.errorMessage)}
+        </p>
+      )}
     </>
   );
 };

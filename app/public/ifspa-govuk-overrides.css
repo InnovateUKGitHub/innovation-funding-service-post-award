@@ -67,7 +67,6 @@ body,
   background: #dee0e2;
 }
 
-.govuk-summary-list__row.govuk-summary-list__row--error,
 .govuk-table__row.table__row--error,
 .govuk-table__row.table__row--info,
 .govuk-table__row.table__row--warning {
@@ -83,21 +82,10 @@ body,
   border-left: 5px solid #005ea5;
 }
 
-.govuk-table__row.table__row--error,
-.govuk-summary-list__row.govuk-summary-list__row--error {
+.govuk-table__row.table__row--error {
   border-left: 5px solid #b10e1e;
 }
-.govuk-summary-list {
-  border-collapse: collapse;
-}
 
-.govuk-summary-list .govuk-link {
-  font: inherit;
-  padding: 0px;
-}
-
-.govuk-summary-list__row.govuk-summary-list__row--error dt:first-child,
-.govuk-summary-list__row.govuk-summary-list__row--error dd:first-child,
 .govuk-table__row.table__row--error td:first-child,
 .govuk-table__row.table__row--error th:first-child,
 .govuk-table__row.table__row--info td:first-child,
@@ -136,6 +124,22 @@ body,
 
 .acc-table__cell-top-border {
   border-top: black 3px solid;
+}
+
+/* Summary List */
+.govuk-summary-list {
+  border-collapse: collapse;
+}
+
+/* Summary List - IFS-PA Custom styles */
+.summary-list__row--error {
+  border-left: 5px solid #b10e1e;
+  background: #f8f8f8;
+}
+
+.summary-list__row--error dt:first-child,
+.summary-list__row--error dd:first-child {
+  padding-left: 1%;
 }
 
 /* Table Sort button Styles */
@@ -607,10 +611,6 @@ button.govuk-link:focus {
     margin-bottom: 0;
     font-weight: bold;
   }
-}
-
-.app-task-list__task-action--completed {
-  color: #00703c;
 }
 
 .claim-table-cell--error {

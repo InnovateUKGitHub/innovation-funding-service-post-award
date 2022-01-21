@@ -3,7 +3,6 @@ import { renderHook, act } from "@testing-library/react-hooks";
 
 import { hookTestBed, TestBedContent } from "@shared/TestBed";
 import { TableSortKey, SortOptions, useTableSorter } from "@ui/components/documents/table-sorter";
-import * as hooksModule from "@ui/hooks";
 
 describe("useTableSorter()", () => {
   const stubTableData = [
@@ -49,16 +48,11 @@ describe("useTableSorter()", () => {
 
   const stubContent = {};
 
-  const setup = (sortKeys: TableSortKey[], tableRows: any[], isClient = true) => {
-    jest.spyOn(hooksModule, "useIsClient").mockReturnValue(isClient);
-
-    return renderHook(
+  const setup = (sortKeys: TableSortKey[], tableRows: any[], isServer?: boolean) =>
+    renderHook(
       () => useTableSorter(sortKeys, tableRows),
-      hookTestBed({ content: stubContent as TestBedContent }),
+      hookTestBed({ isServer, content: stubContent as TestBedContent }),
     );
-  };
-
-  beforeEach(jest.clearAllMocks);
 
   describe("@returns", () => {
     // Note: the easiest way of checking the change has occurred is to check the unique id against values that change
@@ -257,7 +251,7 @@ describe("useTableSorter()", () => {
       });
 
       test("when server rendered (non-js)", () => {
-        const { result } = setup(stubNoColumnsSorted, stubTableData, false);
+        const { result } = setup(stubNoColumnsSorted, stubTableData, true);
 
         expect(_isEqual(result.current.sortedRows, stubTableData)).toBeTruthy();
       });

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 // Note: This is not latest as there is bug with the latest version https://github.com/krisk/Fuse/issues/469#issuecomment-862956883
 import Fuse from "fuse.js";
 
-import { useIsClient } from "@ui/hooks";
+import { useMounted } from "@ui/features";
 import { useStores } from "@ui/redux";
 import { formatDate, getFileSize } from "@framework/util";
 import { DateFormat } from "@framework/constants/enums";
@@ -49,16 +49,16 @@ const filterItems = (valueToSearch: string, items: DocumentsBase["documents"]) =
 
 export function useDocumentSearch(disableSearch: boolean, originalDocuments: DocumentsBase["documents"]) {
   const { features } = useStores().config.getConfig();
-  const isJsEnabled = useIsClient();
+  const { isClient } = useMounted();
 
   const [filterValue, setFilterValue] = useState<string>("");
   const [documents, setDocuments] = useState<DocumentsBase["documents"]>(originalDocuments);
 
   const minDocsForSearch = originalDocuments.length >= features.searchDocsMinThreshold;
-  const enableFilter = isJsEnabled && !disableSearch;
+  const enableFilter = isClient && !disableSearch;
   const hasDocuments = documents.length > 0;
 
-  const displaySearch = !disableSearch && isJsEnabled && minDocsForSearch;
+  const displaySearch = !disableSearch && isClient && minDocsForSearch;
 
   useEffect(() => {
     if (!enableFilter) return;

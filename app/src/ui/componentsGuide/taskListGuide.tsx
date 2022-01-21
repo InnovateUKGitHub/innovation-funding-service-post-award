@@ -26,6 +26,11 @@ export const taskListGuide: IGuide = {
                   status="Complete"
                   route={HomeRoute.getLink({})}
                 />
+                <Task 
+                  name="View rationale" 
+                  status="Incomplete" 
+                  route={HomeRoute.getLink({})}
+                />
                 <Task
                   name="View reasoning"
                   status="To do"
@@ -47,8 +52,10 @@ export const taskListGuide: IGuide = {
             <OL className="app-task-list">
               <TaskListSection step={1} title={"Scope Change"}>
                 <Task name="View files" status="Complete" route={HomeRoute.getLink({})} />
+                <Task name="View rationale" status="Incomplete" route={HomeRoute.getLink({})} />
                 <Task name="View reasoning" status="To do" route={HomeRoute.getLink({})} />
               </TaskListSection>
+
               <TaskListSection step={2} title={"Partner change"}>
                 <Task name="View files" status="To do" route={HomeRoute.getLink({})} />
               </TaskListSection>

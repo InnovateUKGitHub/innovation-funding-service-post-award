@@ -9,7 +9,6 @@ interface ProjectStatusCheckProps {
 
 /**
  * @description Adds context tree if projectId is available, all nested routes will be aware of the project status
- * @deprecated Refactor and consume useProjectStatusCheck() when App is a functional component
  */
 export function ProjectStatusCheck({ projectId, overrideAccess, ...props }: ProjectStatusCheckProps) {
   const statusValue = useProjectStatusCheck(projectId, overrideAccess);

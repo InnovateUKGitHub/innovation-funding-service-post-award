@@ -31,8 +31,6 @@ export function renderHtml(html: string, htmlTitle: string, preloadedState: any 
           <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
       </head>
       <body class="govuk-template__body">
-          <a href="#main-content" class="govuk-skip-link">Skip to main content</a>
-
           <div id="root">${html}</div>
 
           ${renderJSGoogleTagManager(configuration.googleTagManagerCode, nonce)}

@@ -5,7 +5,7 @@ import { useStores } from "@ui/redux";
  *
  * Notice this is not invoked within any react hooks, these DO NOT RUN on SSR (Server Side Request)
  */
-export function useAppMount(projectId?: string): void {
+export function useAppMount(projectId: string | undefined): void {
   const stores = useStores();
 
   if (projectId) {

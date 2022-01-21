@@ -6,6 +6,7 @@ import { useStores } from "@ui/redux";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { EditorStatus } from "@ui/constants/enums";
 import { useContent } from "@ui/hooks";
+import { useMounted } from "@ui/features";
 import { noop } from "@ui/helpers/noop";
 import * as ACC from "@ui/components";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
@@ -17,6 +18,7 @@ type CompaniesHouseStepProps = PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
 export function CompaniesHouseStep({ pcrItem: originalPayload, ...props }: CompaniesHouseStepProps) {
   const { companies } = useStores();
   const { getContent } = useContent();
+  const { isServer } = useMounted();
 
   const [searchInputValue, setSearchInputValue] = useState<string>();
   const [formData, setFormData] = useState<PCRItemForPartnerAdditionDto>(originalPayload);
@@ -58,7 +60,7 @@ export function CompaniesHouseStep({ pcrItem: originalPayload, ...props }: Compa
             update={(_, searchValue) => setSearchInputValue(searchValue?.trim() || "")}
           />
 
-          {!props.isClient && (
+          {isServer && (
             <Form.Button styling="Primary" name="companiesHouseSearch">
               {getContent(x => x.pcrAddPartnerCompanyHouse.searchButton)}
             </Form.Button>

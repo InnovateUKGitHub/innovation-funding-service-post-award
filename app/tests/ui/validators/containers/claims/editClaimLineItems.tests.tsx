@@ -119,32 +119,31 @@ const stubProps = {
     data: {},
     state: LoadingStatus.Done,
   } as Pending<DocumentSummaryDto[]>,
-  isClient: true
 } as ContainerProps<EditClaimDetailsParams, EditClaimLineItemsData, EditClaimLineItemsCallbacks>;
 
 describe("editClaimLineItems", () => {
   const setup = (
     props: ContainerProps<EditClaimDetailsParams, EditClaimLineItemsData, EditClaimLineItemsCallbacks>,
-  ) => {
-    return render(
-      <TestBed content={contentStub as TestBedContent}>
+    isServer?: boolean,
+  ) =>
+    render(
+      <TestBed isServer={isServer} content={contentStub as TestBedContent}>
         <EditClaimLineItemsComponent {...props} />
       </TestBed>,
     );
-  };
 
   describe("@renders", () => {
     describe("@content solution", () => {
       test("with editClaimLineItemCurrencyGbp", () => {
         const stubMessage = contentStub.claimDocuments.messages.editClaimLineItemCurrencyGbp.content;
-        const { queryByText } = setup(stubProps);
+        const { queryByText } = setup(stubProps, false);
 
         expect(queryByText(stubMessage)).toBeInTheDocument();
       });
 
       test("with nonJsEditClaimLineItemCurrencyGbp", () => {
         const stubMessage = contentStub.claimDocuments.messages.nonJsEditClaimLineItemCurrencyGbp.content;
-        const { queryByText } = setup({ ...stubProps, isClient: false });
+        const { queryByText } = setup(stubProps, true);
 
         expect(queryByText(stubMessage)).toBeInTheDocument();
       });

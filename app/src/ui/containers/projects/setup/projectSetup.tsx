@@ -59,10 +59,11 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
             <ACC.Content value={x => x.projectSetup.projectMessages.setupGuidance} />
           </ACC.Renderers.SimpleString>
         </ACC.Section>
+
         <ACC.UL qa="taskList">
-          <ACC.TaskListSection titleContent={x => x.projectSetup.taskList.sectionTitleEnterInfo} qa="WhatDoYouWantToDo">
+          <ACC.TaskListSection title={x => x.projectSetup.taskList.sectionTitleEnterInfo} qa="WhatDoYouWantToDo">
             <ACC.Task
-              nameContent={x => x.projectSetup.setSpendProfile}
+              name={x => x.projectSetup.setSpendProfile}
               status={partner.spendProfileStatusLabel as ACC.TaskStatus}
               route={this.props.routes.projectSetupSpendProfile.getLink({
                 partnerId: partner.id,
@@ -70,14 +71,16 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
               })}
               validation={[editor.validator.spendProfileStatus]}
             />
+
             <ACC.Task
-              nameContent={x => x.projectSetup.provideBankDetails}
+              name={x => x.projectSetup.provideBankDetails}
               status={partner.bankDetailsTaskStatusLabel as ACC.TaskStatus}
               route={this.getBankDetailsLink(partner)}
               validation={[editor.validator.bankDetailsTaskStatus]}
             />
+
             <ACC.Task
-              nameContent={x => x.projectSetup.providePostcode}
+              name={x => x.projectSetup.providePostcode}
               status={this.isPostcodeComplete(partner.postcode)}
               route={this.props.routes.projectSetupPostcode.getLink({
                 projectId: this.props.projectId,
@@ -87,6 +90,7 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
             />
           </ACC.TaskListSection>
         </ACC.UL>
+
         <Form.Form
           data={partner}
           editor={editor}

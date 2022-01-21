@@ -4,9 +4,10 @@ import { getAuthRoles, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { StoresConsumer } from "@ui/redux";
-import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants";
+import { PCRItemType, PCRStatus } from "@framework/constants";
 import * as ACC from "../../components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
+import { getPcrItemTaskStatus } from "./utils/get-pcr-item-task-status";
 
 interface Params {
   projectId: string;
@@ -84,7 +85,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
       <ACC.TaskListSection step={stepCount} title="Explain why you want to make the changes" qa="reasoning">
         <ACC.Task
           name="Reasoning for Innovate UK"
-          status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}
+          status={getPcrItemTaskStatus(projectChangeRequest.reasoningStatus)}
           route={this.props.routes.pcrViewReasoning.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
         />
       </ACC.TaskListSection>
@@ -112,22 +113,10 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     return (
       <ACC.Task
         name={item.typeName}
-        status={this.getTaskStatus(item.status)}
+        status={getPcrItemTaskStatus(item.status)}
         route={this.props.routes.pcrViewItem.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
       />
     );
-  }
-
-  private getTaskStatus(status: PCRItemStatus): "To do" | "Complete" | "Incomplete" {
-    switch (status) {
-      case PCRItemStatus.Complete:
-        return "Complete";
-      case PCRItemStatus.Incomplete:
-        return "Incomplete";
-      case PCRItemStatus.ToDo:
-      default:
-        return "To do";
-    }
   }
 
   private renderLog() {

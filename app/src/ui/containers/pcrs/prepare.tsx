@@ -8,6 +8,7 @@ import * as ACC from "@ui/components";
 import { ProjectParticipantsHoc } from "@ui/features/project-participants";
 
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
+import { getPcrItemTaskStatus } from "./utils/get-pcr-item-task-status";
 
 export interface ProjectChangeRequestPrepareParams {
   projectId: string;
@@ -149,7 +150,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
       <ACC.TaskListSection step={stepCount} title="Explain why you want to make the changes" qa="reasoning">
         <ACC.Task
           name="Provide reasoning to Innovate UK"
-          status={this.getTaskStatus(projectChangeRequest.reasoningStatus)}
+          status={getPcrItemTaskStatus(projectChangeRequest.reasoningStatus)}
           route={route}
           validation={[editor.validator.reasoningStatus, editor.validator.reasoningComments]}
         />
@@ -163,7 +164,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     return (
       <ACC.Task
         name={item.typeName}
-        status={this.getTaskStatus(item.status)}
+        status={getPcrItemTaskStatus(item.status)}
         route={this.props.routes.pcrPrepareItem.getLink({
           projectId: this.props.projectId,
           pcrId: this.props.pcrId,
@@ -173,18 +174,6 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
         validation={validationErrors}
       />
     );
-  }
-
-  private getTaskStatus(status: PCRItemStatus): "To do" | "Complete" | "Incomplete" {
-    switch (status) {
-      case PCRItemStatus.Complete:
-        return "Complete";
-      case PCRItemStatus.Incomplete:
-        return "Incomplete";
-      case PCRItemStatus.ToDo:
-      default:
-        return "To do";
-    }
   }
 
   private renderLog() {

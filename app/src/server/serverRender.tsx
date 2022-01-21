@@ -19,7 +19,7 @@ import {
   rootReducer,
   RootState,
   setupInitialState,
-  setupMiddleware,
+  setupServerMiddleware,
   StoresProvider,
   RoutesProvider,
 } from "@ui/redux";
@@ -58,7 +58,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     const clientConfig = getClientConfig(context);
 
     const initialState = setupInitialState(route, user, clientConfig);
-    const middleware = setupMiddleware(router, false);
+    const middleware = setupServerMiddleware(router);
     const store = createStore(rootReducer, initialState, middleware);
     const modalRegister = new ModalRegister();
 

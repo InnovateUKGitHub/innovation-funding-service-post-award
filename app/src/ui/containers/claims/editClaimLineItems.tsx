@@ -20,6 +20,7 @@ import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { Content } from "@content/content";
 import { diffAsPercentage, sum } from "@framework/util/numberHelper";
 import { EditorStatus } from "@ui/constants/enums";
+import { MountedHoc, useMounted } from "@ui/features";
 
 export interface EditClaimDetailsParams {
   projectId: string;
@@ -113,7 +114,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
         }
         error={editor.error}
         validator={editor.validator}
-        pageTitle={<ACC.Projects.Title {...project} heading={costCategory.name}/>}
+        pageTitle={<ACC.Projects.Title {...project} heading={costCategory.name} />}
       >
         {this.renderNegativeClaimWarning(editor.data)}
 
@@ -136,13 +137,17 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
             )
           )}
           <ACC.Renderers.SimpleString qa="guidance-currency-message">
-            <ACC.Content
-              value={x =>
-                this.props.isClient
-                  ? x.claimDocuments.messages.editClaimLineItemCurrencyGbp
-                  : x.claimDocuments.messages.nonJsEditClaimLineItemCurrencyGbp
-              }
-            />
+            <MountedHoc>
+              {y => (
+                <ACC.Content
+                  value={x =>
+                    y.isClient
+                      ? x.claimDocuments.messages.editClaimLineItemCurrencyGbp
+                      : x.claimDocuments.messages.nonJsEditClaimLineItemCurrencyGbp
+                  }
+                />
+              )}
+            </MountedHoc>
           </ACC.Renderers.SimpleString>
         </>
 
@@ -242,7 +247,6 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     const validationResults = editor.validator.items.results;
 
     const documentSection = this.getCompetitionRenderTableDocumentContent(competitionType, documents, editor);
-
 
     return (
       <LineItemForm.Form
@@ -420,7 +424,12 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     );
   }
 
-  private renderCost(item: ClaimLineItemDto, index: { column: number; row: number }, validation: ClaimLineItemDtoValidator, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
+  private renderCost(
+    item: ClaimLineItemDto,
+    index: { column: number; row: number },
+    validation: ClaimLineItemDtoValidator,
+    editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>,
+  ) {
     return (
       <span>
         <ACC.ValidationError error={validation.cost} />
@@ -454,7 +463,12 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     return <ACC.ValidationMessage messageType="info" qa="claim-warning" message={markup} />;
   }
 
-  private renderDescription(item: ClaimLineItemDto, index: { column: number; row: number }, validation: ClaimLineItemDtoValidator, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
+  private renderDescription(
+    item: ClaimLineItemDto,
+    index: { column: number; row: number },
+    validation: ClaimLineItemDtoValidator,
+    editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>,
+  ) {
     return (
       <span>
         <ACC.ValidationError error={validation.description} />
@@ -470,14 +484,22 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     );
   }
 
-  private removeItem(item: ClaimLineItemDto, i: { column: number; row: number }, e: React.SyntheticEvent<HTMLAnchorElement>, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
+  private removeItem(
+    item: ClaimLineItemDto,
+    i: { column: number; row: number },
+    e: React.SyntheticEvent<HTMLAnchorElement>,
+    editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>,
+  ) {
     e.preventDefault();
     const dto = editor.data;
     dto.lineItems.splice(i.row, 1);
     this.props.onUpdate(false, dto);
   }
 
-  private addItem(e: React.SyntheticEvent<HTMLAnchorElement>, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>) {
+  private addItem(
+    e: React.SyntheticEvent<HTMLAnchorElement>,
+    editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>,
+  ) {
     e.preventDefault();
     const dto = editor.data;
     dto.lineItems.push({
@@ -488,7 +510,11 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     this.props.onUpdate(false, dto);
   }
 
-  private updateItem(i: { column: number; row: number }, editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>, update: (item: ClaimLineItemDto) => void) {
+  private updateItem(
+    i: { column: number; row: number },
+    editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>,
+    update: (item: ClaimLineItemDto) => void,
+  ) {
     const dto = editor.data;
     update(dto.lineItems[i.row]);
     this.props.onUpdate(false, dto);
@@ -615,6 +641,8 @@ const getDestination = (props: EditClaimDetailsParams & BaseProps, goToUpload: b
 
 const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) => {
   const stores = useStores();
+  const { isClient } = useMounted();
+
   return (
     <EditClaimLineItemsComponent
       {...props}
@@ -634,7 +662,7 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
         props.periodId,
         props.costCategoryId,
         (dto: ClaimDetailsDto) => {
-          if (props.isClient) return;
+          if (isClient) return;
           const currentItemsLength = dto.lineItems.length;
           const maximumItemsLength = stores.config.getConfig().options.nonJsMaxClaimLineItems;
           const extraRows = maximumItemsLength - currentItemsLength;

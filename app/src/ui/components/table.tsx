@@ -63,8 +63,8 @@ interface TableProps<T> {
   children: TableChild<T> | (TableChild<T> | TableChild<T>[])[];
   className?: string;
   qa: string;
-  footers?: JSX.Element[];
-  headers?: JSX.Element[];
+  footers?: React.ReactElement[];
+  headers?: React.ReactElement[];
   data: T[];
   validationResult?: (Results<{}> | null | undefined)[] | Result;
   caption?: React.ReactNode;
@@ -100,7 +100,7 @@ export function TableColumn<T>({
     const headerValue: string | JSX.Element = isValidElement(header) ? header : getContent(header || "");
     const noHeaderValue: boolean = typeof headerValue === "string" ? !headerValue.length : false;
 
-    const HeadingContainer = props.hideHeader || noHeaderValue ? AccessibilityText : SortButton;
+    const displayForScreenReaders = props.hideHeader || noHeaderValue;
 
     return (
       <th
@@ -112,7 +112,11 @@ export function TableColumn<T>({
           [`govuk-table__header--${classSuffix}`]: !!classSuffix,
         })}
       >
-        <HeadingContainer isSortable={!!ariaSort}>{headerValue}</HeadingContainer>
+        {displayForScreenReaders ? (
+          <AccessibilityText>{headerValue}</AccessibilityText>
+        ) : (
+          <SortButton isSortable={!!ariaSort}>{headerValue}</SortButton>
+        )}
       </th>
     );
   };
@@ -380,11 +384,17 @@ export interface ITypedTable<T extends {}> {
 
 export const TypedTable = <T extends {}>(): ITypedTable<T> => ({
   Table: TableComponent as React.FunctionComponent<TableProps<T>>,
-  Custom: CustomColumn as React.FunctionComponent<ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }>,
+  Custom: CustomColumn as React.FunctionComponent<
+    ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }
+  >,
   String: StringColumn as React.FunctionComponent<ExternalColumnProps<T, string | null>>,
   Number: NumberColumn as React.FunctionComponent<ExternalColumnProps<T, number | null>>,
-  Currency: CurrencyColumn as React.FunctionComponent<ExternalColumnProps<T, number | null> & { fractionDigits?: number }>,
-  Percentage: PercentageColumn as React.FunctionComponent<ExternalColumnProps<T, number | null> & { fractionDigits?: number }>,
+  Currency: CurrencyColumn as React.FunctionComponent<
+    ExternalColumnProps<T, number | null> & { fractionDigits?: number }
+  >,
+  Percentage: PercentageColumn as React.FunctionComponent<
+    ExternalColumnProps<T, number | null> & { fractionDigits?: number }
+  >,
   FullDate: FullDateColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
   ShortDate: ShortDateColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,
   ShortDateTime: ShortDateTimeColumn as React.FunctionComponent<ExternalColumnProps<T, Date | null>>,

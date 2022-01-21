@@ -74,7 +74,6 @@ interface Callbacks {
 export interface SpendProfileCostFormProps<T extends PCRSpendProfileCostDto, V extends PCRBaseCostDtoValidator<T>> {
   editor: IEditorStore<PCRDto, PCRDtoValidator>;
   validator: V;
-  isClient: boolean;
   onChange: (dto: PCRDto) => void;
   onSave: (dto: PCRDto, redirectLink?: ILinkInfo) => void;
   data: T;
@@ -93,23 +92,43 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
       cost: this.props.cost,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.costCategory, x.validator, x.cost, this.props.routes, { projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: this.props.itemId, costCategoryId: this.props.costCategoryId })}/>;
+    return (
+      <ACC.PageLoader
+        pending={combined}
+        render={x =>
+          this.renderContents(x.project, x.editor, x.costCategory, x.validator, x.cost, this.props.routes, {
+            projectId: this.props.projectId,
+            pcrId: this.props.pcrId,
+            itemId: this.props.itemId,
+            costCategoryId: this.props.costCategoryId,
+          })
+        }
+      />
+    );
   }
 
-  private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, costCategory: CostCategoryDto, validator: PCRSpendProfileCostDtoValidator | undefined, cost: PCRSpendProfileCostDto, routes: IRoutes, params: PcrAddSpendProfileCostParams) {
+  private renderContents(
+    project: ProjectDto,
+    editor: IEditorStore<PCRDto, PCRDtoValidator>,
+    costCategory: CostCategoryDto,
+    validator: PCRSpendProfileCostDtoValidator | undefined,
+    cost: PCRSpendProfileCostDto,
+    routes: IRoutes,
+    params: PcrAddSpendProfileCostParams,
+  ) {
     return (
       <ACC.Page
-        backLink={(
+        backLink={
           <ACC.BackLink route={this.getBackLink(cost, editor.data)}>
-            <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.backLink(costCategory.name)}/>
+            <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.backLink(costCategory.name)} />
           </ACC.BackLink>
-        )}
-        pageTitle={<ACC.Projects.Title {...project}/>}
+        }
+        pageTitle={<ACC.Projects.Title {...project} />}
         project={project}
         validator={validator}
         error={editor.error}
       >
-        <ACC.Renderers.Messages messages={this.props.messages}/>
+        <ACC.Renderers.Messages messages={this.props.messages} />
         <ACC.Section title={x => x.pcrSpendProfilePrepareCostContent.costSectionTitle(costCategory.name)}>
           {this.renderGuidance(costCategory)}
           {this.renderForm(costCategory, editor, validator, cost, routes, params)}
@@ -121,9 +140,11 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   private renderGuidance(costCategory: CostCategoryDto) {
     if (costCategory.type === CostCategoryType.Overheads) {
       return (
-          <ACC.Info summary={<ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.guidanceTitle(costCategory.name)}/>}>
-            <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.messages.costGuidance(costCategory.type)}/>
-          </ACC.Info>
+        <ACC.Info
+          summary={<ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.guidanceTitle(costCategory.name)} />}
+        >
+          <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.messages.costGuidance(costCategory.type)} />
+        </ACC.Info>
       );
     }
     return null;
@@ -137,7 +158,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
         itemId: pcrItem.id,
         pcrId: pcrDto.id,
         projectId: pcrDto.projectId,
-        step: this.getSpendProfileStep(pcrItem) || undefined
+        step: this.getSpendProfileStep(pcrItem) || undefined,
       });
     }
 
@@ -146,7 +167,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
       itemId: this.props.itemId,
       pcrId: this.props.pcrId,
       projectId: this.props.projectId,
-      costCategoryId: this.props.costCategoryId
+      costCategoryId: this.props.costCategoryId,
     });
   }
 
@@ -164,16 +185,23 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
     return !redirectLink ? this.props.onSave(dto, this.getBackLink(cost, dto)) : this.props.onSave(dto, redirectLink);
   }
 
-  private renderForm(costCategory: CostCategoryDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, validator: PCRSpendProfileCostDtoValidator | undefined, cost: PCRSpendProfileCostDto, routes: IRoutes, params: PcrAddSpendProfileCostParams) {
+  private renderForm(
+    costCategory: CostCategoryDto,
+    editor: IEditorStore<PCRDto, PCRDtoValidator>,
+    validator: PCRSpendProfileCostDtoValidator | undefined,
+    cost: PCRSpendProfileCostDto,
+    routes: IRoutes,
+    params: PcrAddSpendProfileCostParams,
+  ) {
     const props = {
       editor,
-      isClient: this.props.isClient,
       onSave: (x: PCRDto, redirectLink?: ILinkInfo) => this.onSave(x, cost, redirectLink || undefined),
       onChange: (x: PCRDto) => this.props.onChange(x),
       costCategory,
       routes,
       params,
     };
+
     switch (costCategory.type) {
       case CostCategoryType.Labour: return <LabourFormComponent {...props} data={cost as PCRSpendProfileLabourCostDto} validator={validator as PCRLabourCostDtoValidator}/>;
       case CostCategoryType.Overheads: return <OverheadsFormComponent {...props} data={cost as PCRSpendProfileOverheadsCostDto} validator={validator as PCROverheadsCostDtoValidator}/>;

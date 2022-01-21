@@ -1,7 +1,6 @@
 import { renderHook, act } from "@testing-library/react-hooks";
 import { v4 as uuidv4 } from "uuid";
 
-import * as hooksModule from "@ui/hooks";
 import { hookTestBed, TestBedStore, TestBedContent } from "@shared/TestBed";
 import { useDocumentSearch } from "@ui/components/documents/document-search.hook";
 import { DocumentsBase } from "@ui/components/documents/documents.interface";
@@ -12,10 +11,17 @@ describe("useDocumentSearch()", () => {
     test2: { content: "stub-test2" },
   };
 
-  const setup = (disableSearch: boolean, originalDocuments: DocumentsBase["documents"], stubStore?: TestBedStore) =>
+  const setup = (
+    disableSearch: boolean,
+    originalDocuments: DocumentsBase["documents"],
+    options?: {
+      isServer?: boolean;
+      stores?: TestBedStore;
+    },
+  ) =>
     renderHook(
       () => useDocumentSearch(disableSearch, originalDocuments),
-      hookTestBed({ stores: stubStore, content: stubTestContent as TestBedContent }),
+      hookTestBed({ ...options, content: stubTestContent as TestBedContent }),
     );
 
   const stubBaseDocument: DocumentsBase["documents"][0] = {
@@ -28,24 +34,16 @@ describe("useDocumentSearch()", () => {
     isOwner: true,
   };
 
-  const isClientSpy = jest.spyOn(hooksModule, "useIsClient");
-
-  beforeEach(jest.clearAllMocks);
-
   describe("@returns", () => {
     describe("with isSearchable", () => {
       it("with non-js", () => {
-        isClientSpy.mockReturnValue(false);
-
-        const { result } = setup(false, []);
+        const { result } = setup(false, [], { isServer: true });
 
         expect(result.current.displaySearch).toBeFalsy();
       });
 
       describe("with document threshold", () => {
         it("when document length is below threshold", () => {
-          isClientSpy.mockReturnValue(true);
-
           const stubStores = {
             config: {
               getConfig: () => ({
@@ -55,14 +53,12 @@ describe("useDocumentSearch()", () => {
               }),
             },
           } as TestBedStore;
-          const { result } = setup(false, [], stubStores);
+          const { result } = setup(false, [], { stores: stubStores });
 
           expect(result.current.displaySearch).toBeFalsy();
         });
 
         it("when document length equals threshold", () => {
-          isClientSpy.mockReturnValue(true);
-
           const stubStores = {
             config: {
               getConfig: () => ({
@@ -72,14 +68,12 @@ describe("useDocumentSearch()", () => {
               }),
             },
           } as TestBedStore;
-          const { result } = setup(false, [stubBaseDocument], stubStores);
+          const { result } = setup(false, [stubBaseDocument], { stores: stubStores });
 
           expect(result.current.displaySearch).toBeTruthy();
         });
 
         it("when document length is above threshold", () => {
-          isClientSpy.mockReturnValue(true);
-
           const stubStores = {
             config: {
               getConfig: () => ({
@@ -89,7 +83,7 @@ describe("useDocumentSearch()", () => {
               }),
             },
           } as TestBedStore;
-          const { result } = setup(false, [stubBaseDocument, stubBaseDocument], stubStores);
+          const { result } = setup(false, [stubBaseDocument, stubBaseDocument], { stores: stubStores });
 
           expect(result.current.displaySearch).toBeTruthy();
         });
@@ -98,21 +92,18 @@ describe("useDocumentSearch()", () => {
 
     describe("with hasDocuments", () => {
       it("when empty", () => {
-        isClientSpy.mockReturnValue(true);
         const { result } = setup(false, []);
 
         expect(result.current.hasDocuments).toBeFalsy();
       });
 
       it("when populated", () => {
-        isClientSpy.mockReturnValue(true);
         const { result } = setup(false, [stubBaseDocument]);
 
         expect(result.current.hasDocuments).toBeTruthy();
       });
 
       it("when populated matches filter results", () => {
-        isClientSpy.mockReturnValue(true);
         const stubDocument = { ...stubBaseDocument };
 
         const { result } = setup(false, [stubDocument]);
@@ -123,7 +114,6 @@ describe("useDocumentSearch()", () => {
       });
 
       it("when populated but does not match filter results", () => {
-        isClientSpy.mockReturnValue(true);
         const stubDocument = { ...stubBaseDocument };
         const { result } = setup(false, [stubDocument]);
 
@@ -135,14 +125,12 @@ describe("useDocumentSearch()", () => {
 
     describe("with documents", () => {
       it("when empty", () => {
-        isClientSpy.mockReturnValue(true);
         const { result } = setup(false, []);
 
         expect(result.current.documents).toHaveLength(0);
       });
 
       it("when populated", () => {
-        isClientSpy.mockReturnValue(true);
         const { result } = setup(false, [stubBaseDocument]);
 
         expect(result.current.documents).toHaveLength(1);
@@ -152,7 +140,6 @@ describe("useDocumentSearch()", () => {
     describe("with setFilterText", () => {
       describe("when disableSearch is false", () => {
         it("with a single document", () => {
-          isClientSpy.mockReturnValue(true);
           const stubDocument = { ...stubBaseDocument };
 
           const { result } = setup(false, [stubDocument]);
@@ -163,7 +150,6 @@ describe("useDocumentSearch()", () => {
         });
 
         it("with multiple documents", () => {
-          isClientSpy.mockReturnValue(true);
           const stubDocument = { ...stubBaseDocument };
 
           const { result } = setup(false, [stubDocument, stubDocument]);
@@ -183,7 +169,6 @@ describe("useDocumentSearch()", () => {
             ${"with an open bracket"} | ${"("}
             ${"with a pound sign"}    | ${"£"}
           `("$name", ({ queryString }) => {
-            isClientSpy.mockReturnValue(true);
             const stubDocument = { ...stubBaseDocument };
 
             const { result } = setup(false, [stubDocument]);
@@ -201,7 +186,6 @@ describe("useDocumentSearch()", () => {
             ${"with mixed casing from query"}                    | ${"hello"}             | ${"hElLo"}
             ${"with mixed casing both filename and query value"} | ${"I sHoUld bE fOuNd"} | ${"fOunD"}
           `("$name", ({ documentFileName, queryCaseString }) => {
-            isClientSpy.mockReturnValue(true);
             const stubDocument = { ...stubBaseDocument, fileName: documentFileName };
 
             const { result } = setup(false, [stubDocument]);
@@ -214,7 +198,6 @@ describe("useDocumentSearch()", () => {
         });
 
         it("when disableSearch is false all documents should return", () => {
-          isClientSpy.mockReturnValue(true);
           const stubDocument = { ...stubBaseDocument };
 
           const nonMatchingDocument = {
@@ -233,7 +216,6 @@ describe("useDocumentSearch()", () => {
 
         it("with single result", () => {
           const stubUnSearchableFileName = "I_AM_A_FILENAME_THAT_WILL_NEVER_BE_SEARCHED";
-          isClientSpy.mockReturnValue(true);
 
           const stubDocs = [
             stubBaseDocument,
@@ -255,8 +237,6 @@ describe("useDocumentSearch()", () => {
         it("with multiple results", () => {
           const stubCommonPartFileName = "testDoc";
           const stubNonMatchingFileName = "I_AM_A_FILENAME_THAT_WILL_NEVER_BE_SEARCHED";
-
-          isClientSpy.mockReturnValue(true);
 
           const stubDocs = [
             {
@@ -294,8 +274,6 @@ describe("useDocumentSearch()", () => {
           it("with date created", () => {
             const stubCommonPartFileName = "2021";
 
-            isClientSpy.mockReturnValue(true);
-
             const stubDocs = [
               {
                 ...stubBaseDocument,
@@ -332,8 +310,6 @@ describe("useDocumentSearch()", () => {
           it("with file size", () => {
             const stubParsedFileSize = "12.167KB";
 
-            isClientSpy.mockReturnValue(true);
-
             const stubDocs = [
               {
                 ...stubBaseDocument,
@@ -369,8 +345,6 @@ describe("useDocumentSearch()", () => {
 
           it("with uploaded by", () => {
             const stubUploadedName = "Innovate UK";
-
-            isClientSpy.mockReturnValue(true);
 
             const stubDocs = [
               {

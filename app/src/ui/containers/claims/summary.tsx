@@ -95,20 +95,20 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
             )}
             <ACC.SummaryList qa="costs-to-be-claimed-summary-list">
               <ACC.SummaryListItem
-                label={<ACC.Content value={x => x.claimPrepareSummary.costClaimedLabel} />}
+                label={x => x.claimPrepareSummary.costClaimedLabel}
                 content={<ACC.Renderers.Currency value={totalCosts.totalCostsClaimed} />}
                 qa="totalCostsClaimed"
               />
 
               <ACC.SummaryListItem
-                label={<ACC.Content value={x => x.claimPrepareSummary.fundingLevelLabel} />}
+                label={x => x.claimPrepareSummary.fundingLevelLabel}
                 content={<ACC.Renderers.Percentage value={data.partner.awardRate} />}
                 qa="fundingLevel"
               />
 
               {!isLoans && (
                 <ACC.SummaryListItem
-                  label={<ACC.Content value={x => x.claimPrepareSummary.costsToBePaidLabel} />}
+                  label={x => x.claimPrepareSummary.costsToBePaidLabel}
                   content={<ACC.Renderers.Currency value={totalCosts.totalCostsPaid} />}
                   qa="totalCostsPaid"
                 />
@@ -268,9 +268,6 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
 
     const difference = roundCurrency(totalEligibleCosts - totalForecastsAndCosts);
     const differencePercentage = totalEligibleCosts > 0 ? (difference * 100) / totalEligibleCosts : 0;
-    const eligibleCostsLabel = <ACC.Content value={x => x.claimPrepareSummary.eligibleCostsLabel} />;
-    const forecastLabel = <ACC.Content value={x => x.claimPrepareSummary.forecastLabel} />;
-    const differenceLabel = <ACC.Content value={x => x.claimPrepareSummary.differenceLabel} />;
     const editForecastMessage = <ACC.Content value={x => x.claimPrepareSummary.editForecastMessage} />;
     const forecastTitle = <ACC.Content value={x => x.claimPrepareSummary.forecastTitle} />;
 
@@ -278,19 +275,19 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
       <ACC.Section title={forecastTitle} qa="forecast-summary">
         <ACC.SummaryList qa="forecast-summary-list">
           <ACC.SummaryListItem
-            label={eligibleCostsLabel}
+            label={x => x.claimPrepareSummary.eligibleCostsLabel}
             content={<ACC.Renderers.Currency value={totalEligibleCosts} />}
             qa="totalEligibleCosts"
           />
 
           <ACC.SummaryListItem
-            label={forecastLabel}
+            label={x => x.claimPrepareSummary.forecastLabel}
             content={<ACC.Renderers.Currency value={totalForecastsAndCosts} />}
             qa="totalForecastsAndCosts"
           />
 
           <ACC.SummaryListItem
-            label={differenceLabel}
+            label={x => x.claimPrepareSummary.differenceLabel}
             content={
               <>
                 <ACC.Renderers.Currency value={difference} /> (<ACC.Renderers.Percentage value={differencePercentage} />

@@ -59,6 +59,8 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
       <input
         id={this.props.id || this.props.name}
         type="text"
+        pattern="[0-9]*"
+        inputMode="numeric"
         className={className}
         name={this.props.name}
         value={this.state.value}

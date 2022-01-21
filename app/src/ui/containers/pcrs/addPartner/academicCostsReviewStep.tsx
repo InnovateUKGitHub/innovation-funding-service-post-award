@@ -10,6 +10,7 @@ import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileD
 import { PCROrganisationType } from "@framework/constants";
 import { Pending } from "@shared/pending";
 import { SimpleString } from "@ui/components/renderers";
+import { MountedHoc } from "@ui/features";
 
 interface ContainerProps {
   costCategories: CostCategoryDto[];
@@ -20,64 +21,92 @@ interface Data {
   costDto: PCRSpendProfileAcademicCostDto;
 }
 
-class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & ContainerProps, Data> {
+class Component extends React.Component<
+  PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & ContainerProps,
+  Data
+> {
   render() {
     const { costCategories, pcrItem } = this.props;
-    const data = costCategories.map(
-      costCategory => {
+    const data = costCategories
+      .map(costCategory => {
         return {
           costCategory,
-          costDto: this.props.pcrItem.spendProfile.costs.find(x => x.costCategoryId === costCategory.id) as PCRSpendProfileAcademicCostDto
+          costDto: this.props.pcrItem.spendProfile.costs.find(
+            x => x.costCategoryId === costCategory.id,
+          ) as PCRSpendProfileAcademicCostDto,
         };
-      }).filter(x => !!x);
+      })
+      .filter(x => !!x);
     const total = sum(data, x => (x.costDto ? x.costDto.value : 0) || 0);
 
     const Table = ACC.TypedTable<Data>();
 
     return (
-      <ACC.Section title={x => x.pcrAddPartnerAcademicCosts.labels.projectCostsHeading}>
-        <ACC.Section title={x => x.pcrAddPartnerAcademicCosts.labels.tsbReferenceHeading}>
-          <SimpleString qa="tsbReference">{pcrItem.tsbReference}</SimpleString>
-        </ACC.Section>
-        <ACC.Section title={x => x.pcrAddPartnerAcademicCosts.costsSectionTitle}>
-          <Table.Table qa="costsTable" data={data}>
-            <Table.String
-              header={x => x.pcrAddPartnerAcademicCosts.categoryHeading}
-              qa="category"
-              value={x => x.costCategory.name}
-              footer={this.props.isClient &&
-              <ACC.Renderers.SimpleString className={"govuk-!-font-weight-bold"}>
-                <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.totalCosts}/>
-              </ACC.Renderers.SimpleString>}
-            />
-            <Table.Currency
-              header={x => x.pcrAddPartnerAcademicCosts.costHeading}
-              qa="cost"
-              value={x => x.costDto? x.costDto.value : 0}
-              width={30}
-              footer={this.props.isClient && <ACC.Renderers.Currency value={total}/>}
-            />
-          </Table.Table>
-        </ACC.Section>
-        <ACC.Link styling="SecondaryButton" route={this.props.routes.pcrReviewItem.getLink({ itemId: this.props.pcrItem.id, pcrId: this.props.pcr.id, projectId: this.props.project.id })}>Return to summary</ACC.Link>
-      </ACC.Section>
+      <MountedHoc>
+        {state => (
+          <ACC.Section title={x => x.pcrAddPartnerAcademicCosts.labels.projectCostsHeading}>
+            <ACC.Section title={x => x.pcrAddPartnerAcademicCosts.labels.tsbReferenceHeading}>
+              <SimpleString qa="tsbReference">{pcrItem.tsbReference}</SimpleString>
+            </ACC.Section>
+
+            <ACC.Section title={x => x.pcrAddPartnerAcademicCosts.costsSectionTitle}>
+              <Table.Table qa="costsTable" data={data}>
+                <Table.String
+                  header={x => x.pcrAddPartnerAcademicCosts.categoryHeading}
+                  qa="category"
+                  value={x => x.costCategory.name}
+                  footer={
+                    state.isClient && (
+                      <ACC.Renderers.SimpleString className={"govuk-!-font-weight-bold"}>
+                        <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.totalCosts} />
+                      </ACC.Renderers.SimpleString>
+                    )
+                  }
+                />
+
+                <Table.Currency
+                  header={x => x.pcrAddPartnerAcademicCosts.costHeading}
+                  qa="cost"
+                  value={x => (x.costDto ? x.costDto.value : 0)}
+                  width={30}
+                  footer={state.isClient && <ACC.Renderers.Currency value={total} />}
+                />
+              </Table.Table>
+            </ACC.Section>
+
+            <ACC.Link
+              styling="SecondaryButton"
+              route={this.props.routes.pcrReviewItem.getLink({
+                itemId: this.props.pcrItem.id,
+                pcrId: this.props.pcr.id,
+                projectId: this.props.project.id,
+              })}
+            >
+              Return to summary
+            </ACC.Link>
+          </ACC.Section>
+        )}
+      </MountedHoc>
     );
   }
 }
 
-export const AcademicCostsReviewStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => (
+export const AcademicCostsReviewStep = (
+  props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
+) => (
   <StoresConsumer>
-    {
-      stores => {
-        const costCategories = stores.costCategories.getAllUnfiltered().then(allCostCategories => allCostCategories.filter(costCategory =>
-          costCategory.organisationType === PCROrganisationType.Academic
-          && costCategory.competitionType === props.project.competitionType));
+    {stores => {
+      const costCategories = stores.costCategories
+        .getAllUnfiltered()
+        .then(allCostCategories =>
+          allCostCategories.filter(
+            costCategory =>
+              costCategory.organisationType === PCROrganisationType.Academic &&
+              costCategory.competitionType === props.project.competitionType,
+          ),
+        );
 
-        return <ACC.Loader
-          pending={Pending.combine({ costCategories })}
-          render={x => <Component {...x} {...props} />}
-        />;
-      }
-    }
+      return <ACC.Loader pending={Pending.combine({ costCategories })} render={x => <Component {...x} {...props} />} />;
+    }}
   </StoresConsumer>
 );

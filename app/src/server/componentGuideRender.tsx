@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { combineReducers, createStore } from "redux";
 import { Provider } from "react-redux";
 
-import { TestBed, TestBedStore } from "@shared/TestBed";
+import { TestBed } from "@shared/TestBed";
 import { Content } from "@content/content";
 import { Guide } from "@ui/componentsGuide/guide";
 import { PageTitleState } from "@ui/redux/reducers/pageTitleReducer";
@@ -25,16 +25,9 @@ export function componentGuideRender(req: Request, res: Response) {
 
   const store = createStore(reducer, { title: exampleTitle });
 
-  // The default state for testbed is true - we have to override
-  const serverStore = {
-    config: {
-      isClient: () => false,
-    } as TestBedStore["config"],
-  };
-
   const html = renderToString(
     <Provider store={store}>
-      <TestBed stores={serverStore as TestBedStore} content={new Content()}>
+      <TestBed isServer content={new Content()}>
         <Guide source="server" filter={req.query.guide} />
       </TestBed>
     </Provider>,

@@ -17,7 +17,7 @@ import {
   ModalRegister,
   rootReducer,
   RoutesProvider,
-  setupMiddleware,
+  setupClientMiddleware,
   StoresConsumer,
   StoresProvider,
 } from "@ui/redux";
@@ -28,11 +28,9 @@ import { getPolyfills } from "./polyfill";
 // eslint-disable-next-line no-underscore-dangle
 const serverState = processDto((window as any).__PRELOADED_STATE__);
 
-serverState.isClient = true;
-
 const routes = routeConfig;
 const router = configureRouter(routes);
-const middleware = composeWithDevTools(setupMiddleware(router, true));
+const middleware = composeWithDevTools(setupClientMiddleware(router));
 const store = createStore(rootReducer, serverState, middleware);
 
 // factory to make the stores for the provider

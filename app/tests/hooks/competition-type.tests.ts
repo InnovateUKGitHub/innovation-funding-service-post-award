@@ -99,27 +99,47 @@ describe("useCompetitionType()", () => {
           );
         });
 
-        test("when a project query contains an error", () => {
-          const stubProjectId = "123456";
-          const mockLoadingError = jest
-            .fn()
-            .mockReturnValue(new Pending(LoadingStatus.Done, { competitionType: stubProjectId }, "There is an error"));
+        describe("with error", () => {
+          test("with error message", () => {
+            const stubProjectId = "123456";
+            const stubError = "There is an error";
+            const mockLoadingError = jest.fn().mockReturnValue(new Pending(LoadingStatus.Failed, undefined, stubError));
 
-          const { result } = renderHook(
-            () => useCompetitionType(stubProjectId),
-            hookTestBed({
-              stores: {
-                projects: {
-                  getById: mockLoadingError,
-                } as any,
-              },
-            }),
-          );
+            const { result } = renderHook(
+              () => useCompetitionType(stubProjectId),
+              hookTestBed({
+                stores: {
+                  projects: {
+                    getById: mockLoadingError,
+                  } as any,
+                },
+              }),
+            );
 
-          expect(mockLoadingError).toHaveBeenCalledTimes(1);
-          expect(() => result.current).toThrowError(
-            new Error(`There was an error getting the competitionType from projectId - ${stubProjectId}`),
-          );
+            expect(mockLoadingError).toHaveBeenCalledTimes(1);
+            expect(() => result.current).toThrowError(new Error(stubError));
+          });
+
+          test("with no error", () => {
+            const stubProjectId = "123456";
+            const mockLoadingError = jest.fn().mockReturnValue(new Pending(LoadingStatus.Failed, undefined));
+
+            const { result } = renderHook(
+              () => useCompetitionType(stubProjectId),
+              hookTestBed({
+                stores: {
+                  projects: {
+                    getById: mockLoadingError,
+                  } as any,
+                },
+              }),
+            );
+
+            expect(mockLoadingError).toHaveBeenCalledTimes(1);
+            expect(() => result.current).toThrowError(
+              new Error(`There was an error getting the competitionType from projectId - ${stubProjectId}`),
+            );
+          });
         });
       });
     });

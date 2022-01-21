@@ -49,17 +49,17 @@ class PartnerDetailsComponent extends ContainerBase<Params, Data> {
         <ACC.Section>
           <ACC.SummaryList qa="partner-details">
             <ACC.SummaryListItem
-              labelContent={x => x.partnerDetails.contactLabels.partnerName}
+              label={x => x.partnerDetails.contactLabels.partnerName}
               qa="partner-name"
               content={<ACC.Renderers.SimpleString>{partner.name}</ACC.Renderers.SimpleString>}
             />
             <ACC.SummaryListItem
-              labelContent={x => x.partnerDetails.contactLabels.partnerType}
+              label={x => x.partnerDetails.contactLabels.partnerType}
               qa="partner-type"
               content={<ACC.Renderers.SimpleString>{partner.type}</ACC.Renderers.SimpleString>}
             />
             <ACC.SummaryListItem
-              labelContent={x => x.partnerDetails.contactLabels.partnerPostcode}
+              label={x => x.partnerDetails.contactLabels.partnerPostcode}
               qa="partner-postcode"
               content={<ACC.Renderers.SimpleString>{partner.postcode}</ACC.Renderers.SimpleString>}
               action={

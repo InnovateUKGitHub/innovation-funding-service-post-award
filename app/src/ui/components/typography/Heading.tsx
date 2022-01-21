@@ -1,11 +1,11 @@
 import React from "react";
 import cx from "classnames";
 
-export type GdsHeadingClasses = `govuk-heading-${"xl" | "l" | "m" | "s"}`;
+
 export type GdsHeadingTypes = `h${"1" | "2" | "3" | "4"}`;
 type HeadingAvailableElements = GdsHeadingTypes | "p";
 
-const gdsHeadingClasses: Record<GdsHeadingTypes, GdsHeadingClasses> = {
+export const gdsHeadingClasses: Record<GdsHeadingTypes, string> = {
   h1: "govuk-heading-xl",
   h2: "govuk-heading-l",
   h3: "govuk-heading-m",
