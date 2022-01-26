@@ -1,5 +1,3 @@
-import React from "react";
-
 import {
   FinancialVirementDto,
   PartnerDto,
@@ -14,10 +12,11 @@ import { IEditorStore, useStores } from "@ui/redux";
 import { useContent } from "@ui/hooks";
 import { MultiplePartnerFinancialVirementDtoValidator, PCRDtoValidator } from "@ui/validators";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
-import * as ACC from "@ui/components";
 import { PCRItemType } from "@framework/types";
-
 import { roundCurrency } from "@framework/util";
+import { useProjectParticipants } from "@ui/features/project-participants";
+import * as ACC from "@ui/components";
+
 import { PcrSummaryConsumer } from "../components/PcrSummary";
 
 export interface FinancialVirementSummaryProps
@@ -31,6 +30,7 @@ export interface FinancialVirementSummaryProps
 
 export function FinancialVirementSummaryComponent({ mode, ...props }: FinancialVirementSummaryProps) {
   const { getContent } = useContent();
+  const { isMultipleParticipants } = useProjectParticipants();
 
   const getPartnerLink = (partnerVirement: PartnerVirementsDto, partner: PartnerDto) => {
     const params = {
@@ -108,22 +108,26 @@ export function FinancialVirementSummaryComponent({ mode, ...props }: FinancialV
                   <Table.Currency qa="newRemainingGrant" header={x => x.financialVirementSummary.labels.partnerNewRemainingGrant} value={x => x.partnerVirement.newRemainingGrant} footer={<ACC.Renderers.Currency value={virement.newRemainingGrant} className={displayHighlight ==="negative-hightlight" && "highlight--error"} />} />
                 </Table.Table>
 
-                <ACC.Renderers.SimpleString>
-                  <ACC.Content value={x => x.financialVirementSummary.grantAdvice} />
-                </ACC.Renderers.SimpleString>
+                {isMultipleParticipants && (
+                  <>
+                    <ACC.Renderers.SimpleString>
+                      <ACC.Content value={x => x.financialVirementSummary.grantAdvice} />
+                    </ACC.Renderers.SimpleString>
 
-                <ACC.Section qa="edit-partner-level">
-                  <ACC.Link
-                    styling="SecondaryButton"
-                    route={props.routes.pcrFinancialVirementEditPartnerLevel.getLink({
-                      itemId: props.pcrItem.id,
-                      pcrId: props.pcr.id,
-                      projectId: props.projectId,
-                    })}
-                  >
-                    <ACC.Content value={x => x.financialVirementSummary.changeGrantLink} />
-                  </ACC.Link>
-                </ACC.Section>
+                    <ACC.Section qa="edit-partner-level">
+                      <ACC.Link
+                        styling="SecondaryButton"
+                        route={props.routes.pcrFinancialVirementEditPartnerLevel.getLink({
+                          itemId: props.pcrItem.id,
+                          pcrId: props.pcr.id,
+                          projectId: props.projectId,
+                        })}
+                      >
+                        <ACC.Content value={x => x.financialVirementSummary.changeGrantLink} />
+                      </ACC.Link>
+                    </ACC.Section>
+                  </>
+                )}
               </>
             ) : (
               <>
