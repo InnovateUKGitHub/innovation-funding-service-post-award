@@ -326,7 +326,7 @@ export class Content extends ContentBase {
     this.pcrSpendProfilePrepareCostContent = new PcrSpendProfilePrepareCostContent(this, competitionType);
     this.pcrSpendProfileDeleteCostContent = new PcrSpendProfileDeleteCostContent(this, competitionType);
     this.pcrSpendProfileOverheadDocumentContent = new PcrSpendProfileOverheadDocumentContent(this, competitionType);
-    this.pcrScopeChangeProjectContent = new PCRScopeChangeProjectContent(this);
+    this.pcrScopeChangeProjectContent = new PCRScopeChangeProjectContent(this, competitionType);
 
     this.pcrNameChange = new PCRNameChangeContent(this, competitionType);
     this.pcrNameChangePrepareItemFiles = new PCRNameChangePrepareItemFilesContent(this, competitionType);

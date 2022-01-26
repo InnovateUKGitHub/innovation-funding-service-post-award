@@ -8,6 +8,8 @@ import { useContent } from "@ui/hooks";
 import { IEditorStore, useStores } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import { ProjectRole } from "@framework/constants";
+import { useProjectParticipants } from "@ui/features/project-participants";
+
 import { PcrTypesGuidance } from "./components/PcrTypesGuidance";
 
 export interface CreatePcrParams {
@@ -24,6 +26,8 @@ interface CreatePcrProps extends CreatePcrParams, BaseProps {
 }
 
 function PCRCreateComponent({ content, ...props }: CreatePcrProps) {
+  const { isMultipleParticipants } = useProjectParticipants();
+
   const getListData = (editorItems: Dtos.PCRItemDto[], itemTypes: Dtos.PCRItemTypeDto[]) => {
     const filteredOptions = itemTypes.reduce<ACC.SelectOption[][]>(
       (allOptions, itemType) => {
@@ -83,7 +87,7 @@ function PCRCreateComponent({ content, ...props }: CreatePcrProps) {
         <ACC.Renderers.SimpleString>{content.guidanceIntroMessage}</ACC.Renderers.SimpleString>
 
         <ACC.UL>
-          <li>{content.guidanceListRow1}</li>
+          {isMultipleParticipants && <li>{content.guidanceListRow1}</li>}
           <li>{content.guidanceListRow2}</li>
         </ACC.UL>
 
@@ -95,7 +99,7 @@ function PCRCreateComponent({ content, ...props }: CreatePcrProps) {
             onChange={dto => props.onChange(false, dto)}
           >
             <PCRForm.Fieldset heading={content.selectRequestTypesTitle}>
-              <PcrTypesGuidance qa="create" types={itemTypes}/>
+              <PcrTypesGuidance qa="create" types={itemTypes} />
 
               <PCRForm.Checkboxes
                 name="types"

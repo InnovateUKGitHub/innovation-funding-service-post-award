@@ -144,6 +144,9 @@
       "claim-forecast": {
         "back-link": "Back to claims documents",
         "button-save-and-return": "Save and return to project costs"
+      },
+      "pcr-suspend-project-details": {
+        "suspend-project-intro": "You will not be able to perform any normal activities while this project is on hold, for example you cannot raise project change requests (PCR's), update forecasts, or submit costs."
       }
     },
     "claims-messages": {
@@ -166,6 +169,14 @@
       "availabilityPeriod": "Availability period",
       "extensionPeriod": "Extension period",
       "repaymentPeriod": "Repayment period"
+    },
+    "financial-virement-labels": {
+      "cost-category-costs-claimed": "Costs to date",
+      "project-original-remaining-grant": "Total remaining loan",
+      "project-new-remaining-grant": "New total remaining loan",
+      "partner-original-remaining-grant": "Remaining loan",
+      "partner-new-remaining-grant": "New remaining loan",
+      "grant-moving-over-year": "Loan value moving over the financial year end"
     }
   }
 }

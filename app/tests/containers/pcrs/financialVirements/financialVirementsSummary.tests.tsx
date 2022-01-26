@@ -1,4 +1,4 @@
-import { LoadingStatus, PCRItemType } from "@framework/types";
+import { PCRItemType } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { TestBed, TestBedStore, TestBedContent } from "@shared/TestBed";
 import { render } from "@testing-library/react";
@@ -9,6 +9,7 @@ import {
   FinancialVirementSummary,
   FinancialVirementSummaryContainerProps,
 } from "@ui/containers/pcrs/financialVirements/financialVirementsSummary";
+import { ProjectParticipantProvider } from "@ui/features/project-participants";
 
 import { TestContext } from "../../../server/testContextProvider";
 
@@ -101,7 +102,10 @@ describe("<FinancialVirementSummary />", () => {
         disabled: false,
         recordTypeId: "0124I000000FZOEQA4",
         files: [
-          { name: "reallocate-project-costs.xlsx", relativeUrl: "/ifspa-assets/pcr_templates/reallocate-project-costs.xlsx" },
+          {
+            name: "reallocate-project-costs.xlsx",
+            relativeUrl: "/ifspa-assets/pcr_templates/reallocate-project-costs.xlsx",
+          },
         ],
       },
       {
@@ -111,7 +115,10 @@ describe("<FinancialVirementSummary />", () => {
         disabled: false,
         recordTypeId: "0124I000000FZOFQA4",
         files: [
-          { name: "reallocate-project-costs.xlsx", relativeUrl: "/ifspa-assets/pcr_templates/reallocate-project-costs.xlsx" },
+          {
+            name: "reallocate-project-costs.xlsx",
+            relativeUrl: "/ifspa-assets/pcr_templates/reallocate-project-costs.xlsx",
+          },
         ],
       },
       {
@@ -286,8 +293,11 @@ describe("<FinancialVirementSummary />", () => {
         },
       }),
     },
+    partners: {
+      getPartnersForProject: jest.fn().mockReturnValue(Pending.done([{}, {}])),
+    },
     financialVirements: {
-      get: jest.fn().mockReturnValue(new Pending(LoadingStatus.Done, stubValidVirement)),
+      get: jest.fn().mockReturnValue(Pending.done(stubValidVirement)),
     },
   } as any;
 
@@ -467,9 +477,11 @@ describe("<FinancialVirementSummary />", () => {
 
     return render(
       <TestBed stores={stubStore as TestBedStore} content={stubContent as TestBedContent}>
-        <PcrSummaryProvider {...summaryProviderProps}>
-          <FinancialVirementSummary {...requiredProps} mode={mode} />
-        </PcrSummaryProvider>
+        <ProjectParticipantProvider projectId="stub-id">
+          <PcrSummaryProvider {...summaryProviderProps}>
+            <FinancialVirementSummary {...requiredProps} mode={mode} />
+          </PcrSummaryProvider>
+        </ProjectParticipantProvider>
       </TestBed>,
     );
   };

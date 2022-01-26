@@ -4,7 +4,9 @@ import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcr
 import { IEditorStore, StoresConsumer } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import * as ACC from "../../components";
+import * as ACC from "@ui/components";
+import { ProjectParticipantsHoc } from "@ui/features/project-participants";
+
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 export interface ProjectChangeRequestPrepareParams {
@@ -96,16 +98,27 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
             name="comments"
             hint="If you want to explain anything to your monitoring officer or to Innovate UK, add it here."
             value={x => x.comments}
-            update={(m, v) => m.comments = v || ""}
+            update={(m, v) => (m.comments = v || "")}
             validation={editor.validator.comments}
             characterCountOptions={{ type: "descending", maxValue: PCRDtoValidator.maxCommentsLength }}
             qa="info-text-area"
           />
         </Form.Fieldset>
         <Form.Fieldset qa="save-buttons">
-          <ACC.Renderers.SimpleString>By submitting this request, you confirm that all project partners have approved these changes.</ACC.Renderers.SimpleString>
+          <ProjectParticipantsHoc>
+            {x =>
+              x.isMultipleParticipants && (
+                <ACC.Renderers.SimpleString>
+                  By submitting this request, you confirm that all project partners have approved these changes.
+                </ACC.Renderers.SimpleString>
+              )
+            }
+          </ProjectParticipantsHoc>
+
           <Form.Submit>Submit request</Form.Submit>
-          <Form.Button name="return" onClick={() => this.onSave(editor, projectChangeRequest, false)}>Save and return to requests</Form.Button>
+          <Form.Button name="return" onClick={() => this.onSave(editor, projectChangeRequest, false)}>
+            Save and return to requests
+          </Form.Button>
         </Form.Fieldset>
       </Form.Form>
     );
