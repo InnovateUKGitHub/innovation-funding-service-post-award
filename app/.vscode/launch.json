@@ -8,8 +8,9 @@
       "command": "npm run start:dev",
       "cwd": "${workspaceFolder}",
       "skipFiles": [
+        "<node_internals>/**",
         "${workspaceFolder}/node_modules/**/*.js",
-        "${workspaceFolder}/lib/**/*.js"
+        "${workspaceFolder}/**/*.js"
       ]
     }
   ]

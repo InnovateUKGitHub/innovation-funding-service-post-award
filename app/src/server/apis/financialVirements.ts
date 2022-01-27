@@ -5,22 +5,22 @@ import { processDto } from "@shared/processResponse";
 import { FinancialVirementDto } from "@framework/dtos";
 import { ApiParams, ControllerBase } from "./controllerBase";
 
-class Controller extends ControllerBase<FinancialVirementDto> implements IFinancialVirement {
+class Controller extends ControllerBase<FinancialVirementDto> {
   constructor() {
     super("financial-virements");
 
     this.getItem(
-      "/:projectId/:pcrId/:pcrItemId/:partnerId",
-      p => ({ projectId: p.projectId, pcrId: p.pcrId, pcrItemId: p.pcrItemId, partnerId: p.partnerId }),
+      "/:projectId/:pcrId/:pcrItemId",
+      (p, q) => ({ projectId: p.projectId, pcrId: p.pcrId, pcrItemId: p.pcrItemId, partnerId: q.partnerId }),
       p => this.get(p),
     );
     this.putItem(
-      "/:projectId/:pcrId/:pcrItemId/:partnerId",
+      "/:projectId/:pcrId/:pcrItemId",
       (p, q, b) => ({
         projectId: p.projectId,
         pcrId: p.pcrId,
         pcrItemId: p.pcrItemId,
-        partnerId: p.partnerId,
+        partnerId: q.partnerId,
         financialVirment: processDto(b),
         submit: q.submit === "true",
       }),
@@ -31,7 +31,7 @@ class Controller extends ControllerBase<FinancialVirementDto> implements IFinanc
   async get(
     params: ApiParams<{ projectId: string; pcrId: string; pcrItemId: string; partnerId?: string }>,
   ): Promise<FinancialVirementDto> {
-    const query = new GetFinancialVirementQuery(params.projectId, params.pcrId, params.pcrItemId, params.partnerId);
+    const query = new GetFinancialVirementQuery(params.projectId, params.pcrItemId, params.partnerId);
     return contextProvider.start(params).runQuery(query);
   }
 
@@ -56,7 +56,7 @@ class Controller extends ControllerBase<FinancialVirementDto> implements IFinanc
     );
     await context.runCommand(command);
 
-    const query = new GetFinancialVirementQuery(params.projectId, params.pcrId, params.pcrItemId, params.partnerId);
+    const query = new GetFinancialVirementQuery(params.projectId, params.pcrItemId, params.partnerId);
     return await context.runQuery(query);
   }
 }

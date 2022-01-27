@@ -9,7 +9,16 @@ import { usePcrSummary } from "./pcr-summary.hook";
  * @description provides mechanism to access PCRItem specific summary-only payloads to nested children
  */
 const PcrSummaryContext = createContext<PcrSummaryResponse | undefined>(undefined);
-export const usePcrSummaryContext = () => useContext(PcrSummaryContext);
+
+export const usePcrSummaryContext = (): PcrSummaryResponse => {
+  const context = useContext(PcrSummaryContext);
+
+  if (!context) {
+    throw new Error("usePcrSummaryContext must be used within a PcrSummaryProvider");
+  }
+
+  return context;
+};
 
 export interface PcrSummaryProviderProps extends PcrSummaryProps {
   children: ReactElement;
@@ -37,11 +46,7 @@ export interface PcrSummaryConsumerProps {
  * @todo Deprecate this in favour of usePcrSummaryContext() directly
  */
 export function PcrSummaryConsumer({ children }: PcrSummaryConsumerProps) {
-  const summaryContext = usePcrSummaryContext();
+  const context = usePcrSummaryContext();
 
-  if (!summaryContext) {
-    throw new Error("usePcrSummaryContext must be used within a PcrSummaryProvider");
-  }
-
-  return children(summaryContext);
+  return children(context);
 }

@@ -25,7 +25,10 @@ export interface PcrSummaryMultiplePartnerFinancialVirement {
   };
 }
 
-export type PcrSummaryResponse = PcrSummaryEmpty | PcrSummaryMultiplePartnerFinancialVirement;
+export type PcrSummaryResponse = (PcrSummaryEmpty | PcrSummaryMultiplePartnerFinancialVirement) & {
+  allowSubmit: boolean;
+  handleSubmitDisplay: (enableSubmit: boolean) => void;
+};
 
 /**
  * Required Arguments for PcrSummary

@@ -12,7 +12,7 @@ describe("UpdateFinancialVirementCommand", () => {
     const partner = testContext.testData.createPartner(project);
     const pcrItem = testContext.testData.createPCRItem();
 
-    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.pcrId, pcrItem.id));
+    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));
 
     testContext.testData.createFinancialVirement(pcrItem, partner);
     const command = new UpdateFinancialVirementCommand(partner.projectId, pcrItem.pcrId, pcrItem.id, dto, true);
@@ -28,7 +28,7 @@ describe("UpdateFinancialVirementCommand", () => {
     const partner = testData.createPartner();
 
     testData.createFinancialVirement(pcrItem, partner);
-    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.pcrId, pcrItem.id));
+    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));
 
     expect(dto).not.toBeNull();
     expect(dto.partners.length).toBe(1);
@@ -58,7 +58,7 @@ describe("UpdateFinancialVirementCommand", () => {
       profileId: "profileId"
     });
 
-    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.pcrId, pcrItem.id));
+    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));
 
     dto.partners[0].virements[0].newEligibleCosts = 100;
 
@@ -101,7 +101,7 @@ describe("UpdateFinancialVirementCommand", () => {
       profileId: "profileId"
     });
 
-    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.pcrId, pcrItem.id));
+    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));
 
     dto.partners[0].virements.find(x => x.costCategoryId === costCategory1.id)!.newEligibleCosts = 160;
 
@@ -149,7 +149,7 @@ describe("UpdateFinancialVirementCommand", () => {
       profileId: "profileId"
     });
 
-    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.pcrId, pcrItem.id));
+    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));
 
     dto.partners[0].virements.find(x => x.costCategoryId === costCategory1.id)!.newEligibleCosts = 160;
     dto.partners[0].newFundingLevel = 60;
@@ -185,7 +185,7 @@ describe("UpdateFinancialVirementCommand", () => {
       profileId: "profileId"
     });
 
-    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.pcrId, pcrItem.id));
+    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));
 
     dto.partners[0].virements[0].newEligibleCosts = 100;
     dto.partners[0].virements[0].costsClaimedToDate = 101;

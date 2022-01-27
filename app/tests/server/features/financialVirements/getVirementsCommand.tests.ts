@@ -50,7 +50,7 @@ describe("GetFinancialVirementQuery", () => {
 
     testData.createFinancialVirement(pcrItem, partner, stubPayload);
 
-    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.pcrId, pcrItem.id));
+    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));
 
     expect(dto).not.toBeNull();
     expect(dto.partners.length).toBe(1);
@@ -100,7 +100,7 @@ describe("GetFinancialVirementQuery", () => {
 
     testData.createFinancialVirement(pcrItem, partner, stubPayload);
 
-    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.pcrId, pcrItem.id));
+    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));
 
     expect(dto).not.toBeNull();
     expect(dto.partners.length).toBe(1);
@@ -138,7 +138,7 @@ describe("GetFinancialVirementQuery", () => {
       testData.createFinancialVirement(pcrItem, partner, stubPayload);
 
       const dto = await testContext.runQuery(
-        new GetFinancialVirementQuery(partner.projectId, pcrItem.pcrId, pcrItem.id),
+        new GetFinancialVirementQuery(partner.projectId, pcrItem.id),
       );
 
       expect(dto).not.toBeNull();

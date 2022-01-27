@@ -57,7 +57,8 @@ export type PCRItemDto =
   | PCRItemForPartnerAdditionDto
   | PCRItemForPartnerWithdrawalDto
   | PCRItemForMultiplePartnerFinancialVirementDto
-  | PCRItemForPeriodLengthChangeDto;
+  | PCRItemForPeriodLengthChangeDto
+  | PCRItemForLoanDrawdownChangeDto;
 
 export type ProjectChangeRequestStandardItemTypes = PCRItemType.SinglePartnerFinancialVirement;
 
@@ -110,6 +111,10 @@ export interface PCRItemForProjectTerminationDto extends PCRItemBaseDto {
 
 export interface PCRItemForPeriodLengthChangeDto extends PCRItemBaseDto {
   type: PCRItemType.PeriodLengthChange;
+}
+
+export interface PCRItemForLoanDrawdownChangeDto extends PCRItemBaseDto {
+  type: PCRItemType.LoanDrawdownChange;
 }
 
 export interface PCRItemForPartnerAdditionDto extends PCRItemBaseDto {

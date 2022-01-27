@@ -85,6 +85,7 @@ export class Context implements Framework.IContext {
       costCategories: new Repositories.CostCategoryRepository(connectionCallback, this.logger),
       documents: new Repositories.DocumentsRepository(connectionCallback, this.logger),
       financialVirements: new Repositories.FinancialVirementRepository(recordTypeCallback, connectionCallback, this.logger),
+      financialLoanVirements: new Repositories.FinancialLoanVirementRepository(recordTypeCallback, connectionCallback, this.logger),
       pcrSpendProfile: new Repositories.PcrSpendProfileRepository(recordTypeCallback, connectionCallback, this.logger),
       monitoringReportResponse: new Repositories.MonitoringReportResponseRepository(recordTypeCallback, connectionCallback, this.logger),
       monitoringReportHeader: new Repositories.MonitoringReportHeaderRepository(recordTypeCallback, connectionCallback, this.logger),

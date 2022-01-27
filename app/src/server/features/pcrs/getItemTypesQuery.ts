@@ -173,6 +173,11 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
       competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "SBRI", "SBRI IFS", "EDGE"],
       typeName: "End the project early",
     },
+    {
+      type: PCRItemType.LoanDrawdownChange,
+      competitions: ["LOANS"],
+      typeName: "Loan Drawdown Change",
+    },
   ].filter(x => {
     // Note: Filter any non-competitions
     return x.competitions.length > 0;

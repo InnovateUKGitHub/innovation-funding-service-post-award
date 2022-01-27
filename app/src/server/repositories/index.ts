@@ -10,6 +10,7 @@ export * from "./costCategoriesRepository";
 export * from "./documentsRepository";
 export * from "./errors";
 export * from "./financialVirementRepository";
+export * from "./financialLoanVirementRepository";
 export * from "./monitoringReportHeaderRepository";
 export * from "./monitoringReportQuestionsRepository";
 export * from "./monitoringReportResponseRepository";

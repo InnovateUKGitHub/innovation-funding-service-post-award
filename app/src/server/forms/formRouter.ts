@@ -16,6 +16,7 @@ import { ClaimReviewDocumentsUploadHandler } from "@server/forms/claimDocuments/
 import { ClaimSummaryFormHandler } from "@server/forms/claimSummaryFormHandler";
 import { MonitoringReportPreparePeriodFormHandler } from "@server/forms/monitoringReport/monitoringReportPreparePeriodFormHandler";
 import { VirementCostsUpdateHandler } from "@server/forms/projectChangeRequest/virements/virementCostsUpdateHandler";
+import { VirementLoanEditHandler } from "@server/forms/projectChangeRequest/virements/virementLoanEditHandler";
 import { EditorStateKeys } from "@ui/redux";
 import { ProjectChangeRequestSpendProfileAddCostHandler } from "@server/forms/projectChangeRequest/spendProfile/spendProfileAddCostHandler";
 import { ProjectChangeRequestSpendProfileCostsSummaryHandler } from "@server/forms/projectChangeRequest/spendProfile/spendProfileCostsHandler";
@@ -91,6 +92,7 @@ export const standardFormHandlers: StandardFormHandlerBase<{}, EditorStateKeys>[
   new ProjectChangeRequestSpendProfileCostsSummaryHandler(),
   new ProjectChangeRequestItemDocumentDeleteHandler(),
   new VirementCostsUpdateHandler(),
+  new VirementLoanEditHandler(),
   new VirementPartnerCostsUpdateHandler(),
   new ProjectSetupFormHandler(),
   new PartnerDetailsEditFormHandler(),

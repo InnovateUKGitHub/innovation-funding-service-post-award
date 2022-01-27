@@ -2,6 +2,7 @@ import { ProjectChangeRequestEntity, ProjectChangeRequestItemEntity } from "@fra
 import {
   PCRDto,
   PCRItemForAccountNameChangeDto,
+  PCRItemForLoanDrawdownChangeDto,
   PCRItemForMultiplePartnerFinancialVirementDto,
   PCRItemForPartnerAdditionDto,
   PCRItemForPartnerWithdrawalDto,
@@ -68,6 +69,8 @@ const mapItem = (pcr: ProjectChangeRequestItemEntity, itemType: PCRItemTypeDto) 
       return mapItemForPeriodLengthChange(pcr, itemType.displayName, itemType.type);
     case PCRItemType.SinglePartnerFinancialVirement:
       return mapStandardItem(pcr, itemType.displayName, itemType.type);
+    case PCRItemType.LoanDrawdownChange:
+      return mapItemForLoansChangeDrawdown(pcr, itemType.displayName, itemType.type);
     default:
       throw new Error("Type not handled");
   }
@@ -179,4 +182,9 @@ const mapItemForMultiplePartnerVirements = (pcr: ProjectChangeRequestItemEntity,
   ...mapBaseItem(pcr, typeName, type),
   type,
   grantMovingOverFinancialYear: (!!pcr.grantMovingOverFinancialYear || pcr.grantMovingOverFinancialYear === 0) ? pcr.grantMovingOverFinancialYear : null
+});
+
+const mapItemForLoansChangeDrawdown = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.LoanDrawdownChange): PCRItemForLoanDrawdownChangeDto => ({
+  ...mapBaseItem(pcr, typeName, type),
+  type,
 });

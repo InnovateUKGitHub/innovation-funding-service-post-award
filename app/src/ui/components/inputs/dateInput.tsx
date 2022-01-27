@@ -4,7 +4,9 @@ import classNames from "classnames";
 import { BaseInput } from "./baseInput";
 import { InputProps } from "./common";
 
-interface FullDateInputProps extends InputProps<Date> {}
+interface FullDateInputProps extends InputProps<Date> {
+  id?: string;
+}
 
 interface FullDateState {
   day: string;
@@ -21,13 +23,13 @@ export class FullDateInput extends BaseInput<FullDateInputProps, FullDateState> 
       this.state = {
         day: val.toFormat("dd"),
         month: val.toFormat("MM"),
-        year: val.toFormat("yyyy")
+        year: val.toFormat("yyyy"),
       };
     } else {
       this.state = {
         day: "",
         month: "",
-        year: ""
+        year: "",
       };
     }
   }
@@ -37,14 +39,12 @@ export class FullDateInput extends BaseInput<FullDateInputProps, FullDateState> 
     const monthName = `${this.props.name}_month`;
     const yearName = `${this.props.name}_year`;
 
-    const inputClass = classNames(
-      "govuk-input",
-      "govuk-date-input__input",
-      { "govuk-input--error": this.props.hasError === true }
-    );
+    const inputClass = classNames("govuk-input", "govuk-date-input__input", {
+      "govuk-input--error": this.props.hasError === true,
+    });
 
     return (
-      <div className="govuk-date-input">
+      <div id={this.props.id} className="govuk-date-input">
         <div className="govuk-date-input__item">
           <div className="govuk-form-group">
             <label className="govuk-label govuk-date-input__label" htmlFor={dayName}>
@@ -67,7 +67,7 @@ export class FullDateInput extends BaseInput<FullDateInputProps, FullDateState> 
           <div className="govuk-form-group">
             <label className="govuk-label govuk-date-input__label" htmlFor={monthName}>
               Month
-          </label>
+            </label>
             <input
               className={classNames(inputClass, "govuk-input--width-2")}
               name={monthName}
@@ -85,7 +85,7 @@ export class FullDateInput extends BaseInput<FullDateInputProps, FullDateState> 
           <div className="govuk-form-group">
             <label className="govuk-label govuk-date-input__label" htmlFor={yearName}>
               Year
-          </label>
+            </label>
             <input
               className={classNames(inputClass, "govuk-input--width-4")}
               name={yearName}
@@ -112,9 +112,12 @@ export class FullDateInput extends BaseInput<FullDateInputProps, FullDateState> 
     if (this.props.onChange) {
       const { day, month, year } = this.state;
 
-      const result = DateTime
-        .fromFormat(`${day}/${month}/${year}`, "d/M/yyyy")
-        .set({hour: 12, minute: 0, second: 0, millisecond: 0});
+      const result = DateTime.fromFormat(`${day}/${month}/${year}`, "d/M/yyyy").set({
+        hour: 12,
+        minute: 0,
+        second: 0,
+        millisecond: 0,
+      });
 
       if (result.isValid) {
         this.props.onChange(result.toJSDate());
@@ -145,12 +148,12 @@ export class MonthYearInput extends BaseInput<MonthYearInputProps, MonthYearStat
     if (val && val.isValid) {
       this.state = {
         month: val.toFormat("MM"),
-        year: val.toFormat("yyyy")
+        year: val.toFormat("yyyy"),
       };
     } else {
       this.state = {
         month: "",
-        year: ""
+        year: "",
       };
     }
   }
@@ -159,17 +162,19 @@ export class MonthYearInput extends BaseInput<MonthYearInputProps, MonthYearStat
     const monthName = `${this.props.name}_month`;
     const yearName = `${this.props.name}_year`;
 
-    const inputClass = classNames(
-      "govuk-input",
-      "govuk-date-input__input",
-      { "govuk-input--error": this.props.hasError === true }
-    );
+    const inputClass = classNames("govuk-input", "govuk-date-input__input", {
+      "govuk-input--error": this.props.hasError === true,
+    });
 
     return (
       <div className="govuk-date-input">
         <div className="govuk-date-input__item">
           <div className="govuk-form-group">
-            { !this.props.hideLabel && <label className="govuk-label govuk-date-input__label" htmlFor={monthName}>Month</label> }
+            {!this.props.hideLabel && (
+              <label className="govuk-label govuk-date-input__label" htmlFor={monthName}>
+                Month
+              </label>
+            )}
             <input
               className={classNames(inputClass, "govuk-input--width-2")}
               name={monthName}
@@ -185,7 +190,11 @@ export class MonthYearInput extends BaseInput<MonthYearInputProps, MonthYearStat
         </div>
         <div className="govuk-date-input__item">
           <div className="govuk-form-group">
-            { !this.props.hideLabel && <label className="govuk-label govuk-date-input__label" htmlFor={yearName}>Year</label> }
+            {!this.props.hideLabel && (
+              <label className="govuk-label govuk-date-input__label" htmlFor={yearName}>
+                Year
+              </label>
+            )}
             <input
               className={classNames(inputClass, "govuk-input--width-4")}
               name={yearName}
@@ -215,8 +224,12 @@ export class MonthYearInput extends BaseInput<MonthYearInputProps, MonthYearStat
 
       const date = DateTime.fromFormat(`${month}/${year}`, "M/yyyy");
 
-      const result = (startOrEnd === "start" ? date.startOf("month") : date.endOf("month"))
-        .set({hour: 12, minute: 0, second: 0, millisecond: 0});
+      const result = (startOrEnd === "start" ? date.startOf("month") : date.endOf("month")).set({
+        hour: 12,
+        minute: 0,
+        second: 0,
+        millisecond: 0,
+      });
 
       if (result.isValid) {
         this.props.onChange(result.toJSDate());

@@ -303,6 +303,7 @@ export class ProjectChangeRequestStore extends StoreBase {
           type: itemType.type,
           status: PCRItemStatus.Complete,
         };
+      case PCRItemType.LoanDrawdownChange:
       case PCRItemType.PeriodLengthChange:
         return {
           ...baseFields,

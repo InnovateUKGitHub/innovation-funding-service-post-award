@@ -1,4 +1,5 @@
 import { QueryBase } from "@server/features/common";
+import { roundCurrency, sum } from "@framework/util";
 import {
   Authorisation,
   CostCategoryVirementDto,
@@ -13,13 +14,11 @@ import {
   calculateNewEligibleCosts,
   calculateNewRemainingGrant,
 } from "@server/features/financialVirements/financialVirementsCalculations";
-import { roundCurrency, sum } from "@framework/util";
-import { GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
+import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims/getCostCategoriesQuery";
 
 export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
   constructor(
     private readonly projectId: string,
-    private readonly pcrId: string,
     private readonly pcrItemId: string,
     private readonly partnerId?: string,
   ) {
