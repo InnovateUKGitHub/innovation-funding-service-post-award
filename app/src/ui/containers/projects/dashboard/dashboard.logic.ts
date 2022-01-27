@@ -6,6 +6,7 @@ import {
   ProjectDto,
   ProjectStatus,
 } from "@framework/types";
+import { projectPriorityComparator } from "@framework/util";
 
 import { CuratedSection, CuratedSections, ProjectData, Section } from "./Dashboard.interface";
 
@@ -38,6 +39,9 @@ export function generateFilteredProjects(projects: ProjectDto[], partners: Partn
     curatedTotals[key] += 1;
     totalProjects += 1;
   }
+
+  // Note: Sort only open projects
+  curatedProjects.open.sort((a, b) => projectPriorityComparator(a.project, b.project));
 
   return {
     totalProjects,
