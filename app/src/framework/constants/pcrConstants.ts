@@ -42,7 +42,7 @@ export enum PCRItemStatus {
   Unknown = 0,
   ToDo = 1,
   Incomplete = 2,
-  Complete = 3
+  Complete = 3,
 }
 
 export enum PCRItemType {
@@ -57,6 +57,7 @@ export enum PCRItemType {
   ScopeChange = 80,
   TimeExtension = 90,
   PeriodLengthChange = 100,
+  LoanDrawdownChange = 110,
 }
 
 export enum PCRParticipantSize {
@@ -95,7 +96,11 @@ export enum PCROrganisationType {
 export const getPCROrganisationType = (partnerType: PCRPartnerType): PCROrganisationType => {
   if (partnerType === PCRPartnerType.Research) {
     return PCROrganisationType.Academic;
-  } else if (partnerType === PCRPartnerType.Business || partnerType === PCRPartnerType.Other || partnerType === PCRPartnerType.ResearchAndTechnology) {
+  } else if (
+    partnerType === PCRPartnerType.Business ||
+    partnerType === PCRPartnerType.Other ||
+    partnerType === PCRPartnerType.ResearchAndTechnology
+  ) {
     return PCROrganisationType.Industrial;
   }
   return PCROrganisationType.Unknown;
@@ -130,6 +135,7 @@ export function getUnavailablePcrItemsMatrix(pcrs: PCRSummaryDto[]): PCRItemType
     [PCRItemType.ScopeChange]: [PCRItemType.ScopeChange],
     [PCRItemType.TimeExtension]: [PCRItemType.TimeExtension],
     [PCRItemType.PeriodLengthChange]: [],
+    [PCRItemType.LoanDrawdownChange]: [PCRItemType.LoanDrawdownChange],
   };
 
   let matrixItems: PCRItemType[] = [];

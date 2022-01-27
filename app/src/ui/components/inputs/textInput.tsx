@@ -7,6 +7,8 @@ export interface TextInputProps extends InputProps<string> {
   maxLength?: number;
   handleKeyTyped?: boolean;
   width?: FormInputWidths;
+  className?: string;
+  id?: string;
 }
 
 export class TextInput extends BaseInput<TextInputProps, InputState> {
@@ -26,9 +28,9 @@ export class TextInput extends BaseInput<TextInputProps, InputState> {
   public render() {
     return (
       <input
-        id={this.props.name}
+        id={this.props.id || this.props.name}
         type="text"
-        className={classNames(
+        className={classNames(this.props.className,
           "govuk-input", {
             "govuk-input--error": this.props.hasError === true,
             [`govuk-input--width-${this.props.width}`]: typeof this.props.width === "number",

@@ -23,20 +23,24 @@ export interface ISalesforceFinancialVirement {
   RecordTypeId: string;
 }
 
-export interface IFinancialVirementRepository {
-  getAllForPcr(pcrItemId: string): Promise<PartnerFinancialVirement[]>;
-  updateVirements(items: Updatable<ISalesforceFinancialVirement>[]): Promise<boolean>;
-}
-
-export class FinancialVirementRepository extends SalesforceRepositoryBase<ISalesforceFinancialVirement> implements IFinancialVirementRepository {
-  constructor(private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+export class FinancialVirementRepository extends SalesforceRepositoryBase<ISalesforceFinancialVirement> {
+  constructor(
+    private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>,
+    getSalesforceConnection: () => Promise<Connection>,
+    logger: ILogger,
+  ) {
     super(getSalesforceConnection, logger);
   }
+
+  private virementWhereQuery = (id: string) =>
+    `Acc_ProjectChangeRequest__c = '${id}' or Acc_ParticipantVirement__r.Acc_ProjectChangeRequest__c = '${id}'`;
 
   protected readonly salesforceObjectName = "Acc_Virements__c";
   protected salesforceFieldNames = [
     "Id",
     "Acc_ProjectChangeRequest__c",
+
+    // Partner Virement
     "Acc_Profile__c",
     "Acc_Profile__r.Acc_CostCategory__c",
     "Acc_Profile__r.Acc_ProjectParticipant__c",
@@ -52,13 +56,24 @@ export class FinancialVirementRepository extends SalesforceRepositoryBase<ISales
   ];
 
   public async getAllForPcr(pcrItemId: string): Promise<PartnerFinancialVirement[]> {
-    const partnerVirementRecordType = await this.getRecordTypeId(this.salesforceObjectName, "Virements for Participant");
+    const partnerVirementRecordType = await this.getRecordTypeId(
+      this.salesforceObjectName,
+      "Virements for Participant",
+    );
     const costCategoryVirementRecordType = await this.getRecordTypeId(this.salesforceObjectName, "Virements for Costs");
-    const data = await super.where(`Acc_ProjectChangeRequest__c = '${pcrItemId}' or Acc_ParticipantVirement__r.Acc_ProjectChangeRequest__c = '${pcrItemId}'`);
-    return new SalesforceFinancialVirementMapper(partnerVirementRecordType, costCategoryVirementRecordType).map(data);
+
+    const partnerVirementMapper = new SalesforceFinancialVirementMapper(
+      partnerVirementRecordType,
+      costCategoryVirementRecordType,
+    );
+
+    const data = await super.where(this.virementWhereQuery(pcrItemId));
+    return partnerVirementMapper.map(data);
   }
 
-  public updateVirements(items: Updatable<ISalesforceFinancialVirement>[]) {
+  public updateVirements(items: Updatable<ISalesforceFinancialVirement>[]): Promise<boolean> {
     return super.updateAll(items);
   }
 }
+
+export type IFinancialVirementRepository = Pick<FinancialVirementRepository, "getAllForPcr" | "updateVirements">;

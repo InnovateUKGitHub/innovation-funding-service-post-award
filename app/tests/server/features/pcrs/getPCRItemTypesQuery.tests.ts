@@ -114,6 +114,7 @@ describe("GetPCRItemTypesQuery", () => {
           PCRItemType.ScopeChange,
           PCRItemType.TimeExtension,
           PCRItemType.ProjectSuspension,
+          PCRItemType.LoanDrawdownChange,
         ]);
       });
     });

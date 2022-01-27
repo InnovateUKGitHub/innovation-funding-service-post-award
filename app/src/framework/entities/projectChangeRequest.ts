@@ -42,6 +42,7 @@ export interface ProjectChangeRequestItemForCreateEntity {
   suspensionEndDate?: Date | null;
   partnerId?: string | null;
   removalPeriod?: number | null;
+
   // add partner
   projectRole?: PCRProjectRole;
   projectRoleLabel?: string | null;
@@ -74,7 +75,8 @@ export interface ProjectChangeRequestItemForCreateEntity {
   awardRate?: number | null;
   hasOtherFunding?: boolean | null;
   tsbReference?: string | null;
-  // virements
+
+  // Partner Virements
   grantMovingOverFinancialYear?: number | null;
 }
 

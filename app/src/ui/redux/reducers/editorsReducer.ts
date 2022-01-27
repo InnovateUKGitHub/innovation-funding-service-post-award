@@ -3,7 +3,7 @@ import { actionTypes } from "redux-router5";
 import * as Validators from "@ui/validators";
 import { RootActions } from "@ui/redux/actions";
 import { Results } from "@ui/validation/results";
-import { ClaimDetailsDto, ClaimDto, ErrorCode, FinancialVirementDto, ForecastDetailsDTO, IAppError, LoanDto, MonitoringReportDto, PartnerDto } from "@framework/types";
+import { ClaimDetailsDto, ClaimDto, ErrorCode, FinancialVirementDto, FinancialLoanVirementDto, ForecastDetailsDTO, IAppError, LoanDto, MonitoringReportDto, PartnerDto } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -109,6 +109,7 @@ export const editorReducer = combineReducers({
   forecastDetails: editorsReducer<ForecastDetailsDTO[], Validators.ForecastDetailsDtosValidator>("forecastDetails"),
   initialForecastDetails: editorsReducer<ForecastDetailsDTO[], Results<ForecastDetailsDTO[]>>("initialForecastDetails"),
   financialVirement: editorsReducer<FinancialVirementDto, Validators.FinancialVirementDtoValidator>("financialVirement"),
+  financialLoanVirement: editorsReducer<FinancialLoanVirementDto, Validators.FinancialLoanVirementDtoValidator>("financialLoanVirement"),
   documents: editorsReducer<DocumentUploadDto, Validators.DocumentUploadDtoValidator>("documents"),
   multipleDocuments: editorsReducer<MultipleDocumentUploadDto, Validators.MultipleDocumentUploadDtoValidator>("multipleDocuments"),
   documentSummary: editorsReducer<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>("documentSummary"),

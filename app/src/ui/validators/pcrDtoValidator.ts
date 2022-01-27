@@ -17,6 +17,7 @@ import {
   PCRStandardItemDto,
   ProjectDto,
   PCRSummaryDto,
+  PCRItemForLoanDrawdownChangeDto,
 } from "@framework/dtos";
 import {
   PCRItemStatus,
@@ -286,6 +287,16 @@ export class PCRDtoValidator extends Results<PCRDto> {
           this.showValidationErrors,
           originalItem as PCRStandardItemDto,
         );
+      case PCRItemType.LoanDrawdownChange:
+        return new PCRLoanDrawdownChangeItemDtoValidator(
+          item,
+          canEdit,
+          this.role,
+          this.model.status,
+          this.recordTypes,
+          this.showValidationErrors,
+          originalItem as PCRItemForLoanDrawdownChangeDto,
+        );
       default:
         throw new Error("PCR Type not implemented");
     }
@@ -509,6 +520,7 @@ export class PCRTimeExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
   offsetMonthsResult = this.validateOffsetMonths();
 }
 
+export class PCRLoanDrawdownChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForLoanDrawdownChangeDto> {}
 export class PCRProjectTerminationItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForProjectTerminationDto> {}
 export class PCRPeriodLengthChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForPeriodLengthChangeDto> {}
 

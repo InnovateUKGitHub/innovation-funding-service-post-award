@@ -1,3 +1,10 @@
+import { LoanFinancialVirement } from "@framework/entities";
+
+export interface FinancialLoanVirementDto {
+  pcrItemId: string;
+  loans: LoanFinancialVirement[];
+}
+
 export interface FinancialVirementDto {
   pcrItemId: string;
   costsClaimedToDate: number;

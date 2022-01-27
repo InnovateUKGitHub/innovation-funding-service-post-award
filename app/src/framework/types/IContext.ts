@@ -25,6 +25,7 @@ export interface IRepositories {
   readonly costCategories: Repositories.ICostCategoryRepository;
   readonly documents: Repositories.IDocumentsRepository;
   readonly financialVirements: Repositories.IFinancialVirementRepository;
+  readonly financialLoanVirements: Repositories.IFinancialLoanVirementRepository;
   readonly monitoringReportResponse: Repositories.IMonitoringReportResponseRepository;
   readonly monitoringReportHeader: Repositories.IMonitoringReportHeaderRepository;
   readonly monitoringReportQuestions: Repositories.IMonitoringReportQuestionsRepository;

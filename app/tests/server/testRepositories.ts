@@ -27,7 +27,7 @@ import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
 import { LoanMapper } from "@server/repositories/mappers/loanMapper";
 import { PcrSpendProfileEntity } from "@framework/entities/pcrSpendProfile";
-import { PcrSpendProfileEntityForCreate } from "@framework/entities";
+import { LoanStatus, PcrSpendProfileEntityForCreate } from "@framework/entities";
 import { BadRequestError, NotFoundError } from "@server/features/common";
 import { BroadcastMapper } from "@server/repositories/mappers/broadcastMapper";
 import { pcrStatusesPicklist } from "../server/features/pcrs/pcrStatusesPicklist";
@@ -714,6 +714,27 @@ class ProjectChangeRequestStatusChangeTestRepository extends TestRepository<Enti
   }
 }
 
+class FinancialLoanVirementsTestRepository extends TestRepository<Entities.LoanFinancialVirement> implements Repositories.IFinancialLoanVirementRepository {
+  async getForPcr(pcrItemId: string): Promise<Entities.LoanFinancialVirement[]> {
+    return await Promise.resolve(this.Items);
+  }
+
+  updateVirements(items: Updatable<Repositories.ISalesforceFinancialLoanVirement>[]): Promise<boolean> {
+    items.forEach(x => this.updateVirement(x));
+    return Promise.resolve(true);
+  }
+
+  private updateVirement(item: Updatable<Repositories.ISalesforceFinancialLoanVirement>) {
+    this.Items.reduce<Entities.LoanFinancialVirement[]>((loans, loan) => {
+      const isEditable = loan.status === LoanStatus.REQUESTED;
+      const isItem = item.Id === loan.id;
+      const shouldReturnLoan = isItem && isEditable;
+
+      return shouldReturnLoan ? [...loans, loan] : loans;
+    }, []);
+  }
+}
+
 class FinancialVirementsTestRepository extends TestRepository<Entities.PartnerFinancialVirement> implements Repositories.IFinancialVirementRepository {
   getAllForPcr(pcrItemId: string): Promise<Entities.PartnerFinancialVirement[]> {
     return super.getWhere(x => x.pcrItemId === pcrItemId);
@@ -866,6 +887,7 @@ export const createTestRepositories = (): ITestRepositories => {
     costCategories: new CostCategoriesTestRepository(),
     documents: new DocumentsTestRepository(),
     financialVirements: new FinancialVirementsTestRepository(),
+    financialLoanVirements: new FinancialLoanVirementsTestRepository(),
     loans: new LoansTestRepository(),
     monitoringReportResponse: new MonitoringReportResponseTestRepository(),
     monitoringReportHeader: new MonitoringReportHeaderTestRepository(),

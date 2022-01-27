@@ -19,6 +19,7 @@ import { suspendProjectWorkflow } from "./suspendProject/workflow";
 import { standardItemWorkflow } from "./standardItem/workflow";
 import { scopeChangeWorkflow } from "./scopeChange/scopeChangeWorkflow";
 import { accountNameChangeWorkflow } from "./nameChange";
+import { LoanDrawdownChangeWorkflow } from "./loanDrawdownChange/LoanDrawdownChangeWorkflow";
 
 export interface PcrStepProps<TDto, TVal> extends IStepProps {
   project: ProjectDto;
@@ -63,6 +64,8 @@ export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<string
         return new PcrWorkflow(scopeChangeWorkflow, step);
       case PCRItemType.TimeExtension:
         return new PcrWorkflow(timeExtensionItemWorkflow, step);
+      case PCRItemType.LoanDrawdownChange:
+        return new PcrWorkflow(LoanDrawdownChangeWorkflow, step);
       case PCRItemType.ProjectSuspension:
         return new PcrWorkflow(suspendProjectWorkflow, step);
       case PCRItemType.MultiplePartnerFinancialVirement:

@@ -116,6 +116,8 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
          };
       case PCRItemType.MultiplePartnerFinancialVirement:
         return { ...init, grantMovingOverFinancialYear: itemDto.grantMovingOverFinancialYear };
+
+      case PCRItemType.LoanDrawdownChange:
       default:
         return init;
     }

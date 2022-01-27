@@ -15,16 +15,19 @@ export class VirementCostsUpdateHandler extends StandardFormHandlerBase<Virement
     super(FinancialVirementEditRoute, ["default"], "financialVirement");
   }
 
-  protected async getDto(context: IContext, params: VirementCostsParams, button: IFormButton, body: IFormBody): Promise<FinancialVirementDto> {
-    const virementDto = await context.runQuery(new GetFinancialVirementQuery(params.projectId, params.pcrId, params.itemId, params.partnerId));
-    if (!virementDto) {
-      throw new BadRequestError("Virement not found");
-    }
+  protected async getDto(
+    context: IContext,
+    params: VirementCostsParams,
+    button: IFormButton,
+    body: IFormBody,
+  ): Promise<FinancialVirementDto> {
+    const virementQuery = new GetFinancialVirementQuery(params.projectId, params.itemId, params.partnerId);
+    const virementDto = await context.runQuery(virementQuery);
+
+    if (!virementDto) throw new BadRequestError("Virement not found");
 
     const partnerVirementDto = virementDto.partners.find(x => x.partnerId === params.partnerId);
-    if (!partnerVirementDto) {
-      throw new BadRequestError("Partner virement not found");
-    }
+    if (!partnerVirementDto) throw new BadRequestError("Partner virement not found");
 
     const partner = await context.runQuery(new GetByIdQuery(params.partnerId));
     const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
@@ -38,7 +41,10 @@ export class VirementCostsUpdateHandler extends StandardFormHandlerBase<Virement
       x.newEligibleCosts = newEligibleCosts;
 
       if (partner.overheadRate) {
-        const related = partnerVirementDto.virements.find(v => calculatedCostCategoryIds.indexOf(v.costCategoryId) !== -1);
+        const related = partnerVirementDto.virements.find(
+          v => calculatedCostCategoryIds.indexOf(v.costCategoryId) !== -1,
+        );
+
         if (related) {
           related.newEligibleCosts = roundCurrency((newEligibleCosts || 0) * (partner.overheadRate / 100));
         }
@@ -48,7 +54,12 @@ export class VirementCostsUpdateHandler extends StandardFormHandlerBase<Virement
     return virementDto;
   }
 
-  protected async run(context: IContext, { projectId, itemId, pcrId }: VirementCostsParams, button: IFormButton, dto: FinancialVirementDto): Promise<ILinkInfo> {
+  protected async run(
+    context: IContext,
+    { projectId, itemId, pcrId }: VirementCostsParams,
+    button: IFormButton,
+    dto: FinancialVirementDto,
+  ): Promise<ILinkInfo> {
     await context.runCommand(new UpdateFinancialVirementCommand(projectId, pcrId, itemId, dto, false));
     return PCRPrepareItemRoute.getLink({ projectId, pcrId, itemId });
   }

@@ -714,3 +714,16 @@ p.govuk-body--multiline {
   /* TODO: Get GDS Colour */
   background-color: #f3f2f1;
 }
+
+.loan-table__row--is-editable td {
+  vertical-align: middle;
+}
+
+.loan-table__cell--error {
+  font-weight: bold;
+  color: #b10e1e;
+}
+
+.loan-table__cell--date-error {
+  border-color: #d4351c;
+}

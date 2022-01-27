@@ -34,6 +34,7 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
     costsSummaries,
     forecastDetails: new Stores.ForecastDetailsStore(claims, claimDetails, forecastGolCosts, partners, costCategories, getState, dispatch),
     financialVirements: new Stores.FinancialVirementsStore(getState, dispatch),
+    financialLoanVirements: new Stores.FinancialLoanVirementsStore(getState, dispatch),
     forecastGolCosts,
     messages: new Stores.MessagesStore(getState, dispatch),
     monitoringReports: new Stores.MonitoringReportsStore(projects, getState, dispatch),

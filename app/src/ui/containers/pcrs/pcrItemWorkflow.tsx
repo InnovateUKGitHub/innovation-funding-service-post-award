@@ -150,6 +150,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
       : [editor.validator, documentsEditor.validator];
 
     return (
+      // TODO: Raise ticket to move this provider closer to 'financialVirementsSummary.tsx'
       <PcrSummaryProvider type={pcrItem.type} partners={partners} virement={virement}>
         <ACC.Page
           backLink={this.getBackLink()}
@@ -214,13 +215,18 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
     documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
     editableItemTypes: PCRItemType[],
   ) {
+    const isPrepareMode = this.props.mode === "prepare";
+    const isFirstStep = this.props.step === 1;
+
+    const displayGuidance = isPrepareMode && isFirstStep;
+
     return (
       <>
-        {this.props.mode === "prepare" && this.props.step === 1 && this.renderGuidanceSection(pcrItem)}
-        {!workflow.isOnSummary() &&
-          this.renderStep(workflow, project, pcr, pcrItem, pcrItemType, editor, documentsEditor)}
-        {workflow.isOnSummary() &&
-          this.renderSummarySection(workflow, project, pcr, pcrItem, editor, editableItemTypes)}
+        {displayGuidance && this.renderGuidanceSection(pcrItem)}
+
+        {workflow.isOnSummary()
+          ? this.renderSummarySection(workflow, project, pcr, pcrItem, editor, editableItemTypes)
+          : this.renderStep(workflow, project, pcr, pcrItem, pcrItemType, editor, documentsEditor)}
       </>
     );
   }
@@ -248,7 +254,10 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
     const status = editor.status || EditorStatus.Editing;
     const { mode } = this.props;
 
-    const currentStep = workflow.getCurrentStepInfo()!;
+    const currentStep = workflow.getCurrentStepInfo();
+
+    if (!currentStep) throw Error("PCR step does not exist on this workflow.");
+
     const props: PcrStepProps<PCRItemDto, typeof validator> = {
       pcr,
       pcrItem,
@@ -322,6 +331,9 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
   private renderCompleteForm(
     workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>,
     editor: IEditorStore<PCRDto, PCRDtoValidator>,
+    config: {
+      allowSubmit: boolean;
+    },
   ) {
     const PCRForm = ACC.TypedForm<PCRItemDto>();
 
@@ -349,7 +361,8 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
               (x.status = value && value.some(y => y.id === "true") ? PCRItemStatus.Complete : PCRItemStatus.Incomplete)
             }
           />
-          <PCRForm.Submit>Save and return to request</PCRForm.Submit>
+
+          {config.allowSubmit && <PCRForm.Submit>Save and return to request</PCRForm.Submit>}
         </PCRForm.Fieldset>
       </PCRForm.Form>
     );
@@ -376,7 +389,10 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
             <ACC.Section qa="item-save-and-return">
               {this.renderSummary(workflow, project, pcr, editor)}
 
-              {displayCompleteForm && this.renderCompleteForm(workflow, editor)}
+              {displayCompleteForm &&
+                this.renderCompleteForm(workflow, editor, {
+                  allowSubmit: summaryContext.allowSubmit,
+                })}
 
               {displayNavigationArrows && (
                 <NavigationArrowsForPCRs
@@ -403,7 +419,6 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
   private onSave(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, dto: PCRDto, skipToSummary = false) {
     const item = dto.items.find(x => x.id === this.props.itemId)!;
 
-    // If on the summary
     if (workflow.isOnSummary()) {
       // If submitting from the summary set the status to "Incomplete" only if it's in "To do" (i.e. if it's set to "Complete" then leave it as it is)
       if (item.status === PCRItemStatus.ToDo) item.status = PCRItemStatus.Incomplete;
@@ -439,7 +454,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
         projectId: this.props.projectId,
         pcrId: this.props.pcrId,
         itemId: this.props.itemId,
-        step: nextStep && nextStep.stepNumber,
+        step: nextStep?.stepNumber,
       }),
     );
   }

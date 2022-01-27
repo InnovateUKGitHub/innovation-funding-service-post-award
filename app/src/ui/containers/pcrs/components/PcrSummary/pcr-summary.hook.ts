@@ -1,16 +1,30 @@
 import { PCRItemType } from "@framework/types";
+import { useState } from "react";
 
 import { PcrSummaryProps, PcrSummaryResponse } from "./pcr-summary.interface";
 import { partnerSummaryData } from "./summary-sections/reallocate-costs";
 
 // TODO: Investigate useMemo for inbound props!
 export function usePcrSummary({ type, partners, virement }: PcrSummaryProps): PcrSummaryResponse {
-  if (type === PCRItemType.MultiplePartnerFinancialVirement) {
-    return partnerSummaryData({ partners, virement });
-  }
+  const [allowSubmit, setButtonVisibility] = useState<boolean>(true);
 
-  return {
+  const handleSubmitDisplay = (enableSubmit: boolean): void => setButtonVisibility(enableSubmit);
+
+  const summaryState: PcrSummaryResponse = {
     data: null,
     isSummaryValid: true,
+    allowSubmit,
+    handleSubmitDisplay,
   };
+
+  if (type === PCRItemType.MultiplePartnerFinancialVirement) {
+    const partnerVirementState = partnerSummaryData({ partners, virement });
+
+    return {
+      ...summaryState,
+      ...partnerVirementState,
+    };
+  }
+
+  return summaryState;
 }
