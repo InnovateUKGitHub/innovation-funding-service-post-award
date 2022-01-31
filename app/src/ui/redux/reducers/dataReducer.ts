@@ -119,5 +119,5 @@ export const dataReducer = combineReducers({
   validate: dataStoreReducer<any>("validate"),
   user: dataStoreReducer<{ [key: string]: ProjectRole }>("user"),
   loans: dataStoreReducer<Dtos.LoanDto[]>("loans"),
-  loan: dataStoreReducer<Dtos.LoanDto | Dtos.LoanDtoWithTotals>("loan")
+  loan: dataStoreReducer<Dtos.LoanDto | Dtos.LoanDto>("loan")
 });

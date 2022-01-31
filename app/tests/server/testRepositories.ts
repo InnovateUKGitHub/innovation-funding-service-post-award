@@ -13,7 +13,6 @@ import {
   IPicklistEntry,
   IRepositories,
   LoanDto,
-  LoanDtoWithTotals,
   MonitoringReportStatus,
   PCRStatus,
   PermissionGroupIdenfifier,
@@ -742,34 +741,33 @@ class FinancialVirementsTestRepository extends TestRepository<Entities.PartnerFi
 
 class LoansTestRepository {
   private Items: Repositories.ISalesforceLoan[] = [];
-  private ItemsWithTotals: Repositories.ISalesforceLoanWithTotals[] = [];
 
   getAll(projectId: string) {
     const loans = this.Items.map(x => new LoanMapper().map(x));
     return Promise.resolve(loans);
   }
 
-  getWithTotals(loanId: string) {
-    return new Promise<LoanDtoWithTotals>(resolve => {
-      const loanItem = this.ItemsWithTotals.find(x => x.Id === loanId);
-
-      if (!loanItem) throw new BadSalesforceQuery();
-
-      const loan = new LoanMapper().mapWithTotals(loanItem);
-
-      resolve(loan);
-    });
-  }
-
-  getWithoutTotals(loanId: string) {
+  get(projectId: string, options: { loanId?: string; periodId?: number }) {
     return new Promise<LoanDto>(resolve => {
-      const loanItem = this.Items.find(x => x.Id === loanId);
+      if (options.loanId) {
+        const loanItem = this.Items.find(x => x.Id === options.loanId);
 
-      if (!loanItem) throw new BadSalesforceQuery();
+        if (!loanItem) throw new BadSalesforceQuery();
 
-      const loan = new LoanMapper().map(loanItem);
+        const loan = new LoanMapper().mapWithTotals(loanItem);
 
-      resolve(loan);
+        resolve(loan);
+      }
+
+      if (options.periodId) {
+        const loanItem = this.Items.find(x => x.Acc_PeriodNumber__c === options.periodId);
+
+        if (!loanItem) throw new BadSalesforceQuery();
+
+        const loan = new LoanMapper().mapWithTotals(loanItem);
+
+        resolve(loan);
+      }
     });
   }
 

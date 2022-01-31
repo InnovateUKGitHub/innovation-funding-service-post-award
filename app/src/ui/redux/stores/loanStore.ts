@@ -1,6 +1,6 @@
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { Pending } from "@shared/pending";
-import { LoanDto, LoanDtoWithTotals } from "@framework/dtos";
+import { LoanDto } from "@framework/dtos";
 import { LoanDtoValidator } from "@ui/validators/loanValidator";
 import { apiClient } from "../../apiClient";
 import { RootState } from "../reducers";
@@ -17,21 +17,25 @@ export class LoansStore extends StoreBase {
     super(getState, dispatch);
   }
 
-  private getKey(projectId: string, loanId: string): string {
-    return storeKeys.getLoanKey(projectId, loanId);
+  private getKey(projectId: string, loanId: string | undefined, periodId?: number | undefined): string {
+    if (loanId) {
+      return storeKeys.getLoanKey(projectId, loanId);
+    }
+
+    if (periodId) {
+      return storeKeys.getLoanByPeriod(projectId, periodId);
+    }
+
+    throw Error("You must supply param after projectId for getKey to work.");
   }
 
   public getAll(projectId: string): Pending<LoanDto[]> {
     return this.getData("loans", storeKeys.getLoansKey(projectId), p => apiClient.loans.getAll({ ...p, projectId }));
   }
 
-  public get<T extends boolean>(
-    withTotals: T,
-    projectId: string,
-    loanId: string,
-  ): Pending<T extends true ? LoanDtoWithTotals : LoanDto> {
-    return this.getData("loan", this.getKey(projectId, loanId), p =>
-      apiClient.loans.get({ ...p, withTotals, projectId, loanId }),
+  public get(projectId: string, loanId?: string, periodId?: number): Pending<LoanDto> {
+    return this.getData("loan", this.getKey(projectId, loanId, periodId), p =>
+      apiClient.loans.get({ ...p, projectId, loanId, periodId }),
     );
   }
 
@@ -41,11 +45,11 @@ export class LoansStore extends StoreBase {
     );
   }
 
-  public getLoanEditor(projectId: string, loanId: string, init?: (dto: LoanDtoWithTotals) => void) {
+  public getLoanEditor(projectId: string, loanId: string, init?: (dto: LoanDto) => void) {
     return this.getEditor(
       "loan",
       this.getKey(projectId, loanId),
-      () => this.get(true, projectId, loanId),
+      () => this.get(projectId, loanId),
       init,
       dto => this.validate(dto, projectId, loanId, false),
     );
@@ -67,9 +71,8 @@ export class LoansStore extends StoreBase {
       p => apiClient.loans.update({ projectId, loanId, loan: dto, ...p }),
       result => {
         this.markStale("loan", this.getKey(projectId, loanId), result);
-        if (message) {
-          this.queue(messageSuccess(message));
-        }
+
+        if (message) this.queue(messageSuccess(message));
 
         onComplete?.(result);
       },

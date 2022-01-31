@@ -1,7 +1,8 @@
 import { UnauthenticatedError } from "@server/features/common/appError";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { IApiClient } from "../server/apis";
-import { processResponse } from "../shared/processResponse";
+import { IApiClient } from "@server/apis";
+import { processResponse } from "@shared/processResponse";
+import { removeUndefinedString } from "@shared/string-helpers";
 import { ClientFileWrapper } from "./clientFileWrapper";
 
 const clientApi: IApiClient = {
@@ -52,7 +53,8 @@ const clientApi: IApiClient = {
   },
   documents: {
     getLoanDocuments: params => ajaxJson(`/api/documents/loans/${params.projectId}/${params.loanId}`),
-    uploadLoanDocuments: params => ajaxPostFiles(`/api/documents/loans/${params.projectId}/${params.loanId}`, params.documents),
+    uploadLoanDocuments: params =>
+      ajaxPostFiles(`/api/documents/loans/${params.projectId}/${params.loanId}`, params.documents),
     deleteLoanDocument: p =>
       ajaxJson(`/api/documents/loans/${p.projectId}/${p.loanId}/${p.documentId}`, { method: "DELETE" }),
     getClaimDocuments: params =>
@@ -137,7 +139,7 @@ const clientApi: IApiClient = {
   },
   loans: {
     getAll: params => ajax(`/api/loans/${params.projectId}`),
-    get: params => ajax(`/api/loans/${params.projectId}/${params.loanId}?totals=${params.withTotals}`),
+    get: params => ajax(`/api/loans/get/${params.projectId}/?loanId=${params.loanId}&periodId=${params.periodId}`),
     update: params => ajaxPut(`/api/loans/${params.projectId}/${params.loanId}`, params.loan),
   },
   monitoringReports: {
@@ -198,8 +200,10 @@ const getJsonHeaders = () => {
   return headers;
 };
 
-const ajax = <T>(queryUrl: string, opts?: RequestInit): Promise<T> => {
+const ajax = <T>(rawQueryUrl: string, opts?: RequestInit): Promise<T> => {
   const options = { credentials: "same-origin" as RequestCredentials, ...opts };
+
+  const queryUrl = removeUndefinedString(rawQueryUrl);
 
   const request = fetch(queryUrl, options);
 

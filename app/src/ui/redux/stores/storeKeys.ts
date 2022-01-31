@@ -4,6 +4,7 @@ const getKey = (...args: (string | number | boolean | "all")[]) => args.join("_"
 
 const getLoansKey = (projectId: string) => getKey("loansKey", "loans", projectId);
 const getLoanKey = (projectId: string, loanId: string) => getKey("loanKey", "loan", "project", projectId, "loan", loanId);
+const getLoanByPeriod = (projectId: string, periodId: number) => getKey("loanKey", "loan", "project", projectId, "period", periodId);
 const getAccountKey = () => getKey("accountKey", "account", "all");
 const getBroadcastsKey = () => getKey("broadcastsKey", "broadcast", "all");
 const getBroadcastKey = (broadcastId: string) => getKey("broadcastKey", "broadcast", broadcastId);
@@ -41,6 +42,7 @@ const getCompaniesKey = (searchString: string, itemsPerPage?: number, startIndex
 export const storeKeys = {
   getLoansKey,
   getLoanKey,
+  getLoanByPeriod,
   getAccountKey,
   getBroadcastsKey,
   getBroadcastKey,
