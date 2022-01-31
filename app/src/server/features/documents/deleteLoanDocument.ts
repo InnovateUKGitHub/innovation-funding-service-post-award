@@ -11,7 +11,7 @@ export class DeleteLoanDocument extends CommandBase<void> {
   }
 
   async accessControl(auth: Authorisation, context: IContext): Promise<boolean> {
-    const loan = await context.repositories.loans.getWithoutTotals(this.projectId, this.loanId);
+    const loan = await context.repositories.loans.get(this.projectId, { loanId: this.loanId });
 
     if (!loan) return false;
 

@@ -20,7 +20,7 @@ export class LoanRequestFormHandler extends StandardFormHandlerBase<LoansRequest
     _button: IFormButton,
     body: IFormBody,
   ): Promise<LoanDto> {
-    const originalLoanQuery = new GetLoan(true, params.projectId, params.loanId);
+    const originalLoanQuery = new GetLoan(params.projectId, { loanId: params.loanId });
     const originalLoan = await context.runQuery(originalLoanQuery);
 
     return {

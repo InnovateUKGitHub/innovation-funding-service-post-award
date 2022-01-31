@@ -1,11 +1,13 @@
 import { QueryBase } from "@server/features/common";
-import { LoanDto, IContext, ProjectRole, Authorisation, LoanDtoWithTotals } from "@framework/types";
+import { LoanDto, IContext, ProjectRole, Authorisation } from "@framework/types";
 
-export class GetLoan extends QueryBase<LoanDto | LoanDtoWithTotals> {
+export class GetLoan extends QueryBase<LoanDto> {
   constructor(
-    private readonly withTotals: boolean = true,
     private readonly projectId: string,
-    private readonly loanId: string,
+    private readonly options: {
+      loanId?: string;
+      periodId?: number;
+    },
   ) {
     super();
   }
@@ -17,10 +19,6 @@ export class GetLoan extends QueryBase<LoanDto | LoanDtoWithTotals> {
   public async run(context: IContext) {
     const { loans } = context.repositories;
 
-    const loanRequest = this.withTotals
-      ? loans.getWithTotals(this.projectId, this.loanId)
-      : loans.getWithoutTotals(this.projectId, this.loanId);
-
-    return await loanRequest;
+    return await loans.get(this.projectId, this.options);
   }
 }

@@ -8,10 +8,11 @@ export interface LoanDto {
   forecastAmount: number;
   requestDate: Date;
   comments: string;
-}
 
-export interface LoanDtoWithTotals extends LoanDto {
-  totalLoan: number;
-  totalPaidToDate: number;
-  remainingLoan: number;
+  // Note: Pulled from project table
+  totals?: {
+    totalLoan: number;
+    totalPaidToDate: number;
+    remainingLoan: number;
+  };
 }

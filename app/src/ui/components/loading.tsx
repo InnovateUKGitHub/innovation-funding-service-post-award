@@ -60,7 +60,7 @@ export function Loader<T>({ pending, render, renderError, renderLoading }: Loadi
   return <LoadingElement>{pendingElement}</LoadingElement>;
 }
 
-function LoadingMessage() {
+export function LoadingMessage() {
   const { getContent } = useContent();
   const loadingMessage = getContent(x => x.components.loading.message);
 

@@ -4,7 +4,7 @@ import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { getPending } from "@ui/helpers/get-pending";
 import { DocumentDescription } from "@framework/constants";
-import { DocumentSummaryDto, LoanDto, LoanDtoWithTotals, MultipleDocumentUploadDto } from "@framework/dtos";
+import { DocumentSummaryDto, LoanDto, MultipleDocumentUploadDto } from "@framework/dtos";
 import { useContent } from "@ui/hooks";
 import { LoanDtoValidator } from "@ui/validators/loanValidator";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
@@ -18,9 +18,9 @@ export interface LoansRequestParams {
 }
 
 interface LoansRequestPageProps extends LoansRequestParams, BaseProps {
-  loan: LoanDtoWithTotals;
+  loan: Required<LoanDto>;
   documents: DocumentSummaryDto[];
-  loanEditor: IEditorStore<LoanDtoWithTotals, LoanDtoValidator>;
+  loanEditor: IEditorStore<LoanDto, LoanDtoValidator>;
   loanDocsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
   onDocsChange: (saving: boolean, dto: MultipleDocumentUploadDto) => void;
   onDocsDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
@@ -31,7 +31,7 @@ function LoansRequestPage({ loan, loanEditor, loanDocsEditor, documents, ...prop
   const { getContent } = useContent();
 
   const RequestForm = ACC.TypedForm<MultipleDocumentUploadDto>();
-  const CommentsForm = ACC.TypedForm<LoanDtoWithTotals>();
+  const CommentsForm = ACC.TypedForm<LoanDto>();
 
   const requestIntroPart1 = getContent(x => x.loanRequest.requestIntroPart1);
   const requestIntroPart2 = getContent(x => x.loanRequest.requestIntroPart2);
@@ -130,7 +130,7 @@ function LoansRequestContainer(props: BaseProps & LoansRequestParams) {
   const { getContent } = useContent();
 
   const projectPending = stores.projects.getById(props.projectId);
-  const loanPending = stores.loans.get(true, props.projectId, props.loanId);
+  const loanPending = stores.loans.get(props.projectId, props.loanId);
   const loanEditorPending = stores.loans.getLoanEditor(props.projectId, props.loanId);
   const loanDocsEditorPending = stores.loanDocuments.getLoanDocumentsEditor(props.projectId, props.loanId);
   const documentsPending = stores.loanDocuments.getLoanDocuments(props.projectId, props.loanId);
@@ -169,10 +169,10 @@ function LoansRequestContainer(props: BaseProps & LoansRequestParams) {
         <ACC.Renderers.SimpleString>{getContent(x => x.loanRequest.errorDrawdown)}</ACC.Renderers.SimpleString>
       )}
 
-      {payload && (
+      {payload?.loan.totals && (
         <LoansRequestPage
           {...props}
-          loan={payload.loan}
+          loan={payload.loan as Required<LoanDto>}
           loanEditor={payload.loanEditor}
           loanDocsEditor={payload.loanDocsEditor}
           documents={payload.documents}

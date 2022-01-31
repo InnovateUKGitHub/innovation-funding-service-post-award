@@ -1,8 +1,9 @@
-import { LoanDto, LoanDtoWithTotals } from "@framework/dtos/loanDto";
+import { LoanDto } from "@framework/dtos/loanDto";
 import { LoanStatus } from "@framework/entities";
 import { roundCurrency } from "@framework/util";
 
-import { ISalesforceLoan, ISalesforceLoanWithTotals } from "../loanRepository";
+import { BadRequestError } from "@server/features/common";
+import { ISalesforceLoan } from "../loanRepository";
 import { SalesforceBaseMapper } from "./saleforceMapperBase";
 
 export class LoanMapper extends SalesforceBaseMapper<ISalesforceLoan, LoanDto> {
@@ -25,8 +26,12 @@ export class LoanMapper extends SalesforceBaseMapper<ISalesforceLoan, LoanDto> {
     };
   }
 
-  public mapWithTotals(item: ISalesforceLoanWithTotals): LoanDtoWithTotals {
-    const loanDetails = this.map(item.Pre_Payments__r.records[0]);
+  public mapWithTotals(item: ISalesforceLoan): LoanDto {
+    const nestedQueryRecord = item?.Pre_Payments__r?.records[0];
+
+    if (!nestedQueryRecord) throw new BadRequestError("No loan found.");
+
+    const loanDetails = this.map(nestedQueryRecord);
 
     const totalLoan = item.Acc_TotalParticipantCosts__c;
     const totalPaidToDate = item.Acc_TotalGrantApproved__c;
@@ -40,9 +45,11 @@ export class LoanMapper extends SalesforceBaseMapper<ISalesforceLoan, LoanDto> {
 
     return {
       ...loanDetails,
-      totalLoan,
-      totalPaidToDate,
-      remainingLoan,
+      totals: {
+        totalLoan,
+        totalPaidToDate,
+        remainingLoan,
+      },
     };
   }
 

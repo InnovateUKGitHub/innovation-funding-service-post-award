@@ -20,7 +20,7 @@ export class UpdateLoanCommand extends CommandBase<boolean> {
   protected async run(context: IContext): Promise<boolean> {
     if (this.loanId !== this.loan.id) throw new BadRequestError();
 
-    const loanQuery = new GetLoan(false, this.projectId, this.loanId);
+    const loanQuery = new GetLoan(this.projectId, { loanId: this.loanId });
     const loanDocumentsQuery = new GetLoanDocumentsQuery(this.projectId, this.loanId);
 
     const existingLoan = await context.runQuery(loanQuery);

@@ -1,8 +1,9 @@
-import { LoanDtoWithTotals } from "@framework/dtos";
+import { LoanDto } from "@framework/dtos";
 
 import * as ACC from "@ui/components";
 
-type LoanTableProps = LoanDtoWithTotals;
+// Note: The totals property has to be required to render the table
+type LoanTableProps = Required<LoanDto>;
 
 export function LoanRequestTable(props: LoanTableProps) {
   const Request = ACC.TypedTable<typeof props>();
@@ -20,13 +21,18 @@ export function LoanRequestTable(props: LoanTableProps) {
         value={x => x.forecastAmount}
       />
 
-      <Request.Currency header="Total loan" qa="drawdown-request-total" fractionDigits={0} value={x => x.totalLoan} />
+      <Request.Currency
+        header="Total loan"
+        qa="drawdown-request-total"
+        fractionDigits={0}
+        value={x => x.totals.totalLoan}
+      />
 
       <Request.Currency
         header="Drawdown to date"
         qa="drawdown-request-paid-to-date"
         fractionDigits={0}
-        value={x => x.totalPaidToDate}
+        value={x => x.totals.totalPaidToDate}
       />
 
       <Request.Custom
@@ -44,7 +50,7 @@ export function LoanRequestTable(props: LoanTableProps) {
         header="Remaining loan"
         qa="drawdown-request-paid-to-date"
         fractionDigits={0}
-        value={x => x.remainingLoan}
+        value={x => x.totals.remainingLoan}
       />
     </Request.Table>
   );

@@ -1,4 +1,4 @@
-import { LoanDto, LoanDtoWithTotals } from "@framework/dtos/loanDto";
+import { LoanDto } from "@framework/dtos/loanDto";
 import { LoanMapper } from "./mappers/loanMapper";
 import { SalesforceRepositoryBaseWithMapping, Updatable } from "./salesforceRepositoryBase";
 
@@ -10,20 +10,18 @@ export interface ISalesforceLoan {
   Loan_LatestForecastDrawdown__c: number;
   Loan_PlannedDateForDrawdown__c: string;
   Loan_UserComments__c: string | null;
-}
 
-export interface ISalesforceLoanWithTotals extends Omit<ISalesforceLoan, "Acc_ProjectId__r"> {
-  Id: string;
+  // Project table fields
   Acc_TotalParticipantCosts__c: number;
   Acc_TotalGrantApproved__c: number;
   Pre_Payments__r: {
     totalSize: number;
     done: boolean;
     records: ISalesforceLoan[];
-  };
+  } | null;
 }
 
-export class LoanRepository extends SalesforceRepositoryBaseWithMapping<ISalesforceLoan, LoanDto | LoanDtoWithTotals> {
+export class LoanRepository extends SalesforceRepositoryBaseWithMapping<ISalesforceLoan, LoanDto> {
   protected readonly salesforceObjectName = "Acc_Prepayment__c";
   private readonly salesforcePrePaymentTable = "Pre_Payments__r";
 
@@ -38,8 +36,6 @@ export class LoanRepository extends SalesforceRepositoryBaseWithMapping<ISalesfo
     "Acc_ProjectParticipant__r.Id",
   ];
 
-  private totalProjectCostsFields = ["Id", "Acc_TotalParticipantCosts__c", "Acc_TotalGrantApproved__c"];
-
   protected mapper = new LoanMapper();
 
   public async update(loanToUpdate: Updatable<ISalesforceLoan>): Promise<boolean> {
@@ -52,29 +48,27 @@ export class LoanRepository extends SalesforceRepositoryBaseWithMapping<ISalesfo
     return super.where(projectWhereQuery);
   }
 
-  public async getWithoutTotals(projectId: string, loanId: string): Promise<LoanDto> {
-    const sqlLoanColumns = this.salesforceFieldNames.join(", ");
-    const projectWhereQuery = `Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'`;
-    const subRequest = `SELECT ${sqlLoanColumns} FROM ${this.salesforceObjectName} WHERE Id = '${loanId}' and ${projectWhereQuery}`;
+  public async get(projectId: string, options: { loanId?: string; periodId?: number }): Promise<LoanDto> {
+    let whereClause = "";
 
-    const [loan] = await super.query<ISalesforceLoan[]>(subRequest);
+    if (options.periodId) whereClause = `WHERE Acc_PeriodNumber__c = ${options.periodId}`;
+    if (options.loanId) whereClause = `WHERE Id = '${options.loanId}'`;
 
-    return new LoanMapper().map(loan);
+    const query = this.getLoanQuery(projectId, whereClause);
+    const [loanItem] = await super.query<ISalesforceLoan[]>(query);
+
+    return new LoanMapper().mapWithTotals(loanItem);
   }
 
-  public async getWithTotals(projectId: string, loanId: string): Promise<LoanDtoWithTotals> {
+  public getLoanQuery(projectId: string, whereClause: string): string {
+    const sqlTotalLoanCostsColumns = ["Id, Acc_TotalParticipantCosts__c, Acc_TotalGrantApproved__c"];
     const sqlLoanColumns = this.salesforceFieldNames.join(", ");
-    const sqlTotalCostColumns = this.totalProjectCostsFields.join(", ");
 
-    const subRequest = `SELECT ${sqlLoanColumns} FROM ${this.salesforcePrePaymentTable} WHERE Id = '${loanId}'`;
-    const totalCostColumns = `${sqlTotalCostColumns}, (${subRequest})`;
+    const subRequest = `SELECT ${sqlLoanColumns} FROM ${this.salesforcePrePaymentTable} ${whereClause}`;
+    const totalCostColumns = `${sqlTotalLoanCostsColumns}, (${subRequest})`;
 
-    const loanWithTotalsQuery = `SELECT ${totalCostColumns} FROM Acc_ProjectParticipant__c WHERE Acc_ProjectId__c = '${projectId}'`;
-
-    const [loan] = await super.query<ISalesforceLoanWithTotals[]>(loanWithTotalsQuery);
-
-    return new LoanMapper().mapWithTotals(loan);
+    return `SELECT ${totalCostColumns} FROM Acc_ProjectParticipant__c WHERE Acc_ProjectId__c = '${projectId}'`;
   }
 }
 
-export type ILoanRepository = Pick<LoanRepository, "getAll" | "getWithoutTotals" | "getWithTotals" | "update">;
+export type ILoanRepository = Pick<LoanRepository, "getAll" | "get" | "update">;

@@ -20,7 +20,7 @@ export class UploadLoanDocumentsCommand extends CommandMultipleDocumentBase<stri
   }
 
   protected async accessControl(auth: Authorisation, context: IContext) {
-    const loan = await context.repositories.loans.getWithoutTotals(this.projectId, this.loanId);
+    const loan = await context.repositories.loans.get(this.projectId, { loanId: this.loanId });
 
     if (!loan) return false;
 
@@ -28,7 +28,7 @@ export class UploadLoanDocumentsCommand extends CommandMultipleDocumentBase<stri
   }
 
   protected async run(context: IContext): Promise<string[]> {
-    const loan = await context.repositories.loans.getWithoutTotals(this.projectId, this.loanId);
+    const loan = await context.repositories.loans.get(this.projectId, { loanId: this.loanId });
 
     if (!loan) {
       throw new BadRequestError(`We cannot attach a document to loan '${this.loanId}' as it could not be found.`);
