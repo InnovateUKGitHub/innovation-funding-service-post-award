@@ -37,7 +37,7 @@ export class ProfileDetailsRepository extends SalesforceRepositoryBase<ISalesfor
   ];
 
   public async getAllByPartner(partnerId: string): Promise<ISalesforceProfileDetails[]> {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}'`;
+    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_CostCategory__c != null`;
     return super.where(filter);
   }
 

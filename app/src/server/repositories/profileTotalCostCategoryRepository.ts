@@ -33,7 +33,7 @@ export class ProfileTotalCostCategoryRepository extends SalesforceRepositoryBase
   ];
 
   getAllByPartnerId(partnerId: string): Promise<ISalesforceProfileTotalCostCategory[]> {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}'`;
+    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_CostCategory__c != null`;
     return super.where(filter);
   }
 }

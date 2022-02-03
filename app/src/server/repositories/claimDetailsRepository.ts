@@ -14,12 +14,12 @@ export interface ISalesforceClaimDetails {
   Acc_ProjectPeriodNumber__c: number;
   Acc_ProjectPeriodStartDate__c: string;
   Acc_ProjectPeriodEndDate__c: string;
-  Acc_ReasonForDifference__c: string|null;
+  Acc_ReasonForDifference__c: string | null;
 }
 
 export interface IClaimDetailsRepository {
   getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]>;
-  get(key: ClaimDetailKey): Promise<ISalesforceClaimDetails|null>;
+  get(key: ClaimDetailKey): Promise<ISalesforceClaimDetails | null>;
   getAllByPartner(partnerId: string): Promise<ISalesforceClaimDetails[]>;
   update(item: Updatable<ISalesforceClaimDetails>): Promise<boolean>;
   insert(insert: Partial<ISalesforceClaimDetails>): Promise<string>;
@@ -31,9 +31,14 @@ export interface IClaimDetailsRepository {
  * Claim amounts stored per cost category per claim and are summed from the Claim Line items
  * A text field for comments
  */
-export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforceClaimDetails> implements IClaimDetailsRepository {
-
-  constructor(private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+export class ClaimDetailsRepository
+  extends SalesforceRepositoryBase<ISalesforceClaimDetails>
+  implements IClaimDetailsRepository {
+  constructor(
+    private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>,
+    getSalesforceConnection: () => Promise<Connection>,
+    logger: ILogger,
+  ) {
     super(getSalesforceConnection, logger);
   }
 
@@ -59,11 +64,12 @@ export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforce
       AND RecordType.Name = '${this.recordType}'
       AND Acc_ProjectPeriodNumber__c = ${periodId}
       AND Acc_ClaimStatus__c != 'New'
+      AND Acc_CostCategory__c != null
     `;
     return super.where(filter);
   }
 
-  get(claimDetailKey: ClaimDetailKey): Promise<ISalesforceClaimDetails|null> {
+  get(claimDetailKey: ClaimDetailKey): Promise<ISalesforceClaimDetails | null> {
     const { projectId, partnerId, periodId, costCategoryId } = claimDetailKey;
     const filter = `
       Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'
@@ -77,7 +83,12 @@ export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforce
   }
 
   getAllByPartner(partnerId: string): Promise<ISalesforceClaimDetails[]> {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_ClaimStatus__c != 'New'`;
+    const filter = `
+      Acc_ProjectParticipant__c = '${partnerId}'
+      AND RecordType.Name = '${this.recordType}'
+      AND Acc_ClaimStatus__c != 'New'
+      AND Acc_CostCategory__c != null
+      `;
     return super.where(filter);
   }
 
@@ -93,7 +104,7 @@ export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforce
       Acc_CostCategory__c: string;
       Acc_PeriodCostCategoryTotal__c: number;
       Acc_ProjectPeriodNumber__c: number;
-      Acc_ReasonForDifference__c: string|null;
+      Acc_ReasonForDifference__c: string | null;
       RecordTypeId: string;
     }> = {
       Acc_ProjectParticipant__c: item.Acc_ProjectParticipant__r && item.Acc_ProjectParticipant__r.Id,
@@ -101,10 +112,9 @@ export class ClaimDetailsRepository extends SalesforceRepositoryBase<ISalesforce
       Acc_PeriodCostCategoryTotal__c: item.Acc_PeriodCostCategoryTotal__c,
       Acc_ProjectPeriodNumber__c: item.Acc_ProjectPeriodNumber__c,
       Acc_ReasonForDifference__c: item.Acc_ReasonForDifference__c,
-      RecordTypeId
+      RecordTypeId,
     };
 
     return super.insertItem(salesforceUpdate);
   }
-
 }
