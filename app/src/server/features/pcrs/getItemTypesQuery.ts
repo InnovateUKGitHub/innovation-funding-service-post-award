@@ -123,7 +123,7 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
     },
     {
       type: PCRItemType.MultiplePartnerFinancialVirement,
-      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "SBRI", "SBRI IFS"],
+      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "SBRI", "SBRI IFS", "EDGE"],
       typeName: "Reallocate several partners' project cost",
       files: ["reallocate-project-costs.xlsx"],
       displayName: "Reallocate project costs",
@@ -131,25 +131,25 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
     },
     {
       type: PCRItemType.PartnerWithdrawal,
-      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "SBRI", "SBRI IFS"],
+      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "SBRI", "SBRI IFS", "EDGE"],
       typeName: "Remove a partner",
     },
     {
       type: PCRItemType.PartnerAddition,
-      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "SBRI", "SBRI IFS"],
+      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "SBRI", "SBRI IFS", "EDGE"],
       typeName: "Add a partner",
       files: ["de-minimis-declaration.odt"],
       guidance: partnerAdditionGuidance,
     },
     {
       type: PCRItemType.ScopeChange,
-      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "SBRI", "SBRI IFS"],
+      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "SBRI", "SBRI IFS", "EDGE"],
       typeName: "Change project scope",
       guidance: scopeChangeGuidance,
     },
     {
       type: PCRItemType.TimeExtension,
-      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "SBRI", "SBRI IFS"],
+      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "SBRI", "SBRI IFS", "EDGE"],
       typeName: "Change project duration",
     },
     {
@@ -159,18 +159,18 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
     },
     {
       type: PCRItemType.AccountNameChange,
-      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "SBRI", "SBRI IFS"],
+      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "SBRI", "SBRI IFS", "EDGE"],
       typeName: "Change a partner's name",
       guidance: nameChangeGuidance,
     },
     {
       type: PCRItemType.ProjectSuspension,
-      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "SBRI", "SBRI IFS"],
+      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "SBRI", "SBRI IFS", "EDGE"],
       typeName: "Put project on hold",
     },
     {
       type: PCRItemType.ProjectTermination,
-      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "SBRI", "SBRI IFS"],
+      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "SBRI", "SBRI IFS", "EDGE"],
       typeName: "End the project early",
     },
   ].filter(x => {

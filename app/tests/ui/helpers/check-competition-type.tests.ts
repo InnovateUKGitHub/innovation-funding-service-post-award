@@ -10,6 +10,7 @@ describe("checkProjectCompetition()", () => {
     isKTP: false,
     isCatapults: false,
     isLoans: false,
+    isEdge: false,
   };
 
   describe("@returns", () => {
@@ -21,6 +22,7 @@ describe("checkProjectCompetition()", () => {
       ${"with Contracts"}                        | ${"CONTRACTS"}     | ${{ ...stubResponse, isContracts: true }}
       ${"with Catapults"}                        | ${"CATAPULTS"}     | ${{ ...stubResponse, isCatapults: true }}
       ${"with Loans"}                            | ${"LOANS"}         | ${{ ...stubResponse, isLoans: true }}
+      ${"with Edge"}                             | ${"EDGE"}          | ${{ ...stubResponse, isEdge: true }}
       ${"with SBRI"}                             | ${"SBRI"}          | ${{ ...stubResponse, isCombinationOfSBRI: true, isSBRI: true }}
       ${"with SBRI IFS"}                         | ${"SBRI IFS"}      | ${{ ...stubResponse, isCombinationOfSBRI: true, isSBRI_IFS: true }}
     `("$name", ({ inboundCompetition, expectedPayload }) => {

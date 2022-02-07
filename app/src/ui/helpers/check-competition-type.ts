@@ -4,6 +4,7 @@ export function checkProjectCompetition(competition: string) {
   const isKTP: boolean = competition === "KTP";
   const isCatapults: boolean = competition === "CATAPULTS";
   const isLoans: boolean = competition === "LOANS";
+  const isEdge: boolean = competition === "EDGE";
 
   const isSBRI: boolean = competition === "SBRI";
   // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -19,5 +20,6 @@ export function checkProjectCompetition(competition: string) {
     isKTP,
     isCatapults,
     isLoans,
+    isEdge,
   };
 }
