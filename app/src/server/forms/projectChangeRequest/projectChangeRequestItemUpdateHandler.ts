@@ -45,7 +45,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
   "pcr"
 > {
   constructor() {
-    super(PCRPrepareItemRoute, ["default", "saveAndReturnToSummary"], "pcr");
+    super(PCRPrepareItemRoute, ["default", "saveAndReturnToSummary", "changeLoanEdit"], "pcr");
   }
 
   protected async getDto(
@@ -93,6 +93,9 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
         break;
       case PCRItemType.SinglePartnerFinancialVirement:
         // nothing to update as only files
+        break;
+      case PCRItemType.LoanDrawdownExtension:
+        this.updateLoanExtension(item, body, stepName);
         break;
     }
 
@@ -337,6 +340,14 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
           }
         }
       }
+    }
+  }
+
+  private updateLoanExtension(item: Dtos.PCRItemForLoanDrawdownExtensionDto, body: IFormBody, stepName: string | undefined) {
+    if (stepName === "loanExtension") {
+      item.availabilityPeriodChange = Number(body.availabilityPeriodChange);
+      item.extensionPeriodChange = Number(body.extensionPeriodChange);
+      item.repaymentPeriodChange = Number(body.repaymentPeriodChange);
     }
   }
 

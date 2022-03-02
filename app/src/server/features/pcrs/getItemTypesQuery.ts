@@ -149,7 +149,7 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
     },
     {
       type: PCRItemType.TimeExtension,
-      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "SBRI", "SBRI IFS", "EDGE"],
+      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "SBRI", "SBRI IFS", "EDGE"],
       typeName: "Change project duration",
     },
     {
@@ -178,8 +178,10 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
       competitions: ["LOANS"],
       typeName: "Loan Drawdown Change",
     },
-  ].filter(x => {
-    // Note: Filter any non-competitions
-    return x.competitions.length > 0;
-  });
+    {
+      type: PCRItemType.LoanDrawdownExtension,
+      competitions: ["LOANS"],
+      typeName: "Change Loans Duration",
+    },
+  ].filter(x => !!x.competitions.length);
 }

@@ -34,6 +34,10 @@ export function PcrTypesGuidance({ qa, types }: PcrTypesGuidanceProps) {
     putProjectOnHoldMessage: getContent(x => x.pcrCreate.putProjectOnHoldMessage),
     endProjectEarlyTitle: getContent(x => x.pcrCreate.endProjectEarlyTitle),
     endProjectEarlyMessage: getContent(x => x.pcrCreate.endProjectEarlyMessage),
+    loanDrawdownChangeTitle: getContent(x => x.pcrCreate.loanDrawdownChangeTitle),
+    loanDrawdownChangeMessage: getContent(x => x.pcrCreate.loanDrawdownChangeMessage),
+    loanDrawdownExtensionTitle: getContent(x => x.pcrCreate.loanDrawdownExtensionTitle),
+    loanDrawdownExtensionMessage: getContent(x => x.pcrCreate.loanDrawdownExtensionMessage),
   };
 
   const guidanceContent: PcrTypeContent[] = [
@@ -77,9 +81,19 @@ export function PcrTypesGuidance({ qa, types }: PcrTypesGuidanceProps) {
       header: content.endProjectEarlyTitle,
       description: content.endProjectEarlyMessage,
     },
+    {
+      type: PCRItemType.LoanDrawdownChange,
+      header: content.loanDrawdownChangeTitle,
+      description: content.loanDrawdownChangeMessage,
+    },
+    {
+      type: PCRItemType.LoanDrawdownExtension,
+      header: content.loanDrawdownExtensionTitle,
+      description: content.loanDrawdownExtensionMessage,
+    },
   ];
 
-  const pcrTypesContent = types.reduce<PcrTypeContent[]>((previous: PcrTypeContent[], { type }) => {
+  const pcrTypesContent = types.reduce<PcrTypeContent[]>((previous, { type }) => {
     const pcrTypeContent = guidanceContent.find(x => x.type === type);
 
     return pcrTypeContent ? [...previous, pcrTypeContent] : previous;

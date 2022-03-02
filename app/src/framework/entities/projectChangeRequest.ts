@@ -78,6 +78,15 @@ export interface ProjectChangeRequestItemForCreateEntity {
 
   // Partner Virements
   grantMovingOverFinancialYear?: number | null;
+
+  // Loan change request
+  projectStartDate?: Date | null;
+  availabilityPeriod?: number | null;
+  availabilityPeriodChange?: number | null;
+  extensionPeriod?: number | null;
+  extensionPeriodChange?: number | null;
+  repaymentPeriod?: number | null;
+  repaymentPeriodChange?: number | null;
 }
 
 export interface ProjectChangeRequestItemEntity extends ProjectChangeRequestItemForCreateEntity {

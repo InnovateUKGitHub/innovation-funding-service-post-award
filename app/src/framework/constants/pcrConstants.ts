@@ -58,6 +58,7 @@ export enum PCRItemType {
   TimeExtension = 90,
   PeriodLengthChange = 100,
   LoanDrawdownChange = 110,
+  LoanDrawdownExtension = 120,
 }
 
 export enum PCRParticipantSize {
@@ -136,6 +137,7 @@ export function getUnavailablePcrItemsMatrix(pcrs: PCRSummaryDto[]): PCRItemType
     [PCRItemType.TimeExtension]: [PCRItemType.TimeExtension],
     [PCRItemType.PeriodLengthChange]: [],
     [PCRItemType.LoanDrawdownChange]: [PCRItemType.LoanDrawdownChange],
+    [PCRItemType.LoanDrawdownExtension]: [PCRItemType.LoanDrawdownExtension],
   };
 
   let matrixItems: PCRItemType[] = [];

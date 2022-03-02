@@ -110,6 +110,10 @@ body,
   padding-left: 4%;
 }
 
+.govuk-table__row--editable td {
+  vertical-align: middle;
+}
+
 .govuk-table__header--light .govuk-table__header:not(:first-child) {
   font-weight: 100;
 }

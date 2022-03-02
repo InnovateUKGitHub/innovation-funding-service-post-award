@@ -18,6 +18,7 @@ import {
   ProjectDto,
   PCRSummaryDto,
   PCRItemForLoanDrawdownChangeDto,
+  PCRItemForLoanDrawdownExtensionDto,
 } from "@framework/dtos";
 import {
   PCRItemStatus,
@@ -297,6 +298,16 @@ export class PCRDtoValidator extends Results<PCRDto> {
           this.showValidationErrors,
           originalItem as PCRItemForLoanDrawdownChangeDto,
         );
+      case PCRItemType.LoanDrawdownExtension:
+        return new PCRLoanExtensionItemDtoValidator(
+          item,
+          canEdit,
+          this.role,
+          this.model.status,
+          this.recordTypes,
+          this.showValidationErrors,
+          originalItem as PCRItemForLoanDrawdownExtensionDto,
+        );
       default:
         throw new Error("PCR Type not implemented");
     }
@@ -374,6 +385,17 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
           !!this.original || this.recordTypes.find(x => x.type === this.model.type)!.enabled,
           "Not a valid change request item",
         ),
+      () => {
+        const inValidRecordIndex = this.recordTypes.findIndex(x => x.recordTypeId === "Unknown");
+
+        if (inValidRecordIndex === -1) return Validation.valid(this);
+
+        // Note: At this point it is likely that SF does not have the recordType to match up against our local item options.
+        return Validation.inValid(
+          this,
+          `Item matching '${this.recordTypes[inValidRecordIndex]?.displayName}' is not available.`,
+        );
+      },
       // If role is not Project Manager then can not add new type
       () => Validation.isTrue(this, isPm || !!this.original, "Cannot add type"),
     );
@@ -520,6 +542,143 @@ export class PCRTimeExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
   offsetMonthsResult = this.validateOffsetMonths();
 }
 
+export class PCRLoanExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForLoanDrawdownExtensionDto> {
+  private isComplete = this.model.status === PCRItemStatus.Complete;
+  private validationTolerance = 3;
+
+  public checkInEditable(date: Date): boolean {
+    const dateToCheck = DateTime.fromJSDate(date);
+    const latestEditableDate = dateToCheck.plus({ month: this.validationTolerance, day: 1 });
+    const dateWithTolerance = latestEditableDate.diffNow(["months"]);
+
+    // Note: Negative numbers are over the tolerance
+    return dateWithTolerance.months < 0;
+  }
+
+  public calculateOffsetDate(offset: number): Date {
+    const startingDate = this.model.projectStartDate!;
+
+    if (offset === 0) return startingDate;
+
+    const internalDate = DateTime.fromJSDate(startingDate).setZone("Europe/London");
+    const offsetDate = internalDate.plus({ months: offset });
+
+    return offsetDate.toJSDate();
+  }
+
+  public allPeriods = this.validateAllPeriods();
+
+  public availabilityPeriodChange = this.validateAvailabilityPeriod();
+  public extensionPeriodChange = this.validateExtensionPeriod();
+  public repaymentPeriodChange = this.validateRepaymentPeriod();
+
+  private validateAllPeriods(): Result {
+    if (!this.isComplete) return Validation.valid(this);
+
+    const isAvailabilityInValid = this.model.availabilityPeriod === this.model.availabilityPeriodChange;
+    const isExtensionInValid = this.model.extensionPeriod === this.model.extensionPeriodChange;
+    const isRepaymentInValid = this.model.repaymentPeriod === this.model.repaymentPeriodChange;
+
+    const isInvalid = isAvailabilityInValid && isExtensionInValid && isRepaymentInValid;
+
+    return Validation.isFalse(this, isInvalid, "You must make at least one change to a phase to continue.");
+  }
+
+  private validateAvailabilityPeriod(): Result {
+    const { availabilityPeriod, availabilityPeriodChange } = this.model;
+
+    if (!availabilityPeriod) {
+      throw Error("validateAvailabilityPeriod() is missing model data to validate.");
+    }
+
+    const availabilityPeriodDate = this.calculateOffsetDate(availabilityPeriod);
+
+    return this.validateWholeMonths(
+      "Availability period",
+      availabilityPeriodDate,
+      availabilityPeriod,
+      availabilityPeriodChange,
+    );
+  }
+
+  private validateExtensionPeriod(): Result {
+    const { availabilityPeriod, extensionPeriod, extensionPeriodChange } = this.model;
+
+    if (!availabilityPeriod || !extensionPeriod) {
+      throw Error("validateExtensionPeriod() is missing model data to validate.");
+    }
+
+    const totalPeriods = availabilityPeriod + extensionPeriod;
+    const extensionPeriodPeriodDate = this.calculateOffsetDate(totalPeriods);
+
+    return this.validateWholeMonths(
+      "Extension period",
+      extensionPeriodPeriodDate,
+      extensionPeriod,
+      extensionPeriodChange,
+    );
+  }
+
+  private validateRepaymentPeriod(): Result {
+    const { availabilityPeriod, extensionPeriod, repaymentPeriod, repaymentPeriodChange } = this.model;
+
+    if (!availabilityPeriod || !extensionPeriod || !repaymentPeriod) {
+      throw Error("validateRepaymentPeriod() is missing model data to validate.");
+    }
+
+    const totalPeriods = availabilityPeriod + extensionPeriod + repaymentPeriod;
+    const repaymentPeriodPeriodDate = this.calculateOffsetDate(totalPeriods);
+
+    return this.validateWholeMonths(
+      "Repayment period",
+      repaymentPeriodPeriodDate,
+      repaymentPeriod,
+      repaymentPeriodChange,
+    );
+  }
+
+  private validateWholeMonths(
+    errorKey: string,
+    validateDate: Date,
+    originalValue: number | null,
+    updatedValue: number | null,
+  ): Result {
+    if (!this.isComplete) return Validation.valid(this);
+
+    if (!originalValue || !updatedValue) {
+      throw Error("validateWholeMonths() is missing 'originalValue' or 'updatedValue' to validate.");
+    }
+
+    return Validation.all(
+      this,
+      () => {
+        const hasValueChanged = originalValue !== updatedValue;
+        const isMonthsEditable = hasValueChanged ? this.checkInEditable(validateDate) : false;
+
+        return Validation.isFalse(
+          this,
+          isMonthsEditable,
+          `'${errorKey}' cannot be change within 3 months of your start date. This has to be '${originalValue}' to proceed.`,
+        );
+      },
+      () => {
+        const isDivisibleValid: boolean = updatedValue % this.validationTolerance === 0;
+
+        return Validation.isTrue(
+          this,
+          isDivisibleValid,
+          `'${errorKey}' value must be in increments of '${this.validationTolerance}', you have entered '${updatedValue}'.`,
+        );
+      },
+      () =>
+        Validation.integer(
+          this,
+          updatedValue,
+          `'${errorKey}' must be a whole number in months, you have entered '${updatedValue}'.`,
+        ),
+    );
+  }
+}
 export class PCRLoanDrawdownChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForLoanDrawdownChangeDto> {}
 export class PCRProjectTerminationItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForProjectTerminationDto> {}
 export class PCRPeriodLengthChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForPeriodLengthChangeDto> {}

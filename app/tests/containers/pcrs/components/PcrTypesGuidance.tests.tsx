@@ -31,6 +31,10 @@ describe("PcrTypes Components", () => {
           putProjectOnHoldMessage: { content: "stub-putProjectOnHoldMessage" },
           endProjectEarlyTitle: { content: "stub-endProjectEarlyTitle" },
           endProjectEarlyMessage: { content: "stub-endProjectEarlyMessage" },
+          loanDrawdownChangeTitle: { content: "stub-loanDrawdownChangeTitle" },
+          loanDrawdownChangeMessage: { content: "stub-loanDrawdownChangeMessage" },
+          loanDrawdownExtensionTitle: { content: "stub-loanDrawdownExtensionTitle" },
+          loanDrawdownExtensionMessage: { content: "stub-loanDrawdownExtensionMessage" },
         },
       };
 

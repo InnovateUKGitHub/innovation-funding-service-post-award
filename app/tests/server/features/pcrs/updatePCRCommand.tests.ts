@@ -7,6 +7,7 @@ import {
   PCRDto,
   PCRItemDto,
   PCRItemForAccountNameChangeDto,
+  PCRItemForLoanDrawdownExtensionDto,
   PCRItemForMultiplePartnerFinancialVirementDto,
   PCRItemForPartnerWithdrawalDto,
   PCRItemForProjectSuspensionDto,
@@ -286,16 +287,11 @@ describe("UpdatePCRCommand", () => {
 
       test("reasoning comments are required when reasoning status is complete", async () => {
         const context = new TestContext();
+
         const project = context.testData.createProject();
         const pcr = context.testData.createPCR(project, { status: PCRStatus.Draft });
-
-        const record = context.testData.createRecordType({
-          parent: "Acc_ProjectChangeRequest__c",
-          type: "Remove a partner",
-        });
-
-        context.testData.createPCRItem(pcr, record, { status: PCRItemStatus.ToDo });
-
+        context.testData.createPCRRecordTypes();
+        context.testData.createPCRItem(pcr, undefined, { status: PCRItemStatus.ToDo });
         context.testData.createCurrentUserAsProjectManager(project);
 
         const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
@@ -315,37 +311,44 @@ describe("UpdatePCRCommand", () => {
       test("adds items", async () => {
         const context = new TestContext();
 
+        const recordTypes = context.testData.createPCRRecordTypes();
         const project = context.testData.createProject();
         context.testData.createPartner(project);
         const pcr = context.testData.createPCR(project, {
           status: PCRStatus.Draft,
           reasoningStatus: PCRItemStatus.Complete,
         });
-        const recordTypes = context.testData.range(3, () =>
-          context.testData.createRecordType({ parent: "Acc_ProjectChangeRequest__c" }),
-        );
-        recordTypes[0].type = "Remove a partner";
-        recordTypes[1].type = "Put project on hold";
-        recordTypes[2].type = "Change project scope";
 
-        context.testData.createPCRItem(pcr, recordTypes[0], { status: PCRItemStatus.Incomplete });
-        context.testData.createPCRItem(pcr, recordTypes[1], { status: PCRItemStatus.Incomplete });
+        const removePartnerRecord = recordTypes.find(x => x.type === "Remove a partner");
+        const projectOnHoldRecord = recordTypes.find(x => x.type === "Put project on hold");
+        const changeProjectScopeRecord = recordTypes.find(x => x.type === "Change project scope");
+
+        if (!removePartnerRecord || !projectOnHoldRecord || !changeProjectScopeRecord) {
+          throw Error("1 or record types was missing that was needed");
+        }
+
+        context.testData.createPCRItem(pcr, removePartnerRecord, { status: PCRItemStatus.Incomplete });
+        context.testData.createPCRItem(pcr, projectOnHoldRecord, { status: PCRItemStatus.Incomplete });
 
         context.testData.createCurrentUserAsProjectManager(project);
 
         const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
-        expect(dto.items.length).toBe(2);
 
-        dto.items.push({
+        expect(dto.items).toHaveLength(2);
+
+        const additionalItem = {
           status: PCRItemStatus.ToDo,
-          type: GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.typeName === recordTypes[2].type)!.type,
-        } as PCRStandardItemDto);
+          // Note: We know this always returns a defined value as we would have thrown on 'changeProjectScopeRecord'
+          type: GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.typeName === changeProjectScopeRecord.type)!.type,
+        };
+
+        dto.items.push(additionalItem as PCRStandardItemDto);
 
         const command = new UpdatePCRCommand(project.Id, pcr.id, dto);
 
         await context.runCommand(command);
 
-        expect(pcr.items.length).toBe(3);
+        expect(pcr.items).toHaveLength(3);
       });
 
       it("does not allow duplicate item types", async () => {
@@ -1360,6 +1363,223 @@ describe("UpdatePCRCommand", () => {
         item.grantMovingOverFinancialYear = 100;
         await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).resolves.toBe(
           true,
+        );
+      });
+    });
+
+    describe("Loan Drawdown Extension", () => {
+      const loanExtensionSetup = async () => {
+        const context = new TestContext();
+
+        const project = context.testData.createProject(x => (x.Acc_CompetitionType__c = "LOANS"));
+        context.testData.createCurrentUserAsProjectManager(project);
+        const pcr = context.testData.createPCR(project, { status: PCRStatus.Draft });
+        const recordTypes = context.testData.createPCRRecordTypes();
+
+        const loanExtensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
+          x => x.type === PCRItemType.LoanDrawdownExtension,
+        );
+        const recordType = recordTypes.find(x => x.type === loanExtensionType!.typeName);
+
+        context.testData.createPCRItem(pcr, recordType, { status: PCRItemStatus.Complete });
+
+        const dto = await context.runQuery(new GetPCRByIdQuery(pcr.projectId, pcr.id));
+
+        /**
+         * @description A simple util that takes the current data and provides a simple way of changing stub data.
+         * @example
+         * const stubData = createStubItems(currentItems => [
+         *   {...currentItems[0], key: "first-item-custom-value" },
+         *   {...currentItems[1], key: "second-item-custom-value" }
+         * ])
+         */
+        const createStubItems = (
+          createNewItems: (currentState: PCRItemForLoanDrawdownExtensionDto[]) => PCRItemForLoanDrawdownExtensionDto[],
+        ): PCRDto => ({ ...dto, items: createNewItems(dto.items as PCRItemForLoanDrawdownExtensionDto[]) });
+
+        return {
+          context,
+          project,
+          pcr,
+          createStubItems,
+        };
+      };
+
+      describe("with valid requests", () => {
+        describe("with availabilityPeriod", () => {
+          test("when increased", async () => {
+            const { context, project, pcr, createStubItems } = await loanExtensionSetup();
+
+            const stubPayload = createStubItems(currentItems => [
+              {
+                ...currentItems[0],
+                projectStartDate: new Date(Date.UTC(2022, 0, 1)),
+                availabilityPeriod: 3,
+                availabilityPeriodChange: 6,
+                extensionPeriod: 3,
+                extensionPeriodChange: 3,
+                repaymentPeriod: 3,
+                repaymentPeriodChange: 3,
+              },
+            ]);
+
+            await expect(
+              context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, stubPayload)),
+            ).resolves.toBeTruthy();
+          });
+
+          test("when decreased", async () => {
+            const { context, project, pcr, createStubItems } = await loanExtensionSetup();
+
+            const stubPayload = createStubItems(currentItems => [
+              {
+                ...currentItems[0],
+                projectStartDate: new Date(Date.UTC(2022, 0, 1)),
+                availabilityPeriod: 9,
+                availabilityPeriodChange: 6,
+                extensionPeriod: 3,
+                extensionPeriodChange: 3,
+                repaymentPeriod: 3,
+                repaymentPeriodChange: 3,
+              },
+            ]);
+
+            await expect(
+              context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, stubPayload)),
+            ).resolves.toBeTruthy();
+          });
+        });
+
+        describe("with extensionPeriod", () => {
+          test("when increased", async () => {
+            const { context, project, pcr, createStubItems } = await loanExtensionSetup();
+
+            const stubPayload = createStubItems(currentItems => [
+              {
+                ...currentItems[0],
+                projectStartDate: new Date(Date.UTC(2022, 0, 1)),
+                availabilityPeriod: 3,
+                availabilityPeriodChange: 3,
+                extensionPeriod: 3,
+                extensionPeriodChange: 6,
+                repaymentPeriod: 3,
+                repaymentPeriodChange: 3,
+              },
+            ]);
+
+            await expect(
+              context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, stubPayload)),
+            ).resolves.toBeTruthy();
+          });
+
+          test("when decreased", async () => {
+            const { context, project, pcr, createStubItems } = await loanExtensionSetup();
+
+            const stubPayload = createStubItems(currentItems => [
+              {
+                ...currentItems[0],
+                projectStartDate: new Date(Date.UTC(2022, 0, 1)),
+                availabilityPeriod: 3,
+                availabilityPeriodChange: 3,
+                extensionPeriod: 9,
+                extensionPeriodChange: 6,
+                repaymentPeriod: 3,
+                repaymentPeriodChange: 3,
+              },
+            ]);
+
+            await expect(
+              context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, stubPayload)),
+            ).resolves.toBeTruthy();
+          });
+        });
+
+        describe("with repaymentPeriod", () => {
+          test("when increased", async () => {
+            const { context, project, pcr, createStubItems } = await loanExtensionSetup();
+
+            const stubPayload = createStubItems(currentItems => [
+              {
+                ...currentItems[0],
+                projectStartDate: new Date(Date.UTC(2022, 0, 1)),
+                availabilityPeriod: 3,
+                availabilityPeriodChange: 3,
+                extensionPeriod: 3,
+                extensionPeriodChange: 3,
+                repaymentPeriod: 3,
+                repaymentPeriodChange: 6,
+              },
+            ]);
+
+            await expect(
+              context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, stubPayload)),
+            ).resolves.toBeTruthy();
+          });
+
+          test("when decreased", async () => {
+            const { context, project, pcr, createStubItems } = await loanExtensionSetup();
+
+            const stubPayload = createStubItems(currentItems => [
+              {
+                ...currentItems[0],
+                projectStartDate: new Date(Date.UTC(2022, 0, 1)),
+                availabilityPeriod: 3,
+                availabilityPeriodChange: 3,
+                extensionPeriod: 3,
+                extensionPeriodChange: 3,
+                repaymentPeriod: 9,
+                repaymentPeriodChange: 6,
+              },
+            ]);
+
+            await expect(
+              context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, stubPayload)),
+            ).resolves.toBeTruthy();
+          });
+        });
+      });
+
+      test("when no changes are made throw an error", async () => {
+        const { context, project, pcr, createStubItems } = await loanExtensionSetup();
+
+        const stubPayload = createStubItems(currentItems => [
+          {
+            ...currentItems[0],
+            projectStartDate: new Date(Date.UTC(2022, 0, 1)),
+            availabilityPeriod: 3,
+            availabilityPeriodChange: 3,
+            extensionPeriod: 3,
+            extensionPeriodChange: 3,
+            repaymentPeriod: 3,
+            repaymentPeriodChange: 3,
+          },
+        ]);
+
+        await expect(context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, stubPayload))).rejects.toThrow(
+          ValidationError,
+        );
+      });
+
+      test("when changed value is not divisible in quarters", async () => {
+        const { context, project, pcr, createStubItems } = await loanExtensionSetup();
+
+        const inValidNumberNotQuarter = 5;
+
+        const stubPayload = createStubItems(currentItems => [
+          {
+            ...currentItems[0],
+            projectStartDate: new Date(Date.UTC(2022, 0, 1)),
+            availabilityPeriod: 3,
+            availabilityPeriodChange: inValidNumberNotQuarter,
+            extensionPeriod: 3,
+            extensionPeriodChange: 3,
+            repaymentPeriod: 3,
+            repaymentPeriodChange: 3,
+          },
+        ]);
+
+        await expect(context.runCommand(new UpdatePCRCommand(project.Id, pcr.id, stubPayload))).rejects.toThrow(
+          ValidationError,
         );
       });
     });

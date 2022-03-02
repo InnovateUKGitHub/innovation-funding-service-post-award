@@ -696,7 +696,11 @@
       "put-project-on-hold-title": "Put a project on hold",
       "put-project-on-hold-message": "This allows you to suspend a project for a specific period. You cannot submit any claims or raise project change requests when the project is on hold.",
       "end-project-early-title": "End project early",
-      "end-project-early-message": "Use this when you believe you are entering your final claim period. Make a note to say your project is ending when you submit this request. You will then enter your final claim period and any other future claim periods will close."
+      "end-project-early-message": "Use this when you believe you are entering your final claim period. Make a note to say your project is ending when you submit this request. You will then enter your final claim period and any other future claim periods will close.",
+      "loan-drawdown-change-title": "Change loan drawdown",
+      "loan-drawdown-change-message": "Use this when you believe you are entering your final claim period. Make a note to say your project is ending when you submit this request. You will then enter your final claim period and any other future claim periods will close.",
+      "loan-drawdown-extension-title": "Extend loan drawdown",
+      "loan-drawdown-extension-message": "This allows either an extension increase or decrease to the loan."
     },
     "pcr-time-extension-step": {
       "existing-project-heading": "Existing project details",

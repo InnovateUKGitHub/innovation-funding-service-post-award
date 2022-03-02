@@ -16,7 +16,7 @@ import { FullDateInput, MonthYearInput } from "./inputs/dateInput";
 import { Button } from "./styledButton";
 import { SearchInput } from "./inputs/searchInput";
 import { FormInputWidths } from "./inputs/baseInput";
-import { DropdownList } from "./inputs";
+import { DropdownList, DropdownListOption } from "./inputs";
 import { Content } from "./content";
 
 interface SharedFormProps<T> {
@@ -49,16 +49,17 @@ interface FormChildProps<T> {
 
 class FormComponent<T> extends React.Component<FormProps<T>, []> {
   render() {
-    const childProps = (index: number): FormChildProps<T> => ({
+    const childProps = (existingProps: any, index: number): FormChildProps<T> => ({
+      ...existingProps,
       key: "formchild" + index,
       formData: this.isEditor(this.props) ? this.props.editor.data : this.props.data,
-      disabled: this.isEditor(this.props) ? this.props.editor.status === EditorStatus.Saving : (this.props.isSaving || false),
+      disabled: this.isEditor(this.props) ? this.props.editor.status === EditorStatus.Saving : (existingProps.disabled || this.props.isSaving || false),
       onChange: this.props.onChange,
       onSubmit: this.props.onSubmit
     });
 
     // TODO: as part of the ticket ACC-7480, we discovered that this function doesn't handle any form components nested within react fragments, we should check if the child is a fragment and if so, traverse it's chidren recursively
-    const childrenWithData = React.Children.map(this.props.children, (child, index) => child && React.cloneElement(child as any, childProps(index)));
+    const childrenWithData = React.Children.map(this.props.children as any[], (child: any, index) => child && React.cloneElement(child as any, childProps(child.props, index)));
     return (
       <StoresConsumer>
         {
@@ -298,12 +299,7 @@ const CheckboxOptionsField = <T extends {}>(props: CheckboxFieldProps<T> & Inter
   );
 };
 
-export interface DropdownOption {
-  id: string;
-  value: string | number;
-  qa?: string;
-}
-
+export type DropdownOption = DropdownListOption;
 interface DropdownFieldProps<T extends {}> extends ExternalFieldProps<T, DropdownOption> {
   options: DropdownOption[];
   hasEmptyOption?: boolean;
@@ -342,6 +338,7 @@ interface SubmitPropsBase {
   name?: string;
   className?: string;
   style?: CSSProperties;
+  disabled?: boolean;
   styling?: "Link" | "Secondary" | "Primary";
 }
 

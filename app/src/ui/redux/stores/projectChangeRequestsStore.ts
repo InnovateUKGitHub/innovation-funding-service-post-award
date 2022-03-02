@@ -309,6 +309,18 @@ export class ProjectChangeRequestStore extends StoreBase {
           ...baseFields,
           type: itemType.type,
         };
+      case PCRItemType.LoanDrawdownExtension:
+        return {
+          ...baseFields,
+          type: itemType.type,
+          projectStartDate: null,
+          extensionPeriod: null,
+          extensionPeriodChange: null,
+          availabilityPeriod: null,
+          availabilityPeriodChange: null,
+          repaymentPeriod: null,
+          repaymentPeriodChange: null,
+        };
       default:
         throw new Error("Item type not handled");
     }

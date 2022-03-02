@@ -55,9 +55,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
 
     const { isActive: isProjectActive } = await context.runQuery(new GetProjectStatusQuery(this.projectId));
 
-    if (!isProjectActive) {
-      throw new InActiveProjectError();
-    }
+    if (!isProjectActive) throw new InActiveProjectError();
 
     const auth = await context.runQuery(new GetAllProjectRolesForUser());
     const projectRoles = auth.forProject(this.projectId).getRoles();
@@ -81,9 +79,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       allPcrs,
     );
 
-    if (!validationResult.isValid) {
-      throw new ValidationError(validationResult);
-    }
+    if (!validationResult.isValid) throw new ValidationError(validationResult);
 
     entityToUpdate.status = this.pcr.status;
     entityToUpdate.reasoning = this.pcr.reasoningComments;
@@ -257,6 +253,27 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
             grantMovingOverFinancialYear: dto.grantMovingOverFinancialYear,
           };
         }
+        break;
+
+      case PCRItemType.LoanDrawdownExtension: {
+        if (
+          dto.availabilityPeriod &&
+          dto.availabilityPeriodChange &&
+          dto.extensionPeriod &&
+          dto.extensionPeriodChange &&
+          dto.repaymentPeriod &&
+          dto.repaymentPeriodChange
+        ) {
+          return {
+            ...init,
+            availabilityPeriodChange: dto.availabilityPeriodChange - dto.availabilityPeriod,
+            extensionPeriodChange: dto.extensionPeriodChange - dto.extensionPeriod,
+            repaymentPeriodChange: dto.repaymentPeriodChange - dto.repaymentPeriod,
+          };
+        }
+
+        break;
+      }
     }
 
     return init;
