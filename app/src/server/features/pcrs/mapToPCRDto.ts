@@ -3,6 +3,7 @@ import {
   PCRDto,
   PCRItemForAccountNameChangeDto,
   PCRItemForLoanDrawdownChangeDto,
+  PCRItemForLoanDrawdownExtensionDto,
   PCRItemForMultiplePartnerFinancialVirementDto,
   PCRItemForPartnerAdditionDto,
   PCRItemForPartnerWithdrawalDto,
@@ -71,6 +72,8 @@ const mapItem = (pcr: ProjectChangeRequestItemEntity, itemType: PCRItemTypeDto) 
       return mapStandardItem(pcr, itemType.displayName, itemType.type);
     case PCRItemType.LoanDrawdownChange:
       return mapItemForLoansChangeDrawdown(pcr, itemType.displayName, itemType.type);
+    case PCRItemType.LoanDrawdownExtension:
+      return mapItemForChangeLoansDuration(pcr, itemType.displayName, itemType.type);
     default:
       throw new Error("Type not handled");
   }
@@ -187,4 +190,16 @@ const mapItemForMultiplePartnerVirements = (pcr: ProjectChangeRequestItemEntity,
 const mapItemForLoansChangeDrawdown = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.LoanDrawdownChange): PCRItemForLoanDrawdownChangeDto => ({
   ...mapBaseItem(pcr, typeName, type),
   type,
+});
+
+const mapItemForChangeLoansDuration = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.LoanDrawdownExtension): PCRItemForLoanDrawdownExtensionDto => ({
+  ...mapBaseItem(pcr, typeName, type),
+  type,
+  projectStartDate: pcr.projectStartDate ?? null,
+  availabilityPeriod: pcr.availabilityPeriod ?? null,
+  availabilityPeriodChange: pcr.availabilityPeriodChange ?? null,
+  extensionPeriod: pcr.extensionPeriod ?? null,
+  extensionPeriodChange: pcr.extensionPeriodChange ?? null,
+  repaymentPeriod: pcr.repaymentPeriod ?? null,
+  repaymentPeriodChange: pcr.repaymentPeriodChange ?? null,
 });

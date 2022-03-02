@@ -32,4 +32,8 @@ export class PCRCreateContent extends ContentPageBase {
   public readonly putProjectOnHoldMessage = this.getContent("put-project-on-hold-message");
   public readonly endProjectEarlyTitle = this.getContent("end-project-early-title");
   public readonly endProjectEarlyMessage = this.getContent("end-project-early-message");
+  public readonly loanDrawdownChangeTitle = this.getContent("loan-drawdown-change-title");
+  public readonly loanDrawdownChangeMessage = this.getContent("loan-drawdown-change-message");
+  public readonly loanDrawdownExtensionTitle = this.getContent("loan-drawdown-extension-title");
+  public readonly loanDrawdownExtensionMessage = this.getContent("loan-drawdown-extension-message");
 }

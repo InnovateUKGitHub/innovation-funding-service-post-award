@@ -6,6 +6,7 @@ interface NumberInputProps extends InputProps<number> {
   id?: string;
   className?: string;
   width?: FormInputWidths;
+  pattern?: string | null;
 }
 
 interface NumberInputState extends InputState {
@@ -13,7 +14,6 @@ interface NumberInputState extends InputState {
 }
 
 export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
-
   constructor(props: NumberInputProps) {
     super(props);
     this.state = this.getStateFromProps(props);
@@ -44,6 +44,8 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
   }
 
   public render() {
+    const { pattern } = this.props;
+
     const className = classNames(
       "govuk-input",
       "govuk-table__cell--numeric",
@@ -52,14 +54,16 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
         [`govuk-input--width-${this.props.width}`]: typeof this.props.width === "number",
         [`govuk-!-width-${this.props.width}`]: typeof this.props.width === "string",
       },
-      this.props.className
+      this.props.className,
     );
+
+    const disablePattern = pattern === null;
 
     return (
       <input
         id={this.props.id || this.props.name}
         type="text"
-        pattern="[0-9]*"
+        pattern={disablePattern ? undefined : pattern ?? "[0-9]*"}
         inputMode="numeric"
         className={className}
         name={this.props.name}
@@ -87,7 +91,7 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
 
     return {
       value,
-      invalid: !!props.value && isNaN(props.value)
+      invalid: !!props.value && isNaN(props.value),
     };
   }
 
@@ -103,7 +107,7 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
     this.cancelTimeout();
 
     // empty string maps to null then use isFinite to handle parse float converting "1. 2" to "1" etc
-    const newValue = value === "" ? null : (isFinite(value as any) ? parseFloat(value) : NaN);
+    const newValue = value === "" ? null : isFinite(value as any) ? parseFloat(value) : NaN;
 
     if (this.props.onChange) {
       this.props.onChange(newValue);

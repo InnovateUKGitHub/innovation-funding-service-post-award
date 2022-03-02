@@ -112,9 +112,9 @@ describe("GetPCRItemTypesQuery", () => {
         expect(expectedTypes).toStrictEqual([
           PCRItemType.MultiplePartnerFinancialVirement,
           PCRItemType.ScopeChange,
-          PCRItemType.TimeExtension,
           PCRItemType.ProjectSuspension,
           PCRItemType.LoanDrawdownChange,
+          PCRItemType.LoanDrawdownExtension,
         ]);
       });
     });

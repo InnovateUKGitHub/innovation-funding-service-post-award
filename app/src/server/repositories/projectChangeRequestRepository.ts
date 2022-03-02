@@ -113,6 +113,16 @@ export interface ISalesforcePCR {
 
   // Virements related field
   Acc_GrantMovingOverFinancialYear__c: number | null;
+
+  // Change loan request
+  Loan_ProjectStartDate__c: string | null;
+
+  Loan_Duration__c: string | null;
+  // Acc_AdditionalNumberofMonths__c is used for setting value
+  Loan_ExtensionPeriod__c: string | null;
+  Loan_ExtensionPeriodChange__c: string | null;
+  Loan_RepaymentPeriod__c: string | null;
+  Loan_RepaymentPeriodChange__c: string | null;
 }
 
 export const mapToPCRStatusLabel = (status: PCRStatus): string => {
@@ -249,6 +259,12 @@ export class ProjectChangeRequestRepository
     "Acc_CommercialWork__c",
     "Acc_TSBReference__c",
     "Acc_GrantMovingOverFinancialYear__c",
+    "Loan_ProjectStartDate__c",
+    "Loan_Duration__c",
+    "Loan_ExtensionPeriod__c",
+    "Loan_ExtensionPeriodChange__c",
+    "Loan_RepaymentPeriod__c",
+    "Loan_RepaymentPeriodChange__c",
   ];
 
   async getAllByProjectId(projectId: string): Promise<ProjectChangeRequestEntity[]> {
@@ -295,47 +311,54 @@ export class ProjectChangeRequestRepository
 
   async updateItems(pcr: ProjectChangeRequestEntity, items: ProjectChangeRequestItemEntity[]) {
     await super.updateAll(
-      items.map(x => ({
-        Id: x.id,
-        Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
-        Acc_NewProjectDuration__C: x.projectDuration,
-        Acc_AdditionalNumberofMonths__c: x.offsetMonths,
-        Acc_NewProjectSummary__c: x.projectSummary,
-        Acc_NewPublicDescription__c: x.publicDescription,
-        Acc_SuspensionStarts__c: this.toOptionalSFDate(x.suspensionStartDate),
-        Acc_SuspensionEnds__c: this.toOptionalSFDate(x.suspensionEndDate),
-        Acc_NewOrganisationName__c: x.accountName,
-        Acc_RemovalPeriod__c: x.removalPeriod,
-        Acc_Project_Participant__c: x.partnerId,
-        Acc_ProjectRole__c: new PcrProjectRoleMapper().mapToSalesforcePCRProjectRole(x.projectRole),
-        Acc_ParticipantType__c: new PcrPartnerTypeMapper().mapToSalesforcePCRPartnerType(x.partnerType),
-        Acc_CommercialWork__c: x.isCommercialWork,
-        Acc_OrganisationName__c: x.organisationName,
-        Acc_RegisteredAddress__c: x.registeredAddress,
-        Acc_RegistrationNumber__c: x.registrationNumber,
-        Acc_ParticipantSize__c: new PcrParticipantSizeMapper().mapToSalesforcePCRParticipantSize(x.participantSize),
-        Acc_Employees__c: x.numberOfEmployees,
-        Acc_TurnoverYearEnd__c: this.toOptionalSFDate(x.financialYearEndDate),
-        Acc_Turnover__c: x.financialYearEndTurnover,
-        Acc_Location__c: new PCRProjectLocationMapper().mapToSalesforcePCRProjectLocation(x.projectLocation),
-        Acc_ProjectCity__c: x.projectCity,
-        Acc_ProjectPostcode__c: x.projectPostcode,
-        Acc_Contact1ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(x.contact1ProjectRole),
-        Acc_Contact1Forename__c: x.contact1Forename,
-        Acc_Contact1Surname__c: x.contact1Surname,
-        Acc_Contact1Phone__c: x.contact1Phone,
-        Acc_Contact1EmailAddress__c: x.contact1Email,
-        Acc_Contact2ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(x.contact2ProjectRole),
-        Acc_Contact2Forename__c: x.contact2Forename,
-        Acc_Contact2Surname__c: x.contact2Surname,
-        Acc_Contact2Phone__c: x.contact2Phone,
-        Acc_Contact2EmailAddress__c: x.contact2Email,
-        Acc_AwardRate__c: x.awardRate,
-        Acc_OtherFunding__c: x.hasOtherFunding,
-        Acc_TotalOtherFunding__c: x.totalOtherFunding,
-        Acc_TSBReference__c: x.tsbReference,
-        Acc_GrantMovingOverFinancialYear__c: x.grantMovingOverFinancialYear,
-      })),
+      items.map(x => {
+        const isDurationChange = x.shortName === "Duration";
+        const additionalNumberOfMonths = isDurationChange ? x.offsetMonths : x.availabilityPeriodChange;
+
+        return {
+          Id: x.id,
+          Acc_MarkedasComplete__c: this.mapItemStatus(x.status),
+          Acc_NewProjectDuration__C: x.projectDuration,
+          Acc_AdditionalNumberofMonths__c: additionalNumberOfMonths ?? 0,
+          Acc_NewProjectSummary__c: x.projectSummary,
+          Acc_NewPublicDescription__c: x.publicDescription,
+          Acc_SuspensionStarts__c: this.toOptionalSFDate(x.suspensionStartDate),
+          Acc_SuspensionEnds__c: this.toOptionalSFDate(x.suspensionEndDate),
+          Acc_NewOrganisationName__c: x.accountName,
+          Acc_RemovalPeriod__c: x.removalPeriod,
+          Acc_Project_Participant__c: x.partnerId,
+          Acc_ProjectRole__c: new PcrProjectRoleMapper().mapToSalesforcePCRProjectRole(x.projectRole),
+          Acc_ParticipantType__c: new PcrPartnerTypeMapper().mapToSalesforcePCRPartnerType(x.partnerType),
+          Acc_CommercialWork__c: x.isCommercialWork,
+          Acc_OrganisationName__c: x.organisationName,
+          Acc_RegisteredAddress__c: x.registeredAddress,
+          Acc_RegistrationNumber__c: x.registrationNumber,
+          Acc_ParticipantSize__c: new PcrParticipantSizeMapper().mapToSalesforcePCRParticipantSize(x.participantSize),
+          Acc_Employees__c: x.numberOfEmployees,
+          Acc_TurnoverYearEnd__c: this.toOptionalSFDate(x.financialYearEndDate),
+          Acc_Turnover__c: x.financialYearEndTurnover,
+          Acc_Location__c: new PCRProjectLocationMapper().mapToSalesforcePCRProjectLocation(x.projectLocation),
+          Acc_ProjectCity__c: x.projectCity,
+          Acc_ProjectPostcode__c: x.projectPostcode,
+          Acc_Contact1ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(x.contact1ProjectRole),
+          Acc_Contact1Forename__c: x.contact1Forename,
+          Acc_Contact1Surname__c: x.contact1Surname,
+          Acc_Contact1Phone__c: x.contact1Phone,
+          Acc_Contact1EmailAddress__c: x.contact1Email,
+          Acc_Contact2ProjectRole__c: new PcrContactRoleMapper().mapToSalesforcePCRProjectRole(x.contact2ProjectRole),
+          Acc_Contact2Forename__c: x.contact2Forename,
+          Acc_Contact2Surname__c: x.contact2Surname,
+          Acc_Contact2Phone__c: x.contact2Phone,
+          Acc_Contact2EmailAddress__c: x.contact2Email,
+          Acc_AwardRate__c: x.awardRate,
+          Acc_OtherFunding__c: x.hasOtherFunding,
+          Acc_TotalOtherFunding__c: x.totalOtherFunding,
+          Acc_TSBReference__c: x.tsbReference,
+          Acc_GrantMovingOverFinancialYear__c: x.grantMovingOverFinancialYear,
+          Loan_ExtensionPeriodChange__c: String(x.extensionPeriodChange),
+          Loan_RepaymentPeriodChange__c: String(x.repaymentPeriodChange),
+        };
+      }),
     );
   }
 

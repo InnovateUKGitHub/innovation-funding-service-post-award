@@ -263,6 +263,15 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
 
   private mapItem(header: ISalesforcePCR, pcrItem: ISalesforcePCR): ProjectChangeRequestItemEntity {
     const partnerType = new PcrPartnerTypeMapper().mapFromSalesforcePCRPartnerType(pcrItem.Acc_ParticipantType__c);
+    const offsetMonths = pcrItem.Acc_AdditionalNumberofMonths__c || 0;
+
+    const extensionPeriod = Number(pcrItem.Loan_ExtensionPeriod__c);
+    const extensionPeriodChange = Number(pcrItem.Loan_ExtensionPeriodChange__c);
+    const availabilityPeriod = Number(pcrItem.Loan_Duration__c);
+    const availabilityPeriodChange = Number(offsetMonths);
+    const repaymentPeriod = Number(pcrItem.Loan_RepaymentPeriod__c);
+    const repaymentPeriodChange = Number(pcrItem.Loan_RepaymentPeriodChange__c);
+
     return {
       id: pcrItem.Id,
       pcrId: header.Id,
@@ -275,7 +284,7 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       publicDescription: pcrItem.Acc_NewPublicDescription__c,
       accountName: pcrItem.Acc_NewOrganisationName__c,
       projectDuration: pcrItem.Acc_NewProjectDuration__c,
-      offsetMonths: pcrItem.Acc_AdditionalNumberofMonths__c || 0,
+      offsetMonths,
       projectDurationSnapshot: pcrItem.Acc_ExistingProjectDuration__c,
       projectSummary: pcrItem.Acc_NewProjectSummary__c,
       removalPeriod: pcrItem.Acc_RemovalPeriod__c,
@@ -326,7 +335,23 @@ export class SalesforcePCRMapper extends SalesforceBaseMapper<ISalesforcePCR[], 
       tsbReference: pcrItem.Acc_TSBReference__c,
       // virements
       grantMovingOverFinancialYear: pcrItem.Acc_GrantMovingOverFinancialYear__c,
+
+      // Change loan request
+      projectStartDate: this.clock.parseOptionalSalesforceDate(pcrItem.Loan_ProjectStartDate__c),
+      availabilityPeriod,
+      availabilityPeriodChange: this.mapChangeOffsetToQuarter(availabilityPeriod, availabilityPeriodChange),
+      extensionPeriod,
+      extensionPeriodChange: this.mapChangeOffsetToQuarter(extensionPeriod, extensionPeriodChange),
+      repaymentPeriod,
+      repaymentPeriodChange: this.mapChangeOffsetToQuarter(repaymentPeriod, repaymentPeriodChange),
     };
+  }
+
+  private mapChangeOffsetToQuarter(currentMonthOffset: number, changedMonthOffset: number): number {
+    // Note: Set default value if no change entry has been populated
+    if (!changedMonthOffset) return currentMonthOffset;
+
+    return changedMonthOffset + currentMonthOffset;
   }
 
   private mapStatus(statusLabel: string): PCRStatus {
