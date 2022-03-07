@@ -339,62 +339,64 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     return (
-      <EnumDocuments documentsToCheck={allowedClaimDocuments}>
-        {docs => (
-          <ACC.AccordionItem
-            title={content.default.uploadSupportingDocumentsFormAccordionTitle}
-            qa="upload-supporting-documents-form-accordion"
-          >
-            <UploadForm.Form
-              enctype="multipart"
-              editor={documentsEditor}
-              onChange={dto => props.onUpload(false, dto)}
-              onSubmit={() => props.onUpload(true, documentsEditor.data)}
-              qa="projectDocumentUpload"
-            >
-              <UploadForm.Fieldset>
-                <ACC.Renderers.SimpleString>{content.default.uploadInstruction1}</ACC.Renderers.SimpleString>
-                <ACC.Renderers.SimpleString>{content.default.uploadInstruction2}</ACC.Renderers.SimpleString>
+      <ACC.AccordionItem
+        title={content.default.uploadSupportingDocumentsFormAccordionTitle}
+        qa="upload-supporting-documents-form-accordion"
+      >
+        <EnumDocuments documentsToCheck={allowedClaimDocuments}>
+          {docs => (
+            <>
+              <UploadForm.Form
+                enctype="multipart"
+                editor={documentsEditor}
+                onChange={dto => props.onUpload(false, dto)}
+                onSubmit={() => props.onUpload(true, documentsEditor.data)}
+                qa="projectDocumentUpload"
+              >
+                <UploadForm.Fieldset>
+                  <ACC.Renderers.SimpleString>{content.default.uploadInstruction1}</ACC.Renderers.SimpleString>
+                  <ACC.Renderers.SimpleString>{content.default.uploadInstruction2}</ACC.Renderers.SimpleString>
 
-                <ACC.DocumentGuidance />
+                  <ACC.DocumentGuidance />
 
-                <UploadForm.MultipleFileUpload
-                  label={content.default.uploadInputLabel}
-                  name="attachment"
-                  labelHidden
-                  value={x => x.files}
-                  update={(dto, files) => (dto.files = files || [])}
-                  validation={documentsEditor.validator.files}
+                  <UploadForm.MultipleFileUpload
+                    label={content.default.uploadInputLabel}
+                    name="attachment"
+                    labelHidden
+                    value={x => x.files}
+                    update={(dto, files) => (dto.files = files || [])}
+                    validation={documentsEditor.validator.files}
+                  />
+
+                  <UploadForm.DropdownList
+                    label={content.default.descriptionLabel}
+                    labelHidden={false}
+                    hasEmptyOption
+                    placeholder="-- No description --"
+                    name="description"
+                    validation={documentsEditor.validator.files}
+                    options={docs}
+                    value={selectedOption => filterDropdownList(selectedOption, docs)}
+                    update={(dto, value) => (dto.description = value ? parseInt(value.id, 10) : undefined)}
+                  />
+                </UploadForm.Fieldset>
+
+                <UploadForm.Submit name="reviewDocuments" styling="Secondary">
+                  {content.default.uploadButton}
+                </UploadForm.Submit>
+              </UploadForm.Form>
+
+              <ACC.Section>
+                <ACC.DocumentEdit
+                  qa="claim-supporting-documents"
+                  onRemove={document => props.onDelete(documentsEditor.data, document)}
+                  documents={documents}
                 />
-
-                <UploadForm.DropdownList
-                  label={content.default.descriptionLabel}
-                  labelHidden={false}
-                  hasEmptyOption
-                  placeholder="-- No description --"
-                  name="description"
-                  validation={documentsEditor.validator.files}
-                  options={docs}
-                  value={selectedOption => filterDropdownList(selectedOption, docs)}
-                  update={(dto, value) => (dto.description = value ? parseInt(value.id, 10) : undefined)}
-                />
-              </UploadForm.Fieldset>
-
-              <UploadForm.Submit name="reviewDocuments" styling="Secondary">
-                {content.default.uploadButton}
-              </UploadForm.Submit>
-            </UploadForm.Form>
-
-            <ACC.Section>
-              <ACC.DocumentEdit
-                qa="claim-supporting-documents"
-                onRemove={document => props.onDelete(documentsEditor.data, document)}
-                documents={documents}
-              />
-            </ACC.Section>
-          </ACC.AccordionItem>
-        )}
-      </EnumDocuments>
+              </ACC.Section>
+            </>
+          )}
+        </EnumDocuments>
+      </ACC.AccordionItem>
     );
   };
 
