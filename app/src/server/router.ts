@@ -9,12 +9,14 @@ import { NotFoundError } from "@server/features/common/appError";
 import { serverRender } from "@server/serverRender";
 import { componentGuideRender } from "@server/componentGuideRender";
 
+export const noAuthRouter = Router();
+
+// Support routes
+noAuthRouter.use("/api/health", healthRouter);
+
 export const router = Router();
 
 const csrfProtection = csrf();
-
-// Support routes
-router.use("/api/health", healthRouter);
 
 // App routes
 router.use("/api", apiRoutes);

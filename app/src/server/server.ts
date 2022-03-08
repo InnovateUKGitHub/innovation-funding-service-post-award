@@ -15,7 +15,7 @@ import { allowCache, noCache, setOwaspHeaders } from "./cacheHeaders";
 
 import { router as cspRouter } from "./csp";
 import { router as authRouter } from "./auth";
-import { router } from "./router";
+import { router, noAuthRouter } from "./router";
 
 import contextProvider from "./features/common/contextProvider";
 import { GetPermissionGroupQuery } from "./features/general/getPermissionGroupsQuery";
@@ -116,11 +116,13 @@ export class Server {
   };
 
   private routing() {
-    this.app.use((req, res, next) => {
+    this.app.use((_, res, next) => {
       res.locals.nonce = uuidv4();
       next();
     });
+
     this.app.use(setOwaspHeaders, allowCache, express.static("public"));
+    this.app.use(noCache, noAuthRouter);
     this.app.use(noCache, cspRouter);
     this.app.use(authRouter);
     this.app.use(internationalisationRouter);
