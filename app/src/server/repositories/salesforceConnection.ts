@@ -21,7 +21,7 @@ interface ISalesforceTokenError {
   error_description: string;
 }
 
-type ISalesforceTokenQuery = ISalesforceTokenPayload | ISalesforceTokenError;
+export type ISalesforceTokenQuery = ISalesforceTokenPayload | ISalesforceTokenError;
 
 export interface ISalesforceTokenDetails {
   currentUsername: string;
@@ -33,12 +33,12 @@ export interface ISalesforceConnectionDetails extends ISalesforceTokenDetails {
   serviceUsername: string;
 }
 
-interface ITokenInfo {
+export interface ITokenInfo {
   accessToken: string;
   url: string;
 }
 
-const tokenCache = new Cache<ITokenInfo>(configuration.timeouts.token);
+export const tokenCache = new Cache<ITokenInfo>(configuration.timeouts.token);
 
 export const getSalesforceAccessToken = async (config: ISalesforceTokenDetails): Promise<ITokenInfo> => {
   const privateKey = readFile(configuration.certificates.salesforce);
