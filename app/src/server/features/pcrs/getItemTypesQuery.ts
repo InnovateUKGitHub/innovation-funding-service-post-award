@@ -7,7 +7,7 @@ import { IConfig, QueryBase } from "../common";
 import { GetByIdQuery } from "../projects";
 
 interface IMetaValue {
-  competitions: string[];
+  ignoredCompetitions: string[];
   type: PCRItemType;
   typeName: string;
   displayName?: string;
@@ -30,16 +30,6 @@ const nameChangeGuidance = `This will change the partner's name in all projects 
 
 const partnerAdditionGuidance = undefined;
 
-const singlePartnerFinancialVirementGuidance = `You need to submit a reallocate project costs spreadsheet. In the yellow boxes enter the names of all partner organisations, their current costs and the costs you are proposing. Enter all partners’ details. There are separate tables for businesses and academic organisations.
-
-You must not:
-
-* increase the combined grant funding within the collaboration
-* exceed any individual partner’s award rate limit
-
-You should not increase the overhead percentage rate.
-`;
-
 const multiplePartnerFinancialVirementGuidance = `You need to submit a reallocate project costs spreadsheet. In the yellow boxes enter the names of all partner organisations, their current costs and the costs you are proposing. Enter all partners’ details. There are separate tables for businesses and academic organisations.
 
 You must not:
@@ -56,11 +46,11 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
   }
 
   protected async run(context: IContext): Promise<PCRItemTypeDto[]> {
-    const project = await context.runQuery(new GetByIdQuery(this.projectId));
     const recordTypes = await context.runQuery(new GetAllRecordTypesQuery());
+    const { competitionType } = await context.runQuery(new GetByIdQuery(this.projectId));
 
-    const recordMetaValues = GetPCRItemTypesQuery.recordTypeMetaValues.filter(x =>
-      x.competitions.includes(project.competitionType),
+    const recordMetaValues = GetPCRItemTypesQuery.recordTypeMetaValues.filter(
+      x => !x.ignoredCompetitions.includes(competitionType),
     );
 
     const pcrRecordTypes = recordTypes.filter(x => x.parent === "Acc_ProjectChangeRequest__c");
@@ -98,6 +88,7 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
     if (metaInfo.type === PCRItemType.PeriodLengthChange) {
       return config.features.changePeriodLengthWorkflow;
     }
+
     return true;
   }
 
@@ -107,81 +98,73 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
   }
 
   /**
-   * @description The DB does not support filtering by competition, so we introduce support here on this static array via 'competitions'.
+   * @description There is no mechanism to support filtering, hence this manual list. The order dictates the UI order what will be presented.
    *
-   * To be clear, the PCR items types will adhere to this order. If the db has an entry but it is not defined here then it will not be available through the api.
+   * If the db has an entry but it is not defined here then it will not be available through the api.
    */
   static readonly recordTypeMetaValues: IMetaValue[] = [
     {
-      type: PCRItemType.SinglePartnerFinancialVirement,
-      competitions: [],
-      // competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "SBRI", "SBRI IFS"],
-      typeName: "Reallocate one partner's project costs",
-      files: ["reallocate-project-costs.xlsx"],
-      displayName: "Reallocate project costs",
-      guidance: singlePartnerFinancialVirementGuidance,
-    },
-    {
       type: PCRItemType.MultiplePartnerFinancialVirement,
-      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "SBRI", "SBRI IFS", "EDGE"],
       typeName: "Reallocate several partners' project cost",
       files: ["reallocate-project-costs.xlsx"],
       displayName: "Reallocate project costs",
       guidance: multiplePartnerFinancialVirementGuidance,
+      ignoredCompetitions: [],
     },
     {
       type: PCRItemType.PartnerWithdrawal,
-      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "SBRI", "SBRI IFS", "EDGE"],
       typeName: "Remove a partner",
+      ignoredCompetitions: ["LOANS"],
     },
     {
       type: PCRItemType.PartnerAddition,
-      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "SBRI", "SBRI IFS", "EDGE"],
       typeName: "Add a partner",
       files: ["de-minimis-declaration.odt"],
       guidance: partnerAdditionGuidance,
+      ignoredCompetitions: ["LOANS"],
     },
     {
       type: PCRItemType.ScopeChange,
-      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "SBRI", "SBRI IFS", "EDGE"],
       typeName: "Change project scope",
       guidance: scopeChangeGuidance,
+      ignoredCompetitions: [],
     },
     {
       type: PCRItemType.TimeExtension,
-      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "SBRI", "SBRI IFS", "EDGE"],
       typeName: "Change project duration",
+      ignoredCompetitions: ["LOANS"],
+
     },
     {
       type: PCRItemType.PeriodLengthChange,
-      competitions: [],
       typeName: "Change period length",
+      ignoredCompetitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "EDGE", "SBRI", "SBRI IFS"],
     },
     {
       type: PCRItemType.AccountNameChange,
-      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "SBRI", "SBRI IFS", "EDGE"],
       typeName: "Change a partner's name",
       guidance: nameChangeGuidance,
+      ignoredCompetitions: ["LOANS"],
     },
     {
       type: PCRItemType.ProjectSuspension,
-      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "SBRI", "SBRI IFS", "EDGE"],
       typeName: "Put project on hold",
+      ignoredCompetitions: [],
     },
     {
       type: PCRItemType.ProjectTermination,
-      competitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "SBRI", "SBRI IFS", "EDGE"],
       typeName: "End the project early",
+      ignoredCompetitions: ["LOANS"],
     },
     {
       type: PCRItemType.LoanDrawdownChange,
-      competitions: ["LOANS"],
       typeName: "Loan Drawdown Change",
+      ignoredCompetitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "EDGE", "SBRI", "SBRI IFS"],
     },
     {
       type: PCRItemType.LoanDrawdownExtension,
-      competitions: ["LOANS"],
       typeName: "Change Loans Duration",
-    },
-  ].filter(x => !!x.competitions.length);
+      ignoredCompetitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "EDGE", "SBRI", "SBRI IFS"],
+    }
+  ];
 }
