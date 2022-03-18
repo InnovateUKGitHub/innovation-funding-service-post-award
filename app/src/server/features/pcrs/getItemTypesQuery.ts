@@ -138,7 +138,7 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
     {
       type: PCRItemType.PeriodLengthChange,
       typeName: "Change period length",
-      ignoredCompetitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "EDGE", "SBRI", "SBRI IFS"],
+      ignoredCompetitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "EDGE", "SBRI", "SBRI IFS", "Horizon Europe Participation"],
     },
     {
       type: PCRItemType.AccountNameChange,
@@ -159,12 +159,12 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
     {
       type: PCRItemType.LoanDrawdownChange,
       typeName: "Loan Drawdown Change",
-      ignoredCompetitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "EDGE", "SBRI", "SBRI IFS"],
+      ignoredCompetitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "EDGE", "SBRI", "SBRI IFS", "Horizon Europe Participation"],
     },
     {
       type: PCRItemType.LoanDrawdownExtension,
       typeName: "Change Loans Duration",
-      ignoredCompetitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "EDGE", "SBRI", "SBRI IFS"],
+      ignoredCompetitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "EDGE", "SBRI", "SBRI IFS", "Horizon Europe Participation"],
     }
   ];
 }

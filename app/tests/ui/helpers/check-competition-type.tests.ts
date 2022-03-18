@@ -1,7 +1,7 @@
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 
 describe("checkProjectCompetition()", () => {
-  const stubResponse = {
+  const stubResponse: ReturnType<typeof checkProjectCompetition> = {
     isCRandD: false,
     isContracts: false,
     isSBRI: false,
@@ -11,6 +11,7 @@ describe("checkProjectCompetition()", () => {
     isCatapults: false,
     isLoans: false,
     isEdge: false,
+    isHorizonEuropeParticipation: false,
   };
 
   describe("@returns", () => {
