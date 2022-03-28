@@ -8,78 +8,99 @@ import { Content } from "@content/content";
 import { MatchedRoute } from "@ui/routing";
 
 export interface BaseProps {
-    messages: string[];
-    route: RouteState;
-    config: IClientConfig;
-    routes: IRoutes;
+  messages: string[];
+  route: RouteState;
+  config: IClientConfig;
+  routes: IRoutes;
 }
 
 export type ContainerProps<TParams, TData, TCallbacks> = TParams & TData & TCallbacks & BaseProps;
 
-export type ContainerBaseClass<TParams, TData, TCallbacks> = new(props: TParams & TData & TCallbacks & BaseProps, context?: any) => ContainerBase<TParams, TData, TCallbacks>;
+export type ContainerBaseClass<TParams, TData, TCallbacks> = new (
+  props: TParams & TData & TCallbacks & BaseProps,
+  context?: any,
+) => ContainerBase<TParams, TData, TCallbacks>;
 
-export abstract class ContainerBaseWithState<TParams = {}, TData = {}, TCallbacks = {}, TState = {}> extends React.Component<ContainerProps<TParams, TData, TCallbacks>, TState> {
-    constructor(props: ContainerProps<TParams, TData, TCallbacks>) {
-        super(props);
-    }
+export abstract class ContainerBaseWithState<
+  TParams = {},
+  TData = {},
+  TCallbacks = {},
+  TState = {}
+> extends React.Component<ContainerProps<TParams, TData, TCallbacks>, TState> {
+  constructor(props: ContainerProps<TParams, TData, TCallbacks>) {
+    super(props);
+  }
 }
 
-export abstract class ContainerBase<TParams = {}, TData = {}, TCallbacks = {}> extends React.Component<ContainerProps<TParams, TData, TCallbacks>> {
-    constructor(props: ContainerProps<TParams, TData, TCallbacks>) {
-        super(props);
-    }
+export abstract class ContainerBase<TParams = {}, TData = {}, TCallbacks = {}> extends React.Component<
+  ContainerProps<TParams, TData, TCallbacks>
+> {
+  constructor(props: ContainerProps<TParams, TData, TCallbacks>) {
+    super(props);
+  }
 }
 
 // TODO: Remove duplication between MatchedRoute and IRouteOptions
 interface IRouteOptions<TParams> extends Pick<MatchedRoute, "allowRouteInActiveAccess"> {
-    routeName: string;
-    routePath: string;
-    container: React.FunctionComponent<TParams & BaseProps>;
-    getParams: (route: RouteState) => TParams;
-    accessControl?: (auth: Authorisation, params: TParams, config: IClientConfig) => boolean;
-    getTitle: (getTitleArgs: { params: TParams; stores: IStores; content: Content }) => {
-        htmlTitle: string;
-        displayTitle: string;
-    };
+  routeName: string;
+  routePath: string;
+  container: React.FunctionComponent<TParams & BaseProps>;
+  getParams: (route: RouteState) => TParams;
+  accessControl?: (auth: Authorisation, params: TParams, config: IClientConfig) => boolean;
+  getTitle: (getTitleArgs: {
+    params: TParams;
+    stores: IStores;
+    content: Content;
+  }) => {
+    htmlTitle: string;
+    displayTitle: string;
+  };
 }
 
 export interface IRouteDefinition<TParams> extends IRouteOptions<TParams> {
-    getLink: (params: TParams) => ILinkInfo;
+  getLink: (params: TParams) => ILinkInfo;
 }
 
 export function defineRoute<TParams>(options: IRouteOptions<TParams>): IRouteDefinition<TParams> {
-    return {
-        ...options,
-        getLink: (params) => ({
-            routeName: options.routeName,
-            routeParams: convertToParameters(params),
-            accessControl: (user: IClientUser, config: IClientConfig) => !options.accessControl || options.accessControl(new Authorisation(user.roleInfo), params, config)
-        })
-    };
+  return {
+    ...options,
+    getLink: params => ({
+      routeName: options.routeName,
+      routeParams: convertToParameters(params),
+      accessControl: (user: IClientUser, config: IClientConfig) =>
+        !options.accessControl || options.accessControl(new Authorisation(user.roleInfo), params, config),
+    }),
+  };
 }
 
 function convertToParameters(params: any) {
-    const result: { [key: string]: string } = {};
+  const result: { [key: string]: string | string[] } = {};
 
-    Object.keys(params || {}).forEach(key => {
-        if (params[key] !== undefined) {
-            result[key] = convertToParameter(params[key]);
-        }
-    });
+  Object.keys(params || {}).forEach(key => {
+    if (params[key] !== undefined) {
+      result[key] = convertToParameter(params[key]);
+    }
+  });
 
-    return result;
+  return result;
 }
 
-function convertToParameter(p: any): string {
+function convertToParameter(p: any): string[] | string {
+  if (typeof p === "number") {
+    return p.toString();
+  }
 
-    if (typeof (p) === "number") {
-        return p.toString();
-    }
-    if (typeof (p) === "boolean") {
-        return p.toString();
-    }
-    if (typeof (p) === "string") {
-        return p;
-    }
-    throw new Error(`Unable to convert parameter to a string : ${JSON.stringify(p)}`);
+  if (typeof p === "boolean") {
+    return p.toString();
+  }
+
+  if (typeof p === "string") {
+    return p;
+  }
+
+  if (Array.isArray(p)) {
+    return p;
+  }
+
+  throw new Error(`Unable to convert parameter to a string : ${JSON.stringify(p)}`);
 }

@@ -82,8 +82,8 @@ const useProjectActions = ({ section, project, partner }: ProjectProps): string[
     }
 
     if (isMo) {
-      messages.push(getContent(x => x.projectsDashboard.messages.claimsToReview(project.claimsToReview)));
-      messages.push(getContent(x => x.projectsDashboard.messages.pcrsToReview(project.pcrsToReview)));
+      project.claimsToReview && messages.push(getContent(x => x.projectsDashboard.messages.claimsToReview(project.claimsToReview)));
+      project.pcrsToReview && messages.push(getContent(x => x.projectsDashboard.messages.pcrsToReview(project.pcrsToReview)));
     }
 
     if (isPm && hasQueriedPcrs) {
@@ -166,7 +166,7 @@ function DashboardProject(props: DashboardProjectProps) {
 
       <div className="govuk-grid-column-one-third govuk-grid-column--right-align govuk-!-margin-top-2">
         {projectActions.map((content, i) => (
-          <div key={`rightMessage${i}`} className="govuk-body-s govuk-!-margin-bottom-0 govuk-!-font-weight-bold">
+          <div key={`rightMessage${i}`} className="govuk-body-s govuk-!-margin-bottom-1 govuk-!-font-weight-bold">
             {content}
           </div>
         ))}
