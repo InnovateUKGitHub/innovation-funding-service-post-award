@@ -23,9 +23,10 @@ export const dayComparator: IComparer<Date> = (a, b) => {
 export const projectPriorityComparator: IComparer<ProjectDto> = (a, b) => {
   const noClaimsAvailable = a.claimsToReview === 0 && b.claimsToReview === 0;
   const noPcrReviewsAvailable = a.pcrsToReview === 0 && b.pcrsToReview === 0;
+  const noPcrQueriesAvailable = a.pcrsQueried === 0 && b.pcrsQueried === 0;
 
   // Note: These have no priority push to bottom
-  if (noClaimsAvailable && noPcrReviewsAvailable) return 99999;
+  if (noClaimsAvailable && noPcrReviewsAvailable && noPcrQueriesAvailable) return Number.MAX_SAFE_INTEGER;
 
-  return b.claimsToReview - a.claimsToReview || b.pcrsToReview - a.pcrsToReview;
+  return b.claimsToReview - a.claimsToReview || b.pcrsToReview - a.pcrsToReview || b.pcrsQueried - a.pcrsQueried;
 };

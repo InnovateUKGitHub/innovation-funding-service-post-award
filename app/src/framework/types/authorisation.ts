@@ -1,22 +1,29 @@
 import { ProjectRole } from "@framework/constants";
 import { IRoleInfo } from "@server/features/projects/getAllProjectRolesForUser";
 
-type AvailableAuthRoles = "isPm" | "isPmOrMo" | "isPmAndFc" | "isFc" | "isMo";
+type AvailableAuthRoles = "Fc" | "Mo" | "Pm" | "PmOrMo" | "PmAndFc" | "Unknown" | "SuperAdmin";
 
-export function getAuthRoles(role: ProjectRole): { [key in AvailableAuthRoles]: boolean } {
+export function getAuthRoles(role: ProjectRole): Record<`is${AvailableAuthRoles}`, boolean> {
+  // Note: As 'Unknown' there is never an overlap so we check against itself
+  const isUnknown = (role & ProjectRole.Unknown) === ProjectRole.Unknown && role === ProjectRole.Unknown;
+
   const isFc = !!(role & ProjectRole.FinancialContact);
-
   const isPm = !!(role & ProjectRole.ProjectManager);
   const isMo = !!(role & ProjectRole.MonitoringOfficer);
-  const isPmOrMo = (role & (ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer)) !== ProjectRole.Unknown;
+
+  const isSuperAdmin = isFc && isPm && isMo;
+
+  const isPmOrMo = isPm || isMo;
   const isPmAndFc = !isMo && isFc && isPm;
 
   return {
-    isPm,
-    isPmOrMo,
-    isPmAndFc,
-    isFc,
+    isUnknown,
     isMo,
+    isFc,
+    isPm,
+    isSuperAdmin,
+    isPmAndFc,
+    isPmOrMo,
   };
 }
 

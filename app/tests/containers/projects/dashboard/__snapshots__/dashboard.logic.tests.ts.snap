@@ -1,0 +1,203 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`getAvailableProjectFilters() with FC filters with multiple of same project 1`] = `
+Array [
+  Object {
+    "id": "SETUP_REQUIRED",
+    "label": "Not completed setup",
+  },
+  Object {
+    "id": "CLAIMS_TO_SUBMIT",
+    "label": "Claims to submit",
+  },
+  Object {
+    "id": "CLAIMS_TO_UPLOAD_REPORT",
+    "label": "Claims missing documents",
+  },
+  Object {
+    "id": "CLAIMS_TO_RESPOND",
+    "label": "Claims needing responses",
+  },
+]
+`;
+
+exports[`getAvailableProjectFilters() with FC filters with other filters 1`] = `
+Array [
+  Object {
+    "id": "CLAIMS_TO_REVIEW",
+    "label": "Claims to review",
+  },
+  Object {
+    "id": "PCRS_TO_REVIEW",
+    "label": "PCR's to review",
+  },
+  Object {
+    "id": "SETUP_REQUIRED",
+    "label": "Not completed setup",
+  },
+  Object {
+    "id": "CLAIMS_TO_SUBMIT",
+    "label": "Claims to submit",
+  },
+  Object {
+    "id": "CLAIMS_TO_UPLOAD_REPORT",
+    "label": "Claims missing documents",
+  },
+  Object {
+    "id": "CLAIMS_TO_RESPOND",
+    "label": "Claims needing responses",
+  },
+]
+`;
+
+exports[`getAvailableProjectFilters() with FC filters with single project 1`] = `
+Array [
+  Object {
+    "id": "SETUP_REQUIRED",
+    "label": "Not completed setup",
+  },
+  Object {
+    "id": "CLAIMS_TO_SUBMIT",
+    "label": "Claims to submit",
+  },
+  Object {
+    "id": "CLAIMS_TO_UPLOAD_REPORT",
+    "label": "Claims missing documents",
+  },
+  Object {
+    "id": "CLAIMS_TO_RESPOND",
+    "label": "Claims needing responses",
+  },
+]
+`;
+
+exports[`getAvailableProjectFilters() with MO filters with multiple of same project 1`] = `
+Array [
+  Object {
+    "id": "CLAIMS_TO_REVIEW",
+    "label": "Claims to review",
+  },
+  Object {
+    "id": "PCRS_TO_REVIEW",
+    "label": "PCR's to review",
+  },
+]
+`;
+
+exports[`getAvailableProjectFilters() with MO filters with other filters 1`] = `
+Array [
+  Object {
+    "id": "CLAIMS_TO_REVIEW",
+    "label": "Claims to review",
+  },
+  Object {
+    "id": "PCRS_TO_REVIEW",
+    "label": "PCR's to review",
+  },
+  Object {
+    "id": "SETUP_REQUIRED",
+    "label": "Not completed setup",
+  },
+  Object {
+    "id": "CLAIMS_TO_SUBMIT",
+    "label": "Claims to submit",
+  },
+  Object {
+    "id": "CLAIMS_TO_UPLOAD_REPORT",
+    "label": "Claims missing documents",
+  },
+  Object {
+    "id": "CLAIMS_TO_RESPOND",
+    "label": "Claims needing responses",
+  },
+]
+`;
+
+exports[`getAvailableProjectFilters() with MO filters with single project 1`] = `
+Array [
+  Object {
+    "id": "CLAIMS_TO_REVIEW",
+    "label": "Claims to review",
+  },
+  Object {
+    "id": "PCRS_TO_REVIEW",
+    "label": "PCR's to review",
+  },
+]
+`;
+
+exports[`getAvailableProjectFilters() with PM filters with multiple of same project 1`] = `
+Array [
+  Object {
+    "id": "PCRS_QUERIED",
+    "label": "PCR's being queried",
+  },
+]
+`;
+
+exports[`getAvailableProjectFilters() with PM filters with other filters 1`] = `
+Array [
+  Object {
+    "id": "PCRS_QUERIED",
+    "label": "PCR's being queried",
+  },
+  Object {
+    "id": "SETUP_REQUIRED",
+    "label": "Not completed setup",
+  },
+  Object {
+    "id": "CLAIMS_TO_SUBMIT",
+    "label": "Claims to submit",
+  },
+  Object {
+    "id": "CLAIMS_TO_UPLOAD_REPORT",
+    "label": "Claims missing documents",
+  },
+  Object {
+    "id": "CLAIMS_TO_RESPOND",
+    "label": "Claims needing responses",
+  },
+]
+`;
+
+exports[`getAvailableProjectFilters() with PM filters with single project 1`] = `
+Array [
+  Object {
+    "id": "PCRS_QUERIED",
+    "label": "PCR's being queried",
+  },
+]
+`;
+
+exports[`getAvailableProjectFilters() with SuperAdmin filters 1`] = `
+Array [
+  Object {
+    "id": "PCRS_QUERIED",
+    "label": "PCR's being queried",
+  },
+  Object {
+    "id": "CLAIMS_TO_REVIEW",
+    "label": "Claims to review",
+  },
+  Object {
+    "id": "PCRS_TO_REVIEW",
+    "label": "PCR's to review",
+  },
+  Object {
+    "id": "SETUP_REQUIRED",
+    "label": "Not completed setup",
+  },
+  Object {
+    "id": "CLAIMS_TO_SUBMIT",
+    "label": "Claims to submit",
+  },
+  Object {
+    "id": "CLAIMS_TO_UPLOAD_REPORT",
+    "label": "Claims missing documents",
+  },
+  Object {
+    "id": "CLAIMS_TO_RESPOND",
+    "label": "Claims needing responses",
+  },
+]
+`;

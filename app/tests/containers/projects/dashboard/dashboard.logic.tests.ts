@@ -1,13 +1,21 @@
 import {
   generateFilteredProjects,
+  getAvailableProjectFilters,
   getPartnerOnProject,
   getProjectSection,
 } from "@ui/containers/projects/dashboard/dashboard.logic";
+import { PartnerDto, ProjectDto } from "@framework/dtos";
 import {
-  PartnerDto,
-  ProjectDto,
-} from "@framework/dtos";
-import { BankCheckStatus, BankDetailsTaskStatus, ClaimFrequency, PartnerClaimStatus, PartnerStatus, PostcodeTaskStatus, ProjectRole, ProjectStatus, SpendProfileStatus } from "@framework/constants";
+  BankCheckStatus,
+  BankDetailsTaskStatus,
+  ClaimFrequency,
+  PartnerClaimStatus,
+  PartnerStatus,
+  PostcodeTaskStatus,
+  ProjectRole,
+  ProjectStatus,
+  SpendProfileStatus,
+} from "@framework/constants";
 
 const validPartnerId = "stub-valid-id";
 
@@ -183,9 +191,9 @@ describe("generateFilteredProjects()", () => {
       ${"two projects"}  | ${[stubProject, stubProject]}
       ${"many projects"} | ${[stubProject, stubProject, stubProject]}
     `("returns with $name", ({ stubProjects }) => {
-      const { totalProjects } = generateFilteredProjects(stubProjects, [stubPartner]);
+      const { totalProjects } = generateFilteredProjects([], stubProjects, [stubPartner]);
 
-      expect(totalProjects).toBe(stubProjects.length);
+      expect(stubProjects).toHaveLength(totalProjects);
     });
   });
 
@@ -196,14 +204,14 @@ describe("generateFilteredProjects()", () => {
 
         const stubProjects = [stubOpenProject];
         const stubPartners = [stubOpenPartner];
-        const { curatedProjects } = generateFilteredProjects(stubProjects, stubPartners);
+        const { curatedProjects } = generateFilteredProjects([], stubProjects, stubPartners);
 
         const [firstOpenProject] = curatedProjects.open;
 
         expect(firstOpenProject).toStrictEqual({
+          curatedSection: "open",
           project: stubProjects[0],
           partner: stubPartners[0],
-          projectSection: "open",
         });
 
         // Assert that no other projects get populated
@@ -219,14 +227,14 @@ describe("generateFilteredProjects()", () => {
         };
         const stubProjects = [stubProject];
         const stubPartners = [stubPartnerNoClaims];
-        const { curatedProjects } = generateFilteredProjects(stubProjects, stubPartners);
+        const { curatedProjects } = generateFilteredProjects([], stubProjects, stubPartners);
 
         const [firstOpenProject] = curatedProjects.open;
 
         expect(firstOpenProject).toStrictEqual({
+          curatedSection: "awaiting",
           project: stubProjects[0],
           partner: stubPartners[0],
-          projectSection: "awaiting",
         });
 
         // Note: We coerce this section to open, need to check this registers the project we sent in.
@@ -241,7 +249,7 @@ describe("generateFilteredProjects()", () => {
       test("should return multiple projects", () => {
         const stubProjects = [stubProject, stubProject];
         const stubPartners = [stubPartnerOpenClaims, stubPartnerOpenClaims];
-        const { curatedProjects } = generateFilteredProjects(stubProjects, stubPartners);
+        const { curatedProjects } = generateFilteredProjects([], stubProjects, stubPartners);
 
         expect(curatedProjects.open.length).toBe(2);
       });
@@ -258,14 +266,14 @@ describe("generateFilteredProjects()", () => {
         const stubProjects = [stubPendingProject];
         const stubPartners = [stubPendingPartner];
 
-        const { curatedProjects } = generateFilteredProjects(stubProjects, stubPartners);
+        const { curatedProjects } = generateFilteredProjects([], stubProjects, stubPartners);
 
         const [firstOpenProject] = curatedProjects.pending;
 
         expect(firstOpenProject).toStrictEqual({
+          curatedSection: "pending",
           project: stubProjects[0],
           partner: stubPartners[0],
-          projectSection: "pending",
         });
 
         // Assert that no other projects get populated
@@ -277,7 +285,7 @@ describe("generateFilteredProjects()", () => {
       test("should return multiple projects", () => {
         const stubProjects = [stubProject, stubProject];
         const stubPartners = [stubPartnerStatusPending, stubPartnerStatusPending];
-        const { curatedProjects } = generateFilteredProjects(stubProjects, stubPartners);
+        const { curatedProjects } = generateFilteredProjects([], stubProjects, stubPartners);
 
         expect(curatedProjects.pending.length).toBe(2);
       });
@@ -293,13 +301,13 @@ describe("generateFilteredProjects()", () => {
 
         const stubProjects = [stubUpComingProject];
         const stubPartners = [stubUpComingPartner];
-        const { curatedProjects } = generateFilteredProjects(stubProjects, stubPartners);
+        const { curatedProjects } = generateFilteredProjects([], stubProjects, stubPartners);
 
         const [firstOpenProject] = curatedProjects.pending;
         expect(firstOpenProject).toStrictEqual({
+          curatedSection: "pending",
           project: stubProjects[0],
           partner: stubPartners[0],
-          projectSection: "pending",
         });
 
         // Assert that no other projects get populated
@@ -311,7 +319,7 @@ describe("generateFilteredProjects()", () => {
       test("should return multiple projects", () => {
         const stubProjects = [stubProjectStatusUnknown, stubProjectStatusUnknown];
         const stubPartners = [stubPartnerStatusPending, stubPartnerStatusPending];
-        const { curatedProjects } = generateFilteredProjects(stubProjects, stubPartners);
+        const { curatedProjects } = generateFilteredProjects([], stubProjects, stubPartners);
 
         expect(curatedProjects.pending.length).toBe(2);
       });
@@ -327,13 +335,13 @@ describe("generateFilteredProjects()", () => {
 
         const stubProjects = [stubArchivedProject];
         const stubPartners = [stubArchivedPartner];
-        const { curatedProjects } = generateFilteredProjects(stubProjects, stubPartners);
+        const { curatedProjects } = generateFilteredProjects([], stubProjects, stubPartners);
 
         const [firstOpenProject] = curatedProjects.archived;
         expect(firstOpenProject).toStrictEqual({
+          curatedSection: "archived",
           project: stubProjects[0],
           partner: stubPartners[0],
-          projectSection: "archived",
         });
 
         // Assert that no other projects get populated
@@ -345,7 +353,7 @@ describe("generateFilteredProjects()", () => {
       test("should return multiple projects", () => {
         const stubProjects = [stubProjectStatusTerminated, stubProjectStatusTerminated];
         const stubPartners = [stubPartner, stubPartner];
-        const { curatedProjects } = generateFilteredProjects(stubProjects, stubPartners);
+        const { curatedProjects } = generateFilteredProjects([], stubProjects, stubPartners);
 
         expect(curatedProjects.archived.length).toBe(2);
       });
@@ -369,12 +377,37 @@ describe("generateFilteredProjects()", () => {
         [openPartner, pendingPartner, upComingPartner, archivedPartner],
       ];
 
-      const { curatedTotals } = generateFilteredProjects(...stubData);
+      const { curatedTotals } = generateFilteredProjects([], ...stubData);
 
       expect(curatedTotals.open).toBe(1);
       expect(curatedTotals.pending).toBe(1);
       expect(curatedTotals.upcoming).toBe(1);
       expect(curatedTotals.archived).toBe(1);
+    });
+  });
+
+  describe("returns filtered projects", () => {
+    test("with all items without any filters", () => {
+      const stubProjects = [stubProject, stubProject];
+      const stubPartners = [stubPartnerOpenClaims, stubPartnerOpenClaims];
+      const { curatedProjects } = generateFilteredProjects([], stubProjects, stubPartners);
+
+      expect(curatedProjects.open).toHaveLength(2);
+    });
+
+    test("with a filter returns filtered list", () => {
+      const projectWithClaimsToReview = {
+        ...stubProject,
+        claimsToReview: 1,
+        roles: ProjectRole.MonitoringOfficer,
+      };
+
+      const stubProjects = [stubProject, stubProject, projectWithClaimsToReview];
+      const stubPartners = [stubPartnerOpenClaims, stubPartnerOpenClaims];
+
+      const { curatedProjects } = generateFilteredProjects(["CLAIMS_TO_REVIEW"], stubProjects, stubPartners);
+
+      expect(curatedProjects.open).toHaveLength(1);
     });
   });
 });
@@ -416,7 +449,7 @@ describe("getPartnerOnProject()", () => {
       test("when a partner is not an fc", () => {
         const stubProjectNotPm: ProjectDto = {
           ...stubProject,
-          roles: ProjectRole.Unknown,
+          roles: ProjectRole.FinancialContact,
         };
 
         const stubPartnerAsMo = {
@@ -601,6 +634,85 @@ describe("getProjectSection()", () => {
           expect(section).toBe("awaiting");
         });
       });
+    });
+  });
+});
+
+describe("getAvailableProjectFilters()", () => {
+  const moProject = { ...stubProject, roles: ProjectRole.MonitoringOfficer };
+  const pmProject = { ...stubProject, roles: ProjectRole.ProjectManager };
+  const fcProject = { ...stubProject, roles: ProjectRole.FinancialContact };
+
+  test("with SuperAdmin filters", () => {
+    const superAdminRoles = ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer | ProjectRole.FinancialContact;
+
+    const superAdminProject = {
+      ...stubProject,
+      roles: superAdminRoles,
+    };
+
+    const filters = getAvailableProjectFilters([superAdminProject]);
+
+    expect(filters).toMatchSnapshot();
+  });
+
+  describe("with MO filters", () => {
+    test("with single project", () => {
+      const filters = getAvailableProjectFilters([moProject]);
+
+      expect(filters).toMatchSnapshot();
+    });
+
+    test("with multiple of same project", () => {
+      const filters = getAvailableProjectFilters([moProject, moProject]);
+
+      expect(filters).toMatchSnapshot();
+    });
+
+    test("with other filters", () => {
+      const filters = getAvailableProjectFilters([moProject, fcProject]);
+
+      expect(filters).toMatchSnapshot();
+    });
+  });
+
+  describe("with PM filters", () => {
+    test("with single project", () => {
+      const filters = getAvailableProjectFilters([pmProject]);
+
+      expect(filters).toMatchSnapshot();
+    });
+
+    test("with multiple of same project", () => {
+      const filters = getAvailableProjectFilters([pmProject, pmProject]);
+
+      expect(filters).toMatchSnapshot();
+    });
+
+    test("with other filters", () => {
+      const filters = getAvailableProjectFilters([pmProject, fcProject]);
+
+      expect(filters).toMatchSnapshot();
+    });
+  });
+
+  describe("with FC filters", () => {
+    test("with single project", () => {
+      const filters = getAvailableProjectFilters([fcProject]);
+
+      expect(filters).toMatchSnapshot();
+    });
+
+    test("with multiple of same project", () => {
+      const filters = getAvailableProjectFilters([fcProject, fcProject]);
+
+      expect(filters).toMatchSnapshot();
+    });
+
+    test("with other filters", () => {
+      const filters = getAvailableProjectFilters([fcProject, moProject]);
+
+      expect(filters).toMatchSnapshot();
     });
   });
 });

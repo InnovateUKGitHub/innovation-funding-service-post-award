@@ -21,5 +21,14 @@ export type DashboardProjectAttr = Pick<DashboardProjectProps, "partner" | "rout
 export interface ProjectData {
   project: ProjectDto;
   partner?: PartnerDto;
-  projectSection: Section;
+  curatedSection: Section;
 }
+
+export type FilterOptions =
+  | "CLAIMS_TO_REVIEW"
+  | "CLAIMS_TO_SUBMIT"
+  | "CLAIMS_TO_UPLOAD_REPORT"
+  | "CLAIMS_TO_RESPOND"
+  | "PCRS_TO_REVIEW"
+  | "PCRS_QUERIED"
+  | "SETUP_REQUIRED";
