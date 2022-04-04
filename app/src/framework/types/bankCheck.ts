@@ -13,8 +13,7 @@ export interface BankCheckCondition {
   readonly description: string;
 }
 
-export interface BankCheckResult {
-}
+export interface BankCheckResult {}
 
 export interface BankCheckValidationResultFields {
   readonly checkPassed: boolean;
@@ -23,7 +22,7 @@ export interface BankCheckValidationResultFields {
 }
 
 export interface BankCheckValidationResult extends BankCheckResult {
-  readonly validationResult: BankCheckValidationResultFields;
+  readonly ValidationResult: BankCheckValidationResultFields;
 }
 
 export interface BankCheckAddress {
@@ -49,7 +48,7 @@ type Score = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | null;
 type MatchFlag = "Match" | "No Match" | null;
 
 export interface BankCheckVerificationResult extends BankCheckResult {
-  readonly verificationResult: BankCheckVerificationResultFields;
+  readonly VerificationResult: BankCheckVerificationResultFields;
 }
 
 export interface BankCheckVerificationResultFields {
@@ -57,5 +56,5 @@ export interface BankCheckVerificationResultFields {
   readonly companyNameScore: Score;
   readonly personalDetailsScore: Score;
   readonly regNumberScore: MatchFlag;
-  readonly conditions: BankCheckCondition;
+  readonly conditions?: BankCheckCondition;
 }

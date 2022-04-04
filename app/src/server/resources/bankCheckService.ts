@@ -1,14 +1,11 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-import * as https from "https";
-import { RequestOptions } from "https";
 import { configuration, ConfigurationError } from "@server/features/common";
 import {
   AccountDetails,
   BankCheckResult,
   BankCheckValidationResult,
   BankCheckVerificationResult,
-  BankDetails
- } from "@framework/types/bankCheck";
+  BankDetails,
+} from "@framework/types/bankCheck";
 
 export interface IVerifyBankCheckInputs {
   companyName: string;
@@ -27,100 +24,48 @@ export interface IVerifyBankCheckInputs {
   };
 }
 
-export interface IBankCheckService {
-  validate(sortcode: string, accountNumber: string): Promise<BankCheckValidationResult>;
-  verify(accountDetails: IVerifyBankCheckInputs): Promise<BankCheckVerificationResult>;
-}
-
-export class BankCheckService implements IBankCheckService {
-
-  private getConnection() {
-    if (!configuration.sil.bankCheckUrl) {
-      throw new ConfigurationError("Bank checking service not configured");
-    }
-    const bankCheckUrl = configuration.sil.bankCheckUrl;
-    const bankCheckPort = configuration.sil.bankCheckPort;
-    return {bankCheckUrl, bankCheckPort};
-  }
-
+export class BankCheckService {
   public async validate(sortcode: string, accountNumber: string): Promise<BankCheckValidationResult> {
-    const {bankCheckUrl, bankCheckPort} = this.getConnection();
-    const bankDetails: BankDetails = {
+    return await this.fetchBankQuery("/experianValidate", {
       sortcode,
-      accountNumber
-    };
-
-    return await this.getResult("/experianValidate", bankCheckUrl, bankCheckPort, bankDetails);
+      accountNumber,
+    });
   }
 
   public async verify(accountDetails: IVerifyBankCheckInputs): Promise<BankCheckVerificationResult> {
-    const {bankCheckUrl, bankCheckPort} = this.getConnection();
-
-    return await this.getResult("/experianVerify", bankCheckUrl, bankCheckPort, accountDetails);
+    return await this.fetchBankQuery("/experianVerify", accountDetails);
   }
 
-  private async getResult<T extends BankDetails | AccountDetails, U extends BankCheckResult>(path: string, url: string, port: number | undefined, request: T): Promise<U> {
-    const res: any = [];
+  private async fetchBankQuery<T extends BankDetails | AccountDetails, U extends BankCheckResult>(
+    path: string,
+    payload: T,
+  ): Promise<U> {
+    try {
+      const { bankCheckUrl, bankCheckPort } = configuration.sil;
 
-    await this.makeApiCall(path, url, port, request)
-      .then(response => {
-        res.push(response);
-      })
-      .catch(error => {
-        throw new Error(`request failed with ${error}`);
+      if (!bankCheckUrl || !bankCheckPort) {
+        throw new ConfigurationError("Bank checking service not configured");
+      }
+
+      const request = await fetch(`${bankCheckUrl}:${bankCheckPort}${path}`, {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        compress: false, // Note: This allows 'Accept-Encoding' to be overridden, SIL only allows 'zip'
+        method: "POST",
+        headers: {
+          "Accept-Encoding": "zip",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
       });
 
-    if (!res[0]) {
-      throw new Error("Failed to get a response");
+      if (!request.ok) throw Error(`Failed querying SIL service for '${path}'`);
+
+      return await request.json();
+    } catch (error) {
+      throw Error(error);
     }
-
-    return res[0] as U;
-  }
-
-  private async makeApiCall<T extends BankDetails | AccountDetails, U extends BankCheckResult>(path: string, hostname: string, port: number | undefined, request: T): Promise<U> {
-    const options: RequestOptions = {
-      method: "POST",
-      hostname,
-      path,
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      }
-    };
-
-    if (port) {
-      options.port = port;
-    }
-
-    const postData = JSON.stringify(request);
-
-    return new Promise((resolve, reject) => {
-      const req = https.request(options, (res: any) => {
-        const chunks: any = [];
-        // reject on bad status
-        if (res.statusCode < 200 || res.statusCode >= 300) {
-          return reject(new Error("statusCode=" + res.statusCode));
-        }
-
-        res.on("data", (chunk: any) => {
-          chunks.push(chunk);
-        });
-
-        res.on("end", () => {
-          try {
-            const body = JSON.parse(Buffer.concat(chunks).toString());
-            resolve(body);
-          } catch (e) {
-            reject(e.message);
-          }
-        });
-      }).on("error", (e) => {
-        reject(`Got error: ${e.message}`);
-      });
-      if (postData) {
-        req.write(postData);
-      }
-      req.end();
-    });
   }
 }
+
+export type IBankCheckService = Pick<BankCheckService, "validate" | "verify">;

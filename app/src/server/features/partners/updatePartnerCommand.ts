@@ -1,8 +1,20 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { BadRequestError, CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
-import { Authorisation, BankCheckStatus, BankDetailsTaskStatus, IContext, PartnerDto, PartnerStatus, ProjectRole } from "@framework/types";
+import {
+  Authorisation,
+  BankCheckStatus,
+  BankDetailsTaskStatus,
+  IContext,
+  PartnerDto,
+  PartnerStatus,
+  ProjectRole,
+} from "@framework/types";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
-import { BankCheckStatusMapper, BankDetailsTaskStatusMapper, PartnerStatusMapper } from "@server/features/partners/mapToPartnerDto";
+import {
+  BankCheckStatusMapper,
+  BankDetailsTaskStatusMapper,
+  PartnerStatusMapper,
+} from "@server/features/partners/mapToPartnerDto";
 import { isBoolean, isNumber } from "@framework/util";
 import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummary";
@@ -14,13 +26,15 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
   constructor(
     private readonly partner: PartnerDto,
     private readonly validateBankDetails?: boolean,
-    private readonly verifyBankDetails?: boolean
+    private readonly verifyBankDetails?: boolean,
   ) {
     super();
   }
 
   protected async accessControl(auth: Authorisation) {
-    return auth.forPartner(this.partner.projectId, this.partner.id).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.FinancialContact);
+    return auth
+      .forPartner(this.partner.projectId, this.partner.id)
+      .hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.FinancialContact);
   }
 
   protected async run(context: IContext) {
@@ -31,7 +45,9 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     }
 
     const originalDto = await context.runQuery(new GetByIdQuery(this.partner.id));
-    const partnerDocuments = await context.runQuery(new GetPartnerDocumentsQuery(this.partner.projectId, this.partner.id));
+    const partnerDocuments = await context.runQuery(
+      new GetPartnerDocumentsQuery(this.partner.projectId, this.partner.id),
+    );
 
     this.validateRequest(originalDto, partnerDocuments);
 
@@ -75,24 +91,30 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     update.Acc_AddressPostcode__c = bankDetails.address.accountPostcode;
   }
 
-  private async bankCheckValidate(originalDto: PartnerDto, partnerDocuments: DocumentSummaryDto[], update: any, context: IContext) {
+  private async bankCheckValidate(
+    originalDto: PartnerDto,
+    partnerDocuments: DocumentSummaryDto[],
+    update: any,
+    context: IContext,
+  ) {
     const { bankDetails } = this.partner;
     if (!bankDetails.sortCode || !bankDetails.accountNumber) {
       throw new BadRequestError("Sort code or account number not provided");
     }
 
-    const bankCheckValidateResult = await context.resources.bankCheckService.validate(bankDetails.sortCode, bankDetails.accountNumber);
+    const { ValidationResult } = await context.resources.bankCheckService.validate(
+      bankDetails.sortCode,
+      bankDetails.accountNumber,
+    );
 
-    const validationResult = bankCheckValidateResult.validationResult;
-
-    if (!validationResult.checkPassed) {
+    if (!ValidationResult.checkPassed) {
       if (this.partner.bankCheckRetryAttempts < context.config.options.bankCheckValidationRetries) {
         throw new ValidationError(
           new PartnerDtoValidator(this.partner, originalDto, partnerDocuments, {
             showValidationErrors: true,
             validateBankDetails: true,
-            failBankValidation: true
-          })
+            failBankValidation: true,
+          }),
         );
       }
       update.Acc_BankCheckState__c = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.ValidationFailed);
@@ -100,13 +122,17 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
       update.Acc_BankCheckState__c = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.ValidationPassed);
     }
 
-    update.Acc_ValidationCheckPassed__c = validationResult.checkPassed;
-    update.Acc_Iban__c = validationResult.iban;
-    update.Acc_ValidationConditionsSeverity__c = validationResult.conditions.severity;
-    update.Acc_ValidationConditionsCode__c = validationResult.conditions.code ? validationResult.conditions.code.toString() : "";
-    update.Acc_ValidationConditionsDesc__c = validationResult.conditions.description;
+    update.Acc_ValidationCheckPassed__c = ValidationResult.checkPassed;
+    update.Acc_Iban__c = ValidationResult.iban;
     update.Acc_AccountNumber__c = bankDetails.accountNumber;
     update.Acc_SortCode__c = bankDetails.sortCode;
+
+    if (ValidationResult.conditions) {
+      update.Acc_ValidationConditionsSeverity__c = ValidationResult.conditions.severity;
+      update.Acc_ValidationConditionsCode__c = ValidationResult.conditions.code?.toString() || "";
+      update.Acc_ValidationConditionsDesc__c = ValidationResult.conditions.description;
+    }
+
     this.updateBankDetails(update);
   }
 
@@ -130,28 +156,35 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
       },
     };
     const bankCheckVerifyResult = await context.resources.bankCheckService.verify(verifyInputs);
-    const { verificationResult } = bankCheckVerifyResult;
+    const { VerificationResult } = bankCheckVerifyResult;
 
-    if (!this.validateVerifyResponse(verificationResult, context)) {
+    if (!this.validateVerifyResponse(VerificationResult, context)) {
       update.Acc_BankCheckState__c = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.VerificationFailed);
     } else {
       update.Acc_BankCheckState__c = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.VerificationPassed);
       this.partner.bankDetailsTaskStatus = BankDetailsTaskStatus.Complete;
     }
 
-    update.Acc_AddressScore__c = verificationResult.addressScore;
-    update.Acc_CompanyNameScore__c = verificationResult.companyNameScore;
-    update.Acc_PersonalDetailsScore__c = verificationResult.personalDetailsScore;
-    update.Acc_RegNumberScore__c = verificationResult.regNumberScore;
-    update.Acc_VerificationConditionsSeverity__c = verificationResult.conditions.severity;
-    update.Acc_VerificationConditionsCode__c = verificationResult.conditions.code ? verificationResult.conditions.code.toString() : "";
-    update.Acc_VerificationConditionsDesc__c = verificationResult.conditions.description;
+    update.Acc_AddressScore__c = VerificationResult.addressScore;
+    update.Acc_CompanyNameScore__c = VerificationResult.companyNameScore;
+    update.Acc_PersonalDetailsScore__c = VerificationResult.personalDetailsScore;
+    update.Acc_RegNumberScore__c = VerificationResult.regNumberScore;
+
+    if (VerificationResult.conditions) {
+      update.Acc_VerificationConditionsSeverity__c = VerificationResult.conditions.severity;
+      update.Acc_VerificationConditionsCode__c = VerificationResult.conditions.code?.toString() || "";
+      update.Acc_VerificationConditionsDesc__c = VerificationResult.conditions.description;
+    }
   }
 
   private validateVerifyResponse(verificationResult: BankCheckVerificationResultFields, context: IContext) {
     // Only checking against address and company name scores as personal details score will always fail.
-    if ((!isNumber(verificationResult.addressScore) || verificationResult.addressScore < context.config.options.bankCheckAddressScorePass)
-    || (!isNumber(verificationResult.companyNameScore) || verificationResult.companyNameScore < context.config.options.bankCheckCompanyNameScorePass)) {
+    if (
+      !isNumber(verificationResult.addressScore) ||
+      verificationResult.addressScore < context.config.options.bankCheckAddressScorePass ||
+      !isNumber(verificationResult.companyNameScore) ||
+      verificationResult.companyNameScore < context.config.options.bankCheckCompanyNameScorePass
+    ) {
       return false;
     }
     if (this.partner.organisationType === "Industrial") {
@@ -161,7 +194,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
   }
 
   private validateRequest(originalDto: PartnerDto, partnerDocuments: DocumentSummaryDto[]) {
-    if(!this.partner) {
+    if (!this.partner) {
       throw new BadRequestError("Request is missing required fields");
     }
 
@@ -171,10 +204,10 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
 
     const validationResult = new PartnerDtoValidator(this.partner, originalDto, partnerDocuments, {
       showValidationErrors: true,
-      validateBankDetails: this.validateBankDetails || this.verifyBankDetails
+      validateBankDetails: this.validateBankDetails || this.verifyBankDetails,
     });
 
-    if(!validationResult.isValid) {
+    if (!validationResult.isValid) {
       throw new ValidationError(validationResult);
     }
   }

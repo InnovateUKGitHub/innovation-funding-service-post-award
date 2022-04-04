@@ -59,7 +59,7 @@ class TestBankCheckService implements IBankCheckService {
   };
 
   private readonly passValidation = {
-    validationResult: {
+    ValidationResult: {
       checkPassed: true,
       iban: "123456",
       conditions: this.passConditions,
@@ -67,7 +67,7 @@ class TestBankCheckService implements IBankCheckService {
   };
 
   private readonly failValidation = {
-    validationResult: {
+    ValidationResult: {
       checkPassed: false,
       iban: null,
       conditions: this.failConditions,
@@ -75,7 +75,7 @@ class TestBankCheckService implements IBankCheckService {
   };
 
   private readonly passVerify = {
-    verificationResult: {
+    VerificationResult: {
       addressScore: 7 as Score,
       companyNameScore: 8 as Score,
       personalDetailsScore: 7 as Score,
@@ -85,7 +85,7 @@ class TestBankCheckService implements IBankCheckService {
   };
 
   private readonly failVerify = {
-    verificationResult: {
+    VerificationResult: {
       addressScore: 0 as Score,
       companyNameScore: 1 as Score,
       personalDetailsScore: 2 as Score,
