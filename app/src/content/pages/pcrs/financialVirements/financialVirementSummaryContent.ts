@@ -18,5 +18,5 @@ export class FinancialVirementSummaryContent extends ContentPageBase {
   };
 
   public readonly changeGrantLink = this.getContent("link-change-grant");
-  public readonly grantValueMovingOverHeading = this.getContent("heading-year-end-grant-value", { markdown: true });
+  public readonly grantValueMovingOverHeading = this.getContent("heading-year-end-grant-value");
 }
