@@ -488,7 +488,7 @@
       "available-grant-message": "Your 'Remaining grant' has a surplus of {{grantDifference}}. You may lose this project surplus permanently if you do not reallocate these funds before you submit this PCR.",
       "unavailable-grant-message": "You must reduce your 'New remaining grant' project total to {{totalOriginalGrant}} or less, because you have exceeded it by {{grantDifference}}. You can change each partner’s 'Remaining grant' to reduce the project total to the amount agreed.",
       "link-change-grant": "Change remaining grant",
-      "heading-year-end-grant-value": "<b>Grant value moving over<br />the financial year end</b>",
+      "heading-year-end-grant-value": "Grant value moving over the financial year end",
       "grant-advice": "If the new remaining grant is higher as a result of the reallocation of costs, you can change the funding level of partners to lower the new project grant."
     },
     "forecasts-components": {
