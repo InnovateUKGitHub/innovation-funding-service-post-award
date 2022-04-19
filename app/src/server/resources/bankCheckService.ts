@@ -41,13 +41,13 @@ export class BankCheckService {
     payload: T,
   ): Promise<U> {
     try {
-      const { bankCheckUrl, bankCheckPort } = configuration.sil;
+      const { bankCheckUrl } = configuration.sil;
 
-      if (!bankCheckUrl || !bankCheckPort) {
+      if (!bankCheckUrl) {
         throw new ConfigurationError("Bank checking service not configured");
       }
 
-      const request = await fetch(`${bankCheckUrl}:${bankCheckPort}${path}`, {
+      const request = await fetch(`${bankCheckUrl}${path}`, {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         compress: false, // Note: This allows 'Accept-Encoding' to be overridden, SIL only allows 'zip'

@@ -66,7 +66,6 @@ export interface IConfig {
 
   readonly sil: {
     bankCheckUrl: string;
-    bankCheckPort: number | undefined;
   };
 
   readonly urls: {
@@ -203,7 +202,6 @@ const s3Account = {
 
 const sil = {
   bankCheckUrl: process.env.SIL_EXPERIAN_URL!,
-  bankCheckPort: process.env.SIL_EXPERIAN_PORT ? parseInt(process.env.SIL_EXPERIAN_PORT, 10) || undefined : undefined,
 };
 
 const companiesHouse = {
