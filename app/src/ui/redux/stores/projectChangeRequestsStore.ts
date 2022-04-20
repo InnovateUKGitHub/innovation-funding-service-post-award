@@ -16,7 +16,7 @@ import {
   PCRProjectLocation,
   PCRProjectRole,
   PCRStatus,
-  TypeOfAid
+  TypeOfAid,
 } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ConfigStore } from "@ui/redux/stores/configStore";
@@ -29,7 +29,12 @@ import { ProjectsStore } from "./projectsStore";
 import { StoreBase } from "./storeBase";
 
 export class ProjectChangeRequestStore extends StoreBase {
-  constructor(private readonly projectStore: ProjectsStore, private readonly configStore: ConfigStore, getState: () => RootState, queue: (action: any) => void) {
+  constructor(
+    private readonly projectStore: ProjectsStore,
+    private readonly configStore: ConfigStore,
+    getState: () => RootState,
+    queue: (action: any) => void,
+  ) {
     super(getState, queue);
   }
 
@@ -38,7 +43,9 @@ export class ProjectChangeRequestStore extends StoreBase {
   }
 
   public getById(projectId: string, pcrId: string) {
-    return this.getData("pcr", this.getKeyForRequest(projectId, pcrId), p => apiClient.pcrs.get({ projectId, id: pcrId, ...p }));
+    return this.getData("pcr", this.getKeyForRequest(projectId, pcrId), p =>
+      apiClient.pcrs.get({ projectId, id: pcrId, ...p }),
+    );
   }
 
   public getItemById(projectId: string, pcrId: string, itemId: string) {
@@ -50,9 +57,7 @@ export class ProjectChangeRequestStore extends StoreBase {
   }
 
   public getEditableItemTypes(projectId: string, projectChangeRequestId: string | null) {
-    const nonEditableTypes: PCRItemType[] = [
-      PCRItemType.ProjectTermination
-    ];
+    const nonEditableTypes: PCRItemType[] = [PCRItemType.ProjectTermination];
 
     if (!projectChangeRequestId) {
       return this.getAllPcrTypes(projectId)
@@ -60,7 +65,8 @@ export class ProjectChangeRequestStore extends StoreBase {
         .then(x => x.filter(y => nonEditableTypes.indexOf(y) === -1));
     }
 
-    return this.getById(projectId, projectChangeRequestId).then(x => x.items)
+    return this.getById(projectId, projectChangeRequestId)
+      .then(x => x.items)
       .then(x => x.map(y => y.type))
       .then(x => x.filter(y => nonEditableTypes.indexOf(y) === -1));
   }
@@ -74,7 +80,9 @@ export class ProjectChangeRequestStore extends StoreBase {
   }
 
   public getAllAvailablePcrTypes(projectId: string, pcrId?: string) {
-    return this.getData("pcrAvailableTypes", storeKeys.pcrAvailableTypesKey(projectId), p => apiClient.pcrs.getAvailableTypes({ ...p, projectId, pcrId }));
+    return this.getData("pcrAvailableTypes", storeKeys.pcrAvailableTypesKey(projectId), p =>
+      apiClient.pcrs.getAvailableTypes({ ...p, projectId, pcrId }),
+    );
   }
 
   public getTimeExtensionOptions(projectId: string) {
@@ -84,33 +92,45 @@ export class ProjectChangeRequestStore extends StoreBase {
   }
 
   public getPcrProjectRoles() {
-    return this.getData("pcrProjectRoles", storeKeys.getPcrProjectRolesKey(), p => apiClient.pcrs.getPcrProjectRoles({ ...p }));
+    return this.getData("pcrProjectRoles", storeKeys.getPcrProjectRolesKey(), p =>
+      apiClient.pcrs.getPcrProjectRoles({ ...p }),
+    );
   }
 
   public getPcrPartnerTypes() {
-    return this.getData("pcrPartnerTypes", storeKeys.getPcrPartnerTypesKey(), p => apiClient.pcrs.getPcrPartnerTypes({ ...p }));
+    return this.getData("pcrPartnerTypes", storeKeys.getPcrPartnerTypesKey(), p =>
+      apiClient.pcrs.getPcrPartnerTypes({ ...p }),
+    );
   }
 
   public getPcrParticipantSizes() {
-    return this.getData("pcrParticipantSizes", storeKeys.getPcrParticipantSizesKey(), p => apiClient.pcrs.getParticipantSizes({ ...p }));
+    return this.getData("pcrParticipantSizes", storeKeys.getPcrParticipantSizesKey(), p =>
+      apiClient.pcrs.getParticipantSizes({ ...p }),
+    );
   }
 
   public getPcrProjectLocations() {
-    return this.getData("pcrProjectLocations", storeKeys.getPcrProjectLocationsKey(), p => apiClient.pcrs.getProjectLocations({ ...p }));
+    return this.getData("pcrProjectLocations", storeKeys.getPcrProjectLocationsKey(), p =>
+      apiClient.pcrs.getProjectLocations({ ...p }),
+    );
   }
 
   public getPcrSpendProfileCapitalUsageType() {
-    return this.getData("pcrSpendProfileCapitalUsageTypes", storeKeys.getPcrSpendProfileCapitalUsageTypesKey(), p => apiClient.pcrs.getCapitalUsageTypes({ ...p }));
+    return this.getData("pcrSpendProfileCapitalUsageTypes", storeKeys.getPcrSpendProfileCapitalUsageTypesKey(), p =>
+      apiClient.pcrs.getCapitalUsageTypes({ ...p }),
+    );
   }
 
   public getPcrSpendProfileOverheadRateOptions() {
-    return this.getData("pcrSpendProfileOverheadRateOptions", storeKeys.getPcrSpendProfileOverheadRateOptionsKey(), p => apiClient.pcrs.getOverheadRateOptions({ ...p }));
+    return this.getData("pcrSpendProfileOverheadRateOptions", storeKeys.getPcrSpendProfileOverheadRateOptionsKey(), p =>
+      apiClient.pcrs.getOverheadRateOptions({ ...p }),
+    );
   }
 
   public getPcrTypeForItem(projectId: string, pcrId: string, itemId: string) {
     const data = Pending.combine({
       itemTypes: this.getAllPcrTypes(projectId),
-      pcrItem: this.getItemById(projectId, pcrId, itemId)
+      pcrItem: this.getItemById(projectId, pcrId, itemId),
     });
 
     return data.chain(result => {
@@ -125,22 +145,23 @@ export class ProjectChangeRequestStore extends StoreBase {
     return this.getEditor(
       "pcr",
       this.getKeyForRequest(projectId),
-      () => Pending.done<PCRDto>({
-        id: "",
-        projectId,
-        status: PCRStatus.Draft,
-        statusName: "",
-        comments: "",
-        reasoningComments: "",
-        reasoningStatus: PCRItemStatus.ToDo,
-        reasoningStatusName: "",
-        requestNumber: NaN,
-        started: new Date(),
-        lastUpdated: new Date(),
-        items: []
-      }),
+      () =>
+        Pending.done<PCRDto>({
+          id: "",
+          projectId,
+          status: PCRStatus.Draft,
+          statusName: "",
+          comments: "",
+          reasoningComments: "",
+          reasoningStatus: PCRItemStatus.ToDo,
+          reasoningStatusName: "",
+          requestNumber: NaN,
+          started: new Date(),
+          lastUpdated: new Date(),
+          items: [],
+        }),
       init,
-      (dto) => this.getValidator(projectId, dto, false)
+      dto => this.getValidator(projectId, dto, false),
     );
   }
 
@@ -150,38 +171,67 @@ export class ProjectChangeRequestStore extends StoreBase {
       this.getKeyForRequest(projectId, pcrId),
       () => this.getById(projectId, pcrId),
       init,
-      (dto) => this.getValidator(projectId, dto, false)
+      dto => this.getValidator(projectId, dto, false),
     );
   }
 
-  public getNewSpendProfileCostValidator(editorPending: Pending<IEditorStore<PCRDto, PCRDtoValidator>>, pcrItemId: string, costCategoryPending: Pending<CostCategoryDto>): Pending<PCRSpendProfileCostDtoValidator | undefined>  {
-    const data = Pending.combine({editor: editorPending, costCategory: costCategoryPending});
-    return data.then(({editor, costCategory}) => {
-      const partnerAdditionValidator = editor.validator.items.results.find(x => x.model.id === pcrItemId) as PCRPartnerAdditionItemDtoValidator;
-      return partnerAdditionValidator.spendProfile.results[0].costs.results.find(x => !x.model.id && x.model.costCategoryId === costCategory.id);
+  public getNewSpendProfileCostValidator(
+    editorPending: Pending<IEditorStore<PCRDto, PCRDtoValidator>>,
+    pcrItemId: string,
+    costCategoryPending: Pending<CostCategoryDto>,
+  ): Pending<PCRSpendProfileCostDtoValidator | undefined> {
+    const data = Pending.combine({ editor: editorPending, costCategory: costCategoryPending });
+    return data.then(({ editor, costCategory }) => {
+      const partnerAdditionValidator = editor.validator.items.results.find(
+        x => x.model.id === pcrItemId,
+      ) as PCRPartnerAdditionItemDtoValidator;
+      return partnerAdditionValidator.spendProfile.results[0].costs.results.find(
+        x => !x.model.id && x.model.costCategoryId === costCategory.id,
+      );
     });
   }
 
-  public getSpendProfileCostValidator(editorPending: Pending<IEditorStore<PCRDto, PCRDtoValidator>>, pcrItemId: string, costId: string) {
+  public getSpendProfileCostValidator(
+    editorPending: Pending<IEditorStore<PCRDto, PCRDtoValidator>>,
+    pcrItemId: string,
+    costId: string,
+  ) {
     return editorPending.then(editor => {
-      const partnerAdditionValidator = editor.validator.items.results.find(x => x.model.id === pcrItemId) as PCRPartnerAdditionItemDtoValidator;
+      const partnerAdditionValidator = editor.validator.items.results.find(
+        x => x.model.id === pcrItemId,
+      ) as PCRPartnerAdditionItemDtoValidator;
       return partnerAdditionValidator.spendProfile.results[0].costs.results.find(x => x.model.id === costId)!;
     });
   }
 
   public getInitialSpendProfileCost(costCategory: CostCategoryDto): PCRSpendProfileCostDto {
-    return {id: "", description: "", value: null, costCategory: costCategory.type as CostCategoryType.Other_Costs, costCategoryId: costCategory.id};
+    return {
+      id: "",
+      description: "",
+      value: null,
+      costCategory: costCategory.type as CostCategoryType.Other_Costs,
+      costCategoryId: costCategory.id,
+    };
   }
 
-  public updatePcrEditor(saving: boolean, projectId: string, dto: PCRDto, message?: string, onComplete?: (result: PCRDto) => void) {
+  public updatePcrEditor(
+    saving: boolean,
+    projectId: string,
+    dto: PCRDto,
+    message?: string,
+    onComplete?: (result: PCRDto) => void,
+  ) {
     this.updateEditor(
       saving,
       "pcr",
       this.getKeyForRequest(projectId, dto.id),
       dto,
-      (showErrors) => this.getValidator(projectId, dto, showErrors),
-      p => dto.id ? apiClient.pcrs.update({ projectId, id: dto.id, pcr: dto, ...p }) : apiClient.pcrs.create({ projectId, projectChangeRequestDto: dto, ...p }),
-      (result) => {
+      showErrors => this.getValidator(projectId, dto, showErrors),
+      p =>
+        dto.id
+          ? apiClient.pcrs.update({ projectId, id: dto.id, pcr: dto, ...p })
+          : apiClient.pcrs.create({ projectId, projectChangeRequestDto: dto, ...p }),
+      result => {
         this.queue(dataLoadAction(this.getKeyForRequest(projectId, result.id), "pcr", LoadingStatus.Updated, result));
         if (message) {
           this.queue(messageSuccess(message));
@@ -189,11 +239,11 @@ export class ProjectChangeRequestStore extends StoreBase {
         if (onComplete) {
           onComplete(result);
         }
-      }
+      },
     );
   }
 
-  public createNewChangeRequestItem(itemType: Dtos.PCRItemTypeDto): (Dtos.PCRItemDto) {
+  public createNewChangeRequestItem(itemType: Dtos.PCRItemTypeDto): Dtos.PCRItemDto {
     const baseFields = {
       id: "",
       guidance: "",
@@ -208,12 +258,12 @@ export class ProjectChangeRequestStore extends StoreBase {
         return {
           ...baseFields,
           type: itemType.type,
-          grantMovingOverFinancialYear: null
+          grantMovingOverFinancialYear: null,
         };
       case PCRItemType.SinglePartnerFinancialVirement:
         return {
           ...baseFields,
-          type: itemType.type
+          type: itemType.type,
         };
       case PCRItemType.PartnerAddition:
         return {
@@ -272,7 +322,7 @@ export class ProjectChangeRequestStore extends StoreBase {
           type: itemType.type,
           partnerId: null,
           accountName: null,
-          partnerNameSnapshot: ""
+          partnerNameSnapshot: "",
         };
       case PCRItemType.TimeExtension:
         return {
@@ -295,7 +345,7 @@ export class ProjectChangeRequestStore extends StoreBase {
           ...baseFields,
           type: itemType.type,
           suspensionStartDate: null,
-          suspensionEndDate: null
+          suspensionEndDate: null,
         };
       case PCRItemType.ProjectTermination:
         return {
@@ -331,7 +381,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       projectRoles: this.projectStore.getById(projectId).then(x => x.roles),
       original: dto.id ? this.getById(projectId, dto.id) : Pending.done(undefined),
       itemTypes: this.getAllPcrTypes(projectId),
-      project: this.projectStore.getById(projectId)
+      project: this.projectStore.getById(projectId),
     }).then(x => new PCRDtoValidator(dto, x.projectRoles, x.itemTypes, showErrors, x.project, x.original));
   }
 
@@ -341,7 +391,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       this.getKeyForRequest(projectId, pcrId),
       dto,
       () => this.getValidator(projectId, dto, false),
-      (p) => apiClient.pcrs.delete({ projectId, id: pcrId, ...p }),
+      p => apiClient.pcrs.delete({ projectId, id: pcrId, ...p }),
       () => {
         if (message) {
           this.queue(messageSuccess(message));
@@ -349,12 +399,15 @@ export class ProjectChangeRequestStore extends StoreBase {
         if (onComplete) {
           onComplete();
         }
-      }
+      },
     );
   }
 
   public getStatusChanges(projectId: string, projectChangeRequestId: string) {
-    return this.getData("projectChangeRequestStatusChanges", this.getKeyForRequest(projectId, projectChangeRequestId), p => apiClient.pcrs.getStatusChanges({ projectId, projectChangeRequestId, ...p }));
+    return this.getData(
+      "projectChangeRequestStatusChanges",
+      this.getKeyForRequest(projectId, projectChangeRequestId),
+      p => apiClient.pcrs.getStatusChanges({ projectId, projectChangeRequestId, ...p }),
+    );
   }
-
 }

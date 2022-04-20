@@ -8,10 +8,7 @@ import { MonitoringReportDto } from "@framework/dtos";
 import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQuestions";
 
 export class CreateMonitoringReportCommand extends CommandBase<string> {
-  constructor(
-    private readonly monitoringReportDto: MonitoringReportDto,
-    private readonly submit: boolean
-  ) {
+  constructor(private readonly monitoringReportDto: MonitoringReportDto, private readonly submit: boolean) {
     super();
   }
 
@@ -21,7 +18,7 @@ export class CreateMonitoringReportCommand extends CommandBase<string> {
 
   private async insertStatusChange(context: IContext, headerId: string): Promise<void> {
     await context.repositories.monitoringReportStatusChange.createStatusChange({
-      Acc_MonitoringReport__c: headerId
+      Acc_MonitoringReport__c: headerId,
     });
   }
 
@@ -43,41 +40,42 @@ export class CreateMonitoringReportCommand extends CommandBase<string> {
       Acc_PeriodStartDate__c: profile.Acc_ProjectPeriodStartDate__c,
       Acc_PeriodEndDate__c: profile.Acc_ProjectPeriodEndDate__c,
       Acc_AddComments__c: "",
-      Acc_MonitoringReportStatus__c: "Draft"
+      Acc_MonitoringReportStatus__c: "Draft",
     };
 
     return context.repositories.monitoringReportHeader.create(createRequest);
   }
 
   private async updateMonitoringReportHeader(context: IContext, headerId: string): Promise<void> {
-    if(this.submit) {
+    if (this.submit) {
       // The status is updated after the response has been inserted
       // This is in case the response insert fails:
       // the header is left in draft status, allowing the user to try and re-submit
       await context.repositories.monitoringReportHeader.update({
         Id: headerId,
-        Acc_MonitoringReportStatus__c: "Awaiting IUK Approval"
+        Acc_MonitoringReportStatus__c: "Awaiting IUK Approval",
       });
     }
   }
 
   private async insertResponse(context: IContext, headerId: string): Promise<void> {
-    const insertItems = this.monitoringReportDto.questions.filter(x => x.optionId).map<Partial<ISalesforceMonitoringReportResponse>>(insertDto => ({
-      Acc_MonitoringHeader__c: headerId,
-      Acc_Question__c: insertDto.optionId!,
-      Acc_QuestionComments__c: insertDto.comments
-    }));
+    const insertItems = this.monitoringReportDto.questions
+      .filter(x => x.optionId)
+      .map<Partial<ISalesforceMonitoringReportResponse>>(insertDto => ({
+        Acc_MonitoringHeader__c: headerId,
+        Acc_Question__c: insertDto.optionId!,
+        Acc_QuestionComments__c: insertDto.comments,
+      }));
 
     await context.repositories.monitoringReportResponse.insert(insertItems);
   }
 
   protected async run(context: IContext) {
-
-    if(this.monitoringReportDto.headerId) {
+    if (this.monitoringReportDto.headerId) {
       throw new BadRequestError("Report has already been created");
     }
 
-    if(this.monitoringReportDto.questions.some(x => !!x.responseId)) {
+    if (this.monitoringReportDto.questions.some(x => !!x.responseId)) {
       throw new BadRequestError("Report questions have already been created");
     }
 
@@ -85,7 +83,13 @@ export class CreateMonitoringReportCommand extends CommandBase<string> {
 
     const questions = await context.runQuery(new GetMonitoringReportActiveQuestions());
 
-    const validationResult = new MonitoringReportDtoValidator(this.monitoringReportDto, true, this.submit, questions, project.periodId);
+    const validationResult = new MonitoringReportDtoValidator(
+      this.monitoringReportDto,
+      true,
+      this.submit,
+      questions,
+      project.periodId,
+    );
     if (!validationResult.isValid) {
       throw new ValidationError(validationResult);
     }

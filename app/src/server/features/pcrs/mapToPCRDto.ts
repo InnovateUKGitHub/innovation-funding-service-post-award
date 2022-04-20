@@ -14,7 +14,7 @@ import {
   PCRItemForTimeExtensionDto,
   PCRItemTypeDto,
   PCRStandardItemDto,
-  ProjectChangeRequestStandardItemTypes
+  ProjectChangeRequestStandardItemTypes,
 } from "@framework/dtos";
 import {
   PCRContactRole,
@@ -23,7 +23,7 @@ import {
   PCRParticipantSize,
   PCRPartnerType,
   PCRProjectLocation,
-  PCRProjectRole
+  PCRProjectRole,
 } from "@framework/constants";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { isBoolean, isNumber } from "@framework/util";
@@ -40,7 +40,7 @@ export const mapToPcrDto = (pcr: ProjectChangeRequestEntity, itemTypes: PCRItemT
   reasoningStatusName: pcr.reasoningStatusName,
   reasoningComments: pcr.reasoning,
   projectId: pcr.projectId,
-  items: mapItems(pcr.items, itemTypes)
+  items: mapItems(pcr.items, itemTypes),
 });
 
 const mapItems = (pcrs: ProjectChangeRequestItemEntity[], itemTypes: PCRItemTypeDto[]) => {
@@ -88,61 +88,97 @@ const mapBaseItem = (pcr: ProjectChangeRequestItemEntity, typeName: string, type
   shortName: pcr.shortName || typeName,
 });
 
-const mapStandardItem = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: ProjectChangeRequestStandardItemTypes): PCRStandardItemDto => ({
+const mapStandardItem = (
+  pcr: ProjectChangeRequestItemEntity,
+  typeName: string,
+  type: ProjectChangeRequestStandardItemTypes,
+): PCRStandardItemDto => ({
   ...mapBaseItem(pcr, typeName, type),
-  type
+  type,
 });
 
-const mapItemForTermination = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.ProjectTermination): PCRItemForProjectTerminationDto => ({
+const mapItemForTermination = (
+  pcr: ProjectChangeRequestItemEntity,
+  typeName: string,
+  type: PCRItemType.ProjectTermination,
+): PCRItemForProjectTerminationDto => ({
   ...mapBaseItem(pcr, typeName, type),
-  type
+  type,
 });
 
-const mapItemForPeriodLengthChange = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.PeriodLengthChange): PCRItemForPeriodLengthChangeDto => ({
+const mapItemForPeriodLengthChange = (
+  pcr: ProjectChangeRequestItemEntity,
+  typeName: string,
+  type: PCRItemType.PeriodLengthChange,
+): PCRItemForPeriodLengthChangeDto => ({
   ...mapBaseItem(pcr, typeName, type),
-  type
+  type,
 });
 
-const mapItemForTimeExtension = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.TimeExtension): PCRItemForTimeExtensionDto => ({
+const mapItemForTimeExtension = (
+  pcr: ProjectChangeRequestItemEntity,
+  typeName: string,
+  type: PCRItemType.TimeExtension,
+): PCRItemForTimeExtensionDto => ({
   ...mapBaseItem(pcr, typeName, type),
   offsetMonths: pcr.offsetMonths ?? 0,
   projectDurationSnapshot: pcr.projectDurationSnapshot || 0,
-  type
+  type,
 });
 
-const mapItemForScopeChange = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.ScopeChange): PCRItemForScopeChangeDto => ({
+const mapItemForScopeChange = (
+  pcr: ProjectChangeRequestItemEntity,
+  typeName: string,
+  type: PCRItemType.ScopeChange,
+): PCRItemForScopeChangeDto => ({
   ...mapBaseItem(pcr, typeName, type),
   projectSummary: pcr.projectSummary || null,
   publicDescription: pcr.publicDescription || null,
   projectSummarySnapshot: pcr.projectSummarySnapshot || null,
   publicDescriptionSnapshot: pcr.publicDescriptionSnapshot || null,
-  type
+  type,
 });
 
-const mapItemForProjectSuspension = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.ProjectSuspension): PCRItemForProjectSuspensionDto => ({
+const mapItemForProjectSuspension = (
+  pcr: ProjectChangeRequestItemEntity,
+  typeName: string,
+  type: PCRItemType.ProjectSuspension,
+): PCRItemForProjectSuspensionDto => ({
   ...mapBaseItem(pcr, typeName, type),
   suspensionStartDate: pcr.suspensionStartDate || null,
   suspensionEndDate: pcr.suspensionEndDate || null,
-  type
+  type,
 });
 
-const mapItemForAccountNameChange = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.AccountNameChange): PCRItemForAccountNameChangeDto => ({
+const mapItemForAccountNameChange = (
+  pcr: ProjectChangeRequestItemEntity,
+  typeName: string,
+  type: PCRItemType.AccountNameChange,
+): PCRItemForAccountNameChangeDto => ({
   ...mapBaseItem(pcr, typeName, type),
   accountName: pcr.accountName || null,
   partnerId: pcr.partnerId || null,
   partnerNameSnapshot: pcr.partnerNameSnapshot || null,
-  type
+  type,
 });
 
-const mapItemForPartnerWithdrawal = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.PartnerWithdrawal): PCRItemForPartnerWithdrawalDto => ({
+const mapItemForPartnerWithdrawal = (
+  pcr: ProjectChangeRequestItemEntity,
+  typeName: string,
+  type: PCRItemType.PartnerWithdrawal,
+): PCRItemForPartnerWithdrawalDto => ({
   ...mapBaseItem(pcr, typeName, type),
   partnerId: pcr.partnerId || null,
   partnerNameSnapshot: pcr.partnerNameSnapshot || null,
   removalPeriod: pcr.removalPeriod || null,
-  type
+  type,
 });
 
-const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.PartnerAddition): PCRItemForPartnerAdditionDto => ({
+const mapItemForPartnerAddition = (
+  pcr: ProjectChangeRequestItemEntity,
+  typeName: string,
+  type: PCRItemType.PartnerAddition,
+): PCRItemForPartnerAdditionDto => ({
   ...mapBaseItem(pcr, typeName, type),
   contact1ProjectRole: pcr.contact1ProjectRole || PCRContactRole.Unknown,
   contact1Forename: pcr.contact1Forename || null,
@@ -178,21 +214,36 @@ const mapItemForPartnerAddition = (pcr: ProjectChangeRequestItemEntity, typeName
   hasOtherFunding: isBoolean(pcr.hasOtherFunding) ? pcr.hasOtherFunding : null,
   totalOtherFunding: isNumber(pcr.totalOtherFunding) ? pcr.totalOtherFunding : null,
   tsbReference: pcr.tsbReference || null,
-  type
-});
-
-const mapItemForMultiplePartnerVirements = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.MultiplePartnerFinancialVirement): PCRItemForMultiplePartnerFinancialVirementDto => ({
-  ...mapBaseItem(pcr, typeName, type),
-  type,
-  grantMovingOverFinancialYear: (!!pcr.grantMovingOverFinancialYear || pcr.grantMovingOverFinancialYear === 0) ? pcr.grantMovingOverFinancialYear : null
-});
-
-const mapItemForLoansChangeDrawdown = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.LoanDrawdownChange): PCRItemForLoanDrawdownChangeDto => ({
-  ...mapBaseItem(pcr, typeName, type),
   type,
 });
 
-const mapItemForChangeLoansDuration = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType.LoanDrawdownExtension): PCRItemForLoanDrawdownExtensionDto => ({
+const mapItemForMultiplePartnerVirements = (
+  pcr: ProjectChangeRequestItemEntity,
+  typeName: string,
+  type: PCRItemType.MultiplePartnerFinancialVirement,
+): PCRItemForMultiplePartnerFinancialVirementDto => ({
+  ...mapBaseItem(pcr, typeName, type),
+  type,
+  grantMovingOverFinancialYear:
+    !!pcr.grantMovingOverFinancialYear || pcr.grantMovingOverFinancialYear === 0
+      ? pcr.grantMovingOverFinancialYear
+      : null,
+});
+
+const mapItemForLoansChangeDrawdown = (
+  pcr: ProjectChangeRequestItemEntity,
+  typeName: string,
+  type: PCRItemType.LoanDrawdownChange,
+): PCRItemForLoanDrawdownChangeDto => ({
+  ...mapBaseItem(pcr, typeName, type),
+  type,
+});
+
+const mapItemForChangeLoansDuration = (
+  pcr: ProjectChangeRequestItemEntity,
+  typeName: string,
+  type: PCRItemType.LoanDrawdownExtension,
+): PCRItemForLoanDrawdownExtensionDto => ({
   ...mapBaseItem(pcr, typeName, type),
   type,
   projectStartDate: pcr.projectStartDate ?? null,

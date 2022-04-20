@@ -10,10 +10,7 @@ import { GetAvailableItemTypesQuery } from "./getAvailableItemTypesQuery";
 import { GetAllPCRsQuery } from "./getAllPCRsQuery";
 
 export class CreateProjectChangeRequestCommand extends CommandBase<string> {
-  constructor(
-    private readonly projectId: string,
-    private readonly projectChangeRequestDto: PCRDto
-  ) {
+  constructor(private readonly projectId: string, private readonly projectChangeRequestDto: PCRDto) {
     super();
   }
 
@@ -21,12 +18,16 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
     return auth.forProject(this.projectId).hasRole(ProjectRole.ProjectManager);
   }
 
-  private async insertProjectChangeRequest(context: IContext, projectChangeRequestDto: PCRDto, itemTypes: PCRItemTypeDto[]): Promise<string> {
+  private async insertProjectChangeRequest(
+    context: IContext,
+    projectChangeRequestDto: PCRDto,
+    itemTypes: PCRItemTypeDto[],
+  ): Promise<string> {
     const newPCR = {
       projectId: projectChangeRequestDto.projectId,
       reasoningStatus: projectChangeRequestDto.reasoningStatus,
       status: projectChangeRequestDto.status,
-      items: projectChangeRequestDto.items.map(x => this.mapItem(projectChangeRequestDto, x, itemTypes))
+      items: projectChangeRequestDto.items.map(x => this.mapItem(projectChangeRequestDto, x, itemTypes)),
     };
 
     return context.repositories.projectChangeRequests.createProjectChangeRequest(newPCR);
@@ -52,36 +53,63 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
     }
 
     const itemTypes = await context.runQuery(new GetAvailableItemTypesQuery(this.projectId));
-    const projectRoles = await context.runQuery(new GetAllProjectRolesForUser()).then(x => x.forProject(this.projectId).getRoles());
+    const projectRoles = await context
+      .runQuery(new GetAllProjectRolesForUser())
+      .then(x => x.forProject(this.projectId).getRoles());
     const projectDto = await context.runQuery(new GetByIdQuery(this.projectId));
     const projectPcrs = await context.runQuery(new GetAllPCRsQuery(this.projectId));
 
-    const validationResult = new PCRDtoValidator(this.projectChangeRequestDto, projectRoles, itemTypes, true, projectDto, undefined, undefined, projectPcrs);
+    const validationResult = new PCRDtoValidator(
+      this.projectChangeRequestDto,
+      projectRoles,
+      itemTypes,
+      true,
+      projectDto,
+      undefined,
+      undefined,
+      projectPcrs,
+    );
 
     if (!validationResult.isValid) {
       throw new ValidationError(validationResult);
     }
 
-    const projectChangeRequestId = await this.insertProjectChangeRequest(context, this.projectChangeRequestDto, itemTypes);
+    const projectChangeRequestId = await this.insertProjectChangeRequest(
+      context,
+      this.projectChangeRequestDto,
+      itemTypes,
+    );
     await this.insertStatusChange(context, projectChangeRequestId);
     return projectChangeRequestId;
   }
 
-  private mapItem(dto: PCRDto, itemDto: PCRItemDto, itemTypes: PCRItemTypeDto[]): ProjectChangeRequestItemForCreateEntity {
+  private mapItem(
+    dto: PCRDto,
+    itemDto: PCRItemDto,
+    itemTypes: PCRItemTypeDto[],
+  ): ProjectChangeRequestItemForCreateEntity {
     const init = {
       projectId: dto.projectId,
       recordTypeId: itemTypes.find(t => t.type === itemDto.type)!.recordTypeId,
-      status: itemDto.status
+      status: itemDto.status,
     };
     switch (itemDto.type) {
       case PCRItemType.TimeExtension:
-          return { ...init, offsetMonths: itemDto.offsetMonths, projectDuration: itemDto.offsetMonths ? itemDto.offsetMonths + itemDto.projectDurationSnapshot : null };
+        return {
+          ...init,
+          offsetMonths: itemDto.offsetMonths,
+          projectDuration: itemDto.offsetMonths ? itemDto.offsetMonths + itemDto.projectDurationSnapshot : null,
+        };
       case PCRItemType.ScopeChange:
-          return { ...init, projectSummary: itemDto.projectSummary, publicDescription: itemDto.publicDescription };
+        return { ...init, projectSummary: itemDto.projectSummary, publicDescription: itemDto.publicDescription };
       case PCRItemType.ProjectSuspension:
-          return { ...init, suspensionStartDate: itemDto.suspensionStartDate, suspensionEndDate: itemDto.suspensionEndDate };
+        return {
+          ...init,
+          suspensionStartDate: itemDto.suspensionStartDate,
+          suspensionEndDate: itemDto.suspensionEndDate,
+        };
       case PCRItemType.AccountNameChange:
-          return { ...init, accountName: itemDto.accountName, partnerId: itemDto.partnerId };
+        return { ...init, accountName: itemDto.accountName, partnerId: itemDto.partnerId };
       case PCRItemType.PartnerWithdrawal:
         return { ...init, removalPeriod: itemDto.removalPeriod, partnerId: itemDto.partnerId };
       case PCRItemType.PartnerAddition:
@@ -113,7 +141,7 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
           awardRate: itemDto.awardRate,
           hasOtherFunding: itemDto.hasOtherFunding,
           tsbReference: itemDto.tsbReference,
-         };
+        };
       case PCRItemType.MultiplePartnerFinancialVirement:
         return { ...init, grantMovingOverFinancialYear: itemDto.grantMovingOverFinancialYear };
 
