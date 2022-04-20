@@ -77,11 +77,6 @@ export function PcrTypesGuidance({ qa, types }: PcrTypesGuidanceProps) {
       description: content.putProjectOnHoldMessage,
     },
     {
-      type: PCRItemType.ProjectTermination,
-      header: content.endProjectEarlyTitle,
-      description: content.endProjectEarlyMessage,
-    },
-    {
       type: PCRItemType.LoanDrawdownChange,
       header: content.loanDrawdownChangeTitle,
       description: content.loanDrawdownChangeMessage,

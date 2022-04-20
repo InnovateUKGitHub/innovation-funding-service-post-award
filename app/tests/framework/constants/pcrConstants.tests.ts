@@ -69,7 +69,6 @@ describe("getUnavailablePcrItemsMatrix()", () => {
         ${"with PartnerAddition"}                | ${PCRItemType.PartnerAddition}
         ${"with PartnerWithdrawal"}              | ${PCRItemType.PartnerWithdrawal}
         ${"with ProjectSuspension"}              | ${PCRItemType.ProjectSuspension}
-        ${"with ProjectTermination"}             | ${PCRItemType.ProjectTermination}
         ${"with SinglePartnerFinancialVirement"} | ${PCRItemType.SinglePartnerFinancialVirement}
         ${"with PeriodLengthChange"}             | ${PCRItemType.PeriodLengthChange}
       `("$name", ({ itemTypeInput }) => {

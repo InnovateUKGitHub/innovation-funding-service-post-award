@@ -13,6 +13,7 @@ interface IMetaValue {
   displayName?: string;
   files?: string[];
   guidance?: string;
+  deprecated?: boolean;
 }
 
 const scopeChangeGuidance = `Your public description is published in line with government practice on openness and transparency of public-funded activities. It should describe your project in a way that will be easy for a non-specialist to understand. Do not include any information that is confidential, for example, intellectual property or patent details.
@@ -75,14 +76,7 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
   }
 
   private getEnabledStatus(metaInfo: IMetaValue, config: IConfig): boolean {
-    // TODO: Raise ticket to remove this PCRItemType since we use 'MultiplePartnerFinancialVirement' in replacement
-    if (metaInfo.type === PCRItemType.SinglePartnerFinancialVirement) {
-      return false;
-    }
-
-    if (metaInfo.type === PCRItemType.MultiplePartnerFinancialVirement) {
-      return true;
-    }
+    if (metaInfo.deprecated) return false;
 
     // TODO: Raise ticket to remove this... Currently we have no matching competitions for this PCRItemType
     if (metaInfo.type === PCRItemType.PeriodLengthChange) {
@@ -133,12 +127,21 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
       type: PCRItemType.TimeExtension,
       typeName: "Change project duration",
       ignoredCompetitions: ["LOANS"],
-
     },
     {
       type: PCRItemType.PeriodLengthChange,
       typeName: "Change period length",
-      ignoredCompetitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "LOANS", "EDGE", "SBRI", "SBRI IFS", "Horizon Europe Participation"],
+      ignoredCompetitions: [
+        "CR&D",
+        "CONTRACTS",
+        "KTP",
+        "CATAPULTS",
+        "LOANS",
+        "EDGE",
+        "SBRI",
+        "SBRI IFS",
+        "Horizon Europe Participation",
+      ],
     },
     {
       type: PCRItemType.AccountNameChange,
@@ -155,16 +158,35 @@ export class GetPCRItemTypesQuery extends QueryBase<PCRItemTypeDto[]> {
       type: PCRItemType.ProjectTermination,
       typeName: "End the project early",
       ignoredCompetitions: ["LOANS"],
+      deprecated: true,
     },
     {
       type: PCRItemType.LoanDrawdownChange,
       typeName: "Loan Drawdown Change",
-      ignoredCompetitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "EDGE", "SBRI", "SBRI IFS", "Horizon Europe Participation"],
+      ignoredCompetitions: [
+        "CR&D",
+        "CONTRACTS",
+        "KTP",
+        "CATAPULTS",
+        "EDGE",
+        "SBRI",
+        "SBRI IFS",
+        "Horizon Europe Participation",
+      ],
     },
     {
       type: PCRItemType.LoanDrawdownExtension,
       typeName: "Change Loans Duration",
-      ignoredCompetitions: ["CR&D", "CONTRACTS", "KTP", "CATAPULTS", "EDGE", "SBRI", "SBRI IFS", "Horizon Europe Participation"],
-    }
+      ignoredCompetitions: [
+        "CR&D",
+        "CONTRACTS",
+        "KTP",
+        "CATAPULTS",
+        "EDGE",
+        "SBRI",
+        "SBRI IFS",
+        "Horizon Europe Participation",
+      ],
+    },
   ];
 }

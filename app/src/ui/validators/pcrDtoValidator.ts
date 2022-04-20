@@ -338,6 +338,12 @@ export class PCRDtoValidator extends Results<PCRDto> {
       children =>
         children.all(
           () => children.required("You must select at least one of the types"),
+          // TODO: add some validation to secure against deprecated PCR item
+          // () =>
+          //   children.isTrue(
+          //     items => items.some(x => ![PCRItemType.ProjectTermination].includes(x.type)),
+          //     "The item type you have requested is not available",
+          //   ),
           () => children.hasNoDuplicates(x => x.type, "No duplicate items allowed"),
           () => {
             if (!this.projectPcrs?.length) return children.valid();
@@ -452,9 +458,7 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
 
 export class PCRStandardItemDtoValidator extends PCRBaseItemDtoValidator<PCRStandardItemDto> {}
 
-export class MultiplePartnerFinancialVirementDtoValidator extends PCRBaseItemDtoValidator<
-  PCRItemForMultiplePartnerFinancialVirementDto
-> {
+export class MultiplePartnerFinancialVirementDtoValidator extends PCRBaseItemDtoValidator<PCRItemForMultiplePartnerFinancialVirementDto> {
   private validateGrantMovingOverFinancialYear() {
     if (!this.canEdit) {
       return Validation.isUnchanged(
@@ -681,6 +685,7 @@ export class PCRLoanExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
 }
 export class PCRLoanDrawdownChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForLoanDrawdownChangeDto> {}
 export class PCRProjectTerminationItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForProjectTerminationDto> {}
+
 export class PCRPeriodLengthChangeItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForPeriodLengthChangeDto> {}
 
 export class PCRProjectSuspensionItemDtoValidator extends PCRBaseItemDtoValidator<PCRItemForProjectSuspensionDto> {

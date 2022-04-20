@@ -672,11 +672,11 @@
       "title": "Start a new request",
       "guidance-intro-message": "Before you submit, you must:",
       "guidance-list": {
-        "row-1": "Ask all project partners to approve the changes",
-        "row-2": "Discuss this request with your monitoring officer"
+        "row-1": "ensure all project partners have approved the change(s)",
+        "row-2": "discuss this request with your monitoring officer"
       },
       "select-request-types-title": "Select request types",
-      "select-types-hint": "You can select more than one type of request. If an option is not selectable, then a PCR of that type has already been started. The current PCR must be deleted (if still in draft) or concluded by Innovate UK before you can start a new one.",
+      "select-types-hint": "You can select more than one type of request. If an option is not selectable, then a Project Change Request (PCR) of that type has already been started. The current PCR must be deleted - if still in draft - or concluded by Innovate UK, before a new one can be started.",
       "back-link": "Back to project change requests",
       "button-create-request": "Create request",
       "button-cancel-request": "Cancel",
@@ -690,7 +690,7 @@
       "change-scope-title": "Change project scope",
       "change-scope-message": "Use this to update the public project description and the internal project summary.",
       "change-duration-title": "Change project duration",
-      "change-duration-message": "You can extend a project by adding extra time. You cannot make a project shorter.",
+      "change-duration-message": "This allows you to request an extension or reduction to your project's duration.",
       "change-partners-name-title": "Change partner's name",
       "change-partners-name-message": "Use when a partner organisation's name has changed. If a partner is being replaced, use 'Add a partner' and 'Remove a partner'.",
       "put-project-on-hold-title": "Put a project on hold",
