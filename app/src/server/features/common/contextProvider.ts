@@ -3,9 +3,8 @@ import { Context } from "./context";
 
 class ContextProvider {
   start(params: { user: ISessionUser }): IContext {
-    const { user } = params;
-    return new Context(user);
+    return new Context(params.user);
   }
 }
 
-export default new ContextProvider();
+export const contextProvider = new ContextProvider();

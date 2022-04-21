@@ -1,7 +1,7 @@
 import { CompanyDto } from "@framework/dtos/companyDto";
 import { SearchCompaniesQuery } from "@server/features/companiesHouse/searchCompaniesQuery";
 import { ICompaniesHouseParams } from "@server/resources/companiesHouse";
-import contextProvider from "../features/common/contextProvider";
+import { contextProvider } from "../features/common/contextProvider";
 import { ApiParams, ControllerBase } from "./controllerBase";
 
 class CompaniesHouse extends ControllerBase<CompanyDto> implements ICompaniesApi {

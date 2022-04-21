@@ -24,7 +24,7 @@ import {
   RoutesProvider,
 } from "@ui/redux";
 import { createErrorPayload } from "@shared/create-error-payload";
-import contextProvider from "./features/common/contextProvider";
+import { contextProvider } from "@server/features/common/contextProvider";
 import { ForbiddenError, FormHandlerError, NotFoundError } from "./features/common/appError";
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
 import { Logger } from "./features/common/logger";

@@ -1,4 +1,4 @@
-import contextProvider from "@server/features/common/contextProvider";
+import { contextProvider } from "@server/features/common/contextProvider";
 import { PCRDto, PCRItemTypeDto, PCRSummaryDto, PCRTimeExtensionOption, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";

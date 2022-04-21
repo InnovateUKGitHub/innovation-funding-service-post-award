@@ -1,4 +1,4 @@
-import contextProvider from "@server/features/common/contextProvider";
+import { contextProvider } from "@server/features/common/contextProvider";
 
 import { BroadcastMessage } from "@framework/entities/broadcastMessage";
 import { BroadcastDto } from "@framework/dtos/BroadcastDto";

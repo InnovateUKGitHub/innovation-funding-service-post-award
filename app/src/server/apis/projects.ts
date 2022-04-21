@@ -1,7 +1,7 @@
 import { ProjectDto, ProjectStatusDto } from "@framework/types";
 import { ApiParams, ControllerBase } from "@server/apis/controllerBase";
 
-import contextProvider from "@server/features/common/contextProvider";
+import { contextProvider } from "@server/features/common/contextProvider";
 import { GetAllQuery, GetByIdQuery, GetProjectStatusQuery } from "@server/features/projects";
 
 class Controller extends ControllerBase<ProjectDto> implements IProjectsApi {

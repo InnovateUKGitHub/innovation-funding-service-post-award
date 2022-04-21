@@ -1,4 +1,4 @@
-import contextProvider from "@server/features/common/contextProvider";
+import { contextProvider } from "@server/features/common/contextProvider";
 import { GetAllClaimDetailsByPartner, GetClaimDetailsQuery } from "@server/features/claimDetails";
 import { processDto } from "@shared/processResponse";
 import { SaveClaimDetails } from "@server/features/claimDetails/saveClaimDetailsCommand";
