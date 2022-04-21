@@ -260,11 +260,6 @@ export class ProjectChangeRequestStore extends StoreBase {
           type: itemType.type,
           grantMovingOverFinancialYear: null,
         };
-      case PCRItemType.SinglePartnerFinancialVirement:
-        return {
-          ...baseFields,
-          type: itemType.type,
-        };
       case PCRItemType.PartnerAddition:
         return {
           ...baseFields,
@@ -353,6 +348,7 @@ export class ProjectChangeRequestStore extends StoreBase {
           type: itemType.type,
           status: PCRItemStatus.Complete,
         };
+      case PCRItemType.SinglePartnerFinancialVirement:
       case PCRItemType.LoanDrawdownChange:
       case PCRItemType.PeriodLengthChange:
         return {
