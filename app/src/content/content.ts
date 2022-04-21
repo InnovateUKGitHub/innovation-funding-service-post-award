@@ -22,6 +22,9 @@ import { ProjectSetupBankDetailsContent } from "@content/pages/project/setup/pro
 import { ProjectSetupContent } from "@content/pages/project/setup/projectSetupContent";
 import { ProjectSetupBankDetailsVerifyContent } from "@content/pages/project/setup/projectSetupBankDetailsVerifyContent";
 import { ProjectSetupBankStatementContent } from "@content/pages/project/setup/projectSetupBankStatementContent";
+
+import { ProjectDto } from "@framework/dtos";
+
 import { ProjectSetupPartnerPostcodeContent } from "./pages/project/setup/projectSetupPostcodeContent";
 import { ContentBase, ContentResult } from "./contentBase";
 
@@ -242,7 +245,7 @@ export class Content extends ContentBase {
     broadcasts: BroadcastContent;
   };
 
-  constructor(competitionType?: string) {
+  constructor(competitionType?: ProjectDto["competitionType"]) {
     super(null, null);
 
     this.header = new HeaderContent(this);
