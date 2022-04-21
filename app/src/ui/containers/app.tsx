@@ -95,7 +95,7 @@ class AppView extends React.Component<IAppProps> {
     return (
       <MountedProvider>
         <ContentProvider value={content}>
-          <FullHeight.Container>
+          <FullHeight.Container data-page-qa={currentRoute.routeName}>
             <a href="#main-content" className="govuk-skip-link">
               Skip to main content
             </a>
@@ -103,7 +103,7 @@ class AppView extends React.Component<IAppProps> {
             <Header headingLink={`${config.ifsRoot}/competition/search`} menuItems={appMenuItems} />
 
             <FullHeight.Content>
-              <GovWidthContainer data-page-qa={currentRoute.routeName}>
+              <GovWidthContainer>
                 <PhaseBanner />
 
                 {hasAccess ? (
