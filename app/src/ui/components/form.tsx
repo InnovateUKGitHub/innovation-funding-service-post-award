@@ -1,6 +1,7 @@
 import React, { CSSProperties } from "react";
+
+import { IEditorStore } from "@ui/redux";
 import { Result } from "@ui/validation";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
 import classNames from "classnames";
 import { ContentSelector } from "@content/content";
 import { IFileWrapper } from "@framework/types";
@@ -17,6 +18,8 @@ import { Button } from "./styledButton";
 import { SearchInput } from "./inputs/searchInput";
 import { FormInputWidths } from "./inputs/baseInput";
 import { DropdownList, DropdownListOption } from "./inputs";
+import { SecurityTokenInput } from "./SecurityTokenInput";
+
 import { Content } from "./content";
 
 interface SharedFormProps<T> {
@@ -60,17 +63,13 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
 
     // TODO: as part of the ticket ACC-7480, we discovered that this function doesn't handle any form components nested within react fragments, we should check if the child is a fragment and if so, traverse it's chidren recursively
     const childrenWithData = React.Children.map(this.props.children as any[], (child: any, index) => child && React.cloneElement(child as any, childProps(child.props, index)));
+
     return (
-      <StoresConsumer>
-        {
-          stores => (
-            <form encType={this.mapEncType()} method={this.props.isGet ? "get" : "post"} action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
-              <input type="hidden" name="_csrf" value={stores && stores.users.getCurrentUser().csrf}/>
-              {childrenWithData}
-            </form>
-          )
-        }
-      </StoresConsumer>
+      <form encType={this.mapEncType()} method={this.props.isGet ? "get" : "post"} action="" onSubmit={(e) => this.onSubmit(e)} data-qa={this.props.qa}>
+        <SecurityTokenInput />
+
+        {childrenWithData}
+      </form>
     );
   }
 
