@@ -1,24 +1,32 @@
 import { CostsSummaryForPeriodDto } from "@framework/dtos";
 import { GetCostsSummaryForPeriodQuery } from "../features/claimDetails";
-import contextProvider from "../features/common/contextProvider";
+import { contextProvider } from "../features/common/contextProvider";
 import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface ICostsSummaryApi {
-  getAllByPartnerIdForPeriod: (params: ApiParams<{ projectId: string; partnerId: string; periodId: number }>) => Promise<CostsSummaryForPeriodDto[]>;
+  getAllByPartnerIdForPeriod: (
+    params: ApiParams<{ projectId: string; partnerId: string; periodId: number }>,
+  ) => Promise<CostsSummaryForPeriodDto[]>;
 }
 
 class Controller extends ControllerBase<CostsSummaryForPeriodDto> implements ICostsSummaryApi {
   constructor() {
     super("costs-summary");
 
-    this.getItems("/", (p, q) => ({
-      projectId: q.projectId,
-      partnerId: q.partnerId,
-      periodId: parseInt(q.periodId, 10)
-    }), (p) => this.getAllByPartnerIdForPeriod(p));
+    this.getItems(
+      "/",
+      (p, q) => ({
+        projectId: q.projectId,
+        partnerId: q.partnerId,
+        periodId: parseInt(q.periodId, 10),
+      }),
+      p => this.getAllByPartnerIdForPeriod(p),
+    );
   }
 
-  public async getAllByPartnerIdForPeriod(params: ApiParams<{ projectId: string; partnerId: string; periodId: number }>) {
+  public async getAllByPartnerIdForPeriod(
+    params: ApiParams<{ projectId: string; partnerId: string; periodId: number }>,
+  ) {
     const query = new GetCostsSummaryForPeriodQuery(params.projectId, params.partnerId, params.periodId);
     return contextProvider.start(params).runQuery(query);
   }

@@ -1,4 +1,4 @@
-import contextProvider from "@server/features/common/contextProvider";
+import { contextProvider } from "@server/features/common/contextProvider";
 import { processDto } from "@shared/processResponse";
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";
 import { UpdateInitialForecastDetailsCommand } from "@server/features/forecastDetails";

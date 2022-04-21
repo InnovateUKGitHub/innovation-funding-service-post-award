@@ -1,4 +1,4 @@
-import contextProvider from "@server/features/common/contextProvider";
+import { contextProvider } from "@server/features/common/contextProvider";
 
 import { LoanDto } from "@framework/dtos/loanDto";
 

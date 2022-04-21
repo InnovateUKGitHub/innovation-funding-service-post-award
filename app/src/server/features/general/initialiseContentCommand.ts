@@ -8,7 +8,7 @@ export class InitialiseContentCommand extends NonAuthorisedCommandBase<boolean> 
     super();
   }
 
-  protected async run(context: IContext) {
+  protected async run(context: IContext): Promise<boolean> {
     const useCustomContent = this.loadCustom && context.config.features.customContent;
 
     // if we have never set default content then contentStoreLastUpdated will be null
@@ -24,6 +24,7 @@ export class InitialiseContentCommand extends NonAuthorisedCommandBase<boolean> 
       // allows values to be removed from the custom content because reset to default content first
       await this.setCompetitionContent(context);
       await this.setDefaultContent(context);
+
       if (customContentUpdateRequired) {
         await this.setCustomContent(context);
       }
@@ -37,21 +38,21 @@ export class InitialiseContentCommand extends NonAuthorisedCommandBase<boolean> 
     return context.resources.customContent.getInfo().then(x => x.lastModified > lastUpdated);
   }
 
-  private async setDefaultContent(context: IContext) {
+  private async setDefaultContent(context: IContext): Promise<void> {
     const defaultContent = JSON.parse(await context.resources.defaultContent.getContent());
     context.internationalisation.addResourceBundle(defaultContent);
     context.caches.contentStoreLastUpdated = defaultContentMarker;
     context.logger.info("Set default content", context.caches.contentStoreLastUpdated);
   }
 
-  private async setCustomContent(context: IContext) {
+  private async setCustomContent(context: IContext): Promise<void> {
     const customContent = JSON.parse(await context.resources.customContent.getContent());
     context.internationalisation.addResourceBundle(customContent);
     context.caches.contentStoreLastUpdated = context.clock.now();
     context.logger.info("Set custom content", context.caches.contentStoreLastUpdated);
   }
 
-  private async setCompetitionContent(context: IContext) {
+  private async setCompetitionContent(context: IContext): Promise<void> {
     const competitionContent = JSON.parse(await context.resources.competitionContent.getContent());
     context.internationalisation.addResourceBundle(competitionContent);
     context.logger.info("Set crd content", context.caches.contentStoreLastUpdated);

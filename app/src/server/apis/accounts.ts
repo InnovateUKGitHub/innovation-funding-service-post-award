@@ -1,6 +1,6 @@
 import { AccountDto } from "@framework/dtos";
 import { GetJesAccountsByNameQuery } from "@server/features/accounts/getJesAccountsByName";
-import contextProvider from "../features/common/contextProvider";
+import { contextProvider } from "../features/common/contextProvider";
 import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface IAccountsApi {
@@ -11,12 +11,16 @@ class Controller extends ControllerBase<AccountDto> implements IAccountsApi {
   constructor() {
     super("jes-accounts");
 
-    this.getItems("/", (p, q) => ({
-      searchString: q.search,
-    }), (p) => this.getAllByJesName(p));
+    this.getItems(
+      "/",
+      (p, q) => ({
+        searchString: q.search,
+      }),
+      p => this.getAllByJesName(p),
+    );
   }
 
-  public async getAllByJesName(params: ApiParams<{searchString?: string}>) {
+  public async getAllByJesName(params: ApiParams<{ searchString?: string }>) {
     const query = new GetJesAccountsByNameQuery(params.searchString);
     return contextProvider.start(params).runQuery(query);
   }

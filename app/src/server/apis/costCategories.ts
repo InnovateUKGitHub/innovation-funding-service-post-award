@@ -1,18 +1,21 @@
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import contextProvider from "../features/common/contextProvider";
+import { contextProvider } from "../features/common/contextProvider";
 import { GetUnfilteredCostCategoriesQuery, GetFilteredCostCategoriesQuery } from "../features/claims";
-import {ApiParams, ControllerBase} from "./controllerBase";
+import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface ICostCategoriesApi {
   getAll: (params: ApiParams<{}>) => Promise<CostCategoryDto[]>;
-  getAllFiltered: (params: ApiParams<{partnerId: string}>) => Promise<CostCategoryDto[]>;
+  getAllFiltered: (params: ApiParams<{ partnerId: string }>) => Promise<CostCategoryDto[]>;
 }
 
 class Controller extends ControllerBase<CostCategoryDto> implements ICostCategoriesApi {
-
   constructor() {
     super("cost-categories");
-    this.getItems("/", () => ({}),  (p) => this.getAll(p));
+    this.getItems(
+      "/",
+      () => ({}),
+      p => this.getAll(p),
+    );
     this.getItems(
       "/filtered/:partnerId",
       p => ({ partnerId: p.partnerId }),
@@ -25,7 +28,7 @@ class Controller extends ControllerBase<CostCategoryDto> implements ICostCategor
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getAllFiltered(params: ApiParams<{partnerId: string}>) {
+  public async getAllFiltered(params: ApiParams<{ partnerId: string }>) {
     const query = new GetFilteredCostCategoriesQuery(params.partnerId);
     return contextProvider.start(params).runQuery(query);
   }

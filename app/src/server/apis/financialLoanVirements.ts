@@ -1,4 +1,4 @@
-import contextProvider from "@server/features/common/contextProvider";
+import { contextProvider } from "@server/features/common/contextProvider";
 import { GetFinancialLoanVirementQuery } from "@server/features/financialVirements/getFinancialLoanVirementQuery";
 import { UpdateFinancialLoanVirementCommand } from "@server/features/financialVirements/updateFinancialLoanVirementCommand";
 import { processDto } from "@shared/processResponse";

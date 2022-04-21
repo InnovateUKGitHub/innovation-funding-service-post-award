@@ -1,10 +1,10 @@
 import { GOLCostDto } from "@framework/dtos";
-import { GetAllForecastsGOLCostsQuery } from "../features/claims/getAllForecastGOLCostsQuery";
-import contextProvider from "../features/common/contextProvider";
-import { ApiParams, ControllerBase } from "./controllerBase";
+import { ApiParams, ControllerBase } from "@server/apis/controllerBase";
+import { GetAllForecastsGOLCostsQuery } from "@server/features/claims/getAllForecastGOLCostsQuery";
+import { contextProvider } from "@server/features/common/contextProvider";
 
 export interface IForecastGolCostsApi {
-  getAllByPartnerId: (params: ApiParams<{partnerId: string}>) => Promise<GOLCostDto[]>;
+  getAllByPartnerId: (params: ApiParams<{ partnerId: string }>) => Promise<GOLCostDto[]>;
 }
 
 class Controller extends ControllerBase<GOLCostDto> implements IForecastGolCostsApi {
@@ -14,12 +14,12 @@ class Controller extends ControllerBase<GOLCostDto> implements IForecastGolCosts
     this.getItems(
       "/",
       (p, q) => ({ partnerId: q.partnerId }),
-      (p) => this.getAllByPartnerId(p)
+      p => this.getAllByPartnerId(p),
     );
   }
 
-  public async getAllByPartnerId(params: ApiParams<{partnerId: string}>) {
-    const {partnerId} = params;
+  public async getAllByPartnerId(params: ApiParams<{ partnerId: string }>) {
+    const { partnerId } = params;
     const query = new GetAllForecastsGOLCostsQuery(partnerId);
     return contextProvider.start(params).runQuery(query);
   }

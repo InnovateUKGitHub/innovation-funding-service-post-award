@@ -2,7 +2,7 @@ import { ClaimDto, ClaimStatusChangeDto, TotalCosts } from "@framework/types";
 
 import { processDto } from "@shared/processResponse";
 import { BadRequestError } from "@server/features/common";
-import contextProvider from "@server/features/common/contextProvider";
+import { contextProvider } from "@server/features/common/contextProvider";
 
 import { ApiParams, ControllerBase } from "@server/apis/controllerBase";
 import {
