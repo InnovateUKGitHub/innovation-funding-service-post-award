@@ -57,5 +57,8 @@ const storesContext = createContext<IStores>(null as any);
 
 /* eslint-disable @typescript-eslint/naming-convention */
 export const StoresProvider = storesContext.Provider;
+/**
+ * @deprecated Please use 'useStores' in favour of this HOC approach
+ */
 export const StoresConsumer = storesContext.Consumer;
 export const useStores = () => useContext(storesContext);

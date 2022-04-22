@@ -1,5 +1,5 @@
 import React from "react";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
@@ -125,15 +125,15 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerAdditio
   }
 }
 
-export const AddPartnerSummary = (props: PcrSummaryProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator, AddPartnerStepNames>) => (
-  <StoresConsumer>
-    {
-      stores => {
-        return (<ACC.Loader
-          pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrItem.id)}
-          render={documents => <Component documents={documents} {...props} />}
-        />);
-      }
-    }
-  </StoresConsumer>
-);
+export const AddPartnerSummary = (
+  props: PcrSummaryProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator, AddPartnerStepNames>,
+) => {
+  const stores = useStores();
+
+  return (
+    <ACC.Loader
+      pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrItem.id)}
+      render={documents => <Component {...props} documents={documents} />}
+    />
+  );
+};

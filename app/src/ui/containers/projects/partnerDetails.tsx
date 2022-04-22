@@ -1,5 +1,5 @@
 import { getAuthRoles, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 import * as ACC from "../../components";
 import { Pending } from "../../../shared/pending";
@@ -83,17 +83,17 @@ class PartnerDetailsComponent extends ContainerBase<Params, Data> {
   }
 }
 
-const PartnerDetailsContainer = (props: Params & BaseProps) => (
-  <StoresConsumer>
-    {stores => (
-      <PartnerDetailsComponent
-        project={stores.projects.getById(props.projectId)}
-        partner={stores.partners.getById(props.partnerId)}
-        {...props}
-      />
-    )}
-  </StoresConsumer>
-);
+const PartnerDetailsContainer = (props: Params & BaseProps) => {
+  const stores = useStores();
+
+  return (
+    <PartnerDetailsComponent
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      partner={stores.partners.getById(props.partnerId)}
+    />
+  );
+};
 
 export const PartnerDetailsRoute = defineRoute<Params>({
   routeName: "partnerDetails",

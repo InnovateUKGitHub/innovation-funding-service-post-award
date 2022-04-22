@@ -1,5 +1,5 @@
 import * as ACC from "@ui/components";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { PCRItemForPartnerAdditionDto, ProjectDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -96,53 +96,50 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
     return (
       <>
-      <ACC.Section title={x => x.pcrSpendProfileOverheadDocumentContent.guidanceHeading}>
-        <ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadGuidance} />
-      </ACC.Section>
+        <ACC.Section title={x => x.pcrSpendProfileOverheadDocumentContent.guidanceHeading}>
+          <ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadGuidance} />
+        </ACC.Section>
 
-      <ACC.Section>
-        <UploadForm.Form
-          enctype="multipart"
-          editor={documentsEditor}
-          onChange={dto => this.props.onFileChange(false, dto)}
-          qa="projectChangeRequestItemUpload"
-        >
-          <UploadForm.Fieldset
-            heading={x => x.pcrSpendProfileOverheadDocumentContent.templateHeading}
-            qa="template"
+        <ACC.Section>
+          <UploadForm.Form
+            enctype="multipart"
+            editor={documentsEditor}
+            onChange={dto => this.props.onFileChange(false, dto)}
+            qa="projectChangeRequestItemUpload"
           >
-            {this.renderTemplateLink()}
-          </UploadForm.Fieldset>
+            <UploadForm.Fieldset heading={x => x.pcrSpendProfileOverheadDocumentContent.templateHeading} qa="template">
+              {this.renderTemplateLink()}
+            </UploadForm.Fieldset>
 
-          <UploadForm.Fieldset
-            qa="documentUpload"
-            heading={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadHeading}
-          >
-            <UploadForm.Hidden name="description" value={() => DocumentDescription.OverheadCalculationSpreadsheet} />
-            <ACC.DocumentGuidance />
-            <UploadForm.MultipleFileUpload
-              label={x => x.pcrSpendProfileOverheadDocumentContent.labels.uploadInputLabel}
-              name="attachment"
-              labelHidden
-              value={data => data.files}
-              update={(dto, files) => {
-                dto.files = files || [];
-                dto.description = DocumentDescription.OverheadCalculationSpreadsheet;
-              }}
-              validation={documentsEditor.validator.files}
-            />
-          </UploadForm.Fieldset>
-          <UploadForm.Fieldset>
-            <UploadForm.Button
-              name="uploadFile"
-              styling="Secondary"
-              onClick={() => this.props.onFileChange(true, documentsEditor.data)}
+            <UploadForm.Fieldset
+              qa="documentUpload"
+              heading={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadHeading}
             >
-              <ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.messages.uploadTitle} />
-            </UploadForm.Button>
-          </UploadForm.Fieldset>
-        </UploadForm.Form>
-      </ACC.Section>
+              <UploadForm.Hidden name="description" value={() => DocumentDescription.OverheadCalculationSpreadsheet} />
+              <ACC.DocumentGuidance />
+              <UploadForm.MultipleFileUpload
+                label={x => x.pcrSpendProfileOverheadDocumentContent.labels.uploadInputLabel}
+                name="attachment"
+                labelHidden
+                value={data => data.files}
+                update={(dto, files) => {
+                  dto.files = files || [];
+                  dto.description = DocumentDescription.OverheadCalculationSpreadsheet;
+                }}
+                validation={documentsEditor.validator.files}
+              />
+            </UploadForm.Fieldset>
+            <UploadForm.Fieldset>
+              <UploadForm.Button
+                name="uploadFile"
+                styling="Secondary"
+                onClick={() => this.props.onFileChange(true, documentsEditor.data)}
+              >
+                <ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.messages.uploadTitle} />
+              </UploadForm.Button>
+            </UploadForm.Fieldset>
+          </UploadForm.Form>
+        </ACC.Section>
       </>
     );
   }
@@ -157,51 +154,51 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
   }
 }
 
-const OverheadDocumentContainer = (props: OverheadDocumentsPageParams & BaseProps) => (
-  <StoresConsumer>
-    {stores => (
-      <OverheadDocumentsComponent
-        project={stores.projects.getById(props.projectId)}
-        costCategories={stores.costCategories.getAllUnfiltered()}
-        pcrItem={
-          stores.projectChangeRequests.getItemById(props.projectId, props.pcrId, props.itemId) as Pending<
-            PCRItemForPartnerAdditionDto
-          >
-        }
-        documents={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.itemId)}
-        editor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.itemId)}
-        onFileChange={(isSaving, dto) => {
-          stores.messages.clearMessages();
-          // show message if remaining on page
-          const successMessage = isSaving
-            ? dto.files.length === 1
-              ? "Your document has been uploaded."
-              : `${dto.files.length} documents have been uploaded.`
-            : undefined;
-          stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(
-            isSaving,
-            props.projectId,
-            props.itemId,
-            dto,
-            true,
-            successMessage,
-          );
-        }}
-        onFileDelete={(dto, document) => {
-          stores.messages.clearMessages();
-          stores.projectChangeRequestDocuments.deletePcrOrPcrItemDocumentsEditor(
-            props.projectId,
-            props.itemId,
-            dto,
-            document,
-            "Your document has been removed.",
-          );
-        }}
-        {...props}
-      />
-    )}
-  </StoresConsumer>
-);
+const OverheadDocumentContainer = (props: OverheadDocumentsPageParams & BaseProps) => {
+  const stores = useStores();
+
+  return (
+    <OverheadDocumentsComponent
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      costCategories={stores.costCategories.getAllUnfiltered()}
+      pcrItem={
+        stores.projectChangeRequests.getItemById(props.projectId, props.pcrId, props.itemId) as Pending<
+          PCRItemForPartnerAdditionDto
+        >
+      }
+      documents={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.itemId)}
+      editor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.itemId)}
+      onFileChange={(isSaving, dto) => {
+        stores.messages.clearMessages();
+        // show message if remaining on page
+        const successMessage = isSaving
+          ? dto.files.length === 1
+            ? "Your document has been uploaded."
+            : `${dto.files.length} documents have been uploaded.`
+          : undefined;
+        stores.projectChangeRequestDocuments.updatePcrOrPcrItemDocumentsEditor(
+          isSaving,
+          props.projectId,
+          props.itemId,
+          dto,
+          true,
+          successMessage,
+        );
+      }}
+      onFileDelete={(dto, document) => {
+        stores.messages.clearMessages();
+        stores.projectChangeRequestDocuments.deletePcrOrPcrItemDocumentsEditor(
+          props.projectId,
+          props.itemId,
+          dto,
+          document,
+          "Your document has been removed.",
+        );
+      }}
+    />
+  );
+};
 
 export const PCRSpendProfileOverheadDocumentRoute = defineRoute<OverheadDocumentsPageParams>({
   routeName: "pcrSpendProfileOverheadDocument",

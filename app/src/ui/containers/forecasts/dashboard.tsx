@@ -1,6 +1,6 @@
 import { Pending } from "@shared/pending";
 import { ClaimDto, PartnerDto, ProjectDto } from "@framework/dtos";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { roundCurrency } from "@framework/util";
 import { ProjectRole } from "@framework/constants";
 import * as ACC from "../../components";
@@ -20,8 +20,18 @@ interface Callbacks {}
 
 class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
   render() {
-    const combined = Pending.combine({projectDetails: this.props.projectDetails, partners: this.props.partners, activeClaims: this.props.activeClaims});
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.projectDetails, x.partners, x.activeClaims)} />;
+    const combined = Pending.combine({
+      projectDetails: this.props.projectDetails,
+      partners: this.props.partners,
+      activeClaims: this.props.activeClaims,
+    });
+
+    return (
+      <ACC.PageLoader
+        pending={combined}
+        render={x => this.renderContents(x.projectDetails, x.partners, x.activeClaims)}
+      />
+    );
   }
 
   private renderContents(project: ProjectDto, partners: PartnerDto[], activeClaims: ClaimDto[]) {
@@ -30,7 +40,9 @@ class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
     const getForecastsAndCosts = (partner: PartnerDto) => {
       const claim = activeClaims.find(x => x.partnerId === partner.id);
       const claimCost = claim ? claim.totalCost || 0 : 0;
-      return claimCost + (partner.totalFutureForecastsForParticipants || 0) + (partner.totalParticipantCostsClaimed || 0);
+      return (
+        claimCost + (partner.totalFutureForecastsForParticipants || 0) + (partner.totalParticipantCostsClaimed || 0)
+      );
     };
 
     return (
@@ -82,25 +94,26 @@ class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const ForecastDashboardContainer = (props: Params & BaseProps) => (
-  <StoresConsumer>
-    {stores => (
-      <ProjectForecastComponent
-        projectDetails={stores.projects.getById(props.projectId)}
-        partners={stores.partners.getPartnersForProject(props.projectId)}
-        activeClaims={stores.claims.getActiveClaimsForProject(props.projectId)}
-        {...props}
-      />
-    )}
-  </StoresConsumer>
-);
+const ForecastDashboardContainer = (props: Params & BaseProps) => {
+  const stores = useStores();
+
+  return (
+    <ProjectForecastComponent
+      projectDetails={stores.projects.getById(props.projectId)}
+      partners={stores.partners.getPartnersForProject(props.projectId)}
+      activeClaims={stores.claims.getActiveClaimsForProject(props.projectId)}
+      {...props}
+    />
+  );
+};
 
 export const ForecastDashboardRoute = defineRoute({
   allowRouteInActiveAccess: true,
   routeName: "projectForecasts",
   routePath: "/projects/:projectId/forecasts",
   container: ForecastDashboardContainer,
-  getParams: (r) => ({ projectId: r.params.projectId }),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
-  getTitle: ({content}) => content.forecastsDashboard.title()
+  getParams: r => ({ projectId: r.params.projectId }),
+  accessControl: (auth, { projectId }) =>
+    auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
+  getTitle: ({ content }) => content.forecastsDashboard.title(),
 });

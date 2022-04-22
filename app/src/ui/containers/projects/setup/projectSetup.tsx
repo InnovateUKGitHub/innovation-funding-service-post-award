@@ -1,6 +1,6 @@
 import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import * as Dtos from "@framework/dtos";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import * as ACC from "@ui/components";
@@ -148,23 +148,23 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
   }
 }
 
-const ProjectSetupContainer = (props: ProjectSetupParams & BaseProps) => (
-  <StoresConsumer>
-    {stores => (
-      <ProjectSetupComponent
-        project={stores.projects.getById(props.projectId)}
-        partner={stores.partners.getById(props.partnerId)}
-        editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
-        onUpdate={(saving, dto) =>
-          stores.partners.updatePartner(saving, props.partnerId, dto, {
-            onComplete: () => stores.navigation.navigateTo(props.routes.projectDashboard.getLink({})),
-          })
-        }
-        {...props}
-      />
-    )}
-  </StoresConsumer>
-);
+const ProjectSetupContainer = (props: ProjectSetupParams & BaseProps) => {
+  const stores = useStores();
+
+  return (
+    <ProjectSetupComponent
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      partner={stores.partners.getById(props.partnerId)}
+      editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
+      onUpdate={(saving, dto) =>
+        stores.partners.updatePartner(saving, props.partnerId, dto, {
+          onComplete: () => stores.navigation.navigateTo(props.routes.projectDashboard.getLink({})),
+        })
+      }
+    />
+  );
+};
 
 export const ProjectSetupRoute = defineRoute<ProjectSetupParams>({
   routeName: "projectSetup",

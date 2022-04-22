@@ -1,6 +1,6 @@
 import * as ACC from "@ui/components";
 import { Option, PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { PCRParticipantSize } from "@framework/constants";
@@ -73,15 +73,13 @@ const InnerContainer = (
 
 export const OrganisationDetailsStep = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
-) => (
-  <StoresConsumer>
-    {stores => {
-      return (
-        <ACC.Loader
-          pending={stores.projectChangeRequests.getPcrParticipantSizes()}
-          render={x => <InnerContainer pcrParticipantSize={x} {...props} />}
-        />
-      );
-    }}
-  </StoresConsumer>
-);
+) => {
+  const stores = useStores();
+
+  return (
+    <ACC.Loader
+      pending={stores.projectChangeRequests.getPcrParticipantSizes()}
+      render={x => <InnerContainer {...props} pcrParticipantSize={x}  />}
+    />
+  );
+};

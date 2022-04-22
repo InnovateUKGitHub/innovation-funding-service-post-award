@@ -1,7 +1,7 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { Option, PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { Pending } from "@shared/pending";
@@ -46,7 +46,10 @@ class Component extends React.Component<
           onSubmit={() => this.onSave(this.props.pcrItem)}
           onChange={dto => this.onChange(dto)}
         >
-          <ACC.ValidationMessage messageType="info" message={x => x.pcrAddPartnerRoleAndOrganisation.validationMessage}/>
+          <ACC.ValidationMessage
+            messageType="info"
+            message={x => x.pcrAddPartnerRoleAndOrganisation.validationMessage}
+          />
           <Form.Fieldset heading={x => x.pcrAddPartnerRoleAndOrganisation.labels.roleHeading}>
             <Form.Radio
               name="projectRole"
@@ -79,8 +82,8 @@ class Component extends React.Component<
             />
           </Form.Fieldset>
           <Form.Fieldset heading={x => x.pcrAddPartnerRoleAndOrganisation.labels.organisationHeading}>
-            <ACC.Info summary={<ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.infoSummary}/>}>
-              <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.organisationTypeInfo}/>
+            <ACC.Info summary={<ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.infoSummary} />}>
+              <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.organisationTypeInfo} />
             </ACC.Info>
             <Form.Radio
               name="partnerType"
@@ -143,17 +146,16 @@ class Component extends React.Component<
 
 export const RoleAndOrganisationStep = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
-) => (
-  <StoresConsumer>
-    {stores => {
-      const pcrProjectRoles = stores.projectChangeRequests.getPcrProjectRoles();
-      const pcrPartnerTypes = stores.projectChangeRequests.getPcrPartnerTypes();
-      return (
-        <ACC.Loader
-          pending={Pending.combine({ pcrProjectRoles, pcrPartnerTypes })}
-          render={x => <Component pcrProjectRoles={x.pcrProjectRoles} pcrPartnerTypes={x.pcrPartnerTypes} {...props} />}
-        />
-      );
-    }}
-  </StoresConsumer>
-);
+) => {
+  const stores = useStores();
+
+  const pcrProjectRoles = stores.projectChangeRequests.getPcrProjectRoles();
+  const pcrPartnerTypes = stores.projectChangeRequests.getPcrPartnerTypes();
+
+  return (
+    <ACC.Loader
+      pending={Pending.combine({ pcrProjectRoles, pcrPartnerTypes })}
+      render={x => <Component pcrProjectRoles={x.pcrProjectRoles} pcrPartnerTypes={x.pcrPartnerTypes} {...props} />}
+    />
+  );
+};

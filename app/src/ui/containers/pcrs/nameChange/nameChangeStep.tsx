@@ -1,6 +1,6 @@
 import * as ACC from "@ui/components";
 import { PartnerDto, PCRItemForAccountNameChangeDto } from "@framework/dtos";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRAccountNameChangeItemDtoValidator } from "@ui/validators";
 import { EditorStatus } from "@ui/constants/enums";
@@ -62,15 +62,13 @@ const InnerContainer = (
 
 export const NameChangeStep = (
   props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRAccountNameChangeItemDtoValidator>,
-) => (
-  <StoresConsumer>
-    {stores => {
-      return (
-        <ACC.Loader
-          pending={stores.partners.getPartnersForProject(props.project.id)}
-          render={x => <InnerContainer partners={x} {...props} />}
-        />
-      );
-    }}
-  </StoresConsumer>
-);
+) => {
+  const stores = useStores();
+
+  return (
+    <ACC.Loader
+      pending={stores.partners.getPartnersForProject(props.project.id)}
+      render={x => <InnerContainer {...props} partners={x} />}
+    />
+  );
+};

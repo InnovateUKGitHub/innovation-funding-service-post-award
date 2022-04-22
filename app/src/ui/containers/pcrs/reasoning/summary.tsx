@@ -1,7 +1,7 @@
 import { ILinkInfo, PCRItemStatus, PCRItemType } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import { NavigationArrowsForPCRs } from "@ui/containers/pcrs/navigationArrows";
 import { IReasoningWorkflowMetadata } from "@ui/containers/pcrs/reasoning/workflowMetadata";
@@ -136,14 +136,14 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
   }
 }
 
-export const PCRReasoningSummary = (props: Props & BaseProps) => (
-  <StoresConsumer>
-    {stores => (
-      <PCRReasoningSummaryComponent
-        files={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrId)}
-        editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
-        {...props}
-      />
-    )}
-  </StoresConsumer>
-);
+export const PCRReasoningSummary = (props: Props & BaseProps) => {
+  const stores = useStores();
+
+  return (
+    <PCRReasoningSummaryComponent
+      {...props}
+      files={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrId)}
+      editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
+    />
+  );
+};

@@ -47,19 +47,17 @@ const getStores = () => {
 // make sure middleware and reducers have run
 store.dispatch(Actions.initaliseAction());
 
-class Client extends React.Component<{}> {
-  render() {
-    return (
-      // @todo remove once react/redux connect can be removed
-      <Provider store={store}>
-        <RouterProvider router={router}>
-          <StoresProvider value={getStores()}>
-            <StoresConsumer>{stores => <AppWithContent stores={stores} store={store} />}</StoresConsumer>
-          </StoresProvider>
-        </RouterProvider>
-      </Provider>
-    );
-  }
+function Client() {
+  return (
+    // @todo remove once react/redux connect can be removed
+    <Provider store={store}>
+      <RouterProvider router={router}>
+        <StoresProvider value={getStores()}>
+          <StoresConsumer>{stores => <AppWithContent stores={stores} store={store} />}</StoresConsumer>
+        </StoresProvider>
+      </RouterProvider>
+    </Provider>
+  );
 }
 
 class AppWithContent extends React.Component<{ stores: IStores; store: typeof store }> {

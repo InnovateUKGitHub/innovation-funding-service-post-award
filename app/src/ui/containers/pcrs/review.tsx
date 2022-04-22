@@ -4,7 +4,7 @@ import { ProjectDto, ProjectRole } from "@framework/types";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { PCRItemType, PCRStatus } from "@framework/constants";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
@@ -173,22 +173,30 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
   }
 }
 
-const PCRReviewContainer = (props: PCRReviewParams & BaseProps) => (
-  <StoresConsumer>
-    {stores => (
-      <PCRReviewComponent
-        project={stores.projects.getById(props.projectId)}
-        pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
-        statusChanges={stores.projectChangeRequests.getStatusChanges(props.projectId, props.pcrId)}
-        // initalise editor pcr status to unknown to force state selection via form
-        editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId, x => x.status = PCRStatus.Unknown)}
-        onChange={(save, dto) => stores.projectChangeRequests.updatePcrEditor(save, props.projectId, dto, undefined, () => stores.navigation.navigateTo(props.routes.pcrsDashboard.getLink({ projectId: props.projectId })))}
-        editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
-        {...props}
-      />
-    )}
-  </StoresConsumer>
-);
+const PCRReviewContainer = (props: PCRReviewParams & BaseProps) => {
+  const stores = useStores();
+
+  return (
+    <PCRReviewComponent
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
+      statusChanges={stores.projectChangeRequests.getStatusChanges(props.projectId, props.pcrId)}
+      // initalise editor pcr status to unknown to force state selection via form
+      editor={stores.projectChangeRequests.getPcrUpdateEditor(
+        props.projectId,
+        props.pcrId,
+        x => (x.status = PCRStatus.Unknown),
+      )}
+      onChange={(save, dto) =>
+        stores.projectChangeRequests.updatePcrEditor(save, props.projectId, dto, undefined, () =>
+          stores.navigation.navigateTo(props.routes.pcrsDashboard.getLink({ projectId: props.projectId })),
+        )
+      }
+      editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
+    />
+  );
+};
 
 export const PCRReviewRoute = defineRoute({
   routeName: "pcrReview",

@@ -1,7 +1,7 @@
 import { PCRItemDto, PCRItemStatus, PCRItemType, PCRStatus, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import * as ACC from "@ui/components";
@@ -195,23 +195,26 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
   }
 }
 
-const PCRPrepareContainer = (props: ProjectChangeRequestPrepareParams & BaseProps) => (
-  <StoresConsumer>
-    {
-      stores => (
-        <PCRPrepareComponent
-          project={stores.projects.getById(props.projectId)}
-          pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
-          statusChanges={stores.projectChangeRequests.getStatusChanges(props.projectId, props.pcrId)}
-          editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
-          onChange={(saving: boolean, dto: PCRDto) => stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, () => stores.navigation.navigateTo(props.routes.pcrsDashboard.getLink({ projectId: props.projectId })))}
-          editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
-          {...props}
-        />
-      )
-    }
-  </StoresConsumer>
-);
+const PCRPrepareContainer = (props: ProjectChangeRequestPrepareParams & BaseProps) => {
+  const stores = useStores();
+
+  return (
+    <PCRPrepareComponent
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
+      statusChanges={stores.projectChangeRequests.getStatusChanges(props.projectId, props.pcrId)}
+      editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
+      onChange={(saving: boolean, dto: PCRDto) =>
+        stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, () =>
+          stores.navigation.navigateTo(props.routes.pcrsDashboard.getLink({ projectId: props.projectId })),
+        )
+      }
+      editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
+    />
+  );
+};
+
 
 export const ProjectChangeRequestPrepareRoute = defineRoute({
   routeName: "pcrPrepare",

@@ -1,6 +1,6 @@
 import React from "react";
 import * as Dtos from "@framework/types";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { MonitoringReportDtoValidator, QuestionValidator } from "@ui/validators";
 import { Pending } from "@shared/pending";
 import { MonitoringReportReportSummaryProps } from "@ui/containers/monitoringReports/monitoringReportWorkflowDef";
@@ -148,15 +148,8 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
   }
 }
 
-export const MonitoringReportSummary = (props: MonitoringReportReportSummaryProps) => (
-  <StoresConsumer>
-    {
-      stores => (
-        <Component
-          statusChanges={stores.monitoringReports.getStatusChanges(props.projectId, props.id)}
-          {...props}
-        />
-      )
-    }
-  </StoresConsumer>
-);
+export const MonitoringReportSummary = (props: MonitoringReportReportSummaryProps) => {
+  const stores = useStores();
+
+  return <Component {...props} statusChanges={stores.monitoringReports.getStatusChanges(props.projectId, props.id)} />;
+};

@@ -10,7 +10,7 @@ import {
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import {
   PCRSpendProfileCapitalUsageCostDto, PCRSpendProfileCostDto,
@@ -116,44 +116,48 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   }
 }
 
-const SpendProfileDeleteCostContainer = (props: PcrDeleteSpendProfileCostParams & BaseProps) => (
-  <StoresConsumer>
-    {stores => {
-      const costCategoryPending = stores.costCategories.get(props.costCategoryId);
-      const dtoPending = stores.projectChangeRequests.getById(props.projectId, props.pcrId);
-      return (
-        <Component
-          project={stores.projects.getById(props.projectId)}
-          costCategory={costCategoryPending}
-          editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
-          cost={dtoPending.then(dto => {
-            const addPartnerItem = dto.items.find(x => x.id === props.itemId && x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
-            return addPartnerItem.spendProfile.costs.find(x => x.id === props.costId) as PCRSpendProfileCostDto;
-          })}
-          onDelete={(dto, projectId) => {
-            const item = dto.items.find(x => x.id === props.itemId && x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
-            const costIndex = item.spendProfile.costs.findIndex(x => x.id === props.costId);
-            if (costIndex > -1) {
-              item.spendProfile.costs.splice(costIndex, 1);
-            }
-            // If submitting from a step set the status to incomplete
-            item.status = PCRItemStatus.Incomplete;
-            stores.messages.clearMessages();
-            stores.projectChangeRequests.updatePcrEditor(true, projectId, dto, "You have deleted a cost", () =>
-              stores.navigation.navigateTo(props.routes.pcrSpendProfileCostsSummary.getLink({
-                projectId: props.projectId,
-                pcrId: props.pcrId,
-                itemId: props.itemId,
-                costCategoryId: props.costCategoryId
-              }))
-            );
-          }}
-          {...props}
-        />
-      );
-    }}
-  </StoresConsumer>
-);
+const SpendProfileDeleteCostContainer = (props: PcrDeleteSpendProfileCostParams & BaseProps) => {
+  const stores = useStores();
+
+  const costCategoryPending = stores.costCategories.get(props.costCategoryId);
+  const dtoPending = stores.projectChangeRequests.getById(props.projectId, props.pcrId);
+  return (
+    <Component
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      costCategory={costCategoryPending}
+      editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
+      cost={dtoPending.then(dto => {
+        const addPartnerItem = dto.items.find(
+          x => x.id === props.itemId && x.type === PCRItemType.PartnerAddition,
+        ) as PCRItemForPartnerAdditionDto;
+        return addPartnerItem.spendProfile.costs.find(x => x.id === props.costId) as PCRSpendProfileCostDto;
+      })}
+      onDelete={(dto, projectId) => {
+        const item = dto.items.find(
+          x => x.id === props.itemId && x.type === PCRItemType.PartnerAddition,
+        ) as PCRItemForPartnerAdditionDto;
+        const costIndex = item.spendProfile.costs.findIndex(x => x.id === props.costId);
+        if (costIndex > -1) {
+          item.spendProfile.costs.splice(costIndex, 1);
+        }
+        // If submitting from a step set the status to incomplete
+        item.status = PCRItemStatus.Incomplete;
+        stores.messages.clearMessages();
+        stores.projectChangeRequests.updatePcrEditor(true, projectId, dto, "You have deleted a cost", () =>
+          stores.navigation.navigateTo(
+            props.routes.pcrSpendProfileCostsSummary.getLink({
+              projectId: props.projectId,
+              pcrId: props.pcrId,
+              itemId: props.itemId,
+              costCategoryId: props.costCategoryId,
+            }),
+          ),
+        );
+      }}
+    />
+  );
+};
 
 export const PCRSpendProfileDeleteCostRoute = defineRoute<PcrDeleteSpendProfileCostParams>({
   routeName: "pcrPrepareSpendProfileDeleteCost",
