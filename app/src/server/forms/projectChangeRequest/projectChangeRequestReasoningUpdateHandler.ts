@@ -11,7 +11,6 @@ import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus, PCRItemType } from "@framework/constants";
 import { reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { configuration } from "@server/features/common";
 
 export class ProjectChangeRequestReasoningUpdateHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareReasoningParams, "pcr"> {
   constructor() {

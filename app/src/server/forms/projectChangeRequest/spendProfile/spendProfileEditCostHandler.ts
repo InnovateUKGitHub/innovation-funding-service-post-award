@@ -8,7 +8,7 @@ import {
   ProjectDto,
   ProjectRole
 } from "@framework/types";
-import { BadRequestError, configuration } from "@server/features/common";
+import { BadRequestError } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { UpdatePCRCommand } from "@server/features/pcrs/updatePcrCommand";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
