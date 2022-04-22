@@ -33,7 +33,7 @@ export const ProjectManagerDetailsStep = (
         qa="addPartnerForm"
         data={props.pcrItem}
         isSaving={props.status === EditorStatus.Saving}
-        onSubmit={() => props.onSave()}
+        onSubmit={() => props.onSave(false)}
         onChange={dto => props.onChange(dto)}
       >
         <Form.Fieldset headingContent={x => x.pcrAddPartnerProjectContacts.labels.projectLeadContactHeading}>

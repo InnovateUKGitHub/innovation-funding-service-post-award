@@ -102,7 +102,7 @@ export const PCRPrepareItemFilesStep = (
               successMessage,
               () => {
                 if (saving === "SaveAndContinue") {
-                  props.onSave();
+                  props.onSave(false);
                 }
               },
             );

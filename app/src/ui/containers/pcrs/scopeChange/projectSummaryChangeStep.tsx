@@ -4,7 +4,9 @@ import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRScopeChangeItemDtoValidator } from "@ui/validators";
 import { EditorStatus } from "@ui/constants/enums";
 
-export const ProjectSummaryChangeStep = (props: PcrStepProps<PCRItemForScopeChangeDto, PCRScopeChangeItemDtoValidator>) => {
+export const ProjectSummaryChangeStep = (
+  props: PcrStepProps<PCRItemForScopeChangeDto, PCRScopeChangeItemDtoValidator>,
+) => {
   const Form = ACC.TypedForm<PCRItemForScopeChangeDto>();
 
   return (
@@ -13,21 +15,29 @@ export const ProjectSummaryChangeStep = (props: PcrStepProps<PCRItemForScopeChan
         data={props.pcrItem}
         isSaving={props.status === EditorStatus.Saving}
         onChange={dto => props.onChange(dto)}
-        onSubmit={() => props.onSave()}
+        onSubmit={() => props.onSave(false)}
       >
         <Form.Fieldset headingContent={x => x.pcrScopeChangeProjectSummaryChange.projectSummaryHeading}>
-          <ACC.Info summary={<ACC.Content value={x => x.pcrScopeChangeProjectSummaryChange.publishedSummary}/>}><ACC.Renderers.SimpleString multiline>{props.pcrItem.projectSummarySnapshot || <ACC.Content value={x => x.pcrScopeChangeProjectSummaryChange.noAvailableSummary}/>}</ACC.Renderers.SimpleString></ACC.Info>
+          <ACC.Info summary={<ACC.Content value={x => x.pcrScopeChangeProjectSummaryChange.publishedSummary} />}>
+            <ACC.Renderers.SimpleString multiline>
+              {props.pcrItem.projectSummarySnapshot || (
+                <ACC.Content value={x => x.pcrScopeChangeProjectSummaryChange.noAvailableSummary} />
+              )}
+            </ACC.Renderers.SimpleString>
+          </ACC.Info>
           <Form.MultilineString
             name="summary"
             hint={props.getRequiredToCompleteMessage()}
             value={m => m.projectSummary}
-            update={(m, v) => m.projectSummary = v}
+            update={(m, v) => (m.projectSummary = v)}
             validation={props.validator.projectSummary}
             qa="newSummary"
             rows={15}
           />
         </Form.Fieldset>
-        <Form.Submit><ACC.Content value={x => x.pcrScopeChangeProjectSummaryChange.pcrItem.submitButton}/></Form.Submit>
+        <Form.Submit>
+          <ACC.Content value={x => x.pcrScopeChangeProjectSummaryChange.pcrItem.submitButton} />
+        </Form.Submit>
       </Form.Form>
     </ACC.Section>
   );

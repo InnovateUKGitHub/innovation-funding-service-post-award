@@ -11,13 +11,16 @@ interface InnerProps {
   pcrParticipantSize: Option<PCRParticipantSize>[];
 }
 
-const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & InnerProps) => {
+const InnerContainer = (
+  props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & InnerProps,
+) => {
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
   const sizeOptions: ACC.SelectOption[] = props.pcrParticipantSize
     .filter(x => x.active && x.value !== PCRParticipantSize.Academic)
     .map(x => ({ id: x.value.toString(), value: x.label }));
 
-  const selectedSizeOption = props.pcrItem.participantSize && sizeOptions.find(x => parseInt(x.id, 10) === props.pcrItem.participantSize);
+  const selectedSizeOption =
+    props.pcrItem.participantSize && sizeOptions.find(x => parseInt(x.id, 10) === props.pcrItem.participantSize);
 
   return (
     <ACC.Section title={x => x.pcrAddPartnerOrganisationDetails.sectionTitle}>
@@ -25,12 +28,14 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
         qa="addPartnerForm"
         data={props.pcrItem}
         isSaving={props.status === EditorStatus.Saving}
-        onSubmit={() => props.onSave()}
+        onSubmit={() => props.onSave(false)}
         onChange={dto => props.onChange(dto)}
       >
         <Form.Fieldset headingContent={x => x.pcrAddPartnerOrganisationDetails.labels.organisationSizeHeading}>
           <>
-            <SimpleString><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.guidance}/></SimpleString>
+            <SimpleString>
+              <ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.guidance} />
+            </SimpleString>
           </>
           <Form.Radio
             name="participantSize"
@@ -38,7 +43,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
             inline={false}
             value={() => selectedSizeOption || undefined}
             update={(x, option) => {
-              if (!option) return x.participantSize = PCRParticipantSize.Unknown;
+              if (!option) return (x.participantSize = PCRParticipantSize.Unknown);
               x.participantSize = parseInt(option.id, 10);
             }}
             validation={props.validator.participantSize}
@@ -49,28 +54,34 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
             name="numberOfEmployees"
             width={4}
             value={m => m.numberOfEmployees}
-            update={(m, val) => m.numberOfEmployees = val}
+            update={(m, val) => (m.numberOfEmployees = val)}
             validation={props.validator.numberOfEmployees}
           />
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
-          <Form.Submit><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.pcrItem.submitButton}/></Form.Submit>
-          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.pcrItem.returnToSummaryButton}/></Form.Button>
+          <Form.Submit>
+            <ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.pcrItem.submitButton} />
+          </Form.Submit>
+          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
+            <ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.pcrItem.returnToSummaryButton} />
+          </Form.Button>
         </Form.Fieldset>
       </Form.Form>
     </ACC.Section>
   );
 };
 
-export const OrganisationDetailsStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => (
+export const OrganisationDetailsStep = (
+  props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
+) => (
   <StoresConsumer>
-    {
-      stores => {
-        return <ACC.Loader
+    {stores => {
+      return (
+        <ACC.Loader
           pending={stores.projectChangeRequests.getPcrParticipantSizes()}
-          render={x => <InnerContainer pcrParticipantSize={x} {...props}/>}
-        />;
-      }
-    }
+          render={x => <InnerContainer pcrParticipantSize={x} {...props} />}
+        />
+      );
+    }}
   </StoresConsumer>
 );

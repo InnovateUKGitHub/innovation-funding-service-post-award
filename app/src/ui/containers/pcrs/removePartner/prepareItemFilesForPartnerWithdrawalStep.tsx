@@ -1,8 +1,8 @@
 import React from "react";
 
 import * as ACC from "@ui/components";
-import { IEditorStore, useStores } from "@ui/redux";
-import { MultipleDocumentUploadDtoValidator, PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
+import { useStores } from "@ui/redux";
+import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForPartnerWithdrawalDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -70,7 +70,7 @@ class Component extends React.Component<
           />
         </ACC.Section>
 
-        <Form.Form qa="saveAndContinue" data={this.props.pcrItem} onSubmit={() => this.props.onSave()}>
+        <Form.Form qa="saveAndContinue" data={this.props.pcrItem} onSubmit={() => this.props.onSave(false)}>
           <Form.Fieldset>
             <Form.Button name="default" styling="Primary">
               <ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.pcrItem.submitButton} />
@@ -112,7 +112,7 @@ export const PCRPrepareItemFilesForPartnerWithdrawalStep = (
               successMessage,
               () => {
                 if (saving === "SaveAndContinue") {
-                  props.onSave();
+                  props.onSave(false);
                 }
               },
             );

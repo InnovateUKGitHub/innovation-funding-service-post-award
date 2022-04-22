@@ -9,14 +9,16 @@ interface InnerProps {
   partners: PartnerDto[];
 }
 
-const InnerContainer = (props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRAccountNameChangeItemDtoValidator> & InnerProps) => {
+const InnerContainer = (
+  props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRAccountNameChangeItemDtoValidator> & InnerProps,
+) => {
   const Form = ACC.TypedForm<PCRItemForAccountNameChangeDto>();
-  const partnerOptions: ACC.SelectOption[] = props.partners.filter(x => !x.isWithdrawn).map(x => (
-    {
+  const partnerOptions: ACC.SelectOption[] = props.partners
+    .filter(x => !x.isWithdrawn)
+    .map(x => ({
       id: x.id,
-      value: ACC.getPartnerName(x)
-    }
-  ));
+      value: ACC.getPartnerName(x),
+    }));
   const selectedPartnerOption = partnerOptions.find(x => x.id === props.pcrItem.partnerId);
 
   return (
@@ -25,7 +27,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRA
         qa="changePartnerNameForm"
         data={props.pcrItem}
         isSaving={props.status === EditorStatus.Saving}
-        onSubmit={() => props.onSave()}
+        onSubmit={() => props.onSave(false)}
         onChange={dto => props.onChange(dto)}
       >
         <Form.Fieldset headingContent={x => x.pcrNameChange.selectPartnerHeading}>
@@ -35,7 +37,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRA
             options={partnerOptions}
             inline={false}
             value={() => selectedPartnerOption}
-            update={(x, value) => x.partnerId = value && value.id}
+            update={(x, value) => (x.partnerId = value && value.id)}
             validation={props.validator.partnerId}
           />
         </Form.Fieldset>
@@ -46,25 +48,29 @@ const InnerContainer = (props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRA
             labelHidden
             name="accountName"
             value={x => x.accountName}
-            update={(x, value) => x.accountName = value}
+            update={(x, value) => (x.accountName = value)}
             validation={props.validator.accountName}
           />
         </Form.Fieldset>
-        <Form.Submit><ACC.Content value={x => x.pcrNameChange.pcrItem.submitButton}/></Form.Submit>
+        <Form.Submit>
+          <ACC.Content value={x => x.pcrNameChange.pcrItem.submitButton} />
+        </Form.Submit>
       </Form.Form>
     </ACC.Section>
   );
 };
 
-export const NameChangeStep = (props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRAccountNameChangeItemDtoValidator>) => (
+export const NameChangeStep = (
+  props: PcrStepProps<PCRItemForAccountNameChangeDto, PCRAccountNameChangeItemDtoValidator>,
+) => (
   <StoresConsumer>
-    {
-      stores => {
-        return <ACC.Loader
+    {stores => {
+      return (
+        <ACC.Loader
           pending={stores.partners.getPartnersForProject(props.project.id)}
-          render={x => <InnerContainer partners={x} {...props}/>}
-        />;
-      }
-    }
+          render={x => <InnerContainer partners={x} {...props} />}
+        />
+      );
+    }}
   </StoresConsumer>
 );

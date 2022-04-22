@@ -4,7 +4,9 @@ import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { EditorStatus } from "@ui/constants/enums";
 
-export const FinanceDetailsStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => {
+export const FinanceDetailsStep = (
+  props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
+) => {
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
   return (
     <ACC.Section title={x => x.pcrAddPartnerFinanceDetails.sectionTitle}>
@@ -12,10 +14,13 @@ export const FinanceDetailsStep = (props: PcrStepProps<PCRItemForPartnerAddition
         qa="addPartnerForm"
         data={props.pcrItem}
         isSaving={props.status === EditorStatus.Saving}
-        onSubmit={() => props.onSave()}
+        onSubmit={() => props.onSave(false)}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset headingContent={x => x.pcrAddPartnerFinanceDetails.labels.financialYearEndHeading} qa="endOfFinancialYear">
+        <Form.Fieldset
+          headingContent={x => x.pcrAddPartnerFinanceDetails.labels.financialYearEndHeading}
+          qa="endOfFinancialYear"
+        >
           <Form.MonthYear
             name="financialYearEndDate"
             hintContent={x => x.pcrAddPartnerFinanceDetails.yearEndHint}
@@ -39,8 +44,12 @@ export const FinanceDetailsStep = (props: PcrStepProps<PCRItemForPartnerAddition
           />
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
-          <Form.Submit><ACC.Content value={x => x.pcrAddPartnerFinanceDetails.pcrItem.submitButton}/></Form.Submit>
-          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerFinanceDetails.pcrItem.returnToSummaryButton}/></Form.Button>
+          <Form.Submit>
+            <ACC.Content value={x => x.pcrAddPartnerFinanceDetails.pcrItem.submitButton} />
+          </Form.Submit>
+          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
+            <ACC.Content value={x => x.pcrAddPartnerFinanceDetails.pcrItem.returnToSummaryButton} />
+          </Form.Button>
         </Form.Fieldset>
       </Form.Form>
     </ACC.Section>

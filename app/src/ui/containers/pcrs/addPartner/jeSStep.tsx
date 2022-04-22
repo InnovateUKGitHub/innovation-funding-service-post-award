@@ -110,7 +110,7 @@ export function JesStepUI({ documents, documentsEditor, ...props }: JesStepUIPro
         />
       </ACC.Section>
 
-      <Form.Form qa="saveAndContinue" data={props.pcrItem} onSubmit={() => props.onSave()}>
+      <Form.Form qa="saveAndContinue" data={props.pcrItem} onSubmit={() => props.onSave(false)}>
         <Form.Fieldset>
           <Form.Submit>{submitButton}</Form.Submit>
 
@@ -145,7 +145,7 @@ export const JeSStep = (props: BasePcrProps) => {
               undefined,
               () => {
                 {
-                  props.onSave();
+                  props.onSave(false);
                 }
               },
             );

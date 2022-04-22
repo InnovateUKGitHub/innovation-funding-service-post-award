@@ -5,20 +5,27 @@ import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { PCRContactRole } from "@framework/constants";
 import { EditorStatus } from "@ui/constants/enums";
 
-export const FinanceContactStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => {
+export const FinanceContactStep = (
+  props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
+) => {
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
   return (
     <ACC.Section title={x => x.pcrAddPartnerProjectContacts.sectionTitle}>
-      <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerProjectContacts.guidance}/></ACC.Renderers.SimpleString>
+      <ACC.Renderers.SimpleString>
+        <ACC.Content value={x => x.pcrAddPartnerProjectContacts.guidance} />
+      </ACC.Renderers.SimpleString>
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
         isSaving={props.status === EditorStatus.Saving}
-        onSubmit={() => props.onSave()}
+        onSubmit={() => props.onSave(false)}
         onChange={dto => props.onChange(dto)}
       >
         <Form.Fieldset headingContent={x => x.pcrAddPartnerProjectContacts.labels.financeContactHeading}>
-          <Form.Hidden name="contact1ProjectRole" value={x => x.contact1ProjectRole = PCRContactRole.FinanceContact}/>
+          <Form.Hidden
+            name="contact1ProjectRole"
+            value={x => (x.contact1ProjectRole = PCRContactRole.FinanceContact)}
+          />
           <Form.String
             labelContent={x => x.pcrAddPartnerProjectContacts.labels.contactFirstNameHeading}
             name="contact1Forename"
@@ -58,8 +65,12 @@ export const FinanceContactStep = (props: PcrStepProps<PCRItemForPartnerAddition
           />
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
-          <Form.Submit><ACC.Content value={x => x.pcrAddPartnerProjectContacts.pcrItem.submitButton}/></Form.Submit>
-          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerProjectContacts.pcrItem.returnToSummaryButton}/></Form.Button>
+          <Form.Submit>
+            <ACC.Content value={x => x.pcrAddPartnerProjectContacts.pcrItem.submitButton} />
+          </Form.Submit>
+          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
+            <ACC.Content value={x => x.pcrAddPartnerProjectContacts.pcrItem.returnToSummaryButton} />
+          </Form.Button>
         </Form.Fieldset>
       </Form.Form>
     </ACC.Section>

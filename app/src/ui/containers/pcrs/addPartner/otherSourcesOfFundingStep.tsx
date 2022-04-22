@@ -121,7 +121,7 @@ function OtherSourcesOfFunding({
     <ACC.Section title={x => x.pcrAddPartnerOtherFundingSources.formSectionTitle}>
       <ACC.Content value={x => x.pcrAddPartnerOtherFundingSources.guidance} />
 
-      <Form.Form qa="addPartnerForm" data={{}} isSaving={status === EditorStatus.Saving} onSubmit={() => onSave()}>
+      <Form.Form qa="addPartnerForm" data={{}} isSaving={status === EditorStatus.Saving} onSubmit={() => onSave(false)}>
         <Form.Fieldset>
           <Form.Hidden value={() => funds.length} name={"itemsLength"} />
 

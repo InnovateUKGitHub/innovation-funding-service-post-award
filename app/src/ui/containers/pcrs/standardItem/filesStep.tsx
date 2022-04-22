@@ -114,7 +114,7 @@ export const FilesStep = (props: PcrStepProps<PCRStandardItemDto, PCRStandardIte
               successMessage,
               () => {
                 if (saving === "SaveAndContinue") {
-                  props.onSave();
+                  props.onSave(false);
                 }
               },
             );
