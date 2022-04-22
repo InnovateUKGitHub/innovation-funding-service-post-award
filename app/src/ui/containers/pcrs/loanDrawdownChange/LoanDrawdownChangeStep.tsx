@@ -36,7 +36,7 @@ function LoanDrawdownChange({ onChange, ...props }: LoanDrawnDownUi) {
   const handleSubmit = (): void => {
     onChange(true, payload.data);
 
-    props.onSave();
+    props.onSave(false);
   };
 
   const LoanUpdateForm = ACC.TypedForm<typeof payload.data.loans>();

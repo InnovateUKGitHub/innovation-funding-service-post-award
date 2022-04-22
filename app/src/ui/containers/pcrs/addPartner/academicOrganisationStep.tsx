@@ -84,7 +84,7 @@ export const AcademicOrganisationStep = (
         qa="jes-accounts-form"
         data={props.pcrItem}
         isSaving={props.status === EditorStatus.Saving}
-        onSubmit={props.onSave}
+        onSubmit={() => props.onSave(false)}
         onChange={props.onChange}
       >
         <ACC.Loader

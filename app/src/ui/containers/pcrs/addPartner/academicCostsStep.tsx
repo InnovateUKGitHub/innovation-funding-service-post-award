@@ -23,17 +23,22 @@ interface Data {
   costDto: PCRSpendProfileAcademicCostDto;
 }
 
-class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & ContainerProps, Data> {
+class Component extends React.Component<
+  PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & ContainerProps,
+  Data
+> {
   render() {
-    const {costCategories} = this.props;
+    const { costCategories } = this.props;
     const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
     return (
       <ACC.Section title={x => x.pcrAddPartnerAcademicCosts.labels.projectCostsHeading}>
-        <ACC.Renderers.SimpleString><ACC.Content value={x => x.pcrAddPartnerAcademicCosts.stepGuidance}/></ACC.Renderers.SimpleString>
+        <ACC.Renderers.SimpleString>
+          <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.stepGuidance} />
+        </ACC.Renderers.SimpleString>
         <Form.Form
           data={this.props.pcrItem}
           isSaving={this.props.status === EditorStatus.Saving}
-          onSubmit={() => this.props.onSave()}
+          onSubmit={() => this.props.onSave(false)}
           onChange={dto => this.props.onChange(dto)}
           qa="academic-costs-form"
         >
@@ -53,7 +58,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
           width={"one-third"}
           name="tsbReference"
           value={dto => dto.tsbReference}
-          update={(x, val) => x.tsbReference = val}
+          update={(x, val) => (x.tsbReference = val)}
           validation={this.props.validator.tsbReference}
         />
       </form.Fieldset>
@@ -61,13 +66,16 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
   }
 
   private renderCosts(form: FormBuilder<PCRItemForPartnerAdditionDto>, costCategories: CostCategoryDto[]) {
-    const data = costCategories.map(
-      costCategory => {
+    const data = costCategories
+      .map(costCategory => {
         return {
           costCategory,
-          costDto: this.props.pcrItem.spendProfile.costs.find(x => x.costCategoryId === costCategory.id) as PCRSpendProfileAcademicCostDto
+          costDto: this.props.pcrItem.spendProfile.costs.find(
+            x => x.costCategoryId === costCategory.id,
+          ) as PCRSpendProfileAcademicCostDto,
         };
-      }).filter(x => !!x);
+      })
+      .filter(x => !!x);
     const total = sum(data, x => x.costDto.value || 0);
 
     const Table = ACC.TypedTable<Data>();
@@ -112,10 +120,10 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     return (
       <form.Fieldset qa="save-and-continue">
         <form.Submit>
-          <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.pcrItem.submitButton}/>
+          <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.pcrItem.submitButton} />
         </form.Submit>
         <form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}>
-          <Content value={x => x.pcrAddPartnerAcademicCosts.pcrItem.returnToSummaryButton}/>
+          <Content value={x => x.pcrAddPartnerAcademicCosts.pcrItem.returnToSummaryButton} />
         </form.Button>
       </form.Fieldset>
     );
@@ -125,7 +133,7 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
     const error = this.getCostValidationResult(item);
     return (
       <span>
-        <ACC.ValidationError error={error}/>
+        <ACC.ValidationError error={error} />
         <ACC.Inputs.NumberInput
           name={`value_${item.costCategory.id}`}
           value={item.costDto.value}
@@ -142,44 +150,43 @@ class Component extends React.Component<PcrStepProps<PCRItemForPartnerAdditionDt
   }
 
   private getCostValidationResult(item: Data) {
-    const validator = this.props.validator.spendProfile.results[0].costs.results.find(x =>
-      x.model.costCategoryId === item.costCategory.id) as PCRAcademicCostDtoValidator;
+    const validator = this.props.validator.spendProfile.results[0].costs.results.find(
+      x => x.model.costCategoryId === item.costCategory.id,
+    ) as PCRAcademicCostDtoValidator;
 
     return validator && validator.value;
   }
 }
 
-export const AcademicCostsStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => (
+export const AcademicCostsStep = (
+  props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
+) => (
   <StoresConsumer>
-    {
-      stores => {
-        // Get list of academic cost categories, and add a cost item for each one (if not already there).
-        const costCategories = stores.costCategories.getAllUnfiltered().then(allCostCategories => {
-          const academicCostCategories = allCostCategories.filter(costCategory =>
-            costCategory.organisationType === PCROrganisationType.Academic
-            && costCategory.competitionType === props.project.competitionType);
+    {stores => {
+      // Get list of academic cost categories, and add a cost item for each one (if not already there).
+      const costCategories = stores.costCategories.getAllUnfiltered().then(allCostCategories => {
+        const academicCostCategories = allCostCategories.filter(
+          costCategory =>
+            costCategory.organisationType === PCROrganisationType.Academic &&
+            costCategory.competitionType === props.project.competitionType,
+        );
 
-          academicCostCategories.forEach(costCategory => {
-              if (props.pcrItem.spendProfile.costs.every(x => x.costCategoryId !== costCategory.id)) {
-                const cost: PCRSpendProfileAcademicCostDto = {
-                  id: "",
-                  costCategoryId: costCategory.id,
-                  costCategory: CostCategoryType.Academic,
-                  description: costCategory.name,
-                  value: 0
-                };
-                props.pcrItem.spendProfile.costs.push(cost);
-              }
-            }
-          );
-          return academicCostCategories;
+        academicCostCategories.forEach(costCategory => {
+          if (props.pcrItem.spendProfile.costs.every(x => x.costCategoryId !== costCategory.id)) {
+            const cost: PCRSpendProfileAcademicCostDto = {
+              id: "",
+              costCategoryId: costCategory.id,
+              costCategory: CostCategoryType.Academic,
+              description: costCategory.name,
+              value: 0,
+            };
+            props.pcrItem.spendProfile.costs.push(cost);
+          }
         });
+        return academicCostCategories;
+      });
 
-        return <ACC.Loader
-          pending={Pending.combine({costCategories})}
-          render={x => <Component {...x} {...props} />}
-        />;
-      }
-    }
+      return <ACC.Loader pending={Pending.combine({ costCategories })} render={x => <Component {...x} {...props} />} />;
+    }}
   </StoresConsumer>
 );

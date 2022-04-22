@@ -108,7 +108,7 @@ const DeMinimisStepUi = ({
           />
         </ACC.Section>
       </ACC.Section>
-      <Form.Form qa="saveAndContinue" data={pcrItem} onSubmit={() => onSave()}>
+      <Form.Form qa="saveAndContinue" data={pcrItem} onSubmit={() => onSave(false)}>
         <Form.Fieldset>
           <Form.Submit>
             <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.pcrItem.submitButton} />
@@ -145,7 +145,7 @@ export const DeMinimisStep = (
               undefined,
               () => {
                 {
-                  props.onSave();
+                  props.onSave(false);
                 }
               },
             );

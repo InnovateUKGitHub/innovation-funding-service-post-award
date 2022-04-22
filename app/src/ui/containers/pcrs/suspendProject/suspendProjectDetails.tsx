@@ -32,7 +32,7 @@ export function SuspendProjectDetails(
           data={props.pcrItem}
           isSaving={props.status === EditorStatus.Saving}
           onChange={dto => props.onChange(dto)}
-          onSubmit={() => props.onSave()}
+          onSubmit={() => props.onSave(false)}
           qa="projectSuspension"
         >
           <Form.Fieldset heading={firstDayOfPauseTitle}>

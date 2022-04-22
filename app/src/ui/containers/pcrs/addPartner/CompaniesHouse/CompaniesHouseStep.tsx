@@ -72,7 +72,7 @@ export function CompaniesHouseStep({ pcrItem: originalPayload, ...props }: Compa
         qa="company-details-form"
         data={formData}
         isSaving={props.status === EditorStatus.Saving}
-        onSubmit={props.onSave}
+        onSubmit={() => props.onSave(false)}
         onChange={props.onChange}
       >
         <ACC.Loader

@@ -5,7 +5,9 @@ import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { Content } from "@ui/components";
 import { EditorStatus } from "@ui/constants/enums";
 
-export const AwardRateStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => {
+export const AwardRateStep = (
+  props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
+) => {
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
 
   return (
@@ -15,7 +17,7 @@ export const AwardRateStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, 
         qa="addPartnerForm"
         data={props.pcrItem}
         isSaving={props.status === EditorStatus.Saving}
-        onSubmit={() => props.onSave()}
+        onSubmit={() => props.onSave(false)}
         onChange={dto => props.onChange(dto)}
       >
         <Form.Fieldset>
@@ -31,7 +33,7 @@ export const AwardRateStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, 
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
           <Form.Submit>
-            <ACC.Content value={x => x.pcrAddPartnerAwardRate.pcrItem.submitButton}/>
+            <ACC.Content value={x => x.pcrAddPartnerAwardRate.pcrItem.submitButton} />
           </Form.Submit>
           <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
             <Content value={x => x.pcrAddPartnerAwardRate.pcrItem.returnToSummaryButton} />

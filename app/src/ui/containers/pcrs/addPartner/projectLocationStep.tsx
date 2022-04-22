@@ -10,13 +10,17 @@ interface InnerProps {
   pcrProjectLocation: Option<PCRProjectLocation>[];
 }
 
-const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & InnerProps) => {
+const InnerContainer = (
+  props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & InnerProps,
+) => {
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
   const projectLocationOptions: ACC.SelectOption[] = props.pcrProjectLocation
     .filter(x => x.active)
     .map(x => ({ id: x.value.toString(), value: x.label }));
 
-  const selectedProjectLocationOption = props.pcrItem.projectLocation && projectLocationOptions.find(x => parseInt(x.id, 10) === props.pcrItem.projectLocation);
+  const selectedProjectLocationOption =
+    props.pcrItem.projectLocation &&
+    projectLocationOptions.find(x => parseInt(x.id, 10) === props.pcrItem.projectLocation);
 
   return (
     <ACC.Section title={x => x.pcrAddPartnerProjectLocationContent.labels.projectLocationHeading}>
@@ -24,7 +28,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
         qa="addPartnerForm"
         data={props.pcrItem}
         isSaving={props.status === EditorStatus.Saving}
-        onSubmit={() => props.onSave()}
+        onSubmit={() => props.onSave(false)}
         onChange={dto => props.onChange(dto)}
       >
         <Form.Fieldset>
@@ -35,7 +39,7 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
             inline={false}
             value={() => selectedProjectLocationOption || undefined}
             update={(x, option) => {
-              if (!option) return x.projectLocation = PCRProjectLocation.Unknown;
+              if (!option) return (x.projectLocation = PCRProjectLocation.Unknown);
               x.projectLocation = parseInt(option.id, 10);
             }}
             validation={props.validator.projectLocation}
@@ -63,23 +67,29 @@ const InnerContainer = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPar
           />
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
-          <Form.Submit><ACC.Content value={x => x.pcrAddPartnerProjectLocationContent.pcrItem.submitButton} /></Form.Submit>
-          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}><ACC.Content value={x => x.pcrAddPartnerProjectLocationContent.pcrItem.returnToSummaryButton} /></Form.Button>
+          <Form.Submit>
+            <ACC.Content value={x => x.pcrAddPartnerProjectLocationContent.pcrItem.submitButton} />
+          </Form.Submit>
+          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
+            <ACC.Content value={x => x.pcrAddPartnerProjectLocationContent.pcrItem.returnToSummaryButton} />
+          </Form.Button>
         </Form.Fieldset>
       </Form.Form>
     </ACC.Section>
   );
 };
 
-export const ProjectLocationStep = (props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => (
+export const ProjectLocationStep = (
+  props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
+) => (
   <StoresConsumer>
-    {
-      stores => {
-        return <ACC.Loader
+    {stores => {
+      return (
+        <ACC.Loader
           pending={stores.projectChangeRequests.getPcrProjectLocations()}
-          render={x => <InnerContainer pcrProjectLocation={x} {...props}/>}
-        />;
-      }
-    }
+          render={x => <InnerContainer pcrProjectLocation={x} {...props} />}
+        />
+      );
+    }}
   </StoresConsumer>
 );

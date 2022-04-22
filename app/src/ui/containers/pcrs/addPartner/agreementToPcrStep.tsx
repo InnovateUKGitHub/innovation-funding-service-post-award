@@ -1,7 +1,7 @@
 import React from "react";
 import * as ACC from "@ui/components";
-import { IEditorStore, StoresConsumer, useStores } from "@ui/redux";
-import { MultipleDocumentUploadDtoValidator, PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
+import { useStores } from "@ui/redux";
+import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -78,7 +78,7 @@ class Component extends React.Component<
           />
         </ACC.Section>
 
-        <Form.Form qa="saveAndContinue" data={pcrItem} onSubmit={() => onSave()}>
+        <Form.Form qa="saveAndContinue" data={pcrItem} onSubmit={() => onSave(false)}>
           <Form.Fieldset>
             <Form.Submit>
               <ACC.Content value={x => x.pcrAddPartnerAgreementToPcr.pcrItem.submitButton} />
@@ -116,7 +116,7 @@ export const AgreementToPCRStep = (
               undefined,
               () => {
                 {
-                  props.onSave();
+                  props.onSave(false);
                 }
               },
             );
