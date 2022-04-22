@@ -31,7 +31,7 @@ export interface PcrStepProps<TDto, TVal> extends IStepProps {
   validator: TVal;
   status: EditorStatus;
   onChange: (dto: TDto) => void;
-  onSave: (skipToSummary?: boolean) => void;
+  onSave: (skipToSummary: boolean) => void;
   getRequiredToCompleteMessage: (additionalMessage?: string) => React.ReactNode;
   routes: IRoutes;
   mode: "prepare" | "review" | "view";
@@ -50,9 +50,19 @@ export interface PcrSummaryProps<TDto, TVal, TStepNames> extends ISummaryProps, 
   getViewLink: (stepName: TStepNames) => React.ReactNode;
 }
 
-export type IPCRWorkflow<T, TVal extends Results<{}>> = IWorkflow<string, PcrStepProps<T, TVal>, PcrSummaryProps<T, TVal, string>, PCRWorkflowValidator>;
+export type IPCRWorkflow<T, TVal extends Results<{}>> = IWorkflow<
+  string,
+  PcrStepProps<T, TVal>,
+  PcrSummaryProps<T, TVal, string>,
+  PCRWorkflowValidator
+>;
 
-export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<string, PcrStepProps<T, TVal>, PcrSummaryProps<T, TVal, string>, PCRWorkflowValidator> {
+export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<
+  string,
+  PcrStepProps<T, TVal>,
+  PcrSummaryProps<T, TVal, string>,
+  PCRWorkflowValidator
+> {
   public constructor(definition: IPCRWorkflow<T, TVal>, stepNumber: number | undefined) {
     super(definition, stepNumber);
   }
@@ -86,7 +96,10 @@ export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<string
     }
   }
 
-  public static getWorkflow(pcrItem: PCRItemDto | undefined, step: number | undefined): PcrWorkflow<PCRItemDto, Results<PCRItemDto>> | null {
+  public static getWorkflow(
+    pcrItem: PCRItemDto | undefined,
+    step: number | undefined,
+  ): PcrWorkflow<PCRItemDto, Results<PCRItemDto>> | null {
     if (!pcrItem) {
       return null;
     }

@@ -34,6 +34,9 @@
           "virements": "Virements are subject to approval by the Local Management Committee (LMC).",
           "requests": "Requests for virements must be submitted online using the Innovation Funding Service and must be approved before the related costs are incurred. These requests must not be submitted after the project partnership has ended."
         }
+      },
+      "pcr-add-partner-state-aid-eligibility": {
+        "guidance-non-aid-funding": "This screen is not relevant to KTPs. Click save and continue."
       }
     }
   },
