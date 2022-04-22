@@ -11,7 +11,7 @@ type BaseProps = PcrSummaryProps<
   LoanExtensionStepNames
 >;
 
-export const loanDrawdownExtensionStepSummary = ({ routes, config, ...props }: BaseProps) => {
+export const loanDrawdownExtensionStepSummary = (props: BaseProps) => {
   // TODO: Check interface, this should always be a Date or throw error in server
   if (!props.pcrItem.projectStartDate) {
     throw Error("Missing start date");

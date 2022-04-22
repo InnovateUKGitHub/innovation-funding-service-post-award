@@ -12,7 +12,6 @@ import { CreateProjectChangeRequestCommand } from "@server/features/pcrs/createP
 import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus, PCRStatus, ProjectRole } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { configuration } from "@server/features/common";
 
 export class ProjectChangeRequestCreateFormHandler extends StandardFormHandlerBase<CreatePcrParams, "pcr"> {
   constructor() {

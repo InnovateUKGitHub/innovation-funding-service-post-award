@@ -715,7 +715,7 @@ class ProjectChangeRequestStatusChangeTestRepository extends TestRepository<Enti
 }
 
 class FinancialLoanVirementsTestRepository extends TestRepository<Entities.LoanFinancialVirement> implements Repositories.IFinancialLoanVirementRepository {
-  async getForPcr(pcrItemId: string): Promise<Entities.LoanFinancialVirement[]> {
+  async getForPcr(): Promise<Entities.LoanFinancialVirement[]> {
     return await Promise.resolve(this.Items);
   }
 
@@ -763,7 +763,7 @@ class FinancialVirementsTestRepository extends TestRepository<Entities.PartnerFi
 class LoansTestRepository {
   private Items: Repositories.ISalesforceLoan[] = [];
 
-  getAll(projectId: string) {
+  getAll() {
     const loans = this.Items.map(x => new LoanMapper().map(x));
     return Promise.resolve(loans);
   }
