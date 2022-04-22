@@ -93,11 +93,11 @@ function ProjectDashboard({
             })
           }
         >
-          <Form.Fieldset heading={<ACC.Content value={x => x.projectsDashboard.searchTitle} />}>
+          <Form.Fieldset heading={x => x.projectsDashboard.searchTitle}>
             <Form.Search
               width="one-half"
-              hint={<ACC.Content value={x => x.projectsDashboard.searchHint} />}
-              label={<ACC.Content value={x => x.projectsDashboard.searchLabel} />}
+              hint={x => x.projectsDashboard.searchHint}
+              label={x => x.projectsDashboard.searchLabel}
               labelHidden={true}
               name="search"
               value={x => x.searchValue}
@@ -118,6 +118,16 @@ function ProjectDashboard({
               }}
             />
           </Form.Fieldset>
+
+          <>
+            <p>visible</p>
+          </>
+
+          {false && (
+            <>
+              <p>hidden</p>
+            </>
+          )}
 
           {isServer && <Form.Submit>Search projects</Form.Submit>}
         </Form.Form>

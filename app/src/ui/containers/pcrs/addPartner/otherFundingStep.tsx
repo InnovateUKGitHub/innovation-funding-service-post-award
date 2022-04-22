@@ -34,7 +34,7 @@ export const OtherFundingStep = (
         <Form.Fieldset>
           <Form.Radio
             name="hasOtherFunding"
-            labelContent={x => x.pcrAddPartnerOtherFunding.questionLabel}
+            label={x => x.pcrAddPartnerOtherFunding.questionLabel}
             labelHidden
             options={options}
             inline={false}

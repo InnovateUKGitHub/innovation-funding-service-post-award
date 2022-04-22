@@ -102,7 +102,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
               <UploadForm.Hidden name="description" value={dto => dto.description} />
 
               <UploadForm.MultipleFileUpload
-                labelContent={x => x.claimDetailDocuments.documentMessages.uploadDocumentsLabel}
+                label={x => x.claimDetailDocuments.documentMessages.uploadDocumentsLabel}
                 labelHidden
                 name="attachment"
                 validation={editor.validator.files}

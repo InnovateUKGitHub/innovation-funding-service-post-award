@@ -39,7 +39,6 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
   ) {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
     const readyToSubmitMessage = <ACC.Content value={x => x.projectSetupSpendProfile.readyToSubmitMessage} />;
-    const markAsComplete = <ACC.Content value={x => x.projectSetupSpendProfile.markAsComplete} />;
 
     const options: ACC.SelectOption[] = [{ id: "true", value: readyToSubmitMessage }];
 
@@ -77,7 +76,7 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
             qa="project-setup-spend-profile-form"
           >
             <ACC.Claims.ForecastTable data={combined} editor={editor} />
-            <Form.Fieldset heading={markAsComplete}>
+            <Form.Fieldset heading={x => x.projectSetupSpendProfile.markAsComplete}>
               <Form.Checkboxes
                 name="isComplete"
                 options={options}

@@ -130,7 +130,7 @@ function SpendProfileCostForm({
             </ACC.Section>
 
             <HiddenForm.Numeric
-              labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.overheads.calculatedCost}
+              label={x => x.pcrSpendProfilePrepareCostContent.labels.overheads.calculatedCost}
               width="one-quarter"
               name="value"
               value={dto => dto.value}
@@ -142,7 +142,7 @@ function SpendProfileCostForm({
 
         {isClient && (
           <Form.Custom
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.overheads.totalCost}
+            label={x => x.pcrSpendProfilePrepareCostContent.labels.overheads.totalCost}
             labelBold
             name="totalCost"
             value={dto => (

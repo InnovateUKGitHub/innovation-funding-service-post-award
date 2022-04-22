@@ -17,7 +17,7 @@ import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { range } from "@shared/range";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { Content } from "@content/content";
+import { Content, ContentSelector } from "@content/content";
 import { diffAsPercentage, sum } from "@framework/util/numberHelper";
 import { EditorStatus } from "@ui/constants/enums";
 import { MountedHoc, useMounted } from "@ui/features";
@@ -318,14 +318,14 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
           <LineItemForm.Fieldset>{this.renderDocuments(documents, isCombinationOfSBRI, editor)}</LineItemForm.Fieldset>
 
           <LineItemForm.Fieldset
-            headingContent={x => x.editClaimLineItems.additionalInformationHeading}
+            heading={x => x.editClaimLineItems.additionalInformationHeading}
             qa="additional-info-form"
             headingQa="additional-info-heading"
             className="govuk-!-margin-top-8"
           >
             <LineItemForm.MultilineString
-              label={<ACC.Content value={x => x.editClaimLineItems.additionalInfo} />}
-              hintContent={this.getHintContent(isKTP, isCombinationOfSBRI)}
+              label={x => x.editClaimLineItems.additionalInfo}
+              hint={this.getHintContent(isKTP, isCombinationOfSBRI)}
               labelHidden
               name="comments"
               value={() => editor.data.comments}
@@ -352,14 +352,14 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
           <LineItemForm.Fieldset>{this.renderDocuments(documents, isCombinationOfSBRI, editor)}</LineItemForm.Fieldset>
 
           <LineItemForm.Fieldset
-            headingContent={x => x.editClaimLineItems.additionalInformationHeading}
+            heading={x => x.editClaimLineItems.additionalInformationHeading}
             qa="additional-info-form"
             headingQa="additional-info-heading"
             className="govuk-!-margin-top-8"
           >
             <LineItemForm.MultilineString
-              label={<ACC.Content value={x => x.editClaimLineItems.additionalInfo} />}
-              hintContent={this.getHintContent(isKTP, isCombinationOfSBRI)}
+              label={x => x.editClaimLineItems.additionalInfo}
+              hint={this.getHintContent(isKTP, isCombinationOfSBRI)}
               labelHidden
               name="comments"
               value={() => editor.data.comments}
@@ -372,7 +372,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     );
   }
 
-  private getHintContent(isKTP: boolean, isCombinationOfSBRI: boolean) {
+  private getHintContent(isKTP: boolean, isCombinationOfSBRI: boolean): ContentSelector | undefined {
     if (!isKTP && !isCombinationOfSBRI) {
       return (x: Content) => x.editClaimLineItems.additionalInformationHint;
     } else if (isCombinationOfSBRI) {

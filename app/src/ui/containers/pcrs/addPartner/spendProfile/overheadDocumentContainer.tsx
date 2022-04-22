@@ -108,7 +108,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
           qa="projectChangeRequestItemUpload"
         >
           <UploadForm.Fieldset
-            headingContent={x => x.pcrSpendProfileOverheadDocumentContent.templateHeading}
+            heading={x => x.pcrSpendProfileOverheadDocumentContent.templateHeading}
             qa="template"
           >
             {this.renderTemplateLink()}
@@ -116,12 +116,12 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
 
           <UploadForm.Fieldset
             qa="documentUpload"
-            headingContent={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadHeading}
+            heading={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadHeading}
           >
             <UploadForm.Hidden name="description" value={() => DocumentDescription.OverheadCalculationSpreadsheet} />
             <ACC.DocumentGuidance />
             <UploadForm.MultipleFileUpload
-              labelContent={x => x.pcrSpendProfileOverheadDocumentContent.labels.uploadInputLabel}
+              label={x => x.pcrSpendProfileOverheadDocumentContent.labels.uploadInputLabel}
               name="attachment"
               labelHidden
               value={data => data.files}

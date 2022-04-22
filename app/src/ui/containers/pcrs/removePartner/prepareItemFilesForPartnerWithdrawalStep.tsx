@@ -33,7 +33,7 @@ class Component extends React.Component<
             onChange={dto => this.props.onFileChange("DontSave", dto)}
             qa="projectChangeRequestItemUpload"
           >
-            <UploadForm.Fieldset headingContent={x => x.pcrRemovePartnerPrepareItemFiles.guidanceHeading}>
+            <UploadForm.Fieldset heading={x => x.pcrRemovePartnerPrepareItemFiles.guidanceHeading}>
               <ACC.Renderers.SimpleString>
                 <ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.guidance} />
               </ACC.Renderers.SimpleString>

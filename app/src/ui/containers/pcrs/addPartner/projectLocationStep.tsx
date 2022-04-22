@@ -34,7 +34,7 @@ const InnerContainer = (
         <Form.Fieldset>
           <Form.Radio
             name="projectLocation"
-            hintContent={x => x.pcrAddPartnerProjectLocationContent.projectLocationGuidance}
+            hint={x => x.pcrAddPartnerProjectLocationContent.projectLocationGuidance}
             options={projectLocationOptions}
             inline={false}
             value={() => selectedProjectLocationOption || undefined}
@@ -45,7 +45,7 @@ const InnerContainer = (
             validation={props.validator.projectLocation}
           />
         </Form.Fieldset>
-        <Form.Fieldset headingContent={x => x.pcrAddPartnerProjectLocationContent.labels.townOrCityHeading}>
+        <Form.Fieldset heading={x => x.pcrAddPartnerProjectLocationContent.labels.townOrCityHeading}>
           <Form.String
             name="projectCity"
             value={dto => dto.projectCity}
@@ -55,10 +55,10 @@ const InnerContainer = (
             validation={props.validator.projectCity}
           />
         </Form.Fieldset>
-        <Form.Fieldset headingContent={x => x.pcrAddPartnerProjectLocationContent.labels.postcodeHeading}>
+        <Form.Fieldset heading={x => x.pcrAddPartnerProjectLocationContent.labels.postcodeHeading}>
           <Form.String
             name="projectPostcode"
-            hintContent={x => x.pcrAddPartnerProjectLocationContent.postcodeGuidance}
+            hint={x => x.pcrAddPartnerProjectLocationContent.postcodeGuidance}
             value={dto => dto.projectPostcode}
             update={(x, val) => {
               x.projectPostcode = val;

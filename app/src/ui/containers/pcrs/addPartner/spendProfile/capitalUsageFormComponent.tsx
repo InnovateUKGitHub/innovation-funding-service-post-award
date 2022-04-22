@@ -35,14 +35,14 @@ class Component extends React.Component<
             <Form.Fieldset qa="capital-usage-costs">
               <Form.Hidden name="id" value={dto => dto.id} />
               <Form.MultilineString
-                labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.capitalUsage.description}
+                label={x => x.pcrSpendProfilePrepareCostContent.labels.capitalUsage.description}
                 name="description"
                 value={dto => dto.description}
                 update={(x, val) => (x.description = val)}
                 validation={validator && validator.description}
               />
               <Form.Radio
-                labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.capitalUsage.type}
+                label={x => x.pcrSpendProfilePrepareCostContent.labels.capitalUsage.type}
                 name="type"
                 options={typeOptions.options}
                 inline={false}
@@ -54,7 +54,7 @@ class Component extends React.Component<
                 validation={this.props.validator.type}
               />
               <Form.Numeric
-                labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.capitalUsage.depreciationPeriod}
+                label={x => x.pcrSpendProfilePrepareCostContent.labels.capitalUsage.depreciationPeriod}
                 name="depreciationPeriod"
                 width={"one-third"}
                 value={dto => dto.depreciationPeriod}
@@ -62,8 +62,8 @@ class Component extends React.Component<
                 validation={validator && validator.depreciationPeriod}
               />
               <Form.Numeric
-                labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.capitalUsage.netPresentValue}
-                hintContent={x => x.pcrSpendProfilePrepareCostContent.labels.capitalUsage.netPresentValueHint}
+                label={x => x.pcrSpendProfilePrepareCostContent.labels.capitalUsage.netPresentValue}
+                hint={x => x.pcrSpendProfilePrepareCostContent.labels.capitalUsage.netPresentValueHint}
                 name="netPresentValue"
                 width={"one-third"}
                 value={dto => dto.netPresentValue}
@@ -71,7 +71,7 @@ class Component extends React.Component<
                 validation={validator && validator.netPresentValue}
               />
               <Form.Numeric
-                labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.capitalUsage.residualValue}
+                label={x => x.pcrSpendProfilePrepareCostContent.labels.capitalUsage.residualValue}
                 name="residualValue"
                 width={"one-third"}
                 value={dto => dto.residualValue}
@@ -79,7 +79,7 @@ class Component extends React.Component<
                 validation={validator && validator.residualValue}
               />
               <Form.Numeric
-                labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.capitalUsage.utilisation}
+                label={x => x.pcrSpendProfilePrepareCostContent.labels.capitalUsage.utilisation}
                 name="utilisation"
                 width={"one-third"}
                 value={dto => dto.utilisation}
@@ -88,7 +88,7 @@ class Component extends React.Component<
               />
               {isClient && (
                 <Form.Custom
-                  labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.capitalUsage.netCost}
+                  label={x => x.pcrSpendProfilePrepareCostContent.labels.capitalUsage.netCost}
                   labelBold
                   name="netCost"
                   value={dto => (

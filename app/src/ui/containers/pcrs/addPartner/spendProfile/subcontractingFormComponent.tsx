@@ -28,7 +28,7 @@ export class SubcontractingFormComponent extends Component<SpendProfileCostFormP
             value={dto => dto.id}
           />
           <Form.String
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.subcontracting.subcontractorName}
+            label={x => x.pcrSpendProfilePrepareCostContent.labels.subcontracting.subcontractorName}
             width={"one-half"}
             name="description"
             value={dto => dto.description}
@@ -36,7 +36,7 @@ export class SubcontractingFormComponent extends Component<SpendProfileCostFormP
             validation={validator && validator.description}
           />
           <Form.String
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.subcontracting.subcontractorCountry}
+            label={x => x.pcrSpendProfilePrepareCostContent.labels.subcontracting.subcontractorCountry}
             width={"one-half"}
             name="subcontractorCountry"
             value={dto => dto.subcontractorCountry}
@@ -44,14 +44,14 @@ export class SubcontractingFormComponent extends Component<SpendProfileCostFormP
             validation={validator && validator.subcontractorCountry}
           />
           <Form.MultilineString
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.subcontracting.subcontractorRoleAndDescription}
+            label={x => x.pcrSpendProfilePrepareCostContent.labels.subcontracting.subcontractorRoleAndDescription}
             name="subcontractorRoleAndDescription"
             value={dto => dto.subcontractorRoleAndDescription}
             update={(x, val) => x.subcontractorRoleAndDescription = val}
             validation={validator && validator.subcontractorRoleAndDescription}
           />
           <Form.Numeric
-              labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.subcontracting.cost}
+              label={x => x.pcrSpendProfilePrepareCostContent.labels.subcontracting.cost}
               name="value"
               width={"one-quarter"}
               value={dto => dto.value}

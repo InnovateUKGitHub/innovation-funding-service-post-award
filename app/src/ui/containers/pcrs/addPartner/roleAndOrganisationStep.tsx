@@ -46,11 +46,8 @@ class Component extends React.Component<
           onSubmit={() => this.onSave(this.props.pcrItem)}
           onChange={dto => this.onChange(dto)}
         >
-          <ACC.ValidationMessage
-            messageType="info"
-            message={x => x.pcrAddPartnerRoleAndOrganisation.validationMessage}
-          />
-          <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.roleHeading}>
+          <ACC.ValidationMessage messageType="info" message={x => x.pcrAddPartnerRoleAndOrganisation.validationMessage}/>
+          <Form.Fieldset heading={x => x.pcrAddPartnerRoleAndOrganisation.labels.roleHeading}>
             <Form.Radio
               name="projectRole"
               options={roleOptions.options}
@@ -63,11 +60,11 @@ class Component extends React.Component<
               validation={this.props.validator.projectRole}
             />
           </Form.Fieldset>
-          <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkHeading}>
+          <Form.Fieldset heading={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkHeading}>
             <Form.Radio
               name="isCommercialWork"
-              labelContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkLabel}
-              hintContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkHint}
+              label={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkLabel}
+              hint={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkHint}
               options={commercialWorkOptions}
               inline={false}
               value={dto => {
@@ -81,13 +78,13 @@ class Component extends React.Component<
               validation={this.props.validator.isCommercialWork}
             />
           </Form.Fieldset>
-          <Form.Fieldset headingContent={x => x.pcrAddPartnerRoleAndOrganisation.labels.organisationHeading}>
-            <ACC.Info summary={<ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.infoSummary} />}>
-              <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.organisationTypeInfo} />
+          <Form.Fieldset heading={x => x.pcrAddPartnerRoleAndOrganisation.labels.organisationHeading}>
+            <ACC.Info summary={<ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.infoSummary}/>}>
+              <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.organisationTypeInfo}/>
             </ACC.Info>
             <Form.Radio
               name="partnerType"
-              hintContent={x => x.pcrAddPartnerRoleAndOrganisation.organisationTypeHint}
+              hint={x => x.pcrAddPartnerRoleAndOrganisation.organisationTypeHint}
               options={typeOptions.options}
               inline={false}
               value={() => typeOptions.selected}

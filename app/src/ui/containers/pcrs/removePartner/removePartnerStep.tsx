@@ -30,7 +30,7 @@ const InnerContainer = (
         onSubmit={() => props.onSave(false)}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset headingContent={x => x.pcrRemovePartner.selectPartnerHeading}>
+        <Form.Fieldset heading={x => x.pcrRemovePartner.selectPartnerHeading}>
           <Form.Radio
             name="partnerId"
             hint={props.getRequiredToCompleteMessage()}
@@ -41,10 +41,10 @@ const InnerContainer = (
             validation={props.validator.partnerId}
           />
         </Form.Fieldset>
-        <Form.Fieldset headingContent={x => x.pcrRemovePartner.removalPeriodHeading}>
+        <Form.Fieldset heading={x => x.pcrRemovePartner.removalPeriodHeading}>
           <Form.Numeric
-            labelContent={x => x.pcrRemovePartner.labels.removalPeriod}
-            hintContent={x => x.pcrRemovePartner.removalPeriodHint}
+            label={x => x.pcrRemovePartner.labels.removalPeriod}
+            hint={x => x.pcrRemovePartner.removalPeriodHint}
             labelHidden
             width={3}
             name="removalPeriod"

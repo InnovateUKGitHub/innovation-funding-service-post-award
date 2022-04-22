@@ -52,9 +52,9 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
           onChange={(dto) => this.props.onChange(dto)}
           qa="monitoringReportCreateForm"
         >
-          <ReportForm.Fieldset qa="additional-comments-section" headingContent={x => x.monitoringReportsSummary.labels.additionalComments}>
+          <ReportForm.Fieldset qa="additional-comments-section" heading={x => x.monitoringReportsSummary.labels.additionalComments}>
             <ReportForm.MultilineString
-              hintContent={x => x.monitoringReportsSummary.messages.additionalCommentsGuidance}
+              hint={x => x.monitoringReportsSummary.messages.additionalCommentsGuidance}
               name="addComments"
               value={() => editor.data.addComments}
               update={(dto, v) => dto.addComments = v || ""}

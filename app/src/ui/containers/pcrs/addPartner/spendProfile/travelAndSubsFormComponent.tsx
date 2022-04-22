@@ -38,7 +38,7 @@ export function TravelAndSubsFormComponent({
         <Form.Hidden name="id" value={dto => dto.id} />
 
         <Form.String
-          labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.description}
+          label={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.description}
           width="one-half"
           name="description"
           value={dto => dto.description}
@@ -47,7 +47,7 @@ export function TravelAndSubsFormComponent({
         />
 
         <Form.Numeric
-          labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.numberOfTimes}
+          label={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.numberOfTimes}
           name="numberOfTimes"
           width="one-third"
           value={dto => dto.numberOfTimes}
@@ -56,7 +56,7 @@ export function TravelAndSubsFormComponent({
         />
 
         <Form.Numeric
-          labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.costOfEach}
+          label={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.costOfEach}
           name="costOfEach"
           width="one-third"
           value={dto => dto.costOfEach}
@@ -65,7 +65,7 @@ export function TravelAndSubsFormComponent({
         />
         {isClient && (
           <Form.Custom
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.totalCost}
+            label={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.totalCost}
             labelBold
             name="totalCost"
             value={dto => (

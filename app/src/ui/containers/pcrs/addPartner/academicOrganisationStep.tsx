@@ -54,7 +54,7 @@ export const AcademicOrganisationStep = (
         isSaving={props.status === EditorStatus.Saving}
         onSubmit={noop}
       >
-        <Form.Fieldset headingContent={x => x.pcrAddPartnerAcademicOrganisation.labels.jesOrganisationSectionTitle}>
+        <Form.Fieldset heading={x => x.pcrAddPartnerAcademicOrganisation.labels.jesOrganisationSectionTitle}>
           <Section>
             <ValidationMessage
               messageType="info"
@@ -65,9 +65,7 @@ export const AcademicOrganisationStep = (
           <Form.Search
             name="searchJesOrganisations"
             qa="input-search-jes-organisations"
-            hint={
-              <ACC.Content value={x => x.pcrAddPartnerAcademicOrganisation.labels.jesOrganisationSectionSubtitle} />
-            }
+            hint={x => x.pcrAddPartnerAcademicOrganisation.labels.jesOrganisationSectionSubtitle}
             value={() => searchInputValue}
             update={(_, searchValue) => setSearchInputValue(searchValue?.trim() || "")}
           />
