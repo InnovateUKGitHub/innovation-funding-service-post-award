@@ -9,7 +9,7 @@ import {
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
@@ -200,18 +200,18 @@ class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProf
   }
 }
 
-const SpendProfileCostsSummaryReviewContainer = (props: PcrSpendProfileCostSummaryParams & BaseProps) => (
-  <StoresConsumer>
-    {stores => (
-      <SpendProfileCostsSummaryReviewComponent
-        project={stores.projects.getById(props.projectId)}
-        costCategory={stores.costCategories.get(props.costCategoryId)}
-        pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
-        {...props}
-      />
-    )}
-  </StoresConsumer>
-);
+const SpendProfileCostsSummaryReviewContainer = (props: PcrSpendProfileCostSummaryParams & BaseProps) => {
+  const stores = useStores();
+
+  return (
+    <SpendProfileCostsSummaryReviewComponent
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      costCategory={stores.costCategories.get(props.costCategoryId)}
+      pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
+    />
+  );
+};
 
 export const PCRSpendProfileReviewCostsSummaryRoute = defineRoute<PcrSpendProfileCostSummaryParams>({
   routeName: "pcrSpendProfileReviewCostsSummary",

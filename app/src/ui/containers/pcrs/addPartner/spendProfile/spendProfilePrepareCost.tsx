@@ -11,7 +11,7 @@ import {
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore, IStores, StoresConsumer } from "@ui/redux";
+import { IEditorStore, IStores, useStores } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import {
   PCRSpendProfileCapitalUsageCostDto, PCRSpendProfileCostDto,
@@ -221,65 +221,72 @@ const onSave = (stores: IStores, dto: PCRDto, projectId: string, link: ILinkInfo
     stores.navigation.navigateTo(link));
 };
 
-const ContainerAdd = (props: PcrAddSpendProfileCostParams & BaseProps) => (
-  <StoresConsumer>
-    {stores => {
-      const costCategoryPending = stores.costCategories.get(props.costCategoryId);
-      const editorPending = costCategoryPending.chain(costCategory => stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId, (dto) => {
-        const addPartner = dto.items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
-        const costs = addPartner.spendProfile.costs;
-        const cost = stores.projectChangeRequests.getInitialSpendProfileCost(costCategory);
-        costs.push(cost);
-      }));
-      return (
-        <Component
-          project={stores.projects.getById(props.projectId)}
-          costCategory={costCategoryPending}
-          editor={editorPending}
-          cost={editorPending.then(editor => {
-            const addPartnerItem = editor.data.items.find(x => x.id === props.itemId && x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
-            const costs = addPartnerItem.spendProfile.costs.filter(x => x.costCategoryId === props.costCategoryId);
-            return costs.find(x => !x.id)!;
-          })}
-          validator={stores.projectChangeRequests.getNewSpendProfileCostValidator(editorPending, props.itemId, costCategoryPending)}
-          onSave={(dto, link) => onSave(stores, dto, props.projectId, link)}
-          onChange={(dto) => {
-            stores.messages.clearMessages();
-            stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
-          }}
-          {...props}
-        />
-      );
-    }}
-  </StoresConsumer>
-);
+const ContainerAdd = (props: PcrAddSpendProfileCostParams & BaseProps) => {
+  const stores = useStores();
 
-const ContainerEdit = (props: PcrEditSpendProfileCostParams & BaseProps) => (
-  <StoresConsumer>
-    {stores => {
-      const costCategoryPending = stores.costCategories.get(props.costCategoryId);
-      const editorPending = stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId);
-      return (
-        <Component
-          project={stores.projects.getById(props.projectId)}
-          costCategory={costCategoryPending}
-          editor={editorPending}
-          cost={editorPending.then(editor => {
-            const addPartnerItem = editor.data.items.find(x => x.id === props.itemId && x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
-            return addPartnerItem.spendProfile.costs.find(x => x.id === props.costId)!;
-          })}
-          validator={stores.projectChangeRequests.getSpendProfileCostValidator(editorPending, props.itemId, props.costId)}
-          onSave={(dto, link) => onSave(stores, dto, props.projectId, link)}
-          onChange={(dto) => {
-            stores.messages.clearMessages();
-            stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
-          }}
-          {...props}
-        />
-      );
-    }}
-  </StoresConsumer>
-);
+  const costCategoryPending = stores.costCategories.get(props.costCategoryId);
+  const editorPending = costCategoryPending.chain(costCategory =>
+    stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId, dto => {
+      const addPartner = dto.items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
+      const costs = addPartner.spendProfile.costs;
+      const cost = stores.projectChangeRequests.getInitialSpendProfileCost(costCategory);
+      costs.push(cost);
+    }),
+  );
+  return (
+    <Component
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      costCategory={costCategoryPending}
+      editor={editorPending}
+      cost={editorPending.then(editor => {
+        const addPartnerItem = editor.data.items.find(
+          x => x.id === props.itemId && x.type === PCRItemType.PartnerAddition,
+        ) as PCRItemForPartnerAdditionDto;
+        const costs = addPartnerItem.spendProfile.costs.filter(x => x.costCategoryId === props.costCategoryId);
+        return costs.find(x => !x.id)!;
+      })}
+      validator={stores.projectChangeRequests.getNewSpendProfileCostValidator(
+        editorPending,
+        props.itemId,
+        costCategoryPending,
+      )}
+      onSave={(dto, link) => onSave(stores, dto, props.projectId, link)}
+      onChange={dto => {
+        stores.messages.clearMessages();
+        stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
+      }}
+    />
+  );
+};
+
+const ContainerEdit = (props: PcrEditSpendProfileCostParams & BaseProps) => {
+  const stores = useStores();
+
+  const costCategoryPending = stores.costCategories.get(props.costCategoryId);
+  const editorPending = stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId);
+
+  return (
+    <Component
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      costCategory={costCategoryPending}
+      editor={editorPending}
+      cost={editorPending.then(editor => {
+        const addPartnerItem = editor.data.items.find(
+          x => x.id === props.itemId && x.type === PCRItemType.PartnerAddition,
+        ) as PCRItemForPartnerAdditionDto;
+        return addPartnerItem.spendProfile.costs.find(x => x.id === props.costId)!;
+      })}
+      validator={stores.projectChangeRequests.getSpendProfileCostValidator(editorPending, props.itemId, props.costId)}
+      onSave={(dto, link) => onSave(stores, dto, props.projectId, link)}
+      onChange={dto => {
+        stores.messages.clearMessages();
+        stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
+      }}
+    />
+  );
+};
 
 export const PCRSpendProfileAddCostRoute = defineRoute<PcrAddSpendProfileCostParams>({
   routeName: "pcrPrepareSpendProfileAddCost",

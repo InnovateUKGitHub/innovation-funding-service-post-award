@@ -1,6 +1,6 @@
 import * as ACC from "@ui/components";
 import { PartnerDto, PCRItemForPartnerWithdrawalDto } from "@framework/dtos";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
 import { EditorStatus } from "@ui/constants/enums";
@@ -63,15 +63,13 @@ const InnerContainer = (
 
 export const RemovePartnerStep = (
   props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRPartnerWithdrawalItemDtoValidator>,
-) => (
-  <StoresConsumer>
-    {stores => {
-      return (
-        <ACC.Loader
-          pending={stores.partners.getPartnersForProject(props.project.id)}
-          render={x => <InnerContainer partners={x} {...props} />}
-        />
-      );
-    }}
-  </StoresConsumer>
-);
+) => {
+  const stores = useStores();
+
+  return (
+    <ACC.Loader
+      pending={stores.partners.getPartnersForProject(props.project.id)}
+      render={x => <InnerContainer partners={x} {...props} />}
+    />
+  );
+};

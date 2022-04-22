@@ -5,7 +5,7 @@ import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import * as ACC from "@ui/components";
 import { sum } from "@framework/util";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { PCROrganisationType } from "@framework/constants";
 import { Pending } from "@shared/pending";
@@ -93,20 +93,18 @@ class Component extends React.Component<
 
 export const AcademicCostsReviewStep = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
-) => (
-  <StoresConsumer>
-    {stores => {
-      const costCategories = stores.costCategories
-        .getAllUnfiltered()
-        .then(allCostCategories =>
-          allCostCategories.filter(
-            costCategory =>
-              costCategory.organisationType === PCROrganisationType.Academic &&
-              costCategory.competitionType === props.project.competitionType,
-          ),
-        );
+) => {
+  const stores = useStores();
 
-      return <ACC.Loader pending={Pending.combine({ costCategories })} render={x => <Component {...x} {...props} />} />;
-    }}
-  </StoresConsumer>
-);
+  const costCategories = stores.costCategories
+    .getAllUnfiltered()
+    .then(allCostCategories =>
+      allCostCategories.filter(
+        costCategory =>
+          costCategory.organisationType === PCROrganisationType.Academic &&
+          costCategory.competitionType === props.project.competitionType,
+      ),
+    );
+
+  return <ACC.Loader pending={Pending.combine({ costCategories })} render={x => <Component {...props} {...x} />} />;
+};

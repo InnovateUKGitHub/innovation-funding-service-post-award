@@ -1,6 +1,6 @@
 import React from "react";
 import * as ACC from "@ui/components";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRStandardItemDto } from "@framework/dtos";
 import { PCRStandardItemDtoValidator } from "@ui/validators";
@@ -40,15 +40,13 @@ class SummaryComponent extends React.Component<
 
 export const Summary = (
   props: PcrSummaryProps<PCRStandardItemDto, PCRStandardItemDtoValidator, StandardItemStepNames>,
-) => (
-  <StoresConsumer>
-    {stores => {
-      return (
-        <ACC.Loader
-          pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrItem.id)}
-          render={documents => <SummaryComponent documents={documents} {...props} />}
-        />
-      );
-    }}
-  </StoresConsumer>
-);
+) => {
+  const stores = useStores();
+
+  return (
+    <ACC.Loader
+      pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrItem.id)}
+      render={documents => <SummaryComponent {...props} documents={documents} />}
+    />
+  );
+};

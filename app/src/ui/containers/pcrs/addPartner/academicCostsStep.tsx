@@ -5,7 +5,7 @@ import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import * as ACC from "@ui/components";
 import { sum } from "@framework/util";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryType, PCROrganisationType } from "@framework/constants";
 import { EditorStatus } from "@ui/constants/enums";
@@ -160,33 +160,32 @@ class Component extends React.Component<
 
 export const AcademicCostsStep = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
-) => (
-  <StoresConsumer>
-    {stores => {
-      // Get list of academic cost categories, and add a cost item for each one (if not already there).
-      const costCategories = stores.costCategories.getAllUnfiltered().then(allCostCategories => {
-        const academicCostCategories = allCostCategories.filter(
-          costCategory =>
-            costCategory.organisationType === PCROrganisationType.Academic &&
-            costCategory.competitionType === props.project.competitionType,
-        );
+) => {
+  const stores = useStores();
 
-        academicCostCategories.forEach(costCategory => {
-          if (props.pcrItem.spendProfile.costs.every(x => x.costCategoryId !== costCategory.id)) {
-            const cost: PCRSpendProfileAcademicCostDto = {
-              id: "",
-              costCategoryId: costCategory.id,
-              costCategory: CostCategoryType.Academic,
-              description: costCategory.name,
-              value: 0,
-            };
-            props.pcrItem.spendProfile.costs.push(cost);
-          }
-        });
-        return academicCostCategories;
-      });
+  // Get list of academic cost categories, and add a cost item for each one (if not already there).
+  const costCategories = stores.costCategories.getAllUnfiltered().then(allCostCategories => {
+    const academicCostCategories = allCostCategories.filter(
+      costCategory =>
+        costCategory.organisationType === PCROrganisationType.Academic &&
+        costCategory.competitionType === props.project.competitionType,
+    );
 
-      return <ACC.Loader pending={Pending.combine({ costCategories })} render={x => <Component {...x} {...props} />} />;
-    }}
-  </StoresConsumer>
-);
+    academicCostCategories.forEach(costCategory => {
+      if (props.pcrItem.spendProfile.costs.every(x => x.costCategoryId !== costCategory.id)) {
+        const cost: PCRSpendProfileAcademicCostDto = {
+          id: "",
+          costCategoryId: costCategory.id,
+          costCategory: CostCategoryType.Academic,
+          description: costCategory.name,
+          value: 0,
+        };
+        props.pcrItem.spendProfile.costs.push(cost);
+      }
+    });
+
+    return academicCostCategories;
+  });
+
+  return <ACC.Loader pending={Pending.combine({ costCategories })} render={x => <Component {...props} {...x} />} />;
+};

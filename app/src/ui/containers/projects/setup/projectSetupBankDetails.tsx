@@ -3,7 +3,7 @@ import { FormBuilder } from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { BankCheckStatus, BankDetailsTaskStatus, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 
 export interface ProjectSetupBankDetailsParams {
@@ -186,45 +186,47 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
   }
 }
 
-const ProjectSetupBankDetailsContainer = (props: ProjectSetupBankDetailsParams & BaseProps) => (
-  <StoresConsumer>
-    {stores => (
-      <ProjectSetupBankDetailsComponent
-        project={stores.projects.getById(props.projectId)}
-        editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId, dto => {
-          dto.bankDetailsTaskStatus = BankDetailsTaskStatus.Incomplete;
-        })}
-        onChange={(submit, dto) => {
-          stores.partners.updatePartner(submit, props.partnerId, dto,
-            {
-              validateBankDetails: submit,
-              onComplete: (resp) => {
-                if (resp.bankCheckStatus === BankCheckStatus.ValidationFailed) {
-                  stores.navigation.navigateTo(props.routes.failedBankCheckConfirmation.getLink({
-                    projectId: props.projectId,
-                    partnerId: props.partnerId
-                  }));
-                } else {
-                  stores.navigation.navigateTo(props.routes.projectSetupBankDetailsVerify.getLink({
-                    projectId: props.projectId,
-                    partnerId: props.partnerId
-                  }));
-                }
-              },
-              onError: (e) => {
-                // TODO use correct type here
-                if (e && e.results && e.results.bankCheckValidation && !e.results.bankCheckValidation.isValid) {
-                  dto.bankCheckRetryAttempts += 1;
-                }
-              },
+const ProjectSetupBankDetailsContainer = (props: ProjectSetupBankDetailsParams & BaseProps) => {
+  const stores = useStores();
+
+  return (
+    <ProjectSetupBankDetailsComponent
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId, dto => {
+        dto.bankDetailsTaskStatus = BankDetailsTaskStatus.Incomplete;
+      })}
+      onChange={(submit, dto) => {
+        stores.partners.updatePartner(submit, props.partnerId, dto, {
+          validateBankDetails: submit,
+          onComplete: resp => {
+            if (resp.bankCheckStatus === BankCheckStatus.ValidationFailed) {
+              stores.navigation.navigateTo(
+                props.routes.failedBankCheckConfirmation.getLink({
+                  projectId: props.projectId,
+                  partnerId: props.partnerId,
+                }),
+              );
+            } else {
+              stores.navigation.navigateTo(
+                props.routes.projectSetupBankDetailsVerify.getLink({
+                  projectId: props.projectId,
+                  partnerId: props.partnerId,
+                }),
+              );
             }
-          );
-        }}
-        {...props}
-      />
-    )}
-  </StoresConsumer>
-);
+          },
+          onError: e => {
+            // TODO use correct type here
+            if (e && e.results && e.results.bankCheckValidation && !e.results.bankCheckValidation.isValid) {
+              dto.bankCheckRetryAttempts += 1;
+            }
+          },
+        });
+      }}
+    />
+  );
+};
 
 export const ProjectSetupBankDetailsRoute = defineRoute({
   routeName: "projectSetupBankDetails",

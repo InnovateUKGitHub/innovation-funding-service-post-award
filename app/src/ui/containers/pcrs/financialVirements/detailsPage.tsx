@@ -1,5 +1,5 @@
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
 import { CostCategoryVirementDto, PartnerDto, PartnerVirementsDto, PCRDto, ProjectDto } from "@framework/dtos";
@@ -112,22 +112,25 @@ class Component extends ContainerBase<Params, Props, {}> {
   }
 }
 
-const Container = (props: Params & BaseProps) => (
-  <StoresConsumer>
-    {
-      stores => (
-        <Component
-          project={stores.projects.getById(props.projectId)}
-          partner={stores.partners.getById(props.partnerId)}
-          pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
-          costCategories={stores.costCategories.getAllForPartner(props.partnerId)}
-          financialVirements={stores.financialVirements.getPartnerVirements(props.projectId, props.partnerId, props.pcrId, props.itemId)}
-          {...props}
-        />
-      )
-    }
-  </StoresConsumer>
-);
+const Container = (props: Params & BaseProps) => {
+  const stores = useStores();
+
+  return (
+    <Component
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      partner={stores.partners.getById(props.partnerId)}
+      pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
+      costCategories={stores.costCategories.getAllForPartner(props.partnerId)}
+      financialVirements={stores.financialVirements.getPartnerVirements(
+        props.projectId,
+        props.partnerId,
+        props.pcrId,
+        props.itemId,
+      )}
+    />
+  );
+};
 
 export const FinancialVirementDetailsRoute = defineRoute({
   routeName: "financial-virement-details",

@@ -1,6 +1,6 @@
 import React from "react";
 import * as ACC from "@ui/components";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { Option } from "@framework/dtos";
 import { PCRSpendProfileCapitalUsageCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { PCRCapitalUsageCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
@@ -132,15 +132,13 @@ class Component extends React.Component<
 
 export const CapitalUsageFormComponent = (
   props: SpendProfileCostFormProps<PCRSpendProfileCapitalUsageCostDto, PCRCapitalUsageCostDtoValidator>,
-) => (
-  <StoresConsumer>
-    {stores => {
-      return (
-        <ACC.Loader
-          pending={stores.projectChangeRequests.getPcrSpendProfileCapitalUsageType()}
-          render={x => <Component types={x} {...props} />}
-        />
-      );
-    }}
-  </StoresConsumer>
-);
+) => {
+  const stores = useStores();
+
+  return (
+    <ACC.Loader
+      pending={stores.projectChangeRequests.getPcrSpendProfileCapitalUsageType()}
+      render={x => <Component types={x} {...props} />}
+    />
+  );
+};

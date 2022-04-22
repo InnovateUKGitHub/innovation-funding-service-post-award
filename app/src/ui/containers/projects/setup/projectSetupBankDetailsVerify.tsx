@@ -2,7 +2,7 @@ import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { BankCheckStatus, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 
 export interface ProjectSetupBankDetailsVerifyParams {
@@ -85,27 +85,33 @@ class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<ProjectSetupB
   }
 }
 
-const ProjectSetupBankDetailsVerifyContainer = (props: ProjectSetupBankDetailsVerifyParams & BaseProps) => (
-  <StoresConsumer>
-    {stores => (
-      <ProjectSetupBankDetailsVerifyComponent
-        project={stores.projects.getById(props.projectId)}
-        editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
-        onChange={(submit, dto) => {
-          stores.partners.updatePartner(submit, props.partnerId, dto,
-            {
-              verifyBankDetails: submit,
-              onComplete: (resp: PartnerDto) => resp.bankCheckStatus === BankCheckStatus.VerificationPassed
-                ? stores.navigation.navigateTo(props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }))
-                : stores.navigation.navigateTo(props.routes.failedBankCheckConfirmation.getLink({ projectId: props.projectId, partnerId: props.partnerId }))
-            }
-          );
-        }}
-        {...props}
-      />
-    )}
-  </StoresConsumer>
-);
+const ProjectSetupBankDetailsVerifyContainer = (props: ProjectSetupBankDetailsVerifyParams & BaseProps) => {
+  const stores = useStores();
+
+  return (
+    <ProjectSetupBankDetailsVerifyComponent
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
+      onChange={(submit, dto) => {
+        stores.partners.updatePartner(submit, props.partnerId, dto, {
+          verifyBankDetails: submit,
+          onComplete: (resp: PartnerDto) =>
+            resp.bankCheckStatus === BankCheckStatus.VerificationPassed
+              ? stores.navigation.navigateTo(
+                  props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }),
+                )
+              : stores.navigation.navigateTo(
+                  props.routes.failedBankCheckConfirmation.getLink({
+                    projectId: props.projectId,
+                    partnerId: props.partnerId,
+                  }),
+                ),
+        });
+      }}
+    />
+  );
+};
 
 export const ProjectSetupBankDetailsVerifyRoute = defineRoute({
   routeName: "ProjectSetupBankDetailsVerify",

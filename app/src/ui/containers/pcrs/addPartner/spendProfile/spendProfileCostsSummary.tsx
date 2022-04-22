@@ -11,7 +11,7 @@ import { EditorStatus } from "@ui/constants/enums";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
@@ -147,30 +147,31 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
   }
 }
 
-const SpendProfileCostsSummaryContainer = (props: PcrSpendProfileCostSummaryParams & BaseProps) => (
-  <StoresConsumer>
-    {stores => (
-      <SpendProfileCostsSummaryComponent
-        project={stores.projects.getById(props.projectId)}
-        costCategory={stores.costCategories.get(props.costCategoryId)}
-        editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId, (dto) => {
-          const addPartnerItem = dto.items.find(x => x.id === props.itemId)!;
-          addPartnerItem.status = PCRItemStatus.Incomplete;
-        })}
-        onSave={(dto, link) => {
-          stores.messages.clearMessages();
-          stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () =>
-            stores.navigation.navigateTo(link));
-        }}
-        onChange={(dto) => {
-          stores.messages.clearMessages();
-          stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
-        }}
-        {...props}
-      />
-    )}
-  </StoresConsumer>
-);
+const SpendProfileCostsSummaryContainer = (props: PcrSpendProfileCostSummaryParams & BaseProps) => {
+  const stores = useStores();
+
+  return (
+    <SpendProfileCostsSummaryComponent
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      costCategory={stores.costCategories.get(props.costCategoryId)}
+      editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId, dto => {
+        const addPartnerItem = dto.items.find(x => x.id === props.itemId)!;
+        addPartnerItem.status = PCRItemStatus.Incomplete;
+      })}
+      onSave={(dto, link) => {
+        stores.messages.clearMessages();
+        stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () =>
+          stores.navigation.navigateTo(link),
+        );
+      }}
+      onChange={dto => {
+        stores.messages.clearMessages();
+        stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
+      }}
+    />
+  );
+};
 
 export const PCRSpendProfileCostsSummaryRoute = defineRoute<PcrSpendProfileCostSummaryParams>({
   routeName: "pcrSpendProfileCostsSummary",

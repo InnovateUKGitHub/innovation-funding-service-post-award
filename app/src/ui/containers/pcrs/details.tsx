@@ -3,7 +3,7 @@ import { getAuthRoles, ProjectDto, ProjectRole } from "@framework/types";
 
 import { Pending } from "@shared/pending";
 import { PCRDto, PCRItemDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { PCRItemType, PCRStatus } from "@framework/constants";
 import * as ACC from "../../components";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
@@ -135,19 +135,19 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   }
 }
 
-const PCRDetailsContainer = (props: Params & BaseProps) => (
-  <StoresConsumer>
-    {stores => (
-      <PCRDetailsComponent
-        project={stores.projects.getById(props.projectId)}
-        pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
-        statusChanges={stores.projectChangeRequests.getStatusChanges(props.projectId, props.pcrId)}
-        editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
-        {...props}
-      />
-    )}
-  </StoresConsumer>
-);
+const PCRDetailsContainer = (props: Params & BaseProps) => {
+  const stores = useStores();
+
+  return (
+    <PCRDetailsComponent
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
+      statusChanges={stores.projectChangeRequests.getStatusChanges(props.projectId, props.pcrId)}
+      editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
+    />
+  );
+};
 
 export const PCRDetailsRoute = defineRoute({
   allowRouteInActiveAccess: true,

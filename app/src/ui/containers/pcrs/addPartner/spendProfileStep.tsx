@@ -1,7 +1,7 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
@@ -176,15 +176,13 @@ class Component extends React.Component<
 
 export const SpendProfileStep = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
-) => (
-  <StoresConsumer>
-    {stores => {
-      return (
-        <ACC.Loader
-          pending={stores.costCategories.getAllUnfiltered()}
-          render={x => <Component costCategories={x} {...props} />}
-        />
-      );
-    }}
-  </StoresConsumer>
-);
+) => {
+  const stores = useStores();
+
+  return (
+    <ACC.Loader
+      pending={stores.costCategories.getAllUnfiltered()}
+      render={x => <Component costCategories={x} {...props} />}
+    />
+  );
+};

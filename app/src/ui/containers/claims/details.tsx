@@ -10,7 +10,7 @@ import {
   ProjectDto,
   ProjectRole,
 } from "@framework/types";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import * as ACC from "@ui/components";
 import { Pending } from "../../../shared/pending";
@@ -212,47 +212,43 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
   }
 }
 
-const ClaimsDetailsContainer = (props: Params & BaseProps) => (
-  <StoresConsumer>
-    {
-      stores => {
-        const auth = stores.users.getCurrentUserAuthorisation();
-        const isMoOrPM = auth.forProject(props.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
-        const isFC = auth.forPartner(props.projectId, props.partnerId).hasRole(ProjectRole.FinancialContact);
+const ClaimsDetailsContainer = (props: Params & BaseProps) => {
+  const stores = useStores();
 
-        const project = stores.projects.getById(props.projectId);
-        const partner = stores.partners.getById(props.partnerId);
-        const costCategories = stores.costCategories.getAllFiltered(props.partnerId);
-        const claim = stores.claims.get(props.partnerId, props.periodId);
+  const auth = stores.users.getCurrentUserAuthorisation();
+  const isMoOrPM = auth.forProject(props.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
+  const isFC = auth.forPartner(props.projectId, props.partnerId).hasRole(ProjectRole.FinancialContact);
 
-        const forecastData: Pending<ACC.Claims.ForecastData> | null = isMoOrPM && !isFC ? Pending.combine({
-          project,
-          partner,
-          claim,
-          claims: stores.claims.getAllClaimsForPartner(props.partnerId),
-          claimDetails: stores.claimDetails.getAllByPartner(props.partnerId),
-          forecastDetails: stores.forecastDetails.getAllByPartner(props.partnerId),
-          golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
-          costCategories,
-        }) : null;
+  const project = stores.projects.getById(props.projectId);
+  const partner = stores.partners.getById(props.partnerId);
+  const costCategories = stores.costCategories.getAllFiltered(props.partnerId);
+  const claim = stores.claims.get(props.partnerId, props.periodId);
 
-        return (
-          <ClaimsDetailsComponent
-            project={project}
-            partner={partner}
-            costCategories={costCategories}
-            claim={claim}
-            documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
-            forecastData={forecastData}
-            statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
-            costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}
-            {...props}
-          />
-        );
-      }
-    }
-  </StoresConsumer>
-);
+  const forecastData: Pending<ACC.Claims.ForecastData> | null = isMoOrPM && !isFC ? Pending.combine({
+    project,
+    partner,
+    claim,
+    claims: stores.claims.getAllClaimsForPartner(props.partnerId),
+    claimDetails: stores.claimDetails.getAllByPartner(props.partnerId),
+    forecastDetails: stores.forecastDetails.getAllByPartner(props.partnerId),
+    golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
+    costCategories,
+  }) : null;
+
+  return (
+    <ClaimsDetailsComponent
+      project={project}
+      partner={partner}
+      costCategories={costCategories}
+      claim={claim}
+      documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
+      forecastData={forecastData}
+      statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
+      costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}
+      {...props}
+    />
+  );
+};
 
 export const ClaimsDetailsRoute = defineRoute({
   allowRouteInActiveAccess: true,

@@ -1,7 +1,7 @@
 import { ILinkInfo, PCRItemStatus, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { PCRDto } from "@framework/dtos/pcrDtos";
-import { IEditorStore, StoresConsumer } from "@ui/redux";
+import { IEditorStore, useStores } from "@ui/redux";
 import { MultipleDocumentUploadDtoValidator, PCRDtoValidator } from "@ui/validators";
 import { PCRReasoningSummary } from "@ui/containers/pcrs/reasoning/summary";
 import { IReasoningWorkflowMetadata, reasoningWorkflowSteps } from "@ui/containers/pcrs/reasoning/workflowMetadata";
@@ -161,28 +161,34 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
   }
 }
 
-const PCRReasoningWorkflowContainer = (props: ProjectChangeRequestPrepareReasoningParams & BaseProps & { mode: "prepare" | "review" | "view" }) => (
-  <StoresConsumer>
-    {stores => (
-      <PCRReasoningWorkflowComponent
-        project={stores.projects.getById(props.projectId)}
-        pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
-        editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
-        documentsEditor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.pcrId)}
-        onSave={(dto, link) => {
-          stores.messages.clearMessages();
-          stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () =>
-            stores.navigation.navigateTo(link));
-        }}
-        onChange={(dto) => {
-          stores.messages.clearMessages();
-          stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
-        }}
-        {...props}
-      />
-    )}
-  </StoresConsumer>
-);
+const PCRReasoningWorkflowContainer = (
+  props: ProjectChangeRequestPrepareReasoningParams & BaseProps & { mode: "prepare" | "review" | "view" },
+) => {
+  const stores = useStores();
+
+  return (
+    <PCRReasoningWorkflowComponent
+      {...props}
+      project={stores.projects.getById(props.projectId)}
+      pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
+      editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
+      documentsEditor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(
+        props.projectId,
+        props.pcrId,
+      )}
+      onSave={(dto, link) => {
+        stores.messages.clearMessages();
+        stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () =>
+          stores.navigation.navigateTo(link),
+        );
+      }}
+      onChange={dto => {
+        stores.messages.clearMessages();
+        stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
+      }}
+    />
+  );
+};
 
 /* eslint-disable react/display-name */
 export const PCRViewReasoningRoute = defineRoute<ProjectChangeRequestPrepareReasoningParams>({

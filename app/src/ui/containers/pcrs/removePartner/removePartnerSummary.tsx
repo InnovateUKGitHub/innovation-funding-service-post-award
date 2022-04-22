@@ -1,6 +1,6 @@
 import React from "react";
 import { PCRItemForPartnerWithdrawalDto } from "@framework/types";
-import { StoresConsumer } from "@ui/redux";
+import { useStores } from "@ui/redux";
 import { PCRPartnerWithdrawalItemDtoValidator } from "@ui/validators";
 import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { removePartnerStepNames } from "@ui/containers/pcrs/removePartner/removePartnerWorkflow";
@@ -32,15 +32,15 @@ class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerWithdra
   }
 }
 
-export const RemovePartnerSummary = (props: PcrSummaryProps<PCRItemForPartnerWithdrawalDto, PCRPartnerWithdrawalItemDtoValidator, removePartnerStepNames>) => (
-  <StoresConsumer>
-    {
-      stores => {
-        return (<ACC.Loader
-          pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrItem.id)}
-          render={documents => <Component documents={documents} {...props} />}
-        />);
-      }
-    }
-  </StoresConsumer>
-);
+export const RemovePartnerSummary = (
+  props: PcrSummaryProps<PCRItemForPartnerWithdrawalDto, PCRPartnerWithdrawalItemDtoValidator, removePartnerStepNames>,
+) => {
+  const stores = useStores();
+
+  return (
+    <ACC.Loader
+      pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrItem.id)}
+      render={documents => <Component {...props} documents={documents} />}
+    />
+  );
+};
