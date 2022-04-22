@@ -27,12 +27,12 @@
   "author": "BJSS Ltd",
   "license": "ISC",
   "browserslist": [
-    "last 2 Chrome versions",
-    "last 2 Firefox versions",
-    "last 2 Samsung versions",
-    "last 2 Edge versions",
+    "last 6 Chrome versions",
+    "last 6 Firefox versions",
+    "last 6 Samsung versions",
+    "last 6 Edge versions",
     "ie 11",
-    "last 2 Safari versions",
+    "last 6 Safari versions",
     "iOS >= 12"
   ],
   "dependencies": {
@@ -40,6 +40,7 @@
     "@types/uuid": "^8.0.1",
     "aws-sdk": "^2.610.0",
     "bytes": "^3.1.0",
+    "caniuse-lite": "^1.0.30001332",
     "classnames": "^2.2.6",
     "commander": "^7.0.0",
     "cookie-session": "^2.0.0-beta.3",
