@@ -6,6 +6,7 @@ export * from "./aidEligibilityStep";
 export * from "./CompaniesHouse";
 export * from "./financeContactStep";
 export * from "./financeDetailsStep";
+export * from "./nonAidFundingStep";
 export * from "./jeSStep";
 export * from "./organisationDetailsSteps";
 export * from "./projectLocationStep";
