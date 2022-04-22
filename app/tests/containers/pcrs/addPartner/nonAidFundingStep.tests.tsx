@@ -18,7 +18,9 @@ describe("<NonAidFundingStep />", () => {
   type TestProps = PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>;
 
   const stubProps = {
-    project: {} as ProjectDto,
+    project: {
+      competitionType: "KTP",
+    } as ProjectDto,
     pcr: {} as PCRDto,
     pcrItem: {} as PCRItemForPartnerAdditionDto,
     pcrItemType: {} as PCRItemTypeDto,
@@ -73,6 +75,22 @@ describe("<NonAidFundingStep />", () => {
       expect(saveAndContinueButton).toBeInTheDocument();
       expect(saveAndReturn).toBeInTheDocument();
       expect(content).toBeInTheDocument();
+    });
+
+    test("with validation UI", () => {
+      const { queryByTestId } = setup(stubProps);
+      const validationInfoElement = queryByTestId("validation-message");
+
+      expect(validationInfoElement).toBeInTheDocument();
+    });
+
+    test("with default paragraph", () => {
+      const defaultContent = { ...stubProps, project: { ...stubProps.project, competitionType: "CR&D" } };
+
+      const { queryByTestId } = setup(defaultContent);
+      const validationInfoElement = queryByTestId("validation-message");
+
+      expect(validationInfoElement).not.toBeInTheDocument();
     });
 
     describe("actions", () => {
