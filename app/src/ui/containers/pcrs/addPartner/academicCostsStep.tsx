@@ -52,9 +52,9 @@ class Component extends React.Component<
 
   private renderTsb(form: FormBuilder<PCRItemForPartnerAdditionDto>) {
     return (
-      <form.Fieldset headingContent={x => x.pcrAddPartnerAcademicCosts.labels.tsbReferenceHeading}>
+      <form.Fieldset heading={x => x.pcrAddPartnerAcademicCosts.labels.tsbReferenceHeading}>
         <form.String
-          labelContent={x => x.pcrAddPartnerAcademicCosts.tsbLabel}
+          label={x => x.pcrAddPartnerAcademicCosts.tsbLabel}
           width={"one-third"}
           name="tsbReference"
           value={dto => dto.tsbReference}
@@ -81,7 +81,7 @@ class Component extends React.Component<
     const Table = ACC.TypedTable<Data>();
 
     return (
-      <form.Fieldset headingContent={x => x.pcrAddPartnerAcademicCosts.costsSectionTitle}>
+      <form.Fieldset heading={x => x.pcrAddPartnerAcademicCosts.costsSectionTitle}>
         <ACC.Renderers.SimpleString>
           <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.costsGuidance} />
         </ACC.Renderers.SimpleString>

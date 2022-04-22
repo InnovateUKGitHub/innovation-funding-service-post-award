@@ -61,14 +61,14 @@ const DeMinimisStepUi = ({
             qa="projectChangeRequestItemUpload"
           >
             <UploadForm.Fieldset
-              headingContent={x => x.pcrAddPartnerStateAidEligibilityContent.templateSectionTitle}
+              heading={x => x.pcrAddPartnerStateAidEligibilityContent.templateSectionTitle}
               qa="template"
             >
               {renderTemplateLinks(props.pcrItemType)}
             </UploadForm.Fieldset>
 
             <UploadForm.Fieldset
-              headingContent={x => x.pcrAddPartnerStateAidEligibilityContent.uploadDeclarationSectionTitle}
+              heading={x => x.pcrAddPartnerStateAidEligibilityContent.uploadDeclarationSectionTitle}
               qa="documentGuidance"
             >
               <UploadForm.Hidden name="description" value={() => DocumentDescription.DeMinimisDeclarationForm} />
@@ -76,7 +76,7 @@ const DeMinimisStepUi = ({
               <ACC.DocumentGuidance />
 
               <UploadForm.MultipleFileUpload
-                labelContent={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.uploadInputLabel}
+                label={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.uploadInputLabel}
                 name="attachment"
                 labelHidden
                 value={data => data.files}

@@ -273,17 +273,15 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
       getRequiredToCompleteMessage: message => {
         const standardMessage = "This is required to complete this request.";
 
-        if (message) {
-          return (
-            <span>
-              {message}
-              <br />
-              {standardMessage}
-            </span>
-          );
-        }
+        if (!message) return standardMessage;
 
-        return standardMessage;
+        return (
+          <span>
+            {message}
+            <br />
+            {standardMessage}
+          </span>
+        );
       },
     };
 

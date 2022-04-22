@@ -38,7 +38,7 @@ export function LabourFormComponent({
         <Form.Hidden name="id" value={dto => dto.id} />
 
         <Form.String
-          labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.role}
+          label={x => x.pcrSpendProfilePrepareCostContent.labels.labour.role}
           width="one-third"
           name="description"
           value={dto => dto.description}
@@ -47,7 +47,7 @@ export function LabourFormComponent({
         />
 
         <Form.Numeric
-          labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.grossCost}
+          label={x => x.pcrSpendProfilePrepareCostContent.labels.labour.grossCost}
           name="grossCostOfRole"
           width="one-third"
           value={dto => dto.grossCostOfRole}
@@ -56,8 +56,8 @@ export function LabourFormComponent({
         />
 
         <Form.Numeric
-          labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.rate}
-          hintContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.rateHint}
+          label={x => x.pcrSpendProfilePrepareCostContent.labels.labour.rate}
+          hint={x => x.pcrSpendProfilePrepareCostContent.labels.labour.rateHint}
           name="ratePerDay"
           width="one-third"
           value={dto => dto.ratePerDay}
@@ -66,7 +66,7 @@ export function LabourFormComponent({
         />
 
         <Form.Numeric
-          labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.daysOnProject}
+          label={x => x.pcrSpendProfilePrepareCostContent.labels.labour.daysOnProject}
           name="daysSpentOnProject"
           width="one-third"
           value={dto => dto.daysSpentOnProject}
@@ -76,8 +76,8 @@ export function LabourFormComponent({
 
         {isClient && (
           <Form.Custom
-            labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.totalCost}
-            hintContent={x => x.pcrSpendProfilePrepareCostContent.labels.labour.totalCostHint}
+            label={x => x.pcrSpendProfilePrepareCostContent.labels.labour.totalCost}
+            hint={x => x.pcrSpendProfilePrepareCostContent.labels.labour.totalCostHint}
             labelBold
             name="totalCost"
             value={dto => (

@@ -114,7 +114,7 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
         onChange={dto => this.props.onChange(dto)}
         onSubmit={() => this.props.onSave(editor.data)}
       >
-        <PCRForm.Fieldset headingContent={x => x.pcrReasoningSummary.markAsCompleteHeading}>
+        <PCRForm.Fieldset heading={x => x.pcrReasoningSummary.markAsCompleteHeading}>
           <PCRForm.Checkboxes
             name="reasoningStatus"
             options={options}

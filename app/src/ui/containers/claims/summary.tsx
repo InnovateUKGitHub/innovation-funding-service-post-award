@@ -197,10 +197,10 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
 
     return (
       <Form.Form editor={editor} onSubmit={() => onSave(claim, editor, true, project)} qa="summary-form">
-        <Form.Fieldset heading={<ACC.Content value={x => x.claimPrepareSummary.addCommentsHeading} />}>
+        <Form.Fieldset heading={x => x.claimPrepareSummary.addCommentsHeading}>
           <Form.MultilineString
             name="comments"
-            hint={<ACC.Content value={x => x.claimPrepareSummary.addCommentsHint} />}
+            hint={x => x.claimPrepareSummary.addCommentsHint}
             value={x => x.comments}
             update={(m, v) => (m.comments = v || "")}
             validation={editor.validator.comments}

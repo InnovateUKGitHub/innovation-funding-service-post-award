@@ -17,14 +17,8 @@ export const ProjectSummaryChangeStep = (
         onChange={dto => props.onChange(dto)}
         onSubmit={() => props.onSave(false)}
       >
-        <Form.Fieldset headingContent={x => x.pcrScopeChangeProjectSummaryChange.projectSummaryHeading}>
-          <ACC.Info summary={<ACC.Content value={x => x.pcrScopeChangeProjectSummaryChange.publishedSummary} />}>
-            <ACC.Renderers.SimpleString multiline>
-              {props.pcrItem.projectSummarySnapshot || (
-                <ACC.Content value={x => x.pcrScopeChangeProjectSummaryChange.noAvailableSummary} />
-              )}
-            </ACC.Renderers.SimpleString>
-          </ACC.Info>
+        <Form.Fieldset heading={x => x.pcrScopeChangeProjectSummaryChange.projectSummaryHeading}>
+          <ACC.Info summary={<ACC.Content value={x => x.pcrScopeChangeProjectSummaryChange.publishedSummary}/>}><ACC.Renderers.SimpleString multiline>{props.pcrItem.projectSummarySnapshot || <ACC.Content value={x => x.pcrScopeChangeProjectSummaryChange.noAvailableSummary}/>}</ACC.Renderers.SimpleString></ACC.Info>
           <Form.MultilineString
             name="summary"
             hint={props.getRequiredToCompleteMessage()}

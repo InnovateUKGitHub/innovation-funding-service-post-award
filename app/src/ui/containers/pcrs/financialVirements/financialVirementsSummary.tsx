@@ -183,7 +183,7 @@ export function GrantMovingOverFinancialYearForm({ form: Form, editor }: GrantMo
   return (
     <Form.Fieldset
       qa="fieldset-grantMovingOverFinancialYear"
-      headingContent={x => x.financialVirementSummary.labels.grantMovingOverYear}
+      heading={x => x.financialVirementSummary.labels.grantMovingOverYear}
     >
       <ACC.TextHint>The financial year ends on 31 March.</ACC.TextHint>
 

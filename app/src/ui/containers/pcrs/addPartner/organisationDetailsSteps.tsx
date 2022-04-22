@@ -31,7 +31,7 @@ const InnerContainer = (
         onSubmit={() => props.onSave(false)}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset headingContent={x => x.pcrAddPartnerOrganisationDetails.labels.organisationSizeHeading}>
+        <Form.Fieldset heading={x => x.pcrAddPartnerOrganisationDetails.labels.organisationSizeHeading}>
           <>
             <SimpleString>
               <ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.guidance} />
@@ -49,7 +49,7 @@ const InnerContainer = (
             validation={props.validator.participantSize}
           />
         </Form.Fieldset>
-        <Form.Fieldset headingContent={x => x.pcrAddPartnerOrganisationDetails.labels.employeeCountHeading}>
+        <Form.Fieldset heading={x => x.pcrAddPartnerOrganisationDetails.labels.employeeCountHeading}>
           <Form.Numeric
             name="numberOfEmployees"
             width={4}

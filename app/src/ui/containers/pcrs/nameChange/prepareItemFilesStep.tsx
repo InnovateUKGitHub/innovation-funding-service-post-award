@@ -31,11 +31,11 @@ class Component extends React.Component<
           onChange={dto => this.props.onFileChange("DontSave", dto)}
           qa="projectChangeRequestItemUpload"
         >
-          <UploadForm.Fieldset headingContent={x => x.pcrNameChangePrepareItemFiles.uploadCertificateHeading}>
+          <UploadForm.Fieldset heading={x => x.pcrNameChangePrepareItemFiles.uploadCertificateHeading}>
             <ACC.DocumentGuidance />
 
             <UploadForm.MultipleFileUpload
-              labelContent={x => x.pcrNameChangePrepareItemFiles.documentLabels.uploadInputLabel}
+              label={x => x.pcrNameChangePrepareItemFiles.documentLabels.uploadInputLabel}
               name="attachment"
               labelHidden
               value={data => data.files}

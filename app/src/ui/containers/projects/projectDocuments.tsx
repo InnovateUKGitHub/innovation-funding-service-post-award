@@ -96,7 +96,7 @@ class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams,
                   <ACC.DocumentGuidance />
 
                   <UploadForm.MultipleFileUpload
-                    labelContent={x => x.projectDocuments.documentLabels.uploadInputLabel}
+                    label={x => x.projectDocuments.documentLabels.uploadInputLabel}
                     name="attachment"
                     labelHidden
                     value={data => data.files}
@@ -105,7 +105,7 @@ class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams,
                   />
 
                   <UploadForm.DropdownList
-                    labelContent={x => x.claimDocuments.descriptionLabel}
+                    label={x => x.claimDocuments.descriptionLabel}
                     labelHidden={false}
                     hasEmptyOption
                     placeholder="-- No description --"

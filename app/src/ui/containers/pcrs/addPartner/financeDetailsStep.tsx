@@ -17,13 +17,10 @@ export const FinanceDetailsStep = (
         onSubmit={() => props.onSave(false)}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset
-          headingContent={x => x.pcrAddPartnerFinanceDetails.labels.financialYearEndHeading}
-          qa="endOfFinancialYear"
-        >
+        <Form.Fieldset heading={x => x.pcrAddPartnerFinanceDetails.labels.financialYearEndHeading} qa="endOfFinancialYear">
           <Form.MonthYear
             name="financialYearEndDate"
-            hintContent={x => x.pcrAddPartnerFinanceDetails.yearEndHint}
+            hint={x => x.pcrAddPartnerFinanceDetails.yearEndHint}
             value={dto => dto.financialYearEndDate}
             update={(x, val) => {
               x.financialYearEndDate = val;
@@ -32,7 +29,7 @@ export const FinanceDetailsStep = (
             validation={props.validator.financialYearEndDate}
           />
         </Form.Fieldset>
-        <Form.Fieldset headingContent={x => x.pcrAddPartnerFinanceDetails.turnoverHeading} qa="turnover">
+        <Form.Fieldset heading={x => x.pcrAddPartnerFinanceDetails.turnoverHeading} qa="turnover">
           <Form.Numeric
             width="one-third"
             name="financialYearEndTurnover"

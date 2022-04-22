@@ -23,17 +23,17 @@ export function PostcodeEdit({ editor, onUpdate, saveButtonContent, ...rest }: P
         {rest.displayCurrentPostcode && (
           <PostcodeForm.Custom
             name="current-partner-postcode-value"
-            labelContent={x => x.features.postcode.currentPostcodeLabel}
+            label={x => x.features.postcode.currentPostcodeLabel}
             value={x => <ACC.Renderers.SimpleString>{x.postcode}</ACC.Renderers.SimpleString>}
             update={() => null}
           />
         )}
         <PostcodeForm.String
           name="new-partner-postcode-value"
-          hintContent={x => x.features.postcode.newPostcodeHint}
+          hint={x => x.features.postcode.newPostcodeHint}
           width="one-quarter"
           value={() => editor.data.postcode}
-          labelContent={x => x.features.postcode.newPostcodeLabel}
+          label={x => x.features.postcode.newPostcodeLabel}
           update={(m, val) => (editor.data.postcode = val!)}
         />
       </PostcodeForm.Fieldset>

@@ -88,7 +88,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
               <ACC.DocumentGuidance />
 
               <UploadForm.MultipleFileUpload
-                labelContent={x => x.projectSetupBankStatement.documentLabels.uploadInputLabel}
+                label={x => x.projectSetupBankStatement.documentLabels.uploadInputLabel}
                 name="attachment"
                 labelHidden
                 value={data => data.files}

@@ -13,18 +13,28 @@ interface Props {
 
 export class MonitoringReportQuestionStep extends React.Component<Props> {
   public render() {
-    const {editor, questionNumber, onChange, onSave} = this.props;
+    const { editor, questionNumber, onChange, onSave } = this.props;
     const ReportForm = ACC.TypedForm<Dtos.MonitoringReportDto>();
-    const title = <ACC.PeriodTitle periodId={editor.data.periodId} periodStartDate={editor.data.startDate} periodEndDate={editor.data.endDate} />;
+    const title = (
+      <ACC.PeriodTitle
+        periodId={editor.data.periodId}
+        periodStartDate={editor.data.startDate}
+        periodEndDate={editor.data.endDate}
+      />
+    );
 
     return (
-      <ACC.Section title={title}  qa="period-information">
+      <ACC.Section title={title} qa="period-information">
         <ACC.Section>
-          <ReportForm.Form editor={editor} onChange={(dto) => onChange(dto)} qa="monitoringReportQuestionForm" >
+          <ReportForm.Form editor={editor} onChange={dto => onChange(dto)} qa="monitoringReportQuestionForm">
             {this.renderFormItem(editor, questionNumber)}
             <ReportForm.Fieldset qa="save-buttons">
-              <ReportForm.Button name="save-continue" styling="Primary" onClick={() => onSave(editor.data, true)}><ACC.Content value={(x) => x.monitoringReportsQuestionStep.continueButton} /></ReportForm.Button>
-              <ReportForm.Button name="save-return" onClick={() => onSave(editor.data, false)}><ACC.Content value={(x) => x.monitoringReportsQuestionStep.saveAndReturnButton} /></ReportForm.Button>
+              <ReportForm.Button name="save-continue" styling="Primary" onClick={() => onSave(editor.data, true)}>
+                <ACC.Content value={x => x.monitoringReportsQuestionStep.continueButton} />
+              </ReportForm.Button>
+              <ReportForm.Button name="save-return" onClick={() => onSave(editor.data, false)}>
+                <ACC.Content value={x => x.monitoringReportsQuestionStep.saveAndReturnButton} />
+              </ReportForm.Button>
             </ReportForm.Fieldset>
           </ReportForm.Form>
         </ACC.Section>
@@ -32,23 +42,32 @@ export class MonitoringReportQuestionStep extends React.Component<Props> {
     );
   }
 
-  private renderFormItem(editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>, questionNumber: number) {
+  private renderFormItem(
+    editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>,
+    questionNumber: number,
+  ) {
     const { data, validator } = editor;
     const ReportForm = ACC.TypedForm<Dtos.MonitoringReportDto>();
 
     const i = data.questions.findIndex(x => x.displayOrder === questionNumber);
     const q = data.questions[i];
     const radioOptions = q.isScored
-      ? (q.options || []).map(y => ({ id: y.id, value: `${y.questionScore} - ${y.questionText}`, qa:`question-${q.displayOrder}-score-${y.questionScore}` }))
+      ? (q.options || []).map(y => ({
+          id: y.id,
+          value: `${y.questionScore} - ${y.questionText}`,
+          qa: `question-${q.displayOrder}-score-${y.questionScore}`,
+        }))
       : [];
+
     return (
       <ReportForm.Fieldset heading={q.title}>
         <ACC.Renderers.SimpleString className="govuk-hint">{q.description}</ACC.Renderers.SimpleString>
         <ReportForm.Hidden name={"questionDisplayOrder"} value={() => questionNumber} />
+
         {!!radioOptions.length && (
           <ReportForm.Radio
             name={`question_${q.displayOrder}_options`}
-            label
+            label=""
             inline={false}
             options={radioOptions}
             value={() => radioOptions.find(x => !!q.optionId && x.id === q.optionId)}
@@ -56,9 +75,10 @@ export class MonitoringReportQuestionStep extends React.Component<Props> {
             validation={validator.responses.results[i].score}
           />
         )}
+
         <ReportForm.MultilineString
           name={`question_${q.displayOrder}_comments`}
-          label={<ACC.Content value={x => x.monitoringReportsQuestionStep.commentLabel} />}
+          label={x => x.monitoringReportsQuestionStep.commentLabel}
           value={() => q.comments}
           update={(x, value) => {
             x.questions[i].comments = value;

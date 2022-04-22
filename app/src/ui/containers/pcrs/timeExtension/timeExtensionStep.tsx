@@ -57,70 +57,31 @@ const TimeExtensionStep = (
       : null;
 
   return (
-    <ACC.Section>
-      <Form.Form
-        data={props.pcrItem}
-        isSaving={props.status === EditorStatus.Saving}
-        onChange={dto => props.onChange(dto)}
-        onSubmit={() => props.onSave(false)}
-        qa="itemStatus"
-      >
-        <Form.Fieldset heading={existingProjectHeading}>
-          <Form.Custom
-            label={dateLabel}
-            name="currentDates"
-            value={m => (
-              <ACC.Renderers.SimpleString>
-                <ACC.Renderers.ShortDateRangeFromDuration
-                  startDate={props.project.startDate}
-                  months={m.projectDurationSnapshot}
-                />
-              </ACC.Renderers.SimpleString>
-            )}
-            update={() => {
-              return;
-            }}
-          />
-          <Form.Custom
-            label={durationLabel}
-            name="currentDuration"
-            value={m => (
-              <ACC.Renderers.SimpleString>
-                <ACC.Renderers.Months months={m.projectDurationSnapshot} />
-              </ACC.Renderers.SimpleString>
-            )}
-            update={() => {
-              return;
-            }}
-          />
-        </Form.Fieldset>
-        <Form.Fieldset heading={proposedProjectHeading}>
-          <Form.DropdownList
-            label={
-              <>
-                <ACC.Renderers.SimpleString>{changeProjectDurationHint}</ACC.Renderers.SimpleString>
-                <ACC.Renderers.SimpleString>{changeProjectDurationHint2}</ACC.Renderers.SimpleString>
-                <ACC.Renderers.SimpleString>{changeProjectDurationHint3}</ACC.Renderers.SimpleString>
-              </>
-            }
-            placeholder="-- Select end date --"
-            name="timeExtension"
-            validation={props.validator.offsetMonthsResult}
-            options={timeExtensionDropdownOptions}
-            value={m => getProjectEndOption(m.offsetMonths)}
-            update={(m, value) => {
-              return (m.offsetMonths = Number(value!.id));
-            }}
-          />
-          {isClient && (
+    <>
+      <ACC.Section>
+        <ACC.Renderers.SimpleString>{changeProjectDurationHint}</ACC.Renderers.SimpleString>
+        <ACC.Renderers.SimpleString>
+          {changeProjectDurationHint2} {changeProjectDurationHint3}
+        </ACC.Renderers.SimpleString>
+      </ACC.Section>
+
+      <ACC.Section>
+        <Form.Form
+          data={props.pcrItem}
+          isSaving={props.status === EditorStatus.Saving}
+          onChange={dto => props.onChange(dto)}
+          onSubmit={() => props.onSave(false)}
+          qa="itemStatus"
+        >
+          <Form.Fieldset heading={existingProjectHeading}>
             <Form.Custom
               label={dateLabel}
-              name="proposedDates"
-              value={() => (
+              name="currentDates"
+              value={m => (
                 <ACC.Renderers.SimpleString>
                   <ACC.Renderers.ShortDateRangeFromDuration
                     startDate={props.project.startDate}
-                    months={newProjectDuration}
+                    months={m.projectDurationSnapshot}
                   />
                 </ACC.Renderers.SimpleString>
               )}
@@ -128,27 +89,73 @@ const TimeExtensionStep = (
                 return;
               }}
             />
-          )}
-          {isClient && (
             <Form.Custom
               label={durationLabel}
-              name="proposedDuration"
-              value={() => (
+              name="currentDuration"
+              value={m => (
                 <ACC.Renderers.SimpleString>
-                  <ACC.Renderers.Months months={newProjectDuration} />
+                  <ACC.Renderers.Months months={m.projectDurationSnapshot} />
                 </ACC.Renderers.SimpleString>
               )}
               update={() => {
                 return;
               }}
             />
-          )}
-        </Form.Fieldset>
-        <Form.Fieldset>
-          <Form.Submit>{saveAndContinue}</Form.Submit>
-        </Form.Fieldset>
-      </Form.Form>
-    </ACC.Section>
+          </Form.Fieldset>
+
+          <Form.Fieldset heading={proposedProjectHeading}>
+            <Form.DropdownList
+              // TODO: Revise this content
+              label={"Please select a new date from the available list"}
+              placeholder="-- Select end date --"
+              name="timeExtension"
+              validation={props.validator.offsetMonthsResult}
+              options={timeExtensionDropdownOptions}
+              value={m => getProjectEndOption(m.offsetMonths)}
+              update={(m, value) => {
+                return (m.offsetMonths = Number(value!.id));
+              }}
+            />
+            {isClient && (
+              <Form.Custom
+                label={dateLabel}
+                name="proposedDates"
+                value={() => (
+                  <ACC.Renderers.SimpleString>
+                    <ACC.Renderers.ShortDateRangeFromDuration
+                      startDate={props.project.startDate}
+                      months={newProjectDuration}
+                    />
+                  </ACC.Renderers.SimpleString>
+                )}
+                update={() => {
+                  return;
+                }}
+              />
+            )}
+
+            {isClient && (
+              <Form.Custom
+                label={durationLabel}
+                name="proposedDuration"
+                value={() => (
+                  <ACC.Renderers.SimpleString>
+                    <ACC.Renderers.Months months={newProjectDuration} />
+                  </ACC.Renderers.SimpleString>
+                )}
+                update={() => {
+                  return;
+                }}
+              />
+            )}
+          </Form.Fieldset>
+
+          <Form.Fieldset>
+            <Form.Submit>{saveAndContinue}</Form.Submit>
+          </Form.Fieldset>
+        </Form.Form>
+      </ACC.Section>
+    </>
   );
 };
 

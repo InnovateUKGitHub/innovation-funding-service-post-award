@@ -36,7 +36,7 @@ export const ProjectManagerDetailsStep = (
         onSubmit={() => props.onSave(false)}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset headingContent={x => x.pcrAddPartnerProjectContacts.labels.projectLeadContactHeading}>
+        <Form.Fieldset heading={x => x.pcrAddPartnerProjectContacts.labels.projectLeadContactHeading}>
           {isClient && (
             <Form.Button name="useFinanceContactDetails" onClick={() => getFinanceContactDetails(props)}>
               <ACC.Content value={x => x.pcrAddPartnerProjectContacts.useFinanceDetails} />
@@ -49,7 +49,7 @@ export const ProjectManagerDetailsStep = (
           />
 
           <Form.String
-            labelContent={x => x.pcrAddPartnerProjectContacts.labels.contactFirstNameHeading}
+            label={x => x.pcrAddPartnerProjectContacts.labels.contactFirstNameHeading}
             name="contact2Forename"
             value={dto => dto.contact2Forename}
             update={(x, val) => {
@@ -59,7 +59,7 @@ export const ProjectManagerDetailsStep = (
           />
 
           <Form.String
-            labelContent={x => x.pcrAddPartnerProjectContacts.labels.contactLastNameHeading}
+            label={x => x.pcrAddPartnerProjectContacts.labels.contactLastNameHeading}
             name="contact2Surname"
             value={dto => dto.contact2Surname}
             update={(x, val) => {
@@ -69,8 +69,8 @@ export const ProjectManagerDetailsStep = (
           />
 
           <Form.String
-            labelContent={x => x.pcrAddPartnerProjectContacts.labels.contactPhoneNumberHeading}
-            hintContent={x => x.pcrAddPartnerProjectContacts.phoneNumberHint}
+            label={x => x.pcrAddPartnerProjectContacts.labels.contactPhoneNumberHeading}
+            hint={x => x.pcrAddPartnerProjectContacts.phoneNumberHint}
             name="contact2Phone"
             value={dto => dto.contact2Phone}
             update={(x, val) => {
@@ -80,7 +80,7 @@ export const ProjectManagerDetailsStep = (
           />
 
           <Form.String
-            labelContent={x => x.pcrAddPartnerProjectContacts.labels.contactEmailHeading}
+            label={x => x.pcrAddPartnerProjectContacts.labels.contactEmailHeading}
             name="contact2Email"
             value={dto => dto.contact2Email}
             update={(x, val) => {

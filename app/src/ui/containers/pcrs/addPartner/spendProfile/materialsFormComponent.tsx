@@ -26,7 +26,7 @@ export class MaterialsFormComponent extends Component<
             <Form.Fieldset qa="materials-costs">
               <Form.Hidden name="id" value={dto => dto.id} />
               <Form.String
-                labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.materials.item}
+                label={x => x.pcrSpendProfilePrepareCostContent.labels.materials.item}
                 width={"one-third"}
                 name="description"
                 value={dto => dto.description}
@@ -34,7 +34,7 @@ export class MaterialsFormComponent extends Component<
                 validation={validator && validator.description}
               />
               <Form.Numeric
-                labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.materials.quantity}
+                label={x => x.pcrSpendProfilePrepareCostContent.labels.materials.quantity}
                 name="quantity"
                 width={"one-third"}
                 value={dto => dto.quantity}
@@ -42,7 +42,7 @@ export class MaterialsFormComponent extends Component<
                 validation={validator && validator.quantity}
               />
               <Form.Numeric
-                labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.materials.costPerItem}
+                label={x => x.pcrSpendProfilePrepareCostContent.labels.materials.costPerItem}
                 name="costPerItem"
                 width={"one-third"}
                 value={dto => dto.costPerItem}
@@ -52,7 +52,7 @@ export class MaterialsFormComponent extends Component<
 
               {isClient && (
                 <Form.Custom
-                  labelContent={x => x.pcrSpendProfilePrepareCostContent.labels.materials.totalCost}
+                  label={x => x.pcrSpendProfilePrepareCostContent.labels.materials.totalCost}
                   labelBold
                   name="totalCost"
                   value={dto => (
