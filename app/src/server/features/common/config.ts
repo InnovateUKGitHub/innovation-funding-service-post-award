@@ -170,10 +170,9 @@ const maxClaimLineItems = () => {
   return parsedMaxNumber;
 };
 
-const parsedBankCheckValidationRetries = parseInt(process.env.BANK_CHECK_VALIDATION_RETRIES!, 10);
 const options: IAppOptions = {
   bankCheckAddressScorePass: parseInt(process.env.BANK_CHECK_ADDRESS_SCORE_PASS!, 10) || 6,
-  bankCheckValidationRetries: isNumber(parsedBankCheckValidationRetries) ? parsedBankCheckValidationRetries : 1,
+  bankCheckValidationRetries: Number(process.env.BANK_CHECK_VALIDATION_RETRIES!) || 3,
   bankCheckCompanyNameScorePass: parseInt(process.env.BANK_CHECK_COMPANY_NAME_SCORE_PASS!, 10) || 6,
   permittedFileTypes,
   permittedTypes: {
