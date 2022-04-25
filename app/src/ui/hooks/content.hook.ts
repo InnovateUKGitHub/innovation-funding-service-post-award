@@ -42,7 +42,7 @@ const getContentResult = (queryFn: Function, contentPayload: Content): ContentRe
     const propertyMissingElement = queryFnParts[queryFnParts.length - 1];
 
     const errorMessage =
-      error.message === missingParentPropertyError
+      error instanceof Error && error.message === missingParentPropertyError
         ? `It appears '${propertyMissingElement}' is not available within the '${propertyMissingParent}' property. There is a problem with your available content object. Query => ${queryAsString}`
         : `It appears the following query did not find a result -> ${queryAsString}`;
 
