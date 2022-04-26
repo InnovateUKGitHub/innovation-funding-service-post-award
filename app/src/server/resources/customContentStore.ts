@@ -1,44 +1,75 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+import { S3Client, GetObjectCommand, HeadObjectCommand } from "@aws-sdk/client-s3";
 import { configuration, ConfigurationError } from "@server/features/common";
-import aws from "aws-sdk";
 
-export interface ICustomContentStore {
-  getContent(): Promise<string>;
-  getInfo(): Promise<{ lastModified: Date }>;
-}
-
-export class CustomContentStore implements ICustomContentStore {
+export class CustomContentStore {
   private getConnection() {
-    if (!configuration.s3Account.accessKeyId || !configuration.s3Account.secretAccessKey) {
-      throw new ConfigurationError("S3 Access not configured");
+    const { accessKeyId, secretAccessKey, contentBucket, customContentPath } = configuration.s3Account;
+
+    if (!accessKeyId) {
+      throw new ConfigurationError("S3 Access 'accessKeyId' is not configured");
     }
-    return new aws.S3({ credentials: { accessKeyId: configuration.s3Account.accessKeyId, secretAccessKey: configuration.s3Account.secretAccessKey } });
+
+    if (!secretAccessKey) {
+      throw new ConfigurationError("S3 Access 'secretAccessKey' is not configured");
+    }
+
+    if (!contentBucket) {
+      throw new ConfigurationError("S3 Bucket - content bucket not configured");
+    }
+
+    if (!customContentPath) {
+      throw new ConfigurationError("S3 Bucket - custom content path not configured");
+    }
+
+    const client: S3Client = new S3Client({
+      credentials: {
+        accessKeyId,
+        secretAccessKey,
+      },
+    });
+
+    return {
+      client,
+      config: {
+        contentBucket,
+        customContentPath,
+      },
+    };
   }
 
-  async getInfo() {
-    const connection = this.getConnection();
+  public async getInfo(): Promise<{ lastModified: Date }> {
+    const { client, config } = this.getConnection();
 
-    if (!configuration.s3Account.contentBucket || !configuration.s3Account.customContentPath) {
-      throw new ConfigurationError("S3 Bucket not configured");
+    try {
+      const getCommand = new HeadObjectCommand({
+        Bucket: config.contentBucket,
+        Key: config.customContentPath,
+      });
+
+      const response = await client.send(getCommand);
+
+      return { lastModified: response.LastModified! };
+    } catch (error) {
+      throw new Error(`S3 Query Error - Failed to HeadObject command, ${JSON.stringify(error)}`);
     }
-
-    return connection
-      .headObject({ Bucket: configuration.s3Account.contentBucket, Key: configuration.s3Account.customContentPath })
-      .promise()
-      .then(x => ({ lastModified: x.LastModified! }));
   }
 
-  async getContent() {
+  public async getContent(): Promise<string> {
+    const { client, config } = this.getConnection();
 
-    const connection = this.getConnection();
-    if (!configuration.s3Account.contentBucket || !configuration.s3Account.customContentPath) {
-      throw new ConfigurationError("S3 Bucket not configured");
+    try {
+      const getCommand = new GetObjectCommand({
+        Bucket: config.contentBucket,
+        Key: config.customContentPath,
+      });
+
+      const response = await client.send(getCommand);
+
+      return response.Body?.toString() ?? "";
+    } catch (error) {
+      throw new Error(`S3 Query Error - Failed to GetObject command, ${JSON.stringify(error)}`);
     }
-
-    return connection
-      .getObject({ Bucket: configuration.s3Account.contentBucket, Key: configuration.s3Account.customContentPath })
-      .promise()
-      .then(x => (x.Body && x.Body.toString() || ""))
-      ;
   }
 }
+
+export type ICustomContentStore = Pick<CustomContentStore, "getContent" | "getInfo">;
