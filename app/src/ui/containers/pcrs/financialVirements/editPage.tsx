@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore, useStores } from "@ui/redux";
 import { Pending } from "@shared/pending";
@@ -262,13 +263,14 @@ class EditPageComponent extends ContainerBase<VirementCostsParams, Props, {}> {
       itemId: this.props.itemId
     };
 
-    return <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)} preserveData><ACC.Content value={x => x.financialVirementEdit.labels.backToSummary}/></ACC.BackLink>;
+    return <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)}><ACC.Content value={x => x.financialVirementEdit.labels.backToSummary}/></ACC.BackLink>;
   }
 }
 
 const Container = (props: VirementCostsParams & BaseProps) => {
-  const { projects, partners, costCategories, financialVirements, navigation } = useStores();
+  const { projects, partners, costCategories, financialVirements } = useStores();
   const editPageContent = useEditPageContent();
+  const navigate = useNavigate();
 
   return (
     <EditPageComponent
@@ -286,13 +288,12 @@ const Container = (props: VirementCostsParams & BaseProps) => {
           dto,
           false,
           () =>
-            navigation.navigateTo(
+            navigate(
               props.routes.pcrPrepareItem.getLink({
                 projectId: props.projectId,
                 pcrId: props.pcrId,
                 itemId: props.itemId,
-              }),
-              true,
+              }).path,
             ),
           props.partnerId
         )

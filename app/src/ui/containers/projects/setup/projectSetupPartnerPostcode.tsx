@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { getContentFromResult, useContent } from "@ui/hooks";
 import { useStores } from "@ui/redux";
@@ -8,10 +9,13 @@ import * as ACC from "../../../components";
 const ProjectSetupPartnerPostcodeContainer = (props: PartnerDetailsParams & BaseProps) => {
   const stores = useStores();
   const { content } = useContent();
+  const navigate = useNavigate();
 
   const url = props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId });
   const saveAndReturnLabel = getContentFromResult(content.projectSetupPostcode.saveAndReturn);
-  const backLink = <ACC.BackLink route={url}>{getContentFromResult(content.projectSetupPostcode.backLink)}</ACC.BackLink>;
+  const backLink = (
+    <ACC.BackLink route={url}>{getContentFromResult(content.projectSetupPostcode.backLink)}</ACC.BackLink>
+  );
 
   return (
     <PartnerDetailsEditComponent
@@ -23,7 +27,7 @@ const ProjectSetupPartnerPostcodeContainer = (props: PartnerDetailsParams & Base
       saveAndReturnLabel={saveAndReturnLabel}
       onUpdate={(saving, dto) =>
         stores.partners.updatePartner(saving, props.partnerId, dto, {
-          onComplete: () => stores.navigation.navigateTo(url),
+          onComplete: () => navigate(url.path),
         })
       }
     />

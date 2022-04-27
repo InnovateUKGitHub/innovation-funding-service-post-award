@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import {
   ILinkInfo,
@@ -5,7 +6,7 @@ import {
   PCRItemStatus,
   PCRItemType,
   ProjectDto,
-  ProjectRole
+  ProjectRole,
 } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
 import * as ACC from "@ui/components";
@@ -30,7 +31,7 @@ interface Data {
   project: Pending<ProjectDto>;
   costCategory: Pending<CostCategoryDto>;
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
- }
+}
 
 interface Callbacks {
   onChange: (dto: PCRDto) => void;
@@ -48,16 +49,31 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.costCategory)} />;
   }
 
-  private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, costCategory: CostCategoryDto) {
-    const addPartnerItem = editor.data.items.find(x => x.id === this.props.itemId && x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
+  private renderContents(
+    project: ProjectDto,
+    editor: IEditorStore<PCRDto, PCRDtoValidator>,
+    costCategory: CostCategoryDto,
+  ) {
+    const addPartnerItem = editor.data.items.find(
+      x => x.id === this.props.itemId && x.type === PCRItemType.PartnerAddition,
+    ) as PCRItemForPartnerAdditionDto;
     const addPartnerWorkflow = this.getWorkflow(addPartnerItem);
     const spendProfileStep = addPartnerWorkflow && addPartnerWorkflow.getCurrentStepInfo();
-    const stepRoute = this.props.routes.pcrPrepareItem.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, step: spendProfileStep && spendProfileStep.stepNumber || undefined});
+    const stepRoute = this.props.routes.pcrPrepareItem.getLink({
+      itemId: this.props.itemId,
+      pcrId: this.props.pcrId,
+      projectId: this.props.projectId,
+      step: (spendProfileStep && spendProfileStep.stepNumber) || undefined,
+    });
     const costs = addPartnerItem.spendProfile.costs.filter(x => x.costCategoryId === this.props.costCategoryId);
     const Form = ACC.TypedForm<PCRDto>();
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={stepRoute}><ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.backLink}/></ACC.BackLink>}
+        backLink={
+          <ACC.BackLink route={stepRoute}>
+            <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.backLink} />
+          </ACC.BackLink>
+        }
         pageTitle={<ACC.Projects.Title {...project} />}
         project={project}
         validator={editor.validator}
@@ -75,7 +91,9 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
             onChange={dto => this.props.onChange(dto)}
           >
             <Form.Fieldset>
-              <Form.Submit><ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.submitButton}/></Form.Submit>
+              <Form.Submit>
+                <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.submitButton} />
+              </Form.Submit>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
@@ -85,17 +103,31 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
 
   private renderGuidance(costCategory: CostCategoryDto) {
     return (
-      <ACC.Info summary={<ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.guidanceTitle(costCategory.name)}/>}>
-        <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.messages.costGuidance(costCategory.type)}/>
+      <ACC.Info
+        summary={<ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.guidanceTitle(costCategory.name)} />}
+      >
+        <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.messages.costGuidance(costCategory.type)} />
       </ACC.Info>
     );
   }
 
-  private renderFooterRow(row: { key: string; title: React.ReactNode; value: React.ReactNode; qa: string; isBold?: boolean }) {
+  private renderFooterRow(row: {
+    key: string;
+    title: React.ReactNode;
+    value: React.ReactNode;
+    qa: string;
+    isBold?: boolean;
+  }) {
     return (
       <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
         <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{row.title}</th>
-        <td className={classNames("govuk-table__cell", "govuk-table__cell--numeric", { "govuk-!-font-weight-bold": row.isBold })}>{row.value}</td>
+        <td
+          className={classNames("govuk-table__cell", "govuk-table__cell--numeric", {
+            "govuk-!-font-weight-bold": row.isBold,
+          })}
+        >
+          {row.value}
+        </td>
         <td className={classNames("govuk-table__cell")} />
       </tr>
     );
@@ -105,34 +137,82 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
     const Table = ACC.TypedTable<PCRSpendProfileCostDto>();
     const total = costs.reduce((acc, cost) => acc + (cost.value || 0), 0);
     const footers = [
-      (
-        <tr key={1} className="govuk-table__row">
-          <td className="govuk-table__cell" colSpan={3}>
-            <ACC.Link route={this.props.routes.pcrPrepareSpendProfileAddCost.getLink({itemId: this.props.itemId, pcrId: this.props.pcrId, projectId: this.props.projectId, costCategoryId: this.props.costCategoryId})}>
-              <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.addCostButton}/>
-            </ACC.Link>
-          </td>
-        </tr>
-      ),
+      <tr key={1} className="govuk-table__row">
+        <td className="govuk-table__cell" colSpan={3}>
+          <ACC.Link
+            route={this.props.routes.pcrPrepareSpendProfileAddCost.getLink({
+              itemId: this.props.itemId,
+              pcrId: this.props.pcrId,
+              projectId: this.props.projectId,
+              costCategoryId: this.props.costCategoryId,
+            })}
+          >
+            <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.addCostButton} />
+          </ACC.Link>
+        </td>
+      </tr>,
       this.renderFooterRow({
-        key: "2", title: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.labels.totalCosts(costCategory.name)}/>, qa: "total-costs", isBold: false, value: <ACC.Renderers.Currency value={total} />
+        key: "2",
+        title: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.labels.totalCosts(costCategory.name)} />,
+        qa: "total-costs",
+        isBold: false,
+        value: <ACC.Renderers.Currency value={total} />,
       }),
     ];
     return (
       <Table.Table qa="costs" data={costs} footers={footers}>
-        <Table.String header={x => x.pcrSpendProfileCostsSummaryContent.labels.description} value={x => x.description} qa={"description"}/>
-        <Table.Currency header={x => x.pcrSpendProfileCostsSummaryContent.labels.cost} value={x => x.value} qa={"cost"}/>
-        <Table.Custom qa="links" header="Links" hideHeader value={x => this.renderLinks(this.props.itemId, x.id, this.props.costCategoryId, this.props.projectId, this.props.pcrId)} />
+        <Table.String
+          header={x => x.pcrSpendProfileCostsSummaryContent.labels.description}
+          value={x => x.description}
+          qa={"description"}
+        />
+        <Table.Currency
+          header={x => x.pcrSpendProfileCostsSummaryContent.labels.cost}
+          value={x => x.value}
+          qa={"cost"}
+        />
+        <Table.Custom
+          qa="links"
+          header="Links"
+          hideHeader
+          value={x =>
+            this.renderLinks(this.props.itemId, x.id, this.props.costCategoryId, this.props.projectId, this.props.pcrId)
+          }
+        />
       </Table.Table>
     );
   }
 
   private renderLinks(itemId: string, costId: string, costCategoryId: string, projectId: string, pcrId: string) {
     const links: { route: ILinkInfo; text: React.ReactNode; qa: string }[] = [];
-    links.push({route: this.props.routes.pcrPrepareSpendProfileEditCost.getLink({itemId, costId, costCategoryId, projectId, pcrId}), text: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.editCostButton} />, qa:"edit"});
-    links.push({route: this.props.routes.pcrPrepareSpendProfileDeleteCost.getLink({itemId, costId, costCategoryId, projectId, pcrId}), text: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.removeCostButton} />, qa:"remove"});
+    links.push({
+      route: this.props.routes.pcrPrepareSpendProfileEditCost.getLink({
+        itemId,
+        costId,
+        costCategoryId,
+        projectId,
+        pcrId,
+      }),
+      text: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.editCostButton} />,
+      qa: "edit",
+    });
+    links.push({
+      route: this.props.routes.pcrPrepareSpendProfileDeleteCost.getLink({
+        itemId,
+        costId,
+        costCategoryId,
+        projectId,
+        pcrId,
+      }),
+      text: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.removeCostButton} />,
+      qa: "remove",
+    });
 
-    return links.map((x, i) => <div key={i} data-qa={x.qa}><ACC.Link route={x.route}>{x.text}</ACC.Link></div>);
+    return links.map((x, i) => (
+      <div key={i} data-qa={x.qa}>
+        <ACC.Link route={x.route}>{x.text}</ACC.Link>
+      </div>
+    ));
   }
 
   private getWorkflow(addPartnerItem: PCRItemForPartnerAdditionDto) {
@@ -148,6 +228,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
 }
 
 const SpendProfileCostsSummaryContainer = (props: PcrSpendProfileCostSummaryParams & BaseProps) => {
+  const navigate = useNavigate();
   const stores = useStores();
 
   return (
@@ -161,9 +242,7 @@ const SpendProfileCostsSummaryContainer = (props: PcrSpendProfileCostSummaryPara
       })}
       onSave={(dto, link) => {
         stores.messages.clearMessages();
-        stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () =>
-          stores.navigation.navigateTo(link),
-        );
+        stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () => navigate(link.path));
       }}
       onChange={dto => {
         stores.messages.clearMessages();
@@ -177,12 +256,12 @@ export const PCRSpendProfileCostsSummaryRoute = defineRoute<PcrSpendProfileCostS
   routeName: "pcrSpendProfileCostsSummary",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId",
   container: SpendProfileCostsSummaryContainer,
-  getParams: (route) => ({
+  getParams: route => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,
   }),
-  getTitle: ({ content }) => (content.pcrSpendProfileCostsSummaryContent.title()),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager)
+  getTitle: ({ content }) => content.pcrSpendProfileCostsSummaryContent.title(),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager),
 });

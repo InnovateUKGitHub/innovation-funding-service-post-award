@@ -1,10 +1,9 @@
 import { LoadingStatus } from "@framework/constants";
-import { actionTypes } from "redux-router5";
+import { routeTransition } from "@ui/redux/actions";
 import { dataReducer } from "../../../src/ui/redux/reducers";
 
-const navigate = (): any => ({ type: actionTypes.TRANSITION_SUCCESS, payload: { previousRoute: "" } });
-const replaceNavigation = (): any => ({ type: actionTypes.TRANSITION_SUCCESS, payload: { previousRoute: "", route: { meta: { options: { replace: true } } } } });
-const preserveDataNavigation = (): any => ({ type: actionTypes.TRANSITION_SUCCESS, payload: { previousRoute: "", route: { meta: { options: { preserveData: true } } } } });
+const navigate =  routeTransition;
+
 
 const claimDataAction = (id: any, data: any, status = 1, error: any = {}): any => ({
   type: "DATA_LOAD",
@@ -78,6 +77,7 @@ describe("DataReducer", () => {
     expect(result.claim[id].status).toBe(LoadingStatus.Stale);
   });
 
+
   test("preserves loaded data on replace navigation", () => {
     const id = 5;
     const data = { test: 456 };
@@ -85,18 +85,7 @@ describe("DataReducer", () => {
     const state2 = dataReducer(state, action);
     expect(state2.claim[id].status).toBe(LoadingStatus.Done);
 
-    const result = dataReducer(state2, replaceNavigation());
-    expect(result.claim[id].status).toBe(LoadingStatus.Done);
-  });
-
-  test("preserves loaded data on preserve data navigation", () => {
-    const id = 5;
-    const data = { test: 456 };
-    const action = claimDataAction(id, data, LoadingStatus.Done);
-    const state2 = dataReducer(state, action);
-    expect(state2.claim[id].status).toBe(LoadingStatus.Done);
-
-    const result = dataReducer(state2, preserveDataNavigation());
+    const result = dataReducer(state2, navigate("REPLACE"));
     expect(result.claim[id].status).toBe(LoadingStatus.Done);
   });
 

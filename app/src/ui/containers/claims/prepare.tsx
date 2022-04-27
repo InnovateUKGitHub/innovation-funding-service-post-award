@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router";
+
 import { useStores } from "@ui/redux";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
@@ -159,6 +161,7 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
 
 const PrepareContainer = (props: PrepareClaimParams & BaseProps) => {
   const stores = useStores();
+  const navigate = useNavigate();
 
   return (
     <PrepareComponent
@@ -179,7 +182,7 @@ const PrepareContainer = (props: PrepareClaimParams & BaseProps) => {
           props.periodId,
           dto,
           undefined,
-          () => link && stores.navigation.navigateTo(link),
+          () => link && navigate(link.path),
         )
       }
     />

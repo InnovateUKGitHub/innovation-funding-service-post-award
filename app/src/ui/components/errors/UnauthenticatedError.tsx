@@ -1,5 +1,6 @@
 import { useContent } from "@ui/hooks";
-import { Page, PageTitle, Section } from "@ui/components";
+import { PageTitle } from "@ui/features/page-title";
+import { Page, Section } from "@ui/components";
 import { ExternalLink, SimpleString } from "@ui/components/renderers";
 
 export function UnauthenticatedError() {

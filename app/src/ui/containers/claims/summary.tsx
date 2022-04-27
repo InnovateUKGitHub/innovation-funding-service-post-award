@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useStores } from "@ui/redux";
 import { useContent } from "@ui/hooks";
 import * as ACC from "@ui/components";
@@ -39,6 +40,7 @@ interface CombinedData {
 }
 
 interface ClaimSummaryComponentProps extends ClaimSummaryParams, BaseProps {
+  projectId: string;
   project: Pending<ProjectDto>;
   partner: Pending<PartnerDto>;
   claim: Pending<ClaimDto>;
@@ -323,6 +325,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
 
 const ClaimSummaryContainer = (props: ClaimSummaryParams & BaseProps) => {
   const stores = useStores();
+  const navigate = useNavigate();
   const { getContent } = useContent();
   const claimedSavedMessage = getContent(x => x.claimPrepareSummary.messages.claimSavedMessage);
 
@@ -346,7 +349,7 @@ const ClaimSummaryContainer = (props: ClaimSummaryParams & BaseProps) => {
           props.periodId,
           dto,
           claimedSavedMessage,
-          () => stores.navigation.navigateTo(link),
+          () => navigate(link.path),
         )
       }
     />

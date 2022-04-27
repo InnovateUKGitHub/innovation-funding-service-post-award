@@ -1,8 +1,7 @@
 import React from "react";
-import { Link as RouterLink } from "react-router5";
+import cx from "classnames";
+import { Link as RouterLink } from "react-router-dom";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
-import { scrollToTheTopInstantly } from "@framework/util/windowHelpers";
-import classNames from "classnames";
 
 type TStyling = "Link" | "PrimaryButton" | "SecondaryButton" | "BackLink";
 interface StyledLinkProps {
@@ -14,11 +13,10 @@ interface LinkProps extends StyledLinkProps {
   route: ILinkInfo;
   className?: string;
   replace?: boolean;
-  preserveData?: boolean;
 }
 
 const getClassNames = (styling: TStyling, className?: string) => {
-  return classNames(
+  return cx(
     {
       "govuk-link": styling === "Link",
       "govuk-button": styling === "PrimaryButton" || styling === "SecondaryButton",
@@ -32,26 +30,18 @@ const getClassNames = (styling: TStyling, className?: string) => {
 
 export class Link extends React.Component<LinkProps> {
   render() {
-    const { id, route, children } = this.props;
-    const styling = this.props.styling || "Link";
-    const className = getClassNames(styling, this.props.className);
+    const { route, className, styling, ...props } = this.props;
+    const linkStyling = styling ?? "Link";
 
-    const options = {
-      replace: this.props.replace || false,
-      preserveData: this.props.preserveData || false,
-    };
+    const styledClassName = getClassNames(linkStyling, className);
 
     return (
       <RouterLink
-        id={id}
-        routeName={route.routeName}
-        routeParams={route.routeParams}
-        className={className}
-        successCallback={scrollToTheTopInstantly}
-        routeOptions={options}
-      >
-        {children}
-      </RouterLink>
+        {...props}
+        to={route.path}
+        className={styledClassName}
+        replace={this.props.replace || false}
+      />
     );
   }
 }
@@ -91,7 +81,7 @@ export const GovLink = React.forwardRef<HTMLAnchorElement, GovLinkProps>(functio
   ref,
 ) {
   return (
-    <a ref={ref} {...props} className={classNames("govuk-link", className)}>
+    <a ref={ref} {...props} className={cx("govuk-link", className)}>
       {children}
     </a>
   );

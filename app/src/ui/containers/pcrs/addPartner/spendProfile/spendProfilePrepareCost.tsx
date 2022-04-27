@@ -1,3 +1,4 @@
+import { useNavigate, NavigateFunction } from "react-router-dom";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import {
   CostCategoryType,
@@ -6,7 +7,7 @@ import {
   PCRItemStatus,
   PCRItemType,
   ProjectDto,
-  ProjectRole
+  ProjectRole,
 } from "@framework/types";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
@@ -14,13 +15,14 @@ import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, IStores, useStores } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import {
-  PCRSpendProfileCapitalUsageCostDto, PCRSpendProfileCostDto,
+  PCRSpendProfileCapitalUsageCostDto,
+  PCRSpendProfileCostDto,
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
   PCRSpendProfileOtherCostsDto,
   PCRSpendProfileOverheadsCostDto,
   PCRSpendProfileSubcontractingCostDto,
-  PCRSpendProfileTravelAndSubsCostDto
+  PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import {
@@ -32,7 +34,7 @@ import {
   PCROverheadsCostDtoValidator,
   PCRSpendProfileCostDtoValidator,
   PCRSubcontractingCostDtoValidator,
-  PCRTravelAndSubsCostDtoValidator
+  PCRTravelAndSubsCostDtoValidator,
 } from "@ui/validators/pcrSpendProfileDtoValidator";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
@@ -43,7 +45,7 @@ import {
   OtherCostsFormComponent,
   OverheadsFormComponent,
   SubcontractingFormComponent,
-  TravelAndSubsFormComponent
+  TravelAndSubsFormComponent,
 } from "@ui/containers/pcrs/addPartner/spendProfile";
 import { IRoutes } from "@ui/routing";
 
@@ -203,25 +205,75 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
     };
 
     switch (costCategory.type) {
-      case CostCategoryType.Labour: return <LabourFormComponent {...props} data={cost as PCRSpendProfileLabourCostDto} validator={validator as PCRLabourCostDtoValidator}/>;
-      case CostCategoryType.Overheads: return <OverheadsFormComponent {...props} data={cost as PCRSpendProfileOverheadsCostDto} validator={validator as PCROverheadsCostDtoValidator}/>;
-      case CostCategoryType.Materials: return <MaterialsFormComponent {...props} data={cost as PCRSpendProfileMaterialsCostDto} validator={validator as PCRMaterialsCostDtoValidator}/>;
-      case CostCategoryType.Subcontracting: return <SubcontractingFormComponent {...props} data={cost as PCRSpendProfileSubcontractingCostDto} validator={validator as PCRSubcontractingCostDtoValidator}/>;
-      case CostCategoryType.Capital_Usage: return <CapitalUsageFormComponent {...props} data={cost as PCRSpendProfileCapitalUsageCostDto} validator={validator as PCRCapitalUsageCostDtoValidator}/>;
-      case CostCategoryType.Travel_And_Subsistence: return <TravelAndSubsFormComponent {...props} data={cost as PCRSpendProfileTravelAndSubsCostDto} validator={validator as PCRTravelAndSubsCostDtoValidator}/>;
-      case CostCategoryType.Other_Costs: return <OtherCostsFormComponent {...props} data={cost as PCRSpendProfileOtherCostsDto} validator={validator as PCROtherCostsDtoValidator}/>;
-      default: return null;
+      case CostCategoryType.Labour:
+        return (
+          <LabourFormComponent
+            {...props}
+            data={cost as PCRSpendProfileLabourCostDto}
+            validator={validator as PCRLabourCostDtoValidator}
+          />
+        );
+      case CostCategoryType.Overheads:
+        return (
+          <OverheadsFormComponent
+            {...props}
+            data={cost as PCRSpendProfileOverheadsCostDto}
+            validator={validator as PCROverheadsCostDtoValidator}
+          />
+        );
+      case CostCategoryType.Materials:
+        return (
+          <MaterialsFormComponent
+            {...props}
+            data={cost as PCRSpendProfileMaterialsCostDto}
+            validator={validator as PCRMaterialsCostDtoValidator}
+          />
+        );
+      case CostCategoryType.Subcontracting:
+        return (
+          <SubcontractingFormComponent
+            {...props}
+            data={cost as PCRSpendProfileSubcontractingCostDto}
+            validator={validator as PCRSubcontractingCostDtoValidator}
+          />
+        );
+      case CostCategoryType.Capital_Usage:
+        return (
+          <CapitalUsageFormComponent
+            {...props}
+            data={cost as PCRSpendProfileCapitalUsageCostDto}
+            validator={validator as PCRCapitalUsageCostDtoValidator}
+          />
+        );
+      case CostCategoryType.Travel_And_Subsistence:
+        return (
+          <TravelAndSubsFormComponent
+            {...props}
+            data={cost as PCRSpendProfileTravelAndSubsCostDto}
+            validator={validator as PCRTravelAndSubsCostDtoValidator}
+          />
+        );
+      case CostCategoryType.Other_Costs:
+        return (
+          <OtherCostsFormComponent
+            {...props}
+            data={cost as PCRSpendProfileOtherCostsDto}
+            validator={validator as PCROtherCostsDtoValidator}
+          />
+        );
+      default:
+        return null;
     }
   }
 }
 
-const onSave = (stores: IStores, dto: PCRDto, projectId: string, link: ILinkInfo) => {
+const onSave = (stores: IStores, dto: PCRDto, projectId: string, link: ILinkInfo, navigate: NavigateFunction) => {
   stores.messages.clearMessages();
-  stores.projectChangeRequests.updatePcrEditor(true, projectId, dto, undefined, () =>
-    stores.navigation.navigateTo(link));
+  stores.projectChangeRequests.updatePcrEditor(true, projectId, dto, undefined, () => navigate(link.path));
 };
 
 const ContainerAdd = (props: PcrAddSpendProfileCostParams & BaseProps) => {
+  const navigate = useNavigate();
   const stores = useStores();
 
   const costCategoryPending = stores.costCategories.get(props.costCategoryId);
@@ -233,6 +285,7 @@ const ContainerAdd = (props: PcrAddSpendProfileCostParams & BaseProps) => {
       costs.push(cost);
     }),
   );
+
   return (
     <Component
       {...props}
@@ -251,7 +304,7 @@ const ContainerAdd = (props: PcrAddSpendProfileCostParams & BaseProps) => {
         props.itemId,
         costCategoryPending,
       )}
-      onSave={(dto, link) => onSave(stores, dto, props.projectId, link)}
+      onSave={(dto, link) => onSave(stores, dto, props.projectId, link, navigate)}
       onChange={dto => {
         stores.messages.clearMessages();
         stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
@@ -261,6 +314,7 @@ const ContainerAdd = (props: PcrAddSpendProfileCostParams & BaseProps) => {
 };
 
 const ContainerEdit = (props: PcrEditSpendProfileCostParams & BaseProps) => {
+  const navigate = useNavigate();
   const stores = useStores();
 
   const costCategoryPending = stores.costCategories.get(props.costCategoryId);
@@ -279,7 +333,7 @@ const ContainerEdit = (props: PcrEditSpendProfileCostParams & BaseProps) => {
         return addPartnerItem.spendProfile.costs.find(x => x.id === props.costId)!;
       })}
       validator={stores.projectChangeRequests.getSpendProfileCostValidator(editorPending, props.itemId, props.costId)}
-      onSave={(dto, link) => onSave(stores, dto, props.projectId, link)}
+      onSave={(dto, link) => onSave(stores, dto, props.projectId, link, navigate)}
       onChange={dto => {
         stores.messages.clearMessages();
         stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
@@ -292,27 +346,27 @@ export const PCRSpendProfileAddCostRoute = defineRoute<PcrAddSpendProfileCostPar
   routeName: "pcrPrepareSpendProfileAddCost",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId/cost",
   container: ContainerAdd,
-  getParams: (route) => ({
+  getParams: route => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,
   }),
   getTitle: ({ content }) => content.pcrSpendProfilePrepareCostContent.title(),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
 });
 
 export const PCRSpendProfileEditCostRoute = defineRoute<PcrEditSpendProfileCostParams>({
   routeName: "pcrPrepareSpendProfileEditCost",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId/cost/:costId",
   container: ContainerEdit,
-  getParams: (route) => ({
+  getParams: route => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,
-    costId: route.params.costId
+    costId: route.params.costId,
   }),
   getTitle: ({ content }) => content.pcrSpendProfilePrepareCostContent.title(),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
 });

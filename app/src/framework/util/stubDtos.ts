@@ -1251,5 +1251,6 @@ export const createPCRSummaryDto: CreateDTO<PCRSummaryDto> = (objectToMerge?) =>
 export const createClaimLink = () => (): ILinkInfo => ({
   routeName: "stub-routeName",
   routeParams: {},
+  path: "stub-routeName",
   accessControl: () => false,
 });

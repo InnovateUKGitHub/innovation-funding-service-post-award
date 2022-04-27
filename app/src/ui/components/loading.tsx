@@ -81,7 +81,7 @@ export function PageLoader<T>(props: LoadingProps<T>) {
 
     const error = createErrorPayload(renderError, hasRequestError).params;
 
-    return <ErrorContainer {...error} />;
+    return <ErrorContainer from="PageLoader" {...error} />;
   };
 
   return <Loader renderError={handleError} {...props} />;

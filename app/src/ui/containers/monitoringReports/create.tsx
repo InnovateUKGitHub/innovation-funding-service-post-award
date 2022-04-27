@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import * as ACC from "@ui/components/index";
 import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
@@ -59,6 +60,7 @@ class Component extends ContainerBase<MonitoringReportCreateParams, Data, Callba
 
 const Container = (props: MonitoringReportCreateParams&BaseProps) => {
   const stores = useStores();
+  const navigate = useNavigate();
   return (
     <Component
       {...props}
@@ -67,7 +69,7 @@ const Container = (props: MonitoringReportCreateParams&BaseProps) => {
       onChange={(save, dto, submit, getLink) => {
         stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, newDto => {
           if (getLink) {
-            return stores.navigation.navigateTo(getLink(newDto.headerId));
+            navigate(getLink(newDto.headerId).path);
           }
         });
       }}

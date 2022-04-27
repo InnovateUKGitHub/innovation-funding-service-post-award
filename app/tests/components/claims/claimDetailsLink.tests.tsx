@@ -1,5 +1,4 @@
 import { render } from "@testing-library/react";
-
 import { TestBed, TestBedContent } from "@shared/TestBed";
 import { ClaimStatus, ProjectRole, PartnerStatus, ProjectStatus } from "@framework/constants";
 import { routeConfig } from "@ui/routing/routeConfig";
@@ -228,9 +227,9 @@ describe("<ClaimDetailsLink />", () => {
     const iarClaimState = ClaimStatus.AWAITING_IAR;
 
     test.each`
-      name                                           | projectRole
-      ${"when project role is MO returns view link"} | ${ProjectRole.MonitoringOfficer}
-      ${"when project role is not FC returns view link"}  | ${ProjectRole.ProjectManager}
+      name                                               | projectRole
+      ${"when project role is MO returns view link"}     | ${ProjectRole.MonitoringOfficer}
+      ${"when project role is not FC returns view link"} | ${ProjectRole.ProjectManager}
     `("$name", ({ projectRole }) => {
       const awaitingIarProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3, status: iarClaimState },
@@ -243,117 +242,4 @@ describe("<ClaimDetailsLink />", () => {
       expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaimText.content)).toBeInTheDocument();
     });
   });
-
-  /* OLD CODE */
-
-  // describe("as a monitoring officer when claim is submitted", () => {
-  //   test("as review claim link", () => {
-  //     const claimState = ClaimStatus.SUBMITTED;
-  //     const projectRole = ProjectRole.MonitoringOfficer;
-
-  //     const claimSubmittedProps: ClaimDetailsLinkWithoutRoutes = {
-  //       claim: { periodId: 3, status: claimState },
-  //       project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
-  //       partner: { id: partnerId, roles: ProjectRole.FinancialContact, partnerStatus: PartnerStatus.Active },
-  //     };
-
-  //     const { queryByText } = setup(claimSubmittedProps);
-
-  //     expect(queryByText(stubContent.components.claimDetailsLinkContent.reviewClaimText.content)).toBeInTheDocument();
-  //   });
-
-  //   test("as review claim link when not an MO", () => {
-  //     const claimState: ClaimStatus = ClaimStatus.SUBMITTED;
-  //     const projectRole: ProjectRole = ProjectRole.FinancialContact;
-
-  //     const claimSubmittedProps: ClaimDetailsLinkWithoutRoutes = {
-  //       claim: { periodId: 3, status: claimState },
-  //       project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
-  //       partner: { id: partnerId, roles: ProjectRole.FinancialContact, partnerStatus: PartnerStatus.Active },
-  //     };
-
-  //     const { queryByText } = setup(claimSubmittedProps);
-
-  //     expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaimText.content)).toBeInTheDocument();
-  //   });
-  // });
-
-  // describe("as an unknown role", () => {
-  //   test("should render a View Claim link when claim is MO Queried", () => {
-  //     const claimState: ClaimStatus = ClaimStatus.MO_QUERIED;
-  //     const partnerRole: ProjectRole = ProjectRole.Unknown;
-
-  //     const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
-  //       claim: { periodId: 3, status: claimState },
-  //       project: { id: projectId, roles: ProjectRole.FinancialContact, status: ProjectStatus.Live },
-  //       partner: { id: partnerId, roles: partnerRole, partnerStatus: PartnerStatus.Active },
-  //     };
-
-  //     const { queryByText } = setup(moQueriedProps);
-
-  //     expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaimText.content)).toBeInTheDocument();
-  //   });
-
-  //   test("should render a View Claim link when claim is Innovate Queried", () => {
-  //     const claimState: ClaimStatus = ClaimStatus.INNOVATE_QUERIED;
-  //     const partnerRole: ProjectRole = ProjectRole.Unknown;
-
-  //     const innovateQueriedProps: ClaimDetailsLinkWithoutRoutes = {
-  //       claim: { periodId: 3, status: claimState },
-  //       project: { id: projectId, roles: ProjectRole.FinancialContact, status: ProjectStatus.Live },
-  //       partner: { id: partnerId, roles: partnerRole, partnerStatus: PartnerStatus.Active },
-  //     };
-
-  //     const { queryByText } = setup(innovateQueriedProps);
-
-  //     expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaimText.content)).toBeInTheDocument();
-  //   });
-  // });
-
-  // describe.only("as a financial contact", () => {
-  //   test.only("should render an Edit Claim link when claim is MO Queried", () => {
-  //     const { queryByText } = setup({
-  //       claim: { periodId: 3, status: ClaimStatus.MO_QUERIED },
-  //       project: { id: projectId },
-  //       partner: { id: partnerId, roles: ProjectRole.FinancialContact },
-  //     });
-  //     expect(queryByText(stubContent.components.claimDetailsLinkContent.editClaimText.content)).toBeInTheDocument();
-  //   });
-
-  //   test("should render an Edit Claim link when claim is Innovate Queried", () => {
-  //     const { queryByText } = setup({
-  //       claim: { periodId: 3, status: ClaimStatus.INNOVATE_QUERIED },
-  //       project: { id: projectId },
-  //       partner: { id: partnerId, roles: ProjectRole.FinancialContact },
-  //     });
-  //     expect(queryByText(stubContent.components.claimDetailsLinkContent.editClaimText.content)).toBeInTheDocument();
-  //   });
-
-  //   test("should render an Edit Claim link when claim is in draft", () => {
-  //     const { queryByText } = setup({
-  //       claim: { periodId: 3, status: ClaimStatus.DRAFT },
-  //       project: { id: projectId },
-  //       partner: { id: partnerId, roles: ProjectRole.FinancialContact },
-  //     });
-  //     expect(queryByText(stubContent.components.claimDetailsLinkContent.editClaimText.content)).toBeInTheDocument();
-  //   });
-  // });
-
-  // test("should render a View Claim link by default", () => {
-  //   const { queryByText } = setup({
-  //     claim: { periodId: 3 },
-  //     project: { id: projectId },
-  //     partner: { id: partnerId },
-  //   });
-  //   expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaimText.content)).toBeInTheDocument();
-  // });
-
-  // test("should render null if partner is someone other than a finance contact, and claim is in draft", () => {
-  //   const { container } = setup({
-  //     claim: { periodId: 3, status: ClaimStatus.DRAFT },
-  //     project: { id: projectId },
-  //     partner: { id: partnerId },
-  //   });
-  //   expect(container.firstChild).toBeNull();
-  // });
 });

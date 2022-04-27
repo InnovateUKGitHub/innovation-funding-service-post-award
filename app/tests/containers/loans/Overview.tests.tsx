@@ -9,6 +9,7 @@ import { LoanStatus } from "@framework/entities";
 
 describe("<LoansOverviewContainer />", () => {
   const stubLink: ILinkInfo = {
+    path: "stub-path",
     routeName: "stub-routename",
     routeParams: {},
     accessControl: () => false,

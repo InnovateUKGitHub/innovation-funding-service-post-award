@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { PCRItemDto, PCRItemStatus, PCRItemType, PCRStatus, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
@@ -29,9 +30,19 @@ interface Callbacks {
 
 class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParams, Data, Callbacks> {
   render() {
-    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, editor: this.props.editor, editableItemTypes: this.props.editableItemTypes });
+    const combined = Pending.combine({
+      project: this.props.project,
+      pcr: this.props.pcr,
+      editor: this.props.editor,
+      editableItemTypes: this.props.editableItemTypes,
+    });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editor, x.editableItemTypes)} />;
+    return (
+      <ACC.PageLoader
+        pending={combined}
+        render={x => this.renderContents(x.project, x.pcr, x.editor, x.editableItemTypes)}
+      />
+    );
   }
 
   private onSave(editor: IEditorStore<PCRDto, PCRDtoValidator>, original: PCRDto, submit: boolean) {
@@ -47,10 +58,19 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     this.props.onChange(true, dto);
   }
 
-  private renderContents(project: ProjectDto, projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
+  private renderContents(
+    project: ProjectDto,
+    projectChangeRequest: PCRDto,
+    editor: IEditorStore<PCRDto, PCRDtoValidator>,
+    editableItemTypes: PCRItemType[],
+  ) {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
+        backLink={
+          <ACC.BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>
+            Back to project change requests
+          </ACC.BackLink>
+        }
         pageTitle={<ACC.Projects.Title {...project} />}
         project={project}
         validator={editor.validator}
@@ -60,7 +80,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
         {this.renderTasks(projectChangeRequest, editor, editableItemTypes)}
         {this.renderLog()}
         {this.renderForm(projectChangeRequest, editor)}
-      </ACC.Page >
+      </ACC.Page>
     );
   }
 
@@ -69,13 +89,31 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
       <ACC.Section title="Details">
         <ACC.SummaryList qa="pcr-prepare">
           <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
-          <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />} action={<ACC.Link route={this.props.routes.projectChangeRequestAddType.getLink({ projectId: this.props.projectId, projectChangeRequestId: this.props.pcrId })}>Add types</ACC.Link>} qa="typesRow" />
+          <ACC.SummaryListItem
+            label="Types"
+            content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />}
+            action={
+              <ACC.Link
+                route={this.props.routes.projectChangeRequestAddType.getLink({
+                  projectId: this.props.projectId,
+                  projectChangeRequestId: this.props.pcrId,
+                })}
+              >
+                Add types
+              </ACC.Link>
+            }
+            qa="typesRow"
+          />
         </ACC.SummaryList>
       </ACC.Section>
     );
   }
 
-  private renderTasks(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
+  private renderTasks(
+    projectChangeRequest: PCRDto,
+    editor: IEditorStore<PCRDto, PCRDtoValidator>,
+    editableItemTypes: PCRItemType[],
+  ) {
     return (
       <ACC.List qa="taskList">
         {this.renderTaskListActions(projectChangeRequest, editor, editableItemTypes)}
@@ -125,7 +163,11 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     );
   }
 
-  private renderTaskListActions(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
+  private renderTaskListActions(
+    projectChangeRequest: PCRDto,
+    editor: IEditorStore<PCRDto, PCRDtoValidator>,
+    editableItemTypes: PCRItemType[],
+  ) {
     if (!editableItemTypes.length) return null;
     const editableItems = projectChangeRequest.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
 
@@ -136,14 +178,18 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     );
   }
 
-  private renderTaskListReasoning(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
+  private renderTaskListReasoning(
+    projectChangeRequest: PCRDto,
+    editor: IEditorStore<PCRDto, PCRDtoValidator>,
+    editableItemTypes: PCRItemType[],
+  ) {
     const editableItems = projectChangeRequest.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
     const stepCount = editableItems.length ? 2 : 1;
 
     const route = this.props.routes.pcrPrepareReasoning.getLink({
       projectId: this.props.projectId,
       pcrId: this.props.pcrId,
-      step: projectChangeRequest.reasoningStatus === PCRItemStatus.ToDo ? 1 : undefined
+      step: projectChangeRequest.reasoningStatus === PCRItemStatus.ToDo ? 1 : undefined,
     });
 
     return (
@@ -169,7 +215,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
           projectId: this.props.projectId,
           pcrId: this.props.pcrId,
           itemId: item.id,
-          step: item.status === PCRItemStatus.ToDo && workflow && workflow.getCurrentStepInfo() ? 1 : undefined
+          step: item.status === PCRItemStatus.ToDo && workflow && workflow.getCurrentStepInfo() ? 1 : undefined,
         })}
         validation={validationErrors}
       />
@@ -184,9 +230,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
             {/* Keeping logs inside loader because accordion defaults to closed*/}
             <ACC.Loader
               pending={this.props.statusChanges}
-              render={(statusChanges) => (
-                <ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" />
-              )}
+              render={statusChanges => <ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" />}
             />
           </ACC.AccordionItem>
         </ACC.Accordion>
@@ -196,6 +240,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
 }
 
 const PCRPrepareContainer = (props: ProjectChangeRequestPrepareParams & BaseProps) => {
+  const navigate = useNavigate();
   const stores = useStores();
 
   return (
@@ -207,7 +252,7 @@ const PCRPrepareContainer = (props: ProjectChangeRequestPrepareParams & BaseProp
       editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
       onChange={(saving: boolean, dto: PCRDto) =>
         stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, () =>
-          stores.navigation.navigateTo(props.routes.pcrsDashboard.getLink({ projectId: props.projectId })),
+          navigate(props.routes.pcrsDashboard.getLink({ projectId: props.projectId }).path),
         )
       }
       editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
@@ -215,18 +260,17 @@ const PCRPrepareContainer = (props: ProjectChangeRequestPrepareParams & BaseProp
   );
 };
 
-
 export const ProjectChangeRequestPrepareRoute = defineRoute({
   routeName: "pcrPrepare",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare",
   container: PCRPrepareContainer,
-  getParams: (route) => ({
+  getParams: route => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
   }),
   getTitle: () => ({
     htmlTitle: "Request",
-    displayTitle: "Request"
+    displayTitle: "Request",
   }),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
 });

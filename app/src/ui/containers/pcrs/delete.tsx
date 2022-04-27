@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { ProjectDto, ProjectRole } from "@framework/types";
 
 import { Pending } from "@shared/pending";
@@ -86,6 +87,7 @@ class PCRDeleteComponent extends ContainerBase<PCRDeleteParams, Data, Callbacks>
 }
 
 const PCRDeleteContainer = (props: PCRDeleteParams & BaseProps) => {
+  const navigate = useNavigate();
   const stores = useStores();
 
   return (
@@ -100,7 +102,7 @@ const PCRDeleteContainer = (props: PCRDeleteParams & BaseProps) => {
           pcrId,
           dto,
           "The project change request has been deleted.",
-          () => stores.navigation.navigateTo(props.routes.pcrsDashboard.getLink({ projectId })),
+          () => navigate(props.routes.pcrsDashboard.getLink({ projectId }).path),
         )
       }
     />

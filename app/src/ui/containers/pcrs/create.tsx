@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import * as Dtos from "@framework/dtos";
 import * as ACC from "@ui/components";
 
@@ -17,6 +18,7 @@ export interface CreatePcrParams {
 }
 
 interface CreatePcrProps extends CreatePcrParams, BaseProps {
+  projectId: string;
   project: Pending<Dtos.ProjectDto>;
   itemTypes: Pending<Dtos.PCRItemTypeDto[]>;
   editor: Pending<IEditorStore<Dtos.PCRDto, PCRDtoValidator>>;
@@ -152,8 +154,9 @@ export function useCreatePcrContent() {
 }
 
 function PCRCreateContainer(props: CreatePcrParams & BaseProps) {
-  const { projects, projectChangeRequests, navigation } = useStores();
+  const { projects, projectChangeRequests } = useStores();
   const pcrContent = useCreatePcrContent();
+  const navigate = useNavigate();
 
   return (
     <PCRCreateComponent
@@ -165,11 +168,11 @@ function PCRCreateContainer(props: CreatePcrParams & BaseProps) {
       createNewChangeRequestItem={itemType => projectChangeRequests.createNewChangeRequestItem(itemType)}
       onChange={(saving, dto) =>
         projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, created =>
-          navigation.navigateTo(
+          navigate(
             props.routes.pcrPrepare.getLink({
               projectId: dto.projectId,
               pcrId: created.id,
-            }),
+            }).path,
           ),
         )
       }

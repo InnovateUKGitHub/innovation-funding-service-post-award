@@ -10,15 +10,17 @@ describe("Header", () => {
       mobileNavigationLabel: {
         content: "stub-mobileNavigationLabel",
       },
+      dashboard: {
+        content: "Dashboard"
+      },
+      profile: {
+        content: "Profile"
+      },
+      signOut: {
+        content: "Sign out"
+      }
     },
-  };
 
-  const getStubItems = (totalNumberOfItems: number): NonNullable<HeaderProps["menuItems"]> => {
-    return Array.from({ length: totalNumberOfItems }, (_, i) => ({
-      text: `text-${i}`,
-      href: `href-${i}`,
-      qa: `qa-${i}`,
-    }));
   };
 
   const defaultProps: HeaderProps = {
@@ -51,8 +53,7 @@ describe("Header", () => {
 
       it("with mobile toggle and label", () => {
         // No items no menu or toggle is shown
-        const stubMenuItems = getStubItems(1);
-        const { queryByTestId, queryByText } = setup({ menuItems: stubMenuItems });
+        const { queryByTestId, queryByText } = setup({ showMenu: true });
 
         const mobileNavigationLabel = queryByText(stubContent.header.mobileNavigationLabel.content);
 
@@ -63,16 +64,8 @@ describe("Header", () => {
     });
 
     describe("without navigation items", () => {
-      it("with defined list but no items", () => {
-        const { queryAllByTestId } = setup({ menuItems: [] });
-
-        const navItems = queryAllByTestId("header-navigation-item");
-
-        expect(navItems).toHaveLength(0);
-      });
-
-      it("when no list is provided", () => {
-        const { queryAllByTestId } = setup();
+      it("with showMenu false", () => {
+        const { queryAllByTestId } = setup({ showMenu: false });
 
         const navItems = queryAllByTestId("header-navigation-item");
 
@@ -81,10 +74,15 @@ describe("Header", () => {
     });
 
     it("with navigation items", () => {
-      const stubNavItems = getStubItems(2);
-      const { queryByTestId, queryAllByTestId } = setup({ menuItems: stubNavItems });
+      const { queryByTestId, queryAllByTestId } = setup({  });
 
       const expectedNavItems = queryAllByTestId("header-navigation-item");
+
+      const stubNavItems = [
+          {qa: "nav-dashboard", href: /dashboard-selection/},
+          {qa: "nav-profile", href: /profile\/view/},
+          {qa: "nav-sign-out", href: /logout/}
+      ];
 
       expect(expectedNavItems).toHaveLength(stubNavItems.length);
 
@@ -95,7 +93,7 @@ describe("Header", () => {
         if (!item) throw Error(`${stubItem.qa} was not found!`);
 
         expect(item).toBeInTheDocument();
-        expect(item.getAttribute("href")).toBe(stubItem.href);
+        expect(item.getAttribute("href")).toMatch(stubItem.href);
       }
     });
   });

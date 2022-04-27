@@ -14,7 +14,7 @@ export function isContentSolution(content: unknown): content is ContentSelector 
 
 type ContentQuery<Param, Response> = (contentQuery: Param) => Response;
 
-interface IUseContent {
+export interface IUseContent {
   content: Content;
   getContentFromResult: ContentQuery<ContentResult, string>;
   getContent: ContentQuery<string | ContentSelector, string>;

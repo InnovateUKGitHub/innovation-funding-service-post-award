@@ -1,5 +1,6 @@
 import { useStores } from "@ui/redux";
 import * as ACC from "@ui/components";
+import { PageTitle } from "@ui/features/page-title";
 
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { getPending } from "@ui/helpers/get-pending";
@@ -23,9 +24,9 @@ function BroadcastPage(props: BroadcastItemProps) {
   const pageTitle = (!isRejected && payload?.title) || getContent(x => x.broadcastPage.emptyBroadcast);
 
   const titleElement = (
-    <ACC.PageTitle
-      caption={getContent(x => x.broadcastPage.broadcastTitle)}
+    <PageTitle
       title={isLoading ? getContent(x => x.broadcastPage.loadingBroadcast) : pageTitle}
+      caption={getContent(x => x.broadcastPage.broadcastTitle)}
     />
   );
 

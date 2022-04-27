@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { Pending } from "@shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore, useStores } from "@ui/redux";
@@ -149,6 +150,7 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
 }
 
 const ProjectSetupContainer = (props: ProjectSetupParams & BaseProps) => {
+  const navigate = useNavigate();
   const stores = useStores();
 
   return (
@@ -159,7 +161,7 @@ const ProjectSetupContainer = (props: ProjectSetupParams & BaseProps) => {
       editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
       onUpdate={(saving, dto) =>
         stores.partners.updatePartner(saving, props.partnerId, dto, {
-          onComplete: () => stores.navigation.navigateTo(props.routes.projectDashboard.getLink({})),
+          onComplete: () => navigate(props.routes.projectDashboard.getLink({}).path),
         })
       }
     />

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { BankDetailsTaskStatus, DocumentDescription, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
@@ -152,6 +153,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
 const ProjectSetupBankStatementContainer = (props: ProjectSetupBankStatementParams & BaseProps) => {
   const stores = useStores();
   const { getContent } = useContent();
+  const navigate = useNavigate();
 
   return (
     <ProjectSetupBankStatementComponent
@@ -189,8 +191,8 @@ const ProjectSetupBankStatementContainer = (props: ProjectSetupBankStatementPara
       onChange={(submit, dto) => {
         stores.partners.updatePartner(submit, props.partnerId, dto, {
           onComplete: () => {
-            stores.navigation.navigateTo(
-              props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }),
+            navigate(
+              props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }).path,
             );
           },
         });

@@ -1,16 +1,15 @@
+import { createStore } from "redux";
+import { Provider } from "react-redux";
+import { Router } from "react-router-dom";
+import { createMemoryHistory } from "history";
+
+import { Result } from "@ui/validation";
 import { Task, TaskListSection, OL } from "@ui/components";
 import { HomeRoute } from "@ui/containers";
-import createRouter from "router5";
-import browserPluginFactory from "router5/plugins/browser";
-import { createStore } from "redux";
 import { rootReducer } from "@ui/redux";
-import { RouterProvider } from "react-router5";
-import { Provider } from "react-redux";
-import { Result } from "@ui/validation";
 import { IGuide } from "@framework/types";
 
-const route = { name: "home", routeName: "home", path: "/" } as any;
-const router = createRouter([route]).usePlugin(browserPluginFactory({ useHash: false }));
+const history = createMemoryHistory();
 
 export const taskListGuide: IGuide = {
   name: "Task list",
@@ -48,7 +47,7 @@ export const taskListGuide: IGuide = {
       `,
       render: () => (
         <Provider store={createStore(rootReducer)}>
-          <RouterProvider router={router}>
+          <Router location={history.location} navigator={history}>
             <OL className="app-task-list">
               <TaskListSection step={1} title={"Scope Change"}>
                 <Task name="View files" status="Complete" route={HomeRoute.getLink({})} />
@@ -60,7 +59,7 @@ export const taskListGuide: IGuide = {
                 <Task name="View files" status="To do" route={HomeRoute.getLink({})} />
               </TaskListSection>
             </OL>
-          </RouterProvider>
+          </Router>
         </Provider>
       ),
     },
@@ -84,7 +83,7 @@ export const taskListGuide: IGuide = {
       `,
       render: () => (
         <Provider store={createStore(rootReducer)}>
-          <RouterProvider router={router}>
+          <Router location={history.location} navigator={history}>
             <OL className="app-task-list">
               <TaskListSection
                 step={1}
@@ -94,7 +93,7 @@ export const taskListGuide: IGuide = {
                 <Task name="View files" status="To do" route={HomeRoute.getLink({})} />
               </TaskListSection>
             </OL>
-          </RouterProvider>
+          </Router>
         </Provider>
       ),
     },

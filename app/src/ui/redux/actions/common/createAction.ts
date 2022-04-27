@@ -10,5 +10,9 @@ export type ActionsUnion<T extends IActionCreatorsMapObject> = ReturnType<T[keyo
 export type AsyncThunk<T, A extends RootActions = RootActions> = ThunkAction<Promise<T>, RootState, any, A>;
 
 export function createAction<T extends string, P>(type: T, payload?: P) {
-  return payload === undefined ? { type } : { type, payload };
+  if(payload !== undefined) {
+    return { type, payload };
+  } else {
+    return { type };
+  }
 }

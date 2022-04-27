@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import {
   CostCategoryType,
@@ -5,7 +6,7 @@ import {
   PCRItemStatus,
   PCRItemType,
   ProjectDto,
-  ProjectRole
+  ProjectRole,
 } from "@framework/types";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
@@ -13,12 +14,13 @@ import { PCRDto } from "@framework/dtos/pcrDtos";
 import { IEditorStore, useStores } from "@ui/redux";
 import { PCRDtoValidator } from "@ui/validators";
 import {
-  PCRSpendProfileCapitalUsageCostDto, PCRSpendProfileCostDto,
+  PCRSpendProfileCapitalUsageCostDto,
+  PCRSpendProfileCostDto,
   PCRSpendProfileLabourCostDto,
   PCRSpendProfileMaterialsCostDto,
   PCRSpendProfileOtherCostsDto,
   PCRSpendProfileSubcontractingCostDto,
-  PCRSpendProfileTravelAndSubsCostDto
+  PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import {
@@ -27,7 +29,7 @@ import {
   DeleteMaterialsCostFormComponent,
   DeleteOtherCostFormComponent,
   DeleteSubcontractingCostFormComponent,
-  DeleteTravelAndSubsCostFormComponent
+  DeleteTravelAndSubsCostFormComponent,
 } from "@ui/containers/pcrs/addPartner/spendProfile";
 import { PcrAddSpendProfileCostParams } from "./spendProfilePrepareCost";
 
@@ -40,7 +42,7 @@ interface Data {
   costCategory: Pending<CostCategoryDto>;
   editor: Pending<IEditorStore<PCRDto, PCRDtoValidator>>;
   cost: Pending<PCRSpendProfileCostDto>;
- }
+}
 
 interface Callbacks {
   onDelete: (dto: PCRDto, projectId: string) => void;
@@ -60,24 +62,35 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
       cost: this.props.cost,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor, x.costCategory, x.cost)} />;
+    return (
+      <ACC.PageLoader
+        pending={combined}
+        render={x => this.renderContents(x.project, x.editor, x.costCategory, x.cost)}
+      />
+    );
   }
 
-  private renderContents(project: ProjectDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, costCategory: CostCategoryDto, cost: PCRSpendProfileCostDto) {
+  private renderContents(
+    project: ProjectDto,
+    editor: IEditorStore<PCRDto, PCRDtoValidator>,
+    costCategory: CostCategoryDto,
+    cost: PCRSpendProfileCostDto,
+  ) {
     const DeleteForm = ACC.TypedForm<PCRSpendProfileCostDto>();
     return (
       <ACC.Page
         backLink={
           <ACC.BackLink
             route={this.props.routes.pcrSpendProfileCostsSummary.getLink({
-                itemId: this.props.itemId,
-                pcrId: this.props.pcrId,
-                projectId: this.props.projectId,
-                costCategoryId: this.props.costCategoryId
-              })}
+              itemId: this.props.itemId,
+              pcrId: this.props.pcrId,
+              projectId: this.props.projectId,
+              costCategoryId: this.props.costCategoryId,
+            })}
           >
-            <ACC.Content value={x => x.pcrSpendProfileDeleteCostContent.backLink(costCategory.name)}/>
-          </ACC.BackLink>}
+            <ACC.Content value={x => x.pcrSpendProfileDeleteCostContent.backLink(costCategory.name)} />
+          </ACC.BackLink>
+        }
         pageTitle={<ACC.Projects.Title {...project} />}
         project={project}
         error={editor.error}
@@ -85,17 +98,14 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
         <ACC.Renderers.Messages messages={this.props.messages} />
         <ACC.Section>
           <DeleteForm.Form data={cost} qa="pcrDelete">
-            <DeleteForm.Hidden
-              name="id"
-              value={dto => dto ? dto.id : ""}
-            />
+            <DeleteForm.Hidden name="id" value={dto => (dto ? dto.id : "")} />
             {cost && this.renderComponent(costCategory, cost)}
             <DeleteForm.Button
               name="delete"
               styling="Warning"
               onClick={() => this.props.onDelete(editor.data, this.props.projectId)}
             >
-              <ACC.Content value={x => x.pcrSpendProfileDeleteCostContent.deleteButton}/>
+              <ACC.Content value={x => x.pcrSpendProfileDeleteCostContent.deleteButton} />
             </DeleteForm.Button>
           </DeleteForm.Form>
         </ACC.Section>
@@ -104,23 +114,54 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   }
 
   private renderComponent(costCategory: CostCategoryDto, cost: PCRSpendProfileCostDto) {
-    switch(costCategory.type) {
-      case CostCategoryType.Labour: return <DeleteLabourCostFormComponent data={cost as PCRSpendProfileLabourCostDto} costCategory={costCategory} />;
-      case CostCategoryType.Materials: return <DeleteMaterialsCostFormComponent data={cost as PCRSpendProfileMaterialsCostDto} costCategory={costCategory} />;
-      case CostCategoryType.Capital_Usage: return <DeleteCapitalUsageCostFormComponent data={cost as PCRSpendProfileCapitalUsageCostDto} costCategory={costCategory} />;
-      case CostCategoryType.Subcontracting: return <DeleteSubcontractingCostFormComponent data={cost as PCRSpendProfileSubcontractingCostDto} costCategory={costCategory} />;
-      case CostCategoryType.Travel_And_Subsistence: return <DeleteTravelAndSubsCostFormComponent data={cost as PCRSpendProfileTravelAndSubsCostDto} costCategory={costCategory} />;
-      case CostCategoryType.Other_Costs: return <DeleteOtherCostFormComponent data={cost as PCRSpendProfileOtherCostsDto} costCategory={costCategory} />;
-      default: return null;
+    switch (costCategory.type) {
+      case CostCategoryType.Labour:
+        return (
+          <DeleteLabourCostFormComponent data={cost as PCRSpendProfileLabourCostDto} costCategory={costCategory} />
+        );
+      case CostCategoryType.Materials:
+        return (
+          <DeleteMaterialsCostFormComponent
+            data={cost as PCRSpendProfileMaterialsCostDto}
+            costCategory={costCategory}
+          />
+        );
+      case CostCategoryType.Capital_Usage:
+        return (
+          <DeleteCapitalUsageCostFormComponent
+            data={cost as PCRSpendProfileCapitalUsageCostDto}
+            costCategory={costCategory}
+          />
+        );
+      case CostCategoryType.Subcontracting:
+        return (
+          <DeleteSubcontractingCostFormComponent
+            data={cost as PCRSpendProfileSubcontractingCostDto}
+            costCategory={costCategory}
+          />
+        );
+      case CostCategoryType.Travel_And_Subsistence:
+        return (
+          <DeleteTravelAndSubsCostFormComponent
+            data={cost as PCRSpendProfileTravelAndSubsCostDto}
+            costCategory={costCategory}
+          />
+        );
+      case CostCategoryType.Other_Costs:
+        return <DeleteOtherCostFormComponent data={cost as PCRSpendProfileOtherCostsDto} costCategory={costCategory} />;
+      default:
+        return null;
     }
   }
 }
 
 const SpendProfileDeleteCostContainer = (props: PcrDeleteSpendProfileCostParams & BaseProps) => {
+  const navigate = useNavigate();
   const stores = useStores();
 
   const costCategoryPending = stores.costCategories.get(props.costCategoryId);
   const dtoPending = stores.projectChangeRequests.getById(props.projectId, props.pcrId);
+
   return (
     <Component
       {...props}
@@ -145,16 +186,17 @@ const SpendProfileDeleteCostContainer = (props: PcrDeleteSpendProfileCostParams 
         item.status = PCRItemStatus.Incomplete;
         stores.messages.clearMessages();
         stores.projectChangeRequests.updatePcrEditor(true, projectId, dto, "You have deleted a cost", () =>
-          stores.navigation.navigateTo(
+          navigate(
             props.routes.pcrSpendProfileCostsSummary.getLink({
               projectId: props.projectId,
               pcrId: props.pcrId,
               itemId: props.itemId,
               costCategoryId: props.costCategoryId,
-            }),
+            }).path,
           ),
         );
       }}
+
     />
   );
 };
@@ -163,13 +205,13 @@ export const PCRSpendProfileDeleteCostRoute = defineRoute<PcrDeleteSpendProfileC
   routeName: "pcrPrepareSpendProfileDeleteCost",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/spendProfile/:costCategoryId/cost/:costId/delete",
   container: SpendProfileDeleteCostContainer,
-  getParams: (route) => ({
+  getParams: route => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,
-    costId: route.params.costId
+    costId: route.params.costId,
   }),
   getTitle: ({ content }) => content.pcrSpendProfileDeleteCostContent.title(),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
 });

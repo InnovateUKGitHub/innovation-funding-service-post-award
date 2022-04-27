@@ -1,7 +1,7 @@
-import { actionTypes } from "redux-router5";
 import { editorsReducer, IEditorStore } from "@ui/redux/reducers";
 import { ClaimDtoValidator } from "@ui/validators";
 import { ClaimDto, IAppError, ErrorCode } from "@framework/types";
+import { routeTransition } from "@ui/redux/actions";
 import { EditorStatus } from "@ui/constants/enums";
 import { EditorResetAction, UpdateEditorAction, EditorSubmitAction, EditorSuccessAction, EditorErrorAction } from "@ui/redux/actions/common/editorActions";
 import { createPartnerDto } from "@framework/util/stubDtos";
@@ -226,13 +226,11 @@ describe("editorsReducer", () => {
     });
   });
 
-  describe("Transition sucess", () => {
+
+  describe("Transition success", () => {
     it("should empty all editors when navigating", () => {
       const originalState = setupInitialState();
-      const action = {
-        type: actionTypes.TRANSITION_SUCCESS,
-        payload: { previousRoute: true }
-      } as any;
+      const action = routeTransition();
 
       const newState = editorsReducer("claim")(originalState.editors.claim, action);
       expect(newState).toEqual({});
@@ -240,19 +238,7 @@ describe("editorsReducer", () => {
 
     test("preserves editor on replace navigation", () => {
       const originalState = setupInitialState();
-      const action = {
-        type: actionTypes.TRANSITION_SUCCESS,
-        payload: {
-          previousRoute: true,
-          route: {
-            meta: {
-              options: {
-                replace: true
-              }
-            }
-          }
-        }
-      } as any;
+      const action = routeTransition("REPLACE");
 
       const newState = editorsReducer("claim")(originalState.editors.claim, action);
       expect(newState).toEqual(originalState.editors.claim);

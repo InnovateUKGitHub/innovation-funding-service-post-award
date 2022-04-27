@@ -1,3 +1,5 @@
+import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
+
 import { useState } from "react";
 import { PartnerDto, ProjectDto } from "@framework/types";
 import { useStores } from "@ui/redux";
@@ -7,12 +9,12 @@ import { noop } from "@ui/helpers/noop";
 import * as ACC from "@ui/components";
 
 import { useMounted } from "@ui/features/has-mounted/mounted.context";
+import { PageTitle } from "@ui/features/page-title";
 import { BroadcastsViewer } from "../Broadcast/BroadcastsViewer";
 import { DashboardProjectList } from "./DashboardProjectList";
 import { DashboardProjectCount } from "./DashboardProjectCount";
 import { FilterOptions } from "./Dashboard.interface";
 import { generateFilteredProjects, getAvailableProjectFilters } from "./dashboard.logic";
-
 
 interface ProjectDashboardParams {
   search?: string;
@@ -60,7 +62,7 @@ function ProjectDashboard({
 
   return (
     <ACC.Page
-      pageTitle={<ACC.PageTitle />}
+      pageTitle={<PageTitle />}
       backLink={
         config.ssoEnabled ? (
           // Note: This has been added as the content component cannot infer the static string length of min 4 characters
@@ -111,9 +113,8 @@ function ProjectDashboard({
               name="filters"
               options={options}
               value={() => (filters.length ? options.filter(x => filters.includes(x.id as FilterOptions)) : null)}
-              update={(_, options) => {
-                const latestFilters = options!.map(x => x.id) as FilterOptions[];
-
+              update={(_, selectOptions) => {
+                const latestFilters = selectOptions!.map(x => x.id) as FilterOptions[];
                 setFilters(latestFilters);
               }}
             />
@@ -149,9 +150,13 @@ function ProjectDashboard({
 const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) => {
   const stores = useStores();
 
-  const projects = stores.projects.getProjectsFilter(props.search);
+  const params = useAppParams<ProjectDashboardParams>();
+
+  const projects = stores.projects.getProjectsFilter(params.search);
   const unfilteredObjects = stores.projects.getProjects();
   const partners = stores.partners.getAll();
+
+  const navigate = useNavigate();
 
   return (
     <ACC.PageLoader
@@ -160,11 +165,11 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
         <ProjectDashboard
           {...props}
           {...resolvedPending}
+          {...params}
           totalNumberOfProjects={resolvedPending.unfilteredObjects.length}
           onSearch={searchParams => {
-            const dashboardRouteWithParams = ProjectDashboardRoute.getLink(searchParams);
-
-            return stores.navigation.navigateTo(dashboardRouteWithParams, true);
+            const routeInfo = ProjectDashboardRoute.getLink(searchParams);
+            return navigate(routeInfo.path);
           }}
         />
       )}
@@ -172,13 +177,20 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
   );
 };
 
+function useAppParams<T extends Record<string, any>>(): T {
+  const [params] = useSearchParams();
+  const urlParam = new URLSearchParams(params);
+
+  return Object.fromEntries(urlParam) as unknown as T;
+}
+
 export const ProjectDashboardRoute = defineRoute({
   routeName: "projectDashboard",
-  routePath: "/projects/dashboard?:search",
+  routePath: "/projects/dashboard",
+  routePathWithQuery: "/projects/dashboard?:search",
   container: ProjectDashboardContainer,
   getParams: r => {
     const { search, filters: rawFilters } = r.params;
-
     // Note: Checkboxes can return 'option' or 'option[]' data type
     const parsedFilters = typeof rawFilters === "string" ? [rawFilters] : rawFilters;
 

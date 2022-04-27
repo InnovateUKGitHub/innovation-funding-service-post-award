@@ -1,6 +1,5 @@
 import { createStore } from "redux";
 import { render } from "@testing-library/react";
-
 import { IClientUser, ProjectRole } from "@framework/types";
 import { routeConfig } from "@ui/routing";
 import { IStores } from "@ui/redux/storesProvider";
@@ -44,7 +43,8 @@ describe("<NavigationArrows />", () => {
     }),
   };
 
-  const setup = (element: React.ReactElement) => render(<TestBed stores={store}>{element}</TestBed>);
+  const setup = (element: React.ReactElement) =>
+    render(<TestBed stores={store}>{element}</TestBed>);
 
   describe("@returns", () => {
     test("with next link only", () => {

@@ -4,6 +4,7 @@ import { chunks, NavigationCard, NavigationCardProps, NavigationCardsGrid } from
 import { TestBed } from "@shared/TestBed";
 
 const createRoute = (uid: string) => ({
+  path: `${uid}-path`,
   routeName: `${uid}-routeName`,
   routeParams: { projectId: `${uid}-projectId` },
   accessControl: () => true,
@@ -17,19 +18,16 @@ function createMessages(totalMessages: number, uid: string) {
 }
 
 function createStubData(length: number): NavigationCardProps[] {
-  return Array.from(
-    { length },
-    (_, uid): NavigationCardProps => {
-      const uidString = `stub-${uid}`;
+  return Array.from({ length }, (_, uid): NavigationCardProps => {
+    const uidString = `stub-${uid}`;
 
-      return {
-        label: `${uidString}-content`,
-        qa: `${uidString}-qa`,
-        messages: createMessages(2, uidString),
-        route: createRoute(uidString),
-      };
-    },
-  );
+    return {
+      label: `${uidString}-content`,
+      qa: `${uidString}-qa`,
+      messages: createMessages(2, uidString),
+      route: createRoute(uidString),
+    };
+  });
 }
 
 describe("chunks()", () => {
@@ -64,10 +62,10 @@ describe("<NavigationCard>", () => {
     const { container, queryByText } = setup();
 
     const labelElement = queryByText(defaultProps.label);
-    const querylistElement = container.querySelector(".card-link__messages");
+    const queryListElement = container.querySelector(".card-link__messages");
 
     expect(labelElement).toBeInTheDocument();
-    expect(querylistElement).not.toBeInTheDocument();
+    expect(queryListElement).not.toBeInTheDocument();
   });
 
   describe("should render label", () => {

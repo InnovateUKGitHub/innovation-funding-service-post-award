@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { IEditorStore, useStores } from "@ui/redux";
 import * as ACC from "@ui/components";
@@ -61,6 +62,7 @@ const PartnerDetailsEditContainer = (props: PartnerDetailsParams & BaseProps) =>
   const url = props.routes.partnerDetails.getLink({ projectId: props.projectId, partnerId: props.partnerId });
   const saveAndReturnLabel = getContent(x => x.partnerDetailsEdit.buttonSaveAndReturnPartnerDetails);
   const backLink = <ACC.BackLink route={url}>{getContent(x => x.partnerDetailsEdit.backToPartnerInfo)}</ACC.BackLink>;
+  const navigate = useNavigate();
 
   return (
     <PartnerDetailsEditComponent
@@ -72,7 +74,9 @@ const PartnerDetailsEditContainer = (props: PartnerDetailsParams & BaseProps) =>
       displayCurrentPostcode
       onUpdate={(saving, dto) =>
         stores.partners.updatePartner(saving, props.partnerId, dto, {
-          onComplete: () => stores.navigation.navigateTo(url),
+          onComplete: () => {
+            navigate(url.path);
+          },
         })
       }
       {...props}

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import * as ACC from "@ui/components";
 import { FormBuilder } from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
@@ -21,7 +22,6 @@ interface Callbacks {
 }
 
 class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDetailsParams, Data, Callbacks> {
-
   public render() {
     const combined = Pending.combine({ project: this.props.project, editor: this.props.editor });
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor)} />;
@@ -32,8 +32,13 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
     return (
       <ACC.Page
         backLink={
-          <ACC.BackLink route={this.props.routes.projectSetup.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}>
-            <ACC.Content value={(x) => x.projectSetupBankDetails.backLink} />
+          <ACC.BackLink
+            route={this.props.routes.projectSetup.getLink({
+              projectId: this.props.projectId,
+              partnerId: this.props.partnerId,
+            })}
+          >
+            <ACC.Content value={x => x.projectSetupBankDetails.backLink} />
           </ACC.BackLink>
         }
         error={editor.error}
@@ -41,7 +46,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
         pageTitle={<ACC.Projects.Title {...project} />}
       >
         {this.renderGuidance()}
-        <ACC.Section qa="bank-details-section" >
+        <ACC.Section qa="bank-details-section">
           <Form.Form
             editor={editor}
             onChange={() => this.props.onChange(false, editor.data)}
@@ -56,12 +61,12 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
                 value={x => x.bankDetails.companyNumber}
                 label={x => x.projectSetupBankDetails.partnerLabels.companyNumber}
                 hint={x => x.projectSetupBankDetails.partnerLabels.companyNumberHint}
-                update={(dto, val) => dto.bankDetails.companyNumber = val}
+                update={(dto, val) => (dto.bankDetails.companyNumber = val)}
               />
             </Form.Fieldset>
             <Form.Fieldset heading={x => x.projectSetupBankDetails.accountDetailsFieldsetTitle}>
-              { this.renderSortCode(editor, Form) }
-              { this.renderAccountNumber(editor, Form) }
+              {this.renderSortCode(editor, Form)}
+              {this.renderAccountNumber(editor, Form)}
             </Form.Fieldset>
             {/* TODO: Commenting out in the hope we get an answer from experian in the coming weeks */}
             {/* <Form.Fieldset heading={x => x.projectSetupBankDetails.accountHolderFieldsetTitle()}>
@@ -82,46 +87,48 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
             </Form.Fieldset> */}
             <Form.Fieldset heading={x => x.projectSetupBankDetails.billingAddressFieldsetTitle}>
               <ACC.Renderers.SimpleString qa={"billingAddressFieldsetGuidance"}>
-                <ACC.Content value={x => x.projectSetupBankDetails.billingAddressFieldsetGuidance}/>
+                <ACC.Content value={x => x.projectSetupBankDetails.billingAddressFieldsetGuidance} />
               </ACC.Renderers.SimpleString>
               <Form.String
                 name="accountBuilding"
                 width={"one-third"}
                 value={x => x.bankDetails.address.accountBuilding}
                 label={x => x.projectSetupBankDetails.partnerLabels.accountBuilding}
-                update={(dto, val) => dto.bankDetails.address.accountBuilding = val}
+                update={(dto, val) => (dto.bankDetails.address.accountBuilding = val)}
               />
               <Form.String
                 name="accountStreet"
                 width={"one-third"}
                 value={x => x.bankDetails.address.accountStreet}
                 label={x => x.projectSetupBankDetails.partnerLabels.accountStreet}
-                update={(dto, val) => dto.bankDetails.address.accountStreet = val}
+                update={(dto, val) => (dto.bankDetails.address.accountStreet = val)}
               />
               <Form.String
                 name="accountLocality"
                 width={"one-third"}
                 value={x => x.bankDetails.address.accountLocality}
                 label={x => x.projectSetupBankDetails.partnerLabels.accountLocality}
-                update={(dto, val) => dto.bankDetails.address.accountLocality = val}
+                update={(dto, val) => (dto.bankDetails.address.accountLocality = val)}
               />
               <Form.String
                 name="accountTownOrCity"
                 width={"one-third"}
                 value={x => x.bankDetails.address.accountTownOrCity}
                 label={x => x.projectSetupBankDetails.partnerLabels.accountTownOrCity}
-                update={(dto, val) => dto.bankDetails.address.accountTownOrCity = val}
+                update={(dto, val) => (dto.bankDetails.address.accountTownOrCity = val)}
               />
               <Form.String
                 name="accountPostcode"
                 width={"one-third"}
                 value={x => x.bankDetails.address.accountPostcode}
                 label={x => x.projectSetupBankDetails.partnerLabels.accountPostcode}
-                update={(dto, val) => dto.bankDetails.address.accountPostcode = val}
+                update={(dto, val) => (dto.bankDetails.address.accountPostcode = val)}
               />
             </Form.Fieldset>
             <Form.Fieldset>
-              <Form.Submit><ACC.Content value={x => x.projectSetupBankDetails.submitButton}/></Form.Submit>
+              <Form.Submit>
+                <ACC.Content value={x => x.projectSetupBankDetails.submitButton} />
+              </Form.Submit>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
@@ -132,7 +139,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
   private renderGuidance() {
     return (
       <ACC.Section qa={"guidance"}>
-        <ACC.Content value={x => x.projectSetupBankDetails.guidanceMessage}/>
+        <ACC.Content value={x => x.projectSetupBankDetails.guidanceMessage} />
       </ACC.Section>
     );
   }
@@ -140,15 +147,17 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
   private renderSortCode(editor: IEditorStore<PartnerDto, PartnerDtoValidator>, Form: FormBuilder<PartnerDto>) {
     if (editor.data.bankCheckStatus === BankCheckStatus.NotValidated) {
       return (
-          <Form.String
-            name="sortCode"
-            width={"one-third"}
-            value={x => x.bankDetails.sortCode}
-            label={x => x.projectSetupBankDetails.partnerLabels.sortCode}
-            hint={x => x.projectSetupBankDetails.partnerLabels.sortCodeHint}
-            update={(dto, val) => dto.bankDetails.sortCode = val}
-            validation={editor.validator.sortCode.isValid ? editor.validator.bankCheckValidation : editor.validator.sortCode}
-          />
+        <Form.String
+          name="sortCode"
+          width={"one-third"}
+          value={x => x.bankDetails.sortCode}
+          label={x => x.projectSetupBankDetails.partnerLabels.sortCode}
+          hint={x => x.projectSetupBankDetails.partnerLabels.sortCodeHint}
+          update={(dto, val) => (dto.bankDetails.sortCode = val)}
+          validation={
+            editor.validator.sortCode.isValid ? editor.validator.bankCheckValidation : editor.validator.sortCode
+          }
+        />
       );
     }
     return (
@@ -164,31 +173,35 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
   private renderAccountNumber(editor: IEditorStore<PartnerDto, PartnerDtoValidator>, Form: FormBuilder<PartnerDto>) {
     if (editor.data.bankCheckStatus === BankCheckStatus.NotValidated) {
       return (
-          <Form.String
-            name="accountNumber"
-            width={"one-third"}
-            value={x => x.bankDetails.accountNumber}
-            label={x => x.projectSetupBankDetails.partnerLabels.accountNumber}
-            hint={x => x.projectSetupBankDetails.partnerLabels.accountNumberHint}
-            update={(dto, val) => dto.bankDetails.accountNumber = val}
-            validation={editor.validator.accountNumber.isValid ? editor.validator.bankCheckValidation : editor.validator.accountNumber}
-          />
+        <Form.String
+          name="accountNumber"
+          width={"one-third"}
+          value={x => x.bankDetails.accountNumber}
+          label={x => x.projectSetupBankDetails.partnerLabels.accountNumber}
+          hint={x => x.projectSetupBankDetails.partnerLabels.accountNumberHint}
+          update={(dto, val) => (dto.bankDetails.accountNumber = val)}
+          validation={
+            editor.validator.accountNumber.isValid
+              ? editor.validator.bankCheckValidation
+              : editor.validator.accountNumber
+          }
+        />
       );
     }
     return (
-        <Form.Custom
-          name="accountNumber"
-          value={x => <ACC.Renderers.SimpleString>{x.bankDetails.accountNumber}</ACC.Renderers.SimpleString>}
-          label={x => x.projectSetupBankDetails.partnerLabels.accountNumber}
-          update={() => null}
-        />
+      <Form.Custom
+        name="accountNumber"
+        value={x => <ACC.Renderers.SimpleString>{x.bankDetails.accountNumber}</ACC.Renderers.SimpleString>}
+        label={x => x.projectSetupBankDetails.partnerLabels.accountNumber}
+        update={() => null}
+      />
     );
   }
 }
 
 const ProjectSetupBankDetailsContainer = (props: ProjectSetupBankDetailsParams & BaseProps) => {
   const stores = useStores();
-
+  const navigate = useNavigate();
   return (
     <ProjectSetupBankDetailsComponent
       {...props}
@@ -201,18 +214,18 @@ const ProjectSetupBankDetailsContainer = (props: ProjectSetupBankDetailsParams &
           validateBankDetails: submit,
           onComplete: resp => {
             if (resp.bankCheckStatus === BankCheckStatus.ValidationFailed) {
-              stores.navigation.navigateTo(
+              navigate(
                 props.routes.failedBankCheckConfirmation.getLink({
                   projectId: props.projectId,
                   partnerId: props.partnerId,
-                }),
+                }).path,
               );
             } else {
-              stores.navigation.navigateTo(
+              navigate(
                 props.routes.projectSetupBankDetailsVerify.getLink({
                   projectId: props.projectId,
                   partnerId: props.partnerId,
-                }),
+                }).path,
               );
             }
           },
@@ -232,10 +245,11 @@ export const ProjectSetupBankDetailsRoute = defineRoute({
   routeName: "projectSetupBankDetails",
   routePath: "/projects/:projectId/setup/:partnerId/bank-details",
   container: ProjectSetupBankDetailsContainer,
-  getParams: (route) => ({
+  getParams: route => ({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,
   }),
   getTitle: ({ content }) => content.projectSetupBankDetails.title(),
-  accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+  accessControl: (auth, { projectId, partnerId }) =>
+    auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
 });

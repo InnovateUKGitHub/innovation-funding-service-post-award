@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import * as ACC from "@ui/components";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { ForecastDetailsDTO, ProjectRole } from "@framework/types";
@@ -107,7 +108,7 @@ function UpdateForecastComponent(props: ForecastUpdateParams & ForecastUpdateDat
 const UpdateForecastContainer = (props: ForecastUpdateParams & BaseProps) => {
   const { getContent } = useContent();
   const stores = useStores();
-
+const navigate = useNavigate();
   const forecastUpdatedMessage = getContent(x => x.forecastsUpdate.messages.forecastUpdated);
 
   return (
@@ -133,8 +134,8 @@ const UpdateForecastContainer = (props: ForecastUpdateParams & BaseProps) => {
           false,
           forecastUpdatedMessage,
           () => {
-            stores.navigation.navigateTo(
-              props.routes.forecastDetails.getLink({ projectId: props.projectId, partnerId: props.partnerId }),
+            navigate(
+              props.routes.forecastDetails.getLink({ projectId: props.projectId, partnerId: props.partnerId }).path
             );
           },
         );
