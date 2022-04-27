@@ -215,7 +215,7 @@ const TableComponent = <T extends {}>({
   const { handleSort, getColumnOption, sortedRows } = useTableSorter(getSortKeys(children), data);
 
   const headers = children.map((column, columnIndex) =>
-    cloneElement(column as React.ReactElement<any>, {
+    isValidElement<InternalColumnProps<T>>(column) && cloneElement(column, {
       mode: "header",
       columnIndex,
       header: isValidElement(column?.props.header) ? column?.props.header : getContent(column?.props.header || ""),
