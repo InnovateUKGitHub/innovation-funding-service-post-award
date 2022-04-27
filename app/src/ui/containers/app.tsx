@@ -1,124 +1,118 @@
-import React from "react";
+import { useEffect, useMemo, useRef } from "react";
+import { Helmet } from "react-helmet";
 import { Store } from "redux";
-import { Params, State as RouteState } from "router5";
 import { ErrorBoundary } from "react-error-boundary";
+import { Routes, Route, useLocation, useNavigationType } from "react-router-dom";
 
-import { Content } from "@content/content";
-import { getContentFromResult, useCompetitionType } from "@ui/hooks";
-import { IRoutes, MatchedRoute, matchRoute } from "@ui/routing";
-import { IStores, ModalRegister, useModal, useRoutes, useStores } from "@ui/redux";
-import { updatePageTitle } from "@ui/redux/actions";
+import { IRouteDefinition } from "@ui/containers/containerBase";
+import { getRoutes, routeConfig } from "@ui/routing";
+import { useModal, useStores } from "@ui/redux";
+import { routeTransition } from "@ui/redux/actions";
 import { ContentProvider } from "@ui/redux/contentProvider";
-import { IClientConfig } from "@ui/redux/reducers/configReducer";
 
-import { FooterExternalContent, footerLinks } from "@ui/containers/app/footer.config";
 import { BaseProps } from "@ui/containers/containerBase";
 
+import { PageTitleProvider } from "@ui/features/page-title";
 import { ProjectParticipantProvider } from "@ui/features/project-participants";
+import { useAppParams } from "@ui/features/use-app-params";
+import { useInitContent } from "@ui/features/use-initial-content";
+
 import { Footer, FullHeight, GovWidthContainer, Header, PhaseBanner, PrivateModal } from "@ui/components";
-import { ErrorContainer, ErrorContainerProps, ErrorBoundaryFallback } from "@ui/components/errors";
+import { ErrorContainer, ErrorBoundaryFallback } from "@ui/components/errors";
 import { MountedProvider } from "@ui/features";
+import { noop } from "@ui/helpers/noop";
+import { getParamsFromUrl } from "@ui/helpers/make-url";
 
 import { useAppMount } from "./app/app-mount.hook";
 import { ProjectStatusCheck } from "./app/project-active";
+import { ErrorNotFoundRoute, ErrorRoute } from "./errors";
+import { FooterExternalContent, footerLinks } from "./app/footer.config";
 
 interface IAppProps {
-  // @todo see if we can remove and replace with a callback to set page title
   dispatch: any;
-  loadStatus: number;
-  config: IClientConfig;
-  messages: string[];
-  modalRegister: ModalRegister;
-  stores: IStores;
-  route: RouteState;
-  routes: IRoutes;
-  content: Content;
-  params: { projectId?: string } & Params;
-  currentRoute: MatchedRoute;
+  currentRoute: IRouteDefinition<any>;
 }
 
-class AppView extends React.Component<IAppProps> {
-  constructor(props: IAppProps) {
-    super(props);
-    props.modalRegister.subscribe("app", () => this.setState({}));
-  }
+function AppView({ currentRoute, dispatch }: IAppProps) {
+  const stores = useStores();
+  const params = useAppParams();
+  const content = useInitContent();
 
-  public componentDidUpdate(prevProps: Readonly<IAppProps>) {
-    const { route, loadStatus, stores, content, dispatch, currentRoute, params } = this.props;
+  const modalRegister = useModal();
+  const auth = stores.users.getCurrentUserAuthorisation();
+  const config = stores.config.getConfig();
+  const messages = stores.messages.messages();
 
-    const newRoute = prevProps.route !== route;
-    const hashLoaded = prevProps.loadStatus !== 0;
+  // Note: We treat no invocation as valid
+  const hasAccess = currentRoute.accessControl ? currentRoute.accessControl(auth, params, config) : true;
+  const titlePayload = currentRoute.getTitle({ params, stores, content });
 
-    if (newRoute || (loadStatus === 0 && hashLoaded)) {
-      dispatch(updatePageTitle(currentRoute, params, stores, content));
+  const navigationType = useNavigationType();
+
+  // Note: Modals are rarely used, but leaving support currently
+  useEffect(() => {
+    modalRegister.subscribe("app", noop);
+  }, [modalRegister]);
+
+  const location = useLocation();
+
+  const routeParams = useMemo(
+    () => getParamsFromUrl(currentRoute.routePath, location.pathname, location.search),
+    [currentRoute.routePath, location.pathname, location.search],
+  );
+
+  // TODO: Deprecating 'config' and pulling from redux store via 'useSelector' prop drilling :(
+  // TODO: Deprecating 'messages' and pulling from redux store via 'useSelector' prop drilling :(
+  // TODO: Deprecating 'routes' and create a typed solution to fetch route with required url params
+  const baseProps: BaseProps = {
+    messages,
+    config,
+    routes: routeConfig,
+    projectId: params.projectId,
+    currentRoute,
+    ...routeParams,
+  };
+
+  const isAlreadyMounted = useRef(false);
+
+  useEffect(() => {
+    if (isAlreadyMounted.current) {
+      dispatch(routeTransition(navigationType));
+    } else {
+      isAlreadyMounted.current = true;
     }
-  }
+  }, [location.pathname, navigationType, dispatch]);
 
-  private accessControl(route: MatchedRoute, params: {}): boolean {
-    if (!route.accessControl) return true;
-    const auth = this.props.stores.users.getCurrentUserAuthorisation();
-    return route.accessControl(auth, params, this.props.config);
-  }
+  return (
+    <>
+      <Helmet>
+        <title>{titlePayload.htmlTitle} - Innovation Funding Service</title>
+      </Helmet>
 
-  public render() {
-    const { modalRegister, messages, route, config, routes, content, currentRoute, params } = this.props;
-
-    const hasAccess = this.accessControl(currentRoute, params);
-
-    const baseProps: BaseProps = {
-      messages,
-      route,
-      config,
-      routes,
-    };
-
-    const RouteContainer = currentRoute.container;
-
-    const appMenuItems = [
-      {
-        qa: "nav-dashboard",
-        href: `${config.ifsRoot}/dashboard-selection`,
-        text: getContentFromResult(content.header.dashboard),
-      },
-      {
-        qa: "nav-profile",
-        href: `${config.ifsRoot}/profile/view`,
-        text: getContentFromResult(content.header.profile),
-      },
-      {
-        qa: "nav-sign-out",
-        href: "/logout",
-        text: getContentFromResult(content.header.signOut),
-      },
-    ];
-
-    return (
-      <MountedProvider>
-        <ContentProvider value={content}>
+      <ContentProvider value={content}>
+        <PageTitleProvider title={titlePayload.displayTitle}>
           <FullHeight.Container data-page-qa={currentRoute.routeName}>
             <a href="#main-content" className="govuk-skip-link">
               Skip to main content
             </a>
 
-            <Header headingLink={`${config.ifsRoot}/competition/search`} menuItems={appMenuItems} />
+            <Header headingLink={`${config.ifsRoot}/competition/search`} />
 
             <FullHeight.Content>
               <GovWidthContainer>
                 <PhaseBanner />
 
                 {hasAccess ? (
-                  <ErrorBoundary fallbackRender={errorProps => <ErrorBoundaryFallback {...(errorProps as any)} />}>
-                    <ProjectParticipantProvider projectId={params.projectId}>
-                      <ProjectStatusCheck
-                        projectId={params.projectId}
-                        overrideAccess={!!currentRoute.allowRouteInActiveAccess}
-                      >
-                        <RouteContainer {...baseProps} {...params} />
-                      </ProjectStatusCheck>
-                    </ProjectParticipantProvider>
-                  </ErrorBoundary>
+                  <ProjectParticipantProvider projectId={params.projectId}>
+                    <ProjectStatusCheck
+                      projectId={params.projectId}
+                      overrideAccess={!!currentRoute.allowRouteInActiveAccess}
+                    >
+                      <currentRoute.container {...baseProps} />
+                    </ProjectStatusCheck>
+                  </ProjectParticipantProvider>
                 ) : (
-                  <ErrorContainer {...(route.params as ErrorContainerProps)} />
+                  <ErrorContainer from="app" {...(params as any)} />
                 )}
               </GovWidthContainer>
             </FullHeight.Content>
@@ -128,13 +122,13 @@ class AppView extends React.Component<IAppProps> {
             </FooterExternalContent>
 
             {modalRegister.getModals().map(modal => (
-              <PrivateModal key={`modal-${modal.id}`} {...modal} />
+              <PrivateModal key={modal.id} {...modal} />
             ))}
           </FullHeight.Container>
-        </ContentProvider>
-      </MountedProvider>
-    );
-  }
+        </PageTitleProvider>
+      </ContentProvider>
+    </>
+  );
 }
 
 interface AppRoute {
@@ -142,32 +136,33 @@ interface AppRoute {
 }
 
 export function App(props: AppRoute) {
-  const stores = useStores();
-  const modalRegister = useModal();
-  const routes = useRoutes();
+  const routesList = getRoutes();
+  // Note: Don't call me in a lifecycle - needs to be SSR compatible!
+  useAppMount();
 
-  const getRoute = stores.navigation.getRoute();
-  const currentRoute = matchRoute(getRoute);
-
-  const params: Params & { projectId?: string } = currentRoute.getParams(getRoute);
-
-  useAppMount(params.projectId);
-
-  const competitionType = useCompetitionType(params.projectId);
+  const error = props.store.getState().globalError;
 
   return (
-    <AppView
-      content={new Content(competitionType)}
-      stores={stores}
-      modalRegister={modalRegister}
-      loadStatus={stores.navigation.getLoadStatus()}
-      config={stores.config.getConfig()}
-      messages={stores.messages.messages()}
-      route={getRoute}
-      params={params}
-      currentRoute={currentRoute}
-      dispatch={props.store.dispatch}
-      routes={routes}
-    />
+    <ErrorBoundary fallbackRender={errorProps => <ErrorBoundaryFallback {...(errorProps as any)} />}>
+      <MountedProvider>
+        <Routes>
+          {error ? (
+            <Route path="*" element={<AppView currentRoute={ErrorRoute} dispatch={props.store.dispatch} />} />
+          ) : (
+            <>
+              {routesList.map(([routeKey, route]) => (
+                <Route
+                  key={routeKey}
+                  path={route.routePath}
+                  element={<AppView currentRoute={route} dispatch={props.store.dispatch} />}
+                />
+              ))}
+
+              <Route path="*" element={<AppView currentRoute={ErrorNotFoundRoute} dispatch={props.store.dispatch} />} />
+            </>
+          )}
+        </Routes>
+      </MountedProvider>
+    </ErrorBoundary>
   );
 }

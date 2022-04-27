@@ -6,6 +6,7 @@ import { IClientConfig } from "@ui/redux/reducers/configReducer";
 
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import * as ACC from "@ui/components";
+import { PageTitle } from "@ui/features/page-title";
 import { useContent } from "@ui/hooks";
 
 function DevHomePage(props: BaseProps) {
@@ -19,7 +20,8 @@ function DevHomePage(props: BaseProps) {
 
   return (
     <>
-      <ACC.PageTitle />
+      <PageTitle />
+
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-full">
           <ACC.H3 as="h2">{getContent(x => x.home.currentUserHeading)}</ACC.H3>

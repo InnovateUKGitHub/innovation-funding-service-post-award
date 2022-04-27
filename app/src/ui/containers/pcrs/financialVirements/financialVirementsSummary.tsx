@@ -46,7 +46,7 @@ export function FinancialVirementSummaryComponent({ mode, ...props }: FinancialV
         : props.routes.pcrFinancialVirementDetails.getLink({ ...params, mode });
 
     return (
-      <ACC.Link preserveData route={route}>
+      <ACC.Link route={route}>
         {ACC.getPartnerName(partner, true)}
       </ACC.Link>
     );

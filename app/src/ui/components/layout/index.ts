@@ -2,7 +2,6 @@ export * from "./footer";
 export * from "./header";
 export * from "./info";
 export * from "./page";
-export * from "./pageTitle";
 export * from "./phaseBanner";
 export * from "./section";
 export * from "./sectionPanel";

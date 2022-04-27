@@ -6,7 +6,6 @@ import { Provider } from "react-redux";
 import { TestBed } from "@shared/TestBed";
 import { Content } from "@content/content";
 import { Guide } from "@ui/componentsGuide/guide";
-import { PageTitleState } from "@ui/redux/reducers/pageTitleReducer";
 import * as colour from "@ui/styles/colours";
 import * as pkg from "../../package.json";
 import { configuration } from "./features/common";
@@ -14,20 +13,13 @@ import { configuration } from "./features/common";
 export function componentGuideRender(req: Request, res: Response) {
   const nonce = res.locals.nonce;
 
-  const exampleTitle: PageTitleState = {
-    displayTitle: "Component guide example title",
-    htmlTitle: "Display title",
-  };
+  const reducer = combineReducers({});
 
-  const reducer = combineReducers({
-    title: (s: PageTitleState = exampleTitle) => s,
-  });
-
-  const store = createStore(reducer, { title: exampleTitle });
+  const store = createStore(reducer, { });
 
   const html = renderToString(
     <Provider store={store}>
-      <TestBed isServer content={new Content()}>
+      <TestBed isServer content={new Content()} shouldOmitRouterProvider>
         <Guide source="server" filter={req.query.guide} />
       </TestBed>
     </Provider>,

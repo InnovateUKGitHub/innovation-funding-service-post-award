@@ -1,20 +1,19 @@
-import createRouter from "router5";
-import browserPluginFactory from "router5/plugins/browser";
+import { Router } from "react-router-dom";
+import { createMemoryHistory } from "history";
 import { NavigationCard, NavigationCardsGrid } from "@ui/components/navigationCard";
-import { RouterProvider } from "react-router5";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
 import { rootReducer } from "@ui/redux";
 import { IGuide, ILinkInfo } from "@framework/types";
 
-const route = { name: "test", path: "/components" } as any;
-const router = createRouter([route]).usePlugin(browserPluginFactory({ useHash: false }));
-
 const dummyLink: ILinkInfo = {
-  routeName: route.name,
+  path: "stub-path",
+  routeName: "stub-navigation-card",
   routeParams: {},
   accessControl: () => true,
 };
+
+const history = createMemoryHistory();
 
 export const navigationCardGuide: IGuide = {
   name: "Navigation card",
@@ -25,9 +24,9 @@ export const navigationCardGuide: IGuide = {
       example: `<NavigationCard route={dummyLink} label="The link" qa="example" />`,
       render: () => (
         <Provider store={createStore(rootReducer)}>
-          <RouterProvider router={router}>
+          <Router location={history.location} navigator={history}>
             <NavigationCard route={dummyLink} label="The link" qa="example" />
-          </RouterProvider>
+          </Router>
         </Provider>
       ),
     },
@@ -47,7 +46,7 @@ export const navigationCardGuide: IGuide = {
       `,
       render: () => (
         <Provider store={createStore(rootReducer)}>
-          <RouterProvider router={router}>
+          <Router location={history.location} navigator={history}>
             <NavigationCardsGrid>
               <NavigationCard
                 route={dummyLink}
@@ -65,7 +64,7 @@ export const navigationCardGuide: IGuide = {
               <NavigationCard route={dummyLink} label="Row 2 column 3" qa="row-2-column-3" />
               <NavigationCard route={dummyLink} label="Row 3 column 1" qa="row-3-column-1" />
             </NavigationCardsGrid>
-          </RouterProvider>
+          </Router>
         </Provider>
       ),
     },

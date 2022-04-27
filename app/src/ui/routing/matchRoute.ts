@@ -1,30 +1,35 @@
 import React from "react";
-import { State } from "router5";
 import { ErrorNotFoundRoute } from "@ui/containers";
 import { IStores } from "@ui/redux";
-import { PageTitleState } from "@ui/redux/reducers/pageTitleReducer";
 import { Authorisation } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { Content } from "@content/content";
-import { IRouteDefinition } from "../containers/containerBase";
-import { routeConfig, RouteKeys } from "./routeConfig";
+import type { RouteState, IRouteDefinition } from "../containers/containerBase";
+import { routeConfig } from "./routeConfig";
 
 export interface MatchedRoute {
   routeName: string;
   accessControl?: (auth: Authorisation, params: {}, config: IClientConfig) => boolean;
-  getParams: (route: State) => State["params"];
+  getParams: (route: RouteState) => RouteState["params"];
   container: React.FunctionComponent<any>;
-  getTitle: (getTitleArgs: { params: {}; stores: IStores; content: Content }) => PageTitleState;
+  getTitle: (getTitleArgs: { params: {}; stores: IStores; content: Content }) => {
+    htmlTitle: string;
+    displayTitle: string;
+  };
   allowRouteInActiveAccess?: true;
 }
 
+const toRegexpMatcher = (routePath: string) => {
+  const matcher = routePath.replace(/:\w+/g, "\\w+");
+  return new RegExp(`^${matcher}$`);
+};
+
+export const availableRoutesWithPatternMatchers = (Object.values(routeConfig) as unknown as IRouteDefinition<{}>[]).map(
+  x => ({ ...x, patternMatcher: toRegexpMatcher(x.routePath) }),
+);
+
 // Note: matchRoute doesn't check if the route is valid but the FormHandler is missing
-export function matchRoute(routeToCheck: State | null | undefined): MatchedRoute {
-  if (!routeToCheck) return ErrorNotFoundRoute;
-
-  const routesKeys = Object.keys(routeConfig) as RouteKeys[];
-  const availableRoutes = routesKeys.map(x => routeConfig[x] as IRouteDefinition<{}>);
-  const foundRoute = availableRoutes.find(x => x.routeName === routeToCheck.name);
-
+export function matchRoute(routeToCheck: string) {
+  const foundRoute = availableRoutesWithPatternMatchers.find(x => x.patternMatcher.test(routeToCheck));
   return foundRoute ?? ErrorNotFoundRoute;
 }

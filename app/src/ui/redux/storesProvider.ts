@@ -9,7 +9,7 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
   const partners = new Stores.PartnersStore(partnerDocuments, getState, dispatch);
   const costCategories = new Stores.CostCategoriesStore(partners, getState, dispatch);
   const costsSummaries = new Stores.CostSummariesStore(getState, dispatch);
-
+  const errorDetails = new Stores.ErrorStore(getState, dispatch);
   const claimDocuments = new Stores.ClaimDocumentsStore(partners, getState, dispatch);
   const claims = new Stores.ClaimsStore(costsSummaries, claimDocuments, partners, getState, dispatch);
   const claimDetails = new Stores.ClaimsDetailsStore(getState, dispatch);
@@ -32,13 +32,13 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
     contacts: new Stores.ContactsStore(getState, dispatch),
     costCategories,
     costsSummaries,
+    errorDetails,
     forecastDetails: new Stores.ForecastDetailsStore(claims, claimDetails, forecastGolCosts, partners, costCategories, getState, dispatch),
     financialVirements: new Stores.FinancialVirementsStore(getState, dispatch),
     financialLoanVirements: new Stores.FinancialLoanVirementsStore(getState, dispatch),
     forecastGolCosts,
     messages: new Stores.MessagesStore(getState, dispatch),
     monitoringReports: new Stores.MonitoringReportsStore(projects, getState, dispatch),
-    navigation: new Stores.NavigationStore(getState, dispatch),
     projectChangeRequestDocuments: new Stores.ProjectChangeRequestDocumentsStore(getState, dispatch),
     projectChangeRequests: new Stores.ProjectChangeRequestStore(projects, config, getState, dispatch),
     projectDocuments: new Stores.ProjectDocumentsStore(getState, dispatch),

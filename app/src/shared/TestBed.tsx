@@ -1,15 +1,10 @@
-import createRouter from "router5";
-import browserPluginFactory from "router5/plugins/browser";
-import { RouterProvider } from "react-router5";
 import _merge from "lodash.merge";
-
+import { createMemoryHistory } from "history";
+import { Router } from "react-router-dom";
 import { mountedContext } from "@ui/features";
+import { PageTitleProvider } from "@ui/features/page-title";
 import { Content } from "@content/content";
 import { ContentProvider, IStores, StoresProvider } from "@ui/redux";
-import React from "react";
-
-const route = { name: "test", path: "/test" } as any;
-const router = createRouter([route]).usePlugin(browserPluginFactory({ useHash: false }));
 
 export type TestBedContent = Partial<Content>;
 export type TestBedStore = Partial<IStores>;
@@ -19,10 +14,25 @@ export interface ITestBedProps {
   content?: TestBedContent;
   stores?: TestBedStore;
   isServer?: boolean;
+  pageTitle?: string;
+  /**
+   * `shouldOmitRouterProvider` will prevent a router provider being added to the test bed.
+   * Because there can only be one router provider in the tree, it may happen that in
+   * some cases there will need to be a separate router provider, in which case pass this flag
+   * in to enable building.
+   */
+  shouldOmitRouterProvider?: boolean;
 }
 
 // Note: When testing a component that consumes <Content />, it expects a provider to be present.
-export function TestBed({ isServer = false, stores, content = {}, children }: ITestBedProps) {
+export function TestBed({
+  isServer = false,
+  stores,
+  content = {},
+  children,
+  pageTitle = "stub-displayTitle",
+  shouldOmitRouterProvider,
+}: ITestBedProps) {
   const stubStores = {
     users: {
       getCurrentUser: () => ({ csrf: "stub-csrf" }),
@@ -43,21 +53,29 @@ export function TestBed({ isServer = false, stores, content = {}, children }: IT
         displayTitle: "stub-displayTitle",
       }),
     },
-  } as TestBedStore;
+  } as unknown as TestBedStore;
 
   const storesValue = _merge(stubStores, stores);
 
   // Note: We need a way of upfront toggling this can use 'MountedProvider'
   const testBedMountState = { isServer, isClient: !isServer };
 
-  return (
+  const history = createMemoryHistory();
+
+  const Providers = (
     <mountedContext.Provider value={testBedMountState}>
-      <RouterProvider router={router}>
+      <PageTitleProvider title={pageTitle}>
         <StoresProvider value={storesValue as any}>
           <ContentProvider value={content as any}>{children}</ContentProvider>
         </StoresProvider>
-      </RouterProvider>
+      </PageTitleProvider>
     </mountedContext.Provider>
+  );
+
+  return shouldOmitRouterProvider ? Providers : (
+    <Router location={history.location} navigator={history}>
+      {Providers}
+    </Router>
   );
 }
 

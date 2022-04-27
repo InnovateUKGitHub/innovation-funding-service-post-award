@@ -670,9 +670,10 @@ describe("renderCostCategory()", () => {
 
   test("returns link when route is available", () => {
     const stubRoute: ILinkInfo = {
-      accessControl: () => false,
+      path: "stub-path",
       routeName: "stub-routeName",
       routeParams: {},
+      accessControl: () => false,
     };
     const defaultCostCategory: ClaimInfoProps = {
       validation: undefined,
@@ -695,9 +696,10 @@ describe("renderCostCategory()", () => {
 
   test("returns link with a defined validation errorMessage", () => {
     const stubRoute: ILinkInfo = {
-      accessControl: () => false,
+      path: "stub-path",
       routeName: "stub-routeName",
       routeParams: {},
+      accessControl: () => false,
     };
     const defaultCostCategory: ClaimInfoProps = {
       validation: new Result(null, false, false, "stub-errorMessage", false),

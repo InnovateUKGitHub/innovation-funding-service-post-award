@@ -1,30 +1,25 @@
-import { RouterProvider } from "react-router5";
-import { createRouter } from "router5";
-import browserPluginFactory from "router5/plugins/browser";
-import { Provider } from "react-redux";
-import { createStore } from "redux";
 import { render } from "@testing-library/react";
-
+import { TestBed } from "@shared/TestBed";
 import * as Links from "@ui/components/links";
-import { rootReducer } from "@ui/redux/reducers";
+import { ILinkInfo } from "@framework/types";
 
-const route = { routeName: "test", routeParams: { id: "exampleId" }, accessControl: () => true };
-const router = createRouter([{ name: route.routeName, path: "/test/:id" }]).usePlugin(
-  browserPluginFactory({ useHash: false }),
-);
+const route: ILinkInfo = {
+  path: "stub-path",
+  routeName: "test",
+  routeParams: { id: "exampleId" },
+  accessControl: () => true,
+};
 
-const expectedPath = `/${route.routeName}/${route.routeParams.id}`;
+const expectedPath = `/${route.path}`;
 
 describe("<Link />", () => {
   describe("@returns", () => {
     test("with path", () => {
       const linkText = "someLinkText";
       const { container } = render(
-        <Provider store={createStore(rootReducer)}>
-          <RouterProvider router={router}>
-            <Links.Link route={route}>{linkText}</Links.Link>
-          </RouterProvider>
-        </Provider>,
+        <TestBed>
+          <Links.Link route={route}>{linkText}</Links.Link>
+        </TestBed>,
       );
 
       const expectedLink = container.querySelector("a");
@@ -40,11 +35,9 @@ describe("<Link />", () => {
       const expectedGovLink = "govuk-link";
 
       const { container } = render(
-        <Provider store={createStore(rootReducer)}>
-          <RouterProvider router={router}>
+        <TestBed>
             <Links.Link route={route}>stub-link</Links.Link>
-          </RouterProvider>
-        </Provider>,
+            </TestBed>,
       );
 
       const expectedLink = container.querySelector(`.${expectedGovLink}`);
@@ -59,11 +52,9 @@ describe("<Link />", () => {
     test("with children", () => {
       const linkText = "someLinkText";
       const { queryByText } = render(
-        <Provider store={createStore(rootReducer)}>
-          <RouterProvider router={router}>
+        <TestBed>
             <Links.Link route={route}>{linkText}</Links.Link>
-          </RouterProvider>
-        </Provider>,
+          </TestBed>,
       );
 
       expect(queryByText(linkText)).toBeInTheDocument();
@@ -76,11 +67,9 @@ describe("<BackLink />", () => {
     test("with path", () => {
       const linkText = "someLinkText";
       const { container } = render(
-        <Provider store={createStore(rootReducer)}>
-          <RouterProvider router={router}>
+        <TestBed>
             <Links.BackLink route={route}>{linkText}</Links.BackLink>
-          </RouterProvider>
-        </Provider>,
+          </TestBed>,
       );
 
       const expectedLink = container.querySelector("a");
@@ -96,11 +85,9 @@ describe("<BackLink />", () => {
       const expectedGovLink = "govuk-back-link";
 
       const { container } = render(
-        <Provider store={createStore(rootReducer)}>
-          <RouterProvider router={router}>
+        <TestBed>
             <Links.BackLink route={route}>stub-link</Links.BackLink>
-          </RouterProvider>
-        </Provider>,
+          </TestBed>,
       );
 
       const expectedLink = container.querySelector(`.${expectedGovLink}`);
@@ -115,11 +102,9 @@ describe("<BackLink />", () => {
     test("with children", () => {
       const linkText = "someLinkText";
       const { queryByText } = render(
-        <Provider store={createStore(rootReducer)}>
-          <RouterProvider router={router}>
+        <TestBed>
             <Links.BackLink route={route}>{linkText}</Links.BackLink>
-          </RouterProvider>
-        </Provider>,
+          </TestBed>,
       );
 
       expect(queryByText(linkText)).toBeInTheDocument();

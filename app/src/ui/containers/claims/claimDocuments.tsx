@@ -87,6 +87,7 @@ export interface ClaimDocumentsPageParams {
 }
 
 interface ClaimDocumentsComponentProps extends ClaimDocumentsPageParams, BaseProps {
+  projectId: string;
   content: ClaimDocumentContent;
   project: Pending<ProjectDto>;
   editor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;
@@ -301,9 +302,9 @@ export const ClaimDocumentsRoute = defineRoute({
   routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId/documents",
   container: ClaimDocumentsContainer,
   getParams: route => ({
-    projectId: route.params.projectId,
-    partnerId: route.params.partnerId,
-    periodId: parseInt(route.params.periodId, 10),
+    projectId: route.params.projectId ?? "",
+    partnerId: route.params.partnerId ?? "",
+    periodId: parseInt(route.params.periodId ?? "", 10),
   }),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
@@ -332,7 +333,7 @@ export interface ClaimDocumentAdviceProps extends Pick<ClaimDto, "isIarRequired"
   competitionType: string;
 }
 
-// Note: Consider recactoring to an object loop based on competitionType if this grows in complexitity
+// Note: Consider refactoring to an object loop based on competitionType if this grows in complexity
 export function ClaimDocumentAdvice({
   content,
   isFinalClaim,
@@ -404,7 +405,7 @@ export function ClaimDocumentAdvice({
       );
     }
 
-    // Note: Final claim message is irrevent if no iar is required - bail out early
+    // Note: Final claim message is irrelevant if no iar is required - bail out early
     if (!isIarRequired && !isFinalClaim) return null;
 
     return (

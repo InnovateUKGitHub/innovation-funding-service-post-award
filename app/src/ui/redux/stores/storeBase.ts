@@ -14,7 +14,7 @@ import {
   handleEditorError,
   handleEditorSubmit,
   handleEditorSuccess,
-  navigateTo,
+
   resetEditor,
   RootActionsOrThunk,
   UpdateEditorAction,
@@ -144,9 +144,6 @@ const conditionalDelete = <
       .then(x => {
         onComplete(x);
         dispatch(handleEditorSuccess(key, store));
-        // if(destination){
-        //   dispatch(navigateTo(destination, true));
-        // }
       })
       .catch(e => {
         dispatch(handleEditorError({ id: key, store, dto, validation, error: e }));
@@ -258,13 +255,9 @@ export class StoreBase {
     getValidator: () => Pending<TVal> | TVal,
     deleteCall: (p: { user: IClientUser }) => Promise<TResult>,
     onComplete: (result: TResult) => void,
-    destination?: ILinkInfo,
   ) {
     this.queue(
       conditionalDelete(store, key, dto, getValidator, deleteCall, result => {
-        if (destination) {
-          this.queue(navigateTo(destination));
-        }
         if (onComplete) {
           onComplete(result);
         }

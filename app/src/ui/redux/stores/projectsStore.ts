@@ -1,6 +1,7 @@
 import { ProjectDto, ProjectStatusDto } from "@framework/dtos";
 import { Pending } from "@shared/pending";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
+
 import { apiClient } from "../../apiClient";
 import { RootState } from "../reducers";
 import { RootActionsOrThunk } from "../actions";
@@ -10,7 +11,6 @@ export class ProjectsStore extends StoreBase {
   constructor(getState: () => RootState, dispatch: (action: RootActionsOrThunk) => void) {
     super(getState, dispatch);
   }
-
   public getProjects() {
     return this.getData("projects", storeKeys.getProjectsKey(), apiClient.projects.getAll);
   }

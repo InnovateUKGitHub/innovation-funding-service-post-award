@@ -1,12 +1,12 @@
 import { render } from "@testing-library/react";
 
-import TestBed, { TestBedStore } from "@shared/TestBed";
-import { PageTitle, PageTitleProps } from "../../../src/ui/components/layout/pageTitle";
+import TestBed from "@shared/TestBed";
+import { PageTitle, PageTitleProps } from "../../src/ui/features/page-title";
 
 describe("<PageTitle />", () => {
-  const setup = (props?: PageTitleProps, stores?: TestBedStore) => {
+  const setup = (props?: PageTitleProps, contextTitle?: string) => {
     const results = render(
-      <TestBed stores={stores}>
+      <TestBed pageTitle={contextTitle}>
         <PageTitle {...props} />
       </TestBed>,
     );
@@ -41,15 +41,7 @@ describe("<PageTitle />", () => {
         ${"returns title prop"}                      | ${"stub-only-title"}   | ${""}
         ${"returns title prop in favour of context"} | ${"stub-favour-title"} | ${"stub-custom-context-title"}
       `("$name", ({ title, contextTitle }) => {
-        const stubTestBedStore = {
-          navigation: {
-            getPageTitle: () => ({
-              displayTitle: contextTitle,
-            }),
-          },
-        } as TestBedStore;
-
-        const { queryByText } = setup({ title }, stubTestBedStore);
+        const { queryByText } = setup({ title }, contextTitle);
         const titleValue = queryByText(title);
 
         expect(titleValue).toBeInTheDocument();
@@ -57,15 +49,8 @@ describe("<PageTitle />", () => {
 
       test("returns context title when title prop is not defined", () => {
         const stubContextTitle = "stub-context-title";
-        const stubTestBedStore = {
-          navigation: {
-            getPageTitle: () => ({
-              displayTitle: stubContextTitle,
-            }),
-          },
-        } as TestBedStore;
 
-        const { queryByText } = setup({ title: "" }, stubTestBedStore);
+        const { queryByText } = setup({ title: "" }, stubContextTitle);
         const titleValue = queryByText(stubContextTitle);
 
         expect(titleValue).toBeInTheDocument();
@@ -84,20 +69,7 @@ describe("<PageTitle />", () => {
     });
 
     test("should render null when title is empty", () => {
-      const stubTestBedStore = {
-        navigation: {
-          getPageTitle: () => ({
-            displayTitle: "",
-          }),
-        },
-      };
-
-      const { container } = setup(
-        {
-          title: "",
-        },
-        stubTestBedStore as TestBedStore,
-      );
+      const { container } = setup({ title: "" }, "");
 
       expect(container.firstChild).toBeNull();
     });

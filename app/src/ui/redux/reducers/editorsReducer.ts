@@ -1,9 +1,19 @@
 import { combineReducers } from "redux";
-import { actionTypes } from "redux-router5";
 import * as Validators from "@ui/validators";
 import { RootActions } from "@ui/redux/actions";
 import { Results } from "@ui/validation/results";
-import { ClaimDetailsDto, ClaimDto, ErrorCode, FinancialVirementDto, FinancialLoanVirementDto, ForecastDetailsDTO, IAppError, LoanDto, MonitoringReportDto, PartnerDto } from "@framework/types";
+import {
+  ClaimDetailsDto,
+  ClaimDto,
+  ErrorCode,
+  FinancialVirementDto,
+  FinancialLoanVirementDto,
+  ForecastDetailsDTO,
+  IAppError,
+  LoanDto,
+  MonitoringReportDto,
+  PartnerDto,
+} from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
 import { PCRDto } from "@framework/dtos/pcrDtos";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -20,7 +30,9 @@ interface State<TDto, TValidator> {
   [x: string]: IEditorStore<TDto, TValidator>;
 }
 
-const getNewStateWithoutErrors = <TDto extends {}, TValidator extends Results<TDto>>(state: State<TDto, TValidator>): State<TDto, TValidator> => {
+const getNewStateWithoutErrors = <TDto extends {}, TValidator extends Results<TDto>>(
+  state: State<TDto, TValidator>,
+): State<TDto, TValidator> => {
   return Object.keys(state).reduce((newState: State<TDto, TValidator>, key) => {
     const editorStore = state[key];
     newState[key] = { ...editorStore, error: null };
@@ -28,93 +40,97 @@ const getNewStateWithoutErrors = <TDto extends {}, TValidator extends Results<TD
   }, {});
 };
 
-export const editorsReducer = <TDto extends {}, TValidator extends Results<TDto>>(store: string) => (state: State<TDto, TValidator> = {}, action: RootActions) => {
-  if (action.type === "EDITOR_UPDATE" && action.payload?.store === store) {
-    const result = { ...state };
-    const originalEditor = result[action.payload.id];
-    const newEditor: IEditorStore<TDto, TValidator> = {
-      ...originalEditor,
-      data: action.payload.dto as TDto,
-      validator: action.payload.validator as TValidator,
-      status: EditorStatus.Editing
-    };
-    result[action.payload.id] = newEditor;
-
-    return result;
-  }
-
-  if (action.type === "EDITOR_SUBMIT" && action.payload?.store === store) {
-    const result = { ...state };
-    const originalEditor = result[action.payload.id];
-    const newEditor: IEditorStore<TDto, TValidator> = {
-      ...originalEditor,
-      data: action.payload.dto as TDto,
-      validator: action.payload.validator as TValidator,
-      status: EditorStatus.Saving
-    };
-    result[action.payload.id] = newEditor;
-
-    return result;
-  }
-
-  if (action.type === "EDITOR_SUBMIT_SUCCESS") {
-    const result = getNewStateWithoutErrors(state);
-    if (action.payload?.store === store) {
+export const editorsReducer =
+  <TDto extends {}, TValidator extends Results<TDto>>(store: string) =>
+  (state: State<TDto, TValidator> = {}, action: RootActions) => {
+    if (action.type === "EDITOR_UPDATE" && action.payload?.store === store) {
+      const result = { ...state };
       const originalEditor = result[action.payload.id];
       const newEditor: IEditorStore<TDto, TValidator> = {
         ...originalEditor,
-        status: EditorStatus.Editing
+        data: action.payload.dto as TDto,
+        validator: action.payload.validator as TValidator,
+        status: EditorStatus.Editing,
       };
       result[action.payload.id] = newEditor;
-    }
-    return result;
-  }
 
-  if (action.type === "EDITOR_SUBMIT_ERROR") {
-    const result = getNewStateWithoutErrors(state);
-    const err = action.payload?.error;
-    if (action.payload?.store === store) {
-      const originalEditor = result[action.payload?.id];
+      return result;
+    }
+
+    if (action.type === "EDITOR_SUBMIT" && action.payload?.store === store) {
+      const result = { ...state };
+      const originalEditor = result[action.payload.id];
       const newEditor: IEditorStore<TDto, TValidator> = {
         ...originalEditor,
-        data: action.payload?.dto as TDto,
-        status: EditorStatus.Editing,
-        error: { code: err?.code || ErrorCode.UNKNOWN_ERROR, message: err?.message || "", results: err?.results },
+        data: action.payload.dto as TDto,
+        validator: action.payload.validator as TValidator,
+        status: EditorStatus.Saving,
       };
-      result[action.payload?.id] = newEditor;
+      result[action.payload.id] = newEditor;
+
+      return result;
     }
-    return result;
-  }
 
-  if (action.type === "EDITOR_RESET" && action.payload?.store === store) {
-    const result = getNewStateWithoutErrors(state);
-    delete result[action.payload.id];
-    return result;
-  }
+    if (action.type === "EDITOR_SUBMIT_SUCCESS") {
+      const result = getNewStateWithoutErrors(state);
+      if (action.payload?.store === store) {
+        const originalEditor = result[action.payload.id];
+        const newEditor: IEditorStore<TDto, TValidator> = {
+          ...originalEditor,
+          status: EditorStatus.Editing,
+        };
+        result[action.payload.id] = newEditor;
+      }
+      return result;
+    }
 
-  if (action.type === actionTypes.TRANSITION_SUCCESS) {
-    const hasPreviousRoute = action.payload.previousRoute !== null;
-    const isReplacing = (action.payload.route && action.payload.route.meta && action.payload.route.meta && action.payload.route.meta.options && action.payload.route.meta.options.replace === true) || false;
-    if (hasPreviousRoute && !isReplacing) {
+    if (action.type === "EDITOR_SUBMIT_ERROR") {
+      const result = getNewStateWithoutErrors(state);
+      const err = action.payload?.error;
+      if (action.payload?.store === store) {
+        const originalEditor = result[action.payload?.id];
+        const newEditor: IEditorStore<TDto, TValidator> = {
+          ...originalEditor,
+          data: action.payload?.dto as TDto,
+          status: EditorStatus.Editing,
+          error: { code: err?.code || ErrorCode.UNKNOWN_ERROR, message: err?.message || "", results: err?.results },
+        };
+        result[action.payload?.id] = newEditor;
+      }
+      return result;
+    }
+
+    if (action.type === "EDITOR_RESET" && action.payload?.store === store) {
+      const result = getNewStateWithoutErrors(state);
+      delete result[action.payload.id];
+      return result;
+    }
+
+    if (action.type === "ROUTE_TRANSITION" && action.payload !== "REPLACE") {
       return {};
     }
-  }
 
-  return state;
-};
+    return state;
+  };
 
 export const editorReducer = combineReducers({
   claim: editorsReducer<ClaimDto, Validators.ClaimDtoValidator>("claim"),
   claimDetail: editorsReducer<ClaimDetailsDto, Validators.ClaimDetailsValidator>("claimDetail"),
   forecastDetails: editorsReducer<ForecastDetailsDTO[], Validators.ForecastDetailsDtosValidator>("forecastDetails"),
   initialForecastDetails: editorsReducer<ForecastDetailsDTO[], Results<ForecastDetailsDTO[]>>("initialForecastDetails"),
-  financialVirement: editorsReducer<FinancialVirementDto, Validators.FinancialVirementDtoValidator>("financialVirement"),
-  financialLoanVirement: editorsReducer<FinancialLoanVirementDto, Validators.FinancialLoanVirementDtoValidator>("financialLoanVirement"),
+  financialVirement: editorsReducer<FinancialVirementDto, Validators.FinancialVirementDtoValidator>(
+    "financialVirement",
+  ),
+  financialLoanVirement: editorsReducer<FinancialLoanVirementDto, Validators.FinancialLoanVirementDtoValidator>(
+    "financialLoanVirement",
+  ),
   documents: editorsReducer<DocumentUploadDto, Validators.DocumentUploadDtoValidator>("documents"),
-  multipleDocuments: editorsReducer<MultipleDocumentUploadDto, Validators.MultipleDocumentUploadDtoValidator>("multipleDocuments"),
+  multipleDocuments: editorsReducer<MultipleDocumentUploadDto, Validators.MultipleDocumentUploadDtoValidator>(
+    "multipleDocuments",
+  ),
   documentSummary: editorsReducer<DocumentSummaryDto[], Results<DocumentSummaryDto[]>>("documentSummary"),
   monitoringReport: editorsReducer<MonitoringReportDto, Validators.MonitoringReportDtoValidator>("monitoringReport"),
   pcr: editorsReducer<PCRDto, Results<PCRDto>>("pcr"),
   partner: editorsReducer<PartnerDto, Results<PartnerDto>>("partner"),
-  loan: editorsReducer<LoanDto, Results<LoanDto>>("loan")
+  loan: editorsReducer<LoanDto, Results<LoanDto>>("loan"),
 });

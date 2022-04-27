@@ -88,7 +88,7 @@ export const Guide: React.FunctionComponent<GuideProps> = props => {
 
   return (
     <div>
-      <Header headingLink={`${process.env.SERVER_URL}/components`} />
+      <Header showMenu={false} headingLink={`${process.env.SERVER_URL}/components`} />
 
       <GovWidthContainer style={{ maxWidth: "100%" }}>
         <main

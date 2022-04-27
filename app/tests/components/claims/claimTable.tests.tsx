@@ -11,9 +11,8 @@ import {
 import TestBed, { TestBedContent } from "@shared/TestBed";
 
 import { ClaimProps } from "@ui/components/claims/utils/costCategoryTableHelper";
+import { ClaimTable } from "@ui/components/claims/claimTable";
 import { getColumnTextValues } from "../helpers/tableHelpers";
-
-import { ClaimTable } from "../../../src/ui/components/claims/claimTable";
 
 describe("<ClaimTable />", () => {
   const defaultStubData: ClaimProps = {
@@ -40,12 +39,13 @@ describe("<ClaimTable />", () => {
     },
   };
 
-  const setup = (props?: Partial<ClaimProps>) =>
-    render(
+  const setup = (props?: Partial<ClaimProps>) => {
+    return render(
       <TestBed content={stubContent as TestBedContent}>
         <ClaimTable {...defaultStubData} {...props} />
       </TestBed>,
     );
+  };
 
   describe("@renders", () => {
     describe("with data in correct order", () => {

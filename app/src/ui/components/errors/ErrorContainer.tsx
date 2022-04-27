@@ -3,7 +3,7 @@ import { ErrorPayload, createErrorPayload } from "@shared/create-error-payload";
 
 import { errorPages, internalErrorFallback, InternalErrorTypes } from "./error.config";
 
-export type ErrorContainerProps = ErrorPayload["params"];
+export type ErrorContainerProps = ErrorPayload["params"] & { from?: string };
 
 /**
  * Error hoc which switches between UI based on errorType

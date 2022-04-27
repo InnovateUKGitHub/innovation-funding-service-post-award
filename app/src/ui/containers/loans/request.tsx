@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { IEditorStore, useStores } from "@ui/redux";
 import * as ACC from "@ui/components";
 
@@ -18,6 +19,7 @@ export interface LoansRequestParams {
 }
 
 interface LoansRequestPageProps extends LoansRequestParams, BaseProps {
+  projectId: string;
   loan: Required<LoanDto>;
   documents: DocumentSummaryDto[];
   loanEditor: IEditorStore<LoanDto, LoanDtoValidator>;
@@ -144,6 +146,7 @@ function LoansRequestContainer(props: BaseProps & LoansRequestParams) {
   });
 
   const { isLoading, isRejected, payload } = getPending(loanRequestPendings);
+  const navigate = useNavigate();
 
   const backLinkElement = (
     <ACC.BackLink route={props.routes.loansSummary.getLink({ projectId: props.projectId })}>
@@ -179,8 +182,7 @@ function LoansRequestContainer(props: BaseProps & LoansRequestParams) {
           onLoanUpdate={dto => {
             stores.loans.updateLoanEditor(props.projectId, props.loanId, dto, undefined, () => {
               const loansOverviewLink = props.routes.loansSummary.getLink({ projectId: props.projectId });
-
-              stores.navigation.navigateTo(loansOverviewLink);
+              navigate(loansOverviewLink.path);
             });
           }}
           onDocsDelete={(dto, document) => {

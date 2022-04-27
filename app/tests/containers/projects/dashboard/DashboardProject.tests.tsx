@@ -29,12 +29,14 @@ describe("<DashboardProject />", () => {
 
   const stubProjectSetupLink = jest.fn().mockReturnValue({
     routeName: "stub-projectSetup-routeName",
+    path: "stub-projectSetup-routeName",
     routeParams: {},
     accessControl: true,
   });
 
   const stubProjectOverviewLink = jest.fn().mockReturnValue({
     routeName: "stub-projectOverview-routeName",
+    path: "stub-projectOverview-routeName",
     routeParams: {},
     accessControl: true,
   });
@@ -101,7 +103,7 @@ describe("<DashboardProject />", () => {
         expect(stubProjectOverviewLink).toHaveBeenCalledTimes(0);
       });
 
-      test("when upcomming", () => {
+      test("when upcoming", () => {
         const stubProject = { projectNumber: "1111", title: "stub-title" } as ProjectDto;
         const { queryByText } = setup({ section: "upcoming", project: stubProject });
 
@@ -186,13 +188,13 @@ describe("<DashboardProject />", () => {
 
         setup({ section: "upcoming", project: stubProject });
 
-        const upcommingDate = await findByTextContent("1 Sep to 1 Nov 2021");
+        const upcomingDate = await findByTextContent("1 Sep to 1 Nov 2021");
 
-        expect(upcommingDate).toBeInTheDocument();
+        expect(upcomingDate).toBeInTheDocument();
       });
 
       describe("with available project section", () => {
-        describe.each<DashboardProjectProps["section"]>(["open", "awaiting"])(`when %s`, projectSection => {
+        describe.each<DashboardProjectProps["section"]>(["open", "awaiting"])("when %s", projectSection => {
           describe("with project ended", () => {
             test("with no partner", () => {
               const stubProject = createProjectDto({ isPastEndDate: true });

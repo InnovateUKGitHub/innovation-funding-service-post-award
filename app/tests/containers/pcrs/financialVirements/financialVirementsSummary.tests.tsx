@@ -227,6 +227,7 @@ describe("<FinancialVirementSummary />", () => {
       pcrFinancialVirementEditCostCategoryLevel: {
         getLink: jest.fn().mockReturnValue({
           routeName: "stub-pcrFinancialVirementEditCostCategoryLevel-routeName",
+          path: "stub-pcrFinancialVirementEditCostCategoryLevel-path",
           routeParams: {},
           accessControl: true,
         }),
@@ -234,6 +235,7 @@ describe("<FinancialVirementSummary />", () => {
       pcrFinancialVirementDetails: {
         getLink: jest.fn().mockReturnValue({
           routeName: "stub-pcrFinancialVirementDetails-routeName",
+          path: "stub-pcrFinancialVirementDetails-path",
           routeParams: {},
           accessControl: true,
         }),
@@ -241,6 +243,7 @@ describe("<FinancialVirementSummary />", () => {
       pcrFinancialVirementEditPartnerLevel: {
         getLink: jest.fn().mockReturnValue({
           routeName: "stub-pcrFinancialVirementEditPartnerLevel-routeName",
+          path: "stub-pcrFinancialVirementEditPartnerLevel-path",
           routeParams: {},
           accessControl: true,
         }),

@@ -25,6 +25,7 @@ describe("<ForecastClaimAdvice />", () => {
   };
 
   const stubLink: ILinkInfo = {
+    path: "stub-path",
     routeName: "stub-routeName",
     routeParams: {},
     accessControl: () => false,

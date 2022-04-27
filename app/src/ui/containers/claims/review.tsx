@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import * as ACC from "@ui/components";
 import { IEditorStore, useStores } from "@ui/redux";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
@@ -523,6 +524,7 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => {
   const stores = useStores();
   const { getContent } = useContent();
   const reviewContent = useReviewContent();
+  const navigate = useNavigate();
 
   return (
     <ReviewComponent
@@ -556,7 +558,7 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => {
               ? x.claimReview.messages.claimQueried
               : x.claimReview.messages.claimApproved,
           ),
-          () => stores.navigation.navigateTo(props.routes.allClaimsDashboard.getLink({ projectId: props.projectId })),
+          () => navigate(props.routes.allClaimsDashboard.getLink({ projectId: props.projectId }).path),
         );
       }}
       onUpload={(saving, dto) => {

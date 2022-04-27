@@ -20,6 +20,8 @@ const csrfProtection = csrf();
 
 // App routes
 router.use("/api", apiRoutes);
+
+// TODO: should scope this for dev access only (e.g. check for sso enabled)
 router.use("/components", csrfProtection, componentGuideRender);
 
 // Form posts

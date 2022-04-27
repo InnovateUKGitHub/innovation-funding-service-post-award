@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import * as ACC from "@ui/components";
 import * as Dtos from "@framework/dtos";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
@@ -63,6 +64,7 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
 const DeleteVerificationContainer = (props: MonitoringReportDeleteParams&BaseProps) => {
   const stores = useStores();
   const { getContent } = useContent();
+  const navigate = useNavigate();
 
   return (
     <DeleteVerificationComponent
@@ -75,7 +77,7 @@ const DeleteVerificationContainer = (props: MonitoringReportDeleteParams&BasePro
           dto,
           getContent(x => x.monitoringReportsDelete.messages.onDeleteMonitoringReportMessage),
           () =>
-            stores.navigation.navigateTo(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId })),
+            navigate(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId }).path),
         )
       }
       {...props}

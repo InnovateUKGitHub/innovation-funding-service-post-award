@@ -9,6 +9,7 @@ import { ILinkInfo } from "@framework/types";
 
 describe("<LoansTable />", () => {
   const stubLink: ILinkInfo = {
+    path: "stub-path",
     routeName: "stub-routename",
     routeParams: {},
     accessControl: () => false,

@@ -35,7 +35,7 @@ export function LinksList({ links = [], openNewWindow = false, renderAfterLink }
   return (
     <>
       {filteredList.map((link, i) => (
-        <div className="govuk-!-padding-bottom-4" key={link.text}>
+        <div className="govuk-!-padding-bottom-4" key={`${link.text}-${i}`}>
           {/* eslint-disable-next-line react/jsx-no-target-blank */}
           <a
             target={openNewWindow ? "_blank" : ""}

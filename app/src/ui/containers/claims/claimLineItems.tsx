@@ -1,6 +1,14 @@
 import * as ACC from "@ui/components";
-import { State } from "router5";
-import { ClaimDetailsDto, ClaimDto, ClaimLineItemDto, ForecastDetailsDTO, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import {
+  ClaimDetailsDto,
+  ClaimDto,
+  ClaimLineItemDto,
+  ForecastDetailsDTO,
+  ILinkInfo,
+  PartnerDto,
+  ProjectDto,
+  ProjectRole,
+} from "@framework/types";
 import classNames from "classnames";
 import { useStores } from "@ui/redux";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
@@ -8,10 +16,11 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { useContent } from "@ui/hooks";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { diffAsPercentage, sum } from "@framework/util/numberHelper";
-import { Pending } from "../../../shared/pending";
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
-interface Params {
+import { Pending } from "../../../shared/pending";
+import { BaseProps, ContainerBase, defineRoute, RouteState } from "../containerBase";
+
+interface ClaimLineItemsParams {
   projectId: string;
   partnerId: string;
   costCategoryId: string;
@@ -39,7 +48,7 @@ interface CombinedData {
   claim: ClaimDto;
 }
 
-export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
+export class ClaimLineItemsComponent extends ContainerBase<ClaimLineItemsParams, Data, {}> {
   public render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -51,20 +60,29 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       claim: this.props.claim,
     });
 
-    return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
+    return <ACC.PageLoader pending={combined} render={data => this.renderContents(data)} />;
   }
 
-  private renderContents({ project, partner, claimDetails, costCategories, forecastDetail, documents, claim }: CombinedData) {
-    const params: Params = {
+  private renderContents({
+    project,
+    partner,
+    claimDetails,
+    costCategories,
+    forecastDetail,
+    documents,
+    claim,
+  }: CombinedData) {
+    const params: ClaimLineItemsParams = {
       partnerId: this.props.partnerId,
       costCategoryId: this.props.costCategoryId,
       periodId: this.props.periodId,
-      projectId: this.props.projectId
+      projectId: this.props.projectId,
     };
 
-    const backLink = this.props.route.name === ReviewClaimLineItemsRoute.routeName ?
-      this.props.routes.reviewClaim.getLink(params) :
-      this.props.routes.claimDetails.getLink(params);
+    const backLink =
+      this.props.currentRoute.routeName === ReviewClaimLineItemsRoute.routeName
+        ? this.props.routes.reviewClaim.getLink(params)
+        : this.props.routes.claimDetails.getLink(params);
 
     // TODO: we get this twice which is not ideal, but this whole file should be refactored to a function component and we can address it then
     const currentCostCategory = costCategories.find(x => x.id === this.props.costCategoryId);
@@ -73,7 +91,7 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       <ACC.Page
         backLink={<ACC.BackLink route={backLink}>Back to claim</ACC.BackLink>}
         pageTitle={<ACC.Projects.Title {...project} heading={currentCostCategory?.name} />}
-        >
+      >
         <ACC.Section>
           <ClaimLineItemsTable
             lineItems={claimDetails.lineItems}
@@ -113,11 +131,16 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
 
   // TODO - this is something which we do in at least two places so should be generic
   private filterOverheads(costCategoryName: string, overheadRate: number): boolean {
-    return !(costCategoryName === "Overheads" &&
-            overheadRate <= this.props.config.options.standardOverheadRate);
+    return !(costCategoryName === "Overheads" && overheadRate <= this.props.config.options.standardOverheadRate);
   }
 
-  private getLinks(costCategories: CostCategoryDto[], project: ProjectDto, partner: PartnerDto, overheadRate: number, pages: { getLink: (params: Params) => ILinkInfo }) {
+  private getLinks(
+    costCategories: CostCategoryDto[],
+    project: ProjectDto,
+    partner: PartnerDto,
+    overheadRate: number,
+    pages: { getLink: (params: ClaimLineItemsParams) => ILinkInfo },
+  ) {
     const periodId = this.props.periodId;
     const costCategoriesToUse = costCategories
       .filter(x => x.competitionType === project.competitionType && x.organisationType === partner.organisationType)
@@ -137,27 +160,38 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
       previousCostCategory = costCategoriesToUse[currentPosition - 1];
     }
 
-    const createCostCategoryLink = (costCategory: CostCategoryDto | null) => costCategory ? ({
-      label: costCategory.name,
-      route: pages.getLink({
-        partnerId: partner.id,
-        projectId: project.id,
-        periodId,
-        costCategoryId: costCategory.id
-      })
-    }) : null;
+    const createCostCategoryLink = (costCategory: CostCategoryDto | null) =>
+      costCategory
+        ? {
+            label: costCategory.name,
+            route: pages.getLink({
+              partnerId: partner.id,
+              projectId: project.id,
+              periodId,
+              costCategoryId: costCategory.id,
+            }),
+          }
+        : null;
 
     const previousLink = createCostCategoryLink(previousCostCategory);
     const nextLink = createCostCategoryLink(nextCostCategory);
 
     return {
       previousLink,
-      nextLink
+      nextLink,
     };
   }
 
-  private readonly renderNavigationArrows = (costCategories: CostCategoryDto[], project: ProjectDto, partner: PartnerDto, claim: ClaimDto) => {
-    const route = this.props.route.name === ReviewClaimLineItemsRoute.routeName ? ReviewClaimLineItemsRoute : ClaimLineItemsRoute;
+  private readonly renderNavigationArrows = (
+    costCategories: CostCategoryDto[],
+    project: ProjectDto,
+    partner: PartnerDto,
+    claim: ClaimDto,
+  ) => {
+    const route =
+      this.props.routes.claimLineItems.routeName === ReviewClaimLineItemsRoute.routeName
+        ? ReviewClaimLineItemsRoute
+        : ClaimLineItemsRoute;
     const navigationLinks = this.getLinks(costCategories, project, partner, claim.overheadRate, route);
     if (navigationLinks === null) return null;
 
@@ -169,15 +203,17 @@ export class ClaimLineItemsComponent extends ContainerBase<Params, Data, {}> {
 
     return (
       <ACC.Section title={this.props.content.additionalInfoTitle} qa="additional-information">
-        <ACC.Renderers.SimpleString>
-          {claimDetail.comments}
-        </ACC.Renderers.SimpleString>
+        <ACC.Renderers.SimpleString>{claimDetail.comments}</ACC.Renderers.SimpleString>
       </ACC.Section>
     );
   };
 }
 
-function ClaimLineItemsTable({ lineItems, forecastDetail, content }: {
+function ClaimLineItemsTable({
+  lineItems,
+  forecastDetail,
+  content,
+}: {
   lineItems: ClaimLineItemDto[];
   forecastDetail: ForecastDetailsDTO;
   content: Record<string, string>;
@@ -193,7 +229,11 @@ function ClaimLineItemsTable({ lineItems, forecastDetail, content }: {
   }) => (
     <tr key={row.key} className="govuk-table__row" data-qa={row.qa}>
       <th className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">{row.title}</th>
-      <td className={classNames("govuk-table__cell", "govuk-table__cell--numeric", { "govuk-!-font-weight-bold": row.isBold })}>
+      <td
+        className={classNames("govuk-table__cell", "govuk-table__cell--numeric", {
+          "govuk-!-font-weight-bold": row.isBold,
+        })}
+      >
         {row.value}
       </td>
       <th className="govuk-table__cell">
@@ -271,7 +311,7 @@ export function useClaimLineItemsContent() {
   };
 }
 
-const ClaimLineItemsContainer = (props: Params & BaseProps) => {
+const ClaimLineItemsContainer = (props: ClaimLineItemsParams & BaseProps) => {
   const claimLineItemsContent = useClaimLineItemsContent();
   const stores = useStores();
 
@@ -295,11 +335,11 @@ const ClaimLineItemsContainer = (props: Params & BaseProps) => {
   );
 };
 
-const getParams = (route: State): Params => ({
-  projectId: route.params.projectId,
-  partnerId: route.params.partnerId,
-  costCategoryId: route.params.costCategoryId,
-  periodId: parseInt(route.params.periodId, 10)
+const getParams = (route: RouteState): ClaimLineItemsParams => ({
+  projectId: route.params.projectId ?? "",
+  partnerId: route.params.partnerId ?? "",
+  costCategoryId: route.params.costCategoryId ?? "",
+  periodId: parseInt(route.params.periodId ?? "", 10),
 });
 
 export const ClaimLineItemsRoute = defineRoute({
@@ -307,12 +347,12 @@ export const ClaimLineItemsRoute = defineRoute({
   routeName: "claimLineItemsView",
   routePath: "/projects/:projectId/claims/:partnerId/details/:periodId/costs/:costCategoryId",
   container: ClaimLineItemsContainer,
-  getParams: (route) => getParams(route),
+  getParams: route => getParams(route),
   getTitle: ({ params, stores }) => {
     const costCatName = stores.costCategories.get(params.costCategoryId).then(x => x.name).data;
     return {
       htmlTitle: costCatName ? `View costs for ${costCatName}` : "View costs",
-      displayTitle: costCatName || "Line items"
+      displayTitle: costCatName || "Line items",
     };
   },
 });
@@ -321,7 +361,7 @@ export const ReviewClaimLineItemsRoute = defineRoute({
   routeName: "claimLineItemsReview",
   routePath: "/projects/:projectId/claims/:partnerId/review/:periodId/costs/:costCategoryId",
   container: ClaimLineItemsContainer,
-  getParams: (route) => getParams(route),
+  getParams: route => getParams(route),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager) ||
     auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
@@ -329,7 +369,7 @@ export const ReviewClaimLineItemsRoute = defineRoute({
     const costCatName = stores.costCategories.get(params.costCategoryId).then(x => x.name).data;
     return {
       htmlTitle: costCatName ? `Review costs for ${costCatName}` : "Review costs",
-      displayTitle: costCatName || "Costs"
+      displayTitle: costCatName || "Costs",
     };
   },
 });

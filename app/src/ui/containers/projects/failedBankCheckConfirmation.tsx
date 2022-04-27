@@ -13,6 +13,7 @@ export interface FailedBankCheckConfirmationParams {
 }
 
 interface FailedBankCheckConfirmationProps extends BaseProps, FailedBankCheckConfirmationParams {
+  projectId: string;
   project: Pending<ProjectDto>;
 }
 

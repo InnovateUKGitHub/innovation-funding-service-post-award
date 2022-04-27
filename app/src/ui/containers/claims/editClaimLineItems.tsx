@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */ // TODO: ACC-7889
+import {useNavigate} from "react-router-dom";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import {
@@ -642,6 +643,7 @@ const getDestination = (props: EditClaimDetailsParams & BaseProps, goToUpload: b
 const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) => {
   const stores = useStores();
   const { isClient } = useMounted();
+  const navigate = useNavigate();
 
   return (
     <EditClaimLineItemsComponent
@@ -687,7 +689,7 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
           props.periodId,
           props.costCategoryId,
           dto,
-          () => stores.navigation.navigateTo(getDestination(props, goToUpload)),
+          () => navigate(getDestination(props, goToUpload).path),
         )
       }
       maxClaimLineItems={stores.config.getConfig().options.maxClaimLineItems} // TODO when this is refactored to a function component, we can replace this param with useStores inside the component

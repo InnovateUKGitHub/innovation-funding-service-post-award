@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import * as ACC from "@ui/components";
 import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
@@ -27,20 +28,34 @@ class Component extends ContainerBase<MonitoringReportPreparePeriodParams, Data,
       project: this.props.project,
     });
 
-    return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data.project, data.editor)} />;
+    return <ACC.PageLoader pending={combined} render={data => this.renderContents(data.project, data.editor)} />;
   }
 
-  private renderContents(project: Dtos.ProjectDto, editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
+  private renderContents(
+    project: Dtos.ProjectDto,
+    editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>,
+  ) {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.monitoringReportWorkflow.getLink({ projectId: this.props.projectId, id: this.props.id, mode: "prepare", step: undefined })}><ACC.Content value={(x) => x.monitoringReportsPeriodStep.backLink} /></ACC.BackLink>}
+        backLink={
+          <ACC.BackLink
+            route={this.props.routes.monitoringReportWorkflow.getLink({
+              projectId: this.props.projectId,
+              id: this.props.id,
+              mode: "prepare",
+              step: undefined,
+            })}
+          >
+            <ACC.Content value={x => x.monitoringReportsPeriodStep.backLink} />
+          </ACC.BackLink>
+        }
         pageTitle={<ACC.Projects.Title {...project} />}
         validator={editor.validator}
         error={editor.error}
       >
         <ACC.MonitoringReportPeriodFormComponent
           editor={editor}
-          onChange={(dto) => this.props.onChange(false, dto)}
+          onChange={dto => this.props.onChange(false, dto)}
           onSave={(dto, submit, progress) => this.props.onChange(true, dto, submit, this.getLink(progress))}
         />
       </ACC.Page>
@@ -50,12 +65,18 @@ class Component extends ContainerBase<MonitoringReportPreparePeriodParams, Data,
     if (!progress) {
       return this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId });
     }
-    return this.props.routes.monitoringReportWorkflow.getLink({ projectId: this.props.projectId, id: this.props.id, mode: "prepare", step: 1 });
+    return this.props.routes.monitoringReportWorkflow.getLink({
+      projectId: this.props.projectId,
+      id: this.props.id,
+      mode: "prepare",
+      step: 1,
+    });
   }
 }
 
 const Container = (props: MonitoringReportPreparePeriodParams & BaseProps) => {
   const stores = useStores();
+  const navigate = useNavigate();
   return (
     <Component
       {...props}
@@ -64,7 +85,7 @@ const Container = (props: MonitoringReportPreparePeriodParams & BaseProps) => {
       onChange={(save, dto, submit, link) => {
         stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
           if (link) {
-            stores.navigation.navigateTo(link);
+            navigate(link.path);
           }
         });
       }}
@@ -76,7 +97,7 @@ export const MonitoringReportPreparePeriodRoute = defineRoute({
   routeName: "monitoringReportPreparePeriod",
   routePath: "/projects/:projectId/monitoring-reports/:id/prepare-period",
   container: Container,
-  getParams: (r) => ({ projectId: r.params.projectId, id: r.params.id }),
+  getParams: r => ({ projectId: r.params.projectId, id: r.params.id }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
-  getTitle: ({content}) => content.monitoringReportsPeriodStep.title(),
+  getTitle: ({ content }) => content.monitoringReportsPeriodStep.title(),
 });

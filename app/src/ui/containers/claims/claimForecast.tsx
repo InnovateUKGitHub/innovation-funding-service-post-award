@@ -1,7 +1,18 @@
+import { useNavigate } from "react-router-dom";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { getArrayFromPeriod, isNumber } from "@framework/util";
-import { ClaimDetailsSummaryDto, ClaimDto, ForecastDetailsDTO, getAuthRoles, GOLCostDto, ILinkInfo, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import {
+  ClaimDetailsSummaryDto,
+  ClaimDto,
+  ForecastDetailsDTO,
+  getAuthRoles,
+  GOLCostDto,
+  ILinkInfo,
+  PartnerDto,
+  ProjectDto,
+  ProjectRole,
+} from "@framework/types";
 import { Pending } from "@shared/pending";
 import { ForecastDetailsDtosValidator } from "@ui/validators";
 import { IEditorStore, useStores } from "@ui/redux";
@@ -33,7 +44,6 @@ interface Callbacks {
 
 class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Callbacks> {
   render() {
-
     const combinedForecastData = Pending.combine({
       project: this.props.project,
       partner: this.props.partner,
@@ -52,10 +62,18 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
   renderOverheadsRate(overheadRate: number | null) {
     if (!isNumber(overheadRate)) return null;
 
-    return <ACC.Renderers.SimpleString qa="overhead-costs"><ACC.Content value={x => x.claimForecast.overheadsCosts}/><ACC.Renderers.Percentage value={overheadRate} /></ACC.Renderers.SimpleString>;
+    return (
+      <ACC.Renderers.SimpleString qa="overhead-costs">
+        <ACC.Content value={x => x.claimForecast.overheadsCosts} />
+        <ACC.Renderers.Percentage value={overheadRate} />
+      </ACC.Renderers.SimpleString>
+    );
   }
 
-  renderContents(combined: ACC.Claims.ForecastData, editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>) {
+  renderContents(
+    combined: ACC.Claims.ForecastData,
+    editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>,
+  ) {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
 
     const periodId = combined.project.periodId;
@@ -71,7 +89,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
       );
     };
 
-    const onFormSave = () =>{
+    const onFormSave = () => {
       this.props.onUpdate(
         true,
         getArrayFromPeriod(editor.data, periodId, combined.project.numberOfPeriods),
@@ -81,15 +99,34 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.claimDocuments.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId, periodId: this.props.periodId })}><ACC.Content value={x => x.claimForecast.backLink}/></ACC.BackLink>}
+        backLink={
+          <ACC.BackLink
+            route={this.props.routes.claimDocuments.getLink({
+              projectId: this.props.projectId,
+              partnerId: this.props.partnerId,
+              periodId: this.props.periodId,
+            })}
+          >
+            <ACC.Content value={x => x.claimForecast.backLink} />
+          </ACC.BackLink>
+        }
         error={editor.error}
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title {...combined.project} />}
       >
         <ACC.Section qa="partner-name">
           <ACC.Renderers.AriaLive>
-            {combined.partner.newForecastNeeded && <ACC.ValidationMessage messageType="info" message={x => x.claimForecast.messages.frequencyChangeMessage} qa="period-change-warning" />}
-            <ACC.ValidationMessage messageType="info" message={x => x.claimForecast.messages.lastChanceToChangeForecast(combined.project.periodId)} />
+            {combined.partner.newForecastNeeded && (
+              <ACC.ValidationMessage
+                messageType="info"
+                message={x => x.claimForecast.messages.frequencyChangeMessage}
+                qa="period-change-warning"
+              />
+            )}
+            <ACC.ValidationMessage
+              messageType="info"
+              message={x => x.claimForecast.messages.lastChanceToChangeForecast(combined.project.periodId)}
+            />
           </ACC.Renderers.AriaLive>
           <ACC.Forecasts.Warning {...combined} editor={editor} />
           {this.renderOverheadsRate(combined.partner.overheadRate)}
@@ -101,15 +138,17 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
           >
             <ACC.Claims.ForecastTable data={combined} editor={editor} isSubmitting />
             <Form.Fieldset qa="last-saved">
-              {combined.partner.forecastLastModifiedDate && <ACC.Claims.ClaimLastModified modifiedDate={combined.partner.forecastLastModifiedDate} />}
+              {combined.partner.forecastLastModifiedDate && (
+                <ACC.Claims.ClaimLastModified modifiedDate={combined.partner.forecastLastModifiedDate} />
+              )}
             </Form.Fieldset>
             <Form.Fieldset qa="save-and-continue">
-              <Form.Submit><ACC.Content value={x => x.claimForecast.continueToSummaryButton} /></Form.Submit>
-              <Form.Button
-                name="save"
-                onClick={onFormSave}
-              >
-              <ACC.Content value={x => x.claimForecast.saveAndReturnButton} /></Form.Button>
+              <Form.Submit>
+                <ACC.Content value={x => x.claimForecast.continueToSummaryButton} />
+              </Form.Submit>
+              <Form.Button name="save" onClick={onFormSave}>
+                <ACC.Content value={x => x.claimForecast.saveAndReturnButton} />
+              </Form.Button>
             </Form.Fieldset>
           </Form.Form>
         </ACC.Section>
@@ -128,8 +167,8 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
 const ClaimForcastContainer = (props: ClaimForecastParams & BaseProps) => {
   const stores = useStores();
   const { getContent } = useContent();
-
-  const claimSavedMessage = getContent((x) => x.claimForecast.messages.claimSavedMessage);
+  const navigate = useNavigate();
+  const claimSavedMessage = getContent(x => x.claimForecast.messages.claimSavedMessage);
 
   const handleOnUpdate: Callbacks["onUpdate"] = (saving, dto, link) => {
     stores.forecastDetails.updateForcastEditor(
@@ -140,7 +179,7 @@ const ClaimForcastContainer = (props: ClaimForecastParams & BaseProps) => {
       false,
       claimSavedMessage,
       () => {
-        if (link) stores.navigation.navigateTo(link);
+        if (link) navigate(link.path);
       },
     );
   };

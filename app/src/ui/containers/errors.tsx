@@ -1,10 +1,12 @@
-import { ErrorContainer, ErrorContainerProps, NotFoundError } from "../components/errors";
-import { BaseProps, defineRoute } from "./containerBase";
+import { useStores } from "@ui/redux";
+import { ErrorContainer, NotFoundError } from "../components/errors";
+import {  defineRoute } from "./containerBase";
 
-function ErrorRouteContainer({ route }: BaseProps) {
-  const errorProps = route.params as ErrorContainerProps;
+function ErrorRouteContainer() {
+  const stores = useStores();
+  const errorPayload = stores.errorDetails.errors() ?? { errorCode: 418, errorType: "UNKNOWN ERROR" };
 
-  return <ErrorContainer {...errorProps} />;
+  return <ErrorContainer {...errorPayload} />;
 }
 
 export const ErrorRoute = defineRoute<{}>({
@@ -15,10 +17,12 @@ export const ErrorRoute = defineRoute<{}>({
   getTitle: ({ content }) => content.errors.genericFallback.title(),
 });
 
+export const ErrorNotFoundContainer = NotFoundError;
+
 export const ErrorNotFoundRoute = defineRoute<{}>({
   routeName: "errorNotFound",
   routePath: "/error-not-found",
-  container: NotFoundError,
+  container: ErrorNotFoundContainer,
   getParams: () => ({}),
   getTitle: ({ content }) => content.errors.notfound.title(),
 });

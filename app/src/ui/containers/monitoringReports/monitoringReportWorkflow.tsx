@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import * as ACC from "@ui/components";
 import * as Dtos from "@framework/dtos";
 import { Pending } from "@shared/pending";
@@ -108,13 +109,14 @@ class Component extends ContainerBase<MonitoringReportWorkflowParams, Data, Call
 
 const Container = (props: MonitoringReportWorkflowParams & BaseProps) => {
   const stores = useStores();
+  const navigate = useNavigate();
   return (
     <Component
       project={stores.projects.getById(props.projectId)}
       editor={stores.monitoringReports.getUpdateMonitoringReportEditor(props.projectId, props.id)}
       onChange={(save, dto, submit, link) => {
         stores.monitoringReports.updateMonitoringReportEditor(save, props.projectId, dto, submit, () => {
-          if (link) stores.navigation.navigateTo(link);
+          if (link) navigate(link.path);
         });
       }}
       {...props}
@@ -125,7 +127,8 @@ const Container = (props: MonitoringReportWorkflowParams & BaseProps) => {
 export const MonitoringReportWorkflowRoute = defineRoute({
   allowRouteInActiveAccess: true,
   routeName: "monitoringReportPrepare",
-  routePath: "/projects/:projectId/monitoring-reports/:id/:mode<(prepare|view){1}>?:step",
+  routePath: "/projects/:projectId/monitoring-reports/:id/:mode",
+  routePathWithQuery: "/projects/:projectId/monitoring-reports/:id/:mode?:step",
   container: Container,
   getParams: (r) => ({ projectId: r.params.projectId, id: r.params.id, mode: r.params.mode, step: parseInt(r.params.step, 10) }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),

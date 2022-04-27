@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { ForecastDetailsDTO, PartnerDto, ProjectRole, SpendProfileStatus } from "@framework/types";
@@ -110,6 +111,7 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
 const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams & BaseProps) => {
   const stores = useStores();
   const { getContent } = useContent();
+  const navigate = useNavigate();
 
   const navigateToProjectSetup = () => {
     const projectSetupParams = {
@@ -117,7 +119,7 @@ const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams
       partnerId: props.partnerId,
     };
 
-    stores.navigation.navigateTo(props.routes.projectSetup.getLink(projectSetupParams));
+    navigate(props.routes.projectSetup.getLink(projectSetupParams).path);
   };
 
   return (

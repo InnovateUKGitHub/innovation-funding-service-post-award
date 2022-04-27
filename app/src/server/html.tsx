@@ -1,9 +1,11 @@
+import { HelmetData } from "react-helmet";
 import * as colour from "../ui/styles/colours";
 import { configuration } from "../server/features/common";
 
 import * as pkg from "../../package.json";
 
-export function renderHtml(html: string, htmlTitle: string, preloadedState: any = {}, nonce: string) {
+export function renderHtml(HelmetInstance: HelmetData, html: string, preloadedState: any = {}, nonce: string) {
+  const titleMetaTag = HelmetInstance.title.toString();
   const govukFrontendVersion = pkg.devDependencies["govuk-frontend"].replace(/[^0-9/.]/, "");
 
   return `
@@ -11,7 +13,7 @@ export function renderHtml(html: string, htmlTitle: string, preloadedState: any 
   <html lang="en">
       <head>
           <meta charset="utf-8" />
-          <title>${htmlTitle}</title>
+          ${titleMetaTag}
           <meta name="viewport" content="width=device-width, initial-scale=1">
           <meta name="theme-color" content="${colour.govukColourBlack}" />
 
@@ -45,7 +47,9 @@ export function renderHtml(html: string, htmlTitle: string, preloadedState: any 
             window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, "\\u003c")}
           </script>
 
-          <script nonce="${nonce}" src="/govuk-frontend-${govukFrontendVersion}.min.js?build=${configuration.build}"></script>
+          <script nonce="${nonce}" src="/govuk-frontend-${govukFrontendVersion}.min.js?build=${
+    configuration.build
+  }"></script>
           <script nonce="${nonce}" src="/build/vendor.js?build=${configuration.build}"></script>
           <script nonce="${nonce}" src="/build/bundle.js?build=${configuration.build}"></script>
           ${renderNonJSGoogleTagManager(configuration.googleTagManagerCode)}

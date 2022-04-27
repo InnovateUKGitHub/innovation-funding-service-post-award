@@ -1,4 +1,5 @@
 /* eslint-disable react/display-name */
+import { useNavigate } from "react-router-dom";
 import {
   ILinkInfo,
   PCRItemDto,
@@ -321,8 +322,8 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
       mode,
       config: this.props.config,
       messages: this.props.messages,
-      route: this.props.route,
       routes: this.props.routes,
+      currentRoute: this.props.currentRoute,
     });
   }
 
@@ -462,6 +463,7 @@ const PCRItemContainer = (
   props: ProjectChangeRequestPrepareItemParams & BaseProps & { mode: "prepare" | "review" | "view" },
 ) => {
   const stores = useStores();
+  const navigate = useNavigate();
 
   return (
     <PCRItemWorkflow
@@ -480,9 +482,9 @@ const PCRItemContainer = (
       )}
       onSave={(dto, link) => {
         stores.messages.clearMessages();
-        stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () =>
-          stores.navigation.navigateTo(link),
-        );
+        stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () => {
+          navigate(link.path);
+        });
       }}
       onChange={dto => {
         stores.messages.clearMessages();
@@ -520,7 +522,8 @@ export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParam
 
 export const PCRReviewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
   routeName: "pcrReviewItem",
-  routePath: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId?:step",
+  routePath: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId",
+  routePathWithQuery: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId?:step",
   container: props => <PCRItemContainer {...props} mode="review" />,
   getParams: route => ({
     projectId: route.params.projectId,
@@ -534,7 +537,8 @@ export const PCRReviewItemRoute = defineRoute<ProjectChangeRequestPrepareItemPar
 
 export const PCRPrepareItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
   routeName: "pcrPrepareItem",
-  routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId?:step",
+  routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId",
+  routePathWithQuery: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId?:step",
   container: props => <PCRItemContainer {...props} mode="prepare" />,
   getParams: route => ({
     projectId: route.params.projectId,

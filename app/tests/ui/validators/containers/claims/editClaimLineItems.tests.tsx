@@ -81,6 +81,12 @@ const stubBaseProps = {
     prepareClaim: {
       getLink: jest.fn().mockReturnValue({
         routeName: "test",
+        routePath: "/projects/:projectId/claims/:partnerId/prepare/:periodId/costs/:costCategoryId",
+        path: "/projects/123/claims/abcde/prepare/1/costs/4",
+        projectId: "123",
+        partnerId: "abcde",
+        periodId: "1",
+        costCategoryId: "4",
       }),
     },
   } as any,

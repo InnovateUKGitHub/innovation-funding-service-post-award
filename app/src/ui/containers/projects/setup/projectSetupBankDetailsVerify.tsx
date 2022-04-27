@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import { BankCheckStatus, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
@@ -19,8 +20,11 @@ interface Callbacks {
   onChange: (submit: boolean, dto: PartnerDto) => void;
 }
 
-class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<ProjectSetupBankDetailsVerifyParams, Data, Callbacks> {
-
+class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<
+  ProjectSetupBankDetailsVerifyParams,
+  Data,
+  Callbacks
+> {
   public render() {
     const combined = Pending.combine({ project: this.props.project, editor: this.props.editor });
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor)} />;
@@ -32,8 +36,13 @@ class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<ProjectSetupB
     return (
       <ACC.Page
         backLink={
-          <ACC.BackLink route={this.props.routes.projectSetup.getLink({ projectId: this.props.projectId, partnerId: this.props.partnerId })}>
-            <ACC.Content value={(x) => x.projectSetupBankDetailsVerify.backLink} />
+          <ACC.BackLink
+            route={this.props.routes.projectSetup.getLink({
+              projectId: this.props.projectId,
+              partnerId: this.props.partnerId,
+            })}
+          >
+            <ACC.Content value={x => x.projectSetupBankDetailsVerify.backLink} />
           </ACC.BackLink>
         }
         error={editor.error}
@@ -43,21 +52,57 @@ class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<ProjectSetupB
         {this.renderGuidance()}
         <ACC.Section>
           <ACC.SummaryList qa="bank-details-summary">
-            <ACC.SummaryListItem label={x => x.projectSetupBankDetailsVerify.partnerLabels.organisationName} content={editor.data.name} qa={"organisationName"}/>
-            <ACC.SummaryListItem label={x => x.projectSetupBankDetailsVerify.partnerLabels.companyNumber} content={bankDetails.companyNumber} qa={"companyNumber"}/>
-            <ACC.SummaryListItem label={x => x.projectSetupBankDetailsVerify.partnerLabels.sortCode} content={bankDetails.sortCode} qa={"sortCode"}/>
-            <ACC.SummaryListItem label={x => x.projectSetupBankDetailsVerify.partnerLabels.accountNumber} content={bankDetails.accountNumber} qa={"accountNumber"}/>
+            <ACC.SummaryListItem
+              label={x => x.projectSetupBankDetailsVerify.partnerLabels.organisationName}
+              content={editor.data.name}
+              qa={"organisationName"}
+            />
+            <ACC.SummaryListItem
+              label={x => x.projectSetupBankDetailsVerify.partnerLabels.companyNumber}
+              content={bankDetails.companyNumber}
+              qa={"companyNumber"}
+            />
+            <ACC.SummaryListItem
+              label={x => x.projectSetupBankDetailsVerify.partnerLabels.sortCode}
+              content={bankDetails.sortCode}
+              qa={"sortCode"}
+            />
+            <ACC.SummaryListItem
+              label={x => x.projectSetupBankDetailsVerify.partnerLabels.accountNumber}
+              content={bankDetails.accountNumber}
+              qa={"accountNumber"}
+            />
             {/* TODO: Commenting out in the hope we get an answer from experian in the coming weeks */}
             {/* <ACC.SummaryListItem label={x => x.projectSetupBankDetailsVerify.partnerLabels.firstName()} content={bankDetails.firstName} qa={"firstName"}/>
             <ACC.SummaryListItem label={x => x.projectSetupBankDetailsVerify.partnerLabels.lastName()} content={bankDetails.lastName} qa={"lastName"}/> */}
-            <ACC.SummaryListItem label={x => x.projectSetupBankDetailsVerify.partnerLabels.accountBuilding} content={bankDetails.address.accountBuilding} qa={"accountBuilding"}/>
-            <ACC.SummaryListItem label={x => x.projectSetupBankDetailsVerify.partnerLabels.accountStreet} content={bankDetails.address.accountStreet} qa={"accountStreet"}/>
-            <ACC.SummaryListItem label={x => x.projectSetupBankDetailsVerify.partnerLabels.accountLocality} content={bankDetails.address.accountLocality} qa={"accountLocality"}/>
-            <ACC.SummaryListItem label={x => x.projectSetupBankDetailsVerify.partnerLabels.accountTownOrCity} content={bankDetails.address.accountTownOrCity} qa={"accountTownOrCity"}/>
-            <ACC.SummaryListItem label={x => x.projectSetupBankDetailsVerify.partnerLabels.accountPostcode} content={bankDetails.address.accountPostcode} qa={"accountPostcode"}/>
+            <ACC.SummaryListItem
+              label={x => x.projectSetupBankDetailsVerify.partnerLabels.accountBuilding}
+              content={bankDetails.address.accountBuilding}
+              qa={"accountBuilding"}
+            />
+            <ACC.SummaryListItem
+              label={x => x.projectSetupBankDetailsVerify.partnerLabels.accountStreet}
+              content={bankDetails.address.accountStreet}
+              qa={"accountStreet"}
+            />
+            <ACC.SummaryListItem
+              label={x => x.projectSetupBankDetailsVerify.partnerLabels.accountLocality}
+              content={bankDetails.address.accountLocality}
+              qa={"accountLocality"}
+            />
+            <ACC.SummaryListItem
+              label={x => x.projectSetupBankDetailsVerify.partnerLabels.accountTownOrCity}
+              content={bankDetails.address.accountTownOrCity}
+              qa={"accountTownOrCity"}
+            />
+            <ACC.SummaryListItem
+              label={x => x.projectSetupBankDetailsVerify.partnerLabels.accountPostcode}
+              content={bankDetails.address.accountPostcode}
+              qa={"accountPostcode"}
+            />
           </ACC.SummaryList>
         </ACC.Section>
-        <ACC.Section qa="bank-details-verify-section" >
+        <ACC.Section qa="bank-details-verify-section">
           <Form.Form
             editor={editor}
             onChange={() => this.props.onChange(false, editor.data)}
@@ -65,9 +110,17 @@ class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<ProjectSetupB
             qa="bank-details-form"
           >
             <Form.Fieldset>
-              <Form.Submit><ACC.Content value={x => x.projectSetupBankDetailsVerify.submitButton}/></Form.Submit>
-              <ACC.Link styling="SecondaryButton" route={this.props.routes.projectSetupBankDetails.getLink({projectId: this.props.projectId, partnerId: this.props.partnerId})}>
-                <ACC.Content value={x => x.projectSetupBankDetailsVerify.changeButton}/>
+              <Form.Submit>
+                <ACC.Content value={x => x.projectSetupBankDetailsVerify.submitButton} />
+              </Form.Submit>
+              <ACC.Link
+                styling="SecondaryButton"
+                route={this.props.routes.projectSetupBankDetails.getLink({
+                  projectId: this.props.projectId,
+                  partnerId: this.props.partnerId,
+                })}
+              >
+                <ACC.Content value={x => x.projectSetupBankDetailsVerify.changeButton} />
               </ACC.Link>
             </Form.Fieldset>
           </Form.Form>
@@ -79,7 +132,7 @@ class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<ProjectSetupB
   private renderGuidance() {
     return (
       <ACC.Section qa={"guidance"}>
-        <ACC.Content value={x => x.projectSetupBankDetailsVerify.guidanceMessage}/>
+        <ACC.Content value={x => x.projectSetupBankDetailsVerify.guidanceMessage} />
       </ACC.Section>
     );
   }
@@ -87,6 +140,7 @@ class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<ProjectSetupB
 
 const ProjectSetupBankDetailsVerifyContainer = (props: ProjectSetupBankDetailsVerifyParams & BaseProps) => {
   const stores = useStores();
+  const navigate = useNavigate();
 
   return (
     <ProjectSetupBankDetailsVerifyComponent
@@ -98,14 +152,14 @@ const ProjectSetupBankDetailsVerifyContainer = (props: ProjectSetupBankDetailsVe
           verifyBankDetails: submit,
           onComplete: (resp: PartnerDto) =>
             resp.bankCheckStatus === BankCheckStatus.VerificationPassed
-              ? stores.navigation.navigateTo(
-                  props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }),
+              ? navigate(
+                  props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId }).path,
                 )
-              : stores.navigation.navigateTo(
+              : navigate(
                   props.routes.failedBankCheckConfirmation.getLink({
                     projectId: props.projectId,
                     partnerId: props.partnerId,
-                  }),
+                  }).path,
                 ),
         });
       }}
@@ -117,10 +171,11 @@ export const ProjectSetupBankDetailsVerifyRoute = defineRoute({
   routeName: "ProjectSetupBankDetailsVerify",
   routePath: "/projects/:projectId/setup/:partnerId/bank-details-verify",
   container: ProjectSetupBankDetailsVerifyContainer,
-  getParams: (route) => ({
+  getParams: route => ({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,
   }),
   getTitle: ({ content }) => content.projectSetupBankDetailsVerify.title(),
-  accessControl: (auth, { projectId, partnerId }) => auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
+  accessControl: (auth, { projectId, partnerId }) =>
+    auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
 });
