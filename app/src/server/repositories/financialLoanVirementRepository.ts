@@ -52,14 +52,11 @@ export class FinancialLoanVirementRepository extends SalesforceRepositoryBase<IS
 
     const virementMapper = new SalesforceFinancialLoanVirementMapper(loanVirementRecordType);
 
-    const virementWhereQuery = `Acc_ProjectChangeRequest__c = '${pcrItemId}' or Acc_ParticipantVirement__r.Acc_ProjectChangeRequest__c = '${pcrItemId}'`;
-
+    const virementWhereQuery = `Acc_ProjectChangeRequest__c = '${pcrItemId}' or Acc_ParticipantVirement__r.Acc_ProjectChangeRequest__c = '${pcrItemId}' ORDER BY Loan_PeriodNumber__c ASC`;
     const rawLoans = await super.where(virementWhereQuery);
-
     if (!rawLoans.length) {
       throw new BadRequestError(`No virement found for '${pcrItemId}'.`);
     }
-
     return virementMapper.map(rawLoans);
   }
 

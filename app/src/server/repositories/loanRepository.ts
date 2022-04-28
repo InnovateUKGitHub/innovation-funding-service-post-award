@@ -43,7 +43,7 @@ export class LoanRepository extends SalesforceRepositoryBaseWithMapping<ISalesfo
   }
 
   public async getAll(projectId: string): Promise<LoanDto[]> {
-    const projectWhereQuery = `Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'`;
+    const projectWhereQuery = `Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}' ORDER BY Acc_PeriodNumber__c ASC`;
 
     return super.where(projectWhereQuery);
   }
