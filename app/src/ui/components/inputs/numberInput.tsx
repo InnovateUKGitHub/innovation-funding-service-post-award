@@ -57,13 +57,10 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
       this.props.className,
     );
 
-    const disablePattern = pattern === null;
-
     return (
       <input
         id={this.props.id || this.props.name}
         type="text"
-        pattern={disablePattern ? undefined : pattern ?? "[0-9]*"}
         inputMode="numeric"
         className={className}
         name={this.props.name}
