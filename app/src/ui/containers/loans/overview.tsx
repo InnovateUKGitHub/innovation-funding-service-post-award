@@ -29,7 +29,7 @@ function LoansOverview({ loans, routes, projectId }: LoansOverviewProps) {
       {pendingLoan && (
         <ACC.Renderers.SimpleString>
           {isLastItem
-            ? "Your last drawdown reqest has been received. It is currently being reviewed."
+            ? "Your last drawdown request has been received. It is currently being reviewed."
             : `You can request your next drawdown once drawdown ${pendingLoan.period} is approved.`}
         </ACC.Renderers.SimpleString>
       )}
