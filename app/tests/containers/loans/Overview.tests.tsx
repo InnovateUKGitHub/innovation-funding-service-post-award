@@ -166,7 +166,7 @@ describe("<LoansOverviewContainer />", () => {
           const { queryByText } = setup(undefined, storeWithResolvedData);
 
           const loanIntroMessage = queryByText(
-            "Your last drawdown reqest has been received. It is currently being reviewed.",
+            "Your last drawdown request has been received. It is currently being reviewed.",
           );
 
           expect(loanIntroMessage).toBeInTheDocument();
