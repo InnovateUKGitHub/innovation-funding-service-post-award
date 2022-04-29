@@ -5,6 +5,7 @@ import { useContent } from "@ui/hooks";
 import { useStores } from "@ui/redux";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
+import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 
 export type BasePcrProps = PcrStepProps<Dtos.PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>;
 
@@ -15,8 +16,9 @@ export interface JesStepUIProps extends BasePcrProps {
   onFileDelete: (dto: Dtos.MultipleDocumentUploadDto, document: Dtos.DocumentSummaryDto) => void;
 }
 
-export function JesStepUI({ documents, documentsEditor, ...props }: JesStepUIProps) {
+export function JesStepUI({ documents, documentsEditor, project, ...props }: JesStepUIProps) {
   const { getContent } = useContent();
+  const { isKTP } = checkProjectCompetition(project.competitionType);
 
   const jesApplyingViaSystemLinkContent = getContent(x => x.pcrAddPartnerJeS.jesListItem1LinkContent);
   const jesListProcessItem2 = getContent(x => x.pcrAddPartnerJeS.jesListItem2);
@@ -43,9 +45,7 @@ export function JesStepUI({ documents, documentsEditor, ...props }: JesStepUIPro
     const UploadForm = ACC.TypedForm<Dtos.MultipleDocumentUploadDto>();
 
     return (
-      <ACC.Section>
-        <ACC.H2>{jesHeading}</ACC.H2>
-
+      <>
         <ACC.Renderers.SimpleString>{jesIntroduction}</ACC.Renderers.SimpleString>
 
         <ACC.UL>
@@ -92,23 +92,35 @@ export function JesStepUI({ documents, documentsEditor, ...props }: JesStepUIPro
             </UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>
-      </ACC.Section>
+      </>
     );
   };
 
   const Form = ACC.TypedForm<Dtos.PCRItemForPartnerAdditionDto>();
 
   return (
-    <>
-      {renderForm()}
+    <ACC.Section>
 
-      <ACC.Section>
-        <ACC.DocumentEdit
-          qa="je-s-document"
-          onRemove={document => props.onFileDelete(documentsEditor.data, document)}
-          documents={documents}
-        />
-      </ACC.Section>
+      <ACC.H2>{jesHeading}</ACC.H2>
+        {isKTP ? (
+            <ACC.ValidationMessage
+              messageType="info"
+              message={x => x.pcrAddPartnerJeS.jesIntroduction}
+              qa="jes-form-ktp-not-needed-info-message"
+            />
+          ) : (
+        <>
+          {renderForm()}
+
+          <ACC.Section>
+            <ACC.DocumentEdit
+              qa="je-s-document"
+              onRemove={document => props.onFileDelete(documentsEditor.data, document)}
+              documents={documents}
+            />
+          </ACC.Section>
+        </>
+        )}
 
       <Form.Form qa="saveAndContinue" data={props.pcrItem} onSubmit={() => props.onSave(false)}>
         <Form.Fieldset>
@@ -119,7 +131,7 @@ export function JesStepUI({ documents, documentsEditor, ...props }: JesStepUIPro
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>
-    </>
+    </ACC.Section>
   );
 }
 
