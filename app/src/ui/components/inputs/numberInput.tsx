@@ -6,7 +6,6 @@ interface NumberInputProps extends InputProps<number> {
   id?: string;
   className?: string;
   width?: FormInputWidths;
-  pattern?: string | null;
 }
 
 interface NumberInputState extends InputState {
@@ -44,8 +43,6 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
   }
 
   public render() {
-    const { pattern } = this.props;
-
     const className = classNames(
       "govuk-input",
       "govuk-table__cell--numeric",
