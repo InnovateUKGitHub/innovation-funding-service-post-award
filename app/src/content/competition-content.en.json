@@ -37,6 +37,9 @@
       },
       "pcr-add-partner-state-aid-eligibility": {
         "guidance-non-aid-funding": "This screen is not relevant to KTPs. Click save and continue."
+      },
+      "pcr-add-partner-jes": {
+        "jes-introduction": "This screen is not relevant to KTPs. Click save and continue."
       }
     }
   },

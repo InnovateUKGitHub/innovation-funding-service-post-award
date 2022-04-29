@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 
-import { MultipleDocumentUploadDto } from "@framework/dtos";
+import { MultipleDocumentUploadDto, ProjectDto, } from "@framework/dtos";
 import { TestBed, TestBedContent, TestBedStore } from "@shared/TestBed";
 
 import { configuration } from "@server/features/common";
@@ -88,50 +88,52 @@ describe("<JesStepUI />", () => {
     },
   } as any;
 
-  const setup = (props?: Partial<JesStepUIProps>) => {
-    const stubFiles: MultipleDocumentUploadDto = {
-      files: [
-        {
-          fileName: "stub-fileName",
-          size: 1024,
-        },
-      ],
-    };
-
-    // TODO: Create generic "BasePcrProps" TestBed so that each workflow requires a lot less pain!
-    const stubBasePcrProps: BasePcrProps = {
-      project: null as any,
-      pcr: null as any,
-      pcrItem: null as any,
-      pcrItemType: null as any,
-      documentsEditor: {
-        data: { files: [] },
-        validator: new MultipleDocumentUploadDtoValidator(stubFiles, configuration.options, false, true, null),
-        status: 1,
-        error: null,
+  const stubFiles: MultipleDocumentUploadDto = {
+    files: [
+      {
+        fileName: "stub-fileName",
+        size: 1024,
       },
-      validator: null as any,
-      status: null as any,
-      onChange: jest.fn(),
-      onSave: jest.fn(),
-      getRequiredToCompleteMessage: jest.fn(),
-      routes: {} as any,
-      mode: "prepare",
-    };
+    ],
+  };
 
-    const requiredJesStepUIProps: Pick<JesStepUIProps, "documents" | "onSubmit" | "onFileChange" | "onFileDelete"> = {
-      documents: [],
-      onSubmit: jest.fn(),
-      onFileChange: jest.fn(),
-      onFileDelete: jest.fn(),
-    };
+  // TODO: Create generic "BasePcrProps" TestBed so that each workflow requires a lot less pain!
+  const stubBasePcrProps: BasePcrProps = {
+    project: {
+      competitionType: "CR&D"
+    } as ProjectDto,
+    pcr: null as any,
+    pcrItem: null as any,
+    pcrItemType: null as any,
+    documentsEditor: {
+      data: { files: [] },
+      validator: new MultipleDocumentUploadDtoValidator(stubFiles, configuration.options, false, true, null),
+      status: 1,
+      error: null,
+    },
+    validator: null as any,
+    status: null as any,
+    onChange: jest.fn(),
+    onSave: jest.fn(),
+    getRequiredToCompleteMessage: jest.fn(),
+    routes: {} as any,
+    mode: "prepare",
+  };
 
-    return render(
+  const requiredJesStepUIProps: Pick<JesStepUIProps, "documents" | "onSubmit" | "onFileChange" | "onFileDelete"> = {
+    documents: [],
+    onSubmit: jest.fn(),
+    onFileChange: jest.fn(),
+    onFileDelete: jest.fn(),
+  };
+
+
+  const setup = (props?: Partial<JesStepUIProps>) => render(
       <TestBed content={(stubContent as unknown) as TestBedContent} stores={stubStore as TestBedStore}>
         <JesStepUI {...stubBasePcrProps} {...requiredJesStepUIProps} {...props} />
       </TestBed>,
     );
-  };
+
 
   describe("@returns", () => {
     test("as default", () => {
@@ -140,6 +142,12 @@ describe("<JesStepUI />", () => {
       const jestUploadForm = queryByTestId("saveAndContinue");
 
       expect(jestUploadForm).toBeInTheDocument();
+    });
+
+    test("with competition type KTP", () => {
+      const ktpProject = {...stubBasePcrProps, project: { ...stubBasePcrProps.project, competitionType: "KTP"} } as any;
+      const { queryByTestId } = setup(ktpProject);
+      expect(queryByTestId("jes-form-ktp-not-needed-info-message")).toBeInTheDocument();
     });
 
     describe("returns content", () => {
