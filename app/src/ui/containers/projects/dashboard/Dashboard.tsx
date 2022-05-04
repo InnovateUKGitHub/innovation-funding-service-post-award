@@ -6,13 +6,13 @@ import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { noop } from "@ui/helpers/noop";
 import * as ACC from "@ui/components";
 
+import { useMounted } from "@ui/features/has-mounted/mounted.context";
+import { BroadcastsViewer } from "../Broadcast/BroadcastsViewer";
 import { DashboardProjectList } from "./DashboardProjectList";
 import { DashboardProjectCount } from "./DashboardProjectCount";
 import { FilterOptions } from "./Dashboard.interface";
 import { generateFilteredProjects, getAvailableProjectFilters } from "./dashboard.logic";
 
-import { BroadcastsViewer } from "../Broadcast/BroadcastsViewer";
-import { useMounted } from "@ui/features/has-mounted/mounted.context";
 
 interface ProjectDashboardParams {
   search?: string;
@@ -84,7 +84,7 @@ function ProjectDashboard({
         <Form.Form
           data={searchFilterState}
           qa="projectSearch"
-          isGet={true}
+          isGet
           onSubmit={noop}
           onChange={model =>
             props.onSearch({
@@ -98,7 +98,7 @@ function ProjectDashboard({
               width="one-half"
               hint={x => x.projectsDashboard.searchHint}
               label={x => x.projectsDashboard.searchLabel}
-              labelHidden={true}
+              labelHidden
               name="search"
               value={x => x.searchValue}
               update={(x, v) => (x.searchValue = v ?? "")}
@@ -118,16 +118,6 @@ function ProjectDashboard({
               }}
             />
           </Form.Fieldset>
-
-          <>
-            <p>visible</p>
-          </>
-
-          {false && (
-            <>
-              <p>hidden</p>
-            </>
-          )}
 
           {isServer && <Form.Submit>Search projects</Form.Submit>}
         </Form.Form>
