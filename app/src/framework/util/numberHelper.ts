@@ -14,10 +14,16 @@ export const isNumber = (value?: number | null): value is number => {
  * @description Added an Epsilon cover edge cases such as 1.005 to round correctly
  */
 export function roundCurrency(value: number) {
-  if (value === 0) return value;
+  if (value === 0) return 0;
 
   const valueToBeRounded = (value + epsilon) * 100;
-  const roundedValue = Math.round(valueToBeRounded);
+  /**
+   * `| 0` coerces into an int.
+   * Occasionally a negative zero (-0) is being generated. JS float
+   * spec allows for negative and positive zeros. By coercing to int, only int 0
+   * (equivalent to positive zero) exists.
+   */
+  const roundedValue = Math.round(valueToBeRounded) | 0;
 
   return roundedValue / 100;
 }

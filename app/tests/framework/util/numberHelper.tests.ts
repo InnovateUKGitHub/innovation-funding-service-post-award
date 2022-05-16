@@ -25,7 +25,6 @@ describe("numberHelper", () => {
   describe("roundCurrency()", () => {
     const testCases = test.each`
       name               | inputValue    | expectedValue
-      ${"zero value"}    | ${0}          | ${0}
       ${"whole"}         | ${10}         | ${10}
       ${"short decimal"} | ${12.1312}    | ${12.13}
       ${"long decimal"}  | ${17.9873424} | ${17.99}
@@ -36,6 +35,9 @@ describe("numberHelper", () => {
         name                         | edgeCaseValue | expectedValue
         ${"positive trailing digit"} | ${1.005}      | ${1.01}
         ${"negative trailing digit"} | ${-1.005}     | ${-1}
+        ${"positive zero"}           | ${0}          | ${0}
+        ${"negative zero"}           | ${-0}         | ${0}
+        ${"resolves to neg zero"}    | ${-0.0004}    | ${0}
       `("with a $name number", ({ edgeCaseValue, expectedValue }) => {
         const roundedNumber = roundCurrency(edgeCaseValue);
 
