@@ -180,6 +180,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
 
     return (
       <ACC.Task
+        key={item.typeName}
         name={item.typeName}
         status={getPcrItemTaskStatus(item.status)}
         route={this.props.routes.pcrReviewItem.getLink({
