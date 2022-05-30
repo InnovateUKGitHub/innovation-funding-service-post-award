@@ -377,6 +377,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
   ) {
     const { mode } = this.props;
     const isPrepareMode = mode === "prepare";
+    const isReviewing = mode === "review";
     const displayNavigationArrows = mode === "review" || mode === "view";
 
     return (
@@ -397,7 +398,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
                 <NavigationArrowsForPCRs
                   pcr={pcr}
                   currentItem={pcrItem}
-                  isReviewing={isPrepareMode}
+                  isReviewing={isReviewing}
                   editableItemTypes={editableItemTypes}
                   routes={this.props.routes}
                 />
