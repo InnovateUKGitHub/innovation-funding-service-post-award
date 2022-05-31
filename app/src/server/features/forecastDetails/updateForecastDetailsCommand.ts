@@ -1,10 +1,9 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { BadRequestError, CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
 import { ISalesforceProfileDetails } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery, GetUnfilteredCostCategoriesQuery, UpdateClaimCommand } from "@server/features/claims";
 import { GetAllClaimDetailsByPartner } from "@server/features/claimDetails";
-import { GetByIdQuery as GetProjectById, GetProjectStatusQuery } from "@server/features/projects";
+import { GetProjectStatusQuery } from "@server/features/projects";
 import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
 import { Authorisation, ClaimDetailsSummaryDto, ClaimDto, ClaimStatus, ForecastDetailsDTO, GOLCostDto, IContext, PartnerDto, ProjectRole } from "@framework/types";
 import { GetByIdQuery } from "@server/features/partners";
@@ -32,7 +31,6 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
       throw new InActiveProjectError();
     }
 
-    const project = await context.runQuery(new GetProjectById(this.projectId));
     const existing = await context.runQuery(new GetAllForecastsForPartnerQuery(this.partnerId));
 
     const preparedForecasts = await this.ignoreCalculatedCostCategories(context, this.forecasts);
@@ -42,7 +40,6 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     const partner = await context.runQuery(new GetByIdQuery(this.partnerId));
 
     await this.testValidation(claims, claimDetails, golCosts, partner);
-    await this.testPastForecastPeriodsHaveNotBeenUpdated(project.periodId, preparedForecasts, existing);
     await this.updateProfileDetails(context, preparedForecasts, existing);
     await this.updatePartner(context, partner);
 
@@ -67,18 +64,6 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
 
     if (!validation.isValid) {
       throw new ValidationError(validation);
-    }
-  }
-
-  private async testPastForecastPeriodsHaveNotBeenUpdated(currentPeriodId: number, forecasts: ForecastDetailsDTO[], existing: ForecastDetailsDTO[]): Promise<void> {
-    const hasAllForecastedUnSubmitted = forecasts.every(x => {
-      const hasPeriodElapsed = x.periodId >= currentPeriodId;
-
-      return hasPeriodElapsed || !this.hasChanged(x, existing);
-    });
-
-    if (!hasAllForecastedUnSubmitted) {
-      throw new BadRequestError("You can't update the forecast of approved periods.");
     }
   }
 

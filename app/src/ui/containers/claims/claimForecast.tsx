@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import * as ACC from "@ui/components";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { getArrayFromPeriod, isNumber } from "@framework/util";
+import { getArrayExcludingPeriods, isNumber } from "@framework/util";
 import {
   ClaimDetailsSummaryDto,
   ClaimDto,
@@ -76,11 +76,12 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
   ) {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
 
-    const periodId = combined.project.periodId;
+    const periodsClaimed = new Set(this.props.claimDetails?.data?.map(x => x.periodId));
+
     const handleSubmit = () => {
       return this.props.onUpdate(
         true,
-        getArrayFromPeriod(editor.data, periodId, combined.project.numberOfPeriods),
+        getArrayExcludingPeriods(editor.data, periodsClaimed),
         this.props.routes.claimSummary.getLink({
           projectId: this.props.projectId,
           partnerId: this.props.partnerId,
@@ -92,7 +93,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
     const onFormSave = () => {
       this.props.onUpdate(
         true,
-        getArrayFromPeriod(editor.data, periodId, combined.project.numberOfPeriods),
+        getArrayExcludingPeriods(editor.data, periodsClaimed),
         this.getBackLink(combined.project),
       );
     };
@@ -136,7 +137,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
             onSubmit={handleSubmit}
             qa="claim-forecast-form"
           >
-            <ACC.Claims.ForecastTable data={combined} editor={editor} isSubmitting />
+            <ACC.Claims.ForecastTable data={combined} editor={editor} isSubmitting allowRetroactiveForecastEdit />
             <Form.Fieldset qa="last-saved">
               {combined.partner.forecastLastModifiedDate && (
                 <ACC.Claims.ClaimLastModified modifiedDate={combined.partner.forecastLastModifiedDate} />
@@ -164,14 +165,14 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
   }
 }
 
-const ClaimForcastContainer = (props: ClaimForecastParams & BaseProps) => {
+const ClaimForecastContainer = (props: ClaimForecastParams & BaseProps) => {
   const stores = useStores();
   const { getContent } = useContent();
   const navigate = useNavigate();
   const claimSavedMessage = getContent(x => x.claimForecast.messages.claimSavedMessage);
 
   const handleOnUpdate: Callbacks["onUpdate"] = (saving, dto, link) => {
-    stores.forecastDetails.updateForcastEditor(
+    stores.forecastDetails.updateForecastEditor(
       saving,
       props.projectId,
       props.partnerId,
@@ -204,7 +205,7 @@ const ClaimForcastContainer = (props: ClaimForecastParams & BaseProps) => {
 export const ClaimForecastRoute = defineRoute({
   routeName: "claimForecast",
   routePath: "/projects/:projectId/claims/:partnerId/forecast/:periodId",
-  container: ClaimForcastContainer,
+  container: ClaimForecastContainer,
   getParams: route => ({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,

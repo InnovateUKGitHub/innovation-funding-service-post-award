@@ -139,7 +139,7 @@ const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams
       editor={stores.forecastDetails.getInitialForecastEditor(props.partnerId)}
       partnerEditor={stores.partners.getPartnerEditor(props.projectId, props.partnerId)}
       onChange={(saving, submit, payload) => {
-        stores.forecastDetails.updateInitialForcastEditor(
+        stores.forecastDetails.updateInitialForecastEditor(
           saving,
           props.projectId,
           props.partnerId,

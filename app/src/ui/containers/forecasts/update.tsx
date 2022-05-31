@@ -126,7 +126,7 @@ const navigate = useNavigate();
       })}
       editor={stores.forecastDetails.getForecastEditor(props.partnerId)}
       onChange={(saving, dto) => {
-        stores.forecastDetails.updateForcastEditor(
+        stores.forecastDetails.updateForecastEditor(
           saving,
           props.projectId,
           props.partnerId,

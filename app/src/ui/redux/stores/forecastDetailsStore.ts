@@ -93,7 +93,7 @@ export class ForecastDetailsStore extends StoreBase {
     );
   }
 
-  public updateForcastEditor(
+  public updateForecastEditor(
     saving: boolean,
     projectId: string,
     partnerId: string,
@@ -113,7 +113,7 @@ export class ForecastDetailsStore extends StoreBase {
     );
   }
 
-  public updateInitialForcastEditor(
+  public updateInitialForecastEditor(
     saving: boolean,
     projectId: string,
     partnerId: string,
