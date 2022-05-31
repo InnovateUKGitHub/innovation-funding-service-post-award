@@ -33,3 +33,16 @@ export const getArrayFromPeriod = <T extends any[]>(
     return notPreviousPeriod && item.periodId <= lastPeriodId;
   }) as T;
 };
+
+export const getArrayExcludingPeriods = <T extends {
+  periodId: number;
+}>(
+  originalArray: T[],
+  excludePeriods: Set<number>
+): T[] => {
+  if(!originalArray.length) return originalArray;
+
+  return originalArray.filter(item =>
+    !excludePeriods.has(item.periodId)
+  );
+};

@@ -56,6 +56,7 @@ interface Props {
   editor?: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>;
   onChange?: (data: ForecastDetailsDTO[]) => void;
   isSubmitting?: boolean;
+  allowRetroactiveForecastEdit?: boolean;
 }
 
 export class ForecastTable extends React.Component<Props> {
@@ -144,7 +145,7 @@ export class ForecastTable extends React.Component<Props> {
             key={p}
             header={intervals[p]}
             value={(x, index) =>
-              this.renderForecastCell(x, parseInt(p, 10), index, data, editor, isSubmitting || false)
+              this.renderForecastCell(x, parseInt(p, 10), index, data, editor, isSubmitting || false, this.props.allowRetroactiveForecastEdit ?? false)
             }
             cellClassName={() => "govuk-table__cell--numeric"}
             classSuffix="numeric"
@@ -262,6 +263,7 @@ export class ForecastTable extends React.Component<Props> {
     data: ForecastData,
     editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator> | undefined,
     isSubmitting: boolean,
+    allowRetroactiveForecastEdit?: boolean
   ) {
     const value = forecastRow.forecasts[periodId];
     const costCategory = data.costCategories.find(x => x.id === forecastRow.categoryId);
@@ -272,8 +274,8 @@ export class ForecastTable extends React.Component<Props> {
     if (
       (costCategory && costCategory.isCalculated) ||
       !editor ||
-      (periodId < data.project.periodId && !isPending) ||
-      (periodId === data.project.periodId && !isPending && !isSubmitting)
+      (periodId < data.project.periodId && !isPending && !allowRetroactiveForecastEdit) ||
+      (periodId === data.project.periodId && !isPending && !isSubmitting && !allowRetroactiveForecastEdit)
     ) {
       return <Currency value={value} />;
     }

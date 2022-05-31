@@ -1,4 +1,18 @@
-import { getArrayFromPeriod, groupBy } from "@framework/util";
+import { getArrayFromPeriod, getArrayExcludingPeriods, groupBy } from "@framework/util";
+
+interface ListWithPeriodId {
+  periodId: number;
+}
+
+function createIncrementingPeriodData(totalStubCount: number): ListWithPeriodId[] {
+  const arr = [] as ListWithPeriodId[];
+
+  for (let i = 1; i <= totalStubCount; i++) {
+    arr.push({ periodId: i } as ListWithPeriodId);
+  }
+
+  return arr;
+}
 
 describe("arrayHelpers", () => {
   describe("groupBy()", () => {
@@ -25,21 +39,19 @@ describe("arrayHelpers", () => {
     });
   });
 
+  describe("getArrayExcludingPeriods()", () => {
+    const listWithPeriodId = createIncrementingPeriodData(10);
+
+    it("should return list with filtered out periodIds that were included in the set passed in as second arg", () => {
+      const excludePeriods = new Set([2, 4, 5]);
+
+      expect(getArrayExcludingPeriods(listWithPeriodId, excludePeriods).map(x => x.periodId)).toEqual([
+        1, 3, 6, 7, 8, 9, 10,
+      ]);
+    });
+  });
+
   describe("getArrayFromPeriod()", () => {
-    interface ListWithPeriodId {
-      periodId: number;
-    }
-
-    function createIncrementingPeriodData(totalStubCount: number): ListWithPeriodId[] {
-      const arr = [] as ListWithPeriodId[];
-
-      for (let i = 1; i <= totalStubCount; i++) {
-        arr.push({ periodId: i } as ListWithPeriodId);
-      }
-
-      return arr;
-    }
-
     const stubEndPeriod = 10;
     const listWithPeriodId = createIncrementingPeriodData(10);
 
