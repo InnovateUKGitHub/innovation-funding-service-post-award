@@ -32,6 +32,9 @@
       ],
       "@content/*": [
         "src/content/*"
+      ],
+      "@tests/*": [
+        "tests/*"
       ]
     },
     // "composite": true,                     /* Enable project compilation */
