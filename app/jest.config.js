@@ -4,7 +4,7 @@ module.exports = {
   testURL: "http://localhost",
   snapshotSerializers: ["enzyme-to-json/serializer"],
   setupFilesAfterEnv: ["<rootDir>/config/jest-setup.js"],
-  coveragePathIgnorePatterns: ["/node_modules/"],
+  coveragePathIgnorePatterns: ["/node_modules/", "\\.(test|spec)\\."],
   collectCoverageFrom: [
     "src/server/features/**/*.{ts,tsx}",
     "src/framework/util/*.{ts,tsx,json}",
@@ -22,7 +22,7 @@ module.exports = {
   transform: {
     "^.+\\.tsx?$": "ts-jest",
   },
-  testRegex: "(/tests/.*(tests|spec))\\.tsx?$",
+  testRegex: "/src/.*\\.(test|spec)\\.tsx?$",
   moduleFileExtensions: ["ts", "tsx", "js"],
   testResultsProcessor: "jest-bamboo-reporter",
   watchPlugins: ["jest-watch-typeahead/filename", "jest-watch-typeahead/testname"],
@@ -33,5 +33,6 @@ module.exports = {
     "@ui/(.*)": "<rootDir>/src/ui/$1",
     "@util/(.*)": "<rootDir>/src/util/$1",
     "@content/(.*)": "<rootDir>/src/content/$1",
+    "@tests/(.*)": "<rootDir>/tests/$1"
   },
 };
