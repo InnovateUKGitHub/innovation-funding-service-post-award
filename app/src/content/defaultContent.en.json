@@ -682,7 +682,7 @@
       "button-cancel-request": "Cancel",
       "learn-more-title": "Learn more about request types",
       "reallocate-costs-title": "Reallocate project costs",
-      "reallocate-costs-message": "This allows you to move costs from one category to another or from one partner to another.",
+      "reallocate-costs-message": "This allows you to move costs from one category to another.",
       "remove-partner-title": "Remove a partner",
       "remove-partner-message": "Use this when a partner is leaving the project and is ready to submit their final claim.",
       "add-partner-title": "Add a partner",
@@ -694,13 +694,13 @@
       "change-partners-name-title": "Change partner's name",
       "change-partners-name-message": "Use when a partner organisation's name has changed. If a partner is being replaced, use 'Add a partner' and 'Remove a partner'.",
       "put-project-on-hold-title": "Put a project on hold",
-      "put-project-on-hold-message": "This allows you to suspend a project for a specific period. You cannot submit any claims or raise project change requests when the project is on hold.",
+      "put-project-on-hold-message": "This allows you to suspend a project for a specific period. You cannot submit any claims, costs, drawdown requests or raise project change requests when the project is on hold.",
       "end-project-early-title": "End project early",
       "end-project-early-message": "Use this when you believe you are entering your final claim period. Make a note to say your project is ending when you submit this request. You will then enter your final claim period and any other future claim periods will close.",
       "loan-drawdown-change-title": "Change loan drawdown",
-      "loan-drawdown-change-message": "Use this when you believe you are entering your final claim period. Make a note to say your project is ending when you submit this request. You will then enter your final claim period and any other future claim periods will close.",
-      "loan-drawdown-extension-title": "Extend loan drawdown",
-      "loan-drawdown-extension-message": "This allows either an extension increase or decrease to the loan."
+      "loan-drawdown-change-message": "This allows for you to change the date and/or amount of forecasted drawdowns in the case of unforeseen circumstances leading to significant variations between drawn amounts and amounts spent (over or underspent).",
+      "loan-drawdown-extension-title": "Change loans duration",
+      "loan-drawdown-extension-message": "This allows you to extend or reduce the duration of your loan periods (availability, extension and repayment)."
     },
     "pcr-time-extension-step": {
       "existing-project-heading": "Existing project details",
