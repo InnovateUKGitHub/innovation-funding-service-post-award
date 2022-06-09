@@ -83,7 +83,7 @@ describe("getAllForProjectQuery", () => {
       id: "Partner1",
       name: "Expected name",
       accountId: "AccountId1",
-      type: "Accedemic",
+      type: "Academic",
       postcode: "BS1 1AA",
       postcodeStatusLabel: "",
       postcodeStatus: PostcodeTaskStatus.Complete,

@@ -1,5 +1,5 @@
 import { GetCostsSummaryForPeriodQuery } from "@server/features/claimDetails";
-import { Authorisation, ProjectRole } from "@framework/types";
+import { Authorisation, PCROrganisationType, ProjectRole } from "@framework/types";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("GetCostSummaryForPeriodQuery", () => {
@@ -8,7 +8,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
 
     const partner = context.testData.createPartner();
     const costCategories = context.testData.range(5, () =>
-      context.testData.createCostCategory({ organisationType: "Industrial" }),
+      context.testData.createCostCategory({ organisationType: PCROrganisationType.Industrial }),
     );
 
     const project = context.testData.createProject();
@@ -31,7 +31,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const partner = context.testData.createPartner();
     const costCategories = context.testData.range(5, (_, i) =>
       context.testData.createCostCategory({
-        organisationType: "Industrial",
+        organisationType: PCROrganisationType.Industrial,
         displayOrder: 5 - i,
         id: `costCategory_${5 - i}`,
       }),
@@ -62,10 +62,10 @@ describe("GetCostSummaryForPeriodQuery", () => {
 
     const partner = context.testData.createPartner();
 
-    context.testData.range(3, () => context.testData.createCostCategory({ organisationType: "Academic" }));
+    context.testData.range(3, () => context.testData.createCostCategory({ organisationType: PCROrganisationType.Academic }));
 
     const costCategories = context.testData.range(5, () =>
-      context.testData.createCostCategory({ organisationType: "Industrial" }),
+      context.testData.createCostCategory({ organisationType: PCROrganisationType.Industrial }),
     );
 
     const project = context.testData.createProject();
@@ -87,7 +87,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
 
     const expectedCost = 25000;
 
-    const costCategory = context.testData.createCostCategory({ organisationType: "Industrial" });
+    const costCategory = context.testData.createCostCategory({ organisationType: PCROrganisationType.Industrial });
     const partner = context.testData.createPartner();
 
     const periodId = 1;
@@ -118,8 +118,8 @@ describe("GetCostSummaryForPeriodQuery", () => {
     const expectedCost1 = 25000;
     const expectedCost2 = 35000;
 
-    const costCategory1 = context.testData.createCostCategory({ organisationType: "Industrial" });
-    const costCategory2 = context.testData.createCostCategory({ organisationType: "Industrial" });
+    const costCategory1 = context.testData.createCostCategory({ organisationType: PCROrganisationType.Industrial });
+    const costCategory2 = context.testData.createCostCategory({ organisationType: PCROrganisationType.Industrial });
 
     const partner = context.testData.createPartner();
 
@@ -245,7 +245,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     expect(result[0].costsClaimedToDate).toBe(1234);
   });
 
-  test("should return all cost categoried event if no details", async () => {
+  test("should return all cost categories even if no details", async () => {
     const context = new TestContext();
 
     const project = context.testData.createProject();
@@ -266,7 +266,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
     context.testData.range(3, () =>
       context.testData.createCostCategory({
         competitionType: project.Acc_CompetitionType__c,
-        organisationType: partner.organisationType + "_",
+        organisationType: PCROrganisationType.Unknown,
       }),
     );
 
@@ -362,7 +362,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
       expect(await context.runAccessControl(auth, query)).toBe(true);
     });
 
-    test("Project Unkown fails", async () => {
+    test("Project Unknown fails", async () => {
       const context = new TestContext();
       const project = context.testData.createProject();
       const partner = context.testData.createPartner();

@@ -1,10 +1,11 @@
 import { CostCategoryType } from "@framework/constants";
+import { PCROrganisationType } from "@framework/constants";
 
 export interface CostCategoryDto {
   id: string;
   name: string;
   type: CostCategoryType;
-  organisationType: string; // TODO:use PCROrganisationType enum
+  organisationType: PCROrganisationType;
   competitionType: string;
   isCalculated: boolean;
   hasRelated: boolean;

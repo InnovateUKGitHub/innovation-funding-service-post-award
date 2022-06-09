@@ -1,4 +1,5 @@
 import { Partner } from "@framework/entities/partner";
+import { PCROrganisationType } from "@framework/constants";
 import { SalesforceRepositoryBaseWithMapping, Updatable } from "./salesforceRepositoryBase";
 import { SalesforcePartnerMapper } from "./mappers/partnerMapper";
 
@@ -8,7 +9,7 @@ export interface ISalesforcePartner {
     Id: string;
     Name: string;
   } | null;
-  Acc_OrganisationType__c: string;
+  Acc_OrganisationType__c: PCROrganisationType;
   Acc_ParticipantType__c: string;
   Acc_ParticipantSize__c: string;
   Acc_ProjectRole__c: string;

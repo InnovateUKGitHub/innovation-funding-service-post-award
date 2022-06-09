@@ -16,7 +16,7 @@ import {
   TypeOfAid
 } from "@framework/types";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
-import { CostCategoryType, PCRItemStatus, PCRParticipantSize, PCRStatus } from "@framework/constants";
+import { CostCategoryType, PCRItemStatus, PCRParticipantSize, PCRStatus, PCROrganisationType } from "@framework/constants";
 import { ISalesforceDocument } from "@server/repositories/contentVersionRepository";
 import { ITestRepositories } from "./testRepositories";
 
@@ -38,7 +38,7 @@ export class TestData {
       type: CostCategoryType.Unknown,
       displayOrder: seed,
       competitionType: "SBRI",
-      organisationType: "Industrial",
+      organisationType: PCROrganisationType.Industrial,
       description: `Cost Category description ${seed}`,
       hintText: `Cost Category hint ${seed}`,
       hasRelated: false,
@@ -132,7 +132,7 @@ export class TestData {
       id: `Partner${seed}`,
       accountId: `AccountId${seed}`,
       name: `Participant Name ${seed}`,
-      participantType: "Accedemic",
+      participantType: "Academic",
       participantSize: "Large",
       projectId: project.Id,
       competitionType: project.Acc_CompetitionType__c,
@@ -142,7 +142,7 @@ export class TestData {
       capLimit: 50,
       awardRate: 50,
       forecastLastModifiedDate: null,
-      organisationType: "Industrial",
+      organisationType: PCROrganisationType.Industrial,
       overheadRate: 20,
       overdueProject: false,
       claimsForReview: 0,
