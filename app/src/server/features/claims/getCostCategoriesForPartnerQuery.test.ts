@@ -1,3 +1,4 @@
+import { PCROrganisationType } from "@framework/constants";
 import { PartnerDto } from "@framework/dtos";
 import { CostCategory } from "@framework/entities";
 import { GetCostCategoriesForPartnerQuery } from "@server/features/claims/getCostCategoriesForPartnerQuery";
@@ -9,7 +10,7 @@ describe("GetCostCategoriesForPartnerQuery()", () => {
     const stubCostCategoryTotal = 2;
     const mockPartner = {
       competitionType: "ABC",
-      organisationType: "123",
+      organisationType: PCROrganisationType.Industrial,
     };
 
     const context = new TestContext();

@@ -1,27 +1,27 @@
 import { SalesforceCostCategoryMapper } from "@server/repositories/mappers/costCategoryMapper";
 import { ISalesforceCostCategory } from "@server/repositories";
+import { PCROrganisationType, CostCategoryName } from "@framework/constants";
 
 const createSalesforceRecord = (update?: Partial<ISalesforceCostCategory>): ISalesforceCostCategory => {
   const item: ISalesforceCostCategory = {
     Id: "Test_Id",
-    Acc_CostCategoryName__c: "Test_Name",
+    Acc_CostCategoryName__c: CostCategoryName.Other_Costs,
     Acc_DisplayOrder__c: 1,
-    Acc_OrganisationType__c: "Test_Organisation",
+    Acc_OrganisationType__c: PCROrganisationType.Industrial,
     Acc_CompetitionType__c: "Test_Competition",
     Acc_CostCategoryDescription__c: "Test_Description",
     Acc_HintText__c: "Test_Hint",
     Acc_OverrideAwardRate__c: 0,
   };
 
-  if(update) Object.assign(item, update);
+  if (update) Object.assign(item, update);
 
   return item;
 };
 
 describe("SalesforceCostCategoryMapper", () => {
   it("Maps id correctly", () => {
-    const expected = "EXPECTED";
-
+    const expected = CostCategoryName.Academic;
     const mapper = new SalesforceCostCategoryMapper();
     const result = mapper.map(createSalesforceRecord({ Id: expected }));
 
@@ -29,7 +29,7 @@ describe("SalesforceCostCategoryMapper", () => {
   });
 
   it("Maps name correctly", () => {
-    const expected = "EXPECTED";
+    const expected = CostCategoryName.Academic;
 
     const mapper = new SalesforceCostCategoryMapper();
     const result = mapper.map(createSalesforceRecord({ Acc_CostCategoryName__c: expected }));
@@ -38,7 +38,7 @@ describe("SalesforceCostCategoryMapper", () => {
   });
 
   it("Maps organisationType correctly", () => {
-    const expected = "EXPECTED";
+    const expected = PCROrganisationType.Academic;
 
     const mapper = new SalesforceCostCategoryMapper();
     const result = mapper.map(createSalesforceRecord({ Acc_OrganisationType__c: expected }));
@@ -85,8 +85,8 @@ describe("SalesforceCostCategoryMapper", () => {
   it("Maps hasRelated correctly", () => {
     const mapper = new SalesforceCostCategoryMapper();
 
-    const result1 = mapper.map(createSalesforceRecord({ Acc_CostCategoryName__c : "Labour" }));
-    const result2 = mapper.map(createSalesforceRecord({ Acc_CostCategoryName__c : "NotLabour" }));
+    const result1 = mapper.map(createSalesforceRecord({ Acc_CostCategoryName__c: CostCategoryName.Labour }));
+    const result2 = mapper.map(createSalesforceRecord({ Acc_CostCategoryName__c: CostCategoryName.Materials }));
 
     expect(result1.hasRelated).toEqual(false);
     expect(result2.hasRelated).toEqual(false);
@@ -95,8 +95,8 @@ describe("SalesforceCostCategoryMapper", () => {
   it("Maps isCalculated correctly", () => {
     const mapper = new SalesforceCostCategoryMapper();
 
-    const result1 = mapper.map(createSalesforceRecord({ Acc_CostCategoryName__c : "Overheads" }));
-    const result2 = mapper.map(createSalesforceRecord({ Acc_CostCategoryName__c : "NotOverheads" }));
+    const result1 = mapper.map(createSalesforceRecord({ Acc_CostCategoryName__c: CostCategoryName.Overheads }));
+    const result2 = mapper.map(createSalesforceRecord({ Acc_CostCategoryName__c: CostCategoryName.Materials }));
 
     expect(result1.isCalculated).toEqual(false);
     expect(result2.isCalculated).toEqual(false);
@@ -106,7 +106,7 @@ describe("SalesforceCostCategoryMapper", () => {
     const overrideAwardRate = 35;
     const mapper = new SalesforceCostCategoryMapper();
 
-    const expected = mapper.map(createSalesforceRecord({ Acc_OverrideAwardRate__c : overrideAwardRate }));
+    const expected = mapper.map(createSalesforceRecord({ Acc_OverrideAwardRate__c: overrideAwardRate }));
 
     expect(expected.overrideAwardRate).toEqual(overrideAwardRate);
   });

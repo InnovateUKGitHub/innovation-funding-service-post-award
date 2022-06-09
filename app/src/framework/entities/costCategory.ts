@@ -1,10 +1,10 @@
-import { CostCategoryType } from "@framework/constants";
+import { CostCategoryType, PCROrganisationType } from "@framework/constants";
 
 export interface CostCategory {
   id: string;
   name: string;
   type: CostCategoryType;
-  organisationType: string;
+  organisationType: PCROrganisationType;
   competitionType: string;
   isCalculated: boolean;
   hasRelated: boolean;

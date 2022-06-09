@@ -5,7 +5,7 @@ import { SalesforceBaseMapper } from "./saleforceMapperBase";
 
 export class SalesforceCostCategoryMapper extends SalesforceBaseMapper<ISalesforceCostCategory, CostCategory> {
   private typeMapper(costCategory: ISalesforceCostCategory): CostCategoryType {
-    if (costCategory.Acc_OrganisationType__c === CostCategoryName.Academic) {
+    if (costCategory.Acc_OrganisationType__c === CostCategoryName.Academic.valueOf()) {
       return CostCategoryType.Academic;
     }
     // @TODO: get from SF -- this is nasty but no solution provided as yet from salesforce
