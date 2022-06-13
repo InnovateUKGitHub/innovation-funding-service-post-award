@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 
 import { TestBed, TestBedStore, TestBedContent } from "@shared/TestBed";
 import { ILinkInfo, LoadingStatus, LoanDto } from "@framework/types";
-import { LoansOverviewContainer, LoansOverviewContainerProps } from "@ui/containers/loans/overview";
+import { LoansOverviewContainer, LoansOverviewContainerProps } from "@ui/containers/loans/overview.page";
 import { Pending } from "@shared/pending";
 import { LoanStatus } from "@framework/entities";
 

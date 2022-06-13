@@ -13,4 +13,4 @@ export * from "./projectLocationStep";
 export * from "./projectManagerDetailsStep";
 export * from "./roleAndOrganisationStep";
 export * from "./spendProfileStep";
-export * from "./spendProfile/spendProfileCostsSummary";
+export * from "./spendProfile/spendProfileCostsSummary.page";

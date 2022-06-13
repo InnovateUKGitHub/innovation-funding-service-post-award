@@ -1,1 +1,1 @@
-export * from "./broadcast-page";
+export * from "./broadcast.page";

@@ -1,3 +1,3 @@
-export * from "./dashboard";
-export * from "./details";
-export * from "./update";
+export * from "./dashboard.page";
+export * from "./details.page";
+export * from "./update.page";

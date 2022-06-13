@@ -5,7 +5,7 @@ import {
   useClaimDocumentContent,
   ClaimDocumentAdvice,
   ClaimDocumentAdviceProps,
-} from "@ui/containers/claims/claimDocuments";
+} from "@ui/containers/claims/claimDocuments.page";
 import { hookTestBed, TestBedContent } from "@shared/TestBed";
 
 describe("useClaimDocumentContent()", () => {
