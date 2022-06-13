@@ -46,6 +46,7 @@ function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaims
 
     const leadPartner = getLeadPartner(partners);
     const isLeadPartnerFc = leadPartner && getAuthRoles(leadPartner.roles).isFc;
+    const hasWithdrawnPartners = partners.some(partner => partner.isWithdrawn);
 
     return (
       <Acc.Page
@@ -55,6 +56,10 @@ function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaims
         partner={isLeadPartnerFc ? leadPartner : undefined}
       >
         {isMultipleParticipants && isFc && renderGuidanceMessage(isCombinationOfSBRI, partners)}
+
+        {hasWithdrawnPartners && (
+          <Acc.ValidationMessage messageType="info" message={x => x.allClaimsDashboard.messages.hasWithdrawnPartners} />
+        )}
 
         <Acc.Renderers.Messages messages={props.messages} />
 

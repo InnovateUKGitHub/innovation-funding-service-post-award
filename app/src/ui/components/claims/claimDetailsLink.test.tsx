@@ -62,6 +62,34 @@ describe("<ClaimDetailsLink />", () => {
 
       expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaimText.content)).toBeInTheDocument();
     });
+
+    test("when the partner is Involuntarily Withdrawn", () => {
+      const partnerStatus = PartnerStatus.InvoluntaryWithdrawal;
+
+      const draftProps: ClaimDetailsLinkWithoutRoutes = {
+        claim: { periodId: 3, status: ClaimStatus.PAID },
+        project: { id: projectId, roles: ProjectRole.MonitoringOfficer, status: ProjectStatus.Live },
+        partner: { id: partnerId, roles: ProjectRole.FinancialContact, partnerStatus },
+      };
+
+      const { queryByText } = setup(draftProps);
+
+      expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaimText.content)).toBeInTheDocument();
+    });
+
+    test("when the partner is Voluntarily Withdrawn", () => {
+      const partnerStatus = PartnerStatus.VoluntaryWithdrawal;
+
+      const draftProps: ClaimDetailsLinkWithoutRoutes = {
+        claim: { periodId: 3, status: ClaimStatus.PAID },
+        project: { id: projectId, roles: ProjectRole.MonitoringOfficer, status: ProjectStatus.Live },
+        partner: { id: partnerId, roles: ProjectRole.FinancialContact, partnerStatus },
+      };
+
+      const { queryByText } = setup(draftProps);
+
+      expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaimText.content)).toBeInTheDocument();
+    });
   });
 
   describe("when ClaimStatus.DRAFT", () => {

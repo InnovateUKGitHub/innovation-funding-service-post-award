@@ -7,6 +7,7 @@ import {
   getAuthRoles,
   ILinkInfo,
   PartnerDto,
+  PartnerStatus,
   ProjectDto,
   ProjectRole,
 } from "@framework/types";
@@ -43,7 +44,6 @@ interface CombinedData {
 }
 
 export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
-
   public render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -54,7 +54,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       claimDetails: this.props.costsSummaryForPeriod,
     });
 
-    return <ACC.PageLoader pending={combined} render={(data) => this.renderContents(data)} />;
+    return <ACC.PageLoader pending={combined} render={data => this.renderContents(data)} />;
   }
 
   private renderContents(data: CombinedData) {
@@ -65,11 +65,20 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={backLink}><ACC.Content value={x => x.claimDetails.backLink} /></ACC.BackLink>}
+        backLink={
+          <ACC.BackLink route={backLink}>
+            <ACC.Content value={x => x.claimDetails.backLink} />
+          </ACC.BackLink>
+        }
         pageTitle={<ACC.Projects.Title {...data.project} />}
         partner={data.partner}
       >
-        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={x => x.claimDetails.messages.finalClaimMessage}/>}
+        {data.claim.isFinalClaim && (
+          <ACC.ValidationMessage messageType="info" message={x => x.claimDetails.messages.finalClaimMessage} />
+        )}
+        {data.partner.isWithdrawn && (
+          <ACC.ValidationMessage messageType="info" message={x => x.claimDetails.messages.partnerWithdrawn} />
+        )}
         {this.renderPageSubtitle(data)}
         {this.renderCostsAndGrantSummary(data)}
         {this.renderTableSection(data)}
@@ -91,14 +100,34 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       <ACC.Section>
         <ACC.SectionPanel qa="claims-summary">
           <ACC.DualDetails>
-            <ClaimSummaryDetails.Details title={<ACC.Content value={x => x.claimDetails.costsAndGrantSummaryTitle} />} data={data.claim} qa="claim-costs-summary">
-              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.costsClaimed} />} qa="costs-claimed" value={x => x.totalCostsSubmitted} />
-              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.costsApproved} />} qa="costs-approved" value={x => x.totalCostsApproved} />
-              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.costsDeferred} />} qa="costs-deferred" value={x => x.totalDeferredAmount} />
+            <ClaimSummaryDetails.Details
+              title={<ACC.Content value={x => x.claimDetails.costsAndGrantSummaryTitle} />}
+              data={data.claim}
+              qa="claim-costs-summary"
+            >
+              <ClaimSummaryDetails.Currency
+                label={<ACC.Content value={x => x.claimDetails.labels.costsClaimed} />}
+                qa="costs-claimed"
+                value={x => x.totalCostsSubmitted}
+              />
+              <ClaimSummaryDetails.Currency
+                label={<ACC.Content value={x => x.claimDetails.labels.costsApproved} />}
+                qa="costs-approved"
+                value={x => x.totalCostsApproved}
+              />
+              <ClaimSummaryDetails.Currency
+                label={<ACC.Content value={x => x.claimDetails.labels.costsDeferred} />}
+                qa="costs-deferred"
+                value={x => x.totalDeferredAmount}
+              />
             </ClaimSummaryDetails.Details>
 
             <ClaimSummaryDetails.Details data={data.claim} qa="claim-grant-summary">
-              <ClaimSummaryDetails.Currency label={<ACC.Content value={x => x.claimDetails.labels.totalGrantPaid} />} qa="total-grant-paid" value={x => x.periodCostsToBePaid} />
+              <ClaimSummaryDetails.Currency
+                label={<ACC.Content value={x => x.claimDetails.labels.totalGrantPaid} />}
+                qa="total-grant-paid"
+                value={x => x.periodCostsToBePaid}
+              />
             </ClaimSummaryDetails.Details>
           </ACC.DualDetails>
         </ACC.SectionPanel>
@@ -111,15 +140,14 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
   }
 
   private renderTableSection(data: CombinedData) {
-    return (
-      <ACC.Section>
-        {this.renderTable(data)}
-      </ACC.Section>
-    );
+    return <ACC.Section>{this.renderTable(data)}</ACC.Section>;
   }
 
   private renderAccordionSection(data: CombinedData) {
-    const isArchived = data.claim.status === ClaimStatus.PAID || data.claim.status === ClaimStatus.APPROVED || ClaimStatus.PAYMENT_REQUESTED;
+    const isArchived =
+      data.claim.status === ClaimStatus.PAID ||
+      data.claim.status === ClaimStatus.APPROVED ||
+      ClaimStatus.PAYMENT_REQUESTED;
     const { isMo } = getAuthRoles(data.project.roles);
     const showForecast = this.props.forecastData && !(isArchived && isMo);
     return (
@@ -179,7 +207,12 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
     if (!partnerHasCorrectRole) return null;
 
-    return this.props.routes.claimLineItems.getLink({ partnerId: this.props.partnerId, projectId: this.props.projectId, periodId: this.props.periodId, costCategoryId });
+    return this.props.routes.claimLineItems.getLink({
+      partnerId: this.props.partnerId,
+      projectId: this.props.projectId,
+      periodId: this.props.periodId,
+      costCategoryId,
+    });
   }
 
   private getClaimPeriodTitle(data: CombinedData) {
@@ -191,9 +224,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       <ACC.AccordionItem title={x => x.claimDetails.labels.forecastAccordionTitle} qa="forecast-accordion">
         <ACC.Loader
           pending={pendingForecastData}
-          render={(forecastData) => (
-            <ACC.Claims.ForecastTable data={forecastData} hideValidation />
-          )}
+          render={forecastData => <ACC.Claims.ForecastTable data={forecastData} hideValidation />}
         />
       </ACC.AccordionItem>
     );
@@ -216,7 +247,9 @@ const ClaimsDetailsContainer = (props: Params & BaseProps) => {
   const stores = useStores();
 
   const auth = stores.users.getCurrentUserAuthorisation();
-  const isMoOrPM = auth.forProject(props.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
+  const isMoOrPM = auth
+    .forProject(props.projectId)
+    .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager);
   const isFC = auth.forPartner(props.projectId, props.partnerId).hasRole(ProjectRole.FinancialContact);
 
   const project = stores.projects.getById(props.projectId);
@@ -224,16 +257,19 @@ const ClaimsDetailsContainer = (props: Params & BaseProps) => {
   const costCategories = stores.costCategories.getAllFiltered(props.partnerId);
   const claim = stores.claims.get(props.partnerId, props.periodId);
 
-  const forecastData: Pending<ACC.Claims.ForecastData> | null = isMoOrPM && !isFC ? Pending.combine({
-    project,
-    partner,
-    claim,
-    claims: stores.claims.getAllClaimsForPartner(props.partnerId),
-    claimDetails: stores.claimDetails.getAllByPartner(props.partnerId),
-    forecastDetails: stores.forecastDetails.getAllByPartner(props.partnerId),
-    golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
-    costCategories,
-  }) : null;
+  const forecastData: Pending<ACC.Claims.ForecastData> | null =
+    isMoOrPM && !isFC
+      ? Pending.combine({
+          project,
+          partner,
+          claim,
+          claims: stores.claims.getAllClaimsForPartner(props.partnerId),
+          claimDetails: stores.claimDetails.getAllByPartner(props.partnerId),
+          forecastDetails: stores.forecastDetails.getAllByPartner(props.partnerId),
+          golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),
+          costCategories,
+        })
+      : null;
 
   return (
     <ClaimsDetailsComponent
@@ -255,7 +291,13 @@ export const ClaimsDetailsRoute = defineRoute({
   routeName: "claimDetails",
   routePath: "/projects/:projectId/claims/:partnerId/details/:periodId",
   container: ClaimsDetailsContainer,
-  getParams: (route) => ({ projectId: route.params.projectId, partnerId: route.params.partnerId, periodId: parseInt(route.params.periodId, 10) }),
-  accessControl: (auth, params) => auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager) || auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact),
+  getParams: route => ({
+    projectId: route.params.projectId,
+    partnerId: route.params.partnerId,
+    periodId: parseInt(route.params.periodId, 10),
+  }),
+  accessControl: (auth, params) =>
+    auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager) ||
+    auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact),
   getTitle: ({ content }) => content.claimDetails.title(),
 });

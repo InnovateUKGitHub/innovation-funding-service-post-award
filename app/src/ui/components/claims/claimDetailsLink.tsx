@@ -42,7 +42,11 @@ export function ClaimDetailsLink({ claim, partner, project, routes }: ClaimDetai
     },
   };
 
-  return <div className="claim-details-link-wrapper"><Link {...linkTypeOptions[linkType]} /></div>;
+  return (
+    <div className="claim-details-link-wrapper">
+      <Link {...linkTypeOptions[linkType]} />
+    </div>
+  );
 }
 
 export function getClaimDetailsLinkType({
@@ -50,7 +54,13 @@ export function getClaimDetailsLinkType({
   partner,
   claim,
 }: ClaimDetailsBaseProps): "edit" | "review" | "view" | null {
-  if (partner.partnerStatus === PartnerStatus.OnHold) return "view";
+  if (
+    partner.partnerStatus === PartnerStatus.OnHold ||
+    partner.partnerStatus === PartnerStatus.InvoluntaryWithdrawal ||
+    partner.partnerStatus === PartnerStatus.VoluntaryWithdrawal
+  ) {
+return "view";
+}
 
   const { isMo: isProjectMo, isPm: isProjectPm, isPmOrMo: isProjectPmOrMo } = getAuthRoles(project.roles);
   const isPartnerFc = getAuthRoles(partner.roles).isFc;

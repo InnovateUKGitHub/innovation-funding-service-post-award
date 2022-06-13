@@ -18,7 +18,7 @@ export function ClaimsDashboardGuidance({
 }: ClaimsDashboardGuidanceProps) {
   const { getContent } = useContent();
 
-  let guidenceMessage: React.ReactElement;
+  let guidanceMessage: React.ReactElement;
 
   if (overdueProject) {
     const overdueGuidanceMessage1 = getContent(x => x.claimsDashboard.messages.overdueGuidanceMessage1);
@@ -26,7 +26,7 @@ export function ClaimsDashboardGuidance({
     const overdueGuidanceMessage3 = getContent(x => x.claimsDashboard.messages.overdueGuidanceMessage3);
     const overdueGuidanceMessage4 = getContent(x => x.claimsDashboard.messages.overdueGuidanceMessage4);
 
-    guidenceMessage = (
+    guidanceMessage = (
       <>
         {overdueGuidanceMessage1}
         {overdueGuidanceMessage2}
@@ -38,16 +38,16 @@ export function ClaimsDashboardGuidance({
     const isPartnerFc = getAuthRoles(roles).isFc;
     const { isCombinationOfSBRI } = checkProjectCompetition(competitionType);
 
-    const defaultGuidenceMessage = getContent(x => x.allClaimsDashboard.messages.guidanceMessage);
+    const defaultGuidanceMessage = getContent(x => x.allClaimsDashboard.messages.guidanceMessage);
 
-    const displaySbriGuidence = isPartnerFc && isCombinationOfSBRI;
+    const displaySbriGuidance = isPartnerFc && isCombinationOfSBRI;
 
-    if (displaySbriGuidence) {
-      return <Acc.Renderers.SimpleString>{defaultGuidenceMessage}</Acc.Renderers.SimpleString>;
+    if (displaySbriGuidance) {
+      return <Acc.Renderers.SimpleString>{defaultGuidanceMessage}</Acc.Renderers.SimpleString>;
     }
 
-    guidenceMessage = <Acc.Renderers.Markdown value={defaultGuidenceMessage} />;
+    guidanceMessage = <Acc.Renderers.Markdown value={defaultGuidanceMessage} />;
   }
 
-  return <Acc.ValidationMessage qa="guidance-message" messageType="info" message={guidenceMessage} />;
+  return <Acc.ValidationMessage qa="guidance-message" messageType="info" message={guidanceMessage} />;
 }

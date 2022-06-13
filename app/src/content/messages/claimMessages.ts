@@ -68,4 +68,6 @@ export class ClaimMessages extends ContentBase {
   public readonly milestoneBullet2 = this.getContent("milestone-bullet-2");
   public readonly milestoneBullet3 = this.getContent("milestone-bullet-3");
   public readonly milestoneBullet4 = this.getContent("milestone-bullet-4");
+  public readonly partnerWithdrawn = this.getContent("partner-withdrawn");
+  public readonly hasWithdrawnPartners = this.getContent("has-withdrawn-partner");
 }
