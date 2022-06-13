@@ -31,7 +31,7 @@ import {
   DeleteSubcontractingCostFormComponent,
   DeleteTravelAndSubsCostFormComponent,
 } from "@ui/containers/pcrs/addPartner/spendProfile";
-import { PcrAddSpendProfileCostParams } from "./spendProfilePrepareCost";
+import { PcrAddSpendProfileCostParams } from "./spendProfilePrepareCost.page";
 
 export interface PcrDeleteSpendProfileCostParams extends PcrAddSpendProfileCostParams {
   costId: string;

@@ -25,7 +25,7 @@ import { getParamsFromUrl } from "@ui/helpers/make-url";
 
 import { useAppMount } from "./app/app-mount.hook";
 import { ProjectStatusCheck } from "./app/project-active";
-import { ErrorNotFoundRoute, ErrorRoute } from "./errors";
+import { ErrorNotFoundRoute, ErrorRoute } from "./errors.page";
 import { FooterExternalContent, footerLinks } from "./app/footer.config";
 
 interface IAppProps {
