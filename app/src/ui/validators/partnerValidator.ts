@@ -26,6 +26,7 @@ export class PartnerDtoValidator extends Results<PartnerDto> {
         [PartnerStatus.InvoluntaryWithdrawal]: [PartnerStatus.InvoluntaryWithdrawal],
         [PartnerStatus.VoluntaryWithdrawal]: [PartnerStatus.VoluntaryWithdrawal],
         [PartnerStatus.OnHold]: [PartnerStatus.OnHold],
+        [PartnerStatus.MigratedWithdrawn]: [PartnerStatus.MigratedWithdrawn],
     };
 
     private isPartnerStatusTransitionAllowed(original: PartnerDto, model: PartnerDto) {
