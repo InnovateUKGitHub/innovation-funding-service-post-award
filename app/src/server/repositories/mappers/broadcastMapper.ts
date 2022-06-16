@@ -2,7 +2,7 @@ import { BroadcastDto } from "@framework/dtos/BroadcastDto";
 import { ISalesforceBroadcast } from "@server/repositories/broadcastRepository";
 import { parseSfLongTextArea } from "@server/util/salesforce-string-helpers";
 
-import { SalesforceBaseMapper } from "./saleforceMapperBase";
+import { SalesforceBaseMapper } from "./salesforceMapperBase";
 
 export class BroadcastMapper extends SalesforceBaseMapper<ISalesforceBroadcast, BroadcastDto> {
   public map(item: ISalesforceBroadcast): BroadcastDto {

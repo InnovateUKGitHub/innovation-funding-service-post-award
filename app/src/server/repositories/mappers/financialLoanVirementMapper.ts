@@ -2,7 +2,7 @@ import { LoanFinancialVirement } from "@framework/entities";
 import { LoanStatus } from "@framework/entities";
 import { ISalesforceFinancialLoanVirement } from "../financialLoanVirementRepository";
 import { LoanMapper } from "./loanMapper";
-import { SalesforceBaseMapper } from "./saleforceMapperBase";
+import { SalesforceBaseMapper } from "./salesforceMapperBase";
 
 export class SalesforceFinancialLoanVirementMapper extends SalesforceBaseMapper<
   ISalesforceFinancialLoanVirement[],

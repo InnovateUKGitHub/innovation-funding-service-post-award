@@ -15,7 +15,7 @@ export enum ErrorCode {
   CONFIGURATION_ERROR = 8,
 }
 
-export enum PermissionGroupIdenfifier {
+export enum PermissionGroupIdentifier {
   Unknown = 0,
   ClaimsTeam = 1,
 }

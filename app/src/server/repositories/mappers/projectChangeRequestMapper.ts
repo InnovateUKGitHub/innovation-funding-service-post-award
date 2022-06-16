@@ -11,7 +11,7 @@ import {
   TypeOfAid,
 } from "@framework/constants";
 import { ISalesforcePCR } from "../projectChangeRequestRepository";
-import { SalesforceBaseMapper } from "./saleforceMapperBase";
+import { SalesforceBaseMapper } from "./salesforceMapperBase";
 
 export const mapToPCRStatus = (statusLabel: string) => {
   switch (statusLabel) {
