@@ -1,13 +1,13 @@
 import { GetPermissionGroupQuery } from "@server/features/general/getPermissionGroupsQuery";
 import { BadRequestError } from "@server/features/common";
-import { PermissionGroupIdenfifier } from "@framework/constants";
+import { PermissionGroupIdentifier } from "@framework/constants";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("GetPermissionGroupQuery", () => {
   it("returns error if asking for unknown group", async () => {
     const context = new TestContext();
 
-    const query = new GetPermissionGroupQuery(PermissionGroupIdenfifier.Unknown);
+    const query = new GetPermissionGroupQuery(PermissionGroupIdentifier.Unknown);
 
     await expect(context.runQuery(query)).rejects.toThrow(BadRequestError);
   });
@@ -19,7 +19,7 @@ describe("GetPermissionGroupQuery", () => {
       { id: "Unknown ID", identifier: 22, name: "TEST NAME" }
     ];
 
-    const query = new GetPermissionGroupQuery(PermissionGroupIdenfifier.ClaimsTeam);
+    const query = new GetPermissionGroupQuery(PermissionGroupIdentifier.ClaimsTeam);
 
     await expect(context.runQuery(query)).rejects.toThrow(BadRequestError);
   });
@@ -27,12 +27,12 @@ describe("GetPermissionGroupQuery", () => {
   it("returns item if found", async () => {
     const context = new TestContext();
 
-    const query = new GetPermissionGroupQuery(PermissionGroupIdenfifier.ClaimsTeam);
+    const query = new GetPermissionGroupQuery(PermissionGroupIdentifier.ClaimsTeam);
 
     const result = await context.runQuery(query);
 
     expect(result.id).toBe(context.repositories.permissionGroups.Items[0].id);
-    expect(result.identifier).toBe(PermissionGroupIdenfifier.ClaimsTeam);
+    expect(result.identifier).toBe(PermissionGroupIdentifier.ClaimsTeam);
   });
 
 });

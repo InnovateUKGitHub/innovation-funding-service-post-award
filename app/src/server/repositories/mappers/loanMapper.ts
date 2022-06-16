@@ -4,7 +4,7 @@ import { roundCurrency } from "@framework/util";
 
 import { BadRequestError } from "@server/features/common";
 import { ISalesforceLoan } from "../loanRepository";
-import { SalesforceBaseMapper } from "./saleforceMapperBase";
+import { SalesforceBaseMapper } from "./salesforceMapperBase";
 
 export class LoanMapper extends SalesforceBaseMapper<ISalesforceLoan, LoanDto> {
   constructor() {

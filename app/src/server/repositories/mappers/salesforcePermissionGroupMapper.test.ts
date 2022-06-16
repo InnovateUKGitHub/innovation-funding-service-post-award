@@ -1,4 +1,4 @@
-import { PermissionGroupIdenfifier } from "@framework/constants";
+import { PermissionGroupIdentifier } from "@framework/constants";
 import { SalesforcePermissionGroupMapper } from "@server/repositories/mappers/permissionGroupMapper";
 
 describe("SalesforcePermissionGroupMapper", () => {
@@ -13,26 +13,26 @@ describe("SalesforcePermissionGroupMapper", () => {
   it("Maps idenfier if found correctly", () => {
 
     const lookup = {
-      Expected_Develoiper_Name: PermissionGroupIdenfifier.ClaimsTeam
+      Expected_Develoiper_Name: PermissionGroupIdentifier.ClaimsTeam
     };
 
     const mapper = new SalesforcePermissionGroupMapper(lookup);
     const result = mapper.map({ Id: "", DeveloperName: "Expected_Develoiper_Name" });
 
-    expect(result.identifier).toEqual(PermissionGroupIdenfifier.ClaimsTeam);
-    expect(result.name).toEqual(PermissionGroupIdenfifier[PermissionGroupIdenfifier.ClaimsTeam]);
+    expect(result.identifier).toEqual(PermissionGroupIdentifier.ClaimsTeam);
+    expect(result.name).toEqual(PermissionGroupIdentifier[PermissionGroupIdentifier.ClaimsTeam]);
   });
 
   it("Maps idenfier to unknown if not found", () => {
 
     const lookup = {
-      Expected_Develoiper_Name: PermissionGroupIdenfifier.ClaimsTeam
+      Expected_Develoiper_Name: PermissionGroupIdentifier.ClaimsTeam
     };
 
     const mapper = new SalesforcePermissionGroupMapper(lookup);
     const result = mapper.map({ Id: "", DeveloperName: "---Expected_Develoiper_Name---" });
 
-    expect(result.identifier).toEqual(PermissionGroupIdenfifier.Unknown);
-    expect(result.name).toEqual(PermissionGroupIdenfifier[PermissionGroupIdenfifier.Unknown]);
+    expect(result.identifier).toEqual(PermissionGroupIdentifier.Unknown);
+    expect(result.name).toEqual(PermissionGroupIdentifier[PermissionGroupIdentifier.Unknown]);
   });
 });

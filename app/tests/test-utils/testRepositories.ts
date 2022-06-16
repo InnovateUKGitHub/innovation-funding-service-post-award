@@ -15,7 +15,7 @@ import {
   LoanDto,
   MonitoringReportStatus,
   PCRStatus,
-  PermissionGroupIdenfifier,
+  PermissionGroupIdentifier,
   TypeOfAid
 } from "@framework/types";
 import * as Entities from "@framework/entities";
@@ -525,7 +525,7 @@ class ClaimStatusChangeTestRepository extends TestRepository<Repositories.ISales
 
 class PermissionGroupTestRepository implements Repositories.IPermissionGroupRepository {
   public Items: Entities.PermissionGroup[] = [
-    { id: "ClaimsTeamID", identifier: PermissionGroupIdenfifier.ClaimsTeam, name: PermissionGroupIdenfifier[PermissionGroupIdenfifier.ClaimsTeam] }
+    { id: "ClaimsTeamID", identifier: PermissionGroupIdentifier.ClaimsTeam, name: PermissionGroupIdentifier[PermissionGroupIdentifier.ClaimsTeam] }
   ];
 
   getAll() {

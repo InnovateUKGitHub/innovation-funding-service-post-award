@@ -1,7 +1,7 @@
-import { PermissionGroupIdenfifier } from "@framework/constants";
+import { PermissionGroupIdentifier } from "@framework/constants";
 
 export interface PermissionGroup {
   id: string;
-  identifier: PermissionGroupIdenfifier;
+  identifier: PermissionGroupIdentifier;
   name: string;
 }

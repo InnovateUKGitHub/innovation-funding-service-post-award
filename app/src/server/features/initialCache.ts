@@ -1,4 +1,4 @@
-import { IContext, PermissionGroupIdenfifier } from "@framework/types";
+import { IContext, PermissionGroupIdentifier } from "@framework/types";
 
 import { QueryBase } from "@server/features/common";
 
@@ -23,7 +23,7 @@ type ICacheQuery = [string, QueryBase<unknown>];
  * Queries must be non user specific! The idea here is to isolate all initial queries rather than clutter the server
  */
 const initialCacheQueries: ICacheQuery[] = [
-  ["Permission group cache", new GetPermissionGroupQuery(PermissionGroupIdenfifier.ClaimsTeam)],
+  ["Permission group cache", new GetPermissionGroupQuery(PermissionGroupIdentifier.ClaimsTeam)],
   ["Record type cache", new GetAllRecordTypesQuery()],
   ["Cost Categories cache", new GetUnfilteredCostCategoriesQuery()],
   ["Claim Statuses cache", new GetClaimStatusesQuery()],
