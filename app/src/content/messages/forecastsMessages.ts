@@ -9,4 +9,5 @@ export class ForecastsMessages extends ContentBase {
   public readonly projectEnded = this.getContent("project-ended");
   public readonly finalClaim = this.getContent("final-claim");
   public readonly forecastUpdated = this.getContent("forecast-updated");
+  public readonly partnerHasWithdrawn = this.getContent("partner-has-withdrawn");
 }

@@ -47,7 +47,11 @@ function ViewForecastComponent(props: ViewForecastParams & ViewForecastData & Ba
         project={data.project}
         partner={data.partner}
       >
-        <ForecastClaimAdvice claimLink={allClaimsDashboardLink} />
+        {data.partner.isWithdrawn ? (
+          <ACC.ValidationMessage messageType="info" message={x => x.forecastsDetails.messages.partnerHasWithdrawn} />
+        ) : (
+          <ForecastClaimAdvice claimLink={allClaimsDashboardLink} />
+        )}
 
         {renderFinalClaimMessage(data, isPartnerFc)}
 
