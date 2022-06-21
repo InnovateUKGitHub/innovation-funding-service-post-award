@@ -21,13 +21,25 @@ export interface IReasoningWorkflowMetadata {
   stepRender: (props: ReasoningStepProps) => React.ReactNode;
 }
 
-/* eslint-disable react/display-name */
-export const reasoningWorkflowSteps: IReasoningWorkflowMetadata[] = [{
-  stepName: "reasoningStep",
-  stepNumber: 1,
-  stepRender: (props: ReasoningStepProps) => <PCRPrepareReasoningStep {...props} onSave={(dto: PCRDto) => props.onSave(dto)} onChange={(dto) => props.onChange(dto)} />
-}, {
-  stepName: "filesStep",
-  stepNumber: 2,
-  stepRender: (props: ReasoningStepProps) => <PCRPrepareReasoningFilesStep {...props} onSave={(dto: PCRDto) => props.onSave(dto)} />
-}];
+export const reasoningWorkflowSteps: IReasoningWorkflowMetadata[] = [
+  {
+    stepName: "reasoningStep",
+    stepNumber: 1,
+    stepRender: function PCRReasoningWorkflowReasoningStep(props: ReasoningStepProps) {
+      return (
+        <PCRPrepareReasoningStep
+          {...props}
+          onSave={(dto: PCRDto) => props.onSave(dto)}
+          onChange={dto => props.onChange(dto)}
+        />
+      );
+    },
+  },
+  {
+    stepName: "filesStep",
+    stepNumber: 2,
+    stepRender: function PCRReasoningWorkflowFilesStep(props: ReasoningStepProps) {
+      return <PCRPrepareReasoningFilesStep {...props} onSave={(dto: PCRDto) => props.onSave(dto)} />;
+    },
+  },
+];

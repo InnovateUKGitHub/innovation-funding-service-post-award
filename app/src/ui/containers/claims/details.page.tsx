@@ -7,7 +7,6 @@ import {
   getAuthRoles,
   ILinkInfo,
   PartnerDto,
-  PartnerStatus,
   ProjectDto,
   ProjectRole,
 } from "@framework/types";

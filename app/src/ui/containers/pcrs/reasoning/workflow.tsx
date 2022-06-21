@@ -35,10 +35,15 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
       project: this.props.project,
       pcr: this.props.pcr,
       editor: this.props.editor,
-      documentsEditor: this.props.documentsEditor
+      documentsEditor: this.props.documentsEditor,
     });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editor, x.documentsEditor)}/>;
+    return (
+      <ACC.PageLoader
+        pending={combined}
+        render={x => this.renderContents(x.project, x.pcr, x.editor, x.documentsEditor)}
+      />
+    );
   }
 
   private findStepByNumber(stepNumber: number) {
@@ -61,55 +66,92 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
     return this.props.routes.pcrPrepareReasoning.getLink({
       projectId: this.props.projectId,
       pcrId: this.props.pcrId,
-      step: this.findStepByName(stepName).stepNumber
+      step: this.findStepByName(stepName).stepNumber,
     });
   }
 
-  private renderContents(project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>) {
+  private renderContents(
+    project: ProjectDto,
+    pcr: PCRDto,
+    editor: IEditorStore<PCRDto, PCRDtoValidator>,
+    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
+  ) {
     return (
       <ACC.Page
         backLink={this.getBackLink()}
-        pageTitle={<ACC.Projects.Title {...project}/>}
+        pageTitle={<ACC.Projects.Title {...project} />}
         project={project}
         validator={[editor.validator, documentsEditor.validator]}
         error={editor.error || documentsEditor.error}
       >
-        <ACC.Renderers.Messages messages={this.props.messages}/>
+        <ACC.Renderers.Messages messages={this.props.messages} />
 
-        {this.props.mode === "prepare" && !!this.props.step && this.renderStep(this.props.step, pcr, editor, documentsEditor)}
+        {this.props.mode === "prepare" &&
+          !!this.props.step &&
+          this.renderStep(this.props.step, pcr, editor, documentsEditor)}
         {!this.props.step && this.renderSummary(pcr, editor)}
-
       </ACC.Page>
     );
   }
 
   private getBackLink() {
     if (this.props.mode === "review") {
-      return <ACC.BackLink route={this.props.routes.pcrReview.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}><ACC.Content value={x => x.pcrReasoningWorkflow.backLink}/></ACC.BackLink>;
+      return (
+        <ACC.BackLink
+          route={this.props.routes.pcrReview.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
+        >
+          <ACC.Content value={x => x.pcrReasoningWorkflow.backLink} />
+        </ACC.BackLink>
+      );
     }
     if (this.props.mode === "prepare") {
-      return <ACC.BackLink route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}><ACC.Content value={x => x.pcrReasoningWorkflow.backLink}/></ACC.BackLink>;
+      return (
+        <ACC.BackLink
+          route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
+        >
+          <ACC.Content value={x => x.pcrReasoningWorkflow.backLink} />
+        </ACC.BackLink>
+      );
     }
-    return <ACC.BackLink route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}><ACC.Content value={x => x.pcrReasoningWorkflow.backLink}/></ACC.BackLink>;
+    return (
+      <ACC.BackLink
+        route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
+      >
+        <ACC.Content value={x => x.pcrReasoningWorkflow.backLink} />
+      </ACC.BackLink>
+    );
   }
 
-  private renderStep(stepNumber: number, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>) {
+  private renderStep(
+    stepNumber: number,
+    pcr: PCRDto,
+    editor: IEditorStore<PCRDto, PCRDtoValidator>,
+    documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
+  ) {
     const step = this.findStepByNumber(stepNumber);
     return (
       <>
         <ACC.Section>
           <ACC.SummaryList qa="pcr-prepareReasoning">
-            <ACC.SummaryListItem label={x => x.pcrReasoningWorkflow.labels.requestNumber} content={pcr.requestNumber} qa="numberRow"/>
-            <ACC.SummaryListItem label={x => x.pcrReasoningWorkflow.labels.types} content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.shortName)}/>} qa="typesRow"/>
+            <ACC.SummaryListItem
+              label={x => x.pcrReasoningWorkflow.labels.requestNumber}
+              content={pcr.requestNumber}
+              qa="numberRow"
+            />
+            <ACC.SummaryListItem
+              label={x => x.pcrReasoningWorkflow.labels.types}
+              content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.shortName)} />}
+              qa="typesRow"
+            />
           </ACC.SummaryList>
         </ACC.Section>
-        { stepNumber === 1 && this.renderGuidanceSection() }
+        {stepNumber === 1 && this.renderGuidanceSection()}
         {step.stepRender({
           ...this.props,
           onChange: (dto: PCRDto) => this.props.onChange(dto),
           onSave: (dto: PCRDto) => this.onSave(dto),
           editor,
-          documentsEditor
+          documentsEditor,
         })}
       </>
     );
@@ -122,7 +164,7 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
         pcr={pcr}
         editor={editor}
         onSave={(dto: PCRDto) => this.onSave(dto)}
-        onChange={(dto) => this.props.onChange(dto)}
+        onChange={dto => this.props.onChange(dto)}
         getStepLink={(stepName: IReasoningWorkflowMetadata["stepName"]) => this.getStepLink(stepName)}
       />
     );
@@ -130,7 +172,7 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
 
   private renderGuidanceSection() {
     return null;
-    // ToDo clarify what guidance on a reasoning page should be.
+    // TODO clarify what guidance on a reasoning page should be.
     // if (!pcr.guidance) return null;
     // return (
     //   <ACC.Section qa="guidance">
@@ -143,10 +185,13 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
     // If on the summary
     if (!this.props.step) {
       // submit and go back to the prepare page
-      return this.props.onSave(dto, this.props.routes.pcrPrepare.getLink({
-        projectId: this.props.projectId,
-        pcrId: this.props.pcrId
-      }));
+      return this.props.onSave(
+        dto,
+        this.props.routes.pcrPrepare.getLink({
+          projectId: this.props.projectId,
+          pcrId: this.props.pcrId,
+        }),
+      );
     }
 
     // If submitting from a step set the status to incomplete
@@ -154,74 +199,87 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
 
     // If on the last step go to the summary
     // If not on the last step go to the next step
-    return this.props.onSave(dto, this.props.routes.pcrPrepareReasoning.getLink({
-      projectId: this.props.projectId,
-      pcrId: this.props.pcrId,
-      step: this.props.step === reasoningWorkflowSteps.length ? undefined : this.props.step + 1
-    }));
+    return this.props.onSave(
+      dto,
+      this.props.routes.pcrPrepareReasoning.getLink({
+        projectId: this.props.projectId,
+        pcrId: this.props.pcrId,
+        step: this.props.step === reasoningWorkflowSteps.length ? undefined : this.props.step + 1,
+      }),
+    );
   }
 }
 
-const PCRReasoningWorkflowContainer = (props: ProjectChangeRequestPrepareReasoningParams & BaseProps & { mode: "prepare" | "review" | "view" }) => {
+const PCRReasoningWorkflowContainer = (
+  props: ProjectChangeRequestPrepareReasoningParams & BaseProps & { mode: "prepare" | "review" | "view" },
+) => {
   const navigate = useNavigate();
   const stores = useStores();
 
   return (
-      <PCRReasoningWorkflowComponent
+    <PCRReasoningWorkflowComponent
       {...props}
-        project={stores.projects.getById(props.projectId)}
-        pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
-        editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
-        documentsEditor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.pcrId)}
-        onSave={(dto, link) => {
-          stores.messages.clearMessages();
-          stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () =>
-            navigate(link.path));
-        }}
-        onChange={(dto) => {
-          stores.messages.clearMessages();
-          stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
-        }}
-      />
-);
+      project={stores.projects.getById(props.projectId)}
+      pcr={stores.projectChangeRequests.getById(props.projectId, props.pcrId)}
+      editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId)}
+      documentsEditor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(
+        props.projectId,
+        props.pcrId,
+      )}
+      onSave={(dto, link) => {
+        stores.messages.clearMessages();
+        stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () => navigate(link.path));
+      }}
+      onChange={dto => {
+        stores.messages.clearMessages();
+        stores.projectChangeRequests.updatePcrEditor(false, props.projectId, dto);
+      }}
+    />
+  );
 };
 
-/* eslint-disable react/display-name */
 export const PCRViewReasoningRoute = defineRoute<ProjectChangeRequestPrepareReasoningParams>({
   allowRouteInActiveAccess: true,
   routeName: "pcrViewReasoning",
   routePath: "/projects/:projectId/pcrs/:pcrId/details/reasoning",
-  getParams: (route) => ({
+  getParams: route => ({
     projectId: route.params.projectId,
-    pcrId: route.params.pcrId
+    pcrId: route.params.pcrId,
   }),
-  container: (props) => <PCRReasoningWorkflowContainer mode="view" {...props}/>,
-  getTitle: ({content}) => content.pcrReasoningWorkflow.title(),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
+  container: function PCRViewReasoningWorkflowContainer(props) {
+    return <PCRReasoningWorkflowContainer mode="view" {...props} />;
+  },
+  getTitle: ({ content }) => content.pcrReasoningWorkflow.title(),
+  accessControl: (auth, { projectId }) =>
+    auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
 });
 
 export const PCRReviewReasoningRoute = defineRoute<ProjectChangeRequestPrepareReasoningParams>({
   routeName: "pcrReviewReasoning",
   routePath: "/projects/:projectId/pcrs/:pcrId/review/reasoning",
-  container: (props) => <PCRReasoningWorkflowContainer mode="review" {...props}/>,
-  getParams: (route) => ({
+  container: function PCRReviewReasoningWorkflowContainer(props) {
+    return <PCRReasoningWorkflowContainer mode="review" {...props} />;
+  },
+  getParams: route => ({
     projectId: route.params.projectId,
-    pcrId: route.params.pcrId
+    pcrId: route.params.pcrId,
   }),
-  getTitle: ({content}) => content.pcrReasoningWorkflow.title(),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer)
+  getTitle: ({ content }) => content.pcrReasoningWorkflow.title(),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer),
 });
 
 export const PCRPrepareReasoningRoute = defineRoute<ProjectChangeRequestPrepareReasoningParams>({
   routeName: "pcrPrepareReasoning",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/reasoning",
   routePathWithQuery: "/projects/:projectId/pcrs/:pcrId/prepare/reasoning?:step",
-  container: (props) => <PCRReasoningWorkflowContainer mode="prepare" {...props}/>,
-  getParams: (route) => ({
+  container: function PCRPrepareReasoningWorkflowContainer(props) {
+    return <PCRReasoningWorkflowContainer mode="prepare" {...props} />;
+  },
+  getParams: route => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
-    step: parseInt(route.params.step, 10)
+    step: parseInt(route.params.step, 10),
   }),
-  getTitle: ({content}) => content.pcrPrepareReasoning.title(),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager)
+  getTitle: ({ content }) => content.pcrPrepareReasoning.title(),
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
 });
