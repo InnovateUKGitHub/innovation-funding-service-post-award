@@ -17,7 +17,7 @@ export class TextInput extends BaseInput<TextInputProps, InputState> {
     this.state = { value: props.value || "" };
   }
 
-  public componentWillReceiveProps(nextProps: InputProps<string>) {
+  public UNSAFE_componentWillReceiveProps(nextProps: InputProps<string>) {
     if (nextProps.value !== this.props.value) {
 
       this.setState({ value: nextProps.value || "" });

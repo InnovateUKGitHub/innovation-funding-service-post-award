@@ -26,12 +26,13 @@ export class RadioList extends BaseInput<RadioListProps, {}> {
 
   renderOption(name: string, item: RadioOptionProps, index: number): any {
     const selected = this.props.value ? this.props.value.id === item.id : false;
+    const inputId = `${this.props.name}_${item.id}`;
     return (
       <div className="govuk-radios__item" key={"option" + index}>
         <input
           data-qa={item.qa}
           className="govuk-radios__input"
-          id={`${this.props.name}_${item.id}`}
+          id={inputId}
           name={this.props.name}
           type="radio"
           value={item.id}
@@ -40,7 +41,7 @@ export class RadioList extends BaseInput<RadioListProps, {}> {
           aria-checked={selected}
           disabled={this.props.disabled}
         />
-        <label className="govuk-label govuk-radios__label" htmlFor={`${this.props.name}_${item.id}`}>{item.value}</label>
+        <label className="govuk-label govuk-radios__label" htmlFor={inputId}>{item.value}</label>
       </div>
     );
   }

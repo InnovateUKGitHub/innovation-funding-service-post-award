@@ -53,6 +53,7 @@ export class FullDateInput extends BaseInput<FullDateInputProps, FullDateState> 
             <input
               className={classNames(inputClass, "govuk-input--width-2")}
               name={dayName}
+              id={dayName}
               type="text"
               pattern="[0-9]*"
               disabled={!!this.props.disabled}
@@ -71,6 +72,7 @@ export class FullDateInput extends BaseInput<FullDateInputProps, FullDateState> 
             <input
               className={classNames(inputClass, "govuk-input--width-2")}
               name={monthName}
+              id={monthName}
               type="text"
               pattern="[0-9]*"
               disabled={!!this.props.disabled}
@@ -89,6 +91,7 @@ export class FullDateInput extends BaseInput<FullDateInputProps, FullDateState> 
             <input
               className={classNames(inputClass, "govuk-input--width-4")}
               name={yearName}
+              id={yearName}
               type="text"
               pattern="[0-9]*"
               disabled={!!this.props.disabled}
@@ -178,6 +181,7 @@ export class MonthYearInput extends BaseInput<MonthYearInputProps, MonthYearStat
             <input
               className={classNames(inputClass, "govuk-input--width-2")}
               name={monthName}
+              id={monthName}
               type="text"
               pattern="[0-9]*"
               disabled={!!this.props.disabled}
@@ -198,6 +202,7 @@ export class MonthYearInput extends BaseInput<MonthYearInputProps, MonthYearStat
             <input
               className={classNames(inputClass, "govuk-input--width-4")}
               name={yearName}
+              id={yearName}
               type="text"
               pattern="[0-9]*"
               disabled={!!this.props.disabled}

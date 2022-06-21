@@ -1,169 +1,113 @@
-import { mount, shallow } from "enzyme";
+import { render } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
-import { NumberInput } from "@ui/components/inputs";
+import { NumberInput } from "@ui/components/inputs/numberInput";
 
 describe("NumberInput", () => {
+  const getInput = (props?: any) => {
+    const { getByLabelText } = render(
+      <NumberInput name="testName" debounce={false} ariaLabel="test number input" {...props} />,
+    );
+
+    return getByLabelText("test number input") as HTMLInputElement;
+  };
+
   it("Renders with given name", () => {
-    const output = shallow(<NumberInput name="number test" />);
-    expect(output.prop("name")).toBe("number test");
+    render(<NumberInput name="testName" />);
+    expect(document.querySelector('[name="testName"]')).toBeInTheDocument();
   });
 
   it("Renders with no value empty", () => {
-    const output = shallow(<NumberInput name="number test" />);
-    expect(output.prop("value")).toBe("");
+    const input = getInput();
+    expect(input.value).toBe("");
   });
 
   it("Renders with given value", () => {
-    const output = shallow(<NumberInput name="number test" value={78} />);
-    expect(output.prop("value")).toBe("78");
+    const input = getInput({ value: 78 });
+    expect(input.value).toBe("78");
   });
 
-  it("Renders with empty string if invalid value given", () => {
-    const output = shallow(<NumberInput name="number test" value={"invalid string" as any} />);
-    expect(output.prop("value")).toBe("");
+  it("Renders with empty string if null value given", () => {
+    const input = getInput({ value: null });
+    expect(input.value).toBe("");
   });
 
   it("Renders with basic classNames", () => {
-    const output = shallow(<NumberInput name="number test" />);
-    expect(output.prop("className")).toContain("govuk-input");
-    expect(output.prop("className")).toContain("govuk-table__cell--numeric");
+    const input = getInput({ value: 78 });
+    expect(input).toHaveClass("govuk-input");
+    expect(input).toHaveClass("govuk-table__cell--numeric");
   });
 
   it("Renders with given className", () => {
-    const output = shallow(<NumberInput name="number test" className="testing" />);
-    expect(output.prop("className")).toContain("testing");
+    const input = getInput({ value: 78, className: "testing" });
+    expect(input).toHaveClass("testing");
   });
 
   it("Renders with error class when invalid", () => {
-    const output = shallow(<NumberInput name="number test" />);
-    output.setState({ invalid: true });
-    expect(output.prop("className")).toContain("govuk-input--error");
+    const input = getInput({ value: 78 });
+    expect(input).not.toHaveClass("govuk-input--error");
+    userEvent.type(input, "ha");
+    expect(input).toHaveClass("govuk-input--error");
   });
 
   it("Renders enabled as default", () => {
-    const output = shallow(<NumberInput name="number test" />);
-    expect(output.prop("disabled")).toBe(false);
+    const input = getInput();
+    expect(input).not.toBeDisabled();
   });
 
   it("Renders as disabled", () => {
-    const output = shallow(<NumberInput name="number test" disabled />);
-    expect(output.prop("disabled")).toBe(true);
+    const input = getInput({ disabled: true });
+    expect(input).toBeDisabled();
   });
 
-  it("Updates component state with value", () => {
-    const output = mount(<NumberInput name="number test" />);
-
-    expect(output.state("value")).toBe("");
-    (output.find("input").instance() as any).value = "1";
-    output.simulate("change");
-    expect(output.state("value")).toBe("1");
-  });
-
-  it("Debounces onChange calls", async (done) => {
+  it("Debounces onChange calls", () => {
+    jest.useFakeTimers();
     const onChange = jest.fn();
-    const output = mount(<NumberInput name="number test" onChange={onChange} />);
+    const input = getInput({ value: 12, onChange, debounce: true });
 
-    (output.find("input").instance() as any).value = "1";
-    output.simulate("change");
-    (output.find("input").instance() as any).value = "2";
-    output.simulate("change");
-    (output.find("input").instance() as any).value = "3";
-    output.simulate("change");
-
-    await new Promise<void>(resolve => setTimeout(resolve, 500));
-
-    expect(output.state("value")).toBe("3");
-    expect(onChange).toHaveBeenCalledTimes(1);
-    expect(onChange).toHaveBeenCalledWith(3);
-    done();
+    userEvent.type(input, "1");
+    userEvent.clear(input);
+    userEvent.type(input, "2");
+    userEvent.clear(input);
+    userEvent.type(input, "3");
+    jest.runAllTimers();
+    expect(onChange).toBeCalledTimes(1);
+    expect(onChange).toBeCalledWith(3);
+    jest.useRealTimers();
   });
 
-  it("Doesn't call onChange when value unchanged", async (done) => {
+  it("Updates component state with value", async () => {
+    const input = getInput({ value: "" });
+    userEvent.type(input, "1");
+    expect(input.value).toBe("1");
+  });
+
+  it("Calls a passed in onchange when value changed", () => {
     const onChange = jest.fn();
-    const output = mount(<NumberInput name="number test" value={1} onChange={onChange} />);
-
-    (output.find("input").instance() as any).value = "1";
-    output.simulate("change");
-
-    await new Promise<void>(resolve => setTimeout(resolve, 500));
-
-    expect(output.state("value")).toBe("1");
-    expect(onChange).not.toHaveBeenCalled();
-    done();
+    const input = getInput({ value: 1, onChange});
+    userEvent.type(input, "2");
+    expect(onChange).toHaveBeenCalledWith(12);
   });
 
-  it("Updates state on blur", () => {
-    const output = mount(<NumberInput name="number test" />);
-
-    (output.find("input").instance() as any).value = "1";
-    expect(output.state("value")).toBe("");
-
-    output.simulate("blur");
-    expect(output.state("value")).toBe("1");
-  });
-
-  it("Calls onChange after onBlur event", async (done) => {
+  it("Calls onChange with null if value is empty string", () => {
     const onChange = jest.fn();
-    const output = mount(<NumberInput name="number test" onChange={onChange} />);
-
-    (output.find("input").instance() as any).value = "2";
-    output.simulate("blur");
-
-    expect(output.state("value")).toBe("2");
-    expect(onChange).toHaveBeenCalledTimes(1);
-    done();
-  });
-
-  it("Calls onChange with null if value is empty string", async (done) => {
-    const onChange = jest.fn();
-    const output = mount(<NumberInput name="number test" value={1} onChange={onChange} />);
-
-    (output.find("input").instance() as any).value = "";
-    output.simulate("blur");
-
-    expect(output.state("value")).toBe("");
+    const input = getInput({ value: 1, onChange});
+    userEvent.clear(input);
+    userEvent.type(input, "");
     expect(onChange).toHaveBeenCalledWith(null);
-    done();
+
   });
 
-  it("Calls onChange with Nan if value is not a number", async (done) => {
+  it("Calls onChange with Nan if value is not a number",  () => {
     const onChange = jest.fn();
-    const output = mount(<NumberInput name="number test" value={1} onChange={onChange} />);
-
-    (output.find("input").instance() as any).value = "abc";
-    output.simulate("blur");
-
-    expect(output.state("value")).toBe("abc");
+    const input = getInput({ value: 1, onChange});
+    userEvent.type(input, "abc");
     expect(onChange).toHaveBeenCalledWith(NaN);
-    done();
-  });
 
-  it("Props updates state value on change", () => {
-    const output = mount(<NumberInput name="number test" value={1} />);
-    expect(output.state("value")).toBe("1");
-    output.setProps({ value: 2 });
-    expect(output.state("value")).toBe("2");
-    expect(output.state("invalid")).toBe(false);
-  });
-
-  it("Props update with non numerical value sets state invalid and empty", () => {
-    const output = mount(<NumberInput name="number test" value={3} />);
-    expect(output.state("value")).toBe("3");
-    output.setProps({ value: "abc3" });
-    expect(output.state("value")).toBe("");
-    expect(output.state("invalid")).toBe(true);
-  });
-
-  it("Props update with non numerical value when already invalid sets as empty", () => {
-    const output = mount(<NumberInput name="number test" value={"abc1" as any} />);
-    output.setProps({ value: "abc3" });
-    expect(output.state("value")).toBe("");
-    expect(output.state("invalid")).toBe(true);
   });
 
   it("Handles floating point numbers", () => {
-    const output = mount(<NumberInput name="number test" value={(2.2 - 1)} />);
-    expect((output.find("input").instance() as any).value).toBe("1.2");
-
+    const input = getInput({ value: 2.2 - 1});
+    expect(input.value).toBe("1.2");
   });
 });

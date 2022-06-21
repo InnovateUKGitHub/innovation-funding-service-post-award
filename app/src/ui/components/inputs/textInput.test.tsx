@@ -1,105 +1,95 @@
-import { mount } from "enzyme";
+import { render, fireEvent } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import { TextInput, TextInputProps } from "@ui/components/inputs/textInput";
 
 describe("TextInput", () => {
   const defaultProps = {
     name: "stub-name",
+    debounce: false,
   };
 
-  const setup = (props?: Partial<TextInputProps>) => mount(<TextInput {...defaultProps} {...props} />);
+  const setup = (props?: Partial<TextInputProps>) => render(<TextInput {...defaultProps} {...props} />);
 
   it("Renders with correct class", () => {
-    const wrapper = setup();
-    expect(wrapper.childAt(0).prop("className")).toContain("govuk-input");
+    const { container } = setup();
+    expect(container.firstChild).toHaveClass("govuk-input");
   });
 
   it("Renders with correct name", () => {
     const stubName = "has-valid-name";
-    const wrapper = setup({ name: stubName });
-    expect(wrapper.childAt(0).prop("name")).toContain(stubName);
+    const { container } = setup({ name: stubName });
+    expect(container.firstChild).toHaveAttribute("name", stubName);
   });
 
   describe("Renders with enabled", () => {
     it("when true false by default", () => {
-      const wrapper = setup();
-      expect(wrapper.childAt(0).prop("disabled")).toBe(false);
+      const { container } = setup();
+      expect(container.firstChild).not.toBeDisabled();
     });
 
     it("when false", () => {
-      const wrapper = setup({ disabled: true });
-      expect(wrapper.childAt(0).prop("disabled")).toBe(true);
+      const { container } = setup({ disabled: true });
+      expect(container.firstChild).toBeDisabled();
     });
   });
 
   it("Renders with no text", () => {
-    const wrapper = setup();
-    expect(wrapper.childAt(0).prop("value")).toBe("");
+    const { container } = setup();
+    expect((container.firstChild as HTMLInputElement).value).toBe("");
   });
 
   it("Renders with correct text", () => {
-    const wrapper = setup({ value: "test text" });
-    expect(wrapper.childAt(0).prop("value")).toBe("test text");
+    const { container } = setup({ value: "test text" });
+    expect((container.firstChild as HTMLInputElement).value).toBe("test text");
   });
 
   it("Renders with correct maxLength attribute", () => {
-    const wrapper = setup({ maxLength: 20 });
-    expect(wrapper.find("input").prop("maxLength")).toEqual(20);
+    const { container } = setup({ maxLength: 20 });
+    expect(container.firstChild).toHaveAttribute("maxLength", "20");
   });
 
   it("Renders placeholder", () => {
-    const wrapper = setup({ placeholder: "randomText" });
-    expect(wrapper.childAt(0).prop("placeholder")).toBe("randomText");
-  });
-
-  it("Should update state when props change", () => {
-    const wrapper = setup({ maxLength: 20, value: "" });
-    wrapper.setProps({ value: "test" });
-
-    expect(wrapper.state("value")).toBe("test");
+    const { container } = setup({ placeholder: "randomText" });
+    expect(container.firstChild).toHaveAttribute("placeholder", "randomText");
   });
 
   it("Should call onChange on key up", () => {
     const onChange = jest.fn();
-    const wrapper = setup({ maxLength: 20, value: "", onChange });
-
-    wrapper.setProps({ handleKeyTyped: true });
-
-    (wrapper.find("input").instance() as any).value = "1";
-
-    wrapper.simulate("keyup");
-
+    const { container } = setup({ maxLength: 20, value: "", onChange, handleKeyTyped: true });
+    userEvent.type(container.firstChild as HTMLInputElement, "1");
+    fireEvent.keyUp(container.firstChild as HTMLInputElement, { key: "1", code: "Digit1", keyCode: 49  });
     expect(onChange).toHaveBeenCalledWith("1");
   });
 
   it("Should update state on blur", () => {
     const onChange = jest.fn();
-    const wrapper = setup({ maxLength: 20, value: "", onChange });
+    const {container } = setup({ maxLength: 20, value: "", onChange });
 
-    (wrapper.find("input").instance() as any).value = "1";
-    wrapper.simulate("blur");
+    userEvent.type(container.firstChild as HTMLInputElement, "1");
+    fireEvent.blur(container.firstChild as HTMLInputElement);
 
     expect(onChange).toHaveBeenCalledWith("1");
   });
 
-  it("Debounces onChange calls", async done => {
+  it("Debounces onChange calls", () => {
+    jest.useFakeTimers();
     const onChange = jest.fn();
-    const wrapper = setup({ onChange });
+    const { container }= setup({ onChange, debounce: true });
 
-    (wrapper.find("input").instance() as any).value = "1";
-    wrapper.simulate("change");
+    const input = container.firstChild as HTMLInputElement;
 
-    (wrapper.find("input").instance() as any).value = "2";
-    wrapper.simulate("change");
+    userEvent.type(input, "1");
+    userEvent.clear(input);
+    userEvent.type(input, "2");
+    userEvent.clear(input);
+    userEvent.type(input, "3");
 
-    (wrapper.find("input").instance() as any).value = "3";
-    wrapper.simulate("change");
+    jest.runAllTimers();
 
-    await new Promise<void>(resolve => setTimeout(resolve, 500));
-
-    expect(wrapper.state("value")).toBe("3");
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onChange).toHaveBeenCalledWith("3");
-    done();
+
+    jest.useRealTimers();
   });
 });
