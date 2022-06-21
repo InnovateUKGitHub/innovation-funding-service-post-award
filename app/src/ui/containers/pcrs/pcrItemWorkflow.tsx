@@ -1,4 +1,3 @@
-/* eslint-disable react/display-name */
 import { useNavigate } from "react-router-dom";
 import {
   ILinkInfo,
@@ -271,7 +270,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
       mode,
       onChange: itemDto => this.onChange(editor.data, itemDto),
       onSave: skipToSummary => this.onSave(workflow, editor.data, skipToSummary),
-      getRequiredToCompleteMessage: message => {
+      getRequiredToCompleteMessage: function RequiredToCompleteMessage(message) {
         const standardMessage = "This is required to complete this request.";
 
         if (!message) return standardMessage;
@@ -515,7 +514,9 @@ export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParam
     itemId: route.params.itemId,
     pcrId: route.params.pcrId,
   }),
-  container: props => <PCRItemContainer {...props} mode="view" />,
+  container: function PCRViewItemContainer(props) {
+    return <PCRItemContainer {...props} mode="view" />;
+  },
   getTitle: ({ params, stores }) => getTitle("View project change request item", params, stores),
   accessControl: (auth, { projectId }) =>
     auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
@@ -525,7 +526,9 @@ export const PCRReviewItemRoute = defineRoute<ProjectChangeRequestPrepareItemPar
   routeName: "pcrReviewItem",
   routePath: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId",
   routePathWithQuery: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId?:step",
-  container: props => <PCRItemContainer {...props} mode="review" />,
+  container: function PCRReviewItemContainer(props) {
+    return <PCRItemContainer {...props} mode="review" />;
+  },
   getParams: route => ({
     projectId: route.params.projectId,
     itemId: route.params.itemId,
@@ -540,7 +543,9 @@ export const PCRPrepareItemRoute = defineRoute<ProjectChangeRequestPrepareItemPa
   routeName: "pcrPrepareItem",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId",
   routePathWithQuery: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId?:step",
-  container: props => <PCRItemContainer {...props} mode="prepare" />,
+  container: function PCRPrepareItemContainer(props) {
+    return <PCRItemContainer {...props} mode="prepare" />;
+  },
   getParams: route => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
