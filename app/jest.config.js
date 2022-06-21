@@ -2,7 +2,6 @@ module.exports = {
   verbose: true,
   coverageDirectory: "dashboard/unit_testing",
   testURL: "http://localhost",
-  snapshotSerializers: ["enzyme-to-json/serializer"],
   setupFilesAfterEnv: ["<rootDir>/config/jest-setup.js"],
   coveragePathIgnorePatterns: ["/node_modules/", "\\.(test|spec)\\."],
   collectCoverageFrom: [

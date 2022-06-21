@@ -268,7 +268,6 @@ module.exports = {
     "no-multiple-empty-lines": "error",
     "no-new-wrappers": "error",
     "no-throw-literal": "error",
-    "no-restricted-imports": ["error", "enzyme"],
     "no-trailing-spaces": "error",
     "no-undef-init": "error",
     "no-underscore-dangle": "error",
