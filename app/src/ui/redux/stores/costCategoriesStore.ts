@@ -1,6 +1,6 @@
 import { apiClient } from "@ui/apiClient";
 import { Pending } from "@shared/pending";
-import { NotFoundError } from "@server/features/common";
+import { NotFoundError } from "@shared/appError";
 import { LoadingStatus } from "@framework/constants";
 import { RootState } from "../reducers";
 import { RootActionsOrThunk } from "../actions/root";
