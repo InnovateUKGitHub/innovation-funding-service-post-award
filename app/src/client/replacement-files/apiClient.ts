@@ -1,9 +1,9 @@
-import { UnauthenticatedError } from "@server/features/common/appError";
+import { UnauthenticatedError } from "@shared/appError";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IApiClient } from "@server/apis";
 import { processResponse } from "@shared/processResponse";
 import { removeUndefinedString } from "@shared/string-helpers";
-import { ClientFileWrapper } from "./clientFileWrapper";
+import { ClientFileWrapper } from "../clientFileWrapper";
 
 const clientApi: IApiClient = {
   accounts: {

@@ -1,6 +1,6 @@
 import { Authorisation, ProjectRole } from "@framework/types";
 import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteProjectChangeRequestCommand";
-import { BadRequestError, NotFoundError } from "@server/features/common";
+import { BadRequestError, NotFoundError } from "@shared/appError";
 import { getAllEnumValues } from "@shared/enumHelper";
 import { PCRStatus } from "@framework/constants";
 import { TestContext } from "@tests/test-utils/testContextProvider";

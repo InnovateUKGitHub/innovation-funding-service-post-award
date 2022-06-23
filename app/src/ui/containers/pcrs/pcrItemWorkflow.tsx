@@ -11,7 +11,7 @@ import {
 } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
 
-import { ForbiddenError } from "@server/features/common";
+import { ForbiddenError } from "@shared/appError";
 
 import { PCRDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
