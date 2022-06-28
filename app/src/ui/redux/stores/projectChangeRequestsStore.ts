@@ -3,7 +3,7 @@ import { PCRDto } from "@framework/dtos";
 import { PCRDtoValidator, PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { apiClient } from "@ui/apiClient";
 import { Pending } from "@shared/pending";
-import { NotFoundError } from "@server/features/common";
+import { NotFoundError } from "@shared/appError";
 import {
   CostCategoryType,
   LoadingStatus,

@@ -4,7 +4,7 @@ import mimeTypes from "mime-types";
 import express, { Request, Response } from "express";
 
 import { IAppError, IFileWrapper, ISessionUser } from "@framework/types";
-import { NotFoundError } from "@server/features/common/appError";
+import { NotFoundError } from "@shared/appError";
 import { getErrorResponse, getErrorStatus } from "@server/errorHandlers";
 import { configuration } from "@server/features/common";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
