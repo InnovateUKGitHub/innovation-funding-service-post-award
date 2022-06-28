@@ -81,8 +81,6 @@ interface GuideProps {
   filter: string;
 }
 
-const hostname = typeof global.window !== "undefined" ? global.window.location.origin : process?.env.SERVER_URL;
-
 export const Guide: React.FunctionComponent<GuideProps> = props => {
   const guidesToRender = guides
     .map((guide, originalIndex) => ({ guide, originalIndex }))
@@ -90,7 +88,7 @@ export const Guide: React.FunctionComponent<GuideProps> = props => {
 
   return (
     <div>
-      <Header showMenu={false} headingLink={`${hostname}/components`} />
+      <Header showMenu={false} headingLink={`${process.env.SERVER_URL}/components`} />
 
       <GovWidthContainer style={{ maxWidth: "100%" }}>
         <main

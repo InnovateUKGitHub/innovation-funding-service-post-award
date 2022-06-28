@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */ // Note: due to this file being extended, it's okay for there to be unused params as they're required for children
-import { NotFoundError } from "@shared/appError";
+import { NotFoundError } from "@server/features/common";
 import {Updatable} from "../../src/server/repositories/salesforceRepositoryBase";
 
 export abstract class TestRepository<T> {

@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 
-import { AppError } from "@shared/appError";
+import { AppError } from "@server/features/common";
 import { createErrorPayload } from "@shared/create-error-payload";
 import { Pending } from "@shared/pending";
 import { IAppError } from "@framework/types/IAppError";

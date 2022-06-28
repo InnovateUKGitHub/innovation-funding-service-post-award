@@ -1,5 +1,5 @@
 import { BroadcastDto } from "@framework/dtos/BroadcastDto";
-import { NotFoundError } from "@shared/appError";
+import { NotFoundError } from "@server/features/common";
 import { BroadcastMapper } from "./mappers/broadcastMapper";
 import { SalesforceRepositoryBaseWithMapping } from "./salesforceRepositoryBase";
 
