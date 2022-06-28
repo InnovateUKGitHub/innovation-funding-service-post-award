@@ -50,7 +50,6 @@ export function renderHtml(HelmetInstance: HelmetData, html: string, preloadedSt
           <script nonce="${nonce}" src="/govuk-frontend-${govukFrontendVersion}.min.js?build=${
     configuration.build
   }"></script>
-          <script nonce="${nonce}" src="/build/vendor.js?build=${configuration.build}"></script>
           <script nonce="${nonce}" src="/build/bundle.js?build=${configuration.build}"></script>
           ${renderNonJSGoogleTagManager(configuration.googleTagManagerCode)}
       </body>
