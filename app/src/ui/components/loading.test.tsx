@@ -84,12 +84,13 @@ describe("<Loader />", () => {
   const pendingLoading = new Pending(LoadingStatus.Loading, null);
   const pendingFailed = new Pending(LoadingStatus.Failed, null);
 
-  const setup = <T extends unknown>(props: LoadingProps<T>) =>
-    render(
+  function setup<T>(props: LoadingProps<T>) {
+    return render(
       <TestBed content={stubContent as TestBedContent}>
         <Loader {...props} />
       </TestBed>,
     );
+  }
 
   beforeEach(jest.clearAllMocks);
 

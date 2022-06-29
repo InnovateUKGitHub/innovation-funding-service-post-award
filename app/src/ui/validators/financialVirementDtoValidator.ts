@@ -104,13 +104,11 @@ class FinancialLoanVirement<T extends FinancialLoanVirementDto["loans"][0]> exte
     if (!this.submit || !this.model.isEditable) return Validation.valid(this);
 
     const currentVirementIndex = this.allVirements.findIndex(x => x.id === this.model.id);
-
     const previousVirement = this.allVirements[currentVirementIndex - 1];
     const currentVirement = this.allVirements[currentVirementIndex];
 
     // Note: First date can be anything no previous collision possible
     if (currentVirementIndex === 0) return Validation.valid(this);
-
     const previousDrawdownDateInMs = previousVirement.newDate.getTime();
     const updatedDateInMs = currentVirement.newDate.getTime();
 

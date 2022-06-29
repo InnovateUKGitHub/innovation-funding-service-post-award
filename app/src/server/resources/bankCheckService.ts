@@ -62,7 +62,7 @@ export class BankCheckService {
       if (!request.ok) throw Error(`Failed querying SIL service for '${path}'`);
 
       return await request.json();
-    } catch (error) {
+    } catch (error: any) {
       throw Error(error);
     }
   }

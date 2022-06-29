@@ -30,9 +30,9 @@ export class InActiveProjectError extends ForbiddenError {
 export class FormHandlerError extends AppError {
   constructor(
     public key: string,
-    public store: string,
-    public dto: {},
-    public result: Results<{}>,
+    public store: any,
+    public dto: any,
+    public result: any, // TODO: fix this any issue
     public error: IAppError,
   ) {
     super(error.code, error.message || "Not Found");

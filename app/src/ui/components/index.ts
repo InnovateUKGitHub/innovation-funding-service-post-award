@@ -7,7 +7,6 @@ import * as Forecasts from "./forecasts";
 import * as Partners from "./partners";
 
 export { Claims, Inputs, Forecasts, MonitoringReports, Projects, Renderers, Partners };
-
 export * from "./documents";
 export * from "./typography";
 export * from "./accordion";

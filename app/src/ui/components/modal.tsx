@@ -8,11 +8,13 @@ import { ModalConsumer, ModalRegister } from "@ui/redux";
 
 interface Props {
   id: string;
+  children: React.ReactNode | null | undefined;
 }
 
 interface InnerProps {
   id: string;
   modalRegister: ModalRegister;
+  children: React.ReactNode;
 }
 export const Modal: React.FunctionComponent<Props> = ({ id, children }) => (
   <ModalConsumer>{ modalRegister => <Component id={id} modalRegister={modalRegister}>{children}</Component> }</ModalConsumer>
@@ -33,7 +35,7 @@ class Component extends React.Component<InnerProps> {
     this.props.modalRegister.registerModal({id: this.props.id, children: this.props.children});
   }
 
-  render(): React.ReactElement<any> | string | number | {} | React.ReactNodeArray | React.ReactPortal | boolean | null | undefined {
+  render(): React.ReactNode {
     return null;
   }
 }
@@ -42,7 +44,7 @@ class Component extends React.Component<InnerProps> {
 * Currently used in the app component so should not be placed anywhere else. For adding modals to the page, use the "Modal" component.
 * It's been left as an exported module so it can be demoed in the component guide
 * */
-export class PrivateModal extends React.Component<{id: string}> {
+export class PrivateModal extends React.Component<{id: string; children: React.ReactNode}> {
   render() {
     return (
       <div id={this.props.id} className={"govuk-modal-dialogue"} data-module="govuk-modal-dialogue">

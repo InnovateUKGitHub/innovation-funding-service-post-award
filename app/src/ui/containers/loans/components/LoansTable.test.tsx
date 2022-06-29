@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuid } from "uuid";
 import { render } from "@testing-library/react";
 
 import { TestBed } from "@shared/TestBed";
@@ -10,7 +10,7 @@ import { ILinkInfo } from "@framework/types";
 describe("<LoansTable />", () => {
   const stubLink: ILinkInfo = {
     path: "stub-path",
-    routeName: "stub-routename",
+    routeName: "stub-routeName",
     routeParams: {},
     accessControl: () => false,
   };
@@ -33,7 +33,7 @@ describe("<LoansTable />", () => {
 
   describe("@returns", () => {
     const stubLoanItem: LoanDto = {
-      id: uuidv4(),
+      id: uuid(),
       status: LoanStatus.REQUESTED,
       period: 1,
       requestDate: new Date(Date.UTC(2021, 9, 1)),
@@ -52,7 +52,7 @@ describe("<LoansTable />", () => {
 
     test("with single item defined", () => {
       const stubItem: LoanDto = {
-        id: uuidv4(),
+        id: uuid(),
         status: LoanStatus.PLANNED,
         period: 1,
         requestDate: new Date(Date.UTC(2021, 9, 1)),
@@ -80,7 +80,7 @@ describe("<LoansTable />", () => {
 
     test("with multiple items defined", () => {
       const stubFirstItem: LoanDto = {
-        id: uuidv4(),
+        id: uuid(),
         status: LoanStatus.REQUESTED,
         period: 1,
         requestDate: new Date(Date.UTC(2021, 9, 1)),
@@ -90,7 +90,7 @@ describe("<LoansTable />", () => {
       };
 
       const stubSecondItem: LoanDto = {
-        id: uuidv4(),
+        id: uuid(),
         status: LoanStatus.PLANNED,
         period: 2,
         requestDate: new Date(Date.UTC(2021, 7, 1)),
@@ -138,7 +138,7 @@ describe("<LoansTable />", () => {
   describe("@events", () => {
     test("with no call to createLink as status is not 'PLANNED'", () => {
       const stubItem: LoanDto = {
-        id: uuidv4(),
+        id: uuid(),
         status: LoanStatus.REQUESTED,
         period: 1,
         requestDate: new Date(Date.UTC(2021, 7, 1)),
@@ -175,7 +175,7 @@ describe("<LoansTable />", () => {
 
       const stubPlannedLinkFn = jest.fn().mockReturnValue({
         ...stubLink,
-        routeName: "stub-planned-routename",
+        routeName: "stub-planned-routeName",
       });
 
       const { queryByText } = setup({

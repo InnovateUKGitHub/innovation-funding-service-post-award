@@ -37,7 +37,12 @@ import { EditClaimLineItemsFormHandler } from "./editClaimLineItemsFormHandler";
 import { HomeFormHandler } from "./homeFormHandler";
 import { PrepareClaimFormHandler } from "./prepareClaimFormHandler";
 import { UpdateForecastFormHandler } from "./updateForecastFormHandler";
-import { IFormHandler, MultipleFileFormHandlerBase, SingleFileFormHandlerBase, StandardFormHandlerBase } from "./formHandlerBase";
+import {
+  IFormHandler,
+  MultipleFileFormHandlerBase,
+  SingleFileFormHandlerBase,
+  StandardFormHandlerBase,
+} from "./formHandlerBase";
 import { ClaimDetailDocumentDeleteHandler } from "./claimDetailDocument/claimDetailDocumentDeleteHandler";
 import { ClaimDetailDocumentUploadHandler } from "./claimDetailDocument/claimDetailDocumentUploadHandler";
 import { ProjectDocumentDeleteHandler } from "./ProjectDocumentDeleteHandler";
@@ -121,18 +126,15 @@ const getRoute = (handler: IFormHandler) => {
   return handler.routePath.replace(/(<|>)/g, "");
 };
 
-const handlePost = (handler: IFormHandler) => async (
-  req: express.Request,
-  res: express.Response,
-  next: express.NextFunction,
-) => {
-  try {
-    await handler.handle(req, res, next);
-  } catch (e) {
-    console.log(e);
-    return serverRender(req, res, e);
-  }
-};
+const handlePost =
+  (handler: IFormHandler) => async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    try {
+      await handler.handle(req, res, next);
+    } catch (e: any) {
+      console.log(e);
+      return serverRender(req, res, e);
+    }
+  };
 
 const handleError = (error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   if (error) {
@@ -146,6 +148,7 @@ export const configureFormRouter = (csrfProtection: RequestHandler) => {
   const result = express.Router();
   const badRequestHandler = new BadRequestHandler();
 
+  // eslint-disable-next-line sonarjs/no-empty-collection
   singleFileFormHandlers.forEach(x => {
     result.post(getRoute(x), upload.single("attachment"), csrfProtection, handlePost(x), handleError);
   });

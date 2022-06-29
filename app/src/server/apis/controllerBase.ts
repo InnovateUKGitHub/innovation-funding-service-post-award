@@ -73,10 +73,10 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
     const wrappedGetParams: InnerGetParams<TParams & { document: DocumentUploadDto }> = (params, query, body, req) => {
       const p = getParams(params, query, body);
 
-      const file: IFileWrapper | null = req.file && new ServerFileWrapper(req.file);
+      const file: IFileWrapper | null = req.file ? new ServerFileWrapper(req.file) as IFileWrapper : null;
       const description = Number(body.description) || undefined;
 
-      const document: DocumentUploadDto | null = file && { file, description };
+      const document: DocumentUploadDto = { file, description };
 
       return { document, ...p };
     };

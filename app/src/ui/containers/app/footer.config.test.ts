@@ -1,4 +1,4 @@
-import { renderHook } from "@testing-library/react-hooks";
+import { renderHook } from "@testing-library/react";
 import { hookTestBed } from "@shared/TestBed";
 import { footerLinks, useFooterExternalContent } from "@ui/containers/app/footer.config";
 import { Content } from "@content/content";

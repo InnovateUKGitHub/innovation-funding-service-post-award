@@ -20,7 +20,7 @@ export function componentGuideRender(req: Request, res: Response) {
   const html = renderToString(
     <Provider store={store}>
       <TestBed isServer content={new Content()} shouldOmitRouterProvider>
-        <Guide source="server" filter={req.query.guide} />
+        <Guide source="server" filter={req.query.guide as string} />
       </TestBed>
     </Provider>,
   );

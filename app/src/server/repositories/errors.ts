@@ -4,7 +4,7 @@ export class BadSalesforceQuery extends Error {
   }
 }
 
-export class SalesforceUnavilableError extends Error {
+export class SalesforceUnavailableError extends Error {
   constructor(message: string) {
     super(message);
   }
