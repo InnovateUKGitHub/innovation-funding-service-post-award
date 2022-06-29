@@ -43,7 +43,7 @@ export abstract class RepositoryBase {
       throw new Errors.BadSalesforceQuery(e.errorCode, e.errorCode);
     }
     if (e.errorCode === "ERROR_HTTP_503") {
-      throw new Errors.SalesforceUnavilableError("Salesforce unavailable");
+      throw new Errors.SalesforceUnavailableError("Salesforce unavailable");
     }
     if (e.errorCode === "INVALID_QUERY_FILTER_OPERATOR") {
       throw new Errors.SalesforceInvalidFilterError("Salesforce filter error");

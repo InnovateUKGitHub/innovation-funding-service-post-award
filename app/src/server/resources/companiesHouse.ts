@@ -42,10 +42,10 @@ export class CompaniesHouseBase {
       }
 
       return await fetchQuery.json();
-    } catch (err) {
+    } catch (err: any) {
       // Note: Add specific api failures here
 
-      if (err.message.includes("socket hang up")) {
+      if (err?.message?.includes("socket hang up")) {
         // Note: Add this point we know to contact develop/escalate
         throw new Error("COMPANIES_HOUSE_WHITELIST_ISSUE");
       }

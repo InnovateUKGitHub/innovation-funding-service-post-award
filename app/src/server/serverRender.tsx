@@ -132,7 +132,6 @@ function onComplete(store: Store, error?: FormHandlerError) {
       Actions.handleEditorError({
         id: error.key,
         dto: error.dto,
-        validation: error.result,
         error: error.error,
         store: error.store,
         scrollToTop: false,

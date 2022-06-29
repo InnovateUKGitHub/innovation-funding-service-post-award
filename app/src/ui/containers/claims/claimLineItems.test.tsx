@@ -1,4 +1,4 @@
-import { renderHook } from "@testing-library/react-hooks";
+import { renderHook } from "@testing-library/react";
 import { useClaimLineItemsContent } from "@ui/containers";
 import { hookTestBed, TestBedContent } from "@shared/TestBed";
 import { Content } from "@content/content";

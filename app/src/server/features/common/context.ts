@@ -14,12 +14,12 @@ import * as Repositories from "../../repositories";
 import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
 import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationError } from "./appError";
 
-// obvs needs to be singleton
+// obviously needs to be singleton
 const cachesImplementation: Framework.ICaches = {
   costCategories: new Common.Cache<CostCategoryDto[]>(Common.configuration.timeouts.costCategories),
   optionsLookup: new Common.Cache<Framework.Option<any>[]>(Common.configuration.timeouts.optionsLookup),
   projectRoles: new Common.Cache<{ [key: string]: IRoleInfo }>(Common.configuration.timeouts.projectRoles),
-  permissionGroups: new Common.Cache<Entities.PermissionGroup[]>(0 /* permanant cache */),
+  permissionGroups: new Common.Cache<Entities.PermissionGroup[]>(0 /* permanent cache */),
   recordTypes: new Common.Cache<Entities.RecordType[]>(Common.configuration.timeouts.recordTypes),
   contentStoreLastUpdated: null,
 };
@@ -155,7 +155,7 @@ export class Context implements Framework.IContext {
       }
       // await the run because of the finally
       return await runnable.run(this);
-    } catch (e) {
+    } catch (e: any) {
       this.logger.warn("Failed query", runnable.logMessage(), e);
       if (e instanceof ValidationError) {
         this.logger.debug("Validation Error", e.results && e.results.log());
@@ -171,7 +171,7 @@ export class Context implements Framework.IContext {
     const timer = this.startTimer(runnable.constructor.name);
     try {
       return runnable.run(this);
-    } catch (e) {
+    } catch (e: any) {
       this.logger.warn("Failed query", runnable.logMessage(), e);
       throw constructErrorResponse(e);
     } finally {

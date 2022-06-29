@@ -6,7 +6,7 @@ import { AccordionItem, AccordionItemProps } from "./AccordionItem";
 
 type AccordionNodes = React.ReactElement<AccordionItemProps>;
 
-// Note: Consumers using ternarys or shortcuts will hit type errors 'React.Children.toArray' removes falsy values
+// Note: Consumers using ternaries or shortcuts will hit type errors 'React.Children.toArray' removes falsy values
 type ConsumerAccordionNodes = AccordionNodes | false | null;
 
 export interface AccordionProps {

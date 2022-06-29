@@ -40,6 +40,10 @@ import { pcrSpendProfileOverheadRatePicklist } from "@server/features/pcrs/pcrSp
 import { TestRepository } from "./testRepository";
 import { TestFileWrapper } from "./testData";
 
+function nullReturn() {
+ return null;
+}
+
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
     return super.getOne(x => x.Id === id);
@@ -253,7 +257,7 @@ class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocumen
   getDocumentContent(documentId: string): Promise<Stream> {
     return super.getOne(x => x[1].Id === documentId).then(x => {
       const s = new Stream.Readable();
-      s._read = () => null;
+      s._read = nullReturn;
       s.push(x[1].Id);
       s.push(null);
       return s;
@@ -725,7 +729,7 @@ class FinancialLoanVirementsTestRepository extends TestRepository<Entities.LoanF
   }
 
   private updateVirement(item: Updatable<Repositories.ISalesforceFinancialLoanVirement>) {
-    this.Items.reduce<Entities.LoanFinancialVirement[]>((loans, loan) => {
+    return this.Items.reduce<Entities.LoanFinancialVirement[]>((loans, loan) => {
       const isEditable = loan.status === LoanStatus.REQUESTED;
       const isItem = item.Id === loan.id;
       const shouldReturnLoan = isItem && isEditable;

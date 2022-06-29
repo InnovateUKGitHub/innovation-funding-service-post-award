@@ -31,7 +31,7 @@ describe("Heading variants", () => {
 
       const { container } = render(<Variant>Look ma! I'm a Variant!</Variant>);
 
-      const expectedElement = container.querySelector(Variant.name);
+      const expectedElement = container.querySelector(Variant.name.toLowerCase());
 
       expect(expectedElement).toBeInTheDocument();
       expect(expectedElement).toHaveClass(gdsHeadingClasses[variantKey]);

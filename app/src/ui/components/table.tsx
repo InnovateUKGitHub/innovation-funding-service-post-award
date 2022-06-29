@@ -194,7 +194,7 @@ function getSortKeys<T>(items: TableChild<T>[]): TableSortKey[] {
     return Array(items.length).fill(null);
   }
 
-  return items.map(x => (x?.props.sortByKey ? `${x.props.sortByKey}` : null));
+  return items.map(x => (x?.props.sortByKey ? String(x.props.sortByKey) : null));
 }
 
 const TableComponent = <T extends {}>({
@@ -208,20 +208,23 @@ const TableComponent = <T extends {}>({
   ...props
 }: TableProps<T> & { validationResult?: Results<{}>[] }) => {
   const { getContent } = useContent();
-  const children = useMemo(() => React.Children.toArray(unflattenedChildren).filter(Boolean) as TableChild<T>[], [
-    unflattenedChildren,
-  ]);
+  const children = useMemo(
+    () => React.Children.toArray(unflattenedChildren).filter(Boolean) as TableChild<T>[],
+    [unflattenedChildren],
+  );
 
   const { handleSort, getColumnOption, sortedRows } = useTableSorter(getSortKeys(children), data);
 
-  const headers = children.map((column, columnIndex) =>
-    isValidElement<InternalColumnProps<T>>(column) && cloneElement(column, {
-      mode: "header",
-      columnIndex,
-      header: isValidElement(column?.props.header) ? column?.props.header : getContent(column?.props.header || ""),
-      "aria-sort": getColumnOption?.(columnIndex),
-      onSortClick: () => handleSort(columnIndex),
-    }),
+  const headers = children.map(
+    (column, columnIndex) =>
+      isValidElement<InternalColumnProps<T>>(column) &&
+      cloneElement(column, {
+        mode: "header",
+        columnIndex,
+        header: isValidElement(column?.props.header) ? column?.props.header : getContent(column?.props.header || ""),
+        "aria-sort": getColumnOption?.(columnIndex),
+        onSortClick: () => handleSort(columnIndex),
+      }),
   );
 
   const cols = children.map((column, columnIndex) =>
@@ -327,7 +330,9 @@ function FullDateColumn<T extends {}>(props: ExternalColumnProps<T, Date | null>
 }
 
 function FullNumericDateColumn<T extends {}>(props: ExternalColumnProps<T, Date | null>) {
-  return <TableColumn<T> {...props} renderCell={(data, index) => <FullNumericDate value={props.value(data, index)} />} />;
+  return (
+    <TableColumn<T> {...props} renderCell={(data, index) => <FullNumericDate value={props.value(data, index)} />} />
+  );
 }
 
 function ShortDateColumn<T extends {}>(props: ExternalColumnProps<T, Date | null>) {

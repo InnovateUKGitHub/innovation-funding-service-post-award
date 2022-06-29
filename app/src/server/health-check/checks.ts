@@ -18,7 +18,7 @@ export async function checkSalesforce(logger: ILogger): Promise<HealthCheckResul
     await getSalesforceAccessToken(tokenPayload);
 
     return { ...check, status: "Success" };
-  } catch (error) {
+  } catch (error: any) {
     logger.error("SALESFORCE HEALTH CHECK", new AppError(ErrorCode.UNKNOWN_ERROR, error.tokenError, error));
 
     return {
@@ -47,7 +47,7 @@ export async function checkGoogleAnalytics(logger: ILogger): Promise<HealthCheck
     if (!response.ok) throw new Error(`Failed get request to ${tagManagerEndpoint}`);
 
     return { ...check, status: "Success" };
-  } catch (error) {
+  } catch (error: any) {
     logger.error("GOOGLE ANALYTICS HEALTH CHECK", new AppError(ErrorCode.UNKNOWN_ERROR, error.message, error));
 
     return { ...check, status: "Failed", error };
@@ -61,7 +61,7 @@ export async function checkCompaniesHouse(logger: ILogger): Promise<HealthCheckR
     await new CompaniesHouse().searchCompany({ searchString: "test" });
 
     return { ...check, status: "Success" };
-  } catch (error) {
+  } catch (error: any) {
     logger.error("COMPANIES HOUSE HEALTH CHECK", new AppError(ErrorCode.UNKNOWN_ERROR, error.message, error));
 
     return { ...check, status: "Failed", error };

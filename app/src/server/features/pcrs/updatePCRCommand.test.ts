@@ -1415,7 +1415,7 @@ describe("UpdatePCRCommand", () => {
 
       describe("with valid requests", () => {
         beforeAll(() => {
-          jest.useFakeTimers("modern");
+          jest.useFakeTimers();
           jest.setSystemTime(new Date(2022, 3, 1));
         });
 

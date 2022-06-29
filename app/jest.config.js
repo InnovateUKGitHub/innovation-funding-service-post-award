@@ -1,7 +1,18 @@
+/** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
-  verbose: true,
+  verbose: false,
   coverageDirectory: "dashboard/unit_testing",
-  testURL: "http://localhost",
+  testEnvironment: "jsdom",
+  testEnvironmentOptions: {
+    url: "http://localhost",
+  },
+  globals: {
+    "ts-jest": {
+      tsconfig: {
+        target: "ES2015",
+      },
+    },
+  },
   setupFilesAfterEnv: ["<rootDir>/config/jest-setup.js"],
   coveragePathIgnorePatterns: ["/node_modules/", "\\.(test|spec)\\."],
   collectCoverageFrom: [
@@ -16,11 +27,12 @@ module.exports = {
     "src/ui/redux/**/*.{ts,tsx}",
     "src/ui/validators/**/*.{ts,tsx}",
   ],
+  preset: "ts-jest",
   coverageReporters: ["text", "html", "lcov"],
-  transformIgnorePatterns: ["<rootDir>/node_modules/"],
   transform: {
-    "^.+\\.tsx?$": "ts-jest",
+    "^.+\\.(t|j)sx?$": "ts-jest",
   },
+  transformIgnorePatterns: ["/node_modules/(?!uuid)"],
   testRegex: "/src/.*\\.(test|spec)\\.tsx?$",
   moduleFileExtensions: ["ts", "tsx", "js"],
   testResultsProcessor: "jest-bamboo-reporter",
@@ -32,6 +44,6 @@ module.exports = {
     "@ui/(.*)": "<rootDir>/src/ui/$1",
     "@util/(.*)": "<rootDir>/src/util/$1",
     "@content/(.*)": "<rootDir>/src/content/$1",
-    "@tests/(.*)": "<rootDir>/tests/$1"
+    "@tests/(.*)": "<rootDir>/tests/$1",
   },
 };

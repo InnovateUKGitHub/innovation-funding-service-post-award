@@ -1,6 +1,5 @@
 /* eslint-disable import/order */
 import React from "react";
-
 import { Header } from "../components/layout/header";
 
 import { accordionGuide } from "./accordionGuide";

@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuid } from "uuid";
 import { render } from "@testing-library/react";
 
 import { TestBed, TestBedStore, TestBedContent } from "@shared/TestBed";
@@ -6,6 +6,7 @@ import { ILinkInfo, LoadingStatus, LoanDto } from "@framework/types";
 import { LoansOverviewContainer, LoansOverviewContainerProps } from "@ui/containers/loans/overview.page";
 import { Pending } from "@shared/pending";
 import { LoanStatus } from "@framework/entities";
+
 
 describe("<LoansOverviewContainer />", () => {
   const stubLink: ILinkInfo = {
@@ -47,7 +48,7 @@ describe("<LoansOverviewContainer />", () => {
     );
 
   const stubUnknownLoan: LoanDto = {
-    id: uuidv4(),
+    id: uuid(),
     status: LoanStatus.UNKNOWN,
     period: 1,
     requestDate: new Date(Date.UTC(2021, 9, 1)),

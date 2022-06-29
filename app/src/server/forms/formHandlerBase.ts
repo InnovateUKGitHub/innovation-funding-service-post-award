@@ -8,6 +8,8 @@ import { contextProvider } from "@server/features/common/contextProvider";
 import { FormHandlerError } from "@server/features/common/appError";
 import { ISession, ServerFileWrapper } from "../apis/controllerBase";
 
+// TODO: review types in this file
+
 interface RouteInfo<TParams> {
   routeName: string;
   routePath: string;
@@ -20,12 +22,16 @@ export interface IFormHandler {
 }
 
 export interface IFormButton {
-  name: string | undefined;
+  name: string;
   value: string;
 }
 export interface IFormBody {
   [key: string]: string;
 }
+
+type StoreKey<TStore extends EditorStateKeys> = keyof EditorState[TStore];
+
+type AnyEditor = InferEditorStoreDto<any>;
 
 abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implements IFormHandler {
   protected constructor(routeInfo: RouteInfo<TParams>, buttons: string[], protected store: TStore) {
@@ -58,23 +64,25 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
     const session: ISession = { user: req.session!.user };
     const context = contextProvider.start(session);
 
-    let dto: InferEditorStoreDto<EditorState[TStore][string]>;
+    let dto: AnyEditor;
+
     try {
       dto =
         (await this.createDto(context, params, button, body, req)) ||
-        ({} as InferEditorStoreDto<EditorState[TStore][string]>);
+        ({} as AnyEditor);
+        // ({} as InferEditorStoreDto<EditorState[TStore][StoreKey<TStore>]>);
     } catch (error) {
       context.logger.error("Error creating dto in form submission", error);
-      dto = {} as InferEditorStoreDto<EditorState[TStore][string]>;
+      dto = {} as AnyEditor;
     }
 
     try {
       const { path: newRedirectUrl } = await this.run(context, params, button, dto);
       res.redirect(newRedirectUrl);
       return;
-    } catch (error) {
+    } catch (error: any) {
       context.logger.error("Error handling form submission", error);
-      const key = this.getStoreKey(params, dto);
+      const key = this.getStoreKey(params, dto as any);
       throw new FormHandlerError(
         key,
         this.store,
@@ -91,22 +99,23 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
     button: IFormButton,
     body: IFormBody,
     req: express.Request,
-  ): Promise<InferEditorStoreDto<EditorState[TStore][string]>>;
+  ): Promise<AnyEditor>;
 
   protected abstract run(
     context: IContext,
     params: TParams,
     button: IFormButton,
-    dto: InferEditorStoreDto<EditorState[TStore][string]>,
+    dto: AnyEditor,
   ): Promise<ILinkInfo>;
 
-  protected abstract getStoreKey(params: TParams, dto: InferEditorStoreDto<EditorState[TStore][string]>): string;
+  protected abstract getStoreKey(params: TParams, dto: InferEditorStoreDto<EditorState[TStore][StoreKey<TStore>]>): string;
 
   protected abstract createValidationResult(
     params: TParams,
-    dto: InferEditorStoreDto<EditorState[TStore][string]>,
+    // dto: InferEditorStoreDto<EditorState[TStore][StoreKey<TStore>]>,
+    dto: AnyEditor,
     button: IFormButton,
-  ): InferEditorStoreValidator<EditorState[TStore][string]>;
+  ):  InferEditorStoreValidator<any>;
 }
 export abstract class StandardFormHandlerBase<TParams, TStore extends EditorStateKeys> extends FormHandlerBase<
   TParams,
@@ -117,7 +126,7 @@ export abstract class StandardFormHandlerBase<TParams, TStore extends EditorStat
     params: TParams,
     button: IFormButton,
     body: IFormBody,
-  ): Promise<InferEditorStoreDto<EditorState[TStore][string]>> {
+  ): Promise<AnyEditor> {
     return this.getDto(context, params, button, body);
   }
 
@@ -126,7 +135,7 @@ export abstract class StandardFormHandlerBase<TParams, TStore extends EditorStat
     params: TParams,
     button: IFormButton,
     body: IFormBody,
-  ): Promise<InferEditorStoreDto<EditorState[TStore][string]>>;
+  ): Promise<AnyEditor>;
 }
 
 export abstract class SingleFileFormHandlerBase<TParams, TStore extends EditorStateKeys> extends FormHandlerBase<
@@ -139,8 +148,8 @@ export abstract class SingleFileFormHandlerBase<TParams, TStore extends EditorSt
     button: IFormButton,
     body: IFormBody,
     req: express.Request,
-  ): Promise<InferEditorStoreDto<EditorState[TStore][string]>> {
-    const file: IFileWrapper | null = req.file && new ServerFileWrapper(req.file);
+  ): Promise<AnyEditor> {
+    const file: IFileWrapper | null = req.file ? new ServerFileWrapper(req.file) as IFileWrapper : null;
     return this.getDto(context, params, button, body, file);
   }
 
@@ -150,7 +159,7 @@ export abstract class SingleFileFormHandlerBase<TParams, TStore extends EditorSt
     button: IFormButton,
     body: IFormBody,
     file: IFileWrapper | null,
-  ): Promise<InferEditorStoreDto<EditorState[TStore][string]>>;
+  ): Promise<AnyEditor>;
 }
 
 export abstract class MultipleFileFormHandlerBase<TParams, TStore extends EditorStateKeys> extends FormHandlerBase<
@@ -163,7 +172,7 @@ export abstract class MultipleFileFormHandlerBase<TParams, TStore extends Editor
     button: IFormButton,
     body: IFormBody,
     req: express.Request,
-  ): Promise<InferEditorStoreDto<EditorState[TStore][string]>> {
+  ): Promise<AnyEditor> {
     const files: IFileWrapper[] = Array.isArray(req.files) ? req.files.map(x => new ServerFileWrapper(x)) : [];
     return this.getDto(context, params, button, body, files);
   }
@@ -174,5 +183,5 @@ export abstract class MultipleFileFormHandlerBase<TParams, TStore extends Editor
     button: IFormButton,
     body: IFormBody,
     files: IFileWrapper[],
-  ): Promise<InferEditorStoreDto<EditorState[TStore][string]>>;
+  ): Promise<AnyEditor>;
 }

@@ -12,6 +12,5 @@ export function useCompetitionType(projectId: string | undefined): string | unde
   if (isRejected) {
     throw new Error(error ?? `There was an error getting the competitionType from projectId - ${projectId}`);
   }
-
   return payload?.competitionType ?? undefined;
 }

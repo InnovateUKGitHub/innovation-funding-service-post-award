@@ -12,7 +12,7 @@ import {
   FinancialLoanVirementDto,
   FinancialVirementDto,
   PartnerVirementsDto,
-} from "@framework/dtos/finacialVirementDto";
+} from "@framework/dtos/financialVirementDto";
 
 describe("financialVirementDtoValidator", () => {
   describe("@validates", () => {

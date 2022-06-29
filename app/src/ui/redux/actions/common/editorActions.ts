@@ -2,6 +2,7 @@ import { Results } from "@ui/validation/results";
 import { scrollToTheTopSmoothly } from "@framework/util/windowHelpers";
 import { IAppError } from "@framework/types/IAppError";
 import { ErrorCode } from "@framework/constants";
+import { InferEditorStoreValidator } from "@ui/redux/stores/storeBase";
 import { createAction } from "./createAction";
 
 export type UpdateEditorAction = ReturnType<typeof updateEditorAction>;
@@ -12,12 +13,12 @@ export type EditorResetAction = ReturnType<typeof resetEditor>;
 
 export type EditorAction = UpdateEditorAction | EditorSubmitAction | EditorSuccessAction | EditorErrorAction | EditorResetAction;
 
-export function updateEditorAction<T>(id: string, store: string, dto: T, validator: Results<{}> | null) {
+export function updateEditorAction<T>(id: string, store: string, dto: T, validator: Results<any> | InferEditorStoreValidator<any> | null) {
   const payload = {id, store, dto, validator};
   return createAction("EDITOR_UPDATE", payload);
 }
 
-export function handleEditorSubmit<T>(id: string, store: string, dto: T, validator: Results<{}> | null) {
+export function handleEditorSubmit<T>(id: string, store: string, dto: T, validator: Results<any> | InferEditorStoreValidator<any> | null) {
   return createAction("EDITOR_SUBMIT", { id, store, dto, validator });
 }
 
@@ -29,7 +30,6 @@ interface HandleEditorErrorParams<T> {
   id: string;
   store: string;
   dto: T;
-  validation: Results<{}> | null;
   error: IAppError;
   scrollToTop?: boolean;
 }
