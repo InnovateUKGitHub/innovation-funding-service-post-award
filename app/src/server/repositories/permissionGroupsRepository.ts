@@ -1,4 +1,4 @@
-import { PermissionGroupIdenfifier } from "@framework/constants";
+import { PermissionGroupIdentifier } from "@framework/constants";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { ILogger } from "@server/features/common";
 import { Connection } from "jsforce";
@@ -16,8 +16,8 @@ export interface IPermissionGroupRepository {
 
 // used to filter the requested permission groups and map them to the relevant identifier
 // this key is the DeveloperName field in salesforce
-const SalesforcePermisionGroups: {[key: string]: PermissionGroupIdenfifier} = {
-  Acc_Claims_Team_Lead_Pending_Assignment: PermissionGroupIdenfifier.ClaimsTeam
+const SalesforcePermisionGroups: {[key: string]: PermissionGroupIdentifier} = {
+  Acc_Claims_Team_Lead_Pending_Assignment: PermissionGroupIdentifier.ClaimsTeam
 };
 
 /**

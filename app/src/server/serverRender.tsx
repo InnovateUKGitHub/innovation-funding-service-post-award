@@ -1,16 +1,15 @@
+import { Helmet } from "react-helmet";
 import { renderToString } from "react-dom/server";
 import { AnyAction, createStore, Store } from "redux";
-import { constants as routerConstants, Router, State } from "router5";
 import { Provider } from "react-redux";
-import { RouterProvider } from "react-router5";
+import { StaticRouter } from "react-router-dom/server";
 import { Request, Response } from "express";
-
-import { configureRouter, IRoutes, MatchedRoute, matchRoute, routeConfig } from "@ui/routing";
-import { ErrorCode, IAppError, IClientUser, IContext } from "@framework/types";
+import { getParamsFromUrl } from "@ui/helpers/make-url";
+import { routeConfig, matchRoute } from "@ui/routing";
+import { ErrorCode, IAppError, IClientUser, IContext, Authorisation } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import * as Actions from "@ui/redux/actions";
 import { App } from "@ui/containers/app";
-import { Content } from "@content/content";
 import {
   createStores,
   IStores,
@@ -21,101 +20,78 @@ import {
   setupInitialState,
   setupServerMiddleware,
   StoresProvider,
-  RoutesProvider,
 } from "@ui/redux";
 import { createErrorPayload } from "@shared/create-error-payload";
 import { contextProvider } from "@server/features/common/contextProvider";
-import { ForbiddenError, FormHandlerError, NotFoundError } from "./features/common/appError";
+import { ForbiddenError,FormHandlerError } from "./features/common/appError";
+
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
 import { Logger } from "./features/common/logger";
-import { configuration } from "./features/common";
 import { getErrorStatus } from "./errorHandlers";
 import { renderHtml } from "./html";
 
 export async function serverRender(req: Request, res: Response, error?: IAppError): Promise<void> {
-  let content: Content;
-
-  const nonce = res.locals.nonce;
-
-  const routes = routeConfig;
-  const router = configureRouter(routes);
+  const { nonce } = res.locals;
+  const middleware = setupServerMiddleware();
+  const context = contextProvider.start({ user: req.session!.user });
+  const clientConfig = getClientConfig(context);
+  const modalRegister = new ModalRegister();
 
   try {
     if (error && !(error instanceof FormHandlerError)) {
       throw error;
     }
 
-    const route = await startRouter(req, router);
-
-    if (route.name === routerConstants.UNKNOWN_ROUTE) {
-      throw new NotFoundError();
-    }
-
-    const context = contextProvider.start({ user: req.session!.user });
     const auth = await context.runQuery(new GetAllProjectRolesForUser());
-
     const user: IClientUser = { roleInfo: auth.permissions, email: req.session!.user.email, csrf: req.csrfToken() };
-    const clientConfig = getClientConfig(context);
-
-    const initialState = setupInitialState(route, user, clientConfig);
-    const middleware = setupServerMiddleware(router);
+    const initialState = setupInitialState(user, clientConfig);
     const store = createStore(rootReducer, initialState, middleware);
-    const modalRegister = new ModalRegister();
 
     const stores = createStores(
       () => store.getState(),
       action => process.nextTick(() => store.dispatch(action as AnyAction)),
     );
 
-    const matched = matchRoute(route);
-    const params = matched.getParams(route);
+    const matched = matchRoute(req.url);
+    const params = getParamsFromUrl(matched.routePath, req.url);
 
     if (matched.accessControl?.(auth, params, clientConfig) === false) {
       throw new ForbiddenError();
     }
 
+    // Note: Keep resolving app queries + actions until completion for final render below
     await loadAllData(store, () => {
-      // render the app to cause any other actions to go round the loop
-      renderApp(router, nonce, store, stores, routes, modalRegister);
+      renderApp(req.url, nonce, store, stores, modalRegister);
     });
 
-    // Note: Attempt competitionType query if available
-    content ??= getContent(stores, route);
+    onComplete(store, error);
+    res.send(renderApp(req.url, nonce, store, stores, modalRegister));
+  } catch (renderError: unknown) {
 
-    onComplete(store, stores, content, matched, params, error);
-
-    res.send(renderApp(router, nonce, store, stores, routes, modalRegister));
-  } catch (renderError) {
+    // TODO: add error handling for salesforce errors e.g. invalid project id
     // Note: capture stack trace for logs
-    new Logger(req.session?.user).error("Unable to render", renderError);
+    new Logger(req.session?.user).error((renderError as IAppError).message, renderError);
+    const errorStatusCode = getErrorStatus(renderError as IAppError);
+    const errorPayload = createErrorPayload(renderError as IAppError, false).params;
 
-    // Note: Error could return at any time, competitionType could never be available
-    content ??= new Content();
-
-    const isInvalidRoute = renderError instanceof NotFoundError;
-    const errorRoute: State = createErrorPayload(renderError, isInvalidRoute);
-
-    // Note: Were rendering only errors! Working on suppling least data as possible
-    const initialState = {
-      router: { route: errorRoute },
-      config: { ssoEnabled: configuration.sso.enabled },
-    } as RootState;
-
-    const store = createStore(rootReducer, initialState);
+    const auth = new Authorisation({});
+    const user: IClientUser = { roleInfo: auth.permissions, email: "", csrf: req.csrfToken() };
+    const initialState = setupInitialState(user, clientConfig);
+    const store = createStore(rootReducer, initialState, middleware);
 
     const stores = createStores(
       () => store.getState(),
       action => process.nextTick(() => store.dispatch(action as AnyAction)),
     );
 
-    const matched = matchRoute(errorRoute);
+    // Note: Keep resolving app queries + actions until completion for final render below
+    await loadAllData(store, () => {
+      renderApp(req.url, nonce, store, stores, modalRegister);
+    });
 
-    store.dispatch(Actions.setPageTitle(matched.getTitle({ params: errorRoute.params, stores, content })));
+    store.dispatch(Actions.setError(errorPayload));
 
-    const errorStatusCode = getErrorStatus(renderError);
-    const errorHtml = renderApp(router, nonce, store, stores, routes, new ModalRegister());
-
-    res.status(errorStatusCode).send(errorHtml);
+    res.status(errorStatusCode).send(renderApp(routeConfig.error.routePath, nonce, store, stores, modalRegister));
   }
 }
 
@@ -144,16 +120,9 @@ function loadAllData(store: Store, render: () => void): Promise<void> {
   });
 }
 
-const onComplete = (
-  store: Store,
-  stores: IStores,
-  content: Content,
-  matched: MatchedRoute,
-  params: {},
-  error?: FormHandlerError,
-) => {
+function onComplete(store: Store, error?: FormHandlerError) {
   // validation error occurred so add it into store as validation error
-  if (error && error.code === ErrorCode.VALIDATION_ERROR) {
+  if (error?.code === ErrorCode.VALIDATION_ERROR) {
     store.dispatch(Actions.updateEditorAction(error.key, error.store, error.dto, error.error.results!));
   } else if (error) {
     // some other validation error occurred so add it into store as actual error
@@ -170,48 +139,31 @@ const onComplete = (
       }),
     );
   }
-
-  store.dispatch(Actions.setPageTitle(matched.getTitle({ params, stores, content })));
-};
-
-// wrap callback in Promise so we use await for consistency
-function startRouter(req: Request, router: Router): Promise<State> {
-  return new Promise((resolve, reject) => {
-    router.start(req.originalUrl, (routeError, route) => {
-      if (routeError || !route) {
-        return reject(routeError);
-      }
-
-      return resolve(route);
-    });
-  });
 }
 
 function renderApp(
-  router: Router,
+  requestUrl: string,
   nonce: string,
   store: Store<RootState>,
   stores: IStores,
-  routes: IRoutes,
   modalRegister: ModalRegister,
 ): string {
+  const state = store.getState();
   const html = renderToString(
     <Provider store={store}>
-      <RouterProvider router={router}>
+      <StaticRouter location={requestUrl}>
         <StoresProvider value={stores}>
           <ModalProvider value={modalRegister}>
-            <RoutesProvider value={routes}>
-              <App store={store} />
-            </RoutesProvider>
+            <App store={store} />
           </ModalProvider>
         </StoresProvider>
-      </RouterProvider>
+      </StaticRouter>
     </Provider>,
   );
+  // Note: Must be called after "renderToString"
+  const helmet = Helmet.renderStatic();
 
-  const state = store.getState();
-
-  return renderHtml(html, state.title.htmlTitle, state, nonce);
+  return renderHtml(helmet, html, state, nonce);
 }
 
 function getClientConfig(context: IContext): IClientConfig {
@@ -221,18 +173,4 @@ function getClientConfig(context: IContext): IClientConfig {
     ssoEnabled: context.config.sso.enabled,
     options: context.config.options,
   };
-}
-
-// Note: This has to be ran after store has been populated as it will never return a 'competitionType' value
-function getContent(stores: ReturnType<typeof createStores>, resolvedRoute: State): Content {
-  const { projectId } = resolvedRoute.params;
-
-  if (!projectId) return new Content();
-
-  const projectPending = stores.projects.getById(projectId);
-  const resolvedPendingCompetition = projectPending.then(x => x.competitionType).data;
-
-  const competitionTypeValue = resolvedPendingCompetition ?? undefined;
-
-  return new Content(competitionTypeValue);
 }

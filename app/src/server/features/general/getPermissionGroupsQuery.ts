@@ -1,10 +1,10 @@
-import { IContext, PermissionGroupIdenfifier } from "@framework/types";
+import { IContext, PermissionGroupIdentifier } from "@framework/types";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { BadRequestError, QueryBase } from "../common";
 
 export class GetPermissionGroupQuery extends QueryBase<PermissionGroup> {
 
-  constructor(private readonly identifier: PermissionGroupIdenfifier) {
+  constructor(private readonly identifier: PermissionGroupIdentifier) {
     super();
   }
 
@@ -14,8 +14,8 @@ export class GetPermissionGroupQuery extends QueryBase<PermissionGroup> {
 
     const result = all.find(y => y.identifier === this.identifier);
 
-    if (!result || this.identifier === PermissionGroupIdenfifier.Unknown) {
-      throw new BadRequestError(`Unable to load permission group for identifier ${PermissionGroupIdenfifier[this.identifier]}`);
+    if (!result || this.identifier === PermissionGroupIdentifier.Unknown) {
+      throw new BadRequestError(`Unable to load permission group for identifier ${PermissionGroupIdentifier[this.identifier]}`);
     }
 
     return result;

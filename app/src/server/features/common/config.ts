@@ -1,7 +1,6 @@
 import bytes from "bytes";
 import { parseLogLevel } from "@framework/types/logLevel";
 import { IAppOptions } from "@framework/types/IAppOptions";
-import { isNumber } from "@framework/util";
 import { IFeatureFlags, LogLevel } from "@framework/types";
 
 const defaultCacheTimeout = 720;

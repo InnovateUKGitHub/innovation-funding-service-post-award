@@ -1,7 +1,7 @@
 
-export * from "./projectSetup";
-export * from "./projectSetupPartnerPostcode";
-export * from "./projectSetupSpendProfile";
-export * from "./projectSetupBankDetails";
-export * from "./projectSetupBankStatement";
-export * from "./projectSetupBankDetailsVerify";
+export * from "./projectSetup.page";
+export * from "./projectSetupPartnerPostcode.page";
+export * from "./projectSetupSpendProfile.page";
+export * from "./projectSetupBankDetails.page";
+export * from "./projectSetupBankStatement.page";
+export * from "./projectSetupBankDetailsVerify.page";

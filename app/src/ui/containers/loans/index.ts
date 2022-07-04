@@ -1,2 +1,2 @@
-export * from "./overview";
-export * from "./request";
+export * from "./overview.page";
+export * from "./request.page";

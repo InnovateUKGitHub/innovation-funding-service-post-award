@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
@@ -99,7 +100,6 @@ function EditPartnerLevelComponent(props: EditPartnerLevelProps & FinancialVirem
               pcrId: props.pcrId,
               itemId: props.itemId,
             })}
-            preserveData
           >
             {props.content.backToSummary}
           </ACC.BackLink>
@@ -149,7 +149,7 @@ function EditPartnerLevelComponent(props: EditPartnerLevelProps & FinancialVirem
                     <VirementTable.Percentage
                       qa="fundingLevel"
                       header={props.content.originalFundingLevel}
-                      value={(x) => x.virement.originalFundingLevel}
+                      value={x => x.virement.originalFundingLevel}
                       footer={<ACC.Renderers.Percentage value={editor.data.originalFundingLevel} />}
                       isDivider="normal"
                     />
@@ -191,7 +191,7 @@ function EditPartnerLevelComponent(props: EditPartnerLevelProps & FinancialVirem
                     <VirementTable.Percentage
                       qa="newLevel"
                       header={props.content.newFundingLevel}
-                      value={(x) => x.virement.newFundingLevel}
+                      value={x => x.virement.newFundingLevel}
                       footer={<ACC.Renderers.Percentage value={editor.data.newFundingLevel} />}
                     />
                   </VirementTable.Table>
@@ -209,9 +209,9 @@ function EditPartnerLevelComponent(props: EditPartnerLevelProps & FinancialVirem
 }
 
 const Container = (props: FinancialVirementParams & BaseProps) => {
-  const { projects, partners, financialVirements, navigation } = useStores();
+  const { projects, partners, financialVirements } = useStores();
   const editPartnerLevelContent = useEditPartnerLevelContent();
-
+  const navigate = useNavigate();
   return (
     <EditPartnerLevelComponent
       content={editPartnerLevelContent}
@@ -227,13 +227,12 @@ const Container = (props: FinancialVirementParams & BaseProps) => {
           dto,
           true,
           () =>
-            navigation.navigateTo(
+            navigate(
               props.routes.pcrPrepareItem.getLink({
                 projectId: props.projectId,
                 pcrId: props.pcrId,
                 itemId: props.itemId,
-              }),
-              true,
+              }).path,
             ),
         )
       }

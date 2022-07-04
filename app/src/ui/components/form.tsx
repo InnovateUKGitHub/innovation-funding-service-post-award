@@ -59,12 +59,13 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
     this.props.onSubmit();
   }
 
-  // TODO: Refator '"editor" in props' when tsc is updated, it cannot infer when made a variable :(
+  // TODO: Refactor '"editor" in props' when tsc is updated, it cannot infer when made a variable :(
   public render() {
     const { enctype, isGet, qa, children, onChange, onSubmit, ...props } = this.props;
 
     const isFormDisabled = "editor" in props ? props.editor.status === EditorStatus.Saving : props.isSaving;
 
+    // TODO: find out why we need to spread onSubmit and onChange on to each of the immediate children of the form.
     const childrenWithProps = React.Children.toArray(children).map((child, index) => {
       const formData = "editor" in props ? props.editor.data : props.data;
 

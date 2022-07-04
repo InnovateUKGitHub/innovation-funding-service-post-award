@@ -6,7 +6,7 @@ import { Link } from "../links";
 interface ClaimDetailsBaseProps {
   claim: Pick<ClaimDto, "status" | "periodId">;
   project: Pick<ProjectDto, "id" | "status" | "roles">;
-  partner: Pick<PartnerDto, "id" | "roles" | "partnerStatus">;
+  partner: Pick<PartnerDto, "id" | "roles" | "partnerStatus" | "isWithdrawn">;
 }
 
 export interface ClaimDetailsLinkRoutes extends ClaimDetailsBaseProps {
@@ -42,7 +42,11 @@ export function ClaimDetailsLink({ claim, partner, project, routes }: ClaimDetai
     },
   };
 
-  return <div className="claim-details-link-wrapper"><Link {...linkTypeOptions[linkType]} /></div>;
+  return (
+    <div className="claim-details-link-wrapper">
+      <Link {...linkTypeOptions[linkType]} />
+    </div>
+  );
 }
 
 export function getClaimDetailsLinkType({
@@ -50,7 +54,9 @@ export function getClaimDetailsLinkType({
   partner,
   claim,
 }: ClaimDetailsBaseProps): "edit" | "review" | "view" | null {
-  if (partner.partnerStatus === PartnerStatus.OnHold) return "view";
+  if (partner.partnerStatus === PartnerStatus.OnHold || partner.isWithdrawn) {
+    return "view";
+  }
 
   const { isMo: isProjectMo, isPm: isProjectPm, isPmOrMo: isProjectPmOrMo } = getAuthRoles(project.roles);
   const isPartnerFc = getAuthRoles(partner.roles).isFc;

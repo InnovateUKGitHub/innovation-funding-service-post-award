@@ -1,5 +1,5 @@
 import { DocumentDescription } from "@framework/constants";
-import { SalesforceBaseMapper } from "@server/repositories/mappers/saleforceMapperBase";
+import { SalesforceBaseMapper } from "@server/repositories/mappers/salesforceMapperBase";
 import { ISalesforceDocument } from "@server/repositories";
 import { DocumentEntity } from "@framework/entities/document";
 

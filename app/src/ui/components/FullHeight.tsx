@@ -4,11 +4,11 @@ interface LayoutProps {
 }
 
 function Container(props: LayoutProps) {
-  return <div {...props} className="full-height-container" />;
+  return <div className="full-height-container" {...props} />;
 }
 
 function Content(props: LayoutProps) {
-  return <div {...props} className="full-height-content" />;
+  return <div className="full-height-content" {...props} />;
 }
 
 // Note: These are exported under a variable as they have to work in tandem, this approach makes it clearer during usage.

@@ -2,12 +2,10 @@ import React from "react";
 import { hydrate } from "react-dom";
 import i18next from "i18next";
 import { Provider } from "react-redux";
-import { RouterProvider } from "react-router5";
+import { BrowserRouter } from "react-router-dom";
 import { AnyAction, createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
-
 import * as Actions from "@ui/redux/actions";
-import { configureRouter, routeConfig } from "@ui/routing";
 import { processDto } from "@shared/processResponse";
 import { App } from "@ui/containers/app";
 import {
@@ -16,7 +14,6 @@ import {
   ModalProvider,
   ModalRegister,
   rootReducer,
-  RoutesProvider,
   setupClientMiddleware,
   StoresConsumer,
   StoresProvider,
@@ -28,9 +25,7 @@ import { getPolyfills } from "./polyfill";
 // eslint-disable-next-line no-underscore-dangle
 const serverState = processDto((window as any).__PRELOADED_STATE__);
 
-const routes = routeConfig;
-const router = configureRouter(routes);
-const middleware = composeWithDevTools(setupClientMiddleware(router));
+const middleware = composeWithDevTools(setupClientMiddleware());
 const store = createStore(rootReducer, serverState, middleware);
 
 // factory to make the stores for the provider
@@ -47,17 +42,19 @@ const getStores = () => {
 // make sure middleware and reducers have run
 store.dispatch(Actions.initaliseAction());
 
-function Client() {
-  return (
-    // @todo remove once react/redux connect can be removed
-    <Provider store={store}>
-      <RouterProvider router={router}>
-        <StoresProvider value={getStores()}>
-          <StoresConsumer>{stores => <AppWithContent stores={stores} store={store} />}</StoresConsumer>
-        </StoresProvider>
-      </RouterProvider>
-    </Provider>
-  );
+class Client extends React.Component<{}> {
+  render() {
+    return (
+      // @todo remove once react/redux connect can be removed
+      <Provider store={store}>
+        <BrowserRouter>
+          <StoresProvider value={getStores()}>
+            <StoresConsumer>{stores => <AppWithContent stores={stores} store={store} />}</StoresConsumer>
+          </StoresProvider>
+        </BrowserRouter>
+      </Provider>
+    );
+  }
 }
 
 class AppWithContent extends React.Component<{ stores: IStores; store: typeof store }> {
@@ -70,11 +67,9 @@ class AppWithContent extends React.Component<{ stores: IStores; store: typeof st
 
   render() {
     return (
-      <RoutesProvider value={routes}>
-        <ModalProvider value={new ModalRegister()}>
-          <App store={store} />
-        </ModalProvider>
-      </RoutesProvider>
+      <ModalProvider value={new ModalRegister()}>
+        <App store={store} />
+      </ModalProvider>
     );
   }
 }
@@ -109,4 +104,4 @@ getPolyfills()
         i18next.addResourceBundle("en", "default", content, true, true);
       });
   })
-  .then(() => router.start(() => hydrate(<Client />, document.getElementById("root"))));
+  .then(() => hydrate(<Client />, document.getElementById("root")));
