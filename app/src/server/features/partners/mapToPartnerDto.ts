@@ -17,7 +17,7 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
   constructor(
     private readonly item: Partner,
     private readonly partnerLevelRoles: ProjectRole,
-    private readonly projectLevelRoles: ProjectRole
+    private readonly projectLevelRoles: ProjectRole,
   ) {
     super();
   }
@@ -48,7 +48,9 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
       projectId: this.item.projectId,
       totalParticipantGrant: this.valueIfPermission(this.item.totalParticipantCosts),
       totalParticipantCostsClaimed: this.valueIfPermission(this.item.totalApprovedCosts),
-      percentageParticipantCostsClaimed: this.valueIfPermission(this.calcPercentageClaimed(this.item.totalParticipantCosts, this.item.totalApprovedCosts)),
+      percentageParticipantCostsClaimed: this.valueIfPermission(
+        this.calcPercentageClaimed(this.item.totalParticipantCosts, this.item.totalApprovedCosts),
+      ),
       awardRate: this.valueIfPermission(this.item.awardRate),
       capLimit: this.valueIfPermission(this.item.capLimit),
       totalPaidCosts: this.valueIfPermission(this.item.totalPaidCosts),
@@ -64,17 +66,33 @@ export class MapToPartnerDtoCommand extends SyncCommandBase<PartnerDto> {
       overheadRate: this.valueIfPermission(this.item.overheadRate) || null,
       partnerStatus,
       partnerStatusLabel: this.item.participantStatusLabel,
-      isWithdrawn: [PartnerStatus.VoluntaryWithdrawal, PartnerStatus.InvoluntaryWithdrawal].indexOf(partnerStatus) >= 0,
+      isWithdrawn:
+        [
+          PartnerStatus.VoluntaryWithdrawal,
+          PartnerStatus.InvoluntaryWithdrawal,
+          PartnerStatus.MigratedWithdrawn,
+        ].indexOf(partnerStatus) >= 0,
       totalCostsAwarded: this.item.totalCostsAwarded,
       auditReportFrequencyName: this.item.auditReportFrequencyName,
       totalPrepayment: this.item.totalPrepayment,
-      percentageParticipantCostsSubmitted: this.valueIfPermission(this.calcPercentageClaimed(this.item.totalParticipantCosts, this.item.totalCostsSubmitted)),
+      percentageParticipantCostsSubmitted: this.valueIfPermission(
+        this.calcPercentageClaimed(this.item.totalParticipantCosts, this.item.totalCostsSubmitted),
+      ),
       totalFundingDueToReceive: this.valueIfPermission(this.item.totalParticipantCosts * (this.item.awardRate / 100)), // TODO update calc here?
       newForecastNeeded: this.item.newForecastNeeded,
       // For active partners initialise these as complete as they may not have come through the acc ui and therefore not be set correctly
-      spendProfileStatus: partnerStatus === PartnerStatus.Active ? SpendProfileStatus.Complete : new PartnerSpendProfileStatusMapper().mapFromSalesforce(this.item.spendProfileStatus),
-      bankCheckStatus: partnerStatus === PartnerStatus.Active ? BankCheckStatus.VerificationPassed : new BankCheckStatusMapper().mapFromSalesforce(this.item.bankCheckStatus),
-      bankDetailsTaskStatus: partnerStatus === PartnerStatus.Active ? BankDetailsTaskStatus.Complete : new BankDetailsTaskStatusMapper().mapFromSalesforce(this.item.bankDetailsTaskStatus),
+      spendProfileStatus:
+        partnerStatus === PartnerStatus.Active
+          ? SpendProfileStatus.Complete
+          : new PartnerSpendProfileStatusMapper().mapFromSalesforce(this.item.spendProfileStatus),
+      bankCheckStatus:
+        partnerStatus === PartnerStatus.Active
+          ? BankCheckStatus.VerificationPassed
+          : new BankCheckStatusMapper().mapFromSalesforce(this.item.bankCheckStatus),
+      bankDetailsTaskStatus:
+        partnerStatus === PartnerStatus.Active
+          ? BankDetailsTaskStatus.Complete
+          : new BankDetailsTaskStatusMapper().mapFromSalesforce(this.item.bankDetailsTaskStatus),
       spendProfileStatusLabel: this.item.spendProfileStatusLabel,
       totalGrantApproved: this.item.totalGrantApproved,
       remainingParticipantGrant: this.item.remainingParticipantGrant,
@@ -281,6 +299,7 @@ export class PartnerStatusMapper {
     onHold: "On Hold",
     involuntaryWithdrawal: "Involuntary Withdrawal",
     voluntaryWithdrawal: "Voluntary Withdrawal",
+    migratedWithdrawn: "Migrated - Withdrawn",
     pending: "Pending",
   };
 
@@ -296,6 +315,8 @@ export class PartnerStatusMapper {
         return PartnerStatus.Pending;
       case this.options.voluntaryWithdrawal:
         return PartnerStatus.VoluntaryWithdrawal;
+      case this.options.migratedWithdrawn:
+        return PartnerStatus.MigratedWithdrawn;
       default:
         return PartnerStatus.Unknown;
     }
@@ -313,6 +334,8 @@ export class PartnerStatusMapper {
         return this.options.pending;
       case PartnerStatus.VoluntaryWithdrawal:
         return this.options.voluntaryWithdrawal;
+      case PartnerStatus.MigratedWithdrawn:
+        return this.options.migratedWithdrawn;
       default:
         return undefined;
     }

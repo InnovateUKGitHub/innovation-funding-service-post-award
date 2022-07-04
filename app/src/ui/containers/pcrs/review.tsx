@@ -1,4 +1,4 @@
-
+import { useNavigate } from "react-router-dom";
 import { ProjectDto, ProjectRole } from "@framework/types";
 
 import * as ACC from "@ui/components";
@@ -29,15 +29,34 @@ interface Callbacks {
 
 class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks> {
   render() {
-    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, editor: this.props.editor, editableItemTypes: this.props.editableItemTypes });
+    const combined = Pending.combine({
+      project: this.props.project,
+      pcr: this.props.pcr,
+      editor: this.props.editor,
+      editableItemTypes: this.props.editableItemTypes,
+    });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editor, x.editableItemTypes)} />;
+    return (
+      <ACC.PageLoader
+        pending={combined}
+        render={x => this.renderContents(x.project, x.pcr, x.editor, x.editableItemTypes)}
+      />
+    );
   }
 
-  private renderContents(project: ProjectDto, projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
+  private renderContents(
+    project: ProjectDto,
+    projectChangeRequest: PCRDto,
+    editor: IEditorStore<PCRDto, PCRDtoValidator>,
+    editableItemTypes: PCRItemType[],
+  ) {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
+        backLink={
+          <ACC.BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>
+            Back to project change requests
+          </ACC.BackLink>
+        }
         pageTitle={<ACC.Projects.Title {...project} />}
         project={project}
         validator={editor.validator}
@@ -56,13 +75,21 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
       <ACC.Section title="Details">
         <ACC.SummaryList qa="pcrDetails">
           <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
-          <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />} qa="typesRow" />
+          <ACC.SummaryListItem
+            label="Types"
+            content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />}
+            qa="typesRow"
+          />
         </ACC.SummaryList>
       </ACC.Section>
     );
   }
 
-  private renderTasks(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
+  private renderTasks(
+    projectChangeRequest: PCRDto,
+    editor: IEditorStore<PCRDto, PCRDtoValidator>,
+    editableItemTypes: PCRItemType[],
+  ) {
     return (
       <ACC.List qa="taskList">
         {this.renderTaskListActions(projectChangeRequest, editor, editableItemTypes)}
@@ -94,7 +121,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
             inline={false}
             options={options}
             value={() => selected}
-            update={(m, v) => m.status = parseInt(v && v.id || "", 10) || PCRStatus.Unknown}
+            update={(m, v) => (m.status = parseInt((v && v.id) || "", 10) || PCRStatus.Unknown)}
             validation={editor.validator.status}
           />
         </Form.Fieldset>
@@ -104,7 +131,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
             label=""
             hint="If you query the request, you must explain what the partner needs to amend. If you are sending it to Innovate UK, you must say whether you approve of the request, giving a reason why."
             value={m => m.comments}
-            update={(m, v) => m.comments = (v || "")}
+            update={(m, v) => (m.comments = v || "")}
             validation={editor.validator.comments}
             characterCountOptions={{ type: "descending", maxValue: PCRDtoValidator.maxCommentsLength }}
           />
@@ -116,7 +143,11 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
     );
   }
 
-  private renderTaskListActions(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>, editableItemTypes: PCRItemType[]) {
+  private renderTaskListActions(
+    projectChangeRequest: PCRDto,
+    editor: IEditorStore<PCRDto, PCRDtoValidator>,
+    editableItemTypes: PCRItemType[],
+  ) {
     if (!editableItemTypes.length) return null;
     const editableItems = projectChangeRequest.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
 
@@ -136,7 +167,10 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
         <ACC.Task
           name="Reasoning for Innovate UK"
           status={getPcrItemTaskStatus(projectChangeRequest.reasoningStatus)}
-          route={this.props.routes.pcrReviewReasoning.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
+          route={this.props.routes.pcrReviewReasoning.getLink({
+            projectId: this.props.projectId,
+            pcrId: this.props.pcrId,
+          })}
         />
       </ACC.TaskListSection>
     );
@@ -146,9 +180,14 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
 
     return (
       <ACC.Task
+        key={item.typeName}
         name={item.typeName}
         status={getPcrItemTaskStatus(item.status)}
-        route={this.props.routes.pcrReviewItem.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
+        route={this.props.routes.pcrReviewItem.getLink({
+          projectId: this.props.projectId,
+          pcrId: this.props.pcrId,
+          itemId: item.id,
+        })}
         validation={validationErrors}
       />
     );
@@ -162,9 +201,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
             {/* Keeping logs inside loader because accordion defaults to closed*/}
             <ACC.Loader
               pending={this.props.statusChanges}
-              render={(statusChanges) => (
-                <ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" />
-              )}
+              render={statusChanges => <ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" />}
             />
           </ACC.AccordionItem>
         </ACC.Accordion>
@@ -174,6 +211,7 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
 }
 
 const PCRReviewContainer = (props: PCRReviewParams & BaseProps) => {
+  const navigate = useNavigate();
   const stores = useStores();
 
   return (
@@ -189,9 +227,9 @@ const PCRReviewContainer = (props: PCRReviewParams & BaseProps) => {
         x => (x.status = PCRStatus.Unknown),
       )}
       onChange={(save, dto) =>
-        stores.projectChangeRequests.updatePcrEditor(save, props.projectId, dto, undefined, () =>
-          stores.navigation.navigateTo(props.routes.pcrsDashboard.getLink({ projectId: props.projectId })),
-        )
+        stores.projectChangeRequests.updatePcrEditor(save, props.projectId, dto, undefined, () => {
+          navigate(props.routes.pcrsDashboard.getLink({ projectId: props.projectId }).path);
+        })
       }
       editableItemTypes={stores.projectChangeRequests.getEditableItemTypes(props.projectId, props.pcrId)}
     />
@@ -202,13 +240,13 @@ export const PCRReviewRoute = defineRoute({
   routeName: "pcrReview",
   routePath: "/projects/:projectId/pcrs/:pcrId/review",
   container: PCRReviewContainer,
-  getParams: (route) => ({
+  getParams: route => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
   }),
   getTitle: () => ({
     htmlTitle: "Request",
-    displayTitle: "Request"
+    displayTitle: "Request",
   }),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer)
+  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
 });

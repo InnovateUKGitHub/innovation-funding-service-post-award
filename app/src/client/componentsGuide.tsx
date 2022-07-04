@@ -1,25 +1,7 @@
 import ReactDom from "react-dom";
-import { combineReducers, createStore } from "redux";
-import { Provider } from "react-redux";
-
 import { Content } from "@content/content";
-import { PageTitleState } from "@ui/redux/reducers/pageTitleReducer";
 import { Guide } from "@ui/componentsGuide/guide";
-
 import { TestBed } from "@shared/TestBed";
-
-const exampleTitle: PageTitleState = {
-  displayTitle: "Component guide example title",
-  htmlTitle: "Example title",
-};
-
-const reducer = combineReducers({
-  title: (s: PageTitleState = exampleTitle) => s,
-});
-
-const store = createStore(reducer, {
-  title: exampleTitle,
-});
 
 const ClientGuide = () => {
   function getGuide(): string {
@@ -43,11 +25,9 @@ const ClientGuide = () => {
   }
 
   return (
-    <Provider store={store}>
-      <TestBed content={new Content()}>
-        <Guide source="client" filter={getGuide()} />
-      </TestBed>
-    </Provider>
+    <TestBed content={new Content()} shouldOmitRouterProvider>
+      <Guide source="client" filter={getGuide()} />
+    </TestBed>
   );
 };
 

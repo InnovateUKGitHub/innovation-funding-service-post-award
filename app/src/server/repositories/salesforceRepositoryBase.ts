@@ -2,7 +2,7 @@ import { Stream } from "stream";
 import { Connection, DescribeSObjectResult, Field, Query, RecordResult, SuccessResult } from "jsforce";
 
 import * as Errors from "@server/repositories/errors";
-import { ISalesforceMapper } from "@server/repositories/mappers/saleforceMapperBase";
+import { ISalesforceMapper } from "@server/repositories/mappers/salesforceMapperBase";
 import { BadRequestError, configuration, ILogger } from "@server/features/common";
 import { IPicklistEntry } from "@framework/types";
 import { createBatch } from "@shared/create-batch";
@@ -89,7 +89,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
       if (!targetObject) return null;
 
       return this.mapper.map(targetObject);
-    } catch (e) {
+    } catch (e: any) {
       if (e.errorCode === "MALFORMED_ID" || e.errorCode === "NOT_FOUND") {
         return null;
       } else {
@@ -397,7 +397,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
    * A batch is determined from a config value. This config has been set to the max payload size SF can handle on each request, thus removing SF query errors.
    *
    */
-  private batchRequest<BatchType extends any[], Response extends any>(
+  private batchRequest<BatchType extends any[], Response>(
     payload: BatchType,
     request: (batchPayload: BatchType) => Promise<Response>,
   ): Promise<Response[]> {

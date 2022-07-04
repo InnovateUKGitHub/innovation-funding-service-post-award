@@ -7,7 +7,7 @@ import {
   ProjectChangeRequestItemForCreateEntity,
 } from "@framework/entities";
 import { ILogger } from "@server/features/common/logger";
-import { NotFoundError } from "@server/features/common";
+import { NotFoundError } from "@shared/appError";
 import { PCRItemStatus, PCRStatus } from "@framework/constants";
 import { IPicklistEntry } from "@framework/types";
 import {

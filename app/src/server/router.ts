@@ -5,7 +5,7 @@ import { healthRouter } from "@server/health";
 import { router as apiRoutes } from "@server/apis";
 
 import { configureFormRouter } from "@server/forms/formRouter";
-import { NotFoundError } from "@server/features/common/appError";
+import { NotFoundError } from "@shared/appError";
 import { serverRender } from "@server/serverRender";
 import { componentGuideRender } from "@server/componentGuideRender";
 
@@ -20,6 +20,8 @@ const csrfProtection = csrf();
 
 // App routes
 router.use("/api", apiRoutes);
+
+// TODO: should scope this for dev access only (e.g. check for sso enabled)
 router.use("/components", csrfProtection, componentGuideRender);
 
 // Form posts

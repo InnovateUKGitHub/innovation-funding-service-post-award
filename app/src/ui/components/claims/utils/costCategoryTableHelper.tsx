@@ -1,5 +1,5 @@
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { ClaimDto, CostCategoryType, CostsSummaryForPeriodDto, PartnerDto, ProjectDto } from "@framework/types";
+import { ClaimDto, CostCategoryType, CostsSummaryForPeriodDto, PartnerDto, ProjectDto, PCROrganisationType } from "@framework/types";
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 
 import { Link } from "@ui/components";
@@ -103,7 +103,7 @@ function calculateTotalRow(claimDetails: ClaimProps["claimDetails"]): ClaimTable
       isCalculated: false,
       hasRelated: false,
       competitionType: "Unknown",
-      organisationType: "Unknown",
+      organisationType: PCROrganisationType.Unknown ,
       description: "",
       hintText: "",
     },

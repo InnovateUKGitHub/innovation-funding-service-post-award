@@ -18,12 +18,12 @@ const getProjectNotes = ({ section, project, partner }: ProjectProps): JSX.Eleme
   messages.push(<>{project.leadPartnerName}</>);
 
   if (section === "upcoming") {
-    const upcommingMessage = <ACC.Renderers.ShortDateRange start={project.startDate} end={project.endDate} />;
+    const upcomingMessage = <ACC.Renderers.ShortDateRange start={project.startDate} end={project.endDate} />;
 
-    messages.push(upcommingMessage);
+    messages.push(upcomingMessage);
   }
 
-  // Note: If project is not availble then just bail early!
+  // Note: If project is not available then just bail early!
   if (isNotAvailable) return messages;
 
   if (project.isPastEndDate || isPartnerWithdrawn) {
@@ -82,8 +82,12 @@ const useProjectActions = ({ section, project, partner }: ProjectProps): string[
     }
 
     if (isMo) {
-      project.claimsToReview && messages.push(getContent(x => x.projectsDashboard.messages.claimsToReview(project.claimsToReview)));
-      project.pcrsToReview && messages.push(getContent(x => x.projectsDashboard.messages.pcrsToReview(project.pcrsToReview)));
+      if (project.claimsToReview) {
+        messages.push(getContent(x => x.projectsDashboard.messages.claimsToReview(project.claimsToReview)));
+      }
+      if (project.pcrsToReview) {
+        messages.push(getContent(x => x.projectsDashboard.messages.pcrsToReview(project.pcrsToReview)));
+      }
     }
 
     if (isPm && hasQueriedPcrs) {
@@ -114,15 +118,15 @@ const hasProjectAction = ({ section, project, partner }: ProjectProps): boolean 
   if (hasPmOrMoClaims || hasMoClaimsDue) return true;
 
   if (partner) {
-    const hasClaimsOverdue = partner.claimsOverdue && partner.claimsOverdue > 0;
+    const hasPartnerClaimsOverdue = partner.claimsOverdue && partner.claimsOverdue > 0;
     const hasIarRequiredClaim = partner.claimStatus === PartnerClaimStatus.IARRequired;
 
-    const hasOutstandingActions = hasClaimsOverdue || hasIarRequiredClaim;
+    const hasOutstandingActions = hasPartnerClaimsOverdue || hasIarRequiredClaim;
 
-    const unsubmitedStatuses = [PartnerClaimStatus.ClaimSubmitted, PartnerClaimStatus.NoClaimsDue];
-    const hasUnsubmittedClaims = unsubmitedStatuses.every(x => x !== partner.claimStatus);
+    const unSubmittedStatuses = [PartnerClaimStatus.ClaimSubmitted, PartnerClaimStatus.NoClaimsDue];
+    const hasUnSubmittedClaims = unSubmittedStatuses.every(x => x !== partner.claimStatus);
 
-    if (hasOutstandingActions || hasUnsubmittedClaims) return true;
+    if (hasOutstandingActions || hasUnSubmittedClaims) return true;
   }
 
   return false;
@@ -146,7 +150,7 @@ function DashboardProject(props: DashboardProjectProps) {
   const titleValue = generateTitle(props);
   const displayAction = hasProjectAction(props);
   const projectActions = useProjectActions(props);
-  const prohectNotes = getProjectNotes(props);
+  const projectNotes = getProjectNotes(props);
 
   return (
     <ACC.ListItem key={props.project.id} actionRequired={displayAction} qa={`project-${props.project.projectNumber}`}>
@@ -156,7 +160,7 @@ function DashboardProject(props: DashboardProjectProps) {
             {titleValue}
           </ACC.H4>
 
-          {prohectNotes.map((note, i) => (
+          {projectNotes.map((note, i) => (
             <div key={i} className="govuk-body-s govuk-!-margin-bottom-0">
               {note}
             </div>

@@ -1,6 +1,6 @@
 import { apiClient } from "@ui/apiClient";
 import { Pending } from "@shared/pending";
-import { NotFoundError } from "@server/features/common";
+import { NotFoundError } from "@shared/appError";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { FinancialVirementDtoValidator } from "@ui/validators";
 import { FinancialVirementDto, PartnerVirementsDto } from "@framework/dtos";

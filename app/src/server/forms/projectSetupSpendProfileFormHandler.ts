@@ -1,6 +1,6 @@
 import { ILinkInfo } from "@framework/types/ILinkInfo";
 import { IContext } from "@framework/types/IContext";
-import { ForecastUpdateParams } from "@ui/containers/forecasts/update";
+import { ForecastUpdateParams } from "@ui/containers/forecasts/update.page";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { ProjectSetupRoute, ProjectSetupSpendProfileParams, ProjectSetupSpendProfileRoute } from "@ui/containers";
 import { GetAllInitialForecastsForPartnerQuery } from "@server/features/forecastDetails/getAllInitialForecastsForPartnerQuery";

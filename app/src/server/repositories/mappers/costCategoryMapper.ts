@@ -1,11 +1,11 @@
 import { CostCategoryName, CostCategoryType } from "@framework/constants";
 import { CostCategory } from "@framework/entities";
 import { ISalesforceCostCategory } from "../costCategoriesRepository";
-import { SalesforceBaseMapper } from "./saleforceMapperBase";
+import { SalesforceBaseMapper } from "./salesforceMapperBase";
 
 export class SalesforceCostCategoryMapper extends SalesforceBaseMapper<ISalesforceCostCategory, CostCategory> {
   private typeMapper(costCategory: ISalesforceCostCategory): CostCategoryType {
-    if (costCategory.Acc_OrganisationType__c === CostCategoryName.Academic) {
+    if (costCategory.Acc_OrganisationType__c === CostCategoryName.Academic.valueOf()) {
       return CostCategoryType.Academic;
     }
     // @TODO: get from SF -- this is nasty but no solution provided as yet from salesforce

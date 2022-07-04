@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import * as ACC from "@ui/components";
 import * as Dtos from "@framework/dtos";
 
@@ -141,6 +142,7 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
 
 const PCRAddTypeContainer = (props: ProjectChangeRequestAddTypeParams & BaseProps) => {
   const stores = useStores();
+  const navigate = useNavigate();
 
   return (
     <PCRAddTypeComponent
@@ -150,8 +152,8 @@ const PCRAddTypeContainer = (props: ProjectChangeRequestAddTypeParams & BaseProp
       editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.projectChangeRequestId)}
       onChange={(saving, dto) =>
         stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, () =>
-          stores.navigation.navigateTo(
-            props.routes.pcrPrepare.getLink({ projectId: props.projectId, pcrId: props.projectChangeRequestId }),
+          navigate(
+            props.routes.pcrPrepare.getLink({ projectId: props.projectId, pcrId: props.projectChangeRequestId }).path
           ),
         )
       }

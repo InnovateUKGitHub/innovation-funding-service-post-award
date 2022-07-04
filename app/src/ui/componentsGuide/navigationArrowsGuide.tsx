@@ -1,14 +1,12 @@
-import {Provider} from "react-redux";
-import {createStore} from "redux";
-import { RouterProvider } from "react-router5";
-import createRouter from "router5";
-import browserPluginFactory from "router5/plugins/browser";
+import { Provider } from "react-redux";
+import { Router } from "react-router-dom";
+import { createMemoryHistory } from "history";
+import { createStore } from "redux";
 import { IGuide, ILinkInfo } from "@framework/types";
-import {NavigationArrows} from "../components";
-import {rootReducer} from "../redux/reducers";
+import { NavigationArrows } from "../components";
+import { rootReducer } from "../redux/reducers";
 
 const route = { name: "test", path: "/components" } as any;
-const router = createRouter([route]).usePlugin(browserPluginFactory({ useHash: false }));
 
 interface DummyLink {
   label: string;
@@ -19,8 +17,9 @@ const previousLink: DummyLink = {
   label: "The previous item",
   route: {
     routeName: route.name,
+    path: route.name,
     routeParams: {},
-    accessControl: () => true
+    accessControl: () => true,
   },
 };
 
@@ -28,10 +27,13 @@ const nextLink: DummyLink = {
   label: "The next item",
   route: {
     routeName: route.name,
+    path: route.name,
     routeParams: {},
-    accessControl: () => true
+    accessControl: () => true,
   },
 };
+
+const history = createMemoryHistory();
 
 export const navigationArrowsGuide: IGuide = {
   name: "Navigation arrows",
@@ -42,11 +44,11 @@ export const navigationArrowsGuide: IGuide = {
       example: `<NavigationArrows previousLink={null} nextLink={nextLink} />`,
       render: () => (
         <Provider store={createStore(rootReducer)}>
-          <RouterProvider router={router}>
-            <NavigationArrows previousLink={null} nextLink={nextLink}/>
-          </RouterProvider>
+          <Router location={history.location} navigator={history}>
+            <NavigationArrows previousLink={null} nextLink={nextLink} />
+          </Router>
         </Provider>
-      )
+      ),
     },
     {
       name: "Middle cost category",
@@ -54,11 +56,11 @@ export const navigationArrowsGuide: IGuide = {
       example: `<NavigationArrows previousLink={previousLink} nextLink={previousLink} />`,
       render: () => (
         <Provider store={createStore(rootReducer)}>
-          <RouterProvider router={router}>
+          <Router location={history.location} navigator={history}>
             <NavigationArrows previousLink={previousLink} nextLink={nextLink} />
-          </RouterProvider>
+          </Router>
         </Provider>
-      )
+      ),
     },
     {
       name: "Last cost category",
@@ -66,11 +68,11 @@ export const navigationArrowsGuide: IGuide = {
       example: `<NavigationArrows previousLink={previousLink} nextLink={null} />`,
       render: () => (
         <Provider store={createStore(rootReducer)}>
-          <RouterProvider router={router}>
-            <NavigationArrows previousLink={previousLink} nextLink={null}/>
-          </RouterProvider>
+          <Router location={history.location} navigator={history}>
+            <NavigationArrows previousLink={previousLink} nextLink={null} />
+          </Router>
         </Provider>
-      )
-    }
-  ]
+      ),
+    },
+  ],
 };

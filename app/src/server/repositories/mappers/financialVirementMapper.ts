@@ -1,6 +1,6 @@
 import { CostCategoryFinancialVirement, PartnerFinancialVirement } from "@framework/entities";
 import { ISalesforceFinancialVirement } from "../financialVirementRepository";
-import { SalesforceBaseMapper } from "./saleforceMapperBase";
+import { SalesforceBaseMapper } from "./salesforceMapperBase";
 
 export class SalesforceFinancialVirementMapper extends SalesforceBaseMapper<
   ISalesforceFinancialVirement[],

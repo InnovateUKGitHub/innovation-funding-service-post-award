@@ -1,20 +1,21 @@
 export enum PartnerClaimStatus {
-  Unknown = 0,
-  NoClaimsDue = 1,
-  ClaimDue = 2,
-  ClaimsOverdue = 3,
-  ClaimQueried = 4,
-  ClaimSubmitted = 5,
-  IARRequired = 6,
+  Unknown,
+  NoClaimsDue,
+  ClaimDue,
+  ClaimsOverdue,
+  ClaimQueried,
+  ClaimSubmitted,
+  IARRequired,
 }
 
 export enum PartnerStatus {
-  Unknown = 0,
-  Active = 1,
-  OnHold = 2,
-  InvoluntaryWithdrawal = 3,
-  VoluntaryWithdrawal = 4,
-  Pending = 5,
+  Unknown,
+  Active,
+  OnHold,
+  InvoluntaryWithdrawal,
+  VoluntaryWithdrawal,
+  Pending,
+  MigratedWithdrawn,
 }
 
 export enum BankCheckStatus {

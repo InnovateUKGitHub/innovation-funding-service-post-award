@@ -1,5 +1,5 @@
 import { ErrorPayload } from "@shared/create-error-payload";
-import { PageTitle } from "@ui/components/layout";
+import { PageTitle } from "@ui/features/page-title";
 import { useContent } from "@ui/hooks";
 import { useStores } from "@ui/redux";
 

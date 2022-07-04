@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 
-import { AppError } from "@server/features/common";
+import { AppError } from "@shared/appError";
 import { createErrorPayload } from "@shared/create-error-payload";
 import { Pending } from "@shared/pending";
 import { IAppError } from "@framework/types/IAppError";
@@ -81,7 +81,7 @@ export function PageLoader<T>(props: LoadingProps<T>) {
 
     const error = createErrorPayload(renderError, hasRequestError).params;
 
-    return <ErrorContainer {...error} />;
+    return <ErrorContainer from="PageLoader" {...error} />;
   };
 
   return <Loader renderError={handleError} {...props} />;

@@ -1,23 +1,23 @@
 import { combineReducers } from "redux";
-import { router5Reducer, RouterState } from "redux-router5";
 import { IClientUser } from "@framework/types/IUser";
 import { historyReducer } from "@ui/redux/reducers/historyReducer";
+import { ErrorPayload } from "@shared/create-error-payload";
 import { dataReducer } from "./dataReducer";
 import { loadStatusReducer } from "./loadStatusReducer";
 import { editorReducer } from "./editorsReducer";
+import { errorReducer } from "./errorReducer";
 import { userReducer } from "./userReducer";
 import { messagesReducer } from "./messagesReducer";
 import { configReducer, IClientConfig } from "./configReducer";
-import { pageTitleReducer, PageTitleState } from "./pageTitleReducer";
 
 export type DataState = ReturnType<typeof dataReducer>;
 export type DataStateKeys = keyof DataState;
 export type EditorState = ReturnType<typeof editorReducer>;
 export type EditorStateKeys = keyof EditorState;
 export type MessagesState = ReturnType<typeof messagesReducer>;
+export type ErrorState = ReturnType<typeof errorReducer>;
 
 export interface RootState {
-  router: RouterState;
   data: DataState;
   editors: EditorState;
   history: number;
@@ -25,11 +25,10 @@ export interface RootState {
   messages: MessagesState;
   user: IClientUser;
   config: IClientConfig;
-  title: PageTitleState;
+  globalError: ErrorPayload["params"] | null;
 }
 
 export const rootReducer = combineReducers<RootState>({
-  router: router5Reducer,
   data: dataReducer,
   editors: editorReducer,
   history: historyReducer,
@@ -37,5 +36,5 @@ export const rootReducer = combineReducers<RootState>({
   messages: messagesReducer,
   user: userReducer,
   config: configReducer,
-  title: pageTitleReducer
+  globalError: errorReducer,
 });

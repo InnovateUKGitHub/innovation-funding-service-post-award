@@ -1,5 +1,5 @@
 import { useContent } from "@ui/hooks";
-import { PageTitle } from "@ui/components/layout";
+import { PageTitle } from "@ui/features/page-title";
 
 import { Page, Section } from "../layout";
 import { SimpleString } from "../renderers/simpleString";

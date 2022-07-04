@@ -1,6 +1,6 @@
 import { RecordType } from "@framework/entities";
 import { ISalesforceRecordType } from "../recordTypeRepository";
-import { SalesforceBaseMapper } from "./saleforceMapperBase";
+import { SalesforceBaseMapper } from "./salesforceMapperBase";
 
 export class SalesforceRecordTypeMapper extends SalesforceBaseMapper<ISalesforceRecordType, RecordType> {
   public map(item: ISalesforceRecordType): RecordType {

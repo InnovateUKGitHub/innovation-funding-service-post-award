@@ -1,4 +1,4 @@
-/* eslint-disable react/display-name */
+import { useNavigate } from "react-router-dom";
 import {
   ILinkInfo,
   PCRItemDto,
@@ -11,7 +11,7 @@ import {
 } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
 
-import { ForbiddenError } from "@server/features/common";
+import { ForbiddenError } from "@shared/appError";
 
 import { PCRDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
@@ -270,7 +270,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
       mode,
       onChange: itemDto => this.onChange(editor.data, itemDto),
       onSave: skipToSummary => this.onSave(workflow, editor.data, skipToSummary),
-      getRequiredToCompleteMessage: message => {
+      getRequiredToCompleteMessage: function RequiredToCompleteMessage(message) {
         const standardMessage = "This is required to complete this request.";
 
         if (!message) return standardMessage;
@@ -321,8 +321,8 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
       mode,
       config: this.props.config,
       messages: this.props.messages,
-      route: this.props.route,
       routes: this.props.routes,
+      currentRoute: this.props.currentRoute,
     });
   }
 
@@ -376,6 +376,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
   ) {
     const { mode } = this.props;
     const isPrepareMode = mode === "prepare";
+    const isReviewing = mode === "review";
     const displayNavigationArrows = mode === "review" || mode === "view";
 
     return (
@@ -396,7 +397,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
                 <NavigationArrowsForPCRs
                   pcr={pcr}
                   currentItem={pcrItem}
-                  isReviewing={isPrepareMode}
+                  isReviewing={isReviewing}
                   editableItemTypes={editableItemTypes}
                   routes={this.props.routes}
                 />
@@ -462,6 +463,7 @@ const PCRItemContainer = (
   props: ProjectChangeRequestPrepareItemParams & BaseProps & { mode: "prepare" | "review" | "view" },
 ) => {
   const stores = useStores();
+  const navigate = useNavigate();
 
   return (
     <PCRItemWorkflow
@@ -480,9 +482,9 @@ const PCRItemContainer = (
       )}
       onSave={(dto, link) => {
         stores.messages.clearMessages();
-        stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () =>
-          stores.navigation.navigateTo(link),
-        );
+        stores.projectChangeRequests.updatePcrEditor(true, props.projectId, dto, undefined, () => {
+          navigate(link.path);
+        });
       }}
       onChange={dto => {
         stores.messages.clearMessages();
@@ -512,7 +514,9 @@ export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParam
     itemId: route.params.itemId,
     pcrId: route.params.pcrId,
   }),
-  container: props => <PCRItemContainer {...props} mode="view" />,
+  container: function PCRViewItemContainer(props) {
+    return <PCRItemContainer {...props} mode="view" />;
+  },
   getTitle: ({ params, stores }) => getTitle("View project change request item", params, stores),
   accessControl: (auth, { projectId }) =>
     auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
@@ -520,8 +524,11 @@ export const PCRViewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParam
 
 export const PCRReviewItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
   routeName: "pcrReviewItem",
-  routePath: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId?:step",
-  container: props => <PCRItemContainer {...props} mode="review" />,
+  routePath: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId",
+  routePathWithQuery: "/projects/:projectId/pcrs/:pcrId/review/item/:itemId?:step",
+  container: function PCRReviewItemContainer(props) {
+    return <PCRItemContainer {...props} mode="review" />;
+  },
   getParams: route => ({
     projectId: route.params.projectId,
     itemId: route.params.itemId,
@@ -534,8 +541,11 @@ export const PCRReviewItemRoute = defineRoute<ProjectChangeRequestPrepareItemPar
 
 export const PCRPrepareItemRoute = defineRoute<ProjectChangeRequestPrepareItemParams>({
   routeName: "pcrPrepareItem",
-  routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId?:step",
-  container: props => <PCRItemContainer {...props} mode="prepare" />,
+  routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId",
+  routePathWithQuery: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId?:step",
+  container: function PCRPrepareItemContainer(props) {
+    return <PCRItemContainer {...props} mode="prepare" />;
+  },
   getParams: route => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,

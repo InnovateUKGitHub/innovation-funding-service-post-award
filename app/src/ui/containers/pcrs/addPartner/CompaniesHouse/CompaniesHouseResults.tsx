@@ -23,7 +23,7 @@ export function CompaniesHouseResults({ selectedRegistrationNumber, options, onS
     if (newSelectedCompany) onSelect(newSelectedCompany);
   };
 
-  const compayOptions: ACC.SelectOption[] = useMemo(() => {
+  const companyOptions: ACC.SelectOption[] = useMemo(() => {
     return options.map(x => ({
       id: x.registrationNumber,
       value: (
@@ -41,7 +41,7 @@ export function CompaniesHouseResults({ selectedRegistrationNumber, options, onS
   }, [options]);
 
   const getSelectedOption: ACC.SelectOption | undefined = selectedRegistrationNumber
-    ? compayOptions.find(x => x.id === selectedRegistrationNumber)
+    ? companyOptions.find(x => x.id === selectedRegistrationNumber)
     : undefined;
 
   return (
@@ -49,7 +49,7 @@ export function CompaniesHouseResults({ selectedRegistrationNumber, options, onS
       <Form.Radio
         name="searchResults"
         inline={false}
-        options={compayOptions}
+        options={companyOptions}
         value={useCallback(() => getSelectedOption, [getSelectedOption])}
         update={(_, selectedOpt) => handleSelection(selectedOpt?.id, options)}
       />

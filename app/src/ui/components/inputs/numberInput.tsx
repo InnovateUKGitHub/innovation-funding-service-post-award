@@ -33,7 +33,7 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
     return parseFloat(this.state.value) !== nextProps.value;
   }
 
-  public componentWillReceiveProps(nextProps: NumberInputProps) {
+  public UNSAFE_componentWillReceiveProps(nextProps: NumberInputProps) {
     // if both new and current is nan then don't change
     // also if current string in state once passed is equivalent don't change
     if (this.hasChanged(nextProps)) {
