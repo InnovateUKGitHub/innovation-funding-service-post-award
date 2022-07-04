@@ -1414,6 +1414,14 @@ describe("UpdatePCRCommand", () => {
       };
 
       describe("with valid requests", () => {
+        beforeAll(() => {
+          jest.useFakeTimers("modern");
+          jest.setSystemTime(new Date(2022, 3, 1));
+        });
+
+        afterAll(() => {
+          jest.useRealTimers();
+        });
         describe("with availabilityPeriod", () => {
           test("when increased", async () => {
             const { context, project, pcr, createStubItems } = await loanExtensionSetup();
