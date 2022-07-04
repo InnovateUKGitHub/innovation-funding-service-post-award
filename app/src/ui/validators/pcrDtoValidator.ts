@@ -589,8 +589,8 @@ export class PCRLoanExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
   }
 
   private validateAvailabilityPeriod(): Result {
-    const { availabilityPeriod, availabilityPeriodChange } = this.model;
-
+    const { availabilityPeriod, availabilityPeriodChange, id } = this.model;
+    if (!id) return Validation.valid(this); // missing id shows pcr not created yet
     if (!availabilityPeriod) {
       throw Error("validateAvailabilityPeriod() is missing model data to validate.");
     }
@@ -606,8 +606,8 @@ export class PCRLoanExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
   }
 
   private validateExtensionPeriod(): Result {
-    const { availabilityPeriod, extensionPeriod, extensionPeriodChange } = this.model;
-
+    const { availabilityPeriod, extensionPeriod, extensionPeriodChange, id } = this.model;
+    if (!id) return Validation.valid(this); // missing id shows pcr not created yet
     if (!availabilityPeriod || !extensionPeriod) {
       throw Error("validateExtensionPeriod() is missing model data to validate.");
     }
@@ -624,8 +624,8 @@ export class PCRLoanExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
   }
 
   private validateRepaymentPeriod(): Result {
-    const { availabilityPeriod, extensionPeriod, repaymentPeriod, repaymentPeriodChange } = this.model;
-
+    const { availabilityPeriod, extensionPeriod, repaymentPeriod, repaymentPeriodChange, id } = this.model;
+    if (!id) return Validation.valid(this); // missing id shows pcr not created yet
     if (!availabilityPeriod || !extensionPeriod || !repaymentPeriod) {
       throw Error("validateRepaymentPeriod() is missing model data to validate.");
     }
