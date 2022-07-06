@@ -38,8 +38,8 @@ describe("getAllForProjectQuery", () => {
 
         expect(result).not.toBe(null);
         expect(result.length).toBe(2);
-        expect(result.find(x => x.id === leadPartner.id)!.isLead).toBe(true);
-        expect(result.find(x => x.id === notLeadPartner.id)!.isLead).toBe(false);
+        expect(result.find(x => x.id === leadPartner.id)?.isLead).toBe(true);
+        expect(result.find(x => x.id === notLeadPartner.id)?.isLead).toBe(false);
     });
 
     it("sorts by 'Project Lead' and then alpabetical", async () => {
@@ -89,7 +89,7 @@ describe("getAllForProjectQuery", () => {
         // Set partner B, D, E, to be no name
         partners
             .filter(x => x.name === "Partner_B" || x.name === "Partner_D"|| x.name === "Partner_E")
-            .forEach(x => x.name = null!);
+            .forEach(x => x.name = null as unknown as string);
 
         const result = await context.runQuery(new GetAllForProjectQuery(project.Id));
 

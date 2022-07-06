@@ -107,7 +107,7 @@ describe("GetClaim", () => {
     const query = new GetClaim(partner.id, period);
     const result = await context.runQuery(query);
 
-    expect(result.approvedDate).toEqual(context.clock.parse(claim.Acc_ApprovedDate__c!, salesforceDateFormat));
+    expect(result.approvedDate).toEqual(context.clock.parse(claim.Acc_ApprovedDate__c ?? "", salesforceDateFormat));
   });
 
   it("calculates correct paidDate", async () => {
@@ -121,7 +121,7 @@ describe("GetClaim", () => {
     const query = new GetClaim(partner.id, period);
     const result = await context.runQuery(query);
 
-    expect(result.paidDate).toEqual(context.clock.parse(claim.Acc_PaidDate__c!, salesforceDateFormat));
+    expect(result.paidDate).toEqual(context.clock.parse(claim.Acc_PaidDate__c ?? "", salesforceDateFormat));
   });
 
   it("calculates isApproved true if ClaimStatus is Approved", async () => {
@@ -271,7 +271,7 @@ describe("GetClaim", () => {
     const period = 1;
 
     testData.createClaim(partner, period);
-    testData.createProfileTotalPeriod(partner, period, x => (x.Acc_PeriodLatestForecastCost__c = null!));
+    testData.createProfileTotalPeriod(partner, period, x => (x.Acc_PeriodLatestForecastCost__c = 0));
     const query = new GetClaim(partner.id, period);
     const result = await context.runQuery(query);
 

@@ -50,7 +50,7 @@ interface CombinedData {
 }
 
 export interface EditClaimLineItemsCallbacks {
-  onUpdate: (saving: boolean, dto: ClaimDetailsDto, goToUpdload?: boolean) => void;
+  onUpdate: (saving: boolean, dto: ClaimDetailsDto, goToUpload?: boolean) => void;
 }
 
 export class EditClaimLineItemsComponent extends ContainerBaseWithState<
@@ -87,7 +87,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
       partnerId: this.props.partnerId,
       periodId: this.props.periodId,
     });
-    const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
+    const costCategory = costCategories.find(x => x.id === this.props.costCategoryId) || {} as CostCategoryDto;
 
     const { isKTP, isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
     const editClaimLineItemGuidance = <ACC.Content value={x => x.claimDocuments.messages.editClaimLineItemGuidance} />;
@@ -438,7 +438,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
           name={`value${index.row}`}
           value={item.value}
           disabled={editor.status === EditorStatus.Saving}
-          onChange={val => this.updateItem(index, editor, dto => (dto.value = val!))}
+          onChange={val => this.updateItem(index, editor, dto => (dto.value = val as number))}
           ariaLabel={`value of claim line item ${index.row + 1}`}
         />
       </span>
@@ -478,7 +478,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
           name={`description${index.row}`}
           value={item.description}
           disabled={editor.status === EditorStatus.Saving}
-          onChange={val => this.updateItem(index, editor, dto => (dto.description = val!))}
+          onChange={val => this.updateItem(index, editor, dto => (dto.description = val as string))}
           ariaLabel={`description of claim line item ${index.row + 1}`}
         />
       </span>

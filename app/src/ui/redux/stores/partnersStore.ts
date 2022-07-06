@@ -33,7 +33,7 @@ export class PartnersStore extends StoreBase {
   }
 
   public getLeadPartner(projectId: string) {
-    return this.getPartnersForProject(projectId).then(x => x.find(y => y.isLead)!);
+    return this.getPartnersForProject(projectId).then(x => x.find(y => y.isLead));
   }
 
   public getPartnerEditor(projectId: string, partnerId: string, init?: (dto: PartnerDto) => void) {

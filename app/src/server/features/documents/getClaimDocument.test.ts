@@ -1,4 +1,4 @@
-import { Authorisation, ProjectRole } from "@framework/types";
+import { Authorisation, DocumentDto, ProjectRole } from "@framework/types";
 import { GetClaimDocumentQuery } from "@server/features/documents/getClaimDocument";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
@@ -12,7 +12,7 @@ describe("GetClaimDocumentQuery", () => {
     const document = context.testData.createDocument(claim.Id, "cat", "jpg", "","file content");
 
     const query = new GetClaimDocumentQuery({projectId: project.Id, partnerId: partner.id, periodId: claim.Acc_ProjectPeriodNumber__c}, document.Id);
-    const result = await context.runQuery(query).then(x => x!);
+    const result = await context.runQuery(query).then(x => x as DocumentDto);
 
     expect(result).not.toBeNull();
     expect(result.fileName).toBe("cat.jpg");

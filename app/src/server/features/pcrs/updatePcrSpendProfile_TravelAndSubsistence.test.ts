@@ -51,7 +51,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
       expect(insertedSpendProfileCost).toBeDefined();
       expect(insertedSpendProfileCost.id).toBeTruthy();
-      expect(insertedSpendProfileCost.value).toBe(insertedSpendProfileCost.numberOfTimes! * insertedSpendProfileCost.costOfEach!);
+      expect(insertedSpendProfileCost.value).toBe((insertedSpendProfileCost.numberOfTimes as number) * (insertedSpendProfileCost.costOfEach as number));
       expect(insertedSpendProfileCost.numberOfTimes).toBe(5);
       expect(insertedSpendProfileCost.costOfEach).toBe(3);
       expect(insertedSpendProfileCost.description).toBe("Boots Meal Deal");

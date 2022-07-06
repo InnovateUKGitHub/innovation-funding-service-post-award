@@ -113,7 +113,7 @@ const TimeExtensionStep = (
               options={timeExtensionDropdownOptions}
               value={m => getProjectEndOption(m.offsetMonths)}
               update={(m, value) => {
-                return (m.offsetMonths = Number(value!.id));
+                return (m.offsetMonths = Number(value?.id));
               }}
             />
             {isClient && (

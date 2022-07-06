@@ -135,7 +135,7 @@ module.exports = {
   rules: {
     "@typescript-eslint/ban-types": "off", // TODO: switch back to error
     "@typescript-eslint/explicit-module-boundary-types": "off", // TODO: switch back to error
-    "@typescript-eslint/no-non-null-assertion": "off", // TODO: switch back to error
+    "@typescript-eslint/no-non-null-assertion": "error",
     "sonarjs/no-duplicate-string": "off", // TODO: switch back to error
     "sonarjs/cognitive-complexity": "off", /// TODO: switch back to error
     "sonarjs/no-unused-collection": "off", // TODO: switch back to error

@@ -39,6 +39,6 @@ export class Result {
 
     public log() {
         if (this.isValid) return null;
-        return this.errorMessage!;
+        return this.errorMessage;
     }
 }

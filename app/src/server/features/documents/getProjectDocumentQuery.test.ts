@@ -1,5 +1,5 @@
 import { GetProjectDocumentQuery } from "@server/features/documents/getProjectDocument";
-import { Authorisation, ProjectRole } from "@framework/types";
+import { Authorisation, DocumentDto, ProjectRole } from "@framework/types";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("GetProjectDocumentQuery", () => {
@@ -10,7 +10,7 @@ describe("GetProjectDocumentQuery", () => {
     const document = context.testData.createDocument(project.Id, "cat", "jpg", "Cher", "file content");
 
     const query = new GetProjectDocumentQuery(project.Id, document.Id);
-    const result = await context.runQuery(query).then(x => x!);
+    const result = await context.runQuery(query).then(x => x as DocumentDto);
 
     expect(result).not.toBeNull();
     expect(result.fileName).toBe("cat.jpg");
@@ -19,7 +19,7 @@ describe("GetProjectDocumentQuery", () => {
     expect(result.stream).not.toBeNull();
   });
 
-  it("should return null if document dosnt exist", async () => {
+  it("should return null if document doesn't exist", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
 

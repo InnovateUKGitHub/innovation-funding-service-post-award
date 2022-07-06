@@ -56,6 +56,7 @@ describe("UpdateClaimCommand", () => {
     const context = new TestContext();
     const partner = context.testData.createPartner();
     const dto = mapClaim(context)(context.testData.createClaim(), partner.competitionType);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     dto.id = null!;
     const project = context.testData.createProject();
     const command = new UpdateClaimCommand(project.Id, dto);

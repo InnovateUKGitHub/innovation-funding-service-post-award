@@ -31,7 +31,7 @@ export class GetMonitoringReportsForProject extends QueryBase<MonitoringReportSu
       if (b.periodId !== a.periodId) {
         return b.periodId - a.periodId;
       }
-      return dateComparator(b.lastUpdated!, a.lastUpdated!);
+      return dateComparator(b.lastUpdated as Date, a.lastUpdated as Date);
     });
   }
 }

@@ -33,7 +33,7 @@ export function DocumentFilter({ value, name, qa, placeholder = "Search document
         placeholder={placeholder}
         value={x => x.filteredText}
         // Note: SearchInput will always return a string, form controls always return TValue | null poor generic defaults :(
-        update={(x, v) => (x.filteredText = v!)}
+        update={(x, v) => (x.filteredText = v as string)}
       />
     </FilterForm.Form>
   );

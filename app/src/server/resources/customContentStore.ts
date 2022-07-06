@@ -48,7 +48,7 @@ export class CustomContentStore {
 
       const response = await client.send(getCommand);
 
-      return { lastModified: response.LastModified! };
+      return { lastModified: response.LastModified as Date};
     } catch (error) {
       throw new Error(`S3 Query Error - Failed to HeadObject command, ${JSON.stringify(error)}`);
     }

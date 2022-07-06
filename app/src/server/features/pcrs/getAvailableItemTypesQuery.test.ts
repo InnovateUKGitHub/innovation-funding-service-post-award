@@ -15,11 +15,11 @@ describe("GetAvailableItemTypesQuery", () => {
 
       const reallocateProjectCostsType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
         x => x.type === PCRItemType.MultiplePartnerFinancialVirement,
-      )!;
+      );
 
       const pcrRecordTypes = context.testData.createPCRRecordTypes();
       const reallocateSeveralPartnersProjectCost = pcrRecordTypes.find(
-        x => x.type === reallocateProjectCostsType.typeName,
+        x => x.type === reallocateProjectCostsType?.typeName,
       );
       context.testData.createPCRItem(pcr, reallocateSeveralPartnersProjectCost);
 
@@ -42,13 +42,13 @@ describe("GetAvailableItemTypesQuery", () => {
 
       const reallocateProjectCostsType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
         x => x.type === PCRItemType.MultiplePartnerFinancialVirement,
-      )!;
+      );
       const reallocateSeveralPartnersProjectCost = pcrRecordTypes.find(
-        x => x.type === reallocateProjectCostsType.typeName,
+        x => x.type === reallocateProjectCostsType?.typeName,
       );
 
-      const timeExtensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.TimeExtension)!;
-      const changeProjectDuration = pcrRecordTypes.find(x => x.type === timeExtensionType.typeName);
+      const timeExtensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.TimeExtension);
+      const changeProjectDuration = pcrRecordTypes.find(x => x.type === timeExtensionType?.typeName);
 
       context.testData.createPCRItem(projectPcr, reallocateSeveralPartnersProjectCost);
       context.testData.createPCRItem(editingPcr, changeProjectDuration);

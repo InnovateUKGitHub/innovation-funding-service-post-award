@@ -159,7 +159,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
     }
 
     return Validation.all(this, () =>
-      Validation.permitedValues(this, this.model.status, permittedStatus, "Set a valid status"),
+      Validation.permittedValues(this, this.model.status, permittedStatus, "Set a valid status"),
     );
   }
 
@@ -169,7 +169,7 @@ export class PCRDtoValidator extends Results<PCRDto> {
     const preparePcrStatus = [PCRStatus.Draft, PCRStatus.QueriedByMonitoringOfficer, PCRStatus.QueriedByInnovateUK];
     return Validation.all(
       this,
-      () => Validation.permitedValues(this, this.model.reasoningStatus, permittedStatus, "Invalid reasoning status"),
+      () => Validation.permittedValues(this, this.model.reasoningStatus, permittedStatus, "Invalid reasoning status"),
       () =>
         Validation.isTrue(
           this,
@@ -388,7 +388,7 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
       () =>
         Validation.isTrue(
           this,
-          !!this.original || this.recordTypes.find(x => x.type === this.model.type)!.enabled,
+          !!this.original || (this.recordTypes.find(x => x.type === this.model.type)?.enabled ?? null),
           "Not a valid change request item",
         ),
       () => {
@@ -420,7 +420,7 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
 
     return Validation.all(
       this,
-      () => Validation.permitedValues(this, this.model.status, permittedStatus, "Invalid status"),
+      () => Validation.permittedValues(this, this.model.status, permittedStatus, "Invalid status"),
       () =>
         isPm
           ? Validation.isTrue(
@@ -489,7 +489,7 @@ export class MultiplePartnerFinancialVirementDtoValidator extends PCRBaseItemDto
         ),
       () =>
         hasValue
-          ? Validation.isTrue(this, this.model.grantMovingOverFinancialYear! >= 0, "The value can not be lower than 0.")
+          ? Validation.isTrue(this, (this.model.grantMovingOverFinancialYear ?? 0) >= 0, "The value can not be lower than 0.")
           : Validation.valid(this),
     );
   }
@@ -560,7 +560,10 @@ export class PCRLoanExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
   }
 
   public calculateOffsetDate(offset: number): Date {
-    const startingDate = this.model.projectStartDate!;
+    const startingDate = this.model.projectStartDate;
+    if(startingDate === null) {
+      throw new Error("Cannot calculate offset date of null");
+    }
 
     if (offset === 0) return startingDate;
 
@@ -1203,7 +1206,7 @@ export class PCRAccountNameChangeItemDtoValidator extends PCRBaseItemDtoValidato
           : Validation.valid(this),
       () =>
         this.partners && this.model.partnerId
-          ? Validation.permitedValues(
+          ? Validation.permittedValues(
               this,
               this.model.partnerId,
               this.partners.filter(x => !x.isWithdrawn).map(x => x.id),
@@ -1278,7 +1281,7 @@ export class PCRPartnerWithdrawalItemDtoValidator extends PCRBaseItemDtoValidato
           : Validation.valid(this),
       () =>
         this.partners && this.model.partnerId
-          ? Validation.permitedValues(
+          ? Validation.permittedValues(
               this,
               this.model.partnerId,
               this.partners.filter(x => !x.isWithdrawn).map(x => x.id),

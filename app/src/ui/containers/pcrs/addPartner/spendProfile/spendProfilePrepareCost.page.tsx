@@ -181,7 +181,8 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   }
 
   private onSave(dto: PCRDto, cost: PCRSpendProfileCostDto, redirectLink?: ILinkInfo) {
-    const item = dto.items.find(x => x.id === this.props.itemId)!;
+    const item = dto.items.find(x => x.id === this.props.itemId);
+    if(!item) throw new Error(`Cannot find item matching ${this.props.itemId}`);
     // If submitting from a step set the status to incomplete
     item.status = PCRItemStatus.Incomplete;
     return !redirectLink ? this.props.onSave(dto, this.getBackLink(cost, dto)) : this.props.onSave(dto, redirectLink);
@@ -297,7 +298,8 @@ const ContainerAdd = (props: PcrAddSpendProfileCostParams & BaseProps) => {
           x => x.id === props.itemId && x.type === PCRItemType.PartnerAddition,
         ) as PCRItemForPartnerAdditionDto;
         const costs = addPartnerItem.spendProfile.costs.filter(x => x.costCategoryId === props.costCategoryId);
-        return costs.find(x => !x.id)!;
+        return costs.find(x => !x.id) as PCRSpendProfileCostDto;
+
       })}
       validator={stores.projectChangeRequests.getNewSpendProfileCostValidator(
         editorPending,
@@ -330,7 +332,7 @@ const ContainerEdit = (props: PcrEditSpendProfileCostParams & BaseProps) => {
         const addPartnerItem = editor.data.items.find(
           x => x.id === props.itemId && x.type === PCRItemType.PartnerAddition,
         ) as PCRItemForPartnerAdditionDto;
-        return addPartnerItem.spendProfile.costs.find(x => x.id === props.costId)!;
+        return addPartnerItem.spendProfile.costs.find(x => x.id === props.costId) as PCRSpendProfileCostDto;
       })}
       validator={stores.projectChangeRequests.getSpendProfileCostValidator(editorPending, props.itemId, props.costId)}
       onSave={(dto, link) => onSave(stores, dto, props.projectId, link, navigate)}

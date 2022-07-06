@@ -491,12 +491,12 @@ class MonitoringReportStatusChangeTestRepository extends TestRepository<Reposito
   createStatusChange(statusChange: Partial<Repositories.ISalesforceMonitoringReportStatusChange>) {
     return super.insertOne({
       Id: (this.Items.length + 1).toString(),
-      Acc_MonitoringReport__c: statusChange.Acc_MonitoringReport__c!,
-      Acc_PreviousMonitoringReportStatus__c: statusChange.Acc_PreviousMonitoringReportStatus__c!,
-      Acc_NewMonitoringReportStatus__c: statusChange.Acc_NewMonitoringReportStatus__c!,
-      Acc_CreatedByAlias__c: statusChange.Acc_CreatedByAlias__c!,
-      CreatedDate: statusChange.CreatedDate!,
-      Acc_ExternalComment__c: statusChange.Acc_ExternalComment__c!
+      Acc_MonitoringReport__c: statusChange.Acc_MonitoringReport__c ?? "",
+      Acc_PreviousMonitoringReportStatus__c: statusChange.Acc_PreviousMonitoringReportStatus__c ?? "",
+      Acc_NewMonitoringReportStatus__c: statusChange.Acc_NewMonitoringReportStatus__c ?? "",
+      Acc_CreatedByAlias__c: statusChange.Acc_CreatedByAlias__c ?? "",
+      CreatedDate: statusChange.CreatedDate ?? "",
+      Acc_ExternalComment__c: statusChange.Acc_ExternalComment__c ?? ""
     });
   }
 
@@ -700,7 +700,7 @@ class ProjectChangeRequestStatusChangeTestRepository extends TestRepository<Enti
 
   createStatusChange(statusChange: Repositories.ICreateProjectChangeRequestStatusChange) {
     const previousStatus = this.pcrRepository.PreviousStatus[statusChange.Acc_ProjectChangeRequest__c];
-    const newStatus = this.pcrRepository.Items.find(x => x.id === statusChange.Acc_ProjectChangeRequest__c)!.status;
+    const newStatus = this.pcrRepository.Items.find(x => x.id === statusChange.Acc_ProjectChangeRequest__c)?.status as PCRStatus;
     return super.insertOne({
       id: (this.Items.length + 1).toString(),
       pcrId: statusChange.Acc_ProjectChangeRequest__c,

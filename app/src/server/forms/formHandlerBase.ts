@@ -61,7 +61,7 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
     const body = { ...req.body };
     delete body[`button_${buttonName}`];
 
-    const session: ISession = { user: req.session!.user };
+    const session: ISession = { user: req.session?.user };
     const context = contextProvider.start(session);
 
     let dto: AnyEditor;

@@ -49,7 +49,7 @@ describe("FullDateInput", () => {
     expect(dateInput.value).toBe("");
     await userEvent.type(dateInput, "Blah blah");
     expect(lastUpdate).not.toBeNull();
-    expect(lastUpdate!.getTime()).toBeNaN();
+    expect((lastUpdate as unknown as Date).getTime()).toBeNaN();
   });
 
   it("Valid date causes onchange with correctly generated date", async () => {

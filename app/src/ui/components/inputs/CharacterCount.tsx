@@ -44,7 +44,7 @@ function checkCharacterCount({ type, count, minValue, maxValue }: CharacterCount
 
   if (type === "descending") {
     // TSC Bug - Min value should be coerced as 'number' not 'number | undefined' due to union above
-    const remainingCount = maxValue! - count;
+    const remainingCount = (maxValue as number) - count;
     const hasNegativeHint = remainingCount < 0;
     const toneOfVoice = hasNegativeHint ? "too many" : "remaining";
     const absoluteCount = Math.abs(remainingCount);

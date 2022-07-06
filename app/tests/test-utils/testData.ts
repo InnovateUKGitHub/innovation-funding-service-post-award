@@ -712,8 +712,8 @@ export class TestData {
     const seed = this.repositories.projectChangeRequests.Items.reduce((c, x) => c + x.items.length, 0) + 1;
     pcr = pcr || this.createPCR();
 
-    // find a record type that hasnt yet been used
-    recordType = recordType || this.createPCRRecordTypes().find(x => pcr!.items.every(y => x.id !== y.recordTypeId));
+    // find a record type that hasn't yet been used
+    recordType = recordType || this.createPCRRecordTypes().find(x => pcr?.items.every(y => x.id !== y.recordTypeId));
 
     if(!recordType) {
       throw new Error("Unable to create pcr item as pcr already has all the record types");

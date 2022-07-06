@@ -88,9 +88,11 @@ export class CreateProjectChangeRequestCommand extends CommandBase<string> {
     itemDto: PCRItemDto,
     itemTypes: PCRItemTypeDto[],
   ): ProjectChangeRequestItemForCreateEntity {
+    const matchedItem = itemTypes.find(t => t.type === itemDto.type);
+    if(!matchedItem) throw new Error(`cannot find item matching ${itemDto.type}`);
     const init = {
       projectId: dto.projectId,
-      recordTypeId: itemTypes.find(t => t.type === itemDto.type)!.recordTypeId,
+      recordTypeId: matchedItem.recordTypeId,
       status: itemDto.status,
     };
     switch (itemDto.type) {

@@ -25,7 +25,7 @@ export function LinksList({ links = [], openNewWindow = false, renderAfterLink }
       ...allLinks,
       {
         text: getContent(link.text),
-        url: link.url!,
+        url: link.url,
         qa: link.qa,
       },
     ],

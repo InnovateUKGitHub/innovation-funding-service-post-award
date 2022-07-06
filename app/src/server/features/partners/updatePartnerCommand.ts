@@ -140,9 +140,9 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     const { bankDetails } = this.partner;
     const verifyInputs = {
       companyName: this.partner.name,
-      registrationNumber: bankDetails.companyNumber ? bankDetails.companyNumber : "",
-      sortcode: bankDetails.sortCode!,
-      accountNumber: bankDetails.accountNumber!,
+      registrationNumber: bankDetails.companyNumber ?? "",
+      sortcode: bankDetails.sortCode ?? "",
+      accountNumber: bankDetails.accountNumber ?? "",
       // As these are business accounts they do not have a named account holder associated, however these values seem to be required by the Experian Verify API. As such, we are hardcoding dummy values for them here.
       firstName: "NA",
       lastName: "NA",

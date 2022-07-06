@@ -23,6 +23,7 @@ import {
 } from "@ui/redux";
 import { createErrorPayload } from "@shared/create-error-payload";
 import { contextProvider } from "@server/features/common/contextProvider";
+import { Results } from "@ui/validation";
 import { ForbiddenError,FormHandlerError } from "./features/common/appError";
 
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
@@ -33,7 +34,7 @@ import { renderHtml } from "./html";
 export async function serverRender(req: Request, res: Response, error?: IAppError): Promise<void> {
   const { nonce } = res.locals;
   const middleware = setupServerMiddleware();
-  const context = contextProvider.start({ user: req.session!.user });
+  const context = contextProvider.start({ user: req.session?.user });
   const clientConfig = getClientConfig(context);
   const modalRegister = new ModalRegister();
 
@@ -43,7 +44,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     }
 
     const auth = await context.runQuery(new GetAllProjectRolesForUser());
-    const user: IClientUser = { roleInfo: auth.permissions, email: req.session!.user.email, csrf: req.csrfToken() };
+    const user: IClientUser = { roleInfo: auth.permissions, email: req.session?.user.email, csrf: req.csrfToken() };
     const initialState = setupInitialState(user, clientConfig);
     const store = createStore(rootReducer, initialState, middleware);
 
@@ -123,7 +124,7 @@ function loadAllData(store: Store, render: () => void): Promise<void> {
 function onComplete(store: Store, error?: FormHandlerError) {
   // validation error occurred so add it into store as validation error
   if (error?.code === ErrorCode.VALIDATION_ERROR) {
-    store.dispatch(Actions.updateEditorAction(error.key, error.store, error.dto, error.error.results!));
+    store.dispatch(Actions.updateEditorAction(error.key, error.store, error.dto, error.error.results as Results<{}>));
   } else if (error) {
     // some other validation error occurred so add it into store as actual error
     // need to pair with the submit action to keep count in sync

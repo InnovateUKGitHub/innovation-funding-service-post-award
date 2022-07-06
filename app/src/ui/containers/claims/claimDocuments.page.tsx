@@ -173,7 +173,7 @@ const ClaimDocumentsComponent = ({
                 validation={editor.validator.description}
                 options={documentTypeOptions}
                 value={data =>
-                  data.description ? documentTypeOptions.find(x => x.id === data.description!.toString()) : undefined
+                  data.description ? documentTypeOptions.find(x => x.id === data.description?.toString()) : undefined
                 }
                 update={(dto, value) => (dto.description = value ? parseInt(value.id, 10) : undefined)}
               />

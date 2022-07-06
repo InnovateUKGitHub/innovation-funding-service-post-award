@@ -200,7 +200,7 @@ export class ProjectChangeRequestStore extends StoreBase {
       const partnerAdditionValidator = editor.validator.items.results.find(
         x => x.model.id === pcrItemId,
       ) as PCRPartnerAdditionItemDtoValidator;
-      return partnerAdditionValidator.spendProfile.results[0].costs.results.find(x => x.model.id === costId)!;
+      return partnerAdditionValidator.spendProfile.results[0].costs.results.find(x => x.model.id === costId);
     });
   }
 

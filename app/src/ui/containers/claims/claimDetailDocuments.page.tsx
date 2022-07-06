@@ -56,7 +56,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
       periodId: this.props.periodId,
       costCategoryId: this.props.costCategoryId,
     });
-    const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
+    const costCategory = costCategories.find(x => x.id === this.props.costCategoryId) || {} as CostCategoryDto;
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
     const { isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
 

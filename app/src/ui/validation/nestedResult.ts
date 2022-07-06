@@ -27,7 +27,7 @@ export class NestedResult<T extends Results<{}>> extends Result {
 
   public log() {
     if (this.isValid) return null;
-    return this.errorMessage! + "/n/t" + this.results.filter(x => !x.isValid).map(x => x.log()).join("/n/t");
+    return this.errorMessage + "/n/t" + this.results.filter(x => !x.isValid).map(x => x.log()).join("/n/t");
   }
 }
 
@@ -52,6 +52,6 @@ export class Nested<T extends Results<{}>> extends Result {
 
   public log() {
     if (this.isValid) return null;
-    return this.errorMessage! + "/n/t" + this.results.filter(x => !x.isValid).map(x => x.log()).join("/n/t");
+    return this.errorMessage + "/n/t" + this.results.filter(x => !x.isValid).map(x => x.log()).join("/n/t");
   }
 }

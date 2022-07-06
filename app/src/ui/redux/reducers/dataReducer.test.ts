@@ -40,9 +40,10 @@ describe("DataReducer", () => {
     const error = { code: 6, message: "test error", results: {} };
     const action = claimDataAction(id, {}, 0, error);
     const result = dataReducer(state, action);
-    expect(result.claim[id].error!.code).toBe(error.code);
-    expect(result.claim[id].error!.message).toBe(error.message);
-    expect(result.claim[id].error!.results).toBe(error.results);
+    const errorResult = result.claim[id]?.error;
+    expect(errorResult?.code).toBe(error.code);
+    expect(errorResult?.message).toBe(error.message);
+    expect(errorResult?.results).toBe(error.results);
   });
 
   test("reuses existing data if action data is falsy", () => {

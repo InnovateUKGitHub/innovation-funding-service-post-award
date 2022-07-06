@@ -52,14 +52,15 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
 
   private renderContents({ project, costCategories, documents, editor, pcrItem }: CombinedData) {
     const cost = pcrItem.spendProfile.costs.find(x => x.costCategoryId === this.props.costCategoryId);
+    if(!cost) throw new Error(`Cannot find cost matching ${this.props.costCategoryId}`);
     const back = this.props.routes.pcrPrepareSpendProfileEditCost.getLink({
       projectId: project.id,
       pcrId: this.props.pcrId,
       itemId: this.props.itemId,
       costCategoryId: this.props.costCategoryId,
-      costId: cost!.id,
+      costId: cost.id,
     });
-    const costCategory = costCategories.find(x => x.id === this.props.costCategoryId)! || {};
+    const costCategory = costCategories.find(x => x.id === this.props.costCategoryId) || {} as CostCategoryDto;
 
     return (
       <ACC.Page

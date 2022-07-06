@@ -72,7 +72,7 @@ class Component extends React.Component<
               inline={false}
               value={dto => {
                 if (dto.isCommercialWork === null || dto.isCommercialWork === undefined) return null;
-                return commercialWorkOptions.find(x => x.id === dto.isCommercialWork!.toString());
+                return commercialWorkOptions.find(x => x.id === dto?.isCommercialWork?.toString());
               }}
               update={(dto, option) => {
                 if (!option) return (dto.isCommercialWork = null);
@@ -101,8 +101,8 @@ class Component extends React.Component<
                 }
                 const selectedOption = parseInt(option.id, 10);
                 // If the partner type is academic then the organisation step is skipped and the participant size is set to "Academic"
-                const organistionType = getPCROrganisationType(selectedOption);
-                if (organistionType === PCROrganisationType.Academic) {
+                const organisationType = getPCROrganisationType(selectedOption);
+                if (organisationType === PCROrganisationType.Academic) {
                   x.participantSize = PCRParticipantSize.Academic;
                 }
                 x.partnerType = selectedOption;

@@ -26,7 +26,7 @@ const createTestData = async (context: TestContext) => {
   });
   const project3 = await testStore.createProject(x => {
     x.Acc_ProjectTitle__c = "project 3";
-    x.Acc_LeadParticipantName__c = "Barnie";
+    x.Acc_LeadParticipantName__c = "Bernie";
   });
   const partner3 = await testStore.createPartner(project3, x => {
     x.name = "partner 3";
@@ -46,53 +46,53 @@ describe("Projects Store", () => {
       const context = new TestContext();
       await createTestData(context);
       const projectsStore = new ProjectsStore(context.testStore.getState, context.testStore.dispatch);
-      const projects = projectsStore.getProjectsFilter("project").data!;
+      const projects = projectsStore.getProjectsFilter("project").data;
       expect(projects).toHaveLength(3);
     });
     it("should filter by project name",  async () => {
       const context = new TestContext();
       const testData = await createTestData(context);
       const projectsStore = new ProjectsStore(context.testStore.getState, context.testStore.dispatch);
-      const projects = projectsStore.getProjectsFilter("project 2").data!;
+      const projects = projectsStore.getProjectsFilter("project 2").data;
       expect(projects).toHaveLength(1);
-      expect(projects[0].id).toBe(testData[1].project.Id);
+      expect(projects?.[0].id).toBe(testData[1].project.Id);
     });
     it("should ignore case",  async () => {
       const context = new TestContext();
       const testData = await createTestData(context);
       const projectsStore = new ProjectsStore(context.testStore.getState, context.testStore.dispatch);
-      const projects = projectsStore.getProjectsFilter("PROJECT 2").data!;
+      const projects = projectsStore.getProjectsFilter("PROJECT 2").data;
       expect(projects).toHaveLength(1);
-      expect(projects[0].id).toBe(testData[1].project.Id);
+      expect(projects?.[0].id).toBe(testData[1].project.Id);
     });
     it("should filter by project number",  async () => {
       const context = new TestContext();
       const testData = await createTestData(context);
       const projectsStore = new ProjectsStore(context.testStore.getState, context.testStore.dispatch);
-      const projects = projectsStore.getProjectsFilter(testData[2].project.Acc_ProjectNumber__c).data!;
+      const projects = projectsStore.getProjectsFilter(testData[2].project.Acc_ProjectNumber__c).data;
       expect(projects).toHaveLength(1);
-      expect(projects[0].id).toBe(testData[2].project.Id);
+      expect(projects?.[0].id).toBe(testData[2].project.Id);
     });
     it("should filter by lead partner name",  async () => {
       const context = new TestContext();
       const testData = await createTestData(context);
       const projectsStore = new ProjectsStore(context.testStore.getState, context.testStore.dispatch);
-      const projects = projectsStore.getProjectsFilter("Bob").data!;
+      const projects = projectsStore.getProjectsFilter("Bob").data;
       expect(projects).toHaveLength(1);
-      expect(projects[0].id).toBe(testData[0].project.Id);
+      expect(projects?.[0].id).toBe(testData[0].project.Id);
     });
     it("should return no results if there are no matches",  async () => {
       const context = new TestContext();
       await createTestData(context);
       const projectsStore = new ProjectsStore(context.testStore.getState, context.testStore.dispatch);
-      const projects = projectsStore.getProjectsFilter("Zelda").data!;
+      const projects = projectsStore.getProjectsFilter("Zelda").data;
       expect(projects).toHaveLength(0);
     });
     it("should return all the results if no search string is passed in", async () => {
       const context = new TestContext();
       await createTestData(context);
       const projectsStore = new ProjectsStore(context.testStore.getState, context.testStore.dispatch);
-      const projects = projectsStore.getProjectsFilter("").data!;
+      const projects = projectsStore.getProjectsFilter("").data;
       expect(projects).toHaveLength(3);
     });
   });

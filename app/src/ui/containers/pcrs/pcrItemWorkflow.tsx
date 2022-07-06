@@ -250,7 +250,8 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
     editor: IEditorStore<PCRDto, PCRDtoValidator>,
     documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
   ) {
-    const validator = editor.validator.items.results.find(x => x.model.id === pcrItem.id)!;
+    const validator = editor.validator.items.results.find(x => x.model.id === pcrItem.id);
+    if(!validator) throw new Error(`Cannot find validator matching itemId ${this.props.itemId}`);
     const status = editor.status || EditorStatus.Editing;
     const { mode } = this.props;
 
@@ -300,8 +301,10 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
     pcr: PCRDto,
     editor: IEditorStore<PCRDto, PCRDtoValidator>,
   ) {
-    const pcrItem = editor.data.items.find(x => x.id === this.props.itemId)!;
-    const validator = editor.validator.items.results.find(x => x.model.id === pcrItem.id)!;
+    const pcrItem = editor.data.items.find(x => x.id === this.props.itemId);
+    if(!pcrItem) throw new Error(`Cannot find pcrItem matching itemId ${this.props.itemId}`);
+    const validator = editor.validator.items.results.find(x => x.model.id === pcrItem.id);
+    if(!validator) throw new Error(`Cannot find validator matching itemId ${this.props.itemId}`);
     const { projectId, mode } = this.props;
     const workflowSummary = workflow.getSummary();
 
@@ -335,7 +338,8 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
   ) {
     const PCRForm = ACC.TypedForm<PCRItemDto>();
 
-    const pcrItem = editor.data.items.find(x => x.id === this.props.itemId)!;
+    const pcrItem = editor.data.items.find(x => x.id === this.props.itemId);
+    if(!pcrItem) throw new Error(`Cannot find pcrItem matching itemId ${this.props.itemId}`);
     const canReallocatePcr = pcrItem.type === PCRItemType.MultiplePartnerFinancialVirement;
 
     const options: ACC.SelectOption[] = [{ id: "true", value: "I agree with this change." }];
@@ -416,11 +420,12 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
   }
 
   private onSave(workflow: PcrWorkflow<PCRItemDto, Results<PCRItemDto>>, dto: PCRDto, skipToSummary = false) {
-    const item = dto.items.find(x => x.id === this.props.itemId)!;
+    const item = dto.items.find(x => x.id === this.props.itemId);
+    if(!item) throw new Error(`Cannot find item matching ${this.props.itemId}`);
 
     if (workflow.isOnSummary()) {
       // If submitting from the summary set the status to "Incomplete" only if it's in "To do" (i.e. if it's set to "Complete" then leave it as it is)
-      if (item.status === PCRItemStatus.ToDo) item.status = PCRItemStatus.Incomplete;
+      if (item?.status === PCRItemStatus.ToDo) item.status = PCRItemStatus.Incomplete;
       // submit and go back to the prepare page
       return this.props.onSave(
         dto,
