@@ -16,7 +16,7 @@ export class Results<T> implements IValidationResult {
 
   public isRequired = false;
 
-  /* internal dont use directly in normal behaviour as a Result adds itself to the parent Results validator */
+  /* internal don't use directly in normal behaviour as a Result adds itself to the parent Results validator */
   protected add(result: Result) {
     if (!result.isValid) {
       this.isValid = false;

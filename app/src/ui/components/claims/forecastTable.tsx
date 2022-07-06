@@ -287,7 +287,7 @@ export class ForecastTable extends React.Component<Props> {
           name={`value_${periodId}_${forecastRow.categoryId}`}
           value={value}
           ariaLabel={`${forecastRow.categoryName} Period ${periodId}`}
-          onChange={val => this.updateItem(editor.data, forecastRow.categoryId, periodId, dto => (dto.value = val!))}
+          onChange={val => this.updateItem(editor.data, forecastRow.categoryId, periodId, dto => (dto.value = val as number))}
           className="govuk-!-font-size-16"
           disabled={editor.status === EditorStatus.Saving}
         />

@@ -168,10 +168,10 @@ export function TableColumn<T>({
   };
 
   const tableColumnOptions: Record<ColumnMode, () => JSX.Element> = {
-    header: () => renderHeader(columnIndex!),
-    footer: () => renderFooter(columnIndex!),
-    col: () => renderCol(columnIndex!),
-    cell: () => renderCell(props.dataItem!, columnIndex!, props.rowIndex!),
+    header: () => renderHeader(columnIndex ?? 0),
+    footer: () => renderFooter(columnIndex ?? 0),
+    col: () => renderCol(columnIndex ?? 0),
+    cell: () => renderCell(props.dataItem as T, columnIndex ?? 0, props.rowIndex ?? 0),
   };
 
   return tableColumnOptions[props.mode]();
@@ -262,7 +262,7 @@ const TableComponent = <T extends {}>({
 
   const rowClasses = rowFlags.map(x => (x ? rowClassesStates[x] : ""));
 
-  const childColumnsHasFooters = children.some(x => x!.props.footer);
+  const childColumnsHasFooters = children.some(x => x?.props?.footer);
 
   const footerColumns = childColumnsHasFooters
     ? children.map((column, columnIndex) =>

@@ -20,7 +20,7 @@ export class NumberInput extends BaseInput<NumberInputProps, NumberInputState> {
 
   private hasChanged(nextProps: NumberInputProps) {
     // if value is NaN in incoming props and we have a string that is a number in the state value it is a change
-    if (isNaN(nextProps.value!)) {
+    if (isNaN(nextProps.value as any)) {
       return isFinite(this.state.value as any);
     }
 

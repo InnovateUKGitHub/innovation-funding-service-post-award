@@ -26,7 +26,7 @@ export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
     const filteredItemTypes = pcrItemTypes
       .map(pcrItemType => ({ itemType: pcrItemType, item: pcr.items.find((x => x.recordTypeId === pcrItemType.recordTypeId))}))
       .filter(x => !!x.item)
-      .map(x => ({itemType : x.itemType, item : x.item!}));
+      .map(x => ({itemType : x.itemType, item : x.item}));
 
     return {
       id: pcr.id,
@@ -39,7 +39,7 @@ export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
       items: filteredItemTypes.map(x => ({
         type: x.itemType.type,
         typeName: x.itemType.displayName,
-        shortName: x.item.shortName || x.itemType.displayName
+        shortName: x.item?.shortName || x.itemType.displayName
       }))
     };
   }

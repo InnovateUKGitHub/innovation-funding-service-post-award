@@ -1,3 +1,4 @@
+
 /* eslint-disable @typescript-eslint/naming-convention */
 import { PCRDto, PCRItemDto, PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
@@ -107,12 +108,12 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       .filter(x => !!x.originalItem)
       // get any updates
       .map(x => {
-        const updates = this.getItemUpdates(x.originalItem!, x.item);
-        return updates ? { ...x.originalItem!, ...updates } : null;
+
+        const updates = this.getItemUpdates(x.originalItem as ProjectChangeRequestItemEntity, x.item);
+        return updates ? { ...x.originalItem, ...updates } : null;
       })
       // filter those that need updating
-      .filter(x => !!x)
-      .map<ProjectChangeRequestItemEntity>(x => x!);
+      .filter(x => !!x) as ProjectChangeRequestItemEntity[];
 
     if (itemsToUpdate.length) {
       await context.repositories.projectChangeRequests.updateItems(entityToUpdate, itemsToUpdate);
@@ -120,11 +121,15 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
 
     const itemsToInsert: ProjectChangeRequestItemForCreateEntity[] = paired
       .filter(x => !x.originalItem)
-      .map(x => ({
-        recordTypeId: itemTypes.find(t => t.type === x.item.type)!.recordTypeId,
+      .map(x => {
+        const itemType = itemTypes.find(t => t.type === x.item.type);
+        if(!itemType) throw new Error(`Cannot find item matching ${x.item.type}`);
+        return ({
+        recordTypeId: itemType.recordTypeId,
         status: x.item.status,
         projectId: this.projectId,
-      }));
+      });
+});
 
     if (itemsToInsert.length) {
       await context.repositories.projectChangeRequests.insertItems(this.projectChangeRequestId, itemsToInsert);

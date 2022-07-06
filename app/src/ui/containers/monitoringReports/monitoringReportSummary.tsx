@@ -137,7 +137,7 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
 
   private renderResponse(editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>, question: Dtos.MonitoringReportQuestionDto) {
     const response = question.options.find(x => x.id === question.optionId);
-    const validation = editor && editor.validator.responses.results.find(x => x.model.displayOrder === question.displayOrder)!;
+    const validation = editor && editor.validator.responses.results.find(x => x.model.displayOrder === question.displayOrder) as QuestionValidator;
     return (
       <ACC.Section title={question.title}>
         <ACC.SummaryList qa={`summary-question-${question.displayOrder}`}>

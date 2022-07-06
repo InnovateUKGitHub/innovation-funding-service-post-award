@@ -130,7 +130,7 @@ describe("UpdateForecastDetailsCommand", () => {
     const command = new UpdateForecastDetailsCommand(partner.projectId, partner.id, dto, false);
     await context.runCommand(command);
 
-    expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id)!.Acc_LatestForecastCost__c).toBe(500);
+    expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id)?.Acc_LatestForecastCost__c).toBe(500);
   });
 
   it("total costs less than gol costs should update forecasts", async () => {
@@ -165,8 +165,8 @@ describe("UpdateForecastDetailsCommand", () => {
     const command = new UpdateForecastDetailsCommand(partner.projectId, partner.id, dto, false);
     await context.runCommand(command);
 
-    expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id)!.Acc_LatestForecastCost__c).toBe(250);
-    expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail2.Id)!.Acc_LatestForecastCost__c).toBe(100);
+    expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id)?.Acc_LatestForecastCost__c).toBe(250);
+    expect(context.repositories.profileDetails.Items.find(x => x.Id === profileDetail2.Id)?.Acc_LatestForecastCost__c).toBe(100);
   });
 
   it("should update claim status from DRAFT to SUBMITTED", async () => {
@@ -194,7 +194,7 @@ describe("UpdateForecastDetailsCommand", () => {
 
     const command = new UpdateForecastDetailsCommand(partner.projectId, partner.id, dto, true);
     await context.runCommand(command);
-    expect(context.repositories.claims.Items.find(x => x.Id === claim.Id)!.Acc_ClaimStatus__c).toBe(ClaimStatus.SUBMITTED);
+    expect(context.repositories.claims.Items.find(x => x.Id === claim.Id)?.Acc_ClaimStatus__c).toBe(ClaimStatus.SUBMITTED);
   });
 
   it("should update claim status from MO_QUERIED to SUBMITTED", async () => {
@@ -224,7 +224,7 @@ describe("UpdateForecastDetailsCommand", () => {
 
     const command = new UpdateForecastDetailsCommand(partner.projectId, partner.id, dto, true);
     await context.runCommand(command);
-    expect(context.repositories.claims.Items.find(x => x.Id === claim.Id)!.Acc_ClaimStatus__c).toBe(ClaimStatus.SUBMITTED);
+    expect(context.repositories.claims.Items.find(x => x.Id === claim.Id)?.Acc_ClaimStatus__c).toBe(ClaimStatus.SUBMITTED);
   });
 
   it("should update claim status from INNOVATE_QUERIED to AWAITING_IUK_APPROVAL", async () => {
@@ -254,7 +254,7 @@ describe("UpdateForecastDetailsCommand", () => {
 
     const command = new UpdateForecastDetailsCommand(partner.projectId, partner.id, dto, true);
     await context.runCommand(command);
-    expect(context.repositories.claims.Items.find(x => x.Id === claim.Id)!.Acc_ClaimStatus__c).toBe(ClaimStatus.AWAITING_IUK_APPROVAL);
+    expect(context.repositories.claims.Items.find(x => x.Id === claim.Id)?.Acc_ClaimStatus__c).toBe(ClaimStatus.AWAITING_IUK_APPROVAL);
   });
 
   it("should throw an error if invalid claim status when updating forecast", async () => {
@@ -395,8 +395,8 @@ describe("UpdateForecastDetailsCommand", () => {
 
     expect(error).not.toBeNull();
     expect(error).toBeInstanceOf(ValidationError);
-    expect(error.results!.isValid).toBe(false);
-    expect(error.results!.errors.map(x => x.errorMessage)).toEqual(["Your overall total cannot be higher than your total eligible costs."]);
+    expect(error.results?.isValid).toBe(false);
+    expect(error.results?.errors.map(x => x.errorMessage)).toEqual(["Your overall total cannot be higher than your total eligible costs."]);
   });
 
   it("when submitted creates status change record", async () => {

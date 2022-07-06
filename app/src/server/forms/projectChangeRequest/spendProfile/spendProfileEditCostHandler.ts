@@ -79,7 +79,7 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
       case CostCategoryType.Overheads: return this.updateOverheadsCost(cost as PCRSpendProfileOverheadsCostDto, body, button);
       case CostCategoryType.Materials: return this.updateMaterialsCost(cost as PCRSpendProfileMaterialsCostDto, body);
       case CostCategoryType.Subcontracting: return this.updateSubcontractingCost(cost as PCRSpendProfileSubcontractingCostDto, body);
-      case CostCategoryType.Capital_Usage: return this.updateCapitalUsagecost(cost as PCRSpendProfileCapitalUsageCostDto, body);
+      case CostCategoryType.Capital_Usage: return this.updateCapitalUsageCost(cost as PCRSpendProfileCapitalUsageCostDto, body);
       case CostCategoryType.Travel_And_Subsistence: return this.updateTravelAndSubsCost(cost as PCRSpendProfileTravelAndSubsCostDto, body);
       case CostCategoryType.Other_Costs: return this.updateOtherCost(cost as PCRSpendProfileOtherCostsDto, body);
     }
@@ -114,7 +114,7 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
     cost.value = parseNumber(body.value);
   }
 
-  private updateCapitalUsagecost(cost: PCRSpendProfileCapitalUsageCostDto, body: IFormBody) {
+  private updateCapitalUsageCost(cost: PCRSpendProfileCapitalUsageCostDto, body: IFormBody) {
     cost.description = body.description;
     cost.type = parseNumber(body.type) || PCRSpendProfileCapitalUsageType.Unknown;
     cost.depreciationPeriod = parseNumber(body.depreciationPeriod);
@@ -145,8 +145,8 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
 
     const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
-    const costCategoryDto = costCategories.find(x => x.id === params.costCategoryId)!;
-
+    const costCategoryDto = costCategories.find(x => x.id === params.costCategoryId);
+    if(!costCategoryDto) throw new Error(`Cannot find cost category dto matching ${params.costCategoryId}`);
     if (costCategoryDto.type === CostCategoryType.Overheads) {
       const pcrItem = dto.items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
 

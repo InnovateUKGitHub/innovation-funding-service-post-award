@@ -198,7 +198,7 @@ describe("saveMonitoringReports", () => {
     await context.runCommand(new SaveMonitoringReport(dto, true));
     const statusChange = context.repositories.monitoringReportStatusChange.Items.find(x => x.Acc_MonitoringReport__c === dto.headerId);
     expect(statusChange).toBeDefined();
-    expect(statusChange!.Acc_ExternalComment__c).toEqual(dto.addComments);
+    expect(statusChange?.Acc_ExternalComment__c).toEqual(dto.addComments);
   });
 
   it("should clear comments on the monitoring report when the report is submitted", async () => {
@@ -210,7 +210,7 @@ describe("saveMonitoringReports", () => {
     await context.runCommand(new SaveMonitoringReport(dto, true));
     const statusChange = context.repositories.monitoringReportStatusChange.Items.find(x => x.Acc_MonitoringReport__c === dto.headerId);
     expect(statusChange).toBeDefined();
-    expect(statusChange!.Acc_ExternalComment__c).toEqual("Test comment");
+    expect(statusChange?.Acc_ExternalComment__c).toEqual("Test comment");
     expect(report.Acc_AddComments__c).toBe("");
   });
 });

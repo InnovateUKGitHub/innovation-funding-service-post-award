@@ -38,7 +38,7 @@ interface HandleEditorErrorParams<T> {
 export function handleEditorError<T>({ id, store, dto, error, scrollToTop = true }: HandleEditorErrorParams<T>) {
   if (scrollToTop) scrollToTheTopSmoothly();
   if (error.code === ErrorCode.VALIDATION_ERROR) {
-    return updateEditorAction(id, store, dto, error.results!);
+    return updateEditorAction(id, store, dto, error.results ?? null);
   }
   return createAction("EDITOR_SUBMIT_ERROR", { id, store, dto, error });
 }

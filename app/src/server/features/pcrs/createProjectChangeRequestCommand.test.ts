@@ -180,7 +180,7 @@ describe("Create PCR Command", () => {
     const partner = context.testData.createPartner(project);
     const recordTypes = context.testData.createPCRRecordTypes();
 
-    const itemType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange)!;
+    const itemType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange);
 
     const command = new CreateProjectChangeRequestCommand(project.Id, ({
       projectId: project.Id,
@@ -188,7 +188,7 @@ describe("Create PCR Command", () => {
       reasoningStatus: PCRItemStatus.ToDo,
       items: [
         {
-          type: itemType.type,
+          type: itemType?.type,
           status: PCRItemStatus.ToDo,
           accountName: "Frida",
           partnerId: partner.id,
@@ -197,9 +197,9 @@ describe("Create PCR Command", () => {
     } as any) as PCRDto);
 
     const id = await context.runCommand(command);
-    const newPCR = context.repositories.projectChangeRequests.Items.find(x => x.id === id)!;
+    const newPCR = context.repositories.projectChangeRequests.Items.find(x => x.id === id);
     expect(newPCR).toBeDefined();
-    expect(newPCR.items).toHaveLength(1);
+    expect(newPCR?.items).toHaveLength(1);
     expect(newPCR).toEqual({
       id,
       projectId: project.Id,
@@ -211,7 +211,7 @@ describe("Create PCR Command", () => {
           projectId: project.Id,
           partnerId: partner.id,
           accountName: "Frida",
-          recordTypeId: recordTypes.find(x => x.type === itemType.typeName)!.id,
+          recordTypeId: recordTypes.find(x => x.type === itemType?.typeName)?.id,
         },
       ],
     });

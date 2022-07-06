@@ -26,7 +26,7 @@ export class Pending<T> {
   then<T2>(map: (data: T, state?: LoadingStatus, error?: any) => T2, noData?: () => T2) {
     let newData: T2 | null | undefined = null;
     if (Pending.canResolve([this])) {
-      newData = map(this.data!, this.state, this.error);
+      newData = map(this.data as T, this.state, this.error);
     } else if (noData) {
       newData = noData();
     }
@@ -43,7 +43,7 @@ export class Pending<T> {
    */
   and<T2, TR>(pending: Pending<T2>, combineData: (pending1: T, pending2: T2) => TR): Pending<TR> {
     const state = Pending.lowestState([this.state, pending.state]);
-    const data = Pending.canResolve([this, pending]) ? combineData(this.data!, pending.data!) : null;
+    const data = Pending.canResolve([this, pending]) ? combineData(this.data as T, pending.data as T2) : null;
     const error = this.error || pending.error;
     return new Pending(state, data, error);
   }
@@ -55,7 +55,7 @@ export class Pending<T> {
    */
   chain<T2>(next: (data: T, state: LoadingStatus) => Pending<T2>): Pending<T2> {
     if (Pending.canResolve([this])) {
-      return next(this.data!, this.state);
+      return next(this.data as T ,this.state);
     }
     return new Pending<T2>(this.state, null, this.error);
   }
@@ -104,12 +104,9 @@ export class Pending<T> {
    */
   static flatten<W>(pendings: Pending<W>[]): Pending<W[]> {
     const state = Pending.lowestState(pendings.map(x => x.state));
-    const data = Pending.canResolve(pendings) ? pendings.map(x => x.data!) : null;
-    const error = pendings
-      .filter(x => !!x.error)
-      .map(x => x.error)
-      .shift();
-    return new Pending<W[]>(state, data, error);
+    const data = Pending.canResolve(pendings) ? pendings.map(x => x.data) : null;
+    const error = pendings.filter(x => !!x.error).map(x => x.error).shift();
+    return new Pending<W[]>(state, data as W[], error);
   }
 
   static lowestState(states: LoadingStatus[]) {

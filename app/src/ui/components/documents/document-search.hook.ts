@@ -31,8 +31,8 @@ const filterItems = (valueToSearch: string, items: DocumentsBase["documents"]) =
   if (!valueToSearch.trim().length) return items;
 
   const preParsedItems = items.map(x => {
-    const shortDate = formatDate(x.dateCreated, DateFormat.SHORT_DATE)!;
-    const fullDate = formatDate(x.dateCreated, DateFormat.FULL_DATE)!;
+    const shortDate = formatDate(x.dateCreated, DateFormat.SHORT_DATE);
+    const fullDate = formatDate(x.dateCreated, DateFormat.FULL_DATE);
     // Note: No date support for 'fuse.js'
     const dateCreated = `${shortDate} ${fullDate}`;
 

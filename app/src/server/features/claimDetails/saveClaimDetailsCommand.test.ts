@@ -61,7 +61,7 @@ describe("SaveClaimDetails", () => {
           x.Acc_CostCategory__c === costCategory.id &&
           x.Acc_ProjectParticipant__r.Id === partner.id &&
           x.Acc_ProjectPeriodNumber__c === periodId,
-      )!.Acc_ReasonForDifference__c,
+      )?.Acc_ReasonForDifference__c,
     ).toEqual("this is a comment");
   });
 

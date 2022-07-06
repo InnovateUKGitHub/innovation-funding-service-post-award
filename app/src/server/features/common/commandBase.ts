@@ -70,7 +70,6 @@ export abstract class CommandDocumentBase<T> extends CommandBase<T> {
         this.document,
         context.config.options,
         this.showValidationErrors,
-        error,
       );
       if (!result.isValid) {
         throw new ValidationError(result);

@@ -32,7 +32,7 @@ export class MonitoringReportPeriodFormComponent extends Component<PeriodProps> 
               width={3}
               name="period"
               value={(x) => x.periodId}
-              update={(x, v) => (x.periodId = v!)}
+              update={(x, v) => (x.periodId = v as number)}
               validation={editor.validator.periodId}
             />
             <ReportForm.Fieldset qa="save-buttons">

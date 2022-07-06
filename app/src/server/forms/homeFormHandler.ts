@@ -14,14 +14,18 @@ export class HomeFormHandler implements IFormHandler {
       isReset: req.body.button_reset === "",
     };
 
-    if (!req.session!.user) {
-      req.session!.user = {};
+    if(!req.session) {
+      req.session = {};
+    }
+
+    if (!req.session.user) {
+      req.session.user = {};
     }
 
     if (dto.isReset) {
-      req.session!.user.email = configuration.salesforce.serviceUsername;
+      req.session.user.email = configuration.salesforce.serviceUsername;
     } else if (dto.user) {
-      req.session!.user.email = dto.user;
+      req.session.user.email = dto.user;
     }
 
     res.redirect(HomeRoute.routePath);

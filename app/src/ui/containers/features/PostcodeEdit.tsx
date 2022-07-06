@@ -34,7 +34,7 @@ export function PostcodeEdit({ editor, onUpdate, saveButtonContent, ...rest }: P
           width="one-quarter"
           value={() => editor.data.postcode}
           label={x => x.features.postcode.newPostcodeLabel}
-          update={(m, val) => (editor.data.postcode = val!)}
+          update={(m, val) => (editor.data.postcode = val)}
         />
       </PostcodeForm.Fieldset>
 

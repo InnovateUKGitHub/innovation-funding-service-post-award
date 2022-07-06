@@ -1,6 +1,6 @@
 import { IStepProps, ISummaryProps, IWorkflow, WorkflowBase } from "@framework/types/workflowBase";
 import * as Dtos from "@framework/dtos";
-import { MonitoringReportDtoValidator } from "@ui/validators";
+import { MonitoringReportDtoValidator, QuestionValidator } from "@ui/validators";
 import { numberComparator } from "@framework/util";
 import { MonitoringReportQuestionStep } from "@ui/containers/monitoringReports/questionStep";
 import { IEditorStore } from "@ui/redux";
@@ -41,7 +41,7 @@ const getQuestionSteps = (dto: Dtos.MonitoringReportDto, startingStepNumber: num
       displayName: x.title,
       stepNumber: i + startingStepNumber,
       validation: (val: MonitoringReportDtoValidator) =>
-        val.responses.results.find(response => response.question.displayOrder === x.displayOrder)!,
+        val.responses.results.find(response => response.question.displayOrder === x.displayOrder) as QuestionValidator,
       stepRender: function QuestionStepWrapper(props: MonitoringReportReportStepProps) {
         return <MonitoringReportQuestionStep questionNumber={x.displayOrder} {...props} />;
       },

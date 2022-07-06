@@ -63,7 +63,7 @@ export class CreateMonitoringReportCommand extends CommandBase<string> {
       .filter(x => x.optionId)
       .map<Partial<ISalesforceMonitoringReportResponse>>(insertDto => ({
         Acc_MonitoringHeader__c: headerId,
-        Acc_Question__c: insertDto.optionId!,
+        Acc_Question__c: insertDto.optionId as string,
         Acc_QuestionComments__c: insertDto.comments,
       }));
 

@@ -198,8 +198,8 @@ describe("UpdatePCRCommand", () => {
         const recordTypes = context.testData.createPCRRecordTypes();
         const projectTestType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.LoanDrawdownChange,
-        )!;
-        const recordType = recordTypes.find(x => x.type === projectTestType.typeName);
+        );
+        const recordType = recordTypes.find(x => x.type === projectTestType?.typeName);
 
         context.testData.createPCRItem(pcr, recordType);
 
@@ -232,9 +232,9 @@ describe("UpdatePCRCommand", () => {
           const recordTypes = context.testData.createPCRRecordTypes();
           const projectTestType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
             x => x.type === PCRItemType.LoanDrawdownChange,
-          )!;
+          );
 
-          const recordType = recordTypes.find(x => x.type === projectTestType.typeName);
+          const recordType = recordTypes.find(x => x.type === projectTestType?.typeName);
 
           context.testData.createPCRItem(pcr, recordType);
 
@@ -273,8 +273,8 @@ describe("UpdatePCRCommand", () => {
           const recordTypes = context.testData.createPCRRecordTypes();
           const projectTestType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
             x => x.type === PCRItemType.LoanDrawdownChange,
-          )!;
-          const recordType = recordTypes.find(x => x.type === projectTestType.typeName);
+          );
+          const recordType = recordTypes.find(x => x.type === projectTestType?.typeName);
 
           context.testData.createPCRItem(pcr, recordType);
 
@@ -345,7 +345,7 @@ describe("UpdatePCRCommand", () => {
         const additionalItem = {
           status: PCRItemStatus.ToDo,
           // Note: We know this always returns a defined value as we would have thrown on 'changeProjectScopeRecord'
-          type: GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.typeName === changeProjectScopeRecord.type)!.type,
+          type: GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.typeName === changeProjectScopeRecord.type)?.type,
         };
 
         dto.items.push(additionalItem as PCRStandardItemDto);
@@ -456,8 +456,8 @@ describe("UpdatePCRCommand", () => {
         const recordTypes = context.testData.createPCRRecordTypes();
         const projectTestType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.LoanDrawdownChange,
-        )!;
-        const recordType = recordTypes.find(x => x.type === projectTestType.typeName);
+        );
+        const recordType = recordTypes.find(x => x.type === projectTestType?.typeName);
 
         context.testData.createPCRItem(pcr, recordType);
 
@@ -485,8 +485,8 @@ describe("UpdatePCRCommand", () => {
         const recordTypes = context.testData.createPCRRecordTypes();
         const projectTestType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.LoanDrawdownChange,
-        )!;
-        const recordType = recordTypes.find(x => x.type === projectTestType.typeName);
+        );
+        const recordType = recordTypes.find(x => x.type === projectTestType?.typeName);
 
         context.testData.createPCRItem(pcr, recordType);
 
@@ -510,8 +510,8 @@ describe("UpdatePCRCommand", () => {
         const recordTypes = context.testData.createPCRRecordTypes();
         const projectTestType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.LoanDrawdownChange,
-        )!;
-        const recordType = recordTypes.find(x => x.type === projectTestType.typeName);
+        );
+        const recordType = recordTypes.find(x => x.type === projectTestType?.typeName);
 
         context.testData.createPCRItem(pcr, recordType);
 
@@ -611,7 +611,7 @@ describe("UpdatePCRCommand", () => {
 
       test.each(invalidEditStatus.map<[string, PCRStatus]>(x => [PCRStatus[x], x]))(
         "can not update when %s",
-        async (stausLabel, status) => {
+        async (statusLabel, status) => {
           const context = new TestContext();
 
           const project = context.testData.createProject();
@@ -666,7 +666,7 @@ describe("UpdatePCRCommand", () => {
 
         const scopeChangeTypeName = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.ScopeChange,
-        )!.typeName;
+        )?.typeName;
 
         const recordType = recordTypes.find(x => x.type === scopeChangeTypeName);
         context.testData.createPCRItem(projectChangeRequest, recordType, {
@@ -700,7 +700,7 @@ describe("UpdatePCRCommand", () => {
 
         const scopeChangeTypeName = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.ScopeChange,
-        )!.typeName;
+        )?.typeName;
 
         const recordType = recordTypes.find(x => x.type === scopeChangeTypeName);
         context.testData.createPCRItem(projectChangeRequest, recordType);
@@ -836,8 +836,8 @@ describe("UpdatePCRCommand", () => {
 
         const updatedItem = context.repositories.projectChangeRequests.Items.find(
           x => x.id === projectChangeRequest.id,
-        )!.items.find(x => x.id === item.id)!;
-        await expect(updatedItem.projectDuration).toEqual(item.offsetMonths + item.projectDurationSnapshot);
+        )?.items.find(x => x.id === item.id);
+        await expect(updatedItem?.projectDuration).toEqual(item.offsetMonths + item.projectDurationSnapshot);
       });
     });
 
@@ -852,9 +852,9 @@ describe("UpdatePCRCommand", () => {
 
         const projectSuspensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.ProjectSuspension,
-        )!;
+        );
 
-        const recordType = recordTypes.find(x => x.type === projectSuspensionType.typeName);
+        const recordType = recordTypes.find(x => x.type === projectSuspensionType?.typeName);
         context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Complete });
 
         const dto = await context.runQuery(
@@ -878,9 +878,9 @@ describe("UpdatePCRCommand", () => {
 
         const projectSuspensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.ProjectSuspension,
-        )!;
+        );
 
-        const recordType = recordTypes.find(x => x.type === projectSuspensionType.typeName);
+        const recordType = recordTypes.find(x => x.type === projectSuspensionType?.typeName);
         context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete });
 
         const dto = await context.runQuery(
@@ -903,9 +903,9 @@ describe("UpdatePCRCommand", () => {
 
         const projectSuspensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.ProjectSuspension,
-        )!;
+        );
 
-        const recordType = recordTypes.find(x => x.type === projectSuspensionType.typeName);
+        const recordType = recordTypes.find(x => x.type === projectSuspensionType?.typeName);
         context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete });
 
         const dto = await context.runQuery(
@@ -928,9 +928,9 @@ describe("UpdatePCRCommand", () => {
 
         const projectSuspensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.ProjectSuspension,
-        )!;
+        );
 
-        const recordType = recordTypes.find(x => x.type === projectSuspensionType.typeName);
+        const recordType = recordTypes.find(x => x.type === projectSuspensionType?.typeName);
         context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete });
 
         const dto = await context.runQuery(
@@ -953,9 +953,9 @@ describe("UpdatePCRCommand", () => {
 
         const projectSuspensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.ProjectSuspension,
-        )!;
+        );
 
-        const recordType = recordTypes.find(x => x.type === projectSuspensionType.typeName);
+        const recordType = recordTypes.find(x => x.type === projectSuspensionType?.typeName);
         context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete });
 
         const dto = await context.runQuery(
@@ -975,8 +975,8 @@ describe("UpdatePCRCommand", () => {
           new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id),
         );
         const updatedItem = updated.items[0] as PCRItemForProjectSuspensionDto;
-        await expect(updatedItem.suspensionStartDate!.toISOString()).toEqual(startDate.toISOString());
-        await expect(updatedItem.suspensionEndDate!.toISOString()).toEqual(endDate.toISOString());
+        await expect(updatedItem.suspensionStartDate?.toISOString()).toEqual(startDate.toISOString());
+        await expect(updatedItem.suspensionEndDate?.toISOString()).toEqual(endDate.toISOString());
       });
     });
 
@@ -992,9 +992,9 @@ describe("UpdatePCRCommand", () => {
 
         const projectSuspensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.AccountNameChange,
-        )!;
+        );
 
-        const recordType = recordTypes.find(x => x.type === projectSuspensionType.typeName);
+        const recordType = recordTypes.find(x => x.type === projectSuspensionType?.typeName);
         context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Complete });
 
         const dto = await context.runQuery(
@@ -1033,9 +1033,9 @@ describe("UpdatePCRCommand", () => {
 
         const projectSuspensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.AccountNameChange,
-        )!;
+        );
 
-        const recordType = recordTypes.find(x => x.type === projectSuspensionType.typeName);
+        const recordType = recordTypes.find(x => x.type === projectSuspensionType?.typeName);
         context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Complete });
 
         const dto = await context.runQuery(
@@ -1067,9 +1067,9 @@ describe("UpdatePCRCommand", () => {
 
         const accountNameChangeType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.AccountNameChange,
-        )!;
+        );
 
-        const recordType = recordTypes.find(x => x.type === accountNameChangeType.typeName);
+        const recordType = recordTypes.find(x => x.type === accountNameChangeType?.typeName);
         context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Complete });
 
         const dto = await context.runQuery(
@@ -1102,8 +1102,8 @@ describe("UpdatePCRCommand", () => {
 
         const accountNameChangeType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.AccountNameChange,
-        )!;
-        const recordType = context.testData.createPCRRecordTypes().find(x => x.type === accountNameChangeType.typeName);
+        );
+        const recordType = context.testData.createPCRRecordTypes().find(x => x.type === accountNameChangeType?.typeName);
         context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.ToDo });
 
         const dto = await context.runQuery(
@@ -1137,9 +1137,9 @@ describe("UpdatePCRCommand", () => {
 
         const partnerWithdrawalType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.PartnerWithdrawal,
-        )!;
+        );
 
-        const recordType = recordTypes.find(x => x.type === partnerWithdrawalType.typeName);
+        const recordType = recordTypes.find(x => x.type === partnerWithdrawalType?.typeName);
         context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Complete });
 
         const dto = await context.runQuery(
@@ -1178,9 +1178,9 @@ describe("UpdatePCRCommand", () => {
 
         const partnerWithdrawalType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.PartnerWithdrawal,
-        )!;
+        );
 
-        const recordType = recordTypes.find(x => x.type === partnerWithdrawalType.typeName);
+        const recordType = recordTypes.find(x => x.type === partnerWithdrawalType?.typeName);
         context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Complete });
 
         const dto = await context.runQuery(
@@ -1212,9 +1212,9 @@ describe("UpdatePCRCommand", () => {
 
         const partnerWithdrawalType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.PartnerWithdrawal,
-        )!;
+        );
 
-        const recordType = recordTypes.find(x => x.type === partnerWithdrawalType.typeName);
+        const recordType = recordTypes.find(x => x.type === partnerWithdrawalType?.typeName);
         context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Complete });
 
         const dto = await context.runQuery(
@@ -1249,9 +1249,9 @@ describe("UpdatePCRCommand", () => {
 
         const partnerWithdrawalType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.PartnerWithdrawal,
-        )!;
+        );
 
-        const recordType = recordTypes.find(x => x.type === partnerWithdrawalType.typeName);
+        const recordType = recordTypes.find(x => x.type === partnerWithdrawalType?.typeName);
         context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Complete });
 
         const dto = await context.runQuery(
@@ -1283,9 +1283,9 @@ describe("UpdatePCRCommand", () => {
 
         const partnerWithdrawalType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.PartnerWithdrawal,
-        )!;
+        );
 
-        const recordType = recordTypes.find(x => x.type === partnerWithdrawalType.typeName);
+        const recordType = recordTypes.find(x => x.type === partnerWithdrawalType?.typeName);
         context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Complete });
 
         const dto = await context.runQuery(
@@ -1318,8 +1318,8 @@ describe("UpdatePCRCommand", () => {
 
         const partnerWithdrawalType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.PartnerWithdrawal,
-        )!;
-        const recordType = context.testData.createPCRRecordTypes().find(x => x.type === partnerWithdrawalType.typeName);
+        );
+        const recordType = context.testData.createPCRRecordTypes().find(x => x.type === partnerWithdrawalType?.typeName);
         context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.ToDo });
 
         const dto = await context.runQuery(
@@ -1353,9 +1353,9 @@ describe("UpdatePCRCommand", () => {
 
         const multiplePartnerFinancialVirement = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.MultiplePartnerFinancialVirement,
-        )!;
+        );
 
-        const recordType = recordTypes.find(x => x.type === multiplePartnerFinancialVirement.typeName);
+        const recordType = recordTypes.find(x => x.type === multiplePartnerFinancialVirement?.typeName);
         context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Complete });
 
         const dto = await context.runQuery(
@@ -1387,7 +1387,7 @@ describe("UpdatePCRCommand", () => {
         const loanExtensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.LoanDrawdownExtension,
         );
-        const recordType = recordTypes.find(x => x.type === loanExtensionType!.typeName);
+        const recordType = recordTypes.find(x => x.type === loanExtensionType?.typeName);
 
         context.testData.createPCRItem(pcr, recordType, { status: PCRItemStatus.Complete });
 

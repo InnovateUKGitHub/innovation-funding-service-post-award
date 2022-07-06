@@ -205,7 +205,7 @@ describe("GetCostSummaryForPeriodQuery", () => {
       costCategory,
       partner,
       periodId,
-      x => (x.Acc_PeriodCostCategoryTotal__c = null!),
+      x => (x.Acc_PeriodCostCategoryTotal__c = 0),
     );
 
     const query = new GetCostsSummaryForPeriodQuery(project.Id, partner.id, periodId);

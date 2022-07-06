@@ -32,7 +32,8 @@ export class ProjectSetupSpendProfileFormHandler extends StandardFormHandlerBase
       .filter(x => costCategories.find(c => c.id === x.costCategoryId))
       .map(x => {
         const value = parseFloat(body[`value_${x.periodId}_${x.costCategoryId}`]);
-        const costCategory = costCategories.find(c => c.id === x.costCategoryId)!;
+        const costCategory = costCategories.find(c => c.id === x.costCategoryId);
+        if(!costCategory) throw new Error(`Cannot find costCategory matching ${x.costCategoryId}`);
         // If it's calculated then we don't care if it's not valid so just set it to zero
         x.value = !isNumber(value) && costCategory.isCalculated ? 0 : value;
         return {

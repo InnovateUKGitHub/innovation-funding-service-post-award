@@ -22,8 +22,8 @@ describe("claims by project", () => {
       const partnerStore = new PartnersStore(partnerDocumentsStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumentsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, claimDocumentsStore, partnerStore, context.testStore.getState, context.testStore.dispatch);
-      const foundClaims = claimsStore.getAllClaimsForProject(project.Id).data!;
-      expect(foundClaims[0].id).toEqual(claim.Id);
+      const foundClaims = claimsStore.getAllClaimsForProject(project.Id).data;
+      expect(foundClaims?.[0].id).toEqual(claim.Id);
     });
 
     it("should return an empty array when there are no claims for the queried project", async () => {
@@ -37,7 +37,7 @@ describe("claims by project", () => {
       const partnerStore = new PartnersStore(partnerDocumentsStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumentsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, claimDocumentsStore, partnerStore, context.testStore.getState, context.testStore.dispatch);
-      const foundClaims = claimsStore.getAllClaimsForProject("not real").data!;
+      const foundClaims = claimsStore.getAllClaimsForProject("not real").data;
       expect(foundClaims).toEqual([]);
     });
   });
@@ -56,9 +56,9 @@ describe("claims by project", () => {
       const partnerStore = new PartnersStore(partnerDocumentsStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumentsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, claimDocumentsStore, partnerStore, context.testStore.getState, context.testStore.dispatch);
-      const foundClaims = claimsStore.getActiveClaimsForProject(project.Id).data!;
+      const foundClaims = claimsStore.getActiveClaimsForProject(project.Id).data;
       expect(foundClaims).toHaveLength(1);
-      expect(foundClaims[0].id).toEqual(draftClaim.Id);
+      expect(foundClaims?.[0].id).toEqual(draftClaim.Id);
     });
 
     it("should return an empty array when there are no open claims", async () => {
@@ -72,7 +72,7 @@ describe("claims by project", () => {
       const partnerStore = new PartnersStore(partnerDocumentsStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumentsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, claimDocumentsStore, partnerStore, context.testStore.getState, context.testStore.dispatch);
-      const foundClaims = claimsStore.getActiveClaimsForProject(project.Id).data!;
+      const foundClaims = claimsStore.getActiveClaimsForProject(project.Id).data;
       expect(foundClaims).toEqual([]);
     });
   });
@@ -90,9 +90,9 @@ describe("claims by project", () => {
       const partnerStore = new PartnersStore(partnerDocumentsStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumentsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, claimDocumentsStore, partnerStore, context.testStore.getState, context.testStore.dispatch);
-      const foundClaims = claimsStore.getInactiveClaimsForProject(project.Id).data!;
+      const foundClaims = claimsStore.getInactiveClaimsForProject(project.Id).data;
       expect(foundClaims).toHaveLength(1);
-      expect(foundClaims[0].id).toEqual(approvedClaim.Id);
+      expect(foundClaims?.[0].id).toEqual(approvedClaim.Id);
     });
     it("should return empty array when there is no open claims", async () => {
       const context = new TestContext();
@@ -106,7 +106,7 @@ describe("claims by project", () => {
       const partnerStore = new PartnersStore(partnerDocumentsStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumentsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, claimDocumentsStore, partnerStore, context.testStore.getState, context.testStore.dispatch);
-      const foundClaims = claimsStore.getInactiveClaimsForProject(project.Id).data!;
+      const foundClaims = claimsStore.getInactiveClaimsForProject(project.Id).data;
       expect(foundClaims).toEqual([]);
     });
   });
@@ -125,8 +125,8 @@ describe("claims by partner", () => {
       const partnerStore = new PartnersStore(partnerDocumentsStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumentsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, claimDocumentsStore, partnerStore, context.testStore.getState, context.testStore.dispatch);
-      const foundClaims = claimsStore.getAllClaimsForPartner(partner.id).data!;
-      expect(foundClaims[0].id).toEqual(claim.Id);
+      const foundClaims = claimsStore.getAllClaimsForPartner(partner.id).data;
+      expect(foundClaims?.[0].id).toEqual(claim.Id);
     });
 
     it("should return an empty array when there are no claims for the queried project", async () => {
@@ -140,7 +140,7 @@ describe("claims by partner", () => {
       const partnerStore = new PartnersStore(partnerDocumentsStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumentsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, claimDocumentsStore, partnerStore, context.testStore.getState, context.testStore.dispatch);
-      const foundClaims = claimsStore.getAllClaimsForPartner("not real").data!;
+      const foundClaims = claimsStore.getAllClaimsForPartner("not real").data;
       expect(foundClaims).toEqual([]);
     });
   });
@@ -159,8 +159,8 @@ describe("claims by partner", () => {
       const partnerStore = new PartnersStore(partnerDocumentsStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumentsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, claimDocumentsStore, partnerStore, context.testStore.getState, context.testStore.dispatch);
-      const foundClaim = claimsStore.getActiveClaimForPartner(partner.id).data!;
-      expect(foundClaim.id).toEqual(draftClaim.Id);
+      const foundClaim = claimsStore.getActiveClaimForPartner(partner.id).data;
+      expect(foundClaim?.id).toEqual(draftClaim.Id);
     });
 
     it("should return an empty array when there are no open claims", async () => {
@@ -174,7 +174,7 @@ describe("claims by partner", () => {
       const partnerStore = new PartnersStore(partnerDocumentsStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumentsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, claimDocumentsStore, partnerStore, context.testStore.getState, context.testStore.dispatch);
-      const foundClaim = claimsStore.getActiveClaimForPartner(partner.id).data!;
+      const foundClaim = claimsStore.getActiveClaimForPartner(partner.id).data;
       expect(foundClaim).toBeNull();
     });
   });
@@ -192,9 +192,9 @@ describe("claims by partner", () => {
       const partnerStore = new PartnersStore(partnerDocumentsStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumentsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, claimDocumentsStore, partnerStore, context.testStore.getState, context.testStore.dispatch);
-      const foundClaims = claimsStore.getInactiveClaimsForPartner(partner.id).data!;
+      const foundClaims = claimsStore.getInactiveClaimsForPartner(partner.id).data;
       expect(foundClaims).toHaveLength(1);
-      expect(foundClaims[0].id).toEqual(approvedClaim.Id);
+      expect(foundClaims?.[0].id).toEqual(approvedClaim.Id);
     });
     it("should return empty array when there is no open claims", async () => {
       const context = new TestContext();
@@ -208,7 +208,7 @@ describe("claims by partner", () => {
       const partnerStore = new PartnersStore(partnerDocumentsStore, context.testStore.getState, context.testStore.dispatch);
       const claimDocumentsStore = new ClaimDocumentsStore(partnerStore, context.testStore.getState, context.testStore.dispatch);
       const claimsStore = new ClaimsStore(costSummariesStore, claimDocumentsStore, partnerStore, context.testStore.getState, context.testStore.dispatch);
-      const foundClaims = claimsStore.getInactiveClaimsForPartner(partner.id).data!;
+      const foundClaims = claimsStore.getInactiveClaimsForPartner(partner.id).data;
       expect(foundClaims).toEqual([]);
     });
   });

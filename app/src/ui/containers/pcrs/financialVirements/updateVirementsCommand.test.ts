@@ -103,6 +103,7 @@ describe("UpdateFinancialVirementCommand", () => {
 
     const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     dto.partners[0].virements.find(x => x.costCategoryId === costCategory1.id)!.newEligibleCosts = 160;
 
     const result = await testContext.runCommand(new UpdateFinancialVirementCommand(partner.projectId, pcrItem.pcrId, pcrItem.id, dto, true));
@@ -151,6 +152,7 @@ describe("UpdateFinancialVirementCommand", () => {
 
     const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     dto.partners[0].virements.find(x => x.costCategoryId === costCategory1.id)!.newEligibleCosts = 160;
     dto.partners[0].newFundingLevel = 60;
     const result = await testContext.runCommand(new UpdateFinancialVirementCommand(partner.projectId, pcrItem.pcrId, pcrItem.id, dto, true));

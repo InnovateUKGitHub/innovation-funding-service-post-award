@@ -3,6 +3,7 @@ import { getFileSize } from "@framework/util/files";
 
 import { ITypedTable, TableChild, TypedTable } from "@ui/components/table";
 import { Content } from "@ui/components/content";
+import { DocumentDescription } from "@framework/constants";
 import { TypedForm } from "../form";
 import { DocumentsBase } from "./documents.interface";
 import { DocumentsUnavailable } from "./DocumentsUnavailable";
@@ -32,7 +33,7 @@ export function DocumentTable({ documents = [], qa, customContent }: DocumentTab
         qa="fileType"
         value={x =>
           x.description ? (
-            <Content value={c => c.components.documents.labels.documentDescriptionLabel(x.description!)} />
+            <Content value={c => c.components.documents.labels.documentDescriptionLabel(x.description as DocumentDescription)} />
           ) : null
         }
       />

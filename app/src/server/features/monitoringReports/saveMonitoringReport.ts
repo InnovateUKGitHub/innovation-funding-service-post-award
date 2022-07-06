@@ -68,14 +68,14 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
     const deleteItems = existing.filter(x => persistedIds.indexOf(x.Id) === -1).map(x => x.Id);
 
     const updateItems = updateDtos.map<Updatable<ISalesforceMonitoringReportResponse>>(updateDto => ({
-      Id: updateDto.responseId!,
-      Acc_Question__c: updateDto.optionId!,
+      Id: updateDto.responseId ?? "",
+      Acc_Question__c: updateDto.optionId ?? "",
       Acc_QuestionComments__c: updateDto.comments
     }));
 
     const insertItems = insertDtos.map<Partial<ISalesforceMonitoringReportResponse>>(insertDto => ({
       Acc_MonitoringHeader__c: this.monitoringReportDto.headerId,
-      Acc_Question__c: insertDto.optionId!,
+      Acc_Question__c: insertDto.optionId ?? "",
       Acc_QuestionComments__c: insertDto.comments
     }));
 

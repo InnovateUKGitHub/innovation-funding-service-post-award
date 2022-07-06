@@ -169,8 +169,8 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
 
     const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
-    const costCategoryDto = costCategories.find(x => x.id === params.costCategoryId)!;
-
+    const costCategoryDto = costCategories.find(x => x.id === params.costCategoryId);
+    if(!costCategoryDto) throw new Error(`Cannot find cost category dto matching ${params.costCategoryId}`);
     if (costCategoryDto.type === CostCategoryType.Overheads) {
       const pcrItem = dto.items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
 
