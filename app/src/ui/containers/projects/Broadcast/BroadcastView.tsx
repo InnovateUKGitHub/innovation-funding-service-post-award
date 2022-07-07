@@ -1,5 +1,5 @@
 import { BroadcastDto } from "@framework/dtos/BroadcastDto";
-import { BroadcastPageRoute } from "@ui/containers/broadcasts/broadcast-page";
+import { BroadcastPageRoute } from "@ui/containers/broadcasts/broadcast.page";
 import * as ACC from "@ui/components";
 import { useContent } from "@ui/hooks";
 
