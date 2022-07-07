@@ -10,7 +10,7 @@ import { PartnerDto, ProjectDto } from "@framework/dtos";
 import { findByTextContent } from "@tests/test-utils/rtl-helpers";
 
 describe("<DashboardProject />", () => {
-  const stubContent = ({
+  const stubContent = {
     projectsDashboard: {
       messages: {
         pendingProject: { content: "stub-pendingProject" },
@@ -22,10 +22,11 @@ describe("<DashboardProject />", () => {
         pcrQueried: { content: "stub-pcrQueried" },
         projectEnded: { content: "stub-projectEnded" },
         claimsToReview: jest.fn().mockReturnValue({ content: "stub-claimsToReview" }),
+        claimOverdue: jest.fn().mockReturnValue({ content: "stub-claimOverdue" }),
         pcrsToReview: jest.fn().mockReturnValue({ content: "stub-pcrsToReview" }),
       },
     },
-  } as any) as TestBedContent;
+  } as any as TestBedContent;
 
   const stubProjectSetupLink = jest.fn().mockReturnValue({
     routeName: "stub-projectSetup-routeName",
@@ -48,14 +49,14 @@ describe("<DashboardProject />", () => {
       claimsOverdue: 0,
     }),
     section: "archived",
-    routes: ({
+    routes: {
       projectSetup: {
         getLink: stubProjectSetupLink,
       },
       projectOverview: {
         getLink: stubProjectOverviewLink,
       },
-    } as unknown) as DashboardProjectProps["routes"],
+    } as unknown as DashboardProjectProps["routes"],
   };
 
   const setup = (props: Partial<DashboardProjectProps>) => {
@@ -71,19 +72,18 @@ describe("<DashboardProject />", () => {
   describe("@renders", () => {
     describe("with projects action visibility", () => {
       test.each`
-        name                                                                  | inboundProps                                                                                          | expectedActionVisible
-        ${"when archived"}                                                    | ${{ section: "archived" }}                                                                            | ${false}
-        ${"when upcoming"}                                                    | ${{ section: "upcoming" }}                                                                            | ${false}
-        ${"when pending"}                                                     | ${{ section: "pending" }}                                                                             | ${true}
-        ${"when open fallback state"}                                         | ${{ section: "open" }}                                                                                | ${false}
-        ${"when open with partner with no actions or claims due"}             | ${{ section: "open", partner: { claimsOverdue: 0, claimStatus: PartnerClaimStatus.ClaimSubmitted } }} | ${false}
-        ${"when open with partner claims overdue"}                            | ${{ section: "open", partner: { claimsOverdue: 1, claimStatus: PartnerClaimStatus.ClaimSubmitted } }} | ${true}
-        ${"when open with partner claims overdue with no unsubmitted status"} | ${{ section: "open", partner: { claimsOverdue: 1 } }}                                                 | ${true}
-        ${"when open with partner claimsStatus IARRequired"}                  | ${{ section: "open", partner: { claimStatus: PartnerClaimStatus.IARRequired } }}                      | ${true}
-        ${"when open with partner claimsStatus is not ClaimSubmitted"}        | ${{ section: "open", partner: { claimStatus: PartnerClaimStatus.Unknown } }}                          | ${true}
-        ${"when open with partner claimsStatus is not NoClaimsDue"}           | ${{ section: "open", partner: { claimStatus: PartnerClaimStatus.ClaimDue } }}                         | ${true}
-        ${"when open with project PM with claims overdue"}                    | ${{ section: "open", project: { roles: ProjectRole.ProjectManager, claimsOverdue: 1 } }}              | ${true}
-        ${"when open with project MO with claims to review"}                  | ${{ section: "open", project: { roles: ProjectRole.MonitoringOfficer, claimsToReview: 1 } }}          | ${true}
+        name                                                            | inboundProps                                                                                                                          | expectedActionVisible
+        ${"when archived"}                                              | ${{ section: "archived" }}                                                                                                            | ${false}
+        ${"when upcoming"}                                              | ${{ section: "upcoming" }}                                                                                                            | ${false}
+        ${"when pending"}                                               | ${{ section: "pending" }}                                                                                                             | ${true}
+        ${"when open fallback state"}                                   | ${{ section: "open" }}                                                                                                                | ${false}
+        ${"when open with partner with no actions or claims due"}       | ${{ section: "open", partner: { claimStatus: PartnerClaimStatus.ClaimSubmitted } }}                                                   | ${false}
+        ${"when open with partner claims overdue"}                      | ${{ section: "open", partner: { claimStatus: PartnerClaimStatus.ClaimsOverdue } }}                                                    | ${true}
+        ${"when open with partner claimsStatus IARRequired"}            | ${{ section: "open", partner: { claimStatus: PartnerClaimStatus.IARRequired } }}                                                      | ${true}
+        ${"when open with partner claimsStatus is not ClaimSubmitted"}  | ${{ section: "open", partner: { claimStatus: PartnerClaimStatus.ClaimQueried } }}                                                     | ${true}
+        ${"when open with partner claimsStatus is not NoClaimsDue"}     | ${{ section: "open", partner: { claimStatus: PartnerClaimStatus.ClaimDue } }}                                                         | ${true}
+        ${"when open with project MO with claims overdue"}              | ${{ section: "open", project: { roles: ProjectRole.MonitoringOfficer, claimsOverdue: 1 } }}                                           | ${true}
+        ${"when open with project MO with claims to review"}            | ${{ section: "open", project: { roles: ProjectRole.MonitoringOfficer, claimsToReview: 1 } }}                                          | ${true}
       `("$name", ({ inboundProps, expectedActionVisible }) => {
         const { container } = setup(inboundProps);
 
