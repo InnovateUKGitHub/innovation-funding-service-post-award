@@ -1,6 +1,5 @@
 import { BroadcastDto } from "@framework/dtos/BroadcastDto";
-
-import { useRoutes } from "@ui/redux";
+import { BroadcastPageRoute } from "@ui/containers/broadcasts/broadcast-page";
 import * as ACC from "@ui/components";
 import { useContent } from "@ui/hooks";
 
@@ -8,7 +7,7 @@ type BroadcastViewProps = BroadcastDto;
 
 export function BroadcastView({ id, title, content }: BroadcastViewProps) {
   const { getContent } = useContent();
-  const route = useRoutes().BroadcastPage.getLink({ broadcastId: id });
+  const route = BroadcastPageRoute.getLink({ broadcastId: id });
 
   const snippetMaxCharacters = 80;
   const messageSnippet = content[0].slice(0, snippetMaxCharacters);
