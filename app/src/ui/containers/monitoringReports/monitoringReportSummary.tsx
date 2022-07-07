@@ -112,6 +112,7 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
         qa={`question-${question.displayOrder}-comments`}
         /* Put the action on the second item if not showing the first*/
         action={!question.isScored && this.getAction(validation, question)}
+        isMarkdown
       />
     );
   }
