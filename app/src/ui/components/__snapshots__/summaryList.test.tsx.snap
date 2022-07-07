@@ -1,0 +1,53 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SummaryList /> @returns renders markdown content adequately 1`] = `
+<div>
+  <dl
+    class="govuk-summary-list"
+    data-qa="with-action"
+  >
+    <div
+      class="govuk-summary-list__row"
+      data-qa="test-item"
+    >
+      <dt
+        class="govuk-summary-list__key"
+      >
+        Label
+      </dt>
+      <span
+        class="govuk-body markdown"
+      >
+        <p>
+          There is a thing to be done 
+          <code>
+            abc.com
+          </code>
+           yes there is.
+        </p>
+        
+
+        <p>
+          I hate to break it to you.
+        </p>
+        
+
+        <blockquote>
+          
+
+          <p>
+            He said I should do it
+          </p>
+          
+
+        </blockquote>
+        
+
+      </span>
+      <dd
+        class="govuk-summary-list__actions"
+      />
+    </div>
+  </dl>
+</div>
+`;
