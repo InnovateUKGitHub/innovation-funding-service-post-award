@@ -191,7 +191,7 @@ describe("UpdateClaimCommand", () => {
     expect(claim.Acc_ReasonForDifference__c).toBe("A New Message");
   });
 
-  it("when message is over 1000 characters expect expection", async () => {
+  it("when message is over 1000 characters expect exception", async () => {
     const context = new TestContext();
     const claim = context.testData.createClaim();
     const partner = context.testData.createPartner();
@@ -217,7 +217,7 @@ describe("UpdateClaimCommand", () => {
     await context.runCommand(command);
   });
 
-  it("when message is not set and claim status is changing to MO Quried expect validation excetion", async () => {
+  it("when message is not set and claim status is changing to MO Queried expect validation exception", async () => {
     const context = new TestContext();
     const partner = context.testData.createPartner();
     const claim = context.testData.createClaim(partner);
@@ -233,7 +233,7 @@ describe("UpdateClaimCommand", () => {
     await expect(context.runCommand(new UpdateClaimCommand(partner.projectId, dto))).resolves.toEqual(true);
   });
 
-  it("when message is not set and claim status is already MO Quried expect no validation excetion", async () => {
+  it("when message is not set and claim status is already MO Queried expect no validation exception", async () => {
     const context = new TestContext();
     const partner = context.testData.createPartner();
     const claim = context.testData.createClaim(partner);
@@ -314,7 +314,7 @@ describe("UpdateClaimCommand", () => {
     const partner = context.testData.createPartner();
     const claim = context.testData.createClaim(partner, 2);
     claim.Acc_ClaimStatus__c = ClaimStatus.SUBMITTED;
-    claim.Acc_ReasonForDifference__c = "Orignal Comments";
+    claim.Acc_ReasonForDifference__c = "Original Comments";
 
     const dto = mapClaim(context)(claim, partner.competitionType);
 
@@ -325,7 +325,7 @@ describe("UpdateClaimCommand", () => {
     await context.runCommand(command);
 
     expect(context.repositories.claimStatusChanges.Items.length).toBe(1);
-    expect(context.repositories.claimStatusChanges.Items[0].Acc_ExternalComment__c).toBe("Orignal Comments");
+    expect(context.repositories.claimStatusChanges.Items[0].Acc_ExternalComment__c).toBe("Original Comments");
     expect(claim.Acc_ReasonForDifference__c).toBe("");
   });
 
@@ -486,7 +486,7 @@ describe("UpdateClaimCommand", () => {
   });
 
   describe("with validateFinalClaim", () => {
-    it.only("should pass validation when command is not on summary", async () => {
+    it("should pass validation when command is not on summary", async () => {
       const context = new TestContext();
       const project = context.testData.createProject(x => (x.Acc_ProjectStatus__c = "On Hold"));
       const claim = context.testData.createClaim();
