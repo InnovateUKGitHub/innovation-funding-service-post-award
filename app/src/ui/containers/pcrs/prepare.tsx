@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { v4 as uuid } from "uuid";
 import { PCRItemDto, PCRItemStatus, PCRItemType, PCRStatus, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
 import { PCRDto, ProjectChangeRequestStatusChangeDto } from "@framework/dtos/pcrDtos";
@@ -209,6 +210,7 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
     const workflow = PcrWorkflow.getWorkflow(item, 1);
     return (
       <ACC.Task
+        key={uuid()}
         name={item.typeName}
         status={getPcrItemTaskStatus(item.status)}
         route={this.props.routes.pcrPrepareItem.getLink({

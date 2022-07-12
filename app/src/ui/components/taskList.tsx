@@ -1,6 +1,6 @@
 import React from "react";
 import cx from "classnames";
-
+import { v4 as uuid} from "uuid";
 import { ILinkInfo } from "@framework/types";
 import { Result } from "@ui/validation";
 import { UL, Tag, TagTypeOptions } from "@ui/components";
@@ -37,7 +37,7 @@ export function Task({ route, name, status, validation }: ITask) {
   return (
     <li className={cx("app-task-list__item", { "app-task-list__item--error": hasError })}>
       {validation?.map(v => (
-        <ValidationError error={v} key={v.key} />
+        <ValidationError error={v} key={uuid()} />
       ))}
 
       <span className="app-task-list__task-name">{taskName}</span>
