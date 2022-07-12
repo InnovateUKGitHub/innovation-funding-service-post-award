@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 
-import { MultipleDocumentUploadDto, ProjectDto, } from "@framework/dtos";
+import { MultipleDocumentUploadDto, ProjectDto } from "@framework/dtos";
 import { TestBed, TestBedContent, TestBedStore } from "@shared/TestBed";
 
 import { configuration } from "@server/features/common";
@@ -100,7 +100,7 @@ describe("<JesStepUI />", () => {
   // TODO: Create generic "BasePcrProps" TestBed so that each workflow requires a lot less pain!
   const stubBasePcrProps: BasePcrProps = {
     project: {
-      competitionType: "CR&D"
+      competitionType: "CR&D",
     } as ProjectDto,
     pcr: null as any,
     pcrItem: null as any,
@@ -127,13 +127,12 @@ describe("<JesStepUI />", () => {
     onFileDelete: jest.fn(),
   };
 
-
-  const setup = (props?: Partial<JesStepUIProps>) => render(
-      <TestBed content={(stubContent as unknown) as TestBedContent} stores={stubStore as TestBedStore}>
+  const setup = (props?: Partial<JesStepUIProps>) =>
+    render(
+      <TestBed content={stubContent as unknown as TestBedContent} stores={stubStore as TestBedStore}>
         <JesStepUI {...stubBasePcrProps} {...requiredJesStepUIProps} {...props} />
       </TestBed>,
     );
-
 
   describe("@returns", () => {
     test("as default", () => {
@@ -145,7 +144,10 @@ describe("<JesStepUI />", () => {
     });
 
     test("with competition type KTP", () => {
-      const ktpProject = {...stubBasePcrProps, project: { ...stubBasePcrProps.project, competitionType: "KTP"} } as any;
+      const ktpProject = {
+        ...stubBasePcrProps,
+        project: { ...stubBasePcrProps.project, competitionType: "KTP" },
+      } as any;
       const { queryByTestId } = setup(ktpProject);
       expect(queryByTestId("jes-form-ktp-not-needed-info-message")).toBeInTheDocument();
     });

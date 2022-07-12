@@ -3,8 +3,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
 import React from "react";
+import { v4 as uuid } from "uuid";
 import { NestedResult, Results } from "@ui/validation";
 import { Result } from "../validation/result";
+
 
 interface Props {
   error: Result | null | undefined;
@@ -64,7 +66,7 @@ export const ValidationError: React.FunctionComponent<Props> = ({ error, hideMes
   return (
     <>
       {validations.map(r => (
-        <ValidationErrorAnchor key={r.key} result={r} />
+        <ValidationErrorAnchor key={uuid()} result={r} />
       ))}
 
       {!hideMessage && (
@@ -78,5 +80,5 @@ export const ValidationError: React.FunctionComponent<Props> = ({ error, hideMes
 
 const ValidationErrorAnchor: React.FunctionComponent<{ result: Result }> = ({ result }) => {
   // TODO: this shouldn't be an anchor without an href, a styled button will do
-  return <a id={result.key} key={result.key} aria-hidden="true" />;
+  return <a id={result.key} aria-hidden="true" />;
 };
