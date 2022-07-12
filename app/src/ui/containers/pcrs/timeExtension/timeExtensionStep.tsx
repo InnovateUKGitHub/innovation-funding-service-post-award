@@ -36,7 +36,6 @@ const TimeExtensionStep = (
         return {
           id: x.offset.toString(),
           value: isCurrent ? currentProjectEndDate : x.label,
-          selected: isCurrent,
         };
       }),
     [props.timeExtensionOptions, currentProjectEndDate],
