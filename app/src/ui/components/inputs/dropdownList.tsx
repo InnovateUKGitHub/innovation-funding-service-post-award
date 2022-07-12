@@ -10,7 +10,6 @@ export interface DropdownListOption {
    */
   displayName?: string;
   qa?: string;
-  selected?: boolean;
 }
 
 export interface DropdownListProps extends InputProps<Exclude<DropdownListOption, "selected">> {
@@ -42,7 +41,6 @@ export class DropdownList extends BaseInput<DropdownListProps, {}> {
         {this.props.options.map(item => (
           <option
             key={item.id}
-            selected={item.selected ?? false}
             data-qa={item.qa || `option-${item.id}-qa`}
             value={item.id}
             aria-selected={this.props?.value?.id === item.id}
