@@ -89,6 +89,7 @@ describe("PcrSummary", () => {
     });
 
     test("throws error when no context is available", () => {
+      jest.spyOn(console, "error").mockImplementation(jest.fn);
       // TODO: Improve solution for console.error suppression for this test - https://github.com/facebook/react/issues/11098
       // Note: This needs to reside within the expect callback to work
       // TODO: Figure out a better way to silencing console errors for thrown expect's...
@@ -97,6 +98,7 @@ describe("PcrSummary", () => {
       expect(() => render(<PcrSummaryConsumer>{() => <></>}</PcrSummaryConsumer>)).toThrow(
         "usePcrSummaryContext must be used within a PcrSummaryProvider",
       );
+      jest.restoreAllMocks();
     });
   });
 });
