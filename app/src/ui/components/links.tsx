@@ -31,18 +31,15 @@ const getClassNames = (styling: TStyling, className?: string) => {
 
 export class Link extends React.Component<LinkProps> {
   render() {
-    const { route, className, styling, ...props } = this.props;
+    const { route, className, styling, id, replace = false, children } = this.props;
     const linkStyling = styling ?? "Link";
 
     const styledClassName = getClassNames(linkStyling, className);
 
     return (
-      <RouterLink
-        {...props}
-        to={route.path}
-        className={styledClassName}
-        replace={this.props.replace || false}
-      />
+      <RouterLink id={id} to={route.path} className={styledClassName} replace={replace}>
+        {children}
+      </RouterLink>
     );
   }
 }

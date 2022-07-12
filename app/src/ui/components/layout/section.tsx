@@ -69,7 +69,7 @@ export function Section({ id, qa, title, subtitle, badge, className, children }:
           )}
 
           {subtitle && (
-            <SimpleString data-qa="section-subtitle">
+            <SimpleString qa="section-subtitle">
               {typeof subtitle === "string" || !isValidElement(subtitle) ? getContent(subtitle) : subtitle}
             </SimpleString>
           )}
