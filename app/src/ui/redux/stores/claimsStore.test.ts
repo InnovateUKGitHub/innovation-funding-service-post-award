@@ -11,6 +11,11 @@ import { ClaimsStore } from "./claimsStore";
 describe("claims by project", () => {
   describe("getAllClaimsForProject", () => {
 
+    beforeAll(() => {
+      // suppress info about filed salesforce attempts since test asserts failure anyway and it pollutes the report
+      jest.spyOn(console, "info").mockImplementation(jest.fn());
+    });
+
     it("should return the claims for the queried project", async () => {
       const context = new TestContext();
       const testStore = context.testStore;
