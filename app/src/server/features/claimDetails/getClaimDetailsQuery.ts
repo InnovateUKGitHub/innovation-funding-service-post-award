@@ -19,10 +19,10 @@ export class GetClaimDetailsQuery extends QueryBase<ClaimDetailsDto> {
 
   protected async run(context: IContext) {
     const claimDetail = await context.repositories.claimDetails.get({ projectId: this.projectId, partnerId: this.partnerId, periodId: this.periodId, costCategoryId: this.costCategoryId });
-    const lineItems = await context.repositories.claimLineItems.getAllForCategory(this.partnerId, this.costCategoryId, this.periodId) || [];
+    const lineItems = await context.repositories.claimLineItems.getAllForCategory(this.partnerId, this.costCategoryId, this.periodId);
 
     if (!claimDetail) {
-      // @TODO: throw once overheads renenabled?
+      // @TODO: throw once overheads re-enabled?
       return ({
         partnerId: this.partnerId,
         costCategoryId: this.costCategoryId,
@@ -31,7 +31,7 @@ export class GetClaimDetailsQuery extends QueryBase<ClaimDetailsDto> {
         periodEnd: null,
         value: 0,
         comments: null,
-        lineItems: [] // @TODO move clientside logic here?
+        lineItems: [] // @TODO move client-side logic here?
       });
     }
     return mapClaimDetails(claimDetail, lineItems, context);

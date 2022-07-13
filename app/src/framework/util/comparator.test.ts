@@ -1,6 +1,32 @@
 import { DateTime } from "luxon";
-import { dayComparator, projectPriorityComparator } from "@framework/util";
+import { dayComparator, projectPriorityComparator, stringComparator } from "@framework/util";
 import { createProjectDto } from "@framework/util/stubDtos";
+
+describe("stringComparator", () => {
+  test("two strings passed in then return the response of the localeCompare method", () => {
+    const a = "réservé";
+    const b = "reserve";
+    expect(stringComparator(a, b)).toEqual(1);
+  });
+
+  test("the second string is empty, return -1", () => {
+    const a = "reserve";
+    const b = "";
+    expect(stringComparator(a, b)).toEqual(-1);
+  });
+
+  test("the first string is empty, return 1", () => {
+    const a = "";
+    const b = "reserve";
+    expect(stringComparator(a, b)).toEqual(1);
+  });
+
+  test("both strings empty, return 0", () => {
+    const a = "";
+    const b = "";
+    expect(stringComparator(a, b)).toEqual(0);
+  });
+});
 
 describe("dayComparator", () => {
   const dateFormat = "dd/MM/yyyy HH:mm";

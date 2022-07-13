@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { BadRequestError, CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
 import {
   Authorisation,

@@ -37,6 +37,8 @@ import { pcrProjectRolesPicklist } from "@server/features/pcrs/pcrProjectRolesPi
 import { pcrProjectLocationPicklist } from "@server/features/pcrs/pcrProjectLocationPicklist";
 import { pcrSpendProfileCapitalUsageTypePicklist } from "@server/features/pcrs/pcrSpendProfileCapitalUsageTypesPicklist";
 import { pcrSpendProfileOverheadRatePicklist } from "@server/features/pcrs/pcrSpendProfileOverheadsRateOptionsPicklist";
+import { DateTime } from "luxon";
+import { parseSfLongTextArea } from "@server/util/salesforce-string-helpers";
 import { TestRepository } from "./testRepository";
 import { TestFileWrapper } from "./testData";
 
@@ -765,7 +767,7 @@ class FinancialVirementsTestRepository extends TestRepository<Entities.PartnerFi
 }
 
 class LoansTestRepository {
-  private Items: Repositories.ISalesforceLoan[] = [];
+  public Items: Repositories.ISalesforceLoan[] = [];
 
   getAll() {
     const loans = this.Items.map(x => new LoanMapper().map(x));
@@ -821,6 +823,7 @@ class BroadcastsTestRepository {
   private Items: Repositories.ISalesforceBroadcast[] = [];
 
   get(broadcastId: string) {
+
     return new Promise<BroadcastDto>(resolve => {
       const broadcastItem = this.Items.find(x => x.Id === broadcastId);
 
@@ -836,12 +839,24 @@ class BroadcastsTestRepository {
 
   getAll() {
     return new Promise<BroadcastDto[]>(resolve => {
-      const filteredItems = this.Items.filter(x => x.Acc_EndDate__c > "Today" && x.Acc_StartDate__c <= "Today");
-
-      const finalValues = filteredItems.map(new BroadcastMapper().map);
-
+      const today = DateTime.fromFormat("6 Jun 2022", "d MMM yy").toFormat("yyyy-MM-dd");
+      const filteredItems = this.Items.filter(x => x.Acc_EndDate__c > today && x.Acc_StartDate__c <= today);
+      const finalValues = filteredItems.map(item => ({
+        id: item.Id,
+        title: item.Name,
+        startDate: new Date(item.Acc_StartDate__c),
+        endDate: new Date(item.Acc_EndDate__c),
+        content: parseSfLongTextArea(item.Acc_Message__c),}));
       resolve(finalValues);
     });
+  }
+
+  public setItems(items: Repositories.ISalesforceBroadcast | Repositories.ISalesforceBroadcast[] ){
+    if(Array.isArray(items)) {
+      this.Items.push(...items);
+    } else {
+      this.Items.push(items);
+    }
   }
 }
 
@@ -854,6 +869,7 @@ export interface ITestRepositories extends IRepositories {
   claimStatusChanges: ClaimStatusChangeTestRepository;
   costCategories: CostCategoriesTestRepository;
   documents: DocumentsTestRepository;
+  loans: LoansTestRepository;
   financialVirements: FinancialVirementsTestRepository;
   monitoringReportHeader: MonitoringReportHeaderTestRepository;
   monitoringReportResponse: MonitoringReportResponseTestRepository;
