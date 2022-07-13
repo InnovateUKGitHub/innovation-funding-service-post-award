@@ -24,7 +24,7 @@ const cachesImplementation: Framework.ICaches = {
   contentStoreLastUpdated: null,
 };
 
-const constructErrorResponse = <E extends Error>(error: E): AppError => {
+export const constructErrorResponse = <E extends Error>(error: E): AppError => {
   if (
     error instanceof ValidationError ||
     error instanceof ForbiddenError ||

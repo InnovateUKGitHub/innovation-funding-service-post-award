@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LineBreakList should create a list of components separated with line-breaks 1`] = `
+<div>
+  <p>
+    We'll
+  </p>
+  <br />
+  <p>
+    Meet
+  </p>
+  <br />
+  <p>
+    Again
+  </p>
+  <br />
+  <p>
+    Don't
+  </p>
+  <br />
+  <p>
+    Know
+  </p>
+  <br />
+  <p>
+    Where
+  </p>
+  <br />
+  <p>
+    Don't
+  </p>
+  <br />
+  <p>
+    Know
+  </p>
+  <br />
+  <p>
+    When
+  </p>
+</div>
+`;

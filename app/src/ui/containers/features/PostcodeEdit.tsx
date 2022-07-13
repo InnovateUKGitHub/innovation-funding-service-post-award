@@ -5,7 +5,7 @@ import { IEditorStore } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import * as ACC from "../../components";
 
-interface PostcodeProps {
+export interface PostcodeProps {
   partner: PartnerDto;
   editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
   onUpdate: (saving: boolean, dto: PartnerDto) => void;

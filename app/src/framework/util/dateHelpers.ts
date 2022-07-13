@@ -5,12 +5,7 @@ export const convertDateAndTime = (jsDate: Date | null): DateTime | null => {
   return jsDate && DateTime.fromJSDate(jsDate).setZone("Europe/London");
 };
 
-const appendMeridian = (date: DateTime | null, format: string) => {
-  if (date && date.isValid) {
-    return format + (date.hour >= 12 ? "'pm'" : "'am'");
-  }
-  return format;
-};
+const appendMeridian = (date: DateTime, format: string) => format + (date.hour >= 12 ? "'pm'" : "'am'");
 
 export const formatDate = (jsDate: Date | null | undefined, format: DateFormat) => {
   if (!jsDate) return null;
@@ -45,6 +40,7 @@ export const formatDate = (jsDate: Date | null | undefined, format: DateFormat) 
     case DateFormat.MONTH_YEAR: {
       return date.toFormat("MMMM yyyy");
     }
-    default: return "INVALID DATE FORMAT";
+    default:
+      return "INVALID DATE FORMAT";
   }
 };

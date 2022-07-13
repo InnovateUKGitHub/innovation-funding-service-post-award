@@ -49,11 +49,11 @@ describe("<DocumentGuidance />", () => {
     describe("static content", () => {
       const excludedList = ["title", "fileSize"] as const;
       type ExcludedKeys = typeof excludedList[number];
-      type StaticDocumkentGuidanceKeys = Exclude<keyof DocumentGuidanceContent, ExcludedKeys>;
+      type StaticDocumentGuidanceKeys = Exclude<keyof DocumentGuidanceContent, ExcludedKeys>;
 
       const documentGuidanceKeys = Object.keys(stubContent.components.documentGuidance).filter(
         x => !excludedList.some(el => el === x),
-      ) as StaticDocumkentGuidanceKeys[];
+      ) as StaticDocumentGuidanceKeys[];
 
       test.each(documentGuidanceKeys)("with %s", contentKey => {
         const { queryByText } = setup();
