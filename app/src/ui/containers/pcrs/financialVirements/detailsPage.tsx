@@ -134,7 +134,7 @@ const Container = (props: Params & BaseProps) => {
 
 export const FinancialVirementDetailsRoute = defineRoute({
   routeName: "financial-virement-details",
-  routePath: "/projects/:projectId/pcrs/:pcrId/:mode<view|review>/item/:itemId/financial/:partnerId",
+  routePath: "/projects/:projectId/pcrs/:pcrId/:mode/item/:itemId/financial/:partnerId",
   container: Container,
   getParams: (route) => ({
     projectId: route.params.projectId,
