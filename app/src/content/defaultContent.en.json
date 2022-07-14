@@ -904,6 +904,7 @@
     "negative-claim-warning": "You have entered negative values for the following items:",
     "claim-summary-warning": "You have entered a negative claim for this period. Click 'Edit costs to be claimed' button if you wish to change this.",
     "claim-saved-message": "You have saved your claim.",
+    "claim-submitted-message": "You have submitted your claim.",
     "loading-claims": "Loading claims...",
     "partner-withdrawn": "This partner has withdrawn from the project. It is not possible to edit claims.",
     "has-withdrawn-partner": "It is not possible to edit claims of partners that have withdrawn from the project."
