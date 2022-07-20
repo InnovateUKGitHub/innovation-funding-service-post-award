@@ -128,7 +128,7 @@ function DashboardProject(props: DashboardProjectProps) {
   const projectActions = useProjectActions(props);
   const projectNotes = getProjectNotes(props);
 
-  const displayAction = useProjectActions(props).length > 0 && !doesNotRequireAction(props);
+  const displayAction = projectActions.length > 0 && !doesNotRequireAction(props);
   return (
     <ACC.ListItem key={props.project.id} actionRequired={displayAction} qa={`project-${props.project.projectNumber}`}>
       <div className="govuk-grid-column-two-thirds" style={{ display: "inline-flex", alignItems: "center" }}>
