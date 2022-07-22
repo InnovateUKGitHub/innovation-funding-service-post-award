@@ -1,13 +1,19 @@
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
+
+const isolatedModules = process.env.TS_JEST_ISOLATED_MODULES || false;
+
+
 module.exports = {
   verbose: false,
   coverageDirectory: "dashboard/unit_testing",
   testEnvironment: "jsdom",
+  maxWorkers: 4,
   testEnvironmentOptions: {
     url: "http://localhost",
   },
   globals: {
     "ts-jest": {
+      isolatedModules,
       tsconfig: {
         target: "ES2015",
       },
