@@ -731,3 +731,7 @@ p.govuk-body--multiline {
 .loan-table__cell--date-error {
   border-color: #d4351c;
 }
+
+.govuk-width-container {
+  max-width:1020px;
+}
