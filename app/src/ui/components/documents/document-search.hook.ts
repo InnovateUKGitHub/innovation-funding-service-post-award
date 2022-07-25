@@ -12,7 +12,6 @@ import { DocumentSummaryDto } from "@framework/dtos";
 const fuzzySearch = <T>(value: string, items: T[], keysToSearch: string[]) => {
   const valueToSearch = value.trim();
 
-  // TODO: reconfirm this value after migrating to Node16
   const scoreThreshold = 0.3;
 
   const fusedQuery = new Fuse(items, {
