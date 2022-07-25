@@ -4,8 +4,15 @@
 set -e
 
 export NODE_OPTIONS=--max_old_space_size=4096
+export npm_config_cache=npm-cache
+
+echo "Updating npm"
+npm install npm@latest -g
+
 echo "About to run node check script"
 npm run script:check-node
+echo "About to globally install rimraf"
+npm install rimraf -g
 echo "About to run ci"
 npm ci --no-optional
 echo "About to run patch-package"

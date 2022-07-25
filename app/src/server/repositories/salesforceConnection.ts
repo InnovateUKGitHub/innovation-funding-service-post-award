@@ -52,7 +52,8 @@ export const getSalesforceAccessToken = async (config: ISalesforceTokenDetails):
 
   const jwtToken = jwt.sign(jwtPayload, privateKey, jwtOptions);
 
-  const body = new FormData();
+  // Create URLSearchParams for a "Content-Type: application/x-www-form-urlencoded"
+  const body = new URLSearchParams();
   body.append("grant_type", "urn:ietf:params:oauth:grant-type:jwt-bearer");
   body.append("assertion", jwtToken);
 
