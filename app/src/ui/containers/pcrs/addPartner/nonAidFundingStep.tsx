@@ -1,5 +1,6 @@
 import * as ACC from "@ui/components";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
+import { EditorStatus } from "@ui/constants/enums";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { useContent } from "@ui/hooks";
@@ -9,6 +10,7 @@ export const NonAidFundingStep = ({
   project,
   pcrItem,
   onSave,
+  status,
 }: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => {
   const { getContent } = useContent();
 
@@ -29,7 +31,12 @@ export const NonAidFundingStep = ({
         )}
       </ACC.Section>
 
-      <Form.Form qa="saveAndContinue" data={pcrItem} onSubmit={() => onSave(false)}>
+      <Form.Form
+        qa="saveAndContinue"
+        data={pcrItem}
+        onSubmit={() => onSave(false)}
+        isSaving={status === EditorStatus.Saving}
+      >
         <Form.Fieldset>
           <Form.Submit>{getContent(x => x.pcrAddPartnerStateAidEligibilityContent.pcrItem.submitButton)}</Form.Submit>
 
