@@ -289,10 +289,12 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
     if (mode === "review") {
       // When reviewing a pcr, the MO should only be able to visit pages which support read only.
       if (!currentStep.readonlyStepRender) throw new ForbiddenError();
-      return currentStep.readonlyStepRender(props);
+      const ReadonlyCurrentStep = currentStep.readonlyStepRender;
+      return <ReadonlyCurrentStep {...props} />;
     }
 
-    return currentStep.stepRender(props);
+    const CurrentStep = currentStep.stepRender;
+    return <CurrentStep {...props} />;
   }
 
   private renderSummary(
