@@ -32,12 +32,14 @@ describe("numberHelper", () => {
 
     describe("capture edge cases", () => {
       test.each`
-        name                         | edgeCaseValue | expectedValue
-        ${"positive trailing digit"} | ${1.005}      | ${1.01}
-        ${"negative trailing digit"} | ${-1.005}     | ${-1}
-        ${"positive zero"}           | ${0}          | ${0}
-        ${"negative zero"}           | ${-0}         | ${0}
-        ${"resolves to neg zero"}    | ${-0.0004}    | ${0}
+        name                         | edgeCaseValue        | expectedValue
+        ${"positive trailing digit"} | ${1.005}             | ${1.01}
+        ${"negative trailing digit"} | ${-1.005}            | ${-1}
+        ${"positive zero"}           | ${0}                 | ${0}
+        ${"negative zero"}           | ${-0}                | ${0}
+        ${"resolves to neg zero"}    | ${-0.0004}           | ${0}
+        ${"very large"}              | ${418_679_600.005}   | ${418_679_600.01}
+        ${"upper support limit"}     | ${1_000_000_000.005} | ${1_000_000_000.01}
       `("with a $name number", ({ edgeCaseValue, expectedValue }) => {
         const roundedNumber = roundCurrency(edgeCaseValue);
 
