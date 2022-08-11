@@ -70,6 +70,7 @@
       "totalEligibleCostsHeader": "Total eligible costs",
       "differenceHeader": "Difference",
       "periodHeader": "Period",
+      "iarDueHeader": "IAR Due",
       "noDataText": "No data",
       "costCategoriesHeader": "Cost categories"
     },
