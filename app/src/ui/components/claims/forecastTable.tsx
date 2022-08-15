@@ -28,6 +28,7 @@ export interface ForecastData {
   partner: PartnerDto;
   claim: ClaimDto | null;
   claims: ClaimDto[];
+  IARDueOnClaimPeriods?: string[];
   claimDetails: ClaimDetailsSummaryDto[];
   forecastDetails: ForecastDetailsDTO[];
   golCosts: GOLCostDto[];
@@ -116,7 +117,7 @@ export class ForecastTable extends React.Component<Props> {
       <Table.Table
         data={tableRows}
         qa="forecast-table"
-        headers={this.renderTableHeaders(periods, periodId, data.claim, data.claims)}
+        headers={this.renderTableHeaders(periods, periodId, data.claim, data.claims, data.IARDueOnClaimPeriods ?? [])}
         footers={this.renderTableFooters(
           periods,
           tableRows,
@@ -370,12 +371,12 @@ export class ForecastTable extends React.Component<Props> {
     claimPeriod: number,
     claim: ClaimDto | null,
     claims: ClaimDto[] | null,
+    periodsWithIARDue: string[]
   ) {
     // If there is a draft claim then show "Costs you are claiming"
     // If there isn't a draft claim then don't show "Costs you are claiming" and "Costs claimed" applies to all claims
     const previous = claim ? claimPeriod - 1 : claimPeriod;
     const forecasts = periods.length > claimPeriod;
-
     const costsClaimedText = <Content value={x => x.components.forecastTable.costsClaimedHeader} />;
     const costsClaimingText = <Content value={x => x.components.forecastTable.costsClaimingHeader} />;
     const forecastText = <Content value={x => x.components.forecastTable.forecastHeader} />;
@@ -386,14 +387,6 @@ export class ForecastTable extends React.Component<Props> {
     const iarDueText = <Content value={x => x.components.forecastTable.iarDueHeader} />;
     const noDataText = <Content value={x => x.components.forecastTable.noDataText} />;
     const costCategoriesText = <Content value={x => x.components.forecastTable.costCategoriesHeader} />;
-
-    const periodsWithIARDue =
-      claims?.reduce((acc: string[], cur: ClaimDto) => {
-        if (cur?.isIarRequired && cur.iarStatus === "Not Received") {
-          acc.push(cur.periodId.toString());
-        }
-        return acc;
-      }, []) ?? [];
 
     return [
       <tr key="cHeader1" className="govuk-table__row govuk-body-s">

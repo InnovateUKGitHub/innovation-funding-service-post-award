@@ -31,6 +31,7 @@ interface Data {
   claim: Pending<ClaimDto | null>;
   claims: Pending<ClaimDto[]>;
   claimDetails: Pending<ClaimDetailsSummaryDto[]>;
+  IARDueOnClaimPeriods: Pending<string[]>;
   forecastDetails: Pending<ForecastDetailsDTO[]>;
   golCosts: Pending<GOLCostDto[]>;
   costCategories: Pending<CostCategoryDto[]>;
@@ -50,6 +51,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
       claim: this.props.claim,
       claims: this.props.claims,
       claimDetails: this.props.claimDetails,
+      IARDueOnClaimPeriods: this.props.IARDueOnClaimPeriods,
       forecastDetails: this.props.forecastDetails,
       golCosts: this.props.golCosts,
       costCategories: this.props.costCategories,
@@ -191,6 +193,7 @@ const ClaimForecastContainer = (props: ClaimForecastParams & BaseProps) => {
       partner={stores.partners.getById(props.partnerId)}
       claim={stores.claims.getActiveClaimForPartner(props.partnerId)}
       claims={stores.claims.getAllClaimsForPartner(props.partnerId)}
+      IARDueOnClaimPeriods={stores.claims.getIARDueOnClaimPeriods(props.partnerId)}
       claimDetails={stores.claimDetails.getAllByPartner(props.partnerId)}
       forecastDetails={stores.forecastDetails.getAllByPartner(props.partnerId)}
       golCosts={stores.forecastGolCosts.getAllByPartner(props.partnerId)}
