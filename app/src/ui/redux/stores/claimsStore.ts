@@ -10,6 +10,14 @@ import { RootState } from "@ui/redux/reducers";
 
 import { ClaimDocumentsStore, CostSummariesStore, PartnersStore } from "@ui/redux/stores";
 
+const periodsWithIARDue = (data: ClaimDto[]) =>
+    data.reduce((acc: string[], cur: ClaimDto) => {
+      if (cur.iarStatus === "Not Received" && cur.isIarRequired) {
+        acc.push(cur.periodId.toString());
+      }
+      return acc;
+    }, []) ?? [];
+
 export class ClaimsStore extends StoreBase {
   constructor(
     private readonly costsSummariesStore: CostSummariesStore,
@@ -55,6 +63,12 @@ export class ClaimsStore extends StoreBase {
       data => data,
       () => [],
     );
+  }
+
+  public getIARDueOnClaimPeriods(partnerId: string) {
+    return this.getData("allClaimsIncludingNew", storeKeys.getPartnerKey(partnerId), p =>
+      apiClient.claims.getAllIncludingNewByPartnerId({ partnerId, ...p }),
+    ).then(periodsWithIARDue, () => []);
   }
 
   public getActiveClaimForPartner(partnerId: string) {

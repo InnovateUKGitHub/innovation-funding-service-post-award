@@ -37,6 +37,7 @@ export interface ISalesforceClaim {
 export interface IClaimRepository {
   getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]>;
   getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]>;
+  getAllIncludingNewByPartnerId(partnerId: string): Promise<ISalesforceClaim[]>;
   get(partnerId: string, periodId: number): Promise<ISalesforceClaim>;
   getByProjectId(projectId: string, partnerId: string, periodId: number): Promise<ISalesforceClaim>;
   getClaimStatuses(): Promise<IPicklistEntry[]>;
@@ -51,7 +52,6 @@ export interface IClaimRepository {
  * Claims also store the status of the claim ie Approval Paid etc.
  */
 export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> implements IClaimRepository {
-
   private readonly recordType = "Total Project Period";
 
   protected readonly salesforceObjectName = "Acc_Claims__c";
@@ -81,7 +81,6 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     "Acc_TotalCostsApproved__c",
     "Acc_TotalDeferredAmount__c",
     "Acc_PeriodCoststobePaid__c",
-
   ];
 
   private getStandardFilter() {
@@ -93,7 +92,9 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
   }
 
   public getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]> {
-    const filter = this.getStandardFilter() + `
+    const filter =
+      this.getStandardFilter() +
+      `
       AND Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'
     `;
 
@@ -101,7 +102,19 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
   }
 
   public getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]> {
-    const filter = this.getStandardFilter() + `
+    const filter =
+      this.getStandardFilter() +
+      `
+      AND Acc_ProjectParticipant__c = '${partnerId}'
+    `;
+
+    return super.where(filter);
+  }
+
+  public getAllIncludingNewByPartnerId(partnerId: string): Promise<ISalesforceClaim[]> {
+    const filter = `
+      RecordType.Name = '${this.recordType}'
+      AND Acc_ClaimStatus__c != 'Not used'
       AND Acc_ProjectParticipant__c = '${partnerId}'
     `;
 
@@ -109,7 +122,9 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
   }
 
   public async get(partnerId: string, periodId: number) {
-    const filter = this.getStandardFilter() + `
+    const filter =
+      this.getStandardFilter() +
+      `
       AND Acc_ProjectParticipant__c = '${partnerId}'
       AND Acc_ProjectPeriodNumber__c = ${periodId}
     `;
@@ -124,7 +139,9 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
   }
 
   public async getByProjectId(projectId: string, partnerId: string, periodId: number) {
-    const filter = this.getStandardFilter() + `
+    const filter =
+      this.getStandardFilter() +
+      `
       AND Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'
       AND Acc_ProjectParticipant__c = '${partnerId}'
       AND Acc_ProjectPeriodNumber__c = ${periodId}

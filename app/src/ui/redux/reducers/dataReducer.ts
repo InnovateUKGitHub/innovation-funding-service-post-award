@@ -71,6 +71,7 @@ export const dataReducer = combineReducers({
   broadcast: dataStoreReducer<Dtos.BroadcastDto>("broadcast"),
   claims: dataStoreReducer<Dtos.ClaimDto[]>("claims"),
   claim: dataStoreReducer<Dtos.ClaimDto>("claim"),
+  allClaimsIncludingNew: dataStoreReducer<Dtos.ClaimDto[]>("allClaimsIncludingNew"),
   claimTotalCosts: dataStoreReducer<TotalCosts>("claimTotalCosts"),
   claimDetail: dataStoreReducer<ClaimDetailsDto>("claimDetail"),
   claimDetails: dataStoreReducer<ClaimDetailsSummaryDto[]>("claimDetails"),

@@ -198,6 +198,7 @@ const ViewForecastContainer = (props: ViewForecastParams & BaseProps) => {
         partner: stores.partners.getById(props.partnerId),
         claim: stores.claims.getActiveClaimForPartner(props.partnerId),
         claims: stores.claims.getAllClaimsForPartner(props.partnerId),
+        IARDueOnClaimPeriods: stores.claims.getIARDueOnClaimPeriods(props.partnerId),
         claimDetails: stores.claimDetails.getAllByPartner(props.partnerId),
         forecastDetails: stores.forecastDetails.getAllByPartner(props.partnerId),
         golCosts: stores.forecastGolCosts.getAllByPartner(props.partnerId),

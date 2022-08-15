@@ -140,6 +140,10 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
     return super.getWhere(x => x.Acc_ProjectParticipant__r.Id === partnerId);
   }
 
+  getAllIncludingNewByPartnerId(partnerId: string) {
+    return super.getWhere(x => x.Acc_ProjectParticipant__r.Id === partnerId);
+  }
+
   get(partnerId: string, periodId: number) {
     return super.getOne(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
   }
