@@ -43,9 +43,6 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
   }
 
   protected async getDto(context: IContext, params: PcrEditSpendProfileCostParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
-    if (!body.id) {
-      throw new BadRequestError("Cost not found");
-    }
     const dto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId));
 
     const item = dto.items.find(x => x.id === params.itemId) as PCRItemForPartnerAdditionDto;
@@ -63,7 +60,7 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
       throw new BadRequestError("Unknown cost category");
     }
 
-    const cost = item.spendProfile.costs.find(x => x.id === body.id && x.costCategoryId === params.costCategoryId);
+    const cost = item.spendProfile.costs.find(x => x.id === params.costId && x.costCategoryId === params.costCategoryId);
     if (!cost) {
       throw new BadRequestError("Cost not found");
     }
