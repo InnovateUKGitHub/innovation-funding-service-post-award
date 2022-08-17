@@ -156,9 +156,11 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   private getOverheadsCostValue(overheadsCostDto: PCRSpendProfileOverheadsCostDto, costCategories: CostCategoryDto[], items: PcrSpendProfileEntity[]) {
     const labourCostCategory = costCategories.find(x => x.type === CostCategoryType.Labour);
     if(!labourCostCategory) throw new Error(`Cannot find labourCostCategory matching ${CostCategoryType.Labour}`);
+
     const labourCosts = items
-      .filter(x => x.costCategoryId === labourCostCategory.id)
+      .filter(x => x.costCategory === CostCategoryType.Labour)
       .reduce((acc, item) => acc + (item.value || 0), 0);
+
     switch (overheadsCostDto.overheadRate) {
       case PCRSpendProfileOverheadRate.Unknown:
         return null;

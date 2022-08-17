@@ -1,5 +1,3 @@
-
-/* eslint-disable @typescript-eslint/naming-convention */
 import { PCRDto, PCRItemDto, PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { Authorisation, IContext, PCRItemType } from "@framework/types";
@@ -108,7 +106,6 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       .filter(x => !!x.originalItem)
       // get any updates
       .map(x => {
-
         const updates = this.getItemUpdates(x.originalItem as ProjectChangeRequestItemEntity, x.item);
         return updates ? { ...x.originalItem, ...updates } : null;
       })
@@ -123,13 +120,13 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       .filter(x => !x.originalItem)
       .map(x => {
         const itemType = itemTypes.find(t => t.type === x.item.type);
-        if(!itemType) throw new Error(`Cannot find item matching ${x.item.type}`);
-        return ({
-        recordTypeId: itemType.recordTypeId,
-        status: x.item.status,
-        projectId: this.projectId,
+        if (!itemType) throw new Error(`Cannot find item matching ${x.item.type}`);
+        return {
+          recordTypeId: itemType.recordTypeId,
+          status: x.item.status,
+          projectId: this.projectId,
+        };
       });
-});
 
     if (itemsToInsert.length) {
       await context.repositories.projectChangeRequests.insertItems(this.projectChangeRequestId, itemsToInsert);
@@ -139,6 +136,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
       const partnerAdditionItemDto = this.pcr.items.find(
         x => x.type === PCRItemType.PartnerAddition,
       ) as PCRItemForPartnerAdditionDto;
+
       if (partnerAdditionItemDto) {
         await context.runCommand(
           new UpdatePCRSpendProfileCommand(

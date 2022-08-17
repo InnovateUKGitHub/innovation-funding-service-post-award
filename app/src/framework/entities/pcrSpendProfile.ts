@@ -1,11 +1,11 @@
-import { PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/constants";
+import { CostCategoryType, PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/constants";
 
 export interface PcrSpendProfileEntityForCreate {
   pcrItemId: string;
   costCategoryId: string;
   value: number | null;
   description: string | null;
-
+  costCategory?: CostCategoryType;
   dateOtherFundingSecured?: string;
 
   // labour
