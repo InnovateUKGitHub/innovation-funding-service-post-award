@@ -7,7 +7,7 @@ import { TestBed } from "@shared/TestBed";
 import { Content } from "@content/content";
 import { Guide } from "@ui/componentsGuide/guide";
 import * as colour from "@ui/styles/colours";
-import * as pkg from "../../package.json";
+import { devDependencies } from "../../package.json";
 import { configuration } from "./features/common";
 
 export function componentGuideRender(req: Request, res: Response) {
@@ -29,7 +29,8 @@ export function componentGuideRender(req: Request, res: Response) {
 }
 
 const renderGuide = (nonce: string, html: string) => {
-  const govukFrontendVersion = pkg.devDependencies["govuk-frontend"].replace(/[^0-9/.]/, "");
+  const govukFrontendVersion = devDependencies["govuk-frontend"].replace(/[^0-9/.]/, "");
+  // const govukFrontendVersion = "4.0.0";
 
   return `
     <!DOCTYPE html>

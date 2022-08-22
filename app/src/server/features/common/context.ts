@@ -12,6 +12,7 @@ import { CompaniesHouseBase } from "@server/resources/companiesHouse";
 import * as Salesforce from "../../repositories/salesforceConnection";
 import * as Repositories from "../../repositories";
 import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
+import { GetRecordTypeQuery } from "../general/getRecordTypeQuery";
 import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationError } from "./appError";
 
 // obviously needs to be singleton
@@ -253,9 +254,7 @@ export class Context implements Framework.IContext {
 
   // helper function for repositories that need record type ids
   private async getRecordTypeId(objectName: string, recordType: string): Promise<string> {
-    // Needs to dynamically import otherwise can be a circular reference
-    const queryImport = await import("../general/getRecordTypeQuery");
-    const query = new queryImport.GetRecordTypeQuery(objectName, recordType);
+    const query = new GetRecordTypeQuery(objectName, recordType);
     return this.runQuery(query).then(x => x.id);
   }
 }
