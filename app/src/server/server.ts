@@ -1,28 +1,34 @@
-import https from "https";
 import fs from "fs";
+import https from "https";
 import express from "express";
 import { v4 as uuidV4 } from "uuid";
 
-import { router as cspRouter } from "@server/csp";
 import { router as authRouter } from "@server/auth";
-import { router, noAuthRouter } from "@server/router";
+import { router as cspRouter } from "@server/csp";
+import { noAuthRouter, router } from "@server/router";
 
 import { allowCache, noCache, setOwaspHeaders } from "@server/cacheHeaders";
-import { initInternationalisation, internationalisationRouter } from "@server/internationalisation";
-import { contextProvider } from "@server/features/common/contextProvider";
 import { configuration, Logger } from "@server/features/common";
+import { contextProvider } from "@server/features/common/contextProvider";
 import { InitialiseContentCommand } from "@server/features/general/initialiseContentCommand";
 import { fetchCaches } from "@server/features/initialCache";
+import { initInternationalisation, internationalisationRouter } from "@server/internationalisation";
+import { developmentRouter } from "./developmentReloader";
 
 export class Server {
   private readonly app: express.Express;
   private readonly log: Logger;
 
-  constructor(private readonly port: number) {
+  constructor(private readonly port: number, development = false) {
     this.app = express();
     this.log = new Logger();
 
     this.app.enable("trust proxy");
+
+    if (development) {
+      this.development();
+    }
+
     this.middleware();
     this.routing();
   }
@@ -74,6 +80,10 @@ export class Server {
       this.handleRouter5GetWithPlus,
       this.requestLogger,
     ]);
+  }
+
+  private development(): void {
+    this.app.use(developmentRouter);
   }
 
   private readonly requestLogger = (req: express.Request, _res: express.Response, next: express.NextFunction): void => {

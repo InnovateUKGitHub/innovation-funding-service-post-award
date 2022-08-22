@@ -41,10 +41,13 @@ export class Result {
     if (hasMounted) {
       this.pKey = getKey();
     } else {
-      global.window?.requestAnimationFrame(() => {
-        hasMounted = true;
-        this.pKey = getKey();
-      });
+      // For clientside only
+      if (typeof window !== "undefined") {
+        requestAnimationFrame(() => {
+          hasMounted = true;
+          this.pKey = getKey();
+        });
+      }
     }
   }
 

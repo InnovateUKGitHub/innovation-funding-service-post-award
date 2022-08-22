@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ES2015",
+    "module": "ESNext",
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "declaration": false, 
+    "noEmit": true,
+    "rootDir": "./src",
+    "baseUrl": "./src",
+    "paths": {
+      "@shared/*": ["shared/*"],
+      "@framework/*": ["framework/*"],
+      "@ui/*": ["ui/*"],
+      "@util/*": ["framework/util/*"],
+      "@content/*": ["content/*"]
+    },
+    "strict": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "exclude": ["node_modules", "dist", "./tests/**/*", "./**/.test.*", "./**/.spec.*"],
+  "include": ["./client/**/*", "./content/**/*", "./framework/**/*", "./shared/**/*", "./ui/**/*"]
+}
