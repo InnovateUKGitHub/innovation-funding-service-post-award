@@ -79,6 +79,10 @@ class ProjectDocumentsComponent extends ContainerBase<ProjectDocumentPageParams,
         </ACC.Renderers.SimpleString>
 
         <ACC.Renderers.SimpleString>
+          <ACC.Content value={x => x.projectDocuments.documentMessages.documentsIntroMessage.documentsPrivacyMessage} />
+        </ACC.Renderers.SimpleString>
+
+        <ACC.Renderers.SimpleString>
           <ACC.Content value={x => x.projectDocuments.documentMessages.documentsIntroMessage.notForClaimsMessage} />
         </ACC.Renderers.SimpleString>
 
