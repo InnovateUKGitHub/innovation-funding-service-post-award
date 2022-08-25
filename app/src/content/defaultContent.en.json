@@ -1141,6 +1141,7 @@
     "upload-instruction-2": "You will also be able to see any documents added to the claim by the finance contact and Innovate UK.",
     "documentsIntroMessage": {
       "storing-documents-message": "This page is for storing most project-related supporting documents, including those uploaded by Innovate UK.",
+      "documents-privacy-message": "Documents stored here are only accessible by the Monitoring Officer and Innovate UK.",
       "not-for-claims-message": "Do not use this page for claims. You must only upload supporting documents for claims on the page where you review them."
     }
   },
