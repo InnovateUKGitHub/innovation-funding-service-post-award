@@ -223,7 +223,12 @@
       "costsToDateMessage": "costs to date"
     },
     "project-details": {
-      "title": "Project details"
+      "title": "Project details",
+      "project-manager-info": "Only project managers can raise project change requests.",
+      "finance-contact-info": "Only finance contacts can submit claims.",
+      "change-info": "If you need to change the lead project manager or finance contact, please email ",
+      "change-email": "grants_service@iuk.ukri.org",
+      "change-end": "."
     },
     "project-documents": {
       "title": "Project documents",

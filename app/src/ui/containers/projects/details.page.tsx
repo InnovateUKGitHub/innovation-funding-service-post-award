@@ -1,11 +1,12 @@
-import { Pending } from "@shared/pending";
 import { getAuthRoles, PartnerDto, ProjectContactDto, ProjectDto, ProjectRole } from "@framework/types";
-import { useStores } from "@ui/redux";
+import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
+import { SimpleString } from "@ui/components/renderers";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { getPlural } from "@ui/helpers/plurals";
-import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
+import { useStores } from "@ui/redux";
 import { GetProjectStatus } from "../app/project-active";
+import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
 interface Data {
   projectDetails: Pending<ProjectDto>;
@@ -54,7 +55,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     };
   }
 
-  private renderPrimaryContacts(partners: CombinedData["partners"], contacts: CombinedData["contacts"]) {
+  private renderPrimaryContacts({ partners, contacts }: CombinedData) {
     const { primaryRoles } = this.getRoles();
 
     const projectContacts = primaryRoles.map((role: ProjectContactRole) => {
@@ -62,11 +63,17 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
       const qa = role.replace(/\s+/g, "-").toLowerCase();
       const contact = contacts.find(x => x.role === role);
       const partner = contact && partners.find(x => x.accountId === contact.accountId);
+      let comment;
+
+      if (role === "Project Manager") {
+        comment = <ACC.Content value={x => x.projectDetails.projectManagerInfo} />;
+      }
 
       return {
         qa,
         contact,
         partner,
+        comment,
       };
     });
 
@@ -113,13 +120,25 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         />
 
         <ACC.Section title={x => x.projectDetails.projectLabels.projectMembers}>
-          {this.renderPrimaryContacts(partners, contacts)}
+          {this.renderPrimaryContacts({ project, partners, contacts })}
 
           <ACC.Section title={x => x.projectDetails.projectLabels.financeContacts}>
             <ACC.PartnersAndFinanceContacts
               contacts={contacts}
               partners={partners}
               projectContactLabels={x => x.projectDetails.contactLabels}
+              comment={(
+                <SimpleString>
+                  <ACC.Content value={(x) => x.projectDetails.financeContactInfo} />
+                </SimpleString>
+              )}
+              footnote={(
+                <SimpleString>
+                  <ACC.Content value={(x => x.projectDetails.changeInfo)} />
+                  <ACC.EmailContent value={(x => x.projectDetails.changeEmail)} />
+                  <ACC.Content value={(x => x.projectDetails.changeEnd)} />
+                </SimpleString>
+              )}
             />
           </ACC.Section>
 
