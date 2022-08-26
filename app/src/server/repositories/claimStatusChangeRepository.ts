@@ -1,3 +1,4 @@
+import { sss } from "@server/util/salesforce-string-helpers";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface ISalesforceClaimStatusChange {
@@ -45,7 +46,7 @@ export class ClaimStatusChangeRepository
   }
 
   getAllForClaim(partnerId: string, periodId: number): Promise<ISalesforceClaimStatusChange[]> {
-    return super.where(`Acc_Claim__r.Acc_ProjectParticipant__c = '${partnerId}' and Acc_Claim__r.Acc_ProjectPeriodNumber__c = ${periodId}`);
+    return super.where(`Acc_Claim__r.Acc_ProjectParticipant__c = '${sss(partnerId)}' and Acc_Claim__r.Acc_ProjectPeriodNumber__c = ${sss(periodId)}`);
   }
 
 }

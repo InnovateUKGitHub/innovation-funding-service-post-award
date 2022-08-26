@@ -1,3 +1,4 @@
+import { sss } from "@server/util/salesforce-string-helpers";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export type SalesforceRole = "Project Manager" | "Monitoring officer" | "Finance contact";
@@ -48,7 +49,7 @@ export class ProjectContactsRepository
   ];
 
   getAllByProjectId(projectId: string): Promise<ISalesforceProjectContact[]> {
-    return this.where(`Acc_ProjectId__c = '${projectId}'`);
+    return this.where(`Acc_ProjectId__c = '${sss(projectId)}'`);
   }
 
   async getAllForUser(email: string): Promise<ISalesforceProjectContact[]> {
@@ -62,6 +63,6 @@ export class ProjectContactsRepository
       .then(x => x.pop() as { ContactId: string })
       .catch(e => this.constructError(e))) as any;
 
-    return this.where(`Acc_ContactId__c = '${userResult.ContactId}'`);
+    return this.where(`Acc_ContactId__c = '${sss(userResult.ContactId)}'`);
   }
 }

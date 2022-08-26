@@ -1,5 +1,6 @@
-import { Connection } from "jsforce";
 import { IPicklistEntry } from "@framework/types";
+import { sss } from "@server/util/salesforce-string-helpers";
+import { Connection } from "jsforce";
 import { ILogger } from "../features/common";
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 
@@ -60,7 +61,7 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
   }
 
   async get(projectId: string, periodId: number): Promise<ISalesforceMonitoringReportHeader> {
-    return super.loadItem(`Acc_Project__c = '${projectId}' AND Acc_ProjectPeriodNumber__c = ${periodId} AND RecordType.Name = '${this.recordType}'`);
+    return super.loadItem(`Acc_Project__c = '${sss(projectId)}' AND Acc_ProjectPeriodNumber__c = ${sss(periodId)} AND RecordType.Name = '${sss(this.recordType)}'`);
   }
 
   update(updateDto: Updatable<ISalesforceMonitoringReportHeader>): Promise<boolean> {
@@ -73,7 +74,7 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
   }
 
   async getAllForProject(projectId: string): Promise<ISalesforceMonitoringReportHeader[]> {
-    return super.where(`Acc_Project__c = '${projectId}' AND RecordType.Name = '${this.recordType}'`);
+    return super.where(`Acc_Project__c = '${sss(projectId)}' AND RecordType.Name = '${sss(this.recordType)}'`);
   }
 
   async delete(reportId: string): Promise<void> {

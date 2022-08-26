@@ -1,7 +1,8 @@
-import { Partner } from "@framework/entities/partner";
 import { PCROrganisationType } from "@framework/constants";
-import { SalesforceRepositoryBaseWithMapping, Updatable } from "./salesforceRepositoryBase";
+import { Partner } from "@framework/entities/partner";
+import { sss } from "@server/util/salesforce-string-helpers";
 import { SalesforcePartnerMapper } from "./mappers/partnerMapper";
+import { SalesforceRepositoryBaseWithMapping, Updatable } from "./salesforceRepositoryBase";
 
 export interface ISalesforcePartner {
   Id: string;
@@ -168,7 +169,7 @@ export class PartnerRepository
   mapper = new SalesforcePartnerMapper();
 
   getAllByProjectId(projectId: string) {
-    return super.where(`Acc_ProjectId__c = '${projectId}'`);
+    return super.where(`Acc_ProjectId__c = '${sss(projectId)}'`);
   }
 
   getById(partnerId: string) {

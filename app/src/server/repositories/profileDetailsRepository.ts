@@ -1,4 +1,5 @@
 import { ForecastDetailsDTO } from "@framework/dtos";
+import { sss } from "@server/util/salesforce-string-helpers";
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 
 export interface ISalesforceProfileDetails {
@@ -37,7 +38,7 @@ export class ProfileDetailsRepository extends SalesforceRepositoryBase<ISalesfor
   ];
 
   public async getAllByPartner(partnerId: string): Promise<ISalesforceProfileDetails[]> {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}' AND Acc_CostCategory__c != null`;
+    const filter = `Acc_ProjectParticipant__c = '${sss(partnerId)}' AND RecordType.Name = '${sss(this.recordType)}' AND Acc_CostCategory__c != null`;
     return super.where(filter);
   }
 
@@ -47,18 +48,18 @@ export class ProfileDetailsRepository extends SalesforceRepositoryBase<ISalesfor
     costCategoryId: string,
   ): Promise<ISalesforceProfileDetails> {
     const filter = `
-      Acc_ProjectParticipant__c = '${partnerId}'
-      AND RecordType.Name = '${this.recordType}'
-      AND Acc_ProjectPeriodNumber__c >= ${periodId}
-      AND Acc_CostCategory__c = '${costCategoryId}'
+      Acc_ProjectParticipant__c = '${sss(partnerId)}'
+      AND RecordType.Name = '${sss(this.recordType)}'
+      AND Acc_ProjectPeriodNumber__c >= ${sss(periodId)}
+      AND Acc_CostCategory__c = '${sss(costCategoryId)}'
     `;
     return super.where(filter).then(res => (res && res[0]) || null);
   }
 
   public async getRequiredCategories(partnerId: string): Promise<ISalesforceProfileDetails[]> {
     const filter = `
-      Acc_ProjectParticipant__c = '${partnerId}'
-      AND RecordType.Name = '${this.requiredCategoryType}'
+      Acc_ProjectParticipant__c = '${sss(partnerId)}'
+      AND RecordType.Name = '${sss(this.requiredCategoryType)}'
     `;
     return super.where(filter);
   }

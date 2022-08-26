@@ -1,10 +1,11 @@
 import { LoanFinancialVirement } from "@framework/entities";
-import { Connection } from "jsforce";
-import { ILogger } from "@server/features/common/logger";
 import { BadRequestError } from "@server/features/common";
+import { ILogger } from "@server/features/common/logger";
+import { Connection } from "jsforce";
 
-import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
+import { sss } from "@server/util/salesforce-string-helpers";
 import { SalesforceFinancialLoanVirementMapper } from "./mappers/financialLoanVirementMapper";
+import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 
 export interface ISalesforceFinancialLoanVirement {
   Id: string;
@@ -52,7 +53,7 @@ export class FinancialLoanVirementRepository extends SalesforceRepositoryBase<IS
 
     const virementMapper = new SalesforceFinancialLoanVirementMapper(loanVirementRecordType);
 
-    const virementWhereQuery = `Acc_ProjectChangeRequest__c = '${pcrItemId}' or Acc_ParticipantVirement__r.Acc_ProjectChangeRequest__c = '${pcrItemId}' ORDER BY Loan_PeriodNumber__c ASC`;
+    const virementWhereQuery = `Acc_ProjectChangeRequest__c = '${sss(pcrItemId)}' or Acc_ParticipantVirement__r.Acc_ProjectChangeRequest__c = '${sss(pcrItemId)}' ORDER BY Loan_PeriodNumber__c ASC`;
     const rawLoans = await super.where(virementWhereQuery);
     if (!rawLoans.length) {
       throw new BadRequestError(`No virement found for '${pcrItemId}'.`);

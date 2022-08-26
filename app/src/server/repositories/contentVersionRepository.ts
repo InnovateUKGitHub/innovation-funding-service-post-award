@@ -1,7 +1,8 @@
 import { Stream } from "stream";
-import { ServerFileWrapper } from "@server/apis/controllerBase";
-import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { IFileWrapper } from "@framework/types";
+import { DocumentFilter } from "@framework/types/DocumentFilter";
+import { ServerFileWrapper } from "@server/apis/controllerBase";
+import { sss } from "@server/util/salesforce-string-helpers";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface ISalesforceDocument {
@@ -50,9 +51,9 @@ export class ContentVersionRepository extends SalesforceRepositoryBase<ISalesfor
   ];
 
   public getDocuments(contentDocumentIds: string[], filter?: DocumentFilter): Promise<ISalesforceDocument[]> {
-    let queryString = `ContentDocumentId IN ('${contentDocumentIds.join("', '")}') AND IsLatest = true`;
+    let queryString = `ContentDocumentId IN ('${contentDocumentIds.map(sss).join("', '")}') AND IsLatest = true`;
     if (filter && filter.description) {
-      queryString += ` AND Description = '${filter.description}'`;
+      queryString += ` AND Description = '${sss(filter.description)}'`;
     }
     return super.where(queryString);
   }
