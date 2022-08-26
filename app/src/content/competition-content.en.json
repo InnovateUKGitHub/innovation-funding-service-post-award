@@ -42,7 +42,6 @@
         "jes-introduction": "This screen is not relevant to KTPs. Click save and continue."
       },
       "project-details": {
-        "project-manager-info": "",
         "finance-contact-info": "Only finance contacts can submit claims.",
         "change-info": "If you need to change the finance contact, please email ",
         "change-email": "ktpqueries@iuk.ukri.org",
@@ -162,7 +161,6 @@
         "suspend-project-intro": "You will not be able to perform any normal activities while this project is on hold, for example you cannot raise project change requests (PCR's), update forecasts, or submit costs."
       },
       "project-details": {
-        "project-manager-info": "Only project managers can submit project change requests.",
         "finance-contact-info": "Only finance contacts can submit drawdown requests and costs.",
         "change-info": "If you need to change the lead project manager or finance contact, please email ",
         "change-email": "lending.operations@iuk.ukri.org",

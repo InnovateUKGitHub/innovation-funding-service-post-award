@@ -55,7 +55,8 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     };
   }
 
-  private renderPrimaryContacts({ partners, contacts }: CombinedData) {
+  private renderPrimaryContacts({ project, partners, contacts }: CombinedData) {
+    const { isKTP } = checkProjectCompetition(project.competitionType);
     const { primaryRoles } = this.getRoles();
 
     const projectContacts = primaryRoles.map((role: ProjectContactRole) => {
@@ -65,7 +66,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
       const partner = contact && partners.find(x => x.accountId === contact.accountId);
       let comment;
 
-      if (role === "Project Manager") {
+      if (!isKTP && role === "Project Manager") {
         comment = <ACC.Content value={x => x.projectDetails.projectManagerInfo} />;
       }
 
