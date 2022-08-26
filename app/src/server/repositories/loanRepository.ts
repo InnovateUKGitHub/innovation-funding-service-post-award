@@ -1,4 +1,5 @@
 import { LoanDto } from "@framework/dtos/loanDto";
+import { sss } from "@server/util/salesforce-string-helpers";
 import { LoanMapper } from "./mappers/loanMapper";
 import { SalesforceRepositoryBaseWithMapping, Updatable } from "./salesforceRepositoryBase";
 
@@ -43,7 +44,7 @@ export class LoanRepository extends SalesforceRepositoryBaseWithMapping<ISalesfo
   }
 
   public async getAll(projectId: string): Promise<LoanDto[]> {
-    const projectWhereQuery = `Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}' ORDER BY Acc_PeriodNumber__c ASC`;
+    const projectWhereQuery = `Acc_ProjectParticipant__r.Acc_ProjectId__c = '${sss(projectId)}' ORDER BY Acc_PeriodNumber__c ASC`;
 
     return super.where(projectWhereQuery);
   }
@@ -51,8 +52,8 @@ export class LoanRepository extends SalesforceRepositoryBaseWithMapping<ISalesfo
   public async get(projectId: string, options: { loanId?: string; periodId?: number }): Promise<LoanDto> {
     let whereClause = "";
 
-    if (options.periodId) whereClause = `WHERE Acc_PeriodNumber__c = ${options.periodId}`;
-    if (options.loanId) whereClause = `WHERE Id = '${options.loanId}'`;
+    if (options.periodId) whereClause = `WHERE Acc_PeriodNumber__c = ${sss(options.periodId)}`;
+    if (options.loanId) whereClause = `WHERE Id = '${sss(options.loanId)}'`;
 
     const query = this.getLoanQuery(projectId, whereClause);
     const [loanItem] = await super.query<ISalesforceLoan[]>(query);
@@ -61,13 +62,11 @@ export class LoanRepository extends SalesforceRepositoryBaseWithMapping<ISalesfo
   }
 
   public getLoanQuery(projectId: string, whereClause: string): string {
-    const sqlTotalLoanCostsColumns = ["Id, Acc_TotalParticipantCosts__c, Acc_TotalGrantApproved__c"];
-    const sqlLoanColumns = this.salesforceFieldNames.join(", ");
+    const sqlLoanColumns = this.salesforceFieldNames.map(sss).join(", ");
+    const subRequest = `SELECT ${sqlLoanColumns} FROM ${sss(this.salesforcePrePaymentTable)} ${whereClause}`;
+    const totalCostColumns = `Id, Acc_TotalParticipantCosts__c, Acc_TotalGrantApproved__c, (${subRequest})`;
 
-    const subRequest = `SELECT ${sqlLoanColumns} FROM ${this.salesforcePrePaymentTable} ${whereClause}`;
-    const totalCostColumns = `${sqlTotalLoanCostsColumns}, (${subRequest})`;
-
-    return `SELECT ${totalCostColumns} FROM Acc_ProjectParticipant__c WHERE Acc_ProjectId__c = '${projectId}'`;
+    return `SELECT ${totalCostColumns} FROM Acc_ProjectParticipant__c WHERE Acc_ProjectId__c = '${sss(projectId)}'`;
   }
 }
 

@@ -1,4 +1,4 @@
-import { parseSfLongTextArea } from "@server/util/salesforce-string-helpers";
+import { parseSfLongTextArea, sss } from "@server/util/salesforce-string-helpers";
 
 describe("SalesForce string helpers", () => {
   describe("parseSfLongTextArea()", () => {
@@ -12,6 +12,32 @@ describe("SalesForce string helpers", () => {
       const parsedValue = parseSfLongTextArea(unparsedString);
 
       expect(parsedValue).toStrictEqual(expectedValue);
+    });
+  });
+
+  describe("sss (Salesforce SQL Sanitiser)", () => {
+    it("should throw with invalid numbers", () => {
+      expect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
+        sss(1e999);
+      }).toThrow();
+
+      expect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
+        sss(-1e999);
+      }).toThrow();
+    });
+
+    test.each`
+      name                           | input                                                              | expected
+      ${"valid number"}              | ${123}                                                             | ${"123"}
+      ${"valid string"}              | ${"a0E2600000kQe5lEAC"}                                            | ${"a0E2600000kQe5lEAC"}
+      ${"SQL injection attack"}      | ${"a0E2600000kQe5lEAC' OR Acc_ProjectId__c = 'a0E2600000kQeGwEAK"} | ${"a0E2600000kQe5lEAC\\' OR Acc_ProjectId__c = \\'a0E2600000kQeGwEAK"}
+      ${"string with single quotes"} | ${"I am 'happy' today"}                                            | ${"I am \\'happy\\' today"}
+    `("it should sanitise a $name", ({ input, expected }) => {
+      const parsedValue = sss(input);
+
+      expect(parsedValue).toStrictEqual(expected);
     });
   });
 });

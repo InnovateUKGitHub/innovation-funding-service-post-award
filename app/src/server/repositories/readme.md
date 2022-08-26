@@ -1,6 +1,7 @@
 # Repositories #
 
-The repository layer retrieves from and updates data in the data stores,currently salesforce. Although efforts have been made to make it more agnostic, due to the data structures has it is still fairly specific.
+The repository layer retrieves from and updates data in the data stores, currently SalesForce.
+Although efforts have been made to make it more agnostic, due to the data structures has it is still fairly specific.
 	
 ### All ###
 
@@ -22,25 +23,27 @@ Salesforce fields that are queried are defined in `salesforceFieldNames` propert
 
 Relationships return objects in the result. eg
 
-fields 
-
-	[
-		"ID", 
-		"Acc_PartnerName__c", 
-		"Acc_ProjectId__r.Id", 
-		"Acc_ProjectId__r.Acc_CompetitionType__c"
-	]
+fields
+```json
+[
+	"ID", 
+	"Acc_PartnerName__c", 
+	"Acc_ProjectId__r.Id", 
+	"Acc_ProjectId__r.Acc_CompetitionType__c"
+]
+```
 
 returns the object
-
-    {
-    	ID:string,
-    	Acc_PartnerName__c: string,
-    	Acc_ProjectId__r: {
-    		Id: string, 
-    		Acc_CompetitionType__c: string
-    	}
-    }
+```ts
+{
+	ID: string,
+	Acc_PartnerName__c: string,
+	Acc_ProjectId__r: {
+		Id: string, 
+		Acc_CompetitionType__c: string
+	}
+}
+```
 
 Date Times are returned by salesforce as ISO dates.
 
@@ -56,3 +59,13 @@ Mappers for use in the salesforce repositories inherit from SalesforceBaseMapper
 
 Salesforce calls are made using the library `jsforce` [https://jsforce.github.io/](https://jsforce.github.io/)
 Security provided using JWT Token exchange. See confluence for details.
+
+### Escaping
+
+To ensure that you do not introduce the possibility for an SQL injection attack,
+you **MUST** sanitise all user-controllable inputs with the `sss` method,
+found within `./app/src/server/util/salesforce-string-helpers.ts`.
+
+This will escape all single quotes `'` with a backslash `\'`.
+
+If you feel like you need to escape the SQL in a different way, you're probably doing it wrong.

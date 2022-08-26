@@ -1,4 +1,5 @@
 import { BroadcastDto } from "@framework/dtos/BroadcastDto";
+import { sss } from "@server/util/salesforce-string-helpers";
 import { NotFoundError } from "@shared/appError";
 import { BroadcastMapper } from "./mappers/broadcastMapper";
 import { SalesforceRepositoryBaseWithMapping } from "./salesforceRepositoryBase";
@@ -28,7 +29,7 @@ export class BroadcastRepository extends SalesforceRepositoryBaseWithMapping<ISa
   }
 
   public async get(broadcastId: string): Promise<BroadcastDto> {
-    const broadcast = await super.filterOne(`Id = '${broadcastId}'`);
+    const broadcast = await super.filterOne(`Id = '${sss(broadcastId)}'`);
 
     if (!broadcast) {
       throw new NotFoundError(`Broadcast '${broadcastId}' does not exist`);

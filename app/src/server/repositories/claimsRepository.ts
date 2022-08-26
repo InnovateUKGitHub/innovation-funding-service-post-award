@@ -1,4 +1,5 @@
 import { IPicklistEntry } from "@framework/types";
+import { sss } from "@server/util/salesforce-string-helpers";
 import { NotFoundError } from "../features/common/appError";
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 
@@ -85,7 +86,7 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
 
   private getStandardFilter() {
     return `
-      RecordType.Name = '${this.recordType}'
+      RecordType.Name = '${sss(this.recordType)}'
       AND Acc_ClaimStatus__c != 'New'
       AND Acc_ClaimStatus__c != 'Not used'
     `;
@@ -95,7 +96,7 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     const filter =
       this.getStandardFilter() +
       `
-      AND Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'
+      AND Acc_ProjectParticipant__r.Acc_ProjectId__c = '${sss(projectId)}'
     `;
 
     return super.where(filter);
@@ -105,7 +106,7 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     const filter =
       this.getStandardFilter() +
       `
-      AND Acc_ProjectParticipant__c = '${partnerId}'
+      AND Acc_ProjectParticipant__c = '${sss(partnerId)}'
     `;
 
     return super.where(filter);
@@ -113,9 +114,9 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
 
   public getAllIncludingNewByPartnerId(partnerId: string): Promise<ISalesforceClaim[]> {
     const filter = `
-      RecordType.Name = '${this.recordType}'
+      RecordType.Name = '${sss(this.recordType)}'
       AND Acc_ClaimStatus__c != 'Not used'
-      AND Acc_ProjectParticipant__c = '${partnerId}'
+      AND Acc_ProjectParticipant__c = '${sss(partnerId)}'
     `;
 
     return super.where(filter);
@@ -125,8 +126,8 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     const filter =
       this.getStandardFilter() +
       `
-      AND Acc_ProjectParticipant__c = '${partnerId}'
-      AND Acc_ProjectPeriodNumber__c = ${periodId}
+      AND Acc_ProjectParticipant__c = '${sss(partnerId)}'
+      AND Acc_ProjectPeriodNumber__c = ${sss(periodId)}
     `;
 
     const claim = await super.filterOne(filter);
@@ -142,9 +143,9 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     const filter =
       this.getStandardFilter() +
       `
-      AND Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'
-      AND Acc_ProjectParticipant__c = '${partnerId}'
-      AND Acc_ProjectPeriodNumber__c = ${periodId}
+      AND Acc_ProjectParticipant__r.Acc_ProjectId__c = '${sss(projectId)}'
+      AND Acc_ProjectParticipant__c = '${sss(partnerId)}'
+      AND Acc_ProjectPeriodNumber__c = ${sss(periodId)}
     `;
 
     const claim = await super.filterOne(filter);

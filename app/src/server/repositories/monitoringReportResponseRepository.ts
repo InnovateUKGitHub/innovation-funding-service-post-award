@@ -1,3 +1,4 @@
+import { sss } from "@server/util/salesforce-string-helpers";
 import { Connection } from "jsforce";
 import { ILogger } from "../features/common";
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
@@ -41,7 +42,7 @@ export class MonitoringReportResponseRepository extends SalesforceRepositoryBase
   ];
 
   async getAllForHeader(monitoringReportHeaderId: string): Promise<ISalesforceMonitoringReportResponse[]> {
-    const filter = `Acc_MonitoringHeader__c = '${monitoringReportHeaderId}' AND RecordType.Name = '${this.recordType}'`;
+    const filter = `Acc_MonitoringHeader__c = '${sss(monitoringReportHeaderId)}' AND RecordType.Name = '${sss(this.recordType)}'`;
     return this.where(filter);
   }
 

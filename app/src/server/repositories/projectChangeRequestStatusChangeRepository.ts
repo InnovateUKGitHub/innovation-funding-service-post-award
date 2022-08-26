@@ -1,5 +1,6 @@
-import { SalesforceRepositoryBaseWithMapping } from "@server/repositories/salesforceRepositoryBase";
 import { ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
+import { SalesforceRepositoryBaseWithMapping } from "@server/repositories/salesforceRepositoryBase";
+import { sss } from "@server/util/salesforce-string-helpers";
 import { PCRStatusChangeMapper } from "./mappers/pcrStatusChangeMapper";
 
 export interface ICreateProjectChangeRequestStatusChange {
@@ -51,6 +52,6 @@ export class ProjectChangeRequestStatusChangeRepository extends SalesforceReposi
   }
 
   public getStatusChanges(projectId: string, projectChangeRequestId: string): Promise<ProjectChangeRequestStatusChangeEntity[]> {
-    return super.where(`Acc_ProjectChangeRequest__c = '${projectChangeRequestId}' AND Acc_ProjectChangeRequest__r.Acc_Project__c = '${projectId}'`);
+    return super.where(`Acc_ProjectChangeRequest__c = '${sss(projectChangeRequestId)}' AND Acc_ProjectChangeRequest__r.Acc_Project__c = '${sss(projectId)}'`);
   }
 }

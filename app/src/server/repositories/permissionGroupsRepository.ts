@@ -1,6 +1,7 @@
 import { PermissionGroupIdentifier } from "@framework/constants";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { ILogger } from "@server/features/common";
+import { sss } from "@server/util/salesforce-string-helpers";
 import { Connection } from "jsforce";
 import { SalesforcePermissionGroupMapper } from "./mappers/permissionGroupMapper";
 import { SalesforceRepositoryBaseWithMapping } from "./salesforceRepositoryBase";
@@ -38,6 +39,6 @@ export class PermissionGroupRepository extends SalesforceRepositoryBaseWithMappi
   protected mapper = new SalesforcePermissionGroupMapper(SalesforcePermisionGroups);
 
   public getAll() {
-    return super.where(`DeveloperName IN ('${Object.keys(SalesforcePermisionGroups).join("', '")}')`);
+    return super.where(`DeveloperName IN ('${Object.keys(SalesforcePermisionGroups).map(sss).join("', '")}')`);
   }
 }

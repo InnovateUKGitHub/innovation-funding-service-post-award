@@ -1,3 +1,4 @@
+import { sss } from "@server/util/salesforce-string-helpers";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface ISalesforceClaimTotalCostCategory {
@@ -30,7 +31,7 @@ export class ClaimTotalCostCategoryRepository extends SalesforceRepositoryBase<I
   ];
 
   getAllByPartnerId(partnerId: string): Promise<ISalesforceClaimTotalCostCategory[]> {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}'`;
+    const filter = `Acc_ProjectParticipant__c = '${sss(partnerId)}' AND RecordType.Name = '${sss(this.recordType)}'`;
     return super.where(filter);
   }
 }
