@@ -55,6 +55,7 @@ describe("dayComparator", () => {
 describe("projectPriorityComparator", () => {
   describe("@returns", () => {
     const noClaimsAndReviewsOrQueries = createProjectDto({ claimsToReview: 0, pcrsToReview: 0, pcrsQueried: 0 });
+    const noClaimsAndReviewsOrQueriesAgain = createProjectDto({ claimsToReview: 0, pcrsToReview: 0, pcrsQueried: 0 });
 
     const claimsNoReviewSingle = createProjectDto({ claimsToReview: 1, pcrsToReview: 0, pcrsQueried: 0 });
     const claimsNoReviewMany = createProjectDto({ claimsToReview: 4, pcrsToReview: 0, pcrsQueried: 0 });
@@ -83,6 +84,16 @@ describe("projectPriorityComparator", () => {
         const comparison = projectPriorityComparator(aProject, bProject);
 
         expect(comparison).toBeLessThanOrEqual(-1);
+      });
+
+      test.each`
+        name                                           | aProject                       | bProject
+        ${"when two projects have the same 0 entries"} | ${noClaimsAndReviewsOrQueries} | ${noClaimsAndReviewsOrQueriesAgain}
+        ${"when the same project is passed in"}        | ${claimsWithReviews}           | ${claimsWithReviews}
+      `("will return before $name", ({ aProject, bProject }) => {
+        const comparison = projectPriorityComparator(aProject, bProject);
+
+        expect(comparison).toBe(0);
       });
 
       test.each`
