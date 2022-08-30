@@ -79,7 +79,7 @@ body,
 }
 
 .govuk-table__row.table__row--warning {
-  border-left: 5px solid #005ea5;
+  border-left: 5px solid var(--govukColourBlue);
 }
 
 .govuk-table__row.table__row--error {
@@ -155,7 +155,7 @@ body,
   -webkit-box-shadow: 0 0 0 0;
   -moz-box-shadow: 0 0 0 0;
   box-shadow: 0 0 0 0;
-  color: #005ea5;
+  color: var(--govukColourBlue);
   cursor: pointer;
   font-family: inherit;
   font-size: inherit;
@@ -357,7 +357,6 @@ body,
 @media (min-width: 1024px) {
   .sticky-col {
     background: #ffffff;
-    box-shadow: 1px 1px #bfc1c3;
     position: sticky;
     min-width: 100px;
     width: auto;
@@ -365,6 +364,7 @@ body,
 
   .sticky-col-left-1 {
     left: 0px;
+    margin-left: -1px;
   }
 
   .sticky-col-right-1 {
@@ -378,6 +378,81 @@ body,
   .sticky-col-right-3 {
     right: 200px;
   }
+}
+
+/* 
+ * Pseudoelements are used to cover up parts of the table that peek through
+ * to the scrolling table below, as well as manually drawing table lines.
+ * Couldn't think of a better solution to the problem.
+ *
+ * Ideally, Alphagov will have a better solution to include Sticky Columns.
+ * Stackoverflow recommends "border-collapse: separate" but the GOV.UK CSS uses collapse.
+ *
+ * @author Leondro Lio <leondro.lio@iuk.ukri.org>
+ */
+.sticky-col-right-1::before,
+.sticky-col-right-2::before,
+.sticky-col-right-3::before,
+.sticky-col-left-1::before,
+.acc-sticky-footer::before {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  left: -1px;
+  bottom: 0;
+  right: 0;
+  background-color: white;
+  z-index: -1;
+}
+
+.sticky-col-right-1::after,
+.sticky-col-right-2::after,
+.sticky-col-right-3::after,
+.sticky-col-left-1::after,
+.acc-sticky-footer::after,
+.acc-sticky-table .table__row--warning .sticky-col-left-1::after {
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: -1px;
+  right: -1px;
+  margin: 0;
+  border-bottom: 1px solid var(--govukBorderColour);
+}
+
+.acc-sticky-table .table__row--warning {
+  border-left: 5px none;
+}
+.acc-sticky-table .table__row--warning .sticky-col-left-1::after {
+  /* left: 5px; */
+  border-left: 5px solid var(--govukColourBlue);
+}
+
+.sticky-col-left-1::after {
+  border-right: 1px solid var(--govukBorderColour);
+}
+
+.sticky-col-right-1::after {
+  right: -1px;
+  border-right: 1px solid white;
+}
+
+.sticky-col-right-1::after,
+.sticky-col-right-2::after {
+  border-left: 1px solid var(--govukBorderColour);
+}
+
+.sticky-col-right-3::after {
+  margin-left: -1px;
+  border-left: 1px solid var(--govukColourBlack);
+}
+
+.acc-sticky-footer-cell::after {
+  top: -3px;
+  border-top: 3px solid var(--govukColourBlack);
 }
 
 .acc-section:last-child {
@@ -411,7 +486,7 @@ div.card-link {
 }
 
 div.card-link > a {
-  border-top: 5px solid #005ea5;
+  border-top: 5px solid var(--govukColourBlue);
   height: 100%;
   width: 100%;
   display: inline-block;
@@ -420,7 +495,7 @@ div.card-link > a {
 
 div.card-link > a:hover {
   border-top: 5px solid #057ef2;
-  background: #005ea5;
+  background: var(--govukColourBlue);
   color: #fff;
 }
 
@@ -734,4 +809,10 @@ p.govuk-body--multiline {
 
 .govuk-width-container {
   max-width:1020px;
+}
+
+:root {
+  --govukBorderColour: #b1b4b6;
+  --govukColourBlack: #0b0c0c;
+  --govukColourBlue: #005ea5;
 }
