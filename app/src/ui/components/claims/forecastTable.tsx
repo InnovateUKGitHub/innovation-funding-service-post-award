@@ -61,21 +61,27 @@ interface Props {
 }
 
 export class ForecastTable extends React.Component<Props> {
+  animationFrame?: number;
+
   componentDidMount() {
-    // hack into next event cycle as react is too fast for dom
-    setTimeout(() => {
+    // Keep resizing the columns to fit.
+    this.animationFrame = requestAnimationFrame(() => {
       const col1 = document.getElementsByClassName("sticky-col-right-1");
       const col2 = document.getElementsByClassName("sticky-col-right-2");
       const col3 = document.getElementsByClassName("sticky-col-right-3");
 
       if (!col1.length || !col2.length) return;
 
-      const width1 = col1[0].getBoundingClientRect().width;
-      const width2 = col2[0].getBoundingClientRect().width;
+      const width1 = Math.floor(col1[0].getBoundingClientRect().width);
+      const width2 = Math.floor(col2[0].getBoundingClientRect().width);
 
       Array.from(col2).forEach((x: any) => (x.style.right = `${width1}px`));
       Array.from(col3).forEach((x: any) => (x.style.right = `${width1 + width2}px`));
     });
+  }
+
+  componentWillUnmount() {
+    if (this.animationFrame) cancelAnimationFrame(this.animationFrame);
   }
 
   private getPeriodId(project: ProjectDto, claims: ClaimDto[], draftClaim: ClaimDto | null) {
@@ -130,6 +136,7 @@ export class ForecastTable extends React.Component<Props> {
             "table__row--error": !hideValidation && x.validators.some(v => !v.isValid),
           })
         }
+        className="acc-sticky-table"
         validationResult={!hideValidation ? editor && editor.validator.costCategoryForecasts.results : undefined}
       >
         <Table.String
@@ -487,20 +494,20 @@ export class ForecastTable extends React.Component<Props> {
     cells.push(
       <th
         key="th"
-        className="govuk-table__cell govuk-!-font-weight-bold acc-table__cell-top-border sticky-col sticky-col-left-1"
+        className="govuk-table__cell govuk-!-font-weight-bold acc-table__cell-top-border sticky-col sticky-col-left-1 acc-sticky-footer-cell"
       >
         Total
       </th>,
     );
     cells.push(totals.map((value, index) => this.renderTableFooterCell(value, index)));
     cells.push(
-      this.renderTableFooterCell(costTotal, totals.length + 1, "sticky-col sticky-col-right-3", "qa-costs-remaining"),
+      this.renderTableFooterCell(costTotal, totals.length + 1, "sticky-col sticky-col-right-3 acc-sticky-footer-cell", "qa-costs-remaining"),
     );
-    cells.push(this.renderTableFooterCell(golTotal, totals.length + 2, "sticky-col sticky-col-right-2"));
+    cells.push(this.renderTableFooterCell(golTotal, totals.length + 2, "sticky-col sticky-col-right-2 acc-sticky-footer-cell"));
     cells.push(
       <td
         key="total_diff"
-        className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular sticky-col sticky-col-right-1"
+        className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular sticky-col sticky-col-right-1 acc-sticky-footer-cell"
       >
         <Percentage value={diffAsPercentage(golTotal, costTotal)} />
       </td>,
@@ -517,10 +524,10 @@ export class ForecastTable extends React.Component<Props> {
     ];
   }
 
-  private readonly renderTableFooterCell = (total: number, key: number, className?: string, qa?: string) => (
+  private readonly renderTableFooterCell = (total: number, key: number, className = "", qa?: string) => (
     <td
       key={key}
-      className={`govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular ${className}`}
+      className={`govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border govuk-!-font-weight-regular acc-sticky-footer-cell ${className}`}
     >
       <Currency data-qa={qa} value={total} />
     </td>
