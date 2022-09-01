@@ -640,8 +640,8 @@
     },
     "pcr-spend-profile-costs-summary": {
       "title": "Add partner",
-      "section-title-costs": "{{costCategoryName}} costs",
-      "guidance-title": "{{costCategoryName}} costs guidance",
+      "section-title-costs": "{{costCategoryName}}",
+      "guidance-title": "{{costCategoryName}} guidance",
       "back-link": "Back to project costs",
       "button-submit": "Save and return to project costs",
       "button-add-cost": "Add a cost",
@@ -650,17 +650,17 @@
     },
     "pcr-spend-profile-delete-cost": {
       "title": "Add partner",
-      "section-title-cost": "Delete {{costCategoryName, lowercase}} cost",
-      "back-link": "Back to {{costCategoryName, lowercase}} costs",
+      "section-title-cost": "Delete {{costCategoryName, lowercase}}",
+      "back-link": "Back to {{costCategoryName, lowercase}}",
       "button-delete": "Delete cost",
       "guidance-delete": "All the information will be permanently deleted."
     },
     "pcr-spend-profile-prepare-cost": {
       "title": "Add partner",
-      "section-title-cost": "{{costCategoryName}} cost",
-      "guidance-title": "{{costCategoryName}} costs guidance",
-      "back-link": "Back to {{costCategoryName, lowercase}} costs",
-      "button-submit": "Save and return to {{costCategoryName, lowercase}} costs",
+      "section-title-cost": "{{costCategoryName}}",
+      "guidance-title": "{{costCategoryName}} guidance",
+      "back-link": "Back to {{costCategoryName, lowercase}}",
+      "button-submit": "Save and return to {{costCategoryName, lowercase}}",
       "overheads": {
         "button-submit": "Save and return to project costs"
       }
@@ -937,7 +937,7 @@
   },
   "pcr-spend-profile-labels": {
     "cost": "Cost (£)",
-    "total-costs": "Total {{costCategoryName, lowercase}} costs",
+    "total-costs": "Total {{costCategoryName, lowercase}}",
     "description": "Description",
     "labour": {
       "role": "Role within project",
