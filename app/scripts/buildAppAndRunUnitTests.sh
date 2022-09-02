@@ -8,6 +8,8 @@ echo "About to run node check script"
 npm run script:check-node
 echo "About to run ci"
 npm ci --no-optional
+echo "About to run patch-package"
+npm run patch-package
 echo "About to run build:server"
 npm run build:server
 echo "About to run build:client"
