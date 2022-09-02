@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/naming-convention, @typescript-eslint/no-var-requires, @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/naming-convention, @typescript-eslint/no-var-requires */
+/** @typedef {import('esbuild').BuildOptions} BuildOptions */
 
 const path = require("path");
-const { BuildOptions } = require("esbuild");
 const { nodeExternalsPlugin } = require("esbuild-node-externals");
 const { typecheckPlugin } = require("@jgoz/esbuild-plugin-typecheck");
 const replaceModulesPlugin = require("./replaceModulesPlugin");
@@ -64,6 +64,11 @@ class ESBuildConfiguration {
     };
   }
 
+  /**
+   * Include the configuration options for enabling watch mode.
+   *
+   * @returns {ESBuildConfiguration} Itself
+   */
   withWatch() {
     Object.assign(this.serverBuild, {
       watch: {
@@ -89,6 +94,13 @@ class ESBuildConfiguration {
     return this;
   }
 
+  /**
+   * Include the configuration options for enabling TypeScript checking.
+   * The plugin used builds asynchronously on another thread, so regular
+   * ESbuild speeds are not sacrificed.
+   *
+   * @returns {ESBuildConfiguration} Itself
+   */
   withTypecheck() {
     this.serverBuild.plugins.push(typecheckPlugin());
     this.clientBuild.plugins.push(typecheckPlugin());
@@ -96,14 +108,30 @@ class ESBuildConfiguration {
     return this;
   }
 
+  /**
+   * Obtain the server build options.
+   *
+   * @returns {BuildOptions} Build options for the server-side component of IFS PA
+   */
   getServerConfig() {
     return this.serverBuild;
   }
 
+  /**
+   * Obtain the client build options.
+   *
+   * @returns {BuildOptions} Build options for the client-side component of IFS PA
+   */
   getClientConfig() {
     return this.clientBuild;
   }
 
+  /**
+   * Obtain the instance of the restarter module, which
+   * allows you to restart/refresh the client/server.
+   *
+   * @returns {Restarter} An instance of the restarter
+   */
   getRestarter() {
     return this.restarter;
   }
