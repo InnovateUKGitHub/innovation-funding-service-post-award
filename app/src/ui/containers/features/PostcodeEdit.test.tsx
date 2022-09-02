@@ -1,4 +1,4 @@
-import { prettyDOM, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import TestBed, { TestBedContent } from "@shared/TestBed";
 import { PostcodeEdit, PostcodeProps } from "./PostcodeEdit";

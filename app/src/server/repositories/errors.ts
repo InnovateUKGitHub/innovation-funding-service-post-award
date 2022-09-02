@@ -23,7 +23,7 @@ export class SalesforceInvalidFilterError extends Error {
 }
 
 export class SalesforceDataChangeError extends Error {
-  constructor(message: string, public errors: string[]) {
+  constructor(message: string, public errors: unknown[]) {
     super(message);
   }
 }
