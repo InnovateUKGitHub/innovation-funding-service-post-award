@@ -14,6 +14,8 @@ echo "About to run build:server"
 npm run build:server
 echo "About to run build:client"
 npm run build:client
+echo "About to run esbuild:tsc (ESBuild with TypeScript checking)"
+npm run esbuild:tsc
 echo "About to run lint"
 npm run lint
 echo "About to run test"
