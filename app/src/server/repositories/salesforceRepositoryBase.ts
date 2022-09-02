@@ -1,5 +1,5 @@
 import { Stream } from "stream";
-import { Connection, DescribeSObjectResult, Field, Query, RecordResult, SuccessResult } from "jsforce";
+import { Connection, DescribeSObjectResult, Field, Query, RecordResult, SuccessResult, Error as JError } from "jsforce";
 
 import * as Errors from "@server/repositories/errors";
 import { ISalesforceMapper } from "@server/repositories/mappers/salesforceMapperBase";
@@ -214,12 +214,12 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
     }
   }
 
-  private getDataChangeErrorMessage(result: RecordResult): string[] {
+  private getDataChangeErrorMessage(result: RecordResult) {
     return !result.success ? result.errors : [];
   }
 
-  private getDataChangeErrorMessages(results: RecordResult[]): string[] {
-    return results.map(x => (!x.success ? x.errors : [])).reduce<string[]>((a, b) => a.concat(b), []);
+  private getDataChangeErrorMessages(results: RecordResult[]) {
+    return results.map(x => (!x.success ? x.errors : [])).reduce<JError[]>((a, b) => a.concat(b), []);
   }
 
   protected async insertItem<Payload extends Partial<TSalesforce>>(inserts: Payload): Promise<string> {
