@@ -30,7 +30,6 @@ export function componentGuideRender(req: Request, res: Response) {
 
 const renderGuide = (nonce: string, html: string) => {
   const govukFrontendVersion = devDependencies["govuk-frontend"].replace(/[^0-9/.]/, "");
-  // const govukFrontendVersion = "4.0.0";
 
   return `
     <!DOCTYPE html>
