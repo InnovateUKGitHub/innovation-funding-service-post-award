@@ -1,4 +1,4 @@
-import React, { cloneElement, CSSProperties, isValidElement } from "react";
+import React, { cloneElement, CSSProperties, isValidElement, ReactNode } from "react";
 import cx from "classnames";
 
 import { IEditorStore } from "@ui/redux";
@@ -29,6 +29,7 @@ interface SharedFormProps<T> {
   qa?: string;
   enctype?: "urlencoded" | "multipart";
   isGet?: boolean;
+  children: ReactNode;
 }
 
 interface EditorForm<T> extends SharedFormProps<T> {
@@ -101,6 +102,7 @@ interface FieldsetProps {
   headingQa?: string;
   isSubQuestion?: boolean;
   className?: string;
+  children: ReactNode;
 }
 
 class FieldsetComponent<T> extends React.Component<FieldsetProps, []> {
@@ -472,6 +474,7 @@ interface ButtonProps {
   value?: string;
   onClick?: () => void;
   qa?: string;
+  children: ReactNode;
 }
 
 const ButtonComponent = <T extends {}>(props: ButtonProps & InternalFieldProps<T>) => (

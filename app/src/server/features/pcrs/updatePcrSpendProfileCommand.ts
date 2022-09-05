@@ -154,10 +154,13 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   }
 
   private getOverheadsCostValue(overheadsCostDto: PCRSpendProfileOverheadsCostDto, costCategories: CostCategoryDto[], items: PcrSpendProfileEntity[]) {
-    const labourCostCategory = costCategories.find(x => x.type === CostCategoryType.Labour)!;
+    const labourCostCategory = costCategories.find(x => x.type === CostCategoryType.Labour);
+    if(!labourCostCategory) throw new Error(`Cannot find labourCostCategory matching ${CostCategoryType.Labour}`);
+
     const labourCosts = items
-      .filter(x => x.costCategoryId === labourCostCategory.id)
+      .filter(x => x.costCategory === CostCategoryType.Labour)
       .reduce((acc, item) => acc + (item.value || 0), 0);
+
     switch (overheadsCostDto.overheadRate) {
       case PCRSpendProfileOverheadRate.Unknown:
         return null;
@@ -248,14 +251,14 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     const paired = [...this.spendProfileDto.costs, ...this.spendProfileDto.funds]
       .map(cost => ({
         // This cannot be undefined as both map over the spend profile costs.
-        cost: mappedEntities.find(x => x.id === cost.id)!,
+        cost: mappedEntities.find(x => x.id === cost.id),
         originalCost: originalSpendProfiles.find(x => x.id === cost.id)
       }));
 
     const costsToUpdate = paired
       .filter(x => !!x.originalCost)
       .map(x => {
-        return this.getUpdatedCosts(x.originalCost!, x.cost, costCategories) as PcrSpendProfileEntity;
+        return this.getUpdatedCosts(x.originalCost as PcrSpendProfileEntity, x.cost as PcrSpendProfileEntity, costCategories) as PcrSpendProfileEntity;
       })
       .filter(x => !!x);
 

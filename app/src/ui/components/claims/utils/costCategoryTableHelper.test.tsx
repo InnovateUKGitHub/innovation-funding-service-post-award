@@ -713,7 +713,7 @@ describe("renderCostCategory()", () => {
 
     const categoryNameAsString = setup(defaultCostCategory, stubCategory);
     const expectedLink = (
-      <Link id="Val0" route={stubRoute}>
+      <Link id="Val:0" route={stubRoute}>
         {stubCategory.name}
       </Link>
     );

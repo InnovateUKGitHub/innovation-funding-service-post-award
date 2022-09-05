@@ -1,6 +1,32 @@
 import { DateTime } from "luxon";
-import { dayComparator, projectPriorityComparator } from "@framework/util";
+import { dayComparator, projectPriorityComparator, stringComparator } from "@framework/util";
 import { createProjectDto } from "@framework/util/stubDtos";
+
+describe("stringComparator", () => {
+  test("two strings passed in then return the response of the localeCompare method", () => {
+    const a = "réservé";
+    const b = "reserve";
+    expect(stringComparator(a, b)).toEqual(1);
+  });
+
+  test("the second string is empty, return -1", () => {
+    const a = "reserve";
+    const b = "";
+    expect(stringComparator(a, b)).toEqual(-1);
+  });
+
+  test("the first string is empty, return 1", () => {
+    const a = "";
+    const b = "reserve";
+    expect(stringComparator(a, b)).toEqual(1);
+  });
+
+  test("both strings empty, return 0", () => {
+    const a = "";
+    const b = "";
+    expect(stringComparator(a, b)).toEqual(0);
+  });
+});
 
 describe("dayComparator", () => {
   const dateFormat = "dd/MM/yyyy HH:mm";
@@ -29,6 +55,7 @@ describe("dayComparator", () => {
 describe("projectPriorityComparator", () => {
   describe("@returns", () => {
     const noClaimsAndReviewsOrQueries = createProjectDto({ claimsToReview: 0, pcrsToReview: 0, pcrsQueried: 0 });
+    const noClaimsAndReviewsOrQueriesAgain = createProjectDto({ claimsToReview: 0, pcrsToReview: 0, pcrsQueried: 0 });
 
     const claimsNoReviewSingle = createProjectDto({ claimsToReview: 1, pcrsToReview: 0, pcrsQueried: 0 });
     const claimsNoReviewMany = createProjectDto({ claimsToReview: 4, pcrsToReview: 0, pcrsQueried: 0 });
@@ -57,6 +84,16 @@ describe("projectPriorityComparator", () => {
         const comparison = projectPriorityComparator(aProject, bProject);
 
         expect(comparison).toBeLessThanOrEqual(-1);
+      });
+
+      test.each`
+        name                                           | aProject                       | bProject
+        ${"when two projects have the same 0 entries"} | ${noClaimsAndReviewsOrQueries} | ${noClaimsAndReviewsOrQueriesAgain}
+        ${"when the same project is passed in"}        | ${claimsWithReviews}           | ${claimsWithReviews}
+      `("will return before $name", ({ aProject, bProject }) => {
+        const comparison = projectPriorityComparator(aProject, bProject);
+
+        expect(comparison).toBe(0);
       });
 
       test.each`

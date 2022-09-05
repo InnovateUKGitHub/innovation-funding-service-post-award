@@ -36,7 +36,6 @@ const TimeExtensionStep = (
         return {
           id: x.offset.toString(),
           value: isCurrent ? currentProjectEndDate : x.label,
-          selected: isCurrent,
         };
       }),
     [props.timeExtensionOptions, currentProjectEndDate],
@@ -113,7 +112,7 @@ const TimeExtensionStep = (
               options={timeExtensionDropdownOptions}
               value={m => getProjectEndOption(m.offsetMonths)}
               update={(m, value) => {
-                return (m.offsetMonths = Number(value!.id));
+                return (m.offsetMonths = Number(value?.id));
               }}
             />
             {isClient && (

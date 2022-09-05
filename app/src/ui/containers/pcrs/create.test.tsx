@@ -1,4 +1,4 @@
-import { renderHook } from "@testing-library/react-hooks";
+import { renderHook } from "@testing-library/react";
 
 import { hookTestBed, TestBedContent } from "@shared/TestBed";
 import { useCreatePcrContent } from "@ui/containers/pcrs/create";

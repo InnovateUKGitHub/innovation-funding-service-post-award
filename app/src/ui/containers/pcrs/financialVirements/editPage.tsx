@@ -71,7 +71,8 @@ class EditPageComponent extends ContainerBase<VirementCostsParams, Props, {}> {
   }
 
   private renderPage(project: ProjectDto, partner: PartnerDto, costCategories: CostCategoryDto[], editor: IEditorStore<FinancialVirementDto, FinancialVirementDtoValidator>) {
-    const currentPartnerVirement = editor.data.partners.find(x => x.partnerId === this.props.partnerId)!;
+    const currentPartnerVirement = editor.data.partners.find(x => x.partnerId === this.props.partnerId);
+    if(!currentPartnerVirement) throw new Error(`Cannot find current partner virement matching ${this.props.partnerId}`);
     const partnerVirementsValidator = editor.validator.partners.results.find(x => x.model.partnerId === this.props.partnerId);
 
     const costCategoriesWithVirement = costCategories
@@ -227,10 +228,13 @@ class EditPageComponent extends ContainerBase<VirementCostsParams, Props, {}> {
   }
 
   private updateValue({overheadRate, id}: PartnerDto, costCategory: CostCategoryDto, value: number | null) {
-    const projectCosts = this.props.editor.data!.data;
-    const currentPartner = projectCosts.partners.find((x) => x.partnerId === id)!;
-    const costCategoryVirements = currentPartner.virements.find((x) => x.costCategoryId === costCategory.id)!;
-    costCategoryVirements.newEligibleCosts = value!;
+    const projectCosts = this.props.editor.data?.data;
+    if(!projectCosts) throw new Error("Cannot find projectCosts");
+    const currentPartner = projectCosts.partners.find((x) => x.partnerId === id);
+    if(!currentPartner) throw new Error(`Cannot find current partner matching ${id}`);
+    const costCategoryVirements = currentPartner.virements.find((x) => x.costCategoryId === costCategory.id);
+    if(!costCategoryVirements) throw new Error(`Cannot find cost category virements matching ${costCategory.id}`);
+    costCategoryVirements.newEligibleCosts = value ?? 0;
 
     if (overheadRate) {
       const calculatedCostCategoryIds =

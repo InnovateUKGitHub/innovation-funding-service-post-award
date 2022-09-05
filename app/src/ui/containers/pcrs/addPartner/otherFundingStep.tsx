@@ -40,7 +40,7 @@ export const OtherFundingStep = (
             inline={false}
             value={dto => {
               if (dto.hasOtherFunding === null || dto.hasOtherFunding === undefined) return null;
-              return options.find(x => x.id === dto.hasOtherFunding!.toString());
+              return options.find(x => x.id === dto?.hasOtherFunding?.toString());
             }}
             update={(dto, option) => {
               if (!option) return (dto.hasOtherFunding = null);

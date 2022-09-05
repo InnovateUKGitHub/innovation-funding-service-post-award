@@ -45,10 +45,12 @@ export const mapToPcrDto = (pcr: ProjectChangeRequestEntity, itemTypes: PCRItemT
 
 const mapItems = (pcrs: ProjectChangeRequestItemEntity[], itemTypes: PCRItemTypeDto[]) => {
   const filtered = itemTypes.filter(itemType => pcrs.some(x => x.recordTypeId === itemType.recordTypeId));
-  return filtered.map(itemType => mapItem(pcrs.find(x => x.recordTypeId === itemType.recordTypeId)!, itemType));
+  return filtered.map(itemType => mapItem(pcrs.find(x => x.recordTypeId === itemType.recordTypeId), itemType));
 };
 
-const mapItem = (pcr: ProjectChangeRequestItemEntity, itemType: PCRItemTypeDto) => {
+const mapItem = (pcr: ProjectChangeRequestItemEntity | undefined, itemType: PCRItemTypeDto) => {
+  if(!pcr) throw new Error("Cannot map undefined pcr");
+
   switch (itemType.type) {
     case PCRItemType.TimeExtension:
       return mapItemForTimeExtension(pcr, itemType.displayName, itemType.type);
@@ -81,7 +83,7 @@ const mapItem = (pcr: ProjectChangeRequestItemEntity, itemType: PCRItemTypeDto) 
 
 const mapBaseItem = (pcr: ProjectChangeRequestItemEntity, typeName: string, type: PCRItemType) => ({
   id: pcr.id,
-  guidance: GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === type)!.guidance,
+  guidance: GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === type)?.guidance,
   typeName,
   status: pcr.status,
   statusName: pcr.statusName,

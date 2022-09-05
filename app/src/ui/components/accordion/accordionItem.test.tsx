@@ -1,5 +1,5 @@
 import userEvent from "@testing-library/user-event";
-import { render } from "@testing-library/react";
+import { render, act } from "@testing-library/react";
 
 import { TestBed, TestBedContent } from "@shared/TestBed";
 import { AccordionItem, AccordionItemProps } from "..";
@@ -102,17 +102,16 @@ describe("AccordionItem", () => {
   });
 
   describe("@calls", () => {
-    test("with onClick when clicked", () => {
+    test("with onClick when clicked", async () => {
       const stubToggleFn = jest.fn();
       const { queryAccordionToggle } = setup({ onClick: stubToggleFn });
-
       const toggleBtn = queryAccordionToggle();
 
       if (!toggleBtn) throw Error("Toggle button was not found!");
 
       expect(stubToggleFn).toHaveBeenCalledTimes(0);
 
-      userEvent.click(toggleBtn);
+      await act(() => userEvent.click(toggleBtn));
 
       expect(stubToggleFn).toHaveBeenCalledTimes(1);
     });

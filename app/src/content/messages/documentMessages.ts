@@ -28,6 +28,7 @@ export class DocumentMessages extends ContentBase {
 
   public readonly documentsIntroMessage = {
     storingDocumentsMessage: this.getContent("documentsIntroMessage.storing-documents-message"),
+    documentsPrivacyMessage: this.getContent("documentsIntroMessage.documents-privacy-message"),
     notForClaimsMessage: this.getContent("documentsIntroMessage.not-for-claims-message"),
   };
 

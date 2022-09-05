@@ -31,14 +31,14 @@ export function conditionalLoad<T>(
     ];
 
     if (!existing || reloads.indexOf(existing.status) !== -1) {
-      dispatch(dataLoadAction(id, store, LoadingStatus.Loading, existing && existing.data));
+      dispatch(dataLoadAction(id, store as string, LoadingStatus.Loading, existing && existing.data));
 
       return load({user: state.user})
         .then((result) => {
-          dispatch(dataLoadAction(id, store, LoadingStatus.Done, result));
+          dispatch(dataLoadAction(id, store as string, LoadingStatus.Done, result));
         })
         .catch(err => {
-          dispatch(dataLoadAction(id, store, LoadingStatus.Failed, null, err));
+          dispatch(dataLoadAction(id, store as string, LoadingStatus.Failed, null, err));
         });
     } else {
       return Promise.resolve();

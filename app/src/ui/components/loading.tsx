@@ -46,7 +46,7 @@ export function Loader<T>({ pending, render, renderError, renderLoading }: Loadi
 
     case LoadingStatus.Done:
     case LoadingStatus.Updated:
-      pendingElement = render(pending.data!, false);
+      pendingElement = render(pending.data as T, false);
       break;
 
     case LoadingStatus.Preload:

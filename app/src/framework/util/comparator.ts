@@ -20,13 +20,16 @@ export const dayComparator: IComparer<Date> = (a, b) => {
   return DateTime.fromJSDate(a).startOf("day").toMillis() - DateTime.fromJSDate(b).startOf("day").toMillis();
 };
 
+/**
+ * Compares the sortable position of two projects, from most important to least important.
+ *
+ * @param a The first project
+ * @param b The second project
+ * @returns A number to be consumed by the `Array.prototype.sort` function
+ * @author Leondro Lio <leondro.lio@iuk.ukri.org>
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#description
+ * @example projects.open.sort(projectPriorityComparator)
+ */
 export const projectPriorityComparator: IComparer<ProjectDto> = (a, b) => {
-  const noClaimsAvailable = a.claimsToReview === 0 && b.claimsToReview === 0;
-  const noPcrReviewsAvailable = a.pcrsToReview === 0 && b.pcrsToReview === 0;
-  const noPcrQueriesAvailable = a.pcrsQueried === 0 && b.pcrsQueried === 0;
-
-  // Note: These have no priority push to bottom
-  if (noClaimsAvailable && noPcrReviewsAvailable && noPcrQueriesAvailable) return Number.MAX_SAFE_INTEGER;
-
   return b.claimsToReview - a.claimsToReview || b.pcrsToReview - a.pcrsToReview || b.pcrsQueried - a.pcrsQueried;
 };

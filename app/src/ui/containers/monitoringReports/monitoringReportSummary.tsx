@@ -10,7 +10,7 @@ interface InnerProps {
   statusChanges: Pending<Dtos.MonitoringReportStatusChangeDto[]>;
 }
 
-class Component extends React.Component<MonitoringReportReportSummaryProps & InnerProps> {
+class MonitoringReportComponent extends React.Component<MonitoringReportReportSummaryProps & InnerProps> {
 
   public render() {
     const {mode, editor} = this.props;
@@ -112,6 +112,7 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
         qa={`question-${question.displayOrder}-comments`}
         /* Put the action on the second item if not showing the first*/
         action={!question.isScored && this.getAction(validation, question)}
+        isMarkdown
       />
     );
   }
@@ -136,9 +137,9 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
 
   private renderResponse(editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>, question: Dtos.MonitoringReportQuestionDto) {
     const response = question.options.find(x => x.id === question.optionId);
-    const validation = editor && editor.validator.responses.results.find(x => x.model.displayOrder === question.displayOrder)!;
+    const validation = editor && editor.validator.responses.results.find(x => x.model.displayOrder === question.displayOrder) as QuestionValidator;
     return (
-      <ACC.Section title={question.title}>
+      <ACC.Section title={question.title} key={question.title}>
         <ACC.SummaryList qa={`summary-question-${question.displayOrder}`}>
           {this.renderScore(response, validation, question)}
           {this.renderComments(validation, question)}
@@ -151,5 +152,5 @@ class Component extends React.Component<MonitoringReportReportSummaryProps & Inn
 export const MonitoringReportSummary = (props: MonitoringReportReportSummaryProps) => {
   const stores = useStores();
 
-  return <Component {...props} statusChanges={stores.monitoringReports.getStatusChanges(props.projectId, props.id)} />;
+  return <MonitoringReportComponent {...props} statusChanges={stores.monitoringReports.getStatusChanges(props.projectId, props.id)} />;
 };

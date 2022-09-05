@@ -1,5 +1,5 @@
 import React from "react";
-import { hydrate } from "react-dom";
+import { hydrateRoot } from "react-dom/client";
 import i18next from "i18next";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
@@ -104,4 +104,10 @@ getPolyfills()
         i18next.addResourceBundle("en", "default", content, true, true);
       });
   })
-  .then(() => hydrate(<Client />, document.getElementById("root")));
+  .then(() => {
+    const rootElement = document.getElementById("root");
+    if(!rootElement) {
+      throw new Error("Cannot find Root element from which to attach the app");
+    }
+    hydrateRoot( rootElement, <Client />);
+  });

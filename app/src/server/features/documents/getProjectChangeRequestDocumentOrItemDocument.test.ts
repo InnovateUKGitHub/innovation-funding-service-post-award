@@ -1,5 +1,5 @@
-import * as Entites from "@framework/entities";
-import { Authorisation, ProjectRole } from "@framework/types";
+import * as Entities from "@framework/entities";
+import { Authorisation, DocumentDto, ProjectRole } from "@framework/types";
 import { GetProjectChangeRequestDocumentOrItemDocumentQuery } from "@server/features/documents/getProjectChangeRequestDocumentOrItemDocument";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
@@ -8,7 +8,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project);
-    const pcrRecordType: Entites.RecordType = {
+    const pcrRecordType: Entities.RecordType = {
       id: "id_1",
       parent: pcr.id,
       type: "type"
@@ -18,7 +18,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
     const document = context.testData.createDocument(pcrItem.id, "PCR Document", "txt", "Jackie", "Why I want more money");
 
     const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, document.Id);
-    const result = await context.runQuery(query).then(x => x!);
+    const result = await context.runQuery(query).then(x => x as DocumentDto);
 
     expect(result).not.toBeNull();
     expect(result.fileName).toBe("PCR Document.txt");
@@ -34,7 +34,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
     const document = context.testData.createDocument(pcr.id, "PCR Document", "txt", "Paul","Why I want more money");
 
     const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcr.id, document.Id);
-    const result = await context.runQuery(query).then(x => x!);
+    const result = await context.runQuery(query).then(x => x as DocumentDto);
 
     expect(result).not.toBeNull();
     expect(result.fileName).toBe("PCR Document.txt");
@@ -47,7 +47,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project);
-    const pcrRecordType: Entites.RecordType = {
+    const pcrRecordType: Entities.RecordType = {
       id: "id_1",
       parent: pcr.id,
       type: "type"
@@ -55,7 +55,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
     const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, "Pretend ID");
-    const result = await context.runQuery(query).then(x => x!);
+    const result = await context.runQuery(query).then(x => x as DocumentDto);
 
     expect(result).toBe(null);
   });
@@ -64,7 +64,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project);
-    const pcrRecordType: Entites.RecordType = {
+    const pcrRecordType: Entities.RecordType = {
       id: "id_1",
       parent: pcr.id,
       type: "type"
@@ -75,7 +75,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
     const document = context.testData.createDocument(pcrItem.id, "PCR Document", "txt", "Why I want more managers");
 
     const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem2.id, document.Id);
-    const result = await context.runQuery(query).then(x => x!);
+    const result = await context.runQuery(query).then(x => x as DocumentDto);
 
     expect(result).toBe(null);
   });
@@ -86,7 +86,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
 
       const project = context.testData.createProject();
       const pcr = context.testData.createPCR(project);
-      const pcrRecordType: Entites.RecordType = {
+      const pcrRecordType: Entities.RecordType = {
         id: "id_1",
         parent: pcr.id,
         type: "type"
@@ -106,7 +106,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
 
       const project = context.testData.createProject();
       const pcr = context.testData.createPCR(project);
-      const pcrRecordType: Entites.RecordType = {
+      const pcrRecordType: Entities.RecordType = {
         id: "id_1",
         parent: pcr.id,
         type: "type"
@@ -126,7 +126,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
 
       const project = context.testData.createProject();
       const pcr = context.testData.createPCR(project);
-      const pcrRecordType: Entites.RecordType = {
+      const pcrRecordType: Entities.RecordType = {
         id: "id_1",
         parent: pcr.id,
         type: "type"
@@ -147,7 +147,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
       const project = context.testData.createProject();
       const project2 = context.testData.createProject();
       const pcr = context.testData.createPCR(project);
-      const pcrRecordType: Entites.RecordType = {
+      const pcrRecordType: Entities.RecordType = {
         id: "id_1",
         parent: pcr.id,
         type: "type"
@@ -168,7 +168,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
       const project = context.testData.createProject();
       const project2 = context.testData.createProject();
       const pcr = context.testData.createPCR(project);
-      const pcrRecordType: Entites.RecordType = {
+      const pcrRecordType: Entities.RecordType = {
         id: "id_1",
         parent: pcr.id,
         type: "type"

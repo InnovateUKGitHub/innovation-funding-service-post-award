@@ -49,7 +49,7 @@ interface ClaimSummaryComponentProps extends ClaimSummaryParams, BaseProps {
   statusChanges: Pending<ClaimStatusChangeDto[]>;
   documents: Pending<DocumentSummaryDto[]>;
   totalCosts: Pending<TotalCosts>;
-  onUpdate: (saving: boolean, dto: ClaimDto, next: ILinkInfo) => void;
+  onUpdate: (saving: boolean, dto: ClaimDto, next: ILinkInfo, isSubmitting: boolean) => void;
 }
 
 function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
@@ -257,7 +257,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
       }
     }
 
-    props.onUpdate(true, dto, updateLink);
+    props.onUpdate(true, dto, updateLink, submit);
   };
 
   const renderForecastSummary = (data: Pick<CombinedData, "project" | "partner" | "claim">) => {
@@ -327,8 +327,8 @@ const ClaimSummaryContainer = (props: ClaimSummaryParams & BaseProps) => {
   const stores = useStores();
   const navigate = useNavigate();
   const { getContent } = useContent();
-  const claimedSavedMessage = getContent(x => x.claimPrepareSummary.messages.claimSavedMessage);
-
+  const claimSavedMessage = getContent(x => x.claimPrepareSummary.messages.claimSavedMessage);
+  const claimSubmittedMessage = getContent(x => x.claimPrepareSummary.messages.claimSubmittedMessage);
   return (
     <ClaimSummaryComponent
       {...props}
@@ -340,7 +340,7 @@ const ClaimSummaryContainer = (props: ClaimSummaryParams & BaseProps) => {
       documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
       editor={stores.claims.getClaimEditor(true, props.projectId, props.partnerId, props.periodId)}
       totalCosts={stores.claims.getTotalCosts(props.projectId, props.partnerId, props.periodId)}
-      onUpdate={(saving, dto, link) =>
+      onUpdate={(saving, dto, link, isSubmitting) =>
         stores.claims.updateClaimEditor(
           true,
           saving,
@@ -348,7 +348,7 @@ const ClaimSummaryContainer = (props: ClaimSummaryParams & BaseProps) => {
           props.partnerId,
           props.periodId,
           dto,
-          claimedSavedMessage,
+          isSubmitting ? claimSubmittedMessage: claimSavedMessage,
           () => navigate(link.path),
         )
       }

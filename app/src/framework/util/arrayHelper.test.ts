@@ -1,4 +1,4 @@
-import { getArrayFromPeriod, getArrayExcludingPeriods, groupBy } from "@framework/util";
+import { getArrayFromPeriod, getArrayExcludingPeriods, groupBy, filterEmpty } from "@framework/util";
 
 interface ListWithPeriodId {
   periodId: number;
@@ -15,6 +15,14 @@ function createIncrementingPeriodData(totalStubCount: number): ListWithPeriodId[
 }
 
 describe("arrayHelpers", () => {
+
+  describe("filterEmpty", () => {
+    it("should return an array with any null or undefined elements removed", () => {
+      const initialArray = ["Neil", 123, undefined, null, "", false, true, 0, {}, []];
+      expect(filterEmpty(initialArray)).toEqual(["Neil", 123, "", false, true, 0, {}, []]);
+    });
+  });
+
   describe("groupBy()", () => {
     it("should return a map", () => {
       const arr: string[] = [];
@@ -48,6 +56,12 @@ describe("arrayHelpers", () => {
       expect(getArrayExcludingPeriods(listWithPeriodId, excludePeriods).map(x => x.periodId)).toEqual([
         1, 3, 6, 7, 8, 9, 10,
       ]);
+    });
+
+    it("should return original list if not a valid array type with length", () => {
+      const excludePeriods = new Set([2, 4, 5]);
+       // @ts-expect-error "testing the case where an empty array gets passed in"
+      expect(getArrayExcludingPeriods([], excludePeriods).map(x => x.periodId)).toEqual([]);
     });
   });
 

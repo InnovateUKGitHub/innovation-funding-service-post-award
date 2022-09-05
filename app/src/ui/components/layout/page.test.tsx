@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { renderHook } from "@testing-library/react-hooks";
+import { renderHook } from "@testing-library/react";
 
 import TestBed, { hookTestBed, TestBedContent } from "@shared/TestBed";
 import { ErrorCode, IAppError, PartnerStatus, ProjectStatus } from "@framework/types";

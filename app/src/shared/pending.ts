@@ -13,8 +13,8 @@ export class Pending<T> {
   constructor(
     public state: LoadingStatus = LoadingStatus.Preload,
     public data: T | null | undefined = null,
-    public error?: any
-  ) { }
+    public error?: any,
+  ) {}
 
   /**
    * transform the data T in this Pending into another datastruct T2
@@ -26,7 +26,7 @@ export class Pending<T> {
   then<T2>(map: (data: T, state?: LoadingStatus, error?: any) => T2, noData?: () => T2) {
     let newData: T2 | null | undefined = null;
     if (Pending.canResolve([this])) {
-      newData = map(this.data!, this.state, this.error);
+      newData = map(this.data as T, this.state, this.error);
     } else if (noData) {
       newData = noData();
     }
@@ -41,12 +41,9 @@ export class Pending<T> {
    * @param combineData - a function that takes both Pendings and returns the combined data
    * @return Pending<TR>
    */
-  and<T2, TR>(
-    pending: Pending<T2>,
-    combineData: (pending1: T, pending2: T2) => TR
-  ): Pending<TR> {
+  and<T2, TR>(pending: Pending<T2>, combineData: (pending1: T, pending2: T2) => TR): Pending<TR> {
     const state = Pending.lowestState([this.state, pending.state]);
-    const data = Pending.canResolve([this, pending]) ? combineData(this.data!, pending.data!) : null;
+    const data = Pending.canResolve([this, pending]) ? combineData(this.data as T, pending.data as T2) : null;
     const error = this.error || pending.error;
     return new Pending(state, data, error);
   }
@@ -58,7 +55,7 @@ export class Pending<T> {
    */
   chain<T2>(next: (data: T, state: LoadingStatus) => Pending<T2>): Pending<T2> {
     if (Pending.canResolve([this])) {
-      return next(this.data! ,this.state);
+      return next(this.data as T ,this.state);
     }
     return new Pending<T2>(this.state, null, this.error);
   }
@@ -73,7 +70,7 @@ export class Pending<T> {
     const errors = keys.map(k => pendings[k].error).find(x => !!x);
     const state = Pending.lowestState(keys.map(k => pendings[k].state));
     const data = Pending.canResolve(keys.map(k => pendings[k]))
-      ? keys.reduce((combined, k) => Object.assign({}, combined, { [k]: pendings[k].data }), {}) as TR
+      ? (keys.reduce((combined, k) => Object.assign({}, combined, { [k]: pendings[k].data }), {}) as TR)
       : null;
 
     return new Pending(state, data, errors);
@@ -86,12 +83,7 @@ export class Pending<T> {
    * @return boolean
    */
   private static canResolve(pendings: Pending<{}>[]) {
-    return pendings.every(p => {
-      if (p.state !== LoadingStatus.Done && p.state !== LoadingStatus.Stale && p.state !== LoadingStatus.Updated && (p.data === null || p.data === undefined)) {
-        return false;
-      }
-      return true;
-    });
+    return pendings.every(p => [LoadingStatus.Done, LoadingStatus.Stale, LoadingStatus.Updated].includes(p.state));
   }
 
   /**
@@ -112,18 +104,13 @@ export class Pending<T> {
    */
   static flatten<W>(pendings: Pending<W>[]): Pending<W[]> {
     const state = Pending.lowestState(pendings.map(x => x.state));
-    const data = Pending.canResolve(pendings) ? pendings.map(x => x.data!) : null;
+    const data = Pending.canResolve(pendings) ? pendings.map(x => x.data) : null;
     const error = pendings.filter(x => !!x.error).map(x => x.error).shift();
-    return new Pending<W[]>(state, data, error);
+    return new Pending<W[]>(state, data as W[], error);
   }
 
   static lowestState(states: LoadingStatus[]) {
-    const orderedStates = [
-      LoadingStatus.Failed,
-      LoadingStatus.Loading,
-      LoadingStatus.Preload,
-      LoadingStatus.Stale,
-    ];
+    const orderedStates = [LoadingStatus.Failed, LoadingStatus.Loading, LoadingStatus.Preload, LoadingStatus.Stale];
 
     return orderedStates.find(state => states.indexOf(state) >= 0) || LoadingStatus.Done;
   }

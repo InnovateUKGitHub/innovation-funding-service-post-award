@@ -70,7 +70,7 @@ class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
             />
             <Table.Currency
               header={x => x.forecastsDashboard.underspendHeader}
-              value={x => roundCurrency(x.totalParticipantGrant! - getForecastsAndCosts(x))}
+              value={x => roundCurrency(x.totalParticipantGrant ?? 0 - getForecastsAndCosts(x))}
               qa="underspend"
             />
             <Table.ShortDate

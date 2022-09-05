@@ -74,12 +74,14 @@ describe("UpdatePCRCommand - Partner addition", () => {
     context.testData.createCurrentUserAsProjectManager(project);
     const projectChangeRequest = context.testData.createPCR(project, { status: PCRStatus.Draft });
     const recordTypes = context.testData.createPCRRecordTypes();
-    const projectSuspensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerAddition)!;
-    const recordType = recordTypes.find(x => x.type === projectSuspensionType.typeName);
-    return {context, recordType, projectChangeRequest, project};
+    const projectSuspensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
+      x => x.type === PCRItemType.PartnerAddition,
+    );
+    const recordType = recordTypes.find(x => x.type === projectSuspensionType?.typeName);
+    return { context, recordType, projectChangeRequest, project };
   };
   it("should require project role and partner type to be set on complete", async () => {
-    const {context, projectChangeRequest, recordType, project} = setup();
+    const { context, projectChangeRequest, recordType, project } = setup();
     context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Complete });
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
     const item = dto.items[0] as PCRItemForPartnerAdditionDto;
@@ -89,7 +91,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
   it("should require project role and partner type to be set if the flag is set to required", async () => {
-    const {context, projectChangeRequest, recordType, project} = setup();
+    const { context, projectChangeRequest, recordType, project } = setup();
     context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete });
     let dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
     let item = dto.items[0] as PCRItemForPartnerAdditionDto;
@@ -104,11 +106,12 @@ describe("UpdatePCRCommand - Partner addition", () => {
     item = dto.items[0] as PCRItemForPartnerAdditionDto;
     item.isProjectRoleAndPartnerTypeRequired = true;
     item.isCommercialWork = null;
-    await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
-
+    await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(
+      ValidationError,
+    );
   });
   it("should require fields to be set when the organisation type is Academic", async () => {
-    const {context, projectChangeRequest, recordType, project} = setup();
+    const { context, projectChangeRequest, recordType, project } = setup();
     const completeItem = createCompleteAcademicPcrItem();
     context.testData.createPCRItem(projectChangeRequest, recordType, completeItem);
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
@@ -127,7 +130,7 @@ describe("UpdatePCRCommand - Partner addition", () => {
   });
 
   it("should require fields to be set when the organisation type is Industrial", async () => {
-    const {context, projectChangeRequest, recordType, project} = setup();
+    const { context, projectChangeRequest, recordType, project } = setup();
     const completeItem = createCompleteIndustrialPcrItem();
     context.testData.createPCRItem(projectChangeRequest, recordType, completeItem);
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
@@ -231,29 +234,40 @@ describe("UpdatePCRCommand - Partner addition", () => {
     await expect(context.runCommand(command)).resolves.toBe(true);
   });
   it("should not allow updates to project role & partner type fields once they are set", async () => {
-    const {context, projectChangeRequest, recordType, project} = setup();
-    context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Research, isCommercialWork: false });
+    const { context, projectChangeRequest, recordType, project } = setup();
+    context.testData.createPCRItem(projectChangeRequest, recordType, {
+      status: PCRItemStatus.Incomplete,
+      projectRole: PCRProjectRole.Collaborator,
+      partnerType: PCRPartnerType.Research,
+      isCommercialWork: false,
+    });
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
     const item = dto.items[0] as PCRItemForPartnerAdditionDto;
     item.projectRole = PCRProjectRole.ProjectLead;
-    await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+    await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(
+      ValidationError,
+    );
     item.projectRole = PCRProjectRole.Collaborator;
     item.partnerType = PCRPartnerType.ResearchAndTechnology;
-    await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(ValidationError);
+    await expect(context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto))).rejects.toThrow(
+      ValidationError,
+    );
   });
   it("should update item status", async () => {
-    const {context, projectChangeRequest, recordType, project} = setup();
+    const { context, projectChangeRequest, recordType, project } = setup();
     context.testData.createPCRItem(projectChangeRequest, recordType, createCompleteIndustrialPcrItem());
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
     const item = dto.items[0] as PCRItemForPartnerAdditionDto;
     item.status = PCRItemStatus.Complete;
     await context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto));
-    const updated = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+    const updated = await context.runQuery(
+      new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id),
+    );
     const updatedItem = updated.items[0] as PCRItemForPartnerAdditionDto;
     expect(updatedItem.status).toEqual(PCRItemStatus.Complete);
   });
   it("should update the relevant fields", async () => {
-    const {context, projectChangeRequest, recordType, project} = setup();
+    const { context, projectChangeRequest, recordType, project } = setup();
     context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete });
     const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
     const item = dto.items[0] as PCRItemForPartnerAdditionDto;
@@ -286,7 +300,10 @@ describe("UpdatePCRCommand - Partner addition", () => {
     item.isCommercialWork = true;
     item.tsbReference = "54321EDCBA";
 
-    const costCategoryOtherFunding = context.testData.createCostCategory({name: "Other Funding", type: CostCategoryType.Other_Funding});
+    const costCategoryOtherFunding = context.testData.createCostCategory({
+      name: "Other Funding",
+      type: CostCategoryType.Other_Funding,
+    });
     const dummyDate = DateTime.local().toJSDate();
     item.spendProfile.funds = [
       {
@@ -304,12 +321,14 @@ describe("UpdatePCRCommand - Partner addition", () => {
         value: 120.99,
         description: "Dosh",
         dateSecured: dummyDate,
-      }
+      },
     ];
 
     const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
     await context.runCommand(command);
-    const updated = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
+    const updated = await context.runQuery(
+      new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id),
+    );
     const updatedItem = updated.items[0] as PCRItemForPartnerAdditionDto;
     expect(updatedItem.contact1ProjectRole).toEqual(PCRContactRole.FinanceContact);
     expect(updatedItem.contact1Forename).toEqual("Marjorie");
@@ -341,9 +360,13 @@ describe("UpdatePCRCommand - Partner addition", () => {
   });
   describe("Spend Profile", () => {
     it("should update pcr spend profiles", async () => {
-      const {context, projectChangeRequest, recordType, project} = setup();
-      context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Business });
-      const costCategoryLabour = context.testData.createCostCategory({name: "Labour", type: CostCategoryType.Labour});
+      const { context, projectChangeRequest, recordType, project } = setup();
+      context.testData.createPCRItem(projectChangeRequest, recordType, {
+        status: PCRItemStatus.Incomplete,
+        projectRole: PCRProjectRole.Collaborator,
+        partnerType: PCRPartnerType.Business,
+      });
+      const costCategoryLabour = context.testData.createCostCategory({ name: "Labour", type: CostCategoryType.Labour });
       const dto = await context.runQuery(new GetPCRByIdQuery(projectChangeRequest.projectId, projectChangeRequest.id));
       const item = dto.items[0] as PCRItemForPartnerAdditionDto;
       item.spendProfile.costs.push({
@@ -354,14 +377,16 @@ describe("UpdatePCRCommand - Partner addition", () => {
         ratePerDay: 20,
         daysSpentOnProject: 10,
         description: "Queen",
-        grossCostOfRole: 200
+        grossCostOfRole: 200,
       });
       const command = new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto);
       await context.runCommand(command);
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
       expect(insertedSpendProfileCost).toBeDefined();
       expect(insertedSpendProfileCost.id).toBeTruthy();
-      expect(insertedSpendProfileCost.value).toBe(insertedSpendProfileCost.daysSpentOnProject! * insertedSpendProfileCost.ratePerDay!);
+      expect(insertedSpendProfileCost.value).toBe(
+        (insertedSpendProfileCost.daysSpentOnProject as number) * (insertedSpendProfileCost.ratePerDay as number),
+      );
       expect(insertedSpendProfileCost.costCategoryId).toBe(costCategoryLabour.id);
       expect(insertedSpendProfileCost.pcrItemId).toBe(item.id);
       expect(insertedSpendProfileCost.grossCostOfRole).toBe(200);

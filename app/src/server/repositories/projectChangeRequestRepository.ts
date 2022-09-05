@@ -1,22 +1,23 @@
-import { Connection } from "jsforce";
-import { DateTime } from "luxon";
+import { PCRItemStatus, PCRStatus } from "@framework/constants";
 import {
   ProjectChangeRequestEntity,
   ProjectChangeRequestForCreateEntity,
   ProjectChangeRequestItemEntity,
-  ProjectChangeRequestItemForCreateEntity,
+  ProjectChangeRequestItemForCreateEntity
 } from "@framework/entities";
-import { ILogger } from "@server/features/common/logger";
-import { NotFoundError } from "@shared/appError";
-import { PCRItemStatus, PCRStatus } from "@framework/constants";
 import { IPicklistEntry } from "@framework/types";
+import { ILogger } from "@server/features/common/logger";
+import { sss } from "@server/util/salesforce-string-helpers";
+import { NotFoundError } from "@shared/appError";
+import { Connection } from "jsforce";
+import { DateTime } from "luxon";
 import {
   PcrContactRoleMapper,
   PcrParticipantSizeMapper,
   PcrPartnerTypeMapper,
   PCRProjectLocationMapper,
   PcrProjectRoleMapper,
-  SalesforcePCRMapper,
+  SalesforcePCRMapper
 } from "./mappers/projectChangeRequestMapper";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
@@ -269,14 +270,14 @@ export class ProjectChangeRequestRepository
 
   async getAllByProjectId(projectId: string): Promise<ProjectChangeRequestEntity[]> {
     const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
-    const data = await super.where(`Acc_Project__c='${projectId}'`);
+    const data = await super.where(`Acc_Project__c='${sss(projectId)}'`);
     const mapper = new SalesforcePCRMapper(headerRecordTypeId);
     return mapper.map(data);
   }
 
   async getById(projectId: string, id: string): Promise<ProjectChangeRequestEntity> {
     const data = await super.where(
-      `Acc_Project__c='${projectId}' AND (Id = '${id}' OR Acc_RequestHeader__c = '${id}')`,
+      `Acc_Project__c='${sss(projectId)}' AND (Id = '${sss(id)}' OR Acc_RequestHeader__c = '${sss(id)}')`,
     );
 
     const headerRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
@@ -290,7 +291,7 @@ export class ProjectChangeRequestRepository
   }
 
   async isExisting(projectId: string, projectChangeRequestId: string): Promise<boolean> {
-    const data = await super.filterOne(`Acc_Project__c='${projectId}' AND Id = '${projectChangeRequestId}'`);
+    const data = await super.filterOne(`Acc_Project__c='${sss(projectId)}' AND Id = '${sss(projectChangeRequestId)}'`);
 
     return !!data;
   }

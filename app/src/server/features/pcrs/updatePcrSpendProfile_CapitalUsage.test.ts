@@ -91,8 +91,8 @@ describe("UpdatePCRSpendProfileCommand", () => {
       expect(insertedSpendProfileCost).toBeDefined();
       expect(insertedSpendProfileCost.id).toBeTruthy();
       expect(insertedSpendProfileCost.value).toBe(
-        (insertedSpendProfileCost.utilisation! / 100) *
-          (insertedSpendProfileCost.netPresentValue! - insertedSpendProfileCost.residualValue!),
+        (insertedSpendProfileCost.utilisation as number / 100) *
+          ((insertedSpendProfileCost.netPresentValue as number) - (insertedSpendProfileCost.residualValue as number)),
       );
       expect(insertedSpendProfileCost.capitalUsageType).toBe(PCRSpendProfileCapitalUsageType.New);
       expect(insertedSpendProfileCost.depreciationPeriod).toBe(8);

@@ -16,7 +16,7 @@ export class SearchInput extends BaseInput<SearchInputProps, InputState> {
     this.state = { value: props.value || "" };
   }
 
-  public componentWillReceiveProps(nextProps: InputProps<string>) {
+  public UNSAFE_componentWillReceiveProps(nextProps: InputProps<string>) {
     if (nextProps.value !== this.props.value) {
       this.setState({ value: nextProps.value || "" }, this.cancelTimeout);
     }

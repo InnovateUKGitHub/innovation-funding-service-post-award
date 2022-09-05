@@ -191,7 +191,7 @@ export function GrantMovingOverFinancialYearForm({ form: Form, editor }: GrantMo
         name="grantMovingOverFinancialYear"
         width={10}
         value={() => itemPcr.grantMovingOverFinancialYear}
-        update={(_m, val) => (itemPcr.grantMovingOverFinancialYear = val!)}
+        update={(_m, val) => (itemPcr.grantMovingOverFinancialYear = val)}
         validation={itemValidator.grantMovingOverFinancialYear}
       />
     </Form.Fieldset>

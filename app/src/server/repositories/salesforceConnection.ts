@@ -1,5 +1,5 @@
 import jsforce from "jsforce";
-import jwt from "jsonwebtoken";
+import jwt, {Algorithm} from "jsonwebtoken";
 
 import { SalesforceTokenError } from "@server/repositories/errors";
 import { Cache } from "@server/features/common/cache";
@@ -47,7 +47,7 @@ export const getSalesforceAccessToken = async (config: ISalesforceTokenDetails):
     issuer: config.clientId,
     audience: config.connectionUrl,
     expiresIn: 10,
-    algorithm: "RS256",
+    algorithm: "RS256" as Algorithm,
   };
 
   const jwtToken = jwt.sign(jwtPayload, privateKey, jwtOptions);

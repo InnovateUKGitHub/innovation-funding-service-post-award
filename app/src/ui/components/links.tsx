@@ -13,6 +13,7 @@ interface LinkProps extends StyledLinkProps {
   route: ILinkInfo;
   className?: string;
   replace?: boolean;
+  children: React.ReactNode;
 }
 
 const getClassNames = (styling: TStyling, className?: string) => {
@@ -30,18 +31,15 @@ const getClassNames = (styling: TStyling, className?: string) => {
 
 export class Link extends React.Component<LinkProps> {
   render() {
-    const { route, className, styling, ...props } = this.props;
+    const { route, className, styling, id, replace = false, children } = this.props;
     const linkStyling = styling ?? "Link";
 
     const styledClassName = getClassNames(linkStyling, className);
 
     return (
-      <RouterLink
-        {...props}
-        to={route.path}
-        className={styledClassName}
-        replace={this.props.replace || false}
-      />
+      <RouterLink id={id} to={route.path} className={styledClassName} replace={replace}>
+        {children}
+      </RouterLink>
     );
   }
 }
@@ -50,6 +48,7 @@ interface ModalLinkProps extends StyledLinkProps {
   modalId: string;
   className?: string;
   open: boolean;
+  children: React.ReactNode;
 }
 
 export class ModalLink extends React.Component<ModalLinkProps> {
@@ -73,7 +72,7 @@ export const BackLink: React.FunctionComponent<LinkProps> = props => (
 );
 
 interface GovLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
-  children: string | React.ReactNode;
+  children: React.ReactNode;
 }
 
 export const GovLink = React.forwardRef<HTMLAnchorElement, GovLinkProps>(function GovLinkWithoutRef(

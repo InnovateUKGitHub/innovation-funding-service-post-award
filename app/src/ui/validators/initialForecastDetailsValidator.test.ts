@@ -157,9 +157,9 @@ describe("InitialForecastDetailsValidator()", () => {
 
       expect(validation.isValid).toBe(true);
 
-      const labourResult = validation.costCategoryForecasts.results.find(x => x.model.costCategory.id === labour.id)!;
+      const labourResult = validation.costCategoryForecasts.results.find(x => x.model.costCategory.id === labour.id);
 
-      expect(labourResult.isValid).toBe(true);
+      expect(labourResult?.isValid).toBe(true);
     });
 
     test("should validate each cost category total if the forecast items are not valid", async () => {
@@ -185,13 +185,13 @@ describe("InitialForecastDetailsValidator()", () => {
 
       expect(validation.isValid).toBe(false);
 
-      const forecastResult = validation.items.results.find(x => x.model.id === invalidForecast.Id)!;
+      const forecastResult = validation.items.results.find(x => x.model.id === invalidForecast.Id);
 
-      expect(forecastResult.isValid).toBe(false);
+      expect(forecastResult?.isValid).toBe(false);
 
-      const labourResult = validation.costCategoryForecasts.results.find(x => x.model.costCategory.id === labour.id)!;
+      const labourResult = validation.costCategoryForecasts.results.find(x => x.model.costCategory.id === labour.id);
 
-      expect(labourResult.isValid).toBe(false);
+      expect(labourResult?.isValid).toBe(false);
     });
 
     test("should validate each cost category total must equal the total eligible costs for that cost category", async () => {
@@ -225,17 +225,17 @@ describe("InitialForecastDetailsValidator()", () => {
 
       expect(validation.isValid).toBe(false);
 
-      const labourResult = validation.costCategoryForecasts.results.find(x => x.model.costCategory.id === labour.id)!;
+      const labourResult = validation.costCategoryForecasts.results.find(x => x.model.costCategory.id === labour.id);
       const materialsResult = validation.costCategoryForecasts.results.find(
         x => x.model.costCategory.id === materials.id,
-      )!;
+      );
       const subcontractingResult = validation.costCategoryForecasts.results.find(
         x => x.model.costCategory.id === subcontracting.id,
-      )!;
+      );
 
-      expect(labourResult.isValid).toBe(false);
-      expect(materialsResult.isValid).toBe(true);
-      expect(subcontractingResult.isValid).toBe(false);
+      expect(labourResult?.isValid).toBe(false);
+      expect(materialsResult?.isValid).toBe(true);
+      expect(subcontractingResult?.isValid).toBe(false);
     });
   });
 });

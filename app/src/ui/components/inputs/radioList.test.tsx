@@ -26,11 +26,11 @@ describe("RadioList", () => {
     expect(input).toHaveAttribute("checked");
   });
 
-  it("marks the correct button as checked when clicked", () => {
+  it("marks the correct button as checked when clicked", async () => {
     const onChange = jest.fn();
     const { getByLabelText } = render(<RadioList options={options} name="testName" onChange={onChange} inline />);
     const input = getByLabelText("Option 3");
-    userEvent.click(input);
+    await userEvent.click(input);
     expect(onChange).toHaveBeenCalledWith({ value: "Option 3", id: "3" });
   });
 });

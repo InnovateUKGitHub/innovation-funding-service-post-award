@@ -88,7 +88,7 @@ describe("<Accordion />", () => {
 
   describe("@actions", () => {
     describe("calls show/hide", () => {
-      test("when clicked many times", () => {
+      test("when clicked many times", async () => {
         const stubFirstContent = "stub-1";
         const stubSecondContent = "stub-2";
 
@@ -104,7 +104,7 @@ describe("<Accordion />", () => {
         expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
 
         // Open all nodes
-        userEvent.click(toggleBtn);
+        await userEvent.click(toggleBtn);
 
         expect(queryByText("Hide all sections")).toBeInTheDocument();
         expect(queryByText("Show all sections")).not.toBeInTheDocument();
@@ -112,7 +112,7 @@ describe("<Accordion />", () => {
         expect(queryAccordionIsOpen(stubSecondContent)).toBeTruthy();
 
         // Close all nodes
-        userEvent.click(toggleBtn);
+        await userEvent.click(toggleBtn);
 
         expect(queryByText("Hide all sections")).not.toBeInTheDocument();
         expect(queryByText("Show all sections")).toBeInTheDocument();
@@ -122,7 +122,7 @@ describe("<Accordion />", () => {
     });
 
     describe("calls toggle on child nodes", () => {
-      test("calls toggle on one item in the list", () => {
+      test("calls toggle on one item in the list", async () => {
         const stubFirstContent = "stub-1";
         const stubSecondContent = "stub-2";
 
@@ -136,19 +136,19 @@ describe("<Accordion />", () => {
         expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
 
         // Open
-        userEvent.click(firstToggle);
+        await userEvent.click(firstToggle);
 
         expect(queryAccordionIsOpen(stubFirstContent)).toBeTruthy();
         expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
 
         // Close
-        userEvent.click(firstToggle);
+        await userEvent.click(firstToggle);
 
         expect(queryAccordionIsOpen(stubFirstContent)).toBeFalsy();
         expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
       });
 
-      test("calls toggle in the correct order (open/closes first node, then second...)", () => {
+      test("calls toggle in the correct order (open/closes first node, then second...)", async () => {
         const stubFirstContent = "stub-1";
         const stubSecondContent = "stub-2";
 
@@ -162,25 +162,25 @@ describe("<Accordion />", () => {
         expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
 
         // Open - first
-        userEvent.click(firstToggle);
+        await userEvent.click(firstToggle);
 
         expect(queryAccordionIsOpen(stubFirstContent)).toBeTruthy();
         expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
 
         // Close - first
-        userEvent.click(firstToggle);
+        await userEvent.click(firstToggle);
 
         expect(queryAccordionIsOpen(stubFirstContent)).toBeFalsy();
         expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();
 
         // Open - second
-        userEvent.click(secondToggle);
+        await userEvent.click(secondToggle);
 
         expect(queryAccordionIsOpen(stubFirstContent)).toBeFalsy();
         expect(queryAccordionIsOpen(stubSecondContent)).toBeTruthy();
 
         // Close - second
-        userEvent.click(secondToggle);
+        await userEvent.click(secondToggle);
 
         expect(queryAccordionIsOpen(stubFirstContent)).toBeFalsy();
         expect(queryAccordionIsOpen(stubSecondContent)).toBeFalsy();

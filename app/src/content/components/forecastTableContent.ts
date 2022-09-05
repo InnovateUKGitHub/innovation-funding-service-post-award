@@ -13,6 +13,7 @@ export class ForecastTableContent extends ContentPageBase {
   public readonly totalEligibleCostsHeader = this.getContent("components.forecastTable.totalEligibleCostsHeader");
   public readonly differenceHeader = this.getContent("components.forecastTable.differenceHeader");
   public readonly periodHeader = this.getContent("components.forecastTable.periodHeader");
+  public readonly iarDueHeader = this.getContent("components.forecastTable.iarDueHeader");
   public readonly noDataText = this.getContent("components.forecastTable.noDataText");
   public readonly costCategoriesHeader = this.getContent("components.forecastTable.costCategoriesHeader");
 }

@@ -20,7 +20,8 @@ export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
     const query = new GetMonitoringReportById(params.projectId, params.id);
     const dto = await context.runQuery(query);
     const questionDisplayOrder = Number(body.questionDisplayOrder);
-    const q = dto.questions.find(x => x.displayOrder === questionDisplayOrder)!;
+    const q = dto.questions.find(x => x.displayOrder === questionDisplayOrder);
+    if(!q) throw new Error(`Cannot find monitoring report question dto matching ${questionDisplayOrder}`);
     if (q.isScored) {
       q.optionId = body[`question_${q.displayOrder}_options`];
     }

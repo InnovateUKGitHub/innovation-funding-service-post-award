@@ -1,6 +1,7 @@
-import { Connection } from "jsforce";
-import { ILogger } from "@server/features/common";
 import { ClaimDetailKey } from "@framework/types";
+import { ILogger } from "@server/features/common";
+import { sss } from "@server/util/salesforce-string-helpers";
+import { Connection } from "jsforce";
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 
 export interface ISalesforceClaimDetails {
@@ -60,9 +61,9 @@ export class ClaimDetailsRepository
 
   getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {
     const filter = `
-      Acc_ProjectParticipant__c = '${partnerId}'
-      AND RecordType.Name = '${this.recordType}'
-      AND Acc_ProjectPeriodNumber__c = ${periodId}
+      Acc_ProjectParticipant__c = '${sss(partnerId)}'
+      AND RecordType.Name = '${sss(this.recordType)}'
+      AND Acc_ProjectPeriodNumber__c = ${sss(periodId)}
       AND Acc_ClaimStatus__c != 'New'
       AND Acc_CostCategory__c != null
     `;
@@ -72,11 +73,11 @@ export class ClaimDetailsRepository
   get(claimDetailKey: ClaimDetailKey): Promise<ISalesforceClaimDetails | null> {
     const { projectId, partnerId, periodId, costCategoryId } = claimDetailKey;
     const filter = `
-      Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'
-      AND Acc_ProjectParticipant__c = '${partnerId}'
-      AND RecordType.Name = '${this.recordType}'
-      AND Acc_ProjectPeriodNumber__c = ${periodId}
-      AND Acc_CostCategory__c = '${costCategoryId}'
+      Acc_ProjectParticipant__r.Acc_ProjectId__c = '${sss(projectId)}'
+      AND Acc_ProjectParticipant__c = '${sss(partnerId)}'
+      AND RecordType.Name = '${sss(this.recordType)}'
+      AND Acc_ProjectPeriodNumber__c = ${sss(periodId)}
+      AND Acc_CostCategory__c = '${sss(costCategoryId)}'
       AND Acc_ClaimStatus__c != 'New'
     `;
     return super.filterOne(filter);
@@ -84,8 +85,8 @@ export class ClaimDetailsRepository
 
   getAllByPartner(partnerId: string): Promise<ISalesforceClaimDetails[]> {
     const filter = `
-      Acc_ProjectParticipant__c = '${partnerId}'
-      AND RecordType.Name = '${this.recordType}'
+      Acc_ProjectParticipant__c = '${sss(partnerId)}'
+      AND RecordType.Name = '${sss(this.recordType)}'
       AND Acc_ClaimStatus__c != 'New'
       AND Acc_CostCategory__c != null
       `;

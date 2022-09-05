@@ -253,7 +253,7 @@ describe("getAllForProjectQuery", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project, x => {
       x.name = "Expected name";
-      x.totalParticipantCosts = null!;
+      x.totalParticipantCosts = null as unknown as number;
       x.totalApprovedCosts = 1000;
       x.awardRate = 50;
       x.capLimit = 50;

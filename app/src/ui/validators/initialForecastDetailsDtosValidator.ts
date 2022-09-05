@@ -51,12 +51,13 @@ export class InitialForecastDetailsDtosValidator
     const groupedForecasts = Array.from(groupedCostCategories.entries());
 
     return this.costCategories.map(costCategory => {
-      const entry = groupedForecasts.find(x => x[0] === costCategory.id)!;
-
+      const entry = groupedForecasts.find(x => x[0] === costCategory.id);
+      const golCost = this.golCosts.find(gol => gol.costCategoryId === costCategory.id);
+      if(!golCost) throw new Error("Unable to find matching golCostDto");
       return {
-        golCost: this.golCosts.find(gol => gol.costCategoryId === costCategory.id)!,
+        golCost,
         costCategory,
-        forecasts: entry && entry[1],
+        forecasts: entry?.[1] ?? [],
       };
     });
   }

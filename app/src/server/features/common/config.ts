@@ -90,13 +90,13 @@ const build = process.env.BUILD || `${Date.now()}`;
 const salesforceQueryLimit: Readonly<number> = 195;
 
 const timeouts = {
-  costCategories: parseFloat(process.env.COST_CAT_TIMEOUT_MINUTES!) || defaultCacheTimeout,
-  projectRoles: parseFloat(process.env.PROJ_ROLES_TIMEOUT_MINUTES!) || defaultCacheTimeout,
-  recordTypes: parseFloat(process.env.RECORD_TYPES_TIMEOUT_MINUTES!) || defaultCacheTimeout,
-  optionsLookup: parseFloat(process.env.OPTIONS_LOOKUP_TIMEOUT_MINUTES!) || defaultCacheTimeout,
-  token: parseFloat(process.env.TOKEN_TIMEOUT_MINUTES!) || 10,
-  cookie: parseFloat(process.env.COOKIE_TIMEOUT_MINUTES!) || 10,
-  contentRefreshSeconds: parseFloat(process.env.CONTENT_REFRESH_TIMEOUT_SECONDS!) || 0,
+  costCategories: parseFloat(process.env.COST_CAT_TIMEOUT_MINUTES ?? "") || defaultCacheTimeout,
+  projectRoles: parseFloat(process.env.PROJ_ROLES_TIMEOUT_MINUTES ?? "") || defaultCacheTimeout,
+  recordTypes: parseFloat(process.env.RECORD_TYPES_TIMEOUT_MINUTES ?? "") || defaultCacheTimeout,
+  optionsLookup: parseFloat(process.env.OPTIONS_LOOKUP_TIMEOUT_MINUTES ?? "") || defaultCacheTimeout,
+  token: parseFloat(process.env.TOKEN_TIMEOUT_MINUTES ?? "") || 10,
+  cookie: parseFloat(process.env.COOKIE_TIMEOUT_MINUTES ?? "") || 10,
+  contentRefreshSeconds: parseFloat(process.env.CONTENT_REFRESH_TIMEOUT_SECONDS ?? "") || 0,
 };
 
 const certificates = {
@@ -115,21 +115,21 @@ const features: IFeatureFlags = {
   futureTimeExtensionInYears: Number(process.env.FUTURE_TIME_EXTENSION_IN_YEARS) || 5,
 };
 
-const logLevel = parseLogLevel(process.env.LOG_LEVEL! || process.env.LOGLEVEL!);
+const logLevel = parseLogLevel((process.env.LOG_LEVEL || process.env.LOGLEVEL) ?? "ERROR");
 const prettyLogs = process.env.PRETTY_LOGS === "true";
 
 const salesforce = {
-  clientId: process.env.SALESFORCE_CLIENT_ID!,
-  connectionUrl: process.env.SALESFORCE_CONNECTION_URL!,
-  serviceUsername: process.env.SALESFORCE_USERNAME! || process.env.SALESFORCEUSERNAME!,
+  clientId: process.env.SALESFORCE_CLIENT_ID ?? "",
+  connectionUrl: process.env.SALESFORCE_CONNECTION_URL ?? "",
+  serviceUsername: (process.env.SALESFORCE_USERNAME || process.env.SALESFORCEUSERNAME) ?? "",
 };
 
-const serverUrl = process.env.SERVER_URL!;
+const serverUrl = process.env.SERVER_URL ?? "";
 
 const sso = {
   enabled: process.env.USE_SSO === "true",
-  providerUrl: process.env.SSO_PROVIDER_URL!,
-  signoutUrl: process.env.SSO_SIGNOUT_URL!,
+  providerUrl: process.env.SSO_PROVIDER_URL ?? "",
+  signoutUrl: process.env.SSO_SIGNOUT_URL ?? "",
 };
 
 const urls = {
@@ -140,7 +140,7 @@ const urls = {
     "https://application-for-innovation-funding.service.gov.uk/management/competition/<<Acc_CompetitionId__c>>/project/<<Acc_IFSApplicationId__c>>",
 };
 
-const cookieKey = process.env.COOKIE_KEY!;
+const cookieKey = process.env.COOKIE_KEY ?? "";
 
 let permittedFileTypes: IAppOptions["permittedFileTypes"] = process.env.PERMITTED_FILE_TYPES
   ? process.env.PERMITTED_FILE_TYPES.split(",")
@@ -170,9 +170,9 @@ const maxClaimLineItems = () => {
 };
 
 const options: IAppOptions = {
-  bankCheckAddressScorePass: parseInt(process.env.BANK_CHECK_ADDRESS_SCORE_PASS!, 10) || 6,
-  bankCheckValidationRetries: Number(process.env.BANK_CHECK_VALIDATION_RETRIES!) || 3,
-  bankCheckCompanyNameScorePass: parseInt(process.env.BANK_CHECK_COMPANY_NAME_SCORE_PASS!, 10) || 6,
+  bankCheckAddressScorePass: parseInt(process.env.BANK_CHECK_ADDRESS_SCORE_PASS ?? "", 10) || 6,
+  bankCheckValidationRetries: Number(process.env.BANK_CHECK_VALIDATION_RETRIES) || 3,
+  bankCheckCompanyNameScorePass: parseInt(process.env.BANK_CHECK_COMPANY_NAME_SCORE_PASS ?? "", 10) || 6,
   permittedFileTypes,
   permittedTypes: {
     pdfTypes,
@@ -181,30 +181,30 @@ const options: IAppOptions = {
     spreadsheetTypes,
     imageTypes,
   },
-  maxUploadFileCount: parseInt(process.env.MAX_UPLOAD_FILE_COUNT!, 10) || 10,
-  maxFileSize: parseInt(process.env.MAX_FILE_SIZE_IN_BYTES!, 10) || bytes("32MB"),
-  standardOverheadRate: parseFloat(process.env.STANDARD_OVERHEAD_RATE!) || 20,
-  numberOfProjectsToSearch: parseInt(process.env.FEATURE_SEARCH_NUMBER_PROJECTS!, 10) || 3,
+  maxUploadFileCount: parseInt(process.env.MAX_UPLOAD_FILE_COUNT ?? "", 10) || 10,
+  maxFileSize: parseInt(process.env.MAX_FILE_SIZE_IN_BYTES ?? "", 10) || bytes("32MB"),
+  standardOverheadRate: parseFloat(process.env.STANDARD_OVERHEAD_RATE ?? "") || 20,
+  numberOfProjectsToSearch: parseInt(process.env.FEATURE_SEARCH_NUMBER_PROJECTS ?? "", 10) || 3,
   maxClaimLineItems: maxClaimLineItems(),
-  nonJsMaxClaimLineItems: parseInt(process.env.NON_JS_FEATURE_MAX_CLAIM_LINE_ITEMS!, 10) || 10,
+  nonJsMaxClaimLineItems: parseInt(process.env.NON_JS_FEATURE_MAX_CLAIM_LINE_ITEMS ?? "", 10) || 10,
 };
 
-const googleTagManagerCode = process.env.GOOGLE_TAG_MANAGER_CODE!;
+const googleTagManagerCode = process.env.GOOGLE_TAG_MANAGER_CODE ?? "";
 
 const s3Account = {
-  accessKeyId: process.env.S3_Access_Key!,
-  secretAccessKey: process.env.S3_Secret!,
-  contentBucket: process.env.S3_Content_Bucket!,
-  customContentPath: process.env.S3_Content_File!,
+  accessKeyId: process.env.S3_Access_Key ?? "",
+  secretAccessKey: process.env.S3_Secret ?? "",
+  contentBucket: process.env.S3_Content_Bucket ?? "",
+  customContentPath: process.env.S3_Content_File ?? "",
 };
 
 const sil = {
-  bankCheckUrl: process.env.SIL_EXPERIAN_URL!,
+  bankCheckUrl: process.env.SIL_EXPERIAN_URL ?? "",
 };
 
 const companiesHouse = {
-  endpoint: process.env.COMPANIES_HOUSE_ENDPOINT!,
-  accessToken: process.env.COMPANIES_HOUSE_ACCESS_TOKEN!,
+  endpoint: process.env.COMPANIES_HOUSE_ENDPOINT ?? "",
+  accessToken: process.env.COMPANIES_HOUSE_ACCESS_TOKEN ?? "",
 };
 
 export const configuration: IConfig = {

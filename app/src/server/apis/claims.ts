@@ -10,6 +10,7 @@ import {
   GetClaimsTotalCosts,
   GetAllClaimsForProjectQuery,
   GetAllForPartnerQuery,
+  GetAllIncludingNewForPartnerQuery,
   GetClaim,
   UpdateClaimCommand,
 } from "@server/features/claims";
@@ -55,6 +56,17 @@ class ClaimController extends ControllerBase<ClaimDto> implements IClaimsApi {
       },
     );
 
+    this.getItems(
+      "/getAllIncludingNew/",
+      (p, q) => ({ partnerId: q.partnerId }),
+      p => {
+        if (p.partnerId) {
+          return this.getAllIncludingNewByPartnerId(p);
+        }
+        return Promise.reject(new BadRequestError("Invalid parameters"));
+      },
+    );
+
     this.getItem(
       "/:partnerId/:periodId",
       p => ({ partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) }),
@@ -80,6 +92,11 @@ class ClaimController extends ControllerBase<ClaimDto> implements IClaimsApi {
 
   public async getAllByPartnerId(params: ApiParams<{ partnerId: string }>): Promise<ClaimDto[]> {
     const query = new GetAllForPartnerQuery(params.partnerId);
+    return contextProvider.start(params).runQuery(query);
+  }
+
+  public async getAllIncludingNewByPartnerId(params: ApiParams<{ partnerId: string }>): Promise<ClaimDto[]> {
+    const query = new GetAllIncludingNewForPartnerQuery(params.partnerId);
     return contextProvider.start(params).runQuery(query);
   }
 
@@ -125,5 +142,11 @@ export const controller = new ClaimController();
 
 export type IClaimsApi = Pick<
   ClaimController,
-  "getAllByProjectId" | "getAllByPartnerId" | "get" | "update" | "getStatusChanges" | "getTotalCosts"
+  | "getAllByProjectId"
+  | "getAllByPartnerId"
+  | "getAllIncludingNewByPartnerId"
+  | "get"
+  | "update"
+  | "getStatusChanges"
+  | "getTotalCosts"
 >;

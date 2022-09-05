@@ -72,6 +72,9 @@ const useProjectActions = ({ section, project, partner }: ProjectProps): string[
         case PartnerClaimStatus.ClaimDue:
           messages.push(getContent(x => x.projectsDashboard.messages.claimToSubmit));
           break;
+        case PartnerClaimStatus.ClaimsOverdue:
+          messages.push(getContent(x => x.projectsDashboard.messages.claimOverdue));
+          break;
         case PartnerClaimStatus.ClaimQueried:
           messages.push(getContent(x => x.projectsDashboard.messages.claimQueried));
           break;
@@ -84,6 +87,10 @@ const useProjectActions = ({ section, project, partner }: ProjectProps): string[
     if (isMo) {
       if (project.claimsToReview) {
         messages.push(getContent(x => x.projectsDashboard.messages.claimsToReview(project.claimsToReview)));
+      }
+      if (project.claimsOverdue) {
+        const content = getContent(x => x.projectsDashboard.messages.claimOverdue);
+        if (!messages.includes(content)) messages.push(content);
       }
       if (project.pcrsToReview) {
         messages.push(getContent(x => x.projectsDashboard.messages.pcrsToReview(project.pcrsToReview)));
@@ -98,39 +105,8 @@ const useProjectActions = ({ section, project, partner }: ProjectProps): string[
   return messages;
 };
 
-const hasProjectAction = ({ section, project, partner }: ProjectProps): boolean => {
-  if (section === "archived" || section === "upcoming") {
-    return false;
-  }
-
-  // If the project is pending and requires setup
-  if (section === "pending") {
-    return true;
-  }
-
-  const { isPmOrMo, isMo } = getAuthRoles(project.roles);
-  const hasClaimsToReview = project.claimsToReview > 0;
-  const hasClaimsOverdue = project.claimsOverdue > 0;
-
-  const hasPmOrMoClaims = isPmOrMo && hasClaimsOverdue;
-  const hasMoClaimsDue = isMo && hasClaimsToReview;
-
-  if (hasPmOrMoClaims || hasMoClaimsDue) return true;
-
-  if (partner) {
-    const hasPartnerClaimsOverdue = partner.claimsOverdue && partner.claimsOverdue > 0;
-    const hasIarRequiredClaim = partner.claimStatus === PartnerClaimStatus.IARRequired;
-
-    const hasOutstandingActions = hasPartnerClaimsOverdue || hasIarRequiredClaim;
-
-    const unSubmittedStatuses = [PartnerClaimStatus.ClaimSubmitted, PartnerClaimStatus.NoClaimsDue];
-    const hasUnSubmittedClaims = unSubmittedStatuses.every(x => x !== partner.claimStatus);
-
-    if (hasOutstandingActions || hasUnSubmittedClaims) return true;
-  }
-
-  return false;
-};
+const doesNotRequireAction = ({ section }: ProjectProps) =>
+  (section === "archived" || section === "upcoming");
 
 const generateTitle = ({ project, partner, section, routes }: DashboardProjectProps): string | JSX.Element => {
   const titleContent = `${project.projectNumber}: ${project.title}`;
@@ -148,10 +124,11 @@ const generateTitle = ({ project, partner, section, routes }: DashboardProjectPr
 
 function DashboardProject(props: DashboardProjectProps) {
   const titleValue = generateTitle(props);
-  const displayAction = hasProjectAction(props);
+
   const projectActions = useProjectActions(props);
   const projectNotes = getProjectNotes(props);
 
+  const displayAction = projectActions.length > 0 && !doesNotRequireAction(props);
   return (
     <ACC.ListItem key={props.project.id} actionRequired={displayAction} qa={`project-${props.project.projectNumber}`}>
       <div className="govuk-grid-column-two-thirds" style={{ display: "inline-flex", alignItems: "center" }}>

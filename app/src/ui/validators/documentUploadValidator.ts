@@ -14,17 +14,17 @@ const invalidCharacterInFileName = (fileName: string) => {
   return `You cannot upload '${fileName}' because it contains forbidden characters.`;
 };
 
-const permittedFileTypeErrorMessage = (file: IFileWrapper) => {
-  return `You cannot upload '${file.fileName}' because it is the wrong file type.`;
+const permittedFileTypeErrorMessage = (file: IFileWrapper | null) => {
+  return `You cannot upload '${file?.fileName}' because it is the wrong file type.`;
 };
 
-const fileTooBigErrorMessage = (file: IFileWrapper, maxFileSize: number) => {
+const fileTooBigErrorMessage = (file: IFileWrapper | null, maxFileSize: number) => {
   const maxMessage = getFileSize(maxFileSize);
-  return `You cannot upload '${file.fileName}' because it must be smaller than ${maxMessage}.`;
+  return `You cannot upload '${file?.fileName}' because it must be smaller than ${maxMessage}.`;
 };
 
-const fileEmptyErrorMessage = (file: IFileWrapper) => {
-  return `You cannot upload '${file.fileName}' because it is empty.`;
+const fileEmptyErrorMessage = (file: IFileWrapper | null) => {
+  return `You cannot upload '${file?.fileName}' because it is empty.`;
 };
 
 export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
@@ -34,7 +34,6 @@ export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
     model: DocumentUploadDto,
     config: IAppOptions,
     showValidationErrors: boolean,
-    private readonly error: FileTypeNotAllowedError | null,
   ) {
     // file is deliberately not a private field so it isn't logged....
     // model is empty object for this reason
@@ -48,14 +47,14 @@ export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
       () =>
         Validation.isTrue(
           this,
-          model.file!.size <= config.maxFileSize,
-          fileTooBigErrorMessage(model.file!, config.maxFileSize),
+          (model.file?.size ?? 0) <= config.maxFileSize,
+          fileTooBigErrorMessage(model?.file, config.maxFileSize),
         ),
-      () => Validation.isFalse(this, model.file!.size === 0, fileEmptyErrorMessage(model.file!)),
+      () => Validation.isFalse(this, model?.file?.size === 0, fileEmptyErrorMessage(model?.file)),
       () => validateFileExtension(this, model.file, config.permittedFileTypes),
     );
     this.description = model.description
-      ? Validation.permitedValues(
+      ? Validation.permittedValues(
           this,
           model.description,
           getAllEnumValues(DocumentDescription),
@@ -80,7 +79,7 @@ export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocument
 
     this.files = this.validateFiles(model, config, filesRequired);
     this.description = model.description
-      ? Validation.permitedValues(
+      ? Validation.permittedValues(
           this,
           model.description,
           getAllEnumValues(DocumentDescription),
@@ -142,11 +141,11 @@ export class FileDtoValidator extends Results<IFileWrapper> {
 }
 function validateFileExtension(results: Results<{}>, file: IFileWrapper | null, permittedFileTypes: string[]): Result {
   const fileName = file ? file.fileName : "";
-  return Validation.permitedValues(
+  return Validation.permittedValues(
     results,
     getFileExtension(fileName),
     permittedFileTypes,
-    permittedFileTypeErrorMessage(file!),
+    permittedFileTypeErrorMessage(file),
   );
 }
 

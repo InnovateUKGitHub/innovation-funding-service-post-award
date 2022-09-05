@@ -178,9 +178,9 @@ const getOptions = (data: NoUndefinedField<PCRItemForLoanDrawdownExtensionDto>) 
   const totalMonths = 75;
 
   return {
-    availabilityPeriod: createOptions(data.availabilityPeriod!, totalMonths),
-    extensionPeriod: createOptions(data.extensionPeriod!, totalMonths),
-    repaymentPeriod: createOptions(data.repaymentPeriod!, totalMonths),
+    availabilityPeriod: createOptions(data.availabilityPeriod, totalMonths),
+    extensionPeriod: createOptions(data.extensionPeriod, totalMonths),
+    repaymentPeriod: createOptions(data.repaymentPeriod, totalMonths),
   };
 };
 
@@ -191,22 +191,22 @@ function createOptions(currentOffset: number, totalMonths: number): ACC.Dropdown
 
   const list = [];
 
-  if (shouldAddStartOption) list.push(createDurationOption(true, currentOffset));
+  if (shouldAddStartOption) list.push(createDurationOption(currentOffset));
 
   for (let newOffset = quarterlyOffset; newOffset <= totalMonths; newOffset += quarterlyOffset) {
     const notCurrentIndex = currentOffset !== newOffset;
-    const optionDoesntExist = currentOffset >= newOffset;
+    const optionDoesNotExist = currentOffset >= newOffset;
     const shouldAddDefaultOption = currentOffset - newOffset === currentOffset % quarterlyOffset;
-    const shouldAddMiddleOption = optionDoesntExist && shouldAddDefaultOption;
+    const shouldAddMiddleOption = optionDoesNotExist && shouldAddDefaultOption;
 
-    if (notCurrentIndex) list.push(createDurationOption(false, newOffset));
-    if (shouldAddMiddleOption) list.push(createDurationOption(true, currentOffset));
+    if (notCurrentIndex) list.push(createDurationOption(newOffset));
+    if (shouldAddMiddleOption) list.push(createDurationOption(currentOffset));
   }
 
   return list;
 }
 
-const createDurationOption = (selected: boolean, value: number) => {
+const createDurationOption = (value: number) => {
   const id = String(value);
   const quarterValue = getQuarterInMonths(value);
 
@@ -217,7 +217,6 @@ const createDurationOption = (selected: boolean, value: number) => {
 
   return {
     id,
-    selected,
     displayName: displayValue,
     value,
   };

@@ -23,7 +23,7 @@ const program = new Command();
 program.option("--secure", "Run in HTTPS mode");
 program.parse(process.argv);
 
-const port = parseInt(process.env.PORT!, 10) || 8080;
+const port = parseInt(process.env.PORT ?? "8080", 10);
 
 const { secure } = program as CustomProcessArgs;
 

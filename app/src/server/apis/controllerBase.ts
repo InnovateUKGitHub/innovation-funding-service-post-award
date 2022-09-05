@@ -73,10 +73,10 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
     const wrappedGetParams: InnerGetParams<TParams & { document: DocumentUploadDto }> = (params, query, body, req) => {
       const p = getParams(params, query, body);
 
-      const file: IFileWrapper | null = req.file && new ServerFileWrapper(req.file);
+      const file: IFileWrapper | null = req.file ? new ServerFileWrapper(req.file) as IFileWrapper : null;
       const description = Number(body.description) || undefined;
 
-      const document: DocumentUploadDto | null = file && { file, description };
+      const document: DocumentUploadDto = { file, description };
 
       return { document, ...p };
     };
@@ -137,7 +137,9 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
   private executeMethod<TParams, TResponse>(successStatus: number, getParams: InnerGetParams<TParams>, run: Run<TParams, TResponse | null>, allowNulls: boolean) {
     return async (req: Request, resp: Response) => {
 
-      const p = Object.assign({ user: req.session!.user as ISessionUser }, getParams(req.params || {}, req.query as RequestQueryParams || {}, req.body || {}, req));
+      const user: ISessionUser = req.session?.user;
+
+      const p = Object.assign({ user }, getParams(req.params || {}, req.query as RequestQueryParams || {}, req.body || {}, req));
 
       run(p)
         .then(result => {
@@ -152,7 +154,8 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
 
   private attachmentHandler<TParams>(successStatus: number, getParams: GetParams<TParams>, run: Run<TParams, DocumentDto | null>) {
     return async (req: Request, resp: Response) => {
-      const p = Object.assign({ user: req.session!.user as ISessionUser }, getParams(req.params || {}, req.query as RequestQueryParams|| {}, req.body || {}));
+      const user: ISessionUser = req.session?.user;
+      const p = Object.assign({ user }, getParams(req.params || {}, req.query as RequestQueryParams|| {}, req.body || {}));
       run(p)
         .then(result => {
           if (result === null || result === undefined) {

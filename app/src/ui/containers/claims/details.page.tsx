@@ -13,6 +13,7 @@ import {
 import { useStores } from "@ui/redux";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import * as ACC from "@ui/components";
+import { ForecastData } from "@ui/components/claims";
 import { Pending } from "../../../shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
 
@@ -152,7 +153,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     return (
       <ACC.Section>
         <ACC.Accordion>
-          {showForecast && this.renderForecastItem(this.props.forecastData!)}
+          {showForecast && this.renderForecastItem(this.props.forecastData as Pending<ForecastData>)}
 
           {this.renderLogsItem()}
 

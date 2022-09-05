@@ -22,7 +22,7 @@ export * from "./projectChangeRequestRepository";
 export * from "./projectChangeRequestStatusChangeRepository";
 export * from "./permissionGroupsRepository";
 export * from "./profileDetailsRepository";
-export * from "./profilePeriodTotalRepositotry";
+export * from "./profilePeriodTotalRepository";
 export * from "./profileTotalCostCategoryRepository";
 export * from "./projectContactsRepository";
 export * from "./projectsRepository";

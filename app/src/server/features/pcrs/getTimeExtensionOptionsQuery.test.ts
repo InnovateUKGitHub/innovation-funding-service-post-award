@@ -3,7 +3,7 @@ import { GetTimeExtensionOptionsQuery } from "@server/features/pcrs/getTimeExten
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("GetTimeExtensionOptionsQuery", () => {
-  beforeAll(() => jest.useFakeTimers("modern"));
+  beforeAll(() => jest.useFakeTimers());
   afterAll(jest.useRealTimers);
 
   const setup = <YearMonthValue extends [number, number]>(

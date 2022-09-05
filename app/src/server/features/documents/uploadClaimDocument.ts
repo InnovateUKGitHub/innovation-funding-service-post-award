@@ -8,6 +8,7 @@ import {
   ClaimStatus,
   DocumentDescription,
   IContext,
+  IFileWrapper,
   ProjectRole,
 } from "@framework/types";
 import { mapClaim } from "@server/features/claims/mapClaim";
@@ -61,7 +62,6 @@ export class UploadClaimDocumentCommand extends CommandDocumentBase<string> {
       this.document,
       context.config.options,
       this.showValidationErrors,
-      null,
     );
 
     if (!result.isValid) {
@@ -76,7 +76,7 @@ export class UploadClaimDocumentCommand extends CommandDocumentBase<string> {
     if (this.document.description === DocumentDescription.IAR) await this.preIarUpload(context, claim);
 
     const documentId = await context.repositories.documents.insertDocument(
-      this.document.file!,
+      this.document.file as IFileWrapper,
       claim.id,
       this.document.description,
     );
