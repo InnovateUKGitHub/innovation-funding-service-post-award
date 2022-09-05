@@ -16,7 +16,7 @@ export const scopeChangeWorkflow: IPCRWorkflow<PCRItemForScopeChangeDto, PCRScop
       displayName: "Proposed public description",
       stepNumber: 1,
       validation: (val) => {
-        const itemValidator = val.pcr.items.results.find(x => x.model.type === PCRItemType.ScopeChange)! as PCRScopeChangeItemDtoValidator;
+        const itemValidator = val.pcr.items.results.find(x => x.model.type === PCRItemType.ScopeChange) as PCRScopeChangeItemDtoValidator;
         return new CombinedResultValidator(itemValidator.publicDescription);
       },
       stepRender: PublicDescriptionChangeStep
@@ -26,7 +26,7 @@ export const scopeChangeWorkflow: IPCRWorkflow<PCRItemForScopeChangeDto, PCRScop
       displayName: "Proposed project summary",
       stepNumber: 2,
       validation: (val) => {
-        const itemValidator = val.pcr.items.results.find(x => x.model.type === PCRItemType.ScopeChange)! as PCRScopeChangeItemDtoValidator;
+        const itemValidator = val.pcr.items.results.find(x => x.model.type === PCRItemType.ScopeChange) as PCRScopeChangeItemDtoValidator;
         return new CombinedResultValidator(itemValidator.projectSummary);
       },
       stepRender: ProjectSummaryChangeStep

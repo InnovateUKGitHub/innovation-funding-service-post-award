@@ -1,4 +1,5 @@
 import { IPicklistEntry } from "@framework/types";
+import { sss } from "@server/util/salesforce-string-helpers";
 import { NotFoundError } from "../features/common/appError";
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 
@@ -37,6 +38,7 @@ export interface ISalesforceClaim {
 export interface IClaimRepository {
   getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]>;
   getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]>;
+  getAllIncludingNewByPartnerId(partnerId: string): Promise<ISalesforceClaim[]>;
   get(partnerId: string, periodId: number): Promise<ISalesforceClaim>;
   getByProjectId(projectId: string, partnerId: string, periodId: number): Promise<ISalesforceClaim>;
   getClaimStatuses(): Promise<IPicklistEntry[]>;
@@ -51,7 +53,6 @@ export interface IClaimRepository {
  * Claims also store the status of the claim ie Approval Paid etc.
  */
 export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> implements IClaimRepository {
-
   private readonly recordType = "Total Project Period";
 
   protected readonly salesforceObjectName = "Acc_Claims__c";
@@ -81,37 +82,52 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
     "Acc_TotalCostsApproved__c",
     "Acc_TotalDeferredAmount__c",
     "Acc_PeriodCoststobePaid__c",
-
   ];
 
   private getStandardFilter() {
     return `
-      RecordType.Name = '${this.recordType}'
+      RecordType.Name = '${sss(this.recordType)}'
       AND Acc_ClaimStatus__c != 'New'
       AND Acc_ClaimStatus__c != 'Not used'
     `;
   }
 
   public getAllByProjectId(projectId: string): Promise<ISalesforceClaim[]> {
-    const filter = this.getStandardFilter() + `
-      AND Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'
+    const filter =
+      this.getStandardFilter() +
+      `
+      AND Acc_ProjectParticipant__r.Acc_ProjectId__c = '${sss(projectId)}'
     `;
 
     return super.where(filter);
   }
 
   public getAllByPartnerId(partnerId: string): Promise<ISalesforceClaim[]> {
-    const filter = this.getStandardFilter() + `
-      AND Acc_ProjectParticipant__c = '${partnerId}'
+    const filter =
+      this.getStandardFilter() +
+      `
+      AND Acc_ProjectParticipant__c = '${sss(partnerId)}'
+    `;
+
+    return super.where(filter);
+  }
+
+  public getAllIncludingNewByPartnerId(partnerId: string): Promise<ISalesforceClaim[]> {
+    const filter = `
+      RecordType.Name = '${sss(this.recordType)}'
+      AND Acc_ClaimStatus__c != 'Not used'
+      AND Acc_ProjectParticipant__c = '${sss(partnerId)}'
     `;
 
     return super.where(filter);
   }
 
   public async get(partnerId: string, periodId: number) {
-    const filter = this.getStandardFilter() + `
-      AND Acc_ProjectParticipant__c = '${partnerId}'
-      AND Acc_ProjectPeriodNumber__c = ${periodId}
+    const filter =
+      this.getStandardFilter() +
+      `
+      AND Acc_ProjectParticipant__c = '${sss(partnerId)}'
+      AND Acc_ProjectPeriodNumber__c = ${sss(periodId)}
     `;
 
     const claim = await super.filterOne(filter);
@@ -124,10 +140,12 @@ export class ClaimRepository extends SalesforceRepositoryBase<ISalesforceClaim> 
   }
 
   public async getByProjectId(projectId: string, partnerId: string, periodId: number) {
-    const filter = this.getStandardFilter() + `
-      AND Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'
-      AND Acc_ProjectParticipant__c = '${partnerId}'
-      AND Acc_ProjectPeriodNumber__c = ${periodId}
+    const filter =
+      this.getStandardFilter() +
+      `
+      AND Acc_ProjectParticipant__r.Acc_ProjectId__c = '${sss(projectId)}'
+      AND Acc_ProjectParticipant__c = '${sss(partnerId)}'
+      AND Acc_ProjectPeriodNumber__c = ${sss(periodId)}
     `;
 
     const claim = await super.filterOne(filter);

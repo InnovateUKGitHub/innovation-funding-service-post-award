@@ -108,7 +108,7 @@ function UpdateForecastComponent(props: ForecastUpdateParams & ForecastUpdateDat
 const UpdateForecastContainer = (props: ForecastUpdateParams & BaseProps) => {
   const { getContent } = useContent();
   const stores = useStores();
-const navigate = useNavigate();
+  const navigate = useNavigate();
   const forecastUpdatedMessage = getContent(x => x.forecastsUpdate.messages.forecastUpdated);
 
   return (
@@ -135,7 +135,7 @@ const navigate = useNavigate();
           forecastUpdatedMessage,
           () => {
             navigate(
-              props.routes.forecastDetails.getLink({ projectId: props.projectId, partnerId: props.partnerId }).path
+              props.routes.forecastDetails.getLink({ projectId: props.projectId, partnerId: props.partnerId }).path,
             );
           },
         );

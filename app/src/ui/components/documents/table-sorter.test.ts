@@ -1,5 +1,5 @@
 import _isEqual from "lodash.isequal";
-import { renderHook, act } from "@testing-library/react-hooks";
+import { renderHook, act } from "@testing-library/react";
 
 import { hookTestBed, TestBedContent } from "@shared/TestBed";
 import { TableSortKey, SortOptions, useTableSorter } from "@ui/components/documents/table-sorter";

@@ -168,8 +168,8 @@ export function optionalChild<T, U extends Results<{}>>(parentResults: Results<{
   return child<T, U>(parentResults, model, validateModel, children => children.valid(), summaryMessage);
 }
 
-export function permitedValues<T>(results: Results<{}>, value: T, permitted: T[], message?: string) {
-  return isTrue(results, permitted.indexOf(value) >= 0, message || "Value is not permited");
+export function permittedValues<T>(results: Results<{}>, value: T, permitted: T[], message?: string) {
+  return isTrue(results, permitted.indexOf(value) >= 0, message || "Value is not permitted");
 }
 
 export class ChildValidators<T> {

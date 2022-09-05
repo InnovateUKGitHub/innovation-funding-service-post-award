@@ -5,6 +5,9 @@ import { parseSfLongTextArea } from "@server/util/salesforce-string-helpers";
 import { SalesforceBaseMapper } from "./salesforceMapperBase";
 
 export class BroadcastMapper extends SalesforceBaseMapper<ISalesforceBroadcast, BroadcastDto> {
+  constructor() {
+    super();
+  }
   public map(item: ISalesforceBroadcast): BroadcastDto {
     return {
       id: item.Id,

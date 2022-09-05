@@ -30,7 +30,8 @@ function OtherSourcesOfFunding({
 
   const addItem = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, dto: PCRItemForPartnerAdditionDto) => {
     e.preventDefault();
-    const otherFundingCostCategory = props.costCategories.find(x => x.type === CostCategoryType.Other_Funding)!;
+    const otherFundingCostCategory = props.costCategories.find(x => x.type === CostCategoryType.Other_Funding);
+    if(!otherFundingCostCategory) throw new Error(`Cannot find other funding cost category matching ${CostCategoryType.Other_Funding}`);
     dto.spendProfile.funds.push({
       costCategoryId: otherFundingCostCategory.id,
       costCategory: CostCategoryType.Other_Funding,
@@ -134,9 +135,9 @@ function OtherSourcesOfFunding({
                   <Form.Hidden value={() => funds[i.row].id} name={`item_${i.row}_id`} />
                   <Form.String
                     name={`item_${i.row}_description`}
-                    // the dto "_dontUse" should not be used here because the form as is doesn't support deeply nested form child elements
+                    // the dto "_doNotUse" should not be used here because the form as is doesn't support deeply nested form child elements
                     value={() => funds[i.row].description}
-                    update={(_dontUse, val) => {
+                    update={(_doNotUse, val) => {
                       funds[i.row].description = val;
                       // onChange needs to be called here because the form as is doesn't support deeply nested form child elements
                       props.onChange(pcrItem);
@@ -226,7 +227,8 @@ export const OtherSourcesOfFundingStep = (
 
     if (isClient) return Pending.done(funds);
 
-    const otherFundingCostCategory = costCategories.find(x => x.type === CostCategoryType.Other_Funding)!;
+    const otherFundingCostCategory = costCategories.find(x => x.type === CostCategoryType.Other_Funding);
+    if(!otherFundingCostCategory) throw new Error(`Cannot find otherFundingCostCategory matching ${CostCategoryType.Other_Funding}`);
     const extraRows = funds.length <= 7 ? 10 - funds.length : 3;
     const extraFundItems: PCRSpendProfileOtherFundingDto[] = range(extraRows).map(
       () =>

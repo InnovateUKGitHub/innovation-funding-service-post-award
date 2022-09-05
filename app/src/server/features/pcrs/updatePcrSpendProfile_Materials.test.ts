@@ -66,7 +66,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       expect(insertedSpendProfileCost).toBeDefined();
       expect(insertedSpendProfileCost.id).toBeTruthy();
       expect(insertedSpendProfileCost.value).toBe(
-        insertedSpendProfileCost.quantity! * insertedSpendProfileCost.costPerItem!,
+        (insertedSpendProfileCost.quantity as number) * (insertedSpendProfileCost.costPerItem as number),
       );
       expect(insertedSpendProfileCost.quantity).toBe(200);
       expect(insertedSpendProfileCost.costPerItem).toBe(10);

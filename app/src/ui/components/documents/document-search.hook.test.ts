@@ -1,5 +1,5 @@
-import { renderHook, act } from "@testing-library/react-hooks";
-import { v4 as uuidv4 } from "uuid";
+import { renderHook, act } from "@testing-library/react";
+import { v4 as uuid } from "uuid";
 
 import { hookTestBed, TestBedStore, TestBedContent } from "@shared/TestBed";
 import { useDocumentSearch } from "@ui/components/documents/document-search.hook";
@@ -27,7 +27,7 @@ describe("useDocumentSearch()", () => {
   const stubBaseDocument: DocumentsBase["documents"][0] = {
     fileName: "stub-filename",
     link: "stub-link",
-    id: uuidv4(),
+    id: uuid(),
     fileSize: 1024,
     dateCreated: new Date(Date.UTC(2021, 10, 1)),
     uploadedBy: "stub-uploadedBy",
@@ -215,13 +215,13 @@ describe("useDocumentSearch()", () => {
         });
 
         it("with single result", () => {
-          const stubUnSearchableFileName = "I_AM_A_FILENAME_THAT_WILL_NEVER_BE_SEARCHED";
+          const stubUnSearchableFileName = "THIS_ITEM_WILL_NEVER_BE_SEARCHED";
 
           const stubDocs = [
             stubBaseDocument,
             {
               ...stubBaseDocument,
-              id: uuidv4(),
+              id: uuid(),
               fileName: stubUnSearchableFileName,
             },
           ];
@@ -241,17 +241,17 @@ describe("useDocumentSearch()", () => {
           const stubDocs = [
             {
               ...stubBaseDocument,
-              id: uuidv4(),
+              id: uuid(),
               fileName: `${stubCommonPartFileName} 1`,
             },
             {
               ...stubBaseDocument,
-              id: uuidv4(),
+              id: uuid(),
               fileName: `${stubCommonPartFileName} 2`,
             },
             {
               ...stubBaseDocument,
-              id: uuidv4(),
+              id: uuid(),
               fileName: stubNonMatchingFileName,
             },
           ];
@@ -277,19 +277,19 @@ describe("useDocumentSearch()", () => {
             const stubDocs = [
               {
                 ...stubBaseDocument,
-                id: uuidv4(),
+                id: uuid(),
                 fileName: "Document 1",
                 dateCreated: new Date(Date.UTC(2021, 1)),
               },
               {
                 ...stubBaseDocument,
-                id: uuidv4(),
+                id: uuid(),
                 fileName: "Document 2",
                 dateCreated: new Date(Date.UTC(2021, 2)),
               },
               {
                 ...stubBaseDocument,
-                id: uuidv4(),
+                id: uuid(),
                 fileName: "Document 3",
                 dateCreated: new Date(Date.UTC(2020, 2)),
               },
@@ -313,19 +313,19 @@ describe("useDocumentSearch()", () => {
             const stubDocs = [
               {
                 ...stubBaseDocument,
-                id: uuidv4(),
+                id: uuid(),
                 fileName: "Document 1",
                 fileSize: 12459,
               },
               {
                 ...stubBaseDocument,
-                id: uuidv4(),
+                id: uuid(),
                 fileName: "Document 2",
                 fileSize: 12459,
               },
               {
                 ...stubBaseDocument,
-                id: uuidv4(),
+                id: uuid(),
                 fileName: "Document 3",
                 fileSize: 205732,
               },
@@ -349,19 +349,19 @@ describe("useDocumentSearch()", () => {
             const stubDocs = [
               {
                 ...stubBaseDocument,
-                id: uuidv4(),
+                id: uuid(),
                 fileName: "Document 1",
                 uploadedBy: stubUploadedName,
               },
               {
                 ...stubBaseDocument,
-                id: uuidv4(),
+                id: uuid(),
                 fileName: "Document 2",
                 uploadedBy: stubUploadedName,
               },
               {
                 ...stubBaseDocument,
-                id: uuidv4(),
+                id: uuid(),
                 fileName: "Document 3",
                 uploadedBy: "Elton John",
               },

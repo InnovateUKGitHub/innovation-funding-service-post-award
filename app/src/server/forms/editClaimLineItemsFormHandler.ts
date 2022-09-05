@@ -28,8 +28,8 @@ export class EditClaimLineItemsFormHandler extends StandardFormHandlerBase<EditC
       partnerId: params.partnerId,
       periodId: params.periodId,
       costCategoryId: params.costCategoryId,
-      description: (body["description" + i] || undefined)!,
-      value: ( body["value" + i] ? parseFloat(body["value" + i]) : undefined)!
+      description: (body["description" + i] || undefined),
+      value: ( body["value" + i] ? parseFloat(body["value" + i]) : undefined)
     }));
 
     return Promise.resolve(Object.assign({}, originalClaimDetails, {

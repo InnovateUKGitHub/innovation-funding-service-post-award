@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-// Note: This is not latest as there is bug with the latest version https://github.com/krisk/Fuse/issues/469#issuecomment-862956883
 import Fuse from "fuse.js";
 
 import { useMounted } from "@ui/features";
@@ -11,7 +10,9 @@ import { DocumentsBase } from "./documents.interface";
 
 const fuzzySearch = <T>(value: string, items: T[], keysToSearch: string[]) => {
   const valueToSearch = value.trim();
-  const scoreThreshold = 0.6;
+
+  // TODO: reconfirm this value after migrating to Node16
+  const scoreThreshold = 0.3;
 
   const fusedQuery = new Fuse(items, {
     threshold: scoreThreshold,
@@ -30,8 +31,8 @@ const filterItems = (valueToSearch: string, items: DocumentsBase["documents"]) =
   if (!valueToSearch.trim().length) return items;
 
   const preParsedItems = items.map(x => {
-    const shortDate = formatDate(x.dateCreated, DateFormat.SHORT_DATE)!;
-    const fullDate = formatDate(x.dateCreated, DateFormat.FULL_DATE)!;
+    const shortDate = formatDate(x.dateCreated, DateFormat.SHORT_DATE);
+    const fullDate = formatDate(x.dateCreated, DateFormat.FULL_DATE);
     // Note: No date support for 'fuse.js'
     const dateCreated = `${shortDate} ${fullDate}`;
 
@@ -56,6 +57,7 @@ export function useDocumentSearch(disableSearch: boolean, originalDocuments: Doc
 
   const minDocsForSearch = originalDocuments.length >= features.searchDocsMinThreshold;
   const enableFilter = isClient && !disableSearch;
+
   const hasDocuments = documents.length > 0;
 
   const displaySearch = !disableSearch && isClient && minDocsForSearch;
@@ -64,7 +66,6 @@ export function useDocumentSearch(disableSearch: boolean, originalDocuments: Doc
     if (!enableFilter) return;
 
     const updatedDocuments = filterItems(filterValue, originalDocuments);
-
     setDocuments(updatedDocuments);
   }, [enableFilter, filterValue, originalDocuments]);
 

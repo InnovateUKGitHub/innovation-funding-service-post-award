@@ -43,7 +43,7 @@ export abstract class RepositoryBase {
       throw new Errors.BadSalesforceQuery(e.errorCode, e.errorCode);
     }
     if (e.errorCode === "ERROR_HTTP_503") {
-      throw new Errors.SalesforceUnavilableError("Salesforce unavailable");
+      throw new Errors.SalesforceUnavailableError("Salesforce unavailable");
     }
     if (e.errorCode === "INVALID_QUERY_FILTER_OPERATOR") {
       throw new Errors.SalesforceInvalidFilterError("Salesforce filter error");
@@ -321,16 +321,19 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
         const deleteQuery = connection.sobject<Payload>(this.salesforceObjectName);
         const batchResults = await deleteQuery.delete(batch);
 
-        // eslint-disable-next-line sonarjs/no-identical-functions
-        return batchResults.reduce<boolean>((_, result) => {
-          if (!result.success && !!result.errors.length) {
-            const errorMessage = this.getErrorFromPayload(result.errors);
+        // If there are no batch results, return false
+        if (batchResults.length === 0) return false;
 
+        // If there are any errors in our batchResults, throw it
+        for (const result of batchResults) {
+          if (!result.success && result.errors.length) {
+            const errorMessage = this.getErrorFromPayload(result.errors);
             throw new Errors.SalesforceDataChangeError(errorMessage, this.getDataChangeErrorMessages(batchResults));
           }
+        }
 
-          return true;
-        }, false);
+        // If there are no errors, return true
+        return true;
       });
 
       const allIdsDeleted: boolean = deleteBatchConfirmations.every(Boolean);

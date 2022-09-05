@@ -12,7 +12,7 @@ const createNewLineItemDto = (detail: ClaimDetailsDto, value?: number, descripti
   partnerId: detail.partnerId,
   periodId: detail.periodId,
   value: value || 100,
-  description: description || "A desciption",
+  description: description || "A description",
   lastModifiedDate: new Date(),
 });
 
@@ -61,7 +61,7 @@ describe("SaveClaimDetails", () => {
           x.Acc_CostCategory__c === costCategory.id &&
           x.Acc_ProjectParticipant__r.Id === partner.id &&
           x.Acc_ProjectPeriodNumber__c === periodId,
-      )!.Acc_ReasonForDifference__c,
+      )?.Acc_ReasonForDifference__c,
     ).toEqual("this is a comment");
   });
 
@@ -395,6 +395,19 @@ describe("SaveClaimDetails", () => {
       const dto = createDto(context, claimDetail);
 
       const command = new SaveClaimDetails(project.Id, partner.id, 1, null as any, dto);
+      await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
+    });
+
+    test("calculated costCategory throws error", async () => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner();
+      const costCategory = context.testData.createCostCategory();
+      costCategory.isCalculated = true;
+      const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
+      const dto = createDto(context, claimDetail);
+
+      const command = new SaveClaimDetails(project.Id, partner.id, 1, costCategory.id, dto);
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 

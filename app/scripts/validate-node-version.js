@@ -20,5 +20,7 @@ const path = require("path");
       `;
 
     throw Error(invalidNodeVersionMessage);
+  } else {
+    console.log("Node version correctly matched", nodeVersion);
   }
 })();

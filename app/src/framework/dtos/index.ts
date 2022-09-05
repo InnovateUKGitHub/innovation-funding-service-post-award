@@ -15,7 +15,7 @@ export * from "./claimLineItemDto";
 export * from "./costCategoryDto";
 export * from "./contact";
 export * from "./costsSummaryForPeriodDto";
-export * from "./finacialVirementDto";
+export * from "./financialVirementDto";
 export * from "./forecastDetailsDto";
 export * from "./golCostDto";
 export * from "./projectContactDto";

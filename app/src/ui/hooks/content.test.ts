@@ -1,8 +1,9 @@
-import { renderHook } from "@testing-library/react-hooks";
+import { renderHook } from "@testing-library/react";
 import { hookTestBed } from "@shared/TestBed";
 import { ContentResult } from "@content/contentBase";
 import { Content } from "@content/content";
 import { getContentFromResult, useContent } from "@ui/hooks";
+import { noop } from "@ui/helpers/noop";
 
 describe("getContentFromResult()", () => {
   test("should get content from result", () => {
@@ -19,6 +20,7 @@ describe("getContentFromResult()", () => {
 });
 
 describe("useContent()", () => {
+
   const stubTestContent = {
     test1: { content: "stub-test1" },
     test2: { content: "stub-test2" },
@@ -27,10 +29,12 @@ describe("useContent()", () => {
   const render = (testContent = {}) => renderHook(useContent, hookTestBed({ content: testContent }));
 
   test("should throw error without provider", () => {
-    // Note: render() is not used here, I do not want a provider as I want to test error
-    const { result } = renderHook(() => useContent());
+    // Note: RTL throws the error even though we catch it with the jest expect. This removes the console.error cli noise
+    const consoleSpy = jest.spyOn(console, "error").mockImplementation(noop);
 
-    expect(result.error).toEqual(Error("useContent() must be used within a <ContentProvider />"));
+    // Note: renderHook() is not used here, I do not want a provider as I want to test error
+    expect(() => renderHook(() => useContent())).toThrowError("useContent() must be used within a <ContentProvider />");
+    consoleSpy.mockRestore();
   });
 
   test("should return content", () => {

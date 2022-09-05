@@ -5,7 +5,7 @@ import { IEditorStore } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import * as ACC from "../../components";
 
-interface PostcodeProps {
+export interface PostcodeProps {
   partner: PartnerDto;
   editor: IEditorStore<PartnerDto, PartnerDtoValidator>;
   onUpdate: (saving: boolean, dto: PartnerDto) => void;
@@ -34,7 +34,7 @@ export function PostcodeEdit({ editor, onUpdate, saveButtonContent, ...rest }: P
           width="one-quarter"
           value={() => editor.data.postcode}
           label={x => x.features.postcode.newPostcodeLabel}
-          update={(m, val) => (editor.data.postcode = val!)}
+          update={(m, val) => (editor.data.postcode = val)}
         />
       </PostcodeForm.Fieldset>
 

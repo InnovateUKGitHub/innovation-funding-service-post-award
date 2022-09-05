@@ -184,7 +184,7 @@ describe("Table", () => {
         expect(headerButtonList).toHaveLength(0);
       });
 
-      it("with one column", () => {
+      it("with one column", async () => {
         const targetColumIndex = 0;
 
         const testData = [
@@ -204,7 +204,7 @@ describe("Table", () => {
 
         const headerButtonList = getSortableButtons(container);
 
-        // Note: this is function so the results are requeried not cached (otherwise it returns pre-clicked values)
+        // Note: this is function so the results are re-queried not cached (otherwise it returns pre-clicked values)
         const getCellData = (index: number) => headerButtonValues(getCellsByRowIndex(container, index));
 
         const initialTargetColumData = getCellData(targetColumIndex);
@@ -213,16 +213,16 @@ describe("Table", () => {
         expect(initialButtonAriaSort).toBe<SortOptions>("none");
 
         // Note: Trigger column sort
-        fireEvent.click(headerButtonList[targetColumIndex]);
+        await fireEvent.click(headerButtonList[targetColumIndex]);
 
-        const requeriedTargetColumData = getCellData(targetColumIndex);
+        const reQueriedTargetColumData = getCellData(targetColumIndex);
         const postButtonAriaSort = getSortableButtonAriaState(headerButtonList[targetColumIndex]);
 
         expect(postButtonAriaSort).toBe<SortOptions>("ascending");
-        expect(_isEqual(requeriedTargetColumData, initialTargetColumData)).toBeFalsy();
+        expect(_isEqual(reQueriedTargetColumData, initialTargetColumData)).toBeFalsy();
       });
 
-      it("with second column invalidating first column sort", () => {
+      it("with second column invalidating first column sort", async () => {
         const firstColumnIndex = 0;
         const newColumnIndex = 1;
 
@@ -246,7 +246,7 @@ describe("Table", () => {
         // Note: this is function so the results are requeried not cached (otherwise it returns pre-clicked values)
         const getCellData = (index: number) => headerButtonValues(getCellsByRowIndex(container, index));
 
-        fireEvent.click(headerButtonList[firstColumnIndex]);
+        await fireEvent.click(headerButtonList[firstColumnIndex]);
 
         const initialFirstColumData = getCellData(firstColumnIndex);
 
@@ -259,7 +259,7 @@ describe("Table", () => {
         `);
 
         // Note: Click next column (different node from first click)
-        fireEvent.click(headerButtonList[newColumnIndex]);
+        await fireEvent.click(headerButtonList[newColumnIndex]);
 
         expect(getCellData(firstColumnIndex)).toMatchInlineSnapshot(`
           Array [
@@ -273,7 +273,7 @@ describe("Table", () => {
         expect(_isEqual(initialFirstColumData, getCellData(firstColumnIndex))).toBeFalsy();
 
         // Note: Click next column (different node from first click)
-        fireEvent.click(headerButtonList[newColumnIndex]);
+        await fireEvent.click(headerButtonList[newColumnIndex]);
 
         expect(getCellData(firstColumnIndex)).toMatchInlineSnapshot(`
           Array [
@@ -287,7 +287,7 @@ describe("Table", () => {
         expect(_isEqual(initialFirstColumData, getCellData(firstColumnIndex))).toBeFalsy();
       });
 
-      it("with second column invalidating first aria-sort", () => {
+      it("with second column invalidating first aria-sort", async () => {
         const firstColumnIndex = 0;
         const newColumnIndex = 1;
 
@@ -311,19 +311,19 @@ describe("Table", () => {
         expect(getSortableButtonAriaState(headerButtonList[firstColumnIndex])).toBe<SortOptions>("none");
         expect(getSortableButtonAriaState(headerButtonList[newColumnIndex])).toBe<SortOptions>("none");
 
-        fireEvent.click(headerButtonList[firstColumnIndex]);
+        await fireEvent.click(headerButtonList[firstColumnIndex]);
 
         expect(getSortableButtonAriaState(headerButtonList[firstColumnIndex])).toBe<SortOptions>("ascending");
         expect(getSortableButtonAriaState(headerButtonList[newColumnIndex])).toBe<SortOptions>("none");
 
         // Note: Click next column (different node from first click)
-        fireEvent.click(headerButtonList[newColumnIndex]);
+        await fireEvent.click(headerButtonList[newColumnIndex]);
 
         expect(getSortableButtonAriaState(headerButtonList[firstColumnIndex])).toBe<SortOptions>("none");
         expect(getSortableButtonAriaState(headerButtonList[newColumnIndex])).toBe<SortOptions>("ascending");
 
         // Note: This event should trigger the next state on the button sort
-        fireEvent.click(headerButtonList[newColumnIndex]);
+        await fireEvent.click(headerButtonList[newColumnIndex]);
 
         expect(getSortableButtonAriaState(headerButtonList[firstColumnIndex])).toBe<SortOptions>("none");
         expect(getSortableButtonAriaState(headerButtonList[newColumnIndex])).toBe<SortOptions>("descending");

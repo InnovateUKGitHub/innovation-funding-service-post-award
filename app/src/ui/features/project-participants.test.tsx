@@ -3,21 +3,21 @@ import { TestBed, TestBedStore } from "@shared/TestBed";
 import { createPartnerDto } from "@framework/util/stubDtos";
 import { PartnerDto } from "@framework/dtos";
 import { Pending } from "@shared/pending";
-import { renderHook } from "@testing-library/react-hooks";
+import { renderHook } from "@testing-library/react";
 import { ProjectParticipantProvider, useProjectParticipants } from "@ui/features/project-participants";
 import { LoadingStatus } from "@framework/constants";
 import { noop } from "@ui/helpers/noop";
 
 describe("useProjectParticipants", () => {
-  const setup = (stubProjectId: string | undefined, stubParterQuery: Pending<PartnerDto[] | undefined>) => {
+  const setup = (stubProjectId: string | undefined, stubPartnerQuery: Pending<PartnerDto[] | undefined>) => {
     const stubStore = {
       partners: {
-        getPartnersForProject: jest.fn().mockReturnValue(stubParterQuery),
+        getPartnersForProject: jest.fn().mockReturnValue(stubPartnerQuery),
       } as Extract<TestBedStore["partners"], "getPartnersForProject">,
     } as TestBedStore;
 
     return renderHook(useProjectParticipants, {
-      wrapper: x => (
+      wrapper: (x: any) => (
         <TestBed stores={stubStore}>
           <ProjectParticipantProvider projectId={stubProjectId}>
             <>{x.children}</>
@@ -35,37 +35,34 @@ describe("useProjectParticipants", () => {
     const stubMultiplePartners = [stubDefinedPartner, stubDefinedPartner];
 
     describe("with thrown errors", () => {
-      // Note: RTL throws the error even though we catch it with 'results.error' this removes the console.warn cli noise
-      const consoleSpy = jest.spyOn(console, "error");
-      consoleSpy.mockImplementation(noop);
+      // Note: RTL throws the error even though we catch it with the jest expect. This removes the console.error cli noise
+      const consoleSpy = jest.spyOn(console, "error").mockImplementation(noop);
 
-      afterEach(consoleSpy.mockRestore);
+      afterAll(consoleSpy.mockRestore);
 
       const stubErrorMessage = "stub-error";
 
       test("with non specific error message", () => {
         const failedQuery = new Pending(LoadingStatus.Failed, undefined, stubErrorMessage);
 
-        const { result } = setup(stubProjectId, failedQuery);
-
-        expect(result.error).toEqual(new Error("There was an error fetching data within useGetProjectParticipants"));
+        expect(() => setup(stubProjectId, failedQuery)).toThrowError(
+          "There was an error fetching data within useGetProjectParticipants",
+        );
       });
 
       test("with no error", () => {
         const failedQuery = new Pending(LoadingStatus.Failed, undefined, undefined);
 
-        const { result } = setup(stubProjectId, failedQuery);
-
-        expect(result.error).toEqual(new Error("There was an error fetching data within useGetProjectParticipants"));
+        expect(() => setup(stubProjectId, failedQuery)).toThrowError(
+          "There was an error fetching data within useGetProjectParticipants",
+        );
       });
 
       test("with thrown error", () => {
         const stubError = new Error(stubErrorMessage);
         const failedQuery = new Pending(LoadingStatus.Failed, undefined, stubError);
 
-        const { result } = setup(stubProjectId, failedQuery);
-
-        expect(result.error).toEqual(stubError);
+        expect(() => setup(stubProjectId, failedQuery)).toThrowError(stubErrorMessage);
       });
     });
 

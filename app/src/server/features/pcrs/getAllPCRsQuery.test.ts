@@ -109,8 +109,8 @@ describe("GetAllPCRsQuery", () => {
 
   it("returns the item short name if available", async () => {
     const context = new TestContext();
-    const pcrItemType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal)!;
-    const recordType = context.testData.createRecordType({type: pcrItemType.typeName, parent: "Acc_ProjectChangeRequest__c"});
+    const pcrItemType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal);
+    const recordType = context.testData.createRecordType({type: pcrItemType?.typeName, parent: "Acc_ProjectChangeRequest__c"});
     const pcr = context.testData.createPCR();
     context.testData.createPCRItem(pcr, recordType, { shortName: "Get rid" });
     const query = new GetAllPCRsQuery(pcr.projectId);
@@ -120,8 +120,8 @@ describe("GetAllPCRsQuery", () => {
 
   it("returns the item type name if short name is not available", async () => {
     const context = new TestContext();
-    const pcrItemType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal)!;
-    const recordType = context.testData.createRecordType({type: pcrItemType.typeName, parent: "Acc_ProjectChangeRequest__c"});
+    const pcrItemType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal);
+    const recordType = context.testData.createRecordType({type: pcrItemType?.typeName, parent: "Acc_ProjectChangeRequest__c"});
     const pcr = context.testData.createPCR();
     context.testData.createPCRItem(pcr, recordType, { shortName: undefined });
     const query = new GetAllPCRsQuery(pcr.projectId);

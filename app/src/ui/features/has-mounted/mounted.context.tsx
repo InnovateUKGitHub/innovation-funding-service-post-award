@@ -16,7 +16,6 @@ function useMountedContext(): MountedState {
 }
 
 interface MountedProviderProps {
-  children: (state: MountedState) => React.ReactNode;
 }
 
 export function MountedProvider(props: MountedProviderProps) {

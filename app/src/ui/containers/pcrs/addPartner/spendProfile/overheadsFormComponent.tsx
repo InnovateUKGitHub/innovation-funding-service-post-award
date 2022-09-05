@@ -79,7 +79,7 @@ function SpendProfileCostForm({
   const HiddenForm = ACC.TypedForm<PCRSpendProfileOverheadsCostDto>();
 
   // If server rendering then always show hidden section
-  const displayHiddenForm = isClient && data.overheadRate !== PCRSpendProfileOverheadRate.Calculated;
+  const displayHiddenForm = !isClient || data.overheadRate === PCRSpendProfileOverheadRate.Calculated;
 
   const Form = ACC.TypedForm<PCRSpendProfileOverheadsCostDto>();
   const rateOptions = getOptions(data.overheadRate, props.rateOptions);

@@ -61,6 +61,7 @@ export class ClaimMessages extends ContentBase {
   public readonly negativeClaimWarning = this.getContent("negative-claim-warning");
   public readonly claimSummaryWarning = this.getContent("claim-summary-warning");
   public readonly claimSavedMessage = this.getContent("claim-saved-message");
+  public readonly claimSubmittedMessage = this.getContent("claim-submitted-message");
   public readonly loadingClaims = this.getContent("loading-claims");
   public readonly milestoneContractAchievement = this.getContent("milestone-contract-achievement");
   public readonly milestoneToDo = this.getContent("milestone-to-do");

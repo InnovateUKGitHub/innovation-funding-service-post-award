@@ -194,7 +194,7 @@ function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaims
               <Acc.Claims.ClaimDetailsLink
                 claim={x}
                 project={project}
-                partner={partners.find(p => p.id === x.partnerId)!}
+                partner={partners.find(p => p.id === x.partnerId) as PartnerDto}
                 routes={props.routes}
               />
             )}

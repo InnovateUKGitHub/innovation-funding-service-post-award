@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import { renderHook } from "@testing-library/react-hooks";
+import { renderHook } from "@testing-library/react";
 import { FinancialVirementDto, PartnerDto, PCRItemType } from "@framework/types";
 
 import { PcrSummaryProps } from "@ui/containers/pcrs/components/PcrSummary/pcr-summary.interface";
@@ -11,7 +11,7 @@ import {
   PcrSummaryProviderProps,
 } from "@ui/containers/pcrs/components/PcrSummary";
 
-import { createDto } from "../../../../../../tests/test-utils/dtoHelpers";
+import { createDto } from "@tests/test-utils/dtoHelpers";
 
 describe("PcrSummary", () => {
   const firstPartner = createDto<PartnerDto>({ id: "1-partner" });
@@ -89,11 +89,16 @@ describe("PcrSummary", () => {
     });
 
     test("throws error when no context is available", () => {
+      jest.spyOn(console, "error").mockImplementation(jest.fn);
       // TODO: Improve solution for console.error suppression for this test - https://github.com/facebook/react/issues/11098
       // Note: This needs to reside within the expect callback to work
+      // TODO: Figure out a better way to silencing console errors for thrown expect's...
+      jest.spyOn(console, "error").mockImplementation(jest.fn);
+
       expect(() => render(<PcrSummaryConsumer>{() => <></>}</PcrSummaryConsumer>)).toThrow(
         "usePcrSummaryContext must be used within a PcrSummaryProvider",
       );
+      jest.restoreAllMocks();
     });
   });
 });

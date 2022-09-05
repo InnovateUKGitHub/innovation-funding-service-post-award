@@ -63,13 +63,15 @@ function EditPartnerLevelComponent(props: EditPartnerLevelProps & FinancialVirem
   });
 
   const updateValue = (partner: PartnerDto, val: number | null): void => {
-    const dto = props.editor.data!.data;
+    const dto = props.editor.data?.data;
+
+    if(!dto) throw new Error("cannot find dto");
 
     const item = dto.partners.find(x => x.partnerId === partner.id);
     if (!item) {
       return;
     }
-    item.newRemainingGrant = val!;
+    item.newRemainingGrant = val ?? 0;
     item.newFundingLevel = (100 * (val || 0)) / item.newRemainingCosts;
 
     dto.newRemainingGrant = dto.partners.reduce((total, current) => total + (current.newRemainingGrant || 0), 0);
@@ -82,12 +84,17 @@ function EditPartnerLevelComponent(props: EditPartnerLevelProps & FinancialVirem
     <ACC.PageLoader
       pending={combined}
       render={({ project, partners, editor }) => {
+
         const data = partners
-          .map(partner => ({
+          .map(partner => {
+            const virement = editor.data.partners.find(x => x.partnerId === partner.id);
+            if(!virement) throw new Error(`Cannot find virement matching partnerId ${partner.id}`);
+            return {
             partner,
-            virement: editor.data.partners.find(x => x.partnerId === partner.id)!,
+            virement,
             validator: editor.validator.partners.results.find(x => x.model.partnerId === partner.id),
-          }))
+          };
+})
           .filter(x => !!x.virement);
 
         const VirementForm = ACC.TypedForm<FinancialVirementDto>();

@@ -37,8 +37,14 @@ import { pcrProjectRolesPicklist } from "@server/features/pcrs/pcrProjectRolesPi
 import { pcrProjectLocationPicklist } from "@server/features/pcrs/pcrProjectLocationPicklist";
 import { pcrSpendProfileCapitalUsageTypePicklist } from "@server/features/pcrs/pcrSpendProfileCapitalUsageTypesPicklist";
 import { pcrSpendProfileOverheadRatePicklist } from "@server/features/pcrs/pcrSpendProfileOverheadsRateOptionsPicklist";
+import { DateTime } from "luxon";
+import { parseSfLongTextArea } from "@server/util/salesforce-string-helpers";
 import { TestRepository } from "./testRepository";
 import { TestFileWrapper } from "./testData";
+
+function nullReturn() {
+ return null;
+}
 
 class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
   getById(id: string) {
@@ -131,6 +137,10 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
   }
 
   getAllByPartnerId(partnerId: string) {
+    return super.getWhere(x => x.Acc_ProjectParticipant__r.Id === partnerId);
+  }
+
+  getAllIncludingNewByPartnerId(partnerId: string) {
     return super.getWhere(x => x.Acc_ProjectParticipant__r.Id === partnerId);
   }
 
@@ -253,7 +263,7 @@ class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocumen
   getDocumentContent(documentId: string): Promise<Stream> {
     return super.getOne(x => x[1].Id === documentId).then(x => {
       const s = new Stream.Readable();
-      s._read = () => null;
+      s._read = nullReturn;
       s.push(x[1].Id);
       s.push(null);
       return s;
@@ -487,12 +497,12 @@ class MonitoringReportStatusChangeTestRepository extends TestRepository<Reposito
   createStatusChange(statusChange: Partial<Repositories.ISalesforceMonitoringReportStatusChange>) {
     return super.insertOne({
       Id: (this.Items.length + 1).toString(),
-      Acc_MonitoringReport__c: statusChange.Acc_MonitoringReport__c!,
-      Acc_PreviousMonitoringReportStatus__c: statusChange.Acc_PreviousMonitoringReportStatus__c!,
-      Acc_NewMonitoringReportStatus__c: statusChange.Acc_NewMonitoringReportStatus__c!,
-      Acc_CreatedByAlias__c: statusChange.Acc_CreatedByAlias__c!,
-      CreatedDate: statusChange.CreatedDate!,
-      Acc_ExternalComment__c: statusChange.Acc_ExternalComment__c!
+      Acc_MonitoringReport__c: statusChange.Acc_MonitoringReport__c ?? "",
+      Acc_PreviousMonitoringReportStatus__c: statusChange.Acc_PreviousMonitoringReportStatus__c ?? "",
+      Acc_NewMonitoringReportStatus__c: statusChange.Acc_NewMonitoringReportStatus__c ?? "",
+      Acc_CreatedByAlias__c: statusChange.Acc_CreatedByAlias__c ?? "",
+      CreatedDate: statusChange.CreatedDate ?? "",
+      Acc_ExternalComment__c: statusChange.Acc_ExternalComment__c ?? ""
     });
   }
 
@@ -696,7 +706,7 @@ class ProjectChangeRequestStatusChangeTestRepository extends TestRepository<Enti
 
   createStatusChange(statusChange: Repositories.ICreateProjectChangeRequestStatusChange) {
     const previousStatus = this.pcrRepository.PreviousStatus[statusChange.Acc_ProjectChangeRequest__c];
-    const newStatus = this.pcrRepository.Items.find(x => x.id === statusChange.Acc_ProjectChangeRequest__c)!.status;
+    const newStatus = this.pcrRepository.Items.find(x => x.id === statusChange.Acc_ProjectChangeRequest__c)?.status as PCRStatus;
     return super.insertOne({
       id: (this.Items.length + 1).toString(),
       pcrId: statusChange.Acc_ProjectChangeRequest__c,
@@ -725,7 +735,7 @@ class FinancialLoanVirementsTestRepository extends TestRepository<Entities.LoanF
   }
 
   private updateVirement(item: Updatable<Repositories.ISalesforceFinancialLoanVirement>) {
-    this.Items.reduce<Entities.LoanFinancialVirement[]>((loans, loan) => {
+    return this.Items.reduce<Entities.LoanFinancialVirement[]>((loans, loan) => {
       const isEditable = loan.status === LoanStatus.REQUESTED;
       const isItem = item.Id === loan.id;
       const shouldReturnLoan = isItem && isEditable;
@@ -761,7 +771,7 @@ class FinancialVirementsTestRepository extends TestRepository<Entities.PartnerFi
 }
 
 class LoansTestRepository {
-  private Items: Repositories.ISalesforceLoan[] = [];
+  public Items: Repositories.ISalesforceLoan[] = [];
 
   getAll() {
     const loans = this.Items.map(x => new LoanMapper().map(x));
@@ -817,6 +827,7 @@ class BroadcastsTestRepository {
   private Items: Repositories.ISalesforceBroadcast[] = [];
 
   get(broadcastId: string) {
+
     return new Promise<BroadcastDto>(resolve => {
       const broadcastItem = this.Items.find(x => x.Id === broadcastId);
 
@@ -832,12 +843,24 @@ class BroadcastsTestRepository {
 
   getAll() {
     return new Promise<BroadcastDto[]>(resolve => {
-      const filteredItems = this.Items.filter(x => x.Acc_EndDate__c > "Today" && x.Acc_StartDate__c <= "Today");
-
-      const finalValues = filteredItems.map(new BroadcastMapper().map);
-
+      const today = DateTime.fromFormat("6 Jun 2022", "d MMM yy").toFormat("yyyy-MM-dd");
+      const filteredItems = this.Items.filter(x => x.Acc_EndDate__c > today && x.Acc_StartDate__c <= today);
+      const finalValues = filteredItems.map(item => ({
+        id: item.Id,
+        title: item.Name,
+        startDate: new Date(item.Acc_StartDate__c),
+        endDate: new Date(item.Acc_EndDate__c),
+        content: parseSfLongTextArea(item.Acc_Message__c),}));
       resolve(finalValues);
     });
+  }
+
+  public setItems(items: Repositories.ISalesforceBroadcast | Repositories.ISalesforceBroadcast[] ){
+    if(Array.isArray(items)) {
+      this.Items.push(...items);
+    } else {
+      this.Items.push(items);
+    }
   }
 }
 
@@ -850,6 +873,7 @@ export interface ITestRepositories extends IRepositories {
   claimStatusChanges: ClaimStatusChangeTestRepository;
   costCategories: CostCategoriesTestRepository;
   documents: DocumentsTestRepository;
+  loans: LoansTestRepository;
   financialVirements: FinancialVirementsTestRepository;
   monitoringReportHeader: MonitoringReportHeaderTestRepository;
   monitoringReportResponse: MonitoringReportResponseTestRepository;

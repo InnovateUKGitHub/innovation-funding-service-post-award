@@ -150,28 +150,28 @@ describe("PcrTypes Components", () => {
           expect(getEndProjectEarlyMessage()).not.toBeInTheDocument();
         });
 
-        test("when clicked additional details should be visible", () => {
+        test("when clicked additional details should be visible", async () => {
           const types: PCRItemTypeDto[] = [{ ...stubPcrItem, type: PCRItemType.MultiplePartnerFinancialVirement }];
           const { queryByText, getByText } = setup({ types });
 
           const reallocateCostsMessage = queryByText(stubContent.pcrCreate.reallocateCostsMessage.content);
           const toggleElement = getByText(stubContent.pcrCreate.learnMoreAboutTitle.content);
 
-          userEvent.click(toggleElement);
+          await userEvent.click(toggleElement);
           expect(reallocateCostsMessage).toBeVisible();
         });
 
-        test("when clicked twice additional details should not be visible", () => {
+        test("when clicked twice additional details should not be visible", async () => {
           const types: PCRItemTypeDto[] = [{ ...stubPcrItem, type: PCRItemType.MultiplePartnerFinancialVirement }];
           const { queryByText, getByText } = setup({ types });
 
           const reallocateCostsMessage = queryByText(stubContent.pcrCreate.reallocateCostsMessage.content);
           const toggleElement = getByText(stubContent.pcrCreate.learnMoreAboutTitle.content);
 
-          userEvent.click(toggleElement);
+          await userEvent.click(toggleElement);
           expect(reallocateCostsMessage).toBeVisible();
 
-          userEvent.click(toggleElement);
+          await userEvent.click(toggleElement);
           expect(reallocateCostsMessage).not.toBeVisible();
         });
       });

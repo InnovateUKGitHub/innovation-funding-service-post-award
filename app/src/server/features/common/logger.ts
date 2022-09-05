@@ -46,7 +46,7 @@ export class Logger implements ILogger {
         params
       };
       const output = this.pretty ? JSON.stringify(item, null, 2) : JSON.stringify(item);
-      console.log(output);
+      console.info(output);
     }
   }
 }

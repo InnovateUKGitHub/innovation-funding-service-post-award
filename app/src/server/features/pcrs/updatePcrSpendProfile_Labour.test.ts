@@ -71,7 +71,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       expect(insertedSpendProfileCost).toBeDefined();
       expect(insertedSpendProfileCost.id).toBeTruthy();
       expect(insertedSpendProfileCost.value).toBe(
-        insertedSpendProfileCost.daysSpentOnProject! * insertedSpendProfileCost.ratePerDay!,
+        (insertedSpendProfileCost.daysSpentOnProject as number) * (insertedSpendProfileCost.ratePerDay as number),
       );
       expect(insertedSpendProfileCost.costCategoryId).toBe(costCategoryLabour.id);
       expect(insertedSpendProfileCost.pcrItemId).toBe(item.id);

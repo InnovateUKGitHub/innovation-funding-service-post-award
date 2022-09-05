@@ -1,3 +1,4 @@
+import { sss } from "@server/util/salesforce-string-helpers";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface ISalesforceProfileTotalPeriod {
@@ -40,31 +41,31 @@ export class ProfileTotalPeriodRepository extends SalesforceRepositoryBase<ISale
 
   getAllByProjectId(projectId: string): Promise<ISalesforceProfileTotalPeriod[]> {
     const filter = `
-      Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'
-      AND RecordType.Name = '${this.recordType}'
+      Acc_ProjectParticipant__r.Acc_ProjectId__c = '${sss(projectId)}'
+      AND RecordType.Name = '${sss(this.recordType)}'
     `;
     return super.where(filter);
   }
 
   getAllByPartnerId(partnerId: string): Promise<ISalesforceProfileTotalPeriod[]> {
-    const filter = `Acc_ProjectParticipant__c = '${partnerId}' AND RecordType.Name = '${this.recordType}'`;
+    const filter = `Acc_ProjectParticipant__c = '${sss(partnerId)}' AND RecordType.Name = '${sss(this.recordType)}'`;
     return super.where(filter);
   }
 
   getByProjectIdAndPeriodId(projectId: string, periodId: number): Promise<ISalesforceProfileTotalPeriod[]> {
     const filter = `
-      Acc_ProjectParticipant__r.Acc_ProjectId__c = '${projectId}'
-      AND RecordType.Name = '${this.recordType}'
-      AND Acc_ProjectPeriodNumber__c = ${periodId}
+      Acc_ProjectParticipant__r.Acc_ProjectId__c = '${sss(projectId)}'
+      AND RecordType.Name = '${sss(this.recordType)}'
+      AND Acc_ProjectPeriodNumber__c = ${sss(periodId)}
     `;
     return super.where(filter);
   }
 
   get(partnerId: string, periodId: number) {
     const filter = `
-      Acc_ProjectParticipant__c = '${partnerId}'
-      AND RecordType.Name = '${this.recordType}'
-      AND Acc_ProjectPeriodNumber__c = ${periodId}
+      Acc_ProjectParticipant__c = '${sss(partnerId)}'
+      AND RecordType.Name = '${sss(this.recordType)}'
+      AND Acc_ProjectPeriodNumber__c = ${sss(periodId)}
     `;
     return super.where(filter).then(x => x[0]);
   }

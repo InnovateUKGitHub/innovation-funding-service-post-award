@@ -93,7 +93,7 @@ describe("<DropdownList />", () => {
         expect(targetElement).toHaveAttribute("aria-selected", "true");
       });
 
-      test("when empty otpion available, nothing is selected", () => {
+      test("when empty option available, nothing is selected", () => {
         const { queryByTestId } = setup({ options: stubOptions } as DropdownListProps);
 
         for (let i = 0; i < 3; i++) {

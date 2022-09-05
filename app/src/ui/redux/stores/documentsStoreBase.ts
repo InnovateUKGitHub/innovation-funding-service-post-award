@@ -12,11 +12,11 @@ export abstract class DocumentsStoreBase extends StoreBase {
   }
 
   protected validateDocumentUploadDto(dto: DocumentUploadDto, showErrors: boolean) {
-    return new DocumentUploadDtoValidator(dto, this.getState().config.options, showErrors, null);
+    return new DocumentUploadDtoValidator(dto, this.getState().config.options, showErrors);
   }
 
   protected afterUpdate(key: string, message: string | undefined, onComplete: (() => void) | undefined) {
-    this.resetEditor("multipleDocuments", key);
+    this.resetEditor("multipleDocuments", key as unknown as any); // TODO: fix this any type
     this.markStale("documents", key, undefined);
     if (message) {
       this.queue(messageSuccess(message));

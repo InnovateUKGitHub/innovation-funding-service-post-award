@@ -1,3 +1,4 @@
+import { v4 as uuid } from "uuid";
 import { flatten } from "@framework/util/arrayHelpers";
 import { useContent } from "@ui/hooks";
 import { IValidationResult, NestedResult, Result, Results } from "../validation";
@@ -79,7 +80,7 @@ export function ValidationSummary({ validation, compressed }: Props) {
 
   function createResultsLinks(res: Result[]): JSX.Element[] {
     return res.map(x => (
-      <li key={`error${x.key}`}>
+      <li key={uuid()}>
         <a href={`#${x.key}`}>{prepareMessage(x.errorMessage)}</a>
       </li>
     ));

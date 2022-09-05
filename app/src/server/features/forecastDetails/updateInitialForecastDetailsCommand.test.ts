@@ -174,9 +174,9 @@ describe("UpdateInitialForecastDetailsCommand", () => {
     const command = new UpdateInitialForecastDetailsCommand(partner.projectId, partner.id, dto, true);
     await context.runCommand(command);
 
-    const item = context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id)!;
-    expect(item.Acc_InitialForecastCost__c).toBe(1500);
-    expect(item.Acc_LatestForecastCost__c).toBe(1500);
+    const item = context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id);
+    expect(item?.Acc_InitialForecastCost__c).toBe(1500);
+    expect(item?.Acc_LatestForecastCost__c).toBe(1500);
     const partnerDto = await context.runQuery(new GetByIdQuery(partner.id));
     expect(partnerDto.spendProfileStatus).toEqual(SpendProfileStatus.Complete);
   });
@@ -211,9 +211,9 @@ describe("UpdateInitialForecastDetailsCommand", () => {
     const command = new UpdateInitialForecastDetailsCommand(partner.projectId, partner.id, dto, false);
     await context.runCommand(command);
 
-    const item = context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id)!;
-    expect(item.Acc_InitialForecastCost__c).toBe(100);
-    expect(item.Acc_LatestForecastCost__c).toBe(0);
+    const item = context.repositories.profileDetails.Items.find(x => x.Id === profileDetail.Id);
+    expect(item?.Acc_InitialForecastCost__c).toBe(100);
+    expect(item?.Acc_LatestForecastCost__c).toBe(0);
     const partnerDto = await context.runQuery(new GetByIdQuery(partner.id));
     expect(partnerDto.spendProfileStatus).toEqual(SpendProfileStatus.Incomplete);
   });

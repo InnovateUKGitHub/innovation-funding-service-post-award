@@ -237,7 +237,8 @@ const SpendProfileCostsSummaryContainer = (props: PcrSpendProfileCostSummaryPara
       project={stores.projects.getById(props.projectId)}
       costCategory={stores.costCategories.get(props.costCategoryId)}
       editor={stores.projectChangeRequests.getPcrUpdateEditor(props.projectId, props.pcrId, dto => {
-        const addPartnerItem = dto.items.find(x => x.id === props.itemId)!;
+        const addPartnerItem = dto.items.find(x => x.id === props.itemId);
+        if(!addPartnerItem) throw new Error(`Cannot find addPartnerItem matching ${props.itemId}`);
         addPartnerItem.status = PCRItemStatus.Incomplete;
       })}
       onSave={(dto, link) => {

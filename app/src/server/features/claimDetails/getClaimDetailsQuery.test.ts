@@ -7,8 +7,8 @@ import { GetClaimDetailsQuery } from ".";
 describe("GetClaimDetailsQuery", () => {
   it("returns single result", async () => {
     const context = new TestContext();
-    const exectedCostCategoryId = "Expected_CostCategory_Id";
-    const exectedParticipantId = "Expected_Participant_Id";
+    const expectedCostCategoryId = "Expected_CostCategory_Id";
+    const expectedParticipantId = "Expected_Participant_Id";
     const expectedId = "Expected_Id";
     const expectedPeriod = 3;
     const expectedValue = 2000;
@@ -16,10 +16,10 @@ describe("GetClaimDetailsQuery", () => {
     const expectedEndDate = expectedStartDate.plus({ days: 30 });
     const expectedComments = "comments";
 
-    const costCategory = context.testData.createCostCategory({ id: exectedCostCategoryId });
+    const costCategory = context.testData.createCostCategory({ id: expectedCostCategoryId });
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(undefined, x => {
-      x.id = exectedParticipantId;
+      x.id = expectedParticipantId;
     });
 
     context.testData.createClaimDetail(project, costCategory, partner, expectedPeriod, x => {
@@ -30,32 +30,32 @@ describe("GetClaimDetailsQuery", () => {
       x.Acc_ReasonForDifference__c = expectedComments;
     });
 
-    const query = new GetClaimDetailsQuery(partner.projectId, exectedParticipantId, expectedPeriod, exectedCostCategoryId);
+    const query = new GetClaimDetailsQuery(partner.projectId, expectedParticipantId, expectedPeriod, expectedCostCategoryId);
     const result = await context.runQuery(query);
 
     expect(result).not.toBeNull();
-    expect(result.costCategoryId).toEqual(exectedCostCategoryId);
+    expect(result.costCategoryId).toEqual(expectedCostCategoryId);
     expect(result.periodStart).toEqual(expectedStartDate.toJSDate());
     expect(result.periodEnd).toEqual(expectedEndDate.toJSDate());
     expect(result.value).toEqual(expectedValue);
     expect(result.comments).toEqual(expectedComments);
   });
 
-  // this needs revising once rollups are working
-  // it may be best to expect exception reather than default item
+  // this needs revising once roll-ups are working
+  // it may be best to expect exception rather than default item
   it("if not found returns default item", async () => {
     const context = new TestContext();
 
-    const exectedCostCategoryId = "Expected_CostCategory_Id";
-    const exectedParticipantId = "Expected_Participant_Id";
+    const expectedCostCategoryId = "Expected_CostCategory_Id";
+    const expectedParticipantId = "Expected_Participant_Id";
     const expectedPeriod = 3;
     const requestedPeriodId = expectedPeriod + 1;
 
-    const query = new GetClaimDetailsQuery("", exectedParticipantId, requestedPeriodId, exectedCostCategoryId);
+    const query = new GetClaimDetailsQuery("", expectedParticipantId, requestedPeriodId, expectedCostCategoryId);
     const result = await context.runQuery(query);
 
     expect(result).not.toBeNull();
-    expect(result.costCategoryId).toEqual(exectedCostCategoryId);
+    expect(result.costCategoryId).toEqual(expectedCostCategoryId);
     expect(result.value).toEqual(0);
     expect(result.periodId).toEqual(expectedPeriod + 1);
     expect(result.value).toEqual(0);

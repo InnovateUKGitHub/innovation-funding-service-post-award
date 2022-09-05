@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Json should render a JSON stringified form of the object passed in 1`] = `
+<div>
+  <pre>
+    {
+     "foo": "bar",
+     "baz": 69,
+     "quux": true
+}
+  </pre>
+</div>
+`;

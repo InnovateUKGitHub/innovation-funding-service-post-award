@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EmailContent @renders should return as default 1`] = `
+<div>
+  <a
+    class="govuk-link govuk-!-font-size-19"
+    data-qa="email-qa"
+    href="mailto:testbed@iuk.ukri.org"
+  >
+    testbed@iuk.ukri.org
+  </a>
+</div>
+`;

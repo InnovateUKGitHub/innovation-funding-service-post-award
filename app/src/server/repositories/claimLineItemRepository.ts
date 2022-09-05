@@ -1,6 +1,7 @@
-import { Connection } from "jsforce";
 import { ILogger } from "@server/features/common";
-import SalesforceRepositoryBase, {Updatable} from "./salesforceRepositoryBase";
+import { sss } from "@server/util/salesforce-string-helpers";
+import { Connection } from "jsforce";
+import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 
 export interface ISalesforceClaimLineItem {
   Id: string;
@@ -49,10 +50,10 @@ export class ClaimLineItemRepository extends SalesforceRepositoryBase<ISalesforc
 
   getAllForCategory(partnerId: string, categoryId: string, periodId: number): Promise<ISalesforceClaimLineItem[]> {
     const filter = `
-      Acc_ProjectParticipant__c = '${partnerId}'
-      AND Acc_ProjectPeriodNumber__c = ${periodId}
-      AND Acc_CostCategory__c = '${categoryId}'
-      AND RecordType.Name = '${this.recordType}'
+      Acc_ProjectParticipant__c = '${sss(partnerId)}'
+      AND Acc_ProjectPeriodNumber__c = ${sss(periodId)}
+      AND Acc_CostCategory__c = '${sss(categoryId)}'
+      AND RecordType.Name = '${sss(this.recordType)}'
     `;
     return super.where(filter);
   }

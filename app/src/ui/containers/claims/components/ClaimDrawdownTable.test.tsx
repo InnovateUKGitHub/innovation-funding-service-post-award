@@ -93,9 +93,9 @@ describe("<ClaimDrawdownTable />", () => {
       jest.spyOn(console, "error").mockImplementation(jest.fn);
 
       test("with no totals provided from query", () => {
-        const misingTotalsQuery = Pending.done({ ...stubLoan, totals: undefined });
+        const missingTotalsQuery = Pending.done({ ...stubLoan, totals: undefined });
 
-        expect(() => setup(undefined, misingTotalsQuery)).toThrow("Loan totals must be available.");
+        expect(() => setup(undefined, missingTotalsQuery)).toThrow("Loan totals must be available.");
       });
 
       test("with a default error", () => {

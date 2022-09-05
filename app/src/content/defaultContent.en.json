@@ -70,6 +70,7 @@
       "totalEligibleCostsHeader": "Total eligible costs",
       "differenceHeader": "Difference",
       "periodHeader": "Period",
+      "iarDueHeader": "IAR Due",
       "noDataText": "No data",
       "costCategoriesHeader": "Cost categories"
     },
@@ -222,7 +223,12 @@
       "costsToDateMessage": "costs to date"
     },
     "project-details": {
-      "title": "Project details"
+      "title": "Project details",
+      "project-manager-info": "Only project managers can raise project change requests.",
+      "finance-contact-info": "Only finance contacts can submit claims.",
+      "change-info": "If you need to change the lead project manager or finance contact, please email ",
+      "change-email": "grants_service@iuk.ukri.org",
+      "change-end": "."
     },
     "project-documents": {
       "title": "Project documents",
@@ -305,7 +311,7 @@
       "errorDrawdown": "There was a problem trying to get your drawdown.",
       "backToLoanOverview": "Back to loans summary page",
       "changeDrawdownLabel": "Change drawdown",
-      "introPart1": "You can request your drawdown here. If you need to change the amount of you drawdown, you will need to submit a",
+      "introPart1": "You can request your drawdown here. If you need to change the amount of your drawdown, you will need to submit a",
       "introPart2": "project change request.",
       "uploadTitle": "Upload drawdown approval request",
       "uploadFormLabel": "Upload",
@@ -314,7 +320,7 @@
       "commentTitle": "Additional information (Optional)",
       "commentHint": "If you want to explain anything to Innovate UK, add it here.",
       "loanDeclarationTitle": "Now send your request",
-      "loanDeclaration": "I confirm that the information I have provided in this claim is correct, complete and contains only eligible costs on an actual basis, which we confirm have been incurred and defrayed. I understand and accept that if I knowingly withhold information, or provide false or misleading information, this may result in my claim being rejected, termination of the contract, recovery of ineligible claims, civil action and where there is evidence of fraud, criminal prosecution.",
+      "loanDeclaration": "By submitting this drawdown request I confirm that the amount requested is in line with forecast eligible project costs and that this has been approved by an authorised signatory of the business. I understand and accept that if I knowingly submit a drawdown request without appropriate approvals or provide false or misleading information, this may result in my drawdown being rejected, termination of the loan, recovery of loan proceeds and outstanding interest, civil action and where there is evidence of fraud, criminal prosecution.",
       "loanSubmitButton": "Accept and send",
       "loanDocumentUploaded": "{{fileName}} has been uploaded",
       "loanDocumentsUploaded": "{{fileCount}} files have been uploaded",
@@ -634,8 +640,8 @@
     },
     "pcr-spend-profile-costs-summary": {
       "title": "Add partner",
-      "section-title-costs": "{{costCategoryName}} costs",
-      "guidance-title": "{{costCategoryName}} costs guidance",
+      "section-title-costs": "{{costCategoryName}}",
+      "guidance-title": "{{costCategoryName}} guidance",
       "back-link": "Back to project costs",
       "button-submit": "Save and return to project costs",
       "button-add-cost": "Add a cost",
@@ -644,17 +650,17 @@
     },
     "pcr-spend-profile-delete-cost": {
       "title": "Add partner",
-      "section-title-cost": "Delete {{costCategoryName, lowercase}} cost",
-      "back-link": "Back to {{costCategoryName, lowercase}} costs",
+      "section-title-cost": "Delete {{costCategoryName, lowercase}}",
+      "back-link": "Back to {{costCategoryName, lowercase}}",
       "button-delete": "Delete cost",
       "guidance-delete": "All the information will be permanently deleted."
     },
     "pcr-spend-profile-prepare-cost": {
       "title": "Add partner",
-      "section-title-cost": "{{costCategoryName}} cost",
-      "guidance-title": "{{costCategoryName}} costs guidance",
-      "back-link": "Back to {{costCategoryName, lowercase}} costs",
-      "button-submit": "Save and return to {{costCategoryName, lowercase}} costs",
+      "section-title-cost": "{{costCategoryName}}",
+      "guidance-title": "{{costCategoryName}} guidance",
+      "back-link": "Back to {{costCategoryName, lowercase}}",
+      "button-submit": "Save and return to {{costCategoryName, lowercase}}",
       "overheads": {
         "button-submit": "Save and return to project costs"
       }
@@ -904,6 +910,7 @@
     "negative-claim-warning": "You have entered negative values for the following items:",
     "claim-summary-warning": "You have entered a negative claim for this period. Click 'Edit costs to be claimed' button if you wish to change this.",
     "claim-saved-message": "You have saved your claim.",
+    "claim-submitted-message": "You have submitted your claim.",
     "loading-claims": "Loading claims...",
     "partner-withdrawn": "This partner has withdrawn from the project. It is not possible to edit claims.",
     "has-withdrawn-partner": "It is not possible to edit claims of partners that have withdrawn from the project."
@@ -930,7 +937,7 @@
   },
   "pcr-spend-profile-labels": {
     "cost": "Cost (£)",
-    "total-costs": "Total {{costCategoryName, lowercase}} costs",
+    "total-costs": "Total {{costCategoryName, lowercase}}",
     "description": "Description",
     "labour": {
       "role": "Role within project",
@@ -1139,6 +1146,7 @@
     "upload-instruction-2": "You will also be able to see any documents added to the claim by the finance contact and Innovate UK.",
     "documentsIntroMessage": {
       "storing-documents-message": "This page is for storing most project-related supporting documents, including those uploaded by Innovate UK.",
+      "documents-privacy-message": "Documents stored here are only accessible by the Monitoring Officer and Innovate UK.",
       "not-for-claims-message": "Do not use this page for claims. You must only upload supporting documents for claims on the page where you review them."
     }
   },

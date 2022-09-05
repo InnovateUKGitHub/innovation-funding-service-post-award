@@ -95,7 +95,7 @@ export function DualDetails({ children }: DualDetailsProps) {
   const clonedChildren = elementChildren.map(field => cloneElement(field));
 
   // Note: TSC is not smart enough to infer title is always defined due to .every former check, hence therefore I have to use the non-null "!"
-  const titles: string[] = clonedChildren.every(x => x.props.title) ? clonedChildren.map(x => x.props.title!) : [];
+  const titles: string[] = clonedChildren.every(x => x.props.title) ? clonedChildren.map(x => x.props.title as string) : [];
 
   return (
     <>
@@ -126,7 +126,7 @@ export class FieldComponent<T> extends React.Component<InternalFieldProps<T>, {}
   render() {
     const { labelClass, label, valueClass, children, data } = this.props;
 
-    const value = children(data!);
+    const value = children(data as T);
 
     return (
       <>

@@ -1,3 +1,4 @@
+import { sss } from "@server/util/salesforce-string-helpers";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
 export interface ISalesforceAccount {
@@ -15,8 +16,8 @@ export class AccountsRepository extends SalesforceRepositoryBase<ISalesforceAcco
   protected readonly salesforceFieldNames = ["Id", "Name", "JES_Organisation__c"];
 
   getAllByJesName(searchString?: string): Promise<ISalesforceAccount[]> {
-    const jesFilter = `JES_Organisation__c = '${this.jesEnabled}'`;
-    const jesQuery = searchString ? `${jesFilter} AND Name LIKE '%${searchString}%'` : jesFilter;
+    const jesFilter = `JES_Organisation__c = '${sss(this.jesEnabled)}'`;
+    const jesQuery = searchString ? `${jesFilter} AND Name LIKE '%${sss(searchString)}%'` : jesFilter;
 
     return super.where(jesQuery);
   }

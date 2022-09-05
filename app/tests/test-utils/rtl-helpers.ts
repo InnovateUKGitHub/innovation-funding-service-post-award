@@ -1,4 +1,6 @@
-import { Nullish, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+
+export type Nullish<T> = T | null | undefined;
 
 type StringOrRegex = string | RegExp;
 

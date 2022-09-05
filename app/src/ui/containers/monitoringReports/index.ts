@@ -3,4 +3,4 @@ export * from "./dashboard.page";
 export * from "./monitoringReportWorkflow.page";
 export * from "./delete.page";
 export * from "./monitoringReportSummary";
-export * from "./periodStep";
+export * from "./periodStep.page";

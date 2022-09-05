@@ -70,11 +70,11 @@ export class Clock implements IClock {
     return this.dateTime(value, format).toJSDate();
   }
 
-  dateTime(value: Date | string, format?: string): DateTime {
+  dateTime(value: Date | string, format = ""): DateTime {
     const localOpts = { locale: "en-GB", zone: "Europe/London" };
 
     return typeof value === "string"
-      ? DateTime.fromFormat(value, format!, localOpts)
+      ? DateTime.fromFormat(value, format, localOpts)
       : DateTime.fromJSDate(value, localOpts);
   }
 }

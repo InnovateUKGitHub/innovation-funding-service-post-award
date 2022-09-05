@@ -1,6 +1,7 @@
 import { PartnerFinancialVirement } from "@framework/entities";
-import { Connection } from "jsforce";
 import { ILogger } from "@server/features/common/logger";
+import { sss } from "@server/util/salesforce-string-helpers";
+import { Connection } from "jsforce";
 import { SalesforceFinancialVirementMapper } from "./mappers/financialVirementMapper";
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 
@@ -33,7 +34,7 @@ export class FinancialVirementRepository extends SalesforceRepositoryBase<ISales
   }
 
   private virementWhereQuery = (id: string) =>
-    `Acc_ProjectChangeRequest__c = '${id}' or Acc_ParticipantVirement__r.Acc_ProjectChangeRequest__c = '${id}'`;
+    `Acc_ProjectChangeRequest__c = '${sss(id)}' or Acc_ParticipantVirement__r.Acc_ProjectChangeRequest__c = '${sss(id)}'`;
 
   protected readonly salesforceObjectName = "Acc_Virements__c";
   protected salesforceFieldNames = [

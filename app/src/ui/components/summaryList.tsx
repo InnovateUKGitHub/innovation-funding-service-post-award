@@ -1,5 +1,6 @@
 import React from "react";
 import cx from "classnames";
+import * as ACC from "@ui/components";
 
 import { Result } from "@ui/validation";
 import { ContentSelector } from "@content/content";
@@ -27,12 +28,24 @@ export function SummaryList({ qa, noBorders, ...props }: SummaryListProps) {
 
 interface SummaryListItemProps {
   label: string | ContentSelector;
-  content: React.ReactNode;
   action?: React.ReactNode;
   validation?: Result;
   qa: string;
 }
-export function SummaryListItem({ content, action, qa, validation, label }: SummaryListItemProps) {
+
+interface SummaryListItemNotMarkdownProps extends SummaryListItemProps {
+  content: React.ReactNode;
+  isMarkdown?: false;
+}
+
+interface SummaryListItemMarkdownProps extends SummaryListItemProps {
+  content: string;
+  isMarkdown: true;
+}
+
+type Props = SummaryListItemMarkdownProps | SummaryListItemNotMarkdownProps;
+
+export function SummaryListItem({ content, action, qa, validation, label, isMarkdown = false }: Props) {
   const { getContent } = useContent();
 
   const hasError = validation && !validation.isValid && validation.showValidationErrors;
@@ -45,7 +58,11 @@ export function SummaryListItem({ content, action, qa, validation, label }: Summ
       })}
     >
       <dt className="govuk-summary-list__key">{getContent(label)}</dt>
-      <dd className="govuk-summary-list__value">{content}</dd>
+      {isMarkdown ? (
+        <ACC.Renderers.Markdown value={content as string} />
+      ) : (
+        <dd className="govuk-summary-list__value">{content}</dd>
+      )}
       <dd className="govuk-summary-list__actions">{action}</dd>
     </div>
   );

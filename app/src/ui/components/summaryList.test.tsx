@@ -24,6 +24,19 @@ describe("<SummaryList />", () => {
       expect(queryByText(stubContent)).toBeInTheDocument();
     });
 
+    it("renders markdown content adequately", () => {
+      const stubContent = `There is a thing to be done \`abc.com\` yes there is.
+
+I hate to break it to you.
+
+> He said I should do it`;
+      const { container } = setup({
+        qa: "with-action",
+        children: <SummaryListItem label="Label" content={stubContent} qa="test-item" isMarkdown />,
+      });
+      expect(container).toMatchSnapshot();
+    });
+
     it("with action", () => {
       const stubHref = "#stub-href";
 
