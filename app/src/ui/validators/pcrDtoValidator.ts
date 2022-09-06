@@ -30,6 +30,7 @@ import {
 } from "@framework/constants";
 import { PCRSpendProfileDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
 import { getUnavailablePcrItemsMatrix, getAuthRoles } from "@framework/types";
+import isNull from "@ui/helpers/is-null";
 import { Result, Results } from "../validation";
 import * as Validation from "./common";
 
@@ -489,7 +490,11 @@ export class MultiplePartnerFinancialVirementDtoValidator extends PCRBaseItemDto
         ),
       () =>
         hasValue
-          ? Validation.isTrue(this, (this.model.grantMovingOverFinancialYear ?? 0) >= 0, "The value can not be lower than 0.")
+          ? Validation.isTrue(
+              this,
+              (this.model.grantMovingOverFinancialYear ?? 0) >= 0,
+              "The value can not be lower than 0.",
+            )
           : Validation.valid(this),
     );
   }
@@ -561,7 +566,7 @@ export class PCRLoanExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
 
   public calculateOffsetDate(offset: number): Date {
     const startingDate = this.model.projectStartDate;
-    if(startingDate === null) {
+    if (startingDate === null) {
       throw new Error("Cannot calculate offset date of null");
     }
 
@@ -611,7 +616,8 @@ export class PCRLoanExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
   private validateExtensionPeriod(): Result {
     const { availabilityPeriod, extensionPeriod, extensionPeriodChange, id } = this.model;
     if (!id) return Validation.valid(this); // missing id shows pcr not created yet
-    if (!availabilityPeriod || !extensionPeriod) {
+
+    if (isNull(availabilityPeriod) || isNull(extensionPeriod)) {
       throw Error("validateExtensionPeriod() is missing model data to validate.");
     }
 
@@ -629,7 +635,8 @@ export class PCRLoanExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
   private validateRepaymentPeriod(): Result {
     const { availabilityPeriod, extensionPeriod, repaymentPeriod, repaymentPeriodChange, id } = this.model;
     if (!id) return Validation.valid(this); // missing id shows pcr not created yet
-    if (!availabilityPeriod || !extensionPeriod || !repaymentPeriod) {
+
+    if(isNull(availabilityPeriod) || isNull(extensionPeriod) || isNull(repaymentPeriod)) {
       throw Error("validateRepaymentPeriod() is missing model data to validate.");
     }
 
@@ -1294,3 +1301,5 @@ export class PCRPartnerWithdrawalItemDtoValidator extends PCRBaseItemDtoValidato
   removalPeriod = this.validateRemovalPeriod();
   partnerId = this.validatePartnerId();
 }
+
+
