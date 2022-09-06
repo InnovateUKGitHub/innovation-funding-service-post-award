@@ -1,0 +1,13 @@
+.vagrant
+node_modules/
+dist/
+/.vscode/
+/**/test-report.json
+/**/.idea
+bamboo-specs.iml
+salesforce
+Vagrantfile
+provision.sh
+.credentials
+/testframework/screenCaptures/
+/app/security/Tmp.Key
