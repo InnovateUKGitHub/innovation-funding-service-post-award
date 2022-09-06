@@ -17,7 +17,10 @@ export const FinanceDetailsStep = (
         onSubmit={() => props.onSave(false)}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset heading={x => x.pcrAddPartnerFinanceDetails.labels.financialYearEndHeading} qa="endOfFinancialYear">
+        <Form.Fieldset
+          heading={x => x.pcrAddPartnerFinanceDetails.labels.financialYearEndHeading}
+          qa="endOfFinancialYear"
+        >
           <Form.MonthYear
             name="financialYearEndDate"
             hint={x => x.pcrAddPartnerFinanceDetails.yearEndHint}

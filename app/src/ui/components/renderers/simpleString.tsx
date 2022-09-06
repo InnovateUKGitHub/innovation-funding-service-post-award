@@ -11,7 +11,15 @@ interface SimpleStringProps {
   style?: CSSProperties;
 }
 
-export function SimpleString({ as: Element = "p", qa, className, multiline, bold, children, style }: SimpleStringProps) {
+export function SimpleString({
+  as: Element = "p",
+  qa,
+  className,
+  multiline,
+  bold,
+  children,
+  style,
+}: SimpleStringProps) {
   return (
     <Element
       data-qa={qa}

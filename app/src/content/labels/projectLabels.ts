@@ -37,7 +37,8 @@ export class ProjectLabels extends ContentBase {
 
   private readonly totalGrantApproved = this.getContent("totalGrantApproved");
   private readonly totalContractPaid = this.getContent("totalContractPaid");
-  public readonly totalApproved = this.getGrantOrContract() === "grant" ? this.totalGrantApproved : this.totalContractPaid;
+  public readonly totalApproved =
+    this.getGrantOrContract() === "grant" ? this.totalGrantApproved : this.totalContractPaid;
 
   private readonly totalGrantPrepayment = this.getContent("totalGrantPrepayment");
   private readonly totalContractPrepayment = this.getContent("totalContractPrepayment");

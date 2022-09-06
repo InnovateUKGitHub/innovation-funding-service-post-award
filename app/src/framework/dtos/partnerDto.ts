@@ -1,4 +1,12 @@
-import { BankCheckStatus, BankDetailsTaskStatus, PartnerClaimStatus, PartnerStatus, PostcodeTaskStatus, ProjectRole, SpendProfileStatus } from "@framework/constants";
+import {
+  BankCheckStatus,
+  BankDetailsTaskStatus,
+  PartnerClaimStatus,
+  PartnerStatus,
+  PostcodeTaskStatus,
+  ProjectRole,
+  SpendProfileStatus,
+} from "@framework/constants";
 
 interface ValidationResponse {
   validationCheckPassed: boolean;

@@ -7,25 +7,26 @@ import { RemovePartnerSummary } from "@ui/containers/pcrs/removePartner/removePa
 
 export type removePartnerStepNames = "removalPeriodStep" | "filesStep";
 
-export const removePartnerWorkflow: IPCRWorkflow<PCRItemForPartnerWithdrawalDto, PCRPartnerWithdrawalItemDtoValidator> = {
-  steps: [
-    {
-      stepName: "removalPeriodStep",
-      displayName: "Partner withdrawal",
-      stepNumber: 1,
-      validation: val => val.pcr,
-      stepRender: RemovePartnerStep
+export const removePartnerWorkflow: IPCRWorkflow<PCRItemForPartnerWithdrawalDto, PCRPartnerWithdrawalItemDtoValidator> =
+  {
+    steps: [
+      {
+        stepName: "removalPeriodStep",
+        displayName: "Partner withdrawal",
+        stepNumber: 1,
+        validation: val => val.pcr,
+        stepRender: RemovePartnerStep,
+      },
+      {
+        stepName: "filesStep",
+        displayName: "Upload withdrawal of partner certificate",
+        stepNumber: 2,
+        validation: val => val.files,
+        stepRender: PCRPrepareItemFilesForPartnerWithdrawalStep,
+      },
+    ],
+    summary: {
+      validation: val => val,
+      summaryRender: RemovePartnerSummary,
     },
-    {
-      stepName: "filesStep",
-      displayName: "Upload withdrawal of partner certificate",
-      stepNumber: 2,
-      validation: val => val.files,
-      stepRender: PCRPrepareItemFilesForPartnerWithdrawalStep
-    }
-  ],
-  summary: {
-    validation: val => val,
-    summaryRender: RemovePartnerSummary
-  }
-};
+  };

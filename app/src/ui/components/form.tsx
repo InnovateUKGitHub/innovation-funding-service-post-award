@@ -107,7 +107,7 @@ interface FieldsetProps {
 
 class FieldsetComponent<T> extends React.Component<FieldsetProps, []> {
   render() {
-    const props = (this.props as any) as FieldsetProps & FormChildProps<T>;
+    const props = this.props as any as FieldsetProps & FormChildProps<T>;
 
     const fieldsetChildren = React.Children.toArray(this.props.children);
     const childrenWithData = fieldsetChildren.map(
@@ -213,7 +213,7 @@ class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & 
 }
 
 const handleSubmit = <TDto extends {}>(props: SubmitProps, e: React.MouseEvent<{}>) => {
-  const formProps = (props as any) as SharedFormProps<TDto>;
+  const formProps = props as any as SharedFormProps<TDto>;
   if (formProps.onSubmit) {
     e.preventDefault();
     formProps.onSubmit();
@@ -231,7 +231,7 @@ const handleChange = <TDto extends {}, TValue extends {}>(
   props: ExternalFieldProps<TDto, TValue>,
   value: TValue | null,
 ) => {
-  const formProps = (props as any) as FormChildProps<TDto>;
+  const formProps = props as any as FormChildProps<TDto>;
   const data = formProps.formData;
   props.update(data, value);
 
@@ -413,7 +413,7 @@ const DropdownListField = <T extends {}>(props: DropdownFieldProps<T> & Internal
 };
 
 const HiddenField = <T extends {}>(props: HiddenFieldProps<T> & InternalFieldProps<T>) => (
-  <input type="hidden" value={props.value(((props as any) as InternalFieldProps<T>).formData) || ""} />
+  <input type="hidden" value={props.value((props as any as InternalFieldProps<T>).formData) || ""} />
 );
 
 const buttonContentConfig = {

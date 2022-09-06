@@ -1,23 +1,12 @@
-import {
-  PartnerDetailsEditRoute,
-  PartnerDetailsParams,
-  PartnerDetailsRoute,
-} from "@ui/containers";
+import { PartnerDetailsEditRoute, PartnerDetailsParams, PartnerDetailsRoute } from "@ui/containers";
 import { IContext, ILinkInfo, PartnerDto } from "@framework/types";
 import { GetByIdQuery } from "@server/features/partners";
 import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCommand";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
-import {
-  IFormBody,
-  IFormButton,
-  StandardFormHandlerBase,
-} from "./formHandlerBase";
+import { IFormBody, IFormButton, StandardFormHandlerBase } from "./formHandlerBase";
 
-export class PartnerDetailsEditFormHandler extends StandardFormHandlerBase<
-  PartnerDetailsParams,
-  "partner"
-> {
+export class PartnerDetailsEditFormHandler extends StandardFormHandlerBase<PartnerDetailsParams, "partner"> {
   constructor() {
     super(PartnerDetailsEditRoute, ["default"], "partner");
   }
@@ -26,7 +15,7 @@ export class PartnerDetailsEditFormHandler extends StandardFormHandlerBase<
     context: IContext,
     params: PartnerDetailsParams,
     button: IFormButton,
-    body: IFormBody
+    body: IFormBody,
   ): Promise<PartnerDto> {
     const dto = await context.runQuery(new GetByIdQuery(params.partnerId));
 
@@ -41,7 +30,7 @@ export class PartnerDetailsEditFormHandler extends StandardFormHandlerBase<
     context: IContext,
     params: PartnerDetailsParams,
     button: IFormButton,
-    dto: PartnerDto
+    dto: PartnerDto,
   ): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePartnerCommand(dto));
 
@@ -52,10 +41,7 @@ export class PartnerDetailsEditFormHandler extends StandardFormHandlerBase<
     return storeKeys.getPartnerKey(params.partnerId);
   }
 
-  protected createValidationResult(
-    params: PartnerDetailsParams,
-    dto: PartnerDto
-  ) {
+  protected createValidationResult(params: PartnerDetailsParams, dto: PartnerDto) {
     return new PartnerDtoValidator(dto, dto, [], {
       showValidationErrors: false,
     });

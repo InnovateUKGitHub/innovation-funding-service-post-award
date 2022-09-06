@@ -6,19 +6,27 @@ import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/f
 import {
   PCRPrepareItemRoute,
   PCRSpendProfileCostsSummaryRoute,
-  PcrSpendProfileCostSummaryParams
+  PcrSpendProfileCostSummaryParams,
 } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 
-export class ProjectChangeRequestSpendProfileCostsSummaryHandler extends StandardFormHandlerBase<PcrSpendProfileCostSummaryParams, "pcr"> {
+export class ProjectChangeRequestSpendProfileCostsSummaryHandler extends StandardFormHandlerBase<
+  PcrSpendProfileCostSummaryParams,
+  "pcr"
+> {
   constructor() {
     super(PCRSpendProfileCostsSummaryRoute, ["default"], "pcr");
   }
 
-  protected async getDto(context: IContext, params: PcrSpendProfileCostSummaryParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
+  protected async getDto(
+    context: IContext,
+    params: PcrSpendProfileCostSummaryParams,
+    button: IFormButton,
+    body: IFormBody,
+  ): Promise<PCRDto> {
     const dto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId));
 
     const item = dto.items.find(x => x.id === params.itemId) as PCRItemForPartnerAdditionDto;
@@ -32,13 +40,18 @@ export class ProjectChangeRequestSpendProfileCostsSummaryHandler extends Standar
     return dto;
   }
 
-  protected async run(context: IContext, params: PcrSpendProfileCostSummaryParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
+  protected async run(
+    context: IContext,
+    params: PcrSpendProfileCostSummaryParams,
+    button: IFormButton,
+    dto: PCRDto,
+  ): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
 
     const addPartnerItem = dto.items.find(x => x.id === params.itemId) as PCRItemForPartnerAdditionDto;
 
     const summaryWorkflow = PcrWorkflow.getWorkflow(addPartnerItem, undefined);
-    if(!summaryWorkflow) throw new Error("summary workflow is null");
+    if (!summaryWorkflow) throw new Error("summary workflow is null");
     const spendProfileS = summaryWorkflow.findStepNumberByName("spendProfileStep");
     const addPartnerWorkflow = PcrWorkflow.getWorkflow(addPartnerItem, spendProfileS);
     const spendProfileStep = addPartnerWorkflow && addPartnerWorkflow.getCurrentStepInfo();
@@ -47,7 +60,7 @@ export class ProjectChangeRequestSpendProfileCostsSummaryHandler extends Standar
       projectId: params.projectId,
       pcrId: params.pcrId,
       itemId: params.itemId,
-      step: spendProfileStep && spendProfileStep.stepNumber || undefined,
+      step: (spendProfileStep && spendProfileStep.stepNumber) || undefined,
     });
   }
 

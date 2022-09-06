@@ -6,41 +6,82 @@ import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { DocumentsStoreBase } from "./documentsStoreBase";
 
 export class ProjectChangeRequestDocumentsStore extends DocumentsStoreBase {
-
   private getKey(projectId: string, pcrOrPCrItemId: string) {
     return storeKeys.getPcrKey(projectId, pcrOrPCrItemId);
   }
 
   public pcrOrPcrItemDocuments(projectId: string, projectChangeRequestIdOrItemId: string) {
-    return this.getData("documents", this.getKey(projectId, projectChangeRequestIdOrItemId), p => apiClient.documents.getProjectChangeRequestDocumentsOrItemDocuments({ projectId, projectChangeRequestIdOrItemId, ...p }));
+    return this.getData("documents", this.getKey(projectId, projectChangeRequestIdOrItemId), p =>
+      apiClient.documents.getProjectChangeRequestDocumentsOrItemDocuments({
+        projectId,
+        projectChangeRequestIdOrItemId,
+        ...p,
+      }),
+    );
   }
 
-  public getPcrOrPcrItemDocumentsEditor(projectId: string, projectChangeRequestIdOrItemId: string, init?: (dto: MultipleDocumentUploadDto) => void) {
-    return this.getEditor("multipleDocuments", this.getKey(projectId, projectChangeRequestIdOrItemId), () => Pending.done<MultipleDocumentUploadDto>({ files: [] }), init, (dto) => Pending.done(this.validateMultipleDocumentsDto(dto, false, true)));
+  public getPcrOrPcrItemDocumentsEditor(
+    projectId: string,
+    projectChangeRequestIdOrItemId: string,
+    init?: (dto: MultipleDocumentUploadDto) => void,
+  ) {
+    return this.getEditor(
+      "multipleDocuments",
+      this.getKey(projectId, projectChangeRequestIdOrItemId),
+      () => Pending.done<MultipleDocumentUploadDto>({ files: [] }),
+      init,
+      dto => Pending.done(this.validateMultipleDocumentsDto(dto, false, true)),
+    );
   }
 
-  public updatePcrOrPcrItemDocumentsEditor(saving: boolean, projectId: string, projectChangeRequestIdOrItemId: string, dto: MultipleDocumentUploadDto, filesRequired: boolean, message?: string, onComplete?: () => void) {
+  public updatePcrOrPcrItemDocumentsEditor(
+    saving: boolean,
+    projectId: string,
+    projectChangeRequestIdOrItemId: string,
+    dto: MultipleDocumentUploadDto,
+    filesRequired: boolean,
+    message?: string,
+    onComplete?: () => void,
+  ) {
     const key = this.getKey(projectId, projectChangeRequestIdOrItemId);
     this.updateMultiple(
       saving,
       filesRequired,
       key,
       dto,
-      (p) => apiClient.documents.uploadProjectChangeRequestDocumentOrItemDocument({ projectId, projectChangeRequestIdOrItemId, ...p }),
+      p =>
+        apiClient.documents.uploadProjectChangeRequestDocumentOrItemDocument({
+          projectId,
+          projectChangeRequestIdOrItemId,
+          ...p,
+        }),
       message,
-      onComplete
+      onComplete,
     );
   }
 
-  public deletePcrOrPcrItemDocumentsEditor(projectId: string, projectChangeRequestIdOrItemId: string, dto: MultipleDocumentUploadDto, document: DocumentSummaryDto, message: string, onComplete?: () => void) {
+  public deletePcrOrPcrItemDocumentsEditor(
+    projectId: string,
+    projectChangeRequestIdOrItemId: string,
+    dto: MultipleDocumentUploadDto,
+    document: DocumentSummaryDto,
+    message: string,
+    onComplete?: () => void,
+  ) {
     const key = this.getKey(projectId, projectChangeRequestIdOrItemId);
     this.deleteEditor(
       "multipleDocuments",
       key,
       dto,
       () => this.validateMultipleDocumentsDto(dto, false, true),
-      (p) => apiClient.documents.deleteProjectChangeRequestDocumentOrItemDocument({ projectId, projectChangeRequestIdOrItemId, documentId: document.id, ...p }),
-      () => this.afterUpdate(key, message, onComplete)
+      p =>
+        apiClient.documents.deleteProjectChangeRequestDocumentOrItemDocument({
+          projectId,
+          projectChangeRequestIdOrItemId,
+          documentId: document.id,
+          ...p,
+        }),
+      () => this.afterUpdate(key, message, onComplete),
     );
   }
 }

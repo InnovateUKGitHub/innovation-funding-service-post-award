@@ -38,7 +38,7 @@ class TestCustomContent {
 
 class TestCompaniesHouse implements ICompaniesHouseBase {
   public async queryCompaniesHouse<T>(): Promise<T> {
-    return Promise.resolve(([] as unknown) as T);
+    return Promise.resolve([] as unknown as T);
   }
 }
 

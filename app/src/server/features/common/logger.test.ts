@@ -1,7 +1,7 @@
 import { LogLevel } from "@framework/constants";
 import { Logger } from "./logger";
 
-describe ("Logger", () => {
+describe("Logger", () => {
   jest.spyOn(console, "info").mockImplementation();
 
   beforeEach(jest.clearAllMocks);

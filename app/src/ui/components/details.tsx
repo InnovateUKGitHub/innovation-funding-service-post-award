@@ -95,7 +95,9 @@ export function DualDetails({ children }: DualDetailsProps) {
   const clonedChildren = elementChildren.map(field => cloneElement(field));
 
   // Note: TSC is not smart enough to infer title is always defined due to .every former check, hence therefore I have to use the non-null "!"
-  const titles: string[] = clonedChildren.every(x => x.props.title) ? clonedChildren.map(x => x.props.title as string) : [];
+  const titles: string[] = clonedChildren.every(x => x.props.title)
+    ? clonedChildren.map(x => x.props.title as string)
+    : [];
 
   return (
     <>
@@ -158,13 +160,7 @@ function MultilineStringField<T extends {}>(props: ExternalFieldProps<T, string>
 
   return (
     <TypedField {...props}>
-      {item =>
-        splitString(props.value(item)).map((line, index) => (
-          <SimpleString key={index}>
-            {line}
-          </SimpleString>
-        ))
-      }
+      {item => splitString(props.value(item)).map((line, index) => <SimpleString key={index}>{line}</SimpleString>)}
     </TypedField>
   );
 }

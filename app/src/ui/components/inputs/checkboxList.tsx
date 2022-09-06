@@ -18,9 +18,7 @@ export class CheckboxList extends BaseInput<CheckboxListProps, {}> {
   render() {
     const className = classNames("govuk-checkboxes");
     return (
-      <div className={className}>
-        {this.props.options.map((x, i) => this.renderOption(this.props.name, x, i))}
-      </div>
+      <div className={className}>{this.props.options.map((x, i) => this.renderOption(this.props.name, x, i))}</div>
     );
   }
 
@@ -40,7 +38,9 @@ export class CheckboxList extends BaseInput<CheckboxListProps, {}> {
           aria-checked={selected}
           disabled={this.props.disabled || item.disabled}
         />
-        <label className="govuk-label govuk-checkboxes__label" htmlFor={`${name}_${item.id}`}>{item.value}</label>
+        <label className="govuk-label govuk-checkboxes__label" htmlFor={`${name}_${item.id}`}>
+          {item.value}
+        </label>
       </div>
     );
   }
@@ -48,7 +48,7 @@ export class CheckboxList extends BaseInput<CheckboxListProps, {}> {
   private onChange(item: { id: string; value: React.ReactNode }, checked: boolean) {
     const original = this.props.value || [];
     if (this.props.onChange) {
-      const values = this.props.options.filter(x => x.id === item.id ? checked : !!original.find(y => y.id === x.id));
+      const values = this.props.options.filter(x => (x.id === item.id ? checked : !!original.find(y => y.id === x.id)));
       this.props.onChange(values);
     }
   }

@@ -9,20 +9,43 @@ export interface IPartnersApi {
   getAll: (params: ApiParams<{}>) => Promise<PartnerDto[]>;
   getAllByProjectId: (params: ApiParams<{ projectId: string }>) => Promise<PartnerDto[]>;
   get: (params: ApiParams<{ partnerId: string }>) => Promise<PartnerDto>;
-  updatePartner: (params: ApiParams<{ partnerId: string; partnerDto: PartnerDto; validateBankDetails?: boolean; verifyBankDetails?: boolean }>) => Promise<PartnerDto>;
+  updatePartner: (
+    params: ApiParams<{
+      partnerId: string;
+      partnerDto: PartnerDto;
+      validateBankDetails?: boolean;
+      verifyBankDetails?: boolean;
+    }>,
+  ) => Promise<PartnerDto>;
 }
 
 class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {
-
   constructor() {
     super("partners");
 
-    this.getItems("/", (p, q) => ({ projectId: q.projectId }), (p) => p.projectId ? this.getAllByProjectId(p): this.getAll(p));
-    this.getItem("/:partnerId", (p) => ({ partnerId: p.partnerId }), (p) => this.get(p));
-    this.putItem("/:partnerId", (p, q, b) => ({ partnerId: p.partnerId, partnerDto: processDto(b), validateBankDetails: q.validateBankDetails === "true", verifyBankDetails: q.verifyBankDetails === "true" }), (p) => this.updatePartner(p));
+    this.getItems(
+      "/",
+      (p, q) => ({ projectId: q.projectId }),
+      p => (p.projectId ? this.getAllByProjectId(p) : this.getAll(p)),
+    );
+    this.getItem(
+      "/:partnerId",
+      p => ({ partnerId: p.partnerId }),
+      p => this.get(p),
+    );
+    this.putItem(
+      "/:partnerId",
+      (p, q, b) => ({
+        partnerId: p.partnerId,
+        partnerDto: processDto(b),
+        validateBankDetails: q.validateBankDetails === "true",
+        verifyBankDetails: q.verifyBankDetails === "true",
+      }),
+      p => this.updatePartner(p),
+    );
   }
 
-  public async getAll(params: ApiParams<{ }>) {
+  public async getAll(params: ApiParams<{}>) {
     const query = new GetAllQuery();
     return contextProvider.start(params).runQuery(query);
   }
@@ -39,9 +62,18 @@ class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async updatePartner(params: ApiParams<{ partnerId: string; partnerDto: PartnerDto; validateBankDetails?: boolean; verifyBankDetails?: boolean }>) {
+  public async updatePartner(
+    params: ApiParams<{
+      partnerId: string;
+      partnerDto: PartnerDto;
+      validateBankDetails?: boolean;
+      verifyBankDetails?: boolean;
+    }>,
+  ) {
     const context = contextProvider.start(params);
-    await context.runCommand(new UpdatePartnerCommand(params.partnerDto, params.validateBankDetails, params.verifyBankDetails));
+    await context.runCommand(
+      new UpdatePartnerCommand(params.partnerDto, params.validateBankDetails, params.verifyBankDetails),
+    );
 
     const query = new GetByIdQuery(params.partnerId);
     return context.runQuery(query);

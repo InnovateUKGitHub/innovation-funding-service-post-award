@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */ // Note: due to this file being extended, it's okay for there to be unused params as they're required for children
 import { NotFoundError } from "@shared/appError";
-import {Updatable} from "../../src/server/repositories/salesforceRepositoryBase";
+import { Updatable } from "../../src/server/repositories/salesforceRepositoryBase";
 
 export abstract class TestRepository<T> {
   Items: T[] = [];
@@ -16,8 +16,8 @@ export abstract class TestRepository<T> {
     });
   }
 
-  protected filterOne(conditional: (item: T) => boolean): Promise<T|null> {
-    return new Promise<T|null>((resolve) => {
+  protected filterOne(conditional: (item: T) => boolean): Promise<T | null> {
+    return new Promise<T | null>(resolve => {
       const found = this.Items.find(x => conditional(x));
       if (found) {
         resolve(found);
@@ -28,7 +28,7 @@ export abstract class TestRepository<T> {
   }
 
   protected getWhere(conditional: (item: T) => boolean): Promise<T[]> {
-    return new Promise<T[]>((resolve) => {
+    return new Promise<T[]>(resolve => {
       const found = this.Items.filter(x => conditional(x));
       resolve(found);
     });
@@ -38,7 +38,7 @@ export abstract class TestRepository<T> {
     return Promise.resolve(this.Items);
   }
 
-  protected deleteItem(item: T|null|undefined): Promise<void> {
+  protected deleteItem(item: T | null | undefined): Promise<void> {
     this.Items = this.Items.filter(element => element !== item);
     return Promise.resolve();
   }

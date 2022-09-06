@@ -2,8 +2,7 @@ import { LoadingStatus } from "@framework/constants";
 import { routeTransition } from "@ui/redux/actions";
 import { dataReducer } from ".";
 
-const navigate =  routeTransition;
-
+const navigate = routeTransition;
 
 const claimDataAction = (id: any, data: any, status = 1, error: any = {}): any => ({
   type: "DATA_LOAD",
@@ -13,7 +12,7 @@ const claimDataAction = (id: any, data: any, status = 1, error: any = {}): any =
     data,
     status,
     error,
-  }
+  },
 });
 
 const state = {} as any;
@@ -77,7 +76,6 @@ describe("DataReducer", () => {
     const result = dataReducer(state2, navigate());
     expect(result.claim[id].status).toBe(LoadingStatus.Stale);
   });
-
 
   test("preserves loaded data on replace navigation", () => {
     const id = 5;

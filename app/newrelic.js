@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 /**
  * New Relic agent configuration.
  *
@@ -20,7 +20,7 @@ exports.config = {
      * issues with the agent, 'info' and higher will impose the least overhead on
      * production applications.
      */
-    level: process.env.NEW_RELIC_LOGGING || "info"
+    level: process.env.NEW_RELIC_LOGGING || "info",
   },
   /**
    * When true, all request headers except for those listed in attributes.exclude
@@ -38,16 +38,16 @@ exports.config = {
      * @env NEW_RELIC_ATTRIBUTES_EXCLUDE
      */
     exclude: [
-      'request.headers.cookie',
-      'request.headers.authorization',
-      'request.headers.proxyAuthorization',
-      'request.headers.setCookie*',
-      'request.headers.x*',
-      'response.headers.cookie',
-      'response.headers.authorization',
-      'response.headers.proxyAuthorization',
-      'response.headers.setCookie*',
-      'response.headers.x*'
-    ]
-  }
-}
+      "request.headers.cookie",
+      "request.headers.authorization",
+      "request.headers.proxyAuthorization",
+      "request.headers.setCookie*",
+      "request.headers.x*",
+      "response.headers.cookie",
+      "response.headers.authorization",
+      "response.headers.proxyAuthorization",
+      "response.headers.setCookie*",
+      "response.headers.x*",
+    ],
+  },
+};

@@ -5,6 +5,8 @@ type AnchorAttr = React.HTMLProps<HTMLAnchorElement>;
 export interface EmailProps extends AnchorAttr {
   children: string;
   qa?: string;
+  href?: string;
+  className?: string;
 }
 
 export function Email({ href, className, qa, children, ...props }: EmailProps) {

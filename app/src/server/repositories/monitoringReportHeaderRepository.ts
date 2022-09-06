@@ -34,9 +34,15 @@ export interface IMonitoringReportHeaderRepository {
  *
  * It also stores the status of the monitoring report.
  */
-export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<ISalesforceMonitoringReportHeader> implements IMonitoringReportHeaderRepository {
-
-  constructor(private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+export class MonitoringReportHeaderRepository
+  extends SalesforceRepositoryBase<ISalesforceMonitoringReportHeader>
+  implements IMonitoringReportHeaderRepository
+{
+  constructor(
+    private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>,
+    getSalesforceConnection: () => Promise<Connection>,
+    logger: ILogger,
+  ) {
     super(getSalesforceConnection, logger);
   }
 
@@ -53,7 +59,7 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
     "Acc_PeriodStartDate__c",
     "Acc_PeriodEndDate__c",
     "Acc_AddComments__c",
-    "LastModifiedDate"
+    "LastModifiedDate",
   ];
 
   async getById(id: string): Promise<ISalesforceMonitoringReportHeader> {
@@ -61,7 +67,11 @@ export class MonitoringReportHeaderRepository extends SalesforceRepositoryBase<I
   }
 
   async get(projectId: string, periodId: number): Promise<ISalesforceMonitoringReportHeader> {
-    return super.loadItem(`Acc_Project__c = '${sss(projectId)}' AND Acc_ProjectPeriodNumber__c = ${sss(periodId)} AND RecordType.Name = '${sss(this.recordType)}'`);
+    return super.loadItem(
+      `Acc_Project__c = '${sss(projectId)}' AND Acc_ProjectPeriodNumber__c = ${sss(
+        periodId,
+      )} AND RecordType.Name = '${sss(this.recordType)}'`,
+    );
   }
 
   update(updateDto: Updatable<ISalesforceMonitoringReportHeader>): Promise<boolean> {

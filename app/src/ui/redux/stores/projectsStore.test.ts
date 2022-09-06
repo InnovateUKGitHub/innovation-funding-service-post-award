@@ -34,22 +34,22 @@ const createTestData = async (context: TestContext) => {
   });
 
   return [
-    {project: project1, partner: partner1},
-    {project: project2, partner: partner2},
-    {project: project3, partner: partner3},
-   ];
+    { project: project1, partner: partner1 },
+    { project: project2, partner: partner2 },
+    { project: project3, partner: partner3 },
+  ];
 };
 
 describe("Projects Store", () => {
-  describe("getProjectsFilter",  () => {
-    it("should return a function for filtering projects",  async () => {
+  describe("getProjectsFilter", () => {
+    it("should return a function for filtering projects", async () => {
       const context = new TestContext();
       await createTestData(context);
       const projectsStore = new ProjectsStore(context.testStore.getState, context.testStore.dispatch);
       const projects = projectsStore.getProjectsFilter("project").data;
       expect(projects).toHaveLength(3);
     });
-    it("should filter by project name",  async () => {
+    it("should filter by project name", async () => {
       const context = new TestContext();
       const testData = await createTestData(context);
       const projectsStore = new ProjectsStore(context.testStore.getState, context.testStore.dispatch);
@@ -57,7 +57,7 @@ describe("Projects Store", () => {
       expect(projects).toHaveLength(1);
       expect(projects?.[0].id).toBe(testData[1].project.Id);
     });
-    it("should ignore case",  async () => {
+    it("should ignore case", async () => {
       const context = new TestContext();
       const testData = await createTestData(context);
       const projectsStore = new ProjectsStore(context.testStore.getState, context.testStore.dispatch);
@@ -65,7 +65,7 @@ describe("Projects Store", () => {
       expect(projects).toHaveLength(1);
       expect(projects?.[0].id).toBe(testData[1].project.Id);
     });
-    it("should filter by project number",  async () => {
+    it("should filter by project number", async () => {
       const context = new TestContext();
       const testData = await createTestData(context);
       const projectsStore = new ProjectsStore(context.testStore.getState, context.testStore.dispatch);
@@ -73,7 +73,7 @@ describe("Projects Store", () => {
       expect(projects).toHaveLength(1);
       expect(projects?.[0].id).toBe(testData[2].project.Id);
     });
-    it("should filter by lead partner name",  async () => {
+    it("should filter by lead partner name", async () => {
       const context = new TestContext();
       const testData = await createTestData(context);
       const projectsStore = new ProjectsStore(context.testStore.getState, context.testStore.dispatch);
@@ -81,7 +81,7 @@ describe("Projects Store", () => {
       expect(projects).toHaveLength(1);
       expect(projects?.[0].id).toBe(testData[0].project.Id);
     });
-    it("should return no results if there are no matches",  async () => {
+    it("should return no results if there are no matches", async () => {
       const context = new TestContext();
       await createTestData(context);
       const projectsStore = new ProjectsStore(context.testStore.getState, context.testStore.dispatch);

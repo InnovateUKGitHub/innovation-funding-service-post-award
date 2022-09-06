@@ -6,18 +6,21 @@ import { SuspendProjectSummary } from "./suspendProjectSummary";
 
 export type SuspendProjectSteps = "details";
 
-export const suspendProjectWorkflow: IPCRWorkflow<PCRItemForProjectSuspensionDto, PCRProjectSuspensionItemDtoValidator> = {
-  steps:[
+export const suspendProjectWorkflow: IPCRWorkflow<
+  PCRItemForProjectSuspensionDto,
+  PCRProjectSuspensionItemDtoValidator
+> = {
+  steps: [
     {
       stepName: "details",
       displayName: "Suspension details",
       stepNumber: 1,
       validation: val => val.pcr,
-      stepRender: SuspendProjectDetails
-    }
+      stepRender: SuspendProjectDetails,
+    },
   ],
-  summary:{
+  summary: {
     validation: val => val,
-    summaryRender: SuspendProjectSummary
-  }
+    summaryRender: SuspendProjectSummary,
+  },
 };

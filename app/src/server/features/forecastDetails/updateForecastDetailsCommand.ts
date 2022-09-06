@@ -1,11 +1,26 @@
 import { BadRequestError, CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
 import { ISalesforceProfileDetails } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
-import { GetAllForecastsGOLCostsQuery, GetAllForPartnerQuery, GetUnfilteredCostCategoriesQuery, UpdateClaimCommand } from "@server/features/claims";
+import {
+  GetAllForecastsGOLCostsQuery,
+  GetAllForPartnerQuery,
+  GetUnfilteredCostCategoriesQuery,
+  UpdateClaimCommand,
+} from "@server/features/claims";
 import { GetAllClaimDetailsByPartner } from "@server/features/claimDetails";
 import { GetProjectStatusQuery } from "@server/features/projects";
 import { ForecastDetailsDtosValidator } from "@ui/validators/forecastDetailsDtosValidator";
-import { Authorisation, ClaimDetailsSummaryDto, ClaimDto, ClaimStatus, ForecastDetailsDTO, GOLCostDto, IContext, PartnerDto, ProjectRole } from "@framework/types";
+import {
+  Authorisation,
+  ClaimDetailsSummaryDto,
+  ClaimDto,
+  ClaimStatus,
+  ForecastDetailsDTO,
+  GOLCostDto,
+  IContext,
+  PartnerDto,
+  ProjectRole,
+} from "@framework/types";
 import { GetByIdQuery } from "@server/features/partners";
 import { UpdatePartnerCommand } from "../partners/updatePartnerCommand";
 import { GetAllForecastsForPartnerQuery } from "./getAllForecastsForPartnerQuery";
@@ -15,7 +30,7 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     private readonly projectId: string,
     private readonly partnerId: string,
     private readonly forecasts: ForecastDetailsDTO[],
-    private readonly submit: boolean
+    private readonly submit: boolean,
   ) {
     super();
   }
@@ -52,15 +67,28 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
 
   private async ignoreCalculatedCostCategories(context: IContext, dtos: ForecastDetailsDTO[]) {
     // check to see if there are any calculated cost categories
-    const calculatedCostCategoryIds = await context.runQuery(new GetUnfilteredCostCategoriesQuery())
-      .then(costCategories =>  costCategories.filter(x => x.isCalculated).map(x => x.id));
+    const calculatedCostCategoryIds = await context
+      .runQuery(new GetUnfilteredCostCategoriesQuery())
+      .then(costCategories => costCategories.filter(x => x.isCalculated).map(x => x.id));
 
     return dtos.filter(forecast => calculatedCostCategoryIds.indexOf(forecast.costCategoryId) === -1);
   }
 
-  private async testValidation(claims: ClaimDto[], claimDetails: ClaimDetailsSummaryDto[], golCosts: GOLCostDto[], partner: PartnerDto) {
+  private async testValidation(
+    claims: ClaimDto[],
+    claimDetails: ClaimDetailsSummaryDto[],
+    golCosts: GOLCostDto[],
+    partner: PartnerDto,
+  ) {
     const showErrors = true;
-    const validation = new ForecastDetailsDtosValidator(this.forecasts, claims, claimDetails, golCosts, partner, showErrors);
+    const validation = new ForecastDetailsDtosValidator(
+      this.forecasts,
+      claims,
+      claimDetails,
+      golCosts,
+      partner,
+      showErrors,
+    );
 
     if (!validation.isValid) {
       throw new ValidationError(validation);
@@ -72,11 +100,17 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
     return !existingItem || item.value !== existingItem.value;
   }
 
-  private async updateProfileDetails(context: IContext, forecasts: ForecastDetailsDTO[], existing: ForecastDetailsDTO[]) {
-    const updates = forecasts.filter(x => this.hasChanged(x, existing)).map<Updatable<ISalesforceProfileDetails>>(x => ({
-      Id: x.id,
-      Acc_LatestForecastCost__c: x.value
-    }));
+  private async updateProfileDetails(
+    context: IContext,
+    forecasts: ForecastDetailsDTO[],
+    existing: ForecastDetailsDTO[],
+  ) {
+    const updates = forecasts
+      .filter(x => this.hasChanged(x, existing))
+      .map<Updatable<ISalesforceProfileDetails>>(x => ({
+        Id: x.id,
+        Acc_LatestForecastCost__c: x.value,
+      }));
 
     return context.repositories.profileDetails.update(updates);
   }
@@ -106,9 +140,12 @@ export class UpdateForecastDetailsCommand extends CommandBase<boolean> {
 
   private nextClaimStatus(claim: ClaimDto) {
     switch (claim.status) {
-      case ClaimStatus.DRAFT: return ClaimStatus.SUBMITTED;
-      case ClaimStatus.MO_QUERIED: return ClaimStatus.SUBMITTED;
-      case ClaimStatus.INNOVATE_QUERIED: return ClaimStatus.AWAITING_IUK_APPROVAL;
+      case ClaimStatus.DRAFT:
+        return ClaimStatus.SUBMITTED;
+      case ClaimStatus.MO_QUERIED:
+        return ClaimStatus.SUBMITTED;
+      case ClaimStatus.INNOVATE_QUERIED:
+        return ClaimStatus.AWAITING_IUK_APPROVAL;
     }
 
     throw new BadRequestError(`Claim in invalid status. Cannot get next claim status for claim in ${claim.status}`);

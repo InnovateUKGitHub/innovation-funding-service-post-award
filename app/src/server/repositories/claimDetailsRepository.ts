@@ -34,7 +34,8 @@ export interface IClaimDetailsRepository {
  */
 export class ClaimDetailsRepository
   extends SalesforceRepositoryBase<ISalesforceClaimDetails>
-  implements IClaimDetailsRepository {
+  implements IClaimDetailsRepository
+{
   constructor(
     private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>,
     getSalesforceConnection: () => Promise<Connection>,
@@ -98,7 +99,6 @@ export class ClaimDetailsRepository
   }
 
   async insert(item: Partial<ISalesforceClaimDetails>) {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
     const RecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
     const salesforceUpdate: Partial<{
       Acc_ProjectParticipant__c: string;

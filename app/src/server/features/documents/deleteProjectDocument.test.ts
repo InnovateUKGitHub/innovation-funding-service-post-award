@@ -6,7 +6,15 @@ describe("DeleteProjectDocumentCommand()", () => {
   it("should delete item when run", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
-    const document = context.testData.createDocument("40", "Document title", "txt", "hello", undefined, undefined, x => (x.Acc_UploadedByMe__c = true));
+    const document = context.testData.createDocument(
+      "40",
+      "Document title",
+      "txt",
+      "hello",
+      undefined,
+      undefined,
+      x => (x.Acc_UploadedByMe__c = true),
+    );
     expect(context.repositories.documents.Items).toHaveLength(1);
 
     const deleteDocumentCommand = new DeleteProjectDocumentCommand(project.Id, document.Id);

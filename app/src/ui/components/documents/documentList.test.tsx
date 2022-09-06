@@ -60,7 +60,7 @@ describe("<DocumentView />", () => {
         fileSize: 1024,
         dateCreated: new Date(Date.UTC(2021, 10, 1)),
         uploadedBy: "stub-uploadedBy",
-        isOwner: true
+        isOwner: true,
       };
 
       const { queryByTestId, queryByText } = setup({ documents: [stubDocument], qa: "docs-list" });

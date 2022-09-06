@@ -77,7 +77,7 @@ describe("NumberInput", () => {
   //   jest.useRealTimers();
   // });
 
-  it("Updates component state with value",  async () => {
+  it("Updates component state with value", async () => {
     const input = getInput({ value: "" });
     await userEvent.type(input, "1");
     expect(input.value).toBe("1");
@@ -85,30 +85,28 @@ describe("NumberInput", () => {
 
   it("Calls a passed in onchange when value changed", async () => {
     const onChange = jest.fn();
-    const input = getInput({ value: 1, onChange});
+    const input = getInput({ value: 1, onChange });
     await userEvent.type(input, "2");
     expect(onChange).toHaveBeenCalledWith(12);
   });
 
   it("Calls onChange with null if value is empty string", async () => {
     const onChange = jest.fn();
-    const input = getInput({ value: 1, onChange});
+    const input = getInput({ value: 1, onChange });
     await userEvent.clear(input);
     await userEvent.type(input, "{backspace}");
     expect(onChange).toHaveBeenCalledWith(null);
-
   });
 
-  it("Calls onChange with Nan if value is not a number",  async () => {
+  it("Calls onChange with Nan if value is not a number", async () => {
     const onChange = jest.fn();
-    const input = getInput({ value: 1, onChange});
+    const input = getInput({ value: 1, onChange });
     await userEvent.type(input, "abc");
     expect(onChange).toHaveBeenCalledWith(NaN);
-
   });
 
   it("Handles floating point numbers", () => {
-    const input = getInput({ value: 2.2 - 1});
+    const input = getInput({ value: 2.2 - 1 });
     expect(input.value).toBe("1.2");
   });
 });

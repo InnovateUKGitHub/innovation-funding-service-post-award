@@ -15,11 +15,7 @@ export function ProjectContact({ contact, partner, qa, comment }: ProjectContact
 
   return (
     <Section title={contact.roleName}>
-      {comment && (
-        <SimpleString qa={`${qa}-roleComment`}>
-          {comment}
-        </SimpleString>
-      )}
+      {comment && <SimpleString qa={`${qa}-roleComment`}>{comment}</SimpleString>}
 
       <SimpleString className="govuk-!-margin-bottom-0" qa={`${qa}-roleName`}>
         {contact.name}

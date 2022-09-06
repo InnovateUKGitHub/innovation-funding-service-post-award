@@ -18,8 +18,10 @@ export interface IClaimTotalCostCategoryRepository {
  *
  * This is the total **claimed** not the total **approved**
  */
-export class ClaimTotalCostCategoryRepository extends SalesforceRepositoryBase<ISalesforceClaimTotalCostCategory> implements IClaimTotalCostCategoryRepository {
-
+export class ClaimTotalCostCategoryRepository
+  extends SalesforceRepositoryBase<ISalesforceClaimTotalCostCategory>
+  implements IClaimTotalCostCategoryRepository
+{
   private readonly recordType: string = "Total Cost Category";
 
   protected readonly salesforceObjectName = "Acc_Claims__c";

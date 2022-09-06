@@ -32,7 +32,8 @@ export interface IProjectContactsRepository {
  */
 export class ProjectContactsRepository
   extends SalesforceRepositoryBase<ISalesforceProjectContact>
-  implements IProjectContactsRepository {
+  implements IProjectContactsRepository
+{
   protected readonly salesforceObjectName = "Acc_ProjectContactLink__c";
 
   protected readonly salesforceFieldNames = [

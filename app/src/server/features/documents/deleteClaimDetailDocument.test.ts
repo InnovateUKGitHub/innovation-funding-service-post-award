@@ -8,17 +8,29 @@ describe("DeleteClaimDetailDocumentCommand", () => {
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project);
     const claimDetail = context.testData.createClaimDetail(project, undefined, partner);
-    const document = context.testData.createDocument(claimDetail.Id, "hello", "txt", "hello", undefined, undefined, x => (x.Acc_UploadedByMe__c = true));
+    const document = context.testData.createDocument(
+      claimDetail.Id,
+      "hello",
+      "txt",
+      "hello",
+      undefined,
+      undefined,
+      x => (x.Acc_UploadedByMe__c = true),
+    );
     expect(context.repositories.documents.Items).toHaveLength(1);
 
-    const claimDetailKey = { projectId: project.Id, partnerId: partner.id, costCategoryId: claimDetail.Acc_CostCategory__c, periodId: claimDetail.Acc_ProjectPeriodNumber__c};
+    const claimDetailKey = {
+      projectId: project.Id,
+      partnerId: partner.id,
+      costCategoryId: claimDetail.Acc_CostCategory__c,
+      periodId: claimDetail.Acc_ProjectPeriodNumber__c,
+    };
     const deleteCommand = new DeleteClaimDetailDocumentCommand(document.ContentDocumentId, claimDetailKey);
     await context.runCommand(deleteCommand);
     expect(context.repositories.documents.Items).toHaveLength(0);
   });
 
   describe("access control", () => {
-
     const setupAccessControlContext = () => {
       const context = new TestContext();
       const project = context.testData.createProject();
@@ -27,33 +39,38 @@ describe("DeleteClaimDetailDocumentCommand", () => {
       const document = context.testData.createDocument(claimDetail.Id, "hello", "txt", "hello");
       expect(context.repositories.documents.Items).toHaveLength(1);
 
-      const claimDetailKey = { projectId: project.Id, partnerId: partner.id, costCategoryId: claimDetail.Acc_CostCategory__c, periodId: claimDetail.Acc_ProjectPeriodNumber__c};
+      const claimDetailKey = {
+        projectId: project.Id,
+        partnerId: partner.id,
+        costCategoryId: claimDetail.Acc_CostCategory__c,
+        periodId: claimDetail.Acc_ProjectPeriodNumber__c,
+      };
       const command = new DeleteClaimDetailDocumentCommand(document.ContentDocumentId, claimDetailKey);
 
-      return {command, project, partner, context};
+      return { command, project, partner, context };
     };
 
     test("accessControl - Finance Contact can delete a document", async () => {
-      const {command, project, partner, context} = setupAccessControlContext();
+      const { command, project, partner, context } = setupAccessControlContext();
 
-      const auth    = new Authorisation({
+      const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.FinancialContact,
-          partnerRoles: { [partner.id]: ProjectRole.FinancialContact }
-        }
+          partnerRoles: { [partner.id]: ProjectRole.FinancialContact },
+        },
       });
 
       expect(await context.runAccessControl(auth, command)).toBe(true);
     });
 
     test("accessControl - No other role can delete a document", async () => {
-      const {command, project, partner, context} = setupAccessControlContext();
+      const { command, project, partner, context } = setupAccessControlContext();
 
-      const auth    = new Authorisation({
+      const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.ProjectManager | ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer,
-          partnerRoles: { [partner.id]: ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer }
-        }
+          partnerRoles: { [partner.id]: ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer },
+        },
       });
 
       expect(await context.runAccessControl(auth, command)).toBe(false);

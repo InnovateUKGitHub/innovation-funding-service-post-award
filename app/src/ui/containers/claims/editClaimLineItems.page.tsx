@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */ // TODO: ACC-7889
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
 import {
@@ -87,7 +87,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
       partnerId: this.props.partnerId,
       periodId: this.props.periodId,
     });
-    const costCategory = costCategories.find(x => x.id === this.props.costCategoryId) || {} as CostCategoryDto;
+    const costCategory = costCategories.find(x => x.id === this.props.costCategoryId) || ({} as CostCategoryDto);
 
     const { isKTP, isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
     const editClaimLineItemGuidance = <ACC.Content value={x => x.claimDocuments.messages.editClaimLineItemGuidance} />;

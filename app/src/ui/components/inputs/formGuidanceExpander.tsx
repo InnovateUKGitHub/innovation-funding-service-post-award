@@ -17,7 +17,7 @@ export interface FormGuidanceExpanderProps {
 export const FormGuidanceExpander = ({ title, items, qa }: FormGuidanceExpanderProps) => {
   return (
     <ACC.Info summary={title} qa={qa}>
-      {!!items.length && <DetailContentList items={items} qa="form-guidance-list"/>}
+      {!!items.length && <DetailContentList items={items} qa="form-guidance-list" />}
     </ACC.Info>
   );
 };

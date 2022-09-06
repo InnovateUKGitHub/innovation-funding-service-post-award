@@ -1,7 +1,7 @@
 import { ValidationError } from "@server/features/common";
-import { PCRPartnerType, PCRProjectRole, } from "@framework/types";
+import { PCRPartnerType, PCRProjectRole } from "@framework/types";
 import { CostCategoryType, PCRItemStatus } from "@framework/constants";
-import { PCRSpendProfileTravelAndSubsCostDto, } from "@framework/dtos/pcrSpendProfileDto";
+import { PCRSpendProfileTravelAndSubsCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
 import { GetPcrSpendProfilesQuery } from "@server/features/pcrs/getPcrSpendProfiles";
 import { setup } from "@tests/test-utils/pcr-spend-profile-helpers";
@@ -9,9 +9,16 @@ import { setup } from "@tests/test-utils/pcr-spend-profile-helpers";
 describe("UpdatePCRSpendProfileCommand", () => {
   describe("Travel and Subsistence", () => {
     it("should validate new spend profile costs for travel and subsistence", async () => {
-      const {context, projectChangeRequest, recordType, project} = setup();
-      const item = context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Business });
-      const costCategory = context.testData.createCostCategory({name: "Travel and Subsistence", type: CostCategoryType.Travel_And_Subsistence});
+      const { context, projectChangeRequest, recordType, project } = setup();
+      const item = context.testData.createPCRItem(projectChangeRequest, recordType, {
+        status: PCRItemStatus.Incomplete,
+        projectRole: PCRProjectRole.Collaborator,
+        partnerType: PCRPartnerType.Business,
+      });
+      const costCategory = context.testData.createCostCategory({
+        name: "Travel and Subsistence",
+        type: CostCategoryType.Travel_And_Subsistence,
+      });
       const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
       const cost: PCRSpendProfileTravelAndSubsCostDto = {
         id: "",
@@ -26,16 +33,29 @@ describe("UpdatePCRSpendProfileCommand", () => {
       const command = new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto);
       await expect(context.runCommand(command)).resolves.toBe(true);
       spendProfileDto.costs[0] = { ...cost, description: null };
-      await expect(context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).rejects.toThrow(ValidationError);
+      await expect(
+        context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto)),
+      ).rejects.toThrow(ValidationError);
       spendProfileDto.costs[0] = { ...cost, numberOfTimes: null };
-      await expect(context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).rejects.toThrow(ValidationError);
+      await expect(
+        context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto)),
+      ).rejects.toThrow(ValidationError);
       spendProfileDto.costs[0] = { ...cost, costOfEach: 12.53467 };
-      await expect(context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto))).rejects.toThrow(ValidationError);
+      await expect(
+        context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto)),
+      ).rejects.toThrow(ValidationError);
     });
     it("should save new spend profile costs for travel and subsitence", async () => {
-      const {context, projectChangeRequest, recordType, project} = setup();
-      const item = context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Business });
-      const costCategory = context.testData.createCostCategory({name: "Travel and Subsistence", type: CostCategoryType.Travel_And_Subsistence});
+      const { context, projectChangeRequest, recordType, project } = setup();
+      const item = context.testData.createPCRItem(projectChangeRequest, recordType, {
+        status: PCRItemStatus.Incomplete,
+        projectRole: PCRProjectRole.Collaborator,
+        partnerType: PCRPartnerType.Business,
+      });
+      const costCategory = context.testData.createCostCategory({
+        name: "Travel and Subsistence",
+        type: CostCategoryType.Travel_And_Subsistence,
+      });
       const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
       spendProfileDto.costs.push({
         id: "",
@@ -51,16 +71,24 @@ describe("UpdatePCRSpendProfileCommand", () => {
       const insertedSpendProfileCost = context.repositories.pcrSpendProfile.Items[0];
       expect(insertedSpendProfileCost).toBeDefined();
       expect(insertedSpendProfileCost.id).toBeTruthy();
-      expect(insertedSpendProfileCost.value).toBe((insertedSpendProfileCost.numberOfTimes as number) * (insertedSpendProfileCost.costOfEach as number));
+      expect(insertedSpendProfileCost.value).toBe(
+        (insertedSpendProfileCost.numberOfTimes as number) * (insertedSpendProfileCost.costOfEach as number),
+      );
       expect(insertedSpendProfileCost.numberOfTimes).toBe(5);
       expect(insertedSpendProfileCost.costOfEach).toBe(3);
       expect(insertedSpendProfileCost.description).toBe("Boots Meal Deal");
     });
     it("should update spend profile costs for travel and subsistence", async () => {
-      const {context, projectChangeRequest, recordType, project} = setup();
-      const item = context.testData.createPCRItem(projectChangeRequest, recordType,
-        { status: PCRItemStatus.Incomplete, projectRole: PCRProjectRole.Collaborator, partnerType: PCRPartnerType.Business });
-      const costCategory = context.testData.createCostCategory({name: "Materials", type: CostCategoryType.Travel_And_Subsistence});
+      const { context, projectChangeRequest, recordType, project } = setup();
+      const item = context.testData.createPCRItem(projectChangeRequest, recordType, {
+        status: PCRItemStatus.Incomplete,
+        projectRole: PCRProjectRole.Collaborator,
+        partnerType: PCRPartnerType.Business,
+      });
+      const costCategory = context.testData.createCostCategory({
+        name: "Materials",
+        type: CostCategoryType.Travel_And_Subsistence,
+      });
       const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(item.id));
       spendProfileDto.costs.push({
         id: "",
@@ -80,7 +108,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       cost.costOfEach = 150;
       cost.description = "Train to London";
       await context.runCommand(new UpdatePCRSpendProfileCommand(project.Id, item.id, spendProfileDto));
-      expect(insertedSpendProfileCost.value).toBe(33*150);
+      expect(insertedSpendProfileCost.value).toBe(33 * 150);
       expect(insertedSpendProfileCost.description).toBe("Train to London");
       expect(insertedSpendProfileCost.numberOfTimes).toBe(33);
       expect(insertedSpendProfileCost.costOfEach).toBe(150);

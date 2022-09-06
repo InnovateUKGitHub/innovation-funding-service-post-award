@@ -182,7 +182,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
 
   private onSave(dto: PCRDto, cost: PCRSpendProfileCostDto, redirectLink?: ILinkInfo) {
     const item = dto.items.find(x => x.id === this.props.itemId);
-    if(!item) throw new Error(`Cannot find item matching ${this.props.itemId}`);
+    if (!item) throw new Error(`Cannot find item matching ${this.props.itemId}`);
     // If submitting from a step set the status to incomplete
     item.status = PCRItemStatus.Incomplete;
     return !redirectLink ? this.props.onSave(dto, this.getBackLink(cost, dto)) : this.props.onSave(dto, redirectLink);
@@ -299,7 +299,6 @@ const ContainerAdd = (props: PcrAddSpendProfileCostParams & BaseProps) => {
         ) as PCRItemForPartnerAdditionDto;
         const costs = addPartnerItem.spendProfile.costs.filter(x => x.costCategoryId === props.costCategoryId);
         return costs.find(x => !x.id) as PCRSpendProfileCostDto;
-
       })}
       validator={stores.projectChangeRequests.getNewSpendProfileCostValidator(
         editorPending,

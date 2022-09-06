@@ -1,4 +1,4 @@
-import {DataStateKeys, IDataStore, RootState} from "@ui/redux/reducers";
+import { DataStateKeys, IDataStore, RootState } from "@ui/redux/reducers";
 import { Pending } from "@shared/pending";
 
 export interface IDataSelector<T> {

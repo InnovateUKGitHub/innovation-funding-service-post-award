@@ -4,7 +4,7 @@ import {
   ClaimDetailDocumentsRoute,
   EditClaimDetailsParams,
   EditClaimLineItemsRoute,
-  PrepareClaimRoute
+  PrepareClaimRoute,
 } from "@ui/containers";
 import { ClaimDetailsDto, IContext, ILinkInfo } from "@framework/types";
 import { range } from "@shared/range";
@@ -13,7 +13,6 @@ import { ClaimDetailsValidator } from "@ui/validators/claimDetailsValidator";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 
 export class EditClaimLineItemsFormHandler extends StandardFormHandlerBase<EditClaimDetailsParams, "claimDetail"> {
-
   constructor() {
     super(EditClaimLineItemsRoute, ["upload", "default"], "claimDetail");
   }
@@ -21,21 +20,25 @@ export class EditClaimLineItemsFormHandler extends StandardFormHandlerBase<EditC
   protected async getDto(context: IContext, params: EditClaimDetailsParams, button: IFormButton, body: IFormBody) {
     const itemCount = parseInt(body.itemCount, 10) || 10;
 
-    const originalClaimDetails = await context.runQuery(new GetClaimDetailsQuery(params.projectId, params.partnerId, params.periodId, params.costCategoryId));
+    const originalClaimDetails = await context.runQuery(
+      new GetClaimDetailsQuery(params.projectId, params.partnerId, params.periodId, params.costCategoryId),
+    );
 
-    const lineItems = range(itemCount).map((x,i) => ({
+    const lineItems = range(itemCount).map((x, i) => ({
       id: body["id" + i] || undefined,
       partnerId: params.partnerId,
       periodId: params.periodId,
       costCategoryId: params.costCategoryId,
-      description: (body["description" + i] || undefined),
-      value: ( body["value" + i] ? parseFloat(body["value" + i]) : undefined)
+      description: body["description" + i] || undefined,
+      value: body["value" + i] ? parseFloat(body["value" + i]) : undefined,
     }));
 
-    return Promise.resolve(Object.assign({}, originalClaimDetails, {
-      comments: body.comments,
-      lineItems
-    }));
+    return Promise.resolve(
+      Object.assign({}, originalClaimDetails, {
+        comments: body.comments,
+        lineItems,
+      }),
+    );
   }
 
   protected createValidationResult(params: EditClaimDetailsParams, dto: ClaimDetailsDto) {
@@ -46,12 +49,23 @@ export class EditClaimLineItemsFormHandler extends StandardFormHandlerBase<EditC
     return storeKeys.getClaimDetailKey(params.partnerId, params.periodId, params.costCategoryId);
   }
 
-  protected async run(context: IContext, params: EditClaimDetailsParams, button: IFormButton, dto: ClaimDetailsDto): Promise<ILinkInfo> {
-    const command = new SaveClaimDetails(params.projectId, params.partnerId, params.periodId, params.costCategoryId, dto);
+  protected async run(
+    context: IContext,
+    params: EditClaimDetailsParams,
+    button: IFormButton,
+    dto: ClaimDetailsDto,
+  ): Promise<ILinkInfo> {
+    const command = new SaveClaimDetails(
+      params.projectId,
+      params.partnerId,
+      params.periodId,
+      params.costCategoryId,
+      dto,
+    );
 
     await context.runCommand(command);
 
-    if(button.name === "upload") {
+    if (button.name === "upload") {
       return ClaimDetailDocumentsRoute.getLink(params);
     }
 

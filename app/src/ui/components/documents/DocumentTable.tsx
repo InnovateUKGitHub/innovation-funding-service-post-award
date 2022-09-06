@@ -33,7 +33,9 @@ export function DocumentTable({ documents = [], qa, customContent }: DocumentTab
         qa="fileType"
         value={x =>
           x.description ? (
-            <Content value={c => c.components.documents.labels.documentDescriptionLabel(x.description as DocumentDescription)} />
+            <Content
+              value={c => c.components.documents.labels.documentDescriptionLabel(x.description as DocumentDescription)}
+            />
           ) : null
         }
       />

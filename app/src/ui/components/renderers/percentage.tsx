@@ -5,7 +5,7 @@ export interface Props {
   fractionDigits?: number;
 }
 
-export const Percentage: React.FunctionComponent<Props> = ({ value, fractionDigits = 2 }) => {
+export const Percentage: React.FunctionComponent<Props> = ({ value, fractionDigits = 2 }: Props) => {
   if (!isNumber(value)) return null;
 
   const options = {

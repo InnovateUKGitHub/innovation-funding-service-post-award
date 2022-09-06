@@ -96,7 +96,8 @@ export interface IPartnerRepository {
  */
 export class PartnerRepository
   extends SalesforceRepositoryBaseWithMapping<ISalesforcePartner, Partner>
-  implements IPartnerRepository {
+  implements IPartnerRepository
+{
   protected readonly salesforceObjectName = "Acc_ProjectParticipant__c";
 
   protected readonly salesforceFieldNames = [

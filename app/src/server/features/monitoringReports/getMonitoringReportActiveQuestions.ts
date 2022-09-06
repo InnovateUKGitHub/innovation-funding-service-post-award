@@ -4,7 +4,6 @@ import { MonitoringReportQuestionDto } from "@framework/dtos";
 import { QueryBase } from "../common";
 
 export class GetMonitoringReportActiveQuestions extends QueryBase<MonitoringReportQuestionDto[]> {
-
   private async getQuestions(context: IContext) {
     const sfQuestions = await context.repositories.monitoringReportQuestions.getAll();
     return sfQuestions

@@ -31,20 +31,32 @@ class Component extends ContainerBase<Params, Props, {}> {
       partner: this.props.partner,
       pcr: this.props.pcr,
       costCategories: this.props.costCategories,
-      financialVirements: this.props.financialVirements
+      financialVirements: this.props.financialVirements,
     });
 
-    return <ACC.PageLoader pending={combined} render={data => this.renderPage(data.project, data.partner, data.costCategories, data.financialVirements, data.pcr)} />;
+    return (
+      <ACC.PageLoader
+        pending={combined}
+        render={data =>
+          this.renderPage(data.project, data.partner, data.costCategories, data.financialVirements, data.pcr)
+        }
+      />
+    );
   }
 
-  private renderPage(project: ProjectDto, partner: PartnerDto, costCategories: CostCategoryDto[], financialVirements: PartnerVirementsDto, pcr: PCRDto) {
-    const data = costCategories
-      .map(costCategory => ({
-        costCategory,
-        virement: financialVirements.virements.find(x => x.costCategoryId === costCategory.id) || createDto<CostCategoryVirementDto>({})
-      }))
-      ;
-
+  private renderPage(
+    project: ProjectDto,
+    partner: PartnerDto,
+    costCategories: CostCategoryDto[],
+    financialVirements: PartnerVirementsDto,
+    pcr: PCRDto,
+  ) {
+    const data = costCategories.map(costCategory => ({
+      costCategory,
+      virement:
+        financialVirements.virements.find(x => x.costCategoryId === costCategory.id) ||
+        createDto<CostCategoryVirementDto>({}),
+    }));
     const VirementTable = ACC.TypedTable<typeof data[0]>();
     return (
       <ACC.Page backLink={this.getBackLink()} pageTitle={<ACC.Projects.Title {...project} />}>
@@ -102,13 +114,21 @@ class Component extends ContainerBase<Params, Props, {}> {
     const params = {
       projectId: this.props.projectId,
       pcrId: this.props.pcrId,
-      itemId: this.props.itemId
+      itemId: this.props.itemId,
     };
 
     if (this.props.mode === "review") {
-      return <ACC.BackLink route={this.props.routes.pcrReviewItem.getLink(params)}><ACC.Content value={x => x.financialVirementDetails.labels.backToSummary}/></ACC.BackLink>;
+      return (
+        <ACC.BackLink route={this.props.routes.pcrReviewItem.getLink(params)}>
+          <ACC.Content value={x => x.financialVirementDetails.labels.backToSummary} />
+        </ACC.BackLink>
+      );
     }
-    return <ACC.BackLink route={this.props.routes.pcrViewItem.getLink(params)}><ACC.Content value={x => x.financialVirementDetails.labels.backToSummary}/></ACC.BackLink>;
+    return (
+      <ACC.BackLink route={this.props.routes.pcrViewItem.getLink(params)}>
+        <ACC.Content value={x => x.financialVirementDetails.labels.backToSummary} />
+      </ACC.BackLink>
+    );
   }
 }
 
@@ -136,12 +156,12 @@ export const FinancialVirementDetailsRoute = defineRoute({
   routeName: "financial-virement-details",
   routePath: "/projects/:projectId/pcrs/:pcrId/:mode/item/:itemId/financial/:partnerId",
   container: Container,
-  getParams: (route) => ({
+  getParams: route => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
     itemId: route.params.itemId,
     partnerId: route.params.partnerId,
-    mode: route.params.mode
+    mode: route.params.mode,
   }),
-  getTitle: ({ content }) => content.financialVirementDetails.title()
+  getTitle: ({ content }) => content.financialVirementDetails.title(),
 });

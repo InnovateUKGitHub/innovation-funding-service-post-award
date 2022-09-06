@@ -136,9 +136,7 @@ describe("FinancialLoanVirementDtoValidator", () => {
     });
 
     describe("with totalValue", () => {
-      /**
-       * @description returns a stub object for testing, requires args needed for testing
-       */
+      // returns a stub object for testing, requires args needed for testing
       const createTotalValueStub = (
         stubs?: Pick<FinancialLoanVirementDto["loans"][0], "isEditable" | "period" | "currentValue" | "newValue">[],
       ): FinancialLoanVirementDto => {
@@ -163,7 +161,9 @@ describe("FinancialLoanVirementDtoValidator", () => {
 
         expect(validation.totalValue.isValid).toBe(expectedResponse);
 
+        // TODO: Remove this if statement. See ACC-8810
         if (!validation.totalValue.isValid) {
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(validation.totalValue.errorMessage).toBe(expectedError);
         }
       });

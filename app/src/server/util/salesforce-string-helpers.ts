@@ -25,6 +25,5 @@ export function sss(unsanitisedValue: string | number): string {
 
   // TODO: When in NodeJS 16, use the replaceAll API from ES2021
   // https://github.com/tc39/proposal-string-replaceall
-  return unsanitisedValue
-    .replace(/'/g, "\\'");
+  return unsanitisedValue.replace(/'/g, "\\'");
 }

@@ -5,18 +5,17 @@ import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { configuration } from "@server/features/common";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import {
-  ClaimDetailDocumentsPageParams,
-  ClaimDetailDocumentsRoute
-} from "../../../ui/containers";
+import { ClaimDetailDocumentsPageParams, ClaimDetailDocumentsRoute } from "../../../ui/containers";
 import { IFormButton, StandardFormHandlerBase } from "../formHandlerBase";
 
 interface Document extends MultipleDocumentUploadDto {
   id: string;
 }
 
-export class ClaimDetailDocumentDeleteHandler extends StandardFormHandlerBase<ClaimDetailDocumentsPageParams, "multipleDocuments"> {
-
+export class ClaimDetailDocumentDeleteHandler extends StandardFormHandlerBase<
+  ClaimDetailDocumentsPageParams,
+  "multipleDocuments"
+> {
   constructor() {
     super(ClaimDetailDocumentsRoute, ["delete"], "multipleDocuments");
   }
@@ -32,7 +31,12 @@ export class ClaimDetailDocumentDeleteHandler extends StandardFormHandlerBase<Cl
     return storeKeys.getClaimDetailKey(params.partnerId, params.periodId, params.costCategoryId);
   }
 
-  protected async run(context: IContext, params: ClaimDetailDocumentsPageParams, button: IFormButton, dto: Document): Promise<ILinkInfo> {
+  protected async run(
+    context: IContext,
+    params: ClaimDetailDocumentsPageParams,
+    button: IFormButton,
+    dto: Document,
+  ): Promise<ILinkInfo> {
     const command = new DeleteClaimDetailDocumentCommand(dto.id, params);
     await context.runCommand(command);
     return ClaimDetailDocumentsRoute.getLink(params);

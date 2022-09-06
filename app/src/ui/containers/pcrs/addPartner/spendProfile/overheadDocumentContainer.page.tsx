@@ -52,7 +52,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
 
   private renderContents({ project, costCategories, documents, editor, pcrItem }: CombinedData) {
     const cost = pcrItem.spendProfile.costs.find(x => x.costCategoryId === this.props.costCategoryId);
-    if(!cost) throw new Error(`Cannot find cost matching ${this.props.costCategoryId}`);
+    if (!cost) throw new Error(`Cannot find cost matching ${this.props.costCategoryId}`);
     const back = this.props.routes.pcrPrepareSpendProfileEditCost.getLink({
       projectId: project.id,
       pcrId: this.props.pcrId,
@@ -60,7 +60,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
       costCategoryId: this.props.costCategoryId,
       costId: cost.id,
     });
-    const costCategory = costCategories.find(x => x.id === this.props.costCategoryId) || {} as CostCategoryDto;
+    const costCategory = costCategories.find(x => x.id === this.props.costCategoryId) || ({} as CostCategoryDto);
 
     return (
       <ACC.Page
@@ -164,9 +164,11 @@ const OverheadDocumentContainer = (props: OverheadDocumentsPageParams & BaseProp
       project={stores.projects.getById(props.projectId)}
       costCategories={stores.costCategories.getAllUnfiltered()}
       pcrItem={
-        stores.projectChangeRequests.getItemById(props.projectId, props.pcrId, props.itemId) as Pending<
-          PCRItemForPartnerAdditionDto
-        >
+        stores.projectChangeRequests.getItemById(
+          props.projectId,
+          props.pcrId,
+          props.itemId,
+        ) as Pending<PCRItemForPartnerAdditionDto>
       }
       documents={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.itemId)}
       editor={stores.projectChangeRequestDocuments.getPcrOrPcrItemDocumentsEditor(props.projectId, props.itemId)}

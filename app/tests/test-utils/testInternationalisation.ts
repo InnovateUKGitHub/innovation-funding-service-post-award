@@ -15,5 +15,4 @@ export class TestInternationalisation implements IInternationalisation {
     }
     return null;
   }
-
 }

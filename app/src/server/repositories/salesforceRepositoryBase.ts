@@ -62,7 +62,7 @@ export abstract class RepositoryBase {
           rej(this.constructError(err));
         } else {
           // there is an error in the typings of result so need to cast here
-          res((records as any) as T[]);
+          res(records as any as T[]);
         }
       });
     });
@@ -117,7 +117,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
 
       if (!query.done) throw new Errors.BadSalesforceQuery();
 
-      return (query.records as unknown) as T;
+      return query.records as unknown as T;
     } catch (error) {
       throw this.constructError(error);
     }
@@ -398,7 +398,6 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
    * @description Receive a payload, split into batches. Then invoke the param on each batch.
    *
    * A batch is determined from a config value. This config has been set to the max payload size SF can handle on each request, thus removing SF query errors.
-   *
    */
   private batchRequest<BatchType extends any[], Response>(
     payload: BatchType,

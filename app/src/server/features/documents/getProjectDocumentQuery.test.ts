@@ -51,7 +51,9 @@ describe("GetProjectDocumentQuery", () => {
 
       const query = new GetProjectDocumentQuery(project.Id, document.Id);
 
-      const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {} } });
+      const auth = new Authorisation({
+        [project.Id]: { projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {} },
+      });
       expect(await context.runAccessControl(auth, query)).toBe(true);
     });
 
@@ -75,7 +77,9 @@ describe("GetProjectDocumentQuery", () => {
 
       const query = new GetProjectDocumentQuery(project.Id, document.Id);
 
-      const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.FinancialContact, partnerRoles: {} } });
+      const auth = new Authorisation({
+        [project.Id]: { projectRoles: ProjectRole.FinancialContact, partnerRoles: {} },
+      });
       expect(await context.runAccessControl(auth, query)).toBe(false);
     });
 
@@ -88,7 +92,9 @@ describe("GetProjectDocumentQuery", () => {
 
       const query = new GetProjectDocumentQuery(project1.Id, document.Id);
 
-      const auth = new Authorisation({ [project2.Id]: { projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {} } });
+      const auth = new Authorisation({
+        [project2.Id]: { projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {} },
+      });
       expect(await context.runAccessControl(auth, query)).toBe(false);
     });
   });

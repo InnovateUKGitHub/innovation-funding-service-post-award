@@ -88,14 +88,14 @@ describe("UpdatePCRSpendProfileCommand", () => {
       expect(insertedItems).toHaveLength(2);
 
       const item1 = insertedItems.find(x => x.costCategoryId === directlyIncurredCostCategory.id);
-      if(!item1) throw new Error("item1 not found");
+      if (!item1) throw new Error("item1 not found");
       expect(item1.id).toBeTruthy();
       expect(item1.value).toBe(directlyIncurredCost.value);
       expect(item1.costCategoryId).toBe(directlyIncurredCostCategory.id);
       expect(item1.description).toBe(directlyIncurredCost.description);
 
       const item2 = insertedItems.find(x => x.costCategoryId === exceptionsEquipmentCostCategory.id);
-      if(!item2) throw new Error("item2 not found");
+      if (!item2) throw new Error("item2 not found");
       expect(item2.id).toBeTruthy();
       expect(item2.value).toBe(exceptionsEquipmentCost.value);
       expect(item2.costCategoryId).toBe(exceptionsEquipmentCost.costCategoryId);

@@ -14,10 +14,14 @@ export class GetAllForecastsGOLCostsQuery extends QueryBase<GOLCostDto[]> {
     const results = await context.repositories.profileTotalCostCategory.getAllByPartnerId(this.partnerId);
     const mapped = results.map<GOLCostDto>(x => ({
       costCategoryId: x.Acc_CostCategory__c,
-      costCategoryName: costCategories.filter(costCategory => costCategory.id === x.Acc_CostCategory__c).map(costCategory => costCategory.name)[0],
+      costCategoryName: costCategories
+        .filter(costCategory => costCategory.id === x.Acc_CostCategory__c)
+        .map(costCategory => costCategory.name)[0],
       value: x.Acc_CostCategoryGOLCost__c,
     }));
 
-    return mapped.sort((x,y) => costCategoriesOrder.indexOf(x.costCategoryId) - costCategoriesOrder.indexOf(y.costCategoryId));
+    return mapped.sort(
+      (x, y) => costCategoriesOrder.indexOf(x.costCategoryId) - costCategoriesOrder.indexOf(y.costCategoryId),
+    );
   }
 }

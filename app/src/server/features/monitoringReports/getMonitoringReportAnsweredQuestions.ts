@@ -3,10 +3,7 @@ import { IContext } from "@framework/types";
 import { QueryBase } from "../common";
 
 export class GetMonitoringReportAnsweredQuestions extends QueryBase<MonitoringReportQuestionDto[]> {
-
-  constructor(
-    private readonly questionIds: string[]
-  ) {
+  constructor(private readonly questionIds: string[]) {
     super();
   }
 
@@ -22,11 +19,13 @@ export class GetMonitoringReportAnsweredQuestions extends QueryBase<MonitoringRe
         comments: null,
         description: x.Acc_QuestionDescription__c,
         isScored: x.Acc_ScoredQuestion__c,
-        options: [{
-          id: x.Id,
-          questionText: x.Acc_QuestionText__c,
-          questionScore: x.Acc_QuestionScore__c
-        }],
+        options: [
+          {
+            id: x.Id,
+            questionText: x.Acc_QuestionText__c,
+            questionScore: x.Acc_QuestionScore__c,
+          },
+        ],
       }));
   }
 }

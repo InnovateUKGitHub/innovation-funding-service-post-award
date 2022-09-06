@@ -3,7 +3,6 @@ import { MonitoringReportStatus } from "@framework/constants";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("GetMonitoringReport", () => {
-
   it("returns all questions when they have all been answered", async () => {
     const context = new TestContext();
     const testData = context.testData;
@@ -69,7 +68,9 @@ describe("GetMonitoringReport", () => {
     const expectedPeriodId = 2;
     const project = testData.createProject();
 
-    const report = testData.createMonitoringReportHeader(project, expectedPeriodId, { Acc_MonitoringReportStatus__c: "Awaiting IUK Approval" });
+    const report = testData.createMonitoringReportHeader(project, expectedPeriodId, {
+      Acc_MonitoringReportStatus__c: "Awaiting IUK Approval",
+    });
 
     const query = new GetMonitoringReportById(report.Acc_Project__c, report.Id);
 
@@ -150,14 +151,19 @@ describe("GetMonitoringReport", () => {
     testData.createMonitoringReportQuestionSet(2, 3, false);
     const question3 = testData.createMonitoringReportQuestionSet(3, 3);
 
-    const report = testData.createMonitoringReportHeader(undefined, undefined, { Acc_MonitoringReportStatus__c: "Draft" });
+    const report = testData.createMonitoringReportHeader(undefined, undefined, {
+      Acc_MonitoringReportStatus__c: "Draft",
+    });
 
     const query = new GetMonitoringReportById(report.Acc_Project__c, report.Id);
 
     const result = await context.runQuery(query);
 
     expect(result.questions).toHaveLength(2);
-    expect(result.questions.map(x => x.title)).toEqual([question1[0].Acc_QuestionName__c, question3[0].Acc_QuestionName__c]);
+    expect(result.questions.map(x => x.title)).toEqual([
+      question1[0].Acc_QuestionName__c,
+      question3[0].Acc_QuestionName__c,
+    ]);
   });
 
   it("returns only answered questions when the report is submitted", async () => {
@@ -169,7 +175,9 @@ describe("GetMonitoringReport", () => {
     const question2 = testData.createMonitoringReportQuestionSet(2, 3, false);
     const question3 = testData.createMonitoringReportQuestionSet(3, 3);
 
-    const report = testData.createMonitoringReportHeader(undefined, undefined, { Acc_MonitoringReportStatus__c: "Awaiting IUK Approval" });
+    const report = testData.createMonitoringReportHeader(undefined, undefined, {
+      Acc_MonitoringReportStatus__c: "Awaiting IUK Approval",
+    });
 
     testData.createMonitoringReportResponse(report, question1[1]);
     testData.createMonitoringReportResponse(report, question2[2]);
@@ -179,7 +187,11 @@ describe("GetMonitoringReport", () => {
 
     const result = await context.runQuery(query);
     expect(result.questions).toHaveLength(3);
-    expect(result.questions.map(x => x.title)).toEqual([question1[0].Acc_QuestionName__c, question2[0].Acc_QuestionName__c, question3[2].Acc_QuestionName__c]);
+    expect(result.questions.map(x => x.title)).toEqual([
+      question1[0].Acc_QuestionName__c,
+      question2[0].Acc_QuestionName__c,
+      question3[2].Acc_QuestionName__c,
+    ]);
     expect(result.questions.map(x => x.optionId)).toEqual([question1[1].Id, question2[2].Id, question3[0].Id]);
   });
 });

@@ -62,7 +62,9 @@ describe("GetCostSummaryForPeriodQuery", () => {
 
     const partner = context.testData.createPartner();
 
-    context.testData.range(3, () => context.testData.createCostCategory({ organisationType: PCROrganisationType.Academic }));
+    context.testData.range(3, () =>
+      context.testData.createCostCategory({ organisationType: PCROrganisationType.Academic }),
+    );
 
     const costCategories = context.testData.range(5, () =>
       context.testData.createCostCategory({ organisationType: PCROrganisationType.Industrial }),

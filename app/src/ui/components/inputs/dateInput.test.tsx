@@ -4,7 +4,6 @@ import userEvent from "@testing-library/user-event";
 import { FullDateInput, MonthYearInput } from "@ui/components/inputs/dateInput";
 
 describe("FullDateInput", () => {
-
   it("Renders with given name", () => {
     render(<FullDateInput name="testName" />);
     expect(document.querySelector('[name="testName_day"]')).toBeInTheDocument();
@@ -26,7 +25,7 @@ describe("FullDateInput", () => {
 
     const dateInput = getByLabelText("Month") as HTMLInputElement;
     expect(dateInput.value).toBe("");
-   await userEvent.type(dateInput, "05");
+    await userEvent.type(dateInput, "05");
     expect(dateInput.value).toEqual("05");
   });
 

@@ -9,20 +9,39 @@ import { UploadClaimDetailDocumentCommand } from "../../features/documents/uploa
 import { ClaimDetailDocumentsPageParams, ClaimDetailDocumentsRoute } from "../../../ui/containers";
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "../formHandlerBase";
 
-export class ClaimDetailDocumentUploadHandler extends MultipleFileFormHandlerBase<ClaimDetailDocumentsPageParams, "multipleDocuments"> {
+export class ClaimDetailDocumentUploadHandler extends MultipleFileFormHandlerBase<
+  ClaimDetailDocumentsPageParams,
+  "multipleDocuments"
+> {
   constructor() {
     super(ClaimDetailDocumentsRoute, ["default"], "multipleDocuments");
   }
 
-  protected async getDto(context: IContext, params: ClaimDetailDocumentsPageParams, button: IFormButton, body: IFormBody, files: IFileWrapper[]): Promise<MultipleDocumentUploadDto> {
+  protected async getDto(
+    context: IContext,
+    params: ClaimDetailDocumentsPageParams,
+    button: IFormButton,
+    body: IFormBody,
+    files: IFileWrapper[],
+  ): Promise<MultipleDocumentUploadDto> {
     return {
       files,
-      description: Number(body.description) || undefined
+      description: Number(body.description) || undefined,
     };
   }
 
-  protected async run(context: IContext, params: ClaimDetailDocumentsPageParams, button: IFormButton, dto: MultipleDocumentUploadDto): Promise<ILinkInfo> {
-    const claimDetailKey = { projectId: params.projectId, partnerId: params.partnerId, periodId: params.periodId, costCategoryId: params.costCategoryId };
+  protected async run(
+    context: IContext,
+    params: ClaimDetailDocumentsPageParams,
+    button: IFormButton,
+    dto: MultipleDocumentUploadDto,
+  ): Promise<ILinkInfo> {
+    const claimDetailKey = {
+      projectId: params.projectId,
+      partnerId: params.partnerId,
+      periodId: params.periodId,
+      costCategoryId: params.costCategoryId,
+    };
 
     await context.runCommand(new UploadClaimDetailDocumentCommand(claimDetailKey, dto));
 

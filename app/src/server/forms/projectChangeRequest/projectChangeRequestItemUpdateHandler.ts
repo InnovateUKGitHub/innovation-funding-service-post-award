@@ -343,7 +343,11 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
     }
   }
 
-  private updateLoanExtension(item: Dtos.PCRItemForLoanDrawdownExtensionDto, body: IFormBody, stepName: string | undefined) {
+  private updateLoanExtension(
+    item: Dtos.PCRItemForLoanDrawdownExtensionDto,
+    body: IFormBody,
+    stepName: string | undefined,
+  ) {
     if (stepName === "loanExtension") {
       item.availabilityPeriodChange = Number(body.availabilityPeriodChange);
       item.extensionPeriodChange = Number(body.extensionPeriodChange);

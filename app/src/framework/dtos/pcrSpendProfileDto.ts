@@ -7,14 +7,14 @@ export interface PcrSpendProfileDto {
 }
 
 export type PCRSpendProfileCostDto =
-    PCRSpendProfileAcademicCostDto
-    | PCRSpendProfileLabourCostDto
-    | PCRSpendProfileMaterialsCostDto
-    | PCRSpendProfileOverheadsCostDto
-    | PCRSpendProfileSubcontractingCostDto
-    | PCRSpendProfileCapitalUsageCostDto
-    | PCRSpendProfileTravelAndSubsCostDto
-    | PCRSpendProfileOtherCostsDto;
+  | PCRSpendProfileAcademicCostDto
+  | PCRSpendProfileLabourCostDto
+  | PCRSpendProfileMaterialsCostDto
+  | PCRSpendProfileOverheadsCostDto
+  | PCRSpendProfileSubcontractingCostDto
+  | PCRSpendProfileCapitalUsageCostDto
+  | PCRSpendProfileTravelAndSubsCostDto
+  | PCRSpendProfileOtherCostsDto;
 
 export type PCRSpendProfileFundingDto = PCRSpendProfileOtherFundingDto;
 
@@ -53,7 +53,8 @@ export interface PCRSpendProfileMaterialsCostDto extends PCRSpendProfileBaseCost
   costPerItem: number | null;
 }
 
-export interface PCRSpendProfileSubcontractingCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Subcontracting> {
+export interface PCRSpendProfileSubcontractingCostDto
+  extends PCRSpendProfileBaseCostDto<CostCategoryType.Subcontracting> {
   costCategory: CostCategoryType.Subcontracting;
   subcontractorCountry: string | null;
   subcontractorRoleAndDescription: string | null;
@@ -69,7 +70,8 @@ export interface PCRSpendProfileCapitalUsageCostDto extends PCRSpendProfileBaseC
   utilisation: number | null;
 }
 
-export interface PCRSpendProfileTravelAndSubsCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Travel_And_Subsistence> {
+export interface PCRSpendProfileTravelAndSubsCostDto
+  extends PCRSpendProfileBaseCostDto<CostCategoryType.Travel_And_Subsistence> {
   numberOfTimes: number | null;
   costOfEach: number | null;
 }

@@ -24,8 +24,10 @@ export interface IProfileTotalPeriodRepository {
  *
  * Stored in "Acc_Profile__c" table with record type of "Total Project Period"
  */
-export class ProfileTotalPeriodRepository extends SalesforceRepositoryBase<ISalesforceProfileTotalPeriod> implements IProfileTotalPeriodRepository {
-
+export class ProfileTotalPeriodRepository
+  extends SalesforceRepositoryBase<ISalesforceProfileTotalPeriod>
+  implements IProfileTotalPeriodRepository
+{
   private readonly recordType: string = "Total Project Period";
 
   protected readonly salesforceObjectName = "Acc_Profile__c";
@@ -36,7 +38,7 @@ export class ProfileTotalPeriodRepository extends SalesforceRepositoryBase<ISale
     "Acc_ProjectPeriodNumber__c",
     "Acc_ProjectPeriodStartDate__c",
     "Acc_ProjectPeriodEndDate__c",
-    "Acc_PeriodLatestForecastCost__c"
+    "Acc_PeriodLatestForecastCost__c",
   ];
 
   getAllByProjectId(projectId: string): Promise<ISalesforceProfileTotalPeriod[]> {

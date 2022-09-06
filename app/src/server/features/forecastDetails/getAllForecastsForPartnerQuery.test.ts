@@ -1,4 +1,3 @@
-
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { GetAllForecastsForPartnerQuery } from ".";
 
@@ -9,9 +8,9 @@ describe("GetAllForecastsForPartnerQuery", () => {
     const partner = context.testData.createPartner();
     context.testData.createProfileDetail(costCat, partner);
 
-    const query  = new GetAllForecastsForPartnerQuery(partner.id);
+    const query = new GetAllForecastsForPartnerQuery(partner.id);
     const result = await context.runQuery(query);
-    const item   = result[0];
+    const item = result[0];
 
     expect(item.costCategoryId).toBe(costCat.id);
     expect(item.periodId).toBe(1);
@@ -24,7 +23,7 @@ describe("GetAllForecastsForPartnerQuery", () => {
     const partner = context.testData.createPartner();
     context.testData.createProfileDetail(costCat, partner);
 
-    const query  = new GetAllForecastsForPartnerQuery(partner.id);
+    const query = new GetAllForecastsForPartnerQuery(partner.id);
     const result = await context.runQuery(query);
 
     expect(result.length).toBe(1);
@@ -38,7 +37,7 @@ describe("GetAllForecastsForPartnerQuery", () => {
     context.testData.createProfileDetail(costCat, partner);
     context.testData.createProfileDetail(costCat, partner);
 
-    const query  = new GetAllForecastsForPartnerQuery(partner.id);
+    const query = new GetAllForecastsForPartnerQuery(partner.id);
     const result = await context.runQuery(query);
 
     expect(result.length).toBe(3);

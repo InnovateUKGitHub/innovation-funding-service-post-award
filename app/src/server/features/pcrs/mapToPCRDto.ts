@@ -45,11 +45,16 @@ export const mapToPcrDto = (pcr: ProjectChangeRequestEntity, itemTypes: PCRItemT
 
 const mapItems = (pcrs: ProjectChangeRequestItemEntity[], itemTypes: PCRItemTypeDto[]) => {
   const filtered = itemTypes.filter(itemType => pcrs.some(x => x.recordTypeId === itemType.recordTypeId));
-  return filtered.map(itemType => mapItem(pcrs.find(x => x.recordTypeId === itemType.recordTypeId), itemType));
+  return filtered.map(itemType =>
+    mapItem(
+      pcrs.find(x => x.recordTypeId === itemType.recordTypeId),
+      itemType,
+    ),
+  );
 };
 
 const mapItem = (pcr: ProjectChangeRequestItemEntity | undefined, itemType: PCRItemTypeDto) => {
-  if(!pcr) throw new Error("Cannot map undefined pcr");
+  if (!pcr) throw new Error("Cannot map undefined pcr");
 
   switch (itemType.type) {
     case PCRItemType.TimeExtension:

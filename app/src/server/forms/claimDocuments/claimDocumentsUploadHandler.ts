@@ -9,19 +9,33 @@ import { IFileWrapper } from "@framework/types";
 import { ClaimDocumentsPageParams, ClaimDocumentsRoute } from "../../../ui/containers";
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "../formHandlerBase";
 
-export class ClaimDocumentsUploadHandler extends MultipleFileFormHandlerBase<ClaimDocumentsPageParams, "multipleDocuments"> {
+export class ClaimDocumentsUploadHandler extends MultipleFileFormHandlerBase<
+  ClaimDocumentsPageParams,
+  "multipleDocuments"
+> {
   constructor() {
     super(ClaimDocumentsRoute, ["upload"], "multipleDocuments");
   }
 
-  protected async getDto(context: IContext, params: ClaimDocumentsPageParams, button: IFormButton, body: IFormBody, files: IFileWrapper[]): Promise<MultipleDocumentUploadDto> {
+  protected async getDto(
+    context: IContext,
+    params: ClaimDocumentsPageParams,
+    button: IFormButton,
+    body: IFormBody,
+    files: IFileWrapper[],
+  ): Promise<MultipleDocumentUploadDto> {
     return {
       files,
-      description: Number(body.description) || undefined
+      description: Number(body.description) || undefined,
     };
   }
 
-  protected async run(context: IContext, params: ClaimDocumentsPageParams, button: IFormButton, dto: MultipleDocumentUploadDto): Promise<ILinkInfo> {
+  protected async run(
+    context: IContext,
+    params: ClaimDocumentsPageParams,
+    button: IFormButton,
+    dto: MultipleDocumentUploadDto,
+  ): Promise<ILinkInfo> {
     const claimDocumentsKey = { projectId: params.projectId, partnerId: params.partnerId, periodId: params.periodId };
 
     await context.runCommand(new UploadClaimDocumentsCommand(claimDocumentsKey, dto));

@@ -4,25 +4,31 @@ import { Results } from "../validation/results";
 import * as Validation from "../validators/common";
 
 const exampleDto = {
-    amount: 10,
-    text: "A string",
-    anEmptyField : "",
+  amount: 10,
+  text: "A string",
+  anEmptyField: "",
 };
 
 class ExampleValidator extends Results<typeof exampleDto> {
-    amount = Validation.isTrue(this, this.model.amount > 10, "Amount must be greater than 10");
-    test = Validation.required(this, this.model.text);
-    anEmptyField = Validation.required(this, this.model.anEmptyField);
+  amount = Validation.isTrue(this, this.model.amount > 10, "Amount must be greater than 10");
+  test = Validation.required(this, this.model.text);
+  anEmptyField = Validation.required(this, this.model.anEmptyField);
 }
 
 export const validationSummaryGuide: IGuide = {
-    name: "Validation Summary",
-    options: [
-        {
-            name: "Simple",
-            comments: <>Renders a list of errors with anchor links to the relevent error.<br/>Will not display until show errors is true and there is an error.</>,
-            example: "<ValidationError error={validationError}/>",
-            render: () => <ValidationSummary validation={new ExampleValidator(exampleDto, true)}/>
-        }
-    ]
+  name: "Validation Summary",
+  options: [
+    {
+      name: "Simple",
+      comments: (
+        <>
+          Renders a list of errors with anchor links to the relevent error.
+          <br />
+          Will not display until show errors is true and there is an error.
+        </>
+      ),
+      example: "<ValidationError error={validationError}/>",
+      render: () => <ValidationSummary validation={new ExampleValidator(exampleDto, true)} />,
+    },
+  ],
 };

@@ -1,7 +1,5 @@
 import { IContext, PCRSpendProfileOverheadRate } from "@framework/types";
-import {
-  PcrSpendProfileOverheadRateMapper
-} from "@server/repositories/mappers/pcrSpendProfileMapper";
+import { PcrSpendProfileOverheadRateMapper } from "@server/repositories/mappers/pcrSpendProfileMapper";
 import { OptionsQueryBase } from "../common/optionsQueryBase";
 
 export class GetPcrSpendProfileOverheadRateOptionsQuery extends OptionsQueryBase<PCRSpendProfileOverheadRate> {

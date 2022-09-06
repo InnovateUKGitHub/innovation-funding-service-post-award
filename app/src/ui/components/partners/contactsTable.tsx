@@ -23,23 +23,11 @@ export function ContactsTable({ contacts, projectContactLabels }: IContactsTable
 
   return (
     <ContactsUI.Table qa="contacts-table-details" data={contacts}>
-      <ContactsUI.String
-        qa="partner-name"
-        header={x => projectContactLabels(x).contactName}
-        value={x => x.name}
-      />
+      <ContactsUI.String qa="partner-name" header={x => projectContactLabels(x).contactName} value={x => x.name} />
 
-      <ContactsUI.String
-        qa="partner-roleName"
-        header={x => projectContactLabels(x).roleName}
-        value={x => x.roleName}
-      />
+      <ContactsUI.String qa="partner-roleName" header={x => projectContactLabels(x).roleName} value={x => x.roleName} />
 
-      <ContactsUI.Email
-        qa="partner-email"
-        header={x => projectContactLabels(x).contactEmail}
-        value={x => x.email}
-      />
+      <ContactsUI.Email qa="partner-email" header={x => projectContactLabels(x).contactEmail} value={x => x.email} />
     </ContactsUI.Table>
   );
 }

@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { PCROrganisationType,  } from "@framework/constants";
+import { PCROrganisationType } from "@framework/constants";
 
 import {
   createClaim,

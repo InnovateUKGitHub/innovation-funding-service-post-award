@@ -64,7 +64,7 @@ describe("useEditPartnerLevelContent()", () => {
     ${"remainingGrantInfoCheckRules"}     | ${"checkRules"}
     ${"remainingGrantInfoRemainingGrant"} | ${"remainingGrant"}
     ${"remainingGrantInfoFundingLevel"}   | ${"fundingLevel"}
-  `("with $property ", ({ name, property }: Record<"name" | "property", string>) => {
+  `("with $property", ({ name, property }: Record<"name" | "property", string>) => {
     const { result } = renderPageContent();
 
     const content = (result.current as any)[name];
@@ -84,7 +84,7 @@ describe("useEditPartnerLevelContent()", () => {
     ${"newFundingLevel"}               | ${"newFundingLevel"}
     ${"projectTotals"}                 | ${"projectTotals"}
     ${"backToSummary"}                 | ${"backToSummary"}
-  `("with $property ", ({ name, property }: Record<"name" | "property", string>) => {
+  `("with $property", ({ name, property }: Record<"name" | "property", string>) => {
     const { result } = renderPageContent();
 
     const content = (result.current as any)[name];

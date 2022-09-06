@@ -7,7 +7,7 @@ describe("GetAllRecordTypesQuery", () => {
 
     const expected = context.testData.range(5, () => context.testData.createRecordType());
 
-    const query  =  new GetAllRecordTypesQuery();
+    const query = new GetAllRecordTypesQuery();
     const result = await context.runQuery(query);
 
     expect(result).toEqual(expected);

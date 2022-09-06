@@ -5,7 +5,6 @@ import { MonitoringReportStatus } from "@framework/constants";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("createMonitoringReports", () => {
-
   it("should create new", async () => {
     const context = new TestContext();
 
@@ -35,7 +34,9 @@ describe("createMonitoringReports", () => {
   it("should create new with all answered questions", async () => {
     const context = new TestContext();
 
-    const questionOptions = context.testData.range(3, seed => context.testData.createMonitoringReportQuestionSet(seed, 3));
+    const questionOptions = context.testData.range(3, seed =>
+      context.testData.createMonitoringReportQuestionSet(seed, 3),
+    );
 
     const dto = await getCreateDto(context);
 
@@ -50,9 +51,18 @@ describe("createMonitoringReports", () => {
     const headerId = await context.runCommand(new CreateMonitoringReportCommand(dto, false));
 
     expect(context.repositories.monitoringReportResponse.Items.length).toBe(2);
-    expect(context.repositories.monitoringReportResponse.Items.map(x => x.Acc_MonitoringHeader__c)).toEqual([headerId, headerId]);
-    expect(context.repositories.monitoringReportResponse.Items.map(x => x.Acc_QuestionComments__c)).toEqual(["Question 1 Comments", "Question 3 Comments"]);
-    expect(context.repositories.monitoringReportResponse.Items.map(x => x.Acc_Question__c)).toEqual([questionOptions[0][0].Id, questionOptions[2][2].Id]);
+    expect(context.repositories.monitoringReportResponse.Items.map(x => x.Acc_MonitoringHeader__c)).toEqual([
+      headerId,
+      headerId,
+    ]);
+    expect(context.repositories.monitoringReportResponse.Items.map(x => x.Acc_QuestionComments__c)).toEqual([
+      "Question 1 Comments",
+      "Question 3 Comments",
+    ]);
+    expect(context.repositories.monitoringReportResponse.Items.map(x => x.Acc_Question__c)).toEqual([
+      questionOptions[0][0].Id,
+      questionOptions[2][2].Id,
+    ]);
   });
 
   it("should create Submitted report if specified", async () => {
@@ -62,7 +72,9 @@ describe("createMonitoringReports", () => {
 
     await context.runCommand(new CreateMonitoringReportCommand(dto, true));
 
-    expect(context.repositories.monitoringReportHeader.Items[0].Acc_MonitoringReportStatus__c).toEqual("Awaiting IUK Approval");
+    expect(context.repositories.monitoringReportHeader.Items[0].Acc_MonitoringReportStatus__c).toEqual(
+      "Awaiting IUK Approval",
+    );
   });
 
   it("should create a status change for draft if the report is created", async () => {
@@ -70,7 +82,9 @@ describe("createMonitoringReports", () => {
 
     const dto = await getCreateDto(context);
     const headerId = await context.runCommand(new CreateMonitoringReportCommand(dto, false));
-    expect(context.repositories.monitoringReportStatusChange.Items.filter(x => x.Acc_MonitoringReport__c === headerId)).toHaveLength(1);
+    expect(
+      context.repositories.monitoringReportStatusChange.Items.filter(x => x.Acc_MonitoringReport__c === headerId),
+    ).toHaveLength(1);
   });
 
   it("should create a status change for awaiting approval if the report is submitted", async () => {
@@ -78,20 +92,25 @@ describe("createMonitoringReports", () => {
 
     const dto = await getCreateDto(context);
     const headerId = await context.runCommand(new CreateMonitoringReportCommand(dto, true));
-    expect(context.repositories.monitoringReportStatusChange.Items.filter(x => x.Acc_MonitoringReport__c === headerId)).toHaveLength(2);
+    expect(
+      context.repositories.monitoringReportStatusChange.Items.filter(x => x.Acc_MonitoringReport__c === headerId),
+    ).toHaveLength(2);
   });
 });
 
 async function getCreateDto(context: TestContext, startDate?: string, endDate?: string): Promise<MonitoringReportDto> {
   const questions = await context.runQuery(new GetMonitoringReportActiveQuestions());
-  const project = context.testData.createProject((x) => {
+  const project = context.testData.createProject(x => {
     x.Acc_CurrentPeriodNumber__c = 1;
   });
   const partner = context.testData.createPartner(project);
-  context.testData.createProfileTotalPeriod(partner, 1, x => (
-    startDate && (x.Acc_ProjectPeriodStartDate__c = startDate),
-    endDate && (x.Acc_ProjectPeriodEndDate__c = endDate)
-  ));
+  context.testData.createProfileTotalPeriod(
+    partner,
+    1,
+    x => (
+      startDate && (x.Acc_ProjectPeriodStartDate__c = startDate), endDate && (x.Acc_ProjectPeriodEndDate__c = endDate)
+    ),
+  );
 
   return {
     projectId: project.Id,

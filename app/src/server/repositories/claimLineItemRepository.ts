@@ -28,9 +28,15 @@ export interface IClaimLineItemRepository {
  *
  * A number of claim line item records are summed to make a claim detail
  */
-export class ClaimLineItemRepository extends SalesforceRepositoryBase<ISalesforceClaimLineItem> implements IClaimLineItemRepository {
-
-  constructor(private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+export class ClaimLineItemRepository
+  extends SalesforceRepositoryBase<ISalesforceClaimLineItem>
+  implements IClaimLineItemRepository
+{
+  constructor(
+    private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>,
+    getSalesforceConnection: () => Promise<Connection>,
+    logger: ILogger,
+  ) {
     super(getSalesforceConnection, logger);
   }
 
@@ -45,7 +51,7 @@ export class ClaimLineItemRepository extends SalesforceRepositoryBase<ISalesforc
     "Acc_CostCategory__c",
     "Acc_ProjectPeriodNumber__c",
     "Acc_ProjectParticipant__c",
-    "LastModifiedDate"
+    "LastModifiedDate",
   ];
 
   getAllForCategory(partnerId: string, categoryId: string, periodId: number): Promise<ISalesforceClaimLineItem[]> {
@@ -58,11 +64,11 @@ export class ClaimLineItemRepository extends SalesforceRepositoryBase<ISalesforc
     return super.where(filter);
   }
 
-  delete(ids: string[]): Promise<void>  {
+  delete(ids: string[]): Promise<void> {
     return super.deleteAll(ids);
   }
 
-  update(lineItems: (Updatable<ISalesforceClaimLineItem>)[]): Promise<boolean>  {
+  update(lineItems: Updatable<ISalesforceClaimLineItem>[]): Promise<boolean> {
     return super.updateAll(lineItems);
   }
 

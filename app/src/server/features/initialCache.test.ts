@@ -28,12 +28,12 @@ describe("initialCache", () => {
   });
 
   it("should initialise log errors if the attempt to query fails", async () => {
-   const failedContext = {
-    ...context,
-    runQuery: jest.fn().mockImplementation(() => {
-throw new Error("bang!");
-})
-   } as unknown as IContext;
+    const failedContext = {
+      ...context,
+      runQuery: jest.fn().mockImplementation(() => {
+        throw new Error("bang!");
+      }),
+    } as unknown as IContext;
     await fetchCaches(failedContext);
 
     expect(logger.error.mock.calls).toMatchSnapshot();

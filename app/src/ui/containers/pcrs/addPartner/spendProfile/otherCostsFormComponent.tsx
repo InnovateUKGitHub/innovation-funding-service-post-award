@@ -5,7 +5,9 @@ import { Component } from "react";
 import { SpendProfileCostFormProps } from "@ui/containers";
 import { EditorStatus } from "@ui/constants/enums";
 
-export class OtherCostsFormComponent extends Component<SpendProfileCostFormProps<PCRSpendProfileOtherCostsDto, PCROtherCostsDtoValidator>> {
+export class OtherCostsFormComponent extends Component<
+  SpendProfileCostFormProps<PCRSpendProfileOtherCostsDto, PCROtherCostsDtoValidator>
+> {
   render() {
     const { editor, validator, data, costCategory } = this.props;
     const Form = ACC.TypedForm<PCRSpendProfileOtherCostsDto>();
@@ -19,15 +21,12 @@ export class OtherCostsFormComponent extends Component<SpendProfileCostFormProps
         onChange={() => this.props.onChange(editor.data)}
       >
         <Form.Fieldset qa="other-costs">
-          <Form.Hidden
-            name="id"
-            value={dto => dto.id}
-          />
+          <Form.Hidden name="id" value={dto => dto.id} />
           <Form.MultilineString
             label={x => x.pcrSpendProfilePrepareCostContent.labels.otherCosts.description}
             name="description"
             value={dto => dto.description}
-            update={(x, val) => x.description = val}
+            update={(x, val) => (x.description = val)}
             validation={validator && validator.description}
           />
           <Form.Numeric
@@ -35,12 +34,14 @@ export class OtherCostsFormComponent extends Component<SpendProfileCostFormProps
             width="one-quarter"
             name="value"
             value={dto => dto.value}
-            update={(dto, val) => dto.value = val}
+            update={(dto, val) => (dto.value = val)}
             validation={validator && validator.value}
           />
         </Form.Fieldset>
         <Form.Fieldset qa="save">
-          <Form.Submit><ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.submitButton(costCategory.name)}/></Form.Submit>
+          <Form.Submit>
+            <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.submitButton(costCategory.name)} />
+          </Form.Submit>
         </Form.Fieldset>
       </Form.Form>
     );

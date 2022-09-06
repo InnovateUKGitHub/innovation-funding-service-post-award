@@ -5,7 +5,10 @@ import { PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@f
 import { isNumber } from "@framework/util";
 import { SalesforceBaseMapper } from "./salesforceMapperBase";
 
-export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISalesforcePcrSpendProfile, PcrSpendProfileEntity> {
+export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<
+  ISalesforcePcrSpendProfile,
+  PcrSpendProfileEntity
+> {
   public constructor(private readonly recordTypeId: string) {
     super();
   }
@@ -14,7 +17,7 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
     return {
       id: x.Id,
       costCategoryId: x.Acc_CostCategoryID__c,
-      pcrItemId:  x.Acc_ProjectChangeRequest__c,
+      pcrItemId: x.Acc_ProjectChangeRequest__c,
       value: x.Acc_TotalCost__c,
       description: x.Acc_ItemDescription__c,
 
@@ -25,7 +28,9 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       ratePerDay: x.Acc_Rate__c,
 
       // Overheads
-      overheadRate: new PcrSpendProfileOverheadRateMapper().mapFromSalesforcePcrSpendProfileOverheadRateOption(x.Acc_OverheadRate__c),
+      overheadRate: new PcrSpendProfileOverheadRateMapper().mapFromSalesforcePcrSpendProfileOverheadRateOption(
+        x.Acc_OverheadRate__c,
+      ),
 
       // Materials
       quantity: x.Acc_Quantity__c,
@@ -36,7 +41,9 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       subcontractorRoleAndDescription: x.Acc_RoleAndDescription__c || undefined,
 
       // Capital Usage
-      capitalUsageType: new PcrSpendProfileCapitalUsageTypeMapper().mapFromSalesforcePcrSpendProfileCapitalUsageType(x.Acc_NewOrExisting__c),
+      capitalUsageType: new PcrSpendProfileCapitalUsageTypeMapper().mapFromSalesforcePcrSpendProfileCapitalUsageType(
+        x.Acc_NewOrExisting__c,
+      ),
       typeLabel: x.NewOrExistingLabel || undefined,
       depreciationPeriod: x.Acc_DepreciationPeriod__c,
       netPresentValue: x.Acc_NetPresentValue__c,
@@ -58,7 +65,7 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
     return {
       RecordTypeId: this.recordTypeId,
       Acc_CostCategoryID__c: x.costCategoryId,
-      Acc_ProjectChangeRequest__c:  x.pcrItemId,
+      Acc_ProjectChangeRequest__c: x.pcrItemId,
 
       Acc_TotalCost__c: isNumber(x.value) ? x.value : null,
       Acc_ItemDescription__c: x.description || null,
@@ -72,7 +79,9 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       Acc_Rate__c: x.ratePerDay,
 
       // Overheads
-      Acc_OverheadRate__c: new PcrSpendProfileOverheadRateMapper().mapToSalesforcePcrSpendProfileOverheadRateOption(x.overheadRate),
+      Acc_OverheadRate__c: new PcrSpendProfileOverheadRateMapper().mapToSalesforcePcrSpendProfileOverheadRateOption(
+        x.overheadRate,
+      ),
 
       // Materials
       Acc_CostPerItem__c: x.costPerItem,
@@ -83,7 +92,9 @@ export class SalesforcePcrSpendProfileMapper extends SalesforceBaseMapper<ISales
       Acc_RoleAndDescription__c: x.subcontractorRoleAndDescription,
 
       // Capital Usage
-      Acc_NewOrExisting__c: new PcrSpendProfileCapitalUsageTypeMapper().mapToSalesforcePcrSpendProfileCapitalUsageType(x.capitalUsageType),
+      Acc_NewOrExisting__c: new PcrSpendProfileCapitalUsageTypeMapper().mapToSalesforcePcrSpendProfileCapitalUsageType(
+        x.capitalUsageType,
+      ),
       Acc_DepreciationPeriod__c: x.depreciationPeriod,
       Acc_NetPresentValue__c: x.netPresentValue,
       Acc_ResidualValue__c: x.residualValue,
@@ -102,21 +113,27 @@ export class PcrSpendProfileCapitalUsageTypeMapper {
     existing: "Existing",
   };
 
-  public mapFromSalesforcePcrSpendProfileCapitalUsageType = ((types: string | null): PCRSpendProfileCapitalUsageType => {
+  public mapFromSalesforcePcrSpendProfileCapitalUsageType = (types: string | null): PCRSpendProfileCapitalUsageType => {
     switch (types) {
-      case this.types.new: return PCRSpendProfileCapitalUsageType.New;
-      case this.types.existing: return PCRSpendProfileCapitalUsageType.Existing;
-      default: return PCRSpendProfileCapitalUsageType.Unknown;
+      case this.types.new:
+        return PCRSpendProfileCapitalUsageType.New;
+      case this.types.existing:
+        return PCRSpendProfileCapitalUsageType.Existing;
+      default:
+        return PCRSpendProfileCapitalUsageType.Unknown;
     }
-  });
+  };
 
-  public mapToSalesforcePcrSpendProfileCapitalUsageType = ((types: PCRSpendProfileCapitalUsageType | undefined) => {
+  public mapToSalesforcePcrSpendProfileCapitalUsageType = (types: PCRSpendProfileCapitalUsageType | undefined) => {
     switch (types) {
-      case PCRSpendProfileCapitalUsageType.New: return this.types.new;
-      case PCRSpendProfileCapitalUsageType.Existing: return this.types.existing;
-      default: return null;
+      case PCRSpendProfileCapitalUsageType.New:
+        return this.types.new;
+      case PCRSpendProfileCapitalUsageType.Existing:
+        return this.types.existing;
+      default:
+        return null;
     }
-  });
+  };
 }
 
 export class PcrSpendProfileOverheadRateMapper {
@@ -126,21 +143,31 @@ export class PcrSpendProfileOverheadRateMapper {
     calculated: "Calculated",
   };
 
-  public mapFromSalesforcePcrSpendProfileOverheadRateOption = ((option: string | undefined): PCRSpendProfileOverheadRate => {
+  public mapFromSalesforcePcrSpendProfileOverheadRateOption = (
+    option: string | undefined,
+  ): PCRSpendProfileOverheadRate => {
     switch (option) {
-      case this.options.zero: return PCRSpendProfileOverheadRate.Zero;
-      case this.options.twenty: return PCRSpendProfileOverheadRate.Twenty;
-      case this.options.calculated: return PCRSpendProfileOverheadRate.Calculated;
-      default: return PCRSpendProfileOverheadRate.Unknown;
+      case this.options.zero:
+        return PCRSpendProfileOverheadRate.Zero;
+      case this.options.twenty:
+        return PCRSpendProfileOverheadRate.Twenty;
+      case this.options.calculated:
+        return PCRSpendProfileOverheadRate.Calculated;
+      default:
+        return PCRSpendProfileOverheadRate.Unknown;
     }
-  });
+  };
 
-  public mapToSalesforcePcrSpendProfileOverheadRateOption = ((option: PCRSpendProfileOverheadRate | undefined) => {
+  public mapToSalesforcePcrSpendProfileOverheadRateOption = (option: PCRSpendProfileOverheadRate | undefined) => {
     switch (option) {
-      case PCRSpendProfileOverheadRate.Zero: return this.options.zero;
-      case PCRSpendProfileOverheadRate.Twenty: return this.options.twenty;
-      case PCRSpendProfileOverheadRate.Calculated: return this.options.calculated;
-      default: return undefined;
+      case PCRSpendProfileOverheadRate.Zero:
+        return this.options.zero;
+      case PCRSpendProfileOverheadRate.Twenty:
+        return this.options.twenty;
+      case PCRSpendProfileOverheadRate.Calculated:
+        return this.options.calculated;
+      default:
+        return undefined;
     }
-  });
+  };
 }

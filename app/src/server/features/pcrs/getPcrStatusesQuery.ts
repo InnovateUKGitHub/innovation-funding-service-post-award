@@ -12,6 +12,6 @@ export class GetPcrStatusesQuery extends OptionsQueryBase<PCRStatus> {
   }
 
   protected mapToEnumValue(value: string) {
-      return mapToPCRStatus(value);
+    return mapToPCRStatus(value);
   }
 }

@@ -14,10 +14,7 @@ interface Document extends MultipleDocumentUploadDto {
   id: string;
 }
 
-export class LoanRequestDocumentDeleteHandler extends StandardFormHandlerBase<
-  LoansRequestParams,
-  "multipleDocuments"
-> {
+export class LoanRequestDocumentDeleteHandler extends StandardFormHandlerBase<LoansRequestParams, "multipleDocuments"> {
   constructor() {
     super(LoansRequestRoute, ["delete"], "multipleDocuments");
   }

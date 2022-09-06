@@ -14,7 +14,7 @@ import {
   ProjectLocationStep,
   ProjectManagerDetailsStep,
   RoleAndOrganisationStep,
-  StateAidEligibilityStep
+  StateAidEligibilityStep,
 } from "@ui/containers/pcrs/addPartner";
 import { SpendProfileStep } from "@ui/containers/pcrs/addPartner/spendProfileStep";
 import { AwardRateStep } from "@ui/containers/pcrs/addPartner/awardRateStep";
@@ -27,7 +27,7 @@ import { AcademicCostsReviewStep } from "@ui/containers/pcrs/addPartner/academic
 import { AgreementToPCRStep } from "./agreementToPcrStep";
 
 export type AddPartnerStepNames =
-  "roleAndOrganisationStep"
+  | "roleAndOrganisationStep"
   | "aidEligibilityStep"
   | "academicCostsStep"
   | "academicOrganisationStep"
@@ -42,10 +42,12 @@ export type AddPartnerStepNames =
   | "awardRateStep"
   | "otherFundingStep"
   | "otherFundingSourcesStep"
-  | "agreementToPcrStep"
-;
+  | "agreementToPcrStep";
 
-export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: number | undefined): IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> => {
+export const getAddPartnerWorkflow = (
+  item: PCRItemForPartnerAdditionDto,
+  step: number | undefined,
+): IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> => {
   const workflow: IPCRWorkflow<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> = {
     steps: [
       {
@@ -82,12 +84,12 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
         stepNumber: 14,
         validation: val => val.files,
         stepRender: AgreementToPCRStep,
-      }
+      },
     ],
     summary: {
       validation: val => val,
       summaryRender: AddPartnerSummary,
-    }
+    },
   };
 
   if (step === 1 || !item.projectRole || !item.partnerType) {
@@ -96,7 +98,7 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
       displayName: "New partner information",
       stepNumber: 1,
       validation: val => val.pcr,
-      stepRender: RoleAndOrganisationStep
+      stepRender: RoleAndOrganisationStep,
     });
   }
 
@@ -139,23 +141,24 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
       displayName: "Je-S form",
       stepNumber: 9,
       validation: val => val.files,
-      stepRender: JeSStep
+      stepRender: JeSStep,
     });
     workflow.steps.push({
       stepName: "academicCostsStep",
       displayName: "Academic costs",
       stepNumber: 10,
       validation: val => {
-        const addPartnerValidator = val.pcr.items.results.find(x =>
-          x.model.type === PCRItemType.PartnerAddition) as PCRPartnerAdditionItemDtoValidator;
+        const addPartnerValidator = val.pcr.items.results.find(
+          x => x.model.type === PCRItemType.PartnerAddition,
+        ) as PCRPartnerAdditionItemDtoValidator;
 
         return new CombinedResultValidator(
           addPartnerValidator.tsbReference,
-          ...addPartnerValidator.spendProfile.results[0].errors
+          ...addPartnerValidator.spendProfile.results[0].errors,
         );
       },
       stepRender: AcademicCostsStep,
-      readonlyStepRender: AcademicCostsReviewStep
+      readonlyStepRender: AcademicCostsReviewStep,
     });
   } else {
     workflow.steps.push({
@@ -163,7 +166,7 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
       displayName: "Companies house",
       stepNumber: 3,
       validation: val => val.pcr,
-      stepRender: CompaniesHouseStep
+      stepRender: CompaniesHouseStep,
     });
     workflow.steps.push({
       stepName: "organisationDetailsStep",
@@ -195,7 +198,7 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
       displayName: "Project manager",
       stepNumber: 8,
       validation: val => val.pcr,
-      stepRender: ProjectManagerDetailsStep
+      stepRender: ProjectManagerDetailsStep,
     });
   }
 
@@ -205,8 +208,9 @@ export const getAddPartnerWorkflow = (item: PCRItemForPartnerAdditionDto, step: 
       displayName: "Other public sector funding",
       stepNumber: 12,
       validation: val => {
-        const addPartnerValidator = val.pcr.items.results.find(x =>
-          x.model.type === PCRItemType.PartnerAddition) as PCRPartnerAdditionItemDtoValidator;
+        const addPartnerValidator = val.pcr.items.results.find(
+          x => x.model.type === PCRItemType.PartnerAddition,
+        ) as PCRPartnerAdditionItemDtoValidator;
         return addPartnerValidator.spendProfile.results[0];
       },
       stepRender: OtherSourcesOfFundingStep,

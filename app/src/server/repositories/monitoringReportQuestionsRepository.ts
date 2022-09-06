@@ -24,7 +24,8 @@ export interface IMonitoringReportQuestionsRepository {
  */
 export class MonitoringReportQuestionsRepository
   extends SalesforceRepositoryBase<ISalesforceMonitoringReportQuestions>
-  implements IMonitoringReportQuestionsRepository {
+  implements IMonitoringReportQuestionsRepository
+{
   protected readonly salesforceObjectName = "Acc_MonitoringQuestion__c";
 
   protected readonly salesforceFieldNames = [
@@ -35,7 +36,7 @@ export class MonitoringReportQuestionsRepository
     "Acc_QuestionText__c",
     "Acc_QuestionDescription__c",
     "Acc_ActiveFlag__c",
-    "Acc_ScoredQuestion__c"
+    "Acc_ScoredQuestion__c",
   ];
 
   public getAll(): Promise<ISalesforceMonitoringReportQuestions[]> {

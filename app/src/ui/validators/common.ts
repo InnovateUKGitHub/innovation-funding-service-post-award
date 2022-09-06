@@ -5,14 +5,18 @@ import { Result } from "../validation/result";
 import { Nested, NestedResult } from "../validation/nestedResult";
 
 // A helper for creating validation rules
-function rule<T>(test: (value: T | null) => boolean, defaultMessage: string, isRequired?: boolean): (results: Results<{}>, value: T | null, message?: string) => Result {
+function rule<T>(
+  test: (value: T | null) => boolean,
+  defaultMessage: string,
+  isRequired?: boolean,
+): (results: Results<{}>, value: T | null, message?: string) => Result {
   return (results: Results<{}>, value: T | null, message?: string) => {
     return new Result(results, results.showValidationErrors, test(value), message || defaultMessage, !!isRequired);
   };
 }
 
 function isValueWholeNumber(value: number): boolean {
-  return (isNumber(value) && Number.isInteger(value));
+  return isNumber(value) && Number.isInteger(value);
 }
 
 export function valid(resultSet: Results<{}>, isRequired?: boolean) {
@@ -23,40 +27,62 @@ export function inValid(resultSet: Results<{}>, message: string, isRequired?: bo
   return new Result(resultSet, resultSet.showValidationErrors, false, message, isRequired || false);
 }
 
-export const required = rule<any>((value) => {
-  if (value === null || value === undefined) {
-    return false;
-  }
-  if (value.__proto__ === ("" as any).__proto__) {
-    return value.trim().length > 0;
-  }
-  if (value instanceof Array) {
-    return value.length > 0;
-  }
-  return true;
-}, "Required", true);
+export const required = rule<any>(
+  value => {
+    if (value === null || value === undefined) {
+      return false;
+    }
+    if (value.__proto__ === ("" as any).__proto__) {
+      return value.trim().length > 0;
+    }
+    if (value instanceof Array) {
+      return value.length > 0;
+    }
+    return true;
+  },
+  "Required",
+  true,
+);
 
-export function isUnchanged(results: Results<{}>, value: number | string | Date | null | boolean | undefined, originalValue: number | string | Date | boolean | null |undefined, message?: string) {
+export function isUnchanged(
+  results: Results<{}>,
+  value: number | string | Date | null | boolean | undefined,
+  originalValue: number | string | Date | boolean | null | undefined,
+  message?: string,
+) {
   if (!originalValue) return isTrue(results, !value, message || "Value can not be changed");
-  if (typeof value === "number" && typeof originalValue === "number") return isTrue(results, value === originalValue, message || "Value can not be changed");
-  if (value instanceof Date && originalValue instanceof Date) return isTrue(results, value.getTime() === originalValue.getTime(), message || "Value can not be changed");
+  if (typeof value === "number" && typeof originalValue === "number")
+    return isTrue(results, value === originalValue, message || "Value can not be changed");
+  if (value instanceof Date && originalValue instanceof Date)
+    return isTrue(results, value.getTime() === originalValue.getTime(), message || "Value can not be changed");
   if (typeof value !== typeof originalValue) return inValid(results, message || "Value can not be changed");
-  if (typeof value === "string" || typeof value === "boolean") return isTrue(results, value === originalValue, message || "Value can not be changed");
+  if (typeof value === "string" || typeof value === "boolean")
+    return isTrue(results, value === originalValue, message || "Value can not be changed");
   return inValid(results, message || "Value can not be changed");
 }
 
-export const isTrue = rule<boolean>((value) => value === null || value === undefined || value === true, "Should be true");
-export const isFalse = rule<boolean>((value) => value === null || value === undefined || value === false, "Should be false");
-export const isDate = rule<Date>((value) => value === null || value === undefined || (value.getTime && !isNaN(value.getTime())), "Invalid date");
+export const isTrue = rule<boolean>(value => value === null || value === undefined || value === true, "Should be true");
+export const isFalse = rule<boolean>(
+  value => value === null || value === undefined || value === false,
+  "Should be false",
+);
+export const isDate = rule<Date>(
+  value => value === null || value === undefined || (value.getTime && !isNaN(value.getTime())),
+  "Invalid date",
+);
 
 // Tests that the day is before or on the test date. Disregards time of day.
 export function isBeforeOrSameDay(results: Results<{}>, value: Date | null, test: Date, message?: string) {
   if (!value || !test) return valid(results);
-  return isTrue(results, dayComparator(value, test) <= 0, message || `Date must be on or before ${test && DateTime.fromJSDate(test).toFormat("d MMM yyyy")}`);
+  return isTrue(
+    results,
+    dayComparator(value, test) <= 0,
+    message || `Date must be on or before ${test && DateTime.fromJSDate(test).toFormat("d MMM yyyy")}`,
+  );
 }
 
 export function maxLength(results: Results<{}>, value: string | null, length: number, message?: string) {
-  return isTrue(results, (!value) || value.length <= length, message || `Maximum of ${length} characters`);
+  return isTrue(results, !value || value.length <= length, message || `Maximum of ${length} characters`);
 }
 
 export function minLength(results: Results<{}>, value: string, length: number, message?: string) {
@@ -64,7 +90,7 @@ export function minLength(results: Results<{}>, value: string, length: number, m
 }
 
 export function exactLength(results: Results<{}>, value: string, length: number, message?: string) {
-  return isTrue(results, (!value) || value.length === length, message || `Must be exactly ${length} characters`);
+  return isTrue(results, !value || value.length === length, message || `Must be exactly ${length} characters`);
 }
 
 export function hasNoDuplicates<T>(results: Results<{}>, values: T[], message: string) {
@@ -74,35 +100,48 @@ export function hasNoDuplicates<T>(results: Results<{}>, values: T[], message: s
 
 export function alphanumeric(results: Results<{}>, value: string, message?: string) {
   const regex = new RegExp(/^[a-z0-9]+$/i);
-  return isTrue(results, (!value) || regex.test(value), message || "Only numbers and letters allowed");
+  return isTrue(results, !value || regex.test(value), message || "Only numbers and letters allowed");
 }
 
 export function number(results: Results<{}>, value: number | undefined | null, message?: string) {
-  return isTrue(results, value === undefined || value === null || isNumber(value), message || "Field must be a number.");
+  return isTrue(
+    results,
+    value === undefined || value === null || isNumber(value),
+    message || "Field must be a number.",
+  );
 }
 
 export function integer(results: Results<{}>, value?: number | null, message?: string) {
-  return isTrue(results, value === undefined || value === null || isValueWholeNumber(value), message || "Field must be a number.");
+  return isTrue(
+    results,
+    value === undefined || value === null || isValueWholeNumber(value),
+    message || "Field must be a number.",
+  );
 }
 
 export function isPositiveInteger(results: Results<{}>, value: number | undefined | null, message?: string) {
-  return isTrue(results, value === undefined || value === null || (isValueWholeNumber(value) && value >= 0), message || "Field must be a positive number");
+  return isTrue(
+    results,
+    value === undefined || value === null || (isValueWholeNumber(value) && value >= 0),
+    message || "Field must be a positive number",
+  );
 }
 
 export function sortCode(results: Results<{}>, value: string | null, message?: string) {
   const regex = new RegExp(/^\d{6}$/);
-  return isTrue(results, (!value) || regex.test(value), message || "Invalid sort code");
+  return isTrue(results, !value || regex.test(value), message || "Invalid sort code");
 }
 
 export function accountNumber(results: Results<{}>, value: string | null, message?: string) {
   const regex = new RegExp(/^\d{6,8}$/);
-  return isTrue(results, (!value) || regex.test(value), message || "Invalid account number");
+  return isTrue(results, !value || regex.test(value), message || "Invalid account number");
 }
 
 export function email(results: Results<{}>, value: string, message?: string) {
   // http://stackoverflow.com/questions/46155/validate-email-address-in-javascript
-  const regex = /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
-  return isTrue(results, (!value) || regex.test(value), message || "Invalid email address");
+  const regex =
+    /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
+  return isTrue(results, !value || regex.test(value), message || "Invalid email address");
 }
 
 export function isCurrency(results: Results<{}>, value: number | null, message?: string) {
@@ -113,7 +152,7 @@ export function isCurrency(results: Results<{}>, value: number | null, message?:
   return isTrue(results, !isNaN(value) && regex.test(value.toString()), message || "Invalid amount");
 }
 
-export function isPositiveFloat(results: Results<{}>,value: number | null, message?: string) {
+export function isPositiveFloat(results: Results<{}>, value: number | null, message?: string) {
   if (!value) {
     return valid(results);
   }
@@ -124,9 +163,13 @@ export function isPositiveFloat(results: Results<{}>,value: number | null, messa
 export function isPercentage(results: Results<{}>, value: number | null, message?: string) {
   const regex = /^[0-9]+(\.[0-9]{1,2})?$/i;
   if (value === null || value === undefined || value === 0) {
- return valid(results);
-}
-  return isTrue(results, !isNaN(value) && regex.test(value.toString()), message || "You must enter a number with up to 2 decimal places");
+    return valid(results);
+  }
+  return isTrue(
+    results,
+    !isNaN(value) && regex.test(value.toString()),
+    message || "You must enter a number with up to 2 decimal places",
+  );
 }
 
 // Accepts an array of delegates. Runs until it finds a failure. EG, Not empty, length < 100, no spaces. Will fail fast.
@@ -147,24 +190,52 @@ export function all(resultSet: Results<{}>, ...results: (() => Result)[]): Resul
 }
 
 // Validating nested object
-export function nested<T, U extends Results<{}>>(parentResults: Results<{}>, model: T, validateModel: (model: T) => U, summaryMessage?: string) {
+export function nested<T, U extends Results<{}>>(
+  parentResults: Results<{}>,
+  model: T,
+  validateModel: (model: T) => U,
+  summaryMessage?: string,
+) {
   return new Nested(parentResults, validateModel(model), summaryMessage);
 }
 
 // Validating lists of things allowing for overall validation
-export function child<T, U extends Results<{}>>(parentResults: Results<{}>, model: T[], validateModel: (model: T) => U, listValidation: (children: ChildValidators<T>) => Result, summaryMessage?: string) {
+export function child<T, U extends Results<{}>>(
+  parentResults: Results<{}>,
+  model: T[],
+  validateModel: (model: T) => U,
+  listValidation: (children: ChildValidators<T>) => Result,
+  summaryMessage?: string,
+) {
   const listResults = listValidation(new ChildValidators(parentResults, model));
   const childResults = model ? model.map(m => validateModel(m)) : [];
   return new NestedResult(parentResults, childResults, listResults, summaryMessage);
 }
 
 // Validating lists of things, but does fail if list is empty.
-export function requiredChild<T, U extends Results<{}>>(parentResults: Results<{}>, model: T[], validateModel: (model: T) => U, emptyMessage?: string, summaryMessage?: string) {
-  return child<T, U>(parentResults, model, validateModel, children => children.required("At least one is required"), summaryMessage);
+export function requiredChild<T, U extends Results<{}>>(
+  parentResults: Results<{}>,
+  model: T[],
+  validateModel: (model: T) => U,
+  emptyMessage?: string,
+  summaryMessage?: string,
+) {
+  return child<T, U>(
+    parentResults,
+    model,
+    validateModel,
+    children => children.required("At least one is required"),
+    summaryMessage,
+  );
 }
 
 // Validating lists of things, but don't care if list is empty.
-export function optionalChild<T, U extends Results<{}>>(parentResults: Results<{}>, model: T[], validateModel: (model: T) => U, summaryMessage?: string) {
+export function optionalChild<T, U extends Results<{}>>(
+  parentResults: Results<{}>,
+  model: T[],
+  validateModel: (model: T) => U,
+  summaryMessage?: string,
+) {
   return child<T, U>(parentResults, model, validateModel, children => children.valid(), summaryMessage);
 }
 
@@ -173,11 +244,16 @@ export function permittedValues<T>(results: Results<{}>, value: T, permitted: T[
 }
 
 export class ChildValidators<T> {
-  constructor(private readonly parent: Results<{}>, private readonly items: T[]) {
-  }
+  constructor(private readonly parent: Results<{}>, private readonly items: T[]) {}
 
   private expected<TValue>(test: (items: T[]) => TValue, expected: TValue, message: string, isRequired?: boolean) {
-    return new Result(null, this.parent.showValidationErrors, test(this.items) === expected, message, isRequired || false);
+    return new Result(
+      null,
+      this.parent.showValidationErrors,
+      test(this.items) === expected,
+      message,
+      isRequired || false,
+    );
   }
 
   public required(message?: string) {
@@ -216,7 +292,7 @@ export class ChildValidators<T> {
 
   public hasNoDuplicates<TCompare = T>(getComparison?: (item: T) => TCompare, message?: string) {
     const test = () => {
-      const mapped = this.items.map(x => getComparison ? getComparison(x) : x);
+      const mapped = this.items.map(x => (getComparison ? getComparison(x) : x));
       return mapped.every((val, i) => mapped.indexOf(val) === i);
     };
 

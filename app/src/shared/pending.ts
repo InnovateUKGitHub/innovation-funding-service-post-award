@@ -21,7 +21,7 @@ export class Pending<T> {
    *
    * @param map - a function which takes the data T, the current status and error, and returns new data T2
    * @param noData - a function to use when no data present to return data T2
-   * @return Pending<T2>
+   * @returns Pending<T2>
    */
   then<T2>(map: (data: T, state?: LoadingStatus, error?: any) => T2, noData?: () => T2) {
     let newData: T2 | null | undefined = null;
@@ -39,7 +39,7 @@ export class Pending<T> {
    *
    * @param pending - the object to combine with this one
    * @param combineData - a function that takes both Pendings and returns the combined data
-   * @return Pending<TR>
+   * @returns Pending<TR>
    */
   and<T2, TR>(pending: Pending<T2>, combineData: (pending1: T, pending2: T2) => TR): Pending<TR> {
     const state = Pending.lowestState([this.state, pending.state]);
@@ -55,7 +55,7 @@ export class Pending<T> {
    */
   chain<T2>(next: (data: T, state: LoadingStatus) => Pending<T2>): Pending<T2> {
     if (Pending.canResolve([this])) {
-      return next(this.data as T ,this.state);
+      return next(this.data as T, this.state);
     }
     return new Pending<T2>(this.state, null, this.error);
   }
@@ -80,7 +80,7 @@ export class Pending<T> {
    * check if all the Pendings given are in the Done state or have data
    *
    * @param pendings - collection of pending objects to be checked
-   * @return boolean
+   * @returns boolean
    */
   private static canResolve(pendings: Pending<{}>[]) {
     return pendings.every(p => [LoadingStatus.Done, LoadingStatus.Stale, LoadingStatus.Updated].includes(p.state));
@@ -90,7 +90,7 @@ export class Pending<T> {
    * create a new Pending in the Done state with data T
    *
    * @param data - the data to create the new Pending with
-   * @return Pending
+   * @returns Pending
    */
   static done<V>(data: V): Pending<V> {
     return new Pending<V>(LoadingStatus.Done, data);
@@ -100,12 +100,15 @@ export class Pending<T> {
    * merge multiple Pendings together
    *
    * @param pendings - collection of Pendings to be merged
-   * @return Pending
+   * @returns Pending
    */
   static flatten<W>(pendings: Pending<W>[]): Pending<W[]> {
     const state = Pending.lowestState(pendings.map(x => x.state));
     const data = Pending.canResolve(pendings) ? pendings.map(x => x.data) : null;
-    const error = pendings.filter(x => !!x.error).map(x => x.error).shift();
+    const error = pendings
+      .filter(x => !!x.error)
+      .map(x => x.error)
+      .shift();
     return new Pending<W[]>(state, data as W[], error);
   }
 

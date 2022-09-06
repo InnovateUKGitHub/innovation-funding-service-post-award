@@ -26,22 +26,33 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
   render() {
     const combined = Pending.combine({
       editor: this.props.editor,
-      project: this.props.project
+      project: this.props.project,
     });
 
     return <ACC.PageLoader pending={combined} render={data => this.renderContents(data.project, data.editor)} />;
   }
 
-  renderContents(project: Dtos.ProjectDto, editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
+  renderContents(
+    project: Dtos.ProjectDto,
+    editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>,
+  ) {
     const DeleteForm = ACC.TypedForm<Dtos.MonitoringReportDto>();
     return (
       <ACC.Page
         pageTitle={<ACC.Projects.Title {...project} />}
-        backLink={<ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}><ACC.Content value={(x) => x.monitoringReportsDelete.backLink} /></ACC.BackLink>}
+        backLink={
+          <ACC.BackLink
+            route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}
+          >
+            <ACC.Content value={x => x.monitoringReportsDelete.backLink} />
+          </ACC.BackLink>
+        }
         error={editor.error}
       >
         <ACC.Section>
-          <ACC.Renderers.SimpleString><ACC.Content value={(x) => x.monitoringReportsDelete.messages.deletingMonitoringReportMessage} /></ACC.Renderers.SimpleString>
+          <ACC.Renderers.SimpleString>
+            <ACC.Content value={x => x.monitoringReportsDelete.messages.deletingMonitoringReportMessage} />
+          </ACC.Renderers.SimpleString>
           <DeleteForm.Form editor={editor} qa="monitoringReportDelete">
             <DeleteForm.Fieldset>
               <DeleteForm.Button
@@ -51,7 +62,7 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
                 onClick={() => this.props.delete(editor.data)}
                 value={editor.data.headerId}
               >
-                <ACC.Content value={(x) => x.monitoringReportsDelete.deleteReportButton} />
+                <ACC.Content value={x => x.monitoringReportsDelete.deleteReportButton} />
               </DeleteForm.Button>
             </DeleteForm.Fieldset>
           </DeleteForm.Form>
@@ -61,7 +72,7 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
   }
 }
 
-const DeleteVerificationContainer = (props: MonitoringReportDeleteParams&BaseProps) => {
+const DeleteVerificationContainer = (props: MonitoringReportDeleteParams & BaseProps) => {
   const stores = useStores();
   const { getContent } = useContent();
   const navigate = useNavigate();
@@ -76,8 +87,7 @@ const DeleteVerificationContainer = (props: MonitoringReportDeleteParams&BasePro
           props.id,
           dto,
           getContent(x => x.monitoringReportsDelete.messages.onDeleteMonitoringReportMessage),
-          () =>
-            navigate(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId }).path),
+          () => navigate(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId }).path),
         )
       }
       {...props}
@@ -89,10 +99,10 @@ export const MonitoringReportDeleteRoute = defineRoute({
   routeName: "monitoringReportDeleteVerification",
   routePath: "/projects/:projectId/monitoring-reports/:id/delete",
   container: DeleteVerificationContainer,
-  getParams: (route) => ({
+  getParams: route => ({
     projectId: route.params.projectId,
-    id: route.params.id
+    id: route.params.id,
   }),
-  getTitle: ({content}) => content.monitoringReportsDelete.title(),
+  getTitle: ({ content }) => content.monitoringReportsDelete.title(),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
 });

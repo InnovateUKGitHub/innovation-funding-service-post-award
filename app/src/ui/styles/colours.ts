@@ -7,8 +7,8 @@ export const govukSecondaryTextColour = "#6f777b";
 export const govukBorderColour = "var(--govukBorderColour)";
 
 // STATUS
-export const  govukColourBlue = "#1d70b8";
-export const  govukErrorColour = "#d4351c";
+export const govukColourBlue = "#1d70b8";
+export const govukErrorColour = "#d4351c";
 
 // GREYSCALE
 export const govukColourBlack = "var(--govukColourBlack)";

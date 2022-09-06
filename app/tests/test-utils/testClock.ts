@@ -2,65 +2,63 @@ import { DateTime } from "luxon";
 import { Clock, IClock } from "../../src/server/features/common/clock";
 
 export class TestClock implements IClock {
+  private testClockNow: Date | null;
+  private readonly inner: Clock;
 
-    private testClockNow: Date | null;
-    private readonly inner: Clock;
+  constructor() {
+    this.testClockNow = null;
+    this.inner = new Clock();
+  }
 
-    constructor() {
-        this.testClockNow = null;
-        this.inner = new Clock();
+  public setDate(value: string, format = "yyyy/MM/dd") {
+    return this.setDateTime(value + " 12:00:00", format + " HH:mm:ss");
+  }
+
+  public setDateTime(value: string, format = "yyyy/MM/dd hh:mm:ss") {
+    const parsed = this.parse(value, format);
+    if (!parsed || isNaN(parsed.getTime())) {
+      throw new Error(`Invalid date for format ${value} ${format}`);
     }
+    return (this.testClockNow = this.parse(value, format));
+  }
 
-    public setDate(value: string, format = "yyyy/MM/dd") {
-        return this.setDateTime(value + " 12:00:00", format + " HH:mm:ss");
-    }
+  now(): Date {
+    return this.testClockNow || new Date();
+  }
 
-    public setDateTime(value: string, format = "yyyy/MM/dd hh:mm:ss") {
-        const parsed = this.parse(value, format);
-        if (!parsed || isNaN(parsed.getTime())) {
-            throw new Error(`Invalid date for format ${value} ${format}`);
-        }
-        return this.testClockNow = this.parse(value, format);
-    }
+  parse(value: string, format: string) {
+    return this.inner.parse(value, format);
+  }
 
-    now(): Date {
-        return this.testClockNow || new Date();
-    }
+  dateTime(value: Date | string, format?: string) {
+    return this.inner.dateTime(value, format);
+  }
 
-    parse(value: string, format: string) {
-        return this.inner.parse(value, format);
-    }
+  asLuxon(): DateTime {
+    return DateTime.fromJSDate(this.now());
+  }
 
-    dateTime(value: Date | string, format?: string) {
-        return this.inner.dateTime(value, format);
-    }
+  parseOptionalSalesforceDate(value: string): Date | null {
+    return this.inner.parseOptionalSalesforceDate(value);
+  }
 
-    asLuxon(): DateTime {
-        return DateTime.fromJSDate(this.now());
-    }
+  formatOptionalSalesforceDate(jsDate?: Date | null): string | null {
+    return this.inner.formatOptionalSalesforceDate(jsDate);
+  }
 
-    parseOptionalSalesforceDate(value: string): Date | null {
-        return this.inner.parseOptionalSalesforceDate(value);
-    }
+  formatRequiredSalesforceDate(jsDate: Date): string {
+    return this.inner.formatRequiredSalesforceDate(jsDate);
+  }
 
-    formatOptionalSalesforceDate(jsDate?: Date | null): string | null {
-        return this.inner.formatOptionalSalesforceDate(jsDate);
-    }
+  parseRequiredSalesforceDate(value: string): Date {
+    return this.inner.parseRequiredSalesforceDate(value);
+  }
 
-    formatRequiredSalesforceDate(jsDate: Date): string {
-        return this.inner.formatRequiredSalesforceDate(jsDate);
-    }
+  parseOptionalSalesforceDateTime(value: string): Date | null {
+    return this.inner.parseOptionalSalesforceDateTime(value);
+  }
 
-    parseRequiredSalesforceDate(value: string): Date {
-        return this.inner.parseRequiredSalesforceDate(value);
-    }
-
-    parseOptionalSalesforceDateTime(value: string): Date | null {
-        return this.inner.parseOptionalSalesforceDateTime(value);
-    }
-
-    parseRequiredSalesforceDateTime(value: string): Date {
-        return this.inner.parseRequiredSalesforceDateTime(value);
-    }
-
+  parseRequiredSalesforceDateTime(value: string): Date {
+    return this.inner.parseRequiredSalesforceDateTime(value);
+  }
 }

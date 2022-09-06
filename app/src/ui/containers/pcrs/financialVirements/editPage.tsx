@@ -67,35 +67,46 @@ class EditPageComponent extends ContainerBase<VirementCostsParams, Props, {}> {
       editor: this.props.editor,
     });
 
-    return <ACC.PageLoader pending={combined} render={data => this.renderPage(data.project, data.partner, data.costCategories, data.editor)} />;
+    return (
+      <ACC.PageLoader
+        pending={combined}
+        render={data => this.renderPage(data.project, data.partner, data.costCategories, data.editor)}
+      />
+    );
   }
 
-  private renderPage(project: ProjectDto, partner: PartnerDto, costCategories: CostCategoryDto[], editor: IEditorStore<FinancialVirementDto, FinancialVirementDtoValidator>) {
+  private renderPage(
+    project: ProjectDto,
+    partner: PartnerDto,
+    costCategories: CostCategoryDto[],
+    editor: IEditorStore<FinancialVirementDto, FinancialVirementDtoValidator>,
+  ) {
     const currentPartnerVirement = editor.data.partners.find(x => x.partnerId === this.props.partnerId);
-    if(!currentPartnerVirement) throw new Error(`Cannot find current partner virement matching ${this.props.partnerId}`);
-    const partnerVirementsValidator = editor.validator.partners.results.find(x => x.model.partnerId === this.props.partnerId);
+    if (!currentPartnerVirement)
+      throw new Error(`Cannot find current partner virement matching ${this.props.partnerId}`);
+    const partnerVirementsValidator = editor.validator.partners.results.find(
+      x => x.model.partnerId === this.props.partnerId,
+    );
 
-    const costCategoriesWithVirement = costCategories
-      .map(x => ({
-        costCategory: x,
-        virement: currentPartnerVirement.virements.find(y => y.costCategoryId === x.id) || createDto<CostCategoryVirementDto>({
+    const costCategoriesWithVirement = costCategories.map(x => ({
+      costCategory: x,
+      virement:
+        currentPartnerVirement.virements.find(y => y.costCategoryId === x.id) ||
+        createDto<CostCategoryVirementDto>({
           costCategoryId: x.id,
           costCategoryName: x.name,
-        })
-      }))
-      ;
-
-    const validation = costCategories
-      .map(x => (partnerVirementsValidator?.virements.results.find(y => y.model.costCategoryId === x.id)) || null)
-      ;
-
+        }),
+    }));
+    const validation = costCategories.map(
+      x => partnerVirementsValidator?.virements.results.find(y => y.model.costCategoryId === x.id) || null,
+    );
     const VirementForm = ACC.TypedForm<FinancialVirementDto>();
     const VirementTable = ACC.TypedTable<typeof costCategoriesWithVirement[0]>();
     const SummaryTable = ACC.TypedTable<FinancialVirementDto>();
 
     const { isPm } = getAuthRoles(project.roles);
     const { isKTP } = checkProjectCompetition(project.competitionType);
-    const  displayIntroMessage: boolean = isKTP && isPm;
+    const displayIntroMessage: boolean = isKTP && isPm;
 
     return (
       <ACC.Page
@@ -208,43 +219,50 @@ class EditPageComponent extends ContainerBase<VirementCostsParams, Props, {}> {
     );
   }
 
-  private renderInput(partner: PartnerDto, costCategory: CostCategoryDto, virement: CostCategoryVirementDto, disabled: boolean, validation: CostCategoryVirementDtoValidator | null) {
+  private renderInput(
+    partner: PartnerDto,
+    costCategory: CostCategoryDto,
+    virement: CostCategoryVirementDto,
+    disabled: boolean,
+    validation: CostCategoryVirementDtoValidator | null,
+  ) {
     return (
       <>
-        <ACC.ValidationError overrideMessage={`Invalid cost for ${costCategory.name}`} error={validation && validation.newPartnerEligibleCosts} />
+        <ACC.ValidationError
+          overrideMessage={`Invalid cost for ${costCategory.name}`}
+          error={validation && validation.newPartnerEligibleCosts}
+        />
         {costCategory.isCalculated ? <ACC.Renderers.Currency value={virement.newEligibleCosts} /> : null}
-        {!costCategory.isCalculated ?
+        {!costCategory.isCalculated ? (
           <ACC.Inputs.NumberInput
             name={virement.costCategoryId}
             value={virement.newEligibleCosts}
-            onChange={(val) => this.updateValue(partner, costCategory, val)}
+            onChange={val => this.updateValue(partner, costCategory, val)}
             width="full"
             ariaLabel={virement.costCategoryName}
             disabled={disabled}
           />
-          : null}
+        ) : null}
       </>
     );
   }
 
-  private updateValue({overheadRate, id}: PartnerDto, costCategory: CostCategoryDto, value: number | null) {
+  private updateValue({ overheadRate, id }: PartnerDto, costCategory: CostCategoryDto, value: number | null) {
     const projectCosts = this.props.editor.data?.data;
-    if(!projectCosts) throw new Error("Cannot find projectCosts");
-    const currentPartner = projectCosts.partners.find((x) => x.partnerId === id);
-    if(!currentPartner) throw new Error(`Cannot find current partner matching ${id}`);
-    const costCategoryVirements = currentPartner.virements.find((x) => x.costCategoryId === costCategory.id);
-    if(!costCategoryVirements) throw new Error(`Cannot find cost category virements matching ${costCategory.id}`);
+    if (!projectCosts) throw new Error("Cannot find projectCosts");
+    const currentPartner = projectCosts.partners.find(x => x.partnerId === id);
+    if (!currentPartner) throw new Error(`Cannot find current partner matching ${id}`);
+    const costCategoryVirements = currentPartner.virements.find(x => x.costCategoryId === costCategory.id);
+    if (!costCategoryVirements) throw new Error(`Cannot find cost category virements matching ${costCategory.id}`);
     costCategoryVirements.newEligibleCosts = value ?? 0;
 
     if (overheadRate) {
       const calculatedCostCategoryIds =
-        this.props.costCategories.then((x) => x.filter((y) => y.isCalculated).map((y) => y.id)).data || [];
-      const related = currentPartner.virements.find((v) => calculatedCostCategoryIds.indexOf(v.costCategoryId) !== -1);
+        this.props.costCategories.then(x => x.filter(y => y.isCalculated).map(y => y.id)).data || [];
+      const related = currentPartner.virements.find(v => calculatedCostCategoryIds.indexOf(v.costCategoryId) !== -1);
       if (related) {
         // prevent newEligibleCosts from being calculated by SF
-        related.newEligibleCosts = roundCurrency(
-          (costCategoryVirements.newEligibleCosts || 0) * (overheadRate / 100),
-        );
+        related.newEligibleCosts = roundCurrency((costCategoryVirements.newEligibleCosts || 0) * (overheadRate / 100));
       }
     }
 
@@ -254,9 +272,11 @@ class EditPageComponent extends ContainerBase<VirementCostsParams, Props, {}> {
     currentPartner.newRemainingGrant = roundCurrency(newRemainingCosts * newFundingPercentage);
 
     projectCosts.newEligibleCosts = projectCosts.partners
-      .filter((x) => !!x.newEligibleCosts)
+      .filter(x => !!x.newEligibleCosts)
       .reduce((total, x) => total + x.newEligibleCosts, 0);
-    projectCosts.newRemainingGrant = roundCurrency(projectCosts.partners.reduce((total, p) => total + p.newRemainingGrant, 0));
+    projectCosts.newRemainingGrant = roundCurrency(
+      projectCosts.partners.reduce((total, p) => total + p.newRemainingGrant, 0),
+    );
     this.props.onChange(false, projectCosts);
   }
 
@@ -264,10 +284,14 @@ class EditPageComponent extends ContainerBase<VirementCostsParams, Props, {}> {
     const params = {
       projectId: this.props.projectId,
       pcrId: this.props.pcrId,
-      itemId: this.props.itemId
+      itemId: this.props.itemId,
     };
 
-    return <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)}><ACC.Content value={x => x.financialVirementEdit.labels.backToSummary}/></ACC.BackLink>;
+    return (
+      <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)}>
+        <ACC.Content value={x => x.financialVirementEdit.labels.backToSummary} />
+      </ACC.BackLink>
+    );
   }
 }
 
@@ -282,7 +306,12 @@ const Container = (props: VirementCostsParams & BaseProps) => {
       project={projects.getById(props.projectId)}
       partner={partners.getById(props.partnerId)}
       costCategories={costCategories.getAllForPartner(props.partnerId)}
-      editor={financialVirements.getFinancialVirementEditor(props.projectId, props.pcrId, props.itemId, props.partnerId)}
+      editor={financialVirements.getFinancialVirementEditor(
+        props.projectId,
+        props.pcrId,
+        props.itemId,
+        props.partnerId,
+      )}
       onChange={(saving, dto) =>
         financialVirements.updateFinancialVirementEditor(
           saving,
@@ -299,7 +328,7 @@ const Container = (props: VirementCostsParams & BaseProps) => {
                 itemId: props.itemId,
               }).path,
             ),
-          props.partnerId
+          props.partnerId,
         )
       }
       {...props}
@@ -312,11 +341,11 @@ export const FinancialVirementEditRoute = defineRoute({
   routeName: "financial-virement-edit",
   routePath: "/projects/:projectId/pcrs/:pcrId/prepare/item/:itemId/financial/:partnerId",
   container: Container,
-  getParams: (route) => ({
+  getParams: route => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
     itemId: route.params.itemId,
     partnerId: route.params.partnerId,
   }),
-  getTitle: ({ content }) => content.financialVirementEdit.title()
+  getTitle: ({ content }) => content.financialVirementEdit.title(),
 });

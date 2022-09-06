@@ -21,7 +21,10 @@ export interface IMonitoringReportStatusChangeRepository {
  * Holds all status changes for Monitoring Report Header records ("Acc_MonitoringAnswer__c" of type "Monitoring Header")
  *
  */
-export class MonitoringReportStatusChangeRepository extends SalesforceRepositoryBase<ISalesforceMonitoringReportStatusChange> implements IMonitoringReportStatusChangeRepository {
+export class MonitoringReportStatusChangeRepository
+  extends SalesforceRepositoryBase<ISalesforceMonitoringReportStatusChange>
+  implements IMonitoringReportStatusChangeRepository
+{
   protected readonly salesforceObjectName = "Acc_StatusChange__c";
   protected readonly salesforceFieldNames = [
     "Id",
@@ -30,7 +33,7 @@ export class MonitoringReportStatusChangeRepository extends SalesforceRepository
     "Acc_NewMonitoringReportStatus__c",
     "Acc_CreatedByAlias__c",
     "CreatedDate",
-    "Acc_ExternalComment__c"
+    "Acc_ExternalComment__c",
   ];
 
   public createStatusChange(statusChange: Partial<ISalesforceMonitoringReportStatusChange>) {
@@ -38,6 +41,6 @@ export class MonitoringReportStatusChangeRepository extends SalesforceRepository
   }
 
   public getStatusChanges(monitoringReportId: string): Promise<ISalesforceMonitoringReportStatusChange[]> {
-    return super.where({Acc_MonitoringReport__c: monitoringReportId});
+    return super.where({ Acc_MonitoringReport__c: monitoringReportId });
   }
 }

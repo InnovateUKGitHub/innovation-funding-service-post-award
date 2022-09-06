@@ -11,13 +11,16 @@ interface Document extends MultipleDocumentUploadDto {
   id: string;
 }
 
-export class ProjectChangeRequestReasoningDocumentDeleteHandler extends StandardFormHandlerBase<ProjectChangeRequestPrepareReasoningParams, "multipleDocuments"> {
+export class ProjectChangeRequestReasoningDocumentDeleteHandler extends StandardFormHandlerBase<
+  ProjectChangeRequestPrepareReasoningParams,
+  "multipleDocuments"
+> {
   constructor() {
     super(PCRPrepareReasoningRoute, ["delete"], "multipleDocuments");
   }
 
   protected getDto(context: IContext, params: ProjectChangeRequestPrepareReasoningParams, button: IFormButton) {
-    return Promise.resolve({id: button.value, files: []});
+    return Promise.resolve({ id: button.value, files: [] });
   }
 
   protected createValidationResult(params: ProjectChangeRequestPrepareReasoningParams, dto: Document) {
@@ -28,7 +31,12 @@ export class ProjectChangeRequestReasoningDocumentDeleteHandler extends Standard
     return storeKeys.getPcrKey(params.projectId, params.pcrId);
   }
 
-  protected async run(context: IContext, params: ProjectChangeRequestPrepareReasoningParams, button: IFormButton, dto: Document): Promise<ILinkInfo> {
+  protected async run(
+    context: IContext,
+    params: ProjectChangeRequestPrepareReasoningParams,
+    button: IFormButton,
+    dto: Document,
+  ): Promise<ILinkInfo> {
     const command = new DeleteProjectChangeRequestDocumentOrItemDocument(dto.id, params.projectId, params.pcrId);
     await context.runCommand(command);
     return PCRPrepareReasoningRoute.getLink(params);

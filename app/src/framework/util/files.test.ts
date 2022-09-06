@@ -13,7 +13,6 @@ describe("getFileSize()", () => {
   });
 });
 
-
 describe("files", () => {
   describe("getFileExtension", () => {
     test.each`

@@ -36,7 +36,7 @@ describe("useEnumDocuments()", () => {
   const stubUnknownDocumentLabel = "description.unknown";
 
   const setup = (enumDocument: object, labelOverride = stubLabels) => {
-    const content = ({
+    const content = {
       claimDocuments: {
         documents: {
           labels: {
@@ -46,7 +46,7 @@ describe("useEnumDocuments()", () => {
           },
         },
       },
-    } as any) as TestBedContent;
+    } as any as TestBedContent;
 
     return renderHook(() => useEnumDocuments(enumDocument, claimAllowedDocuments), hookTestBed({ content }));
   };

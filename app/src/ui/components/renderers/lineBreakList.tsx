@@ -7,15 +7,13 @@ interface Props {
 export const LineBreakList: React.FunctionComponent<Props> = ({ items }) => {
   return (
     <>
-      {
-        items.reduce<ReactNode[]>((result, item, index) => {
-          if(index > 0) {
-            result.push(<br key={`separator${index}`}/>);
-          }
-          result.push(item);
-          return result;
-        }, [])
-      }
+      {items.reduce<ReactNode[]>((result, item, index) => {
+        if (index > 0) {
+          result.push(<br key={`separator${index}`} />);
+        }
+        result.push(item);
+        return result;
+      }, [])}
     </>
   );
 };

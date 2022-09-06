@@ -7,7 +7,6 @@ import { v4 as uuid } from "uuid";
 import { NestedResult, Results } from "@ui/validation";
 import { Result } from "../validation/result";
 
-
 interface Props {
   error: Result | null | undefined;
   hideMessage?: boolean;

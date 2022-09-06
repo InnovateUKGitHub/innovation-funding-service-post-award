@@ -11,8 +11,8 @@ export const initInternationalisation = async () => {
       format: (value: string, format) => {
         if (format === "lowercase") return value.toLocaleLowerCase();
         return value;
-      }
-    }
+      },
+    },
   });
 };
 

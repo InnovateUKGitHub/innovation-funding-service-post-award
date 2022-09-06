@@ -12,8 +12,10 @@ interface Document extends MultipleDocumentUploadDto {
   id: string;
 }
 
-export class ClaimDocumentsDeleteHandler extends StandardFormHandlerBase<ClaimDocumentsPageParams, "multipleDocuments"> {
-
+export class ClaimDocumentsDeleteHandler extends StandardFormHandlerBase<
+  ClaimDocumentsPageParams,
+  "multipleDocuments"
+> {
   constructor() {
     super(ClaimDocumentsRoute, ["delete"], "multipleDocuments");
   }
@@ -29,7 +31,12 @@ export class ClaimDocumentsDeleteHandler extends StandardFormHandlerBase<ClaimDo
     return storeKeys.getClaimKey(params.partnerId, params.periodId);
   }
 
-  protected async run(context: IContext, params: ClaimDocumentsPageParams, button: IFormButton, dto: Document): Promise<ILinkInfo> {
+  protected async run(
+    context: IContext,
+    params: ClaimDocumentsPageParams,
+    button: IFormButton,
+    dto: Document,
+  ): Promise<ILinkInfo> {
     const command = new DeleteClaimDocumentCommand(dto.id, params);
     await context.runCommand(command);
     return ClaimDocumentsRoute.getLink(params);

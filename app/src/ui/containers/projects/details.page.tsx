@@ -128,18 +128,18 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
               contacts={contacts}
               partners={partners}
               projectContactLabels={x => x.projectDetails.contactLabels}
-              comment={(
+              comment={
                 <SimpleString>
-                  <ACC.Content value={(x) => x.projectDetails.financeContactInfo} />
+                  <ACC.Content value={x => x.projectDetails.financeContactInfo} />
                 </SimpleString>
-              )}
-              footnote={(
+              }
+              footnote={
                 <SimpleString>
-                  <ACC.Content value={(x => x.projectDetails.changeInfo)} />
-                  <ACC.EmailContent value={(x => x.projectDetails.changeEmail)} />
-                  <ACC.Content value={(x => x.projectDetails.changeEnd)} />
+                  <ACC.Content value={x => x.projectDetails.changeInfo} />
+                  <ACC.EmailContent value={x => x.projectDetails.changeEmail} />
+                  <ACC.Content value={x => x.projectDetails.changeEnd} />
                 </SimpleString>
-              )}
+              }
             />
           </ACC.Section>
 

@@ -24,10 +24,15 @@ export class PrepareClaimFormHandler extends StandardFormHandlerBase<PrepareClai
     return context.runQuery(new GetClaim(params.partnerId, params.periodId));
   }
 
-  protected async run(context: IContext, params: PrepareClaimParams, button: IFormButton, dto: ClaimDto): Promise<ILinkInfo> {
+  protected async run(
+    context: IContext,
+    params: PrepareClaimParams,
+    button: IFormButton,
+    dto: ClaimDto,
+  ): Promise<ILinkInfo> {
     await context.runCommand(new UpdateClaimCommand(params.projectId, dto));
 
-    if(button.name === "default") {
+    if (button.name === "default") {
       return ClaimDocumentsRoute.getLink(params);
     }
     // if pm as well as fc then go to all claims route

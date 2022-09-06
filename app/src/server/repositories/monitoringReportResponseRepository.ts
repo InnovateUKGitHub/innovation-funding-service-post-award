@@ -24,9 +24,15 @@ export interface IMonitoringReportResponseRepository {
  *
  * Links to the Header record and the question
  */
-export class MonitoringReportResponseRepository extends SalesforceRepositoryBase<ISalesforceMonitoringReportResponse> implements IMonitoringReportResponseRepository {
-
-  constructor(private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+export class MonitoringReportResponseRepository
+  extends SalesforceRepositoryBase<ISalesforceMonitoringReportResponse>
+  implements IMonitoringReportResponseRepository
+{
+  constructor(
+    private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>,
+    getSalesforceConnection: () => Promise<Connection>,
+    logger: ILogger,
+  ) {
     super(getSalesforceConnection, logger);
   }
 
@@ -42,7 +48,9 @@ export class MonitoringReportResponseRepository extends SalesforceRepositoryBase
   ];
 
   async getAllForHeader(monitoringReportHeaderId: string): Promise<ISalesforceMonitoringReportResponse[]> {
-    const filter = `Acc_MonitoringHeader__c = '${sss(monitoringReportHeaderId)}' AND RecordType.Name = '${sss(this.recordType)}'`;
+    const filter = `Acc_MonitoringHeader__c = '${sss(monitoringReportHeaderId)}' AND RecordType.Name = '${sss(
+      this.recordType,
+    )}'`;
     return this.where(filter);
   }
 

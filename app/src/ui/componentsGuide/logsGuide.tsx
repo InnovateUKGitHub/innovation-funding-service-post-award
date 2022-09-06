@@ -3,10 +3,30 @@ import { DateTime } from "luxon";
 import { IGuide } from "@framework/types";
 
 const data: LogItem[] = [
-  { newStatusLabel: "Approved", createdDate: DateTime.local().minus({ days: 1 }).toJSDate(), comments: "", createdBy: "Shane" },
-  { newStatusLabel: "Queried", createdDate: DateTime.local().minus({ days: 2, hours: 1, minutes: 55 }).toJSDate(), comments: "The comments are optional", createdBy: "Markus" },
-  { newStatusLabel: "Submitted", createdDate: DateTime.local().minus({ days: 3, hours: -1, minutes: 12 }).toJSDate(), comments: "", createdBy: "Kian" },
-  { newStatusLabel: "Draft", createdDate: DateTime.local().minus({ days: 4, hours: -1, minutes: -18 }).toJSDate(), comments: "The comments are optional\n\nAnd and can be mutiline", createdBy: "Nicky" },
+  {
+    newStatusLabel: "Approved",
+    createdDate: DateTime.local().minus({ days: 1 }).toJSDate(),
+    comments: "",
+    createdBy: "Shane",
+  },
+  {
+    newStatusLabel: "Queried",
+    createdDate: DateTime.local().minus({ days: 2, hours: 1, minutes: 55 }).toJSDate(),
+    comments: "The comments are optional",
+    createdBy: "Markus",
+  },
+  {
+    newStatusLabel: "Submitted",
+    createdDate: DateTime.local().minus({ days: 3, hours: -1, minutes: 12 }).toJSDate(),
+    comments: "",
+    createdBy: "Kian",
+  },
+  {
+    newStatusLabel: "Draft",
+    createdDate: DateTime.local().minus({ days: 4, hours: -1, minutes: -18 }).toJSDate(),
+    comments: "The comments are optional\n\nAnd and can be mutiline",
+    createdBy: "Nicky",
+  },
 ];
 
 export const logsGuide: IGuide = {
@@ -25,7 +45,7 @@ export const logsGuide: IGuide = {
 
       <Logs data={logs}/>
               `,
-      render: () => <Logs qa="logs_guide" data={data} />
-    }
-  ]
+      render: () => <Logs qa="logs_guide" data={data} />,
+    },
+  ],
 };

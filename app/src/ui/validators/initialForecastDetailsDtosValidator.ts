@@ -13,7 +13,8 @@ import * as Validation from "./common";
 
 export class InitialForecastDetailsDtosValidator
   extends Results<ForecastDetailsDTO[]>
-  implements IForecastDetailsDtosValidator {
+  implements IForecastDetailsDtosValidator
+{
   constructor(
     private readonly forecasts: ForecastDetailsDTO[],
     private readonly golCosts: GOLCostDto[],
@@ -53,7 +54,7 @@ export class InitialForecastDetailsDtosValidator
     return this.costCategories.map(costCategory => {
       const entry = groupedForecasts.find(x => x[0] === costCategory.id);
       const golCost = this.golCosts.find(gol => gol.costCategoryId === costCategory.id);
-      if(!golCost) throw new Error("Unable to find matching golCostDto");
+      if (!golCost) throw new Error("Unable to find matching golCostDto");
       return {
         golCost,
         costCategory,
@@ -65,7 +66,8 @@ export class InitialForecastDetailsDtosValidator
 
 export class InitialForecastDetailsDtoValidator
   extends Results<ForecastDetailsDTO>
-  implements IForecastDetailsDtoValidator {
+  implements IForecastDetailsDtoValidator
+{
   constructor(forecast: ForecastDetailsDTO, showValidationErrors: boolean) {
     super(forecast, showValidationErrors);
   }
@@ -80,7 +82,8 @@ export class InitialForecastDetailsDtoValidator
 
 export class InitialForecastDetailsDtoCostCategoryValidator
   extends Results<CostCategoryForecast>
-  implements IForecastDetailsDtoCostCategoryValidator {
+  implements IForecastDetailsDtoCostCategoryValidator
+{
   constructor(
     public readonly forecast: CostCategoryForecast,
     public readonly submit: boolean,

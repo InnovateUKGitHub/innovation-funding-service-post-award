@@ -12,12 +12,12 @@ export const timeExtensionItemWorkflow: IPCRWorkflow<PCRItemForTimeExtensionDto,
       stepName: "timeExtension",
       displayName: "Time extension",
       stepNumber: 1,
-      validation: (val) => val.pcr,
-      stepRender: TimeExtensionStepContainer
-    }
+      validation: val => val.pcr,
+      stepRender: TimeExtensionStepContainer,
+    },
   ],
   summary: {
-    validation: (val) => val,
-    summaryRender: TimeExtensionSummary
-  }
+    validation: val => val,
+    summaryRender: TimeExtensionSummary,
+  },
 };

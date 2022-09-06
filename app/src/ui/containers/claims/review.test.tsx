@@ -84,7 +84,7 @@ describe("useReviewContent()", () => {
     ${"monitoringReportReminder"}                    | ${"monitoringReportReminder"}
     ${"additionalInfoSectionTitle"}                  | ${"additionalInfoSectionTitle"}
     ${"additionalInfoLabel"}                         | ${"additionalInfoLabel"}
-  `("with $property ", ({ name, property }: Record<"name" | "property", string>) => {
+  `("with $property", ({ name, property }: Record<"name" | "property", string>) => {
     const { result } = renderPageContent();
 
     const content = (result.current.default as any)[name];
@@ -135,7 +135,7 @@ describe("useReviewContent()", () => {
   test.each`
     name                  | property
     ${"descriptionLabel"} | ${"descriptionLabel"}
-  `("with claimDocuments $property ", ({ name, property }: Record<"name" | "property", string>) => {
+  `("with claimDocuments $property", ({ name, property }: Record<"name" | "property", string>) => {
     const { result } = renderPageContent();
 
     const content = (result.current.default as any)[name];
@@ -148,7 +148,7 @@ describe("useReviewContent()", () => {
     name                            | property
     ${"noMatchingDocumentsMessage"} | ${"noMatchingDocumentsMessage"}
     ${"searchDocumentsMessage"}     | ${"searchDocumentsMessage"}
-  `("with projectDocuments $property ", ({ name, property }: Record<"name" | "property", string>) => {
+  `("with projectDocuments $property", ({ name, property }: Record<"name" | "property", string>) => {
     const { result } = renderPageContent();
 
     const content = (result.current.default as any)[name];

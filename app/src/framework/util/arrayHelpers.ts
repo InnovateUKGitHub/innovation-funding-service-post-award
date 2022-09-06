@@ -34,15 +34,15 @@ export const getArrayFromPeriod = <T extends any[]>(
   }) as T;
 };
 
-export const getArrayExcludingPeriods = <T extends {
-  periodId: number;
-}>(
+export const getArrayExcludingPeriods = <
+  T extends {
+    periodId: number;
+  },
+>(
   originalArray: T[],
-  excludePeriods: Set<number>
+  excludePeriods: Set<number>,
 ): T[] => {
-  if(!originalArray.length) return originalArray;
+  if (!originalArray.length) return originalArray;
 
-  return originalArray.filter(item =>
-    !excludePeriods.has(item.periodId)
-  );
+  return originalArray.filter(item => !excludePeriods.has(item.periodId));
 };

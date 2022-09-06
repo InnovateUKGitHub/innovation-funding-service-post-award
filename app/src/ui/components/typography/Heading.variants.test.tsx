@@ -18,9 +18,7 @@ describe("Heading variants", () => {
   });
 
   describe("@renders", () => {
-    const testVariants = test.each(headingVariants);
-
-    testVariants("with %s", variantKey => {
+    test.each(headingVariants)("with %s", variantKey => {
       // Note: variant ("h1") => uppercase ("H1") => and cast as module for object look-up
       const moduleKey = variantKey.toUpperCase() as Uppercase<typeof variantKey>;
       const Variant = variantModule[moduleKey];
@@ -29,7 +27,7 @@ describe("Heading variants", () => {
         throw Error(`No component was found using "${moduleKey}" in "Heading.variants".`);
       }
 
-      const { container } = render(<Variant>Look ma! I'm a Variant!</Variant>);
+      const { container } = render(<Variant>Look ma! I&apos;m a Variant!</Variant>);
 
       const expectedElement = container.querySelector(Variant.name.toLowerCase());
 
@@ -38,11 +36,11 @@ describe("Heading variants", () => {
     });
 
     describe("when rendered 'as' another element", () => {
-      testVariants("with %s", variantKey => {
+      test.each(headingVariants)("with %s", variantKey => {
         const moduleKey = variantKey.toUpperCase() as Uppercase<typeof variantKey>;
         const HeadingVariant = variantModule[moduleKey];
 
-        const { container } = render(<HeadingVariant as="p">Look ma! I'm a Variant!</HeadingVariant>);
+        const { container } = render(<HeadingVariant as="p">Look ma! I&apos;m a Variant!</HeadingVariant>);
 
         const expectedElement = container.querySelector("p");
 

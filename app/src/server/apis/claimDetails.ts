@@ -12,28 +12,38 @@ export interface IClaimDetailsApi {
   saveClaimDetails: (params: ApiParams<ClaimDetailKey & { claimDetails: ClaimDetailsDto }>) => Promise<ClaimDetailsDto>;
 }
 
-class Controller extends ControllerBaseWithSummary<ClaimDetailsSummaryDto, ClaimDetailsDto> implements IClaimDetailsApi {
+class Controller
+  extends ControllerBaseWithSummary<ClaimDetailsSummaryDto, ClaimDetailsDto>
+  implements IClaimDetailsApi
+{
   constructor() {
     super("claim-details");
 
-    this.getItems("/", (p, q) => ({ partnerId: q.partnerId, }), (p) => this.getAllByPartner(p));
-    this.getItem("/:projectId/:partnerId/:periodId/:costCategoryId",
-      (p) => ({
+    this.getItems(
+      "/",
+      (p, q) => ({ partnerId: q.partnerId }),
+      p => this.getAllByPartner(p),
+    );
+    this.getItem(
+      "/:projectId/:partnerId/:periodId/:costCategoryId",
+      p => ({
         projectId: p.projectId,
         partnerId: p.partnerId,
         periodId: parseInt(p.periodId, 10),
-        costCategoryId: p.costCategoryId
+        costCategoryId: p.costCategoryId,
       }),
-      p => this.get(p));
-    this.putItem("/:projectId/:partnerId/:periodId/:costCategoryId",
+      p => this.get(p),
+    );
+    this.putItem(
+      "/:projectId/:partnerId/:periodId/:costCategoryId",
       (p, q, b) => ({
         projectId: p.projectId,
         partnerId: p.partnerId,
         periodId: parseInt(p.periodId, 10),
         costCategoryId: p.costCategoryId,
-        claimDetails: processDto(b)
+        claimDetails: processDto(b),
       }),
-      (p) => this.saveClaimDetails(p)
+      p => this.saveClaimDetails(p),
     );
   }
 
@@ -48,7 +58,9 @@ class Controller extends ControllerBaseWithSummary<ClaimDetailsSummaryDto, Claim
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async saveClaimDetails(params: ApiParams<ClaimDetailKey & { claimDetails: ClaimDetailsDto }>): Promise<ClaimDetailsDto> {
+  public async saveClaimDetails(
+    params: ApiParams<ClaimDetailKey & { claimDetails: ClaimDetailsDto }>,
+  ): Promise<ClaimDetailsDto> {
     const { projectId, partnerId, costCategoryId, periodId, claimDetails } = params;
     const context = contextProvider.start(params);
     const saveLineItemsCommand = new SaveClaimDetails(projectId, partnerId, periodId, costCategoryId, claimDetails);

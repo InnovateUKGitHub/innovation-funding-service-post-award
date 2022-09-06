@@ -4,7 +4,12 @@ import { Results } from "../validation/results";
 import * as Validation from "./common";
 
 export class ClaimDetailsValidator extends Results<ClaimDetailsDto> {
-    public readonly items = Validation.optionalChild(this, this.model.lineItems, x => new ClaimLineItemDtoValidator(x, this.showValidationErrors), "There are invalid claim line items.");
+  public readonly items = Validation.optionalChild(
+    this,
+    this.model.lineItems,
+    x => new ClaimLineItemDtoValidator(x, this.showValidationErrors),
+    "There are invalid claim line items.",
+  );
 }
 
 export class ClaimLineItemDtoValidator extends Results<ClaimLineItemDto> {
@@ -12,10 +17,12 @@ export class ClaimLineItemDtoValidator extends Results<ClaimLineItemDto> {
     ? Validation.required(this, this.model.description, "Enter a description.")
     : Validation.valid(this);
 
-  public cost = Validation.all(this,
-    () => typeof this.model.description === "string" && this.model.description.length > 0
-      ? Validation.required(this, this.model.value, "Enter a cost.")
-      : Validation.valid(this),
-    () => Validation.isCurrency(this, this.model.value, "Costs must be a number.")
-    );
+  public cost = Validation.all(
+    this,
+    () =>
+      typeof this.model.description === "string" && this.model.description.length > 0
+        ? Validation.required(this, this.model.value, "Enter a cost.")
+        : Validation.valid(this),
+    () => Validation.isCurrency(this, this.model.value, "Costs must be a number."),
+  );
 }

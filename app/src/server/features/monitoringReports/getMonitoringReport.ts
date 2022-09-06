@@ -1,5 +1,9 @@
 import { BadRequestError, QueryBase } from "@server/features/common";
-import { ISalesforceMonitoringReportHeader, ISalesforceMonitoringReportResponse, ISalesforceMonitoringReportStatus } from "@server/repositories";
+import {
+  ISalesforceMonitoringReportHeader,
+  ISalesforceMonitoringReportResponse,
+  ISalesforceMonitoringReportStatus,
+} from "@server/repositories";
 import { MonitoringReportDto, MonitoringReportQuestionDto } from "@framework/dtos";
 import { Authorisation, IContext, ProjectRole } from "@framework/types";
 import { GetMonitoringReportActiveQuestions } from "./getMonitoringReportActiveQuestions";
@@ -20,7 +24,7 @@ export class GetMonitoringReportById extends QueryBase<MonitoringReportDto> {
   protected async run(context: IContext): Promise<MonitoringReportDto> {
     const header = await context.repositories.monitoringReportHeader.getById(this.id);
 
-    if(header.Acc_Project__c !== this.projectId) {
+    if (header.Acc_Project__c !== this.projectId) {
       throw new BadRequestError("Invalid request");
     }
 
@@ -39,11 +43,15 @@ export class GetMonitoringReportById extends QueryBase<MonitoringReportDto> {
       periodId: header.Acc_ProjectPeriodNumber__c,
       questions,
       addComments: header.Acc_AddComments__c,
-      lastUpdated: context.clock.parseRequiredSalesforceDateTime(header.LastModifiedDate)
+      lastUpdated: context.clock.parseRequiredSalesforceDateTime(header.LastModifiedDate),
     };
   }
 
-  private async getQuestions(context: IContext, header: ISalesforceMonitoringReportHeader, results: ISalesforceMonitoringReportResponse[]): Promise<MonitoringReportQuestionDto[]> {
+  private async getQuestions(
+    context: IContext,
+    header: ISalesforceMonitoringReportHeader,
+    results: ISalesforceMonitoringReportResponse[],
+  ): Promise<MonitoringReportQuestionDto[]> {
     if (this.updatableStatuses.indexOf(header.Acc_MonitoringReportStatus__c) >= 0) {
       return context.runQuery(new GetMonitoringReportActiveQuestions());
     }
@@ -51,20 +59,23 @@ export class GetMonitoringReportById extends QueryBase<MonitoringReportDto> {
     return context.runQuery(new GetMonitoringReportAnsweredQuestions(answeredQuestions));
   }
 
-  private populateAnswer(question: MonitoringReportQuestionDto, responses: ISalesforceMonitoringReportResponse[]): MonitoringReportQuestionDto {
+  private populateAnswer(
+    question: MonitoringReportQuestionDto,
+    responses: ISalesforceMonitoringReportResponse[],
+  ): MonitoringReportQuestionDto {
     const options = question.options.map(o => o.id);
 
     // if there are no options get it from the preselected answer as its a non-option question
     const response = responses.find(r => options.indexOf(r.Acc_Question__c) >= 0);
 
-    if(!response) {
+    if (!response) {
       return question;
     }
 
     return Object.assign(question, {
       optionId: response.Acc_Question__c,
       comments: response.Acc_QuestionComments__c,
-      responseId: response.Id
+      responseId: response.Id,
     });
   }
 }

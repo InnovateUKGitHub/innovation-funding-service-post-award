@@ -19,27 +19,36 @@ import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("Partner Validator", () => {
   describe("partnerStatus", () => {
-    test("should validate partner status transitions", async () => {
-      const context = new TestContext();
+    describe("should validate partner status transitions", () => {
       const statuses = getAllEnumValues(PartnerStatus).filter(x => x !== PartnerStatus.Unknown);
-      for (const status of statuses) {
-        const partner = context.testData.createPartner(undefined, x => {
-          x.participantStatus = new PartnerStatusMapper().mapToSalesforce(status) || "";
-        });
-        const originalDto = await context.runQuery(new GetByIdQuery(partner.id));
-        const partnerDto = { ...originalDto };
-        for (const newStatus of statuses) {
-          partnerDto.partnerStatus = newStatus;
-          const validator = new PartnerDtoValidator(partnerDto, originalDto, [], { showValidationErrors: true });
-          if (status === PartnerStatus.Pending && newStatus === PartnerStatus.Active) {
-            expect(validator.partnerStatus.isValid).toBe(true);
-          } else if (status === newStatus) {
-            expect(validator.partnerStatus.isValid).toBe(true);
-          } else {
-            expect(validator.partnerStatus.isValid).toBe(false);
-          }
+
+      const statusPairs: PartnerStatus[][] = [];
+
+      // Generate a list of all possible pairs of statuses
+      for (const a of statuses) {
+        for (const b of statuses) {
+          statusPairs.push([a, b]);
         }
       }
+
+      test.each(statusPairs)("between PartnerStatus %s and %s", async (oldStatus, newStatus) => {
+        const context = new TestContext();
+        // Setup the old status
+        const partner = context.testData.createPartner(undefined, x => {
+          x.participantStatus = new PartnerStatusMapper().mapToSalesforce(oldStatus) || "";
+        });
+        const originalDto = await context.runQuery(new GetByIdQuery(partner.id));
+
+        // Copy the partner, but with the new status.
+        const partnerDto = { ...originalDto, partnerStatus: newStatus };
+        const validator = new PartnerDtoValidator(partnerDto, originalDto, [], { showValidationErrors: true });
+
+        expect(validator.partnerStatus.isValid).toBe(
+          // Transition is only valid from pending to active
+          // or the status has not changed.
+          (oldStatus === PartnerStatus.Pending && newStatus === PartnerStatus.Active) || oldStatus === newStatus,
+        );
+      });
     });
   });
 

@@ -111,11 +111,11 @@ describe("Create PCR Command", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     await context.testData.createPartner(project);
-    const command = new CreateProjectChangeRequestCommand(project.Id, ({
+    const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
       status: PCRStatus.Draft,
       reasoningStatus: PCRItemStatus.ToDo,
-    } as any) as PCRDto);
+    } as any as PCRDto);
 
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
@@ -124,11 +124,11 @@ describe("Create PCR Command", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     await context.testData.createPartner(project);
-    const command = new CreateProjectChangeRequestCommand(project.Id, ({
+    const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
       status: PCRStatus.Draft,
       reasoningStatus: PCRItemStatus.Complete,
-    } as any) as PCRDto);
+    } as any as PCRDto);
 
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
@@ -137,11 +137,11 @@ describe("Create PCR Command", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     await context.testData.createPartner(project);
-    const command = new CreateProjectChangeRequestCommand(project.Id, ({
+    const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
       status: PCRStatus.Approved,
       reasoningStatus: PCRItemStatus.ToDo,
-    } as any) as PCRDto);
+    } as any as PCRDto);
 
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
@@ -153,7 +153,7 @@ describe("Create PCR Command", () => {
     context.testData.createCurrentUserAsProjectManager(project);
     const partner = context.testData.createPartner(project);
 
-    const command = new CreateProjectChangeRequestCommand(project.Id, ({
+    const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
       status: PCRStatus.Draft,
       reasoningStatus: PCRItemStatus.ToDo,
@@ -168,7 +168,7 @@ describe("Create PCR Command", () => {
           partnerId: partner.id,
         },
       ],
-    } as any) as PCRDto);
+    } as any as PCRDto);
 
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
@@ -182,7 +182,7 @@ describe("Create PCR Command", () => {
 
     const itemType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.AccountNameChange);
 
-    const command = new CreateProjectChangeRequestCommand(project.Id, ({
+    const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
       status: PCRStatus.Draft,
       reasoningStatus: PCRItemStatus.ToDo,
@@ -194,7 +194,7 @@ describe("Create PCR Command", () => {
           partnerId: partner.id,
         },
       ],
-    } as any) as PCRDto);
+    } as any as PCRDto);
 
     const id = await context.runCommand(command);
     const newPCR = context.repositories.projectChangeRequests.Items.find(x => x.id === id);
@@ -221,7 +221,7 @@ describe("Create PCR Command", () => {
     const project = context.testData.createProject();
     await context.testData.createPartner(project);
     const recordTypes = context.testData.createPCRRecordTypes();
-    const command = new CreateProjectChangeRequestCommand(project.Id, ({
+    const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
       status: PCRStatus.Draft,
       reasoningStatus: PCRItemStatus.ToDo,
@@ -232,7 +232,7 @@ describe("Create PCR Command", () => {
           recordTypeId: recordTypes[0].id,
         },
       ],
-    } as any) as PCRDto);
+    } as any as PCRDto);
     const auth = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.ProjectManager,
@@ -246,7 +246,7 @@ describe("Create PCR Command", () => {
     const project = context.testData.createProject();
     const partner = await context.testData.createPartner(project);
     const recordTypes = context.testData.createPCRRecordTypes();
-    const command = new CreateProjectChangeRequestCommand(project.Id, ({
+    const command = new CreateProjectChangeRequestCommand(project.Id, {
       projectId: project.Id,
       status: PCRStatus.Draft,
       reasoningStatus: PCRItemStatus.ToDo,
@@ -257,7 +257,7 @@ describe("Create PCR Command", () => {
           recordTypeId: recordTypes[0].id,
         },
       ],
-    } as any) as PCRDto);
+    } as any as PCRDto);
     const auth = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer | ProjectRole.Unknown,

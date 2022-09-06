@@ -22,7 +22,10 @@ export const FinanceContactStep = (
         onChange={dto => props.onChange(dto)}
       >
         <Form.Fieldset heading={x => x.pcrAddPartnerProjectContacts.labels.financeContactHeading}>
-          <Form.Hidden name="contact1ProjectRole" value={x => x.contact1ProjectRole = PCRContactRole.FinanceContact}/>
+          <Form.Hidden
+            name="contact1ProjectRole"
+            value={x => (x.contact1ProjectRole = PCRContactRole.FinanceContact)}
+          />
           <Form.String
             label={x => x.pcrAddPartnerProjectContacts.labels.contactFirstNameHeading}
             name="contact1Forename"

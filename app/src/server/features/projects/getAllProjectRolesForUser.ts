@@ -16,9 +16,13 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
     if (!email) {
       return new Authorisation({});
     } else if (email === context.config.salesforce.serviceUsername) {
-      return new Authorisation(await context.caches.projectRoles.fetchAsync(email, () => this.getServiceAccountRoles(context)));
+      return new Authorisation(
+        await context.caches.projectRoles.fetchAsync(email, () => this.getServiceAccountRoles(context)),
+      );
     } else {
-      return new Authorisation(await context.caches.projectRoles.fetchAsync(email, () => this.getProjectRoles(email, context)));
+      return new Authorisation(
+        await context.caches.projectRoles.fetchAsync(email, () => this.getProjectRoles(email, context)),
+      );
     }
   }
 
@@ -31,7 +35,8 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
       const newProjectRole = this.getProjectRole(contact.Acc_Role__c);
 
       // get contact for project and if null initalise to empty and assign to allRoles
-      const roleInfo = allRoles[contact.Acc_ProjectId__c] = (allRoles[contact.Acc_ProjectId__c] || this.getEmptyRoleInfo());
+      const roleInfo = (allRoles[contact.Acc_ProjectId__c] =
+        allRoles[contact.Acc_ProjectId__c] || this.getEmptyRoleInfo());
 
       roleInfo.projectRoles = roleInfo.projectRoles | newProjectRole;
 
@@ -65,14 +70,15 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
     const projectRoles = projects.reduce<{ [key: string]: IRoleInfo }>((roles, project) => {
       roles[project.Id] = {
         projectRoles: allRoles,
-        partnerRoles: {}
+        partnerRoles: {},
       };
       return roles;
     }, {});
 
     return partners.reduce((roles, partner) => {
       // get or create new project level roles record
-      const project = roles[partner.projectId] || (roles[partner.projectId] = { projectRoles: allRoles, partnerRoles: {}});
+      const project =
+        roles[partner.projectId] || (roles[partner.projectId] = { projectRoles: allRoles, partnerRoles: {} });
       // set current partner level to all
       project.partnerRoles[partner.id] = allRoles;
       return roles;
@@ -93,10 +99,9 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
   }
 
   private getEmptyRoleInfo(): IRoleInfo {
-    return ({
+    return {
       projectRoles: ProjectRole.Unknown,
-      partnerRoles: {}
-    });
+      partnerRoles: {},
+    };
   }
-
 }

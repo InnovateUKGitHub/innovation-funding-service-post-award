@@ -6,19 +6,27 @@ import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/f
 import {
   PcrDeleteSpendProfileCostParams,
   PCRSpendProfileCostsSummaryRoute,
-  PCRSpendProfileDeleteCostRoute
+  PCRSpendProfileDeleteCostRoute,
 } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators";
 import { PCRItemStatus } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 
-export class ProjectChangeRequestSpendProfileDeleteCostHandler extends StandardFormHandlerBase<PcrDeleteSpendProfileCostParams, "pcr"> {
+export class ProjectChangeRequestSpendProfileDeleteCostHandler extends StandardFormHandlerBase<
+  PcrDeleteSpendProfileCostParams,
+  "pcr"
+> {
   constructor() {
     super(PCRSpendProfileDeleteCostRoute, ["delete"], "pcr");
   }
 
-  protected async getDto(context: IContext, params: PcrDeleteSpendProfileCostParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
+  protected async getDto(
+    context: IContext,
+    params: PcrDeleteSpendProfileCostParams,
+    button: IFormButton,
+    body: IFormBody,
+  ): Promise<PCRDto> {
     if (!body.id) {
       throw new BadRequestError("Cost not found");
     }
@@ -56,14 +64,19 @@ export class ProjectChangeRequestSpendProfileDeleteCostHandler extends StandardF
     return dto;
   }
 
-  protected async run(context: IContext, params: PcrDeleteSpendProfileCostParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
+  protected async run(
+    context: IContext,
+    params: PcrDeleteSpendProfileCostParams,
+    button: IFormButton,
+    dto: PCRDto,
+  ): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
 
     return PCRSpendProfileCostsSummaryRoute.getLink({
       projectId: params.projectId,
       pcrId: params.pcrId,
       itemId: params.itemId,
-      costCategoryId: params.costCategoryId
+      costCategoryId: params.costCategoryId,
     });
   }
 

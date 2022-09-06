@@ -2,7 +2,8 @@ import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/f
 import { IContext, ILinkInfo } from "@framework/types";
 import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import {
-  MonitoringReportDashboardRoute, MonitoringReportWorkflowParams,
+  MonitoringReportDashboardRoute,
+  MonitoringReportWorkflowParams,
   MonitoringReportWorkflowRoute,
 } from "@ui/containers";
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
@@ -10,18 +11,25 @@ import { GetMonitoringReportById, SaveMonitoringReport } from "@server/features/
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MonitoringReportWorkflowDef } from "@ui/containers/monitoringReports/monitoringReportWorkflowDef";
 
-export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<MonitoringReportWorkflowParams, "monitoringReport"> {
-
+export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
+  MonitoringReportWorkflowParams,
+  "monitoringReport"
+> {
   constructor() {
     super(MonitoringReportWorkflowRoute, ["save-continue", "save-return"], "monitoringReport");
   }
 
-  protected async getDto(context: IContext, params: MonitoringReportWorkflowParams, button: IFormButton, body: IFormBody): Promise<MonitoringReportDto> {
+  protected async getDto(
+    context: IContext,
+    params: MonitoringReportWorkflowParams,
+    button: IFormButton,
+    body: IFormBody,
+  ): Promise<MonitoringReportDto> {
     const query = new GetMonitoringReportById(params.projectId, params.id);
     const dto = await context.runQuery(query);
     const questionDisplayOrder = Number(body.questionDisplayOrder);
     const q = dto.questions.find(x => x.displayOrder === questionDisplayOrder);
-    if(!q) throw new Error(`Cannot find monitoring report question dto matching ${questionDisplayOrder}`);
+    if (!q) throw new Error(`Cannot find monitoring report question dto matching ${questionDisplayOrder}`);
     if (q.isScored) {
       q.optionId = body[`question_${q.displayOrder}_options`];
     }
@@ -43,10 +51,20 @@ export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
     }
 
     const nextStep = MonitoringReportWorkflowDef.getWorkflow(dto, params.step).getNextStepInfo();
-    return MonitoringReportWorkflowRoute.getLink({ projectId: params.projectId, id: params.id, mode: "prepare", step: nextStep && nextStep.stepNumber });
+    return MonitoringReportWorkflowRoute.getLink({
+      projectId: params.projectId,
+      id: params.id,
+      mode: "prepare",
+      step: nextStep && nextStep.stepNumber,
+    });
   }
 
-  protected async run(context: IContext, params: MonitoringReportWorkflowParams, button: IFormButton, dto: MonitoringReportDto): Promise<ILinkInfo> {
+  protected async run(
+    context: IContext,
+    params: MonitoringReportWorkflowParams,
+    button: IFormButton,
+    dto: MonitoringReportDto,
+  ): Promise<ILinkInfo> {
     const command = new SaveMonitoringReport(dto, false);
     await context.runCommand(command);
     if (button.name === "save-return") {
@@ -54,7 +72,12 @@ export class MonitoringReportPrepareFormHandler extends StandardFormHandlerBase<
       if (workflow.isOnSummary()) {
         return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
       }
-      return MonitoringReportWorkflowRoute.getLink({ projectId: params.projectId, id: params.id, mode: "prepare", step: undefined });
+      return MonitoringReportWorkflowRoute.getLink({
+        projectId: params.projectId,
+        id: params.id,
+        mode: "prepare",
+        step: undefined,
+      });
     }
     return this.getLink(button.name === "save-continue", dto, params);
   }

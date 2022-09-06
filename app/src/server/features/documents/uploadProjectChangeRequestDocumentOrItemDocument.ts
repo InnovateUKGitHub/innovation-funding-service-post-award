@@ -5,23 +5,35 @@ import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 // Uses either project change request Id or project change request item Id, as both cn be used as the entity Id of the document
 
 export class UploadProjectChangeRequestDocumentOrItemDocumentCommand extends CommandMultipleDocumentBase<string[]> {
-
   protected filesRequired = true;
   protected showValidationErrors = true;
 
-  constructor(private readonly projectId: string, private readonly projectChangeRequestIdOrItemId: string, protected readonly documents: MultipleDocumentUploadDto) {
+  constructor(
+    private readonly projectId: string,
+    private readonly projectChangeRequestIdOrItemId: string,
+    protected readonly documents: MultipleDocumentUploadDto,
+  ) {
     super();
   }
 
   protected async accessControl(auth: Authorisation, context: IContext) {
-    const projectChangeRequestExists = await context.repositories.projectChangeRequests.isExisting(this.projectId, this.projectChangeRequestIdOrItemId);
+    const projectChangeRequestExists = await context.repositories.projectChangeRequests.isExisting(
+      this.projectId,
+      this.projectChangeRequestIdOrItemId,
+    );
     if (!projectChangeRequestExists) return false;
 
     return auth.forProject(this.projectId).hasRole(ProjectRole.ProjectManager);
   }
 
   protected async run(context: IContext) {
-    const result = new MultipleDocumentUploadDtoValidator(this.documents, context.config.options, this.filesRequired, this.showValidationErrors, null);
+    const result = new MultipleDocumentUploadDtoValidator(
+      this.documents,
+      context.config.options,
+      this.filesRequired,
+      this.showValidationErrors,
+      null,
+    );
 
     if (!result.isValid) {
       throw new ValidationError(result);
@@ -30,7 +42,11 @@ export class UploadProjectChangeRequestDocumentOrItemDocumentCommand extends Com
     const results: string[] = [];
 
     for (const document of this.documents.files.filter(x => x.fileName && x.size)) {
-      const id = await context.repositories.documents.insertDocument(document, this.projectChangeRequestIdOrItemId, this.documents.description);
+      const id = await context.repositories.documents.insertDocument(
+        document,
+        this.projectChangeRequestIdOrItemId,
+        this.documents.description,
+      );
       results.push(id);
     }
 

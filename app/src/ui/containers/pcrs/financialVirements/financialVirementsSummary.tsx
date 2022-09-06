@@ -45,11 +45,7 @@ export function FinancialVirementSummaryComponent({ mode, ...props }: FinancialV
         ? props.routes.pcrFinancialVirementEditCostCategoryLevel.getLink(params)
         : props.routes.pcrFinancialVirementDetails.getLink({ ...params, mode });
 
-    return (
-      <ACC.Link route={route}>
-        {ACC.getPartnerName(partner, true)}
-      </ACC.Link>
-    );
+    return <ACC.Link route={route}>{ACC.getPartnerName(partner, true)}</ACC.Link>;
   };
 
   const getGrantMessage = (

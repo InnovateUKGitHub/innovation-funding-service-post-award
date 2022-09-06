@@ -1,4 +1,3 @@
-/* eslint-disable sonarjs/no-identical-functions */
 import { DateTime } from "luxon";
 import {
   PartnerDto,
@@ -636,7 +635,7 @@ export class PCRLoanExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
     const { availabilityPeriod, extensionPeriod, repaymentPeriod, repaymentPeriodChange, id } = this.model;
     if (!id) return Validation.valid(this); // missing id shows pcr not created yet
 
-    if(isNull(availabilityPeriod) || isNull(extensionPeriod) || isNull(repaymentPeriod)) {
+    if (isNull(availabilityPeriod) || isNull(extensionPeriod) || isNull(repaymentPeriod)) {
       throw Error("validateRepaymentPeriod() is missing model data to validate.");
     }
 
@@ -1301,5 +1300,3 @@ export class PCRPartnerWithdrawalItemDtoValidator extends PCRBaseItemDtoValidato
   removalPeriod = this.validateRemovalPeriod();
   partnerId = this.validatePartnerId();
 }
-
-

@@ -116,7 +116,9 @@ describe("UploadProjectDocumentCommand", () => {
 
     const project = context.testData.createProject();
 
-    const files = context.testData.range(context.config.options.maxUploadFileCount + 1, () => context.testData.createFile());
+    const files = context.testData.range(context.config.options.maxUploadFileCount + 1, () =>
+      context.testData.createFile(),
+    );
 
     const command = new UploadProjectDocumentCommand(project.Id, { files });
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
@@ -153,8 +155,8 @@ describe("UploadProjectDocumentCommand", () => {
     const auth = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.MonitoringOfficer,
-        partnerRoles: {}
-      }
+        partnerRoles: {},
+      },
     });
 
     expect(await context.runAccessControl(auth, command)).toBe(true);
@@ -167,8 +169,8 @@ describe("UploadProjectDocumentCommand", () => {
     const auth = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.FinancialContact | ProjectRole.ProjectManager,
-        partnerRoles: {}
-      }
+        partnerRoles: {},
+      },
     });
 
     expect(await context.runAccessControl(auth, command)).toBe(false);

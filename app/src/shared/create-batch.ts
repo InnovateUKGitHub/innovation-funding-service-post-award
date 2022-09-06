@@ -21,7 +21,7 @@ export function createBatch<T extends any[]>(payload: T, batchSize: number): T[]
     if (loopCount !== 0 && hasStartedNewBatch) batchIndex++;
 
     // Note: Use batch or create empty new batch
-    const batchToPopulate = (newPayload[batchIndex] ??= ([] as unknown) as T);
+    const batchToPopulate = (newPayload[batchIndex] ??= [] as unknown as T);
 
     batchToPopulate.push(payload[loopCount]);
 

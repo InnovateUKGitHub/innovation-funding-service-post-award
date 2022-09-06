@@ -2,7 +2,6 @@ import { GetMonitoringReportActiveQuestions } from "@server/features/monitoringR
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("GetMonitoringReportActiveQuestions", () => {
-
   it("returns all the active questions when no questio Ids are passed in", async () => {
     const context = new TestContext();
     const testData = context.testData;

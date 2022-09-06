@@ -1,4 +1,3 @@
-
 import { GetAllClaimsForProjectQuery } from "@server/features/claims";
 import { ClaimStatus } from "@framework/types";
 import { TestContext } from "@tests/test-utils/testContextProvider";
@@ -182,7 +181,15 @@ describe("getAllClaimsForProjectQuery", () => {
     const query = new GetAllClaimsForProjectQuery(project.Id);
     const results = await context.runQuery(query);
 
-    expect(results.map(x => x.partnerId)).toEqual([partner2.id, partner2.id, partner2.id, partner2.id, partner1.id, partner1.id, partner1.id]);
+    expect(results.map(x => x.partnerId)).toEqual([
+      partner2.id,
+      partner2.id,
+      partner2.id,
+      partner2.id,
+      partner1.id,
+      partner1.id,
+      partner1.id,
+    ]);
     expect(results.map(x => x.periodId)).toEqual([3, 2, 1, 1, 3, 2, 1]);
   });
 });

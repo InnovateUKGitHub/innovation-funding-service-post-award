@@ -18,14 +18,23 @@ interface ISummary<TSummaryProps, TVal extends Results<{}>> {
   validation: (val: TVal) => Results<any>;
   summaryRender: (props: TSummaryProps) => React.ReactElement;
 }
-export interface IWorkflow<TStepName extends string, TStepProps extends IStepProps, TSummaryProps extends ISummaryProps, TVal extends Results<{}>> {
+export interface IWorkflow<
+  TStepName extends string,
+  TStepProps extends IStepProps,
+  TSummaryProps extends ISummaryProps,
+  TVal extends Results<{}>,
+> {
   steps: IStep<TStepName, TStepProps, TVal>[];
   summary: ISummary<TSummaryProps, TVal>;
 }
 
-export interface ICallableStep<TStepProps extends IStepProps, TVal extends Results<{}>> extends IStep<string, TStepProps, TVal> {}
+export type ICallableStep<TStepProps extends IStepProps, TVal extends Results<{}>> = IStep<string, TStepProps, TVal>;
 
-export interface ICallableWorkflow<TStepProps extends IStepProps, TSummaryProps extends ISummaryProps, TVal extends Results<{}>> {
+export interface ICallableWorkflow<
+  TStepProps extends IStepProps,
+  TSummaryProps extends ISummaryProps,
+  TVal extends Results<{}>,
+> {
   isOnSummary: () => boolean;
   getSummary: () => { summaryRender: (props: TSummaryProps) => React.ReactNode } | undefined;
   findStepNumberByName: (name: string) => number | undefined;
@@ -36,11 +45,20 @@ export interface ICallableWorkflow<TStepProps extends IStepProps, TSummaryProps 
   getValidation: (validators: TVal) => Results<{}> | undefined;
 }
 
-export abstract class WorkflowBase<TStepNames extends string, TStepProps extends IStepProps, TSummaryProps extends ISummaryProps, TVal extends Results<{}>> implements ICallableWorkflow<TStepProps, TSummaryProps, TVal> {
+export abstract class WorkflowBase<
+  TStepNames extends string,
+  TStepProps extends IStepProps,
+  TSummaryProps extends ISummaryProps,
+  TVal extends Results<{}>,
+> implements ICallableWorkflow<TStepProps, TSummaryProps, TVal>
+{
   private readonly steps: IStep<TStepNames, TStepProps, TVal>[];
   private readonly summary: ISummary<TSummaryProps, TVal>;
 
-  protected constructor(definition: IWorkflow<TStepNames, TStepProps, TSummaryProps, TVal>, private readonly stepNumber: number | undefined) {
+  protected constructor(
+    definition: IWorkflow<TStepNames, TStepProps, TSummaryProps, TVal>,
+    private readonly stepNumber: number | undefined,
+  ) {
     this.steps = definition.steps;
     this.steps.sort((a, b) => numberComparator(a.stepNumber, b.stepNumber));
     this.summary = definition.summary;

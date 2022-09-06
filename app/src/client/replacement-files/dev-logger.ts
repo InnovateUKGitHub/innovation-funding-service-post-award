@@ -6,10 +6,10 @@ import { DateTime } from "luxon";
  * This one has no hooks into server-side dependencies
  */
 interface ILogger {
-  debug(message: string, ...params: any[]): void;
-  info(message: string, ...params: any[]): void;
-  warn(message: string, ...params: any[]): void;
-  error(message: string, ...params: any[]): void;
+  debug(message: string, ...params: unknown[]): void;
+  info(message: string, ...params: unknown[]): void;
+  warn(message: string, ...params: unknown[]): void;
+  error(message: string, ...params: unknown[]): void;
 }
 
 class Logger implements ILogger {
@@ -23,23 +23,23 @@ class Logger implements ILogger {
     this.pretty = pretty !== undefined ? pretty : false;
   }
 
-  debug(message: string, ...params: any[]) {
+  debug(message: string, ...params: unknown[]) {
     this.log(LogLevel.DEBUG, message, ...params);
   }
 
-  info(message: string, ...params: any[]) {
+  info(message: string, ...params: unknown[]) {
     this.log(LogLevel.INFO, message, ...params);
   }
 
-  warn(message: string, ...params: any[]) {
+  warn(message: string, ...params: unknown[]) {
     this.log(LogLevel.WARN, message, ...params);
   }
 
-  error(message: string, ...params: any[]) {
+  error(message: string, ...params: unknown[]) {
     this.log(LogLevel.ERROR, message, ...params);
   }
 
-  private log(level: LogLevel, message: string, ...params: any[]) {
+  private log(level: LogLevel, message: string, ...params: unknown[]) {
     if (level >= this.level) {
       const item = {
         type: LogLevel[level],

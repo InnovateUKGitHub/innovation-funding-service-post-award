@@ -1,13 +1,11 @@
 import { SalesforceRecordTypeMapper } from "@server/repositories/mappers/recordTypeMapper";
 import { ISalesforceRecordType } from "@server/repositories";
 describe("SalesforceRecordTypeMapper", () => {
-
   const createSalesforceItem = (item: Partial<ISalesforceRecordType>): ISalesforceRecordType => {
-
     const defaultItem: ISalesforceRecordType = {
       Id: "Test Id",
       Name: "Test Name",
-      SobjectType: "Test Object Type"
+      SobjectType: "Test Object Type",
     };
 
     return Object.assign(defaultItem, item);
@@ -36,5 +34,4 @@ describe("SalesforceRecordTypeMapper", () => {
 
     expect(result.parent).toEqual(expectedParent);
   });
-
 });

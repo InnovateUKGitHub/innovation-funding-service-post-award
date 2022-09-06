@@ -2,12 +2,12 @@ import { QueryBase } from "@server/features/common";
 import { Authorisation, IContext, PCRStatus, ProjectChangeRequestStatusChangeDto, ProjectRole } from "@framework/types";
 import { dateComparator } from "@framework/util";
 import { ProjectChangeRequestStatusChangeEntity } from "@framework/entities";
-import { Option} from "@framework/types";
+import { Option } from "@framework/types";
 import { GetAllProjectRolesForUser } from "../projects";
 import { GetPcrStatusesQuery } from "./getPcrStatusesQuery";
 
 export class GetProjectChangeRequestStatusChanges extends QueryBase<ProjectChangeRequestStatusChangeDto[]> {
-  constructor( private readonly projectId: string, private readonly projectChangeRequestId: string ) {
+  constructor(private readonly projectId: string, private readonly projectChangeRequestId: string) {
     super();
   }
 
@@ -16,17 +16,27 @@ export class GetProjectChangeRequestStatusChanges extends QueryBase<ProjectChang
   }
 
   protected async run(context: IContext): Promise<ProjectChangeRequestStatusChangeDto[]> {
-    const statusChanges = await context.repositories.projectChangeRequestStatusChange.getStatusChanges(this.projectId, this.projectChangeRequestId);
+    const statusChanges = await context.repositories.projectChangeRequestStatusChange.getStatusChanges(
+      this.projectId,
+      this.projectChangeRequestId,
+    );
     const statusLookup = await context.runQuery(new GetPcrStatusesQuery());
     const roles = await context.runQuery(new GetAllProjectRolesForUser());
     const isPm = roles.forProject(this.projectId).hasRole(ProjectRole.ProjectManager);
     const isMo = roles.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer);
 
     return statusChanges
-    .map<ProjectChangeRequestStatusChangeDto>(x => this.mapItem(context, x, isMo, isPm, statusLookup)).sort((a, b) => dateComparator(b.createdDate, a.createdDate));
+      .map<ProjectChangeRequestStatusChangeDto>(x => this.mapItem(context, x, isMo, isPm, statusLookup))
+      .sort((a, b) => dateComparator(b.createdDate, a.createdDate));
   }
 
-  protected mapItem(context: IContext, entity: ProjectChangeRequestStatusChangeEntity, isMo: boolean, isPm: boolean, statusLookup: Option<PCRStatus>[]): ProjectChangeRequestStatusChangeDto {
+  protected mapItem(
+    context: IContext,
+    entity: ProjectChangeRequestStatusChangeEntity,
+    isMo: boolean,
+    isPm: boolean,
+    statusLookup: Option<PCRStatus>[],
+  ): ProjectChangeRequestStatusChangeDto {
     const newStatus = entity.newStatus;
     const previousStatus = entity.previousStatus;
     const newStatusLookup = statusLookup.find(x => x.value === newStatus);
@@ -35,13 +45,13 @@ export class GetProjectChangeRequestStatusChanges extends QueryBase<ProjectChang
       id: entity.id,
       projectChangeRequest: entity.pcrId,
       newStatus,
-      newStatusLabel: newStatusLookup && newStatusLookup.label || "Unknown",
+      newStatusLabel: (newStatusLookup && newStatusLookup.label) || "Unknown",
       previousStatus,
-      previousStatusLabel: previousStatusLookup && previousStatusLookup.label || "Unknown",
+      previousStatusLabel: (previousStatusLookup && previousStatusLookup.label) || "Unknown",
       createdBy: entity.createdBy,
       createdDate: entity.createdDate,
       comments: isMo || (isPm && entity.participantVisibility) ? entity.externalComments : null,
-      participantVisibility: entity.participantVisibility
+      participantVisibility: entity.participantVisibility,
     };
   }
 }

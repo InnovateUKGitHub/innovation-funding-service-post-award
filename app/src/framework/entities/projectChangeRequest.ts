@@ -7,7 +7,7 @@ import {
   PCRProjectLocation,
   PCRProjectRole,
   PCRStatus,
-  TypeOfAid
+  TypeOfAid,
 } from "@framework/constants";
 
 export interface ProjectChangeRequestForCreateEntity {

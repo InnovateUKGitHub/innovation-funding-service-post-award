@@ -25,8 +25,10 @@ export interface ICostCategoryRepository {
  *
  * There is currently no way of enabling or disabling cost categories which presumably will required at some point?
  */
-export class CostCategoryRepository extends SalesforceRepositoryBaseWithMapping<ISalesforceCostCategory, CostCategory> implements ICostCategoryRepository {
-
+export class CostCategoryRepository
+  extends SalesforceRepositoryBaseWithMapping<ISalesforceCostCategory, CostCategory>
+  implements ICostCategoryRepository
+{
   protected readonly salesforceObjectName = "Acc_CostCategory__c";
 
   protected readonly salesforceFieldNames = [

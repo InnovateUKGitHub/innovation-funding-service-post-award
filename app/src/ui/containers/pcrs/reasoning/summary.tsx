@@ -53,9 +53,7 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
             />
             <ACC.SummaryListItem
               label={x => x.pcrReasoningSummary.labels.comments}
-              content={
-                <ACC.Renderers.SimpleString multiline>{pcr.reasoningComments}</ACC.Renderers.SimpleString>
-              }
+              content={<ACC.Renderers.SimpleString multiline>{pcr.reasoningComments}</ACC.Renderers.SimpleString>}
               qa="comments"
               validation={editor.validator.reasoningComments}
               action={

@@ -7,7 +7,7 @@ export interface ClaimLastModifiedProps {
 
 export function ClaimLastModified({ modifiedDate }: ClaimLastModifiedProps) {
   const { getContent } = useContent();
-  const messagePrefix = getContent((x) => x.components.claimLastModified.message);
+  const messagePrefix = getContent(x => x.components.claimLastModified.message);
 
   return (
     <SimpleString qa="last-updated">

@@ -19,7 +19,10 @@ export interface ISalesforceProjectChangeRequestStatusChange extends ICreateProj
 
 export interface IProjectChangeRequestStatusChangeRepository {
   createStatusChange(statusChange: ICreateProjectChangeRequestStatusChange): Promise<string>;
-  getStatusChanges(projectId: string, projectChangeRequestId: string): Promise<ProjectChangeRequestStatusChangeEntity[]>;
+  getStatusChanges(
+    projectId: string,
+    projectChangeRequestId: string,
+  ): Promise<ProjectChangeRequestStatusChangeEntity[]>;
 }
 
 /**
@@ -28,7 +31,13 @@ export interface IProjectChangeRequestStatusChangeRepository {
  * Holds all status changes for Project Change Request records ("Acc_ProjectChangeRequest__c" of type "Request Header)
  *
  */
-export class ProjectChangeRequestStatusChangeRepository extends SalesforceRepositoryBaseWithMapping<ISalesforceProjectChangeRequestStatusChange, ProjectChangeRequestStatusChangeEntity> implements IProjectChangeRequestStatusChangeRepository {
+export class ProjectChangeRequestStatusChangeRepository
+  extends SalesforceRepositoryBaseWithMapping<
+    ISalesforceProjectChangeRequestStatusChange,
+    ProjectChangeRequestStatusChangeEntity
+  >
+  implements IProjectChangeRequestStatusChangeRepository
+{
   protected readonly salesforceObjectName = "Acc_StatusChange__c";
   protected readonly salesforceFieldNames = [
     "Id",
@@ -38,7 +47,7 @@ export class ProjectChangeRequestStatusChangeRepository extends SalesforceReposi
     "CreatedDate",
     "Acc_ExternalComment__c",
     "Acc_CreatedByAlias__c",
-    "Acc_ParticipantVisibility__c"
+    "Acc_ParticipantVisibility__c",
   ];
 
   protected mapper = new PCRStatusChangeMapper();
@@ -47,11 +56,18 @@ export class ProjectChangeRequestStatusChangeRepository extends SalesforceReposi
     return super.insertItem({
       Acc_ProjectChangeRequest__c: statusChange.Acc_ProjectChangeRequest__c,
       Acc_ExternalComment__c: statusChange.Acc_ExternalComment__c,
-      Acc_ParticipantVisibility__c: statusChange.Acc_ParticipantVisibility__c
+      Acc_ParticipantVisibility__c: statusChange.Acc_ParticipantVisibility__c,
     });
   }
 
-  public getStatusChanges(projectId: string, projectChangeRequestId: string): Promise<ProjectChangeRequestStatusChangeEntity[]> {
-    return super.where(`Acc_ProjectChangeRequest__c = '${sss(projectChangeRequestId)}' AND Acc_ProjectChangeRequest__r.Acc_Project__c = '${sss(projectId)}'`);
+  public getStatusChanges(
+    projectId: string,
+    projectChangeRequestId: string,
+  ): Promise<ProjectChangeRequestStatusChangeEntity[]> {
+    return super.where(
+      `Acc_ProjectChangeRequest__c = '${sss(
+        projectChangeRequestId,
+      )}' AND Acc_ProjectChangeRequest__r.Acc_Project__c = '${sss(projectId)}'`,
+    );
   }
 }

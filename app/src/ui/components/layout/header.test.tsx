@@ -11,16 +11,15 @@ describe("Header", () => {
         content: "stub-mobileNavigationLabel",
       },
       dashboard: {
-        content: "Dashboard"
+        content: "Dashboard",
       },
       profile: {
-        content: "Profile"
+        content: "Profile",
       },
       signOut: {
-        content: "Sign out"
-      }
+        content: "Sign out",
+      },
     },
-
   };
 
   const defaultProps: HeaderProps = {
@@ -74,14 +73,14 @@ describe("Header", () => {
     });
 
     it("with navigation items", () => {
-      const { queryByTestId, queryAllByTestId } = setup({  });
+      const { queryByTestId, queryAllByTestId } = setup({});
 
       const expectedNavItems = queryAllByTestId("header-navigation-item");
 
       const stubNavItems = [
-          {qa: "nav-dashboard", href: /dashboard-selection/},
-          {qa: "nav-profile", href: /profile\/view/},
-          {qa: "nav-sign-out", href: /logout/}
+        { qa: "nav-dashboard", href: /dashboard-selection/ },
+        { qa: "nav-profile", href: /profile\/view/ },
+        { qa: "nav-sign-out", href: /logout/ },
       ];
 
       expect(expectedNavItems).toHaveLength(stubNavItems.length);

@@ -9,5 +9,5 @@ export const calculateNewRemainingGrant = (virements: CostCategoryVirementDto[],
   const newEligibleCosts = calculateNewEligibleCosts(virements);
   const costsClaimedToDate = sum(virements, v => v.costsClaimedToDate);
   const newRemainingCosts = newEligibleCosts - costsClaimedToDate;
-  return roundCurrency(newRemainingCosts * newFundingLevel / 100);
+  return roundCurrency((newRemainingCosts * newFundingLevel) / 100);
 };

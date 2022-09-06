@@ -378,7 +378,7 @@ export class ForecastTable extends React.Component<Props> {
     claimPeriod: number,
     claim: ClaimDto | null,
     claims: ClaimDto[] | null,
-    periodsWithIARDue: string[]
+    periodsWithIARDue: string[],
   ) {
     // If there is a draft claim then show "Costs you are claiming"
     // If there isn't a draft claim then don't show "Costs you are claiming" and "Costs claimed" applies to all claims
@@ -501,9 +501,16 @@ export class ForecastTable extends React.Component<Props> {
     );
     cells.push(totals.map((value, index) => this.renderTableFooterCell(value, index)));
     cells.push(
-      this.renderTableFooterCell(costTotal, totals.length + 1, "sticky-col sticky-col-right-3 acc-sticky-footer-cell", "qa-costs-remaining"),
+      this.renderTableFooterCell(
+        costTotal,
+        totals.length + 1,
+        "sticky-col sticky-col-right-3 acc-sticky-footer-cell",
+        "qa-costs-remaining",
+      ),
     );
-    cells.push(this.renderTableFooterCell(golTotal, totals.length + 2, "sticky-col sticky-col-right-2 acc-sticky-footer-cell"));
+    cells.push(
+      this.renderTableFooterCell(golTotal, totals.length + 2, "sticky-col sticky-col-right-2 acc-sticky-footer-cell"),
+    );
     cells.push(
       <td
         key="total_diff"

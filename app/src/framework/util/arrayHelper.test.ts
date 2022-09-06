@@ -15,7 +15,6 @@ function createIncrementingPeriodData(totalStubCount: number): ListWithPeriodId[
 }
 
 describe("arrayHelpers", () => {
-
   describe("filterEmpty", () => {
     it("should return an array with any null or undefined elements removed", () => {
       const initialArray = ["Neil", 123, undefined, null, "", false, true, 0, {}, []];
@@ -60,7 +59,7 @@ describe("arrayHelpers", () => {
 
     it("should return original list if not a valid array type with length", () => {
       const excludePeriods = new Set([2, 4, 5]);
-       // @ts-expect-error "testing the case where an empty array gets passed in"
+      // @ts-expect-error "testing the case where an empty array gets passed in"
       expect(getArrayExcludingPeriods([], excludePeriods).map(x => x.periodId)).toEqual([]);
     });
   });

@@ -158,9 +158,7 @@ const ProjectDocumentsContainer = (props: ProjectDocumentPageParams & BaseProps)
       }}
       onDelete={(dto, document) => {
         stores.messages.clearMessages();
-        const successMessage = getContent(x =>
-          x.projectDocuments.documentMessages.documentDeleted(document),
-        );
+        const successMessage = getContent(x => x.projectDocuments.documentMessages.documentDeleted(document));
         stores.projectDocuments.deleteProjectDocument(props.projectId, dto, document, successMessage);
       }}
     />
