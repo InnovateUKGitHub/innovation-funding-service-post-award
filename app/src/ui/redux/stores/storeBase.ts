@@ -109,9 +109,7 @@ const conditionalSave = <
           }
         })
         .catch(e => {
-          dispatch(
-            handleEditorError({ id: key as string, store: store as string, dto, error: e }),
-          );
+          dispatch(handleEditorError({ id: key as string, store: store as string, dto, error: e }));
           if (onError) {
             onError(e);
           }
@@ -161,7 +159,6 @@ const conditionalDelete = <
       });
   };
 };
-
 
 export class StoreBase {
   constructor(protected getState: () => RootState, protected queue: (action: RootActionsOrThunk) => void) {}

@@ -4,6 +4,8 @@ import { StoreBase } from "./storeBase";
 
 export class CostSummariesStore extends StoreBase {
   public getForPeriod(projectId: string, partnerId: string, periodId: number) {
-    return this.getData("costsSummary", storeKeys.getClaimKey(partnerId, periodId), p => apiClient.costsSummary.getAllByPartnerIdForPeriod({projectId, partnerId, periodId, ...p}));
+    return this.getData("costsSummary", storeKeys.getClaimKey(partnerId, periodId), p =>
+      apiClient.costsSummary.getAllByPartnerIdForPeriod({ projectId, partnerId, periodId, ...p }),
+    );
   }
 }

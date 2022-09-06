@@ -1,6 +1,6 @@
 import { useStores } from "@ui/redux";
 import { ErrorContainer, NotFoundError } from "../components/errors";
-import {  defineRoute } from "./containerBase";
+import { defineRoute } from "./containerBase";
 
 function ErrorRouteContainer() {
   const stores = useStores();

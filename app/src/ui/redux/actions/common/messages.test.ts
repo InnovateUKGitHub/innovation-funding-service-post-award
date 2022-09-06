@@ -1,4 +1,3 @@
-
 import { messageSuccess, removeMessages } from "@ui/redux/actions";
 
 describe("messageSuccess", () => {
@@ -6,7 +5,7 @@ describe("messageSuccess", () => {
     const result = messageSuccess("test message");
     expect(result).toEqual({
       type: "MESSAGE_SUCCESS",
-      payload: "test message"
+      payload: "test message",
     });
   });
 });
@@ -15,7 +14,7 @@ describe("removeMessages", () => {
   it("should remove messages", () => {
     const result = removeMessages();
     expect(result).toEqual({
-      type: "REMOVE_MESSAGES"
+      type: "REMOVE_MESSAGES",
     });
   });
 });

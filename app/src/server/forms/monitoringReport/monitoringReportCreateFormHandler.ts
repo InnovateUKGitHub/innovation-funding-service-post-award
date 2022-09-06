@@ -12,12 +12,20 @@ import { MonitoringReportDto } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 
-export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<MonitoringReportCreateParams, "monitoringReport"> {
+export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<
+  MonitoringReportCreateParams,
+  "monitoringReport"
+> {
   constructor() {
-    super(MonitoringReportCreateRoute, [ "save-continue", "save-return"], "monitoringReport");
+    super(MonitoringReportCreateRoute, ["save-continue", "save-return"], "monitoringReport");
   }
 
-  protected async getDto(context: IContext, params: MonitoringReportCreateParams, button: IFormButton, body: IFormBody): Promise<MonitoringReportDto> {
+  protected async getDto(
+    context: IContext,
+    params: MonitoringReportCreateParams,
+    button: IFormButton,
+    body: IFormBody,
+  ): Promise<MonitoringReportDto> {
     const questions = await context.runQuery(new GetMonitoringReportActiveQuestions());
 
     return {
@@ -30,7 +38,7 @@ export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<M
       lastUpdated: null,
       startDate: null,
       endDate: null,
-      addComments: "" // TODO:ACC-6858
+      addComments: "", // TODO:ACC-6858
     };
   }
 
@@ -42,7 +50,12 @@ export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<M
     return storeKeys.getMonitoringReportKey(params.projectId);
   }
 
-  protected async run(context: IContext, params: MonitoringReportCreateParams, button: IFormButton, dto: MonitoringReportDto): Promise<ILinkInfo> {
+  protected async run(
+    context: IContext,
+    params: MonitoringReportCreateParams,
+    button: IFormButton,
+    dto: MonitoringReportDto,
+  ): Promise<ILinkInfo> {
     const command = new CreateMonitoringReportCommand(dto, false);
     const id = await context.runCommand(command);
 
@@ -50,6 +63,5 @@ export class MonitoringReportCreateFormHandler extends StandardFormHandlerBase<M
       return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
     }
     return MonitoringReportWorkflowRoute.getLink({ projectId: params.projectId, id, mode: "prepare", step: 1 });
-
   }
 }

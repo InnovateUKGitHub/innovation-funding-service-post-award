@@ -3,35 +3,49 @@ import { configuration } from "@server/features/common";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/forms/formHandlerBase";
-import {
-  PCRPrepareItemRoute,
-  ProjectChangeRequestPrepareItemParams
-} from "@ui/containers";
+import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/containers";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 
-export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileFormHandlerBase<ProjectChangeRequestPrepareItemParams, "multipleDocuments"> {
+export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileFormHandlerBase<
+  ProjectChangeRequestPrepareItemParams,
+  "multipleDocuments"
+> {
   constructor() {
     super(PCRPrepareItemRoute, ["uploadFile", "uploadFileAndContinue"], "multipleDocuments");
   }
 
-  protected async getDto(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, body: IFormBody, files: IFileWrapper[]): Promise<MultipleDocumentUploadDto> {
+  protected async getDto(
+    context: IContext,
+    params: ProjectChangeRequestPrepareItemParams,
+    button: IFormButton,
+    body: IFormBody,
+    files: IFileWrapper[],
+  ): Promise<MultipleDocumentUploadDto> {
     return {
       files,
-      description: Number(body.description) || undefined
+      description: Number(body.description) || undefined,
     };
   }
 
-  protected async run(context: IContext, params: ProjectChangeRequestPrepareItemParams, button: IFormButton, dto: MultipleDocumentUploadDto): Promise<ILinkInfo> {
-
-    if(dto.files.length || button.name === "uploadFile") {
-      await context.runCommand(new UploadProjectChangeRequestDocumentOrItemDocumentCommand(params.projectId, params.itemId, dto));
+  protected async run(
+    context: IContext,
+    params: ProjectChangeRequestPrepareItemParams,
+    button: IFormButton,
+    dto: MultipleDocumentUploadDto,
+  ): Promise<ILinkInfo> {
+    if (dto.files.length || button.name === "uploadFile") {
+      await context.runCommand(
+        new UploadProjectChangeRequestDocumentOrItemDocumentCommand(params.projectId, params.itemId, dto),
+      );
     }
 
     if (button.name === "uploadFileAndContinue") {
-      const itemDto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId)).then(pcr => pcr.items.find(item => item.id === params.itemId));
+      const itemDto = await context
+        .runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId))
+        .then(pcr => pcr.items.find(item => item.id === params.itemId));
       const workflow = PcrWorkflow.getWorkflow(itemDto, params.step);
       if (workflow) {
         const nextStep = workflow.getNextStepInfo();
@@ -39,7 +53,7 @@ export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileF
           projectId: params.projectId,
           pcrId: params.pcrId,
           itemId: params.itemId,
-          step: nextStep && nextStep.stepNumber
+          step: nextStep && nextStep.stepNumber,
         });
       }
     }
@@ -51,7 +65,11 @@ export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileF
     return storeKeys.getPcrKey(params.projectId, params.itemId);
   }
 
-  protected createValidationResult(params: ProjectChangeRequestPrepareItemParams, dto: MultipleDocumentUploadDto, button: IFormButton) {
+  protected createValidationResult(
+    params: ProjectChangeRequestPrepareItemParams,
+    dto: MultipleDocumentUploadDto,
+    button: IFormButton,
+  ) {
     return new MultipleDocumentUploadDtoValidator(dto, configuration.options, button.name === "uploadFile", true, null);
   }
 }

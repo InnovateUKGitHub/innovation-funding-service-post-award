@@ -11,11 +11,17 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
     const pcrRecordType: Entities.RecordType = {
       id: "id_1",
       parent: pcr.id,
-      type: "type"
+      type: "type",
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
-    const document = context.testData.createDocument(pcrItem.id, "PCR Document", "txt", "Jackie", "Why I want more money");
+    const document = context.testData.createDocument(
+      pcrItem.id,
+      "PCR Document",
+      "txt",
+      "Jackie",
+      "Why I want more money",
+    );
 
     const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, document.Id);
     const result = await context.runQuery(query).then(x => x as DocumentDto);
@@ -31,7 +37,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project);
 
-    const document = context.testData.createDocument(pcr.id, "PCR Document", "txt", "Paul","Why I want more money");
+    const document = context.testData.createDocument(pcr.id, "PCR Document", "txt", "Paul", "Why I want more money");
 
     const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcr.id, document.Id);
     const result = await context.runQuery(query).then(x => x as DocumentDto);
@@ -50,7 +56,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
     const pcrRecordType: Entities.RecordType = {
       id: "id_1",
       parent: pcr.id,
-      type: "type"
+      type: "type",
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -67,7 +73,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
     const pcrRecordType: Entities.RecordType = {
       id: "id_1",
       parent: pcr.id,
-      type: "type"
+      type: "type",
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
     const pcrItem2 = context.testData.createPCRItem(pcr, pcrRecordType);
@@ -89,7 +95,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
       const pcrRecordType: Entities.RecordType = {
         id: "id_1",
         parent: pcr.id,
-        type: "type"
+        type: "type",
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -97,7 +103,9 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
 
       const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, document.Id);
 
-      const auth = new Authorisation({[project.Id]: {projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {}}});
+      const auth = new Authorisation({
+        [project.Id]: { projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {} },
+      });
       expect(await context.runAccessControl(auth, query)).toBe(true);
     });
 
@@ -109,7 +117,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
       const pcrRecordType: Entities.RecordType = {
         id: "id_1",
         parent: pcr.id,
-        type: "type"
+        type: "type",
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -117,7 +125,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
 
       const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, document.Id);
 
-      const auth = new Authorisation({[project.Id]: {projectRoles: ProjectRole.ProjectManager, partnerRoles: {}}});
+      const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.ProjectManager, partnerRoles: {} } });
       expect(await context.runAccessControl(auth, query)).toBe(true);
     });
 
@@ -129,7 +137,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
       const pcrRecordType: Entities.RecordType = {
         id: "id_1",
         parent: pcr.id,
-        type: "type"
+        type: "type",
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -137,7 +145,9 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
 
       const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, document.Id);
 
-      const auth = new Authorisation({[project.Id]: {projectRoles: ProjectRole.FinancialContact, partnerRoles: {}}});
+      const auth = new Authorisation({
+        [project.Id]: { projectRoles: ProjectRole.FinancialContact, partnerRoles: {} },
+      });
       expect(await context.runAccessControl(auth, query)).toBe(false);
     });
 
@@ -150,7 +160,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
       const pcrRecordType: Entities.RecordType = {
         id: "id_1",
         parent: pcr.id,
-        type: "type"
+        type: "type",
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -158,7 +168,9 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
 
       const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, document.Id);
 
-      const auth = new Authorisation({[project2.Id]: {projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {}}});
+      const auth = new Authorisation({
+        [project2.Id]: { projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {} },
+      });
       expect(await context.runAccessControl(auth, query)).toBe(false);
     });
 
@@ -171,7 +183,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
       const pcrRecordType: Entities.RecordType = {
         id: "id_1",
         parent: pcr.id,
-        type: "type"
+        type: "type",
       };
       const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -179,7 +191,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
 
       const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcrItem.id, document.Id);
 
-      const auth = new Authorisation({[project2.Id]: {projectRoles: ProjectRole.ProjectManager, partnerRoles: {}}});
+      const auth = new Authorisation({ [project2.Id]: { projectRoles: ProjectRole.ProjectManager, partnerRoles: {} } });
       expect(await context.runAccessControl(auth, query)).toBe(false);
     });
   });

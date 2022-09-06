@@ -24,7 +24,7 @@ import {
 import { createErrorPayload } from "@shared/create-error-payload";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { Results } from "@ui/validation";
-import { ForbiddenError,FormHandlerError } from "./features/common/appError";
+import { ForbiddenError, FormHandlerError } from "./features/common/appError";
 
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
 import { Logger } from "./features/common/logger";
@@ -68,7 +68,6 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     onComplete(store, error);
     res.send(renderApp(req.url, nonce, store, stores, modalRegister));
   } catch (renderError: unknown) {
-
     // TODO: add error handling for salesforce errors e.g. invalid project id
     // Note: capture stack trace for logs
     new Logger(req.session?.user).error((renderError as IAppError).message, renderError);

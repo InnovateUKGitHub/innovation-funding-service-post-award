@@ -31,7 +31,6 @@ class ClaimController extends ControllerBase<ClaimDto> implements IClaimsApi {
 
     this.getCustom(
       "/:projectId/:partnerId/:periodId/status-changes",
-      // eslint-disable-next-line sonarjs/no-identical-functions
       p => ({
         projectId: p.projectId,
         partnerId: p.partnerId,

@@ -35,7 +35,7 @@ describe("GetAllPCRsQuery", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
 
-    const expected = context.testData.range(5, (x) => context.testData.createPCR(project, { number: x }));
+    const expected = context.testData.range(5, x => context.testData.createPCR(project, { number: x }));
 
     const query = new GetAllPCRsQuery(project.Id);
 
@@ -53,7 +53,7 @@ describe("GetAllPCRsQuery", () => {
       updated: DateTime.fromFormat("1 october 2013", "d MMM yyyy").toJSDate(),
       number: 531,
       status: 55 as PCRStatus,
-      statusName: "Expected Status"
+      statusName: "Expected Status",
     });
 
     const query = new GetAllPCRsQuery(expected.projectId);
@@ -75,7 +75,7 @@ describe("GetAllPCRsQuery", () => {
     const recordTypes = context.testData.createPCRRecordTypes();
 
     const pcr = context.testData.createPCR();
-    context.testData.range(recordTypes.length, (x,i) => context.testData.createPCRItem(pcr, recordTypes[i]));
+    context.testData.range(recordTypes.length, (x, i) => context.testData.createPCRItem(pcr, recordTypes[i]));
 
     const query = new GetAllPCRsQuery(pcr.projectId);
 
@@ -110,7 +110,10 @@ describe("GetAllPCRsQuery", () => {
   it("returns the item short name if available", async () => {
     const context = new TestContext();
     const pcrItemType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal);
-    const recordType = context.testData.createRecordType({type: pcrItemType?.typeName, parent: "Acc_ProjectChangeRequest__c"});
+    const recordType = context.testData.createRecordType({
+      type: pcrItemType?.typeName,
+      parent: "Acc_ProjectChangeRequest__c",
+    });
     const pcr = context.testData.createPCR();
     context.testData.createPCRItem(pcr, recordType, { shortName: "Get rid" });
     const query = new GetAllPCRsQuery(pcr.projectId);
@@ -121,7 +124,10 @@ describe("GetAllPCRsQuery", () => {
   it("returns the item type name if short name is not available", async () => {
     const context = new TestContext();
     const pcrItemType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal);
-    const recordType = context.testData.createRecordType({type: pcrItemType?.typeName, parent: "Acc_ProjectChangeRequest__c"});
+    const recordType = context.testData.createRecordType({
+      type: pcrItemType?.typeName,
+      parent: "Acc_ProjectChangeRequest__c",
+    });
     const pcr = context.testData.createPCR();
     context.testData.createPCRItem(pcr, recordType, { shortName: undefined });
     const query = new GetAllPCRsQuery(pcr.projectId);

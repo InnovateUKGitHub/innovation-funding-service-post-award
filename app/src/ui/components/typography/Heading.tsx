@@ -1,7 +1,6 @@
 import React from "react";
 import cx from "classnames";
 
-
 export type GdsHeadingTypes = `h${"1" | "2" | "3" | "4"}`;
 type HeadingAvailableElements = GdsHeadingTypes | "p";
 
@@ -29,4 +28,3 @@ export function Heading({ type, as, className, qa, ...props }: HeadingProps) {
 
   return <Element {...props} data-qa={qa} className={cx(gdsHeadingClassName, className)} />;
 }
-

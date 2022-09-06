@@ -19,17 +19,19 @@ describe("UpdateInitialForecastDetailsCommand", () => {
   it("when id not set expect validation exception", async () => {
     const context = new TestContext();
 
-    const project = context.testData.createProject(x => x.Acc_ProjectStatus__c = "On Hold");
-    const partner = context.testData.createPartner(project, x => x.participantStatus = "Pending");
+    const project = context.testData.createProject(x => (x.Acc_ProjectStatus__c = "On Hold"));
+    const partner = context.testData.createPartner(project, x => (x.participantStatus = "Pending"));
     const profileDetail = context.testData.createProfileDetail(undefined, partner);
-    const dto: ForecastDetailsDTO[] = [{
-      id: null,
-      costCategoryId: profileDetail.Acc_CostCategory__c,
-      periodId: parseInt(profileDetail.Acc_CostCategory__c, 10),
-      periodStart: new Date(profileDetail.Acc_ProjectPeriodStartDate__c),
-      periodEnd: new Date(profileDetail.Acc_ProjectPeriodEndDate__c),
-      value: 123
-    } as any];
+    const dto: ForecastDetailsDTO[] = [
+      {
+        id: null,
+        costCategoryId: profileDetail.Acc_CostCategory__c,
+        periodId: parseInt(profileDetail.Acc_CostCategory__c, 10),
+        periodStart: new Date(profileDetail.Acc_ProjectPeriodStartDate__c),
+        periodEnd: new Date(profileDetail.Acc_ProjectPeriodEndDate__c),
+        value: 123,
+      } as any,
+    ];
 
     const command = new UpdateInitialForecastDetailsCommand(project.Id, partner.id, dto, false);
     await expect(context.runCommand(command)).rejects.toThrow(InActiveProjectError);

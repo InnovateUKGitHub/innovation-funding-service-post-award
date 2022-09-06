@@ -19,8 +19,10 @@ export interface IRecordTypeRepository {
  *
  * The id is needed when querying and inserting records where multiple types are stored in a single table
  */
-export class RecordTypeRepository extends SalesforceRepositoryBaseWithMapping<ISalesforceRecordType, RecordType> implements IRecordTypeRepository {
-
+export class RecordTypeRepository
+  extends SalesforceRepositoryBaseWithMapping<ISalesforceRecordType, RecordType>
+  implements IRecordTypeRepository
+{
   constructor(getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
     super(getSalesforceConnection, logger);
   }
@@ -29,11 +31,7 @@ export class RecordTypeRepository extends SalesforceRepositoryBaseWithMapping<IS
 
   protected readonly salesforceObjectName = "RecordType";
 
-  protected readonly salesforceFieldNames = [
-    "Id",
-    "Name",
-    "SobjectType"
-  ];
+  protected readonly salesforceFieldNames = ["Id", "Name", "SobjectType"];
 
   async getAll() {
     return super.all();

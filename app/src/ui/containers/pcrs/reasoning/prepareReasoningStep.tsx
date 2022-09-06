@@ -6,15 +6,12 @@ import * as ACC from "../../../components";
 
 export class PCRPrepareReasoningStep extends ContainerBase<ReasoningStepProps, {}> {
   render() {
-    const {editor, onSave, onChange} = this.props;
+    const { editor, onSave, onChange } = this.props;
     const PCRForm = ACC.TypedForm<PCRDto>();
 
     return (
       <ACC.Section qa="reasoning-save-and-return">
-        <PCRForm.Form
-          editor={editor}
-          onChange={dto => onChange(dto)}
-        >
+        <PCRForm.Form editor={editor} onChange={dto => onChange(dto)}>
           <PCRForm.Fieldset heading={x => x.pcrPrepareReasoning.reasoningHeading}>
             <PCRForm.MultilineString
               name="reasoningComments"
@@ -23,13 +20,15 @@ export class PCRPrepareReasoningStep extends ContainerBase<ReasoningStepProps, {
               hint={x => x.pcrPrepareReasoning.hint}
               qa="reason"
               value={m => m.reasoningComments}
-              update={(m, v) => m.reasoningComments = v || ""}
+              update={(m, v) => (m.reasoningComments = v || "")}
               validation={editor.validator.reasoningComments}
               characterCountOptions={{ type: "descending", maxValue: PCRDtoValidator.maxCommentsLength }}
               rows={15}
             />
           </PCRForm.Fieldset>
-          <PCRForm.Button name="reasoningStep" styling="Primary" onClick={() => onSave(editor.data)}><ACC.Content value={x => x.pcrPrepareReasoning.pcrItem.submitButton}/></PCRForm.Button>
+          <PCRForm.Button name="reasoningStep" styling="Primary" onClick={() => onSave(editor.data)}>
+            <ACC.Content value={x => x.pcrPrepareReasoning.pcrItem.submitButton} />
+          </PCRForm.Button>
         </PCRForm.Form>
       </ACC.Section>
     );

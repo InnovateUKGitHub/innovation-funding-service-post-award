@@ -2,11 +2,12 @@ import {
   IContext,
   ILinkInfo,
   PCRDto,
-  PCRItemForPartnerAdditionDto, PCRItemType,
+  PCRItemForPartnerAdditionDto,
+  PCRItemType,
   PCRSpendProfileCapitalUsageType,
   PCRSpendProfileOverheadRate,
   ProjectDto,
-  ProjectRole
+  ProjectRole,
 } from "@framework/types";
 import { BadRequestError } from "@server/features/common";
 import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
@@ -17,7 +18,7 @@ import {
   PCRPrepareItemRoute,
   PCRSpendProfileAddCostRoute,
   PCRSpendProfileCostsSummaryRoute,
-  PCRSpendProfileOverheadDocumentRoute
+  PCRSpendProfileOverheadDocumentRoute,
 } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators";
 import { CostCategoryType, PCRItemStatus } from "@framework/constants";
@@ -30,7 +31,7 @@ import {
   PCRSpendProfileOtherCostsDto,
   PCRSpendProfileOverheadsCostDto,
   PCRSpendProfileSubcontractingCostDto,
-  PCRSpendProfileTravelAndSubsCostDto
+  PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { parseNumber } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
@@ -44,12 +45,20 @@ interface IBaseCost {
   value: number | null;
 }
 
-export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardFormHandlerBase<PcrAddSpendProfileCostParams, "pcr"> {
+export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardFormHandlerBase<
+  PcrAddSpendProfileCostParams,
+  "pcr"
+> {
   constructor() {
     super(PCRSpendProfileAddCostRoute, ["default", "calculateOverheadsDocuments"], "pcr");
   }
 
-  protected async getDto(context: IContext, params: PcrAddSpendProfileCostParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
+  protected async getDto(
+    context: IContext,
+    params: PcrAddSpendProfileCostParams,
+    button: IFormButton,
+    body: IFormBody,
+  ): Promise<PCRDto> {
     const dto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId));
 
     const item = dto.items.find(x => x.id === params.itemId) as PCRItemForPartnerAdditionDto;
@@ -73,7 +82,12 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
     return dto;
   }
 
-  private getCost(costCategory: CostCategoryDto, params: PcrAddSpendProfileCostParams, body: IFormBody, button: IFormButton) {
+  private getCost(
+    costCategory: CostCategoryDto,
+    params: PcrAddSpendProfileCostParams,
+    body: IFormBody,
+    button: IFormButton,
+  ) {
     const baseCostDto = {
       id: "",
       costCategoryId: params.costCategoryId,
@@ -81,17 +95,28 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
       value: parseNumber(body.value),
     };
     switch (costCategory.type) {
-      case CostCategoryType.Labour: return this.getLabourCost(baseCostDto, costCategory.type, body);
-      case CostCategoryType.Overheads: return this.getOverheadsCost(baseCostDto, costCategory.type, body, button);
-      case CostCategoryType.Materials: return this.getMaterialsCost(baseCostDto, costCategory.type, body);
-      case CostCategoryType.Subcontracting: return this.getSubcontractingCost(baseCostDto, costCategory.type, body);
-      case CostCategoryType.Capital_Usage: return this.getCapitalUsageCost(baseCostDto, costCategory.type, body);
-      case CostCategoryType.Travel_And_Subsistence: return this.getTravelAndSubsCost(baseCostDto, costCategory.type, body);
-      case CostCategoryType.Other_Costs: return this.getOtherCost(baseCostDto, costCategory.type);
+      case CostCategoryType.Labour:
+        return this.getLabourCost(baseCostDto, costCategory.type, body);
+      case CostCategoryType.Overheads:
+        return this.getOverheadsCost(baseCostDto, costCategory.type, body, button);
+      case CostCategoryType.Materials:
+        return this.getMaterialsCost(baseCostDto, costCategory.type, body);
+      case CostCategoryType.Subcontracting:
+        return this.getSubcontractingCost(baseCostDto, costCategory.type, body);
+      case CostCategoryType.Capital_Usage:
+        return this.getCapitalUsageCost(baseCostDto, costCategory.type, body);
+      case CostCategoryType.Travel_And_Subsistence:
+        return this.getTravelAndSubsCost(baseCostDto, costCategory.type, body);
+      case CostCategoryType.Other_Costs:
+        return this.getOtherCost(baseCostDto, costCategory.type);
     }
   }
 
-  private getLabourCost(baseCostDto: IBaseCost, costCategory: CostCategoryType.Labour, body: IFormBody): PCRSpendProfileLabourCostDto {
+  private getLabourCost(
+    baseCostDto: IBaseCost,
+    costCategory: CostCategoryType.Labour,
+    body: IFormBody,
+  ): PCRSpendProfileLabourCostDto {
     return {
       ...baseCostDto,
       costCategory,
@@ -101,16 +126,25 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
     };
   }
 
-  private getOverheadsCost(baseCostDto: IBaseCost, costCategory: CostCategoryType.Overheads, body: IFormBody, button: IFormButton): PCRSpendProfileOverheadsCostDto {
+  private getOverheadsCost(
+    baseCostDto: IBaseCost,
+    costCategory: CostCategoryType.Overheads,
+    body: IFormBody,
+    button: IFormButton,
+  ): PCRSpendProfileOverheadsCostDto {
     return {
       ...baseCostDto,
       costCategory,
       overheadRate: parseNumber(body.overheadRate) || PCRSpendProfileOverheadRate.Unknown,
-      value: button.name === "calculateOverheadsDocuments" ? baseCostDto.value || 0 : baseCostDto.value
+      value: button.name === "calculateOverheadsDocuments" ? baseCostDto.value || 0 : baseCostDto.value,
     };
   }
 
-  private getMaterialsCost(baseCostDto: IBaseCost, costCategory: CostCategoryType.Materials, body: IFormBody): PCRSpendProfileMaterialsCostDto {
+  private getMaterialsCost(
+    baseCostDto: IBaseCost,
+    costCategory: CostCategoryType.Materials,
+    body: IFormBody,
+  ): PCRSpendProfileMaterialsCostDto {
     return {
       ...baseCostDto,
       costCategory,
@@ -119,7 +153,11 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
     };
   }
 
-  private getSubcontractingCost(baseCostDto: IBaseCost, costCategory: CostCategoryType.Subcontracting, body: IFormBody): PCRSpendProfileSubcontractingCostDto {
+  private getSubcontractingCost(
+    baseCostDto: IBaseCost,
+    costCategory: CostCategoryType.Subcontracting,
+    body: IFormBody,
+  ): PCRSpendProfileSubcontractingCostDto {
     return {
       ...baseCostDto,
       costCategory,
@@ -129,7 +167,11 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
     };
   }
 
-  private getCapitalUsageCost(baseCostDto: IBaseCost, costCategory: CostCategoryType.Capital_Usage, body: IFormBody): PCRSpendProfileCapitalUsageCostDto {
+  private getCapitalUsageCost(
+    baseCostDto: IBaseCost,
+    costCategory: CostCategoryType.Capital_Usage,
+    body: IFormBody,
+  ): PCRSpendProfileCapitalUsageCostDto {
     return {
       ...baseCostDto,
       costCategory,
@@ -142,7 +184,11 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
     };
   }
 
-  private getTravelAndSubsCost(baseCostDto: IBaseCost, costCategory: CostCategoryType.Travel_And_Subsistence, body: IFormBody): PCRSpendProfileTravelAndSubsCostDto {
+  private getTravelAndSubsCost(
+    baseCostDto: IBaseCost,
+    costCategory: CostCategoryType.Travel_And_Subsistence,
+    body: IFormBody,
+  ): PCRSpendProfileTravelAndSubsCostDto {
     return {
       ...baseCostDto,
       costCategory,
@@ -151,7 +197,10 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
     };
   }
 
-  private getOtherCost(baseCostDto: IBaseCost, costCategory: CostCategoryType.Other_Costs): PCRSpendProfileOtherCostsDto {
+  private getOtherCost(
+    baseCostDto: IBaseCost,
+    costCategory: CostCategoryType.Other_Costs,
+  ): PCRSpendProfileOtherCostsDto {
     return {
       ...baseCostDto,
       costCategory,
@@ -165,12 +214,17 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
     return workflow.findStepNumberByName(stepName);
   }
 
-  protected async run(context: IContext, params: PcrAddSpendProfileCostParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
+  protected async run(
+    context: IContext,
+    params: PcrAddSpendProfileCostParams,
+    button: IFormButton,
+    dto: PCRDto,
+  ): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
 
     const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
     const costCategoryDto = costCategories.find(x => x.id === params.costCategoryId);
-    if(!costCategoryDto) throw new Error(`Cannot find cost category dto matching ${params.costCategoryId}`);
+    if (!costCategoryDto) throw new Error(`Cannot find cost category dto matching ${params.costCategoryId}`);
     if (costCategoryDto.type === CostCategoryType.Overheads) {
       const pcrItem = dto.items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
 
@@ -186,7 +240,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
         itemId: pcrItem.id,
         pcrId: dto.id,
         projectId: dto.projectId,
-        step: this.getSpendProfileStep(context, pcrItem) || undefined
+        step: this.getSpendProfileStep(context, pcrItem) || undefined,
       });
     }
 
@@ -194,7 +248,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
       projectId: params.projectId,
       pcrId: params.pcrId,
       itemId: params.itemId,
-      costCategoryId: params.costCategoryId
+      costCategoryId: params.costCategoryId,
     });
   }
 

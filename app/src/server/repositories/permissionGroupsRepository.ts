@@ -17,8 +17,8 @@ export interface IPermissionGroupRepository {
 
 // used to filter the requested permission groups and map them to the relevant identifier
 // this key is the DeveloperName field in salesforce
-const SalesforcePermisionGroups: {[key: string]: PermissionGroupIdentifier} = {
-  Acc_Claims_Team_Lead_Pending_Assignment: PermissionGroupIdentifier.ClaimsTeam
+const SalesforcePermisionGroups: { [key: string]: PermissionGroupIdentifier } = {
+  Acc_Claims_Team_Lead_Pending_Assignment: PermissionGroupIdentifier.ClaimsTeam,
 };
 
 /**
@@ -26,8 +26,10 @@ const SalesforcePermisionGroups: {[key: string]: PermissionGroupIdentifier} = {
  *
  * @todo Remove this...no longer needed
  */
-export class PermissionGroupRepository extends SalesforceRepositoryBaseWithMapping<ISalesforcePermissionGroup, PermissionGroup> implements IPermissionGroupRepository {
-
+export class PermissionGroupRepository
+  extends SalesforceRepositoryBaseWithMapping<ISalesforcePermissionGroup, PermissionGroup>
+  implements IPermissionGroupRepository
+{
   constructor(getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
     super(getSalesforceConnection, logger);
   }

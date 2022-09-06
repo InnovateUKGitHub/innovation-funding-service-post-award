@@ -126,7 +126,7 @@ describe("UploadClaimDocumentCommand", () => {
       };
       const notValidDescription: DocumentUploadDto = {
         file: context.testData.createFile("test", "file.csv"),
-        description: ("invalid" as any) as number,
+        description: "invalid" as any as number,
       };
       await expect(context.runCommand(new UploadClaimDocumentCommand(claimKey, validDescription))).resolves.toBe("1");
       await expect(context.runCommand(new UploadClaimDocumentCommand(claimKey, notValidDescription))).rejects.toThrow(
@@ -247,8 +247,15 @@ describe("UploadClaimDocumentCommand", () => {
           item.Id = claimId;
           item.Acc_IARRequired__c = true;
         });
-        const originalDocumentId = context.testData.createDocument("12345", "cat", "jpg", "", "", "IAR", x => (x.Acc_UploadedByMe__c = true))
-          .ContentDocumentId;
+        const originalDocumentId = context.testData.createDocument(
+          "12345",
+          "cat",
+          "jpg",
+          "",
+          "",
+          "IAR",
+          x => (x.Acc_UploadedByMe__c = true),
+        ).ContentDocumentId;
 
         const claimKey = {
           projectId: project.Id,

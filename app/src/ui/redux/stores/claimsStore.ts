@@ -11,12 +11,12 @@ import { RootState } from "@ui/redux/reducers";
 import { ClaimDocumentsStore, CostSummariesStore, PartnersStore } from "@ui/redux/stores";
 
 const periodsWithIARDue = (data: ClaimDto[]) =>
-    data.reduce((acc: string[], cur: ClaimDto) => {
-      if (cur.iarStatus === "Not Received" && cur.isIarRequired) {
-        acc.push(cur.periodId.toString());
-      }
-      return acc;
-    }, []) ?? [];
+  data.reduce((acc: string[], cur: ClaimDto) => {
+    if (cur.iarStatus === "Not Received" && cur.isIarRequired) {
+      acc.push(cur.periodId.toString());
+    }
+    return acc;
+  }, []) ?? [];
 
 export class ClaimsStore extends StoreBase {
   constructor(

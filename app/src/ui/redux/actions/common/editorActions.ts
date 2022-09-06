@@ -11,19 +11,34 @@ export type EditorSuccessAction = ReturnType<typeof handleEditorSuccess>;
 export type EditorErrorAction = ReturnType<typeof handleEditorError>;
 export type EditorResetAction = ReturnType<typeof resetEditor>;
 
-export type EditorAction = UpdateEditorAction | EditorSubmitAction | EditorSuccessAction | EditorErrorAction | EditorResetAction;
+export type EditorAction =
+  | UpdateEditorAction
+  | EditorSubmitAction
+  | EditorSuccessAction
+  | EditorErrorAction
+  | EditorResetAction;
 
-export function updateEditorAction<T>(id: string, store: string, dto: T, validator: Results<any> | InferEditorStoreValidator<any> | null) {
-  const payload = {id, store, dto, validator};
+export function updateEditorAction<T>(
+  id: string,
+  store: string,
+  dto: T,
+  validator: Results<any> | InferEditorStoreValidator<any> | null,
+) {
+  const payload = { id, store, dto, validator };
   return createAction("EDITOR_UPDATE", payload);
 }
 
-export function handleEditorSubmit<T>(id: string, store: string, dto: T, validator: Results<any> | InferEditorStoreValidator<any> | null) {
+export function handleEditorSubmit<T>(
+  id: string,
+  store: string,
+  dto: T,
+  validator: Results<any> | InferEditorStoreValidator<any> | null,
+) {
   return createAction("EDITOR_SUBMIT", { id, store, dto, validator });
 }
 
 export function handleEditorSuccess(id: string, editorStore: string) {
-  return createAction("EDITOR_SUBMIT_SUCCESS", {id, store: editorStore});
+  return createAction("EDITOR_SUBMIT_SUCCESS", { id, store: editorStore });
 }
 
 interface HandleEditorErrorParams<T> {

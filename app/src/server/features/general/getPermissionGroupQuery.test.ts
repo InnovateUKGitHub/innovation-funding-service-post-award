@@ -15,9 +15,7 @@ describe("GetPermissionGroupQuery", () => {
   it("returns error if group not found", async () => {
     const context = new TestContext();
 
-    context.repositories.permissionGroups.Items = [
-      { id: "Unknown ID", identifier: 22, name: "TEST NAME" }
-    ];
+    context.repositories.permissionGroups.Items = [{ id: "Unknown ID", identifier: 22, name: "TEST NAME" }];
 
     const query = new GetPermissionGroupQuery(PermissionGroupIdentifier.ClaimsTeam);
 
@@ -34,5 +32,4 @@ describe("GetPermissionGroupQuery", () => {
     expect(result.id).toBe(context.repositories.permissionGroups.Items[0].id);
     expect(result.identifier).toBe(PermissionGroupIdentifier.ClaimsTeam);
   });
-
 });

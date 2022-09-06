@@ -41,7 +41,12 @@ describe("<ClaimDetailsLink />", () => {
       const draftProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3, status: ClaimStatus.PAID },
         project: { id: projectId, roles: ProjectRole.MonitoringOfficer, status: projectStatus },
-        partner: { id: partnerId, roles: ProjectRole.FinancialContact, partnerStatus: PartnerStatus.Active, isWithdrawn: false },
+        partner: {
+          id: partnerId,
+          roles: ProjectRole.FinancialContact,
+          partnerStatus: PartnerStatus.Active,
+          isWithdrawn: false,
+        },
       };
 
       const { queryByText } = setup(draftProps);
@@ -101,7 +106,12 @@ describe("<ClaimDetailsLink />", () => {
       const draftProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3, status: draftClaimState },
         project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
-        partner: { id: partnerId, roles: ProjectRole.MonitoringOfficer, partnerStatus: PartnerStatus.Active, isWithdrawn: false },
+        partner: {
+          id: partnerId,
+          roles: ProjectRole.MonitoringOfficer,
+          partnerStatus: PartnerStatus.Active,
+          isWithdrawn: false,
+        },
       };
 
       const { queryByText } = setup(draftProps);
@@ -134,7 +144,12 @@ describe("<ClaimDetailsLink />", () => {
       const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3, status: moQueriedClaimState },
         project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
-        partner: { id: partnerId, roles: ProjectRole.FinancialContact, partnerStatus: PartnerStatus.Active, isWithdrawn: false },
+        partner: {
+          id: partnerId,
+          roles: ProjectRole.FinancialContact,
+          partnerStatus: PartnerStatus.Active,
+          isWithdrawn: false,
+        },
       };
 
       const { queryByText } = setup(moQueriedProps);
@@ -149,7 +164,12 @@ describe("<ClaimDetailsLink />", () => {
         const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
           claim: { periodId: 3, status: moQueriedClaimState },
           project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
-          partner: { id: partnerId, roles: ProjectRole.MonitoringOfficer, partnerStatus: PartnerStatus.Active, isWithdrawn: false },
+          partner: {
+            id: partnerId,
+            roles: ProjectRole.MonitoringOfficer,
+            partnerStatus: PartnerStatus.Active,
+            isWithdrawn: false,
+          },
         };
 
         const { queryByText } = setup(moQueriedProps);
@@ -163,7 +183,12 @@ describe("<ClaimDetailsLink />", () => {
         const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
           claim: { periodId: 3, status: moQueriedClaimState },
           project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
-          partner: { id: partnerId, roles: ProjectRole.MonitoringOfficer, partnerStatus: PartnerStatus.Active, isWithdrawn: false },
+          partner: {
+            id: partnerId,
+            roles: ProjectRole.MonitoringOfficer,
+            partnerStatus: PartnerStatus.Active,
+            isWithdrawn: false,
+          },
         };
 
         const { queryByText } = setup(moQueriedProps);
@@ -214,7 +239,12 @@ describe("<ClaimDetailsLink />", () => {
       const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3, status: submittedClaimState },
         project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
-        partner: { id: partnerId, roles: ProjectRole.FinancialContact, partnerStatus: PartnerStatus.Active, isWithdrawn: false },
+        partner: {
+          id: partnerId,
+          roles: ProjectRole.FinancialContact,
+          partnerStatus: PartnerStatus.Active,
+          isWithdrawn: false,
+        },
       };
 
       const { queryByText } = setup(moQueriedProps);
@@ -228,7 +258,12 @@ describe("<ClaimDetailsLink />", () => {
       const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3, status: submittedClaimState },
         project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
-        partner: { id: partnerId, roles: ProjectRole.MonitoringOfficer, partnerStatus: PartnerStatus.Active, isWithdrawn: false },
+        partner: {
+          id: partnerId,
+          roles: ProjectRole.MonitoringOfficer,
+          partnerStatus: PartnerStatus.Active,
+          isWithdrawn: false,
+        },
       };
 
       const { queryByText } = setup(moQueriedProps);
@@ -248,7 +283,12 @@ describe("<ClaimDetailsLink />", () => {
       const awaitingIarProps: ClaimDetailsLinkWithoutRoutes = {
         claim: { periodId: 3, status: iarClaimState },
         project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
-        partner: { id: partnerId, roles: ProjectRole.ProjectManager, partnerStatus: PartnerStatus.Active, isWithdrawn: false },
+        partner: {
+          id: partnerId,
+          roles: ProjectRole.ProjectManager,
+          partnerStatus: PartnerStatus.Active,
+          isWithdrawn: false,
+        },
       };
 
       const { queryByText } = setup(awaitingIarProps);

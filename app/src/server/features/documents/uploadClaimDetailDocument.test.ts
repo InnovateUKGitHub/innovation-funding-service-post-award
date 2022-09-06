@@ -23,7 +23,7 @@ describe("UploadClaimDetailDocumentCommand", () => {
 
     const file = context.testData.createFile(expectedContent, expectedFileName);
 
-    const command = new UploadClaimDetailDocumentCommand(claimDetailKey, { files : [file] });
+    const command = new UploadClaimDetailDocumentCommand(claimDetailKey, { files: [file] });
     const documentId = await context.runCommand(command);
     const document = await context.repositories.documents.getDocumentMetadata(documentId[0]);
 
@@ -75,11 +75,11 @@ describe("UploadClaimDetailDocumentCommand", () => {
     const file = context.testData.createFile();
 
     file.fileName = "";
-    const commandNoFilename = new UploadClaimDetailDocumentCommand(claimDetailKey, {files: [file]});
+    const commandNoFilename = new UploadClaimDetailDocumentCommand(claimDetailKey, { files: [file] });
     await expect(context.runCommand(commandNoFilename)).rejects.toThrow(ValidationError);
 
     file.fileName = "NotValid.zip";
-    const commandInvalidFiletype = new UploadClaimDetailDocumentCommand(claimDetailKey, {files: [file]});
+    const commandInvalidFiletype = new UploadClaimDetailDocumentCommand(claimDetailKey, { files: [file] });
     await expect(context.runCommand(commandInvalidFiletype)).rejects.toThrow(ValidationError);
   });
 
@@ -90,24 +90,23 @@ describe("UploadClaimDetailDocumentCommand", () => {
       projectId: "",
       partnerId: "",
       periodId: NaN,
-      costCategoryId: ""
+      costCategoryId: "",
     };
 
     const file = context.testData.createFile();
 
-    const command = new UploadClaimDetailDocumentCommand(claimDetailKey, {files: [file]});
+    const command = new UploadClaimDetailDocumentCommand(claimDetailKey, { files: [file] });
     await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
   });
 
   describe("access control", () => {
-
     const setupAccessControlContext = () => {
       const context = new TestContext();
-      const project  = context.testData.createProject();
-      const partner  = context.testData.createPartner(project);
-      const costCat  = context.testData.createCostCategory();
+      const project = context.testData.createProject();
+      const partner = context.testData.createPartner(project);
+      const costCat = context.testData.createCostCategory();
       const claimDto = context.testData.createClaim(partner);
-      const claimDetail = context.testData.createClaimDetail(project, costCat, partner );
+      const claimDetail = context.testData.createClaimDetail(project, costCat, partner);
 
       const claimDetailKey = {
         projectId: project.Id,
@@ -124,14 +123,13 @@ describe("UploadClaimDetailDocumentCommand", () => {
     };
 
     test("accessControl - Finance Contact can upload documents", async () => {
-
       const { command, project, claimDto, context } = setupAccessControlContext();
 
-      const auth     = new Authorisation({
+      const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.FinancialContact,
-          partnerRoles: { [claimDto.Acc_ProjectParticipant__r.Id]: ProjectRole.FinancialContact}
-        }
+          partnerRoles: { [claimDto.Acc_ProjectParticipant__r.Id]: ProjectRole.FinancialContact },
+        },
       });
 
       expect(await context.runAccessControl(auth, command)).toBe(true);
@@ -140,11 +138,13 @@ describe("UploadClaimDetailDocumentCommand", () => {
     test("accessControl - All other roles are restricted", async () => {
       const { command, project, claimDto, context } = setupAccessControlContext();
 
-      const auth     = new Authorisation({
+      const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer | ProjectRole.FinancialContact,
-          partnerRoles: { [claimDto.Acc_ProjectParticipant__r.Id]: ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer }
-        }
+          partnerRoles: {
+            [claimDto.Acc_ProjectParticipant__r.Id]: ProjectRole.ProjectManager | ProjectRole.MonitoringOfficer,
+          },
+        },
       });
 
       expect(await context.runAccessControl(auth, command)).toBe(false);

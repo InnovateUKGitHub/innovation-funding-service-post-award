@@ -250,7 +250,7 @@ describe("<FinancialVirementSummary />", () => {
     },
   };
 
-  const requiredProps = ({
+  const requiredProps = {
     ...stubPropDrilledProps,
     projectId: stubValidProject.id,
     pcr: stubValidPcr,
@@ -261,7 +261,7 @@ describe("<FinancialVirementSummary />", () => {
     getStepLink: jest.fn(),
     getEditLink: jest.fn(),
     getViewLink: jest.fn(),
-  } as any) as FinancialVirementSummaryContainerProps; // Note: Validation is very hard to stub cast as any to workaround :(
+  } as any as FinancialVirementSummaryContainerProps; // Note: Validation is very hard to stub cast as any to workaround :(
 
   const stubContent = {
     financialVirementDetails: {

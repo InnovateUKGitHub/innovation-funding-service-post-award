@@ -17,14 +17,14 @@ import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationErr
 // obviously needs to be singleton
 const cachesImplementation: Framework.ICaches = {
   costCategories: new Common.Cache<CostCategoryDto[]>(Common.configuration.timeouts.costCategories),
-  optionsLookup: new Common.Cache<Framework.Option<any>[]>(Common.configuration.timeouts.optionsLookup),
+  optionsLookup: new Common.Cache<Framework.Option<unknown>[]>(Common.configuration.timeouts.optionsLookup),
   projectRoles: new Common.Cache<{ [key: string]: IRoleInfo }>(Common.configuration.timeouts.projectRoles),
   permissionGroups: new Common.Cache<Entities.PermissionGroup[]>(0 /* permanent cache */),
   recordTypes: new Common.Cache<Entities.RecordType[]>(Common.configuration.timeouts.recordTypes),
   contentStoreLastUpdated: null,
 };
 
-export const constructErrorResponse = <E extends Error>(error: E): AppError => {
+export const constructErrorResponse = (error: unknown): AppError => {
   if (
     error instanceof ValidationError ||
     error instanceof ForbiddenError ||
@@ -46,8 +46,17 @@ export const constructErrorResponse = <E extends Error>(error: E): AppError => {
     return new AppError(Framework.ErrorCode.BAD_REQUEST_ERROR, error.message, error);
   }
 
-  // TODO capture stack trace for logs
-  return new AppError(Framework.ErrorCode.UNKNOWN_ERROR, error.message, error);
+  if (error instanceof Error) {
+    // TODO capture stack trace for logs
+    return new AppError(Framework.ErrorCode.UNKNOWN_ERROR, error.message, error);
+  }
+
+  if (typeof error === "string") {
+    return new AppError(Framework.ErrorCode.UNKNOWN_ERROR, error);
+  }
+
+  // We don't really know what type the error is, so force it into a string.
+  return new AppError(Framework.ErrorCode.UNKNOWN_ERROR, JSON.stringify(error));
 };
 
 export class Context implements Framework.IContext {
@@ -84,24 +93,50 @@ export class Context implements Framework.IContext {
       claimLineItems: new Repositories.ClaimLineItemRepository(recordTypeCallback, connectionCallback, this.logger),
       costCategories: new Repositories.CostCategoryRepository(connectionCallback, this.logger),
       documents: new Repositories.DocumentsRepository(connectionCallback, this.logger),
-      financialVirements: new Repositories.FinancialVirementRepository(recordTypeCallback, connectionCallback, this.logger),
-      financialLoanVirements: new Repositories.FinancialLoanVirementRepository(recordTypeCallback, connectionCallback, this.logger),
+      financialVirements: new Repositories.FinancialVirementRepository(
+        recordTypeCallback,
+        connectionCallback,
+        this.logger,
+      ),
+      financialLoanVirements: new Repositories.FinancialLoanVirementRepository(
+        recordTypeCallback,
+        connectionCallback,
+        this.logger,
+      ),
       pcrSpendProfile: new Repositories.PcrSpendProfileRepository(recordTypeCallback, connectionCallback, this.logger),
-      monitoringReportResponse: new Repositories.MonitoringReportResponseRepository(recordTypeCallback, connectionCallback, this.logger),
-      monitoringReportHeader: new Repositories.MonitoringReportHeaderRepository(recordTypeCallback, connectionCallback, this.logger),
+      monitoringReportResponse: new Repositories.MonitoringReportResponseRepository(
+        recordTypeCallback,
+        connectionCallback,
+        this.logger,
+      ),
+      monitoringReportHeader: new Repositories.MonitoringReportHeaderRepository(
+        recordTypeCallback,
+        connectionCallback,
+        this.logger,
+      ),
       monitoringReportQuestions: new Repositories.MonitoringReportQuestionsRepository(connectionCallback, this.logger),
       loans: new Repositories.LoanRepository(connectionCallback, this.logger),
-      monitoringReportStatusChange: new Repositories.MonitoringReportStatusChangeRepository(connectionCallback, this.logger),
-      projectChangeRequests: new Repositories.ProjectChangeRequestRepository(recordTypeCallback, connectionCallback, this.logger),
+      monitoringReportStatusChange: new Repositories.MonitoringReportStatusChangeRepository(
+        connectionCallback,
+        this.logger,
+      ),
+      projectChangeRequests: new Repositories.ProjectChangeRequestRepository(
+        recordTypeCallback,
+        connectionCallback,
+        this.logger,
+      ),
       profileDetails: new Repositories.ProfileDetailsRepository(connectionCallback, this.logger),
       profileTotalPeriod: new Repositories.ProfileTotalPeriodRepository(connectionCallback, this.logger),
       profileTotalCostCategory: new Repositories.ProfileTotalCostCategoryRepository(connectionCallback, this.logger),
       projects: new Repositories.ProjectRepository(connectionCallback, this.logger),
       partners: new Repositories.PartnerRepository(connectionCallback, this.logger),
-      projectChangeRequestStatusChange: new Repositories.ProjectChangeRequestStatusChangeRepository(connectionCallback, this.logger),
+      projectChangeRequestStatusChange: new Repositories.ProjectChangeRequestStatusChangeRepository(
+        connectionCallback,
+        this.logger,
+      ),
       projectContacts: new Repositories.ProjectContactsRepository(connectionCallback, this.logger),
       permissionGroups: new Repositories.PermissionGroupRepository(connectionCallback, this.logger),
-      recordTypes: new Repositories.RecordTypeRepository(connectionCallback, this.logger)
+      recordTypes: new Repositories.RecordTypeRepository(connectionCallback, this.logger),
     };
 
     this.resources = {
@@ -109,7 +144,7 @@ export class Context implements Framework.IContext {
       companiesHouse: new CompaniesHouseBase(),
       defaultContent: new DefaultContentStore(),
       competitionContent: new CompetitionContentStore(),
-      customContent: new CustomContentStore()
+      customContent: new CustomContentStore(),
     };
   }
 
@@ -121,7 +156,7 @@ export class Context implements Framework.IContext {
   public readonly resources: Framework.IResources;
 
   public readonly internationalisation: IInternationalisation = {
-    addResourceBundle: (content) => i18next.addResourceBundle("en", "default", content, true, true)
+    addResourceBundle: content => i18next.addResourceBundle("en", "default", content, true, true),
   };
 
   private readonly salesforceConnectionDetails: Salesforce.ISalesforceConnectionDetails;
@@ -155,7 +190,7 @@ export class Context implements Framework.IContext {
       }
       // await the run because of the finally
       return await runnable.run(this);
-    } catch (e: any) {
+    } catch (e: unknown) {
       this.logger.warn("Failed query", runnable.logMessage(), e);
       if (e instanceof ValidationError) {
         this.logger.debug("Validation Error", e.results && e.results.log());
@@ -180,25 +215,27 @@ export class Context implements Framework.IContext {
   }
 
   public runQuery<TResult>(query: Common.QueryBase<TResult>): Promise<TResult> {
-    const runnable = (query as any) as Framework.IAsyncRunnable<TResult>;
+    const runnable = query as any as Framework.IAsyncRunnable<TResult>;
     this.logger.info("Running async query", runnable.logMessage());
     return this.runAsync(runnable);
   }
 
   public runSyncQuery<TResult>(query: Common.SyncQueryBase<TResult>): TResult {
-    const runnable = (query as any) as Framework.ISyncRunnable<TResult>;
+    const runnable = query as any as Framework.ISyncRunnable<TResult>;
     this.logger.info("Running sync query", runnable.logMessage());
     return this.runSync(runnable);
   }
 
-  public runCommand<TResult>(command: Common.CommandBase<TResult> | Common.NonAuthorisedCommandBase<TResult>): Promise<TResult> {
-    const runnable = (command as any) as Framework.IAsyncRunnable<TResult>;
+  public runCommand<TResult>(
+    command: Common.CommandBase<TResult> | Common.NonAuthorisedCommandBase<TResult>,
+  ): Promise<TResult> {
+    const runnable = command as any as Framework.IAsyncRunnable<TResult>;
     this.logger.info("Running async command", runnable.logMessage());
     return this.runAsync(runnable);
   }
 
   public runSyncCommand<TResult>(command: Common.SyncCommandBase<TResult>): TResult {
-    const runnable = (command as any) as Framework.ISyncRunnable<TResult>;
+    const runnable = command as any as Framework.ISyncRunnable<TResult>;
     this.logger.info("Running sync command", runnable.logMessage());
     return this.runSync(runnable);
   }

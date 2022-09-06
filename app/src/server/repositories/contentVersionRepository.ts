@@ -32,8 +32,10 @@ export interface IContentVersionRepository {
   insertDocument(file: IFileWrapper, description: string): Promise<string>;
 }
 
-export class ContentVersionRepository extends SalesforceRepositoryBase<ISalesforceDocument> implements IContentVersionRepository {
-
+export class ContentVersionRepository
+  extends SalesforceRepositoryBase<ISalesforceDocument>
+  implements IContentVersionRepository
+{
   protected readonly salesforceObjectName = "ContentVersion";
 
   protected readonly salesforceFieldNames = [
@@ -47,7 +49,7 @@ export class ContentVersionRepository extends SalesforceRepositoryBase<ISalesfor
     "CreatedDate",
     "Acc_LastModifiedByAlias__c",
     "Acc_UploadedByMe__c",
-    "Owner.Username"
+    "Owner.Username",
   ];
 
   public getDocuments(contentDocumentIds: string[], filter?: DocumentFilter): Promise<ISalesforceDocument[]> {
@@ -73,7 +75,7 @@ export class ContentVersionRepository extends SalesforceRepositoryBase<ISalesfor
       PathOnClient: document.fileName,
       ContentLocation: "S",
       VersionData: document.read(),
-      Description: description
+      Description: description,
     });
   }
 

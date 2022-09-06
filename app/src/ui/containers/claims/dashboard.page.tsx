@@ -208,7 +208,7 @@ export const ClaimsDashboardRoute = defineRoute({
   allowRouteInActiveAccess: true,
   routeName: "claimsDashboard",
   routePath: "/projects/:projectId/claims/",
-  routePathWithQuery:  "/projects/:projectId/claims?:partnerId",
+  routePathWithQuery: "/projects/:projectId/claims?:partnerId",
   container: ClaimsDashboardRouteContainer,
   getParams: route => ({
     projectId: route.params.projectId,

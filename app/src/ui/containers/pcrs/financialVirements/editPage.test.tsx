@@ -1,6 +1,6 @@
-import { useEditPageContent } from "@ui/containers";
-import { renderHook } from "@testing-library/react";
 import { hookTestBed, TestBedContent } from "@shared/TestBed";
+import { renderHook } from "@testing-library/react";
+import { useEditPageContent } from "@ui/containers";
 
 const stubContent = {
   financialVirementEdit: {
@@ -75,7 +75,7 @@ describe("useEditPageContent()", () => {
     ${"introMessage"}     | ${"intro"}
     ${"virementsMessage"} | ${"virements"}
     ${"requestsMessage"}  | ${"requests"}
-  `("with message $property ", ({ name, property }: Record<"name" | "property", string>) => {
+  `("with message $property", ({ name, property }: Record<"name" | "property", string>) => {
     const { result } = renderPageContent();
 
     const content = (result.current as any)[name];
@@ -98,7 +98,7 @@ describe("useEditPageContent()", () => {
     ${"projectNewRemainingGrant"}
     ${"projectDifferenceGrant"}
     ${"backToSummary"}
-  `("with label $property ", ({ property }) => {
+  `("with label $property", ({ property }) => {
     const { result } = renderPageContent();
 
     const content = (result.current as any)[property];
@@ -112,7 +112,7 @@ describe("useEditPageContent()", () => {
       property
       ${"summaryTitle"}
       ${"saveButton"}
-    `("with $property ", ({ property }) => {
+    `("with $property", ({ property }) => {
       const { result } = renderPageContent();
 
       const content = (result.current as any)[property];

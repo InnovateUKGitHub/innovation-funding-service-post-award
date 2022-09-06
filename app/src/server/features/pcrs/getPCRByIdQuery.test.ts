@@ -78,7 +78,7 @@ describe("GetPCRByIdQuery", () => {
     const items = [
       context.testData.createPCRItem(pcr, recordTypes[2]),
       context.testData.createPCRItem(pcr, recordTypes[3]),
-      context.testData.createPCRItem(pcr, recordTypes[4])
+      context.testData.createPCRItem(pcr, recordTypes[4]),
     ];
 
     const query = new GetPCRByIdQuery(pcr.projectId, pcr.id);
@@ -91,7 +91,9 @@ describe("GetPCRByIdQuery", () => {
   test("maps all item fields", async () => {
     const context = new TestContext();
 
-    const recordType = context.testData.createPCRRecordTypes().find(x => x.type === "Change project scope") as RecordType;
+    const recordType = context.testData
+      .createPCRRecordTypes()
+      .find(x => x.type === "Change project scope") as RecordType;
 
     const pcr = context.testData.createPCR();
 
@@ -120,7 +122,7 @@ describe("GetPCRByIdQuery", () => {
   it("returns the item short name if available", async () => {
     const context = new TestContext();
     const pcrItemType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal);
-    if(!pcrItemType) throw new Error("pcrItemType not found");
+    if (!pcrItemType) throw new Error("pcrItemType not found");
     const recordType = context.testData.createRecordType({
       type: pcrItemType.typeName,
       parent: "Acc_ProjectChangeRequest__c",
@@ -135,7 +137,7 @@ describe("GetPCRByIdQuery", () => {
   it("returns the item type name if short name is not available", async () => {
     const context = new TestContext();
     const pcrItemType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.PartnerWithdrawal);
-    if(!pcrItemType) throw new Error("pcrItemType not found");
+    if (!pcrItemType) throw new Error("pcrItemType not found");
     const recordType = context.testData.createRecordType({
       type: pcrItemType.typeName,
       parent: "Acc_ProjectChangeRequest__c",
@@ -150,9 +152,7 @@ describe("GetPCRByIdQuery", () => {
   test("maps fields for time extension", async () => {
     const context = new TestContext();
 
-    const timeExtensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
-      x => x.type === PCRItemType.TimeExtension,
-    );
+    const timeExtensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.TimeExtension);
     const recordType = context.testData.createPCRRecordTypes().find(x => x.type === timeExtensionType?.typeName);
 
     const pcr = context.testData.createPCR();

@@ -8,5 +8,9 @@ export interface ExternalLinkProps extends React.AnchorHTMLAttributes<{}> {
 export function ExternalLink({ rel, children, ...props }: ExternalLinkProps) {
   const relValue = rel || "noopener noreferrer";
 
-  return <a {...props} target="_blank" rel={relValue}>{children}</a>;
+  return (
+    <a {...props} target="_blank" rel={relValue}>
+      {children}
+    </a>
+  );
 }

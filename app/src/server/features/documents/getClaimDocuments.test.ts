@@ -12,14 +12,14 @@ describe("GetClaimDocumentQuery", () => {
 
     const partner = context.testData.createPartner();
     const project = context.testData.createProject();
-    const claim = context.testData.createClaim(partner, 1, (item) => {
+    const claim = context.testData.createClaim(partner, 1, item => {
       item.Id = "12345";
     });
 
     const claimKey = {
       projectId: project.Id,
       partnerId: claim.Acc_ProjectParticipant__r.Id,
-      periodId: claim.Acc_ProjectPeriodNumber__c
+      periodId: claim.Acc_ProjectPeriodNumber__c,
     };
 
     const query = new GetClaimDocumentsQuery(claimKey);
@@ -35,14 +35,14 @@ describe("GetClaimDocumentQuery", () => {
 
     const partner = context.testData.createPartner();
     const project = context.testData.createProject();
-    const claim = context.testData.createClaim(partner, 1, (item) => {
+    const claim = context.testData.createClaim(partner, 1, item => {
       item.Id = "12345";
     });
 
     const claimKey = {
       projectId: project.Id,
       partnerId: claim.Acc_ProjectParticipant__r.Id,
-      periodId: claim.Acc_ProjectPeriodNumber__c
+      periodId: claim.Acc_ProjectPeriodNumber__c,
     };
     const query = new GetClaimDocumentsQuery(claimKey, { description: DocumentDescription.IAR });
     const docs = await context.runQuery(query);
@@ -59,15 +59,20 @@ describe("GetClaimDocumentQuery", () => {
 
     const document = context.testData.createDocument(claim.Id);
 
-    const query = new GetClaimDocumentsQuery({projectId: project.Id, partnerId: partner.id, periodId: claim.Acc_ProjectPeriodNumber__c });
+    const query = new GetClaimDocumentsQuery({
+      projectId: project.Id,
+      partnerId: partner.id,
+      periodId: claim.Acc_ProjectPeriodNumber__c,
+    });
     const result = await context.runQuery(query).then(x => x[0]);
 
     expect(result.id).toBe(document.Id);
-    expect(result.link).toBe(`/api/documents/claims/${project.Id}/${partner.id}/${claim.Acc_ProjectPeriodNumber__c}/${document.Id}/content`);
+    expect(result.link).toBe(
+      `/api/documents/claims/${project.Id}/${partner.id}/${claim.Acc_ProjectPeriodNumber__c}/${document.Id}/content`,
+    );
   });
 
   describe("access control", () => {
-
     const setupAccessControlContext = () => {
       const context = new TestContext();
       const project = context.testData.createProject();
@@ -77,7 +82,7 @@ describe("GetClaimDocumentQuery", () => {
       const claimKey = {
         projectId: project.Id,
         partnerId: partner.id,
-        periodId: 1
+        periodId: 1,
       };
 
       const query = new GetClaimDocumentsQuery(claimKey);
@@ -93,8 +98,8 @@ describe("GetClaimDocumentQuery", () => {
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.FinancialContact,
-          partnerRoles: { [ partner2.id ]: ProjectRole.FinancialContact}
-        }
+          partnerRoles: { [partner2.id]: ProjectRole.FinancialContact },
+        },
       });
 
       expect(await context.runAccessControl(auth, query)).toBe(false);
@@ -106,8 +111,8 @@ describe("GetClaimDocumentQuery", () => {
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.FinancialContact,
-          partnerRoles: { [claim.Acc_ProjectParticipant__r.Id]: ProjectRole.FinancialContact}
-        }
+          partnerRoles: { [claim.Acc_ProjectParticipant__r.Id]: ProjectRole.FinancialContact },
+        },
       });
 
       expect(await context.runAccessControl(auth, query)).toBe(true);
@@ -119,8 +124,8 @@ describe("GetClaimDocumentQuery", () => {
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.MonitoringOfficer,
-          partnerRoles: { [claim.Acc_ProjectParticipant__r.Id]: ProjectRole.Unknown}
-        }
+          partnerRoles: { [claim.Acc_ProjectParticipant__r.Id]: ProjectRole.Unknown },
+        },
       });
 
       expect(await context.runAccessControl(auth, query)).toBe(true);
@@ -132,8 +137,8 @@ describe("GetClaimDocumentQuery", () => {
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.ProjectManager,
-          partnerRoles: { [claim.Acc_ProjectParticipant__r.Id]: ProjectRole.ProjectManager}
-        }
+          partnerRoles: { [claim.Acc_ProjectParticipant__r.Id]: ProjectRole.ProjectManager },
+        },
       });
 
       expect(await context.runAccessControl(auth, query)).toBe(true);
@@ -147,8 +152,8 @@ describe("GetClaimDocumentQuery", () => {
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.ProjectManager,
-          partnerRoles: { [partner2.id]: ProjectRole.ProjectManager}
-        }
+          partnerRoles: { [partner2.id]: ProjectRole.ProjectManager },
+        },
       });
 
       expect(await context.runAccessControl(auth, query)).toBe(true);

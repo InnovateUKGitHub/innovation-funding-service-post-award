@@ -5,26 +5,25 @@ import { GetPcrSpendProfilesQuery } from "./getPcrSpendProfiles";
 
 const setup = async () => {
   const { context, projectChangeRequest, recordType, project } = commonSetup();
-  const pcrItem = context.testData.createPCRItem(
-    projectChangeRequest,
-    recordType,
-    {
-      status: PCRItemStatus.Incomplete,
-      projectRole: PCRProjectRole.Collaborator,
-      partnerType: PCRPartnerType.Research
-    });
+  const pcrItem = context.testData.createPCRItem(projectChangeRequest, recordType, {
+    status: PCRItemStatus.Incomplete,
+    projectRole: PCRProjectRole.Collaborator,
+    partnerType: PCRPartnerType.Research,
+  });
   return { context, project, pcrItem };
 };
 
 describe("getPcrSpendProfile", () => {
   it("should return costs", async () => {
     const { context, pcrItem } = await setup();
-    const costCategory = context.testData.createCostCategory({name: "Labour", type: CostCategoryType.Labour});
+    const costCategory = context.testData.createCostCategory({ name: "Labour", type: CostCategoryType.Labour });
     await context.testData.createPcrSpendProfile({
-      pcrItem, costCategory, update: {
+      pcrItem,
+      costCategory,
+      update: {
         value: 60,
         description: "First labour cost",
-      }
+      },
     });
     const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(pcrItem.id));
     expect(spendProfileDto.funds).toHaveLength(0);
@@ -37,13 +36,18 @@ describe("getPcrSpendProfile", () => {
   });
   it("should return funds", async () => {
     const { context, pcrItem } = await setup();
-    const costCategory = context.testData.createCostCategory({name: "Other Funding", type: CostCategoryType.Other_Funding});
+    const costCategory = context.testData.createCostCategory({
+      name: "Other Funding",
+      type: CostCategoryType.Other_Funding,
+    });
     await context.testData.createPcrSpendProfile({
-      pcrItem, costCategory, update: {
+      pcrItem,
+      costCategory,
+      update: {
         value: 50,
         description: "Some other funding",
-        dateOtherFundingSecured: DateTime.local(2020, 2, 1).toISODate()
-      }
+        dateOtherFundingSecured: DateTime.local(2020, 2, 1).toISODate(),
+      },
     });
     const spendProfileDto = await context.runQuery(new GetPcrSpendProfilesQuery(pcrItem.id));
     expect(spendProfileDto.costs).toHaveLength(0);

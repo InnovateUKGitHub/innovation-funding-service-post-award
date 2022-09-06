@@ -11,24 +11,46 @@ interface InnerProps {
   documents: DocumentSummaryDto[];
 }
 
-class Component extends React.Component<PcrSummaryProps<PCRItemForPartnerWithdrawalDto, PCRPartnerWithdrawalItemDtoValidator, removePartnerStepNames> & InnerProps> {
+class Component extends React.Component<
+  PcrSummaryProps<PCRItemForPartnerWithdrawalDto, PCRPartnerWithdrawalItemDtoValidator, removePartnerStepNames> &
+    InnerProps
+> {
   render() {
     const { pcrItem, validator, documents } = this.props;
     return (
       <ACC.Section qa="remove-partner-summary">
         <ACC.SummaryList qa="remove-partner-summary-list">
-          <ACC.SummaryListItem label={x => x.pcrRemovePartnerSummary.labels.removedPartner} content={pcrItem.partnerNameSnapshot} validation={validator.partnerId} qa="partnerToRemove" action={this.props.getEditLink("removalPeriodStep", validator.partnerId)} />
-          <ACC.SummaryListItem label={x => x.pcrRemovePartnerSummary.labels.lastPeriod} content={pcrItem.removalPeriod} validation={validator.removalPeriod} qa="removalPeriod" action={this.props.getEditLink("removalPeriodStep", validator.removalPeriod)} />
-          <ACC.SummaryListItem label={x => x.pcrRemovePartnerSummary.labels.documents} content={this.renderDocuments(documents)} qa="supportingDocuments" action={this.props.getEditLink("filesStep", null)} />
+          <ACC.SummaryListItem
+            label={x => x.pcrRemovePartnerSummary.labels.removedPartner}
+            content={pcrItem.partnerNameSnapshot}
+            validation={validator.partnerId}
+            qa="partnerToRemove"
+            action={this.props.getEditLink("removalPeriodStep", validator.partnerId)}
+          />
+          <ACC.SummaryListItem
+            label={x => x.pcrRemovePartnerSummary.labels.lastPeriod}
+            content={pcrItem.removalPeriod}
+            validation={validator.removalPeriod}
+            qa="removalPeriod"
+            action={this.props.getEditLink("removalPeriodStep", validator.removalPeriod)}
+          />
+          <ACC.SummaryListItem
+            label={x => x.pcrRemovePartnerSummary.labels.documents}
+            content={this.renderDocuments(documents)}
+            qa="supportingDocuments"
+            action={this.props.getEditLink("filesStep", null)}
+          />
         </ACC.SummaryList>
       </ACC.Section>
     );
   }
 
   private renderDocuments(documents: DocumentSummaryDto[]) {
-    return documents.length > 0
-      ? <ACC.DocumentList documents={documents} qa="documentsList" />
-      : <ACC.Content value={x => x.pcrRemovePartnerSummary.documentMessages.noDocumentsUploaded}/>;
+    return documents.length > 0 ? (
+      <ACC.DocumentList documents={documents} qa="documentsList" />
+    ) : (
+      <ACC.Content value={x => x.pcrRemovePartnerSummary.documentMessages.noDocumentsUploaded} />
+    );
   }
 }
 

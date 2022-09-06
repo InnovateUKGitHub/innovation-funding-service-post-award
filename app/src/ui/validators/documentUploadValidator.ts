@@ -30,11 +30,7 @@ const fileEmptyErrorMessage = (file: IFileWrapper | null) => {
 export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
   public readonly description: Result;
   public readonly file: Result;
-  constructor(
-    model: DocumentUploadDto,
-    config: IAppOptions,
-    showValidationErrors: boolean,
-  ) {
+  constructor(model: DocumentUploadDto, config: IAppOptions, showValidationErrors: boolean) {
     // file is deliberately not a private field so it isn't logged....
     // model is empty object for this reason
     super(null as any, showValidationErrors);
@@ -118,11 +114,7 @@ export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocument
 
 export class FileDtoValidator extends Results<IFileWrapper> {
   // TODO: when this branch is merged with the odg branch, we should take in one config options instead of maxFileSize/permittedFileTypes
-  constructor(
-    file: IFileWrapper,
-    { maxFileSize, permittedFileTypes }: IAppOptions,
-    showValidationErrors: boolean,
-  ) {
+  constructor(file: IFileWrapper, { maxFileSize, permittedFileTypes }: IAppOptions, showValidationErrors: boolean) {
     // file is deliberately not a private field so it isn't logged....
     // model is empty object for this reason
     super(null as any, showValidationErrors);

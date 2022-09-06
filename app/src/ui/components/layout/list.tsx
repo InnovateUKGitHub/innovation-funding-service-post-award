@@ -4,8 +4,9 @@ import cx from "classnames";
 type ListItemAttr = React.HTMLAttributes<HTMLOListElement | HTMLUListElement>;
 
 export interface ListBaseProps extends ListItemAttr {
-  children: React.ReactNode | React.ReactChild[];
+  children: React.ReactNode | React.ReactNode[];
   qa?: string;
+  className?: string;
 }
 
 const listOptions: Record<string, ["ol" | "ul", string]> = {

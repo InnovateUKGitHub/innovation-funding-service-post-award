@@ -28,7 +28,7 @@ function toNumber(value: string) {
   return Number.isNaN(num) ? value : num;
 }
 
-export function getParamsFromUrl(routePath: string, pathname: string, search = ""):  Record<string, string | number> {
+export function getParamsFromUrl(routePath: string, pathname: string, search = ""): Record<string, string | number> {
   const parts = routePath.split(/[/?]/);
   const values = pathname.split(/[/?]/);
 
@@ -38,7 +38,7 @@ export function getParamsFromUrl(routePath: string, pathname: string, search = "
   );
 
   const query = new URLSearchParams(search).entries();
-  for(const [k, v] of query) {
+  for (const [k, v] of query) {
     params[k] = toNumber(v);
   }
   return params;

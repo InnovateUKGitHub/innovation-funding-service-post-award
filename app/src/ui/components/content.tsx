@@ -36,7 +36,7 @@ export const Content = ({ value, styles }: IContentProps) => {
           role="button"
           className="content-prompt__icon"
           tabIndex={0}
-          onKeyDown={(e) => {
+          onKeyDown={e => {
             e.preventDefault();
             e.stopPropagation();
             window.location.hash = `#${modalId}`;

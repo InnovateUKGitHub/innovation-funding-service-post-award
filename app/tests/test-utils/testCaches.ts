@@ -11,11 +11,10 @@ export class TestCaches implements ICaches {
   readonly permissionGroups = new Cache<PermissionGroup[]>(1);
   readonly projectRoles = new Cache<{ [key: string]: IRoleInfo }>(1);
   readonly recordTypes = new Cache<RecordType[]>(1);
-  contentStoreLastUpdated: Date|null = null;
+  contentStoreLastUpdated: Date | null = null;
 }
 
 class TestOptionsCache extends Cache<Option<any>[]> {
-
   constructor() {
     super(1);
   }
@@ -23,13 +22,13 @@ class TestOptionsCache extends Cache<Option<any>[]> {
   public get monitoringReports() {
     return super.fetch("MonitoringReports", () => []);
   }
-  public addMonitoringReportItem(key: MonitoringReportStatus, label: any ) {
+  public addMonitoringReportItem(key: MonitoringReportStatus, label: any) {
     const cache = super.fetch("MonitoringReports", () => []);
     cache.push({
       active: true,
       defaultValue: false,
       label,
-      value: key
+      value: key,
     });
     return this;
   }

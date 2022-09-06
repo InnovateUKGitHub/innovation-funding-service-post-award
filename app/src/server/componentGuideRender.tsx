@@ -15,7 +15,7 @@ export function componentGuideRender(req: Request, res: Response) {
 
   const reducer = combineReducers({});
 
-  const store = createStore(reducer, { });
+  const store = createStore(reducer, {});
 
   const html = renderToString(
     <Provider store={store}>

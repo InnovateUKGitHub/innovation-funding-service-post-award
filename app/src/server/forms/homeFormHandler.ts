@@ -14,7 +14,7 @@ export class HomeFormHandler implements IFormHandler {
       isReset: req.body.button_reset === "",
     };
 
-    if(!req.session) {
+    if (!req.session) {
       req.session = {};
     }
 

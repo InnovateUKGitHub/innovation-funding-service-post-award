@@ -120,9 +120,13 @@ describe("GetClaimStatusChangesQuery", () => {
       comments: existing.Acc_ExternalComment__c,
       createdDate: new Date(existing.CreatedDate),
       newStatus: existing.Acc_NewClaimStatus__c as ClaimStatus,
-      newStatusLabel: claimStatuses.find(x => x.value === existing.Acc_NewClaimStatus__c)?.label ?? "Missing new status label in test data",
+      newStatusLabel:
+        claimStatuses.find(x => x.value === existing.Acc_NewClaimStatus__c)?.label ??
+        "Missing new status label in test data",
       previousStatus: existing.Acc_PreviousClaimStatus__c as ClaimStatus,
-      previousStatusLabel: claimStatuses.find(x => x.value === existing.Acc_PreviousClaimStatus__c)?.label ?? "Missing previous status label in test data",
+      previousStatusLabel:
+        claimStatuses.find(x => x.value === existing.Acc_PreviousClaimStatus__c)?.label ??
+        "Missing previous status label in test data",
       createdBy: existing.Acc_CreatedByAlias__c,
     };
     expect(result).toEqual([expected]);

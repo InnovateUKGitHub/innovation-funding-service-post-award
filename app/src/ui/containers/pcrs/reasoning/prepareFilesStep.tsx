@@ -32,9 +32,7 @@ class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & 
                 onChange={dto => this.props.onFileChange("DontSave", dto)}
                 qa="projectChangeRequestItemUpload"
               >
-                <UploadForm.Fieldset
-                  heading={x => x.pcrReasoningPrepareFiles.documentMessages.uploadDocumentsLabel}
-                >
+                <UploadForm.Fieldset heading={x => x.pcrReasoningPrepareFiles.documentMessages.uploadDocumentsLabel}>
                   <ACC.DocumentGuidance />
 
                   <UploadForm.MultipleFileUpload

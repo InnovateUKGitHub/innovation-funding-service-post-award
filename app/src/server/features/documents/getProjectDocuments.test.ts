@@ -38,7 +38,12 @@ describe("GetProjectDocumentsQuery", () => {
     const expectedDescription = "IAR";
     const expectedUploadedBy = "Chaka Khan";
 
-    const document = context.testData.createDocument(project.Id, expectedFileName, expectedExtention, expectedUploadedBy);
+    const document = context.testData.createDocument(
+      project.Id,
+      expectedFileName,
+      expectedExtention,
+      expectedUploadedBy,
+    );
     document.Description = expectedDescription;
 
     const query = new GetProjectDocumentsQuery(project.Id);
@@ -56,7 +61,7 @@ describe("GetProjectDocumentsQuery", () => {
     const project = context.testData.createProject();
 
     const documents = context.testData.range(3, i => {
-      return context.testData.createDocument(project.Id, undefined, undefined, undefined,undefined, undefined, x => {
+      return context.testData.createDocument(project.Id, undefined, undefined, undefined, undefined, undefined, x => {
         x.CreatedDate = DateTime.local().minus({ days: 1 }).plus({ hours: i }).toISO();
       });
     });
@@ -84,11 +89,11 @@ describe("GetProjectDocumentsQuery", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const command = new GetProjectDocumentsQuery(project.Id);
-    const auth    = new Authorisation({
+    const auth = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.MonitoringOfficer,
-        partnerRoles: {}
-      }
+        partnerRoles: {},
+      },
     });
 
     expect(await context.runAccessControl(auth, command)).toBe(true);
@@ -98,11 +103,11 @@ describe("GetProjectDocumentsQuery", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
     const command = new GetProjectDocumentsQuery(project.Id);
-    const auth    = new Authorisation({
+    const auth = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.FinancialContact | ProjectRole.ProjectManager,
-        partnerRoles: {}
-      }
+        partnerRoles: {},
+      },
     });
 
     expect(await context.runAccessControl(auth, command)).toBe(false);

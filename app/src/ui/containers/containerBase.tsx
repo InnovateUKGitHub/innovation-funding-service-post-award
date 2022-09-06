@@ -55,12 +55,12 @@ export abstract class ContainerBase<TParams = {}, TData = {}, TCallbacks = {}> e
 interface IRouteOptions<TParams> extends Pick<MatchedRoute, "allowRouteInActiveAccess"> {
   routeName: string;
   routePath: string;
-/**
- * `routePathWithQuery` is for the case where routePath can sometimes have a query template
- * e.g. `/pcrs/dashboard?:search` this is not compatible as a path for the Router and so chose
- * to add additional optional prop for this scenario, as better alternative to stripping any query templates
- * at Router level for perf reasons
- */
+  /**
+   * `routePathWithQuery` is for the case where routePath can sometimes have a query template
+   * e.g. `/pcrs/dashboard?:search` this is not compatible as a path for the Router and so chose
+   * to add additional optional prop for this scenario, as better alternative to stripping any query templates
+   * at Router level for perf reasons
+   */
   routePathWithQuery?: string;
   container: React.FunctionComponent<TParams & BaseProps>;
   // TODO: Remove this params are now fetched from a container level not route...

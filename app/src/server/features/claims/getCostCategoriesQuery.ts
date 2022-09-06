@@ -24,7 +24,6 @@ export class GetUnfilteredCostCategoriesQuery extends QueryBase<CostCategoryDto[
 
     data.sort((a, b) => numberComparator(a.displayOrder, b.displayOrder));
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return data.map(({ displayOrder, ...x }) => x);
   }
 }
@@ -35,7 +34,9 @@ export class GetFilteredCostCategoriesQuery extends QueryBase<CostCategoryDto[]>
   }
 
   protected async run(context: IContext) {
-    return context.caches.costCategories.fetchAsync(storeKeys.getCostCategoryKey(this.partnerId), () => this.executeQuery(context));
+    return context.caches.costCategories.fetchAsync(storeKeys.getCostCategoryKey(this.partnerId), () =>
+      this.executeQuery(context),
+    );
   }
 
   private async executeQuery(context: IContext) {
@@ -45,7 +46,6 @@ export class GetFilteredCostCategoriesQuery extends QueryBase<CostCategoryDto[]>
     const filteredCategories = this.filterCostCategories(allCategories, requiredCategories);
     filteredCategories.sort((a, b) => numberComparator(a.displayOrder, b.displayOrder));
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return filteredCategories.map(({ displayOrder, ...x }) => x);
   }
 

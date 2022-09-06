@@ -14,7 +14,6 @@ describe("InitialiseContentCommand", () => {
 
     expect(context.internationalisation.resourceBundles.length).toBe(2);
     expect(context.internationalisation.resourceBundles[0]).toEqual(content);
-
   });
 
   it("does not reset default content", async () => {

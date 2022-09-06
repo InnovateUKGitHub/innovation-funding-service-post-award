@@ -2,9 +2,7 @@
 
 const isolatedModules = process.env.TS_JEST_ISOLATED_MODULES || false;
 
-const abstractFiles = [
-  "commandBase.ts"
-];
+const abstractFiles = ["commandBase.ts"];
 
 module.exports = {
   verbose: false,
@@ -23,7 +21,7 @@ module.exports = {
     },
   },
   setupFilesAfterEnv: ["<rootDir>/config/jest-setup.js"],
-  coveragePathIgnorePatterns: ["/node_modules/", "\\.(test|spec)\\.", "stubDtos",  "\\.page\\.", ...abstractFiles],
+  coveragePathIgnorePatterns: ["/node_modules/", "\\.(test|spec)\\.", "stubDtos", "\\.page\\.", ...abstractFiles],
   collectCoverageFrom: [
     "src/server/features/**/*.{ts,tsx}",
     "src/framework/util/*.{ts,tsx,json}",

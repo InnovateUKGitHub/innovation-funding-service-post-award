@@ -51,14 +51,12 @@ describe("GetMonitoringReportStatusChanges", () => {
 
     context.caches.optionsLookup
       .addMonitoringReportItem(MonitoringReportStatus.Draft, "Custom Draft")
-      .addMonitoringReportItem(MonitoringReportStatus.Approved, "Custom Approved")
-      ;
+      .addMonitoringReportItem(MonitoringReportStatus.Approved, "Custom Approved");
 
     const query = new GetMonitoringReportStatusChanges(project.Id, report.Id);
     const result = (await context.runQuery(query))[0];
 
     expect(result.previousStatusLabel).toBe("Custom Draft");
     expect(result.newStatusLabel).toBe("Custom Approved");
-
   });
 });

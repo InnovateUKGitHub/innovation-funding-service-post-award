@@ -58,13 +58,13 @@ describe("TextInput", () => {
     const onChange = jest.fn();
     const { container } = setup({ maxLength: 20, value: "", onChange, handleKeyTyped: true });
     await userEvent.type(container.firstChild as HTMLInputElement, "1");
-    await fireEvent.keyUp(container.firstChild as HTMLInputElement, { key: "1", code: "Digit1", keyCode: 49  });
+    await fireEvent.keyUp(container.firstChild as HTMLInputElement, { key: "1", code: "Digit1", keyCode: 49 });
     expect(onChange).toHaveBeenCalledWith("1");
   });
 
   it("Should update state on blur", async () => {
     const onChange = jest.fn();
-    const {container } = setup({ maxLength: 20, value: "", onChange });
+    const { container } = setup({ maxLength: 20, value: "", onChange });
 
     await userEvent.type(container.firstChild as HTMLInputElement, "1");
     await fireEvent.blur(container.firstChild as HTMLInputElement);

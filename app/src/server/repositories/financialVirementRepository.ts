@@ -34,7 +34,9 @@ export class FinancialVirementRepository extends SalesforceRepositoryBase<ISales
   }
 
   private virementWhereQuery = (id: string) =>
-    `Acc_ProjectChangeRequest__c = '${sss(id)}' or Acc_ParticipantVirement__r.Acc_ProjectChangeRequest__c = '${sss(id)}'`;
+    `Acc_ProjectChangeRequest__c = '${sss(id)}' or Acc_ParticipantVirement__r.Acc_ProjectChangeRequest__c = '${sss(
+      id,
+    )}'`;
 
   protected readonly salesforceObjectName = "Acc_Virements__c";
   protected salesforceFieldNames = [

@@ -1,6 +1,10 @@
-/* eslint-disable sonarjs/no-identical-functions */
 import { QueryBase } from "@server/features/common";
-import { CostCategoryType, IContext, PCRSpendProfileCapitalUsageType, PCRSpendProfileOverheadRate } from "@framework/types";
+import {
+  CostCategoryType,
+  IContext,
+  PCRSpendProfileCapitalUsageType,
+  PCRSpendProfileOverheadRate,
+} from "@framework/types";
 import { PcrSpendProfileEntity } from "@framework/entities";
 import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
@@ -9,13 +13,15 @@ import {
   PCRSpendProfileAcademicCostDto,
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
-  PcrSpendProfileDto, PCRSpendProfileFundingDto,
+  PcrSpendProfileDto,
+  PCRSpendProfileFundingDto,
   PCRSpendProfileLabourCostDto,
-  PCRSpendProfileMaterialsCostDto, PCRSpendProfileOtherCostsDto,
+  PCRSpendProfileMaterialsCostDto,
+  PCRSpendProfileOtherCostsDto,
   PCRSpendProfileOtherFundingDto,
   PCRSpendProfileOverheadsCostDto,
   PCRSpendProfileSubcontractingCostDto,
-  PCRSpendProfileTravelAndSubsCostDto
+  PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 
 export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
@@ -30,12 +36,23 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
       pcrItemId: this.pcrItemId,
       costs: costCategories
         // For each cost category filter and map costs
-        .map(x => this.mapCosts(x, spendProfiles.filter(s => s.costCategoryId === x.id)))
+        .map(x =>
+          this.mapCosts(
+            x,
+            spendProfiles.filter(s => s.costCategoryId === x.id),
+          ),
+        )
         // Flatten array
         .reduce((acc, x) => acc.concat(x), []),
       funds: costCategories
         // For each cost category filter and map funds
-        .map(x => this.mapFunds(context, x, spendProfiles.filter(s => s.costCategoryId === x.id)))
+        .map(x =>
+          this.mapFunds(
+            context,
+            x,
+            spendProfiles.filter(s => s.costCategoryId === x.id),
+          ),
+        )
         // Flatten array
         .reduce((acc, x) => acc.concat(x), []),
     };
@@ -43,19 +60,32 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
 
   private mapCosts(costCategory: CostCategoryDto, spendProfiles: PcrSpendProfileEntity[]): PCRSpendProfileCostDto[] {
     switch (costCategory.type) {
-      case CostCategoryType.Academic: return this.mapAcademicCosts(spendProfiles, costCategory.type);
-      case CostCategoryType.Labour: return this.mapLabourCosts(spendProfiles, costCategory.type);
-      case CostCategoryType.Overheads: return this.mapOverheadsCosts(spendProfiles, costCategory.type);
-      case CostCategoryType.Materials: return this.mapMaterialsCosts(spendProfiles, costCategory.type);
-      case CostCategoryType.Subcontracting: return this.mapSubcontractingCosts(spendProfiles, costCategory.type);
-      case CostCategoryType.Capital_Usage: return this.mapCapitalUsageCosts(spendProfiles, costCategory.type);
-      case CostCategoryType.Travel_And_Subsistence: return this.mapTravelAndSubsCosts(spendProfiles, costCategory.type);
-      case CostCategoryType.Other_Costs: return this.mapOtherCosts(spendProfiles, costCategory.type);
-      default: return [];
+      case CostCategoryType.Academic:
+        return this.mapAcademicCosts(spendProfiles, costCategory.type);
+      case CostCategoryType.Labour:
+        return this.mapLabourCosts(spendProfiles, costCategory.type);
+      case CostCategoryType.Overheads:
+        return this.mapOverheadsCosts(spendProfiles, costCategory.type);
+      case CostCategoryType.Materials:
+        return this.mapMaterialsCosts(spendProfiles, costCategory.type);
+      case CostCategoryType.Subcontracting:
+        return this.mapSubcontractingCosts(spendProfiles, costCategory.type);
+      case CostCategoryType.Capital_Usage:
+        return this.mapCapitalUsageCosts(spendProfiles, costCategory.type);
+      case CostCategoryType.Travel_And_Subsistence:
+        return this.mapTravelAndSubsCosts(spendProfiles, costCategory.type);
+      case CostCategoryType.Other_Costs:
+        return this.mapOtherCosts(spendProfiles, costCategory.type);
+      default:
+        return [];
     }
   }
 
-  private mapFunds(context: IContext, costCategory: CostCategoryDto, spendProfiles: PcrSpendProfileEntity[]): PCRSpendProfileFundingDto[] {
+  private mapFunds(
+    context: IContext,
+    costCategory: CostCategoryDto,
+    spendProfiles: PcrSpendProfileEntity[],
+  ): PCRSpendProfileFundingDto[] {
     if (costCategory.type === CostCategoryType.Other_Funding) {
       return this.mapOtherFunding(context, spendProfiles, costCategory.type);
     }
@@ -71,22 +101,32 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     };
   }
 
-  private mapOtherFunding(context: IContext, spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Other_Funding): PCRSpendProfileOtherFundingDto[] {
+  private mapOtherFunding(
+    context: IContext,
+    spendProfiles: PcrSpendProfileEntity[],
+    costCategory: CostCategoryType.Other_Funding,
+  ): PCRSpendProfileOtherFundingDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
       costCategory,
-      dateSecured: context.clock.parseOptionalSalesforceDate(x.dateOtherFundingSecured || null)
+      dateSecured: context.clock.parseOptionalSalesforceDate(x.dateOtherFundingSecured || null),
     }));
   }
 
-  private mapAcademicCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Academic): PCRSpendProfileAcademicCostDto[] {
+  private mapAcademicCosts(
+    spendProfiles: PcrSpendProfileEntity[],
+    costCategory: CostCategoryType.Academic,
+  ): PCRSpendProfileAcademicCostDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
       costCategory,
     }));
   }
 
-  private mapLabourCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Labour): PCRSpendProfileLabourCostDto[] {
+  private mapLabourCosts(
+    spendProfiles: PcrSpendProfileEntity[],
+    costCategory: CostCategoryType.Labour,
+  ): PCRSpendProfileLabourCostDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
       costCategory,
@@ -96,15 +136,21 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     }));
   }
 
-  private mapOverheadsCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Overheads): PCRSpendProfileOverheadsCostDto[] {
+  private mapOverheadsCosts(
+    spendProfiles: PcrSpendProfileEntity[],
+    costCategory: CostCategoryType.Overheads,
+  ): PCRSpendProfileOverheadsCostDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
       costCategory,
-      overheadRate: x.overheadRate || PCRSpendProfileOverheadRate.Unknown
+      overheadRate: x.overheadRate || PCRSpendProfileOverheadRate.Unknown,
     }));
   }
 
-  private mapSubcontractingCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Subcontracting): PCRSpendProfileSubcontractingCostDto[] {
+  private mapSubcontractingCosts(
+    spendProfiles: PcrSpendProfileEntity[],
+    costCategory: CostCategoryType.Subcontracting,
+  ): PCRSpendProfileSubcontractingCostDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
       costCategory,
@@ -113,7 +159,10 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     }));
   }
 
-  private mapMaterialsCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Materials): PCRSpendProfileMaterialsCostDto[] {
+  private mapMaterialsCosts(
+    spendProfiles: PcrSpendProfileEntity[],
+    costCategory: CostCategoryType.Materials,
+  ): PCRSpendProfileMaterialsCostDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
       costCategory,
@@ -122,7 +171,10 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     }));
   }
 
-  private mapCapitalUsageCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Capital_Usage): PCRSpendProfileCapitalUsageCostDto[] {
+  private mapCapitalUsageCosts(
+    spendProfiles: PcrSpendProfileEntity[],
+    costCategory: CostCategoryType.Capital_Usage,
+  ): PCRSpendProfileCapitalUsageCostDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
       costCategory,
@@ -131,11 +183,14 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
       depreciationPeriod: isNumber(x.depreciationPeriod) ? x.depreciationPeriod : null,
       netPresentValue: isNumber(x.netPresentValue) ? x.netPresentValue : null,
       residualValue: isNumber(x.residualValue) ? x.residualValue : null,
-      utilisation: isNumber(x.utilisation) ? x.utilisation : null
+      utilisation: isNumber(x.utilisation) ? x.utilisation : null,
     }));
   }
 
-  private mapTravelAndSubsCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Travel_And_Subsistence): PCRSpendProfileTravelAndSubsCostDto[] {
+  private mapTravelAndSubsCosts(
+    spendProfiles: PcrSpendProfileEntity[],
+    costCategory: CostCategoryType.Travel_And_Subsistence,
+  ): PCRSpendProfileTravelAndSubsCostDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
       costCategory,
@@ -144,7 +199,10 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     }));
   }
 
-  private mapOtherCosts(spendProfiles: PcrSpendProfileEntity[], costCategory: CostCategoryType.Other_Costs): PCRSpendProfileOtherCostsDto[] {
+  private mapOtherCosts(
+    spendProfiles: PcrSpendProfileEntity[],
+    costCategory: CostCategoryType.Other_Costs,
+  ): PCRSpendProfileOtherCostsDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
       costCategory,

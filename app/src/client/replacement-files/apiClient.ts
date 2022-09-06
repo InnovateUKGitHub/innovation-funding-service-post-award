@@ -111,7 +111,9 @@ const clientApi: IApiClient = {
   },
   financialVirements: {
     get: params =>
-      ajaxJson(`/api/financial-virements/${params.projectId}/${params.pcrId}/${params.pcrItemId}/?partnerId=${params.partnerId}`),
+      ajaxJson(
+        `/api/financial-virements/${params.projectId}/${params.pcrId}/${params.pcrItemId}/?partnerId=${params.partnerId}`,
+      ),
     update: params =>
       ajaxPut(
         `/api/financial-virements/${params.projectId}/${params.pcrId}/${params.pcrItemId}/?partnerId=${params.partnerId}&submit=${params.submit}`,

@@ -5,7 +5,7 @@ export enum DocumentDescription {
   DeMinimisDeclarationForm = 40,
   /**
    * @deprecated - This will be removed. We now favour the new "ProjectCompletionForm" workflow.
-   **/
+   */
   EndOfProjectSurvey = 50,
   StatementOfExpenditure = 60,
   JeSForm = 70,

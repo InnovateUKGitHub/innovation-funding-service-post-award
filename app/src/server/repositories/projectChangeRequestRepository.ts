@@ -3,7 +3,7 @@ import {
   ProjectChangeRequestEntity,
   ProjectChangeRequestForCreateEntity,
   ProjectChangeRequestItemEntity,
-  ProjectChangeRequestItemForCreateEntity
+  ProjectChangeRequestItemForCreateEntity,
 } from "@framework/entities";
 import { IPicklistEntry } from "@framework/types";
 import { ILogger } from "@server/features/common/logger";
@@ -17,7 +17,7 @@ import {
   PcrPartnerTypeMapper,
   PCRProjectLocationMapper,
   PcrProjectRoleMapper,
-  SalesforcePCRMapper
+  SalesforcePCRMapper,
 } from "./mappers/projectChangeRequestMapper";
 import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 
@@ -185,7 +185,8 @@ export const mapToPCRItemStatusLabel = (status?: PCRItemStatus): string => {
  */
 export class ProjectChangeRequestRepository
   extends SalesforceRepositoryBase<ISalesforcePCR>
-  implements IProjectChangeRequestRepository {
+  implements IProjectChangeRequestRepository
+{
   constructor(
     private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>,
     getSalesforceConnection: () => Promise<Connection>,

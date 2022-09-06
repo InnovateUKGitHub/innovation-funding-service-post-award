@@ -8,7 +8,6 @@ export function checkProjectCompetition(competition: string) {
   const isHorizonEuropeParticipation: boolean = competition === "Horizon Europe Participation";
 
   const isSBRI: boolean = competition === "SBRI";
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   const isSBRI_IFS: boolean = competition === "SBRI IFS"; // Note: this is a valid exception due to how hard it would be to read two i's in a row
   const isCombinationOfSBRI: boolean = isSBRI || isSBRI_IFS;
 
@@ -22,6 +21,6 @@ export function checkProjectCompetition(competition: string) {
     isCatapults,
     isLoans,
     isEdge,
-    isHorizonEuropeParticipation
+    isHorizonEuropeParticipation,
   };
 }

@@ -15,8 +15,7 @@ function useMountedContext(): MountedState {
   return state;
 }
 
-interface MountedProviderProps {
-}
+interface MountedProviderProps {}
 
 export function MountedProvider(props: MountedProviderProps) {
   const state = useMountedContext();
@@ -36,4 +35,3 @@ export function useMounted(): MountedState {
     isClient: mounted,
   };
 }
-

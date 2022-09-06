@@ -66,11 +66,7 @@ export abstract class CommandDocumentBase<T> extends CommandBase<T> {
   protected abstract showValidationErrors: boolean;
   protected handleRepositoryError(context: IContext, error: FileTypeNotAllowedError | null) {
     if (error instanceof FileTypeNotAllowedError) {
-      const result = new DocumentUploadDtoValidator(
-        this.document,
-        context.config.options,
-        this.showValidationErrors,
-      );
+      const result = new DocumentUploadDtoValidator(this.document, context.config.options, this.showValidationErrors);
       if (!result.isValid) {
         throw new ValidationError(result);
       }

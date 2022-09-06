@@ -172,8 +172,9 @@ describe("claimDtoValidator()", () => {
           );
 
           expect(claimState.isValid).toBe(hasNoError);
-
           if (!hasNoError) {
+            // TODO: Remove conditional expects
+            // eslint-disable-next-line jest/no-conditional-expect
             expect(claimState.errorMessage).toBe(expectedError);
           }
         });
@@ -206,6 +207,8 @@ describe("claimDtoValidator()", () => {
             expect(claimState.isValid).toBe(hasNoError);
 
             if (!hasNoError) {
+              // TODO: Remove conditional expects
+              // eslint-disable-next-line jest/no-conditional-expect
               expect(claimState.errorMessage).toBe(expectedError);
             }
           });
@@ -243,6 +246,8 @@ describe("claimDtoValidator()", () => {
           expect(claimState.isValid).toBe(expectedToBeValid);
 
           if (!claimState.isValid || expectedErrorMessage) {
+            // TODO: Remove conditional expects
+            // eslint-disable-next-line jest/no-conditional-expect
             expect(claimState.errorMessage).toBe(expectedErrorMessage);
           }
         });
@@ -283,6 +288,8 @@ describe("claimDtoValidator()", () => {
           expect(claimState.isValid).toBe(expectedToBeValid);
 
           if (!claimState.isValid || expectedErrorMessage) {
+            // TODO: Remove conditional expects
+            // eslint-disable-next-line jest/no-conditional-expect
             expect(claimState.errorMessage).toBe(expectedErrorMessage);
           }
         });
@@ -350,10 +357,7 @@ describe("claimDtoValidator()", () => {
             );
 
             expect(claimState.isValid).toBe(expectedState);
-
-            if (expectedErrorMessage) {
-              expect(claimState.errorMessage).toBe(expectedErrorMessage);
-            }
+            expect(claimState.errorMessage).toBe(expectedErrorMessage);
           });
         });
 
@@ -388,17 +392,14 @@ describe("claimDtoValidator()", () => {
             );
 
             expect(claimState.isValid).toBe(expectedState);
-
-            if (!claimState.isValid || expectedErrorMessage) {
-              expect(claimState.errorMessage).toBe(expectedErrorMessage);
-            }
+            expect(claimState.errorMessage).toBe(expectedErrorMessage);
           });
         });
 
         describe("when ktp project competition", () => {
           test.each`
             name              | testClaimDto                     | expectedState | expectedError
-            ${"when valid"}   | ${{ iarStatus: "Received" }}     | ${true}       | ${""}
+            ${"when valid"}   | ${{ iarStatus: "Received" }}     | ${true}       | ${null}
             ${"when invalid"} | ${{ iarStatus: "Not Received" }} | ${false}      | ${"You must upload a schedule 3 before you can submit this claim."}
           `("when iar required and status $name", ({ testClaimDto, expectedState, expectedError }) => {
             const stubKtpCompetition = "KTP";
@@ -420,10 +421,7 @@ describe("claimDtoValidator()", () => {
             );
 
             expect(claimState.isValid).toBe(expectedState);
-
-            if (expectedError) {
-              expect(claimState.errorMessage).toBe(expectedError);
-            }
+            expect(claimState.errorMessage).toBe(expectedError);
           });
         });
       });
@@ -455,10 +453,7 @@ describe("claimDtoValidator()", () => {
           );
 
           expect(claimState.isValid).toBe(expectedState);
-
-          if (!claimState.isValid || expectedErrorMessage) {
-            expect(claimState.errorMessage).toBe(expectedErrorMessage);
-          }
+          expect(claimState.errorMessage).toBe(expectedErrorMessage);
         });
       });
     });
@@ -467,12 +462,12 @@ describe("claimDtoValidator()", () => {
   describe("with comments", () => {
     describe("with correct claim status", () => {
       test.each`
-        name                                                                    | testClaimDto                                                            | testOriginalStatus        | expectedToBeValid
-        ${"with correct status and original status"}                            | ${{ status: ClaimStatus.MO_QUERIED, comments: "must-contain-a-value" }} | ${ClaimStatus.DRAFT}      | ${true}
-        ${"with an incorrect status and valid original status but no comments"} | ${{ status: ClaimStatus.DRAFT, comments: "must-contain-a-value" }}      | ${ClaimStatus.DRAFT}      | ${true}
-        ${"with correct status and original status but no comments"}            | ${{ status: ClaimStatus.MO_QUERIED, comments: "" }}                     | ${ClaimStatus.DRAFT}      | ${false}
-        ${"with correct status and original status but no comments"}            | ${{ status: ClaimStatus.MO_QUERIED, comments: "must-contain-a-value" }} | ${ClaimStatus.MO_QUERIED} | ${true}
-      `("$name", ({ testClaimDto, testOriginalStatus, expectedToBeValid }) => {
+        name                                                                    | testClaimDto                                                            | testOriginalStatus        | errorMessage
+        ${"with correct status and original status"}                            | ${{ status: ClaimStatus.MO_QUERIED, comments: "must-contain-a-value" }} | ${ClaimStatus.DRAFT}      | ${null}
+        ${"with an incorrect status and valid original status but no comments"} | ${{ status: ClaimStatus.DRAFT, comments: "must-contain-a-value" }}      | ${ClaimStatus.DRAFT}      | ${null}
+        ${"with correct status and original status but no comments"}            | ${{ status: ClaimStatus.MO_QUERIED, comments: "" }}                     | ${ClaimStatus.DRAFT}      | ${"Comments are required if querying a claim"}
+        ${"with correct status and original status but no comments"}            | ${{ status: ClaimStatus.MO_QUERIED, comments: "must-contain-a-value" }} | ${ClaimStatus.MO_QUERIED} | ${null}
+      `("$name", ({ testClaimDto, testOriginalStatus, errorMessage }) => {
         const stubCommentsClaim = { ...stubClaimDto, ...testClaimDto } as ClaimDto;
 
         const { comments } = new ClaimDtoValidator(
@@ -485,20 +480,17 @@ describe("claimDtoValidator()", () => {
           stubIsNotFinalSummary,
         );
 
-        expect(comments.isValid).toBe(expectedToBeValid);
-
-        if (!expectedToBeValid) {
-          expect(comments.errorMessage).toBe("Comments are required if querying a claim");
-        }
+        expect(comments.isValid).toBe(errorMessage === null);
+        expect(comments.errorMessage).toBe(errorMessage);
       });
     });
 
     describe("with correct length validation", () => {
       test.each`
-        name                                      | testCommentValue    | expectedToBeValid
-        ${"with max comment length of 1000"}      | ${"_".repeat(1000)} | ${true}
-        ${"with an exceeding max comment length"} | ${"_".repeat(1001)} | ${false}
-      `("$name", ({ testCommentValue, expectedToBeValid }) => {
+        name                                      | testCommentValue    | errorMessage
+        ${"with max comment length of 1000"}      | ${"_".repeat(1000)} | ${null}
+        ${"with an exceeding max comment length"} | ${"_".repeat(1001)} | ${"Comments must be a maximum of 1000 characters"}
+      `("$name", ({ testCommentValue, errorMessage }) => {
         const stubCommentClaim = {
           ...stubClaimDto,
           status: ClaimStatus.MO_QUERIED,
@@ -515,24 +507,21 @@ describe("claimDtoValidator()", () => {
           stubIsNotFinalSummary,
         );
 
-        expect(comments.isValid).toBe(expectedToBeValid);
-
-        if (!expectedToBeValid) {
-          expect(comments.errorMessage).toBe("Comments must be a maximum of 1000 characters");
-        }
+        expect(comments.isValid).toBe(errorMessage === null);
+        expect(comments.errorMessage).toBe(errorMessage);
       });
     });
   });
 
   describe("with totalCosts", () => {
     test.each`
-      name                                                     | testClaimDetails                                              | expectedToBeValid
-      ${"when total costs are valid"}                          | ${[{ remainingOfferCosts: 1 }]}                               | ${true}
-      ${"when all total costs accumulate to a positive total"} | ${[{ remainingOfferCosts: 5 }, { remainingOfferCosts: 5 }]}   | ${true}
-      ${"when total costs are zero"}                           | ${[{ remainingOfferCosts: 0 }]}                               | ${true}
-      ${"when total costs are negative"}                       | ${[{ remainingOfferCosts: -1 }]}                              | ${false}
-      ${"when all total costs accumulate to a negative total"} | ${[{ remainingOfferCosts: 5 }, { remainingOfferCosts: -10 }]} | ${false}
-    `("$name", ({ testClaimDetails, expectedToBeValid }) => {
+      name                                                     | testClaimDetails                                              | errorMessage
+      ${"when total costs are valid"}                          | ${[{ remainingOfferCosts: 1 }]}                               | ${null}
+      ${"when all total costs accumulate to a positive total"} | ${[{ remainingOfferCosts: 5 }, { remainingOfferCosts: 5 }]}   | ${null}
+      ${"when total costs are zero"}                           | ${[{ remainingOfferCosts: 0 }]}                               | ${null}
+      ${"when total costs are negative"}                       | ${[{ remainingOfferCosts: -1 }]}                              | ${"You must reduce your claim to ensure the remaining eligible costs are zero or higher."}
+      ${"when all total costs accumulate to a negative total"} | ${[{ remainingOfferCosts: 5 }, { remainingOfferCosts: -10 }]} | ${"You must reduce your claim to ensure the remaining eligible costs are zero or higher."}
+    `("$name", ({ testClaimDetails, errorMessage }) => {
       const { totalCosts } = new ClaimDtoValidator(
         stubClaimDto,
         stubOriginalStatus,
@@ -542,9 +531,13 @@ describe("claimDtoValidator()", () => {
         stubCompetitionType,
       );
 
+      const expectedToBeValid = errorMessage === null;
+
       expect(totalCosts.isValid).toBe(expectedToBeValid);
 
       if (!expectedToBeValid) {
+        // TODO: Remove conditional expects
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(totalCosts.errorMessage).toBe(
           "You must reduce your claim to ensure the remaining eligible costs are zero or higher.",
         );

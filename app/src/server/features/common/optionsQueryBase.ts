@@ -2,7 +2,7 @@ import { IContext, IPicklistEntry } from "@framework/types";
 import { Option } from "@framework/dtos/option";
 import { QueryBase } from "./queryBase";
 
-export abstract class OptionsQueryBase<T extends (string | number)> extends QueryBase<Option<T>[]> {
+export abstract class OptionsQueryBase<T extends string | number> extends QueryBase<Option<T>[]> {
   protected constructor(private readonly key: string) {
     super();
   }
@@ -13,9 +13,9 @@ export abstract class OptionsQueryBase<T extends (string | number)> extends Quer
 
   private async executeQuery(context: IContext) {
     const options = await this.getPickListValues(context);
-    const map =  options.reduce<Map<T, Option<T>>>((acc, curr) => {
+    const map = options.reduce<Map<T, Option<T>>>((acc, curr) => {
       const enumValue = this.mapToEnumValue(curr.value);
-      if(!enumValue && enumValue !== 0) {
+      if (!enumValue && enumValue !== 0) {
         return acc;
       }
       return acc.set(enumValue, {

@@ -5,17 +5,23 @@ import { createDto } from "@framework/util/dtoHelpers";
 const partnerRecordType = "PARTNER_RECORD_TYPE";
 const costCategoryRecordType = "COST_CATEGORY_RECORD_TYPE";
 
-const createPartnerLevelSalesforceRecord = (update?: Partial<ISalesforceFinancialVirement>): ISalesforceFinancialVirement => {
+const createPartnerLevelSalesforceRecord = (
+  update?: Partial<ISalesforceFinancialVirement>,
+): ISalesforceFinancialVirement => {
   return createDto<ISalesforceFinancialVirement>({
     Id: "Test_Id",
     Acc_ProjectChangeRequest__c: "PCR_Id",
     Acc_ProjectParticipant__c: "Partner_Id",
-    RecordTypeId:partnerRecordType,
-    ...update
+    RecordTypeId: partnerRecordType,
+    ...update,
   });
 };
 
-const createVirementLevelSalesforceRecord = (partnerLevel: ISalesforceFinancialVirement, costCategoryId: string, update?: Partial<ISalesforceFinancialVirement>): ISalesforceFinancialVirement => {
+const createVirementLevelSalesforceRecord = (
+  partnerLevel: ISalesforceFinancialVirement,
+  costCategoryId: string,
+  update?: Partial<ISalesforceFinancialVirement>,
+): ISalesforceFinancialVirement => {
   return createDto<ISalesforceFinancialVirement>({
     Id: "Test_Id",
     Acc_ProjectChangeRequest__c: "PCR_Id",
@@ -26,7 +32,7 @@ const createVirementLevelSalesforceRecord = (partnerLevel: ISalesforceFinancialV
       Acc_CostCategory__c: costCategoryId,
       Acc_ProjectParticipant__c: partnerLevel.Acc_ProjectParticipant__c,
     },
-    RecordTypeId:costCategoryRecordType,
+    RecordTypeId: costCategoryRecordType,
     ...update,
   });
 };
@@ -35,7 +41,7 @@ describe("SalesforceFinancialVirementMapper", () => {
   it("Maps partner correctly", () => {
     const partner = createPartnerLevelSalesforceRecord({
       Acc_ProjectParticipant__c: "Expected Partner Id",
-      Acc_ProjectChangeRequest__c: "Expected PCR Id"
+      Acc_ProjectChangeRequest__c: "Expected PCR Id",
     });
 
     const results = new SalesforceFinancialVirementMapper(partnerRecordType, costCategoryRecordType).map([partner]);
@@ -47,7 +53,6 @@ describe("SalesforceFinancialVirementMapper", () => {
     expect(result.partnerId).toBe("Expected Partner Id");
     expect(result.pcrItemId).toBe("Expected PCR Id");
     expect(result.virements).toEqual([]);
-
   });
 
   it("Maps partner virement correctly", () => {
@@ -59,7 +64,10 @@ describe("SalesforceFinancialVirementMapper", () => {
       Acc_NewCosts__c: 30,
     });
 
-    const results = new SalesforceFinancialVirementMapper(partnerRecordType, costCategoryRecordType).map([partner, virement]);
+    const results = new SalesforceFinancialVirementMapper(partnerRecordType, costCategoryRecordType).map([
+      partner,
+      virement,
+    ]);
 
     expect(results.length).toBe(1);
 
@@ -71,13 +79,12 @@ describe("SalesforceFinancialVirementMapper", () => {
     expect(result.virements[0].newEligibleCosts).toEqual(30);
     expect(result.virements[0].originalCostsClaimedToDate).toEqual(10);
     expect(result.virements[0].originalEligibleCosts).toEqual(20);
-
   });
 
   it("Maps multiple partners correctly", () => {
     const partner1 = createPartnerLevelSalesforceRecord({
       Acc_ProjectParticipant__c: "Expected Partner 1",
-      Acc_ProjectChangeRequest__c: "Expected PCR Id"
+      Acc_ProjectChangeRequest__c: "Expected PCR Id",
     });
 
     const virement1 = createVirementLevelSalesforceRecord(partner1, "Expected Cost Category 1", {
@@ -88,7 +95,7 @@ describe("SalesforceFinancialVirementMapper", () => {
 
     const partner2 = createPartnerLevelSalesforceRecord({
       Acc_ProjectParticipant__c: "Expected Partner 2",
-      Acc_ProjectChangeRequest__c: "Expected PCR Id"
+      Acc_ProjectChangeRequest__c: "Expected PCR Id",
     });
 
     const virement2 = createVirementLevelSalesforceRecord(partner2, "Expected Cost Category 1", {
@@ -103,7 +110,13 @@ describe("SalesforceFinancialVirementMapper", () => {
       Acc_NewCosts__c: 90,
     });
 
-    const results = new SalesforceFinancialVirementMapper(partnerRecordType, costCategoryRecordType).map([partner1, virement1, virement2, virement3, partner2]);
+    const results = new SalesforceFinancialVirementMapper(partnerRecordType, costCategoryRecordType).map([
+      partner1,
+      virement1,
+      virement2,
+      virement3,
+      partner2,
+    ]);
 
     expect(results.length).toBe(2);
 
@@ -114,6 +127,5 @@ describe("SalesforceFinancialVirementMapper", () => {
     expect(results[1].virements[0].newEligibleCosts).toEqual(60);
     expect(results[1].virements[0].originalCostsClaimedToDate).toEqual(40);
     expect(results[1].virements[0].originalEligibleCosts).toEqual(50);
-
   });
 });

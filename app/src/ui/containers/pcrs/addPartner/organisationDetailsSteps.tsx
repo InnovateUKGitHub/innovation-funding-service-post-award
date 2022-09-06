@@ -79,7 +79,7 @@ export const OrganisationDetailsStep = (
   return (
     <ACC.Loader
       pending={stores.projectChangeRequests.getPcrParticipantSizes()}
-      render={x => <InnerContainer {...props} pcrParticipantSize={x}  />}
+      render={x => <InnerContainer {...props} pcrParticipantSize={x} />}
     />
   );
 };

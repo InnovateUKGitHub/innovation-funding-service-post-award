@@ -28,7 +28,10 @@ export class Results<T> implements IValidationResult {
   }
 
   public log() {
-    return this.errors.filter(x => !x.isValid).map(x => x.log()).join("/n");
+    return this.errors
+      .filter(x => !x.isValid)
+      .map(x => x.log())
+      .join("/n");
   }
 
   public inspect = () => this.log();
@@ -37,7 +40,10 @@ export class Results<T> implements IValidationResult {
 export class CombinedResultsValidator extends Results<{}> {
   constructor(...vals: Results<{}>[]) {
     const errors = vals.reduce<Result[]>((a, b) => a.concat(b.errors), []);
-    super({}, errors.some(x => x.showValidationErrors));
+    super(
+      {},
+      errors.some(x => x.showValidationErrors),
+    );
     // add the items using the internal method
     errors.forEach(x => this.add(x));
   }
@@ -45,7 +51,10 @@ export class CombinedResultsValidator extends Results<{}> {
 
 export class CombinedResultValidator extends Results<{}> {
   constructor(...vals: Result[]) {
-    super({}, vals.some(x => x.showValidationErrors));
+    super(
+      {},
+      vals.some(x => x.showValidationErrors),
+    );
     // add the items using the internal method
     vals.forEach(x => this.add(x));
   }

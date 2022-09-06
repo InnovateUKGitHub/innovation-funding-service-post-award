@@ -13,17 +13,30 @@ export class GetClaimDetailsQuery extends QueryBase<ClaimDetailsDto> {
   }
 
   protected async accessControl(auth: Authorisation) {
-    return auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer)
-    || auth.forPartner(this.projectId, this.partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager);
+    return (
+      auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer) ||
+      auth
+        .forPartner(this.projectId, this.partnerId)
+        .hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager)
+    );
   }
 
   protected async run(context: IContext) {
-    const claimDetail = await context.repositories.claimDetails.get({ projectId: this.projectId, partnerId: this.partnerId, periodId: this.periodId, costCategoryId: this.costCategoryId });
-    const lineItems = await context.repositories.claimLineItems.getAllForCategory(this.partnerId, this.costCategoryId, this.periodId);
+    const claimDetail = await context.repositories.claimDetails.get({
+      projectId: this.projectId,
+      partnerId: this.partnerId,
+      periodId: this.periodId,
+      costCategoryId: this.costCategoryId,
+    });
+    const lineItems = await context.repositories.claimLineItems.getAllForCategory(
+      this.partnerId,
+      this.costCategoryId,
+      this.periodId,
+    );
 
     if (!claimDetail) {
       // @TODO: throw once overheads re-enabled?
-      return ({
+      return {
         partnerId: this.partnerId,
         costCategoryId: this.costCategoryId,
         periodId: this.periodId,
@@ -31,8 +44,8 @@ export class GetClaimDetailsQuery extends QueryBase<ClaimDetailsDto> {
         periodEnd: null,
         value: 0,
         comments: null,
-        lineItems: [] // @TODO move client-side logic here?
-      });
+        lineItems: [], // @TODO move client-side logic here?
+      };
     }
     return mapClaimDetails(claimDetail, lineItems, context);
   }

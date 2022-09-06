@@ -148,7 +148,6 @@ export const configureFormRouter = (csrfProtection: RequestHandler) => {
   const result = express.Router();
   const badRequestHandler = new BadRequestHandler();
 
-  // eslint-disable-next-line sonarjs/no-empty-collection
   singleFileFormHandlers.forEach(x => {
     result.post(getRoute(x), upload.single("attachment"), csrfProtection, handlePost(x), handleError);
   });

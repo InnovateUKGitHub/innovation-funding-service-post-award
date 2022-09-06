@@ -15,5 +15,5 @@ jest.mock("@ui/hooks", () => ({
 // uuid package has known issues with jest importing
 jest.mock("uuid", () => ({
   __esModule: true,
-  v4: () => `1234-stub-uuid-${Math.floor(Math.random() * 100000)}`
+  v4: () => `1234-stub-uuid-${Math.floor(Math.random() * 100000)}`,
 }));

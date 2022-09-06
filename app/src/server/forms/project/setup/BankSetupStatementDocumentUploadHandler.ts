@@ -24,7 +24,7 @@ export class BankSetupStatementDocumentUploadHandler extends MultipleFileFormHan
   ): Promise<MultipleDocumentUploadDto> {
     return Promise.resolve({
       files,
-      description: DocumentDescription.BankStatement
+      description: DocumentDescription.BankStatement,
     });
   }
 

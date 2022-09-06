@@ -10,27 +10,25 @@ describe("SalesforcePermissionGroupMapper", () => {
     expect(result.id).toEqual(expectedId);
   });
 
-  it("Maps idenfier if found correctly", () => {
-
+  it("Maps identifier if found correctly", () => {
     const lookup = {
-      Expected_Develoiper_Name: PermissionGroupIdentifier.ClaimsTeam
+      Expected_Developer_Name: PermissionGroupIdentifier.ClaimsTeam,
     };
 
     const mapper = new SalesforcePermissionGroupMapper(lookup);
-    const result = mapper.map({ Id: "", DeveloperName: "Expected_Develoiper_Name" });
+    const result = mapper.map({ Id: "", DeveloperName: "Expected_Developer_Name" });
 
     expect(result.identifier).toEqual(PermissionGroupIdentifier.ClaimsTeam);
     expect(result.name).toEqual(PermissionGroupIdentifier[PermissionGroupIdentifier.ClaimsTeam]);
   });
 
-  it("Maps idenfier to unknown if not found", () => {
-
+  it("Maps identifier to unknown if not found", () => {
     const lookup = {
-      Expected_Develoiper_Name: PermissionGroupIdentifier.ClaimsTeam
+      Expected_Developer_Name: PermissionGroupIdentifier.ClaimsTeam,
     };
 
     const mapper = new SalesforcePermissionGroupMapper(lookup);
-    const result = mapper.map({ Id: "", DeveloperName: "---Expected_Develoiper_Name---" });
+    const result = mapper.map({ Id: "", DeveloperName: "---Expected_Developer_Name---" });
 
     expect(result.identifier).toEqual(PermissionGroupIdentifier.Unknown);
     expect(result.name).toEqual(PermissionGroupIdentifier[PermissionGroupIdentifier.Unknown]);

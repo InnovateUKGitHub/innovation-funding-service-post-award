@@ -7,7 +7,7 @@ const log = new Logger();
 export const getErrorStatus = (err?: IAppError) => {
   const code = err ? err.code : ErrorCode.UNKNOWN_ERROR;
   const validationError = err as ValidationError;
-  const message = validationError.results && validationError.results.log() || err && err.message || "";
+  const message = (validationError.results && validationError.results.log()) || (err && err.message) || "";
 
   switch (code) {
     case ErrorCode.VALIDATION_ERROR:

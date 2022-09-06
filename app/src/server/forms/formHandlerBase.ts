@@ -67,10 +67,8 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
     let dto: AnyEditor;
 
     try {
-      dto =
-        (await this.createDto(context, params, button, body, req)) ||
-        ({} as AnyEditor);
-        // ({} as InferEditorStoreDto<EditorState[TStore][StoreKey<TStore>]>);
+      dto = (await this.createDto(context, params, button, body, req)) || ({} as AnyEditor);
+      // ({} as InferEditorStoreDto<EditorState[TStore][StoreKey<TStore>]>);
     } catch (error) {
       context.logger.error("Error creating dto in form submission", error);
       dto = {} as AnyEditor;
@@ -101,21 +99,19 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
     req: express.Request,
   ): Promise<AnyEditor>;
 
-  protected abstract run(
-    context: IContext,
-    params: TParams,
-    button: IFormButton,
-    dto: AnyEditor,
-  ): Promise<ILinkInfo>;
+  protected abstract run(context: IContext, params: TParams, button: IFormButton, dto: AnyEditor): Promise<ILinkInfo>;
 
-  protected abstract getStoreKey(params: TParams, dto: InferEditorStoreDto<EditorState[TStore][StoreKey<TStore>]>): string;
+  protected abstract getStoreKey(
+    params: TParams,
+    dto: InferEditorStoreDto<EditorState[TStore][StoreKey<TStore>]>,
+  ): string;
 
   protected abstract createValidationResult(
     params: TParams,
     // dto: InferEditorStoreDto<EditorState[TStore][StoreKey<TStore>]>,
     dto: AnyEditor,
     button: IFormButton,
-  ):  InferEditorStoreValidator<any>;
+  ): InferEditorStoreValidator<any>;
 }
 export abstract class StandardFormHandlerBase<TParams, TStore extends EditorStateKeys> extends FormHandlerBase<
   TParams,
@@ -149,7 +145,7 @@ export abstract class SingleFileFormHandlerBase<TParams, TStore extends EditorSt
     body: IFormBody,
     req: express.Request,
   ): Promise<AnyEditor> {
-    const file: IFileWrapper | null = req.file ? new ServerFileWrapper(req.file) as IFileWrapper : null;
+    const file: IFileWrapper | null = req.file ? (new ServerFileWrapper(req.file) as IFileWrapper) : null;
     return this.getDto(context, params, button, body, file);
   }
 

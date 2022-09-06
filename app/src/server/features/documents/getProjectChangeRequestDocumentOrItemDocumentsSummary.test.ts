@@ -12,7 +12,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery", () => {
     const pcrRecordType: Entites.RecordType = {
       id: "id_1",
       parent: pcr.id,
-      type: "type"
+      type: "type",
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -47,7 +47,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery", () => {
     const pcrRecordType: Entites.RecordType = {
       id: "id_1",
       parent: pcr.id,
-      type: "type"
+      type: "type",
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
     const pcrItem2 = context.testData.createPCRItem(pcr2, pcrRecordType);
@@ -69,7 +69,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery", () => {
     const pcrRecordType: Entites.RecordType = {
       id: "id_1",
       parent: pcr.id,
-      type: "type"
+      type: "type",
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -79,7 +79,14 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery", () => {
     const expectedContent = "Expected content";
     const expectedDescription = "Evidence";
 
-    const document = context.testData.createDocument(pcrItem.id, expectedFileName, expectedExtension, expectedUploadedBy, expectedContent, expectedDescription);
+    const document = context.testData.createDocument(
+      pcrItem.id,
+      expectedFileName,
+      expectedExtension,
+      expectedUploadedBy,
+      expectedContent,
+      expectedDescription,
+    );
 
     const query = new GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery(project.Id, pcrItem.id);
     const result = await context.runQuery(query).then(x => x[0]);
@@ -99,7 +106,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery", () => {
     const pcrRecordType: Entites.RecordType = {
       id: "id_1",
       parent: pcr.id,
-      type: "type"
+      type: "type",
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
@@ -121,13 +128,13 @@ describe("authorisation", () => {
     const pcrRecordType: Entites.RecordType = {
       id: "id_1",
       parent: pcr.id,
-      type: "type"
+      type: "type",
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
     const query = new GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery(project.Id, pcrItem.id);
 
-    const auth = new Authorisation({[project.Id]: {projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {}}});
+    const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {} } });
     expect(await context.runAccessControl(auth, query)).toBe(true);
   });
 
@@ -139,13 +146,13 @@ describe("authorisation", () => {
     const pcrRecordType: Entites.RecordType = {
       id: "id_1",
       parent: pcr.id,
-      type: "type"
+      type: "type",
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
     const query = new GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery(project.Id, pcrItem.id);
 
-    const auth = new Authorisation({[project.Id]: {projectRoles: ProjectRole.ProjectManager, partnerRoles: {}}});
+    const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.ProjectManager, partnerRoles: {} } });
     expect(await context.runAccessControl(auth, query)).toBe(true);
   });
 
@@ -157,13 +164,13 @@ describe("authorisation", () => {
     const pcrRecordType: Entites.RecordType = {
       id: "id_1",
       parent: pcr.id,
-      type: "type"
+      type: "type",
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
     const query = new GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery(project.Id, pcrItem.id);
 
-    const auth = new Authorisation({[project.Id]: {projectRoles: ProjectRole.FinancialContact, partnerRoles: {}}});
+    const auth = new Authorisation({ [project.Id]: { projectRoles: ProjectRole.FinancialContact, partnerRoles: {} } });
     expect(await context.runAccessControl(auth, query)).toBe(false);
   });
 
@@ -176,13 +183,15 @@ describe("authorisation", () => {
     const pcrRecordType: Entites.RecordType = {
       id: "id_1",
       parent: pcr.id,
-      type: "type"
+      type: "type",
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
     const query = new GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery(project.Id, pcrItem.id);
 
-    const auth = new Authorisation({[project2.Id]: {projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {}}});
+    const auth = new Authorisation({
+      [project2.Id]: { projectRoles: ProjectRole.MonitoringOfficer, partnerRoles: {} },
+    });
     expect(await context.runAccessControl(auth, query)).toBe(false);
   });
 
@@ -195,13 +204,13 @@ describe("authorisation", () => {
     const pcrRecordType: Entites.RecordType = {
       id: "id_1",
       parent: pcr.id,
-      type: "type"
+      type: "type",
     };
     const pcrItem = context.testData.createPCRItem(pcr, pcrRecordType);
 
     const query = new GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery(project.Id, pcrItem.id);
 
-    const auth = new Authorisation({[project2.Id]: {projectRoles: ProjectRole.ProjectManager, partnerRoles: {}}});
+    const auth = new Authorisation({ [project2.Id]: { projectRoles: ProjectRole.ProjectManager, partnerRoles: {} } });
     expect(await context.runAccessControl(auth, query)).toBe(false);
   });
 });

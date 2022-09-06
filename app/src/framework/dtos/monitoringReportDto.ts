@@ -5,17 +5,17 @@ export interface MonitoringReportSummaryDto {
   headerId: string;
   status: MonitoringReportStatus;
   statusName: string;
-  startDate: Date|null;
-  endDate: Date|null;
+  startDate: Date | null;
+  endDate: Date | null;
   periodId: number;
-  lastUpdated: Date|null;
+  lastUpdated: Date | null;
 }
 
 export interface MonitoringReportQuestionDto {
-  responseId: string|null;
-  optionId: string|null;
+  responseId: string | null;
+  optionId: string | null;
   title: string;
-  comments: string|null;
+  comments: string | null;
   description: string;
   isScored: boolean;
   options: MonitoringReportOptionDto[];

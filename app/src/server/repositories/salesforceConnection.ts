@@ -1,5 +1,5 @@
 import jsforce from "jsforce";
-import jwt, {Algorithm} from "jsonwebtoken";
+import jwt, { Algorithm } from "jsonwebtoken";
 
 import { SalesforceTokenError } from "@server/repositories/errors";
 import { Cache } from "@server/features/common/cache";

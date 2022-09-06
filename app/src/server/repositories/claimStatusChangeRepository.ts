@@ -27,8 +27,8 @@ export interface IClaimStatusChangeRepository {
  */
 export class ClaimStatusChangeRepository
   extends SalesforceRepositoryBase<ISalesforceClaimStatusChange>
-  implements IClaimStatusChangeRepository {
-
+  implements IClaimStatusChangeRepository
+{
   protected readonly salesforceObjectName = "Acc_StatusChange__c";
   protected readonly salesforceFieldNames = [
     "Id",
@@ -46,7 +46,10 @@ export class ClaimStatusChangeRepository
   }
 
   getAllForClaim(partnerId: string, periodId: number): Promise<ISalesforceClaimStatusChange[]> {
-    return super.where(`Acc_Claim__r.Acc_ProjectParticipant__c = '${sss(partnerId)}' and Acc_Claim__r.Acc_ProjectPeriodNumber__c = ${sss(periodId)}`);
+    return super.where(
+      `Acc_Claim__r.Acc_ProjectParticipant__c = '${sss(partnerId)}' and Acc_Claim__r.Acc_ProjectPeriodNumber__c = ${sss(
+        periodId,
+      )}`,
+    );
   }
-
 }

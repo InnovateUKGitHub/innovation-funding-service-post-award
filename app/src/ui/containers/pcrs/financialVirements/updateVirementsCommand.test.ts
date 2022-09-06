@@ -1,4 +1,3 @@
-
 import { ValidationError, InActiveProjectError } from "@server/features/common";
 import { GetFinancialVirementQuery } from "@server/features/financialVirements/getFinancialVirementQuery";
 import { UpdateFinancialVirementCommand } from "@server/features/financialVirements/updateFinancialVirementCommand";
@@ -33,14 +32,19 @@ describe("UpdateFinancialVirementCommand", () => {
     expect(dto).not.toBeNull();
     expect(dto.partners.length).toBe(1);
 
-    const result = await testContext.runCommand(new UpdateFinancialVirementCommand(partner.projectId, pcrItem.pcrId, pcrItem.id, dto, true));
+    const result = await testContext.runCommand(
+      new UpdateFinancialVirementCommand(partner.projectId, pcrItem.pcrId, pcrItem.id, dto, true),
+    );
 
     expect(result).toBe(true);
   });
 
   it("updated a cost category newEligibleCosts value", async () => {
     const testContext = new TestContext();
-    const { testData, repositories: { financialVirements} } = testContext;
+    const {
+      testData,
+      repositories: { financialVirements },
+    } = testContext;
 
     const pcrItem = testData.createPCRItem();
     const partner = testData.createPartner();
@@ -55,7 +59,7 @@ describe("UpdateFinancialVirementCommand", () => {
       newEligibleCosts: 10,
       originalEligibleCosts: 10,
       originalCostsClaimedToDate: 0,
-      profileId: "profileId"
+      profileId: "profileId",
     });
 
     const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));
@@ -64,7 +68,9 @@ describe("UpdateFinancialVirementCommand", () => {
 
     expect(dto).not.toBeNull();
 
-    const result = await testContext.runCommand(new UpdateFinancialVirementCommand(partner.projectId, pcrItem.pcrId, pcrItem.id, dto, true));
+    const result = await testContext.runCommand(
+      new UpdateFinancialVirementCommand(partner.projectId, pcrItem.pcrId, pcrItem.id, dto, true),
+    );
 
     expect(result).toBe(true);
 
@@ -73,7 +79,10 @@ describe("UpdateFinancialVirementCommand", () => {
 
   it("updated the partner newEligibleCosts and newRemainingGrant value", async () => {
     const testContext = new TestContext();
-    const { testData, repositories: { financialVirements} } = testContext;
+    const {
+      testData,
+      repositories: { financialVirements },
+    } = testContext;
 
     const pcrItem = testData.createPCRItem();
     const partner = testData.createPartner();
@@ -89,7 +98,7 @@ describe("UpdateFinancialVirementCommand", () => {
       newEligibleCosts: 10,
       originalEligibleCosts: 10,
       originalCostsClaimedToDate: 0,
-      profileId: "profileId"
+      profileId: "profileId",
     });
 
     partner1.virements.push({
@@ -98,7 +107,7 @@ describe("UpdateFinancialVirementCommand", () => {
       newEligibleCosts: 100,
       originalEligibleCosts: 120,
       originalCostsClaimedToDate: 0,
-      profileId: "profileId"
+      profileId: "profileId",
     });
 
     const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));
@@ -106,21 +115,26 @@ describe("UpdateFinancialVirementCommand", () => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     dto.partners[0].virements.find(x => x.costCategoryId === costCategory1.id)!.newEligibleCosts = 160;
 
-    const result = await testContext.runCommand(new UpdateFinancialVirementCommand(partner.projectId, pcrItem.pcrId, pcrItem.id, dto, true));
+    const result = await testContext.runCommand(
+      new UpdateFinancialVirementCommand(partner.projectId, pcrItem.pcrId, pcrItem.id, dto, true),
+    );
 
     expect(result).toBe(true);
 
     const newEligibleCosts = 160 + 100;
     const costsClaimedToDate = dto.partners[0].virements.reduce((total, item) => total + item.costsClaimedToDate, 0);
     const newRemainingCosts = newEligibleCosts - costsClaimedToDate;
-    const newRemainingGrant = newRemainingCosts * dto.partners[0].newFundingLevel / 100;
+    const newRemainingGrant = (newRemainingCosts * dto.partners[0].newFundingLevel) / 100;
     expect(financialVirements.Items[0].newEligibleCosts).toBe(newEligibleCosts);
     expect(financialVirements.Items[0].newRemainingGrant).toBe(newRemainingGrant);
   });
 
   it("updates the partner newRemainingGrant value when the funding level is changed", async () => {
     const testContext = new TestContext();
-    const { testData, repositories: { financialVirements} } = testContext;
+    const {
+      testData,
+      repositories: { financialVirements },
+    } = testContext;
 
     const pcrItem = testData.createPCRItem();
     const partner = testData.createPartner();
@@ -129,7 +143,7 @@ describe("UpdateFinancialVirementCommand", () => {
     const costCategory2 = testData.createCostCategory();
 
     const partner1 = testData.createFinancialVirement(pcrItem, partner, {
-      newFundingLevel: 50
+      newFundingLevel: 50,
     });
 
     partner1.virements.push({
@@ -138,7 +152,7 @@ describe("UpdateFinancialVirementCommand", () => {
       newEligibleCosts: 10,
       originalEligibleCosts: 10,
       originalCostsClaimedToDate: 0,
-      profileId: "profileId"
+      profileId: "profileId",
     });
 
     partner1.virements.push({
@@ -147,7 +161,7 @@ describe("UpdateFinancialVirementCommand", () => {
       newEligibleCosts: 100,
       originalEligibleCosts: 120,
       originalCostsClaimedToDate: 0,
-      profileId: "profileId"
+      profileId: "profileId",
     });
 
     const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));
@@ -155,14 +169,16 @@ describe("UpdateFinancialVirementCommand", () => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     dto.partners[0].virements.find(x => x.costCategoryId === costCategory1.id)!.newEligibleCosts = 160;
     dto.partners[0].newFundingLevel = 60;
-    const result = await testContext.runCommand(new UpdateFinancialVirementCommand(partner.projectId, pcrItem.pcrId, pcrItem.id, dto, true));
+    const result = await testContext.runCommand(
+      new UpdateFinancialVirementCommand(partner.projectId, pcrItem.pcrId, pcrItem.id, dto, true),
+    );
 
     expect(result).toBe(true);
 
     const newEligibleCosts = 160 + 100;
     const costsClaimedToDate = dto.partners[0].virements.reduce((total, item) => total + item.costsClaimedToDate, 0);
     const newRemainingCosts = newEligibleCosts - costsClaimedToDate;
-    const newRemainingGrant = newRemainingCosts * 60 / 100;
+    const newRemainingGrant = (newRemainingCosts * 60) / 100;
     expect(financialVirements.Items[0].newEligibleCosts).toBe(newEligibleCosts);
     expect(financialVirements.Items[0].newRemainingGrant).toBe(newRemainingGrant);
   });
@@ -184,7 +200,7 @@ describe("UpdateFinancialVirementCommand", () => {
       newEligibleCosts: 0,
       originalEligibleCosts: 10,
       originalCostsClaimedToDate: 10,
-      profileId: "profileId"
+      profileId: "profileId",
     });
 
     const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));
@@ -192,6 +208,10 @@ describe("UpdateFinancialVirementCommand", () => {
     dto.partners[0].virements[0].newEligibleCosts = 100;
     dto.partners[0].virements[0].costsClaimedToDate = 101;
 
-    await expect(testContext.runCommand(new UpdateFinancialVirementCommand(partner.projectId, pcrItem.pcrId, pcrItem.id, dto, true))).rejects.toThrow(ValidationError);
+    await expect(
+      testContext.runCommand(
+        new UpdateFinancialVirementCommand(partner.projectId, pcrItem.pcrId, pcrItem.id, dto, true),
+      ),
+    ).rejects.toThrow(ValidationError);
   });
 });

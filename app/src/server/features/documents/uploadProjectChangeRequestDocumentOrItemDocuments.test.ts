@@ -13,13 +13,17 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     const recordType: Entites.RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
-      type: "Scope change"
+      type: "Scope change",
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
     const file = context.testData.createFile("This is some content", "testFile.txt");
 
-    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequestItem.id, {files: [file]});
+    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(
+      project.Id,
+      projectChangeRequestItem.id,
+      { files: [file] },
+    );
     const documentIds = await context.runCommand(command);
     const document = await context.repositories.documents.getDocumentMetadata(documentIds[0]);
 
@@ -34,7 +38,9 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
 
     const file = context.testData.createFile("This is some content", "testFile.txt");
 
-    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequest.id, {files: [file]});
+    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequest.id, {
+      files: [file],
+    });
     const documentIds = await context.runCommand(command);
     const document = await context.repositories.documents.getDocumentMetadata(documentIds[0]);
 
@@ -49,7 +55,9 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
 
     const file = context.testData.createFile("This is some content", "testFile.zip");
 
-    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequest.id, {files: [file]});
+    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequest.id, {
+      files: [file],
+    });
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
 
@@ -60,13 +68,19 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     const recordType: Entites.RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
-      type: "Scope change"
+      type: "Scope change",
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
-    const files = context.testData.range(5, (i) => context.testData.createFile(`File content ${i}`, `File name ${i}.txt`));
+    const files = context.testData.range(5, i =>
+      context.testData.createFile(`File content ${i}`, `File name ${i}.txt`),
+    );
 
-    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequestItem.id, {files});
+    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(
+      project.Id,
+      projectChangeRequestItem.id,
+      { files },
+    );
     const documentIds = await context.runCommand(command);
     expect(documentIds.length).toBe(5);
 
@@ -82,13 +96,17 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     const recordType: Entites.RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
-      type: "Scope change"
+      type: "Scope change",
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
     const file = context.testData.createFile("", "testFile.txt");
 
-    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequestItem.id, {files: [file]});
+    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(
+      project.Id,
+      projectChangeRequestItem.id,
+      { files: [file] },
+    );
     const result = context.runCommand(command);
 
     await expect(result).rejects.toThrow(ValidationError);
@@ -102,7 +120,7 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     const recordType: Entites.RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
-      type: "Scope change"
+      type: "Scope change",
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
@@ -110,7 +128,11 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
 
     const file = context.testData.createFile(tooLargeFileContent, "testFile.txt");
 
-    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequestItem.id, {files: [file]});
+    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(
+      project.Id,
+      projectChangeRequestItem.id,
+      { files: [file] },
+    );
     const result = context.runCommand(command);
 
     await expect(result).rejects.toThrow(ValidationError);
@@ -123,13 +145,19 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     const recordType: Entites.RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
-      type: "Scope change"
+      type: "Scope change",
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
-    const files = context.testData.range(context.config.options.maxUploadFileCount + 1, (i) => context.testData.createFile(`File content ${i}`, `File name ${i}`));
+    const files = context.testData.range(context.config.options.maxUploadFileCount + 1, i =>
+      context.testData.createFile(`File content ${i}`, `File name ${i}`),
+    );
 
-    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequestItem.id, {files});
+    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(
+      project.Id,
+      projectChangeRequestItem.id,
+      { files },
+    );
     const result = context.runCommand(command);
 
     await expect(result).rejects.toThrow(ValidationError);
@@ -142,13 +170,17 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     const recordType: Entites.RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
-      type: "Scope change"
+      type: "Scope change",
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
     const file = context.testData.createFile("Test file content", "");
 
-    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequestItem.id, {files: [file]});
+    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(
+      project.Id,
+      projectChangeRequestItem.id,
+      { files: [file] },
+    );
     const result = context.runCommand(command);
 
     await expect(result).rejects.toThrow(ValidationError);
@@ -161,11 +193,15 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     const recordType: Entites.RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
-      type: "Scope change"
+      type: "Scope change",
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
-    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequestItem.id, {files: []});
+    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(
+      project.Id,
+      projectChangeRequestItem.id,
+      { files: [] },
+    );
     const result = context.runCommand(command);
 
     await expect(result).rejects.toThrow(ValidationError);
@@ -178,12 +214,17 @@ describe("UploadProjectChangeRequestDocumentOrItemDocumentCommand", () => {
     const recordType: Entites.RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
-      type: "Scope change"
+      type: "Scope change",
     };
 
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
     const file = context.testData.createFile("Some other content", "fileName.csv");
-    const documentIds = await(context.runCommand(new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequestItem.id, {files: [file], description: DocumentDescription.DeMinimisDeclarationForm})));
+    const documentIds = await context.runCommand(
+      new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequestItem.id, {
+        files: [file],
+        description: DocumentDescription.DeMinimisDeclarationForm,
+      }),
+    );
     const documents = await Promise.all(documentIds.map(x => context.repositories.documents.getDocumentMetadata(x)));
     expect(documents.map(x => x.description)).toEqual([DocumentDescription.DeMinimisDeclarationForm]);
   });
@@ -197,19 +238,23 @@ describe("Access control", () => {
     const recordType: Entites.RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
-      type: "Scope change"
+      type: "Scope change",
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
     const file = context.testData.createFile("This is some content", "testFile.txt");
 
-    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequestItem.id, {files: [file]});
+    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(
+      project.Id,
+      projectChangeRequestItem.id,
+      { files: [file] },
+    );
 
     const auth = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.ProjectManager,
-        partnerRoles: {}
-      }
+        partnerRoles: {},
+      },
     });
 
     expect(await context.runAccessControl(auth, command)).toBe(true);
@@ -222,19 +267,23 @@ describe("Access control", () => {
     const recordType: Entites.RecordType = {
       id: "recordType_1",
       parent: projectChangeRequest.id,
-      type: "Scope change"
+      type: "Scope change",
     };
     const projectChangeRequestItem = context.testData.createPCRItem(projectChangeRequest, recordType);
 
     const file = context.testData.createFile("This is some content", "testFile.txt");
 
-    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(project.Id, projectChangeRequestItem.id, {files: [file]});
+    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(
+      project.Id,
+      projectChangeRequestItem.id,
+      { files: [file] },
+    );
 
     const auth = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.MonitoringOfficer | ProjectRole.FinancialContact,
-        partnerRoles: {}
-      }
+        partnerRoles: {},
+      },
     });
 
     expect(await context.runAccessControl(auth, command)).toBe(false);

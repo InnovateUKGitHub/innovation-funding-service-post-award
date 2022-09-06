@@ -47,7 +47,9 @@ describe("GetAvailableItemTypesQuery", () => {
         x => x.type === reallocateProjectCostsType?.typeName,
       );
 
-      const timeExtensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(x => x.type === PCRItemType.TimeExtension);
+      const timeExtensionType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
+        x => x.type === PCRItemType.TimeExtension,
+      );
       const changeProjectDuration = pcrRecordTypes.find(x => x.type === timeExtensionType?.typeName);
 
       context.testData.createPCRItem(projectPcr, reallocateSeveralPartnersProjectCost);

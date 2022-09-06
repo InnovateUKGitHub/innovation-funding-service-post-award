@@ -7,7 +7,12 @@ export class GetProjectStatusQuery extends QueryBase<ProjectStatusDto> {
     super();
   }
 
-  static readonly inactiveStatuses = [ProjectStatus.OnHold, ProjectStatus.Closed, ProjectStatus.Terminated, ProjectStatus.Unknown];
+  static readonly inactiveStatuses = [
+    ProjectStatus.OnHold,
+    ProjectStatus.Closed,
+    ProjectStatus.Terminated,
+    ProjectStatus.Unknown,
+  ];
 
   async run(context: IContext): Promise<ProjectStatusDto> {
     const { status } = await context.runQuery(new GetByIdQuery(this.projectId));

@@ -14,12 +14,7 @@ describe("calculateOverheadCell()", () => {
 
   test("should recalculate value", () => {
     const stubOverheadRate = 10;
-    const overheadCalculation = calculateOverheadCell(
-      stubOverheadRate,
-      stubCell.costCategoryId,
-      5,
-      stubCell
-    );
+    const overheadCalculation = calculateOverheadCell(stubOverheadRate, stubCell.costCategoryId, 5, stubCell);
 
     const expectedResult = stubCell.value / stubOverheadRate;
 
@@ -27,12 +22,7 @@ describe("calculateOverheadCell()", () => {
   });
 
   test("should return original value", () => {
-    const overheadCalculation = calculateOverheadCell(
-      10,
-      "no-matching-labourCategoryId",
-      5,
-      stubCell
-    );
+    const overheadCalculation = calculateOverheadCell(10, "no-matching-labourCategoryId", 5, stubCell);
 
     expect(overheadCalculation).toBe(5);
   });

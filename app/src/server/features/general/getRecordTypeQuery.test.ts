@@ -9,9 +9,9 @@ describe("GetAllRecordTypesQuery", () => {
     const parent = "Parent";
     const type = "Type";
 
-    const expected = context.testData.createRecordType({parent, type});
+    const expected = context.testData.createRecordType({ parent, type });
 
-    const query  =  new GetRecordTypeQuery(parent, type);
+    const query = new GetRecordTypeQuery(parent, type);
     const result = await context.runQuery(query);
 
     expect(result).toBe(expected);
@@ -22,9 +22,9 @@ describe("GetAllRecordTypesQuery", () => {
 
     const parent = "Parent";
 
-    const data = context.testData.range(3, i => context.testData.createRecordType({parent, type : "Type" + i }));
+    const data = context.testData.range(3, i => context.testData.createRecordType({ parent, type: "Type" + i }));
 
-    const query  =  new GetRecordTypeQuery(parent, "Type2");
+    const query = new GetRecordTypeQuery(parent, "Type2");
     const result = await context.runQuery(query);
 
     expect(result).toBe(data[1]);
@@ -35,9 +35,9 @@ describe("GetAllRecordTypesQuery", () => {
 
     const type = "Type";
 
-    const data = context.testData.range(3, i => context.testData.createRecordType({parent : "Parent" + i, type }));
+    const data = context.testData.range(3, i => context.testData.createRecordType({ parent: "Parent" + i, type }));
 
-    const query  =  new GetRecordTypeQuery("Parent3", type);
+    const query = new GetRecordTypeQuery("Parent3", type);
     const result = await context.runQuery(query);
 
     expect(result).toBe(data[2]);

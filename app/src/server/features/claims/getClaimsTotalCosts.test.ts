@@ -62,7 +62,7 @@ describe("GetClaimsTotalCosts", () => {
       const result = await context.runQuery(query);
 
       const expectedTotalCosts = isNonFecProject ? 3600 : 2600;
-      const expectedTotalCostsPaid = isNonFecProject ? (expectedValue + nonFecClaimTotal) : expectedValue;
+      const expectedTotalCostsPaid = isNonFecProject ? expectedValue + nonFecClaimTotal : expectedValue;
 
       expect(result.totalCostsClaimed).toBe(expectedTotalCosts);
       expect(result.totalCostsPaid).toBe(expectedTotalCostsPaid);

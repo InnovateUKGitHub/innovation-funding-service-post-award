@@ -50,10 +50,10 @@ describe("<ErrorSummary />", () => {
     describe("when authenticated", () => {
       type ArrayOfErrorCodes = ErrorSummaryProps["code"][];
       const availableErrorCodes = Object.keys(ErrorCode).filter(key => typeof ErrorCode[key as any] === "number");
-      const allAuthenticatedErrors = (availableErrorCodes.filter(
+      const allAuthenticatedErrors = availableErrorCodes.filter(
         // TODO: We coerce the error code to a "keyof ErrorCode", then check against what we don't want. Code open to improvement
         key => (ErrorCode[key as any] as any) !== ErrorCode.UNAUTHENTICATED_ERROR,
-      ) as unknown) as ArrayOfErrorCodes;
+      ) as unknown as ArrayOfErrorCodes;
 
       describe("with error codes", () => {
         test.each(allAuthenticatedErrors)("with %s", errorKey => {

@@ -5,9 +5,7 @@ import { dateComparator } from "@framework/util/comparator";
 import { mapMonitoringReportStatus } from "./mapMonitoringReportStatus";
 
 export class GetMonitoringReportsForProject extends QueryBase<MonitoringReportSummaryDto[]> {
-  constructor(
-    private readonly projectId: string,
-  ) {
+  constructor(private readonly projectId: string) {
     super();
   }
 
@@ -17,21 +15,22 @@ export class GetMonitoringReportsForProject extends QueryBase<MonitoringReportSu
 
   protected async run(context: IContext): Promise<MonitoringReportSummaryDto[]> {
     const headers = await context.repositories.monitoringReportHeader.getAllForProject(this.projectId);
-    return headers.map<MonitoringReportSummaryDto>(x => ({
-      headerId: x.Id,
-      projectId: x.Acc_Project__c,
-      status: mapMonitoringReportStatus(x.Acc_MonitoringReportStatus__c),
-      statusName: x.MonitoringReportStatusName,
-      startDate: context.clock.parseOptionalSalesforceDate(x.Acc_PeriodStartDate__c),
-      endDate: context.clock.parseOptionalSalesforceDate(x.Acc_PeriodEndDate__c),
-      periodId: x.Acc_ProjectPeriodNumber__c,
-      lastUpdated: context.clock.parseOptionalSalesforceDateTime(x.LastModifiedDate)
-    }))
-    .sort((a, b) => {
-      if (b.periodId !== a.periodId) {
-        return b.periodId - a.periodId;
-      }
-      return dateComparator(b.lastUpdated as Date, a.lastUpdated as Date);
-    });
+    return headers
+      .map<MonitoringReportSummaryDto>(x => ({
+        headerId: x.Id,
+        projectId: x.Acc_Project__c,
+        status: mapMonitoringReportStatus(x.Acc_MonitoringReportStatus__c),
+        statusName: x.MonitoringReportStatusName,
+        startDate: context.clock.parseOptionalSalesforceDate(x.Acc_PeriodStartDate__c),
+        endDate: context.clock.parseOptionalSalesforceDate(x.Acc_PeriodEndDate__c),
+        periodId: x.Acc_ProjectPeriodNumber__c,
+        lastUpdated: context.clock.parseOptionalSalesforceDateTime(x.LastModifiedDate),
+      }))
+      .sort((a, b) => {
+        if (b.periodId !== a.periodId) {
+          return b.periodId - a.periodId;
+        }
+        return dateComparator(b.lastUpdated as Date, a.lastUpdated as Date);
+      });
   }
 }

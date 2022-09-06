@@ -26,7 +26,7 @@ export class GetAllForProjectQuery extends QueryBase<ProjectContactDto[]> {
       roleName: x.RoleName,
       email: x.Acc_EmailOfSFContact__c,
       accountId: x.Acc_AccountId__c,
-      projectId: x.Acc_ProjectId__c
+      projectId: x.Acc_ProjectId__c,
     };
   }
 }

@@ -1,6 +1,13 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
-import { Authorisation, CostCategoryVirementDto, FinancialVirementDto, IContext, PartnerVirementsDto, ProjectRole } from "@framework/types";
+import {
+  Authorisation,
+  CostCategoryVirementDto,
+  FinancialVirementDto,
+  IContext,
+  PartnerVirementsDto,
+  ProjectRole,
+} from "@framework/types";
 import { flatten } from "@framework/util/arrayHelpers";
 import { ISalesforceFinancialVirement } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
@@ -8,12 +15,18 @@ import { CostCategoryFinancialVirement, PartnerFinancialVirement } from "@framew
 import { FinancialVirementDtoValidator } from "@ui/validators/financialVirementDtoValidator";
 import {
   calculateNewEligibleCosts,
-  calculateNewRemainingGrant
+  calculateNewRemainingGrant,
 } from "@server/features/financialVirements/financialVirementsCalculations";
 import { GetProjectStatusQuery } from "../projects";
 
 export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
-  constructor(private readonly projectId: string, private readonly pcrId: string, private readonly pcrItemId: string, private readonly data: FinancialVirementDto, private readonly submit: boolean) {
+  constructor(
+    private readonly projectId: string,
+    private readonly pcrId: string,
+    private readonly pcrItemId: string,
+    private readonly data: FinancialVirementDto,
+    private readonly submit: boolean,
+  ) {
     super();
   }
 
@@ -36,7 +49,15 @@ export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
     }
 
     const updates: Updatable<ISalesforceFinancialVirement>[] = [];
-    const flattenedCostCategoryDtos = flatten(this.data.partners.map(partner => partner.virements.map(virement => ({ partnerId: partner.partnerId, costCategoryId: virement.costCategoryId, virement }))));
+    const flattenedCostCategoryDtos = flatten(
+      this.data.partners.map(partner =>
+        partner.virements.map(virement => ({
+          partnerId: partner.partnerId,
+          costCategoryId: virement.costCategoryId,
+          virement,
+        })),
+      ),
+    );
 
     existingVirements.forEach(partner => {
       const partnerDto = this.data.partners.find(x => x.partnerId === partner.partnerId);
@@ -49,7 +70,9 @@ export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
       }
 
       partner.virements.forEach(virement => {
-        const costCategoryDto = flattenedCostCategoryDtos.find(x => x.partnerId === partner.partnerId && x.costCategoryId === virement.costCategoryId);
+        const costCategoryDto = flattenedCostCategoryDtos.find(
+          x => x.partnerId === partner.partnerId && x.costCategoryId === virement.costCategoryId,
+        );
         if (costCategoryDto) {
           const update = this.getCostCategoryUpdate(virement, costCategoryDto.virement);
           if (update) {
@@ -66,12 +89,15 @@ export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
     return true;
   }
 
-  private getCostCategoryUpdate(original: CostCategoryFinancialVirement, dto: CostCategoryVirementDto): Updatable<ISalesforceFinancialVirement> | null {
+  private getCostCategoryUpdate(
+    original: CostCategoryFinancialVirement,
+    dto: CostCategoryVirementDto,
+  ): Updatable<ISalesforceFinancialVirement> | null {
     let isUpdated = false;
 
     const update: Updatable<ISalesforceFinancialVirement> = {
       Id: original.id,
-      Acc_Profile__c: original.profileId
+      Acc_Profile__c: original.profileId,
     };
 
     if (original.newEligibleCosts !== dto.newEligibleCosts) {
@@ -82,7 +108,10 @@ export class UpdateFinancialVirementCommand extends CommandBase<boolean> {
     return isUpdated ? update : null;
   }
 
-  private getPartnerUpdate(original: PartnerFinancialVirement, dto: PartnerVirementsDto): Updatable<ISalesforceFinancialVirement> | null {
+  private getPartnerUpdate(
+    original: PartnerFinancialVirement,
+    dto: PartnerVirementsDto,
+  ): Updatable<ISalesforceFinancialVirement> | null {
     let isUpdated = false;
 
     const update: Updatable<ISalesforceFinancialVirement> = {

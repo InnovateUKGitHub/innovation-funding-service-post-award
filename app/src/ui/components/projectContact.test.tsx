@@ -50,7 +50,7 @@ describe("ProjectMember", () => {
       expect(container.firstChild).toBeNull();
     });
 
-    it("with member's name ", () => {
+    it("with member's name", () => {
       const { queryByText } = setup({
         contact: stubContact,
         partner: stubPartner,
@@ -61,7 +61,7 @@ describe("ProjectMember", () => {
       expect(contactName).toBeInTheDocument();
     });
 
-    it("with member's email ", () => {
+    it("with member's email", () => {
       const { queryByText } = setup({ contact: stubContact });
 
       const contactEmail = queryByText(stubContact.email);

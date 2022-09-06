@@ -14,9 +14,9 @@ export const summaryListGuide: IGuide = {
         </SummaryList>`,
       render: () => (
         <SummaryList qa="list-example">
-          <SummaryListItem label="Name" content="Sarah Philips" action={<a href="#Name">Change</a>} qa="dob"/>
+          <SummaryListItem label="Name" content="Sarah Philips" action={<a href="#Name">Change</a>} qa="dob" />
         </SummaryList>
-      )
+      ),
     },
     {
       name: "Single, with no action",
@@ -27,9 +27,9 @@ export const summaryListGuide: IGuide = {
         </SummaryList>`,
       render: () => (
         <SummaryList qa="list-example">
-          <SummaryListItem label="Date of birth" content="5 January 1978" qa="dob"/>
+          <SummaryListItem label="Date of birth" content="5 January 1978" qa="dob" />
         </SummaryList>
-      )
+      ),
     },
     {
       name: "Single, with no action, no borders",
@@ -40,9 +40,9 @@ export const summaryListGuide: IGuide = {
         </SummaryList>`,
       render: () => (
         <SummaryList noBorders qa="list-example">
-          <SummaryListItem label="Contact details" content="07700 900457" qa="contact"/>
+          <SummaryListItem label="Contact details" content="07700 900457" qa="contact" />
         </SummaryList>
-      )
+      ),
     },
     {
       name: "Single, with multiple lines of information",
@@ -54,9 +54,13 @@ export const summaryListGuide: IGuide = {
       `,
       render: () => (
         <SummaryList qa="list-example">
-          <SummaryListItem label="Contact details" content={<LineBreakList items={["Item 1", "Item 2", "Item 3"]}/>} qa="contact"/>
+          <SummaryListItem
+            label="Contact details"
+            content={<LineBreakList items={["Item 1", "Item 2", "Item 3"]} />}
+            qa="contact"
+          />
         </SummaryList>
-      )
+      ),
     },
     {
       name: "Multiple, with actions",
@@ -69,11 +73,26 @@ export const summaryListGuide: IGuide = {
         </SummaryList>`,
       render: () => (
         <SummaryList qa="list-example">
-          <SummaryListItem label="Name" content="Sarah Philips" qa="name" action={<a href="#ChangeName">Change name</a>} />
-          <SummaryListItem label="Date of birth" content="5 January 1978" qa="dob" action={<a href="#ChangeBirth">Change date of birth</a>} />
-          <SummaryListItem label="Contact information" content="72 Guild Street" qa="contact" action={<a href="#ChangeContact">Change contact information</a>} />
+          <SummaryListItem
+            label="Name"
+            content="Sarah Philips"
+            qa="name"
+            action={<a href="#ChangeName">Change name</a>}
+          />
+          <SummaryListItem
+            label="Date of birth"
+            content="5 January 1978"
+            qa="dob"
+            action={<a href="#ChangeBirth">Change date of birth</a>}
+          />
+          <SummaryListItem
+            label="Contact information"
+            content="72 Guild Street"
+            qa="contact"
+            action={<a href="#ChangeContact">Change contact information</a>}
+          />
         </SummaryList>
-      )
+      ),
     },
-  ]
+  ],
 };

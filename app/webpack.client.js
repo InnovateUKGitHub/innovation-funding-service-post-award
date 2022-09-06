@@ -16,7 +16,10 @@ const getPath = (relativePath, replacementPath = "") => path.resolve(__dirname, 
  * @param {string} fileName
  * @returns {[RegExp, string]}
  */
-const getNormalReplacementParams = fileName => [new RegExp(fileName), getPath( "src/client/replacement-files", fileName)];
+const getNormalReplacementParams = fileName => [
+  new RegExp(fileName),
+  getPath("src/client/replacement-files", fileName),
+];
 
 module.exports = function pack(env) {
   if (env !== "production" && env !== "development") {

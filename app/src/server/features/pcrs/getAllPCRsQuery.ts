@@ -11,22 +11,27 @@ export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
   }
 
   public async accessControl(auth: Authorisation) {
-    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager, ProjectRole.FinancialContact);
+    return auth
+      .forProject(this.projectId)
+      .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager, ProjectRole.FinancialContact);
   }
 
   protected async run(context: IContext): Promise<PCRSummaryDto[]> {
     const pcrItemTypes = await context.runQuery(new GetPCRItemTypesQuery(this.projectId));
     const data = await context.repositories.projectChangeRequests.getAllByProjectId(this.projectId);
-    data.sort((a,b) => numberComparator(a.number,b.number) * -1);
+    data.sort((a, b) => numberComparator(a.number, b.number) * -1);
     return data.map(x => this.map(x, pcrItemTypes));
   }
 
   private map(pcr: ProjectChangeRequestEntity, pcrItemTypes: PCRItemTypeDto[]): PCRSummaryDto {
     // find the item types to include
     const filteredItemTypes = pcrItemTypes
-      .map(pcrItemType => ({ itemType: pcrItemType, item: pcr.items.find((x => x.recordTypeId === pcrItemType.recordTypeId))}))
+      .map(pcrItemType => ({
+        itemType: pcrItemType,
+        item: pcr.items.find(x => x.recordTypeId === pcrItemType.recordTypeId),
+      }))
       .filter(x => !!x.item)
-      .map(x => ({itemType : x.itemType, item : x.item}));
+      .map(x => ({ itemType: x.itemType, item: x.item }));
 
     return {
       id: pcr.id,
@@ -39,8 +44,8 @@ export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
       items: filteredItemTypes.map(x => ({
         type: x.itemType.type,
         typeName: x.itemType.displayName,
-        shortName: x.item?.shortName || x.itemType.displayName
-      }))
+        shortName: x.item?.shortName || x.itemType.displayName,
+      })),
     };
   }
 }

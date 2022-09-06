@@ -39,22 +39,22 @@ export class TestData {
         Name: "Achtung, Achtung",
         Acc_Message__c: "Würde der Besitzer eines roten Fiat-Pandas bitte die Rezeption kontaktieren",
         Acc_StartDate__c: startDate,
-        Acc_EndDate__c: endDate
+        Acc_EndDate__c: endDate,
       },
       {
         Id: "2",
         Name: "Achtung, Achtung",
         Acc_Message__c: "Der Verzehr eigener Speisen in der Mensa ist untersagt",
         Acc_StartDate__c: startDate,
-        Acc_EndDate__c: endDate
+        Acc_EndDate__c: endDate,
       },
       {
         Id: "3",
         Name: "Achtung, Achtung",
         Acc_Message__c: "Bitte halten Sie wegen des Virus die soziale Distanz ein",
         Acc_StartDate__c: startDate,
-        Acc_EndDate__c: endDate
-      }
+        Acc_EndDate__c: endDate,
+      },
     ];
 
     this.repositories.broadcast.setItems(broadcasts);

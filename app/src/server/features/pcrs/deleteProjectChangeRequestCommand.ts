@@ -14,7 +14,7 @@ export class DeleteProjectChangeRequestCommand extends CommandBase<boolean> {
   protected async run(context: IContext): Promise<boolean> {
     const existing = await context.repositories.projectChangeRequests.getById(this.projectId, this.pcrId);
 
-    if(existing.status !== PCRStatus.Draft) {
+    if (existing.status !== PCRStatus.Draft) {
       throw new BadRequestError("Can only delete draft project change requests");
     }
     await context.repositories.projectChangeRequests.delete(existing);

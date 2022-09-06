@@ -13,15 +13,13 @@ export interface IContentDocumentLinkRepository {
   insertContentDocumentLink(contentDocumentId: string, linkedEntityId: string): Promise<string>;
 }
 
-export class ContentDocumentLinkRepository extends SalesforceRepositoryBase<ISalesforceContentDocumentLink> implements IContentDocumentLinkRepository {
-
+export class ContentDocumentLinkRepository
+  extends SalesforceRepositoryBase<ISalesforceContentDocumentLink>
+  implements IContentDocumentLinkRepository
+{
   protected readonly salesforceObjectName = "ContentDocumentLink";
 
-  protected readonly salesforceFieldNames = [
-    "Id",
-    "ContentDocumentId",
-    "LinkedEntityId"
-  ];
+  protected readonly salesforceFieldNames = ["Id", "ContentDocumentId", "LinkedEntityId"];
 
   public getAllForEntity(entityId: string): Promise<ISalesforceContentDocumentLink[]> {
     return super.where({ LinkedEntityId: entityId });
@@ -35,7 +33,7 @@ export class ContentDocumentLinkRepository extends SalesforceRepositoryBase<ISal
     return super.insertItem({
       ContentDocumentId: contentDocumentId,
       LinkedEntityId: linkedEntityId,
-      ShareType: "V"
+      ShareType: "V",
     });
   }
 }

@@ -3,9 +3,7 @@ import { ILogger } from "@server/features/common/logger";
 import { PcrSpendProfileEntity, PcrSpendProfileEntityForCreate } from "@framework/entities/pcrSpendProfile";
 import { SalesforcePcrSpendProfileMapper } from "@server/repositories/mappers/pcrSpendProfileMapper";
 import { IPicklistEntry } from "@framework/types";
-import SalesforceRepositoryBase, {
-  Insertable
-} from "./salesforceRepositoryBase";
+import SalesforceRepositoryBase, { Insertable } from "./salesforceRepositoryBase";
 
 export interface ISalesforcePcrSpendProfile {
   Id: string;
@@ -39,7 +37,7 @@ export interface ISalesforcePcrSpendProfile {
   Acc_RoleAndDescription__c?: string;
 
   // Capital Usage
-  Acc_NewOrExisting__c: string|null;
+  Acc_NewOrExisting__c: string | null;
   NewOrExistingLabel?: string;
   // Coming back as a string but should be a number. Handled in the entity mapper.
   Acc_DepreciationPeriod__c?: number;
@@ -62,8 +60,15 @@ export interface IPcrSpendProfileRepository {
   getOverheadRateOptions(): Promise<IPicklistEntry[]>;
 }
 
-export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesforcePcrSpendProfile> implements IPcrSpendProfileRepository {
-  constructor(private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>, getSalesforceConnection: () => Promise<Connection>, logger: ILogger) {
+export class PcrSpendProfileRepository
+  extends SalesforceRepositoryBase<ISalesforcePcrSpendProfile>
+  implements IPcrSpendProfileRepository
+{
+  constructor(
+    private readonly getRecordTypeId: (objectName: string, recordType: string) => Promise<string>,
+    getSalesforceConnection: () => Promise<Connection>,
+    logger: ILogger,
+  ) {
     super(getSalesforceConnection, logger);
   }
 
@@ -107,7 +112,7 @@ export class PcrSpendProfileRepository extends SalesforceRepositoryBase<ISalesfo
     const pcrRecordTypeId = await this.getRecordTypeId(this.salesforceObjectName, this.recordType);
     const records = await super.where({
       Acc_ProjectChangeRequest__c: pcrItemId,
-      RecordTypeId: pcrRecordTypeId
+      RecordTypeId: pcrRecordTypeId,
     });
     const mapper = new SalesforcePcrSpendProfileMapper(pcrRecordTypeId);
     return records.map(x => mapper.map(x));

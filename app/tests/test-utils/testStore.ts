@@ -13,7 +13,6 @@ import getRootState from "@ui/redux/stores/getRootState";
 import { TestContext } from "./testContextProvider";
 
 export class TestStore {
-
   public getState: () => RootState;
   public dispatch: (action: RootActionsOrThunk) => void;
 
@@ -43,12 +42,18 @@ export class TestStore {
     return partner;
   }
 
-  public async createClaim(partner: Entities.Partner, periodId?: number, update?: (item: Repositories.ISalesforceClaim) => void) {
+  public async createClaim(
+    partner: Entities.Partner,
+    periodId?: number,
+    update?: (item: Repositories.ISalesforceClaim) => void,
+  ) {
     const claim = this.context.testData.createClaim(partner, periodId, update);
     const partnerClaims = await this.context.runQuery(new GetAllClaimsForPartner(partner.id));
     const projectClaims = await this.context.runQuery(new GetAllClaimsForProjectQuery(partner.projectId));
     this.dispatch(dataLoadAction(storeKeys.getPartnerKey(partner.id), "claims", LoadingStatus.Done, partnerClaims));
-    this.dispatch(dataLoadAction(storeKeys.getProjectKey(partner.projectId), "claims", LoadingStatus.Done, projectClaims));
+    this.dispatch(
+      dataLoadAction(storeKeys.getProjectKey(partner.projectId), "claims", LoadingStatus.Done, projectClaims),
+    );
     return claim;
   }
 }

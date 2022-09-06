@@ -58,11 +58,7 @@ export class UploadClaimDocumentCommand extends CommandDocumentBase<string> {
   }
 
   protected async run(context: IContext): Promise<string> {
-    const result = new DocumentUploadDtoValidator(
-      this.document,
-      context.config.options,
-      this.showValidationErrors,
-    );
+    const result = new DocumentUploadDtoValidator(this.document, context.config.options, this.showValidationErrors);
 
     if (!result.isValid) {
       throw new ValidationError(result);

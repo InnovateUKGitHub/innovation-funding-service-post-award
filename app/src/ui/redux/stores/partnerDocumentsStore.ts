@@ -10,33 +10,55 @@ export class PartnerDocumentsStore extends DocumentsStoreBase {
     return storeKeys.getPartnerKey(partnerId);
   }
   public getPartnerDocuments(projectId: string, partnerId: string) {
-    return this.getData("documents", this.getKey(partnerId), p => apiClient.documents.getPartnerDocuments({ projectId, partnerId, ...p }));
+    return this.getData("documents", this.getKey(partnerId), p =>
+      apiClient.documents.getPartnerDocuments({ projectId, partnerId, ...p }),
+    );
   }
   public getPartnerDocumentEditor(partnerId: string, init?: (dto: MultipleDocumentUploadDto) => void) {
-    return this.getEditor("multipleDocuments", this.getKey(partnerId), () => Pending.done<MultipleDocumentUploadDto>({ files: [] }), init, (dto) => this.validateMultipleDocumentsDto(dto, false, true));
+    return this.getEditor(
+      "multipleDocuments",
+      this.getKey(partnerId),
+      () => Pending.done<MultipleDocumentUploadDto>({ files: [] }),
+      init,
+      dto => this.validateMultipleDocumentsDto(dto, false, true),
+    );
   }
 
-  public updatePartnerDocumentsEditor(saving: boolean, projectId: string, partnerId: string, dto: MultipleDocumentUploadDto, message: string, onComplete?: () => void) {
+  public updatePartnerDocumentsEditor(
+    saving: boolean,
+    projectId: string,
+    partnerId: string,
+    dto: MultipleDocumentUploadDto,
+    message: string,
+    onComplete?: () => void,
+  ) {
     this.updateMultiple(
       saving,
       true,
       this.getKey(partnerId),
       dto,
-      (p) => apiClient.documents.uploadPartnerDocument({ projectId, partnerId, ...p }),
+      p => apiClient.documents.uploadPartnerDocument({ projectId, partnerId, ...p }),
       message,
-      onComplete
+      onComplete,
     );
   }
 
-  public deletePartnerDocumentsEditor(projectId: string, partnerId: string, dto: MultipleDocumentUploadDto, document: DocumentSummaryDto, message: string, onComplete?: () => void) {
+  public deletePartnerDocumentsEditor(
+    projectId: string,
+    partnerId: string,
+    dto: MultipleDocumentUploadDto,
+    document: DocumentSummaryDto,
+    message: string,
+    onComplete?: () => void,
+  ) {
     const key = this.getKey(partnerId);
     this.deleteEditor(
       "multipleDocuments",
       key,
       dto,
       () => this.validateMultipleDocumentsDto(dto, false, true),
-      (p) => apiClient.documents.deletePartnerDocument({ projectId, partnerId, documentId: document.id, ...p }),
-      () => this.afterUpdate(key, message, onComplete)
+      p => apiClient.documents.deletePartnerDocument({ projectId, partnerId, documentId: document.id, ...p }),
+      () => this.afterUpdate(key, message, onComplete),
     );
   }
 }

@@ -7,7 +7,6 @@ import { LoansOverviewContainer, LoansOverviewContainerProps } from "@ui/contain
 import { Pending } from "@shared/pending";
 import { LoanStatus } from "@framework/entities";
 
-
 describe("<LoansOverviewContainer />", () => {
   const stubLink: ILinkInfo = {
     path: "stub-path",
@@ -20,14 +19,14 @@ describe("<LoansOverviewContainer />", () => {
 
   const defaultProps = {
     projectId: "stub-projectId",
-    routes: ({
-      projectOverview: ({
+    routes: {
+      projectOverview: {
         getLink: stubProjectOverviewLink.mockReturnValue(stubLink),
-      } as unknown) as ILinkInfo,
-      loansRequest: ({
+      } as unknown as ILinkInfo,
+      loansRequest: {
         getLink: stubProjectOverviewLink.mockReturnValue(stubLink),
-      } as unknown) as ILinkInfo,
-    } as unknown) as LoansOverviewContainerProps["routes"],
+      } as unknown as ILinkInfo,
+    } as unknown as LoansOverviewContainerProps["routes"],
   } as LoansOverviewContainerProps;
 
   const stubContent = {
@@ -65,14 +64,14 @@ describe("<LoansOverviewContainer />", () => {
 
   describe("@returns", () => {
     test("with loading state", () => {
-      const storeWithLoadingData = ({
+      const storeWithLoadingData = {
         loans: {
           getAll: jest.fn().mockReturnValue(new Pending(LoadingStatus.Loading)),
         },
         projects: {
           getById: jest.fn().mockReturnValue(new Pending(LoadingStatus.Loading)),
         },
-      } as unknown) as TestBedStore;
+      } as unknown as TestBedStore;
 
       const { queryByText } = setup(undefined, storeWithLoadingData);
 
@@ -82,14 +81,14 @@ describe("<LoansOverviewContainer />", () => {
     });
 
     test("with reject state", () => {
-      const storeWithErrorData = ({
+      const storeWithErrorData = {
         loans: {
           getAll: jest.fn().mockReturnValue(new Pending(LoadingStatus.Failed)),
         },
         projects: {
           getById: jest.fn().mockReturnValue(new Pending(LoadingStatus.Failed)),
         },
-      } as unknown) as TestBedStore;
+      } as unknown as TestBedStore;
 
       const { queryByText } = setup(undefined, storeWithErrorData);
 
@@ -101,14 +100,14 @@ describe("<LoansOverviewContainer />", () => {
     describe("with resolved state", () => {
       describe("with loading message", () => {
         test("with no data", () => {
-          const storeWithResolvedLoadingData = ({
+          const storeWithResolvedLoadingData = {
             loans: {
               getAll: jest.fn().mockReturnValue(new Pending<LoanDto[]>(LoadingStatus.Loading, [])),
             },
             projects: {
               getById: jest.fn().mockReturnValue(new Pending(LoadingStatus.Loading, {})),
             },
-          } as unknown) as TestBedStore;
+          } as unknown as TestBedStore;
 
           const { queryByText } = setup(undefined, storeWithResolvedLoadingData);
 
@@ -119,16 +118,14 @@ describe("<LoansOverviewContainer />", () => {
       });
 
       test("renders correctly", () => {
-        const storeWithResolvedData = ({
+        const storeWithResolvedData = {
           loans: {
-            getAll: jest.fn().mockReturnValue(
-              new Pending<LoanDto[]>(LoadingStatus.Done, [stubApprovedLoan]),
-            ),
+            getAll: jest.fn().mockReturnValue(new Pending<LoanDto[]>(LoadingStatus.Done, [stubApprovedLoan])),
           },
           projects: {
             getById: jest.fn().mockReturnValue(Pending.done({})),
           },
-        } as unknown) as TestBedStore;
+        } as unknown as TestBedStore;
 
         const { queryByTestId } = setup(undefined, storeWithResolvedData);
 
@@ -139,14 +136,14 @@ describe("<LoansOverviewContainer />", () => {
 
       describe("with intro message", () => {
         test("when another loan is available", () => {
-          const storeWithResolvedData = ({
+          const storeWithResolvedData = {
             loans: {
               getAll: jest.fn().mockReturnValue(Pending.done([stubApprovedLoan, stubRequestedLoan, stubPlannedLoan])),
             },
             projects: {
               getById: jest.fn().mockReturnValue(Pending.done({})),
             },
-          } as unknown) as TestBedStore;
+          } as unknown as TestBedStore;
 
           const { queryByText } = setup(undefined, storeWithResolvedData);
 
@@ -156,14 +153,14 @@ describe("<LoansOverviewContainer />", () => {
         });
 
         test("when requested the final loan", () => {
-          const storeWithResolvedData = ({
+          const storeWithResolvedData = {
             loans: {
               getAll: jest.fn().mockReturnValue(Pending.done([stubApprovedLoan, stubRequestedLoan])),
             },
             projects: {
               getById: jest.fn().mockReturnValue(Pending.done({})),
             },
-          } as unknown) as TestBedStore;
+          } as unknown as TestBedStore;
 
           const { queryByText } = setup(undefined, storeWithResolvedData);
 

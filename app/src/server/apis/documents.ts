@@ -34,25 +34,55 @@ import { GetClaimDetailDocumentsQuery } from "../features/documents/getClaimDeta
 import { GetClaimDetailDocumentQuery } from "../features/documents/getClaimDetailDocument";
 
 export interface IDocumentsApi {
-  getClaimDocuments: (params: ApiParams<{ projectId: string; partnerId: string; periodId: number; description?: DocumentDescription }>) => Promise<DocumentSummaryDto[]>;
+  getClaimDocuments: (
+    params: ApiParams<{ projectId: string; partnerId: string; periodId: number; description?: DocumentDescription }>,
+  ) => Promise<DocumentSummaryDto[]>;
   getClaimDetailDocuments: (params: ApiParams<{ claimDetailKey: ClaimDetailKey }>) => Promise<DocumentSummaryDto[]>;
-  getProjectChangeRequestDocumentsOrItemDocuments: (params: ApiParams<{ projectId: string; projectChangeRequestIdOrItemId: string }>) => Promise<DocumentSummaryDto[]>;
+  getProjectChangeRequestDocumentsOrItemDocuments: (
+    params: ApiParams<{ projectId: string; projectChangeRequestIdOrItemId: string }>,
+  ) => Promise<DocumentSummaryDto[]>;
   getProjectDocuments: (params: ApiParams<{ projectId: string }>) => Promise<DocumentSummaryDto[]>;
   getLoanDocuments: (params: ApiParams<{ projectId: string; loanId: string }>) => Promise<DocumentSummaryDto[]>;
   getPartnerDocuments: (params: ApiParams<{ projectId: string; partnerId: string }>) => Promise<DocumentSummaryDto[]>;
-  uploadClaimDetailDocuments: (params: ApiParams<{ claimDetailKey: ClaimDetailKey; documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
-  uploadClaimDocument: (params: ApiParams<{ claimKey: ClaimKey; document: DocumentUploadDto }>) => Promise<{ documentId: string }>;
-  uploadClaimDocuments: (params: ApiParams<{ claimKey: ClaimKey; documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
-  uploadProjectChangeRequestDocumentOrItemDocument: (params: ApiParams<{ projectId: string; projectChangeRequestIdOrItemId: string; documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
-  uploadProjectDocument: (params: ApiParams<{ projectId: string; documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
-  uploadPartnerDocument: (params: ApiParams<{ projectId: string; partnerId: string; documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
-  uploadLoanDocuments: (params: ApiParams<{ projectId: string; loanId: string; documents: MultipleDocumentUploadDto }>) => Promise<{ documentIds: string[] }>;
-  deleteLoanDocument: (params: ApiParams<{ projectId: string; loanId: string; documentId: string }>) => Promise<boolean>;
-  deleteClaimDetailDocument: (params: ApiParams<{ documentId: string; claimDetailKey: ClaimDetailKey }>) => Promise<boolean>;
+  uploadClaimDetailDocuments: (
+    params: ApiParams<{ claimDetailKey: ClaimDetailKey; documents: MultipleDocumentUploadDto }>,
+  ) => Promise<{ documentIds: string[] }>;
+  uploadClaimDocument: (
+    params: ApiParams<{ claimKey: ClaimKey; document: DocumentUploadDto }>,
+  ) => Promise<{ documentId: string }>;
+  uploadClaimDocuments: (
+    params: ApiParams<{ claimKey: ClaimKey; documents: MultipleDocumentUploadDto }>,
+  ) => Promise<{ documentIds: string[] }>;
+  uploadProjectChangeRequestDocumentOrItemDocument: (
+    params: ApiParams<{
+      projectId: string;
+      projectChangeRequestIdOrItemId: string;
+      documents: MultipleDocumentUploadDto;
+    }>,
+  ) => Promise<{ documentIds: string[] }>;
+  uploadProjectDocument: (
+    params: ApiParams<{ projectId: string; documents: MultipleDocumentUploadDto }>,
+  ) => Promise<{ documentIds: string[] }>;
+  uploadPartnerDocument: (
+    params: ApiParams<{ projectId: string; partnerId: string; documents: MultipleDocumentUploadDto }>,
+  ) => Promise<{ documentIds: string[] }>;
+  uploadLoanDocuments: (
+    params: ApiParams<{ projectId: string; loanId: string; documents: MultipleDocumentUploadDto }>,
+  ) => Promise<{ documentIds: string[] }>;
+  deleteLoanDocument: (
+    params: ApiParams<{ projectId: string; loanId: string; documentId: string }>,
+  ) => Promise<boolean>;
+  deleteClaimDetailDocument: (
+    params: ApiParams<{ documentId: string; claimDetailKey: ClaimDetailKey }>,
+  ) => Promise<boolean>;
   deleteClaimDocument: (params: ApiParams<{ documentId: string; claimKey: ClaimKey }>) => Promise<boolean>;
-  deletePartnerDocument: (params: ApiParams<{ documentId: string; projectId: string; partnerId: string }>) => Promise<boolean>;
+  deletePartnerDocument: (
+    params: ApiParams<{ documentId: string; projectId: string; partnerId: string }>,
+  ) => Promise<boolean>;
   deleteProjectDocument: (params: ApiParams<{ projectId: string; documentId: string }>) => Promise<boolean>;
-  deleteProjectChangeRequestDocumentOrItemDocument: (params: ApiParams<{documentId: string; projectId: string; projectChangeRequestIdOrItemId: string}>) => Promise<boolean>;
+  deleteProjectChangeRequestDocumentOrItemDocument: (
+    params: ApiParams<{ documentId: string; projectId: string; projectChangeRequestIdOrItemId: string }>,
+  ) => Promise<boolean>;
 }
 
 class Controller extends ControllerBase<DocumentSummaryDto> implements IDocumentsApi {
@@ -61,50 +91,86 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
 
     this.getItems(
       "/claim-details/:projectId/:partnerId/:periodId/:costCategoryId",
-      (p) => ({ claimDetailKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId } }),
-      p => this.getClaimDetailDocuments(p)
+      p => ({
+        claimDetailKey: {
+          projectId: p.projectId,
+          partnerId: p.partnerId,
+          periodId: parseInt(p.periodId, 10),
+          costCategoryId: p.costCategoryId,
+        },
+      }),
+      p => this.getClaimDetailDocuments(p),
     );
 
     this.getAttachment(
       "/claim-details/:projectId/:partnerId/:periodId/:costCategoryId/:documentId/content",
-      (p) => ({ claimDetailKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId }, documentId: p.documentId }),
-      p => this.getClaimDetailDocument(p)
+      p => ({
+        claimDetailKey: {
+          projectId: p.projectId,
+          partnerId: p.partnerId,
+          periodId: parseInt(p.periodId, 10),
+          costCategoryId: p.costCategoryId,
+        },
+        documentId: p.documentId,
+      }),
+      p => this.getClaimDetailDocument(p),
     );
 
     this.deleteItem(
       "/claim-details/:projectId/:partnerId/:periodId/:costCategoryId/:documentId",
-      (p) => ({ documentId: p.documentId, claimDetailKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId } }),
-      p => this.deleteClaimDetailDocument(p)
+      p => ({
+        documentId: p.documentId,
+        claimDetailKey: {
+          projectId: p.projectId,
+          partnerId: p.partnerId,
+          periodId: parseInt(p.periodId, 10),
+          costCategoryId: p.costCategoryId,
+        },
+      }),
+      p => this.deleteClaimDetailDocument(p),
     );
 
     this.getItems(
       "/claims/:projectId/:partnerId/:periodId/",
-      (p, q) => ({ projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), description: parseInt(q.description, 10) }),
-      p => this.getClaimDocuments(p)
+      (p, q) => ({
+        projectId: p.projectId,
+        partnerId: p.partnerId,
+        periodId: parseInt(p.periodId, 10),
+        description: parseInt(q.description, 10),
+      }),
+      p => this.getClaimDocuments(p),
     );
 
     this.getAttachment(
       "/claims/:projectId/:partnerId/:periodId/:documentId/content",
-      (p) => ({ projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), documentId: p.documentId }),
-      p => this.getClaimDocument(p)
+      p => ({
+        projectId: p.projectId,
+        partnerId: p.partnerId,
+        periodId: parseInt(p.periodId, 10),
+        documentId: p.documentId,
+      }),
+      p => this.getClaimDocument(p),
     );
 
     this.deleteItem(
       "/claims/:projectId/:partnerId/:periodId/:documentId",
-      (p) => ({ documentId: p.documentId, claimKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) } }),
-      p => this.deleteClaimDocument(p)
+      p => ({
+        documentId: p.documentId,
+        claimKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) },
+      }),
+      p => this.deleteClaimDocument(p),
     );
 
     this.deleteItem(
       "/partners/:projectId/:partnerId/:documentId",
-      (p) => ({ documentId: p.documentId, projectId: p.projectId, partnerId: p.partnerId }),
-      p => this.deletePartnerDocument(p)
+      p => ({ documentId: p.documentId, projectId: p.projectId, partnerId: p.partnerId }),
+      p => this.deletePartnerDocument(p),
     );
 
     this.deleteItem(
       "/projects/:projectId/:documentId",
-      (p) => ({ projectId: p.projectId, documentId: p.documentId }),
-      p => this.deleteProjectDocument(p)
+      p => ({ projectId: p.projectId, documentId: p.documentId }),
+      p => this.deleteProjectDocument(p),
     );
 
     this.getItems("/projects/:projectId", p => ({ projectId: p.projectId }), this.getProjectDocuments);
@@ -123,90 +189,107 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
 
     this.postAttachments(
       "/loans/:projectId/:loanId",
-      (p) => ({ projectId: p.projectId, loanId: p.loanId }),
-      this.uploadLoanDocuments
+      p => ({ projectId: p.projectId, loanId: p.loanId }),
+      this.uploadLoanDocuments,
     );
 
     this.deleteItem(
       "/loans/:projectId/:loanId/:documentId",
-      (p) => ({ projectId: p.projectId, loanId: p.loanId, documentId: p.documentId }),
-      this.deleteLoanDocument
+      p => ({ projectId: p.projectId, loanId: p.loanId, documentId: p.documentId }),
+      this.deleteLoanDocument,
     );
 
     this.getItems(
       "/partners/:projectId/:partnerId",
-      (p) => ({ projectId: p.projectId, partnerId: p.partnerId }),
-      p => this.getPartnerDocuments(p)
+      p => ({ projectId: p.projectId, partnerId: p.partnerId }),
+      p => this.getPartnerDocuments(p),
     );
 
     this.getAttachment(
       "/projects/:projectId/:documentId/content",
-      (p) => ({ projectId: p.projectId, documentId: p.documentId }),
-      p => this.getProjectDocument(p)
+      p => ({ projectId: p.projectId, documentId: p.documentId }),
+      p => this.getProjectDocument(p),
     );
 
     this.getAttachment(
       "/partners/:projectId/:partnerId/:documentId/content",
-      (p) => ({ projectId: p.projectId, partnerId: p.partnerId, documentId: p.documentId }),
-      p => this.getPartnerDocument(p)
+      p => ({ projectId: p.projectId, partnerId: p.partnerId, documentId: p.documentId }),
+      p => this.getPartnerDocument(p),
     );
 
     this.getItems(
       "/projectChangeRequests/:projectId/:projectChangeRequestIdOrItemId",
-      (p) => ({ projectId: p.projectId, projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId }),
-      p => this.getProjectChangeRequestDocumentsOrItemDocuments(p)
+      p => ({ projectId: p.projectId, projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId }),
+      p => this.getProjectChangeRequestDocumentsOrItemDocuments(p),
     );
 
     this.getAttachment(
       "/projectChangeRequests/:projectId/:projectChangeRequestIdOrItemId/:documentId/content",
-      (p) => ({ projectId: p.projectId, projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId, documentId: p.documentId }),
-      p => this.getProjectChangeRequestDocumentOrItemDocument(p)
+      p => ({
+        projectId: p.projectId,
+        projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId,
+        documentId: p.documentId,
+      }),
+      p => this.getProjectChangeRequestDocumentOrItemDocument(p),
     );
 
     this.deleteItem(
       "/projectChangeRequests/:projectId/:projectChangeRequestIdOrItemId/:documentId",
-      (p) => ({documentId: p.documentId, projectId: p.projectId, projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId}),
-      p => this.deleteProjectChangeRequestDocumentOrItemDocument(p)
+      p => ({
+        documentId: p.documentId,
+        projectId: p.projectId,
+        projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId,
+      }),
+      p => this.deleteProjectChangeRequestDocumentOrItemDocument(p),
     );
 
     this.postAttachments(
       "/claim-details/:projectId/:partnerId/:periodId/:costCategoryId",
-      (p) => ({ claimDetailKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10), costCategoryId: p.costCategoryId }}),
-      p => this.uploadClaimDetailDocuments(p)
+      p => ({
+        claimDetailKey: {
+          projectId: p.projectId,
+          partnerId: p.partnerId,
+          periodId: parseInt(p.periodId, 10),
+          costCategoryId: p.costCategoryId,
+        },
+      }),
+      p => this.uploadClaimDetailDocuments(p),
     );
 
     this.postAttachment(
       "/claims/:projectId/:partnerId/:periodId",
-      (p) => ({ claimKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) } }),
-      p => this.uploadClaimDocument(p)
+      p => ({ claimKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) } }),
+      p => this.uploadClaimDocument(p),
     );
 
     this.postAttachments(
       "/claimDocuments/:projectId/:partnerId/:periodId",
-      (p) => ({ claimKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10)}}),
-      p => this.uploadClaimDocuments(p)
+      p => ({ claimKey: { projectId: p.projectId, partnerId: p.partnerId, periodId: parseInt(p.periodId, 10) } }),
+      p => this.uploadClaimDocuments(p),
     );
 
     this.postAttachments(
       "/projects/:projectId",
-      (p) => ({ projectId: p.projectId }),
-      p => this.uploadProjectDocument(p)
+      p => ({ projectId: p.projectId }),
+      p => this.uploadProjectDocument(p),
     );
 
     this.postAttachments(
       "/partners/:projectId/:partnerId",
-      (p) => ({ projectId: p.projectId, partnerId: p.partnerId }),
-      p => this.uploadPartnerDocument(p)
+      p => ({ projectId: p.projectId, partnerId: p.partnerId }),
+      p => this.uploadPartnerDocument(p),
     );
 
     this.postAttachments(
       "/projectChangeRequests/:projectId/:projectChangeRequestIdOrItemId",
-      (p) => ({ projectId: p.projectId, projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId }),
-      p => this.uploadProjectChangeRequestDocumentOrItemDocument(p)
+      p => ({ projectId: p.projectId, projectChangeRequestIdOrItemId: p.projectChangeRequestIdOrItemId }),
+      p => this.uploadProjectChangeRequestDocumentOrItemDocument(p),
     );
   }
 
-  public async getLoanDocument(params: ApiParams<{ projectId: string; loanId: string; documentId: string }>): Promise<DocumentDto | null> {
+  public async getLoanDocument(
+    params: ApiParams<{ projectId: string; loanId: string; documentId: string }>,
+  ): Promise<DocumentDto | null> {
     const query = new GetLoanDocumentQuery(params.projectId, params.loanId, params.documentId);
     return contextProvider.start(params).runQuery(query);
   }
@@ -216,7 +299,9 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async uploadLoanDocuments(params: ApiParams<{ projectId: string; loanId: string; documents: MultipleDocumentUploadDto }>) {
+  public async uploadLoanDocuments(
+    params: ApiParams<{ projectId: string; loanId: string; documents: MultipleDocumentUploadDto }>,
+  ) {
     const command = new UploadLoanDocumentsCommand(params.documents, params.projectId, params.loanId);
     const insertedIDs = await contextProvider.start(params).runCommand(command);
 
@@ -229,13 +314,20 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     return true;
   }
 
-  public async getClaimDocuments(params: ApiParams<{ projectId: string; partnerId: string; periodId: number; description?: DocumentDescription }>) {
+  public async getClaimDocuments(
+    params: ApiParams<{ projectId: string; partnerId: string; periodId: number; description?: DocumentDescription }>,
+  ) {
     const { projectId, partnerId, periodId, description } = params;
-    const query = new GetClaimDocumentsQuery({ projectId, partnerId, periodId }, description ? { description }: undefined);
+    const query = new GetClaimDocumentsQuery(
+      { projectId, partnerId, periodId },
+      description ? { description } : undefined,
+    );
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getClaimDocument(params: ApiParams<{ projectId: string; partnerId: string; periodId: number; documentId: string }>) {
+  public async getClaimDocument(
+    params: ApiParams<{ projectId: string; partnerId: string; periodId: number; documentId: string }>,
+  ) {
     const { projectId, partnerId, periodId, documentId } = params;
     const query = new GetClaimDocumentQuery({ projectId, partnerId, periodId }, documentId);
     return contextProvider.start(params).runQuery(query);
@@ -274,23 +366,42 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getProjectChangeRequestDocumentsOrItemDocuments(params: ApiParams<{ projectId: string; projectChangeRequestIdOrItemId: string }>) {
-    const query = new GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery(params.projectId, params.projectChangeRequestIdOrItemId);
+  public async getProjectChangeRequestDocumentsOrItemDocuments(
+    params: ApiParams<{ projectId: string; projectChangeRequestIdOrItemId: string }>,
+  ) {
+    const query = new GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery(
+      params.projectId,
+      params.projectChangeRequestIdOrItemId,
+    );
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getProjectChangeRequestDocumentOrItemDocument(params: ApiParams<{ projectId: string; projectChangeRequestIdOrItemId: string; documentId: string }>) {
-    const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(params.projectId, params.projectChangeRequestIdOrItemId, params.documentId);
+  public async getProjectChangeRequestDocumentOrItemDocument(
+    params: ApiParams<{ projectId: string; projectChangeRequestIdOrItemId: string; documentId: string }>,
+  ) {
+    const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(
+      params.projectId,
+      params.projectChangeRequestIdOrItemId,
+      params.documentId,
+    );
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async deleteProjectChangeRequestDocumentOrItemDocument(params: ApiParams<{ projectId: string; projectChangeRequestIdOrItemId: string; documentId: string }>) {
-    const command = new DeleteProjectChangeRequestDocumentOrItemDocument(params.documentId, params.projectId, params.projectChangeRequestIdOrItemId);
+  public async deleteProjectChangeRequestDocumentOrItemDocument(
+    params: ApiParams<{ projectId: string; projectChangeRequestIdOrItemId: string; documentId: string }>,
+  ) {
+    const command = new DeleteProjectChangeRequestDocumentOrItemDocument(
+      params.documentId,
+      params.projectId,
+      params.projectChangeRequestIdOrItemId,
+    );
     await contextProvider.start(params).runCommand(command);
     return true;
   }
 
-  public async uploadClaimDetailDocuments(params: ApiParams<{ claimDetailKey: ClaimDetailKey; documents: MultipleDocumentUploadDto }>) {
+  public async uploadClaimDetailDocuments(
+    params: ApiParams<{ claimDetailKey: ClaimDetailKey; documents: MultipleDocumentUploadDto }>,
+  ) {
     const { claimDetailKey, documents } = params;
     const command = new UploadClaimDetailDocumentCommand(claimDetailKey, documents);
     const insertedIDs = await contextProvider.start(params).runCommand(command);
@@ -311,11 +422,21 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     return { documentIds: insertedIDs };
   }
 
-  public async uploadProjectChangeRequestDocumentOrItemDocument(params: ApiParams<{ projectId: string; projectChangeRequestIdOrItemId: string; documents: MultipleDocumentUploadDto }>) {
-    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(params.projectId, params.projectChangeRequestIdOrItemId, params.documents);
+  public async uploadProjectChangeRequestDocumentOrItemDocument(
+    params: ApiParams<{
+      projectId: string;
+      projectChangeRequestIdOrItemId: string;
+      documents: MultipleDocumentUploadDto;
+    }>,
+  ) {
+    const command = new UploadProjectChangeRequestDocumentOrItemDocumentCommand(
+      params.projectId,
+      params.projectChangeRequestIdOrItemId,
+      params.documents,
+    );
     const insertedIds = await contextProvider.start(params).runCommand(command);
 
-    return {documentIds: insertedIds};
+    return { documentIds: insertedIds };
   }
 
   public async uploadProjectDocument(params: ApiParams<{ projectId: string; documents: MultipleDocumentUploadDto }>) {
@@ -325,14 +446,18 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     return { documentIds: insertedIDs };
   }
 
-  public async uploadPartnerDocument(params: ApiParams<{ projectId: string; partnerId: string; documents: MultipleDocumentUploadDto }>) {
+  public async uploadPartnerDocument(
+    params: ApiParams<{ projectId: string; partnerId: string; documents: MultipleDocumentUploadDto }>,
+  ) {
     const command = new UploadPartnerDocumentCommand(params.projectId, params.partnerId, params.documents);
     const insertedIDs = await contextProvider.start(params).runCommand(command);
 
     return { documentIds: insertedIDs };
   }
 
-  public async deleteClaimDetailDocument(params: ApiParams<{ documentId: string; claimDetailKey: ClaimDetailKey }>): Promise<boolean> {
+  public async deleteClaimDetailDocument(
+    params: ApiParams<{ documentId: string; claimDetailKey: ClaimDetailKey }>,
+  ): Promise<boolean> {
     const { documentId, claimDetailKey } = params;
     const command = new DeleteClaimDetailDocumentCommand(documentId, claimDetailKey);
     await contextProvider.start(params).runCommand(command);
@@ -347,7 +472,9 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     return true;
   }
 
-  public async deletePartnerDocument(params: ApiParams<{ projectId: string; partnerId: string; documentId: string }>): Promise<boolean> {
+  public async deletePartnerDocument(
+    params: ApiParams<{ projectId: string; partnerId: string; documentId: string }>,
+  ): Promise<boolean> {
     const { documentId, projectId, partnerId } = params;
     const command = new DeletePartnerDocumentCommand(documentId, projectId, partnerId);
     await contextProvider.start(params).runCommand(command);
@@ -356,7 +483,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
   }
 
   public async deleteProjectDocument(params: ApiParams<{ projectId: string; documentId: string }>): Promise<boolean> {
-    const { projectId , documentId} = params;
+    const { projectId, documentId } = params;
     const command = new DeleteProjectDocumentCommand(projectId, documentId);
     await contextProvider.start(params).runCommand(command);
 

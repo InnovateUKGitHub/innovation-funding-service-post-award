@@ -18,9 +18,7 @@ export class RadioList extends BaseInput<RadioListProps, {}> {
   render() {
     const className = classNames("govuk-radios", { "govuk-radios--inline": this.props.inline });
     return (
-      <div className={className}>
-        {this.props.options.map((x, i) => this.renderOption(this.props.name, x, i))}
-      </div>
+      <div className={className}>{this.props.options.map((x, i) => this.renderOption(this.props.name, x, i))}</div>
     );
   }
 
@@ -41,7 +39,9 @@ export class RadioList extends BaseInput<RadioListProps, {}> {
           aria-checked={selected}
           disabled={this.props.disabled}
         />
-        <label className="govuk-label govuk-radios__label" htmlFor={inputId}>{item.value}</label>
+        <label className="govuk-label govuk-radios__label" htmlFor={inputId}>
+          {item.value}
+        </label>
       </div>
     );
   }

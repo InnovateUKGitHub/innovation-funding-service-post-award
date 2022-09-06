@@ -182,12 +182,9 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data> {
       : null;
 
     const footerColumns = [
-      // eslint-disable-next-line react/jsx-key
-      <ACC.Renderers.Currency value={totalParticipantGrantTotal} />,
-      // eslint-disable-next-line react/jsx-key
-      <ACC.Renderers.Currency value={totalCostsSubmittedTotal} />,
-      // eslint-disable-next-line react/jsx-key
-      <ACC.Renderers.Percentage value={percentageParticipantCostsSubmittedTotal} />,
+      <ACC.Renderers.Currency key={0} value={totalParticipantGrantTotal} />,
+      <ACC.Renderers.Currency key={1} value={totalCostsSubmittedTotal} />,
+      <ACC.Renderers.Percentage key={2} value={percentageParticipantCostsSubmittedTotal} />,
     ].map((x, i) => (
       <td key={i} className="govuk-table__cell govuk-table__cell--numeric acc-table__cell-top-border">
         {x}

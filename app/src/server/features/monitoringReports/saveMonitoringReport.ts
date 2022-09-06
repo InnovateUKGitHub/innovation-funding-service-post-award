@@ -1,10 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import {
-  Authorisation,
-  IContext,
-  MonitoringReportDto,
-  ProjectRole
-} from "@framework/types";
+import { Authorisation, IContext, MonitoringReportDto, ProjectRole } from "@framework/types";
 import { BadRequestError, CommandBase, ValidationError } from "@server/features/common";
 import { ISalesforceMonitoringReportHeader, ISalesforceMonitoringReportResponse } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
@@ -13,10 +8,7 @@ import { GetByIdQuery } from "@server/features/projects";
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
 
 export class SaveMonitoringReport extends CommandBase<boolean> {
-  constructor(
-    private readonly monitoringReportDto: MonitoringReportDto,
-    private readonly submit: boolean
-  ) {
+  constructor(private readonly monitoringReportDto: MonitoringReportDto, private readonly submit: boolean) {
     super();
   }
 
@@ -41,7 +33,7 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
       Acc_ProjectPeriodNumber__c: periodId,
       Acc_PeriodStartDate__c: profile.Acc_ProjectPeriodStartDate__c,
       Acc_PeriodEndDate__c: profile.Acc_ProjectPeriodEndDate__c,
-      Acc_AddComments__c: this.monitoringReportDto.addComments
+      Acc_AddComments__c: this.monitoringReportDto.addComments,
     };
 
     if (this.submit) {
@@ -56,12 +48,13 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
     if (!this.submit) return;
     await context.repositories.monitoringReportStatusChange.createStatusChange({
       Acc_MonitoringReport__c: this.monitoringReportDto.headerId,
-      Acc_ExternalComment__c: this.monitoringReportDto.addComments
+      Acc_ExternalComment__c: this.monitoringReportDto.addComments,
     });
   }
 
   private async updateMonitoringReport(context: IContext): Promise<void> {
-    const existing = (await context.repositories.monitoringReportResponse.getAllForHeader(this.monitoringReportDto.headerId)) || [];
+    const existing =
+      (await context.repositories.monitoringReportResponse.getAllForHeader(this.monitoringReportDto.headerId)) || [];
     const updateDtos = this.monitoringReportDto.questions.filter(x => x.responseId && x.optionId);
     const insertDtos = this.monitoringReportDto.questions.filter(x => !x.responseId && x.optionId);
     const persistedIds = updateDtos.map(x => x.responseId);
@@ -70,13 +63,13 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
     const updateItems = updateDtos.map<Updatable<ISalesforceMonitoringReportResponse>>(updateDto => ({
       Id: updateDto.responseId ?? "",
       Acc_Question__c: updateDto.optionId ?? "",
-      Acc_QuestionComments__c: updateDto.comments
+      Acc_QuestionComments__c: updateDto.comments,
     }));
 
     const insertItems = insertDtos.map<Partial<ISalesforceMonitoringReportResponse>>(insertDto => ({
       Acc_MonitoringHeader__c: this.monitoringReportDto.headerId,
       Acc_Question__c: insertDto.optionId ?? "",
-      Acc_QuestionComments__c: insertDto.comments
+      Acc_QuestionComments__c: insertDto.comments,
     }));
 
     await Promise.all<{}>([
@@ -93,7 +86,11 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
       throw new BadRequestError("Invalid request");
     }
 
-    if (header.Acc_MonitoringReportStatus__c !== "Draft" && header.Acc_MonitoringReportStatus__c !== "New" && header.Acc_MonitoringReportStatus__c !== "IUK Queried") {
+    if (
+      header.Acc_MonitoringReportStatus__c !== "Draft" &&
+      header.Acc_MonitoringReportStatus__c !== "New" &&
+      header.Acc_MonitoringReportStatus__c !== "IUK Queried"
+    ) {
       throw new BadRequestError("Report has already been submitted");
     }
 
@@ -103,7 +100,13 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
     const questions = await context.runQuery(new GetMonitoringReportActiveQuestions());
     const project = await context.runQuery(new GetByIdQuery(this.monitoringReportDto.projectId));
 
-    const validationResult = new MonitoringReportDtoValidator(this.monitoringReportDto, true, this.submit, questions, project.periodId);
+    const validationResult = new MonitoringReportDtoValidator(
+      this.monitoringReportDto,
+      true,
+      this.submit,
+      questions,
+      project.periodId,
+    );
     if (!validationResult.isValid) {
       throw new ValidationError(validationResult);
     }

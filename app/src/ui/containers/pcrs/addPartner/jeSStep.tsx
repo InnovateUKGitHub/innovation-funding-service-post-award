@@ -100,15 +100,14 @@ export function JesStepUI({ documents, documentsEditor, project, ...props }: Jes
 
   return (
     <ACC.Section>
-
       <ACC.H2>{jesHeading}</ACC.H2>
-        {isKTP ? (
-            <ACC.ValidationMessage
-              messageType="info"
-              message={x => x.pcrAddPartnerJeS.jesIntroduction}
-              qa="jes-form-ktp-not-needed-info-message"
-            />
-          ) : (
+      {isKTP ? (
+        <ACC.ValidationMessage
+          messageType="info"
+          message={x => x.pcrAddPartnerJeS.jesIntroduction}
+          qa="jes-form-ktp-not-needed-info-message"
+        />
+      ) : (
         <>
           {renderForm()}
 
@@ -120,7 +119,7 @@ export function JesStepUI({ documents, documentsEditor, project, ...props }: Jes
             />
           </ACC.Section>
         </>
-        )}
+      )}
 
       <Form.Form qa="saveAndContinue" data={props.pcrItem} onSubmit={() => props.onSave(false)}>
         <Form.Fieldset>

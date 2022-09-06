@@ -1,5 +1,5 @@
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
-import { PCRReviewParams, PCRReviewRoute, PCRsDashboardRoute, } from "@ui/containers";
+import { PCRReviewParams, PCRReviewRoute, PCRsDashboardRoute } from "@ui/containers";
 import { PCRDto, ProjectDto } from "@framework/dtos";
 import { IContext, ILinkInfo } from "@framework/types";
 import { PCRDtoValidator } from "@ui/validators";
@@ -13,7 +13,12 @@ export class ProjectChangeRequestReviewFormHandler extends StandardFormHandlerBa
     super(PCRReviewRoute, ["default"], "pcr");
   }
 
-  protected async getDto(context: IContext, params: PCRReviewParams, button: IFormButton, body: IFormBody): Promise<PCRDto> {
+  protected async getDto(
+    context: IContext,
+    params: PCRReviewParams,
+    button: IFormButton,
+    body: IFormBody,
+  ): Promise<PCRDto> {
     const dto = await context.runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId));
     dto.comments = body.comments;
     dto.status = parseInt(body.status, 10) || PCRStatus.Unknown;
@@ -21,7 +26,12 @@ export class ProjectChangeRequestReviewFormHandler extends StandardFormHandlerBa
     return dto;
   }
 
-  protected async run(context: IContext, params: PCRReviewParams, button: IFormButton, dto: PCRDto): Promise<ILinkInfo> {
+  protected async run(
+    context: IContext,
+    params: PCRReviewParams,
+    button: IFormButton,
+    dto: PCRDto,
+  ): Promise<ILinkInfo> {
     await context.runCommand(new UpdatePCRCommand(params.projectId, params.pcrId, dto));
     return PCRsDashboardRoute.getLink({ projectId: params.projectId });
   }

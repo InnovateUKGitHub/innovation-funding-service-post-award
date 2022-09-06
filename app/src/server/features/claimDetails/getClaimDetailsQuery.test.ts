@@ -1,4 +1,3 @@
-
 import { DateTime } from "luxon";
 import { Authorisation, ProjectRole } from "@framework/types";
 import { TestContext } from "@tests/test-utils/testContextProvider";
@@ -30,7 +29,12 @@ describe("GetClaimDetailsQuery", () => {
       x.Acc_ReasonForDifference__c = expectedComments;
     });
 
-    const query = new GetClaimDetailsQuery(partner.projectId, expectedParticipantId, expectedPeriod, expectedCostCategoryId);
+    const query = new GetClaimDetailsQuery(
+      partner.projectId,
+      expectedParticipantId,
+      expectedPeriod,
+      expectedCostCategoryId,
+    );
     const result = await context.runQuery(query);
 
     expect(result).not.toBeNull();
@@ -143,8 +147,8 @@ describe("GetClaimDetailsQuery", () => {
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.MonitoringOfficer,
-          partnerRoles: {}
-        }
+          partnerRoles: {},
+        },
       });
 
       expect(await context.runAccessControl(auth, command)).toBe(true);
@@ -158,8 +162,8 @@ describe("GetClaimDetailsQuery", () => {
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.Unknown,
-          partnerRoles: { [partner.id]: ProjectRole.FinancialContact }
-        }
+          partnerRoles: { [partner.id]: ProjectRole.FinancialContact },
+        },
       });
 
       expect(await context.runAccessControl(auth, command)).toBe(true);
@@ -173,8 +177,8 @@ describe("GetClaimDetailsQuery", () => {
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.Unknown,
-          partnerRoles: { [partner.id]: ProjectRole.ProjectManager }
-        }
+          partnerRoles: { [partner.id]: ProjectRole.ProjectManager },
+        },
       });
 
       expect(await context.runAccessControl(auth, command)).toBe(true);
@@ -188,8 +192,8 @@ describe("GetClaimDetailsQuery", () => {
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.FinancialContact | ProjectRole.ProjectManager,
-          partnerRoles: { [partner.id]: ProjectRole.MonitoringOfficer }
-        }
+          partnerRoles: { [partner.id]: ProjectRole.MonitoringOfficer },
+        },
       });
 
       expect(await context.runAccessControl(auth, command)).toBe(false);

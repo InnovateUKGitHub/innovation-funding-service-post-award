@@ -21,7 +21,10 @@ export interface IProfileTotalCostCategoryRepository {
  *
  * @todo - Deprecate class and favour -> ProfileDetailsRepository as it already uses the same Table in SF (getAllByPartnerId() can be replaced with getRequiredCategories()), make sure we migrate "Acc_CostCategoryGOLCost__c" to the other repository
  */
-export class ProfileTotalCostCategoryRepository extends SalesforceRepositoryBase<ISalesforceProfileTotalCostCategory> implements IProfileTotalCostCategoryRepository {
+export class ProfileTotalCostCategoryRepository
+  extends SalesforceRepositoryBase<ISalesforceProfileTotalCostCategory>
+  implements IProfileTotalCostCategoryRepository
+{
   private readonly recordType: string = "Total Cost Category";
 
   protected readonly salesforceObjectName = "Acc_Profile__c";
@@ -34,7 +37,9 @@ export class ProfileTotalCostCategoryRepository extends SalesforceRepositoryBase
   ];
 
   getAllByPartnerId(partnerId: string): Promise<ISalesforceProfileTotalCostCategory[]> {
-    const filter = `Acc_ProjectParticipant__c = '${sss(partnerId)}' AND RecordType.Name = '${sss(this.recordType)}' AND Acc_CostCategory__c != null`;
+    const filter = `Acc_ProjectParticipant__c = '${sss(partnerId)}' AND RecordType.Name = '${sss(
+      this.recordType,
+    )}' AND Acc_CostCategory__c != null`;
     return super.where(filter);
   }
 }

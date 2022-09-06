@@ -17,13 +17,20 @@ interface Dto extends ForecastDetailsDTO {
   isComplete: boolean;
 }
 
-export class ProjectSetupSpendProfileFormHandler extends StandardFormHandlerBase<ProjectSetupSpendProfileParams, "initialForecastDetails"> {
-
+export class ProjectSetupSpendProfileFormHandler extends StandardFormHandlerBase<
+  ProjectSetupSpendProfileParams,
+  "initialForecastDetails"
+> {
   constructor() {
     super(ProjectSetupSpendProfileRoute, ["default"], "initialForecastDetails");
   }
 
-  protected async getDto(context: IContext, params: ForecastUpdateParams, button: IFormButton, body: { [key: string]: string }): Promise<Dto[]> {
+  protected async getDto(
+    context: IContext,
+    params: ForecastUpdateParams,
+    button: IFormButton,
+    body: { [key: string]: string },
+  ): Promise<Dto[]> {
     const dto = await context.runQuery(new GetAllInitialForecastsForPartnerQuery(params.partnerId));
     const partner = await context.runQuery(new GetPartnerByIdQuery(params.partnerId));
     const costCategories = await context.runQuery(new GetCostCategoriesForPartnerQuery(partner));
@@ -33,17 +40,22 @@ export class ProjectSetupSpendProfileFormHandler extends StandardFormHandlerBase
       .map(x => {
         const value = parseFloat(body[`value_${x.periodId}_${x.costCategoryId}`]);
         const costCategory = costCategories.find(c => c.id === x.costCategoryId);
-        if(!costCategory) throw new Error(`Cannot find costCategory matching ${x.costCategoryId}`);
+        if (!costCategory) throw new Error(`Cannot find costCategory matching ${x.costCategoryId}`);
         // If it's calculated then we don't care if it's not valid so just set it to zero
         x.value = !isNumber(value) && costCategory.isCalculated ? 0 : value;
         return {
           ...x,
-          isComplete: body.isComplete === "true"
+          isComplete: body.isComplete === "true",
         };
       });
   }
 
-  protected async run(context: IContext, params: ForecastUpdateParams, button: IFormButton, dto: Dto[]): Promise<ILinkInfo> {
+  protected async run(
+    context: IContext,
+    params: ForecastUpdateParams,
+    button: IFormButton,
+    dto: Dto[],
+  ): Promise<ILinkInfo> {
     // Can assume there is at least one profile detail and that isComplete is set to the same value on every profile detail
     const submit = dto[0].isComplete;
     await context.runCommand(new UpdateInitialForecastDetailsCommand(params.projectId, params.partnerId, dto, submit));

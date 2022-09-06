@@ -70,7 +70,7 @@ export class TestContext implements IContext {
   // handle access control separate to running the commands to keep tests focused on single areas
   public runAccessControl(auth: Authorisation, runnable: QueryBase<any> | CommandBase<any>): Promise<boolean> {
     const runnableQuery = runnable as unknown as IAsyncRunnable<any>;
-    if(typeof runnableQuery?.accessControl === "function") {
+    if (typeof runnableQuery?.accessControl === "function") {
       return runnableQuery.accessControl(auth, this);
     }
     return Promise.reject();

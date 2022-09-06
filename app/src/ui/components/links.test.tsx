@@ -36,8 +36,8 @@ describe("<Link />", () => {
 
       const { container } = render(
         <TestBed>
-            <Links.Link route={route}>stub-link</Links.Link>
-            </TestBed>,
+          <Links.Link route={route}>stub-link</Links.Link>
+        </TestBed>,
       );
 
       const expectedLink = container.querySelector(`.${expectedGovLink}`);
@@ -53,8 +53,8 @@ describe("<Link />", () => {
       const linkText = "someLinkText";
       const { queryByText } = render(
         <TestBed>
-            <Links.Link route={route}>{linkText}</Links.Link>
-          </TestBed>,
+          <Links.Link route={route}>{linkText}</Links.Link>
+        </TestBed>,
       );
 
       expect(queryByText(linkText)).toBeInTheDocument();
@@ -68,8 +68,8 @@ describe("<BackLink />", () => {
       const linkText = "someLinkText";
       const { container } = render(
         <TestBed>
-            <Links.BackLink route={route}>{linkText}</Links.BackLink>
-          </TestBed>,
+          <Links.BackLink route={route}>{linkText}</Links.BackLink>
+        </TestBed>,
       );
 
       const expectedLink = container.querySelector("a");
@@ -86,8 +86,8 @@ describe("<BackLink />", () => {
 
       const { container } = render(
         <TestBed>
-            <Links.BackLink route={route}>stub-link</Links.BackLink>
-          </TestBed>,
+          <Links.BackLink route={route}>stub-link</Links.BackLink>
+        </TestBed>,
       );
 
       const expectedLink = container.querySelector(`.${expectedGovLink}`);
@@ -103,8 +103,8 @@ describe("<BackLink />", () => {
       const linkText = "someLinkText";
       const { queryByText } = render(
         <TestBed>
-            <Links.BackLink route={route}>{linkText}</Links.BackLink>
-          </TestBed>,
+          <Links.BackLink route={route}>{linkText}</Links.BackLink>
+        </TestBed>,
       );
 
       expect(queryByText(linkText)).toBeInTheDocument();

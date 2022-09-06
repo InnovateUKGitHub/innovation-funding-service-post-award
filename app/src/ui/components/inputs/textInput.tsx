@@ -19,7 +19,6 @@ export class TextInput extends BaseInput<TextInputProps, InputState> {
 
   public UNSAFE_componentWillReceiveProps(nextProps: InputProps<string>) {
     if (nextProps.value !== this.props.value) {
-
       this.setState({ value: nextProps.value || "" });
       this.cancelTimeout();
     }
@@ -30,18 +29,17 @@ export class TextInput extends BaseInput<TextInputProps, InputState> {
       <input
         id={this.props.id || this.props.name}
         type="text"
-        className={classNames(this.props.className,
-          "govuk-input", {
-            "govuk-input--error": this.props.hasError === true,
-            [`govuk-input--width-${this.props.width}`]: typeof this.props.width === "number",
-            [`govuk-!-width-${this.props.width}`]: typeof this.props.width === "string",
-          })}
+        className={classNames(this.props.className, "govuk-input", {
+          "govuk-input--error": this.props.hasError === true,
+          [`govuk-input--width-${this.props.width}`]: typeof this.props.width === "number",
+          [`govuk-!-width-${this.props.width}`]: typeof this.props.width === "string",
+        })}
         name={this.props.name}
         value={this.state.value}
         disabled={!!this.props.disabled}
         onChange={e => this.handleChange(e, true)}
         onBlur={e => this.handleChange(e, false)}
-        onKeyUp={this.props.handleKeyTyped ? (e) => this.handleChange(e, false) : undefined}
+        onKeyUp={this.props.handleKeyTyped ? e => this.handleChange(e, false) : undefined}
         maxLength={this.props.maxLength}
         aria-label={this.props.ariaLabel}
         placeholder={this.props.placeholder}
@@ -49,7 +47,10 @@ export class TextInput extends BaseInput<TextInputProps, InputState> {
     );
   }
 
-  private handleChange(e: React.ChangeEvent<HTMLInputElement> | React.KeyboardEvent<HTMLInputElement>, debounce: boolean) {
+  private handleChange(
+    e: React.ChangeEvent<HTMLInputElement> | React.KeyboardEvent<HTMLInputElement>,
+    debounce: boolean,
+  ) {
     const value = e.currentTarget.value;
     if (this.state.value !== value) {
       this.setState({ value });

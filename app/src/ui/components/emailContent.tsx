@@ -2,7 +2,6 @@ import type { ContentSelector } from "@content/content";
 import { useContent } from "@ui/hooks";
 import { Email, EmailProps } from "./renderers";
 
-
 export interface EmailContentProps extends Omit<EmailProps, "value" | "children"> {
   value: ContentSelector;
   qa?: string;
@@ -21,7 +20,5 @@ export function EmailContent({ value, ...props }: EmailContentProps) {
   const { getContent } = useContent();
   const email = getContent(value);
 
-  return (
-    <Email {...props}>{email || ""}</Email>
-  );
+  return <Email {...props}>{email || ""}</Email>;
 }

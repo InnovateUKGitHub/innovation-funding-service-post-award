@@ -43,8 +43,7 @@ describe("<NavigationArrows />", () => {
     }),
   };
 
-  const setup = (element: React.ReactElement) =>
-    render(<TestBed stores={store}>{element}</TestBed>);
+  const setup = (element: React.ReactElement) => render(<TestBed stores={store}>{element}</TestBed>);
 
   describe("@returns", () => {
     test("with next link only", () => {

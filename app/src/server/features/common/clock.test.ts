@@ -1,7 +1,6 @@
 import { Clock } from "./clock";
 
 describe("Clock class", () => {
-
   beforeAll(() => {
     jest.useFakeTimers();
     jest.setSystemTime(new Date(2022, 3, 1));
@@ -48,7 +47,7 @@ describe("Clock class", () => {
       // @ts-expect-error "must accept only a valid date object"
       clock.formatRequiredSalesforceDate(null);
 
-      expect(clock.formatRequiredSalesforceDate( jsDate)).toEqual(sfDate);
+      expect(clock.formatRequiredSalesforceDate(jsDate)).toEqual(sfDate);
     });
   });
 

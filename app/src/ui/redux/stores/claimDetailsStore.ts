@@ -10,37 +10,63 @@ export class ClaimsDetailsStore extends StoreBase {
   }
 
   public getAllByPartner(partnerId: string) {
-    return this.getData("claimDetails", storeKeys.getPartnerKey(partnerId), p => apiClient.claimDetails.getAllByPartner({partnerId, ...p}));
+    return this.getData("claimDetails", storeKeys.getPartnerKey(partnerId), p =>
+      apiClient.claimDetails.getAllByPartner({ partnerId, ...p }),
+    );
   }
 
   public get(projectId: string, partnerId: string, periodId: number, costCategoryId: string) {
-    return this.getData("claimDetail", this.getKey(partnerId, periodId, costCategoryId), p => apiClient.claimDetails.get({projectId, partnerId, periodId, costCategoryId, ...p}));
+    return this.getData("claimDetail", this.getKey(partnerId, periodId, costCategoryId), p =>
+      apiClient.claimDetails.get({ projectId, partnerId, periodId, costCategoryId, ...p }),
+    );
   }
 
-  public getClaimDetailsEditor(projectId: string, partnerId: string, periodId: number, costCategoryId: string, init?: (dto: ClaimDetailsDto) => void) {
+  public getClaimDetailsEditor(
+    projectId: string,
+    partnerId: string,
+    periodId: number,
+    costCategoryId: string,
+    init?: (dto: ClaimDetailsDto) => void,
+  ) {
     return this.getEditor(
       "claimDetail",
       this.getKey(partnerId, periodId, costCategoryId),
       () => this.get(projectId, partnerId, periodId, costCategoryId),
       init,
-      (dto) => new ClaimDetailsValidator(dto, false)
-      );
+      dto => new ClaimDetailsValidator(dto, false),
+    );
   }
 
-  public updateClaimDetailsEditor(saving: boolean, projectId: string, partnerId: string, periodId: number, costCategoryId: string, dto: ClaimDetailsDto, onComplete?: (result: ClaimDetailsDto) => void): void {
+  public updateClaimDetailsEditor(
+    saving: boolean,
+    projectId: string,
+    partnerId: string,
+    periodId: number,
+    costCategoryId: string,
+    dto: ClaimDetailsDto,
+    onComplete?: (result: ClaimDetailsDto) => void,
+  ): void {
     this.updateEditor(
       saving,
       "claimDetail",
       this.getKey(partnerId, periodId, costCategoryId),
       dto,
-      (show) => new ClaimDetailsValidator(dto, show),
-      p => apiClient.claimDetails.saveClaimDetails({projectId, partnerId, periodId, costCategoryId, claimDetails: dto, ...p}),
-      (result) => {
+      show => new ClaimDetailsValidator(dto, show),
+      p =>
+        apiClient.claimDetails.saveClaimDetails({
+          projectId,
+          partnerId,
+          periodId,
+          costCategoryId,
+          claimDetails: dto,
+          ...p,
+        }),
+      result => {
         this.markStale("claimDetail", this.getKey(partnerId, periodId, costCategoryId), result);
-        if(onComplete) {
+        if (onComplete) {
           onComplete(result);
         }
-      }
+      },
     );
   }
 }

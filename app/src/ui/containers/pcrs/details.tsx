@@ -1,4 +1,3 @@
-
 import { getAuthRoles, ProjectDto, ProjectRole } from "@framework/types";
 
 import { Pending } from "@shared/pending";
@@ -21,20 +20,29 @@ interface Data {
   editableItemTypes: Pending<PCRItemType[]>;
 }
 
-interface Callbacks {
-}
+interface Callbacks {}
 
 class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
   render() {
-    const combined = Pending.combine({ project: this.props.project, pcr: this.props.pcr, editableItemTypes: this.props.editableItemTypes });
+    const combined = Pending.combine({
+      project: this.props.project,
+      pcr: this.props.pcr,
+      editableItemTypes: this.props.editableItemTypes,
+    });
 
-    return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editableItemTypes)} />;
+    return (
+      <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.pcr, x.editableItemTypes)} />
+    );
   }
 
   private renderContents(project: ProjectDto, projectChangeRequest: PCRDto, editableItemTypes: PCRItemType[]) {
     return (
       <ACC.Page
-        backLink={<ACC.BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>Back to project change requests</ACC.BackLink>}
+        backLink={
+          <ACC.BackLink route={this.props.routes.pcrsDashboard.getLink({ projectId: this.props.projectId })}>
+            Back to project change requests
+          </ACC.BackLink>
+        }
         pageTitle={<ACC.Projects.Title {...project} />}
         project={project}
       >
@@ -51,7 +59,11 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
       <ACC.Section title="Details">
         <ACC.SummaryList qa="pcr_details">
           <ACC.SummaryListItem label="Request number" content={projectChangeRequest.requestNumber} qa="numberRow" />
-          <ACC.SummaryListItem label="Types" content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />} qa="typesRow" />
+          <ACC.SummaryListItem
+            label="Types"
+            content={<ACC.Renderers.LineBreakList items={projectChangeRequest.items.map(x => x.shortName)} />}
+            qa="typesRow"
+          />
         </ACC.SummaryList>
       </ACC.Section>
     );
@@ -72,7 +84,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
     return (
       <ACC.TaskListSection step={1} title="Give us information" qa="WhatDoYouWantToDo">
-        {editableItems.map((x) => this.getItemTasks(x))}
+        {editableItems.map(x => this.getItemTasks(x))}
       </ACC.TaskListSection>
     );
   }
@@ -86,7 +98,10 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
         <ACC.Task
           name="Reasoning for Innovate UK"
           status={getPcrItemTaskStatus(projectChangeRequest.reasoningStatus)}
-          route={this.props.routes.pcrViewReasoning.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
+          route={this.props.routes.pcrViewReasoning.getLink({
+            projectId: this.props.projectId,
+            pcrId: this.props.pcrId,
+          })}
         />
       </ACC.TaskListSection>
     );
@@ -114,7 +129,11 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
       <ACC.Task
         name={item.typeName}
         status={getPcrItemTaskStatus(item.status)}
-        route={this.props.routes.pcrViewItem.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId, itemId: item.id })}
+        route={this.props.routes.pcrViewItem.getLink({
+          projectId: this.props.projectId,
+          pcrId: this.props.pcrId,
+          itemId: item.id,
+        })}
       />
     );
   }
@@ -126,12 +145,11 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
           {/* Keeping logs inside loader because accordion defaults to closed*/}
           <ACC.Loader
             pending={this.props.statusChanges}
-            render={(statusChanges) => (
-              <ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" />
-            )}
+            render={statusChanges => <ACC.Logs data={statusChanges} qa="projectChangeRequestStatusChangeTable" />}
           />
         </ACC.AccordionItem>
-      </ACC.Accordion>);
+      </ACC.Accordion>
+    );
   }
 }
 
@@ -154,13 +172,14 @@ export const PCRDetailsRoute = defineRoute({
   routeName: "pcrDetails",
   routePath: "/projects/:projectId/pcrs/:pcrId/details",
   container: PCRDetailsContainer,
-  getParams: (route) => ({
+  getParams: route => ({
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
   }),
   getTitle: () => ({
     htmlTitle: "Request",
-    displayTitle: "Request"
+    displayTitle: "Request",
   }),
-  accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer)
+  accessControl: (auth, { projectId }) =>
+    auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
 });

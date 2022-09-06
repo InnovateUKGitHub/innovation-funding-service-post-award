@@ -42,18 +42,20 @@ it("should map salesforce DTO into a POJO", () => {
 
 it("should return undefined for address and status if nullish fields from sf", () => {
   // @ts-expect-error handling salesforce edge cases, but really if this can come back null then the dto interface should accept it
-  expect(mapCompaniesHouse({...sfDto, address: undefined, company_status: null, address_snippet: undefined })).toEqual({
-    address: undefined,
-    addressFull: undefined,
-    companyType: "ltd",
-    registrationNumber: "12345678",
-    status: undefined,
-    title: "Wizard Kings",
-  });
+  expect(mapCompaniesHouse({ ...sfDto, address: undefined, company_status: null, address_snippet: undefined })).toEqual(
+    {
+      address: undefined,
+      addressFull: undefined,
+      companyType: "ltd",
+      registrationNumber: "12345678",
+      status: undefined,
+      title: "Wizard Kings",
+    },
+  );
 });
 
 it("should return undefined for missing address fields", () => {
-  expect(mapCompaniesHouse({...sfDto, address: { ...sfDto.address, address_line_2: undefined } })).toEqual({
+  expect(mapCompaniesHouse({ ...sfDto, address: { ...sfDto.address, address_line_2: undefined } })).toEqual({
     address: {
       addressLine1: "1 Pipers Way",
       addressLine2: undefined,

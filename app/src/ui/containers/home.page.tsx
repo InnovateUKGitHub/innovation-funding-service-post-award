@@ -45,7 +45,7 @@ function DevHomePage(props: BaseProps) {
       <div className="govuk-grid-row">
         <div className="govuk-grid-column-one-third">
           <ACC.H3>
-            <ACC.Link route={props.routes.projectDashboard.getLink({ search: undefined, filters: undefined})}>
+            <ACC.Link route={props.routes.projectDashboard.getLink({ search: undefined, filters: undefined })}>
               {getContent(x => x.home.projectsHeading)}
             </ACC.Link>
           </ACC.H3>

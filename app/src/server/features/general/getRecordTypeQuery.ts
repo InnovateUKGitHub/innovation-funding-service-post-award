@@ -12,11 +12,10 @@ export class GetRecordTypeQuery extends QueryBase<RecordType> {
     const recordTypes = await context.runQuery(new GetAllRecordTypesQuery());
     const recordType = recordTypes.find(x => x.parent === this.parent && x.type === this.type);
 
-    if(!recordType) {
+    if (!recordType) {
       throw new BadRequestError(`Record type not found for ${this.parent} and ${this.type}`);
     }
 
     return recordType;
   }
-
 }

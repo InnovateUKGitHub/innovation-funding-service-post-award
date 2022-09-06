@@ -72,7 +72,9 @@ export function TestBed({
     </mountedContext.Provider>
   );
 
-  return shouldOmitRouterProvider ? Providers : (
+  return shouldOmitRouterProvider ? (
+    Providers
+  ) : (
     <Router location={history.location} navigator={history}>
       {Providers}
     </Router>

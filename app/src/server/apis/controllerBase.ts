@@ -50,7 +50,12 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
     this.router = express.Router();
   }
 
-  protected getCustom<TParams, TResponse>(path: string, getParams: GetParams<TParams>, run: Run<TParams, TResponse | null>, allowNulls?: boolean) {
+  protected getCustom<TParams, TResponse>(
+    path: string,
+    getParams: GetParams<TParams>,
+    run: Run<TParams, TResponse | null>,
+    allowNulls?: boolean,
+  ) {
     this.router.get(path, this.executeMethod(200, getParams, run, allowNulls || false));
     return this;
   }
@@ -69,11 +74,15 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
     return this;
   }
 
-  protected postAttachment<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams & { document: DocumentUploadDto }, { documentId: string }>) {
+  protected postAttachment<TParams>(
+    path: string,
+    getParams: GetParams<TParams>,
+    run: Run<TParams & { document: DocumentUploadDto }, { documentId: string }>,
+  ) {
     const wrappedGetParams: InnerGetParams<TParams & { document: DocumentUploadDto }> = (params, query, body, req) => {
       const p = getParams(params, query, body);
 
-      const file: IFileWrapper | null = req.file ? new ServerFileWrapper(req.file) as IFileWrapper : null;
+      const file: IFileWrapper | null = req.file ? (new ServerFileWrapper(req.file) as IFileWrapper) : null;
       const description = Number(body.description) || undefined;
 
       const document: DocumentUploadDto = { file, description };
@@ -84,8 +93,17 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
     this.router.post(path, upload.single("attachment"), this.executeMethod(201, wrappedGetParams, run, false));
   }
 
-  protected postAttachments<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams & { documents: MultipleDocumentUploadDto }, { documentIds: string[] }>) {
-    const wrappedGetParams: InnerGetParams<TParams & { documents: MultipleDocumentUploadDto }> = (params, query, body, req) => {
+  protected postAttachments<TParams>(
+    path: string,
+    getParams: GetParams<TParams>,
+    run: Run<TParams & { documents: MultipleDocumentUploadDto }, { documentIds: string[] }>,
+  ) {
+    const wrappedGetParams: InnerGetParams<TParams & { documents: MultipleDocumentUploadDto }> = (
+      params,
+      query,
+      body,
+      req,
+    ) => {
       const p = getParams(params, query, body);
 
       const files: IFileWrapper[] = Array.isArray(req.files) ? req.files.map(x => new ServerFileWrapper(x)) : [];
@@ -96,7 +114,11 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
       return { documents, ...p };
     };
 
-    this.router.post(path, upload.array("attachment", configuration.options.maxUploadFileCount), this.executeMethod(201, wrappedGetParams, run, false));
+    this.router.post(
+      path,
+      upload.array("attachment", configuration.options.maxUploadFileCount),
+      this.executeMethod(201, wrappedGetParams, run, false),
+    );
   }
 
   protected putItem<TParams>(path: string, getParams: GetParams<TParams>, run: Run<TParams, TDto | null>) {
@@ -124,7 +146,12 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
     return this;
   }
 
-  protected postCustom<TParams, TResponse>(path: string, successStatus: number | null, getParams: GetParams<TParams>, run: Run<TParams, TResponse>) {
+  protected postCustom<TParams, TResponse>(
+    path: string,
+    successStatus: number | null,
+    getParams: GetParams<TParams>,
+    run: Run<TParams, TResponse>,
+  ) {
     this.router.post(path, this.executeMethod(successStatus || 201, getParams, run, false));
     return this;
   }
@@ -134,12 +161,19 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
     return this;
   }
 
-  private executeMethod<TParams, TResponse>(successStatus: number, getParams: InnerGetParams<TParams>, run: Run<TParams, TResponse | null>, allowNulls: boolean) {
+  private executeMethod<TParams, TResponse>(
+    successStatus: number,
+    getParams: InnerGetParams<TParams>,
+    run: Run<TParams, TResponse | null>,
+    allowNulls: boolean,
+  ) {
     return async (req: Request, resp: Response) => {
-
       const user: ISessionUser = req.session?.user;
 
-      const p = Object.assign({ user }, getParams(req.params || {}, req.query as RequestQueryParams || {}, req.body || {}, req));
+      const p = Object.assign(
+        { user },
+        getParams(req.params || {}, (req.query as RequestQueryParams) || {}, req.body || {}, req),
+      );
 
       run(p)
         .then(result => {
@@ -152,10 +186,17 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
     };
   }
 
-  private attachmentHandler<TParams>(successStatus: number, getParams: GetParams<TParams>, run: Run<TParams, DocumentDto | null>) {
+  private attachmentHandler<TParams>(
+    successStatus: number,
+    getParams: GetParams<TParams>,
+    run: Run<TParams, DocumentDto | null>,
+  ) {
     return async (req: Request, resp: Response) => {
       const user: ISessionUser = req.session?.user;
-      const p = Object.assign({ user }, getParams(req.params || {}, req.query as RequestQueryParams|| {}, req.body || {}));
+      const p = Object.assign(
+        { user },
+        getParams(req.params || {}, (req.query as RequestQueryParams) || {}, req.body || {}),
+      );
       run(p)
         .then(result => {
           if (result === null || result === undefined) {
@@ -166,7 +207,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
           const head = {
             "Content-Length": result.contentLength,
             "Content-Type": `${contentType || defaultContentType}; charset=utf-8`,
-            "Content-Disposition": `filename="${result.fileName}"`
+            "Content-Disposition": `filename="${result.fileName}"`,
           };
           resp.writeHead(successStatus, head);
           return result.stream.pipe(resp);
@@ -180,5 +221,4 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
   }
 }
 
-export abstract class ControllerBase<T> extends ControllerBaseWithSummary<T, T> {
-}
+export abstract class ControllerBase<T> extends ControllerBaseWithSummary<T, T> {}

@@ -348,7 +348,7 @@ const ClaimSummaryContainer = (props: ClaimSummaryParams & BaseProps) => {
           props.partnerId,
           props.periodId,
           dto,
-          isSubmitting ? claimSubmittedMessage: claimSavedMessage,
+          isSubmitting ? claimSubmittedMessage : claimSavedMessage,
           () => navigate(link.path),
         )
       }

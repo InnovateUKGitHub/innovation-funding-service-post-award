@@ -8,10 +8,12 @@ export const readonlyLabel: IGuide = {
     {
       name: "Simple",
       comments: "Show a value",
-      example: "<ReadonlyLabel label={\"Partner name\"}><SimpleString>Rose Dawson</SimpleString></ReadonlyLabel>",
+      example: '<ReadonlyLabel label={"Partner name"}><SimpleString>Rose Dawson</SimpleString></ReadonlyLabel>',
       render: () => (
-        <ReadonlyLabel label={"Partner name"}><SimpleString>Rose Dawson</SimpleString></ReadonlyLabel>
-      )
-    }
-  ]
+        <ReadonlyLabel label={"Partner name"}>
+          <SimpleString>Rose Dawson</SimpleString>
+        </ReadonlyLabel>
+      ),
+    },
+  ],
 };

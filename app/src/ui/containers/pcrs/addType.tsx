@@ -153,7 +153,7 @@ const PCRAddTypeContainer = (props: ProjectChangeRequestAddTypeParams & BaseProp
       onChange={(saving, dto) =>
         stores.projectChangeRequests.updatePcrEditor(saving, props.projectId, dto, undefined, () =>
           navigate(
-            props.routes.pcrPrepare.getLink({ projectId: props.projectId, pcrId: props.projectChangeRequestId }).path
+            props.routes.pcrPrepare.getLink({ projectId: props.projectId, pcrId: props.projectChangeRequestId }).path,
           ),
         )
       }

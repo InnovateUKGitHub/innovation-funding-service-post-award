@@ -476,7 +476,7 @@ describe("UpdatePCRCommand", () => {
         expect(pcr.reasoningStatus).toBe(dto.reasoningStatus);
       });
 
-      test("can update status from Draft to Submitted to MO ", async () => {
+      test("can update status from Draft to Submitted to MO", async () => {
         const context = new TestContext();
 
         const project = context.testData.createProject(setCompetitionTypeAsLoans);
@@ -633,7 +633,7 @@ describe("UpdatePCRCommand", () => {
         },
       );
 
-      test("if user is MO can update status to QueriedByMonitoringOfficer ", async () => {
+      test("if user is MO can update status to QueriedByMonitoringOfficer", async () => {
         const context = new TestContext();
 
         const project = context.testData.createProject();
@@ -1103,7 +1103,9 @@ describe("UpdatePCRCommand", () => {
         const accountNameChangeType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.AccountNameChange,
         );
-        const recordType = context.testData.createPCRRecordTypes().find(x => x.type === accountNameChangeType?.typeName);
+        const recordType = context.testData
+          .createPCRRecordTypes()
+          .find(x => x.type === accountNameChangeType?.typeName);
         context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.ToDo });
 
         const dto = await context.runQuery(
@@ -1319,7 +1321,9 @@ describe("UpdatePCRCommand", () => {
         const partnerWithdrawalType = GetPCRItemTypesQuery.recordTypeMetaValues.find(
           x => x.type === PCRItemType.PartnerWithdrawal,
         );
-        const recordType = context.testData.createPCRRecordTypes().find(x => x.type === partnerWithdrawalType?.typeName);
+        const recordType = context.testData
+          .createPCRRecordTypes()
+          .find(x => x.type === partnerWithdrawalType?.typeName);
         context.testData.createPCRItem(projectChangeRequest, recordType, { status: PCRItemStatus.ToDo });
 
         const dto = await context.runQuery(

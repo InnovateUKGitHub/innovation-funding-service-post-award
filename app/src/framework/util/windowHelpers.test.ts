@@ -1,4 +1,4 @@
-import {scrollToTheTopInstantly, scrollToTheTopSmoothly} from "./windowHelpers";
+import { scrollToTheTopInstantly, scrollToTheTopSmoothly } from "./windowHelpers";
 
 global.window.scrollTo = jest.fn();
 describe("windowHelpers", () => {
@@ -6,12 +6,11 @@ describe("windowHelpers", () => {
 
   test("scrollToTheTopSmoothly", () => {
     scrollToTheTopSmoothly();
-    expect(global.window.scrollTo).toBeCalledWith({ top: 0, behavior: "smooth"});
+    expect(global.window.scrollTo).toBeCalledWith({ top: 0, behavior: "smooth" });
   });
-
 
   test("scrollToTheTopInstantly", () => {
     scrollToTheTopInstantly();
-    expect(global.window.scrollTo).toBeCalledWith(0,0);
+    expect(global.window.scrollTo).toBeCalledWith(0, 0);
   });
 });

@@ -20,7 +20,6 @@ describe("getContentFromResult()", () => {
 });
 
 describe("useContent()", () => {
-
   const stubTestContent = {
     test1: { content: "stub-test1" },
     test2: { content: "stub-test2" },

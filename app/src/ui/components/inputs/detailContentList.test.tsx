@@ -12,7 +12,7 @@ const stubItems = [
 describe("<DetailContentList />", () => {
   const defaultProps = {
     qa: "stub-qa",
-    items: []
+    items: [],
   };
 
   const setupComponent = (props: Partial<DetailContentListProps>) =>

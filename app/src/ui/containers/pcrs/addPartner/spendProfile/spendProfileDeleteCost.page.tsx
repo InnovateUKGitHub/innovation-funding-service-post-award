@@ -196,7 +196,6 @@ const SpendProfileDeleteCostContainer = (props: PcrDeleteSpendProfileCostParams 
           ),
         );
       }}
-
     />
   );
 };

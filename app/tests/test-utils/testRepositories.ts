@@ -1,6 +1,3 @@
-/* eslint-disable sonarjs/no-identical-functions */
-/* eslint-disable @typescript-eslint/naming-convention */
-/* eslint-disable no-underscore-dangle */
 import { Stream } from "stream";
 import * as Repositories from "@server/repositories";
 import { BadSalesforceQuery, FileTypeNotAllowedError } from "@server/repositories";
@@ -16,7 +13,7 @@ import {
   MonitoringReportStatus,
   PCRStatus,
   PermissionGroupIdentifier,
-  TypeOfAid
+  TypeOfAid,
 } from "@framework/types";
 import * as Entities from "@framework/entities";
 import { PicklistEntry } from "jsforce";
@@ -43,10 +40,13 @@ import { TestRepository } from "./testRepository";
 import { TestFileWrapper } from "./testData";
 
 function nullReturn() {
- return null;
+  return null;
 }
 
-class ProjectsTestRepository extends TestRepository<Repositories.ISalesforceProject> implements Repositories.IProjectRepository {
+class ProjectsTestRepository
+  extends TestRepository<Repositories.ISalesforceProject>
+  implements Repositories.IProjectRepository
+{
   getById(id: string) {
     return super.getOne(x => x.Id === id);
   }
@@ -74,27 +74,71 @@ class PartnerTestRepository extends TestRepository<Entities.Partner> implements 
       item.bankDetailsTaskStatus = updatedPartner.Acc_BankCheckCompleted__c;
       item.bankCheckStatus = updatedPartner.Acc_BankCheckState__c;
       item.sortCode = updatedPartner.Acc_SortCode__c !== undefined ? updatedPartner.Acc_SortCode__c : item.sortCode;
-      item.accountNumber = updatedPartner.Acc_AccountNumber__c !== undefined ? updatedPartner.Acc_AccountNumber__c : item.accountNumber;
-      item.companyNumber = updatedPartner.Acc_RegistrationNumber__c !== undefined ? updatedPartner.Acc_RegistrationNumber__c : item.companyNumber;
+      item.accountNumber =
+        updatedPartner.Acc_AccountNumber__c !== undefined ? updatedPartner.Acc_AccountNumber__c : item.accountNumber;
+      item.companyNumber =
+        updatedPartner.Acc_RegistrationNumber__c !== undefined
+          ? updatedPartner.Acc_RegistrationNumber__c
+          : item.companyNumber;
       item.firstName = updatedPartner.Acc_FirstName__c !== undefined ? updatedPartner.Acc_FirstName__c : item.firstName;
       item.lastName = updatedPartner.Acc_LastName__c !== undefined ? updatedPartner.Acc_LastName__c : item.lastName;
-      item.accountStreet = updatedPartner.Acc_AddressStreet__c !== undefined ? updatedPartner.Acc_AddressStreet__c : item.accountStreet;
-      item.accountTownOrCity = updatedPartner.Acc_AddressTown__c !== undefined ? updatedPartner.Acc_AddressTown__c : item.accountTownOrCity;
-      item.accountBuilding = updatedPartner.Acc_AddressBuildingName__c !== undefined ? updatedPartner.Acc_AddressBuildingName__c : item.accountBuilding;
-      item.accountLocality = updatedPartner.Acc_AddressLocality__c !== undefined ? updatedPartner.Acc_AddressLocality__c : item.accountLocality;
-      item.accountPostcode = updatedPartner.Acc_AddressPostcode__c !== undefined ? updatedPartner.Acc_AddressPostcode__c : item.accountPostcode;
-      item.validationCheckPassed = updatedPartner.Acc_ValidationCheckPassed__c !== undefined ? updatedPartner.Acc_ValidationCheckPassed__c : item.validationCheckPassed;
+      item.accountStreet =
+        updatedPartner.Acc_AddressStreet__c !== undefined ? updatedPartner.Acc_AddressStreet__c : item.accountStreet;
+      item.accountTownOrCity =
+        updatedPartner.Acc_AddressTown__c !== undefined ? updatedPartner.Acc_AddressTown__c : item.accountTownOrCity;
+      item.accountBuilding =
+        updatedPartner.Acc_AddressBuildingName__c !== undefined
+          ? updatedPartner.Acc_AddressBuildingName__c
+          : item.accountBuilding;
+      item.accountLocality =
+        updatedPartner.Acc_AddressLocality__c !== undefined
+          ? updatedPartner.Acc_AddressLocality__c
+          : item.accountLocality;
+      item.accountPostcode =
+        updatedPartner.Acc_AddressPostcode__c !== undefined
+          ? updatedPartner.Acc_AddressPostcode__c
+          : item.accountPostcode;
+      item.validationCheckPassed =
+        updatedPartner.Acc_ValidationCheckPassed__c !== undefined
+          ? updatedPartner.Acc_ValidationCheckPassed__c
+          : item.validationCheckPassed;
       item.iban = updatedPartner.Acc_Iban__c !== undefined ? updatedPartner.Acc_Iban__c : item.iban;
-      item.validationConditionsSeverity = updatedPartner.Acc_ValidationConditionsSeverity__c !== undefined ? updatedPartner.Acc_ValidationConditionsSeverity__c : item.validationConditionsSeverity;
-      item.validationConditionsCode = updatedPartner.Acc_ValidationConditionsCode__c !== undefined ? updatedPartner.Acc_ValidationConditionsCode__c : item.validationConditionsCode;
-      item.validationConditionsDesc = updatedPartner.Acc_ValidationConditionsDesc__c !== undefined ?  updatedPartner.Acc_ValidationConditionsDesc__c : item.validationConditionsDesc;
-      item.addressScore = updatedPartner.Acc_AddressScore__c !== undefined ? updatedPartner.Acc_AddressScore__c : item.addressScore;
-      item.companyNameScore = updatedPartner.Acc_CompanyNameScore__c !== undefined ? updatedPartner.Acc_CompanyNameScore__c : item.companyNameScore;
-      item.personalDetailsScore = updatedPartner.Acc_PersonalDetailsScore__c !== undefined ? updatedPartner.Acc_PersonalDetailsScore__c : item.personalDetailsScore;
-      item.regNumberScore = updatedPartner.Acc_RegNumberScore__c !== undefined ? updatedPartner.Acc_RegNumberScore__c : item.regNumberScore;
-      item.verificationConditionsSeverity = updatedPartner.Acc_VerificationConditionsSeverity__c !== undefined ? updatedPartner.Acc_VerificationConditionsSeverity__c : item.verificationConditionsSeverity;
-      item.verificationConditionsCode = updatedPartner.Acc_VerificationConditionsCode__c !== undefined ? updatedPartner.Acc_VerificationConditionsCode__c : item.verificationConditionsCode;
-      item.verificationConditionsDesc = updatedPartner.Acc_VerificationConditionsDesc__c !== undefined ? updatedPartner.Acc_VerificationConditionsDesc__c : item.verificationConditionsDesc;
+      item.validationConditionsSeverity =
+        updatedPartner.Acc_ValidationConditionsSeverity__c !== undefined
+          ? updatedPartner.Acc_ValidationConditionsSeverity__c
+          : item.validationConditionsSeverity;
+      item.validationConditionsCode =
+        updatedPartner.Acc_ValidationConditionsCode__c !== undefined
+          ? updatedPartner.Acc_ValidationConditionsCode__c
+          : item.validationConditionsCode;
+      item.validationConditionsDesc =
+        updatedPartner.Acc_ValidationConditionsDesc__c !== undefined
+          ? updatedPartner.Acc_ValidationConditionsDesc__c
+          : item.validationConditionsDesc;
+      item.addressScore =
+        updatedPartner.Acc_AddressScore__c !== undefined ? updatedPartner.Acc_AddressScore__c : item.addressScore;
+      item.companyNameScore =
+        updatedPartner.Acc_CompanyNameScore__c !== undefined
+          ? updatedPartner.Acc_CompanyNameScore__c
+          : item.companyNameScore;
+      item.personalDetailsScore =
+        updatedPartner.Acc_PersonalDetailsScore__c !== undefined
+          ? updatedPartner.Acc_PersonalDetailsScore__c
+          : item.personalDetailsScore;
+      item.regNumberScore =
+        updatedPartner.Acc_RegNumberScore__c !== undefined ? updatedPartner.Acc_RegNumberScore__c : item.regNumberScore;
+      item.verificationConditionsSeverity =
+        updatedPartner.Acc_VerificationConditionsSeverity__c !== undefined
+          ? updatedPartner.Acc_VerificationConditionsSeverity__c
+          : item.verificationConditionsSeverity;
+      item.verificationConditionsCode =
+        updatedPartner.Acc_VerificationConditionsCode__c !== undefined
+          ? updatedPartner.Acc_VerificationConditionsCode__c
+          : item.verificationConditionsCode;
+      item.verificationConditionsDesc =
+        updatedPartner.Acc_VerificationConditionsDesc__c !== undefined
+          ? updatedPartner.Acc_VerificationConditionsDesc__c
+          : item.verificationConditionsDesc;
       return Promise.resolve(true);
     }
     return Promise.resolve(false);
@@ -105,7 +149,10 @@ class PartnerTestRepository extends TestRepository<Entities.Partner> implements 
   }
 }
 
-class ProjectContactTestRepository extends TestRepository<Repositories.ISalesforceProjectContact> implements Repositories.IProjectContactsRepository {
+class ProjectContactTestRepository
+  extends TestRepository<Repositories.ISalesforceProjectContact>
+  implements Repositories.IProjectContactsRepository
+{
   getAllByProjectId(projectId: string) {
     return super.getWhere(x => x.Acc_ProjectId__c === projectId);
   }
@@ -120,13 +167,19 @@ class CompaniesTestRepository implements Repositories.ICompaniesHouse {
     return Promise.resolve([]);
   }
 }
-class CostCategoriesTestRepository extends TestRepository<Entities.CostCategory> implements Repositories.ICostCategoryRepository {
+class CostCategoriesTestRepository
+  extends TestRepository<Entities.CostCategory>
+  implements Repositories.ICostCategoryRepository
+{
   getAll() {
     return super.getAll();
   }
 }
 
-class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim> implements Repositories.IClaimRepository {
+class ClaimsTestRepository
+  extends TestRepository<Repositories.ISalesforceClaim>
+  implements Repositories.IClaimRepository
+{
   constructor(private readonly partnerRepository: PartnerTestRepository) {
     super();
   }
@@ -177,9 +230,14 @@ class ClaimsTestRepository extends TestRepository<Repositories.ISalesforceClaim>
   }
 }
 
-class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforceClaimDetails> implements Repositories.IClaimDetailsRepository {
+class ClaimDetailsTestRepository
+  extends TestRepository<Repositories.ISalesforceClaimDetails>
+  implements Repositories.IClaimDetailsRepository
+{
   getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<Repositories.ISalesforceClaimDetails[]> {
-    return super.getWhere(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
+    return super.getWhere(
+      x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId,
+    );
   }
 
   getAllByPartner(partnerId: string): Promise<Repositories.ISalesforceClaimDetails[]> {
@@ -187,7 +245,12 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
   }
 
   get({ partnerId, periodId, costCategoryId }: ClaimDetailKey): Promise<Repositories.ISalesforceClaimDetails | null> {
-    return super.filterOne(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === costCategoryId);
+    return super.filterOne(
+      x =>
+        x.Acc_ProjectParticipant__r.Id === partnerId &&
+        x.Acc_ProjectPeriodNumber__c === periodId &&
+        x.Acc_CostCategory__c === costCategoryId,
+    );
   }
 
   update(item: Updatable<Repositories.ISalesforceClaimDetails>): Promise<boolean> {
@@ -206,7 +269,10 @@ class ClaimDetailsTestRepository extends TestRepository<Repositories.ISalesforce
   }
 }
 
-class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocument]> implements Repositories.IDocumentsRepository {
+class DocumentsTestRepository
+  extends TestRepository<[string, ISalesforceDocument]>
+  implements Repositories.IDocumentsRepository
+{
   async insertDocument(file: TestFileWrapper, recordId: string, description: DocumentDescription): Promise<string> {
     const nameParts = file.fileName.split(".");
     const extension = nameParts.length > 1 ? nameParts[nameParts.length - 1] : null;
@@ -217,25 +283,28 @@ class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocumen
 
     const newDocumentId = (this.Items.length + 1).toString();
     // insert tuple [linkedRecordId, document] to enable lookup by linkedRecordId in test repository
-    await super.insertOne([recordId, {
-      Id: newDocumentId,
-      Title: title,
-      FileExtension: extension,
-      ContentDocumentId: newDocumentId,
-      ContentSize: 5,
-      FileType: extension,
-      ReasonForChange: "First upload",
-      PathOnClient: file.fileName,
-      ContentLocation: "S",
-      VersionData: file.content,
-      Description: new DocumentDescriptionMapper().mapToSalesforceDocumentDescription(description),
-      CreatedDate: new Date().toISOString(),
-      Acc_LastModifiedByAlias__c: "User",
-      Acc_UploadedByMe__c: false,
-      Owner: {
-        Username: "aUserName"
-      }
-    }]);
+    await super.insertOne([
+      recordId,
+      {
+        Id: newDocumentId,
+        Title: title,
+        FileExtension: extension,
+        ContentDocumentId: newDocumentId,
+        ContentSize: 5,
+        FileType: extension,
+        ReasonForChange: "First upload",
+        PathOnClient: file.fileName,
+        ContentLocation: "S",
+        VersionData: file.content,
+        Description: new DocumentDescriptionMapper().mapToSalesforceDocumentDescription(description),
+        CreatedDate: new Date().toISOString(),
+        Acc_LastModifiedByAlias__c: "User",
+        Acc_UploadedByMe__c: false,
+        Owner: {
+          Username: "aUserName",
+        },
+      },
+    ]);
     return newDocumentId;
   }
 
@@ -261,13 +330,15 @@ class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocumen
   }
 
   getDocumentContent(documentId: string): Promise<Stream> {
-    return super.getOne(x => x[1].Id === documentId).then(x => {
-      const s = new Stream.Readable();
-      s._read = nullReturn;
-      s.push(x[1].Id);
-      s.push(null);
-      return s;
-    });
+    return super
+      .getOne(x => x[1].Id === documentId)
+      .then(x => {
+        const s = new Stream.Readable();
+        s._read = nullReturn;
+        s.push(x[1].Id);
+        s.push(null);
+        return s;
+      });
   }
 
   async getDocumentMetadata(documentId: string): Promise<DocumentEntity> {
@@ -276,30 +347,44 @@ class DocumentsTestRepository extends TestRepository<[string, ISalesforceDocumen
   }
 
   async getDocumentMetadataForEntityDocument(entityId: string, documentId: string): Promise<DocumentEntity | null> {
-    const document = await super.filterOne(x => documentId === x[1].Id && x[0] === entityId).then(x => (x && x[1]));
+    const document = await super.filterOne(x => documentId === x[1].Id && x[0] === entityId).then(x => x && x[1]);
     return document ? new SalesforceDocumentMapper().map(document) : null;
   }
 
   async getDocumentsMetadata(documentIds: string[], filter?: DocumentFilter): Promise<DocumentEntity[]> {
-    const sfDescription = filter && new DocumentDescriptionMapper().mapToSalesforceDocumentDescription(filter.description);
-    const documents = await super.getWhere(x => documentIds.indexOf(x[1].ContentDocumentId) > 1 && (!filter || sfDescription === x[1].Description)).then(x => x.map(y => y[1]));
+    const sfDescription =
+      filter && new DocumentDescriptionMapper().mapToSalesforceDocumentDescription(filter.description);
+    const documents = await super
+      .getWhere(x => documentIds.indexOf(x[1].ContentDocumentId) > 1 && (!filter || sfDescription === x[1].Description))
+      .then(x => x.map(y => y[1]));
     return documents.map(x => new SalesforceDocumentMapper().map(x));
   }
 
   async getDocumentsMetadataByLinkedRecord(recordId: string, filter?: DocumentFilter): Promise<DocumentEntity[]> {
-    const sfDescription = filter && new DocumentDescriptionMapper().mapToSalesforceDocumentDescription(filter.description);
-    const documents = await super.getWhere(x => x[0] === recordId && (!filter || x[1].Description === sfDescription)).then(x => x.map(y => y[1]));
+    const sfDescription =
+      filter && new DocumentDescriptionMapper().mapToSalesforceDocumentDescription(filter.description);
+    const documents = await super
+      .getWhere(x => x[0] === recordId && (!filter || x[1].Description === sfDescription))
+      .then(x => x.map(y => y[1]));
     return documents.map(x => new SalesforceDocumentMapper().map(x));
   }
 }
 
-class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesforceClaimLineItem> implements Repositories.IClaimLineItemRepository {
+class ClaimLineItemsTestRepository
+  extends TestRepository<Repositories.ISalesforceClaimLineItem>
+  implements Repositories.IClaimLineItemRepository
+{
   getAllForCategory(partnerId: string, categoryId: string, periodId: number) {
-    return super.getWhere(x => x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === categoryId && x.Acc_ProjectParticipant__c === partnerId);
+    return super.getWhere(
+      x =>
+        x.Acc_ProjectPeriodNumber__c === periodId &&
+        x.Acc_CostCategory__c === categoryId &&
+        x.Acc_ProjectParticipant__c === partnerId,
+    );
   }
 
   delete(ids: string[]) {
-    ids.forEach((id) => {
+    ids.forEach(id => {
       const index = this.Items.findIndex(x => x.Id === id);
       if (index === -1) {
         return Promise.reject();
@@ -313,7 +398,7 @@ class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesfor
     if (!(updates instanceof Array)) {
       updates = [updates];
     }
-    updates.forEach((update) => {
+    updates.forEach(update => {
       const index = this.Items.findIndex(x => x.Id === update.Id);
       if (index === -1) {
         return Promise.reject();
@@ -325,7 +410,7 @@ class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesfor
 
   insert(lineItems: Partial<Repositories.ISalesforceClaimLineItem>[]) {
     const newIds: string[] = [];
-    lineItems.forEach((item) => {
+    lineItems.forEach(item => {
       const Id = `ClaimLineItem-${this.Items.length}`;
       newIds.push(Id);
       this.Items.push({ ...item, Id } as Repositories.ISalesforceClaimLineItem);
@@ -334,7 +419,10 @@ class ClaimLineItemsTestRepository extends TestRepository<Repositories.ISalesfor
   }
 }
 
-class MonitoringReportHeaderTestRepository extends TestRepository<Repositories.ISalesforceMonitoringReportHeader> implements Repositories.IMonitoringReportHeaderRepository {
+class MonitoringReportHeaderTestRepository
+  extends TestRepository<Repositories.ISalesforceMonitoringReportHeader>
+  implements Repositories.IMonitoringReportHeaderRepository
+{
   getById(id: string): Promise<Repositories.ISalesforceMonitoringReportHeader> {
     return super.getOne(x => x.Id === id);
   }
@@ -372,21 +460,22 @@ class MonitoringReportHeaderTestRepository extends TestRepository<Repositories.I
           value: statusLabel,
           label: statusLabel,
           active: true,
-          defaultValue: false
-        })
-        )
+          defaultValue: false,
+        })),
     );
   }
-
 }
 
-class MonitoringReportResponseTestRepository extends TestRepository<Repositories.ISalesforceMonitoringReportResponse> implements Repositories.IMonitoringReportResponseRepository {
+class MonitoringReportResponseTestRepository
+  extends TestRepository<Repositories.ISalesforceMonitoringReportResponse>
+  implements Repositories.IMonitoringReportResponseRepository
+{
   getAllForHeader(monitoringReportHeaderId: string): Promise<Repositories.ISalesforceMonitoringReportResponse[]> {
     return super.getWhere(x => x.Acc_MonitoringHeader__c === monitoringReportHeaderId);
   }
 
   delete(idList: string[]) {
-    idList.forEach((Id) => {
+    idList.forEach(Id => {
       const index = this.Items.findIndex(x => x.Id === Id);
       if (index === -1) {
         return Promise.reject();
@@ -400,7 +489,7 @@ class MonitoringReportResponseTestRepository extends TestRepository<Repositories
     if (!(updates instanceof Array)) {
       updates = [updates];
     }
-    updates.forEach((item) => {
+    updates.forEach(item => {
       const index = this.Items.findIndex(x => x.Id === item.Id);
       if (index === -1) {
         return Promise.reject();
@@ -412,7 +501,7 @@ class MonitoringReportResponseTestRepository extends TestRepository<Repositories
 
   insert(response: Partial<Repositories.ISalesforceMonitoringReportResponse>[]) {
     const newIds: string[] = [];
-    response.forEach((x) => {
+    response.forEach(x => {
       const Id = `MonitoringReportResponse-${this.Items.length}`;
       newIds.push(Id);
       this.Items.push({ ...x, Id } as Repositories.ISalesforceMonitoringReportResponse);
@@ -421,13 +510,19 @@ class MonitoringReportResponseTestRepository extends TestRepository<Repositories
   }
 }
 
-class ClaimTotalCostTestRepository extends TestRepository<Repositories.ISalesforceClaimTotalCostCategory> implements Repositories.IClaimTotalCostCategoryRepository {
+class ClaimTotalCostTestRepository
+  extends TestRepository<Repositories.ISalesforceClaimTotalCostCategory>
+  implements Repositories.IClaimTotalCostCategoryRepository
+{
   getAllByPartnerId(partnerId: string) {
     return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
   }
 }
 
-class ProfileDetailsTestRepository extends TestRepository<Repositories.ISalesforceProfileDetails> implements Repositories.IProfileDetailsRepository {
+class ProfileDetailsTestRepository
+  extends TestRepository<Repositories.ISalesforceProfileDetails>
+  implements Repositories.IProfileDetailsRepository
+{
   getRequiredCategories(partnerId: string): Promise<Repositories.ISalesforceProfileDetails[]> {
     return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
   }
@@ -437,7 +532,12 @@ class ProfileDetailsTestRepository extends TestRepository<Repositories.ISalesfor
 
   getById(partnerId: string, periodId: number, costCategoryId: string) {
     return super
-      .getWhere(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId && x.Acc_CostCategory__c === costCategoryId)
+      .getWhere(
+        x =>
+          x.Acc_ProjectParticipant__c === partnerId &&
+          x.Acc_ProjectPeriodNumber__c === periodId &&
+          x.Acc_CostCategory__c === costCategoryId,
+      )
       .then(x => x[0]);
   }
 
@@ -454,25 +554,27 @@ class ProfileDetailsTestRepository extends TestRepository<Repositories.ISalesfor
   }
 }
 
-class ProfileTotalPeriodTestRepository extends TestRepository<Repositories.ISalesforceProfileTotalPeriod> implements Repositories.IProfileTotalPeriodRepository {
+class ProfileTotalPeriodTestRepository
+  extends TestRepository<Repositories.ISalesforceProfileTotalPeriod>
+  implements Repositories.IProfileTotalPeriodRepository
+{
   constructor(private readonly partnerRepository: PartnerTestRepository) {
     super();
   }
 
   get(partnerId: string, periodId: number): Promise<Repositories.ISalesforceProfileTotalPeriod> {
-    return super
-      .getOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
+    return super.getOne(x => x.Acc_ProjectParticipant__c === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
   }
 
   getAllByPartnerId(partnerId: string): Promise<Repositories.ISalesforceProfileTotalPeriod[]> {
-    return super
-      .getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
+    return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
   }
 
   getByProjectIdAndPeriodId(projectId: string, periodId: number) {
     const partnerIds = this.partnerRepository.Items.filter(x => x.projectId === projectId).map(x => x.id);
     return super.getWhere(
-      x => partnerIds.indexOf(x.Acc_ProjectParticipant__c) !== -1 && x.Acc_ProjectPeriodNumber__c === periodId);
+      x => partnerIds.indexOf(x.Acc_ProjectParticipant__c) !== -1 && x.Acc_ProjectPeriodNumber__c === periodId,
+    );
   }
 
   getAllByProjectId(projectId: string): Promise<Repositories.ISalesforceProfileTotalPeriod[]> {
@@ -481,19 +583,28 @@ class ProfileTotalPeriodTestRepository extends TestRepository<Repositories.ISale
   }
 }
 
-class ProfileTotalCostCategoryTestRepository extends TestRepository<Repositories.ISalesforceProfileTotalCostCategory> implements Repositories.IProfileTotalCostCategoryRepository {
+class ProfileTotalCostCategoryTestRepository
+  extends TestRepository<Repositories.ISalesforceProfileTotalCostCategory>
+  implements Repositories.IProfileTotalCostCategoryRepository
+{
   getAllByPartnerId(partnerId: string) {
     return super.getWhere(x => x.Acc_ProjectParticipant__c === partnerId);
   }
 }
 
-class MonitoringReportQuestionsRepository extends TestRepository<Repositories.ISalesforceMonitoringReportQuestions> implements Repositories.IMonitoringReportQuestionsRepository {
+class MonitoringReportQuestionsRepository
+  extends TestRepository<Repositories.ISalesforceMonitoringReportQuestions>
+  implements Repositories.IMonitoringReportQuestionsRepository
+{
   getAll() {
     return super.getAll();
   }
 }
 
-class MonitoringReportStatusChangeTestRepository extends TestRepository<Repositories.ISalesforceMonitoringReportStatusChange> implements Repositories.IMonitoringReportStatusChangeRepository {
+class MonitoringReportStatusChangeTestRepository
+  extends TestRepository<Repositories.ISalesforceMonitoringReportStatusChange>
+  implements Repositories.IMonitoringReportStatusChangeRepository
+{
   createStatusChange(statusChange: Partial<Repositories.ISalesforceMonitoringReportStatusChange>) {
     return super.insertOne({
       Id: (this.Items.length + 1).toString(),
@@ -502,7 +613,7 @@ class MonitoringReportStatusChangeTestRepository extends TestRepository<Reposito
       Acc_NewMonitoringReportStatus__c: statusChange.Acc_NewMonitoringReportStatus__c ?? "",
       Acc_CreatedByAlias__c: statusChange.Acc_CreatedByAlias__c ?? "",
       CreatedDate: statusChange.CreatedDate ?? "",
-      Acc_ExternalComment__c: statusChange.Acc_ExternalComment__c ?? ""
+      Acc_ExternalComment__c: statusChange.Acc_ExternalComment__c ?? "",
     });
   }
 
@@ -511,31 +622,37 @@ class MonitoringReportStatusChangeTestRepository extends TestRepository<Reposito
   }
 }
 
-class ClaimStatusChangeTestRepository extends TestRepository<Repositories.ISalesforceClaimStatusChange> implements Repositories.IClaimStatusChangeRepository {
-
+class ClaimStatusChangeTestRepository
+  extends TestRepository<Repositories.ISalesforceClaimStatusChange>
+  implements Repositories.IClaimStatusChangeRepository
+{
   constructor(private readonly claimsRepository: ClaimsTestRepository) {
     super();
   }
 
   getAllForClaim(partnerId: string, periodId: number) {
-    const claim = this.claimsRepository.Items.find(x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId);
+    const claim = this.claimsRepository.Items.find(
+      x => x.Acc_ProjectParticipant__r.Id === partnerId && x.Acc_ProjectPeriodNumber__c === periodId,
+    );
     return super.getWhere(x => x.Acc_Claim__c === (claim && claim.Id));
   }
 
   async create(statusChange: Partial<Repositories.ISalesforceClaimStatusChange>) {
-
-    const id = `NewStatusChange${(this.Items.length + 1)}`;
+    const id = `NewStatusChange${this.Items.length + 1}`;
 
     super.insertOne({ ...statusChange, Id: id } as Repositories.ISalesforceClaimStatusChange);
 
     return id;
   }
-
 }
 
 class PermissionGroupTestRepository implements Repositories.IPermissionGroupRepository {
   public Items: Entities.PermissionGroup[] = [
-    { id: "ClaimsTeamID", identifier: PermissionGroupIdentifier.ClaimsTeam, name: PermissionGroupIdentifier[PermissionGroupIdentifier.ClaimsTeam] }
+    {
+      id: "ClaimsTeamID",
+      identifier: PermissionGroupIdentifier.ClaimsTeam,
+      name: PermissionGroupIdentifier[PermissionGroupIdentifier.ClaimsTeam],
+    },
   ];
 
   getAll() {
@@ -543,14 +660,19 @@ class PermissionGroupTestRepository implements Repositories.IPermissionGroupRepo
   }
 }
 
-class RecordTypeTestRepository extends TestRepository<Entities.RecordType> implements Repositories.IRecordTypeRepository {
+class RecordTypeTestRepository
+  extends TestRepository<Entities.RecordType>
+  implements Repositories.IRecordTypeRepository
+{
   public getAll() {
     return super.getAll();
   }
 }
 
-class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEntity> implements Repositories.IProjectChangeRequestRepository {
-
+class PCRTestRepository
+  extends TestRepository<Entities.ProjectChangeRequestEntity>
+  implements Repositories.IProjectChangeRequestRepository
+{
   public PreviousStatus: { [key: string]: PCRStatus } = {};
 
   getAllByProjectId(projectId: string): Promise<Entities.ProjectChangeRequestEntity[]> {
@@ -558,10 +680,12 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
   }
 
   getById(projectId: string, id: string): Promise<Entities.ProjectChangeRequestEntity> {
-    return super.getOne(x => x.projectId === projectId && x.id === id).then(x => {
-      this.PreviousStatus[x.id] = x.status;
-      return x;
-    });
+    return super
+      .getOne(x => x.projectId === projectId && x.id === id)
+      .then(x => {
+        this.PreviousStatus[x.id] = x.status;
+        return x;
+      });
   }
 
   updateProjectChangeRequest(): Promise<void> {
@@ -576,7 +700,11 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
     return Promise.resolve();
   }
 
-  private mapItemsForCreate(headerId: string, pcr: Entities.ProjectChangeRequestForCreateEntity, items: Entities.ProjectChangeRequestItemForCreateEntity[]) {
+  private mapItemsForCreate(
+    headerId: string,
+    pcr: Entities.ProjectChangeRequestForCreateEntity,
+    items: Entities.ProjectChangeRequestItemForCreateEntity[],
+  ) {
     const itemLength = pcr.items ? items.length : 0;
     return items.map((x, i) => {
       const itemId = `ProjectChangeRequest-${headerId}-Item-${itemLength + i}`;
@@ -596,7 +724,7 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
         publicDescriptionSnapshot: "",
         existingPartnerName: "",
         shortName: "",
-        ...x
+        ...x,
       };
     });
   }
@@ -608,8 +736,10 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
     pcr.items.push(...insert);
   }
 
-  async createProjectChangeRequest(projectChangeRequest: Entities.ProjectChangeRequestForCreateEntity): Promise<string> {
-    const id = `ProjectChangeRequest${(this.Items.length)}`;
+  async createProjectChangeRequest(
+    projectChangeRequest: Entities.ProjectChangeRequestForCreateEntity,
+  ): Promise<string> {
+    const id = `ProjectChangeRequest${this.Items.length}`;
     const items = this.mapItemsForCreate(id, projectChangeRequest, projectChangeRequest.items);
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -661,13 +791,16 @@ class PCRTestRepository extends TestRepository<Entities.ProjectChangeRequestEnti
   }
 }
 
-class PcrSpendProfileTestRepository extends TestRepository<PcrSpendProfileEntity> implements Repositories.IPcrSpendProfileRepository {
+class PcrSpendProfileTestRepository
+  extends TestRepository<PcrSpendProfileEntity>
+  implements Repositories.IPcrSpendProfileRepository
+{
   getAllForPcr(pcrItemId: string): Promise<Entities.PcrSpendProfileEntity[]> {
     return super.getWhere(x => x.pcrItemId === pcrItemId);
   }
   insertSpendProfiles(items: PcrSpendProfileEntityForCreate[]) {
     const newIds: string[] = [];
-    items.forEach((x) => {
+    items.forEach(x => {
       const id = `PcrSpendProfile-${this.Items.length}`;
       newIds.push(id);
       this.Items.push({ ...x, id });
@@ -682,7 +815,7 @@ class PcrSpendProfileTestRepository extends TestRepository<PcrSpendProfileEntity
     return Promise.resolve(true);
   }
   deleteSpendProfiles(ids: string[]) {
-    ids.forEach(x => this.Items = this.Items.filter(element => element.id !== x));
+    ids.forEach(x => (this.Items = this.Items.filter(element => element.id !== x)));
     return Promise.resolve();
   }
 
@@ -699,14 +832,18 @@ class PcrSpendProfileTestRepository extends TestRepository<PcrSpendProfileEntity
   }
 }
 
-class ProjectChangeRequestStatusChangeTestRepository extends TestRepository<Entities.ProjectChangeRequestStatusChangeEntity> implements Repositories.IProjectChangeRequestStatusChangeRepository {
+class ProjectChangeRequestStatusChangeTestRepository
+  extends TestRepository<Entities.ProjectChangeRequestStatusChangeEntity>
+  implements Repositories.IProjectChangeRequestStatusChangeRepository
+{
   constructor(private readonly pcrRepository: PCRTestRepository) {
     super();
   }
 
   createStatusChange(statusChange: Repositories.ICreateProjectChangeRequestStatusChange) {
     const previousStatus = this.pcrRepository.PreviousStatus[statusChange.Acc_ProjectChangeRequest__c];
-    const newStatus = this.pcrRepository.Items.find(x => x.id === statusChange.Acc_ProjectChangeRequest__c)?.status as PCRStatus;
+    const newStatus = this.pcrRepository.Items.find(x => x.id === statusChange.Acc_ProjectChangeRequest__c)
+      ?.status as PCRStatus;
     return super.insertOne({
       id: (this.Items.length + 1).toString(),
       pcrId: statusChange.Acc_ProjectChangeRequest__c,
@@ -715,16 +852,22 @@ class ProjectChangeRequestStatusChangeTestRepository extends TestRepository<Enti
       previousStatus,
       newStatus,
       externalComments: statusChange.Acc_ExternalComment__c,
-      participantVisibility: statusChange.Acc_ParticipantVisibility__c
+      participantVisibility: statusChange.Acc_ParticipantVisibility__c,
     });
   }
 
-  getStatusChanges(projectId: string, projectChangeRequestId: string): Promise<Entities.ProjectChangeRequestStatusChangeEntity[]> {
+  getStatusChanges(
+    projectId: string,
+    projectChangeRequestId: string,
+  ): Promise<Entities.ProjectChangeRequestStatusChangeEntity[]> {
     return super.getWhere(x => x.pcrId === projectChangeRequestId);
   }
 }
 
-class FinancialLoanVirementsTestRepository extends TestRepository<Entities.LoanFinancialVirement> implements Repositories.IFinancialLoanVirementRepository {
+class FinancialLoanVirementsTestRepository
+  extends TestRepository<Entities.LoanFinancialVirement>
+  implements Repositories.IFinancialLoanVirementRepository
+{
   async getForPcr(): Promise<Entities.LoanFinancialVirement[]> {
     return await Promise.resolve(this.Items);
   }
@@ -745,7 +888,10 @@ class FinancialLoanVirementsTestRepository extends TestRepository<Entities.LoanF
   }
 }
 
-class FinancialVirementsTestRepository extends TestRepository<Entities.PartnerFinancialVirement> implements Repositories.IFinancialVirementRepository {
+class FinancialVirementsTestRepository
+  extends TestRepository<Entities.PartnerFinancialVirement>
+  implements Repositories.IFinancialVirementRepository
+{
   getAllForPcr(pcrItemId: string): Promise<Entities.PartnerFinancialVirement[]> {
     return super.getWhere(x => x.pcrItemId === pcrItemId);
   }
@@ -814,7 +960,8 @@ class LoansTestRepository {
 
 class AccountsTestRepository
   extends TestRepository<Repositories.ISalesforceAccount>
-  implements Repositories.IAccountsRepository {
+  implements Repositories.IAccountsRepository
+{
   getAllByJesName(searchString = "") {
     if (searchString?.length && searchString.length < 3) {
       throw new BadRequestError("You must include at least 3 characters to filter on.");
@@ -827,7 +974,6 @@ class BroadcastsTestRepository {
   private Items: Repositories.ISalesforceBroadcast[] = [];
 
   get(broadcastId: string) {
-
     return new Promise<BroadcastDto>(resolve => {
       const broadcastItem = this.Items.find(x => x.Id === broadcastId);
 
@@ -850,13 +996,14 @@ class BroadcastsTestRepository {
         title: item.Name,
         startDate: new Date(item.Acc_StartDate__c),
         endDate: new Date(item.Acc_EndDate__c),
-        content: parseSfLongTextArea(item.Acc_Message__c),}));
+        content: parseSfLongTextArea(item.Acc_Message__c),
+      }));
       resolve(finalValues);
     });
   }
 
-  public setItems(items: Repositories.ISalesforceBroadcast | Repositories.ISalesforceBroadcast[] ){
-    if(Array.isArray(items)) {
+  public setItems(items: Repositories.ISalesforceBroadcast | Repositories.ISalesforceBroadcast[]) {
+    if (Array.isArray(items)) {
       this.Items.push(...items);
     } else {
       this.Items.push(items);
@@ -900,7 +1047,7 @@ export const createTestRepositories = (): ITestRepositories => {
 
   const projectChangeRequests = new PCRTestRepository();
 
-  return ({
+  return {
     accounts: new AccountsTestRepository(),
     broadcast: new BroadcastsTestRepository(),
     claims: claimsRepository,
@@ -928,6 +1075,6 @@ export const createTestRepositories = (): ITestRepositories => {
     projectContacts: new ProjectContactTestRepository(),
     claimTotalCostCategory: new ClaimTotalCostTestRepository(),
     permissionGroups: new PermissionGroupTestRepository(),
-    recordTypes: new RecordTypeTestRepository()
-  });
+    recordTypes: new RecordTypeTestRepository(),
+  };
 };

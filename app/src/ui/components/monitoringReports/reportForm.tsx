@@ -21,17 +21,21 @@ export class MonitoringReportPeriodFormComponent extends Component<PeriodProps> 
     return (
       <>
         <Section>
-          <SimpleString><Content value={(x) => x.components.reportForm.reportMessage} /></SimpleString>
-          <SimpleString><Content value={(x) => x.components.reportForm.questionScoreMessage} /></SimpleString>
+          <SimpleString>
+            <Content value={x => x.components.reportForm.reportMessage} />
+          </SimpleString>
+          <SimpleString>
+            <Content value={x => x.components.reportForm.questionScoreMessage} />
+          </SimpleString>
         </Section>
         <Section>
-          <ReportForm.Form editor={editor} onChange={(dto) => this.props.onChange(dto)} qa="monitoringReportCreateForm">
+          <ReportForm.Form editor={editor} onChange={dto => this.props.onChange(dto)} qa="monitoringReportCreateForm">
             <ReportForm.Numeric
               label="Period"
               labelBold
               width={3}
               name="period"
-              value={(x) => x.periodId}
+              value={x => x.periodId}
               update={(x, v) => (x.periodId = v as number)}
               validation={editor.validator.periodId}
             />
@@ -41,10 +45,10 @@ export class MonitoringReportPeriodFormComponent extends Component<PeriodProps> 
                 styling="Primary"
                 onClick={() => this.props.onSave(editor.data, false, true)}
               >
-                <Content value={(x) => x.components.reportForm.continueText} />
+                <Content value={x => x.components.reportForm.continueText} />
               </ReportForm.Button>
               <ReportForm.Button name="save-return" onClick={() => this.props.onSave(editor.data, false, false)}>
-                <Content value={(x) => x.components.reportForm.saveAndReturnText} />
+                <Content value={x => x.components.reportForm.saveAndReturnText} />
               </ReportForm.Button>
             </ReportForm.Fieldset>
           </ReportForm.Form>

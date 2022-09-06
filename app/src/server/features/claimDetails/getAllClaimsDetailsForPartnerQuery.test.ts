@@ -1,4 +1,3 @@
-
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { GetAllClaimDetailsByPartner } from ".";
 
@@ -10,9 +9,9 @@ describe("claimDetails/getAllByPartner", () => {
     const partner = context.testData.createPartner();
     context.testData.createClaimDetail(project, costCat, partner);
 
-    const query  = new GetAllClaimDetailsByPartner(partner.id);
+    const query = new GetAllClaimDetailsByPartner(partner.id);
     const result = await context.runQuery(query);
-    const item   = result[0];
+    const item = result[0];
 
     expect(item.costCategoryId).toBe(costCat.id);
     expect(item.periodId).toBe(1);
@@ -26,7 +25,7 @@ describe("claimDetails/getAllByPartner", () => {
     const partner = context.testData.createPartner();
     context.testData.createClaimDetail(project, costCat, partner);
 
-    const query  = new GetAllClaimDetailsByPartner(partner.id);
+    const query = new GetAllClaimDetailsByPartner(partner.id);
     const result = await context.runQuery(query);
 
     expect(result.length).toBe(1);
@@ -42,10 +41,9 @@ describe("claimDetails/getAllByPartner", () => {
     context.testData.createClaimDetail(project, costCat, partner);
     context.testData.createClaimDetail(project, costCat, partner);
 
-    const query  = new GetAllClaimDetailsByPartner(partner.id);
+    const query = new GetAllClaimDetailsByPartner(partner.id);
     const result = await context.runQuery(query);
 
     expect(result.length).toBe(3);
   });
-
 });

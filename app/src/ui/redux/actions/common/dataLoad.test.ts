@@ -1,4 +1,3 @@
-
 import { LoadingStatus } from "@framework/constants";
 import { conditionalLoad, dataLoadAction } from "@ui/redux/actions";
 
@@ -14,7 +13,7 @@ describe("dataLoadAction", () => {
       id: "a",
       store: "b",
       status: 1,
-      data: {}
+      data: {},
     };
     expect(result.payload).toMatchObject(expected);
   });
@@ -26,14 +25,14 @@ describe("dataLoadAction", () => {
       store: "b",
       status: 2,
       data: "d",
-      error: "e"
+      error: "e",
     };
     expect(result.payload).toMatchObject(expected);
   });
 });
 
 describe("conditionalLoad", () => {
-  const getState = () => ({}) as any;
+  const getState = () => ({} as any);
 
   it("should return a thunk", () => {
     const result = conditionalLoad({} as any, jest.fn());
@@ -43,9 +42,9 @@ describe("conditionalLoad", () => {
   test("no existing data dispatches Loading dataLoadAction", () => {
     const dispatch = jest.fn();
     const selector = { get: () => null, key: 1, store: "test" } as any;
-    const load     = jest.fn(() => new Promise(jest.fn()));
-    const thunk    = conditionalLoad(selector, load);
-    const action   = dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, null);
+    const load = jest.fn(() => new Promise(jest.fn()));
+    const thunk = conditionalLoad(selector, load);
+    const action = dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, null);
 
     thunk(dispatch, getState, undefined);
     expect(dispatch).toHaveBeenCalledWith(action);
@@ -54,8 +53,8 @@ describe("conditionalLoad", () => {
   test("no existing data calls 'load'", async () => {
     const dispatch = jest.fn();
     const selector = { get: () => null } as any;
-    const load     = jest.fn(() => Promise.resolve());
-    const thunk    = conditionalLoad(selector, load);
+    const load = jest.fn(() => Promise.resolve());
+    const thunk = conditionalLoad(selector, load);
 
     await thunk(dispatch, getState, undefined);
     expect(load).toHaveBeenCalled();
@@ -64,10 +63,10 @@ describe("conditionalLoad", () => {
   test("no existing data dispatches Done dataLoadAction for result of 'load'", async () => {
     const dispatch = jest.fn();
     const selector = { get: () => null, key: 1, store: "test" } as any;
-    const data     = { test: 1 };
-    const load     = jest.fn(() => Promise.resolve(data));
-    const thunk    = conditionalLoad(selector, load);
-    const action   = dataLoadAction(selector.key, selector.store, LoadingStatus.Done, data);
+    const data = { test: 1 };
+    const load = jest.fn(() => Promise.resolve(data));
+    const thunk = conditionalLoad(selector, load);
+    const action = dataLoadAction(selector.key, selector.store, LoadingStatus.Done, data);
 
     await thunk(dispatch, getState, undefined);
     expect(dispatch).toHaveBeenCalledTimes(2);
@@ -77,10 +76,10 @@ describe("conditionalLoad", () => {
   test("load error dispatches Failed dataLoadAction", async () => {
     const dispatch = jest.fn();
     const selector = { get: () => null, key: 1, store: "test" } as any;
-    const error    = new Error("I am an error");
-    const load     = jest.fn(() => Promise.reject(error));
-    const thunk    = conditionalLoad(selector, load);
-    const action   = dataLoadAction(selector.key, selector.store, LoadingStatus.Failed, null, error);
+    const error = new Error("I am an error");
+    const load = jest.fn(() => Promise.reject(error));
+    const thunk = conditionalLoad(selector, load);
+    const action = dataLoadAction(selector.key, selector.store, LoadingStatus.Failed, null, error);
 
     await thunk(dispatch, getState, undefined);
     expect(dispatch).toHaveBeenCalledTimes(2);
@@ -89,11 +88,11 @@ describe("conditionalLoad", () => {
 
   test("existing data in Preload state dispatches Loading dataLoadAction and calls 'load'", () => {
     const dispatch = jest.fn();
-    const data     = { test: "already loaded1" };
+    const data = { test: "already loaded1" };
     const selector = { get: () => ({ status: LoadingStatus.Preload, data }), key: 1, store: "test" } as any;
-    const load     = jest.fn(() => new Promise(jest.fn()));
-    const thunk    = conditionalLoad(selector, load);
-    const action   = dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, data);
+    const load = jest.fn(() => new Promise(jest.fn()));
+    const thunk = conditionalLoad(selector, load);
+    const action = dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, data);
 
     thunk(dispatch, getState, undefined);
     expect(dispatch).toHaveBeenCalledWith(action);
@@ -102,11 +101,11 @@ describe("conditionalLoad", () => {
 
   test("existing data in Stale state dispatches Loading dataLoadAction and calls 'load'", () => {
     const dispatch = jest.fn();
-    const data     = { test: "already loaded2" };
+    const data = { test: "already loaded2" };
     const selector = { get: () => ({ status: LoadingStatus.Stale, data }), key: 1, store: "test" } as any;
-    const load     = jest.fn(() => new Promise(jest.fn()));
-    const thunk    = conditionalLoad(selector, load);
-    const action   = dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, data);
+    const load = jest.fn(() => new Promise(jest.fn()));
+    const thunk = conditionalLoad(selector, load);
+    const action = dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, data);
 
     thunk(dispatch, getState, undefined);
     expect(dispatch).toHaveBeenCalledWith(action);
@@ -115,10 +114,10 @@ describe("conditionalLoad", () => {
 
   test("existing data in Done state doesn't dispatch or load", () => {
     const dispatch = jest.fn();
-    const data     = { test: "already loaded3" };
+    const data = { test: "already loaded3" };
     const selector = { get: () => ({ status: LoadingStatus.Done, data }), key: 1, store: "test" } as any;
-    const load     = jest.fn(() => new Promise(jest.fn()));
-    const thunk    = conditionalLoad(selector, load);
+    const load = jest.fn(() => new Promise(jest.fn()));
+    const thunk = conditionalLoad(selector, load);
 
     thunk(dispatch, getState, undefined);
     expect(dispatch).not.toHaveBeenCalled();
@@ -128,8 +127,8 @@ describe("conditionalLoad", () => {
   test("existing data in Failed state doesn't dispatch or load", () => {
     const dispatch = jest.fn();
     const selector = { get: () => ({ status: LoadingStatus.Failed }), key: 1, store: "test" } as any;
-    const load     = jest.fn(() => new Promise(jest.fn()));
-    const thunk    = conditionalLoad(selector, load);
+    const load = jest.fn(() => new Promise(jest.fn()));
+    const thunk = conditionalLoad(selector, load);
 
     thunk(dispatch, getState, undefined);
     expect(dispatch).not.toHaveBeenCalled();

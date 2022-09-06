@@ -4,19 +4,27 @@ import { MonitoringReportDto } from "@framework/dtos/monitoringReportDto";
 import {
   MonitoringReportDashboardRoute,
   MonitoringReportPreparePeriodParams,
-  MonitoringReportPreparePeriodRoute, MonitoringReportWorkflowRoute,
+  MonitoringReportPreparePeriodRoute,
+  MonitoringReportWorkflowRoute,
 } from "@ui/containers";
 import { MonitoringReportDtoValidator } from "@ui/validators/MonitoringReportDtoValidator";
 import { GetMonitoringReportById, SaveMonitoringReport } from "@server/features/monitoringReports";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 
-export class MonitoringReportPreparePeriodFormHandler extends StandardFormHandlerBase<MonitoringReportPreparePeriodParams, "monitoringReport"> {
-
+export class MonitoringReportPreparePeriodFormHandler extends StandardFormHandlerBase<
+  MonitoringReportPreparePeriodParams,
+  "monitoringReport"
+> {
   constructor() {
     super(MonitoringReportPreparePeriodRoute, ["save-continue", "save-return"], "monitoringReport");
   }
 
-  protected async getDto(context: IContext, params: MonitoringReportPreparePeriodParams, button: IFormButton, body: IFormBody): Promise<MonitoringReportDto> {
+  protected async getDto(
+    context: IContext,
+    params: MonitoringReportPreparePeriodParams,
+    button: IFormButton,
+    body: IFormBody,
+  ): Promise<MonitoringReportDto> {
     const query = new GetMonitoringReportById(params.projectId, params.id);
     const dto = await context.runQuery(query);
     dto.periodId = parseInt(body.period, 10);
@@ -31,12 +39,22 @@ export class MonitoringReportPreparePeriodFormHandler extends StandardFormHandle
     return storeKeys.getMonitoringReportKey(params.projectId, params.id);
   }
 
-  protected async run(context: IContext, params: MonitoringReportPreparePeriodParams, button: IFormButton, dto: MonitoringReportDto): Promise<ILinkInfo> {
+  protected async run(
+    context: IContext,
+    params: MonitoringReportPreparePeriodParams,
+    button: IFormButton,
+    dto: MonitoringReportDto,
+  ): Promise<ILinkInfo> {
     const command = new SaveMonitoringReport(dto, false);
     await context.runCommand(command);
     if (button.name === "save-return") {
       return MonitoringReportDashboardRoute.getLink({ projectId: params.projectId });
     }
-    return MonitoringReportWorkflowRoute.getLink({ projectId: params.projectId, id: params.id, mode: "prepare", step: 1 });
+    return MonitoringReportWorkflowRoute.getLink({
+      projectId: params.projectId,
+      id: params.id,
+      mode: "prepare",
+      step: 1,
+    });
   }
 }

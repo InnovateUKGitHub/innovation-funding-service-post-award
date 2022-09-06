@@ -4,8 +4,12 @@ import * as Repositories from "@server/repositories";
 import { GetMonitoringReportById } from "@server/features/monitoringReports/getMonitoringReport";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
-const createMonitoringReportTestData = (context: TestContext, periodId: number, update?: Partial<Repositories.ISalesforceMonitoringReportHeader>): Repositories.ISalesforceMonitoringReportHeader => {
-  const project = context.testData.createProject(x => x.Acc_CurrentPeriodNumber__c = 10);
+const createMonitoringReportTestData = (
+  context: TestContext,
+  periodId: number,
+  update?: Partial<Repositories.ISalesforceMonitoringReportHeader>,
+): Repositories.ISalesforceMonitoringReportHeader => {
+  const project = context.testData.createProject(x => (x.Acc_CurrentPeriodNumber__c = 10));
   const partner = context.testData.createPartner(project);
   context.testData.createProfileTotalPeriod(partner, periodId);
   return context.testData.createMonitoringReportHeader(project, periodId, update);
@@ -51,10 +55,14 @@ describe("saveMonitoringReports", () => {
 
     expect(context.repositories.monitoringReportResponse.Items.length).toEqual(2);
 
-    expect(context.repositories.monitoringReportResponse.Items[0].Acc_QuestionComments__c).toEqual("Question 1 comments");
+    expect(context.repositories.monitoringReportResponse.Items[0].Acc_QuestionComments__c).toEqual(
+      "Question 1 comments",
+    );
     expect(context.repositories.monitoringReportResponse.Items[0].Acc_Question__c).toEqual(question1Answer.Id);
 
-    expect(context.repositories.monitoringReportResponse.Items[1].Acc_QuestionComments__c).toEqual("Question 2 comments");
+    expect(context.repositories.monitoringReportResponse.Items[1].Acc_QuestionComments__c).toEqual(
+      "Question 2 comments",
+    );
     expect(context.repositories.monitoringReportResponse.Items[1].Acc_Question__c).toEqual(question2Answer.Id);
   });
 
@@ -68,8 +76,12 @@ describe("saveMonitoringReports", () => {
 
     const report = createMonitoringReportTestData(context, 1);
 
-    const responseQuestion1 = context.testData.createMonitoringReportResponse(report, question1Options[0], { Acc_QuestionComments__c: "Question 1 - old answer" });
-    const responseQuestion2 = context.testData.createMonitoringReportResponse(report, question2Answer, { Acc_QuestionComments__c: "Question 2 comments" });
+    const responseQuestion1 = context.testData.createMonitoringReportResponse(report, question1Options[0], {
+      Acc_QuestionComments__c: "Question 1 - old answer",
+    });
+    const responseQuestion2 = context.testData.createMonitoringReportResponse(report, question2Answer, {
+      Acc_QuestionComments__c: "Question 2 comments",
+    });
 
     const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 
@@ -79,7 +91,10 @@ describe("saveMonitoringReports", () => {
     const command = new SaveMonitoringReport(dto, false);
     await context.runCommand(command);
 
-    expect(context.repositories.monitoringReportResponse.Items.map(x => x.Id)).toEqual([responseQuestion1.Id, responseQuestion2.Id]);
+    expect(context.repositories.monitoringReportResponse.Items.map(x => x.Id)).toEqual([
+      responseQuestion1.Id,
+      responseQuestion2.Id,
+    ]);
 
     expect(responseQuestion1.Acc_QuestionComments__c).toEqual("Question 1 new comments");
     expect(responseQuestion1.Acc_Question__c).toEqual(question1NewAnswer.Id);
@@ -95,8 +110,12 @@ describe("saveMonitoringReports", () => {
     const question2Options = context.testData.createMonitoringReportQuestionSet(2, 3);
 
     const report = createMonitoringReportTestData(context, 1);
-    const responseQuestion1 = context.testData.createMonitoringReportResponse(report, question1Options[0], { Acc_QuestionComments__c: "Question 1 - old answer" });
-    const responseQuestion2 = context.testData.createMonitoringReportResponse(report, question2Options[0], { Acc_QuestionComments__c: "Question 2 - old answer" });
+    const responseQuestion1 = context.testData.createMonitoringReportResponse(report, question1Options[0], {
+      Acc_QuestionComments__c: "Question 1 - old answer",
+    });
+    const responseQuestion2 = context.testData.createMonitoringReportResponse(report, question2Options[0], {
+      Acc_QuestionComments__c: "Question 2 - old answer",
+    });
 
     const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 
@@ -154,7 +173,6 @@ describe("saveMonitoringReports", () => {
     await context.runCommand(new SaveMonitoringReport(dto, false));
 
     expect(report.Acc_MonitoringReportStatus__c).toBe("Draft");
-
   });
 
   it("should save the report with submitted status if it is submitted", async () => {
@@ -176,7 +194,9 @@ describe("saveMonitoringReports", () => {
     const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 
     await context.runCommand(new SaveMonitoringReport(dto, true));
-    expect(context.repositories.monitoringReportStatusChange.Items.find(x => x.Acc_MonitoringReport__c === dto.headerId)).toBeDefined();
+    expect(
+      context.repositories.monitoringReportStatusChange.Items.find(x => x.Acc_MonitoringReport__c === dto.headerId),
+    ).toBeDefined();
   });
 
   it("should not create a status change if the report is not submitted", async () => {
@@ -196,19 +216,26 @@ describe("saveMonitoringReports", () => {
     dto.addComments = "Test comment";
 
     await context.runCommand(new SaveMonitoringReport(dto, true));
-    const statusChange = context.repositories.monitoringReportStatusChange.Items.find(x => x.Acc_MonitoringReport__c === dto.headerId);
+    const statusChange = context.repositories.monitoringReportStatusChange.Items.find(
+      x => x.Acc_MonitoringReport__c === dto.headerId,
+    );
     expect(statusChange).toBeDefined();
     expect(statusChange?.Acc_ExternalComment__c).toEqual(dto.addComments);
   });
 
   it("should clear comments on the monitoring report when the report is submitted", async () => {
     const context = new TestContext();
-    const report = createMonitoringReportTestData(context, 1, { Acc_MonitoringReportStatus__c: "Draft", Acc_AddComments__c: "Test comment" });
+    const report = createMonitoringReportTestData(context, 1, {
+      Acc_MonitoringReportStatus__c: "Draft",
+      Acc_AddComments__c: "Test comment",
+    });
 
     const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 
     await context.runCommand(new SaveMonitoringReport(dto, true));
-    const statusChange = context.repositories.monitoringReportStatusChange.Items.find(x => x.Acc_MonitoringReport__c === dto.headerId);
+    const statusChange = context.repositories.monitoringReportStatusChange.Items.find(
+      x => x.Acc_MonitoringReport__c === dto.headerId,
+    );
     expect(statusChange).toBeDefined();
     expect(statusChange?.Acc_ExternalComment__c).toEqual("Test comment");
     expect(report.Acc_AddComments__c).toBe("");
@@ -219,7 +246,9 @@ describe("saveMonitoringReports validation", () => {
   it("should throw an error if the report has already been submitted", async () => {
     const context = new TestContext();
 
-    const report = createMonitoringReportTestData(context, 1, { Acc_MonitoringReportStatus__c: "Awaiting IUK Approval" });
+    const report = createMonitoringReportTestData(context, 1, {
+      Acc_MonitoringReportStatus__c: "Awaiting IUK Approval",
+    });
 
     const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 
@@ -315,7 +344,7 @@ describe("saveMonitoringReports validation", () => {
   it("should return a bad request if submitted with a different project id", async () => {
     const context = new TestContext();
 
-    const project2 = context.testData.createProject(x => x.Acc_CurrentPeriodNumber__c = 1);
+    const project2 = context.testData.createProject(x => (x.Acc_CurrentPeriodNumber__c = 1));
 
     const report = createMonitoringReportTestData(context, 1);
 

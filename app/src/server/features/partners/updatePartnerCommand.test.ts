@@ -9,7 +9,13 @@ import {
   PostcodeStatusMapper,
 } from "@server/features/partners/mapToPartnerDto";
 import { Partner } from "@framework/entities";
-import { BankCheckStatus, BankDetailsTaskStatus, PartnerStatus, PostcodeTaskStatus, SpendProfileStatus } from "@framework/constants";
+import {
+  BankCheckStatus,
+  BankDetailsTaskStatus,
+  PartnerStatus,
+  PostcodeTaskStatus,
+  SpendProfileStatus,
+} from "@framework/constants";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 import { UpdatePartnerCommand } from "./updatePartnerCommand";
 
@@ -50,7 +56,7 @@ describe("updatePartnerCommand", () => {
 
     it("throws error when project is inactive", async () => {
       const context = new TestContext();
-      const project = context.testData.createProject(x => x.Acc_ProjectStatus__c = "On Hold");
+      const project = context.testData.createProject(x => (x.Acc_ProjectStatus__c = "On Hold"));
       const partner = context.testData.createPartner(project);
 
       const expected: PartnerDto = await context.runQuery(new GetByIdQuery(partner.id));
