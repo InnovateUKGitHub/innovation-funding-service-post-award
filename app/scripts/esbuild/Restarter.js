@@ -36,11 +36,18 @@ class Restarter {
    */
   createServer() {
     this.serverProcess = spawn("npm", ["run", "serve", "--", "--dev"], {
+      // Copy stdout of server to current stdio
       stdio: "inherit",
+
+      // Windows developers needs a shell so it can parse `PATH`
+      // (so npm can be ran with nvm/nvs)
+      shell: process.platform === "win32",
+
+      // Set a default NODE_ENV just in case.
       env: {
         ...process.env,
-        NODE_ENV: process.env.NODE_ENV || "development"
-      }
+        NODE_ENV: process.env.NODE_ENV || "development",
+      },
     });
 
     // If the server closes itself at any time
