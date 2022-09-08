@@ -598,7 +598,7 @@ export class PCRLoanExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
   private validateAvailabilityPeriod(): Result {
     const { availabilityPeriod, availabilityPeriodChange, id } = this.model;
     if (!id) return Validation.valid(this); // missing id shows pcr not created yet
-    if (!availabilityPeriod) {
+    if (isNull(availabilityPeriod)) {
       throw Error("validateAvailabilityPeriod() is missing model data to validate.");
     }
 
@@ -658,7 +658,7 @@ export class PCRLoanExtensionItemDtoValidator extends PCRBaseItemDtoValidator<PC
   ): Result {
     if (!this.isComplete) return Validation.valid(this);
 
-    if (!originalValue || !updatedValue) {
+    if (isNull(originalValue) || isNull(updatedValue)) {
       throw Error("validateWholeMonths() is missing 'originalValue' or 'updatedValue' to validate.");
     }
 
