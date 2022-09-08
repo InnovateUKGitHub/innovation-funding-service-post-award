@@ -34,9 +34,7 @@ class Component extends React.Component<
             qa="projectChangeRequestItemUpload"
           >
             <UploadForm.Fieldset heading={x => x.pcrRemovePartnerPrepareItemFiles.guidanceHeading}>
-              <ACC.Renderers.SimpleString>
-                <ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.guidance} />
-              </ACC.Renderers.SimpleString>
+              <ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.guidance} />
 
               <ACC.DocumentGuidance />
 

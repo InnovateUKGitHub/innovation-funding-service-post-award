@@ -11,6 +11,10 @@ interface SimpleStringProps {
   style?: CSSProperties;
 }
 
+/**
+ * Basic string component
+ * accepts any of "p", "span", "div", defaults to "p"
+ */
 export function SimpleString({
   as: Element = "p",
   qa,
