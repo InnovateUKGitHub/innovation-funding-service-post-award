@@ -83,7 +83,7 @@ import { PCRReasoningPrepareFilesContent } from "./pages/pcrs/reasoning/prepareF
 import { PCRReasoningPrepareReasoningContent } from "./pages/pcrs/reasoning/prepareReasonStepContent";
 import { PCRReasoningSummaryContent } from "./pages/pcrs/reasoning/summaryContent";
 import { PCRReasoningWorkflowContent } from "./pages/pcrs/reasoning/workflowContent";
-import { PCRPrepareItemFilesForPartnerWithrawelContent } from "./pages/pcrs/removePartner/prepareItemFilesForPartnerWithdrawelStepContent";
+import { PCRPrepareItemFilesForPartnerWithdrawalContent } from "./pages/pcrs/removePartner/prepareItemFilesForPartnerWithdrawalStepContent";
 import { PCRRemovePartnerContent } from "./pages/pcrs/removePartner/removePartnerStepContent";
 import { PCRRemovePartnerSummaryContent } from "./pages/pcrs/removePartner/removePartnerSummaryContent";
 import { PCRScopeChangeProjectSummaryChangeContent } from "./pages/pcrs/scopeChange/scopeChangeProjectSummaryChangeStepContent";
@@ -205,7 +205,7 @@ export class Content extends ContentBase {
   public readonly pcrReasoningSummary: PCRReasoningSummaryContent;
   public readonly pcrReasoningWorkflow: PCRReasoningWorkflowContent;
 
-  public readonly pcrRemovePartnerPrepareItemFiles: PCRPrepareItemFilesForPartnerWithrawelContent;
+  public readonly pcrRemovePartnerPrepareItemFiles: PCRPrepareItemFilesForPartnerWithdrawalContent;
   public readonly pcrRemovePartner: PCRRemovePartnerContent;
   public readonly pcrRemovePartnerSummary: PCRRemovePartnerSummaryContent;
 
@@ -344,7 +344,7 @@ export class Content extends ContentBase {
     this.pcrReasoningSummary = new PCRReasoningSummaryContent(this, competitionType);
     this.pcrReasoningWorkflow = new PCRReasoningWorkflowContent(this, competitionType);
 
-    this.pcrRemovePartnerPrepareItemFiles = new PCRPrepareItemFilesForPartnerWithrawelContent(this, competitionType);
+    this.pcrRemovePartnerPrepareItemFiles = new PCRPrepareItemFilesForPartnerWithdrawalContent(this, competitionType);
     this.pcrRemovePartner = new PCRRemovePartnerContent(this, competitionType);
     this.pcrRemovePartnerSummary = new PCRRemovePartnerSummaryContent(this, competitionType);
 

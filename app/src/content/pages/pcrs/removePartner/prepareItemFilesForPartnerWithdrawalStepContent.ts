@@ -4,9 +4,9 @@ import { ContentPageBase } from "@content/contentPageBase";
 import { Content } from "@content/content";
 import { PCRItem } from "../pcrItem";
 
-export class PCRPrepareItemFilesForPartnerWithrawelContent extends ContentPageBase {
+export class PCRPrepareItemFilesForPartnerWithdrawalContent extends ContentPageBase {
   constructor(content: Content, competitionType?: string) {
-    super(content, "pcr-prepare-item-files-for-partner-withdrawel", competitionType);
+    super(content, "pcr-prepare-item-files-for-partner-withdrawal", competitionType);
   }
 
   public readonly pcrItem = new PCRItem(this, this.competitionType);
