@@ -56,7 +56,7 @@ class Component extends React.Component<
                 styling="Secondary"
                 onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}
               >
-                <ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.pcrItem.submitButton} />
+                <ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.pcrItem.uploadDocumentsButton} />
               </UploadForm.Button>
             </UploadForm.Fieldset>
           </UploadForm.Form>
