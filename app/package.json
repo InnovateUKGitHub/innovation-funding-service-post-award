@@ -26,6 +26,7 @@
     "test:light": "TS_JEST_ISOLATED_MODULES=true jest",
     "test:coverage": "jest --coverage",
     "lint": "eslint . --ext .js,.ts,.tsx",
+    "lint:fix": "npm run lint -- --fix",
     "nuke": "npm run clean && rimraf node_modules",
     "update-govfrontend": "node ./scripts/update-govfrontend",
     "update": "npm-check -u",
