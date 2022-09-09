@@ -1,34 +1,17 @@
-import { CostCategoryName, CostCategoryType } from "@framework/constants";
+import { CostCategoryType } from "@framework/constants";
 import { CostCategory } from "@framework/entities";
+import { CostCategoryList } from "@framework/types";
 import { ISalesforceCostCategory } from "../costCategoriesRepository";
 import { SalesforceBaseMapper } from "./salesforceMapperBase";
 
 export class SalesforceCostCategoryMapper extends SalesforceBaseMapper<ISalesforceCostCategory, CostCategory> {
   private typeMapper(costCategory: ISalesforceCostCategory): CostCategoryType {
-    if (costCategory.Acc_OrganisationType__c === CostCategoryName.Academic.valueOf()) {
+    // Academic cost categories are always Academic.
+    if (costCategory.Acc_OrganisationType__c === "Academic") {
       return CostCategoryType.Academic;
     }
-    // @TODO: get from SF -- this is nasty but no solution provided as yet from salesforce
-    switch (costCategory.Acc_CostCategoryName__c) {
-      case CostCategoryName.Other_Public_Sector_Funding:
-        return CostCategoryType.Other_Funding;
-      case CostCategoryName.Labour:
-        return CostCategoryType.Labour;
-      case CostCategoryName.Overheads:
-        return CostCategoryType.Overheads;
-      case CostCategoryName.Materials:
-        return CostCategoryType.Materials;
-      case CostCategoryName.Capital_Usage:
-        return CostCategoryType.Capital_Usage;
-      case CostCategoryName.Subcontracting:
-        return CostCategoryType.Subcontracting;
-      case CostCategoryName.Travel_And_Subsistence:
-        return CostCategoryType.Travel_And_Subsistence;
-      case CostCategoryName.Other_Costs:
-        return CostCategoryType.Other_Costs;
-      default:
-        return CostCategoryType.Unknown;
-    }
+
+    return CostCategoryList.fromName(costCategory.Acc_CostCategoryName__c).id;
   }
 
   public map(x: ISalesforceCostCategory): CostCategory {

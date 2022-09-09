@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import {
-  CostCategoryType,
+  CostCategoryList,
+  CostCategoryGroupType,
   PCRItemForPartnerAdditionDto,
   PCRItemStatus,
   PCRItemType,
@@ -114,40 +115,41 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   }
 
   private renderComponent(costCategory: CostCategoryDto, cost: PCRSpendProfileCostDto) {
-    switch (costCategory.type) {
-      case CostCategoryType.Labour:
+    const costCategoryType = CostCategoryList.fromId(costCategory.type);
+    switch (costCategoryType.group) {
+      case CostCategoryGroupType.Labour:
         return (
           <DeleteLabourCostFormComponent data={cost as PCRSpendProfileLabourCostDto} costCategory={costCategory} />
         );
-      case CostCategoryType.Materials:
+      case CostCategoryGroupType.Materials:
         return (
           <DeleteMaterialsCostFormComponent
             data={cost as PCRSpendProfileMaterialsCostDto}
             costCategory={costCategory}
           />
         );
-      case CostCategoryType.Capital_Usage:
+      case CostCategoryGroupType.Capital_Usage:
         return (
           <DeleteCapitalUsageCostFormComponent
             data={cost as PCRSpendProfileCapitalUsageCostDto}
             costCategory={costCategory}
           />
         );
-      case CostCategoryType.Subcontracting:
+      case CostCategoryGroupType.Subcontracting:
         return (
           <DeleteSubcontractingCostFormComponent
             data={cost as PCRSpendProfileSubcontractingCostDto}
             costCategory={costCategory}
           />
         );
-      case CostCategoryType.Travel_And_Subsistence:
+      case CostCategoryGroupType.Travel_And_Subsistence:
         return (
           <DeleteTravelAndSubsCostFormComponent
             data={cost as PCRSpendProfileTravelAndSubsCostDto}
             costCategory={costCategory}
           />
         );
-      case CostCategoryType.Other_Costs:
+      case CostCategoryGroupType.Other_Costs:
         return <DeleteOtherCostFormComponent data={cost as PCRSpendProfileOtherCostsDto} costCategory={costCategory} />;
       default:
         return null;

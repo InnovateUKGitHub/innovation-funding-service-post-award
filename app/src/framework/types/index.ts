@@ -13,3 +13,4 @@ export * from "./ClaimKey";
 export * from "./fileWapper";
 export * from "./IFeaturesFlags";
 export * from "./IGuide";
+export * from "./CostCategory";

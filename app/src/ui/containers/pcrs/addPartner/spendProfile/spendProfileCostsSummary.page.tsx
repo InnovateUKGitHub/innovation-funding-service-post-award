@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import {
+  CostCategoryItem,
+  CostCategoryList,
   ILinkInfo,
   PCRItemForPartnerAdditionDto,
   PCRItemStatus,
@@ -67,6 +69,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
     });
     const costs = addPartnerItem.spendProfile.costs.filter(x => x.costCategoryId === this.props.costCategoryId);
     const Form = ACC.TypedForm<PCRDto>();
+    const costCategoryType = CostCategoryList.fromId(costCategory.type);
     return (
       <ACC.Page
         backLink={
@@ -81,7 +84,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
         <ACC.Section title={x => x.pcrSpendProfileCostsSummaryContent.costsSectionTitle(costCategory.name)}>
-          {this.renderGuidance(costCategory)}
+          {this.renderGuidance(costCategoryType)}
           {this.renderTable(costs, costCategory)}
           <Form.Form
             qa="submit-costs"
@@ -101,14 +104,18 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
     );
   }
 
-  private renderGuidance(costCategory: CostCategoryDto) {
-    return (
-      <ACC.Info
-        summary={<ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.guidanceTitle(costCategory.name)} />}
-      >
-        <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.messages.costGuidance(costCategory.type)} />
-      </ACC.Info>
-    );
+  private renderGuidance(costCategory: CostCategoryItem) {
+    if (costCategory.showGuidance) {
+      return (
+        <ACC.Info
+          summary={<ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.guidanceTitle(costCategory.name)} />}
+        >
+          <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.messages.costGuidance(costCategory)} />
+        </ACC.Info>
+      );
+    }
+
+    return null;
   }
 
   private renderFooterRow(row: {

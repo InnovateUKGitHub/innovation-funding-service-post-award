@@ -1,11 +1,11 @@
 import { CostCategory } from "@framework/entities";
-import { PCROrganisationType, CostCategoryName } from "@framework/constants";
+import { PCROrganisationType } from "@framework/constants";
 import { SalesforceRepositoryBaseWithMapping } from "./salesforceRepositoryBase";
 import { SalesforceCostCategoryMapper } from "./mappers/costCategoryMapper";
 
 export interface ISalesforceCostCategory {
   Id: string;
-  Acc_CostCategoryName__c: CostCategoryName;
+  Acc_CostCategoryName__c: string;
   Acc_DisplayOrder__c: number;
   Acc_OrganisationType__c: PCROrganisationType;
   Acc_CompetitionType__c: string;

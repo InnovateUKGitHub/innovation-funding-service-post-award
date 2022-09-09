@@ -1,6 +1,8 @@
 import { useNavigate, NavigateFunction } from "react-router-dom";
 import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
 import {
+  CostCategoryItem,
+  CostCategoryList,
   CostCategoryType,
   ILinkInfo,
   PCRItemForPartnerAdditionDto,
@@ -8,6 +10,7 @@ import {
   PCRItemType,
   ProjectDto,
   ProjectRole,
+  CostCategoryGroupType,
 } from "@framework/types";
 import * as ACC from "@ui/components";
 import { Pending } from "@shared/pending";
@@ -118,6 +121,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
     routes: IRoutes,
     params: PcrAddSpendProfileCostParams,
   ) {
+    const costCategoryType = CostCategoryList.fromId(costCategory.type);
     return (
       <ACC.Page
         backLink={
@@ -132,20 +136,20 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
         <ACC.Section title={x => x.pcrSpendProfilePrepareCostContent.costSectionTitle(costCategory.name)}>
-          {this.renderGuidance(costCategory)}
-          {this.renderForm(costCategory, editor, validator, cost, routes, params)}
+          {this.renderGuidance(costCategoryType)}
+          {this.renderForm(costCategory, costCategoryType, editor, validator, cost, routes, params)}
         </ACC.Section>
       </ACC.Page>
     );
   }
 
-  private renderGuidance(costCategory: CostCategoryDto) {
-    if (costCategory.type === CostCategoryType.Overheads) {
+  private renderGuidance(costCategory: CostCategoryItem) {
+    if (costCategory.id === CostCategoryType.Overheads) {
       return (
         <ACC.Info
           summary={<ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.guidanceTitle(costCategory.name)} />}
         >
-          <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.messages.costGuidance(costCategory.type)} />
+          <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.messages.costGuidance(costCategory)} />
         </ACC.Info>
       );
     }
@@ -190,6 +194,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
 
   private renderForm(
     costCategory: CostCategoryDto,
+    costCategoryType: CostCategoryItem,
     editor: IEditorStore<PCRDto, PCRDtoValidator>,
     validator: PCRSpendProfileCostDtoValidator | undefined,
     cost: PCRSpendProfileCostDto,
@@ -205,8 +210,8 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
       params,
     };
 
-    switch (costCategory.type) {
-      case CostCategoryType.Labour:
+    switch (costCategoryType.group) {
+      case CostCategoryGroupType.Labour:
         return (
           <LabourFormComponent
             {...props}
@@ -214,7 +219,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
             validator={validator as PCRLabourCostDtoValidator}
           />
         );
-      case CostCategoryType.Overheads:
+      case CostCategoryGroupType.Overheads:
         return (
           <OverheadsFormComponent
             {...props}
@@ -222,7 +227,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
             validator={validator as PCROverheadsCostDtoValidator}
           />
         );
-      case CostCategoryType.Materials:
+      case CostCategoryGroupType.Materials:
         return (
           <MaterialsFormComponent
             {...props}
@@ -230,7 +235,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
             validator={validator as PCRMaterialsCostDtoValidator}
           />
         );
-      case CostCategoryType.Subcontracting:
+      case CostCategoryGroupType.Subcontracting:
         return (
           <SubcontractingFormComponent
             {...props}
@@ -238,7 +243,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
             validator={validator as PCRSubcontractingCostDtoValidator}
           />
         );
-      case CostCategoryType.Capital_Usage:
+      case CostCategoryGroupType.Capital_Usage:
         return (
           <CapitalUsageFormComponent
             {...props}
@@ -246,7 +251,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
             validator={validator as PCRCapitalUsageCostDtoValidator}
           />
         );
-      case CostCategoryType.Travel_And_Subsistence:
+      case CostCategoryGroupType.Travel_And_Subsistence:
         return (
           <TravelAndSubsFormComponent
             {...props}
@@ -254,7 +259,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
             validator={validator as PCRTravelAndSubsCostDtoValidator}
           />
         );
-      case CostCategoryType.Other_Costs:
+      case CostCategoryGroupType.Other_Costs:
         return (
           <OtherCostsFormComponent
             {...props}

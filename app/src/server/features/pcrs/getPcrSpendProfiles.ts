@@ -1,5 +1,7 @@
 import { QueryBase } from "@server/features/common";
 import {
+  CostCategoryGroupType,
+  CostCategoryList,
   CostCategoryType,
   IContext,
   PCRSpendProfileCapitalUsageType,
@@ -59,23 +61,24 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
   }
 
   private mapCosts(costCategory: CostCategoryDto, spendProfiles: PcrSpendProfileEntity[]): PCRSpendProfileCostDto[] {
-    switch (costCategory.type) {
-      case CostCategoryType.Academic:
-        return this.mapAcademicCosts(spendProfiles, costCategory.type);
-      case CostCategoryType.Labour:
-        return this.mapLabourCosts(spendProfiles, costCategory.type);
-      case CostCategoryType.Overheads:
-        return this.mapOverheadsCosts(spendProfiles, costCategory.type);
-      case CostCategoryType.Materials:
-        return this.mapMaterialsCosts(spendProfiles, costCategory.type);
-      case CostCategoryType.Subcontracting:
-        return this.mapSubcontractingCosts(spendProfiles, costCategory.type);
-      case CostCategoryType.Capital_Usage:
-        return this.mapCapitalUsageCosts(spendProfiles, costCategory.type);
-      case CostCategoryType.Travel_And_Subsistence:
-        return this.mapTravelAndSubsCosts(spendProfiles, costCategory.type);
-      case CostCategoryType.Other_Costs:
-        return this.mapOtherCosts(spendProfiles, costCategory.type);
+    const costCategoryType = CostCategoryList.fromId(costCategory.type);
+    switch (costCategoryType.group) {
+      case CostCategoryGroupType.Academic:
+        return this.mapAcademicCosts(spendProfiles, costCategoryType.id);
+      case CostCategoryGroupType.Labour:
+        return this.mapLabourCosts(spendProfiles, costCategoryType.id);
+      case CostCategoryGroupType.Overheads:
+        return this.mapOverheadsCosts(spendProfiles, costCategoryType.id);
+      case CostCategoryGroupType.Materials:
+        return this.mapMaterialsCosts(spendProfiles, costCategoryType.id);
+      case CostCategoryGroupType.Subcontracting:
+        return this.mapSubcontractingCosts(spendProfiles, costCategoryType.id);
+      case CostCategoryGroupType.Capital_Usage:
+        return this.mapCapitalUsageCosts(spendProfiles, costCategoryType.id);
+      case CostCategoryGroupType.Travel_And_Subsistence:
+        return this.mapTravelAndSubsCosts(spendProfiles, costCategoryType.id);
+      case CostCategoryGroupType.Other_Costs:
+        return this.mapOtherCosts(spendProfiles, costCategoryType.id);
       default:
         return [];
     }
@@ -86,7 +89,8 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     costCategory: CostCategoryDto,
     spendProfiles: PcrSpendProfileEntity[],
   ): PCRSpendProfileFundingDto[] {
-    if (costCategory.type === CostCategoryType.Other_Funding) {
+    const costCategoryType = CostCategoryList.fromId(costCategory.type);
+    if (costCategoryType.group === CostCategoryGroupType.Other_Funding) {
       return this.mapOtherFunding(context, spendProfiles, costCategory.type);
     }
     return [];
@@ -104,7 +108,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
   private mapOtherFunding(
     context: IContext,
     spendProfiles: PcrSpendProfileEntity[],
-    costCategory: CostCategoryType.Other_Funding,
+    costCategory: CostCategoryType,
   ): PCRSpendProfileOtherFundingDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
@@ -115,7 +119,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
 
   private mapAcademicCosts(
     spendProfiles: PcrSpendProfileEntity[],
-    costCategory: CostCategoryType.Academic,
+    costCategory: CostCategoryType,
   ): PCRSpendProfileAcademicCostDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
@@ -125,7 +129,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
 
   private mapLabourCosts(
     spendProfiles: PcrSpendProfileEntity[],
-    costCategory: CostCategoryType.Labour,
+    costCategory: CostCategoryType,
   ): PCRSpendProfileLabourCostDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
@@ -138,7 +142,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
 
   private mapOverheadsCosts(
     spendProfiles: PcrSpendProfileEntity[],
-    costCategory: CostCategoryType.Overheads,
+    costCategory: CostCategoryType,
   ): PCRSpendProfileOverheadsCostDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
@@ -149,7 +153,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
 
   private mapSubcontractingCosts(
     spendProfiles: PcrSpendProfileEntity[],
-    costCategory: CostCategoryType.Subcontracting,
+    costCategory: CostCategoryType,
   ): PCRSpendProfileSubcontractingCostDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
@@ -161,7 +165,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
 
   private mapMaterialsCosts(
     spendProfiles: PcrSpendProfileEntity[],
-    costCategory: CostCategoryType.Materials,
+    costCategory: CostCategoryType,
   ): PCRSpendProfileMaterialsCostDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
@@ -173,7 +177,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
 
   private mapCapitalUsageCosts(
     spendProfiles: PcrSpendProfileEntity[],
-    costCategory: CostCategoryType.Capital_Usage,
+    costCategory: CostCategoryType,
   ): PCRSpendProfileCapitalUsageCostDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
@@ -189,7 +193,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
 
   private mapTravelAndSubsCosts(
     spendProfiles: PcrSpendProfileEntity[],
-    costCategory: CostCategoryType.Travel_And_Subsistence,
+    costCategory: CostCategoryType,
   ): PCRSpendProfileTravelAndSubsCostDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),
@@ -201,7 +205,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
 
   private mapOtherCosts(
     spendProfiles: PcrSpendProfileEntity[],
-    costCategory: CostCategoryType.Other_Costs,
+    costCategory: CostCategoryType,
   ): PCRSpendProfileOtherCostsDto[] {
     return spendProfiles.map(x => ({
       ...this.mapBaseCostFields(x),

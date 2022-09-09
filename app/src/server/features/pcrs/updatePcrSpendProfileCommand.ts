@@ -15,7 +15,15 @@ import {
   PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
 import { PcrSpendProfileEntity } from "@framework/entities";
-import { Authorisation, CostCategoryType, IContext, PCRSpendProfileOverheadRate, ProjectRole } from "@framework/types";
+import {
+  Authorisation,
+  CostCategoryList,
+  CostCategoryGroupType,
+  CostCategoryType,
+  IContext,
+  PCRSpendProfileOverheadRate,
+  ProjectRole,
+} from "@framework/types";
 import { isNumber, roundCurrency } from "@framework/util";
 import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 import { GetPcrSpendProfileOverheadRateOptionsQuery } from "@server/features/pcrs/getPcrSpendProfileOverheadRateOptionsQuery";
@@ -59,22 +67,24 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     dto: PCRSpendProfileCostDto | PCRSpendProfileFundingDto,
   ): PcrSpendProfileEntity {
     const init = this.getBaseSpendProfileEntity(dto);
-    switch (dto.costCategory) {
-      case CostCategoryType.Other_Funding:
-        return this.mapOtherFunding(context, dto, init);
-      case CostCategoryType.Academic:
+    const costCategoryType = CostCategoryList.fromId(dto.costCategory);
+
+    switch (costCategoryType.group) {
+      case CostCategoryGroupType.Other_Funding:
+        return this.mapOtherFunding(context, dto as PCRSpendProfileOtherFundingDto, init);
+      case CostCategoryGroupType.Academic:
         return this.mapAcademic(dto, init);
-      case CostCategoryType.Labour:
-        return this.mapLabour(dto, init);
-      case CostCategoryType.Materials:
-        return this.mapMaterials(dto, init);
-      case CostCategoryType.Subcontracting:
-        return this.mapSubcontracting(dto, init);
-      case CostCategoryType.Capital_Usage:
-        return this.mapCapitalUsage(dto, init);
-      case CostCategoryType.Travel_And_Subsistence:
-        return this.mapTravelAndSubs(dto, init);
-      case CostCategoryType.Other_Costs:
+      case CostCategoryGroupType.Labour:
+        return this.mapLabour(dto as PCRSpendProfileLabourCostDto, init);
+      case CostCategoryGroupType.Materials:
+        return this.mapMaterials(dto as PCRSpendProfileMaterialsCostDto, init);
+      case CostCategoryGroupType.Subcontracting:
+        return this.mapSubcontracting(dto as PCRSpendProfileSubcontractingCostDto, init);
+      case CostCategoryGroupType.Capital_Usage:
+        return this.mapCapitalUsage(dto as PCRSpendProfileCapitalUsageCostDto, init);
+      case CostCategoryGroupType.Travel_And_Subsistence:
+        return this.mapTravelAndSubs(dto as PCRSpendProfileTravelAndSubsCostDto, init);
+      case CostCategoryGroupType.Other_Costs:
         return this.mapOtherCosts(dto, init);
       default:
         throw new BadRequestError("Cost category type not supported");
@@ -225,16 +235,19 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     if (originalCost.value !== cost.value || originalCost.description !== cost.description) return cost;
 
     const costCategoryDto = costCategories.find(x => x.id === cost.costCategoryId);
+
     if (!costCategoryDto) {
       return null;
     }
 
-    switch (costCategoryDto.type) {
-      case CostCategoryType.Academic:
+    const costCategoryType = CostCategoryList.fromId(costCategoryDto.type);
+
+    switch (costCategoryType.group) {
+      case CostCategoryGroupType.Academic:
         if (originalCost.value !== cost.value) {
           return cost;
         }
-      case CostCategoryType.Other_Funding:
+      case CostCategoryGroupType.Other_Funding:
         if (
           originalCost.value !== cost.value ||
           originalCost.description !== cost.description ||
@@ -242,7 +255,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
         ) {
           return cost;
         }
-      case CostCategoryType.Capital_Usage:
+      case CostCategoryGroupType.Capital_Usage:
         if (
           originalCost.depreciationPeriod !== cost.depreciationPeriod ||
           originalCost.netPresentValue !== cost.netPresentValue ||
@@ -252,7 +265,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
         ) {
           return cost;
         }
-      case CostCategoryType.Labour:
+      case CostCategoryGroupType.Labour:
         if (
           originalCost.grossCostOfRole !== cost.grossCostOfRole ||
           originalCost.ratePerDay !== cost.ratePerDay ||
@@ -260,22 +273,22 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
         ) {
           return cost;
         }
-      case CostCategoryType.Materials:
+      case CostCategoryGroupType.Materials:
         if (originalCost.quantity !== cost.quantity || originalCost.costPerItem !== cost.costPerItem) {
           return cost;
         }
-      case CostCategoryType.Overheads:
+      case CostCategoryGroupType.Overheads:
         if (originalCost.overheadRate !== cost.overheadRate) {
           return cost;
         }
-      case CostCategoryType.Subcontracting:
+      case CostCategoryGroupType.Subcontracting:
         if (
           originalCost.subcontractorCountry !== cost.subcontractorCountry ||
           originalCost.subcontractorRoleAndDescription !== cost.subcontractorRoleAndDescription
         ) {
           return cost;
         }
-      case CostCategoryType.Travel_And_Subsistence:
+      case CostCategoryGroupType.Travel_And_Subsistence:
         if (originalCost.costOfEach !== cost.costOfEach || originalCost.numberOfTimes !== cost.numberOfTimes) {
           return cost;
         }

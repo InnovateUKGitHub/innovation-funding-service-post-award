@@ -1,27 +1,27 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */ // TODO: ACC-7889
-import { useNavigate } from "react-router-dom";
-import * as ACC from "@ui/components";
-import { Pending } from "@shared/pending";
+import { Content, ContentSelector } from "@content/content";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import {
   ClaimDetailsDto,
   ClaimLineItemDto,
-  CostCategoryName,
+  CostCategoryType,
   ForecastDetailsDTO,
   ProjectDto,
   ProjectRole,
 } from "@framework/types";
-import { IEditorStore, useStores } from "@ui/redux";
-import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
-import { UL } from "@ui/components";
-import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators/claimDetailsValidator";
-import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { range } from "@shared/range";
-import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { Content, ContentSelector } from "@content/content";
 import { diffAsPercentage, sum } from "@framework/util/numberHelper";
+import { Pending } from "@shared/pending";
+import { range } from "@shared/range";
+import * as ACC from "@ui/components";
+import { UL } from "@ui/components";
 import { EditorStatus } from "@ui/constants/enums";
+import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
 import { MountedHoc, useMounted } from "@ui/features";
+import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
+import { IEditorStore, useStores } from "@ui/redux";
+import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators/claimDetailsValidator";
+import { useNavigate } from "react-router-dom";
 
 export interface EditClaimDetailsParams {
   projectId: string;
@@ -103,8 +103,8 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
       </>
     );
 
-    const isOtherCosts = costCategory.name === CostCategoryName.Other_Costs;
-    const isVAT = costCategory.name === CostCategoryName.VAT;
+    const isOtherCosts = costCategory.type === CostCategoryType.Other_Costs;
+    const isVAT = costCategory.type === CostCategoryType.VAT;
 
     return (
       <ACC.Page
