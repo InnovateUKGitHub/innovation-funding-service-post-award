@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention, @typescript-eslint/no-var-requires */
 /** @typedef {import('esbuild').BuildOptions} BuildOptions */
-
+require("dotenv").config()
 const path = require("path");
 const { nodeExternalsPlugin } = require("esbuild-node-externals");
 const { typecheckPlugin } = require("@jgoz/esbuild-plugin-typecheck");
