@@ -1,3 +1,4 @@
+import { CostCategoryGroupType, CostCategoryType, PCRSpendProfileOverheadRate } from "@framework/constants";
 import {
   PCRSpendProfileAcademicCostDto,
   PCRSpendProfileCapitalUsageCostDto,
@@ -12,7 +13,7 @@ import {
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
-import { CostCategoryType, PCRSpendProfileOverheadRate } from "@framework/constants";
+import { CostCategoryList } from "@framework/types";
 import { hasNoDuplicates } from "@framework/util/arrayHelpers";
 import { Results } from "../validation";
 import * as Validation from "./common";
@@ -27,24 +28,34 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
       case CostCategoryType.Academic:
         return new PCRAcademicCostDtoValidator(cost, this.showValidationErrors);
       case CostCategoryType.Labour:
-        return new PCRLabourCostDtoValidator(cost, this.showValidationErrors);
+        return new PCRLabourCostDtoValidator(cost as PCRSpendProfileLabourCostDto, this.showValidationErrors);
       case CostCategoryType.Overheads:
-        return new PCROverheadsCostDtoValidator(cost, this.showValidationErrors);
+        return new PCROverheadsCostDtoValidator(cost as PCRSpendProfileOverheadsCostDto, this.showValidationErrors);
       case CostCategoryType.Materials:
-        return new PCRMaterialsCostDtoValidator(cost, this.showValidationErrors);
+        return new PCRMaterialsCostDtoValidator(cost as PCRSpendProfileMaterialsCostDto, this.showValidationErrors);
       case CostCategoryType.Subcontracting:
-        return new PCRSubcontractingCostDtoValidator(cost, this.showValidationErrors);
+        return new PCRSubcontractingCostDtoValidator(
+          cost as PCRSpendProfileSubcontractingCostDto,
+          this.showValidationErrors,
+        );
       case CostCategoryType.Capital_Usage:
-        return new PCRCapitalUsageCostDtoValidator(cost, this.showValidationErrors);
+        return new PCRCapitalUsageCostDtoValidator(
+          cost as PCRSpendProfileCapitalUsageCostDto,
+          this.showValidationErrors,
+        );
       case CostCategoryType.Travel_And_Subsistence:
-        return new PCRTravelAndSubsCostDtoValidator(cost, this.showValidationErrors);
+        return new PCRTravelAndSubsCostDtoValidator(
+          cost as PCRSpendProfileTravelAndSubsCostDto,
+          this.showValidationErrors,
+        );
       default:
         return new PCROtherCostsDtoValidator(cost, this.showValidationErrors);
     }
   }
 
   private getFundsValidator(fund: PCRSpendProfileFundingDto) {
-    if (fund.costCategory === CostCategoryType.Other_Funding) {
+    const costCategoryType = CostCategoryList.fromId(fund.costCategory);
+    if (costCategoryType.group === CostCategoryGroupType.Other_Funding) {
       return new PCROtherFundingDtoValidator(fund, this.showValidationErrors);
     }
     return new Results(fund, this.showValidationErrors);
@@ -56,8 +67,10 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
     cost => this.getCostValidator(cost),
     // There should be at most one overhead cost item (representing the overheads to the total labour costs)
     val => {
-      const ofOverheadType = (x: PCRSpendProfileCostDto) => x.costCategory === CostCategoryType.Overheads;
-      const ofAcademicType = (x: PCRSpendProfileCostDto) => x.costCategory === CostCategoryType.Academic;
+      const ofOverheadType = (x: PCRSpendProfileCostDto) =>
+        CostCategoryList.fromId(x.costCategory).group === CostCategoryGroupType.Overheads;
+      const ofAcademicType = (x: PCRSpendProfileCostDto) =>
+        CostCategoryList.fromId(x.costCategory).group === CostCategoryGroupType.Academic;
       return val.all(
         () => {
           return val.isTrue(

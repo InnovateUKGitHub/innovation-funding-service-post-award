@@ -20,32 +20,64 @@ export enum PermissionGroupIdentifier {
   ClaimsTeam = 1,
 }
 
-// This is not a complete list, just the ones we need to know about (e.g. to show certain fields for adding a partner pcr)
+// A list of all Salesforce cost category types.
+// See "/app/src/framework/types/CostCategory.ts" for their
+// corresponding names and guidance texts.
 export enum CostCategoryType {
-  Unknown = 0,
-  Other_Funding = 3,
-  Academic = 5,
-  Labour = 10,
-  Overheads = 20,
-  Materials = 30,
-  Capital_Usage = 40,
-  Subcontracting = 50,
-  Travel_And_Subsistence = 60,
-  Other_Costs = 70,
+  Unknown,
+  Other_Funding,
+  Academic,
+  Labour,
+  Indirect_Costs,
+  Overheads,
+  Materials,
+  Capital_Usage,
+  Subcontracting,
+  Travel_And_Subsistence,
+  Other_Costs,
+  Other_Public_Sector_Funding,
+  VAT,
+  Advance_on_Grant,
+  Capital_Equipment,
+  Capitalised_Labour,
+  Other_Costs_Resource,
+  Other_Costs_Capital,
+  Property_Capital,
+  Property_Revenue,
+  Other_Costs_2,
+  Other_Costs_3,
+  Other_Costs_4,
+  Other_Costs_5,
+  Additional_associate_support,
+  Associate_development,
+  Associate_Employment,
+  Consumables,
+  Estate,
+  Indirect_costs,
+  Knowledge_base_supervisor,
+  Loans_costs_for_Industrial_participants,
 }
 
-export enum CostCategoryName {
-  Other_Funding = "Other funding",
-  Academic = "Academic",
-  Labour = "Labour",
-  Overheads = "Overheads",
-  Materials = "Materials",
-  Capital_Usage = "Capital usage",
-  Subcontracting = "Subcontracting",
-  Travel_And_Subsistence = "Travel and subsistence",
-  Other_Costs = "Other costs",
-  Other_Public_Sector_Funding = "Other public sector funding",
-  VAT = "VAT",
+export enum CostCategoryGroupType {
+  Academic,
+  Labour,
+  Overheads,
+  Materials,
+  Subcontracting,
+  Capital_Usage,
+  Travel_And_Subsistence,
+  Other_Costs,
+  Other_Funding,
+}
+
+export enum CostCategoryInputType {
+  Labour,
+  Overheads,
+  Materials,
+  Subcontracting,
+  Capital_Usage,
+  Travel_And_Subsistence,
+  Other_Costs,
 }
 
 export enum DateFormat {

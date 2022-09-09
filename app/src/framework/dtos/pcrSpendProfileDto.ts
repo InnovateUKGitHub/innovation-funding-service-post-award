@@ -18,50 +18,41 @@ export type PCRSpendProfileCostDto =
 
 export type PCRSpendProfileFundingDto = PCRSpendProfileOtherFundingDto;
 
-interface PCRSpendProfileBaseCostDto<T extends CostCategoryType> {
+interface PCRSpendProfileBaseCostDto {
   id: string;
-  costCategory: T;
+  costCategory: CostCategoryType;
   costCategoryId: string;
   description: string | null;
   value: number | null;
 }
 
-export interface PCRSpendProfileOtherFundingDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Other_Funding> {
-  costCategory: CostCategoryType.Other_Funding;
+export interface PCRSpendProfileOtherFundingDto extends PCRSpendProfileBaseCostDto {
   dateSecured: Date | null;
 }
 
-export interface PCRSpendProfileAcademicCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Academic> {
-  costCategory: CostCategoryType.Academic;
-}
+export type PCRSpendProfileAcademicCostDto = PCRSpendProfileBaseCostDto;
 
-export interface PCRSpendProfileLabourCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Labour> {
-  costCategory: CostCategoryType.Labour;
+export interface PCRSpendProfileLabourCostDto extends PCRSpendProfileBaseCostDto {
   grossCostOfRole: number | null;
   ratePerDay: number | null;
   daysSpentOnProject: number | null;
 }
 
-export interface PCRSpendProfileOverheadsCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Overheads> {
-  costCategory: CostCategoryType.Overheads;
+export interface PCRSpendProfileOverheadsCostDto extends PCRSpendProfileBaseCostDto {
   overheadRate: PCRSpendProfileOverheadRate;
 }
 
-export interface PCRSpendProfileMaterialsCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Materials> {
-  costCategory: CostCategoryType.Materials;
+export interface PCRSpendProfileMaterialsCostDto extends PCRSpendProfileBaseCostDto {
   quantity: number | null;
   costPerItem: number | null;
 }
 
-export interface PCRSpendProfileSubcontractingCostDto
-  extends PCRSpendProfileBaseCostDto<CostCategoryType.Subcontracting> {
-  costCategory: CostCategoryType.Subcontracting;
+export interface PCRSpendProfileSubcontractingCostDto extends PCRSpendProfileBaseCostDto {
   subcontractorCountry: string | null;
   subcontractorRoleAndDescription: string | null;
 }
 
-export interface PCRSpendProfileCapitalUsageCostDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Capital_Usage> {
-  costCategory: CostCategoryType.Capital_Usage;
+export interface PCRSpendProfileCapitalUsageCostDto extends PCRSpendProfileBaseCostDto {
   type: PCRSpendProfileCapitalUsageType;
   typeLabel: string | null;
   depreciationPeriod: number | null;
@@ -70,12 +61,9 @@ export interface PCRSpendProfileCapitalUsageCostDto extends PCRSpendProfileBaseC
   utilisation: number | null;
 }
 
-export interface PCRSpendProfileTravelAndSubsCostDto
-  extends PCRSpendProfileBaseCostDto<CostCategoryType.Travel_And_Subsistence> {
+export interface PCRSpendProfileTravelAndSubsCostDto extends PCRSpendProfileBaseCostDto {
   numberOfTimes: number | null;
   costOfEach: number | null;
 }
 
-export interface PCRSpendProfileOtherCostsDto extends PCRSpendProfileBaseCostDto<CostCategoryType.Other_Costs> {
-  costCategory: CostCategoryType.Other_Costs;
-}
+export type PCRSpendProfileOtherCostsDto = PCRSpendProfileBaseCostDto;

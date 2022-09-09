@@ -1,4 +1,5 @@
 import {
+  CostCategoryList,
   IContext,
   ILinkInfo,
   PCRDto,
@@ -20,7 +21,12 @@ import {
   PCRSpendProfileOverheadDocumentRoute,
 } from "@ui/containers";
 import { PCRDtoValidator } from "@ui/validators";
-import { CostCategoryType, PCRItemStatus, PCRSpendProfileCapitalUsageType } from "@framework/constants";
+import {
+  CostCategoryGroupType,
+  CostCategoryType,
+  PCRItemStatus,
+  PCRSpendProfileCapitalUsageType,
+} from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { GetUnfilteredCostCategoriesQuery } from "@server/features/claims";
 import {
@@ -87,20 +93,21 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
     body: IFormBody,
     button: IFormButton,
   ) {
-    switch (costCategoryDto.type) {
-      case CostCategoryType.Labour:
+    const costCategoryType = CostCategoryList.fromId(costCategoryDto.type);
+    switch (costCategoryType.group) {
+      case CostCategoryGroupType.Labour:
         return this.updateLabourCost(cost as PCRSpendProfileLabourCostDto, body);
-      case CostCategoryType.Overheads:
+      case CostCategoryGroupType.Overheads:
         return this.updateOverheadsCost(cost as PCRSpendProfileOverheadsCostDto, body, button);
-      case CostCategoryType.Materials:
+      case CostCategoryGroupType.Materials:
         return this.updateMaterialsCost(cost as PCRSpendProfileMaterialsCostDto, body);
-      case CostCategoryType.Subcontracting:
+      case CostCategoryGroupType.Subcontracting:
         return this.updateSubcontractingCost(cost as PCRSpendProfileSubcontractingCostDto, body);
-      case CostCategoryType.Capital_Usage:
+      case CostCategoryGroupType.Capital_Usage:
         return this.updateCapitalUsageCost(cost as PCRSpendProfileCapitalUsageCostDto, body);
-      case CostCategoryType.Travel_And_Subsistence:
+      case CostCategoryGroupType.Travel_And_Subsistence:
         return this.updateTravelAndSubsCost(cost as PCRSpendProfileTravelAndSubsCostDto, body);
-      case CostCategoryType.Other_Costs:
+      case CostCategoryGroupType.Other_Costs:
         return this.updateOtherCost(cost as PCRSpendProfileOtherCostsDto, body);
     }
   }

@@ -1,13 +1,5 @@
-import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
-import { CostCategoryType, PCRItemForPartnerAdditionDto, PCRItemType, ProjectDto, ProjectRole } from "@framework/types";
-import * as ACC from "@ui/components";
-import { Pending } from "@shared/pending";
-import { PCRDto } from "@framework/dtos/pcrDtos";
-import { useStores } from "@ui/redux";
-import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import classNames from "classnames";
+import { PCRDto } from "@framework/dtos/pcrDtos";
 import {
   PCRSpendProfileCapitalUsageCostDto,
   PCRSpendProfileCostDto,
@@ -17,7 +9,22 @@ import {
   PCRSpendProfileSubcontractingCostDto,
   PCRSpendProfileTravelAndSubsCostDto,
 } from "@framework/dtos/pcrSpendProfileDto";
+import {
+  CostCategoryList,
+  CostCategoryGroupType,
+  PCRItemForPartnerAdditionDto,
+  PCRItemType,
+  ProjectDto,
+  ProjectRole,
+} from "@framework/types";
+import { Pending } from "@shared/pending";
+import * as ACC from "@ui/components";
 import { PcrSpendProfileCostSummaryParams } from "@ui/containers";
+import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
+import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
+import { useStores } from "@ui/redux";
+import classNames from "classnames";
 
 interface Data {
   project: Pending<ProjectDto>;
@@ -110,18 +117,19 @@ class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProf
 
   private renderViewTable(costs: PCRSpendProfileCostDto[], costCategory: CostCategoryDto) {
     const Table = ACC.TypedTable<PCRSpendProfileCostDto>();
-    switch (costCategory.type) {
-      case CostCategoryType.Labour:
+    const costCategoryType = CostCategoryList.fromId(costCategory.type);
+    switch (costCategoryType.group) {
+      case CostCategoryGroupType.Labour:
         return this.renderLabourCostSummary(costs as PCRSpendProfileLabourCostDto[], costCategory);
-      case CostCategoryType.Materials:
+      case CostCategoryGroupType.Materials:
         return this.renderMaterialsCostSummary(costs as PCRSpendProfileMaterialsCostDto[], costCategory);
-      case CostCategoryType.Capital_Usage:
+      case CostCategoryGroupType.Capital_Usage:
         return this.renderCapitalUsageCostSummary(costs as PCRSpendProfileCapitalUsageCostDto[], costCategory);
-      case CostCategoryType.Subcontracting:
+      case CostCategoryGroupType.Subcontracting:
         return this.renderSubcontractingCostSummary(costs as PCRSpendProfileSubcontractingCostDto[], costCategory);
-      case CostCategoryType.Travel_And_Subsistence:
+      case CostCategoryGroupType.Travel_And_Subsistence:
         return this.renderTravelAndSubsistenceCostSummary(costs as PCRSpendProfileTravelAndSubsCostDto[], costCategory);
-      case CostCategoryType.Other_Costs:
+      case CostCategoryGroupType.Other_Costs:
         return this.renderOtherCostsCostSummary(costs as PCRSpendProfileOtherCostsDto[], costCategory);
       default:
         return (
