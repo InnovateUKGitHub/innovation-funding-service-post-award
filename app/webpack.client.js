@@ -29,39 +29,43 @@ module.exports = function pack(env) {
   process.env.BABEL_ENV = env;
 
   const isDev = env === "development";
+  const shouldEnableDevTools = /^acc-dev|^acc-demo/.test(process.env.ENV_NAME) || isDev;
 
   const appEntryPoint = getPath("src/client/client.tsx");
   const componentGuidesEntryPoint = getPath("src/client/componentsGuide.tsx");
 
-  return [
-    {
-      mode: env,
-      entry: {
-        bundle: ["isomorphic-fetch", appEntryPoint],
-        componentsGuide: componentGuidesEntryPoint,
-      },
-      output: {
-        filename: "[name].js",
-        path: getPath("public/build"),
-      },
-      devtool: "source-map",
-      module: {
-        rules: [
-          {
-            test: /\.tsx?$/,
-            loader: "ts-loader",
-          },
-        ],
-      },
-      resolve: {
-        modules: ["node_modules"],
-        extensions: [".tsx", ".ts", ".jsx", ".js"],
-        plugins: [new TsConfigPathsPlugin()],
-      },
-      plugins: [
-        new NormalModuleReplacementPlugin(...getNormalReplacementParams("dev-logger.ts")),
-        new NormalModuleReplacementPlugin(...getNormalReplacementParams("apiClient.ts")),
-      ].concat(isDev ? [new BundleAnalyzerPlugin()] : []),
+  const configuration = {
+    mode: env,
+    entry: {
+      bundle: ["isomorphic-fetch", appEntryPoint],
     },
-  ];
+    output: {
+      filename: "[name].js",
+      path: getPath("public/build"),
+    },
+    module: {
+      rules: [
+        {
+          test: /\.tsx?$/,
+          loader: "ts-loader",
+        },
+      ],
+    },
+    resolve: {
+      modules: ["node_modules"],
+      extensions: [".tsx", ".ts", ".jsx", ".js"],
+      plugins: [new TsConfigPathsPlugin()],
+    },
+    plugins: [
+      new NormalModuleReplacementPlugin(...getNormalReplacementParams("dev-logger.ts")),
+      new NormalModuleReplacementPlugin(...getNormalReplacementParams("apiClient.ts")),
+    ].concat(isDev ? [new BundleAnalyzerPlugin()] : []),
+  };
+
+  if (shouldEnableDevTools) {
+    configuration.entry.componentsGuide = componentGuidesEntryPoint;
+    configuration.devtool = "source-map";
+  }
+
+  return [configuration];
 };

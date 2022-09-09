@@ -30,11 +30,18 @@ class ESBuildConfiguration {
   restarter = new Restarter(process.env.SERVER_URL);
 
   /**
+   * @type {string}
+   */
+  dirname;
+
+  /**
    * Create a builder for generating esbuild configuration files.
    *
    * @param {string} dirname The __dirname of the `/esbuild.js` file.
    */
   constructor(dirname) {
+    this.dirname = dirname;
+
     this.serverBuild = {
       entryPoints: [path.join(dirname, "src/server/index.ts")],
       platform: "node",
@@ -42,7 +49,6 @@ class ESBuildConfiguration {
       bundle: true,
       outdir: path.join(dirname, "dist/src/server"),
       minify: false,
-      sourcemap: "external",
       tsconfig: path.join(dirname, "tsconfig.json"),
       logLevel: "info",
       plugins: [nodeExternalsPlugin()],
@@ -51,11 +57,9 @@ class ESBuildConfiguration {
     this.clientBuild = {
       entryPoints: {
         bundle: path.join(dirname, "src/client/client.tsx"),
-        componentsGuide: path.join(dirname, "src/client/componentsGuide.tsx"),
       },
       bundle: true,
       outdir: "public/build",
-      sourcemap: "linked",
       minify: true,
       tsconfig: path.join(dirname, "tsconfig.json"),
       plugins: [replaceModulesPlugin],
@@ -104,6 +108,29 @@ class ESBuildConfiguration {
   withTypecheck() {
     this.serverBuild.plugins.push(typecheckPlugin());
     this.clientBuild.plugins.push(typecheckPlugin());
+
+    return this;
+  }
+
+  /**
+   * Include the IFS PA component library
+   *
+   * @returns {ESBuildConfiguration} Itself
+   */
+  withComponentLibrary() {
+    this.serverBuild.entryPoints.componentsGuide = path.join(this.dirname, "src/client/componentsGuide.tsx");
+
+    return this;
+  }
+
+  /**
+   * Include sourcemap support
+   *
+   * @returns {ESBuildConfiguration} Itself
+   */
+  withSourceMap() {
+    this.serverBuild.sourcemap = "linked";
+    this.clientBuild.sourcemap = "linked";
 
     return this;
   }
