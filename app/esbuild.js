@@ -6,13 +6,23 @@ const { program } = require("commander");
 const { build } = require("esbuild");
 const ESBuildConfiguration = require("./scripts/esbuild/ESBuildConfiguration");
 
-const opts = program.option("--watch").option("--tsc").parse(process.argv).opts();
+const opts = program.option("--watch").option("--tsc").option("--devtools").parse(process.argv).opts();
 
 const esbuildConfig = new ESBuildConfiguration(__dirname);
 const restarter = esbuildConfig.getRestarter();
+const shouldEnableDevTools = /^acc-dev|^acc-demo/.test(process.env.ENV_NAME) || process.env.NODE_ENV === "development";
 
-if (opts.watch) esbuildConfig.withWatch();
-if (opts.tsc) esbuildConfig.withTypecheck();
+if (opts.watch) {
+  esbuildConfig.withWatch();
+}
+
+if (opts.tsc) {
+  esbuildConfig.withTypecheck();
+}
+
+if (opts.devtools || shouldEnableDevTools) {
+  esbuildConfig.withComponentLibrary().withSourceMap();
+}
 
 // Build and bundle the server
 build(esbuildConfig.getServerConfig())
