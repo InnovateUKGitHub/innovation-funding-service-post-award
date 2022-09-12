@@ -40,9 +40,8 @@
     "last 6 Firefox versions",
     "last 6 Samsung versions",
     "last 6 Edge versions",
-    "ie 11",
     "last 6 Safari versions",
-    "iOS >= 12"
+    "iOS >= 14"
   ],
   "dependencies": {
     "@aws-sdk/client-s3": "^3.120.0",
