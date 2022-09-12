@@ -4,6 +4,8 @@ const path = require("path");
 const { NormalModuleReplacementPlugin } = require("webpack");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const TsConfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 /**
  *
@@ -32,12 +34,13 @@ module.exports = function pack(env) {
   const shouldEnableDevTools = /^acc-dev|^acc-demo/.test(process.env.ENV_NAME) || isDev;
 
   const appEntryPoint = getPath("src/client/client.tsx");
+  const appStylesEntryPoint = getPath("src/styles/index.css");
   const componentGuidesEntryPoint = getPath("src/client/componentsGuide.tsx");
 
   const configuration = {
     mode: env,
     entry: {
-      bundle: ["isomorphic-fetch", appEntryPoint],
+      bundle: ["isomorphic-fetch", appEntryPoint, appStylesEntryPoint],
     },
     output: {
       filename: "[name].js",
@@ -49,16 +52,56 @@ module.exports = function pack(env) {
           test: /\.tsx?$/,
           loader: "ts-loader",
         },
+        {
+          test: /\.css$/i,
+          use: [
+            MiniCssExtractPlugin.loader,
+            {
+              loader: "css-loader",
+              options: {
+                url: {
+                  filter: url => {
+                    // If the url() references a file, don't resolve it.
+                    if (url.includes(".png")) return false;
+                    if (url.includes(".woff")) return false;
+                    if (url.includes(".woff2")) return false;
+
+                    return true;
+                  },
+                },
+                sourceMap: true,
+              },
+            },
+          ],
+        },
       ],
     },
     resolve: {
       modules: ["node_modules"],
-      extensions: [".tsx", ".ts", ".jsx", ".js"],
+      extensions: [".tsx", ".ts", ".jsx", ".js", ".css"],
       plugins: [new TsConfigPathsPlugin()],
+    },
+    optimization: {
+      minimizer: [
+        "...",
+        new CssMinimizerPlugin({
+          minimizerOptions: {
+            preset: [
+              "default",
+              {
+                discardComments: { removeAll: true },
+              },
+            ],
+          },
+        }),
+      ],
     },
     plugins: [
       new NormalModuleReplacementPlugin(...getNormalReplacementParams("dev-logger.ts")),
       new NormalModuleReplacementPlugin(...getNormalReplacementParams("apiClient.ts")),
+      new MiniCssExtractPlugin({
+        filename: "styles.css",
+      }),
     ].concat(isDev ? [new BundleAnalyzerPlugin()] : []),
   };
 

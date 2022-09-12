@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention, @typescript-eslint/no-var-requires */
 /** @typedef {import('esbuild').BuildOptions} BuildOptions */
-require("dotenv").config()
+require("dotenv").config();
 const path = require("path");
 const { nodeExternalsPlugin } = require("esbuild-node-externals");
 const { typecheckPlugin } = require("@jgoz/esbuild-plugin-typecheck");
@@ -57,13 +57,14 @@ class ESBuildConfiguration {
     this.clientBuild = {
       entryPoints: {
         bundle: path.join(dirname, "src/client/client.tsx"),
+        styles: path.join(dirname, "src/styles/index.css"),
       },
       bundle: true,
       outdir: "public/build",
       minify: true,
       tsconfig: path.join(dirname, "tsconfig.json"),
       plugins: [replaceModulesPlugin],
-      loader: { ".png": "file", ".woff2": "file", ".woff": "file" },
+      external: ["*.png", "*.woff2", "*.woff"],
       logLevel: "info",
     };
   }
