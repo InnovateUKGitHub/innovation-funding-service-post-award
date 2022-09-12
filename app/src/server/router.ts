@@ -9,6 +9,9 @@ import { NotFoundError } from "@shared/appError";
 import { serverRender } from "@server/serverRender";
 import { componentGuideRender } from "@server/componentGuideRender";
 
+const shouldEnableDevTools =
+  /^acc-dev|^acc-demo/.test(process.env.ENV_NAME || "") || process.env.NODE_ENV === "development";
+
 export const noAuthRouter = Router();
 
 // Support routes
@@ -21,8 +24,10 @@ const csrfProtection = csrf();
 // App routes
 router.use("/api", apiRoutes);
 
-// TODO: should scope this for dev access only (e.g. check for sso enabled)
-router.use("/components", csrfProtection, componentGuideRender);
+// Only enable the components page if we're in development mode.
+if (shouldEnableDevTools) {
+  router.use("/components", csrfProtection, componentGuideRender);
+}
 
 // Form posts
 router.post("*", configureFormRouter(csrfProtection));
