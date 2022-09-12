@@ -47,11 +47,7 @@ const renderGuide = (nonce: string, html: string) => {
             <link rel="apple-touch-icon" sizes="152x152" href="/assets/images/govuk-apple-touch-icon-152x152.png">
             <link rel="apple-touch-icon" href="/assets/images/govuk-apple-touch-icon.png">
 
-            <link href="/govuk-frontend-${govukFrontendVersion}.min.css?build=${configuration.build}" rel="stylesheet" />
-            <link href="/ifspa-govuk-overrides.css" rel="stylesheet" />
-            <link href="/ifspa-govuk-overrides-modal.css" rel="stylesheet" />
-
-            <link href="/ifspa-govuk-print-overrides.css?build=${configuration.build}" rel="stylesheet" media="print"/>
+            <link href="/build/styles.css?build=${configuration.build}" rel="stylesheet" />
 
             <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
         </head>

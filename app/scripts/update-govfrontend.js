@@ -4,7 +4,9 @@ const fs = require("fs");
 
 const { minify } = require("terser");
 
-const govFrontendPackageJson = require(require.resolve("govuk-frontend/package.json"));
+const govFrontendPackageJson = JSON.parse(
+  fs.readFileSync(path.join(require.resolve("govuk-frontend"), "..", "..", "package.json"), { encoding: "utf-8" }),
+);
 
 async function minifyJS(content) {
   try {
@@ -55,7 +57,7 @@ async function createGovukStyles() {
   if (!parsedCssContent.length) throw Error("No css was parsed :(");
 
   const outputFileName = `govuk-frontend-${govFrontendPackageJson.version}.min.css`;
-  const outputDirectory = path.resolve(process.cwd(), "public", outputFileName);
+  const outputDirectory = path.resolve(process.cwd(), "src", "styles", outputFileName);
 
   try {
     await fs.promises.writeFile(outputDirectory, parsedCssContent, { encoding: "utf8" });

@@ -64,7 +64,6 @@
   display: none;
 }
 
-
 /*Header with close button*/
 .govuk-modal-dialogue__header {
   margin-bottom: 15px;
@@ -102,7 +101,7 @@
 
 /*Custom backdrop*/
 .govuk-modal-dialogue__backdrop {
-  opacity: .8;
+  opacity: 0.8;
   background: #0b0c0c;
   pointer-events: none;
   touch-action: none;
