@@ -748,6 +748,15 @@ export class PCRProjectSuspensionItemDtoValidator extends PCRBaseItemDtoValidato
               "The date must be at the end of the month",
             )
           : Validation.valid(this),
+      () =>
+        this.model.suspensionEndDate
+          ? Validation.isBeforeOrSameDay(
+              this,
+              this.model.suspensionStartDate,
+              this.model.suspensionEndDate,
+              "The last day of pause cannot be before the first day of pause.",
+            )
+          : Validation.valid(this),
     );
   }
 
