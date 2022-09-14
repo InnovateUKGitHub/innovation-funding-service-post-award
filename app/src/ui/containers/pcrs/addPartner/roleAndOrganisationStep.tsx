@@ -105,6 +105,7 @@ class Component extends React.Component<
                 if (organisationType === PCROrganisationType.Academic) {
                   x.participantSize = PCRParticipantSize.Academic;
                 }
+                x.organisationType = organisationType;
                 x.partnerType = selectedOption;
               }}
               validation={this.props.validator.partnerType}
