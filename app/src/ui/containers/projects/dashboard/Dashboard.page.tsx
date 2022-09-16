@@ -18,7 +18,7 @@ import { generateFilteredProjects, getAvailableProjectFilters } from "./dashboar
 
 interface ProjectDashboardParams {
   search?: string;
-  filters?: FilterOptions[];
+  arrayFilters?: FilterOptions[];
 }
 
 interface ProjectDashboardProps extends BaseProps, ProjectDashboardParams {
@@ -42,17 +42,17 @@ function ProjectDashboard({
   const [filterOptions] = useState(() => getAvailableProjectFilters(unfilteredObjects));
 
   const { isServer } = useMounted();
-  const [filters, setFilters] = useState<FilterOptions[]>(props.filters ?? []);
-  const { curatedProjects, curatedTotals, totalProjects } = generateFilteredProjects(filters, projects, partners);
+  const [arrayFilters, setFilters] = useState<FilterOptions[]>(props.arrayFilters ?? []);
+  const { curatedProjects, curatedTotals, totalProjects } = generateFilteredProjects(arrayFilters, projects, partners);
 
   const searchFilterState = {
     searchValue: props.search,
-    filterValue: filters,
+    filterValue: arrayFilters,
   };
 
   const projectListProps = {
     routes: props.routes,
-    isFiltering: !!props.search || filters.length !== filterOptions.length,
+    isFiltering: !!props.search || arrayFilters.length !== filterOptions.length,
   };
 
   const displaySearch: boolean = totalNumberOfProjects >= config.options.numberOfProjectsToSearch;
@@ -91,7 +91,7 @@ function ProjectDashboard({
           onChange={model =>
             props.onSearch({
               search: model.searchValue,
-              filters,
+              arrayFilters,
             })
           }
         >
@@ -110,9 +110,11 @@ function ProjectDashboard({
           <Form.Fieldset heading="Filter options">
             <Form.Checkboxes
               hint="You can select more than one."
-              name="filters"
+              name="arrayFilters"
               options={options}
-              value={() => (filters.length ? options.filter(x => filters.includes(x.id as FilterOptions)) : null)}
+              value={() =>
+                arrayFilters.length ? options.filter(x => arrayFilters.includes(x.id as FilterOptions)) : null
+              }
               update={(_, selectOptions) => {
                 const latestFilters = selectOptions!.map(x => x.id) as FilterOptions[];
                 setFilters(latestFilters);
@@ -150,9 +152,7 @@ function ProjectDashboard({
 const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) => {
   const stores = useStores();
 
-  const params = useAppParams<ProjectDashboardParams>();
-
-  const projects = stores.projects.getProjectsFilter(params.search);
+  const projects = stores.projects.getProjectsFilter(props.search);
   const unfilteredObjects = stores.projects.getProjects();
   const partners = stores.partners.getAll();
 
@@ -165,7 +165,6 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
         <ProjectDashboard
           {...props}
           {...resolvedPending}
-          {...params}
           totalNumberOfProjects={resolvedPending.unfilteredObjects.length}
           onSearch={searchParams => {
             const routeInfo = ProjectDashboardRoute.getLink(searchParams);
@@ -177,27 +176,11 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
   );
 };
 
-function useAppParams<T extends Record<string, any>>(): T {
-  const [params] = useSearchParams();
-  const urlParam = new URLSearchParams(params);
-
-  return Object.fromEntries(urlParam) as unknown as T;
-}
-
 export const ProjectDashboardRoute = defineRoute({
   routeName: "projectDashboard",
   routePath: "/projects/dashboard",
   routePathWithQuery: "/projects/dashboard?:search",
   container: ProjectDashboardContainer,
-  getParams: r => {
-    const { search, filters: rawFilters } = r.params;
-    // Note: Checkboxes can return 'option' or 'option[]' data type
-    const parsedFilters = typeof rawFilters === "string" ? [rawFilters] : rawFilters;
-
-    return {
-      search,
-      filters: parsedFilters,
-    };
-  },
+  getParams: () => ({}),
   getTitle: x => x.content.projectsDashboard.title(),
 });
