@@ -42,35 +42,23 @@ describe("getParams", () => {
   const routePath = "/projects/:projectId/claims/:partnerId/review/:periodId/costs/:costCategoryId/moId/:moId";
   const url = "/projects/12345678/claims/foo/review/4/costs/bar/moId/4ef12gh4";
 
-  it("should convert to an object of params, converting to number if possible", () => {
-    expect(getParamsFromUrl(routePath, url)).toEqual({
-      projectId: 12345678,
-      partnerId: "foo",
-      periodId: 4,
-      costCategoryId: "bar",
-      moId: "4ef12gh4",
-    });
-  });
+  const defaultResponse = {
+    projectId: 12345678,
+    partnerId: "foo",
+    periodId: 4,
+    costCategoryId: "bar",
+    moId: "4ef12gh4",
+  };
 
-  it("should handle the existence of query strings appended to pathname by ignoring", () => {
-    expect(getParamsFromUrl(routePath, `${url}?foo=bar&baz=quux`)).toEqual({
-      projectId: 12345678,
-      partnerId: "foo",
-      periodId: 4,
-      costCategoryId: "bar",
-      moId: "4ef12gh4",
-    });
-  });
-
-  it("should handle the existence of search query appended as extra arg by adding to params object", () => {
-    expect(getParamsFromUrl(routePath, url, "?foo=bar&baz=quux")).toEqual({
-      projectId: 12345678,
-      partnerId: "foo",
-      periodId: 4,
-      costCategoryId: "bar",
-      moId: "4ef12gh4",
-      foo: "bar",
-      baz: "quux",
-    });
+  test.each`
+    name                                                                                              | testUrl                      | search                                                 | expected
+    ${"should convert to an object of params, converting to a number if possible"}                    | ${url}                       | ${""}                                                  | ${{ ...defaultResponse }}
+    ${"should handle the existence of query strings appended to pathname by ignoring"}                | ${`${url}?foo=bar&baz=quux`} | ${""}                                                  | ${{ ...defaultResponse }}
+    ${"should handle the existence of search query appended as extra arg by adding to params object"} | ${url}                       | ${"?foo=bar&baz=quux"}                                 | ${{ ...defaultResponse, foo: "bar", baz: "quux" }}
+    ${"should not convert duplicate query params into an array, treating last instance as value"}     | ${url}                       | ${"?filters=1&filters=2&filters=three"}                | ${{ ...defaultResponse, filters: "three" }}
+    ${"should not treat params ending in [] as an array"}                                             | ${url}                       | ${"?filters[]=1&filters[]=2&filters[]=three"}          | ${{ ...defaultResponse, "filters[]": "three" }}
+    ${"should convert duplicate query params beginning with 'array' into an array of strings"}        | ${url}                       | ${"?arrayFilters=1&arrayFilters=2&arrayFilters=three"} | ${{ ...defaultResponse, arrayFilters: ["1", "2", "three"] }}
+  `("$name", ({ testUrl, search, expected }) => {
+    expect(getParamsFromUrl(routePath, testUrl, search)).toEqual(expected);
   });
 });
