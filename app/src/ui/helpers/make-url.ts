@@ -28,18 +28,53 @@ function toNumber(value: string) {
   return Number.isNaN(num) ? value : num;
 }
 
-export function getParamsFromUrl(routePath: string, pathname: string, search = ""): Record<string, string | number> {
+type Params = Record<string, string | string[] | number>;
+
+/**
+ * Parse a pathname based on a route path, and obtain the associated parameters.
+ *
+ * @param routePath The shape of the route to parse upon
+ * @param pathname The path the user has requested
+ * @param search Search parameters (as a string)
+ * @returns A record of all parameters passed in from the client.
+ */
+export function getParamsFromUrl(routePath: string, pathname: string, search = ""): Params {
   const parts = routePath.split(/[/?]/);
   const values = pathname.split(/[/?]/);
 
-  const params: Record<string, string | number> = parts.reduce(
+  // Parse the params that are within the "routePath"
+  const routePathParams: Params = parts.reduce(
     (acc, cur, i) => (/^:/.test(cur) ? { ...acc, [cur.replace(":", "")]: toNumber(values[i]) } : acc),
     {},
   );
 
+  // Parse the params that are within the "search"
+  const queryParams: Params = {};
   const query = new URLSearchParams(search).entries();
+
+  // Parse each value into either a string[], string or number.
   for (const [k, v] of query) {
-    params[k] = toNumber(v);
+    // Ensure that only params marked with "array" are parsed as an array.
+    if (k.startsWith("array")) {
+      // Get the param with the specified fieldName
+      // Used to help type-narrow `val`.
+      const val = queryParams[k];
+
+      // If the array exists, push onto the stack.
+      // Otherwise, create a new array.
+      if (Array.isArray(val)) {
+        val.push(v);
+      } else {
+        queryParams[k] = [v];
+      }
+    } else {
+      queryParams[k] = toNumber(v);
+    }
   }
-  return params;
+
+  // Merge both params together, with routePathParams taking priority.
+  return {
+    ...queryParams,
+    ...routePathParams,
+  };
 }
