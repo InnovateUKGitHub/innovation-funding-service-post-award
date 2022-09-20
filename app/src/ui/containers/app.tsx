@@ -39,8 +39,14 @@ interface IAppProps {
  */
 function AppView({ currentRoute, dispatch }: IAppProps) {
   const stores = useStores();
-  const params = useAppParams();
   const content = useInitContent();
+
+  const location = useLocation();
+
+  const { params, routePathParams } = useMemo(
+    () => getParamsFromUrl(currentRoute.routePath, location.pathname, location.search),
+    [currentRoute.routePath, location.pathname, location.search],
+  );
 
   const modalRegister = useModal();
   const auth = stores.users.getCurrentUserAuthorisation();
@@ -58,20 +64,15 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
     modalRegister.subscribe("app", noop);
   }, [modalRegister]);
 
-  const location = useLocation();
-
-  const routeParams = useMemo(
-    () => getParamsFromUrl(currentRoute.routePath, location.pathname, location.search),
-    [currentRoute.routePath, location.pathname, location.search],
-  );
-
+  // TODO: Deprecating 'config' and pulling from redux store via 'useSelector' prop drilling :(
+  // TODO: Deprecating 'messages' and pulling from redux store via 'useSelector' prop drilling :(
+  // TODO: Deprecating 'routes' and create a typed solution to fetch route with required url params
   const baseProps: BaseProps = {
     messages,
     config,
     routes: routeConfig,
-    projectId: params.projectId,
     currentRoute,
-    ...routeParams,
+    ...params,
   };
 
   const isAlreadyMounted = useRef(false);
@@ -105,9 +106,9 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
               <GovWidthContainer>
                 <PhaseBanner />
                 {hasAccess ? (
-                  <ProjectParticipantProvider projectId={params.projectId}>
+                  <ProjectParticipantProvider projectId={routePathParams.projectId as string}>
                     <ProjectStatusCheck
-                      projectId={params.projectId}
+                      projectId={routePathParams.projectId as string}
                       overrideAccess={!!currentRoute.allowRouteInActiveAccess}
                     >
                       <PageContainer {...baseProps} />

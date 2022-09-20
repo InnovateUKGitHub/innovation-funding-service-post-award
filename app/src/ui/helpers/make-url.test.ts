@@ -59,6 +59,6 @@ describe("getParams", () => {
     ${"should not treat params ending in [] as an array"}                                             | ${url}                       | ${"?filters[]=1&filters[]=2&filters[]=three"}          | ${{ ...defaultResponse, "filters[]": "three" }}
     ${"should convert duplicate query params beginning with 'array' into an array of strings"}        | ${url}                       | ${"?arrayFilters=1&arrayFilters=2&arrayFilters=three"} | ${{ ...defaultResponse, arrayFilters: ["1", "2", "three"] }}
   `("$name", ({ testUrl, search, expected }) => {
-    expect(getParamsFromUrl(routePath, testUrl, search)).toEqual(expected);
+    expect(getParamsFromUrl(routePath, testUrl, search).params).toEqual(expected);
   });
 });

@@ -29,6 +29,11 @@ function toNumber(value: string) {
 }
 
 type Params = Record<string, string | string[] | number>;
+interface IParams {
+  queryParams: Params;
+  routePathParams: Params;
+  params: Params;
+}
 
 /**
  * Parse a pathname based on a route path, and obtain the associated parameters.
@@ -38,7 +43,7 @@ type Params = Record<string, string | string[] | number>;
  * @param search Search parameters (as a string)
  * @returns A record of all parameters passed in from the client.
  */
-export function getParamsFromUrl(routePath: string, pathname: string, search = ""): Params {
+export function getParamsFromUrl(routePath: string, pathname: string, search = ""): IParams {
   const parts = routePath.split(/[/?]/);
   const values = pathname.split(/[/?]/);
 
@@ -74,7 +79,11 @@ export function getParamsFromUrl(routePath: string, pathname: string, search = "
 
   // Merge both params together, with routePathParams taking priority.
   return {
-    ...queryParams,
-    ...routePathParams,
+    queryParams,
+    routePathParams,
+    params: {
+      ...queryParams,
+      ...routePathParams,
+    },
   };
 }

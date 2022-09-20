@@ -57,7 +57,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     );
 
     const matched = matchRoute(req.url);
-    const params = getParamsFromUrl(matched.routePath, req.url);
+    const { params } = getParamsFromUrl(matched.routePath, req.url);
 
     if (matched.accessControl?.(auth, params, clientConfig) === false) {
       throw new ForbiddenError();
