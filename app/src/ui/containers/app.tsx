@@ -2,31 +2,29 @@ import { useEffect, useMemo, useRef } from "react";
 import { Helmet } from "react-helmet";
 import { Store, Dispatch } from "redux";
 import { ErrorBoundary } from "react-error-boundary";
-import { Routes, Route, useLocation, useNavigationType } from "react-router-dom";
+import { Route, Routes, useLocation, useNavigationType } from "react-router-dom";
 
 import { IRouteDefinition } from "@ui/containers/containerBase";
-import { getRoutes, routeConfig } from "@ui/routing";
 import { useModal, useStores } from "@ui/redux";
 import { routeTransition } from "@ui/redux/actions";
 import { ContentProvider } from "@ui/redux/contentProvider";
+import { getRoutes, routeConfig } from "@ui/routing";
 
 import { BaseProps } from "@ui/containers/containerBase";
 
 import { PageTitleProvider } from "@ui/features/page-title";
 import { ProjectParticipantProvider } from "@ui/features/project-participants";
-import { useAppParams } from "@ui/features/use-app-params";
 import { useInitContent } from "@ui/features/use-initial-content";
 
 import { Footer, FullHeight, GovWidthContainer, Header, PhaseBanner, PrivateModal } from "@ui/components";
-import { ErrorContainer, ErrorBoundaryFallback } from "@ui/components/errors";
+import { ErrorBoundaryFallback, ErrorContainer } from "@ui/components/errors";
 import { MountedProvider } from "@ui/features";
-import { noop } from "@ui/helpers/noop";
 import { getParamsFromUrl } from "@ui/helpers/make-url";
+import { noop } from "@ui/helpers/noop";
 
-import { useAppMount } from "./app/app-mount.hook";
+import { FooterExternalContent, footerLinks } from "./app/footer.config";
 import { ProjectStatusCheck } from "./app/project-active";
 import { ErrorNotFoundRoute, ErrorRoute } from "./errors.page";
-import { FooterExternalContent, footerLinks } from "./app/footer.config";
 
 interface IAppProps {
   dispatch: Dispatch;
@@ -39,8 +37,6 @@ interface IAppProps {
  */
 function AppView({ currentRoute, dispatch }: IAppProps) {
   const stores = useStores();
-  const content = useInitContent();
-
   const location = useLocation();
 
   const { params, routePathParams } = useMemo(
@@ -48,6 +44,7 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
     [currentRoute.routePath, location.pathname, location.search],
   );
 
+  const content = useInitContent(params);
   const modalRegister = useModal();
   const auth = stores.users.getCurrentUserAuthorisation();
   const config = stores.config.getConfig();
@@ -145,7 +142,7 @@ interface AppRoute {
 export function App(props: AppRoute) {
   const routesList = getRoutes();
   // Note: Don't call me in a lifecycle - needs to be SSR compatible!
-  useAppMount();
+  // useAppMount();
 
   const error = props.store.getState().globalError;
 

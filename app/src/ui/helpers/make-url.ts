@@ -28,7 +28,7 @@ function toNumber(value: string) {
   return Number.isNaN(num) ? value : num;
 }
 
-type Params = Record<string, string | string[] | number>;
+export type Params = Record<string, string | string[] | number>;
 interface IParams {
   queryParams: Params;
   routePathParams: Params;
@@ -46,6 +46,7 @@ interface IParams {
 export function getParamsFromUrl(routePath: string, pathname: string, search = ""): IParams {
   const parts = routePath.split(/[/?]/);
   const values = pathname.split(/[/?]/);
+  const usedRouteParts = new Set<string>();
 
   // Parse the params that are within the "routePath"
   const routePathParams: Params = parts.reduce(
@@ -55,12 +56,14 @@ export function getParamsFromUrl(routePath: string, pathname: string, search = "
 
   // Parse the params that are within the "search"
   const queryParams: Params = {};
-  const query = new URLSearchParams(search).entries();
+  const query = new URLSearchParams(search);
 
   // Parse each value into either a string[], string or number.
-  for (const [k, v] of query) {
+  for (const [k, v] of query.entries()) {
     // Ensure that only params marked with "array" are parsed as an array.
-    if (k.startsWith("array")) {
+    if (usedRouteParts.has(k)) {
+      // nothing
+    } else if (k.startsWith("array")) {
       // Get the param with the specified fieldName
       // Used to help type-narrow `val`.
       const val = queryParams[k];
