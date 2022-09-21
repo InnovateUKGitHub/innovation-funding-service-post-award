@@ -38,20 +38,25 @@ export class FinancialLoanVirementDtoValidator extends Results<FinancialLoanVire
     );
   }
 
+  /**
+   * Get whether a loan is overdrawn or not.
+   * A loan is overdrawn when the new total is greater than the current total.
+   */
+  private isOverdrawnLoan(): boolean {
+    return this.totals.updatedTotal > this.totals.currentTotal;
+  }
+
   private validateTotalValue() {
     // Note: Delegate children to validate themselves
     const ignoreSingleVirementChanges = this.editablePeriods.length === 1;
 
     if (!this.submit || ignoreSingleVirementChanges) return Validation.valid(this);
 
-    const isOverdrawnLoan = this.totals.updatedTotal - this.totals.currentTotal <= 0;
-
-    return Validation.isTrue(this, isOverdrawnLoan, this.getErrorMessage(this.editablePeriods));
+    // Validate that a loan is NOT overdrawn.
+    return Validation.isTrue(this, !this.isOverdrawnLoan(), this.getErrorMessage(this.editablePeriods));
   }
 
   private validateItems() {
-    const isOverdrawnLoan = this.totals.updatedTotal - this.totals.currentTotal <= 0;
-
     return Validation.requiredChild(
       this,
       this.model.loans,
@@ -59,7 +64,7 @@ export class FinancialLoanVirementDtoValidator extends Results<FinancialLoanVire
         new FinancialLoanVirement(
           x,
           this.model.loans,
-          isOverdrawnLoan,
+          !this.isOverdrawnLoan(),
           this.showValidationErrors,
           this.submit,
           period => this.getErrorMessage([period]),
