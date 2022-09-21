@@ -152,10 +152,14 @@ describe("FinancialLoanVirementDtoValidator", () => {
       };
 
       test.each`
-        name                        | payload                                                                                                                                                     | expectedResponse | expectedError
-        ${"with one item to check"} | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 10 }])}                                                                  | ${true}          | ${null}
-        ${"when matching"}          | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 10 }, { isEditable: true, period: 2, currentValue: 10, newValue: 10 }])} | ${true}          | ${null}
-        ${"when non-matching"}      | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 20 }, { isEditable: true, period: 2, currentValue: 10, newValue: 20 }])} | ${false}         | ${"You cannot exceed '£20.00' by '£20.00'. Adjust period '1, 2' to proceed."}
+        name                                          | payload                                                                                                                                                     | expectedResponse | expectedError
+        ${"with one item to check"}                   | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 10 }])}                                                                  | ${true}          | ${null}
+        ${"when equal in months"}                     | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 10 }, { isEditable: true, period: 2, currentValue: 10, newValue: 10 }])} | ${true}          | ${null}
+        ${"with valid funds moved to earlier months"} | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 20 }, { isEditable: true, period: 2, currentValue: 10, newValue: 0 }])}  | ${true}          | ${null}
+        ${"with valid funds moved to later months"}   | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 0 }, { isEditable: true, period: 2, currentValue: 10, newValue: 20 }])}  | ${true}          | ${null}
+        ${"with overdrawn funds in all months"}       | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 20 }, { isEditable: true, period: 2, currentValue: 10, newValue: 20 }])} | ${false}         | ${"You cannot exceed '£20.00' by '£20.00'. Adjust period '1, 2' to proceed."}
+        ${"with overdrawn funds in earlier months"}   | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 20 }, { isEditable: true, period: 2, currentValue: 10, newValue: 10 }])} | ${false}         | ${"You cannot exceed '£20.00' by '£10.00'. Adjust period '1, 2' to proceed."}
+        ${"with overdrawn funds in later months"}     | ${createTotalValueStub([{ isEditable: true, period: 1, currentValue: 10, newValue: 10 }, { isEditable: true, period: 2, currentValue: 10, newValue: 20 }])} | ${false}         | ${"You cannot exceed '£20.00' by '£10.00'. Adjust period '1, 2' to proceed."}
       `("$name", ({ payload, expectedResponse, expectedError }) => {
         const validation = new FinancialLoanVirementDtoValidator(payload, true, true);
 
