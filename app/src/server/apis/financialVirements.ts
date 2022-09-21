@@ -21,7 +21,7 @@ class Controller extends ControllerBase<FinancialVirementDto> {
         pcrId: p.pcrId,
         pcrItemId: p.pcrItemId,
         partnerId: q.partnerId,
-        financialVirment: processDto(b),
+        financialVirement: processDto(b),
         submit: q.submit === "true",
       }),
       p => this.update(p),
@@ -41,7 +41,7 @@ class Controller extends ControllerBase<FinancialVirementDto> {
       pcrId: string;
       pcrItemId: string;
       partnerId?: string;
-      financialVirment: FinancialVirementDto;
+      financialVirement: FinancialVirementDto;
       submit: boolean;
     }>,
   ): Promise<FinancialVirementDto> {
@@ -51,7 +51,7 @@ class Controller extends ControllerBase<FinancialVirementDto> {
       params.projectId,
       params.pcrId,
       params.pcrItemId,
-      params.financialVirment,
+      params.financialVirement,
       params.submit,
     );
     await context.runCommand(command);
