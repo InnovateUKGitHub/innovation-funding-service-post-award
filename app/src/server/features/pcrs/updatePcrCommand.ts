@@ -142,7 +142,11 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
           new UpdatePCRSpendProfileCommand(
             this.projectId,
             partnerAdditionItemDto.id,
-            partnerAdditionItemDto.spendProfile,
+            partnerAdditionItemDto.spendProfile ?? {
+              costs: [],
+              funds: [],
+              pcrItemId: undefined,
+            },
           ),
         );
       }

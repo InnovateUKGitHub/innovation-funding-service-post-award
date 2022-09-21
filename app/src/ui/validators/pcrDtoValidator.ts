@@ -835,7 +835,11 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
 
   spendProfile = Validation.nested(
     this,
-    this.model.spendProfile,
+    this.model?.spendProfile ?? {
+      costs: [],
+      funds: [],
+      pcrItemId: undefined,
+    },
     x => new PCRSpendProfileDtoValidator(x, this.showValidationErrors),
     "Spend profile is not valid",
   );
