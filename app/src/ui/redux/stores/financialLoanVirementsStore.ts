@@ -46,7 +46,7 @@ export class FinancialLoanVirementsStore extends StoreBase {
       this.getKey(projectId, pcrId, pcrItemId),
       dto,
       showErrors => new FinancialLoanVirementDtoValidator(dto, showErrors, submit),
-      p => apiClient.financialLoanVirements.update({ ...p, projectId, pcrItemId, financialVirment: dto, submit }),
+      p => apiClient.financialLoanVirements.update({ ...p, projectId, pcrItemId, financialVirement: dto, submit }),
       result => {
         this.markStale("financialLoanVirement", this.getKey(projectId, pcrId, pcrItemId), result);
       },

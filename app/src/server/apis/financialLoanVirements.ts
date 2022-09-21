@@ -23,7 +23,7 @@ class Controller extends ControllerBase<FinancialLoanVirementDto> {
       (p, q, b) => ({
         projectId: p.projectId,
         pcrItemId: p.pcrItemId,
-        financialVirment: processDto(b),
+        financialVirement: processDto(b),
         submit: q.submit === "true",
       }),
       this.update,
@@ -40,7 +40,7 @@ class Controller extends ControllerBase<FinancialLoanVirementDto> {
     params: ApiParams<{
       projectId: string;
       pcrItemId: string;
-      financialVirment: FinancialLoanVirementDto;
+      financialVirement: FinancialLoanVirementDto;
       submit: boolean;
     }>,
   ): Promise<FinancialLoanVirementDto> {
@@ -49,7 +49,7 @@ class Controller extends ControllerBase<FinancialLoanVirementDto> {
     const command = new UpdateFinancialLoanVirementCommand(
       params.projectId,
       params.pcrItemId,
-      params.financialVirment,
+      params.financialVirement,
       params.submit,
     );
     await context.runCommand(command);
