@@ -63,7 +63,11 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
 
   public costs = Validation.child(
     this,
-    this.model.costs,
+    this.model?.costs ?? {
+      costs: [],
+      funds: [],
+      pcrItemId: undefined,
+    },
     cost => this.getCostValidator(cost),
     // There should be at most one overhead cost item (representing the overheads to the total labour costs)
     val => {

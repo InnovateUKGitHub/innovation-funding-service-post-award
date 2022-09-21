@@ -298,7 +298,9 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
   }
 
   protected async run(context: IContext): Promise<boolean> {
-    if (this.pcrItemId !== this.spendProfileDto.pcrItemId) {
+    if (this.pcrItemId && this.pcrItemId !== this.spendProfileDto?.pcrItemId) {
+      // if both are falsy, then will be a new PCR type being created, will therefore need to
+      // allow through this check
       throw new BadRequestError();
     }
 
