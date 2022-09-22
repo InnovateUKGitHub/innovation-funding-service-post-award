@@ -4,16 +4,18 @@ import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCom
 import {
   PartnerDetailsParams,
   ProjectSetupBankDetailsParams,
-  ProjectSetupBankDetailsRoute,
   ProjectSetupBankDetailsVerifyRoute,
 } from "@ui/containers";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "../../formHandlerBase";
 
-export class ProjectSetupBankDetailsHandler extends StandardFormHandlerBase<ProjectSetupBankDetailsParams, "partner"> {
+export class ProjectSetupBankDetailsConfirmHandler extends StandardFormHandlerBase<
+  ProjectSetupBankDetailsParams,
+  "partner"
+> {
   constructor() {
-    super(ProjectSetupBankDetailsRoute, ["default"], "partner");
+    super(ProjectSetupBankDetailsVerifyRoute, ["default"], "partner");
   }
 
   protected async getDto(
@@ -23,16 +25,6 @@ export class ProjectSetupBankDetailsHandler extends StandardFormHandlerBase<Proj
     body: IFormBody,
   ): Promise<PartnerDto> {
     const dto = await context.runQuery(new GetByIdQuery(params.partnerId));
-
-    dto.bankDetails.companyNumber = body["companyNumber"];
-    dto.bankDetails.sortCode = body["sortCode"];
-    dto.bankDetails.accountNumber = body["accountNumber"];
-    dto.bankDetails.address.accountBuilding = body["accountBuilding"];
-    dto.bankDetails.address.accountLocality = body["accountLocality"];
-    dto.bankDetails.address.accountPostcode = body["accountPostcode"];
-    dto.bankDetails.address.accountStreet = body["accountStreet"];
-    dto.bankDetails.address.accountTownOrCity = body["accountTownOrCity"];
-
     return dto;
   }
 
@@ -42,7 +34,7 @@ export class ProjectSetupBankDetailsHandler extends StandardFormHandlerBase<Proj
     button: IFormButton,
     dto: PartnerDto,
   ): Promise<ILinkInfo> {
-    await context.runCommand(new UpdatePartnerCommand(dto, true, false));
+    await context.runCommand(new UpdatePartnerCommand(dto, false, true));
     return ProjectSetupBankDetailsVerifyRoute.getLink(params);
   }
 
@@ -53,7 +45,7 @@ export class ProjectSetupBankDetailsHandler extends StandardFormHandlerBase<Proj
   protected createValidationResult(params: ProjectSetupBankDetailsParams, dto: PartnerDto) {
     return new PartnerDtoValidator(dto, dto, [], {
       showValidationErrors: false,
-      validateBankDetails: true,
+      validateBankDetails: false,
       failBankValidation: false,
     });
   }
