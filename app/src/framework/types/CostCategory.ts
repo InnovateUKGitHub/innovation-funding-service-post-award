@@ -129,6 +129,8 @@ const items: ICostCategoryTypeCompetitionOverridable[] = [
     overrides: {
       KTP: {
         showGuidance: false,
+        preGuidanceWarningMessageKey: "cost-pre-guidance-warning-subcontracting",
+        showPreGuidanceWarning: true,
       },
     },
   },
