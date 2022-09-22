@@ -67,7 +67,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
     dto: PCRSpendProfileCostDto | PCRSpendProfileFundingDto,
   ): PcrSpendProfileEntity {
     const init = this.getBaseSpendProfileEntity(dto);
-    const costCategoryType = CostCategoryList.fromId(dto.costCategory);
+    const costCategoryType = new CostCategoryList().fromId(dto.costCategory);
 
     switch (costCategoryType.group) {
       case CostCategoryGroupType.Other_Funding:
@@ -240,7 +240,7 @@ export class UpdatePCRSpendProfileCommand extends CommandBase<boolean> {
       return null;
     }
 
-    const costCategoryType = CostCategoryList.fromId(costCategoryDto.type);
+    const costCategoryType = new CostCategoryList().fromId(costCategoryDto.type);
 
     switch (costCategoryType.group) {
       case CostCategoryGroupType.Academic:

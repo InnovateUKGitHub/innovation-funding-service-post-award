@@ -95,7 +95,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
       description: body.description,
       value: parseNumber(body.value),
     };
-    const costCategoryType = CostCategoryList.fromId(costCategory.type);
+    const costCategoryType = new CostCategoryList().fromId(costCategory.type);
     switch (costCategoryType.group) {
       case CostCategoryGroupType.Labour:
         return this.getLabourCost(baseCostDto, costCategory.type, body);
@@ -224,7 +224,7 @@ export class ProjectChangeRequestSpendProfileAddCostHandler extends StandardForm
     const costCategories = await context.runQuery(new GetUnfilteredCostCategoriesQuery());
     const costCategoryDto = costCategories.find(x => x.id === params.costCategoryId);
     if (!costCategoryDto) throw new Error(`Cannot find cost category dto matching ${params.costCategoryId}`);
-    const costCategoryType = CostCategoryList.fromId(costCategoryDto.type);
+    const costCategoryType = new CostCategoryList().fromId(costCategoryDto.type);
     if (costCategoryType.group === CostCategoryGroupType.Overheads) {
       const pcrItem = dto.items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
 

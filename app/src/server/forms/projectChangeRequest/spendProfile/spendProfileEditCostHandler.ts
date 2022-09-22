@@ -93,7 +93,7 @@ export class ProjectChangeRequestSpendProfileEditCostHandler extends StandardFor
     body: IFormBody,
     button: IFormButton,
   ) {
-    const costCategoryType = CostCategoryList.fromId(costCategoryDto.type);
+    const costCategoryType = new CostCategoryList().fromId(costCategoryDto.type);
     switch (costCategoryType.group) {
       case CostCategoryGroupType.Labour:
         return this.updateLabourCost(cost as PCRSpendProfileLabourCostDto, body);

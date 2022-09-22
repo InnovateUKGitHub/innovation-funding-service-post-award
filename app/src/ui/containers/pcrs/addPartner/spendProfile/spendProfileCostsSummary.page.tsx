@@ -69,7 +69,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
     });
     const costs = addPartnerItem.spendProfile.costs.filter(x => x.costCategoryId === this.props.costCategoryId);
     const Form = ACC.TypedForm<PCRDto>();
-    const costCategoryType = CostCategoryList.fromId(costCategory.type);
+    const costCategoryType = new CostCategoryList(project.competitionType).fromId(costCategory.type);
     return (
       <ACC.Page
         backLink={
@@ -84,6 +84,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
         <ACC.Section title={x => x.pcrSpendProfileCostsSummaryContent.costsSectionTitle(costCategory.name)}>
+          {this.renderPreGuidanceWarning(costCategoryType)}
           {this.renderGuidance(costCategoryType)}
           {this.renderTable(costs, costCategory)}
           <Form.Form
@@ -102,6 +103,19 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
         </ACC.Section>
       </ACC.Page>
     );
+  }
+
+  private renderPreGuidanceWarning(costCategory: CostCategoryItem) {
+    if (costCategory.showPreGuidanceWarning) {
+      return (
+        <ACC.ValidationMessage
+          messageType="info"
+          message={x => x.pcrSpendProfileCostsSummaryContent.messages.costPreGuidanceWarning(costCategory)}
+        />
+      );
+    }
+
+    return null;
   }
 
   private renderGuidance(costCategory: CostCategoryItem) {

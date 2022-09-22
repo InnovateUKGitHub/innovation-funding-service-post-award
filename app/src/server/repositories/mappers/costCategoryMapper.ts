@@ -11,7 +11,7 @@ export class SalesforceCostCategoryMapper extends SalesforceBaseMapper<ISalesfor
       return CostCategoryType.Academic;
     }
 
-    return CostCategoryList.fromName(costCategory.Acc_CostCategoryName__c).id;
+    return new CostCategoryList().fromName(costCategory.Acc_CostCategoryName__c).id;
   }
 
   public map(x: ISalesforceCostCategory): CostCategory {
