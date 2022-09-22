@@ -22,7 +22,7 @@ import {
 import { getPolyfills } from "./polyfill";
 
 // get servers store to initialise client store
-const serverState = processDto((window as any).__PRELOADED_STATE__);
+const serverState = processDto(window.__PRELOADED_STATE__);
 
 const middleware = composeWithDevTools(setupClientMiddleware());
 const store = createStore(rootReducer, serverState, middleware);
@@ -35,13 +35,10 @@ const getStores = () => {
   );
 };
 
-// add to global to help dev
-(window as any).Store = store;
-
 // make sure middleware and reducers have run
 store.dispatch(Actions.initaliseAction());
 
-class Client extends React.Component<{}> {
+class Client extends React.Component<NoProps> {
   render() {
     return (
       // @todo remove once react/redux connect can be removed
@@ -56,8 +53,10 @@ class Client extends React.Component<{}> {
   }
 }
 
-class AppWithContent extends React.Component<{ stores: IStores; store: typeof store }> {
-  constructor(props: any) {
+type AppWithContentProps = { stores: IStores; store: typeof store };
+
+class AppWithContent extends React.Component<AppWithContentProps> {
+  constructor(props: AppWithContentProps) {
     super(props);
     // whenever the store changes force a rerender this will flow down to container level
     // where if no props have changed rendering stops
@@ -88,7 +87,7 @@ getPolyfills()
     }),
   )
   // temporarily add it globally to help debugging...
-  .then(() => ((window as any).i18n = i18next))
+  .then(() => (window.i18n = i18next))
   .then(() => {
     // get the english by default, if supporting another language and the browser specifies it then would need to get that too
     return fetch("/globalization/en")
