@@ -63,6 +63,7 @@ import { BankSetupStatementDocumentDeleteHandler } from "./project/setup/BankSet
 
 import { LoanRequestDocumentDeleteHandler, LoanRequestDocumentUploadHandler } from "./loan";
 import { LoanRequestFormHandler } from "./loan/LoanRequestFormHandler";
+import { ProjectSetupBankDetailsHandler } from "./project/setup/ProjectSetupBankDetailsHandler";
 
 export const standardFormHandlers: StandardFormHandlerBase<{}, EditorStateKeys>[] = [
   new ClaimForecastFormHandler(),
@@ -104,6 +105,7 @@ export const standardFormHandlers: StandardFormHandlerBase<{}, EditorStateKeys>[
   new ProjectSetupSpendProfileFormHandler(),
   new ProjectSetupPartnerPostcodeFormHandler(),
   new BankSetupStatementDocumentDeleteHandler(),
+  new ProjectSetupBankDetailsHandler(),
   new LoanRequestDocumentDeleteHandler(),
 ];
 
