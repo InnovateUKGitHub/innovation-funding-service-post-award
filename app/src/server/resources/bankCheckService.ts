@@ -26,14 +26,14 @@ export interface IVerifyBankCheckInputs {
 
 export class BankCheckService {
   public async validate(sortcode: string, accountNumber: string): Promise<BankCheckValidationResult> {
-    return await this.fetchBankQuery("/experianValidate", {
+    return await this.fetchBankQuery<BankDetails, BankCheckValidationResult>("/experianValidate", {
       sortcode,
       accountNumber,
     });
   }
 
   public async verify(accountDetails: IVerifyBankCheckInputs): Promise<BankCheckVerificationResult> {
-    return await this.fetchBankQuery("/experianVerify", accountDetails);
+    return await this.fetchBankQuery<AccountDetails, BankCheckVerificationResult>("/experianVerify", accountDetails);
   }
 
   private async fetchBankQuery<T extends BankDetails | AccountDetails, U extends BankCheckResult>(
