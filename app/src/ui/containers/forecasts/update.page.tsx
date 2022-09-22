@@ -39,7 +39,7 @@ function UpdateForecastComponent(props: ForecastUpdateParams & ForecastUpdateDat
     const { project, claim, partner } = forecastData;
 
     const handleSubmit = () => {
-      if (isProjectActive) return;
+      if (!isProjectActive) return;
 
       const forecasts = getArrayFromPeriod(editor.data, periodId, project.numberOfPeriods);
       return props.onChange(true, forecasts);
