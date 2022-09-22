@@ -79,7 +79,7 @@ interface GuideProps {
   filter: string;
 }
 
-const hostname = typeof global.window !== "undefined" ? global.window.location.origin : process?.env.SERVER_URL;
+const hostname = typeof window !== "undefined" ? window.location.origin : process?.env.SERVER_URL;
 
 export const Guide: React.FunctionComponent<GuideProps> = props => {
   const guidesToRender = guides
