@@ -121,7 +121,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
     routes: IRoutes,
     params: PcrAddSpendProfileCostParams,
   ) {
-    const costCategoryType = CostCategoryList.fromId(costCategory.type);
+    const costCategoryType = new CostCategoryList(project.competitionType).fromId(costCategory.type);
     return (
       <ACC.Page
         backLink={

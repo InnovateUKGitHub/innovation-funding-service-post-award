@@ -117,7 +117,7 @@ class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProf
 
   private renderViewTable(costs: PCRSpendProfileCostDto[], costCategory: CostCategoryDto) {
     const Table = ACC.TypedTable<PCRSpendProfileCostDto>();
-    const costCategoryType = CostCategoryList.fromId(costCategory.type);
+    const costCategoryType = new CostCategoryList().fromId(costCategory.type);
     switch (costCategoryType.group) {
       case CostCategoryGroupType.Labour:
         return this.renderLabourCostSummary(costs as PCRSpendProfileLabourCostDto[], costCategory);

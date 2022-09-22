@@ -61,7 +61,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
   }
 
   private mapCosts(costCategory: CostCategoryDto, spendProfiles: PcrSpendProfileEntity[]): PCRSpendProfileCostDto[] {
-    const costCategoryType = CostCategoryList.fromId(costCategory.type);
+    const costCategoryType = new CostCategoryList().fromId(costCategory.type);
     switch (costCategoryType.group) {
       case CostCategoryGroupType.Academic:
         return this.mapAcademicCosts(spendProfiles, costCategoryType.id);
@@ -89,7 +89,7 @@ export class GetPcrSpendProfilesQuery extends QueryBase<PcrSpendProfileDto> {
     costCategory: CostCategoryDto,
     spendProfiles: PcrSpendProfileEntity[],
   ): PCRSpendProfileFundingDto[] {
-    const costCategoryType = CostCategoryList.fromId(costCategory.type);
+    const costCategoryType = new CostCategoryList().fromId(costCategory.type);
     if (costCategoryType.group === CostCategoryGroupType.Other_Funding) {
       return this.mapOtherFunding(context, spendProfiles, costCategory.type);
     }

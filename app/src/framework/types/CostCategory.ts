@@ -5,7 +5,14 @@ interface ICostCategoryType {
   name: string;
   showGuidance: boolean;
   guidanceMessageKey: string;
+  showPreGuidanceWarning: boolean;
+  preGuidanceWarningMessageKey: string;
   group: CostCategoryGroupType | null;
+}
+
+type ICostCategoryTypeCompetitionOverrides = Record<string, Partial<ICostCategoryType>>;
+interface ICostCategoryTypeCompetitionOverridable extends ICostCategoryType {
+  overrides?: ICostCategoryTypeCompetitionOverrides;
 }
 
 /**
@@ -23,23 +30,47 @@ class CostCategoryItem {
   name: string;
   showGuidance: boolean;
   guidanceMessageKey: string;
+  showPreGuidanceWarning: boolean;
+  preGuidanceWarningMessageKey: string;
   group: CostCategoryGroupType | null;
 
-  constructor({ id, name, showGuidance, guidanceMessageKey, group }: ICostCategoryType) {
+  constructor(
+    {
+      id,
+      name,
+      showGuidance,
+      guidanceMessageKey,
+      showPreGuidanceWarning,
+      preGuidanceWarningMessageKey,
+      group,
+      overrides,
+    }: ICostCategoryTypeCompetitionOverridable,
+    competitionType?: string,
+  ) {
+    // Apply all default CostCategory items.
     this.id = id;
     this.name = name;
     this.showGuidance = showGuidance;
     this.guidanceMessageKey = guidanceMessageKey;
+    this.preGuidanceWarningMessageKey = preGuidanceWarningMessageKey;
+    this.showPreGuidanceWarning = showPreGuidanceWarning;
     this.group = group;
+
+    // Apply any overrides for this specific competitionType.
+    if (overrides && competitionType && competitionType in overrides) {
+      Object.assign(this, overrides[competitionType]);
+    }
   }
 }
 
-const items: ICostCategoryType[] = [
+const items: ICostCategoryTypeCompetitionOverridable[] = [
   {
     id: CostCategoryType.Other_Funding,
     name: "Other funding",
     guidanceMessageKey: "cost-guidance-default",
     showGuidance: false,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Funding,
   },
   {
@@ -47,6 +78,8 @@ const items: ICostCategoryType[] = [
     name: "Academic",
     guidanceMessageKey: "cost-guidance-default",
     showGuidance: false,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Academic,
   },
   {
@@ -54,6 +87,8 @@ const items: ICostCategoryType[] = [
     name: "Labour",
     guidanceMessageKey: "cost-guidance-labour",
     showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Labour,
   },
   {
@@ -61,6 +96,8 @@ const items: ICostCategoryType[] = [
     name: "Overheads",
     guidanceMessageKey: "cost-guidance-overheads",
     showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Overheads,
   },
   {
@@ -68,6 +105,8 @@ const items: ICostCategoryType[] = [
     name: "Materials",
     guidanceMessageKey: "cost-guidance-materials",
     showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Materials,
   },
   {
@@ -75,6 +114,8 @@ const items: ICostCategoryType[] = [
     name: "Capital usage",
     guidanceMessageKey: "cost-guidance-capital-usage",
     showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Capital_Usage,
   },
   {
@@ -82,27 +123,48 @@ const items: ICostCategoryType[] = [
     name: "Subcontracting",
     guidanceMessageKey: "cost-guidance-subcontracting",
     showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Subcontracting,
+    overrides: {
+      KTP: {
+        showGuidance: false,
+      },
+    },
   },
   {
     id: CostCategoryType.Travel_And_Subsistence,
     name: "Travel and subsistence",
     guidanceMessageKey: "cost-guidance-travel-and-subs",
     showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Travel_And_Subsistence,
   },
   {
     id: CostCategoryType.Other_Costs,
     name: "Other costs",
     guidanceMessageKey: "cost-guidance-other-costs",
-    showGuidance: false,
+    showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
+    overrides: {
+      KTP: {
+        showGuidance: true,
+        guidanceMessageKey: "cost-guidance-default",
+        showPreGuidanceWarning: true,
+        preGuidanceWarningMessageKey: "cost-pre-guidance-warning-other-costs",
+      },
+    },
   },
   {
     id: CostCategoryType.Other_Public_Sector_Funding,
     name: "Other public sector funding",
     guidanceMessageKey: "cost-guidance-default",
     showGuidance: false,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
@@ -110,6 +172,8 @@ const items: ICostCategoryType[] = [
     name: "VAT",
     guidanceMessageKey: "cost-guidance-default",
     showGuidance: false,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
@@ -117,6 +181,8 @@ const items: ICostCategoryType[] = [
     name: "Advance on Grant",
     guidanceMessageKey: "cost-guidance-default",
     showGuidance: false,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
@@ -124,6 +190,8 @@ const items: ICostCategoryType[] = [
     name: "Capital Equipment",
     guidanceMessageKey: "cost-guidance-default",
     showGuidance: false,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
@@ -131,6 +199,8 @@ const items: ICostCategoryType[] = [
     name: "Capitalised Labour",
     guidanceMessageKey: "cost-guidance-default",
     showGuidance: false,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
@@ -138,6 +208,8 @@ const items: ICostCategoryType[] = [
     name: "Other Costs - Resource",
     guidanceMessageKey: "cost-guidance-other-costs",
     showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
@@ -145,6 +217,8 @@ const items: ICostCategoryType[] = [
     name: "Other costs- Capital",
     guidanceMessageKey: "cost-guidance-other-costs",
     showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
@@ -152,6 +226,8 @@ const items: ICostCategoryType[] = [
     name: "Property Capital",
     guidanceMessageKey: "cost-guidance-default",
     showGuidance: false,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
@@ -159,6 +235,8 @@ const items: ICostCategoryType[] = [
     name: "Property Revenue",
     guidanceMessageKey: "cost-guidance-default",
     showGuidance: false,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
@@ -166,6 +244,8 @@ const items: ICostCategoryType[] = [
     name: "Other Costs 2",
     guidanceMessageKey: "cost-guidance-other-costs",
     showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
@@ -173,6 +253,8 @@ const items: ICostCategoryType[] = [
     name: "Other Costs 3",
     guidanceMessageKey: "cost-guidance-other-costs",
     showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
@@ -180,6 +262,8 @@ const items: ICostCategoryType[] = [
     name: "Other Costs 4",
     guidanceMessageKey: "cost-guidance-other-costs",
     showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
@@ -187,6 +271,8 @@ const items: ICostCategoryType[] = [
     name: "Other Costs 5",
     guidanceMessageKey: "cost-guidance-other-costs",
     showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
@@ -194,6 +280,8 @@ const items: ICostCategoryType[] = [
     name: "Additional associate support",
     guidanceMessageKey: "cost-guidance-additional-associate-support",
     showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
@@ -201,6 +289,8 @@ const items: ICostCategoryType[] = [
     name: "Associate development",
     guidanceMessageKey: "cost-guidance-associate-development",
     showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
@@ -208,6 +298,8 @@ const items: ICostCategoryType[] = [
     name: "Associate Employment",
     guidanceMessageKey: "cost-guidance-associate-employment",
     showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
@@ -215,6 +307,8 @@ const items: ICostCategoryType[] = [
     name: "Consumables",
     guidanceMessageKey: "cost-guidance-consumables",
     showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
@@ -222,6 +316,8 @@ const items: ICostCategoryType[] = [
     name: "Estate",
     guidanceMessageKey: "cost-guidance-estate",
     showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
@@ -229,13 +325,17 @@ const items: ICostCategoryType[] = [
     name: "Indirect costs",
     guidanceMessageKey: "cost-guidance-indirect-costs",
     showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
     id: CostCategoryType.Knowledge_base_supervisor,
     name: "Knowledge base supervisor",
     guidanceMessageKey: "cost-guidance-default",
-    showGuidance: false,
+    showGuidance: true,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
   {
@@ -243,29 +343,39 @@ const items: ICostCategoryType[] = [
     name: "Loans costs for Industrial participants",
     guidanceMessageKey: "cost-guidance-default",
     showGuidance: false,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
   },
 ];
 
 /**
- * A static class for finding a CostCategory based on either its Salesforce name
+ * A class for finding a CostCategory based on either its Salesforce name
  * or the internal CostCategoryType.
  *
  * @author Leondro Lio <leondro.lio@iuk.ukri.org>
  */
 class CostCategoryList {
-  private static unknownCostCategory = new CostCategoryItem({
+  private readonly unknownCostCategory = new CostCategoryItem({
     id: CostCategoryType.Unknown,
     name: "Unknown Type",
     showGuidance: false,
     guidanceMessageKey: "cost-guidance-default",
+    showPreGuidanceWarning: false,
+    preGuidanceWarningMessageKey: "cost-guidance-default",
     group: null,
   });
 
-  private static costCategories: CostCategoryItem[] = [
-    CostCategoryList.unknownCostCategory,
-    ...items.map(item => new CostCategoryItem(item)),
-  ];
+  private readonly costCategories: CostCategoryItem[];
+
+  /**
+   * Create a lookup-table for retreiving information about Cost Categories.
+   *
+   * @param competitionType The type of competition type, if known, for changing guidance information.
+   */
+  constructor(competitionType?: string) {
+    this.costCategories = [this.unknownCostCategory, ...items.map(item => new CostCategoryItem(item, competitionType))];
+  }
 
   /**
    * Obtain cost category data from the Salesforce cost category name.
@@ -274,10 +384,10 @@ class CostCategoryList {
    * @author Leondro Lio <leondro.lio@iuk.ukri.org>
    * @returns A cost category.
    */
-  static fromName(name: string) {
-    const category = CostCategoryList.costCategories.find(costCategory => costCategory.name === name);
+  fromName(name: string) {
+    const category = this.costCategories.find(costCategory => costCategory.name === name);
     if (category) return category;
-    return CostCategoryList.unknownCostCategory;
+    return this.unknownCostCategory;
   }
 
   /**
@@ -287,10 +397,10 @@ class CostCategoryList {
    * @author Leondro Lio <leondro.lio@iuk.ukri.org>
    * @returns A cost category.
    */
-  static fromId(type: CostCategoryType) {
-    const category = CostCategoryList.costCategories.find(costCategory => costCategory.id === type);
+  fromId(type: CostCategoryType) {
+    const category = this.costCategories.find(costCategory => costCategory.id === type);
     if (category) return category;
-    return CostCategoryList.unknownCostCategory;
+    return this.unknownCostCategory;
   }
 }
 

@@ -115,7 +115,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
   }
 
   private renderComponent(costCategory: CostCategoryDto, cost: PCRSpendProfileCostDto) {
-    const costCategoryType = CostCategoryList.fromId(costCategory.type);
+    const costCategoryType = new CostCategoryList().fromId(costCategory.type);
     switch (costCategoryType.group) {
       case CostCategoryGroupType.Labour:
         return (

@@ -54,7 +54,7 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
   }
 
   private getFundsValidator(fund: PCRSpendProfileFundingDto) {
-    const costCategoryType = CostCategoryList.fromId(fund.costCategory);
+    const costCategoryType = new CostCategoryList().fromId(fund.costCategory);
     if (costCategoryType.group === CostCategoryGroupType.Other_Funding) {
       return new PCROtherFundingDtoValidator(fund, this.showValidationErrors);
     }
@@ -68,9 +68,9 @@ export class PCRSpendProfileDtoValidator extends Results<PcrSpendProfileDto> {
     // There should be at most one overhead cost item (representing the overheads to the total labour costs)
     val => {
       const ofOverheadType = (x: PCRSpendProfileCostDto) =>
-        CostCategoryList.fromId(x.costCategory).group === CostCategoryGroupType.Overheads;
+        new CostCategoryList().fromId(x.costCategory).group === CostCategoryGroupType.Overheads;
       const ofAcademicType = (x: PCRSpendProfileCostDto) =>
-        CostCategoryList.fromId(x.costCategory).group === CostCategoryGroupType.Academic;
+        new CostCategoryList().fromId(x.costCategory).group === CostCategoryGroupType.Academic;
       return val.all(
         () => {
           return val.isTrue(

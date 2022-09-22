@@ -9,5 +9,8 @@ export class PcrSpendProfileMessages extends ContentBase {
   public readonly costGuidance = (costCategory: CostCategoryItem) => {
     return this.getContent(costCategory.guidanceMessageKey, { markdown: true });
   };
+  public readonly costPreGuidanceWarning = (costCategory: CostCategoryItem) => {
+    return this.getContent(costCategory.preGuidanceWarningMessageKey, { markdown: true });
+  };
   public readonly overHeadsCalculatedGuidance = this.getContent("calculated-guidance-overheads");
 }
