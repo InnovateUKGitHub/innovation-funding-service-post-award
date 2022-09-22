@@ -13,7 +13,7 @@ import { configuration } from "./features/common";
 export function componentGuideRender(req: Request, res: Response) {
   const nonce = res.locals.nonce;
 
-  const reducer = combineReducers({});
+  const reducer = combineReducers({ app: (state = {}) => state });
 
   const store = createStore(reducer, {});
 

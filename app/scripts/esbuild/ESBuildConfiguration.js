@@ -119,8 +119,7 @@ class ESBuildConfiguration {
    * @returns {ESBuildConfiguration} Itself
    */
   withComponentLibrary() {
-    this.serverBuild.entryPoints.componentsGuide = path.join(this.dirname, "src/client/componentsGuide.tsx");
-
+    this.clientBuild.entryPoints.componentsGuide = path.join(this.dirname, "src/client/componentsGuide.tsx");
     return this;
   }
 
