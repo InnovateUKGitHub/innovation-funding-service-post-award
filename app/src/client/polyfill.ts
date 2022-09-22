@@ -1,6 +1,6 @@
 /**
  * handle polyfilling time-zones if required.
- * don't render react app until we're sure polyfill is done or unnecesssary
+ * don't render react app until we're sure polyfill is done or unnecessary
  */
 export const getPolyfills = () => {
   return new Promise<void>(resolve => {
