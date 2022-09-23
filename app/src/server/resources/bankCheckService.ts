@@ -40,31 +40,27 @@ export class BankCheckService {
     path: string,
     payload: T,
   ): Promise<U> {
-    try {
-      const { bankCheckUrl } = configuration.sil;
+    const { bankCheckUrl } = configuration.sil;
 
-      if (!bankCheckUrl) {
-        throw new ConfigurationError("Bank checking service not configured");
-      }
-
-      const request = await fetch(`${bankCheckUrl}${path}`, {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        compress: false, // Note: This allows 'Accept-Encoding' to be overridden, SIL only allows 'zip'
-        method: "POST",
-        headers: {
-          "Accept-Encoding": "zip",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (!request.ok) throw Error(`Failed querying SIL service for '${path}'`);
-
-      return await request.json();
-    } catch (error: any) {
-      throw Error(error);
+    if (!bankCheckUrl) {
+      throw new ConfigurationError("Bank checking service not configured");
     }
+
+    const request = await fetch(`${bankCheckUrl}${path}`, {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      compress: false, // Note: This allows 'Accept-Encoding' to be overridden, SIL only allows 'zip'
+      method: "POST",
+      headers: {
+        "Accept-Encoding": "zip",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!request.ok) throw Error(`Failed querying SIL service for '${path}'`);
+
+    return await request.json();
   }
 }
 
