@@ -4,7 +4,7 @@ import cookieSession from "cookie-session";
 
 import { configuration } from "../server/features/common/config";
 import { noCache } from "./cacheHeaders";
-import { Logger } from "./features/common";
+import { Logger } from "@shared/developmentLogger";
 import {
   successfulValidationRoute,
   getEmailFromAuthPayload,
@@ -13,6 +13,8 @@ import {
 } from "./shibboleth.config";
 
 export const router = express.Router();
+
+const logger = new Logger("Auth");
 
 const cookieName = "chocolate-chip";
 router.use(
@@ -50,7 +52,7 @@ router.get("/logout", noCache, (_req, res) => {
 router.post(successfulValidationRoute, (req, res) =>
   passport.authenticate("shibboleth", (authError, payload) => {
     if (authError) {
-      new Logger().error("Authentication Error", authError);
+      logger.error("Authentication Error", authError);
 
       const errorMessage =
         "An authentication error occurred when loading the application, please trying logging in again.";

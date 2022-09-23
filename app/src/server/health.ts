@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 
-import { configuration, ILogger, Logger } from "@server/features/common";
+import { configuration } from "@server/features/common";
+import { ILogger, Logger } from "@shared/developmentLogger";
 import { HealthCheckResult, checkCompaniesHouse, checkGoogleAnalytics, checkSalesforce } from "./health-check";
 
 export const healthRouter: Router = Router();

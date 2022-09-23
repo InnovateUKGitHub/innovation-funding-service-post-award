@@ -1,4 +1,4 @@
-import { ILogger } from "@server/features/common";
+import { ILogger } from "@shared/developmentLogger";
 import { ITimer } from "@framework/types";
 
 export class Timer implements ITimer {

@@ -1,6 +1,6 @@
 import { gzip } from "node-gzip";
 import { health } from "../server/health";
-import { Logger } from "./features/common";
+import { Logger } from "@shared/developmentLogger";
 
 export const healthCheck = async () => {
   const logger = new Logger("New relic health check");

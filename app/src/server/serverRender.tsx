@@ -27,7 +27,7 @@ import { Results } from "@ui/validation";
 import { ForbiddenError, FormHandlerError } from "./features/common/appError";
 
 import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRolesForUser";
-import { Logger } from "./features/common/logger";
+import { Logger } from "@shared/developmentLogger";
 import { getErrorStatus } from "./errorHandlers";
 import { renderHtml } from "./html";
 

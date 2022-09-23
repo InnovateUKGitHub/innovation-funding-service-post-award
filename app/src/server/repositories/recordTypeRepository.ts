@@ -1,5 +1,5 @@
 import { Connection } from "jsforce";
-import { ILogger } from "@server/features/common";
+import { ILogger } from "@shared/developmentLogger";
 import { RecordType } from "@framework/entities";
 import { SalesforceRepositoryBaseWithMapping } from "./salesforceRepositoryBase";
 import { SalesforceRecordTypeMapper } from "./mappers/recordTypeMapper";

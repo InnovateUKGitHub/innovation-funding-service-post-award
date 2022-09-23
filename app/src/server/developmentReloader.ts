@@ -1,7 +1,7 @@
 import express, { Response } from "express";
-import { Logger } from "../server/features/common/logger";
+import { Logger } from "@shared/developmentLogger";
 
-const logger = new Logger("Development Logger");
+const logger = new Logger("Develop");
 
 const developmentRouter = express.Router();
 

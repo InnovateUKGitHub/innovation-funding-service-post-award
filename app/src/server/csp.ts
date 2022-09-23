@@ -1,5 +1,5 @@
 import express from "express";
-import { Logger } from "../server/features/common/logger";
+import { Logger } from "@shared/developmentLogger";
 
 export const router = express.Router();
 

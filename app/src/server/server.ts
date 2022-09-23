@@ -8,20 +8,21 @@ import { router as cspRouter } from "@server/csp";
 import { noAuthRouter, router } from "@server/router";
 
 import { allowCache, noCache, setOwaspHeaders } from "@server/cacheHeaders";
-import { configuration, Logger } from "@server/features/common";
+import { configuration } from "@server/features/common";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { InitialiseContentCommand } from "@server/features/general/initialiseContentCommand";
 import { fetchCaches } from "@server/features/initialCache";
 import { initInternationalisation, internationalisationRouter } from "@server/internationalisation";
 import { developmentRouter } from "@server/developmentReloader";
+import { Logger } from "@shared/developmentLogger";
 
 export class Server {
   private readonly app: express.Express;
-  private readonly log: Logger;
+  private readonly logger: Logger;
 
   constructor(private readonly port: number, development = false) {
     this.app = express();
-    this.log = new Logger();
+    this.logger = new Logger("Webserver");
 
     this.app.enable("trust proxy");
 
@@ -49,8 +50,8 @@ export class Server {
       this.app.listen(this.port);
     }
 
-    this.log.info(`Listening at ${process.env.SERVER_URL}`);
-    this.log.info("Configuration", configuration);
+    this.logger.info("Configuration", configuration);
+    this.logger.info(`Webserver is now available at ${process.env.SERVER_URL}`);
 
     setTimeout(() => this.primeCaches());
 
@@ -87,7 +88,7 @@ export class Server {
   }
 
   private readonly requestLogger = (req: express.Request, _res: express.Response, next: express.NextFunction): void => {
-    this.log.debug("request", req.url, req.method);
+    this.logger.debug(`${req.method} Request - ${req.url}`);
 
     next();
   };

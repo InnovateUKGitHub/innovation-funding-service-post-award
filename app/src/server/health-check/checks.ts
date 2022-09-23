@@ -1,9 +1,10 @@
 import { ErrorCode } from "@framework/types";
 import { CompaniesHouse } from "@server/repositories";
 
-import { configuration, ILogger, AppError } from "@server/features/common";
+import { configuration, AppError } from "@server/features/common";
 import { getSalesforceAccessToken } from "@server/repositories/salesforceConnection";
 import { HealthCheckResult } from "@server/health-check/health-check.interface";
+import { ILogger } from "@shared/developmentLogger";
 
 export async function checkSalesforce(logger: ILogger): Promise<HealthCheckResult> {
   const check = { id: "salesforce" };

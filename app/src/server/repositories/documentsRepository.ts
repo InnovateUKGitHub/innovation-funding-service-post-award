@@ -3,7 +3,7 @@ import { Connection } from "jsforce";
 import { ContentDocumentLinkRepository } from "@server/repositories/contentDocumentLinkRepository";
 import { ContentDocumentRepository } from "@server/repositories/contentDocumentRepository";
 import { ContentVersionRepository } from "@server/repositories/contentVersionRepository";
-import { ILogger } from "@server/features/common";
+import { ILogger } from "@shared/developmentLogger";
 import { ServerFileWrapper } from "@server/apis/controllerBase";
 import { DocumentEntity } from "@framework/entities/document";
 import { DocumentDescriptionMapper, SalesforceDocumentMapper } from "@server/repositories/mappers/documentMapper";
