@@ -14,6 +14,7 @@ import * as Repositories from "../../repositories";
 import { GetAllProjectRolesForUser, IRoleInfo } from "../projects/getAllProjectRolesForUser";
 import { GetRecordTypeQuery } from "../general/getRecordTypeQuery";
 import { AppError, BadRequestError, ForbiddenError, NotFoundError, ValidationError } from "./appError";
+import { ILogger, Logger } from "@shared/developmentLogger";
 
 // obviously needs to be singleton
 const cachesImplementation: Framework.ICaches = {
@@ -75,7 +76,9 @@ export class Context implements Framework.IContext {
       currentUsername: this.user?.email,
     };
 
-    this.logger = new Common.Logger(user && user.email);
+    this.logger = new Logger("Context", {
+      prefixLines: [user && user.email],
+    });
 
     this.caches = cachesImplementation;
 
@@ -150,7 +153,7 @@ export class Context implements Framework.IContext {
   }
 
   public readonly repositories: Framework.IRepositories;
-  public readonly logger: Common.ILogger;
+  public readonly logger: ILogger;
   public readonly config: Common.IConfig;
   public readonly clock: Common.IClock = new Common.Clock();
   public readonly caches: Framework.ICaches;
@@ -231,7 +234,7 @@ export class Context implements Framework.IContext {
     command: Common.CommandBase<TResult> | Common.NonAuthorisedCommandBase<TResult>,
   ): Promise<TResult> {
     const runnable = command as any as Framework.IAsyncRunnable<TResult>;
-    this.logger.info("Running async command", runnable.logMessage());
+    this.logger.info("Running async command", ...runnable.logMessage());
     return this.runAsync(runnable);
   }
 

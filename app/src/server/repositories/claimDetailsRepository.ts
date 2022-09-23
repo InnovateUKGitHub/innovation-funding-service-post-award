@@ -1,5 +1,5 @@
 import { ClaimDetailKey } from "@framework/types";
-import { ILogger } from "@server/features/common";
+import { ILogger } from "@shared/developmentLogger";
 import { sss } from "@server/util/salesforce-string-helpers";
 import { Connection } from "jsforce";
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";

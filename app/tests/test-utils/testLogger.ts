@@ -1,29 +1,28 @@
-import { LogLevel } from "@framework/constants";
-import { ILogger, Logger } from "../../src/server/features/common/logger";
+import { ILogger, Logger } from "@shared/developmentLogger";
 
 export class TestLogger implements ILogger {
-  private readonly innerLogger = new Logger(undefined, LogLevel.DEBUG, true);
+  private readonly innerLogger = new Logger("TestLogger");
   public outputToConsole = false;
 
-  info(message: string, params: any[]): void {
+  info(message: string, params: unknown[]): void {
     if (this.outputToConsole) {
       this.innerLogger.info(message, params);
     }
   }
 
-  debug(message: string, params: any[]): void {
+  debug(message: string, params: unknown[]): void {
     if (this.outputToConsole) {
       this.innerLogger.debug(message, params);
     }
   }
 
-  warn(message: string, params: any[]): void {
+  warn(message: string, params: unknown[]): void {
     if (this.outputToConsole) {
       this.innerLogger.warn(message, params);
     }
   }
 
-  error(message: string, params: any[]): void {
+  error(message: string, params: unknown[]): void {
     if (this.outputToConsole) {
       this.innerLogger.error(message, params);
     }

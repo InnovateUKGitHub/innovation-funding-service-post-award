@@ -1,8 +1,8 @@
 import { ErrorCode, IAppError } from "@framework/types";
-import { Logger } from "./features/common/logger";
+import { Logger } from "@shared/developmentLogger";
 import { ValidationError } from "./features/common";
 
-const log = new Logger();
+const log = new Logger("Web Server");
 
 export const getErrorStatus = (err?: IAppError) => {
   const code = err ? err.code : ErrorCode.UNKNOWN_ERROR;

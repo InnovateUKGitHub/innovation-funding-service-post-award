@@ -1,6 +1,6 @@
 import { LoanFinancialVirement } from "@framework/entities";
 import { BadRequestError } from "@server/features/common";
-import { ILogger } from "@server/features/common/logger";
+import { ILogger } from "@shared/developmentLogger";
 import { Connection } from "jsforce";
 
 import { sss } from "@server/util/salesforce-string-helpers";

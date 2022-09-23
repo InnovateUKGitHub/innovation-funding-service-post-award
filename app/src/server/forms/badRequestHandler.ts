@@ -1,9 +1,10 @@
 import express from "express";
-import { Logger } from "@server/features/common";
+import { Logger } from "@shared/developmentLogger";
 import { BadRequestError, NotFoundError } from "../features/common/appError";
 import { IFormHandler } from "./formHandlerBase";
 
 export class BadRequestHandler implements IFormHandler {
+  public logger = new Logger("Bad Request");
   public routePath = "*";
   public middleware = [];
 
@@ -12,7 +13,7 @@ export class BadRequestHandler implements IFormHandler {
     if (res.locals.isMatchedRoute) {
       const buttons = Object.keys(req.body).filter(x => x.startsWith("button_"));
 
-      new Logger().error("No handler for", req.url, buttons);
+      this.logger.error(`Missing handler for endpoint ${req.url}`, buttons);
       next(new BadRequestError());
     } else {
       next(new NotFoundError());

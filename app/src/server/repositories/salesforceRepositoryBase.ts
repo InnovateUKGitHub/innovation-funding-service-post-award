@@ -3,9 +3,10 @@ import { Connection, DescribeSObjectResult, Field, Query, RecordResult, SuccessR
 
 import * as Errors from "@server/repositories/errors";
 import { ISalesforceMapper } from "@server/repositories/mappers/salesforceMapperBase";
-import { BadRequestError, configuration, ILogger } from "@server/features/common";
+import { BadRequestError, configuration } from "@server/features/common";
 import { IPicklistEntry } from "@framework/types";
 import { createBatch } from "@shared/create-batch";
+import { ILogger } from "@shared/developmentLogger";
 
 export type Updatable<T> = Partial<T> & {
   Id: string;
@@ -37,7 +38,7 @@ export abstract class RepositoryBase {
   };
 
   protected constructError(e: any) {
-    this.logger.error("Salesforce Error: ", e.errorCode, e.message);
+    this.logger.error("Salesforce Error", e.errorCode, e.message);
 
     if (e.errorCode === "INVALID_FIELD") {
       throw new Errors.BadSalesforceQuery(e.errorCode, e.errorCode);

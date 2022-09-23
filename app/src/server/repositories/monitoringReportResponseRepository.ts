@@ -1,6 +1,6 @@
 import { sss } from "@server/util/salesforce-string-helpers";
 import { Connection } from "jsforce";
-import { ILogger } from "../features/common";
+import { ILogger } from "@shared/developmentLogger";
 import SalesforceRepositoryBase, { Updatable } from "./salesforceRepositoryBase";
 
 export interface ISalesforceMonitoringReportResponse {

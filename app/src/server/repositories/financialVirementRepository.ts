@@ -1,5 +1,5 @@
 import { PartnerFinancialVirement } from "@framework/entities";
-import { ILogger } from "@server/features/common/logger";
+import { ILogger } from "@shared/developmentLogger";
 import { sss } from "@server/util/salesforce-string-helpers";
 import { Connection } from "jsforce";
 import { SalesforceFinancialVirementMapper } from "./mappers/financialVirementMapper";

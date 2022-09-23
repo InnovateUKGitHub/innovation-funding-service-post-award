@@ -6,7 +6,7 @@ import {
   ProjectChangeRequestItemForCreateEntity,
 } from "@framework/entities";
 import { IPicklistEntry } from "@framework/types";
-import { ILogger } from "@server/features/common/logger";
+import { ILogger } from "@shared/developmentLogger";
 import { sss } from "@server/util/salesforce-string-helpers";
 import { NotFoundError } from "@shared/appError";
 import { Connection } from "jsforce";
