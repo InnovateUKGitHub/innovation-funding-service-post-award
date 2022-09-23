@@ -5,7 +5,7 @@ import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCom
 import {
   FailedBankCheckConfirmationRoute,
   PartnerDetailsParams,
-  ProjectSetupBankDetailsParams,
+  ProjectSetupBankDetailsVerifyParams,
   ProjectSetupBankDetailsVerifyRoute,
   ProjectSetupRoute,
 } from "@ui/containers";
@@ -13,8 +13,8 @@ import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "../../formHandlerBase";
 
-export class ProjectSetupBankDetailsConfirmHandler extends StandardFormHandlerBase<
-  ProjectSetupBankDetailsParams,
+export class ProjectSetupBankDetailsVerifyHandler extends StandardFormHandlerBase<
+  ProjectSetupBankDetailsVerifyParams,
   "partner"
 > {
   constructor() {
@@ -33,7 +33,7 @@ export class ProjectSetupBankDetailsConfirmHandler extends StandardFormHandlerBa
 
   protected async run(
     context: IContext,
-    params: ProjectSetupBankDetailsParams,
+    params: ProjectSetupBankDetailsVerifyParams,
     button: IFormButton,
     dto: PartnerDto,
   ): Promise<ILinkInfo> {
@@ -59,11 +59,11 @@ export class ProjectSetupBankDetailsConfirmHandler extends StandardFormHandlerBa
     }
   }
 
-  protected getStoreKey(params: ProjectSetupBankDetailsParams) {
+  protected getStoreKey(params: ProjectSetupBankDetailsVerifyParams) {
     return storeKeys.getPartnerKey(params.partnerId);
   }
 
-  protected createValidationResult(params: ProjectSetupBankDetailsParams, dto: PartnerDto) {
+  protected createValidationResult(params: ProjectSetupBankDetailsVerifyParams, dto: PartnerDto) {
     return new PartnerDtoValidator(dto, dto, [], {
       showValidationErrors: false,
       validateBankDetails: false,
