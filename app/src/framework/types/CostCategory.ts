@@ -151,14 +151,6 @@ const items: ICostCategoryTypeCompetitionOverridable[] = [
     preGuidanceWarningMessageKey: "cost-guidance-default",
     showPreGuidanceWarning: false,
     group: CostCategoryGroupType.Other_Costs,
-    overrides: {
-      KTP: {
-        showGuidance: true,
-        guidanceMessageKey: "cost-guidance-default",
-        showPreGuidanceWarning: true,
-        preGuidanceWarningMessageKey: "cost-pre-guidance-warning-other-costs",
-      },
-    },
   },
   {
     id: CostCategoryType.Other_Public_Sector_Funding,
