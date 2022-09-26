@@ -1,9 +1,11 @@
-import { useState, useMemo } from "react";
-import { useMounted } from "@ui/features";
 import { dateComparator, numberComparator, stringComparator } from "@framework/util";
-import { devLogger } from "@ui/helpers/dev-logger";
+import { Logger } from "@shared/developmentLogger";
+import { useMounted } from "@ui/features";
+import { useMemo, useState } from "react";
 
 export type SortOptions = "none" | "ascending" | "descending";
+
+const logger = new Logger("Table Sort");
 
 // Note: Get current state and return next state
 const sortOptionsWorkflow: Record<SortOptions, SortOptions> = {
@@ -34,7 +36,7 @@ function sortRowsFromKey({ sortKey, sortDirection }: ColumnSortState, rows: any[
       return dateComparator(firstItem, secondItem);
     }
 
-    devLogger("Table Sort value ${sortKey} has not matched against any comparator");
+    logger.warn(`Table Sort value ${sortKey} has not matched against any comparator`);
     return 0;
   });
 }
