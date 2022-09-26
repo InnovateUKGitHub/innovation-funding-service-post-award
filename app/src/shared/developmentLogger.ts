@@ -80,10 +80,21 @@ export interface ILogger {
   info(location: string, ...params: unknown[]): void;
   warn(location: string, ...params: unknown[]): void;
   error(location: string, ...params: unknown[]): void;
-  clone(options: Partial<LoggerOptions>): ILogger;
 }
 
+/**
+ * Unified logging system for both serverside/clientside logging.
+ * Automatically detects between logging with ANSI colour codes for development,
+ * or logging with the standard `console.log` for web and production serverside.
+ */
 export class Logger implements ILogger {
+  /**
+   * The logging method that this Logger will adopt.
+   *
+   * 1. If we're in development on the server, we will use TTY colour mode.
+   * 2. (in the future) on the web browser, we will use console.log CSS styles
+   * 3. As a fallback, we will use the legacy console.log system.
+   */
   private static readonly logMethod: LogMethod = (() => {
     if (typeof process !== "undefined") {
       if (process.env.NODE_ENV === "development") return LogMethod.TELETYPE;
@@ -99,18 +110,35 @@ export class Logger implements ILogger {
     return LogMethod.CONSOLE_LOG;
   })();
 
+  /**
+   * The class/location to where this logger is located.
+   * NOT FOR YOUR MESSAGE
+   */
   private readonly identifier: string;
+
+  /**
+   * Options for the logger.
+   */
   private readonly options: LoggerOptions;
 
+  /**
+   * Create a new logger to help keep track of class/code progress.
+   *
+   * @param identifier The class/location to where this logger is located. This option is NOT for your message.
+   * @param options Optional options to modify how the logger behaves.
+   */
   constructor(identifier: string, options?: Partial<LoggerOptions>) {
-    this.identifier = identifier || "FIXME";
+    this.identifier = identifier;
     let logLevel: LogLevel;
 
     if (options?.logLevel) {
+      // Obtain the overridden log level
       logLevel = options?.logLevel;
-    } else if (process.env) {
+    } else if (typeof process !== "undefined") {
+      // Obtain the log level if we are running on the server side.
       logLevel = parseLogLevel((process.env.LOG_LEVEL || process.env.LOGLEVEL) ?? "ERROR");
     } else {
+      // Default to a "log only error" policy.
       logLevel = LogLevel.ERROR;
     }
 
@@ -120,34 +148,60 @@ export class Logger implements ILogger {
     };
   }
 
-  clone(options: LoggerOptions): Logger {
-    return new Logger(this.identifier, {
-      prefixLines: [...options.prefixLines, ...this.options.prefixLines],
-    });
-  }
-
+  /**
+   * Print a debug 🐣 message to the console.
+   *
+   * @param message The message to print. Keep it short and to a single line, without any newlines.
+   * @param params Any associated data to pretty-print alongside the message.
+   */
   debug(message: string, ...params: unknown[]) {
     this.log(LogLevel.DEBUG, message, ...params);
   }
 
+  /**
+   * Print an info 📘 message to the console.
+   *
+   * @param message The message to print. Keep it short and to a single line, without any newlines.
+   * @param params Any associated data to pretty-print alongside the message.
+   */
   info(message: string, ...params: unknown[]) {
     this.log(LogLevel.INFO, message, ...params);
   }
 
+  /**
+   * Print a warning ⚠ message to the console.
+   *
+   * @param message The message to print. Keep it short and to a single line, without any newlines.
+   * @param params Any associated data to pretty-print alongside the message.
+   */
   warn(message: string, ...params: unknown[]) {
     this.log(LogLevel.WARN, message, ...params);
   }
 
+  /**
+   * Print an error ⛔ message to the console.
+   *
+   * @param message The message to print. Keep it short and to a single line, without any newlines.
+   * @param params Any associated data to pretty-print alongside the message.
+   */
   error(message: string, ...params: unknown[]) {
     this.log(LogLevel.ERROR, message, ...params);
   }
 
+  /**
+   * Print an message to the console at a specified verbosity level.
+   *
+   * @param level The logging level to print the message at.
+   * @param message The message to print. Keep it short and to a single line, without any newlines.
+   * @param params Any associated data to pretty-print alongside the message.
+   */
   private log(level: LogLevel, message: string, ...params: unknown[]) {
     if (level >= this.options.logLevel) {
       switch (Logger.logMethod) {
         case LogMethod.TELETYPE:
           return this.logWithTeletype(level, message, ...params);
         case LogMethod.WEB:
+        // TODO: Write a web based logger, preferably with CSS. See ACC-8861
         case LogMethod.CONSOLE_LOG:
         default:
           return this.logWithConsoleLog(level, message, ...params);
@@ -158,6 +212,13 @@ export class Logger implements ILogger {
   private static readonly LOG_LEVEL_PADDING = 10;
   private static readonly LOG_IDENTIFIER_PADDING = 12;
 
+  /**
+   * Print an message to the developer's VT100 compatible terminal, at a specified verbosity level.
+   *
+   * @param level The logging level to print the message at.
+   * @param message The message to print. Keep it short and to a single line, without any newlines.
+   * @param params Any associated data to pretty-print alongside the message.
+   */
   private async logWithTeletype(level: LogLevel, message: string, ...params: unknown[]) {
     let output = "";
     let fg: ForegroundColourCode;
@@ -198,13 +259,19 @@ export class Logger implements ILogger {
         break;
     }
 
+    // Print the log type name, followed by the identifier, followed by the message.
     output += colouring.byNum(logLevelName, fg);
     output += colouring.byNum(this.identifier.padEnd(Logger.LOG_IDENTIFIER_PADDING), ForegroundColourCode.CYAN);
     output += message;
 
+    // If any params exist...
     for (const param of [...this.options.prefixLines, ...params]) {
+      // Add a new line to print the param onto.
+      output += "\n";
+
       let inspectedParam: string;
 
+      // Try and convert the unknown type into a string.
       if (typeof param === "undefined") {
         inspectedParam = "undefined";
       } else if (typeof param === "object") {
@@ -213,13 +280,16 @@ export class Logger implements ILogger {
         inspectedParam = String(param);
       }
 
-      // If inspected output takes more than one line...
+      // Split the string into it's consituent lines
       const lines = inspectedParam.split("\n");
-      output += "\n";
+
+      // For each line...
       output += lines
         .map(line => {
           let spaces = "";
 
+          // Print (LOG_LEVEL_PADDING) spaces, except for the second-to-last column.
+          // This column will have a background colour of the log level printed.
           for (let i = 0; i < Logger.LOG_LEVEL_PADDING; i++) {
             if (i === Logger.LOG_LEVEL_PADDING - 2) {
               spaces += colouring.bg(" ", bg);
@@ -233,9 +303,18 @@ export class Logger implements ILogger {
         .join("\n");
     }
 
+    // Print the output.
     console.log(output);
   }
 
+  /**
+   * Print an message to the terminal.
+   * Not suitable for development, as it prints out JSON strings, which is hard to read.
+   *
+   * @param level The logging level to print the message at.
+   * @param message The message to print. Keep it short and to a single line, without any newlines.
+   * @param params Any associated data to pretty-print alongside the message.
+   */
   private logWithConsoleLog(level: LogLevel, message: string, ...params: unknown[]) {
     const item = {
       type: LogLevel[level],
