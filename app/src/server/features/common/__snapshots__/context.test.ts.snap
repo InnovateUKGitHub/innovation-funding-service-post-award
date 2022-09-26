@@ -7,10 +7,12 @@ Object {
     "jesEnabled": "Yes",
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": DefaultMapper {},
     "payloadErrors": Object {
@@ -29,10 +31,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": BroadcastMapper {
       "clock": Clock {},
@@ -56,10 +60,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": DefaultMapper {},
     "payloadErrors": Object {
@@ -86,10 +92,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": DefaultMapper {},
     "payloadErrors": Object {
@@ -113,10 +121,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": DefaultMapper {},
     "payloadErrors": Object {
@@ -140,10 +150,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": DefaultMapper {},
     "payloadErrors": Object {
@@ -163,10 +175,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": DefaultMapper {},
     "payloadErrors": Object {
@@ -208,10 +222,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": SalesforceCostCategoryMapper {
       "clock": Clock {},
@@ -238,10 +254,12 @@ Object {
       "getSalesforceConnection": [Function],
       "logger": Logger {
         "identifier": "Context",
-        "level": 5,
-        "prefixLines": Array [
-          "user@email.com",
-        ],
+        "options": Object {
+          "logLevel": 5,
+          "prefixLines": Array [
+            "user@email.com",
+          ],
+        },
       },
       "mapper": DefaultMapper {},
       "payloadErrors": Object {
@@ -260,10 +278,12 @@ Object {
       "getSalesforceConnection": [Function],
       "logger": Logger {
         "identifier": "Context",
-        "level": 5,
-        "prefixLines": Array [
-          "user@email.com",
-        ],
+        "options": Object {
+          "logLevel": 5,
+          "prefixLines": Array [
+            "user@email.com",
+          ],
+        },
       },
       "mapper": DefaultMapper {},
       "payloadErrors": Object {
@@ -280,10 +300,12 @@ Object {
       "getSalesforceConnection": [Function],
       "logger": Logger {
         "identifier": "Context",
-        "level": 5,
-        "prefixLines": Array [
-          "user@email.com",
-        ],
+        "options": Object {
+          "logLevel": 5,
+          "prefixLines": Array [
+            "user@email.com",
+          ],
+        },
       },
       "mapper": DefaultMapper {},
       "payloadErrors": Object {
@@ -312,10 +334,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": DefaultMapper {},
     "payloadErrors": Object {
@@ -342,10 +366,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": DefaultMapper {},
     "payloadErrors": Object {
@@ -376,10 +402,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": LoanMapper {
       "clock": Clock {},
@@ -407,10 +435,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": DefaultMapper {},
     "payloadErrors": Object {
@@ -436,10 +466,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": DefaultMapper {},
     "payloadErrors": Object {
@@ -464,10 +496,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": DefaultMapper {},
     "payloadErrors": Object {
@@ -488,10 +522,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": DefaultMapper {},
     "payloadErrors": Object {
@@ -514,10 +550,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": SalesforcePartnerMapper {
       "clock": Clock {},
@@ -599,10 +637,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": DefaultMapper {},
     "payloadErrors": Object {
@@ -642,10 +682,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": SalesforcePermissionGroupMapper {
       "clock": Clock {},
@@ -668,10 +710,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": DefaultMapper {},
     "payloadErrors": Object {
@@ -697,10 +741,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": DefaultMapper {},
     "payloadErrors": Object {
@@ -721,10 +767,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": DefaultMapper {},
     "payloadErrors": Object {
@@ -747,10 +795,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": PCRStatusChangeMapper {
       "clock": Clock {},
@@ -777,10 +827,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": DefaultMapper {},
     "payloadErrors": Object {
@@ -866,10 +918,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": DefaultMapper {},
     "payloadErrors": Object {
@@ -895,10 +949,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": DefaultMapper {},
     "payloadErrors": Object {
@@ -948,10 +1004,12 @@ Object {
     "getSalesforceConnection": [Function],
     "logger": Logger {
       "identifier": "Context",
-      "level": 5,
-      "prefixLines": Array [
-        "user@email.com",
-      ],
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [
+          "user@email.com",
+        ],
+      },
     },
     "mapper": SalesforceRecordTypeMapper {
       "clock": Clock {},

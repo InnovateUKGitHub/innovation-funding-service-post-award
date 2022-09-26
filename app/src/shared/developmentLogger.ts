@@ -70,11 +70,17 @@ const colouring = {
   },
 };
 
+interface LoggerOptions {
+  prefixLines: string[];
+  logLevel: LogLevel;
+}
+
 export interface ILogger {
   debug(location: string, ...params: unknown[]): void;
   info(location: string, ...params: unknown[]): void;
   warn(location: string, ...params: unknown[]): void;
   error(location: string, ...params: unknown[]): void;
+  clone(options: Partial<LoggerOptions>): ILogger;
 }
 
 export class Logger implements ILogger {
@@ -93,24 +99,31 @@ export class Logger implements ILogger {
     return LogMethod.CONSOLE_LOG;
   })();
 
-  private readonly level: LogLevel;
   private readonly identifier: string;
-  private readonly prefixLines: string[];
+  private readonly options: LoggerOptions;
 
-  constructor(
-    identifier: string,
-    options?: {
-      prefixLines: string[];
-    },
-  ) {
+  constructor(identifier: string, options?: Partial<LoggerOptions>) {
     this.identifier = identifier || "FIXME";
-    this.prefixLines = options?.prefixLines || [];
+    let logLevel: LogLevel;
 
-    if (process.env) {
-      this.level = parseLogLevel((process.env.LOG_LEVEL || process.env.LOGLEVEL) ?? "ERROR");
+    if (options?.logLevel) {
+      logLevel = options?.logLevel;
+    } else if (process.env) {
+      logLevel = parseLogLevel((process.env.LOG_LEVEL || process.env.LOGLEVEL) ?? "ERROR");
     } else {
-      this.level = LogLevel.ERROR;
+      logLevel = LogLevel.ERROR;
     }
+
+    this.options = {
+      prefixLines: options?.prefixLines ?? [],
+      logLevel,
+    };
+  }
+
+  clone(options: LoggerOptions): Logger {
+    return new Logger(this.identifier, {
+      prefixLines: [...options.prefixLines, ...this.options.prefixLines],
+    });
   }
 
   debug(message: string, ...params: unknown[]) {
@@ -130,7 +143,7 @@ export class Logger implements ILogger {
   }
 
   private log(level: LogLevel, message: string, ...params: unknown[]) {
-    if (level >= this.level) {
+    if (level >= this.options.logLevel) {
       switch (Logger.logMethod) {
         case LogMethod.TELETYPE:
           return this.logWithTeletype(level, message, ...params);
@@ -189,7 +202,7 @@ export class Logger implements ILogger {
     output += colouring.byNum(this.identifier.padEnd(Logger.LOG_IDENTIFIER_PADDING), ForegroundColourCode.CYAN);
     output += message;
 
-    for (const param of [...this.prefixLines, ...params]) {
+    for (const param of [...this.options.prefixLines, ...params]) {
       let inspectedParam: string;
 
       if (typeof param === "undefined") {
@@ -230,7 +243,6 @@ export class Logger implements ILogger {
       time: new Date().toISOString(),
       message,
       params,
-      method: Logger.logMethod,
     };
     const output = JSON.stringify(item, null, 2);
     console.info(output);
