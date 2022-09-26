@@ -1,18 +1,17 @@
-import { QueryBase } from "@server/features/common/queryBase";
-import { SyncQueryBase } from "@server/features/common/queryBase";
-import { CommandBase, NonAuthorisedCommandBase, SyncCommandBase } from "@server/features/common/commandBase";
 import { Authorisation, IAsyncRunnable, IContext, ISyncRunnable } from "@framework/types";
 import { ValidationError } from "@server/features/common";
-import { createTestRepositories, ITestRepositories } from "./testRepositories";
-import { TestData } from "./testData";
-import { TestClock } from "./testClock";
-import { TestLogger } from "./testLogger";
-import { TestUser } from "./testUser";
-import { TestConfig } from "./testConfig";
-import { TestStore } from "./testStore";
+import { CommandBase, NonAuthorisedCommandBase, SyncCommandBase } from "@server/features/common/commandBase";
+import { QueryBase, SyncQueryBase } from "@server/features/common/queryBase";
+import { Logger } from "@shared/developmentLogger";
 import { TestCaches } from "./testCaches";
-import { TestResources } from "./testResources";
+import { TestClock } from "./testClock";
+import { TestConfig } from "./testConfig";
+import { TestData } from "./testData";
 import { TestInternationalisation } from "./testInternationalisation";
+import { createTestRepositories, ITestRepositories } from "./testRepositories";
+import { TestResources } from "./testResources";
+import { TestStore } from "./testStore";
+import { TestUser } from "./testUser";
 
 export class TestContext implements IContext {
   constructor() {
@@ -22,7 +21,7 @@ export class TestContext implements IContext {
   }
 
   public clock = new TestClock();
-  public logger = new TestLogger();
+  public logger = new Logger("Test Logger");
   public repositories: ITestRepositories;
   public user = new TestUser();
   public testData: TestData;

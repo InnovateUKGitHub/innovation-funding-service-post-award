@@ -97,7 +97,6 @@ module.exports = function pack(env) {
       ],
     },
     plugins: [
-      new NormalModuleReplacementPlugin(...getNormalReplacementParams("dev-logger.ts")),
       new NormalModuleReplacementPlugin(...getNormalReplacementParams("apiClient.ts")),
       new MiniCssExtractPlugin({
         filename: "styles.css",
