@@ -110,6 +110,20 @@ export class Logger implements ILogger {
     return LogMethod.CONSOLE_LOG;
   })();
 
+  private static defaultOptions: LoggerOptions = {
+    prefixLines: [],
+    logLevel: LogLevel.ERROR,
+  };
+
+  /**
+   * Override the default options.
+   *
+   * @param options The options to override the default options with
+   */
+  static setDefaultOptions(options?: Partial<LoggerOptions>) {
+    Object.assign(Logger.defaultOptions, options);
+  }
+
   /**
    * The class/location to where this logger is located.
    * NOT FOR YOUR MESSAGE
@@ -119,7 +133,7 @@ export class Logger implements ILogger {
   /**
    * Options for the logger.
    */
-  private readonly options: LoggerOptions;
+  private readonly options: Partial<LoggerOptions> = {};
 
   /**
    * Create a new logger to help keep track of class/code progress.
@@ -129,23 +143,16 @@ export class Logger implements ILogger {
    */
   constructor(identifier: string, options?: Partial<LoggerOptions>) {
     this.identifier = identifier;
-    let logLevel: LogLevel;
 
     if (options?.logLevel) {
       // Obtain the overridden log level
-      logLevel = options?.logLevel;
+      this.options.logLevel = options?.logLevel;
     } else if (typeof process !== "undefined") {
       // Obtain the log level if we are running on the server side.
-      logLevel = parseLogLevel((process.env.LOG_LEVEL || process.env.LOGLEVEL) ?? "ERROR");
-    } else {
-      // Default to a "log only error" policy.
-      logLevel = LogLevel.ERROR;
+      this.options.logLevel = parseLogLevel((process.env.LOG_LEVEL || process.env.LOGLEVEL) ?? "ERROR");
     }
 
-    this.options = {
-      prefixLines: options?.prefixLines ?? [],
-      logLevel,
-    };
+    this.options.prefixLines = options?.prefixLines ?? Logger.defaultOptions.prefixLines;
   }
 
   /**
@@ -189,6 +196,26 @@ export class Logger implements ILogger {
   }
 
   /**
+   * Get the current LogLevel.
+   * If a logLevel is not set, returns default logLevel.
+   *
+   * @returns The current Logger LogLevel.
+   */
+  private getLogLevel(): LogLevel {
+    return this.options.logLevel || Logger.defaultOptions.logLevel;
+  }
+
+  /**
+   * Get the currently set prefix lines.
+   * If prefix lines are not set, returns default prefix lines.
+   *
+   * @returns The current prefix-lines.
+   */
+  private getPrefixLines(): string[] {
+    return this.options.prefixLines || Logger.defaultOptions.prefixLines;
+  }
+
+  /**
    * Print an message to the console at a specified verbosity level.
    *
    * @param level The logging level to print the message at.
@@ -196,7 +223,7 @@ export class Logger implements ILogger {
    * @param params Any associated data to pretty-print alongside the message.
    */
   private log(level: LogLevel, message: string, ...params: unknown[]) {
-    if (level >= this.options.logLevel) {
+    if (level >= this.getLogLevel()) {
       switch (Logger.logMethod) {
         case LogMethod.TELETYPE:
           return this.logWithTeletype(level, message, ...params);
@@ -265,7 +292,7 @@ export class Logger implements ILogger {
     output += message;
 
     // If any params exist...
-    for (const param of [...this.options.prefixLines, ...params]) {
+    for (const param of [...this.getPrefixLines(), ...params]) {
       // Add a new line to print the param onto.
       output += "\n";
 
