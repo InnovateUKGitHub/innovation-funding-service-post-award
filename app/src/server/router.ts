@@ -8,9 +8,7 @@ import { configureFormRouter } from "@server/forms/formRouter";
 import { NotFoundError } from "@shared/appError";
 import { serverRender } from "@server/serverRender";
 import { componentGuideRender } from "@server/componentGuideRender";
-
-const shouldEnableDevTools =
-  /^acc-dev|^acc-demo/.test(process.env.ENV_NAME || "") || process.env.NODE_ENV === "development";
+import { isAccDevOrDemo, isLocalDevelopment } from "@shared/isEnv";
 
 export const noAuthRouter = Router();
 
@@ -25,7 +23,7 @@ const csrfProtection = csrf();
 router.use("/api", apiRoutes);
 
 // Only enable the components page if we're in development mode.
-if (shouldEnableDevTools) {
+if (isAccDevOrDemo || isLocalDevelopment) {
   router.use("/components", csrfProtection, componentGuideRender);
 }
 
