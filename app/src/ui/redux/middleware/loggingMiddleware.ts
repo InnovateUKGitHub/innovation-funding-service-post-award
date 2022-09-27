@@ -1,6 +1,9 @@
+import { Logger } from "@shared/developmentLogger";
 import { AnyAction, Dispatch } from "redux";
 
+const logger = new Logger("Redux");
+
 export const loggingMiddleware = () => (next: Dispatch) => (action: AnyAction) => {
-  console.log("Running action", action.type, action.payload);
+  logger.debug("Running action", action.type, action.payload);
   next(action);
 };
