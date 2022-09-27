@@ -31,14 +31,14 @@ developmentRouter.get("/dev/refresh", (req, res) => {
   }
 
   // Let esbuild know that everything is ok!
-  res.send(201);
+  res.sendStatus(201);
 });
 
 developmentRouter.get("/dev/reload", (req, res) => {
   // When esbuild requests a server reload, close the server.
   // esbuild will help re-create a new server.
   logger.info("Server reload requested.");
-  res.send(201);
+  res.sendStatus(201);
   process.exit(0);
 });
 
