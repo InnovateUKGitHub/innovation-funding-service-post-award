@@ -228,7 +228,7 @@ export class Logger implements ILogger {
         case LogMethod.TELETYPE:
           return this.logWithTeletype(level, message, ...params);
         case LogMethod.WEB:
-        // TODO: Write a web based logger, preferably with CSS. See ACC-8861
+          return this.logWithCSS(level, message, ...params);
         case LogMethod.CONSOLE_LOG:
         default:
           return this.logWithConsoleLog(level, message, ...params);
@@ -332,6 +332,56 @@ export class Logger implements ILogger {
 
     // Print the output.
     console.log(output);
+  }
+
+  /**
+   * Print an message to the user/developer's , at a specified verbosity level.
+   *
+   * @param level The logging level to print the message at.
+   * @param message The message to print. Keep it short and to a single line, without any newlines.
+   * @param params Any associated data to pretty-print alongside the message.
+   */
+  private async logWithCSS(level: LogLevel, message: string, ...params: unknown[]) {
+    let output = "";
+
+    const defaultCSS = "font-family: system-ui;";
+    let logLevelCSS = defaultCSS;
+    const logIdentifierCSS = defaultCSS;
+    const logMessageCSS = defaultCSS;
+    let logLevelName: string;
+
+    // Adjust colours and message content for different log levels.
+    switch (level) {
+      case LogLevel.ERROR:
+        logLevelCSS += "color: RED;";
+        logLevelName = "Error ⛔";
+        break;
+      case LogLevel.WARN:
+        logLevelCSS += "color: YELLOW;";
+        logLevelName = "Warning ⚠";
+        break;
+      case LogLevel.DEBUG:
+        logLevelCSS += "color: BLUE;";
+        logLevelName = "Debugging 🐣";
+        break;
+      case LogLevel.INFO:
+        logLevelCSS += "color: BLUE;";
+        logLevelName = "Info 📘";
+        break;
+      case LogLevel.VERBOSE:
+        logLevelCSS += "color: BLUE;";
+        logLevelName = "Trace 🐥";
+        break;
+      default:
+        logLevelName = "Default";
+        break;
+    }
+
+    // Print the log type name, followed by the identifier, followed by the message.
+    output += `%c${logLevelName}  %c${this.identifier}%c / %c${message}`;
+
+    // Print the output.
+    console.log(output, logLevelCSS, logIdentifierCSS, defaultCSS, logMessageCSS, ...params);
   }
 
   /**
