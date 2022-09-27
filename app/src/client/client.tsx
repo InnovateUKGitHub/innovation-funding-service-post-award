@@ -18,9 +18,11 @@ import {
 } from "@ui/redux";
 
 import { getPolyfills } from "./polyfill";
+import { Logger } from "@shared/developmentLogger";
 
 // get servers store to initialise client store
 const serverState = processDto(window.__PRELOADED_STATE__);
+Logger.setDefaultOptions({ logLevel: serverState.config.logLevel });
 
 const middleware = composeWithDevTools(setupClientMiddleware());
 const store = createStore(rootReducer, serverState, middleware);
