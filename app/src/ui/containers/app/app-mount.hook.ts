@@ -1,21 +1,20 @@
 import { useEffect } from "react";
 
-import { useStores } from "@ui/redux";
 import { scrollToTheTopInstantly } from "@framework/util";
-import { useAppParams } from "@ui/features/use-app-params";
+import { Params } from "@ui/helpers/make-url";
+import { useStores } from "@ui/redux";
 
 /**
  * @description This dispatches preflight requests thus avoiding loading, prefer static data which is unlikely to frequently change.
  *
  * Notice this is not invoked within any react hooks, these DO NOT RUN on SSR (Server Side Request)
  */
-export function useAppMount(): void {
-  const { projectId } = useAppParams<{ projectId?: string }>();
+export function useAppMount(params: Params): void {
+  const { projectId } = params;
   const stores = useStores();
 
-  if (projectId) {
+  if (typeof projectId === "string") {
     stores.projects.isValidProject(projectId);
-
     stores.partners.getPartnersForProject(projectId);
   }
 

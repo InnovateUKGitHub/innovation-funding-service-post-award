@@ -25,6 +25,7 @@ import { noop } from "@ui/helpers/noop";
 import { FooterExternalContent, footerLinks } from "./app/footer.config";
 import { ProjectStatusCheck } from "./app/project-active";
 import { ErrorNotFoundRoute, ErrorRoute } from "./errors.page";
+import { useAppMount } from "./app/app-mount.hook";
 
 interface IAppProps {
   dispatch: Dispatch;
@@ -43,6 +44,9 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
     () => getParamsFromUrl(currentRoute.routePath, location.pathname, location.search),
     [currentRoute.routePath, location.pathname, location.search],
   );
+
+  // Note: Don't call me in a lifecycle - needs to be SSR compatible!
+  useAppMount(routePathParams);
 
   const content = useInitContent(params);
   const modalRegister = useModal();
@@ -141,9 +145,6 @@ interface AppRoute {
  */
 export function App(props: AppRoute) {
   const routesList = getRoutes();
-  // Note: Don't call me in a lifecycle - needs to be SSR compatible!
-  // useAppMount();
-
   const error = props.store.getState().globalError;
 
   return (
