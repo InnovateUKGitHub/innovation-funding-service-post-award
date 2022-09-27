@@ -5,6 +5,7 @@ import { Command } from "commander";
 
 import { Server } from "./server";
 import { healthCheck } from "./healthCheck";
+import { isLocalDevelopment } from "@shared/isEnv";
 
 // Set up New Relic to monitor app when deployed
 if (process.env.NEW_RELIC_ENABLED === "true") {
@@ -26,7 +27,7 @@ program.parse(process.argv);
 const { secure, dev } = program as CustomProcessArgs;
 
 const port = parseInt(process.env.PORT ?? "8080", 10);
-const development = dev || process.env.NODE_ENV === "development";
+const development = dev || isLocalDevelopment;
 
 if (secure && process.env.SERVER_URL) {
   process.env.SERVER_URL = process.env.SERVER_URL.replace("http://", "https://");

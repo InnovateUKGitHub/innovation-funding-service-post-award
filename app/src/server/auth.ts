@@ -11,6 +11,7 @@ import {
   ShibbolethPayload,
   shibbolethStrategy,
 } from "./shibboleth.config";
+import { isLocalDevelopment } from "@shared/isEnv";
 
 export const router = express.Router();
 
@@ -19,7 +20,7 @@ const logger = new Logger("Auth");
 const cookieName = "chocolate-chip";
 router.use(
   cookieSession({
-    secure: process.env.SERVER_URL !== "http://localhost:8080",
+    secure: !isLocalDevelopment,
     httpOnly: true,
     name: cookieName,
     secret: configuration.cookieKey,
@@ -41,7 +42,7 @@ router.get("/login", noCache, passport.authenticate("shibboleth"));
 router.get("/logout", noCache, (_req, res) => {
   res.cookie(cookieName, "", {
     expires: new Date("1970-01-01"),
-    secure: process.env.SERVER_URL !== "http://localhost:8080",
+    secure: !isLocalDevelopment,
     httpOnly: true,
   });
 
