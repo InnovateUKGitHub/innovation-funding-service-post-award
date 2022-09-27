@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { hydrateRoot } from "react-dom/client";
 import i18next from "i18next";
 import { Provider } from "react-redux";
@@ -10,13 +10,11 @@ import { processDto } from "@shared/processResponse";
 import { App } from "@ui/containers/app";
 import {
   createStores,
-  IStores,
-  ModalProvider,
-  ModalRegister,
   rootReducer,
   setupClientMiddleware,
-  StoresConsumer,
   StoresProvider,
+  ModalProvider,
+  ModalRegister,
 } from "@ui/redux";
 
 import { getPolyfills } from "./polyfill";
@@ -38,39 +36,27 @@ const getStores = () => {
 // make sure middleware and reducers have run
 store.dispatch(Actions.initaliseAction());
 
-class Client extends React.Component<NoProps> {
-  render() {
-    return (
-      // @todo remove once react/redux connect can be removed
-      <Provider store={store}>
-        <BrowserRouter>
-          <StoresProvider value={getStores()}>
-            <StoresConsumer>{stores => <AppWithContent stores={stores} store={store} />}</StoresConsumer>
-          </StoresProvider>
-        </BrowserRouter>
-      </Provider>
-    );
-  }
-}
+const Client = () => {
+  const [, setState] = useState(0);
 
-type AppWithContentProps = { stores: IStores; store: typeof store };
-
-class AppWithContent extends React.Component<AppWithContentProps> {
-  constructor(props: AppWithContentProps) {
-    super(props);
+  useEffect(() => {
     // whenever the store changes force a rerender this will flow down to container level
     // where if no props have changed rendering stops
-    this.props.store.subscribe(() => this.setState({ marker: {} }));
-  }
+    store.subscribe(() => setState(s => s + 1));
+  }, []);
 
-  render() {
-    return (
-      <ModalProvider value={new ModalRegister()}>
-        <App store={store} />
-      </ModalProvider>
-    );
-  }
-}
+  return (
+    <Provider store={store}>
+      <BrowserRouter>
+        <StoresProvider value={getStores()}>
+          <ModalProvider value={new ModalRegister()}>
+            <App store={store} />
+          </ModalProvider>
+        </StoresProvider>
+      </BrowserRouter>
+    </Provider>
+  );
+};
 
 getPolyfills()
   .then(() =>

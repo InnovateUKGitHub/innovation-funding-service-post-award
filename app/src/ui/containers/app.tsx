@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from "react";
 import { Helmet } from "react-helmet";
-import { Store } from "redux";
+import { Store, Dispatch } from "redux";
 import { ErrorBoundary } from "react-error-boundary";
 import { Routes, Route, useLocation, useNavigationType } from "react-router-dom";
 
@@ -29,10 +29,14 @@ import { ErrorNotFoundRoute, ErrorRoute } from "./errors.page";
 import { FooterExternalContent, footerLinks } from "./app/footer.config";
 
 interface IAppProps {
-  dispatch: any;
+  dispatch: Dispatch;
   currentRoute: IRouteDefinition<any>;
 }
 
+/**
+ * `<AppView />`
+ * Handles providers, helmet and layout
+ */
 function AppView({ currentRoute, dispatch }: IAppProps) {
   const stores = useStores();
   const params = useAppParams();
@@ -61,9 +65,6 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
     [currentRoute.routePath, location.pathname, location.search],
   );
 
-  // TODO: Deprecating 'config' and pulling from redux store via 'useSelector' prop drilling :(
-  // TODO: Deprecating 'messages' and pulling from redux store via 'useSelector' prop drilling :(
-  // TODO: Deprecating 'routes' and create a typed solution to fetch route with required url params
   const baseProps: BaseProps = {
     messages,
     config,
@@ -83,6 +84,8 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
     }
   }, [location.pathname, navigationType, dispatch]);
 
+  const PageContainer = currentRoute.container;
+
   return (
     <>
       <Helmet>
@@ -101,14 +104,13 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
             <FullHeight.Content>
               <GovWidthContainer>
                 <PhaseBanner />
-
                 {hasAccess ? (
                   <ProjectParticipantProvider projectId={params.projectId}>
                     <ProjectStatusCheck
                       projectId={params.projectId}
                       overrideAccess={!!currentRoute.allowRouteInActiveAccess}
                     >
-                      <currentRoute.container {...baseProps} />
+                      <PageContainer {...baseProps} />
                     </ProjectStatusCheck>
                   </ProjectParticipantProvider>
                 ) : (
@@ -135,6 +137,10 @@ interface AppRoute {
   store: Store;
 }
 
+/**
+ * `<App />`
+ * Handles routes and error boundary
+ */
 export function App(props: AppRoute) {
   const routesList = getRoutes();
   // Note: Don't call me in a lifecycle - needs to be SSR compatible!
