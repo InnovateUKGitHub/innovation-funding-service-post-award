@@ -31,6 +31,9 @@ import { Logger } from "@shared/developmentLogger";
 import { getErrorStatus } from "./errorHandlers";
 import { renderHtml } from "./html";
 
+/**
+ * The main server side process handled here.
+ */
 export async function serverRender(req: Request, res: Response, error?: IAppError): Promise<void> {
   const { nonce } = res.locals;
   const middleware = setupServerMiddleware();
@@ -95,6 +98,9 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
   }
 }
 
+/**
+ * Populates the redux store before being added as preloaded state
+ */
 function loadAllData(store: Store, render: () => void): Promise<void> {
   return new Promise<void>(resolve => {
     const unsubscribeStore = store.subscribe(() => {
@@ -120,6 +126,9 @@ function loadAllData(store: Store, render: () => void): Promise<void> {
   });
 }
 
+/**
+ * on complete function to be called after successfully loading all data
+ */
 function onComplete(store: Store, error?: FormHandlerError) {
   // validation error occurred so add it into store as validation error
   if (error?.code === ErrorCode.VALIDATION_ERROR) {
@@ -140,6 +149,9 @@ function onComplete(store: Store, error?: FormHandlerError) {
   }
 }
 
+/**
+ * renders the app server side
+ */
 function renderApp(
   requestUrl: string,
   nonce: string,
@@ -165,6 +177,9 @@ function renderApp(
   return renderHtml(helmet, html, state, nonce);
 }
 
+/**
+ * gets the client config
+ */
 function getClientConfig(context: IContext): IClientConfig {
   return {
     ifsRoot: context.config.urls.ifsRoot,
