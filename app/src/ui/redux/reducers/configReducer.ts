@@ -1,11 +1,12 @@
 import { IAppOptions } from "@framework/types/IAppOptions";
-import { IFeatureFlags } from "@framework/types";
+import { IFeatureFlags, LogLevel } from "@framework/types";
 
 export interface IClientConfig {
   ifsRoot: string;
   features: IFeatureFlags;
   options: IAppOptions;
   ssoEnabled: boolean;
+  logLevel: LogLevel;
 }
 
 export const configReducer = (state: IClientConfig = {} as IClientConfig) => {
