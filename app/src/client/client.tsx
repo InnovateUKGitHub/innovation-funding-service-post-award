@@ -27,11 +27,11 @@ Logger.setDefaultOptions({ logLevel: serverState.config.logLevel });
 const middleware = composeWithDevTools(setupClientMiddleware());
 const store = createStore(rootReducer, serverState, middleware);
 
-// factory to make the stores for the provider
+// Create a IFS-PA (not Redux) store.
 const getStores = () => {
   return createStores(
     () => store.getState(),
-    action => setTimeout(() => store.dispatch(action as AnyAction)),
+    action => store.dispatch(action as AnyAction),
   );
 };
 
@@ -42,9 +42,16 @@ const Client = () => {
   const [, setState] = useState(0);
 
   useEffect(() => {
-    // whenever the store changes force a rerender this will flow down to container level
-    // where if no props have changed rendering stops
-    store.subscribe(() => setState(s => s + 1));
+    // Whenever our IFS-PA store changes...
+    const unsub = store.subscribe(() => {
+      // Wait for the render to finish, before setting state to trigger a rerender.
+      setTimeout(() => setState(s => s + 1));
+    });
+
+    // Unsubscribe when the <Client /> will unmount.
+    return () => {
+      unsub();
+    };
   }, []);
 
   return (
