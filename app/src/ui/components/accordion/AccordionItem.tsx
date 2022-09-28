@@ -64,7 +64,7 @@ export function AccordionItem({ qa, children, isOpen = false, onClick, ...props 
               </span>
             </button>
           ) : (
-            <span className="govuk-accordion__section-button" id={accordionHeadingId}>
+            <span className="govuk-accordion__section-button govuk-heading-m" id={accordionHeadingId}>
               {title}
             </span>
           )}
