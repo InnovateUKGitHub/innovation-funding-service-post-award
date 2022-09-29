@@ -1,6 +1,5 @@
 import React from "react";
 import classNames from "classnames";
-import { BaseInput } from "./baseInput";
 import { InputProps } from "./common";
 
 interface CheckboxOptionProps {
@@ -14,16 +13,17 @@ interface CheckboxListProps extends InputProps<{ id: string; value: React.ReactN
   options: CheckboxOptionProps[];
 }
 
-export class CheckboxList extends BaseInput<CheckboxListProps, {}> {
-  render() {
-    const className = classNames("govuk-checkboxes");
-    return (
-      <div className={className}>{this.props.options.map((x, i) => this.renderOption(this.props.name, x, i))}</div>
-    );
-  }
+export const CheckboxList = (props: CheckboxListProps) => {
+  const onChange = (item: { id: string; value: React.ReactNode }, checked: boolean) => {
+    const original = props.value || [];
+    if (props.onChange) {
+      const values = props.options.filter(x => (x.id === item.id ? checked : !!original.find(y => y.id === x.id)));
+      props.onChange(values);
+    }
+  };
 
-  renderOption(name: string, item: CheckboxOptionProps, index: number): any {
-    const selected = this.props.value ? !!this.props.value.find(x => x.id === item.id) : false;
+  const renderOption = (name: string, item: CheckboxOptionProps, index: number): any => {
+    const selected = props.value ? !!props.value.find(x => x.id === item.id) : false;
     return (
       <div className="govuk-checkboxes__item" key={"option" + index}>
         <input
@@ -33,23 +33,18 @@ export class CheckboxList extends BaseInput<CheckboxListProps, {}> {
           name={name}
           type="checkbox"
           value={item.id}
-          onChange={e => this.onChange(item, e.target.checked)}
+          onChange={e => onChange(item, e.target.checked)}
           checked={selected}
           aria-checked={selected}
-          disabled={this.props.disabled || item.disabled}
+          disabled={props.disabled || item.disabled}
         />
         <label className="govuk-label govuk-checkboxes__label" htmlFor={`${name}_${item.id}`}>
           {item.value}
         </label>
       </div>
     );
-  }
+  };
 
-  private onChange(item: { id: string; value: React.ReactNode }, checked: boolean) {
-    const original = this.props.value || [];
-    if (this.props.onChange) {
-      const values = this.props.options.filter(x => (x.id === item.id ? checked : !!original.find(y => y.id === x.id)));
-      this.props.onChange(values);
-    }
-  }
-}
+  const className = classNames("govuk-checkboxes");
+  return <div className={className}>{props.options.map((x, i) => renderOption(props.name, x, i))}</div>;
+};

@@ -1,6 +1,5 @@
 import React from "react";
 import classNames from "classnames";
-import { BaseInput } from "./baseInput";
 import { InputProps } from "./common";
 
 interface RadioOptionProps {
@@ -14,41 +13,37 @@ interface RadioListProps extends InputProps<{ id: string; value: React.ReactNode
   inline: boolean;
 }
 
-export class RadioList extends BaseInput<RadioListProps, {}> {
-  render() {
-    const className = classNames("govuk-radios", { "govuk-radios--inline": this.props.inline });
-    return (
-      <div className={className}>{this.props.options.map((x, i) => this.renderOption(this.props.name, x, i))}</div>
-    );
-  }
+export const RadioList = (props: RadioListProps) => {
+  const handleChange = (item: { id: string; value: React.ReactNode }) => {
+    if (props.onChange) {
+      props.onChange(item);
+    }
+  };
 
-  renderOption(name: string, item: RadioOptionProps, index: number): any {
-    const selected = this.props.value ? this.props.value.id === item.id : false;
-    const inputId = `${this.props.name}_${item.id}`;
+  const renderOption = (name: string, item: RadioOptionProps, index: number): any => {
+    const selected = props.value ? props.value.id === item.id : false;
+    const inputId = `${props.name}_${item.id}`;
     return (
       <div className="govuk-radios__item" key={"option" + index}>
         <input
           data-qa={item.qa}
           className="govuk-radios__input"
           id={inputId}
-          name={this.props.name}
+          name={props.name}
           type="radio"
           value={item.id}
-          onChange={() => this.onChange(item)}
+          onChange={() => handleChange(item)}
           checked={selected}
           aria-checked={selected}
-          disabled={this.props.disabled}
+          disabled={props.disabled}
         />
         <label className="govuk-label govuk-radios__label" htmlFor={inputId}>
           {item.value}
         </label>
       </div>
     );
-  }
+  };
 
-  private onChange(item: { id: string; value: React.ReactNode }) {
-    if (this.props.onChange) {
-      this.props.onChange(item);
-    }
-  }
-}
+  const className = classNames("govuk-radios", { "govuk-radios--inline": props.inline });
+  return <div className={className}>{props.options.map((x, i) => renderOption(props.name, x, i))}</div>;
+};
