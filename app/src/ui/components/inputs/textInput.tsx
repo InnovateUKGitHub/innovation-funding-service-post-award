@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import classNames from "classnames";
-import { BaseInput, FormInputWidths } from "./baseInput";
-import { InputProps, InputState } from "./common";
+import { FormInputWidths, useDebounce, useUpdateStateValueOnProps } from "./input-utils";
+import { InputProps } from "./common";
 
 export interface TextInputProps extends InputProps<string> {
   maxLength?: number;
@@ -11,57 +11,43 @@ export interface TextInputProps extends InputProps<string> {
   id?: string;
 }
 
-export class TextInput extends BaseInput<TextInputProps, InputState> {
-  constructor(props: TextInputProps) {
-    super(props);
-    this.state = { value: props.value || "" };
-  }
+export const TextInput = (props: TextInputProps) => {
+  const [state, setState] = useState({ value: props.value ?? "" });
+  const debouncedOnChange = useDebounce(props.onChange, props.debounce);
 
-  public UNSAFE_componentWillReceiveProps(nextProps: InputProps<string>) {
-    if (nextProps.value !== this.props.value) {
-      this.setState({ value: nextProps.value || "" });
-      this.cancelTimeout();
-    }
-  }
+  useUpdateStateValueOnProps(props.value ?? "", setState);
 
-  public render() {
-    return (
-      <input
-        id={this.props.id || this.props.name}
-        type="text"
-        className={classNames(this.props.className, "govuk-input", {
-          "govuk-input--error": this.props.hasError === true,
-          [`govuk-input--width-${this.props.width}`]: typeof this.props.width === "number",
-          [`govuk-!-width-${this.props.width}`]: typeof this.props.width === "string",
-        })}
-        name={this.props.name}
-        value={this.state.value}
-        disabled={!!this.props.disabled}
-        onChange={e => this.handleChange(e, true)}
-        onBlur={e => this.handleChange(e, false)}
-        onKeyUp={this.props.handleKeyTyped ? e => this.handleChange(e, false) : undefined}
-        maxLength={this.props.maxLength}
-        aria-label={this.props.ariaLabel}
-        placeholder={this.props.placeholder}
-      />
-    );
-  }
-
-  private handleChange(
+  const handleChange = (
     e: React.ChangeEvent<HTMLInputElement> | React.KeyboardEvent<HTMLInputElement>,
     debounce: boolean,
-  ) {
+  ) => {
     const value = e.currentTarget.value;
-    if (this.state.value !== value) {
-      this.setState({ value });
-      this.debounce(() => this.changeNow(value), debounce);
+    setState({ value });
+    if (debounce) {
+      debouncedOnChange(value);
+    } else if (props.onChange) {
+      props.onChange(value);
     }
-  }
+  };
 
-  private changeNow(value: string) {
-    this.cancelTimeout();
-    if (this.props.onChange) {
-      this.props.onChange(value);
-    }
-  }
-}
+  return (
+    <input
+      id={props.id || props.name}
+      type="text"
+      className={classNames(props.className, "govuk-input", {
+        "govuk-input--error": props.hasError === true,
+        [`govuk-input--width-${props.width}`]: typeof props.width === "number",
+        [`govuk-!-width-${props.width}`]: typeof props.width === "string",
+      })}
+      name={props.name}
+      value={state.value}
+      disabled={!!props.disabled}
+      onChange={e => handleChange(e, true)}
+      onBlur={e => handleChange(e, false)}
+      onKeyUp={props.handleKeyTyped ? e => handleChange(e, false) : undefined}
+      maxLength={props.maxLength}
+      aria-label={props.ariaLabel}
+      placeholder={props.placeholder}
+    />
+  );
+};

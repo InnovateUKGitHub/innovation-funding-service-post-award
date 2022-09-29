@@ -17,7 +17,7 @@ import { MultipleFileUpload } from "./inputs/fileUpload";
 import { FullDateInput, MonthYearInput } from "./inputs/dateInput";
 import { Button } from "./styledButton";
 import { SearchInput } from "./inputs/searchInput";
-import { FormInputWidths } from "./inputs/baseInput";
+import { FormInputWidths } from "./inputs/input-utils";
 import { DropdownList, DropdownListOption } from "./inputs";
 import { SecurityTokenInput } from "./SecurityTokenInput";
 

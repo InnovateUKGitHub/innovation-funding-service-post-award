@@ -1,5 +1,4 @@
 import cx from "classnames";
-import { BaseInput } from "./baseInput";
 import { InputProps } from "./common";
 
 export interface DropdownListOption {
@@ -20,42 +19,51 @@ export interface DropdownListProps extends InputProps<Exclude<DropdownListOption
   className?: string;
 }
 
-export class DropdownList extends BaseInput<DropdownListProps, {}> {
-  render() {
-    return (
-      <select
-        id={this.props.id || this.props.name}
-        name={this.props.name}
-        data-qa={this.props.qa}
-        className={cx("govuk-select", this.props.className)}
-        value={this.props.value?.id || ""}
-        onChange={e => this.onChange(e.target.value)}
-        disabled={this.props.disabled}
-      >
-        {this.props.hasEmptyOption && (
-          <option data-qa="placeholder-option" aria-selected={!this.props.value} value="">
-            {this.props.placeholder}
-          </option>
-        )}
-
-        {this.props.options.map(item => (
-          <option
-            key={item.id}
-            data-qa={item.qa || `option-${item.id}-qa`}
-            value={item.id}
-            aria-selected={this.props?.value?.id === item.id}
-          >
-            {item.displayName ?? item.value}
-          </option>
-        ))}
-      </select>
-    );
-  }
-
-  private onChange(id: string) {
-    if (this.props.onChange) {
-      const item = id && this.props.options.find(x => x.id === id);
-      this.props.onChange(item || null);
+export const DropdownList = ({
+  id,
+  qa,
+  className,
+  options,
+  disabled,
+  value,
+  onChange,
+  hasEmptyOption,
+  placeholder,
+  name,
+}: DropdownListProps) => {
+  const handleChange = (id: string) => {
+    if (onChange) {
+      const item = id && options.find(x => x.id === id);
+      onChange(item || null);
     }
-  }
-}
+  };
+
+  return (
+    <select
+      id={id || name}
+      name={name}
+      data-qa={qa}
+      className={cx("govuk-select", className)}
+      value={value?.id || ""}
+      onChange={e => handleChange(e.target.value)}
+      disabled={disabled}
+    >
+      {hasEmptyOption && (
+        <option data-qa="placeholder-option" aria-selected={!value} value="">
+          {placeholder}
+        </option>
+      )}
+
+      {options.map(item => (
+        <option
+          key={item.id}
+          data-qa={item.qa || `option-${item.id}-qa`}
+          value={item.id}
+          aria-selected={value?.id === item.id}
+        >
+          {item.displayName ?? item.value}
+        </option>
+      ))}
+    </select>
+  );
+};

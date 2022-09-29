@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import classNames from "classnames";
 import { IFileWrapper } from "@framework/types";
 import { ClientFileWrapper } from "../../../client/clientFileWrapper";
@@ -17,43 +17,37 @@ export interface MultipleFileUploadProps extends InputAttr {
   multiple?: never;
 }
 
-export class MultipleFileUpload extends React.Component<MultipleFileUploadProps> {
-  private fileInput: HTMLInputElement | null = null;
+export const MultipleFileUpload = ({ name, qa, error, onChange, value, ...props }: MultipleFileUploadProps) => {
+  const fileInput = useRef<HTMLInputElement | null>(null);
 
-  // TODO: refactor deprecated react methods
-  public UNSAFE_componentWillReceiveProps(nextProps: MultipleFileUploadProps) {
-    if (this.fileInput && this.fileInput.value && (!nextProps.value || !nextProps.value.length)) {
-      this.fileInput.value = "";
+  useEffect(() => {
+    if (fileInput.current?.value && (!value || !value.length)) {
+      fileInput.current.value = "";
     }
-  }
+  }, [value]);
 
-  public render() {
-    // TODO: https://devops.innovateuk.org/issue-tracking/browse/ACC-8161
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { value, error, ...props } = this.props;
-
-    return (
-      <input
-        {...props}
-        id={props.name}
-        data-qa={props.qa || "multiple-file-upload"}
-        type="file"
-        className={classNames("govuk-file-upload", { "govuk-file-upload--error": error })}
-        onChange={e => this.handleChange(e)}
-        onBlur={e => this.handleChange(e)}
-        multiple
-        ref={ref => (this.fileInput = ref)}
-      />
-    );
-  }
-
-  private handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
 
     if (!files?.length) {
-      return this.props.onChange([]);
+      return onChange([]);
     }
 
-    return this.props.onChange(Array.from(files).map(f => new ClientFileWrapper(f)));
-  }
-}
+    return onChange(Array.from(files).map(f => new ClientFileWrapper(f)));
+  };
+
+  return (
+    <input
+      {...props}
+      id={name}
+      name={name}
+      data-qa={qa || "multiple-file-upload"}
+      type="file"
+      className={classNames("govuk-file-upload", { "govuk-file-upload--error": error })}
+      onChange={e => handleChange(e)}
+      onBlur={e => handleChange(e)}
+      multiple
+      ref={fileInput}
+    />
+  );
+};

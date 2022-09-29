@@ -1,11 +1,13 @@
-import { render, fireEvent } from "@testing-library/react";
+import { render, fireEvent, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 
 import { TextAreaInput, TextAreaInputProps } from "@ui/components/inputs/textAreaInput";
-import { defaultInputDebounceTimeout } from "@ui/components/inputs/baseInput";
+import { defaultInputDebounceTimeout } from "@ui/components/inputs/input-utils";
 
 describe("TextAreaInput", () => {
   const defaultProps: TextAreaInputProps = {
     name: "stub-name",
+    qa: "test-text-area-input",
   };
 
   const setup = (props?: Partial<TextAreaInputProps>) => {
@@ -74,27 +76,23 @@ describe("TextAreaInput", () => {
     });
 
     test("with correct maxLength attribute", () => {
-      const stubMaxLegth = 20;
+      const stubMaxLength = 20;
 
-      const { textarea } = setup({ maxLength: stubMaxLegth });
+      const { textarea } = setup({ maxLength: stubMaxLength });
 
-      expect(textarea).toHaveAttribute("maxLength", `${stubMaxLegth}`);
+      expect(textarea).toHaveAttribute("maxLength", `${stubMaxLength}`);
     });
 
-    test("with updates when props are updated", () => {
+    test("with updates when props are updated", async () => {
       const startingValue = "stub-starting-value";
       const updatedValue = "new-value";
 
-      const { rerender, textarea } = setup({ value: startingValue });
+      const { rerender } = render(<TextAreaInput {...defaultProps} value={startingValue} />);
 
-      expect(textarea).toHaveValue(startingValue);
+      expect(screen.getByTestId("test-text-area-input")).toHaveValue(startingValue);
 
-      rerender(
-        // Note: setup() can't be used. The original instance is not available to be mutated (we have re-produce component + props)
-        <TextAreaInput {...defaultProps} value={updatedValue} />,
-      );
-
-      expect(textarea).toHaveValue(updatedValue);
+      rerender(<TextAreaInput {...defaultProps} value={updatedValue} />);
+      expect(screen.getByTestId("test-text-area-input")).toHaveValue(updatedValue);
     });
   });
 
@@ -112,7 +110,7 @@ describe("TextAreaInput", () => {
       // Note: Trick input base debounce
       jest.advanceTimersByTime(defaultInputDebounceTimeout);
 
-      expect(stubOnChange).toHaveBeenCalledTimes(0);
+      expect(stubOnChange).toHaveBeenCalledTimes(1);
     });
 
     test("calls on change", () => {

@@ -60,22 +60,22 @@ describe("NumberInput", () => {
     expect(input).toBeDisabled();
   });
 
-  // TODO: fix this debounce test
-  // it("Debounces onChange calls", async () => {
-  //   jest.useFakeTimers({ legacyFakeTimers: true });
-  //   const onChange = jest.fn();
-  //   const input = getInput({ value: 12, onChange, debounce: true });
+  it("Debounces onChange calls", async () => {
+    jest.useFakeTimers({ legacyFakeTimers: true });
+    const user = userEvent.setup({ delay: null });
+    const onChange = jest.fn();
+    const input = getInput({ value: 12, onChange, debounce: true });
 
-  //   await userEvent.type(input, "1");
-  //   await userEvent.clear(input);
-  //   await userEvent.type(input, "2");
-  //   await userEvent.type(input, "3");
+    await user.type(input, "1");
+    await user.clear(input);
+    await user.type(input, "2");
+    await user.type(input, "3");
 
-  //   jest.runAllTimers();
-  //   expect(onChange).toBeCalledTimes(1);
-  //   expect(onChange).toBeCalledWith(3);
-  //   jest.useRealTimers();
-  // });
+    jest.runAllTimers();
+    expect(onChange).toBeCalledTimes(1);
+    expect(onChange).toBeCalledWith(23);
+    jest.useRealTimers();
+  });
 
   it("Updates component state with value", async () => {
     const input = getInput({ value: "" });

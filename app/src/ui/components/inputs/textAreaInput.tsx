@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import cx from "classnames";
-
-import { BaseInput } from "./baseInput";
-import { InputProps, InputState } from "./common";
+import { useDebounce, useUpdateStateValueOnProps } from "./input-utils";
+import { InputProps } from "./common";
 import { CharacterCount, CharacterTypes } from "./CharacterCount";
 
 export interface TextAreaInputProps extends InputProps<string> {
@@ -12,75 +11,47 @@ export interface TextAreaInputProps extends InputProps<string> {
   characterCountOptions?: CharacterTypes | "off";
 }
 
-export class TextAreaInput extends BaseInput<TextAreaInputProps, InputState> {
-  constructor(props: TextAreaInputProps) {
-    super(props);
-    this.state = { value: props.value ?? "" };
-  }
+export const TextAreaInput = (props: TextAreaInputProps) => {
+  const [state, setState] = useState<{ value: string }>({ value: props.value ?? "" });
 
-  public UNSAFE_componentWillReceiveProps(nextProps: InputProps<string>) {
-    if (nextProps.value !== this.props.value) {
-      this.setState({ value: nextProps.value ?? "" }, () => {
-        this.cancelTimeout();
-      });
+  const debouncedOnChange = useDebounce(props.onChange, props.debounce);
+  useUpdateStateValueOnProps<string>(props.value ?? "", setState);
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>, debounce: boolean) => {
+    const value = e.currentTarget.value;
+
+    setState({ value });
+
+    if (debounce) {
+      debouncedOnChange(value);
+    } else if (props.onChange) {
+      props.onChange(value);
     }
-  }
+  };
 
-  public render() {
-    const { value } = this.state;
+  const TextAreaComponent = (
+    <textarea
+      id={props.name}
+      name={props.name}
+      className={cx("govuk-textarea", { "govuk-input--error": props.hasError })}
+      rows={props.rows}
+      value={state.value}
+      disabled={!!props.disabled}
+      onChange={x => handleChange(x, true)}
+      onBlur={x => handleChange(x, false)}
+      maxLength={props.maxLength}
+      aria-describedby={props.ariaDescribedBy}
+      data-qa={props.qa}
+      aria-label={props.ariaLabel}
+    />
+  );
 
-    const {
-      qa,
-      characterCountOptions,
-      name,
-      rows = 5,
-      hasError,
-      ariaDescribedBy,
-      maxLength,
-      ariaLabel,
-      ...props
-    } = this.props;
-
-    const textareaElement = (
-      <textarea
-        id={name}
-        name={name}
-        className={cx("govuk-textarea", { "govuk-input--error": hasError })}
-        rows={rows}
-        value={value}
-        disabled={!!props.disabled}
-        onChange={x => this.handleChange(x, true)}
-        onBlur={x => this.handleChange(x, false)}
-        maxLength={maxLength}
-        aria-describedby={ariaDescribedBy}
-        data-qa={qa}
-        aria-label={ariaLabel}
-      />
-    );
-
-    return characterCountOptions === "off" ? (
-      // Note: We treat optional param as a default config below
-      textareaElement
-    ) : (
-      <CharacterCount type="ascending" count={value.length} {...characterCountOptions}>
-        {textareaElement}
-      </CharacterCount>
-    );
-  }
-
-  private handleChange(e: React.ChangeEvent<HTMLTextAreaElement>, allowDebounce: boolean) {
-    const inputValue = e.currentTarget.value;
-
-    if (this.state.value !== inputValue) {
-      this.setState({ value: inputValue }, () => {
-        this.debounce(() => this.changeNow(inputValue), allowDebounce);
-      });
-    }
-  }
-
-  private changeNow(value: string) {
-    this.cancelTimeout();
-
-    this.props.onChange?.(value);
-  }
-}
+  return props.characterCountOptions === "off" ? (
+    // Note: We treat optional param as a default config below
+    TextAreaComponent
+  ) : (
+    <CharacterCount type="ascending" count={state.value.length} {...props.characterCountOptions}>
+      {TextAreaComponent}
+    </CharacterCount>
+  );
+};

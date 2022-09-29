@@ -4,6 +4,8 @@ import TestBed, { TestBedContent } from "@shared/TestBed";
 import { PostcodeEdit, PostcodeProps } from "./PostcodeEdit";
 
 describe("PostcodeEdit", () => {
+  afterEach(jest.clearAllMocks);
+
   const stubContent = {
     features: {
       postcode: {
@@ -51,6 +53,6 @@ describe("PostcodeEdit", () => {
     await userEvent.type(input, "ED1 5ZX");
     const submit = getByText("Save");
     await userEvent.click(submit);
-    expect(defaultProps.onUpdate).toHaveBeenCalledWith(true, { postcode: "SN2 1ET" });
+    expect(defaultProps.onUpdate).toHaveBeenCalledWith(true, { postcode: "ED1 5ZX" });
   });
 });
