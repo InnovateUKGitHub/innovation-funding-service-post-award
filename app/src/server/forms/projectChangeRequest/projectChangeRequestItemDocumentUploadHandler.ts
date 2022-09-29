@@ -1,20 +1,18 @@
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { IContext, IFileWrapper, ILinkInfo } from "@framework/types";
 import { configuration } from "@server/features/common";
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
-import { GetPCRByIdQuery } from "@server/features/pcrs/getPCRByIdQuery";
 import { IFormBody, IFormButton, MultipleFileFormHandlerBase } from "@server/forms/formHandlerBase";
 import { PCRPrepareItemRoute, ProjectChangeRequestPrepareItemParams } from "@ui/containers";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { PcrWorkflow } from "@ui/containers/pcrs/pcrWorkflow";
-import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 
 export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileFormHandlerBase<
   ProjectChangeRequestPrepareItemParams,
   "multipleDocuments"
 > {
   constructor() {
-    super(PCRPrepareItemRoute, ["uploadFile", "uploadFileAndContinue"], "multipleDocuments");
+    super(PCRPrepareItemRoute, ["uploadFile"], "multipleDocuments");
   }
 
   protected async getDto(
@@ -36,26 +34,11 @@ export class ProjectChangeRequestItemDocumentUploadHandler extends MultipleFileF
     button: IFormButton,
     dto: MultipleDocumentUploadDto,
   ): Promise<ILinkInfo> {
-    if (dto.files.length || button.name === "uploadFile") {
+    // Run command only if any files have been uploaded.
+    if (dto.files.length) {
       await context.runCommand(
         new UploadProjectChangeRequestDocumentOrItemDocumentCommand(params.projectId, params.itemId, dto),
       );
-    }
-
-    if (button.name === "uploadFileAndContinue") {
-      const itemDto = await context
-        .runQuery(new GetPCRByIdQuery(params.projectId, params.pcrId))
-        .then(pcr => pcr.items.find(item => item.id === params.itemId));
-      const workflow = PcrWorkflow.getWorkflow(itemDto, params.step);
-      if (workflow) {
-        const nextStep = workflow.getNextStepInfo();
-        return PCRPrepareItemRoute.getLink({
-          projectId: params.projectId,
-          pcrId: params.pcrId,
-          itemId: params.itemId,
-          step: nextStep && nextStep.stepNumber,
-        });
-      }
     }
 
     return PCRPrepareItemRoute.getLink(params);

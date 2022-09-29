@@ -15,9 +15,15 @@ interface InnerProps {
 }
 class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & InnerProps> {
   render(): React.ReactNode {
-    const { documentsEditor } = this.props;
+    const { documentsEditor, pcrId, projectId } = this.props;
 
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
+
+    // Get the step-less review-before-submit page.
+    const back = this.props.routes.pcrPrepareReasoning.getLink({
+      projectId: projectId,
+      pcrId: pcrId,
+    });
 
     return (
       <ACC.Loader
@@ -43,17 +49,7 @@ class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & 
                     update={(dto, files) => (dto.files = files || [])}
                     validation={documentsEditor.validator.files}
                   />
-                </UploadForm.Fieldset>
 
-                <UploadForm.Fieldset>
-                  <ACC.DocumentEdit
-                    qa="prepare-files-documents"
-                    onRemove={document => this.props.onFileDelete(documentsEditor.data, document)}
-                    documents={documents}
-                  />
-                </UploadForm.Fieldset>
-
-                <UploadForm.Fieldset className="govuk-!-margin-top-4">
                   <UploadForm.Button
                     name="uploadFile"
                     styling="Secondary"
@@ -61,12 +57,19 @@ class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & 
                   >
                     <ACC.Content value={x => x.pcrReasoningPrepareFiles.documentMessages.uploadDocumentsLabel} />
                   </UploadForm.Button>
-
-                  <UploadForm.Button name="uploadFileAndContinue" styling="Primary">
-                    <ACC.Content value={x => x.pcrReasoningPrepareFiles.pcrItem.submitButton} />
-                  </UploadForm.Button>
                 </UploadForm.Fieldset>
               </UploadForm.Form>
+              <ACC.Section>
+                <ACC.DocumentEdit
+                  qa="prepare-files-documents"
+                  onRemove={document => this.props.onFileDelete(documentsEditor.data, document)}
+                  documents={documents}
+                />
+              </ACC.Section>
+
+              <ACC.Link styling="PrimaryButton" route={back}>
+                <ACC.Content value={x => x.pcrReasoningPrepareFiles.pcrItem.submitButton} />
+              </ACC.Link>
             </ACC.Section>
           </>
         )}
