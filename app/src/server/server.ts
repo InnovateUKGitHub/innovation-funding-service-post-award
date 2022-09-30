@@ -137,7 +137,7 @@ export class Server {
   }
 
   // Note: We are making non-user sensitive queries fetch all cacheable data!
-  private readonly stubEmail = configuration.salesforce.serviceUsername;
+  private readonly stubEmail = configuration.salesforceServiceUser.serviceUsername;
 
   private async primeCaches(): Promise<void> {
     const cacheContext = contextProvider.start({ user: { email: this.stubEmail } });

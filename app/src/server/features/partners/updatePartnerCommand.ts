@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { BadRequestError, CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
+import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import {
   Authorisation,
   BankCheckStatus,
@@ -9,19 +9,23 @@ import {
   PartnerStatus,
   ProjectRole,
 } from "@framework/types";
-import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
+import { BankCheckVerificationResultFields } from "@framework/types/bankCheck";
+import { isBoolean, isNumber } from "@framework/util";
+import { BadRequestError, CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
+import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummary";
+import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import {
   BankCheckStatusMapper,
   BankDetailsTaskStatusMapper,
   PartnerStatusMapper,
 } from "@server/features/partners/mapToPartnerDto";
-import { isBoolean, isNumber } from "@framework/util";
-import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
-import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummary";
-import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { BankCheckVerificationResultFields } from "@framework/types/bankCheck";
+import { ISalesforcePartner } from "@server/repositories";
+import { Updatable } from "@server/repositories/salesforceRepositoryBase";
+import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import { GetProjectStatusQuery } from "../projects";
+import { GetBankVerificationDetailsByIdQuery } from "./getBankVerificationDetailsByIdQuery";
 
+type PartnerUpdatable = Updatable<ISalesforcePartner>;
 export class UpdatePartnerCommand extends CommandBase<boolean> {
   constructor(
     private readonly partner: PartnerDto,
@@ -51,7 +55,9 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
 
     this.validateRequest(originalDto, partnerDocuments);
 
-    const update = {};
+    const update: PartnerUpdatable = {
+      Id: this.partner.id,
+    };
 
     if (this.partner.partnerStatus === PartnerStatus.Pending) {
       if (this.partner.bankCheckStatus === BankCheckStatus.NotValidated && this.validateBankDetails) {
@@ -69,8 +75,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
 
     await context.repositories.partners.update({
       ...update,
-      Id: this.partner.id,
-      Acc_Postcode__c: this.partner.postcode || undefined,
+      Acc_Postcode__c: this.partner.postcode ?? undefined,
       Acc_NewForecastNeeded__c: isBoolean(this.partner.newForecastNeeded) ? this.partner.newForecastNeeded : undefined,
       Acc_ParticipantStatus__c: new PartnerStatusMapper().mapToSalesforce(this.partner.partnerStatus),
       Acc_BankCheckCompleted__c: new BankDetailsTaskStatusMapper().mapToSalesforce(this.partner.bankDetailsTaskStatus),
@@ -79,22 +84,22 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     return true;
   }
 
-  private async updateBankDetails(update: any) {
+  private async updateBankDetails(update: PartnerUpdatable) {
     const { bankDetails } = this.partner;
-    update.Acc_RegistrationNumber__c = bankDetails.companyNumber;
-    update.Acc_FirstName__c = bankDetails.firstName;
-    update.Acc_LastName__c = bankDetails.lastName;
-    update.Acc_AddressStreet__c = bankDetails.address.accountStreet;
-    update.Acc_AddressTown__c = bankDetails.address.accountTownOrCity;
-    update.Acc_AddressBuildingName__c = bankDetails.address.accountBuilding;
-    update.Acc_AddressLocality__c = bankDetails.address.accountLocality;
-    update.Acc_AddressPostcode__c = bankDetails.address.accountPostcode;
+    update.Acc_RegistrationNumber__c = bankDetails.companyNumber ?? undefined;
+    update.Acc_FirstName__c = bankDetails.firstName ?? undefined;
+    update.Acc_LastName__c = bankDetails.lastName ?? undefined;
+    update.Acc_AddressStreet__c = bankDetails.address.accountStreet ?? undefined;
+    update.Acc_AddressTown__c = bankDetails.address.accountTownOrCity ?? undefined;
+    update.Acc_AddressBuildingName__c = bankDetails.address.accountBuilding ?? undefined;
+    update.Acc_AddressLocality__c = bankDetails.address.accountLocality ?? undefined;
+    update.Acc_AddressPostcode__c = bankDetails.address.accountPostcode ?? undefined;
   }
 
   private async bankCheckValidate(
     originalDto: PartnerDto,
     partnerDocuments: DocumentSummaryDto[],
-    update: any,
+    update: PartnerUpdatable,
     context: IContext,
   ) {
     const { bankDetails } = this.partner;
@@ -123,7 +128,7 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     }
 
     update.Acc_ValidationCheckPassed__c = ValidationResult.checkPassed;
-    update.Acc_Iban__c = ValidationResult.iban;
+    update.Acc_Iban__c = ValidationResult.iban ?? undefined;
     update.Acc_AccountNumber__c = bankDetails.accountNumber;
     update.Acc_SortCode__c = bankDetails.sortCode;
 
@@ -136,40 +141,64 @@ export class UpdatePartnerCommand extends CommandBase<boolean> {
     this.updateBankDetails(update);
   }
 
-  private async bankCheckVerify(update: any, context: IContext) {
-    const { bankDetails } = this.partner;
-    const verifyInputs = {
+  /**
+   * Verify a project partner's bank account number/sort code and address.
+   *
+   * @param update The pass-by-reference object of items that we wish to update
+   * @param context The user context to run upon.
+   */
+  private async bankCheckVerify(update: PartnerUpdatable, context: IContext) {
+    // When a user wants to verify their bank details, they will be on a "confirmation screen".
+    // This confirmation screen displays their account number and sort code with a mask.
+    // (e.g. User will send in XX4749 and XXXX8818, so we can't verify on that!)
+    //
+    // To solve this, we grab the plaintext sort code/account number from Salesforce
+    // using the Bank Details service user.
+    const unmaskedPartnerDto = await context
+      .asBankDetailsValidationUser()
+      .runQuery(new GetBankVerificationDetailsByIdQuery(this.partner.id));
+
+    // Grab the bank details from the unmasked partner.
+    const { bankDetails } = unmaskedPartnerDto;
+
+    // Run a verification against the bank details that we have re-obtained from Salesforce.
+    const bankCheckVerifyResult = await context.resources.bankCheckService.verify({
       companyName: this.partner.name,
       registrationNumber: bankDetails.companyNumber ?? "",
       sortcode: bankDetails.sortCode ?? "",
       accountNumber: bankDetails.accountNumber ?? "",
-      // As these are business accounts they do not have a named account holder associated, however these values seem to be required by the Experian Verify API. As such, we are hardcoding dummy values for them here.
+      // As these are business accounts they do not have a named account holder associated,
+      // however these values seem to be required by the Experian Verify API.
+      // As such, we are hardcoding dummy values for them here.
       firstName: "NA",
       lastName: "NA",
       address: {
         organisation: "",
-        buildingName: bankDetails.address ? bankDetails.address.accountBuilding : "",
-        street: bankDetails.address ? bankDetails.address.accountStreet : "",
-        locality: bankDetails.address ? bankDetails.address.accountLocality : "",
-        town: bankDetails.address ? bankDetails.address.accountTownOrCity : "",
-        postcode: bankDetails.address ? bankDetails.address.accountPostcode : "",
+        buildingName: bankDetails.address?.accountBuilding ?? "",
+        street: bankDetails.address?.accountStreet ?? "",
+        locality: bankDetails.address?.accountLocality ?? "",
+        town: bankDetails.address?.accountTownOrCity ?? "",
+        postcode: bankDetails.address?.accountPostcode ?? "",
       },
-    };
-    const bankCheckVerifyResult = await context.resources.bankCheckService.verify(verifyInputs);
+    });
     const { VerificationResult } = bankCheckVerifyResult;
 
     if (!this.validateVerifyResponse(VerificationResult, context)) {
+      // If we have failed the test, mark the verification as failed.
       update.Acc_BankCheckState__c = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.VerificationFailed);
     } else {
+      // Otherwise, mark as passed and move the partner onto the "complete" stage.
       update.Acc_BankCheckState__c = new BankCheckStatusMapper().mapToSalesforce(BankCheckStatus.VerificationPassed);
       this.partner.bankDetailsTaskStatus = BankDetailsTaskStatus.Complete;
     }
 
-    update.Acc_AddressScore__c = VerificationResult.addressScore;
-    update.Acc_CompanyNameScore__c = VerificationResult.companyNameScore;
-    update.Acc_PersonalDetailsScore__c = VerificationResult.personalDetailsScore;
-    update.Acc_RegNumberScore__c = VerificationResult.regNumberScore;
+    // Save the Experian verification score to Salesforce
+    update.Acc_AddressScore__c = VerificationResult.addressScore ?? undefined;
+    update.Acc_CompanyNameScore__c = VerificationResult.companyNameScore ?? undefined;
+    update.Acc_PersonalDetailsScore__c = VerificationResult.personalDetailsScore ?? undefined;
+    update.Acc_RegNumberScore__c = VerificationResult.regNumberScore ?? undefined;
 
+    // Save Experian errors and warnings to Salesforce
     if (VerificationResult.conditions) {
       update.Acc_VerificationConditionsSeverity__c = VerificationResult.conditions.severity;
       update.Acc_VerificationConditionsCode__c = VerificationResult.conditions.code?.toString() || "";

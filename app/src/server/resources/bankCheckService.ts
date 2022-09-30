@@ -1,4 +1,4 @@
-import { configuration, ConfigurationError } from "@server/features/common";
+import { BadRequestError, configuration, ConfigurationError } from "@server/features/common";
 import {
   AccountDetails,
   BankCheckResult,
@@ -25,7 +25,24 @@ export interface IVerifyBankCheckInputs {
 }
 
 export class BankCheckService {
+  /**
+   * Ensure that input does not have masking characters, like those
+   * generated and included by Salesforce.
+   *
+   * @param sortcode The user's sort code
+   * @param accountNumber The user's account number
+   */
+  public checkForUnmaskedInput(sortcode: string, accountNumber: string): void {
+    if (sortcode.toLowerCase().includes("x")) {
+      throw new BadRequestError("Sort code includes masking characters");
+    }
+    if (accountNumber.toLowerCase().includes("x")) {
+      throw new BadRequestError("Account number includes masking characters");
+    }
+  }
+
   public async validate(sortcode: string, accountNumber: string): Promise<BankCheckValidationResult> {
+    this.checkForUnmaskedInput(sortcode, accountNumber);
     return await this.fetchBankQuery<BankDetails, BankCheckValidationResult>("/experianValidate", {
       sortcode,
       accountNumber,
@@ -33,6 +50,7 @@ export class BankCheckService {
   }
 
   public async verify(accountDetails: IVerifyBankCheckInputs): Promise<BankCheckVerificationResult> {
+    this.checkForUnmaskedInput(accountDetails.sortcode, accountDetails.accountNumber);
     return await this.fetchBankQuery<AccountDetails, BankCheckVerificationResult>("/experianVerify", accountDetails);
   }
 

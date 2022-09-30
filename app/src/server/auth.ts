@@ -80,11 +80,11 @@ router.post(successfulValidationRoute, (req, res) =>
 );
 
 router.use((req, res, next) => {
-  if (!configuration.salesforce.serviceUsername) {
+  if (!configuration.salesforceServiceUser.serviceUsername) {
     throw Error("Missing 'configuration.salesforce.serviceUsername' value");
   }
 
-  const { salesforce, sso } = configuration;
+  const { salesforceServiceUser, sso } = configuration;
   if (sso.enabled && req.url === "/") {
     return res.redirect("/projects/dashboard");
   }
@@ -99,7 +99,7 @@ router.use((req, res, next) => {
     // if user not logged in but we aren't using sso then set default user
     req.session ??= {};
     req.session.user ??= {};
-    req.session.user.email ??= salesforce.serviceUsername;
+    req.session.user.email ??= salesforceServiceUser.serviceUsername;
     return next();
   }
 

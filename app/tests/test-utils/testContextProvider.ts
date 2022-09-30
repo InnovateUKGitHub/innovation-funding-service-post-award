@@ -78,4 +78,8 @@ export class TestContext implements IContext {
   public asSystemUser() {
     return this;
   }
+
+  public asBankDetailsValidationUser() {
+    return this;
+  }
 }

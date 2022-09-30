@@ -66,9 +66,9 @@ export class Context implements Framework.IContext {
     this.config = Common.configuration;
 
     const salesforceConfig = {
-      clientId: this.config.salesforce.clientId,
-      connectionUrl: this.config.salesforce.connectionUrl,
-      serviceUsername: this.config.salesforce.serviceUsername,
+      clientId: this.config.salesforceServiceUser.clientId,
+      connectionUrl: this.config.salesforceServiceUser.connectionUrl,
+      serviceUsername: this.config.salesforceServiceUser.serviceUsername,
     };
 
     this.salesforceConnectionDetails = {
@@ -244,15 +244,40 @@ export class Context implements Framework.IContext {
     return this.runSync(runnable);
   }
 
-  // allows context to be escalated to the system user
-  // use with discretion!!!
-  public asSystemUser(): Framework.IContext {
-    const serviceUser = this.config.salesforce.serviceUsername;
-    if (this.user.email !== serviceUser) {
-      this.logger.info("Escalating to service user", this.user.email, serviceUser);
-      return new Context({ email: serviceUser });
+  /**
+   * Elevate a user context to a different user context.
+   *
+   * @param user The Salesforce user e-mail address
+   * @returns An elevated IContext as the passed in user
+   * @author Leondro Lio <leondro.lio@iuk.ukri.org>
+   */
+  private elevateUserAs(user: string): Framework.IContext {
+    if (this.user.email !== user) {
+      return new Context({ email: user });
     }
     return this;
+  }
+
+  /**
+   * Elevate a user context to the system user context
+   *
+   * @returns An elevated IContext as the system user
+   */
+  public asSystemUser(): Framework.IContext {
+    const serviceUser = this.config.salesforceServiceUser.serviceUsername;
+    this.logger.info(`Escalating from ${this.user.email} to system user ${serviceUser}`);
+    return this.elevateUserAs(serviceUser);
+  }
+
+  /**
+   * Elevate a user context to the bank details validation user context.
+   *
+   * @returns An elevated IContext as the bank details validation user
+   */
+  public asBankDetailsValidationUser(): Framework.IContext {
+    const serviceUser = this.config.bankDetailsValidationUser.serviceUsername;
+    this.logger.info(`Escalating from ${this.user.email} to banking user ${serviceUser}`);
+    return this.elevateUserAs(serviceUser);
   }
 
   // helper function for repositories that need record type ids
