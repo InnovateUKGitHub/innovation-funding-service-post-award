@@ -73,6 +73,7 @@ export interface IContext {
   user: ISessionUser;
   startTimer: (message: string) => ITimer;
   asSystemUser: () => IContext;
+  asBankDetailsValidationUser: () => IContext;
   internationalisation: IInternationalisation;
 }
 

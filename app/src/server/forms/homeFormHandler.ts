@@ -23,7 +23,7 @@ export class HomeFormHandler implements IFormHandler {
     }
 
     if (dto.isReset) {
-      req.session.user.email = configuration.salesforce.serviceUsername;
+      req.session.user.email = configuration.salesforceServiceUser.serviceUsername;
     } else if (dto.user) {
       req.session.user.email = dto.user;
     }

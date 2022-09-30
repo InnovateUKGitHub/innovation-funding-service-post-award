@@ -10,9 +10,9 @@ export async function checkSalesforce(logger: ILogger): Promise<HealthCheckResul
   const check = { id: "salesforce" };
 
   const tokenPayload = {
-    clientId: configuration.salesforce.clientId,
-    connectionUrl: configuration.salesforce.connectionUrl,
-    currentUsername: configuration.salesforce.serviceUsername,
+    clientId: configuration.salesforceServiceUser.clientId,
+    connectionUrl: configuration.salesforceServiceUser.connectionUrl,
+    currentUsername: configuration.salesforceServiceUser.serviceUsername,
   };
 
   try {

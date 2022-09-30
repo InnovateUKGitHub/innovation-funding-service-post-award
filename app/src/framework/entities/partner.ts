@@ -1,5 +1,4 @@
 import { PCROrganisationType } from "@framework/constants";
-
 export interface Partner {
   id: string;
   accountId: string;
@@ -70,3 +69,19 @@ export interface Partner {
   remainingParticipantGrant: number;
   isNonFunded: boolean;
 }
+
+export type PartnerBankDetails = Pick<
+  Partner,
+  | "id"
+  | "sortCode"
+  | "accountNumber"
+  | "firstName"
+  | "lastName"
+  | "accountStreet"
+  | "accountBuilding"
+  | "accountLocality"
+  | "accountPostcode"
+  | "accountTownOrCity"
+  | "accountId"
+  | "companyNumber"
+>;

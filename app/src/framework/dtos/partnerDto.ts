@@ -42,6 +42,12 @@ export interface BankDetails {
   address: AccountAddress;
 }
 
+export interface PartnerBankDetailsDto {
+  id: string;
+  accountId: string;
+  bankDetails: BankDetails;
+}
+
 export interface PartnerDto {
   id: string;
   type: string;

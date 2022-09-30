@@ -17,6 +17,7 @@ export * from "./monitoringReportResponseRepository";
 export * from "./loanRepository";
 export * from "./monitoringReportStatusChangeRepository";
 export * from "./partnersRepository";
+export * from "./partnerBankDetailsRepository";
 export * from "./pcrSpendProfileRepository";
 export * from "./projectChangeRequestRepository";
 export * from "./projectChangeRequestStatusChangeRepository";
