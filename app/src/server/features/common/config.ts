@@ -9,6 +9,12 @@ const getFeatureFlagValue = (value: string | undefined, defaultValue: boolean) =
   return value === "true" ?? defaultValue;
 };
 
+interface SalesforceUserConfig {
+  readonly clientId: string;
+  readonly connectionUrl: string;
+  readonly serviceUsername: string;
+}
+
 export interface IConfig {
   readonly build: string;
 
@@ -43,12 +49,8 @@ export interface IConfig {
 
   readonly prettyLogs: boolean;
 
-  readonly salesforce: {
-    readonly clientId: string;
-    readonly connectionUrl: string;
-    // @TODO: Remove
-    readonly serviceUsername: string;
-  };
+  readonly salesforceServiceUser: SalesforceUserConfig;
+  readonly bankDetailsValidationUser: SalesforceUserConfig;
 
   readonly serverUrl: string;
 
@@ -118,10 +120,15 @@ const features: IFeatureFlags = {
 const logLevel = parseLogLevel((process.env.LOG_LEVEL || process.env.LOGLEVEL) ?? "ERROR");
 const prettyLogs = process.env.PRETTY_LOGS === "true";
 
-const salesforce = {
+const salesforceServiceUser = {
   clientId: process.env.SALESFORCE_CLIENT_ID ?? "",
   connectionUrl: process.env.SALESFORCE_CONNECTION_URL ?? "",
   serviceUsername: (process.env.SALESFORCE_USERNAME || process.env.SALESFORCEUSERNAME) ?? "",
+};
+
+const bankDetailsValidationUser = {
+  ...salesforceServiceUser,
+  serviceUsername: process.env.SALESFORCE_BANK_DETAILS_VALIDATION_USERNAME ?? "",
 };
 
 const serverUrl = process.env.SERVER_URL ?? "";
@@ -218,7 +225,8 @@ export const configuration: IConfig = {
   logLevel,
   options,
   prettyLogs,
-  salesforce,
+  salesforceServiceUser,
+  bankDetailsValidationUser,
   serverUrl,
   companiesHouse,
   sil,

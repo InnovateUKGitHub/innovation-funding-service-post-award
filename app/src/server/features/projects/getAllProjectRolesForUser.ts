@@ -15,7 +15,10 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
 
     if (!email) {
       return new Authorisation({});
-    } else if (email === context.config.salesforce.serviceUsername) {
+    } else if (
+      email === context.config.salesforceServiceUser.serviceUsername ||
+      email === context.config.bankDetailsValidationUser.serviceUsername
+    ) {
       return new Authorisation(
         await context.caches.projectRoles.fetchAsync(email, () => this.getServiceAccountRoles(context)),
       );

@@ -69,7 +69,13 @@ export class TestConfig implements IConfig {
 
   public prettyLogs = false;
 
-  public salesforce = {
+  public salesforceServiceUser = {
+    clientId: "",
+    connectionUrl: "",
+    serviceUsername: "",
+  };
+
+  public bankDetailsValidationUser = {
     clientId: "",
     connectionUrl: "",
     serviceUsername: "",
