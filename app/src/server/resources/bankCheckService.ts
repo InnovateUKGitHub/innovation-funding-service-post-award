@@ -6,6 +6,7 @@ import {
   BankCheckVerificationResult,
   BankDetails,
 } from "@framework/types/bankCheck";
+import { Logger } from "@shared/developmentLogger";
 
 export interface IVerifyBankCheckInputs {
   companyName: string;
@@ -25,6 +26,8 @@ export interface IVerifyBankCheckInputs {
 }
 
 export class BankCheckService {
+  private logger: Logger = new Logger("BankCheckService");
+
   /**
    * Ensure that input does not have masking characters, like those
    * generated and included by Salesforce.
@@ -76,9 +79,12 @@ export class BankCheckService {
       body: JSON.stringify(payload),
     });
 
-    if (!request.ok) throw Error(`Failed querying SIL service for '${path}'`);
-
-    return await request.json();
+    if (request.ok) {
+      return await request.json();
+    } else {
+      this.logger.debug("Failed querying Experian via SIL", `${bankCheckUrl}${path}`, payload, await request.json());
+      throw Error("Failed querying Experian via SIL");
+    }
   }
 }
 
