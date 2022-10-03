@@ -108,8 +108,9 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
 
       const files: IFileWrapper[] = Array.isArray(req.files) ? req.files.map(x => new ServerFileWrapper(x)) : [];
       const description = Number(body.description) || undefined;
+      const partnerId = body.partnerId;
 
-      const documents: MultipleDocumentUploadDto = { files, description };
+      const documents: MultipleDocumentUploadDto = { files, description, partnerId };
 
       return { documents, ...p };
     };

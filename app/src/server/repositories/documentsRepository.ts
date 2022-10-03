@@ -3,7 +3,7 @@ import { Connection } from "jsforce";
 import { ContentDocumentLinkRepository } from "@server/repositories/contentDocumentLinkRepository";
 import { ContentDocumentRepository } from "@server/repositories/contentDocumentRepository";
 import { ContentVersionRepository } from "@server/repositories/contentVersionRepository";
-import { ILogger } from "@shared/developmentLogger";
+import { ILogger, Logger } from "@shared/developmentLogger";
 import { ServerFileWrapper } from "@server/apis/controllerBase";
 import { DocumentEntity } from "@framework/entities/document";
 import { DocumentDescriptionMapper, SalesforceDocumentMapper } from "@server/repositories/mappers/documentMapper";
@@ -12,6 +12,7 @@ import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { IFileWrapper } from "@framework/types";
 
 export class DocumentsRepository {
+  private readonly logger: Logger = new Logger("DocumentsRepository");
   private readonly contentVersionRepository: ContentVersionRepository;
   private readonly contentDocumentLinkRepository: ContentDocumentLinkRepository;
   private readonly contentDocumentRepository: ContentDocumentRepository;
@@ -33,6 +34,8 @@ export class DocumentsRepository {
     recordId: string,
     description?: DocumentDescription,
   ): Promise<string> {
+    this.logger.debug("Adding files", recordId, description);
+
     const sfDescription = new DocumentDescriptionMapper().mapToSalesforceDocumentDescription(description);
     const contentVersionId = await this.contentVersionRepository.insertDocument(
       document as ServerFileWrapper,

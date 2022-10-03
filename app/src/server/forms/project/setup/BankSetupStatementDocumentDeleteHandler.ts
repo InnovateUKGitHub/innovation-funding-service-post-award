@@ -36,7 +36,7 @@ export class BankSetupStatementDocumentDeleteHandler extends StandardFormHandler
     _button: IFormButton,
     dto: Document,
   ): Promise<ILinkInfo> {
-    await context.runCommand(new DeletePartnerDocumentCommand(dto.id, params.projectId, params.partnerId));
+    await context.runCommand(new DeletePartnerDocumentCommand(params.projectId, params.partnerId, dto.id));
 
     return ProjectSetupBankStatementRoute.getLink(params);
   }

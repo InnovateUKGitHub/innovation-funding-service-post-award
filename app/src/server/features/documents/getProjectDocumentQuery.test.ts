@@ -7,7 +7,7 @@ describe("GetProjectDocumentQuery", () => {
     const context = new TestContext();
     const project = context.testData.createProject();
 
-    const document = context.testData.createDocument(project.Id, "cat", "jpg", "Cher", "file content");
+    const document = context.testData.createDocument(project.Id, "cat", "jpg", "Cher", "Meow Inc", "file content");
 
     const query = new GetProjectDocumentQuery(project.Id, document.Id);
     const result = await context.runQuery(query).then(x => x as DocumentDto);

@@ -253,6 +253,7 @@ describe("UploadClaimDocumentCommand", () => {
           "jpg",
           "",
           "",
+          "",
           "IAR",
           x => (x.Acc_UploadedByMe__c = true),
         ).ContentDocumentId;

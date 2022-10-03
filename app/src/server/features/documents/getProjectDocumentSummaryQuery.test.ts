@@ -1,9 +1,9 @@
-import { GetProjectDocumentsQuery } from "@server/features/documents/getProjectDocumentsSummary";
+import { GetProjectDocumentSummaryQuery } from "@server/features/documents/getProjectDocumentSummaryQuery";
 import { Authorisation, DocumentDescription, ProjectRole } from "@framework/types";
 import { DateTime } from "luxon";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
-describe("GetProjectDocumentsQuery", () => {
+describe("GetProjectDocumentSummaryQuery", () => {
   it("should return all documents associated with the project", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
@@ -11,7 +11,7 @@ describe("GetProjectDocumentsQuery", () => {
     context.testData.createDocument(project.Id, "report1", "pdf");
     context.testData.createDocument(project.Id, "report2", "pdf");
 
-    const query = new GetProjectDocumentsQuery(project.Id);
+    const query = new GetProjectDocumentSummaryQuery(project.Id);
     const docs = await context.runQuery(query);
     expect(docs).toHaveLength(2);
   });
@@ -24,7 +24,7 @@ describe("GetProjectDocumentsQuery", () => {
     context.testData.createDocument(project1.Id, "report1", "pdf");
     context.testData.createDocument(project1.Id, "report2", "pdf");
 
-    const query = new GetProjectDocumentsQuery(project2.Id);
+    const query = new GetProjectDocumentSummaryQuery(project2.Id);
     const docs = await context.runQuery(query);
     expect(docs).toHaveLength(0);
   });
@@ -46,7 +46,7 @@ describe("GetProjectDocumentsQuery", () => {
     );
     document.Description = expectedDescription;
 
-    const query = new GetProjectDocumentsQuery(project.Id);
+    const query = new GetProjectDocumentSummaryQuery(project.Id);
     const result = await context.runQuery(query).then(x => x[0]);
 
     expect(result.id).toBe(document.Id);
@@ -61,12 +61,21 @@ describe("GetProjectDocumentsQuery", () => {
     const project = context.testData.createProject();
 
     const documents = context.testData.range(3, i => {
-      return context.testData.createDocument(project.Id, undefined, undefined, undefined, undefined, undefined, x => {
-        x.CreatedDate = DateTime.local().minus({ days: 1 }).plus({ hours: i }).toISO();
-      });
+      return context.testData.createDocument(
+        project.Id,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        x => {
+          x.CreatedDate = DateTime.local().minus({ days: 1 }).plus({ hours: i }).toISO();
+        },
+      );
     });
 
-    const query = new GetProjectDocumentsQuery(project.Id);
+    const query = new GetProjectDocumentSummaryQuery(project.Id);
     const result = await context.runQuery(query);
 
     const expected = documents.map(x => x.Id).reverse();
@@ -79,7 +88,7 @@ describe("GetProjectDocumentsQuery", () => {
 
     const document = context.testData.createDocument(project.Id, "report1", "pdf");
 
-    const query = new GetProjectDocumentsQuery(project.Id);
+    const query = new GetProjectDocumentSummaryQuery(project.Id);
     const result = await context.runQuery(query).then(x => x[0]);
 
     expect(result.link).toBe(`/api/documents/projects/${project.Id}/${document.Id}/content`);
@@ -88,7 +97,7 @@ describe("GetProjectDocumentsQuery", () => {
   test("accessControl - Project Monitoring officer passes", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
-    const command = new GetProjectDocumentsQuery(project.Id);
+    const command = new GetProjectDocumentSummaryQuery(project.Id);
     const auth = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.MonitoringOfficer,
@@ -102,7 +111,7 @@ describe("GetProjectDocumentsQuery", () => {
   test("accessControl - all other roles fail", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();
-    const command = new GetProjectDocumentsQuery(project.Id);
+    const command = new GetProjectDocumentSummaryQuery(project.Id);
     const auth = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.FinancialContact | ProjectRole.ProjectManager,

@@ -414,7 +414,7 @@ const DropdownListField = <T extends {}>(props: DropdownFieldProps<T> & Internal
 };
 
 const HiddenField = <T extends {}>(props: HiddenFieldProps<T> & InternalFieldProps<T>) => (
-  <input type="hidden" value={props.value((props as any as InternalFieldProps<T>).formData) || ""} />
+  <input type="hidden" name={props.name} value={props.value((props as any as InternalFieldProps<T>).formData) || ""} />
 );
 
 const buttonContentConfig = {

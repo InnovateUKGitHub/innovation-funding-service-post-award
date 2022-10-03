@@ -7,6 +7,7 @@ import { formatDate, getFileSize } from "@framework/util";
 import { DateFormat } from "@framework/constants/enums";
 
 import { DocumentsBase } from "./documents.interface";
+import { DocumentSummaryDto } from "@framework/dtos";
 
 const fuzzySearch = <T>(value: string, items: T[], keysToSearch: string[]) => {
   const valueToSearch = value.trim();
@@ -27,7 +28,7 @@ const fuzzySearch = <T>(value: string, items: T[], keysToSearch: string[]) => {
   return initialResults.filter(x => Number(x.score?.toFixed(2)) <= scoreThreshold);
 };
 
-const filterItems = (valueToSearch: string, items: DocumentsBase["documents"]) => {
+const filterItems = <T extends DocumentSummaryDto>(valueToSearch: string, items: T[]) => {
   if (!valueToSearch.trim().length) return items;
 
   const preParsedItems = items.map(x => {
@@ -48,12 +49,12 @@ const filterItems = (valueToSearch: string, items: DocumentsBase["documents"]) =
   return items.filter(x => filteredItemsIds.includes(x.id));
 };
 
-export function useDocumentSearch(disableSearch: boolean, originalDocuments: DocumentsBase["documents"]) {
+export function useDocumentSearch<T extends DocumentSummaryDto>(disableSearch: boolean, originalDocuments: T[]) {
   const { features } = useStores().config.getConfig();
   const { isClient } = useMounted();
 
   const [filterValue, setFilterValue] = useState<string>("");
-  const [documents, setDocuments] = useState<DocumentsBase["documents"]>(originalDocuments);
+  const [documents, setDocuments] = useState<T[]>(originalDocuments);
 
   const minDocsForSearch = originalDocuments.length >= features.searchDocsMinThreshold;
   const enableFilter = isClient && !disableSearch;

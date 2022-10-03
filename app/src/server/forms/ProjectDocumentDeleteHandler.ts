@@ -2,17 +2,15 @@ import { IContext, ILinkInfo } from "@framework/types";
 import { MultipleDocumentUploadDto } from "@framework/dtos";
 
 import { configuration } from "@server/features/common";
-import { IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
+import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";
 import { DeleteProjectDocumentCommand } from "@server/features/documents/deleteProjectDocument";
 
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 
 import { ProjectDocumentPageParams, ProjectDocumentsRoute } from "@ui/containers";
-
-interface Document extends MultipleDocumentUploadDto {
-  id: string;
-}
+import { DocumentDeleteDto } from "@framework/dtos/documentDeleteDto";
+import { DeletePartnerDocumentCommand } from "@server/features/documents/deletePartnerDocument";
 
 export class ProjectDocumentDeleteHandler extends StandardFormHandlerBase<
   ProjectDocumentPageParams,
@@ -22,8 +20,13 @@ export class ProjectDocumentDeleteHandler extends StandardFormHandlerBase<
     super(ProjectDocumentsRoute, ["delete"], "multipleDocuments");
   }
 
-  protected getDto(context: IContext, params: ProjectDocumentPageParams, button: IFormButton) {
-    return Promise.resolve({ id: button.value, files: [] });
+  protected async getDto(
+    context: IContext,
+    params: ProjectDocumentPageParams,
+    button: IFormButton,
+    body: IFormBody,
+  ): Promise<DocumentDeleteDto> {
+    return { documentId: button.value, files: [], partnerId: body.partnerId };
   }
 
   protected getStoreKey(params: ProjectDocumentPageParams) {
@@ -34,14 +37,18 @@ export class ProjectDocumentDeleteHandler extends StandardFormHandlerBase<
     context: IContext,
     params: ProjectDocumentPageParams,
     button: IFormButton,
-    dto: Document,
+    dto: DocumentDeleteDto,
   ): Promise<ILinkInfo> {
-    await context.runCommand(new DeleteProjectDocumentCommand(params.projectId, dto.id));
+    if (dto.partnerId) {
+      await context.runCommand(new DeletePartnerDocumentCommand(params.projectId, dto.partnerId, dto.documentId));
+    } else {
+      await context.runCommand(new DeleteProjectDocumentCommand(params.projectId, dto.documentId));
+    }
 
     return ProjectDocumentsRoute.getLink(params);
   }
 
-  protected createValidationResult(params: ProjectDocumentPageParams, dto: Document) {
+  protected createValidationResult(params: ProjectDocumentPageParams, dto: DocumentDeleteDto) {
     return new MultipleDocumentUploadDtoValidator(dto, configuration.options, false, false, null);
   }
 }

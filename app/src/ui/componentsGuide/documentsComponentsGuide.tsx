@@ -13,6 +13,7 @@ const initialDocs: DocumentSummaryDto[] = [
     fileSize: 20635049,
     dateCreated: new Date(2021, 10, 26),
     uploadedBy: "Elton John",
+    uploadedByPartnerName: "Hedge's Hedges Ltd",
     isOwner: true,
   },
   {
@@ -23,6 +24,7 @@ const initialDocs: DocumentSummaryDto[] = [
     fileSize: 20635049,
     dateCreated: new Date(1990, 5, 6),
     uploadedBy: "Mike Tyson",
+    uploadedByPartnerName: "Hedge's Hedges Ltd",
     isOwner: true,
   },
   {
@@ -33,6 +35,7 @@ const initialDocs: DocumentSummaryDto[] = [
     fileSize: 20635049,
     dateCreated: new Date(2021, 8, 26),
     uploadedBy: "Donald Duck",
+    uploadedByPartnerName: "Hedge's Hedges Ltd",
     isOwner: true,
   },
   {
@@ -43,6 +46,7 @@ const initialDocs: DocumentSummaryDto[] = [
     fileSize: 10635049,
     dateCreated: new Date(2020, 3, 22),
     uploadedBy: "John Lemon",
+    uploadedByPartnerName: "Hedge's Hedges Ltd",
     isOwner: true,
   },
   {
@@ -53,6 +57,7 @@ const initialDocs: DocumentSummaryDto[] = [
     fileSize: 18635049,
     dateCreated: new Date(2021, 9, 3),
     uploadedBy: "Fred Mango",
+    uploadedByPartnerName: "Hedge's Hedges Ltd",
     isOwner: true,
   },
   {
@@ -63,6 +68,7 @@ const initialDocs: DocumentSummaryDto[] = [
     fileSize: 12635049,
     dateCreated: new Date(2021, 10, 8),
     uploadedBy: "Bonny Banana",
+    uploadedByPartnerName: "Hedge's Hedges Ltd",
     isOwner: true,
   },
 ];

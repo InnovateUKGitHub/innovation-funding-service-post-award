@@ -46,7 +46,7 @@ interface InternalColumnProps<T> {
 
 interface ExternalColumnProps<T, TResult> {
   header?: string | ContentSelector | React.ReactElement<unknown>; // Note: Some currency components return values as element not strings
-  sortByKey?: T extends object ? keyof T : undefined;
+  sortByKey?: keyof T;
   value: (item: T, index: { column: number; row: number }) => TResult;
   cellClassName?: (data: T, index: { column: number; row: number }) => string | null | undefined;
   colClassName?: (col: number) => string;
@@ -378,7 +378,7 @@ const LinkColumn = <T extends {}>(props: ExternalColumnProps<T, ILinkInfo> & { c
   );
 };
 
-export interface ITypedTable<T extends {}> {
+export interface ITypedTable<T extends Record<keyof T, unknown>> {
   Table: React.FunctionComponent<TableProps<T>>;
   Custom: React.FunctionComponent<ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }>;
   String: React.FunctionComponent<ExternalColumnProps<T, string | null>>;
@@ -393,7 +393,7 @@ export interface ITypedTable<T extends {}> {
   Link: React.FunctionComponent<ExternalColumnProps<T, ILinkInfo> & { content: React.ReactNode }>;
 }
 
-export const TypedTable = <T extends {}>(): ITypedTable<T> => ({
+export const TypedTable = <T extends Partial<Record<keyof T, unknown>>>(): ITypedTable<T> => ({
   Table: TableComponent as React.FunctionComponent<TableProps<T>>,
   Custom: CustomColumn as React.FunctionComponent<
     ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }

@@ -240,8 +240,18 @@
     },
     "project-documents": {
       "title": "Project documents",
+      "project-level-subtitle": "Documents shared with Innovate UK and Monitoring Officer",
+      "partner-level-subtitle": "Documents shared with Innovate UK and partners",
+      "partner-self-level-subtitle": "Documents for {{partnerName}}",
       "noMatchingDocumentsMessage": "No documents match.",
-      "searchDocumentsMessage": "Search documents"
+      "searchDocumentsMessage": "Search documents",
+      "document-labels": {
+        "description-label": "Type",
+        "participant-label": "Access Control",
+        "participant-placeholder": "Innovate UK and MO only",
+        "participant-option": "Innovate UK, MO and {{partnerName}}",
+        "description-placeholder": "-- No type --"
+      }
     },
     "project-setup-postcode-details": {
       "title": {
@@ -1153,11 +1163,8 @@
     "upload-documents": "Upload documents",
     "upload-instruction-1": "You can upload and store any documents for this claim on this page.",
     "upload-instruction-2": "You will also be able to see any documents added to the claim by the finance contact and Innovate UK.",
-    "documentsIntroMessage": {
-      "storing-documents-message": "This page is for storing most project-related supporting documents, including those uploaded by Innovate UK.",
-      "documents-privacy-message": "Documents stored here are only accessible by the Monitoring Officer and Innovate UK.",
-      "not-for-claims-message": "Do not use this page for claims. You must only upload supporting documents for claims on the page where you review them."
-    }
+    "monitoring-officer-documents-intro-message": "This page displays documents which are shared with Innovate UK and each project\nparticipant. Documents shared here are only accessible to Innovate UK and the\nmonitoring officer. Documents shared with the finance contact and project\nmanager (for lead applicant), are accessible only by that participant, Innovate\nUK and the monitoring officer. When uploading documents, you can choose whether\nthey are accessible by Innovate UK only, or with a participant.\n\nDo not select a participant if you wish to share the file with Innovate UK only.\n\nYou must upload supporting documents on the page you are submitting your claim\nor PCR. Do not use this page for claims or PCR’s.\n",
+    "other-role-documents-intro-message": "This page is for storing most project related supporting documents, including\nthose uploaded by Innovate UK.\n\nDocuments stored here are only accessible by the Monitoring Officer and\nparticipants representing \"{{partnerName}}\".\n\nYou must upload supporting documents on the page you are submitting your claim\nor PCR. Do not use this page for claims or PCR’s.\n"
   },
   "financial-virement-labels": {
     "partner-name": "Partner",

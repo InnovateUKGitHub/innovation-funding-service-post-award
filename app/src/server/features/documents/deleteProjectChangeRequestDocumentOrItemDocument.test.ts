@@ -13,6 +13,7 @@ describe("DeleteProjectChangeRequestDocumentOrItemCommand", () => {
       "some content",
       undefined,
       undefined,
+      undefined,
       x => (x.Acc_UploadedByMe__c = true),
     );
     const project = context.testData.createProject();
@@ -40,6 +41,7 @@ describe("DeleteProjectChangeRequestDocumentOrItemCommand", () => {
       "title",
       "jpg",
       "some content",
+      undefined,
       undefined,
       undefined,
       x => (x.Acc_UploadedByMe__c = true),

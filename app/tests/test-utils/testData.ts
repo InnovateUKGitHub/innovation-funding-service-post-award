@@ -649,6 +649,7 @@ export class TestData {
     title = "cat",
     fileType: string | null = "jpg",
     uploadedBy = "Catwoman",
+    uploadedByPartnerName = "Hedge's Hedges Ltd",
     content = "",
     description?: string,
     update?: (item: ISalesforceDocument) => void,
@@ -671,6 +672,13 @@ export class TestData {
       CreatedDate: new Date().toISOString(),
       Owner: {
         Username: "aUserId",
+      },
+      LastModifiedBy: {
+        Contact: {
+          Account: {
+            Name: uploadedByPartnerName,
+          },
+        },
       },
     };
 

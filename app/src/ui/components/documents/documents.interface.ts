@@ -1,6 +1,6 @@
 import { DocumentSummaryDto } from "@framework/dtos";
 
-export interface DocumentsBase {
-  documents: DocumentSummaryDto[];
+export interface DocumentsBase<T = DocumentSummaryDto> {
+  documents: T[];
   qa: string;
 }

@@ -2,7 +2,7 @@ export * from "./dashboard/Dashboard.page";
 export * from "./details.page";
 export * from "./financeSummary.page";
 export * from "./failedBankCheckConfirmation.page";
-export * from "./projectDocuments.page";
+export * from "./documents/projectDocuments.page";
 export * from "./overview.page";
 export * from "./partnerDetails.page";
 export * from "./partnerDetailsEdit.page";
