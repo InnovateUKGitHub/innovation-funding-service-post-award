@@ -31,6 +31,7 @@ describe("useDocumentSearch()", () => {
     fileSize: 1024,
     dateCreated: new Date(Date.UTC(2021, 10, 1)),
     uploadedBy: "stub-uploadedBy",
+    uploadedByPartnerName: "stub-uploadedByPartnerName",
     isOwner: true,
   };
 
@@ -308,7 +309,7 @@ describe("useDocumentSearch()", () => {
           });
 
           it("with file size", () => {
-            const stubParsedFileSize = "12.167KB";
+            const stubParsedFileSize = "12KB";
 
             const stubDocs = [
               {

@@ -72,6 +72,7 @@ const clientApi: IApiClient = {
       ajaxJson(`/api/documents/projectChangeRequests/${params.projectId}/${params.projectChangeRequestIdOrItemId}`),
     getProjectDocuments: params => ajaxJson(`/api/documents/projects/${params.projectId}`),
     getPartnerDocuments: params => ajaxJson(`/api/documents/partners/${params.projectId}/${params.partnerId}`),
+    getAllPartnerDocuments: params => ajaxJson(`/api/documents/partners/${params.projectId}`),
     deleteProjectChangeRequestDocumentOrItemDocument: params =>
       ajaxJson(
         `/api/documents/projectChangeRequests/${params.projectId}/${params.projectChangeRequestIdOrItemId}/${params.documentId}`,
@@ -278,6 +279,9 @@ const ajaxPostFiles = <T>(url: string, documents: MultipleDocumentUploadDto) => 
   });
   if (documents.description) {
     formData.append("description", documents.description.toString());
+  }
+  if (documents.partnerId) {
+    formData.append("partnerId", documents.partnerId);
   }
   return ajaxPostFormData<T>(url, formData);
 };

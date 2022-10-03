@@ -5,6 +5,12 @@ interface IStream {
   pipe<T extends NodeJS.WritableStream>(destination: T, options?: { end?: boolean }): T;
 }
 
+export type AllPartnerDocumentSummaryDto = PartnerDocumentSummaryDto[];
+export interface PartnerDocumentSummaryDto extends DocumentSummaryDto {
+  partnerId: string;
+  partnerName: string;
+}
+
 export interface DocumentSummaryDto {
   fileName: string;
   link: string;
@@ -13,6 +19,7 @@ export interface DocumentSummaryDto {
   fileSize: number;
   dateCreated: Date;
   uploadedBy: string;
+  uploadedByPartnerName: string | null;
   isOwner: boolean;
 }
 

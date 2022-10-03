@@ -2,7 +2,7 @@ import { Authorisation, ProjectRole } from "@framework/types";
 import { DocumentEntity } from "@framework/entities/document";
 import { DocumentsSummaryQueryBase } from "./documentsSummaryQueryBase";
 
-export class GetProjectDocumentsQuery extends DocumentsSummaryQueryBase {
+export class GetProjectDocumentSummaryQuery extends DocumentsSummaryQueryBase {
   constructor(private readonly projectId: string) {
     super();
   }

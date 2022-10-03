@@ -9,6 +9,7 @@ import { getFileExtension, getFileName, getFileSize } from "@framework/util";
 import { Results } from "../validation/results";
 import { Result } from "../validation/result";
 import * as Validation from "./common";
+import { Logger } from "@shared/developmentLogger";
 
 const invalidCharacterInFileName = (fileName: string) => {
   return `You cannot upload '${fileName}' because it contains forbidden characters.`;
@@ -61,7 +62,11 @@ export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
 }
 
 export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocumentUploadDto> {
+  private readonly logger: Logger = new Logger("MultipleDocumentUploadDtoValidator");
+
   public readonly description: Result;
+  public readonly partnerId: Result;
+
   constructor(
     model: MultipleDocumentUploadDto,
     config: IAppOptions,
@@ -82,6 +87,7 @@ export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocument
           "Not a valid description",
         )
       : Validation.valid(this);
+    this.partnerId = Validation.valid(this);
   }
 
   private validateFiles(model: MultipleDocumentUploadDto, config: IAppOptions, filesRequired: boolean) {

@@ -9,11 +9,7 @@ import {
   PartnerStatus,
   ProjectRole,
 } from "@framework/types";
-import { BankCheckVerificationResultFields } from "@framework/types/bankCheck";
-import { isBoolean, isNumber } from "@framework/util";
 import { BadRequestError, CommandBase, InActiveProjectError, ValidationError } from "@server/features/common";
-import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummary";
-import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
 import {
   BankCheckStatusMapper,
   BankDetailsTaskStatusMapper,
@@ -22,6 +18,10 @@ import {
 import { ISalesforcePartner } from "@server/repositories";
 import { Updatable } from "@server/repositories/salesforceRepositoryBase";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
+import { isBoolean, isNumber } from "@framework/util";
+import { GetByIdQuery } from "@server/features/partners/getByIdQuery";
+import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummaryQuery";
+import { BankCheckVerificationResultFields } from "@framework/types/bankCheck";
 import { GetProjectStatusQuery } from "../projects";
 import { GetBankVerificationDetailsByIdQuery } from "./getBankVerificationDetailsByIdQuery";
 

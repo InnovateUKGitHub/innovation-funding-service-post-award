@@ -25,6 +25,7 @@ export class ProjectDocumentUploadHandler extends MultipleFileFormHandlerBase<
     return Promise.resolve({
       files,
       description: Number(body.description) || undefined,
+      partnerId: body.partnerId,
     });
   }
 

@@ -12,6 +12,7 @@ const documents = [
     dateCreated: new Date(),
     owner: "owner1@ownder.com",
     uploadedBy: "Bubbles",
+    uploadedByPartnerName: "Hedge's Hedges Ltd",
     isOwner: false,
   },
   {
@@ -22,6 +23,7 @@ const documents = [
     dateCreated: new Date(),
     owner: "owner2@ownder.com",
     uploadedBy: "Blossom",
+    uploadedByPartnerName: "Hedge's Hedges Ltd",
     isOwner: false,
   },
   {
@@ -32,6 +34,7 @@ const documents = [
     dateCreated: new Date(),
     owner: "owner3@ownder.com",
     uploadedBy: "Buttercup",
+    uploadedByPartnerName: "Hedge's Hedges Ltd",
     isOwner: false,
   },
 ];

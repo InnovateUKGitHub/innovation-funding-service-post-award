@@ -20,6 +20,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
       "PCR Document",
       "txt",
       "Jackie",
+      "Jackie's Jacks",
       "Why I want more money",
     );
 
@@ -37,7 +38,14 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
     const project = context.testData.createProject();
     const pcr = context.testData.createPCR(project);
 
-    const document = context.testData.createDocument(pcr.id, "PCR Document", "txt", "Paul", "Why I want more money");
+    const document = context.testData.createDocument(
+      pcr.id,
+      "PCR Document",
+      "txt",
+      "Paul",
+      "Paul's Paul Emporium",
+      "Why I want more money",
+    );
 
     const query = new GetProjectChangeRequestDocumentOrItemDocumentQuery(project.Id, pcr.id, document.Id);
     const result = await context.runQuery(query).then(x => x as DocumentDto);
