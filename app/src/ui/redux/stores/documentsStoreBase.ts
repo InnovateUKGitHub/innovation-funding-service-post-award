@@ -16,7 +16,11 @@ export abstract class DocumentsStoreBase extends StoreBase {
 
   protected afterUpdate(key: string, message: string | undefined, onComplete: (() => void) | undefined) {
     this.resetEditor("multipleDocuments", key as unknown as any, { files: [] }); // TODO: fix this any type
+
+    // Reload both documents and partnerDocuments
     this.markStale("documents", key, undefined);
+    this.markStale("partnerDocuments", key, undefined);
+
     if (message) {
       this.queue(messageSuccess(message));
       scrollToTheTopSmoothly();
@@ -27,7 +31,11 @@ export abstract class DocumentsStoreBase extends StoreBase {
   }
 
   private afterError(key: string) {
-    setTimeout(() => this.markStale("documents", key, undefined));
+    setTimeout(() => {
+      // Reload both documents and partnerDocuments
+      this.markStale("documents", key, undefined);
+      this.markStale("partnerDocuments", key, undefined);
+    });
   }
 
   protected updateMultiple(

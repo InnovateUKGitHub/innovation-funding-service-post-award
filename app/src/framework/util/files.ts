@@ -8,7 +8,7 @@ export function getFileSize(fileSizeBytes: number): string {
   const unit = displayMb ? "MB" : "KB"; // Note: we don't need to support Bytes/GB
 
   return bytes.format(fileSizeBytes, {
-    decimalPlaces: 3,
+    decimalPlaces: 0,
     thousandsSeparator: ",",
     unit,
   });

@@ -7,7 +7,12 @@ export class GetPartnerDocumentQuery extends DocumentQueryBase {
   }
 
   protected async accessControl(auth: Authorisation): Promise<boolean> {
-    return auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact);
+    return (
+      auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer) ||
+      auth
+        .forPartner(this.projectId, this.partnerId)
+        .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.FinancialContact, ProjectRole.ProjectManager)
+    );
   }
 
   protected getRecordId(): Promise<string | null> {

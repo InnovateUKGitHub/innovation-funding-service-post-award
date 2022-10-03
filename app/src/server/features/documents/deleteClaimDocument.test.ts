@@ -12,6 +12,7 @@ describe("DeleteClaimDocumentCommand", () => {
       "hello",
       undefined,
       undefined,
+      undefined,
       x => (x.Acc_UploadedByMe__c = true),
     );
     const project = context.testData.createProject();

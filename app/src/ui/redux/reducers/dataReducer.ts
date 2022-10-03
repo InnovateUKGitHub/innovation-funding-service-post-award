@@ -94,6 +94,7 @@ export const dataReducer = combineReducers({
     "monitoringReportStatusChanges",
   ),
   partner: dataStoreReducer<Dtos.PartnerDto>("partner"),
+  partnerDocuments: dataStoreReducer<Dtos.AllPartnerDocumentSummaryDto>("partnerDocuments"),
   partners: dataStoreReducer<Dtos.PartnerDto[]>("partners"),
   pcrs: dataStoreReducer<Dtos.PCRSummaryDto[]>("pcrs"),
   pcr: dataStoreReducer<Dtos.PCRDto>("pcr"),

@@ -11,9 +11,9 @@ import { GetProjectDocumentQuery } from "@server/features/documents/getProjectDo
 import { UploadProjectChangeRequestDocumentOrItemDocumentCommand } from "@server/features/documents/uploadProjectChangeRequestDocumentOrItemDocument";
 import { UploadClaimDocumentsCommand } from "@server/features/documents/uploadClaimDocuments";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { DocumentDto, DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { AllPartnerDocumentSummaryDto, DocumentDto, DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { GetPartnerDocumentQuery } from "@server/features/documents/getPartnerDocument";
-import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummary";
+import { GetPartnerDocumentsQuery } from "@server/features/documents/getPartnerDocumentsSummaryQuery";
 import { UploadPartnerDocumentCommand } from "@server/features/documents/uploadPartnerDocument";
 import { DeletePartnerDocumentCommand } from "@server/features/documents/deletePartnerDocument";
 
@@ -29,9 +29,10 @@ import { UploadClaimDocumentCommand } from "../features/documents/uploadClaimDoc
 import { GetClaimDocumentQuery } from "../features/documents/getClaimDocument";
 import { GetClaimDocumentsQuery } from "../features/documents/getClaimDocumentsSummary";
 import { UploadClaimDetailDocumentCommand } from "../features/documents/uploadClaimDetailDocument";
-import { GetProjectDocumentsQuery } from "../features/documents/getProjectDocumentsSummary";
+import { GetProjectDocumentSummaryQuery } from "../features/documents/getProjectDocumentSummaryQuery";
 import { GetClaimDetailDocumentsQuery } from "../features/documents/getClaimDetailDocumentsSummary";
 import { GetClaimDetailDocumentQuery } from "../features/documents/getClaimDetailDocument";
+import { GetAllPartnerDocumentsQuery } from "@server/features/documents/getAllPartnerDocumentsSummaryQuery";
 
 export interface IDocumentsApi {
   getClaimDocuments: (
@@ -42,8 +43,9 @@ export interface IDocumentsApi {
     params: ApiParams<{ projectId: string; projectChangeRequestIdOrItemId: string }>,
   ) => Promise<DocumentSummaryDto[]>;
   getProjectDocuments: (params: ApiParams<{ projectId: string }>) => Promise<DocumentSummaryDto[]>;
-  getLoanDocuments: (params: ApiParams<{ projectId: string; loanId: string }>) => Promise<DocumentSummaryDto[]>;
   getPartnerDocuments: (params: ApiParams<{ projectId: string; partnerId: string }>) => Promise<DocumentSummaryDto[]>;
+  getAllPartnerDocuments: (params: ApiParams<{ projectId: string }>) => Promise<AllPartnerDocumentSummaryDto>;
+  getLoanDocuments: (params: ApiParams<{ projectId: string; loanId: string }>) => Promise<DocumentSummaryDto[]>;
   uploadClaimDetailDocuments: (
     params: ApiParams<{ claimDetailKey: ClaimDetailKey; documents: MultipleDocumentUploadDto }>,
   ) => Promise<{ documentIds: string[] }>;
@@ -174,6 +176,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     );
 
     this.getItems("/projects/:projectId", p => ({ projectId: p.projectId }), this.getProjectDocuments);
+    this.getItems("/partners/:projectId", p => ({ projectId: p.projectId }), this.getAllPartnerDocuments);
 
     this.getAttachment(
       "/loans/:projectId/:loanId/:documentId/content",
@@ -346,13 +349,19 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
 
   public async getProjectDocuments(params: ApiParams<{ projectId: string }>) {
     const { projectId } = params;
-    const query = new GetProjectDocumentsQuery(projectId);
+    const query = new GetProjectDocumentSummaryQuery(projectId);
     return contextProvider.start(params).runQuery(query);
   }
 
   public async getPartnerDocuments(params: ApiParams<{ projectId: string; partnerId: string }>) {
     const { projectId, partnerId } = params;
     const query = new GetPartnerDocumentsQuery(projectId, partnerId);
+    return contextProvider.start(params).runQuery(query);
+  }
+
+  public async getAllPartnerDocuments(params: ApiParams<{ projectId: string }>) {
+    const { projectId } = params;
+    const query = new GetAllPartnerDocumentsQuery(projectId);
     return contextProvider.start(params).runQuery(query);
   }
 
@@ -476,7 +485,7 @@ class Controller extends ControllerBase<DocumentSummaryDto> implements IDocument
     params: ApiParams<{ projectId: string; partnerId: string; documentId: string }>,
   ): Promise<boolean> {
     const { documentId, projectId, partnerId } = params;
-    const command = new DeletePartnerDocumentCommand(documentId, projectId, partnerId);
+    const command = new DeletePartnerDocumentCommand(projectId, partnerId, documentId);
     await contextProvider.start(params).runCommand(command);
 
     return true;

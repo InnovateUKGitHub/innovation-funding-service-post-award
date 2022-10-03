@@ -3,9 +3,9 @@ import { CommandBase } from "@server/features/common";
 
 export class DeletePartnerDocumentCommand extends CommandBase<void> {
   constructor(
-    private readonly documentId: string,
     private readonly projectId: string,
     private readonly partnerId: string,
+    private readonly documentId: string,
   ) {
     super();
   }
@@ -13,9 +13,14 @@ export class DeletePartnerDocumentCommand extends CommandBase<void> {
   async accessControl(auth: Authorisation, context: IContext) {
     const documentExists = await context.repositories.documents.isExistingDocument(this.documentId, this.partnerId);
 
-    return documentExists
-      ? auth.forPartner(this.projectId, this.partnerId).hasRole(ProjectRole.FinancialContact)
-      : false;
+    if (!documentExists) return false;
+
+    return (
+      auth.forProject(this.projectId).hasRole(ProjectRole.MonitoringOfficer) ||
+      auth
+        .forPartner(this.projectId, this.partnerId)
+        .hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager)
+    );
   }
 
   protected async run(context: IContext) {

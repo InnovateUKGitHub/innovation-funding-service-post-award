@@ -11,6 +11,7 @@ const documents = [
     dateCreated: new Date(),
     owner: "owner1@ownder.com",
     uploadedBy: "Snap",
+    uploadedByPartnerName: "Neil Little's Little Tots",
     isOwner: false,
   },
   {
@@ -21,6 +22,7 @@ const documents = [
     dateCreated: new Date(),
     owner: "owner2@ownder.com",
     uploadedBy: "Crackle",
+    uploadedByPartnerName: "Neil Little's Little Tots",
     isOwner: false,
   },
   {
@@ -31,6 +33,7 @@ const documents = [
     dateCreated: new Date(),
     owner: "owner3@ownder.com",
     uploadedBy: "Pop",
+    uploadedByPartnerName: "Neil Little's Little Tots",
     isOwner: false,
   },
 ];

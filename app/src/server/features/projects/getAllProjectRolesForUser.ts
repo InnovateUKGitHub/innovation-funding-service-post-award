@@ -65,27 +65,41 @@ export class GetAllProjectRolesForUser extends QueryBase<Authorisation> {
     return isFc || (isPm && partner.projectRole === SalesforceProjectRole.ProjectLead);
   }
 
+  /**
+   * Obtain a full-access permission-set for the system user.
+   *
+   * @param context The system user context.
+   * @returns The full permissions for all projects and it's associated partners
+   */
   private async getServiceAccountRoles(context: IContext): Promise<{ [key: string]: IRoleInfo }> {
     const projects = await context.repositories.projects.getAll();
     const partners = await context.repositories.partners.getAll();
     const allRoles = ProjectRole.MonitoringOfficer | ProjectRole.ProjectManager | ProjectRole.FinancialContact;
 
-    const projectRoles = projects.reduce<{ [key: string]: IRoleInfo }>((roles, project) => {
-      roles[project.Id] = {
+    // Create an empty roles set.
+    const roles: Record<string, IRoleInfo> = {};
+
+    // Collate a list of all possible project IDs.
+    // If the project id doesn't exist in projects list, it will be included via the partners project id.
+    const projectIds = [...projects.map(p => p.Id), ...partners.map(p => p.projectId)];
+
+    // For each project...
+    for (const project of projectIds) {
+      // Initialise the project with all possible roles.
+      roles[project] = {
         projectRoles: allRoles,
         partnerRoles: {},
       };
-      return roles;
-    }, {});
+    }
 
-    return partners.reduce((roles, partner) => {
-      // get or create new project level roles record
-      const project =
-        roles[partner.projectId] || (roles[partner.projectId] = { projectRoles: allRoles, partnerRoles: {} });
-      // set current partner level to all
-      project.partnerRoles[partner.id] = allRoles;
-      return roles;
-    }, projectRoles);
+    // For each partner...
+    for (const partner of partners) {
+      // Initialise each partner of the project with all the possible roles.
+      roles[partner.projectId].partnerRoles[partner.id] = allRoles;
+    }
+
+    // Give back the super-user permission-set.
+    return roles;
   }
 
   private getProjectRole(salesforceRole: SalesforceRole): ProjectRole {

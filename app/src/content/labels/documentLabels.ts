@@ -67,6 +67,11 @@ export class DocumentLabels extends ContentBase {
 
   public readonly documentDescriptionLabel = (documentDescription: DocumentDescription | null) =>
     this.getDocumentDescriptionLabel(documentDescription);
+  public readonly descriptionLabel = this.getContent("description-label");
+  public readonly participantLabel = this.getContent("participant-label");
+  public readonly participantOption = (partnerName: string) => this.getContent("participant-option", { partnerName });
+  public readonly participantPlaceholder = this.getContent("participant-placeholder");
+  public readonly descriptionPlaceholder = this.getContent("description-placeholder");
   public readonly uploadInputLabel = this.getContent("uploadInputLabel");
   public readonly fileNameLabel = this.getContent("fileNameLabel");
   public readonly dateUploadedLabel = this.getContent("dateUploadedLabel");

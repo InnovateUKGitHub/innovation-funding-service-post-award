@@ -1,8 +1,8 @@
-import { apiClient } from "@ui/apiClient";
-import { Pending } from "@shared/pending";
-import { storeKeys } from "@ui/redux/stores/storeKeys";
+import { DocumentSummaryDto, PartnerDocumentSummaryDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { DocumentSummaryDto } from "@framework/dtos";
+import { Pending } from "@shared/pending";
+import { apiClient } from "@ui/apiClient";
+import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { DocumentsStoreBase } from "./documentsStoreBase";
 
 export class ProjectDocumentsStore extends DocumentsStoreBase {
@@ -45,7 +45,7 @@ export class ProjectDocumentsStore extends DocumentsStoreBase {
   public deleteProjectDocument(
     projectId: string,
     dto: MultipleDocumentUploadDto,
-    document: DocumentSummaryDto,
+    document: DocumentSummaryDto | PartnerDocumentSummaryDto,
     message?: string,
     onComplete?: () => void,
   ) {
@@ -56,6 +56,25 @@ export class ProjectDocumentsStore extends DocumentsStoreBase {
       dto,
       () => this.validateMultipleDocumentsDto(dto, false, true),
       p => apiClient.documents.deleteProjectDocument({ documentId: document.id, projectId, ...p }),
+      () => this.afterUpdate(key, message, onComplete),
+    );
+  }
+
+  public deleteProjectPartnerDocumentsEditor(
+    projectId: string,
+    partnerId: string,
+    dto: MultipleDocumentUploadDto,
+    document: DocumentSummaryDto,
+    message: string,
+    onComplete?: () => void,
+  ) {
+    const key = this.getProjectDocumentsKey(projectId);
+    this.deleteEditor(
+      "multipleDocuments",
+      key,
+      dto,
+      () => this.validateMultipleDocumentsDto(dto, false, true),
+      p => apiClient.documents.deletePartnerDocument({ projectId, partnerId, documentId: document.id, ...p }),
       () => this.afterUpdate(key, message, onComplete),
     );
   }

@@ -26,11 +26,15 @@ export class DocumentMessages extends ContentBase {
   public readonly uploadInstruction1 = this.getContent("upload-instruction-1");
   public readonly uploadInstruction2 = this.getContent("upload-instruction-2");
 
-  public readonly documentsIntroMessage = {
-    storingDocumentsMessage: this.getContent("documentsIntroMessage.storing-documents-message"),
-    documentsPrivacyMessage: this.getContent("documentsIntroMessage.documents-privacy-message"),
-    notForClaimsMessage: this.getContent("documentsIntroMessage.not-for-claims-message"),
-  };
+  public readonly monitoringOfficerDocumentsIntroMessage = this.getContent(
+    "monitoring-officer-documents-intro-message",
+    { markdown: true },
+  );
+  public readonly otherRoleDocumentsIntroMessage = (partnerName?: string) =>
+    this.getContent("other-role-documents-intro-message", {
+      markdown: true,
+      partnerName,
+    });
 
   public readonly backLink = (previousPage: string) => this.getContent("back-link", { previousPage });
 

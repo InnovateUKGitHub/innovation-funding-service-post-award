@@ -20,12 +20,12 @@ describe("<DocumentView />", () => {
     },
   };
 
-  const defaultProps: DocumentViewProps = {
+  const defaultProps: DocumentViewProps<DocumentSummaryDto> = {
     documents: [],
     qa: "stub-qa",
   };
 
-  const setup = (props?: Partial<DocumentViewProps>) => {
+  const setup = (props?: Partial<DocumentViewProps<DocumentSummaryDto>>) => {
     return render(
       <TestBed content={stubContent as TestBedContent}>
         <ACC.DocumentView {...defaultProps} {...props} />
@@ -60,6 +60,7 @@ describe("<DocumentView />", () => {
         fileSize: 1024,
         dateCreated: new Date(Date.UTC(2021, 10, 1)),
         uploadedBy: "stub-uploadedBy",
+        uploadedByPartnerName: "stub-uploadedByPartnerName",
         isOwner: true,
       };
 

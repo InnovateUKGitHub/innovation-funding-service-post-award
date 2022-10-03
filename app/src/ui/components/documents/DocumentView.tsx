@@ -1,38 +1,39 @@
-import { cloneElement } from "react";
-
+import { DocumentSummaryDto, PartnerDocumentSummaryDto, ProjectDto } from "@framework/dtos";
 import { useContent } from "@ui/hooks";
-import { H2 } from "../typography";
+import React from "react";
 import { SimpleString } from "../renderers";
-
+import { H2 } from "../typography";
+import { useDocumentSearch } from "./document-search.hook";
+import { DocumentFilter } from "./DocumentFilter";
+import { DocumentsUnavailable } from "./DocumentsUnavailable";
 import {
   DocumentTable,
   DocumentTableProps,
   DocumentTableWithDelete,
   DocumentTableWithDeleteProps,
+  PartnerDocumentTableWithDelete,
 } from "./DocumentTable";
-import { DocumentFilter } from "./DocumentFilter";
-import { DocumentsUnavailable } from "./DocumentsUnavailable";
-import { DocumentsBase } from "./documents.interface";
-import { useDocumentSearch } from "./document-search.hook";
 
 export interface DocumentShow {
   validationMessage?: string;
   disableSearch?: boolean;
   hideHeader?: boolean;
+  hideSubtitle?: boolean;
 }
 
-interface DocumentDisplayProps
-  extends Partial<Pick<DocumentShow, "disableSearch" | "hideHeader">>,
-    Pick<DocumentsBase, "documents"> {
-  children: React.ReactElement<DocumentViewProps> | React.ReactElement<DocumentEditProps>;
+interface DocumentDisplayProps<T extends DocumentSummaryDto>
+  extends Partial<Pick<DocumentShow, "disableSearch" | "hideHeader" | "hideSubtitle">> {
+  children: (documents: T[]) => React.ReactElement<DocumentViewProps<T>> | React.ReactElement<DocumentEditProps<T>>;
+  documents: T[];
 }
 
-function DocumentDisplay({
+function DocumentDisplay<T extends DocumentSummaryDto>({
   hideHeader,
+  hideSubtitle,
   disableSearch = false,
   documents: unCheckedDocuments,
   children,
-}: DocumentDisplayProps) {
+}: DocumentDisplayProps<T>) {
   const { getContent } = useContent();
   const { displaySearch, hasDocuments, documents, filterConfig } = useDocumentSearch(disableSearch, unCheckedDocuments);
 
@@ -40,37 +41,51 @@ function DocumentDisplay({
     <>
       {!hideHeader && <H2>{getContent(x => x.components.documents.labels.documentDisplayTitle)}</H2>}
 
-      {hasDocuments && (
+      {!hideSubtitle && hasDocuments && (
         <SimpleString>{getContent(x => x.components.documents.labels.documentDisplaySubTitle)}</SimpleString>
       )}
 
       {displaySearch && <DocumentFilter qa="document-filter" {...filterConfig} />}
 
       {hasDocuments ? (
-        cloneElement(children, { ...children.props, documents })
+        children(documents)
       ) : (
-        <DocumentsUnavailable removeSpacing={hideHeader} validationMessage={children.props.validationMessage} />
+        <DocumentsUnavailable
+          removeSpacing={hideHeader}
+          validationMessage={children(documents).props.validationMessage}
+        />
       )}
     </>
   );
 }
 
-export type DocumentViewProps = DocumentShow & DocumentTableProps;
+export type DocumentViewProps<T extends DocumentSummaryDto> = DocumentShow & DocumentTableProps<T>;
 
-export const DocumentView = (props: DocumentViewProps) => {
+export const DocumentView = <T extends DocumentSummaryDto>(props: DocumentViewProps<T>) => {
   return (
     <DocumentDisplay {...props}>
-      <DocumentTable {...props} qa={`${props.qa}-container`} />
+      {documents => <DocumentTable {...props} qa={`${props.qa}-container`} documents={documents} />}
     </DocumentDisplay>
   );
 };
 
-export type DocumentEditProps = DocumentShow & DocumentTableWithDeleteProps;
+export type DocumentEditProps<T extends DocumentSummaryDto> = DocumentShow & DocumentTableWithDeleteProps<T>;
+export type ProjectPartnerDocumentEditProps<T extends DocumentSummaryDto> = DocumentEditProps<T> & {
+  project: ProjectDto;
+};
 
-export const DocumentEdit = (props: DocumentEditProps) => {
+export const DocumentEdit = (props: DocumentEditProps<DocumentSummaryDto>) => {
   return (
     <DocumentDisplay {...props}>
-      <DocumentTableWithDelete {...props} qa={`${props.qa}-container`} />
+      {documents => <DocumentTableWithDelete {...props} qa={`${props.qa}-container`} documents={documents} />}
+    </DocumentDisplay>
+  );
+};
+
+export const PartnerDocumentEdit = (props: ProjectPartnerDocumentEditProps<PartnerDocumentSummaryDto>) => {
+  return (
+    <DocumentDisplay {...props}>
+      {documents => <PartnerDocumentTableWithDelete {...props} qa={`${props.qa}-container`} documents={documents} />}
     </DocumentDisplay>
   );
 };

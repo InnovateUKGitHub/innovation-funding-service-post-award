@@ -323,10 +323,18 @@ Object {
         "Description",
         "CreatedDate",
         "Acc_LastModifiedByAlias__c",
+        "LastModifiedBy.Contact.Account.Name",
         "Acc_UploadedByMe__c",
         "Owner.Username",
       ],
       "salesforceObjectName": "ContentVersion",
+    },
+    "logger": Logger {
+      "identifier": "DocumentsRepository",
+      "options": Object {
+        "logLevel": 5,
+        "prefixLines": Array [],
+      },
     },
   },
   "financialLoanVirements": FinancialLoanVirementRepository {

@@ -5,8 +5,11 @@ import { DocumentEntity } from "@framework/entities/document";
 import { DocumentFilter } from "@framework/types/DocumentFilter";
 import { QueryBase } from "../common";
 import { mapToDocumentSummaryDto } from "./mapToDocumentSummaryDto";
+import { Logger } from "@shared/developmentLogger";
 
 export abstract class DocumentsSummaryQueryBase extends QueryBase<DocumentSummaryDto[]> {
+  public logger: Logger = new Logger("DocumentsSummaryQueryBase");
+
   constructor(protected readonly filter?: DocumentFilter) {
     super();
   }
@@ -17,6 +20,7 @@ export abstract class DocumentsSummaryQueryBase extends QueryBase<DocumentSummar
 
   protected async run(context: IContext): Promise<DocumentSummaryDto[]> {
     const recordId = await this.getRecordId(context);
+    this.logger.debug("Obtaining documents", recordId);
 
     if (!recordId) return [];
 
