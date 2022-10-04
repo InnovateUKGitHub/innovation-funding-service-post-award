@@ -169,7 +169,7 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
           totalNumberOfProjects={resolvedPending.unfilteredObjects.length}
           onSearch={searchParams => {
             const routeInfo = ProjectDashboardRoute.getLink(searchParams);
-            return navigate(routeInfo.path);
+            return navigate(routeInfo.path, { replace: true });
           }}
         />
       )}
