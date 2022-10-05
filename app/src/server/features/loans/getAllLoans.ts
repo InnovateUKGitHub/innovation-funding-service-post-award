@@ -7,7 +7,9 @@ export class GetAllLoans extends QueryBase<LoanDto[]> {
   }
 
   protected async accessControl(auth: Authorisation) {
-    return auth.forProject(this.projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.FinancialContact);
+    return auth
+      .forProject(this.projectId)
+      .hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager, ProjectRole.FinancialContact);
   }
 
   public async run(context: IContext): Promise<LoanDto[]> {
