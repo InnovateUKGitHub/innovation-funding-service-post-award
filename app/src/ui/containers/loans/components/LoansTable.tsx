@@ -1,17 +1,16 @@
-import cx from "classnames";
-
-import { LoanStatus } from "@framework/entities";
 import { LoanDto } from "@framework/dtos";
-import { ILinkInfo } from "@framework/types";
-
+import { LoanStatus } from "@framework/entities";
+import { getAuthRoles, ILinkInfo } from "@framework/types";
 import * as ACC from "@ui/components";
+import cx from "classnames";
 
 export interface LoansTableProps {
   items: LoanDto[];
   createLink: (selectedPeriod: LoanDto["id"]) => ILinkInfo;
+  roles: ReturnType<typeof getAuthRoles>;
 }
 
-export function LoansTable({ items, createLink }: LoansTableProps) {
+export function LoansTable({ items, createLink, roles }: LoansTableProps) {
   const Drawdown = ACC.TypedTable<typeof items[0]>();
 
   const nextLoanIndex = items.findIndex(x => x.status === LoanStatus.PLANNED);
@@ -60,7 +59,10 @@ export function LoansTable({ items, createLink }: LoansTableProps) {
         value={({ id }) => {
           const nextPlannedLoan = nextLoan?.id === id;
 
-          return nextPlannedLoan && <LoanRequestButton route={createLink(nextLoan.id)} disabled={!canRequestLoan} />;
+          return (
+            nextPlannedLoan &&
+            !roles.isMo && <LoanRequestButton route={createLink(nextLoan.id)} disabled={!canRequestLoan} />
+          );
         }}
       />
     </Drawdown.Table>

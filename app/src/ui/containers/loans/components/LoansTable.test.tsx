@@ -1,11 +1,10 @@
-import { v4 as uuid } from "uuid";
-import { render } from "@testing-library/react";
-
-import { TestBed } from "@shared/TestBed";
-import { LoansTable, LoansTableProps } from "@ui/containers/loans/components/LoansTable";
 import { LoanDto } from "@framework/dtos";
 import { LoanStatus } from "@framework/entities";
 import { ILinkInfo } from "@framework/types";
+import { TestBed } from "@shared/TestBed";
+import { render } from "@testing-library/react";
+import { LoansTable, LoansTableProps } from "@ui/containers/loans/components/LoansTable";
+import { v4 as uuid } from "uuid";
 
 describe("<LoansTable />", () => {
   const stubLink: ILinkInfo = {
@@ -20,6 +19,15 @@ describe("<LoansTable />", () => {
   const defaultProps: LoansTableProps = {
     items: [],
     createLink: stubCreateLinkFn,
+    roles: {
+      isMo: false,
+      isFc: true,
+      isPm: true,
+      isPmAndFc: true,
+      isPmOrMo: true,
+      isSuperAdmin: true,
+      isUnknown: true,
+    },
   };
 
   const setup = (props?: Partial<LoansTableProps>) =>

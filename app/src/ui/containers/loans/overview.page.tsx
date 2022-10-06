@@ -1,12 +1,12 @@
+import { LoanDto, ProjectDto } from "@framework/dtos";
 import { LoanStatus } from "@framework/entities";
-import { useStores } from "@ui/redux";
+import { getAuthRoles } from "@framework/types";
+import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
-import { LoanDto } from "@framework/dtos";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { getPending } from "@ui/helpers/get-pending";
 import { useContent } from "@ui/hooks";
-import { Pending } from "@shared/pending";
-
+import { useStores } from "@ui/redux";
 import { LoansTable } from "./components/LoansTable";
 
 interface LoansOverviewParams {
@@ -14,15 +14,16 @@ interface LoansOverviewParams {
 }
 
 interface LoansOverviewProps extends BaseProps {
-  projectId: string;
+  project: ProjectDto;
   loans: LoanDto[];
 }
 
-function LoansOverview({ loans, routes, projectId }: LoansOverviewProps) {
+function LoansOverview({ loans, routes, project }: LoansOverviewProps) {
   const pendingLoanIndex = loans.findIndex(x => x.status === LoanStatus.REQUESTED);
   const pendingLoan = loans[pendingLoanIndex];
 
   const isLastItem = pendingLoanIndex === loans.length - 1;
+  const roles = getAuthRoles(project.roles);
 
   return (
     <ACC.Section>
@@ -34,7 +35,11 @@ function LoansOverview({ loans, routes, projectId }: LoansOverviewProps) {
         </ACC.Renderers.SimpleString>
       )}
 
-      <LoansTable items={loans} createLink={loanId => routes.loansRequest.getLink({ projectId, loanId })} />
+      <LoansTable
+        items={loans}
+        roles={roles}
+        createLink={loanId => routes.loansRequest.getLink({ projectId: project.id, loanId })}
+      />
     </ACC.Section>
   );
 }
@@ -73,7 +78,7 @@ export function LoansOverviewContainer({ projectId, ...props }: LoansOverviewCon
         </ACC.Renderers.SimpleString>
       )}
 
-      {payload && <LoansOverview projectId={projectId} loans={payload.loans} {...props} />}
+      {payload && <LoansOverview project={payload.project} loans={payload.loans} {...props} />}
     </ACC.Page>
   );
 }
