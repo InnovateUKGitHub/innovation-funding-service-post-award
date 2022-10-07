@@ -15,7 +15,7 @@ export abstract class DocumentsStoreBase extends StoreBase {
   }
 
   protected afterUpdate(key: string, message: string | undefined, onComplete: (() => void) | undefined) {
-    this.resetEditor("multipleDocuments", key as unknown as any); // TODO: fix this any type
+    this.resetEditor("multipleDocuments", key as unknown as any, { files: [] }); // TODO: fix this any type
     this.markStale("documents", key, undefined);
     if (message) {
       this.queue(messageSuccess(message));

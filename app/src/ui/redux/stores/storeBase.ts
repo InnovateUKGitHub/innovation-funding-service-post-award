@@ -274,7 +274,7 @@ export class StoreBase {
     );
   }
 
-  protected resetEditor<T extends EditorStateKeys, K extends EditorState[T]>(store: T, key: K) {
-    this.queue(resetEditor(key as unknown as string, store as unknown as string));
+  protected resetEditor<T extends EditorStateKeys, K extends EditorState[T], TDto>(store: T, key: K, newDto: TDto) {
+    this.queue(resetEditor<TDto>(key as unknown as string, store as unknown as string, newDto));
   }
 }
