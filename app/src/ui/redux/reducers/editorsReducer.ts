@@ -101,8 +101,21 @@ export const editorsReducer =
     }
 
     if (action.type === "EDITOR_RESET" && action.payload?.store === store) {
+      // Clear all errors from the Redux state
       const result = getNewStateWithoutErrors(state);
-      delete result[action.payload.id];
+
+      // Create a copy of the editor, but replace the data with
+      // the new replacement default dto
+      const newEditor: IEditorStore<TDto, TValidator> = {
+        ...result[action.payload?.id],
+        data: action.payload?.dto as TDto,
+        status: EditorStatus.Editing,
+      };
+
+      // Assign the new editor to the state
+      result[action.payload?.id] = newEditor;
+
+      // Return the new Redux state
       return result;
     }
 

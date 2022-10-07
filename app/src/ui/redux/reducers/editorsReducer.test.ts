@@ -213,25 +213,43 @@ describe("editorsReducer", () => {
   });
 
   describe("editor reset", () => {
-    it("should delete editor if reset", () => {
-      const originalState = setupInitialState();
+    it("should reset editor to initial state if reset", () => {
+      // Start off with an editor with an ID of "initial"
+      const originalState = setupInitialState(x => {
+        x.data.id = "initial";
+      });
 
+      // Just make sure our original state has been created
+      expect(originalState.editors.claim[1]).not.toBeUndefined();
+
+      // Send off an editor reset call - It should go back to "after".
       const action: EditorResetAction = {
         type: "EDITOR_RESET",
-        payload: { id: "1", store: "claim" },
+        payload: { id: "1", store: "claim", dto: { id: "after" } },
       };
 
-      expect(originalState.editors.claim["1"]).not.toBeUndefined();
+      // Send off the call
       const newState = editorsReducer("claim")(originalState.editors.claim, action);
-      expect(newState["1"]).toBeUndefined();
+
+      // Make sure our state now has the reset Dto
+      expect(newState[1]).toEqual({
+        data: {
+          id: "after",
+        },
+        error: null,
+        status: 1,
+        validator: null,
+      });
     });
 
     it("should not delete other editors if reset", () => {
-      const originalState = setupInitialState();
+      const originalState = setupInitialState(x => {
+        x.data.id = "before";
+      });
 
       const action: EditorResetAction = {
         type: "EDITOR_RESET",
-        payload: { id: "2", store: "claim" },
+        payload: { id: "2", store: "claim", dto: { id: "after" } },
       };
 
       expect(originalState.editors.claim["1"]).not.toBeUndefined();

@@ -58,6 +58,6 @@ export function handleEditorError<T>({ id, store, dto, error, scrollToTop = true
   return createAction("EDITOR_SUBMIT_ERROR", { id, store, dto, error });
 }
 
-export function resetEditor(id: string, store: string) {
-  return createAction("EDITOR_RESET", { id, store });
+export function resetEditor<TDto>(id: string, store: string, dto: TDto) {
+  return createAction("EDITOR_RESET", { id, store, dto });
 }
