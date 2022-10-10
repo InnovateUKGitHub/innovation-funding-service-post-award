@@ -1,4 +1,4 @@
-import { useSearchParams, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { useState } from "react";
 import { PartnerDto, ProjectDto } from "@framework/types";
@@ -17,7 +17,7 @@ import { FilterOptions } from "./Dashboard.interface";
 import { generateFilteredProjects, getAvailableProjectFilters } from "./dashboard.logic";
 
 interface ProjectDashboardParams {
-  search?: string;
+  search?: string | number;
   arrayFilters?: FilterOptions[];
 }
 
@@ -35,24 +35,26 @@ function ProjectDashboard({
   projects,
   unfilteredObjects,
   totalNumberOfProjects,
+  search: searchQuery,
   ...props
 }: ProjectDashboardProps) {
   // TODO: Ideally this would be an api which would be non-js / js agnostic
   // Note: 'unfilteredObjects' is needed as the filter options are derived from projects, when filtered there could be nothing to search.
   const [filterOptions] = useState(() => getAvailableProjectFilters(unfilteredObjects));
+  const search = searchQuery === undefined ? "" : "" + searchQuery;
 
   const { isServer } = useMounted();
   const [arrayFilters, setFilters] = useState<FilterOptions[]>(props.arrayFilters ?? []);
   const { curatedProjects, curatedTotals, totalProjects } = generateFilteredProjects(arrayFilters, projects, partners);
 
   const searchFilterState = {
-    searchValue: props.search,
+    searchValue: search,
     filterValue: arrayFilters,
   };
 
   const projectListProps = {
     routes: props.routes,
-    isFiltering: !!props.search || arrayFilters.length !== filterOptions.length,
+    isFiltering: !!search || arrayFilters.length !== filterOptions.length,
   };
 
   const displaySearch: boolean = totalNumberOfProjects >= config.options.numberOfProjectsToSearch;
@@ -151,8 +153,7 @@ function ProjectDashboard({
 
 const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) => {
   const stores = useStores();
-
-  const projects = stores.projects.getProjectsFilter(props.search);
+  const projects = stores.projects.getProjectsFilter(props.search?.toString());
   const unfilteredObjects = stores.projects.getProjects();
   const partners = stores.partners.getAll();
 

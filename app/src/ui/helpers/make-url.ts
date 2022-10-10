@@ -1,3 +1,6 @@
+/**
+ * Constructs a url based on the passed in parameters
+ */
 export function makeUrlWithQuery(path: string, routeParams: any): string {
   if (!routeParams || Object.keys(routeParams).length === 0) return path.replace(/\?:.+/, "");
   const tokenKeysAsString = Object.keys(routeParams).join("|");
@@ -23,9 +26,15 @@ export function makeUrlWithQuery(path: string, routeParams: any): string {
     .replace(queryRegex, (_: string, p1: string, p2: string) => `${p1}${p2}=${encodeURIComponent(routeParams[p2])}`);
 }
 
+/**
+ * converts string value to number if possible
+ * or returns original string
+ */
 function toNumber(value: string) {
-  const num = Number(value);
-  return Number.isNaN(num) ? value : num;
+  if (/^\d+$/.test(value)) {
+    return Number(value);
+  }
+  return value;
 }
 
 export type Params = Record<string, string | string[] | number>;
