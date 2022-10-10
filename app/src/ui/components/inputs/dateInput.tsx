@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
 import classNames from "classnames";
 import { useDebounce } from "./input-utils";
@@ -6,12 +6,6 @@ import { InputProps } from "./common";
 
 interface FullDateInputProps extends InputProps<Date> {
   id?: string;
-}
-
-interface FullDateState {
-  day: string;
-  month: string;
-  year: string;
 }
 
 const getInitialFullDateState = (props: FullDateInputProps) => {
@@ -33,7 +27,10 @@ const getInitialFullDateState = (props: FullDateInputProps) => {
 };
 
 export function FullDateInput(props: FullDateInputProps) {
-  const [state, setState] = useState<FullDateState>(getInitialFullDateState(props));
+  const init = getInitialFullDateState(props);
+  const [day, setDay] = useState<string>(init.day);
+  const [month, setMonth] = useState<string>(init.month);
+  const [year, setYear] = useState<string>(init.year);
 
   const dayName = `${props.name}_day`;
   const monthName = `${props.name}_month`;
@@ -43,34 +40,33 @@ export function FullDateInput(props: FullDateInputProps) {
     "govuk-input--error": props.hasError === true,
   });
 
-  const sendUpdate = () => {
-    if (props.onChange) {
-      const { day, month, year } = state;
+  const debouncedChange = useDebounce(props.onChange, props.debounce);
 
-      const result = DateTime.fromFormat(`${day}/${month}/${year}`, "d/M/yyyy").set({
+  useEffect(() => {
+    if (props.onChange) {
+      // Create a datetime with the set year/month/day
+      let date = DateTime.local(Number(year), Number(month), Number(day));
+
+      // Set our time to mid-day
+      date = date.set({
         hour: 12,
         minute: 0,
         second: 0,
         millisecond: 0,
       });
 
-      if (result.isValid) {
-        props.onChange(result.toJSDate());
+      // If we have a valid date, return that JS Date object.
+      if (date.isValid) {
+        debouncedChange(date.toJSDate());
       } else if (day !== "" || month !== "" || year !== "") {
-        props.onChange(new Date(NaN));
+        // Return an invalid date.
+        debouncedChange(new Date(NaN));
       } else {
-        props.onChange(null);
+        // If the day/month/year is empty, just return null.
+        debouncedChange(null);
       }
     }
-  };
-  const debouncedSendUpdate = useDebounce(sendUpdate, props.debounce, 500);
-
-  const handleChange = (day: string, month: string, year: string) => {
-    setState({ day, month, year });
-    if (debouncedSendUpdate) {
-      debouncedSendUpdate();
-    }
-  };
+  }, [day, month, year, props, debouncedChange]);
 
   return (
     <div id={props.id} className="govuk-date-input">
@@ -88,8 +84,8 @@ export function FullDateInput(props: FullDateInputProps) {
             disabled={!!props.disabled}
             aria-label={props.ariaLabel && `${props.ariaLabel} day`}
             aria-describedby={props.ariaDescribedBy}
-            value={state.day}
-            onChange={e => handleChange(e.currentTarget.value, state.month, state.year)}
+            value={day}
+            onChange={e => setDay(e.currentTarget.value)}
           />
         </div>
       </div>
@@ -107,8 +103,8 @@ export function FullDateInput(props: FullDateInputProps) {
             disabled={!!props.disabled}
             aria-label={props.ariaLabel && `${props.ariaLabel} month`}
             aria-describedby={props.ariaDescribedBy}
-            value={state.month}
-            onChange={e => handleChange(state.day, e.currentTarget.value, state.year)}
+            value={month}
+            onChange={e => setMonth(e.currentTarget.value)}
           />
         </div>
       </div>
@@ -126,8 +122,8 @@ export function FullDateInput(props: FullDateInputProps) {
             disabled={!!props.disabled}
             aria-label={props.ariaLabel && `${props.ariaLabel} year`}
             aria-describedby={props.ariaDescribedBy}
-            value={state.year}
-            onChange={e => handleChange(state.day, state.month, e.currentTarget.value)}
+            value={year}
+            onChange={e => setYear(e.currentTarget.value)}
           />
         </div>
       </div>
@@ -138,11 +134,6 @@ export function FullDateInput(props: FullDateInputProps) {
 interface MonthYearInputProps extends InputProps<Date> {
   startOrEnd: "start" | "end";
   hideLabel?: boolean;
-}
-
-interface MonthYearState {
-  month: string;
-  year: string;
 }
 
 const getInitialMonthYearState = (props: FullDateInputProps) => {
@@ -162,7 +153,9 @@ const getInitialMonthYearState = (props: FullDateInputProps) => {
 };
 
 export function MonthYearInput(props: MonthYearInputProps) {
-  const [state, setState] = useState<MonthYearState>(getInitialMonthYearState(props));
+  const init = getInitialMonthYearState(props);
+  const [month, setMonth] = useState<string>(init.month);
+  const [year, setYear] = useState<string>(init.year);
 
   const monthName = `${props.name}_month`;
   const yearName = `${props.name}_year`;
@@ -171,38 +164,42 @@ export function MonthYearInput(props: MonthYearInputProps) {
     "govuk-input--error": props.hasError === true,
   });
 
-  const sendUpdate = () => {
+  const debouncedChange = useDebounce(props.onChange, props.debounce);
+
+  useEffect(() => {
     if (props.onChange) {
-      const { month, year } = state;
       const { startOrEnd } = props;
 
-      const date = DateTime.fromFormat(`${month}/${year}`, "M/yyyy");
+      // Create a datetime with the set year/month
+      let date = DateTime.local(Number(year), Number(month));
 
-      const result = (startOrEnd === "start" ? date.startOf("month") : date.endOf("month")).set({
+      // Align our day to the start/end of the month
+      if (startOrEnd === "start") {
+        date = date.startOf("month");
+      } else {
+        date = date.endOf("month");
+      }
+
+      // Set our time to mid-day
+      date = date.set({
         hour: 12,
         minute: 0,
         second: 0,
         millisecond: 0,
       });
 
-      if (result.isValid) {
-        props.onChange(result.toJSDate());
+      // If we have a valid date, return that JS Date object.
+      if (date.isValid) {
+        debouncedChange(date.toJSDate());
       } else if (month !== "" || year !== "") {
-        props.onChange(new Date(NaN));
+        // Return an invalid date.
+        debouncedChange(new Date(NaN));
       } else {
-        props.onChange(null);
+        // If the month/year is empty, just return null.
+        debouncedChange(null);
       }
     }
-  };
-
-  const debouncedSendUpdate = useDebounce(sendUpdate, props.debounce, 500);
-
-  const handleChange = (month: string, year: string) => {
-    setState({ month, year });
-    if (debouncedSendUpdate) {
-      debouncedSendUpdate();
-    }
-  };
+  }, [month, year, props, debouncedChange]);
 
   return (
     <div className="govuk-date-input">
@@ -222,8 +219,8 @@ export function MonthYearInput(props: MonthYearInputProps) {
             disabled={!!props.disabled}
             aria-label={props.ariaLabel && `${props.ariaLabel} month`}
             aria-describedby={props.ariaDescribedBy}
-            value={state.month}
-            onChange={e => handleChange(e.currentTarget.value, state.year)}
+            value={month}
+            onChange={e => setMonth(e.currentTarget.value)}
           />
         </div>
       </div>
@@ -243,8 +240,8 @@ export function MonthYearInput(props: MonthYearInputProps) {
             disabled={!!props.disabled}
             aria-label={props.ariaLabel && `${props.ariaLabel} year`}
             aria-describedby={props.ariaDescribedBy}
-            value={state.year}
-            onChange={e => handleChange(state.month, e.currentTarget.value)}
+            value={year}
+            onChange={e => setYear(e.currentTarget.value)}
           />
         </div>
       </div>
