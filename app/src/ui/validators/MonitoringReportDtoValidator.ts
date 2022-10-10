@@ -89,4 +89,7 @@ export class MonitoringReportDtoValidator extends Results<MonitoringReportDto> {
       ),
     "There are invalid responses.",
   );
+
+  // Limit the monitoring report comment to a max-length of 5000 characters.
+  public readonly addComments = Validation.all(this, () => Validation.maxLength(this, this.model.addComments, 5000));
 }
