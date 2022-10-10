@@ -64,6 +64,7 @@ class MonitoringReportComponent extends React.Component<MonitoringReportReportSu
               value={() => editor.data.addComments}
               update={(dto, v) => (dto.addComments = v || "")}
               qa="additional-comments-text-area"
+              characterCountOptions={{ type: "descending", maxValue: 5000 }}
             />
           </ReportForm.Fieldset>
           <ACC.Renderers.SimpleString>
