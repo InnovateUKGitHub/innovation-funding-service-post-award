@@ -14,7 +14,7 @@ const getJesAccountKey = (searchString: string) => getKey("jesAccountKey", "acco
 const getProjectKey = (projectId: string) => getKey("projectKey", "project", projectId);
 const getProjectsKey = () => getKey("projectsKey", "project", "all");
 const getValidProjectStatusKey = (projectId: string) => getKey("validProjectStatus", getProjectKey(projectId));
-const getPartnerKey = (partnerId: string) => getKey("validProjectStatus", "partner", partnerId);
+const getPartnerKey = (partnerId: string) => getKey("partnerKey", "partner", partnerId);
 const getPartnersKey = () => getKey("partnersKey", "partner", "all");
 const getCostCategoryKey = (partnerId: string) => getKey("costCategoryKey", "filtered", partnerId);
 const getClaimKey = (partnerId: string, periodId: number) =>
