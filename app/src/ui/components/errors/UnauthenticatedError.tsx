@@ -2,6 +2,8 @@ import { useContent } from "@ui/hooks";
 import { PageTitle } from "@ui/features/page-title";
 import { Page, Section } from "@ui/components";
 import { ExternalLink, SimpleString } from "@ui/components/renderers";
+import { isAccDevOrDemo, isLocalDevelopment } from "@shared/isEnv";
+import { UserChanger } from "@ui/containers/developer/UserChanger";
 
 export function UnauthenticatedError() {
   const { getContent } = useContent();
@@ -20,6 +22,8 @@ export function UnauthenticatedError() {
           {contactUsPreLink} {contactUsLink} {contactUsPostLink}
         </SimpleString>
       </Section>
+
+      {isAccDevOrDemo || isLocalDevelopment ? <UserChanger noSearch /> : null}
     </Page>
   );
 }
