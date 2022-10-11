@@ -29,6 +29,7 @@ interface SharedFormProps<T> {
   qa?: string;
   enctype?: "urlencoded" | "multipart";
   isGet?: boolean;
+  action?: string;
   children: ReactNode;
 }
 
@@ -62,7 +63,7 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
 
   // TODO: Refactor '"editor" in props' when tsc is updated, it cannot infer when made a variable :(
   public render() {
-    const { enctype, isGet, qa, children, onChange, onSubmit, ...props } = this.props;
+    const { action = "", enctype, isGet, qa, children, onChange, onSubmit, ...props } = this.props;
 
     const isFormDisabled = "editor" in props ? props.editor.status === EditorStatus.Saving : props.isSaving;
 
@@ -87,7 +88,7 @@ class FormComponent<T> extends React.Component<FormProps<T>, []> {
     const methodValue = isGet ? "get" : "post";
 
     return (
-      <form encType={encType} method={methodValue} action="" data-qa={qa} onSubmit={e => this.onSubmit(e)}>
+      <form encType={encType} method={methodValue} action={action} data-qa={qa} onSubmit={e => this.onSubmit(e)}>
         <SecurityTokenInput />
 
         {childrenWithProps}
