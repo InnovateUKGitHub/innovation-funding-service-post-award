@@ -236,7 +236,7 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
 
     return (
       <ACC.Section qa="guidance">
-        <ACC.Renderers.Markdown value={pcrItem.guidance} />
+        <ACC.Renderers.Markdown trusted value={pcrItem.guidance} />
       </ACC.Section>
     );
   }

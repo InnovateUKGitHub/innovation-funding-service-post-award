@@ -20,7 +20,7 @@ export const Content = ({ value, styles }: IContentProps) => {
   const { key, content, markdown } = getResultByQuery(value);
 
   const displayValue: string | React.ReactElement = markdown ? (
-    <Markdown style={styles && { color: styles.color }} value={content} />
+    <Markdown trusted style={styles && { color: styles.color }} value={content} />
   ) : (
     content
   );
