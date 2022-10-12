@@ -46,7 +46,7 @@ export function ClaimsDashboardGuidance({
       return <Acc.Renderers.SimpleString>{defaultGuidanceMessage}</Acc.Renderers.SimpleString>;
     }
 
-    guidanceMessage = <Acc.Renderers.Markdown value={defaultGuidanceMessage} />;
+    guidanceMessage = <Acc.Renderers.Markdown trusted value={defaultGuidanceMessage} />;
   }
 
   return <Acc.ValidationMessage qa="guidance-message" messageType="info" message={guidanceMessage} />;

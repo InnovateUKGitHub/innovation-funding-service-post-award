@@ -2,6 +2,7 @@ import { marked } from "marked";
 
 export interface IMarkdownProps {
   value: string;
+  trusted?: boolean;
   style?: React.CSSProperties;
 }
 
@@ -25,8 +26,15 @@ renderer.link = (href, title, text) => {
  * between server side and client side. Especially if wrapped in other components
  * and parents. E.g. if `<Content>` wrapped in `<SimpleString>`
  */
-export function Markdown({ value, ...props }: IMarkdownProps) {
+export function Markdown({ value, trusted = false, ...props }: IMarkdownProps) {
   if (!value.length) return null;
+
+  if (!trusted) {
+    value = value
+      .replace("&", "&amp;") // Replace ampersands to keep them available
+      .replace("<", "&lt;") // Replace < and > to ensure HTML is not injected
+      .replace(">", "&gt;");
+  }
 
   return (
     <span

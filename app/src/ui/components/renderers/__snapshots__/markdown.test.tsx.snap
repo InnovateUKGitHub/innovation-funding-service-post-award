@@ -1,0 +1,32 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Markdown @renders with converted markdown parsed correctly with headings 1`] = `
+"<span class=\\"govuk-body markdown\\"><h2 id=\\"heading-test\\">Heading Test</h2>
+</span>"
+`;
+
+exports[`Markdown @renders with converted markdown parsed correctly with html and secure disabled 1`] = `
+"<span class=\\"govuk-body markdown\\"><p>&lt;script&gt;alert(\\"Neil Little\\")</p>
+</span>"
+`;
+
+exports[`Markdown @renders with converted markdown parsed correctly with html and secure enabled 1`] = `"<span class=\\"govuk-body markdown\\"><p>Hello world!</p></span>"`;
+
+exports[`Markdown @renders with converted markdown parsed correctly with ordered lists 1`] = `
+"<span class=\\"govuk-body markdown\\"><ol>
+<li>stub-ordered-item</li>
+</ol>
+</span>"
+`;
+
+exports[`Markdown @renders with converted markdown parsed correctly with string 1`] = `
+"<span class=\\"govuk-body markdown\\"><p>stub-content</p>
+</span>"
+`;
+
+exports[`Markdown @renders with converted markdown parsed correctly with unordered lists 1`] = `
+"<span class=\\"govuk-body markdown\\"><ul>
+<li>stub-unordered-item</li>
+</ul>
+</span>"
+`;

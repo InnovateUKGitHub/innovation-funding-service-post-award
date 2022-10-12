@@ -47,26 +47,22 @@ Heading Test
 
     describe("with converted markdown parsed correctly", () => {
       test.each`
-        name                      | markdown                   | parsedNodes     | expected
-        ${"with string"}          | ${"stub-content"}          | ${["p"]}        | ${"<p>stub-content</p>"}
-        ${"with headings"}        | ${stubMarkdownHeading}     | ${["h2"]}       | ${'<h2 id="heading-test">Heading Test</h2></span>'}
-        ${"with ordered lists"}   | ${"1. stub-ordered-item"}  | ${["ol", "li"]} | ${"<ol><li>stub-ordered-item</li></ol>"}
-        ${"with unordered lists"} | ${"* stub-unordered-item"} | ${["ul", "li"]} | ${"<ul><li>stub-unordered-item</li></ul>"}
-      `("$name", ({ markdown, parsedNodes, expected }) => {
-        const { queryByText, container } = setup({ value: markdown });
+        name                               | trusted  | bannedStrings                | markdown
+        ${"with string"}                   | ${true}  | ${[]}                        | ${"stub-content"}
+        ${"with headings"}                 | ${true}  | ${[]}                        | ${stubMarkdownHeading}
+        ${"with ordered lists"}            | ${true}  | ${[]}                        | ${"1. stub-ordered-item"}
+        ${"with unordered lists"}          | ${true}  | ${[]}                        | ${"* stub-unordered-item"}
+        ${"with html and secure enabled"}  | ${true}  | ${[]}                        | ${"<p>Hello world!</p>"}
+        ${"with html and secure disabled"} | ${false} | ${["<script>", "</script>"]} | ${'<script>alert("Neil Little")</script>'}
+      `("$name", ({ markdown, trusted, bannedStrings }) => {
+        const { container } = setup({ value: markdown, trusted });
 
-        // Note: This is a simple parser, mutlitple elements will fail. Consider testing refactor to cater to more scenarios!
-        const parseHtmlToExpectedText = expected.replace(/<[^>]+>/g, "");
-        const targetElement = queryByText(parseHtmlToExpectedText);
+        // Use snapshot testing to compare Markdown output values
+        expect(container.innerHTML).toMatchSnapshot();
 
-        expect(targetElement).toBeInTheDocument();
-
-        for (const node of parsedNodes) {
-          const targetNode = container.querySelector(node);
-
-          if (!targetNode) throw Error(`It appears "${node}" was not found!`);
-
-          expect(targetNode).toBeInTheDocument();
+        // Ensure that banned values will NEVER be in the markdown output
+        for (const bannedString of bannedStrings) {
+          expect(container.innerHTML).not.toContain(bannedString);
         }
       });
     });
