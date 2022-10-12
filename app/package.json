@@ -58,6 +58,7 @@
     "fuse": "^0.4.0",
     "fuse.js": "^6.2.1",
     "i18next": "^19.1.0",
+    "isomorphic-dompurify": "^0.23.0",
     "isomorphic-fetch": "^2.2.1",
     "isomorphic-form-data": "^2.0.0",
     "jsforce": "^1.11.0",
