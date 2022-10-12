@@ -5,10 +5,7 @@ exports[`Markdown @renders with converted markdown parsed correctly with heading
 </span>"
 `;
 
-exports[`Markdown @renders with converted markdown parsed correctly with html and secure disabled 1`] = `
-"<span class=\\"govuk-body markdown\\"><p>&lt;script&gt;alert(\\"Neil Little\\")</p>
-</span>"
-`;
+exports[`Markdown @renders with converted markdown parsed correctly with html and secure disabled 1`] = `"<span class=\\"govuk-body markdown\\"></span>"`;
 
 exports[`Markdown @renders with converted markdown parsed correctly with html and secure enabled 1`] = `"<span class=\\"govuk-body markdown\\"><p>Hello world!</p></span>"`;
 
