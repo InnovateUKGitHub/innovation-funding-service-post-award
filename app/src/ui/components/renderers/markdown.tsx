@@ -1,4 +1,5 @@
 import { marked } from "marked";
+import DOMPurify from "isomorphic-dompurify";
 
 export interface IMarkdownProps {
   value: string;
@@ -29,18 +30,20 @@ renderer.link = (href, title, text) => {
 export function Markdown({ value, trusted = false, ...props }: IMarkdownProps) {
   if (!value.length) return null;
 
+  let content = value;
+
   if (!trusted) {
-    value = value
-      .replace("&", "&amp;") // Replace ampersands to keep them available
-      .replace("<", "&lt;") // Replace < and > to ensure HTML is not injected
-      .replace(">", "&gt;");
+    // Sanitise input Markdown to remove HTML.
+    content = DOMPurify.sanitize(value, {
+      FORBID_TAGS: ["script", "style", "iframe", "frame", "html", "body", "head"],
+    });
   }
 
   return (
     <span
       {...props}
       className="govuk-body markdown"
-      dangerouslySetInnerHTML={{ __html: marked.parse(value, { renderer }) }}
+      dangerouslySetInnerHTML={{ __html: marked.parse(content, { renderer }) }}
     ></span>
   );
 }

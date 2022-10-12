@@ -17,3 +17,9 @@ jest.mock("uuid", () => ({
   __esModule: true,
   v4: () => `1234-stub-uuid-${Math.floor(Math.random() * 100000)}`,
 }));
+
+// TODO: Delete the next few lines...
+// https://github.com/kkomelin/isomorphic-dompurify/issues/91#issuecomment-1012645198
+const util = require("util");
+global.TextEncoder = util.TextEncoder;
+global.TextDecoder = util.TextDecoder;
