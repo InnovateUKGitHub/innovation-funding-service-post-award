@@ -24,6 +24,19 @@ describe("<ErrorContainer />", () => {
           yourDashboardMessage: { content: "stub-yourDashboardMessage" },
         },
       },
+      components: {
+        userChanger: {
+          sectionTitle: { content: "stub-sectionTitle" },
+          pickUserSubtitle: { content: "stub-pickUserSubtitle" },
+          enterUserSubtitle: { content: "stub-enterUserSubtitle" },
+          projectDropdownPlaceholder: { content: "stub-projectDropdownPlaceholder" },
+          contactDropdownPlaceholder: { content: "stub-contactDropdownPlaceholder" },
+          contactListEmpty: { content: "stub-contactListEmpty" },
+          changeUserMessage: { content: "stub-changeUserMessage" },
+          resetUserMessage: { content: "stub-resetUserMessage" },
+          invalidUserMessage: { content: "stub-invalidUserMessage" },
+        },
+      },
     };
 
     const setup = (props: ErrorContainerProps) =>

@@ -111,6 +111,7 @@ import { ClaimsComponentsContent } from "./pages/claims/components/claimsCompone
 import { PostcodeContent } from "./pages/project/postcodeContent";
 import { BroadcastPage } from "./pages/broadcastPage";
 import { LoansSummary, LoanRequestContent } from "./pages/loans";
+import { UserChangerContent } from "./components/userChangerContent";
 
 export type ContentSelector = (content: Content) => ContentResult | undefined;
 
@@ -243,6 +244,7 @@ export class Content extends ContentBase {
     claimDetailsLinkContent: ClaimDetailsLinkContent;
     phaseBannerContent: PhaseBannerContent;
     broadcasts: BroadcastContent;
+    userChanger: UserChangerContent;
   };
 
   constructor(competitionType?: ProjectDto["competitionType"]) {
@@ -381,6 +383,7 @@ export class Content extends ContentBase {
       claimDetailsLinkContent: new ClaimDetailsLinkContent(this, competitionType),
       phaseBannerContent: new PhaseBannerContent(this, competitionType),
       broadcasts: new BroadcastContent(this),
+      userChanger: new UserChangerContent(this),
     };
   }
 }

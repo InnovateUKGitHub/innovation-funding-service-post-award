@@ -123,6 +123,17 @@
       "readBroadcastLinkText": "Read more",
       "broadcastLabelStartDate": "Start date:",
       "broadcastLabelEndDate": "End date:"
+    },
+    "userChanger": {
+      "section-title": "User Switcher",
+      "pick-user-subtitle": "Pick a user",
+      "enter-user-subtitle": "Or manually enter an E-Mail",
+      "project-dropdown-placeholder": "-- Select a project --",
+      "contact-dropdown-placeholder": "-- Select a contact --",
+      "contact-list-empty": "There are no contacts to select for this project",
+      "change-user-message": "Change user",
+      "reset-user-message": "Revert to System User",
+      "invalid-user-message": "You have authenticated as an invalid user. Please enter the E-Mail address of the valid user, or press the \"Revert to System User\" button to re-authenticate as the system user."
     }
   },
   "pages": {
@@ -155,9 +166,6 @@
     },
     "home": {
       "title": "Home",
-      "current-user-heading": "Current user",
-      "change-user-message": "Change user",
-      "reset-user-message": "Reset user",
       "projects-heading": "Projects",
       "projects-dashboard-heading": "Projects dashboard"
     },

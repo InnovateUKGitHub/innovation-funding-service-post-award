@@ -73,7 +73,7 @@ const UserChangerProjectSelectorPartnerSelector = ({
 
   // If no contacts exists for the project, display a message
   if (contacts.length === 0) {
-    return <SimpleString>There are no contacts to select for this project.</SimpleString>;
+    return <SimpleString>{getContent(x => x.components.userChanger.contactListEmpty)}</SimpleString>;
   }
 
   return (
@@ -143,12 +143,12 @@ const UserChangerProjectSelector = ({ projects }: { projects: ProjectDto[] }) =>
       }}
       action="/"
     >
-      <H3>Pick a user...</H3>
+      <H3>{getContent(x => x.components.userChanger.pickUserSubtitle)}</H3>
       <SelectUserForm.DropdownList
         name="projectId"
         options={projectOptions}
         hasEmptyOption
-        placeholder="-- Select a project --"
+        placeholder={getContent(x => x.components.userChanger.projectDropdownPlaceholder)}
         value={p => projectOptions.find(x => p.projectId === x.value)}
         update={(x, v) => {
           x.projectId = String(v?.value);
@@ -156,7 +156,7 @@ const UserChangerProjectSelector = ({ projects }: { projects: ProjectDto[] }) =>
       />
       {project?.id && <UserChangerProjectSelectorPartnerLoader project={project} onChange={v => setEmail(v?.email)} />}
 
-      <H3>Or manually enter an E-Mail</H3>
+      <H3>{getContent(x => x.components.userChanger.enterUserSubtitle)}</H3>
 
       <SelectUserForm.String
         label="user"
@@ -166,8 +166,10 @@ const UserChangerProjectSelector = ({ projects }: { projects: ProjectDto[] }) =>
         update={(x, v) => (x.email = v || "")}
       />
 
-      <SelectUserForm.Submit>{getContent(x => x.home.changeUserMessage)}</SelectUserForm.Submit>
-      <SelectUserForm.Button name="reset">{getContent(x => x.home.resetUserMessage)}</SelectUserForm.Button>
+      <SelectUserForm.Submit>{getContent(x => x.components.userChanger.changeUserMessage)}</SelectUserForm.Submit>
+      <SelectUserForm.Button name="reset">
+        {getContent(x => x.components.userChanger.resetUserMessage)}
+      </SelectUserForm.Button>
     </SelectUserForm.Form>
   );
 };
@@ -196,10 +198,7 @@ const UserChangerManualEmailEntry = () => {
       }}
       action="/"
     >
-      <SimpleString>
-        You have authenticated as an invalid user. Enter the E-Mail address of the valid user, or press &quot;Reset
-        User&quot; to re-authenticate as the system user.
-      </SimpleString>
+      <SimpleString>{getContent(x => x.components.userChanger.invalidUserMessage)}</SimpleString>
 
       <SelectUserForm.String
         label="user"
@@ -209,8 +208,10 @@ const UserChangerManualEmailEntry = () => {
         update={(x, v) => (x.email = v || "")}
       />
 
-      <SelectUserForm.Submit>{getContent(x => x.home.changeUserMessage)}</SelectUserForm.Submit>
-      <SelectUserForm.Button name="reset">{getContent(x => x.home.resetUserMessage)}</SelectUserForm.Button>
+      <SelectUserForm.Submit>{getContent(x => x.components.userChanger.changeUserMessage)}</SelectUserForm.Submit>
+      <SelectUserForm.Button name="reset">
+        {getContent(x => x.components.userChanger.resetUserMessage)}
+      </SelectUserForm.Button>
     </SelectUserForm.Form>
   );
 };
@@ -223,7 +224,7 @@ const UserChangerManualEmailEntry = () => {
  */
 const UserChanger = ({ noSearch = false }: { noSearch?: boolean }) => {
   return (
-    <Section title="User Switcher">
+    <Section title={x => x.components.userChanger.sectionTitle}>
       {!noSearch ? <UserChangerProjectLoader /> : <UserChangerManualEmailEntry />}
     </Section>
   );
