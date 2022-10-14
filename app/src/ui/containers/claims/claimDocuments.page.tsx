@@ -32,6 +32,7 @@ type ClaimDocumentContentKeys =
   | "requiredUploadStep1"
   | "requiredUploadStep2"
   | "iarRequired"
+  | "iarRequiredPara2"
   | "sbriDocumentAdvice"
   | "sbriInvoiceBullet1"
   | "sbriInvoiceBullet2"
@@ -43,6 +44,9 @@ type ClaimDocumentContentKeys =
 
 type ClaimDocumentContent = Record<ClaimDocumentContentKeys, string>;
 
+/**
+ * @returns {ClaimDocumentContent} content for the claim document page
+ */
 export function useClaimDocumentContent(): ClaimDocumentContent {
   const { getContent } = useContent();
 
@@ -53,19 +57,17 @@ export function useClaimDocumentContent(): ClaimDocumentContent {
     documentsListSectionTitle: getContent(x => x.claimDocuments.documentsListSectionTitle),
     saveAndContinueToSummaryButton: getContent(x => x.claimDocuments.saveAndContinueToSummaryButton),
     saveAndContinueToForecastButton: getContent(x => x.claimDocuments.saveAndContinueToForecastButton),
-
     sbriDocumentAdvice: getContent(x => x.claimDocuments.messages.sbriDocumentAdvice),
     sbriInvoiceBullet1: getContent(x => x.claimDocuments.messages.sbriInvoiceBullet1),
     sbriInvoiceBullet2: getContent(x => x.claimDocuments.messages.sbriInvoiceBullet2),
     sbriInvoiceBullet3: getContent(x => x.claimDocuments.messages.sbriInvoiceBullet3),
     sbriMoAdvice: getContent(x => x.claimDocuments.messages.sbriMoAdvice),
     finalClaimMessage: getContent(x => x.claimDocuments.messages.finalClaimMessage),
-
     finalClaimGuidanceParagraph1: getContent(x => x.claimDocuments.messages.finalClaimGuidanceParagraph1),
     finalClaimStep1: getContent(x => x.claimDocuments.messages.finalClaimStep1),
     finalClaimStep2: getContent(x => x.claimDocuments.messages.finalClaimStep2),
     iarRequired: getContent(x => x.claimDocuments.messages.iarRequired),
-
+    iarRequiredPara2: getContent(x => x.claimDocuments.messages.iarRequiredPara2),
     iarRequiredAdvice: getContent(x => x.claimDocuments.messages.iarRequiredAdvice),
     finalClaimIarAdvice: getContent(x => x.claimDocuments.messages.finalClaimIarAdvice),
     finalClaimNonIarAdvice: getContent(x => x.claimDocuments.messages.finalClaimNonIarAdvice),
@@ -73,7 +75,6 @@ export function useClaimDocumentContent(): ClaimDocumentContent {
     requiredUploadAdvice: getContent(x => x.claimDocuments.messages.requiredUploadAdvice),
     requiredUploadStep1: getContent(x => x.claimDocuments.messages.requiredUploadStep1),
     requiredUploadStep2: getContent(x => x.claimDocuments.messages.requiredUploadStep2),
-
     uploadTitle: getContent(x => x.claimDocuments.documentMessages.uploadTitle),
     uploadDocumentsLabel: getContent(x => x.claimDocuments.documentMessages.uploadDocumentsLabel),
     noDocumentsUploaded: getContent(x => x.claimDocuments.documentMessages.noDocumentsUploaded),
@@ -324,6 +325,7 @@ export interface ClaimDocumentAdviceProps extends Pick<ClaimDto, "isIarRequired"
     | "finalClaimStep1"
     | "finalClaimStep2"
     | "iarRequired"
+    | "iarRequiredPara2"
     | "sbriDocumentAdvice"
     | "sbriInvoiceBullet1"
     | "sbriInvoiceBullet2"
@@ -334,6 +336,9 @@ export interface ClaimDocumentAdviceProps extends Pick<ClaimDto, "isIarRequired"
 }
 
 // Note: Consider refactoring to an object loop based on competitionType if this grows in complexity
+/**
+ * Displays claim document advice
+ */
 export function ClaimDocumentAdvice({
   content,
   isFinalClaim,
@@ -342,7 +347,7 @@ export function ClaimDocumentAdvice({
 }: ClaimDocumentAdviceProps) {
   const { isKTP, isCombinationOfSBRI } = checkProjectCompetition(competitionType);
 
-  const getAdvise = () => {
+  const getAdvice = () => {
     if (isKTP) {
       return (
         <>
@@ -419,16 +424,24 @@ export function ClaimDocumentAdvice({
               <li>{content.finalClaimStep2}</li>
             </ACC.OL>
 
-            {isIarRequired && <ACC.Renderers.SimpleString>{content.iarRequired}</ACC.Renderers.SimpleString>}
+            {isIarRequired && (
+              <>
+                <ACC.Renderers.SimpleString>{content.iarRequired}</ACC.Renderers.SimpleString>
+                <ACC.Renderers.SimpleString>{content.iarRequiredPara2}</ACC.Renderers.SimpleString>
+              </>
+            )}
           </>
         ) : (
-          <ACC.Renderers.SimpleString qa="iarText">{content.iarRequired}</ACC.Renderers.SimpleString>
+          <>
+            <ACC.Renderers.SimpleString qa="iarText">{content.iarRequired}</ACC.Renderers.SimpleString>
+            <ACC.Renderers.SimpleString>{content.iarRequiredPara2}</ACC.Renderers.SimpleString>
+          </>
         )}
       </>
     );
   };
 
-  const adviceContent = getAdvise();
+  const adviceContent = getAdvice();
 
   return adviceContent ? <div data-qa="iarText">{adviceContent}</div> : null;
 }
