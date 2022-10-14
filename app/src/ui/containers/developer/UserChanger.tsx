@@ -1,5 +1,5 @@
 import { ProjectContactDto, ProjectDto } from "@framework/dtos";
-import { H3, Loader, Section, TypedForm } from "@ui/components";
+import { H3, Loader, Section, SelectOption, TypedForm } from "@ui/components";
 import { DropdownListOption } from "@ui/components/inputs";
 import { SimpleString } from "@ui/components/renderers";
 import { useContent } from "@ui/hooks";
@@ -17,6 +17,7 @@ interface UserChangerManualEmailFormInputs {
 }
 interface UserSwitcherFormInputs extends UserChangerManualEmailFormInputs {
   projectId?: string;
+  shouldStripNoemail: boolean;
 }
 
 const UserChangerProjectSelectorPartnerSelector = ({
@@ -124,6 +125,7 @@ const UserChangerProjectSelector = ({ projects }: { projects: ProjectDto[] }) =>
 
   const [project, setProjectId] = useState<ProjectDto>();
   const [email, setEmail] = useState<string | undefined>(initialEmailState);
+  const [shouldStripNoemail, setShouldStripNoEmail] = useState<boolean>(true);
   const SelectUserForm = TypedForm<UserSwitcherFormInputs>();
 
   // Create options for dropdown to select a project.
@@ -134,13 +136,31 @@ const UserChangerProjectSelector = ({ projects }: { projects: ProjectDto[] }) =>
     qa: p.id,
   }));
 
+  // Create options for checkboxes to toggle "noemail" stripping support
+  const options: SelectOption[] = [{ id: "true", value: "Remove 'noemail' from end of email automatically" }];
+
   const userFormProps = {
-    data: { projectId: project?.id, email },
+    data: { projectId: project?.id, email, shouldStripNoemail },
     onChange: (e: UserSwitcherFormInputs) => {
       setProjectId(projects.find(x => x.id === e.projectId));
+      setShouldStripNoEmail(e.shouldStripNoemail);
       setEmail(e.email);
     },
     action: "/",
+  };
+
+  /**
+   * Strip "noemail" from the end of an email address, but only if enabled.
+   *
+   * @param email The email address
+   * @returns The email address, with "noemail" stripped (if enabled)
+   */
+  const stripNoEmail = (email?: string | null) => {
+    let newmail = email || "";
+    if (shouldStripNoemail) {
+      newmail = newmail.replace(/noemail$/, "");
+    }
+    return newmail;
   };
 
   return (
@@ -153,12 +173,12 @@ const UserChangerProjectSelector = ({ projects }: { projects: ProjectDto[] }) =>
           hasEmptyOption
           placeholder={getContent(x => x.components.userChanger.projectDropdownPlaceholder)}
           value={p => projectOptions.find(x => p.projectId === x.value)}
-          update={(x, v) => {
-            x.projectId = String(v?.value);
-          }}
+          update={(x, value) => (x.projectId = String(value?.value))}
         />
       </SelectUserForm.Form>
-      {project?.id && <UserChangerProjectSelectorPartnerLoader project={project} onChange={v => setEmail(v?.email)} />}
+      {project?.id && (
+        <UserChangerProjectSelectorPartnerLoader project={project} onChange={v => setEmail(stripNoEmail(v?.email))} />
+      )}
       <SelectUserForm.Form {...userFormProps}>
         <H3>{getContent(x => x.components.userChanger.enterUserSubtitle)}</H3>
 
@@ -167,7 +187,16 @@ const UserChangerProjectSelector = ({ projects }: { projects: ProjectDto[] }) =>
           name="user"
           labelHidden
           value={x => x.email}
-          update={(x, v) => (x.email = v || "")}
+          update={(x, value) => {
+            x.email = stripNoEmail(value);
+          }}
+        />
+
+        <SelectUserForm.Checkboxes
+          name="itemStatus"
+          options={options}
+          value={x => (x.shouldStripNoemail ? options : [])}
+          update={(x, value) => (x.shouldStripNoemail = value?.some(y => y.id === "true") || false)}
         />
 
         <SelectUserForm.Submit>{getContent(x => x.components.userChanger.changeUserMessage)}</SelectUserForm.Submit>
