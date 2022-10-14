@@ -134,43 +134,48 @@ const UserChangerProjectSelector = ({ projects }: { projects: ProjectDto[] }) =>
     qa: p.id,
   }));
 
+  const userFormProps = {
+    data: { projectId: project?.id, email },
+    onChange: (e: UserSwitcherFormInputs) => {
+      setProjectId(projects.find(x => x.id === e.projectId));
+      setEmail(e.email);
+    },
+    action: "/",
+  };
+
   return (
-    <SelectUserForm.Form
-      data={{ projectId: project?.id, email }}
-      onChange={e => {
-        setProjectId(projects.find(x => x.id === e.projectId));
-        setEmail(e.email);
-      }}
-      action="/"
-    >
-      <H3>{getContent(x => x.components.userChanger.pickUserSubtitle)}</H3>
-      <SelectUserForm.DropdownList
-        name="projectId"
-        options={projectOptions}
-        hasEmptyOption
-        placeholder={getContent(x => x.components.userChanger.projectDropdownPlaceholder)}
-        value={p => projectOptions.find(x => p.projectId === x.value)}
-        update={(x, v) => {
-          x.projectId = String(v?.value);
-        }}
-      />
+    <>
+      <SelectUserForm.Form {...userFormProps}>
+        <H3>{getContent(x => x.components.userChanger.pickUserSubtitle)}</H3>
+        <SelectUserForm.DropdownList
+          name="projectId"
+          options={projectOptions}
+          hasEmptyOption
+          placeholder={getContent(x => x.components.userChanger.projectDropdownPlaceholder)}
+          value={p => projectOptions.find(x => p.projectId === x.value)}
+          update={(x, v) => {
+            x.projectId = String(v?.value);
+          }}
+        />
+      </SelectUserForm.Form>
       {project?.id && <UserChangerProjectSelectorPartnerLoader project={project} onChange={v => setEmail(v?.email)} />}
+      <SelectUserForm.Form {...userFormProps}>
+        <H3>{getContent(x => x.components.userChanger.enterUserSubtitle)}</H3>
 
-      <H3>{getContent(x => x.components.userChanger.enterUserSubtitle)}</H3>
+        <SelectUserForm.String
+          label="user"
+          name="user"
+          labelHidden
+          value={x => x.email}
+          update={(x, v) => (x.email = v || "")}
+        />
 
-      <SelectUserForm.String
-        label="user"
-        name="user"
-        labelHidden
-        value={x => x.email}
-        update={(x, v) => (x.email = v || "")}
-      />
-
-      <SelectUserForm.Submit>{getContent(x => x.components.userChanger.changeUserMessage)}</SelectUserForm.Submit>
-      <SelectUserForm.Button name="reset">
-        {getContent(x => x.components.userChanger.resetUserMessage)}
-      </SelectUserForm.Button>
-    </SelectUserForm.Form>
+        <SelectUserForm.Submit>{getContent(x => x.components.userChanger.changeUserMessage)}</SelectUserForm.Submit>
+        <SelectUserForm.Button name="reset">
+          {getContent(x => x.components.userChanger.resetUserMessage)}
+        </SelectUserForm.Button>
+      </SelectUserForm.Form>
+    </>
   );
 };
 
