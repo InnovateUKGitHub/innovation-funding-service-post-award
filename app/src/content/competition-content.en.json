@@ -26,6 +26,7 @@
       },
       "claims-messages": {
         "iar-required": "You must attach a schedule 3 to this claim.",
+        "iar-required-para-2": "",
         "final-claim-guidance": "You need to complete the following tasks before we can approve your final claim and make your last payment: \n\n-   upload a Schedule 3 \n-   upload the LMC meeting's minutes or virtual approval\n-   complete your final report"
       },
       "financial-virement-edit": {

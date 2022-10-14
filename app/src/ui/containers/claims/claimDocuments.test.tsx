@@ -30,6 +30,7 @@ describe("useClaimDocumentContent()", () => {
       saveAndContinueToForecastButton: { content: "stub-saveAndContinueToForecastButton" },
       messages: {
         iarRequired: { content: "stub-iarRequired" },
+        iarRequiredPara2: { content: "stub-iarRequired-para-2" },
         iarRequiredAdvice: { content: "stub-iarRequiredAdvice" },
         finalClaimIarAdvice: { content: "stub-finalClaimIarAdvice" },
         finalClaimNonIarAdvice: { content: "stub-finalClaimNonIarAdvice" },
@@ -125,6 +126,7 @@ describe("<ClaimDocumentAdvice />", () => {
     finalClaimStep1: "stub-finalClaimStep1",
     finalClaimStep2: "stub-finalClaimStep2",
     iarRequired: "stub-iarRequired",
+    iarRequiredPara2: "stub-iarRequiredPara2",
     sbriDocumentAdvice: "stub-sbriInvoice",
     sbriInvoiceBullet1: "stub-sbriInvoice-bullet-1",
     sbriInvoiceBullet2: "stub-sbriInvoice-bullet-2",

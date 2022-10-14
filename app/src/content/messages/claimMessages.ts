@@ -34,6 +34,7 @@ export class ClaimMessages extends ContentBase {
   public readonly finalClaimStep1 = this.getContent("final-claim-step-1");
   public readonly finalClaimStep2 = this.getContent("final-claim-step-2");
   public readonly iarRequired = this.getContent("iar-required");
+  public readonly iarRequiredPara2 = this.getContent("iar-required-para-2");
   public readonly usefulTip = this.getContent("useful-tip");
   public readonly requiredUploadAdvice = this.getContent("required-upload-advice");
   public readonly requiredUploadStep1 = this.getContent("required-upload-step-1");
