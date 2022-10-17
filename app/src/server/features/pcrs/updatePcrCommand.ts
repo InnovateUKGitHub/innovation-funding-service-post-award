@@ -3,7 +3,7 @@ import { PCRDtoValidator } from "@ui/validators/pcrDtoValidator";
 import { Authorisation, IContext, PCRItemType } from "@framework/types";
 import { ProjectChangeRequestItemEntity, ProjectChangeRequestItemForCreateEntity } from "@framework/entities";
 import { GetAllForProjectQuery } from "@server/features/partners";
-import { CostCategoryType, PCRStatus, ProjectRole } from "@framework/constants";
+import { CostCategoryType, PCRItemTypeName, PCRStatus, ProjectRole } from "@framework/constants";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { sum } from "@framework/util";
@@ -168,6 +168,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
             ...init,
             offsetMonths: dto.offsetMonths,
             projectDuration: dto.offsetMonths ? dto.offsetMonths + dto.projectDurationSnapshot : null,
+            shortName: PCRItemTypeName.TimeExtension,
           };
         }
         break;
