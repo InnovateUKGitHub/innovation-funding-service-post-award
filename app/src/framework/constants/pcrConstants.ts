@@ -45,7 +45,7 @@ export enum PCRItemStatus {
   Complete = 3,
 }
 
-export enum PCRItemType {
+export const enum PCRItemType {
   Unknown = 0,
   AccountNameChange = 10,
   PartnerAddition = 20,
@@ -59,6 +59,22 @@ export enum PCRItemType {
   PeriodLengthChange = 100,
   LoanDrawdownChange = 110,
   LoanDrawdownExtension = 120,
+}
+
+export const enum PCRItemTypeName {
+  Unknown = "Unknown",
+  AccountNameChange = "AccountNameChange",
+  PartnerAddition = "PartnerAddition",
+  PartnerWithdrawal = "PartnerWithdrawal",
+  ProjectSuspension = "ProjectSuspension",
+  ProjectTermination = "ProjectTermination",
+  MultiplePartnerFinancialVirement = "MultiplePartnerFinancialVirement",
+  SinglePartnerFinancialVirement = "SinglePartnerFinancialVirement",
+  ScopeChange = "ScopeChange",
+  TimeExtension = "TimeExtension",
+  PeriodLengthChange = "PeriodLengthChange",
+  LoanDrawdownChange = "LoanDrawdownChange",
+  LoanDrawdownExtension = "LoanDrawdownExtension",
 }
 
 export enum PCRParticipantSize {

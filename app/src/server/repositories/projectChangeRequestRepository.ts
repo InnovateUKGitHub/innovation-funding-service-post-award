@@ -1,4 +1,4 @@
-import { PCRItemStatus, PCRStatus } from "@framework/constants";
+import { PCRItemStatus, PCRItemTypeName, PCRStatus } from "@framework/constants";
 import {
   ProjectChangeRequestEntity,
   ProjectChangeRequestForCreateEntity,
@@ -314,7 +314,7 @@ export class ProjectChangeRequestRepository
   async updateItems(pcr: ProjectChangeRequestEntity, items: ProjectChangeRequestItemEntity[]) {
     await super.updateAll(
       items.map(x => {
-        const isDurationChange = x.shortName === "Duration";
+        const isDurationChange = x.shortName === PCRItemTypeName.TimeExtension;
         const additionalNumberOfMonths = isDurationChange ? x.offsetMonths : x.availabilityPeriodChange;
 
         return {
