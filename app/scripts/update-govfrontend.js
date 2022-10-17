@@ -1,7 +1,6 @@
 const sass = require("sass");
 const path = require("path");
 const fs = require("fs");
-
 const { minify } = require("terser");
 
 const govFrontendPackageJson = JSON.parse(
@@ -51,31 +50,17 @@ async function createGovukStyles() {
   const govFrontendAllSass = `node_modules/govuk-frontend/${govFrontendPackageJson.sass}`;
 
   // Parse SCSS -> CSS
-  const parsedSassResponse = sass.renderSync({ file: govFrontendAllSass, outputStyle: "compressed" });
+  const parsedSassResponse = sass.compile(govFrontendAllSass);
   const parsedCssContent = Buffer.from(parsedSassResponse.css).toString("utf8");
 
   if (!parsedCssContent.length) throw Error("No css was parsed :(");
 
-  const outputFileName = `govuk-frontend-${govFrontendPackageJson.version}.min.css`;
+  const outputFileName = `govuk-frontend-${govFrontendPackageJson.version}.css`;
   const outputDirectory = path.resolve(process.cwd(), "src", "styles", outputFileName);
 
-  try {
-    await fs.promises.writeFile(outputDirectory, parsedCssContent, { encoding: "utf8" });
+  await fs.promises.writeFile(outputDirectory, parsedCssContent, { encoding: "utf8" });
 
-    const [targetFile, outputFile, timeTaken] = [
-      govFrontendAllSass,
-      outputDirectory,
-      parsedSassResponse.stats.duration,
-    ];
-
-    console.log(
-      `createGovukStyles: Completed in '${timeTaken}ms', using file '${targetFile}', output file '${outputFile}'.`,
-    );
-
-    return Promise.resolve();
-  } catch (error) {
-    return Promise.reject(error);
-  }
+  console.log(`createGovukStyles: Completed using file '${govFrontendAllSass}', output file '${outputDirectory}'.`);
 }
 
 async function getGovukMainScript() {
@@ -103,15 +88,8 @@ async function getGovukMainScript() {
   const outputFileName = `govuk-frontend-${govFrontendPackageJson.version}.min.js`;
   const outputDirectory = path.resolve(process.cwd(), "public", outputFileName);
 
-  try {
-    await fs.promises.writeFile(outputDirectory, compiledCode, { encoding: "utf8" });
-
-    console.log(`getGovukMainScript: Completed using file '${outputFileName}', output file '${outputDirectory}'.`);
-
-    return Promise.resolve();
-  } catch (error) {
-    return Promise.reject(error);
-  }
+  await fs.promises.writeFile(outputDirectory, compiledCode, { encoding: "utf8" });
+  console.log(`getGovukMainScript: Completed using file '${outputFileName}', output file '${outputDirectory}'.`);
 }
 
 async function getGovukImagesAndFonts() {
