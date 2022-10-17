@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import cx from "classnames";
-import { useDebounce, useUpdateStateValueOnProps } from "./input-utils";
+import { useDebounce } from "./input-utils";
 import { InputProps } from "./common";
 import { CharacterCount, CharacterTypes } from "./CharacterCount";
 
@@ -15,7 +15,6 @@ export const TextAreaInput = (props: TextAreaInputProps) => {
   const [state, setState] = useState<{ value: string }>({ value: props.value ?? "" });
 
   const debouncedOnChange = useDebounce(props.onChange, props.debounce);
-  useUpdateStateValueOnProps<string>(props.value ?? "", setState);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>, debounce: boolean) => {
     const value = e.currentTarget.value;

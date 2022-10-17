@@ -1,5 +1,4 @@
-import { render, fireEvent, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import { render, fireEvent } from "@testing-library/react";
 
 import { TextAreaInput, TextAreaInputProps } from "@ui/components/inputs/textAreaInput";
 import { defaultInputDebounceTimeout } from "@ui/components/inputs/input-utils";
@@ -81,18 +80,6 @@ describe("TextAreaInput", () => {
       const { textarea } = setup({ maxLength: stubMaxLength });
 
       expect(textarea).toHaveAttribute("maxLength", `${stubMaxLength}`);
-    });
-
-    test("with updates when props are updated", async () => {
-      const startingValue = "stub-starting-value";
-      const updatedValue = "new-value";
-
-      const { rerender } = render(<TextAreaInput {...defaultProps} value={startingValue} />);
-
-      expect(screen.getByTestId("test-text-area-input")).toHaveValue(startingValue);
-
-      rerender(<TextAreaInput {...defaultProps} value={updatedValue} />);
-      expect(screen.getByTestId("test-text-area-input")).toHaveValue(updatedValue);
     });
   });
 
