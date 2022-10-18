@@ -159,11 +159,12 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
     item: ProjectChangeRequestItemEntity,
     dto: PCRItemDto,
   ): Partial<ProjectChangeRequestItemEntity> | null {
-    const init = item.status !== dto.status ? { status: dto.status } : null;
+    const statusChange = item.status !== dto.status;
+    const init = statusChange ? { status: dto.status } : null;
 
     switch (dto.type) {
       case PCRItemType.TimeExtension:
-        if (item.offsetMonths !== dto.offsetMonths) {
+        if (statusChange || item.offsetMonths !== dto.offsetMonths) {
           return {
             ...init,
             offsetMonths: dto.offsetMonths,
@@ -173,27 +174,36 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
         }
         break;
       case PCRItemType.ScopeChange:
-        if (item.projectSummary !== dto.projectSummary || item.publicDescription !== dto.publicDescription) {
+        if (
+          statusChange ||
+          item.projectSummary !== dto.projectSummary ||
+          item.publicDescription !== dto.publicDescription
+        ) {
           return { ...init, projectSummary: dto.projectSummary, publicDescription: dto.publicDescription };
         }
         break;
       case PCRItemType.ProjectSuspension:
-        if (item.suspensionStartDate !== dto.suspensionStartDate || item.suspensionEndDate !== dto.suspensionEndDate) {
+        if (
+          statusChange ||
+          item.suspensionStartDate !== dto.suspensionStartDate ||
+          item.suspensionEndDate !== dto.suspensionEndDate
+        ) {
           return { ...init, suspensionStartDate: dto.suspensionStartDate, suspensionEndDate: dto.suspensionEndDate };
         }
         break;
       case PCRItemType.AccountNameChange:
-        if (item.accountName !== dto.accountName || item.partnerId !== dto.partnerId) {
+        if (statusChange || item.accountName !== dto.accountName || item.partnerId !== dto.partnerId) {
           return { ...init, accountName: dto.accountName, partnerId: dto.partnerId };
         }
         break;
       case PCRItemType.PartnerWithdrawal:
-        if (item.removalPeriod !== dto.removalPeriod || item.partnerId !== dto.partnerId) {
+        if (statusChange || item.removalPeriod !== dto.removalPeriod || item.partnerId !== dto.partnerId) {
           return { ...init, partnerId: dto.partnerId, removalPeriod: dto.removalPeriod };
         }
         break;
       case PCRItemType.PartnerAddition:
         if (
+          statusChange ||
           item.contact1ProjectRole !== dto.contact1ProjectRole ||
           item.contact1Forename !== dto.contact1Forename ||
           item.contact1Surname !== dto.contact1Surname ||
@@ -255,7 +265,7 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
         }
         break;
       case PCRItemType.MultiplePartnerFinancialVirement:
-        if (item.grantMovingOverFinancialYear !== dto.grantMovingOverFinancialYear) {
+        if (statusChange || item.grantMovingOverFinancialYear !== dto.grantMovingOverFinancialYear) {
           return {
             ...init,
             grantMovingOverFinancialYear: dto.grantMovingOverFinancialYear,
