@@ -1,7 +1,7 @@
 import fs from "fs";
 import https from "https";
 import express from "express";
-import { v4 as uuidV4 } from "uuid";
+import crypto from "crypto";
 
 import { router as authRouter } from "@server/auth";
 import { router as cspRouter } from "@server/csp";
@@ -119,7 +119,8 @@ export class Server {
   };
 
   private readonly setNonceValue = (_req: express.Request, res: express.Response, next: express.NextFunction): void => {
-    res.locals.nonce = uuidV4();
+    const nonce = crypto.randomBytes(16).toString("base64");
+    res.locals.nonce = nonce;
 
     next();
   };

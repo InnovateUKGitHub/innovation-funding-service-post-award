@@ -19,23 +19,31 @@ export const policyConfig = (nonce: string): Record<CspPolicySources, (string | 
   "object-src": ["none"],
   "script-src": [
     "self",
-    "unsafe-inline",
+    "unsafe-eval",
     "strict-dynamic",
     `nonce-${nonce}`,
     "https://www.googletagmanager.com",
     "https://tagmanager.google.com",
-    "https://www.google-analytics.com",
-    "https://ssl.google-analytics.com",
+    "https://*.google-analytics.com",
+    "https://tagassistant.google.com/",
   ],
-  "style-src": ["self", "unsafe-inline", "https://tagmanager.google.com", "https://fonts.googleapis.com"],
+  "style-src": [
+    "self",
+    "unsafe-inline",
+    "https://tagmanager.google.com",
+    "https://fonts.googleapis.com",
+    "https://www.googletagmanager.com",
+  ],
   "img-src": [
     "self",
-    "www.googletagmanager.com",
+    "data:",
+    "https://www.googletagmanager.com",
     "https://www.google-analytics.com",
     "https://ssl.gstatic.com",
     "https://www.gstatic.com",
+    "https://fonts.gstatic.com",
   ],
-  "connect-src": ["self", "https://www.google-analytics.com"],
+  "connect-src": ["self", "https://*.google-analytics.com"],
   "font-src": ["self", "https://assets.publishing.service.gov.uk/frontend/", "https://fonts.gstatic.com"],
   "report-uri": ["/api/csp/violation-report"],
 });
@@ -44,7 +52,7 @@ export function getContentSecurityPolicy(nonceValue: string): string {
   const policyKeyDelimiter = "; ";
   const cspConfig = policyConfig(nonceValue);
 
-  const configkeys = Object.keys(cspConfig) as CspPolicySources[];
+  const configKeys = Object.keys(cspConfig) as CspPolicySources[];
 
   const getCspValue = (cspValue: string) => {
     const isNonce = cspValue.slice(0, 6) === "nonce-";
@@ -52,7 +60,7 @@ export function getContentSecurityPolicy(nonceValue: string): string {
     return isNonce || isQuoteValid ? `'${cspValue}'` : cspValue;
   };
 
-  const cspPolicy = configkeys.reduce((partialPolicyString, policyKey) => {
+  const cspPolicy = configKeys.reduce((partialPolicyString, policyKey) => {
     const policyOptions = cspConfig[policyKey];
     const policyValue = policyOptions.map(getCspValue).join(" ");
     const nextCspPolicy = `${policyKey} ${policyValue}` + policyKeyDelimiter;

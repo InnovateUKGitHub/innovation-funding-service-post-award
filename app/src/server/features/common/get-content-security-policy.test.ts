@@ -3,7 +3,7 @@ import { getContentSecurityPolicy, policyConfig } from "@server/features/common/
 const stubNonce = "STUB_UNIQUE_NONCE_VALUE";
 
 describe("policyConfig()", () => {
-  describe("returns with config", () => {
+  it("returns with config", () => {
     const config = policyConfig(stubNonce);
 
     expect(config).toMatchSnapshot();

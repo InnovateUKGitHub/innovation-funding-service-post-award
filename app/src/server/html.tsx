@@ -4,14 +4,20 @@ import { configuration } from "../server/features/common";
 
 import * as pkg from "../../package.json";
 
+/**
+ * The template into which the React App is injected. It includes the meta tags, links and google tag manager
+ */
 export function renderHtml(HelmetInstance: HelmetData, html: string, preloadedState: any = {}, nonce: string) {
   const titleMetaTag = HelmetInstance.title.toString();
+
   const govukFrontendVersion = pkg.devDependencies["govuk-frontend"].replace(/[^0-9/.]/, "");
 
   return `
   <!DOCTYPE html>
   <html lang="en">
       <head>
+          ${renderJSGoogleTagManager(configuration.googleTagManagerCode, nonce)}
+          
           <meta charset="utf-8" />
           ${titleMetaTag}
           <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,9 +35,9 @@ export function renderHtml(HelmetInstance: HelmetData, html: string, preloadedSt
           <meta property="og:image" content="/assets/images/govuk-opengraph-image.png">
       </head>
       <body class="govuk-template__body">
-          <div id="root">${html}</div>
+          ${renderNonJSGoogleTagManager(configuration.googleTagManagerCode)}
 
-          ${renderJSGoogleTagManager(configuration.googleTagManagerCode, nonce)}
+          <div id="root">${html}</div>
 
           <script nonce="${nonce}">
             // if js enabled then hide page for moment to allow any difference from server v client rendering to be sorted
@@ -47,7 +53,7 @@ export function renderHtml(HelmetInstance: HelmetData, html: string, preloadedSt
     configuration.build
   }"></script>
           <script nonce="${nonce}" src="/build/bundle.js?build=${configuration.build}"></script>
-          ${renderNonJSGoogleTagManager(configuration.googleTagManagerCode)}
+         
       </body>
   </html>
 `;
@@ -58,17 +64,19 @@ const renderJSGoogleTagManager = (tagManagerCode: string, nonce: string) => {
     return "";
   }
   return `
-      <!-- Google Tag Manager -->
-      <script nonce="${nonce}">( function(w,d,s,l,i) {
-        w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(),event:'gtm.js'});
-        var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+<!-- Google Tag Manager -->
+<script nonce="${nonce}">
+    (function(w,d,s,l,i){
+      w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});
+      var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
         j.async=true;
         j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
         var n=d.querySelector('[nonce]');
         n&&j.setAttribute('nonce',n.nonce||n.getAttribute('nonce'));
         f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','${tagManagerCode}');</script>
-      <!-- End Google Tag Manager -->
+    })(window,document,'script','dataLayer', '${tagManagerCode}');
+</script>
+<!-- End Google Tag Manager -->
     `;
 };
 
