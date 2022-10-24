@@ -116,13 +116,13 @@ function SpendProfileCostForm({
         {displayHiddenForm && (
           <HiddenForm.Fieldset>
             <ACC.Renderers.SimpleString>
-              <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.messages.overHeadsCalculatedGuidance} />
+              <ACC.Content value={x => x.spendProfileMessages.calculatedGuidanceOverheads} />
             </ACC.Renderers.SimpleString>
             <HiddenForm.Button
               name="calculateOverheadsDocuments"
               onClick={() => props.onSave(editor.data, getUploadDocumentsLink())}
             >
-              <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.labels.overheads.uploadDocumentsLink} />
+              <ACC.Content value={x => x.pcrSpendProfileLabels.overheads.linkDocumentsUpload} />
             </HiddenForm.Button>
 
             <ACC.Section qa="overheads-form-section">
@@ -130,7 +130,7 @@ function SpendProfileCostForm({
             </ACC.Section>
 
             <HiddenForm.Numeric
-              label={x => x.pcrSpendProfilePrepareCostContent.labels.overheads.calculatedCost}
+              label={x => x.pcrSpendProfileLabels.overheads.calculatedCost}
               width="one-quarter"
               name="value"
               value={dto => dto.value}
@@ -142,7 +142,7 @@ function SpendProfileCostForm({
 
         {isClient && (
           <Form.Custom
-            label={x => x.pcrSpendProfilePrepareCostContent.labels.overheads.totalCost}
+            label={x => x.pcrSpendProfileLabels.overheads.totalCost}
             labelBold
             name="totalCost"
             value={dto => (
@@ -156,7 +156,7 @@ function SpendProfileCostForm({
       </Form.Fieldset>
       <Form.Fieldset qa="save">
         <Form.Submit>
-          <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.overheads.submitButton} />
+          <ACC.Content value={x => x.pages.pcrSpendProfilePrepareCost.overheads.buttonSubmit} />
         </Form.Submit>
       </Form.Fieldset>
     </Form.Form>

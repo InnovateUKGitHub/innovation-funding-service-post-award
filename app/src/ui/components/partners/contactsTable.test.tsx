@@ -2,11 +2,11 @@ import { render } from "@testing-library/react";
 
 import { TestBed, TestBedStore } from "@shared/TestBed";
 import { ProjectContactDto } from "@framework/dtos";
-import { ProjectContactLabels } from "@content/labels/projectContactLabels";
 
 import { ContactsTable, IContactsTable } from "@ui/components/partners/contactsTable";
 
 import { getColumnValues } from "../../../../tests/test-utils/tableHelpers";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<ContactsTable />", () => {
   const stubStores = {
@@ -15,17 +15,18 @@ describe("<ContactsTable />", () => {
     },
   };
 
-  const stubProjectLabels = {
-    contactName: { content: "Contact" },
-    roleName: { content: "Name" },
-    contactEmail: { content: "Partner" },
-    noContactsMessage: { content: "No contacts exist." },
-  } as ProjectContactLabels;
+  const stubContent = {
+    projectContactLabels: {
+      contactName: "Contact",
+      roleName: "Name",
+      contactEmail: "Partner",
+      noContactsMessage: "No contacts exist.",
+    },
+  };
 
   const setup = (props?: Omit<IContactsTable, "projectContactLabels">) => {
     const defaultProps: IContactsTable = {
       contacts: [],
-      projectContactLabels: () => stubProjectLabels,
     };
 
     return render(
@@ -35,11 +36,15 @@ describe("<ContactsTable />", () => {
     );
   };
 
+  beforeAll(async () => {
+    testInitialiseInternationalisation(stubContent);
+  });
+
   describe("@returns", () => {
     it("when no contacts message", () => {
       const { queryByText } = setup();
 
-      const noContactsElement = queryByText(stubProjectLabels.noContactsMessage.content);
+      const noContactsElement = queryByText(stubContent.projectContactLabels.noContactsMessage);
 
       expect(noContactsElement).toBeInTheDocument();
     });
@@ -68,7 +73,7 @@ describe("<ContactsTable />", () => {
 
       const { queryByText, queryByTestId } = setup({ contacts: stubContacts });
 
-      const noContactsElement = queryByText(stubProjectLabels.noContactsMessage.content);
+      const noContactsElement = queryByText(stubContent.projectContactLabels.noContactsMessage);
       const contactsTable = queryByTestId("contacts-table-details");
 
       expect(contactsTable).toBeInTheDocument();

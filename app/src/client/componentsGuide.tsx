@@ -1,8 +1,7 @@
 import ReactDom from "react-dom/client";
 
-import { Content } from "@content/content";
-import { Guide } from "@ui/componentsGuide/guide";
 import { TestBed } from "@shared/TestBed";
+import { Guide } from "@ui/componentsGuide/guide";
 
 /**
  * parses query string to get name of component to display in the guide
@@ -17,7 +16,7 @@ function getGuide() {
 }
 
 const ClientGuide = () => (
-  <TestBed content={new Content()} shouldOmitRouterProvider>
+  <TestBed shouldOmitRouterProvider>
     <Guide source="client" filter={getGuide()} />
   </TestBed>
 );

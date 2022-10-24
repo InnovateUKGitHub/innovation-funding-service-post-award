@@ -12,12 +12,12 @@ export class PCRPrepareReasoningStep extends ContainerBase<ReasoningStepProps, {
     return (
       <ACC.Section qa="reasoning-save-and-return">
         <PCRForm.Form editor={editor} onChange={dto => onChange(dto)}>
-          <PCRForm.Fieldset heading={x => x.pcrPrepareReasoning.reasoningHeading}>
+          <PCRForm.Fieldset heading={x => x.pages.pcrReasoningPrepareReasoning.headingReasoning}>
             <PCRForm.MultilineString
               name="reasoningComments"
-              label={x => x.pcrPrepareReasoning.reasoningHeading}
+              label={x => x.pages.pcrReasoningPrepareReasoning.headingReasoning}
               labelHidden
-              hint={x => x.pcrPrepareReasoning.hint}
+              hint={x => x.pages.pcrReasoningPrepareReasoning.hint}
               qa="reason"
               value={m => m.reasoningComments}
               update={(m, v) => (m.reasoningComments = v || "")}
@@ -27,7 +27,7 @@ export class PCRPrepareReasoningStep extends ContainerBase<ReasoningStepProps, {
             />
           </PCRForm.Fieldset>
           <PCRForm.Button name="reasoningStep" styling="Primary" onClick={() => onSave(editor.data)}>
-            <ACC.Content value={x => x.pcrPrepareReasoning.pcrItem.submitButton} />
+            <ACC.Content value={x => x.pcrItem.submitButton} />
           </PCRForm.Button>
         </PCRForm.Form>
       </ACC.Section>

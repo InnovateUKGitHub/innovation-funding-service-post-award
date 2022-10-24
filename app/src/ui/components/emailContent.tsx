@@ -1,4 +1,4 @@
-import type { ContentSelector } from "@content/content";
+import type { ContentSelector } from "@copy/type";
 import { useContent } from "@ui/hooks";
 import { Email, EmailProps } from "./renderers";
 

@@ -1,27 +1,33 @@
 import { render } from "@testing-library/react";
-
 import { TestBed } from "@shared/TestBed";
-import { Content } from "@content/content";
+import { Copy } from "@copy/Copy";
 import { IValidationMessageProps, ValidationMessage } from "@ui/components";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { PossibleCopyFunctions } from "@copy/type";
 
 describe("<ValidationMessage />", () => {
-  const setup = (props: IValidationMessageProps) => {
-    const stubCopy = {
-      home: {
-        exampleContentTitle: {
-          content: "stub-exampleContentTitle",
-        },
-      },
-    } as Partial<Content>;
+  const stubContent = {
+    example: {
+      contentTitle: "stub-exampleContentTitle",
+    },
+  };
 
+  const setup = (props: IValidationMessageProps) => {
     return render(
-      <TestBed content={stubCopy}>
+      <TestBed>
         <ValidationMessage {...props} />
       </TestBed>,
     );
   };
 
   const StubComponentContent = () => <div>custom component</div>;
+
+  beforeAll(async () => {
+    testInitialiseInternationalisation(stubContent);
+  });
+
+  type PossibleTestCopyKeys = typeof stubContent;
+  type PossibleTestCopyFunctions = PossibleCopyFunctions<PossibleTestCopyKeys>;
 
   describe("@renders", () => {
     it("when message is empty", () => {
@@ -31,13 +37,13 @@ describe("<ValidationMessage />", () => {
 
     describe("with different message data types", () => {
       test.each`
-        name                  | message                                             | expected
-        ${"react component"}  | ${(<StubComponentContent />)}                       | ${"div"}
-        ${"react element"}    | ${(<div>content within div</div>)}                  | ${"div"}
-        ${"react fragment"}   | ${(<>content within a react shorthand fragment</>)} | ${"div"}
-        ${"content solution"} | ${(x: Content) => x.home.exampleContentTitle}       | ${"span"}
-        ${"string"}           | ${"stub string"}                                    | ${"span"}
-        ${"number"}           | ${100}                                              | ${"span"}
+        name                  | message                                                     | expected
+        ${"react component"}  | ${(<StubComponentContent />)}                               | ${"div"}
+        ${"react element"}    | ${(<div>content within div</div>)}                          | ${"div"}
+        ${"react fragment"}   | ${(<>content within a react shorthand fragment</>)}         | ${"div"}
+        ${"content solution"} | ${(x: PossibleTestCopyFunctions) => x.example.contentTitle} | ${"span"}
+        ${"string"}           | ${"stub string"}                                            | ${"span"}
+        ${"number"}           | ${100}                                                      | ${"span"}
       `("with a $name within a $expected", ({ message, expected }) => {
         const { getByTestId } = setup({ message, messageType: "info" });
 

@@ -11,15 +11,15 @@ export function ErrorSummary({ code, message }: ErrorSummaryProps) {
   const { getContent } = useContent();
   const isUnauthenticated = code === ErrorCode.UNAUTHENTICATED_ERROR;
 
-  const title = getContent(x => x.components.errorSummary.errorTitle);
-  const expiredMessage = getContent(x => x.components.errorSummary.expiredMessageContent);
-  const unsavedWarning = getContent(x => x.components.errorSummary.unsavedWarningContent);
-  const somethingGoneWrong = getContent(x => x.components.errorSummary.somethingGoneWrongContent);
+  const title = getContent(x => x.components.errorSummary.title);
+  const expiredMessage = getContent(x => x.components.errorSummary.expiredMessage);
+  const unsavedWarning = getContent(x => x.components.errorSummary.unsavedWarning);
+  const somethingGoneWrong = getContent(x => x.components.errorSummary.somethingGoneWrong);
 
   // Unique Errors
   const authErrorMessages = {
     SF_UPDATE_ALL_FAILURE: getContent(x => x.components.errorSummary.updateAllFailure),
-    INSUFFICIENT_ACCESS_OR_READONLY: getContent(x => x.components.errorSummary.insufficienceAccessRights),
+    INSUFFICIENT_ACCESS_OR_READONLY: getContent(x => x.components.errorSummary.insufficientAccessRights),
     NOT_UPLOADED_FROM_OWNER: getContent(x => x.components.errorSummary.notUploadedByOwner),
   };
 

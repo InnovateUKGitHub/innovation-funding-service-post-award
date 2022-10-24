@@ -1,5 +1,5 @@
 import { useContent } from "@ui/hooks";
-import { ContentSelector } from "@content/content";
+import type { ContentSelector } from "@copy/type";
 
 interface Link {
   url: string;
@@ -24,7 +24,7 @@ export function LinksList({ links = [], openNewWindow = false, renderAfterLink }
     (allLinks, link) => [
       ...allLinks,
       {
-        text: getContent(link.text),
+        text: typeof link.text === "string" ? link.text : getContent(link.text),
         url: link.url,
         qa: link.qa,
       },
@@ -44,7 +44,7 @@ export function LinksList({ links = [], openNewWindow = false, renderAfterLink }
             href={link.url}
             data-qa={link.qa}
           >
-            {getContent(link.text)}
+            {link.text}
           </a>
 
           {renderAfterLink?.(i)}

@@ -1,32 +1,37 @@
 import { render } from "@testing-library/react";
 
 import { PhaseBanner } from "@ui/components";
-import { TestBed, TestBedContent } from "@shared/TestBed";
+import { TestBed } from "@shared/TestBed";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<PhaseBanner />", () => {
   const stubContent = {
     components: {
       phaseBannerContent: {
-        newServiceMessage: { content: "stub-newServiceMessage" },
-        feedbackMessage: { content: "stub-feedback" },
-        helpImprove: { content: "stub-helpImprove" },
-        betaText: { content: "stub-betaText" },
+        newServiceMessage: "stub-newServiceMessage",
+        feedbackMessage: "stub-feedback",
+        helpImprove: "stub-helpImprove",
+        betaText: "stub-betaText",
       },
     },
   };
 
   const setup = () =>
     render(
-      <TestBed content={stubContent as TestBedContent}>
+      <TestBed>
         <PhaseBanner />
       </TestBed>,
     );
+
+  beforeAll(async () => {
+    testInitialiseInternationalisation(stubContent);
+  });
 
   describe("@renders", () => {
     it("with beta element", () => {
       const { queryByText } = setup();
 
-      const betaTextElement = queryByText(stubContent.components.phaseBannerContent.betaText.content);
+      const betaTextElement = queryByText(stubContent.components.phaseBannerContent.betaText);
 
       expect(betaTextElement).toBeInTheDocument();
     });
@@ -35,7 +40,7 @@ describe("<PhaseBanner />", () => {
       const { getByRole } = setup();
 
       const feedbackLink = getByRole("link", {
-        name: stubContent.components.phaseBannerContent.feedbackMessage.content,
+        name: stubContent.components.phaseBannerContent.feedbackMessage,
       });
 
       expect(feedbackLink).toHaveAttribute("href", "https://www.surveymonkey.co.uk/r/IFSPostAwardFeedback");
@@ -45,7 +50,7 @@ describe("<PhaseBanner />", () => {
       const { queryByTestId } = setup();
 
       const { newServiceMessage, feedbackMessage, helpImprove } = stubContent.components.phaseBannerContent;
-      const expectedRenderedMessage = `${newServiceMessage.content} ${feedbackMessage.content} ${helpImprove.content}`;
+      const expectedRenderedMessage = `${newServiceMessage} ${feedbackMessage} ${helpImprove}`;
 
       const bannerMessageElement = queryByTestId("banner-message");
 

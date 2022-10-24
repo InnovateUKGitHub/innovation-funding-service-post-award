@@ -66,7 +66,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
 
     return (
       <ACC.Renderers.SimpleString qa="overhead-costs">
-        <ACC.Content value={x => x.claimForecast.overheadsCosts} />
+        <ACC.Content value={x => x.pages.claimForecast.overheadsCosts} />
         <ACC.Renderers.Percentage value={overheadRate} />
       </ACC.Renderers.SimpleString>
     );
@@ -110,7 +110,7 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
               periodId: this.props.periodId,
             })}
           >
-            <ACC.Content value={x => x.claimForecast.backLink} />
+            <ACC.Content value={x => x.pages.claimForecast.backLink} />
           </ACC.BackLink>
         }
         error={editor.error}
@@ -122,13 +122,13 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
             {combined.partner.newForecastNeeded && (
               <ACC.ValidationMessage
                 messageType="info"
-                message={x => x.claimForecast.messages.frequencyChangeMessage}
+                message={x => x.claimsMessages.frequencyChangeMessage}
                 qa="period-change-warning"
               />
             )}
             <ACC.ValidationMessage
               messageType="info"
-              message={x => x.claimForecast.messages.lastChanceToChangeForecast(combined.project.periodId)}
+              message={x => x.claimsMessages.lastChanceToChangeForecast({ periodId: combined.project.periodId })}
             />
           </ACC.Renderers.AriaLive>
           <ACC.Forecasts.Warning {...combined} editor={editor} />
@@ -147,10 +147,10 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
             </Form.Fieldset>
             <Form.Fieldset qa="save-and-continue">
               <Form.Submit>
-                <ACC.Content value={x => x.claimForecast.continueToSummaryButton} />
+                <ACC.Content value={x => x.pages.claimForecast.buttonContinueToSummary} />
               </Form.Submit>
               <Form.Button name="save" onClick={onFormSave}>
-                <ACC.Content value={x => x.claimForecast.saveAndReturnButton} />
+                <ACC.Content value={x => x.pages.claimForecast.buttonSaveAndReturn} />
               </Form.Button>
             </Form.Fieldset>
           </Form.Form>
@@ -171,7 +171,7 @@ const ClaimForecastContainer = (props: ClaimForecastParams & BaseProps) => {
   const stores = useStores();
   const { getContent } = useContent();
   const navigate = useNavigate();
-  const claimSavedMessage = getContent(x => x.claimForecast.messages.claimSavedMessage);
+  const claimSavedMessage = getContent(x => x.claimsMessages.claimSavedMessage);
 
   const handleOnUpdate: Callbacks["onUpdate"] = (saving, dto, link) => {
     stores.forecastDetails.updateForecastEditor(

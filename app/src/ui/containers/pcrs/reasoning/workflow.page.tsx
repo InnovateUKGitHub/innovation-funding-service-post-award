@@ -100,7 +100,7 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
         <ACC.BackLink
           route={this.props.routes.pcrReview.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
         >
-          <ACC.Content value={x => x.pcrReasoningWorkflow.backLink} />
+          <ACC.Content value={x => x.pages.pcrReasoningWorkflow.backLink} />
         </ACC.BackLink>
       );
     }
@@ -109,7 +109,7 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
         <ACC.BackLink
           route={this.props.routes.pcrPrepare.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
         >
-          <ACC.Content value={x => x.pcrReasoningWorkflow.backLink} />
+          <ACC.Content value={x => x.pages.pcrReasoningWorkflow.backLink} />
         </ACC.BackLink>
       );
     }
@@ -117,7 +117,7 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
       <ACC.BackLink
         route={this.props.routes.pcrDetails.getLink({ projectId: this.props.projectId, pcrId: this.props.pcrId })}
       >
-        <ACC.Content value={x => x.pcrReasoningWorkflow.backLink} />
+        <ACC.Content value={x => x.pages.pcrReasoningWorkflow.backLink} />
       </ACC.BackLink>
     );
   }
@@ -134,12 +134,12 @@ class PCRReasoningWorkflowComponent extends ContainerBase<ProjectChangeRequestPr
         <ACC.Section>
           <ACC.SummaryList qa="pcr-prepareReasoning">
             <ACC.SummaryListItem
-              label={x => x.pcrReasoningWorkflow.labels.requestNumber}
+              label={x => x.pcrReasoningLabels.requestNumber}
               content={pcr.requestNumber}
               qa="numberRow"
             />
             <ACC.SummaryListItem
-              label={x => x.pcrReasoningWorkflow.labels.types}
+              label={x => x.pcrReasoningLabels.types}
               content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.shortName)} />}
               qa="typesRow"
             />
@@ -249,7 +249,7 @@ export const PCRViewReasoningRoute = defineRoute<ProjectChangeRequestPrepareReas
   container: function PCRViewReasoningWorkflowContainer(props) {
     return <PCRReasoningWorkflowContainer mode="view" {...props} />;
   },
-  getTitle: ({ content }) => content.pcrReasoningWorkflow.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrReasoningWorkflow.title),
   accessControl: (auth, { projectId }) =>
     auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer),
 });
@@ -264,7 +264,7 @@ export const PCRReviewReasoningRoute = defineRoute<ProjectChangeRequestPrepareRe
     projectId: route.params.projectId,
     pcrId: route.params.pcrId,
   }),
-  getTitle: ({ content }) => content.pcrReasoningWorkflow.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrReasoningWorkflow.title),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer),
 });
 
@@ -280,6 +280,6 @@ export const PCRPrepareReasoningRoute = defineRoute<ProjectChangeRequestPrepareR
     pcrId: route.params.pcrId,
     step: parseInt(route.params.step, 10),
   }),
-  getTitle: ({ content }) => content.pcrPrepareReasoning.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrReasoningPrepareReasoning.title),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
 });

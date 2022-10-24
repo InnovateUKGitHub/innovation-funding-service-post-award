@@ -1,76 +1,55 @@
 import { useContext } from "react";
 
+import type { ContentSelector, TranslationResult } from "@copy/type";
 import { contentContext } from "@ui/redux/contentProvider";
-import { Content, ContentSelector } from "@content/content";
-import { ContentResult } from "@content/contentBase";
 
-// Note: A type guard for inferring ContentSelector correctly
+/**
+ * Test an input to see if it matches a ContentSelector shape.
+ *
+ * @param content The input to test
+ * @returns Whether the input was a ContentSelector
+ * @author Neil Little
+ */
 export function isContentSolution(content: unknown): content is ContentSelector {
   const isNotString = typeof content !== "string";
   const isFn = typeof content === "function";
 
   return isNotString && isFn;
 }
-
-type ContentQuery<Param, Response> = (contentQuery: Param) => Response;
-
-export interface IUseContent {
-  content: Content;
-  getContentFromResult: ContentQuery<ContentResult, string>;
-  getContent: ContentQuery<string | ContentSelector, string>;
-  getResultByQuery: ContentQuery<ContentSelector, ContentResult>;
+interface IUseContent {
+  getContent: (selector: ContentSelector) => TranslationResult;
 }
 
 /**
- * @description Provide a mechanism which checks for a valid ContentResult before getting content. This gives more meaningful error messages in tests too!
+ * Obtain a method to fetch content from the Copy Repository.
+ *
+ * @returns A competition-type dependant content fetching function.
+ * @author Neil Little <neil.little@ukri.org>
+ * @author Leondro Lio <leondro.lio@iuk.ukri.org>
  */
-const getContentResult = (queryFn: Function, contentPayload: Content): ContentResult => {
-  const missingParentPropertyError = "MISSING_PARENT";
-  try {
-    const queriedContent = queryFn(contentPayload);
-
-    if (typeof queriedContent === "undefined") {
-      throw new Error(missingParentPropertyError);
-    }
-
-    return queriedContent;
-  } catch (error) {
-    const queryAsString = queryFn.toString();
-    const queryFnParts = queryAsString.split(".");
-
-    const propertyMissingParent = queryFnParts[queryFnParts.length - 2];
-    const propertyMissingElement = queryFnParts[queryFnParts.length - 1];
-
-    const errorMessage =
-      error instanceof Error && error.message === missingParentPropertyError
-        ? `It appears '${propertyMissingElement}' is not available within the '${propertyMissingParent}' property. There is a problem with your available content object. Query => ${queryAsString}`
-        : `It appears the following query did not find a result -> ${queryAsString}`;
-
-    throw new Error(errorMessage);
-  }
-};
-
-export const getContentFromResult: IUseContent["getContentFromResult"] = ({ content }) => content;
-
 export const useContent = (): IUseContent => {
+  // Grab the Content Context
   const appContent = useContext(contentContext);
 
+  // Crash out if `useContent` was not called inside the provider.
   if (!appContent) {
     throw new Error("useContent() must be used within a <ContentProvider />");
   }
 
-  const getContent = (contentRequest: string | ContentSelector): string => {
-    return isContentSolution(contentRequest)
-      ? getContentFromResult(getContentResult(contentRequest, appContent))
-      : contentRequest;
+  /**
+   * Obtain the localisation of a translation.
+   *
+   * @param contentSelector A function that returns a path to a localisation
+   * @returns The translated message
+   * @author Neil Little <neil.little@ukri.org>
+   * @example
+   * <p>{getContent(x => x.pages.header.siteName)}</p>
+   */
+  const getContent = (contentSelector: ContentSelector | string): string => {
+    return appContent.getCopyString(contentSelector);
   };
 
-  const getResultByQuery = (contentQuery: ContentSelector) => getContentResult(contentQuery, appContent);
-
   return {
-    content: appContent,
     getContent,
-    getResultByQuery,
-    getContentFromResult,
   };
 };

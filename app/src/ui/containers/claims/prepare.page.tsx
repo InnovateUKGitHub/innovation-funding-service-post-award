@@ -67,7 +67,7 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
       <ACC.Page
         backLink={
           <ACC.BackLink route={this.getBackLink(data.project, data.partner)}>
-            <ACC.Content value={x => x.claimPrepare.backLink} />
+            <ACC.Content value={x => x.pages.claimPrepare.backLink} />
           </ACC.BackLink>
         }
         error={data.editor.error}
@@ -75,7 +75,7 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
         pageTitle={<ACC.Projects.Title {...data.project} />}
       >
         {data.claim.isFinalClaim && (
-          <ACC.ValidationMessage messageType="info" message={x => x.claimPrepare.messages.finalClaimMessage} />
+          <ACC.ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />
         )}
         {this.renderDetailsSection(data)}
       </ACC.Page>
@@ -122,13 +122,13 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
 
           <Form.Fieldset qa="save-and-continue">
             <Form.Submit>
-              <ACC.Content value={x => x.claimPrepare.saveAndContinueButton} />
+              <ACC.Content value={x => x.pages.claimPrepare.buttonSaveAndContinue} />
             </Form.Submit>
             <Form.Button
               name="save"
               onClick={() => this.props.onUpdate(true, data.editor.data, this.getBackLink(data.project, data.partner))}
             >
-              <ACC.Content value={x => x.claimPrepare.saveAndReturnButton} />
+              <ACC.Content value={x => x.pages.claimPrepare.buttonSaveAndReturn} />
             </Form.Button>
           </Form.Fieldset>
         </Form.Form>
@@ -147,7 +147,7 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
   private renderLogsSection() {
     return (
       <ACC.Accordion>
-        <ACC.AccordionItem title={x => x.claimPrepare.labels.claimLogAccordionTitle} qa="status-and-comments-log">
+        <ACC.AccordionItem title={x => x.claimsLabels.accordionTitleClaimLog} qa="status-and-comments-log">
           {/* Keeping logs inside loader because accordion defaults to closed*/}
           <ACC.Loader
             pending={this.props.statusChanges}
@@ -200,5 +200,5 @@ export const PrepareClaimRoute = defineRoute({
   }),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
-  getTitle: ({ content }) => content.claimPrepare.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.claimPrepare.title),
 });

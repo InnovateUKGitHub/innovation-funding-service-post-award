@@ -1,0 +1,64 @@
+{
+  "claimsMessages": {
+    "iarRequiredAdvice": "You must upload a Schedule 3 with this claim.",
+    "finalClaimIarAdvice": "You also need to complete your final report on the KTP Portal before we can make your final payment.",
+    "finalClaimNonIarAdvice": "You need to complete your final report on the KTP Portal before we can make your final payment.",
+    "usefulTip": "Useful tip: you can use this page to upload and store all your claim support documents for this project.",
+    "requiredUploadAdvice": "For KTP claims, you must upload one of these claim approval documents:",
+    "requiredUploadStep1": "LMC minutes - from the local management committee (LMC) meeting where your claim was approved",
+    "requiredUploadStep2": "LMC virtual approval - an email approval saved as a PDF document or screenshot image, which clearly shows the date and time the email was sent"
+  },
+  "pages": {
+    "claimReview": {
+      "additionalInfoHintIfYou": "If you:",
+      "additionalInfoHintQueryClaim": "query the claim, you must explain what the partner needs to change",
+      "additionalInfoHintSubmitClaim": "submit the claim for approval, you can write a supporting statement to Innovate UK",
+      "claimReviewDeclaration": "I am satisfied that the costs claimed appear to comply with the terms and conditions of the awarded grant and eligible costs agreed by the Innovate UK Project Finance Team. This is based on evidence provided both in reports and at Local Management Committee meetings (LMC).",
+      "monitoringReportReminder": "You must submit a monitoring report for this period before the approved claim can be paid."
+    },
+    "financeSummary": {
+      "accountantsReportTitle": "When a schedule 3 is needed"
+    },
+    "claimPrepareSummary": {
+      "addCommentsHeading": "Supporting statement",
+      "addCommentsHint": "You must write a supporting statement for your claim. All supporting information for your monitoring officer and Innovate UK must be included here."
+    },
+    "claimsMessages": {
+      "iarRequired": "You must attach a schedule 3 to this claim.",
+      "iarRequiredPara2": "",
+      "finalClaimGuidance": "You need to complete the following tasks before we can approve your final claim and make your last payment: \n\n-   upload a Schedule 3 \n-   upload the LMC meeting's minutes or virtual approval\n-   complete your final report"
+    },
+    "financialVirementEdit": {
+      "editPageMessage": {
+        "intro": "The knowledge base partner may vire funds between the 'Travel and subsistence' and 'Consumables' cost categories. Funds can also be vired out of these 2 categories into the 'Associate development' category. Funds cannot be vired out of the 'Associate development' category.",
+        "virements": "Virements are subject to approval by the Local Management Committee (LMC).",
+        "requests": "Requests for virements must be submitted online using the Innovation Funding Service and must be approved before the related costs are incurred. These requests must not be submitted after the project partnership has ended."
+      }
+    },
+    "pcrAddPartnerStateAidEligibility": {
+      "guidanceNonAidFunding": "This screen is not relevant to KTPs. Click save and continue."
+    },
+    "pcrAddPartnerJes": {
+      "jesIntroduction": "This screen is not relevant to KTPs. Click save and continue."
+    },
+    "projectDetails": {
+      "financeContactInfo": "Only finance contacts can submit claims.",
+      "changeInfo": "If you need to change the finance contact, please email ",
+      "changeEmail": "ktpqueries@iuk.ukri.org",
+      "changeEnd": "."
+    }
+  },
+  "spendProfileMessages": {
+    "costGuidanceAdditionalAssociateSupport": "These are the costs of managing the associate, such as computing, personnel admin, learning resources and secretarist support to the local management committee (LMC).\n\nA full description of allowable costs can be found in the [KTP Project costs guidance (opens in a new tab)](https://www.ukri.org/councils/innovate-uk/guidance-for-applicants/costs-we-fund/costs-guidance-for-knowledge-transfer-partnerships/).",
+    "costGuidanceAssociateDevelopment": "This supports the associate's personal and professional development.\n\nA full description of allowable costs can be found in the [KTP Project costs guidance (opens in a new tab)](https://www.ukri.org/councils/innovate-uk/guidance-for-applicants/costs-we-fund/costs-guidance-for-knowledge-transfer-partnerships/).",
+    "costGuidanceAssociateEmployment": "These are the associate's total employment costs for all projects listed in the partnership proposal, for example: salary, redundancy payments, NI and pension contributions\n\nThe business partner is solely responsible for any salary and additional employment costs that exceed the amounts recorded in this section.\n\nThe only reason you may exceed this limit is if you have added a London weighting allowance.\n\nA full description of allowable costs can be found in the [KTP Project costs guidance (opens in a new tab)](https://www.ukri.org/councils/innovate-uk/guidance-for-applicants/costs-we-fund/costs-guidance-for-knowledge-transfer-partnerships/).",
+    "costGuidanceConsumables": "The consumables budget is a standard contribution towards the consumable items needed to complete these projects.\n\nA full description of allowable costs can be found in the [KTP Project costs guidance (opens in a new tab)](https://www.ukri.org/councils/innovate-uk/guidance-for-applicants/costs-we-fund/costs-guidance-for-knowledge-transfer-partnerships/).",
+    "costGuidanceEstate": "This is usually zero because the associate is normally located at the premises of the knowledge base partner.\n\nA full description of allowable costs can be found in the [KTP Project costs guidance (opens in a new tab)](https://www.ukri.org/councils/innovate-uk/guidance-for-applicants/costs-we-fund/costs-guidance-for-knowledge-transfer-partnerships/).",
+    "costGuidanceIndirectCosts": "These costs are calculated automatically and paid at 100%. The calculation is 46% of the sum of 2 grant amounts: 'Associate employment costs' and the 'Academic and secretarial support costs'.\n\nA full description of allowable costs can be found in the [KTP Project costs guidance (opens in a new tab)](https://www.ukri.org/councils/innovate-uk/guidance-for-applicants/costs-we-fund/costs-guidance-for-knowledge-transfer-partnerships/).",
+    "costGuidanceTravelAndSubs": "Please enter separate costs for the associate and the knowledge base supervisor. Include all travel and subsistence costs needed for the proposed projects. Be specific and add each item separately.\n\nA full description of allowable costs can be found in the [KTP Project costs guidance (opens in a new tab)](https://www.ukri.org/councils/innovate-uk/guidance-for-applicants/costs-we-fund/costs-guidance-for-knowledge-transfer-partnerships/).",
+    "costGuidanceDefault": "A full description of allowable costs can be found in the [KTP Project costs guidance (opens in a new tab)](https://www.ukri.org/councils/innovate-uk/guidance-for-applicants/costs-we-fund/costs-guidance-for-knowledge-transfer-partnerships/).",
+    "costGuidanceOtherCosts": "Requests under other costs should be discussed and agreed with your nominated KTA in the first instance, with formal approval granted by the Programme Manager in relation to a request for Mentoring support costs prior to submission.\n\nPlease refer to the current guidance on eligible costs under this category as this may be subject to change\n\nA full description of allowable costs can be found in the [KTP Project costs guidance (opens in a new tab)](https://www.ukri.org/councils/innovate-uk/guidance-for-applicants/costs-we-fund/costs-guidance-for-knowledge-transfer-partnerships/).",
+    "costPreGuidanceWarningOtherCosts": "Do not complete this section unless your Mentoring Support Costs have been approved by the Programme Manager.",
+    "costPreGuidanceWarningSubcontracting": "This cost category is not applicable to KTPs, and should not be completed.\n\nA full description of allowable costs can be found in the [KTP Project costs guidance (opens in a new tab)](https://www.ukri.org/councils/innovate-uk/guidance-for-applicants/costs-we-fund/costs-guidance-for-knowledge-transfer-partnerships/)."
+  }
+}

@@ -10,9 +10,9 @@ export const FinanceContactStep = (
 ) => {
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
   return (
-    <ACC.Section title={x => x.pcrAddPartnerProjectContacts.sectionTitle}>
+    <ACC.Section title={x => x.pages.pcrAddPartnerProjectContacts.sectionTitle}>
       <ACC.Renderers.SimpleString>
-        <ACC.Content value={x => x.pcrAddPartnerProjectContacts.guidance} />
+        <ACC.Content value={x => x.pages.pcrAddPartnerProjectContacts.guidance} />
       </ACC.Renderers.SimpleString>
       <Form.Form
         qa="addPartnerForm"
@@ -21,13 +21,13 @@ export const FinanceContactStep = (
         onSubmit={() => props.onSave(false)}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset heading={x => x.pcrAddPartnerProjectContacts.labels.financeContactHeading}>
+        <Form.Fieldset heading={x => x.pcrAddPartnerLabels.financeContactHeading}>
           <Form.Hidden
             name="contact1ProjectRole"
             value={x => (x.contact1ProjectRole = PCRContactRole.FinanceContact)}
           />
           <Form.String
-            label={x => x.pcrAddPartnerProjectContacts.labels.contactFirstNameHeading}
+            label={x => x.pcrAddPartnerLabels.contactFirstNameHeading}
             name="contact1Forename"
             value={dto => dto.contact1Forename}
             update={(x, val) => {
@@ -36,7 +36,7 @@ export const FinanceContactStep = (
             validation={props.validator.contact1Forename}
           />
           <Form.String
-            label={x => x.pcrAddPartnerProjectContacts.labels.contactLastNameHeading}
+            label={x => x.pcrAddPartnerLabels.contactLastNameHeading}
             name="contact1Surname"
             value={dto => dto.contact1Surname}
             update={(x, val) => {
@@ -45,8 +45,8 @@ export const FinanceContactStep = (
             validation={props.validator.contact1Surname}
           />
           <Form.String
-            label={x => x.pcrAddPartnerProjectContacts.labels.contactPhoneNumberHeading}
-            hint={x => x.pcrAddPartnerProjectContacts.phoneNumberHint}
+            label={x => x.pcrAddPartnerLabels.contactPhoneNumberHeading}
+            hint={x => x.pages.pcrAddPartnerProjectContacts.phoneNumberHint}
             name="contact1Phone"
             value={dto => dto.contact1Phone}
             update={(x, val) => {
@@ -55,7 +55,7 @@ export const FinanceContactStep = (
             validation={props.validator.contact1Phone}
           />
           <Form.String
-            label={x => x.pcrAddPartnerProjectContacts.labels.contactEmailHeading}
+            label={x => x.pcrAddPartnerLabels.contactEmailHeading}
             name="contact1Email"
             value={dto => dto.contact1Email}
             update={(x, val) => {
@@ -66,10 +66,10 @@ export const FinanceContactStep = (
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
           <Form.Submit>
-            <ACC.Content value={x => x.pcrAddPartnerProjectContacts.pcrItem.submitButton} />
+            <ACC.Content value={x => x.pcrItem.submitButton} />
           </Form.Submit>
           <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
-            <ACC.Content value={x => x.pcrAddPartnerProjectContacts.pcrItem.returnToSummaryButton} />
+            <ACC.Content value={x => x.pcrItem.returnToSummaryButton} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>

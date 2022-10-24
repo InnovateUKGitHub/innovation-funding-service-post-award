@@ -1,31 +1,27 @@
-import { renderHook } from "@testing-library/react";
+import { PossibleCopyFunctions } from "@copy/type";
 import { hookTestBed } from "@shared/TestBed";
-import { ContentResult } from "@content/contentBase";
-import { Content } from "@content/content";
-import { getContentFromResult, useContent } from "@ui/hooks";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { renderHook } from "@testing-library/react";
 import { noop } from "@ui/helpers/noop";
-
-describe("getContentFromResult()", () => {
-  test("should get content from result", () => {
-    const stubResult: ContentResult = {
-      key: "stub-key",
-      content: "stub-content",
-      markdown: false,
-    };
-
-    const result = getContentFromResult(stubResult);
-
-    expect(result).toBe(stubResult.content);
-  });
-});
+import { useContent } from "@ui/hooks";
 
 describe("useContent()", () => {
   const stubTestContent = {
-    test1: { content: "stub-test1" },
-    test2: { content: "stub-test2" },
+    example: {
+      contentTitle: "Microsoft Teams",
+      content_one: "You have {{count}} {{name}} message.",
+      content_other: "You have {{count}} {{name}} messages.",
+    },
   };
 
-  const render = (testContent = {}) => renderHook(useContent, hookTestBed({ content: testContent }));
+  type PossibleTestCopyKeys = typeof stubTestContent;
+  type PossibleTestCopyFunctions = PossibleCopyFunctions<PossibleTestCopyKeys>;
+
+  const render = renderHook(useContent, hookTestBed({}));
+
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubTestContent);
+  });
 
   test("should throw error without provider", () => {
     // Note: RTL throws the error even though we catch it with the jest expect. This removes the console.error cli noise
@@ -36,98 +32,15 @@ describe("useContent()", () => {
     consoleSpy.mockRestore();
   });
 
-  test("should return content", () => {
-    const { result } = render(stubTestContent);
+  test.each`
+    name                                           | contentSelector                                                                      | result
+    ${"valid string input"}                        | ${"example.contentTitle"}                                                            | ${"Microsoft Teams"}
+    ${"valid content selector"}                    | ${(x: PossibleTestCopyFunctions) => x.example.contentTitle}                          | ${"Microsoft Teams"}
+    ${"valid content selector with singular data"} | ${(x: PossibleTestCopyFunctions) => x.example.content({ count: 1, name: "Teams" })}  | ${"You have 1 Teams message."}
+    ${"valid content selector with plural data"}   | ${(x: PossibleTestCopyFunctions) => x.example.content({ count: 12, name: "Slack" })} | ${"You have 12 Slack messages."}
+  `("should return content with $name", ({ contentSelector, result }) => {
+    const { getContent } = render.result.current;
 
-    expect(result.current.content).toStrictEqual(stubTestContent);
-  });
-
-  describe("with getContent()", () => {
-    describe("using a ContentSelector", () => {
-      test("with valid query", () => {
-        const stubContent = {
-          header: {
-            dashboard: {
-              content: "stub-dashboard",
-            },
-          },
-        };
-
-        const { getContent } = render(stubContent).result.current;
-
-        expect(getContent(x => x.header.dashboard)).toBe(stubContent.header.dashboard.content);
-      });
-
-      test("with missing nested property", () => {
-        const stubContent = {
-          header: {},
-        };
-
-        const { getContent } = render(stubContent).result.current;
-
-        const stubQuery = (x: Content) => x.header.dashboard;
-
-        const contentError = () => getContent(stubQuery);
-
-        expect(contentError).toThrow(
-          `It appears 'dashboard' is not available within the 'header' property. There is a problem with your available content object. Query => ${stubQuery.toString()}`,
-        );
-      });
-
-      test("with missing parent property", () => {
-        const { getContent } = render().result.current;
-
-        const stubQuery = (x: Content) => x.header.dashboard;
-
-        const contentError = () => getContent(stubQuery);
-
-        expect(contentError).toThrow(`It appears the following query did not find a result -> ${stubQuery.toString()}`);
-      });
-    });
-
-    test("using a string", () => {
-      const stubContentString = "some-content";
-      const { getContent } = render().result.current;
-
-      expect(getContent(stubContentString)).toBe(stubContentString);
-    });
-  });
-
-  test("should return getResultByQuery", () => {
-    const stubContent = {
-      header: {
-        profile: {
-          key: "stub-profile-key",
-          content: "stub-profile-content",
-          markdown: false,
-        },
-      },
-    };
-
-    const { getResultByQuery } = render(stubContent).result.current;
-
-    const content = getResultByQuery(x => x.header.profile);
-
-    expect(content.key).toBe(stubContent.header.profile.key);
-    expect(content.content).toBe(stubContent.header.profile.content);
-    expect(content.markdown).toBe(stubContent.header.profile.markdown);
-  });
-
-  test("should return getContentFromResult", () => {
-    const stubContent = {
-      header: {
-        profile: {
-          key: "stub-profile-key",
-          content: "stub-profile-content",
-          markdown: false,
-        },
-      },
-    };
-
-    const { current } = render().result;
-
-    const content = current.getContentFromResult(stubContent.header.profile);
-
-    expect(content).toBe(stubContent.header.profile.content);
+    expect(getContent(contentSelector)).toBe(result);
   });
 });

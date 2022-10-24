@@ -81,38 +81,38 @@ export const useFooterExternalContent = (): ISupplementLinksOptions => {
     externalContent: {
       title: {
         id: "footer-title",
-        content: getContent(x => x.footer.supportLinks),
+        content: getContent(x => x.site.footer.supportLinks),
       },
       usesCookie: {
         id: "uses-cookies",
-        content: getContent(x => x.footer.explainCookies),
+        content: getContent(x => x.site.footer.explainCookies),
       },
 
       govLicenseLinkPart1: {
         id: "govLicenseLinkPart1",
-        content: getContent(x => x.footer.govLicenseLinkPart1),
+        content: getContent(x => x.site.footer.externalLinkText.part1),
       },
 
       govLicenseLinkPart3: {
         id: "govLicenseLinkPart3",
-        content: getContent(x => x.footer.govLicenseLinkPart3),
+        content: getContent(x => x.site.footer.externalLinkText.part2),
       },
     },
     externalLinks: {
       moreAboutCookies: {
         id: "more-about-cookies-text",
         href: ifsCookieUrl,
-        content: getContent(x => x.footer.cookieFindOutMore),
+        content: getContent(x => x.site.footer.cookieFindOutMore),
       },
       crownCopyrightLink: {
         id: "crown-copyright-link",
         href: crownCopyrightUrl,
-        content: getContent(x => x.footer.crownCopyright),
+        content: getContent(x => x.site.footer.crownCopyright),
       },
       govLicenseLinkPart2: {
         id: "license-link",
         href: ukGovLicence,
-        content: getContent(x => x.footer.govLicenseLinkPart2),
+        content: getContent(x => x.site.footer.externalLinkText.part2LinkText),
       },
     },
   };

@@ -46,7 +46,7 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
       <ACC.Page
         backLink={
           <ACC.BackLink route={this.props.routes.projectDashboard.getLink({})}>
-            <ACC.Content value={x => x.projectSetup.backLink} />
+            <ACC.Content value={x => x.pages.projectSetup.backLink} />
           </ACC.BackLink>
         }
         pageTitle={<ACC.Projects.Title {...project} />}
@@ -57,14 +57,14 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
       >
         <ACC.Section qa="guidance">
           <ACC.Renderers.SimpleString>
-            <ACC.Content value={x => x.projectSetup.projectMessages.setupGuidance} />
+            <ACC.Content value={x => x.projectMessages.setupGuidance} />
           </ACC.Renderers.SimpleString>
         </ACC.Section>
 
         <ACC.UL qa="taskList">
-          <ACC.TaskListSection title={x => x.projectSetup.taskList.sectionTitleEnterInfo} qa="WhatDoYouWantToDo">
+          <ACC.TaskListSection title={x => x.taskList.giveUsInfoSectionTitle} qa="WhatDoYouWantToDo">
             <ACC.Task
-              name={x => x.projectSetup.setSpendProfile}
+              name={x => x.pages.projectSetup.setSpendProfile}
               status={partner.spendProfileStatusLabel as ACC.TaskStatus}
               route={this.props.routes.projectSetupSpendProfile.getLink({
                 partnerId: partner.id,
@@ -74,14 +74,14 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
             />
 
             <ACC.Task
-              name={x => x.projectSetup.provideBankDetails}
+              name={x => x.pages.projectSetup.provideBankDetails}
               status={partner.bankDetailsTaskStatusLabel as ACC.TaskStatus}
               route={this.getBankDetailsLink(partner)}
               validation={[editor.validator.bankDetailsTaskStatus]}
             />
 
             <ACC.Task
-              name={x => x.projectSetup.providePostcode}
+              name={x => x.pages.projectSetup.provideProjectLocation}
               status={this.isPostcodeComplete(partner.postcode)}
               route={this.props.routes.projectSetupPostcode.getLink({
                 projectId: this.props.projectId,
@@ -103,7 +103,7 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
         >
           <Form.Fieldset>
             <Form.Submit>
-              <ACC.Content value={x => x.projectSetup.complete} />
+              <ACC.Content value={x => x.pages.projectSetup.complete} />
             </Form.Submit>
           </Form.Fieldset>
         </Form.Form>
@@ -174,5 +174,5 @@ export const ProjectSetupRoute = defineRoute<ProjectSetupParams>({
   getParams: r => ({ projectId: r.params.projectId, partnerId: r.params.partnerId }),
   container: ProjectSetupContainer,
   accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(ProjectRole.FinancialContact),
-  getTitle: ({ content }) => content.projectSetup.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.projectSetup.title),
 });

@@ -26,7 +26,7 @@ export class MaterialsFormComponent extends Component<
             <Form.Fieldset qa="materials-costs">
               <Form.Hidden name="id" value={dto => dto.id} />
               <Form.String
-                label={x => x.pcrSpendProfilePrepareCostContent.labels.materials.item}
+                label={x => x.pcrSpendProfileLabels.materials.item}
                 width={"one-third"}
                 name="description"
                 value={dto => dto.description}
@@ -34,7 +34,7 @@ export class MaterialsFormComponent extends Component<
                 validation={validator && validator.description}
               />
               <Form.Numeric
-                label={x => x.pcrSpendProfilePrepareCostContent.labels.materials.quantity}
+                label={x => x.pcrSpendProfileLabels.materials.quantity}
                 name="quantity"
                 width={"one-third"}
                 value={dto => dto.quantity}
@@ -42,7 +42,7 @@ export class MaterialsFormComponent extends Component<
                 validation={validator && validator.quantity}
               />
               <Form.Numeric
-                label={x => x.pcrSpendProfilePrepareCostContent.labels.materials.costPerItem}
+                label={x => x.pcrSpendProfileLabels.materials.costPerItem}
                 name="costPerItem"
                 width={"one-third"}
                 value={dto => dto.costPerItem}
@@ -52,7 +52,7 @@ export class MaterialsFormComponent extends Component<
 
               {isClient && (
                 <Form.Custom
-                  label={x => x.pcrSpendProfilePrepareCostContent.labels.materials.totalCost}
+                  label={x => x.pcrSpendProfileLabels.materials.totalCost}
                   labelBold
                   name="totalCost"
                   value={dto => (
@@ -66,7 +66,9 @@ export class MaterialsFormComponent extends Component<
             </Form.Fieldset>
             <Form.Fieldset qa="save">
               <Form.Submit>
-                <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.submitButton(costCategory.name)} />
+                <ACC.Content
+                  value={x => x.pages.pcrSpendProfilePrepareCost.buttonSubmit({ costCategoryName: costCategory.name })}
+                />
               </Form.Submit>
             </Form.Fieldset>
           </Form.Form>

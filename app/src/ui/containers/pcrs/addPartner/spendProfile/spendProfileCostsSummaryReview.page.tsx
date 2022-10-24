@@ -60,14 +60,16 @@ class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProf
       <ACC.Page
         backLink={
           <ACC.BackLink route={stepRoute}>
-            <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.backLink} />
+            <ACC.Content value={x => x.pages.pcrSpendProfileCostsSummary.backLink} />
           </ACC.BackLink>
         }
         pageTitle={<ACC.Projects.Title {...project} />}
         project={project}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        <ACC.Section title={x => x.pcrSpendProfileCostsSummaryContent.costsSectionTitle(costCategory.name)}>
+        <ACC.Section
+          title={x => x.pages.pcrSpendProfileCostsSummary.sectionTitleCosts({ costCategoryName: costCategory.name })}
+        >
           {this.renderViewTable(costs, costCategory)}
         </ACC.Section>
       </ACC.Page>
@@ -106,7 +108,7 @@ class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProf
     return [
       this.renderFooterRow({
         key: "1",
-        title: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.labels.totalCosts(costCategory.name)} />,
+        title: <ACC.Content value={x => x.pcrSpendProfileLabels.totalCosts({ costCategoryName: costCategory.name })} />,
         qa: "total-costs",
         isBold: false,
         numberOfColumns,
@@ -135,15 +137,11 @@ class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProf
         return (
           <Table.Table qa="default-costs" data={costs} footers={this.getFooters(costs, costCategory, 2)}>
             <Table.String
-              header={x => x.pcrSpendProfileCostsSummaryContent.labels.description}
+              header={x => x.pcrSpendProfileLabels.description}
               value={x => x.description}
               qa={"description"}
             />
-            <Table.Currency
-              header={x => x.pcrSpendProfileCostsSummaryContent.labels.cost}
-              value={x => x.value}
-              qa={"cost"}
-            />
+            <Table.Currency header={x => x.pcrSpendProfileLabels.cost} value={x => x.value} qa={"cost"} />
           </Table.Table>
         );
     }
@@ -153,31 +151,19 @@ class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProf
     const Table = ACC.TypedTable<PCRSpendProfileLabourCostDto>();
     return (
       <Table.Table qa="labour-costs" data={costs} footers={this.getFooters(costs, costCategory, 5)}>
-        <Table.String
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.labour.role}
-          value={x => x.description}
-          qa={"description"}
-        />
+        <Table.String header={x => x.pcrSpendProfileLabels.labour.role} value={x => x.description} qa={"description"} />
         <Table.Currency
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.labour.grossCost}
+          header={x => x.pcrSpendProfileLabels.labour.grossCost}
           value={x => x.grossCostOfRole}
           qa={"grossEmployeeCost"}
         />
-        <Table.Currency
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.labour.rate}
-          value={x => x.ratePerDay}
-          qa={"ratePerDay"}
-        />
+        <Table.Currency header={x => x.pcrSpendProfileLabels.labour.rate} value={x => x.ratePerDay} qa={"ratePerDay"} />
         <Table.Number
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.labour.daysOnProject}
+          header={x => x.pcrSpendProfileLabels.labour.daysSpentOnProject}
           value={x => x.daysSpentOnProject}
           qa={"daysSpentOnProject"}
         />
-        <Table.Currency
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.labour.totalCost}
-          value={x => x.value}
-          qa={"totalCost"}
-        />
+        <Table.Currency header={x => x.pcrSpendProfileLabels.labour.totalCost} value={x => x.value} qa={"totalCost"} />
       </Table.Table>
     );
   }
@@ -187,22 +173,22 @@ class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProf
     return (
       <Table.Table qa="materials-costs" data={costs} footers={this.getFooters(costs, costCategory, 4)}>
         <Table.String
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.materials.item}
+          header={x => x.pcrSpendProfileLabels.materials.item}
           value={x => x.description}
           qa={"description"}
         />
         <Table.Number
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.materials.quantity}
+          header={x => x.pcrSpendProfileLabels.materials.quantity}
           value={x => x.quantity}
           qa={"quantity"}
         />
         <Table.Currency
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.materials.costPerItem}
+          header={x => x.pcrSpendProfileLabels.materials.costPerItem}
           value={x => x.costPerItem}
           qa={"costPerItem"}
         />
         <Table.Currency
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.materials.totalCost}
+          header={x => x.pcrSpendProfileLabels.materials.totalCost}
           value={x => x.value}
           qa={"totalCost"}
         />
@@ -218,22 +204,22 @@ class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProf
     return (
       <Table.Table qa="subcontracting-costs" data={costs} footers={this.getFooters(costs, costCategory, 4)}>
         <Table.String
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.subcontracting.subcontractorName}
+          header={x => x.pcrSpendProfileLabels.subcontracting.subcontractorName}
           value={x => x.description}
           qa={"description"}
         />
         <Table.String
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.subcontracting.subcontractorCountry}
+          header={x => x.pcrSpendProfileLabels.subcontracting.subcontractorCountry}
           value={x => x.subcontractorCountry}
           qa={"subcontractorCountry"}
         />
         <Table.String
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.subcontracting.subcontractorRoleAndDescription}
+          header={x => x.pcrSpendProfileLabels.subcontracting.subcontractorRoleAndDescription}
           value={x => x.subcontractorRoleAndDescription}
           qa={"subcontractorRoleAndDescription"}
         />
         <Table.Currency
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.subcontracting.cost}
+          header={x => x.pcrSpendProfileLabels.subcontracting.cost}
           value={x => x.value}
           qa={"totalCost"}
         />
@@ -246,37 +232,33 @@ class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProf
     return (
       <Table.Table qa="capital-usage-costs" data={costs} footers={this.getFooters(costs, costCategory, 7)}>
         <Table.String
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.capitalUsage.description}
+          header={x => x.pcrSpendProfileLabels.capitalUsage.description}
           value={x => x.description}
           qa={"description"}
         />
-        <Table.String
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.capitalUsage.type}
-          value={x => x.typeLabel}
-          qa={"type"}
-        />
+        <Table.String header={x => x.pcrSpendProfileLabels.capitalUsage.type} value={x => x.typeLabel} qa={"type"} />
         <Table.Number
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.capitalUsage.depreciationPeriod}
+          header={x => x.pcrSpendProfileLabels.capitalUsage.depreciationPeriod}
           value={x => x.depreciationPeriod}
           qa={"depreciationPeriod"}
         />
         <Table.Currency
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.capitalUsage.netPresentValue}
+          header={x => x.pcrSpendProfileLabels.capitalUsage.netPresentValue}
           value={x => x.netPresentValue}
           qa={"netPresentValue"}
         />
         <Table.Currency
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.capitalUsage.residualValue}
+          header={x => x.pcrSpendProfileLabels.capitalUsage.residualValue}
           value={x => x.residualValue}
           qa={"residualValue"}
         />
         <Table.Percentage
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.capitalUsage.utilisation}
+          header={x => x.pcrSpendProfileLabels.capitalUsage.utilisation}
           value={x => x.utilisation}
           qa={"utilisation"}
         />
         <Table.Currency
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.capitalUsage.netCost}
+          header={x => x.pcrSpendProfileLabels.capitalUsage.netCost}
           value={x => x.value}
           qa={"totalCost"}
         />
@@ -292,22 +274,22 @@ class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProf
     return (
       <Table.Table qa="travel-and-subs-costs" data={costs} footers={this.getFooters(costs, costCategory, 4)}>
         <Table.String
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.travelAndSubs.description}
+          header={x => x.pcrSpendProfileLabels.travelAndSubs.description}
           value={x => x.description}
           qa={"description"}
         />
         <Table.Number
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.travelAndSubs.numberOfTimes}
+          header={x => x.pcrSpendProfileLabels.travelAndSubs.numberOfTimes}
           value={x => x.numberOfTimes}
           qa={"numberOfTimes"}
         />
         <Table.Currency
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.travelAndSubs.costOfEach}
+          header={x => x.pcrSpendProfileLabels.travelAndSubs.costOfEach}
           value={x => x.costOfEach}
           qa={"costOfEach"}
         />
         <Table.Currency
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.travelAndSubs.totalCost}
+          header={x => x.pcrSpendProfileLabels.travelAndSubs.totalCost}
           value={x => x.value}
           qa={"totalCost"}
         />
@@ -320,12 +302,12 @@ class SpendProfileCostsSummaryReviewComponent extends ContainerBase<PcrSpendProf
     return (
       <Table.Table qa="other-costs" data={costs} footers={this.getFooters(costs, costCategory, 2)}>
         <Table.String
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.otherCosts.description}
+          header={x => x.pcrSpendProfileLabels.otherCosts.description}
           value={x => x.description}
           qa={"description"}
         />
         <Table.Currency
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.otherCosts.totalCost}
+          header={x => x.pcrSpendProfileLabels.otherCosts.totalCost}
           value={x => x.value}
           qa={"totalCost"}
         />
@@ -368,6 +350,6 @@ export const PCRSpendProfileReviewCostsSummaryRoute = defineRoute<PcrSpendProfil
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,
   }),
-  getTitle: ({ content }) => content.pcrSpendProfileCostsSummaryContent.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfileCostsSummary.title),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer),
 });

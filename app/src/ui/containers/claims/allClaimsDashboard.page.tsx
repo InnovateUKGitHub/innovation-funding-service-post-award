@@ -7,8 +7,8 @@ import { useStores } from "@ui/redux";
 import { getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
 import { getPartnerName } from "@ui/components";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { roundCurrency } from "@framework/util";
-import { ProjectRole, ProjectStatus } from "@framework/constants";
+import { formatDate, roundCurrency } from "@framework/util";
+import { DateFormat, ProjectRole, ProjectStatus } from "@framework/constants";
 import { IRoutes } from "@ui/routing";
 import { getAuthRoles } from "@framework/types";
 import { getLeadPartner } from "@framework/util/partnerHelper";
@@ -58,18 +58,18 @@ function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaims
         {isMultipleParticipants && isFc && renderGuidanceMessage(isCombinationOfSBRI, partners)}
 
         {hasWithdrawnPartners && (
-          <Acc.ValidationMessage messageType="info" message={x => x.allClaimsDashboard.messages.hasWithdrawnPartners} />
+          <Acc.ValidationMessage messageType="info" message={x => x.claimsMessages.hasWithdrawnPartner} />
         )}
 
         <Acc.Renderers.Messages messages={props.messages} />
 
-        <Acc.Section qa="current-claims-section" title={x => x.allClaimsDashboard.labels.openSectionTitle}>
+        <Acc.Section qa="current-claims-section" title={x => x.claimsLabels.openSectionTitle}>
           <Acc.Loader
             pending={props.currentClaims}
             render={(currentClaims, isLoading) =>
               isLoading ? (
                 <Acc.Renderers.SimpleString qa="claimsLoadingMessage">
-                  <Acc.Content value={x => x.allClaimsDashboard.messages.loadingClaims} />
+                  <Acc.Content value={x => x.claimsMessages.loadingClaims} />
                 </Acc.Renderers.SimpleString>
               ) : (
                 renderCurrentClaimsPerPeriod(currentClaims, projectDetails, partners)
@@ -78,7 +78,7 @@ function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaims
           />
         </Acc.Section>
 
-        <Acc.Section qa="closed-claims-section" title={x => x.allClaimsDashboard.labels.closedSectionTitle}>
+        <Acc.Section qa="closed-claims-section" title={x => x.claimsLabels.closedSectionTitle}>
           {renderPreviousClaimsSections(projectDetails, partners, previousClaims)}
         </Acc.Section>
       </Acc.Page>
@@ -92,7 +92,7 @@ function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaims
     if (!isCurrentOverduePartner && isCombinationOfSBRI) {
       return (
         <Acc.Renderers.SimpleString qa="theFinalClaimApprovedNotificationMessage">
-          <Acc.Content value={x => x.allClaimsDashboard.sbriGuidanceMessage} />
+          <Acc.Content value={x => x.pages.allClaimsDashboard.sbriGuidanceMessage} />
         </Acc.Renderers.SimpleString>
       );
     }
@@ -119,7 +119,7 @@ function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaims
       if (project.status === ProjectStatus.Terminated || project.status === ProjectStatus.Closed) {
         return (
           <Acc.Renderers.SimpleString qa="theFinalClaimApprovedNotificationMessage">
-            <Acc.Content value={x => x.allClaimsDashboard.messages.noRemainingClaims} />
+            <Acc.Content value={x => x.claimsMessages.noRemainingClaims} />
           </Acc.Renderers.SimpleString>
         );
       }
@@ -128,7 +128,9 @@ function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaims
       const date = DateTime.fromJSDate(project.periodEndDate).plus({ days: 1 }).toJSDate();
       return (
         <Acc.Renderers.SimpleString qa="notificationMessage">
-          <Acc.Content value={x => x.allClaimsDashboard.messages.noOpenClaimsMessage(date)} />
+          <Acc.Content
+            value={x => x.claimsMessages.noOpenClaims({ nextClaimStartDate: formatDate(date, DateFormat.FULL_DATE) })}
+          />
         </Acc.Renderers.SimpleString>
       );
     }
@@ -161,33 +163,29 @@ function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaims
         <ClaimTable.Table
           data={claims}
           bodyRowFlag={x => (getBodyRowFlag(x, project, partners) ? "edit" : null)}
-          caption={<Acc.Content value={x => x.allClaimsDashboard.labels.openCaption} />}
+          caption={<Acc.Content value={x => x.claimsLabels.openCaption} />}
           qa="current-claims-table"
         >
-          <ClaimTable.Custom header={x => x.allClaimsDashboard.labels.partner} qa="partner" value={renderPartnerName} />
+          <ClaimTable.Custom header={x => x.claimsLabels.partner} qa="partner" value={renderPartnerName} />
           <ClaimTable.Currency
-            header={x => x.allClaimsDashboard.labels.forecastCosts}
+            header={x => x.claimsLabels.forecastCosts}
             qa="forecast-cost"
             value={x => x.forecastCost}
           />
+          <ClaimTable.Currency header={x => x.claimsLabels.actualCosts} qa="actual-cost" value={x => x.totalCost} />
           <ClaimTable.Currency
-            header={x => x.allClaimsDashboard.labels.actualCosts}
-            qa="actual-cost"
-            value={x => x.totalCost}
-          />
-          <ClaimTable.Currency
-            header={x => x.allClaimsDashboard.labels.difference}
+            header={x => x.claimsLabels.difference}
             qa="diff"
             value={x => roundCurrency(x.forecastCost - x.totalCost)}
           />
-          <ClaimTable.String header={x => x.allClaimsDashboard.labels.status} qa="status" value={x => x.statusLabel} />
+          <ClaimTable.String header={x => x.claimsLabels.status} qa="status" value={x => x.statusLabel} />
           <ClaimTable.ShortDate
-            header={x => x.allClaimsDashboard.labels.lastUpdated}
+            header={x => x.claimsLabels.lastUpdatedDate}
             qa="last-update"
             value={x => x.paidDate || x.approvedDate || x.lastModifiedDate}
           />
           <ClaimTable.Custom
-            header={x => x.allClaimsDashboard.labels.actionHeader}
+            header={x => x.claimsLabels.actionHeader}
             hideHeader
             qa="link"
             value={x => (
@@ -237,7 +235,7 @@ function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaims
     if (previousClaims.length === 0) {
       return (
         <Acc.Renderers.SimpleString qa={`noClosedClaims-${partner.accountId}`}>
-          <Acc.Content value={x => x.allClaimsDashboard.messages.noClosedClaims} />
+          <Acc.Content value={x => x.claimsMessages.noClosedClaims} />
         </Acc.Renderers.SimpleString>
       );
     }
@@ -249,28 +247,24 @@ function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaims
         <ClaimTable.Table data={previousClaims} caption={partnerName} qa={`previousClaims-${partner.accountId}`}>
           <ClaimTable.Custom qa="period" value={x => renderClosedPeriodColumn(x)} />
           <ClaimTable.Currency
-            header={x => x.allClaimsDashboard.labels.forecastCosts}
+            header={x => x.claimsLabels.forecastCosts}
             qa="forecast-cost"
             value={x => x.forecastCost}
           />
+          <ClaimTable.Currency header={x => x.claimsLabels.actualCosts} qa="actual-cost" value={x => x.totalCost} />
           <ClaimTable.Currency
-            header={x => x.allClaimsDashboard.labels.actualCosts}
-            qa="actual-cost"
-            value={x => x.totalCost}
-          />
-          <ClaimTable.Currency
-            header={x => x.allClaimsDashboard.labels.difference}
+            header={x => x.claimsLabels.difference}
             qa="diff"
             value={x => roundCurrency(x.forecastCost - x.totalCost)}
           />
-          <ClaimTable.String header={x => x.allClaimsDashboard.labels.status} qa="status" value={x => x.statusLabel} />
+          <ClaimTable.String header={x => x.claimsLabels.status} qa="status" value={x => x.statusLabel} />
           <ClaimTable.ShortDate
-            header={x => x.allClaimsDashboard.labels.lastUpdated}
+            header={x => x.claimsLabels.lastUpdatedDate}
             qa="last-update"
             value={x => x.paidDate || x.approvedDate || x.lastModifiedDate}
           />
           <ClaimTable.Custom
-            header={x => x.allClaimsDashboard.labels.actionHeader}
+            header={x => x.claimsLabels.actionHeader}
             hideHeader
             qa="link"
             value={x => (
@@ -313,7 +307,7 @@ export const AllClaimsDashboardRoute = defineRoute({
   getParams: route => ({
     projectId: route.params.projectId ?? "",
   }),
-  getTitle: ({ content }) => content.allClaimsDashboard.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.allClaimsDashboard.title),
   accessControl: (auth, { projectId }) =>
     auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
 });

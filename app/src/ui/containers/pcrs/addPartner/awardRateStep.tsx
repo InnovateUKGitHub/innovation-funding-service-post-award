@@ -11,8 +11,8 @@ export const AwardRateStep = (
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
 
   return (
-    <ACC.Section title={x => x.pcrAddPartnerAwardRate.formSectionTitle}>
-      <Content value={x => x.pcrAddPartnerAwardRate.guidance} />
+    <ACC.Section title={x => x.pages.pcrAddPartnerAwardRate.formSectionTitle}>
+      <Content markdown value={x => x.pages.pcrAddPartnerAwardRate.guidance} />
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
@@ -33,10 +33,10 @@ export const AwardRateStep = (
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
           <Form.Submit>
-            <ACC.Content value={x => x.pcrAddPartnerAwardRate.pcrItem.submitButton} />
+            <ACC.Content value={x => x.pcrItem.submitButton} />
           </Form.Submit>
           <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
-            <Content value={x => x.pcrAddPartnerAwardRate.pcrItem.returnToSummaryButton} />
+            <Content value={x => x.pcrItem.returnToSummaryButton} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>

@@ -1,161 +1,186 @@
 import { renderHook } from "@testing-library/react";
 
 import { useReviewContent } from "@ui/containers";
-import { hookTestBed, TestBedContent } from "@shared/TestBed";
+import { hookTestBed } from "@shared/TestBed";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { ContentProvider } from "@ui/redux";
+import { Copy } from "@copy/Copy";
 
 const stubContent = {
-  projectDetails: {
-    projectLabels: {
-      competitionNameLabel: { content: "stub-competitionNameLabel" },
-      competitionTypeLabel: { content: "stub-competitionTypeLabel" },
+  projectLabels: {
+    competitionNameLabel: "stub-competitionNameLabel",
+    competitionTypeLabel: "stub-competitionTypeLabel",
+  },
+  documentMessages: {
+    uploadInstruction1: "stub-uploadInstruction1",
+    uploadInstruction2: "stub-uploadInstruction2",
+    noDocumentsUploaded: "stub-noDocumentsUploaded",
+  },
+  claimsLabels: {
+    accordionTitleForecast: "stub-accordionTitleForecast",
+    accordionTitleClaimLog: "stub-accordionTitleClaimLog",
+  },
+  claimsMessages: {
+    finalClaim: "stub-finalClaim",
+  },
+  pages: {
+    projectDocuments: {
+      noMatchingDocumentsMessage: "stub-noMatchingDocumentsMessage",
+      searchDocumentsMessage: "stub-searchDocumentsMessage",
+    },
+    claimDocuments: {
+      descriptionLabel: "stub-descriptionLabel",
+    },
+    claimReview: {
+      backLink: "stub-backLink",
+      optionQueryClaim: "stub-optionQueryClaim",
+      optionSubmitClaim: "stub-optionSubmitClaim",
+      sectionTitleHowToProceed: "stub-sectionTitleHowToProceed",
+      sectionTitleAdditionalInfo: "stub-sectionTitleAdditionalInfo",
+      additionalInfoHint: "stub-additionalInfoHint",
+      claimReviewDeclaration: "stub-claimReviewDeclaration",
+      monitoringReportReminder: "stub-monitoringReportReminder",
+      buttonSubmit: "stub-buttonSubmit",
+      buttonSendQuery: "stub-buttonSendQuery",
+      buttonUpload: "stub-buttonUpload",
+      labelInputUpload: "stub-labelInputUpload",
+      accordionTitleSupportingDocumentsForm: "stub-accordionTitleSupportingDocumentsForm",
+      additionalInfo: "stub-additionalInfo",
+      additionalInfoHintIfYou: "stub-additionalInfoHintIfYou",
+      additionalInfoHintQueryClaim: "stub-additionalInfoHintQueryClaim",
+      additionalInfoHintSubmitClaim: "stub-additionalInfoHintSubmitClaim",
     },
   },
-  claimReview: {
-    additionalInfoHint: { content: "stub-additionalInfoHint" },
-    backLink: { content: "stub-backLink" },
-    queryClaimOption: { content: "stub-queryClaimOption" },
-    approveClaimOption: { content: "stub-approveClaimOption" },
-    howToProceedSectionTitle: { content: "stub-howToProceedSectionTitle" },
-    submitButton: { content: "stub-submitButton" },
-    sendQueryButton: { content: "stub-sendQueryButton" },
-    uploadSupportingDocumentsFormAccordionTitle: { content: "stub-uploadSupportingDocumentsFormAccordionTitle" },
-    uploadInputLabel: { content: "stub-uploadInputLabel" },
-    uploadButton: { content: "stub-uploadButton" },
-    claimReviewDeclaration: { content: "stub-claimReviewDeclaration" },
-    monitoringReportReminder: { content: "stub-monitoringReportReminder" },
-    additionalInfoSectionTitle: { content: "stub-additionalInfoSectionTitle" },
-    additionalInfoLabel: { content: "stub-additionalInfoLabel" },
-    additionalInfoHintIfYou: { content: "stub-additionalInfoHintIfYou" },
-    additionalInfoHintQueryClaim: { content: "stub-additionalInfoHintQueryClaim" },
-    additionalInfoHintSubmitClaim: { content: "stub-additionalInfoHintSubmitClaim" },
-    labels: {
-      forecastAccordionTitle: { content: "stub-forecastAccordionTitle" },
-      claimLogAccordionTitle: { content: "stub-claimLogAccordionTitle" },
-    },
-    documentMessages: {
-      uploadInstruction1: { content: "stub-uploadInstruction1" },
-      uploadInstruction2: { content: "stub-uploadInstruction2" },
-      noDocumentsUploaded: { content: "stub-noDocumentsUploaded" },
-    },
-    messages: {
-      finalClaimMessage: { content: "stub-finalClaimMessage" },
-    },
-  },
-  claimDocuments: {
-    descriptionLabel: { content: "stub-descriptionLabel" },
-  },
-  projectDocuments: {
-    noMatchingDocumentsMessage: { content: "stub-noMatchingDocumentsMessage" },
-    searchDocumentsMessage: { content: "stub-searchDocumentsMessage" },
-  },
-} as any;
+};
 
-const renderPageContent = () => {
-  return renderHook(useReviewContent, hookTestBed({ content: stubContent as TestBedContent }));
+const renderPageContent = (competitionType?: string) => {
+  return renderHook(useReviewContent, hookTestBed({ competitionType }));
 };
 
 describe("useReviewContent()", () => {
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent);
+  });
+
   test.each`
     name                      | property
     ${"competitionNameLabel"} | ${"competitionNameLabel"}
     ${"competitionTypeLabel"} | ${"competitionTypeLabel"}
-  `("with message $property", ({ name, property }: Record<"name" | "property", string>) => {
+  `(
+    "with message $property",
+    ({ name, property }: { name: string; property: keyof typeof stubContent.pages.claimReview }) => {
+      const { result } = renderPageContent();
+
+      const content = (result.current.default as any)[name];
+      const expectedContent = stubContent.pages.claimReview[property];
+
+      expect(content).toBe(expectedContent);
+    },
+  );
+
+  test.each`
+    name                                       | property
+    ${"backLink"}                              | ${"backLink"}
+    ${"optionQueryClaim"}                      | ${"optionQueryClaim"}
+    ${"optionSubmitClaim"}                     | ${"optionSubmitClaim"}
+    ${"sectionTitleHowToProceed"}              | ${"sectionTitleHowToProceed"}
+    ${"sectionTitleAdditionalInfo"}            | ${"sectionTitleAdditionalInfo"}
+    ${"additionalInfoHint"}                    | ${"additionalInfoHint"}
+    ${"claimReviewDeclaration"}                | ${"claimReviewDeclaration"}
+    ${"monitoringReportReminder"}              | ${"monitoringReportReminder"}
+    ${"buttonSubmit"}                          | ${"buttonSubmit"}
+    ${"buttonSendQuery"}                       | ${"buttonSendQuery"}
+    ${"buttonUpload"}                          | ${"buttonUpload"}
+    ${"labelInputUpload"}                      | ${"labelInputUpload"}
+    ${"accordionTitleSupportingDocumentsForm"} | ${"accordionTitleSupportingDocumentsForm"}
+    ${"additionalInfo"}                        | ${"additionalInfo"}
+  `("with $property", ({ name, property }: { name: string; property: keyof typeof stubContent.pages.claimReview }) => {
     const { result } = renderPageContent();
 
     const content = (result.current.default as any)[name];
-    const expectedContent = stubContent.projectDetails.projectLabels[property].content;
+    const expectedContent = stubContent.pages.claimReview[property];
 
     expect(content).toBe(expectedContent);
   });
 
   test.each`
-    name                                             | property
-    ${"additionalInfoHint"}                          | ${"additionalInfoHint"}
-    ${"backlinkMessage"}                             | ${"backLink"}
-    ${"queryClaimOption"}                            | ${"queryClaimOption"}
-    ${"approveClaimOption"}                          | ${"approveClaimOption"}
-    ${"howToProceedSectionTitle"}                    | ${"howToProceedSectionTitle"}
-    ${"submitButton"}                                | ${"submitButton"}
-    ${"sendQueryButton"}                             | ${"sendQueryButton"}
-    ${"uploadSupportingDocumentsFormAccordionTitle"} | ${"uploadSupportingDocumentsFormAccordionTitle"}
-    ${"uploadInputLabel"}                            | ${"uploadInputLabel"}
-    ${"uploadButton"}                                | ${"uploadButton"}
-    ${"claimReviewDeclaration"}                      | ${"claimReviewDeclaration"}
-    ${"monitoringReportReminder"}                    | ${"monitoringReportReminder"}
-    ${"additionalInfoSectionTitle"}                  | ${"additionalInfoSectionTitle"}
-    ${"additionalInfoLabel"}                         | ${"additionalInfoLabel"}
-  `("with $property", ({ name, property }: Record<"name" | "property", string>) => {
-    const { result } = renderPageContent();
+    name            | property
+    ${"finalClaim"} | ${"finalClaim"}
+  `(
+    "with message $property",
+    ({ name, property }: { name: string; property: keyof typeof stubContent.claimsMessages }) => {
+      const { result } = renderPageContent();
 
-    const content = (result.current.default as any)[name];
-    const expectedContent = stubContent.claimReview[property].content;
+      const content = (result.current.default as any)[name];
+      const expectedContent = stubContent.claimsMessages[property];
 
-    expect(content).toBe(expectedContent);
-  });
+      expect(content).toBe(expectedContent);
+    },
+  );
 
   test.each`
-    name                   | property
-    ${"finalClaimMessage"} | ${"finalClaimMessage"}
-  `("with message $property", ({ name, property }: Record<"name" | "property", string>) => {
-    const { result } = renderPageContent();
+    name                        | property
+    ${"accordionTitleForecast"} | ${"accordionTitleForecast"}
+    ${"accordionTitleClaimLog"} | ${"accordionTitleClaimLog"}
+  `(
+    "with labels $property",
+    ({ name, property }: { name: string; property: keyof typeof stubContent.claimsLabels }) => {
+      const { result } = renderPageContent();
 
-    const content = (result.current.default as any)[name];
-    const expectedContent = stubContent.claimReview.messages[property].content;
+      const content = (result.current.default as any)[name];
+      const expectedContent = stubContent.claimsLabels[property];
 
-    expect(content).toBe(expectedContent);
-  });
-
-  test.each`
-    name                   | property
-    ${"forecastItemTitle"} | ${"forecastAccordionTitle"}
-    ${"logItemTitle"}      | ${"claimLogAccordionTitle"}
-  `("with labels $property", ({ name, property }: Record<"name" | "property", string>) => {
-    const { result } = renderPageContent();
-
-    const content = (result.current.default as any)[name];
-    const expectedContent = stubContent.claimReview.labels[property].content;
-
-    expect(content).toBe(expectedContent);
-  });
+      expect(content).toBe(expectedContent);
+    },
+  );
 
   test.each`
     name                     | property
     ${"uploadInstruction1"}  | ${"uploadInstruction1"}
     ${"uploadInstruction2"}  | ${"uploadInstruction2"}
     ${"noDocumentsUploaded"} | ${"noDocumentsUploaded"}
-  `("with documentMessages $property", ({ name, property }: Record<"name" | "property", string>) => {
-    const { result } = renderPageContent();
+  `(
+    "with documentMessages $property",
+    ({ name, property }: { name: string; property: keyof typeof stubContent.documentMessages }) => {
+      const { result } = renderPageContent();
 
-    const content = (result.current.default as any)[name];
-    const expectedContent = stubContent.claimReview.documentMessages[property].content;
+      const content = (result.current.default as any)[name];
+      const expectedContent = stubContent.documentMessages[property];
 
-    expect(content).toBe(expectedContent);
-  });
+      expect(content).toBe(expectedContent);
+    },
+  );
 
   test.each`
     name                  | property
     ${"descriptionLabel"} | ${"descriptionLabel"}
-  `("with claimDocuments $property", ({ name, property }: Record<"name" | "property", string>) => {
-    const { result } = renderPageContent();
+  `(
+    "with claimDocuments $property",
+    ({ name, property }: { name: string; property: keyof typeof stubContent.pages.claimDocuments }) => {
+      const { result } = renderPageContent();
 
-    const content = (result.current.default as any)[name];
-    const expectedContent = stubContent.claimDocuments[property].content;
+      const content = (result.current.default as any)[name];
+      const expectedContent = stubContent.pages.claimDocuments[property];
 
-    expect(content).toBe(expectedContent);
-  });
+      expect(content).toBe(expectedContent);
+    },
+  );
 
   test.each`
     name                            | property
     ${"noMatchingDocumentsMessage"} | ${"noMatchingDocumentsMessage"}
     ${"searchDocumentsMessage"}     | ${"searchDocumentsMessage"}
-  `("with projectDocuments $property", ({ name, property }: Record<"name" | "property", string>) => {
-    const { result } = renderPageContent();
+  `(
+    "with projectDocuments $property",
+    ({ name, property }: { name: string; property: keyof typeof stubContent.pages.projectDocuments }) => {
+      const { result } = renderPageContent();
 
-    const content = (result.current.default as any)[name];
-    const expectedContent = stubContent.projectDocuments[property].content;
+      const content = (result.current.default as any)[name];
+      const expectedContent = stubContent.pages.projectDocuments[property];
 
-    expect(content).toBe(expectedContent);
-  });
+      expect(content).toBe(expectedContent);
+    },
+  );
 });
 
 describe("getCompetitionContent()", () => {
@@ -168,12 +193,10 @@ describe("getCompetitionContent()", () => {
       throw new Error("No KTP content found");
     }
 
-    expect(ktpContent.additionalInfoHintIfYou).toEqual(stubContent.claimReview.additionalInfoHintIfYou.content);
-    expect(ktpContent.additionalInfoHintQueryClaim).toEqual(
-      stubContent.claimReview.additionalInfoHintQueryClaim.content,
-    );
+    expect(ktpContent.additionalInfoHintIfYou).toEqual(stubContent.pages.claimReview.additionalInfoHintIfYou);
+    expect(ktpContent.additionalInfoHintQueryClaim).toEqual(stubContent.pages.claimReview.additionalInfoHintQueryClaim);
     expect(ktpContent.additionalInfoHintSubmitClaim).toEqual(
-      stubContent.claimReview.additionalInfoHintSubmitClaim.content,
+      stubContent.pages.claimReview.additionalInfoHintSubmitClaim,
     );
   });
 

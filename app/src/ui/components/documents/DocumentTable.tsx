@@ -1,4 +1,4 @@
-import { DocumentDescription } from "@framework/constants";
+import { getDocumentDescriptionContentSelector } from "@framework/constants";
 import { DocumentSummaryDto, PartnerDocumentSummaryDto } from "@framework/dtos/documentDto";
 import { getAuthRoles } from "@framework/types";
 import { getFileSize } from "@framework/util/files";
@@ -38,13 +38,7 @@ export const DocumentTable = <T extends DocumentSummaryDto>({
       <ProjectDocumentsTable.Custom
         header="Type"
         qa="fileType"
-        value={x =>
-          x.description ? (
-            <Content
-              value={c => c.components.documents.labels.documentDescriptionLabel(x.description as DocumentDescription)}
-            />
-          ) : null
-        }
+        value={x => <Content value={getDocumentDescriptionContentSelector(x.description)} />}
       />
 
       <ProjectDocumentsTable.ShortDate

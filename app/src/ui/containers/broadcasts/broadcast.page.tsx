@@ -21,29 +21,33 @@ function BroadcastPage(props: BroadcastItemProps) {
   const broadcastQuery = stores.broadcasts.get(props.broadcastId);
   const { isLoading, isRejected, payload } = getPending(broadcastQuery);
 
-  const pageTitle = (!isRejected && payload?.title) || getContent(x => x.broadcastPage.emptyBroadcast);
+  const pageTitle = (!isRejected && payload?.title) || getContent(x => x.components.broadcastContent.emptyBroadcast);
 
   const titleElement = (
     <PageTitle
-      title={isLoading ? getContent(x => x.broadcastPage.loadingBroadcast) : pageTitle}
-      caption={getContent(x => x.broadcastPage.broadcastTitle)}
+      title={isLoading ? getContent(x => x.components.broadcastContent.loadingBroadcast) : pageTitle}
+      caption={getContent(x => x.components.broadcastContent.broadcastTitle)}
     />
   );
 
   const backLinkElement = (
     <ACC.BackLink route={props.routes.projectDashboard.getLink({})}>
-      {getContent(x => x.projectOverview.backToProjects)}
+      {getContent(x => x.pages.projectOverview.backToProjects)}
     </ACC.BackLink>
   );
 
   return (
     <ACC.Page pageTitle={titleElement} backLink={backLinkElement}>
       {isLoading && (
-        <ACC.Renderers.SimpleString>{getContent(x => x.broadcastPage.loadingBroadcast)}</ACC.Renderers.SimpleString>
+        <ACC.Renderers.SimpleString>
+          {getContent(x => x.components.broadcastContent.loadingBroadcast)}
+        </ACC.Renderers.SimpleString>
       )}
 
       {isRejected && (
-        <ACC.Renderers.SimpleString>{getContent(x => x.broadcastPage.errorBroadcast)}</ACC.Renderers.SimpleString>
+        <ACC.Renderers.SimpleString>
+          {getContent(x => x.components.broadcastContent.errorBroadcast)}
+        </ACC.Renderers.SimpleString>
       )}
 
       {payload && <BroadcastDetail {...payload} />}
@@ -58,5 +62,5 @@ export const BroadcastPageRoute = defineRoute<BroadcastPageParams>({
   getParams: r => ({
     broadcastId: r.params.broadcastId,
   }),
-  getTitle: ({ content }) => content.broadcastPage.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.broadcastPage.title),
 });

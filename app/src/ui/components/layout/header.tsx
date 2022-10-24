@@ -12,7 +12,7 @@ export interface HeaderProps {
 
 export function Header({ showMenu = true, headingLink }: HeaderProps) {
   const stores = useStores();
-  const { getContent, content } = useContent();
+  const { getContent } = useContent();
   const { setRef } = useGovFrontend("Header");
 
   const config = stores.config.getConfig();
@@ -24,17 +24,17 @@ export function Header({ showMenu = true, headingLink }: HeaderProps) {
             {
               qa: "nav-dashboard",
               href: `${config.ifsRoot}/dashboard-selection`,
-              text: getContent(x => x.header.dashboard),
+              text: getContent(x => x.site.header.navigation.dashboard),
             },
             {
               qa: "nav-profile",
               href: `${config.ifsRoot}/profile/view`,
-              text: getContent(x => x.header.profile),
+              text: getContent(x => x.site.header.navigation.profile),
             },
             {
               qa: "nav-sign-out",
               href: "/logout",
-              text: getContent(x => x.header.signOut),
+              text: getContent(x => x.site.header.navigation.signOut),
             },
           ]
         : [],
@@ -52,7 +52,7 @@ export function Header({ showMenu = true, headingLink }: HeaderProps) {
 
         <div className="govuk-header__content">
           <a href={headingLink} className="govuk-header__link govuk-header__link--service-name" data-qa="site-name">
-            {content.header.siteName}
+            {getContent(x => x.site.header.siteName)}
           </a>
 
           <nav aria-label="Menu" className="govuk-header__navigation">
@@ -63,7 +63,7 @@ export function Header({ showMenu = true, headingLink }: HeaderProps) {
               aria-label="Show or hide Top Level Navigation"
               data-qa="mobile-nav-toggle"
             >
-              {getContent(x => x.header.mobileNavigationLabel)}
+              {getContent(x => x.site.header.mobileNavigationLabel)}
             </button>
 
             <ul id="navigation" className="govuk-header__navigation-list">

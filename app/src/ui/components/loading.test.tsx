@@ -1,48 +1,53 @@
 import { render } from "@testing-library/react";
 
-import TestBed, { TestBedContent } from "@shared/TestBed";
+import TestBed from "@shared/TestBed";
 import { ErrorCode, LoadingStatus } from "@framework/types";
 import { Pending } from "../../shared/pending";
 import { Loader, LoadingProps, PageLoader } from ".";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 const stubContent = {
-  errors: {
-    genericFallback: {
-      standardError: { content: "stub-standardError" },
-      dashboardText: { content: "stub-dashboardText" },
+  pages: {
+    genericFallbackError: {
+      message: "stub-standardError",
+      dashboardText: "stub-dashboardText",
     },
     unauthenticated: {
-      contactUsPreLinkContent: { content: "stub-contactUsPreLinkContent" },
-      contactUsLinkTextContent: { content: "stub-contactUsLinkTextContent" },
-      contactUsPostLinkContent: { content: "stub-contactUsPostLinkContent" },
+      preLinkContent: "stub-contactUsPreLinkContent",
+      linkTextContent: "stub-contactUsLinkTextContent",
+      postLinkContent: "stub-contactUsPostLinkContent",
     },
     notfound: {
-      notFoundError: { content: "stub-notFoundError" },
-      goBackMessage: { content: "stub-goBackMessage" },
-      innovateUKMessage: { content: "stub-innovateUKMessage" },
-      yourDashboardMessage: { content: "stub-yourDashboardMessage" },
+      errorMessage: "stub-notFoundError",
+      goBackMessage: "stub-goBackMessage",
+      innovateUkMessage: "stub-innovateUkMessage",
+      yourDashBoard: "stub-yourDashboardMessage",
     },
   },
   components: {
     errorSummary: {
-      errorTitle: { content: "stub-errorContent" },
-      expiredMessageContent: { content: "stub-expiredMessageContent" },
-      unsavedWarningContent: { content: "stub-unsavedWarningContent" },
-      somethingGoneWrongContent: { content: "stub-somethingGoneWrongContent" },
-      updateAllFailure: { content: "stub-updateAllFailure" },
-      insufficienceAccessRights: { content: "stub-insufficienceAccessRights" },
-      notUploadedByOwner: { content: "stub-notUploadedByOwner" },
+      title: "stub-errorContent",
+      expiredMessage: "stub-expiredMessageContent",
+      unsavedWarning: "stub-unsavedWarningContent",
+      somethingGoneWrong: "stub-somethingGoneWrongContent",
+      updateAllFailure: "stub-updateAllFailure",
+      insufficientAccessRights: "stub-insufficientAccessRights",
+      notUploadedByOwner: "stub-notUploadedByOwner",
     },
     loading: {
-      message: { content: "stub-loading-message" },
+      message: "stub-loading-message",
     },
   },
 };
 
 describe("<PageLoader />", () => {
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent);
+  });
+
   const setup = (props: LoadingProps<{}>) =>
     render(
-      <TestBed content={stubContent as TestBedContent}>
+      <TestBed>
         <PageLoader {...props} />
       </TestBed>,
     );
@@ -86,7 +91,7 @@ describe("<Loader />", () => {
 
   function setup<T>(props: LoadingProps<T>) {
     return render(
-      <TestBed content={stubContent as TestBedContent}>
+      <TestBed>
         <Loader {...props} />
       </TestBed>,
     );
@@ -148,7 +153,7 @@ describe("<Loader />", () => {
           pending: pendingLoading,
         });
 
-        expect(getByText(stubContent.components.loading.message.content)).toBeInTheDocument();
+        expect(getByText(stubContent.components.loading.message)).toBeInTheDocument();
       });
     });
 

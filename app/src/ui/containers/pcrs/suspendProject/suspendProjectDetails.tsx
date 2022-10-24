@@ -14,10 +14,10 @@ export function SuspendProjectDetails(
 
   const Form = ACC.TypedForm<PCRItemForProjectSuspensionDto>();
 
-  const suspendProjectIntro = getContent(x => x.pcrScopeChangeProjectContent.suspendProjectIntro);
-  const firstDayOfPauseTitle = getContent(x => x.pcrScopeChangeProjectContent.firstDayOfPauseTitle);
-  const lastDayOfPauseTitle = getContent(x => x.pcrScopeChangeProjectContent.lastDayOfPauseTitle);
-  const lastDayOfPauseHint = getContent(x => x.pcrScopeChangeProjectContent.lastDayOfPauseHint);
+  const suspendProjectIntro = getContent(x => x.pages.pcrSuspendProjectDetails.suspendProjectIntro);
+  const firstDayOfPauseTitle = getContent(x => x.pages.pcrSuspendProjectDetails.firstDayOfPauseTitle);
+  const lastDayOfPauseTitle = getContent(x => x.pages.pcrSuspendProjectDetails.lastDayOfPauseTitle);
+  const lastDayOfPauseHint = getContent(x => x.pages.pcrSuspendProjectDetails.lastDayOfPauseHint);
 
   return (
     <>

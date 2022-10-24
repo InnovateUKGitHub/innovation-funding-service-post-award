@@ -3,7 +3,7 @@ import { ErrorNotFoundRoute } from "@ui/containers";
 import { IStores } from "@ui/redux";
 import { Authorisation } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
-import { Content } from "@content/content";
+import { Copy } from "@copy/Copy";
 import type { RouteState, IRouteDefinition } from "../containers/containerBase";
 import { routeConfig } from "./routeConfig";
 
@@ -12,7 +12,7 @@ export interface MatchedRoute {
   accessControl?: (auth: Authorisation, params: {}, config: IClientConfig) => boolean;
   getParams: (route: RouteState) => RouteState["params"];
   container: React.FunctionComponent<any>;
-  getTitle: (getTitleArgs: { params: {}; stores: IStores; content: Content }) => {
+  getTitle: (getTitleArgs: { params: {}; stores: IStores; content: Copy }) => {
     htmlTitle: string;
     displayTitle: string;
   };

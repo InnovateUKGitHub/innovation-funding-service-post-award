@@ -1,27 +1,30 @@
 import { render } from "@testing-library/react";
-
-import { TestBed, TestBedContent } from "@shared/TestBed";
+import { TestBed } from "@shared/TestBed";
 import { NotFoundError } from "@ui/components/errors";
-import { generateContentArray } from "@tests/test-utils/generate-content-array";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<NotFoundErrorPage />", () => {
   describe("@renders", () => {
     const stubContent = {
-      errors: {
-        notfound: {
-          notFoundError: { content: "stub-notFoundError" },
-          goBackMessage: { content: "stub-goBackMessage" },
-          innovateUKMessage: { content: "stub-innovateUKMessage" },
-          yourDashboardMessage: { content: "stub-yourDashboardMessage" },
+      pages: {
+        notFoundError: {
+          errorMessage: "stub-notFoundError",
+          goBackMessage: "stub-goBackMessage",
+          innovateUkMessage: "stub-innovateUkMessage",
+          yourDashBoard: "stub-yourDashboardMessage",
         },
       },
     };
 
-    const content = generateContentArray(stubContent);
+    const content = Object.entries(stubContent.pages.notFoundError);
+
+    beforeAll(async () => {
+      await testInitialiseInternationalisation(stubContent);
+    });
 
     test.each(content)("with %s", (_key, value) => {
       const { queryByText } = render(
-        <TestBed content={stubContent as TestBedContent}>
+        <TestBed>
           <NotFoundError />
         </TestBed>,
       );

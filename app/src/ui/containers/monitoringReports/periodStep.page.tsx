@@ -46,7 +46,7 @@ class Component extends ContainerBase<MonitoringReportPreparePeriodParams, Data,
               step: undefined,
             })}
           >
-            <ACC.Content value={x => x.monitoringReportsPeriodStep.backLink} />
+            <ACC.Content value={x => x.pages.monitoringReportsPeriodStep.backLink} />
           </ACC.BackLink>
         }
         pageTitle={<ACC.Projects.Title {...project} />}
@@ -99,5 +99,5 @@ export const MonitoringReportPreparePeriodRoute = defineRoute({
   container: Container,
   getParams: r => ({ projectId: r.params.projectId, id: r.params.id }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
-  getTitle: ({ content }) => content.monitoringReportsPeriodStep.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.monitoringReportsPeriodStep.title),
 });

@@ -6,12 +6,10 @@ import { Cache, IClock, IConfig } from "@server/features/common";
 import { PermissionGroup } from "@framework/entities/permissionGroup";
 import { RecordType } from "@framework/entities/recordType";
 import { Option } from "@framework/types";
-import { IDefaultContentStore } from "@server/resources/defaultContentStore";
 import { ICustomContentStore } from "@server/resources/customContentStore";
 import { ICompaniesHouseBase } from "@server/resources/companiesHouse";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { IBankCheckService } from "@server/resources/bankCheckService";
-import { ICompetitionContentStore } from "@server/resources/competitionContentStore";
 import { ISessionUser } from "./IUser";
 import { Authorisation } from "./authorisation";
 import { ILogger } from "@shared/developmentLogger";
@@ -48,15 +46,13 @@ export interface IRepositories {
 }
 
 export interface IResources {
-  readonly defaultContent: IDefaultContentStore;
-  readonly competitionContent: ICompetitionContentStore;
   readonly customContent: ICustomContentStore;
   readonly companiesHouse: ICompaniesHouseBase;
   readonly bankCheckService: IBankCheckService;
 }
 
 export interface IInternationalisation {
-  addResourceBundle(content: any): void;
+  addResourceBundle(content: any, namespace: string): void;
 }
 
 export interface IContext {

@@ -67,7 +67,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
       let comment;
 
       if (!isKTP && role === "Project Manager") {
-        comment = <ACC.Content value={x => x.projectDetails.projectManagerInfo} />;
+        comment = <ACC.Content value={x => x.pages.projectDetails.projectManagerInfo} />;
       }
 
       return {
@@ -94,11 +94,8 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     const otherContacts = contacts.filter(x => excludedOtherRoles.indexOf(x.role) === -1);
 
     return (
-      <ACC.Section title={x => x.projectDetails.projectLabels.otherContacts} qa="other-contacts-table">
-        <ACC.Partners.ContactsTable
-          contacts={otherContacts}
-          projectContactLabels={x => x.projectDetails.contactLabels}
-        />
+      <ACC.Section title={x => x.projectLabels.otherContacts} qa="other-contacts-table">
+        <ACC.Partners.ContactsTable contacts={otherContacts} />
       </ACC.Section>
     );
   }
@@ -116,28 +113,32 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
       >
         <ACC.Section
           qa="period-information"
-          title={x => x.projectDetails.projectMessages.currentPeriodInfo(project.periodId, project.numberOfPeriods)}
+          title={x =>
+            x.projectMessages.currentPeriodInfo({
+              currentPeriod: project.periodId,
+              numberOfPeriods: project.numberOfPeriods,
+            })
+          }
           subtitle={<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />}
         />
 
-        <ACC.Section title={x => x.projectDetails.projectLabels.projectMembers}>
+        <ACC.Section title={x => x.projectLabels.projectMembers}>
           {this.renderPrimaryContacts({ project, partners, contacts })}
 
-          <ACC.Section title={x => x.projectDetails.projectLabels.financeContacts}>
+          <ACC.Section title={x => x.projectLabels.financeContacts}>
             <ACC.PartnersAndFinanceContacts
               contacts={contacts}
               partners={partners}
-              projectContactLabels={x => x.projectDetails.contactLabels}
               comment={
                 <SimpleString>
-                  <ACC.Content value={x => x.projectDetails.financeContactInfo} />
+                  <ACC.Content value={x => x.pages.projectDetails.financeContactInfo} />
                 </SimpleString>
               }
               footnote={
                 <SimpleString>
-                  <ACC.Content value={x => x.projectDetails.changeInfo} />
-                  <ACC.EmailContent value={x => x.projectDetails.changeEmail} />
-                  <ACC.Content value={x => x.projectDetails.changeEnd} />
+                  <ACC.Content value={x => x.pages.projectDetails.changeInfo} />
+                  <ACC.EmailContent value={x => x.pages.projectDetails.changeEmail} />
+                  <ACC.Content value={x => x.pages.projectDetails.changeEnd} />
                 </SimpleString>
               }
             />
@@ -148,33 +149,30 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
 
         {this.renderPartnerInformationTable(partners, project)}
 
-        <ACC.Section
-          title={<ACC.Content value={x => x.projectDetails.projectLabels.projectInformation} />}
-          qa="project-details"
-        >
+        <ACC.Section title={<ACC.Content value={x => x.projectLabels.projectInformation} />} qa="project-details">
           <ACC.SummaryList qa="project-information">
             {competitionName && (
               <ACC.SummaryListItem
-                label={x => x.projectDetails.projectLabels.competitionNameLabel}
+                label={x => x.projectLabels.competitionName}
                 qa="competition-name"
                 content={<ACC.Renderers.SimpleString>{competitionName}</ACC.Renderers.SimpleString>}
               />
             )}
 
             <ACC.SummaryListItem
-              label={x => x.projectDetails.projectLabels.competitionTypeLabel}
+              label={x => x.projectLabels.competitionType}
               qa="competition-type"
               content={<ACC.Renderers.SimpleString>{project.competitionType}</ACC.Renderers.SimpleString>}
             />
 
             <ACC.SummaryListItem
-              label={x => x.projectDetails.projectLabels.startDate}
+              label={x => x.projectLabels.startDate}
               qa="start-date"
               content={<ACC.Renderers.FullDate value={project.startDate} />}
             />
 
             <ACC.SummaryListItem
-              label={x => x.projectDetails.projectLabels.endDate}
+              label={x => x.projectLabels.endDate}
               qa="end-date"
               content={<ACC.Renderers.FullDate value={isLoans ? project.loanEndDate : project.endDate} />}
             />
@@ -183,7 +181,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
               <>
                 <ACC.SummaryListItem
                   qa="availability-period"
-                  label={x => x.projectDetails.projectLabels.loanAvailabilityPeriod}
+                  label={x => x.projectLabels.availabilityPeriod}
                   content={
                     <ACC.Renderers.SimpleString>
                       {getPlural("month", project.loanAvailabilityPeriodLength)}
@@ -192,7 +190,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                 />
                 <ACC.SummaryListItem
                   qa="extension-period"
-                  label={x => x.projectDetails.projectLabels.loanExtensionPeriod}
+                  label={x => x.projectLabels.extensionPeriod}
                   content={
                     <ACC.Renderers.SimpleString>
                       {getPlural("month", project.loanExtensionPeriodLength)}
@@ -201,7 +199,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
                 />
                 <ACC.SummaryListItem
                   qa="repayment-period"
-                  label={x => x.projectDetails.projectLabels.loanRepaymentPeriod}
+                  label={x => x.projectLabels.repaymentPeriod}
                   content={
                     <ACC.Renderers.SimpleString>
                       {getPlural("month", project.loanRepaymentPeriodLength)}
@@ -212,13 +210,13 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
             ) : (
               <>
                 <ACC.SummaryListItem
-                  label={x => x.projectDetails.projectLabels.duration}
+                  label={x => x.projectLabels.duration}
                   qa="duration"
                   content={getPlural("month", project.durationInMonths)}
                 />
 
                 <ACC.SummaryListItem
-                  label={x => x.projectDetails.projectLabels.numberOfPeriods}
+                  label={x => x.projectLabels.numberOfPeriods}
                   qa="periods"
                   content={project.numberOfPeriods}
                 />
@@ -226,7 +224,7 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
             )}
 
             <ACC.SummaryListItem
-              label={x => x.projectDetails.projectLabels.scope}
+              label={x => x.projectLabels.scope}
               qa="scope"
               content={<ACC.Renderers.SimpleString multiline>{project.summary}</ACC.Renderers.SimpleString>}
             />
@@ -241,36 +239,40 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     const { isPmOrMo } = getAuthRoles(project.roles);
 
     return (
-      <ACC.Section title={x => x.projectDetails.projectLabels.partners}>
+      <ACC.Section title={x => x.projectLabels.partners}>
         <PartnersTable.Table qa="partner-information" data={partners}>
           <PartnersTable.Custom
-            header={x => x.partnerDetails.contactLabels.partnerName}
+            header={x => x.pages.partnerDetails.projectContactLabels.partnerName}
             value={x => this.renderPartnerName(x)}
             qa="partner-name"
           />
           <PartnersTable.String
-            header={x => x.partnerDetails.contactLabels.partnerType}
+            header={x => x.projectContactLabels.partnerType}
             value={x => x.type}
             qa="partner-type"
           />
           {isPmOrMo ? (
             <PartnersTable.String
-              header={x => x.partnerDetails.contactLabels.statusLabel}
+              header={x => x.projectContactLabels.status}
               value={x => x.partnerStatusLabel}
               qa="partner-status"
             />
           ) : null}
           {isPmOrMo ? (
             <PartnersTable.Custom
-              header={x => x.partnerDetails.contactLabels.fundingLabel}
-              value={x => (
-                <ACC.Content value={content => content.partnerDetails.contactLabels.fundingState(x.isNonFunded)} />
+              header={x => x.projectContactLabels.fundingType}
+              value={p => (
+                <ACC.Content
+                  value={x =>
+                    p.isNonFunded ? x.projectContactLabels.nonFundedLabel : x.projectContactLabels.fundedLabel
+                  }
+                />
               )}
               qa="partner-funding"
             />
           ) : null}
           <PartnersTable.String
-            header={x => x.partnerDetails.contactLabels.partnerPostcode}
+            header={x => x.projectContactLabels.partnerPostcode}
             value={x => x.postcode}
             qa="partner-postcode"
           />
@@ -322,7 +324,7 @@ export const ProjectDetailsRoute = defineRoute({
   routePath: "/projects/:projectId/details",
   container: ProjectDetailsContainer,
   getParams: r => ({ projectId: r.params.projectId }),
-  getTitle: x => x.content.projectDetails.title(),
+  getTitle: x => x.content.getTitleCopy(x => x.pages.projectDetails.title),
   accessControl: (auth, params) =>
     auth
       .forProject(params.projectId)

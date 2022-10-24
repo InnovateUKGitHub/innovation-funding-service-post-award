@@ -23,7 +23,7 @@ const InnerContainer = (
     projectLocationOptions.find(x => parseInt(x.id, 10) === props.pcrItem.projectLocation);
 
   return (
-    <ACC.Section title={x => x.pcrAddPartnerProjectLocationContent.labels.projectLocationHeading}>
+    <ACC.Section title={x => x.pcrAddPartnerLabels.projectLocationHeading}>
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
@@ -34,7 +34,7 @@ const InnerContainer = (
         <Form.Fieldset>
           <Form.Radio
             name="projectLocation"
-            hint={x => x.pcrAddPartnerProjectLocationContent.projectLocationGuidance}
+            hint={x => x.pages.pcrAddPartnerProjectLocation.projectLocationGuidance}
             options={projectLocationOptions}
             inline={false}
             value={() => selectedProjectLocationOption || undefined}
@@ -45,7 +45,7 @@ const InnerContainer = (
             validation={props.validator.projectLocation}
           />
         </Form.Fieldset>
-        <Form.Fieldset heading={x => x.pcrAddPartnerProjectLocationContent.labels.townOrCityHeading}>
+        <Form.Fieldset heading={x => x.pcrAddPartnerLabels.townOrCityHeading}>
           <Form.String
             name="projectCity"
             value={dto => dto.projectCity}
@@ -55,10 +55,10 @@ const InnerContainer = (
             validation={props.validator.projectCity}
           />
         </Form.Fieldset>
-        <Form.Fieldset heading={x => x.pcrAddPartnerProjectLocationContent.labels.postcodeHeading}>
+        <Form.Fieldset heading={x => x.pcrAddPartnerLabels.postcodeHeading}>
           <Form.String
             name="projectPostcode"
-            hint={x => x.pcrAddPartnerProjectLocationContent.postcodeGuidance}
+            hint={x => x.pages.pcrAddPartnerProjectLocation.postcodeGuidance}
             value={dto => dto.projectPostcode}
             update={(x, val) => {
               x.projectPostcode = val;
@@ -68,10 +68,10 @@ const InnerContainer = (
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
           <Form.Submit>
-            <ACC.Content value={x => x.pcrAddPartnerProjectLocationContent.pcrItem.submitButton} />
+            <ACC.Content value={x => x.pcrItem.submitButton} />
           </Form.Submit>
           <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
-            <ACC.Content value={x => x.pcrAddPartnerProjectLocationContent.pcrItem.returnToSummaryButton} />
+            <ACC.Content value={x => x.pcrItem.returnToSummaryButton} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>

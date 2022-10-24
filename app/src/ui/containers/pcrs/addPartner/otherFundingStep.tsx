@@ -13,17 +13,17 @@ export const OtherFundingStep = (
   const options: ACC.SelectOption[] = [
     {
       id: "true",
-      value: <Content value={x => x.pcrAddPartnerOtherFunding.labels.otherFundsYes} />,
+      value: <Content value={x => x.pcrAddPartnerLabels.otherFundsYes} />,
     },
     {
       id: "false",
-      value: <Content value={x => x.pcrAddPartnerOtherFunding.labels.otherFundsNo} />,
+      value: <Content value={x => x.pcrAddPartnerLabels.otherFundsNo} />,
     },
   ];
 
   return (
-    <ACC.Section title={x => x.pcrAddPartnerOtherFunding.formSectionTitle}>
-      <Content value={x => x.pcrAddPartnerOtherFunding.guidance} />
+    <ACC.Section title={x => x.pages.pcrAddPartnerOtherFunding.formSectionTitle}>
+      <Content markdown value={x => x.pages.pcrAddPartnerOtherFunding.guidance} />
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
@@ -34,7 +34,7 @@ export const OtherFundingStep = (
         <Form.Fieldset>
           <Form.Radio
             name="hasOtherFunding"
-            label={x => x.pcrAddPartnerOtherFunding.questionLabel}
+            label={x => x.pages.pcrAddPartnerOtherFunding.labelOtherSourcesQuestion}
             labelHidden
             options={options}
             inline={false}
@@ -51,10 +51,10 @@ export const OtherFundingStep = (
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
           <Form.Submit>
-            <ACC.Content value={x => x.pcrAddPartnerOtherFunding.pcrItem.submitButton} />
+            <ACC.Content value={x => x.pcrItem.submitButton} />
           </Form.Submit>
           <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
-            <Content value={x => x.pcrAddPartnerOtherFunding.pcrItem.returnToSummaryButton} />
+            <Content value={x => x.pcrItem.returnToSummaryButton} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>

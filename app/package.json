@@ -56,7 +56,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "fuse.js": "^6.6.2",
-    "i18next": "^19.1.0",
+    "i18next": "^22.0.2",
     "isomorphic-dompurify": "^0.23.0",
     "isomorphic-fetch": "^2.2.1",
     "isomorphic-form-data": "^2.0.0",
@@ -178,6 +178,6 @@
     "@framework": "dist/src/framework",
     "@ui": "dist/src/ui",
     "@util": "dist/src/util",
-    "@content": "dist/src/content"
+    "@copy": "dist/src/copy"
   }
 }

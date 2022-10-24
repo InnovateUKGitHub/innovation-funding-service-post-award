@@ -16,12 +16,20 @@ export function DashboardProjectCount({ curatedTotals, totalProjectCount }: Dash
 
   const results: string[] = [];
 
-  if (!!pendingTotal) results.push(getContent(x => x.projectsDashboard.pendingMessage(pendingTotal)));
-  if (!!openTotal) results.push(getContent(x => x.projectsDashboard.liveMessage(openTotal)));
-  if (!!upcomingTotal) results.push(getContent(x => x.projectsDashboard.upcomingMessage(upcomingTotal)));
-  if (!!archivedTotal) results.push(getContent(x => x.projectsDashboard.archivedMessage(archivedTotal)));
+  if (!!pendingTotal) {
+    results.push(getContent(x => x.pages.projectsDashboard.countMessages.pendingMessage({ count: pendingTotal })));
+  }
+  if (!!openTotal) {
+    results.push(getContent(x => x.pages.projectsDashboard.countMessages.liveMessage({ count: openTotal })));
+  }
+  if (!!upcomingTotal) {
+    results.push(getContent(x => x.pages.projectsDashboard.countMessages.upcomingMessage({ count: upcomingTotal })));
+  }
+  if (!!archivedTotal) {
+    results.push(getContent(x => x.pages.projectsDashboard.countMessages.archivedMessage({ count: archivedTotal })));
+  }
 
-  const prefixMessage = getContent(x => x.projectsDashboard.projectCountPrefixMessage(totalProjectCount));
+  const prefixMessage = getContent(x => x.pages.projectsDashboard.projectPrefixCount({ count: totalProjectCount }));
   const listOfProjects = `(${results.join(", ")})`;
 
   return (

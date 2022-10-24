@@ -21,21 +21,21 @@ class Component extends React.Component<
       <ACC.Section qa="remove-partner-summary">
         <ACC.SummaryList qa="remove-partner-summary-list">
           <ACC.SummaryListItem
-            label={x => x.pcrRemovePartnerSummary.labels.removedPartner}
+            label={x => x.pcrRemovePartnerLabels.removedPartner}
             content={pcrItem.partnerNameSnapshot}
             validation={validator.partnerId}
             qa="partnerToRemove"
             action={this.props.getEditLink("removalPeriodStep", validator.partnerId)}
           />
           <ACC.SummaryListItem
-            label={x => x.pcrRemovePartnerSummary.labels.lastPeriod}
+            label={x => x.pcrRemovePartnerLabels.lastPeriod}
             content={pcrItem.removalPeriod}
             validation={validator.removalPeriod}
             qa="removalPeriod"
             action={this.props.getEditLink("removalPeriodStep", validator.removalPeriod)}
           />
           <ACC.SummaryListItem
-            label={x => x.pcrRemovePartnerSummary.labels.documents}
+            label={x => x.pcrRemovePartnerLabels.documents}
             content={this.renderDocuments(documents)}
             qa="supportingDocuments"
             action={this.props.getEditLink("filesStep", null)}
@@ -49,7 +49,7 @@ class Component extends React.Component<
     return documents.length > 0 ? (
       <ACC.DocumentList documents={documents} qa="documentsList" />
     ) : (
-      <ACC.Content value={x => x.pcrRemovePartnerSummary.documentMessages.noDocumentsUploaded} />
+      <ACC.Content value={x => x.documentMessages.noDocumentsUploaded} />
     );
   }
 }

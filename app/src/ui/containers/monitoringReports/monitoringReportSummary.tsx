@@ -34,10 +34,7 @@ class MonitoringReportComponent extends React.Component<MonitoringReportReportSu
     return (
       <ACC.Section>
         <ACC.Accordion>
-          <ACC.AccordionItem
-            title={x => x.monitoringReportsSummary.labels.statusAndCommentsLog}
-            qa="status-and-comments-log"
-          >
+          <ACC.AccordionItem title={x => x.monitoringReportsLabels.statusAndCommentsLog} qa="status-and-comments-log">
             {/* Keeping logs inside loader because accordion defaults to closed*/}
             <ACC.Loader
               pending={this.props.statusChanges}
@@ -56,10 +53,10 @@ class MonitoringReportComponent extends React.Component<MonitoringReportReportSu
         <ReportForm.Form editor={editor} onChange={dto => this.props.onChange(dto)} qa="monitoringReportCreateForm">
           <ReportForm.Fieldset
             qa="additional-comments-section"
-            heading={x => x.monitoringReportsSummary.labels.additionalComments}
+            heading={x => x.monitoringReportsLabels.additionalComments}
           >
             <ReportForm.MultilineString
-              hint={x => x.monitoringReportsSummary.messages.additionalCommentsGuidance}
+              hint={x => x.monitoringReportsMessages.additionalCommentsGuidance}
               name="addComments"
               value={() => editor.data.addComments}
               update={(dto, v) => (dto.addComments = v || "")}
@@ -68,14 +65,14 @@ class MonitoringReportComponent extends React.Component<MonitoringReportReportSu
             />
           </ReportForm.Fieldset>
           <ACC.Renderers.SimpleString>
-            <ACC.Content value={x => x.monitoringReportsSummary.messages.submittingMonitoringReportMessage} />
+            <ACC.Content value={x => x.monitoringReportsMessages.submittingMonitoringReportMessage} />
           </ACC.Renderers.SimpleString>
           <ReportForm.Fieldset qa="save-buttons">
             <ReportForm.Button name="submit" styling="Primary" onClick={() => this.props.onSave(editor.data, true)}>
-              <ACC.Content value={x => x.monitoringReportsSummary.submitButton} />
+              <ACC.Content value={x => x.pages.monitoringReportsSummary.buttonSubmit} />
             </ReportForm.Button>
             <ReportForm.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(editor.data, false)}>
-              <ACC.Content value={x => x.monitoringReportsSummary.saveAndReturnButton} />
+              <ACC.Content value={x => x.pages.monitoringReportsSummary.buttonSaveAndReturn} />
             </ReportForm.Button>
           </ReportForm.Fieldset>
         </ReportForm.Form>
@@ -94,7 +91,7 @@ class MonitoringReportComponent extends React.Component<MonitoringReportReportSu
           replace
           route={this.props.getEditLink(`question-${question.displayOrder}`)}
         >
-          <ACC.Content value={x => x.monitoringReportsSummary.editItemButton} />
+          <ACC.Content value={x => x.pages.monitoringReportsSummary.buttonEditItem} />
         </ACC.Link>
       </span>
     );
@@ -111,7 +108,7 @@ class MonitoringReportComponent extends React.Component<MonitoringReportReportSu
     return (
       <ACC.SummaryListItem
         validation={validation.score}
-        label={x => x.monitoringReportsSummary.scoreLabel}
+        label={x => x.pages.monitoringReportsSummary.scoreLabel}
         content={response && `${response.questionScore} - ${response.questionText}`}
         qa={`question-${question.displayOrder}-score`}
         action={this.getAction(validation, question)}
@@ -140,7 +137,7 @@ class MonitoringReportComponent extends React.Component<MonitoringReportReportSu
         <ACC.SummaryList qa={"summary-period"}>
           <ACC.SummaryListItem
             validation={validation}
-            label={x => x.monitoringReportsSummary.periodLabel}
+            label={x => x.pages.monitoringReportsSummary.periodLabel}
             content={editor.data.periodId}
             qa={"period"}
             /* Put the action on the second item if not showing the first*/
@@ -154,7 +151,7 @@ class MonitoringReportComponent extends React.Component<MonitoringReportReportSu
                     id: this.props.id,
                   })}
                 >
-                  <ACC.Content value={x => x.monitoringReportsSummary.editItemButton} />
+                  <ACC.Content value={x => x.pages.monitoringReportsSummary.buttonEditItem} />
                 </ACC.Link>
               )
             }
