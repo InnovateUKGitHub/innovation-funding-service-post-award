@@ -5,7 +5,7 @@ interface UserDto {
 }
 
 export interface IUserApi {
-  getCurrent: (params: ApiParams<{}>) => Promise<UserDto>;
+  getCurrent: (params: ApiParams) => Promise<UserDto>;
 }
 
 class Controller extends ControllerBase<UserDto> implements IUserApi {
@@ -19,7 +19,7 @@ class Controller extends ControllerBase<UserDto> implements IUserApi {
     );
   }
 
-  getCurrent(params: ApiParams<{}>) {
+  getCurrent(params: ApiParams) {
     return Promise.resolve<UserDto>({ email: params.user.email });
   }
 }

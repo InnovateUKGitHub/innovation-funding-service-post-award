@@ -36,7 +36,7 @@ class Controller
     );
     this.putItem(
       "/:projectId/:partnerId/:periodId/:costCategoryId",
-      (p, q, b) => ({
+      (p, q, b: ClaimDetailsDto) => ({
         projectId: p.projectId,
         partnerId: p.partnerId,
         periodId: parseInt(p.periodId, 10),
