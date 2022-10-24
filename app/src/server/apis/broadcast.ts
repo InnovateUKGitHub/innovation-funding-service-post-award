@@ -15,7 +15,7 @@ class BroadcastApi extends ControllerBase<BroadcastMessage> {
     this.getItem("/:broadcastId", p => ({ broadcastId: p.broadcastId }), this.get);
   }
 
-  public async getAll(params: ApiParams<{}>): Promise<BroadcastDto[]> {
+  public async getAll(params: ApiParams): Promise<BroadcastDto[]> {
     const query = new GetAllBroadcasts();
     return contextProvider.start(params).runQuery(query);
   }

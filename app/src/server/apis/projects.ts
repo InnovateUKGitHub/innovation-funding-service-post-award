@@ -27,7 +27,7 @@ class Controller extends ControllerBase<ProjectDto> implements IProjectsApi {
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getAll(params: ApiParams<{}>): Promise<ProjectDto[]> {
+  public async getAll(params: ApiParams): Promise<ProjectDto[]> {
     const query = new GetAllQuery();
     return contextProvider.start(params).runQuery(query);
   }

@@ -16,7 +16,7 @@ class Controller extends ControllerBase<FinancialVirementDto> {
     );
     this.putItem(
       "/:projectId/:pcrId/:pcrItemId",
-      (p, q, b) => ({
+      (p, q, b: FinancialVirementDto) => ({
         projectId: p.projectId,
         pcrId: p.pcrId,
         pcrItemId: p.pcrItemId,

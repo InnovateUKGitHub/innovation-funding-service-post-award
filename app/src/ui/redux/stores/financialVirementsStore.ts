@@ -66,7 +66,16 @@ export class FinancialVirementsStore extends StoreBase {
       this.getKey(projectId, pcrId, pcrItemId, partnerId),
       dto,
       showErrors => new FinancialVirementDtoValidator(dto, showErrors, submit),
-      p => apiClient.financialVirements.update({ projectId, pcrId, pcrItemId, financialVirement: dto, submit, ...p }),
+      p =>
+        apiClient.financialVirements.update({
+          projectId,
+          pcrId,
+          pcrItemId,
+          financialVirement: dto,
+          partnerId,
+          submit,
+          ...p,
+        }),
       result => {
         if (partnerId) this.markStale("financialVirement", this.getKey(projectId, pcrId, pcrItemId, partnerId), result);
         this.markStale("financialVirement", this.getKey(projectId, pcrId, pcrItemId), result);

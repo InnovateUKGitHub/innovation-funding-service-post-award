@@ -25,7 +25,7 @@ export interface IMonitoringReportsApi {
     params: ApiParams<{ monitoringReportDto: MonitoringReportDto; submit: boolean }>,
   ) => Promise<MonitoringReportDto>;
   deleteMonitoringReport: (params: ApiParams<{ projectId: string; reportId: string }>) => Promise<boolean>;
-  getActiveQuestions: (params: ApiParams<{}>) => Promise<MonitoringReportQuestionDto[]>;
+  getActiveQuestions: (params: ApiParams) => Promise<MonitoringReportQuestionDto[]>;
   getStatusChanges: (
     params: ApiParams<{ projectId: string; reportId: string }>,
   ) => Promise<MonitoringReportStatusChangeDto[]>;
@@ -55,7 +55,7 @@ class Controller
     );
     this.putItem(
       "/",
-      (p, q, b) => ({ monitoringReportDto: processDto(b), submit: q.submit === "true" }),
+      (p, q, b: MonitoringReportDto) => ({ monitoringReportDto: processDto(b), submit: q.submit === "true" }),
       p => this.saveMonitoringReport(p),
     );
     this.deleteItem(
@@ -105,7 +105,7 @@ class Controller
     return contextProvider.start(params).runQuery(query);
   }
 
-  public getActiveQuestions(params: ApiParams<{}>) {
+  public getActiveQuestions(params: ApiParams) {
     return contextProvider.start(params).runQuery(new GetMonitoringReportActiveQuestions());
   }
 

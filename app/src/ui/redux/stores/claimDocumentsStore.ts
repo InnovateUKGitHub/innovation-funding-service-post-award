@@ -7,6 +7,7 @@ import { RootActionsOrThunk } from "../actions";
 import { RootState } from "../reducers";
 import { PartnersStore } from "./partnersStore";
 import { DocumentsStoreBase } from "./documentsStoreBase";
+import { DocumentDescription } from "@framework/constants";
 
 export class ClaimDocumentsStore extends DocumentsStoreBase {
   constructor(
@@ -23,7 +24,7 @@ export class ClaimDocumentsStore extends DocumentsStoreBase {
 
   public getClaimDocuments(projectId: string, partnerId: string, periodId: number) {
     return this.getData("documents", this.getKey(partnerId, periodId), p =>
-      apiClient.documents.getClaimDocuments({ projectId, partnerId, periodId, ...p }),
+      apiClient.documents.getClaimDocuments({ projectId, partnerId, description: undefined, periodId, ...p }),
     );
   }
 
