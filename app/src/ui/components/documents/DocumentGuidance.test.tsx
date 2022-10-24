@@ -1,9 +1,8 @@
 import bytes from "bytes";
 import { render } from "@testing-library/react";
-import { DocumentGuidanceContent } from "@content/components/documentGuidanceContent";
-import { TestBed, TestBedContent, TestBedStore } from "@shared/TestBed";
+import { TestBed, TestBedStore } from "@shared/TestBed";
 import { DocumentGuidance } from "@ui/components";
-import { ContentResult } from "@content/contentBase";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<DocumentGuidance />", () => {
   const stubStore = {
@@ -14,42 +13,42 @@ describe("<DocumentGuidance />", () => {
         },
       }),
     },
-  } as any;
+  };
 
   const stubContent = {
     components: {
       documentGuidance: {
-        uploadGuidance: { content: "stub-uploadGuidance" },
-        uniqueFilename: { content: "stub-uniqueFilename" },
-        noFilesNumberLimit: { content: "stub-noFilesNumberLimit" },
-        fileSize: (size: number): ContentResult => ({
-          key: "test-key",
-          content: `stub-fileSize: ${bytes(size)}`,
-          markdown: false,
-        }),
-        fileTypesUpload: { content: "stub-fileTypesUpload" },
-        pdfFiles: { content: "stub-pdfFiles" },
-        textFiles: { content: "stub-textFiles" },
-        presentationFiles: { content: "stub-presentationFiles" },
-        spreadsheetFiles: { content: "stub-spreadsheetFiles" },
-        availableImageExtensions: { content: "stub-availableImageExtensions" },
-        fileTypesQuestion: { content: "stub-fileTypesQuestion" },
-      } as DocumentGuidanceContent,
+        uploadGuidance: "stub-uploadGuidance",
+        uniqueFileName: "stub-uniqueFilename",
+        noFilesNumberLimit: "stub-noFilesNumberLimit",
+        fileSize: "stub-fileSize: {{maxFileSize}}",
+        fileTypesUpload: "stub-fileTypesUpload",
+        pdfFiles: "stub-pdfFiles",
+        textFiles: "stub-textFiles",
+        presentationFiles: "stub-presentationFiles",
+        spreadsheetFiles: "stub-spreadsheetFiles",
+        availableImageExtensions: "stub-availableImageExtensions",
+        fileTypesQuestion: "stub-fileTypesQuestion",
+      },
     },
   };
 
   const setup = () =>
     render(
-      <TestBed content={stubContent as TestBedContent} stores={stubStore as TestBedStore}>
+      <TestBed stores={stubStore as TestBedStore}>
         <DocumentGuidance />
       </TestBed>,
     );
+
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent);
+  });
 
   describe("@renders", () => {
     describe("static content", () => {
       const excludedList = ["title", "fileSize"] as const;
       type ExcludedKeys = typeof excludedList[number];
-      type StaticDocumentGuidanceKeys = Exclude<keyof DocumentGuidanceContent, ExcludedKeys>;
+      type StaticDocumentGuidanceKeys = Exclude<keyof typeof stubContent.components.documentGuidance, ExcludedKeys>;
 
       const documentGuidanceKeys = Object.keys(stubContent.components.documentGuidance).filter(
         x => !excludedList.some(el => el === x),
@@ -58,7 +57,7 @@ describe("<DocumentGuidance />", () => {
       test.each(documentGuidanceKeys)("with %s", contentKey => {
         const { queryByText } = setup();
 
-        const targetText = stubContent.components.documentGuidance[contentKey].content;
+        const targetText = stubContent.components.documentGuidance[contentKey];
         const contentTarget = queryByText(targetText);
 
         expect(contentTarget).toBeInTheDocument();
@@ -69,7 +68,9 @@ describe("<DocumentGuidance />", () => {
       test("fileSize", () => {
         const { queryByText } = setup();
 
-        const targetText = `stub-fileSize: ${bytes(stubStore.config.getConfig().options.maxFileSize)}`;
+        console.log(bytes(stubStore.config.getConfig().options.maxFileSize));
+
+        const targetText = `stub-fileSize: 1KB`;
         const contentTarget = queryByText(targetText);
 
         expect(contentTarget).toBeInTheDocument();

@@ -38,7 +38,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
               partnerId: this.props.partnerId,
             })}
           >
-            <ACC.Content value={x => x.projectSetupBankDetails.backLink} />
+            <ACC.Content value={x => x.pages.projectSetupBankDetails.backLink} />
           </ACC.BackLink>
         }
         error={editor.error}
@@ -53,81 +53,81 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
             onSubmit={() => this.props.onChange(true, editor.data)}
             qa="bank-details-form"
           >
-            <Form.Fieldset heading={x => x.projectSetupBankDetails.organisationInfoFieldsetTitle}>
+            <Form.Fieldset heading={x => x.pages.projectSetupBankDetails.fieldsetTitleOrganisationInfo}>
               <ACC.Renderers.SimpleString bold>{editor.data.name}</ACC.Renderers.SimpleString>
               <Form.String
                 name="companyNumber"
                 width={"one-third"}
                 value={x => x.bankDetails.companyNumber}
-                label={x => x.projectSetupBankDetails.partnerLabels.companyNumber}
-                hint={x => x.projectSetupBankDetails.partnerLabels.companyNumberHint}
+                label={x => x.partnerLabels.companyNumber}
+                hint={x => x.partnerLabels.companyNumberHint}
                 update={(dto, val) => (dto.bankDetails.companyNumber = val)}
               />
             </Form.Fieldset>
-            <Form.Fieldset heading={x => x.projectSetupBankDetails.accountDetailsFieldsetTitle}>
+            <Form.Fieldset heading={x => x.pages.projectSetupBankDetails.fieldsetTitleAccountDetails}>
               {this.renderSortCode(editor, Form)}
               {this.renderAccountNumber(editor, Form)}
             </Form.Fieldset>
             {/* TODO: Commenting out in the hope we get an answer from experian in the coming weeks */}
-            {/* <Form.Fieldset heading={x => x.projectSetupBankDetails.accountHolderFieldsetTitle()}>
+            {/* <Form.Fieldset heading={x => x.pages.projectSetupBankDetails.fieldsetTitleAccountHolder()}>
               <Form.String
                 name="firstName"
                 width={"one-third"}
                 value={x => x.bankDetails.firstName}
-                label={x => x.projectSetupBankDetails.partnerLabels.firstName()}
+                label={x => x.pages.projectSetupBankDetails.partnerLabels.firstName()}
                 update={(dto, val) => dto.bankDetails.firstName = val}
               />
               <Form.String
                 name="lastName"
                 width={"one-third"}
                 value={x => x.bankDetails.lastName}
-                label={x => x.projectSetupBankDetails.partnerLabels.lastName()}
+                label={x => x.pages.projectSetupBankDetails.partnerLabels.lastName()}
                 update={(dto, val) => dto.bankDetails.lastName = val}
               />
             </Form.Fieldset> */}
-            <Form.Fieldset heading={x => x.projectSetupBankDetails.billingAddressFieldsetTitle}>
+            <Form.Fieldset heading={x => x.pages.projectSetupBankDetails.fieldsetTitleBillingAddress}>
               <ACC.Renderers.SimpleString qa={"billingAddressFieldsetGuidance"}>
-                <ACC.Content value={x => x.projectSetupBankDetails.billingAddressFieldsetGuidance} />
+                <ACC.Content value={x => x.pages.projectSetupBankDetails.fieldsetGuidanceBillingAddress} />
               </ACC.Renderers.SimpleString>
               <Form.String
                 name="accountBuilding"
                 width={"one-third"}
                 value={x => x.bankDetails.address.accountBuilding}
-                label={x => x.projectSetupBankDetails.partnerLabels.accountBuilding}
+                label={x => x.partnerLabels.accountBuilding}
                 update={(dto, val) => (dto.bankDetails.address.accountBuilding = val)}
               />
               <Form.String
                 name="accountStreet"
                 width={"one-third"}
                 value={x => x.bankDetails.address.accountStreet}
-                label={x => x.projectSetupBankDetails.partnerLabels.accountStreet}
+                label={x => x.partnerLabels.accountStreet}
                 update={(dto, val) => (dto.bankDetails.address.accountStreet = val)}
               />
               <Form.String
                 name="accountLocality"
                 width={"one-third"}
                 value={x => x.bankDetails.address.accountLocality}
-                label={x => x.projectSetupBankDetails.partnerLabels.accountLocality}
+                label={x => x.partnerLabels.accountLocality}
                 update={(dto, val) => (dto.bankDetails.address.accountLocality = val)}
               />
               <Form.String
                 name="accountTownOrCity"
                 width={"one-third"}
                 value={x => x.bankDetails.address.accountTownOrCity}
-                label={x => x.projectSetupBankDetails.partnerLabels.accountTownOrCity}
+                label={x => x.partnerLabels.accountTownOrCity}
                 update={(dto, val) => (dto.bankDetails.address.accountTownOrCity = val)}
               />
               <Form.String
                 name="accountPostcode"
                 width={"one-third"}
                 value={x => x.bankDetails.address.accountPostcode}
-                label={x => x.projectSetupBankDetails.partnerLabels.accountPostcode}
+                label={x => x.partnerLabels.accountPostcode}
                 update={(dto, val) => (dto.bankDetails.address.accountPostcode = val)}
               />
             </Form.Fieldset>
             <Form.Fieldset>
               <Form.Submit>
-                <ACC.Content value={x => x.projectSetupBankDetails.submitButton} />
+                <ACC.Content value={x => x.pages.projectSetupBankDetails.submitButton} />
               </Form.Submit>
             </Form.Fieldset>
           </Form.Form>
@@ -139,7 +139,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
   private renderGuidance() {
     return (
       <ACC.Section qa={"guidance"}>
-        <ACC.Content value={x => x.projectSetupBankDetails.guidanceMessage} />
+        <ACC.Content markdown value={x => x.pages.projectSetupBankDetails.guidanceMessage} />
       </ACC.Section>
     );
   }
@@ -151,8 +151,8 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
           name="sortCode"
           width={"one-third"}
           value={x => x.bankDetails.sortCode}
-          label={x => x.projectSetupBankDetails.partnerLabels.sortCode}
-          hint={x => x.projectSetupBankDetails.partnerLabels.sortCodeHint}
+          label={x => x.partnerLabels.sortCode}
+          hint={x => x.partnerLabels.sortCodeHint}
           update={(dto, val) => (dto.bankDetails.sortCode = val)}
           validation={
             editor.validator.sortCode.isValid ? editor.validator.bankCheckValidation : editor.validator.sortCode
@@ -164,7 +164,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
       <Form.Custom
         name="sortCode"
         value={x => <ACC.Renderers.SimpleString>{x.bankDetails.sortCode}</ACC.Renderers.SimpleString>}
-        label={x => x.projectSetupBankDetails.partnerLabels.sortCode}
+        label={x => x.partnerLabels.sortCode}
         update={() => null}
       />
     );
@@ -177,8 +177,8 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
           name="accountNumber"
           width={"one-third"}
           value={x => x.bankDetails.accountNumber}
-          label={x => x.projectSetupBankDetails.partnerLabels.accountNumber}
-          hint={x => x.projectSetupBankDetails.partnerLabels.accountNumberHint}
+          label={x => x.partnerLabels.accountNumber}
+          hint={x => x.partnerLabels.accountNumberHint}
           update={(dto, val) => (dto.bankDetails.accountNumber = val)}
           validation={
             editor.validator.accountNumber.isValid
@@ -192,7 +192,7 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
       <Form.Custom
         name="accountNumber"
         value={x => <ACC.Renderers.SimpleString>{x.bankDetails.accountNumber}</ACC.Renderers.SimpleString>}
-        label={x => x.projectSetupBankDetails.partnerLabels.accountNumber}
+        label={x => x.partnerLabels.accountNumber}
         update={() => null}
       />
     );
@@ -249,7 +249,7 @@ export const ProjectSetupBankDetailsRoute = defineRoute({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,
   }),
-  getTitle: ({ content }) => content.projectSetupBankDetails.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.projectSetupBankDetails.title),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
 });

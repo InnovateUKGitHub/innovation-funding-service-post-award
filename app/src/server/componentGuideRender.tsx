@@ -1,10 +1,9 @@
-import { renderToString } from "react-dom/server";
 import { Request, Response } from "express";
-import { combineReducers, createStore } from "redux";
+import { renderToString } from "react-dom/server";
 import { Provider } from "react-redux";
+import { combineReducers, createStore } from "redux";
 
 import { TestBed } from "@shared/TestBed";
-import { Content } from "@content/content";
 import { Guide } from "@ui/componentsGuide/guide";
 import * as colour from "@ui/styles/colours";
 import { devDependencies } from "../../package.json";
@@ -19,7 +18,7 @@ export function componentGuideRender(req: Request, res: Response) {
 
   const html = renderToString(
     <Provider store={store}>
-      <TestBed isServer content={new Content()} shouldOmitRouterProvider>
+      <TestBed isServer shouldOmitRouterProvider>
         <Guide source="server" filter={req.query.guide as string} />
       </TestBed>
     </Provider>,

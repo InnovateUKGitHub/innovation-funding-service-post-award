@@ -1,8 +1,7 @@
 import * as ACC from "@ui/components";
-import { Content } from "@content/content";
-import { DocumentMessages } from "@content/messages/documentMessages";
 import { useContent } from "@ui/hooks";
 import { useStores } from "@ui/redux";
+import bytes from "bytes";
 
 export function DocumentGuidance() {
   const { getContent } = useContent();
@@ -10,8 +9,8 @@ export function DocumentGuidance() {
   const { maxFileSize } = stores.config.getConfig().options;
 
   const uploadGuidance = getContent(x => x.components.documentGuidance.uploadGuidance);
-  const fileSizeGuidance = getContent(x => x.components.documentGuidance.fileSize(maxFileSize));
-  const fileNameGuidance = getContent(x => x.components.documentGuidance.uniqueFilename);
+  const fileSizeGuidance = getContent(x => x.components.documentGuidance.fileSize({ maxFileSize: bytes(maxFileSize) }));
+  const fileNameGuidance = getContent(x => x.components.documentGuidance.uniqueFileName);
   const noFilesNumberLimitMessage = getContent(x => x.components.documentGuidance.noFilesNumberLimit);
   const fileTypesUploadMessage = getContent(x => x.components.documentGuidance.fileTypesUpload);
   const pdf = getContent(x => x.components.documentGuidance.pdfFiles);
@@ -46,23 +45,3 @@ export function DocumentGuidance() {
     </>
   );
 }
-
-export type IDocumentMessages = (x: Content) => DocumentMessages;
-
-interface DocumentGuidanceWithContentProps {
-  documentMessages: IDocumentMessages;
-}
-
-export const DocumentGuidanceWithContent = (props: DocumentGuidanceWithContentProps) => {
-  const stores = useStores();
-  const { maxFileSize, permittedTypes } = stores.config.getConfig().options;
-
-  return (
-    <>
-      <ACC.Content value={x => props.documentMessages(x).header(maxFileSize)} />
-      <ACC.Info summary={<ACC.Content value={x => props.documentMessages(x).infoTitle} />}>
-        <ACC.Content value={x => props.documentMessages(x).infoContent(permittedTypes)} />
-      </ACC.Info>
-    </>
-  );
-};

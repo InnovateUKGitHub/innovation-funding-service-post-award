@@ -9,12 +9,13 @@ import {
   createPartnerDto,
   createProjectDto,
 } from "@framework/util/stubDtos";
-import TestBed, { TestBedContent } from "@shared/TestBed";
+import TestBed from "@shared/TestBed";
 
 import { ClaimProps } from "@ui/components/claims/utils/costCategoryTableHelper";
 import { getColumnTextValues } from "@tests/test-utils/tableHelpers";
 
 import { ClaimTable } from "@ui/components/claims/claimTable";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<ClaimTable />", () => {
   const defaultStubData: ClaimProps = {
@@ -28,26 +29,32 @@ describe("<ClaimTable />", () => {
   };
 
   const stubContent = {
-    claimsComponents: {
-      negativeCategoriesMessage: {
-        before: { content: "stub-negativeCategoriesMessage-before" },
-        after: { content: "stub-negativeCategoriesMessage-after" },
+    pages: {
+      claimsComponents: {
+        negativeCategoriesMessage: {
+          before: "stub-negativeCategoriesMessage-before",
+          after: "stub-negativeCategoriesMessage-after",
+        },
+        categoryLabel: "stub-categoryLabel",
+        totalEligibleCosts: "stub-totalEligibleCosts",
+        eligibleCostsClaimedToDate: "stub-eligibleCostsClaimedToDate",
+        costsClaimedThisPeriod: "stub-costsClaimedThisPeriod",
+        remainingEligibleCosts: "stub-remainingEligibleCosts",
       },
-      categoryLabel: { content: "stub-categoryLabel" },
-      totalEligibleCosts: { content: "stub-totalEligibleCosts" },
-      eligibleCostsClaimedToDate: { content: "stub-eligibleCostsClaimedToDate" },
-      costsClaimedThisPeriod: { content: "stub-costsClaimedThisPeriod" },
-      remainingEligibleCosts: { content: "stub-remainingEligibleCosts" },
     },
   };
 
   const setup = (props?: Partial<ClaimProps>) => {
     return render(
-      <TestBed content={stubContent as TestBedContent}>
+      <TestBed>
         <ClaimTable {...defaultStubData} {...props} />
       </TestBed>,
     );
   };
+
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent);
+  });
 
   describe("@renders", () => {
     describe("with data in correct order", () => {
@@ -213,10 +220,10 @@ describe("<ClaimTable />", () => {
         };
         const { queryByText } = setup(warningClaim);
 
-        const negativeContent = stubContent.claimsComponents.negativeCategoriesMessage;
+        const negativeContent = stubContent.pages.claimsComponents.negativeCategoriesMessage;
 
-        const negativeWarningFirstParagraph = queryByText(negativeContent.before.content);
-        const negativeWarningLastParagraph = queryByText(negativeContent.after.content);
+        const negativeWarningFirstParagraph = queryByText(negativeContent.before);
+        const negativeWarningLastParagraph = queryByText(negativeContent.after);
 
         expect(negativeWarningFirstParagraph).toBeInTheDocument();
         expect(negativeWarningLastParagraph).toBeInTheDocument();

@@ -1,0 +1,34 @@
+{
+  "claimsMessages": {
+    "guidanceMessage": "You must upload an invoice with every claim. VAT invoices are required from partners registered for value-added tax (VAT).",
+    "editClaimLineItemOtherCostsTotalCosts": "Enter your total costs on this page, (excluding VAT from your invoice if you are VAT registered).",
+    "editClaimLineItemVatRegistered": "If you are VAT registered you must enter all VAT from your invoice on the 'VAT' cost category page.",
+    "editClaimLineItemContactMo": "Contact your monitoring officer for more information about the level of detail you need to provide.",
+    "editClaimLineItemUploadEvidence": "Upload evidence of costs claimed against this cost category here.",
+    "editClaimLineItemClaimDocuments": "Do not upload supporting documents for the whole claim here. You can upload them in the 'Claim documents' section later.",
+    "sbriDocumentDetailGuidance": "Only upload evidence of costs claimed against this cost category '{{costCategoryName}}' on this page.",
+    "sbriSupportingDocumentGuidance": "Do not upload supporting documents for the whole claim here. You can upload them in the 'Claim documents' section later.",
+    "sbriDocumentAdvice": "You need to upload the following documents here:",
+    "sbriInvoiceBullet1": "VAT invoices with every claim by partners registered for value-added tax (VAT)",
+    "sbriInvoiceBullet2": "non-VAT invoices with every claim by partners not registered for VAT",
+    "sbriInvoiceBullet3": "any documents requested by your monitoring officer to support a claim",
+    "sbriMoAdvice": "Contact your monitoring officer for more information about what you need to provide.",
+    "milestoneContractAchievement": "You need to approve costs based on the participant's achievement of the milestones listed in the contract.",
+    "milestoneToDo": "You must:",
+    "milestoneBullet1": "approve costs for 100% of the milestone payment, if the participant has achieved all their milestones",
+    "milestoneBullet2": "only approve costs for the retention payment percentages specified in the contract, if the participant has partially achieved their milestones",
+    "milestoneBullet3": "approve costs for 0% of the milestone payment and invoice for \u00a30, if the participant has failed to achieve their milestones",
+    "milestoneBullet4": "query the claim if the participant needs to make amendments"
+  },
+  "pages": {
+    "claimReview": {
+      "claimReviewDeclaration": "By pressing submit, I have satisfied myself that, based on limited sampling of financial information, and on such evidence as presented at project review meetings and in reports, the costs claimed appear commensurate with the progress reported by the project, and evidence presented is attributable to project activity."
+    },
+    "allClaimsDashboard": {
+      "sbriGuidanceMessage": "You must upload an invoice with every claim. VAT invoices are required from partners registered for value-added tax (VAT)."
+    },
+    "editClaimLineItems": {
+      "sbriHintAdditionalInformation": "Explain any difference between the forecast (payment schedule) costs and the total costs, including the actions you are taking as a result of the difference. For example, updating the project plan or financial forecast."
+    }
+  }
+}

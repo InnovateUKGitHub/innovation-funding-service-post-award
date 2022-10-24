@@ -15,18 +15,18 @@ export function BroadcastsViewer() {
 
   return (
     <>
-      <ACC.H2>{getContent(x => x.components.broadcasts.broadcastsTitle)}</ACC.H2>
+      <ACC.H2>{getContent(x => x.components.broadcastContent.broadcastsTitle)}</ACC.H2>
 
       <div className="broadcasts govuk-!-margin-bottom-8">
         {isLoading && (
           <ACC.Renderers.SimpleString>
-            {getContent(x => x.components.broadcasts.loadingBroadcasts)}
+            {getContent(x => x.components.broadcastContent.loadingBroadcasts)}
           </ACC.Renderers.SimpleString>
         )}
 
         {isRejected && (
           <ACC.Renderers.SimpleString>
-            {getContent(x => x.components.broadcasts.errorBroadcasts)}
+            {getContent(x => x.components.broadcastContent.errorBroadcasts)}
           </ACC.Renderers.SimpleString>
         )}
 
@@ -35,7 +35,7 @@ export function BroadcastsViewer() {
             payload.map(broadcast => <BroadcastView key={broadcast.id} {...broadcast} />)
           ) : (
             <ACC.Renderers.SimpleString>
-              {getContent(x => x.components.broadcasts.emptyBroadcasts)}
+              {getContent(x => x.components.broadcastContent.emptyBroadcasts)}
             </ACC.Renderers.SimpleString>
           ))}
       </div>

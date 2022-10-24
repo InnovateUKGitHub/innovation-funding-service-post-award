@@ -20,14 +20,14 @@ export const NonAidFundingStep = ({
 
   return (
     <>
-      <ACC.Section qa="non-aid" title={x => x.pcrAddPartnerStateAidEligibilityContent.nonAidFundingTitle}>
+      <ACC.Section qa="non-aid" title={x => x.pages.pcrAddPartnerStateAidEligibility.formSectionTitleNonAidFunding}>
         {isKTP ? (
           <ACC.ValidationMessage
             messageType="info"
-            message={x => x.pcrAddPartnerStateAidEligibilityContent.nonAidFundingGuidance}
+            message={x => x.pages.pcrAddPartnerStateAidEligibility.guidanceNonAidFunding}
           />
         ) : (
-          <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.nonAidFundingGuidance} />
+          <ACC.Content markdown value={x => x.pages.pcrAddPartnerStateAidEligibility.guidanceNonAidFunding} />
         )}
       </ACC.Section>
 
@@ -38,10 +38,10 @@ export const NonAidFundingStep = ({
         isSaving={status === EditorStatus.Saving}
       >
         <Form.Fieldset>
-          <Form.Submit>{getContent(x => x.pcrAddPartnerStateAidEligibilityContent.pcrItem.submitButton)}</Form.Submit>
+          <Form.Submit>{getContent(x => x.pcrItem.submitButton)}</Form.Submit>
 
           <Form.Button name="saveAndReturnToSummary" onClick={() => onSave(true)}>
-            {getContent(x => x.pcrAddPartnerStateAidEligibilityContent.pcrItem.returnToSummaryButton)}
+            {getContent(x => x.pcrItem.returnToSummaryButton)}
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>

@@ -35,12 +35,12 @@ function LoansRequestPage({ loan, loanEditor, loanDocsEditor, documents, ...prop
   const RequestForm = ACC.TypedForm<MultipleDocumentUploadDto>();
   const CommentsForm = ACC.TypedForm<LoanDto>();
 
-  const requestIntroPart1 = getContent(x => x.loanRequest.requestIntroPart1);
-  const requestIntroPart2 = getContent(x => x.loanRequest.requestIntroPart2);
+  const requestIntroPart1 = getContent(x => x.pages.loansRequest.introPart1);
+  const requestIntroPart2 = getContent(x => x.pages.loansRequest.introPart2);
 
   const createPcrLink = (
     <ACC.Link route={props.routes.pcrCreate.getLink({ projectId: props.projectId })}>
-      {getContent(x => x.loanRequest.changeDrawdownLabel)}
+      {getContent(x => x.pages.loansRequest.changeDrawdownLabel)}
     </ACC.Link>
   );
 
@@ -56,8 +56,8 @@ function LoansRequestPage({ loan, loanEditor, loanDocsEditor, documents, ...prop
         <LoanRequestTable {...loan} />
       </ACC.Section>
 
-      <ACC.Section title={getContent(x => x.loanRequest.uploadTitle)}>
-        <ACC.Renderers.SimpleString>{getContent(x => x.loanRequest.uploadIntro)}</ACC.Renderers.SimpleString>
+      <ACC.Section title={getContent(x => x.pages.loansRequest.uploadTitle)}>
+        <ACC.Renderers.SimpleString>{getContent(x => x.pages.loansRequest.uploadIntro)}</ACC.Renderers.SimpleString>
 
         <RequestForm.Form
           qa="loanDocumentsForm"
@@ -72,7 +72,7 @@ function LoansRequestPage({ loan, loanEditor, loanDocsEditor, documents, ...prop
             <RequestForm.MultipleFileUpload
               name="attachment"
               labelHidden
-              label={getContent(x => x.loanRequest.uploadFormLabel)}
+              label={getContent(x => x.pages.loansRequest.uploadFormLabel)}
               validation={loanDocsEditor.validator.files}
               value={data => data.files}
               update={(dto, files) => {
@@ -87,7 +87,7 @@ function LoansRequestPage({ loan, loanEditor, loanDocsEditor, documents, ...prop
             name="loan-document-upload"
             onClick={() => props.onDocsChange(true, loanDocsEditor.data)}
           >
-            {getContent(x => x.loanRequest.uploadFormButton)}
+            {getContent(x => x.pages.loansRequest.uploadFormButton)}
           </RequestForm.Button>
         </RequestForm.Form>
       </ACC.Section>
@@ -102,8 +102,8 @@ function LoansRequestPage({ loan, loanEditor, loanDocsEditor, documents, ...prop
 
       <ACC.Section>
         <CommentsForm.Form qa="summary-form" editor={loanEditor} onSubmit={() => props.onLoanUpdate(loanEditor.data)}>
-          <CommentsForm.Fieldset heading={getContent(x => x.loanRequest.commentTitle)}>
-            <ACC.TextHint>{getContent(x => x.loanRequest.commentHint)}</ACC.TextHint>
+          <CommentsForm.Fieldset heading={getContent(x => x.pages.loansRequest.commentTitle)}>
+            <ACC.TextHint>{getContent(x => x.pages.loansRequest.commentHint)}</ACC.TextHint>
 
             <CommentsForm.MultilineString
               qa="info-text-area"
@@ -114,12 +114,14 @@ function LoansRequestPage({ loan, loanEditor, loanDocsEditor, documents, ...prop
             />
           </CommentsForm.Fieldset>
 
-          <CommentsForm.Fieldset heading={getContent(x => x.loanRequest.loanDeclarationTitle)}>
-            <ACC.Renderers.SimpleString>{getContent(x => x.loanRequest.loanDeclaration)}</ACC.Renderers.SimpleString>
+          <CommentsForm.Fieldset heading={getContent(x => x.pages.loansRequest.loanDeclarationTitle)}>
+            <ACC.Renderers.SimpleString>
+              {getContent(x => x.pages.loansRequest.loanDeclaration)}
+            </ACC.Renderers.SimpleString>
           </CommentsForm.Fieldset>
 
           <CommentsForm.Fieldset qa="save-buttons">
-            <CommentsForm.Submit>{getContent(x => x.loanRequest.loanSubmitButton)}</CommentsForm.Submit>
+            <CommentsForm.Submit>{getContent(x => x.pages.loansRequest.loanSubmitButton)}</CommentsForm.Submit>
           </CommentsForm.Fieldset>
         </CommentsForm.Form>
       </ACC.Section>
@@ -150,7 +152,7 @@ function LoansRequestContainer(props: BaseProps & LoansRequestParams) {
 
   const backLinkElement = (
     <ACC.BackLink route={props.routes.loansSummary.getLink({ projectId: props.projectId })}>
-      {getContent(x => x.loanRequest.backToLoanOverview)}
+      {getContent(x => x.pages.loansRequest.backToLoanOverview)}
     </ACC.BackLink>
   );
 
@@ -158,7 +160,7 @@ function LoansRequestContainer(props: BaseProps & LoansRequestParams) {
     !isLoading && payload ? (
       <ACC.Projects.Title {...payload.project} />
     ) : (
-      <ACC.Renderers.SimpleString>{getContent(x => x.loanRequest.loadingDrawdown)}</ACC.Renderers.SimpleString>
+      <ACC.Renderers.SimpleString>{getContent(x => x.pages.loansRequest.loadingDrawdown)}</ACC.Renderers.SimpleString>
     );
 
   return (
@@ -169,7 +171,7 @@ function LoansRequestContainer(props: BaseProps & LoansRequestParams) {
       validator={payload?.loanEditor.validator}
     >
       {isRejected && (
-        <ACC.Renderers.SimpleString>{getContent(x => x.loanRequest.errorDrawdown)}</ACC.Renderers.SimpleString>
+        <ACC.Renderers.SimpleString>{getContent(x => x.pages.loansRequest.errorDrawdown)}</ACC.Renderers.SimpleString>
       )}
 
       {payload?.loan.totals && (
@@ -186,14 +188,16 @@ function LoansRequestContainer(props: BaseProps & LoansRequestParams) {
             });
           }}
           onDocsDelete={(dto, document) => {
-            const removedMessage = getContent(x => x.loanRequest.loanDocumentsRemoved(document.fileName));
+            const removedMessage = getContent(x =>
+              x.pages.loansRequest.loanDocumentsRemoved({ filename: document.fileName }),
+            );
 
             stores.loanDocuments.deleteLoanDocument(props.projectId, props.loanId, dto, document, removedMessage);
           }}
           onDocsChange={(saving, dto) => {
             stores.messages.clearMessages();
 
-            const uploadedMessage = getContent(x => x.loanRequest.loanDocumentsUploaded(dto.files));
+            const uploadedMessage = getContent(x => x.pages.loansRequest.loanDocumentsUploaded({ count: dto.files }));
 
             stores.loanDocuments.updateLoanDocumentsEditor(saving, props.projectId, props.loanId, dto, uploadedMessage);
           }}
@@ -211,5 +215,5 @@ export const LoansRequestRoute = defineRoute<LoansRequestParams>({
     projectId: r.params.projectId,
     loanId: r.params.loanId,
   }),
-  getTitle: x => x.content.loanRequest.title(),
+  getTitle: x => x.content.getTitleCopy(x => x.pages.loansRequest.title),
 });

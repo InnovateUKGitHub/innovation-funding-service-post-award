@@ -6,13 +6,14 @@ import {
   PCRItemTypeDto,
   ProjectDto,
 } from "@framework/dtos";
-import TestBed, { TestBedContent } from "@shared/TestBed";
+import TestBed from "@shared/TestBed";
 import { NonAidFundingStep } from "@ui/containers/pcrs/addPartner";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { MultipleDocumentUploadDtoValidator, PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { IEditorStore } from "@ui/redux";
 import { EditorStatus } from "@ui/constants/enums";
 import { IRoutes } from "@ui/routing";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<NonAidFundingStep />", () => {
   type TestProps = PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>;
@@ -35,33 +36,31 @@ describe("<NonAidFundingStep />", () => {
   } as TestProps;
 
   const stubContent = {
-    pcrAddPartnerStateAidEligibilityContent: {
-      nonAidFundingTitle: {
-        content: "Non aid funding",
+    pages: {
+      pcrAddPartnerStateAidEligibility: {
+        formSectionTitleNonAidFunding: "Non aid funding",
+        guidanceNonAidFunding: "This screen is extremely relevant.",
       },
-      nonAidFundingGuidance: {
-        content: "This screen is extremely relevant.",
-      },
-      pcrItem: {
-        submitButton: {
-          content: "stub-submitButton",
-        },
-        returnToSummaryButton: {
-          content: "stub-returnToSummaryButton",
-        },
-      },
+    },
+    pcrItem: {
+      submitButton: "stub-submitButton",
+      returnToSummaryButton: "stub-returnToSummaryButton",
     },
   };
 
   const setup = (props: TestProps, isServer?: boolean) => {
     return render(
-      <TestBed isServer={isServer} content={stubContent as TestBedContent}>
+      <TestBed isServer={isServer}>
         <NonAidFundingStep {...props} />
       </TestBed>,
     );
   };
 
   beforeEach(jest.clearAllMocks);
+
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent);
+  });
 
   describe("@returns", () => {
     test("as default", () => {

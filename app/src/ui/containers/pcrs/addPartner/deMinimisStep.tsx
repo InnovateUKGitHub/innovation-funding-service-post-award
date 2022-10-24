@@ -6,7 +6,7 @@ import { PCRItemForPartnerAdditionDto, PCRItemTypeDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { DocumentDescription } from "@framework/constants";
-import { Content } from "@content/content";
+import { Copy } from "@copy/Copy";
 
 interface DeMinimisStepUiProps {
   documents: DocumentSummaryDto[];
@@ -33,7 +33,7 @@ const DeMinimisStepUi = ({
           openNewWindow
           links={itemType.files.map(x => ({
             url: x.relativeUrl,
-            text: (content: Content) => content.pcrAddPartnerStateAidEligibilityContent.labels.deMinimisDeclarationForm,
+            text: x => x.pcrAddPartnerLabels.deMinimisDeclarationForm,
           }))}
         />
       </ACC.Section>
@@ -45,8 +45,11 @@ const DeMinimisStepUi = ({
 
   return (
     <>
-      <ACC.Section qa="de-minimis-intro" title={x => x.pcrAddPartnerStateAidEligibilityContent.deMinimisTitle}>
-        <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.deMinimisGuidance} />
+      <ACC.Section
+        qa="de-minimis-intro"
+        title={x => x.pages.pcrAddPartnerStateAidEligibility.formSectionTitleDeMinimis}
+      >
+        <ACC.Content markdown value={x => x.pages.pcrAddPartnerStateAidEligibility.guidanceDeMinimis} />
       </ACC.Section>
 
       <ACC.Section qa="de-minimis">
@@ -59,14 +62,14 @@ const DeMinimisStepUi = ({
             qa="projectChangeRequestItemUpload"
           >
             <UploadForm.Fieldset
-              heading={x => x.pcrAddPartnerStateAidEligibilityContent.templateSectionTitle}
+              heading={x => x.pages.pcrAddPartnerStateAidEligibility.sectionTitleTemplate}
               qa="template"
             >
               {renderTemplateLinks(props.pcrItemType)}
             </UploadForm.Fieldset>
 
             <UploadForm.Fieldset
-              heading={x => x.pcrAddPartnerStateAidEligibilityContent.uploadDeclarationSectionTitle}
+              heading={x => x.pages.pcrAddPartnerStateAidEligibility.sectionTitleUploadDeclaration}
               qa="documentGuidance"
             >
               <UploadForm.Hidden name="description" value={() => DocumentDescription.DeMinimisDeclarationForm} />
@@ -74,7 +77,7 @@ const DeMinimisStepUi = ({
               <ACC.DocumentGuidance />
 
               <UploadForm.MultipleFileUpload
-                label={x => x.pcrAddPartnerStateAidEligibilityContent.documentLabels.uploadInputLabel}
+                label={x => x.documentLabels.uploadInputLabel}
                 name="attachment"
                 labelHidden
                 value={data => data.files}
@@ -92,7 +95,7 @@ const DeMinimisStepUi = ({
                 styling="Secondary"
                 onClick={() => props.onFileChange(true, documentsEditor.data)}
               >
-                <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.documentMessages.uploadTitle} />
+                <ACC.Content value={x => x.documentMessages.uploadTitle} />
               </UploadForm.Button>
             </UploadForm.Fieldset>
           </UploadForm.Form>
@@ -109,10 +112,10 @@ const DeMinimisStepUi = ({
       <Form.Form qa="saveAndContinue" data={pcrItem} onSubmit={() => onSave(false)}>
         <Form.Fieldset>
           <Form.Submit>
-            <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.pcrItem.submitButton} />
+            <ACC.Content value={x => x.pcrItem.submitButton} />
           </Form.Submit>
           <Form.Button name="saveAndReturnToSummary" onClick={() => onSave(true)}>
-            <ACC.Content value={x => x.pcrAddPartnerStateAidEligibilityContent.pcrItem.returnToSummaryButton} />
+            <ACC.Content value={x => x.pcrItem.returnToSummaryButton} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>

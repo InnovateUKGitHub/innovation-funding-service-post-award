@@ -2,54 +2,51 @@ import { render } from "@testing-library/react";
 
 import { ProjectRole } from "@framework/constants";
 import { ClaimsDashboardGuidance, ClaimsDashboardGuidanceProps } from "@ui/containers/claims/components";
-import { TestBed, TestBedContent } from "@shared/TestBed";
+import { TestBed } from "@shared/TestBed";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<ClaimsDashboardGuidance />", () => {
   describe("@renders", () => {
     const stubContent = {
-      allClaimsDashboard: {
-        messages: {
-          guidanceMessage: { content: "stub-guidanceMessage" },
+      claimsMessages: {
+        guidanceMessage: "stub-guidanceMessage",
+        overdueGuidanceMessage: {
+          message1: "stub-overdueGuidanceMessage1",
+          message2: "stub-overdueGuidanceMessage2",
+          message3: "stub-overdueGuidanceMessage3",
+          message4: "stub-overdueGuidanceMessage4",
         },
       },
-      claimsDashboard: {
-        messages: {
-          overdueGuidanceMessage1: { content: "stub-overdueGuidanceMessage1" },
-          overdueGuidanceMessage2: { content: "stub-overdueGuidanceMessage2" },
-          overdueGuidanceMessage3: { content: "stub-overdueGuidanceMessage3" },
-          overdueGuidanceMessage4: { content: "stub-overdueGuidanceMessage4" },
-        },
-      },
-    } as TestBedContent;
+    };
 
     const setup = (props: ClaimsDashboardGuidanceProps) => {
       return render(
-        <TestBed content={stubContent}>
+        <TestBed>
           <ClaimsDashboardGuidance {...props} />
         </TestBed>,
       );
     };
 
-    test("when overdue claim", () => {
-      if (!stubContent.claimsDashboard) throw Error("Missing claimsDashboard content!");
+    beforeAll(async () => {
+      await testInitialiseInternationalisation(stubContent);
+    });
 
+    test("when overdue claim", () => {
       const { queryByText } = setup({ overdueProject: true });
 
-      const claimGuidanceMessages = stubContent.claimsDashboard.messages;
+      const claimGuidanceMessages = stubContent.claimsMessages;
 
-      expect(queryByText(claimGuidanceMessages.overdueGuidanceMessage1.content, { exact: false })).toBeInTheDocument();
-      expect(queryByText(claimGuidanceMessages.overdueGuidanceMessage2.content, { exact: false })).toBeInTheDocument();
-      expect(queryByText(claimGuidanceMessages.overdueGuidanceMessage3.content, { exact: false })).toBeInTheDocument();
-      expect(queryByText(claimGuidanceMessages.overdueGuidanceMessage4.content, { exact: false })).toBeInTheDocument();
+      expect(queryByText(claimGuidanceMessages.overdueGuidanceMessage.message1, { exact: false })).toBeInTheDocument();
+      expect(queryByText(claimGuidanceMessages.overdueGuidanceMessage.message2, { exact: false })).toBeInTheDocument();
+      expect(queryByText(claimGuidanceMessages.overdueGuidanceMessage.message3, { exact: false })).toBeInTheDocument();
+      expect(queryByText(claimGuidanceMessages.overdueGuidanceMessage.message4, { exact: false })).toBeInTheDocument();
     });
 
     describe("when not overdue", () => {
-      if (!stubContent.allClaimsDashboard) throw Error("Missing allClaimsDashboard content!");
-
       test.each`
         name             | inputRoles                       | expectedContent
-        ${"when FC"}     | ${ProjectRole.FinancialContact}  | ${stubContent.allClaimsDashboard.messages.guidanceMessage.content}
-        ${"when not FC"} | ${ProjectRole.MonitoringOfficer} | ${stubContent.allClaimsDashboard.messages.guidanceMessage.content}
+        ${"when FC"}     | ${ProjectRole.FinancialContact}  | ${stubContent.claimsMessages.guidanceMessage}
+        ${"when not FC"} | ${ProjectRole.MonitoringOfficer} | ${stubContent.claimsMessages.guidanceMessage}
       `("when not overdue partner as non SBRI competion $name", ({ inputRoles, expectedContent }) => {
         const { container, queryByText } = setup({
           competitionType: "CR&D",
@@ -63,8 +60,8 @@ describe("<ClaimsDashboardGuidance />", () => {
 
       test.each`
         name             | inputRoles                       | shouldHaveMarkdownElement | expectedContent
-        ${"when FC"}     | ${ProjectRole.FinancialContact}  | ${false}                  | ${stubContent.allClaimsDashboard.messages.guidanceMessage.content}
-        ${"when not FC"} | ${ProjectRole.MonitoringOfficer} | ${true}                   | ${stubContent.allClaimsDashboard.messages.guidanceMessage.content}
+        ${"when FC"}     | ${ProjectRole.FinancialContact}  | ${false}                  | ${stubContent.claimsMessages.guidanceMessage}
+        ${"when not FC"} | ${ProjectRole.MonitoringOfficer} | ${true}                   | ${stubContent.claimsMessages.guidanceMessage}
       `(
         "when not overdue partner as a SBRI project $name",
         ({ inputRoles, shouldHaveMarkdownElement, expectedContent }) => {

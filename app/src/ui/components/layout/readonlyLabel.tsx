@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { ContentSelector } from "@content/content";
+import type { ContentSelector } from "@copy/type";
 import { Content } from "@ui/components";
 
 interface Props {

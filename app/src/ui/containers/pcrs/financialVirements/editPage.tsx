@@ -18,28 +18,26 @@ export function useEditPageContent() {
   const { getContent } = useContent();
 
   return {
-    summaryTitle: getContent(x => x.financialVirementEdit.summaryTitle),
-    saveButton: getContent(x => x.financialVirementEdit.saveButton),
+    summaryTitle: getContent(x => x.pages.financialVirementEdit.summaryTitle),
+    saveButton: getContent(x => x.pages.financialVirementEdit.saveButton),
 
-    introMessage: getContent(x => x.financialVirementEdit.editPageMessage.intro),
-    virementsMessage: getContent(x => x.financialVirementEdit.editPageMessage.virements),
-    requestsMessage: getContent(x => x.financialVirementEdit.editPageMessage.requests),
+    introMessage: getContent(x => x.pages.financialVirementEdit.editPageMessage.intro),
+    virementsMessage: getContent(x => x.pages.financialVirementEdit.editPageMessage.virements),
+    requestsMessage: getContent(x => x.pages.financialVirementEdit.editPageMessage.requests),
 
-    costCategoryName: getContent(x => x.financialVirementEdit.labels.costCategoryName),
-    costCategoryOriginalEligibleCosts: getContent(
-      x => x.financialVirementEdit.labels.costCategoryOriginalEligibleCosts,
-    ),
-    costCategoryCostsClaimed: getContent(x => x.financialVirementEdit.labels.costCategoryCostsClaimed),
-    costCategoryNewEligibleCosts: getContent(x => x.financialVirementEdit.labels.costCategoryNewEligibleCosts),
-    costCategoryDifferenceCosts: getContent(x => x.financialVirementEdit.labels.costCategoryDifferenceCosts),
-    partnerTotals: getContent(x => x.financialVirementEdit.labels.partnerTotals),
-    projectOriginalEligibleCosts: getContent(x => x.financialVirementEdit.labels.projectOriginalEligibleCosts),
-    projectNewEligibleCosts: getContent(x => x.financialVirementEdit.labels.projectNewEligibleCosts),
-    projectDifferenceCosts: getContent(x => x.financialVirementEdit.labels.projectDifferenceCosts),
-    projectOriginalRemainingGrant: getContent(x => x.financialVirementEdit.labels.projectOriginalRemainingGrant),
-    projectNewRemainingGrant: getContent(x => x.financialVirementEdit.labels.projectNewRemainingGrant),
-    projectDifferenceGrant: getContent(x => x.financialVirementEdit.labels.projectDifferenceGrant),
-    backToSummary: getContent(x => x.financialVirementEdit.labels.backToSummary),
+    costCategoryName: getContent(x => x.financialVirementLabels.costCategoryName),
+    costCategoryOriginalEligibleCosts: getContent(x => x.financialVirementLabels.costCategoryOriginalEligibleCosts),
+    costCategoryCostsClaimed: getContent(x => x.financialVirementLabels.costCategoryCostsClaimed),
+    costCategoryNewEligibleCosts: getContent(x => x.financialVirementLabels.costCategoryNewEligibleCosts),
+    costCategoryDifferenceCosts: getContent(x => x.financialVirementLabels.costCategoryDifferenceCosts),
+    partnerTotals: getContent(x => x.financialVirementLabels.partnerTotals),
+    projectOriginalEligibleCosts: getContent(x => x.financialVirementLabels.projectOriginalEligibleCosts),
+    projectNewEligibleCosts: getContent(x => x.financialVirementLabels.projectNewEligibleCosts),
+    projectDifferenceCosts: getContent(x => x.financialVirementLabels.projectDifferenceCosts),
+    projectOriginalRemainingGrant: getContent(x => x.financialVirementLabels.projectOriginalRemainingGrant),
+    projectNewRemainingGrant: getContent(x => x.financialVirementLabels.projectNewRemainingGrant),
+    projectDifferenceGrant: getContent(x => x.financialVirementLabels.projectDifferenceGrant),
+    backToSummary: getContent(x => x.financialVirementLabels.backToSummary),
   };
 }
 
@@ -177,7 +175,7 @@ const EditPage = ({
             itemId: itemId,
           })}
         >
-          <ACC.Content value={x => x.financialVirementEdit.labels.backToSummary} />
+          <ACC.Content value={x => x.financialVirementLabels.backToSummary} />
         </ACC.BackLink>
       }
       pageTitle={<ACC.Projects.Title {...project} />}
@@ -369,5 +367,5 @@ export const FinancialVirementEditRoute = defineRoute({
     itemId: route.params.itemId,
     partnerId: route.params.partnerId,
   }),
-  getTitle: ({ content }) => content.financialVirementEdit.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.financialVirementEdit.title),
 });

@@ -1,12 +1,13 @@
 import { render } from "@testing-library/react";
 
-import { TestBed, TestBedContent, TestBedStore } from "@shared/TestBed";
+import { TestBed, TestBedStore } from "@shared/TestBed";
 import { ClaimDrawdownTable, ClaimDrawdownTableProps } from "@ui/containers/claims/components/ClaimDrawdownTable";
 import { LoanDto } from "@framework/dtos";
 import { LoanStatus } from "@framework/entities";
 import { createProjectDto } from "@framework/util/stubDtos";
 import { Pending } from "@shared/pending";
 import { LoadingStatus } from "@framework/constants";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<ClaimDrawdownTable />", () => {
   const stubProject = createProjectDto({ competitionType: "LOANS" });
@@ -35,7 +36,7 @@ describe("<ClaimDrawdownTable />", () => {
   const stubContent = {
     components: {
       loading: {
-        message: { content: "stub-loading" },
+        message: "stub-loading",
       },
     },
   };
@@ -48,11 +49,15 @@ describe("<ClaimDrawdownTable />", () => {
     } as any;
 
     return render(
-      <TestBed stores={stubStore as TestBedStore} content={stubContent as TestBedContent}>
+      <TestBed stores={stubStore as TestBedStore}>
         <ClaimDrawdownTable {...defaultProps} {...props} />
       </TestBed>,
     );
   };
+
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent);
+  });
 
   describe("@returns", () => {
     test("with no UI when compeition is not LOANS", () => {

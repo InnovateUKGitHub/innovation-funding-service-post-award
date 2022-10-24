@@ -21,6 +21,7 @@ import {
 
 import { getPolyfills } from "./polyfill";
 import { Logger } from "@shared/developmentLogger";
+import { allLanguages, allNamespaces, CopyLanguages, CopyNamespaces } from "@copy/data";
 
 // get servers store to initialise client store
 const serverState = processDto(window.__PRELOADED_STATE__) as unknown as PreloadedState<RootState>;
@@ -69,40 +70,42 @@ const Client = () => {
   );
 };
 
-getPolyfills()
-  .then(() =>
-    i18next.init({
-      lng: "en",
-      fallbackLng: "en",
-      defaultNS: "default",
-      interpolation: {
-        format: (value: string, format) => {
-          if (format === "lowercase") return value.toLocaleLowerCase();
-          return value;
-        },
+(async () => {
+  await getPolyfills();
+
+  await i18next.init({
+    lng: CopyLanguages.en_GB,
+    fallbackLng: CopyLanguages.en_GB,
+    defaultNS: CopyNamespaces.DEFAULT,
+    fallbackNS: CopyNamespaces.DEFAULT,
+    interpolation: {
+      format: (value: string, format) => {
+        if (format === "lowercase") return value.toLocaleLowerCase();
+        return value;
       },
-    }),
-  )
-  // temporarily add it globally to help debugging...
-  .then(() => (window.i18n = i18next))
-  .then(() => {
-    // get the english by default, if supporting another language and the browser specifies it then would need to get that too
-    return fetch("/globalization/en")
-      .then(content => {
-        if (content.ok) {
-          return content.json();
-        } else {
-          throw new Error(`Unable to load content : ${content.status} : ${content.statusText}`);
-        }
-      })
-      .then(content => {
-        i18next.addResourceBundle("en", "default", content, true, true);
-      });
-  })
-  .then(() => {
-    const rootElement = document.getElementById("root");
-    if (!rootElement) {
-      throw new Error("Cannot find Root element from which to attach the app");
-    }
-    hydrateRoot(rootElement, <Client />);
+    },
   });
+
+  const promises = [];
+
+  // TODO: Don't fetch ALL languages and namespaces by default.
+  for (const namespace of allNamespaces) {
+    for (const language of allLanguages) {
+      const promise = fetch(`/internationalisation/${language}/${namespace}`)
+        .then(res => res.json())
+        .then(data => {
+          i18next.addResourceBundle("en-GB", namespace, data, true, true);
+        });
+
+      promises.push(promise);
+    }
+  }
+
+  await Promise.all(promises);
+
+  const rootElement = document.getElementById("root");
+  if (!rootElement) {
+    throw new Error("Cannot find Root element from which to attach the app");
+  }
+  hydrateRoot(rootElement, <Client />);
+})();

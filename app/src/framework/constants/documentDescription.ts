@@ -1,3 +1,5 @@
+import type { ContentSelector } from "@copy/type";
+
 export enum DocumentDescription {
   IAR = 10,
   ClaimValidationForm = 20,
@@ -28,6 +30,63 @@ export enum DocumentDescription {
   Loan = 230,
 }
 
+const getDocumentDescriptionContentSelector = (type: DocumentDescription | null | undefined): ContentSelector => {
+  switch (type) {
+    case DocumentDescription.IAR:
+      return x => x.documentLabels.description.iar;
+    case DocumentDescription.ClaimValidationForm:
+      return x => x.documentLabels.description.claimValidationForm;
+    case DocumentDescription.Evidence:
+      return x => x.documentLabels.description.evidence;
+    case DocumentDescription.DeMinimisDeclarationForm:
+      return x => x.documentLabels.description.deMinimisDeclarationForm;
+    case DocumentDescription.EndOfProjectSurvey:
+      return x => x.documentLabels.description.endOfProjectSurvey;
+    case DocumentDescription.StatementOfExpenditure:
+      return x => x.documentLabels.description.statementOfExpenditure;
+    case DocumentDescription.JeSForm:
+      return x => x.documentLabels.description.jesForm;
+    case DocumentDescription.OverheadCalculationSpreadsheet:
+      return x => x.documentLabels.description.overheadCalculationSpreadsheet;
+    case DocumentDescription.BankStatement:
+      return x => x.documentLabels.description.bankStatement;
+    case DocumentDescription.AgreementToPCR:
+      return x => x.documentLabels.description.agreementToPcr;
+    case DocumentDescription.LMCMinutes:
+      return x => x.documentLabels.description.lmcMinutes;
+    case DocumentDescription.ScheduleThree:
+      return x => x.documentLabels.description.scheduleThree;
+    case DocumentDescription.ReviewMeeting:
+      return x => x.documentLabels.description.reviewMeeting;
+    case DocumentDescription.Plans:
+      return x => x.documentLabels.description.plans;
+    case DocumentDescription.CollaborationAgreement:
+      return x => x.documentLabels.description.collaborationAgreement;
+    case DocumentDescription.RiskRegister:
+      return x => x.documentLabels.description.riskRegister;
+    case DocumentDescription.AnnexThree:
+      return x => x.documentLabels.description.annexThree;
+    case DocumentDescription.Presentation:
+      return x => x.documentLabels.description.presentation;
+    case DocumentDescription.Email:
+      return x => x.documentLabels.description.email;
+    case DocumentDescription.MeetingAgenda:
+      return x => x.documentLabels.description.meetingAgenda;
+    case DocumentDescription.Invoice:
+      return x => x.documentLabels.description.invoice;
+    case DocumentDescription.ProjectCompletionForm:
+      return x => x.documentLabels.description.projectCompletionForm;
+    case DocumentDescription.ProofOfSatisfiedConditions:
+      return x => x.documentLabels.description.proofOfSatisfiedConditions;
+    case DocumentDescription.Loan:
+      return x => x.documentLabels.description.loan;
+    case null:
+    case undefined:
+    default:
+      return x => x.documentLabels.description.unknown;
+  }
+};
+
 export const allowedClaimDocuments: Readonly<DocumentDescription[]> = [
   DocumentDescription.Invoice,
   DocumentDescription.IAR,
@@ -37,3 +96,5 @@ export const allowedClaimDocuments: Readonly<DocumentDescription[]> = [
   DocumentDescription.LMCMinutes,
   DocumentDescription.ScheduleThree,
 ];
+
+export { getDocumentDescriptionContentSelector };

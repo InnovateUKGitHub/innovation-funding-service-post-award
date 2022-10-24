@@ -43,26 +43,29 @@ export function CompaniesHouseStep({ pcrItem: originalPayload, ...props }: Compa
   };
 
   return (
-    <ACC.Section qa="company-house" title={getContent(x => x.pcrAddPartnerCompanyHouse.sectionTitle)}>
+    <ACC.Section qa="company-house" title={getContent(x => x.pages.pcrAddPartnerCompanyHouse.sectionTitle)}>
       <Form.Form
         qa="addPartnerForm"
         data={originalPayload}
         isSaving={props.status === EditorStatus.Saving}
         onSubmit={noop}
       >
-        <Form.Fieldset qa="search-companies-house" heading={getContent(x => x.pcrAddPartnerCompanyHouse.searchHeading)}>
+        <Form.Fieldset
+          qa="search-companies-house"
+          heading={getContent(x => x.pages.pcrAddPartnerCompanyHouse.headingSearch)}
+        >
           <Form.Search
             labelHidden
             autoComplete="off"
             name="searchCompaniesHouse"
-            hint={getContent(x => x.pcrAddPartnerCompanyHouse.hint)}
+            hint={getContent(x => x.pages.pcrAddPartnerCompanyHouse.hint)}
             value={() => searchInputValue}
             update={(_, searchValue) => setSearchInputValue(searchValue?.trim() || "")}
           />
 
           {isServer && (
             <Form.Button styling="Primary" name="companiesHouseSearch">
-              {getContent(x => x.pcrAddPartnerCompanyHouse.searchButton)}
+              {getContent(x => x.pages.pcrAddPartnerCompanyHouse.buttonSearch)}
             </Form.Button>
           )}
         </Form.Fieldset>
@@ -79,7 +82,7 @@ export function CompaniesHouseStep({ pcrItem: originalPayload, ...props }: Compa
           pending={getCompanies()}
           renderLoading={() => (
             <ACC.Renderers.SimpleString>
-              {getContent(x => x.pcrAddPartnerCompanyHouse.resultsLoading)}
+              {getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultsLoading)}
             </ACC.Renderers.SimpleString>
           )}
           render={(companyResults, isLoading) => {
@@ -91,7 +94,7 @@ export function CompaniesHouseStep({ pcrItem: originalPayload, ...props }: Compa
             if (isLoadingCompanies) {
               return (
                 <ACC.Renderers.SimpleString>
-                  {getContent(x => x.pcrAddPartnerCompanyHouse.resultsLoading)}
+                  {getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultsLoading)}
                 </ACC.Renderers.SimpleString>
               );
             }
@@ -108,7 +111,7 @@ export function CompaniesHouseStep({ pcrItem: originalPayload, ...props }: Compa
 
                 {hasNoCompanies && (
                   <ACC.Renderers.SimpleString>
-                    {getContent(x => x.pcrAddPartnerCompanyHouse.resultNotShowing)}
+                    {getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultNotShowing)}
                   </ACC.Renderers.SimpleString>
                 )}
               </>
@@ -116,10 +119,13 @@ export function CompaniesHouseStep({ pcrItem: originalPayload, ...props }: Compa
           }}
         />
 
-        <Form.Fieldset qa="companies-house-form" heading={getContent(x => x.pcrAddPartnerCompanyHouse.formHeading)}>
+        <Form.Fieldset
+          qa="companies-house-form"
+          heading={getContent(x => x.pages.pcrAddPartnerCompanyHouse.headingForm)}
+        >
           <Form.String
             name="organisationName"
-            label={getContent(x => x.pcrAddPartnerCompanyHouse.labels.organisationNameHeading)}
+            label={getContent(x => x.pcrAddPartnerLabels.organisationNameHeading)}
             value={dto => dto.organisationName}
             update={(dto, val) => (dto.organisationName = val)}
             validation={props.validator.companyHouseOrganisationName}
@@ -127,7 +133,7 @@ export function CompaniesHouseStep({ pcrItem: originalPayload, ...props }: Compa
 
           <Form.String
             name="registrationNumber"
-            label={getContent(x => x.pcrAddPartnerCompanyHouse.labels.registrationNumberHeading)}
+            label={getContent(x => x.pcrAddPartnerLabels.registrationNumberHeading)}
             value={dto => dto.registrationNumber}
             update={(dto, val) => (dto.registrationNumber = val)}
             validation={props.validator.registrationNumber}
@@ -135,7 +141,7 @@ export function CompaniesHouseStep({ pcrItem: originalPayload, ...props }: Compa
 
           <Form.String
             name="registeredAddress"
-            label={getContent(x => x.pcrAddPartnerCompanyHouse.labels.registeredAddressHeading)}
+            label={getContent(x => x.pcrAddPartnerLabels.registeredAddressHeading)}
             value={dto => dto.registeredAddress}
             update={(dto, val) => (dto.registeredAddress = val)}
             validation={props.validator.registeredAddress}
@@ -143,10 +149,10 @@ export function CompaniesHouseStep({ pcrItem: originalPayload, ...props }: Compa
         </Form.Fieldset>
 
         <Form.Fieldset qa="save-and-continue-companies-house">
-          <Form.Submit>{getContent(x => x.pcrAddPartnerCompanyHouse.pcrItem.submitButton)}</Form.Submit>
+          <Form.Submit>{getContent(x => x.pcrItem.submitButton)}</Form.Submit>
 
           <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
-            {getContent(x => x.pcrAddPartnerCompanyHouse.pcrItem.returnToSummaryButton)}
+            {getContent(x => x.pcrItem.returnToSummaryButton)}
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>

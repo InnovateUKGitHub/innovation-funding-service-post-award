@@ -129,7 +129,7 @@ class Component extends ContainerBase<MonitoringReportWorkflowParams, Data, Call
     if (this.props.mode === "view") {
       return (
         <ACC.BackLink route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}>
-          <ACC.Content value={x => x.monitoringReportsWorkflow.backLink} />
+          <ACC.Content value={x => x.pages.monitoringReportsWorkflow.backLink} />
         </ACC.BackLink>
       );
     }
@@ -142,7 +142,7 @@ class Component extends ContainerBase<MonitoringReportWorkflowParams, Data, Call
             id: this.props.id,
           })}
         >
-          <ACC.Content value={x => x.monitoringReportsWorkflow.backLink} />
+          <ACC.Content value={x => x.pages.monitoringReportsWorkflow.backLink} />
         </ACC.BackLink>
       );
     }
@@ -156,7 +156,11 @@ class Component extends ContainerBase<MonitoringReportWorkflowParams, Data, Call
         })}
       >
         <ACC.Content
-          value={x => x.monitoringReportsWorkflow.backToStepLink(prevStep.displayName.toLocaleLowerCase())}
+          value={x =>
+            x.pages.monitoringReportsWorkflow.linkBackToStep({
+              step: prevStep.displayName.toLocaleLowerCase(),
+            })
+          }
         />
       </ACC.BackLink>
     );
@@ -195,6 +199,6 @@ export const MonitoringReportWorkflowRoute = defineRoute({
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
   getTitle: ({ params, content }) =>
     params.mode === "view"
-      ? content.monitoringReportsWorkflow.viewMode.title()
-      : content.monitoringReportsWorkflow.editMode.title(),
+      ? content.getTitleCopy(x => x.pages.monitoringReportsWorkflow.viewMode.title)
+      : content.getTitleCopy(x => x.pages.monitoringReportsWorkflow.editMode.title),
 });

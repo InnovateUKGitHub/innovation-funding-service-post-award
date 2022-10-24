@@ -32,8 +32,8 @@ class PartnerDetailsComponent extends ContainerBase<Params, Data> {
   private renderContents({ partner, project }: CombinedData) {
     const { isFc, isPm } = getAuthRoles(partner.roles);
 
-    const backToProjectDetailsLink = <ACC.Content value={x => x.partnerDetails.backToProjectDetails} />;
-    const editLink = <ACC.Content value={x => x.partnerDetails.editLink} />;
+    const backToProjectDetailsLink = <ACC.Content value={x => x.pages.partnerDetails.backToProjectDetails} />;
+    const editLink = <ACC.Content value={x => x.pages.partnerDetails.editLink} />;
 
     return (
       <ACC.Page
@@ -49,17 +49,17 @@ class PartnerDetailsComponent extends ContainerBase<Params, Data> {
         <ACC.Section>
           <ACC.SummaryList qa="partner-details">
             <ACC.SummaryListItem
-              label={x => x.partnerDetails.contactLabels.partnerName}
+              label={x => x.pages.partnerDetails.projectContactLabels.partnerName}
               qa="partner-name"
               content={<ACC.Renderers.SimpleString>{partner.name}</ACC.Renderers.SimpleString>}
             />
             <ACC.SummaryListItem
-              label={x => x.partnerDetails.contactLabels.partnerType}
+              label={x => x.pages.partnerDetails.projectContactLabels.partnerType}
               qa="partner-type"
               content={<ACC.Renderers.SimpleString>{partner.type}</ACC.Renderers.SimpleString>}
             />
             <ACC.SummaryListItem
-              label={x => x.partnerDetails.contactLabels.partnerPostcode}
+              label={x => x.projectContactLabels.partnerPostcode}
               qa="partner-postcode"
               content={<ACC.Renderers.SimpleString>{partner.postcode}</ACC.Renderers.SimpleString>}
               action={
@@ -100,7 +100,7 @@ export const PartnerDetailsRoute = defineRoute<Params>({
   routePath: "/projects/:projectId/details/:partnerId",
   container: PartnerDetailsContainer,
   getParams: r => ({ projectId: r.params.projectId, partnerId: r.params.partnerId }),
-  getTitle: ({ content }) => content.partnerDetails.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.partnerDetails.title),
   accessControl: (auth, { projectId }) =>
     auth
       .forProject(projectId)

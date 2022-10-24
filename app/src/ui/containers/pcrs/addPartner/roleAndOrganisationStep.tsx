@@ -30,15 +30,15 @@ class Component extends React.Component<
     const commercialWorkOptions: ACC.SelectOption[] = [
       {
         id: "true",
-        value: <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkYes} />,
+        value: <ACC.Content value={x => x.pcrAddPartnerLabels.commercialWorkYes} />,
       },
       {
         id: "false",
-        value: <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkNo} />,
+        value: <ACC.Content value={x => x.pcrAddPartnerLabels.commercialWorkNo} />,
       },
     ];
     return (
-      <ACC.Section qa="role-and-partner-type" title={x => x.pcrAddPartnerRoleAndOrganisation.formSectionTitle}>
+      <ACC.Section qa="role-and-partner-type" title={x => x.pages.pcrAddPartnerRoleAndOrganisation.formSectionTitle}>
         <Form.Form
           qa="addPartnerForm"
           data={this.props.pcrItem}
@@ -48,9 +48,9 @@ class Component extends React.Component<
         >
           <ACC.ValidationMessage
             messageType="info"
-            message={x => x.pcrAddPartnerRoleAndOrganisation.validationMessage}
+            message={x => x.pages.pcrAddPartnerRoleAndOrganisation.validationMessage}
           />
-          <Form.Fieldset heading={x => x.pcrAddPartnerRoleAndOrganisation.labels.roleHeading}>
+          <Form.Fieldset heading={x => x.pcrAddPartnerLabels.roleHeading}>
             <Form.Radio
               name="projectRole"
               options={roleOptions.options}
@@ -63,11 +63,11 @@ class Component extends React.Component<
               validation={this.props.validator.projectRole}
             />
           </Form.Fieldset>
-          <Form.Fieldset heading={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkHeading}>
+          <Form.Fieldset heading={x => x.pcrAddPartnerLabels.commercialWorkHeading}>
             <Form.Radio
               name="isCommercialWork"
-              label={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkLabel}
-              hint={x => x.pcrAddPartnerRoleAndOrganisation.labels.commercialWorkHint}
+              label={x => x.pcrAddPartnerLabels.commercialWorkLabel}
+              hint={x => x.pcrAddPartnerLabels.commercialWorkLabelHint}
               options={commercialWorkOptions}
               inline={false}
               value={dto => {
@@ -81,13 +81,13 @@ class Component extends React.Component<
               validation={this.props.validator.isCommercialWork}
             />
           </Form.Fieldset>
-          <Form.Fieldset heading={x => x.pcrAddPartnerRoleAndOrganisation.labels.organisationHeading}>
-            <ACC.Info summary={<ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.infoSummary} />}>
-              <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.organisationTypeInfo} />
+          <Form.Fieldset heading={x => x.pcrAddPartnerLabels.organisationHeading}>
+            <ACC.Info summary={<ACC.Content value={x => x.pages.pcrAddPartnerRoleAndOrganisation.infoSummary} />}>
+              <ACC.Content markdown value={x => x.pages.pcrAddPartnerRoleAndOrganisation.organisationTypeInfo} />
             </ACC.Info>
             <Form.Radio
               name="partnerType"
-              hint={x => x.pcrAddPartnerRoleAndOrganisation.organisationTypeHint}
+              hint={x => x.pages.pcrAddPartnerRoleAndOrganisation.organisationTypeHint}
               options={typeOptions.options}
               inline={false}
               value={() => typeOptions.selected}
@@ -113,10 +113,10 @@ class Component extends React.Component<
           </Form.Fieldset>
           <Form.Fieldset qa="save-and-continue">
             <Form.Submit>
-              <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.pcrItem.submitButton} />
+              <ACC.Content value={x => x.pcrItem.submitButton} />
             </Form.Submit>
             <Form.Button name="saveAndReturnToSummary" onClick={() => this.onSave(this.props.pcrItem, true)}>
-              <ACC.Content value={x => x.pcrAddPartnerRoleAndOrganisation.pcrItem.returnToSummaryButton} />
+              <ACC.Content value={x => x.pcrItem.returnToSummaryButton} />
             </Form.Button>
           </Form.Fieldset>
         </Form.Form>

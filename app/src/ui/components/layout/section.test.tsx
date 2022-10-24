@@ -1,21 +1,26 @@
 import { render } from "@testing-library/react";
 
-import { TestBed, TestBedContent } from "@shared/TestBed";
+import { TestBed } from "@shared/TestBed";
 import { Section, SectionProps } from "@ui/components/layout/section";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<Section />", () => {
   const stubContent = {
     stubCategory: {
-      stubValue: { content: "stub-content-solution-value" },
+      stubValue: "stub-content-solution-value",
     },
-  } as any;
+  };
 
   const setup = (props?: SectionProps) =>
     render(
-      <TestBed content={stubContent as TestBedContent}>
+      <TestBed>
         <Section {...props} />
       </TestBed>,
     );
+
+  beforeAll(async () => {
+    testInitialiseInternationalisation(stubContent);
+  });
 
   describe("with edge cases", () => {
     test("should render null when no data is passed", () => {
@@ -39,7 +44,7 @@ describe("<Section />", () => {
       const stubTitleContentSolution = (x: any) => x.stubCategory.stubValue;
       const { queryByText } = setup({ title: stubTitleContentSolution });
 
-      const titleElement = queryByText(stubContent.stubCategory.stubValue.content);
+      const titleElement = queryByText(stubContent.stubCategory.stubValue);
 
       expect(titleElement).toBeInTheDocument();
     });
@@ -67,7 +72,7 @@ describe("<Section />", () => {
       const stubSubTitleContentSolution = (x: any) => x.stubCategory.stubValue;
       const { queryByText } = setup({ subtitle: stubSubTitleContentSolution });
 
-      const subTitleElement = queryByText(stubContent.stubCategory.stubValue.content);
+      const subTitleElement = queryByText(stubContent.stubCategory.stubValue);
 
       expect(subTitleElement).toBeInTheDocument();
     });
@@ -128,7 +133,7 @@ describe("<Section />", () => {
       const stubTitleLevel2 = "stub-title-level-2";
 
       const { getByRole } = render(
-        <TestBed content={stubContent as TestBedContent}>
+        <TestBed>
           <Section title={stubTitleLevel1}>
             <Section title={stubTitleLevel2} />
           </Section>
@@ -148,7 +153,7 @@ describe("<Section />", () => {
       const stubTitleLevel3 = "stub-title-level-3";
 
       const { getByRole } = render(
-        <TestBed content={stubContent as TestBedContent}>
+        <TestBed>
           <Section title={stubTitleLevel1}>
             <Section title={stubTitleLevel2}>
               <Section title={stubTitleLevel3} />
@@ -173,7 +178,7 @@ describe("<Section />", () => {
       const stubTitleLevel4 = "stub-title-level-4";
 
       const { getByRole } = render(
-        <TestBed content={stubContent as TestBedContent}>
+        <TestBed>
           <Section title={stubTitleLevel1}>
             <Section title={stubTitleLevel2}>
               <Section title={stubTitleLevel3}>

@@ -62,7 +62,12 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data> {
 
     const currentPeriodTitle = (
       <ACC.Content
-        value={x => x.financeSummary.projectMessages.currentPeriodInfo(project.periodId, project.numberOfPeriods)}
+        value={x =>
+          x.projectMessages.currentPeriodInfo({
+            currentPeriod: project.periodId,
+            numberOfPeriods: project.numberOfPeriods,
+          })
+        }
       />
     );
 
@@ -208,21 +213,21 @@ function FinanceSummaryContainer(props: Params & BaseProps) {
   const { getContent } = useContent();
 
   const financeSummaryContent = {
-    backToProjectOverview: getContent(x => x.financeSummary.backToProjectOverview),
-    partnerFinanceDetailsTitle: getContent(x => x.financeSummary.partnerFinanceDetailsTitle),
-    accountantsReportTitle: getContent(x => x.financeSummary.accountantsReportTitle),
-    totalsFooterLabel: getContent(x => x.financeSummary.totalsFooterLabel),
-    auditReportFrequencyLabel: getContent(x => x.financeSummary.projectLabels.auditReportFrequency),
-    partnerProjectLabel: getContent(x => x.financeSummary.projectLabels.partner),
-    projectCostsLabel: getContent(x => x.financeSummary.projectLabels.projectCosts),
-    totalEligibleCostsLabel: getContent(x => x.financeSummary.projectLabels.totalEligibleCosts),
-    totalEligibleCostsClaimedLabel: getContent(x => x.financeSummary.projectLabels.totalEligibleCostsClaimed),
-    percentageEligibleCostsClaimedLabel: getContent(x => x.financeSummary.projectLabels.percentageEligibleCostsClaimed),
-    awardRateLabel: getContent(x => x.financeSummary.projectLabels.awardRate),
-    totalApprovedLabel: getContent(x => x.financeSummary.projectLabels.totalApproved),
-    remainingValueLabel: getContent(x => x.financeSummary.projectLabels.remainingValue),
-    totalPrepaymentLabel: getContent(x => x.financeSummary.projectLabels.totalPrepayment),
-    capLimitLabel: getContent(x => x.financeSummary.projectLabels.capLimit),
+    backToProjectOverview: getContent(x => x.pages.financeSummary.bactToProjectOverview),
+    partnerFinanceDetailsTitle: getContent(x => x.pages.financeSummary.partnerFinanceDetailsTitle),
+    accountantsReportTitle: getContent(x => x.pages.financeSummary.accountantsReportTitle),
+    totalsFooterLabel: getContent(x => x.pages.financeSummary.totalsFooter),
+    auditReportFrequencyLabel: getContent(x => x.projectLabels.auditReportFrequency),
+    partnerProjectLabel: getContent(x => x.projectLabels.partner),
+    projectCostsLabel: getContent(x => x.projectLabels.projectCostsLabel),
+    totalEligibleCostsLabel: getContent(x => x.projectLabels.totalEligibleCostsLabel),
+    totalEligibleCostsClaimedLabel: getContent(x => x.projectLabels.totalEligibleCostsClaimedLabel),
+    percentageEligibleCostsClaimedLabel: getContent(x => x.projectLabels.percentageEligibleCostsClaimedLabel),
+    awardRateLabel: getContent(x => x.projectLabels.awardRate),
+    totalApprovedLabel: getContent(x => x.projectLabels.totalApproved),
+    remainingValueLabel: getContent(x => x.projectLabels.remainingValue),
+    totalPrepaymentLabel: getContent(x => x.projectLabels.totalPrepayment),
+    capLimitLabel: getContent(x => x.projectLabels.capLimit),
   };
 
   return (
@@ -248,5 +253,5 @@ export const FinanceSummaryRoute = defineRoute({
     auth
       .forProject(params.projectId)
       .hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.MonitoringOfficer, ProjectRole.FinancialContact),
-  getTitle: x => x.content.financeSummary.title(),
+  getTitle: x => x.content.getTitleCopy(x => x.pages.financeSummary.title),
 });

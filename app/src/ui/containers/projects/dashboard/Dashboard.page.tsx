@@ -69,11 +69,11 @@ function ProjectDashboard({
         config.ssoEnabled ? (
           // Note: This has been added as the content component cannot infer the static string length of min 4 characters
           <a className="govuk-back-link" href={`${config.ifsRoot}/dashboard-selection`}>
-            <ACC.Content value={x => x.projectsDashboard.backToDashboard} />
+            <ACC.Content value={x => x.pages.projectsDashboard.backToDashboard} />
           </a>
         ) : (
           <ACC.BackLink route={props.routes.home.getLink({})}>
-            <ACC.Content value={x => x.projectsDashboard.backToHomepage} />
+            <ACC.Content value={x => x.pages.projectsDashboard.backToHomepage} />
           </ACC.BackLink>
         )
       }
@@ -81,7 +81,7 @@ function ProjectDashboard({
       <BroadcastsViewer />
 
       <ACC.H2>
-        <ACC.Content value={x => x.projectsDashboard.projectsTitle} />
+        <ACC.Content value={x => x.pages.projectsDashboard.projectsTitle} />
       </ACC.H2>
 
       {displaySearch && (
@@ -97,11 +97,11 @@ function ProjectDashboard({
             })
           }
         >
-          <Form.Fieldset heading={x => x.projectsDashboard.searchTitle}>
+          <Form.Fieldset heading={x => x.pages.projectsDashboard.searchTitle}>
             <Form.Search
               width="one-half"
-              hint={x => x.projectsDashboard.searchHint}
-              label={x => x.projectsDashboard.searchLabel}
+              hint={x => x.pages.projectsDashboard.searchHint}
+              label={x => x.pages.projectsDashboard.searchLabel}
               labelHidden
               name="search"
               value={x => x.searchValue}
@@ -183,5 +183,5 @@ export const ProjectDashboardRoute = defineRoute({
   routePathWithQuery: "/projects/dashboard?:search",
   container: ProjectDashboardContainer,
   getParams: () => ({}),
-  getTitle: x => x.content.projectsDashboard.title(),
+  getTitle: x => x.content.getTitleCopy(x => x.pages.projectsDashboard.title),
 });

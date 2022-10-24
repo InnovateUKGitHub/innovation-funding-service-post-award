@@ -83,7 +83,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     const editableItems = projectChangeRequest.items.filter(x => editableItemTypes.indexOf(x.type) > -1);
 
     return (
-      <ACC.TaskListSection step={1} title="Give us information" qa="WhatDoYouWantToDo">
+      <ACC.TaskListSection step={1} title={x => x.taskList.giveUsInfoSectionTitle} qa="WhatDoYouWantToDo">
         {editableItems.map(x => this.getItemTasks(x))}
       </ACC.TaskListSection>
     );
@@ -94,7 +94,7 @@ class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
     const stepCount = editableItems.length ? 2 : 1;
 
     return (
-      <ACC.TaskListSection step={stepCount} title="Explain why you want to make the changes" qa="reasoning">
+      <ACC.TaskListSection step={stepCount} title={x => x.taskList.explainSectionTitle} qa="reasoning">
         <ACC.Task
           name="Reasoning for Innovate UK"
           status={getPcrItemTaskStatus(projectChangeRequest.reasoningStatus)}

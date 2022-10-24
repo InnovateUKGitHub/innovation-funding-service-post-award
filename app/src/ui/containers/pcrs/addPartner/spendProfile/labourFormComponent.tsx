@@ -38,7 +38,7 @@ export function LabourFormComponent({
         <Form.Hidden name="id" value={dto => dto.id} />
 
         <Form.String
-          label={x => x.pcrSpendProfilePrepareCostContent.labels.labour.role}
+          label={x => x.pcrSpendProfileLabels.labour.role}
           width="one-third"
           name="description"
           value={dto => dto.description}
@@ -47,7 +47,7 @@ export function LabourFormComponent({
         />
 
         <Form.Numeric
-          label={x => x.pcrSpendProfilePrepareCostContent.labels.labour.grossCost}
+          label={x => x.pcrSpendProfileLabels.labour.grossCost}
           name="grossCostOfRole"
           width="one-third"
           value={dto => dto.grossCostOfRole}
@@ -56,8 +56,8 @@ export function LabourFormComponent({
         />
 
         <Form.Numeric
-          label={x => x.pcrSpendProfilePrepareCostContent.labels.labour.rate}
-          hint={x => x.pcrSpendProfilePrepareCostContent.labels.labour.rateHint}
+          label={x => x.pcrSpendProfileLabels.labour.rate}
+          hint={x => x.pcrSpendProfileLabels.labour.rateHint}
           name="ratePerDay"
           width="one-third"
           value={dto => dto.ratePerDay}
@@ -66,7 +66,7 @@ export function LabourFormComponent({
         />
 
         <Form.Numeric
-          label={x => x.pcrSpendProfilePrepareCostContent.labels.labour.daysOnProject}
+          label={x => x.pcrSpendProfileLabels.labour.daysSpentOnProject}
           name="daysSpentOnProject"
           width="one-third"
           value={dto => dto.daysSpentOnProject}
@@ -76,8 +76,8 @@ export function LabourFormComponent({
 
         {isClient && (
           <Form.Custom
-            label={x => x.pcrSpendProfilePrepareCostContent.labels.labour.totalCost}
-            hint={x => x.pcrSpendProfilePrepareCostContent.labels.labour.totalCostHint}
+            label={x => x.pcrSpendProfileLabels.labour.totalCost}
+            hint={x => x.pcrSpendProfileLabels.labour.totalCostHint}
             labelBold
             name="totalCost"
             value={dto => (
@@ -92,7 +92,9 @@ export function LabourFormComponent({
 
       <Form.Fieldset qa="save">
         <Form.Submit>
-          <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.submitButton(costCategory.name)} />
+          <ACC.Content
+            value={x => x.pages.pcrSpendProfilePrepareCost.buttonSubmit({ costCategoryName: costCategory.name })}
+          />
         </Form.Submit>
       </Form.Fieldset>
     </Form.Form>

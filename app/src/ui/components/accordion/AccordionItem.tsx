@@ -3,7 +3,7 @@ import cx from "classnames";
 
 import { useContent } from "@ui/hooks";
 import { useMounted } from "@ui/features";
-import { ContentSelector } from "@content/content";
+import type { ContentSelector } from "@copy/type";
 import { removeSpaces } from "@shared/string-helpers";
 
 import { AccessibilityText } from "../renderers";
@@ -26,7 +26,13 @@ export function AccordionItem({ qa, children, isOpen = false, onClick, ...props 
   const accordionHeadingId = `accordion-default-heading-${uid}`;
   const accordionContentId = `accordion-default-content-${uid}`;
 
-  const title = getContent(props.title);
+  let title;
+
+  if (typeof props.title === "string") {
+    title = props.title;
+  } else {
+    title = getContent(props.title);
+  }
 
   return (
     <div

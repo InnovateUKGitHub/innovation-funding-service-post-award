@@ -65,25 +65,25 @@ class Component extends ContainerBase<Params, Props, {}> {
           <VirementTable.Table qa="partnerVirements" data={data}>
             <VirementTable.String
               qa="costCategory"
-              header={x => x.financialVirementDetails.labels.costCategoryName}
+              header={x => x.financialVirementLabels.costCategoryName}
               value={x => x.costCategory.name}
-              footer={<ACC.Content value={x => x.financialVirementDetails.labels.partnerTotals} />}
+              footer={<ACC.Content value={x => x.financialVirementLabels.partnerTotals} />}
             />
             <VirementTable.Currency
               qa="originalEligibleCosts"
-              header={x => x.financialVirementDetails.labels.costCategoryOriginalEligibleCosts}
+              header={x => x.financialVirementLabels.costCategoryOriginalEligibleCosts}
               value={x => x.virement.originalEligibleCosts}
               footer={<ACC.Renderers.Currency value={financialVirements.originalEligibleCosts} />}
             />
             <VirementTable.Currency
               qa="newEligibleCosts"
-              header={x => x.financialVirementDetails.labels.costCategoryNewEligibleCosts}
+              header={x => x.financialVirementLabels.costCategoryNewEligibleCosts}
               value={x => x.virement.newEligibleCosts}
               footer={<ACC.Renderers.Currency value={financialVirements.newEligibleCosts} />}
             />
             <VirementTable.Currency
               qa="difference"
-              header={x => x.financialVirementDetails.labels.costCategoryDifferenceCosts}
+              header={x => x.financialVirementLabels.costCategoryDifferenceCosts}
               value={x => roundCurrency(x.virement.newEligibleCosts - x.virement.originalEligibleCosts)}
               footer={
                 <ACC.Renderers.Currency
@@ -120,13 +120,13 @@ class Component extends ContainerBase<Params, Props, {}> {
     if (this.props.mode === "review") {
       return (
         <ACC.BackLink route={this.props.routes.pcrReviewItem.getLink(params)}>
-          <ACC.Content value={x => x.financialVirementDetails.labels.backToSummary} />
+          <ACC.Content value={x => x.financialVirementLabels.backToSummary} />
         </ACC.BackLink>
       );
     }
     return (
       <ACC.BackLink route={this.props.routes.pcrViewItem.getLink(params)}>
-        <ACC.Content value={x => x.financialVirementDetails.labels.backToSummary} />
+        <ACC.Content value={x => x.financialVirementLabels.backToSummary} />
       </ACC.BackLink>
     );
   }
@@ -163,5 +163,5 @@ export const FinancialVirementDetailsRoute = defineRoute({
     partnerId: route.params.partnerId,
     mode: route.params.mode,
   }),
-  getTitle: ({ content }) => content.financialVirementDetails.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.financialVirementDetails.title),
 });

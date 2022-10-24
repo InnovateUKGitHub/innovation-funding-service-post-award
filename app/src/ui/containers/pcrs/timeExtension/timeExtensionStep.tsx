@@ -19,15 +19,15 @@ const TimeExtensionStep = (
   const { isClient } = useMounted();
 
   const Form = ACC.TypedForm<PCRItemForTimeExtensionDto>();
-  const existingProjectHeading = getContent(x => x.pcrTimeExtensionStepContent.existingProjectHeading);
-  const dateLabel = getContent(x => x.pcrTimeExtensionStepContent.dateLabel);
-  const durationLabel = getContent(x => x.pcrTimeExtensionStepContent.durationLabel);
-  const proposedProjectHeading = getContent(x => x.pcrTimeExtensionStepContent.proposedProjectHeading);
-  const changeProjectDurationHint = getContent(x => x.pcrTimeExtensionStepContent.changeProjectDurationHint);
-  const changeProjectDurationHint2 = getContent(x => x.pcrTimeExtensionStepContent.changeProjectDurationHint2);
-  const changeProjectDurationHint3 = getContent(x => x.pcrTimeExtensionStepContent.changeProjectDurationHint3);
-  const saveAndContinue = getContent(x => x.pcrTimeExtensionStepContent.saveAndContinue);
-  const currentProjectEndDate = getContent(x => x.pcrTimeExtensionStepContent.currentProjectEndDate);
+  const existingProjectHeading = getContent(x => x.pages.pcrTimeExtensionStep.existingProjectHeading);
+  const dateLabel = getContent(x => x.pages.pcrTimeExtensionStep.dateLabel);
+  const durationLabel = getContent(x => x.pages.pcrTimeExtensionStep.durationLabel);
+  const proposedProjectHeading = getContent(x => x.pages.pcrTimeExtensionStep.proposedProjectHeading);
+  const changeProjectDurationHint = getContent(x => x.pages.pcrTimeExtensionStep.changeProjectDurationHint);
+  const changeProjectDurationHint2 = getContent(x => x.pages.pcrTimeExtensionStep.changeProjectDurationHint2);
+  const changeProjectDurationHint3 = getContent(x => x.pages.pcrTimeExtensionStep.changeProjectDurationHint3);
+  const saveAndContinue = getContent(x => x.pages.pcrTimeExtensionStep.saveAndContinue);
+  const currentProjectEndDate = getContent(x => x.pages.pcrTimeExtensionStep.currentProjectEndDate);
 
   const timeExtensionDropdownOptions = React.useMemo(
     () =>
@@ -170,7 +170,7 @@ export const TimeExtensionStepContainer = (
       render={(timeExtensionOptions, isLoading) =>
         isLoading ? (
           <ACC.Renderers.SimpleString qa="claimsLoadingMessage">
-            <ACC.Content value={x => x.pcrTimeExtensionStepContent.loadingTimeExtensionOptions} />
+            <ACC.Content value={x => x.pages.pcrTimeExtensionStep.loadingTimeExtensionOptions} />
           </ACC.Renderers.SimpleString>
         ) : (
           <TimeExtensionStep timeExtensionOptions={timeExtensionOptions} {...props} />

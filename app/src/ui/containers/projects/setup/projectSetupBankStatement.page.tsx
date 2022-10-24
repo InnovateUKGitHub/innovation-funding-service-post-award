@@ -59,7 +59,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
 
     const backLinkElement = (
       <ACC.BackLink route={projectSetupRoute}>
-        <ACC.Content value={x => x.projectSetupBankStatement.backLink} />
+        <ACC.Content value={x => x.pages.projectSetupBankStatement.backLink} />
       </ACC.BackLink>
     );
     return (
@@ -72,7 +72,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
         <ACC.Renderers.Messages messages={this.props.messages} />
 
         <ACC.Section qa="guidance">
-          <ACC.Content value={x => x.projectSetupBankStatement.guidanceMessage} />
+          <ACC.Content markdown value={x => x.pages.projectSetupBankStatement.guidanceMessage} />
         </ACC.Section>
 
         <ACC.Section>
@@ -89,7 +89,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
               <ACC.DocumentGuidance />
 
               <UploadForm.MultipleFileUpload
-                label={x => x.projectSetupBankStatement.documentLabels.uploadInputLabel}
+                label={x => x.documentLabels.uploadInputLabel}
                 name="attachment"
                 labelHidden
                 value={data => data.files}
@@ -107,7 +107,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
                 styling="Secondary"
                 onClick={() => this.props.onFileChange(true, documentsEditor.data)}
               >
-                <ACC.Content value={x => x.projectSetupBankStatement.documentMessages.uploadTitle} />
+                <ACC.Content value={x => x.documentMessages.uploadTitle} />
               </UploadForm.Button>
             </UploadForm.Fieldset>
           </UploadForm.Form>
@@ -130,7 +130,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
           >
             <BankStatementForm.Fieldset>
               <BankStatementForm.Submit>
-                <ACC.Content value={x => x.projectSetupBankStatement.submitButton} />
+                <ACC.Content value={x => x.pages.projectSetupBankStatement.buttonSubmit} />
               </BankStatementForm.Submit>
 
               <ACC.Link
@@ -140,7 +140,7 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
                   partnerId: this.props.partnerId,
                 })}
               >
-                <ACC.Content value={x => x.projectSetupBankStatement.returnButton} />
+                <ACC.Content value={x => x.pages.projectSetupBankStatement.buttonReturn} />
               </ACC.Link>
             </BankStatementForm.Fieldset>
           </BankStatementForm.Form>
@@ -164,9 +164,7 @@ const ProjectSetupBankStatementContainer = (props: ProjectSetupBankStatementPara
       onFileChange={(isSaving, dto) => {
         stores.messages.clearMessages();
         // show message if remaining on page
-        const successMessage = getContent(x =>
-          x.projectSetupBankStatement.documentMessages.getDocumentUploadedMessage(dto.files.length),
-        );
+        const successMessage = getContent(x => x.documentMessages.uploadedDocuments({ count: dto.files.length }));
         stores.partnerDocuments.updatePartnerDocumentsEditor(
           isSaving,
           props.projectId,
@@ -182,7 +180,7 @@ const ProjectSetupBankStatementContainer = (props: ProjectSetupBankStatementPara
           props.partnerId,
           dto,
           document,
-          getContent(x => x.projectSetupBankStatement.documentsRemovedMessage),
+          getContent(x => x.pages.projectSetupBankStatement.documentRemovedMessage),
         );
       }}
       editor={stores.partners.getPartnerEditor(props.projectId, props.partnerId, dto => {
@@ -209,7 +207,7 @@ export const ProjectSetupBankStatementRoute = defineRoute<ProjectSetupBankStatem
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,
   }),
-  getTitle: x => x.content.projectSetupBankStatement.title(),
+  getTitle: x => x.content.getTitleCopy(x => x.pages.projectSetupBankStatement.title),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
 });

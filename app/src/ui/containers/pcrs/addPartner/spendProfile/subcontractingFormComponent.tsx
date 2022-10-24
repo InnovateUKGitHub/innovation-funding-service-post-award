@@ -23,7 +23,7 @@ export class SubcontractingFormComponent extends Component<
         <Form.Fieldset qa="subcontracting-costs">
           <Form.Hidden name="id" value={dto => dto.id} />
           <Form.String
-            label={x => x.pcrSpendProfilePrepareCostContent.labels.subcontracting.subcontractorName}
+            label={x => x.pcrSpendProfileLabels.subcontracting.subcontractorName}
             width={"one-half"}
             name="description"
             value={dto => dto.description}
@@ -31,7 +31,7 @@ export class SubcontractingFormComponent extends Component<
             validation={validator && validator.description}
           />
           <Form.String
-            label={x => x.pcrSpendProfilePrepareCostContent.labels.subcontracting.subcontractorCountry}
+            label={x => x.pcrSpendProfileLabels.subcontracting.subcontractorCountry}
             width={"one-half"}
             name="subcontractorCountry"
             value={dto => dto.subcontractorCountry}
@@ -39,14 +39,14 @@ export class SubcontractingFormComponent extends Component<
             validation={validator && validator.subcontractorCountry}
           />
           <Form.MultilineString
-            label={x => x.pcrSpendProfilePrepareCostContent.labels.subcontracting.subcontractorRoleAndDescription}
+            label={x => x.pcrSpendProfileLabels.subcontracting.subcontractorRoleAndDescription}
             name="subcontractorRoleAndDescription"
             value={dto => dto.subcontractorRoleAndDescription}
             update={(x, val) => (x.subcontractorRoleAndDescription = val)}
             validation={validator && validator.subcontractorRoleAndDescription}
           />
           <Form.Numeric
-            label={x => x.pcrSpendProfilePrepareCostContent.labels.subcontracting.cost}
+            label={x => x.pcrSpendProfileLabels.subcontracting.cost}
             name="value"
             width={"one-quarter"}
             value={dto => dto.value}
@@ -56,7 +56,9 @@ export class SubcontractingFormComponent extends Component<
         </Form.Fieldset>
         <Form.Fieldset qa="save">
           <Form.Submit>
-            <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.submitButton(costCategory.name)} />
+            <ACC.Content
+              value={x => x.pages.pcrSpendProfilePrepareCost.buttonSubmit({ costCategoryName: costCategory.name })}
+            />
           </Form.Submit>
         </Form.Fieldset>
       </Form.Form>

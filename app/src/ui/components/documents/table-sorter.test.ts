@@ -1,7 +1,7 @@
 import _isEqual from "lodash.isequal";
 import { renderHook, act } from "@testing-library/react";
 
-import { hookTestBed, TestBedContent } from "@shared/TestBed";
+import { hookTestBed } from "@shared/TestBed";
 import { TableSortKey, SortOptions, useTableSorter } from "@ui/components/documents/table-sorter";
 
 describe("useTableSorter()", () => {
@@ -46,13 +46,8 @@ describe("useTableSorter()", () => {
 
   const stubNoColumnsSorted: (keyof typeof stubTableData[0] | null)[] = [null, null, null, null, null, null, null];
 
-  const stubContent = {};
-
   const setup = (sortKeys: TableSortKey[], tableRows: any[], isServer?: boolean) =>
-    renderHook(
-      () => useTableSorter(sortKeys, tableRows),
-      hookTestBed({ isServer, content: stubContent as TestBedContent }),
-    );
+    renderHook(() => useTableSorter(sortKeys, tableRows), hookTestBed({ isServer }));
 
   describe("@returns", () => {
     // Note: the easiest way of checking the change has occurred is to check the unique id against values that change

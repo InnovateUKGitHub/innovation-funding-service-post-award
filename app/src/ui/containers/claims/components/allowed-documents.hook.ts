@@ -1,4 +1,4 @@
-import { DocumentDescription } from "@framework/constants";
+import { DocumentDescription, getDocumentDescriptionContentSelector } from "@framework/constants";
 import { getAllEnumValues } from "@shared/enumHelper";
 import { DropdownOption } from "@ui/components";
 import { useContent } from "@ui/hooks";
@@ -16,7 +16,7 @@ export function useEnumDocuments(
     if (isInvalidDocument) return acc;
 
     const id = doc.toString();
-    const value = getContent(x => x.claimDocuments.documents.labels.documentDescriptionLabel(doc));
+    const value = getContent(getDocumentDescriptionContentSelector(doc));
 
     return [
       ...acc,

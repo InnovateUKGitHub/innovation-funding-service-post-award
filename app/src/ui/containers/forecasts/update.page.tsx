@@ -50,7 +50,7 @@ function UpdateForecastComponent(props: ForecastUpdateParams & ForecastUpdateDat
 
       return (
         <ACC.Renderers.SimpleString qa="overhead-costs">
-          <ACC.Content value={x => x.forecastsUpdate.labels.overheadCosts} />
+          <ACC.Content value={x => x.forecastsLabels.overheadCosts} />
           <ACC.Renderers.Percentage value={overheadRate} />
         </ACC.Renderers.SimpleString>
       );
@@ -62,7 +62,7 @@ function UpdateForecastComponent(props: ForecastUpdateParams & ForecastUpdateDat
       <ACC.Page
         backLink={
           <ACC.BackLink route={routes.forecastDetails.getLink({ projectId, partnerId })}>
-            <ACC.Content value={x => x.forecastsUpdate.backLink} />
+            <ACC.Content value={x => x.pages.forecastsUpdate.backLink} />
           </ACC.BackLink>
         }
         error={editor.error}
@@ -72,7 +72,7 @@ function UpdateForecastComponent(props: ForecastUpdateParams & ForecastUpdateDat
         <ForecastClaimAdvice claimLink={allClaimsDashboardLink} />
 
         {claim && claim.isFinalClaim && (
-          <ACC.ValidationMessage messageType="info" message={x => x.forecastsUpdate.messages.finalClaim} />
+          <ACC.ValidationMessage messageType="info" message={x => x.forecastsMessages.finalClaim} />
         )}
 
         <ACC.Section title="" qa="partner-forecast">
@@ -94,7 +94,7 @@ function UpdateForecastComponent(props: ForecastUpdateParams & ForecastUpdateDat
               )}
 
               <Form.Submit>
-                <ACC.Content value={x => x.forecastsUpdate.submitButton} />
+                <ACC.Content value={x => x.pages.forecastsUpdate.buttonSubmit} />
               </Form.Submit>
             </Form.Fieldset>
           </Form.Form>
@@ -109,7 +109,7 @@ const UpdateForecastContainer = (props: ForecastUpdateParams & BaseProps) => {
   const { getContent } = useContent();
   const stores = useStores();
   const navigate = useNavigate();
-  const forecastUpdatedMessage = getContent(x => x.forecastsUpdate.messages.forecastUpdated);
+  const forecastUpdatedMessage = getContent(x => x.forecastsMessages.forecastUpdated);
 
   return (
     <UpdateForecastComponent
@@ -155,7 +155,7 @@ export const UpdateForecastRoute = defineRoute({
     partnerId: route.params.partnerId,
     periodId: parseInt(route.params.periodId, 10),
   }),
-  getTitle: ({ content }) => content.forecastsUpdate.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.forecastsUpdate.title),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
 });

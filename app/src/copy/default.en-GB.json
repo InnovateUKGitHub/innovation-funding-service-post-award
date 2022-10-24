@@ -1,0 +1,1291 @@
+{
+  "site": {
+    "header": {
+      "siteName": "Innovation Funding Service",
+      "mobileNavigationLabel": "Menu",
+      "navigation": {
+        "dashboard": "Dashboard",
+        "profile": "Profile",
+        "signOut": "Sign Out"
+      }
+    },
+    "footer": {
+      "supportLinks": "Support links",
+      "cookieFindOutMore": "Find out more about cookies",
+      "explainCookies": "GOV.UK uses cookies to make the site simpler.",
+      "externalLinkText": {
+        "part1": "All content is available under the ",
+        "part2LinkText": "Open Government Licence v3.0",
+        "part2": ", except where otherwise stated"
+      },
+      "crownCopyright": "\u00a9 Crown copyright"
+    }
+  },
+  "example": {
+    "contentTitle": "Content solution",
+    "content": "Some example content"
+  },
+  "components": {
+    "validationSummary": {
+      "title": "There is a problem"
+    },
+    "errorSummary": {
+      "title": "There is a problem",
+      "expiredMessage": "Your session has expired. You must reload the page before trying again.",
+      "unsavedWarning": "Anything you have not already saved will be lost.",
+      "somethingGoneWrong": "Something has gone wrong at our end and we were unable to complete the action. Try submitting the page again.",
+      "updateAllFailure": "Something went wrong and we could not update your forecast. Please click \u2018Save and return to project setup\u2019 again.",
+      "insufficientAccessRights": "We are unable to save the changes. Please click 'Back to claims' and click into the cost category again. For claim line items that you want to remove, set the value to zero and save.",
+      "notUploadedByOwner": "You cannot remove this file as you did not upload it. You can only remove files that you have uploaded."
+    },
+    "logs": {
+      "noChangesMessage": "There are no changes.",
+      "columnHeaderDate": "Date and time",
+      "statusUpdate": "Status update",
+      "createdBy": "Created by"
+    },
+    "loading": {
+      "message": "Loading..."
+    },
+    "documentGuidance": {
+      "uploadGuidance": "You can upload up to 10 documents at a time. Each document must:",
+      "fileSize": "be less than {{maxFileSize}} in file size",
+      "uniqueFileName": "have a unique file name that describes its contents",
+      "noFilesNumberLimit": "There is no limit to the number of files you can upload in total.",
+      "fileTypesUpload": "You can upload these file types:",
+      "pdfFiles": "PDF (pdf, xps)",
+      "textFiles": "text (doc, docx, rdf, txt, csv, odt)",
+      "presentationFiles": "presentation (ppt, pptx, odp)",
+      "spreadsheetFiles": "spreadsheet (xls, xlsx, ods)",
+      "availableImageExtensions": "images (jpg, jpeg, png)",
+      "fileTypesQuestion": "Learn more about files you can upload"
+    },
+    "claimLastModified": {
+      "message": "Changes last saved"
+    },
+    "forecastTable": {
+      "costsClaimedHeader": "Costs claimed",
+      "costsClaimingHeader": "Costs you are claiming",
+      "forecastHeader": "Forecast",
+      "totalHeader": "Total",
+      "totalEligibleCostsHeader": "Total eligible costs",
+      "differenceHeader": "Difference",
+      "periodHeader": "Period",
+      "iarDueHeader": "IAR Due",
+      "noDataText": "No data",
+      "costCategoriesHeader": "Cost categories"
+    },
+    "reportForm": {
+      "reportMessage": "Each report refers to a period of the project. You may have more than one report per period.",
+      "questionScoreMessage": "For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. The report will be returned to you otherwise.",
+      "continueText": "Continue",
+      "saveAndReturnText": "Save and return to monitoring reports"
+    },
+    "forecastDetails": {
+      "finalClaimMessageFc": "You cannot change your forecast. You must",
+      "submitLink": "submit your final claim",
+      "finalClaimMessageMo": "has submitted their final claim so cannot change their forecast.",
+      "finalClaimDueMessageMo": "is due to submit their final claim so cannot change their forecast."
+    },
+    "warningContent": {
+      "amountRequestMessage": "The amount you are requesting is more than the agreed costs for:",
+      "contactmessage": "Your Monitoring Officer will let you know if they have any concerns.",
+      "advisoryMoPmMessage": "The partner is requesting an amount more than the grant offered for:"
+    },
+    "projectInactiveContent": {
+      "projectInactiveMessage": "This project is currently inactive, you can't edit this project so you have been prevented from viewing this page.",
+      "projectOnHoldMessage": "This project is on hold. Contact Innovate UK for more information.",
+      "partnerOnHoldMessage": "Partner is on hold. Contact Innovate UK for more information."
+    },
+    "claimDetailsLinkContent": {
+      "editClaim": "Edit",
+      "reviewClaim": "Review",
+      "viewClaim": "View"
+    },
+    "phaseBannerContent": {
+      "newServiceMessage": "This is a new service \u2013 your",
+      "feedbackMessage": "feedback",
+      "helpImprove": "will help us to improve it.",
+      "betaText": "beta"
+    },
+    "broadcastContent": {
+      "broadcastsTitle": "Broadcasts",
+      "broadcastTitle": "Broadcast",
+      "broadcastDetailsHeading": "Details",
+      "broadcastMessageHeading": "Message",
+      "loadingBroadcasts": "Loading your broadcasts...",
+      "loadingBroadcast": "Loading your broadcast...",
+      "errorBroadcasts": "There was an error when trying to get broadcasts.",
+      "errorBroadcast": "There was an error when trying to get the broadcast.",
+      "emptyBroadcasts": "There are no broadcasts available at this time.",
+      "emptyBroadcast": "Please try again or contact support.",
+      "readBroadcastLinkText": "Read more",
+      "broadcastLabelStartDate": "Start date:",
+      "broadcastLabelEndDate": "End date:"
+    },
+    "userChanger": {
+      "sectionTitle": "User Switcher",
+      "pickUserSubtitle": "From Salesforce",
+      "enterUserSubtitle": "Manually from E-Mail",
+      "projectDropdownPlaceholder": "-- Select a project --",
+      "contactDropdownPlaceholder": "-- Select a contact --",
+      "contactListEmpty": "There are no contacts to select for this project",
+      "changeUserMessage": "Change user",
+      "resetUserMessage": "Revert to System User",
+      "invalidUserMessage": "You have authenticated as an invalid user. Please enter the E-Mail address of the valid user, or press the \"Revert to System User\" button to re-authenticate as the system user.",
+      "tableHeaderMonitoringOfficer": "MO",
+      "tableHeaderProjectManager": "PM",
+      "tableHeaderFinancialContact": "FC"
+    }
+  },
+  "pages": {
+    "genericFallbackError": {
+      "title": {
+        "html": "Error",
+        "display": "Something has gone wrong at our end"
+      },
+      "message": "You can either go back to the page you were previously on or go back to your",
+      "dashboardText": "dashboard"
+    },
+    "unauthenticatedError": {
+      "title": {
+        "html": "There is a problem.",
+        "display": "There is a problem."
+      },
+      "preLinkContent": "Please ",
+      "linkTextContent": "contact us",
+      "postLinkContent": "to fix your account permissions."
+    },
+    "notFoundError": {
+      "title": {
+        "html": "Page not found",
+        "display": "Page not found"
+      },
+      "errorMessage": "Please check the web address or search term you entered for any errors. You can return to",
+      "goBackMessage": "or go back to the",
+      "yourDashBoard": "your dashboard",
+      "innovateUkMessage": "Innovate UK homepage"
+    },
+    "home": {
+      "title": "Home",
+      "projectsHeading": "Projects",
+      "projectsDashboardHeading": "Projects dashboard"
+    },
+    "broadcastPage": {
+      "title": {
+        "html": "View Broadcast",
+        "display": "View Broadcast"
+      }
+    },
+    "projectsDashboard": {
+      "title": "Dashboard",
+      "projectsTitle": "Projects",
+      "searchTitle": "Search",
+      "searchHint": "Project number, project or lead partner",
+      "searchLabel": "TEST",
+      "noLiveProjectsMessage": "You do not have any live projects.",
+      "noLiveMatchingMessage": "There are no matching live projects.",
+      "upcomingTitle": "Upcoming",
+      "noUpcomingProjectsMessage": "You do not have any upcoming projects.",
+      "noUpcomingMatchingMessage": "There are no matching upcoming projects.",
+      "archivedTitle": "Archived",
+      "noArchivedProjectsMessage": "You do not have any archived projects.",
+      "noArchivedMatchingMessage": "There are no matching archived projects.",
+      "projectMessages": {
+        "claimQueriedMessage": "Your claim has been queried. Please respond.",
+        "projectEndedMessage": "Project ended (final claim period)"
+      },
+      "projectPrefixCount_one": "{{count}} project",
+      "projectPrefixCount_other": "{{count}} projects",
+      "backToDashboard": "Back to dashboard",
+      "backToHomepage": "Back to home page",
+      "countMessages": {
+        "pendingMessage": "{{count}} in project setup",
+        "liveMessage": "{{count}} live",
+        "upcomingMessage": "{{count}} upcoming",
+        "archivedMessage": "{{count}} archived"
+      }
+    },
+    "projectSetup": {
+      "title": "Project setup",
+      "backLink": "Back to projects",
+      "setSpendProfile": "Set spend profile",
+      "provideBankDetails": "Provide your bank details",
+      "provideProjectLocation": "Provide your project location postcode",
+      "complete": "Complete project setup"
+    },
+    "projectOverview": {
+      "title": "Project overview",
+      "monitoringReportLink": "Monitoring reports",
+      "loansLink": "Drawdowns",
+      "claimsLink": "Claims",
+      "forecastLink": "Forecast",
+      "forecastsLink": "Forecasts",
+      "projectChangeRequestsLink": "Project change requests",
+      "documentsLink": "Documents",
+      "detailsLink": "Project details",
+      "summaryLink": "Finance summary",
+      "projectMessages": {
+        "pcrQueried": "Request queried",
+        "pcrToReview": "Requests to review: {{numberOfPcrs}}"
+      },
+      "backToProjects": "Back to Project",
+      "costsToDateMessage": "costs to date"
+    },
+    "projectDetails": {
+      "title": "Project details",
+      "projectManagerInfo": "Only project managers can raise project change requests.",
+      "financeContactInfo": "Only finance contacts can submit claims.",
+      "changeInfo": "If you need to change the lead project manager or finance contact, please email ",
+      "changeEmail": "grants_service@iuk.ukri.org",
+      "changeEnd": "."
+    },
+    "projectDocuments": {
+      "title": "Project documents",
+      "noMatchingDocumentsMessage": "No documents match.",
+      "searchDocumentsMessage": "Search documents",
+      "projectLevelSubtitle": "Documents shared with Innovate UK and Monitoring Officer",
+      "partnerLevelSubtitle": "Documents shared with Innovate UK and partners",
+      "partnerSelfLevelSubtitle": "Documents for {{partnerName}}"
+    },
+    "projectSetupPostcodeDetails": {
+      "title": {
+        "html": "Edit your project location postcode",
+        "display": "Provide your project location postcode"
+      },
+      "backLink": "Back to set up your project",
+      "saveAndReturn": "Save and return to project setup"
+    },
+    "projectSetupBankDetails": {
+      "title": "Provide your bank details",
+      "guidanceMessage": "In order for us to pay your grant we need the bank details of your organisation. The bank account must belong to the organisation listed.",
+      "submitButton": "Submit bank details",
+      "backLink": "Back to set up your project",
+      "fieldsetTitleOrganisationInfo": "Organisation information",
+      "fieldsetTitleAccountDetails": "Account details",
+      "fieldsetTitleAccountHolder": "Account holder",
+      "fieldsetTitleBillingAddress": "Billing address",
+      "fieldsetGuidanceBillingAddress": "This is the billing address connected to this bank account. This is not the address of the bank."
+    },
+    "projectSetupBankStatement": {
+      "title": "Upload bank statement",
+      "guidanceMessage": "We need you to upload a redacted bank statement for your organisation. This must be dated within 90 days of the upload date.\n\nThis will allow us to confirm we have the correct details.\n\nThe statement must show your:\n* company name\n* account number\n* sort code",
+      "buttonSubmit": "Submit bank statement",
+      "buttonReturn": "Return to set up your project",
+      "backLink": "Back to set up your project",
+      "documentRemovedMessage": "Your document has been removed."
+    },
+    "projectSetupBankDetailsVerify": {
+      "title": "Confirm your bank details",
+      "guidanceMessage": "Your bank details will now be submitted to Innovate UK for review. We will contact you if we need any further information.",
+      "submitButton": "Submit bank details",
+      "changeButton": "Change bank details",
+      "backLink": "Back to set up your project"
+    },
+    "projectSetupSpendProfile": {
+      "title": "Spend Profile",
+      "guidanceMessage": "You must provide a forecast of all eligible project costs to reflect your spend throughout the project.",
+      "submitButton": "Save and return to project setup",
+      "backLink": "Back to set up your project",
+      "readyToSubmitMessage": "This is ready to submit.",
+      "markAsComplete": "Mark as complete",
+      "spendProfileUpdatedMessage": "Your spend profile has been updated."
+    },
+    "failedBankCheckConfirmation": {
+      "title": "We need more information",
+      "backLink": "Back to set up your project",
+      "returnToSetup": "Return to set up your project",
+      "guidance": {
+        "line1": "Our automated checks were unable to verify your bank details.",
+        "line2": "We need you to upload a redacted bank statement for your organisation. This must be dated within 90 days of the upload date.",
+        "line3": "This will allow us to confirm we have the correct details.",
+        "list": {
+          "intro": "The statement must show your:",
+          "item1": "Company name",
+          "item2": "Account number",
+          "item3": "Sort code"
+        }
+      }
+    },
+    "loansSummary": {
+      "title": {
+        "html": "View Drawdowns",
+        "display": "Drawdowns"
+      },
+      "loadingDrawdowns": "Loading drawdowns...",
+      "rejectedDrawdownsError": "There was an error trying to fetch your drawdowns."
+    },
+    "loansRequest": {
+      "title": {
+        "html": "View Drawdown",
+        "display": "Drawdown"
+      },
+      "loadingDrawdown": "We're loading your drawdown...",
+      "errorDrawdown": "There was a problem trying to get your drawdown.",
+      "backToLoanOverview": "Back to loans summary page",
+      "changeDrawdownLabel": "Change drawdown",
+      "introPart1": "You can request your drawdown here. If you need to change the amount of your drawdown, you will need to submit a",
+      "introPart2": "project change request.",
+      "uploadTitle": "Upload drawdown approval request",
+      "uploadFormLabel": "Upload",
+      "uploadIntro": "You must upload a signed drawdown approval request",
+      "uploadFormButton": "Upload documents",
+      "commentTitle": "Additional information (Optional)",
+      "commentHint": "If you want to explain anything to Innovate UK, add it here.",
+      "loanDeclarationTitle": "Now send your request",
+      "loanDeclaration": "By submitting this drawdown request I confirm that the amount requested is in line with forecast eligible project costs and that this has been approved by an authorised signatory of the business. I understand and accept that if I knowingly submit a drawdown request without appropriate approvals or provide false or misleading information, this may result in my drawdown being rejected, termination of the loan, recovery of loan proceeds and outstanding interest, civil action and where there is evidence of fraud, criminal prosecution.",
+      "loanSubmitButton": "Accept and send",
+      "loanDocumentsUploaded_one": "{{count}} file have been uploaded",
+      "loanDocumentsUploaded_other": "{{count}} files have been uploaded",
+      "loanDocumentsRemoved": "{{fileName}} has been removed."
+    },
+    "financeSummary": {
+      "title": "Finance summary",
+      "totalsFooter": "Totals",
+      "projectLabels": {
+        "totalEligibleCostsClaimedLabel": "Costs claimed to date",
+        "percentageEligibleCostsClaimedLabel": "Percentage of costs claimed to date"
+      },
+      "bactToProjectOverview": "Back to project overview",
+      "partnerFinanceDetailsTitle": "Partner finance details",
+      "accountantsReportTitle": "When an independent accountant's report is needed"
+    },
+    "allClaimsDashboard": {
+      "title": "Claims"
+    },
+    "claimsComponents": {
+      "negativeCategoriesMessage": {
+        "before": "You have exceeded the total eligible costs for these categories",
+        "after": "Please check with your monitoring officer before submitting your claim."
+      },
+      "categoryLabel": "Category",
+      "totalEligibleCosts": "Total eligible costs",
+      "eligibleCostsClaimedToDate": "Eligible costs claimed to date",
+      "costsClaimedThisPeriod": "Costs claimed this period",
+      "remainingEligibleCosts": "Remaining eligible costs",
+      "forecastForPeriod": "Forecast for period",
+      "differenceInUnit": "Difference ({{unitValue}})"
+    },
+    "claimsDashboard": {
+      "title": {
+        "html": "Claims - View project",
+        "display": "Claims"
+      },
+      "claimsMessages": {
+        "noRemainingClaims": "There are no claims. Innovate UK has approved your final claim.",
+        "noOpenClaims": "You have no open claims. The next claim period begins {{nextClaimStartDate}}.",
+        "noClosedClaims": "You have not made any claims."
+      }
+    },
+    "claimDocuments": {
+      "title": "Claim documents",
+      "sectionTitleDocumentList": "Files uploaded",
+      "backLink": "Back to costs to be claimed",
+      "buttonSaveAndReturn": "Save and return to claims",
+      "buttonSaveAndContinueToSummary": "Continue to summary",
+      "buttonSaveAndContinueToForecast": "Continue to update forecast",
+      "descriptionLabel": "Description"
+    },
+    "claimDetailDocuments": {
+      "title": "Upload and removed documents"
+    },
+    "claimDetails": {
+      "title": {
+        "html": "View claim",
+        "display": "Claim"
+      },
+      "backLink": "Back to claims",
+      "costsAndGrantSummaryTitle": "Summary",
+      "sectionTitleComments": "Comments"
+    },
+    "claimForecast": {
+      "backLink": "Back to claims documents",
+      "buttonSaveAndReturn": "Save and return to claims",
+      "buttonContinueToSummary": "Continue to summary",
+      "overheadsCosts": "Overheads costs: "
+    },
+    "claimSummary": {
+      "title": "Claim summary"
+    },
+    "claimLineItems": {
+      "supportingDocumentsTitle": "Supporting documents",
+      "additionalInfoTitle": "Additional information",
+      "noDataMessage": "No data",
+      "totalCostTitle": "Total costs",
+      "forecastCostTitle": "Forecast costs",
+      "differenceTitle": "Difference",
+      "descriptionHeader": "Description",
+      "costHeader": "Cost (\u00a3)",
+      "lastUpdatedHeader": "Last updated"
+    },
+    "editClaimLineItems": {
+      "backLink": "Back to claims",
+      "headerDescription": "Description",
+      "headerLastUpdated": "Last updated",
+      "headerCost": "Cost (\u00a3)",
+      "headerAction": "Action",
+      "buttonSaveAndReturn": "Save and return to claims",
+      "headerAdditionalInformation": "Additional information",
+      "headerSupportingDocuments": "Supporting documents",
+      "buttonUploadAndRemoveDocuments": "Upload and remove documents",
+      "hintAdditionalInformation": "Explain any difference between the forecast costs and the total costs, and what actions are you taking because of this. For example updating the project plan or financial forecast.",
+      "buttonRemove": "Remove",
+      "noData": "No data",
+      "totalCosts": "Total costs",
+      "forecastCosts": "Forecast costs",
+      "difference": "Difference",
+      "addCost": "Add a cost",
+      "additionalInfo": "additional-info"
+    },
+    "claimPrepare": {
+      "title": "Costs to be claimed",
+      "backLink": "Back to claims",
+      "buttonSaveAndReturn": "Save and return to claims",
+      "buttonSaveAndContinue": "Continue to claims documents"
+    },
+    "claimPrepareSummary": {
+      "backToDocuments": "Back to claim documents",
+      "backToForecast": "Back to update forecast",
+      "addCommentsHeading": "Add comments",
+      "addCommentsHint": "If you want to explain anything to your monitoring officer or to Innovate UK, add it here.",
+      "submitClaimMessage": "Submit claim",
+      "saveAndReturnMessage": "Save and return to claims",
+      "costsClaimedLabel": "Total costs to be claimed",
+      "fundingLevelLabel": "Funding level",
+      "costsToBePaidLabel": "Total costs to be paid",
+      "editCostsMessage": "Edit costs to be claimed",
+      "claimDocumentsTitle": "Claim documents",
+      "editClaimDocuments": "Edit claim documents",
+      "finalClaimSupportingDocumentMessage": "You must upload a supporting document before you can submit this claim.",
+      "eligibleCostsLabel": "Total eligible costs",
+      "forecastLabel": "Total of forecasts and costs",
+      "differenceLabel": "Difference",
+      "editForecastMessage": "Edit forecast",
+      "costsTitle": "Costs to be claimed",
+      "nonFecCalculationMessage": "This claim does not follow the normal grant calculation rules (Costs claimed X Funding award rate). This claim may have one or more cost categories paid at a different funding award rate compared to your overall funding award rate.",
+      "forecastTitle": "Forecast"
+    },
+    "claimReview": {
+      "title": {
+        "html": "Review claim",
+        "display": "Claim"
+      },
+      "backLink": "Back to claims",
+      "optionQueryClaim": "Query claim",
+      "optionSubmitClaim": "Submit for approval",
+      "sectionTitleHowToProceed": "How do you want to proceed with this claim?",
+      "sectionTitleAdditionalInfo": "Additional information",
+      "additionalInfoHint": "If you query the claim, you must explain what the partner needs to amend. If you approve the claim, you may add a comment to Innovate UK in support of the claim.",
+      "claimReviewDeclaration": "I am satisfied that the costs claimed appear to comply with the terms and conditions of the awarded grant and eligible costs agreed by the Innovate UK Project Finance Team. This is based on sample checks of the project's financial information, plus evidence provided both in reports and at the quarterly review meeting (QRM).",
+      "monitoringReportReminder": "You must submit a monitoring report for this period before the approved claim can be paid.",
+      "buttonSubmit": "Submit",
+      "buttonSendQuery": "Send query",
+      "buttonUpload": "Upload documents",
+      "labelInputUpload": "Upload files",
+      "accordionTitleSupportingDocumentsForm": "Supporting documents",
+      "additionalInfo": "additional-info"
+    },
+    "financialVirementDetails": {
+      "title": "Reallocate costs"
+    },
+    "financialVirementEdit": {
+      "title": "Reallocate costs",
+      "summaryTitle": "Summary of project costs",
+      "saveButton": "Save and return to reallocate project costs"
+    },
+    "financialVirementEditPartnerLevel": {
+      "title": "Change remaining grant",
+      "saveButton": "Save and return to reallocate project costs",
+      "remainingGrantInfo": {
+        "intro": "You can only use this page to change the 'New remaining grant' for partners who can have different funding level percentages.",
+        "checkRules": "Check the funding rules to ensure each partner's funding level does not exceed their allowable limit.",
+        "remainingGrant": "You can change the 'New remaining grant' for any partner to ensure the total 'New remaining grant' does not exceed the total 'Remaining grant'.",
+        "fundingLevel": "Each partner's 'Funding level' will be updated to the 'New funding level' for the remaining project costs."
+      }
+    },
+    "financialVirementSummary": {
+      "availableGrantMessage": "Your 'Remaining grant' has a surplus of {{grantDifference}}. You may lose this project surplus permanently if you do not reallocate these funds before you submit this PCR.",
+      "unavailableGrantMessage": "You must reduce your 'New remaining grant' project total to {{totalOriginalGrant}} or less, because you have exceeded it by {{grantDifference}}. You can change each partner\u2019s 'Remaining grant' to reduce the project total to the amount agreed.",
+      "linkChangeGrant": "Change remaining grant",
+      "headingYearEndGrantValue": "Grant value moving over the financial year end",
+      "grantAdvice": "If the new remaining grant is higher as a result of the reallocation of costs, you can change the funding level of partners to lower the new project grant."
+    },
+    "forecastsComponents": {
+      "adviseMessage": {
+        "part1": "You can only update forecasts for future periods here. You must update your current period when you ",
+        "part2Link": "make a claim",
+        "part3": "."
+      }
+    },
+    "forecastsDashboard": {
+      "title": {
+        "html": "Forecasts - View project",
+        "display": "Forecasts"
+      },
+      "headerPartner": "Partner",
+      "headerTotalEligibleCosts": "Total eligible costs",
+      "headerForecastsAndCosts": "Forecasts and costs",
+      "headerUnderspend": "Underspend",
+      "headerLastUpdate": "Date of last update",
+      "backLink": "Back to project",
+      "linkUpdateForecast": "Update forecast",
+      "viewForecast": "View forecast",
+      "headerAction": "Action"
+    },
+    "forecastsDetails": {
+      "title": {
+        "html": "View forecast - View project",
+        "display": "Forecast"
+      },
+      "backLinkMoOrPm": "Back to forecasts",
+      "backLink": "Back to project",
+      "linkUpdateForecast": "Update forecast"
+    },
+    "forecastsUpdate": {
+      "title": {
+        "html": "Update forecast",
+        "display": "Update forecast"
+      },
+      "backLink": "Back to forecast",
+      "buttonSubmit": "Submit"
+    },
+    "monitoringReportsDashboard": {
+      "title": {
+        "html": "Monitoring reports - View project",
+        "display": "Monitoring reports"
+      },
+      "buttonNewMonitoringReport": "Start a new report",
+      "sectionTitleOpen": "Open",
+      "sectionTitleArchived": "Archived",
+      "linkViewMonitoringReport": "View report",
+      "linkEditMonitoringReport": "Edit report",
+      "linkDeleteMonitoringReport": "Delete report",
+      "headerTitle": "Title",
+      "headerStatus": "Status",
+      "headerDateUpdated": "Last updated",
+      "headerAction": "Action"
+    },
+    "monitoringReportsCreate": {
+      "title": {
+        "html": "Create monitoring report",
+        "display": "Monitoring report"
+      },
+      "backLink": "Back to monitoring reports"
+    },
+    "monitoringReportsDelete": {
+      "title": {
+        "html": "Delete monitoring report",
+        "display": "Monitoring report"
+      },
+      "backLink": "Back to monitoring reports",
+      "buttonDeleteReport": "Delete report"
+    },
+    "monitoringReportsSummary": {
+      "buttonSubmit": "Submit report",
+      "buttonSaveAndReturn": "Save and return to project",
+      "buttonEditItem": "Edit",
+      "scoreLabel": "Score",
+      "commentsLabel": "Comments",
+      "periodLabel": "Period"
+    },
+    "monitoringReportsWorkflow": {
+      "editMode": {
+        "title": {
+          "html": "Edit monitoring report",
+          "display": "Monitoring report"
+        }
+      },
+      "viewMode": {
+        "title": {
+          "html": "View monitoring report",
+          "display": "Monitoring report"
+        }
+      },
+      "backLink": "Back to monitoring reports",
+      "linkBackToStep": "Back to {{step}}"
+    },
+    "monitoringReportsWorkflowEdit": {
+      "title": {
+        "html": "Edit monitoring report",
+        "display": "Monitoring report"
+      }
+    },
+    "monitoringReportsWorkflowView": {
+      "title": {
+        "html": "View monitoring report",
+        "display": "Monitoring report"
+      }
+    },
+    "monitoringReportsPeriodStep": {
+      "title": {
+        "html": "Edit monitoring report",
+        "display": "Monitoring report"
+      },
+      "backLink": "Back to summary"
+    },
+    "monitoringReportsQuestionStep": {
+      "buttonContinue": "Continue",
+      "buttonSaveAndReturn": "Save and return to summary",
+      "commentLabel": "Comment"
+    },
+    "partnerDetails": {
+      "title": {
+        "html": "View partner information",
+        "display": "Partner information"
+      },
+      "projectContactLabels": {
+        "partnerName": "Name",
+        "partnerType": "Type"
+      },
+      "backToProjectDetails": "Back to project details",
+      "editLink": "Edit"
+    },
+    "partnerDetailsEdit": {
+      "title": {
+        "html": "Edit partner information",
+        "display": "Partner information"
+      },
+      "sectionTitlePostcode": "Edit location",
+      "labelCurrentPostcode": "Current location",
+      "labelNewPostcode": "New location",
+      "hintNewPostcode": "Enter the postcode, postal code or zip code. If the location does not have one of these, enter the town or city.",
+      "saveAndReturnPartnerDetailsButton": "Save and return to partner information",
+      "backToPartnerInfo": "Back to partner information"
+    },
+    "pcrSpendProfileCostsSummary": {
+      "title": "Add partner",
+      "sectionTitleCosts": "{{costCategoryName}}",
+      "guidanceTitle": "{{costCategoryName}} guidance",
+      "backLink": "Back to project costs",
+      "buttonSubmit": "Save and return to project costs",
+      "buttonAddCost": "Add a cost",
+      "buttonEditCost": "Edit",
+      "buttonRemoveCost": "Remove"
+    },
+    "pcrSpendProfileDeleteCost": {
+      "title": "Add partner",
+      "sectionTitleCost": "Delete {{costCategoryName, lowercase}}",
+      "backLink": "Back to {{costCategoryName, lowercase}}",
+      "buttonDelete": "Delete cost",
+      "guidanceDelete": "All the information will be permanently deleted."
+    },
+    "pcrSpendProfilePrepareCost": {
+      "title": "Add partner",
+      "sectionTitleCost": "{{costCategoryName}}",
+      "guidanceTitle": "{{costCategoryName}} guidance",
+      "backLink": "Back to {{costCategoryName, lowercase}}",
+      "buttonSubmit": "Save and return to {{costCategoryName, lowercase}}",
+      "overheads": {
+        "buttonSubmit": "Save and return to project costs"
+      }
+    },
+    "pcrSpendProfileOverheadDocuments": {
+      "title": "Add partner",
+      "guidanceHeading": "Calculate overheads",
+      "guidanceDocumentUpload": "If the new partner feels their overheads are higher than 20% they may calculate a value using the Innovate UK model in the spreadsheet available below. The model shows which types of indirect costs associated with the project they may claim. For support with this option, contact our Customer Support Service.\n\nAny value claimed under this model will be subject to a review to assess the appropriateness of the claim.",
+      "documentUploadHeading": "Upload completed overhead calculation spreadsheet",
+      "buttonSubmit": "Save and return to overheads costs",
+      "backLink": "Back to overheads costs",
+      "headingTemplate": "Templates"
+    },
+    "pcrCreate": {
+      "title": "Start a new request",
+      "guidanceIntroMessage": "Before you submit, you must:",
+      "guidanceList": {
+        "row1": "ensure all project partners have approved the change(s)",
+        "row2": "discuss this request with your monitoring officer"
+      },
+      "selectRequestTypesTitle": "Select request types",
+      "selectTypesHint": "You can select more than one type of request. If an option is not selectable, then a Project Change Request (PCR) of that type has already been started. The current PCR must be deleted - if still in draft - or concluded by Innovate UK, before a new one can be started.",
+      "backLink": "Back to project change requests",
+      "buttonCreateRequest": "Create request",
+      "buttonCancelRequest": "Cancel",
+      "learnMoreTitle": "Learn more about request types",
+      "reallocateCostsTitle": "Reallocate project costs",
+      "reallocateCostsMessage": "This allows you to move costs from one category to another.",
+      "removePartnerTitle": "Remove a partner",
+      "removePartnerMessage": "Use this when a partner is leaving the project and is ready to submit their final claim.",
+      "addPartnerTitle": "Add a partner",
+      "addPartnerMessage": "This allows you to add a new partner to a project. When adding a new partner to replace an existing one, also use 'Remove a partner' to remove the existing one.",
+      "changeScopeTitle": "Change project scope",
+      "changeScopeMessage": "Use this to update the public project description and the internal project summary.",
+      "changeDurationTitle": "Change project duration",
+      "changeDurationMessage": "This allows you to request an extension or reduction to your project's duration.",
+      "changePartnersNameTitle": "Change partner's name",
+      "changePartnersNameMessage": "Use when a partner organisation's name has changed. If a partner is being replaced, use 'Add a partner' and 'Remove a partner'.",
+      "putProjectOnHoldTitle": "Put a project on hold",
+      "putProjectOnHoldMessage": "This allows you to suspend a project for a specific period. You cannot submit any claims, costs, drawdown requests or raise project change requests when the project is on hold.",
+      "endProjectEarlyTitle": "End project early",
+      "endProjectEarlyMessage": "Use this when you believe you are entering your final claim period. Make a note to say your project is ending when you submit this request. You will then enter your final claim period and any other future claim periods will close.",
+      "loanDrawdownChangeTitle": "Change loan drawdown",
+      "loanDrawdownChangeMessage": "This allows for you to change the date and/or amount of forecasted drawdowns in the case of unforeseen circumstances leading to significant variations between drawn amounts and amounts spent (over or underspent).",
+      "loanDrawdownExtensionTitle": "Change loans duration",
+      "loanDrawdownExtensionMessage": "This allows you to extend or reduce the duration of your loan periods (availability, extension and repayment)."
+    },
+    "pcrTimeExtensionStep": {
+      "existingProjectHeading": "Existing project details",
+      "dateLabel": "Start and end date",
+      "durationLabel": "Duration",
+      "proposedProjectHeading": "Proposed project details",
+      "changeProjectDurationHint": "Use this page to request an extension or reduction to your project\u2019s duration. Values are set by month.",
+      "changeProjectDurationHint2": "Select the new project end date you require.",
+      "changeProjectDurationHint3": "Project durations cannot be reduced beyond the current month.",
+      "loadingTimeExtensionOptions": "Loading duration options...",
+      "saveAndContinue": "Save and continue",
+      "currentProjectEndDate": "Current project end date"
+    },
+    "pcrAddPartnerRoleAndOrganisation": {
+      "formSectionTitle": "New partner information",
+      "validationMessage": "You cannot change this information after you continue.",
+      "infoSummary": "What are the different types?",
+      "organisationTypeInfo": "**Business** - a business based in the UK or overseas.\n\n **Research** - higher education and organisations registered with Je-S.\n\n **Research and technology organisation (RTO)** - organisations which solely promote and conduct collaborative research and innovation.\n\n **Public sector, charity or non Je-S registered research organisation** - a not-for-profit public sector body or charity working on innovation, not registered with Je-S.",
+      "organisationTypeHint": "If the new partner's organisation type is not listed, contact your monitoring officer."
+    },
+    "pcrAddPartnerStateAidEligibility": {
+      "formSectionTitleStateAid": "State aid eligibility",
+      "formSectionTitleDeMinimis": "De minimis aid eligibility",
+      "formSectionTitleNonAidFunding": "Non-aid funding",
+      "sectionTitleTemplate": "Template",
+      "sectionTitleUploadDeclaration": "Upload declaration form",
+      "guidanceStateAid": "If we decide to award this organisation funding they must be eligible to receive State aid at the point of the award. If they are found to be ineligible, we will withdraw our offer.",
+      "guidanceDeMinimis": "The funding will be made as a de minimis grant. All organisations for a de minimis award must complete and upload a de minimis declaration. This states any and all de minimis awards (from any source of public funding) during the current and previous 2 fiscal years.\n\nIn order to minimise distortion of competition, the European Commission sets limits on how much assistance can be given without its prior approval, to organisations operating in a competitive market. There is a ceiling of \u20ac200,000 for all de minimis aid provided to any one organisation over a 3 fiscal year period.\n\nThe new organisation needs to declare any de minimis aid awarded to any other public funding body which requests it. They must also keep all documentation associated with the award for 10 years from the date the award is granted.",
+      "guidanceNonAidFunding": "This competition provides funding that is classed as non-aid. The new organisation should seek independent legal advice on what this means for them, before you complete this project change request.\n\n\n\nNon-aid is only granted to organisations which declare that they will not use the funding:\n\n\n\n*  in any way which gives them selective economic or commercial advantage\n\n*  in any other way which would <a href=\"https://ec.europa.eu/regional_policy/sources/conferences/state-aid/01_rdi2017_spatharis.pdf\" rel=\"noopener noreferrer\" target=\"_blank\" >determine the funding as State aid (opens in new window)</a> as defined by the European Commission \n\n\n\nIt is important to note that it is the activity they intend to perform in the project, which is assessed as eligible for non-aid, and not their organisation as an entity.\n\n\n\nIf they are found to be exploiting the outputs from this project commercially or economically to gain a selective advantage in the market, we will withdraw our offer."
+    },
+    "pcrAddPartnerAwardRate": {
+      "formSectionTitle": "Funding level",
+      "guidance": "The maximum the new organisation can enter is based on their size, type of organisation and research category of the project, based on the <a href=\"https://www.gov.uk/guidance/innovate-uk-funding-general-guidance-for-applicants#funding-rules\" rel=\"noopener noreferrer\" target=\"_blank\" >Innovate UK general guidance for grant applicants</a> (opens in new window). This will be reviewed by Innovate UK to ensure the project stays within the funding rules.\n\n\n\nThe percentage applied for must reflect other funding received."
+    },
+    "pcrAddPartnerProjectLocation": {
+      "projectLocationGuidance": "Indicate where the majority of the work being done by this partner will take place.",
+      "postcodeGuidance": "If this is not available, leave this blank."
+    },
+    "pcrAddPartnerAcademicCosts": {
+      "stepGuidance": "Enter this information from the completed Je-S form.",
+      "tsbLabel": "This number is found at the top of the Je-S form",
+      "costsSectionTitle": "Project costs",
+      "costsGuidance": "Enter the figures from the summary of resources section of the Je-S form.",
+      "categoryHeading": "Category",
+      "costHeading": "Cost (\u00a3)",
+      "totalCosts": "Total costs (\u00a3)"
+    },
+    "pcrAddPartnerAcademicOrganisation": {
+      "hint": "Enter the name of the organisation that you work for.",
+      "loading": "Loading Je-S organisations...",
+      "jesSearchResults": "Je-S search results",
+      "noResultsFound": "No results found"
+    },
+    "pcrAddPartnerCompanyHouse": {
+      "sectionTitle": "Company house",
+      "headingForm": "Company details",
+      "headingSearch": "Search companies house",
+      "hint": "Enter your organisation name or registration number. To filter your search by location e.g. find HSBC in London would be - hsbc location:'London'.",
+      "buttonSearch": "Search",
+      "resultsLoading": "Loading company results...",
+      "resultNotShowing": "Is your organisation not showing in these results? Check your spelling, or try searching again using a more specific company name or the registration number.",
+      "headingSearchResults": "Companies house search results"
+    },
+    "pcrAddPartnerProjectContacts": {
+      "sectionTitle": "Add person to organisation",
+      "guidance": "This information will be used to create an account for this person in the Innovation Funding Service.",
+      "useFinanceDetails": "Use the same details as the finance contact",
+      "phoneNumberHint": "We may use this to contact the partner for more information about this request."
+    },
+    "pcrAddPartnerFinanceDetails": {
+      "sectionTitle": "Financial details",
+      "hintYearEnd": "This is the end of the last financial year for which you have your turnover.",
+      "headingTurnover": "Turnover (\u00a3)"
+    },
+    "pcrAddPartnerJes": {
+      "jesIntroduction": "Your new academic partner must apply for funding through the Je-S system. To find out more about the Je-S requirements and processes please go to:",
+      "jesListItem1LinkContent": "Guidance from Innovate UK for academics applying via the Je-S system (opens in a new window)",
+      "jesListItem2BeforeLink": "The",
+      "jesWebsiteLinkContent": "Je-S website (opens in a new window)",
+      "jesUploadSupport": "Upload a pdf copy of the completed Je-S output form, once the new partner has a status of 'With Council'. If there is information outstanding or the partner is not at this status, your request will be rejected."
+    },
+    "pcrAddPartnerOrganisationDetails": {
+      "sectionTitle": "Organisation details",
+      "guidance": "This definition must include organisations that are part of the new partner organisation. That is, where the new partner organisation owns shares in another organisation or has shares owned by another organisation.\n\nUse the European Commission (EC) <a href=\"https://ec.europa.eu/growth/smes/business-friendly-environment/sme-definition_en\" rel=\"noopener noreferrer\" target=\"_blank\" > small to medium enterprise (SME) definition (opens in new window)</a> for guidance."
+    },
+    "pcrAddPartnerSpendProfile": {
+      "returnToSummaryNoSaveButton": "Return to summary",
+      "categoryHeading": "Category",
+      "totalCosts": "Total costs (\u00a3)",
+      "costHeading": "Cost (\u00a3)",
+      "labelView": "View",
+      "labelEdit": "Edit"
+    },
+    "pcrAddPartnerOtherFunding": {
+      "formSectionTitle": "Other public sector funding?",
+      "guidance": "Is the new partner receiving any other public sector funding for this project? This is important as other public sector support counts as part of the funding they can receive.",
+      "labelYes": "Yes",
+      "labelNo": "No",
+      "labelOtherSourcesQuestion": "Is the new partner receiving any other public sector funding for this project?"
+    },
+    "pcrAddPartnerOtherFundingSources": {
+      "formSectionTitle": "Other public sector funding?",
+      "guidance": "Include all sources of funding the new partner is receiving on top of the funding they are claiming from Innovate UK. These will be taken into account when calculating the funding they will receive.",
+      "columnHeaderDescription": "Source of funding",
+      "columnHeaderDate": "Date secured (MM YYYY)",
+      "columnHeaderValue": "Funding amount (\u00a3)",
+      "buttonRemove": "Remove",
+      "buttonAdd": "Add another source of funding",
+      "footerLabelTotal": "Total other funding"
+    },
+    "pcrAddPartnerAgreementToPcr": {
+      "guidance": "You must upload copies of signed letters from all other project partners to show they have agreed to this change",
+      "heading": "Upload partner agreement"
+    },
+    "pcrPeriodLengthChange": {
+      "guidance": "The period length can be 3 months or 1 month. This request will affect all remaining periods of the project for all partners. It will also change:\n* how your project's forecast is divided\n* how often your project submits a claim.\n\n\n\nWe will reject this if you submit it with any other request type.",
+      "periodLengthQuarterly": "3 months",
+      "periodLengthMonthly": "1 month"
+    },
+    "pcrNameChange": {
+      "headingSelectPartner": "Select partner",
+      "headingEnterName": "Enter new name"
+    },
+    "pcrNameChangePrepareItemFiles": {
+      "headingUploadCertificate": "Upload change of name certificate"
+    },
+    "pcrReasoningPrepareReasoning": {
+      "title": {
+        "html": "Provide reasoning to Innovate UK",
+        "display": "Provide reasoning to Innovate UK"
+      },
+      "hint": "You must explain each change. Be brief and write clearly.<br/>If you are requesting a reallocation of project costs, you must justify each change to your costs.",
+      "headingReasoning": "Reasoning"
+    },
+    "pcrReasoningSummary": {
+      "headingMarkAsComplete": "Mark as complete",
+      "edit": "Edit",
+      "noDocuments": "No documents attached"
+    },
+    "pcrReasoningWorkflow": {
+      "title": {
+        "html": "Reasoning for Innovate UK",
+        "display": "Reasoning for Innovate UK"
+      },
+      "backLink": "Back to request"
+    },
+    "pcrPrepareItemFilesForPartnerWithdrawal": {
+      "guidanceHeading": "Upload withdrawal of partner certificate",
+      "guidance": "You must upload these documents:\n\n* a confirmation letter on headed paper from the partner who is leaving, signed by someone with financial authority\n* a brief list of the outstanding deliverables, and who each will be assigned to once the partner leaves\n* copies of signed letters from all other project partners to show they have agreed to this change"
+    },
+    "pcrRemovePartner": {
+      "headingSelectPartner": "Select partner to remove",
+      "headingRemovalPeriod": "When is their last period?",
+      "hintRemovalPeriod": "The partner can make a claim for this period before being removed. If they have a claim in progress, they will be removed once that claim has been paid."
+    },
+    "pcrScopeChangeProjectSummaryChange": {
+      "headingProjectSummary": "Proposed project summary",
+      "publishedSummary": "Published project summary",
+      "noAvailableSummary": "No project summary available."
+    },
+    "pcrScopeChangePublicDescriptionChange": {
+      "headingPublicDescription": "Proposed public description",
+      "publishedDescription": "Published public description",
+      "noAvailableDescription": "No public description available."
+    },
+    "pcrSuspendProjectDetails": {
+      "suspendProjectIntro": "You will not be able to perform any normal activities while this project is on hold, for example you cannot raise project change requests (PCR's), update forecasts, or create and submit claims.",
+      "firstDayOfPauseTitle": "First day of pause",
+      "lastDayOfPauseTitle": "Last day of pause (if known)",
+      "lastDayOfPauseHint": "This will happen on the last day of the month."
+    }
+  },
+  "claimsMessages": {
+    "guidanceMessage": "All partners in this project must upload evidence for each expenditure with every claim made. These might include invoices, timesheets, receipts or spreadsheets for capital usage. This is part of Innovate UK's obligations under the [Managing Public Money government handbook](https://www.gov.uk/government/publications/managing-public-money?_ga=2.105018247.521318796.1576575366-1871284022.1544109966) in relation to assurance, financial management and control.",
+    "overdueGuidanceMessage": {
+      "message1": "Further to previous notifications, the deadline for your final claims period has now passed. You can no longer submit claims for costs incurred or upload supporting documents.",
+      "message2": " If you have any queries, contact ",
+      "message3": "closeout@innovateuk.ukri.org",
+      "message4": "."
+    },
+    "submitClaimConfirmation": "I confirm that the information I have provided in this claim is correct, complete and contains only eligible costs on an actual basis, which we confirm have been incurred and defrayed. I understand and accept that if I knowingly withhold information, or provide false or misleading information, this may result in my claim being rejected, termination of the contract, recovery of ineligible claims, civil action and where there is evidence of fraud, criminal prosecution.",
+    "noOpenClaims": "There are no open claims. The next claim period begins {{nextClaimStartDate}}.",
+    "noClosedClaims": "There are no closed claims for this partner.",
+    "noRemainingClaims": "There are no claims. Innovate UK has approved the final claims.",
+    "finalClaim": "This is the final claim.",
+    "finalClaimGuidanceContent1": "You need to complete our short survey about the project before we can make your final payment:",
+    "finalClaimStep1": "Complete our survey.",
+    "finalClaimStep2": "Download a copy of your completed survey and upload it on this page.",
+    "iarRequired": "An Independent Accountant's Report (IAR) must be uploaded to support the claim before it can be submitted to Innovate UK. If your total grant value is \u00a350,000 or under, a Statement of Expenditure (SoE) may be sufficient. Your monitoring officer will be able to confirm which document is needed.",
+    "iarRequiredPara2": "Upload your IAR or SoE in the claim documents, selecting the IAR document type (for both) and then proceed to submit your claim.",
+    "claimQueried": "You have queried this claim.",
+    "claimApproved": "You have approved this claim.",
+    "frequencyChangeMessage": "Your project asked us to change the length of the remaining periods. You must make sure your forecast reflects your expected spend or your monitoring officer will not approve your claim.",
+    "lastChanceToChangeForecast": "This is your last chance to change the forecast for period {{periodId}}",
+    "documentDetailGuidance": "Evidence for each expenditure might include, but is not limited to, invoices, timesheets, receipts and spreadsheets for capital usage.",
+    "documentDisclaimerMessage": "Do not remove any documents for previous months' costs.",
+    "interimClaimMessage": "When adding costs for last month, you must:\n\n* use a new line for every cost each month\n\n* name the month in the description\n\n* not alter any information for previous months' costs",
+    "editClaimLineItemGuidance": "You must break down your total costs and upload evidence for each expenditure you are claiming for. Contact your monitoring officer for more information about the level of detail you are required to provide.",
+    "editClaimLineItemConvertGbp": "You can enter up to 120 separate lines of costs and you must convert any foreign currency amounts to pounds sterling (GBP) before you enter them into your claim.",
+    "nonjsEditClaimLineItemConvertGbp": "You can enter up to 10 separate lines of costs and you must convert any foreign currency amounts to pounds sterling (GBP) before you enter them into your claim.",
+    "editClaimLineItemDocumentGuidance": "Upload evidence of the costs for your monitoring officer to review. If you do not upload documents your monitoring officer is unlikely to accept your claim. Contact them for advice on which documents to provide.",
+    "negativeClaimWarning": "You have entered negative values for the following items:",
+    "claimSummaryWarning": "You have entered a negative claim for this period. Click 'Edit costs to be claimed' button if you wish to change this.",
+    "claimSavedMessage": "You have saved your claim.",
+    "claimSubmittedMessage": "You have submitted your claim.",
+    "loadingClaims": "Loading claims...",
+    "partnerWithdrawn": "This partner has withdrawn from the project. It is not possible to edit claims.",
+    "hasWithdrawnPartner": "It is not possible to edit claims of partners that have withdrawn from the project."
+  },
+  "claimsLabels": {
+    "openSectionTitle": "Open",
+    "closedSectionTitle": "Closed",
+    "accordionTitleForecast": "Forecast",
+    "accordionTitleClaimLog": "Status and comments log",
+    "partner": "Partner",
+    "period": "Period",
+    "forecastCosts": "Forecast costs for period",
+    "actualCosts": "Actual costs for period",
+    "difference": "Difference",
+    "status": "Status",
+    "documentListTitle": "Supporting documents",
+    "lastUpdatedDate": "Date of last update",
+    "costsClaimed": "Costs claimed",
+    "costsApproved": "Costs approved",
+    "costsDeferred": "Costs deferred",
+    "totalGrantPaid": "Total grant paid",
+    "openCaption": "Open",
+    "actionHeader": "Action"
+  },
+  "pcrSpendProfileLabels": {
+    "cost": "Cost (\u00a3)",
+    "totalCosts": "Total {{costCategoryName, lowercase}}",
+    "description": "Description",
+    "labour": {
+      "role": "Role within project",
+      "grossCost": "Gross employee cost",
+      "rate": "Rate (\u00a3/day)",
+      "rateHint": "This should be calculated from the number of working days for this role per year.",
+      "daysSpentOnProject": "Days to be spent by all staff with this role",
+      "totalCost": "Total cost",
+      "totalCostHint": "Total cost will update when saved."
+    },
+    "overheads": {
+      "totalCost": "Total cost",
+      "calculatedCost": "Total cost of overheads as calculated in the spreadsheet (\u00a3)",
+      "linkDocumentsUpload": "Calculate overheads documents"
+    },
+    "materials": {
+      "item": "Item",
+      "quantity": "Quantity",
+      "costPerItem": "Cost per item (\u00a3)",
+      "totalCost": "Total cost"
+    },
+    "subcontracting": {
+      "subcontractorName": "Subcontractor name",
+      "subcontractorCountry": "Country where the subcontractor will work",
+      "subcontractorRoleAndDescription": "Role of the the subcontractor in the project and description of the work they will do",
+      "cost": "Cost (\u00a3)"
+    },
+    "capitalUsage": {
+      "description": "Item description",
+      "type": "New or existing item?",
+      "depreciationPeriod": "Depreciation period (months)",
+      "netPresentValue": "Net present value (\u00a3)",
+      "netPresentValueHint": "Either the current net present value or the price you bought it for",
+      "residualValue": "Residual value at end of project (\u00a3)",
+      "utilisation": "Utilisation (%)",
+      "netCost": "Net cost:"
+    },
+    "travelAndSubs": {
+      "description": "Purpose of journey or desription of subsistence cost",
+      "numberOfTimes": "Number of times",
+      "costOfEach": "Cost each (\u00a3)",
+      "totalCost": "Total cost"
+    },
+    "otherCosts": {
+      "description": "Description and justification of the cost",
+      "totalCost": "Estimated cost (\u00a3)"
+    }
+  },
+  "projectMessages": {
+    "setupGuidance": "You need to give us some information so that we can complete project setup.  You will then be able to view your project and begin making claims.",
+    "noClaimDueMessage": "No claim due",
+    "claimDueMessage": "Claim due",
+    "claimOverdueMessage": "Claim overdue",
+    "claimQueriedMessage": "Claim queried",
+    "claimSubmittedMessage": "Claim submitted",
+    "iarRequiredMessage": "IAR required",
+    "schedule3RequiredMessage": "Schedule 3 required",
+    "claimsToReviewMessage": "Claims to review: {{count}}",
+    "claimToSubmitMessage": "You need to submit your claim.",
+    "claimRequestMissingDocument": "You need to submit your claim report.",
+    "projectEndedMessage": "Project ended",
+    "finalClaimPeriodMessage": "Final claim period",
+    "currentPeriodInfo": "Project period {{currentPeriod}} of {{numberOfPeriods}}",
+    "pcrQueried": "Project change request queried",
+    "pcrsToReview": "Project change requests to review: {{count}}",
+    "projectOnHold": "On hold",
+    "pendingProject": "You need to set up your project",
+    "checkForecast": "Check your forecast"
+  },
+  "spendProfileMessages": {
+    "costGuidanceLabour": "The new partner will need to account for all labour costs as they occur. For example, there must be timesheets and payroll records. These must show the actual hours worked by individuals and paid by the organisation.\nThey can include the following labour costs, based on PAYE records:\n\n* gross salary\n* National Insurance\n* company pension contribution\n* life insurance\n* other non-discretionary package costs\n\nYou cannot include:\n\n* discretionary bonuses\n* performance related payments of any kind\n\nYou may include the total number of working days for staff but do not include:\n\n* sick days\n* waiting time\n* training days\n* non-productive time\n\nList the total days worked by all categories of staff on the project. Describe their roles.\n\nWe will review the total amount of time and cost of labour before we approve this request. The terms and conditions of the grant include compliance with these points.",
+    "costGuidanceOverheads": "You may claim for no overhead costs or 20% of your labour costs without providing any further supporting documentation or calculations. Actual costs can be claimed up to a maximum of the calculated figure.\n\n\nIf you feel your overheads are higher than 20% you may calculate a value using the Innovate UK model in the spreadsheet available below. The model shows you which types of indirect costs associated with your project you may claim. For support with this option, please contact our Customer Support Service on 0300 321 4357. Any value claimed under this model will be subject to a review. This will assess the appropriateness of your claim if your grant application is successful.",
+    "costGuidanceMaterials": "You can claim the costs of materials used on your project providing:\n\n*  they are not already purchased or included in the overheads\n*  they are purchased from third parties\n*  they won\u2019t have a residual/resale value at the end of your project. If they do you can claim the costs minus this value\n\nMaterials supplied by associated companies or project partners should be charged at cost.\n\nSoftware that you have purchased specifically for use during your project may be included. If you already own the software then only additional costs which are incurred and paid during your project, will be eligible. For example, installation, training or customisation.\n\nMaterial costs must be itemised to justify that they are eligible.",
+    "costGuidanceSubcontracting": "You can subcontract work if you don\u2019t have the expertise in your project team. You can also subcontract if it is cheaper than developing your skills in-house.\n\nSubcontracting costs relate to work carried out by third party organisations. These organisations are not part of your project.\n\nSubcontracting is eligible providing it is justified as to why the work cannot be performed by a project partner.\n\nSubcontracting associate companies should be charged at cost.\n\nWhere possible you should select a UK based contractor. You should name the subcontractor (where known) and describe what they will be doing. You should also state where the work will be undertaken. We will look at the size of this contribution when assessing your eligibility and level of support.",
+    "costGuidanceCapitalUsage": "You can claim the usage costs of capital assets you will buy for, or use on, your project.\n\nYou will need to calculate a \u2018usage\u2019 value for each item. You can do this by deducting its expected value from its original price at the end of your project. If you owned the equipment before the project started then you should use its net present value.\n\nThis value is then multiplied by the amount, in percentages, that is used during the project. This final value represents the eligible cost to your project.",
+    "costGuidanceTravelAndSubs": "Include all travel and subsistence costs that relate to this project. Be specific and add each item separately.\n\nYou can claim reasonable travel and subsistence costs for those individuals identified in the labour table. Costs must be necessary and be solely for the progression of your project.\n\nTravel costs must be at economy travel only. State the reason for travel, number of people travelling, mode of transport, cost per trip and number of trips.\n\nProvide full details and the purpose for any subsistence expenditure, including the number of staff involved.",
+    "costGuidanceOtherCosts": "This category can be used for any direct project costs which are not covered in the other categories. Examples of other costs include:\n\n#### Workshop/laboratory usage charge outs\nCosts relating to workshops or laboratories that can be identified specifically as directly attributable to the project can be claimed in this section.\n\nYou should provide details of how the workshop or laboratory charge out rates are calculated per hour/day. This can include specific labour (such as staff permanently in place to maintain and run the workshop or laboratory and not considered project specific), rent, rates, maintenance and equipment calibration costs. These should form the overall costs together with the available operational hours to inform the hourly/daily charge out rates. Each workshop or laboratory will need to be supported with actual usage data to claim costs.\n\n#### Training costs\nThese costs are eligible where they are specific to and necessary for your project. We may consider support for management training specific to your project but will not support ongoing training.\n\n#### Preparation of technical reports\nProject costs related to technical reports may be eligible for example where the main aim of your project is the support of standards or technology transfer. You should show how this report is above and beyond what good project management would produce.\n\n#### Market assessment\nThere is some scope for support of market assessment studies to help understand how your project results are applicable to the intended market. Market research as a promotional tool is ineligible.\n\n#### Licensing in new technologies\nWe may consider support where we deem it makes sense to do so, for example, to avoid \u2018reinventing the wheel\u2019. If imported technology makes up a large part of your project (which is technology valued at more than \u00a3100,000) then we expect the development of that technology as part of your project.\n\n#### Patent filing costs for new intellectual property (IP)\nIP costs generated by your project are eligible. This cost is allowable for SMEs up to a limit of \u00a37,500 per partner. These should not include legal costs relating to the filing of trademark related expenditure as these are considered to be marketing/exploitation costs and therefore ineligible.\n\nRegulatory compliance costs are eligible if necessary to carry out your project. Project audit and accountancy feeds are not eligible.",
+    "costGuidanceDefault": "",
+    "calculatedGuidanceOverheads": "You will need to submit an overheads calculation spreadsheet, available following the link below, if the new partner feels their overheads are higher than 20%."
+  },
+  "forecastsMessages": {
+    "warningPeriodChange": "Your project asked us to change the length of the remaining periods. Make sure your forecast is correct before submitting your next claim.",
+    "projectEnded": "You cannot change your forecast. Your project has ended.",
+    "finalClaim": "This is the final claim.",
+    "forecastUpdated": "Your forecast has been updated.",
+    "partnerHasWithdrawn": "This partner has withdrawn from the project. It is not possible to update the forecast."
+  },
+  "monitoringReportsMessages": {
+    "additionalCommentsGuidance": "If you want to explain anything to Innovate UK, add it here.",
+    "reportsSubmissionGuidance": "You should submit reports for this project according to the schedule agreed with Innovate UK.",
+    "noOpenReportsMessage": "There are no open reports.",
+    "noArchivedReportsMessage": "There are no archived reports.",
+    "onDeleteMonitoringReportMessage": "You have deleted the monitoring report.",
+    "deletingMonitoringReportMessage": "All the information in the report will be permanently removed.",
+    "submittingMonitoringReportMessage": "By submitting this report, you certify that from the project monitoring documents shown to you, this report represents your best opinion of the current progress of this project."
+  },
+  "projectLabels": {
+    "projectCostsLabel": "Project costs to date",
+    "partnerCostsLabel": "{{partnerName}} costs to date",
+    "totalEligibleCostsLabel": "Total eligible costs",
+    "totalEligibleCostsClaimedLabel": "Eligible costs claimed to date",
+    "percentageEligibleCostsClaimedLabel": "Percentage of eligible costs claimed to date",
+    "projectInformation": "Project information",
+    "competitionName": "Competition name",
+    "competitionType": "Competition type",
+    "startDate": "Project start date",
+    "endDate": "Project end date",
+    "duration": "Duration",
+    "numberOfPeriods": "Number of periods",
+    "scope": "Project scope statement",
+    "projectMembers": "Project members",
+    "financeContacts": "Finance contacts",
+    "otherContacts": "Other contacts",
+    "partners": "Partner information",
+    "partner": "Partner",
+    "awardRate": "Funding level",
+    "capLimit": "Claim cap",
+    "auditReportFrequency": "Audit frequency",
+    "totalApproved": "Total grant approved",
+    "remainingValue": "Remaining grant",
+    "totalPrepayment": "Total grant paid in advance"
+  },
+  "partnerLabels": {
+    "organisationName": "Organisation name",
+    "companyNumber": "Company number",
+    "companyNumberHint": "This is the registered organisation number.",
+    "sortCode": "Sort code",
+    "sortCodeHint": "Must be 6 digits long, for example: 311212.",
+    "accountNumber": "Account number",
+    "accountNumberHint": "Must be between 6 and 8 digits long, for example: 15481965.",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "accountBuilding": "Building",
+    "accountStreet": "Street",
+    "accountLocality": "Locality",
+    "accountTownOrCity": "Town or city",
+    "accountPostcode": "Postcode"
+  },
+  "projectContactLabels": {
+    "contactName": "Name",
+    "roleName": "Role",
+    "partnerName": "Partner",
+    "partnerType": "Partner type",
+    "status": "Status",
+    "fundingType": "Funding status",
+    "partnerPostcode": "Location",
+    "contactEmail": "Email",
+    "nonFundedLabel": "Non-funded",
+    "fundedLabel": "Funded",
+    "noContactsMessage": "No contacts exist."
+  },
+  "documentLabels": {
+    "documentDisplayTitle": "Files uploaded",
+    "documentDisplaySubTitle": "All documents uploaded will be shown here. All documents open in a new window.",
+    "uploadInputLabel": "Upload files",
+    "fileNameLabel": "File name",
+    "dateUploadedLabel": "Date uploaded",
+    "fileSizeLabel": "File size",
+    "uploadedByLabel": "Uploaded by",
+    "descriptionLabel": "Type",
+    "descriptionPlaceholder": "-- No type --",
+    "participantLabel": "Access Control",
+    "participantPlaceholder": "Innovate UK and MO only",
+    "participantOption": "Innovate UK, MO and {{partnerName}}",
+    "description": {
+      "invoice": "Invoice",
+      "iar": "Independent accountant\u2019s report",
+      "evidence": "Claim evidence",
+      "endOfProjectSurvey": "End-of-project survey",
+      "statementOfExpenditure": "Statement of expenditure",
+      "claimValidationForm": "Claim Validation Form",
+      "deMinimisDeclarationForm": "De Minimis Declaration Form",
+      "jesForm": "Je-S Form",
+      "overheadCalculationSpreadsheet": "Overhead calculation spreadsheet",
+      "bankStatement": "Bank Statement",
+      "agreementToPcr": "Agreement to PCR",
+      "none": "",
+      "unknown": "Unknown",
+      "lmcMinutes": "LMC documents",
+      "scheduleThree": "Schedule 3",
+      "reviewMeeting": "Review meeting",
+      "plans": "Plans",
+      "collaborationAgreement": "Collaboration agreement",
+      "riskRegister": "Risk register",
+      "annexThree": "Annex 3",
+      "presentation": "Presentation",
+      "email": "Email",
+      "meetingAgenda": "Meeting agenda",
+      "projectCompletionForm": "Project completion form",
+      "proofOfSatisfiedConditions": "Proof of satisfied conditions",
+      "loan": "Drawdown approval"
+    }
+  },
+  "documentMessages": {
+    "documentTitle": "List of documents",
+    "header": "You can upload up to 10 documents at a time. Each document must:\n\n* be less than {{maxFileSize}} in file size\n* have a unique file name that describes its contents\n\nThere is no limit to the number of files you can upload in total.",
+    "infoTitle": "What file types can I upload?",
+    "infoContent": "You can upload these file types:\n\n* PDF ({{pdfTypes}})\n* text ({{textTypes}})\n* presentation ({{presentationTypes}})\n* spreadsheet ({{spreadsheetTypes}})\n* image ({{imageTypes}})",
+    "deletedDocument": "'{{deletedFileName}}' has been deleted.",
+    "uploadedDocuments_one": "Your document has been uploaded.",
+    "uploadedDocuments_other": "{{totalFiles}} documents have been uploaded.",
+    "noDocumentsUploaded": "No documents uploaded.",
+    "documentsNotApplicable": "Not applicable",
+    "newWindow": "All documents open in new window.",
+    "backLink": "Back to {{previousPage}}",
+    "uploadTitle": "Upload",
+    "uploadDocuments": "Upload documents",
+    "uploadInstruction1": "You can upload and store any documents for this claim on this page.",
+    "uploadInstruction2": "You will also be able to see any documents added to the claim by the finance contact and Innovate UK.",
+    "monitoringOfficerDocumentsIntroMessage": "This page displays documents which are shared with Innovate UK and each project\nparticipant. Documents shared here are only accessible to Innovate UK and the\nmonitoring officer. Documents shared with the finance contact and project\nmanager (for lead applicant), are accessible only by that participant, Innovate\nUK and the monitoring officer. When uploading documents, you can choose whether\nthey are accessible by Innovate UK only, or with a participant.\n\nDo not select a participant if you wish to share the file with Innovate UK only.\n\nYou must upload supporting documents on the page you are submitting your claim\nor PCR. Do not use this page for claims or PCR’s.\n",
+    "otherRoleDocumentsIntroMessage": "This page is for storing most project related supporting documents, including\nthose uploaded by Innovate UK.\n\nDocuments stored here are only accessible by the Monitoring Officer and\nparticipants representing \"{{partnerName}}\".\n\nYou must upload supporting documents on the page you are submitting your claim\nor PCR. Do not use this page for claims or PCR’s.\n"
+  },
+  "financialVirementLabels": {
+    "partnerName": "Partner",
+    "costCategoryName": "Cost category",
+    "originalFundingLevel": "Funding level",
+    "newFundingLevel": "New funding level",
+    "projectOriginalEligibleCosts": "Total eligible costs",
+    "projectNewEligibleCosts": "New total eligible costs",
+    "projectDifferenceCosts": "Difference",
+    "projectOriginalRemainingGrant": "Total remaining grant",
+    "projectNewRemainingGrant": "New total remaining grant",
+    "projectDifferenceGrant": "Difference",
+    "partnerOriginalEligibleCosts": "Total eligible costs",
+    "partnerOriginalRemainingCosts": "Remaining costs",
+    "partnerOriginalRemainingGrant": "Remaining grant",
+    "partnerNewEligibleCosts": "New total eligible costs",
+    "partnerNewRemainingCosts": "New remaining costs",
+    "partnerNewRemainingGrant": "New remaining grant",
+    "partnerDifferenceCosts": "Difference",
+    "partnerOriginalGrant": "Total grant",
+    "partnerNewGrant": "New total grant",
+    "partnerDifferenceGrant": "Difference",
+    "costCategoryOriginalEligibleCosts": "Total eligible costs",
+    "costCategoryCostsClaimed": "Costs claimed",
+    "costCategoryNewEligibleCosts": "New total eligible costs",
+    "costCategoryDifferenceCosts": "Costs reallocated",
+    "projectTotals": "Project totals",
+    "partnerTotals": "Partner totals",
+    "grantMovingOverYear": "Grant value moving over the financial year end",
+    "yearEndInformation": "The financial year ends on March 31st.",
+    "backToSummary": "Back to summary"
+  },
+  "forecastsLabels": {
+    "overheadCosts": "Overhead costs: "
+  },
+  "monitoringReportsLabels": {
+    "statusAndCommentsLog": "Status and comments log",
+    "additionalComments": "Add comments"
+  },
+  "pcrItem": {
+    "submitButton": "Save and continue",
+    "returnToSummaryButton": "Save and return to summary",
+    "returnToRequestButton": "Save and return to request",
+    "uploadDocumentsButton": "Upload documents"
+  },
+  "pcrAddPartnerLabels": {
+    "roleHeading": "Project role",
+    "commercialWorkHeading": "Project outputs",
+    "commercialWorkLabel": "Will the new partner's work on the project be mostly commercial or economic?",
+    "commercialWorkLabelHint": "This question applies to all organisations, including research organisations that normally act non-economically.",
+    "commercialWorkNo": "No",
+    "commercialWorkYes": "Yes",
+    "organisationHeading": "Organisation type",
+    "deMinimisDeclarationForm": "De minimis declaration form",
+    "organisationNameHeading": "Organisation name",
+    "registrationNumberHeading": "Registration number",
+    "registeredAddressHeading": "Registered address",
+    "organisationSizeHeading": "Size",
+    "employeeCountHeading": "Number of full time employees",
+    "financialYearEndHeading": "End of financial year",
+    "projectLocationHeading": "Project location",
+    "townOrCityHeading": "Name of town or city",
+    "postcodeHeading": "Postcode, postal code or zip code",
+    "contactFirstNameHeading": "First name",
+    "contactLastNameHeading": "Last name",
+    "contactPhoneNumberHeading": "Phone number",
+    "contactEmailHeading": "Email",
+    "jesHeading": "Je-S form",
+    "tsbReferenceHeading": "TSB reference",
+    "projectCostsHeading": "Project costs for new partner",
+    "otherFundingSourcesHeading": "Other sources of funding?",
+    "otherFundsYes": "Yes",
+    "otherFundsNo": "No",
+    "amountOfOtherFundingHeading": "Funding from other sources",
+    "fundingLevelHeading": "Funding level",
+    "fundingSoughtHeading": "Funding sought",
+    "partnerContributionsHeading": "Partner contribution to project",
+    "organisationSectionTitle": "Organisation",
+    "jesOrganisationSectionTitle": "Search for organisation",
+    "jesOrganisationSectionSubtitle": "Enter the name of the organisation that you work for.",
+    "jesOrganisationInfo": "Your organisation must be registered on Je-S before we will consider you to be a research organisation.",
+    "searchButton": "Search",
+    "commercialWorkSummaryHeading": "Commercial or economic project outputs?",
+    "aidEligibilityDeclaration": "Eligibility of aid declaration",
+    "turnoverSummaryHeading": "Turnover",
+    "contactsSectionTitle": "Contacts",
+    "financeContactHeading": "Finance contact",
+    "projectLeadContactHeading": "Project manager",
+    "fundingSectionTitle": "Funding",
+    "agreementToPcrHeading": "Partner agreement",
+    "agreementSectionTitle": "Agreement"
+  },
+  "pcrPeriodLengthChangeLabels": {
+    "currentPeriodLength": "Current period length",
+    "newPeriodLength": "New period length"
+  },
+  "pcrNameChangeLabels": {
+    "enterName": "Enter new name",
+    "existingName": "Existing name",
+    "proposedName": "Proposed name",
+    "certificate": "Change of name certificate"
+  },
+  "pcrReasoningLabels": {
+    "requestNumber": "Request number",
+    "types": "Types",
+    "comments": "Comments",
+    "files": "Files"
+  },
+  "pcrRemovePartnerLabels": {
+    "removalPeriod": "Removal period",
+    "removedPartner": "Partner being removed",
+    "lastPeriod": "Last period",
+    "documents": "Documents"
+  },
+  "pcrScopeChangeLabels": {
+    "existingDescription": "Existing public description",
+    "newDescription": "New public description",
+    "existingSummary": "Existing project summary",
+    "newSummary": "New project summary"
+  },
+  "taskList": {
+    "giveUsInfoSectionTitle": "Give us information",
+    "explainSectionTitle": "Explain why you want to make the changes"
+  }
+}

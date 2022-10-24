@@ -34,9 +34,9 @@ class Component extends React.Component<
             onChange={dto => this.props.onFileChange(false, dto)}
             qa="projectChangeRequestItemUpload"
           >
-            <UploadForm.Fieldset heading={x => x.pcrAddPartnerAgreementToPcr.heading}>
+            <UploadForm.Fieldset heading={x => x.pages.pcrAddPartnerAgreementToPcr.heading}>
               <ACC.Renderers.SimpleString>
-                <ACC.Content value={x => x.pcrAddPartnerAgreementToPcr.guidance} />
+                <ACC.Content value={x => x.pages.pcrAddPartnerAgreementToPcr.guidance} />
               </ACC.Renderers.SimpleString>
             </UploadForm.Fieldset>
 
@@ -46,7 +46,7 @@ class Component extends React.Component<
               <ACC.DocumentGuidance />
 
               <UploadForm.MultipleFileUpload
-                label={x => x.pcrAddPartnerAgreementToPcr.documentLabels.uploadInputLabel}
+                label={x => x.documentLabels.uploadInputLabel}
                 name="attachment"
                 labelHidden
                 value={data => data.files}
@@ -64,7 +64,7 @@ class Component extends React.Component<
                 styling="Secondary"
                 onClick={() => this.props.onFileChange(true, documentsEditor.data)}
               >
-                <ACC.Content value={x => x.pcrAddPartnerAgreementToPcr.documentMessages.uploadTitle} />
+                <ACC.Content value={x => x.documentMessages.uploadTitle} />
               </UploadForm.Button>
             </UploadForm.Fieldset>
           </UploadForm.Form>
@@ -81,10 +81,10 @@ class Component extends React.Component<
         <Form.Form qa="saveAndContinue" data={pcrItem} onSubmit={() => onSave(false)}>
           <Form.Fieldset>
             <Form.Submit>
-              <ACC.Content value={x => x.pcrAddPartnerAgreementToPcr.pcrItem.submitButton} />
+              <ACC.Content value={x => x.pcrItem.submitButton} />
             </Form.Submit>
             <Form.Button name="saveAndReturnToSummary" onClick={() => onSave(true)}>
-              <ACC.Content value={x => x.pcrAddPartnerAgreementToPcr.pcrItem.returnToSummaryButton} />
+              <ACC.Content value={x => x.pcrItem.returnToSummaryButton} />
             </Form.Button>
           </Form.Fieldset>
         </Form.Form>

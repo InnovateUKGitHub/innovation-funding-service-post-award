@@ -39,7 +39,7 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
     partnerEditor: IEditorStore<PartnerDto, PartnerDtoValidator>,
   ) {
     const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
-    const readyToSubmitMessage = <ACC.Content value={x => x.projectSetupSpendProfile.readyToSubmitMessage} />;
+    const readyToSubmitMessage = <ACC.Content value={x => x.pages.projectSetupSpendProfile.readyToSubmitMessage} />;
 
     const options: ACC.SelectOption[] = [{ id: "true", value: readyToSubmitMessage }];
 
@@ -52,7 +52,7 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
               partnerId: this.props.partnerId,
             })}
           >
-            <ACC.Content value={x => x.projectSetupSpendProfile.backLink} />
+            <ACC.Content value={x => x.pages.projectSetupSpendProfile.backLink} />
           </ACC.BackLink>
         }
         error={editor.error}
@@ -77,7 +77,7 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
             qa="project-setup-spend-profile-form"
           >
             <ACC.Claims.ForecastTable data={combined} editor={editor} />
-            <Form.Fieldset heading={x => x.projectSetupSpendProfile.markAsComplete}>
+            <Form.Fieldset heading={x => x.pages.projectSetupSpendProfile.markAsComplete}>
               <Form.Checkboxes
                 name="isComplete"
                 options={options}
@@ -90,7 +90,7 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
                 }
               />
               <Form.Submit>
-                <ACC.Content value={x => x.projectSetupSpendProfile.submitButton} />
+                <ACC.Content value={x => x.pages.projectSetupSpendProfile.submitButton} />
               </Form.Submit>
             </Form.Fieldset>
           </Form.Form>
@@ -102,7 +102,7 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
   private renderGuidance() {
     return (
       <ACC.Renderers.SimpleString qa="guidance">
-        <ACC.Content value={x => x.projectSetupSpendProfile.guidanceMessage} />
+        <ACC.Content value={x => x.pages.projectSetupSpendProfile.guidanceMessage} />
       </ACC.Renderers.SimpleString>
     );
   }
@@ -145,7 +145,7 @@ const ProjectSetupSpendProfileContainer = (props: ProjectSetupSpendProfileParams
           props.partnerId,
           payload,
           submit,
-          getContent(x => x.projectSetupSpendProfile.spendProfileUpdatedMessage),
+          getContent(x => x.pages.projectSetupSpendProfile.spendProfileUpdatedMessage),
           navigateToProjectSetup,
         );
       }}
@@ -162,7 +162,7 @@ export const ProjectSetupSpendProfileRoute = defineRoute({
     projectId: route.params.projectId,
     partnerId: route.params.partnerId,
   }),
-  getTitle: ({ content }) => content.projectSetupSpendProfile.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.projectSetupSpendProfile.title),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
 });

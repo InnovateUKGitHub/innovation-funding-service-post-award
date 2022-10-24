@@ -2,12 +2,10 @@ import i18next from "i18next";
 import * as Common from "@server/features/common";
 import * as Framework from "@framework/types";
 import * as Entities from "@framework/entities";
-import { DefaultContentStore } from "@server/resources/defaultContentStore";
 import { IInternationalisation } from "@framework/types";
 import { CustomContentStore } from "@server/resources/customContentStore";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { BankCheckService } from "@server/resources/bankCheckService";
-import { CompetitionContentStore } from "@server/resources/competitionContentStore";
 import { CompaniesHouseBase } from "@server/resources/companiesHouse";
 import * as Salesforce from "../../repositories/salesforceConnection";
 import * as Repositories from "../../repositories";
@@ -146,8 +144,6 @@ export class Context implements Framework.IContext {
     this.resources = {
       bankCheckService: new BankCheckService(),
       companiesHouse: new CompaniesHouseBase(),
-      defaultContent: new DefaultContentStore(),
-      competitionContent: new CompetitionContentStore(),
       customContent: new CustomContentStore(),
     };
   }
@@ -160,7 +156,7 @@ export class Context implements Framework.IContext {
   public readonly resources: Framework.IResources;
 
   public readonly internationalisation: IInternationalisation = {
-    addResourceBundle: content => i18next.addResourceBundle("en", "default", content, true, true),
+    addResourceBundle: (content, namespace) => i18next.addResourceBundle("en-GB", namespace, content, true, true),
   };
 
   private readonly salesforceConnectionDetails: Salesforce.ISalesforceConnectionDetails;

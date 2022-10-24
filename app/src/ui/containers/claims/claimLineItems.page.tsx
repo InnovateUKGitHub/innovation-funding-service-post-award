@@ -288,15 +288,15 @@ function ClaimLineItemsTable({
 export function useClaimLineItemsContent() {
   const { getContent } = useContent();
 
-  const supportingDocumentsTitle = getContent(x => x.claimLineItems.supportingDocumentsTitle);
-  const additionalInfoTitle = getContent(x => x.claimLineItems.additionalInfoTitle);
-  const totalCostTitle = getContent(x => x.claimLineItems.totalCostTitle);
-  const forecastCostTitle = getContent(x => x.claimLineItems.forecastCostTitle);
-  const differenceTitle = getContent(x => x.claimLineItems.differenceTitle);
-  const descriptionHeader = getContent(x => x.claimLineItems.descriptionHeader);
-  const costHeader = getContent(x => x.claimLineItems.costHeader);
-  const lastUpdatedHeader = getContent(x => x.claimLineItems.lastUpdatedHeader);
-  const noDataMessage = getContent(x => x.claimLineItems.noDataMessage);
+  const supportingDocumentsTitle = getContent(x => x.pages.claimLineItems.supportingDocumentsTitle);
+  const additionalInfoTitle = getContent(x => x.pages.claimLineItems.additionalInfoTitle);
+  const totalCostTitle = getContent(x => x.pages.claimLineItems.totalCostTitle);
+  const forecastCostTitle = getContent(x => x.pages.claimLineItems.forecastCostTitle);
+  const differenceTitle = getContent(x => x.pages.claimLineItems.differenceTitle);
+  const descriptionHeader = getContent(x => x.pages.claimLineItems.descriptionHeader);
+  const costHeader = getContent(x => x.pages.claimLineItems.costHeader);
+  const lastUpdatedHeader = getContent(x => x.pages.claimLineItems.lastUpdatedHeader);
+  const noDataMessage = getContent(x => x.pages.claimLineItems.noDataMessage);
 
   return {
     supportingDocumentsTitle,

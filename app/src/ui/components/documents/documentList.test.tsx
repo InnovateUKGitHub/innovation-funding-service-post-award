@@ -2,21 +2,18 @@ import { render } from "@testing-library/react";
 
 import { DocumentSummaryDto } from "@framework/dtos";
 import * as ACC from "@ui/components";
-import TestBed, { TestBedContent } from "@shared/TestBed";
+import TestBed from "@shared/TestBed";
 import { DocumentViewProps } from "@ui/components";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<DocumentView />", () => {
   const stubContent = {
-    components: {
-      documents: {
-        labels: {
-          documentDisplayTitle: { content: "stub-documentDisplayTitle" },
-          documentDisplaySubTitle: { content: "stub-documentDisplaySubTitle" },
-        },
-        messages: {
-          noDocumentsUploaded: { content: "stub-noDocumentsUploaded" },
-        },
-      },
+    documentLabels: {
+      documentDisplayTitle: "stub-documentDisplayTitle",
+      documentDisplaySubTitle: "stub-documentDisplaySubTitle",
+    },
+    documentMessages: {
+      noDocumentsUploaded: "stub-noDocumentsUploaded",
     },
   };
 
@@ -27,17 +24,21 @@ describe("<DocumentView />", () => {
 
   const setup = (props?: Partial<DocumentViewProps<DocumentSummaryDto>>) => {
     return render(
-      <TestBed content={stubContent as TestBedContent}>
+      <TestBed>
         <ACC.DocumentView {...defaultProps} {...props} />
       </TestBed>,
     );
   };
 
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent);
+  });
+
   describe("@renders", () => {
     test("with default validation message", () => {
       const wrapper = setup();
 
-      const fallbackContent = stubContent.components.documents.messages.noDocumentsUploaded.content;
+      const fallbackContent = stubContent.documentMessages.noDocumentsUploaded;
 
       expect(wrapper.getByText(fallbackContent)).toBeInTheDocument();
     });
@@ -66,7 +67,7 @@ describe("<DocumentView />", () => {
 
       const { queryByTestId, queryByText } = setup({ documents: [stubDocument], qa: "docs-list" });
 
-      const fallbackContent = stubContent.components.documents.messages.noDocumentsUploaded.content;
+      const fallbackContent = stubContent.documentMessages.noDocumentsUploaded;
 
       expect(queryByTestId("docs-list-container")).toBeInTheDocument();
       expect(queryByText(fallbackContent)).not.toBeInTheDocument();

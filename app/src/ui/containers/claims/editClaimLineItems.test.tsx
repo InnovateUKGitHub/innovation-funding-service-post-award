@@ -9,72 +9,64 @@ import { BaseProps, ContainerProps } from "@ui/containers/containerBase";
 import { Pending } from "@shared/pending";
 import { ClaimDetailsDto, DocumentSummaryDto, ForecastDetailsDTO, ProjectDto } from "@framework/dtos";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import { TestBed, TestBedContent } from "@shared/TestBed";
+import { TestBed } from "@shared/TestBed";
 import { LoadingStatus } from "@framework/constants";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { CopyNamespaces } from "@copy/data";
 
 const projectId = "test-id";
 
-const contentStub = {
-  editClaimLineItems: {
-    saveAndReturnButton: { content: "stub-saveAndReturnButton" },
-    backLink: { content: "stub-backLink" },
-    descriptionHeader: { content: "stub-descriptionHeader" },
-    lastUpdatedHeader: { content: "stub-lastUpdatedHeader" },
-    costHeader: { content: "stub-costHeader" },
-    uploadAndRemoveDocumentsButton: { content: "stub-uploadAndRemoveDocumentsButton" },
-    additionalInformationHeading: { content: "stub-additionalInformationHeading" },
-    additionalInfo: { content: "stub-additionalInfo" },
-    additionalInformationHint: { content: "stub-additionalInformationHint" },
-    sbriAdditionalInformationHint: { content: "stub-sbriAdditionalInformationHint" },
-    actionHeader: { content: "stub-actionHeader" },
-    supportingDocumentsHeader: { content: "stub-supportingDocumentsHeader" },
-    totalCosts: { content: "stub-totalCosts" },
-    noData: { content: "stub-noData" },
-    addCost: { content: "stub-addCost" },
-    forecastCosts: { content: "stub-forecastCosts" },
-    difference: { content: "stub-difference" },
-    messages: {
-      editClaimLineItemDocumentGuidance: { content: "stub-editClaimLineItemDocumentGuidance" },
-      negativeClaimWarning: { content: "stub-negativeClaimWarning" },
-      editClaimLineItemContactMo: { content: "stub-editClaimLineItemContactMo" },
-      editClaimLineItemUploadEvidence: { content: "stub-editClaimLineItemUploadEvidence" },
-      editClaimLineItemClaimDocuments: { content: "stub-editClaimLineItemClaimDocuments" },
-    },
-    documentLabels: {
-      documentDisplayTitle: { content: "stub-documentDisplayTitle" },
-    },
-    documentMessages: {
-      noDocumentsUploaded: { content: "stub-noDocumentsUploaded" },
+const stubContent = {
+  pages: {
+    editClaimLineItems: {
+      backLink: "stub-backLink",
+      headerDescription: "stub-headerDescription",
+      headerLastUpdated: "stub-headerLastUpdated",
+      headerCost: "stub-headerCost",
+      headerAction: "stub-headerAction",
+      buttonSaveAndReturn: "stub-buttonSaveAndReturn",
+      headerAdditionalInformation: "stub-headerAdditionalInformation",
+      headerSupportingDocuments: "stub-headerSupportingDocuments",
+      buttonUploadAndRemoveDocuments: "stub-buttonUploadAndRemoveDocuments",
+      hintAdditionalInformation: "stub-hintAdditionalInformation",
+      buttonRemove: "stub-buttonRemove",
+      noData: "stub-noData",
+      totalCosts: "stub-totalCosts",
+      forecastCosts: "stub-forecastCosts",
+      difference: "stub-difference",
+      addCost: "stub-addCost",
+      additionalInfo: "stub-additionalInfo",
     },
   },
-  claimDocuments: {
-    messages: {
-      editClaimLineItemGuidance: {
-        content: "stub-editClaimLineItemGuidance",
-      },
-      editClaimLineItemCurrencyGbp: {
-        content: "stub-editClaimLineItemCurrencyGbp",
-      },
-      nonJsEditClaimLineItemCurrencyGbp: {
-        content: "stub-nonJsEditClaimLineItemCurrencyGbp",
-      },
-      editClaimLineItemOtherCostsTotal: {
-        content: "stub-editClaimLineItemOtherCostsTotal",
-      },
+  claimsMessages: {
+    editClaimLineItemDocumentGuidance: "stub-editClaimLineItemDocumentGuidance",
+    negativeClaimWarning: "stub-negativeClaimWarning",
+    editClaimLineItemGuidance: "stub-editClaimLineItemGuidance",
+    editClaimLineItemConvertGbp: "stub-editClaimLineItemCurrencyGbp",
+    nonjsEditClaimLineItemConvertGbp: "stub-nonJsEditClaimLineItemCurrencyGbp",
+    editClaimLineItemOtherCostsTotalCosts: "stub-editClaimLineItemOtherCostsTotal",
+  },
+  documentLabels: {
+    documentDisplayTitle: "stub-documentDisplayTitle",
+    documentDisplaySubTitle: "stub-documentDisplaySubTitle",
+  },
+  documentMessages: {
+    noDocumentsUploaded: "stub-noDocumentsUploaded",
+  },
+};
+
+const stubSbriContent = {
+  pages: {
+    editClaimLineItems: {
+      sbriHintAdditionalInformation: "stub-sbriHintAdditionalInformation",
     },
   },
-  components: {
-    documents: {
-      labels: {
-        documentDisplayTitle: { content: "stub-documentDisplayTitle" },
-        documentDisplaySubTitle: { content: "stub-documentDisplaySubTitle" },
-      },
-      messages: {
-        noDocumentsUploaded: { content: "stub-noDocumentsUploaded" },
-      },
-    },
+  claimsMessages: {
+    editClaimLineItemContactMo: "stub-editClaimLineItemContactMo",
+    editClaimLineItemUploadEvidence: "stub-editClaimLineItemUploadEvidence",
+    editClaimLineItemClaimDocuments: "stub-editClaimLineItemClaimDocuments",
   },
-} as any;
+};
 
 const stubBaseProps = {
   routes: {
@@ -133,22 +125,29 @@ describe("editClaimLineItems", () => {
     isServer?: boolean,
   ) =>
     render(
-      <TestBed isServer={isServer} content={contentStub as TestBedContent}>
+      <TestBed competitionType={props.project.data?.competitionType} isServer={isServer}>
         <EditClaimLineItemsComponent {...props} />
       </TestBed>,
     );
 
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent, {
+      [CopyNamespaces.SBRI]: stubSbriContent,
+      [CopyNamespaces.SBRI_IFS]: stubSbriContent,
+    });
+  });
+
   describe("@renders", () => {
     describe("@content solution", () => {
       test("with editClaimLineItemCurrencyGbp", () => {
-        const stubMessage = contentStub.claimDocuments.messages.editClaimLineItemCurrencyGbp.content;
+        const stubMessage = stubContent.claimsMessages.editClaimLineItemConvertGbp;
         const { queryByText } = setup(stubProps, false);
 
         expect(queryByText(stubMessage)).toBeInTheDocument();
       });
 
       test("with nonJsEditClaimLineItemCurrencyGbp", () => {
-        const stubMessage = contentStub.claimDocuments.messages.nonJsEditClaimLineItemCurrencyGbp.content;
+        const stubMessage = stubContent.claimsMessages.nonjsEditClaimLineItemConvertGbp;
         const { queryByText } = setup(stubProps, true);
 
         expect(queryByText(stubMessage)).toBeInTheDocument();
@@ -168,10 +167,10 @@ describe("editClaimLineItems", () => {
           } as Partial<ProjectDto>,
         } as Pending<ProjectDto>,
       };
-      const uploadAndRemoveDocumentsButton = contentStub.editClaimLineItems.uploadAndRemoveDocumentsButton.content;
-      const additionalInformationHeading = contentStub.editClaimLineItems.additionalInformationHeading.content;
-      const additionalInfo = contentStub.editClaimLineItems.additionalInfo.content;
-      const additionalInformationHint = contentStub.editClaimLineItems.additionalInformationHint.content;
+      const uploadAndRemoveDocumentsButton = stubContent.pages.editClaimLineItems.buttonUploadAndRemoveDocuments;
+      const additionalInformationHeading = stubContent.pages.editClaimLineItems.headerAdditionalInformation;
+      const additionalInfo = stubContent.pages.editClaimLineItems.additionalInfo;
+      const additionalInformationHint = stubContent.pages.editClaimLineItems.hintAdditionalInformation;
       const { queryByText } = setup(stubKtpProps);
 
       expect(queryByText(uploadAndRemoveDocumentsButton)).not.toBeInTheDocument();
@@ -198,12 +197,10 @@ describe("editClaimLineItems", () => {
         };
         const { queryByText } = setup(stubSbriProps);
 
-        const sbriAdditionalInformationHint = contentStub.editClaimLineItems.sbriAdditionalInformationHint.content;
-        const editClaimLineItemContactMo = contentStub.editClaimLineItems.messages.editClaimLineItemContactMo.content;
-        const editClaimLineItemUploadEvidence =
-          contentStub.editClaimLineItems.messages.editClaimLineItemUploadEvidence.content;
-        const editClaimLineItemClaimDocuments =
-          contentStub.editClaimLineItems.messages.editClaimLineItemClaimDocuments.content;
+        const sbriAdditionalInformationHint = stubSbriContent.pages.editClaimLineItems.sbriHintAdditionalInformation;
+        const editClaimLineItemContactMo = stubSbriContent.claimsMessages.editClaimLineItemContactMo;
+        const editClaimLineItemUploadEvidence = stubSbriContent.claimsMessages.editClaimLineItemUploadEvidence;
+        const editClaimLineItemClaimDocuments = stubSbriContent.claimsMessages.editClaimLineItemClaimDocuments;
 
         expect(queryByText(sbriAdditionalInformationHint)).toBeInTheDocument();
         expect(queryByText(editClaimLineItemContactMo)).toBeInTheDocument();

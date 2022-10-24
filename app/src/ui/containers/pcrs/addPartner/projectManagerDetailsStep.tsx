@@ -25,9 +25,9 @@ export const ProjectManagerDetailsStep = (
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
 
   return (
-    <ACC.Section title={x => x.pcrAddPartnerProjectContacts.sectionTitle}>
+    <ACC.Section title={x => x.pages.pcrAddPartnerProjectContacts.sectionTitle}>
       <ACC.Renderers.SimpleString>
-        <ACC.Content value={x => x.pcrAddPartnerProjectContacts.guidance} />
+        <ACC.Content value={x => x.pages.pcrAddPartnerProjectContacts.guidance} />
       </ACC.Renderers.SimpleString>
       <Form.Form
         qa="addPartnerForm"
@@ -36,10 +36,10 @@ export const ProjectManagerDetailsStep = (
         onSubmit={() => props.onSave(false)}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset heading={x => x.pcrAddPartnerProjectContacts.labels.projectLeadContactHeading}>
+        <Form.Fieldset heading={x => x.pcrAddPartnerLabels.projectLeadContactHeading}>
           {isClient && (
             <Form.Button name="useFinanceContactDetails" onClick={() => getFinanceContactDetails(props)}>
-              <ACC.Content value={x => x.pcrAddPartnerProjectContacts.useFinanceDetails} />
+              <ACC.Content value={x => x.pages.pcrAddPartnerProjectContacts.useFinanceDetails} />
             </Form.Button>
           )}
 
@@ -49,7 +49,7 @@ export const ProjectManagerDetailsStep = (
           />
 
           <Form.String
-            label={x => x.pcrAddPartnerProjectContacts.labels.contactFirstNameHeading}
+            label={x => x.pcrAddPartnerLabels.contactFirstNameHeading}
             name="contact2Forename"
             value={dto => dto.contact2Forename}
             update={(x, val) => {
@@ -59,7 +59,7 @@ export const ProjectManagerDetailsStep = (
           />
 
           <Form.String
-            label={x => x.pcrAddPartnerProjectContacts.labels.contactLastNameHeading}
+            label={x => x.pcrAddPartnerLabels.contactLastNameHeading}
             name="contact2Surname"
             value={dto => dto.contact2Surname}
             update={(x, val) => {
@@ -69,8 +69,8 @@ export const ProjectManagerDetailsStep = (
           />
 
           <Form.String
-            label={x => x.pcrAddPartnerProjectContacts.labels.contactPhoneNumberHeading}
-            hint={x => x.pcrAddPartnerProjectContacts.phoneNumberHint}
+            label={x => x.pcrAddPartnerLabels.contactPhoneNumberHeading}
+            hint={x => x.pages.pcrAddPartnerProjectContacts.phoneNumberHint}
             name="contact2Phone"
             value={dto => dto.contact2Phone}
             update={(x, val) => {
@@ -80,7 +80,7 @@ export const ProjectManagerDetailsStep = (
           />
 
           <Form.String
-            label={x => x.pcrAddPartnerProjectContacts.labels.contactEmailHeading}
+            label={x => x.pcrAddPartnerLabels.contactEmailHeading}
             name="contact2Email"
             value={dto => dto.contact2Email}
             update={(x, val) => {
@@ -91,10 +91,10 @@ export const ProjectManagerDetailsStep = (
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
           <Form.Submit>
-            <ACC.Content value={x => x.pcrAddPartnerProjectContacts.pcrItem.submitButton} />
+            <ACC.Content value={x => x.pcrItem.submitButton} />
           </Form.Submit>
           <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
-            <ACC.Content value={x => x.pcrAddPartnerProjectContacts.pcrItem.returnToSummaryButton} />
+            <ACC.Content value={x => x.pcrItem.returnToSummaryButton} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>

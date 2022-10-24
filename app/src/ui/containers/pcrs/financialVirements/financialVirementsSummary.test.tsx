@@ -1,6 +1,6 @@
 import { PCRItemType } from "@framework/types";
 import { Pending } from "@shared/pending";
-import { TestBed, TestBedStore, TestBedContent } from "@shared/TestBed";
+import { TestBed, TestBedStore } from "@shared/TestBed";
 import { render } from "@testing-library/react";
 
 import { PcrSummaryProvider, PcrSummaryProviderProps } from "@ui/containers/pcrs/components/PcrSummary/PcrSummary";
@@ -11,6 +11,7 @@ import {
 } from "@ui/containers/pcrs/financialVirements/financialVirementsSummary";
 import { ProjectParticipantProvider } from "@ui/features/project-participants";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<FinancialVirementSummary />", () => {
   const context = new TestContext();
@@ -266,26 +267,28 @@ describe("<FinancialVirementSummary />", () => {
   const stubContent = {
     financialVirementDetails: {
       labels: {
-        projectTotals: { content: "stub-projectTotals" },
+        projectTotals: "stub-projectTotals",
       },
     },
-    financialVirementSummary: {
-      availableGrantMessage: () => ({ content: "stub-availableGrantMessage" }),
-      unavailableGrantMessage: () => ({ content: "stub-unavailableGrantMessage" }),
-      changeGrantLink: { content: "stub-changeGrantLink" },
-      grantAdvice: { content: "stub-grantAdvice" },
-      grantValueMovingOverHeading: { content: "stub-grantValueMovingOverHeading" },
-      labels: {
-        partnerName: { content: "stub-partnerName" },
-        partnerOriginalEligibleCosts: { content: "stub-partnerOriginalEligibleCosts" },
-        partnerOriginalRemainingCosts: { content: "stub-partnerOriginalRemainingCosts" },
-        partnerOriginalRemainingGrant: { content: "stub-partnerOriginalRemainingGrant" },
-        partnerNewEligibleCosts: { content: "stub-partnerNewEligibleCosts" },
-        partnerNewRemainingCosts: { content: "stub-partnerNewRemainingCosts" },
-        partnerNewRemainingGrant: { content: "stub-partnerNewRemainingGrant" },
+    pages: {
+      financialVirementSummary: {
+        availableGrantMessage: "stub-availableGrantMessage",
+        unavailableGrantMessage: "stub-unavailableGrantMessage",
+        changeGrantLink: "stub-changeGrantLink",
+        grantAdvice: "stub-grantAdvice",
+        grantValueMovingOverHeading: "stub-grantValueMovingOverHeading",
+        labels: {
+          partnerName: "stub-partnerName",
+          partnerOriginalEligibleCosts: "stub-partnerOriginalEligibleCosts",
+          partnerOriginalRemainingCosts: "stub-partnerOriginalRemainingCosts",
+          partnerOriginalRemainingGrant: "stub-partnerOriginalRemainingGrant",
+          partnerNewEligibleCosts: "stub-partnerNewEligibleCosts",
+          partnerNewRemainingCosts: "stub-partnerNewRemainingCosts",
+          partnerNewRemainingGrant: "stub-partnerNewRemainingGrant",
+        },
       },
     },
-  } as any;
+  };
 
   const stubStore = {
     config: {
@@ -478,7 +481,7 @@ describe("<FinancialVirementSummary />", () => {
     };
 
     return render(
-      <TestBed stores={stubStore as TestBedStore} content={stubContent as TestBedContent}>
+      <TestBed stores={stubStore as TestBedStore}>
         <ProjectParticipantProvider projectId="stub-id">
           <PcrSummaryProvider {...summaryProviderProps}>
             <FinancialVirementSummary {...requiredProps} mode={mode} />
@@ -488,11 +491,15 @@ describe("<FinancialVirementSummary />", () => {
     );
   };
 
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent);
+  });
+
   describe("@returns", () => {
     describe("when mode is prepare", () => {
-      const grantAdviceContent = stubContent.financialVirementSummary.grantAdvice.content;
-      const availableGrantContent = stubContent.financialVirementSummary.availableGrantMessage().content;
-      const unavailableGrantContent = stubContent.financialVirementSummary.unavailableGrantMessage().content;
+      const grantAdviceContent = stubContent.pages.financialVirementSummary.grantAdvice;
+      const availableGrantContent = stubContent.pages.financialVirementSummary.availableGrantMessage;
+      const unavailableGrantContent = stubContent.pages.financialVirementSummary.unavailableGrantMessage;
 
       test("with valid grant content", () => {
         const validGrantVirement = {

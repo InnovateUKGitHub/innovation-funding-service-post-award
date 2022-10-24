@@ -74,7 +74,7 @@ const UserChangerProjectSelectorPartnerSelector = ({
       <ProjectContactTable.Table qa="user-switcher-contacts" data={sortedData}>
         <ProjectContactTable.String
           qa="partner-name"
-          header={x => x.projectDetails.contactLabels.contactName}
+          header={x => x.projectContactLabels.contactName}
           value={x => x.projectContactDto.name}
         />
 
@@ -98,7 +98,7 @@ const UserChangerProjectSelectorPartnerSelector = ({
 
         <ProjectContactTable.String
           qa="partner-email"
-          header={x => x.projectDetails.contactLabels.contactEmail}
+          header={x => x.projectContactLabels.contactEmail}
           value={x => stripNoEmail(x.projectContactDto.email)}
         />
 

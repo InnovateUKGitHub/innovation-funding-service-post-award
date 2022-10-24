@@ -1,14 +1,13 @@
 import userEvent from "@testing-library/user-event";
 import { render, act } from "@testing-library/react";
 
-import { TestBed, TestBedContent } from "@shared/TestBed";
+import { TestBed } from "@shared/TestBed";
 import { AccordionItem, AccordionItemProps } from "..";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 const stubContent = {
-  home: {
-    exampleContentTitle: {
-      content: "stub-exampleContentTitle",
-    },
+  example: {
+    contentTitle: "stub-exampleContentTitle",
   },
 };
 
@@ -20,7 +19,7 @@ const defaultProps: AccordionItemProps = {
 
 const setup = (props?: Partial<AccordionItemProps>, isServer?: boolean) => {
   const rtl = render(
-    <TestBed isServer={isServer} content={stubContent as TestBedContent}>
+    <TestBed isServer={isServer}>
       <AccordionItem {...defaultProps} {...props} />
     </TestBed>,
   );
@@ -55,6 +54,10 @@ const setup = (props?: Partial<AccordionItemProps>, isServer?: boolean) => {
 };
 
 describe("AccordionItem", () => {
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent);
+  });
+
   describe("@renders", () => {
     describe("with isOpen", () => {
       test.each`
@@ -77,9 +80,9 @@ describe("AccordionItem", () => {
       });
 
       test("with title as content solution", () => {
-        const { getAccordion } = setup({ title: x => x.home.exampleContentTitle });
+        const { getAccordion } = setup({ title: x => x.example.contentTitle });
 
-        const { titleNode, accordionNode } = getAccordion(stubContent.home.exampleContentTitle.content);
+        const { titleNode, accordionNode } = getAccordion(stubContent.example.contentTitle);
 
         expect(titleNode).toBeInTheDocument();
         expect(accordionNode.tagName).toBe("BUTTON");

@@ -1,20 +1,24 @@
-import TestBed, { TestBedContent } from "@shared/TestBed";
+import { CopyContentInvalidInputKeyError } from "@copy/Copy";
+import TestBed from "@shared/TestBed";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 import { render } from "@testing-library/react";
-
 import { EmailContent, EmailContentProps } from "@ui/components/emailContent";
 
 describe("EmailContent", () => {
-  const content = {
-    projectDetails: {
-      changeEmail: {
-        content: "testbed@iuk.ukri.org",
+  beforeAll(async () => {
+    await testInitialiseInternationalisation({
+      pages: {
+        projectDetails: {
+          changeEmail: "testbed@iuk.ukri.org",
+        },
       },
-    },
-  } as TestBedContent;
+    });
+  });
+
   const setup = (props?: Partial<EmailContentProps>) =>
     render(
-      <TestBed content={content}>
-        <EmailContent value={x => x.projectDetails.changeEmail} {...props} />
+      <TestBed>
+        <EmailContent value={x => x.pages.projectDetails.changeEmail} {...props} />
       </TestBed>,
     );
 
@@ -27,9 +31,8 @@ describe("EmailContent", () => {
     describe("should render href", () => {
       test("with default value", () => {
         const { getByRole } = setup();
-        const expectedHref = `mailto:${content.projectDetails?.changeEmail.content}`;
         const anchorEl = getByRole("link");
-        expect(anchorEl).toHaveAttribute("href", expectedHref);
+        expect(anchorEl).toHaveAttribute("href", "mailto:testbed@iuk.ukri.org");
       });
 
       test("with provided href", () => {
@@ -52,9 +55,10 @@ describe("EmailContent", () => {
       expect(anchorEl.getAttribute("data-qa")).toBe("email-qa");
     });
 
-    test("when empty should render null", () => {
-      const { queryByRole } = setup({ value: undefined });
-      expect(queryByRole("link")).toBe(null);
+    test("when empty should crash for invalid ContentSelector", () => {
+      expect(() => {
+        setup({ value: undefined });
+      }).toThrow(CopyContentInvalidInputKeyError);
     });
   });
 });

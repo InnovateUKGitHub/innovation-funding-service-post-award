@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */ // TODO: ACC-7889
-import { Content, ContentSelector } from "@content/content";
+import { Copy } from "@copy/Copy";
+import type { ContentSelector } from "@copy/type";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import {
@@ -90,15 +91,15 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId) || ({} as CostCategoryDto);
 
     const { isKTP, isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
-    const editClaimLineItemGuidance = <ACC.Content value={x => x.claimDocuments.messages.editClaimLineItemGuidance} />;
+    const editClaimLineItemGuidance = <ACC.Content value={x => x.claimsMessages.editClaimLineItemGuidance} />;
 
     const editClaimLineItemVat = (
       <>
         <ACC.Renderers.SimpleString qa="vat-registered">
-          <ACC.Content value={x => x.claimDocuments.messages.editClaimLineItemVatRegistered} />
+          <ACC.Content value={x => x.claimsMessages.editClaimLineItemVatRegistered} />
         </ACC.Renderers.SimpleString>
         <ACC.Renderers.SimpleString qa="vat-contact-mo">
-          <ACC.Content value={x => x.claimDocuments.messages.editClaimLineItemContactMo} />
+          <ACC.Content value={x => x.claimsMessages.editClaimLineItemContactMo} />
         </ACC.Renderers.SimpleString>
       </>
     );
@@ -110,7 +111,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
       <ACC.Page
         backLink={
           <ACC.BackLink route={back}>
-            <ACC.Content value={x => x.editClaimLineItems.backLink} />
+            <ACC.Content value={x => x.pages.editClaimLineItems.backLink} />
           </ACC.BackLink>
         }
         error={editor.error}
@@ -125,7 +126,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
               {isOtherCosts && (
                 <>
                   <ACC.Renderers.SimpleString qa="other-costs-guidance-message">
-                    <ACC.Content value={x => x.claimDocuments.messages.editClaimLineItemOtherCostsTotal} />
+                    <ACC.Content value={x => x.claimsMessages.editClaimLineItemOtherCostsTotalCosts} />
                   </ACC.Renderers.SimpleString>
                   {editClaimLineItemVat}
                 </>
@@ -143,8 +144,8 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
                 <ACC.Content
                   value={x =>
                     y.isClient
-                      ? x.claimDocuments.messages.editClaimLineItemCurrencyGbp
-                      : x.claimDocuments.messages.nonJsEditClaimLineItemCurrencyGbp
+                      ? x.claimsMessages.editClaimLineItemConvertGbp
+                      : x.claimsMessages.nonjsEditClaimLineItemConvertGbp
                   }
                 />
               )}
@@ -210,17 +211,17 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
             qa="current-claim-summary-table"
           >
             <LineItemTable.String
-              header={x => x.editClaimLineItems.descriptionHeader}
+              header={x => x.pages.editClaimLineItems.headerDescription}
               qa="cost-description"
               value={x => x.description}
             />
             <LineItemTable.ShortDate
-              header={x => x.editClaimLineItems.lastUpdatedHeader}
+              header={x => x.pages.editClaimLineItems.headerLastUpdated}
               qa="cost-last-updated"
               value={x => x.lastModifiedDate}
             />
             <LineItemTable.Currency
-              header={x => x.editClaimLineItems.costHeader}
+              header={x => x.pages.editClaimLineItems.headerCost}
               qa="cost-value"
               value={x => x.value}
               width={30}
@@ -231,7 +232,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
         {supportingDocumentContent}
 
         <LineItemForm.Submit>
-          <ACC.Content value={x => x.editClaimLineItems.saveAndReturnButton} />
+          <ACC.Content value={x => x.pages.editClaimLineItems.buttonSaveAndReturn} />
         </LineItemForm.Submit>
       </LineItemForm.Form>
     );
@@ -264,30 +265,30 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
             qa="current-claim-summary-table"
           >
             <LineItemTable.Custom
-              header={x => x.editClaimLineItems.descriptionHeader}
+              header={x => x.pages.editClaimLineItems.headerDescription}
               qa="cost-description"
               value={(x, i) => this.renderDescription(x, i, validationResults[i.row], editor)}
             />
             <LineItemTable.Custom
-              header={x => x.editClaimLineItems.costHeader}
+              header={x => x.pages.editClaimLineItems.headerCost}
               qa="cost-value"
               classSuffix="numeric"
               value={(x, i) => this.renderCost(x, i, validationResults[i.row], editor)}
               width={30}
             />
             <LineItemTable.ShortDate
-              header={x => x.editClaimLineItems.lastUpdatedHeader}
+              header={x => x.pages.editClaimLineItems.headerLastUpdated}
               qa="cost-last-updated"
               value={x => x.lastModifiedDate}
             />
             {this.state.showAddRemove ? (
               <LineItemTable.Custom
-                header={x => x.editClaimLineItems.actionHeader}
+                header={x => x.pages.editClaimLineItems.headerAction}
                 hideHeader
                 qa="remove"
                 value={(x, i) => (
                   <a href="" className="govuk-link" role="button" onClick={e => this.removeItem(x, i, e, editor)}>
-                    <ACC.Content value={y => y.editClaimLineItems.removeButton} />
+                    <ACC.Content value={y => y.pages.editClaimLineItems.buttonRemove} />
                   </a>
                 )}
                 width={1}
@@ -298,7 +299,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
 
         {documentSection}
         <LineItemForm.Submit>
-          <ACC.Content value={x => x.editClaimLineItems.saveAndReturnButton} />
+          <ACC.Content value={x => x.pages.editClaimLineItems.buttonSaveAndReturn} />
         </LineItemForm.Submit>
       </LineItemForm.Form>
     );
@@ -319,13 +320,13 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
           <LineItemForm.Fieldset>{this.renderDocuments(documents, isCombinationOfSBRI, editor)}</LineItemForm.Fieldset>
 
           <LineItemForm.Fieldset
-            heading={x => x.editClaimLineItems.additionalInformationHeading}
+            heading={x => x.pages.editClaimLineItems.headerAdditionalInformation}
             qa="additional-info-form"
             headingQa="additional-info-heading"
             className="govuk-!-margin-top-8"
           >
             <LineItemForm.MultilineString
-              label={x => x.editClaimLineItems.additionalInfo}
+              label={x => x.pages.editClaimLineItems.additionalInfo}
               hint={this.getHintContent(isKTP, isCombinationOfSBRI)}
               labelHidden
               name="comments"
@@ -353,13 +354,13 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
           <LineItemForm.Fieldset>{this.renderDocuments(documents, isCombinationOfSBRI, editor)}</LineItemForm.Fieldset>
 
           <LineItemForm.Fieldset
-            heading={x => x.editClaimLineItems.additionalInformationHeading}
+            heading={x => x.pages.editClaimLineItems.headerAdditionalInformation}
             qa="additional-info-form"
             headingQa="additional-info-heading"
             className="govuk-!-margin-top-8"
           >
             <LineItemForm.MultilineString
-              label={x => x.editClaimLineItems.additionalInfo}
+              label={x => x.pages.editClaimLineItems.additionalInfo}
               hint={this.getHintContent(isKTP, isCombinationOfSBRI)}
               labelHidden
               name="comments"
@@ -375,9 +376,9 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
 
   private getHintContent(isKTP: boolean, isCombinationOfSBRI: boolean): ContentSelector | undefined {
     if (!isKTP && !isCombinationOfSBRI) {
-      return (x: Content) => x.editClaimLineItems.additionalInformationHint;
+      return x => x.pages.editClaimLineItems.hintAdditionalInformation;
     } else if (isCombinationOfSBRI) {
-      return (x: Content) => x.editClaimLineItems.sbriAdditionalInformationHint;
+      return x => x.pages.editClaimLineItems.sbriHintAdditionalInformation;
     } else {
       return undefined;
     }
@@ -392,29 +393,32 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
 
     return (
       <>
-        <ACC.Section title={x => x.editClaimLineItems.supportingDocumentsHeader} qa="supporting-documents-section">
+        <ACC.Section
+          title={x => x.pages.editClaimLineItems.headerSupportingDocuments}
+          qa="supporting-documents-section"
+        >
           {isCombinationOfSBRI ? (
             <>
               <ACC.Renderers.SimpleString>
-                <ACC.Content value={x => x.editClaimLineItems.messages.editClaimLineItemUploadEvidence} />
+                <ACC.Content value={x => x.claimsMessages.editClaimLineItemUploadEvidence} />
               </ACC.Renderers.SimpleString>
 
               <ACC.Renderers.SimpleString>
-                <ACC.Content value={x => x.editClaimLineItems.messages.editClaimLineItemClaimDocuments} />
+                <ACC.Content value={x => x.claimsMessages.editClaimLineItemClaimDocuments} />
               </ACC.Renderers.SimpleString>
 
               <ACC.Renderers.SimpleString>
-                <ACC.Content value={x => x.editClaimLineItems.messages.editClaimLineItemContactMo} />
+                <ACC.Content value={x => x.claimsMessages.editClaimLineItemContactMo} />
               </ACC.Renderers.SimpleString>
             </>
           ) : (
             <ACC.Renderers.SimpleString>
-              <ACC.Content value={x => x.editClaimLineItems.messages.editClaimLineItemDocumentGuidance} />
+              <ACC.Content value={x => x.claimsMessages.editClaimLineItemDocumentGuidance} />
             </ACC.Renderers.SimpleString>
           )}
 
           <LineItemForm.Button name="upload" onClick={() => this.props.onUpdate(true, editorData.data, true)}>
-            <ACC.Content value={x => x.editClaimLineItems.uploadAndRemoveDocumentsButton} />
+            <ACC.Content value={x => x.pages.editClaimLineItems.buttonUploadAndRemoveDocuments} />
           </LineItemForm.Button>
         </ACC.Section>
 
@@ -454,7 +458,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     const markup = (
       <>
         <ACC.Renderers.SimpleString>
-          <ACC.Content value={content => content.editClaimLineItems.messages.negativeClaimWarning} />
+          <ACC.Content value={x => x.claimsMessages.negativeClaimWarning} />
         </ACC.Renderers.SimpleString>
 
         <UL>{errorItemsList}</UL>
@@ -541,7 +545,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
         <tr key={1} className="govuk-table__row">
           <td className="govuk-table__cell" colSpan={4}>
             <a href="" className="govuk-link" role="button" onClick={e => this.addItem(e, editor)} data-qa="add-cost">
-              <ACC.Content value={x => x.editClaimLineItems.addCost} />
+              <ACC.Content value={x => x.pages.editClaimLineItems.addCost} />
             </a>
           </td>
         </tr>,
@@ -551,20 +555,20 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     footers.push(
       <tr key={2} className="govuk-table__row">
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
-          <ACC.Content value={x => x.editClaimLineItems.totalCosts} />
+          <ACC.Content value={x => x.pages.editClaimLineItems.totalCosts} />
         </td>
         <td className="govuk-table__cell govuk-table__cell--numeric">
           <ACC.Renderers.Currency value={total} />
         </td>
         <td className="govuk-table__cell">
           <ACC.Renderers.AccessibilityText>
-            <ACC.Content value={x => x.editClaimLineItems.noData} />
+            <ACC.Content value={x => x.pages.editClaimLineItems.noData} />
           </ACC.Renderers.AccessibilityText>
         </td>
         {showAddRemove ? (
           <td className="govuk-table__cell">
             <ACC.Renderers.AccessibilityText>
-              <ACC.Content value={x => x.editClaimLineItems.noData} />
+              <ACC.Content value={x => x.pages.editClaimLineItems.noData} />
             </ACC.Renderers.AccessibilityText>
           </td>
         ) : null}
@@ -574,20 +578,20 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     footers.push(
       <tr key={3} className="govuk-table__row">
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
-          <ACC.Content value={x => x.editClaimLineItems.forecastCosts} />
+          <ACC.Content value={x => x.pages.editClaimLineItems.forecastCosts} />
         </td>
         <td className="govuk-table__cell govuk-table__cell--numeric">
           <ACC.Renderers.Currency value={forecast} />
         </td>
         <td className="govuk-table__cell">
           <ACC.Renderers.AccessibilityText>
-            <ACC.Content value={x => x.editClaimLineItems.noData} />
+            <ACC.Content value={x => x.pages.editClaimLineItems.noData} />
           </ACC.Renderers.AccessibilityText>
         </td>
         {showAddRemove ? (
           <td className="govuk-table__cell">
             <ACC.Renderers.AccessibilityText>
-              <ACC.Content value={x => x.editClaimLineItems.noData} />
+              <ACC.Content value={x => x.pages.editClaimLineItems.noData} />
             </ACC.Renderers.AccessibilityText>
           </td>
         ) : null}
@@ -598,20 +602,20 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
       footers.push(
         <tr key={4} className="govuk-table__row">
           <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
-            <ACC.Content value={x => x.editClaimLineItems.difference} />
+            <ACC.Content value={x => x.pages.editClaimLineItems.difference} />
           </td>
           <td className="govuk-table__cell govuk-table__cell--numeric">
             <ACC.Renderers.Percentage value={diff} />
           </td>
           <td className="govuk-table__cell">
             <ACC.Renderers.AccessibilityText>
-              <ACC.Content value={x => x.editClaimLineItems.noData} />
+              <ACC.Content value={x => x.pages.editClaimLineItems.noData} />
             </ACC.Renderers.AccessibilityText>
           </td>
           {showAddRemove ? (
             <td className="govuk-table__cell">
               <ACC.Renderers.AccessibilityText>
-                <ACC.Content value={x => x.editClaimLineItems.noData} />
+                <ACC.Content value={x => x.pages.editClaimLineItems.noData} />
               </ACC.Renderers.AccessibilityText>
             </td>
           ) : null}

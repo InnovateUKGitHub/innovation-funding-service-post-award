@@ -42,42 +42,42 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
         <ACC.Section>
           <ACC.SummaryList qa="pcr_reasoning">
             <ACC.SummaryListItem
-              label={x => x.pcrReasoningSummary.labels.requestNumber}
+              label={x => x.pcrReasoningLabels.requestNumber}
               content={pcr.requestNumber}
               qa="numberRow"
             />
             <ACC.SummaryListItem
-              label={x => x.pcrReasoningSummary.labels.types}
+              label={x => x.pcrReasoningLabels.types}
               content={<ACC.Renderers.LineBreakList items={pcr.items.map(x => x.shortName)} />}
               qa="typesRow"
             />
             <ACC.SummaryListItem
-              label={x => x.pcrReasoningSummary.labels.comments}
+              label={x => x.pcrReasoningLabels.comments}
               content={<ACC.Renderers.SimpleString multiline>{pcr.reasoningComments}</ACC.Renderers.SimpleString>}
               qa="comments"
               validation={editor.validator.reasoningComments}
               action={
                 mode === "prepare" && (
                   <ACC.Link id={editor.validator.reasoningComments.key} route={getStepLink("reasoningStep")}>
-                    <ACC.Content value={x => x.pcrReasoningSummary.edit} />
+                    <ACC.Content value={x => x.pages.pcrReasoningSummary.edit} />
                   </ACC.Link>
                 )
               }
             />
             <ACC.SummaryListItem
-              label={x => x.pcrReasoningSummary.labels.files}
+              label={x => x.pcrReasoningLabels.files}
               content={
                 documents.length ? (
                   <ACC.DocumentList documents={documents} qa="docs" />
                 ) : (
-                  <ACC.Content value={x => x.pcrReasoningSummary.noDocuments} />
+                  <ACC.Content value={x => x.pages.pcrReasoningSummary.noDocuments} />
                 )
               }
               qa="files"
               action={
                 mode === "prepare" && (
                   <ACC.Link route={getStepLink("filesStep")}>
-                    <ACC.Content value={x => x.pcrReasoningSummary.edit} />
+                    <ACC.Content value={x => x.pages.pcrReasoningSummary.edit} />
                   </ACC.Link>
                 )
               }
@@ -112,7 +112,7 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
         onChange={dto => this.props.onChange(dto)}
         onSubmit={() => this.props.onSave(editor.data)}
       >
-        <PCRForm.Fieldset heading={x => x.pcrReasoningSummary.markAsCompleteHeading}>
+        <PCRForm.Fieldset heading={x => x.pages.pcrReasoningSummary.headingMarkAsComplete}>
           <PCRForm.Checkboxes
             name="reasoningStatus"
             options={options}
@@ -126,7 +126,7 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
         </PCRForm.Fieldset>
         <PCRForm.Fieldset qa="submit-button">
           <PCRForm.Submit>
-            <ACC.Content value={x => x.pcrReasoningSummary.pcrItem.returnToRequestButton} />
+            <ACC.Content value={x => x.pcrItem.returnToRequestButton} />
           </PCRForm.Submit>
         </PCRForm.Fieldset>
       </PCRForm.Form>

@@ -9,7 +9,7 @@ export const ProjectDocumentTableLoader = (
   return (
     <>
       <H3>
-        <Content value={x => x.projectDocuments.projectLevelSubtitle} />
+        <Content value={x => x.pages.projectDocuments.projectLevelSubtitle} />
       </H3>
       <Loader
         pending={props.projectDocuments}

@@ -74,7 +74,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
           <ACC.ValidationMessage
             qa="summary-warning"
             messageType="info"
-            message={x => x.claimPrepareSummary.messages.claimSummaryWarning}
+            message={x => x.claimsMessages.claimSummaryWarning}
           />
         )}
 
@@ -82,35 +82,35 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
           {data.claim.isFinalClaim && (
             <ACC.ValidationMessage
               messageType="info"
-              message={<ACC.Content value={x => x.claimPrepareSummary.messages.finalClaimMessage} />}
+              message={<ACC.Content value={x => x.claimsMessages.finalClaim} />}
             />
           )}
 
           <ACC.Section
-            title={<ACC.Content value={x => x.claimPrepareSummary.costsTitle} />}
+            title={<ACC.Content value={x => x.pages.claimPrepareSummary.costsTitle} />}
             qa="costs-to-be-claimed-summary"
           >
             {data.project.isNonFec && (
               <ACC.Renderers.SimpleString>
-                <ACC.Content value={x => x.claimPrepareSummary.nonFecCalculationMessage} />
+                <ACC.Content value={x => x.pages.claimPrepareSummary.nonFecCalculationMessage} />
               </ACC.Renderers.SimpleString>
             )}
             <ACC.SummaryList qa="costs-to-be-claimed-summary-list">
               <ACC.SummaryListItem
-                label={x => x.claimPrepareSummary.costClaimedLabel}
+                label={x => x.pages.claimPrepareSummary.costsClaimedLabel}
                 content={<ACC.Renderers.Currency value={totalCosts.totalCostsClaimed} />}
                 qa="totalCostsClaimed"
               />
 
               <ACC.SummaryListItem
-                label={x => x.claimPrepareSummary.fundingLevelLabel}
+                label={x => x.pages.claimPrepareSummary.fundingLevelLabel}
                 content={<ACC.Renderers.Percentage value={data.partner.awardRate} />}
                 qa="fundingLevel"
               />
 
               {!isLoans && (
                 <ACC.SummaryListItem
-                  label={x => x.claimPrepareSummary.costsToBePaidLabel}
+                  label={x => x.pages.claimPrepareSummary.costsToBePaidLabel}
                   content={<ACC.Renderers.Currency value={totalCosts.totalCostsPaid} />}
                   qa="totalCostsPaid"
                 />
@@ -119,13 +119,13 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
 
             <ACC.Renderers.SimpleString>
               <ACC.Link id="editCostsToBeClaimedLink" route={props.routes.prepareClaim.getLink(linkProps)}>
-                <ACC.Content value={x => x.claimPrepareSummary.editCostsMessage} />
+                <ACC.Content value={x => x.pages.claimPrepareSummary.editCostsMessage} />
               </ACC.Link>
             </ACC.Renderers.SimpleString>
           </ACC.Section>
 
           <ACC.Section
-            title={<ACC.Content value={x => x.claimPrepareSummary.claimDocumentsTitle} />}
+            title={<ACC.Content value={x => x.pages.claimPrepareSummary.claimDocumentsTitle} />}
             qa="claim-documents-summary"
           >
             {renderDocumentValidation(data)}
@@ -146,7 +146,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
     const editDocumentLink = (
       <ACC.Renderers.SimpleString>
         <ACC.Link id="claimDocumentsLink" route={props.routes.claimDocuments.getLink(linkProps)}>
-          <ACC.Content value={x => x.claimPrepareSummary.editClaimDocuments} />
+          <ACC.Content value={x => x.pages.claimPrepareSummary.editClaimDocuments} />
         </ACC.Link>
       </ACC.Renderers.SimpleString>
     );
@@ -157,7 +157,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
         message={
           <>
             <ACC.Renderers.SimpleString>
-              <ACC.Content value={x => x.claimPrepareSummary.finalClaimSupportingDocumentMessage} />
+              <ACC.Content value={x => x.pages.claimPrepareSummary.finalClaimSupportingDocumentMessage} />
             </ACC.Renderers.SimpleString>
 
             {editDocumentLink}
@@ -168,7 +168,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
       // TODO: Speak with business about refactoring to document table UI
       <>
         {data.documents.length ? (
-          <ACC.Section subtitle={<ACC.Content value={x => x.claimPrepareSummary.documentMessages.newWindow} />}>
+          <ACC.Section subtitle={<ACC.Content value={x => x.documentMessages.newWindow} />}>
             <ACC.DocumentList documents={data.documents} qa="claim-documents-list" />
           </ACC.Section>
         ) : (
@@ -185,11 +185,11 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
 
     return data.claim.isFinalClaim ? (
       <ACC.BackLink route={props.routes.claimDocuments.getLink(linkProps)}>
-        <ACC.Content value={x => x.claimPrepareSummary.backToDocuments} />
+        <ACC.Content value={x => x.pages.claimPrepareSummary.backToDocuments} />
       </ACC.BackLink>
     ) : (
       <ACC.BackLink route={props.routes.claimForecast.getLink(linkProps)}>
-        <ACC.Content value={x => x.claimPrepareSummary.backToForecast} />
+        <ACC.Content value={x => x.pages.claimPrepareSummary.backToForecast} />
       </ACC.BackLink>
     );
   };
@@ -199,10 +199,10 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
 
     return (
       <Form.Form editor={editor} onSubmit={() => onSave(claim, editor, true, project)} qa="summary-form">
-        <Form.Fieldset heading={x => x.claimPrepareSummary.addCommentsHeading}>
+        <Form.Fieldset heading={x => x.pages.claimPrepareSummary.addCommentsHeading}>
           <Form.MultilineString
             name="comments"
-            hint={x => x.claimPrepareSummary.addCommentsHint}
+            hint={x => x.pages.claimPrepareSummary.addCommentsHint}
             value={x => x.comments}
             update={(m, v) => (m.comments = v || "")}
             validation={editor.validator.comments}
@@ -213,13 +213,13 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
 
         <Form.Fieldset qa="save-buttons">
           <ACC.Renderers.SimpleString>
-            <ACC.Content value={x => x.claimPrepareSummary.messages.submitClaimConfirmation} />
+            <ACC.Content value={x => x.claimsMessages.submitClaimConfirmation} />
           </ACC.Renderers.SimpleString>
 
-          <Form.Submit>{<ACC.Content value={x => x.claimPrepareSummary.submitClaimMessage} />}</Form.Submit>
+          <Form.Submit>{<ACC.Content value={x => x.pages.claimPrepareSummary.submitClaimMessage} />}</Form.Submit>
 
           <Form.Button name="save" onClick={() => onSave(claim, editor, false, project)}>
-            <ACC.Content value={x => x.claimPrepareSummary.saveAndReturn} />
+            <ACC.Content value={x => x.pages.claimPrepareSummary.saveAndReturnMessage} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>
@@ -270,26 +270,26 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
 
     const difference = roundCurrency(totalEligibleCosts - totalForecastsAndCosts);
     const differencePercentage = totalEligibleCosts > 0 ? (difference * 100) / totalEligibleCosts : 0;
-    const editForecastMessage = <ACC.Content value={x => x.claimPrepareSummary.editForecastMessage} />;
-    const forecastTitle = <ACC.Content value={x => x.claimPrepareSummary.forecastTitle} />;
+    const editForecastMessage = <ACC.Content value={x => x.pages.claimPrepareSummary.editForecastMessage} />;
+    const forecastTitle = <ACC.Content value={x => x.pages.claimPrepareSummary.forecastTitle} />;
 
     return (
       <ACC.Section title={forecastTitle} qa="forecast-summary">
         <ACC.SummaryList qa="forecast-summary-list">
           <ACC.SummaryListItem
-            label={x => x.claimPrepareSummary.eligibleCostsLabel}
+            label={x => x.pages.claimPrepareSummary.eligibleCostsLabel}
             content={<ACC.Renderers.Currency value={totalEligibleCosts} />}
             qa="totalEligibleCosts"
           />
 
           <ACC.SummaryListItem
-            label={x => x.claimPrepareSummary.forecastLabel}
+            label={x => x.pages.claimPrepareSummary.forecastLabel}
             content={<ACC.Renderers.Currency value={totalForecastsAndCosts} />}
             qa="totalForecastsAndCosts"
           />
 
           <ACC.SummaryListItem
-            label={x => x.claimPrepareSummary.differenceLabel}
+            label={x => x.pages.claimPrepareSummary.differenceLabel}
             content={
               <>
                 <ACC.Renderers.Currency value={difference} /> (<ACC.Renderers.Percentage value={differencePercentage} />
@@ -327,8 +327,8 @@ const ClaimSummaryContainer = (props: ClaimSummaryParams & BaseProps) => {
   const stores = useStores();
   const navigate = useNavigate();
   const { getContent } = useContent();
-  const claimSavedMessage = getContent(x => x.claimPrepareSummary.messages.claimSavedMessage);
-  const claimSubmittedMessage = getContent(x => x.claimPrepareSummary.messages.claimSubmittedMessage);
+  const claimSavedMessage = getContent(x => x.claimsMessages.claimSavedMessage);
+  const claimSubmittedMessage = getContent(x => x.claimsMessages.claimSubmittedMessage);
   return (
     <ClaimSummaryComponent
       {...props}
@@ -367,5 +367,5 @@ export const ClaimSummaryRoute = defineRoute({
   }),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
-  getTitle: ({ content }) => content.claimSummary.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.claimSummary.title),
 });

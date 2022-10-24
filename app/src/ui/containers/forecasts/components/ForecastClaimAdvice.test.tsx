@@ -1,21 +1,18 @@
 import { render } from "@testing-library/react";
 
-import TestBed, { TestBedContent } from "@shared/TestBed";
+import TestBed from "@shared/TestBed";
 import { ILinkInfo } from "@framework/types";
 import { ForecastClaimAdvice, ForecastClaimAdviceProps } from "./ForecastClaimAdvice";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<ForecastClaimAdvice />", () => {
   const stubContent = {
-    forecastsComponents: {
-      adviseMessage: {
-        part1: {
-          content: "stub-part1",
-        },
-        part2Link: {
-          content: "stub-part2Link",
-        },
-        part3: {
-          content: "stub-part3",
+    pages: {
+      forecastsComponents: {
+        adviseMessage: {
+          part1: "stub-part1",
+          part2Link: "stub-part2Link",
+          part3: "stub-part3",
         },
       },
     },
@@ -34,21 +31,25 @@ describe("<ForecastClaimAdvice />", () => {
 
   const setup = (props: ForecastClaimAdviceProps) =>
     render(
-      <TestBed content={stubContent as TestBedContent}>
+      <TestBed>
         <ForecastClaimAdvice {...defaultProps} {...props} />
       </TestBed>,
     );
 
   beforeEach(jest.clearAllMocks);
 
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent);
+  });
+
   describe("@content", () => {
-    const contentSolution = stubContent.forecastsComponents.adviseMessage;
+    const contentSolution = stubContent.pages.forecastsComponents.adviseMessage;
 
     test.each`
       name                | stringToCheck
-      ${"with part1"}     | ${contentSolution.part1.content}
-      ${"with part2Link"} | ${contentSolution.part2Link.content}
-      ${"with part3"}     | ${contentSolution.part3.content}
+      ${"with part1"}     | ${contentSolution.part1}
+      ${"with part2Link"} | ${contentSolution.part2Link}
+      ${"with part3"}     | ${contentSolution.part3}
     `("$name", ({ stringToCheck }) => {
       const { getByText } = setup({ claimLink: stubLink });
 

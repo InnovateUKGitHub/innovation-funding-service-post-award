@@ -1,18 +1,19 @@
 import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import TestBed, { TestBedContent } from "@shared/TestBed";
+import TestBed from "@shared/TestBed";
 import { PostcodeEdit, PostcodeProps } from "./PostcodeEdit";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("PostcodeEdit", () => {
   afterEach(jest.clearAllMocks);
 
   const stubContent = {
-    features: {
-      postcode: {
-        postcodeSectionTitle: { content: "Postcode Section Title" },
-        currentPostcodeLabel: { content: "Current Postcode Label" },
-        newPostcodeLabel: { content: "New Postcode Label" },
-        newPostcodeHint: { content: "New Postcode Hint" },
+    pages: {
+      partnerDetailsEdit: {
+        sectionTitlePostcode: "Postcode Section Title",
+        labelCurrentPostcode: "Current Postcode Label",
+        labelNewPostcode: "New Postcode Label",
+        hintNewPostcode: "New Postcode Hint",
       },
     },
   };
@@ -30,12 +31,17 @@ describe("PostcodeEdit", () => {
       },
     },
   } as unknown as PostcodeProps;
+
   const setup = (props: Partial<PostcodeProps> = {}) =>
     render(
-      <TestBed content={stubContent as unknown as TestBedContent}>
+      <TestBed>
         <PostcodeEdit {...defaultProps} {...props} />
       </TestBed>,
     );
+
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent);
+  });
 
   it("should render as expected", () => {
     expect(setup().container).toMatchSnapshot();
@@ -48,7 +54,7 @@ describe("PostcodeEdit", () => {
 
   it("should allow updating of postcode", async () => {
     const { getByLabelText, getByText } = setup();
-    const input = getByLabelText(stubContent.features.postcode.newPostcodeLabel.content);
+    const input = getByLabelText(stubContent.pages.partnerDetailsEdit.labelNewPostcode);
     await userEvent.clear(input);
     await userEvent.type(input, "ED1 5ZX");
     const submit = getByText("Save");

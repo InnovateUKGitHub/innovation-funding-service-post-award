@@ -31,9 +31,9 @@ class Component extends React.Component<
     const { costCategories } = this.props;
     const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
     return (
-      <ACC.Section title={x => x.pcrAddPartnerAcademicCosts.labels.projectCostsHeading}>
+      <ACC.Section title={x => x.pcrAddPartnerLabels.projectCostsHeading}>
         <ACC.Renderers.SimpleString>
-          <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.stepGuidance} />
+          <ACC.Content value={x => x.pages.pcrAddPartnerAcademicCosts.stepGuidance} />
         </ACC.Renderers.SimpleString>
         <Form.Form
           data={this.props.pcrItem}
@@ -52,9 +52,9 @@ class Component extends React.Component<
 
   private renderTsb(form: FormBuilder<PCRItemForPartnerAdditionDto>) {
     return (
-      <form.Fieldset heading={x => x.pcrAddPartnerAcademicCosts.labels.tsbReferenceHeading}>
+      <form.Fieldset heading={x => x.pcrAddPartnerLabels.tsbReferenceHeading}>
         <form.String
-          label={x => x.pcrAddPartnerAcademicCosts.tsbLabel}
+          label={x => x.pages.pcrAddPartnerAcademicCosts.tsbLabel}
           width={"one-third"}
           name="tsbReference"
           value={dto => dto.tsbReference}
@@ -81,28 +81,28 @@ class Component extends React.Component<
     const Table = ACC.TypedTable<Data>();
 
     return (
-      <form.Fieldset heading={x => x.pcrAddPartnerAcademicCosts.costsSectionTitle}>
+      <form.Fieldset heading={x => x.pages.pcrAddPartnerAcademicCosts.costsSectionTitle}>
         <ACC.Renderers.SimpleString>
-          <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.costsGuidance} />
+          <ACC.Content value={x => x.pages.pcrAddPartnerAcademicCosts.costsGuidance} />
         </ACC.Renderers.SimpleString>
 
         <MountedHoc>
           {state => (
             <Table.Table qa="costsTable" data={data}>
               <Table.String
-                header={x => x.pcrAddPartnerAcademicCosts.categoryHeading}
+                header={x => x.pages.pcrAddPartnerAcademicCosts.categoryHeading}
                 qa="category"
                 value={x => x.costCategory.name}
                 footer={
                   state.isClient && (
                     <ACC.Renderers.SimpleString className={"govuk-!-font-weight-bold"}>
-                      <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.totalCosts} />
+                      <ACC.Content value={x => x.pages.pcrAddPartnerAcademicCosts.totalCosts} />
                     </ACC.Renderers.SimpleString>
                   )
                 }
               />
               <Table.Custom
-                header={x => x.pcrAddPartnerAcademicCosts.costHeading}
+                header={x => x.pages.pcrAddPartnerAcademicCosts.costHeading}
                 qa="cost-value"
                 classSuffix="numeric"
                 value={x => this.renderCost(x)}
@@ -120,10 +120,10 @@ class Component extends React.Component<
     return (
       <form.Fieldset qa="save-and-continue">
         <form.Submit>
-          <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.pcrItem.submitButton} />
+          <ACC.Content value={x => x.pcrItem.submitButton} />
         </form.Submit>
         <form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}>
-          <Content value={x => x.pcrAddPartnerAcademicCosts.pcrItem.returnToSummaryButton} />
+          <Content value={x => x.pcrItem.returnToSummaryButton} />
         </form.Button>
       </form.Fieldset>
     );

@@ -1,38 +1,41 @@
 import { render } from "@testing-library/react";
 
 import { ClaimLastModified, ClaimLastModifiedProps } from "@ui/components/claims";
-import TestBed, { TestBedContent } from "@shared/TestBed";
+import TestBed from "@shared/TestBed";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<ClaimLastModified />", () => {
   const stubContent = {
     components: {
       claimLastModified: {
-        message: {
-          content: "stub-claimLastModified",
-        },
+        message: "stub-claimLastModified",
       },
     },
   };
   const setup = (props: ClaimLastModifiedProps) =>
     render(
-      <TestBed content={stubContent as TestBedContent}>
+      <TestBed>
         <ClaimLastModified {...props} />
       </TestBed>,
     );
+
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent);
+  });
 
   it("should render with content", () => {
     const { getByTestId } = setup({ modifiedDate: new Date() });
 
     const targetElement = getByTestId("last-updated");
 
-    expect(targetElement).toHaveTextContent(stubContent.components.claimLastModified.message.content);
+    expect(targetElement).toHaveTextContent(stubContent.components.claimLastModified.message);
   });
 
   it("should render message format correctly", () => {
     const { getByTestId } = setup({ modifiedDate: new Date("April 6, 1990 10:28:00 +0100") });
     const targetElement = getByTestId("last-updated");
 
-    const prefixMessage = stubContent.components.claimLastModified.message.content;
+    const prefixMessage = stubContent.components.claimLastModified.message;
     const formattedDate = "6 April 1990, 10:28am";
 
     expect(targetElement).toHaveTextContent(`${prefixMessage}: ${formattedDate}`);

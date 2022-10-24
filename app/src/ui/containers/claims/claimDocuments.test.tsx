@@ -6,109 +6,112 @@ import {
   ClaimDocumentAdvice,
   ClaimDocumentAdviceProps,
 } from "@ui/containers/claims/claimDocuments.page";
-import { hookTestBed, TestBedContent } from "@shared/TestBed";
+import { hookTestBed } from "@shared/TestBed";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("useClaimDocumentContent()", () => {
   const stubContent = {
-    components: {
-      documents: {
-        labels: {
-          documentDisplayTitle: { content: "stub-documentDisplayTitle" },
-          documentDisplaySubTitle: { content: "stub-documentDisplaySubTitle" },
-        },
-        messages: {
-          noDocumentsUploaded: { content: "stub-noDocumentsUploaded" },
-        },
+    documentLabels: {
+      documentDisplayTitle: "stub-documentDisplayTitle",
+      documentDisplaySubTitle: "stub-documentDisplaySubTitle",
+    },
+    documentMessages: {
+      uploadTitle: "stub-uploadTitle",
+      uploadDocuments: "stub-uploadDocumentsLabel",
+      noDocumentsUploaded: "stub-noDocumentsUploaded",
+    },
+    pages: {
+      claimDocuments: {
+        backLink: "stub-backLink",
+        descriptionLabel: "stub-descriptionLabel",
+        documentsListSectionTitle: "stub-documentsListSectionTitle",
+        buttonSaveAndReturn: "stub-buttonSaveAndReturn",
+        buttonSaveAndContinueToSummary: "stub-buttonSaveAndContinueToSummary",
+        buttonSaveAndContinueToForecast: "stub-buttonSaveAndContinueToForecast",
       },
     },
-    claimDocuments: {
-      backLink: { content: "stub-backLink" },
-      descriptionLabel: { content: "stub-descriptionLabel" },
-      documentsListSectionTitle: { content: "stub-documentsListSectionTitle" },
-      saveAndReturnButton: { content: "stub-saveAndReturnButton" },
-      saveAndContinueToSummaryButton: { content: "stub-saveAndContinueToSummaryButton" },
-      saveAndContinueToForecastButton: { content: "stub-saveAndContinueToForecastButton" },
-      messages: {
-        iarRequired: { content: "stub-iarRequired" },
-        iarRequiredPara2: { content: "stub-iarRequired-para-2" },
-        iarRequiredAdvice: { content: "stub-iarRequiredAdvice" },
-        finalClaimIarAdvice: { content: "stub-finalClaimIarAdvice" },
-        finalClaimNonIarAdvice: { content: "stub-finalClaimNonIarAdvice" },
-        usefulTip: { content: "stub-usefulTip" },
-        requiredUploadAdvice: { content: "stub-requiredUploadAdvice" },
-        requiredUploadStep1: { content: "stub-requiredUploadStep1" },
-        requiredUploadStep2: { content: "stub-requiredUploadStep2" },
-        finalClaimMessage: { content: "stub-finalClaimMessage" },
-        finalClaimGuidanceParagraph1: { content: "stub-finalClaimGuidanceParagraph1" },
-        finalClaimStep1: { content: "stub-finalClaimStep1" },
-        finalClaimStep2: { content: "stub-finalClaimStep2" },
-        sbriDocumentAdvice: { content: "stub-sbriInvoice" },
-        sbriInvoiceBullet1: { content: "stub-sbriInvoice-bullet-1" },
-        sbriInvoiceBullet2: { content: "stub-sbriInvoice-bullet-2" },
-        sbriInvoiceBullet3: { content: "stub-sbriInvoice-bullet-3" },
-        sbriMoAdvice: { content: "stub-sbriInvoice2" },
-      },
-      documentMessages: {
-        uploadTitle: { content: "stub-uploadTitle" },
-        uploadDocumentsLabel: { content: "stub-uploadDocumentsLabel" },
-        noDocumentsUploaded: { content: "stub-noDocumentsUploaded" },
-      },
+    claimsMessages: {
+      iarRequired: "stub-iarRequired",
+      iarRequiredPara2: "stub-iarRequired-para-2",
+      iarRequiredAdvice: "stub-iarRequiredAdvice",
+      finalClaimIarAdvice: "stub-finalClaimIarAdvice",
+      finalClaimNonIarAdvice: "stub-finalClaimNonIarAdvice",
+      usefulTip: "stub-usefulTip",
+      requiredUploadAdvice: "stub-requiredUploadAdvice",
+      requiredUploadStep1: "stub-requiredUploadStep1",
+      requiredUploadStep2: "stub-requiredUploadStep2",
+      finalClaim: "stub-finalClaim",
+      finalClaimGuidanceContent1: "stub-finalClaimGuidanceContent1",
+      finalClaimStep1: "stub-finalClaimStep1",
+      finalClaimStep2: "stub-finalClaimStep2",
+      sbriDocumentAdvice: "stub-sbriInvoice",
+      sbriInvoiceBullet1: "stub-sbriInvoice-bullet-1",
+      sbriInvoiceBullet2: "stub-sbriInvoice-bullet-2",
+      sbriInvoiceBullet3: "stub-sbriInvoice-bullet-3",
+      sbriMoAdvice: "stub-sbriInvoice2",
     },
-  } as any;
+  };
 
   const renderPageContent = () => {
-    return renderHook(useClaimDocumentContent, hookTestBed({ content: stubContent as TestBedContent }));
+    return renderHook(useClaimDocumentContent, hookTestBed({}));
   };
+
+  beforeAll(async () => {
+    testInitialiseInternationalisation(stubContent);
+  });
 
   test.each`
     name                                 | property
     ${"backLink"}                        | ${"backLink"}
     ${"descriptionLabel"}                | ${"descriptionLabel"}
-    ${"saveAndReturnButton"}             | ${"saveAndReturnButton"}
-    ${"saveAndContinueToSummaryButton"}  | ${"saveAndContinueToSummaryButton"}
-    ${"saveAndContinueToForecastButton"} | ${"saveAndContinueToForecastButton"}
-  `("with $property", ({ name, property }: Record<"name" | "property", string>) => {
+    ${"buttonSaveAndReturn"}             | ${"buttonSaveAndReturn"}
+    ${"buttonSaveAndContinueToSummary"}  | ${"buttonSaveAndContinueToSummary"}
+    ${"buttonSaveAndContinueToForecast"} | ${"buttonSaveAndContinueToForecast"}
+  `(
+    "with $property",
+    ({ name, property }: { name: string; property: keyof typeof stubContent.pages.claimDocuments }) => {
+      const { result } = renderPageContent();
+
+      const content = (result.current as any)[name];
+      const expectedContent = stubContent.pages.claimDocuments[property];
+
+      expect(content).toBe(expectedContent);
+    },
+  );
+
+  test.each`
+    name                            | property
+    ${"iarRequired"}                | ${"iarRequired"}
+    ${"iarRequiredAdvice"}          | ${"iarRequiredAdvice"}
+    ${"finalClaimIarAdvice"}        | ${"finalClaimIarAdvice"}
+    ${"finalClaimNonIarAdvice"}     | ${"finalClaimNonIarAdvice"}
+    ${"usefulTip"}                  | ${"usefulTip"}
+    ${"requiredUploadAdvice"}       | ${"requiredUploadAdvice"}
+    ${"requiredUploadStep1"}        | ${"requiredUploadStep1"}
+    ${"requiredUploadStep2"}        | ${"requiredUploadStep2"}
+    ${"finalClaim"}                 | ${"finalClaim"}
+    ${"finalClaimGuidanceContent1"} | ${"finalClaimGuidanceContent1"}
+    ${"finalClaimStep1"}            | ${"finalClaimStep1"}
+    ${"finalClaimStep2"}            | ${"finalClaimStep2"}
+  `("with $property", ({ name, property }: { name: string; property: keyof typeof stubContent.claimsMessages }) => {
     const { result } = renderPageContent();
 
     const content = (result.current as any)[name];
-    const expectedContent = stubContent.claimDocuments[property].content;
+    const expectedContent = stubContent.claimsMessages[property];
 
     expect(content).toBe(expectedContent);
   });
 
   test.each`
-    name                              | property
-    ${"iarRequired"}                  | ${"iarRequired"}
-    ${"iarRequiredAdvice"}            | ${"iarRequiredAdvice"}
-    ${"finalClaimIarAdvice"}          | ${"finalClaimIarAdvice"}
-    ${"finalClaimNonIarAdvice"}       | ${"finalClaimNonIarAdvice"}
-    ${"usefulTip"}                    | ${"usefulTip"}
-    ${"requiredUploadAdvice"}         | ${"requiredUploadAdvice"}
-    ${"requiredUploadStep1"}          | ${"requiredUploadStep1"}
-    ${"requiredUploadStep2"}          | ${"requiredUploadStep2"}
-    ${"finalClaimMessage"}            | ${"finalClaimMessage"}
-    ${"finalClaimGuidanceParagraph1"} | ${"finalClaimGuidanceParagraph1"}
-    ${"finalClaimStep1"}              | ${"finalClaimStep1"}
-    ${"finalClaimStep2"}              | ${"finalClaimStep2"}
-  `("with $property", ({ name, property }: Record<"name" | "property", string>) => {
+    name                     | property
+    ${"uploadTitle"}         | ${"uploadTitle"}
+    ${"uploadDocuments"}     | ${"uploadDocuments"}
+    ${"noDocumentsUploaded"} | ${"noDocumentsUploaded"}
+  `("with $property", ({ name, property }: { name: string; property: keyof typeof stubContent.documentMessages }) => {
     const { result } = renderPageContent();
 
     const content = (result.current as any)[name];
-    const expectedContent = stubContent.claimDocuments.messages[property].content;
-
-    expect(content).toBe(expectedContent);
-  });
-
-  test.each`
-    name                      | property
-    ${"uploadTitle"}          | ${"uploadTitle"}
-    ${"uploadDocumentsLabel"} | ${"uploadDocumentsLabel"}
-    ${"noDocumentsUploaded"}  | ${"noDocumentsUploaded"}
-  `("with $property", ({ name, property }: Record<"name" | "property", string>) => {
-    const { result } = renderPageContent();
-
-    const content = (result.current as any)[name];
-    const expectedContent = stubContent.claimDocuments.documentMessages[property].content;
+    const expectedContent = stubContent.documentMessages[property];
 
     expect(content).toBe(expectedContent);
   });
@@ -122,7 +125,7 @@ describe("<ClaimDocumentAdvice />", () => {
     requiredUploadAdvice: "stub-requiredUploadAdvice",
     requiredUploadStep1: "stub-requiredUploadStep1",
     requiredUploadStep2: "stub-requiredUploadStep2",
-    finalClaimGuidanceParagraph1: "stub-finalClaimGuidanceParagraph1",
+    finalClaimGuidanceContent1: "stub-finalClaimGuidanceContent1",
     finalClaimStep1: "stub-finalClaimStep1",
     finalClaimStep2: "stub-finalClaimStep2",
     iarRequired: "stub-iarRequired",
@@ -168,7 +171,7 @@ describe("<ClaimDocumentAdvice />", () => {
           content: stubContent,
         });
 
-        expect(queryByText(stubContent.finalClaimGuidanceParagraph1)).toBeInTheDocument();
+        expect(queryByText(stubContent.finalClaimGuidanceContent1)).toBeInTheDocument();
         expect(queryByText(stubContent.finalClaimStep1)).toBeInTheDocument();
         expect(queryByText(stubContent.finalClaimStep2)).toBeInTheDocument();
         expect(queryByText(stubContent.iarRequired)).toBeInTheDocument();
@@ -182,7 +185,7 @@ describe("<ClaimDocumentAdvice />", () => {
           content: stubContent,
         });
 
-        expect(queryByText(stubContent.finalClaimGuidanceParagraph1)).toBeInTheDocument();
+        expect(queryByText(stubContent.finalClaimGuidanceContent1)).toBeInTheDocument();
         expect(queryByText(stubContent.finalClaimStep1)).toBeInTheDocument();
         expect(queryByText(stubContent.finalClaimStep2)).toBeInTheDocument();
       });
@@ -267,7 +270,7 @@ describe("<ClaimDocumentAdvice />", () => {
           content: stubContent,
         });
 
-        expect(queryByText(stubContent.finalClaimGuidanceParagraph1)).toBeInTheDocument();
+        expect(queryByText(stubContent.finalClaimGuidanceContent1)).toBeInTheDocument();
         expect(queryByText(stubContent.finalClaimStep1)).toBeInTheDocument();
         expect(queryByText(stubContent.finalClaimStep2)).toBeInTheDocument();
 
@@ -317,7 +320,7 @@ describe("<ClaimDocumentAdvice />", () => {
           isFinalClaim: true,
           content: stubContent,
         });
-        expect(queryByText(stubContent.finalClaimGuidanceParagraph1)).toBeInTheDocument();
+        expect(queryByText(stubContent.finalClaimGuidanceContent1)).toBeInTheDocument();
         expect(queryByText(stubContent.finalClaimStep1)).toBeInTheDocument();
         expect(queryByText(stubContent.finalClaimStep2)).toBeInTheDocument();
 

@@ -23,7 +23,7 @@ const InnerContainer = (
     props.pcrItem.participantSize && sizeOptions.find(x => parseInt(x.id, 10) === props.pcrItem.participantSize);
 
   return (
-    <ACC.Section title={x => x.pcrAddPartnerOrganisationDetails.sectionTitle}>
+    <ACC.Section title={x => x.pages.pcrAddPartnerOrganisationDetails.sectionTitle}>
       <Form.Form
         qa="addPartnerForm"
         data={props.pcrItem}
@@ -31,12 +31,8 @@ const InnerContainer = (
         onSubmit={() => props.onSave(false)}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset heading={x => x.pcrAddPartnerOrganisationDetails.labels.organisationSizeHeading}>
-          <>
-            <SimpleString>
-              <ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.guidance} />
-            </SimpleString>
-          </>
+        <Form.Fieldset heading={x => x.pcrAddPartnerLabels.organisationSizeHeading}>
+          <ACC.Content markdown value={x => x.pages.pcrAddPartnerOrganisationDetails.guidance} />
           <Form.Radio
             name="participantSize"
             options={sizeOptions}
@@ -49,7 +45,7 @@ const InnerContainer = (
             validation={props.validator.participantSize}
           />
         </Form.Fieldset>
-        <Form.Fieldset heading={x => x.pcrAddPartnerOrganisationDetails.labels.employeeCountHeading}>
+        <Form.Fieldset heading={x => x.pcrAddPartnerLabels.employeeCountHeading}>
           <Form.Numeric
             name="numberOfEmployees"
             width={4}
@@ -60,10 +56,10 @@ const InnerContainer = (
         </Form.Fieldset>
         <Form.Fieldset qa="save-and-continue">
           <Form.Submit>
-            <ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.pcrItem.submitButton} />
+            <ACC.Content value={x => x.pcrItem.submitButton} />
           </Form.Submit>
           <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
-            <ACC.Content value={x => x.pcrAddPartnerOrganisationDetails.pcrItem.returnToSummaryButton} />
+            <ACC.Content value={x => x.pcrItem.returnToSummaryButton} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>

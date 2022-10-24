@@ -19,7 +19,7 @@ export function BroadcastView({ id, title, content }: BroadcastViewProps) {
       <ACC.Renderers.SimpleString className="govuk-!-margin-bottom-0">
         <ACC.Renderers.Bold>{title} - </ACC.Renderers.Bold> {sampleMessage}
         <ACC.Link route={route} className="broadcast-highlight__link">
-          {getContent(x => x.components.broadcasts.readBroadcastLinkText)}
+          {getContent(x => x.components.broadcastContent.readBroadcastLinkText)}
         </ACC.Link>
       </ACC.Renderers.SimpleString>
     </div>

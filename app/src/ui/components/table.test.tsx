@@ -2,9 +2,10 @@ import _isEqual from "lodash.isequal";
 import { render } from "@testing-library/react";
 import fireEvent from "@testing-library/user-event";
 
-import { TestBed, TestBedContent } from "@shared/TestBed";
+import { TestBed } from "@shared/TestBed";
 import { TypedTable } from "@ui/components/table";
 import { SortOptions } from "@ui/components/documents/table-sorter";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 const headerButtonValues = (cells: Element[]): string[] => Array.from(cells).map(x => x.innerHTML);
 
@@ -35,14 +36,18 @@ describe("Table", () => {
   const stubContent = {
     components: {
       loading: {
-        message: { content: "stub-loading-message" },
+        message: "stub-loading-message",
       },
     },
   };
 
   const setup = (tableChildren: React.ReactElement<any, string | React.JSXElementConstructor<any>>) => {
-    return render(<TestBed content={stubContent as TestBedContent}>{tableChildren}</TestBed>);
+    return render(<TestBed>{tableChildren}</TestBed>);
   };
+
+  beforeAll(async () => {
+    testInitialiseInternationalisation(stubContent);
+  });
 
   describe("@renders", () => {
     describe("with column header", () => {
@@ -61,7 +66,7 @@ describe("Table", () => {
       });
 
       it("as content solution", () => {
-        const stubHeader = stubContent.components.loading.message.content;
+        const stubHeader = stubContent.components.loading.message;
 
         const NumericTable = TypedTable<number>();
 

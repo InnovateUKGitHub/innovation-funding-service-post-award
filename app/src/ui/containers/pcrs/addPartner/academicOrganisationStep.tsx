@@ -42,7 +42,7 @@ export const AcademicOrganisationStep = (
 
   const renderLoading = () => (
     <ACC.Renderers.SimpleString>
-      {getContent(x => x.pcrAddPartnerAcademicOrganisation.loading)}
+      {getContent(x => x.pages.pcrAddPartnerAcademicOrganisation.loading)}
     </ACC.Renderers.SimpleString>
   );
 
@@ -54,25 +54,25 @@ export const AcademicOrganisationStep = (
         isSaving={props.status === EditorStatus.Saving}
         onSubmit={noop}
       >
-        <Form.Fieldset heading={x => x.pcrAddPartnerAcademicOrganisation.labels.jesOrganisationSectionTitle}>
+        <Form.Fieldset heading={x => x.pcrAddPartnerLabels.jesOrganisationSectionTitle}>
           <Section>
             <ValidationMessage
               messageType="info"
               qa="jes-organisation-info"
-              message={x => x.pcrAddPartnerAcademicOrganisation.labels.jesOrganisationInfo}
+              message={x => x.pcrAddPartnerLabels.jesOrganisationInfo}
             />
           </Section>
           <Form.Search
             name="searchJesOrganisations"
             qa="input-search-jes-organisations"
-            hint={x => x.pcrAddPartnerAcademicOrganisation.labels.jesOrganisationSectionSubtitle}
+            hint={x => x.pcrAddPartnerLabels.jesOrganisationSectionSubtitle}
             value={() => searchInputValue}
             update={(_, searchValue) => setSearchInputValue(searchValue?.trim() || "")}
           />
 
           {isServer && (
             <Form.Button qa="button-search-jes-organisations" styling="Primary" name="jesOrganisationSearch">
-              {getContent(x => x.pcrAddPartnerAcademicOrganisation.labels.searchButton)}
+              {getContent(x => x.pcrAddPartnerLabels.searchButton)}
             </Form.Button>
           )}
         </Form.Fieldset>
@@ -106,7 +106,7 @@ export const AcademicOrganisationStep = (
             ) : (
               <>
                 <ACC.Renderers.SimpleString qa="no-jes-results-found">
-                  {getContent(x => x.pcrAddPartnerCompanyHouse.resultNotShowing)}
+                  {getContent(x => x.pages.pcrAddPartnerCompanyHouse.resultNotShowing)}
                 </ACC.Renderers.SimpleString>
               </>
             );
@@ -114,10 +114,10 @@ export const AcademicOrganisationStep = (
         />
         <Form.Fieldset qa="save-and-continue">
           <Form.Submit>
-            <ACC.Content value={x => x.pcrAddPartnerAcademicOrganisation.pcrItem.submitButton} />
+            <ACC.Content value={x => x.pcrItem.submitButton} />
           </Form.Submit>
           <Form.Button qa="save-and-return-to-summary" name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
-            <ACC.Content value={x => x.pcrAddPartnerAcademicOrganisation.pcrItem.returnToSummaryButton} />
+            <ACC.Content value={x => x.pcrItem.returnToSummaryButton} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>

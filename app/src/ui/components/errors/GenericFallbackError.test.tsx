@@ -1,26 +1,31 @@
 import { render } from "@testing-library/react";
 
-import { TestBed, TestBedContent } from "@shared/TestBed";
+import { TestBed } from "@shared/TestBed";
 import { GenericFallbackError, GenericFallbackErrorProps } from "@ui/components/errors";
 import { ErrorCode } from "@framework/types";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<GenericFallbackError />", () => {
   describe("@renders", () => {
     const stubContent = {
-      errors: {
-        genericFallback: {
-          standardError: { content: "stub-standardError" },
-          dashboardText: { content: "stub-dashboardText" },
+      pages: {
+        genericFallbackError: {
+          message: "stub-message",
+          dashboardText: "stub-dashboardText",
         },
       },
     };
 
     const setup = (props: GenericFallbackErrorProps) =>
       render(
-        <TestBed content={stubContent as TestBedContent}>
+        <TestBed>
           <GenericFallbackError {...props} />
         </TestBed>,
       );
+
+    beforeAll(async () => {
+      await testInitialiseInternationalisation(stubContent);
+    });
 
     test("with page message containing link text", () => {
       const { container } = setup({
@@ -29,8 +34,8 @@ describe("<GenericFallbackError />", () => {
       });
 
       const expectedWrittenContent = [
-        stubContent.errors.genericFallback.standardError.content,
-        stubContent.errors.genericFallback.dashboardText.content,
+        stubContent.pages.genericFallbackError.message,
+        stubContent.pages.genericFallbackError.dashboardText,
       ].join(" ");
 
       expect(container).toHaveTextContent(expectedWrittenContent);

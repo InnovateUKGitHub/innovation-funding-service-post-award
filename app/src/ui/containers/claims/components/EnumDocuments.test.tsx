@@ -3,6 +3,7 @@ import { render } from "@testing-library/react";
 import TestBed from "@shared/TestBed";
 import * as hook from "@ui/containers/claims/components/allowed-documents.hook";
 import { EnumDocuments } from "@ui/containers/claims/components/EnumDocuments";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 const stubLabels: Record<number, string | undefined> = {
   10: "IAR",
@@ -12,19 +13,19 @@ const stubLabels: Record<number, string | undefined> = {
   110: "LMCMinutes",
   120: "ScheduleThree",
 };
-const stubUnknownDocumentLabel = "description.unknown";
 
-const stubHookContent = {
-  claimDocuments: {
-    documents: {
-      labels: {
-        documentDescriptionLabel: jest.fn((x: number) => ({
-          content: stubLabels[x] || stubUnknownDocumentLabel,
-        })),
-      },
+const stubContent = {
+  documentLabels: {
+    description: {
+      iar: "stub-iar",
+      evidence: "stub-evidence",
+      endOfProjectSurvey: "stub-endOfProjectSurvey",
+      statementOfExpenditure: "stub-statementOfExpenditure",
+      lmcMinutes: "stub-lmcMinutes",
+      scheduleThree: "stub-scheduleThree",
     },
   },
-} as any;
+};
 
 describe("<EnumDocuments />", () => {
   beforeEach(jest.clearAllMocks);
@@ -35,7 +36,7 @@ describe("<EnumDocuments />", () => {
 
   const setupComponent = () =>
     render(
-      <TestBed content={stubHookContent}>
+      <TestBed>
         <EnumDocuments documentsToCheck={[]}>{data => <div data-qa={elementId}>{data.length}</div>}</EnumDocuments>
       </TestBed>,
     );
@@ -45,6 +46,10 @@ describe("<EnumDocuments />", () => {
     { id: "id-evidence", value: "Evidence" },
     { id: "id-endofprojectsurvey", value: "EndOfProjectSurvey" },
   ];
+
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent);
+  });
 
   test.each`
     name                                       | docs             | expectedDocLength

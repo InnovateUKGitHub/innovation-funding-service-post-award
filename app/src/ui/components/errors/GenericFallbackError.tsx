@@ -15,8 +15,8 @@ export const GenericFallbackError = ({ errorStack, errorMessage }: GenericFallba
   const { getContent } = useContent();
   const { ssoEnabled } = useStores().config.getConfig();
 
-  const errorMessageMessage = getContent(x => x.errors.genericFallback.standardError);
-  const dashboardTextMessage = getContent(x => x.errors.genericFallback.dashboardText);
+  const errorMessageMessage = getContent(x => x.pages.genericFallbackError.message);
+  const dashboardTextMessage = getContent(x => x.pages.genericFallbackError.dashboardText);
 
   const dashboardLink = "/projects/dashboard";
   const goToDashboardLink = <ExternalLink href={dashboardLink}>{dashboardTextMessage}</ExternalLink>;

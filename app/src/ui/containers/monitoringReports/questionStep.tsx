@@ -30,10 +30,10 @@ export class MonitoringReportQuestionStep extends React.Component<Props> {
             {this.renderFormItem(editor, questionNumber)}
             <ReportForm.Fieldset qa="save-buttons">
               <ReportForm.Button name="save-continue" styling="Primary" onClick={() => onSave(editor.data, true)}>
-                <ACC.Content value={x => x.monitoringReportsQuestionStep.continueButton} />
+                <ACC.Content value={x => x.pages.monitoringReportsQuestionStep.buttonContinue} />
               </ReportForm.Button>
               <ReportForm.Button name="save-return" onClick={() => onSave(editor.data, false)}>
-                <ACC.Content value={x => x.monitoringReportsQuestionStep.saveAndReturnButton} />
+                <ACC.Content value={x => x.pages.monitoringReportsQuestionStep.buttonSaveAndReturn} />
               </ReportForm.Button>
             </ReportForm.Fieldset>
           </ReportForm.Form>
@@ -78,7 +78,7 @@ export class MonitoringReportQuestionStep extends React.Component<Props> {
 
         <ReportForm.MultilineString
           name={`question_${q.displayOrder}_comments`}
-          label={x => x.monitoringReportsQuestionStep.commentLabel}
+          label={x => x.pages.monitoringReportsQuestionStep.commentLabel}
           value={() => q.comments}
           update={(x, value) => {
             x.questions[i].comments = value;

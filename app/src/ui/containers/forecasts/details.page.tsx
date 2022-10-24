@@ -33,9 +33,9 @@ function ViewForecastComponent(props: ViewForecastParams & ViewForecastData & Ba
       ? props.routes.forecastDashboard.getLink({ projectId: data.project.id })
       : props.routes.projectOverview.getLink({ projectId: data.project.id });
     const backText = isProjectPmOrMo ? (
-      <ACC.Content value={x => x.forecastsDetails.moOrPmBackLink} />
+      <ACC.Content value={x => x.pages.forecastsDetails.backLinkMoOrPm} />
     ) : (
-      <ACC.Content value={x => x.forecastsDetails.backLink} />
+      <ACC.Content value={x => x.pages.forecastsDetails.backLink} />
     );
 
     const allClaimsDashboardLink = props.routes.allClaimsDashboard.getLink({ projectId: props.projectId });
@@ -48,7 +48,7 @@ function ViewForecastComponent(props: ViewForecastParams & ViewForecastData & Ba
         partner={data.partner}
       >
         {data.partner.isWithdrawn ? (
-          <ACC.ValidationMessage messageType="info" message={x => x.forecastsDetails.messages.partnerHasWithdrawn} />
+          <ACC.ValidationMessage messageType="info" message={x => x.forecastsMessages.partnerHasWithdrawn} />
         ) : (
           <ForecastClaimAdvice claimLink={allClaimsDashboardLink} />
         )}
@@ -64,7 +64,7 @@ function ViewForecastComponent(props: ViewForecastParams & ViewForecastData & Ba
             <ACC.ValidationMessage
               qa="period-change-warning"
               messageType="info"
-              message={x => x.forecastsDetails.messages.projectChangeWarning}
+              message={x => x.forecastsMessages.warningPeriodChange}
             />
           )}
 
@@ -101,7 +101,7 @@ function ViewForecastComponent(props: ViewForecastParams & ViewForecastData & Ba
         <ACC.ValidationMessage
           qa="final-claim-message-FC"
           messageType="info"
-          message={x => x.forecastsDetails.messages.projectEnded}
+          message={x => x.forecastsMessages.projectEnded}
         />
       ) : (
         <ACC.ValidationMessage
@@ -109,7 +109,7 @@ function ViewForecastComponent(props: ViewForecastParams & ViewForecastData & Ba
           messageType="info"
           message={
             <span>
-              <ACC.Content value={x => x.components.forecastDetails.finalClaimMessageFC} />
+              <ACC.Content value={x => x.components.forecastDetails.finalClaimMessageFc} />
               <ACC.Link route={claimPageLink} styling="Link">
                 <ACC.Content value={x => x.components.forecastDetails.submitLink} />
               </ACC.Link>
@@ -131,7 +131,7 @@ function ViewForecastComponent(props: ViewForecastParams & ViewForecastData & Ba
         message={
           <>
             {ACC.getPartnerName(data.partner)}
-            <ACC.Content value={x => x.components.forecastDetails.finalClaimMessageMO} />
+            <ACC.Content value={x => x.components.forecastDetails.finalClaimMessageMo} />
           </>
         }
       />
@@ -142,7 +142,7 @@ function ViewForecastComponent(props: ViewForecastParams & ViewForecastData & Ba
         message={
           <>
             {ACC.getPartnerName(data.partner)}
-            <ACC.Content value={x => x.components.forecastDetails.finalClaimDueMessageMO} />
+            <ACC.Content value={x => x.components.forecastDetails.finalClaimDueMessageMo} />
           </>
         }
       />
@@ -154,7 +154,7 @@ function ViewForecastComponent(props: ViewForecastParams & ViewForecastData & Ba
 
     return (
       <ACC.Renderers.SimpleString qa="overhead-costs">
-        <ACC.Content value={x => x.forecastsDetails.labels.overheadCosts} />
+        <ACC.Content value={x => x.forecastsLabels.overheadCosts} />
         <ACC.Renderers.Percentage value={overheadRate} />
       </ACC.Renderers.SimpleString>
     );
@@ -180,7 +180,7 @@ function ViewForecastComponent(props: ViewForecastParams & ViewForecastData & Ba
           periodId: project.periodId,
         })}
       >
-        <ACC.Content value={x => x.forecastsDetails.updateForecastLink} />
+        <ACC.Content value={x => x.pages.forecastsDetails.linkUpdateForecast} />
       </ACC.Link>
     );
   };
@@ -222,5 +222,5 @@ export const ForecastDetailsRoute = defineRoute({
     const isFC = auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact);
     return isMOOrPM || isFC;
   },
-  getTitle: ({ content }) => content.forecastsDetails.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.forecastsDetails.title),
 });

@@ -17,11 +17,11 @@ export const ProjectSummaryChangeStep = (
         onChange={dto => props.onChange(dto)}
         onSubmit={() => props.onSave(false)}
       >
-        <Form.Fieldset heading={x => x.pcrScopeChangeProjectSummaryChange.projectSummaryHeading}>
-          <ACC.Info summary={<ACC.Content value={x => x.pcrScopeChangeProjectSummaryChange.publishedSummary} />}>
+        <Form.Fieldset heading={x => x.pages.pcrScopeChangeProjectSummaryChange.headingProjectSummary}>
+          <ACC.Info summary={<ACC.Content value={x => x.pages.pcrScopeChangeProjectSummaryChange.publishedSummary} />}>
             <ACC.Renderers.SimpleString multiline>
               {props.pcrItem.projectSummarySnapshot || (
-                <ACC.Content value={x => x.pcrScopeChangeProjectSummaryChange.noAvailableSummary} />
+                <ACC.Content value={x => x.pages.pcrScopeChangeProjectSummaryChange.noAvailableSummary} />
               )}
             </ACC.Renderers.SimpleString>
           </ACC.Info>
@@ -36,7 +36,7 @@ export const ProjectSummaryChangeStep = (
           />
         </Form.Fieldset>
         <Form.Submit>
-          <ACC.Content value={x => x.pcrScopeChangeProjectSummaryChange.pcrItem.submitButton} />
+          <ACC.Content value={x => x.pcrItem.submitButton} />
         </Form.Submit>
       </Form.Form>
     </ACC.Section>

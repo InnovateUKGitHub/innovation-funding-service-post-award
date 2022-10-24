@@ -1,4 +1,5 @@
 import { IContext } from "@framework/types";
+import { enCopy, ktpEnCopy, loansEnCopy, sbriEnCopy, sbriIfsEnCopy } from "@copy/data";
 import { NonAuthorisedCommandBase } from "../common/commandBase";
 
 const defaultContentMarker = new Date("1970/01/01");
@@ -22,8 +23,8 @@ export class InitialiseContentCommand extends NonAuthorisedCommandBase<boolean> 
     if (defaultContentUpdateRequired || customContentUpdateRequired) {
       // need to set default content even if its only custom content updated
       // allows values to be removed from the custom content because reset to default content first
-      await this.setCompetitionContent(context);
-      await this.setDefaultContent(context);
+      this.setCompetitionContent(context);
+      this.setDefaultContent(context);
 
       if (customContentUpdateRequired) {
         await this.setCustomContent(context);
@@ -38,23 +39,24 @@ export class InitialiseContentCommand extends NonAuthorisedCommandBase<boolean> 
     return context.resources.customContent.getInfo().then(x => x.lastModified > lastUpdated);
   }
 
-  private async setDefaultContent(context: IContext): Promise<void> {
-    const defaultContent = JSON.parse(await context.resources.defaultContent.getContent());
-    context.internationalisation.addResourceBundle(defaultContent);
+  private setDefaultContent(context: IContext): void {
+    context.internationalisation.addResourceBundle(enCopy, "default");
     context.caches.contentStoreLastUpdated = defaultContentMarker;
     context.logger.info("Set default content", context.caches.contentStoreLastUpdated);
   }
 
   private async setCustomContent(context: IContext): Promise<void> {
     const customContent = JSON.parse(await context.resources.customContent.getContent());
-    context.internationalisation.addResourceBundle(customContent);
+    context.internationalisation.addResourceBundle(customContent, "default");
     context.caches.contentStoreLastUpdated = context.clock.now();
     context.logger.info("Set custom content", context.caches.contentStoreLastUpdated);
   }
 
-  private async setCompetitionContent(context: IContext): Promise<void> {
-    const competitionContent = JSON.parse(await context.resources.competitionContent.getContent());
-    context.internationalisation.addResourceBundle(competitionContent);
+  private setCompetitionContent(context: IContext): void {
+    context.internationalisation.addResourceBundle(ktpEnCopy, "ktp");
+    context.internationalisation.addResourceBundle(sbriEnCopy, "sbri");
+    context.internationalisation.addResourceBundle(sbriIfsEnCopy, "sbri-ifs");
+    context.internationalisation.addResourceBundle(loansEnCopy, "loans");
     context.logger.info("Set crd content", context.caches.contentStoreLastUpdated);
   }
 }

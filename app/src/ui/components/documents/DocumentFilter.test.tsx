@@ -1,18 +1,13 @@
 import { render, fireEvent, act } from "@testing-library/react";
 
-import { TestBed, TestBedContent } from "@shared/TestBed";
+import { TestBed } from "@shared/TestBed";
 import { DocumentFilter, DocumentFilterProps } from "@ui/components/documents/DocumentFilter";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<DocumentFilter />", () => {
   const stubContent = {
-    components: {
-      documents: {
-        messages: {
-          noDocumentsUploaded: {
-            content: "stub-noDocumentsUploaded",
-          },
-        },
-      },
+    documentMessages: {
+      noDocumentsUploaded: "stub-noDocumentsUploaded",
     },
   };
 
@@ -24,7 +19,7 @@ describe("<DocumentFilter />", () => {
 
   const setup = (props?: Partial<DocumentFilterProps>) => {
     const rtl = render(
-      <TestBed content={stubContent as TestBedContent}>
+      <TestBed>
         <DocumentFilter {...defaultProps} {...props} />
       </TestBed>,
     );
@@ -48,6 +43,10 @@ describe("<DocumentFilter />", () => {
   };
 
   beforeEach(jest.clearAllMocks);
+
+  beforeAll(async () => {
+    testInitialiseInternationalisation(stubContent);
+  });
 
   describe("@returns", () => {
     test("with search field", () => {

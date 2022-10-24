@@ -7,41 +7,43 @@ export const DeleteCapitalUsageCostFormComponent = (
 ) => {
   const { data, costCategory } = props;
   return (
-    <ACC.Section title={x => x.pcrSpendProfileDeleteCostContent.costSectionTitle(costCategory.name)}>
-      <ACC.ValidationMessage messageType="alert" message={x => x.pcrSpendProfileDeleteCostContent.deleteGuidance} />
+    <ACC.Section
+      title={x => x.pages.pcrSpendProfileDeleteCost.sectionTitleCost({ costCategoryName: costCategory.name })}
+    >
+      <ACC.ValidationMessage messageType="alert" message={x => x.pages.pcrSpendProfileDeleteCost.guidanceDelete} />
       <ACC.SummaryList qa="deleteCapitalUsageCost">
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.capitalUsage.description}
+          label={x => x.pcrSpendProfileLabels.capitalUsage.description}
           content={data.description}
           qa="description"
         />
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.capitalUsage.type}
+          label={x => x.pcrSpendProfileLabels.capitalUsage.type}
           content={data.typeLabel}
           qa="type"
         />
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.capitalUsage.depreciationPeriod}
+          label={x => x.pcrSpendProfileLabels.capitalUsage.depreciationPeriod}
           content={data.depreciationPeriod}
           qa="depreciationPeriod"
         />
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.capitalUsage.netPresentValue}
+          label={x => x.pcrSpendProfileLabels.capitalUsage.netPresentValue}
           content={<ACC.Renderers.Currency value={data.netPresentValue} />}
           qa="netPresentValue"
         />
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.capitalUsage.residualValue}
+          label={x => x.pcrSpendProfileLabels.capitalUsage.residualValue}
           content={<ACC.Renderers.Currency value={data.residualValue} />}
           qa="residualValue"
         />
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.capitalUsage.utilisation}
+          label={x => x.pcrSpendProfileLabels.capitalUsage.utilisation}
           content={<ACC.Renderers.Percentage value={data.utilisation} />}
           qa="utilisation"
         />
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.capitalUsage.netCost}
+          label={x => x.pcrSpendProfileLabels.capitalUsage.netCost}
           content={<ACC.Renderers.Currency value={data.value} />}
           qa="value"
         />

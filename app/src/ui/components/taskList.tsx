@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 import { ILinkInfo } from "@framework/types";
 import { Result } from "@ui/validation";
 import { UL, Tag, TagTypeOptions } from "@ui/components";
-import { ContentSelector } from "@content/content";
+import type { ContentSelector } from "@copy/type";
 import { useContent } from "@ui/hooks";
 
 import { ValidationError } from "./validationError";
@@ -29,7 +29,7 @@ export function Task({ route, name, status, validation }: ITask) {
   const { getContent } = useContent();
   const hasError = !!validation?.find(x => !x.isValid);
 
-  const link = getContent(name);
+  const link = typeof name === "string" ? name : getContent(name);
   const taskName = route ? <Link route={route}>{link}</Link> : link;
 
   const taskStyle = statusConfig[status];
@@ -60,7 +60,7 @@ export interface ITaskListItem {
 export function TaskListSection({ step, title, validation, children, qa }: ITaskListItem) {
   const { getContent } = useContent();
 
-  const titleValue = getContent(title);
+  const titleValue = typeof title === "string" ? title : getContent(title);
   const validationErrors = validation?.map(v => <ValidationError error={v} key={v.key} />);
 
   return (

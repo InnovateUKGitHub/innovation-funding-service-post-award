@@ -1,10 +1,10 @@
 import cx from "classnames";
 import { isContentSolution } from "@ui/hooks";
-import { ContentSelector } from "@content/content";
+import type { ContentSelector } from "@copy/type";
 import { Content } from "@ui/components/content";
 
 import * as colours from "../styles/colours";
-import { SimpleString } from "./renderers";
+import { Markdown, SimpleString } from "./renderers";
 
 type MessageType = "info" | "error" | "success" | "warning" | "alert";
 
@@ -64,9 +64,15 @@ export interface IValidationMessageProps {
   message: React.ReactChild | ContentSelector;
   messageType: MessageType;
   qa?: string;
+  markdown?: boolean;
 }
 
-export function ValidationMessage({ message, messageType, qa = "validation-message" }: IValidationMessageProps) {
+export function ValidationMessage({
+  markdown,
+  message,
+  messageType,
+  qa = "validation-message",
+}: IValidationMessageProps) {
   if (typeof message === "string" && !message.length) return null;
 
   const isBlockElement = !["string", "number", "function"].includes(typeof message);
@@ -86,7 +92,13 @@ export function ValidationMessage({ message, messageType, qa = "validation-messa
       </span>
 
       <SimpleString as={elementType} qa={`${qa}-content`} style={{ color: ui.styles.color }}>
-        {isContentSolution(message) ? <Content styles={ui.styles} value={message} /> : message}
+        {isContentSolution(message) ? (
+          <Content markdown={markdown} styles={ui.styles} value={message} />
+        ) : markdown && typeof message === "string" ? (
+          <Markdown value={message} />
+        ) : (
+          message
+        )}
       </SimpleString>
     </div>
   );

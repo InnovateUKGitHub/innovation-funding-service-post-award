@@ -23,14 +23,14 @@ export class OtherCostsFormComponent extends Component<
         <Form.Fieldset qa="other-costs">
           <Form.Hidden name="id" value={dto => dto.id} />
           <Form.MultilineString
-            label={x => x.pcrSpendProfilePrepareCostContent.labels.otherCosts.description}
+            label={x => x.pcrSpendProfileLabels.otherCosts.description}
             name="description"
             value={dto => dto.description}
             update={(x, val) => (x.description = val)}
             validation={validator && validator.description}
           />
           <Form.Numeric
-            label={x => x.pcrSpendProfilePrepareCostContent.labels.otherCosts.totalCost}
+            label={x => x.pcrSpendProfileLabels.otherCosts.totalCost}
             width="one-quarter"
             name="value"
             value={dto => dto.value}
@@ -40,7 +40,9 @@ export class OtherCostsFormComponent extends Component<
         </Form.Fieldset>
         <Form.Fieldset qa="save">
           <Form.Submit>
-            <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.submitButton(costCategory.name)} />
+            <ACC.Content
+              value={x => x.pages.pcrSpendProfilePrepareCost.buttonSubmit({ costCategoryName: costCategory.name })}
+            />
           </Form.Submit>
         </Form.Fieldset>
       </Form.Form>

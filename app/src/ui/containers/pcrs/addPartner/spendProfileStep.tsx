@@ -25,7 +25,7 @@ class Component extends React.Component<
     const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
 
     return (
-      <ACC.Section title={x => x.pcrAddPartnerSpendProfile.labels.projectCostsHeading}>
+      <ACC.Section title={x => x.pcrAddPartnerLabels.projectCostsHeading}>
         {this.renderTable()}
         <Form.Form
           qa="addPartnerForm"
@@ -37,12 +37,12 @@ class Component extends React.Component<
           <Form.Fieldset qa="save-and-continue">
             {this.props.mode === "prepare" && (
               <Form.Submit>
-                <ACC.Content value={x => x.pcrAddPartnerSpendProfile.pcrItem.submitButton} />
+                <ACC.Content value={x => x.pcrItem.submitButton} />
               </Form.Submit>
             )}
             {this.props.mode === "prepare" && (
               <Form.Button name="saveAndReturnToSummary" onClick={() => this.props.onSave(true)}>
-                <ACC.Content value={x => x.pcrAddPartnerSpendProfile.pcrItem.returnToSummaryButton} />
+                <ACC.Content value={x => x.pcrItem.returnToSummaryButton} />
               </Form.Button>
             )}
             {this.props.mode === "review" && (
@@ -54,7 +54,7 @@ class Component extends React.Component<
                   projectId: this.props.project.id,
                 })}
               >
-                <ACC.Content value={x => x.pcrAddPartnerSpendProfile.returnToSummaryNoSave} />
+                <ACC.Content value={x => x.pages.pcrAddPartnerSpendProfile.returnToSummaryNoSaveButton} />
               </ACC.Link>
             )}
           </Form.Fieldset>
@@ -82,17 +82,17 @@ class Component extends React.Component<
       <ACC.Section>
         <Table.Table qa="costsTable" data={data}>
           <Table.Custom
-            header={x => x.pcrAddPartnerSpendProfile.categoryHeading}
+            header={x => x.pages.pcrAddPartnerSpendProfile.categoryHeading}
             qa="category"
             value={x => x.costCategory.name}
             footer={
               <ACC.Renderers.SimpleString className={"govuk-!-font-weight-bold"}>
-                <ACC.Content value={x => x.pcrAddPartnerSpendProfile.totalCosts} />
+                <ACC.Content value={x => x.pages.pcrAddPartnerSpendProfile.totalCosts} />
               </ACC.Renderers.SimpleString>
             }
           />
           <Table.Currency
-            header={x => x.pcrAddPartnerSpendProfile.costHeading}
+            header={x => x.pages.pcrAddPartnerSpendProfile.costHeading}
             qa="cost"
             value={x => x.cost}
             footer={<ACC.Renderers.Currency value={total} />}
@@ -118,7 +118,7 @@ class Component extends React.Component<
             costCategoryId: data.costCategory.id,
           })}
         >
-          <ACC.Content value={x => x.pcrAddPartnerSpendProfile.viewLabel} />
+          <ACC.Content value={x => x.pages.pcrAddPartnerSpendProfile.labelView} />
         </ACC.Link>
       );
     }
@@ -133,7 +133,7 @@ class Component extends React.Component<
             costCategoryId: data.costCategory.id,
           })}
         >
-          <ACC.Content value={x => x.pcrAddPartnerSpendProfile.editLabel} />
+          <ACC.Content value={x => x.pages.pcrAddPartnerSpendProfile.labelEdit} />
         </ACC.Link>
       );
     }
@@ -154,7 +154,7 @@ class Component extends React.Component<
             costId: overheadsCost.id,
           })}
         >
-          <ACC.Content value={x => x.pcrAddPartnerSpendProfile.editLabel} />
+          <ACC.Content value={x => x.pages.pcrAddPartnerSpendProfile.labelEdit} />
         </ACC.Link>
       );
     }
@@ -168,7 +168,7 @@ class Component extends React.Component<
           costCategoryId: data.costCategory.id,
         })}
       >
-        <ACC.Content value={x => x.pcrAddPartnerSpendProfile.editLabel} />
+        <ACC.Content value={x => x.pages.pcrAddPartnerSpendProfile.labelEdit} />
       </ACC.Link>
     );
   }

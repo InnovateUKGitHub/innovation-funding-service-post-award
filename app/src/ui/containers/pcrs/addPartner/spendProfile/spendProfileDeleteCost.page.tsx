@@ -89,7 +89,9 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
               costCategoryId: this.props.costCategoryId,
             })}
           >
-            <ACC.Content value={x => x.pcrSpendProfileDeleteCostContent.backLink(costCategory.name)} />
+            <ACC.Content
+              value={x => x.pages.pcrSpendProfileDeleteCost.backLink({ costCategoryName: costCategory.name })}
+            />
           </ACC.BackLink>
         }
         pageTitle={<ACC.Projects.Title {...project} />}
@@ -106,7 +108,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
               styling="Warning"
               onClick={() => this.props.onDelete(editor.data, this.props.projectId)}
             >
-              <ACC.Content value={x => x.pcrSpendProfileDeleteCostContent.deleteButton} />
+              <ACC.Content value={x => x.pages.pcrSpendProfileDeleteCost.buttonDelete} />
             </DeleteForm.Button>
           </DeleteForm.Form>
         </ACC.Section>
@@ -213,6 +215,6 @@ export const PCRSpendProfileDeleteCostRoute = defineRoute<PcrDeleteSpendProfileC
     costCategoryId: route.params.costCategoryId,
     costId: route.params.costId,
   }),
-  getTitle: ({ content }) => content.pcrSpendProfileDeleteCostContent.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfileDeleteCost.title),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
 });

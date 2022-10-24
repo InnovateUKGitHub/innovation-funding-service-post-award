@@ -60,12 +60,14 @@ export function FinancialVirementSummaryComponent({ mode, ...props }: FinancialV
     const grantDifference = ACC.Renderers.getCurrency(Math.abs(newGrantDifference));
 
     if (hasAvailableGrant) {
-      return getContent(x => x.financialVirementSummary.availableGrantMessage(grantDifference));
+      return getContent(x => x.pages.financialVirementSummary.availableGrantMessage({ grantDifference }));
     }
 
     const totalOriginalGrant = ACC.Renderers.getCurrency(Math.abs(originalGrant));
 
-    return getContent(x => x.financialVirementSummary.unavailableGrantMessage({ grantDifference, totalOriginalGrant }));
+    return getContent(x =>
+      x.pages.financialVirementSummary.unavailableGrantMessage({ grantDifference, totalOriginalGrant }),
+    );
   };
 
   const renderContent = (virement: FinancialVirementDto) => (
@@ -88,26 +90,76 @@ export function FinancialVirementSummaryComponent({ mode, ...props }: FinancialV
         return (
           <>
             {grantMessage && (
-              <ACC.ValidationMessage message={grantMessage} messageType={data.hasAvailableGrant ? "info" : "error"} />
+              <ACC.ValidationMessage
+                markdown
+                message={grantMessage}
+                messageType={data.hasAvailableGrant ? "info" : "error"}
+              />
             )}
 
             {mode === "prepare" ? (
               <>
-                {/* prettier-ignore */}
                 <Table.Table qa="partners" data={projectCostsOfPartners}>
-                  <Table.Custom qa="partner" header={x => x.financialVirementSummary.labels.partnerName} value={x => getPartnerLink(x.partnerVirement, x.partner)} footer={<ACC.Content value={x => x.financialVirementDetails.labels.projectTotals} />} isDivider="normal" />
-                  <Table.Currency qa="originalEligibleCosts" header={x => x.financialVirementSummary.labels.partnerOriginalEligibleCosts} value={x => x.partnerVirement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={virement.originalEligibleCosts} />} />
-                  <Table.Currency qa="originalRemaining" header={x => x.financialVirementSummary.labels.partnerOriginalRemainingCosts} value={x => x.partnerVirement.originalRemainingCosts} footer={<ACC.Renderers.Currency value={virement.originalRemainingCosts} />} />
-                  <Table.Currency qa="originalRemainingGrant" header={x => x.financialVirementSummary.labels.partnerOriginalRemainingGrant} value={x => x.partnerVirement.originalRemainingGrant} footer={<ACC.Renderers.Currency value={virement.originalRemainingGrant} className={displayHighlight === "positive-hightlight" && "highlight--info"} />} isDivider="normal" />
-                  <Table.Currency qa="newEligibleCosts" header={x => x.financialVirementSummary.labels.partnerNewEligibleCosts} value={x => x.partnerVirement.newEligibleCosts} footer={<ACC.Renderers.Currency value={virement.newEligibleCosts} />} />
-                  <Table.Currency qa="newRemainingCosts" header={x => x.financialVirementSummary.labels.partnerNewRemainingCosts} value={x => x.partnerVirement.newRemainingCosts} footer={<ACC.Renderers.Currency value={virement.newRemainingCosts} />} />
-                  <Table.Currency qa="newRemainingGrant" header={x => x.financialVirementSummary.labels.partnerNewRemainingGrant} value={x => x.partnerVirement.newRemainingGrant} footer={<ACC.Renderers.Currency value={virement.newRemainingGrant} className={displayHighlight ==="negative-hightlight" && "highlight--error"} />} />
+                  <Table.Custom
+                    qa="partner"
+                    header={x => x.financialVirementLabels.partnerName}
+                    value={x => getPartnerLink(x.partnerVirement, x.partner)}
+                    footer={<ACC.Content value={x => x.financialVirementLabels.projectTotals} />}
+                    isDivider="normal"
+                  />
+                  <Table.Currency
+                    qa="originalEligibleCosts"
+                    header={x => x.financialVirementLabels.partnerOriginalEligibleCosts}
+                    value={x => x.partnerVirement.originalEligibleCosts}
+                    footer={<ACC.Renderers.Currency value={virement.originalEligibleCosts} />}
+                  />
+                  <Table.Currency
+                    qa="originalRemaining"
+                    header={x => x.financialVirementLabels.partnerOriginalRemainingCosts}
+                    value={x => x.partnerVirement.originalRemainingCosts}
+                    footer={<ACC.Renderers.Currency value={virement.originalRemainingCosts} />}
+                  />
+                  <Table.Currency
+                    qa="originalRemainingGrant"
+                    header={x => x.financialVirementLabels.partnerOriginalRemainingGrant}
+                    value={x => x.partnerVirement.originalRemainingGrant}
+                    footer={
+                      <ACC.Renderers.Currency
+                        value={virement.originalRemainingGrant}
+                        className={displayHighlight === "positive-hightlight" && "highlight--info"}
+                      />
+                    }
+                    isDivider="normal"
+                  />
+                  <Table.Currency
+                    qa="newEligibleCosts"
+                    header={x => x.financialVirementLabels.partnerNewEligibleCosts}
+                    value={x => x.partnerVirement.newEligibleCosts}
+                    footer={<ACC.Renderers.Currency value={virement.newEligibleCosts} />}
+                  />
+                  <Table.Currency
+                    qa="newRemainingCosts"
+                    header={x => x.financialVirementLabels.partnerNewRemainingCosts}
+                    value={x => x.partnerVirement.newRemainingCosts}
+                    footer={<ACC.Renderers.Currency value={virement.newRemainingCosts} />}
+                  />
+                  <Table.Currency
+                    qa="newRemainingGrant"
+                    header={x => x.financialVirementLabels.partnerNewRemainingGrant}
+                    value={x => x.partnerVirement.newRemainingGrant}
+                    footer={
+                      <ACC.Renderers.Currency
+                        value={virement.newRemainingGrant}
+                        className={displayHighlight === "negative-hightlight" && "highlight--error"}
+                      />
+                    }
+                  />
                 </Table.Table>
 
                 {isMultipleParticipants && (
                   <>
                     <ACC.Renderers.SimpleString>
-                      <ACC.Content value={x => x.financialVirementSummary.grantAdvice} />
+                      <ACC.Content value={x => x.pages.financialVirementSummary.grantAdvice} />
                     </ACC.Renderers.SimpleString>
 
                     <ACC.Section qa="edit-partner-level">
@@ -119,7 +171,7 @@ export function FinancialVirementSummaryComponent({ mode, ...props }: FinancialV
                           projectId: props.projectId,
                         })}
                       >
-                        <ACC.Content value={x => x.financialVirementSummary.changeGrantLink} />
+                        <ACC.Content value={x => x.pages.financialVirementSummary.linkChangeGrant} />
                       </ACC.Link>
                     </ACC.Section>
                   </>
@@ -127,24 +179,89 @@ export function FinancialVirementSummaryComponent({ mode, ...props }: FinancialV
               </>
             ) : (
               <>
-                {/* prettier-ignore */}
-                <Table.Table qa="partners" data={projectCostsOfPartners} headerRowClass="govuk-body-s" bodyRowClass={() => "govuk-body-s"} footerRowClass="govuk-body-s">
-                  <Table.Custom qa="partner" header={x => x.financialVirementSummary.labels.partnerName} value={x => getPartnerLink(x.partnerVirement, x.partner)} footer={<ACC.Content value={x => x.financialVirementDetails.labels.projectTotals} />} isDivider="normal" />
-                  <Table.Currency qa="originalEligibleCosts" header={x => x.financialVirementSummary.labels.partnerOriginalEligibleCosts} value={x => x.partnerVirement.originalEligibleCosts} footer={<ACC.Renderers.Currency value={virement.originalEligibleCosts} />} />
-                  <Table.Currency qa="newEligibleCosts" header={x => x.financialVirementSummary.labels.partnerNewEligibleCosts} value={x => x.partnerVirement.newEligibleCosts} footer={<ACC.Renderers.Currency value={virement.newEligibleCosts} />} />
-                  <Table.Currency qa="differenceEligibleCosts" header={x => x.financialVirementSummary.labels.partnerDifferenceCosts} value={x => roundCurrency(x.partnerVirement.newEligibleCosts - x.partnerVirement.originalEligibleCosts)} footer={<ACC.Renderers.Currency value={roundCurrency(virement.newEligibleCosts - virement.originalEligibleCosts)} />} isDivider="normal" />
-                  <Table.Percentage qa="originalFundingLevel" header={x => x.financialVirementSummary.labels.originalFundingLevel} value={x => x.partnerVirement.originalFundingLevel} footer={<ACC.Renderers.Percentage value={virement.originalFundingLevel} />} />
-                  <Table.Percentage qa="newFundingLevel" header={x => x.financialVirementSummary.labels.newFundingLevel} value={x => x.partnerVirement.newFundingLevel} footer={<ACC.Renderers.Percentage value={virement.newFundingLevel} />} isDivider="normal" />
-                  <Table.Currency qa="originalRemainingGrant" header={x => x.financialVirementSummary.labels.partnerOriginalRemainingGrant} value={x => x.partnerVirement.originalRemainingGrant} footer={<ACC.Renderers.Currency value={virement.originalRemainingGrant} />} />
-                  <Table.Currency qa="newRemainingGrant" header={x => x.financialVirementSummary.labels.partnerNewRemainingGrant} value={x => x.partnerVirement.newRemainingGrant} footer={<ACC.Renderers.Currency value={virement.newRemainingGrant} />} />
-                  <Table.Currency qa="differenceRemainingGrant" header={x => x.financialVirementSummary.labels.partnerDifferenceGrant} value={x => roundCurrency(x.partnerVirement.newRemainingGrant - x.partnerVirement.originalRemainingGrant)} footer={<ACC.Renderers.Currency value={roundCurrency(virement.newRemainingGrant - virement.originalRemainingGrant)} />} />
+                <Table.Table
+                  qa="partners"
+                  data={projectCostsOfPartners}
+                  headerRowClass="govuk-body-s"
+                  bodyRowClass={() => "govuk-body-s"}
+                  footerRowClass="govuk-body-s"
+                >
+                  <Table.Custom
+                    qa="partner"
+                    header={x => x.financialVirementLabels.partnerName}
+                    value={x => getPartnerLink(x.partnerVirement, x.partner)}
+                    footer={<ACC.Content value={x => x.financialVirementLabels.projectTotals} />}
+                    isDivider="normal"
+                  />
+                  <Table.Currency
+                    qa="originalEligibleCosts"
+                    header={x => x.financialVirementLabels.partnerOriginalEligibleCosts}
+                    value={x => x.partnerVirement.originalEligibleCosts}
+                    footer={<ACC.Renderers.Currency value={virement.originalEligibleCosts} />}
+                  />
+                  <Table.Currency
+                    qa="newEligibleCosts"
+                    header={x => x.financialVirementLabels.partnerNewEligibleCosts}
+                    value={x => x.partnerVirement.newEligibleCosts}
+                    footer={<ACC.Renderers.Currency value={virement.newEligibleCosts} />}
+                  />
+                  <Table.Currency
+                    qa="differenceEligibleCosts"
+                    header={x => x.financialVirementLabels.partnerDifferenceCosts}
+                    value={x =>
+                      roundCurrency(x.partnerVirement.newEligibleCosts - x.partnerVirement.originalEligibleCosts)
+                    }
+                    footer={
+                      <ACC.Renderers.Currency
+                        value={roundCurrency(virement.newEligibleCosts - virement.originalEligibleCosts)}
+                      />
+                    }
+                    isDivider="normal"
+                  />
+                  <Table.Percentage
+                    qa="originalFundingLevel"
+                    header={x => x.financialVirementLabels.originalFundingLevel}
+                    value={x => x.partnerVirement.originalFundingLevel}
+                    footer={<ACC.Renderers.Percentage value={virement.originalFundingLevel} />}
+                  />
+                  <Table.Percentage
+                    qa="newFundingLevel"
+                    header={x => x.financialVirementLabels.newFundingLevel}
+                    value={x => x.partnerVirement.newFundingLevel}
+                    footer={<ACC.Renderers.Percentage value={virement.newFundingLevel} />}
+                    isDivider="normal"
+                  />
+                  <Table.Currency
+                    qa="originalRemainingGrant"
+                    header={x => x.financialVirementLabels.partnerOriginalRemainingGrant}
+                    value={x => x.partnerVirement.originalRemainingGrant}
+                    footer={<ACC.Renderers.Currency value={virement.originalRemainingGrant} />}
+                  />
+                  <Table.Currency
+                    qa="newRemainingGrant"
+                    header={x => x.financialVirementLabels.partnerNewRemainingGrant}
+                    value={x => x.partnerVirement.newRemainingGrant}
+                    footer={<ACC.Renderers.Currency value={virement.newRemainingGrant} />}
+                  />
+                  <Table.Currency
+                    qa="differenceRemainingGrant"
+                    header={x => x.financialVirementLabels.partnerDifferenceGrant}
+                    value={x =>
+                      roundCurrency(x.partnerVirement.newRemainingGrant - x.partnerVirement.originalRemainingGrant)
+                    }
+                    footer={
+                      <ACC.Renderers.Currency
+                        value={roundCurrency(virement.newRemainingGrant - virement.originalRemainingGrant)}
+                      />
+                    }
+                  />
                 </Table.Table>
 
                 <ACC.Section>
                   <ACC.SummaryList qa="pcr_financial-virement">
                     <ACC.SummaryListItem
                       qa="grantValueYearEnd"
-                      label={x => x.financialVirementSummary.grantValueMovingOverHeading}
+                      label={x => x.pages.financialVirementSummary.headingYearEndGrantValue}
                       content={<ACC.Renderers.Currency value={props.pcrItem.grantMovingOverFinancialYear} />}
                     />
                   </ACC.SummaryList>
@@ -179,7 +296,7 @@ export function GrantMovingOverFinancialYearForm({ form: Form, editor }: GrantMo
   return (
     <Form.Fieldset
       qa="fieldset-grantMovingOverFinancialYear"
-      heading={x => x.financialVirementSummary.labels.grantMovingOverYear}
+      heading={x => x.financialVirementLabels.grantMovingOverYear}
     >
       <ACC.TextHint>The financial year ends on 31 March.</ACC.TextHint>
 

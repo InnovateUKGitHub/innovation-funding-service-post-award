@@ -3,7 +3,7 @@ import cx from "classnames";
 
 import { IEditorStore } from "@ui/redux";
 import { Result } from "@ui/validation";
-import { ContentSelector } from "@content/content";
+import type { ContentSelector } from "@copy/type";
 import { IFileWrapper } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
 import { isContentSolution } from "@ui/hooks";
@@ -182,7 +182,16 @@ class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & 
     const { hint, name, label, labelHidden, labelBold, field, formData, validation } = this.props;
     const hasError = validation && validation.showValidationErrors && !validation.isValid;
 
-    const hintValue = isContentSolution(hint) ? <Content value={hint} /> : hint;
+    let hintValue: ReactNode;
+
+    if (!hint) {
+      hintValue = undefined;
+    } else if (isValidElement(hint)) {
+      hintValue = hint;
+    } else if (isContentSolution(hint)) {
+      hintValue = <Content value={hint} />;
+    }
+
     const HintElement = typeof hintValue === "string" ? "p" : "div";
 
     return (

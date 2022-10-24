@@ -14,7 +14,7 @@ export function renderHtml(HelmetInstance: HelmetData, html: string, preloadedSt
 
   return `
   <!DOCTYPE html>
-  <html lang="en">
+  <html lang="en-GB">
       <head>
           ${renderJSGoogleTagManager(configuration.googleTagManagerCode, nonce)}
           

@@ -1,6 +1,6 @@
 import { fireEvent, render, act } from "@testing-library/react";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import TestBed, { TestBedContent, TestBedStore } from "@shared/TestBed";
+import TestBed, { TestBedStore } from "@shared/TestBed";
 import { AcademicOrganisationStep } from "@ui/containers/pcrs/addPartner";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
@@ -18,36 +18,22 @@ describe("<AcademicOrganisationStep />", () => {
     isServer?: boolean,
   ) => {
     const stubContent = {
-      pcrAddPartnerAcademicOrganisation: {
-        labels: {
-          searchButton: {
-            content: "stub-search-button",
-          },
-          jesOrganisationSectionTitle: {
-            content: "stub-jes-section-title",
-          },
-          jesOrganisationSectionSubtitle: {
-            content: "stub-jes-section-subtitle",
-          },
-          jesOrganisationInfo: {
-            content: "stub-jes-info",
-          },
-        },
-        jesSearchResults: {
-          content: "stub-jes-header",
-        },
-        pcrItem: {
-          submitButton: {
-            content: "stub-submit-button",
-          },
-          returnToSummaryButton: {
-            content: "stub-return-to-summary-button",
-          },
-        },
+      pcrAddPartnerLabels: {
+        searchButton: "stub-search-button",
+        jesOrganisationSectionTitle: "stub-jes-section-title",
+        jesOrganisationSectionSubtitle: "stub-jes-section-subtitle",
+        jesOrganisationInfo: "stub-jes-info",
       },
-      pcrAddPartnerCompanyHouse: {
-        resultNotShowing: {
-          content: "stub-result-not-showing",
+      pcrItem: {
+        submitButton: "stub-submit-button",
+        returnToSummaryButton: "stub-return-to-summary-button",
+      },
+      pages: {
+        pcrAddPartnerAcademicOrganisation: {
+          jesSearchResults: "stub-jes-header",
+        },
+        pcrAddPartnerCompanyHouse: {
+          resultNotShowing: "stub-result-not-showing",
         },
       },
     } as any;
@@ -67,7 +53,7 @@ describe("<AcademicOrganisationStep />", () => {
     } as any;
 
     return render(
-      <TestBed isServer={isServer} content={stubContent as TestBedContent} stores={stubStore as TestBedStore}>
+      <TestBed isServer={isServer} stores={stubStore as TestBedStore}>
         <AcademicOrganisationStep {...props} />
       </TestBed>,
     );

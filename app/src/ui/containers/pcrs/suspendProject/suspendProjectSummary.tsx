@@ -19,7 +19,7 @@ export const SuspendProjectSummary = (
       <ACC.SummaryList qa="projectSuspension">
         <ACC.SummaryListItem
           qa="startDate"
-          label={x => x.pcrScopeChangeProjectContent.firstDayOfPauseTitle}
+          label={x => x.pages.pcrSuspendProjectDetails.firstDayOfPauseTitle}
           validation={props.validator.suspensionStartDate}
           content={<ACC.Renderers.ShortDate value={props.pcrItem.suspensionStartDate} />}
           action={props.getEditLink("details", props.validator.suspensionStartDate)}
@@ -27,7 +27,7 @@ export const SuspendProjectSummary = (
 
         <ACC.SummaryListItem
           qa="endDate"
-          label={x => x.pcrScopeChangeProjectContent.lastDayOfPauseTitle}
+          label={x => x.pages.pcrSuspendProjectDetails.lastDayOfPauseTitle}
           validation={props.validator.suspensionEndDate}
           content={lastDayContent}
           action={props.getEditLink("details", props.validator.suspensionEndDate)}

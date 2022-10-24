@@ -3,7 +3,7 @@ import { Authorisation, IClientUser, ILinkInfo } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { IStores } from "@ui/redux";
 import { IRoutes } from "@ui/routing/routeConfig";
-import { Content } from "@content/content";
+import { Copy } from "@copy/Copy";
 import { MatchedRoute } from "@ui/routing";
 import { makeUrlWithQuery } from "@ui/helpers/make-url";
 
@@ -66,7 +66,7 @@ interface IRouteOptions<TParams> extends Pick<MatchedRoute, "allowRouteInActiveA
   // TODO: Remove this params are now fetched from a container level not route...
   getParams: (route: RouteState) => TParams;
   accessControl?: (auth: Authorisation, params: TParams, config: IClientConfig) => boolean;
-  getTitle: (getTitleArgs: { params: TParams; stores: IStores; content: Content }) => {
+  getTitle: (getTitleArgs: { params: TParams; stores: IStores; content: Copy }) => {
     htmlTitle: string;
     displayTitle: string;
   };

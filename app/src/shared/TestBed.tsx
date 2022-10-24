@@ -3,15 +3,14 @@ import { createMemoryHistory } from "history";
 import { Router } from "react-router-dom";
 import { mountedContext } from "@ui/features";
 import { PageTitleProvider } from "@ui/features/page-title";
-import { Content } from "@content/content";
+import { Copy } from "@copy/Copy";
 import { ContentProvider, IStores, StoresProvider } from "@ui/redux";
 
-export type TestBedContent = Partial<Content>;
 export type TestBedStore = Partial<IStores>;
 
 export interface ITestBedProps {
   children: React.ReactElement<{}>;
-  content?: TestBedContent;
+  competitionType?: string;
   stores?: TestBedStore;
   isServer?: boolean;
   pageTitle?: string;
@@ -28,7 +27,7 @@ export interface ITestBedProps {
 export function TestBed({
   isServer = false,
   stores,
-  content = {},
+  competitionType,
   children,
   pageTitle = "stub-displayTitle",
   shouldOmitRouterProvider,
@@ -66,7 +65,7 @@ export function TestBed({
     <mountedContext.Provider value={testBedMountState}>
       <PageTitleProvider title={pageTitle}>
         <StoresProvider value={storesValue as any}>
-          <ContentProvider value={content as any}>{children}</ContentProvider>
+          <ContentProvider value={new Copy(competitionType)}>{children}</ContentProvider>
         </StoresProvider>
       </PageTitleProvider>
     </mountedContext.Provider>

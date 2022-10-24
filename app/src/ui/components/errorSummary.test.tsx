@@ -2,26 +2,31 @@ import { render } from "@testing-library/react";
 
 import { ErrorSummary, ErrorSummaryProps } from "@ui/components";
 import { ErrorCode } from "@framework/types";
-import TestBed, { TestBedContent } from "@shared/TestBed";
+import TestBed from "@shared/TestBed";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<ErrorSummary />", () => {
   const stubContent = {
     components: {
       errorSummary: {
-        errorTitle: { content: "stub-errorContent" },
-        expiredMessageContent: { content: "stub-expiredMessageContent" },
-        unsavedWarningContent: { content: "stub-unsavedWarningContent" },
-        somethingGoneWrongContent: { content: "stub-somethingGoneWrongContent" },
-        updateAllFailure: { content: "stub-updateAllFailure" },
-        insufficienceAccessRights: { content: "stub-insufficienceAccessRights" },
-        notUploadedByOwner: { content: "stub-notUploadedByOwner" },
+        title: "stub-errorContent",
+        expiredMessage: "stub-expiredMessageContent",
+        unsavedWarning: "stub-unsavedWarningContent",
+        somethingGoneWrong: "stub-somethingGoneWrongContent",
+        updateAllFailure: "stub-updateAllFailure",
+        insufficientAccessRights: "stub-insufficientAccessRights",
+        notUploadedByOwner: "stub-notUploadedByOwner",
       },
     },
   };
 
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent);
+  });
+
   const setup = (props: ErrorSummaryProps) =>
     render(
-      <TestBed content={stubContent as TestBedContent}>
+      <TestBed>
         <ErrorSummary {...props} />
       </TestBed>,
     );
@@ -30,7 +35,7 @@ describe("<ErrorSummary />", () => {
     test("with title", () => {
       const { queryByText } = setup({ code: ErrorCode.UNKNOWN_ERROR });
 
-      const titleElement = queryByText(stubContent.components.errorSummary.errorTitle.content);
+      const titleElement = queryByText(stubContent.components.errorSummary.title);
 
       expect(titleElement).toBeInTheDocument();
     });
@@ -39,8 +44,8 @@ describe("<ErrorSummary />", () => {
       test("as default", () => {
         const { queryByText } = setup({ code: ErrorCode.UNAUTHENTICATED_ERROR });
 
-        const expiredMessageElement = queryByText(stubContent.components.errorSummary.expiredMessageContent.content);
-        const unsavedMessageElement = queryByText(stubContent.components.errorSummary.unsavedWarningContent.content);
+        const expiredMessageElement = queryByText(stubContent.components.errorSummary.expiredMessage);
+        const unsavedMessageElement = queryByText(stubContent.components.errorSummary.unsavedWarning);
 
         expect(expiredMessageElement).toBeInTheDocument();
         expect(unsavedMessageElement).toBeInTheDocument();
@@ -59,9 +64,7 @@ describe("<ErrorSummary />", () => {
         test.each(allAuthenticatedErrors)("with %s", errorKey => {
           const { queryByText } = setup({ code: errorKey });
 
-          const fallbackErrorElement = queryByText(
-            stubContent.components.errorSummary.somethingGoneWrongContent.content,
-          );
+          const fallbackErrorElement = queryByText(stubContent.components.errorSummary.somethingGoneWrong);
 
           expect(fallbackErrorElement).toBeInTheDocument();
         });
@@ -70,9 +73,9 @@ describe("<ErrorSummary />", () => {
       describe("with error messages", () => {
         test.each`
           name                                                          | errorMessage                         | expectedContent
-          ${"with an update all failure"}                               | ${"SF_UPDATE_ALL_FAILURE"}           | ${stubContent.components.errorSummary.updateAllFailure.content}
-          ${"with insufficient access to remove claim line items"}      | ${"INSUFFICIENT_ACCESS_OR_READONLY"} | ${stubContent.components.errorSummary.insufficienceAccessRights.content}
-          ${"when the document owner does not match original uploader"} | ${"NOT_UPLOADED_FROM_OWNER"}         | ${stubContent.components.errorSummary.notUploadedByOwner.content}
+          ${"with an update all failure"}                               | ${"SF_UPDATE_ALL_FAILURE"}           | ${stubContent.components.errorSummary.updateAllFailure}
+          ${"with insufficient access to remove claim line items"}      | ${"INSUFFICIENT_ACCESS_OR_READONLY"} | ${stubContent.components.errorSummary.insufficientAccessRights}
+          ${"when the document owner does not match original uploader"} | ${"NOT_UPLOADED_FROM_OWNER"}         | ${stubContent.components.errorSummary.notUploadedByOwner}
         `("$name", ({ errorMessage, expectedContent }) => {
           const { queryByText } = setup({ code: ErrorCode.UNKNOWN_ERROR, message: errorMessage });
 
@@ -85,7 +88,7 @@ describe("<ErrorSummary />", () => {
       test("when authenticated with message missing", () => {
         const { queryByText } = setup({ code: ErrorCode.UNKNOWN_ERROR, message: undefined });
 
-        const fallbackErrorElement = queryByText(stubContent.components.errorSummary.somethingGoneWrongContent.content);
+        const fallbackErrorElement = queryByText(stubContent.components.errorSummary.somethingGoneWrong);
 
         expect(fallbackErrorElement).toBeInTheDocument();
       });

@@ -30,7 +30,7 @@ const InnerContainer = (
         onSubmit={() => props.onSave(false)}
         onChange={dto => props.onChange(dto)}
       >
-        <Form.Fieldset heading={x => x.pcrNameChange.selectPartnerHeading}>
+        <Form.Fieldset heading={x => x.pages.pcrNameChange.headingSelectPartner}>
           <Form.Radio
             name="partnerId"
             hint={props.getRequiredToCompleteMessage()}
@@ -41,9 +41,9 @@ const InnerContainer = (
             validation={props.validator.partnerId}
           />
         </Form.Fieldset>
-        <Form.Fieldset heading={x => x.pcrNameChange.enterNameHeading}>
+        <Form.Fieldset heading={x => x.pages.pcrNameChange.headingEnterName}>
           <Form.String
-            label={x => x.pcrNameChange.labels.enterName}
+            label={x => x.pcrNameChangeLabels.enterName}
             hint={props.getRequiredToCompleteMessage()}
             labelHidden
             name="accountName"
@@ -53,7 +53,7 @@ const InnerContainer = (
           />
         </Form.Fieldset>
         <Form.Submit>
-          <ACC.Content value={x => x.pcrNameChange.pcrItem.submitButton} />
+          <ACC.Content value={x => x.pcrItem.submitButton} />
         </Form.Submit>
       </Form.Form>
     </ACC.Section>

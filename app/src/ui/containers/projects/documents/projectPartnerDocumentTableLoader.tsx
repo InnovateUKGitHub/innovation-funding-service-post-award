@@ -14,9 +14,13 @@ export const ProjectPartnerDocumentTableLoader = (
     <>
       <H3>
         {isMo ? (
-          <Content value={x => x.projectDocuments.partnerLevelSubtitle} />
+          <Content value={x => x.pages.projectDocuments.partnerLevelSubtitle} />
         ) : (
-          <Content value={x => x.projectDocuments.partnerSelfLevelSubtitle(getCurrentPartnerName(props.partners))} />
+          <Content
+            value={x =>
+              x.pages.projectDocuments.partnerSelfLevelSubtitle({ partnerName: getCurrentPartnerName(props.partners) })
+            }
+          />
         )}
       </H3>
 

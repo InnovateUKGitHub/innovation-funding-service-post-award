@@ -38,7 +38,7 @@ export function TravelAndSubsFormComponent({
         <Form.Hidden name="id" value={dto => dto.id} />
 
         <Form.String
-          label={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.description}
+          label={x => x.pcrSpendProfileLabels.travelAndSubs.description}
           width="one-half"
           name="description"
           value={dto => dto.description}
@@ -47,7 +47,7 @@ export function TravelAndSubsFormComponent({
         />
 
         <Form.Numeric
-          label={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.numberOfTimes}
+          label={x => x.pcrSpendProfileLabels.travelAndSubs.numberOfTimes}
           name="numberOfTimes"
           width="one-third"
           value={dto => dto.numberOfTimes}
@@ -56,7 +56,7 @@ export function TravelAndSubsFormComponent({
         />
 
         <Form.Numeric
-          label={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.costOfEach}
+          label={x => x.pcrSpendProfileLabels.travelAndSubs.costOfEach}
           name="costOfEach"
           width="one-third"
           value={dto => dto.costOfEach}
@@ -65,7 +65,7 @@ export function TravelAndSubsFormComponent({
         />
         {isClient && (
           <Form.Custom
-            label={x => x.pcrSpendProfilePrepareCostContent.labels.travelAndSubs.totalCost}
+            label={x => x.pcrSpendProfileLabels.travelAndSubs.totalCost}
             labelBold
             name="totalCost"
             value={dto => (
@@ -80,7 +80,9 @@ export function TravelAndSubsFormComponent({
 
       <Form.Fieldset qa="save">
         <Form.Submit>
-          <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.submitButton(costCategory.name)} />
+          <ACC.Content
+            value={x => x.pages.pcrSpendProfilePrepareCost.buttonSubmit({ costCategoryName: costCategory.name })}
+          />
         </Form.Submit>
       </Form.Fieldset>
     </Form.Form>

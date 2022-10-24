@@ -12,33 +12,33 @@ export function ClaimReviewTable(props: ClaimProps) {
     <CostCategoriesTable.Table qa="cost-cat" data={costCategories} validationResult={props.validation}>
       <CostCategoriesTable.Custom
         qa="category"
-        header={getContent(x => x.claimsComponents.categoryLabel)}
+        header={getContent(x => x.pages.claimsComponents.categoryLabel)}
         value={x => x.label}
         cellClassName={x => (x.isTotal ? "govuk-!-font-weight-bold" : null)}
       />
 
       <CostCategoriesTable.Currency
         qa="forecastForPeriod"
-        header={getContent(x => x.claimsComponents.forecastForPeriod)}
+        header={getContent(x => x.pages.claimsComponents.forecastForPeriod)}
         value={x => x.cost.forecastThisPeriod}
       />
 
       <CostCategoriesTable.Currency
         qa="costsThisPeriod"
-        header={getContent(x => x.claimsComponents.costsClaimedThisPeriod)}
+        header={getContent(x => x.pages.claimsComponents.costsClaimedThisPeriod)}
         value={x => x.cost.costsClaimedThisPeriod}
         cellClassName={x => (x.isTotal ? "govuk-!-font-weight-bold" : null)}
       />
 
       <CostCategoriesTable.Currency
         qa="differencePounds"
-        header={getContent(x => x.claimsComponents.differenceInPounds)}
+        header={getContent(x => x.pages.claimsComponents.differenceInUnit)}
         value={x => x.differenceInPounds}
       />
 
       <CostCategoriesTable.Percentage
         qa="differencePercentage"
-        header={getContent(x => x.claimsComponents.differenceInPercent)}
+        header={getContent(x => x.pages.claimsComponents.differenceInUnit)}
         value={x => x.diffPercentage}
       />
     </CostCategoriesTable.Table>

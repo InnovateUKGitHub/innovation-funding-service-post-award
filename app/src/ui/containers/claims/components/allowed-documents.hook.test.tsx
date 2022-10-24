@@ -2,8 +2,9 @@ import { renderHook } from "@testing-library/react";
 
 import { DocumentDescription } from "@framework/types";
 
-import { hookTestBed, TestBedContent } from "@shared/TestBed";
+import { hookTestBed } from "@shared/TestBed";
 import { useEnumDocuments } from "@ui/containers/claims/components/allowed-documents.hook";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("useEnumDocuments()", () => {
   enum stubDocumentDescriptions {
@@ -15,6 +16,10 @@ describe("useEnumDocuments()", () => {
     Invoice = 210,
   }
 
+  enum stubUnknownDocumentDescriptions {
+    Unknown = 3821,
+  }
+
   const claimAllowedDocuments: Readonly<DocumentDescription[]> = [
     DocumentDescription.IAR,
     DocumentDescription.Evidence,
@@ -24,32 +29,27 @@ describe("useEnumDocuments()", () => {
     DocumentDescription.Invoice,
   ];
 
-  const stubLabels: Record<number, string | undefined> = {
-    10: "IAR",
-    30: "Evidence",
-    60: "StatementOfExpenditure",
-    110: "LMCMinutes",
-    120: "ScheduleThree",
-    210: "Invoice",
-  };
-
-  const stubUnknownDocumentLabel = "description.unknown";
-
-  const setup = (enumDocument: object, labelOverride = stubLabels) => {
-    const content = {
-      claimDocuments: {
-        documents: {
-          labels: {
-            documentDescriptionLabel: jest.fn((x: number) => ({
-              content: labelOverride[x] || stubUnknownDocumentLabel,
-            })),
-          },
-        },
+  const stubContent = {
+    documentLabels: {
+      description: {
+        iar: "stub-IAR",
+        evidence: "stub-Evidence",
+        statementOfExpenditure: "stub-StatementOfExpenditure",
+        lmcMinutes: "stub-LMCMinutes",
+        scheduleThree: "stub-ScheduleThree",
+        invoice: "stub-Invoice",
+        unknown: "stub-unknown",
       },
-    } as any as TestBedContent;
-
-    return renderHook(() => useEnumDocuments(enumDocument, claimAllowedDocuments), hookTestBed({ content }));
+    },
   };
+
+  const setup = (enumDocument: object) => {
+    return renderHook(() => useEnumDocuments(enumDocument, claimAllowedDocuments), hookTestBed({}));
+  };
+
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent);
+  });
 
   test("returns the correct array length", () => {
     // Note: Total keys here should match length below
@@ -85,28 +85,6 @@ describe("useEnumDocuments()", () => {
     const queryInvalidDocumentLabel = result.current.find(
       x => x.id === String(stubMissingLabelDocuments.Description_with_no_available_label),
     );
-
-    expect(queryInvalidDocumentLabel).toBeUndefined();
-  });
-
-  test("returns back with 1 unknown value", () => {
-    const stubMissingLabel: Record<number, string | undefined> = {
-      10: undefined,
-      30: "Evidence",
-      60: "StatementOfExpenditure",
-      110: "LMCMinutes",
-      120: "ScheduleThree",
-      210: "Invoice",
-    };
-
-    const { result } = setup(stubDocumentDescriptions, stubMissingLabel);
-
-    const totalUnknownValues = result.current.find(x => x.value === stubUnknownDocumentLabel);
-
-    expect(totalUnknownValues).toBeDefined();
-
-    // Note: Lets ensure that the array is correct but the invalid item did not filter through!
-    const queryInvalidDocumentLabel = result.current.find(x => x.id === String(stubMissingLabel[10]));
 
     expect(queryInvalidDocumentLabel).toBeUndefined();
   });

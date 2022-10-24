@@ -1,9 +1,10 @@
 import { render } from "@testing-library/react";
-import { TestBed, TestBedContent } from "@shared/TestBed";
+import { TestBed } from "@shared/TestBed";
 import { ClaimStatus, ProjectRole, PartnerStatus, ProjectStatus } from "@framework/constants";
 import { routeConfig } from "@ui/routing/routeConfig";
 
 import { ClaimDetailsLink, ClaimDetailsLinkRoutes } from "@ui/components/claims/claimDetailsLink";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 // TODO: This test data needs updating there are way too many "as any" overrides here...
 describe("<ClaimDetailsLink />", () => {
@@ -13,9 +14,9 @@ describe("<ClaimDetailsLink />", () => {
   const stubContent = {
     components: {
       claimDetailsLinkContent: {
-        editClaimText: { content: "stub_editClaimText" },
-        reviewClaimText: { content: "stub-reviewClaimText" },
-        viewClaimText: { content: "stub-viewClaimText" },
+        editClaim: "stub_editClaimText",
+        reviewClaim: "stub-reviewClaimText",
+        viewClaim: "stub-viewClaimText",
       },
     },
   };
@@ -28,11 +29,15 @@ describe("<ClaimDetailsLink />", () => {
     };
 
     return render(
-      <TestBed content={stubContent as TestBedContent}>
+      <TestBed>
         <ClaimDetailsLink {...defaultProps} {...props} />
       </TestBed>,
     );
   };
+
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent);
+  });
 
   describe("with edge cases", () => {
     test("when the project is on hold", () => {
@@ -51,7 +56,7 @@ describe("<ClaimDetailsLink />", () => {
 
       const { queryByText } = setup(draftProps);
 
-      expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaimText.content)).toBeInTheDocument();
+      expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaim)).toBeInTheDocument();
     });
 
     test("when the partner is on hold", () => {
@@ -65,7 +70,7 @@ describe("<ClaimDetailsLink />", () => {
 
       const { queryByText } = setup(draftProps);
 
-      expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaimText.content)).toBeInTheDocument();
+      expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaim)).toBeInTheDocument();
     });
 
     test("when the partner is withdrawn", () => {
@@ -79,7 +84,7 @@ describe("<ClaimDetailsLink />", () => {
 
       const { queryByText } = setup(draftProps);
 
-      expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaimText.content)).toBeInTheDocument();
+      expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaim)).toBeInTheDocument();
     });
   });
 
@@ -97,7 +102,7 @@ describe("<ClaimDetailsLink />", () => {
 
       const { queryByText } = setup(draftProps);
 
-      expect(queryByText(stubContent.components.claimDetailsLinkContent.editClaimText.content)).toBeInTheDocument();
+      expect(queryByText(stubContent.components.claimDetailsLinkContent.editClaim)).toBeInTheDocument();
     });
 
     test("when project is MO returns view link", () => {
@@ -116,7 +121,7 @@ describe("<ClaimDetailsLink />", () => {
 
       const { queryByText } = setup(draftProps);
 
-      expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaimText.content)).toBeInTheDocument();
+      expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaim)).toBeInTheDocument();
     });
 
     test("when project is not an FC and the partner is not MO returns view link", () => {
@@ -149,7 +154,7 @@ describe("<ClaimDetailsLink />", () => {
 
       const { queryByText } = setup(moQueriedProps);
 
-      expect(queryByText(stubContent.components.claimDetailsLinkContent.editClaimText.content)).toBeInTheDocument();
+      expect(queryByText(stubContent.components.claimDetailsLinkContent.editClaim)).toBeInTheDocument();
     });
 
     test("when partner is not FC returns view link", () => {
@@ -163,7 +168,47 @@ describe("<ClaimDetailsLink />", () => {
 
       const { queryByText } = setup(moQueriedProps);
 
-      expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaimText.content)).toBeInTheDocument();
+      expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaim)).toBeInTheDocument();
+    });
+
+    describe("when project role is not MO returns edit link", () => {
+      test("when PM", () => {
+        const projectRole = ProjectRole.ProjectManager;
+
+        const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
+          claim: { periodId: 3, status: moQueriedClaimState },
+          project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
+          partner: {
+            id: partnerId,
+            roles: ProjectRole.MonitoringOfficer,
+            partnerStatus: PartnerStatus.Active,
+            isWithdrawn: false,
+          },
+        };
+
+        const { queryByText } = setup(moQueriedProps);
+
+        expect(queryByText(stubContent.components.claimDetailsLinkContent.editClaim)).toBeInTheDocument();
+      });
+
+      test("when FC", () => {
+        const projectRole = ProjectRole.FinancialContact;
+
+        const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
+          claim: { periodId: 3, status: moQueriedClaimState },
+          project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
+          partner: {
+            id: partnerId,
+            roles: ProjectRole.MonitoringOfficer,
+            partnerStatus: PartnerStatus.Active,
+            isWithdrawn: false,
+          },
+        };
+
+        const { queryByText } = setup(moQueriedProps);
+
+        expect(queryByText(stubContent.components.claimDetailsLinkContent.editClaim)).toBeInTheDocument();
+      });
     });
   });
 
@@ -181,7 +226,7 @@ describe("<ClaimDetailsLink />", () => {
 
       const { queryByText } = setup(moQueriedProps);
 
-      expect(queryByText(stubContent.components.claimDetailsLinkContent.editClaimText.content)).toBeInTheDocument();
+      expect(queryByText(stubContent.components.claimDetailsLinkContent.editClaim)).toBeInTheDocument();
     });
 
     test("when partner is not FC returns view link", () => {
@@ -195,7 +240,7 @@ describe("<ClaimDetailsLink />", () => {
 
       const { queryByText } = setup(moQueriedProps);
 
-      expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaimText.content)).toBeInTheDocument();
+      expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaim)).toBeInTheDocument();
     });
   });
 
@@ -218,7 +263,7 @@ describe("<ClaimDetailsLink />", () => {
 
       const { queryByText } = setup(moQueriedProps);
 
-      expect(queryByText(stubContent.components.claimDetailsLinkContent.reviewClaimText.content)).toBeInTheDocument();
+      expect(queryByText(stubContent.components.claimDetailsLinkContent.reviewClaim)).toBeInTheDocument();
     });
 
     test("when project role is not MO always returns view", () => {
@@ -237,7 +282,7 @@ describe("<ClaimDetailsLink />", () => {
 
       const { queryByText } = setup(moQueriedProps);
 
-      expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaimText.content)).toBeInTheDocument();
+      expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaim)).toBeInTheDocument();
     });
   });
 
@@ -262,7 +307,7 @@ describe("<ClaimDetailsLink />", () => {
 
       const { queryByText } = setup(awaitingIarProps);
 
-      expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaimText.content)).toBeInTheDocument();
+      expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaim)).toBeInTheDocument();
     });
   });
 });

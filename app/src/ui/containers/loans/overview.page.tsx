@@ -60,7 +60,7 @@ export function LoansOverviewContainer({ projectId, ...props }: LoansOverviewCon
     isResolved && !!payload ? (
       <ACC.Projects.Title {...payload.project} />
     ) : (
-      <ACC.Renderers.SimpleString>{getContent(x => x.loansSummary.loadingDrawdowns)}</ACC.Renderers.SimpleString>
+      <ACC.Renderers.SimpleString>{getContent(x => x.pages.loansSummary.loadingDrawdowns)}</ACC.Renderers.SimpleString>
     );
 
   return (
@@ -68,13 +68,13 @@ export function LoansOverviewContainer({ projectId, ...props }: LoansOverviewCon
       pageTitle={pageTitleValue}
       backLink={
         <ACC.BackLink route={props.routes.projectOverview.getLink({ projectId })}>
-          {getContent(x => x.projectOverview.backToProjects)}
+          {getContent(x => x.pages.projectOverview.backToProjects)}
         </ACC.BackLink>
       }
     >
       {isRejected && (
         <ACC.Renderers.SimpleString>
-          {getContent(x => x.loansSummary.rejectedDrawdownsError)}
+          {getContent(x => x.pages.loansSummary.rejectedDrawdownsError)}
         </ACC.Renderers.SimpleString>
       )}
 
@@ -90,5 +90,5 @@ export const LoansSummaryRoute = defineRoute<LoansOverviewParams>({
   getParams: r => ({
     projectId: r.params.projectId,
   }),
-  getTitle: x => x.content.loansSummary.title(),
+  getTitle: x => x.content.getTitleCopy(x => x.pages.loansSummary.title),
 });

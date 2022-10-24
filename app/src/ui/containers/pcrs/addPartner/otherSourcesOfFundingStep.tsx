@@ -90,7 +90,7 @@ const OtherSourcesOfFunding = ({
               className="govuk-link"
               onClick={e => addItem(e, pcrItemDto)}
             >
-              <ACC.Content value={x => x.pcrAddPartnerOtherFundingSources.addButton} />
+              <ACC.Content value={x => x.pages.pcrAddPartnerOtherFundingSources.buttonAdd} />
             </button>
           </td>
         </tr>,
@@ -104,7 +104,7 @@ const OtherSourcesOfFunding = ({
         </td>
 
         <td className="govuk-table__cell govuk-table__cell--numeric govuk-!-font-weight-bold">
-          <ACC.Content value={x => x.pcrAddPartnerOtherFundingSources.footerLabelTotal} />
+          <ACC.Content value={x => x.pages.pcrAddPartnerOtherFundingSources.footerLabelTotal} />
         </td>
 
         <td className="govuk-table__cell govuk-table__cell--numeric">
@@ -126,8 +126,8 @@ const OtherSourcesOfFunding = ({
   const Table = ACC.TypedTable<PCRSpendProfileOtherFundingDto>();
 
   return (
-    <ACC.Section title={x => x.pcrAddPartnerOtherFundingSources.formSectionTitle}>
-      <ACC.Content value={x => x.pcrAddPartnerOtherFundingSources.guidance} />
+    <ACC.Section title={x => x.pages.pcrAddPartnerOtherFundingSources.formSectionTitle}>
+      <ACC.Content markdown value={x => x.pages.pcrAddPartnerOtherFundingSources.guidance} />
 
       <Form.Form qa="addPartnerForm" data={{}} isSaving={status === EditorStatus.Saving} onSubmit={() => onSave(false)}>
         <Form.Fieldset>
@@ -135,7 +135,7 @@ const OtherSourcesOfFunding = ({
 
           <Table.Table qa="otherFundingTable" data={funds} footers={renderFooters(pcrItem)}>
             <Table.Custom
-              header={x => x.pcrAddPartnerOtherFundingSources.columnHeaderDescription}
+              header={x => x.pages.pcrAddPartnerOtherFundingSources.columnHeaderDescription}
               qa="cost-description"
               value={(x, i) => (
                 <>
@@ -156,7 +156,7 @@ const OtherSourcesOfFunding = ({
             />
 
             <Table.Custom
-              header={x => x.pcrAddPartnerOtherFundingSources.columnHeaderDate}
+              header={x => x.pages.pcrAddPartnerOtherFundingSources.columnHeaderDate}
               qa="cost-date"
               value={(x, i) => (
                 <Form.MonthYear
@@ -173,7 +173,7 @@ const OtherSourcesOfFunding = ({
               )}
             />
             <Table.Custom
-              header={x => x.pcrAddPartnerOtherFundingSources.columnHeaderValue}
+              header={x => x.pages.pcrAddPartnerOtherFundingSources.columnHeaderValue}
               qa="cost-value"
               value={(x, i) => (
                 <Form.Numeric
@@ -199,7 +199,7 @@ const OtherSourcesOfFunding = ({
                     className="govuk-link"
                     onClick={e => removeItem(e, pcrItem, dto)}
                   >
-                    <ACC.Content value={x => x.pcrAddPartnerOtherFundingSources.removeButton} />
+                    <ACC.Content value={x => x.pages.pcrAddPartnerOtherFundingSources.buttonRemove} />
                   </button>
                 )}
                 width={1}
@@ -210,11 +210,11 @@ const OtherSourcesOfFunding = ({
 
         <Form.Fieldset qa="save-and-continue">
           <Form.Submit>
-            <ACC.Content value={x => x.pcrAddPartnerOtherFundingSources.pcrItem.submitButton} />
+            <ACC.Content value={x => x.pcrItem.submitButton} />
           </Form.Submit>
 
           <Form.Button name="saveAndReturnToSummary" onClick={() => onSave(true)}>
-            <ACC.Content value={x => x.pcrAddPartnerOtherFundingSources.pcrItem.returnToSummaryButton} />
+            <ACC.Content value={x => x.pcrItem.returnToSummaryButton} />
           </Form.Button>
         </Form.Fieldset>
       </Form.Form>

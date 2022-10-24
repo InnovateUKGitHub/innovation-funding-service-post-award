@@ -38,11 +38,11 @@ class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & 
                 onChange={dto => this.props.onFileChange("DontSave", dto)}
                 qa="projectChangeRequestItemUpload"
               >
-                <UploadForm.Fieldset heading={x => x.pcrReasoningPrepareFiles.documentMessages.uploadDocumentsLabel}>
+                <UploadForm.Fieldset heading={x => x.documentMessages.uploadDocuments}>
                   <ACC.DocumentGuidance />
 
                   <UploadForm.MultipleFileUpload
-                    label={x => x.pcrReasoningPrepareFiles.documentLabels.uploadInputLabel}
+                    label={x => x.documentLabels.uploadInputLabel}
                     name="attachment"
                     labelHidden
                     value={data => data.files}
@@ -55,7 +55,7 @@ class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & 
                     styling="Secondary"
                     onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}
                   >
-                    <ACC.Content value={x => x.pcrReasoningPrepareFiles.documentMessages.uploadDocumentsLabel} />
+                    <ACC.Content value={x => x.documentMessages.uploadDocuments} />
                   </UploadForm.Button>
                 </UploadForm.Fieldset>
               </UploadForm.Form>
@@ -68,7 +68,7 @@ class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & 
               </ACC.Section>
 
               <ACC.Link styling="PrimaryButton" route={back}>
-                <ACC.Content value={x => x.pcrReasoningPrepareFiles.pcrItem.submitButton} />
+                <ACC.Content value={x => x.pcrItem.submitButton} />
               </ACC.Link>
             </ACC.Section>
           </>

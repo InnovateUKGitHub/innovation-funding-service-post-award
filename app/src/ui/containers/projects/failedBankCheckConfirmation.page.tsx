@@ -23,7 +23,7 @@ function FailedBankCheckConfirmation({ projectId, partnerId, routes, ...props }:
   const renderContents = (project: ProjectDto) => {
     const projectSetupRoute = routes.projectSetup.getLink({ projectId, partnerId });
 
-    const failedConfirmationBackLink = getContent(x => x.failedBankCheckConfirmation.backLink);
+    const failedConfirmationBackLink = getContent(x => x.pages.failedBankCheckConfirmation.backLink);
     const backLink = <ACC.BackLink route={projectSetupRoute}>{failedConfirmationBackLink}</ACC.BackLink>;
     const pageTitle = <ACC.Projects.Title {...project} />;
 
@@ -31,31 +31,31 @@ function FailedBankCheckConfirmation({ projectId, partnerId, routes, ...props }:
       <ACC.Page backLink={backLink} pageTitle={pageTitle} project={project}>
         <ACC.Section qa="guidance">
           <ACC.Renderers.SimpleString>
-            {getContent(x => x.failedBankCheckConfirmation.guidanceLine1)}
+            {getContent(x => x.pages.failedBankCheckConfirmation.guidance.line1)}
           </ACC.Renderers.SimpleString>
 
           <ACC.Renderers.SimpleString>
-            {getContent(x => x.failedBankCheckConfirmation.guidanceLine2)}
+            {getContent(x => x.pages.failedBankCheckConfirmation.guidance.line2)}
           </ACC.Renderers.SimpleString>
 
           <ACC.Renderers.SimpleString>
-            {getContent(x => x.failedBankCheckConfirmation.guidanceLine3)}
+            {getContent(x => x.pages.failedBankCheckConfirmation.guidance.line3)}
           </ACC.Renderers.SimpleString>
 
           <ACC.Renderers.SimpleString>
-            {getContent(x => x.failedBankCheckConfirmation.guidanceListIntro)}
+            {getContent(x => x.pages.failedBankCheckConfirmation.guidance.list.intro)}
           </ACC.Renderers.SimpleString>
 
           <ACC.UL>
-            <li>{getContent(x => x.failedBankCheckConfirmation.guidanceListItem1)}</li>
-            <li>{getContent(x => x.failedBankCheckConfirmation.guidanceListItem2)}</li>
-            <li>{getContent(x => x.failedBankCheckConfirmation.guidanceListItem3)}</li>
+            <li>{getContent(x => x.pages.failedBankCheckConfirmation.guidance.list.item1)}</li>
+            <li>{getContent(x => x.pages.failedBankCheckConfirmation.guidance.list.item2)}</li>
+            <li>{getContent(x => x.pages.failedBankCheckConfirmation.guidance.list.item3)}</li>
           </ACC.UL>
         </ACC.Section>
 
         <ACC.Section qa="return-to-setup-button">
           <ACC.Link styling="PrimaryButton" route={projectSetupRoute}>
-            {getContent(x => x.failedBankCheckConfirmation.returnButton)}
+            {getContent(x => x.pages.failedBankCheckConfirmation.returnToSetup)}
           </ACC.Link>
         </ACC.Section>
       </ACC.Page>
@@ -80,5 +80,5 @@ export const FailedBankCheckConfirmationRoute = defineRoute<FailedBankCheckConfi
   }),
   container: FailedBankCheckConfirmationContainer,
   accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(ProjectRole.FinancialContact),
-  getTitle: x => x.content.failedBankCheckConfirmation.title(),
+  getTitle: x => x.content.getTitleCopy(x => x.pages.failedBankCheckConfirmation.title),
 });

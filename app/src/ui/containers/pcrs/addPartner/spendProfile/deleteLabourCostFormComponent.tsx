@@ -5,31 +5,33 @@ import { SpendProfileDeleteFormProps } from "@ui/containers";
 export const DeleteLabourCostFormComponent = (props: SpendProfileDeleteFormProps<PCRSpendProfileLabourCostDto>) => {
   const { data, costCategory } = props;
   return (
-    <ACC.Section title={x => x.pcrSpendProfileDeleteCostContent.costSectionTitle(costCategory.name)}>
-      <ACC.ValidationMessage messageType="alert" message={x => x.pcrSpendProfileDeleteCostContent.deleteGuidance} />
+    <ACC.Section
+      title={x => x.pages.pcrSpendProfileDeleteCost.sectionTitleCost({ costCategoryName: costCategory.name })}
+    >
+      <ACC.ValidationMessage messageType="alert" message={x => x.pages.pcrSpendProfileDeleteCost.guidanceDelete} />
       <ACC.SummaryList qa="deleteLabourCost">
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.labour.role}
+          label={x => x.pcrSpendProfileLabels.labour.role}
           content={data.description}
           qa="roleWithinProject"
         />
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.labour.grossCost}
+          label={x => x.pcrSpendProfileLabels.labour.grossCost}
           content={<ACC.Renderers.Currency value={data.grossCostOfRole} />}
           qa="grossCostOfRole"
         />
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.labour.rate}
+          label={x => x.pcrSpendProfileLabels.labour.rate}
           content={<ACC.Renderers.Currency value={data.ratePerDay} />}
           qa="ratePerDay"
         />
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.labour.daysOnProject}
+          label={x => x.pcrSpendProfileLabels.labour.daysSpentOnProject}
           content={data.daysSpentOnProject}
           qa="daysSpentOnProject"
         />
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.labour.totalCost}
+          label={x => x.pcrSpendProfileLabels.labour.totalCost}
           content={<ACC.Renderers.Currency value={data.value} />}
           qa="totalCost"
         />

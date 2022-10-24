@@ -1,40 +1,41 @@
 import { render } from "@testing-library/react";
 
-import { TestBed, TestBedContent, TestBedStore } from "@shared/TestBed";
+import { TestBed, TestBedStore } from "@shared/TestBed";
 import { ErrorContainer, ErrorContainerProps } from "@ui/components/errors";
 import { ErrorCode } from "@framework/constants";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<ErrorContainer />", () => {
   describe("@renders", () => {
     const stubContent = {
-      errors: {
-        genericFallback: {
-          standardError: { content: "stub-standardError" },
-          dashboardText: { content: "stub-dashboardText" },
+      pages: {
+        genericFallbackError: {
+          message: "stub-standardError",
+          dashboardText: "stub-dashboardText",
         },
-        unauthenticated: {
-          contactUsPreLinkContent: { content: "stub-contactUsPreLinkContent" },
-          contactUsLinkTextContent: { content: "stub-contactUsLinkTextContent" },
-          contactUsPostLinkContent: { content: "stub-contactUsPostLinkContent" },
+        unauthenticatedError: {
+          preLinkContent: "stub-contactUsPreLinkContent",
+          linkTextContent: "stub-contactUsLinkTextContent",
+          postLinkContent: "stub-contactUsPostLinkContent",
         },
-        notfound: {
-          notFoundError: { content: "stub-notFoundError" },
-          goBackMessage: { content: "stub-goBackMessage" },
-          innovateUKMessage: { content: "stub-innovateUKMessage" },
-          yourDashboardMessage: { content: "stub-yourDashboardMessage" },
+        notFoundError: {
+          errorMessage: "stub-notFoundError",
+          goBackMessage: "stub-goBackMessage",
+          innovateUkMessage: "stub-innovateUkMessage",
+          yourDashBoard: "stub-yourDashboardMessage",
         },
       },
       components: {
         userChanger: {
-          sectionTitle: { content: "stub-sectionTitle" },
-          pickUserSubtitle: { content: "stub-pickUserSubtitle" },
-          enterUserSubtitle: { content: "stub-enterUserSubtitle" },
-          projectDropdownPlaceholder: { content: "stub-projectDropdownPlaceholder" },
-          contactDropdownPlaceholder: { content: "stub-contactDropdownPlaceholder" },
-          contactListEmpty: { content: "stub-contactListEmpty" },
-          changeUserMessage: { content: "stub-changeUserMessage" },
-          resetUserMessage: { content: "stub-resetUserMessage" },
-          invalidUserMessage: { content: "stub-invalidUserMessage" },
+          sectionTitle: "stub-sectionTitle",
+          pickUserSubtitle: "stub-pickUserSubtitle",
+          enterUserSubtitle: "stub-enterUserSubtitle",
+          projectDropdownPlaceholder: "stub-projectDropdownPlaceholder",
+          contactDropdownPlaceholder: "stub-contactDropdownPlaceholder",
+          contactListEmpty: "stub-contactListEmpty",
+          changeUserMessage: "stub-changeUserMessage",
+          resetUserMessage: "stub-resetUserMessage",
+          invalidUserMessage: "stub-invalidUserMessage",
         },
       },
     };
@@ -49,10 +50,14 @@ describe("<ErrorContainer />", () => {
 
     const setup = (props: ErrorContainerProps) =>
       render(
-        <TestBed content={stubContent as unknown as TestBedContent} stores={testStore as unknown as TestBedStore}>
+        <TestBed stores={testStore as unknown as TestBedStore}>
           <ErrorContainer {...props} />
         </TestBed>,
       );
+
+    beforeAll(async () => {
+      testInitialiseInternationalisation(stubContent);
+    });
 
     describe("with fallback error", () => {
       test("when no errorType matches a value in error config", () => {

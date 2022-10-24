@@ -64,7 +64,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
       <ACC.Page
         backLink={
           <ACC.BackLink route={back}>
-            <ACC.Content value={x => x.claimDetailDocuments.documentMessages.backLink(costCategory.name)} />
+            <ACC.Content value={x => x.documentMessages.backLink({ previousPage: costCategory.name })} />
           </ACC.BackLink>
         }
         error={editor.error}
@@ -74,21 +74,23 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
         {isCombinationOfSBRI ? (
           <>
             <ACC.Renderers.SimpleString qa="sbriDocumentGuidance">
-              <ACC.Content value={x => x.claimDetailDocuments.messages.sbriDocumentDetailGuidance(costCategory.name)} />
+              <ACC.Content
+                value={x => x.claimsMessages.sbriDocumentDetailGuidance({ costCategoryName: costCategory.name })}
+              />
             </ACC.Renderers.SimpleString>
             <ACC.Renderers.SimpleString qa="sbriSupportingDocumentGuidance">
-              <ACC.Content value={x => x.claimDetailDocuments.messages.sbriSupportingDocumentGuidance} />
+              <ACC.Content value={x => x.claimsMessages.sbriSupportingDocumentGuidance} />
             </ACC.Renderers.SimpleString>
           </>
         ) : (
           <ACC.Renderers.SimpleString qa="guidanceText">
-            <ACC.Content value={x => x.claimDetailDocuments.messages.documentDetailGuidance} />
+            <ACC.Content value={x => x.claimsMessages.documentDetailGuidance} />
           </ACC.Renderers.SimpleString>
         )}
 
         <ACC.Renderers.Messages messages={this.props.messages} />
 
-        <ACC.Section title={x => x.claimDetailDocuments.documentMessages.uploadTitle}>
+        <ACC.Section title={x => x.documentMessages.uploadTitle}>
           <UploadForm.Form
             enctype="multipart"
             editor={editor}
@@ -102,7 +104,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
               <UploadForm.Hidden name="description" value={dto => dto.description} />
 
               <UploadForm.MultipleFileUpload
-                label={x => x.claimDetailDocuments.documentMessages.uploadDocumentsLabel}
+                label={x => x.documentMessages.uploadDocuments}
                 labelHidden
                 name="attachment"
                 validation={editor.validator.files}
@@ -112,7 +114,7 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
             </UploadForm.Fieldset>
 
             <UploadForm.Submit>
-              <ACC.Content value={x => x.claimDetailDocuments.documentMessages.uploadDocumentsLabel} />
+              <ACC.Content value={x => x.documentMessages.uploadDocuments} />
             </UploadForm.Submit>
           </UploadForm.Form>
         </ACC.Section>
@@ -135,9 +137,7 @@ const ClaimDetailDocumentsContainer = (props: ClaimDetailDocumentsPageParams & B
 
   const handleOnChange: Callbacks["onChange"] = (saving, dto) => {
     stores.messages.clearMessages();
-    const successMessage = getContent(x =>
-      x.claimDetailDocuments.documentMessages.getDocumentUploadedMessage(dto.files.length),
-    );
+    const successMessage = getContent(x => x.documentMessages.uploadedDocuments({ count: dto.files.length }));
 
     stores.claimDetailDocuments.updateClaimDetailDocumentsEditor(
       saving,

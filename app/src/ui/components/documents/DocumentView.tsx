@@ -39,10 +39,10 @@ function DocumentDisplay<T extends DocumentSummaryDto>({
 
   return (
     <>
-      {!hideHeader && <H2>{getContent(x => x.components.documents.labels.documentDisplayTitle)}</H2>}
+      {!hideHeader && <H2>{getContent(x => x.documentLabels.documentDisplayTitle)}</H2>}
 
       {!hideSubtitle && hasDocuments && (
-        <SimpleString>{getContent(x => x.components.documents.labels.documentDisplaySubTitle)}</SimpleString>
+        <SimpleString>{getContent(x => x.documentLabels.documentDisplaySubTitle)}</SimpleString>
       )}
 
       {displaySearch && <DocumentFilter qa="document-filter" {...filterConfig} />}

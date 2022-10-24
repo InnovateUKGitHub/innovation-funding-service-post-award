@@ -10,10 +10,10 @@ const innovateUKLink = "https://www.gov.uk/government/organisations/innovate-uk"
 export function NotFoundError() {
   const { getContent } = useContent();
 
-  const errorMessage = getContent(x => x.errors.notfound.notFoundError);
-  const goBackMessage = getContent(x => x.errors.notfound.goBackMessage);
-  const homepage = getContent(x => x.errors.notfound.innovateUKMessage);
-  const yourDashBoardMessage = getContent(x => x.errors.notfound.yourDashboardMessage);
+  const errorMessage = getContent(x => x.pages.notFoundError.errorMessage);
+  const goBackMessage = getContent(x => x.pages.notFoundError.goBackMessage);
+  const homepage = getContent(x => x.pages.notFoundError.innovateUkMessage);
+  const yourDashBoardMessage = getContent(x => x.pages.notFoundError.yourDashBoard);
 
   const dashboardLinkElement = <a href="/projects/dashboard">{yourDashBoardMessage}</a>;
   const innovateLinkElement = <ExternalLink href={innovateUKLink}>{homepage}</ExternalLink>;

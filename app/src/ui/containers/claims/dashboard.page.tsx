@@ -58,7 +58,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
         </ProjectParticipantsHoc>
 
         <Acc.Renderers.Messages messages={this.props.messages} />
-        <Acc.Section qa="current-claims-section" title={x => x.claimsDashboard.labels.openSectionTitle}>
+        <Acc.Section qa="current-claims-section" title={x => x.claimsLabels.openSectionTitle}>
           {this.renderCurrentClaims(
             currentClaim ? [currentClaim] : [],
             "current-claims-table",
@@ -67,7 +67,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
             previousClaims,
           )}
         </Acc.Section>
-        <Acc.Section qa="previous-claims-section" title={x => x.claimsDashboard.labels.closedSectionTitle}>
+        <Acc.Section qa="previous-claims-section" title={x => x.claimsLabels.closedSectionTitle}>
           {this.renderPreviousClaims(previousClaims, "previous-claims-table", project, partner)}
         </Acc.Section>
       </Acc.Page>
@@ -80,13 +80,13 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
     if (previousClaims && previousClaims.find(x => x.isFinalClaim)) {
       return (
         <Acc.Renderers.SimpleString qa="yourFinalClaimApprovedNotificationMessage">
-          <Acc.Content value={x => x.claimsDashboard.messages.noRemainingClaims} />
+          <Acc.Content value={x => x.claimsMessages.noRemainingClaims} />
         </Acc.Renderers.SimpleString>
       );
     }
     return (
       <Acc.Renderers.SimpleString>
-        <Acc.Content value={x => x.claimsDashboard.messages.noOpenClaimsMessage(date)} />
+        <Acc.Content value={x => x.claimsMessages.noOpenClaims(date)} />
       </Acc.Renderers.SimpleString>
     );
   }
@@ -116,7 +116,7 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
 
     return (
       <Acc.Renderers.SimpleString>
-        <Acc.Content value={x => x.claimsDashboard.messages.noClosedClaims} />
+        <Acc.Content value={x => x.claimsMessages.noClosedClaims} />
       </Acc.Renderers.SimpleString>
     );
   }
@@ -140,37 +140,29 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
             caption={tableCaption}
           >
             <ClaimTable.Custom
-              header={x => x.claimsDashboard.labels.period}
+              header={x => x.claimsLabels.period}
               qa="period"
               value={x => <Acc.Claims.ClaimPeriodDate claim={x} />}
             />
-
             <ClaimTable.Currency
-              header={x => x.claimsDashboard.labels.forecastCosts}
+              header={x => x.claimsLabels.forecastCosts}
               qa="forecast-cost"
               value={x => x.forecastCost}
             />
-
+            <ClaimTable.Currency header={x => x.claimsLabels.actualCosts} qa="actual-cost" value={x => x.totalCost} />
             <ClaimTable.Currency
-              header={x => x.claimsDashboard.labels.actualCosts}
-              qa="actual-cost"
-              value={x => x.totalCost}
-            />
-
-            <ClaimTable.Currency
-              header={x => x.claimsDashboard.labels.difference}
+              header={x => x.claimsLabels.difference}
               qa="diff"
               value={x => roundCurrency(x.forecastCost - x.totalCost)}
             />
-            <ClaimTable.Custom header={x => x.claimsDashboard.labels.status} qa="status" value={x => x.statusLabel} />
-
+            <ClaimTable.Custom header={x => x.claimsLabels.status} qa="status" value={x => x.statusLabel} />
             <ClaimTable.ShortDate
-              header={x => x.claimsDashboard.labels.lastUpdated}
+              header={x => x.claimsLabels.lastUpdatedDate}
               qa="date"
               value={x => x.paidDate || x.approvedDate || x.lastModifiedDate}
             />
             <ClaimTable.Custom
-              header={x => x.claimsDashboard.labels.actionHeader}
+              header={x => x.claimsLabels.actionHeader}
               hideHeader
               qa="link"
               value={x => (
@@ -222,5 +214,5 @@ export const ClaimsDashboardRoute = defineRoute({
 
     return isFC && !isMoOrPm;
   },
-  getTitle: ({ content }) => content.claimsDashboard.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.claimsDashboard.title),
 });

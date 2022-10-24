@@ -50,7 +50,7 @@ module.exports = {
     "@framework/(.*)": "<rootDir>/src/framework/$1",
     "@ui/(.*)": "<rootDir>/src/ui/$1",
     "@util/(.*)": "<rootDir>/src/util/$1",
-    "@content/(.*)": "<rootDir>/src/content/$1",
+    "@copy/(.*)": "<rootDir>/src/copy/$1",
     "@tests/(.*)": "<rootDir>/tests/$1",
   },
 };

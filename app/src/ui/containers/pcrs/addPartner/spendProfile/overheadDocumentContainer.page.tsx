@@ -66,7 +66,9 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
       <ACC.Page
         backLink={
           <ACC.BackLink route={back}>
-            <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.backLink(costCategory.name)} />
+            <ACC.Content
+              value={x => x.pages.pcrSpendProfilePrepareCost.backLink({ costCategoryName: costCategory.name })}
+            />
           </ACC.BackLink>
         }
         error={editor.error}
@@ -85,7 +87,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
           />
         </ACC.Section>
         <ACC.Link styling="PrimaryButton" route={back}>
-          <ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.submitButton} />
+          <ACC.Content value={x => x.pages.pcrSpendProfileOverheadDocuments.buttonSubmit} />
         </ACC.Link>
       </ACC.Page>
     );
@@ -97,8 +99,8 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
     const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
     return (
       <>
-        <ACC.Section title={x => x.pcrSpendProfileOverheadDocumentContent.guidanceHeading}>
-          <ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadGuidance} />
+        <ACC.Section title={x => x.pages.pcrSpendProfileOverheadDocuments.guidanceHeading}>
+          <ACC.Content markdown value={x => x.pages.pcrSpendProfileOverheadDocuments.guidanceDocumentUpload} />
         </ACC.Section>
 
         <ACC.Section>
@@ -108,18 +110,18 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
             onChange={dto => this.props.onFileChange(false, dto)}
             qa="projectChangeRequestItemUpload"
           >
-            <UploadForm.Fieldset heading={x => x.pcrSpendProfileOverheadDocumentContent.templateHeading} qa="template">
+            <UploadForm.Fieldset heading={x => x.pages.pcrSpendProfileOverheadDocuments.headingTemplate} qa="template">
               {this.renderTemplateLink()}
             </UploadForm.Fieldset>
 
             <UploadForm.Fieldset
               qa="documentUpload"
-              heading={x => x.pcrSpendProfileOverheadDocumentContent.documentUploadHeading}
+              heading={x => x.pages.pcrSpendProfileOverheadDocuments.documentUploadHeading}
             >
               <UploadForm.Hidden name="description" value={() => DocumentDescription.OverheadCalculationSpreadsheet} />
               <ACC.DocumentGuidance />
               <UploadForm.MultipleFileUpload
-                label={x => x.pcrSpendProfileOverheadDocumentContent.labels.uploadInputLabel}
+                label={x => x.documentLabels.uploadInputLabel}
                 name="attachment"
                 labelHidden
                 value={data => data.files}
@@ -136,7 +138,7 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
                 styling="Secondary"
                 onClick={() => this.props.onFileChange(true, documentsEditor.data)}
               >
-                <ACC.Content value={x => x.pcrSpendProfileOverheadDocumentContent.messages.uploadTitle} />
+                <ACC.Content value={x => x.documentMessages.uploadTitle} />
               </UploadForm.Button>
             </UploadForm.Fieldset>
           </UploadForm.Form>
@@ -215,6 +217,6 @@ export const PCRSpendProfileOverheadDocumentRoute = defineRoute<OverheadDocument
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,
   }),
-  getTitle: ({ content }) => content.pcrSpendProfileOverheadDocumentContent.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfileOverheadDocuments.title),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
 });

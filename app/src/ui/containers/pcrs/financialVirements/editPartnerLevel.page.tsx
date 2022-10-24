@@ -13,30 +13,28 @@ export function useEditPartnerLevelContent() {
   const { getContent } = useContent();
 
   return {
-    saveButton: getContent(x => x.financialVirementEditPartnerLevel.saveButton),
+    saveButton: getContent(x => x.pages.financialVirementEditPartnerLevel.saveButton),
 
-    remainingGrantInfoIntro: getContent(x => x.financialVirementEditPartnerLevel.remainingGrantInfo.intro),
-    remainingGrantInfoCheckRules: getContent(x => x.financialVirementEditPartnerLevel.remainingGrantInfo.checkRules),
+    remainingGrantInfoIntro: getContent(x => x.pages.financialVirementEditPartnerLevel.remainingGrantInfo.intro),
+    remainingGrantInfoCheckRules: getContent(
+      x => x.pages.financialVirementEditPartnerLevel.remainingGrantInfo.checkRules,
+    ),
     remainingGrantInfoRemainingGrant: getContent(
-      x => x.financialVirementEditPartnerLevel.remainingGrantInfo.remainingGrant,
+      x => x.pages.financialVirementEditPartnerLevel.remainingGrantInfo.remainingGrant,
     ),
     remainingGrantInfoFundingLevel: getContent(
-      x => x.financialVirementEditPartnerLevel.remainingGrantInfo.fundingLevel,
+      x => x.pages.financialVirementEditPartnerLevel.remainingGrantInfo.fundingLevel,
     ),
 
-    partnerName: getContent(x => x.financialVirementEditPartnerLevel.labels.partnerName),
-    partnerOriginalRemainingCosts: getContent(
-      x => x.financialVirementEditPartnerLevel.labels.partnerOriginalRemainingCosts,
-    ),
-    partnerOriginalRemainingGrant: getContent(
-      x => x.financialVirementEditPartnerLevel.labels.partnerOriginalRemainingGrant,
-    ),
-    originalFundingLevel: getContent(x => x.financialVirementEditPartnerLevel.labels.originalFundingLevel),
-    partnerNewRemainingCosts: getContent(x => x.financialVirementEditPartnerLevel.labels.partnerNewRemainingCosts),
-    partnerNewRemainingGrant: getContent(x => x.financialVirementEditPartnerLevel.labels.partnerNewRemainingGrant),
-    newFundingLevel: getContent(x => x.financialVirementEditPartnerLevel.labels.newFundingLevel),
-    projectTotals: getContent(x => x.financialVirementEditPartnerLevel.labels.projectTotals),
-    backToSummary: getContent(x => x.financialVirementEditPartnerLevel.labels.backToSummary),
+    partnerName: getContent(x => x.financialVirementLabels.partnerName),
+    partnerOriginalRemainingCosts: getContent(x => x.financialVirementLabels.partnerOriginalRemainingCosts),
+    partnerOriginalRemainingGrant: getContent(x => x.financialVirementLabels.partnerOriginalRemainingGrant),
+    originalFundingLevel: getContent(x => x.financialVirementLabels.originalFundingLevel),
+    partnerNewRemainingCosts: getContent(x => x.financialVirementLabels.partnerNewRemainingCosts),
+    partnerNewRemainingGrant: getContent(x => x.financialVirementLabels.partnerNewRemainingGrant),
+    newFundingLevel: getContent(x => x.financialVirementLabels.newFundingLevel),
+    projectTotals: getContent(x => x.financialVirementLabels.projectTotals),
+    backToSummary: getContent(x => x.financialVirementLabels.backToSummary),
   };
 }
 
@@ -256,5 +254,5 @@ export const FinancialVirementEditPartnerLevelRoute = defineRoute({
     pcrId: route.params.pcrId,
     itemId: route.params.itemId,
   }),
-  getTitle: ({ content }) => content.financialVirementEditPartnerLevel.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.financialVirementEditPartnerLevel.title),
 });

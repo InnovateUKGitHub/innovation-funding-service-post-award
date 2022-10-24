@@ -16,7 +16,7 @@ import {
   AccessibilityText,
 } from "@ui/components/renderers";
 import * as colour from "@ui/styles/colours";
-import { ContentSelector } from "@content/content";
+import type { ContentSelector } from "@copy/type";
 import { useContent } from "@ui/hooks";
 
 import { TableSortKey, useTableSorter } from "./documents/table-sorter";
@@ -98,7 +98,16 @@ export function TableColumn<T>({
   if (!props.mode) return null;
 
   const renderHeader = (column: number): JSX.Element => {
-    const headerValue: string | JSX.Element = isValidElement(header) ? header : getContent(header || "");
+    let headerValue: string | React.ReactElement<unknown>;
+
+    if (typeof header === "string" || isValidElement(header)) {
+      headerValue = header;
+    } else if (header) {
+      headerValue = getContent(header);
+    } else {
+      headerValue = "";
+    }
+
     const noHeaderValue: boolean = typeof headerValue === "string" ? !headerValue.length : false;
 
     const displayForScreenReaders = props.hideHeader || noHeaderValue;
@@ -221,7 +230,12 @@ const TableComponent = <T extends {}>({
       cloneElement(column, {
         mode: "header",
         columnIndex,
-        header: isValidElement(column?.props.header) ? column?.props.header : getContent(column?.props.header || ""),
+        header:
+          typeof column?.props.header === "undefined" ||
+          typeof column?.props.header === "string" ||
+          isValidElement(column?.props.header)
+            ? column?.props.header
+            : getContent(column?.props.header || ""),
         "aria-sort": getColumnOption?.(columnIndex),
         onSortClick: () => handleSort(columnIndex),
       }),

@@ -7,7 +7,7 @@ import * as ACC from "@ui/components";
 import { useContent } from "@ui/hooks";
 import { useStores } from "@ui/redux";
 import { IRoutes } from "@ui/routing";
-import { ContentSelector } from "@content/content";
+import type { ContentSelector } from "@copy/type";
 
 interface MonitoringReportDashboardParams {
   projectId: string;
@@ -63,32 +63,32 @@ function MonitoringReportDashboard(props: MonitoringReportDashboardParams & Moni
         <ACC.ValidationMessage
           qa="guidance-message"
           messageType="info"
-          message={x => x.monitoringReportsDashboard.messages.reportsSubmissionGuidance}
+          message={x => x.monitoringReportsMessages.reportsSubmissionGuidance}
         />
 
         <ACC.Link
           route={props.routes.monitoringReportCreate.getLink({ projectId: props.projectId })}
           className="govuk-button"
         >
-          <ACC.Content value={x => x.monitoringReportsDashboard.buttonNewMonitoringReport} />
+          <ACC.Content value={x => x.pages.monitoringReportsDashboard.buttonNewMonitoringReport} />
         </ACC.Link>
 
-        <ACC.Section title={<ACC.Content value={x => x.monitoringReportsDashboard.sectionTitleOpen} />}>
+        <ACC.Section title={<ACC.Content value={x => x.pages.monitoringReportsDashboard.sectionTitleOpen} />}>
           {reportSections.open.length ? (
             renderTable(reportSections.open, "current")
           ) : (
             <ACC.Renderers.SimpleString>
-              <ACC.Content value={x => x.monitoringReportsDashboard.messages.noOpenReportsMessage} />
+              <ACC.Content value={x => x.monitoringReportsMessages.noOpenReportsMessage} />
             </ACC.Renderers.SimpleString>
           )}
         </ACC.Section>
 
-        <ACC.Section title={<ACC.Content value={x => x.monitoringReportsDashboard.sectionTitleArchived} />}>
+        <ACC.Section title={<ACC.Content value={x => x.pages.monitoringReportsDashboard.sectionTitleArchived} />}>
           {reportSections.archived.length ? (
             renderTable(reportSections.archived, "previous")
           ) : (
             <ACC.Renderers.SimpleString>
-              <ACC.Content value={x => x.monitoringReportsDashboard.messages.noArchivedReportsMessage} />
+              <ACC.Content value={x => x.monitoringReportsMessages.noArchivedReportsMessage} />
             </ACC.Renderers.SimpleString>
           )}
         </ACC.Section>
@@ -106,7 +106,7 @@ function MonitoringReportDashboard(props: MonitoringReportDashboardParams & Moni
         qa={`${section}-reports-table`}
       >
         <ReportsTable.Custom
-          header={getContent(x => x.monitoringReportsDashboard.titleHeader)}
+          header={getContent(x => x.pages.monitoringReportsDashboard.headerTitle)}
           qa="title"
           value={report => (
             <ACC.PeriodTitle
@@ -117,17 +117,17 @@ function MonitoringReportDashboard(props: MonitoringReportDashboardParams & Moni
           )}
         />
         <ReportsTable.String
-          header={getContent(x => x.monitoringReportsDashboard.statusHeader)}
+          header={getContent(x => x.pages.monitoringReportsDashboard.headerStatus)}
           qa="status"
           value={report => report.statusName}
         />
         <ReportsTable.ShortDateTime
-          header={getContent(x => x.monitoringReportsDashboard.dateUploadedHeader)}
+          header={getContent(x => x.pages.monitoringReportsDashboard.headerDateUpdated)}
           qa="dateUpdated"
           value={report => report.lastUpdated}
         />
         <ReportsTable.Custom
-          header={getContent(x => x.monitoringReportsDashboard.actionHeader)}
+          header={getContent(x => x.pages.monitoringReportsDashboard.headerAction)}
           hideHeader
           qa="link"
           value={report => renderLinks(report)}
@@ -147,7 +147,7 @@ function MonitoringReportDashboard(props: MonitoringReportDashboardParams & Moni
           mode: "prepare",
           step: undefined,
         }),
-        titleContent: content => content.monitoringReportsDashboard.linkEditMonitoringReport,
+        titleContent: content => content.pages.monitoringReportsDashboard.linkEditMonitoringReport,
         qa: "editLink",
       });
     } else {
@@ -158,7 +158,7 @@ function MonitoringReportDashboard(props: MonitoringReportDashboardParams & Moni
           mode: "view",
           step: undefined,
         }),
-        titleContent: content => content.monitoringReportsDashboard.linkViewMonitoringReport,
+        titleContent: content => content.pages.monitoringReportsDashboard.linkViewMonitoringReport,
         qa: "viewLink",
       });
     }
@@ -166,7 +166,7 @@ function MonitoringReportDashboard(props: MonitoringReportDashboardParams & Moni
     if (report.status === MonitoringReportStatus.Draft) {
       links.push({
         route: props.routes.monitoringReportDelete.getLink({ projectId: report.projectId, id: report.headerId }),
-        titleContent: content => content.monitoringReportsDashboard.linkDeleteMonitoringReport,
+        titleContent: content => content.pages.monitoringReportsDashboard.linkDeleteMonitoringReport,
         qa: "deleteLink",
       });
     }
@@ -203,5 +203,5 @@ export const MonitoringReportDashboardRoute = defineRoute({
   getParams: r => ({ projectId: r.params.projectId, periodId: parseInt(r.params.periodId, 10) }),
   container: MonitoringReportContainer,
   accessControl: (auth, params) => auth.forProject(params.projectId).hasRole(ProjectRole.MonitoringOfficer),
-  getTitle: ({ content }) => content.monitoringReportsDashboard.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.monitoringReportsDashboard.title),
 });

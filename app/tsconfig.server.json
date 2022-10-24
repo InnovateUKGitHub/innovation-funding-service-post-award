@@ -17,7 +17,7 @@
       "@framework/*": ["src/framework/*"],
       "@ui/*": ["src/ui/*"],
       "@util/*": ["src/framework/util/*"],
-      "@content/*": ["src/content/*"],
+      "@copy/*": ["src/copy/*"],
       "@tests/*": ["tests/*"]
     },
     "strict": true,
