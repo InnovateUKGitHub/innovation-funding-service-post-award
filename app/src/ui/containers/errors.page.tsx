@@ -14,7 +14,7 @@ export const ErrorRoute = defineRoute<{}>({
   routePath: "/error",
   container: ErrorRouteContainer,
   getParams: () => ({}),
-  getTitle: ({ content }) => content.errors.genericFallback.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.genericFallbackError.title),
 });
 
 export const ErrorNotFoundContainer = NotFoundError;
@@ -24,5 +24,5 @@ export const ErrorNotFoundRoute = defineRoute<{}>({
   routePath: "/error-not-found",
   container: ErrorNotFoundContainer,
   getParams: () => ({}),
-  getTitle: ({ content }) => content.errors.notfound.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.notFoundError.title),
 });

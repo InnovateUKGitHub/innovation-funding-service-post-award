@@ -33,8 +33,8 @@ class Component extends React.Component<
             onChange={dto => this.props.onFileChange("DontSave", dto)}
             qa="projectChangeRequestItemUpload"
           >
-            <UploadForm.Fieldset heading={x => x.pcrRemovePartnerPrepareItemFiles.guidanceHeading}>
-              <ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.guidance} />
+            <UploadForm.Fieldset heading={x => x.pages.pcrPrepareItemFilesForPartnerWithdrawal.guidanceHeading}>
+              <ACC.Content markdown value={x => x.pages.pcrPrepareItemFilesForPartnerWithdrawal.guidance} />
 
               <ACC.DocumentGuidance />
 
@@ -54,7 +54,7 @@ class Component extends React.Component<
                 styling="Secondary"
                 onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}
               >
-                <ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.pcrItem.uploadDocumentsButton} />
+                <ACC.Content value={x => x.pcrItem.uploadDocumentsButton} />
               </UploadForm.Button>
             </UploadForm.Fieldset>
           </UploadForm.Form>
@@ -71,7 +71,7 @@ class Component extends React.Component<
         <Form.Form qa="saveAndContinue" data={this.props.pcrItem} onSubmit={() => this.props.onSave(false)}>
           <Form.Fieldset>
             <Form.Button name="default" styling="Primary">
-              <ACC.Content value={x => x.pcrRemovePartnerPrepareItemFiles.pcrItem.submitButton} />
+              <ACC.Content value={x => x.pcrItem.submitButton} />
             </Form.Button>
           </Form.Fieldset>
         </Form.Form>

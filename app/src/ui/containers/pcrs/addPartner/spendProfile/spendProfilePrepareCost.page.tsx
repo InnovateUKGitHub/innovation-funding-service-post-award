@@ -126,7 +126,9 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
       <ACC.Page
         backLink={
           <ACC.BackLink route={this.getBackLink(cost, editor.data)}>
-            <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.backLink(costCategory.name)} />
+            <ACC.Content
+              value={x => x.pages.pcrSpendProfilePrepareCost.backLink({ costCategoryName: costCategory.name })}
+            />
           </ACC.BackLink>
         }
         pageTitle={<ACC.Projects.Title {...project} />}
@@ -135,7 +137,9 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
         error={editor.error}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        <ACC.Section title={x => x.pcrSpendProfilePrepareCostContent.costSectionTitle(costCategory.name)}>
+        <ACC.Section
+          title={x => x.pages.pcrSpendProfilePrepareCost.sectionTitleCost({ costCategoryName: costCategory.name })}
+        >
           {this.renderGuidance(costCategoryType)}
           {this.renderForm(costCategory, costCategoryType, editor, validator, cost, routes, params)}
         </ACC.Section>
@@ -147,9 +151,13 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
     if (costCategory.id === CostCategoryType.Overheads) {
       return (
         <ACC.Info
-          summary={<ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.guidanceTitle(costCategory.name)} />}
+          summary={
+            <ACC.Content
+              value={x => x.pages.pcrSpendProfilePrepareCost.guidanceTitle({ costCategoryName: costCategory.name })}
+            />
+          }
         >
-          <ACC.Content value={x => x.pcrSpendProfilePrepareCostContent.messages.costGuidance(costCategory)} />
+          <ACC.Content markdown value={costCategory.guidanceMessageKey} />
         </ACC.Info>
       );
     }
@@ -358,7 +366,7 @@ export const PCRSpendProfileAddCostRoute = defineRoute<PcrAddSpendProfileCostPar
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,
   }),
-  getTitle: ({ content }) => content.pcrSpendProfilePrepareCostContent.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfilePrepareCost.title),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
 });
 
@@ -373,6 +381,6 @@ export const PCRSpendProfileEditCostRoute = defineRoute<PcrEditSpendProfileCostP
     costCategoryId: route.params.costCategoryId,
     costId: route.params.costId,
   }),
-  getTitle: ({ content }) => content.pcrSpendProfilePrepareCostContent.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfilePrepareCost.title),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.ProjectManager),
 });

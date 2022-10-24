@@ -67,17 +67,17 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
       <ACC.Page
         backLink={
           <ACC.BackLink route={backLink}>
-            <ACC.Content value={x => x.claimDetails.backLink} />
+            <ACC.Content value={x => x.pages.claimDetails.backLink} />
           </ACC.BackLink>
         }
         pageTitle={<ACC.Projects.Title {...data.project} />}
         partner={data.partner}
       >
         {data.claim.isFinalClaim && (
-          <ACC.ValidationMessage messageType="info" message={x => x.claimDetails.messages.finalClaimMessage} />
+          <ACC.ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />
         )}
         {data.partner.isWithdrawn && (
-          <ACC.ValidationMessage messageType="info" message={x => x.claimDetails.messages.partnerWithdrawn} />
+          <ACC.ValidationMessage messageType="info" message={x => x.claimsMessages.partnerWithdrawn} />
         )}
         {this.renderPageSubtitle(data)}
         {this.renderCostsAndGrantSummary(data)}
@@ -101,22 +101,22 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         <ACC.SectionPanel qa="claims-summary">
           <ACC.DualDetails>
             <ClaimSummaryDetails.Details
-              title={<ACC.Content value={x => x.claimDetails.costsAndGrantSummaryTitle} />}
+              title={<ACC.Content value={x => x.pages.claimDetails.costsAndGrantSummaryTitle} />}
               data={data.claim}
               qa="claim-costs-summary"
             >
               <ClaimSummaryDetails.Currency
-                label={<ACC.Content value={x => x.claimDetails.labels.costsClaimed} />}
+                label={<ACC.Content value={x => x.claimsLabels.costsClaimed} />}
                 qa="costs-claimed"
                 value={x => x.totalCostsSubmitted}
               />
               <ClaimSummaryDetails.Currency
-                label={<ACC.Content value={x => x.claimDetails.labels.costsApproved} />}
+                label={<ACC.Content value={x => x.claimsLabels.costsApproved} />}
                 qa="costs-approved"
                 value={x => x.totalCostsApproved}
               />
               <ClaimSummaryDetails.Currency
-                label={<ACC.Content value={x => x.claimDetails.labels.costsDeferred} />}
+                label={<ACC.Content value={x => x.claimsLabels.costsDeferred} />}
                 qa="costs-deferred"
                 value={x => x.totalDeferredAmount}
               />
@@ -124,7 +124,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
             <ClaimSummaryDetails.Details data={data.claim} qa="claim-grant-summary">
               <ClaimSummaryDetails.Currency
-                label={<ACC.Content value={x => x.claimDetails.labels.totalGrantPaid} />}
+                label={<ACC.Content value={x => x.claimsLabels.totalGrantPaid} />}
                 qa="total-grant-paid"
                 value={x => x.periodCostsToBePaid}
               />
@@ -158,7 +158,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
           {this.renderLogsItem()}
 
           {isMo && (
-            <ACC.AccordionItem qa="documents-list-accordion" title={x => x.claimDetails.labels.documentsTitle}>
+            <ACC.AccordionItem qa="documents-list-accordion" title={x => x.claimsLabels.documentListTitle}>
               <ACC.DocumentView hideHeader qa="claim-detail-documents" documents={data.documents} />
             </ACC.AccordionItem>
           )}
@@ -171,7 +171,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
     const { isMo } = getAuthRoles(project.roles);
     if (isMo && (claim.status === ClaimStatus.DRAFT || claim.status === ClaimStatus.MO_QUERIED) && claim.comments) {
       return (
-        <ACC.Section title={x => x.claimDetails.commentsSectionTitle} qa="additionalComments">
+        <ACC.Section title={x => x.pages.claimDetails.sectionTitleComments} qa="additionalComments">
           <ACC.Renderers.SimpleString multiline>{claim.comments}</ACC.Renderers.SimpleString>
         </ACC.Section>
       );
@@ -221,7 +221,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
   private renderForecastItem(pendingForecastData: Pending<ACC.Claims.ForecastData>) {
     return (
-      <ACC.AccordionItem title={x => x.claimDetails.labels.forecastAccordionTitle} qa="forecast-accordion">
+      <ACC.AccordionItem title={x => x.claimsLabels.accordionTitleForecast} qa="forecast-accordion">
         <ACC.Loader
           pending={pendingForecastData}
           render={forecastData => <ACC.Claims.ForecastTable data={forecastData} hideValidation />}
@@ -232,7 +232,7 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
 
   private renderLogsItem() {
     return (
-      <ACC.AccordionItem title={x => x.claimDetails.labels.claimLogAccordionTitle} qa="claim-status-change-accordion">
+      <ACC.AccordionItem title={x => x.claimsLabels.accordionTitleClaimLog} qa="claim-status-change-accordion">
         {/* Keeping logs inside loader because accordion defaults to closed*/}
         <ACC.Loader
           pending={this.props.statusChanges}
@@ -299,5 +299,5 @@ export const ClaimsDetailsRoute = defineRoute({
   accessControl: (auth, params) =>
     auth.forProject(params.projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager) ||
     auth.forPartner(params.projectId, params.partnerId).hasRole(ProjectRole.FinancialContact),
-  getTitle: ({ content }) => content.claimDetails.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.claimDetails.title),
 });

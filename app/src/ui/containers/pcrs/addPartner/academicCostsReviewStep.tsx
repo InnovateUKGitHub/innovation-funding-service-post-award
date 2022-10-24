@@ -44,28 +44,28 @@ class Component extends React.Component<
     return (
       <MountedHoc>
         {state => (
-          <ACC.Section title={x => x.pcrAddPartnerAcademicCosts.labels.projectCostsHeading}>
-            <ACC.Section title={x => x.pcrAddPartnerAcademicCosts.labels.tsbReferenceHeading}>
+          <ACC.Section title={x => x.pcrAddPartnerLabels.projectCostsHeading}>
+            <ACC.Section title={x => x.pcrAddPartnerLabels.tsbReferenceHeading}>
               <SimpleString qa="tsbReference">{pcrItem.tsbReference}</SimpleString>
             </ACC.Section>
 
-            <ACC.Section title={x => x.pcrAddPartnerAcademicCosts.costsSectionTitle}>
+            <ACC.Section title={x => x.pages.pcrAddPartnerAcademicCosts.costsSectionTitle}>
               <Table.Table qa="costsTable" data={data}>
                 <Table.String
-                  header={x => x.pcrAddPartnerAcademicCosts.categoryHeading}
+                  header={x => x.pages.pcrAddPartnerAcademicCosts.categoryHeading}
                   qa="category"
                   value={x => x.costCategory.name}
                   footer={
                     state.isClient && (
                       <ACC.Renderers.SimpleString className={"govuk-!-font-weight-bold"}>
-                        <ACC.Content value={x => x.pcrAddPartnerAcademicCosts.totalCosts} />
+                        <ACC.Content value={x => x.pages.pcrAddPartnerAcademicCosts.totalCosts} />
                       </ACC.Renderers.SimpleString>
                     )
                   }
                 />
 
                 <Table.Currency
-                  header={x => x.pcrAddPartnerAcademicCosts.costHeading}
+                  header={x => x.pages.pcrAddPartnerAcademicCosts.costHeading}
                   qa="cost"
                   value={x => (x.costDto ? x.costDto.value : 0)}
                   width={30}

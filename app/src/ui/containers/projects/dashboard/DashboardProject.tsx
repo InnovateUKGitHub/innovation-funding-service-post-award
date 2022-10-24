@@ -27,7 +27,7 @@ const getProjectNotes = ({ section, project, partner }: ProjectProps): JSX.Eleme
   if (isNotAvailable) return messages;
 
   if (project.isPastEndDate || isPartnerWithdrawn) {
-    messages.push(<ACC.Content value={x => x.projectsDashboard.messages.projectEnded} />);
+    messages.push(<ACC.Content value={x => x.projectMessages.projectEndedMessage} />);
   } else {
     const projectDate = <ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />;
 
@@ -48,7 +48,7 @@ const useProjectActions = ({ section, project, partner }: ProjectProps): string[
   const messages: string[] = [];
 
   if (section === "pending") {
-    messages.push(getContent(x => x.projectsDashboard.messages.pendingProject));
+    messages.push(getContent(x => x.projectMessages.pendingProject));
   }
 
   if (section === "archived") {
@@ -60,53 +60,52 @@ const useProjectActions = ({ section, project, partner }: ProjectProps): string[
     const hasQueriedPcrs = project.pcrsQueried > 0;
 
     if (isProjectOnHold) {
-      messages.push(getContent(x => x.projectsDashboard.messages.projectOnHold));
+      messages.push(getContent(x => x.projectMessages.projectOnHold));
     }
 
     if (isFc && partner) {
       if (partner.newForecastNeeded) {
-        messages.push(getContent(x => x.projectsDashboard.messages.checkForecast));
+        messages.push(getContent(x => x.projectMessages.checkForecast));
       }
 
       switch (partner.claimStatus) {
         case PartnerClaimStatus.ClaimDue:
-          messages.push(getContent(x => x.projectsDashboard.messages.claimToSubmit));
+          messages.push(getContent(x => x.projectMessages.claimToSubmitMessage));
           break;
         case PartnerClaimStatus.ClaimsOverdue:
-          messages.push(getContent(x => x.projectsDashboard.messages.claimOverdue));
+          messages.push(getContent(x => x.projectMessages.claimOverdueMessage));
           break;
         case PartnerClaimStatus.ClaimQueried:
-          messages.push(getContent(x => x.projectsDashboard.messages.claimQueried));
+          messages.push(getContent(x => x.projectMessages.claimQueriedMessage));
           break;
         case PartnerClaimStatus.IARRequired:
-          messages.push(getContent(x => x.projectsDashboard.messages.claimRequestMissingDocument));
+          messages.push(getContent(x => x.projectMessages.claimRequestMissingDocument));
           break;
       }
     }
 
     if (isMo) {
       if (project.claimsToReview) {
-        messages.push(getContent(x => x.projectsDashboard.messages.claimsToReview(project.claimsToReview)));
+        messages.push(getContent(x => x.projectMessages.claimsToReviewMessage({ count: project.claimsToReview })));
       }
       if (project.claimsOverdue) {
-        const content = getContent(x => x.projectsDashboard.messages.claimOverdue);
+        const content = getContent(x => x.projectMessages.claimOverdueMessage);
         if (!messages.includes(content)) messages.push(content);
       }
       if (project.pcrsToReview) {
-        messages.push(getContent(x => x.projectsDashboard.messages.pcrsToReview(project.pcrsToReview)));
+        messages.push(getContent(x => x.projectMessages.pcrsToReview({ count: project.pcrsToReview })));
       }
     }
 
     if (isPm && hasQueriedPcrs) {
-      messages.push(getContent(x => x.projectsDashboard.messages.pcrQueried));
+      messages.push(getContent(x => x.projectMessages.pcrQueried));
     }
   }
 
   return messages;
 };
 
-const doesNotRequireAction = ({ section }: ProjectProps) =>
-  (section === "archived" || section === "upcoming");
+const doesNotRequireAction = ({ section }: ProjectProps) => section === "archived" || section === "upcoming";
 
 const generateTitle = ({ project, partner, section, routes }: DashboardProjectProps): string | JSX.Element => {
   const titleContent = `${project.projectNumber}: ${project.title}`;

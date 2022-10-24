@@ -4,22 +4,9 @@ import { IBankCheckService, IVerifyBankCheckInputs } from "@server/resources/ban
 import { BankCheckCondition } from "@framework/types/bankCheck";
 
 export class TestResources implements IResources {
-  public defaultContent = new TestDefaultContent();
   public customContent = new TestCustomContent();
-  public competitionContent = new TestCompetitionContent();
   public companiesHouse = new TestCompaniesHouse();
   public bankCheckService = new TestBankCheckService();
-}
-
-class TestDefaultContent {
-  private content = "";
-  public getContent = () => Promise.resolve(this.content);
-  public setContent = (value: string) => (this.content = value);
-}
-class TestCompetitionContent {
-  private content = "";
-  public getContent = () => Promise.resolve(this.content);
-  public setContent = (value: string) => (this.content = value);
 }
 
 class TestCustomContent {

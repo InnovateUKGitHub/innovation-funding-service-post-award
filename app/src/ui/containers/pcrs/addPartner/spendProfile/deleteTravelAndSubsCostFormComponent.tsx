@@ -7,26 +7,28 @@ export const DeleteTravelAndSubsCostFormComponent = (
 ) => {
   const { data, costCategory } = props;
   return (
-    <ACC.Section title={x => x.pcrSpendProfileDeleteCostContent.costSectionTitle(costCategory.name)}>
-      <ACC.ValidationMessage messageType="alert" message={x => x.pcrSpendProfileDeleteCostContent.deleteGuidance} />
+    <ACC.Section
+      title={x => x.pages.pcrSpendProfileDeleteCost.sectionTitleCost({ costCategoryName: costCategory.name })}
+    >
+      <ACC.ValidationMessage messageType="alert" message={x => x.pages.pcrSpendProfileDeleteCost.guidanceDelete} />
       <ACC.SummaryList qa="deleteTravelAndSubsCost">
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.travelAndSubs.description}
+          label={x => x.pcrSpendProfileLabels.travelAndSubs.description}
           content={data.description}
           qa="description"
         />
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.travelAndSubs.numberOfTimes}
+          label={x => x.pcrSpendProfileLabels.travelAndSubs.numberOfTimes}
           content={data.numberOfTimes}
           qa="numberOfTimes"
         />
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.travelAndSubs.costOfEach}
+          label={x => x.pcrSpendProfileLabels.travelAndSubs.costOfEach}
           content={<ACC.Renderers.Currency value={data.costOfEach} />}
           qa="costOfEach"
         />
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.travelAndSubs.totalCost}
+          label={x => x.pcrSpendProfileLabels.travelAndSubs.totalCost}
           content={<ACC.Renderers.Currency value={data.value} />}
           qa="totalCost"
         />

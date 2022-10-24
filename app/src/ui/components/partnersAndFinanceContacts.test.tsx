@@ -3,7 +3,7 @@ import { render } from "@testing-library/react";
 import { TestBed, TestBedStore } from "@shared/TestBed";
 import { PartnerDto, ProjectContactDto } from "@framework/types";
 import { PartnersAndFinanceContacts, PartnersAndFinanceContactsProps } from "@ui/components/partnersAndFinanceContacts";
-import { ProjectContactLabels } from "@content/labels/projectContactLabels";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 const testPartnerData: PartnerDto[] = [
   {
@@ -78,16 +78,9 @@ describe("<PartnersAndFinanceContacts />", () => {
       },
     };
 
-    const stubLabels = {
-      contactEmail: { content: "Email" },
-      contactName: { content: "Name" },
-      partnerName: { content: "Partner" },
-    } as ProjectContactLabels;
-
     const defaultProps: PartnersAndFinanceContactsProps = {
       partners: testPartnerData,
       contacts: testContactData,
-      projectContactLabels: () => stubLabels,
     };
 
     return render(
@@ -96,6 +89,14 @@ describe("<PartnersAndFinanceContacts />", () => {
       </TestBed>,
     );
   };
+
+  beforeAll(async () => {
+    await testInitialiseInternationalisation({
+      contactEmail: "Email",
+      contactName: "Name",
+      partnerName: "Partner",
+    });
+  });
 
   describe("@renders", () => {
     test("with partners names and Steel Manufacturing as the lead", () => {

@@ -31,11 +31,11 @@ class Component extends React.Component<
           onChange={dto => this.props.onFileChange("DontSave", dto)}
           qa="projectChangeRequestItemUpload"
         >
-          <UploadForm.Fieldset heading={x => x.pcrNameChangePrepareItemFiles.uploadCertificateHeading}>
+          <UploadForm.Fieldset heading={x => x.pages.pcrNameChangePrepareItemFiles.headingUploadCertificate}>
             <ACC.DocumentGuidance />
 
             <UploadForm.MultipleFileUpload
-              label={x => x.pcrNameChangePrepareItemFiles.documentLabels.uploadInputLabel}
+              label={x => x.documentLabels.uploadInputLabel}
               name="attachment"
               labelHidden
               value={data => data.files}
@@ -50,11 +50,11 @@ class Component extends React.Component<
               styling="Secondary"
               onClick={() => this.props.onFileChange("SaveAndRemain", documentsEditor.data)}
             >
-              <ACC.Content value={x => x.pcrNameChangePrepareItemFiles.documentMessages.uploadTitle} />
+              <ACC.Content value={x => x.documentMessages.uploadTitle} />
             </UploadForm.Button>
 
             <UploadForm.Button name="uploadFileAndContinue" styling="Primary">
-              <ACC.Content value={x => x.pcrNameChangePrepareItemFiles.pcrItem.submitButton} />
+              <ACC.Content value={x => x.pcrItem.submitButton} />
             </UploadForm.Button>
           </UploadForm.Fieldset>
         </UploadForm.Form>

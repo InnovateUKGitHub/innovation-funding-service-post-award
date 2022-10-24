@@ -1,77 +1,65 @@
 import { useEditPartnerLevelContent } from "@ui/containers";
 import { renderHook } from "@testing-library/react";
-import { hookTestBed, TestBedContent } from "@shared/TestBed";
+import { hookTestBed } from "@shared/TestBed";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 const stubContent = {
-  financialVirementEditPartnerLevel: {
-    saveButton: {
-      content: "stub-saveButton",
-    },
-    remainingGrantInfo: {
-      intro: {
-        content: "stub-remainingGrantInfoIntro",
-      },
-      checkRules: {
-        content: "stub-remainingGrantInfoCheckRules",
-      },
-      remainingGrant: {
-        content: "stub-remainingGrantInfoRemainingGrant",
-      },
-      fundingLevel: {
-        content: "stub-remainingGrantInfoFundingLevel",
-      },
-    },
-    labels: {
-      partnerName: {
-        content: "stub-partnerName",
-      },
-      partnerOriginalRemainingCosts: {
-        content: "stub-partnerOriginalRemainingCosts",
-      },
-      partnerOriginalRemainingGrant: {
-        content: "stub-partnerOriginalRemainingGrant",
-      },
-      originalFundingLevel: {
-        content: "stub-originalFundingLevel",
-      },
-      partnerNewRemainingCosts: {
-        content: "stub-partnerNewRemainingCosts",
-      },
-      partnerNewRemainingGrant: {
-        content: "stub-partnerNewRemainingGrant",
-      },
-      newFundingLevel: {
-        content: "stub-newFundingLevel",
-      },
-      backToSummary: {
-        content: "stub-backToSummary",
-      },
-      projectTotals: {
-        content: "stub-projectTotals",
+  pages: {
+    financialVirementEditPartnerLevel: {
+      saveButton: "stub-saveButton",
+      remainingGrantInfo: {
+        intro: "stub-remainingGrantInfoIntro",
+        checkRules: "stub-remainingGrantInfoCheckRules",
+        remainingGrant: "stub-remainingGrantInfoRemainingGrant",
+        fundingLevel: "stub-remainingGrantInfoFundingLevel",
       },
     },
   },
-} as any;
+  financialVirementLabels: {
+    partnerName: "stub-partnerName",
+    partnerOriginalRemainingCosts: "stub-partnerOriginalRemainingCosts",
+    partnerOriginalRemainingGrant: "stub-partnerOriginalRemainingGrant",
+    originalFundingLevel: "stub-originalFundingLevel",
+    partnerNewRemainingCosts: "stub-partnerNewRemainingCosts",
+    partnerNewRemainingGrant: "stub-partnerNewRemainingGrant",
+    newFundingLevel: "stub-newFundingLevel",
+    backToSummary: "stub-backToSummary",
+    projectTotals: "stub-projectTotals",
+  },
+};
 
 const renderPageContent = () => {
-  return renderHook(useEditPartnerLevelContent, hookTestBed({ content: stubContent as TestBedContent }));
+  return renderHook(useEditPartnerLevelContent, hookTestBed({}));
 };
 
 describe("useEditPartnerLevelContent()", () => {
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent);
+  });
+
   test.each`
     name                                  | property
     ${"remainingGrantInfoIntro"}          | ${"intro"}
     ${"remainingGrantInfoCheckRules"}     | ${"checkRules"}
     ${"remainingGrantInfoRemainingGrant"} | ${"remainingGrant"}
     ${"remainingGrantInfoFundingLevel"}   | ${"fundingLevel"}
-  `("with $property", ({ name, property }: Record<"name" | "property", string>) => {
-    const { result } = renderPageContent();
+  `(
+    "with $property",
+    ({
+      name,
+      property,
+    }: {
+      name: string;
+      property: keyof typeof stubContent.pages.financialVirementEditPartnerLevel.remainingGrantInfo;
+    }) => {
+      const { result } = renderPageContent();
 
-    const content = (result.current as any)[name];
-    const expectedContent = stubContent.financialVirementEditPartnerLevel.remainingGrantInfo[property].content;
+      const content = (result.current as any)[name];
+      const expectedContent = stubContent.pages.financialVirementEditPartnerLevel.remainingGrantInfo[property];
 
-    expect(content).toBe(expectedContent);
-  });
+      expect(content).toBe(expectedContent);
+    },
+  );
 
   test.each`
     name                               | property
@@ -84,19 +72,22 @@ describe("useEditPartnerLevelContent()", () => {
     ${"newFundingLevel"}               | ${"newFundingLevel"}
     ${"projectTotals"}                 | ${"projectTotals"}
     ${"backToSummary"}                 | ${"backToSummary"}
-  `("with $property", ({ name, property }: Record<"name" | "property", string>) => {
-    const { result } = renderPageContent();
+  `(
+    "with $property",
+    ({ name, property }: { name: string; property: keyof typeof stubContent.financialVirementLabels }) => {
+      const { result } = renderPageContent();
 
-    const content = (result.current as any)[name];
-    const expectedContent = stubContent.financialVirementEditPartnerLevel.labels[property].content;
+      const content = (result.current as any)[name];
+      const expectedContent = stubContent.financialVirementLabels[property];
 
-    expect(content).toBe(expectedContent);
-  });
+      expect(content).toBe(expectedContent);
+    },
+  );
 
   test("saveButton content", () => {
     const { result } = renderPageContent();
     const content = result.current.saveButton;
 
-    expect(content).toBe(stubContent.financialVirementEditPartnerLevel.saveButton.content);
+    expect(content).toBe(stubContent.pages.financialVirementEditPartnerLevel.saveButton);
   });
 });

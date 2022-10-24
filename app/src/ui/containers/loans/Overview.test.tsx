@@ -1,11 +1,12 @@
 import { v4 as uuid } from "uuid";
 import { render } from "@testing-library/react";
 
-import { TestBed, TestBedStore, TestBedContent } from "@shared/TestBed";
+import { TestBed, TestBedStore } from "@shared/TestBed";
 import { ILinkInfo, LoadingStatus, LoanDto } from "@framework/types";
 import { LoansOverviewContainer, LoansOverviewContainerProps } from "@ui/containers/loans/overview.page";
 import { Pending } from "@shared/pending";
 import { LoanStatus } from "@framework/entities";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<LoansOverviewContainer />", () => {
   const stubLink: ILinkInfo = {
@@ -30,18 +31,20 @@ describe("<LoansOverviewContainer />", () => {
   } as LoansOverviewContainerProps;
 
   const stubContent = {
-    projectOverview: {
-      backToProjects: { content: "stub-backToProjects" },
-    },
-    loansSummary: {
-      loadingDrawdowns: { content: "stub-loadingDrawdowns" },
-      rejectedDrawdownsError: { content: "stub-rejectedDrawdownsError" },
+    pages: {
+      projectOverview: {
+        backToProjects: "stub-backToProjects",
+      },
+      loansSummary: {
+        loadingDrawdowns: "stub-loadingDrawdowns",
+        rejectedDrawdownsError: "stub-rejectedDrawdownsError",
+      },
     },
   };
 
   const setup = (props?: LoansOverviewContainerProps, stores?: TestBedStore) =>
     render(
-      <TestBed stores={stores} content={stubContent as TestBedContent}>
+      <TestBed stores={stores}>
         <LoansOverviewContainer {...defaultProps} {...props} />
       </TestBed>,
     );
@@ -62,6 +65,10 @@ describe("<LoansOverviewContainer />", () => {
   const stubApprovedLoan = createStubLoan(LoanStatus.APPROVED);
   const stubRequestedLoan = createStubLoan(LoanStatus.REQUESTED);
 
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent);
+  });
+
   describe("@returns", () => {
     test("with loading state", () => {
       const storeWithLoadingData = {
@@ -75,7 +82,7 @@ describe("<LoansOverviewContainer />", () => {
 
       const { queryByText } = setup(undefined, storeWithLoadingData);
 
-      const loadingMessage = queryByText(stubContent.loansSummary.loadingDrawdowns.content);
+      const loadingMessage = queryByText(stubContent.pages.loansSummary.loadingDrawdowns);
 
       expect(loadingMessage).toBeInTheDocument();
     });
@@ -92,7 +99,7 @@ describe("<LoansOverviewContainer />", () => {
 
       const { queryByText } = setup(undefined, storeWithErrorData);
 
-      const rejectedMessage = queryByText(stubContent.loansSummary.rejectedDrawdownsError.content);
+      const rejectedMessage = queryByText(stubContent.pages.loansSummary.rejectedDrawdownsError);
 
       expect(rejectedMessage).toBeInTheDocument();
     });
@@ -111,7 +118,7 @@ describe("<LoansOverviewContainer />", () => {
 
           const { queryByText } = setup(undefined, storeWithResolvedLoadingData);
 
-          const loanLoadingMessage = queryByText(stubContent.loansSummary.loadingDrawdowns.content);
+          const loanLoadingMessage = queryByText(stubContent.pages.loansSummary.loadingDrawdowns);
 
           expect(loanLoadingMessage).toBeInTheDocument();
         });

@@ -4,7 +4,12 @@ import { Pending } from "@shared/pending";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore, useStores } from "@ui/redux";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
-import { allowedClaimDocuments, DocumentDescription, ProjectRole } from "@framework/constants";
+import {
+  allowedClaimDocuments,
+  DocumentDescription,
+  getDocumentDescriptionContentSelector,
+  ProjectRole,
+} from "@framework/constants";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDescriptionDto, DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { getAuthRoles } from "@framework/types";
@@ -13,71 +18,42 @@ import { getAllEnumValues } from "@shared/enumHelper";
 import { useContent } from "@ui/hooks";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 
-type ClaimDocumentContentKeys =
-  | "backLink"
-  | "finalClaimMessage"
-  | "uploadDocumentsLabel"
-  | "descriptionLabel"
-  | "documentsListSectionTitle"
-  | "saveAndReturnButton"
-  | "saveAndContinueToSummaryButton"
-  | "finalClaimGuidanceParagraph1"
-  | "finalClaimStep1"
-  | "finalClaimStep2"
-  | "iarRequiredAdvice"
-  | "finalClaimIarAdvice"
-  | "finalClaimNonIarAdvice"
-  | "usefulTip"
-  | "requiredUploadAdvice"
-  | "requiredUploadStep1"
-  | "requiredUploadStep2"
-  | "iarRequired"
-  | "iarRequiredPara2"
-  | "sbriDocumentAdvice"
-  | "sbriInvoiceBullet1"
-  | "sbriInvoiceBullet2"
-  | "sbriInvoiceBullet3"
-  | "sbriMoAdvice"
-  | "noDocumentsUploaded"
-  | "saveAndContinueToForecastButton"
-  | "uploadTitle";
-
-type ClaimDocumentContent = Record<ClaimDocumentContentKeys, string>;
+type ClaimDocumentContent = ReturnType<typeof useClaimDocumentContent>;
 
 /**
  * @returns {ClaimDocumentContent} content for the claim document page
  */
-export function useClaimDocumentContent(): ClaimDocumentContent {
+export function useClaimDocumentContent() {
   const { getContent } = useContent();
 
   return {
-    backLink: getContent(x => x.claimDocuments.backLink),
-    descriptionLabel: getContent(x => x.claimDocuments.descriptionLabel),
-    saveAndReturnButton: getContent(x => x.claimDocuments.saveAndReturnButton),
-    documentsListSectionTitle: getContent(x => x.claimDocuments.documentsListSectionTitle),
-    saveAndContinueToSummaryButton: getContent(x => x.claimDocuments.saveAndContinueToSummaryButton),
-    saveAndContinueToForecastButton: getContent(x => x.claimDocuments.saveAndContinueToForecastButton),
-    sbriDocumentAdvice: getContent(x => x.claimDocuments.messages.sbriDocumentAdvice),
-    sbriInvoiceBullet1: getContent(x => x.claimDocuments.messages.sbriInvoiceBullet1),
-    sbriInvoiceBullet2: getContent(x => x.claimDocuments.messages.sbriInvoiceBullet2),
-    sbriInvoiceBullet3: getContent(x => x.claimDocuments.messages.sbriInvoiceBullet3),
-    sbriMoAdvice: getContent(x => x.claimDocuments.messages.sbriMoAdvice),
-    finalClaimMessage: getContent(x => x.claimDocuments.messages.finalClaimMessage),
-    finalClaimGuidanceParagraph1: getContent(x => x.claimDocuments.messages.finalClaimGuidanceParagraph1),
-    finalClaimStep1: getContent(x => x.claimDocuments.messages.finalClaimStep1),
-    finalClaimStep2: getContent(x => x.claimDocuments.messages.finalClaimStep2),
-    iarRequired: getContent(x => x.claimDocuments.messages.iarRequired),
-    iarRequiredPara2: getContent(x => x.claimDocuments.messages.iarRequiredPara2),
-    iarRequiredAdvice: getContent(x => x.claimDocuments.messages.iarRequiredAdvice),
-    finalClaimIarAdvice: getContent(x => x.claimDocuments.messages.finalClaimIarAdvice),
-    finalClaimNonIarAdvice: getContent(x => x.claimDocuments.messages.finalClaimNonIarAdvice),
-    usefulTip: getContent(x => x.claimDocuments.messages.usefulTip),
-    requiredUploadAdvice: getContent(x => x.claimDocuments.messages.requiredUploadAdvice),
-    requiredUploadStep1: getContent(x => x.claimDocuments.messages.requiredUploadStep1),
-    requiredUploadStep2: getContent(x => x.claimDocuments.messages.requiredUploadStep2),
-    uploadTitle: getContent(x => x.claimDocuments.documentMessages.uploadTitle),
-    uploadDocumentsLabel: getContent(x => x.claimDocuments.documentMessages.uploadDocumentsLabel),
-    noDocumentsUploaded: getContent(x => x.claimDocuments.documentMessages.noDocumentsUploaded),
+    backLink: getContent(x => x.pages.claimDocuments.backLink),
+    descriptionLabel: getContent(x => x.pages.claimDocuments.descriptionLabel),
+    buttonSaveAndReturn: getContent(x => x.pages.claimDocuments.buttonSaveAndReturn),
+    documentsListSectionTitle: getContent(x => x.pages.claimDocuments.sectionTitleDocumentList),
+    buttonSaveAndContinueToSummary: getContent(x => x.pages.claimDocuments.buttonSaveAndContinueToSummary),
+    buttonSaveAndContinueToForecast: getContent(x => x.pages.claimDocuments.buttonSaveAndContinueToForecast),
+    sbriDocumentAdvice: getContent(x => x.claimsMessages.sbriDocumentAdvice),
+    sbriInvoiceBullet1: getContent(x => x.claimsMessages.sbriInvoiceBullet1),
+    sbriInvoiceBullet2: getContent(x => x.claimsMessages.sbriInvoiceBullet2),
+    sbriInvoiceBullet3: getContent(x => x.claimsMessages.sbriInvoiceBullet3),
+    sbriMoAdvice: getContent(x => x.claimsMessages.sbriMoAdvice),
+    finalClaim: getContent(x => x.claimsMessages.finalClaim),
+    finalClaimGuidanceContent1: getContent(x => x.claimsMessages.finalClaimGuidanceContent1),
+    finalClaimStep1: getContent(x => x.claimsMessages.finalClaimStep1),
+    finalClaimStep2: getContent(x => x.claimsMessages.finalClaimStep2),
+    iarRequired: getContent(x => x.claimsMessages.iarRequired),
+    iarRequiredPara2: getContent(x => x.claimsMessages.iarRequiredPara2),
+    iarRequiredAdvice: getContent(x => x.claimsMessages.iarRequiredAdvice),
+    finalClaimIarAdvice: getContent(x => x.claimsMessages.finalClaimIarAdvice),
+    finalClaimNonIarAdvice: getContent(x => x.claimsMessages.finalClaimNonIarAdvice),
+    usefulTip: getContent(x => x.claimsMessages.usefulTip),
+    requiredUploadAdvice: getContent(x => x.claimsMessages.requiredUploadAdvice),
+    requiredUploadStep1: getContent(x => x.claimsMessages.requiredUploadStep1),
+    requiredUploadStep2: getContent(x => x.claimsMessages.requiredUploadStep2),
+    uploadTitle: getContent(x => x.documentMessages.uploadTitle),
+    uploadDocuments: getContent(x => x.documentMessages.uploadDocuments),
+    noDocumentsUploaded: getContent(x => x.documentMessages.noDocumentsUploaded),
   };
 }
 
@@ -140,7 +116,7 @@ const ClaimDocumentsComponent = ({
       >
         <ACC.Renderers.Messages messages={props.messages} />
 
-        {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={content.finalClaimMessage} />}
+        {claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={content.finalClaim} />}
 
         <ACC.Section>
           <ClaimDocumentAdvice {...claim} content={content} competitionType={project.competitionType} />
@@ -157,7 +133,7 @@ const ClaimDocumentsComponent = ({
               <ACC.DocumentGuidance />
 
               <UploadForm.MultipleFileUpload
-                label={content.uploadDocumentsLabel}
+                label={content.uploadDocuments}
                 labelHidden
                 name="attachment"
                 validation={editor.validator.files}
@@ -182,7 +158,7 @@ const ClaimDocumentsComponent = ({
 
             {/* TODO: @documents-content make button label consistent*/}
             <UploadForm.Button styling="Secondary" name="upload" onClick={() => props.onChange(true, editor.data)}>
-              {content.uploadDocumentsLabel}
+              {content.uploadDocuments}
             </UploadForm.Button>
           </UploadForm.Form>
         </ACC.Section>
@@ -203,7 +179,7 @@ const ClaimDocumentsComponent = ({
               id="continue-claim"
               route={props.routes.claimSummary.getLink(claimLinkParams)}
             >
-              {content.saveAndContinueToSummaryButton}
+              {content.buttonSaveAndContinueToSummary}
             </ACC.Link>
           ) : (
             <ACC.Link
@@ -211,12 +187,12 @@ const ClaimDocumentsComponent = ({
               id="continue-claim"
               route={props.routes.claimForecast.getLink(claimLinkParams)}
             >
-              {content.saveAndContinueToForecastButton}
+              {content.buttonSaveAndContinueToForecast}
             </ACC.Link>
           )}
 
           <ACC.Link styling="SecondaryButton" id="save-claim" route={getDashboardLink(project)}>
-            {content.saveAndReturnButton}
+            {content.buttonSaveAndReturn}
           </ACC.Link>
         </ACC.Section>
       </ACC.Page>
@@ -254,7 +230,7 @@ function useClaimDocumentDescriptions(): Pending<DocumentDescriptionDto[]> {
 
   const claimDocumentDescriptions = documentValues.map(description => ({
     id: description,
-    label: getContent(x => x.claimDocuments.documents.labels.documentDescriptionLabel(description)),
+    label: getContent(getDocumentDescriptionContentSelector(description)),
   }));
 
   return Pending.done(claimDocumentDescriptions);
@@ -278,7 +254,7 @@ const ClaimDocumentsContainer = (props: ClaimDocumentsPageParams & BaseProps) =>
         stores.messages.clearMessages();
 
         const successfullyUploadedMessage = getContent(x =>
-          x.claimDocuments.documentMessages.getDocumentUploadedMessage(dto.files.length),
+          x.documentMessages.uploadedDocuments({ count: dto.files.length }),
         );
 
         stores.claimDocuments.updateClaimDocumentsEditor(
@@ -309,7 +285,7 @@ export const ClaimDocumentsRoute = defineRoute({
   }),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasRole(ProjectRole.FinancialContact),
-  getTitle: ({ content }) => content.claimDocuments.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.claimDocuments.title),
 });
 
 export interface ClaimDocumentAdviceProps extends Pick<ClaimDto, "isIarRequired" | "isFinalClaim"> {
@@ -321,7 +297,7 @@ export interface ClaimDocumentAdviceProps extends Pick<ClaimDto, "isIarRequired"
     | "requiredUploadAdvice"
     | "requiredUploadStep1"
     | "requiredUploadStep2"
-    | "finalClaimGuidanceParagraph1"
+    | "finalClaimGuidanceContent1"
     | "finalClaimStep1"
     | "finalClaimStep2"
     | "iarRequired"
@@ -382,7 +358,7 @@ export function ClaimDocumentAdvice({
         <>
           {isFinalClaim && (
             <>
-              <ACC.Renderers.SimpleString>{content.finalClaimGuidanceParagraph1}</ACC.Renderers.SimpleString>
+              <ACC.Renderers.SimpleString>{content.finalClaimGuidanceContent1}</ACC.Renderers.SimpleString>
 
               <ACC.UL>
                 <li>{content.finalClaimStep1}</li>
@@ -417,7 +393,7 @@ export function ClaimDocumentAdvice({
       <>
         {isFinalClaim ? (
           <>
-            <ACC.Renderers.SimpleString>{content.finalClaimGuidanceParagraph1}</ACC.Renderers.SimpleString>
+            <ACC.Renderers.SimpleString>{content.finalClaimGuidanceContent1}</ACC.Renderers.SimpleString>
 
             <ACC.OL>
               <li>{content.finalClaimStep1}</li>

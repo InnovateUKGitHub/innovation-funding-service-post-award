@@ -45,7 +45,7 @@ export function CompaniesHouseResults({ selectedRegistrationNumber, options, onS
     : undefined;
 
   return (
-    <Form.Fieldset qa="searchResults" heading={getContent(x => x.pcrAddPartnerCompanyHouse.searchResultsHeading)}>
+    <Form.Fieldset qa="searchResults" heading={getContent(x => x.pages.pcrAddPartnerCompanyHouse.headingSearchResults)}>
       <Form.Radio
         name="searchResults"
         inline={false}

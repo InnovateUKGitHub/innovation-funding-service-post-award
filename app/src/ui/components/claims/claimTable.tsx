@@ -19,9 +19,9 @@ export function ClaimTable(props: ClaimProps) {
     <>
       {displayWarningMessage && (
         <ValidationListMessage
-          before={getContent(x => x.claimsComponents.negativeCategoriesMessage.before)}
+          before={getContent(x => x.pages.claimsComponents.negativeCategoriesMessage.before)}
           items={totalNegativeCategories.reduce<string[]>((acc, item) => [...acc, item.category.name], [])}
-          after={getContent(x => x.claimsComponents.negativeCategoriesMessage.after)}
+          after={getContent(x => x.pages.claimsComponents.negativeCategoriesMessage.after)}
         />
       )}
 
@@ -37,7 +37,7 @@ export function ClaimTable(props: ClaimProps) {
       >
         <CostCategoriesTable.Custom
           qa="category"
-          header={getContent(x => x.claimsComponents.categoryLabel)}
+          header={getContent(x => x.pages.claimsComponents.categoryLabel)}
           value={x => x.label}
           cellClassName={x =>
             cx({
@@ -49,26 +49,26 @@ export function ClaimTable(props: ClaimProps) {
 
         <CostCategoriesTable.Currency
           qa="offerCosts"
-          header={getContent(x => x.claimsComponents.totalEligibleCosts)}
+          header={getContent(x => x.pages.claimsComponents.totalEligibleCosts)}
           value={x => x.cost.offerTotal}
         />
 
         <CostCategoriesTable.Currency
           qa="claimedToDate"
-          header={getContent(x => x.claimsComponents.eligibleCostsClaimedToDate)}
+          header={getContent(x => x.pages.claimsComponents.eligibleCostsClaimedToDate)}
           value={x => x.cost.costsClaimedToDate}
         />
 
         <CostCategoriesTable.Currency
           qa="periodCosts"
-          header={getContent(x => x.claimsComponents.costsClaimedThisPeriod)}
+          header={getContent(x => x.pages.claimsComponents.costsClaimedThisPeriod)}
           value={x => x.cost.costsClaimedThisPeriod}
           cellClassName={x => (x.isTotal ? "govuk-!-font-weight-bold" : null)}
         />
 
         <CostCategoriesTable.Currency
           qa="remainingCosts"
-          header={getContent(x => x.claimsComponents.remainingEligibleCosts)}
+          header={getContent(x => x.pages.claimsComponents.remainingEligibleCosts)}
           value={x => x.cost.remainingOfferCosts}
           cellClassName={x => (hasError(x) ? "claim-table-cell--error" : null)}
         />

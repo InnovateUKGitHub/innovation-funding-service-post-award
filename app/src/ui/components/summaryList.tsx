@@ -3,7 +3,7 @@ import cx from "classnames";
 import * as ACC from "@ui/components";
 
 import { Result } from "@ui/validation";
-import { ContentSelector } from "@content/content";
+import type { ContentSelector } from "@copy/type";
 import { useContent } from "@ui/hooks";
 
 export interface SummaryListProps {
@@ -57,7 +57,7 @@ export function SummaryListItem({ content, action, qa, validation, label, isMark
         "summary-list__row--error": hasError,
       })}
     >
-      <dt className="govuk-summary-list__key">{getContent(label)}</dt>
+      <dt className="govuk-summary-list__key">{typeof label === "string" ? label : getContent(label)}</dt>
       {isMarkdown ? (
         <ACC.Renderers.Markdown value={content as string} />
       ) : (

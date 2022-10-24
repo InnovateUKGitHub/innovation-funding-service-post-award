@@ -12,13 +12,36 @@ interface ProjectListProps {
 }
 
 export function DashboardProjectList({ isFiltering, routes, projects, errorType }: ProjectListProps) {
-  const { content, getContentFromResult } = useContent();
+  const { getContent } = useContent();
 
   if (!projects.length) {
-    const messageByType = content.projectsDashboard[errorType];
-    const noProjectMessage = isFiltering ? messageByType.noMatchingProjects : messageByType.noProjects;
+    let content: string;
 
-    return <SimpleString>{getContentFromResult(noProjectMessage)}</SimpleString>;
+    switch (errorType) {
+      case "live":
+        content = getContent(x =>
+          isFiltering
+            ? x.pages.projectsDashboard.noLiveMatchingMessage
+            : x.pages.projectsDashboard.noLiveProjectsMessage,
+        );
+        break;
+      case "upcoming":
+        content = getContent(x =>
+          isFiltering
+            ? x.pages.projectsDashboard.noUpcomingMatchingMessage
+            : x.pages.projectsDashboard.noUpcomingProjectsMessage,
+        );
+        break;
+      case "archived":
+        content = getContent(x =>
+          isFiltering
+            ? x.pages.projectsDashboard.noArchivedMatchingMessage
+            : x.pages.projectsDashboard.noArchivedProjectsMessage,
+        );
+        break;
+    }
+
+    return <SimpleString>{content}</SimpleString>;
   }
 
   return (

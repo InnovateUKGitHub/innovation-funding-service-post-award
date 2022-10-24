@@ -1,16 +1,11 @@
 import { renderHook, act } from "@testing-library/react";
 import { v4 as uuid } from "uuid";
 
-import { hookTestBed, TestBedStore, TestBedContent } from "@shared/TestBed";
+import { hookTestBed, TestBedStore } from "@shared/TestBed";
 import { useDocumentSearch } from "@ui/components/documents/document-search.hook";
 import { DocumentsBase } from "@ui/components/documents/documents.interface";
 
 describe("useDocumentSearch()", () => {
-  const stubTestContent = {
-    test1: { content: "stub-test1" },
-    test2: { content: "stub-test2" },
-  };
-
   const setup = (
     disableSearch: boolean,
     originalDocuments: DocumentsBase["documents"],
@@ -18,11 +13,7 @@ describe("useDocumentSearch()", () => {
       isServer?: boolean;
       stores?: TestBedStore;
     },
-  ) =>
-    renderHook(
-      () => useDocumentSearch(disableSearch, originalDocuments),
-      hookTestBed({ ...options, content: stubTestContent as TestBedContent }),
-    );
+  ) => renderHook(() => useDocumentSearch(disableSearch, originalDocuments), hookTestBed({ ...options }));
 
   const stubBaseDocument: DocumentsBase["documents"][0] = {
     fileName: "stub-filename",

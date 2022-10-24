@@ -7,26 +7,28 @@ export const DeleteSubcontractingCostFormComponent = (
 ) => {
   const { data, costCategory } = props;
   return (
-    <ACC.Section title={x => x.pcrSpendProfileDeleteCostContent.costSectionTitle(costCategory.name)}>
-      <ACC.ValidationMessage messageType="alert" message={x => x.pcrSpendProfileDeleteCostContent.deleteGuidance} />
+    <ACC.Section
+      title={x => x.pages.pcrSpendProfileDeleteCost.sectionTitleCost({ costCategoryName: costCategory.name })}
+    >
+      <ACC.ValidationMessage messageType="alert" message={x => x.pages.pcrSpendProfileDeleteCost.guidanceDelete} />
       <ACC.SummaryList qa="deleteSubcontractingCost">
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.subcontracting.subcontractorName}
+          label={x => x.pcrSpendProfileLabels.subcontracting.subcontractorName}
           content={data.description}
           qa="description"
         />
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.subcontracting.subcontractorCountry}
+          label={x => x.pcrSpendProfileLabels.subcontracting.subcontractorCountry}
           content={data.subcontractorCountry}
           qa="subcontractorCountry"
         />
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.subcontracting.subcontractorRoleAndDescription}
+          label={x => x.pcrSpendProfileLabels.subcontracting.subcontractorRoleAndDescription}
           content={data.subcontractorRoleAndDescription}
           qa="subcontractorRoleAndDescription"
         />
         <ACC.SummaryListItem
-          label={x => x.pcrSpendProfileDeleteCostContent.labels.subcontracting.cost}
+          label={x => x.pcrSpendProfileLabels.subcontracting.cost}
           content={<ACC.Renderers.Currency value={data.value} />}
           qa="value"
         />

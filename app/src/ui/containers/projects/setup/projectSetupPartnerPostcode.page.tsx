@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { getContentFromResult, useContent } from "@ui/hooks";
+import { useContent } from "@ui/hooks";
 import { useStores } from "@ui/redux";
 import { ProjectRole } from "@framework/constants";
 import { PartnerDetailsEditComponent, PartnerDetailsParams } from "../partnerDetailsEdit.page";
@@ -8,13 +8,13 @@ import * as ACC from "../../../components";
 
 const ProjectSetupPartnerPostcodeContainer = (props: PartnerDetailsParams & BaseProps) => {
   const stores = useStores();
-  const { content } = useContent();
+  const { getContent } = useContent();
   const navigate = useNavigate();
 
   const url = props.routes.projectSetup.getLink({ projectId: props.projectId, partnerId: props.partnerId });
-  const saveAndReturnLabel = getContentFromResult(content.projectSetupPostcode.saveAndReturn);
+  const saveAndReturnLabel = getContent(x => x.pages.projectSetupPostcodeDetails.saveAndReturn);
   const backLink = (
-    <ACC.BackLink route={url}>{getContentFromResult(content.projectSetupPostcode.backLink)}</ACC.BackLink>
+    <ACC.BackLink route={url}>{getContent(x => x.pages.projectSetupPostcodeDetails.backLink)}</ACC.BackLink>
   );
 
   return (
@@ -39,7 +39,7 @@ export const ProjectSetupPartnerPostcodeRoute = defineRoute<PartnerDetailsParams
   routePath: "/projects/:projectId/postcode/:partnerId",
   container: ProjectSetupPartnerPostcodeContainer,
   getParams: r => ({ projectId: r.params.projectId, partnerId: r.params.partnerId }),
-  getTitle: ({ content }) => content.projectSetupPostcode.title(),
+  getTitle: x => x.content.getTitleCopy(x => x.pages.projectSetupPostcodeDetails.title),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager),
 });

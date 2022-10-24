@@ -1,40 +1,45 @@
 import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { TestBed, TestBedContent } from "@shared/TestBed";
+import { TestBed } from "@shared/TestBed";
 import { PcrTypesGuidance, PcrTypesGuidanceProps } from "@ui/containers/pcrs/components/PcrTypesGuidance";
 import { PCRItemTypeDto } from "@framework/dtos";
 import { PCRItemType } from "@framework/constants";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("PcrTypes Components", () => {
   describe("PcrTypesGuidance", () => {
     describe("@renders", () => {
       const stubContent = {
-        pcrCreate: {
-          learnMoreAboutTitle: { content: "stub-learnMoreAboutTitle" },
-
-          selectTypesHint: { content: "stub-selectTypesHint" },
-
-          reallocateCostsTitle: { content: "stub-reallocateCostsTitle" },
-          reallocateCostsMessage: { content: "stub-reallocateCostsMessage" },
-          removePartnerTitle: { content: "stub-removePartnerTitle" },
-          removePartnerMessage: { content: "stub-removePartnerMessage" },
-          addPartnerTitle: { content: "stub-addPartnerTitle" },
-          addPartnerMessage: { content: "stub-addPartnerMessage" },
-          changeScopeTitle: { content: "stub-changeScopeTitle" },
-          changeScopeMessage: { content: "stub-changeScopeMessage" },
-          changeDurationTitle: { content: "stub-changeDurationTitle" },
-          changeDurationMessage: { content: "stub-changeDurationMessage" },
-          changePartnersNameTitle: { content: "stub-changePartnersNameTitle" },
-          changePartnersNameMessage: { content: "stub-changePartnersNameMessage" },
-          putProjectOnHoldTitle: { content: "stub-putProjectOnHoldTitle" },
-          putProjectOnHoldMessage: { content: "stub-putProjectOnHoldMessage" },
-          endProjectEarlyTitle: { content: "stub-endProjectEarlyTitle" },
-          endProjectEarlyMessage: { content: "stub-endProjectEarlyMessage" },
-          loanDrawdownChangeTitle: { content: "stub-loanDrawdownChangeTitle" },
-          loanDrawdownChangeMessage: { content: "stub-loanDrawdownChangeMessage" },
-          loanDrawdownExtensionTitle: { content: "stub-loanDrawdownExtensionTitle" },
-          loanDrawdownExtensionMessage: { content: "stub-loanDrawdownExtensionMessage" },
+        pages: {
+          pcrCreate: {
+            selectRequestTypesTitle: "stub-selectRequestTypesTitle",
+            selectTypesHint: "stub-selectTypesHint",
+            backLink: "stub-backLink",
+            buttonCreateRequest: "stub-buttonCreateRequest",
+            buttonCancelRequest: "stub-buttonCancelRequest",
+            learnMoreTitle: "stub-learnMoreTitle",
+            reallocateCostsTitle: "stub-reallocateCostsTitle",
+            reallocateCostsMessage: "stub-reallocateCostsMessage",
+            removePartnerTitle: "stub-removePartnerTitle",
+            removePartnerMessage: "stub-removePartnerMessage",
+            addPartnerTitle: "stub-addPartnerTitle",
+            addPartnerMessage: "stub-addPartnerMessage",
+            changeScopeTitle: "stub-changeScopeTitle",
+            changeScopeMessage: "stub-changeScopeMessage",
+            changeDurationTitle: "stub-changeDurationTitle",
+            changeDurationMessage: "stub-changeDurationMessage",
+            changePartnersNameTitle: "stub-changePartnersNameTitle",
+            changePartnersNameMessage: "stub-changePartnersNameMessage",
+            putProjectOnHoldTitle: "stub-putProjectOnHoldTitle",
+            putProjectOnHoldMessage: "stub-putProjectOnHoldMessage",
+            endProjectEarlyTitle: "stub-endProjectEarlyTitle",
+            endProjectEarlyMessage: "stub-endProjectEarlyMessage",
+            loanDrawdownChangeTitle: "stub-loanDrawdownChangeTitle",
+            loanDrawdownChangeMessage: "stub-loanDrawdownChangeMessage",
+            loanDrawdownExtensionTitle: "stub-loanDrawdownExtensionTitle",
+            loanDrawdownExtensionMessage: "stub-loanDrawdownExtensionMessage",
+          },
         },
       };
 
@@ -54,20 +59,20 @@ describe("PcrTypes Components", () => {
 
       const setup = (props?: Partial<PcrTypesGuidanceProps>) => {
         const rtl = render(
-          <TestBed content={stubContent as TestBedContent}>
+          <TestBed>
             <PcrTypesGuidance {...defaultProps} {...props} />
           </TestBed>,
         );
 
-        const getReallocateCostsMessage = () => rtl.queryByText(stubContent.pcrCreate.reallocateCostsMessage.content);
-        const getRemovePartnerMessage = () => rtl.queryByText(stubContent.pcrCreate.removePartnerMessage.content);
-        const getAddPartnerMessage = () => rtl.queryByText(stubContent.pcrCreate.addPartnerMessage.content);
-        const getChangeScopeMessage = () => rtl.queryByText(stubContent.pcrCreate.changeScopeMessage.content);
-        const getChangeDurationMessage = () => rtl.queryByText(stubContent.pcrCreate.changeDurationMessage.content);
+        const getReallocateCostsMessage = () => rtl.queryByText(stubContent.pages.pcrCreate.reallocateCostsMessage);
+        const getRemovePartnerMessage = () => rtl.queryByText(stubContent.pages.pcrCreate.removePartnerMessage);
+        const getAddPartnerMessage = () => rtl.queryByText(stubContent.pages.pcrCreate.addPartnerMessage);
+        const getChangeScopeMessage = () => rtl.queryByText(stubContent.pages.pcrCreate.changeScopeMessage);
+        const getChangeDurationMessage = () => rtl.queryByText(stubContent.pages.pcrCreate.changeDurationMessage);
         const getChangePartnersNameMessage = () =>
-          rtl.queryByText(stubContent.pcrCreate.changePartnersNameMessage.content);
-        const getPutProjectOnHoldMessage = () => rtl.queryByText(stubContent.pcrCreate.putProjectOnHoldMessage.content);
-        const getEndProjectEarlyMessage = () => rtl.queryByText(stubContent.pcrCreate.endProjectEarlyMessage.content);
+          rtl.queryByText(stubContent.pages.pcrCreate.changePartnersNameMessage);
+        const getPutProjectOnHoldMessage = () => rtl.queryByText(stubContent.pages.pcrCreate.putProjectOnHoldMessage);
+        const getEndProjectEarlyMessage = () => rtl.queryByText(stubContent.pages.pcrCreate.endProjectEarlyMessage);
 
         return {
           ...rtl,
@@ -82,12 +87,16 @@ describe("PcrTypes Components", () => {
         };
       };
 
+      beforeAll(async () => {
+        await testInitialiseInternationalisation(stubContent);
+      })
+
       describe("@renders", () => {
         test("as default", () => {
           const { queryByText } = setup();
 
-          const titleElement = queryByText(stubContent.pcrCreate.learnMoreAboutTitle.content);
-          const hintElement = queryByText(stubContent.pcrCreate.selectTypesHint.content);
+          const titleElement = queryByText(stubContent.pages.pcrCreate.learnMoreTitle);
+          const hintElement = queryByText(stubContent.pages.pcrCreate.selectTypesHint);
 
           expect(titleElement).toBeInTheDocument();
           expect(hintElement).toBeInTheDocument();
@@ -154,8 +163,8 @@ describe("PcrTypes Components", () => {
           const types: PCRItemTypeDto[] = [{ ...stubPcrItem, type: PCRItemType.MultiplePartnerFinancialVirement }];
           const { queryByText, getByText } = setup({ types });
 
-          const reallocateCostsMessage = queryByText(stubContent.pcrCreate.reallocateCostsMessage.content);
-          const toggleElement = getByText(stubContent.pcrCreate.learnMoreAboutTitle.content);
+          const reallocateCostsMessage = queryByText(stubContent.pages.pcrCreate.reallocateCostsMessage);
+          const toggleElement = getByText(stubContent.pages.pcrCreate.learnMoreTitle);
 
           await userEvent.click(toggleElement);
           expect(reallocateCostsMessage).toBeVisible();
@@ -165,8 +174,8 @@ describe("PcrTypes Components", () => {
           const types: PCRItemTypeDto[] = [{ ...stubPcrItem, type: PCRItemType.MultiplePartnerFinancialVirement }];
           const { queryByText, getByText } = setup({ types });
 
-          const reallocateCostsMessage = queryByText(stubContent.pcrCreate.reallocateCostsMessage.content);
-          const toggleElement = getByText(stubContent.pcrCreate.learnMoreAboutTitle.content);
+          const reallocateCostsMessage = queryByText(stubContent.pages.pcrCreate.reallocateCostsMessage);
+          const toggleElement = getByText(stubContent.pages.pcrCreate.learnMoreTitle);
 
           await userEvent.click(toggleElement);
           expect(reallocateCostsMessage).toBeVisible();

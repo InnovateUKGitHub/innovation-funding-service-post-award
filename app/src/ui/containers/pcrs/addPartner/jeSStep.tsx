@@ -20,16 +20,16 @@ export function JesStepUI({ documents, documentsEditor, project, ...props }: Jes
   const { getContent } = useContent();
   const { isKTP } = checkProjectCompetition(project.competitionType);
 
-  const jesApplyingViaSystemLinkContent = getContent(x => x.pcrAddPartnerJeS.jesListItem1LinkContent);
-  const jesListProcessItem2 = getContent(x => x.pcrAddPartnerJeS.jesListItem2);
-  const jesWebsiteLinkContent = getContent(x => x.pcrAddPartnerJeS.jesWebsiteLinkContent);
-  const jesIntroduction = getContent(x => x.pcrAddPartnerJeS.jesIntroduction);
-  const jesUploadSupport = getContent(x => x.pcrAddPartnerJeS.jesUploadSupport);
-  const submitButton = getContent(x => x.pcrAddPartnerJeS.pcrItem.submitButton);
-  const returnToSummaryButton = getContent(x => x.pcrAddPartnerJeS.pcrItem.returnToSummaryButton);
-  const jesHeading = getContent(x => x.pcrAddPartnerJeS.labels.jesHeading);
-  const uploadInputLabel = getContent(x => x.pcrAddPartnerJeS.documentLabels.uploadInputLabel);
-  const uploadTitle = getContent(x => x.pcrAddPartnerJeS.documentMessages.uploadTitle);
+  const jesApplyingViaSystemLinkContent = getContent(x => x.pages.pcrAddPartnerJes.jesListItem1LinkContent);
+  const jesListProcessItem2 = getContent(x => x.pages.pcrAddPartnerJes.jesListItem2BeforeLink);
+  const jesWebsiteLinkContent = getContent(x => x.pages.pcrAddPartnerJes.jesWebsiteLinkContent);
+  const jesIntroduction = getContent(x => x.pages.pcrAddPartnerJes.jesIntroduction);
+  const jesUploadSupport = getContent(x => x.pages.pcrAddPartnerJes.jesUploadSupport);
+  const submitButton = getContent(x => x.pcrItem.submitButton);
+  const returnToSummaryButton = getContent(x => x.pcrItem.returnToSummaryButton);
+  const jesHeading = getContent(x => x.pcrAddPartnerLabels.jesHeading);
+  const uploadInputLabel = getContent(x => x.documentLabels.uploadInputLabel);
+  const uploadTitle = getContent(x => x.documentMessages.uploadTitle);
 
   const renderForm = () => {
     const applicationUrl =
@@ -104,7 +104,7 @@ export function JesStepUI({ documents, documentsEditor, project, ...props }: Jes
       {isKTP ? (
         <ACC.ValidationMessage
           messageType="info"
-          message={x => x.pcrAddPartnerJeS.jesIntroduction}
+          message={x => x.pages.pcrAddPartnerJes.jesIntroduction}
           qa="jes-form-ktp-not-needed-info-message"
         />
       ) : (

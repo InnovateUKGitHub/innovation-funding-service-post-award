@@ -44,14 +44,14 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
           <ACC.BackLink
             route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}
           >
-            <ACC.Content value={x => x.monitoringReportsDelete.backLink} />
+            <ACC.Content value={x => x.pages.monitoringReportsDelete.backLink} />
           </ACC.BackLink>
         }
         error={editor.error}
       >
         <ACC.Section>
           <ACC.Renderers.SimpleString>
-            <ACC.Content value={x => x.monitoringReportsDelete.messages.deletingMonitoringReportMessage} />
+            <ACC.Content value={x => x.monitoringReportsMessages.deletingMonitoringReportMessage} />
           </ACC.Renderers.SimpleString>
           <DeleteForm.Form editor={editor} qa="monitoringReportDelete">
             <DeleteForm.Fieldset>
@@ -62,7 +62,7 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
                 onClick={() => this.props.delete(editor.data)}
                 value={editor.data.headerId}
               >
-                <ACC.Content value={x => x.monitoringReportsDelete.deleteReportButton} />
+                <ACC.Content value={x => x.pages.monitoringReportsDelete.buttonDeleteReport} />
               </DeleteForm.Button>
             </DeleteForm.Fieldset>
           </DeleteForm.Form>
@@ -86,7 +86,7 @@ const DeleteVerificationContainer = (props: MonitoringReportDeleteParams & BaseP
           props.projectId,
           props.id,
           dto,
-          getContent(x => x.monitoringReportsDelete.messages.onDeleteMonitoringReportMessage),
+          getContent(x => x.monitoringReportsMessages.onDeleteMonitoringReportMessage),
           () => navigate(props.routes.monitoringReportDashboard.getLink({ projectId: dto.projectId }).path),
         )
       }
@@ -103,6 +103,6 @@ export const MonitoringReportDeleteRoute = defineRoute({
     projectId: route.params.projectId,
     id: route.params.id,
   }),
-  getTitle: ({ content }) => content.monitoringReportsDelete.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.monitoringReportsDelete.title),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
 });

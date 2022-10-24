@@ -45,7 +45,7 @@ class Component extends ContainerBase<MonitoringReportCreateParams, Data, Callba
           <ACC.BackLink
             route={this.props.routes.monitoringReportDashboard.getLink({ projectId: this.props.projectId })}
           >
-            <ACC.Content value={x => x.monitoringReportsCreate.backLink} />
+            <ACC.Content value={x => x.pages.monitoringReportsCreate.backLink} />
           </ACC.BackLink>
         }
         pageTitle={<ACC.Projects.Title {...project} />}
@@ -102,5 +102,5 @@ export const MonitoringReportCreateRoute = defineRoute({
   container: Container,
   getParams: r => ({ projectId: r.params.projectId }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
-  getTitle: ({ content }) => content.monitoringReportsCreate.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.monitoringReportsCreate.title),
 });

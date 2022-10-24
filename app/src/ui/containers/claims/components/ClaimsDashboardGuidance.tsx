@@ -21,10 +21,10 @@ export function ClaimsDashboardGuidance({
   let guidanceMessage: React.ReactElement;
 
   if (overdueProject) {
-    const overdueGuidanceMessage1 = getContent(x => x.claimsDashboard.messages.overdueGuidanceMessage1);
-    const overdueGuidanceMessage2 = getContent(x => x.claimsDashboard.messages.overdueGuidanceMessage2);
-    const overdueGuidanceMessage3 = getContent(x => x.claimsDashboard.messages.overdueGuidanceMessage3);
-    const overdueGuidanceMessage4 = getContent(x => x.claimsDashboard.messages.overdueGuidanceMessage4);
+    const overdueGuidanceMessage1 = getContent(x => x.claimsMessages.overdueGuidanceMessage.message1);
+    const overdueGuidanceMessage2 = getContent(x => x.claimsMessages.overdueGuidanceMessage.message2);
+    const overdueGuidanceMessage3 = getContent(x => x.claimsMessages.overdueGuidanceMessage.message3);
+    const overdueGuidanceMessage4 = getContent(x => x.claimsMessages.overdueGuidanceMessage.message4);
 
     guidanceMessage = (
       <>
@@ -38,7 +38,7 @@ export function ClaimsDashboardGuidance({
     const isPartnerFc = getAuthRoles(roles).isFc;
     const { isCombinationOfSBRI } = checkProjectCompetition(competitionType);
 
-    const defaultGuidanceMessage = getContent(x => x.allClaimsDashboard.messages.guidanceMessage);
+    const defaultGuidanceMessage = getContent(x => x.claimsMessages.guidanceMessage);
 
     const displaySbriGuidance = isPartnerFc && isCombinationOfSBRI;
 

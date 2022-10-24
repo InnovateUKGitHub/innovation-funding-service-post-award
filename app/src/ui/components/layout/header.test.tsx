@@ -1,23 +1,18 @@
 import { render } from "@testing-library/react";
 
-import { TestBed, TestBedContent } from "@shared/TestBed";
+import { TestBed } from "@shared/TestBed";
 import { Header, HeaderProps } from "@ui/components/layout/header";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("Header", () => {
   const stubContent = {
-    header: {
-      siteName: "stub-siteName",
-      mobileNavigationLabel: {
-        content: "stub-mobileNavigationLabel",
-      },
-      dashboard: {
-        content: "Dashboard",
-      },
-      profile: {
-        content: "Profile",
-      },
-      signOut: {
-        content: "Sign out",
+    site: {
+      header: {
+        siteName: "stub-siteName",
+        mobileNavigationLabel: "stub-mobileNavigationLabel",
+        dashboard: "Dashboard",
+        profile: "Profile",
+        signOut: "Sign out",
       },
     },
   };
@@ -28,17 +23,21 @@ describe("Header", () => {
 
   const setup = (props?: Partial<HeaderProps>) =>
     render(
-      <TestBed content={stubContent as TestBedContent}>
+      <TestBed>
         <Header {...defaultProps} {...props} />
       </TestBed>,
     );
+
+  beforeAll(async () => {
+    testInitialiseInternationalisation(stubContent);
+  });
 
   describe("@renders", () => {
     it("should return heading link", () => {
       const stubHeadingLink = "https://stub-link.me";
       const { getByText } = setup({ headingLink: stubHeadingLink });
 
-      const siteLink = getByText(stubContent.header.siteName);
+      const siteLink = getByText(stubContent.site.header.siteName);
 
       expect(siteLink).toHaveAttribute("href", stubHeadingLink);
     });
@@ -54,7 +53,7 @@ describe("Header", () => {
         // No items no menu or toggle is shown
         const { queryByTestId, queryByText } = setup({ showMenu: true });
 
-        const mobileNavigationLabel = queryByText(stubContent.header.mobileNavigationLabel.content);
+        const mobileNavigationLabel = queryByText(stubContent.site.header.mobileNavigationLabel);
 
         expect(mobileNavigationLabel).toBeInTheDocument();
 

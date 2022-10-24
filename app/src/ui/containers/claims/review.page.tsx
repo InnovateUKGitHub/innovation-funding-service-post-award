@@ -25,8 +25,7 @@ import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { useContent } from "@ui/hooks";
 import { useMounted } from "@ui/features";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { Content } from "@content/content";
-import { DropdownOption, IDocumentMessages } from "@ui/components";
+import { DropdownOption } from "@ui/components";
 
 import { EnumDocuments } from "./components";
 
@@ -37,7 +36,7 @@ export interface ReviewClaimParams {
 }
 
 interface ReviewData {
-  content: ReviewContent;
+  content: ReturnType<typeof useReviewContent>;
   project: Pending<ProjectDto>;
   partner: Pending<PartnerDto>;
   costCategories: Pending<CostCategoryDto[]>;
@@ -53,83 +52,41 @@ interface ReviewData {
   documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;
 }
 
-type ReviewContentKeys =
-  | "competitionNameLabel"
-  | "competitionTypeLabel"
-  | "backlinkMessage"
-  | "finalClaimMessage"
-  | "logItemTitle"
-  | "additionalInfoHint"
-  | "forecastItemTitle"
-  | "queryClaimOption"
-  | "approveClaimOption"
-  | "howToProceedSectionTitle"
-  | "submitButton"
-  | "sendQueryButton"
-  | "uploadSupportingDocumentsFormAccordionTitle"
-  | "uploadInputLabel"
-  | "uploadButton"
-  | "claimReviewDeclaration"
-  | "monitoringReportReminder"
-  | "additionalInfoSectionTitle"
-  | "additionalInfoLabel"
-  | "uploadInstruction1"
-  | "uploadInstruction2"
-  | "noDocumentsUploaded"
-  | "descriptionLabel"
-  | "noMatchingDocumentsMessage"
-  | "searchDocumentsMessage";
-
-type ReviewContentKTPKeys =
-  | "additionalInfoHintIfYou"
-  | "additionalInfoHintQueryClaim"
-  | "additionalInfoHintSubmitClaim";
-
-interface ReviewContent {
-  default: Record<ReviewContentKeys, string>;
-  document: IDocumentMessages;
-  getCompetitionContent: (competitionType: string) => Record<ReviewContentKTPKeys, string> | undefined;
-}
-
-export function useReviewContent(): ReviewContent {
+export function useReviewContent() {
   const { getContent } = useContent();
 
   const defaultContent = {
-    competitionNameLabel: getContent(x => x.projectDetails.projectLabels.competitionNameLabel),
-    competitionTypeLabel: getContent(x => x.projectDetails.projectLabels.competitionTypeLabel),
-    additionalInfoHint: getContent(x => x.claimReview.additionalInfoHint),
-    backlinkMessage: getContent(x => x.claimReview.backLink),
-    queryClaimOption: getContent(x => x.claimReview.queryClaimOption),
-    approveClaimOption: getContent(x => x.claimReview.approveClaimOption),
-    howToProceedSectionTitle: getContent(x => x.claimReview.howToProceedSectionTitle),
-    submitButton: getContent(x => x.claimReview.submitButton),
-    sendQueryButton: getContent(x => x.claimReview.sendQueryButton),
-    uploadSupportingDocumentsFormAccordionTitle: getContent(
-      x => x.claimReview.uploadSupportingDocumentsFormAccordionTitle,
-    ),
-    uploadInputLabel: getContent(x => x.claimReview.uploadInputLabel),
-    uploadButton: getContent(x => x.claimReview.uploadButton),
-    claimReviewDeclaration: getContent(x => x.claimReview.claimReviewDeclaration),
-    monitoringReportReminder: getContent(x => x.claimReview.monitoringReportReminder),
-    additionalInfoSectionTitle: getContent(x => x.claimReview.additionalInfoSectionTitle),
-    additionalInfoLabel: getContent(x => x.claimReview.additionalInfoLabel),
-    finalClaimMessage: getContent(x => x.claimReview.messages.finalClaimMessage),
-    forecastItemTitle: getContent(x => x.claimReview.labels.forecastAccordionTitle),
-    logItemTitle: getContent(x => x.claimReview.labels.claimLogAccordionTitle),
-    uploadInstruction1: getContent(x => x.claimReview.documentMessages.uploadInstruction1),
-    uploadInstruction2: getContent(x => x.claimReview.documentMessages.uploadInstruction2),
-    noDocumentsUploaded: getContent(x => x.claimReview.documentMessages.noDocumentsUploaded),
-    descriptionLabel: getContent(x => x.claimDocuments.descriptionLabel),
-    noMatchingDocumentsMessage: getContent(x => x.projectDocuments.noMatchingDocumentsMessage),
-    searchDocumentsMessage: getContent(x => x.projectDocuments.searchDocumentsMessage),
+    competitionName: getContent(x => x.projectLabels.competitionName),
+    competitionType: getContent(x => x.projectLabels.competitionType),
+    additionalInfoHint: getContent(x => x.pages.claimReview.additionalInfoHint),
+    backLink: getContent(x => x.pages.claimReview.backLink),
+    optionQueryClaim: getContent(x => x.pages.claimReview.optionQueryClaim),
+    optionSubmitClaim: getContent(x => x.pages.claimReview.optionSubmitClaim),
+    sectionTitleHowToProceed: getContent(x => x.pages.claimReview.sectionTitleHowToProceed),
+    buttonSubmit: getContent(x => x.pages.claimReview.buttonSubmit),
+    buttonSendQuery: getContent(x => x.pages.claimReview.buttonSendQuery),
+    accordionTitleSupportingDocumentsForm: getContent(x => x.pages.claimReview.accordionTitleSupportingDocumentsForm),
+    labelInputUpload: getContent(x => x.pages.claimReview.labelInputUpload),
+    buttonUpload: getContent(x => x.pages.claimReview.buttonUpload),
+    claimReviewDeclaration: getContent(x => x.pages.claimReview.claimReviewDeclaration),
+    monitoringReportReminder: getContent(x => x.pages.claimReview.monitoringReportReminder),
+    sectionTitleAdditionalInfo: getContent(x => x.pages.claimReview.sectionTitleAdditionalInfo),
+    additionalInfo: getContent(x => x.pages.claimReview.additionalInfo),
+    finalClaim: getContent(x => x.claimsMessages.finalClaim),
+    accordionTitleForecast: getContent(x => x.claimsLabels.accordionTitleForecast),
+    accordionTitleClaimLog: getContent(x => x.claimsLabels.accordionTitleClaimLog),
+    uploadInstruction1: getContent(x => x.documentMessages.uploadInstruction1),
+    uploadInstruction2: getContent(x => x.documentMessages.uploadInstruction2),
+    noDocumentsUploaded: getContent(x => x.documentMessages.noDocumentsUploaded),
+    descriptionLabel: getContent(x => x.pages.claimDocuments.descriptionLabel),
+    noMatchingDocumentsMessage: getContent(x => x.pages.projectDocuments.noMatchingDocumentsMessage),
+    searchDocumentsMessage: getContent(x => x.pages.projectDocuments.searchDocumentsMessage),
   };
 
-  const document = (x: Content) => x.claimReview.documentMessages;
-
-  const ktpContent: Record<ReviewContentKTPKeys, string> = {
-    additionalInfoHintQueryClaim: getContent(x => x.claimReview.additionalInfoHintQueryClaim),
-    additionalInfoHintSubmitClaim: getContent(x => x.claimReview.additionalInfoHintSubmitClaim),
-    additionalInfoHintIfYou: getContent(x => x.claimReview.additionalInfoHintIfYou),
+  const ktpContent = {
+    additionalInfoHintQueryClaim: getContent(x => x.pages.claimReview.additionalInfoHintQueryClaim),
+    additionalInfoHintSubmitClaim: getContent(x => x.pages.claimReview.additionalInfoHintSubmitClaim),
+    additionalInfoHintIfYou: getContent(x => x.pages.claimReview.additionalInfoHintIfYou),
   };
 
   const getCompetitionContent = (competitionType: string) => {
@@ -141,7 +98,6 @@ export function useReviewContent(): ReviewContent {
   return {
     getCompetitionContent,
     default: defaultContent,
-    document,
   };
 }
 
@@ -171,7 +127,7 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
 
     const backLinkElement = (
       <ACC.BackLink route={props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}>
-        {content.default.backlinkMessage}
+        {content.default.backLink}
       </ACC.BackLink>
     );
 
@@ -184,42 +140,40 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
       >
         <ACC.Renderers.Messages messages={props.messages} />
 
-        {data.claim.isFinalClaim && (
-          <ACC.ValidationMessage messageType="info" message={content.default.finalClaimMessage} />
-        )}
+        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={content.default.finalClaim} />}
 
         {data.partner.competitionName && (
           <ACC.Renderers.SimpleString className="margin-bottom-none">
-            <span className="govuk-!-font-weight-bold">{content.default.competitionNameLabel}:</span>{" "}
+            <span className="govuk-!-font-weight-bold">{content.default.competitionName}:</span>{" "}
             {data.partner.competitionName}
           </ACC.Renderers.SimpleString>
         )}
 
         <ACC.Renderers.SimpleString>
-          <span className="govuk-!-font-weight-bold">{content.default.competitionTypeLabel}:</span>{" "}
+          <span className="govuk-!-font-weight-bold">{content.default.competitionType}:</span>{" "}
           {data.partner.competitionType}
         </ACC.Renderers.SimpleString>
 
         {isMo && isCombinationOfSBRI && (
           <>
             <ACC.Renderers.SimpleString>
-              <ACC.Content value={x => x.claimReview.messages.milestoneContractAchievement} />
+              <ACC.Content value={x => x.claimsMessages.milestoneContractAchievement} />
             </ACC.Renderers.SimpleString>
             <ACC.Renderers.SimpleString>
-              <ACC.Content value={x => x.claimReview.messages.milestoneToDo} />
+              <ACC.Content value={x => x.claimsMessages.milestoneToDo} />
             </ACC.Renderers.SimpleString>
             <ACC.UL>
               <li>
-                <ACC.Content value={x => x.claimReview.messages.milestoneBullet1} />
+                <ACC.Content value={x => x.claimsMessages.milestoneBullet1} />
               </li>
               <li>
-                <ACC.Content value={x => x.claimReview.messages.milestoneBullet2} />
+                <ACC.Content value={x => x.claimsMessages.milestoneBullet2} />
               </li>
               <li>
-                <ACC.Content value={x => x.claimReview.messages.milestoneBullet3} />
+                <ACC.Content value={x => x.claimsMessages.milestoneBullet3} />
               </li>
               <li>
-                <ACC.Content value={x => x.claimReview.messages.milestoneBullet4} />
+                <ACC.Content value={x => x.claimsMessages.milestoneBullet4} />
               </li>
             </ACC.UL>
           </>
@@ -238,7 +192,7 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
           <ACC.Accordion>
             {renderForecastItem()}
 
-            <ACC.AccordionItem title={content.default.logItemTitle} qa="log-accordion">
+            <ACC.AccordionItem title={content.default.accordionTitleClaimLog} qa="log-accordion">
               {/* Keeping logs inside loader because accordion defaults to closed*/}
               <ACC.Loader
                 pending={props.statusChanges}
@@ -268,7 +222,7 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
     });
 
     return (
-      <ACC.AccordionItem qa="forecast-accordion" title={content.default.forecastItemTitle}>
+      <ACC.AccordionItem qa="forecast-accordion" title={content.default.accordionTitleForecast}>
         <ACC.Loader
           pending={pendingForecastData}
           render={forecastData => <ACC.Claims.ForecastTable hideValidation data={forecastData} />}
@@ -290,8 +244,8 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
     const Form = ACC.TypedForm<ClaimDto>();
 
     const options: ACC.SelectOption[] = [
-      { id: ClaimStatus.MO_QUERIED, value: content.default.queryClaimOption },
-      { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: content.default.approveClaimOption },
+      { id: ClaimStatus.MO_QUERIED, value: content.default.optionQueryClaim },
+      { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: content.default.optionSubmitClaim },
     ];
 
     const validSubmittedClaimStatus = [
@@ -312,7 +266,7 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
         onChange={dto => props.onUpdate(false, dto)}
         qa="review-form"
       >
-        <Form.Fieldset heading={content.default.howToProceedSectionTitle}>
+        <Form.Fieldset heading={content.default.sectionTitleHowToProceed}>
           <Form.Radio
             name="status"
             options={options}
@@ -341,7 +295,7 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
 
     return (
       <ACC.AccordionItem
-        title={content.default.uploadSupportingDocumentsFormAccordionTitle}
+        title={content.default.accordionTitleSupportingDocumentsForm}
         qa="upload-supporting-documents-form-accordion"
       >
         <EnumDocuments documentsToCheck={allowedClaimDocuments}>
@@ -361,7 +315,7 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
                   <ACC.DocumentGuidance />
 
                   <UploadForm.MultipleFileUpload
-                    label={content.default.uploadInputLabel}
+                    label={content.default.labelInputUpload}
                     name="attachment"
                     labelHidden
                     value={x => x.files}
@@ -383,7 +337,7 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
                 </UploadForm.Fieldset>
 
                 <UploadForm.Submit name="reviewDocuments" styling="Secondary">
-                  {content.default.uploadButton}
+                  {content.default.buttonUpload}
                 </UploadForm.Submit>
               </UploadForm.Form>
 
@@ -443,12 +397,12 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
       // Returning array here instead of React.Fragment as Fieldset data will not persist through Fragment,
       <Form.Fieldset
         key="form"
-        heading={content.default.additionalInfoSectionTitle}
+        heading={content.default.sectionTitleAdditionalInfo}
         qa="additional-info-form"
         headingQa="additional-info-heading"
       >
         <Form.MultilineString
-          label={content.default.additionalInfoLabel}
+          label={content.default.additionalInfo}
           labelHidden
           hint={getCompetitionHintContent(project.competitionType)}
           name="comments"
@@ -469,7 +423,7 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
     const showQueryLabel = editor.data.status === ClaimStatus.MO_QUERIED;
 
     // Note: With SSR remove dynamic text
-    return showQueryLabel ? content.default.sendQueryButton : content.default.submitButton;
+    return showQueryLabel ? content.default.buttonSendQuery : content.default.buttonSubmit;
   };
 
   const updateStatus = (dto: ClaimDto, option: ACC.SelectOption | null | undefined) => {
@@ -554,9 +508,7 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => {
           props.periodId,
           dto,
           getContent(x =>
-            dto.status === ClaimStatus.MO_QUERIED
-              ? x.claimReview.messages.claimQueried
-              : x.claimReview.messages.claimApproved,
+            dto.status === ClaimStatus.MO_QUERIED ? x.claimsMessages.claimQueried : x.claimsMessages.claimApproved,
           ),
           () => navigate(props.routes.allClaimsDashboard.getLink({ projectId: props.projectId }).path),
         );
@@ -570,7 +522,7 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => {
           props.partnerId,
           props.periodId,
           dto,
-          getContent(x => x.claimDocuments.documentMessages.getDocumentUploadedMessage(dto.files.length)),
+          getContent(x => x.documentMessages.uploadedDocuments({ count: dto.files.length })),
           () => stores.claims.markClaimAsStale(props.partnerId, props.periodId),
         );
       }}
@@ -583,7 +535,7 @@ const ReviewContainer = (props: ReviewClaimParams & BaseProps) => {
           props.periodId,
           dto,
           document,
-          getContent(x => x.claimDocuments.documentMessages.documentDeleted(document)),
+          getContent(x => x.documentMessages.deletedDocument({ deletedFileName: document })),
           () => stores.claims.markClaimAsStale(props.partnerId, props.periodId),
         );
       }}
@@ -601,5 +553,5 @@ export const ReviewClaimRoute = defineRoute({
     periodId: parseInt(route.params.periodId, 10),
   }),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasRole(ProjectRole.MonitoringOfficer),
-  getTitle: ({ content }) => content.claimReview.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.claimReview.title),
 });

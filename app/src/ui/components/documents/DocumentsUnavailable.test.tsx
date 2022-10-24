@@ -1,33 +1,32 @@
 import { render } from "@testing-library/react";
 
-import { TestBed, TestBedContent } from "@shared/TestBed";
+import { TestBed } from "@shared/TestBed";
 import { DocumentsUnavailable, DocumentsUnavailableProps } from "@ui/components/documents/DocumentsUnavailable";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<DocumentsUnavailable />", () => {
   const stubContent = {
-    components: {
-      documents: {
-        messages: {
-          noDocumentsUploaded: {
-            content: "stub-noDocumentsUploaded",
-          },
-        },
-      },
+    documentMessages: {
+      noDocumentsUploaded: "stub-noDocumentsUploaded",
     },
   };
 
   const setup = (props?: Partial<DocumentsUnavailableProps>) =>
     render(
-      <TestBed content={stubContent as TestBedContent}>
+      <TestBed>
         <DocumentsUnavailable {...props} />
       </TestBed>,
     );
+
+  beforeAll(async () => {
+    testInitialiseInternationalisation(stubContent);
+  });
 
   describe("@renders", () => {
     test("as default", () => {
       const { queryByText } = setup();
 
-      const fallbackContent = stubContent.components.documents.messages.noDocumentsUploaded.content;
+      const fallbackContent = stubContent.documentMessages.noDocumentsUploaded;
 
       expect(queryByText(fallbackContent)).toBeInTheDocument();
     });

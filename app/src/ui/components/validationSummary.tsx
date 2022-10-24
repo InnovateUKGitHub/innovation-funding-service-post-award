@@ -46,7 +46,7 @@ export function ValidationSummary({ validation, compressed }: Props) {
       data-qa="validation-summary"
     >
       <h2 className="govuk-error-summary__title" id="error-summary-title">
-        {getContent(x => x.components.validationSummary.validationsTitle)}
+        {getContent(x => x.components.validationSummary.title)}
       </h2>
       <div className="govuk-error-summary__body">
         <List className="govuk-error-summary__list">{createResultsLinks(results)}</List>

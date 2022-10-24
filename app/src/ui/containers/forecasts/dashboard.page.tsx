@@ -54,37 +54,37 @@ class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
         <ACC.Section qa="project-forecasts">
           <Table.Table data={partners} qa="partner-table">
             <Table.Custom
-              header={x => x.forecastsDashboard.partnerHeader}
+              header={x => x.pages.forecastsDashboard.headerPartner}
               value={x => ACC.getPartnerName(x, true)}
               qa="partner"
             />
             <Table.Currency
-              header={x => x.forecastsDashboard.totalEligibleCostsHeader}
+              header={x => x.pages.forecastsDashboard.headerTotalEligibleCosts}
               value={x => x.totalParticipantGrant}
               qa="grant-offered"
             />
             <Table.Currency
-              header={x => x.forecastsDashboard.forecastsAndCostsHeader}
+              header={x => x.pages.forecastsDashboard.headerForecastsAndCosts}
               value={x => getForecastsAndCosts(x)}
               qa="forecasts-and-costs"
             />
             <Table.Currency
-              header={x => x.forecastsDashboard.underspendHeader}
+              header={x => x.pages.forecastsDashboard.headerUnderspend}
               value={x => roundCurrency(x.totalParticipantGrant ?? 0 - getForecastsAndCosts(x))}
               qa="underspend"
             />
             <Table.ShortDate
-              header={x => x.forecastsDashboard.lastUpdateHeader}
+              header={x => x.pages.forecastsDashboard.headerLastUpdate}
               value={x => x.forecastLastModifiedDate}
               qa="last-updated"
             />
             <Table.Link
-              header={x => x.forecastsDashboard.actionHeader}
+              header={x => x.pages.forecastsDashboard.headerAction}
               hideHeader
               value={x =>
                 this.props.routes.forecastDetails.getLink({ projectId: this.props.projectId, partnerId: x.id })
               }
-              content={<ACC.Content value={x => x.forecastsDashboard.viewForecastHeader} />}
+              content={<ACC.Content value={x => x.pages.forecastsDashboard.viewForecast} />}
               qa="view-partner-forecast"
             />
           </Table.Table>
@@ -115,5 +115,5 @@ export const ForecastDashboardRoute = defineRoute({
   getParams: r => ({ projectId: r.params.projectId }),
   accessControl: (auth, { projectId }) =>
     auth.forProject(projectId).hasAnyRoles(ProjectRole.MonitoringOfficer, ProjectRole.ProjectManager),
-  getTitle: ({ content }) => content.forecastsDashboard.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.forecastsDashboard.title),
 });

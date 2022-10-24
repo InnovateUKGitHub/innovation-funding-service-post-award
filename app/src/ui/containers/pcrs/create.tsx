@@ -142,14 +142,14 @@ export function useCreatePcrContent() {
   const { getContent } = useContent();
 
   return {
-    selectTypesHint: getContent(x => x.pcrCreate.selectTypesHint),
-    backLink: getContent(x => x.pcrCreate.backLink),
-    selectRequestTypesTitle: getContent(x => x.pcrCreate.selectRequestTypesTitle),
-    createRequestButton: getContent(x => x.pcrCreate.createRequestButton),
-    cancelRequestButton: getContent(x => x.pcrCreate.cancelRequestButton),
-    guidanceIntroMessage: getContent(x => x.pcrCreate.guidanceIntroMessage),
-    guidanceListRow1: getContent(x => x.pcrCreate.guidanceListRow1),
-    guidanceListRow2: getContent(x => x.pcrCreate.guidanceListRow2),
+    selectTypesHint: getContent(x => x.pages.pcrCreate.selectTypesHint),
+    backLink: getContent(x => x.pages.pcrCreate.backLink),
+    selectRequestTypesTitle: getContent(x => x.pages.pcrCreate.selectRequestTypesTitle),
+    createRequestButton: getContent(x => x.pages.pcrCreate.buttonCreateRequest),
+    cancelRequestButton: getContent(x => x.pages.pcrCreate.buttonCancelRequest),
+    guidanceIntroMessage: getContent(x => x.pages.pcrCreate.guidanceIntroMessage),
+    guidanceListRow1: getContent(x => x.pages.pcrCreate.guidanceList.row1),
+    guidanceListRow2: getContent(x => x.pages.pcrCreate.guidanceList.row2),
   };
 }
 
@@ -185,6 +185,6 @@ export const PCRCreateRoute = defineRoute({
   routePath: "/projects/:projectId/pcrs/create",
   container: PCRCreateContainer,
   getParams: route => ({ projectId: route.params.projectId }),
-  getTitle: ({ content }) => content.pcrCreate.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrCreate.title),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager),
 });

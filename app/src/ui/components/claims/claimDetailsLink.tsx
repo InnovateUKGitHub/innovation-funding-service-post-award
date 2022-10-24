@@ -30,15 +30,15 @@ export function ClaimDetailsLink({ claim, partner, project, routes }: ClaimDetai
   const linkTypeOptions = {
     edit: {
       route: routes.prepareClaim.getLink(linkProps),
-      children: getContent(x => x.components.claimDetailsLinkContent.editClaimText),
+      children: getContent(x => x.components.claimDetailsLinkContent.editClaim),
     },
     review: {
       route: routes.reviewClaim.getLink(linkProps),
-      children: getContent(x => x.components.claimDetailsLinkContent.reviewClaimText),
+      children: getContent(x => x.components.claimDetailsLinkContent.reviewClaim),
     },
     view: {
       route: routes.claimDetails.getLink(linkProps),
-      children: getContent(x => x.components.claimDetailsLinkContent.viewClaimText),
+      children: getContent(x => x.components.claimDetailsLinkContent.viewClaim),
     },
   };
 

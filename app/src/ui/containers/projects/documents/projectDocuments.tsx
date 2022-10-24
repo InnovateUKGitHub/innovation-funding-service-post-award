@@ -62,7 +62,7 @@ export const ProjectDocumentPage = (
   const partnerOptions: DropdownListOption[] = partners.map(partner => ({
     id: partner.id,
     value: partner.id,
-    displayName: getContent(x => x.projectDocuments.documentLabels.participantOption(partner.name)),
+    displayName: getContent(x => x.documentLabels.participantOption({ partnerName: partner.name })),
     qa: `document-partner-${partner.id}`,
   }));
 
@@ -80,13 +80,13 @@ export const ProjectDocumentPage = (
 
       <Section>
         {isProjectMo ? (
-          <Content value={x => x.projectDocuments.documentMessages.monitoringOfficerDocumentsIntroMessage} />
+          <Content markdown value={x => x.documentMessages.monitoringOfficerDocumentsIntroMessage} />
         ) : (
-          <Content value={x => x.projectDocuments.documentMessages.otherRoleDocumentsIntroMessage(partnerName)} />
+          <Content markdown value={x => x.documentMessages.otherRoleDocumentsIntroMessage({ partnerName })} />
         )}
       </Section>
 
-      <Section title={x => x.projectDocuments.documentMessages.uploadTitle}>
+      <Section title={x => x.documentMessages.uploadTitle}>
         <EnumDocuments documentsToCheck={allowedProjectDocuments}>
           {docs => (
             <UploadForm.Form
@@ -100,7 +100,7 @@ export const ProjectDocumentPage = (
                 <DocumentGuidance />
 
                 <UploadForm.MultipleFileUpload
-                  label={x => x.projectDocuments.documentLabels.uploadInputLabel}
+                  label={x => x.documentLabels.uploadInputLabel}
                   name="attachment"
                   labelHidden
                   value={data => data.files}
@@ -112,9 +112,9 @@ export const ProjectDocumentPage = (
                 {/* If a user is not the project MO, but they have more than one partner to select (?!?), show them all the partners. */}
                 {(isProjectMo || validUploadPartners.length > 1) && (
                   <UploadForm.DropdownList
-                    label={x => x.projectDocuments.documentLabels.participantLabel}
+                    label={x => x.documentLabels.participantLabel}
                     hasEmptyOption={isProjectMo} // Only the project MO can select the "Innovate UK/MO only" option
-                    placeholder={getContent(x => x.projectDocuments.documentLabels.participantPlaceholder)}
+                    placeholder={getContent(x => x.documentLabels.participantPlaceholder)}
                     name="partnerId"
                     validation={editor.validator.partnerId}
                     options={partnerOptions}
@@ -135,9 +135,9 @@ export const ProjectDocumentPage = (
                 )}
 
                 <UploadForm.DropdownList
-                  label={x => x.projectDocuments.documentLabels.descriptionLabel}
+                  label={x => x.documentLabels.descriptionLabel}
                   hasEmptyOption
-                  placeholder={getContent(x => x.projectDocuments.documentLabels.descriptionPlaceholder)}
+                  placeholder={getContent(x => x.documentLabels.descriptionPlaceholder)}
                   name="description"
                   validation={editor.validator.description}
                   options={docs}
@@ -147,7 +147,7 @@ export const ProjectDocumentPage = (
               </UploadForm.Fieldset>
 
               <UploadForm.Submit styling="Secondary">
-                <Content value={x => x.projectDocuments.documentMessages.uploadDocumentsLabel} />
+                <Content value={x => x.documentMessages.uploadDocuments} />
               </UploadForm.Submit>
             </UploadForm.Form>
           )}
@@ -156,11 +156,11 @@ export const ProjectDocumentPage = (
 
       <Section>
         <H2>
-          <Content value={x => x.projectDocuments.documentLabels.documentDisplayTitle} />
+          <Content value={x => x.documentLabels.documentDisplayTitle} />
         </H2>
 
         <SimpleString>
-          <Content value={x => x.projectDocuments.documentLabels.documentDisplaySubTitle} />
+          <Content value={x => x.documentLabels.documentDisplaySubTitle} />
         </SimpleString>
 
         {isProjectMo && (

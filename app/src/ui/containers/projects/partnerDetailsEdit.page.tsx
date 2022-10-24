@@ -60,8 +60,10 @@ const PartnerDetailsEditContainer = (props: PartnerDetailsParams & BaseProps) =>
   const { getContent } = useContent();
 
   const url = props.routes.partnerDetails.getLink({ projectId: props.projectId, partnerId: props.partnerId });
-  const saveAndReturnLabel = getContent(x => x.partnerDetailsEdit.buttonSaveAndReturnPartnerDetails);
-  const backLink = <ACC.BackLink route={url}>{getContent(x => x.partnerDetailsEdit.backToPartnerInfo)}</ACC.BackLink>;
+  const saveAndReturnLabel = getContent(x => x.pages.partnerDetailsEdit.saveAndReturnPartnerDetailsButton);
+  const backLink = (
+    <ACC.BackLink route={url}>{getContent(x => x.pages.partnerDetailsEdit.backToPartnerInfo)}</ACC.BackLink>
+  );
   const navigate = useNavigate();
 
   return (
@@ -89,7 +91,7 @@ export const PartnerDetailsEditRoute = defineRoute<PartnerDetailsParams>({
   routePath: "/projects/:projectId/setup/:partnerId/project-location",
   container: PartnerDetailsEditContainer,
   getParams: r => ({ projectId: r.params.projectId, partnerId: r.params.partnerId }),
-  getTitle: ({ content }) => content.features.postcode.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.partnerDetailsEdit.title),
   accessControl: (auth, { projectId, partnerId }) =>
     auth.forPartner(projectId, partnerId).hasAnyRoles(ProjectRole.FinancialContact, ProjectRole.ProjectManager),
 });

@@ -18,26 +18,26 @@ export function PcrTypesGuidance({ qa, types }: PcrTypesGuidanceProps) {
   const { getContent } = useContent();
 
   const content = {
-    reallocateCostsMessage: getContent(x => x.pcrCreate.reallocateCostsMessage),
-    reallocateCostsTitle: getContent(x => x.pcrCreate.reallocateCostsTitle),
-    removePartnerTitle: getContent(x => x.pcrCreate.removePartnerTitle),
-    removePartnerMessage: getContent(x => x.pcrCreate.removePartnerMessage),
-    addPartnerTitle: getContent(x => x.pcrCreate.addPartnerTitle),
-    addPartnerMessage: getContent(x => x.pcrCreate.addPartnerMessage),
-    changeScopeTitle: getContent(x => x.pcrCreate.changeScopeTitle),
-    changeScopeMessage: getContent(x => x.pcrCreate.changeScopeMessage),
-    changeDurationTitle: getContent(x => x.pcrCreate.changeDurationTitle),
-    changeDurationMessage: getContent(x => x.pcrCreate.changeDurationMessage),
-    changePartnersNameTitle: getContent(x => x.pcrCreate.changePartnersNameTitle),
-    changePartnersNameMessage: getContent(x => x.pcrCreate.changePartnersNameMessage),
-    putProjectOnHoldTitle: getContent(x => x.pcrCreate.putProjectOnHoldTitle),
-    putProjectOnHoldMessage: getContent(x => x.pcrCreate.putProjectOnHoldMessage),
-    endProjectEarlyTitle: getContent(x => x.pcrCreate.endProjectEarlyTitle),
-    endProjectEarlyMessage: getContent(x => x.pcrCreate.endProjectEarlyMessage),
-    loanDrawdownChangeTitle: getContent(x => x.pcrCreate.loanDrawdownChangeTitle),
-    loanDrawdownChangeMessage: getContent(x => x.pcrCreate.loanDrawdownChangeMessage),
-    loanDrawdownExtensionTitle: getContent(x => x.pcrCreate.loanDrawdownExtensionTitle),
-    loanDrawdownExtensionMessage: getContent(x => x.pcrCreate.loanDrawdownExtensionMessage),
+    reallocateCostsMessage: getContent(x => x.pages.pcrCreate.reallocateCostsMessage),
+    reallocateCostsTitle: getContent(x => x.pages.pcrCreate.reallocateCostsTitle),
+    removePartnerTitle: getContent(x => x.pages.pcrCreate.removePartnerTitle),
+    removePartnerMessage: getContent(x => x.pages.pcrCreate.removePartnerMessage),
+    addPartnerTitle: getContent(x => x.pages.pcrCreate.addPartnerTitle),
+    addPartnerMessage: getContent(x => x.pages.pcrCreate.addPartnerMessage),
+    changeScopeTitle: getContent(x => x.pages.pcrCreate.changeScopeTitle),
+    changeScopeMessage: getContent(x => x.pages.pcrCreate.changeScopeMessage),
+    changeDurationTitle: getContent(x => x.pages.pcrCreate.changeDurationTitle),
+    changeDurationMessage: getContent(x => x.pages.pcrCreate.changeDurationMessage),
+    changePartnersNameTitle: getContent(x => x.pages.pcrCreate.changePartnersNameTitle),
+    changePartnersNameMessage: getContent(x => x.pages.pcrCreate.changePartnersNameMessage),
+    putProjectOnHoldTitle: getContent(x => x.pages.pcrCreate.putProjectOnHoldTitle),
+    putProjectOnHoldMessage: getContent(x => x.pages.pcrCreate.putProjectOnHoldMessage),
+    endProjectEarlyTitle: getContent(x => x.pages.pcrCreate.endProjectEarlyTitle),
+    endProjectEarlyMessage: getContent(x => x.pages.pcrCreate.endProjectEarlyMessage),
+    loanDrawdownChangeTitle: getContent(x => x.pages.pcrCreate.loanDrawdownChangeTitle),
+    loanDrawdownChangeMessage: getContent(x => x.pages.pcrCreate.loanDrawdownChangeMessage),
+    loanDrawdownExtensionTitle: getContent(x => x.pages.pcrCreate.loanDrawdownExtensionTitle),
+    loanDrawdownExtensionMessage: getContent(x => x.pages.pcrCreate.loanDrawdownExtensionMessage),
   };
 
   const guidanceContent: PcrTypeContent[] = [
@@ -94,8 +94,8 @@ export function PcrTypesGuidance({ qa, types }: PcrTypesGuidanceProps) {
     return pcrTypeContent ? [...previous, pcrTypeContent] : previous;
   }, []);
 
-  const title = getContent(x => x.pcrCreate.learnMoreAboutTitle);
-  const hint = getContent(x => x.pcrCreate.selectTypesHint);
+  const title = getContent(x => x.pages.pcrCreate.learnMoreTitle);
+  const hint = getContent(x => x.pages.pcrCreate.selectTypesHint);
 
   return (
     <div data-qa={qa}>

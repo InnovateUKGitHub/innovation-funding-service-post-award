@@ -58,15 +58,13 @@ const ProjectDocumentsContainer = (props: ProjectDocumentPageParams & BaseProps)
       editor={stores.projectDocuments.getProjectDocumentEditor(props.projectId)}
       onChange={(saving, dto) => {
         stores.messages.clearMessages();
-        const successMessage = getContent(x =>
-          x.projectDocuments.documentMessages.getDocumentUploadedMessage(dto.files.length),
-        );
+        const successMessage = getContent(x => x.documentMessages.uploadedDocuments({ count: dto.files.length }));
 
         stores.projectDocuments.updateProjectDocumentsEditor(saving, props.projectId, dto, successMessage);
       }}
       onDelete={(dto, doc) => {
         stores.messages.clearMessages();
-        const successMessage = getContent(x => x.projectDocuments.documentMessages.documentDeleted(doc));
+        const successMessage = getContent(x => x.documentMessages.uploadedDocuments({ deletedFileName: doc.fileName }));
         if ("partnerId" in doc) {
           stores.projectDocuments.deleteProjectPartnerDocumentsEditor(
             props.projectId,
@@ -89,5 +87,5 @@ export const ProjectDocumentsRoute = defineRoute({
   routePath: "/projects/:projectId/documents",
   container: ProjectDocumentsContainer,
   getParams: route => ({ projectId: route.params.projectId }),
-  getTitle: ({ content }) => content.projectDocuments.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.projectDocuments.title),
 });

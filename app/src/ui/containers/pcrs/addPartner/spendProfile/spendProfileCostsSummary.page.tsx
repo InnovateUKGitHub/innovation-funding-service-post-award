@@ -74,7 +74,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
       <ACC.Page
         backLink={
           <ACC.BackLink route={stepRoute}>
-            <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.backLink} />
+            <ACC.Content value={x => x.pages.pcrSpendProfileCostsSummary.backLink} />
           </ACC.BackLink>
         }
         pageTitle={<ACC.Projects.Title {...project} />}
@@ -83,7 +83,9 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
         error={editor.error}
       >
         <ACC.Renderers.Messages messages={this.props.messages} />
-        <ACC.Section title={x => x.pcrSpendProfileCostsSummaryContent.costsSectionTitle(costCategory.name)}>
+        <ACC.Section
+          title={x => x.pages.pcrSpendProfileCostsSummary.sectionTitleCosts({ costCategoryName: costCategory.name })}
+        >
           {this.renderPreGuidanceWarning(costCategoryType)}
           {this.renderGuidance(costCategoryType)}
           {this.renderTable(costs, costCategory)}
@@ -96,7 +98,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
           >
             <Form.Fieldset>
               <Form.Submit>
-                <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.submitButton} />
+                <ACC.Content value={x => x.pages.pcrSpendProfileCostsSummary.buttonSubmit} />
               </Form.Submit>
             </Form.Fieldset>
           </Form.Form>
@@ -107,12 +109,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
 
   private renderPreGuidanceWarning(costCategory: CostCategoryItem) {
     if (costCategory.showPreGuidanceWarning) {
-      return (
-        <ACC.ValidationMessage
-          messageType="info"
-          message={x => x.pcrSpendProfileCostsSummaryContent.messages.costPreGuidanceWarning(costCategory)}
-        />
-      );
+      return <ACC.ValidationMessage markdown messageType="info" message={costCategory.preGuidanceWarningMessageKey} />;
     }
 
     return null;
@@ -122,9 +119,13 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
     if (costCategory.showGuidance) {
       return (
         <ACC.Info
-          summary={<ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.guidanceTitle(costCategory.name)} />}
+          summary={
+            <ACC.Content
+              value={x => x.pages.pcrSpendProfileCostsSummary.guidanceTitle({ costCategoryName: costCategory.name })}
+            />
+          }
         >
-          <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.messages.costGuidance(costCategory)} />
+          <ACC.Content markdown value={costCategory.guidanceMessageKey} />
         </ACC.Info>
       );
     }
@@ -168,13 +169,13 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
               costCategoryId: this.props.costCategoryId,
             })}
           >
-            <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.addCostButton} />
+            <ACC.Content value={x => x.pages.pcrSpendProfileCostsSummary.buttonAddCost} />
           </ACC.Link>
         </td>
       </tr>,
       this.renderFooterRow({
         key: "2",
-        title: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.labels.totalCosts(costCategory.name)} />,
+        title: <ACC.Content value={x => x.pcrSpendProfileLabels.totalCosts({ costCategoryName: costCategory.name })} />,
         qa: "total-costs",
         isBold: false,
         value: <ACC.Renderers.Currency value={total} />,
@@ -182,16 +183,8 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
     ];
     return (
       <Table.Table qa="costs" data={costs} footers={footers}>
-        <Table.String
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.description}
-          value={x => x.description}
-          qa={"description"}
-        />
-        <Table.Currency
-          header={x => x.pcrSpendProfileCostsSummaryContent.labels.cost}
-          value={x => x.value}
-          qa={"cost"}
-        />
+        <Table.String header={x => x.pcrSpendProfileLabels.description} value={x => x.description} qa={"description"} />
+        <Table.Currency header={x => x.pcrSpendProfileLabels.cost} value={x => x.value} qa={"cost"} />
         <Table.Custom
           qa="links"
           header="Links"
@@ -214,7 +207,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
         projectId,
         pcrId,
       }),
-      text: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.editCostButton} />,
+      text: <ACC.Content value={x => x.pages.pcrSpendProfileCostsSummary.buttonEditCost} />,
       qa: "edit",
     });
     links.push({
@@ -225,7 +218,7 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
         projectId,
         pcrId,
       }),
-      text: <ACC.Content value={x => x.pcrSpendProfileCostsSummaryContent.removeCostButton} />,
+      text: <ACC.Content value={x => x.pages.pcrSpendProfileCostsSummary.buttonRemoveCost} />,
       qa: "remove",
     });
 
@@ -284,6 +277,6 @@ export const PCRSpendProfileCostsSummaryRoute = defineRoute<PcrSpendProfileCostS
     itemId: route.params.itemId,
     costCategoryId: route.params.costCategoryId,
   }),
-  getTitle: ({ content }) => content.pcrSpendProfileCostsSummaryContent.title(),
+  getTitle: ({ content }) => content.getTitleCopy(x => x.pages.pcrSpendProfileCostsSummary.title),
   accessControl: (auth, { projectId }) => auth.forProject(projectId).hasAnyRoles(ProjectRole.ProjectManager),
 });

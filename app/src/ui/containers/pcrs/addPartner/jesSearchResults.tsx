@@ -21,7 +21,7 @@ export function JesSearchResults({ selected, jesAccounts, update }: JesSearchRes
 
   return (
     <>
-      <H2>{getContent(x => x.pcrAddPartnerAcademicOrganisation.jesSearchResults)}</H2>
+      <H2>{getContent(x => x.pages.pcrAddPartnerAcademicOrganisation.jesSearchResults)}</H2>
       <Form.Fieldset qa="jesSearchResults">
         <Form.Radio
           name="searchResults"

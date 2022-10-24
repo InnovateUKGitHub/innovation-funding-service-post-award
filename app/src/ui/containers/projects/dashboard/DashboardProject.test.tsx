@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 
-import { TestBed, TestBedContent } from "@shared/TestBed";
+import { TestBed } from "@shared/TestBed";
 import { MemoizedDashboardProject as DashboardProject } from "@ui/containers/projects/dashboard/DashboardProject";
 import { DashboardProjectProps } from "@ui/containers/projects/dashboard/Dashboard.interface";
 import { createPartnerDto, createProjectDto } from "@framework/util/stubDtos";
@@ -8,25 +8,24 @@ import { PartnerClaimStatus, ProjectRole, ProjectStatus } from "@framework/const
 import { PartnerDto, ProjectDto } from "@framework/dtos";
 
 import { findByTextContent } from "@tests/test-utils/rtl-helpers";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("<DashboardProject />", () => {
   const stubContent = {
-    projectsDashboard: {
-      messages: {
-        pendingProject: { content: "stub-pendingProject" },
-        projectOnHold: { content: "stub-projectOnHold" },
-        checkForecast: { content: "stub-checkForecast" },
-        claimToSubmit: { content: "stub-claimToSubmit" },
-        claimQueried: { content: "stub-claimQueried" },
-        claimRequestMissingDocument: { content: "stub-claimRequestMissingDocument" },
-        pcrQueried: { content: "stub-pcrQueried" },
-        projectEnded: { content: "stub-projectEnded" },
-        claimsToReview: jest.fn().mockReturnValue({ content: "stub-claimsToReview" }),
-        claimOverdue: jest.fn().mockReturnValue({ content: "stub-claimOverdue" }),
-        pcrsToReview: jest.fn().mockReturnValue({ content: "stub-pcrsToReview" }),
-      },
+    projectMessages: {
+      pendingProject: "stub-pendingProject",
+      projectOnHold: "stub-projectOnHold",
+      checkForecast: "stub-checkForecast",
+      claimToSubmitMessage: "stub-claimToSubmit",
+      claimQueriedMessage: "stub-claimQueried",
+      claimRequestMissingDocument: "stub-claimRequestMissingDocument",
+      pcrQueried: "stub-pcrQueried",
+      projectEndedMessage: "stub-projectEnded",
+      claimsToReviewMessage: "stub-claimsToReview count = {{count}}",
+      claimOverdueMessage: "stub-claimOverdue count = {{count}}",
+      pcrsToReview: "stub-pcrsToReview count = {{count}}",
     },
-  } as any as TestBedContent;
+  };
 
   const stubProjectSetupLink = jest.fn().mockReturnValue({
     routeName: "stub-projectSetup-routeName",
@@ -61,7 +60,7 @@ describe("<DashboardProject />", () => {
 
   const setup = (props: Partial<DashboardProjectProps>) => {
     return render(
-      <TestBed content={stubContent as TestBedContent}>
+      <TestBed>
         <DashboardProject {...defaultProps} {...props} />
       </TestBed>,
     );
@@ -69,21 +68,25 @@ describe("<DashboardProject />", () => {
 
   beforeEach(jest.clearAllMocks);
 
+  beforeAll(async () => {
+    await testInitialiseInternationalisation(stubContent);
+  });
+
   describe("@renders", () => {
     describe("with projects action visibility", () => {
       test.each`
-        name                                                            | inboundProps                                                                                                                          | expectedActionVisible
-        ${"when archived"}                                              | ${{ section: "archived" }}                                                                                                            | ${false}
-        ${"when upcoming"}                                              | ${{ section: "upcoming" }}                                                                                                            | ${false}
-        ${"when pending"}                                               | ${{ section: "pending" }}                                                                                                             | ${true}
-        ${"when open fallback state"}                                   | ${{ section: "open" }}                                                                                                                | ${false}
-        ${"when open with partner with no actions or claims due"}       | ${{ section: "open", partner: { claimStatus: PartnerClaimStatus.ClaimSubmitted } }}                                                   | ${false}
-        ${"when open with partner claims overdue"}                      | ${{ section: "open", partner: { claimStatus: PartnerClaimStatus.ClaimsOverdue } }}                                                    | ${true}
-        ${"when open with partner claimsStatus IARRequired"}            | ${{ section: "open", partner: { claimStatus: PartnerClaimStatus.IARRequired } }}                                                      | ${true}
-        ${"when open with partner claimsStatus is not ClaimSubmitted"}  | ${{ section: "open", partner: { claimStatus: PartnerClaimStatus.ClaimQueried } }}                                                     | ${true}
-        ${"when open with partner claimsStatus is not NoClaimsDue"}     | ${{ section: "open", partner: { claimStatus: PartnerClaimStatus.ClaimDue } }}                                                         | ${true}
-        ${"when open with project MO with claims overdue"}              | ${{ section: "open", project: { roles: ProjectRole.MonitoringOfficer, claimsOverdue: 1 } }}                                           | ${true}
-        ${"when open with project MO with claims to review"}            | ${{ section: "open", project: { roles: ProjectRole.MonitoringOfficer, claimsToReview: 1 } }}                                          | ${true}
+        name                                                           | inboundProps                                                                                 | expectedActionVisible
+        ${"when archived"}                                             | ${{ section: "archived" }}                                                                   | ${false}
+        ${"when upcoming"}                                             | ${{ section: "upcoming" }}                                                                   | ${false}
+        ${"when pending"}                                              | ${{ section: "pending" }}                                                                    | ${true}
+        ${"when open fallback state"}                                  | ${{ section: "open" }}                                                                       | ${false}
+        ${"when open with partner with no actions or claims due"}      | ${{ section: "open", partner: { claimStatus: PartnerClaimStatus.ClaimSubmitted } }}          | ${false}
+        ${"when open with partner claims overdue"}                     | ${{ section: "open", partner: { claimStatus: PartnerClaimStatus.ClaimsOverdue } }}           | ${true}
+        ${"when open with partner claimsStatus IARRequired"}           | ${{ section: "open", partner: { claimStatus: PartnerClaimStatus.IARRequired } }}             | ${true}
+        ${"when open with partner claimsStatus is not ClaimSubmitted"} | ${{ section: "open", partner: { claimStatus: PartnerClaimStatus.ClaimQueried } }}            | ${true}
+        ${"when open with partner claimsStatus is not NoClaimsDue"}    | ${{ section: "open", partner: { claimStatus: PartnerClaimStatus.ClaimDue } }}                | ${true}
+        ${"when open with project MO with claims overdue"}             | ${{ section: "open", project: { roles: ProjectRole.MonitoringOfficer, claimsOverdue: 1 } }}  | ${true}
+        ${"when open with project MO with claims to review"}           | ${{ section: "open", project: { roles: ProjectRole.MonitoringOfficer, claimsToReview: 1 } }} | ${true}
       `("$name", ({ inboundProps, expectedActionVisible }) => {
         const { container } = setup(inboundProps);
 
@@ -201,9 +204,7 @@ describe("<DashboardProject />", () => {
 
               const { queryByText } = setup({ section: projectSection, project: stubProject });
 
-              if (!stubContent.projectsDashboard) throw Error("Missing projectsDashboard in stub content");
-
-              const projectEndedMessage = queryByText(stubContent.projectsDashboard.messages.projectEnded.content);
+              const projectEndedMessage = queryByText(stubContent.projectMessages.projectEndedMessage);
 
               expect(projectEndedMessage).toBeInTheDocument();
             });
@@ -213,9 +214,7 @@ describe("<DashboardProject />", () => {
 
               const { queryByText } = setup({ section: projectSection, partner: stubPartner });
 
-              if (!stubContent.projectsDashboard) throw Error("Missing projectsDashboard in stub content");
-
-              const projectEndedMessage = queryByText(stubContent.projectsDashboard.messages.projectEnded.content);
+              const projectEndedMessage = queryByText(stubContent.projectMessages.projectEndedMessage);
 
               expect(projectEndedMessage).toBeInTheDocument();
             });
@@ -252,9 +251,7 @@ describe("<DashboardProject />", () => {
       test("when section is pending", () => {
         const { queryByText } = setup({ section: "pending" });
 
-        if (!stubContent.projectsDashboard) throw Error("Missing projectsDashboard in stub content");
-
-        const projectPendingMessage = queryByText(stubContent.projectsDashboard.messages.pendingProject.content);
+        const projectPendingMessage = queryByText(stubContent.projectMessages.pendingProject);
 
         expect(projectPendingMessage).toBeInTheDocument();
       });
@@ -272,9 +269,7 @@ describe("<DashboardProject />", () => {
             const stubProject = createProjectDto({ status: ProjectStatus.OnHold });
             const { queryByText } = setup({ section: projectSection, project: stubProject });
 
-            if (!stubContent.projectsDashboard) throw Error("Missing projectsDashboard in stub content");
-
-            const projectOnHoldMessage = queryByText(stubContent.projectsDashboard.messages.projectOnHold.content);
+            const projectOnHoldMessage = queryByText(stubContent.projectMessages.projectOnHold);
 
             expect(projectOnHoldMessage).toBeInTheDocument();
           });
@@ -286,23 +281,17 @@ describe("<DashboardProject />", () => {
 
               const { queryByText } = setup({ section: projectSection, project: stubProject, partner: stubPartner });
 
-              if (!stubContent.projectsDashboard) throw Error("Missing projectsDashboard in stub content");
-
-              const partnerCheckForecastMessage = queryByText(
-                stubContent.projectsDashboard.messages.checkForecast.content,
-              );
+              const partnerCheckForecastMessage = queryByText(stubContent.projectMessages.checkForecast);
 
               expect(partnerCheckForecastMessage).toBeInTheDocument();
             });
 
             describe("when claim status", () => {
-              if (!stubContent.projectsDashboard) throw Error("Missing projectsDashboard in stub content");
-
               test.each`
                 name                    | claimStatus                        | expectedMessage
-                ${"with claim due"}     | ${PartnerClaimStatus.ClaimDue}     | ${stubContent.projectsDashboard.messages.claimToSubmit.content}
-                ${"with claim queried"} | ${PartnerClaimStatus.ClaimQueried} | ${stubContent.projectsDashboard.messages.claimQueried.content}
-                ${"with IAR required"}  | ${PartnerClaimStatus.IARRequired}  | ${stubContent.projectsDashboard.messages.claimRequestMissingDocument.content}
+                ${"with claim due"}     | ${PartnerClaimStatus.ClaimDue}     | ${stubContent.projectMessages.claimToSubmitMessage}
+                ${"with claim queried"} | ${PartnerClaimStatus.ClaimQueried} | ${stubContent.projectMessages.claimQueriedMessage}
+                ${"with IAR required"}  | ${PartnerClaimStatus.IARRequired}  | ${stubContent.projectMessages.claimRequestMissingDocument}
               `("$name", ({ claimStatus, expectedMessage }) => {
                 const stubProject = createProjectDto({
                   status: ProjectStatus.Live,
@@ -326,9 +315,7 @@ describe("<DashboardProject />", () => {
 
                 const { queryByText } = setup({ section: projectSection, project: stubProject });
 
-                if (!stubContent.projectsDashboard) throw Error("Missing projectsDashboard in stub content");
-
-                const partnerPcrQueriedMessage = queryByText(stubContent.projectsDashboard.messages.pcrQueried.content);
+                const partnerPcrQueriedMessage = queryByText(stubContent.projectMessages.pcrQueried);
 
                 expect(partnerPcrQueriedMessage).not.toBeInTheDocument();
               });
@@ -342,9 +329,7 @@ describe("<DashboardProject />", () => {
 
                 const { queryByText } = setup({ section: projectSection, project: stubProject });
 
-                if (!stubContent.projectsDashboard) throw Error("Missing projectsDashboard in stub content");
-
-                const partnerPcrQueriedMessage = queryByText(stubContent.projectsDashboard.messages.pcrQueried.content);
+                const partnerPcrQueriedMessage = queryByText(stubContent.projectMessages.pcrQueried);
 
                 expect(partnerPcrQueriedMessage).toBeInTheDocument();
               });
@@ -360,14 +345,18 @@ describe("<DashboardProject />", () => {
 
               const { queryByText } = setup({ section: projectSection, project: stubProject });
 
-              if (!stubContent.projectsDashboard) throw Error("Missing projectsDashboard in stub content");
+              const claimsToReviewText = stubContent.projectMessages.claimsToReviewMessage.replace(
+                "{{count}}",
+                stubProject.claimsToReview.toFixed(0),
+              );
 
-              const partnerClaimToReviewMessage = queryByText(
-                stubContent.projectsDashboard.messages.claimsToReview(stubProject.claimsToReview).content,
+              const pcrsToReviewText = stubContent.projectMessages.pcrsToReview.replace(
+                "{{count}}",
+                stubProject.pcrsToReview.toFixed(0),
               );
-              const partnerPcrsToReviewMessage = queryByText(
-                stubContent.projectsDashboard.messages.pcrsToReview(stubProject.pcrsToReview).content,
-              );
+
+              const partnerClaimToReviewMessage = queryByText(claimsToReviewText);
+              const partnerPcrsToReviewMessage = queryByText(pcrsToReviewText);
 
               expect(partnerClaimToReviewMessage).toBeInTheDocument();
               expect(partnerPcrsToReviewMessage).toBeInTheDocument();

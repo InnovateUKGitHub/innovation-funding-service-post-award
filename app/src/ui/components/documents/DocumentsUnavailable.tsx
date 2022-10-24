@@ -11,7 +11,7 @@ export function DocumentsUnavailable({ removeSpacing, validationMessage }: Docum
 
   return (
     <SimpleString className={removeSpacing ? "govuk-!-margin-0" : "govuk-!-margin-top-5"}>
-      {validationMessage || getContent(x => x.components.documents.messages.noDocumentsUploaded)}
+      {validationMessage || getContent(x => x.documentMessages.noDocumentsUploaded)}
     </SimpleString>
   );
 }

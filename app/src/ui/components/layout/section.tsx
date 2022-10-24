@@ -2,7 +2,7 @@ import React, { isValidElement, useContext, createContext } from "react";
 import cx from "classnames";
 
 import { useContent } from "@ui/hooks";
-import { ContentSelector } from "@content/content";
+import type { ContentSelector } from "@copy/type";
 import { SimpleString } from "@ui/components/renderers/simpleString";
 import * as typographyModule from "@ui/components/typography";
 
@@ -64,13 +64,13 @@ export function Section({ id, qa, title, subtitle, badge, className, children }:
                 "govuk-!-margin-bottom-0": !subtitle,
               })}
             >
-              {typeof title === "string" || !isValidElement(title) ? getContent(title) : title}
+              {typeof title === "string" || isValidElement(title) ? title : getContent(title)}
             </Header>
           )}
 
           {subtitle && (
             <SimpleString qa="section-subtitle">
-              {typeof subtitle === "string" || !isValidElement(subtitle) ? getContent(subtitle) : subtitle}
+              {typeof subtitle === "string" || isValidElement(subtitle) ? subtitle : getContent(subtitle)}
             </SimpleString>
           )}
         </div>

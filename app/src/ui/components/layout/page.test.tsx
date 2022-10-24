@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { renderHook } from "@testing-library/react";
 
-import TestBed, { hookTestBed, TestBedContent } from "@shared/TestBed";
+import TestBed, { hookTestBed } from "@shared/TestBed";
 import { ErrorCode, IAppError, PartnerStatus, ProjectStatus } from "@framework/types";
 import { Result, Results } from "@ui/validation";
 
@@ -12,23 +12,25 @@ import {
   PageValidationProjectStatus,
   usePageValidationMessage,
 } from "@ui/components/layout/page";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("usePageValidationMessage()", () => {
   const stubContent = {
     components: {
       projectInactiveContent: {
-        projectOnHoldMessage: { content: "stub-projectOnHoldMessage" },
-        partnerOnHoldMessage: { content: "stub-partnerOnHoldMessage" },
+        projectOnHoldMessage: "stub-projectOnHoldMessage",
+        partnerOnHoldMessage: "stub-partnerOnHoldMessage",
       },
     },
   };
 
   const renderPageContent = (project: PageValidationProjectStatus, partner: PageValidationPartnerStatus) => {
-    return renderHook(
-      () => usePageValidationMessage(project, partner),
-      hookTestBed({ content: stubContent as TestBedContent }),
-    );
+    return renderHook(() => usePageValidationMessage(project, partner), hookTestBed({}));
   };
+
+  beforeAll(async () => {
+    testInitialiseInternationalisation(stubContent);
+  });
 
   it("should return null", () => {
     const { result } = renderPageContent(ProjectStatus.Live, PartnerStatus.Active);
@@ -39,13 +41,13 @@ describe("usePageValidationMessage()", () => {
   it("should return project hold message", () => {
     const { result } = renderPageContent(ProjectStatus.OnHold, PartnerStatus.Active);
 
-    expect(result.current).toBe(stubContent.components.projectInactiveContent.projectOnHoldMessage.content);
+    expect(result.current).toBe(stubContent.components.projectInactiveContent.projectOnHoldMessage);
   });
 
   it("should return partner hold message", () => {
     const { result } = renderPageContent(ProjectStatus.Live, PartnerStatus.OnHold);
 
-    expect(result.current).toBe(stubContent.components.projectInactiveContent.partnerOnHoldMessage.content);
+    expect(result.current).toBe(stubContent.components.projectInactiveContent.partnerOnHoldMessage);
   });
 });
 
@@ -61,27 +63,31 @@ describe("<Page />", () => {
   const stubContent = {
     components: {
       validationSummary: {
-        validationsTitle: { content: "stub-validationsTitle" },
+        title: "stub-validationsTitle",
       },
       errorSummary: {
-        errorTitle: { content: "stub-errorTitle" },
-        expiredMessageContent: { content: "stub-expiredMessageContent" },
-        unsavedWarningContent: { content: "stub-unsavedWarningContent" },
-        somethingGoneWrongContent: { content: "stub-somethingGoneWrongContent" },
-        updateAllFailure: { content: "stub-updateAllFailure" },
-        insufficienceAccessRights: { content: "stub-insufficienceAccessRights" },
-        notUploadedByOwner: { content: "stub-notUploadedByOwner" },
+        errorTitle: "stub-errorTitle",
+        expiredMessageContent: "stub-expiredMessageContent",
+        unsavedWarningContent: "stub-unsavedWarningContent",
+        somethingGoneWrongContent: "stub-somethingGoneWrongContent",
+        updateAllFailure: "stub-updateAllFailure",
+        insufficientAccessRights: "stub-insufficientAccessRights",
+        notUploadedByOwner: "stub-notUploadedByOwner",
       },
       projectInactiveContent: {
-        projectOnHoldMessage: { content: "stub-projectOnHoldMessage" },
-        partnerOnHoldMessage: { content: "stub-partnerOnHoldMessage" },
+        projectOnHoldMessage: "stub-projectOnHoldMessage",
+        partnerOnHoldMessage: "stub-partnerOnHoldMessage",
       },
     },
   };
 
+  beforeAll(async () => {
+    testInitialiseInternationalisation(stubContent);
+  });
+
   const setup = (props?: Partial<PageProps>) => {
     const result = render(
-      <TestBed content={stubContent as TestBedContent}>
+      <TestBed>
         <Page {...defaultProps} {...props} />
       </TestBed>,
     );
@@ -146,7 +152,7 @@ describe("<Page />", () => {
       const singleValidation: PageProps["validator"] = new Results({}, false, [stubError1]);
       const { queryByText } = setup({ validator: singleValidation });
 
-      expect(queryByText(stubContent.components.validationSummary.validationsTitle.content)).toBeInTheDocument();
+      expect(queryByText(stubContent.components.validationSummary.title)).toBeInTheDocument();
     });
 
     it("with multiple validations", () => {
@@ -156,15 +162,15 @@ describe("<Page />", () => {
 
       const { queryByText } = setup({ validator: arrayOfValidations });
 
-      expect(queryByText(stubContent.components.validationSummary.validationsTitle.content)).toBeInTheDocument();
+      expect(queryByText(stubContent.components.validationSummary.title)).toBeInTheDocument();
     });
   });
 
   describe("renders a hold message", () => {
     test.each`
       name                | props                                                          | expectedMessage
-      ${"with a project"} | ${{ project: { status: ProjectStatus.OnHold } as any }}        | ${stubContent.components.projectInactiveContent.projectOnHoldMessage.content}
-      ${"with a partner"} | ${{ partner: { partnerStatus: PartnerStatus.OnHold } as any }} | ${stubContent.components.projectInactiveContent.partnerOnHoldMessage.content}
+      ${"with a project"} | ${{ project: { status: ProjectStatus.OnHold } as any }}        | ${stubContent.components.projectInactiveContent.projectOnHoldMessage}
+      ${"with a partner"} | ${{ partner: { partnerStatus: PartnerStatus.OnHold } as any }} | ${stubContent.components.projectInactiveContent.partnerOnHoldMessage}
     `("$name on hold", ({ props, expectedMessage }) => {
       const { holdMessageElementQa, queryByTestId } = setup(props);
 

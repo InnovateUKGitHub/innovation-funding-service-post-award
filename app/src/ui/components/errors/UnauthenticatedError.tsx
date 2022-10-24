@@ -9,12 +9,12 @@ export function UnauthenticatedError() {
   const { getContent } = useContent();
   const { ssoEnabled } = useStores().config.getConfig();
 
-  const contactUsPreLink = getContent(x => x.errors.unauthenticated.contactUsPreLinkContent);
-  const contactUsLinkText = getContent(x => x.errors.unauthenticated.contactUsLinkTextContent);
+  const contactUsPreLink = getContent(x => x.pages.unauthenticatedError.preLinkContent);
+  const contactUsLinkText = getContent(x => x.pages.unauthenticatedError.linkTextContent);
   const contactLink = "https://apply-for-innovation-funding.service.gov.uk/info/contact";
   const contactUsLink = <ExternalLink href={contactLink}>{contactUsLinkText}</ExternalLink>;
 
-  const contactUsPostLink = getContent(x => x.errors.unauthenticated.contactUsPostLinkContent);
+  const contactUsPostLink = getContent(x => x.pages.unauthenticatedError.postLinkContent);
 
   return (
     <Page qa="unauthenticated-error" pageTitle={<PageTitle />}>

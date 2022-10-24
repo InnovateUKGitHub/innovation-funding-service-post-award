@@ -1,5 +1,3 @@
-import { Content } from "@content/content";
-import { ProjectContactLabels } from "@content/labels/projectContactLabels";
 import { PartnerDto, ProjectContactDto } from "@framework/types";
 import { getPartnerName } from "@ui/components/partners";
 import { ReactNode } from "react";
@@ -8,18 +6,11 @@ import { TypedTable } from "./table";
 export interface PartnersAndFinanceContactsProps {
   partners: PartnerDto[];
   contacts: ProjectContactDto[];
-  projectContactLabels: (content: Content) => ProjectContactLabels;
   comment?: ReactNode;
   footnote?: ReactNode;
 }
 
-export function PartnersAndFinanceContacts({
-  contacts,
-  partners,
-  projectContactLabels,
-  comment,
-  footnote,
-}: PartnersAndFinanceContactsProps) {
+export function PartnersAndFinanceContacts({ contacts, partners, comment, footnote }: PartnersAndFinanceContactsProps) {
   const partnersAndContactsData = partners.map(partner => ({
     partner,
     financeContact: contacts.find(x => x.accountId === partner.accountId && x.role === "Finance contact"),
@@ -33,19 +24,19 @@ export function PartnersAndFinanceContacts({
       <PartnersTable.Table qa="finance-contact-details" data={partnersAndContactsData}>
         <PartnersTable.String
           qa="fc-name"
-          header={x => projectContactLabels(x).contactName}
+          header={x => x.projectContactLabels.contactName}
           value={x => x.financeContact?.name || ""}
         />
 
         <PartnersTable.Custom
           qa="partner-name"
-          header={x => projectContactLabels(x).partnerName}
+          header={x => x.projectContactLabels.partnerName}
           value={x => getPartnerName(x.partner, true)}
         />
 
         <PartnersTable.Email
           qa="fc-email"
-          header={x => projectContactLabels(x).contactEmail}
+          header={x => x.projectContactLabels.contactEmail}
           value={x => x.financeContact?.email || ""}
         />
       </PartnersTable.Table>

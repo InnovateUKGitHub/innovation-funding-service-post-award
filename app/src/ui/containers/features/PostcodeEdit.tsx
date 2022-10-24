@@ -1,4 +1,4 @@
-import { ContentSelector } from "@content/content";
+import type { ContentSelector } from "@copy/type";
 import { PartnerDto } from "@framework/dtos";
 import { useContent } from "@ui/hooks";
 import { IEditorStore } from "@ui/redux";
@@ -23,23 +23,25 @@ export function PostcodeEdit({ editor, onUpdate, saveButtonContent, ...rest }: P
         {rest.displayCurrentPostcode && (
           <PostcodeForm.Custom
             name="current-partner-postcode-value"
-            label={x => x.features.postcode.currentPostcodeLabel}
+            label={x => x.pages.partnerDetailsEdit.labelCurrentPostcode}
             value={x => <ACC.Renderers.SimpleString>{x.postcode}</ACC.Renderers.SimpleString>}
             update={() => null}
           />
         )}
         <PostcodeForm.String
           name="new-partner-postcode-value"
-          hint={x => x.features.postcode.newPostcodeHint}
+          hint={x => x.pages.partnerDetailsEdit.hintNewPostcode}
           width="one-quarter"
           value={() => editor.data.postcode}
-          label={x => x.features.postcode.newPostcodeLabel}
+          label={x => x.pages.partnerDetailsEdit.labelNewPostcode}
           update={(m, val) => (editor.data.postcode = val)}
         />
       </PostcodeForm.Fieldset>
 
       <PostcodeForm.Fieldset>
-        <PostcodeForm.Submit>{getContent(saveButtonContent)}</PostcodeForm.Submit>
+        <PostcodeForm.Submit>
+          {typeof saveButtonContent === "string" ? saveButtonContent : getContent(saveButtonContent)}
+        </PostcodeForm.Submit>
       </PostcodeForm.Fieldset>
     </PostcodeForm.Form>
   );
