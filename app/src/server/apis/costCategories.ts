@@ -4,7 +4,7 @@ import { GetUnfilteredCostCategoriesQuery, GetFilteredCostCategoriesQuery } from
 import { ApiParams, ControllerBase } from "./controllerBase";
 
 export interface ICostCategoriesApi {
-  getAll: (params: ApiParams<{}>) => Promise<CostCategoryDto[]>;
+  getAll: (params: ApiParams) => Promise<CostCategoryDto[]>;
   getAllFiltered: (params: ApiParams<{ partnerId: string }>) => Promise<CostCategoryDto[]>;
 }
 
@@ -23,7 +23,7 @@ class Controller extends ControllerBase<CostCategoryDto> implements ICostCategor
     );
   }
 
-  public async getAll(params: ApiParams<{}>) {
+  public async getAll(params: ApiParams) {
     const query = new GetUnfilteredCostCategoriesQuery();
     return contextProvider.start(params).runQuery(query);
   }

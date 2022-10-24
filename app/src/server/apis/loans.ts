@@ -32,7 +32,7 @@ class LoansApi extends ControllerBase<LoanDto> {
 
     super.putItem(
       "/:projectId/:loanId",
-      (p, q, b) => ({
+      (p, q, b: LoanDto) => ({
         projectId: p.projectId,
         loanId: p.loanId,
         loan: processDto(b),

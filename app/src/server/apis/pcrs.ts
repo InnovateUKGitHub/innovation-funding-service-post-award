@@ -46,12 +46,12 @@ export interface IPCRsApi {
   getStatusChanges: (
     params: ApiParams<{ projectId: string; projectChangeRequestId: string }>,
   ) => Promise<ProjectChangeRequestStatusChangeDto[]>;
-  getPcrProjectRoles: (params: ApiParams<{}>) => Promise<Option<PCRProjectRole>[]>;
-  getPcrPartnerTypes: (params: ApiParams<{}>) => Promise<Option<PCRPartnerType>[]>;
-  getParticipantSizes: (params: ApiParams<{}>) => Promise<Option<PCRParticipantSize>[]>;
-  getProjectLocations: (params: ApiParams<{}>) => Promise<Option<PCRProjectLocation>[]>;
-  getCapitalUsageTypes: (params: ApiParams<{}>) => Promise<Option<PCRSpendProfileCapitalUsageType>[]>;
-  getOverheadRateOptions: (params: ApiParams<{}>) => Promise<Option<PCRSpendProfileOverheadRate>[]>;
+  getPcrProjectRoles: (params: ApiParams) => Promise<Option<PCRProjectRole>[]>;
+  getPcrPartnerTypes: (params: ApiParams) => Promise<Option<PCRPartnerType>[]>;
+  getParticipantSizes: (params: ApiParams) => Promise<Option<PCRParticipantSize>[]>;
+  getProjectLocations: (params: ApiParams) => Promise<Option<PCRProjectLocation>[]>;
+  getCapitalUsageTypes: (params: ApiParams) => Promise<Option<PCRSpendProfileCapitalUsageType>[]>;
+  getOverheadRateOptions: (params: ApiParams) => Promise<Option<PCRSpendProfileOverheadRate>[]>;
 }
 
 class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implements IPCRsApi {
@@ -80,13 +80,13 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
 
     this.postItem(
       "/:projectId",
-      (p, _, b) => ({ projectId: p.projectId, projectChangeRequestDto: processDto(b) }),
+      (p, _, b: PCRDto) => ({ projectId: p.projectId, projectChangeRequestDto: processDto(b) }),
       this.create,
     );
 
     this.putItem(
       "/:projectId/:id",
-      (p, _, b) => ({ projectId: p.projectId, id: p.id, pcr: processDto(b) }),
+      (p, _, b: PCRDto) => ({ projectId: p.projectId, id: p.id, pcr: processDto(b) }),
       this.update,
     );
 
@@ -142,32 +142,32 @@ class Controller extends ControllerBaseWithSummary<PCRSummaryDto, PCRDto> implem
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getPcrProjectRoles(params: ApiParams<{}>) {
+  public async getPcrProjectRoles(params: ApiParams) {
     const query = new GetPcrProjectRolesQuery();
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getPcrPartnerTypes(params: ApiParams<{}>) {
+  public async getPcrPartnerTypes(params: ApiParams) {
     const query = new GetPcrPartnerTypesQuery();
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getParticipantSizes(params: ApiParams<{}>) {
+  public async getParticipantSizes(params: ApiParams) {
     const query = new GetPcrParticipantSizesQuery();
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getProjectLocations(params: ApiParams<{}>) {
+  public async getProjectLocations(params: ApiParams) {
     const query = new GetPcrProjectLocationsQuery();
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getCapitalUsageTypes(params: ApiParams<{}>) {
+  public async getCapitalUsageTypes(params: ApiParams) {
     const query = new GetPcrSpendProfileCapitalUsageTypesQuery();
     return contextProvider.start(params).runQuery(query);
   }
 
-  public async getOverheadRateOptions(params: ApiParams<{}>) {
+  public async getOverheadRateOptions(params: ApiParams) {
     const query = new GetPcrSpendProfileOverheadRateOptionsQuery();
     return contextProvider.start(params).runQuery(query);
   }

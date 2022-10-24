@@ -29,7 +29,7 @@ export interface ISession {
   user: ISessionUser;
 }
 
-export type ApiParams<T> = T & ISession;
+export type ApiParams<T = undefined> = T extends undefined ? ISession : Merge<T, ISession>;
 
 interface RequestUrlParams {
   [key: string]: string;
@@ -174,7 +174,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
       const p = Object.assign(
         { user },
         getParams(req.params || {}, (req.query as RequestQueryParams) || {}, req.body || {}, req),
-      );
+      ) as ApiParams<TParams>;
 
       run(p)
         .then(result => {
@@ -197,7 +197,7 @@ export abstract class ControllerBaseWithSummary<TSummaryDto, TDto> {
       const p = Object.assign(
         { user },
         getParams(req.params || {}, (req.query as RequestQueryParams) || {}, req.body || {}),
-      );
+      ) as ApiParams<TParams>;
       run(p)
         .then(result => {
           if (result === null || result === undefined) {

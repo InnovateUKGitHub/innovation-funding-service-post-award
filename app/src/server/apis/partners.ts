@@ -6,7 +6,7 @@ import { UpdatePartnerCommand } from "@server/features/partners/updatePartnerCom
 import { GetAllForProjectQuery, GetAllQuery, GetByIdQuery } from "../features/partners";
 
 export interface IPartnersApi {
-  getAll: (params: ApiParams<{}>) => Promise<PartnerDto[]>;
+  getAll: (params: ApiParams) => Promise<PartnerDto[]>;
   getAllByProjectId: (params: ApiParams<{ projectId: string }>) => Promise<PartnerDto[]>;
   get: (params: ApiParams<{ partnerId: string }>) => Promise<PartnerDto>;
   updatePartner: (
@@ -35,7 +35,7 @@ class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {
     );
     this.putItem(
       "/:partnerId",
-      (p, q, b) => ({
+      (p, q, b: PartnerDto) => ({
         partnerId: p.partnerId,
         partnerDto: processDto(b),
         validateBankDetails: q.validateBankDetails === "true",
@@ -45,7 +45,7 @@ class Controller extends ControllerBase<PartnerDto> implements IPartnersApi {
     );
   }
 
-  public async getAll(params: ApiParams<{}>) {
+  public async getAll(params: ApiParams) {
     const query = new GetAllQuery();
     return contextProvider.start(params).runQuery(query);
   }

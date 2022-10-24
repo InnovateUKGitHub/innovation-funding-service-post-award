@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { AnyAction, createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
+import type { PreloadedState } from "redux";
 import * as Actions from "@ui/redux/actions";
 import { processDto } from "@shared/processResponse";
 import { App } from "@ui/containers/app";
@@ -15,13 +16,14 @@ import {
   StoresProvider,
   ModalProvider,
   ModalRegister,
+  RootState,
 } from "@ui/redux";
 
 import { getPolyfills } from "./polyfill";
 import { Logger } from "@shared/developmentLogger";
 
 // get servers store to initialise client store
-const serverState = processDto(window.__PRELOADED_STATE__);
+const serverState = processDto(window.__PRELOADED_STATE__) as unknown as PreloadedState<RootState>;
 Logger.setDefaultOptions({ logLevel: serverState.config.logLevel });
 
 const middleware = composeWithDevTools(setupClientMiddleware());
