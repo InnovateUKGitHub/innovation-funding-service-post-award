@@ -32,6 +32,7 @@ const baseShibbolethConfig: SamlConfig = {
   entryPoint: configuration.sso.providerUrl,
   issuer: configuration.serverUrl,
   callbackUrl: configuration.serverUrl + successfulValidationRoute,
+  cert: configuration.certificates.shibboleth,
 };
 
 // the info we're asking for
