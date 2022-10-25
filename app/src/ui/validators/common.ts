@@ -66,10 +66,14 @@ export const isFalse = rule<boolean>(
   value => value === null || value === undefined || value === false,
   "Should be false",
 );
-export const isDate = rule<Date>(
-  value => value === null || value === undefined || (value.getTime && !isNaN(value.getTime())),
-  "Invalid date",
-);
+export const isDate = rule<Date>(value => {
+  return (
+    value === null ||
+    value === undefined ||
+    (value.getFullYear() > 1999 && // let's hope nothing from last millennium
+      value.getFullYear() < 2200) // remember to update this in around 160 years
+  );
+}, "Invalid date");
 
 // Tests that the day is before or on the test date. Disregards time of day.
 export function isBeforeOrSameDay(results: Results<{}>, value: Date | null, test: Date, message?: string) {
