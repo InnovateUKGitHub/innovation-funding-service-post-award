@@ -166,8 +166,10 @@ export function MonthYearInput(props: MonthYearInputProps) {
 
   const debouncedChange = useDebounce(props.onChange, props.debounce);
 
+  const hasOnChangeFn = typeof props.onChange === "function";
+
   useEffect(() => {
-    if (props.onChange) {
+    if (hasOnChangeFn) {
       const { startOrEnd } = props;
 
       // Create a datetime with the set year/month
@@ -199,7 +201,7 @@ export function MonthYearInput(props: MonthYearInputProps) {
         debouncedChange(null);
       }
     }
-  }, [month, year, props, debouncedChange]);
+  }, [month, year, hasOnChangeFn]);
 
   return (
     <div className="govuk-date-input">
