@@ -57,7 +57,7 @@ export type IPCRWorkflow<T, TVal extends Results<{}>> = IWorkflow<
   PCRWorkflowValidator
 >;
 
-export class PcrWorkflow<T, TVal extends Results<T>> extends WorkflowBase<
+export class PcrWorkflow<T extends {}, TVal extends Results<T>> extends WorkflowBase<
   string,
   PcrStepProps<T, TVal>,
   PcrSummaryProps<T, TVal, string>,
