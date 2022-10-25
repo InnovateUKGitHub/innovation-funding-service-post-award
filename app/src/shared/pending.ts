@@ -82,7 +82,7 @@ export class Pending<T> {
    * @param pendings - collection of pending objects to be checked
    * @returns boolean
    */
-  private static canResolve(pendings: Pending<{}>[]) {
+  private static canResolve(pendings: Pending<unknown>[]) {
     return pendings.every(p => [LoadingStatus.Done, LoadingStatus.Stale, LoadingStatus.Updated].includes(p.state));
   }
 
