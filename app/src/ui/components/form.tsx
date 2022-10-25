@@ -556,7 +556,7 @@ const CustomComponent = <T extends {}>(props: ExternalFieldProps<T, React.ReactN
   return <FieldComponent {...props} field={(data, disabled) => props.value(data, disabled)} />;
 };
 
-export interface FormBuilder<T> {
+export interface FormBuilder<T extends {}> {
   Form: new () => FormComponent<T>;
   Fieldset: new () => FieldsetComponent<T>;
   String: React.FunctionComponent<StringFieldProps<T>>;
