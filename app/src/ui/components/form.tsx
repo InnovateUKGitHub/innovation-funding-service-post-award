@@ -545,6 +545,7 @@ const MonthYearComponent = <T extends {}>(props: MonthYearProps<T, Date> & Inter
           hasError={hasError}
           startOrEnd={props.startOrEnd}
           hideLabel={props.hideLabel}
+          debounce={false}
         />
       )}
     />

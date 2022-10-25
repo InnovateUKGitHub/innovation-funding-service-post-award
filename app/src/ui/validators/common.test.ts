@@ -4,10 +4,19 @@ import { Results } from "@ui/validation";
 
 describe("common validators", () => {
   describe("date", () => {
-    const date = new Date("invalid date");
+    it("should validate against invalid dates", () => {
+      const date = new Date("invalid date");
 
-    expect(Validators.isDate(new Results({}, true), date).isValid).toBe(false);
+      expect(Validators.isDate(new Results({}, true), date).isValid).toBe(false);
+    });
+
+    it("should validate against incomplete dates", () => {
+      const date = new Date("Oct 25 0202");
+
+      expect(Validators.isDate(new Results({}, true), date).isValid).toBe(false);
+    });
   });
+
   describe("isBeforeOrSameDay", () => {
     it("should be valid when a date is not entered", () => {
       expect(Validators.isBeforeOrSameDay(new Results({}, true), null, new Date()).isValid).toBe(true);
