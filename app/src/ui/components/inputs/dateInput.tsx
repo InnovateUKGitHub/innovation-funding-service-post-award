@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DateTime } from "luxon";
 import classNames from "classnames";
+import { useDidUpdate } from "@ui/hooks";
 import { useDebounce } from "./input-utils";
 import { InputProps } from "./common";
 
@@ -42,7 +43,7 @@ export function FullDateInput(props: FullDateInputProps) {
 
   const debouncedChange = useDebounce(props.onChange, props.debounce);
 
-  useEffect(() => {
+  useDidUpdate(() => {
     if (props.onChange) {
       // Create a datetime with the set year/month/day
       let date = DateTime.local(Number(year), Number(month), Number(day));
@@ -66,7 +67,7 @@ export function FullDateInput(props: FullDateInputProps) {
         debouncedChange(null);
       }
     }
-  }, [day, month, year, props, debouncedChange]);
+  }, [day, month, year]);
 
   return (
     <div id={props.id} className="govuk-date-input">
@@ -168,7 +169,7 @@ export function MonthYearInput(props: MonthYearInputProps) {
 
   const hasOnChangeFn = typeof props.onChange === "function";
 
-  useEffect(() => {
+  useDidUpdate(() => {
     if (hasOnChangeFn) {
       const { startOrEnd } = props;
 
