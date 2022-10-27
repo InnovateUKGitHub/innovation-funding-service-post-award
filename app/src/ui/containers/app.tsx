@@ -21,8 +21,6 @@ import { ErrorBoundaryFallback, ErrorContainer } from "@ui/components/errors";
 import { MountedProvider } from "@ui/features";
 import { getParamsFromUrl } from "@ui/helpers/make-url";
 import { noop } from "@ui/helpers/noop";
-
-import { FooterExternalContent, footerLinks } from "./app/footer.config";
 import { ProjectStatusCheck } from "./app/project-active";
 import { ErrorNotFoundRoute, ErrorRoute } from "./errors.page";
 import { useAppMount } from "./app/app-mount.hook";
@@ -121,9 +119,7 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
               </GovWidthContainer>
             </FullHeight.Content>
 
-            <FooterExternalContent>
-              {payload => <Footer supportingLinks={footerLinks} footerContent={payload} />}
-            </FooterExternalContent>
+            <Footer />
 
             {modalRegister.getModals().map(modal => (
               <PrivateModal key={modal.id} {...modal} />

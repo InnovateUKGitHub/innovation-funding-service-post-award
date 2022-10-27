@@ -10,8 +10,7 @@ describe("<GenericFallbackError />", () => {
     const stubContent = {
       pages: {
         genericFallbackError: {
-          message: "stub-message",
-          dashboardText: "stub-dashboardText",
+          message: "Please use <0>Google</0>.",
         },
       },
     };
@@ -28,17 +27,15 @@ describe("<GenericFallbackError />", () => {
     });
 
     test("with page message containing link text", () => {
-      const { container } = setup({
+      const { queryByTestId } = setup({
         errorCode: ErrorCode.UNKNOWN_ERROR,
         errorType: "stub-errorType",
       });
 
-      const expectedWrittenContent = [
-        stubContent.pages.genericFallbackError.message,
-        stubContent.pages.genericFallbackError.dashboardText,
-      ].join(" ");
+      const message = queryByTestId("message");
 
-      expect(container).toHaveTextContent(expectedWrittenContent);
+      expect(message).toBeInTheDocument();
+      expect(message).toMatchSnapshot();
     });
 
     describe("with developer error", () => {

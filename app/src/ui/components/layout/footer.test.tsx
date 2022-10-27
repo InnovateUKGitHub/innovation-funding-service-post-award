@@ -1,76 +1,44 @@
+import TestBed from "@shared/TestBed";
+import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 import { render } from "@testing-library/react";
-
-import { Footer, FooterProps } from "@ui/components/layout/footer";
+import { Footer } from "@ui/components/layout/footer";
+import { crownCopyrightUrl, footerLinks, ifsCookieUrl, ukGovLicence } from "@ui/containers/app/footer.config";
 
 describe("Footer", () => {
-  const stubData: FooterProps = {
-    supportingLinks: [
-      {
-        id: "link-1",
-        href: "https://www.gov.uk/link-1",
-        content: "supporting-link-1",
-      },
-      {
-        id: "link-2",
-        href: "https://www.gov.uk/link-2",
-        content: "supporting-link-2",
-      },
-    ],
-    footerContent: {
-      externalContent: {
-        title: {
-          id: "stub-qa-title",
-          content: "stub-title",
-        },
-        usesCookie: {
-          id: "stub-qa-usesCookie",
-          content: "stub-usesCookie",
-        },
-        govLicenseLinkPart1: {
-          id: "stub-qa-govLicenseLinkPart1",
-          content: "stub-govLicenseLinkPart1",
-        },
-        govLicenseLinkPart3: {
-          id: "stub-qa-govLicenseLinkPart3",
-          content: "stub-govLicenseLinkPart3",
-        },
-      },
-      externalLinks: {
-        crownCopyrightLink: {
-          id: "stub-qa-crownCopyrightLink",
-          href: "stub-href-crownCopyrightLink",
-          content: "stub-crownCopyrightLink",
-        },
-        moreAboutCookies: {
-          id: "stub-qa-moreAboutCookies",
-          href: "stub-href-moreAboutCookies",
-          content: "stub-moreAboutCookies",
-        },
-        govLicenseLinkPart2: {
-          id: "stub-qa-govLicenseLinkPart2",
-          href: "stub-href-govLicenseLinkPart2",
-          content: "stub-govLicenseLinkPart2",
-        },
+  const stubContent = {
+    site: {
+      footer: {
+        supportLinks: "stub-supportLinks",
+        cookieFindOutMore: "stub-cookieFindOutMore",
+        explainCookies: "stub-explainCookies",
+        externalLinkText: "IFS PA is not available under the <0>MIT Licence</0>, except where otherwise stated",
+        crownCopyright: "stub-crownCopyright",
       },
     },
   };
 
-  const setup = (props?: Partial<FooterProps>) => render(<Footer {...stubData} {...props} />);
+  const setup = () =>
+    render(
+      <TestBed>
+        <Footer />
+      </TestBed>,
+    );
+
+  beforeAll(async () => {
+    testInitialiseInternationalisation(stubContent);
+  });
 
   test("should render links", () => {
     const { queryByText } = setup();
 
-    stubData.supportingLinks.forEach(link => {
+    footerLinks.forEach(link => {
       expect(queryByText(link.content)).toBeInTheDocument();
     });
   });
 
   test.each`
-    name                                         | linkContent
-    ${"title"}                                   | ${stubData.footerContent.externalContent.title.content}
-    ${"GOV.UK uses cookies"}                     | ${stubData.footerContent.externalContent.usesCookie.content}
-    ${"external government license link part 1"} | ${stubData.footerContent.externalContent.govLicenseLinkPart1.content}
-    ${"external government license link part 3"} | ${stubData.footerContent.externalContent.govLicenseLinkPart3.content}
+    name               | linkContent
+    ${"Support links"} | ${stubContent.site.footer.supportLinks}
   `("should find $name content", ({ linkContent }) => {
     const { queryByText } = setup();
 
@@ -79,17 +47,29 @@ describe("Footer", () => {
   });
 
   test.each`
-    name                                    | link
-    ${"crown copyright"}                    | ${stubData.footerContent.externalLinks.crownCopyrightLink}
-    ${"more about cookies"}                 | ${stubData.footerContent.externalLinks.moreAboutCookies}
-    ${"external government license part 2"} | ${stubData.footerContent.externalLinks.govLicenseLinkPart2}
-  `("should find $name link", ({ link }) => {
+    name                    | text                                         | link
+    ${"crown copyright"}    | ${stubContent.site.footer.crownCopyright}    | ${crownCopyrightUrl}
+    ${"more about cookies"} | ${stubContent.site.footer.cookieFindOutMore} | ${ifsCookieUrl}
+  `("should find $name link", ({ text, link }) => {
     const { queryByText } = setup();
-    const footerContent = queryByText(link.content);
+    const footerContent = queryByText(text);
 
-    if (!footerContent) throw Error(`It appears ${link} was not found in the document.`);
+    if (!footerContent) throw Error(`It appears ${text} was not found in the document.`);
 
-    expect(footerContent.getAttribute("href")).toBe(link.href);
+    expect(footerContent.getAttribute("href")).toBe(link);
     expect(footerContent).toBeInTheDocument();
+  });
+
+  test("should render OGLv3 text with link", () => {
+    const { queryByTestId } = setup();
+    const licenceContent = queryByTestId("licence");
+    const licenceLink = queryByTestId("licence-link");
+
+    if (!licenceLink) throw Error(`It appears the licence link was not found in the document.`);
+
+    expect(licenceContent).toBeInTheDocument();
+    expect(licenceLink).toBeInTheDocument();
+    expect(licenceLink.getAttribute("href")).toBe(ukGovLicence);
+    expect(licenceContent).toMatchSnapshot();
   });
 });

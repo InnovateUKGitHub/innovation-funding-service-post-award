@@ -10,9 +10,7 @@
   },
   "pages": {
     "claimReview": {
-      "additionalInfoHintIfYou": "If you:",
-      "additionalInfoHintQueryClaim": "query the claim, you must explain what the partner needs to change",
-      "additionalInfoHintSubmitClaim": "submit the claim for approval, you can write a supporting statement to Innovate UK",
+      "additionalInfoHint": "If you:\n\n- query the claim, you must explain what the partner needs to change\n- submit the claim for approval, you can write a supporting statement to Innovate UK",
       "claimReviewDeclaration": "I am satisfied that the costs claimed appear to comply with the terms and conditions of the awarded grant and eligible costs agreed by the Innovate UK Project Finance Team. This is based on evidence provided both in reports and at Local Management Committee meetings (LMC).",
       "monitoringReportReminder": "You must submit a monitoring report for this period before the approved claim can be paid."
     },
@@ -43,9 +41,8 @@
     },
     "projectDetails": {
       "financeContactInfo": "Only finance contacts can submit claims.",
-      "changeInfo": "If you need to change the finance contact, please email ",
-      "changeEmail": "ktpqueries@iuk.ukri.org",
-      "changeEnd": "."
+      "changeInfo": "If you need to change the finance contact, please email <0>{{ emailAddress }}</0>.",
+      "changeEmail": "ktpqueries@iuk.ukri.org"
     }
   },
   "spendProfileMessages": {

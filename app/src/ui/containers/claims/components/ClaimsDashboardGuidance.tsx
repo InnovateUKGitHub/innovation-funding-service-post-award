@@ -4,6 +4,7 @@ import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { useContent } from "@ui/hooks";
 
 import * as Acc from "@ui/components";
+import { Content, EmailContent } from "@ui/components";
 
 export interface ClaimsDashboardGuidanceProps {
   overdueProject: PartnerDto["overdueProject"];
@@ -21,18 +22,11 @@ export function ClaimsDashboardGuidance({
   let guidanceMessage: React.ReactElement;
 
   if (overdueProject) {
-    const overdueGuidanceMessage1 = getContent(x => x.claimsMessages.overdueGuidanceMessage.message1);
-    const overdueGuidanceMessage2 = getContent(x => x.claimsMessages.overdueGuidanceMessage.message2);
-    const overdueGuidanceMessage3 = getContent(x => x.claimsMessages.overdueGuidanceMessage.message3);
-    const overdueGuidanceMessage4 = getContent(x => x.claimsMessages.overdueGuidanceMessage.message4);
-
     guidanceMessage = (
-      <>
-        {overdueGuidanceMessage1}
-        {overdueGuidanceMessage2}
-        <Acc.Renderers.Email>{overdueGuidanceMessage3}</Acc.Renderers.Email>
-        {overdueGuidanceMessage4}
-      </>
+      <Content
+        value={x => x.claimsMessages.overdueGuidanceMessage.message}
+        components={[<EmailContent key="email" value={x => x.claimsMessages.overdueGuidanceMessage.email} />]}
+      />
     );
   } else {
     const isPartnerFc = getAuthRoles(roles).isFc;

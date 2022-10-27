@@ -1,11 +1,12 @@
 import { CopyLanguages, CopyNamespaces } from "@copy/data";
 import i18next, { ResourceKey } from "i18next";
+import { initReactI18next } from "react-i18next";
 
 const testInitialiseInternationalisation = <T extends ResourceKey>(
   copy: T,
   additionalCopy?: { [key: string]: ResourceKey },
 ) => {
-  return i18next.init({
+  return i18next.use(initReactI18next).init({
     lng: CopyLanguages.en_GB,
     ns: CopyNamespaces.DEFAULT,
     fallbackLng: CopyLanguages.en_GB,

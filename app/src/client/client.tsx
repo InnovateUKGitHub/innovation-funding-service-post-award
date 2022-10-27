@@ -22,6 +22,7 @@ import {
 import { getPolyfills } from "./polyfill";
 import { Logger } from "@shared/developmentLogger";
 import { allLanguages, allNamespaces, CopyLanguages, CopyNamespaces } from "@copy/data";
+import { initReactI18next } from "react-i18next";
 
 // get servers store to initialise client store
 const serverState = processDto(window.__PRELOADED_STATE__) as unknown as PreloadedState<RootState>;
@@ -73,7 +74,7 @@ const Client = () => {
 (async () => {
   await getPolyfills();
 
-  await i18next.init({
+  await i18next.use(initReactI18next).init({
     lng: CopyLanguages.en_GB,
     fallbackLng: CopyLanguages.en_GB,
     defaultNS: CopyNamespaces.DEFAULT,

@@ -40,6 +40,7 @@ export function TestBed({
       getConfig: () => ({
         options: {
           maxClaimLineItems: 120,
+          maxFileSize: 1024,
         },
         features: {
           contentHint: false,

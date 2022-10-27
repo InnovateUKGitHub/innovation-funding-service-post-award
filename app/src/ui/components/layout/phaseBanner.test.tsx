@@ -8,9 +8,7 @@ describe("<PhaseBanner />", () => {
   const stubContent = {
     components: {
       phaseBannerContent: {
-        newServiceMessage: "stub-newServiceMessage",
-        feedbackMessage: "stub-feedback",
-        helpImprove: "stub-helpImprove",
+        newServiceMessage: "This is written in JavaScript. Your <0>continued hatred of JavaScript</0> will help us.",
         betaText: "stub-betaText",
       },
     },
@@ -36,25 +34,13 @@ describe("<PhaseBanner />", () => {
       expect(betaTextElement).toBeInTheDocument();
     });
 
-    it("with feedback link", () => {
-      const { getByRole } = setup();
-
-      const feedbackLink = getByRole("link", {
-        name: stubContent.components.phaseBannerContent.feedbackMessage,
-      });
-
-      expect(feedbackLink).toHaveAttribute("href", "https://www.surveymonkey.co.uk/r/IFSPostAwardFeedback");
-    });
-
     it("with composed message", () => {
       const { queryByTestId } = setup();
 
-      const { newServiceMessage, feedbackMessage, helpImprove } = stubContent.components.phaseBannerContent;
-      const expectedRenderedMessage = `${newServiceMessage} ${feedbackMessage} ${helpImprove}`;
-
       const bannerMessageElement = queryByTestId("banner-message");
 
-      expect(bannerMessageElement).toHaveTextContent(new RegExp(expectedRenderedMessage));
+      expect(bannerMessageElement).toBeInTheDocument();
+      expect(bannerMessageElement).toMatchSnapshot();
     });
   });
 });

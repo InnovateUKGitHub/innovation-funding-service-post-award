@@ -17,7 +17,7 @@
     "milestoneToDo": "You must:",
     "milestoneBullet1": "approve costs for 100% of the milestone payment, if the participant has achieved all their milestones",
     "milestoneBullet2": "only approve costs for the retention payment percentages specified in the contract, if the participant has partially achieved their milestones",
-    "milestoneBullet3": "approve costs for 0% of the milestone payment and invoice for \u00a30, if the participant has failed to achieve their milestones",
+    "milestoneBullet3": "approve costs for 0% of the milestone payment and invoice for £0, if the participant has failed to achieve their milestones",
     "milestoneBullet4": "query the claim if the participant needs to make amendments"
   },
   "pages": {

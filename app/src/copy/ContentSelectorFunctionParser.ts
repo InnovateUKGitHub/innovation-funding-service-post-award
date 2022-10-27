@@ -64,8 +64,8 @@ export class ContentSelectorFunctionParser<T extends object = PossibleCopyFuncti
    */
   public getContentCall(): ContentSelectorCallInformation {
     return {
-      key: this.contentSelectorParts.join("."),
-      dataOption: this.arguments,
+      i18nKey: this.contentSelectorParts.join("."),
+      values: this.arguments,
     };
   }
 }
