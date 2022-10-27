@@ -198,10 +198,11 @@ export class StoreBase {
     getData: () => Pending<TDto>,
     init: ((data: TDto) => void) | null | undefined,
     getValidator: (data: TDto) => Pending<TVal> | TVal,
+    forceRefreshEditor?: boolean,
   ): Pending<IEditorStore<TDto, TVal>> {
     const existing = this.getState().editors[store]?.[key as string];
 
-    if (existing) {
+    if (existing && !forceRefreshEditor) {
       return Pending.done<IEditorStore<TDto, TVal>>(existing as any);
     }
 

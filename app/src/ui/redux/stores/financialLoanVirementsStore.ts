@@ -22,6 +22,7 @@ export class FinancialLoanVirementsStore extends StoreBase {
     pcrId: string,
     pcrItemId: string,
     displayValidations: boolean,
+    forceRefreshEditor?: boolean,
   ): Pending<IEditorStore<FinancialLoanVirementDto, FinancialLoanVirementDtoValidator>> {
     return super.getEditor(
       "financialLoanVirement",
@@ -29,6 +30,7 @@ export class FinancialLoanVirementsStore extends StoreBase {
       () => this.get(projectId, pcrId, pcrItemId),
       undefined,
       data => new FinancialLoanVirementDtoValidator(data, displayValidations, displayValidations),
+      forceRefreshEditor,
     );
   }
 

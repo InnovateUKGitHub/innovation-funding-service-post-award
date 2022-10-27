@@ -45,13 +45,16 @@ export const LoanDrawdownChangeUI = ({
 export const LoanDrawdownChangeSummary = (props: BaseLoanDrawdownSummaryProps) => {
   const stores = useStores();
 
-  const displayValidations = props.pcrItem.status === PCRItemStatus.Complete;
+  const displayValidations =
+    props.pcrItem.status === PCRItemStatus.Complete || props.pcrItem.status === PCRItemStatus.Incomplete;
 
+  const forceRefreshEditor = true;
   const loanEditorPending = stores.financialLoanVirements.getFinancialVirementEditor(
     props.projectId,
     props.pcr.id,
     props.pcrItem.id,
     displayValidations,
+    forceRefreshEditor,
   );
 
   return (
