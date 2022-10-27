@@ -170,46 +170,6 @@ describe("<ClaimDetailsLink />", () => {
 
       expect(queryByText(stubContent.components.claimDetailsLinkContent.viewClaim)).toBeInTheDocument();
     });
-
-    describe("when project role is not MO returns edit link", () => {
-      test("when PM", () => {
-        const projectRole = ProjectRole.ProjectManager;
-
-        const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
-          claim: { periodId: 3, status: moQueriedClaimState },
-          project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
-          partner: {
-            id: partnerId,
-            roles: ProjectRole.MonitoringOfficer,
-            partnerStatus: PartnerStatus.Active,
-            isWithdrawn: false,
-          },
-        };
-
-        const { queryByText } = setup(moQueriedProps);
-
-        expect(queryByText(stubContent.components.claimDetailsLinkContent.editClaim)).toBeInTheDocument();
-      });
-
-      test("when FC", () => {
-        const projectRole = ProjectRole.FinancialContact;
-
-        const moQueriedProps: ClaimDetailsLinkWithoutRoutes = {
-          claim: { periodId: 3, status: moQueriedClaimState },
-          project: { id: projectId, roles: projectRole, status: ProjectStatus.Live },
-          partner: {
-            id: partnerId,
-            roles: ProjectRole.MonitoringOfficer,
-            partnerStatus: PartnerStatus.Active,
-            isWithdrawn: false,
-          },
-        };
-
-        const { queryByText } = setup(moQueriedProps);
-
-        expect(queryByText(stubContent.components.claimDetailsLinkContent.editClaim)).toBeInTheDocument();
-      });
-    });
   });
 
   describe("when ClaimStatus.INNOVATE_QUERIED", () => {

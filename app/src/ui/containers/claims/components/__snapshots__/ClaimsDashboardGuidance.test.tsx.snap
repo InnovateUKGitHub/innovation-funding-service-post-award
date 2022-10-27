@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ClaimsDashboardGuidance /> @renders when overdue claim 1`] = `
+<div
+  class="govuk-warning-text-background govuk-warning-text acc-message acc-message__info"
+  data-qa="guidance-message"
+  data-qa-type="info"
+  style="border-color: #1d70b8;"
+>
+  <span
+    class="govuk-warning-text__assistive"
+    data-qa="guidance-message-assistive"
+  >
+    Info
+  </span>
+  <div
+    class="govuk-body"
+    data-qa="guidance-message-content"
+  >
+    Deadline past. Too late. Email 
+    <a
+      class="govuk-link govuk-!-font-size-19"
+      href="mailto:webmaster@example.com"
+    >
+      webmaster@example.com
+    </a>
+     for more information.
+  </div>
+</div>
+`;

@@ -64,7 +64,7 @@ const ProjectDocumentsContainer = (props: ProjectDocumentPageParams & BaseProps)
       }}
       onDelete={(dto, doc) => {
         stores.messages.clearMessages();
-        const successMessage = getContent(x => x.documentMessages.uploadedDocuments({ deletedFileName: doc.fileName }));
+        const successMessage = getContent(x => x.documentMessages.deletedDocument({ deletedFileName: doc.fileName }));
         if ("partnerId" in doc) {
           stores.projectDocuments.deleteProjectPartnerDocumentsEditor(
             props.projectId,

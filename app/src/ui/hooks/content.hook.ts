@@ -1,6 +1,5 @@
 import { useContext } from "react";
-
-import type { ContentSelector, TranslationResult } from "@copy/type";
+import type { ContentSelector, TranslationResult, ContentSelectorCallInformation } from "@copy/type";
 import { contentContext } from "@ui/redux/contentProvider";
 
 /**
@@ -16,9 +15,6 @@ export function isContentSolution(content: unknown): content is ContentSelector 
 
   return isNotString && isFn;
 }
-interface IUseContent {
-  getContent: (selector: ContentSelector) => TranslationResult;
-}
 
 /**
  * Obtain a method to fetch content from the Copy Repository.
@@ -27,7 +23,7 @@ interface IUseContent {
  * @author Neil Little <neil.little@ukri.org>
  * @author Leondro Lio <leondro.lio@iuk.ukri.org>
  */
-export const useContent = (): IUseContent => {
+export const useContent = () => {
   // Grab the Content Context
   const appContent = useContext(contentContext);
 
@@ -45,11 +41,16 @@ export const useContent = (): IUseContent => {
    * @example
    * <p>{getContent(x => x.pages.header.siteName)}</p>
    */
-  const getContent = (contentSelector: ContentSelector | string): string => {
+  const getContent = (contentSelector: ContentSelector | string): TranslationResult => {
     return appContent.getCopyString(contentSelector);
+  };
+
+  const getContentCall = (contentSelector: ContentSelector | string): ContentSelectorCallInformation => {
+    return appContent.getContentCall(contentSelector);
   };
 
   return {
     getContent,
+    getContentCall,
   };
 };

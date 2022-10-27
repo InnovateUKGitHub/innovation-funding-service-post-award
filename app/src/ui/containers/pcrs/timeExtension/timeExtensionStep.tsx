@@ -23,9 +23,6 @@ const TimeExtensionStep = (
   const dateLabel = getContent(x => x.pages.pcrTimeExtensionStep.dateLabel);
   const durationLabel = getContent(x => x.pages.pcrTimeExtensionStep.durationLabel);
   const proposedProjectHeading = getContent(x => x.pages.pcrTimeExtensionStep.proposedProjectHeading);
-  const changeProjectDurationHint = getContent(x => x.pages.pcrTimeExtensionStep.changeProjectDurationHint);
-  const changeProjectDurationHint2 = getContent(x => x.pages.pcrTimeExtensionStep.changeProjectDurationHint2);
-  const changeProjectDurationHint3 = getContent(x => x.pages.pcrTimeExtensionStep.changeProjectDurationHint3);
   const saveAndContinue = getContent(x => x.pages.pcrTimeExtensionStep.saveAndContinue);
   const currentProjectEndDate = getContent(x => x.pages.pcrTimeExtensionStep.currentProjectEndDate);
 
@@ -58,10 +55,7 @@ const TimeExtensionStep = (
   return (
     <>
       <ACC.Section>
-        <ACC.Renderers.SimpleString>{changeProjectDurationHint}</ACC.Renderers.SimpleString>
-        <ACC.Renderers.SimpleString>
-          {changeProjectDurationHint2} {changeProjectDurationHint3}
-        </ACC.Renderers.SimpleString>
+        <ACC.Content markdown value={x => x.pages.pcrTimeExtensionStep.changeProjectDurationHint} />
       </ACC.Section>
 
       <ACC.Section>

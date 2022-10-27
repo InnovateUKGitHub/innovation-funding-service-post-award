@@ -30,14 +30,14 @@ class Copy {
    * @param fullKey The content selector
    * @returns Path taken by the content selector, as well as passed in data
    */
-  private getContentCall(fullKey: ContentSelector | TitleContentSelector | string): ContentSelectorCallInformation {
-    let key: string;
+  public getContentCall(fullKey: ContentSelector | TitleContentSelector | string): ContentSelectorCallInformation {
+    let i18nKey: string;
     let data: DataOption = {};
 
     // If the input key was a string...
     if (typeof fullKey === "string") {
       // Use the input key as the key
-      key = fullKey;
+      i18nKey = fullKey;
     } else if (typeof fullKey === "function") {
       // If the input key was a function, aka a content selector...
 
@@ -50,8 +50,8 @@ class Copy {
       // Proxy now contains information about the Content Selector.
       const callInfo = contentSelectorFunctionParser.getContentCall();
 
-      key = callInfo.key;
-      data = callInfo.dataOption;
+      i18nKey = callInfo.i18nKey;
+      data = callInfo.values;
     } else {
       // Crash when a non-string or non-content selector is passed in.
       this.logger.error(`Cannot translate invalid non-string/function key`, fullKey);
@@ -60,13 +60,13 @@ class Copy {
 
     // If a competition type is specified, prefix all keys with the namespace.
     if (this.competitionType) {
-      key = `${this.competitionType}:${key}`;
+      i18nKey = `${this.competitionType}:${i18nKey}`;
     }
 
     // Return resolved information.
     return {
-      key,
-      dataOption: data,
+      i18nKey,
+      values: data,
     };
   }
 
@@ -78,8 +78,8 @@ class Copy {
    * @returns The copy as a string
    */
   public getCopyString(contentSelector: ContentSelector | string, options?: DataOption): string {
-    const { key, dataOption } = this.getContentCall(contentSelector);
-    return i18next.t(key, { ...options, ...dataOption }) || key;
+    const { i18nKey, values: dataOption } = this.getContentCall(contentSelector);
+    return i18next.t(i18nKey, { ...options, ...dataOption }) || i18nKey;
   }
 
   /**
@@ -89,21 +89,21 @@ class Copy {
    * @returns A title content
    */
   public getTitleCopy(contentSelector: ContentSelector | TitleContentSelector): TitleContentResult {
-    const { key, dataOption } = this.getContentCall(contentSelector);
+    const { i18nKey, values: dataOption } = this.getContentCall(contentSelector);
 
     let htmlTitle;
     let displayTitle;
 
     // Attempt to fetch both HTML and Display titles.
-    if (i18next.exists(key + ".html")) {
-      htmlTitle = i18next.t(key + ".html", dataOption);
+    if (i18next.exists(i18nKey + ".html")) {
+      htmlTitle = i18next.t(i18nKey + ".html", dataOption);
     }
-    if (i18next.exists(key + ".display")) {
-      displayTitle = i18next.t(key + ".display", dataOption);
+    if (i18next.exists(i18nKey + ".display")) {
+      displayTitle = i18next.t(i18nKey + ".display", dataOption);
     }
 
     // Fetch the fallback title.
-    const titleOnly = i18next.t(key, dataOption);
+    const titleOnly = i18next.t(i18nKey, dataOption);
 
     return {
       htmlTitle: htmlTitle || titleOnly,

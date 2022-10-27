@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<DocumentGuidance /> @renders 1`] = `
+<DocumentFragment>
+  <details
+    class="govuk-details"
+    data-module="govuk-details"
+  >
+    <summary
+      class="govuk-details__summary"
+    >
+      <span
+        class="govuk-details__summary-text"
+      >
+        stub-header
+      </span>
+    </summary>
+    <div
+      class="govuk-details__text"
+    >
+      <span
+        class="govuk-body markdown"
+      >
+        <p>
+          stub-message
+        </p>
+        
+
+      </span>
+    </div>
+  </details>
+</DocumentFragment>
+`;

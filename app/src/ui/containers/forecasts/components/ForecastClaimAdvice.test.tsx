@@ -9,11 +9,7 @@ describe("<ForecastClaimAdvice />", () => {
   const stubContent = {
     pages: {
       forecastsComponents: {
-        adviseMessage: {
-          part1: "stub-part1",
-          part2Link: "stub-part2Link",
-          part3: "stub-part3",
-        },
+        adviceMessage: "You must eat <0>lettuce</0> to proceed.",
       },
     },
   };
@@ -43,21 +39,13 @@ describe("<ForecastClaimAdvice />", () => {
   });
 
   describe("@content", () => {
-    const contentSolution = stubContent.pages.forecastsComponents.adviseMessage;
+    test("renders", () => {
+      const { queryByTestId } = setup({ claimLink: stubLink });
 
-    test.each`
-      name                | stringToCheck
-      ${"with part1"}     | ${contentSolution.part1}
-      ${"with part2Link"} | ${contentSolution.part2Link}
-      ${"with part3"}     | ${contentSolution.part3}
-    `("$name", ({ stringToCheck }) => {
-      const { getByText } = setup({ claimLink: stubLink });
+      const forecastClaimAdvice = queryByTestId("forecastClaimAdvice");
 
-      // Note: exact is false since not each content string has its own node
-      const targetElement = getByText(stringToCheck, { exact: false });
-
-      // Note: toBeInTheDocument() checks the element, not all stubs have there own elements
-      expect(targetElement).toBeDefined();
+      expect(forecastClaimAdvice).toBeInTheDocument();
+      expect(forecastClaimAdvice).toMatchSnapshot();
     });
   });
 });

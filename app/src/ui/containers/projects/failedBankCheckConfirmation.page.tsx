@@ -30,27 +30,7 @@ function FailedBankCheckConfirmation({ projectId, partnerId, routes, ...props }:
     return (
       <ACC.Page backLink={backLink} pageTitle={pageTitle} project={project}>
         <ACC.Section qa="guidance">
-          <ACC.Renderers.SimpleString>
-            {getContent(x => x.pages.failedBankCheckConfirmation.guidance.line1)}
-          </ACC.Renderers.SimpleString>
-
-          <ACC.Renderers.SimpleString>
-            {getContent(x => x.pages.failedBankCheckConfirmation.guidance.line2)}
-          </ACC.Renderers.SimpleString>
-
-          <ACC.Renderers.SimpleString>
-            {getContent(x => x.pages.failedBankCheckConfirmation.guidance.line3)}
-          </ACC.Renderers.SimpleString>
-
-          <ACC.Renderers.SimpleString>
-            {getContent(x => x.pages.failedBankCheckConfirmation.guidance.list.intro)}
-          </ACC.Renderers.SimpleString>
-
-          <ACC.UL>
-            <li>{getContent(x => x.pages.failedBankCheckConfirmation.guidance.list.item1)}</li>
-            <li>{getContent(x => x.pages.failedBankCheckConfirmation.guidance.list.item2)}</li>
-            <li>{getContent(x => x.pages.failedBankCheckConfirmation.guidance.list.item3)}</li>
-          </ACC.UL>
+          <ACC.Content markdown value={x => x.pages.failedBankCheckConfirmation.guidance} />
         </ACC.Section>
 
         <ACC.Section qa="return-to-setup-button">

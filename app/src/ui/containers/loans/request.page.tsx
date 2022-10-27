@@ -12,6 +12,7 @@ import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 
 import { LoanRequestTable } from "./components/LoanTable";
+import { Content } from "@ui/components";
 
 export interface LoansRequestParams {
   projectId: string;
@@ -35,14 +36,7 @@ function LoansRequestPage({ loan, loanEditor, loanDocsEditor, documents, ...prop
   const RequestForm = ACC.TypedForm<MultipleDocumentUploadDto>();
   const CommentsForm = ACC.TypedForm<LoanDto>();
 
-  const requestIntroPart1 = getContent(x => x.pages.loansRequest.introPart1);
-  const requestIntroPart2 = getContent(x => x.pages.loansRequest.introPart2);
-
-  const createPcrLink = (
-    <ACC.Link route={props.routes.pcrCreate.getLink({ projectId: props.projectId })}>
-      {getContent(x => x.pages.loansRequest.changeDrawdownLabel)}
-    </ACC.Link>
-  );
+  const createPcrLink = <ACC.Link route={props.routes.pcrCreate.getLink({ projectId: props.projectId })}> </ACC.Link>;
 
   return (
     <>
@@ -50,7 +44,7 @@ function LoansRequestPage({ loan, loanEditor, loanDocsEditor, documents, ...prop
 
       <ACC.Section>
         <ACC.Renderers.SimpleString>
-          {requestIntroPart1} {createPcrLink} {requestIntroPart2}
+          <Content value={x => x.pages.loansRequest.introduction} components={[createPcrLink]} />
         </ACC.Renderers.SimpleString>
 
         <LoanRequestTable {...loan} />

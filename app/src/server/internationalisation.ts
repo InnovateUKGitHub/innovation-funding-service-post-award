@@ -1,10 +1,11 @@
 import { CopyLanguages, CopyNamespaces } from "@copy/data";
 import express from "express";
 import i18next from "i18next";
+import { initReactI18next } from "react-i18next";
 
 export const initInternationalisation = async () => {
   // initialize library
-  await i18next.init({
+  await i18next.use(initReactI18next).init({
     lng: CopyLanguages.en_GB,
     fallbackLng: CopyLanguages.en_GB,
     defaultNS: CopyNamespaces.DEFAULT,

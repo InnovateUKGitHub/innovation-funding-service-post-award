@@ -13,11 +13,7 @@
       "supportLinks": "Support links",
       "cookieFindOutMore": "Find out more about cookies",
       "explainCookies": "GOV.UK uses cookies to make the site simpler.",
-      "externalLinkText": {
-        "part1": "All content is available under the ",
-        "part2LinkText": "Open Government Licence v3.0",
-        "part2": ", except where otherwise stated"
-      },
+      "externalLinkText": "All content is available under the <0>Open Government Licence v3.0</0>, except where otherwise stated",
       "crownCopyright": "\u00a9 Crown copyright"
     }
   },
@@ -48,17 +44,8 @@
       "message": "Loading..."
     },
     "documentGuidance": {
-      "uploadGuidance": "You can upload up to 10 documents at a time. Each document must:",
-      "fileSize": "be less than {{maxFileSize}} in file size",
-      "uniqueFileName": "have a unique file name that describes its contents",
-      "noFilesNumberLimit": "There is no limit to the number of files you can upload in total.",
-      "fileTypesUpload": "You can upload these file types:",
-      "pdfFiles": "PDF (pdf, xps)",
-      "textFiles": "text (doc, docx, rdf, txt, csv, odt)",
-      "presentationFiles": "presentation (ppt, pptx, odp)",
-      "spreadsheetFiles": "spreadsheet (xls, xlsx, ods)",
-      "availableImageExtensions": "images (jpg, jpeg, png)",
-      "fileTypesQuestion": "Learn more about files you can upload"
+      "header": "Learn more about files you can upload",
+      "message": "You can upload up to 10 documents at a time. Each document must:\n\n- be less than {{maxFileSize}} in file size\n- have a unique file name that describes its contents\n\nThere is no limit to the number of files you can upload in total.\n\nYou can upload these file types:\n\n- PDF (pdf, xps)\n- text (doc, docx, rdf, txt, csv, odt)\n- presentation (ppt, pptx, odp)\n- spreadsheet (xls, xlsx, ods)\n- images (jpg, jpeg, png)\n"
     },
     "claimLastModified": {
       "message": "Changes last saved"
@@ -103,9 +90,7 @@
       "viewClaim": "View"
     },
     "phaseBannerContent": {
-      "newServiceMessage": "This is a new service \u2013 your",
-      "feedbackMessage": "feedback",
-      "helpImprove": "will help us to improve it.",
+      "newServiceMessage": "This is a new service – your <0>feedback</0> will help us to improve it.",
       "betaText": "beta"
     },
     "broadcastContent": {
@@ -144,27 +129,22 @@
         "html": "Error",
         "display": "Something has gone wrong at our end"
       },
-      "message": "You can either go back to the page you were previously on or go back to your",
-      "dashboardText": "dashboard"
+      "message": "You can either go back to the page you were previously on or go back to your <0>dashboard</0>.",
+      "developerHeading": "Internal Developer Error"
     },
     "unauthenticatedError": {
       "title": {
         "html": "There is a problem.",
         "display": "There is a problem."
       },
-      "preLinkContent": "Please ",
-      "linkTextContent": "contact us",
-      "postLinkContent": "to fix your account permissions."
+      "contactUs": "Please <0>contact us</0>, to fix your account permissions."
     },
     "notFoundError": {
       "title": {
         "html": "Page not found",
         "display": "Page not found"
       },
-      "errorMessage": "Please check the web address or search term you entered for any errors. You can return to",
-      "goBackMessage": "or go back to the",
-      "yourDashBoard": "your dashboard",
-      "innovateUkMessage": "Innovate UK homepage"
+      "goBackMessage": "Please check the web address or search term you entered for any errors. You can return to <0>your dashboard</0> or go back to the <1>Innovate UK homepage</1>."
     },
     "home": {
       "title": "Home",
@@ -230,15 +210,14 @@
         "pcrToReview": "Requests to review: {{numberOfPcrs}}"
       },
       "backToProjects": "Back to Project",
-      "costsToDateMessage": "costs to date"
+      "costsToDateMessage": "{{partnerName}} costs to date"
     },
     "projectDetails": {
       "title": "Project details",
       "projectManagerInfo": "Only project managers can raise project change requests.",
       "financeContactInfo": "Only finance contacts can submit claims.",
-      "changeInfo": "If you need to change the lead project manager or finance contact, please email ",
-      "changeEmail": "grants_service@iuk.ukri.org",
-      "changeEnd": "."
+      "changeInfo": "If you need to change the lead project manager or finance contact, please email <0>{{ emailAddress }}</0>.",
+      "changeEmail": "grants_service@iuk.ukri.org"
     },
     "projectDocuments": {
       "title": "Project documents",
@@ -295,17 +274,7 @@
       "title": "We need more information",
       "backLink": "Back to set up your project",
       "returnToSetup": "Return to set up your project",
-      "guidance": {
-        "line1": "Our automated checks were unable to verify your bank details.",
-        "line2": "We need you to upload a redacted bank statement for your organisation. This must be dated within 90 days of the upload date.",
-        "line3": "This will allow us to confirm we have the correct details.",
-        "list": {
-          "intro": "The statement must show your:",
-          "item1": "Company name",
-          "item2": "Account number",
-          "item3": "Sort code"
-        }
-      }
+      "guidance": "Our automated checks were unable to verify your bank details.\n\nWe need you to upload a redacted bank statement for your organisation.\nThis must be dated within 90 days of the upload date.\n\nThis will allow us to confirm we have the correct details.\n\nThe statement must show your:\n- Company name\n- Account number\n- Sort code"
     },
     "loansSummary": {
       "title": {
@@ -323,9 +292,7 @@
       "loadingDrawdown": "We're loading your drawdown...",
       "errorDrawdown": "There was a problem trying to get your drawdown.",
       "backToLoanOverview": "Back to loans summary page",
-      "changeDrawdownLabel": "Change drawdown",
-      "introPart1": "You can request your drawdown here. If you need to change the amount of your drawdown, you will need to submit a",
-      "introPart2": "project change request.",
+      "introduction": "You can request your drawdown here. If you need to change the amount of your drawdown, you will need to submit a <0>Change drawdown</0> project change request.",
       "uploadTitle": "Upload drawdown approval request",
       "uploadFormLabel": "Upload",
       "uploadIntro": "You must upload a signed drawdown approval request",
@@ -364,7 +331,7 @@
       "costsClaimedThisPeriod": "Costs claimed this period",
       "remainingEligibleCosts": "Remaining eligible costs",
       "forecastForPeriod": "Forecast for period",
-      "differenceInUnit": "Difference ({{unitValue}})"
+      "differenceInUnit": "Difference ({{unit}})"
     },
     "claimsDashboard": {
       "title": {
@@ -415,14 +382,14 @@
       "forecastCostTitle": "Forecast costs",
       "differenceTitle": "Difference",
       "descriptionHeader": "Description",
-      "costHeader": "Cost (\u00a3)",
+      "costHeader": "Cost (£)",
       "lastUpdatedHeader": "Last updated"
     },
     "editClaimLineItems": {
       "backLink": "Back to claims",
       "headerDescription": "Description",
       "headerLastUpdated": "Last updated",
-      "headerCost": "Cost (\u00a3)",
+      "headerCost": "Cost (£)",
       "headerAction": "Action",
       "buttonSaveAndReturn": "Save and return to claims",
       "headerAdditionalInformation": "Additional information",
@@ -435,7 +402,7 @@
       "forecastCosts": "Forecast costs",
       "difference": "Difference",
       "addCost": "Add a cost",
-      "additionalInfo": "additional-info"
+      "additionalInfo": "Additional info"
     },
     "claimPrepare": {
       "title": "Costs to be claimed",
@@ -483,7 +450,7 @@
       "buttonUpload": "Upload documents",
       "labelInputUpload": "Upload files",
       "accordionTitleSupportingDocumentsForm": "Supporting documents",
-      "additionalInfo": "additional-info"
+      "additionalInfo": "Additional info"
     },
     "financialVirementDetails": {
       "title": "Reallocate costs"
@@ -511,11 +478,7 @@
       "grantAdvice": "If the new remaining grant is higher as a result of the reallocation of costs, you can change the funding level of partners to lower the new project grant."
     },
     "forecastsComponents": {
-      "adviseMessage": {
-        "part1": "You can only update forecasts for future periods here. You must update your current period when you ",
-        "part2Link": "make a claim",
-        "part3": "."
-      }
+      "adviceMessage": "You can only update forecasts for future periods here. You must update your current period when you <0>make a claim</0>."
     },
     "forecastsDashboard": {
       "title": {
@@ -727,9 +690,7 @@
       "dateLabel": "Start and end date",
       "durationLabel": "Duration",
       "proposedProjectHeading": "Proposed project details",
-      "changeProjectDurationHint": "Use this page to request an extension or reduction to your project\u2019s duration. Values are set by month.",
-      "changeProjectDurationHint2": "Select the new project end date you require.",
-      "changeProjectDurationHint3": "Project durations cannot be reduced beyond the current month.",
+      "changeProjectDurationHint": "Use this page to request an extension or reduction to your project’s duration. Values are set by month.\n\nSelect the new project end date you require.\nProject durations cannot be reduced beyond the current month.",
       "loadingTimeExtensionOptions": "Loading duration options...",
       "saveAndContinue": "Save and continue",
       "currentProjectEndDate": "Current project end date"
@@ -765,8 +726,8 @@
       "costsSectionTitle": "Project costs",
       "costsGuidance": "Enter the figures from the summary of resources section of the Je-S form.",
       "categoryHeading": "Category",
-      "costHeading": "Cost (\u00a3)",
-      "totalCosts": "Total costs (\u00a3)"
+      "costHeading": "Cost (£)",
+      "totalCosts": "Total costs (£)"
     },
     "pcrAddPartnerAcademicOrganisation": {
       "hint": "Enter the name of the organisation that you work for.",
@@ -793,7 +754,7 @@
     "pcrAddPartnerFinanceDetails": {
       "sectionTitle": "Financial details",
       "hintYearEnd": "This is the end of the last financial year for which you have your turnover.",
-      "headingTurnover": "Turnover (\u00a3)"
+      "headingTurnover": "Turnover (£)"
     },
     "pcrAddPartnerJes": {
       "jesIntroduction": "Your new academic partner must apply for funding through the Je-S system. To find out more about the Je-S requirements and processes please go to:",
@@ -809,8 +770,8 @@
     "pcrAddPartnerSpendProfile": {
       "returnToSummaryNoSaveButton": "Return to summary",
       "categoryHeading": "Category",
-      "totalCosts": "Total costs (\u00a3)",
-      "costHeading": "Cost (\u00a3)",
+      "totalCosts": "Total costs (£)",
+      "costHeading": "Cost (£)",
       "labelView": "View",
       "labelEdit": "Edit"
     },
@@ -826,7 +787,7 @@
       "guidance": "Include all sources of funding the new partner is receiving on top of the funding they are claiming from Innovate UK. These will be taken into account when calculating the funding they will receive.",
       "columnHeaderDescription": "Source of funding",
       "columnHeaderDate": "Date secured (MM YYYY)",
-      "columnHeaderValue": "Funding amount (\u00a3)",
+      "columnHeaderValue": "Funding amount (£)",
       "buttonRemove": "Remove",
       "buttonAdd": "Add another source of funding",
       "footerLabelTotal": "Total other funding"
@@ -896,10 +857,8 @@
   "claimsMessages": {
     "guidanceMessage": "All partners in this project must upload evidence for each expenditure with every claim made. These might include invoices, timesheets, receipts or spreadsheets for capital usage. This is part of Innovate UK's obligations under the [Managing Public Money government handbook](https://www.gov.uk/government/publications/managing-public-money?_ga=2.105018247.521318796.1576575366-1871284022.1544109966) in relation to assurance, financial management and control.",
     "overdueGuidanceMessage": {
-      "message1": "Further to previous notifications, the deadline for your final claims period has now passed. You can no longer submit claims for costs incurred or upload supporting documents.",
-      "message2": " If you have any queries, contact ",
-      "message3": "closeout@innovateuk.ukri.org",
-      "message4": "."
+      "message": "Further to previous notifications, the deadline for your final claims period has now passed. You can no longer submit claims for costs incurred or upload supporting documents. If you have any queries, contact <0 />.",
+      "email": "closeout@innovateuk.ukri.org"
     },
     "submitClaimConfirmation": "I confirm that the information I have provided in this claim is correct, complete and contains only eligible costs on an actual basis, which we confirm have been incurred and defrayed. I understand and accept that if I knowingly withhold information, or provide false or misleading information, this may result in my claim being rejected, termination of the contract, recovery of ineligible claims, civil action and where there is evidence of fraud, criminal prosecution.",
     "noOpenClaims": "There are no open claims. The next claim period begins {{nextClaimStartDate}}.",
@@ -909,7 +868,7 @@
     "finalClaimGuidanceContent1": "You need to complete our short survey about the project before we can make your final payment:",
     "finalClaimStep1": "Complete our survey.",
     "finalClaimStep2": "Download a copy of your completed survey and upload it on this page.",
-    "iarRequired": "An Independent Accountant's Report (IAR) must be uploaded to support the claim before it can be submitted to Innovate UK. If your total grant value is \u00a350,000 or under, a Statement of Expenditure (SoE) may be sufficient. Your monitoring officer will be able to confirm which document is needed.",
+    "iarRequired": "An Independent Accountant's Report (IAR) must be uploaded to support the claim before it can be submitted to Innovate UK. If your total grant value is £50,000 or under, a Statement of Expenditure (SoE) may be sufficient. Your monitoring officer will be able to confirm which document is needed.",
     "iarRequiredPara2": "Upload your IAR or SoE in the claim documents, selecting the IAR document type (for both) and then proceed to submit your claim.",
     "claimQueried": "You have queried this claim.",
     "claimApproved": "You have approved this claim.",
@@ -951,13 +910,13 @@
     "actionHeader": "Action"
   },
   "pcrSpendProfileLabels": {
-    "cost": "Cost (\u00a3)",
+    "cost": "Cost (£)",
     "totalCosts": "Total {{costCategoryName, lowercase}}",
     "description": "Description",
     "labour": {
       "role": "Role within project",
       "grossCost": "Gross employee cost",
-      "rate": "Rate (\u00a3/day)",
+      "rate": "Rate (£/day)",
       "rateHint": "This should be calculated from the number of working days for this role per year.",
       "daysSpentOnProject": "Days to be spent by all staff with this role",
       "totalCost": "Total cost",
@@ -965,40 +924,40 @@
     },
     "overheads": {
       "totalCost": "Total cost",
-      "calculatedCost": "Total cost of overheads as calculated in the spreadsheet (\u00a3)",
+      "calculatedCost": "Total cost of overheads as calculated in the spreadsheet (£)",
       "linkDocumentsUpload": "Calculate overheads documents"
     },
     "materials": {
       "item": "Item",
       "quantity": "Quantity",
-      "costPerItem": "Cost per item (\u00a3)",
+      "costPerItem": "Cost per item (£)",
       "totalCost": "Total cost"
     },
     "subcontracting": {
       "subcontractorName": "Subcontractor name",
       "subcontractorCountry": "Country where the subcontractor will work",
       "subcontractorRoleAndDescription": "Role of the the subcontractor in the project and description of the work they will do",
-      "cost": "Cost (\u00a3)"
+      "cost": "Cost (£)"
     },
     "capitalUsage": {
       "description": "Item description",
       "type": "New or existing item?",
       "depreciationPeriod": "Depreciation period (months)",
-      "netPresentValue": "Net present value (\u00a3)",
+      "netPresentValue": "Net present value (£)",
       "netPresentValueHint": "Either the current net present value or the price you bought it for",
-      "residualValue": "Residual value at end of project (\u00a3)",
+      "residualValue": "Residual value at end of project (£)",
       "utilisation": "Utilisation (%)",
       "netCost": "Net cost:"
     },
     "travelAndSubs": {
       "description": "Purpose of journey or desription of subsistence cost",
       "numberOfTimes": "Number of times",
-      "costOfEach": "Cost each (\u00a3)",
+      "costOfEach": "Cost each (£)",
       "totalCost": "Total cost"
     },
     "otherCosts": {
       "description": "Description and justification of the cost",
-      "totalCost": "Estimated cost (\u00a3)"
+      "totalCost": "Estimated cost (£)"
     }
   },
   "projectMessages": {
@@ -1029,7 +988,7 @@
     "costGuidanceSubcontracting": "You can subcontract work if you don\u2019t have the expertise in your project team. You can also subcontract if it is cheaper than developing your skills in-house.\n\nSubcontracting costs relate to work carried out by third party organisations. These organisations are not part of your project.\n\nSubcontracting is eligible providing it is justified as to why the work cannot be performed by a project partner.\n\nSubcontracting associate companies should be charged at cost.\n\nWhere possible you should select a UK based contractor. You should name the subcontractor (where known) and describe what they will be doing. You should also state where the work will be undertaken. We will look at the size of this contribution when assessing your eligibility and level of support.",
     "costGuidanceCapitalUsage": "You can claim the usage costs of capital assets you will buy for, or use on, your project.\n\nYou will need to calculate a \u2018usage\u2019 value for each item. You can do this by deducting its expected value from its original price at the end of your project. If you owned the equipment before the project started then you should use its net present value.\n\nThis value is then multiplied by the amount, in percentages, that is used during the project. This final value represents the eligible cost to your project.",
     "costGuidanceTravelAndSubs": "Include all travel and subsistence costs that relate to this project. Be specific and add each item separately.\n\nYou can claim reasonable travel and subsistence costs for those individuals identified in the labour table. Costs must be necessary and be solely for the progression of your project.\n\nTravel costs must be at economy travel only. State the reason for travel, number of people travelling, mode of transport, cost per trip and number of trips.\n\nProvide full details and the purpose for any subsistence expenditure, including the number of staff involved.",
-    "costGuidanceOtherCosts": "This category can be used for any direct project costs which are not covered in the other categories. Examples of other costs include:\n\n#### Workshop/laboratory usage charge outs\nCosts relating to workshops or laboratories that can be identified specifically as directly attributable to the project can be claimed in this section.\n\nYou should provide details of how the workshop or laboratory charge out rates are calculated per hour/day. This can include specific labour (such as staff permanently in place to maintain and run the workshop or laboratory and not considered project specific), rent, rates, maintenance and equipment calibration costs. These should form the overall costs together with the available operational hours to inform the hourly/daily charge out rates. Each workshop or laboratory will need to be supported with actual usage data to claim costs.\n\n#### Training costs\nThese costs are eligible where they are specific to and necessary for your project. We may consider support for management training specific to your project but will not support ongoing training.\n\n#### Preparation of technical reports\nProject costs related to technical reports may be eligible for example where the main aim of your project is the support of standards or technology transfer. You should show how this report is above and beyond what good project management would produce.\n\n#### Market assessment\nThere is some scope for support of market assessment studies to help understand how your project results are applicable to the intended market. Market research as a promotional tool is ineligible.\n\n#### Licensing in new technologies\nWe may consider support where we deem it makes sense to do so, for example, to avoid \u2018reinventing the wheel\u2019. If imported technology makes up a large part of your project (which is technology valued at more than \u00a3100,000) then we expect the development of that technology as part of your project.\n\n#### Patent filing costs for new intellectual property (IP)\nIP costs generated by your project are eligible. This cost is allowable for SMEs up to a limit of \u00a37,500 per partner. These should not include legal costs relating to the filing of trademark related expenditure as these are considered to be marketing/exploitation costs and therefore ineligible.\n\nRegulatory compliance costs are eligible if necessary to carry out your project. Project audit and accountancy feeds are not eligible.",
+    "costGuidanceOtherCosts": "This category can be used for any direct project costs which are not covered in the other categories. Examples of other costs include:\n\n#### Workshop/laboratory usage charge outs\nCosts relating to workshops or laboratories that can be identified specifically as directly attributable to the project can be claimed in this section.\n\nYou should provide details of how the workshop or laboratory charge out rates are calculated per hour/day. This can include specific labour (such as staff permanently in place to maintain and run the workshop or laboratory and not considered project specific), rent, rates, maintenance and equipment calibration costs. These should form the overall costs together with the available operational hours to inform the hourly/daily charge out rates. Each workshop or laboratory will need to be supported with actual usage data to claim costs.\n\n#### Training costs\nThese costs are eligible where they are specific to and necessary for your project. We may consider support for management training specific to your project but will not support ongoing training.\n\n#### Preparation of technical reports\nProject costs related to technical reports may be eligible for example where the main aim of your project is the support of standards or technology transfer. You should show how this report is above and beyond what good project management would produce.\n\n#### Market assessment\nThere is some scope for support of market assessment studies to help understand how your project results are applicable to the intended market. Market research as a promotional tool is ineligible.\n\n#### Licensing in new technologies\nWe may consider support where we deem it makes sense to do so, for example, to avoid \u2018reinventing the wheel\u2019. If imported technology makes up a large part of your project (which is technology valued at more than £100,000) then we expect the development of that technology as part of your project.\n\n#### Patent filing costs for new intellectual property (IP)\nIP costs generated by your project are eligible. This cost is allowable for SMEs up to a limit of £7,500 per partner. These should not include legal costs relating to the filing of trademark related expenditure as these are considered to be marketing/exploitation costs and therefore ineligible.\n\nRegulatory compliance costs are eligible if necessary to carry out your project. Project audit and accountancy feeds are not eligible.",
     "costGuidanceDefault": "",
     "calculatedGuidanceOverheads": "You will need to submit an overheads calculation spreadsheet, available following the link below, if the new partner feels their overheads are higher than 20%."
   },
@@ -1148,20 +1107,18 @@
   },
   "documentMessages": {
     "documentTitle": "List of documents",
-    "header": "You can upload up to 10 documents at a time. Each document must:\n\n* be less than {{maxFileSize}} in file size\n* have a unique file name that describes its contents\n\nThere is no limit to the number of files you can upload in total.",
     "infoTitle": "What file types can I upload?",
     "infoContent": "You can upload these file types:\n\n* PDF ({{pdfTypes}})\n* text ({{textTypes}})\n* presentation ({{presentationTypes}})\n* spreadsheet ({{spreadsheetTypes}})\n* image ({{imageTypes}})",
     "deletedDocument": "'{{deletedFileName}}' has been deleted.",
     "uploadedDocuments_one": "Your document has been uploaded.",
-    "uploadedDocuments_other": "{{totalFiles}} documents have been uploaded.",
+    "uploadedDocuments_other": "{{count}} documents have been uploaded.",
     "noDocumentsUploaded": "No documents uploaded.",
     "documentsNotApplicable": "Not applicable",
     "newWindow": "All documents open in new window.",
     "backLink": "Back to {{previousPage}}",
     "uploadTitle": "Upload",
     "uploadDocuments": "Upload documents",
-    "uploadInstruction1": "You can upload and store any documents for this claim on this page.",
-    "uploadInstruction2": "You will also be able to see any documents added to the claim by the finance contact and Innovate UK.",
+    "uploadInstruction": "You can upload and store any documents for this claim on this page.\n\nYou will also be able to see any documents added to the claim by the finance contact and Innovate UK.",
     "monitoringOfficerDocumentsIntroMessage": "This page displays documents which are shared with Innovate UK and each project\nparticipant. Documents shared here are only accessible to Innovate UK and the\nmonitoring officer. Documents shared with the finance contact and project\nmanager (for lead applicant), are accessible only by that participant, Innovate\nUK and the monitoring officer. When uploading documents, you can choose whether\nthey are accessible by Innovate UK only, or with a participant.\n\nDo not select a participant if you wish to share the file with Innovate UK only.\n\nYou must upload supporting documents on the page you are submitting your claim\nor PCR. Do not use this page for claims or PCR’s.\n",
     "otherRoleDocumentsIntroMessage": "This page is for storing most project related supporting documents, including\nthose uploaded by Innovate UK.\n\nDocuments stored here are only accessible by the Monitoring Officer and\nparticipants representing \"{{partnerName}}\".\n\nYou must upload supporting documents on the page you are submitting your claim\nor PCR. Do not use this page for claims or PCR’s.\n"
   },

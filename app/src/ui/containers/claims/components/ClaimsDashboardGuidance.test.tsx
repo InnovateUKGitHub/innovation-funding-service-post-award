@@ -11,10 +11,8 @@ describe("<ClaimsDashboardGuidance />", () => {
       claimsMessages: {
         guidanceMessage: "stub-guidanceMessage",
         overdueGuidanceMessage: {
-          message1: "stub-overdueGuidanceMessage1",
-          message2: "stub-overdueGuidanceMessage2",
-          message3: "stub-overdueGuidanceMessage3",
-          message4: "stub-overdueGuidanceMessage4",
+          message: "Deadline past. Too late. Email <0 /> for more information.",
+          email: "webmaster@example.com",
         },
       },
     };
@@ -32,14 +30,11 @@ describe("<ClaimsDashboardGuidance />", () => {
     });
 
     test("when overdue claim", () => {
-      const { queryByText } = setup({ overdueProject: true });
+      const { queryByTestId } = setup({ overdueProject: true });
 
-      const claimGuidanceMessages = stubContent.claimsMessages;
-
-      expect(queryByText(claimGuidanceMessages.overdueGuidanceMessage.message1, { exact: false })).toBeInTheDocument();
-      expect(queryByText(claimGuidanceMessages.overdueGuidanceMessage.message2, { exact: false })).toBeInTheDocument();
-      expect(queryByText(claimGuidanceMessages.overdueGuidanceMessage.message3, { exact: false })).toBeInTheDocument();
-      expect(queryByText(claimGuidanceMessages.overdueGuidanceMessage.message4, { exact: false })).toBeInTheDocument();
+      const guidanceMessage = queryByTestId("guidance-message");
+      expect(guidanceMessage).toBeInTheDocument();
+      expect(guidanceMessage).toMatchSnapshot();
     });
 
     describe("when not overdue", () => {

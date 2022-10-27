@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Footer should render OGLv3 text with link 1`] = `
+<span
+  class="govuk-footer__licence-description"
+  data-qa="licence"
+>
+  IFS PA is not available under the 
+  <a
+    class="govuk-footer__link"
+    data-qa="licence-link"
+    href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
+    rel="license"
+    target="_blank"
+  >
+    MIT Licence
+  </a>
+  , except where otherwise stated
+</span>
+`;

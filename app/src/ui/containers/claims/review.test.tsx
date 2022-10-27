@@ -3,8 +3,7 @@ import { renderHook } from "@testing-library/react";
 import { useReviewContent } from "@ui/containers";
 import { hookTestBed } from "@shared/TestBed";
 import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
-import { ContentProvider } from "@ui/redux";
-import { Copy } from "@copy/Copy";
+import { CopyNamespaces } from "@copy/data";
 
 const stubContent = {
   projectLabels: {
@@ -12,8 +11,7 @@ const stubContent = {
     competitionTypeLabel: "stub-competitionTypeLabel",
   },
   documentMessages: {
-    uploadInstruction1: "stub-uploadInstruction1",
-    uploadInstruction2: "stub-uploadInstruction2",
+    uploadInstruction: "stub-uploadInstruction",
     noDocumentsUploaded: "stub-noDocumentsUploaded",
   },
   claimsLabels: {
@@ -46,9 +44,14 @@ const stubContent = {
       labelInputUpload: "stub-labelInputUpload",
       accordionTitleSupportingDocumentsForm: "stub-accordionTitleSupportingDocumentsForm",
       additionalInfo: "stub-additionalInfo",
-      additionalInfoHintIfYou: "stub-additionalInfoHintIfYou",
-      additionalInfoHintQueryClaim: "stub-additionalInfoHintQueryClaim",
-      additionalInfoHintSubmitClaim: "stub-additionalInfoHintSubmitClaim",
+    },
+  },
+};
+
+const ktpContent = {
+  pages: {
+    claimReview: {
+      additionalInfoHint: "stub-ktp-additionalInfoHint",
     },
   },
 };
@@ -59,7 +62,7 @@ const renderPageContent = (competitionType?: string) => {
 
 describe("useReviewContent()", () => {
   beforeAll(async () => {
-    await testInitialiseInternationalisation(stubContent);
+    await testInitialiseInternationalisation(stubContent, { [CopyNamespaces.KTP]: ktpContent });
   });
 
   test.each`
@@ -71,7 +74,7 @@ describe("useReviewContent()", () => {
     ({ name, property }: { name: string; property: keyof typeof stubContent.pages.claimReview }) => {
       const { result } = renderPageContent();
 
-      const content = (result.current.default as any)[name];
+      const content = (result.current as any)[name];
       const expectedContent = stubContent.pages.claimReview[property];
 
       expect(content).toBe(expectedContent);
@@ -97,7 +100,7 @@ describe("useReviewContent()", () => {
   `("with $property", ({ name, property }: { name: string; property: keyof typeof stubContent.pages.claimReview }) => {
     const { result } = renderPageContent();
 
-    const content = (result.current.default as any)[name];
+    const content = (result.current as any)[name];
     const expectedContent = stubContent.pages.claimReview[property];
 
     expect(content).toBe(expectedContent);
@@ -111,7 +114,7 @@ describe("useReviewContent()", () => {
     ({ name, property }: { name: string; property: keyof typeof stubContent.claimsMessages }) => {
       const { result } = renderPageContent();
 
-      const content = (result.current.default as any)[name];
+      const content = (result.current as any)[name];
       const expectedContent = stubContent.claimsMessages[property];
 
       expect(content).toBe(expectedContent);
@@ -127,29 +130,19 @@ describe("useReviewContent()", () => {
     ({ name, property }: { name: string; property: keyof typeof stubContent.claimsLabels }) => {
       const { result } = renderPageContent();
 
-      const content = (result.current.default as any)[name];
+      const content = (result.current as any)[name];
       const expectedContent = stubContent.claimsLabels[property];
 
       expect(content).toBe(expectedContent);
     },
   );
 
-  test.each`
-    name                     | property
-    ${"uploadInstruction1"}  | ${"uploadInstruction1"}
-    ${"uploadInstruction2"}  | ${"uploadInstruction2"}
-    ${"noDocumentsUploaded"} | ${"noDocumentsUploaded"}
-  `(
-    "with documentMessages $property",
-    ({ name, property }: { name: string; property: keyof typeof stubContent.documentMessages }) => {
-      const { result } = renderPageContent();
+  test("with documentMessages", () => {
+    const { result } = renderPageContent();
 
-      const content = (result.current.default as any)[name];
-      const expectedContent = stubContent.documentMessages[property];
-
-      expect(content).toBe(expectedContent);
-    },
-  );
+    expect(result.current.noDocumentsUploaded).toBe(stubContent.documentMessages.noDocumentsUploaded);
+    expect(result.current.uploadInstruction).toBe(stubContent.documentMessages.uploadInstruction);
+  });
 
   test.each`
     name                  | property
@@ -159,7 +152,7 @@ describe("useReviewContent()", () => {
     ({ name, property }: { name: string; property: keyof typeof stubContent.pages.claimDocuments }) => {
       const { result } = renderPageContent();
 
-      const content = (result.current.default as any)[name];
+      const content = (result.current as any)[name];
       const expectedContent = stubContent.pages.claimDocuments[property];
 
       expect(content).toBe(expectedContent);
@@ -175,36 +168,16 @@ describe("useReviewContent()", () => {
     ({ name, property }: { name: string; property: keyof typeof stubContent.pages.projectDocuments }) => {
       const { result } = renderPageContent();
 
-      const content = (result.current.default as any)[name];
+      const content = (result.current as any)[name];
       const expectedContent = stubContent.pages.projectDocuments[property];
 
       expect(content).toBe(expectedContent);
     },
   );
-});
 
-describe("getCompetitionContent()", () => {
   test("with ktp competition type", () => {
-    const { result } = renderPageContent();
+    const { result } = renderPageContent(CopyNamespaces.KTP);
 
-    const ktpContent = result.current.getCompetitionContent("KTP");
-
-    if (!ktpContent) {
-      throw new Error("No KTP content found");
-    }
-
-    expect(ktpContent.additionalInfoHintIfYou).toEqual(stubContent.pages.claimReview.additionalInfoHintIfYou);
-    expect(ktpContent.additionalInfoHintQueryClaim).toEqual(stubContent.pages.claimReview.additionalInfoHintQueryClaim);
-    expect(ktpContent.additionalInfoHintSubmitClaim).toEqual(
-      stubContent.pages.claimReview.additionalInfoHintSubmitClaim,
-    );
-  });
-
-  test("with no matching value", () => {
-    const { result } = renderPageContent();
-
-    const fetchOtherContent = result.current.getCompetitionContent("this-should-error");
-
-    expect(fetchOtherContent).toBeUndefined();
+    expect(result.current.additionalInfoHint).toEqual(ktpContent.pages.claimReview.additionalInfoHint);
   });
 });

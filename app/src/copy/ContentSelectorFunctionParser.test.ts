@@ -41,8 +41,8 @@ describe("ContentSelectorFunctionParser", () => {
     contentSelector(proxy);
 
     // Obtain interception information.
-    const { key, dataOption } = contentSelectorFunctionParser.getContentCall();
-    expect(key).toEqual(expectedKey);
-    expect(dataOption).toEqual(expectedDataOption);
+    const { i18nKey, values } = contentSelectorFunctionParser.getContentCall();
+    expect(i18nKey).toEqual(expectedKey);
+    expect(values).toEqual(expectedDataOption);
   });
 });

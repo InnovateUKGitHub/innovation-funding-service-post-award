@@ -62,6 +62,6 @@ export interface TitleContentResult {
 
 // Interface to store ContentSelector key and potential inputs.
 export interface ContentSelectorCallInformation {
-  key: string;
-  dataOption: DataOption;
+  i18nKey: string;
+  values: DataOption;
 }

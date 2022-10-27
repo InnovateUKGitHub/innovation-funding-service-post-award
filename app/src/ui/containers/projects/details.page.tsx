@@ -136,9 +136,10 @@ class ProjectDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
               }
               footnote={
                 <SimpleString>
-                  <ACC.Content value={x => x.pages.projectDetails.changeInfo} />
-                  <ACC.EmailContent value={x => x.pages.projectDetails.changeEmail} />
-                  <ACC.Content value={x => x.pages.projectDetails.changeEnd} />
+                  <ACC.Content
+                    value={x => x.pages.projectDetails.changeInfo}
+                    components={[<ACC.EmailContent key="email" value={x => x.pages.projectDetails.changeEmail} />]}
+                  />
                 </SimpleString>
               }
             />

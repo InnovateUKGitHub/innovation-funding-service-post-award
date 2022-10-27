@@ -8,30 +8,26 @@ describe("<NotFoundErrorPage />", () => {
     const stubContent = {
       pages: {
         notFoundError: {
-          errorMessage: "stub-notFoundError",
-          goBackMessage: "stub-goBackMessage",
-          innovateUkMessage: "stub-innovateUkMessage",
-          yourDashBoard: "stub-yourDashboardMessage",
+          goBackMessage: "It's a good idea to <0>go back</0> or visit the <1>Innovate UK homepage</1>.",
         },
       },
     };
-
-    const content = Object.entries(stubContent.pages.notFoundError);
 
     beforeAll(async () => {
       await testInitialiseInternationalisation(stubContent);
     });
 
-    test.each(content)("with %s", (_key, value) => {
-      const { queryByText } = render(
+    test("Contains description message", () => {
+      const { queryByTestId } = render(
         <TestBed>
           <NotFoundError />
         </TestBed>,
       );
 
-      const contentElement = queryByText(value, { exact: false });
+      const contentElement = queryByTestId("errorMessage");
 
       expect(contentElement).toBeInTheDocument();
+      expect(contentElement).toMatchSnapshot();
     });
   });
 });

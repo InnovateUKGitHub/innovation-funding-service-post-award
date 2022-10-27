@@ -43,9 +43,8 @@
     },
     "projectDetails": {
       "financeContactInfo": "Only finance contacts can submit drawdown requests and costs.",
-      "changeInfo": "If you need to change the lead project manager or finance contact, please email ",
-      "changeEmail": "lending.operations@iuk.ukri.org",
-      "changeEnd": "."
+      "changeInfo": "If you need to change the lead project manager or finance contact, please email <0>{{ emailAddress }}</0>.",
+      "changeEmail": "lending.operations@iuk.ukri.org"
     }
   },
   "claimsMessages": {

@@ -1,17 +1,27 @@
 import type { ContentSelector } from "@copy/type";
 import { useContent } from "@ui/hooks";
+import { Trans } from "react-i18next";
 import { Markdown } from "./renderers/markdown";
 
 interface IContentProps {
   value: ContentSelector;
-  markdown?: boolean;
   styles?: React.CSSProperties;
+  markdown?: boolean;
+  components?: readonly React.ReactElement[] | { readonly [tagName: string]: React.ReactElement };
 }
 
-export const Content = ({ value, styles, markdown = false }: IContentProps) => {
-  const { getContent } = useContent();
+export const Content = ({ value, styles, markdown = false, components }: IContentProps) => {
+  const { getContent, getContentCall } = useContent();
+
+  if (components) {
+    const { i18nKey, values } = getContentCall(value);
+
+    return <Trans i18nKey={i18nKey} values={values} components={components} />;
+  }
 
   const content = getContent(value);
 
-  return markdown ? <Markdown trusted style={styles && { color: styles.color }} value={content} /> : <>{content}</>;
+  if (markdown) return <Markdown trusted style={styles && { color: styles.color }} value={content} />;
+
+  return <>{content}</>;
 };

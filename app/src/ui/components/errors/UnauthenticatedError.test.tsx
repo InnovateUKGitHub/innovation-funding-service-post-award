@@ -8,9 +8,7 @@ describe("<UnauthenticatedError />", () => {
     const stubContent = {
       pages: {
         unauthenticatedError: {
-          preLinkContent: "stub-contactUsPreLinkContent",
-          linkTextContent: "stub-contactUsLinkTextContent",
-          postLinkContent: "stub-contactUsPostLinkContent",
+          contactUs: "Contact <0>Joe Grundman</0> to ask for forgivness",
         },
       },
       components: {
@@ -48,15 +46,12 @@ describe("<UnauthenticatedError />", () => {
     });
 
     test("with page message containing link text", () => {
-      const { container } = setup();
+      const { queryByTestId } = setup();
 
-      const expectedWrittenContent = [
-        stubContent.pages.unauthenticatedError.preLinkContent,
-        stubContent.pages.unauthenticatedError.linkTextContent,
-        stubContent.pages.unauthenticatedError.postLinkContent,
-      ].join(" ");
+      const reason = queryByTestId("reason");
 
-      expect(container).toHaveTextContent(expectedWrittenContent);
+      expect(reason).toBeInTheDocument();
+      expect(reason).toMatchSnapshot();
     });
   });
 });

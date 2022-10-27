@@ -89,7 +89,7 @@ describe("PcrTypes Components", () => {
 
       beforeAll(async () => {
         await testInitialiseInternationalisation(stubContent);
-      })
+      });
 
       describe("@renders", () => {
         test("as default", () => {

@@ -28,6 +28,7 @@ import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { DropdownOption } from "@ui/components";
 
 import { EnumDocuments } from "./components";
+import { Markdown } from "@ui/components/renderers";
 
 export interface ReviewClaimParams {
   projectId: string;
@@ -75,30 +76,14 @@ export function useReviewContent() {
     finalClaim: getContent(x => x.claimsMessages.finalClaim),
     accordionTitleForecast: getContent(x => x.claimsLabels.accordionTitleForecast),
     accordionTitleClaimLog: getContent(x => x.claimsLabels.accordionTitleClaimLog),
-    uploadInstruction1: getContent(x => x.documentMessages.uploadInstruction1),
-    uploadInstruction2: getContent(x => x.documentMessages.uploadInstruction2),
+    uploadInstruction: getContent(x => x.documentMessages.uploadInstruction),
     noDocumentsUploaded: getContent(x => x.documentMessages.noDocumentsUploaded),
     descriptionLabel: getContent(x => x.pages.claimDocuments.descriptionLabel),
     noMatchingDocumentsMessage: getContent(x => x.pages.projectDocuments.noMatchingDocumentsMessage),
     searchDocumentsMessage: getContent(x => x.pages.projectDocuments.searchDocumentsMessage),
   };
 
-  const ktpContent = {
-    additionalInfoHintQueryClaim: getContent(x => x.pages.claimReview.additionalInfoHintQueryClaim),
-    additionalInfoHintSubmitClaim: getContent(x => x.pages.claimReview.additionalInfoHintSubmitClaim),
-    additionalInfoHintIfYou: getContent(x => x.pages.claimReview.additionalInfoHintIfYou),
-  };
-
-  const getCompetitionContent = (competitionType: string) => {
-    const { isKTP } = checkProjectCompetition(competitionType);
-
-    return isKTP ? ktpContent : undefined;
-  };
-
-  return {
-    getCompetitionContent,
-    default: defaultContent,
-  };
+  return defaultContent;
 }
 
 interface ReviewCallbacks {
@@ -127,7 +112,7 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
 
     const backLinkElement = (
       <ACC.BackLink route={props.routes.allClaimsDashboard.getLink({ projectId: data.project.id })}>
-        {content.default.backLink}
+        {content.backLink}
       </ACC.BackLink>
     );
 
@@ -140,18 +125,16 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
       >
         <ACC.Renderers.Messages messages={props.messages} />
 
-        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={content.default.finalClaim} />}
+        {data.claim.isFinalClaim && <ACC.ValidationMessage messageType="info" message={content.finalClaim} />}
 
         {data.partner.competitionName && (
           <ACC.Renderers.SimpleString className="margin-bottom-none">
-            <span className="govuk-!-font-weight-bold">{content.default.competitionName}:</span>{" "}
-            {data.partner.competitionName}
+            <span className="govuk-!-font-weight-bold">{content.competitionName}:</span> {data.partner.competitionName}
           </ACC.Renderers.SimpleString>
         )}
 
         <ACC.Renderers.SimpleString>
-          <span className="govuk-!-font-weight-bold">{content.default.competitionType}:</span>{" "}
-          {data.partner.competitionType}
+          <span className="govuk-!-font-weight-bold">{content.competitionType}:</span> {data.partner.competitionType}
         </ACC.Renderers.SimpleString>
 
         {isMo && isCombinationOfSBRI && (
@@ -192,7 +175,7 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
           <ACC.Accordion>
             {renderForecastItem()}
 
-            <ACC.AccordionItem title={content.default.accordionTitleClaimLog} qa="log-accordion">
+            <ACC.AccordionItem title={content.accordionTitleClaimLog} qa="log-accordion">
               {/* Keeping logs inside loader because accordion defaults to closed*/}
               <ACC.Loader
                 pending={props.statusChanges}
@@ -222,7 +205,7 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
     });
 
     return (
-      <ACC.AccordionItem qa="forecast-accordion" title={content.default.accordionTitleForecast}>
+      <ACC.AccordionItem qa="forecast-accordion" title={content.accordionTitleForecast}>
         <ACC.Loader
           pending={pendingForecastData}
           render={forecastData => <ACC.Claims.ForecastTable hideValidation data={forecastData} />}
@@ -244,8 +227,8 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
     const Form = ACC.TypedForm<ClaimDto>();
 
     const options: ACC.SelectOption[] = [
-      { id: ClaimStatus.MO_QUERIED, value: content.default.optionQueryClaim },
-      { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: content.default.optionSubmitClaim },
+      { id: ClaimStatus.MO_QUERIED, value: content.optionQueryClaim },
+      { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: content.optionSubmitClaim },
     ];
 
     const validSubmittedClaimStatus = [
@@ -266,7 +249,7 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
         onChange={dto => props.onUpdate(false, dto)}
         qa="review-form"
       >
-        <Form.Fieldset heading={content.default.sectionTitleHowToProceed}>
+        <Form.Fieldset heading={content.sectionTitleHowToProceed}>
           <Form.Radio
             name="status"
             options={options}
@@ -295,7 +278,7 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
 
     return (
       <ACC.AccordionItem
-        title={content.default.accordionTitleSupportingDocumentsForm}
+        title={content.accordionTitleSupportingDocumentsForm}
         qa="upload-supporting-documents-form-accordion"
       >
         <EnumDocuments documentsToCheck={allowedClaimDocuments}>
@@ -309,13 +292,12 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
                 qa="projectDocumentUpload"
               >
                 <UploadForm.Fieldset>
-                  <ACC.Renderers.SimpleString>{content.default.uploadInstruction1}</ACC.Renderers.SimpleString>
-                  <ACC.Renderers.SimpleString>{content.default.uploadInstruction2}</ACC.Renderers.SimpleString>
+                  <ACC.Renderers.Markdown value={content.uploadInstruction} />
 
                   <ACC.DocumentGuidance />
 
                   <UploadForm.MultipleFileUpload
-                    label={content.default.labelInputUpload}
+                    label={content.labelInputUpload}
                     name="attachment"
                     labelHidden
                     value={x => x.files}
@@ -324,7 +306,7 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
                   />
 
                   <UploadForm.DropdownList
-                    label={content.default.descriptionLabel}
+                    label={content.descriptionLabel}
                     labelHidden={false}
                     hasEmptyOption
                     placeholder="-- No description --"
@@ -337,7 +319,7 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
                 </UploadForm.Fieldset>
 
                 <UploadForm.Submit name="reviewDocuments" styling="Secondary">
-                  {content.default.buttonUpload}
+                  {content.buttonUpload}
                 </UploadForm.Submit>
               </UploadForm.Form>
 
@@ -355,26 +337,12 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
     );
   };
 
-  const getCompetitionHintContent = (competitionType: string) => {
-    const ktpContent = content.getCompetitionContent(competitionType);
-
-    return ktpContent ? (
-      <>
-        {ktpContent.additionalInfoHintIfYou}
-        <li>{ktpContent.additionalInfoHintQueryClaim}</li>
-        <li>{ktpContent.additionalInfoHintSubmitClaim}</li>
-      </>
-    ) : (
-      content.default.additionalInfoHint
-    );
-  };
-
   const getMOReminderMessage = (competitionType: string) => {
     const reminderByCompetion = `${competitionType.toLowerCase()}-reminder`;
 
     return (
       <ACC.Renderers.SimpleString key={reminderByCompetion} qa={reminderByCompetion}>
-        {content.default.monitoringReportReminder}
+        {content.monitoringReportReminder}
       </ACC.Renderers.SimpleString>
     );
   };
@@ -387,9 +355,7 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
     const moReminderElement = getMOReminderMessage(project.competitionType);
     const submitButtonElement = <Form.Submit key="button">{getSubmitButtonLabel(editor)}</Form.Submit>;
     const declarationElement = (
-      <ACC.Renderers.SimpleString key="declaration">
-        {content.default.claimReviewDeclaration}
-      </ACC.Renderers.SimpleString>
+      <ACC.Renderers.SimpleString key="declaration">{content.claimReviewDeclaration}</ACC.Renderers.SimpleString>
     );
 
     // Note: <Fieldset> has not got got support for React.Fragment
@@ -397,14 +363,14 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
       // Returning array here instead of React.Fragment as Fieldset data will not persist through Fragment,
       <Form.Fieldset
         key="form"
-        heading={content.default.sectionTitleAdditionalInfo}
+        heading={content.sectionTitleAdditionalInfo}
         qa="additional-info-form"
         headingQa="additional-info-heading"
       >
         <Form.MultilineString
-          label={content.default.additionalInfo}
+          label={content.additionalInfo}
           labelHidden
-          hint={getCompetitionHintContent(project.competitionType)}
+          hint={<Markdown value={content.additionalInfoHint} />}
           name="comments"
           value={m => m.comments}
           update={(m, v) => (m.comments = v)}
@@ -423,7 +389,7 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
     const showQueryLabel = editor.data.status === ClaimStatus.MO_QUERIED;
 
     // Note: With SSR remove dynamic text
-    return showQueryLabel ? content.default.buttonSendQuery : content.default.buttonSubmit;
+    return showQueryLabel ? content.buttonSendQuery : content.buttonSubmit;
   };
 
   const updateStatus = (dto: ClaimDto, option: ACC.SelectOption | null | undefined) => {

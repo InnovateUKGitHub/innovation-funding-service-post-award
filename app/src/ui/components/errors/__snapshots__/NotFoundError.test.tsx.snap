@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<NotFoundErrorPage /> @renders Contains description message 1`] = `
+<p
+  class="govuk-body"
+  data-qa="errorMessage"
+>
+  It's a good idea to 
+  <a
+    href="/projects/dashboard"
+  >
+    go back
+  </a>
+   or visit the 
+  <a
+    href="https://www.gov.uk/government/organisations/innovate-uk"
+    rel="noopener noreferrer"
+    target="_blank"
+  >
+    Innovate UK homepage
+  </a>
+  .
+</p>
+`;
