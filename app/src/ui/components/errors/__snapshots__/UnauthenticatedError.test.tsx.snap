@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<UnauthenticatedError /> @renders with page message containing link text 1`] = `
+<p
+  class="govuk-body"
+  data-qa="reason"
+>
+  Contact 
+  <a
+    href="https://apply-for-innovation-funding.service.gov.uk/info/contact"
+    rel="noopener noreferrer"
+    target="_blank"
+  >
+    Joe Grundman
+  </a>
+   to ask for forgivness
+</p>
+`;

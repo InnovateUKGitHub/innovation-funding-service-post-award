@@ -1,22 +1,21 @@
 import * as React from "react";
 import { useContent } from "@ui/hooks";
 import { ExternalLink } from "../renderers";
+import { Content } from "../content";
 
 export function PhaseBanner() {
   const { getContent } = useContent();
 
-  const newServiceMessage = getContent(x => x.components.phaseBannerContent.newServiceMessage);
-  const feedbackMessage = getContent(x => x.components.phaseBannerContent.feedbackMessage);
-  const helpImproveMessage = getContent(x => x.components.phaseBannerContent.helpImprove);
   const betaText = getContent(x => x.components.phaseBannerContent.betaText);
 
   const dashboardLink = (
     <ExternalLink
       className="govuk-link"
+      key="beta"
       href="https://www.surveymonkey.co.uk/r/IFSPostAwardFeedback"
       data-qa="phase-banner-link"
     >
-      {feedbackMessage}
+      {" "}
     </ExternalLink>
   );
 
@@ -26,7 +25,7 @@ export function PhaseBanner() {
         <strong className="govuk-tag govuk-phase-banner__content__tag">{betaText}</strong>
 
         <span className="govuk-phase-banner__text" data-qa="banner-message">
-          {newServiceMessage} {dashboardLink} {helpImproveMessage}
+          <Content value={x => x.components.phaseBannerContent.newServiceMessage} components={[dashboardLink]} />
         </span>
       </p>
     </div>

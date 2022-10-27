@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ForecastClaimAdvice /> @content renders 1`] = `
+<p
+  class="govuk-body"
+  data-qa="forecastClaimAdvice"
+>
+  You must eat 
+  <a
+    class="govuk-link"
+    href="/stub-path"
+  >
+    lettuce
+  </a>
+   to proceed.
+</p>
+`;

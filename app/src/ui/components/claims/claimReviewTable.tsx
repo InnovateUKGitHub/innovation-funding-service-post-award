@@ -32,13 +32,13 @@ export function ClaimReviewTable(props: ClaimProps) {
 
       <CostCategoriesTable.Currency
         qa="differencePounds"
-        header={getContent(x => x.pages.claimsComponents.differenceInUnit)}
+        header={getContent(x => x.pages.claimsComponents.differenceInUnit({ unit: "£" }))}
         value={x => x.differenceInPounds}
       />
 
       <CostCategoriesTable.Percentage
         qa="differencePercentage"
-        header={getContent(x => x.pages.claimsComponents.differenceInUnit)}
+        header={getContent(x => x.pages.claimsComponents.differenceInUnit({ unit: "%" }))}
         value={x => x.diffPercentage}
       />
     </CostCategoriesTable.Table>

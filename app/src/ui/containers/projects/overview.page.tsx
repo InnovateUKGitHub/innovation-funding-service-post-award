@@ -112,11 +112,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
     return (
       <ACC.SectionPanel
         qa="claims-totals"
-        title={
-          <>
-            {partnerName} {<ACC.Content value={x => x.pages.projectOverview.costsToDateMessage} />}
-          </>
-        }
+        title={<ACC.Content value={x => x.pages.projectOverview.costsToDateMessage({ partnerName })} />}
       >
         <ACC.DualDetails>
           <PartnerSummaryDetails.Details qa="claims-totals-col-0" data={partner}>
@@ -180,10 +176,11 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
                 <PartnerSummaryDetails.Details
                   data={partner}
                   title={
-                    <>
-                      {ACC.getPartnerName(partner)}{" "}
-                      {<ACC.Content value={x => x.pages.projectOverview.costsToDateMessage} />}
-                    </>
+                    <ACC.Content
+                      value={x =>
+                        x.pages.projectOverview.costsToDateMessage({ partnerName: ACC.getPartnerName(partner) })
+                      }
+                    />
                   }
                   qa="lead-partner-summary"
                 >
