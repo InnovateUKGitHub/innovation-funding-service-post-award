@@ -30,9 +30,15 @@ function OtherSourcesOfFunding({
 
   const addItem = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, dto: PCRItemForPartnerAdditionDto) => {
     e.preventDefault();
-    const otherFundingCostCategory = props.costCategories.find(x => x.type === CostCategoryType.Other_Funding);
+    const otherFundingCostCategory = props.costCategories.find(
+      x => x.type === CostCategoryType.Other_Public_Sector_Funding,
+    );
     if (!otherFundingCostCategory)
-      throw new Error(`Cannot find other funding cost category matching ${CostCategoryType.Other_Funding}`);
+      throw new Error(
+        `Cannot find other public sector funding cost category matching ${
+          CostCategoryType[CostCategoryType.Other_Public_Sector_Funding]
+        }: ${CostCategoryType.Other_Public_Sector_Funding}`,
+      );
     dto.spendProfile.funds.push({
       costCategoryId: otherFundingCostCategory.id,
       costCategory: CostCategoryType.Other_Funding,
