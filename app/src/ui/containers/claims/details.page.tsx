@@ -73,11 +73,9 @@ export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
         pageTitle={<ACC.Projects.Title {...data.project} />}
         partner={data.partner}
       >
-        {data.claim.isFinalClaim && (
+        {/* If the partner is not withdrawn, and it's the final claim, show message. */}
+        {!data.partner.isWithdrawn && data.claim.isFinalClaim && (
           <ACC.ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />
-        )}
-        {data.partner.isWithdrawn && (
-          <ACC.ValidationMessage messageType="info" message={x => x.claimsMessages.partnerWithdrawn} />
         )}
         {this.renderPageSubtitle(data)}
         {this.renderCostsAndGrantSummary(data)}
