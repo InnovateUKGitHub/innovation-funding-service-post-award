@@ -54,10 +54,16 @@ export function parseNumber(x?: string | number | null) {
   return isNumber(value) ? value : null;
 }
 
-export function sum<T>(items: T[], value: (item: T) => number): number {
+/**
+ * _sumBy_
+ *
+ * Takes an array of values as first argument, and a reducer function for second.
+ * Returns the sum of values extracted with the reducer function.
+ */
+export function sumBy<T>(items: T[], reducer: (item: T) => number): number {
   if (!items.length) return 0;
 
-  return items.reduce((total, item) => total + value(item), 0);
+  return items.reduce((total, item) => total + reducer(item), 0);
 }
 
 export const withinRange = <T = number>(numberToCheck: T, startRange: T, endRange: T): boolean => {

@@ -1,4 +1,4 @@
-import { groupBy, isNumber, sum, roundCurrency } from "@framework/util";
+import { groupBy, isNumber, sumBy, roundCurrency } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import {
   CostCategoryForecast,
@@ -102,7 +102,7 @@ export class InitialForecastDetailsDtoCostCategoryValidator
 
     if (shouldNotValidate) return Validation.valid(this);
 
-    const accumulatedForecastTotals = sum(this.model.forecasts, x => (isNumber(x.value) ? x.value : 0));
+    const accumulatedForecastTotals = sumBy(this.model.forecasts, x => (isNumber(x.value) ? x.value : 0));
     const totalCategoryForecast = roundCurrency(accumulatedForecastTotals);
 
     const isValid = totalCategoryForecast === this.model.golCost.value;

@@ -1,5 +1,5 @@
 import { QueryBase } from "@server/features/common";
-import { roundCurrency, sum } from "@framework/util";
+import { roundCurrency, sumBy } from "@framework/util";
 import {
   Authorisation,
   CostCategoryVirementDto,
@@ -38,13 +38,13 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
 
     const partners = data.map(x => this.mapPartner(x, costCategories));
 
-    const costsClaimedToDate = sum(partners, v => v.costsClaimedToDate);
-    const originalEligibleCosts = sum(partners, v => v.originalEligibleCosts);
-    const originalRemainingCosts = sum(partners, v => v.originalRemainingCosts);
-    const originalRemainingGrant = sum(partners, v => v.originalRemainingGrant);
-    const newEligibleCosts = sum(partners, v => v.newEligibleCosts);
-    const newRemainingCosts = sum(partners, v => v.newRemainingCosts);
-    const newRemainingGrant = sum(partners, v => v.newRemainingGrant);
+    const costsClaimedToDate = sumBy(partners, v => v.costsClaimedToDate);
+    const originalEligibleCosts = sumBy(partners, v => v.originalEligibleCosts);
+    const originalRemainingCosts = sumBy(partners, v => v.originalRemainingCosts);
+    const originalRemainingGrant = sumBy(partners, v => v.originalRemainingGrant);
+    const newEligibleCosts = sumBy(partners, v => v.newEligibleCosts);
+    const newRemainingCosts = sumBy(partners, v => v.newRemainingCosts);
+    const newRemainingGrant = sumBy(partners, v => v.newRemainingGrant);
 
     const originalFundingLevel = originalRemainingCosts ? (100 * originalRemainingGrant) / originalRemainingCosts : 0;
     const newFundingLevel = newRemainingCosts ? (100 * newRemainingGrant) / newRemainingCosts : 0;
@@ -70,8 +70,8 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
 
     const costCategoryVirements = partner.virements.map(x => this.mapCostCategory(x, costCategories));
 
-    const totalCostsClaimedToDate = sum(costCategoryVirements, v => v.costsClaimedToDate);
-    const totalOriginalEligibleCosts = sum(costCategoryVirements, v => v.originalEligibleCosts);
+    const totalCostsClaimedToDate = sumBy(costCategoryVirements, v => v.costsClaimedToDate);
+    const totalOriginalEligibleCosts = sumBy(costCategoryVirements, v => v.originalEligibleCosts);
 
     // Note: Defensive coding here - not clear if setting newRemainingGrant on create
     const roundedNewRemainingGrant = newRemainingGrant

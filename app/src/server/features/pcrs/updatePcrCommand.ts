@@ -6,7 +6,7 @@ import { GetAllForProjectQuery } from "@server/features/partners";
 import { CostCategoryType, PCRStatus, ProjectRole } from "@framework/constants";
 import { UpdatePCRSpendProfileCommand } from "@server/features/pcrs/updatePcrSpendProfileCommand";
 import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
-import { sum } from "@framework/util";
+import { sumBy } from "@framework/util";
 import { GetAllProjectRolesForUser, GetByIdQuery, GetProjectStatusQuery } from "../projects";
 import { BadRequestError, CommandBase, InActiveProjectError, ValidationError } from "../common";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
@@ -287,8 +287,8 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
   }
 
   private calculateTotalOtherFunding(dto: PCRItemForPartnerAdditionDto) {
-    return sum(
-      dto.spendProfile.funds.filter(x => x.costCategory === CostCategoryType.Other_Funding),
+    return sumBy(
+      dto.spendProfile.funds.filter(x => x.costCategory === CostCategoryType.Other_Public_Sector_Funding),
       fund => fund.value || 0,
     );
   }
