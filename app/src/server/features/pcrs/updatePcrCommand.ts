@@ -288,7 +288,11 @@ export class UpdatePCRCommand extends CommandBase<boolean> {
 
   private calculateTotalOtherFunding(dto: PCRItemForPartnerAdditionDto) {
     return sumBy(
-      dto.spendProfile.funds.filter(x => x.costCategory === CostCategoryType.Other_Public_Sector_Funding),
+      dto.spendProfile.funds.filter(
+        x =>
+          x.costCategory === CostCategoryType.Other_Public_Sector_Funding ||
+          x.costCategory === CostCategoryType.Other_Funding,
+      ),
       fund => fund.value || 0,
     );
   }
