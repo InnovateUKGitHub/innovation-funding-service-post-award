@@ -82,7 +82,8 @@
     "projectInactiveContent": {
       "projectInactiveMessage": "This project is currently inactive, you can't edit this project so you have been prevented from viewing this page.",
       "projectOnHoldMessage": "This project is on hold. Contact Innovate UK for more information.",
-      "partnerOnHoldMessage": "Partner is on hold. Contact Innovate UK for more information."
+      "partnerOnHoldMessage": "Partner is on hold. Contact Innovate UK for more information.",
+      "partnerWithdrawal": "Partner has withdrawn. Contact Innovate UK for more information."
     },
     "claimDetailsLinkContent": {
       "editClaim": "Edit",
@@ -886,7 +887,6 @@
     "claimSavedMessage": "You have saved your claim.",
     "claimSubmittedMessage": "You have submitted your claim.",
     "loadingClaims": "Loading claims...",
-    "partnerWithdrawn": "This partner has withdrawn from the project. It is not possible to edit claims.",
     "hasWithdrawnPartner": "It is not possible to edit claims of partners that have withdrawn from the project."
   },
   "claimsLabels": {

@@ -47,13 +47,13 @@ const ViewForecastComponent = (props: ViewForecastParams & ViewForecastData & Ba
         project={data.project}
         partner={data.partner}
       >
-        {data.partner.isWithdrawn ? (
-          <ACC.ValidationMessage messageType="info" message={x => x.forecastsMessages.partnerHasWithdrawn} />
-        ) : (
-          <ForecastClaimAdvice claimLink={allClaimsDashboardLink} />
+        {/* If the partner is not withdrawn, show messages */}
+        {!data.partner.isWithdrawn && (
+          <>
+            <ForecastClaimAdvice claimLink={allClaimsDashboardLink} />
+            {renderFinalClaimMessage(data, isPartnerFc)}
+          </>
         )}
-
-        {renderFinalClaimMessage(data, isPartnerFc)}
 
         <ACC.Section title={partnerName} qa="partner-name" className="govuk-!-padding-bottom-3">
           <ACC.Renderers.Messages messages={props.messages} />

@@ -23,11 +23,16 @@ export const usePageValidationMessage = (
     return getContent(x => x.components.projectInactiveContent.projectOnHoldMessage);
   }
 
-  if (partnerStatus === PartnerStatus.OnHold) {
-    return getContent(x => x.components.projectInactiveContent.partnerOnHoldMessage);
+  switch (partnerStatus) {
+    case PartnerStatus.OnHold:
+      return getContent(x => x.components.projectInactiveContent.partnerOnHoldMessage);
+    case PartnerStatus.InvoluntaryWithdrawal:
+    case PartnerStatus.MigratedWithdrawn:
+    case PartnerStatus.VoluntaryWithdrawal:
+      return getContent(x => x.components.projectInactiveContent.partnerWithdrawal);
+    default:
+      return null;
   }
-
-  return null;
 };
 
 export interface PageProps {
