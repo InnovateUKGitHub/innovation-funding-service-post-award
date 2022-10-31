@@ -4,7 +4,7 @@ import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import * as ACC from "@ui/components";
-import { sum } from "@framework/util";
+import { sumBy } from "@framework/util";
 import { useStores } from "@ui/redux";
 import { PCRSpendProfileAcademicCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { PCROrganisationType } from "@framework/constants";
@@ -37,7 +37,7 @@ class Component extends React.Component<
         };
       })
       .filter(x => !!x);
-    const total = sum(data, x => (x.costDto ? x.costDto.value : 0) || 0);
+    const total = sumBy(data, x => (x.costDto ? x.costDto.value : 0) || 0);
 
     const Table = ACC.TypedTable<Data>();
 

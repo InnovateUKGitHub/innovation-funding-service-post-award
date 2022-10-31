@@ -1,6 +1,6 @@
 import { QueryBase } from "@server/features/common";
 import { CostsSummaryForPeriodDto, IContext, TotalCosts } from "@framework/types";
-import { roundCurrency, sum } from "@framework/util";
+import { roundCurrency, sumBy } from "@framework/util";
 import { GetCostsSummaryForPeriodQuery } from "../claimDetails";
 
 export class GetClaimsTotalCosts extends QueryBase<TotalCosts> {
@@ -27,7 +27,7 @@ export class GetClaimsTotalCosts extends QueryBase<TotalCosts> {
     projectAwardRate = 0,
     isNonFec: boolean,
   ): TotalCosts => {
-    const totalCostsClaimed: number = sum(claimDetails, claim => claim.costsClaimedThisPeriod);
+    const totalCostsClaimed: number = sumBy(claimDetails, claim => claim.costsClaimedThisPeriod);
 
     const totalCostsPaid = isNonFec
       ? this.calculateCostsClaimedByIndividualClaim(claimDetails, projectAwardRate)

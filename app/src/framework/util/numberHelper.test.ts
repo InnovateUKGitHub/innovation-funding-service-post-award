@@ -1,4 +1,11 @@
-import { diffAsPercentage, isNumber, parseNumber, roundCurrency, sum, withinRange } from "@framework/util/numberHelper";
+import {
+  diffAsPercentage,
+  isNumber,
+  parseNumber,
+  roundCurrency,
+  sumBy,
+  withinRange,
+} from "@framework/util/numberHelper";
 
 describe("numberHelper", () => {
   describe("isNumber()", () => {
@@ -115,7 +122,7 @@ describe("numberHelper", () => {
       ${"returns total array with numbers"}          | ${[1, 2, 3, 4]}                   | ${(x: any) => x}       | ${10}
       ${"returns total using property within array"} | ${[{ value: 10 }, { value: 20 }]} | ${(x: any) => x.value} | ${30}
     `("$name", ({ inputValue, valueFn, expectedValue }) => {
-      const totalSum = sum(inputValue, valueFn);
+      const totalSum = sumBy(inputValue, valueFn);
 
       expect(totalSum).toBe(expectedValue);
     });

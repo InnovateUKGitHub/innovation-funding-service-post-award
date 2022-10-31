@@ -15,7 +15,7 @@ import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { useContent } from "@ui/hooks";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { diffAsPercentage, sum } from "@framework/util/numberHelper";
+import { diffAsPercentage, sumBy } from "@framework/util/numberHelper";
 
 import { Pending } from "../../../shared/pending";
 import { BaseProps, ContainerBase, defineRoute, RouteState } from "../containerBase";
@@ -242,7 +242,7 @@ function ClaimLineItemsTable({
     </tr>
   );
 
-  const total: number = sum(lineItems, item => item.value);
+  const total: number = sumBy(lineItems, item => item.value);
 
   const forecast = forecastDetail.value;
   const diff = diffAsPercentage(forecast, total);
