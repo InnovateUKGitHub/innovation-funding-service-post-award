@@ -12,7 +12,7 @@ export class HomeFormHandler implements IFormHandler {
 
   public async handle(req: express.Request, res: express.Response): Promise<void> {
     const dto = {
-      user: ((req.body.user as string) || "").trim() || null,
+      user: ((req.body.user as string) || (req.body.button_user as string) || "").trim() || null,
       isReset: req.body.button_reset === "",
     };
 

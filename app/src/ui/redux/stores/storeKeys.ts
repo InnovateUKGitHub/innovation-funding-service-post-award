@@ -13,6 +13,9 @@ const getBroadcastKey = (broadcastId: string) => getKey("broadcastKey", "broadca
 const getJesAccountKey = (searchString: string) => getKey("jesAccountKey", "account", searchString);
 const getProjectKey = (projectId: string) => getKey("projectKey", "project", projectId);
 const getProjectsKey = () => getKey("projectsKey", "project", "all");
+const getProjectsKeyAsDeveloper = () => getKey("projectsKey", "project", "all", "developer");
+const getProjectContactsKey = (projectId: string) => getKey("projectContactsKey", projectId);
+const getProjectContactsKeyAsDeveloper = (projectId: string) => getKey("projectContactsKey", projectId, "developer");
 const getValidProjectStatusKey = (projectId: string) => getKey("validProjectStatus", getProjectKey(projectId));
 const getPartnerKey = (partnerId: string) => getKey("partnerKey", "partner", partnerId);
 const getPartnersKey = () => getKey("partnersKey", "partner", "all");
@@ -77,6 +80,9 @@ export const storeKeys = {
   getJesAccountKey,
   getProjectKey,
   getProjectsKey,
+  getProjectsKeyAsDeveloper,
+  getProjectContactsKey,
+  getProjectContactsKeyAsDeveloper,
   getValidProjectStatusKey,
   getPartnerKey,
   getPartnersKey,

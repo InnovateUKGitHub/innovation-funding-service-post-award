@@ -41,7 +41,7 @@ describe("<ErrorContainer />", () => {
 
     const setup = (props: ErrorContainerProps) =>
       render(
-        <TestBed content={stubContent as TestBedContent}>
+        <TestBed content={stubContent as unknown as TestBedContent}>
           <ErrorContainer {...props} />
         </TestBed>,
       );
