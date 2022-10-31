@@ -15,6 +15,8 @@ export const TextInput = (props: TextInputProps) => {
   const [state, setState] = useState({ value: props.value ?? "" });
   const debouncedOnChange = useDebounce(props.onChange, props.debounce);
 
+  useUpdateStateValueOnProps(props.value ?? "", setState);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement> | React.KeyboardEvent<HTMLInputElement>,
     debounce: boolean,
