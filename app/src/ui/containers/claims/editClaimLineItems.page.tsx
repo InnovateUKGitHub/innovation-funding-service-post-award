@@ -10,7 +10,7 @@ import {
   ProjectDto,
   ProjectRole,
 } from "@framework/types";
-import { diffAsPercentage, sum } from "@framework/util/numberHelper";
+import { diffAsPercentage, sumBy } from "@framework/util/numberHelper";
 import { Pending } from "@shared/pending";
 import { range } from "@shared/range";
 import * as ACC from "@ui/components";
@@ -527,7 +527,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     showAddRemove: boolean,
     editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>,
   ) {
-    const total: number = sum(data, item => item.value);
+    const total: number = sumBy(data, item => item.value);
 
     // @TODO remove multiply by 100
     const forecast = forecastDetail.value;
