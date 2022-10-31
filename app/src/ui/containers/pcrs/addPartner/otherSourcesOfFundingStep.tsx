@@ -19,13 +19,13 @@ interface ContainerProps {
   funds: PCRSpendProfileOtherFundingDto[];
 }
 
-function OtherSourcesOfFunding({
+const OtherSourcesOfFunding = ({
   pcrItem,
   onSave,
   status,
   funds,
   ...props
-}: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & ContainerProps) {
+}: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & ContainerProps) => {
   const { isClient } = useMounted();
 
   const addItem = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, dto: PCRItemForPartnerAdditionDto) => {
@@ -41,7 +41,7 @@ function OtherSourcesOfFunding({
       );
     dto.spendProfile.funds.push({
       costCategoryId: otherFundingCostCategory.id,
-      costCategory: CostCategoryType.Other_Funding,
+      costCategory: CostCategoryType.Other_Public_Sector_Funding,
       description: null,
       id: "",
       value: null,
@@ -54,7 +54,7 @@ function OtherSourcesOfFunding({
   const getCostValidation = (rowNumber: number, field: keyof PCRSpendProfileOtherFundingDto) => {
     const index = rowNumber;
     const results = props.validator.spendProfile.results[0].funds.results;
-    const relevantResults = results.filter(x => x.model.costCategory === CostCategoryType.Other_Funding);
+    const relevantResults = results.filter(x => x.model.costCategory === CostCategoryType.Other_Public_Sector_Funding);
     const result = relevantResults[index] as PCROtherFundingDtoValidator;
 
     return result ? result[field] : undefined;
@@ -75,7 +75,7 @@ function OtherSourcesOfFunding({
 
   const renderFooters = (pcrItemDto: PCRItemForPartnerAdditionDto) => {
     const total = pcrItemDto.spendProfile.funds
-      .filter(x => x.costCategory === CostCategoryType.Other_Funding)
+      .filter(x => x.costCategory === CostCategoryType.Other_Public_Sector_Funding)
       .reduce((t, item) => t + (item.value || 0), 0);
 
     const footers: JSX.Element[] = [];
@@ -220,7 +220,7 @@ function OtherSourcesOfFunding({
       </Form.Form>
     </ACC.Section>
   );
-}
+};
 
 export const OtherSourcesOfFundingStep = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
@@ -230,13 +230,15 @@ export const OtherSourcesOfFundingStep = (
 
   const costCategoriesPending = stores.costCategories.getAllUnfiltered();
   const fundsPending = costCategoriesPending.chain(costCategories => {
-    const funds = props.pcrItem.spendProfile.funds.filter(x => x.costCategory === CostCategoryType.Other_Funding);
+    const funds = props.pcrItem.spendProfile.funds.filter(
+      x => x.costCategory === CostCategoryType.Other_Public_Sector_Funding,
+    );
 
     if (isClient) return Pending.done(funds);
 
-    const otherFundingCostCategory = costCategories.find(x => x.type === CostCategoryType.Other_Funding);
+    const otherFundingCostCategory = costCategories.find(x => x.type === CostCategoryType.Other_Public_Sector_Funding);
     if (!otherFundingCostCategory)
-      throw new Error(`Cannot find otherFundingCostCategory matching ${CostCategoryType.Other_Funding}`);
+      throw new Error(`Cannot find otherFundingCostCategory matching ${CostCategoryType.Other_Public_Sector_Funding}`);
     const extraRows = funds.length <= 7 ? 10 - funds.length : 3;
     const extraFundItems: PCRSpendProfileOtherFundingDto[] = range(extraRows).map(
       () =>

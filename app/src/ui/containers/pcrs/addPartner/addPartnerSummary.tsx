@@ -12,7 +12,7 @@ interface InnerProps {
   documents: DocumentSummaryDto[];
 }
 
-class Component extends React.Component<
+class SummaryComponent extends React.Component<
   PcrSummaryProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator, AddPartnerStepNames> & InnerProps
 > {
   render() {
@@ -262,7 +262,7 @@ class Component extends React.Component<
   ) {
     const totalProjectCosts = pcrItem.spendProfile.costs.reduce((t, v) => t + (v.value || 0), 0);
     const nonFundedCosts = totalProjectCosts - (pcrItem.totalOtherFunding || 0);
-    const fundingSought = (nonFundedCosts * (pcrItem.awardRate || 0)) / 100;
+    const fundingSought = (nonFundedCosts * (pcrItem.awardRate || 0)) / 100 || 0;
     const partnerContribution = nonFundedCosts - fundingSought;
 
     return (
@@ -372,7 +372,7 @@ export const AddPartnerSummary = (
   return (
     <ACC.Loader
       pending={stores.projectChangeRequestDocuments.pcrOrPcrItemDocuments(props.projectId, props.pcrItem.id)}
-      render={documents => <Component {...props} documents={documents} />}
+      render={documents => <SummaryComponent {...props} documents={documents} />}
     />
   );
 };

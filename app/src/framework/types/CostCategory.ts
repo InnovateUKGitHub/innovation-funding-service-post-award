@@ -159,7 +159,7 @@ const items: ICostCategoryTypeCompetitionOverridable[] = [
     showGuidance: false,
     preGuidanceWarningMessageKey: "cost-guidance-default",
     showPreGuidanceWarning: false,
-    group: CostCategoryGroupType.Other_Costs,
+    group: CostCategoryGroupType.Other_Funding,
   },
   {
     id: CostCategoryType.VAT,

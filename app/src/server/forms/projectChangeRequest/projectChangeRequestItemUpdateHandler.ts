@@ -320,9 +320,13 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
       item.hasOtherFunding = body.hasOtherFunding === "true" ? true : body.hasOtherFunding === "false" ? false : null;
     }
     if (stepName === "otherFundingSourcesStep") {
-      const otherFundingCostCategory = costCategories.find(x => x.type === CostCategoryType.Other_Funding);
+      const otherFundingCostCategory = costCategories.find(
+        x => x.type === CostCategoryType.Other_Public_Sector_Funding,
+      );
       const itemsLength = parseNumber(body.itemsLength);
-      item.spendProfile.funds = item.spendProfile.funds.filter(x => x.costCategory !== CostCategoryType.Other_Funding);
+      item.spendProfile.funds = item.spendProfile.funds.filter(
+        x => x.costCategory !== CostCategoryType.Other_Public_Sector_Funding,
+      );
       if (itemsLength !== null && otherFundingCostCategory) {
         for (let i = 0; i < itemsLength; ++i) {
           const [id, month, year, description, value] = ["id", "date_month", "date_year", "description", "value"].map(
@@ -331,7 +335,7 @@ export class ProjectChangeRequestItemUpdateHandler extends StandardFormHandlerBa
           if (description || month || year || value) {
             item.spendProfile.funds.push({
               id: id || "",
-              costCategory: CostCategoryType.Other_Funding,
+              costCategory: CostCategoryType.Other_Public_Sector_Funding,
               costCategoryId: otherFundingCostCategory.id,
               description: description || "",
               value: parseFloat(value) || 0,
