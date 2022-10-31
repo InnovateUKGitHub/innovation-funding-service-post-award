@@ -58,7 +58,7 @@ export function getClaimDetailsLinkType({
     return "view";
   }
 
-  const { isMo: isProjectMo, isPm: isProjectPm, isPmOrMo: isProjectPmOrMo } = getAuthRoles(project.roles);
+  const { isMo: isProjectMo, isPmOrMo: isProjectPmOrMo } = getAuthRoles(project.roles);
   const isPartnerFc = getAuthRoles(partner.roles).isFc;
 
   switch (claim.status) {
@@ -71,8 +71,6 @@ export function getClaimDetailsLinkType({
     }
 
     case ClaimStatus.MO_QUERIED:
-      return isProjectMo && !isProjectPm ? "view" : "edit";
-
     case ClaimStatus.INNOVATE_QUERIED:
       return isPartnerFc ? "edit" : "view";
 
