@@ -1,6 +1,7 @@
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import { noop } from "@ui/helpers/noop";
+import { useDidUpdate } from "@ui/hooks";
 
 export type FormInputWidths =
   | "full"
@@ -47,15 +48,7 @@ export function useDebounce<T extends BasicFn>(
  * Hook will update the state value property when props change (not on initial mount)
  */
 export function useUpdateStateValueOnProps<S>(value: S, setState: Dispatch<SetStateAction<{ value: S }>>) {
-  const initialised = useRef(false);
-  useEffect(
-    function () {
-      if (initialised.current) {
-        setState(s => ({ ...s, value }));
-      } else {
-        initialised.current = true;
-      }
-    },
-    [value],
-  );
+  useDidUpdate(() => {
+    setState(s => ({ ...s, value }));
+  }, [value]);
 }
