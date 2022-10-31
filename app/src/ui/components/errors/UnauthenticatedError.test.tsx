@@ -24,13 +24,16 @@ describe("<UnauthenticatedError />", () => {
           changeUserMessage: { content: "stub-changeUserMessage" },
           resetUserMessage: { content: "stub-resetUserMessage" },
           invalidUserMessage: { content: "stub-invalidUserMessage" },
+          tableHeaderMonitoringOfficer: { content: "stub-tableHeaderMonitoringOfficer" },
+          tableHeaderProjectManager: { content: "stub-tableHeaderProjectManager" },
+          tableHeaderFinancialContact: { content: "stub-tableHeaderFinancialContact" },
         },
       },
     };
 
     const setup = () =>
       render(
-        <TestBed content={stubContent as TestBedContent}>
+        <TestBed content={stubContent as unknown as TestBedContent}>
           <UnauthenticatedError />
         </TestBed>,
       );

@@ -2,11 +2,12 @@ import { useContent } from "@ui/hooks";
 import { PageTitle } from "@ui/features/page-title";
 import { Page, Section } from "@ui/components";
 import { ExternalLink, SimpleString } from "@ui/components/renderers";
-import { isAccDevOrDemo, isLocalDevelopment } from "@shared/isEnv";
 import { UserChanger } from "@ui/containers/developer/UserChanger";
+import { useStores } from "@ui/redux";
 
 export function UnauthenticatedError() {
   const { getContent } = useContent();
+  const { ssoEnabled } = useStores().config.getConfig();
 
   const contactUsPreLink = getContent(x => x.errors.unauthenticated.contactUsPreLinkContent);
   const contactUsLinkText = getContent(x => x.errors.unauthenticated.contactUsLinkTextContent);
@@ -23,7 +24,7 @@ export function UnauthenticatedError() {
         </SimpleString>
       </Section>
 
-      {isAccDevOrDemo || isLocalDevelopment ? <UserChanger noSearch /> : null}
+      {!ssoEnabled && <UserChanger />}
     </Page>
   );
 }

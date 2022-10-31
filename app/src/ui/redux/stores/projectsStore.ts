@@ -11,8 +11,13 @@ export class ProjectsStore extends StoreBase {
   constructor(getState: () => RootState, dispatch: (action: RootActionsOrThunk) => void) {
     super(getState, dispatch);
   }
+
   public getProjects() {
     return this.getData("projects", storeKeys.getProjectsKey(), apiClient.projects.getAll);
+  }
+
+  public getProjectsAsDeveloper() {
+    return this.getData("projects", storeKeys.getProjectsKeyAsDeveloper(), apiClient.projects.getAllAsDeveloper);
   }
 
   public getProjectsFilter(searchString?: string | null): Pending<ProjectDto[]> {

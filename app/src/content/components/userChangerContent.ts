@@ -14,5 +14,7 @@ export class UserChangerContent extends ContentPageBase {
   public readonly contactListEmpty = this.getContent("components.userChanger.contact-list-empty");
   public readonly changeUserMessage = this.getContent("components.userChanger.change-user-message");
   public readonly resetUserMessage = this.getContent("components.userChanger.reset-user-message");
-  public readonly invalidUserMessage = this.getContent("components.userChanger.invalid-user-message");
+  public readonly tableHeaderMonitoringOfficer = this.getContent("components.userChanger.tableHeaderMonitoringOfficer");
+  public readonly tableHeaderProjectManager = this.getContent("components.userChanger.tableHeaderProjectManager");
+  public readonly tableHeaderFinancialContact = this.getContent("components.userChanger.tableHeaderFinancialContact");
 }
