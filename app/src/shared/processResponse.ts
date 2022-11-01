@@ -13,6 +13,11 @@ export const processDto = <T>(data: T): T => {
     return data.map(x => processDto(x));
   }
 
+  // Do not process JavaScript Dates.
+  if (data instanceof Date) {
+    return data;
+  }
+
   if (isObjectType(data)) {
     const newObj: AnyObject = {};
 
