@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Info /> @renders with ReactNode contents 1`] = `
+<div>
+  <details
+    class="govuk-details"
+    data-module="govuk-details"
+  >
+    <summary
+      class="govuk-details__summary"
+    >
+      <span
+        class="govuk-details__summary-text"
+      >
+        Slimming 
+        <b>
+          world
+        </b>
+      </span>
+    </summary>
+    <div
+      class="govuk-details__text"
+    >
+      <h1>
+        Sus Individuals
+      </h1>
+      <ul>
+        <li>
+          Red
+        </li>
+        <li>
+          Orange
+        </li>
+      </ul>
+    </div>
+  </details>
+</div>
+`;
+
+exports[`<Info /> @renders with string contents 1`] = `
+<div>
+  <details
+    class="govuk-details"
+    data-module="govuk-details"
+  >
+    <summary
+      class="govuk-details__summary"
+    >
+      <span
+        class="govuk-details__summary-text"
+      >
+        Slimming World
+      </span>
+    </summary>
+    <div
+      class="govuk-details__text"
+    >
+      Did you know that apples are mostly red?
+    </div>
+  </details>
+</div>
+`;
