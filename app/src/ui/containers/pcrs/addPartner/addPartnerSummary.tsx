@@ -4,8 +4,9 @@ import { PcrSummaryProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { AddPartnerStepNames } from "@ui/containers/pcrs/addPartner/addPartnerWorkflow";
-import { DocumentDescription, PCROrganisationType, PCRProjectRole } from "@framework/constants";
+import { DocumentDescription, PCROrganisationType, PCRProjectRole, CostCategoryType } from "@framework/constants";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
+import { sumBy } from "@framework/util";
 import * as ACC from "../../../components";
 
 interface InnerProps {
@@ -261,7 +262,9 @@ class SummaryComponent extends React.Component<
     isIndustrial: boolean,
   ) {
     const totalProjectCosts = pcrItem.spendProfile.costs.reduce((t, v) => t + (v.value || 0), 0);
-    const nonFundedCosts = totalProjectCosts - (pcrItem.totalOtherFunding || 0);
+    const totalOtherFunding = this.calculateTotalOtherFunding(pcrItem?.spendProfile?.funds ?? []);
+
+    const nonFundedCosts = totalProjectCosts - (totalOtherFunding || 0);
     const fundingSought = (nonFundedCosts * (pcrItem.awardRate || 0)) / 100 || 0;
     const partnerContribution = nonFundedCosts - fundingSought;
 
@@ -327,7 +330,7 @@ class SummaryComponent extends React.Component<
           {pcrItem.hasOtherFunding && (
             <ACC.SummaryListItem
               label={x => x.pcrAddPartnerSummary.labels.amountOfOtherFundingHeading}
-              content={<ACC.Renderers.Currency value={pcrItem.totalOtherFunding} />}
+              content={<ACC.Renderers.Currency value={totalOtherFunding} />}
               qa="amountOfOtherFunding"
               action={this.props.getEditLink("otherFundingSourcesStep", null)}
             />
@@ -360,6 +363,20 @@ class SummaryComponent extends React.Component<
       <ACC.DocumentList documents={docs} qa="documents" />
     ) : (
       <ACC.Content value={x => x.pcrAddPartnerSummary.documentMessages.documentsNotApplicable} />
+    );
+  }
+
+  /**
+   * Calculates total other funding from spend profile funds to avoid over-complicated caching issues
+   */
+  private calculateTotalOtherFunding(funds: PCRItemForPartnerAdditionDto["spendProfile"]["funds"]) {
+    return sumBy(
+      funds.filter(
+        x =>
+          x.costCategory === CostCategoryType.Other_Public_Sector_Funding ||
+          x.costCategory === CostCategoryType.Other_Funding,
+      ),
+      fund => fund.value || 0,
     );
   }
 }
