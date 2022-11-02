@@ -32,6 +32,7 @@ export class VirementPartnerCostsUpdateHandler extends StandardFormHandlerBase<
     }
 
     virementDto.partners.forEach(partner => {
+      // Check if the partnerId is in the submitted body.
       if (!body.hasOwnProperty(partner.partnerId)) return;
 
       const val = parseFloat(body[partner.partnerId]);
