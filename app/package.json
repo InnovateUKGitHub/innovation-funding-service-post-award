@@ -186,7 +186,7 @@
     "patch-package": "^6.4.7",
     "prettier": "2.7.1",
     "relay-compiler": "^14.1.0",
-    "rimraf": "^2.6.2",
+    "rimraf": "^3.0.2",
     "sass": "^1.39.2",
     "terser": "^5.15.1",
     "ts-jest": "^28.0.5",
