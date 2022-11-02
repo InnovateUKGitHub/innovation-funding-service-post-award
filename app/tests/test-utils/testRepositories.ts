@@ -749,11 +749,18 @@ class PCRTestRepository
     const id = `ProjectChangeRequest${this.Items.length}`;
     const items = this.mapItemsForCreate(id, projectChangeRequest, projectChangeRequest.items);
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const insertPayload: Entities.ProjectChangeRequestEntity = { id, items, ...projectChangeRequest };
-
-    await super.insertOne(insertPayload);
+    await super.insertOne({
+      ...projectChangeRequest,
+      id,
+      items,
+      number: 0,
+      started: new Date("2009-08-07"),
+      updated: new Date("2012-02-12"),
+      statusName: "",
+      reasoningStatusName: "",
+      reasoning: "",
+      comments: "",
+    });
 
     return id;
   }

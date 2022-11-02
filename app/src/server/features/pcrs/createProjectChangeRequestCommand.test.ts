@@ -200,7 +200,7 @@ describe("Create PCR Command", () => {
     const newPCR = context.repositories.projectChangeRequests.Items.find(x => x.id === id);
     expect(newPCR).toBeDefined();
     expect(newPCR?.items).toHaveLength(1);
-    expect(newPCR).toEqual({
+    expect(newPCR).toMatchObject({
       id,
       projectId: project.Id,
       status: PCRStatus.Draft,
