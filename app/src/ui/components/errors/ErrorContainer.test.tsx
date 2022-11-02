@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 
-import { TestBed, TestBedContent } from "@shared/TestBed";
+import { TestBed, TestBedContent, TestBedStore } from "@shared/TestBed";
 import { ErrorContainer, ErrorContainerProps } from "@ui/components/errors";
 import { ErrorCode } from "@framework/constants";
 
@@ -39,9 +39,17 @@ describe("<ErrorContainer />", () => {
       },
     };
 
+    const testStore = {
+      projects: {
+        getProjectsAsDeveloper() {
+          return [];
+        },
+      },
+    };
+
     const setup = (props: ErrorContainerProps) =>
       render(
-        <TestBed content={stubContent as unknown as TestBedContent}>
+        <TestBed content={stubContent as unknown as TestBedContent} stores={testStore as unknown as TestBedStore}>
           <ErrorContainer {...props} />
         </TestBed>,
       );

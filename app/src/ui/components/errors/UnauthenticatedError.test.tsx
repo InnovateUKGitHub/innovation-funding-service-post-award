@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 
-import { TestBed, TestBedContent } from "@shared/TestBed";
+import { TestBed, TestBedContent, TestBedStore } from "@shared/TestBed";
 import { UnauthenticatedError } from "@ui/components/errors";
 
 describe("<UnauthenticatedError />", () => {
@@ -31,9 +31,17 @@ describe("<UnauthenticatedError />", () => {
       },
     };
 
+    const testStore = {
+      projects: {
+        getProjectsAsDeveloper() {
+          return [];
+        },
+      },
+    };
+
     const setup = () =>
       render(
-        <TestBed content={stubContent as unknown as TestBedContent}>
+        <TestBed content={stubContent as unknown as TestBedContent} stores={testStore as unknown as TestBedStore}>
           <UnauthenticatedError />
         </TestBed>,
       );
