@@ -156,7 +156,7 @@ let permittedFileTypes: IAppOptions["permittedFileTypes"] = process.env.PERMITTE
   : [];
 
 const pdfTypes = ["pdf", "xps"];
-const textTypes = ["doc", "docx", "rdf", "txt", "csv", "odt"];
+const textTypes = ["doc", "docx", "rtf", "txt", "csv", "odt"];
 const presentationTypes = ["ppt", "pptx", "odp"];
 const spreadsheetTypes = ["xls", "xlsx", "ods"];
 const imageTypes = ["jpg", "jpeg", "png", "odg"];
