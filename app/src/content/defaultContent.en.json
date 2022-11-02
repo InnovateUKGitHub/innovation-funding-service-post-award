@@ -53,7 +53,7 @@
       "noFilesNumberLimit": "There is no limit to the number of files you can upload in total.",
       "fileTypesUpload": "You can upload these file types:",
       "pdfFiles": "PDF (pdf, xps)",
-      "textFiles": "text (doc, docx, rdf, txt, csv, odt)",
+      "textFiles": "text (doc, docx, rtf, txt, csv, odt)",
       "presentationFiles": "presentation (ppt, pptx, odp)",
       "spreadsheetFiles": "spreadsheet (xls, xlsx, ods)",
       "availableImageExtensions": "images (jpg, jpeg, png)",
