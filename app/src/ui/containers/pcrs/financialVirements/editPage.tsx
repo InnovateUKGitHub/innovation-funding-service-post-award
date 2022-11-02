@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { BaseProps, ContainerBase, defineRoute } from "@ui/containers/containerBase";
+import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { IEditorStore, useStores } from "@ui/redux";
 import { Pending } from "@shared/pending";
 import * as ACC from "@ui/components";
@@ -12,6 +12,7 @@ import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { useContent } from "@ui/hooks";
 import { getAuthRoles } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
+import { PCRPrepareItemRoute } from "../pcrItemWorkflow";
 
 export function useEditPageContent() {
   const { getContent } = useContent();
@@ -49,220 +50,106 @@ export interface VirementCostsParams {
   itemId: string;
 }
 
-interface Props {
+interface EditPageBaseProps extends VirementCostsParams {
+  onChange: (saving: boolean, dto: FinancialVirementDto) => void;
+}
+
+interface EditPagePendingProps extends EditPageBaseProps {
   project: Pending<ProjectDto>;
   partner: Pending<PartnerDto>;
   costCategories: Pending<CostCategoryDto[]>;
   editor: Pending<IEditorStore<FinancialVirementDto, FinancialVirementDtoValidator>>;
-  content: Record<string, string>;
-  onChange: (saving: boolean, dto: FinancialVirementDto) => void;
 }
 
-class EditPageComponent extends ContainerBase<VirementCostsParams, Props, {}> {
-  render() {
-    const combined = Pending.combine({
-      project: this.props.project,
-      partner: this.props.partner,
-      costCategories: this.props.costCategories,
-      editor: this.props.editor,
-    });
+interface EditPageProps extends EditPageBaseProps {
+  project: ProjectDto;
+  partner: PartnerDto;
+  costCategories: CostCategoryDto[];
+  editor: IEditorStore<FinancialVirementDto, FinancialVirementDtoValidator>;
+}
 
-    return (
-      <ACC.PageLoader
-        pending={combined}
-        render={data => this.renderPage(data.project, data.partner, data.costCategories, data.editor)}
-      />
-    );
-  }
+interface EditPageInputRowProps {
+  costCategory: CostCategoryDto;
+  virement: CostCategoryVirementDto;
+  disabled: boolean;
+  validation: CostCategoryVirementDtoValidator | null;
+  updateValue: (costCategory: CostCategoryDto, value: number | null) => void;
+}
 
-  private renderPage(
-    project: ProjectDto,
-    partner: PartnerDto,
-    costCategories: CostCategoryDto[],
-    editor: IEditorStore<FinancialVirementDto, FinancialVirementDtoValidator>,
-  ) {
-    const currentPartnerVirement = editor.data.partners.find(x => x.partnerId === this.props.partnerId);
-    if (!currentPartnerVirement)
-      throw new Error(`Cannot find current partner virement matching ${this.props.partnerId}`);
-    const partnerVirementsValidator = editor.validator.partners.results.find(
-      x => x.model.partnerId === this.props.partnerId,
-    );
+/**
+ * A loading page, which waits for essential data to be loaded first before displaying the edit page.
+ *
+ * @returns A loading screen for the edit page
+ */
+const EditPageLoader = ({ project, partner, costCategories, editor, ...props }: EditPagePendingProps) => {
+  const combined = Pending.combine({
+    project: project,
+    partner: partner,
+    costCategories: costCategories,
+    editor: editor,
+  });
 
-    const costCategoriesWithVirement = costCategories.map(x => ({
-      costCategory: x,
-      virement:
-        currentPartnerVirement.virements.find(y => y.costCategoryId === x.id) ||
-        createDto<CostCategoryVirementDto>({
-          costCategoryId: x.id,
-          costCategoryName: x.name,
-        }),
-    }));
-    const validation = costCategories.map(
-      x => partnerVirementsValidator?.virements.results.find(y => y.model.costCategoryId === x.id) || null,
-    );
-    const VirementForm = ACC.TypedForm<FinancialVirementDto>();
-    const VirementTable = ACC.TypedTable<typeof costCategoriesWithVirement[0]>();
-    const SummaryTable = ACC.TypedTable<FinancialVirementDto>();
+  return <ACC.PageLoader pending={combined} render={data => <EditPage {...props} {...data} />} />;
+};
 
-    const { isPm } = getAuthRoles(project.roles);
-    const { isKTP } = checkProjectCompetition(project.competitionType);
-    const displayIntroMessage: boolean = isKTP && isPm;
+/**
+ * A page for editing Loans virements for a PCR.
+ *
+ * @returns The Edit Page
+ */
+const EditPage = ({
+  editor,
+  costCategories,
+  partner,
+  partnerId,
+  project,
+  pcrId,
+  projectId,
+  itemId,
+  onChange,
+}: EditPageProps) => {
+  const content = useEditPageContent();
+  const currentPartnerVirement = editor.data.partners.find(x => x.partnerId === partnerId);
+  if (!currentPartnerVirement) throw new Error(`Cannot find current partner virement matching ${partnerId}`);
+  const partnerVirementsValidator = editor.validator.partners.results.find(x => x.model.partnerId === partnerId);
 
-    return (
-      <ACC.Page
-        backLink={this.getBackLink()}
-        pageTitle={<ACC.Projects.Title {...project} />}
-        error={editor.error}
-        validator={partnerVirementsValidator}
-      >
-        {displayIntroMessage && (
-          <>
-            <ACC.Renderers.SimpleString>{this.props.content.introMessage}</ACC.Renderers.SimpleString>
-            <ACC.Renderers.SimpleString>{this.props.content.virementsMessage}</ACC.Renderers.SimpleString>
-            <ACC.Renderers.SimpleString>{this.props.content.requestsMessage}</ACC.Renderers.SimpleString>
-          </>
-        )}
+  const costCategoriesWithVirement = costCategories.map(x => ({
+    costCategory: x,
+    virement:
+      currentPartnerVirement.virements.find(y => y.costCategoryId === x.id) ||
+      createDto<CostCategoryVirementDto>({
+        costCategoryId: x.id,
+        costCategoryName: x.name,
+      }),
+  }));
+  const validation = costCategories.map(
+    x => partnerVirementsValidator?.virements.results.find(y => y.model.costCategoryId === x.id) || null,
+  );
+  const VirementForm = ACC.TypedForm<FinancialVirementDto>();
+  const VirementTable = ACC.TypedTable<typeof costCategoriesWithVirement[0]>();
+  const SummaryTable = ACC.TypedTable<FinancialVirementDto>();
 
-        <ACC.Section title={partner.name}>
-          <VirementForm.Form
-            editor={editor}
-            onChange={dto => this.props.onChange(false, dto)}
-            onSubmit={() => this.props.onChange(true, editor.data)}
-            qa="virementForm"
-          >
-            <VirementForm.Fieldset>
-              <VirementTable.Table
-                qa="partnerVirements"
-                data={costCategoriesWithVirement}
-                validationResult={validation}
-              >
-                <VirementTable.String
-                  qa="costCategory"
-                  header={this.props.content.costCategoryName}
-                  value={x => x.costCategory.name}
-                  footer={this.props.content.partnerTotals}
-                />
-                <VirementTable.Currency
-                  qa="originalEligibleCosts"
-                  header={this.props.content.costCategoryOriginalEligibleCosts}
-                  value={x => x.virement.originalEligibleCosts}
-                  footer={<ACC.Renderers.Currency value={currentPartnerVirement.originalEligibleCosts} />}
-                />
-                <VirementTable.Currency
-                  qa="originalCostsClaimed"
-                  header={this.props.content.costCategoryCostsClaimed}
-                  value={x => x.virement.costsClaimedToDate}
-                  footer={<ACC.Renderers.Currency value={currentPartnerVirement.costsClaimedToDate} />}
-                />
-                <VirementTable.Custom
-                  qa="newEligibleCosts"
-                  header={this.props.content.costCategoryNewEligibleCosts}
-                  value={(x, i) =>
-                    this.renderInput(
-                      partner,
-                      x.costCategory,
-                      x.virement,
-                      editor.status === EditorStatus.Saving,
-                      validation[i.row],
-                    )
-                  }
-                  footer={<ACC.Renderers.Currency value={currentPartnerVirement.newEligibleCosts} />}
-                  classSuffix={"numeric"}
-                />
-                <VirementTable.Currency
-                  qa="difference"
-                  header={this.props.content.costCategoryDifferenceCosts}
-                  value={x => roundCurrency(x.virement.newEligibleCosts - x.virement.originalEligibleCosts)}
-                />
-              </VirementTable.Table>
-            </VirementForm.Fieldset>
-            <VirementForm.Fieldset heading={this.props.content.summaryTitle}>
-              <SummaryTable.Table qa="summary-table" data={[editor.data]}>
-                <SummaryTable.Currency
-                  qa="originalEligibleCosts"
-                  header={this.props.content.projectOriginalEligibleCosts}
-                  value={x => x.originalEligibleCosts}
-                />
-                <SummaryTable.Currency
-                  qa="newEligibleCosts"
-                  header={this.props.content.projectNewEligibleCosts}
-                  value={x => x.newEligibleCosts}
-                />
-                <SummaryTable.Currency
-                  qa="differenceEligibleCosts"
-                  header={this.props.content.projectDifferenceCosts}
-                  value={x => roundCurrency(x.newEligibleCosts - x.originalEligibleCosts)}
-                />
-                <SummaryTable.Currency
-                  qa="originalRemainingGrant"
-                  header={this.props.content.projectOriginalRemainingGrant}
-                  value={x => x.originalRemainingGrant}
-                />
-                <SummaryTable.Currency
-                  qa="newRemainingGrant"
-                  header={this.props.content.projectNewRemainingGrant}
-                  value={x => x.newRemainingGrant}
-                />
-                <SummaryTable.Currency
-                  qa="differenceRemainingGrant"
-                  header={this.props.content.projectDifferenceGrant}
-                  value={x => roundCurrency(x.newRemainingGrant - x.originalRemainingGrant)}
-                />
-              </SummaryTable.Table>
-            </VirementForm.Fieldset>
-            <VirementForm.Fieldset>
-              <VirementForm.Submit>{this.props.content.saveButton}</VirementForm.Submit>
-            </VirementForm.Fieldset>
-          </VirementForm.Form>
-        </ACC.Section>
-      </ACC.Page>
-    );
-  }
+  const { isPm } = getAuthRoles(project.roles);
+  const { isKTP } = checkProjectCompetition(project.competitionType);
+  const displayIntroMessage: boolean = isKTP && isPm;
 
-  private renderInput(
-    partner: PartnerDto,
-    costCategory: CostCategoryDto,
-    virement: CostCategoryVirementDto,
-    disabled: boolean,
-    validation: CostCategoryVirementDtoValidator | null,
-  ) {
-    return (
-      <>
-        <ACC.ValidationError
-          overrideMessage={`Invalid cost for ${costCategory.name}`}
-          error={validation && validation.newPartnerEligibleCosts}
-        />
-        {costCategory.isCalculated ? <ACC.Renderers.Currency value={virement.newEligibleCosts} /> : null}
-        {!costCategory.isCalculated ? (
-          <ACC.Inputs.NumberInput
-            name={virement.costCategoryId}
-            value={virement.newEligibleCosts}
-            onChange={val => this.updateValue(partner, costCategory, val)}
-            width="full"
-            ariaLabel={virement.costCategoryName}
-            disabled={disabled}
-          />
-        ) : null}
-      </>
-    );
-  }
-
-  private updateValue({ overheadRate, id }: PartnerDto, costCategory: CostCategoryDto, value: number | null) {
-    const projectCosts = this.props.editor.data?.data;
+  const updateValue = (costCategory: CostCategoryDto, value: number | null) => {
+    const projectCosts = editor.data;
     if (!projectCosts) throw new Error("Cannot find projectCosts");
-    const currentPartner = projectCosts.partners.find(x => x.partnerId === id);
-    if (!currentPartner) throw new Error(`Cannot find current partner matching ${id}`);
+    const currentPartner = projectCosts.partners.find(x => x.partnerId === partner.id);
+    if (!currentPartner) throw new Error(`Cannot find current partner matching ${partner.id}`);
     const costCategoryVirements = currentPartner.virements.find(x => x.costCategoryId === costCategory.id);
     if (!costCategoryVirements) throw new Error(`Cannot find cost category virements matching ${costCategory.id}`);
     costCategoryVirements.newEligibleCosts = value ?? 0;
 
-    if (overheadRate) {
-      const calculatedCostCategoryIds =
-        this.props.costCategories.then(x => x.filter(y => y.isCalculated).map(y => y.id)).data || [];
+    if (partner.overheadRate) {
+      const calculatedCostCategoryIds = costCategories.filter(y => y.isCalculated).map(y => y.id);
       const related = currentPartner.virements.find(v => calculatedCostCategoryIds.indexOf(v.costCategoryId) !== -1);
       if (related) {
         // prevent newEligibleCosts from being calculated by SF
-        related.newEligibleCosts = roundCurrency((costCategoryVirements.newEligibleCosts || 0) * (overheadRate / 100));
+        related.newEligibleCosts = roundCurrency(
+          (costCategoryVirements.newEligibleCosts || 0) * (partner.overheadRate / 100),
+        );
       }
     }
 
@@ -277,32 +164,167 @@ class EditPageComponent extends ContainerBase<VirementCostsParams, Props, {}> {
     projectCosts.newRemainingGrant = roundCurrency(
       projectCosts.partners.reduce((total, p) => total + p.newRemainingGrant, 0),
     );
-    this.props.onChange(false, projectCosts);
-  }
+    onChange(false, projectCosts);
+  };
 
-  private getBackLink() {
-    const params = {
-      projectId: this.props.projectId,
-      pcrId: this.props.pcrId,
-      itemId: this.props.itemId,
-    };
+  return (
+    <ACC.Page
+      backLink={
+        <ACC.BackLink
+          route={PCRPrepareItemRoute.getLink({
+            projectId: projectId,
+            pcrId: pcrId,
+            itemId: itemId,
+          })}
+        >
+          <ACC.Content value={x => x.financialVirementEdit.labels.backToSummary} />
+        </ACC.BackLink>
+      }
+      pageTitle={<ACC.Projects.Title {...project} />}
+      error={editor.error}
+      validator={partnerVirementsValidator}
+    >
+      {displayIntroMessage && (
+        <>
+          <ACC.Renderers.SimpleString>{content.introMessage}</ACC.Renderers.SimpleString>
+          <ACC.Renderers.SimpleString>{content.virementsMessage}</ACC.Renderers.SimpleString>
+          <ACC.Renderers.SimpleString>{content.requestsMessage}</ACC.Renderers.SimpleString>
+        </>
+      )}
 
-    return (
-      <ACC.BackLink route={this.props.routes.pcrPrepareItem.getLink(params)}>
-        <ACC.Content value={x => x.financialVirementEdit.labels.backToSummary} />
-      </ACC.BackLink>
-    );
-  }
-}
+      <ACC.Section title={partner.name}>
+        <VirementForm.Form
+          editor={editor}
+          onChange={dto => onChange(false, dto)}
+          onSubmit={() => onChange(true, editor.data)}
+          qa="virementForm"
+        >
+          <VirementForm.Fieldset>
+            <VirementTable.Table qa="partnerVirements" data={costCategoriesWithVirement} validationResult={validation}>
+              <VirementTable.String
+                qa="costCategory"
+                header={content.costCategoryName}
+                value={x => x.costCategory.name}
+                footer={content.partnerTotals}
+              />
+              <VirementTable.Currency
+                qa="originalEligibleCosts"
+                header={content.costCategoryOriginalEligibleCosts}
+                value={x => x.virement.originalEligibleCosts}
+                footer={<ACC.Renderers.Currency value={currentPartnerVirement.originalEligibleCosts} />}
+              />
+              <VirementTable.Currency
+                qa="originalCostsClaimed"
+                header={content.costCategoryCostsClaimed}
+                value={x => x.virement.costsClaimedToDate}
+                footer={<ACC.Renderers.Currency value={currentPartnerVirement.costsClaimedToDate} />}
+              />
+              <VirementTable.Custom
+                qa="newEligibleCosts"
+                header={content.costCategoryNewEligibleCosts}
+                value={(x, i) => (
+                  <EditPageInput
+                    key={i.row}
+                    costCategory={x.costCategory}
+                    virement={x.virement}
+                    disabled={editor.status === EditorStatus.Saving}
+                    validation={validation[i.row]}
+                    updateValue={updateValue}
+                  />
+                )}
+                footer={<ACC.Renderers.Currency value={currentPartnerVirement.newEligibleCosts} />}
+                classSuffix={"numeric"}
+              />
+              <VirementTable.Currency
+                qa="difference"
+                header={content.costCategoryDifferenceCosts}
+                value={x => roundCurrency(x.virement.newEligibleCosts - x.virement.originalEligibleCosts)}
+              />
+            </VirementTable.Table>
+          </VirementForm.Fieldset>
+          <VirementForm.Fieldset heading={content.summaryTitle}>
+            <SummaryTable.Table qa="summary-table" data={[editor.data]}>
+              <SummaryTable.Currency
+                qa="originalEligibleCosts"
+                header={content.projectOriginalEligibleCosts}
+                value={x => x.originalEligibleCosts}
+              />
+              <SummaryTable.Currency
+                qa="newEligibleCosts"
+                header={content.projectNewEligibleCosts}
+                value={x => x.newEligibleCosts}
+              />
+              <SummaryTable.Currency
+                qa="differenceEligibleCosts"
+                header={content.projectDifferenceCosts}
+                value={x => roundCurrency(x.newEligibleCosts - x.originalEligibleCosts)}
+              />
+              <SummaryTable.Currency
+                qa="originalRemainingGrant"
+                header={content.projectOriginalRemainingGrant}
+                value={x => x.originalRemainingGrant}
+              />
+              <SummaryTable.Currency
+                qa="newRemainingGrant"
+                header={content.projectNewRemainingGrant}
+                value={x => x.newRemainingGrant}
+              />
+              <SummaryTable.Currency
+                qa="differenceRemainingGrant"
+                header={content.projectDifferenceGrant}
+                value={x => roundCurrency(x.newRemainingGrant - x.originalRemainingGrant)}
+              />
+            </SummaryTable.Table>
+          </VirementForm.Fieldset>
+          <VirementForm.Fieldset>
+            <VirementForm.Submit>{content.saveButton}</VirementForm.Submit>
+          </VirementForm.Fieldset>
+        </VirementForm.Form>
+      </ACC.Section>
+    </ACC.Page>
+  );
+};
 
+/**
+ * An input element of <EditPage />, which either displays an input field, or a rendered text value,
+ * depending on whether the cost category is automatically calculated or not.
+ *
+ * @returns An input element of the <EditPage /> table.
+ */
+const EditPageInput = ({ costCategory, validation, virement, disabled, updateValue }: EditPageInputRowProps) => {
+  return (
+    <>
+      <ACC.ValidationError
+        overrideMessage={`Invalid cost for ${costCategory.name}`}
+        error={validation && validation.newPartnerEligibleCosts}
+      />
+      {costCategory.isCalculated ? (
+        <ACC.Renderers.Currency value={virement.newEligibleCosts} />
+      ) : (
+        <ACC.Inputs.NumberInput
+          name={virement.costCategoryId}
+          value={virement.newEligibleCosts}
+          onChange={val => updateValue(costCategory, val)}
+          width="full"
+          ariaLabel={virement.costCategoryName}
+          disabled={disabled}
+        />
+      )}
+    </>
+  );
+};
+
+/**
+ * A financial virement editing page for Loans PCRs
+ *
+ * @returns A wrapper for <EditPage />
+ */
 const Container = (props: VirementCostsParams & BaseProps) => {
   const { projects, partners, costCategories, financialVirements } = useStores();
-  const editPageContent = useEditPageContent();
   const navigate = useNavigate();
 
   return (
-    <EditPageComponent
-      content={editPageContent}
+    <EditPageLoader
       project={projects.getById(props.projectId)}
       partner={partners.getById(props.partnerId)}
       costCategories={costCategories.getAllForPartner(props.partnerId)}
