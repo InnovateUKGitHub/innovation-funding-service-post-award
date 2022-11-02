@@ -1,13 +1,13 @@
-/* eslint-disable @typescript-eslint/naming-convention, @typescript-eslint/no-var-requires */
+// @ts-check
 /** @typedef {import('child_process').ChildProcess} ChildProcess */
 const { spawn, spawnSync } = require("child_process");
 const fetch = require("isomorphic-fetch");
 
 class Restarter {
   /**
-   * @type {ChildProcess}
+   * @type {ChildProcess | null}
    */
-  serverProcess;
+  serverProcess = null;
 
   /**
    * @type {string}
@@ -26,7 +26,9 @@ class Restarter {
     // createServer() itself has a hook to re-create a new server.
     if (this.serverProcess) {
       console.log("Killing server!");
-      fetch(`${this.url}/dev/reload`);
+      fetch(`${this.url}/dev/reload`).catch(() => {
+        console.log("Could not send reload signal - is the server running?");
+      });
     }
   }
 
