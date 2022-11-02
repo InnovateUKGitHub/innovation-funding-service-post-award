@@ -54,6 +54,10 @@ class ProjectsTestRepository
   getAll() {
     return super.getAll();
   }
+
+  getProjectsAsDeveloper() {
+    return super.getAll();
+  }
 }
 
 class PartnerTestRepository extends TestRepository<Entities.Partner> implements Repositories.IPartnerRepository {
