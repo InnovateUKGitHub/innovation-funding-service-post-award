@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import classNames from "classnames";
-import { FormInputWidths, useDebounce, useUpdateStateValueOnProps } from "./input-utils";
+import { FormInputWidths, useDebounce, useUpdateStateValueOnPropsChange } from "./input-utils";
 import { InputProps } from "./common";
 
 export interface TextInputProps extends InputProps<string> {
@@ -15,7 +15,7 @@ export const TextInput = (props: TextInputProps) => {
   const [state, setState] = useState({ value: props.value ?? "" });
   const debouncedOnChange = useDebounce(props.onChange, props.debounce);
 
-  useUpdateStateValueOnProps(props.value ?? "", setState);
+  useUpdateStateValueOnPropsChange(props.value ?? "", setState);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement> | React.KeyboardEvent<HTMLInputElement>,

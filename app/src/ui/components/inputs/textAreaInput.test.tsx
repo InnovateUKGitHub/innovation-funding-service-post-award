@@ -81,6 +81,21 @@ describe("TextAreaInput", () => {
 
       expect(textarea).toHaveAttribute("maxLength", `${stubMaxLength}`);
     });
+
+    test("with value prop changes", () => {
+      const initialStubValue = "Jo HaSeul";
+      const subsequentStubValue = "Microsoft Teams";
+
+      const { getByText, rerender } = setup({ value: initialStubValue });
+
+      const expectedInitialElementWithText = getByText(initialStubValue);
+      expect(expectedInitialElementWithText).toBeInTheDocument();
+
+      rerender(<TextAreaInput {...defaultProps} value={subsequentStubValue} />);
+
+      const expectedSubsequentElementWithText = getByText(subsequentStubValue);
+      expect(expectedSubsequentElementWithText).toBeInTheDocument();
+    });
   });
 
   describe("@events", () => {
