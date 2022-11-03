@@ -2,7 +2,7 @@ import { renderHook, render, screen } from "@testing-library/react";
 import { noop } from "@ui/helpers/noop";
 import { useState } from "react";
 
-import { useDebounce, useUpdateStateValueOnProps } from "./input-utils";
+import { useDebounce, useUpdateStateValueOnPropsChange } from "./input-utils";
 
 describe("useDebounce", () => {
   afterEach(jest.clearAllMocks);
@@ -58,7 +58,7 @@ describe("useUpdateStateValueFromProps", () => {
 
   const TestComponent = ({ value }: { value: number }) => {
     const [state, setState] = useState<{ value: number }>({ value });
-    useUpdateStateValueOnProps(value, setState);
+    useUpdateStateValueOnPropsChange(value, setState);
     return <h1 data-qa="hook-test">{state.value}</h1>;
   };
 

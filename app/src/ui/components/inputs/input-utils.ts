@@ -47,7 +47,7 @@ export function useDebounce<T extends BasicFn>(
 /**
  * Hook will update the state value property when props change (not on initial mount)
  */
-export function useUpdateStateValueOnProps<S>(value: S, setState: Dispatch<SetStateAction<{ value: S }>>) {
+export function useUpdateStateValueOnPropsChange<S>(value: S, setState: Dispatch<SetStateAction<{ value: S }>>) {
   useDidUpdate(() => {
     setState(s => ({ ...s, value }));
   }, [value]);
