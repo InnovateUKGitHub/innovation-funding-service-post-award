@@ -10,6 +10,7 @@ export interface ISalesforceClaimDetails {
     Id: string;
     Acc_ProjectId__c: string;
   };
+  Acc_CreatedByMe__c: boolean;
   Acc_CostCategory__c: string;
   Acc_PeriodCostCategoryTotal__c: number;
   Acc_ProjectPeriodNumber__c: number;
@@ -58,6 +59,7 @@ export class ClaimDetailsRepository
     "Acc_ProjectPeriodStartDate__c",
     "Acc_ProjectPeriodEndDate__c",
     "Acc_ReasonForDifference__c",
+    "Acc_CreatedByMe__c",
   ];
 
   getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {
