@@ -15,8 +15,8 @@ import { diffAsPercentage, sumBy } from "@framework/util/numberHelper";
 import { Pending } from "@shared/pending";
 import { range } from "@shared/range";
 import * as ACC from "@ui/components";
-import { UL } from "@ui/components";
 import { AwardRateOverridesMessage } from "@ui/components/claims/AwardRateOverridesMessage";
+import { createTypedForm, UL } from "@ui/components";
 import { EditorStatus } from "@ui/constants/enums";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
 import { MountedHoc, useMounted } from "@ui/features";
@@ -57,7 +57,14 @@ export interface EditClaimLineItemsCallbacks {
   onUpdate: (saving: boolean, dto: ClaimDetailsDto, goToUpload?: boolean) => void;
 }
 
-const LineItemForm = ACC.createTypedForm<ClaimDetailsDto>();
+const LineItemForm = createTypedForm<ClaimDetailsDto>();
+const DeleteByEnteringZero = () => (
+  <ACC.ValidationMessage
+    messageType="info"
+    qa="claim-warning"
+    message={<ACC.Content value={x => x.pages.editClaimLineItems.setToZeroToRemove} />}
+  />
+);
 
 export class EditClaimLineItemsComponent extends ContainerBaseWithState<
   EditClaimDetailsParams,
@@ -103,6 +110,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
       periodId: this.props.periodId,
     });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId) || ({} as CostCategoryDto);
+    const userIsAllowedToDelete = claimDetails.createdByMe;
 
     const { isKTP, isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
     const editClaimLineItemGuidance = <ACC.Content value={x => x.claimsMessages.editClaimLineItemGuidance} />;
@@ -138,6 +146,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
           isNonFec={project.isNonFec}
         />
         {this.renderNegativeClaimWarning(editor.data)}
+        {!userIsAllowedToDelete && <DeleteByEnteringZero />}
 
         <>
           {isCombinationOfSBRI ? (
@@ -183,7 +192,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
                 editor,
                 project.competitionType,
               )
-            : this.renderTable(editor, forecastDetail, documents, project.competitionType)}
+            : this.renderTable(editor, forecastDetail, documents, project.competitionType, userIsAllowedToDelete)}
         </ACC.Section>
       </ACC.Page>
     );
@@ -261,6 +270,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     forecastDetail: ForecastDetailsDTO,
     documents: DocumentSummaryDto[],
     competitionType: string,
+    shouldShowDeleteButton: boolean,
   ) {
     const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
     const validationResults = editor.validator.items.results;
@@ -298,7 +308,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
               qa="cost-last-updated"
               value={x => x.lastModifiedDate}
             />
-            {this.state.showAddRemove ? (
+            {this.state.showAddRemove && shouldShowDeleteButton ? (
               <LineItemTable.Custom
                 header={x => x.pages.editClaimLineItems.headerAction}
                 hideHeader
