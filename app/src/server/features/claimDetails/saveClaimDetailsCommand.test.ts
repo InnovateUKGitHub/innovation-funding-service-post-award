@@ -23,7 +23,7 @@ const createNewDto = (partner: Partner, periodId: number, costCategory: CostCate
   costCategoryId: costCategory.id,
   value: 0,
   periodId,
-  createdByMe: true,
+  isAuthor: true,
   periodStart: new Date(),
   periodEnd: new Date(),
 });
