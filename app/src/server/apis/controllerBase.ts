@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-/* global Express */
 import mimeTypes from "mime-types";
 import express, { Request, Response } from "express";
 

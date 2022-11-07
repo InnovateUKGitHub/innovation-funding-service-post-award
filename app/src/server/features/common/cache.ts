@@ -1,4 +1,3 @@
-/* global NodeJS */
 import { ICache } from "@framework/types";
 
 export class Cache<T> implements ICache<T> {
