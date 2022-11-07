@@ -1,4 +1,3 @@
-/** global window */
 import { Results } from "./results";
 
 interface ResultsInternal {
@@ -16,6 +15,9 @@ interface ResultsInternal {
 let hasMounted = false;
 let keyVal = 0;
 
+/**
+ * returns incremented key
+ */
 function getKey() {
   return `Val:${++keyVal}`;
 }
@@ -25,7 +27,7 @@ export class Result {
   private pKey = "Val:0";
 
   constructor(
-    results: Results<{}> | null,
+    results: Results<AnyObject> | null,
     public readonly showValidationErrors: boolean,
     public readonly isValid: boolean,
     public readonly errorMessage: string | null,
@@ -41,7 +43,7 @@ export class Result {
     if (hasMounted) {
       this.pKey = getKey();
     } else {
-      // For clientside only
+      // For client-side only
       if (typeof window !== "undefined") {
         requestAnimationFrame(() => {
           hasMounted = true;

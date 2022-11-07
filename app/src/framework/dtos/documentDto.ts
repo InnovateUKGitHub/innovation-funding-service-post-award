@@ -1,4 +1,3 @@
-/* global NodeJS */
 import { DocumentDescription } from "@framework/constants";
 
 interface IStream {
