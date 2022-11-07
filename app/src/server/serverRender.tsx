@@ -59,6 +59,8 @@ const ServerApp = ({ requestUrl, store, stores, modalRegister, relayEnvironment 
   </Provider>
 );
 
+const logger = new Logger("Server Render");
+
 /**
  * The main server side process handled here.
  */
