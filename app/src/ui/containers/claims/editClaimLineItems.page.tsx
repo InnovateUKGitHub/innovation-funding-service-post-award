@@ -110,7 +110,6 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
       periodId: this.props.periodId,
     });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId) || ({} as CostCategoryDto);
-    const userIsAllowedToDelete = claimDetails.createdByMe;
 
     const { isKTP, isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
     const editClaimLineItemGuidance = <ACC.Content value={x => x.claimsMessages.editClaimLineItemGuidance} />;
@@ -146,7 +145,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
           isNonFec={project.isNonFec}
         />
         {this.renderNegativeClaimWarning(editor.data)}
-        {!userIsAllowedToDelete && <DeleteByEnteringZero />}
+        {!claimDetails.isAuthor && <DeleteByEnteringZero />}
 
         <>
           {isCombinationOfSBRI ? (
@@ -192,7 +191,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
                 editor,
                 project.competitionType,
               )
-            : this.renderTable(editor, forecastDetail, documents, project.competitionType, userIsAllowedToDelete)}
+            : this.renderTable(editor, forecastDetail, documents, project.competitionType, claimDetails.isAuthor)}
         </ACC.Section>
       </ACC.Page>
     );

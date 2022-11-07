@@ -550,7 +550,9 @@ export class TestData {
       Acc_ProjectPeriodStartDate__c: "2018-01-02",
       Acc_ProjectPeriodEndDate__c: "2018-03-04",
       Acc_ReasonForDifference__c: "comments",
-      Acc_CreatedByMe__c: true,
+      Owner: {
+        Email: "content.solution@iuk.ukri.org",
+      },
     };
 
     if (update) {

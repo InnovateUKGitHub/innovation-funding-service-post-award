@@ -84,7 +84,7 @@ Object {
       "Acc_ProjectPeriodStartDate__c",
       "Acc_ProjectPeriodEndDate__c",
       "Acc_ReasonForDifference__c",
-      "Acc_CreatedByMe__c",
+      "Owner.Email",
     ],
     "salesforceObjectName": "Acc_Claims__c",
   },
