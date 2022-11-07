@@ -41,6 +41,9 @@ export interface PageProps {
   qa?: string;
 }
 
+/**
+ * Page Component
+ */
 export function Page({ pageTitle, backLink, error, children, project, partner, validator, qa }: PageProps) {
   const validation = validator && Array.isArray(validator) ? new CombinedResultsValidator(...validator) : validator;
   const displayAriaLive: boolean = !!error || !!validation;

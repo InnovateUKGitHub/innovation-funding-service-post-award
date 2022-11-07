@@ -173,7 +173,8 @@ describe("InitialForecastDetailsValidator()", () => {
         labour,
         partner,
         1,
-        item => (item.Acc_InitialForecastCost__c = null as any),
+        // @ts-expect-error testing that an invalid assignment (non-number) is handled correctly
+        item => (item.Acc_InitialForecastCost__c = null),
       );
       context.testData.createProfileDetail(labour, partner, 2, item => (item.Acc_InitialForecastCost__c = 50));
 

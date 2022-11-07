@@ -4,6 +4,9 @@ interface Props {
   items: ReactNode[];
 }
 
+/**
+ * List component with items separated by a line break
+ */
 export const LineBreakList: React.FunctionComponent<Props> = ({ items }) => {
   return (
     <>

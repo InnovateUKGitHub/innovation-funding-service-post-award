@@ -1,3 +1,6 @@
+/**
+ * returns object with bunch of booleans for different competition types
+ */
 export function checkProjectCompetition(competition: string) {
   const isCRandD: boolean = competition === "CR&D";
   const isContracts: boolean = competition === "CONTRACTS";

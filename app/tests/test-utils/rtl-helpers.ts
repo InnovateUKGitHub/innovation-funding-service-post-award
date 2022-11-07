@@ -17,10 +17,16 @@ const validateTextPresence = (_content: string, node: Nullish<Element>, textMatc
   return nodeHasText && childrenDoesNotHaveText;
 };
 
+/**
+ * gets the element from the text content and validates its presence, uses RTL `get` method
+ */
 export function getByTextContent(textMatch: StringOrRegex): HTMLElement {
   return screen.getByText((...args) => validateTextPresence(...args, textMatch));
 }
 
+/**
+ * finds the element by text content and validates, uses RTL `find` method which has async retry support
+ */
 export async function findByTextContent(textMatch: StringOrRegex): Promise<HTMLElement> {
   return screen.findByText((...args) => validateTextPresence(...args, textMatch));
 }

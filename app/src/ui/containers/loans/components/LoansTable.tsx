@@ -10,7 +10,7 @@ export interface LoansTableProps {
   roles: ReturnType<typeof getAuthRoles>;
 }
 
-export function LoansTable({ items, createLink, roles }: LoansTableProps) {
+export const LoansTable = ({ items, createLink, roles }: LoansTableProps) => {
   const Drawdown = ACC.TypedTable<typeof items[0]>();
 
   const nextLoanIndex = items.findIndex(x => x.status === LoanStatus.PLANNED);
@@ -67,7 +67,7 @@ export function LoansTable({ items, createLink, roles }: LoansTableProps) {
       />
     </Drawdown.Table>
   );
-}
+};
 
 interface LoanRequestButtonProps {
   disabled: boolean;

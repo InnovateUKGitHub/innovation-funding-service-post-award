@@ -15,7 +15,6 @@
  *   console.log(x.length) // type narrowed to string by this point
  * }
  */
-
 function isNull(val: unknown): val is null {
   return val === null;
 }

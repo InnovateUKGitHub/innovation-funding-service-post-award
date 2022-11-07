@@ -3,10 +3,16 @@ interface LayoutProps {
   className?: never;
 }
 
+/**
+ * full height container div
+ */
 function Container(props: LayoutProps) {
   return <div className="full-height-container" {...props} />;
 }
 
+/**
+ * full height content div
+ */
 function Content(props: LayoutProps) {
   return <div className="full-height-content" {...props} />;
 }

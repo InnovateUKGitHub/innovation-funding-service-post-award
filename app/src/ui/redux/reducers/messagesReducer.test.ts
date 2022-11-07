@@ -1,12 +1,14 @@
 import { routeTransition, removeMessages } from "../actions/common";
 import { messagesReducer } from ".";
+import { RootActions } from "../actions";
 
-const successMessage = (message: string): any => ({
-  type: "MESSAGE_SUCCESS",
-  payload: message,
-});
+const successMessage = (message: string) =>
+  ({
+    type: "MESSAGE_SUCCESS",
+    payload: message,
+  } as RootActions);
 
-const navigate = (): any => routeTransition();
+const navigate = () => routeTransition();
 
 describe("MessagesReducer", () => {
   it("should add message to store", () => {
@@ -16,16 +18,6 @@ describe("MessagesReducer", () => {
     expect(result.length).toBe(1);
     expect(result.pop()).toEqual({ ttl: 1, message });
   });
-
-  // TODO: this, and the next test do not really test what they claim to test. Write better tests
-  // it("should retain message after single page navigation", () => {
-  //   const message = "test message 2";
-  //   const action  = successMessage(message);
-  //   const before  = messagesReducer([], action);
-  //   const after   = messagesReducer(before, navigate());
-  //   expect(after.length).toBe(1);
-  //   expect(after.pop()).toEqual({ ttl: 0, message });
-  // });
 
   it("should remove message after two page navigations", () => {
     const message = "test message 3";

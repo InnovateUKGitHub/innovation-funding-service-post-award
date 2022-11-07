@@ -5,7 +5,7 @@ import { MonitoringReportDto, MonitoringReportSummaryDto } from "@framework/dtos
 import { LoadingStatus, MonitoringReportStatus } from "@framework/types";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { dataLoadAction, messageSuccess } from "../actions";
+import { dataLoadAction, messageSuccess, RootActionsOrThunk } from "../actions";
 import { RootState } from "../reducers";
 import { ProjectsStore } from "./projectsStore";
 import { StoreBase } from "./storeBase";
@@ -14,7 +14,7 @@ export class MonitoringReportsStore extends StoreBase {
   constructor(
     private readonly projectStore: ProjectsStore,
     protected getState: () => RootState,
-    protected queue: (action: any) => void,
+    protected queue: (action: RootActionsOrThunk) => void,
   ) {
     super(getState, queue);
   }

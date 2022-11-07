@@ -1,5 +1,7 @@
 type KeyValuePayload = [string, string];
 
+type ContentBody = { [key: string]: { content: string } | ContentBody };
+
 /**
  *
  * @description A small utility which is agnostic of nested data. It takes test stub content and returns a flat data structure [key, value] (handy for toBeInTheDocument() tests)
@@ -17,7 +19,7 @@ type KeyValuePayload = [string, string];
  *
  * Output -> [["level2Item1", "stub-level2Item1"], ["level2Item2", "stub-level2Item2"], ["level3Item2", "stub-level3Item2"]]
  */
-export function generateContentArray(payload: any): KeyValuePayload[] {
+export function generateContentArray(payload: ContentBody): KeyValuePayload[] {
   if (!payload) return [];
 
   let output: KeyValuePayload[] = [];
@@ -40,7 +42,7 @@ export function generateContentArray(payload: any): KeyValuePayload[] {
 
       output.push(outputPayload);
     } else {
-      const childContentKeys = generateContentArray(childItem);
+      const childContentKeys = generateContentArray(childItem as ContentBody);
 
       if (Array.isArray(childContentKeys)) {
         output = [...output, ...childContentKeys];

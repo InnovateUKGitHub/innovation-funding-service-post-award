@@ -13,6 +13,7 @@ import { PCROtherFundingDtoValidator } from "@ui/validators/pcrSpendProfileDtoVa
 import { CostCategoryType } from "@framework/constants";
 import { EditorStatus } from "@ui/constants/enums";
 import { useMounted } from "@ui/features";
+import { Result } from "@ui/validation";
 
 interface ContainerProps {
   costCategories: CostCategoryDto[];
@@ -51,13 +52,13 @@ const OtherSourcesOfFunding = ({
     props.onChange(dto);
   };
 
-  const getCostValidation = (rowNumber: number, field: keyof PCRSpendProfileOtherFundingDto) => {
+  const getCostValidation = (rowNumber: number, field: keyof PCROtherFundingDtoValidator) => {
     const index = rowNumber;
     const results = props.validator.spendProfile.results[0].funds.results;
     const relevantResults = results.filter(x => x.model.costCategory === CostCategoryType.Other_Public_Sector_Funding);
     const result = relevantResults[index] as PCROtherFundingDtoValidator;
-
-    return result ? result[field] : undefined;
+    const costValidation = result ? result[field] : undefined;
+    return costValidation as Result;
   };
 
   const removeItem = (

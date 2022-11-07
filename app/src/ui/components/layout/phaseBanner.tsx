@@ -1,8 +1,10 @@
-import * as React from "react";
 import { useContent } from "@ui/hooks";
 import { ExternalLink } from "../renderers";
 import { Content } from "../content";
 
+/**
+ * PhaseBanner component with dashboard link
+ */
 export function PhaseBanner() {
   const { getContent } = useContent();
 

@@ -1,3 +1,6 @@
+/**
+ * Gets the the values for the table columns
+ */
 export function getColumnValues(container: Element, tableQA: string, targetColumnQa: string): Element[] {
   const cols = container.querySelectorAll(`[data-qa="${tableQA}"] table colgroup col`);
   const rows = container.querySelectorAll(`[data-qa="${tableQA}"] table tbody tr`);
@@ -18,6 +21,9 @@ export function getColumnValues(container: Element, tableQA: string, targetColum
   return Array.from<Element>(rows).map(x => x.querySelectorAll("td")[qaTargetIndex]);
 }
 
+/**
+ * gets values for table cells
+ */
 export function getCellValue(container: Element, tableQA: string, columnQA: string, rowIndex: number): Element {
   const cols = container.querySelectorAll(`[data-qa="${tableQA}"] table colgroup col`);
   const row = container.querySelectorAll(`[data-qa="${tableQA}"] table tbody tr`)[rowIndex];
@@ -36,6 +42,9 @@ export function getCellValue(container: Element, tableQA: string, columnQA: stri
   return row.querySelectorAll("td")[colIndex];
 }
 
+/**
+ * gets values for the footer
+ */
 export function getFooterValue(container: Element, tableQA: string, rowIndex: number, colIndex: number): Element {
   const targetRow = container.querySelectorAll(`[data-qa="${tableQA}"] table tfoot tr`)[rowIndex];
   const rowCells = targetRow.querySelectorAll("td");
@@ -43,6 +52,9 @@ export function getFooterValue(container: Element, tableQA: string, rowIndex: nu
   return rowCells[colIndex];
 }
 
+/**
+ * gets the row elements
+ */
 export function getRowElements(containerEl: Element, dataQa: string, index: number): ChildNode[] {
   const getUid = containerEl.querySelector(`[data-qa="${dataQa}"]`);
 
@@ -62,6 +74,9 @@ export function getRowElements(containerEl: Element, dataQa: string, index: numb
   return Array.from(getChildNodes);
 }
 
+/**
+ * gets the column text values
+ */
 export function getColumnTextValues(container: Element, dataQa: string, index: number): string[] {
   const columnValue = getRowElements(container, dataQa, index);
 

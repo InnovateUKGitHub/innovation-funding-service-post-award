@@ -1,4 +1,4 @@
-import { CostCategoryType } from "@framework/constants";
+import { CostCategoryType, PCROrganisationType } from "@framework/constants";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 
 export default (mod?: Partial<CostCategoryDto>): CostCategoryDto => {
@@ -6,12 +6,12 @@ export default (mod?: Partial<CostCategoryDto>): CostCategoryDto => {
     id: "",
     name: "Labour",
     type: CostCategoryType.Labour,
-    competitionType: "Sector" as any,
+    competitionType: "Sector",
     description: "Labour",
     isCalculated: false,
     hasRelated: false,
     hintText: "",
-    organisationType: "Industrial" as any,
+    organisationType: PCROrganisationType.Industrial,
   };
   return { ...template, ...mod };
 };

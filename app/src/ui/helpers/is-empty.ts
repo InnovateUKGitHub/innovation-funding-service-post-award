@@ -1,5 +1,8 @@
 type CommonDataTypes = object | string | number | boolean | undefined;
 
+/**
+ * asserts is plain empty object
+ */
 export function isEmpty(valueToCheck: object | null | undefined | CommonDataTypes | CommonDataTypes[]): boolean {
   if (valueToCheck === null || valueToCheck === undefined) return true;
 

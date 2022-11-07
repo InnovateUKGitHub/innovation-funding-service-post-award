@@ -31,6 +31,9 @@ export function getCurrency(value: CurrentArgs["value"], fractionDigits: Current
   return currencyValue.format(formatValue);
 }
 
+/**
+ * Formatted currency component
+ */
 export function Currency({ value, fractionDigits = 2, className, ...props }: CurrencyProps) {
   const formattedValue = getCurrency(value, fractionDigits);
 

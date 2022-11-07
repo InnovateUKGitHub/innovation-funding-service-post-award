@@ -6,14 +6,14 @@ import { SpendProfileCostFormProps } from "@ui/containers";
 import { EditorStatus } from "@ui/constants/enums";
 import { useMounted } from "@ui/features";
 
-export function LabourFormComponent({
+export const LabourFormComponent = ({
   onSave,
   onChange,
   editor,
   validator,
   data,
   costCategory,
-}: SpendProfileCostFormProps<PCRSpendProfileLabourCostDto, PCRLabourCostDtoValidator>) {
+}: SpendProfileCostFormProps<PCRSpendProfileLabourCostDto, PCRLabourCostDtoValidator>) => {
   const { isClient } = useMounted();
 
   const handleOnChange = (dto: PCRSpendProfileLabourCostDto) => {
@@ -99,4 +99,4 @@ export function LabourFormComponent({
       </Form.Fieldset>
     </Form.Form>
   );
-}
+};

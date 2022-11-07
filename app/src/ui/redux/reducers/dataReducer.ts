@@ -32,7 +32,7 @@ export interface IDataStore<T> {
 }
 
 const dataStoreReducer =
-  <TData extends {}>(storeKey: string) =>
+  <TData extends AnyObject>(storeKey: string) =>
   (state: { [key: string]: IDataStore<TData> } = {}, action: DataLoadAction | TransitionActions) => {
     if (action.type === "DATA_LOAD" && action.payload?.store === storeKey) {
       const existing = state[action.payload.id];
@@ -111,14 +111,14 @@ export const dataReducer = combineReducers({
   pcrSpendProfileOverheadRateOptions: dataStoreReducer<Dtos.Option<PCRSpendProfileOverheadRate>[]>(
     "pcrSpendProfileOverheadRateOptions",
   ),
-  projectRole: dataStoreReducer<any>("projectRole"),
+  projectRole: dataStoreReducer<AnyObject>("projectRole"),
   project: dataStoreReducer<Dtos.ProjectDto>("project"),
   projects: dataStoreReducer<Dtos.ProjectDto[]>("projects"),
   projectChangeRequestStatusChanges: dataStoreReducer<Dtos.ProjectChangeRequestStatusChangeDto[]>(
     "projectChangeRequestStatusChanges",
   ),
   projectContacts: dataStoreReducer<ProjectContactDto[]>("projectContacts"),
-  validate: dataStoreReducer<any>("validate"),
+  validate: dataStoreReducer<AnyObject>("validate"),
   user: dataStoreReducer<{ [key: string]: ProjectRole }>("user"),
   loans: dataStoreReducer<Dtos.LoanDto[]>("loans"),
   loan: dataStoreReducer<Dtos.LoanDto | Dtos.LoanDto>("loan"),

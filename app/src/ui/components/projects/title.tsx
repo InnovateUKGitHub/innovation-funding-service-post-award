@@ -5,6 +5,9 @@ export interface TitleProps extends Pick<ProjectDto, "projectNumber" | "title"> 
   heading?: string;
 }
 
+/**
+ * Title Component
+ */
 export function Title({ projectNumber, title, heading }: TitleProps) {
   const captionValue = `${projectNumber} : ${title}`;
 

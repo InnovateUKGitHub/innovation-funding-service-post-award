@@ -8,5 +8,5 @@ export const loadStatusMiddleware =
   (store: MiddlewareAPI<Dispatch, RootState>) => (next: Dispatch) => (action: AnyAction) => {
     next(action);
     const loadStatus = store.getState().loadStatus;
-    (window as any)[pageLoadStatusKey] = loadStatus === 0;
+    window[pageLoadStatusKey] = loadStatus === 0;
   };

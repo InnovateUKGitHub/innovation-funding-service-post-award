@@ -20,7 +20,7 @@ export class TestStore {
     const initialState = getRootState();
     const middleware = applyMiddleware(thunk);
     const store = createStore(rootReducer, initialState, middleware);
-    this.dispatch = store.dispatch as any;
+    this.dispatch = store.dispatch as (action: RootActionsOrThunk) => void;
     this.getState = store.getState;
   }
 

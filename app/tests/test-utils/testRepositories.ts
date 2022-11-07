@@ -39,6 +39,9 @@ import { parseSfLongTextArea } from "@server/util/salesforce-string-helpers";
 import { TestRepository } from "./testRepository";
 import { TestFileWrapper } from "./testData";
 
+/**
+ * utility stub function returns null when called
+ */
 function nullReturn() {
   return null;
 }

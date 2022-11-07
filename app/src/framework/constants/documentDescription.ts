@@ -27,7 +27,7 @@ export enum DocumentDescription {
   Invoice = 210,
   ProjectCompletionForm = 220,
   ProofOfSatisfiedConditions = 230,
-  Loan = 230,
+  Loan = 240,
 }
 
 const getDocumentDescriptionContentSelector = (type: DocumentDescription | null | undefined): ContentSelector => {

@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 /**
  * Creates an object from url params, if you provide a type, it will be typed :)
  */
-export function useAppParams<T extends Record<string, any> & { projectId?: string }>(): T {
+export function useAppParams<T extends AnyObject & { projectId?: string }>(): T {
   const urlParams = useParams();
   const [params] = useSearchParams();
   const urlParam = new URLSearchParams(params);

@@ -111,16 +111,7 @@ export type PCRSpendProfileCostDtoValidator =
   | PCRTravelAndSubsCostDtoValidator
   | PCROtherCostsDtoValidator;
 
-interface StringKeys {
-  [key: string]: string;
-}
-
-export class PCROtherFundingDtoValidator
-  extends PCRBaseCostDtoValidator<PCRSpendProfileOtherFundingDto>
-  implements StringKeys
-{
-  // eslint-disable-next-line no-undef
-  [k: string]: any;
+export class PCROtherFundingDtoValidator extends PCRBaseCostDtoValidator<PCRSpendProfileOtherFundingDto> {
   public description = Validation.required(this, this.model.description, "Source of funding is required");
   public dateSecured = Validation.all(
     this,

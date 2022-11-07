@@ -12,11 +12,11 @@ export interface ClaimsDashboardGuidanceProps {
   roles?: PartnerDto["roles"];
 }
 
-export function ClaimsDashboardGuidance({
+export const ClaimsDashboardGuidance = ({
   overdueProject,
   competitionType = "",
   roles = ProjectRole.Unknown,
-}: ClaimsDashboardGuidanceProps) {
+}: ClaimsDashboardGuidanceProps) => {
   const { getContent } = useContent();
 
   let guidanceMessage: React.ReactElement;
@@ -44,4 +44,4 @@ export function ClaimsDashboardGuidance({
   }
 
   return <Acc.ValidationMessage qa="guidance-message" messageType="info" message={guidanceMessage} />;
-}
+};

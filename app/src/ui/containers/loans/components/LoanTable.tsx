@@ -5,7 +5,7 @@ import * as ACC from "@ui/components";
 // Note: The totals property has to be required to render the table
 type LoanTableProps = Required<LoanDto>;
 
-export function LoanRequestTable(props: LoanTableProps) {
+export const LoanRequestTable = (props: LoanTableProps) => {
   const Request = ACC.TypedTable<typeof props>();
 
   return (
@@ -54,4 +54,4 @@ export function LoanRequestTable(props: LoanTableProps) {
       />
     </Request.Table>
   );
-}
+};

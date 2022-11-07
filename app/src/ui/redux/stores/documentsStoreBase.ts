@@ -15,7 +15,7 @@ export abstract class DocumentsStoreBase extends StoreBase {
   }
 
   protected afterUpdate(key: string, message: string | undefined, onComplete: (() => void) | undefined) {
-    this.resetEditor("multipleDocuments", key as unknown as any, { files: [] }); // TODO: fix this any type
+    this.resetEditor("multipleDocuments", key, { files: [] });
 
     // Reload both documents and partnerDocuments
     this.markStale("documents", key, undefined);

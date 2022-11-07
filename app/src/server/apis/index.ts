@@ -22,8 +22,6 @@ import * as projects from "./projects";
 import * as projectContacts from "./projectContacts";
 import * as users from "./users";
 
-import { ControllerBase } from "./controllerBase";
-
 export interface IApiClient {
   accounts: accounts.IAccountsApi;
   broadcasts: broadcasts.IBroadcastApi;
@@ -47,7 +45,7 @@ export interface IApiClient {
   users: users.IUserApi;
 }
 
-export const serverApis: IApiClient & Record<string, ControllerBase<{}>> = {
+export const serverApis = {
   accounts: accounts.controller,
   broadcasts: broadcasts.controller,
   claims: claims.controller,
@@ -68,11 +66,11 @@ export const serverApis: IApiClient & Record<string, ControllerBase<{}>> = {
   projects: projects.controller,
   projectContacts: projectContacts.controller,
   users: users.controller,
-};
+} as const;
 
 export const router = express.Router();
 
-Object.keys(serverApis)
+(Object.keys(serverApis) as (keyof typeof serverApis)[])
   .map(key => ({ path: serverApis[key].path, controller: serverApis[key] }))
   .forEach(item => router.use("/" + item.path, item.controller.router));
 

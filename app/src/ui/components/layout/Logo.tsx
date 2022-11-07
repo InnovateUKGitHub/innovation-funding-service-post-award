@@ -1,3 +1,6 @@
+/**
+ * Logo Component
+ */
 export function Logo() {
   return (
     <span className="govuk-header__logotype">

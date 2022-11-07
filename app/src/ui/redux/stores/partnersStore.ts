@@ -4,13 +4,13 @@ import { PartnerDto } from "@framework/dtos";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 import { PartnerDocumentsStore } from "@ui/redux/stores/partnerDocumentsStore";
 import { LoadingStatus } from "@framework/constants";
-import { dataLoadAction } from "../actions";
+import { dataLoadAction, RootActionsOrThunk } from "../actions";
 import { RootState } from "../reducers";
 import { StoreBase } from "./storeBase";
 
 interface UpdatePartnerOptions {
   onComplete?: (result: PartnerDto) => void;
-  onError?: (error: any) => void;
+  onError?: (error: unknown) => void;
   validateBankDetails?: boolean;
   verifyBankDetails?: boolean;
 }
@@ -19,7 +19,7 @@ export class PartnersStore extends StoreBase {
   constructor(
     private readonly partnerDocumentsStore: PartnerDocumentsStore,
     getState: () => RootState,
-    dispatch: (action: any) => void,
+    dispatch: (action: RootActionsOrThunk) => void,
   ) {
     super(getState, dispatch);
   }

@@ -9,6 +9,9 @@ export interface TextHintReactProps {
 
 const textHintStyles = { color: colour.govukSecondaryTextColour };
 
+/**
+ * TextHint component
+ */
 export function TextHint(props: TextHintReactProps) {
   if (!props.children.length) return null;
 

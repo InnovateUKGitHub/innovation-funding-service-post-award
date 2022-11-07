@@ -21,11 +21,11 @@ const setupInitialState = (update?: (data: IEditorStore<ClaimDto, ClaimDtoValida
 
   state.editors.claim = {
     1: {
-      data: {},
-      validator: null,
+      data: {} as ClaimDto,
+      validator: {} as ClaimDtoValidator,
       error: null,
     },
-  } as any;
+  };
 
   if (update) update(state.editors.claim[1]);
 
@@ -238,7 +238,7 @@ describe("editorsReducer", () => {
         },
         error: null,
         status: 1,
-        validator: null,
+        validator: {},
       });
     });
 

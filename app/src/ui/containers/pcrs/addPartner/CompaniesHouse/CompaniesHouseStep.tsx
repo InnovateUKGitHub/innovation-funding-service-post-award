@@ -15,7 +15,7 @@ import { CompaniesHouseResults } from "./CompaniesHouseResults";
 
 type CompaniesHouseStepProps = PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>;
 
-export function CompaniesHouseStep({ pcrItem: originalPayload, ...props }: CompaniesHouseStepProps) {
+export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: CompaniesHouseStepProps) => {
   const { companies } = useStores();
   const { getContent } = useContent();
   const { isServer } = useMounted();
@@ -158,4 +158,4 @@ export function CompaniesHouseStep({ pcrItem: originalPayload, ...props }: Compa
       </Form.Form>
     </ACC.Section>
   );
-}
+};
