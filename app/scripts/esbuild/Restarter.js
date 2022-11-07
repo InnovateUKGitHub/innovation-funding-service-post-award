@@ -26,7 +26,9 @@ class Restarter {
     // createServer() itself has a hook to re-create a new server.
     if (this.serverProcess) {
       console.log("Killing server!");
-      fetch(`${this.url}/dev/reload`);
+      fetch(`${this.url}/dev/reload`).catch(() => {
+        console.log("Could not send reload signal - is the server running?");
+      });
     }
   }
 
