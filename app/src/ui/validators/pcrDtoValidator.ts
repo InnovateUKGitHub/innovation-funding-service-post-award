@@ -441,14 +441,18 @@ export class PCRBaseItemDtoValidator<T extends PCRItemDto> extends Results<T> {
 
   public type = this.validateTypes();
 
-  protected requiredIfComplete(value: any, message?: string) {
+  protected requiredIfComplete(value: Validation.ValidatableValue, message?: string) {
     if (this.model.status !== PCRItemStatus.Complete) {
       return Validation.valid(this);
     }
     return Validation.required(this, value, message);
   }
 
-  protected hasPermissionToEdit(value: any, originalValue: any, message?: string) {
+  protected hasPermissionToEdit(
+    value: Validation.ValidatableValue,
+    originalValue: Validation.ValidatableValue,
+    message?: string,
+  ) {
     if (this.canEdit) {
       return Validation.valid(this);
     }
@@ -823,12 +827,12 @@ export class PCRPartnerAdditionItemDtoValidator extends PCRBaseItemDtoValidator<
     return this.requiredIfComplete(this.model.organisationName, "Enter an organisation name");
   }
 
-  private validateProjectManagerDetailsRequired(value: any, message: string) {
+  private validateProjectManagerDetailsRequired(value: Validation.ValidatableValue, message: string) {
     if (this.model.projectRole !== PCRProjectRole.ProjectLead) return Validation.valid(this);
     return this.requiredIfComplete(value, message);
   }
 
-  private validateCompanyHouseDetailsRequired(value: any, message: string) {
+  private validateCompanyHouseDetailsRequired(value: Validation.ValidatableValue, message: string) {
     if (this.model.organisationType === PCROrganisationType.Academic) return Validation.valid(this);
     return this.requiredIfComplete(value, message);
   }

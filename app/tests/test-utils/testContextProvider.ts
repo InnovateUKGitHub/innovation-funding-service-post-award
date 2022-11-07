@@ -44,11 +44,11 @@ export class TestContext implements IContext {
   public caches = new TestCaches();
 
   public runQuery<TResult>(query: QueryBase<TResult>): Promise<TResult> {
-    return (query as any as IAsyncRunnable<TResult>).run(this);
+    return (query as unknown as IAsyncRunnable<TResult>).run(this);
   }
 
   public runCommand<TResult>(command: CommandBase<TResult> | NonAuthorisedCommandBase<TResult>): Promise<TResult> {
-    const runnable = command as any as IAsyncRunnable<TResult>;
+    const runnable = command as unknown as IAsyncRunnable<TResult>;
     return runnable.run(this).catch(e => {
       if (e instanceof ValidationError) {
         this.logger.debug("Validation ERROR", [e.results]);
@@ -59,16 +59,16 @@ export class TestContext implements IContext {
   }
 
   public runSyncQuery<TResult>(query: SyncQueryBase<TResult>): TResult {
-    return (query as any as ISyncRunnable<TResult>).run(this);
+    return (query as unknown as ISyncRunnable<TResult>).run(this);
   }
 
   public runSyncCommand<TResult>(command: SyncCommandBase<TResult>): TResult {
-    return (command as any as ISyncRunnable<TResult>).run(this);
+    return (command as unknown as ISyncRunnable<TResult>).run(this);
   }
 
   // handle access control separate to running the commands to keep tests focused on single areas
-  public runAccessControl(auth: Authorisation, runnable: QueryBase<any> | CommandBase<any>): Promise<boolean> {
-    const runnableQuery = runnable as unknown as IAsyncRunnable<any>;
+  public runAccessControl(auth: Authorisation, runnable: QueryBase<unknown> | CommandBase<unknown>): Promise<boolean> {
+    const runnableQuery = runnable as unknown as IAsyncRunnable<unknown>;
     if (typeof runnableQuery?.accessControl === "function") {
       return runnableQuery.accessControl(auth, this);
     }

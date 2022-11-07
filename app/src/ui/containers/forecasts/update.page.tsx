@@ -22,7 +22,7 @@ interface ForecastUpdateData {
   onChange: (saving: boolean, dto: ForecastDetailsDTO[]) => void;
 }
 
-function UpdateForecastComponent(props: ForecastUpdateParams & ForecastUpdateData & BaseProps) {
+const UpdateForecastComponent = (props: ForecastUpdateParams & ForecastUpdateData & BaseProps) => {
   const { isActive: isProjectActive } = useProjectStatus();
 
   const combined = Pending.combine({
@@ -103,7 +103,7 @@ function UpdateForecastComponent(props: ForecastUpdateParams & ForecastUpdateDat
     );
   };
   return <ACC.PageLoader pending={combined} render={x => renderContents(x.data, x.editor)} />;
-}
+};
 
 const UpdateForecastContainer = (props: ForecastUpdateParams & BaseProps) => {
   const { getContent } = useContent();

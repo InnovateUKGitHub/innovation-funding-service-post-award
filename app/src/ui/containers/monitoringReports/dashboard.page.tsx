@@ -21,7 +21,9 @@ interface MonitoringReportDashboardData {
   messages: string[];
 }
 
-function MonitoringReportDashboard(props: MonitoringReportDashboardParams & MonitoringReportDashboardData & BaseProps) {
+const MonitoringReportDashboard = (
+  props: MonitoringReportDashboardParams & MonitoringReportDashboardData & BaseProps,
+) => {
   const { getContent } = useContent();
 
   const editStatuses = [MonitoringReportStatus.New, MonitoringReportStatus.Draft, MonitoringReportStatus.Queried];
@@ -38,9 +40,9 @@ function MonitoringReportDashboard(props: MonitoringReportDashboardParams & Moni
     partners: props.partners,
   });
 
-  function renderContents(project: Dtos.ProjectDto, reports: Dtos.MonitoringReportSummaryDto[]) {
+  const renderContents = (project: Dtos.ProjectDto, reports: Dtos.MonitoringReportSummaryDto[]) => {
     // loop though reports splitting them into open or archived
-    const inital = { open: [], archived: [] };
+    const initial = { open: [], archived: [] };
     const reportSections = reports.reduce<{
       open: Dtos.MonitoringReportSummaryDto[];
       archived: Dtos.MonitoringReportSummaryDto[];
@@ -51,7 +53,7 @@ function MonitoringReportDashboard(props: MonitoringReportDashboardParams & Moni
         result.archived.push(report);
       }
       return result;
-    }, inital);
+    }, initial);
 
     return (
       <ACC.Page
@@ -94,9 +96,9 @@ function MonitoringReportDashboard(props: MonitoringReportDashboardParams & Moni
         </ACC.Section>
       </ACC.Page>
     );
-  }
+  };
 
-  function renderTable(reports: Dtos.MonitoringReportSummaryDto[], section: "current" | "previous") {
+  const renderTable = (reports: Dtos.MonitoringReportSummaryDto[], section: "current" | "previous") => {
     const ReportsTable = ACC.TypedTable<Dtos.MonitoringReportSummaryDto>();
 
     return (
@@ -134,9 +136,9 @@ function MonitoringReportDashboard(props: MonitoringReportDashboardParams & Moni
         />
       </ReportsTable.Table>
     );
-  }
+  };
 
-  function renderLinks(report: Dtos.MonitoringReportSummaryDto) {
+  const renderLinks = (report: Dtos.MonitoringReportSummaryDto) => {
     const links: { route: ILinkInfo; titleContent: ContentSelector; qa: string }[] = [];
 
     if (editStatuses.indexOf(report.status) > -1) {
@@ -178,10 +180,10 @@ function MonitoringReportDashboard(props: MonitoringReportDashboardParams & Moni
         </ACC.Link>
       </div>
     ));
-  }
+  };
 
   return <ACC.PageLoader pending={combined} render={data => renderContents(data.project, data.reports)} />;
-}
+};
 
 const MonitoringReportContainer = (props: MonitoringReportDashboardParams & BaseProps) => {
   const stores = useStores();

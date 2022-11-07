@@ -1,8 +1,8 @@
 import { Results } from "./results";
 import { Result } from "./result";
 
-export class NestedResult<T extends Results<{}>> extends Result {
-  constructor(parentResults: Results<{}>, results: T[], listValidation: Result, summaryMessage?: string) {
+export class NestedResult<T extends Results<ResultBase>> extends Result {
+  constructor(parentResults: Results<ResultBase>, results: T[], listValidation: Result, summaryMessage?: string) {
     const listValidationInvalid = listValidation && !listValidation.isValid;
     const itemValidationInvalid = (results.length && results.some(x => !x.isValid)) || false;
 
@@ -37,8 +37,8 @@ export class NestedResult<T extends Results<{}>> extends Result {
   }
 }
 
-export class Nested<T extends Results<{}>> extends Result {
-  constructor(parentResults: Results<{}>, result: T, summaryMessage?: string) {
+export class Nested<T extends Results<ResultBase>> extends Result {
+  constructor(parentResults: Results<ResultBase>, result: T, summaryMessage?: string) {
     const isValid = result && result.isValid;
     const message = summaryMessage || "Validation failed";
 

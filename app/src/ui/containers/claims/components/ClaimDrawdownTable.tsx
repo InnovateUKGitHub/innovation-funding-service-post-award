@@ -12,7 +12,7 @@ export interface ClaimDrawdownTableProps extends ProjectOptions {
   requiredPeriod: number;
 }
 
-function useClaimDrawdown(props: ClaimDrawdownTableProps) {
+const useClaimDrawdown = (props: ClaimDrawdownTableProps) => {
   const { isLoans } = checkProjectCompetition(props.competitionType);
   const stores = useStores();
 
@@ -35,9 +35,9 @@ function useClaimDrawdown(props: ClaimDrawdownTableProps) {
     ...rest,
     isLoading,
   };
-}
+};
 
-export function ClaimDrawdownTable(props: ClaimDrawdownTableProps) {
+export const ClaimDrawdownTable = (props: ClaimDrawdownTableProps) => {
   const claimDrawdown = useClaimDrawdown(props);
 
   if (!claimDrawdown) return null;
@@ -67,4 +67,4 @@ export function ClaimDrawdownTable(props: ClaimDrawdownTableProps) {
       />
     </PeriodDrawdownTable.Table>
   );
-}
+};

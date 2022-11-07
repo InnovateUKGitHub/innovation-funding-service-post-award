@@ -23,7 +23,7 @@ import { ConfigStore } from "@ui/redux/stores/configStore";
 import { PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PCRSpendProfileCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
-import { dataLoadAction, messageSuccess } from "../actions";
+import { dataLoadAction, messageSuccess, RootActionsOrThunk } from "../actions";
 import { IEditorStore, RootState } from "../reducers";
 import { ProjectsStore } from "./projectsStore";
 import { StoreBase } from "./storeBase";
@@ -33,7 +33,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     private readonly projectStore: ProjectsStore,
     private readonly configStore: ConfigStore,
     getState: () => RootState,
-    queue: (action: any) => void,
+    queue: (action: RootActionsOrThunk) => void,
   ) {
     super(getState, queue);
   }
@@ -372,7 +372,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     }
   }
 
-  private getValidator(projectId: string, dto: PCRDto, showErrors: boolean): any {
+  private getValidator(projectId: string, dto: PCRDto, showErrors: boolean) {
     return Pending.combine({
       projectRoles: this.projectStore.getById(projectId).then(x => x.roles),
       original: dto.id ? this.getById(projectId, dto.id) : Pending.done(undefined),
@@ -381,7 +381,7 @@ export class ProjectChangeRequestStore extends StoreBase {
     }).then(x => new PCRDtoValidator(dto, x.projectRoles, x.itemTypes, showErrors, x.project, x.original));
   }
 
-  public deletePcr(projectId: string, pcrId: string, dto: PCRDto, message?: string, onComplete?: () => void): void {
+  public deletePcr(projectId: string, pcrId: string, dto: PCRDto, message?: string, onComplete?: () => void) {
     this.deleteEditor(
       "pcr",
       this.getKeyForRequest(projectId, pcrId),

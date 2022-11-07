@@ -73,7 +73,7 @@ const conditionalSave = <
   getValidator: (show: boolean) => Pending<TVal> | TVal,
   saveCall: (params: { user: IClientUser }) => Promise<TResult>,
   onComplete?: (result: TResult) => void,
-  onError?: (e: any) => void,
+  onError?: (e: unknown) => void,
 ) => {
   // dispatch a thunk to get latest store...
   return (
@@ -203,7 +203,7 @@ export class StoreBase {
     const existing = this.getState().editors[store]?.[key as string];
 
     if (existing && !forceRefreshEditor) {
-      return Pending.done<IEditorStore<TDto, TVal>>(existing as any);
+      return Pending.done<IEditorStore<TDto, TVal>>(existing as IEditorStore<TDto, TVal>);
     }
 
     const data = getData()
@@ -247,7 +247,7 @@ export class StoreBase {
     getValidator: (showErrors: boolean) => Pending<TVal> | TVal,
     saveCall: (p: { user: IClientUser }) => Promise<TResult>,
     onComplete?: (result: TResult) => void,
-    onError?: (e: any) => void,
+    onError?: (e: unknown) => void,
   ) {
     this.queue(conditionalSave(submit, store, key, dto, getValidator, saveCall, onComplete, onError));
   }
@@ -275,7 +275,7 @@ export class StoreBase {
     );
   }
 
-  protected resetEditor<T extends EditorStateKeys, K extends EditorState[T], TDto>(store: T, key: K, newDto: TDto) {
-    this.queue(resetEditor<TDto>(key as unknown as string, store as unknown as string, newDto));
+  protected resetEditor<T extends EditorStateKeys, K extends string, TDto>(store: T, key: K, newDto: TDto) {
+    this.queue(resetEditor<TDto>(key, store as string, newDto));
   }
 }

@@ -7,6 +7,9 @@ export interface IContactsTable {
   contacts: ProjectContactDto[];
 }
 
+/**
+ * ContactsTable component
+ */
 export function ContactsTable({ contacts }: IContactsTable) {
   if (!contacts.length) {
     return (

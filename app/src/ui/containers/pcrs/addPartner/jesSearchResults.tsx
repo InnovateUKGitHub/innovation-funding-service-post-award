@@ -9,7 +9,7 @@ interface JesSearchResultsProps {
   update: (id: string | undefined, jesAccounts: AccountDto[]) => void;
 }
 
-export function JesSearchResults({ selected, jesAccounts, update }: JesSearchResultsProps) {
+export const JesSearchResults = ({ selected, jesAccounts, update }: JesSearchResultsProps) => {
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
   const { getContent } = useContent();
 
@@ -33,4 +33,4 @@ export function JesSearchResults({ selected, jesAccounts, update }: JesSearchRes
       </Form.Fieldset>
     </>
   );
-}
+};

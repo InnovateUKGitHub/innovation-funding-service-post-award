@@ -59,7 +59,7 @@ export function getParamsFromUrl(routePath: string, pathname: string, search = "
 
   // Parse the params that are within the "routePath"
   const routePathParams: Params = parts.reduce(
-    (acc, cur, i) => (/^:/.test(cur) ? { ...acc, [cur.replace(":", "")]: toNumber(values[i]) } : acc),
+    (acc: Params, cur, i) => (/^:/.test(cur) ? { ...acc, [cur.replace(":", "")]: toNumber(values[i]) } : acc),
     {},
   );
 

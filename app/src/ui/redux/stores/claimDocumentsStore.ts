@@ -7,7 +7,6 @@ import { RootActionsOrThunk } from "../actions";
 import { RootState } from "../reducers";
 import { PartnersStore } from "./partnersStore";
 import { DocumentsStoreBase } from "./documentsStoreBase";
-import { DocumentDescription } from "@framework/constants";
 
 export class ClaimDocumentsStore extends DocumentsStoreBase {
   constructor(

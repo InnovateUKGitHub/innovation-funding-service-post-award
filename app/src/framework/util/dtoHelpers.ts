@@ -1,1 +1,1 @@
-export const createDto = <T extends {}>(dto: Partial<T>): T => dto as T;
+export const createDto = <T>(dto: Partial<T>): T => dto as T;

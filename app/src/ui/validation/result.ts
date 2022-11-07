@@ -27,13 +27,13 @@ export class Result {
   private pKey = "Val:0";
 
   constructor(
-    results: Results<AnyObject> | null,
+    results: Results<ResultBase> | null,
     public readonly showValidationErrors: boolean,
     public readonly isValid: boolean,
     public readonly errorMessage: string | null,
     public readonly isRequired: boolean,
   ) {
-    const internalResults = results as any as ResultsInternal;
+    const internalResults = results as unknown as ResultsInternal;
 
     if (internalResults) {
       internalResults.add(this);

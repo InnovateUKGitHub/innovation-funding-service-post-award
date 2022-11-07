@@ -52,7 +52,7 @@ export interface IResources {
 }
 
 export interface IInternationalisation {
-  addResourceBundle(content: any, namespace: string): void;
+  addResourceBundle(content: ContentJson, namespace: string): void;
 }
 
 export interface IContext {
@@ -88,12 +88,12 @@ export interface ICaches {
 
 export interface IAsyncRunnable<T> {
   run: (context: IContext) => Promise<T>;
-  logMessage: () => any[];
-  handleRepositoryError?: (context: IContext, error: any) => void;
+  logMessage: () => unknown[];
+  handleRepositoryError?: (context: IContext, error: unknown) => void;
   accessControl?: (auth: Authorisation, context: IContext) => Promise<boolean>;
 }
 
 export interface ISyncRunnable<T> {
   run: (context: IContext) => T;
-  logMessage: () => any[];
+  logMessage: () => unknown[];
 }

@@ -1,9 +1,9 @@
 import { IInternationalisation } from "@framework/types/IContext";
 
 export class TestInternationalisation implements IInternationalisation {
-  public resourceBundles: any[] = [];
+  public resourceBundles: Record<string, string>[] = [];
 
-  public addResourceBundle(content: any): void {
+  public addResourceBundle(content: Record<string, string>) {
     this.resourceBundles.push(content);
   }
 

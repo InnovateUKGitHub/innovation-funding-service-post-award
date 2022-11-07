@@ -59,7 +59,7 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     const matched = matchRoute(req.url);
     const { params } = getParamsFromUrl(matched.routePath, req.url);
 
-    if (matched.accessControl?.(auth, params, clientConfig) === false) {
+    if (matched.accessControl?.(auth, params as any, clientConfig) === false) {
       throw new ForbiddenError();
     }
 
@@ -132,7 +132,7 @@ function loadAllData(store: Store, render: () => void): Promise<void> {
 function onComplete(store: Store, error?: FormHandlerError) {
   // validation error occurred so add it into store as validation error
   if (error?.code === ErrorCode.VALIDATION_ERROR) {
-    store.dispatch(Actions.updateEditorAction(error.key, error.store, error.dto, error.error.results as Results<{}>));
+    store.dispatch(Actions.updateEditorAction(error.key, error.store, error.dto, error.error.results as Results<any>));
   } else if (error) {
     // some other validation error occurred so add it into store as actual error
     // need to pair with the submit action to keep count in sync

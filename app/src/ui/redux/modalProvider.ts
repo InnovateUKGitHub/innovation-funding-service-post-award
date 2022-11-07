@@ -28,7 +28,8 @@ export class ModalRegister {
   }
 }
 
-const modalContext = createContext<ModalRegister>(null as any);
+// will be initialised to Modal Register when the Provider is called
+const modalContext = createContext<ModalRegister>(null as unknown as ModalRegister);
 
 /* eslint-disable @typescript-eslint/naming-convention */
 export const ModalProvider = modalContext.Provider;

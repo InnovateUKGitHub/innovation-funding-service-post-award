@@ -13,7 +13,7 @@ export interface PostcodeProps {
   displayCurrentPostcode: boolean;
 }
 
-export function PostcodeEdit({ editor, onUpdate, saveButtonContent, ...rest }: PostcodeProps) {
+export const PostcodeEdit = ({ editor, onUpdate, saveButtonContent, ...rest }: PostcodeProps) => {
   const PostcodeForm = ACC.TypedForm<PartnerDto>();
   const { getContent } = useContent();
 
@@ -45,4 +45,4 @@ export function PostcodeEdit({ editor, onUpdate, saveButtonContent, ...rest }: P
       </PostcodeForm.Fieldset>
     </PostcodeForm.Form>
   );
-}
+};

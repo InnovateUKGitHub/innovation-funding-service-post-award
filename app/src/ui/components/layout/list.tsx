@@ -18,20 +18,32 @@ export interface ListProps extends ListBaseProps {
   type?: keyof typeof listOptions;
 }
 
+/**
+ * List component defaulting to unordered list
+ */
 export function List({ type, qa, className, ...props }: ListProps) {
   const [Element = "ul", gdsStyle] = type ? listOptions[type] : [];
 
   return <Element {...props} data-qa={qa} className={cx("govuk-list", gdsStyle, className)} />;
 }
 
+/**
+ * Unordered List component with bullets
+ */
 export function UL(props: ListBaseProps & React.HTMLProps<HTMLUListElement>) {
   return <List {...props} type="bullet" />;
 }
 
+/**
+ * Ordered list
+ */
 export function OL(props: ListBaseProps & React.HTMLProps<HTMLOListElement>) {
   return <List {...props} type="number" />;
 }
 
+/**
+ * Plain unordered list
+ */
 export function PlainList(props: ListBaseProps & React.HTMLProps<HTMLOListElement>) {
   return <List {...props} type="plain" />;
 }

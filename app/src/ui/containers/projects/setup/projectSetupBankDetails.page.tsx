@@ -7,6 +7,18 @@ import { Pending } from "@shared/pending";
 import { IEditorStore, useStores } from "@ui/redux";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
 
+type BankCheckValidationError = {
+  results: {
+    bankCheckValidation: {
+      isValid: boolean;
+    };
+  };
+};
+
+const isBankCheckValidationError = (e: any): e is BankCheckValidationError => {
+  return e?.results?.bankCheckValidation?.isValid;
+};
+
 export interface ProjectSetupBankDetailsParams {
   projectId: string;
   partnerId: string;
@@ -230,8 +242,7 @@ const ProjectSetupBankDetailsContainer = (props: ProjectSetupBankDetailsParams &
             }
           },
           onError: e => {
-            // TODO use correct type here
-            if (e && e.results && e.results.bankCheckValidation && !e.results.bankCheckValidation.isValid) {
+            if (isBankCheckValidationError(e)) {
               dto.bankCheckRetryAttempts += 1;
             }
           },

@@ -14,7 +14,7 @@ export class TestCaches implements ICaches {
   contentStoreLastUpdated: Date | null = null;
 }
 
-class TestOptionsCache extends Cache<Option<any>[]> {
+class TestOptionsCache extends Cache<Option<unknown>[]> {
   constructor() {
     super(1);
   }
@@ -22,7 +22,7 @@ class TestOptionsCache extends Cache<Option<any>[]> {
   public get monitoringReports() {
     return super.fetch("MonitoringReports", () => []);
   }
-  public addMonitoringReportItem(key: MonitoringReportStatus, label: any) {
+  public addMonitoringReportItem(key: MonitoringReportStatus, label: string) {
     const cache = super.fetch("MonitoringReports", () => []);
     cache.push({
       active: true,

@@ -4,6 +4,9 @@ import { isEmpty } from "./is-empty";
 
 type IPendingStatus = "IDLE" | "LOADING" | "RESOLVED" | "REJECTED";
 
+/**
+ * gets pending status
+ */
 export function getPending<T>({ state, data, error = undefined }: Pending<T>) {
   const shouldCheckData = state === LoadingStatus.Loading || state === LoadingStatus.Stale;
 

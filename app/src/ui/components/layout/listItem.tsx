@@ -10,6 +10,9 @@ export interface ListItemProps extends DivAttr {
   className?: never;
 }
 
+/**
+ * ListItem component
+ */
 export function ListItem({ qa, actionRequired, ...props }: ListItemProps) {
   return (
     <div

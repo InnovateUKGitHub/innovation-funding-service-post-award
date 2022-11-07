@@ -22,6 +22,9 @@ export const sectionContext = createContext<SectionTypes>("h2");
 export const SectionProvider = sectionContext.Provider;
 const useSection = () => useContext(sectionContext);
 
+/**
+ * Section component
+ */
 export function Section({ id, qa, title, subtitle, badge, className, children }: SectionProps) {
   const { getContent } = useContent();
   const header = useSection();

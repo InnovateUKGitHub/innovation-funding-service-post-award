@@ -14,6 +14,9 @@ const SectionPanelStyles = {
   border: `1px solid ${govukBorderColour}`,
 };
 
+/**
+ * SectionPanel component
+ */
 export function SectionPanel({ qa, title, children }: SectionPanelProps) {
   return (
     <div className="govuk-!-padding-3" data-qa={qa} style={SectionPanelStyles}>

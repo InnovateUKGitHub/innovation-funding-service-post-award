@@ -34,6 +34,9 @@ interface DetailsComponentProps<T> {
   valueClassName?: string;
 }
 
+/**
+ * Details Component
+ */
 function DetailsComponent<T extends {}>({
   displayDensity = "Comfortable",
   qa,
@@ -90,6 +93,9 @@ export interface DualDetailsProps {
   children: OptionalChild<DualDetailsChild> | OptionalChild<DualDetailsChild>[];
 }
 
+/**
+ * DualDetails component
+ */
 export function DualDetails({ children }: DualDetailsProps) {
   const elementChildren = React.Children.toArray(children) as DualDetailsChild[];
   const clonedChildren = elementChildren.map(field => cloneElement(field));

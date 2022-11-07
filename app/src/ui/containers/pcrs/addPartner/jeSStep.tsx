@@ -16,7 +16,7 @@ export interface JesStepUIProps extends BasePcrProps {
   onFileDelete: (dto: Dtos.MultipleDocumentUploadDto, document: Dtos.DocumentSummaryDto) => void;
 }
 
-export function JesStepUI({ documents, documentsEditor, project, ...props }: JesStepUIProps) {
+export const JesStepUI = ({ documents, documentsEditor, project, ...props }: JesStepUIProps) => {
   const { getContent } = useContent();
   const { isKTP } = checkProjectCompetition(project.competitionType);
 
@@ -132,7 +132,7 @@ export function JesStepUI({ documents, documentsEditor, project, ...props }: Jes
       </Form.Form>
     </ACC.Section>
   );
-}
+};
 
 export const JeSStep = (props: BasePcrProps) => {
   const stores = useStores();

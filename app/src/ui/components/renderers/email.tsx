@@ -9,6 +9,9 @@ export interface EmailProps extends AnchorAttr {
   className?: string;
 }
 
+/**
+ * Email component, rendered as anchor
+ */
 export function Email({ href, className, qa, children, ...props }: EmailProps) {
   const fallbackHref = children.trim();
   if (!children.length) return null;
