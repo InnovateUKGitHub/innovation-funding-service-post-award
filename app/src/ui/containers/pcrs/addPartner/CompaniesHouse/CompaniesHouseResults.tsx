@@ -10,7 +10,11 @@ interface CompaniesHouseResultsProps {
   onSelect: (option: CompanyDto) => void;
 }
 
-export function CompaniesHouseResults({ selectedRegistrationNumber, options, onSelect }: CompaniesHouseResultsProps) {
+export const CompaniesHouseResults = ({
+  selectedRegistrationNumber,
+  options,
+  onSelect,
+}: CompaniesHouseResultsProps) => {
   const { getContent } = useContent();
 
   const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
@@ -55,4 +59,4 @@ export function CompaniesHouseResults({ selectedRegistrationNumber, options, onS
       />
     </Form.Fieldset>
   );
-}
+};

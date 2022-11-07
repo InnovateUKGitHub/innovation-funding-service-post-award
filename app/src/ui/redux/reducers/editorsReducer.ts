@@ -30,7 +30,7 @@ interface State<TDto, TValidator> {
   [x: string]: IEditorStore<TDto, TValidator>;
 }
 
-const getNewStateWithoutErrors = <TDto extends {}, TValidator extends Results<TDto>>(
+const getNewStateWithoutErrors = <TDto extends AnyObject, TValidator extends Results<TDto>>(
   state: State<TDto, TValidator>,
 ): State<TDto, TValidator> => {
   return Object.keys(state).reduce((newState: State<TDto, TValidator>, key) => {
@@ -41,7 +41,7 @@ const getNewStateWithoutErrors = <TDto extends {}, TValidator extends Results<TD
 };
 
 export const editorsReducer =
-  <TDto extends {}, TValidator extends Results<TDto>>(store: string) =>
+  <TDto extends AnyObject, TValidator extends Results<TDto>>(store: string) =>
   (state: State<TDto, TValidator> = {}, action: RootActions) => {
     if (action.type === "EDITOR_UPDATE" && action.payload?.store === store) {
       const result = { ...state };

@@ -3,11 +3,6 @@ import { getPending } from "@ui/helpers/get-pending";
 import { Params } from "@ui/helpers/make-url";
 import { useStores } from "@ui/redux";
 
-// Note: We assume this is could be present to make the conditional rendering
-interface GenericParams {
-  projectId: string | undefined;
-}
-
 /**
  * @description Returns the content solution based on the availability of the projectId (used based on condition competitionType rendering)
  */

@@ -20,7 +20,7 @@ interface ViewForecastData {
   messages: string[];
 }
 
-function ViewForecastComponent(props: ViewForecastParams & ViewForecastData & BaseProps) {
+const ViewForecastComponent = (props: ViewForecastParams & ViewForecastData & BaseProps) => {
   const { isActive: isProjectActive } = useProjectStatus();
 
   const renderContents = (data: ACC.Claims.ForecastData) => {
@@ -186,7 +186,7 @@ function ViewForecastComponent(props: ViewForecastParams & ViewForecastData & Ba
   };
 
   return <ACC.PageLoader pending={props.data} render={data => renderContents(data)} />;
-}
+};
 
 const ViewForecastContainer = (props: ViewForecastParams & BaseProps) => {
   const stores = useStores();

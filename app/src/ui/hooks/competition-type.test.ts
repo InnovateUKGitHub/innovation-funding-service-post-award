@@ -4,6 +4,7 @@ import { hookTestBed } from "@shared/TestBed";
 import { useCompetitionType } from "@ui/hooks";
 import { Pending } from "@shared/pending";
 import { LoadingStatus } from "@framework/constants";
+import { IStores } from "@ui/redux";
 
 describe("useCompetitionType()", () => {
   beforeEach(jest.clearAllMocks);
@@ -23,8 +24,8 @@ describe("useCompetitionType()", () => {
             stores: {
               projects: {
                 getById: mockGetById,
-              } as any,
-            },
+              },
+            } as unknown as IStores,
           }),
         );
 
@@ -45,8 +46,8 @@ describe("useCompetitionType()", () => {
               stores: {
                 projects: {
                   getById: mockLoadingError,
-                } as any,
-              },
+                },
+              } as unknown as IStores,
             }),
           );
 
@@ -64,8 +65,8 @@ describe("useCompetitionType()", () => {
               stores: {
                 projects: {
                   getById: mockBadResponse,
-                } as any,
-              },
+                },
+              } as unknown as IStores,
             }),
           );
 
@@ -91,8 +92,8 @@ describe("useCompetitionType()", () => {
                 stores: {
                   projects: {
                     getById: mockLoadingError,
-                  } as any,
-                },
+                  },
+                } as unknown as IStores,
               }),
             ),
           ).toThrowError(`There was an error getting the competitionType from projectId - ${stubProjectId}`);
@@ -110,8 +111,8 @@ describe("useCompetitionType()", () => {
                 stores: {
                   projects: {
                     getById: mockLoadingError,
-                  } as any,
-                },
+                  },
+                } as unknown as IStores,
               }),
             ),
           ).toThrowError(stubError);
@@ -128,8 +129,8 @@ describe("useCompetitionType()", () => {
                 stores: {
                   projects: {
                     getById: mockLoadingError,
-                  } as any,
-                },
+                  },
+                } as unknown as IStores,
               }),
             ),
           ).toThrowError(`There was an error getting the competitionType from projectId - ${stubProjectId}`);

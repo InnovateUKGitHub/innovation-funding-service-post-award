@@ -16,6 +16,9 @@ const initialProjectStatusState: IProjectParticipants = {
   isMultipleParticipants: false,
 };
 
+/**
+ *  hook to return all project participants
+ */
 function useGetProjectParticipants(projectId?: string): IProjectParticipants {
   const stores = useStores();
 
@@ -45,12 +48,18 @@ interface ProjectParticipantProviderProps {
   children: React.ReactElement;
 }
 
+/**
+ * Provider for project participant context
+ */
 export function ProjectParticipantProvider({ projectId, ...props }: ProjectParticipantProviderProps) {
   const state = useGetProjectParticipants(projectId);
 
   return <projectParticipantsContext.Provider {...props} value={state} />;
 }
 
+/**
+ * hook for project participant context
+ */
 export function useProjectParticipants(): IProjectParticipants {
   const context = useContext(projectParticipantsContext);
 

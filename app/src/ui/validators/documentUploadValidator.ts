@@ -28,13 +28,18 @@ const fileEmptyErrorMessage = (file: IFileWrapper | null) => {
   return `You cannot upload '${file?.fileName}' because it is empty.`;
 };
 
+// TODO: investigate better solution to passing in null to supers, preferably by passing in the model.
+// Avoided as part of ACC-8996 because wishing to avoid actual code changes in this PR
+
 export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
   public readonly description: Result;
   public readonly file: Result;
   constructor(model: DocumentUploadDto, config: IAppOptions, showValidationErrors: boolean) {
     // file is deliberately not a private field so it isn't logged....
     // model is empty object for this reason
-    super(null as any, showValidationErrors);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
+    super(null, showValidationErrors);
 
     this.file = Validation.all(
       this,
@@ -76,7 +81,9 @@ export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocument
   ) {
     // file is deliberately not a private field so it isn't logged....
     // model is empty object for this reason
-    super(null as any, showValidationErrors);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
+    super(null, showValidationErrors);
 
     this.files = this.validateFiles(model, config, filesRequired);
     this.description = model.description
@@ -123,7 +130,9 @@ export class FileDtoValidator extends Results<IFileWrapper> {
   constructor(file: IFileWrapper, { maxFileSize, permittedFileTypes }: IAppOptions, showValidationErrors: boolean) {
     // file is deliberately not a private field so it isn't logged....
     // model is empty object for this reason
-    super(null as any, showValidationErrors);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore-next-line
+    super(null, showValidationErrors);
 
     this.file = Validation.all(
       this,
@@ -137,7 +146,14 @@ export class FileDtoValidator extends Results<IFileWrapper> {
 
   public readonly file: Result;
 }
-function validateFileExtension(results: Results<{}>, file: IFileWrapper | null, permittedFileTypes: string[]): Result {
+/**
+ * validates file extension
+ */
+function validateFileExtension<T extends Results<ResultBase>>(
+  results: T,
+  file: IFileWrapper | null,
+  permittedFileTypes: string[],
+): Result {
   const fileName = file ? file.fileName : "";
   return Validation.permittedValues(
     results,
@@ -147,7 +163,10 @@ function validateFileExtension(results: Results<{}>, file: IFileWrapper | null, 
   );
 }
 
-function validateFileName(results: Results<{}>, file: IFileWrapper | null): Result {
+/**
+ * validates file name
+ */
+function validateFileName<T extends Results<ResultBase>>(results: T, file: IFileWrapper | null): Result {
   // TODO: this needs to be moved to config
   const validCharacters = /^[\w\d\s\\.\-()]+$/;
 

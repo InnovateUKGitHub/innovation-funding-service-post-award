@@ -1,21 +1,22 @@
 import { LoadingStatus } from "@framework/constants";
-import { routeTransition } from "@ui/redux/actions";
+import { DataLoadAction, routeTransition } from "@ui/redux/actions";
 import { dataReducer } from ".";
 
 const navigate = routeTransition;
 
-const claimDataAction = (id: any, data: any, status = 1, error: any = {}): any => ({
-  type: "DATA_LOAD",
-  payload: {
-    store: "claim",
-    id,
-    data,
-    status,
-    error,
-  },
-});
+const claimDataAction = (id: number, data: unknown, status = 1, error: unknown = {}) =>
+  ({
+    type: "DATA_LOAD",
+    payload: {
+      store: "claim",
+      id,
+      data,
+      status,
+      error,
+    },
+  } as unknown as DataLoadAction);
 
-const state = {} as any;
+const state = {} as ReturnType<typeof dataReducer>;
 
 describe("DataReducer", () => {
   test("given data is added to the store", () => {

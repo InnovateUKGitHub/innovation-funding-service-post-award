@@ -29,7 +29,7 @@ interface AllClaimsDashboardData {
   messages: string[];
 }
 
-function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaimsDashboardData & BaseProps) {
+const AllClaimsDashboardComponent = (props: AllClaimsDashboardParams & AllClaimsDashboardData & BaseProps) => {
   const { isMultipleParticipants } = useProjectParticipants();
 
   const { isActive: isProjectActive } = useProjectStatus();
@@ -283,7 +283,7 @@ function AllClaimsDashboardComponent(props: AllClaimsDashboardParams & AllClaims
   return (
     <Acc.PageLoader pending={combined} render={x => renderContents(x.projectDetails, x.partners, x.previousClaims)} />
   );
-}
+};
 
 const AllClaimsDashboardContainer = (props: AllClaimsDashboardParams & BaseProps) => {
   const stores = useStores();

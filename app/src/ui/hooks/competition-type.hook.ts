@@ -1,6 +1,9 @@
 import { getPending } from "@ui/helpers/get-pending";
 import { useStores } from "@ui/redux";
 
+/**
+ * hook returns competition type from project id
+ */
 export function useCompetitionType(projectId: string | undefined): string | undefined {
   const { projects } = useStores();
 

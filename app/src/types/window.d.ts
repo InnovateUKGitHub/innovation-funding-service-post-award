@@ -4,5 +4,6 @@ declare global {
   interface Window {
     __PRELOADED_STATE__: string;
     i18n: i18n;
+    __PAGE_LOAD_STATUS__: boolean;
   }
 }

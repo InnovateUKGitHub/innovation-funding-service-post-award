@@ -61,7 +61,8 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
 
 export type IStores = ReturnType<typeof createStores>;
 
-const storesContext = createContext<IStores>(null as any);
+// initialised to null, will be set with stores when the Provider is instantiated
+const storesContext = createContext<IStores>(null as unknown as IStores);
 
 /* eslint-disable @typescript-eslint/naming-convention */
 export const StoresProvider = storesContext.Provider;
