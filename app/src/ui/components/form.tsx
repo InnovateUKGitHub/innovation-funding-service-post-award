@@ -25,7 +25,7 @@ import { ValidationError } from "./validationError";
 export type DropdownOption = DropdownListOption;
 
 // Return type of our `createTypedForm` function
-export type FormBuilder<T extends TypedFormDataType> = ReturnType<typeof createTypedForm<T>>;
+export type FormBuilder<T> = ReturnType<typeof createTypedForm<T>>;
 
 // Type of a form Select option.
 export interface SelectOption {
@@ -41,9 +41,6 @@ export interface SelectOption {
  * @returns A new name for the hint
  */
 const createFieldHintId = (name: string) => `${name}-hint`;
-
-// Valid controlled form datatypes
-type TypedFormDataType = Record<string, any> | string | number | null;
 
 /**
  * Create a collection of controlled form elements, and it's corresponding parent form.
@@ -88,7 +85,7 @@ type TypedFormDataType = Record<string, any> | string | number | null;
  *   );
  * };
  */
-export const createTypedForm = <T extends TypedFormDataType>() => {
+export const createTypedForm = <T,>() => {
   // Props shared by the <Form /> element, whether it is an editor or just a visualiser.
   interface SharedFormProps {
     onChange?: (data: T) => void;
