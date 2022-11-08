@@ -40,6 +40,8 @@ interface Callbacks {
   onSave: (dto: PCRDto, link: ILinkInfo) => void;
 }
 
+const Form = ACC.createTypedForm<PCRDto>();
+
 class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCostSummaryParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
@@ -68,7 +70,6 @@ class SpendProfileCostsSummaryComponent extends ContainerBase<PcrSpendProfileCos
       step: (spendProfileStep && spendProfileStep.stepNumber) || undefined,
     });
     const costs = addPartnerItem.spendProfile.costs.filter(x => x.costCategoryId === this.props.costCategoryId);
-    const Form = ACC.TypedForm<PCRDto>();
     const costCategoryType = new CostCategoryList(project.competitionType).fromId(costCategory.type);
     return (
       <ACC.Page

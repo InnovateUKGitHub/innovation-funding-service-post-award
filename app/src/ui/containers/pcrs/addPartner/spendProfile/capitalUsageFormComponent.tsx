@@ -14,12 +14,13 @@ interface InnerProps {
   types: Option<PCRSpendProfileCapitalUsageType>[];
 }
 
+const Form = ACC.createTypedForm<PCRSpendProfileCapitalUsageCostDto>();
+
 class Component extends React.Component<
   SpendProfileCostFormProps<PCRSpendProfileCapitalUsageCostDto, PCRCapitalUsageCostDtoValidator> & InnerProps
 > {
   render() {
     const { editor, validator, data, costCategory } = this.props;
-    const Form = ACC.TypedForm<PCRSpendProfileCapitalUsageCostDto>();
     const typeOptions = this.getOptions(this.props.data.type, this.props.types);
 
     return (

@@ -15,6 +15,9 @@ interface DeMinimisStepUiProps {
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
+const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+
 const DeMinimisStepUi = ({
   documents,
   documentsEditor,
@@ -39,9 +42,6 @@ const DeMinimisStepUi = ({
       </ACC.Section>
     );
   };
-
-  const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
-  const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
   return (
     <>

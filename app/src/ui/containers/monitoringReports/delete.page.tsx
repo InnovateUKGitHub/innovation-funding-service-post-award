@@ -22,6 +22,8 @@ interface Data {
   editor: Pending<IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>>;
 }
 
+const DeleteForm = ACC.createTypedForm<Dtos.MonitoringReportDto>();
+
 class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeleteParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
@@ -36,7 +38,6 @@ class DeleteVerificationComponent extends ContainerBase<MonitoringReportDeletePa
     project: Dtos.ProjectDto,
     editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>,
   ) {
-    const DeleteForm = ACC.TypedForm<Dtos.MonitoringReportDto>();
     return (
       <ACC.Page
         pageTitle={<ACC.Projects.Title {...project} />}

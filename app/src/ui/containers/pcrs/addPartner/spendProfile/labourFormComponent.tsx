@@ -6,6 +6,8 @@ import { SpendProfileCostFormProps } from "@ui/containers";
 import { EditorStatus } from "@ui/constants/enums";
 import { useMounted } from "@ui/features";
 
+const Form = ACC.createTypedForm<PCRSpendProfileLabourCostDto>();
+
 export const LabourFormComponent = ({
   onSave,
   onChange,
@@ -23,8 +25,6 @@ export const LabourFormComponent = ({
 
     onChange(editor.data);
   };
-
-  const Form = ACC.TypedForm<PCRSpendProfileLabourCostDto>();
 
   return (
     <Form.Form

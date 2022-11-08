@@ -4,11 +4,11 @@ import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRScopeChangeItemDtoValidator } from "@ui/validators";
 import { EditorStatus } from "@ui/constants/enums";
 
+const Form = ACC.createTypedForm<PCRItemForScopeChangeDto>();
+
 export const PublicDescriptionChangeStep = (
   props: PcrStepProps<PCRItemForScopeChangeDto, PCRScopeChangeItemDtoValidator>,
 ) => {
-  const Form = ACC.TypedForm<PCRItemForScopeChangeDto>();
-
   return (
     <ACC.Section qa="newDescriptionSection">
       <Form.Form

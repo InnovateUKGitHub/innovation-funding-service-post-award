@@ -20,6 +20,8 @@ interface ContainerProps {
   funds: PCRSpendProfileOtherFundingDto[];
 }
 
+const Form = ACC.createTypedForm<null>();
+
 const OtherSourcesOfFunding = ({
   pcrItem,
   onSave,
@@ -123,14 +125,18 @@ const OtherSourcesOfFunding = ({
     return footers;
   };
 
-  const Form = ACC.TypedForm<{}>();
   const Table = ACC.TypedTable<PCRSpendProfileOtherFundingDto>();
 
   return (
     <ACC.Section title={x => x.pages.pcrAddPartnerOtherFundingSources.formSectionTitle}>
       <ACC.Content markdown value={x => x.pages.pcrAddPartnerOtherFundingSources.guidance} />
 
-      <Form.Form qa="addPartnerForm" data={{}} isSaving={status === EditorStatus.Saving} onSubmit={() => onSave(false)}>
+      <Form.Form
+        qa="addPartnerForm"
+        data={null}
+        isSaving={status === EditorStatus.Saving}
+        onSubmit={() => onSave(false)}
+      >
         <Form.Fieldset>
           <Form.Hidden value={() => funds.length} name={"itemsLength"} />
 

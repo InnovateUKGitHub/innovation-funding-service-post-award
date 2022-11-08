@@ -4,10 +4,10 @@ import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { EditorStatus } from "@ui/constants/enums";
 
+const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
 export const FinanceDetailsStep = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
 ) => {
-  const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
   return (
     <ACC.Section title={x => x.pages.pcrAddPartnerFinanceDetails.sectionTitle}>
       <Form.Form

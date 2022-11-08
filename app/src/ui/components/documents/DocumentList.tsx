@@ -1,6 +1,6 @@
 import { stringComparator } from "@framework/util/comparator";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
-import { TypedForm } from "../form";
+import { createTypedForm } from "../form";
 import { LinksList } from "../linksList";
 
 import { DocumentsUnavailable } from "./DocumentsUnavailable";
@@ -29,13 +29,13 @@ interface DocumentListWithDeleteProps extends DocumentsBase {
   onRemove: (d: DocumentSummaryDto) => void;
 }
 
+const Form = createTypedForm<DocumentSummaryDto[]>();
+
 export function DocumentListWithDelete({ documents = [], qa, onRemove }: DocumentListWithDeleteProps) {
   if (!documents.length) return <DocumentsUnavailable />;
 
   // @TODO: should server not do this?
   documents.sort((a, b) => stringComparator(a.fileName, b.fileName));
-
-  const Form = TypedForm<DocumentSummaryDto[]>();
 
   return (
     <div data-qa={qa}>

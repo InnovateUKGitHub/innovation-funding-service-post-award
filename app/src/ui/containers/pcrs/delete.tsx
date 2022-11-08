@@ -23,6 +23,8 @@ interface Callbacks {
   onDelete: (projectId: string, pcrId: string, dto: PCRDto) => void;
 }
 
+const DeleteForm = ACC.createTypedForm<PCRDto>();
+
 class PCRDeleteComponent extends ContainerBase<PCRDeleteParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
@@ -35,7 +37,6 @@ class PCRDeleteComponent extends ContainerBase<PCRDeleteParams, Data, Callbacks>
   }
 
   private renderContents(project: ProjectDto, pcr: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
-    const DeleteForm = ACC.TypedForm<PCRDto>();
     return (
       <ACC.Page
         backLink={

@@ -5,12 +5,13 @@ import { PCRSubcontractingCostDtoValidator } from "@ui/validators/pcrSpendProfil
 import { SpendProfileCostFormProps } from "@ui/containers";
 import { EditorStatus } from "@ui/constants/enums";
 
+const Form = ACC.createTypedForm<PCRSpendProfileSubcontractingCostDto>();
+
 export class SubcontractingFormComponent extends Component<
   SpendProfileCostFormProps<PCRSpendProfileSubcontractingCostDto, PCRSubcontractingCostDtoValidator>
 > {
   render() {
     const { editor, validator, data, costCategory } = this.props;
-    const Form = ACC.TypedForm<PCRSpendProfileSubcontractingCostDto>();
 
     return (
       <Form.Form

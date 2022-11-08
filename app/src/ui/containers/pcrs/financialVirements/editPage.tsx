@@ -90,6 +90,8 @@ const EditPageLoader = ({ project, partner, costCategories, editor, ...props }: 
   return <ACC.PageLoader pending={combined} render={data => <EditPage {...props} {...data} />} />;
 };
 
+const VirementForm = ACC.createTypedForm<FinancialVirementDto>();
+
 /**
  * A page for editing Loans virements for a PCR.
  *
@@ -123,7 +125,6 @@ const EditPage = ({
   const validation = costCategories.map(
     x => partnerVirementsValidator?.virements.results.find(y => y.model.costCategoryId === x.id) || null,
   );
-  const VirementForm = ACC.TypedForm<FinancialVirementDto>();
   const VirementTable = ACC.TypedTable<typeof costCategoriesWithVirement[0]>();
   const SummaryTable = ACC.TypedTable<FinancialVirementDto>();
 

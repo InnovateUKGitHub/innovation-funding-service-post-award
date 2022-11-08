@@ -27,6 +27,8 @@ interface CreatePcrProps extends CreatePcrParams, BaseProps {
   createNewChangeRequestItem: (itemType: Dtos.PCRItemTypeDto) => Dtos.PCRItemDto;
 }
 
+const PCRForm = ACC.createTypedForm<Dtos.PCRDto>();
+
 function PCRCreateComponent({ content, ...props }: CreatePcrProps) {
   const { isMultipleParticipants } = useProjectParticipants();
 
@@ -75,7 +77,6 @@ function PCRCreateComponent({ content, ...props }: CreatePcrProps) {
     const pcrDashboardLink = props.routes.pcrsDashboard.getLink({ projectId: props.projectId });
     const pcrDashboardBackLink = <ACC.BackLink route={pcrDashboardLink}>{content.backLink}</ACC.BackLink>;
 
-    const PCRForm = ACC.TypedForm<Dtos.PCRDto>();
     const { options, selected } = getListData(editor.data.items, itemTypes);
 
     return (

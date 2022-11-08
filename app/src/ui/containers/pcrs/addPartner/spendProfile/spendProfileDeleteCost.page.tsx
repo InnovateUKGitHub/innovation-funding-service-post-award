@@ -54,6 +54,8 @@ export interface SpendProfileDeleteFormProps<T extends PCRSpendProfileCostDto> {
   costCategory: CostCategoryDto;
 }
 
+const DeleteForm = ACC.createTypedForm<PCRSpendProfileCostDto>();
+
 class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
@@ -77,7 +79,6 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
     costCategory: CostCategoryDto,
     cost: PCRSpendProfileCostDto,
   ) {
-    const DeleteForm = ACC.TypedForm<PCRSpendProfileCostDto>();
     return (
       <ACC.Page
         backLink={

@@ -19,12 +19,12 @@ interface InnerProps {
   pcrPartnerTypes: Option<PCRPartnerType>[];
 }
 
+const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+
 class Component extends React.Component<
   PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & InnerProps
 > {
   render() {
-    const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
-
     const roleOptions = this.getOptions(this.props.pcrItem.projectRole, this.props.pcrProjectRoles);
     const typeOptions = this.getOptions(this.props.pcrItem.partnerType, this.props.pcrPartnerTypes);
     const commercialWorkOptions: ACC.SelectOption[] = [

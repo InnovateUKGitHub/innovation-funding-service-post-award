@@ -21,6 +21,11 @@ interface ProjectDashboardParams {
   arrayFilters?: FilterOptions[];
 }
 
+interface IProjectDashboardForm {
+  searchValue: string;
+  filterValue: FilterOptions[];
+}
+
 interface ProjectDashboardProps extends BaseProps, ProjectDashboardParams {
   totalNumberOfProjects: number;
   projects: ProjectDto[];
@@ -28,6 +33,8 @@ interface ProjectDashboardProps extends BaseProps, ProjectDashboardParams {
   partners: PartnerDto[];
   onSearch: (searchParams: ProjectDashboardParams) => void;
 }
+
+const Form = ACC.createTypedForm<IProjectDashboardForm>();
 
 function ProjectDashboard({
   config,
@@ -59,8 +66,6 @@ function ProjectDashboard({
 
   const displaySearch: boolean = totalNumberOfProjects >= config.options.numberOfProjectsToSearch;
   const options: ACC.SelectOption[] = filterOptions.map(x => ({ id: x.id, value: x.label }));
-
-  const Form = ACC.TypedForm<typeof searchFilterState>();
 
   return (
     <ACC.Page

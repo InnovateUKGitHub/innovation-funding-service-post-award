@@ -6,13 +6,13 @@ import { useContent } from "@ui/hooks";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRProjectSuspensionItemDtoValidator } from "@ui/validators";
 
+const Form = ACC.createTypedForm<PCRItemForProjectSuspensionDto>();
+
 export function SuspendProjectDetails(
   props: PcrStepProps<PCRItemForProjectSuspensionDto, PCRProjectSuspensionItemDtoValidator>,
 ) {
   const { getContent } = useContent();
   const { isPm } = getAuthRoles(props.project.roles);
-
-  const Form = ACC.TypedForm<PCRItemForProjectSuspensionDto>();
 
   const suspendProjectIntro = getContent(x => x.pages.pcrSuspendProjectDetails.suspendProjectIntro);
   const firstDayOfPauseTitle = getContent(x => x.pages.pcrSuspendProjectDetails.firstDayOfPauseTitle);

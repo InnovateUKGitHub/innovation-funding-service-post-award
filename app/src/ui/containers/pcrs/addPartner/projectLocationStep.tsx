@@ -10,10 +10,11 @@ interface InnerProps {
   pcrProjectLocation: Option<PCRProjectLocation>[];
 }
 
+const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+
 const InnerContainer = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & InnerProps,
 ) => {
-  const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
   const projectLocationOptions: ACC.SelectOption[] = props.pcrProjectLocation
     .filter(x => x.active)
     .map(x => ({ id: x.value.toString(), value: x.label }));

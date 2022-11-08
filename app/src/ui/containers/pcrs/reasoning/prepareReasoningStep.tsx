@@ -4,10 +4,11 @@ import { PCRDtoValidator } from "@ui/validators";
 import { ContainerBase } from "../../containerBase";
 import * as ACC from "../../../components";
 
+const PCRForm = ACC.createTypedForm<PCRDto>();
+
 export class PCRPrepareReasoningStep extends ContainerBase<ReasoningStepProps, {}> {
   render() {
     const { editor, onSave, onChange } = this.props;
-    const PCRForm = ACC.TypedForm<PCRDto>();
 
     return (
       <ACC.Section qa="reasoning-save-and-return">

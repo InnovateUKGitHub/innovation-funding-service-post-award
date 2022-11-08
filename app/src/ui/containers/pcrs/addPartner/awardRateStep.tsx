@@ -5,11 +5,10 @@ import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { Content } from "@ui/components";
 import { EditorStatus } from "@ui/constants/enums";
 
+const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
 export const AwardRateStep = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
 ) => {
-  const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
-
   return (
     <ACC.Section title={x => x.pages.pcrAddPartnerAwardRate.formSectionTitle}>
       <Content markdown value={x => x.pages.pcrAddPartnerAwardRate.guidance} />

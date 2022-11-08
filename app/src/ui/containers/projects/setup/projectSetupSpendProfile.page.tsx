@@ -24,6 +24,7 @@ interface Callbacks {
   onChangePartner: (dto: PartnerDto) => void;
 }
 
+const Form = ACC.createTypedForm<ForecastDetailsDTO[]>();
 class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendProfileParams, Data, Callbacks> {
   public render() {
     const combined = Pending.combine({
@@ -38,7 +39,6 @@ class ProjectSetupSpendProfileComponent extends ContainerBase<ProjectSetupSpendP
     editor: IEditorStore<ForecastDetailsDTO[], IForecastDetailsDtosValidator>,
     partnerEditor: IEditorStore<PartnerDto, PartnerDtoValidator>,
   ) {
-    const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
     const readyToSubmitMessage = <ACC.Content value={x => x.pages.projectSetupSpendProfile.readyToSubmitMessage} />;
 
     const options: ACC.SelectOption[] = [{ id: "true", value: readyToSubmitMessage }];

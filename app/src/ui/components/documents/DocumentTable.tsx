@@ -4,7 +4,7 @@ import { getAuthRoles } from "@framework/types";
 import { getFileSize } from "@framework/util/files";
 import { Content } from "@ui/components/content";
 import { ITypedTable, TypedTable } from "@ui/components/table";
-import { TypedForm } from "../form";
+import { createTypedForm } from "../form";
 import { DocumentsBase } from "./documents.interface";
 import { DocumentsUnavailable } from "./DocumentsUnavailable";
 import { ProjectPartnerDocumentEditProps } from "./DocumentView";
@@ -12,6 +12,8 @@ import { ProjectPartnerDocumentEditProps } from "./DocumentView";
 export interface DocumentTableProps<T extends DocumentSummaryDto> extends DocumentsBase<T> {
   customContent?: (table: ITypedTable<T>) => any;
 }
+
+const Form = createTypedForm<DocumentSummaryDto[]>();
 
 export const DocumentTable = <T extends DocumentSummaryDto>({
   documents = [],
@@ -81,8 +83,6 @@ export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithD
 }: DocumentTableWithDeleteProps<DocumentSummaryDto>) => {
   if (!documents.length) return <DocumentsUnavailable />;
 
-  const Form = TypedForm<DocumentSummaryDto[]>();
-
   return (
     <Form.Form data={documents}>
       <DocumentTable
@@ -127,7 +127,7 @@ export const PartnerDocumentTableWithDelete: React.FunctionComponent<
   ProjectPartnerDocumentEditProps<PartnerDocumentSummaryDto>) => {
   if (!documents.length) return <DocumentsUnavailable />;
 
-  const Form = TypedForm<PartnerDocumentSummaryDto[]>();
+  const Form = createTypedForm<PartnerDocumentSummaryDto[]>();
   const { isMo } = getAuthRoles(project.roles);
 
   return (

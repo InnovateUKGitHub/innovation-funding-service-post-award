@@ -53,6 +53,9 @@ interface ReviewData {
   documentsEditor: Pending<IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>>;
 }
 
+const Form = ACC.createTypedForm<ClaimDto>();
+const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+
 export function useReviewContent() {
   const { getContent } = useContent();
 
@@ -224,8 +227,6 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
   };
 
   const renderForm = (data: CombinedData): JSX.Element => {
-    const Form = ACC.TypedForm<ClaimDto>();
-
     const options: ACC.SelectOption[] = [
       { id: ClaimStatus.MO_QUERIED, value: content.optionQueryClaim },
       { id: ClaimStatus.AWAITING_IUK_APPROVAL, value: content.optionSubmitClaim },
@@ -274,8 +275,6 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
   };
 
   const renderSupportingDocumentsItem = ({ documentsEditor, documents }: CombinedData) => {
-    const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
-
     return (
       <ACC.AccordionItem
         title={content.accordionTitleSupportingDocumentsForm}

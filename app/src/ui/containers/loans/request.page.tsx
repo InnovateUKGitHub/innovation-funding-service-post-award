@@ -30,11 +30,11 @@ interface LoansRequestPageProps extends LoansRequestParams, BaseProps {
   onLoanUpdate: (dto: LoanDto) => void;
 }
 
+const RequestForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+const CommentsForm = ACC.createTypedForm<LoanDto>();
+
 function LoansRequestPage({ loan, loanEditor, loanDocsEditor, documents, ...props }: LoansRequestPageProps) {
   const { getContent } = useContent();
-
-  const RequestForm = ACC.TypedForm<MultipleDocumentUploadDto>();
-  const CommentsForm = ACC.TypedForm<LoanDto>();
 
   const createPcrLink = <ACC.Link route={props.routes.pcrCreate.getLink({ projectId: props.projectId })}> </ACC.Link>;
 

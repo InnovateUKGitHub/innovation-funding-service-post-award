@@ -9,6 +9,8 @@ import { useContent } from "@ui/hooks";
 import { IRoutes } from "@ui/routing";
 import { EditorStatus } from "@ui/constants/enums";
 
+const VirementForm = ACC.createTypedForm<FinancialVirementDto>();
+
 export function useEditPartnerLevelContent() {
   const { getContent } = useContent();
 
@@ -94,7 +96,6 @@ function EditPartnerLevelComponent(props: EditPartnerLevelProps & FinancialVirem
           })
           .filter(x => !!x.virement);
 
-        const VirementForm = ACC.TypedForm<FinancialVirementDto>();
         const VirementTable = ACC.TypedTable<typeof data[0]>();
 
         const backLink = (

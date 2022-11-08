@@ -3,10 +3,10 @@ import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 
+const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
 export const StateAidEligibilityStep = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
 ) => {
-  const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
   return (
     <>
       <ACC.Section qa="state-aid" title={x => x.pages.pcrAddPartnerStateAidEligibility.formSectionTitleStateAid}>

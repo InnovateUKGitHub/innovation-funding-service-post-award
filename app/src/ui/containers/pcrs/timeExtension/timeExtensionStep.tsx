@@ -12,13 +12,14 @@ interface TimeExtensionProps {
   timeExtensionOptions: PCRTimeExtensionOption[];
 }
 
+const Form = ACC.createTypedForm<PCRItemForTimeExtensionDto>();
+
 const TimeExtensionStep = (
   props: PcrStepProps<PCRItemForTimeExtensionDto, PCRTimeExtensionItemDtoValidator> & TimeExtensionProps,
 ) => {
   const { getContent } = useContent();
   const { isClient } = useMounted();
 
-  const Form = ACC.TypedForm<PCRItemForTimeExtensionDto>();
   const existingProjectHeading = getContent(x => x.pages.pcrTimeExtensionStep.existingProjectHeading);
   const dateLabel = getContent(x => x.pages.pcrTimeExtensionStep.dateLabel);
   const durationLabel = getContent(x => x.pages.pcrTimeExtensionStep.durationLabel);

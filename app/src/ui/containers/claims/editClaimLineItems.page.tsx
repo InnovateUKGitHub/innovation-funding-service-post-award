@@ -54,6 +54,8 @@ export interface EditClaimLineItemsCallbacks {
   onUpdate: (saving: boolean, dto: ClaimDetailsDto, goToUpload?: boolean) => void;
 }
 
+const LineItemForm = ACC.createTypedForm<ClaimDetailsDto>();
+
 export class EditClaimLineItemsComponent extends ContainerBaseWithState<
   EditClaimDetailsParams,
   EditClaimLineItemsData,
@@ -190,7 +192,6 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
       },
     ];
 
-    const LineItemForm = ACC.TypedForm<ClaimDetailsDto>();
     const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
     const supportingDocumentContent = this.getCompetitionRenderCalculatedDocumentSection(
       competitionType,
@@ -244,7 +245,6 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     documents: DocumentSummaryDto[],
     competitionType: string,
   ) {
-    const LineItemForm = ACC.TypedForm<ClaimDetailsDto>();
     const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
     const validationResults = editor.validator.items.results;
 
@@ -312,8 +312,6 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
   ) {
     const { isKTP, isCombinationOfSBRI } = checkProjectCompetition(competitionType);
 
-    const LineItemForm = ACC.TypedForm<ClaimDetailsDto>();
-
     return (
       !isKTP && (
         <>
@@ -345,7 +343,6 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     documents: DocumentSummaryDto[],
     editor: IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>,
   ) {
-    const LineItemForm = ACC.TypedForm<ClaimDetailsDto>();
     const { isKTP, isCombinationOfSBRI } = checkProjectCompetition(competitionType);
 
     return (
@@ -389,8 +386,6 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     isCombinationOfSBRI: boolean,
     editorData: CombinedData["editor"],
   ) {
-    const LineItemForm = ACC.TypedForm<ClaimDetailsDto>();
-
     return (
       <>
         <ACC.Section

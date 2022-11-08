@@ -10,14 +10,14 @@ interface CompaniesHouseResultsProps {
   onSelect: (option: CompanyDto) => void;
 }
 
+const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+
 export const CompaniesHouseResults = ({
   selectedRegistrationNumber,
   options,
   onSelect,
 }: CompaniesHouseResultsProps) => {
   const { getContent } = useContent();
-
-  const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
 
   const handleSelection = (companyId: string | undefined, results: CompanyDto[]): void => {
     if (!companyId) return;

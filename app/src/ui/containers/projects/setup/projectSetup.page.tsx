@@ -28,6 +28,7 @@ interface CombinedData {
   editor: IEditorStore<Dtos.PartnerDto, PartnerDtoValidator>;
 }
 
+const Form = ACC.createTypedForm<Dtos.PartnerDto>();
 class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
@@ -40,8 +41,6 @@ class ProjectSetupComponent extends ContainerBase<ProjectSetupParams, Data, Call
   }
 
   private renderContents({ project, partner, editor }: CombinedData) {
-    const Form = ACC.TypedForm<Dtos.PartnerDto>();
-
     return (
       <ACC.Page
         backLink={

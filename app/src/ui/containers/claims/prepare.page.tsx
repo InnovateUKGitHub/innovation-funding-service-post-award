@@ -48,6 +48,8 @@ interface CombinedData {
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
 }
 
+const Form = ACC.createTypedForm<ClaimDto>();
+
 class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks> {
   public render() {
     const combined = Pending.combine({
@@ -83,8 +85,6 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
   }
 
   private renderDetailsSection(data: CombinedData) {
-    const Form = ACC.TypedForm<ClaimDto>();
-
     return (
       <ACC.Section title={<ACC.Claims.ClaimPeriodDate claim={data.claim} />}>
         <ACC.Claims.ClaimTable

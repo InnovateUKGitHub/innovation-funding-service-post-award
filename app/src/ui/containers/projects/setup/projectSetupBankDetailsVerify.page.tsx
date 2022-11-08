@@ -20,6 +20,7 @@ interface Callbacks {
   onChange: (submit: boolean, dto: PartnerDto) => void;
 }
 
+const Form = ACC.createTypedForm<PartnerDto>();
 class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<
   ProjectSetupBankDetailsVerifyParams,
   Data,
@@ -30,7 +31,6 @@ class ProjectSetupBankDetailsVerifyComponent extends ContainerBase<
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor)} />;
   }
   public renderContents(project: ProjectDto, editor: IEditorStore<PartnerDto, PartnerDtoValidator>) {
-    const Form = ACC.TypedForm<PartnerDto>();
     const { bankDetails } = editor.data;
 
     return (

@@ -14,13 +14,13 @@ interface InnerProps {
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
+const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+
 class Component extends React.Component<
   PcrStepProps<PCRItemForAccountNameChangeDto, PCRAccountNameChangeItemDtoValidator> & InnerProps
 > {
   render(): React.ReactNode {
     const { documents, documentsEditor } = this.props;
-
-    const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     return (
       <ACC.Section>

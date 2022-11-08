@@ -2,7 +2,7 @@ import { IEditorStore } from "@ui/redux";
 import * as Dtos from "@framework/dtos";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { SimpleString } from "@ui/components/renderers";
-import { TypedForm } from "../form";
+import { createTypedForm } from "@ui/components/form";
 import { Section } from "../layout/section";
 import { Content } from "../content";
 
@@ -12,9 +12,9 @@ interface PeriodProps {
   onSave: (dto: Dtos.MonitoringReportDto, submit: boolean, progress: boolean) => void;
 }
 
-export const MonitoringReportPeriodFormComponent = ({ editor, onChange, onSave }: PeriodProps) => {
-  const ReportForm = TypedForm<Dtos.MonitoringReportDto>();
+const ReportForm = createTypedForm<Dtos.MonitoringReportDto>();
 
+export const MonitoringReportPeriodFormComponent = ({ editor, onChange, onSave }: PeriodProps) => {
   return (
     <>
       <Section>

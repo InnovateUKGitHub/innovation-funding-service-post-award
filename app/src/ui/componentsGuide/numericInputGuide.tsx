@@ -1,7 +1,7 @@
-import { TypedForm } from "@ui/components";
+import { createTypedForm } from "@ui/components";
 import { IGuide } from "@framework/types";
 
-const ReportForm = TypedForm<number>();
+const ReportForm = createTypedForm<number>();
 
 export const numericInputGuide: IGuide = {
   name: "Input",

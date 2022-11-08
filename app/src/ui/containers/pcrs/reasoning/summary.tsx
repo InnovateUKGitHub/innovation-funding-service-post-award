@@ -25,6 +25,8 @@ interface Data {
   editableItemTypes: Pending<PCRItemType[]>;
 }
 
+const PCRForm = ACC.createTypedForm<PCRDto>();
+
 class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
   render() {
     const combined = Pending.combine({
@@ -103,8 +105,6 @@ class PCRReasoningSummaryComponent extends ContainerBase<Props, Data> {
   }
 
   private renderCompleteForm(editor: IEditorStore<PCRDto, PCRDtoValidator>) {
-    const PCRForm = ACC.TypedForm<PCRDto>();
-
     const options: ACC.SelectOption[] = [{ id: "true", value: "I have finished making changes." }];
     return (
       <PCRForm.Form

@@ -75,6 +75,8 @@ interface ClaimDocumentsComponentProps extends ClaimDocumentsPageParams, BasePro
   onDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
+const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+
 const ClaimDocumentsComponent = ({
   content,
   projectId,
@@ -90,7 +92,6 @@ const ClaimDocumentsComponent = ({
     documentDescriptions: DocumentDescriptionDto[],
   ) => {
     const { isLoans } = checkProjectCompetition(project.competitionType);
-    const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     const documentTypeOptions: DropdownOption[] = documentDescriptions
       .filter(x => {

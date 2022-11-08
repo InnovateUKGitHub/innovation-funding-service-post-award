@@ -8,6 +8,8 @@ import { ReasoningStepProps } from "@ui/containers/pcrs/reasoning/workflowMetada
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 
+const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+
 interface InnerProps {
   documents: Pending<DocumentSummaryDto[]>;
   onFileChange: (saving: "DontSave" | "SaveAndRemain" | "SaveAndContinue", dto: MultipleDocumentUploadDto) => void;
@@ -16,8 +18,6 @@ interface InnerProps {
 class PrepareReasoningFilesStepComponent extends Component<ReasoningStepProps & InnerProps> {
   render(): React.ReactNode {
     const { documentsEditor, pcrId, projectId } = this.props;
-
-    const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     // Get the step-less review-before-submit page.
     const back = this.props.routes.pcrPrepareReasoning.getLink({

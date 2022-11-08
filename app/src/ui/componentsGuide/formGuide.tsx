@@ -1,7 +1,7 @@
 import React from "react";
 import { IFileWrapper } from "@framework/types";
 import { IGuide } from "@framework/types";
-import { TypedForm } from "../components/form";
+import { createTypedForm } from "../components/form";
 import { Json } from "../components/renderers/json";
 import { range } from "../../shared/range";
 
@@ -44,6 +44,8 @@ interface ISimpleEditorDto {
   file: IFileWrapper[] | null;
 }
 
+const ExampleForm = createTypedForm<ISimpleEditorDto>();
+
 class SimpleForm extends React.Component<{}, { original: ISimpleEditorDto; editor: ISimpleEditorDto }> {
   private readonly options: { value: React.ReactNode; id: string }[];
   private readonly multiOptions: { value: React.ReactNode; id: string }[];
@@ -69,8 +71,6 @@ class SimpleForm extends React.Component<{}, { original: ISimpleEditorDto; edito
   }
 
   render() {
-    const ExampleForm = TypedForm<ISimpleEditorDto>();
-
     return (
       <div>
         <Json value={this.state} />

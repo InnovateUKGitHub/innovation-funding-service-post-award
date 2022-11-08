@@ -1,16 +1,16 @@
 import * as ACC from "@ui/components";
 import { AccountDto, PCRItemForPartnerAdditionDto } from "@framework/dtos";
-import { H2 } from "@ui/components";
+import { createTypedForm, H2 } from "@ui/components";
 import { useContent } from "@ui/hooks";
 
 interface JesSearchResultsProps {
   selected: AccountDto | undefined;
   jesAccounts: AccountDto[];
   update: (id: string | undefined, jesAccounts: AccountDto[]) => void;
+  Form: ReturnType<typeof createTypedForm<PCRItemForPartnerAdditionDto>>;
 }
 
-export const JesSearchResults = ({ selected, jesAccounts, update }: JesSearchResultsProps) => {
-  const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
+export const JesSearchResults = ({ selected, jesAccounts, update, Form }: JesSearchResultsProps) => {
   const { getContent } = useContent();
 
   const jesAccountsOptions: ACC.SelectOption[] = jesAccounts.map(x => ({
