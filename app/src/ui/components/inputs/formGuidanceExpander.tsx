@@ -1,4 +1,4 @@
-import * as ACC from "@ui/components";
+import { Info } from "../layout/info";
 import { DetailContentList } from "./detailContentList";
 
 export interface ExpandedItem {
@@ -13,7 +13,7 @@ export interface FormGuidanceExpanderProps {
 }
 
 export const FormGuidanceExpander = ({ title, items, qa }: FormGuidanceExpanderProps) => (
-  <ACC.Info summary={title} qa={qa}>
+  <Info summary={title} qa={qa}>
     {!!items.length && <DetailContentList items={items} qa="form-guidance-list" />}
-  </ACC.Info>
+  </Info>
 );

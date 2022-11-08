@@ -1,8 +1,8 @@
 import React from "react";
 import cx from "classnames";
 
-import * as ACC from "@ui/components";
 import { ExpandedItem } from "./formGuidanceExpander";
+import { SimpleString } from "../renderers/simpleString";
 
 export interface DetailContentListProps {
   items: ExpandedItem[];
@@ -16,15 +16,15 @@ export function DetailContentList({ items, qa }: DetailContentListProps) {
     <div data-qa={qa}>
       {items.map((x, i) => (
         <React.Fragment key={x.header}>
-          <ACC.Renderers.SimpleString
+          <SimpleString
             className={cx("govuk-!-font-weight-bold govuk-!-margin-bottom-1", {
               "govuk-!-padding-top-3": i === 0,
             })}
           >
             {x.header}
-          </ACC.Renderers.SimpleString>
+          </SimpleString>
 
-          <ACC.Renderers.SimpleString>{x.description}</ACC.Renderers.SimpleString>
+          <SimpleString>{x.description}</SimpleString>
         </React.Fragment>
       ))}
     </div>
