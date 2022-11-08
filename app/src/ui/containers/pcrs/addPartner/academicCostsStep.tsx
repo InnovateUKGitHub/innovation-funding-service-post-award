@@ -23,13 +23,14 @@ interface Data {
   costDto: PCRSpendProfileAcademicCostDto;
 }
 
+const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+
 class Component extends React.Component<
   PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & ContainerProps,
   Data
 > {
   render() {
     const { costCategories } = this.props;
-    const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
     return (
       <ACC.Section title={x => x.pcrAddPartnerLabels.projectCostsHeading}>
         <ACC.Renderers.SimpleString>

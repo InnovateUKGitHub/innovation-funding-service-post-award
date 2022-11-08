@@ -1,5 +1,5 @@
 import { ProjectContactDto, ProjectDto } from "@framework/dtos";
-import { H3, Loader, Section, TypedForm, TypedTable } from "@ui/components";
+import { H3, Loader, Section, createTypedForm, TypedTable } from "@ui/components";
 import { DropdownListOption } from "@ui/components/inputs";
 import { SimpleString } from "@ui/components/renderers";
 import { useContent } from "@ui/hooks";
@@ -20,6 +20,11 @@ interface UserSwitcherFormInputs extends UserChangerEmailFormInput {
   shouldStripNoemail: boolean;
 }
 
+const ResetUserForm = createTypedForm<string>();
+const ManuallyEnterUserForm = createTypedForm<UserChangerEmailFormInput>();
+const SelectProjectForm = createTypedForm<UserSwitcherFormInputs>();
+const SelectContactForm = createTypedForm<string>();
+
 const UserChangerProjectSelectorPartnerSelector = ({
   contacts,
 }: {
@@ -28,7 +33,6 @@ const UserChangerProjectSelectorPartnerSelector = ({
 }) => {
   const { getContent } = useContent();
   const ProjectContactTable = TypedTable<UserChangerTableRow>();
-  const SelectUserForm = TypedForm<string>();
 
   // A contact email-to-role record to collate a user's roles together.
   const contactRoleInfo: Record<string, UserChangerTableRow> = {};
@@ -70,7 +74,7 @@ const UserChangerProjectSelectorPartnerSelector = ({
   };
 
   return (
-    <SelectUserForm.Form data="" action="/">
+    <SelectContactForm.Form data="" action="/">
       <ProjectContactTable.Table qa="user-switcher-contacts" data={sortedData}>
         <ProjectContactTable.String
           qa="partner-name"
@@ -106,7 +110,7 @@ const UserChangerProjectSelectorPartnerSelector = ({
           qa="delete"
           value={x => {
             return (
-              <SelectUserForm.Button
+              <SelectContactForm.Button
                 name="user"
                 styling="Link"
                 className="govuk-!-font-size-19"
@@ -114,12 +118,12 @@ const UserChangerProjectSelectorPartnerSelector = ({
                 value={stripNoEmail(x.projectContactDto.email)}
               >
                 Change user
-              </SelectUserForm.Button>
+              </SelectContactForm.Button>
             );
           }}
         />
       </ProjectContactTable.Table>
-    </SelectUserForm.Form>
+    </SelectContactForm.Form>
   );
 };
 
@@ -141,7 +145,6 @@ const UserChangerProjectSelector = ({ projects }: { projects: ProjectDto[] }) =>
   const [project, setProjectId] = useState<ProjectDto>();
   const [email, setEmail] = useState<string | undefined>(initialEmailState);
   const [shouldStripNoemail, setShouldStripNoEmail] = useState<boolean>(true);
-  const SelectUserForm = TypedForm<UserSwitcherFormInputs>();
 
   // Create options for dropdown to select a project.
   const projectOptions: DropdownListOption[] = projects
@@ -171,9 +174,9 @@ const UserChangerProjectSelector = ({ projects }: { projects: ProjectDto[] }) =>
 
   return (
     <>
-      <SelectUserForm.Form {...userFormProps}>
+      <SelectProjectForm.Form {...userFormProps}>
         <H3>{getContent(x => x.components.userChanger.pickUserSubtitle)}</H3>
-        <SelectUserForm.DropdownList
+        <SelectProjectForm.DropdownList
           name="projectId"
           options={projectOptions}
           hasEmptyOption
@@ -181,7 +184,7 @@ const UserChangerProjectSelector = ({ projects }: { projects: ProjectDto[] }) =>
           value={p => projectOptions.find(x => p.projectId === x.value)}
           update={(x, value) => (x.projectId = String(value?.value))}
         />
-      </SelectUserForm.Form>
+      </SelectProjectForm.Form>
       {project?.id && <UserChangerProjectSelectorPartnerLoader project={project} />}
     </>
   );
@@ -199,14 +202,13 @@ const UserChangerProjectLoader = () => {
 
 const UserChangerReset = () => {
   const { getContent } = useContent();
-  const SelectUserForm = TypedForm<string>();
 
   return (
-    <SelectUserForm.Form data="" action="/">
-      <SelectUserForm.Button name="reset">
+    <ResetUserForm.Form data="" action="/">
+      <ResetUserForm.Button name="reset">
         {getContent(x => x.components.userChanger.resetUserMessage)}
-      </SelectUserForm.Button>
-    </SelectUserForm.Form>
+      </ResetUserForm.Button>
+    </ResetUserForm.Form>
   );
 };
 
@@ -214,10 +216,9 @@ const UserChangerManualEmailEntry = () => {
   const { getContent } = useContent();
   const initialEmailState = useStores().users.getCurrentUser().email;
   const [email, setEmail] = useState<string | undefined>(initialEmailState);
-  const SelectUserForm = TypedForm<UserChangerEmailFormInput>();
 
   return (
-    <SelectUserForm.Form
+    <ManuallyEnterUserForm.Form
       data={{ email }}
       onChange={e => {
         setEmail(e.email);
@@ -226,7 +227,7 @@ const UserChangerManualEmailEntry = () => {
     >
       <H3>{getContent(x => x.components.userChanger.enterUserSubtitle)}</H3>
 
-      <SelectUserForm.String
+      <ManuallyEnterUserForm.String
         label="user"
         name="user"
         labelHidden
@@ -234,8 +235,10 @@ const UserChangerManualEmailEntry = () => {
         update={(x, v) => (x.email = v || "")}
       />
 
-      <SelectUserForm.Submit>{getContent(x => x.components.userChanger.changeUserMessage)}</SelectUserForm.Submit>
-    </SelectUserForm.Form>
+      <ManuallyEnterUserForm.Submit>
+        {getContent(x => x.components.userChanger.changeUserMessage)}
+      </ManuallyEnterUserForm.Submit>
+    </ManuallyEnterUserForm.Form>
   );
 };
 

@@ -33,14 +33,13 @@ interface Callbacks {
   onChange: (submit: boolean, dto: PartnerDto) => void;
 }
 
+const Form = ACC.createTypedForm<PartnerDto>();
 class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDetailsParams, Data, Callbacks> {
   public render() {
     const combined = Pending.combine({ project: this.props.project, editor: this.props.editor });
     return <ACC.PageLoader pending={combined} render={x => this.renderContents(x.project, x.editor)} />;
   }
   public renderContents(project: ProjectDto, editor: IEditorStore<PartnerDto, PartnerDtoValidator>) {
-    const Form = ACC.TypedForm<PartnerDto>();
-
     return (
       <ACC.Page
         backLink={

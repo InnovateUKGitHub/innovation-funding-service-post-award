@@ -13,8 +13,9 @@ export interface PostcodeProps {
   displayCurrentPostcode: boolean;
 }
 
+const PostcodeForm = ACC.createTypedForm<PartnerDto>();
+
 export const PostcodeEdit = ({ editor, onUpdate, saveButtonContent, ...rest }: PostcodeProps) => {
-  const PostcodeForm = ACC.TypedForm<PartnerDto>();
   const { getContent } = useContent();
 
   return (

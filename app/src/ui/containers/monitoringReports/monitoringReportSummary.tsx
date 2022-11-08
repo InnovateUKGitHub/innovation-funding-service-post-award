@@ -10,6 +10,8 @@ interface InnerProps {
   statusChanges: Pending<Dtos.MonitoringReportStatusChangeDto[]>;
 }
 
+const ReportForm = ACC.createTypedForm<Dtos.MonitoringReportDto>();
+
 class MonitoringReportComponent extends React.Component<MonitoringReportReportSummaryProps & InnerProps> {
   public render() {
     const { mode, editor } = this.props;
@@ -47,7 +49,6 @@ class MonitoringReportComponent extends React.Component<MonitoringReportReportSu
   }
 
   private renderForm(editor: IEditorStore<Dtos.MonitoringReportDto, MonitoringReportDtoValidator>) {
-    const ReportForm = ACC.TypedForm<Dtos.MonitoringReportDto>();
     return (
       <ACC.Section>
         <ReportForm.Form editor={editor} onChange={dto => this.props.onChange(dto)} qa="monitoringReportCreateForm">

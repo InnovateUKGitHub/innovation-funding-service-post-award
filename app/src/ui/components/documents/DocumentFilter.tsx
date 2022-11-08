@@ -1,12 +1,14 @@
 import { useCallback } from "react";
 
 import { noop } from "@ui/helpers/noop";
-import { TypedForm } from "@ui/components/form";
+import { createTypedForm } from "../form";
 
 // Note: TypedForm enforces an object shaped payload, so this can't a single primitive string
 interface DocumentFilterState {
   filteredText: string;
 }
+
+const FilterForm = createTypedForm<DocumentFilterState>();
 
 export interface DocumentFilterProps {
   value: string;
@@ -23,7 +25,6 @@ export function DocumentFilter({ value, name, qa, placeholder = "Search document
   );
 
   const formData: DocumentFilterState = { filteredText: value };
-  const FilterForm = TypedForm<typeof formData>();
 
   return (
     <FilterForm.Form qa={qa} data={formData} onSubmit={noop} onChange={handleOnSearch}>

@@ -5,12 +5,13 @@ import { Component } from "react";
 import { SpendProfileCostFormProps } from "@ui/containers";
 import { EditorStatus } from "@ui/constants/enums";
 
+const Form = ACC.createTypedForm<PCRSpendProfileOtherCostsDto>();
+
 export class OtherCostsFormComponent extends Component<
   SpendProfileCostFormProps<PCRSpendProfileOtherCostsDto, PCROtherCostsDtoValidator>
 > {
   render() {
     const { editor, validator, data, costCategory } = this.props;
-    const Form = ACC.TypedForm<PCRSpendProfileOtherCostsDto>();
 
     return (
       <Form.Form

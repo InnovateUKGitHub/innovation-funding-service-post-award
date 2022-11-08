@@ -57,6 +57,8 @@ interface Callbacks {
   onSave: (dto: PCRDto, link: ILinkInfo) => void;
 }
 
+const PCRForm = ACC.createTypedForm<PCRItemDto>();
+
 class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
@@ -338,8 +340,6 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
       allowSubmit: boolean;
     },
   ) {
-    const PCRForm = ACC.TypedForm<PCRItemDto>();
-
     const pcrItem = editor.data.items.find(x => x.id === this.props.itemId);
     if (!pcrItem) throw new Error(`Cannot find pcrItem matching itemId ${this.props.itemId}`);
     const canReallocatePcr = pcrItem.type === PCRItemType.MultiplePartnerFinancialVirement;

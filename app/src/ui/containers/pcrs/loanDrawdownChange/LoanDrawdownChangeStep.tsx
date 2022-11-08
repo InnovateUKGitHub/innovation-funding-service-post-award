@@ -8,6 +8,7 @@ import { getPending } from "@ui/helpers/get-pending";
 import { EditorStatus } from "@ui/constants/enums";
 import { ValidationSummary } from "@ui/components";
 import { LoanEditTable } from "./LoanEditTable";
+import { LoanFinancialVirement } from "@framework/entities";
 
 type LoanDrawdownPcrStepProps = PcrStepProps<PCRItemForLoanDrawdownChangeDto, PCRLoanDrawdownChangeItemDtoValidator>;
 
@@ -16,6 +17,8 @@ interface LoanDrawnDownUi extends Omit<LoanDrawdownPcrStepProps, "onChange"> {
 
   onChange: (saving: boolean, dto: FinancialLoanVirementDto) => void;
 }
+
+const LoanUpdateForm = ACC.createTypedForm<LoanFinancialVirement[]>();
 
 function LoanDrawdownChange({ onChange, ...props }: LoanDrawnDownUi) {
   const { isLoading, payload, isRejected, error } = getPending(props.editor);
@@ -38,8 +41,6 @@ function LoanDrawdownChange({ onChange, ...props }: LoanDrawnDownUi) {
 
     props.onSave(false);
   };
-
-  const LoanUpdateForm = ACC.TypedForm<typeof payload.data.loans>();
 
   return (
     <ACC.Section qa="uploadFileSection">

@@ -28,6 +28,8 @@ interface Callbacks {
   onChange: (submit: boolean, dto: PartnerDto) => void;
 }
 
+const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+const BankStatementForm = ACC.createTypedForm<PartnerDto>();
 class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankStatementParams, Data, Callbacks> {
   public render() {
     const combined = Pending.combine({
@@ -51,9 +53,6 @@ class ProjectSetupBankStatementComponent extends ContainerBase<ProjectSetupBankS
     editor: IEditorStore<PartnerDto, PartnerDtoValidator>,
     documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
   ) {
-    const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
-    const BankStatementForm = ACC.TypedForm<PartnerDto>();
-
     const projectSetupParams = { projectId: this.props.projectId, partnerId: this.props.partnerId };
     const projectSetupRoute = this.props.routes.projectSetup.getLink(projectSetupParams);
 

@@ -9,10 +9,11 @@ interface InnerProps {
   partners: PartnerDto[];
 }
 
+const Form = ACC.createTypedForm<PCRItemForPartnerWithdrawalDto>();
+
 const InnerContainer = (
   props: PcrStepProps<PCRItemForPartnerWithdrawalDto, PCRPartnerWithdrawalItemDtoValidator> & InnerProps,
 ) => {
-  const Form = ACC.TypedForm<PCRItemForPartnerWithdrawalDto>();
   const partnerOptions: ACC.SelectOption[] = props.partners
     .filter(x => !x.isWithdrawn)
     .map(x => ({

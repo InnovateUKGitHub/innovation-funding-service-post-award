@@ -16,6 +16,8 @@ export interface JesStepUIProps extends BasePcrProps {
   onFileDelete: (dto: Dtos.MultipleDocumentUploadDto, document: Dtos.DocumentSummaryDto) => void;
 }
 
+const UploadForm = ACC.createTypedForm<Dtos.MultipleDocumentUploadDto>();
+
 export const JesStepUI = ({ documents, documentsEditor, project, ...props }: JesStepUIProps) => {
   const { getContent } = useContent();
   const { isKTP } = checkProjectCompetition(project.competitionType);
@@ -41,8 +43,6 @@ export const JesStepUI = ({ documents, documentsEditor, project, ...props }: Jes
     const externalJesLink = (
       <ACC.Renderers.ExternalLink href="https://je-s.rcuk.ac.uk">{jesWebsiteLinkContent}</ACC.Renderers.ExternalLink>
     );
-
-    const UploadForm = ACC.TypedForm<Dtos.MultipleDocumentUploadDto>();
 
     return (
       <>
@@ -96,7 +96,7 @@ export const JesStepUI = ({ documents, documentsEditor, project, ...props }: Jes
     );
   };
 
-  const Form = ACC.TypedForm<Dtos.PCRItemForPartnerAdditionDto>();
+  const Form = ACC.createTypedForm<Dtos.PCRItemForPartnerAdditionDto>();
 
   return (
     <ACC.Section>

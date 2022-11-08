@@ -22,6 +22,8 @@ interface ForecastUpdateData {
   onChange: (saving: boolean, dto: ForecastDetailsDTO[]) => void;
 }
 
+const Form = ACC.createTypedForm<ForecastDetailsDTO[]>();
+
 const UpdateForecastComponent = (props: ForecastUpdateParams & ForecastUpdateData & BaseProps) => {
   const { isActive: isProjectActive } = useProjectStatus();
 
@@ -34,7 +36,6 @@ const UpdateForecastComponent = (props: ForecastUpdateParams & ForecastUpdateDat
     forecastData: ForecastData,
     editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>,
   ) => {
-    const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
     const { partnerId, projectId, periodId, routes, onChange } = props;
     const { project, claim, partner } = forecastData;
 

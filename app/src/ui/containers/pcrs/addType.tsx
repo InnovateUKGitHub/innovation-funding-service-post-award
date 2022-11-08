@@ -25,6 +25,8 @@ interface Callbacks {
   createNewChangeRequestItem: (itemType: Dtos.PCRItemTypeDto) => Dtos.PCRItemDto;
 }
 
+const PCRForm = ACC.createTypedForm<Dtos.PCRDto>();
+
 class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
@@ -95,7 +97,6 @@ class PCRAddTypeComponent extends ContainerBase<ProjectChangeRequestAddTypeParam
     pcrEditor: IEditorStore<Dtos.PCRDto, PCRDtoValidator>,
     itemTypes: Dtos.PCRItemTypeDto[],
   ): React.ReactNode {
-    const PCRForm = ACC.TypedForm<Dtos.PCRDto>();
     const { options, selected } = this.getListData(pcrEditor.data.items, itemTypes);
 
     return (

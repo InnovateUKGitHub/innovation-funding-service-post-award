@@ -27,6 +27,8 @@ interface Callbacks {
   onChange: (save: boolean, dto: PCRDto) => void;
 }
 
+const Form = ACC.createTypedForm<PCRDto>();
+
 class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
@@ -99,8 +101,6 @@ class PCRReviewComponent extends ContainerBase<PCRReviewParams, Data, Callbacks>
   }
 
   private renderForm(editor: IEditorStore<PCRDto, PCRDtoValidator>) {
-    const Form = ACC.TypedForm<PCRDto>();
-
     const options: ACC.SelectOption[] = [
       { id: PCRStatus.QueriedByMonitoringOfficer.toString(), value: "Query the request" },
       { id: PCRStatus.SubmittedToInnovateUK.toString(), value: "Send for approval" },

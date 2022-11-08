@@ -37,6 +37,8 @@ interface Callbacks {
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
+const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+
 export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsPageParams, Data, Callbacks> {
   public render() {
     const combined = Pending.combine({
@@ -96,7 +98,6 @@ export class OverheadDocumentsComponent extends ContainerBase<OverheadDocumentsP
   private renderForm(
     documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>,
   ): React.ReactNode {
-    const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
     return (
       <>
         <ACC.Section title={x => x.pages.pcrSpendProfileOverheadDocuments.guidanceHeading}>

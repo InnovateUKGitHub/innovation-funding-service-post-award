@@ -6,6 +6,8 @@ import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { useContent } from "@ui/hooks";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 
+const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+
 export const NonAidFundingStep = ({
   project,
   pcrItem,
@@ -13,8 +15,6 @@ export const NonAidFundingStep = ({
   status,
 }: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>) => {
   const { getContent } = useContent();
-
-  const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
 
   const { isKTP } = checkProjectCompetition(project.competitionType);
 

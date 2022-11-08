@@ -11,10 +11,11 @@ interface Props {
   onSave: (dto: Dtos.MonitoringReportDto, progress: boolean) => void;
 }
 
+const ReportForm = ACC.createTypedForm<Dtos.MonitoringReportDto>();
+
 export class MonitoringReportQuestionStep extends React.Component<Props> {
   public render() {
     const { editor, questionNumber, onChange, onSave } = this.props;
-    const ReportForm = ACC.TypedForm<Dtos.MonitoringReportDto>();
     const title = (
       <ACC.PeriodTitle
         periodId={editor.data.periodId}
@@ -47,7 +48,7 @@ export class MonitoringReportQuestionStep extends React.Component<Props> {
     questionNumber: number,
   ) {
     const { data, validator } = editor;
-    const ReportForm = ACC.TypedForm<Dtos.MonitoringReportDto>();
+    const ReportForm = ACC.createTypedForm<Dtos.MonitoringReportDto>();
 
     const i = data.questions.findIndex(x => x.displayOrder === questionNumber);
     const q = data.questions[i];

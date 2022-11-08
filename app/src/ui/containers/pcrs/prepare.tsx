@@ -29,6 +29,8 @@ interface Callbacks {
   onChange: (save: boolean, dto: PCRDto) => void;
 }
 
+const Form = ACC.createTypedForm<PCRDto>();
+
 class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParams, Data, Callbacks> {
   render() {
     const combined = Pending.combine({
@@ -124,8 +126,6 @@ class PCRPrepareComponent extends ContainerBase<ProjectChangeRequestPrepareParam
   }
 
   private renderForm(projectChangeRequest: PCRDto, editor: IEditorStore<PCRDto, PCRDtoValidator>) {
-    const Form = ACC.TypedForm<PCRDto>();
-
     return (
       <Form.Form
         editor={editor}

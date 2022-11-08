@@ -17,13 +17,13 @@ interface TableData {
   cost: number;
 }
 
+const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+
 class Component extends React.Component<
   PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & ContainerProps,
   TableData
 > {
   render() {
-    const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
-
     return (
       <ACC.Section title={x => x.pcrAddPartnerLabels.projectCostsHeading}>
         {this.renderTable()}

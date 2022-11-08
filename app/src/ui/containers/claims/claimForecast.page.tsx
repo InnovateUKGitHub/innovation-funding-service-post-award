@@ -43,6 +43,8 @@ interface Callbacks {
   onUpdate: (saving: boolean, dto: ForecastDetailsDTO[], link?: ILinkInfo) => void;
 }
 
+const Form = ACC.createTypedForm<ForecastDetailsDTO[]>();
+
 class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Callbacks> {
   render() {
     const combinedForecastData = Pending.combine({
@@ -76,8 +78,6 @@ class ClaimForecastComponent extends ContainerBase<ClaimForecastParams, Data, Ca
     combined: ACC.Claims.ForecastData,
     editor: IEditorStore<ForecastDetailsDTO[], ForecastDetailsDtosValidator>,
   ) {
-    const Form = ACC.TypedForm<ForecastDetailsDTO[]>();
-
     const periodsClaimed = new Set(this.props.claimDetails?.data?.map(x => x.periodId));
 
     const handleSubmit = () => {

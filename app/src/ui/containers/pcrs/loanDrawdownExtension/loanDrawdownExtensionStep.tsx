@@ -15,6 +15,8 @@ type LoanDrawdownExtensionStepProps = PcrStepProps<
   PCRLoanExtensionItemDtoValidator
 >;
 
+const LoanForm = ACC.createTypedForm<PCRItemForLoanDrawdownExtensionDto>();
+
 export const LoanDrawdownExtensionStepContainer = (props: LoanDrawdownExtensionStepProps) => {
   const [state, setState] = useState<PCRItemForLoanDrawdownExtensionDto>(props.pcrItem);
 
@@ -28,7 +30,6 @@ export const LoanDrawdownExtensionStepContainer = (props: LoanDrawdownExtensionS
     props.onChange(latestState);
   };
 
-  const LoanForm = ACC.TypedForm<typeof state>();
   const formattedStartDate = formatDate(props.pcrItem.projectStartDate, DateFormat.SHORT_DATE);
 
   const isDisabled = props.status === EditorStatus.Saving;

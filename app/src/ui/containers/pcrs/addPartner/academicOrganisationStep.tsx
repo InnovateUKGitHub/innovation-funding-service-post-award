@@ -12,11 +12,12 @@ import { useMounted } from "@ui/features";
 import { Section, ValidationMessage } from "@ui/components";
 import { JesSearchResults } from "./jesSearchResults";
 
+const AddForm = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+const PartnerForm = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+
 export const AcademicOrganisationStep = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
 ) => {
-  const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
-
   const { accounts } = useStores();
   const { getContent } = useContent();
   const { isServer } = useMounted();
@@ -48,13 +49,13 @@ export const AcademicOrganisationStep = (
 
   return (
     <ACC.Section>
-      <Form.Form
+      <AddForm.Form
         qa="addPartnerForm"
         data={props.pcrItem}
         isSaving={props.status === EditorStatus.Saving}
         onSubmit={noop}
       >
-        <Form.Fieldset heading={x => x.pcrAddPartnerLabels.jesOrganisationSectionTitle}>
+        <AddForm.Fieldset heading={x => x.pcrAddPartnerLabels.jesOrganisationSectionTitle}>
           <Section>
             <ValidationMessage
               messageType="info"
@@ -62,7 +63,7 @@ export const AcademicOrganisationStep = (
               message={x => x.pcrAddPartnerLabels.jesOrganisationInfo}
             />
           </Section>
-          <Form.Search
+          <AddForm.Search
             name="searchJesOrganisations"
             qa="input-search-jes-organisations"
             hint={x => x.pcrAddPartnerLabels.jesOrganisationSectionSubtitle}
@@ -71,14 +72,14 @@ export const AcademicOrganisationStep = (
           />
 
           {isServer && (
-            <Form.Button qa="button-search-jes-organisations" styling="Primary" name="jesOrganisationSearch">
+            <AddForm.Button qa="button-search-jes-organisations" styling="Primary" name="jesOrganisationSearch">
               {getContent(x => x.pcrAddPartnerLabels.searchButton)}
-            </Form.Button>
+            </AddForm.Button>
           )}
-        </Form.Fieldset>
-      </Form.Form>
+        </AddForm.Fieldset>
+      </AddForm.Form>
 
-      <Form.Form
+      <PartnerForm.Form
         qa="jes-accounts-form"
         data={props.pcrItem}
         isSaving={props.status === EditorStatus.Saving}
@@ -102,6 +103,7 @@ export const AcademicOrganisationStep = (
                 selected={currentSelectedOption}
                 jesAccounts={jesAccounts}
                 update={updateOrganisationName}
+                Form={PartnerForm}
               />
             ) : (
               <>
@@ -112,15 +114,19 @@ export const AcademicOrganisationStep = (
             );
           }}
         />
-        <Form.Fieldset qa="save-and-continue">
-          <Form.Submit>
+        <PartnerForm.Fieldset qa="save-and-continue">
+          <PartnerForm.Submit>
             <ACC.Content value={x => x.pcrItem.submitButton} />
-          </Form.Submit>
-          <Form.Button qa="save-and-return-to-summary" name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
+          </PartnerForm.Submit>
+          <PartnerForm.Button
+            qa="save-and-return-to-summary"
+            name="saveAndReturnToSummary"
+            onClick={() => props.onSave(true)}
+          >
             <ACC.Content value={x => x.pcrItem.returnToSummaryButton} />
-          </Form.Button>
-        </Form.Fieldset>
-      </Form.Form>
+          </PartnerForm.Button>
+        </PartnerForm.Fieldset>
+      </PartnerForm.Form>
     </ACC.Section>
   );
 };

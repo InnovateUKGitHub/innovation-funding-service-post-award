@@ -15,14 +15,14 @@ interface InnerProps {
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
+const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+
 class Component extends React.Component<
   PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & InnerProps
 > {
   render() {
     const { documents, documentsEditor, pcrItem, onSave } = this.props;
-
-    const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
-    const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
 
     return (
       <>

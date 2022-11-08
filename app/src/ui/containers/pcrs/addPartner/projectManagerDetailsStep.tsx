@@ -17,12 +17,12 @@ const getFinanceContactDetails = (
   props.onChange(dto);
 };
 
+const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+
 export const ProjectManagerDetailsStep = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
 ) => {
   const { isClient } = useMounted();
-
-  const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
 
   return (
     <ACC.Section title={x => x.pages.pcrAddPartnerProjectContacts.sectionTitle}>

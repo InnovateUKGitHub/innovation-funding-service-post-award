@@ -52,6 +52,8 @@ interface ClaimSummaryComponentProps extends ClaimSummaryParams, BaseProps {
   onUpdate: (saving: boolean, dto: ClaimDto, next: ILinkInfo, isSubmitting: boolean) => void;
 }
 
+const Form = ACC.createTypedForm<ClaimDto>();
+
 function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
   const getClaimLinkProps = (data: Pick<CombinedData, "project" | "partner">) => ({
     projectId: data.project.id,
@@ -195,8 +197,6 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
   };
 
   const renderClaimForm = ({ editor, claim, project }: Pick<CombinedData, "editor" | "claim" | "project">) => {
-    const Form = ACC.TypedForm<ClaimDto>();
-
     return (
       <Form.Form editor={editor} onSubmit={() => onSave(claim, editor, true, project)} qa="summary-form">
         <Form.Fieldset heading={x => x.pages.claimPrepareSummary.addCommentsHeading}>

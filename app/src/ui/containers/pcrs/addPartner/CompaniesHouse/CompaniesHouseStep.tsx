@@ -15,6 +15,8 @@ import { CompaniesHouseResults } from "./CompaniesHouseResults";
 
 type CompaniesHouseStepProps = PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>;
 
+const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+
 export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: CompaniesHouseStepProps) => {
   const { companies } = useStores();
   const { getContent } = useContent();
@@ -22,8 +24,6 @@ export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: Compa
 
   const [searchInputValue, setSearchInputValue] = useState<string>();
   const [formData, setFormData] = useState<PCRItemForPartnerAdditionDto>(originalPayload);
-
-  const Form = ACC.TypedForm<typeof formData>();
 
   const getCompanies: () => Pending<CompanyDto[]> = useCallback(
     () => (searchInputValue?.length ? companies.getCompanies(searchInputValue, 10) : Pending.done([])),

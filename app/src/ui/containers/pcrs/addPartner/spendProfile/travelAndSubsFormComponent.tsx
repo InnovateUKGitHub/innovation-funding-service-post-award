@@ -6,6 +6,8 @@ import { SpendProfileCostFormProps } from "@ui/containers";
 import { EditorStatus } from "@ui/constants/enums";
 import { useMounted } from "@ui/features";
 
+const Form = ACC.createTypedForm<PCRSpendProfileTravelAndSubsCostDto>();
+
 export function TravelAndSubsFormComponent({
   onSave,
   onChange,
@@ -23,8 +25,6 @@ export function TravelAndSubsFormComponent({
 
     onChange(editor.data);
   };
-
-  const Form = ACC.TypedForm<PCRSpendProfileTravelAndSubsCostDto>();
 
   return (
     <Form.Form

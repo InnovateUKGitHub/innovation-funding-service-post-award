@@ -10,7 +10,7 @@ import {
   Projects,
   Renderers,
   Section,
-  TypedForm,
+  createTypedForm,
 } from "@ui/components";
 import { DropdownListOption } from "@ui/components/inputs";
 import { SimpleString } from "@ui/components/renderers";
@@ -22,6 +22,8 @@ import { useStores } from "@ui/redux";
 import { Callbacks, ProjectDocumentPageData, ProjectDocumentPageParams } from "./projectDocuments.page";
 import { ProjectDocumentTableLoader } from "./projectDocumentTableLoader";
 import { ProjectPartnerDocumentTableLoader } from "./projectPartnerDocumentTableLoader";
+
+const UploadForm = createTypedForm<MultipleDocumentUploadDto>();
 
 export const ProjectDocumentPage = (
   props: ContainerProps<ProjectDocumentPageParams, ProjectDocumentPageData, Callbacks>,
@@ -50,8 +52,6 @@ export const ProjectDocumentPage = (
     DocumentDescription.Email,
     DocumentDescription.MeetingAgenda,
   ];
-
-  const UploadForm = TypedForm<MultipleDocumentUploadDto>();
 
   const { isMo: isProjectMo } = getAuthRoles(project.roles);
   const validUploadPartners = partners.filter(partner => {

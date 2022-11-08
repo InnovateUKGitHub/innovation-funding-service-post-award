@@ -6,12 +6,13 @@ import { SpendProfileCostFormProps } from "@ui/containers";
 import { EditorStatus } from "@ui/constants/enums";
 import { MountedHoc } from "@ui/features";
 
+const Form = ACC.createTypedForm<PCRSpendProfileMaterialsCostDto>();
+
 export class MaterialsFormComponent extends Component<
   SpendProfileCostFormProps<PCRSpendProfileMaterialsCostDto, PCRMaterialsCostDtoValidator>
 > {
   render() {
     const { editor, validator, data, costCategory } = this.props;
-    const Form = ACC.TypedForm<PCRSpendProfileMaterialsCostDto>();
 
     return (
       <MountedHoc>

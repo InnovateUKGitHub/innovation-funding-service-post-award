@@ -13,6 +13,8 @@ interface FileStepsProps {
   onFileDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
+const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+
 class FilesStepComponent extends React.Component<
   PcrStepProps<PCRStandardItemDto, PCRStandardItemDtoValidator> & FileStepsProps
 > {
@@ -46,8 +48,6 @@ class FilesStepComponent extends React.Component<
   }
 
   private renderForm(documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>) {
-    const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
-
     return (
       <ACC.Section>
         <UploadForm.Form

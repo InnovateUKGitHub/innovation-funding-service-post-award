@@ -16,6 +16,9 @@ interface InnerProps {
   documents: DocumentSummaryDto[];
 }
 
+const HiddenForm = ACC.createTypedForm<PCRSpendProfileOverheadsCostDto>();
+const Form = ACC.createTypedForm<PCRSpendProfileOverheadsCostDto>();
+
 function SpendProfileCostForm({
   editor,
   validator,
@@ -76,12 +79,9 @@ function SpendProfileCostForm({
     });
   };
 
-  const HiddenForm = ACC.TypedForm<PCRSpendProfileOverheadsCostDto>();
-
   // If server rendering then always show hidden section
   const displayHiddenForm = !isClient || data.overheadRate === PCRSpendProfileOverheadRate.Calculated;
 
-  const Form = ACC.TypedForm<PCRSpendProfileOverheadsCostDto>();
   const rateOptions = getOptions(data.overheadRate, props.rateOptions);
 
   return (

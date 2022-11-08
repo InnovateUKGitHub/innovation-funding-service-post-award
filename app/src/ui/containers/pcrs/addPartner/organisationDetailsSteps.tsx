@@ -11,10 +11,11 @@ interface InnerProps {
   pcrParticipantSize: Option<PCRParticipantSize>[];
 }
 
+const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+
 const InnerContainer = (
   props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator> & InnerProps,
 ) => {
-  const Form = ACC.TypedForm<PCRItemForPartnerAdditionDto>();
   const sizeOptions: ACC.SelectOption[] = props.pcrParticipantSize
     .filter(x => x.active && x.value !== PCRParticipantSize.Academic)
     .map(x => ({ id: x.value.toString(), value: x.label }));

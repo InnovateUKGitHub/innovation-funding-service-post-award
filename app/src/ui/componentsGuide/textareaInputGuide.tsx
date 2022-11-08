@@ -1,8 +1,8 @@
-import { TypedForm } from "@ui/components";
+import { createTypedForm } from "@ui/components";
 import { IGuide } from "@framework/types";
 import { noop } from "@ui/helpers/noop";
 
-const Form = TypedForm<string>();
+const Form = createTypedForm<string>();
 
 export const textareaInputGuide: IGuide = {
   name: "Textarea",

@@ -1,185 +1,383 @@
-import React, { cloneElement, CSSProperties, isValidElement, ReactNode } from "react";
-import cx from "classnames";
-
-import { IEditorStore } from "@ui/redux";
-import { Result } from "@ui/validation";
 import type { ContentSelector } from "@copy/type";
 import { IFileWrapper } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
 import { isContentSolution } from "@ui/hooks";
-import { TextAreaInput, TextAreaInputProps } from "./inputs/textAreaInput";
-import { ValidationError } from "./validationError";
-import { TextInput } from "./inputs/textInput";
+import { IEditorStore } from "@ui/redux";
+import { Result } from "@ui/validation";
+import cx from "classnames";
+import React, { createContext, CSSProperties, isValidElement, ReactNode, useContext } from "react";
+import { Content } from "./content";
+import { DropdownList, DropdownListOption } from "./inputs";
+import { CheckboxList } from "./inputs/checkboxList";
+import { FullDateInput, MonthYearInput } from "./inputs/dateInput";
+import { MultipleFileUpload } from "./inputs/fileUpload";
+import { FormInputWidths } from "./inputs/input-utils";
 import { NumberInput } from "./inputs/numberInput";
 import { RadioList } from "./inputs/radioList";
-import { CheckboxList } from "./inputs/checkboxList";
-import { MultipleFileUpload } from "./inputs/fileUpload";
-import { FullDateInput, MonthYearInput } from "./inputs/dateInput";
-import { Button } from "./styledButton";
 import { SearchInput } from "./inputs/searchInput";
-import { FormInputWidths } from "./inputs/input-utils";
-import { DropdownList, DropdownListOption } from "./inputs";
+import { TextAreaInput, TextAreaInputProps } from "./inputs/textAreaInput";
+import { TextInput } from "./inputs/textInput";
 import { SecurityTokenInput } from "./SecurityTokenInput";
+import { Button } from "./styledButton";
+import { ValidationError } from "./validationError";
 
-import { Content } from "./content";
+// Re-export dropdown option interface
+export type DropdownOption = DropdownListOption;
 
-interface SharedFormProps<T> {
-  onChange?: (data: T) => void;
-  onSubmit?: () => void;
-  qa?: string;
-  enctype?: "urlencoded" | "multipart";
-  isGet?: boolean;
-  action?: string;
-  children: ReactNode;
+// Return type of our `createTypedForm` function
+export type FormBuilder<T extends TypedFormDataType> = ReturnType<typeof createTypedForm<T>>;
+
+// Type of a form Select option.
+export interface SelectOption {
+  id: string;
+  value: React.ReactNode;
 }
 
-interface EditorForm<T> extends SharedFormProps<T> {
-  editor: IEditorStore<T, any>;
-}
+/**
+ * Create a unique ID for hints for accessability and screen-reader purposes,
+ * based upon the existing name of the field.
+ *
+ * @param name The name of the form field.
+ * @returns A new name for the hint
+ */
+const createFieldHintId = (name: string) => `${name}-hint`;
 
-interface DataForm<T> extends SharedFormProps<T> {
-  data: T;
-  isSaving?: boolean;
-}
+// Valid controlled form datatypes
+type TypedFormDataType = Record<string, any> | string | number | null;
 
-type FormProps<T> = EditorForm<T> | DataForm<T>;
-
-interface FormChildProps<T> {
-  key?: string;
-  formData: T;
-  onChange?: (data: T) => void;
-  onSubmit?: () => void;
-  disabled: boolean;
-  qa?: string;
-}
-
-class FormComponent<T> extends React.Component<FormProps<T>, []> {
-  private onSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
-    if (!this.props.onSubmit) return;
-
-    e.preventDefault();
-    this.props.onSubmit();
+/**
+ * Create a collection of controlled form elements, and it's corresponding parent form.
+ * All returned input elements, such as <Form.String />, <Form.Numeric />, <Form.MonthYear /> etc., **must**
+ * be surrounded by the returned <Form.Form /> element.
+ *
+ * (unsupported!)
+ * To use input elements without using controlled input, pass in the `null` type.
+ *
+ * @returns A set of components that fit the shape
+ * @example
+ * // This form only controls a single string.
+ * const InputForm = createTypedForm<string>();
+ *
+ * const ContentSolutionComponent = () => {
+ *   const { getContent } = useContent();
+ *   const initialEmailState = "neil.little@iuk.ukri.org";
+ *   const [email, setEmail] = useState<string | undefined>(initialEmailState);
+ *
+ *   return (
+ *     <InputForm.Form
+ *       data={{ email }}
+ *       onChange={e => {
+ *         setEmail(e.email);
+ *       }}
+ *       action="/"
+ *     >
+ *       <H3>{getContent(x => x.components.userChanger.enterUserSubtitle)}</H3>
+ *
+ *       <InputForm.String
+ *         label="user"
+ *         name="user"
+ *         labelHidden
+ *         value={x => x.email}
+ *         update={(x, v) => (x.email = v || "")}
+ *       />
+ *
+ *       <InputForm.Submit>
+ *         {getContent(x => x.components.userChanger.changeUserMessage)}
+ *       </InputForm.Submit>
+ *     </InputForm.Form>
+ *   );
+ * };
+ */
+export const createTypedForm = <T extends TypedFormDataType>() => {
+  // Props shared by the <Form /> element, whether it is an editor or just a visualiser.
+  interface SharedFormProps {
+    onChange?: (data: T) => void;
+    onSubmit?: () => void;
+    qa?: string;
+    enctype?: "urlencoded" | "multipart";
+    isGet?: boolean;
+    action?: string;
+    children: ReactNode;
   }
 
-  // TODO: Refactor '"editor" in props' when tsc is updated, it cannot infer when made a variable :(
-  public render() {
-    const { action = "", enctype, isGet, qa, children, onChange, onSubmit, ...props } = this.props;
+  // <Form /> editor specific props
+  interface EditorForm extends SharedFormProps {
+    editor: IEditorStore<T, any>;
+  }
 
-    const isFormDisabled = "editor" in props ? props.editor.status === EditorStatus.Saving : props.isSaving;
+  // <Form /> visualiser specific props
+  interface DataForm extends SharedFormProps {
+    data: T;
+    isSaving?: boolean;
+  }
 
-    // TODO: find out why we need to spread onSubmit and onChange on to each of the immediate children of the form.
-    const childrenWithProps = React.Children.toArray(children).map((child, index) => {
-      const formData = "editor" in props ? props.editor.data : props.data;
+  // Props that apply to either the editor <Form /> or the visualiser <Form />
+  type FormProps = EditorForm | DataForm;
 
-      return (
-        isValidElement<FormChildProps<T>>(child) &&
-        cloneElement(child, {
-          ...child.props,
-          key: `formchild-${index}`,
-          onChange,
-          onSubmit,
-          formData,
-          disabled: isFormDisabled || child.props.disabled,
-        })
-      );
-    });
+  interface FieldsetProps {
+    heading?: string | ContentSelector;
+    qa?: string;
+    headingQa?: string;
+    isSubQuestion?: boolean;
+    className?: string;
+    children: ReactNode;
+  }
 
-    const encType = enctype === "multipart" ? "multipart/form-data" : "application/x-www-form-urlencoded";
+  interface InternalFieldProps {
+    key?: string;
+    qa?: string;
+    field: (data: T, disabled: boolean, hasError: boolean | undefined) => React.ReactNode;
+  }
+
+  interface HiddenFieldProps {
+    name: string;
+    value: (data: T) => string | number | null | undefined;
+  }
+
+  // TODO: Check accessibility - label + hint being required
+  interface ExternalFieldProps<TValue> {
+    label?: string | ContentSelector;
+    labelBold?: boolean;
+    labelHidden?: boolean;
+    hint?: React.ReactNode | ContentSelector;
+    name: string;
+    value: (data: T, disabled: boolean) => TValue | null | undefined;
+    update: (data: T, value: TValue | null) => void;
+    validation?: Result;
+    placeholder?: string;
+  }
+
+  interface StringFieldProps extends ExternalFieldProps<string> {
+    width?: FormInputWidths;
+  }
+
+  interface SearchFieldProps extends ExternalFieldProps<string> {
+    width?: FormInputWidths;
+    autoComplete?: React.InputHTMLAttributes<T>["autoComplete"];
+    qa?: string;
+  }
+
+  type MultiStringFieldProps = ExternalFieldProps<string> & Omit<TextAreaInputProps, "value">;
+
+  interface NumericFieldProps extends ExternalFieldProps<number> {
+    width?: FormInputWidths;
+  }
+
+  interface RadioFieldProps extends ExternalFieldProps<SelectOption> {
+    options: SelectOption[];
+    inline: boolean;
+  }
+
+  interface CheckboxFieldProps extends ExternalFieldProps<SelectOption[]> {
+    options: SelectOption[];
+  }
+
+  interface DropdownFieldProps extends ExternalFieldProps<DropdownOption> {
+    options: DropdownOption[];
+    hasEmptyOption?: boolean;
+  }
+
+  const buttonContentConfig = {
+    SAVE_AND_CONTINUE: "Save and continue",
+  };
+
+  interface SubmitPropsBase {
+    name?: string;
+    className?: string;
+    style?: CSSProperties;
+    disabled?: boolean;
+    styling?: "Link" | "Secondary" | "Primary";
+  }
+
+  interface SubmitPropsWithType {
+    children?: never;
+    type: keyof typeof buttonContentConfig;
+  }
+
+  interface SubmitPropsWithoutType {
+    type?: never;
+    // Note: <ACC.Content> returns an element not a string :(
+    children: string | React.ReactElement;
+  }
+
+  type SubmitProps = SubmitPropsBase & (SubmitPropsWithType | SubmitPropsWithoutType);
+
+  interface ButtonProps {
+    name: string;
+    className?: string;
+    disabled?: boolean;
+    style?: CSSProperties;
+    styling?: "Link" | "Secondary" | "Primary" | "Warning";
+    value?: string;
+    onClick?: () => void;
+    qa?: string;
+    children: ReactNode;
+  }
+
+  interface MonthYearProps<TValue> extends ExternalFieldProps<TValue> {
+    startOrEnd: "start" | "end";
+    hideLabel?: boolean;
+  }
+
+  interface IFormDataContext {
+    formData: T;
+    onChange?: (data: T) => void;
+    onSubmit?: () => void;
+    disabled: boolean;
+  }
+
+  // Create a context for all child components to consume form data
+  const FormDataContext = createContext<IFormDataContext | undefined>(undefined);
+  const FormDataContextProvider = FormDataContext.Provider;
+
+  /**
+   * A hook to obtain information from the parent <Form />, such as...
+   * - Form Data
+   * - Form `onChange` and `onSubmit` handlers
+   * - Whether the form is disabled or not
+   *
+   * @author Leondro Lio <leondro.lio@iuk.ukri.org>
+   * @returns Information from the parent <Form />
+   */
+  const useFormDataContext = () => {
+    const context = useContext(FormDataContext);
+    if (context === undefined) {
+      throw new Error("Form components must be used within <FormComponent />");
+    }
+    return context;
+  };
+
+  /**
+   * A hook to create an "onChange" handler, by obtaining the parent form "onChange" method with React Context.
+   *
+   * @author Leondro Lio <leondro.lio@iuk.ukri.org>
+   * @param update The update method, to modify the form content
+   * @returns An "onChange" function handler
+   */
+  const useHandleChange = <TValue,>(update: (data: T, value: TValue | null) => void) => {
+    const { formData, onChange } = useFormDataContext();
+
+    return (value: TValue | null) => {
+      update(formData, value);
+
+      if (onChange) {
+        onChange(formData);
+      }
+    };
+  };
+
+  /**
+   * A hook to create an "onSubmit" handler, by obtaining the parent form "onSubmit" method with React Context.
+   *
+   * @author Leondro Lio <leondro.lio@iuk.ukri.org>
+   * @param update The update method, to modify the form content
+   * @returns An "onSubmit" function handler
+   */
+  const useHandleSubmit = () => {
+    const { onSubmit } = useFormDataContext();
+
+    return (e: React.MouseEvent<{}>) => {
+      if (onSubmit) {
+        e.preventDefault();
+        onSubmit();
+      }
+    };
+  };
+
+  /**
+   * A controlled form component.
+   * Controlled forms pass form data to children automatically via React Context.
+   *
+   * @returns A form component
+   */
+  const FormComponent = ({ action = "", enctype, isGet, qa, children, onChange, onSubmit, ...props }: FormProps) => {
+    const isFormDisabled =
+      "editor" in props
+        ? props.editor.status === EditorStatus.Saving // If we're in an editor form, check for edit status
+        : props.isSaving ?? false; /// If we're in a data form, check for "isSaving" prop
+
+    const formData = "editor" in props ? props.editor.data : props.data;
+
     const methodValue = isGet ? "get" : "post";
 
     return (
-      <form encType={encType} method={methodValue} action={action} data-qa={qa} onSubmit={e => this.onSubmit(e)}>
+      <form
+        encType={enctype === "multipart" ? "multipart/form-data" : "application/x-www-form-urlencoded"}
+        method={methodValue}
+        action={action}
+        data-qa={qa}
+        onSubmit={e => {
+          if (!onSubmit) return;
+          e.preventDefault();
+          onSubmit();
+        }}
+      >
         <SecurityTokenInput />
 
-        {childrenWithProps}
+        <FormDataContextProvider
+          value={{
+            formData,
+            onChange,
+            onSubmit,
+            disabled: isFormDisabled,
+          }}
+        >
+          {children}
+        </FormDataContextProvider>
       </form>
     );
-  }
-}
+  };
 
-interface FieldsetProps {
-  heading?: string | ContentSelector;
-  qa?: string;
-  headingQa?: string;
-  isSubQuestion?: boolean;
-  className?: string;
-  children: ReactNode;
-}
-
-class FieldsetComponent<T> extends React.Component<FieldsetProps, []> {
-  render() {
-    const props = this.props as any as FieldsetProps & FormChildProps<T>;
-
-    const fieldsetChildren = React.Children.toArray(this.props.children);
-    const childrenWithData = fieldsetChildren.map(
-      (child, index) =>
-        isValidElement<FieldsetProps & FormChildProps<T>>(child) &&
-        cloneElement(child, {
-          key: `fieldset-child-${index}`,
-          formData: props.formData,
-          disabled: props.disabled,
-          onChange: props.onChange,
-          onSubmit: props.onSubmit,
-        }),
-    );
-
-    const Header = this.props.isSubQuestion ? "h3" : "h2";
-
-    const { heading } = this.props;
+  /**
+   * A fieldset component, for grouping a collection of form fields together.
+   *
+   * @returns A fieldset component
+   */
+  const FieldsetComponent = ({ children, isSubQuestion, qa, heading, headingQa, className }: FieldsetProps) => {
+    const Header = isSubQuestion ? "h3" : "h2";
 
     // TODO: Check for accessibility - can header be ommited
     const headerContent = heading ? typeof heading === "string" ? heading : <Content value={heading} /> : undefined;
 
     return (
-      <fieldset className={cx("govuk-fieldset", this.props.className)} data-qa={this.props.qa}>
+      <fieldset className={cx("govuk-fieldset", className)} data-qa={qa}>
         <legend
           className={cx({
             "govuk-fieldset__legend": true,
-            "govuk-fieldset__legend--s": this.props.isSubQuestion,
-            "govuk-fieldset__legend--m": !this.props.isSubQuestion,
+            "govuk-fieldset__legend--s": isSubQuestion,
+            "govuk-fieldset__legend--m": !isSubQuestion,
           })}
         >
           {headerContent && (
-            <Header className="govuk-fieldset__heading" data-qa={this.props.headingQa}>
+            <Header className="govuk-fieldset__heading" data-qa={headingQa}>
               {headerContent}
             </Header>
           )}
         </legend>
 
-        {childrenWithData}
+        {children}
       </fieldset>
     );
-  }
-}
+  };
 
-interface InternalFieldProps<T> extends FormChildProps<T> {
-  field: (data: T, disabled: boolean, hasError: boolean | undefined) => React.ReactNode;
-}
+  /**
+   * A component that helps wrap our non-form-controlled input components.
+   *
+   * @private
+   * @returns A field component
+   */
+  const FieldComponent = <TValue,>({
+    hint,
+    name,
+    label,
+    labelHidden,
+    labelBold,
+    field,
+    validation,
+  }: InternalFieldProps & ExternalFieldProps<TValue>) => {
+    // Obtain information about the form we are within
+    const { disabled, formData } = useFormDataContext();
 
-interface HiddenFieldProps<TDto> {
-  name: string;
-  value: (data: TDto) => string | number | null | undefined;
-}
-
-// TODO: Check accessibility - label + hint being required
-interface ExternalFieldProps<TDto, TValue> {
-  label?: string | ContentSelector;
-  labelBold?: boolean;
-  labelHidden?: boolean;
-  hint?: React.ReactNode | ContentSelector;
-  name: string;
-  value: (data: TDto, disabled: boolean) => TValue | null | undefined;
-  update: (data: TDto, value: TValue | null) => void;
-  validation?: Result;
-  placeholder?: string;
-}
-
-// encapsulate logic for hint it generation
-const createFieldHintId = <TDto, TValue>(props: ExternalFieldProps<TDto, TValue>) => `${props.name}-hint`;
-
-class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & ExternalFieldProps<T, TValue>, {}> {
-  render() {
-    const { hint, name, label, labelHidden, labelBold, field, formData, validation } = this.props;
     const hasError = validation && validation.showValidationErrors && !validation.isValid;
 
     let hintValue: ReactNode;
@@ -209,399 +407,380 @@ class FieldComponent<T, TValue> extends React.Component<InternalFieldProps<T> & 
         )}
 
         {hintValue && (
-          <HintElement id={createFieldHintId(this.props)} className="govuk-hint">
+          <HintElement id={createFieldHintId(name)} className="govuk-hint">
             {hintValue}
           </HintElement>
         )}
 
         {validation && <ValidationError error={validation} />}
 
-        {field(formData, this.props.disabled, hasError)}
+        {field(formData, disabled, hasError)}
       </div>
     );
-  }
-}
+  };
 
-const handleSubmit = <TDto extends {}>(props: SubmitProps, e: React.MouseEvent<{}>) => {
-  const formProps = props as any as SharedFormProps<TDto>;
-  if (formProps.onSubmit) {
-    e.preventDefault();
-    formProps.onSubmit();
-  }
-};
+  /**
+   * A `<FieldComponent />` specifically typed to a `string`
+   */
+  const StringFieldComponent = FieldComponent<string>;
 
-const handleOtherButton = (props: ButtonProps, e: React.MouseEvent<{}>) => {
-  if (props.onClick) {
-    e.preventDefault();
-    props.onClick();
-  }
-};
+  /**
+   * A `<FieldComponent />` specifically typed to a `number`
+   */
+  const NumberFieldComponent = FieldComponent<number>;
 
-const handleChange = <TDto extends {}, TValue extends {}>(
-  props: ExternalFieldProps<TDto, TValue>,
-  value: TValue | null,
-) => {
-  const formProps = props as any as FormChildProps<TDto>;
-  const data = formProps.formData;
-  props.update(data, value);
+  /**
+   * A `<FieldComponent />` specifically typed to a `SelectOption`
+   */
+  const SelectFieldComponent = FieldComponent<SelectOption>;
 
-  if (formProps.onChange) {
-    formProps.onChange(data);
-  }
-};
+  /**
+   * A `<FieldComponent />` specifically typed to an array of `SelectOption`
+   */
+  const MultipleSelectFieldComponent = FieldComponent<SelectOption[]>;
 
-interface StringFieldProps<T> extends ExternalFieldProps<T, string> {
-  width?: FormInputWidths;
-}
+  /**
+   * A `<FieldComponent />` specifically typed to a `DropdownOption`
+   */
+  const DropdownFieldComponent = FieldComponent<DropdownOption>;
 
-const StringField = <T extends {}>({ field, ...props }: StringFieldProps<T> & InternalFieldProps<T>) => (
-  <FieldComponent
-    {...props}
-    field={
-      field ||
-      ((data, disabled) => (
-        <TextInput
-          width={props.width}
-          name={props.name}
-          value={props.value(data, disabled)}
-          onChange={val => handleChange(props, val)}
-          placeholder={props.placeholder}
-          disabled={disabled}
-        />
-      ))
-    }
-  />
-);
-
-interface SearchFieldProps<T> extends ExternalFieldProps<T, string> {
-  width?: FormInputWidths;
-  autoComplete?: React.InputHTMLAttributes<T>["autoComplete"];
-  qa?: string;
-}
-
-const SearchField = <T extends {}>({ field, ...props }: SearchFieldProps<T> & InternalFieldProps<T>) => (
-  <FieldComponent
-    {...props}
-    field={
-      field ||
-      ((data, disabled) => (
-        <SearchInput
-          {...props}
-          disabled={disabled}
-          value={props.value(data, disabled)}
-          onChange={val => handleChange(props, val)}
-        />
-      ))
-    }
-  />
-);
-
-type MultiStringFieldProps<T> = ExternalFieldProps<T, string> & Omit<TextAreaInputProps, "value">;
-
-const MultiStringField = <T extends {}>({ field, ...props }: MultiStringFieldProps<T> & InternalFieldProps<T>) => (
-  <FieldComponent
-    {...props}
-    field={
-      field ||
-      ((data, disabled) => (
-        <TextAreaInput
-          name={props.name}
-          value={props.value(data, disabled)}
-          onChange={val => handleChange(props, val)}
-          rows={props.rows}
-          qa={props.qa}
-          ariaDescribedBy={props.hint ? createFieldHintId(props) : undefined}
-          disabled={disabled}
-          characterCountOptions={props.characterCountOptions}
-        />
-      ))
-    }
-  />
-);
-
-interface NumericFieldProps<T> extends ExternalFieldProps<T, number> {
-  width?: FormInputWidths;
-}
-
-const NumericField = <T extends {}>(props: NumericFieldProps<T> & InternalFieldProps<T>) => {
-  const TypedFieldComponent = FieldComponent as new () => FieldComponent<T, number>;
-
-  return (
-    <TypedFieldComponent
-      {...props}
-      field={(data, disabled) => (
-        <NumberInput
-          name={props.name}
-          value={props.value(data, disabled)}
-          onChange={val => handleChange(props, val)}
-          width={props.width}
-          disabled={disabled}
-        />
-      )}
-    />
-  );
-};
-
-export interface SelectOption {
-  id: string;
-  value: React.ReactNode;
-}
-
-interface RadioFieldProps<T extends {}> extends ExternalFieldProps<T, SelectOption> {
-  options: SelectOption[];
-  inline: boolean;
-}
-
-const RadioOptionsField = <T extends {}>(props: RadioFieldProps<T> & InternalFieldProps<T>) => {
-  const TypedFieldComponent = FieldComponent as new () => FieldComponent<T, SelectOption>;
-
-  return (
-    <TypedFieldComponent
-      {...props}
-      field={(data, disabled) => (
-        <RadioList
-          options={props.options}
-          name={props.name}
-          value={props.value(data, disabled)}
-          inline={props.inline}
-          onChange={val => handleChange(props, val)}
-          disabled={disabled}
-        />
-      )}
-    />
-  );
-};
-
-interface CheckboxFieldProps<T extends {}> extends ExternalFieldProps<T, SelectOption[]> {
-  options: SelectOption[];
-}
-
-const CheckboxOptionsField = <T extends {}>(props: CheckboxFieldProps<T> & InternalFieldProps<T>) => {
-  const TypedFieldComponent = FieldComponent as new () => FieldComponent<T, SelectOption[]>;
-
-  return (
-    <TypedFieldComponent
-      {...props}
-      field={(data, disabled) => (
-        <CheckboxList
-          options={props.options}
-          name={props.name}
-          value={props.value(data, disabled)}
-          onChange={val => handleChange(props, val)}
-          disabled={disabled}
-        />
-      )}
-    />
-  );
-};
-
-export type DropdownOption = DropdownListOption;
-interface DropdownFieldProps<T extends {}> extends ExternalFieldProps<T, DropdownOption> {
-  options: DropdownOption[];
-  hasEmptyOption?: boolean;
-}
-
-const DropdownListField = <T extends {}>(props: DropdownFieldProps<T> & InternalFieldProps<T>) => {
-  const TypedFieldComponent = FieldComponent as new () => FieldComponent<T, DropdownOption>;
-
-  return (
-    <TypedFieldComponent
-      {...props}
-      field={(data, disabled) => (
-        <DropdownList
-          placeholder={props.placeholder}
-          options={props.options}
-          name={props.name}
-          hasEmptyOption={props.hasEmptyOption}
-          value={props.value(data, disabled)}
-          onChange={val => handleChange(props, val)}
-          disabled={disabled}
-        />
-      )}
-    />
-  );
-};
-
-const HiddenField = <T extends {}>(props: HiddenFieldProps<T> & InternalFieldProps<T>) => (
-  <input type="hidden" name={props.name} value={props.value((props as any as InternalFieldProps<T>).formData) || ""} />
-);
-
-const buttonContentConfig = {
-  SAVE_AND_CONTINUE: "Save and continue",
-};
-
-interface SubmitPropsBase {
-  name?: string;
-  className?: string;
-  style?: CSSProperties;
-  disabled?: boolean;
-  styling?: "Link" | "Secondary" | "Primary";
-}
-
-interface SubmitPropsWithType {
-  children?: never;
-  type: keyof typeof buttonContentConfig;
-}
-
-interface SubmitPropsWithoutType {
-  type?: never;
-  // Note: <ACC.Content> returns an element not a string :(
-  children: string | React.ReactElement;
-}
-
-type SubmitProps = SubmitPropsBase & (SubmitPropsWithType | SubmitPropsWithoutType);
-
-const SubmitComponent = <T extends {}>({ name, ...props }: SubmitProps & InternalFieldProps<T>) => {
-  const content = props.type ? buttonContentConfig[props.type] : props.children;
-
-  const nameValue = `button_${name || "default"}`;
-
-  return (
-    <Button
-      type="submit"
-      name={nameValue}
-      className={props.className}
-      disabled={props.disabled}
-      style={props.style}
-      styling={props.styling || "Primary"}
-      onClick={e => handleSubmit(props, e)}
-    >
-      {content}
-    </Button>
-  );
-};
-
-function SubmitAndContinueComponent<T extends {}>(props: SubmitPropsBase & InternalFieldProps<T>) {
-  return <SubmitComponent {...props} type="SAVE_AND_CONTINUE" />;
-}
-
-interface ButtonProps {
-  name: string;
-  className?: string;
-  disabled?: boolean;
-  style?: CSSProperties;
-  styling?: "Link" | "Secondary" | "Primary" | "Warning";
-  value?: string;
-  onClick?: () => void;
-  qa?: string;
-  children: ReactNode;
-}
-
-const ButtonComponent = <T extends {}>(props: ButtonProps & InternalFieldProps<T>) => (
-  <Button
-    type="submit"
-    name={`button_${props.name}`}
-    className={cx(props.className, { ["govuk-button--disabled"]: props.disabled })}
-    disabled={props.disabled}
-    style={props.style}
-    styling={props.styling || "Secondary"}
-    value={props.value}
-    onClick={e => handleOtherButton(props, e)}
-    qa={props.qa}
-  >
-    {(props as any).children}
-  </Button>
-);
-
-const MultipleFileUploadComponent = <T extends {}>(
-  props: ExternalFieldProps<T, IFileWrapper[]> & InternalFieldProps<T>,
-) => (
-  <FieldComponent
-    {...props}
-    field={(data, disabled, hasError) => (
-      <MultipleFileUpload
-        value={props.value(data, disabled)}
-        name={props.name}
-        onChange={val => handleChange(props, val)}
-        disabled={disabled}
-        error={hasError}
+  /**
+   * A `string` type textbox
+   *
+   * @returns A single-line form controlled string input component
+   */
+  const StringField = (props: StringFieldProps) => {
+    const handleChange = useHandleChange(props.update);
+    return (
+      <StringFieldComponent
+        {...props}
+        field={(data, disabled) => (
+          <TextInput
+            width={props.width}
+            name={props.name}
+            value={props.value(data, disabled)}
+            onChange={handleChange}
+            placeholder={props.placeholder}
+            disabled={disabled}
+          />
+        )}
       />
-    )}
-  />
-);
+    );
+  };
 
-const FullDateComponent = <T extends {}>(props: ExternalFieldProps<T, Date> & InternalFieldProps<T>) => (
-  <FieldComponent
-    {...props}
-    field={(data, disabled, hasError) => (
-      <FullDateInput
-        name={props.name}
-        disabled={disabled}
-        value={props.value(data, disabled)}
-        onChange={val => handleChange(props, val)}
-        ariaDescribedBy={props.hint ? createFieldHintId(props) : undefined}
-        hasError={hasError}
+  /**
+   * A `string` type textbox, geared towards acting as a search box
+   *
+   * @returns A single-line form controlled string input component, styled as a search box.
+   */
+  const SearchField = (props: SearchFieldProps) => {
+    const handleChange = useHandleChange(props.update);
+    return (
+      <StringFieldComponent
+        {...props}
+        field={(data, disabled) => (
+          <SearchInput {...props} disabled={disabled} value={props.value(data, disabled)} onChange={handleChange} />
+        )}
       />
-    )}
-  />
-);
+    );
+  };
 
-interface MonthYearProps<TDto, TValue> extends ExternalFieldProps<TDto, TValue> {
-  startOrEnd: "start" | "end";
-  hideLabel?: boolean;
-}
+  /**
+   * A `string` type textarea
+   *
+   * @returns A multi-line form controlled string textarea component
+   */
+  const MultiStringField = (props: MultiStringFieldProps) => {
+    const handleChange = useHandleChange(props.update);
+    return (
+      <StringFieldComponent
+        {...props}
+        field={(data, disabled) => (
+          <TextAreaInput
+            name={props.name}
+            value={props.value(data, disabled)}
+            onChange={handleChange}
+            rows={props.rows}
+            qa={props.qa}
+            ariaDescribedBy={props.hint ? createFieldHintId(props.name) : undefined}
+            disabled={disabled}
+            characterCountOptions={props.characterCountOptions}
+          />
+        )}
+      />
+    );
+  };
 
-const MonthYearComponent = <T extends {}>(props: MonthYearProps<T, Date> & InternalFieldProps<T>) => {
-  return (
-    <FieldComponent
-      {...props}
-      field={(data, disabled, hasError) => (
-        <MonthYearInput
-          name={props.name}
-          disabled={disabled}
-          value={props.value(data, disabled)}
-          onChange={val => handleChange(props, val)}
-          ariaDescribedBy={props.hint ? createFieldHintId(props) : undefined}
-          hasError={hasError}
-          startOrEnd={props.startOrEnd}
-          hideLabel={props.hideLabel}
-          debounce={false}
-        />
-      )}
-    />
-  );
+  /**
+   * A `number` type textbox
+   *
+   * @returns A single-line form controlled number input component
+   */
+  const NumericField = (props: NumericFieldProps) => {
+    const handleChange = useHandleChange(props.update);
+    return (
+      <NumberFieldComponent
+        {...props}
+        field={(data, disabled) => (
+          <NumberInput
+            name={props.name}
+            value={props.value(data, disabled)}
+            onChange={handleChange}
+            width={props.width}
+            disabled={disabled}
+          />
+        )}
+      />
+    );
+  };
+
+  /**
+   * Radio Buttons
+   *
+   * @returns A set of form controlled radio buttons
+   */
+  const RadioOptionsField = (props: RadioFieldProps) => {
+    const handleChange = useHandleChange(props.update);
+    return (
+      <SelectFieldComponent
+        {...props}
+        field={(data, disabled) => (
+          <RadioList
+            options={props.options}
+            name={props.name}
+            value={props.value(data, disabled)}
+            inline={props.inline}
+            onChange={handleChange}
+            disabled={disabled}
+          />
+        )}
+      />
+    );
+  };
+
+  /**
+   * Checkboxes
+   *
+   * @returns A set of form controlled checkboxes
+   */
+  const CheckboxOptionsField = (props: CheckboxFieldProps) => {
+    const handleChange = useHandleChange(props.update);
+    return (
+      <MultipleSelectFieldComponent
+        {...props}
+        field={(data, disabled) => (
+          <CheckboxList
+            options={props.options}
+            name={props.name}
+            value={props.value(data, disabled)}
+            onChange={handleChange}
+            disabled={disabled}
+          />
+        )}
+      />
+    );
+  };
+
+  /**
+   * Dropdown
+   *
+   * @returns A form controlled dropdown
+   */
+  const DropdownListField = (props: DropdownFieldProps) => {
+    const handleChange = useHandleChange(props.update);
+    return (
+      <DropdownFieldComponent
+        {...props}
+        field={(data, disabled) => (
+          <DropdownList
+            placeholder={props.placeholder}
+            options={props.options}
+            name={props.name}
+            hasEmptyOption={props.hasEmptyOption}
+            value={props.value(data, disabled)}
+            onChange={handleChange}
+            disabled={disabled}
+          />
+        )}
+      />
+    );
+  };
+
+  /**
+   * Inject a hidden value into the form.
+   *
+   * @returns An invisible form controlled input field
+   */
+  const HiddenField = (props: HiddenFieldProps) => {
+    const { formData } = useFormDataContext();
+    return <input type="hidden" name={props.name} value={props.value(formData) || ""} />;
+  };
+
+  /**
+   * Form submission button
+   *
+   * @returns A "submit" button
+   */
+  const SubmitComponent = ({ name, ...props }: SubmitProps) => {
+    const handleSubmit = useHandleSubmit();
+    const { disabled } = useFormDataContext();
+    const content = props.type ? buttonContentConfig[props.type] : props.children;
+    const nameValue = `button_${name || "default"}`;
+
+    return (
+      <Button
+        type="submit"
+        name={nameValue}
+        className={props.className}
+        disabled={disabled || props.disabled}
+        style={props.style}
+        styling={props.styling || "Primary"}
+        onClick={handleSubmit}
+      >
+        {content}
+      </Button>
+    );
+  };
+
+  /**
+   * Form "Save and Continue" button
+   *
+   * @returns A "submit and continue" button
+   */
+  const SubmitAndContinueComponent = (props: SubmitPropsBase) => {
+    return <SubmitComponent {...props} type="SAVE_AND_CONTINUE" />;
+  };
+
+  /**
+   * Form button.
+   * For a submit/save and continue button, check out <Submit /> or <SubmitAndContinue /> components.
+   *
+   * @returns A button
+   */
+  const ButtonComponent = (props: ButtonProps) => {
+    const { disabled } = useFormDataContext();
+    return (
+      <Button
+        type="submit"
+        name={`button_${props.name}`}
+        className={cx(props.className, { ["govuk-button--disabled"]: disabled || props.disabled })}
+        disabled={disabled || props.disabled}
+        style={props.style}
+        styling={props.styling || "Secondary"}
+        value={props.value}
+        onClick={e => {
+          if (props.onClick) {
+            e.preventDefault();
+            props.onClick();
+          }
+        }}
+        qa={props.qa}
+      >
+        {props.children}
+      </Button>
+    );
+  };
+
+  /**
+   * A multi-file upload input.
+   *
+   * @returns A form-controlled multi-file upload area
+   */
+  const MultipleFileUploadComponent = (props: ExternalFieldProps<IFileWrapper[]>) => {
+    const handleChange = useHandleChange(props.update);
+    return (
+      <FieldComponent
+        {...props}
+        field={(data, disabled, hasError) => (
+          <MultipleFileUpload
+            value={props.value(data, disabled)}
+            name={props.name}
+            onChange={handleChange}
+            disabled={disabled}
+            error={hasError}
+          />
+        )}
+      />
+    );
+  };
+
+  /**
+   * A full date (dd/mm/yyyy) component.
+   *
+   * @returns A full date (dd/mm/yyyy) controlled form component
+   */
+  const FullDateComponent = (props: ExternalFieldProps<Date>) => {
+    const handleChange = useHandleChange(props.update);
+    return (
+      <FieldComponent
+        {...props}
+        field={(data, disabled, hasError) => (
+          <FullDateInput
+            name={props.name}
+            disabled={disabled}
+            value={props.value(data, disabled)}
+            onChange={handleChange}
+            ariaDescribedBy={props.hint ? createFieldHintId(props.name) : undefined}
+            hasError={hasError}
+          />
+        )}
+      />
+    );
+  };
+
+  /**
+   * A partial date (mm/yyyy) component.
+   *
+   * @returns A partial date (mm/yyyy) controlled form component
+   */
+  const MonthYearComponent = (props: MonthYearProps<Date>) => {
+    const handleChange = useHandleChange(props.update);
+    return (
+      <FieldComponent
+        {...props}
+        field={(data, disabled, hasError) => (
+          <MonthYearInput
+            name={props.name}
+            disabled={disabled}
+            value={props.value(data, disabled)}
+            onChange={handleChange}
+            ariaDescribedBy={props.hint ? createFieldHintId(props.name) : undefined}
+            hasError={hasError}
+            startOrEnd={props.startOrEnd}
+            hideLabel={props.hideLabel}
+            debounce={false}
+          />
+        )}
+      />
+    );
+  };
+
+  /**
+   * A provider of parent form data and disabled state.
+   *
+   * @returns A React component that provides form data and disabled state.
+   */
+  const CustomComponent = (props: ExternalFieldProps<React.ReactNode>) => {
+    return <FieldComponent {...props} field={(data, disabled) => props.value(data, disabled)} />;
+  };
+
+  return {
+    Form: FormComponent,
+    Fieldset: FieldsetComponent,
+    String: StringField,
+    Search: SearchField,
+    MultilineString: MultiStringField,
+    Numeric: NumericField,
+    Radio: RadioOptionsField,
+    DropdownList: DropdownListField,
+    Checkboxes: CheckboxOptionsField,
+    Hidden: HiddenField,
+    Submit: SubmitComponent,
+    SubmitAndContinue: SubmitAndContinueComponent,
+    Button: ButtonComponent,
+    MultipleFileUpload: MultipleFileUploadComponent,
+    Date: FullDateComponent,
+    MonthYear: MonthYearComponent,
+    Custom: CustomComponent,
+  };
 };
-
-const CustomComponent = <T extends {}>(props: ExternalFieldProps<T, React.ReactNode> & InternalFieldProps<T>) => {
-  return <FieldComponent {...props} field={(data, disabled) => props.value(data, disabled)} />;
-};
-
-export interface FormBuilder<T extends {}> {
-  Form: new () => FormComponent<T>;
-  Fieldset: new () => FieldsetComponent<T>;
-  String: React.FunctionComponent<StringFieldProps<T>>;
-  Search: React.FunctionComponent<SearchFieldProps<T>>;
-  MultilineString: React.FunctionComponent<MultiStringFieldProps<T>>;
-  Numeric: React.FunctionComponent<NumericFieldProps<T>>;
-  Radio: React.FunctionComponent<RadioFieldProps<T>>;
-  DropdownList: React.FunctionComponent<DropdownFieldProps<T>>;
-  Checkboxes: React.FunctionComponent<CheckboxFieldProps<T>>;
-  Hidden: React.FunctionComponent<HiddenFieldProps<T>>;
-  Submit: React.FunctionComponent<SubmitProps>;
-  SubmitAndContinue: React.FunctionComponent<SubmitPropsBase>;
-  Button: React.FunctionComponent<ButtonProps>;
-  MultipleFileUpload: React.FunctionComponent<ExternalFieldProps<T, IFileWrapper[]>>;
-  Date: React.FunctionComponent<ExternalFieldProps<T, Date>>;
-  MonthYear: React.FunctionComponent<MonthYearProps<T, Date>>;
-  Custom: React.FunctionComponent<ExternalFieldProps<T, React.ReactNode>>;
-}
-
-export const TypedForm = <T extends {}>(): FormBuilder<T> => ({
-  Form: FormComponent as new () => FormComponent<T>,
-  Fieldset: FieldsetComponent as new () => FieldsetComponent<T>,
-  String: StringField as React.FunctionComponent<StringFieldProps<T>>,
-  Search: SearchField as React.FunctionComponent<SearchFieldProps<T>>,
-  MultilineString: MultiStringField as React.FunctionComponent<MultiStringFieldProps<T>>,
-  Numeric: NumericField as React.FunctionComponent<NumericFieldProps<T>>,
-  Radio: RadioOptionsField as React.FunctionComponent<RadioFieldProps<T>>,
-  DropdownList: DropdownListField as React.FunctionComponent<DropdownFieldProps<T>>,
-  Checkboxes: CheckboxOptionsField as React.FunctionComponent<CheckboxFieldProps<T>>,
-  Hidden: HiddenField as React.FunctionComponent<HiddenFieldProps<T>>,
-  Submit: SubmitComponent as React.FunctionComponent<SubmitProps>,
-  SubmitAndContinue: SubmitAndContinueComponent as React.FunctionComponent<SubmitPropsBase>,
-  Button: ButtonComponent as React.FunctionComponent<ButtonProps>,
-  MultipleFileUpload: MultipleFileUploadComponent as React.FunctionComponent<ExternalFieldProps<T, IFileWrapper[]>>,
-  Date: FullDateComponent as React.FunctionComponent<ExternalFieldProps<T, Date>>,
-  MonthYear: MonthYearComponent as React.FunctionComponent<MonthYearProps<T, Date>>,
-  Custom: CustomComponent as React.FunctionComponent<ExternalFieldProps<T, React.ReactNode>>,
-});

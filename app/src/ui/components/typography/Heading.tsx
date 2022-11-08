@@ -20,9 +20,6 @@ export interface HeadingBaseProps extends React.HTMLProps<HTMLHeadingElement> {
 
 export interface HeadingProps extends HeadingBaseProps {
   type: GdsHeadingTypes;
-
-  // Discard unnecessary fields.
-  formData?: unknown;
 }
 
 /**
@@ -32,7 +29,7 @@ export interface HeadingProps extends HeadingBaseProps {
  * @returns A heading component, rendering as a regular HTML heading
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function Heading({ type: HeadingType, as: AsComponent, className, qa, formData: _, ...rest }: HeadingProps) {
+export function Heading({ type: HeadingType, as: AsComponent, className, qa, ...rest }: HeadingProps) {
   const Element = AsComponent || HeadingType;
   const gdsHeadingClassName = gdsHeadingClasses[HeadingType];
 

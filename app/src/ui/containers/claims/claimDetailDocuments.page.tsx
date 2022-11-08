@@ -37,6 +37,8 @@ interface Callbacks {
   onDelete: (dto: MultipleDocumentUploadDto, document: DocumentSummaryDto) => void;
 }
 
+const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
+
 export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocumentsPageParams, Data, Callbacks> {
   public render() {
     const combined = Pending.combine({
@@ -57,7 +59,6 @@ export class ClaimDetailDocumentsComponent extends ContainerBase<ClaimDetailDocu
       costCategoryId: this.props.costCategoryId,
     });
     const costCategory = costCategories.find(x => x.id === this.props.costCategoryId) || ({} as CostCategoryDto);
-    const UploadForm = ACC.TypedForm<MultipleDocumentUploadDto>();
     const { isCombinationOfSBRI } = checkProjectCompetition(project.competitionType);
 
     return (
