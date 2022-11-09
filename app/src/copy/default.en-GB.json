@@ -22,6 +22,9 @@
     "content": "Some example content"
   },
   "components": {
+    "projectContactRoles": {
+      "none": "There are no contacts with this role."
+    },
     "validationSummary": {
       "title": "There is a problem"
     },
@@ -1023,7 +1026,12 @@
     "numberOfPeriods": "Number of periods",
     "scope": "Project scope statement",
     "projectMembers": "Project members",
-    "financeContacts": "Finance contacts",
+    "monitoringOfficers_one": "Monitoring Officer",
+    "monitoringOfficers_other": "Monitoring Officers",
+    "projectManagers_one": "Project Manager",
+    "projectManagers_other": "Project Managers",
+    "financeContacts_one": "Finance contact",
+    "financeContacts_other": "Finance contacts",
     "otherContacts": "Other contacts",
     "partners": "Partner information",
     "partner": "Partner",

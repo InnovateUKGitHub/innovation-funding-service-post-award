@@ -1,7 +1,22 @@
 import { getAuthRoles, PartnerDto, ProjectContactDto, ProjectDto, ProjectRole } from "@framework/types";
 import { Pending } from "@shared/pending";
-import * as ACC from "@ui/components";
-import { SimpleString } from "@ui/components/renderers";
+import {
+  PartnerContactRoleTable,
+  Section,
+  Projects,
+  getPartnerName,
+  Partners,
+  TypedTable,
+  Link,
+  Content,
+  Page,
+  SummaryListItem,
+  SummaryList,
+  EmailContent,
+  PageLoader,
+} from "@ui/components";
+import { getContactRole } from "@ui/components/partners/getContactRole";
+import { FullDate, ShortDateRange, SimpleString } from "@ui/components/renderers";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { getPlural } from "@ui/helpers/plurals";
 import { useProjectStatus } from "@ui/hooks";
@@ -41,38 +56,6 @@ const useRoles = () => {
   };
 };
 
-const PrimaryContactProjectDetailsComponent = ({ project, partners, contacts }: Props) => {
-  const { isKTP } = checkProjectCompetition(project.competitionType);
-  const { primaryRoles } = useRoles();
-
-  const projectContacts = primaryRoles.map((role: ProjectContactRole) => {
-    // Note: kebabCase the role name, this saves manually crafting a string
-    const qa = role.replace(/\s+/g, "-").toLowerCase();
-    const contact = contacts.find(x => x.role === role);
-    const partner = contact && partners.find(x => x.accountId === contact.accountId);
-    let comment;
-
-    if (!isKTP && role === "Project Manager") {
-      comment = <ACC.Content value={x => x.pages.projectDetails.projectManagerInfo} />;
-    }
-
-    return {
-      qa,
-      contact,
-      partner,
-      comment,
-    };
-  });
-
-  return (
-    <>
-      {projectContacts.map(contact => (
-        <ACC.ProjectContact key={contact.qa} {...contact} />
-      ))}
-    </>
-  );
-};
-
 const OtherContactProjectDetailsComponent = ({ contacts }: ContactsProps) => {
   const stores = useStores();
   const { excludedOtherRoles } = useRoles();
@@ -82,27 +65,27 @@ const OtherContactProjectDetailsComponent = ({ contacts }: ContactsProps) => {
   const otherContacts = contacts.filter(x => excludedOtherRoles.indexOf(x.role) === -1);
 
   return (
-    <ACC.Section title={x => x.projectLabels.otherContacts} qa="other-contacts-table">
-      <ACC.Partners.ContactsTable contacts={otherContacts} />
-    </ACC.Section>
+    <Section title={x => x.projectLabels.otherContacts} qa="other-contacts-table">
+      <Partners.ContactsTable contacts={otherContacts} />
+    </Section>
   );
 };
 
 const PartnerName = ({ project, partner }: { project: ProjectDto; partner: PartnerDto }) => {
-  const partnerName = ACC.getPartnerName(partner, true);
+  const partnerName = getPartnerName(partner, true);
   const projectStatus = useProjectStatus();
   const routes = useRoutes();
 
   if (projectStatus.isActive) {
     return (
-      <ACC.Link
+      <Link
         route={routes.partnerDetails.getLink({
           projectId: project.id,
           partnerId: partner.id,
         })}
       >
         {partnerName}
-      </ACC.Link>
+      </Link>
     );
   }
 
@@ -110,11 +93,11 @@ const PartnerName = ({ project, partner }: { project: ProjectDto; partner: Partn
 };
 
 const PartnerInformationTable = ({ project, partners }: { project: ProjectDto; partners: PartnerDto[] }) => {
-  const PartnersTable = ACC.TypedTable<PartnerDto>();
+  const PartnersTable = TypedTable<PartnerDto>();
   const { isPmOrMo } = getAuthRoles(project.roles);
 
   return (
-    <ACC.Section title={x => x.projectLabels.partners}>
+    <Section title={x => x.projectLabels.partners}>
       <PartnersTable.Table qa="partner-information" data={partners}>
         <PartnersTable.Custom
           header={x => x.pages.partnerDetails.projectContactLabels.partnerName}
@@ -133,7 +116,7 @@ const PartnerInformationTable = ({ project, partners }: { project: ProjectDto; p
           <PartnersTable.Custom
             header={x => x.projectContactLabels.fundingType}
             value={p => (
-              <ACC.Content
+              <Content
                 value={x =>
                   p.isNonFunded ? x.projectContactLabels.nonFundedLabel : x.projectContactLabels.fundedLabel
                 }
@@ -148,24 +131,28 @@ const PartnerInformationTable = ({ project, partners }: { project: ProjectDto; p
           qa="partner-postcode"
         />
       </PartnersTable.Table>
-    </ACC.Section>
+    </Section>
   );
 };
 
 const ProjectDetailsComponent = ({ project, partners, contacts }: Props) => {
-  const { isLoans } = checkProjectCompetition(project.competitionType);
+  const { isLoans, isKTP } = checkProjectCompetition(project.competitionType);
   const routes = useRoutes();
 
   // Note: Partners is reused avoid destructing - all partners will have the same competitionName at this UI
   const competitionName = partners[0].competitionName;
 
+  const monitoringOfficers = getContactRole({ contacts, partners, partnerRole: "Monitoring officer" });
+  const projectManagers = getContactRole({ contacts, partners, partnerRole: "Project Manager" });
+  const financeContacts = getContactRole({ contacts, partners, partnerRole: "Finance contact" });
+
   return (
-    <ACC.Page
-      backLink={<ACC.Projects.ProjectBackLink project={project} routes={routes} />}
-      pageTitle={<ACC.Projects.Title {...project} />}
+    <Page
+      backLink={<Projects.ProjectBackLink project={project} routes={routes} />}
+      pageTitle={<Projects.Title {...project} />}
       project={project}
     >
-      <ACC.Section
+      <Section
         qa="period-information"
         title={x =>
           x.projectMessages.currentPeriodInfo({
@@ -173,104 +160,112 @@ const ProjectDetailsComponent = ({ project, partners, contacts }: Props) => {
             numberOfPeriods: project.numberOfPeriods,
           })
         }
-        subtitle={<ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />}
+        subtitle={<ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />}
       />
 
-      <ACC.Section title={x => x.projectLabels.projectMembers}>
-        <PrimaryContactProjectDetailsComponent project={project} partners={partners} contacts={contacts} />
+      <Section title={x => x.projectLabels.projectMembers}>
+        <Section title={x => x.projectLabels.monitoringOfficers({ count: monitoringOfficers.length })}>
+          <PartnerContactRoleTable
+            hidePartnerColumn
+            qa="monitoring-officer-details"
+            contactRoles={monitoringOfficers}
+          />
+        </Section>
 
-        <ACC.Section title={x => x.projectLabels.financeContacts}>
-          <ACC.PartnersAndFinanceContacts
-            contacts={contacts}
-            partners={partners}
+        <Section title={x => x.projectLabels.projectManagers({ count: projectManagers.length })}>
+          <PartnerContactRoleTable
+            qa="project-manager-details"
+            contactRoles={projectManagers}
+            comment={
+              !isKTP && (
+                <SimpleString>
+                  <Content value={x => x.pages.projectDetails.projectManagerInfo} />
+                </SimpleString>
+              )
+            }
+          />
+        </Section>
+
+        <Section title={x => x.projectLabels.financeContacts({ count: financeContacts.length })}>
+          <PartnerContactRoleTable
+            qa="finance-contact-details"
+            contactRoles={financeContacts}
             comment={
               <SimpleString>
-                <ACC.Content value={x => x.pages.projectDetails.financeContactInfo} />
+                <Content value={x => x.pages.projectDetails.financeContactInfo} />
               </SimpleString>
             }
             footnote={
               <SimpleString>
-                <ACC.Content
+                <Content
                   value={x => x.pages.projectDetails.changeInfo}
-                  components={[<ACC.EmailContent key="email" value={x => x.pages.projectDetails.changeEmail} />]}
+                  components={[<EmailContent key="email" value={x => x.pages.projectDetails.changeEmail} />]}
                 />
               </SimpleString>
             }
           />
-        </ACC.Section>
+        </Section>
 
         <OtherContactProjectDetailsComponent contacts={contacts} />
-      </ACC.Section>
+      </Section>
 
       <PartnerInformationTable project={project} partners={partners} />
 
-      <ACC.Section title={<ACC.Content value={x => x.projectLabels.projectInformation} />} qa="project-details">
-        <ACC.SummaryList qa="project-information">
+      <Section title={<Content value={x => x.projectLabels.projectInformation} />} qa="project-details">
+        <SummaryList qa="project-information">
           {competitionName && (
-            <ACC.SummaryListItem
+            <SummaryListItem
               label={x => x.projectLabels.competitionName}
               qa="competition-name"
-              content={<ACC.Renderers.SimpleString>{competitionName}</ACC.Renderers.SimpleString>}
+              content={<SimpleString>{competitionName}</SimpleString>}
             />
           )}
 
-          <ACC.SummaryListItem
+          <SummaryListItem
             label={x => x.projectLabels.competitionType}
             qa="competition-type"
-            content={<ACC.Renderers.SimpleString>{project.competitionType}</ACC.Renderers.SimpleString>}
+            content={<SimpleString>{project.competitionType}</SimpleString>}
           />
 
-          <ACC.SummaryListItem
+          <SummaryListItem
             label={x => x.projectLabels.startDate}
             qa="start-date"
-            content={<ACC.Renderers.FullDate value={project.startDate} />}
+            content={<FullDate value={project.startDate} />}
           />
 
-          <ACC.SummaryListItem
+          <SummaryListItem
             label={x => x.projectLabels.endDate}
             qa="end-date"
-            content={<ACC.Renderers.FullDate value={isLoans ? project.loanEndDate : project.endDate} />}
+            content={<FullDate value={isLoans ? project.loanEndDate : project.endDate} />}
           />
 
           {isLoans ? (
             <>
-              <ACC.SummaryListItem
+              <SummaryListItem
                 qa="availability-period"
                 label={x => x.projectLabels.availabilityPeriod}
-                content={
-                  <ACC.Renderers.SimpleString>
-                    {getPlural("month", project.loanAvailabilityPeriodLength)}
-                  </ACC.Renderers.SimpleString>
-                }
+                content={<SimpleString>{getPlural("month", project.loanAvailabilityPeriodLength)}</SimpleString>}
               />
-              <ACC.SummaryListItem
+              <SummaryListItem
                 qa="extension-period"
                 label={x => x.projectLabels.extensionPeriod}
-                content={
-                  <ACC.Renderers.SimpleString>
-                    {getPlural("month", project.loanExtensionPeriodLength)}
-                  </ACC.Renderers.SimpleString>
-                }
+                content={<SimpleString>{getPlural("month", project.loanExtensionPeriodLength)}</SimpleString>}
               />
-              <ACC.SummaryListItem
+              <SummaryListItem
                 qa="repayment-period"
                 label={x => x.projectLabels.repaymentPeriod}
-                content={
-                  <ACC.Renderers.SimpleString>
-                    {getPlural("month", project.loanRepaymentPeriodLength)}
-                  </ACC.Renderers.SimpleString>
-                }
+                content={<SimpleString>{getPlural("month", project.loanRepaymentPeriodLength)}</SimpleString>}
               />
             </>
           ) : (
             <>
-              <ACC.SummaryListItem
+              <SummaryListItem
                 label={x => x.projectLabels.duration}
                 qa="duration"
                 content={getPlural("month", project.durationInMonths)}
               />
 
-              <ACC.SummaryListItem
+              <SummaryListItem
                 label={x => x.projectLabels.numberOfPeriods}
                 qa="periods"
                 content={project.numberOfPeriods}
@@ -278,14 +273,14 @@ const ProjectDetailsComponent = ({ project, partners, contacts }: Props) => {
             </>
           )}
 
-          <ACC.SummaryListItem
+          <SummaryListItem
             label={x => x.projectLabels.scope}
             qa="scope"
-            content={<ACC.Renderers.SimpleString multiline>{project.summary}</ACC.Renderers.SimpleString>}
+            content={<SimpleString multiline>{project.summary}</SimpleString>}
           />
-        </ACC.SummaryList>
-      </ACC.Section>
-    </ACC.Page>
+        </SummaryList>
+      </Section>
+    </Page>
   );
 };
 
@@ -298,7 +293,7 @@ const ProjectDetailsContainer = (props: Params & BaseProps) => {
     contacts: stores.contacts.getAllByProjectId(props.projectId),
   });
 
-  return <ACC.PageLoader pending={combined} render={x => <ProjectDetailsComponent {...x} />} />;
+  return <PageLoader pending={combined} render={x => <ProjectDetailsComponent {...x} />} />;
 };
 
 export const ProjectDetailsRoute = defineRoute({
