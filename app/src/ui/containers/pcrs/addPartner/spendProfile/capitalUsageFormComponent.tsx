@@ -92,12 +92,11 @@ class Component extends React.Component<
                   label={x => x.pcrSpendProfileLabels.capitalUsage.netCost}
                   labelBold
                   name="netCost"
-                  value={dto => (
+                  value={({ formData }) => (
                     <ACC.Renderers.SimpleString>
-                      <ACC.Renderers.Currency value={dto.value} />
+                      <ACC.Renderers.Currency value={formData.value} />
                     </ACC.Renderers.SimpleString>
                   )}
-                  update={() => null}
                 />
               )}
             </Form.Fieldset>

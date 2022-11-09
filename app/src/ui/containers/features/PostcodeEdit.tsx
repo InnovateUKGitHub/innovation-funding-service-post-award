@@ -25,8 +25,7 @@ export const PostcodeEdit = ({ editor, onUpdate, saveButtonContent, ...rest }: P
           <PostcodeForm.Custom
             name="current-partner-postcode-value"
             label={x => x.pages.partnerDetailsEdit.labelCurrentPostcode}
-            value={x => <ACC.Renderers.SimpleString>{x.postcode}</ACC.Renderers.SimpleString>}
-            update={() => null}
+            value={({ formData }) => <ACC.Renderers.SimpleString>{formData.postcode}</ACC.Renderers.SimpleString>}
           />
         )}
         <PostcodeForm.String

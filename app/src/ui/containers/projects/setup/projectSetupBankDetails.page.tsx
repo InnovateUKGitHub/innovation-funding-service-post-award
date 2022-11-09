@@ -174,9 +174,10 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
     return (
       <Form.Custom
         name="sortCode"
-        value={x => <ACC.Renderers.SimpleString>{x.bankDetails.sortCode}</ACC.Renderers.SimpleString>}
+        value={({ formData }) => (
+          <ACC.Renderers.SimpleString>{formData.bankDetails.sortCode}</ACC.Renderers.SimpleString>
+        )}
         label={x => x.partnerLabels.sortCode}
-        update={() => null}
       />
     );
   }
@@ -202,7 +203,9 @@ class ProjectSetupBankDetailsComponent extends ContainerBase<ProjectSetupBankDet
     return (
       <Form.Custom
         name="accountNumber"
-        value={x => <ACC.Renderers.SimpleString>{x.bankDetails.accountNumber}</ACC.Renderers.SimpleString>}
+        value={({ formData }) => (
+          <ACC.Renderers.SimpleString>{formData.bankDetails.accountNumber}</ACC.Renderers.SimpleString>
+        )}
         label={x => x.partnerLabels.accountNumber}
         update={() => null}
       />

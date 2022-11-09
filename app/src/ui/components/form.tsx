@@ -120,10 +120,18 @@ export const createTypedForm = <T,>() => {
     children: ReactNode;
   }
 
+  interface FieldParams {
+    formData: T;
+    disabled: boolean;
+    hasError: boolean | undefined;
+    onChange?: (data: T) => void;
+    onSubmit?: () => void;
+  }
+
   interface InternalFieldProps {
     key?: string;
     qa?: string;
-    field: (data: T, disabled: boolean, hasError: boolean | undefined) => React.ReactNode;
+    field: (params: FieldParams) => React.ReactNode;
   }
 
   interface HiddenFieldProps {
@@ -131,17 +139,25 @@ export const createTypedForm = <T,>() => {
     value: (data: T) => string | number | null | undefined;
   }
 
-  // TODO: Check accessibility - label + hint being required
-  interface ExternalFieldProps<TValue> {
+  interface FieldComponentProps {
     label?: string | ContentSelector;
     labelBold?: boolean;
     labelHidden?: boolean;
     hint?: React.ReactNode | ContentSelector;
     name: string;
-    value: (data: T, disabled: boolean) => TValue | null | undefined;
-    update: (data: T, value: TValue | null) => void;
     validation?: Result;
     placeholder?: string;
+  }
+
+  // TODO: Check accessibility - label + hint being required
+  interface ExternalFieldProps<TValue> extends FieldComponentProps {
+    value: (data: T, disabled: boolean) => TValue | null | undefined;
+    update: (data: T, value: TValue | null) => void;
+  }
+
+  interface CustomFieldProps extends FieldComponentProps {
+    value: (params: FieldParams) => React.ReactNode | null | undefined;
+    update?: (data: T, value: React.ReactNode | null) => void;
   }
 
   interface StringFieldProps extends ExternalFieldProps<string> {
@@ -251,11 +267,13 @@ export const createTypedForm = <T,>() => {
    * @param update The update method, to modify the form content
    * @returns An "onChange" function handler
    */
-  const useHandleChange = <TValue,>(update: (data: T, value: TValue | null) => void) => {
+  const useHandleChange = <TValue,>(update?: (data: T, value: TValue | null) => void) => {
     const { formData, onChange } = useFormDataContext();
 
     return (value: TValue | null) => {
-      update(formData, value);
+      if (update) {
+        update(formData, value);
+      }
 
       if (onChange) {
         onChange(formData);
@@ -363,7 +381,7 @@ export const createTypedForm = <T,>() => {
    * @private
    * @returns A field component
    */
-  const FieldComponent = <TValue,>({
+  const FieldComponent = ({
     hint,
     name,
     label,
@@ -371,9 +389,9 @@ export const createTypedForm = <T,>() => {
     labelBold,
     field,
     validation,
-  }: InternalFieldProps & ExternalFieldProps<TValue>) => {
+  }: InternalFieldProps & FieldComponentProps) => {
     // Obtain information about the form we are within
-    const { disabled, formData } = useFormDataContext();
+    const { disabled, formData, onChange, onSubmit } = useFormDataContext();
 
     const hasError = validation && validation.showValidationErrors && !validation.isValid;
 
@@ -411,35 +429,10 @@ export const createTypedForm = <T,>() => {
 
         {validation && <ValidationError error={validation} />}
 
-        {field(formData, disabled, hasError)}
+        {field({ formData, disabled, hasError, onChange, onSubmit })}
       </div>
     );
   };
-
-  /**
-   * A `<FieldComponent />` specifically typed to a `string`
-   */
-  const StringFieldComponent = FieldComponent<string>;
-
-  /**
-   * A `<FieldComponent />` specifically typed to a `number`
-   */
-  const NumberFieldComponent = FieldComponent<number>;
-
-  /**
-   * A `<FieldComponent />` specifically typed to a `SelectOption`
-   */
-  const SelectFieldComponent = FieldComponent<SelectOption>;
-
-  /**
-   * A `<FieldComponent />` specifically typed to an array of `SelectOption`
-   */
-  const MultipleSelectFieldComponent = FieldComponent<SelectOption[]>;
-
-  /**
-   * A `<FieldComponent />` specifically typed to a `DropdownOption`
-   */
-  const DropdownFieldComponent = FieldComponent<DropdownOption>;
 
   /**
    * A `string` type textbox
@@ -449,13 +442,13 @@ export const createTypedForm = <T,>() => {
   const StringField = (props: StringFieldProps) => {
     const handleChange = useHandleChange(props.update);
     return (
-      <StringFieldComponent
+      <FieldComponent
         {...props}
-        field={(data, disabled) => (
+        field={({ formData, disabled }) => (
           <TextInput
             width={props.width}
             name={props.name}
-            value={props.value(data, disabled)}
+            value={props.value(formData, disabled)}
             onChange={handleChange}
             placeholder={props.placeholder}
             disabled={disabled}
@@ -473,10 +466,10 @@ export const createTypedForm = <T,>() => {
   const SearchField = (props: SearchFieldProps) => {
     const handleChange = useHandleChange(props.update);
     return (
-      <StringFieldComponent
+      <FieldComponent
         {...props}
-        field={(data, disabled) => (
-          <SearchInput {...props} disabled={disabled} value={props.value(data, disabled)} onChange={handleChange} />
+        field={({ formData, disabled }) => (
+          <SearchInput {...props} disabled={disabled} value={props.value(formData, disabled)} onChange={handleChange} />
         )}
       />
     );
@@ -490,12 +483,12 @@ export const createTypedForm = <T,>() => {
   const MultiStringField = (props: MultiStringFieldProps) => {
     const handleChange = useHandleChange(props.update);
     return (
-      <StringFieldComponent
+      <FieldComponent
         {...props}
-        field={(data, disabled) => (
+        field={({ formData, disabled }) => (
           <TextAreaInput
             name={props.name}
-            value={props.value(data, disabled)}
+            value={props.value(formData, disabled)}
             onChange={handleChange}
             rows={props.rows}
             qa={props.qa}
@@ -516,12 +509,12 @@ export const createTypedForm = <T,>() => {
   const NumericField = (props: NumericFieldProps) => {
     const handleChange = useHandleChange(props.update);
     return (
-      <NumberFieldComponent
+      <FieldComponent
         {...props}
-        field={(data, disabled) => (
+        field={({ formData, disabled }) => (
           <NumberInput
             name={props.name}
-            value={props.value(data, disabled)}
+            value={props.value(formData, disabled)}
             onChange={handleChange}
             width={props.width}
             disabled={disabled}
@@ -539,13 +532,13 @@ export const createTypedForm = <T,>() => {
   const RadioOptionsField = (props: RadioFieldProps) => {
     const handleChange = useHandleChange(props.update);
     return (
-      <SelectFieldComponent
+      <FieldComponent
         {...props}
-        field={(data, disabled) => (
+        field={({ formData, disabled }) => (
           <RadioList
             options={props.options}
             name={props.name}
-            value={props.value(data, disabled)}
+            value={props.value(formData, disabled)}
             inline={props.inline}
             onChange={handleChange}
             disabled={disabled}
@@ -563,13 +556,13 @@ export const createTypedForm = <T,>() => {
   const CheckboxOptionsField = (props: CheckboxFieldProps) => {
     const handleChange = useHandleChange(props.update);
     return (
-      <MultipleSelectFieldComponent
+      <FieldComponent
         {...props}
-        field={(data, disabled) => (
+        field={({ formData, disabled }) => (
           <CheckboxList
             options={props.options}
             name={props.name}
-            value={props.value(data, disabled)}
+            value={props.value(formData, disabled)}
             onChange={handleChange}
             disabled={disabled}
           />
@@ -586,15 +579,15 @@ export const createTypedForm = <T,>() => {
   const DropdownListField = (props: DropdownFieldProps) => {
     const handleChange = useHandleChange(props.update);
     return (
-      <DropdownFieldComponent
+      <FieldComponent
         {...props}
-        field={(data, disabled) => (
+        field={({ formData, disabled }) => (
           <DropdownList
             placeholder={props.placeholder}
             options={props.options}
             name={props.name}
             hasEmptyOption={props.hasEmptyOption}
-            value={props.value(data, disabled)}
+            value={props.value(formData, disabled)}
             onChange={handleChange}
             disabled={disabled}
           />
@@ -688,9 +681,9 @@ export const createTypedForm = <T,>() => {
     return (
       <FieldComponent
         {...props}
-        field={(data, disabled, hasError) => (
+        field={({ formData, disabled, hasError }) => (
           <MultipleFileUpload
-            value={props.value(data, disabled)}
+            value={props.value(formData, disabled)}
             name={props.name}
             onChange={handleChange}
             disabled={disabled}
@@ -711,11 +704,11 @@ export const createTypedForm = <T,>() => {
     return (
       <FieldComponent
         {...props}
-        field={(data, disabled, hasError) => (
+        field={({ formData, disabled, hasError }) => (
           <FullDateInput
             name={props.name}
             disabled={disabled}
-            value={props.value(data, disabled)}
+            value={props.value(formData, disabled)}
             onChange={handleChange}
             ariaDescribedBy={props.hint ? createFieldHintId(props.name) : undefined}
             hasError={hasError}
@@ -735,11 +728,11 @@ export const createTypedForm = <T,>() => {
     return (
       <FieldComponent
         {...props}
-        field={(data, disabled, hasError) => (
+        field={({ formData, disabled, hasError }) => (
           <MonthYearInput
             name={props.name}
             disabled={disabled}
-            value={props.value(data, disabled)}
+            value={props.value(formData, disabled)}
             onChange={handleChange}
             ariaDescribedBy={props.hint ? createFieldHintId(props.name) : undefined}
             hasError={hasError}
@@ -757,8 +750,8 @@ export const createTypedForm = <T,>() => {
    *
    * @returns A React component that provides form data and disabled state.
    */
-  const CustomComponent = (props: ExternalFieldProps<React.ReactNode>) => {
-    return <FieldComponent {...props} field={(data, disabled) => props.value(data, disabled)} />;
+  const CustomComponent = ({ value, ...params }: CustomFieldProps) => {
+    return <FieldComponent {...params} field={value} />;
   };
 
   return {
