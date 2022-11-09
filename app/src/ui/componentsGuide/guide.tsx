@@ -15,7 +15,6 @@ import { logsGuide } from "./logsGuide";
 import { navigationArrowsGuide } from "./navigationArrowsGuide";
 import { navigationCardGuide } from "./navigationCardGuide";
 import { numericInputGuide } from "./numericInputGuide";
-import { projectContactGuide } from "./projectContactGuide";
 import { pageTitleGuide } from "./pageTitleGuide";
 import { renderersGuide } from "./renderersGuide";
 import { sectionGuide } from "./sectionGuide";
@@ -57,7 +56,6 @@ const guides: IGuide[] = [
   navigationCardGuide,
   numericInputGuide,
   textareaInputGuide,
-  projectContactGuide,
   pageTitleGuide,
   percentageGuide,
   readonlyLabel,

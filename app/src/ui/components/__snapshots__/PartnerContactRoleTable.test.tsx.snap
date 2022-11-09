@@ -1,0 +1,261 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<PartnersAndFinanceContacts /> @renders matching FC snapshot 1`] = `
+<div>
+  <div
+    class="govuk-table-wrapper"
+    data-qa="partner-contact-role-table"
+  >
+    <table
+      class="govuk-table"
+    >
+      <colgroup>
+        <col
+          data-qa="col-fc-name"
+        />
+        <col
+          data-qa="col-partner-name"
+        />
+        <col
+          data-qa="col-fc-email"
+        />
+      </colgroup>
+      <thead
+        class="govuk-table__head"
+      >
+        <tr
+          class="govuk-table__row"
+        >
+          <th
+            class="govuk-table__header"
+            scope="col"
+          >
+            Name
+          </th>
+          <th
+            class="govuk-table__header"
+            scope="col"
+          >
+            Partner
+          </th>
+          <th
+            class="govuk-table__header"
+            scope="col"
+          >
+            Email
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        class="govuk-table__body"
+      >
+        <tr
+          class="govuk-table__row"
+        >
+          <td
+            class="govuk-table__cell"
+          >
+            Ted Tester
+          </td>
+          <td
+            class="govuk-table__cell"
+          >
+            Steel Manufacturing (Lead)
+          </td>
+          <td
+            class="govuk-table__cell"
+          >
+            <a
+              class="govuk-link govuk-!-font-size-19"
+              href="mailto:tedtester@nowhere.com"
+            >
+              tedtester@nowhere.com
+            </a>
+          </td>
+        </tr>
+        <tr
+          class="govuk-table__row"
+        >
+          <td
+            class="govuk-table__cell"
+          >
+            Joe Bloggs
+          </td>
+          <td
+            class="govuk-table__cell"
+          >
+            University of Life
+          </td>
+          <td
+            class="govuk-table__cell"
+          >
+            <a
+              class="govuk-link govuk-!-font-size-19"
+              href="mailto:joebloggs@nowhere.com"
+            >
+              joebloggs@nowhere.com
+            </a>
+          </td>
+        </tr>
+        <tr
+          class="govuk-table__row"
+        >
+          <td
+            class="govuk-table__cell"
+          >
+            Bob Baker
+          </td>
+          <td
+            class="govuk-table__cell"
+          >
+            Driverless Cars
+          </td>
+          <td
+            class="govuk-table__cell"
+          >
+            <a
+              class="govuk-link govuk-!-font-size-19"
+              href="mailto:bobbaker@nowhere.com"
+            >
+              bobbaker@nowhere.com
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+`;
+
+exports[`<PartnersAndFinanceContacts /> @renders matching MO snapshot 1`] = `
+<div>
+  <div
+    class="govuk-table-wrapper"
+    data-qa="partner-contact-role-table"
+  >
+    <table
+      class="govuk-table"
+    >
+      <colgroup>
+        <col
+          data-qa="col-fc-name"
+        />
+        <col
+          data-qa="col-partner-name"
+        />
+        <col
+          data-qa="col-fc-email"
+        />
+      </colgroup>
+      <thead
+        class="govuk-table__head"
+      >
+        <tr
+          class="govuk-table__row"
+        >
+          <th
+            class="govuk-table__header"
+            scope="col"
+          >
+            Name
+          </th>
+          <th
+            class="govuk-table__header"
+            scope="col"
+          >
+            Partner
+          </th>
+          <th
+            class="govuk-table__header"
+            scope="col"
+          >
+            Email
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        class="govuk-table__body"
+      />
+    </table>
+  </div>
+</div>
+`;
+
+exports[`<PartnersAndFinanceContacts /> @renders matching PM snapshot 1`] = `
+<div>
+  <div
+    class="govuk-table-wrapper"
+    data-qa="partner-contact-role-table"
+  >
+    <table
+      class="govuk-table"
+    >
+      <colgroup>
+        <col
+          data-qa="col-fc-name"
+        />
+        <col
+          data-qa="col-partner-name"
+        />
+        <col
+          data-qa="col-fc-email"
+        />
+      </colgroup>
+      <thead
+        class="govuk-table__head"
+      >
+        <tr
+          class="govuk-table__row"
+        >
+          <th
+            class="govuk-table__header"
+            scope="col"
+          >
+            Name
+          </th>
+          <th
+            class="govuk-table__header"
+            scope="col"
+          >
+            Partner
+          </th>
+          <th
+            class="govuk-table__header"
+            scope="col"
+          >
+            Email
+          </th>
+        </tr>
+      </thead>
+      <tbody
+        class="govuk-table__body"
+      >
+        <tr
+          class="govuk-table__row"
+        >
+          <td
+            class="govuk-table__cell"
+          >
+            Dave Developer
+          </td>
+          <td
+            class="govuk-table__cell"
+          >
+            University of Life
+          </td>
+          <td
+            class="govuk-table__cell"
+          >
+            <a
+              class="govuk-link govuk-!-font-size-19"
+              href="mailto:davedeveloper@nowhere.com"
+            >
+              davedeveloper@nowhere.com
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+`;
