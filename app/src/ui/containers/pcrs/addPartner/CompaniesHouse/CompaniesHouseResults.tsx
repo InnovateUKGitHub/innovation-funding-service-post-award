@@ -3,19 +3,20 @@ import { useCallback, useMemo } from "react";
 import { CompanyDto, PCRItemForPartnerAdditionDto } from "@framework/dtos";
 import { useContent } from "@ui/hooks";
 import * as ACC from "@ui/components";
+import { FormBuilder } from "@ui/components";
 
 interface CompaniesHouseResultsProps {
   selectedRegistrationNumber: string | undefined;
   options: CompanyDto[];
   onSelect: (option: CompanyDto) => void;
+  Form: FormBuilder<PCRItemForPartnerAdditionDto>;
 }
-
-const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
 
 export const CompaniesHouseResults = ({
   selectedRegistrationNumber,
   options,
   onSelect,
+  Form,
 }: CompaniesHouseResultsProps) => {
   const { getContent } = useContent();
 
