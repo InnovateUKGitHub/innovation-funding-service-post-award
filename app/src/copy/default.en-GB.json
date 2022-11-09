@@ -813,7 +813,7 @@
         "html": "Provide reasoning to Innovate UK",
         "display": "Provide reasoning to Innovate UK"
       },
-      "hint": "You must explain each change. Be brief and write clearly.<br/>If you are requesting a reallocation of project costs, you must justify each change to your costs.",
+      "hint": "You must explain each change. Be brief and write clearly. If you are requesting a reallocation of project costs, you must justify each change to your costs.",
       "headingReasoning": "Reasoning"
     },
     "pcrReasoningSummary": {
