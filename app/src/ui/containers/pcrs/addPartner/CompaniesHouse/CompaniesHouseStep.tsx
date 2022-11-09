@@ -106,6 +106,7 @@ export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: Compa
                     options={companyResults}
                     selectedRegistrationNumber={formData.registrationNumber || undefined}
                     onSelect={handleCompanySelection}
+                    Form={Form}
                   />
                 )}
 
