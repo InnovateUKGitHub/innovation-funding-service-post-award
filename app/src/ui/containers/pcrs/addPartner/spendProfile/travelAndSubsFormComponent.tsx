@@ -68,9 +68,9 @@ export function TravelAndSubsFormComponent({
             label={x => x.pcrSpendProfileLabels.travelAndSubs.totalCost}
             labelBold
             name="totalCost"
-            value={dto => (
+            value={({ formData }) => (
               <ACC.Renderers.SimpleString>
-                <ACC.Renderers.Currency value={dto.value} />
+                <ACC.Renderers.Currency value={formData.value} />
               </ACC.Renderers.SimpleString>
             )}
             update={() => null}

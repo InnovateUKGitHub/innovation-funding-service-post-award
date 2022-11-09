@@ -87,7 +87,13 @@ const UpdateForecastComponent = (props: ForecastUpdateParams & ForecastUpdateDat
             onSubmit={handleSubmit}
             qa="partner-forecast-form"
           >
-            <ACC.Claims.ForecastTable data={forecastData} editor={editor} />
+            <Form.Custom
+              name="forecastTable"
+              update={() => null}
+              value={({ onChange }) => (
+                <ACC.Claims.ForecastTable onChange={onChange} data={forecastData} editor={editor} />
+              )}
+            />
 
             <Form.Fieldset>
               {partner.forecastLastModifiedDate && (

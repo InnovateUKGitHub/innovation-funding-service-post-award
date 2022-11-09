@@ -71,29 +71,23 @@ const TimeExtensionStep = (
             <Form.Custom
               label={dateLabel}
               name="currentDates"
-              value={m => (
+              value={({ formData }) => (
                 <ACC.Renderers.SimpleString>
                   <ACC.Renderers.ShortDateRangeFromDuration
                     startDate={props.project.startDate}
-                    months={m.projectDurationSnapshot}
+                    months={formData.projectDurationSnapshot}
                   />
                 </ACC.Renderers.SimpleString>
               )}
-              update={() => {
-                return;
-              }}
             />
             <Form.Custom
               label={durationLabel}
               name="currentDuration"
-              value={m => (
+              value={({ formData }) => (
                 <ACC.Renderers.SimpleString>
-                  <ACC.Renderers.Months months={m.projectDurationSnapshot} />
+                  <ACC.Renderers.Months months={formData.projectDurationSnapshot} />
                 </ACC.Renderers.SimpleString>
               )}
-              update={() => {
-                return;
-              }}
             />
           </Form.Fieldset>
 

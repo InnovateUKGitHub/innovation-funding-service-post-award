@@ -43,11 +43,17 @@ export const LoanDrawdownExtensionStepContainer = (props: LoanDrawdownExtensionS
       <ACC.Renderers.SimpleString>Project start date: {formattedStartDate}</ACC.Renderers.SimpleString>
 
       <LoanForm.Form qa="loanEditForm" data={state} onSubmit={() => props.onSave(false)}>
-        <LoanChangeDurationTable
-          editMode
-          isDisabled={isDisabled}
-          validator={props.validator}
-          onUpdate={handleOnUpdate}
+        <LoanForm.Custom
+          name="loanChangeDurationTable"
+          value={({ formData }) => (
+            <LoanChangeDurationTable
+              editMode
+              isDisabled={isDisabled}
+              validator={props.validator}
+              onUpdate={handleOnUpdate}
+              formData={formData}
+            />
+          )}
         />
 
         <LoanForm.SubmitAndContinue name="changeLoanEdit" disabled={isDisabled} />
