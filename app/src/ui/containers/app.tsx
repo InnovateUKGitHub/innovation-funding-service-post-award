@@ -5,7 +5,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { Route, Routes, useLocation, useNavigationType } from "react-router-dom";
 
 import { IRouteDefinition } from "@ui/containers/containerBase";
-import { useModal, useStores } from "@ui/redux";
+import { RoutesProvider, useModal, useStores } from "@ui/redux";
 import { routeTransition } from "@ui/redux/actions";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { getRoutes, routeConfig } from "@ui/routing";
@@ -145,25 +145,30 @@ export function App(props: AppRoute) {
 
   return (
     <ErrorBoundary fallbackRender={errorProps => <ErrorBoundaryFallback {...(errorProps as any)} />}>
-      <MountedProvider>
-        <Routes>
-          {error ? (
-            <Route path="*" element={<AppView currentRoute={ErrorRoute} dispatch={props.store.dispatch} />} />
-          ) : (
-            <>
-              {routesList.map(([routeKey, route]) => (
-                <Route
-                  key={routeKey}
-                  path={route.routePath}
-                  element={<AppView currentRoute={route} dispatch={props.store.dispatch} />}
-                />
-              ))}
+      <RoutesProvider value={routeConfig}>
+        <MountedProvider>
+          <Routes>
+            {error ? (
+              <Route path="*" element={<AppView currentRoute={ErrorRoute} dispatch={props.store.dispatch} />} />
+            ) : (
+              <>
+                {routesList.map(([routeKey, route]) => (
+                  <Route
+                    key={routeKey}
+                    path={route.routePath}
+                    element={<AppView currentRoute={route} dispatch={props.store.dispatch} />}
+                  />
+                ))}
 
-              <Route path="*" element={<AppView currentRoute={ErrorNotFoundRoute} dispatch={props.store.dispatch} />} />
-            </>
-          )}
-        </Routes>
-      </MountedProvider>
+                <Route
+                  path="*"
+                  element={<AppView currentRoute={ErrorNotFoundRoute} dispatch={props.store.dispatch} />}
+                />
+              </>
+            )}
+          </Routes>
+        </MountedProvider>
+      </RoutesProvider>
     </ErrorBoundary>
   );
 }
