@@ -15,6 +15,7 @@ import { ForbiddenError } from "@shared/appError";
 
 import { PCRDto, PCRItemTypeDto } from "@framework/dtos/pcrDtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import WithScrollToTopOnPropChange from "@ui/features/scroll-to-top-on-prop-change";
 
 import { Results } from "@ui/validation";
 import { MultipleDocumentUploadDtoValidator, PCRDtoValidator } from "@ui/validators";
@@ -296,7 +297,11 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
     }
 
     const CurrentStep = currentStep.stepRender;
-    return <CurrentStep {...props} />;
+    return (
+      <WithScrollToTopOnPropChange propToScrollOn={workflow.getCurrentStepName()}>
+        <CurrentStep {...props} />
+      </WithScrollToTopOnPropChange>
+    );
   }
 
   private renderSummary(
@@ -386,32 +391,34 @@ class PCRItemWorkflow extends ContainerBase<ProjectChangeRequestPrepareItemParam
     const displayNavigationArrows = mode === "review" || mode === "view";
 
     return (
-      <PcrSummaryConsumer>
-        {summaryContext => {
-          const displayCompleteForm = isPrepareMode && summaryContext.isSummaryValid;
+      <WithScrollToTopOnPropChange propToScrollOn={workflow.getCurrentStepName()}>
+        <PcrSummaryConsumer>
+          {summaryContext => {
+            const displayCompleteForm = isPrepareMode && summaryContext.isSummaryValid;
 
-          return (
-            <ACC.Section qa="item-save-and-return">
-              {this.renderSummary(workflow, project, pcr, editor)}
+            return (
+              <ACC.Section qa="item-save-and-return">
+                {this.renderSummary(workflow, project, pcr, editor)}
 
-              {displayCompleteForm &&
-                this.renderCompleteForm(workflow, editor, {
-                  allowSubmit: summaryContext.allowSubmit,
-                })}
+                {displayCompleteForm &&
+                  this.renderCompleteForm(workflow, editor, {
+                    allowSubmit: summaryContext.allowSubmit,
+                  })}
 
-              {displayNavigationArrows && (
-                <NavigationArrowsForPCRs
-                  pcr={pcr}
-                  currentItem={pcrItem}
-                  isReviewing={isReviewing}
-                  editableItemTypes={editableItemTypes}
-                  routes={this.props.routes}
-                />
-              )}
-            </ACC.Section>
-          );
-        }}
-      </PcrSummaryConsumer>
+                {displayNavigationArrows && (
+                  <NavigationArrowsForPCRs
+                    pcr={pcr}
+                    currentItem={pcrItem}
+                    isReviewing={isReviewing}
+                    editableItemTypes={editableItemTypes}
+                    routes={this.props.routes}
+                  />
+                )}
+              </ACC.Section>
+            );
+          }}
+        </PcrSummaryConsumer>
+      </WithScrollToTopOnPropChange>
     );
   }
 
