@@ -1,8 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`Error config returns available error views 1`] = `
-Object {
-  "AUTHENTICATION_ERROR": "UnauthenticatedError",
-  "NOT_FOUND": "NotFoundError",
-}
-`;

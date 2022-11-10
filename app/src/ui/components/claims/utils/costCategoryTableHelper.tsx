@@ -38,6 +38,9 @@ interface ClaimTableResponse {
   costCategories: ClaimTableRow[];
 }
 
+/**
+ * creates the table data
+ */
 export function createTableData(props: ClaimProps): ClaimTableResponse {
   const costCategories: ClaimTableRow[] = [];
   const totalNegativeCategories: ClaimTableRow[] = [];
@@ -78,6 +81,9 @@ const emptyCostsSummaryForPeriodDto: CostsSummaryForPeriodDto = {
   remainingOfferCosts: 0,
 };
 
+/**
+ * calculates total for the row
+ */
 function calculateTotalRow(claimDetails: ClaimProps["claimDetails"]): ClaimTableRow {
   let totalRowCosts: CostsSummaryForPeriodDto = {
     costCategoryId: "",
@@ -124,6 +130,9 @@ function calculateTotalRow(claimDetails: ClaimProps["claimDetails"]): ClaimTable
   };
 }
 
+/**
+ * creates a row
+ */
 function createRow(category: CostCategoryDto, claimItem: ClaimProps) {
   const { claimDetails, ...restClaimProps } = claimItem;
 
@@ -151,7 +160,7 @@ function createRow(category: CostCategoryDto, claimItem: ClaimProps) {
 export type ClaimInfoProps = Pick<ClaimProps, "getLink" | "validation">;
 export type CategoryInfoProps = Pick<CostCategoryDto, "id" | "name">;
 
-export function renderCostCategory(claimInfo: ClaimInfoProps, categoryInfo: CategoryInfoProps) {
+export const renderCostCategory = (claimInfo: ClaimInfoProps, categoryInfo: CategoryInfoProps) => {
   const { getLink, validation } = claimInfo;
   const route = getLink(categoryInfo.id);
 
@@ -164,4 +173,4 @@ export function renderCostCategory(claimInfo: ClaimInfoProps, categoryInfo: Cate
       {categoryInfo.name}
     </Link>
   );
-}
+};

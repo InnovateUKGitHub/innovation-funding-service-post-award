@@ -1,7 +1,7 @@
 /**
  * Constructs a url based on the passed in parameters
  */
-export function makeUrlWithQuery(path: string, routeParams: any): string {
+export function makeUrlWithQuery(path: string, routeParams: AnyObject): string {
   if (!routeParams || Object.keys(routeParams).length === 0) return path.replace(/\?:.+/, "");
   const tokenKeysAsString = Object.keys(routeParams).join("|");
 

@@ -43,7 +43,7 @@ interface CombinedData {
   claimDetails: CostsSummaryForPeriodDto[];
 }
 
-export class ClaimsDetailsComponent extends ContainerBase<Params, Data, {}> {
+export class ClaimsDetailsComponent extends ContainerBase<Params, Data> {
   public render() {
     const combined = Pending.combine({
       project: this.props.project,

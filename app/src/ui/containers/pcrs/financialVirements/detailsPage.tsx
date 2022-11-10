@@ -24,7 +24,7 @@ interface Props {
   financialVirements: Pending<PartnerVirementsDto>;
 }
 
-class Component extends ContainerBase<Params, Props, {}> {
+class Component extends ContainerBase<Params, Props> {
   render() {
     const combined = Pending.combine({
       project: this.props.project,

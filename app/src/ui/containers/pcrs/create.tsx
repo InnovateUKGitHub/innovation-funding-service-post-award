@@ -29,7 +29,7 @@ interface CreatePcrProps extends CreatePcrParams, BaseProps {
 
 const PCRForm = ACC.createTypedForm<Dtos.PCRDto>();
 
-function PCRCreateComponent({ content, ...props }: CreatePcrProps) {
+const PCRCreateComponent = ({ content, ...props }: CreatePcrProps) => {
   const { isMultipleParticipants } = useProjectParticipants();
 
   const getListData = (editorItems: Dtos.PCRItemDto[], itemTypes: Dtos.PCRItemTypeDto[]) => {
@@ -137,8 +137,11 @@ function PCRCreateComponent({ content, ...props }: CreatePcrProps) {
   });
 
   return <ACC.PageLoader pending={combined} render={x => renderPage(x.project, x.itemTypes, x.editor)} />;
-}
+};
 
+/**
+ * Gets the Content for create PCR
+ */
 export function useCreatePcrContent() {
   const { getContent } = useContent();
 
@@ -154,6 +157,9 @@ export function useCreatePcrContent() {
   };
 }
 
+/**
+ * Create Pcr container
+ */
 function PCRCreateContainer(props: CreatePcrParams & BaseProps) {
   const { projects, projectChangeRequests } = useStores();
   const pcrContent = useCreatePcrContent();

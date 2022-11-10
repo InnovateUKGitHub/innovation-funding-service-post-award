@@ -1,5 +1,6 @@
 declare type EmptyObject = Record<string, never>;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare type AnyObject = Record<string, any>;
 
 declare type Merge<A, B> = A extends EmptyObject
@@ -11,3 +12,8 @@ declare type Merge<A, B> = A extends EmptyObject
 declare type ContentJson = { [key: string]: string | ContentJson };
 
 declare type ResultBase = AnyObject | null;
+
+// https://stackoverflow.com/a/53050575
+declare type NoUndefinedField<T> = {
+  [P in keyof T]-?: NoUndefinedField<NonNullable<T[P]>>;
+};

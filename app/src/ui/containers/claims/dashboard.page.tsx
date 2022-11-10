@@ -23,7 +23,7 @@ interface Data {
   currentClaim: Pending<ClaimDto | null>;
 }
 
-class Component extends ContainerBase<ClaimDashboardPageParams, Data, {}> {
+class Component extends ContainerBase<ClaimDashboardPageParams, Data> {
   public render() {
     const combined = Pending.combine({
       project: this.props.projectDetails,

@@ -21,7 +21,7 @@ describe("CostCategory", () => {
     });
 
     it("maps an unknown id to the unknown cost type", () => {
-      const result = costCategoryList.fromName(1234567 as any);
+      const result = costCategoryList.fromName("1234567");
       expect(result.id).toEqual(CostCategoryType.Unknown);
       expect(result.name).toEqual("Unknown Type");
     });

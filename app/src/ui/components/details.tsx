@@ -37,7 +37,7 @@ interface DetailsComponentProps<T> {
 /**
  * Details Component
  */
-function DetailsComponent<T extends {}>({
+function DetailsComponent<T extends AnyObject>({
   displayDensity = "Comfortable",
   qa,
   labelWidth,
@@ -130,7 +130,7 @@ export function DualDetails({ children }: DualDetailsProps) {
   );
 }
 
-export class FieldComponent<T> extends React.Component<InternalFieldProps<T>, {}> {
+export class FieldComponent<T> extends React.Component<InternalFieldProps<T>> {
   render() {
     const { labelClass, label, valueClass, children, data } = this.props;
 
@@ -148,19 +148,28 @@ export class FieldComponent<T> extends React.Component<InternalFieldProps<T>, {}
   }
 }
 
-function CustomField<T extends {}>(props: ExternalFieldProps<T, React.ReactElement>) {
+/**
+ * Field with custom props
+ */
+function CustomField<T extends AnyObject>(props: ExternalFieldProps<T, React.ReactElement>) {
   const TypedField = FieldComponent as new () => FieldComponent<T>;
 
   return <TypedField {...props}>{item => (item ? props.value(item) : null)}</TypedField>;
 }
 
-function StringOrNumberField<T extends {}, Value extends string | number>(props: ExternalFieldProps<T, Value>) {
+/**
+ * StringOrNumberField
+ */
+function StringOrNumberField<T extends AnyObject, Value extends string | number>(props: ExternalFieldProps<T, Value>) {
   const TypedField = FieldComponent as new () => FieldComponent<T>;
 
   return <TypedField {...props}>{item => <SimpleString>{props.value(item)}</SimpleString>}</TypedField>;
 }
 
-function MultilineStringField<T extends {}>(props: ExternalFieldProps<T, string>) {
+/**
+ * MultilineStringField AKA TextArea
+ */
+function MultilineStringField<T extends AnyObject>(props: ExternalFieldProps<T, string>) {
   const TypedField = FieldComponent as new () => FieldComponent<T>;
   const splitString = (v: string | null) => (v || "").split("\n").filter(x => !!x);
 
@@ -171,7 +180,10 @@ function MultilineStringField<T extends {}>(props: ExternalFieldProps<T, string>
   );
 }
 
-function DateField<T extends {}>(props: ExternalFieldProps<T, Date>) {
+/**
+ * Date Input field
+ */
+function DateField<T extends AnyObject>(props: ExternalFieldProps<T, Date>) {
   const TypedField = FieldComponent as new () => FieldComponent<T>;
 
   return (
@@ -185,7 +197,10 @@ function DateField<T extends {}>(props: ExternalFieldProps<T, Date>) {
   );
 }
 
-function DateTimeField<T extends {}>(props: ExternalFieldProps<T, Date>) {
+/**
+ * DateTime field
+ */
+function DateTimeField<T extends AnyObject>(props: ExternalFieldProps<T, Date>) {
   const TypedField = FieldComponent as new () => FieldComponent<T>;
 
   return (
@@ -201,7 +216,10 @@ function DateTimeField<T extends {}>(props: ExternalFieldProps<T, Date>) {
 
 type CurrencyFieldProps<T> = ExternalFieldProps<T, number> & { fractionDigits?: number };
 
-function CurrencyField<T extends {}>(props: CurrencyFieldProps<T>) {
+/**
+ * Currency field
+ */
+function CurrencyField<T extends AnyObject>(props: CurrencyFieldProps<T>) {
   const TypedField = FieldComponent as new () => FieldComponent<T>;
 
   return (
@@ -217,7 +235,10 @@ function CurrencyField<T extends {}>(props: CurrencyFieldProps<T>) {
 
 type PercentageFieldProps<T> = ExternalFieldProps<T, number> & { fractionDigits?: number };
 
-function PercentageField<T extends {}>(props: PercentageFieldProps<T>) {
+/**
+ * Percentage format field
+ */
+function PercentageField<T extends AnyObject>(props: PercentageFieldProps<T>) {
   const TypedField = FieldComponent as new () => FieldComponent<T>;
 
   return (
@@ -231,6 +252,9 @@ function PercentageField<T extends {}>(props: PercentageFieldProps<T>) {
   );
 }
 
+/**
+ * Heading field, set as H4
+ */
 function HeadingField({ label, qa }: ExternalHeadingProps) {
   return (
     <div className={"govuk-grid-column-full"} data-qa={qa}>
@@ -239,7 +263,7 @@ function HeadingField({ label, qa }: ExternalHeadingProps) {
   );
 }
 
-export const TypedDetails = <T extends {}>() => ({
+export const TypedDetails = <T extends AnyObject>() => ({
   Details: DetailsComponent as React.FunctionComponent<DetailsComponentProps<T>>,
   String: StringOrNumberField as React.FunctionComponent<ExternalFieldProps<T, string>>,
   Number: StringOrNumberField as React.FunctionComponent<ExternalFieldProps<T, number>>,

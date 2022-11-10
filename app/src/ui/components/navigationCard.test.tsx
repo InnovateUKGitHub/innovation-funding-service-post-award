@@ -10,6 +10,9 @@ const createRoute = (uid: string) => ({
   accessControl: () => true,
 });
 
+/**
+ * iteratively creates a list of message stubs up to length.
+ */
 function createMessages(totalMessages: number, uid: string) {
   return Array.from({ length: totalMessages }, (_, i) => ({
     message: `${uid}-message-${i + 1}`,
@@ -17,6 +20,9 @@ function createMessages(totalMessages: number, uid: string) {
   }));
 }
 
+/**
+ * iteratively creates stub data for the mock tests
+ */
 function createStubData(length: number): NavigationCardProps[] {
   return Array.from({ length }, (_, uid): NavigationCardProps => {
     const uidString = `stub-${uid}`;

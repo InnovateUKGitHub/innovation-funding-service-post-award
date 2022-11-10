@@ -38,7 +38,7 @@ interface InternalColumnProps<T> {
   columnIndex?: number;
   qa: string;
   width?: number;
-  validation?: Results<{}>;
+  validation?: Results<ResultBase>;
   isDivider?: DividerTypes;
   paddingRight?: string;
   hideHeader?: boolean;
@@ -58,7 +58,15 @@ interface ExternalColumnProps<T, TResult> {
   hideHeader?: boolean;
 }
 
-export type TableChild<T> = React.ReactElement<ExternalColumnProps<T, {}>> | null;
+interface ClonedExternalColumnProps<T, TResult> extends ExternalColumnProps<T, TResult> {
+  mode?: ColumnMode;
+  columnIndex?: number;
+  rowIndex?: number;
+  dataItem?: T;
+  validation?: Results<TResult>;
+}
+
+export type TableChild<T> = React.ReactElement<ExternalColumnProps<T, ResultBase>> | null;
 
 interface TableProps<T> {
   children: TableChild<T> | (TableChild<T> | TableChild<T>[])[];
@@ -67,7 +75,7 @@ interface TableProps<T> {
   footers?: React.ReactElement[];
   headers?: React.ReactElement[];
   data: T[];
-  validationResult?: (Results<{}> | null | undefined)[] | Result;
+  validationResult?: (Results<ResultBase> | null | undefined)[] | Result;
   caption?: React.ReactNode;
   bodyRowClass?: (row: T, index: number) => string;
   bodyRowFlag?: (row: T, index: number) => "warning" | "info" | "error" | "edit" | null;
@@ -80,12 +88,14 @@ interface SortButtonProps {
   isSortable: boolean;
 }
 
-function SortButton({ isSortable, ...props }: SortButtonProps) {
+const SortButton = ({ isSortable, ...props }: SortButtonProps) => {
   if (!isSortable) return <>{props.children}</>;
-
   return <button {...props} type="button" className="table-sort-button" />;
-}
+};
 
+/**
+ * Creates a table column
+ */
 export function TableColumn<T>({
   header,
   columnIndex,
@@ -195,6 +205,9 @@ const rowClassesStates: Record<"warning" | "error" | "info" | "edit", string> = 
 
 const standardRowCssClass = "govuk-table__row";
 
+/**
+ * Gets the keys for sorting the data items.
+ */
 function getSortKeys<T>(items: TableChild<T>[]): TableSortKey[] {
   // Note: We check all data items are an object as we need keys to sort from
   const isSortableHeader: boolean = items.every(_isPlainObject);
@@ -206,7 +219,7 @@ function getSortKeys<T>(items: TableChild<T>[]): TableSortKey[] {
   return items.map(x => (x?.props.sortByKey ? String(x.props.sortByKey) : null));
 }
 
-const TableComponent = <T extends {}>({
+const TableComponent = <T extends AnyObject>({
   children: unflattenedChildren,
   validationResult,
   data,
@@ -215,7 +228,7 @@ const TableComponent = <T extends {}>({
   className,
   caption,
   ...props
-}: TableProps<T> & { validationResult?: Results<{}>[] }) => {
+}: TableProps<T> & { validationResult?: Results<ResultBase>[] }) => {
   const { getContent } = useContent();
   const children = useMemo(
     () => React.Children.toArray(unflattenedChildren).filter(Boolean) as TableChild<T>[],
@@ -242,12 +255,12 @@ const TableComponent = <T extends {}>({
   );
 
   const cols = children.map((column, columnIndex) =>
-    cloneElement(column as React.ReactElement<any>, { mode: "col", columnIndex }),
+    cloneElement(column as React.ReactElement<ClonedExternalColumnProps<T, ResultBase>>, { mode: "col", columnIndex }),
   );
 
   const contents = sortedRows.map((dataItem, rowIndex) =>
     children.map((column, columnIndex) =>
-      cloneElement(column as React.ReactElement<any>, {
+      cloneElement(column as React.ReactElement<ClonedExternalColumnProps<T, ResultBase>>, {
         mode: "cell",
         rowIndex,
         columnIndex,
@@ -280,7 +293,10 @@ const TableComponent = <T extends {}>({
 
   const footerColumns = childColumnsHasFooters
     ? children.map((column, columnIndex) =>
-        cloneElement(column as React.ReactElement<any>, { mode: "footer", columnIndex }),
+        cloneElement(column as React.ReactElement<ClonedExternalColumnProps<T, ResultBase>>, {
+          mode: "footer",
+          columnIndex,
+        }),
       )
     : [];
   const hasFooterColumns = !!footerColumns.length;
@@ -327,70 +343,64 @@ const TableComponent = <T extends {}>({
   );
 };
 
-function CustomColumn<T extends {}>(props: ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" }) {
-  return <TableColumn<T> {...props} renderCell={(data, index) => props.value(data, index)} />;
-}
+const CustomColumn = <T extends AnyObject>(
+  props: ExternalColumnProps<T, React.ReactNode> & { classSuffix?: "numeric" },
+) => <TableColumn<T> {...props} renderCell={(data, index) => props.value(data, index)} />;
 
-function StringColumn<T extends {}>(props: ExternalColumnProps<T, string | null>) {
-  return <TableColumn<T> {...props} renderCell={(data, index) => props.value(data, index)} />;
-}
+const StringColumn = <T extends AnyObject>(props: ExternalColumnProps<T, string | null>) => (
+  <TableColumn<T> {...props} renderCell={(data, index) => props.value(data, index)} />
+);
 
-function NumberColumn<T extends {}>(props: ExternalColumnProps<T, number | null>) {
-  return <TableColumn<T> {...props} classSuffix="numeric" renderCell={(data, index) => props.value(data, index)} />;
-}
+const NumberColumn = <T extends AnyObject>(props: ExternalColumnProps<T, number | null>) => (
+  <TableColumn<T> {...props} classSuffix="numeric" renderCell={(data, index) => props.value(data, index)} />
+);
 
-function FullDateColumn<T extends {}>(props: ExternalColumnProps<T, Date | null>) {
-  return <TableColumn<T> {...props} renderCell={(data, index) => <FullDate value={props.value(data, index)} />} />;
-}
+const FullDateColumn = <T extends AnyObject>(props: ExternalColumnProps<T, Date | null>) => (
+  <TableColumn<T> {...props} renderCell={(data, index) => <FullDate value={props.value(data, index)} />} />
+);
 
-function FullNumericDateColumn<T extends {}>(props: ExternalColumnProps<T, Date | null>) {
-  return (
-    <TableColumn<T> {...props} renderCell={(data, index) => <FullNumericDate value={props.value(data, index)} />} />
-  );
-}
+const FullNumericDateColumn = <T extends AnyObject>(props: ExternalColumnProps<T, Date | null>) => (
+  <TableColumn<T> {...props} renderCell={(data, index) => <FullNumericDate value={props.value(data, index)} />} />
+);
 
-function ShortDateColumn<T extends {}>(props: ExternalColumnProps<T, Date | null>) {
-  return <TableColumn<T> {...props} renderCell={(data, index) => <ShortDate value={props.value(data, index)} />} />;
-}
+const ShortDateColumn = <T extends AnyObject>(props: ExternalColumnProps<T, Date | null>) => (
+  <TableColumn<T> {...props} renderCell={(data, index) => <ShortDate value={props.value(data, index)} />} />
+);
 
-function ShortDateTimeColumn<T extends {}>(props: ExternalColumnProps<T, Date | null>) {
-  return <TableColumn<T> {...props} renderCell={(data, index) => <ShortDateTime value={props.value(data, index)} />} />;
-}
+const ShortDateTimeColumn = <T extends AnyObject>(props: ExternalColumnProps<T, Date | null>) => (
+  <TableColumn<T> {...props} renderCell={(data, index) => <ShortDateTime value={props.value(data, index)} />} />
+);
 
-function EmailColumn<T extends {}>(props: ExternalColumnProps<T, string>) {
+const EmailColumn = <T extends AnyObject>(props: ExternalColumnProps<T, string>) => {
   return <TableColumn<T> {...props} renderCell={(data, index) => <Email>{props.value(data, index)}</Email>} />;
-}
-
-function CurrencyColumn<T extends {}>(props: ExternalColumnProps<T, number | null> & { fractionDigits?: number }) {
-  return (
-    <TableColumn<T>
-      {...props}
-      classSuffix="numeric"
-      renderCell={(data, index) => <Currency value={props.value(data, index)} fractionDigits={props.fractionDigits} />}
-    />
-  );
-}
-
-const PercentageColumn = <T extends {}>(props: ExternalColumnProps<T, number | null> & { fractionDigits?: number }) => {
-  return (
-    <TableColumn<T>
-      {...props}
-      classSuffix="numeric"
-      renderCell={(data, index) => (
-        <Percentage value={props.value(data, index)} fractionDigits={props.fractionDigits} />
-      )}
-    />
-  );
 };
 
-const LinkColumn = <T extends {}>(props: ExternalColumnProps<T, ILinkInfo> & { content: React.ReactNode }) => {
-  return (
-    <TableColumn<T>
-      {...props}
-      renderCell={(data, index) => <Link route={props.value(data, index)}>{props.content}</Link>}
-    />
-  );
-};
+const CurrencyColumn = <T extends AnyObject>(
+  props: ExternalColumnProps<T, number | null> & { fractionDigits?: number },
+) => (
+  <TableColumn<T>
+    {...props}
+    classSuffix="numeric"
+    renderCell={(data, index) => <Currency value={props.value(data, index)} fractionDigits={props.fractionDigits} />}
+  />
+);
+
+const PercentageColumn = <T extends AnyObject>(
+  props: ExternalColumnProps<T, number | null> & { fractionDigits?: number },
+) => (
+  <TableColumn<T>
+    {...props}
+    classSuffix="numeric"
+    renderCell={(data, index) => <Percentage value={props.value(data, index)} fractionDigits={props.fractionDigits} />}
+  />
+);
+
+const LinkColumn = <T extends AnyObject>(props: ExternalColumnProps<T, ILinkInfo> & { content: React.ReactNode }) => (
+  <TableColumn<T>
+    {...props}
+    renderCell={(data, index) => <Link route={props.value(data, index)}>{props.content}</Link>}
+  />
+);
 
 export interface ITypedTable<T extends Record<keyof T, unknown>> {
   Table: React.FunctionComponent<TableProps<T>>;

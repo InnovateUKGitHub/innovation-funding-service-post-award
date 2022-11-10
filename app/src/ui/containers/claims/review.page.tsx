@@ -56,34 +56,39 @@ interface ReviewData {
 const Form = ACC.createTypedForm<ClaimDto>();
 const UploadForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
 
+/**
+ * ### useReviewContent
+ *
+ * hook returns content needed for the review page
+ */
 export function useReviewContent() {
   const { getContent } = useContent();
 
   const defaultContent = {
-    competitionName: getContent(x => x.projectLabels.competitionName),
-    competitionType: getContent(x => x.projectLabels.competitionType),
+    accordionTitleClaimLog: getContent(x => x.claimsLabels.accordionTitleClaimLog),
+    accordionTitleForecast: getContent(x => x.claimsLabels.accordionTitleForecast),
+    accordionTitleSupportingDocumentsForm: getContent(x => x.pages.claimReview.accordionTitleSupportingDocumentsForm),
+    additionalInfo: getContent(x => x.pages.claimReview.additionalInfo),
     additionalInfoHint: getContent(x => x.pages.claimReview.additionalInfoHint),
     backLink: getContent(x => x.pages.claimReview.backLink),
-    optionQueryClaim: getContent(x => x.pages.claimReview.optionQueryClaim),
-    optionSubmitClaim: getContent(x => x.pages.claimReview.optionSubmitClaim),
-    sectionTitleHowToProceed: getContent(x => x.pages.claimReview.sectionTitleHowToProceed),
-    buttonSubmit: getContent(x => x.pages.claimReview.buttonSubmit),
     buttonSendQuery: getContent(x => x.pages.claimReview.buttonSendQuery),
-    accordionTitleSupportingDocumentsForm: getContent(x => x.pages.claimReview.accordionTitleSupportingDocumentsForm),
-    labelInputUpload: getContent(x => x.pages.claimReview.labelInputUpload),
+    buttonSubmit: getContent(x => x.pages.claimReview.buttonSubmit),
     buttonUpload: getContent(x => x.pages.claimReview.buttonUpload),
     claimReviewDeclaration: getContent(x => x.pages.claimReview.claimReviewDeclaration),
-    monitoringReportReminder: getContent(x => x.pages.claimReview.monitoringReportReminder),
-    sectionTitleAdditionalInfo: getContent(x => x.pages.claimReview.sectionTitleAdditionalInfo),
-    additionalInfo: getContent(x => x.pages.claimReview.additionalInfo),
-    finalClaim: getContent(x => x.claimsMessages.finalClaim),
-    accordionTitleForecast: getContent(x => x.claimsLabels.accordionTitleForecast),
-    accordionTitleClaimLog: getContent(x => x.claimsLabels.accordionTitleClaimLog),
-    uploadInstruction: getContent(x => x.documentMessages.uploadInstruction),
-    noDocumentsUploaded: getContent(x => x.documentMessages.noDocumentsUploaded),
+    competitionName: getContent(x => x.projectLabels.competitionName),
+    competitionType: getContent(x => x.projectLabels.competitionType),
     descriptionLabel: getContent(x => x.pages.claimDocuments.descriptionLabel),
+    finalClaim: getContent(x => x.claimsMessages.finalClaim),
+    labelInputUpload: getContent(x => x.pages.claimReview.labelInputUpload),
+    monitoringReportReminder: getContent(x => x.pages.claimReview.monitoringReportReminder),
+    noDocumentsUploaded: getContent(x => x.documentMessages.noDocumentsUploaded),
     noMatchingDocumentsMessage: getContent(x => x.pages.projectDocuments.noMatchingDocumentsMessage),
+    optionQueryClaim: getContent(x => x.pages.claimReview.optionQueryClaim),
+    optionSubmitClaim: getContent(x => x.pages.claimReview.optionSubmitClaim),
     searchDocumentsMessage: getContent(x => x.pages.projectDocuments.searchDocumentsMessage),
+    sectionTitleAdditionalInfo: getContent(x => x.pages.claimReview.sectionTitleAdditionalInfo),
+    sectionTitleHowToProceed: getContent(x => x.pages.claimReview.sectionTitleHowToProceed),
+    uploadInstruction: getContent(x => x.documentMessages.uploadInstruction),
   };
 
   return defaultContent;
@@ -106,7 +111,7 @@ interface CombinedData {
   documentsEditor: IEditorStore<MultipleDocumentUploadDto, MultipleDocumentUploadDtoValidator>;
 }
 
-function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData & ReviewCallbacks & BaseProps) {
+const ReviewComponent = ({ content, ...props }: ReviewClaimParams & ReviewData & ReviewCallbacks & BaseProps) => {
   const { isClient } = useMounted();
 
   const renderContents = (data: CombinedData) => {
@@ -430,7 +435,7 @@ function ReviewComponent({ content, ...props }: ReviewClaimParams & ReviewData &
   });
 
   return <ACC.PageLoader pending={combined} render={data => renderContents(data)} />;
-}
+};
 
 const initEditor = (dto: ClaimDto) => {
   // if the status hasn't already been set to "MO Queried" or "Awaiting IUK Approval" then set the status to New so that the validation kicks in a forces a change

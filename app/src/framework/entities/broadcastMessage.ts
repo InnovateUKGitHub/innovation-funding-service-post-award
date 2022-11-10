@@ -1,1 +1,1 @@
-export interface BroadcastMessage {}
+export type BroadcastMessage = AnyObject;

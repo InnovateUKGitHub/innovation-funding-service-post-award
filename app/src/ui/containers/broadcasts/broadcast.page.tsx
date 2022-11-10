@@ -14,7 +14,7 @@ interface BroadcastPageParams {
 
 interface BroadcastItemProps extends BaseProps, BroadcastPageParams {}
 
-function BroadcastPage(props: BroadcastItemProps) {
+const BroadcastPage = (props: BroadcastItemProps) => {
   const stores = useStores();
   const { getContent } = useContent();
 
@@ -53,7 +53,7 @@ function BroadcastPage(props: BroadcastItemProps) {
       {payload && <BroadcastDetail {...payload} />}
     </ACC.Page>
   );
-}
+};
 
 export const BroadcastPageRoute = defineRoute<BroadcastPageParams>({
   routeName: "broadcastPage",

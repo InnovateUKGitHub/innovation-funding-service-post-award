@@ -45,7 +45,7 @@ describe("<PageLoader />", () => {
     await testInitialiseInternationalisation(stubContent);
   });
 
-  const setup = (props: LoadingProps<{}>) =>
+  const setup = (props: LoadingProps<AnyObject>) =>
     render(
       <TestBed>
         <PageLoader {...props} />
@@ -89,6 +89,9 @@ describe("<Loader />", () => {
   const pendingLoading = new Pending(LoadingStatus.Loading, null);
   const pendingFailed = new Pending(LoadingStatus.Failed, null);
 
+  /**
+   * setup test
+   */
   function setup<T>(props: LoadingProps<T>) {
     return render(
       <TestBed>
@@ -187,11 +190,11 @@ describe("<Loader />", () => {
 
       describe("should render renderError", () => {
         it("with no error code", () => {
-          const errorWitoutCode = new Pending(LoadingStatus.Failed, null);
+          const errorWithoutCode = new Pending(LoadingStatus.Failed, null);
 
           const { queryByText } = setup({
             render: jest.fn(),
-            pending: errorWitoutCode,
+            pending: errorWithoutCode,
             renderError: e => <div>{e.message}</div>,
           });
 

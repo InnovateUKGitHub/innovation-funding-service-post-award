@@ -19,14 +19,14 @@ interface InnerProps {
 const HiddenForm = ACC.createTypedForm<PCRSpendProfileOverheadsCostDto>();
 const Form = ACC.createTypedForm<PCRSpendProfileOverheadsCostDto>();
 
-function SpendProfileCostForm({
+const SpendProfileCostForm = ({
   editor,
   validator,
   data,
   documents,
   params,
   ...props
-}: SpendProfileCostFormProps<PCRSpendProfileOverheadsCostDto, PCROverheadsCostDtoValidator> & InnerProps) {
+}: SpendProfileCostFormProps<PCRSpendProfileOverheadsCostDto, PCROverheadsCostDtoValidator> & InnerProps) => {
   const { isClient } = useMounted();
 
   const getOptions = <T extends number>(selected: T, options: Option<T>[]) => {
@@ -161,7 +161,7 @@ function SpendProfileCostForm({
       </Form.Fieldset>
     </Form.Form>
   );
-}
+};
 
 export const OverheadsFormComponent = (
   props: SpendProfileCostFormProps<PCRSpendProfileOverheadsCostDto, PCROverheadsCostDtoValidator>,

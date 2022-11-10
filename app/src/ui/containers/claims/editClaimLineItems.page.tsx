@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */ // TODO: ACC-7889
-import { Copy } from "@copy/Copy";
 import type { ContentSelector } from "@copy/type";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
@@ -674,8 +673,8 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
             periodId: props.periodId,
             id: "",
             description: "",
-            value: null as any,
-            lastModifiedDate: null as any,
+            value: null as unknown as number,
+            lastModifiedDate: null as unknown as Date,
           }));
           dto.lineItems.push(...extraLineItems);
         },

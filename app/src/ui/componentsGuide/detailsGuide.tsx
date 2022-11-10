@@ -1,6 +1,49 @@
 import { IGuide } from "@framework/types";
 import { DualDetails, TypedDetails } from "../components/details";
 
+const SimpleDetailsExample = () => {
+  const data = { id: "Example 1", name: "Simple Example", started: new Date() };
+  const ItemDetails = TypedDetails<typeof data>();
+
+  return (
+    <ItemDetails.Details labelWidth="Narrow" data={data}>
+      <ItemDetails.String label="Id" qa="id" value={x => x.id} />
+      <ItemDetails.String label="Name" qa="name" value={x => x.name} />
+      <ItemDetails.DateTime label="Started" qa="started" value={x => x.started} />
+    </ItemDetails.Details>
+  );
+};
+
+const CompactDetailsExample = () => {
+  const data = { id: "Example 1", name: "Compact Example", created: new Date() };
+  const ItemDetails = TypedDetails<typeof data>();
+
+  return (
+    <ItemDetails.Details displayDensity="Compact" labelWidth="Narrow" data={data}>
+      <ItemDetails.String label="Id" qa="id" value={x => x.id} />
+      <ItemDetails.String label="Name" qa="name" value={x => x.name} />
+      <ItemDetails.DateTime label="Started" qa="started" value={x => x.created} />
+    </ItemDetails.Details>
+  );
+};
+
+const DoubleDetailsExample = () => {
+  const data = { id: "Example 1", name: "Dual Example", created: new Date() };
+  const ItemDetails = TypedDetails<typeof data>();
+
+  return (
+    <DualDetails>
+      <ItemDetails.Details title="Title one the one" data={data}>
+        <ItemDetails.String label="Id" qa="id" value={x => x.id} />
+        <ItemDetails.String label="Name" qa="name" value={x => x.name} />
+      </ItemDetails.Details>
+      <ItemDetails.Details title="Title two the two" data={data}>
+        <ItemDetails.DateTime label="Started" qa="started" value={x => x.created} />
+      </ItemDetails.Details>
+    </DualDetails>
+  );
+};
+
 export const detailsGuide: IGuide = {
   name: "Details",
   options: [
@@ -56,46 +99,3 @@ export const detailsGuide: IGuide = {
     },
   ],
 };
-
-function SimpleDetailsExample() {
-  const data = { id: "Example 1", name: "Simple Example", started: new Date() };
-  const ItemDetails = TypedDetails<typeof data>();
-
-  return (
-    <ItemDetails.Details labelWidth="Narrow" data={data}>
-      <ItemDetails.String label="Id" qa="id" value={x => x.id} />
-      <ItemDetails.String label="Name" qa="name" value={x => x.name} />
-      <ItemDetails.DateTime label="Started" qa="started" value={x => x.started} />
-    </ItemDetails.Details>
-  );
-}
-
-function CompactDetailsExample() {
-  const data = { id: "Example 1", name: "Compact Example", created: new Date() };
-  const ItemDetails = TypedDetails<typeof data>();
-
-  return (
-    <ItemDetails.Details displayDensity="Compact" labelWidth="Narrow" data={data}>
-      <ItemDetails.String label="Id" qa="id" value={x => x.id} />
-      <ItemDetails.String label="Name" qa="name" value={x => x.name} />
-      <ItemDetails.DateTime label="Started" qa="started" value={x => x.created} />
-    </ItemDetails.Details>
-  );
-}
-
-function DoubleDetailsExample() {
-  const data = { id: "Example 1", name: "Dual Example", created: new Date() };
-  const ItemDetails = TypedDetails<typeof data>();
-
-  return (
-    <DualDetails>
-      <ItemDetails.Details title="Title one the one" data={data}>
-        <ItemDetails.String label="Id" qa="id" value={x => x.id} />
-        <ItemDetails.String label="Name" qa="name" value={x => x.name} />
-      </ItemDetails.Details>
-      <ItemDetails.Details title="Title two the two" data={data}>
-        <ItemDetails.DateTime label="Started" qa="started" value={x => x.created} />
-      </ItemDetails.Details>
-    </DualDetails>
-  );
-}

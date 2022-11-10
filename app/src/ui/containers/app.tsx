@@ -24,6 +24,7 @@ import { noop } from "@ui/helpers/noop";
 import { ProjectStatusCheck } from "./app/project-active";
 import { ErrorNotFoundRoute, ErrorRoute } from "./errors.page";
 import { useAppMount } from "./app/app-mount.hook";
+import { ErrorPayload } from "@shared/create-error-payload";
 
 interface IAppProps {
   dispatch: Dispatch;
@@ -114,7 +115,7 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
                     </ProjectStatusCheck>
                   </ProjectParticipantProvider>
                 ) : (
-                  <ErrorContainer from="app" {...(params as any)} />
+                  <ErrorContainer from="app" {...(params as ErrorPayload["params"])} />
                 )}
               </GovWidthContainer>
             </FullHeight.Content>
@@ -144,7 +145,7 @@ export function App(props: AppRoute) {
   const error = props.store.getState().globalError;
 
   return (
-    <ErrorBoundary fallbackRender={errorProps => <ErrorBoundaryFallback {...(errorProps as any)} />}>
+    <ErrorBoundary fallbackRender={errorProps => <ErrorBoundaryFallback {...errorProps} />}>
       <RoutesProvider value={routeConfig}>
         <MountedProvider>
           <Routes>

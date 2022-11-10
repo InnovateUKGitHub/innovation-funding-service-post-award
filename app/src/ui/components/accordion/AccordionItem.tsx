@@ -18,7 +18,7 @@ export interface AccordionItemProps {
   onClick?: () => void;
 }
 
-export function AccordionItem({ qa, children, isOpen = false, onClick, ...props }: AccordionItemProps) {
+export const AccordionItem = ({ qa, children, isOpen = false, onClick, ...props }: AccordionItemProps) => {
   const { isClient } = useMounted();
   const { getContent } = useContent();
 
@@ -82,4 +82,4 @@ export function AccordionItem({ qa, children, isOpen = false, onClick, ...props 
       </div>
     </div>
   );
-}
+};

@@ -8,9 +8,9 @@ import { PCRProjectSuspensionItemDtoValidator } from "@ui/validators";
 
 const Form = ACC.createTypedForm<PCRItemForProjectSuspensionDto>();
 
-export function SuspendProjectDetails(
+export const SuspendProjectDetails = (
   props: PcrStepProps<PCRItemForProjectSuspensionDto, PCRProjectSuspensionItemDtoValidator>,
-) {
+) => {
   const { getContent } = useContent();
   const { isPm } = getAuthRoles(props.project.roles);
 
@@ -62,4 +62,4 @@ export function SuspendProjectDetails(
       </ACC.Section>
     </>
   );
-}
+};

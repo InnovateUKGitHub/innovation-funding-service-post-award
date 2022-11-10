@@ -7,19 +7,6 @@ import { useEnumDocuments } from "@ui/containers/claims/components/allowed-docum
 import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
 describe("useEnumDocuments()", () => {
-  enum stubDocumentDescriptions {
-    IAR = 10,
-    Evidence = 30,
-    StatementOfExpenditure = 60,
-    LMCMinutes = 110,
-    ScheduleThree = 120,
-    Invoice = 210,
-  }
-
-  enum stubUnknownDocumentDescriptions {
-    Unknown = 3821,
-  }
-
   const claimAllowedDocuments: Readonly<DocumentDescription[]> = [
     DocumentDescription.IAR,
     DocumentDescription.Evidence,
@@ -43,9 +30,12 @@ describe("useEnumDocuments()", () => {
     },
   };
 
-  const setup = (enumDocument: object) => {
+  /**
+   * setup function taking enum documents generic
+   */
+  function setup(enumDocument: typeof DocumentDescription) {
     return renderHook(() => useEnumDocuments(enumDocument, claimAllowedDocuments), hookTestBed({}));
-  };
+  }
 
   beforeAll(async () => {
     await testInitialiseInternationalisation(stubContent);
@@ -62,7 +52,7 @@ describe("useEnumDocuments()", () => {
       Invoice = 210,
     }
 
-    const { result } = setup(stubDescriptions);
+    const { result } = setup(stubDescriptions as unknown as typeof DocumentDescription);
 
     expect(result.current).toHaveLength(6);
   });
@@ -76,7 +66,7 @@ describe("useEnumDocuments()", () => {
       Description_with_no_available_label = 123456789,
     }
 
-    const { result } = setup(stubMissingLabelDocuments);
+    const { result } = setup(stubMissingLabelDocuments as unknown as typeof DocumentDescription);
 
     // Note: This value should be a total count of keys from "stubMissingLabelDocuments" minus 1 invalid item!
     expect(result.current).toHaveLength(4);

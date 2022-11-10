@@ -73,7 +73,7 @@ const initialDocs: DocumentSummaryDto[] = [
   },
 ];
 
-function DemoDocsWithDelete() {
+const DemoDocsWithDelete = () => {
   const [undeletedDocs, setDocs] = useState<DocumentSummaryDto[]>(initialDocs);
 
   return (
@@ -93,7 +93,7 @@ function DemoDocsWithDelete() {
       />
     </>
   );
-}
+};
 
 export const documentComponents: IGuide = {
   name: "Document Components",

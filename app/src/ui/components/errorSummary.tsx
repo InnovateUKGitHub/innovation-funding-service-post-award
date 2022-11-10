@@ -7,7 +7,7 @@ export interface ErrorSummaryProps {
   message?: IAppError["message"];
 }
 
-export function ErrorSummary({ code, message }: ErrorSummaryProps) {
+export const ErrorSummary = ({ code, message }: ErrorSummaryProps) => {
   const { getContent } = useContent();
   const isUnauthenticated = code === ErrorCode.UNAUTHENTICATED_ERROR;
 
@@ -51,4 +51,4 @@ export function ErrorSummary({ code, message }: ErrorSummaryProps) {
       </div>
     </div>
   );
-}
+};

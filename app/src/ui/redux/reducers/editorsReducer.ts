@@ -126,7 +126,7 @@ export const editorsReducer =
     return state;
   };
 
-export const editorReducer = combineReducers({
+const reducers = {
   claim: editorsReducer<ClaimDto, Validators.ClaimDtoValidator>("claim"),
   claimDetail: editorsReducer<ClaimDetailsDto, Validators.ClaimDetailsValidator>("claimDetail"),
   forecastDetails: editorsReducer<ForecastDetailsDTO[], Validators.ForecastDetailsDtosValidator>("forecastDetails"),
@@ -146,4 +146,8 @@ export const editorReducer = combineReducers({
   pcr: editorsReducer<PCRDto, Results<PCRDto>>("pcr"),
   partner: editorsReducer<PartnerDto, Results<PartnerDto>>("partner"),
   loan: editorsReducer<LoanDto, Results<LoanDto>>("loan"),
-});
+};
+
+export type EditorStateKeys = keyof typeof reducers;
+
+export const editorReducer = combineReducers(reducers);

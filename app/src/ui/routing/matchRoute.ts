@@ -1,23 +1,5 @@
-import type { FunctionComponent } from "react";
 import { ErrorNotFoundRoute } from "@ui/containers";
-import { IStores } from "@ui/redux";
-import { Authorisation } from "@framework/types";
-import { IClientConfig } from "@ui/redux/reducers/configReducer";
-import { Copy } from "@copy/Copy";
-import type { RouteState } from "../containers/containerBase";
 import { routeConfig } from "./routeConfig";
-
-export interface MatchedRoute {
-  routeName: string;
-  accessControl?: (auth: Authorisation, params: AnyObject, config: IClientConfig) => boolean;
-  getParams: (route: RouteState) => RouteState["params"];
-  container: FunctionComponent<unknown>;
-  getTitle: (getTitleArgs: { params: AnyObject; stores: IStores; content: Copy }) => {
-    htmlTitle: string;
-    displayTitle: string;
-  };
-  allowRouteInActiveAccess?: true;
-}
 
 const toRegexpMatcher = (routePath: string) => {
   const matcher = routePath.replace(/:\w+/g, "\\w+");

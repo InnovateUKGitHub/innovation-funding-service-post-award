@@ -6,7 +6,7 @@ import { IGuide, ILinkInfo } from "@framework/types";
 import { NavigationArrows } from "../components";
 import { rootReducer } from "../redux/reducers";
 
-const route = { name: "test", path: "/components" } as any;
+const route = { name: "test", path: "/components" };
 
 interface DummyLink {
   label: string;

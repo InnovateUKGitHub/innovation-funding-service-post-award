@@ -15,7 +15,7 @@ describe("<DropdownList />", () => {
     name: "stub-name",
   };
 
-  const setup = (props?: DropdownListProps) =>
+  const setup = (props?: Partial<DropdownListProps>) =>
     render(
       <TestBed>
         <DropdownList {...defaultProps} {...props} />
@@ -115,7 +115,7 @@ describe("<DropdownList />", () => {
         { id: "2", value: "stub value 3", qa: "stub-option-2-qa" },
       ];
 
-      const { getByTestId } = setup({ qa: stubQa, options, onChange } as any);
+      const { getByTestId } = setup({ qa: stubQa, options, onChange });
 
       expect(onChange).toHaveBeenCalledTimes(0);
       fireEvent.change(getByTestId("stub-qa"), { target: { value: "1" } });
@@ -131,7 +131,7 @@ describe("<DropdownList />", () => {
         hasEmptyOption: true,
         value: defaultProps.options[0],
         onChange,
-      } as any);
+      });
 
       fireEvent.change(getByTestId("stub-qa"), { target: { value: "" } });
       expect(onChange).toHaveBeenCalledWith(null);

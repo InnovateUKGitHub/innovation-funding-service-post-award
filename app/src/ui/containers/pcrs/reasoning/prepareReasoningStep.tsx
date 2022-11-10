@@ -6,7 +6,7 @@ import * as ACC from "../../../components";
 
 const PCRForm = ACC.createTypedForm<PCRDto>();
 
-export class PCRPrepareReasoningStep extends ContainerBase<ReasoningStepProps, {}> {
+export class PCRPrepareReasoningStep extends ContainerBase<ReasoningStepProps> {
   render() {
     const { editor, onSave, onChange } = this.props;
 

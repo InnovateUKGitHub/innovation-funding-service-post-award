@@ -8,7 +8,6 @@ import { useStores } from "@ui/redux";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { ProjectParticipantsHoc } from "@ui/features/project-participants";
 import { IRoutes } from "@ui/routing";
-import { Copy } from "@copy/Copy";
 import type { ContentSelector } from "@copy/type";
 import { getLeadPartner } from "@framework/util/partnerHelper";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
@@ -31,7 +30,7 @@ interface ILinks {
   messages?: () => NavigationCardMessage[];
 }
 
-class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
+class ProjectOverviewComponent extends ContainerBase<Params, Data, AnyObject> {
   render() {
     const combined = Pending.combine({
       project: this.props.projectDetails,
@@ -398,7 +397,7 @@ class ProjectOverviewComponent extends ContainerBase<Params, Data, {}> {
   }
 }
 
-function ProjectOverviewContainer(props: Params & BaseProps) {
+const ProjectOverviewContainer = (props: Params & BaseProps) => {
   const stores = useStores();
 
   return (
@@ -409,7 +408,7 @@ function ProjectOverviewContainer(props: Params & BaseProps) {
       user={stores.users.getCurrentUser()}
     />
   );
-}
+};
 
 export const ProjectOverviewRoute = defineRoute({
   allowRouteInActiveAccess: true,

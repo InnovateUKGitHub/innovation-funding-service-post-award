@@ -5,7 +5,7 @@ export interface AccordionControlsProps {
   isOpen: boolean;
 }
 
-export function AccordionControls({ isOpen, onClick }: AccordionControlsProps) {
+export const AccordionControls = ({ isOpen, onClick }: AccordionControlsProps) => {
   const showAllText = isOpen ? "Hide all sections" : "Show all sections";
 
   return (
@@ -23,4 +23,4 @@ export function AccordionControls({ isOpen, onClick }: AccordionControlsProps) {
       </button>
     </div>
   );
-}
+};

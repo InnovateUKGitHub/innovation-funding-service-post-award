@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { enCopy, ktpEnCopy, loansEnCopy, sbriEnCopy, sbriIfsEnCopy } from "@copy/data";
 
 // The type that is returned from fetching a translation from the JSON.

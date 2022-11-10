@@ -17,27 +17,6 @@ describe("<AcademicOrganisationStep />", () => {
     props: PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>,
     isServer?: boolean,
   ) => {
-    const stubContent = {
-      pcrAddPartnerLabels: {
-        searchButton: "stub-search-button",
-        jesOrganisationSectionTitle: "stub-jes-section-title",
-        jesOrganisationSectionSubtitle: "stub-jes-section-subtitle",
-        jesOrganisationInfo: "stub-jes-info",
-      },
-      pcrItem: {
-        submitButton: "stub-submit-button",
-        returnToSummaryButton: "stub-return-to-summary-button",
-      },
-      pages: {
-        pcrAddPartnerAcademicOrganisation: {
-          jesSearchResults: "stub-jes-header",
-        },
-        pcrAddPartnerCompanyHouse: {
-          resultNotShowing: "stub-result-not-showing",
-        },
-      },
-    } as any;
-
     const stubStore = {
       accounts: {
         getJesAccountsByName: getJesStub.mockReturnValue(
@@ -50,10 +29,10 @@ describe("<AcademicOrganisationStep />", () => {
           ]),
         ),
       },
-    } as any;
+    };
 
     return render(
-      <TestBed isServer={isServer} stores={stubStore as TestBedStore}>
+      <TestBed isServer={isServer} stores={stubStore as unknown as TestBedStore}>
         <AcademicOrganisationStep {...props} />
       </TestBed>,
     );

@@ -23,6 +23,11 @@ export interface PartnerDetailsParams {
   partnerId: string;
 }
 
+/**
+ * ### PartnerDetailsEditComponent
+ *
+ * React component to edit partner details
+ */
 export function PartnerDetailsEditComponent(props: PartnerDetailsEditComponentProps) {
   const combined = Pending.combine({
     project: props.project,

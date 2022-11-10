@@ -7,6 +7,7 @@ import { MountedProvider } from "@ui/features";
 import { useInitContent } from "@ui/features/use-initial-content";
 import { FullHeight, GovWidthContainer, Header } from "@ui/components";
 import { errorPages, internalErrorFallback, InternalErrorTypes } from "./error.config";
+import { FallbackProps } from "react-error-boundary";
 
 export type ErrorContainerProps = ErrorPayload["params"] & { from?: string };
 
@@ -25,9 +26,9 @@ export const ErrorContainer = (props: ErrorContainerProps) => {
  * Pull required props from ErrorBoundary
  * Requires Providers and page layout because fallback lies outside main react component tree
  */
-export function ErrorBoundaryFallback({ error }: { error: IAppError }) {
+export function ErrorBoundaryFallback({ error }: FallbackProps) {
   const stores = useStores();
-  const errorPayload = createErrorPayload(error, false);
+  const errorPayload = createErrorPayload(error as unknown as IAppError, false);
   const content = useInitContent();
   const config = stores.config.getConfig();
   return (

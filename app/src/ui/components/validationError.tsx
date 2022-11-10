@@ -49,8 +49,8 @@ export const ValidationError: React.FunctionComponent<Props> = ({ error, hideMes
 
   // need to add anchor tags for all possible errors related to the display of this input error
   // if nested there are the results and summary errors to add as well
-  const children = error instanceof NestedResult ? (error as NestedResult<Results<{}>>).results : [];
-  const associated = error instanceof NestedResult ? (error as NestedResult<Results<{}>>).listValidation : null;
+  const children = error instanceof NestedResult ? (error as NestedResult<Results<ResultBase>>).results : [];
+  const associated = error instanceof NestedResult ? (error as NestedResult<Results<ResultBase>>).listValidation : null;
   const validations = children
     .filter(x => !x.isValid && x.showValidationErrors)
     .map(x => x.errors)

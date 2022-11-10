@@ -57,7 +57,7 @@ describe("useEditPageContent()", () => {
     }) => {
       const { result } = renderPageContent();
 
-      const content = (result.current as any)[name];
+      const content = (result.current as unknown as Record<string, string>)[name];
       const expectedContent = stubContent.pages.financialVirementEdit.editPageMessage[property];
 
       expect(content).toBe(expectedContent);
@@ -81,7 +81,7 @@ describe("useEditPageContent()", () => {
   `("with label $property", ({ property }: { property: keyof typeof stubContent.financialVirementLabels }) => {
     const { result } = renderPageContent();
 
-    const content = (result.current as any)[property];
+    const content = (result.current as unknown as Record<string, string>)[property];
     const expectedContent = stubContent.financialVirementLabels[property];
 
     expect(content).toBe(expectedContent);
@@ -95,7 +95,7 @@ describe("useEditPageContent()", () => {
     `("with $property", ({ property }: { property: keyof typeof stubContent.pages.financialVirementEdit }) => {
       const { result } = renderPageContent();
 
-      const content = (result.current as any)[property];
+      const content = (result.current as unknown as Record<string, string>)[property];
       const expectedContent = stubContent.pages.financialVirementEdit[property];
 
       expect(content).toBe(expectedContent);

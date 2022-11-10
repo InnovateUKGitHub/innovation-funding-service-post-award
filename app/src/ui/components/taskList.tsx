@@ -25,7 +25,7 @@ interface ITask {
   validation?: Result[];
 }
 
-export function Task({ route, name, status, validation }: ITask) {
+export const Task = ({ route, name, status, validation }: ITask) => {
   const { getContent } = useContent();
   const hasError = !!validation?.find(x => !x.isValid);
 
@@ -47,7 +47,7 @@ export function Task({ route, name, status, validation }: ITask) {
       </span>
     </li>
   );
-}
+};
 
 export interface ITaskListItem {
   title: string | ContentSelector;
@@ -57,7 +57,7 @@ export interface ITaskListItem {
   children: React.ReactElement<ITask> | React.ReactElement<ITask>[];
 }
 
-export function TaskListSection({ step, title, validation, children, qa }: ITaskListItem) {
+export const TaskListSection = ({ step, title, validation, children, qa }: ITaskListItem) => {
   const { getContent } = useContent();
 
   const titleValue = typeof title === "string" ? title : getContent(title);
@@ -75,4 +75,4 @@ export function TaskListSection({ step, title, validation, children, qa }: ITask
       </UL>
     </li>
   );
-}
+};

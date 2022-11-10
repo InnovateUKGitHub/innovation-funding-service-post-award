@@ -5,7 +5,7 @@ export interface ClaimLastModifiedProps {
   modifiedDate: Date;
 }
 
-export function ClaimLastModified({ modifiedDate }: ClaimLastModifiedProps) {
+export const ClaimLastModified = ({ modifiedDate }: ClaimLastModifiedProps) => {
   const { getContent } = useContent();
   const messagePrefix = getContent(x => x.components.claimLastModified.message);
 
@@ -14,4 +14,4 @@ export function ClaimLastModified({ modifiedDate }: ClaimLastModifiedProps) {
       {messagePrefix}: <FullDateTime value={modifiedDate} />
     </SimpleString>
   );
-}
+};

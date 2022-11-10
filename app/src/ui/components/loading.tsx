@@ -19,6 +19,9 @@ export interface LoadingProps<T> {
   renderLoading?: () => JSX.Element;
 }
 
+/**
+ * Loader component handles the loading status and changes to the UI for different loading states
+ */
 export function Loader<T>({ pending, render, renderError, renderLoading }: LoadingProps<T>) {
   const fallbackPendingError = new AppError(ErrorCode.UNKNOWN_ERROR, "An error has occurred while fetching data.");
 
@@ -60,7 +63,7 @@ export function Loader<T>({ pending, render, renderError, renderLoading }: Loadi
   return <LoadingElement>{pendingElement}</LoadingElement>;
 }
 
-export function LoadingMessage() {
+export const LoadingMessage = () => {
   const { getContent } = useContent();
   const loadingMessage = getContent(x => x.components.loading.message);
 
@@ -69,8 +72,11 @@ export function LoadingMessage() {
       {loadingMessage}
     </SimpleString>
   );
-}
+};
 
+/**
+ * PageLoader component will show error container if there is an error, otherwise the Loader component will be rendered
+ */
 export function PageLoader<T>(props: LoadingProps<T>) {
   const handleError: LoadingProps<T>["renderError"] = renderError => {
     const hasRequestError = renderError.code === ErrorCode.REQUEST_ERROR;

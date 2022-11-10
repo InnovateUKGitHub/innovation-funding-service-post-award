@@ -364,7 +364,7 @@ class CostCategoryList {
   private readonly costCategories: CostCategoryItem[];
 
   /**
-   * Create a lookup-table for retreiving information about Cost Categories.
+   * Create a lookup-table for retrieving information about Cost Categories.
    *
    * @param competitionType The type of competition type, if known, for changing guidance information.
    */
@@ -375,7 +375,7 @@ class CostCategoryList {
   /**
    * Obtain cost category data from the Salesforce cost category name.
    *
-   * @param type {CostCategoryType} The ID of the cost category.
+   * @param {CostCategoryType} name  The ID of the cost category.
    * @author Leondro Lio <leondro.lio@iuk.ukri.org>
    * @returns A cost category.
    */
@@ -388,7 +388,7 @@ class CostCategoryList {
   /**
    * Obtain cost category data from a cost category id.
    *
-   * @param type {CostCategoryType} The ID of the cost category.
+   * @param {CostCategoryType} type The ID of the cost category.
    * @author Leondro Lio <leondro.lio@iuk.ukri.org>
    * @returns A cost category.
    */

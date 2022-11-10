@@ -13,13 +13,13 @@ export interface PartnersAndFinanceContactsProps {
 
 const PartnersTable = TypedTable<IContactRole>();
 
-export function PartnerContactRoleTable({
+export const PartnerContactRoleTable = ({
   contactRoles,
   comment,
   footnote,
   qa,
   hidePartnerColumn = false,
-}: PartnersAndFinanceContactsProps) {
+}: PartnersAndFinanceContactsProps) => {
   return (
     <>
       {comment}
@@ -54,4 +54,4 @@ export function PartnerContactRoleTable({
       {footnote}
     </>
   );
-}
+};

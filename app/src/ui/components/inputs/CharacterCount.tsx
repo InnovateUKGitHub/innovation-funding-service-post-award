@@ -19,6 +19,9 @@ export type CharacterCountOptions = CharacterTypes & {
   count: number;
 };
 
+/**
+ * utility function to check the character count
+ */
 function checkCharacterCount({ type, count, minValue, maxValue }: CharacterCountOptions) {
   let hasErrorHint = false;
 
@@ -67,7 +70,7 @@ export type CharacterCountProps = CharacterCountOptions & {
   children: React.ReactElement;
 };
 
-export function CharacterCount({ children, ...characterConfig }: CharacterCountProps) {
+export const CharacterCount = ({ children, ...characterConfig }: CharacterCountProps) => {
   // Note: 'useIsClient' is not correctly rendering the right UI
   const [mounted, setMounted] = useState(false);
 
@@ -92,4 +95,4 @@ export function CharacterCount({ children, ...characterConfig }: CharacterCountP
       </SimpleString>
     </div>
   );
-}
+};

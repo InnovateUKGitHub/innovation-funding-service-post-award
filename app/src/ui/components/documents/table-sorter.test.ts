@@ -2,10 +2,20 @@ import _isEqual from "lodash.isequal";
 import { renderHook, act } from "@testing-library/react";
 
 import { hookTestBed } from "@shared/TestBed";
-import { TableSortKey, SortOptions, useTableSorter } from "@ui/components/documents/table-sorter";
+import { SortOptions, useTableSorter } from "@ui/components/documents/table-sorter";
+
+type TableDataItem = {
+  link: string;
+  fileName: string;
+  id: string;
+  description: number | null;
+  fileSize: number;
+  dateCreated: Date;
+  uploadedBy: string | (() => string);
+};
 
 describe("useTableSorter()", () => {
-  const stubTableData = [
+  const stubTableData: TableDataItem[] = [
     {
       link: "#",
       fileName: "document-4.docx",
@@ -46,7 +56,7 @@ describe("useTableSorter()", () => {
 
   const stubNoColumnsSorted: (keyof typeof stubTableData[0] | null)[] = [null, null, null, null, null, null, null];
 
-  const setup = (sortKeys: TableSortKey[], tableRows: any[], isServer?: boolean) =>
+  const setup = (sortKeys: (keyof TableDataItem | null)[], tableRows: TableDataItem[], isServer?: boolean) =>
     renderHook(() => useTableSorter(sortKeys, tableRows), hookTestBed({ isServer }));
 
   describe("@returns", () => {

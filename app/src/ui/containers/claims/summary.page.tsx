@@ -54,7 +54,7 @@ interface ClaimSummaryComponentProps extends ClaimSummaryParams, BaseProps {
 
 const Form = ACC.createTypedForm<ClaimDto>();
 
-function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
+const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
   const getClaimLinkProps = (data: Pick<CombinedData, "project" | "partner">) => ({
     projectId: data.project.id,
     partnerId: data.partner.id,
@@ -321,7 +321,7 @@ function ClaimSummaryComponent(props: ClaimSummaryComponentProps) {
   });
 
   return <ACC.PageLoader pending={combined} render={renderContents} />;
-}
+};
 
 const ClaimSummaryContainer = (props: ClaimSummaryParams & BaseProps) => {
   const stores = useStores();

@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { FormInputWidths, useDebounce } from "./input-utils";
 import { InputProps, InputState } from "./common";
 
-interface NumberInputProps extends InputProps<number> {
+export interface NumberInputProps extends InputProps<number> {
   id?: string;
   className?: string;
   width?: FormInputWidths;

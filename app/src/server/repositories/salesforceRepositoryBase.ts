@@ -56,14 +56,14 @@ export abstract class RepositoryBase {
     return e instanceof Error ? e : new Error(`${e.errorCode}: ${e.message}`);
   }
 
-  protected executeArray<T>(query: Query<{}>): Promise<T[]> {
+  protected executeArray<T>(query: Query<AnyObject>): Promise<T[]> {
     return new Promise<T[]>((res, rej) => {
       query.execute(undefined, (err, records) => {
         if (err) {
           rej(this.constructError(err));
         } else {
           // there is an error in the typings of result so need to cast here
-          res(records as any as T[]);
+          res(records as unknown as T[]);
         }
       });
     });
@@ -247,7 +247,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
       const connection = await this.getSalesforceConnection();
       const targetObject = connection.sobject<Partial<TSalesforce>>(this.salesforceObjectName);
 
-      const insertedBatchIds = await this.batchRequest<Payload, string[]>(insertPayload, async batch => {
+      const insertedBatchIds = await this.batchRequest(insertPayload, async batch => {
         const batchResults = await targetObject.insert(batch);
         const validPayload = batchResults.every(x => x.success);
 
@@ -291,7 +291,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
     try {
       const connection = await this.getSalesforceConnection();
 
-      const updateBatchConfirmations = await this.batchRequest<Payload, boolean>(updatePayload, async batch => {
+      const updateBatchConfirmations = await this.batchRequest(updatePayload, async batch => {
         const updateQuery = await connection.sobject<TSalesforce>(this.salesforceObjectName);
         const batchResults = await updateQuery.update(batch);
 
@@ -318,7 +318,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
     try {
       const connection = await this.getSalesforceConnection();
 
-      const deleteBatchConfirmations = await this.batchRequest<Payload, boolean>(deleteIds, async batch => {
+      const deleteBatchConfirmations = await this.batchRequest(deleteIds, async batch => {
         const deleteQuery = connection.sobject<Payload>(this.salesforceObjectName);
         const batchResults = await deleteQuery.delete(batch);
 
@@ -400,11 +400,11 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
    *
    * A batch is determined from a config value. This config has been set to the max payload size SF can handle on each request, thus removing SF query errors.
    */
-  private batchRequest<BatchType extends any[], Response>(
-    payload: BatchType,
-    request: (batchPayload: BatchType) => Promise<Response>,
+  private batchRequest<BatchType, Response>(
+    payload: BatchType[],
+    request: (batchPayload: BatchType[]) => Promise<Response>,
   ): Promise<Response[]> {
-    const generatedBatches = createBatch<BatchType>(payload, configuration.salesforceQueryLimit);
+    const generatedBatches = createBatch(payload, configuration.salesforceQueryLimit);
     const promisedBatches = generatedBatches.map(x => request(x));
 
     return Promise.all(promisedBatches);

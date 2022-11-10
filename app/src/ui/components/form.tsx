@@ -37,8 +37,8 @@ export interface SelectOption {
  * Create a unique ID for hints for accessability and screen-reader purposes,
  * based upon the existing name of the field.
  *
- * @param name The name of the form field.
- * @returns A new name for the hint
+ * @param {string} name The name of the form field.
+ * @returns {string} A new name for the hint
  */
 const createFieldHintId = (name: string) => `${name}-hint`;
 
@@ -50,7 +50,6 @@ const createFieldHintId = (name: string) => `${name}-hint`;
  * (unsupported!)
  * To use input elements without using controlled input, pass in the `null` type.
  *
- * @returns A set of components that fit the shape
  * @example
  * // This form only controls a single string.
  * const InputForm = createTypedForm<string>();
@@ -86,7 +85,7 @@ const createFieldHintId = (name: string) => `${name}-hint`;
  * };
  */
 export const createTypedForm = <T,>() => {
-  // Props shared by the <Form /> element, whether it is an editor or just a visualiser.
+  // Props shared by the <Form /> element, whether it is an editor or just a visualizer.
   interface SharedFormProps {
     onChange?: (data: T) => void;
     onSubmit?: () => void;
@@ -100,16 +99,16 @@ export const createTypedForm = <T,>() => {
 
   // <Form /> editor specific props
   interface EditorForm extends SharedFormProps {
-    editor: IEditorStore<T, any>;
+    editor: IEditorStore<T, AnyObject>;
   }
 
-  // <Form /> visualiser specific props
+  // <Form /> visualizer specific props
   interface DataForm extends SharedFormProps {
     data: T;
     isSaving?: boolean;
   }
 
-  // Props that apply to either the editor <Form /> or the visualiser <Form />
+  // Props that apply to either the editor <Form /> or the visualizer <Form />
   type FormProps = EditorForm | DataForm;
 
   interface FieldsetProps {
@@ -251,7 +250,6 @@ export const createTypedForm = <T,>() => {
    * - Whether the form is disabled or not
    *
    * @author Leondro Lio <leondro.lio@iuk.ukri.org>
-   * @returns Information from the parent <Form />
    */
   const useFormDataContext = () => {
     const context = useContext(FormDataContext);
@@ -265,8 +263,6 @@ export const createTypedForm = <T,>() => {
    * A hook to create an "onChange" handler, by obtaining the parent form "onChange" method with React Context.
    *
    * @author Leondro Lio <leondro.lio@iuk.ukri.org>
-   * @param update The update method, to modify the form content
-   * @returns An "onChange" function handler
    */
   const useHandleChange = <TValue,>(update?: (data: T, value: TValue | null) => void) => {
     const { formData, onChange } = useFormDataContext();
@@ -286,13 +282,11 @@ export const createTypedForm = <T,>() => {
    * A hook to create an "onSubmit" handler, by obtaining the parent form "onSubmit" method with React Context.
    *
    * @author Leondro Lio <leondro.lio@iuk.ukri.org>
-   * @param update The update method, to modify the form content
-   * @returns An "onSubmit" function handler
    */
   const useHandleSubmit = () => {
     const { onSubmit } = useFormDataContext();
 
-    return (e: React.MouseEvent<{}>) => {
+    return (e: React.MouseEvent<HTMLButtonElement>) => {
       if (onSubmit) {
         e.preventDefault();
         onSubmit();
@@ -303,8 +297,6 @@ export const createTypedForm = <T,>() => {
   /**
    * A controlled form component.
    * Controlled forms pass form data to children automatically via React Context.
-   *
-   * @returns A form component
    */
   const FormComponent = ({
     action = "",
@@ -357,13 +349,11 @@ export const createTypedForm = <T,>() => {
 
   /**
    * A fieldset component, for grouping a collection of form fields together.
-   *
-   * @returns A fieldset component
    */
   const FieldsetComponent = ({ children, isSubQuestion, qa, heading, headingQa, className }: FieldsetProps) => {
     const Header = isSubQuestion ? "h3" : "h2";
 
-    // TODO: Check for accessibility - can header be ommited
+    // TODO: Check for accessibility - can header be omitted
     const headerContent = heading ? typeof heading === "string" ? heading : <Content value={heading} /> : undefined;
 
     return (
@@ -389,9 +379,6 @@ export const createTypedForm = <T,>() => {
 
   /**
    * A component that helps wrap our non-form-controlled input components.
-   *
-   * @private
-   * @returns A field component
    */
   const FieldComponent = ({
     hint,

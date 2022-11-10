@@ -20,8 +20,8 @@ export const renderersGuide: IGuide = {
   ],
 };
 
-class MarkdownGuide extends React.Component<{}, { markdownContent: string }> {
-  constructor(props: {}) {
+class MarkdownGuide extends React.Component<EmptyObject, { markdownContent: string }> {
+  constructor(props: EmptyObject) {
     super(props);
     this.state = { markdownContent: "Loading..." };
     if (fetch) {

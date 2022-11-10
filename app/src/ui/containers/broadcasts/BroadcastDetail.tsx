@@ -3,7 +3,7 @@ import * as ACC from "@ui/components";
 import { BroadcastDto } from "@framework/dtos";
 import { useContent } from "@ui/hooks";
 
-export function BroadcastDetail(props: BroadcastDto) {
+export const BroadcastDetail = (props: BroadcastDto) => {
   const { getContent } = useContent();
   const Broadcast = ACC.TypedDetails<NonNullable<typeof props>>();
 
@@ -40,4 +40,4 @@ export function BroadcastDetail(props: BroadcastDto) {
       </ACC.Section>
     </>
   );
-}
+};

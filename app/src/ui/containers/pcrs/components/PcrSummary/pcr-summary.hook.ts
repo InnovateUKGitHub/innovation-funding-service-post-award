@@ -5,6 +5,10 @@ import { PcrSummaryProps, PcrSummaryResponse } from "./pcr-summary.interface";
 import { partnerSummaryData } from "./summary-sections/reallocate-costs";
 
 // TODO: Investigate useMemo for inbound props!
+
+/**
+ * hook to get state for PCR summary
+ */
 export function usePcrSummary({ type, partners, virement }: PcrSummaryProps): PcrSummaryResponse {
   const [allowSubmit, setButtonVisibility] = useState<boolean>(true);
 

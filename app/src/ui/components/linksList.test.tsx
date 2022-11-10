@@ -1,8 +1,8 @@
-import React from "react";
 import { render } from "@testing-library/react";
 
 import { LinksList, LinksListProps } from "@ui/components/linksList";
 import { TestBed } from "@shared/TestBed";
+import { Link } from "./links";
 
 describe("<LinksList />", () => {
   describe("@returns", () => {
@@ -14,14 +14,14 @@ describe("<LinksList />", () => {
       );
 
     it("with an empty array", () => {
-      const stubEmptyList = [] as any;
-      const { container } = setup({ links: stubEmptyList });
+      const stubEmptyList = [] as Link[];
+      const { container } = setup({ links: stubEmptyList } as unknown as LinksListProps);
 
       expect(container.firstChild).toBeNull();
     });
 
     it("with single link", () => {
-      const oneLink = { url: "test1", text: "testtext1" };
+      const oneLink = { url: "test1", text: "test-text1" };
 
       const { container } = setup({ links: [oneLink] });
 
@@ -39,9 +39,9 @@ describe("<LinksList />", () => {
 
     it("with multiple links", () => {
       const stubLinks = [
-        { url: "test1", text: "testtext1" },
-        { url: "test2", text: "testtext2" },
-        { url: "test3", text: "testtext3" },
+        { url: "test1", text: "test-text1" },
+        { url: "test2", text: "test-text2" },
+        { url: "test3", text: "test-text3" },
       ];
 
       const { container } = setup({ links: stubLinks });

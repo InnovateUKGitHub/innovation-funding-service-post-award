@@ -24,6 +24,11 @@ type WindowWithGDSLoaded = typeof window & {
   GOVUKFrontend: GDSModules;
 };
 
+/**
+ * ### useGovFrontend
+ *
+ * initializes govFrontend module
+ */
 export function useGovFrontend(module: keyof GDSModules) {
   const { isClient } = useMounted();
 

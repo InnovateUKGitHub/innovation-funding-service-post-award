@@ -4,7 +4,6 @@ import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { IStores } from "@ui/redux";
 import { IRoutes } from "@ui/routing/routeConfig";
 import { Copy } from "@copy/Copy";
-import { MatchedRoute } from "@ui/routing";
 import { makeUrlWithQuery } from "@ui/helpers/make-url";
 
 interface RouteStateParams {
@@ -29,30 +28,32 @@ export type ContainerProps<TParams, TData, TCallbacks> = TParams & TData & TCall
 
 export type ContainerBaseClass<TParams, TData, TCallbacks> = new (
   props: TParams & TData & TCallbacks & BaseProps,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   context?: any,
 ) => ContainerBase<TParams, TData, TCallbacks>;
 
 export abstract class ContainerBaseWithState<
-  TParams = {},
-  TData = {},
-  TCallbacks = {},
-  TState = {},
+  TParams = AnyObject,
+  TData = AnyObject,
+  TCallbacks = AnyObject,
+  TState = AnyObject,
 > extends React.Component<ContainerProps<TParams, TData, TCallbacks>, TState> {
   constructor(props: ContainerProps<TParams, TData, TCallbacks>) {
     super(props);
   }
 }
 
-export abstract class ContainerBase<TParams = {}, TData = {}, TCallbacks = {}> extends React.Component<
-  ContainerProps<TParams, TData, TCallbacks>
-> {
+export abstract class ContainerBase<
+  TParams = AnyObject,
+  TData = AnyObject,
+  TCallbacks = AnyObject,
+> extends React.Component<ContainerProps<TParams, TData, TCallbacks>> {
   constructor(props: ContainerProps<TParams, TData, TCallbacks>) {
     super(props);
   }
 }
 
-// TODO: Remove duplication between MatchedRoute and IRouteOptions
-interface IRouteOptions<TParams> extends Pick<MatchedRoute, "allowRouteInActiveAccess"> {
+interface IRouteOptions<TParams> {
   routeName: string;
   routePath: string;
   /**
@@ -63,20 +64,38 @@ interface IRouteOptions<TParams> extends Pick<MatchedRoute, "allowRouteInActiveA
    */
   routePathWithQuery?: string;
   container: React.FunctionComponent<TParams & BaseProps>;
-  // TODO: Remove this params are now fetched from a container level not route...
   getParams: (route: RouteState) => TParams;
   accessControl?: (auth: Authorisation, params: TParams, config: IClientConfig) => boolean;
   getTitle: (getTitleArgs: { params: TParams; stores: IStores; content: Copy }) => {
     htmlTitle: string;
     displayTitle: string;
   };
+  allowRouteInActiveAccess?: boolean;
 }
 
 export interface IRouteDefinition<TParams> extends IRouteOptions<TParams> {
   getLink: (params: TParams) => ILinkInfo;
 }
 
-export function defineRoute<TParams>(options: IRouteOptions<TParams>): IRouteDefinition<TParams> {
+/**
+ * ### defineRoute
+ *
+ * takes route config and generates a link object and returns config with link
+ */
+// export function defineRoute<TParams extends AnyObject>(options: IRouteOptions<TParams>): IRouteDefinition<TParams> {
+//   return {
+//     ...options,
+//     getLink: params => ({
+//       path: makeUrlWithQuery(options.routePathWithQuery || options.routePath, convertToParameters(params)),
+//       routeName: options.routeName,
+//       routeParams: convertToParameters(params),
+//       accessControl: (user: IClientUser, config: IClientConfig) =>
+//         options.accessControl?.(new Authorisation(user.roleInfo), params, config) ?? true,
+//     }),
+//   };
+// }
+
+export function defineRoute<TParams extends AnyObject>(options: IRouteOptions<TParams>): IRouteDefinition<TParams> {
   return {
     ...options,
     getLink: params => ({
@@ -89,10 +108,13 @@ export function defineRoute<TParams>(options: IRouteOptions<TParams>): IRouteDef
   };
 }
 
-function convertToParameters(params: any) {
+/**
+ * converts data object to stringified versions suitable for url params
+ */
+function convertToParameters(params: AnyObject) {
   const result: { [key: string]: string | string[] } = {};
 
-  Object.keys(params || {}).forEach(key => {
+  Object.keys(params || {}).forEach((key: keyof typeof params) => {
     if (params[key] !== undefined) {
       result[key] = convertToParameter(params[key]);
     }
@@ -101,7 +123,10 @@ function convertToParameters(params: any) {
   return result;
 }
 
-function convertToParameter(p: any): string[] | string {
+/**
+ * converts a parameter to string
+ */
+function convertToParameter(p: unknown): string[] | string {
   if (typeof p === "number") {
     return p.toString();
   }

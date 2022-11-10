@@ -7,7 +7,7 @@ import { Content } from "../content";
 
 const innovateUKLink = "https://www.gov.uk/government/organisations/innovate-uk";
 
-export function NotFoundError() {
+export const NotFoundError = () => {
   const dashboardLinkElement = (
     <a key="dashboard" href="/projects/dashboard">
       {" "}
@@ -31,4 +31,4 @@ export function NotFoundError() {
       </Section>
     </Page>
   );
-}
+};

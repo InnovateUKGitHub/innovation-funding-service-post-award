@@ -48,7 +48,7 @@ interface CombinedData {
   claim: ClaimDto;
 }
 
-export class ClaimLineItemsComponent extends ContainerBase<ClaimLineItemsParams, Data, {}> {
+export class ClaimLineItemsComponent extends ContainerBase<ClaimLineItemsParams, Data> {
   public render() {
     const combined = Pending.combine({
       project: this.props.project,
@@ -209,7 +209,7 @@ export class ClaimLineItemsComponent extends ContainerBase<ClaimLineItemsParams,
   };
 }
 
-function ClaimLineItemsTable({
+const ClaimLineItemsTable = ({
   lineItems,
   forecastDetail,
   content,
@@ -217,7 +217,7 @@ function ClaimLineItemsTable({
   lineItems: ClaimLineItemDto[];
   forecastDetail: ForecastDetailsDTO;
   content: Record<string, string>;
-}) {
+}) => {
   const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
 
   const renderFooterRow = (row: {
@@ -283,8 +283,13 @@ function ClaimLineItemsTable({
       />
     </LineItemTable.Table>
   );
-}
+};
 
+/**
+ * ### useClaimLineItemsContent
+ *
+ * hook returns content used in ClaimLineItems component
+ */
 export function useClaimLineItemsContent() {
   const { getContent } = useContent();
 

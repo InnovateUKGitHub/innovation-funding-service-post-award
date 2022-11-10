@@ -17,7 +17,7 @@ describe("useProjectParticipants", () => {
     } as TestBedStore;
 
     return renderHook(useProjectParticipants, {
-      wrapper: (x: any) => (
+      wrapper: x => (
         <TestBed stores={stubStore}>
           <ProjectParticipantProvider projectId={stubProjectId}>
             <>{x.children}</>

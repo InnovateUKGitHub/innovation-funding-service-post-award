@@ -8,14 +8,14 @@ import { useMounted } from "@ui/features";
 
 const Form = ACC.createTypedForm<PCRSpendProfileTravelAndSubsCostDto>();
 
-export function TravelAndSubsFormComponent({
+export const TravelAndSubsFormComponent = ({
   onSave,
   onChange,
   editor,
   validator,
   data,
   costCategory,
-}: SpendProfileCostFormProps<PCRSpendProfileTravelAndSubsCostDto, PCRTravelAndSubsCostDtoValidator>) {
+}: SpendProfileCostFormProps<PCRSpendProfileTravelAndSubsCostDto, PCRTravelAndSubsCostDtoValidator>) => {
   const { isClient } = useMounted();
 
   const handleOnChange = (dto: PCRSpendProfileTravelAndSubsCostDto) => {
@@ -87,4 +87,4 @@ export function TravelAndSubsFormComponent({
       </Form.Fieldset>
     </Form.Form>
   );
-}
+};

@@ -20,7 +20,7 @@ export const RadioList = (props: RadioListProps) => {
     }
   };
 
-  const renderOption = (name: string, item: RadioOptionProps, index: number): any => {
+  const renderOption = (item: RadioOptionProps, index: number) => {
     const selected = props.value ? props.value.id === item.id : false;
     const inputId = `${props.name}_${item.id}`;
     return (
@@ -45,5 +45,5 @@ export const RadioList = (props: RadioListProps) => {
   };
 
   const className = classNames("govuk-radios", { "govuk-radios--inline": props.inline });
-  return <div className={className}>{props.options.map((x, i) => renderOption(props.name, x, i))}</div>;
+  return <div className={className}>{props.options.map((x, i) => renderOption(x, i))}</div>;
 };

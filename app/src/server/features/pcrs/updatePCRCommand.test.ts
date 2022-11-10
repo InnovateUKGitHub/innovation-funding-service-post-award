@@ -17,7 +17,7 @@ import {
   PCRStandardItemDto,
   ProjectRole,
 } from "@framework/types";
-import { getAllEnumValues } from "@shared/enumHelper";
+import { getAllNumericalEnumValues } from "@shared/enumHelper";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { PCRItemStatus, PCRItemType, PCRStatus } from "@framework/constants";
 import { TestContext } from "@tests/test-utils/testContextProvider";
@@ -256,7 +256,7 @@ describe("UpdatePCRCommand", () => {
         },
       );
 
-      const invalidEditStatus = getAllEnumValues<PCRStatus>(PCRStatus).filter(x => validEditStatus.indexOf(x) === -1);
+      const invalidEditStatus = getAllNumericalEnumValues(PCRStatus).filter(x => validEditStatus.indexOf(x) === -1);
 
       test.each(invalidEditStatus.map<[string, PCRStatus]>(x => [PCRStatus[x], x]))(
         "can not update when %s",
@@ -607,7 +607,7 @@ describe("UpdatePCRCommand", () => {
         },
       );
 
-      const invalidEditStatus = getAllEnumValues<PCRStatus>(PCRStatus).filter(x => validEditStatus.indexOf(x) === -1);
+      const invalidEditStatus = getAllNumericalEnumValues(PCRStatus).filter(x => validEditStatus.indexOf(x) === -1);
 
       test.each(invalidEditStatus.map<[string, PCRStatus]>(x => [PCRStatus[x], x]))(
         "can not update when %s",

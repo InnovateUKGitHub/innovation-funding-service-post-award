@@ -18,7 +18,13 @@ export interface DocumentFilterProps {
   placeholder?: string;
 }
 
-export function DocumentFilter({ value, name, qa, placeholder = "Search documents", onSearch }: DocumentFilterProps) {
+export const DocumentFilter = ({
+  value,
+  name,
+  qa,
+  placeholder = "Search documents",
+  onSearch,
+}: DocumentFilterProps) => {
   const handleOnSearch = useCallback(
     (newState: DocumentFilterState): void => onSearch(newState.filteredText),
     [onSearch],
@@ -39,4 +45,4 @@ export function DocumentFilter({ value, name, qa, placeholder = "Search document
       />
     </FilterForm.Form>
   );
-}
+};

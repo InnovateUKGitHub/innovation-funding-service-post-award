@@ -15,8 +15,8 @@ type BankCheckValidationError = {
   };
 };
 
-const isBankCheckValidationError = (e: any): e is BankCheckValidationError => {
-  return e?.results?.bankCheckValidation?.isValid;
+const isBankCheckValidationError = (e: unknown): e is BankCheckValidationError => {
+  return (e as BankCheckValidationError)?.results?.bankCheckValidation?.isValid;
 };
 
 export interface ProjectSetupBankDetailsParams {

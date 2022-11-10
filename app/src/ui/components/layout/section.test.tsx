@@ -3,6 +3,7 @@ import { render } from "@testing-library/react";
 import { TestBed } from "@shared/TestBed";
 import { Section, SectionProps } from "@ui/components/layout/section";
 import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { ContentSelector, PossibleCopyStrings } from "@copy/type";
 
 describe("<Section />", () => {
   const stubContent = {
@@ -41,7 +42,8 @@ describe("<Section />", () => {
     });
 
     test("as a content solution", () => {
-      const stubTitleContentSolution = (x: any) => x.stubCategory.stubValue;
+      const stubTitleContentSolution = ((x: typeof stubContent) =>
+        x.stubCategory.stubValue) as unknown as ContentSelector<PossibleCopyStrings>;
       const { queryByText } = setup({ title: stubTitleContentSolution });
 
       const titleElement = queryByText(stubContent.stubCategory.stubValue);
@@ -69,7 +71,8 @@ describe("<Section />", () => {
     });
 
     test("as a content solution", () => {
-      const stubSubTitleContentSolution = (x: any) => x.stubCategory.stubValue;
+      const stubSubTitleContentSolution = ((x: typeof stubContent) =>
+        x.stubCategory.stubValue) as unknown as ContentSelector<PossibleCopyStrings>;
       const { queryByText } = setup({ subtitle: stubSubTitleContentSolution });
 
       const subTitleElement = queryByText(stubContent.stubCategory.stubValue);

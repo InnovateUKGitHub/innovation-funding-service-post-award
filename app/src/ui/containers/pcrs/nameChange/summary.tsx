@@ -1,4 +1,3 @@
-import React from "react";
 import { PartnerDto, PCRItemForAccountNameChangeDto } from "@framework/types";
 import { useStores } from "@ui/redux";
 import { PCRAccountNameChangeItemDtoValidator } from "@ui/validators";

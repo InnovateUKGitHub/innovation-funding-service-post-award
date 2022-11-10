@@ -15,7 +15,6 @@ export interface EmailContentProps extends Omit<EmailProps, "value" | "children"
  * @example
  * <EmailContent value={x => x.myPage.emailAddress} />
  */
-
 export function EmailContent({ value, ...props }: EmailContentProps) {
   const { getContent } = useContent();
   const email = getContent(value);

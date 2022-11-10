@@ -5,6 +5,12 @@ import { useMemo, useState } from "react";
 
 export type SortOptions = "none" | "ascending" | "descending";
 
+export type TableSortKey = string | null;
+interface ColumnSortState<T> {
+  sortKey?: T;
+  sortDirection: SortOptions;
+}
+
 const logger = new Logger("Table Sort");
 
 // Note: Get current state and return next state
@@ -14,7 +20,10 @@ const sortOptionsWorkflow: Record<SortOptions, SortOptions> = {
   descending: "ascending",
 };
 
-function sortRowsFromKey({ sortKey, sortDirection }: ColumnSortState, rows: any[]) {
+/**
+ * sorts rows according to the sort key and sort direction
+ */
+function sortRowsFromKey<T>({ sortKey, sortDirection }: ColumnSortState<keyof T | null | undefined>, rows: T[]) {
   if (!sortKey || sortDirection === "none") return rows;
 
   return rows.sort((unCheckedA, uncheckedB) => {
@@ -36,22 +45,23 @@ function sortRowsFromKey({ sortKey, sortDirection }: ColumnSortState, rows: any[
       return dateComparator(firstItem, secondItem);
     }
 
-    logger.warn(`Table Sort value ${sortKey} has not matched against any comparator`);
+    logger.warn(`Table Sort value ${String(sortKey)} has not matched against any comparator`);
     return 0;
   });
 }
 
-export type TableSortKey = string | null;
-interface ColumnSortState {
-  sortKey?: string;
-  sortDirection: SortOptions;
-}
-
 const initialSortState: SortOptions = "none";
 
-export function useTableSorter(sortKeys: TableSortKey[], tableRows: any[]) {
+/**
+ * ### useTableSorter
+ *
+ * hook returns sorted table configuration
+ */
+export function useTableSorter<T extends AnyObject>(sortKeys: (keyof T | null | undefined)[], tableRows: T[]) {
   const { isServer } = useMounted();
-  const [sortColumn, setSortColumn] = useState<ColumnSortState>({ sortDirection: initialSortState });
+  const [sortColumn, setSortColumn] = useState<ColumnSortState<keyof T | null | undefined>>({
+    sortDirection: initialSortState,
+  });
 
   const sortedRows = useMemo(() => sortRowsFromKey(sortColumn, tableRows), [sortColumn, tableRows]);
 

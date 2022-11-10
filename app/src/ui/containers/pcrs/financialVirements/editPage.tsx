@@ -14,6 +14,9 @@ import { getAuthRoles } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
 import { PCRPrepareItemRoute } from "../pcrItemWorkflow";
 
+/**
+ * hook to return edit page content
+ */
 export function useEditPageContent() {
   const { getContent } = useContent();
 
@@ -76,8 +79,6 @@ interface EditPageInputRowProps {
 
 /**
  * A loading page, which waits for essential data to be loaded first before displaying the edit page.
- *
- * @returns A loading screen for the edit page
  */
 const EditPageLoader = ({ project, partner, costCategories, editor, ...props }: EditPagePendingProps) => {
   const combined = Pending.combine({
@@ -94,8 +95,6 @@ const VirementForm = ACC.createTypedForm<FinancialVirementDto>();
 
 /**
  * A page for editing Loans virements for a PCR.
- *
- * @returns The Edit Page
  */
 const EditPage = ({
   editor,
@@ -287,8 +286,6 @@ const EditPage = ({
 /**
  * An input element of <EditPage />, which either displays an input field, or a rendered text value,
  * depending on whether the cost category is automatically calculated or not.
- *
- * @returns An input element of the <EditPage /> table.
  */
 const EditPageInput = ({ costCategory, validation, virement, disabled, updateValue }: EditPageInputRowProps) => {
   return (
@@ -315,8 +312,6 @@ const EditPageInput = ({ costCategory, validation, virement, disabled, updateVal
 
 /**
  * A financial virement editing page for Loans PCRs
- *
- * @returns A wrapper for <EditPage />
  */
 const Container = (props: VirementCostsParams & BaseProps) => {
   const { projects, partners, costCategories, financialVirements } = useStores();

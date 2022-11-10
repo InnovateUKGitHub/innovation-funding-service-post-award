@@ -14,8 +14,8 @@ interface TagProps {
   children: string;
 }
 
-export function Tag({ type, ...props }: TagProps) {
+export const Tag = ({ type, ...props }: TagProps) => {
   const tagStyles = tagConfig[type];
 
   return <strong className={cx("govuk-tag", tagStyles)} {...props} />;
-}
+};

@@ -6,6 +6,11 @@ import * as ACC from "@ui/components";
 
 import { BroadcastView } from "./BroadcastView";
 
+/**
+ * ### BroadcastsViewer
+ *
+ * React component displays broadcasts
+ */
 export function BroadcastsViewer() {
   const { getContent } = useContent();
   const stores = useStores();

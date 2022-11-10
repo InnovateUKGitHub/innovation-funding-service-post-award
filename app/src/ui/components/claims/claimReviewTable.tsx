@@ -2,7 +2,7 @@ import { useContent } from "@ui/hooks";
 import { TypedTable } from "../table";
 import { ClaimProps, ClaimTableRow, createTableData } from "./utils/costCategoryTableHelper";
 
-export function ClaimReviewTable(props: ClaimProps) {
+export const ClaimReviewTable = (props: ClaimProps) => {
   const { getContent } = useContent();
 
   const { costCategories } = createTableData(props);
@@ -43,4 +43,4 @@ export function ClaimReviewTable(props: ClaimProps) {
       />
     </CostCategoriesTable.Table>
   );
-}
+};

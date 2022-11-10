@@ -74,7 +74,7 @@ interface LoanRequestButtonProps {
   route: ILinkInfo;
 }
 
-function LoanRequestButton({ disabled, route }: LoanRequestButtonProps) {
+const LoanRequestButton = ({ disabled, route }: LoanRequestButtonProps) => {
   const sharedProps = {
     className: "govuk-!-margin-bottom-0",
     children: "Request",
@@ -85,4 +85,4 @@ function LoanRequestButton({ disabled, route }: LoanRequestButtonProps) {
   ) : (
     <ACC.Link route={route} styling="PrimaryButton" {...sharedProps} />
   );
-}
+};

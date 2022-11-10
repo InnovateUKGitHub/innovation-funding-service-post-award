@@ -94,9 +94,6 @@ const conditionalSave = <
     }
 
     dispatch(updateEditorAction(key as string, store as string, dto, validator));
-    // TODO: fix this typescript error
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     if (saving && !validator.isValid) {
       scrollToTheTopSmoothly();
     } else if (saving) {

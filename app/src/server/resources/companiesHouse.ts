@@ -1,4 +1,5 @@
 import { configuration, ConfigurationError } from "@server/features/common";
+import { isError } from "@server/features/common";
 
 export interface ICompaniesHouseParams {
   searchString: string;
@@ -42,15 +43,19 @@ export class CompaniesHouseBase {
       }
 
       return await fetchQuery.json();
-    } catch (err: any) {
+    } catch (err: unknown) {
       // Note: Add specific api failures here
 
-      if (err?.message?.includes("socket hang up")) {
-        // Note: Add this point we know to contact develop/escalate
-        throw new Error("COMPANIES_HOUSE_WHITELIST_ISSUE");
+      if (isError(err)) {
+        if (err?.message?.includes("socket hang up")) {
+          // Note: Add this point we know to contact develop/escalate
+          throw new Error("COMPANIES_HOUSE_WHITELIST_ISSUE");
+        }
+
+        throw new Error(err.message);
       }
 
-      throw new Error(err);
+      throw new Error(String(err));
     }
   }
 }

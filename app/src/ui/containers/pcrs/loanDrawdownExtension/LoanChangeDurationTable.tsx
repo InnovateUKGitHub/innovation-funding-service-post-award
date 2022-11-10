@@ -5,12 +5,6 @@ import { PCRLoanExtensionItemDtoValidator } from "@ui/validators";
 import * as ACC from "@ui/components";
 import { useMounted } from "@ui/features";
 
-// TODO: Move to generic area
-// https://stackoverflow.com/a/53050575
-type NoUndefinedField<T> = {
-  [P in keyof T]-?: NoUndefinedField<NonNullable<T[P]>>;
-};
-
 type BaseChangeDurationTable =
   | {
       editMode?: false;
@@ -30,14 +24,14 @@ type LoanChangeDurationTableProps = BaseChangeDurationTable & {
   validator: PCRLoanExtensionItemDtoValidator;
 };
 
-export function LoanChangeDurationTable({
+export const LoanChangeDurationTable = ({
   editMode = false,
   isDisabled = false,
   editLink,
   onUpdate,
   validator,
   ...props
-}: LoanChangeDurationTableProps) {
+}: LoanChangeDurationTableProps) => {
   const { isServer } = useMounted();
 
   if (!props.formData) throw Error("<LoanChangeDurationTable> must be used with a Form to receive data.");
@@ -169,12 +163,11 @@ export function LoanChangeDurationTable({
       {editMode ? null : <LoanEdit.Custom qa="edit-link" header="" value={() => editLink} />}
     </LoanEdit.Table>
   );
-}
+};
 
 const getQuarterInMonths = (totalMonths: number): number => totalMonths / 3;
 
 const getOptions = (data: NoUndefinedField<PCRItemForLoanDrawdownExtensionDto>) => {
-  // TODO: Feature flag this loan increase months
   const totalMonths = 75;
 
   return {
@@ -184,9 +177,12 @@ const getOptions = (data: NoUndefinedField<PCRItemForLoanDrawdownExtensionDto>) 
   };
 };
 
+/**
+ * Creates a list of options
+ */
 function createOptions(currentOffset: number, totalMonths: number): ACC.DropdownOption[] {
   const quarterlyOffset = 3;
-  // Note: Capture any current options which are less than "quarterlyOffset" or not modulas of 3
+  // Note: Capture any current options which are less than "quarterlyOffset" or not modulo of 3
   const shouldAddStartOption = currentOffset < quarterlyOffset;
 
   const list = [];

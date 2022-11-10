@@ -52,6 +52,10 @@ describe("useClaimDocumentContent()", () => {
     },
   };
 
+  type ClaimDocumentKeys = keyof typeof stubContent.pages.claimDocuments;
+  type ClaimMessagesKeys = keyof typeof stubContent.claimsMessages;
+  type DocumentMessageKeys = keyof typeof stubContent.documentMessages;
+
   const renderPageContent = () => {
     return renderHook(useClaimDocumentContent, hookTestBed({}));
   };
@@ -67,17 +71,14 @@ describe("useClaimDocumentContent()", () => {
     ${"buttonSaveAndReturn"}             | ${"buttonSaveAndReturn"}
     ${"buttonSaveAndContinueToSummary"}  | ${"buttonSaveAndContinueToSummary"}
     ${"buttonSaveAndContinueToForecast"} | ${"buttonSaveAndContinueToForecast"}
-  `(
-    "with $property",
-    ({ name, property }: { name: string; property: keyof typeof stubContent.pages.claimDocuments }) => {
-      const { result } = renderPageContent();
+  `("with $property", ({ name, property }: { name: ClaimDocumentKeys; property: ClaimDocumentKeys }) => {
+    const { result } = renderPageContent();
 
-      const content = (result.current as any)[name];
-      const expectedContent = stubContent.pages.claimDocuments[property];
+    const content = result.current[name];
+    const expectedContent = stubContent.pages.claimDocuments[property];
 
-      expect(content).toBe(expectedContent);
-    },
-  );
+    expect(content).toBe(expectedContent);
+  });
 
   test.each`
     name                            | property
@@ -93,10 +94,10 @@ describe("useClaimDocumentContent()", () => {
     ${"finalClaimGuidanceContent1"} | ${"finalClaimGuidanceContent1"}
     ${"finalClaimStep1"}            | ${"finalClaimStep1"}
     ${"finalClaimStep2"}            | ${"finalClaimStep2"}
-  `("with $property", ({ name, property }: { name: string; property: keyof typeof stubContent.claimsMessages }) => {
+  `("with $property", ({ name, property }: { name: ClaimMessagesKeys; property: ClaimMessagesKeys }) => {
     const { result } = renderPageContent();
 
-    const content = (result.current as any)[name];
+    const content = result.current[name];
     const expectedContent = stubContent.claimsMessages[property];
 
     expect(content).toBe(expectedContent);
@@ -107,10 +108,10 @@ describe("useClaimDocumentContent()", () => {
     ${"uploadTitle"}         | ${"uploadTitle"}
     ${"uploadDocuments"}     | ${"uploadDocuments"}
     ${"noDocumentsUploaded"} | ${"noDocumentsUploaded"}
-  `("with $property", ({ name, property }: { name: string; property: keyof typeof stubContent.documentMessages }) => {
+  `("with $property", ({ name, property }: { name: DocumentMessageKeys; property: DocumentMessageKeys }) => {
     const { result } = renderPageContent();
 
-    const content = (result.current as any)[name];
+    const content = result.current[name];
     const expectedContent = stubContent.documentMessages[property];
 
     expect(content).toBe(expectedContent);

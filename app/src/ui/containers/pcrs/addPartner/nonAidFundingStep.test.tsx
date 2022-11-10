@@ -107,6 +107,9 @@ describe("<NonAidFundingStep />", () => {
     });
   });
 
+  /**
+   * click button helper
+   */
   function clickButton(text: string) {
     const { getByText } = setup(stubProps);
     const btn = getByText(text);

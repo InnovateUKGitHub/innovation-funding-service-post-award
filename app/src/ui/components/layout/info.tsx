@@ -6,7 +6,7 @@ interface InfoProps {
   qa?: string;
 }
 
-export function Info({ qa, summary, children }: InfoProps) {
+export const Info = ({ qa, summary, children }: InfoProps) => {
   const { setRef } = useGovFrontend("Details");
 
   return (
@@ -18,4 +18,4 @@ export function Info({ qa, summary, children }: InfoProps) {
       <div className="govuk-details__text">{children}</div>
     </details>
   );
-}
+};

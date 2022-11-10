@@ -1,5 +1,8 @@
 import { PcrSummaryMultiplePartnerFinancialVirement, SummaryLogicProps } from "../pcr-summary.interface";
 
+/**
+ * Gets the Partner Summary Data
+ */
 export function partnerSummaryData(data: SummaryLogicProps): PcrSummaryMultiplePartnerFinancialVirement {
   const projectCostsOfPartners = findPartnersWithVirements(data);
   const hasAvailablePartners = !!projectCostsOfPartners.length;
@@ -34,6 +37,9 @@ export function partnerSummaryData(data: SummaryLogicProps): PcrSummaryMultipleP
 
 type IPartnerMatchingVirements = PcrSummaryMultiplePartnerFinancialVirement["data"]["projectCostsOfPartners"];
 
+/**
+ * Finds partners with virements
+ */
 function findPartnersWithVirements({ partners, virement }: SummaryLogicProps) {
   return partners.reduce<IPartnerMatchingVirements>((tableRows, partner) => {
     const partnerVirement = virement.partners.find(x => x.partnerId === partner.id);

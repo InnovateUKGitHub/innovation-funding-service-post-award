@@ -70,8 +70,8 @@ const Footer = () => {
   );
 };
 
-function FooterLink({ className, ...props }: ExternalLinkProps) {
+const FooterLink = ({ className, ...props }: ExternalLinkProps) => {
   return <ExternalLink data-qa={props.id} className={cx("govuk-footer__link", className)} {...props} />;
-}
+};
 
 export { Footer };

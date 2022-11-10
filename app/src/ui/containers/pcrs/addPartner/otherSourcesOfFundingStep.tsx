@@ -169,7 +169,7 @@ const OtherSourcesOfFunding = ({
                 <Form.MonthYear
                   name={`item_${i.row}_date`}
                   value={() => funds[i.row].dateSecured}
-                  update={(_dontUse, val) => {
+                  update={(_doNotUse, val) => {
                     funds[i.row].dateSecured = val;
                     props.onChange(pcrItem);
                   }}
@@ -186,7 +186,7 @@ const OtherSourcesOfFunding = ({
                 <Form.Numeric
                   name={`item_${i.row}_value`}
                   value={() => funds[i.row].value}
-                  update={(_dontUse, val) => {
+                  update={(_doNotUse, val) => {
                     funds[i.row].value = val;
                     props.onChange(pcrItem);
                   }}

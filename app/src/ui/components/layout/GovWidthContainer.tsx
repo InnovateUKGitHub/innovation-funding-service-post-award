@@ -8,6 +8,6 @@ export interface GovWidthContainerProps extends DivAttr {
   style?: React.CSSProperties;
 }
 
-export function GovWidthContainer({ className, ...props }: GovWidthContainerProps) {
-  return <div className={cx("govuk-width-container", className)} {...props} />;
-}
+export const GovWidthContainer = ({ className, ...props }: GovWidthContainerProps) => (
+  <div className={cx("govuk-width-container", className)} {...props} />
+);

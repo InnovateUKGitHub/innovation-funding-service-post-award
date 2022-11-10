@@ -6,7 +6,7 @@ export interface ForecastClaimAdviceProps {
   claimLink: ILinkInfo;
 }
 
-export function ForecastClaimAdvice({ claimLink }: ForecastClaimAdviceProps) {
+export const ForecastClaimAdvice = ({ claimLink }: ForecastClaimAdviceProps) => {
   return (
     <SimpleString qa="forecastClaimAdvice">
       <Content
@@ -19,4 +19,4 @@ export function ForecastClaimAdvice({ claimLink }: ForecastClaimAdviceProps) {
       />
     </SimpleString>
   );
-}
+};

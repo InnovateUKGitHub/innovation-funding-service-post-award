@@ -20,9 +20,7 @@ interface Data {
   editableItemTypes: Pending<PCRItemType[]>;
 }
 
-interface Callbacks {}
-
-class PCRDetailsComponent extends ContainerBase<Params, Data, Callbacks> {
+class PCRDetailsComponent extends ContainerBase<Params, Data> {
   render() {
     const combined = Pending.combine({
       project: this.props.project,

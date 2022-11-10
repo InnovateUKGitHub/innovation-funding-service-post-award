@@ -14,7 +14,7 @@ const samlConfig = {
 
 type expectedUrnResponse = Record<keyof typeof samlConfig, string>;
 
-// Note: Parse serialised SAML response
+// Note: Parse serialized SAML response
 export const getEmailFromAuthPayload = (x: Record<string, string>) => x[samlConfig.urnEmail];
 
 export type ShibbolethPayload = expectedUrnResponse & {

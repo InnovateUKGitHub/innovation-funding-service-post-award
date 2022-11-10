@@ -13,7 +13,7 @@ interface NavigationArrowsProps {
   nextLink?: LinkProps | null;
 }
 
-export function NavigationArrows({ previousLink, nextLink }: NavigationArrowsProps) {
+export const NavigationArrows = ({ previousLink, nextLink }: NavigationArrowsProps) => {
   if (!previousLink && !nextLink) return null;
 
   return (
@@ -23,7 +23,7 @@ export function NavigationArrows({ previousLink, nextLink }: NavigationArrowsPro
       {nextLink && <NavigationArrow {...nextLink} direction="right" name="Next" qa="arrow-left" />}
     </div>
   );
-}
+};
 
 type NavigationArrowProps = LinkProps & {
   name: string;
@@ -36,7 +36,7 @@ const directionOptions: Record<NavigationArrowProps["direction"], typeof ArrowLe
   right: ArrowRight,
 };
 
-function NavigationArrow({ direction, label, route, name, qa }: NavigationArrowProps) {
+const NavigationArrow = ({ direction, label, route, name, qa }: NavigationArrowProps) => {
   const Icon = directionOptions[direction];
 
   return (
@@ -50,4 +50,4 @@ function NavigationArrow({ direction, label, route, name, qa }: NavigationArrowP
       </div>
     </Link>
   );
-}
+};

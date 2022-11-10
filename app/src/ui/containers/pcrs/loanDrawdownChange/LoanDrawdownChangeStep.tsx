@@ -20,6 +20,9 @@ interface LoanDrawnDownUi extends Omit<LoanDrawdownPcrStepProps, "onChange"> {
 
 const LoanUpdateForm = ACC.createTypedForm<LoanFinancialVirement[]>();
 
+/**
+ * React Component for Loan Drawdown CHange
+ */
 function LoanDrawdownChange({ onChange, ...props }: LoanDrawnDownUi) {
   const { isLoading, payload, isRejected, error } = getPending(props.editor);
 

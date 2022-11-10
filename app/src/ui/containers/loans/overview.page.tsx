@@ -18,7 +18,7 @@ interface LoansOverviewProps extends BaseProps {
   loans: LoanDto[];
 }
 
-function LoansOverview({ loans, routes, project }: LoansOverviewProps) {
+const LoansOverview = ({ loans, routes, project }: LoansOverviewProps) => {
   const pendingLoanIndex = loans.findIndex(x => x.status === LoanStatus.REQUESTED);
   const pendingLoan = loans[pendingLoanIndex];
 
@@ -42,11 +42,11 @@ function LoansOverview({ loans, routes, project }: LoansOverviewProps) {
       />
     </ACC.Section>
   );
-}
+};
 
 export type LoansOverviewContainerProps = BaseProps & LoansOverviewParams;
 
-export function LoansOverviewContainer({ projectId, ...props }: LoansOverviewContainerProps) {
+export const LoansOverviewContainer = ({ projectId, ...props }: LoansOverviewContainerProps) => {
   const { getContent } = useContent();
   const stores = useStores();
 
@@ -81,7 +81,7 @@ export function LoansOverviewContainer({ projectId, ...props }: LoansOverviewCon
       {payload && <LoansOverview project={payload.project} loans={payload.loans} {...props} />}
     </ACC.Page>
   );
-}
+};
 
 export const LoansSummaryRoute = defineRoute<LoansOverviewParams>({
   routeName: "loansSummary",

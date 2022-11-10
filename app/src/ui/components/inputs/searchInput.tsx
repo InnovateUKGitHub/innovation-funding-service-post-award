@@ -6,7 +6,7 @@ import { InputProps } from "./common";
 interface SearchInputProps extends InputProps<string> {
   maxLength?: number;
   width?: FormInputWidths;
-  autoComplete?: React.InputHTMLAttributes<{}>["autoComplete"];
+  autoComplete?: React.InputHTMLAttributes<HTMLInputElement>["autoComplete"];
   qa?: string;
 }
 

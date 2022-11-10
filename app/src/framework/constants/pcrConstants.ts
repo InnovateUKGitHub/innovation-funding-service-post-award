@@ -123,6 +123,9 @@ export const getPCROrganisationType = (partnerType: PCRPartnerType): PCROrganisa
   return PCROrganisationType.Unknown;
 };
 
+/**
+ * Gets a list of PCR items that are not available
+ */
 export function getUnavailablePcrItemsMatrix(pcrs: PCRSummaryDto[]): PCRItemType[] {
   // Note: Avoid wasting time upfront
   if (!pcrs.length) return [];

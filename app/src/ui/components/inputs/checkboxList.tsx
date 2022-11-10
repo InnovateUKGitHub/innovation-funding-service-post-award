@@ -22,7 +22,7 @@ export const CheckboxList = (props: CheckboxListProps) => {
     }
   };
 
-  const renderOption = (name: string, item: CheckboxOptionProps, index: number): any => {
+  const renderOption = (name: string, item: CheckboxOptionProps, index: number) => {
     const selected = props.value ? !!props.value.find(x => x.id === item.id) : false;
     return (
       <div className="govuk-checkboxes__item" key={"option" + index}>

@@ -23,12 +23,9 @@ export interface HeadingProps extends HeadingBaseProps {
 }
 
 /**
- * Pre-styled GOV.UK headings
+ * Pre-styled GOV.UK headings, rendering as a regular HTML heading
  * Removes the need to style HTML headings manually
- *
- * @returns A heading component, rendering as a regular HTML heading
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function Heading({ type: HeadingType, as: AsComponent, className, qa, ...rest }: HeadingProps) {
   const Element = AsComponent || HeadingType;
   const gdsHeadingClassName = gdsHeadingClasses[HeadingType];

@@ -24,7 +24,7 @@ interface LoanEditTableViewProps {
 
 type LoanEditTableProps = LoanEditStore & (LoanEditTableEditProps | LoanEditTableViewProps);
 
-export function LoanEditTable({ data, validator, status, mode, onEdit, onEditLink }: LoanEditTableProps) {
+export const LoanEditTable = ({ data, validator, status, mode, onEdit, onEditLink }: LoanEditTableProps) => {
   const isEditMode = mode === "edit";
   const isViewMode = mode === "view";
   const isDisabled = status === EditorStatus.Saving;
@@ -167,4 +167,4 @@ export function LoanEditTable({ data, validator, status, mode, onEdit, onEditLin
       {isViewMode ? <LoanEdit.Custom qa="edit-loan" value={x => isViewMode && x.isEditable && onEditLink} /> : null}
     </LoanEdit.Table>
   );
-}
+};

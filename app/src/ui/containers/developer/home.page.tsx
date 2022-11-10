@@ -40,6 +40,6 @@ export const HomeRoute = defineRoute({
   routePath: "/",
   container: DeveloperHomePage,
   getParams: () => ({}),
-  accessControl: (auth: Authorisation, params: {}, config: IClientConfig) => !config.ssoEnabled,
+  accessControl: (auth: Authorisation, params: EmptyObject, config: IClientConfig) => !config.ssoEnabled,
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.home.title),
 });

@@ -1,7 +1,7 @@
 import { Authorisation, ProjectRole } from "@framework/types";
 import { DeleteProjectChangeRequestCommand } from "@server/features/pcrs/deleteProjectChangeRequestCommand";
 import { BadRequestError, NotFoundError } from "@shared/appError";
-import { getAllEnumValues } from "@shared/enumHelper";
+import { getAllNumericalEnumValues } from "@shared/enumHelper";
 import { PCRStatus } from "@framework/constants";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
@@ -82,7 +82,7 @@ describe("DeleteProjectChangeRequestCommand", () => {
   });
 
   const draftItemsToExclude = [PCRStatus.Draft, PCRStatus.Unknown];
-  const filteredPcrStates = getAllEnumValues<PCRStatus>(PCRStatus).filter(x => !draftItemsToExclude.includes(x));
+  const filteredPcrStates = getAllNumericalEnumValues(PCRStatus).filter(x => !draftItemsToExclude.includes(x));
 
   filteredPcrStates.forEach(status => {
     test(`cannot delete pcr in ${PCRStatus[status]} status`, async () => {

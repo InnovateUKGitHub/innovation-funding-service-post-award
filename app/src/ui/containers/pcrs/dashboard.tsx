@@ -19,7 +19,7 @@ interface PCRDashboardData {
   messages: string[];
 }
 
-function PCRsDashboardComponent(props: PCRDashboardParams & PCRDashboardData & BaseProps) {
+const PCRsDashboardComponent = (props: PCRDashboardParams & PCRDashboardData & BaseProps) => {
   const { isActive: isProjectActive } = useProjectStatus();
 
   const combined = Pending.combine({
@@ -133,7 +133,7 @@ function PCRsDashboardComponent(props: PCRDashboardParams & PCRDashboardData & B
   };
 
   return <ACC.PageLoader pending={combined} render={x => renderContents(x.project, x.pcrs)} />;
-}
+};
 
 const PCRsDashboardContainer = (props: PCRDashboardParams & BaseProps) => {
   const stores = useStores();

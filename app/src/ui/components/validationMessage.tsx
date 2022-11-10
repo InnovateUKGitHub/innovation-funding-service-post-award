@@ -67,12 +67,12 @@ export interface IValidationMessageProps {
   markdown?: boolean;
 }
 
-export function ValidationMessage({
+export const ValidationMessage = ({
   markdown,
   message,
   messageType,
   qa = "validation-message",
-}: IValidationMessageProps) {
+}: IValidationMessageProps) => {
   if (typeof message === "string" && !message.length) return null;
 
   const isBlockElement = !["string", "number", "function"].includes(typeof message);
@@ -102,4 +102,4 @@ export function ValidationMessage({
       </SimpleString>
     </div>
   );
-}
+};

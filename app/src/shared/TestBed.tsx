@@ -9,7 +9,7 @@ import { ContentProvider, IStores, StoresProvider } from "@ui/redux";
 export type TestBedStore = Partial<IStores>;
 
 export interface ITestBedProps {
-  children: React.ReactElement<{}>;
+  children: React.ReactElement;
   competitionType?: string;
   stores?: TestBedStore;
   isServer?: boolean;
@@ -23,7 +23,11 @@ export interface ITestBedProps {
   shouldOmitRouterProvider?: boolean;
 }
 
-// Note: When testing a component that consumes <Content />, it expects a provider to be present.
+/**
+ * TestBed is a component configured with all stores needed for tests to run
+ *
+ * Note: When testing a component that consumes <Content />, it expects a provider to be present.
+ */
 export function TestBed({
   isServer = false,
   stores,
@@ -53,9 +57,9 @@ export function TestBed({
         displayTitle: "stub-displayTitle",
       }),
     },
-  } as unknown as TestBedStore;
+  };
 
-  const storesValue = _merge(stubStores, stores);
+  const storesValue = _merge(stubStores, stores) as Required<TestBedStore>;
 
   // Note: We need a way of upfront toggling this can use 'MountedProvider'
   const testBedMountState = { isServer, isClient: !isServer };
@@ -65,7 +69,7 @@ export function TestBed({
   const Providers = (
     <mountedContext.Provider value={testBedMountState}>
       <PageTitleProvider title={pageTitle}>
-        <StoresProvider value={storesValue as any}>
+        <StoresProvider value={storesValue}>
           <ContentProvider value={new Copy(competitionType)}>{children}</ContentProvider>
         </StoresProvider>
       </PageTitleProvider>

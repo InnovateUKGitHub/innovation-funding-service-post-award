@@ -2,7 +2,7 @@ import { useContent } from "@ui/hooks";
 import { SimpleString } from "./renderers";
 import { Section } from "./layout";
 
-export function ProjectInactive() {
+export const ProjectInactive = () => {
   const { getContent } = useContent();
 
   const inactiveMessage = getContent(x => x.components.projectInactiveContent.projectInactiveMessage);
@@ -12,4 +12,4 @@ export function ProjectInactive() {
       <SimpleString>{inactiveMessage}</SimpleString>
     </Section>
   );
-}
+};

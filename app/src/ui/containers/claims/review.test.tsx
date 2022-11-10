@@ -6,10 +6,6 @@ import { testInitialiseInternationalisation } from "@shared/testInitialiseIntern
 import { CopyNamespaces } from "@copy/data";
 
 const stubContent = {
-  projectLabels: {
-    competitionNameLabel: "stub-competitionNameLabel",
-    competitionTypeLabel: "stub-competitionTypeLabel",
-  },
   documentMessages: {
     uploadInstruction: "stub-uploadInstruction",
     noDocumentsUploaded: "stub-noDocumentsUploaded",
@@ -48,6 +44,12 @@ const stubContent = {
   },
 };
 
+type ClaimMessagesKeys = keyof typeof stubContent.claimsMessages;
+type ClaimReviewKeys = keyof typeof stubContent.pages.claimReview;
+type ClaimLabelKeys = keyof typeof stubContent.claimsLabels;
+type ClaimDocumentsKeys = keyof typeof stubContent.pages.claimDocuments;
+type DocumentMessageKeys = keyof typeof stubContent.pages.projectDocuments;
+
 const ktpContent = {
   pages: {
     claimReview: {
@@ -66,22 +68,6 @@ describe("useReviewContent()", () => {
   });
 
   test.each`
-    name                      | property
-    ${"competitionNameLabel"} | ${"competitionNameLabel"}
-    ${"competitionTypeLabel"} | ${"competitionTypeLabel"}
-  `(
-    "with message $property",
-    ({ name, property }: { name: string; property: keyof typeof stubContent.pages.claimReview }) => {
-      const { result } = renderPageContent();
-
-      const content = (result.current as any)[name];
-      const expectedContent = stubContent.pages.claimReview[property];
-
-      expect(content).toBe(expectedContent);
-    },
-  );
-
-  test.each`
     name                                       | property
     ${"backLink"}                              | ${"backLink"}
     ${"optionQueryClaim"}                      | ${"optionQueryClaim"}
@@ -97,10 +83,10 @@ describe("useReviewContent()", () => {
     ${"labelInputUpload"}                      | ${"labelInputUpload"}
     ${"accordionTitleSupportingDocumentsForm"} | ${"accordionTitleSupportingDocumentsForm"}
     ${"additionalInfo"}                        | ${"additionalInfo"}
-  `("with $property", ({ name, property }: { name: string; property: keyof typeof stubContent.pages.claimReview }) => {
+  `("with $property", ({ name, property }: { name: ClaimReviewKeys; property: ClaimReviewKeys }) => {
     const { result } = renderPageContent();
 
-    const content = (result.current as any)[name];
+    const content = result.current[name];
     const expectedContent = stubContent.pages.claimReview[property];
 
     expect(content).toBe(expectedContent);
@@ -109,33 +95,27 @@ describe("useReviewContent()", () => {
   test.each`
     name            | property
     ${"finalClaim"} | ${"finalClaim"}
-  `(
-    "with message $property",
-    ({ name, property }: { name: string; property: keyof typeof stubContent.claimsMessages }) => {
-      const { result } = renderPageContent();
+  `("with message $property", ({ name, property }: { name: ClaimMessagesKeys; property: ClaimMessagesKeys }) => {
+    const { result } = renderPageContent();
 
-      const content = (result.current as any)[name];
-      const expectedContent = stubContent.claimsMessages[property];
+    const content = result.current[name];
+    const expectedContent = stubContent.claimsMessages[property];
 
-      expect(content).toBe(expectedContent);
-    },
-  );
+    expect(content).toBe(expectedContent);
+  });
 
   test.each`
     name                        | property
     ${"accordionTitleForecast"} | ${"accordionTitleForecast"}
     ${"accordionTitleClaimLog"} | ${"accordionTitleClaimLog"}
-  `(
-    "with labels $property",
-    ({ name, property }: { name: string; property: keyof typeof stubContent.claimsLabels }) => {
-      const { result } = renderPageContent();
+  `("with labels $property", ({ name, property }: { name: ClaimLabelKeys; property: ClaimLabelKeys }) => {
+    const { result } = renderPageContent();
 
-      const content = (result.current as any)[name];
-      const expectedContent = stubContent.claimsLabels[property];
+    const content = result.current[name];
+    const expectedContent = stubContent.claimsLabels[property];
 
-      expect(content).toBe(expectedContent);
-    },
-  );
+    expect(content).toBe(expectedContent);
+  });
 
   test("with documentMessages", () => {
     const { result } = renderPageContent();
@@ -149,10 +129,10 @@ describe("useReviewContent()", () => {
     ${"descriptionLabel"} | ${"descriptionLabel"}
   `(
     "with claimDocuments $property",
-    ({ name, property }: { name: string; property: keyof typeof stubContent.pages.claimDocuments }) => {
+    ({ name, property }: { name: ClaimDocumentsKeys; property: ClaimDocumentsKeys }) => {
       const { result } = renderPageContent();
 
-      const content = (result.current as any)[name];
+      const content = result.current[name];
       const expectedContent = stubContent.pages.claimDocuments[property];
 
       expect(content).toBe(expectedContent);
@@ -165,10 +145,10 @@ describe("useReviewContent()", () => {
     ${"searchDocumentsMessage"}     | ${"searchDocumentsMessage"}
   `(
     "with projectDocuments $property",
-    ({ name, property }: { name: string; property: keyof typeof stubContent.pages.projectDocuments }) => {
+    ({ name, property }: { name: DocumentMessageKeys; property: DocumentMessageKeys }) => {
       const { result } = renderPageContent();
 
-      const content = (result.current as any)[name];
+      const content = result.current[name];
       const expectedContent = stubContent.pages.projectDocuments[property];
 
       expect(content).toBe(expectedContent);
