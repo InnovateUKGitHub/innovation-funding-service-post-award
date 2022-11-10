@@ -1,6 +1,7 @@
 import React from "react";
 import * as ACC from "@ui/components";
 import { useStores } from "@ui/redux";
+import { EditorStatus } from "@ui/constants/enums";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { PCRItemForPartnerAdditionDto } from "@framework/dtos";
@@ -78,7 +79,12 @@ class Component extends React.Component<
           />
         </ACC.Section>
 
-        <Form.Form qa="saveAndContinue" data={pcrItem} onSubmit={() => onSave(false)}>
+        <Form.Form
+          qa="saveAndContinue"
+          data={pcrItem}
+          onSubmit={() => onSave(false)}
+          isSaving={this.props.status === EditorStatus.Saving}
+        >
           <Form.Fieldset>
             <Form.Submit>
               <ACC.Content value={x => x.pcrItem.submitButton} />
