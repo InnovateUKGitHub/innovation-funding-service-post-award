@@ -73,6 +73,7 @@ export const DocumentTable = <T extends DocumentSummaryDto>({
 export interface DocumentTableWithDeleteProps<T extends DocumentSummaryDto> extends DocumentsBase<T> {
   hideRemove?: (d: T) => boolean;
   onRemove: (d: T) => void;
+  disabled?: boolean;
 }
 
 export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithDeleteProps<DocumentSummaryDto>> = ({
@@ -80,6 +81,7 @@ export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithD
   qa,
   hideRemove,
   onRemove,
+  disabled,
 }: DocumentTableWithDeleteProps<DocumentSummaryDto>) => {
   if (!documents.length) return <DocumentsUnavailable />;
 
@@ -102,7 +104,7 @@ export const DocumentTableWithDelete: React.FunctionComponent<DocumentTableWithD
                   style={{ marginLeft: "15px" }}
                   onClick={() => onRemove(x)}
                   value={x.id}
-                  disabled={!x.isOwner}
+                  disabled={!x.isOwner || disabled}
                 >
                   Remove
                 </Form.Button>
