@@ -3,6 +3,7 @@ import * as Dtos from "@framework/dtos";
 import { DocumentDescription } from "@framework/constants";
 import { useContent } from "@ui/hooks";
 import { useStores } from "@ui/redux";
+import { EditorStatus } from "@ui/constants/enums";
 import { PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
 import { PcrStepProps } from "@ui/containers/pcrs/pcrWorkflow";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
@@ -121,7 +122,12 @@ export const JesStepUI = ({ documents, documentsEditor, project, ...props }: Jes
         </>
       )}
 
-      <Form.Form qa="saveAndContinue" data={props.pcrItem} onSubmit={() => props.onSave(false)}>
+      <Form.Form
+        qa="saveAndContinue"
+        data={props.pcrItem}
+        onSubmit={() => props.onSave(false)}
+        isSaving={props.status === EditorStatus.Saving}
+      >
         <Form.Fieldset>
           <Form.Submit>{submitButton}</Form.Submit>
 
