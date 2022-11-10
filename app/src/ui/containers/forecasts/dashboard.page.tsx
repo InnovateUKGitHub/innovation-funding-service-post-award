@@ -16,9 +16,7 @@ interface Params {
   projectId: string;
 }
 
-interface Callbacks {}
-
-class ProjectForecastComponent extends ContainerBase<Params, Data, Callbacks> {
+class ProjectForecastComponent extends ContainerBase<Params, Data> {
   render() {
     const combined = Pending.combine({
       projectDetails: this.props.projectDetails,

@@ -27,7 +27,7 @@ const getInitialFullDateState = (props: FullDateInputProps) => {
   }
 };
 
-export function FullDateInput(props: FullDateInputProps) {
+export const FullDateInput = (props: FullDateInputProps) => {
   const init = getInitialFullDateState(props);
   const [day, setDay] = useState<string>(init.day);
   const [month, setMonth] = useState<string>(init.month);
@@ -130,7 +130,7 @@ export function FullDateInput(props: FullDateInputProps) {
       </div>
     </div>
   );
-}
+};
 
 interface MonthYearInputProps extends InputProps<Date> {
   startOrEnd: "start" | "end";
@@ -153,7 +153,7 @@ const getInitialMonthYearState = (props: FullDateInputProps) => {
   }
 };
 
-export function MonthYearInput(props: MonthYearInputProps) {
+export const MonthYearInput = (props: MonthYearInputProps) => {
   const init = getInitialMonthYearState(props);
   const [month, setMonth] = useState<string>(init.month);
   const [year, setYear] = useState<string>(init.year);
@@ -250,4 +250,4 @@ export function MonthYearInput(props: MonthYearInputProps) {
       </div>
     </div>
   );
-}
+};

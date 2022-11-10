@@ -1,15 +1,23 @@
-import { IClientUser, LoadingStatus } from "@framework/types";
+import { IAppError, IClientUser, LoadingStatus } from "@framework/types";
 import { IDataSelector } from "../../selectors/common";
 import { AsyncThunk, createAction } from "./createAction";
 
 type DataLoadThunk = typeof dataLoadAction;
 export type DataLoadAction = ReturnType<DataLoadThunk>;
 
-export function dataLoadAction(id: string, store: string, status: LoadingStatus, data: any, error?: any) {
+/**
+ * Data Load action creator.
+ * Data is as close to _any_ type as it's possible to be.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function dataLoadAction(id: string, store: string, status: LoadingStatus, data: any, error?: IAppError | null) {
   const payload = { id, store, status, data, error };
   return createAction("DATA_LOAD", payload);
 }
 
+/**
+ * Conditional Load action creator
+ */
 export function conditionalLoad<T>(
   selector: IDataSelector<T>,
   load: (params: { user: IClientUser }) => Promise<T>,

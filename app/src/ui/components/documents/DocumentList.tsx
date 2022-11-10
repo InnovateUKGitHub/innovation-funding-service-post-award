@@ -6,7 +6,7 @@ import { LinksList } from "../linksList";
 import { DocumentsUnavailable } from "./DocumentsUnavailable";
 import { DocumentsBase } from "./documents.interface";
 
-export function DocumentList({ documents = [], qa }: DocumentsBase) {
+export const DocumentList = ({ documents = [], qa }: DocumentsBase) => {
   if (!documents.length) return <DocumentsUnavailable />;
 
   // @TODO: should server not do this?
@@ -23,7 +23,7 @@ export function DocumentList({ documents = [], qa }: DocumentsBase) {
       <LinksList openNewWindow links={listItems} />
     </div>
   );
-}
+};
 
 interface DocumentListWithDeleteProps extends DocumentsBase {
   onRemove: (d: DocumentSummaryDto) => void;
@@ -31,7 +31,7 @@ interface DocumentListWithDeleteProps extends DocumentsBase {
 
 const Form = createTypedForm<DocumentSummaryDto[]>();
 
-export function DocumentListWithDelete({ documents = [], qa, onRemove }: DocumentListWithDeleteProps) {
+export const DocumentListWithDelete = ({ documents = [], qa, onRemove }: DocumentListWithDeleteProps) => {
   if (!documents.length) return <DocumentsUnavailable />;
 
   // @TODO: should server not do this?
@@ -68,4 +68,4 @@ export function DocumentListWithDelete({ documents = [], qa, onRemove }: Documen
       </Form.Form>
     </div>
   );
-}
+};

@@ -17,7 +17,7 @@ import {
 } from "@framework/types";
 import * as Entities from "@framework/entities";
 import { PicklistEntry } from "jsforce";
-import { getAllEnumValues } from "@shared/enumHelper";
+import { getAllNumericalEnumValues } from "@shared/enumHelper";
 import { DocumentDescriptionMapper, SalesforceDocumentMapper } from "@server/repositories/mappers/documentMapper";
 import { DocumentEntity } from "@framework/entities/document";
 import { DocumentFilter } from "@framework/types/DocumentFilter";
@@ -452,7 +452,7 @@ class MonitoringReportHeaderTestRepository
   }
 
   create(item: Repositories.ISalesforceMonitoringReportHeader): Promise<string> {
-    item.Id = `New resonse ${this.Items.length + 1}`;
+    item.Id = `New response ${this.Items.length + 1}`;
     super.insertOne(item);
     return Promise.resolve(item.Id);
   }
@@ -467,7 +467,7 @@ class MonitoringReportHeaderTestRepository
 
   getMonitoringReportStatuses(): Promise<PicklistEntry[]> {
     return Promise.resolve(
-      getAllEnumValues<MonitoringReportStatus>(MonitoringReportStatus)
+      getAllNumericalEnumValues(MonitoringReportStatus)
         // convert to string representation of enum value
         .map(x => MonitoringReportStatus[x])
         .map(statusLabel => ({

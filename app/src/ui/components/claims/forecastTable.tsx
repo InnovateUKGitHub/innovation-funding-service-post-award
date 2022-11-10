@@ -75,8 +75,8 @@ export class ForecastTable extends React.Component<Props> {
       const width1 = Math.floor(col1[0].getBoundingClientRect().width);
       const width2 = Math.floor(col2[0].getBoundingClientRect().width);
 
-      Array.from(col2).forEach((x: any) => (x.style.right = `${width1}px`));
-      Array.from(col3).forEach((x: any) => (x.style.right = `${width1 + width2}px`));
+      (Array.from(col2) as HTMLElement[]).forEach(x => (x.style.right = `${width1}px`));
+      (Array.from(col3) as HTMLElement[]).forEach(x => (x.style.right = `${width1 + width2}px`));
     });
   }
 
@@ -541,6 +541,9 @@ export class ForecastTable extends React.Component<Props> {
   );
 }
 
+/**
+ * gets the overhead rate
+ */
 function getOverheadRate(
   partner: ForecastData["partner"],
   project: ForecastData["project"],
@@ -570,6 +573,9 @@ function getOverheadRate(
   };
 }
 
+/**
+ * calculates overhead value
+ */
 export function calculateOverheadCell(
   overheadRate: number,
   labourCategoryId: string,

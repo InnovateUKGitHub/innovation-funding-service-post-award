@@ -36,11 +36,11 @@ export const usePageValidationMessage = (
 };
 
 export interface PageProps {
-  pageTitle: React.ReactElement<{}>;
+  pageTitle: React.ReactElement<AnyObject>;
   children: React.ReactNode;
-  backLink?: React.ReactElement<{}>;
+  backLink?: React.ReactElement<AnyObject>;
   error?: IAppError | null;
-  validator?: Results<{}> | Results<{}>[] | null;
+  validator?: Results<AnyObject> | Results<AnyObject>[] | null;
   project?: ProjectDto;
   partner?: PartnerDto;
   qa?: string;

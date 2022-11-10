@@ -27,7 +27,7 @@ const prepareMessage = (errorMessage: string | null | undefined): React.ReactNod
   return null;
 };
 
-export function ValidationSummary({ validation, compressed }: Props) {
+export const ValidationSummary = ({ validation, compressed }: Props) => {
   const { getContent } = useContent();
 
   const results: Result[] = [];
@@ -54,6 +54,9 @@ export function ValidationSummary({ validation, compressed }: Props) {
     </div>
   );
 
+  /**
+   * populate results array with validation
+   */
   function populateResults(): void {
     if (validation && validation.errors) {
       validation.errors
@@ -67,7 +70,7 @@ export function ValidationSummary({ validation, compressed }: Props) {
               results.push(x.listValidation);
             } else {
               const childErrors = flatten(
-                (x as NestedResult<Results<{}>>).results.filter(y => !y.isValid).map(y => y.errors),
+                (x as NestedResult<Results<ResultBase>>).results.filter(y => !y.isValid).map(y => y.errors),
               );
               childErrors.forEach(e => results.push(e));
             }
@@ -78,6 +81,9 @@ export function ValidationSummary({ validation, compressed }: Props) {
     }
   }
 
+  /**
+   * creates links for the results
+   */
   function createResultsLinks(res: Result[]): JSX.Element[] {
     return res.map(x => (
       <li key={uuid()}>
@@ -85,4 +91,4 @@ export function ValidationSummary({ validation, compressed }: Props) {
       </li>
     ));
   }
-}
+};

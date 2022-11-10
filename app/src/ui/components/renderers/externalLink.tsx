@@ -1,4 +1,4 @@
-export interface ExternalLinkProps extends React.AnchorHTMLAttributes<{}> {
+export interface ExternalLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string;
   children: string | React.ReactElement;
 }

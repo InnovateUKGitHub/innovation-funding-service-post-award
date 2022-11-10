@@ -15,7 +15,7 @@ export interface LinksListProps {
   renderAfterLink?: (x: number) => React.ReactNode;
 }
 
-export function LinksList({ links = [], openNewWindow = false, renderAfterLink }: LinksListProps) {
+export const LinksList = ({ links = [], openNewWindow = false, renderAfterLink }: LinksListProps) => {
   const { getContent } = useContent();
 
   if (!links?.length) return null;
@@ -52,4 +52,4 @@ export function LinksList({ links = [], openNewWindow = false, renderAfterLink }
       ))}
     </>
   );
-}
+};

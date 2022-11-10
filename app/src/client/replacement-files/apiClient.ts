@@ -249,7 +249,7 @@ const ajaxJson = <T>(url: string, opts?: RequestInit): Promise<T> => {
   return ajax(url, options);
 };
 
-const ajaxPost = <T>(url: string, body: {} = {}, opts?: RequestInit) => {
+const ajaxPost = <T>(url: string, body: AnyObject = {}, opts?: RequestInit) => {
   const options: RequestInit = Object.assign({}, opts, {
     method: "POST",
     body: JSON.stringify(body),
@@ -297,7 +297,7 @@ const ajaxPostFormData = <T>(url: string, formData: FormData, opts?: RequestInit
   return ajax<T>(url, options);
 };
 
-const ajaxPut = <T>(url: string, body: {}, opts?: RequestInit) => {
+const ajaxPut = <T>(url: string, body: AnyObject, opts?: RequestInit) => {
   const options: RequestInit = Object.assign({}, opts, {
     method: "PUT",
     body: JSON.stringify(body),

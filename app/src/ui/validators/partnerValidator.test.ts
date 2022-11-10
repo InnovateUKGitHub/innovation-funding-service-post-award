@@ -6,7 +6,7 @@ import {
   PartnerSpendProfileStatusMapper,
   PartnerStatusMapper,
 } from "@server/features/partners/mapToPartnerDto";
-import { getAllEnumValues } from "@shared/enumHelper";
+import { getAllNumericalEnumValues } from "@shared/enumHelper";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import {
   BankCheckStatus,
@@ -20,7 +20,7 @@ import { TestContext } from "@tests/test-utils/testContextProvider";
 describe("Partner Validator", () => {
   describe("partnerStatus", () => {
     describe("should validate partner status transitions", () => {
-      const statuses = getAllEnumValues(PartnerStatus).filter(x => x !== PartnerStatus.Unknown);
+      const statuses = getAllNumericalEnumValues(PartnerStatus).filter(x => x !== PartnerStatus.Unknown);
 
       const statusPairs: PartnerStatus[][] = [];
 

@@ -13,7 +13,7 @@ export interface SummaryListProps {
   className?: never;
 }
 
-export function SummaryList({ qa, noBorders, ...props }: SummaryListProps) {
+export const SummaryList = ({ qa, noBorders, ...props }: SummaryListProps) => {
   return (
     <dl
       {...props}
@@ -24,7 +24,7 @@ export function SummaryList({ qa, noBorders, ...props }: SummaryListProps) {
       })}
     />
   );
-}
+};
 
 interface SummaryListItemProps {
   label: string | ContentSelector;
@@ -45,7 +45,7 @@ interface SummaryListItemMarkdownProps extends SummaryListItemProps {
 
 type Props = SummaryListItemMarkdownProps | SummaryListItemNotMarkdownProps;
 
-export function SummaryListItem({ content, action, qa, validation, label, isMarkdown = false }: Props) {
+export const SummaryListItem = ({ content, action, qa, validation, label, isMarkdown = false }: Props) => {
   const { getContent } = useContent();
 
   const hasError = validation && !validation.isValid && validation.showValidationErrors;
@@ -66,4 +66,4 @@ export function SummaryListItem({ content, action, qa, validation, label, isMark
       <dd className="govuk-summary-list__actions">{action}</dd>
     </div>
   );
-}
+};

@@ -6,9 +6,12 @@ import { useEnumDocuments } from "./allowed-documents.hook";
 
 interface EnumDocumentsProps {
   documentsToCheck: Readonly<DocumentDescription[]>;
-  children: (docum: DropdownOption[]) => React.ReactElement;
+  children: (documents: DropdownOption[]) => React.ReactElement;
 }
 
+/**
+ * wrapper component to allow use of `useEnumDocuments` hook with class components
+ */
 export function EnumDocuments({ documentsToCheck, children }: EnumDocumentsProps) {
   const documents = useEnumDocuments(DocumentDescription, documentsToCheck);
 

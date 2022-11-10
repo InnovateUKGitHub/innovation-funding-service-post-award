@@ -11,6 +11,12 @@ const initialProjectStatusState: ProjectStatusContext = {
   status: ProjectStatus.Unknown,
 };
 
+/**
+ * **useProjectStatus**
+ *
+ * hook gets projectStatus from the ProjectActiveContext.
+ * defaults to initial project status state.
+ */
 export function useProjectStatus(): ProjectStatusContext {
   const projectStatus = useContext(ProjectActiveContext);
 

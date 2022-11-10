@@ -21,6 +21,9 @@ describe("PcrSummary", () => {
   const stubPartners: PartnerDto[] = [firstPartner, secondPartner];
 
   describe("<PcrSummaryProvider>", () => {
+    /**
+     * Gets the stub element for the context
+     */
     function StubPcrSummaryContextHookFetcher() {
       const context = usePcrSummaryContext();
 

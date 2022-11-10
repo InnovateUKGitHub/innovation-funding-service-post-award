@@ -14,6 +14,9 @@ interface PcrTypeContent {
   description: string;
 }
 
+/**
+ * Gets content for PCR types guidance
+ */
 export function PcrTypesGuidance({ qa, types }: PcrTypesGuidanceProps) {
   const { getContent } = useContent();
 

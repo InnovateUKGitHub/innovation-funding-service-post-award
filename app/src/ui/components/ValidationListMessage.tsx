@@ -8,7 +8,7 @@ export interface ValidationListMessageProps<MessageContent = JSX.Element | strin
   items?: string[];
 }
 
-export function ValidationListMessage({ before, items = [], after, ...props }: ValidationListMessageProps) {
+export const ValidationListMessage = ({ before, items = [], after, ...props }: ValidationListMessageProps) => {
   if (!items.length) return null;
 
   const messages = items.map(item => <li key={item}>{item}</li>);
@@ -22,4 +22,4 @@ export function ValidationListMessage({ before, items = [], after, ...props }: V
   );
 
   return <ValidationMessage {...props} messageType="info" message={markup} />;
-}
+};

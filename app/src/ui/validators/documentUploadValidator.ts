@@ -1,7 +1,7 @@
 import { FileTypeNotAllowedError } from "@server/repositories";
 import { NestedResult } from "@ui/validation";
 import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
-import { getAllEnumValues } from "@shared/enumHelper";
+import { getAllNumericalEnumValues } from "@shared/enumHelper";
 import { DocumentDescription } from "@framework/constants";
 import { IAppOptions } from "@framework/types/IAppOptions";
 import { IFileWrapper } from "@framework/types";
@@ -59,7 +59,7 @@ export class DocumentUploadDtoValidator extends Results<DocumentUploadDto> {
       ? Validation.permittedValues(
           this,
           model.description,
-          getAllEnumValues(DocumentDescription),
+          getAllNumericalEnumValues(DocumentDescription),
           "Not a valid description",
         )
       : Validation.valid(this);
@@ -90,7 +90,7 @@ export class MultipleDocumentUploadDtoValidator extends Results<MultipleDocument
       ? Validation.permittedValues(
           this,
           model.description,
-          getAllEnumValues(DocumentDescription),
+          getAllNumericalEnumValues(DocumentDescription),
           "Not a valid description",
         )
       : Validation.valid(this);

@@ -27,6 +27,9 @@ interface DocumentDisplayProps<T extends DocumentSummaryDto>
   documents: T[];
 }
 
+/**
+ * Component displays uploaded documents
+ */
 function DocumentDisplay<T extends DocumentSummaryDto>({
   hideHeader,
   hideSubtitle,

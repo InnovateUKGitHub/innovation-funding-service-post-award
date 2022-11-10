@@ -81,8 +81,8 @@ const stubBaseProps = {
         costCategoryId: "4",
       }),
     },
-  } as any,
-} as Partial<BaseProps>;
+  },
+} as unknown as Partial<BaseProps>;
 
 const stubProps = {
   ...stubBaseProps,
@@ -108,7 +108,7 @@ const stubProps = {
       },
     },
     state: LoadingStatus.Done,
-  } as any,
+  },
   forecastDetail: {
     data: {},
     state: LoadingStatus.Done,
@@ -117,7 +117,7 @@ const stubProps = {
     data: {},
     state: LoadingStatus.Done,
   } as Pending<DocumentSummaryDto[]>,
-} as ContainerProps<EditClaimDetailsParams, EditClaimLineItemsData, EditClaimLineItemsCallbacks>;
+} as unknown as ContainerProps<EditClaimDetailsParams, EditClaimLineItemsData, EditClaimLineItemsCallbacks>;
 
 describe("editClaimLineItems", () => {
   const setup = (
@@ -181,9 +181,9 @@ describe("editClaimLineItems", () => {
 
     describe("with sbri content", () => {
       test.each`
-        name                                 | competitionType
-        ${"with 'SBRI' competition type"}    | ${"SBRI"}
-        ${"with 'SBRI IFS' competiton type"} | ${"SBRI IFS"}
+        name                                  | competitionType
+        ${"with 'SBRI' competition type"}     | ${"SBRI"}
+        ${"with 'SBRI IFS' competition type"} | ${"SBRI IFS"}
       `("$name", ({ competitionType }) => {
         const stubSbriProps = {
           ...stubProps,

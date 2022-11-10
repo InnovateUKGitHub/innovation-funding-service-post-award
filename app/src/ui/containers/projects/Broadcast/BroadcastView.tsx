@@ -5,6 +5,11 @@ import { useContent } from "@ui/hooks";
 
 type BroadcastViewProps = BroadcastDto;
 
+/**
+ * ### BroadcastView
+ *
+ * React component displays individual broadcast
+ */
 export function BroadcastView({ id, title, content }: BroadcastViewProps) {
   const { getContent } = useContent();
   const route = BroadcastPageRoute.getLink({ broadcastId: id });

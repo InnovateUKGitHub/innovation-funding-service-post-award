@@ -56,6 +56,9 @@ const filterItems = <T extends DocumentSummaryDto>(valueToSearch: string, items:
   return items.filter(x => filteredItemsIds.includes(x.id));
 };
 
+/**
+ * hook to handle document search functionality
+ */
 export function useDocumentSearch<T extends DocumentSummaryDto>(disableSearch: boolean, originalDocuments: T[]) {
   const { features } = useStores().config.getConfig();
   const { isClient } = useMounted();

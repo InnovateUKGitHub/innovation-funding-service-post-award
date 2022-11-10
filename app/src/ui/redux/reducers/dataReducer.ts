@@ -36,7 +36,7 @@ const dataStoreReducer =
   (state: { [key: string]: IDataStore<TData> } = {}, action: DataLoadAction | TransitionActions) => {
     if (action.type === "DATA_LOAD" && action.payload?.store === storeKey) {
       const existing = state[action.payload.id];
-      const err = action.payload.error;
+      const err = action.payload.error || null;
 
       const pending: IDataStore<TData> = {
         status: action.payload.status,
@@ -65,7 +65,7 @@ const dataStoreReducer =
     return state;
   };
 
-export const dataReducer = combineReducers({
+const reducers = {
   jesOnlyAccounts: dataStoreReducer<Dtos.AccountDto[]>("jesOnlyAccounts"),
   broadcasts: dataStoreReducer<Dtos.BroadcastDto[]>("broadcasts"),
   broadcast: dataStoreReducer<Dtos.BroadcastDto>("broadcast"),
@@ -122,4 +122,8 @@ export const dataReducer = combineReducers({
   user: dataStoreReducer<{ [key: string]: ProjectRole }>("user"),
   loans: dataStoreReducer<Dtos.LoanDto[]>("loans"),
   loan: dataStoreReducer<Dtos.LoanDto | Dtos.LoanDto>("loan"),
-});
+};
+
+export type DataStateKeys = keyof typeof reducers;
+
+export const dataReducer = combineReducers(reducers);

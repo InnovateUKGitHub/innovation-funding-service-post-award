@@ -2,6 +2,13 @@ import { useStores } from "@ui/redux";
 import { ErrorContainer, NotFoundError } from "../components/errors";
 import { defineRoute } from "./containerBase";
 
+/**
+ * Error Route Container
+ *
+ * fetches error from stores and returns ErrorContainer component
+ *
+ * defaults to "Unknown Error"
+ */
 function ErrorRouteContainer() {
   const stores = useStores();
   const errorPayload = stores.errorDetails.errors() ?? { errorCode: 418, errorType: "UNKNOWN ERROR" };
@@ -9,7 +16,7 @@ function ErrorRouteContainer() {
   return <ErrorContainer {...errorPayload} />;
 }
 
-export const ErrorRoute = defineRoute<{}>({
+export const ErrorRoute = defineRoute({
   routeName: "error",
   routePath: "/error",
   container: ErrorRouteContainer,
@@ -19,7 +26,7 @@ export const ErrorRoute = defineRoute<{}>({
 
 export const ErrorNotFoundContainer = NotFoundError;
 
-export const ErrorNotFoundRoute = defineRoute<{}>({
+export const ErrorNotFoundRoute = defineRoute({
   routeName: "errorNotFound",
   routePath: "/error-not-found",
   container: ErrorNotFoundContainer,

@@ -18,25 +18,34 @@ export type EditorAction =
   | EditorErrorAction
   | EditorResetAction;
 
+/**
+ * Action creator for update editor
+ */
 export function updateEditorAction<T>(
   id: string,
   store: string,
   dto: T,
-  validator: Results<any> | InferEditorStoreValidator<any> | null,
+  validator: Results<ResultBase> | InferEditorStoreValidator<AnyObject> | null,
 ) {
   const payload = { id, store, dto, validator };
   return createAction("EDITOR_UPDATE", payload);
 }
 
+/**
+ * action creator for handle editor submit
+ */
 export function handleEditorSubmit<T>(
   id: string,
   store: string,
   dto: T,
-  validator: Results<any> | InferEditorStoreValidator<any> | null,
+  validator: Results<ResultBase> | InferEditorStoreValidator<AnyObject> | null,
 ) {
   return createAction("EDITOR_SUBMIT", { id, store, dto, validator });
 }
 
+/**
+ * action creator for editor submit success
+ */
 export function handleEditorSuccess(id: string, editorStore: string) {
   return createAction("EDITOR_SUBMIT_SUCCESS", { id, store: editorStore });
 }
@@ -49,7 +58,9 @@ interface HandleEditorErrorParams<T> {
   scrollToTop?: boolean;
 }
 
-// @TODO - refactor to be multiple parameters
+/**
+ * Action creator for handle editor error
+ */
 export function handleEditorError<T>({ id, store, dto, error, scrollToTop = true }: HandleEditorErrorParams<T>) {
   if (scrollToTop) scrollToTheTopSmoothly();
   if (error.code === ErrorCode.VALIDATION_ERROR) {
@@ -58,6 +69,9 @@ export function handleEditorError<T>({ id, store, dto, error, scrollToTop = true
   return createAction("EDITOR_SUBMIT_ERROR", { id, store, dto, error });
 }
 
+/**
+ * Action creator for reset the editor
+ */
 export function resetEditor<TDto>(id: string, store: string, dto: TDto) {
   return createAction("EDITOR_RESET", { id, store, dto });
 }

@@ -1,14 +1,19 @@
 import { DocumentDescription, getDocumentDescriptionContentSelector } from "@framework/constants";
-import { getAllEnumValues } from "@shared/enumHelper";
+import { getAllNumericalEnumValues } from "@shared/enumHelper";
 import { DropdownOption } from "@ui/components";
 import { useContent } from "@ui/hooks";
 
+/**
+ * ### useEnumDocuments
+ *
+ * Not sure what this does exactly
+ */
 export function useEnumDocuments(
-  enumDocuments: object,
+  enumDocuments: typeof DocumentDescription,
   documentsToCheck: Readonly<DocumentDescription[]>,
 ): DropdownOption[] {
   const { getContent } = useContent();
-  const getRawDocs: number[] = getAllEnumValues(enumDocuments);
+  const getRawDocs: number[] = getAllNumericalEnumValues(enumDocuments);
 
   return getRawDocs.reduce<DropdownOption[]>((acc, doc) => {
     const isInvalidDocument = !documentsToCheck.includes(doc);

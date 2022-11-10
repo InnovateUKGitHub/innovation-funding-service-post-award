@@ -53,16 +53,16 @@ describe("<ErrorSummary />", () => {
     });
 
     describe("when authenticated", () => {
-      type ArrayOfErrorCodes = ErrorSummaryProps["code"][];
-      const availableErrorCodes = Object.keys(ErrorCode).filter(key => typeof ErrorCode[key as any] === "number");
+      const availableErrorCodes = (Object.keys(ErrorCode) as (keyof typeof ErrorCode)[]).filter(
+        key => typeof ErrorCode[key] === "number",
+      );
       const allAuthenticatedErrors = availableErrorCodes.filter(
-        // TODO: We coerce the error code to a "keyof ErrorCode", then check against what we don't want. Code open to improvement
-        key => (ErrorCode[key as any] as any) !== ErrorCode.UNAUTHENTICATED_ERROR,
-      ) as unknown as ArrayOfErrorCodes;
+        key => ErrorCode[key] !== ErrorCode.UNAUTHENTICATED_ERROR,
+      );
 
       describe("with error codes", () => {
         test.each(allAuthenticatedErrors)("with %s", errorKey => {
-          const { queryByText } = setup({ code: errorKey });
+          const { queryByText } = setup({ code: ErrorCode[errorKey] });
 
           const fallbackErrorElement = queryByText(stubContent.components.errorSummary.somethingGoneWrong);
 

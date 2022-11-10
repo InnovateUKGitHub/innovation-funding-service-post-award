@@ -332,7 +332,7 @@ describe("createTableData()", () => {
       expect(lineItems.length).toBe(2);
     });
 
-    describe("returns total row when matching items are found", () => {
+    test("returns total row when matching items are found", () => {
       const stubData: ClaimProps = {
         ...defaultStubData,
         costCategories: [],

@@ -22,7 +22,7 @@ export const LoanDrawdownExtensionStepContainer = (props: LoanDrawdownExtensionS
 
   if (!props.pcrItem.projectStartDate) throw Error("A project start is required");
 
-  const handleOnUpdate = (data: any): void => {
+  const handleOnUpdate = (data: AnyObject): void => {
     const latestState = { ...state, ...data };
 
     setState(latestState);

@@ -50,14 +50,14 @@ export interface PcrSummaryProps<TDto, TVal, TStepNames> extends ISummaryProps, 
   getViewLink: (stepName: TStepNames) => React.ReactNode;
 }
 
-export type IPCRWorkflow<T, TVal extends Results<{}>> = IWorkflow<
+export type IPCRWorkflow<T, TVal extends Results<AnyObject>> = IWorkflow<
   string,
   PcrStepProps<T, TVal>,
   PcrSummaryProps<T, TVal, string>,
   PCRWorkflowValidator
 >;
 
-export class PcrWorkflow<T extends {}, TVal extends Results<T>> extends WorkflowBase<
+export class PcrWorkflow<T extends AnyObject, TVal extends Results<T>> extends WorkflowBase<
   string,
   PcrStepProps<T, TVal>,
   PcrSummaryProps<T, TVal, string>,

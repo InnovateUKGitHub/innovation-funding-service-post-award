@@ -7,7 +7,7 @@ export interface ClaimPeriodProps {
   partner?: Pick<PartnerDto, "name" | "isWithdrawn" | "isLead">;
 }
 
-export function getClaimPeriodDate({ claim, partner }: ClaimPeriodProps) {
+export const getClaimPeriodDate = ({ claim, partner }: ClaimPeriodProps) => {
   const partnerClaim = "claim for period";
   const fallbackClaimPeriod = "Period";
   const periodId = claim.periodId + ":";
@@ -18,7 +18,7 @@ export function getClaimPeriodDate({ claim, partner }: ClaimPeriodProps) {
       {periodPrefix} {periodId} <ShortDateRange start={claim.periodStartDate} end={claim.periodEndDate} />
     </>
   );
-}
+};
 
 /**
  * @deprecated Please use getClaimPeriodDate()

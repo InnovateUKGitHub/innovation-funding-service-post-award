@@ -6,7 +6,7 @@ import { ValidationListMessage } from "../ValidationListMessage";
 
 import { ClaimProps, ClaimTableRow, createTableData } from "./utils/costCategoryTableHelper";
 
-export function ClaimTable(props: ClaimProps) {
+export const ClaimTable = (props: ClaimProps) => {
   const { getContent } = useContent();
   const CostCategoriesTable = TypedTable<ClaimTableRow>();
 
@@ -75,4 +75,4 @@ export function ClaimTable(props: ClaimProps) {
       </CostCategoriesTable.Table>
     </>
   );
-}
+};

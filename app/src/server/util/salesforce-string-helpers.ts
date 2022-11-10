@@ -1,3 +1,6 @@
+/**
+ * Takes text area and splits into an array of trimmed strings
+ */
 export function parseSfLongTextArea(unParsedString: string): string[] {
   return unParsedString
     .trim()

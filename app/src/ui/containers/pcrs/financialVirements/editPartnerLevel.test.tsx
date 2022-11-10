@@ -54,7 +54,7 @@ describe("useEditPartnerLevelContent()", () => {
     }) => {
       const { result } = renderPageContent();
 
-      const content = (result.current as any)[name];
+      const content = (result.current as unknown as Record<string, string>)[name];
       const expectedContent = stubContent.pages.financialVirementEditPartnerLevel.remainingGrantInfo[property];
 
       expect(content).toBe(expectedContent);
@@ -77,7 +77,7 @@ describe("useEditPartnerLevelContent()", () => {
     ({ name, property }: { name: string; property: keyof typeof stubContent.financialVirementLabels }) => {
       const { result } = renderPageContent();
 
-      const content = (result.current as any)[name];
+      const content = (result.current as unknown as Record<string, string>)[name] as string;
       const expectedContent = stubContent.financialVirementLabels[property];
 
       expect(content).toBe(expectedContent);

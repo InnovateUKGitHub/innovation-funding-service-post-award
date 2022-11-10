@@ -1,5 +1,9 @@
 import { LoadingStatus } from "@framework/constants";
+import { IAppError } from "@framework/types";
+import { Pending } from "@shared/pending";
+import { IDataStore, RootState } from "@ui/redux";
 import { conditionalLoad, dataLoadAction } from "@ui/redux/actions";
+import { IDataSelector } from "@ui/redux/selectors/common";
 
 describe("dataLoadAction", () => {
   test("action type is DATA_LOAD", () => {
@@ -19,32 +23,37 @@ describe("dataLoadAction", () => {
   });
 
   it("should have correct payload with error", () => {
-    const result = dataLoadAction("a", "b", 2, "d", "e");
+    const result = dataLoadAction("a", "b", 2, "d", { code: 418, message: "I'm a teapot" });
     const expected = {
       id: "a",
       store: "b",
       status: 2,
       data: "d",
-      error: "e",
+      error: { code: 418, message: "I'm a teapot" },
     };
     expect(result.payload).toMatchObject(expected);
   });
 });
 
 describe("conditionalLoad", () => {
-  const getState = () => ({} as any);
+  const getState = () => ({} as RootState);
 
   it("should return a thunk", () => {
-    const result = conditionalLoad({} as any, jest.fn());
+    const result = conditionalLoad({} as IDataSelector<unknown>, jest.fn());
     expect(typeof result).toBe("function");
   });
 
   test("no existing data dispatches Loading dataLoadAction", () => {
     const dispatch = jest.fn();
-    const selector = { get: () => null, key: 1, store: "test" } as any;
+
+    const selector = {
+      get: () => null as unknown as IDataStore<unknown>,
+      key: "1",
+      store: "test",
+    } as unknown as IDataSelector<unknown>;
     const load = jest.fn(() => new Promise(jest.fn()));
     const thunk = conditionalLoad(selector, load);
-    const action = dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, null);
+    const action = dataLoadAction(selector.key, selector.store as string, LoadingStatus.Loading, null);
 
     thunk(dispatch, getState, undefined);
     expect(dispatch).toHaveBeenCalledWith(action);
@@ -52,7 +61,9 @@ describe("conditionalLoad", () => {
 
   test("no existing data calls 'load'", async () => {
     const dispatch = jest.fn();
-    const selector = { get: () => null } as any;
+    const selector = {
+      get: () => null as unknown as IDataStore<unknown>,
+    } as unknown as IDataSelector<unknown>;
     const load = jest.fn(() => Promise.resolve());
     const thunk = conditionalLoad(selector, load);
 
@@ -62,11 +73,15 @@ describe("conditionalLoad", () => {
 
   test("no existing data dispatches Done dataLoadAction for result of 'load'", async () => {
     const dispatch = jest.fn();
-    const selector = { get: () => null, key: 1, store: "test" } as any;
+    const selector = {
+      get: () => null as unknown as IDataStore<unknown>,
+      key: "1",
+      store: "test",
+    } as unknown as IDataSelector<unknown>;
     const data = { test: 1 };
     const load = jest.fn(() => Promise.resolve(data));
     const thunk = conditionalLoad(selector, load);
-    const action = dataLoadAction(selector.key, selector.store, LoadingStatus.Done, data);
+    const action = dataLoadAction(selector.key, selector.store as string, LoadingStatus.Done, data);
 
     await thunk(dispatch, getState, undefined);
     expect(dispatch).toHaveBeenCalledTimes(2);
@@ -75,11 +90,18 @@ describe("conditionalLoad", () => {
 
   test("load error dispatches Failed dataLoadAction", async () => {
     const dispatch = jest.fn();
-    const selector = { get: () => null, key: 1, store: "test" } as any;
-    const error = new Error("I am an error");
+    const selector = {
+      get: () => null as unknown as IDataStore<unknown>,
+      key: "1",
+      store: "test",
+    } as unknown as IDataSelector<unknown>;
+    const error: IAppError = {
+      code: 418,
+      message: "I am a teapot",
+    };
     const load = jest.fn(() => Promise.reject(error));
     const thunk = conditionalLoad(selector, load);
-    const action = dataLoadAction(selector.key, selector.store, LoadingStatus.Failed, null, error);
+    const action = dataLoadAction(selector.key, selector.store as string, LoadingStatus.Failed, null, error);
 
     await thunk(dispatch, getState, undefined);
     expect(dispatch).toHaveBeenCalledTimes(2);
@@ -89,10 +111,15 @@ describe("conditionalLoad", () => {
   test("existing data in Preload state dispatches Loading dataLoadAction and calls 'load'", () => {
     const dispatch = jest.fn();
     const data = { test: "already loaded1" };
-    const selector = { get: () => ({ status: LoadingStatus.Preload, data }), key: 1, store: "test" } as any;
+    const selector: IDataSelector<unknown> = {
+      get: () => ({ status: LoadingStatus.Preload, data, error: null }),
+      key: "1",
+      store: "broadcasts",
+      getPending: () => null as unknown as Pending<unknown>,
+    };
     const load = jest.fn(() => new Promise(jest.fn()));
     const thunk = conditionalLoad(selector, load);
-    const action = dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, data);
+    const action = dataLoadAction(selector.key, selector.store as string, LoadingStatus.Loading, data);
 
     thunk(dispatch, getState, undefined);
     expect(dispatch).toHaveBeenCalledWith(action);
@@ -102,10 +129,15 @@ describe("conditionalLoad", () => {
   test("existing data in Stale state dispatches Loading dataLoadAction and calls 'load'", () => {
     const dispatch = jest.fn();
     const data = { test: "already loaded2" };
-    const selector = { get: () => ({ status: LoadingStatus.Stale, data }), key: 1, store: "test" } as any;
+    const selector: IDataSelector<unknown> = {
+      get: () => ({ status: LoadingStatus.Stale, data, error: null }),
+      key: "1",
+      store: "broadcasts",
+      getPending: () => null as unknown as Pending<unknown>,
+    };
     const load = jest.fn(() => new Promise(jest.fn()));
     const thunk = conditionalLoad(selector, load);
-    const action = dataLoadAction(selector.key, selector.store, LoadingStatus.Loading, data);
+    const action = dataLoadAction(selector.key, selector.store as string, LoadingStatus.Loading, data);
 
     thunk(dispatch, getState, undefined);
     expect(dispatch).toHaveBeenCalledWith(action);
@@ -115,7 +147,12 @@ describe("conditionalLoad", () => {
   test("existing data in Done state doesn't dispatch or load", () => {
     const dispatch = jest.fn();
     const data = { test: "already loaded3" };
-    const selector = { get: () => ({ status: LoadingStatus.Done, data }), key: 1, store: "test" } as any;
+    const selector: IDataSelector<unknown> = {
+      get: () => ({ status: LoadingStatus.Done, data, error: null }),
+      key: "1",
+      store: "broadcasts",
+      getPending: () => null as unknown as Pending<unknown>,
+    };
     const load = jest.fn(() => new Promise(jest.fn()));
     const thunk = conditionalLoad(selector, load);
 
@@ -126,7 +163,12 @@ describe("conditionalLoad", () => {
 
   test("existing data in Failed state doesn't dispatch or load", () => {
     const dispatch = jest.fn();
-    const selector = { get: () => ({ status: LoadingStatus.Failed }), key: 1, store: "test" } as any;
+    const selector: IDataSelector<unknown> = {
+      get: () => ({ status: LoadingStatus.Failed, data: {}, error: null }),
+      key: "1",
+      store: "broadcasts",
+      getPending: () => null as unknown as Pending<unknown>,
+    };
     const load = jest.fn(() => new Promise(jest.fn()));
     const thunk = conditionalLoad(selector, load);
 

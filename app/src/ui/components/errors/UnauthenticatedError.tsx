@@ -4,7 +4,7 @@ import { ExternalLink, SimpleString } from "@ui/components/renderers";
 import { UserChanger } from "@ui/containers/developer/UserChanger";
 import { useStores } from "@ui/redux";
 
-export function UnauthenticatedError() {
+export const UnauthenticatedError = () => {
   const { ssoEnabled } = useStores().config.getConfig();
 
   const contactLink = "https://apply-for-innovation-funding.service.gov.uk/info/contact";
@@ -27,4 +27,4 @@ export function UnauthenticatedError() {
       {!ssoEnabled && <UserChanger />}
     </Page>
   );
-}
+};

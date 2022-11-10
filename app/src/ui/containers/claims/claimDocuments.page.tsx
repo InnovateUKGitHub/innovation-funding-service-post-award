@@ -14,7 +14,7 @@ import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentDescriptionDto, DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { getAuthRoles } from "@framework/types";
 import { DocumentEdit, DropdownOption } from "@ui/components";
-import { getAllEnumValues } from "@shared/enumHelper";
+import { getAllNumericalEnumValues } from "@shared/enumHelper";
 import { useContent } from "@ui/hooks";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 
@@ -224,10 +224,16 @@ const ClaimDocumentsComponent = ({
   );
 };
 
-// TODO Refactor and consume this via an api from SF
+/**
+ * ### useClaimDocumentDescriptions
+ *
+ * gets the claim document descriptions
+ *
+ * TODO Refactor and consume this via an api from SF
+ */
 function useClaimDocumentDescriptions(): Pending<DocumentDescriptionDto[]> {
   const { getContent } = useContent();
-  const documentValues = getAllEnumValues(DocumentDescription);
+  const documentValues = getAllNumericalEnumValues(DocumentDescription);
 
   const claimDocumentDescriptions = documentValues.map(description => ({
     id: description,

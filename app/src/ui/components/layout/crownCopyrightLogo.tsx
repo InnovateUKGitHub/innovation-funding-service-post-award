@@ -1,4 +1,4 @@
-export const CrownCopyrightLogo = (props: React.SVGAttributes<{}>) => (
+export const CrownCopyrightLogo = (props: React.SVGAttributes<SVGElement>) => (
   <svg
     {...props}
     aria-hidden="true"

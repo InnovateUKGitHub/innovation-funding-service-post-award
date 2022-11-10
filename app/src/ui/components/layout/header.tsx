@@ -10,7 +10,7 @@ export interface HeaderProps {
   showMenu?: boolean;
 }
 
-export function Header({ showMenu = true, headingLink }: HeaderProps) {
+export const Header = ({ showMenu = true, headingLink }: HeaderProps) => {
   const stores = useStores();
   const { getContent } = useContent();
   const { setRef } = useGovFrontend("Header");
@@ -80,4 +80,4 @@ export function Header({ showMenu = true, headingLink }: HeaderProps) {
       </GovWidthContainer>
     </header>
   );
-}
+};

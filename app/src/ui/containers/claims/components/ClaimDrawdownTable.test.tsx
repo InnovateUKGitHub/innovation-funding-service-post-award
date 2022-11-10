@@ -41,15 +41,18 @@ describe("<ClaimDrawdownTable />", () => {
     },
   };
 
-  const setup = (props?: Partial<ClaimDrawdownTableProps>, stubLoanQuery: Pending<any> = Pending.done(stubLoan)) => {
+  const setup = (
+    props?: Partial<ClaimDrawdownTableProps>,
+    stubLoanQuery: Pending<LoanDto | undefined> = Pending.done(stubLoan),
+  ) => {
     const stubStore = {
       loans: {
         get: jest.fn().mockReturnValue(stubLoanQuery),
       },
-    } as any;
+    };
 
     return render(
-      <TestBed stores={stubStore as TestBedStore}>
+      <TestBed stores={stubStore as unknown as TestBedStore}>
         <ClaimDrawdownTable {...defaultProps} {...props} />
       </TestBed>,
     );
@@ -60,13 +63,13 @@ describe("<ClaimDrawdownTable />", () => {
   });
 
   describe("@returns", () => {
-    test("with no UI when compeition is not LOANS", () => {
+    test("with no UI when competition is not LOANS", () => {
       const { container } = setup({ competitionType: "CR&D" });
 
       expect(container.firstChild).toBeNull();
     });
 
-    test("with UI when compeition is LOANS", () => {
+    test("with UI when competition is LOANS", () => {
       const validQuery = Pending.done(stubLoan);
       const { queryByTestId } = setup({ competitionType: "LOANS" }, validQuery);
 
@@ -104,7 +107,7 @@ describe("<ClaimDrawdownTable />", () => {
       });
 
       test("with a default error", () => {
-        const errorQuery = new Pending(LoadingStatus.Failed);
+        const errorQuery = new Pending<LoanDto>(LoadingStatus.Failed);
 
         expect(() => setup(undefined, errorQuery)).toThrow(
           "There was an error fetching data within ClaimDrawdownTable",

@@ -6,7 +6,6 @@ import { PCRItemForPartnerAdditionDto, PCRItemTypeDto } from "@framework/dtos";
 import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { DocumentDescription } from "@framework/constants";
-import { Copy } from "@copy/Copy";
 
 interface DeMinimisStepUiProps {
   documents: DocumentSummaryDto[];

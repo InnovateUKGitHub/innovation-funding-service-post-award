@@ -42,7 +42,7 @@ describe("<ClaimsDashboardGuidance />", () => {
         name             | inputRoles                       | expectedContent
         ${"when FC"}     | ${ProjectRole.FinancialContact}  | ${stubContent.claimsMessages.guidanceMessage}
         ${"when not FC"} | ${ProjectRole.MonitoringOfficer} | ${stubContent.claimsMessages.guidanceMessage}
-      `("when not overdue partner as non SBRI competion $name", ({ inputRoles, expectedContent }) => {
+      `("when not overdue partner as non SBRI competition $name", ({ inputRoles, expectedContent }) => {
         const { container, queryByText } = setup({
           competitionType: "CR&D",
           roles: inputRoles,
@@ -69,8 +69,10 @@ describe("<ClaimsDashboardGuidance />", () => {
           expect(queryByText(expectedContent)).toBeInTheDocument();
 
           if (shouldHaveMarkdownElement) {
+            // eslint-disable-next-line jest/no-conditional-expect
             expect(container.querySelector(".markdown")).toBeInTheDocument();
           } else {
+            // eslint-disable-next-line jest/no-conditional-expect
             expect(container.querySelector(".markdown")).not.toBeInTheDocument();
           }
         },

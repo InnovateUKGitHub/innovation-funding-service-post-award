@@ -13,7 +13,7 @@ export interface ClaimDetailsLinkRoutes extends ClaimDetailsBaseProps {
   routes: IRoutes;
 }
 
-export function ClaimDetailsLink({ claim, partner, project, routes }: ClaimDetailsLinkRoutes) {
+export const ClaimDetailsLink = ({ claim, partner, project, routes }: ClaimDetailsLinkRoutes) => {
   const { getContent } = useContent();
   const { isActive: isProjectActive } = useProjectStatus();
 
@@ -47,13 +47,13 @@ export function ClaimDetailsLink({ claim, partner, project, routes }: ClaimDetai
       <Link {...linkTypeOptions[linkType]} />
     </div>
   );
-}
+};
 
-export function getClaimDetailsLinkType({
+export const getClaimDetailsLinkType = ({
   project,
   partner,
   claim,
-}: ClaimDetailsBaseProps): "edit" | "review" | "view" | null {
+}: ClaimDetailsBaseProps): "edit" | "review" | "view" | null => {
   if (partner.partnerStatus === PartnerStatus.OnHold || partner.isWithdrawn) {
     return "view";
   }
@@ -80,4 +80,4 @@ export function getClaimDetailsLinkType({
     default:
       return "view";
   }
-}
+};

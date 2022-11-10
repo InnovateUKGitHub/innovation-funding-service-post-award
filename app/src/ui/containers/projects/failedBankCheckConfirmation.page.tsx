@@ -17,6 +17,11 @@ interface FailedBankCheckConfirmationProps extends BaseProps, FailedBankCheckCon
   project: Pending<ProjectDto>;
 }
 
+/**
+ * ### FailedBankCheckConfirmation
+ *
+ * React Component Page when bank check confirmation failed
+ */
 function FailedBankCheckConfirmation({ projectId, partnerId, routes, ...props }: FailedBankCheckConfirmationProps) {
   const { getContent } = useContent();
 
@@ -45,6 +50,11 @@ function FailedBankCheckConfirmation({ projectId, partnerId, routes, ...props }:
   return <ACC.Loader pending={props.project} render={x => renderContents(x)} />;
 }
 
+/**
+ * ### FailedBankCheckConfirmationContainer
+ *
+ * React Page Container for when bank check confirmation failed
+ */
 function FailedBankCheckConfirmationContainer(props: FailedBankCheckConfirmationParams & BaseProps) {
   const { projects } = useStores();
 

@@ -1,6 +1,7 @@
 import { render } from "@testing-library/react";
 
 import { DualDetails, DualDetailsProps, TypedDetails } from "@ui/components/details";
+import React from "react";
 
 describe("Detail Components", () => {
   describe("<Details>", () => {
@@ -216,7 +217,7 @@ describe("Detail Components", () => {
 
   describe("<DualDetails />", () => {
     describe("@renders", () => {
-      const TestChild = ({ title, children }: any) => (
+      const TestChild = ({ title, children }: { title?: string; children: React.ReactElement | string }) => (
         <div data-id={title}>
           <p>{children}</p>
         </div>

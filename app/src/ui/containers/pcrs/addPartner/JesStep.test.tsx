@@ -1,10 +1,18 @@
 import { render } from "@testing-library/react";
-import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
-import { MultipleDocumentUploadDto, ProjectDto } from "@framework/dtos";
+import { MultipleDocumentUploadDtoValidator, PCRPartnerAdditionItemDtoValidator } from "@ui/validators";
+import {
+  MultipleDocumentUploadDto,
+  PCRDto,
+  PCRItemForPartnerAdditionDto,
+  PCRItemTypeDto,
+  ProjectDto,
+} from "@framework/dtos";
 import { TestBed, TestBedStore } from "@shared/TestBed";
 import { configuration } from "@server/features/common";
 import { BasePcrProps, JesStepUI, JesStepUIProps } from "@ui/containers/pcrs/addPartner/jeSStep";
 import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import { EditorStatus } from "@ui/constants/enums";
+import { IRoutes } from "@ui/routing";
 
 describe("<JesStepUI />", () => {
   const stubContent = {
@@ -64,7 +72,7 @@ describe("<JesStepUI />", () => {
     users: {
       getCurrentUser: jest.fn().mockReturnValue({ csrf: "stub-csrf" }),
     },
-  } as any;
+  };
 
   const stubFiles: MultipleDocumentUploadDto = {
     files: [
@@ -80,21 +88,21 @@ describe("<JesStepUI />", () => {
     project: {
       competitionType: "CR&D",
     } as ProjectDto,
-    pcr: null as any,
-    pcrItem: null as any,
-    pcrItemType: null as any,
+    pcr: null as unknown as PCRDto,
+    pcrItem: null as unknown as PCRItemForPartnerAdditionDto,
+    pcrItemType: null as unknown as PCRItemTypeDto,
     documentsEditor: {
       data: { files: [] },
       validator: new MultipleDocumentUploadDtoValidator(stubFiles, configuration.options, false, true, null),
       status: 1,
       error: null,
     },
-    validator: null as any,
-    status: null as any,
+    validator: null as unknown as PCRPartnerAdditionItemDtoValidator,
+    status: null as unknown as EditorStatus,
     onChange: jest.fn(),
     onSave: jest.fn(),
     getRequiredToCompleteMessage: jest.fn(),
-    routes: {} as any,
+    routes: {} as unknown as IRoutes,
     mode: "prepare",
   };
 
@@ -107,7 +115,7 @@ describe("<JesStepUI />", () => {
 
   const setup = (props?: Partial<JesStepUIProps>) =>
     render(
-      <TestBed stores={stubStore as TestBedStore}>
+      <TestBed stores={stubStore as unknown as TestBedStore}>
         <JesStepUI {...stubBasePcrProps} {...requiredJesStepUIProps} {...props} />
       </TestBed>,
     );
@@ -129,7 +137,7 @@ describe("<JesStepUI />", () => {
       const ktpProject = {
         ...stubBasePcrProps,
         project: { ...stubBasePcrProps.project, competitionType: "KTP" },
-      } as any;
+      };
       const { queryByTestId } = setup(ktpProject);
       expect(queryByTestId("jes-form-ktp-not-needed-info-message")).toBeInTheDocument();
     });

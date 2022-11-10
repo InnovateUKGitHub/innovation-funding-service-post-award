@@ -15,6 +15,8 @@ describe("EmailContent", () => {
     });
   });
 
+  afterAll(jest.restoreAllMocks);
+
   const setup = (props?: Partial<EmailContentProps>) =>
     render(
       <TestBed>
@@ -56,6 +58,8 @@ describe("EmailContent", () => {
     });
 
     test("when empty should crash for invalid ContentSelector", () => {
+      jest.spyOn(console, "error").mockImplementation();
+      jest.spyOn(console, "info").mockImplementation();
       expect(() => {
         setup({ value: undefined });
       }).toThrow(CopyContentInvalidInputKeyError);

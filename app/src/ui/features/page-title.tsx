@@ -8,9 +8,12 @@ const pageTitleContext = createContext<PageTitleContext | undefined>(undefined);
 
 interface PageTitleProviderProps {
   title: string;
-  children: React.ReactElement<any>;
+  children: React.ReactNode;
 }
 
+/**
+ * Provider for pageTitleContext
+ */
 export function PageTitleProvider({ title, ...props }: PageTitleProviderProps) {
   const payload = {
     pageTitle: title,
@@ -19,6 +22,9 @@ export function PageTitleProvider({ title, ...props }: PageTitleProviderProps) {
   return <pageTitleContext.Provider {...props} value={payload} />;
 }
 
+/**
+ * useContext hook for pageTitle context
+ */
 function usePageTitle(): PageTitleContext {
   const context = useContext(pageTitleContext);
 
@@ -34,6 +40,9 @@ export interface PageTitleProps {
   caption?: string;
 }
 
+/**
+ * ReactComponent for page title
+ */
 export function PageTitle({ caption, title }: PageTitleProps) {
   const { pageTitle } = usePageTitle();
 

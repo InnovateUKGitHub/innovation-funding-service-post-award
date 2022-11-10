@@ -66,8 +66,8 @@ const UserChangerProjectSelectorPartnerSelector = ({
   /**
    * Strip "noemail" from the end of an email address, but only if enabled.
    *
-   * @param email The email address
-   * @returns The email address, with "noemail" stripped (if enabled)
+   * @param {string} email The email address
+   * @returns {string} The email address, with "noemail" stripped (if enabled)
    */
   const stripNoEmail = (email: string) => {
     return email.replace(/noemail$/, "");
@@ -244,9 +244,6 @@ const UserChangerManualEmailEntry = () => {
 
 /**
  * A development user switching interface to help select a valid contact for projects.
- *
- * @param props.noSearch Whether the search functionality should be enabled or disabled - Disable if you are on a menu where the user does not have permission to search for users.
- * @returns A React Component
  */
 const UserChanger = () => {
   return (

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<ClaimDrawdownTable /> @returns with UI when compeition is LOANS 1`] = `
+exports[`<ClaimDrawdownTable /> @returns with UI when competition is LOANS 1`] = `
 <div
   class="govuk-table-wrapper"
   data-qa="period-loan-table"

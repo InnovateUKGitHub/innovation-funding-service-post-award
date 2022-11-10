@@ -93,14 +93,14 @@ describe("<Page />", () => {
     );
 
     const holdMessageElementQa = "on-hold-info-message";
-    const backlinkElementQa = "page-backlink";
+    const backLinkElementQa = "page-backlink";
     const pageErrorElementQa = "error-summary";
     const validationSummaryQa = "validation-summary";
 
     return {
       ...result,
       holdMessageElementQa,
-      backlinkElementQa,
+      backLinkElementQa,
       pageErrorElementQa,
       validationSummaryQa,
     };
@@ -108,20 +108,20 @@ describe("<Page />", () => {
 
   describe("@renders", () => {
     it("with default props", () => {
-      const { queryByTestId, pageErrorElementQa, backlinkElementQa, holdMessageElementQa } = setup();
+      const { queryByTestId, pageErrorElementQa, backLinkElementQa, holdMessageElementQa } = setup();
 
       expect(queryByTestId(stubTitleQa)).toBeInTheDocument();
       expect(queryByTestId(stubChildrenQa)).toBeInTheDocument();
 
       expect(queryByTestId(pageErrorElementQa)).not.toBeInTheDocument();
-      expect(queryByTestId(backlinkElementQa)).not.toBeInTheDocument();
+      expect(queryByTestId(backLinkElementQa)).not.toBeInTheDocument();
       expect(queryByTestId(holdMessageElementQa)).not.toBeInTheDocument();
     });
 
     it("with a backLink", () => {
-      const { backlinkElementQa, queryByTestId } = setup({ backLink: <div>backlink element</div> });
+      const { backLinkElementQa, queryByTestId } = setup({ backLink: <div>backlink element</div> });
 
-      expect(queryByTestId(backlinkElementQa)).toBeInTheDocument();
+      expect(queryByTestId(backLinkElementQa)).toBeInTheDocument();
     });
 
     it("with a qa", () => {
@@ -168,9 +168,9 @@ describe("<Page />", () => {
 
   describe("renders a hold message", () => {
     test.each`
-      name                | props                                                          | expectedMessage
-      ${"with a project"} | ${{ project: { status: ProjectStatus.OnHold } as any }}        | ${stubContent.components.projectInactiveContent.projectOnHoldMessage}
-      ${"with a partner"} | ${{ partner: { partnerStatus: PartnerStatus.OnHold } as any }} | ${stubContent.components.projectInactiveContent.partnerOnHoldMessage}
+      name                | props                                                   | expectedMessage
+      ${"with a project"} | ${{ project: { status: ProjectStatus.OnHold } }}        | ${stubContent.components.projectInactiveContent.projectOnHoldMessage}
+      ${"with a partner"} | ${{ partner: { partnerStatus: PartnerStatus.OnHold } }} | ${stubContent.components.projectInactiveContent.partnerOnHoldMessage}
     `("$name on hold", ({ props, expectedMessage }) => {
       const { holdMessageElementQa, queryByTestId } = setup(props);
 

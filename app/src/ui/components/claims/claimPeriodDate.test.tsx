@@ -15,9 +15,7 @@ const partner = {
   isLead: false,
 };
 
-function setup(props: ClaimPeriodProps) {
-  return render(<ClaimPeriodDate {...props} />);
-}
+const setup = (props: ClaimPeriodProps) => render(<ClaimPeriodDate {...props} />);
 
 describe("<ClaimPeriodDate />", () => {
   describe("@renders", () => {

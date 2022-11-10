@@ -8,7 +8,7 @@ import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { noop } from "@ui/helpers/noop";
 import * as ACC from "@ui/components";
 
-import { useMounted } from "@ui/features/has-mounted/mounted.context";
+import { useMountedState } from "@ui/features/has-mounted/Mounted";
 import { PageTitle } from "@ui/features/page-title";
 import { BroadcastsViewer } from "../Broadcast/BroadcastsViewer";
 import { DashboardProjectList } from "./DashboardProjectList";
@@ -50,7 +50,7 @@ function ProjectDashboard({
   const [filterOptions] = useState(() => getAvailableProjectFilters(unfilteredObjects));
   const search = searchQuery === undefined ? "" : "" + searchQuery;
 
-  const { isServer } = useMounted();
+  const { isServer } = useMountedState();
   const [arrayFilters, setFilters] = useState<FilterOptions[]>(props.arrayFilters ?? []);
   const { curatedProjects, curatedTotals, totalProjects } = generateFilteredProjects(arrayFilters, projects, partners);
 

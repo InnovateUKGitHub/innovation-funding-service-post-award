@@ -1,11 +1,20 @@
-// it would be nice to be able to constrain and infer this function but not sure how to in typescript currently.
-// Only use this function for enums mapping to numbers
-export const getAllEnumValues = <T extends number>(enumType: any): T[] => {
-  return (
-    Object.keys(enumType)
-      // filter to values - value prop returns the name
-      .filter(k => typeof enumType[k] === "string")
-      // convert to enum rather than string
-      .map(x => parseInt(x, 10) as T)
-  );
+export type Enum = { [key: string | number]: string | number };
+
+type EnumNumerical<T extends Enum> = {
+  [K in keyof T]: T[K] extends number ? T[K] : never;
+};
+
+type ObjectValues<T extends { [key: string]: number }, K = keyof T> = [K] extends [keyof T]
+  ? [K] extends [never]
+    ? []
+    : T[K][]
+  : never;
+
+export type EnumValues<T extends Enum> = ObjectValues<EnumNumerical<T>>;
+
+/**
+ * Gets the numerical enum values. Does not respond for string-type enums
+ */
+export const getAllNumericalEnumValues = <T extends Enum>(enumType: T): EnumValues<T> => {
+  return Object.values(enumType).filter(k => typeof k === "number") as EnumValues<T>;
 };

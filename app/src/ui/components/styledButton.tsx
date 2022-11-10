@@ -3,14 +3,14 @@ import classNames from "classnames";
 
 import { useGovFrontend } from "@ui/hooks";
 
-export interface StyledButtonProps extends React.ButtonHTMLAttributes<{}> {
+export interface StyledButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   styling: "Link" | "Secondary" | "Primary" | "Warning";
   className?: string;
   style?: CSSProperties;
   qa?: string;
 }
 
-export function Button({ className, styling, qa, ...props }: StyledButtonProps) {
+export const Button = ({ className, styling, qa, ...props }: StyledButtonProps) => {
   const { setRef } = useGovFrontend("Button");
 
   const getButtonTypeClass = (type: StyledButtonProps["styling"]) => {
@@ -37,4 +37,4 @@ export function Button({ className, styling, qa, ...props }: StyledButtonProps) 
       {...props}
     />
   );
-}
+};

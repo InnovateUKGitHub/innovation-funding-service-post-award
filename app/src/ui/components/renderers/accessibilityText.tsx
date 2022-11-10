@@ -6,6 +6,9 @@ interface AccessibilityTextProps {
   className?: string;
 }
 
-export function AccessibilityText({ as: Element = "div", className, ...props }: AccessibilityTextProps) {
-  return <Element className={cx("govuk-visually-hidden", className)} {...props} />;
-}
+/**
+ * Accessibility text adds text intended to be read by screen readers
+ */
+export const AccessibilityText = ({ as: Element = "div", className, ...props }: AccessibilityTextProps) => (
+  <Element className={cx("govuk-visually-hidden", className)} {...props} />
+);

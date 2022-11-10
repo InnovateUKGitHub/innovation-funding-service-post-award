@@ -15,7 +15,7 @@ export interface AccordionProps {
 }
 
 type AccordionState = Map<number, boolean>;
-export function Accordion({ qa, children }: AccordionProps) {
+export const Accordion = ({ qa, children }: AccordionProps) => {
   const { isClient } = useMounted();
 
   const accordionItems = React.Children.toArray(children) as AccordionNodes[];
@@ -69,6 +69,6 @@ export function Accordion({ qa, children }: AccordionProps) {
       )}
     </div>
   );
-}
+};
 
 Accordion.Item = AccordionItem;

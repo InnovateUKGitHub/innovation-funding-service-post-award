@@ -208,7 +208,7 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data> {
   }
 }
 
-function FinanceSummaryContainer(props: Params & BaseProps) {
+const FinanceSummaryContainer = (props: Params & BaseProps) => {
   const stores = useStores();
   const { getContent } = useContent();
 
@@ -238,7 +238,7 @@ function FinanceSummaryContainer(props: Params & BaseProps) {
       partners={stores.partners.getPartnersForProject(props.projectId)}
     />
   );
-}
+};
 
 export const FinanceSummaryRoute = defineRoute({
   allowRouteInActiveAccess: true,

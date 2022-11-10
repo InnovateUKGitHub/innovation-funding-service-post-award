@@ -64,7 +64,6 @@ export type IStores = ReturnType<typeof createStores>;
 // initialised to null, will be set with stores when the Provider is instantiated
 const storesContext = createContext<IStores>(null as unknown as IStores);
 
-/* eslint-disable @typescript-eslint/naming-convention */
 export const StoresProvider = storesContext.Provider;
 /**
  * @deprecated Please use 'useStores' in favour of this HOC approach

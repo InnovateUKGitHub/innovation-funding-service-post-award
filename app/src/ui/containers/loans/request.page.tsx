@@ -33,7 +33,7 @@ interface LoansRequestPageProps extends LoansRequestParams, BaseProps {
 const RequestForm = ACC.createTypedForm<MultipleDocumentUploadDto>();
 const CommentsForm = ACC.createTypedForm<LoanDto>();
 
-function LoansRequestPage({ loan, loanEditor, loanDocsEditor, documents, ...props }: LoansRequestPageProps) {
+const LoansRequestPage = ({ loan, loanEditor, loanDocsEditor, documents, ...props }: LoansRequestPageProps) => {
   const { getContent } = useContent();
 
   const createPcrLink = <ACC.Link route={props.routes.pcrCreate.getLink({ projectId: props.projectId })}> </ACC.Link>;
@@ -121,9 +121,9 @@ function LoansRequestPage({ loan, loanEditor, loanDocsEditor, documents, ...prop
       </ACC.Section>
     </>
   );
-}
+};
 
-function LoansRequestContainer(props: BaseProps & LoansRequestParams) {
+const LoansRequestContainer = (props: BaseProps & LoansRequestParams) => {
   const stores = useStores();
   const { getContent } = useContent();
 
@@ -199,7 +199,7 @@ function LoansRequestContainer(props: BaseProps & LoansRequestParams) {
       )}
     </ACC.Page>
   );
-}
+};
 
 export const LoansRequestRoute = defineRoute<LoansRequestParams>({
   routeName: "loansRequest",

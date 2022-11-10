@@ -6,7 +6,7 @@ export interface DocumentsUnavailableProps {
   removeSpacing?: boolean;
 }
 
-export function DocumentsUnavailable({ removeSpacing, validationMessage }: DocumentsUnavailableProps) {
+export const DocumentsUnavailable = ({ removeSpacing, validationMessage }: DocumentsUnavailableProps) => {
   const { getContent } = useContent();
 
   return (
@@ -14,4 +14,4 @@ export function DocumentsUnavailable({ removeSpacing, validationMessage }: Docum
       {validationMessage || getContent(x => x.documentMessages.noDocumentsUploaded)}
     </SimpleString>
   );
-}
+};

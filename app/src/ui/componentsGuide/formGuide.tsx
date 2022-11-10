@@ -21,7 +21,7 @@ export const formGuide: IGuide = {
             <ExampleForm.MonthYear label="Month year" name="name" hint="Month & year input" startOrEnd="start" value={data => data.date} update={(dto, date) => dto.date = date}/>
             <ExampleForm.Radio label="Radio option" name="option" hint="The option value" inline={true} options={this.options} value={dto => dto.option} update={(dto, option) => dto.option = option}/>
             <ExampleForm.DropdownList label="Drop down list option" name="option" hint="The option value" hasEmptyOption={true} options={this.options} value={dto => dto.option} update={(dto, option) => dto.option = option}/>
-            <ExampleForm.Checkboxes label="Checkbox option" name="option" hint="The option value" options={this.multiOptions} value={dto => dto.mulipleOptions} update={(dto, options) => dto.mulipleOptions = options}/>
+            <ExampleForm.Checkboxes label="Checkbox option" name="option" hint="The option value" options={this.multiOptions} value={dto => dto.multipleOptions} update={(dto, options) => dto.multipleOptions = options}/>
             <ExampleForm.MultipleFileUpload value={dto => dto.file} label="Upload file" name="upload file" hint="select file" update={(dto, file) => dto.file = file}/>
         </ExampleForm.Fieldset>
         <ExampleForm.Submit>Save</ExampleForm.Submit>
@@ -39,19 +39,19 @@ interface ISimpleEditorDto {
   date: Date | null;
   option: { value: React.ReactNode; id: string } | null;
   dropdownOption: { value: string | number; id: string } | null;
-  mulipleOptions: { value: React.ReactNode; id: string }[] | null;
+  multipleOptions: { value: React.ReactNode; id: string }[] | null;
   dropdownOptions: { value: string | number; id: string }[] | null;
   file: IFileWrapper[] | null;
 }
 
 const ExampleForm = createTypedForm<ISimpleEditorDto>();
 
-class SimpleForm extends React.Component<{}, { original: ISimpleEditorDto; editor: ISimpleEditorDto }> {
+class SimpleForm extends React.Component<EmptyObject, { original: ISimpleEditorDto; editor: ISimpleEditorDto }> {
   private readonly options: { value: React.ReactNode; id: string }[];
   private readonly multiOptions: { value: React.ReactNode; id: string }[];
   private readonly dropdownOptions: { value: string | number; id: string }[];
 
-  constructor(props: {}) {
+  constructor(props: EmptyObject) {
     super(props);
     const dto: ISimpleEditorDto = {
       name: "Example Name",
@@ -59,7 +59,7 @@ class SimpleForm extends React.Component<{}, { original: ISimpleEditorDto; edito
       value: 100,
       option: null,
       dropdownOption: null,
-      mulipleOptions: [],
+      multipleOptions: [],
       dropdownOptions: [],
       file: null,
       date: new Date(),
@@ -135,8 +135,8 @@ class SimpleForm extends React.Component<{}, { original: ISimpleEditorDto; edito
               name="option"
               hint="The option value"
               options={this.multiOptions}
-              value={dto => dto.mulipleOptions}
-              update={(dto, options) => (dto.mulipleOptions = options)}
+              value={dto => dto.multipleOptions}
+              update={(dto, options) => (dto.multipleOptions = options)}
             />
             <ExampleForm.MultipleFileUpload
               value={dto => dto.file}

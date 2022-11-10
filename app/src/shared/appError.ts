@@ -63,3 +63,10 @@ export class ConfigurationError extends AppError {
     super(ErrorCode.CONFIGURATION_ERROR, message);
   }
 }
+
+/**
+ * type guard narrows unknown to error if it matches Error api
+ */
+export function isError(err: unknown): err is Error {
+  return typeof err === "object" && err !== null && "message" in err;
+}

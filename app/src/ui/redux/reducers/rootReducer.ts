@@ -11,10 +11,11 @@ import { messagesReducer } from "./messagesReducer";
 import { configReducer, IClientConfig } from "./configReducer";
 
 export type DataState = ReturnType<typeof dataReducer>;
-export type DataStateKeys = keyof DataState;
+
 export type EditorState = ReturnType<typeof editorReducer>;
-export type EditorStateKeys = keyof EditorState;
+
 export type MessagesState = ReturnType<typeof messagesReducer>;
+
 export type ErrorState = ReturnType<typeof errorReducer>;
 
 export interface RootState {

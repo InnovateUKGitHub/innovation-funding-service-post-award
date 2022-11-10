@@ -4,7 +4,7 @@ export interface AccordionToggleProps {
   isOpen: boolean;
 }
 
-export function AccordionToggle({ isOpen }: AccordionToggleProps) {
+export const AccordionToggle = ({ isOpen }: AccordionToggleProps) => {
   return (
     <span
       className={cx("govuk-accordion-nav__chevron", {
@@ -12,4 +12,4 @@ export function AccordionToggle({ isOpen }: AccordionToggleProps) {
       })}
     />
   );
-}
+};

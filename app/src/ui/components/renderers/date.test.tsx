@@ -33,12 +33,12 @@ describe("FullDate", () => {
 });
 
 describe("FullDateTime", () => {
-  it("should render the date in moning as 7 January 1993 09:02 9:02am", () => {
+  it("should render the date in morning as 7 January 1993 09:02 9:02am", () => {
     const { queryByText } = render(<FullDateTime value={date} />);
     expect(queryByText("7 January 1993, 9:02am")).toBeInTheDocument();
   });
 
-  it("should render the date in moning as 7 January 1993 09:02 9:02pm", () => {
+  it("should render the date in morning as 7 January 1993 09:02 9:02pm", () => {
     const { queryByText } = render(<FullDateTime value={afternoonDate} />);
     expect(queryByText("7 January 1993, 9:02pm")).toBeInTheDocument();
   });
@@ -321,12 +321,13 @@ describe("Months", () => {
 
 describe("MonthYear", () => {
   it("should render null if date not provided", () => {
-    const { container } = render(<MonthYear value={null as any} />);
+    const { container } = render(<MonthYear value={null} />);
     expect(container.firstChild).toBeNull();
   });
 
   it("should show that invalid date is provided", () => {
-    const { queryByText } = render(<MonthYear value={"hello world" as any} />);
+    // @ts-expect-error testing invalid date format
+    const { queryByText } = render(<MonthYear value={"hello world"} />);
     expect(queryByText("INVALID DATE FORMAT")).toBeInTheDocument();
   });
 

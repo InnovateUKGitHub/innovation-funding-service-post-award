@@ -262,7 +262,7 @@ describe("<FinancialVirementSummary />", () => {
     getStepLink: jest.fn(),
     getEditLink: jest.fn(),
     getViewLink: jest.fn(),
-  } as any as FinancialVirementSummaryContainerProps; // Note: Validation is very hard to stub cast as any to workaround :(
+  } as unknown as FinancialVirementSummaryContainerProps; // Note: Validation is very hard to stub cast as any to workaround :(
 
   const stubContent = {
     financialVirementDetails: {
@@ -304,7 +304,7 @@ describe("<FinancialVirementSummary />", () => {
     financialVirements: {
       get: jest.fn().mockReturnValue(Pending.done(stubValidVirement)),
     },
-  } as any;
+  } as unknown as TestBedStore;
 
   // Note: We omit "children" as this is context provider. "virement" is ommited as we add this in each test case below, see setup()
   const stubPcrSummaryProviderProps: Omit<PcrSummaryProviderProps, "children" | "virement"> = {
@@ -481,7 +481,7 @@ describe("<FinancialVirementSummary />", () => {
     };
 
     return render(
-      <TestBed stores={stubStore as TestBedStore}>
+      <TestBed stores={stubStore}>
         <ProjectParticipantProvider projectId="stub-id">
           <PcrSummaryProvider {...summaryProviderProps}>
             <FinancialVirementSummary {...requiredProps} mode={mode} />
@@ -675,13 +675,13 @@ describe("<FinancialVirementSummary />", () => {
         const { queryByText } = setup("prepare", validGrantVirement);
 
         const grantAdvice = queryByText(grantAdviceContent);
-        const availablegrantAdvice = queryByText(availableGrantContent);
-        const unavailablegrantAdvice = queryByText(unavailableGrantContent);
+        const availableGrantAdvice = queryByText(availableGrantContent);
+        const unavailableGrantAdvice = queryByText(unavailableGrantContent);
 
         expect(grantAdvice).toBeInTheDocument();
 
-        expect(unavailablegrantAdvice).not.toBeInTheDocument();
-        expect(availablegrantAdvice).not.toBeInTheDocument();
+        expect(unavailableGrantAdvice).not.toBeInTheDocument();
+        expect(availableGrantAdvice).not.toBeInTheDocument();
       });
 
       test("with unavailable grant content", () => {
@@ -857,11 +857,11 @@ describe("<FinancialVirementSummary />", () => {
         const { queryByText } = setup("prepare", unavailableGrantVirement);
 
         const grantAdvice = queryByText(grantAdviceContent);
-        const availablegrantAdvice = queryByText(availableGrantContent);
-        const unavailablegrantAdvice = queryByText(unavailableGrantContent);
+        const availableGrantAdvice = queryByText(availableGrantContent);
+        const unavailableGrantAdvice = queryByText(unavailableGrantContent);
 
-        expect(unavailablegrantAdvice).toBeInTheDocument();
-        expect(availablegrantAdvice).not.toBeInTheDocument();
+        expect(unavailableGrantAdvice).toBeInTheDocument();
+        expect(availableGrantAdvice).not.toBeInTheDocument();
         expect(grantAdvice).toBeInTheDocument();
       });
 
@@ -1038,11 +1038,11 @@ describe("<FinancialVirementSummary />", () => {
         const { queryByText } = setup("prepare", availableGrantVirement);
 
         const grantAdvice = queryByText(grantAdviceContent);
-        const availablegrantAdvice = queryByText(availableGrantContent);
-        const unavailablegrantAdvice = queryByText(unavailableGrantContent);
+        const availableGrantAdvice = queryByText(availableGrantContent);
+        const unavailableGrantAdvice = queryByText(unavailableGrantContent);
 
-        expect(availablegrantAdvice).toBeInTheDocument();
-        expect(unavailablegrantAdvice).not.toBeInTheDocument();
+        expect(availableGrantAdvice).toBeInTheDocument();
+        expect(unavailableGrantAdvice).not.toBeInTheDocument();
         expect(grantAdvice).toBeInTheDocument();
       });
     });

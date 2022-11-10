@@ -5,15 +5,6 @@ import * as hook from "@ui/containers/claims/components/allowed-documents.hook";
 import { EnumDocuments } from "@ui/containers/claims/components/EnumDocuments";
 import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
 
-const stubLabels: Record<number, string | undefined> = {
-  10: "IAR",
-  30: "Evidence",
-  50: "EndOfProjectSurvey",
-  60: "StatementOfExpenditure",
-  110: "LMCMinutes",
-  120: "ScheduleThree",
-};
-
 const stubContent = {
   documentLabels: {
     description: {
@@ -44,7 +35,7 @@ describe("<EnumDocuments />", () => {
   const populatedDocs = [
     { id: "id-iar", value: "IAR" },
     { id: "id-evidence", value: "Evidence" },
-    { id: "id-endofprojectsurvey", value: "EndOfProjectSurvey" },
+    { id: "id-endOfProjectSurvey", value: "EndOfProjectSurvey" },
   ];
 
   beforeAll(async () => {

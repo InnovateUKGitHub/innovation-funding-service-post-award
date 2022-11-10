@@ -14,19 +14,20 @@ module.exports = {
     },
   },
   rules: {
-    "no-unused-vars": ["error", { ignoreRestSiblings: true }],
+    "no-unused-vars": ["error", { ignoreRestSiblings: true, argsIgnorePattern: "^_" }],
   },
   parser: "@typescript-eslint/parser",
   overrides: [
     {
-      files: ["*.ts"],
+      files: ["*.ts", "*.tsx"],
       plugins: ["@typescript-eslint"],
       extends: ["plugin:@typescript-eslint/recommended", "plugin:jsdoc/recommended", "plugin:prettier/recommended"],
       rules: {
         "jsdoc/require-jsdoc": ["warn", { enableFixer: false }],
         "jsdoc/require-param": "off",
+        "jsdoc/require-param-type": "off",
         "jsdoc/require-returns": "off",
-        // TODO: Get rid of the below rules.
+        "jsdoc/require-returns-type": "off",
         "@typescript-eslint/ban-types": "warn",
         "@typescript-eslint/no-empty-interface": "warn",
       },
@@ -48,7 +49,8 @@ module.exports = {
         "jsdoc/require-jsdoc": ["warn", { enableFixer: false }],
         "jsdoc/require-param": "off",
         "jsdoc/require-returns": "off",
-        // TODO: Get rid of the below rules.
+        "jsdoc/require-returns-type": "off",
+        "jsdoc/require-param-type": "off",
         "@typescript-eslint/ban-types": "warn",
         "@typescript-eslint/no-empty-interface": "warn",
       },
@@ -69,8 +71,9 @@ module.exports = {
       rules: {
         "jsdoc/require-jsdoc": ["warn", { enableFixer: false }],
         "jsdoc/require-param": "off",
+        "jsdoc/require-param-type": "off",
+        "jsdoc/require-returns-type": "off",
         "jsdoc/require-returns": "off",
-        // TODO: Get rid of the below rules.
         "@typescript-eslint/no-explicit-any": "warn",
         "@typescript-eslint/ban-types": "warn",
         "jest/no-standalone-expect": "warn",

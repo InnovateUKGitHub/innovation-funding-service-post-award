@@ -6,6 +6,7 @@ import { TestBed } from "@shared/TestBed";
 import { TypedTable } from "@ui/components/table";
 import { SortOptions } from "@ui/components/documents/table-sorter";
 import { testInitialiseInternationalisation } from "@shared/testInitialiseInternationalisation";
+import React from "react";
 
 const headerButtonValues = (cells: Element[]): string[] => Array.from(cells).map(x => x.innerHTML);
 
@@ -41,7 +42,7 @@ describe("Table", () => {
     },
   };
 
-  const setup = (tableChildren: React.ReactElement<any, string | React.JSXElementConstructor<any>>) => {
+  const setup = (tableChildren: React.ReactElement) => {
     return render(<TestBed>{tableChildren}</TestBed>);
   };
 

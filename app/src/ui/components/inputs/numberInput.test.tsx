@@ -1,10 +1,10 @@
 import { render } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { NumberInput } from "@ui/components/inputs/numberInput";
+import { NumberInput, NumberInputProps } from "@ui/components/inputs/numberInput";
 
 describe("NumberInput", () => {
-  const getInput = (props?: any) => {
+  const getInput = (props?: Partial<NumberInputProps>) => {
     const { getByLabelText } = render(
       <NumberInput name="testName" debounce={false} ariaLabel="test number input" {...props} />,
     );
@@ -78,7 +78,7 @@ describe("NumberInput", () => {
   });
 
   it("Updates component state with value", async () => {
-    const input = getInput({ value: "" });
+    const input = getInput({ value: null });
     await userEvent.type(input, "1");
     expect(input.value).toBe("1");
   });

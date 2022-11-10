@@ -9,7 +9,7 @@ export interface DetailContentListProps {
   qa: string;
 }
 
-export function DetailContentList({ items, qa }: DetailContentListProps) {
+export const DetailContentList = ({ items, qa }: DetailContentListProps) => {
   if (!items.length) return null;
 
   return (
@@ -29,4 +29,4 @@ export function DetailContentList({ items, qa }: DetailContentListProps) {
       ))}
     </div>
   );
-}
+};

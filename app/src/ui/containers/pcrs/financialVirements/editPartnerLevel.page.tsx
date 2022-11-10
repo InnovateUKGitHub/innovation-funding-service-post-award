@@ -11,6 +11,9 @@ import { EditorStatus } from "@ui/constants/enums";
 
 const VirementForm = ACC.createTypedForm<FinancialVirementDto>();
 
+/**
+ * Hook returns content for edit partner view
+ */
 export function useEditPartnerLevelContent() {
   const { getContent } = useContent();
 
@@ -55,7 +58,7 @@ interface EditPartnerLevelProps {
   onChange: (saving: boolean, dto: FinancialVirementDto) => void;
 }
 
-function EditPartnerLevelComponent(props: EditPartnerLevelProps & FinancialVirementParams) {
+const EditPartnerLevelComponent = (props: EditPartnerLevelProps & FinancialVirementParams) => {
   const combined = Pending.combine({
     project: props.project,
     partners: props.partners,
@@ -211,7 +214,7 @@ function EditPartnerLevelComponent(props: EditPartnerLevelProps & FinancialVirem
       }}
     />
   );
-}
+};
 
 const Container = (props: FinancialVirementParams & BaseProps) => {
   const { projects, partners, financialVirements } = useStores();

@@ -17,7 +17,7 @@ export class Pending<T> {
   ) {}
 
   /**
-   * transform the data T in this Pending into another datastruct T2
+   * transform the data T in this Pending into another data struct T2
    *
    * @param map - a function which takes the data T, the current status and error, and returns new data T2
    * @param noData - a function to use when no data present to return data T2
@@ -35,7 +35,7 @@ export class Pending<T> {
   }
 
   /**
-   * combine this pending with another to create a new Pending with a defined datastruct
+   * combine this pending with another to create a new Pending with a defined data struct
    *
    * @param pending - the object to combine with this one
    * @param combineData - a function that takes both Pendings and returns the combined data

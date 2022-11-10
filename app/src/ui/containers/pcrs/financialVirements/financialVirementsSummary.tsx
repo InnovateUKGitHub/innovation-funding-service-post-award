@@ -28,7 +28,7 @@ export interface FinancialVirementSummaryProps
   virement: Pending<FinancialVirementDto>;
 }
 
-export function FinancialVirementSummaryComponent({ mode, ...props }: FinancialVirementSummaryProps) {
+export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialVirementSummaryProps) => {
   const { getContent } = useContent();
   const { isMultipleParticipants } = useProjectParticipants();
 
@@ -276,14 +276,14 @@ export function FinancialVirementSummaryComponent({ mode, ...props }: FinancialV
 
   const pendingPayload = Pending.combine({ virement: props.virement });
   return <ACC.Loader pending={pendingPayload} render={x => renderContent(x.virement)} />;
-}
+};
 
 interface GrantMovingOverFinancialYearFormProps {
   editor: IEditorStore<PCRDto, PCRDtoValidator>;
   form: ACC.FormBuilder<PCRItemDto>;
 }
 
-export function GrantMovingOverFinancialYearForm({ form: Form, editor }: GrantMovingOverFinancialYearFormProps) {
+export const GrantMovingOverFinancialYearForm = ({ form: Form, editor }: GrantMovingOverFinancialYearFormProps) => {
   const targetPcrType = PCRItemType.MultiplePartnerFinancialVirement;
 
   const itemPcr = editor.data.items.find(
@@ -309,7 +309,7 @@ export function GrantMovingOverFinancialYearForm({ form: Form, editor }: GrantMo
       />
     </Form.Fieldset>
   );
-}
+};
 
 export type FinancialVirementSummaryContainerProps = PcrSummaryProps<
   PCRItemForMultiplePartnerFinancialVirementDto,
