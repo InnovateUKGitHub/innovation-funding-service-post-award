@@ -94,6 +94,7 @@ export const createTypedForm = <T,>() => {
     enctype?: "urlencoded" | "multipart";
     isGet?: boolean;
     action?: string;
+    disabled?: boolean;
     children: ReactNode;
   }
 
@@ -305,11 +306,22 @@ export const createTypedForm = <T,>() => {
    *
    * @returns A form component
    */
-  const FormComponent = ({ action = "", enctype, isGet, qa, children, onChange, onSubmit, ...props }: FormProps) => {
+  const FormComponent = ({
+    action = "",
+    enctype,
+    isGet,
+    qa,
+    children,
+    onChange,
+    onSubmit,
+    disabled,
+    ...props
+  }: FormProps) => {
     const isFormDisabled =
-      "editor" in props
+      disabled ||
+      ("editor" in props
         ? props.editor.status === EditorStatus.Saving // If we're in an editor form, check for edit status
-        : props.isSaving ?? false; /// If we're in a data form, check for "isSaving" prop
+        : props.isSaving ?? false); /// If we're in a data form, check for "isSaving" prop
 
     const formData = "editor" in props ? props.editor.data : props.data;
 
