@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react";
 
-import { CompanyDto, PCRItemForPartnerAdditionDto } from "@framework/dtos";
+import { CompanyDto } from "@framework/dtos";
 import { useContent } from "@ui/hooks";
 import * as ACC from "@ui/components";
 import { FormBuilder } from "@ui/components";
@@ -9,7 +9,7 @@ interface CompaniesHouseResultsProps {
   selectedRegistrationNumber: string | undefined;
   options: CompanyDto[];
   onSelect: (option: CompanyDto) => void;
-  Form: FormBuilder<PCRItemForPartnerAdditionDto>;
+  Form: FormBuilder<null>;
 }
 
 export const CompaniesHouseResults = ({
