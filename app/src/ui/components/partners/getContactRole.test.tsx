@@ -118,20 +118,20 @@ describe("getContactRole", () => {
   it("gets all FCs of a project", () => {
     expect(fcRoles).toStrictEqual([
       {
-        partner: steelManufacturingPartner,
-        contact: tedTesterContact,
-      },
-      {
-        partner: universityOfLifePartner,
-        contact: joeBloggsContact,
-      },
-      {
         partner: driverlessCarsPartner,
         contact: bobBakerContact,
       },
       {
         partner: driverlessCarsPartner,
         contact: nicoleHedgesContact,
+      },
+      {
+        partner: steelManufacturingPartner,
+        contact: tedTesterContact,
+      },
+      {
+        partner: universityOfLifePartner,
+        contact: joeBloggsContact,
       },
     ]);
   });
