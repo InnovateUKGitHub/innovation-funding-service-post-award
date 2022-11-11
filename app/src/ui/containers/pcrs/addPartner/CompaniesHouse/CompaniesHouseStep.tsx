@@ -15,7 +15,8 @@ import { CompaniesHouseResults } from "./CompaniesHouseResults";
 
 type CompaniesHouseStepProps = PcrStepProps<PCRItemForPartnerAdditionDto, PCRPartnerAdditionItemDtoValidator>;
 
-const Form = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
+const SearchForm = ACC.createTypedForm<null>();
+const CompanyForm = ACC.createTypedForm<PCRItemForPartnerAdditionDto>();
 
 export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: CompaniesHouseStepProps) => {
   const { companies } = useStores();
@@ -44,17 +45,12 @@ export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: Compa
 
   return (
     <ACC.Section qa="company-house" title={getContent(x => x.pages.pcrAddPartnerCompanyHouse.sectionTitle)}>
-      <Form.Form
-        qa="addPartnerForm"
-        data={originalPayload}
-        isSaving={props.status === EditorStatus.Saving}
-        onSubmit={noop}
-      >
-        <Form.Fieldset
+      <SearchForm.Form qa="addPartnerForm" data={null} isSaving={props.status === EditorStatus.Saving} onSubmit={noop}>
+        <SearchForm.Fieldset
           qa="search-companies-house"
           heading={getContent(x => x.pages.pcrAddPartnerCompanyHouse.headingSearch)}
         >
-          <Form.Search
+          <SearchForm.Search
             labelHidden
             autoComplete="off"
             name="searchCompaniesHouse"
@@ -64,20 +60,12 @@ export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: Compa
           />
 
           {isServer && (
-            <Form.Button styling="Primary" name="companiesHouseSearch">
+            <SearchForm.Button styling="Primary" name="companiesHouseSearch">
               {getContent(x => x.pages.pcrAddPartnerCompanyHouse.buttonSearch)}
-            </Form.Button>
+            </SearchForm.Button>
           )}
-        </Form.Fieldset>
-      </Form.Form>
+        </SearchForm.Fieldset>
 
-      <Form.Form
-        qa="company-details-form"
-        data={formData}
-        isSaving={props.status === EditorStatus.Saving}
-        onSubmit={() => props.onSave(false)}
-        onChange={props.onChange}
-      >
         <ACC.Loader
           pending={getCompanies()}
           renderLoading={() => (
@@ -106,7 +94,7 @@ export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: Compa
                     options={companyResults}
                     selectedRegistrationNumber={formData.registrationNumber || undefined}
                     onSelect={handleCompanySelection}
-                    Form={Form}
+                    Form={SearchForm}
                   />
                 )}
 
@@ -119,12 +107,20 @@ export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: Compa
             );
           }}
         />
+      </SearchForm.Form>
 
-        <Form.Fieldset
+      <CompanyForm.Form
+        qa="company-details-form"
+        data={formData}
+        isSaving={props.status === EditorStatus.Saving}
+        onSubmit={() => props.onSave(false)}
+        onChange={props.onChange}
+      >
+        <CompanyForm.Fieldset
           qa="companies-house-form"
           heading={getContent(x => x.pages.pcrAddPartnerCompanyHouse.headingForm)}
         >
-          <Form.String
+          <CompanyForm.String
             name="organisationName"
             label={getContent(x => x.pcrAddPartnerLabels.organisationNameHeading)}
             value={dto => dto.organisationName}
@@ -132,7 +128,7 @@ export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: Compa
             validation={props.validator.companyHouseOrganisationName}
           />
 
-          <Form.String
+          <CompanyForm.String
             name="registrationNumber"
             label={getContent(x => x.pcrAddPartnerLabels.registrationNumberHeading)}
             value={dto => dto.registrationNumber}
@@ -140,23 +136,23 @@ export const CompaniesHouseStep = ({ pcrItem: originalPayload, ...props }: Compa
             validation={props.validator.registrationNumber}
           />
 
-          <Form.String
+          <CompanyForm.String
             name="registeredAddress"
             label={getContent(x => x.pcrAddPartnerLabels.registeredAddressHeading)}
             value={dto => dto.registeredAddress}
             update={(dto, val) => (dto.registeredAddress = val)}
             validation={props.validator.registeredAddress}
           />
-        </Form.Fieldset>
+        </CompanyForm.Fieldset>
 
-        <Form.Fieldset qa="save-and-continue-companies-house">
-          <Form.Submit>{getContent(x => x.pcrItem.submitButton)}</Form.Submit>
+        <CompanyForm.Fieldset qa="save-and-continue-companies-house">
+          <CompanyForm.Submit>{getContent(x => x.pcrItem.submitButton)}</CompanyForm.Submit>
 
-          <Form.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
+          <CompanyForm.Button name="saveAndReturnToSummary" onClick={() => props.onSave(true)}>
             {getContent(x => x.pcrItem.returnToSummaryButton)}
-          </Form.Button>
-        </Form.Fieldset>
-      </Form.Form>
+          </CompanyForm.Button>
+        </CompanyForm.Fieldset>
+      </CompanyForm.Form>
     </ACC.Section>
   );
 };
