@@ -77,7 +77,7 @@ class Restarter {
   getClientBanner() {
     return `
 (() => {
-  const source = new EventSource("${this.url}/dev/hook");
+  const source = new EventSource(window.location.origin + "/dev/hook");
   console.log("Client reloader loaded!", source);
 
   source.onmessage = () => {
