@@ -3,6 +3,9 @@ import * as colour from "../ui/styles/colours";
 import { configuration } from "../server/features/common";
 
 import * as pkg from "../../package.json";
+import { readFileSync } from "fs";
+
+const versionInformation = readFileSync("public/version");
 
 /**
  * The template into which the React App is injected. It includes the meta tags, links and google tag manager
@@ -14,6 +17,9 @@ export function renderHtml(HelmetInstance: HelmetData, html: string, preloadedSt
 
   return `
   <!DOCTYPE html>
+
+  ${versionInformation}
+
   <html lang="en-GB">
       <head>
           ${renderJSGoogleTagManager(configuration.googleTagManagerCode, nonce)}
