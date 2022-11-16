@@ -11,4 +11,3 @@ provision.sh
 .credentials
 /testframework/screenCaptures/
 /app/security/Tmp.Key
-/app/public/version

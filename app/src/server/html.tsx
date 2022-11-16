@@ -3,9 +3,55 @@ import * as colour from "../ui/styles/colours";
 import { configuration } from "../server/features/common";
 
 import * as pkg from "../../package.json";
-import { readFileSync } from "fs";
+import { execSync } from "child_process";
 
-const versionInformation = readFileSync("public/version");
+let versionInformation = "";
+
+try {
+  /**
+   * Run a command, capturing the stdout as a string.
+   * stderr is ignored.
+   *
+   * Returns undefined if an error occurs.
+   *
+   * @author Leondro Lio <leondro.lio@iuk.ukri.org>
+   */
+  const runCmd = (line: string): string | undefined => {
+    try {
+      return execSync(line, { stdio: ["pipe", "ignore", "ignore"] })
+        .toString()
+        .trim();
+    } catch {
+      return undefined;
+    }
+  };
+
+  const BUILD_DATETIME = new Date().toLocaleDateString(undefined, {
+    weekday: "long",
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+    hour12: true,
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    timeZoneName: "short",
+  });
+
+  const BUILD_GIT_COMMIT_HASH = process.env.BUILD_COMMIT_HASH ?? runCmd("git rev-parse HEAD") ?? "Unknown commit";
+  const BUILD_GIT_BRANCH_NAME = process.env.GIT_BRANCH ?? runCmd("git symbolic-ref --short HEAD") ?? "Unknown branch";
+  const BUILD_DIRTY_FLAG = runCmd("git status --short --porcelain")?.length ? "-dirty" : "";
+
+  versionInformation = `
+  <!--
+    Innovation Funding Service (Post Award)
+    Innovate UK, UK Research and Innovation
+  
+    Built on ${BUILD_DATETIME}
+    ${BUILD_GIT_BRANCH_NAME} (${BUILD_GIT_COMMIT_HASH}${BUILD_DIRTY_FLAG})
+  -->
+  `;
+} catch {}
 
 /**
  * The template into which the React App is injected. It includes the meta tags, links and google tag manager

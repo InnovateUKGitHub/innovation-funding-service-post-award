@@ -6,9 +6,6 @@ const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const TsConfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const makeHtmlBuildHeader = require("./scripts/makeHtmlBuildHeader");
-
-makeHtmlBuildHeader("Webpack");
 
 /**
  *
