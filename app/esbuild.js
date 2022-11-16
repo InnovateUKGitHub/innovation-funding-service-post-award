@@ -5,6 +5,7 @@
 const { program } = require("commander");
 const { build } = require("esbuild");
 const ESBuildConfiguration = require("./scripts/esbuild/ESBuildConfiguration");
+const makeHtmlBuildHeader = require("./scripts/makeHtmlBuildHeader");
 
 const opts = program.option("--watch").option("--tsc").option("--devtools").parse(process.argv).opts();
 
@@ -27,6 +28,8 @@ if (opts.devtools || shouldEnableDevTools) {
 // Build and bundle the server
 build(esbuildConfig.getServerConfig())
   .then(() => {
+    makeHtmlBuildHeader("ESBuild");
+
     // Create a server on first build.
     if (opts.watch) restarter.createServer();
   })
