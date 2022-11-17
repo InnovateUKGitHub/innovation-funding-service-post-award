@@ -44,12 +44,12 @@ export class GetClaimsTotalCosts extends QueryBase<TotalCosts> {
   ): TotalCosts => {
     const totalCostsClaimed: number = sumBy(claimDetails, claim => claim.costsClaimedThisPeriod);
 
-    // Start off with a simple calculation
+    // Start off with a simple calculation...
     let totalCostsPaid = this.calculateCostsClaimed(projectAwardRate, totalCostsClaimed);
 
-    // If there are cost category overrides...
-    if (claimOverrides.type !== AwardRateOverrideType.NONE) {
-      // Perform cost category based calculations
+    // ...unless the non-FEC project has cost category overrides
+    if (isNonFec && claimOverrides.type !== AwardRateOverrideType.NONE) {
+      // In which case, we should take into account any overrides.
       totalCostsPaid = this.calculateCostsClaimedWithCostCategoryOverrides(
         claimDetails,
         claimOverrides,
