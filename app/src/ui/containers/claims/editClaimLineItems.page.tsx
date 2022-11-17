@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */ // TODO: ACC-7889
 import type { ContentSelector } from "@copy/type";
+import { ClaimOverrideRateDto } from "@framework/dtos/claimOverrideRate";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import {
@@ -15,6 +16,7 @@ import { Pending } from "@shared/pending";
 import { range } from "@shared/range";
 import * as ACC from "@ui/components";
 import { UL } from "@ui/components";
+import { ClaimOverridesMessage } from "@ui/components/claims/ClaimOverridesMessage";
 import { EditorStatus } from "@ui/constants/enums";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
 import { MountedHoc, useMounted } from "@ui/features";
@@ -33,6 +35,7 @@ export interface EditClaimDetailsParams {
 export interface EditClaimLineItemsData {
   project: Pending<ProjectDto>;
   claimDetails: Pending<ClaimDetailsDto>;
+  claimOverrides: Pending<ClaimOverrideRateDto>;
   costCategories: Pending<CostCategoryDto[]>;
   editor: Pending<IEditorStore<ClaimDetailsDto, ClaimDetailsValidator>>;
   forecastDetail: Pending<ForecastDetailsDTO>;
@@ -43,6 +46,7 @@ export interface EditClaimLineItemsData {
 interface CombinedData {
   project: ProjectDto;
   claimDetails: ClaimDetailsDto;
+  claimOverrides: ClaimOverrideRateDto;
   costCategories: CostCategoryDto[];
   forecastDetail: ForecastDetailsDTO;
   documents: DocumentSummaryDto[];
@@ -74,6 +78,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     const combined = Pending.combine({
       project: this.props.project,
       claimDetails: this.props.claimDetails,
+      claimOverrides: this.props.claimOverrides,
       costCategories: this.props.costCategories,
       forecastDetail: this.props.forecastDetail,
       documents: this.props.documents,
@@ -83,7 +88,15 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     return <ACC.PageLoader pending={combined} render={data => this.renderContents(data)} />;
   }
 
-  private renderContents({ project, costCategories, documents, forecastDetail, claimDetails, editor }: CombinedData) {
+  private renderContents({
+    project,
+    costCategories,
+    documents,
+    forecastDetail,
+    claimOverrides,
+    claimDetails,
+    editor,
+  }: CombinedData) {
     const back = this.props.routes.prepareClaim.getLink({
       projectId: project.id,
       partnerId: this.props.partnerId,
@@ -119,6 +132,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title {...project} heading={costCategory.name} />}
       >
+        <ClaimOverridesMessage claimOverrides={claimOverrides} currentCostCategoryId={costCategory.id} />
         {this.renderNegativeClaimWarning(editor.data)}
 
         <>
@@ -650,6 +664,7 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
       claimDetails={stores.claimDetails.get(props.projectId, props.partnerId, props.periodId, props.costCategoryId)}
       costCategories={stores.costCategories.getAllFiltered(props.partnerId)}
       forecastDetail={stores.forecastDetails.get(props.partnerId, props.periodId, props.costCategoryId)}
+      claimOverrides={stores.claimOverrides.getAllByPartner(props.partnerId)}
       documents={stores.claimDetailDocuments.getClaimDetailDocuments(
         props.projectId,
         props.partnerId,
