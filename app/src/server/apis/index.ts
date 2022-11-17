@@ -4,6 +4,7 @@ import { NotFoundError } from "../features/common/appError";
 import * as accounts from "./accounts";
 import * as broadcasts from "./broadcast";
 import * as claims from "./claims";
+import * as claimOverrides from "./claimOverrides";
 import * as claimDetails from "./claimDetails";
 import * as companiesHouse from "./companies";
 import * as costsSummary from "./costsSummary";
@@ -29,6 +30,7 @@ export interface IApiClient {
   costsSummary: costsSummary.ICostsSummaryApi;
   companies: companiesHouse.ICompaniesApi;
   claims: claims.IClaimsApi;
+  claimOverrides: claimOverrides.IClaimOverridesApi;
   costCategories: costCategories.ICostCategoriesApi;
   documents: documents.IDocumentsApi;
   financialVirements: financialVirements.IFinancialVirement;
@@ -49,6 +51,7 @@ export const serverApis = {
   accounts: accounts.controller,
   broadcasts: broadcasts.controller,
   claims: claims.controller,
+  claimOverrides: claimOverrides.controller,
   claimDetails: claimDetails.controller,
   companies: companiesHouse.controller,
   costsSummary: costsSummary.controller,

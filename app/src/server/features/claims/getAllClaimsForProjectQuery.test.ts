@@ -17,7 +17,7 @@ describe("getAllClaimsForProjectQuery", () => {
       x.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED;
     });
 
-    context.testData.createProfileTotalPeriod(partner, expectedPeriodId, x => {
+    context.testData.createProfileTotalPeriod(partner, expectedPeriodId, undefined, x => {
       x.Acc_PeriodLatestForecastCost__c = expectedForcastCost;
     });
 
@@ -43,7 +43,7 @@ describe("getAllClaimsForProjectQuery", () => {
         x.Acc_ProjectPeriodCost__c = i * 10;
         x.Acc_ClaimStatus__c = ClaimStatus.INNOVATE_QUERIED;
       });
-      context.testData.createProfileTotalPeriod(partner, i, x => {
+      context.testData.createProfileTotalPeriod(partner, i, undefined, x => {
         x.Acc_PeriodLatestForecastCost__c = i * 100;
       });
     });
@@ -75,11 +75,11 @@ describe("getAllClaimsForProjectQuery", () => {
       x.Acc_ClaimStatus__c = ClaimStatus.APPROVED;
     });
 
-    context.testData.createProfileTotalPeriod(partner1, 1, x => {
+    context.testData.createProfileTotalPeriod(partner1, 1, undefined, x => {
       x.Acc_PeriodLatestForecastCost__c = 100;
     });
 
-    context.testData.createProfileTotalPeriod(partner2, 1, x => {
+    context.testData.createProfileTotalPeriod(partner2, 1, undefined, x => {
       x.Acc_PeriodLatestForecastCost__c = 200;
     });
 
@@ -112,11 +112,11 @@ describe("getAllClaimsForProjectQuery", () => {
       x.Acc_ClaimStatus__c = ClaimStatus.APPROVED;
     });
 
-    context.testData.createProfileTotalPeriod(partner1, 1, x => {
+    context.testData.createProfileTotalPeriod(partner1, 1, undefined, x => {
       x.Acc_PeriodLatestForecastCost__c = 100;
     });
 
-    context.testData.createProfileTotalPeriod(partner2, 1, x => {
+    context.testData.createProfileTotalPeriod(partner2, 1, undefined, x => {
       x.Acc_PeriodLatestForecastCost__c = 200;
     });
 

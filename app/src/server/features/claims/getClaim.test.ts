@@ -271,7 +271,7 @@ describe("GetClaim", () => {
     const period = 1;
 
     testData.createClaim(partner, period);
-    testData.createProfileTotalPeriod(partner, period, x => (x.Acc_PeriodLatestForecastCost__c = 0));
+    testData.createProfileTotalPeriod(partner, period, undefined, x => (x.Acc_PeriodLatestForecastCost__c = 0));
     const query = new GetClaim(partner.id, period);
     const result = await context.runQuery(query);
 

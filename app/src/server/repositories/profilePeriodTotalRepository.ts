@@ -8,6 +8,8 @@ export interface ISalesforceProfileTotalPeriod {
   Acc_ProjectPeriodStartDate__c: string;
   Acc_ProjectPeriodEndDate__c: string;
   Acc_PeriodLatestForecastCost__c: number;
+  Acc_OverrideAwardRate__c: number;
+  Acc_ProfileOverrideAwardRate__c: number;
 }
 
 export interface IProfileTotalPeriodRepository {
@@ -39,6 +41,8 @@ export class ProfileTotalPeriodRepository
     "Acc_ProjectPeriodStartDate__c",
     "Acc_ProjectPeriodEndDate__c",
     "Acc_PeriodLatestForecastCost__c",
+    "Acc_OverrideAwardRate__c",
+    "Acc_ProfileOverrideAwardRate__c",
   ];
 
   getAllByProjectId(projectId: string): Promise<ISalesforceProfileTotalPeriod[]> {
