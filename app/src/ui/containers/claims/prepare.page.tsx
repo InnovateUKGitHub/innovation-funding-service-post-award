@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 import { useStores } from "@ui/redux";
 import * as ACC from "@ui/components";
@@ -8,6 +8,7 @@ import { ClaimDtoValidator } from "@ui/validators/claimDtoValidator";
 import { Pending } from "@shared/pending";
 import {
   ClaimDto,
+  ClaimOverrideRateDto,
   ClaimStatusChangeDto,
   CostsSummaryForPeriodDto,
   getAuthRoles,
@@ -18,6 +19,7 @@ import {
 } from "@framework/types";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { ClaimDrawdownTable } from "./components/ClaimDrawdownTable";
+import { ClaimOverridesMessage } from "@ui/components/claims";
 
 export interface PrepareClaimParams {
   projectId: string;
@@ -30,6 +32,7 @@ interface Data {
   partner: Pending<PartnerDto>;
   costCategories: Pending<CostCategoryDto[]>;
   claim: Pending<ClaimDto>;
+  claimOverrides: Pending<ClaimOverrideRateDto>;
   costsSummaryForPeriod: Pending<CostsSummaryForPeriodDto[]>;
   editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
   statusChanges: Pending<ClaimStatusChangeDto[]>;
@@ -44,6 +47,7 @@ interface CombinedData {
   partner: PartnerDto;
   costCategories: CostCategoryDto[];
   claim: ClaimDto;
+  claimOverrides: ClaimOverrideRateDto;
   claimDetails: CostsSummaryForPeriodDto[];
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
 }
@@ -57,6 +61,7 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
       partner: this.props.partner,
       costCategories: this.props.costCategories,
       claim: this.props.claim,
+      claimOverrides: this.props.claimOverrides,
       claimDetails: this.props.costsSummaryForPeriod,
       editor: this.props.editor,
     });
@@ -76,6 +81,7 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title {...data.project} />}
       >
+        <ClaimOverridesMessage claimOverrides={data.claimOverrides} />
         {data.claim.isFinalClaim && (
           <ACC.ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />
         )}
@@ -170,6 +176,7 @@ const PrepareContainer = (props: PrepareClaimParams & BaseProps) => {
       partner={stores.partners.getById(props.partnerId)}
       costCategories={stores.costCategories.getAllFiltered(props.partnerId)}
       claim={stores.claims.get(props.partnerId, props.periodId)}
+      claimOverrides={stores.claimOverrides.getAllByPartner(props.partnerId)}
       costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}
       statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
       editor={stores.claims.getClaimEditor(false, props.projectId, props.partnerId, props.periodId)}

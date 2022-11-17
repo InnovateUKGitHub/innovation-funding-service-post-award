@@ -90,6 +90,10 @@ const stubProps = {
     data: { id: projectId } as Partial<ProjectDto>,
     state: LoadingStatus.Done,
   } as Pending<ProjectDto>,
+  claimOverrides: {
+    data: {},
+    state: LoadingStatus.Done,
+  },
   claimDetails: {
     data: {},
     state: LoadingStatus.Done,
