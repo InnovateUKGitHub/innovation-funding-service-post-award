@@ -107,6 +107,7 @@ async function getCreateDto(context: TestContext, startDate?: string, endDate?: 
   context.testData.createProfileTotalPeriod(
     partner,
     1,
+    undefined,
     x => (
       startDate && (x.Acc_ProjectPeriodStartDate__c = startDate), endDate && (x.Acc_ProjectPeriodEndDate__c = endDate)
     ),

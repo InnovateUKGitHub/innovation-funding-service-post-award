@@ -13,11 +13,13 @@ describe("GetClaimsTotalCosts", () => {
     const project = testData.createProject(x => ((x.Id = projectId), (x.Acc_NonFEC__c = isNonFecProject)));
     const partner = testData.createPartner(project, x => ((x.id = partnerId), (x.awardRate = awardRate)));
 
+    // Create a new cost category that is associated with the project.
     const stubCostCategory = testData.createCostCategory({
       competitionType: project.Acc_CompetitionType__c,
       organisationType: partner.organisationType,
     });
     testData.createProfileDetail(stubCostCategory, partner, periodNum);
+    testData.createProfileTotalCostCategory(stubCostCategory, partner);
     testData.createClaimDetail(
       project,
       stubCostCategory,
@@ -26,14 +28,16 @@ describe("GetClaimsTotalCosts", () => {
       x => (x.Acc_PeriodCostCategoryTotal__c = 2600),
     );
 
+    // Create a second cost category that should be awarded at a different award rate
     if (isNonFecProject) {
-      const overrideAwardRateCostCategory = context.testData.createCostCategory({
+      const overrideAwardRateCostCategory = testData.createCostCategory({
         competitionType: project.Acc_CompetitionType__c,
         organisationType: partner.organisationType,
         overrideAwardRate: overrideAwardRate ?? 100,
       });
-      context.testData.createProfileDetail(overrideAwardRateCostCategory, partner, periodNum);
-      context.testData.createClaimDetail(
+      testData.createProfileDetail(overrideAwardRateCostCategory, partner, periodNum);
+      testData.createProfileTotalCostCategory(overrideAwardRateCostCategory, partner);
+      testData.createClaimDetail(
         project,
         overrideAwardRateCostCategory,
         partner,

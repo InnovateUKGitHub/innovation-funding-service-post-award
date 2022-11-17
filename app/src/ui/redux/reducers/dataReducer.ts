@@ -71,6 +71,7 @@ const reducers = {
   broadcast: dataStoreReducer<Dtos.BroadcastDto>("broadcast"),
   claims: dataStoreReducer<Dtos.ClaimDto[]>("claims"),
   claim: dataStoreReducer<Dtos.ClaimDto>("claim"),
+  claimOverrides: dataStoreReducer<Dtos.ClaimOverrideRateDto>("claimOverrides"),
   allClaimsIncludingNew: dataStoreReducer<Dtos.ClaimDto[]>("allClaimsIncludingNew"),
   claimTotalCosts: dataStoreReducer<TotalCosts>("claimTotalCosts"),
   claimDetail: dataStoreReducer<ClaimDetailsDto>("claimDetail"),

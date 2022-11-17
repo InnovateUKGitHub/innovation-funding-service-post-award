@@ -24,6 +24,9 @@ const clientApi: IApiClient = {
     getTotalCosts: params =>
       ajaxJson(`/api/claims/${params.projectId}/${params.partnerId}/${params.periodId}/total-costs`),
   },
+  claimOverrides: {
+    getAllByPartner: params => ajaxJson(`/api/claim-overrides/${params.partnerId}`),
+  },
   companies: {
     searchCompany: params =>
       ajaxJson(

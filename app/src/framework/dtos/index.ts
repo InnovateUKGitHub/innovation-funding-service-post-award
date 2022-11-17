@@ -1,6 +1,7 @@
 export * from "./accountDto";
 export * from "./BroadcastDto";
 export * from "./claimDto";
+export * from "./claimOverrideRate";
 export * from "./companyDto";
 export * from "./monitoringReportDto";
 export * from "./partnerDto";

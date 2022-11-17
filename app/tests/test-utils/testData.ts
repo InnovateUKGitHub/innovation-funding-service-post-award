@@ -694,6 +694,7 @@ export class TestData {
     costCategory?: Entities.CostCategory,
     partner?: Entities.Partner,
     golCost?: number,
+    profileOverrideAwardRate?: number,
     update?: (item: Repositories.ISalesforceProfileTotalCostCategory) => void,
   ): Repositories.ISalesforceProfileTotalCostCategory {
     costCategory = costCategory || this.createCostCategory();
@@ -702,9 +703,14 @@ export class TestData {
 
     const newItem: Repositories.ISalesforceProfileTotalCostCategory = {
       Acc_CostCategory__c: costCategory.id,
+      Acc_CostCategory__r: {
+        Acc_CostCategoryName__c: costCategory.name,
+      },
       Acc_ProjectParticipant__c: partner.id,
       Acc_CostCategoryGOLCost__c: golCost,
       Id: this.repositories.profileTotalCostCategory.Items.length + 1 + "",
+      Acc_OverrideAwardRate__c: profileOverrideAwardRate ?? costCategory.overrideAwardRate ?? null,
+      Acc_ProfileOverrideAwardRate__c: profileOverrideAwardRate ?? null,
     };
 
     if (update) {
@@ -719,6 +725,7 @@ export class TestData {
   public createProfileTotalPeriod(
     partner?: Entities.Partner,
     periodId?: number,
+    profileOverrideAwardRate?: number,
     update?: (item: Repositories.ISalesforceProfileTotalPeriod) => void,
   ): Repositories.ISalesforceProfileTotalPeriod {
     partner = partner || this.createPartner();
@@ -729,6 +736,8 @@ export class TestData {
       Acc_ProjectPeriodNumber__c: periodId || 1,
       Acc_ProjectPeriodStartDate__c: "2020-08-01",
       Acc_ProjectPeriodEndDate__c: "2020-08-31",
+      Acc_OverrideAwardRate__c: profileOverrideAwardRate ?? 14,
+      Acc_ProfileOverrideAwardRate__c: profileOverrideAwardRate ?? 14,
       LastModifiedDate: new Date().toISOString(),
     };
 

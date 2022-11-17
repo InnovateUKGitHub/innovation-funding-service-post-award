@@ -4,8 +4,13 @@ import SalesforceRepositoryBase from "./salesforceRepositoryBase";
 export interface ISalesforceProfileTotalCostCategory {
   Id: string;
   Acc_CostCategory__c: string;
+  Acc_CostCategory__r: {
+    Acc_CostCategoryName__c: string;
+  };
   Acc_CostCategoryGOLCost__c: number;
   Acc_ProjectParticipant__c: string;
+  Acc_OverrideAwardRate__c: number | null;
+  Acc_ProfileOverrideAwardRate__c: number | null;
 }
 
 export interface IProfileTotalCostCategoryRepository {
@@ -32,8 +37,11 @@ export class ProfileTotalCostCategoryRepository
   protected readonly salesforceFieldNames = [
     "Id",
     "Acc_CostCategory__c",
+    "Acc_CostCategory__r.Acc_CostCategoryName__c",
     "Acc_CostCategoryGOLCost__c",
     "Acc_ProjectParticipant__c",
+    "Acc_OverrideAwardRate__c",
+    "Acc_ProfileOverrideAwardRate__c",
   ];
 
   getAllByPartnerId(partnerId: string): Promise<ISalesforceProfileTotalCostCategory[]> {
