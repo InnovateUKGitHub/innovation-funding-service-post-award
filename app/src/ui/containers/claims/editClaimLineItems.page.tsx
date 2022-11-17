@@ -132,7 +132,11 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title {...project} heading={costCategory.name} />}
       >
-        <ClaimOverridesMessage claimOverrides={claimOverrides} currentCostCategoryId={costCategory.id} />
+        <ClaimOverridesMessage
+          claimOverrides={claimOverrides}
+          currentCostCategoryId={costCategory.id}
+          isNonFec={project.isNonFec}
+        />
         {this.renderNegativeClaimWarning(editor.data)}
 
         <>

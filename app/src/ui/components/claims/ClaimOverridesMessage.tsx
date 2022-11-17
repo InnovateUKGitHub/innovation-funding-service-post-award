@@ -7,10 +7,12 @@ const ClaimOverridesMessage = ({
   claimOverrides,
   currentPeriod,
   currentCostCategoryId,
+  isNonFec,
 }: {
   claimOverrides: ClaimOverrideRateDto;
   currentPeriod?: number;
   currentCostCategoryId?: string;
+  isNonFec: boolean;
 }) => {
   const getIntroductionMessage = (type: AwardRateOverrideType) => {
     switch (type) {
@@ -79,6 +81,9 @@ const ClaimOverridesMessage = ({
 
   const introMessage = getIntroductionMessage(claimOverrides.type);
 
+  // Only display message if we are non-FEC
+  if (!isNonFec) return null;
+  // ...and we have an award type.
   if (!introMessage) return null;
 
   return (

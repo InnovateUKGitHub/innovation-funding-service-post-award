@@ -81,7 +81,7 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title {...data.project} />}
       >
-        <ClaimOverridesMessage claimOverrides={data.claimOverrides} />
+        <ClaimOverridesMessage claimOverrides={data.claimOverrides} isNonFec={data.project.isNonFec} />
         {data.claim.isFinalClaim && (
           <ACC.ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />
         )}
