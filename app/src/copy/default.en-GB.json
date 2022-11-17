@@ -441,7 +441,6 @@
       "differenceLabel": "Difference",
       "editForecastMessage": "Edit forecast",
       "costsTitle": "Costs to be claimed",
-      "nonFecCalculationMessage": "This claim does not follow the normal grant calculation rules (Costs claimed X Funding award rate). This claim may have one or more cost categories paid at a different funding award rate compared to your overall funding award rate.",
       "forecastTitle": "Forecast"
     },
     "claimReview": {

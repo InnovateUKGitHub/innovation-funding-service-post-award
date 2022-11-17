@@ -9,6 +9,7 @@ import { Pending } from "@shared/pending";
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import {
   ClaimDto,
+  ClaimOverrideRateDto,
   ClaimStatus,
   ClaimStatusChangeDto,
   CostsSummaryForPeriodDto,
@@ -21,6 +22,7 @@ import {
 } from "@framework/types";
 import { roundCurrency } from "@framework/util";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
+import { ClaimOverridesMessage } from "@ui/components/claims";
 
 export interface ClaimSummaryParams {
   projectId: string;
@@ -32,6 +34,7 @@ interface CombinedData {
   project: ProjectDto;
   partner: PartnerDto;
   claim: ClaimDto;
+  claimOverrides: ClaimOverrideRateDto;
   claimDetails: CostsSummaryForPeriodDto[];
   editor: IEditorStore<ClaimDto, ClaimDtoValidator>;
   statusChanges: ClaimStatusChangeDto[];
@@ -44,6 +47,7 @@ interface ClaimSummaryComponentProps extends ClaimSummaryParams, BaseProps {
   project: Pending<ProjectDto>;
   partner: Pending<PartnerDto>;
   claim: Pending<ClaimDto>;
+  claimOverrides: Pending<ClaimOverrideRateDto>;
   costsSummaryForPeriod: Pending<CostsSummaryForPeriodDto[]>;
   editor: Pending<IEditorStore<ClaimDto, ClaimDtoValidator>>;
   statusChanges: Pending<ClaimStatusChangeDto[]>;
@@ -92,11 +96,7 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
             title={<ACC.Content value={x => x.pages.claimPrepareSummary.costsTitle} />}
             qa="costs-to-be-claimed-summary"
           >
-            {data.project.isNonFec && (
-              <ACC.Renderers.SimpleString>
-                <ACC.Content value={x => x.pages.claimPrepareSummary.nonFecCalculationMessage} />
-              </ACC.Renderers.SimpleString>
-            )}
+            <ClaimOverridesMessage claimOverrides={data.claimOverrides} isNonFec={data.project.isNonFec} />
             <ACC.SummaryList qa="costs-to-be-claimed-summary-list">
               <ACC.SummaryListItem
                 label={x => x.pages.claimPrepareSummary.costsClaimedLabel}
@@ -313,6 +313,7 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
     project: props.project,
     partner: props.partner,
     claim: props.claim,
+    claimOverrides: props.claimOverrides,
     claimDetails: props.costsSummaryForPeriod,
     editor: props.editor,
     statusChanges: props.statusChanges,
@@ -335,6 +336,7 @@ const ClaimSummaryContainer = (props: ClaimSummaryParams & BaseProps) => {
       project={stores.projects.getById(props.projectId)}
       partner={stores.partners.getById(props.partnerId)}
       claim={stores.claims.get(props.partnerId, props.periodId)}
+      claimOverrides={stores.claimOverrides.getAllByPartner(props.partnerId)}
       costsSummaryForPeriod={stores.costsSummaries.getForPeriod(props.projectId, props.partnerId, props.periodId)}
       statusChanges={stores.claims.getStatusChanges(props.projectId, props.partnerId, props.periodId)}
       documents={stores.claimDocuments.getClaimDocuments(props.projectId, props.partnerId, props.periodId)}
