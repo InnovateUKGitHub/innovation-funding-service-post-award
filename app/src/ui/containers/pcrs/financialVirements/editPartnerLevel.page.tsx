@@ -8,6 +8,7 @@ import { FinancialVirementDto, PartnerDto, ProjectDto } from "@framework/dtos";
 import { useContent } from "@ui/hooks";
 import { IRoutes } from "@ui/routing";
 import { EditorStatus } from "@ui/constants/enums";
+import { AwardRateOverridesMessage } from "@ui/components/claims";
 
 const VirementForm = ACC.createTypedForm<FinancialVirementDto>();
 
@@ -120,6 +121,7 @@ const EditPartnerLevelComponent = (props: EditPartnerLevelProps & FinancialVirem
             validator={editor.validator}
           >
             <ACC.Section>
+              <AwardRateOverridesMessage isNonFec={project.isNonFec} />
               <ACC.Renderers.SimpleString>{props.content.remainingGrantInfoIntro}</ACC.Renderers.SimpleString>
               <ACC.Renderers.SimpleString>{props.content.remainingGrantInfoCheckRules}</ACC.Renderers.SimpleString>
               <ACC.Renderers.SimpleString>{props.content.remainingGrantInfoRemainingGrant}</ACC.Renderers.SimpleString>

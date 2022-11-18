@@ -16,7 +16,7 @@ import { Pending } from "@shared/pending";
 import { range } from "@shared/range";
 import * as ACC from "@ui/components";
 import { UL } from "@ui/components";
-import { ClaimOverridesMessage } from "@ui/components/claims/ClaimOverridesMessage";
+import { AwardRateOverridesMessage } from "@ui/components/claims/AwardRateOverridesMessage";
 import { EditorStatus } from "@ui/constants/enums";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
 import { MountedHoc, useMounted } from "@ui/features";
@@ -132,7 +132,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
         validator={editor.validator}
         pageTitle={<ACC.Projects.Title {...project} heading={costCategory.name} />}
       >
-        <ClaimOverridesMessage
+        <AwardRateOverridesMessage
           claimOverrides={claimOverrides}
           currentCostCategoryId={costCategory.id}
           isNonFec={project.isNonFec}

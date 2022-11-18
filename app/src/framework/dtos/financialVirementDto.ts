@@ -49,4 +49,6 @@ export interface CostCategoryVirementDto {
   originalRemainingCosts: number;
   newEligibleCosts: number;
   newRemainingCosts: number;
+  originalRemainingGrant: number;
+  newRemainingGrant: number;
 }
