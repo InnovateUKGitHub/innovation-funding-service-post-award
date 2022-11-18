@@ -3,38 +3,56 @@ import { ClaimOverrideRateDto } from "@framework/dtos";
 import { Content } from "../content";
 import { ValidationMessage } from "../validationMessage";
 
-const ClaimOverridesMessage = ({
+export enum AwardRateOverrideLabel {
+  CLAIM = "claim",
+  PROJECT = "project",
+}
+
+const AwardRateOverridesMessage = ({
   claimOverrides,
   currentPeriod,
   currentCostCategoryId,
   isNonFec,
+  overrideLabel = AwardRateOverrideLabel.CLAIM,
 }: {
-  claimOverrides: ClaimOverrideRateDto;
+  claimOverrides?: ClaimOverrideRateDto;
   currentPeriod?: number;
   currentCostCategoryId?: string;
   isNonFec: boolean;
+  overrideLabel?: AwardRateOverrideLabel;
 }) => {
-  const getIntroductionMessage = (type: AwardRateOverrideType) => {
+  const getIntroductionMessage = (type?: AwardRateOverrideType) => {
     switch (type) {
       case AwardRateOverrideType.BY_COST_CATEGORY:
-        return <Content markdown value={x => x.components.claimOverridesMessage.costCategoryAwardRateOverride} />;
+        switch (overrideLabel) {
+          case AwardRateOverrideLabel.PROJECT:
+            return (
+              <Content markdown value={x => x.components.awardRateOverridesMessage.costCategoryAwardRateOverride} />
+            );
+          case AwardRateOverrideLabel.CLAIM:
+            return (
+              <Content
+                markdown
+                value={x => x.components.awardRateOverridesMessage.claimCostCategoryAwardRateOverride}
+              />
+            );
+        }
       case AwardRateOverrideType.BY_PERIOD:
-        return <Content markdown value={x => x.components.claimOverridesMessage.periodAwardRateOverride} />;
+        switch (overrideLabel) {
+          case AwardRateOverrideLabel.PROJECT:
+            return <Content markdown value={x => x.components.awardRateOverridesMessage.periodAwardRateOverride} />;
+          case AwardRateOverrideLabel.CLAIM:
+            return (
+              <Content markdown value={x => x.components.awardRateOverridesMessage.claimPeriodAwardRateOverride} />
+            );
+        }
       default:
-        return null;
+        return <Content markdown value={x => x.components.awardRateOverridesMessage.nonFec} />;
     }
   };
 
   const getOverrideList = (overrides: ClaimOverrideRateDto) => {
     switch (overrides.type) {
-      // case AwardRateOverrideType.BY_COST_CATEGORY:
-      //   return (
-      //     <ul>
-      //       {overrides.overrides.map(override => (
-      //         <li key={override.costCategoryId}><Content value={x => x.components.claimOverridesMessage.periodPaidAt({ period: })} /></li>
-      //       ))}
-      //     </ul>
-      //   );
       case AwardRateOverrideType.BY_COST_CATEGORY:
         return (
           <ul>
@@ -50,9 +68,9 @@ const ClaimOverridesMessage = ({
               .map(override => (
                 <li key={override.costCategoryId}>
                   {currentCostCategoryId === override.costCategoryId ? (
-                    <Content value={x => x.components.claimOverridesMessage.currentCostCategoryPaidAt(override)} />
+                    <Content value={x => x.components.awardRateOverridesMessage.currentCostCategoryPaidAt(override)} />
                   ) : (
-                    <Content value={x => x.components.claimOverridesMessage.costCategoryPaidAt(override)} />
+                    <Content value={x => x.components.awardRateOverridesMessage.costCategoryPaidAt(override)} />
                   )}
                 </li>
               ))}
@@ -66,9 +84,9 @@ const ClaimOverridesMessage = ({
               .map(override => (
                 <li key={override.period}>
                   {currentPeriod === override.period ? (
-                    <Content value={x => x.components.claimOverridesMessage.currentPeriodPaidAt(override)} />
+                    <Content value={x => x.components.awardRateOverridesMessage.currentPeriodPaidAt(override)} />
                   ) : (
-                    <Content value={x => x.components.claimOverridesMessage.periodPaidAt(override)} />
+                    <Content value={x => x.components.awardRateOverridesMessage.periodPaidAt(override)} />
                   )}
                 </li>
               ))}
@@ -79,12 +97,10 @@ const ClaimOverridesMessage = ({
     }
   };
 
-  const introMessage = getIntroductionMessage(claimOverrides.type);
+  const introMessage = getIntroductionMessage(claimOverrides?.type);
 
   // Only display message if we are non-FEC
   if (!isNonFec) return null;
-  // ...and we have an award type.
-  if (!introMessage) return null;
 
   return (
     <ValidationMessage
@@ -92,11 +108,11 @@ const ClaimOverridesMessage = ({
       message={
         <>
           {introMessage}
-          {getOverrideList(claimOverrides)}
+          {claimOverrides && getOverrideList(claimOverrides)}
         </>
       }
     />
   );
 };
 
-export { ClaimOverridesMessage };
+export { AwardRateOverridesMessage };

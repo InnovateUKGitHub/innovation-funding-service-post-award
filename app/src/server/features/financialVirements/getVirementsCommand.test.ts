@@ -17,7 +17,7 @@ describe("GetFinancialVirementQuery", () => {
     };
   };
 
-  it("calculates the partner newEligibleCosts and newRemainingGrant if they are undefined", async () => {
+  it("calculates the partner newEligibleCosts and newRemainingGrant", async () => {
     const { testContext, testData, pcrItem, partner } = setup();
 
     const costCategory1 = testData.createCostCategory();
@@ -64,51 +64,6 @@ describe("GetFinancialVirementQuery", () => {
 
     expect(dtoPartner.newEligibleCosts).toBe(newEligibleCosts);
     expect(dtoPartner.newRemainingGrant).toBe(newRemainingGrant);
-  });
-
-  it("returns the partner newEligibleCosts without calculating if it is not undefined", async () => {
-    const { testContext, testData, pcrItem, partner } = setup();
-
-    const costCategory1 = testData.createCostCategory();
-    const costCategory2 = testData.createCostCategory();
-
-    const stubVirement1 = {
-      id: "cat1",
-      costCategoryId: costCategory1.id,
-      newEligibleCosts: 50,
-      originalCostsClaimedToDate: 51,
-      originalEligibleCosts: 52,
-      profileId: "profileId",
-    };
-
-    const stubVirement2 = {
-      id: "cat2",
-      costCategoryId: costCategory2.id,
-      newEligibleCosts: 60,
-      originalCostsClaimedToDate: 51,
-      originalEligibleCosts: 52,
-      profileId: "profileId",
-    };
-
-    const stubPayload = {
-      newRemainingGrant: 1,
-      newEligibleCosts: 2,
-      newFundingLevel: 53,
-      originalFundingLevel: 100,
-      virements: [stubVirement1, stubVirement2],
-    };
-
-    testData.createFinancialVirement(pcrItem, partner, stubPayload);
-
-    const dto = await testContext.runQuery(new GetFinancialVirementQuery(partner.projectId, pcrItem.id));
-
-    expect(dto).not.toBeNull();
-    expect(dto.partners.length).toBe(1);
-
-    const [dtoPartner] = dto.partners;
-
-    expect(dtoPartner.newEligibleCosts).toBe(2);
-    expect(dtoPartner.newRemainingGrant).toBe(1);
   });
 
   describe("returns edge cases", () => {

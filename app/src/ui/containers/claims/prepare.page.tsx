@@ -19,7 +19,7 @@ import {
 } from "@framework/types";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { ClaimDrawdownTable } from "./components/ClaimDrawdownTable";
-import { ClaimOverridesMessage } from "@ui/components/claims";
+import { AwardRateOverridesMessage } from "@ui/components/claims";
 
 export interface PrepareClaimParams {
   projectId: string;
@@ -81,7 +81,7 @@ class PrepareComponent extends ContainerBase<PrepareClaimParams, Data, Callbacks
         validator={data.editor.validator}
         pageTitle={<ACC.Projects.Title {...data.project} />}
       >
-        <ClaimOverridesMessage claimOverrides={data.claimOverrides} isNonFec={data.project.isNonFec} />
+        <AwardRateOverridesMessage claimOverrides={data.claimOverrides} isNonFec={data.project.isNonFec} />
         {data.claim.isFinalClaim && (
           <ACC.ValidationMessage messageType="info" message={x => x.claimsMessages.finalClaim} />
         )}

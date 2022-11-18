@@ -535,6 +535,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 5000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 35000 / 2,
+                  newRemainingGrant: 35000 / 2,
                 },
                 {
                   costCategoryName: "Overheads",
@@ -544,6 +546,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 1000,
                   originalEligibleCosts: 8000,
                   newEligibleCosts: 8000,
+                  originalRemainingGrant: 7000 / 2,
+                  newRemainingGrant: 7000 / 2,
                 },
                 {
                   costCategoryName: "Materials",
@@ -553,6 +557,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 7000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 33000 / 2,
+                  newRemainingGrant: 33000 / 2,
                 },
                 {
                   costCategoryName: "Capital usage",
@@ -562,6 +568,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 8000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 32000 / 2,
+                  newRemainingGrant: 32000 / 2,
                 },
                 {
                   costCategoryName: "Subcontracting",
@@ -571,6 +579,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 9000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 31000 / 2,
+                  newRemainingGrant: 31000 / 2,
                 },
                 {
                   costCategoryName: "Travel and subsistence",
@@ -580,6 +590,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 4000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 36000 / 2,
+                  newRemainingGrant: 36000 / 2,
                 },
                 {
                   costCategoryName: "Other costs",
@@ -589,6 +601,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 3000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 37000 / 2,
+                  newRemainingGrant: 37000 / 2,
                 },
               ],
             },
@@ -612,6 +626,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 5000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 35000 / 2,
+                  newRemainingGrant: 35000 / 2,
                 },
                 {
                   costCategoryName: "Overheads",
@@ -621,6 +637,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 1000,
                   originalEligibleCosts: 8000,
                   newEligibleCosts: 8000,
+                  originalRemainingGrant: 7000 / 2,
+                  newRemainingGrant: 7000 / 2,
                 },
                 {
                   costCategoryName: "Materials",
@@ -630,6 +648,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 7000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 33000 / 2,
+                  newRemainingGrant: 33000 / 2,
                 },
                 {
                   costCategoryName: "Capital usage",
@@ -639,6 +659,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 8000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 32000 / 2,
+                  newRemainingGrant: 32000 / 2,
                 },
                 {
                   costCategoryName: "Subcontracting",
@@ -648,6 +670,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 9000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 31000 / 2,
+                  newRemainingGrant: 31000 / 2,
                 },
                 {
                   costCategoryName: "Travel and subsistence",
@@ -657,6 +681,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 4000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 36000 / 2,
+                  newRemainingGrant: 36000 / 2,
                 },
                 {
                   costCategoryName: "Other costs",
@@ -666,6 +692,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 3000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 37000 / 2,
+                  newRemainingGrant: 37000 / 2,
                 },
               ],
             },
@@ -717,6 +745,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 5000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 35000 / 2,
+                  newRemainingGrant: 35000 / 2,
                 },
                 {
                   costCategoryName: "Overheads",
@@ -726,6 +756,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 1000,
                   originalEligibleCosts: 8000,
                   newEligibleCosts: 8000,
+                  originalRemainingGrant: 7000 / 2,
+                  newRemainingGrant: 7000 / 2,
                 },
                 {
                   costCategoryName: "Materials",
@@ -735,6 +767,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 7000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 33000 / 2,
+                  newRemainingGrant: 33000 / 2,
                 },
                 {
                   costCategoryName: "Capital usage",
@@ -744,6 +778,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 8000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 32000 / 2,
+                  newRemainingGrant: 32000 / 2,
                 },
                 {
                   costCategoryName: "Subcontracting",
@@ -753,6 +789,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 9000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 31000 / 2,
+                  newRemainingGrant: 31000 / 2,
                 },
                 {
                   costCategoryName: "Travel and subsistence",
@@ -762,6 +800,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 4000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 36000 / 2,
+                  newRemainingGrant: 36000 / 2,
                 },
                 {
                   costCategoryName: "Other costs",
@@ -771,6 +811,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 3000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 50000,
+                  originalRemainingGrant: 37000 / 2,
+                  newRemainingGrant: 47000 / 2,
                 },
               ],
             },
@@ -794,6 +836,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 5000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 35000 / 2,
+                  newRemainingGrant: 35000 / 2,
                 },
                 {
                   costCategoryName: "Overheads",
@@ -803,6 +847,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 1000,
                   originalEligibleCosts: 8000,
                   newEligibleCosts: 8000,
+                  originalRemainingGrant: 7000 / 2,
+                  newRemainingGrant: 7000 / 2,
                 },
                 {
                   costCategoryName: "Materials",
@@ -812,6 +858,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 7000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 33000 / 2,
+                  newRemainingGrant: 33000 / 2,
                 },
                 {
                   costCategoryName: "Capital usage",
@@ -821,6 +869,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 8000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 32000 / 2,
+                  newRemainingGrant: 32000 / 2,
                 },
                 {
                   costCategoryName: "Subcontracting",
@@ -830,6 +880,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 9000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 31000 / 2,
+                  newRemainingGrant: 31000 / 2,
                 },
                 {
                   costCategoryName: "Travel and subsistence",
@@ -839,6 +891,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 4000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 36000 / 2,
+                  newRemainingGrant: 36000 / 2,
                 },
                 {
                   costCategoryName: "Other costs",
@@ -848,6 +902,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 3000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 37000 / 2,
+                  newRemainingGrant: 37000 / 2,
                 },
               ],
             },
@@ -898,6 +954,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 5000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 35000 / 2,
+                  newRemainingGrant: 35000 / 2,
                 },
                 {
                   costCategoryName: "Overheads",
@@ -907,6 +965,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 1000,
                   originalEligibleCosts: 8000,
                   newEligibleCosts: 8000,
+                  originalRemainingGrant: 7000 / 2,
+                  newRemainingGrant: 7000 / 2,
                 },
                 {
                   costCategoryName: "Materials",
@@ -916,6 +976,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 7000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 33000 / 2,
+                  newRemainingGrant: 33000 / 2,
                 },
                 {
                   costCategoryName: "Capital usage",
@@ -925,6 +987,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 8000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 32000 / 2,
+                  newRemainingGrant: 32000 / 2,
                 },
                 {
                   costCategoryName: "Subcontracting",
@@ -934,6 +998,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 9000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 31000 / 2,
+                  newRemainingGrant: 31000 / 2,
                 },
                 {
                   costCategoryName: "Travel and subsistence",
@@ -943,6 +1009,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 4000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 36000 / 2,
+                  newRemainingGrant: 36000 / 2,
                 },
                 {
                   costCategoryName: "Other costs",
@@ -952,6 +1020,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 3000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 30000,
+                  originalRemainingGrant: 37000 / 2,
+                  newRemainingGrant: 27000 / 2,
                 },
               ],
             },
@@ -975,6 +1045,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 5000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 35000 / 2,
+                  newRemainingGrant: 35000 / 2,
                 },
                 {
                   costCategoryName: "Overheads",
@@ -984,6 +1056,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 1000,
                   originalEligibleCosts: 8000,
                   newEligibleCosts: 8000,
+                  originalRemainingGrant: 7000 / 2,
+                  newRemainingGrant: 7000 / 2,
                 },
                 {
                   costCategoryName: "Materials",
@@ -993,6 +1067,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 7000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 33000 / 2,
+                  newRemainingGrant: 33000 / 2,
                 },
                 {
                   costCategoryName: "Capital usage",
@@ -1002,6 +1078,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 8000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 32000 / 2,
+                  newRemainingGrant: 32000 / 2,
                 },
                 {
                   costCategoryName: "Subcontracting",
@@ -1011,6 +1089,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 9000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 31000 / 2,
+                  newRemainingGrant: 31000 / 2,
                 },
                 {
                   costCategoryName: "Travel and subsistence",
@@ -1020,6 +1100,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 4000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 36000 / 2,
+                  newRemainingGrant: 36000 / 2,
                 },
                 {
                   costCategoryName: "Other costs",
@@ -1029,6 +1111,8 @@ describe("<FinancialVirementSummary />", () => {
                   costsClaimedToDate: 3000,
                   originalEligibleCosts: 40000,
                   newEligibleCosts: 40000,
+                  originalRemainingGrant: 37000 / 2,
+                  newRemainingGrant: 37000 / 2,
                 },
               ],
             },

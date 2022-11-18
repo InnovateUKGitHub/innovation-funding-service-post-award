@@ -22,7 +22,7 @@ import {
 } from "@framework/types";
 import { roundCurrency } from "@framework/util";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
-import { ClaimOverridesMessage } from "@ui/components/claims";
+import { AwardRateOverridesMessage } from "@ui/components/claims";
 
 export interface ClaimSummaryParams {
   projectId: string;
@@ -96,7 +96,7 @@ const ClaimSummaryComponent = (props: ClaimSummaryComponentProps) => {
             title={<ACC.Content value={x => x.pages.claimPrepareSummary.costsTitle} />}
             qa="costs-to-be-claimed-summary"
           >
-            <ClaimOverridesMessage claimOverrides={data.claimOverrides} isNonFec={data.project.isNonFec} />
+            <AwardRateOverridesMessage claimOverrides={data.claimOverrides} isNonFec={data.project.isNonFec} />
             <ACC.SummaryList qa="costs-to-be-claimed-summary-list">
               <ACC.SummaryListItem
                 label={x => x.pages.claimPrepareSummary.costsClaimedLabel}

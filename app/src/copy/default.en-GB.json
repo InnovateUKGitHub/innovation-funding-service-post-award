@@ -53,9 +53,12 @@
     "claimLastModified": {
       "message": "Changes last saved"
     },
-    "claimOverridesMessage": {
-      "periodAwardRateOverride": "This claim does not follow the normal grant calculation rules (costs claimed × funding award rate).\n\nThis claim may have one or more periods paid at a different funding award rate compared to your overall funding award rate.",
-      "costCategoryAwardRateOverride": "This claim does not follow the normal grant calculation rules (costs claimed × funding award rate).\n\nThis claim may have one or more cost categories paid at a different funding award rate compared to your overall funding award rate.",
+    "awardRateOverridesMessage": {
+      "periodAwardRateOverride": "This project does not follow the normal grant calculation rules (costs claimed × funding award rate).\n\nThe partner may have one or more periods paid at a different funding award rate compared to your overall funding award rate.",
+      "costCategoryAwardRateOverride": "This project does not follow the normal grant calculation rules (costs claimed × funding award rate).\n\nThe partner may have one or more cost categories paid at a different funding award rate compared to your overall funding award rate.",
+      "claimPeriodAwardRateOverride": "This claim does not follow the normal grant calculation rules (costs claimed × funding award rate).\n\nThis claim may have one or more periods paid at a different funding award rate compared to your overall funding award rate.",
+      "claimCostCategoryAwardRateOverride": "This claim does not follow the normal grant calculation rules (costs claimed × funding award rate).\n\nThis claim may have one or more cost categories paid at a different funding award rate compared to your overall funding award rate.",
+      "nonFec": "This project does not follow the normal grant calculation rules (costs claimed × funding award rate).\n\nThe project and any partner may have one or more cost categories paid at a different funding award rate compared to your overall funding award rate.",
       "periodPaidAt": "Period {{period}} is paid at a rate of {{amount}}% rather than your normal Award rate",
       "currentPeriodPaidAt": "This period is paid at a rate of {{amount}}% rather than your normal Award rate",
       "costCategoryPaidAt": "Cost category {{costCategoryName, lowercase}} is paid at a rate of {{amount}}% rather than your normal Award rate",
@@ -1162,6 +1165,9 @@
     "costCategoryCostsClaimed": "Costs claimed",
     "costCategoryNewEligibleCosts": "New total eligible costs",
     "costCategoryDifferenceCosts": "Costs reallocated",
+    "costCategoryAwardRate": "Award rate",
+    "costCategoryNewRemainingGrant": "New remaining grant",
+    "costCategoryOriginalRemainingGrant": "Remaining grant",
     "projectTotals": "Project totals",
     "partnerTotals": "Partner totals",
     "grantMovingOverYear": "Grant value moving over the financial year end",

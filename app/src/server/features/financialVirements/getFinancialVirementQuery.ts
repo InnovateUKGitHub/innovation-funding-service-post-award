@@ -1,19 +1,18 @@
-import { QueryBase } from "@server/features/common";
-import { roundCurrency, sumBy } from "@framework/util";
+import { AwardRateOverrideType } from "@framework/constants/awardRateOverride";
+import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
+import { CostCategoryFinancialVirement, PartnerFinancialVirement } from "@framework/entities";
 import {
   Authorisation,
+  ClaimOverrideRateDto,
   CostCategoryVirementDto,
   FinancialVirementDto,
   IContext,
   PartnerVirementsDto,
   ProjectRole,
 } from "@framework/types";
-import { CostCategoryFinancialVirement, PartnerFinancialVirement } from "@framework/entities";
-import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
-import {
-  calculateNewEligibleCosts,
-  calculateNewRemainingGrant,
-} from "@server/features/financialVirements/financialVirementsCalculations";
+import { roundCurrency, sumBy } from "@framework/util";
+import { QueryBase } from "@server/features/common";
+import { GetClaimOverrideRates } from "../claims/getClaimOverrideRates";
 import { GetFilteredCostCategoriesQuery, GetUnfilteredCostCategoriesQuery } from "../claims/getCostCategoriesQuery";
 
 export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
@@ -36,18 +35,20 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
 
     const data = await context.repositories.financialVirements.getAllForPcr(this.pcrItemId);
 
-    const partners = data.map(x => this.mapPartner(x, costCategories));
+    const partners = await Promise.all(data.map(x => this.mapPartner(context, x, costCategories)));
 
-    const costsClaimedToDate = sumBy(partners, v => v.costsClaimedToDate);
-    const originalEligibleCosts = sumBy(partners, v => v.originalEligibleCosts);
-    const originalRemainingCosts = sumBy(partners, v => v.originalRemainingCosts);
-    const originalRemainingGrant = sumBy(partners, v => v.originalRemainingGrant);
-    const newEligibleCosts = sumBy(partners, v => v.newEligibleCosts);
-    const newRemainingCosts = sumBy(partners, v => v.newRemainingCosts);
-    const newRemainingGrant = sumBy(partners, v => v.newRemainingGrant);
+    const costsClaimedToDate = roundCurrency(sumBy(partners, v => v.costsClaimedToDate));
+    const originalEligibleCosts = roundCurrency(sumBy(partners, v => v.originalEligibleCosts));
+    const originalRemainingCosts = roundCurrency(sumBy(partners, v => v.originalRemainingCosts));
+    const originalRemainingGrant = roundCurrency(sumBy(partners, v => v.originalRemainingGrant));
+    const newEligibleCosts = roundCurrency(sumBy(partners, v => v.newEligibleCosts));
+    const newRemainingCosts = roundCurrency(sumBy(partners, v => v.newRemainingCosts));
+    const newRemainingGrant = roundCurrency(sumBy(partners, v => v.newRemainingGrant));
 
-    const originalFundingLevel = originalRemainingCosts ? (100 * originalRemainingGrant) / originalRemainingCosts : 0;
-    const newFundingLevel = newRemainingCosts ? (100 * newRemainingGrant) / newRemainingCosts : 0;
+    const originalFundingLevel = roundCurrency(
+      originalRemainingCosts ? (100 * originalRemainingGrant) / originalRemainingCosts : 0,
+    );
+    const newFundingLevel = roundCurrency(newRemainingCosts ? (100 * newRemainingGrant) / newRemainingCosts : 0);
 
     return {
       pcrItemId: this.pcrItemId,
@@ -65,28 +66,31 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
     };
   }
 
-  private mapPartner(partner: PartnerFinancialVirement, costCategories: CostCategoryDto[]): PartnerVirementsDto {
-    const { partnerId, newFundingLevel, newRemainingGrant, newEligibleCosts, originalFundingLevel } = partner;
+  private async mapPartner(
+    context: IContext,
+    partner: PartnerFinancialVirement,
+    costCategories: CostCategoryDto[],
+  ): Promise<PartnerVirementsDto> {
+    const { partnerId, originalFundingLevel, newFundingLevel } = partner;
+    const overrides = await context.runQuery(new GetClaimOverrideRates(partnerId));
 
-    const costCategoryVirements = partner.virements.map(x => this.mapCostCategory(x, costCategories));
+    const costCategoryVirements = partner.virements.map(x =>
+      this.mapCostCategory(x, costCategories, overrides, partner),
+    );
 
-    const totalCostsClaimedToDate = sumBy(costCategoryVirements, v => v.costsClaimedToDate);
-    const totalOriginalEligibleCosts = sumBy(costCategoryVirements, v => v.originalEligibleCosts);
+    const totalCostsClaimedToDate = roundCurrency(sumBy(costCategoryVirements, v => v.costsClaimedToDate));
+    const totalOriginalEligibleCosts = roundCurrency(sumBy(costCategoryVirements, v => v.originalEligibleCosts));
 
     // Note: Defensive coding here - not clear if setting newRemainingGrant on create
-    const roundedNewRemainingGrant = newRemainingGrant
-      ? roundCurrency(newRemainingGrant)
-      : calculateNewRemainingGrant(costCategoryVirements, newFundingLevel);
+    const roundedNewRemainingGrant = roundCurrency(sumBy(costCategoryVirements, v => v.newRemainingGrant));
+
+    const originalRemainingGrant = roundCurrency(sumBy(costCategoryVirements, v => v.originalRemainingGrant));
 
     // Note: Defensive coding here - not clear if setting newEligibleCosts on create
-    const roundedNewEligibleCosts = newEligibleCosts
-      ? roundCurrency(newEligibleCosts)
-      : calculateNewEligibleCosts(costCategoryVirements);
+    const roundedNewEligibleCosts = roundCurrency(sumBy(costCategoryVirements, v => v.newEligibleCosts));
 
-    const originalRemainingCosts = totalOriginalEligibleCosts - totalCostsClaimedToDate;
-    const originalFundingPercentage = originalFundingLevel / 100;
-    const originalRemainingGrant = roundCurrency(originalRemainingCosts * originalFundingPercentage);
-    const newRemainingCosts = roundedNewEligibleCosts - totalCostsClaimedToDate;
+    const originalRemainingCosts = roundCurrency(totalOriginalEligibleCosts - totalCostsClaimedToDate);
+    const newRemainingCosts = roundCurrency(roundedNewEligibleCosts - totalCostsClaimedToDate);
 
     return {
       partnerId,
@@ -106,10 +110,26 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
   private mapCostCategory(
     virement: CostCategoryFinancialVirement,
     costCategories: CostCategoryDto[],
+    overrides: ClaimOverrideRateDto,
+    partner: PartnerFinancialVirement,
   ): CostCategoryVirementDto {
     const costCategoryName = costCategories.filter(x => x.id === virement.costCategoryId).map(x => x.name)[0];
+
+    let { originalFundingLevel, newFundingLevel } = partner;
+
+    if (overrides.type === AwardRateOverrideType.BY_COST_CATEGORY) {
+      const override = overrides.overrides.find(x => x.costCategoryId === virement.costCategoryId);
+
+      if (override) {
+        originalFundingLevel = override.amount;
+        newFundingLevel = override.amount;
+      }
+    }
+
     const originalRemainingCosts = virement.originalEligibleCosts - virement.originalCostsClaimedToDate;
     const newRemainingCosts = virement.newEligibleCosts - virement.originalCostsClaimedToDate;
+    const originalRemainingGrant = roundCurrency(originalRemainingCosts * (originalFundingLevel / 100));
+    const newRemainingGrant = roundCurrency(newRemainingCosts * (newFundingLevel / 100));
 
     return {
       costCategoryName,
@@ -119,6 +139,8 @@ export class GetFinancialVirementQuery extends QueryBase<FinancialVirementDto> {
       costsClaimedToDate: virement.originalCostsClaimedToDate,
       originalEligibleCosts: virement.originalEligibleCosts,
       newEligibleCosts: virement.newEligibleCosts,
+      originalRemainingGrant,
+      newRemainingGrant,
     };
   }
 }
