@@ -52,3 +52,14 @@ export function useUpdateStateValueOnPropsChange<S>(value: S, setState: Dispatch
     setState(s => ({ ...s, value }));
   }, [value]);
 }
+
+/**
+ * ### useResetValueOnNameChange
+ *
+ * hook resets the value when the name changes for "virtual" unmounting in e.g. monitoring reports
+ */
+export function useResetValueOnNameChange(setState: Dispatch<SetStateAction<{ value: string }>>, name: string) {
+  useDidUpdate(() => {
+    setState(s => ({ ...s, value: "" }));
+  }, [name]);
+}
