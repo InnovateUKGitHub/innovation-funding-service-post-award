@@ -489,6 +489,8 @@
       "unavailableGrantMessage": "You must reduce your 'New remaining grant' project total to {{totalOriginalGrant}} or less, because you have exceeded it by {{grantDifference}}. You can change each partner\u2019s 'Remaining grant' to reduce the project total to the amount agreed.",
       "linkChangeGrant": "Change remaining grant",
       "headingYearEndGrantValue": "Grant value moving over the financial year end",
+      "nonFecGrantAdvice": "If you would like to reallocate costs between partners in this project, contact <0 />.",
+      "nonFecGrantAdviceChangeEmail": "grants_service@iuk.ukri.org",
       "grantAdvice": "If the new remaining grant is higher as a result of the reallocation of costs, you can change the funding level of partners to lower the new project grant."
     },
     "forecastsComponents": {
