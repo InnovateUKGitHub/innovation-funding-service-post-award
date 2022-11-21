@@ -33,6 +33,9 @@
         "requests": "Requests for virements must be submitted online using the Innovation Funding Service and must be approved before the related costs are incurred. These requests must not be submitted after the project partnership has ended."
       }
     },
+    "financialVirementSummary": {
+      "nonFecGrantAdviceChangeEmail": "ktpqueries@iuk.ukri.org"
+    },
     "pcrAddPartnerStateAidEligibility": {
       "guidanceNonAidFunding": "This screen is not relevant to KTPs. Click save and continue."
     },

@@ -18,6 +18,7 @@ import { useProjectParticipants } from "@ui/features/project-participants";
 import * as ACC from "@ui/components";
 
 import { PcrSummaryConsumer } from "../components/PcrSummary";
+import { EmailContent } from "@ui/components";
 
 export interface FinancialVirementSummaryProps
   extends PcrSummaryProps<
@@ -31,6 +32,7 @@ export interface FinancialVirementSummaryProps
 export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialVirementSummaryProps) => {
   const { getContent } = useContent();
   const { isMultipleParticipants } = useProjectParticipants();
+  const { isNonFec } = props.project;
 
   const getPartnerLink = (partnerVirement: PartnerVirementsDto, partner: PartnerDto) => {
     const params = {
@@ -156,7 +158,21 @@ export const FinancialVirementSummaryComponent = ({ mode, ...props }: FinancialV
                   />
                 </Table.Table>
 
-                {isMultipleParticipants && (
+                {isMultipleParticipants && isNonFec ? (
+                  <>
+                    <ACC.Renderers.SimpleString>
+                      <ACC.Content
+                        components={[
+                          <EmailContent
+                            key="email"
+                            value={x => x.pages.financialVirementSummary.nonFecGrantAdviceChangeEmail}
+                          />,
+                        ]}
+                        value={x => x.pages.financialVirementSummary.nonFecGrantAdvice}
+                      />
+                    </ACC.Renderers.SimpleString>
+                  </>
+                ) : (
                   <>
                     <ACC.Renderers.SimpleString>
                       <ACC.Content value={x => x.pages.financialVirementSummary.grantAdvice} />
