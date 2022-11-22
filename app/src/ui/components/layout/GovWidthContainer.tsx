@@ -1,9 +1,10 @@
 import cx from "classnames";
+import { ReactNode } from "react";
 
 type DivAttr = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>;
 
 export interface GovWidthContainerProps extends DivAttr {
-  children: React.ReactChild | React.ReactChild[];
+  children: ReactNode;
   className?: string;
   style?: React.CSSProperties;
 }

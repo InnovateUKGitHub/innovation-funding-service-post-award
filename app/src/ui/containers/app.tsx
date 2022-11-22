@@ -25,6 +25,7 @@ import { ProjectStatusCheck } from "./app/project-active";
 import { ErrorNotFoundRoute, ErrorRoute } from "./errors.page";
 import { useAppMount } from "./app/app-mount.hook";
 import { ErrorPayload } from "@shared/create-error-payload";
+import { DeveloperSection } from "@ui/components/layout/DeveloperSection";
 
 interface IAppProps {
   dispatch: Dispatch;
@@ -120,6 +121,7 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
               </GovWidthContainer>
             </FullHeight.Content>
 
+            {!config.ssoEnabled && <DeveloperSection />}
             <Footer />
 
             {modalRegister.getModals().map(modal => (

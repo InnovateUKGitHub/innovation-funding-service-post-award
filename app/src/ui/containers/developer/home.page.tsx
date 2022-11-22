@@ -4,7 +4,7 @@ import { H1, Page } from "@ui/components";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
-import { UserChanger } from "./UserChanger";
+import { UserSwitcher } from "./UserSwitcher";
 
 const DeveloperHomePage = (props: BaseProps) => {
   const { getContent } = useContent();
@@ -29,8 +29,6 @@ const DeveloperHomePage = (props: BaseProps) => {
           messages={[{ message: getContent(x => x.example.content), qa: "example-content-label" }]}
         />
       </ACC.NavigationCardsGrid>
-
-      <UserChanger />
     </Page>
   );
 };

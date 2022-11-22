@@ -266,6 +266,7 @@ export class TestData {
       },
       Acc_UserId__r: {
         Name: "Mr Internal Contact",
+        Username: `projectcontact${seed}@login.com.bjssdev`,
       },
       Acc_Role__c: role,
       RoleName: roleName,

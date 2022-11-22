@@ -8,9 +8,4 @@ export class ContactsStore extends StoreBase {
       apiClient.projectContacts.getAllByProjectId({ projectId, ...p }),
     );
   }
-  public getAllByProjectIdAsDeveloper(projectId: string) {
-    return this.getData("projectContacts", storeKeys.getProjectContactsKeyAsDeveloper(projectId), p =>
-      apiClient.projectContacts.getAllByProjectIdAsDeveloper({ projectId, ...p }),
-    );
-  }
 }

@@ -955,6 +955,7 @@ Object {
       "Acc_ContactId__r.Name",
       "Acc_ContactId__r.Email",
       "Acc_UserId__r.Name",
+      "Acc_UserId__r.Username",
     ],
     "salesforceObjectName": "Acc_ProjectContactLink__c",
   },
