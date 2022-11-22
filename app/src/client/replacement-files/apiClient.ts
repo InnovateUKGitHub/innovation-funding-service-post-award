@@ -55,6 +55,9 @@ const clientApi: IApiClient = {
     getAll: () => ajaxJson("/api/cost-categories"),
     getAllFiltered: params => ajaxJson(`/api/cost-categories/filtered/${params.partnerId}`),
   },
+  developerUsers: {
+    getAllByProjectId: params => ajaxJson(`/api/developer-users/${params.projectId}`),
+  },
   documents: {
     getLoanDocuments: params => ajaxJson(`/api/documents/loans/${params.projectId}/${params.loanId}`),
     uploadLoanDocuments: params =>
@@ -194,8 +197,6 @@ const clientApi: IApiClient = {
   },
   projectContacts: {
     getAllByProjectId: params => ajaxJson(`/api/project-contacts?projectId=${params.projectId}`),
-    getAllByProjectIdAsDeveloper: params =>
-      ajaxJson(`/api/project-contacts/allAsDeveloper?projectId=${params.projectId}`),
   },
   partners: {
     get: params => ajaxJson(`/api/partners/${params.partnerId}`),

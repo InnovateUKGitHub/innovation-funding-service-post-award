@@ -10,6 +10,7 @@ export * from "./configStore";
 export * from "./contactsStore";
 export * from "./costCategoriesStore";
 export * from "./costsSummariesStore";
+export * from "./developerUsersStore";
 export * from "./errorStore";
 export * from "./financialVirementsStore";
 export * from "./financialLoanVirementsStore";

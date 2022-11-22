@@ -17,7 +17,8 @@ export interface ISalesforceProjectContact {
   };
   Acc_UserId__r: {
     Name: string;
-  };
+    Username: string;
+  } | null;
 }
 
 export interface IProjectContactsRepository {
@@ -47,6 +48,7 @@ export class ProjectContactsRepository
     "Acc_ContactId__r.Name",
     "Acc_ContactId__r.Email",
     "Acc_UserId__r.Name",
+    "Acc_UserId__r.Username",
   ];
 
   getAllByProjectId(projectId: string): Promise<ISalesforceProjectContact[]> {

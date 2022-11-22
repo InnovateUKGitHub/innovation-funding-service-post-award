@@ -34,7 +34,7 @@ import { ProjectChangeRequestDeleteFormHandler } from "./projectChangeRequest/de
 import { BadRequestHandler } from "./badRequestHandler";
 import { ClaimForecastFormHandler } from "./claimForecastFormHandler";
 import { EditClaimLineItemsFormHandler } from "./editClaimLineItemsFormHandler";
-import { HomeFormHandler } from "./homeFormHandler";
+import { DeveloperUserSwitcherHandler } from "./developerUserSwitcherHandler";
 import { PrepareClaimFormHandler } from "./prepareClaimFormHandler";
 import { UpdateForecastFormHandler } from "./updateForecastFormHandler";
 import {
@@ -167,7 +167,7 @@ export const configureFormRouter = (csrfProtection: RequestHandler) => {
   });
 
   if (!configuration.sso.enabled) {
-    const homeFormHandler = new HomeFormHandler();
+    const homeFormHandler = new DeveloperUserSwitcherHandler();
     result.post(getRoute(homeFormHandler), csrfProtection, homeFormHandler.handle, handleError);
   }
 

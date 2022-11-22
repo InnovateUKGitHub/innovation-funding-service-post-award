@@ -47,7 +47,12 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     }
 
     const auth = await context.runQuery(new GetAllProjectRolesForUser());
-    const user: IClientUser = { roleInfo: auth.permissions, email: req.session?.user.email, csrf: req.csrfToken() };
+    const user: IClientUser = {
+      roleInfo: auth.permissions,
+      email: req.session?.user.email,
+      projectId: req.session?.user.projectId,
+      csrf: req.csrfToken(),
+    };
     const initialState = setupInitialState(user, clientConfig);
     const store = createStore(rootReducer, initialState, middleware);
 
@@ -78,7 +83,12 @@ export async function serverRender(req: Request, res: Response, error?: IAppErro
     const errorPayload = createErrorPayload(renderError as IAppError, false).params;
 
     const auth = new Authorisation({});
-    const user: IClientUser = { roleInfo: auth.permissions, email: "", csrf: req.csrfToken() };
+    const user: IClientUser = {
+      roleInfo: auth.permissions,
+      email: "",
+      csrf: req.csrfToken(),
+      projectId: req.session?.user.projectId,
+    };
     const initialState = setupInitialState(user, clientConfig);
     const store = createStore(rootReducer, initialState, middleware);
 
