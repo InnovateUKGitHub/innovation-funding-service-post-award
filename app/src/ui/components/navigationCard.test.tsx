@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 
-import { chunks, NavigationCard, NavigationCardProps, NavigationCardsGrid } from "@ui/components";
+import { NavigationCard, NavigationCardProps, NavigationCardsGrid } from "@ui/components";
 import { TestBed } from "@shared/TestBed";
 
 const createRoute = (uid: string) => ({
@@ -35,19 +35,6 @@ function createStubData(length: number): NavigationCardProps[] {
     };
   });
 }
-
-describe("chunks()", () => {
-  test.each`
-    name                                  | chunkSize | array                          | expected
-    ${"with 1 chunks with a length of 2"} | ${2}      | ${[1, 2]}                      | ${[[1, 2]]}
-    ${"with 2 chunks with a length of 2"} | ${2}      | ${[1, 2, 3, 4]}                | ${[[1, 2], [3, 4]]}
-    ${"with 1 chunk with a length of 3"}  | ${3}      | ${[1, 2, 3]}                   | ${[[1, 2, 3]]}
-    ${"with 2 chunks with a length of 3"} | ${3}      | ${[1, 2, 3, 4, 5, 6]}          | ${[[1, 2, 3], [4, 5, 6]]}
-    ${"with 3 chunks with a length of 3"} | ${3}      | ${[1, 2, 3, 4, 5, 6, 7, 8, 9]} | ${[[1, 2, 3], [4, 5, 6], [7, 8, 9]]}
-  `("should return $name", ({ chunkSize, array, expected }) => {
-    expect(chunks(array, chunkSize)).toStrictEqual(expected);
-  });
-});
 
 describe("<NavigationCard>", () => {
   const defaultProps = {
@@ -116,8 +103,8 @@ describe("<NavigationCard>", () => {
 });
 
 describe("<NavigationCardsGrid>", () => {
-  const setup = (totalChildren: number) => {
-    const stubNavigation = createStubData(totalChildren);
+  test("should render child components", () => {
+    const stubNavigation = createStubData(8);
     const { container } = render(
       <TestBed>
         <NavigationCardsGrid>
@@ -128,26 +115,8 @@ describe("<NavigationCardsGrid>", () => {
       </TestBed>,
     );
 
-    const navGroupElement = container.querySelectorAll(".govuk-grid-row");
-    const navGroupItemElement = container.querySelectorAll(".govuk-grid-column-one-third");
+    const navGroupElement = container.querySelectorAll(".card-link-grid");
 
-    return {
-      navGroupElement,
-      navGroupItemElement,
-    };
-  };
-
-  test.each`
-    name                        | totalItems | totalGroups
-    ${"with 1 group, 1 item"}   | ${1}       | ${1}
-    ${"with 1 group, 2 items"}  | ${2}       | ${1}
-    ${"with 2 groups, 4 item"}  | ${4}       | ${2}
-    ${"with 2 groups, 6 items"} | ${6}       | ${2}
-    ${"with 3 groups, 9 items"} | ${9}       | ${3}
-  `("should render $name", ({ totalItems, totalGroups }) => {
-    const { navGroupElement, navGroupItemElement } = setup(totalItems);
-
-    expect(navGroupItemElement).toHaveLength(totalItems);
-    expect(navGroupElement).toHaveLength(totalGroups);
+    expect(navGroupElement).toMatchSnapshot();
   });
 });
