@@ -15,7 +15,6 @@ export interface NavigationCardProps {
   messages?: NavigationCardMessage[];
 }
 
-// TODO: Refactor this component to be consumed via parent. E.G NavigationCardsGrid.Item = NavigationCard (Consume as <NavigationCardsGrid.Item ... />)
 export const NavigationCard = ({ qa, label, route, messages }: NavigationCardProps) => {
   return (
     <div className="card-link" data-qa={qa}>
@@ -40,44 +39,6 @@ export const NavigationCard = ({ qa, label, route, messages }: NavigationCardPro
 
 type NavigationCardsList = React.ReactElement<NavigationCardProps>[];
 
-interface NavigationCardsGridProps {
-  children: NavigationCardsList;
-}
-
-export const NavigationCardsGrid = ({ children }: NavigationCardsGridProps) => {
-  const childrenArray = React.Children.toArray(children) as NavigationCardsList;
-  const chunkSize = 3;
-
-  const gridLayout = chunks(childrenArray, chunkSize);
-
-  return (
-    <>
-      {gridLayout.map((group, groupIndex) => {
-        const groupUid = `group-${groupIndex}`;
-
-        return (
-          <div key={groupUid} className="govuk-grid-row card-link-grid">
-            {group.map((navCard, rowIndex) => (
-              <div key={`${groupUid}-row-${rowIndex}`} className="govuk-grid-column-one-third">
-                {navCard}
-              </div>
-            ))}
-          </div>
-        );
-      })}
-    </>
-  );
+export const NavigationCardsGrid = ({ children }: { children: NavigationCardsList }) => {
+  return <div className="govuk-grid-row card-link-grid">{children}</div>;
 };
-
-/**
- * Breaks the array into chunks of size
- */
-export function chunks<T>(array: T[], size: number): T[][] {
-  const results = [];
-
-  while (array.length) {
-    results.push(array.splice(0, size));
-  }
-
-  return results;
-}
