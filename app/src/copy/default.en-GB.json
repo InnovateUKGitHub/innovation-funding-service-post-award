@@ -426,7 +426,7 @@
       "difference": "Difference",
       "addCost": "Add a cost",
       "additionalInfo": "Additional info",
-      "setToZeroToRemove": "For claim line items you want to remove, set the value to zero and save."
+      "setToZeroToRemove": "You can only remove claim line items you created. For other claim line items you want to remove, set the value to zero and save."
     },
     "claimPrepare": {
       "title": "Costs to be claimed",

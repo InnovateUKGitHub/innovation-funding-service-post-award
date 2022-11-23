@@ -6,4 +6,5 @@ export interface ClaimLineItemDto {
   periodId: number;
   costCategoryId: string;
   lastModifiedDate: Date;
+  isAuthor: boolean;
 }

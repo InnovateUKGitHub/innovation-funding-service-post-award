@@ -145,7 +145,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
           isNonFec={project.isNonFec}
         />
         {this.renderNegativeClaimWarning(editor.data)}
-        {!claimDetails.isAuthor && <DeleteByEnteringZero />}
+        {(!claimDetails.isAuthor || editor.data.lineItems.some(x => !x.isAuthor)) && <DeleteByEnteringZero />}
 
         <>
           {isCombinationOfSBRI ? (
@@ -191,7 +191,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
                 editor,
                 project.competitionType,
               )
-            : this.renderTable(editor, forecastDetail, documents, project.competitionType, claimDetails.isAuthor)}
+            : this.renderTable(editor, forecastDetail, documents, project.competitionType)}
         </ACC.Section>
       </ACC.Page>
     );
@@ -214,6 +214,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
         id: "",
         value: claimDetails.value,
         lastModifiedDate: new Date(),
+        isAuthor: true,
       },
     ];
 
@@ -269,7 +270,6 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
     forecastDetail: ForecastDetailsDTO,
     documents: DocumentSummaryDto[],
     competitionType: string,
-    shouldShowDeleteButton: boolean,
   ) {
     const LineItemTable = ACC.TypedTable<ClaimLineItemDto>();
     const validationResults = editor.validator.items.results;
@@ -307,19 +307,19 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
               qa="cost-last-updated"
               value={x => x.lastModifiedDate}
             />
-            {this.state.showAddRemove && shouldShowDeleteButton ? (
-              <LineItemTable.Custom
-                header={x => x.pages.editClaimLineItems.headerAction}
-                hideHeader
-                qa="remove"
-                value={(x, i) => (
+            <LineItemTable.Custom
+              header={x => x.pages.editClaimLineItems.headerAction}
+              hideHeader
+              qa="remove"
+              value={(x, i) =>
+                x.isAuthor && (
                   <a href="" className="govuk-link" role="button" onClick={e => this.removeItem(x, i, e, editor)}>
                     <ACC.Content value={y => y.pages.editClaimLineItems.buttonRemove} />
                   </a>
-                )}
-                width={1}
-              />
-            ) : null}
+                )
+              }
+              width={1}
+            />
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
 
@@ -532,6 +532,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
       partnerId: this.props.partnerId,
       periodId: this.props.periodId,
       costCategoryId: this.props.costCategoryId,
+      isAuthor: true,
     } as ClaimLineItemDto);
     this.props.onUpdate(false, dto);
   }
@@ -703,6 +704,7 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
             description: "",
             value: null as unknown as number,
             lastModifiedDate: null as unknown as Date,
+            isAuthor: true,
           }));
           dto.lineItems.push(...extraLineItems);
         },
