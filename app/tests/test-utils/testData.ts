@@ -583,6 +583,9 @@ export class TestData {
       Acc_LineItemDescription__c: "We hired a person to do a thing",
       LastModifiedDate: "2018-03-04T12:00:00.000+00",
       RecordTypeId: "Claims Line Item",
+      Owner: {
+        Email: "peter.potter@hedgeshedges.co.uk",
+      },
     };
 
     if (update) {

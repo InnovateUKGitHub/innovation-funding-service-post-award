@@ -114,6 +114,7 @@ Object {
       "Acc_CostCategory__c",
       "Acc_ProjectPeriodNumber__c",
       "Acc_ProjectParticipant__c",
+      "Owner.Email",
       "LastModifiedDate",
     ],
     "salesforceObjectName": "Acc_Claims__c",
