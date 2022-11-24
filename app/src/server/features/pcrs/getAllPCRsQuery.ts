@@ -1,9 +1,10 @@
 import { PCRItemTypeDto, PCRSummaryDto } from "@framework/dtos/pcrDtos";
-import { Authorisation, IContext, ProjectRole } from "@framework/types";
+import { Authorisation, IContext, PCRStatus, ProjectRole } from "@framework/types";
 import { numberComparator } from "@framework/util";
 import { ProjectChangeRequestEntity } from "@framework/entities";
 import { QueryBase } from "../common";
 import { GetPCRItemTypesQuery } from "./getItemTypesQuery";
+import { GetAllProjectRolesForUser } from "../projects";
 
 export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
   constructor(private readonly projectId: string) {
@@ -17,10 +18,17 @@ export class GetAllPCRsQuery extends QueryBase<PCRSummaryDto[]> {
   }
 
   protected async run(context: IContext): Promise<PCRSummaryDto[]> {
+    const roles = await context.runQuery(new GetAllProjectRolesForUser());
     const pcrItemTypes = await context.runQuery(new GetPCRItemTypesQuery(this.projectId));
-    const data = await context.repositories.projectChangeRequests.getAllByProjectId(this.projectId);
-    data.sort((a, b) => numberComparator(a.number, b.number) * -1);
-    return data.map(x => this.map(x, pcrItemTypes));
+
+    const isPmOrFc = roles
+      .forProject(this.projectId)
+      .hasAnyRoles(ProjectRole.ProjectManager, ProjectRole.FinancialContact);
+
+    return (await context.repositories.projectChangeRequests.getAllByProjectId(this.projectId))
+      .sort((a, b) => numberComparator(b.number, a.number))
+      .filter(x => (isPmOrFc ? true : x.status !== PCRStatus.Draft)) // If we are an MO, hide any draft PCRs.
+      .map(x => this.map(x, pcrItemTypes));
   }
 
   private map(pcr: ProjectChangeRequestEntity, pcrItemTypes: PCRItemTypeDto[]): PCRSummaryDto {

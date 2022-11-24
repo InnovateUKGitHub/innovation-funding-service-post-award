@@ -1,8 +1,8 @@
-import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
-import { DateTime } from "luxon";
 import { PCRItemType, PCRStatus } from "@framework/constants";
+import { GetAllPCRsQuery } from "@server/features/pcrs/getAllPCRsQuery";
 import { GetPCRItemTypesQuery } from "@server/features/pcrs/getItemTypesQuery";
 import { TestContext } from "@tests/test-utils/testContextProvider";
+import { DateTime } from "luxon";
 
 describe("GetAllPCRsQuery", () => {
   test("when project has no pcrs then empty list returned", async () => {
@@ -67,6 +67,64 @@ describe("GetAllPCRsQuery", () => {
     expect(result.status).toEqual(expected.status);
     expect(result.statusName).toEqual(expected.statusName);
     expect(result.items).toEqual([]);
+  });
+
+  test.each`
+    role    | numberOfProjects
+    ${"mo"} | ${2}
+    ${"fc"} | ${3}
+    ${"pm"} | ${3}
+  `(
+    "draft PCRs are not hidden for role $role",
+    async ({ role, numberOfProjects }: { role: "fc" | "mo" | "pm"; numberOfProjects: number }) => {
+      const context = new TestContext();
+      const project = context.testData.createProject();
+
+      if (role === "mo") context.testData.createCurrentUserAsMonitoringOfficer(project);
+      if (role === "fc") context.testData.createCurrentUserAsFinanceContact(project);
+      if (role === "pm") context.testData.createCurrentUserAsProjectManager(project);
+
+      // Create 2 PCRs that should be retuned
+      context.testData.createPCR(project, {
+        status: PCRStatus.SubmittedToMonitoringOfficer,
+      });
+      context.testData.createPCR(project, {
+        status: PCRStatus.Approved,
+      });
+
+      // Create a PCR that should NOT be returned, if we're an MO.
+      context.testData.createPCR(project, {
+        status: PCRStatus.Draft,
+      });
+
+      const query = new GetAllPCRsQuery(project.Id);
+      const results = await context.runQuery(query);
+
+      expect(results).toHaveLength(numberOfProjects);
+    },
+  );
+
+  test("draft PCRs are hidden for MOs", async () => {
+    const context = new TestContext();
+    const project = context.testData.createProject();
+    context.testData.createCurrentUserAsMonitoringOfficer(project);
+
+    // Create a PCR that should be returned
+    const expected = context.testData.createPCR(project, {
+      status: PCRStatus.SubmittedToMonitoringOfficer,
+    });
+
+    // Create a PCR that should NOT be returned.
+    context.testData.createPCR(project, {
+      status: PCRStatus.Draft,
+    });
+
+    const query = new GetAllPCRsQuery(expected.projectId);
+
+    const results = await context.runQuery(query);
+
+    // Expect only one PCR to be retrieved.
+    expect(results).toHaveLength(1);
   });
 
   test("pcrs items are returned as expected", async () => {
