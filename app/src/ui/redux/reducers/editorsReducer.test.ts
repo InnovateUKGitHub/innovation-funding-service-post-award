@@ -214,9 +214,10 @@ describe("editorsReducer", () => {
 
   describe("editor reset", () => {
     it("should reset editor to initial state if reset", () => {
-      // Start off with an editor with an ID of "initial"
+      // Start off with an editor with an id and validator that should be destroyed.
       const originalState = setupInitialState(x => {
         x.data.id = "initial";
+        x.validator.isValid = true;
       });
 
       // Just make sure our original state has been created
@@ -225,7 +226,7 @@ describe("editorsReducer", () => {
       // Send off an editor reset call - It should go back to "after".
       const action: EditorResetAction = {
         type: "EDITOR_RESET",
-        payload: { id: "1", store: "claim", dto: { id: "after" } },
+        payload: { id: "1", store: "claim", dto: { id: "after" }, validator: {} as Results<ResultBase> },
       };
 
       // Send off the call
@@ -249,7 +250,7 @@ describe("editorsReducer", () => {
 
       const action: EditorResetAction = {
         type: "EDITOR_RESET",
-        payload: { id: "2", store: "claim", dto: { id: "after" } },
+        payload: { id: "2", store: "claim", dto: { id: "after" }, validator: {} as Results<ResultBase> },
       };
 
       expect(originalState.editors.claim["1"]).not.toBeUndefined();

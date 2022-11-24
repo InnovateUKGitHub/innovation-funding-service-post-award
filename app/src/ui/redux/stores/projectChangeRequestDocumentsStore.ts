@@ -81,7 +81,7 @@ export class ProjectChangeRequestDocumentsStore extends DocumentsStoreBase {
           documentId: document.id,
           ...p,
         }),
-      () => this.afterUpdate(key, message, onComplete),
+      () => this.afterUpdate(key, message, true, onComplete),
     );
   }
 }
