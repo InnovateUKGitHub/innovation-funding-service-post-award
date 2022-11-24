@@ -72,6 +72,11 @@ export function handleEditorError<T>({ id, store, dto, error, scrollToTop = true
 /**
  * Action creator for reset the editor
  */
-export function resetEditor<TDto>(id: string, store: string, dto: TDto) {
-  return createAction("EDITOR_RESET", { id, store, dto });
+export function resetEditor<TDto>(
+  id: string,
+  store: string,
+  dto: TDto,
+  validator: Results<ResultBase> | InferEditorStoreValidator<AnyObject> | null,
+) {
+  return createAction("EDITOR_RESET", { id, store, dto, validator });
 }
