@@ -119,6 +119,21 @@ describe("editorsReducer", () => {
       const newState = editorsReducer("claim")(originalState.editors.claim, action);
       expect(newState[1].error).toBeNull();
     });
+
+    it("should reset showValidationErrors to false so that multi-form views can start pristine", () => {
+      const originalState = setupInitialState(x => {
+        x.status = EditorStatus.Saving;
+        x.validator = { showValidationErrors: true } as ClaimDtoValidator;
+      });
+
+      const action: EditorSuccessAction = {
+        type: "EDITOR_SUBMIT_SUCCESS",
+        payload: { id: "1", store: "claim" },
+      };
+
+      const newState = editorsReducer("claim")(originalState.editors.claim, action);
+      expect(newState[1].validator.showValidationErrors).toBe(false);
+    });
   });
 
   describe("submit error", () => {
