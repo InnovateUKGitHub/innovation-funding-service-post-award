@@ -32,7 +32,7 @@ router.use(passport.initialize());
 
 passport.use("shibboleth", shibbolethStrategy);
 
-passport.serializeUser((parsedResponse: any, onSuccess: (err: any, id?: unknown) => void): void => {
+passport.serializeUser((parsedResponse: unknown, onSuccess: (err: unknown, id?: unknown) => void): void => {
   const payload = parsedResponse as Pick<ShibbolethPayload, "email">;
   onSuccess(null, { email: payload.email });
 });

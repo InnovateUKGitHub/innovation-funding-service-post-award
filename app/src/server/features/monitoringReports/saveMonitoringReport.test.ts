@@ -260,7 +260,8 @@ describe("saveMonitoringReports validation", () => {
 
     const report = createMonitoringReportTestData(context, 1);
 
-    report.Acc_ProjectPeriodNumber__c = null as any;
+    // @ts-expect-error invalid(missing) id
+    report.Acc_ProjectPeriodNumber__c = null;
     const dto = await context.runQuery(new GetMonitoringReportById(report.Acc_Project__c, report.Id));
 
     const command = new SaveMonitoringReport(dto, false);

@@ -3,6 +3,11 @@ import { IRoleInfo } from "@server/features/projects/getAllProjectRolesForUser";
 
 type AvailableAuthRoles = "Fc" | "Mo" | "Pm" | "PmOrMo" | "PmAndFc" | "Unknown" | "SuperAdmin";
 
+/**
+ * Gets object with auth roles as series of booleans
+ *
+ * @param {ProjectRole} role role of user for project
+ */
 export function getAuthRoles(role: ProjectRole): Record<`is${AvailableAuthRoles}`, boolean> {
   // Note: As 'Unknown' there is never an overlap so we check against itself
   const isUnknown = (role & ProjectRole.Unknown) === ProjectRole.Unknown && role === ProjectRole.Unknown;

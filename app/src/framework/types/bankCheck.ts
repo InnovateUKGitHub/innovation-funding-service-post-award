@@ -13,7 +13,7 @@ export interface BankCheckCondition {
   readonly description: string;
 }
 
-export interface BankCheckResult {}
+export type BankCheckResult = AnyObject;
 
 export interface BankCheckValidationResultFields {
   readonly checkPassed: boolean;

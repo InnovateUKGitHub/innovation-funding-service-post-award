@@ -5,6 +5,9 @@ import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("GetClaimStatusChangesQuery", () => {
   describe("with access control", () => {
+    /**
+     * setup helper for access control
+     */
     function accessControlSetup() {
       const context = new TestContext();
       const partner = context.testData.createPartner();
@@ -179,6 +182,9 @@ describe("GetClaimStatusChangesQuery", () => {
   });
 
   describe("returns correct newStatusLabel with IAR label logic", () => {
+    /**
+     * setup helper for new status label
+     */
     async function newStatusLabelSetup(competitionType: PartnerDto["competitionType"]) {
       const context = new TestContext();
 

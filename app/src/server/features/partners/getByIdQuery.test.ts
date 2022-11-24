@@ -267,14 +267,15 @@ describe("getAllForProjectQuery", () => {
     expect(result.percentageParticipantCostsClaimed).toBe(null);
   });
 
-  it("calculated cost claimed percentage is 0 when nothing clamed", async () => {
+  it("calculated cost claimed percentage is 0 when nothing claimed", async () => {
     const context = new TestContext();
 
     const project = context.testData.createProject();
     const partner = context.testData.createPartner(project, x => {
       x.name = "Expected name";
       x.totalParticipantCosts = 10000;
-      x.totalApprovedCosts = null as any;
+      // @ts-expect-error testing invalid input
+      x.totalApprovedCosts = null;
       x.awardRate = 50;
       x.capLimit = 50;
     });
@@ -291,7 +292,6 @@ describe("getAllForProjectQuery", () => {
     await expect(context.runQuery(new GetByIdQuery("fakePartnerId"))).rejects.toThrow();
   });
 
-  // @TODO: Separate into two different tests
   it("when user is finance contact expect role set", async () => {
     const context = new TestContext();
     const project = context.testData.createProject();

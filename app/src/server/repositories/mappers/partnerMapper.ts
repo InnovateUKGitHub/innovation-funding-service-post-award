@@ -77,12 +77,12 @@ export class SalesforcePartnerMapper extends SalesforceBaseMapper<ISalesforcePar
   }
 }
 
+/**
+ * Note: This field returns a string with an html img element :(
+ *
+ * We have to parse and validate based on 2 types of src values.
+ */
 export function parseSalesForceWarningFlagUI(flagAsImageString: string): boolean {
-  /**
-   * Note: This field returns a string with an html img element :(
-   *
-   * We have to parse and validate based on 2 types of src values.
-   */
   const validFlagsRegex = /\w*ACC_Red_Flag|Acc_ClearImage/;
 
   const selectedFlag = flagAsImageString.match(validFlagsRegex);

@@ -1,5 +1,9 @@
 import { MonitoringReportStatus } from "@framework/constants";
 
+/**
+ * converts monitoring report string to corresponding enum value,
+ * defaults to `Unknown`
+ */
 export function mapMonitoringReportStatus(status: string) {
   switch (status) {
     case "Draft":

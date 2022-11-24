@@ -79,6 +79,7 @@ export interface ITimer {
 
 export interface ICaches {
   readonly costCategories: Cache<CostCategoryDto[]>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   readonly optionsLookup: Cache<Option<any>[]>;
   readonly permissionGroups: Cache<PermissionGroup[]>;
   readonly projectRoles: Cache<{ [key: string]: IRoleInfo }>;

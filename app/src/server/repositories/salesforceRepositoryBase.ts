@@ -19,7 +19,7 @@ export type Insertable<T> = Pick<T, Exclude<keyof T, "Id">>;
 interface UpdatedErrorResult {
   statusCode: string;
   message: string;
-  fields: any[];
+  fields: unknown[];
 }
 
 /**
@@ -37,23 +37,24 @@ export abstract class RepositoryBase {
     FALLBACK_QUERY_ERROR: "FALLBACK_QUERY_ERROR",
   };
 
-  protected constructError(e: any) {
-    this.logger.error("Salesforce Error", e.errorCode, e.message);
+  protected constructError(e: unknown | Errors.SalesforceErrorResponse) {
+    if (Errors.isSalesforceErrorResponse(e)) {
+      this.logger.error("Salesforce Error", e.errorCode, e.message);
 
-    if (e.errorCode === "INVALID_FIELD") {
-      throw new Errors.BadSalesforceQuery(e.errorCode, e.errorCode);
+      if (e.errorCode === "INVALID_FIELD") {
+        throw new Errors.BadSalesforceQuery(e.errorCode, e.errorCode);
+      }
+      if (e.errorCode === "ERROR_HTTP_503") {
+        throw new Errors.SalesforceUnavailableError("Salesforce unavailable");
+      }
+      if (e.errorCode === "INVALID_QUERY_FILTER_OPERATOR") {
+        throw new Errors.SalesforceInvalidFilterError("Salesforce filter error");
+      }
+      if (e.errorCode === "FILE_EXTENSION_NOT_ALLOWED") {
+        throw new Errors.FileTypeNotAllowedError(e.message);
+      }
+      return e instanceof Error ? e : new Error(`${e}`);
     }
-    if (e.errorCode === "ERROR_HTTP_503") {
-      throw new Errors.SalesforceUnavailableError("Salesforce unavailable");
-    }
-    if (e.errorCode === "INVALID_QUERY_FILTER_OPERATOR") {
-      throw new Errors.SalesforceInvalidFilterError("Salesforce filter error");
-    }
-    if (e.errorCode === "FILE_EXTENSION_NOT_ALLOWED") {
-      throw new Errors.FileTypeNotAllowedError(e.message);
-    }
-
-    return e instanceof Error ? e : new Error(`${e.errorCode}: ${e.message}`);
   }
 
   protected executeArray<T>(query: Query<AnyObject>): Promise<T[]> {
@@ -82,7 +83,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   protected abstract readonly salesforceFieldNames: string[];
   protected abstract readonly mapper: ISalesforceMapper<TSalesforce, TEntity>;
 
-  protected async retrieve(id: string): Promise<TEntity | null> {
+  protected async retrieve(id: string): Promise<TEntity | null | undefined> {
     try {
       const connection = await this.getSalesforceConnection();
       const targetObject = await connection.sobject<TSalesforce>(this.salesforceObjectName).retrieve(id);
@@ -90,11 +91,13 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
       if (!targetObject) return null;
 
       return this.mapper.map(targetObject);
-    } catch (e: any) {
-      if (e.errorCode === "MALFORMED_ID" || e.errorCode === "NOT_FOUND") {
-        return null;
-      } else {
-        throw this.constructError(e);
+    } catch (e: unknown | Error) {
+      if (Errors.isSalesforceErrorResponse(e)) {
+        if (e.errorCode === "MALFORMED_ID" || e.errorCode === "NOT_FOUND") {
+          return null;
+        } else {
+          throw this.constructError(e);
+        }
       }
     }
   }
@@ -103,7 +106,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
     try {
       const connection = await this.getSalesforceConnection();
       const targetObject = connection.sobject(this.salesforceObjectName);
-      const allItems = await targetObject.select(this.salesforceFieldNames).execute();
+      const allItems = (await targetObject.select(this.salesforceFieldNames).execute()) as TSalesforce[];
 
       return this.map(allItems);
     } catch (error) {
@@ -174,7 +177,7 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
     try {
       const connection = await this.getSalesforceConnection();
       const filteredQuery = connection.sobject(this.salesforceObjectName).select(this.salesforceFieldNames);
-      const filteredResponse = await filteredQuery.where(filter).execute();
+      const filteredResponse = (await filteredQuery.where(filter).execute()) as TSalesforce[];
 
       if (!filteredResponse.length) return [];
 
@@ -197,12 +200,12 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
   protected async filterOne<Payload extends Partial<TSalesforce> | string>(filter: Payload): Promise<TEntity | null> {
     try {
       const connection = await this.getSalesforceConnection();
-      const query = await connection
+      const query = (await connection
         .sobject(this.salesforceObjectName)
         .select(this.salesforceFieldNames)
         .where(filter)
         .limit(1)
-        .execute();
+        .execute()) as TSalesforce[];
 
       if (!query.length) return null;
 
@@ -367,9 +370,8 @@ export abstract class SalesforceRepositoryBaseWithMapping<TSalesforce, TEntity> 
     }
   }
 
-  public map(result: Partial<{}>[]): TEntity[] {
-    const salesforce = result as TSalesforce[];
-    return salesforce.map(x => this.mapper.map(x));
+  public map(salesforceResult: TSalesforce[]): TEntity[] {
+    return salesforceResult.map(x => this.mapper.map(x));
   }
 
   /**

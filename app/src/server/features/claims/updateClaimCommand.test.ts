@@ -2,7 +2,7 @@ import { UpdateClaimCommand } from "@server/features/claims/updateClaim";
 import { mapClaim } from "@server/features/claims/mapClaim";
 import { ClaimStatus } from "@framework/constants";
 import { InActiveProjectError, ValidationError } from "@server/features/common/appError";
-import { Authorisation, ProjectRole } from "@framework/types";
+import { Authorisation, ClaimDto, ProjectRole } from "@framework/types";
 import { TestContext } from "@tests/test-utils/testContextProvider";
 
 describe("UpdateClaimCommand", () => {
@@ -10,7 +10,7 @@ describe("UpdateClaimCommand", () => {
     test("with project MO passes", async () => {
       const context = new TestContext();
       const project = context.testData.createProject();
-      const command = new UpdateClaimCommand(project.Id, {} as any);
+      const command = new UpdateClaimCommand(project.Id, {} as ClaimDto);
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.MonitoringOfficer,
@@ -25,7 +25,7 @@ describe("UpdateClaimCommand", () => {
       const context = new TestContext();
       const project = context.testData.createProject();
       const claimDto = { partnerId: "abc" };
-      const command = new UpdateClaimCommand(project.Id, claimDto as any);
+      const command = new UpdateClaimCommand(project.Id, claimDto as ClaimDto);
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.Unknown,
@@ -40,7 +40,7 @@ describe("UpdateClaimCommand", () => {
       const context = new TestContext();
       const project = context.testData.createProject();
       const claimDto = { partnerId: "abc" };
-      const command = new UpdateClaimCommand(project.Id, claimDto as any);
+      const command = new UpdateClaimCommand(project.Id, claimDto as ClaimDto);
       const auth = new Authorisation({
         [project.Id]: {
           projectRoles: ProjectRole.FinancialContact | ProjectRole.ProjectManager,
@@ -56,8 +56,8 @@ describe("UpdateClaimCommand", () => {
     const context = new TestContext();
     const partner = context.testData.createPartner();
     const dto = mapClaim(context)(context.testData.createClaim(), partner.competitionType);
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    dto.id = null!;
+    // @ts-expect-error invalid id
+    dto.id = null;
     const project = context.testData.createProject();
     const command = new UpdateClaimCommand(project.Id, dto);
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
@@ -65,7 +65,7 @@ describe("UpdateClaimCommand", () => {
 
   it("when status updated to draft expect item updated", async () => {
     const context = new TestContext();
-    const claim = context.testData.createClaim(undefined, undefined, x => (x.Acc_ClaimStatus__c = "New" as any));
+    const claim = context.testData.createClaim(undefined, undefined, x => (x.Acc_ClaimStatus__c = "New"));
     const partner = context.testData.createPartner();
     const dto = mapClaim(context)(claim, partner.competitionType);
     const project = context.testData.createProject();
@@ -214,7 +214,7 @@ describe("UpdateClaimCommand", () => {
     dto.comments = "a".repeat(1000);
 
     const command = new UpdateClaimCommand(project.Id, dto);
-    await context.runCommand(command);
+    await expect(context.runCommand(command)).resolves.toBe(true);
   });
 
   it("when message is not set and claim status is changing to MO Queried expect validation exception", async () => {

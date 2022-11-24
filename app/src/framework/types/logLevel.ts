@@ -1,5 +1,11 @@
 import { LogLevel } from "@framework/constants";
 
+/**
+ * Converts string to corresponding LogLevel enum
+ *
+ * @param {string} value string to match against LogLevel
+ * @returns {LogLevel} LogLevel
+ */
 export function parseLogLevel(value: string) {
   switch ((value || "").toUpperCase()) {
     case "VERBOSE":

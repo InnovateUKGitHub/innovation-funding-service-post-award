@@ -6,6 +6,9 @@ import { getSalesforceAccessToken } from "@server/repositories/salesforceConnect
 import { HealthCheckResult } from "@server/health-check/health-check.interface";
 import { ILogger } from "@shared/developmentLogger";
 
+/**
+ * Checks the health of the salesforce connection
+ */
 export async function checkSalesforce(logger: ILogger): Promise<HealthCheckResult> {
   const check = { id: "salesforce" };
 
@@ -19,6 +22,7 @@ export async function checkSalesforce(logger: ILogger): Promise<HealthCheckResul
     await getSalesforceAccessToken(tokenPayload);
 
     return { ...check, status: "Success" };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     logger.error("SALESFORCE HEALTH CHECK", new AppError(ErrorCode.UNKNOWN_ERROR, error.tokenError, error));
 
@@ -30,6 +34,9 @@ export async function checkSalesforce(logger: ILogger): Promise<HealthCheckResul
   }
 }
 
+/**
+ * checks the health of the google analytics connection
+ */
 export async function checkGoogleAnalytics(logger: ILogger): Promise<HealthCheckResult> {
   const check = { id: "googleAnalytics" };
 
@@ -48,6 +55,7 @@ export async function checkGoogleAnalytics(logger: ILogger): Promise<HealthCheck
     if (!response.ok) throw new Error(`Failed get request to ${tagManagerEndpoint}`);
 
     return { ...check, status: "Success" };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     logger.error("GOOGLE ANALYTICS HEALTH CHECK", new AppError(ErrorCode.UNKNOWN_ERROR, error.message, error));
 
@@ -55,6 +63,9 @@ export async function checkGoogleAnalytics(logger: ILogger): Promise<HealthCheck
   }
 }
 
+/**
+ * checks the health of the companies house connection
+ */
 export async function checkCompaniesHouse(logger: ILogger): Promise<HealthCheckResult> {
   const check = { id: "companiesHouse" };
 
@@ -62,6 +73,7 @@ export async function checkCompaniesHouse(logger: ILogger): Promise<HealthCheckR
     await new CompaniesHouse().searchCompany({ searchString: "test" });
 
     return { ...check, status: "Success" };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     logger.error("COMPANIES HOUSE HEALTH CHECK", new AppError(ErrorCode.UNKNOWN_ERROR, error.message, error));
 

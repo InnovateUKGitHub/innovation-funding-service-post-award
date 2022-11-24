@@ -8,7 +8,7 @@ export abstract class QueryBase<T> {
     return Promise.resolve(true);
   }
 
-  protected logMessage(): any {
+  protected logMessage(): unknown {
     return [this.constructor.name, this];
   }
 }
@@ -16,7 +16,7 @@ export abstract class QueryBase<T> {
 export abstract class SyncQueryBase<T> {
   protected abstract run(context: IContext): T;
 
-  protected logMessage(): any {
+  protected logMessage(): unknown {
     return [this.constructor.name, this];
   }
 }

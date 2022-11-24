@@ -40,7 +40,7 @@ export interface PageProps {
   children: React.ReactNode;
   backLink?: React.ReactElement<AnyObject>;
   error?: IAppError | null;
-  validator?: Results<AnyObject> | Results<AnyObject>[] | null;
+  validator?: Results<ResultBase> | Results<ResultBase>[] | null;
   project?: ProjectDto;
   partner?: PartnerDto;
   qa?: string;

@@ -4,7 +4,6 @@ import { H1, Page } from "@ui/components";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
-import { UserSwitcher } from "./UserSwitcher";
 
 const DeveloperHomePage = (props: BaseProps) => {
   const { getContent } = useContent();

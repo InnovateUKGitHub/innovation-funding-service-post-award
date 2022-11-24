@@ -22,7 +22,7 @@ describe("accounts", () => {
   });
 
   describe("search name provided", () => {
-    test("should return only JES organisations that match the provided name", async () => {
+    test("should return JES organisations that match the provided name", async () => {
       const context = new TestContext();
       context.testData.createAccount({ JES_Organisation__c: "Yes" } as ISalesforceAccount);
       context.testData.createAccount({ JES_Organisation__c: "Yes" } as ISalesforceAccount);
@@ -35,7 +35,7 @@ describe("accounts", () => {
       expect(result).toHaveLength(2);
     });
 
-    test("should return only JES organisations that match the provided name", async () => {
+    test("should not return any JES organisations that don't match the provided name", async () => {
       const context = new TestContext();
       context.testData.createAccount({ JES_Organisation__c: "Yes" } as ISalesforceAccount);
       context.testData.createAccount({ JES_Organisation__c: "Yes" } as ISalesforceAccount);

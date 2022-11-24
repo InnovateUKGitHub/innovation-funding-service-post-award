@@ -25,13 +25,13 @@ describe("UpdateForecastDetailsCommand", () => {
     const partnerId = profileDetail.Acc_ProjectParticipant__c;
     const dto: ForecastDetailsDTO[] = [
       {
-        id: null,
+        id: "123",
         costCategoryId: profileDetail.Acc_CostCategory__c,
         periodId: parseInt(profileDetail.Acc_CostCategory__c, 10),
         periodStart: new Date(profileDetail.Acc_ProjectPeriodStartDate__c),
         periodEnd: new Date(profileDetail.Acc_ProjectPeriodEndDate__c),
         value: 123,
-      } as any,
+      },
     ];
 
     const command = new UpdateForecastDetailsCommand(project.Id, partnerId, dto, false);
@@ -46,13 +46,14 @@ describe("UpdateForecastDetailsCommand", () => {
     const partnerId = profileDetail.Acc_ProjectParticipant__c;
     const dto: ForecastDetailsDTO[] = [
       {
+        // @ts-expect-error invalid id scenario
         id: null,
         costCategoryId: profileDetail.Acc_CostCategory__c,
         periodId: parseInt(profileDetail.Acc_CostCategory__c, 10),
         periodStart: new Date(profileDetail.Acc_ProjectPeriodStartDate__c),
         periodEnd: new Date(profileDetail.Acc_ProjectPeriodEndDate__c),
         value: 123,
-      } as any,
+      },
     ];
 
     const command = new UpdateForecastDetailsCommand(project.Id, partnerId, dto, false);

@@ -11,7 +11,7 @@ import {
 } from "@ui/containers";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
 import { PartnerDtoValidator } from "@ui/validators/partnerValidator";
-import { IFormBody, IFormButton, StandardFormHandlerBase } from "../../formHandlerBase";
+import { IFormButton, StandardFormHandlerBase } from "../../formHandlerBase";
 
 export class ProjectSetupBankDetailsVerifyHandler extends StandardFormHandlerBase<
   ProjectSetupBankDetailsVerifyParams,
@@ -21,12 +21,7 @@ export class ProjectSetupBankDetailsVerifyHandler extends StandardFormHandlerBas
     super(ProjectSetupBankDetailsVerifyRoute, ["default"], "partner");
   }
 
-  protected async getDto(
-    context: IContext,
-    params: PartnerDetailsParams,
-    button: IFormButton,
-    body: IFormBody,
-  ): Promise<PartnerDto> {
+  protected async getDto(context: IContext, params: PartnerDetailsParams): Promise<PartnerDto> {
     const dto = await context.runQuery(new GetByIdQuery(params.partnerId));
     return dto;
   }

@@ -24,6 +24,7 @@ export class GetUnfilteredCostCategoriesQuery extends QueryBase<CostCategoryDto[
 
     data.sort((a, b) => numberComparator(a.displayOrder, b.displayOrder));
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return data.map(({ displayOrder, ...x }) => x);
   }
 }
@@ -45,7 +46,7 @@ export class GetFilteredCostCategoriesQuery extends QueryBase<CostCategoryDto[]>
 
     const filteredCategories = this.filterCostCategories(allCategories, requiredCategories);
     filteredCategories.sort((a, b) => numberComparator(a.displayOrder, b.displayOrder));
-
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     return filteredCategories.map(({ displayOrder, ...x }) => x);
   }
 

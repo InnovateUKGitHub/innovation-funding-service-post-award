@@ -1,9 +1,11 @@
 import { HelmetData } from "react-helmet";
+import type { PreloadedState } from "redux";
 import * as colour from "../ui/styles/colours";
 import { configuration } from "../server/features/common";
 
 import * as pkg from "../../package.json";
 import { execSync } from "child_process";
+import { RootState } from "@ui/redux";
 
 let versionInformation = "";
 
@@ -56,7 +58,12 @@ try {
 /**
  * The template into which the React App is injected. It includes the meta tags, links and google tag manager
  */
-export function renderHtml(HelmetInstance: HelmetData, html: string, preloadedState: any = {}, nonce: string) {
+export function renderHtml(
+  HelmetInstance: HelmetData,
+  html: string,
+  preloadedState: PreloadedState<RootState>,
+  nonce: string,
+) {
   const titleMetaTag = HelmetInstance.title.toString();
 
   const govukFrontendVersion = pkg.devDependencies["govuk-frontend"].replace(/[^0-9/.]/, "");

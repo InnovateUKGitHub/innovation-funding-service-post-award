@@ -129,7 +129,8 @@ describe("SaveClaimDetails", () => {
 
     const dto = createDto(context, claimDetails);
     const lineItem = createNewLineItemDto(dto);
-    lineItem.value = null as any;
+    // @ts-expect-error invalid line item value
+    lineItem.value = null;
     dto.lineItems = [lineItem];
 
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
@@ -157,7 +158,7 @@ describe("SaveClaimDetails", () => {
     expect(context.repositories.claimLineItems.Items).toHaveLength(0);
 
     const expectedValue = 1000;
-    const expectedDescription = "Line itme comment";
+    const expectedDescription = "Line item comment";
 
     const dto = createDto(context, claimDetails);
     const lineItem = createNewLineItemDto(dto, expectedValue, expectedDescription);
@@ -347,7 +348,14 @@ describe("SaveClaimDetails", () => {
       const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
       const dto = createDto(context, claimDetail);
 
-      const command = new SaveClaimDetails(null as any, partner.id, 1, costCategory.id, dto);
+      const command = new SaveClaimDetails(
+        // @ts-expect-error invalid project id
+        null,
+        partner.id,
+        1,
+        costCategory.id,
+        dto,
+      );
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 
@@ -359,7 +367,14 @@ describe("SaveClaimDetails", () => {
       const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
       const dto = createDto(context, claimDetail);
 
-      const command = new SaveClaimDetails(project.Id, null as any, 1, costCategory.id, dto);
+      const command = new SaveClaimDetails(
+        project.Id,
+        // @ts-expect-error invalid partner id
+        null,
+        1,
+        costCategory.id,
+        dto,
+      );
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 
@@ -384,7 +399,14 @@ describe("SaveClaimDetails", () => {
       const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
       const dto = createDto(context, claimDetail);
 
-      const command = new SaveClaimDetails(project.Id, partner.id, null as any, costCategory.id, dto);
+      const command = new SaveClaimDetails(
+        project.Id,
+        partner.id,
+        // @ts-expect-error invalid period id
+        null,
+        costCategory.id,
+        dto,
+      );
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 
@@ -396,7 +418,14 @@ describe("SaveClaimDetails", () => {
       const claimDetail = context.testData.createClaimDetail(project, costCategory, partner, 1);
       const dto = createDto(context, claimDetail);
 
-      const command = new SaveClaimDetails(project.Id, partner.id, 1, null as any, dto);
+      const command = new SaveClaimDetails(
+        project.Id,
+        partner.id,
+        1,
+        // @ts-expect-error invalid costCategoryId id
+        null,
+        dto,
+      );
       await expect(context.runCommand(command)).rejects.toThrow(BadRequestError);
     });
 

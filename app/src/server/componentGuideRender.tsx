@@ -9,6 +9,9 @@ import * as colour from "@ui/styles/colours";
 import { devDependencies } from "../../package.json";
 import { configuration } from "./features/common";
 
+/**
+ * renders the component guide
+ */
 export function componentGuideRender(req: Request, res: Response) {
   const nonce = res.locals.nonce;
 

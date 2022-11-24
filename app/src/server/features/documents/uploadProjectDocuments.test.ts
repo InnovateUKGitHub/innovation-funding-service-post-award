@@ -72,7 +72,8 @@ describe("UploadProjectDocumentCommand", () => {
 
     const files = context.testData.range(3, i => context.testData.createFile(`File ${i}`, `test${i}.txt`));
 
-    files[1].content = null as any;
+    // @ts-expect-error invalid file content
+    files[1].content = null;
 
     const command = new UploadProjectDocumentCommand(project.Id, { files });
 

@@ -3,6 +3,9 @@ import { salesforceDateFormat } from "@server/features/common";
 import { ClaimDetailsDto, ClaimDetailsSummaryDto, IContext } from "@framework/types";
 import mapClaimLineItem from "@server/features/claimDetails/mapClaimLineItem";
 
+/**
+ * mapper function for `mapClaimDetails`
+ */
 export function mapClaimDetailsSummary(
   salesforceClaimDetails: ISalesforceClaimDetails,
   context: IContext,
@@ -21,6 +24,9 @@ export function mapClaimDetailsSummary(
   };
 }
 
+/**
+ * maps claimDetails from salesforce to js standard
+ */
 export function mapClaimDetails(
   salesforceClaimDetails: ISalesforceClaimDetails,
   salesforceLineItems: ISalesforceClaimLineItem[],

@@ -68,7 +68,6 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
 
     try {
       dto = (await this.createDto(context, params, button, body, req)) || ({} as AnyEditor);
-      // ({} as InferEditorStoreDto<EditorState[TStore][StoreKey<TStore>]>);
     } catch (error) {
       context.logger.error("Error creating dto in form submission", error);
       dto = {} as AnyEditor;
@@ -78,7 +77,7 @@ abstract class FormHandlerBase<TParams, TStore extends EditorStateKeys> implemen
       const { path: newRedirectUrl } = await this.run(context, params, button, dto);
       res.redirect(newRedirectUrl);
       return;
-    } catch (error: any) {
+    } catch (error: unknown) {
       context.logger.error("Error handling form submission", error);
       const key = this.getStoreKey(params, dto as any);
       throw new FormHandlerError(

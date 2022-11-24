@@ -71,26 +71,4 @@ describe("TextInput", () => {
 
     expect(onChange).toHaveBeenCalledWith("1");
   });
-
-  // TODO: Fix this debounce test
-  // it("Debounces onChange calls", () => {
-  //   jest.useFakeTimers();
-  //   const onChange = jest.fn();
-  //   const { container }= setup({ onChange, debounce: true });
-
-  //   const input = container.firstChild as HTMLInputElement;
-
-  //   userEvent.type(input, "1");
-  //   userEvent.clear(input);
-  //   userEvent.type(input, "2");
-  //   userEvent.clear(input);
-  //   userEvent.type(input, "3");
-
-  //   jest.runAllTimers();
-
-  //   expect(onChange).toHaveBeenCalledTimes(1);
-  //   expect(onChange).toHaveBeenCalledWith("3");
-
-  //   jest.useRealTimers();
-  // });
 });

@@ -70,7 +70,7 @@ export class ContentVersionRepository
 
   public getDocument(versionId: string): Promise<ISalesforceDocument> {
     return super.retrieve(versionId).then(x => {
-      if (x === null) {
+      if (x === null || x === undefined) {
         throw Error("Document not found");
       }
       return x;

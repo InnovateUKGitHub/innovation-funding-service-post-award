@@ -19,6 +19,7 @@ export type FormInputWidths =
 
 export const defaultInputDebounceTimeout = 250;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type BasicFn = (...args: any[]) => unknown;
 
 /**
@@ -34,11 +35,11 @@ export function useDebounce<T extends BasicFn>(
   timeout: number = defaultInputDebounceTimeout,
 ) {
   const timeoutId = useRef<number>(0);
-  if (!action) return noop;
+  if (!action || typeof action !== "function") return noop;
 
   if (allowDebounce === false) return action;
 
-  return (...args: T extends BasicFn ? Parameters<T> : never) => {
+  return (...args: Parameters<T>) => {
     window.clearTimeout(timeoutId.current);
     timeoutId.current = window.setTimeout(() => action(...args), timeout);
   };

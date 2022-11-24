@@ -96,9 +96,9 @@ const mapFrequencyToEnum = (freq: string): ClaimFrequency => {
 const getIFSUrl = (project: ISalesforceProject, ifsUrl: string): string | null => {
   if (ifsUrl && project.Acc_ProjectSource__c === "IFS") {
     /// foreach prop in project build regex replacing <<PROP_NAME>> with value and then replace the expected value in string
-    return Object.keys(project)
-      .map(key => ({ regEx: new RegExp(`<<${key}>>`, "g"), val: (project as any)[key] }))
-      .reduce((url, item) => url.replace(item.regEx, item.val), ifsUrl);
+    return (Object.keys(project) as (keyof ISalesforceProject)[])
+      .map(key => ({ regEx: new RegExp(`<<${key}>>`, "g"), val: project[key] }))
+      .reduce((url, item) => url.replace(item.regEx, String(item.val)), ifsUrl);
   }
   return null;
 };

@@ -1,6 +1,6 @@
 import { PCROrganisationType } from "@framework/constants";
 import { PartnerDto } from "@framework/dtos";
-import { CostCategory } from "@framework/entities";
+import { CostCategory, Partner } from "@framework/entities";
 import { GetCostCategoriesForPartnerQuery } from "@server/features/claims/getCostCategoriesForPartnerQuery";
 
 import { TestContext } from "@tests/test-utils/testContextProvider";
@@ -25,7 +25,10 @@ describe("GetCostCategoriesForPartnerQuery()", () => {
     context.testData.range(stubCostCategoryTotal, count => {
       // Create both sets of data at the same time so they will always match
       context.testData.createCostCategory(mockPartner);
-      context.testData.createProfileDetail({ id: `CostCat${count}` } as any, { id: stubPartner.id } as any);
+      context.testData.createProfileDetail(
+        { id: `CostCat${count}` } as CostCategory,
+        { id: stubPartner.id } as Partner,
+      );
     });
 
     // Create blank cost categories which will never match

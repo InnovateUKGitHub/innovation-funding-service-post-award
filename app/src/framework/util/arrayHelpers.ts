@@ -1,7 +1,13 @@
+/**
+ * returns array with null or undefined elements removed
+ */
 export function filterEmpty<T>(array: (T | null | undefined)[]): T[] {
   return array.filter(x => x !== null && x !== undefined) as T[];
 }
 
+/**
+ * Returns an array flattened one level
+ */
 export function flatten<T>(array: T[][]): T[] {
   return array.reduce<T[]>((a, b) => a.concat(b), []);
 }
@@ -18,11 +24,11 @@ export const groupBy = <T, K>(list: T[], getKey: (entry: T) => K) => {
   return map;
 };
 
-export const getArrayFromPeriod = <T extends any[]>(
-  originalArray: T,
+export const getArrayFromPeriod = <T extends { periodId: number }>(
+  originalArray: T[],
   currentPeriod: number,
   lastPeriodId?: number,
-): T => {
+) => {
   if (!originalArray.length) return originalArray;
 
   return originalArray.filter(item => {
@@ -31,7 +37,7 @@ export const getArrayFromPeriod = <T extends any[]>(
     if (!lastPeriodId) return notPreviousPeriod;
 
     return notPreviousPeriod && item.periodId <= lastPeriodId;
-  }) as T;
+  });
 };
 
 export const getArrayExcludingPeriods = <

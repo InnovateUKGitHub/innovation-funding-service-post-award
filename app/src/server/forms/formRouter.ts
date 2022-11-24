@@ -67,7 +67,7 @@ import { ProjectSetupBankDetailsHandler } from "./project/setup/ProjectSetupBank
 import { ProjectSetupBankDetailsVerifyHandler } from "./project/setup/ProjectSetupBankDetailsVerifyHandler";
 import { ProjectSetupBankStatementHandler } from "./project/setup/ProjectSetupBankStatementHandler";
 
-export const standardFormHandlers: StandardFormHandlerBase<{}, EditorStateKeys>[] = [
+export const standardFormHandlers: StandardFormHandlerBase<AnyObject, EditorStateKeys>[] = [
   new ClaimForecastFormHandler(),
   new EditClaimLineItemsFormHandler(),
   new ClaimSummaryFormHandler(),
@@ -113,9 +113,9 @@ export const standardFormHandlers: StandardFormHandlerBase<{}, EditorStateKeys>[
   new LoanRequestDocumentDeleteHandler(),
 ];
 
-export const singleFileFormHandlers: SingleFileFormHandlerBase<{}, EditorStateKeys>[] = [];
+export const singleFileFormHandlers: SingleFileFormHandlerBase<AnyObject, EditorStateKeys>[] = [];
 
-export const multiFileFormHandlers: MultipleFileFormHandlerBase<{}, EditorStateKeys>[] = [
+export const multiFileFormHandlers: MultipleFileFormHandlerBase<AnyObject, EditorStateKeys>[] = [
   new ClaimDetailDocumentUploadHandler(),
   new ClaimDocumentsUploadHandler(),
   new ClaimReviewDocumentsUploadHandler(),
@@ -136,13 +136,20 @@ const handlePost =
   (handler: IFormHandler) => async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     try {
       await handler.handle(req, res, next);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
       console.log(e);
       return serverRender(req, res, e);
     }
   };
 
-const handleError = (error: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+const handleError = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  error: any,
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+) => {
   if (error) {
     serverRender(req, res, error);
   } else {
