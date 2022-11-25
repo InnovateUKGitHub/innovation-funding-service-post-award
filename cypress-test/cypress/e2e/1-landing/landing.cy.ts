@@ -40,6 +40,7 @@ describe("landing page > projects dashboard > selected project", () => {
     cy.get(`${projectCardCss} a`).wait(500).contains(testProjectName).click();
 
     cy.get("h1").contains("Project overview");
+    cy.get('[data-qa="page-title"').should("contain.text", testProjectName)
   });
 
   describe("project card links for this project", () => {
