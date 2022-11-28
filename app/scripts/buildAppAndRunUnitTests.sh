@@ -10,11 +10,9 @@ echo "About to run ci"
 npm ci --no-optional
 echo "About to run patch-package"
 npm run patch-package
-echo "About to run build:server"
-npm run build:server
-echo "About to run build:client"
-npm run build:client
-echo "About to run esbuild:tsc (ESBuild with TypeScript checking)"
+echo "About to build with Webpack"
+npm run build
+echo "About to build with ESBuild"
 npm run esbuild:tsc
 echo "About to run lint"
 npm run lint
