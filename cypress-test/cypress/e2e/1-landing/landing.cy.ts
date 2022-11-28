@@ -21,13 +21,22 @@ describe("landing page > projects dashboard > selected project", () => {
     cy.get(projectCardCss).should("have.length.greaterThan", 5);
   });
 
-  it("should have a selection of checkbox filters that filter ", () => {
+  it("should have project change requests to review filter", () => {
     cy.getByLabel("PCR's being queried").click();
 
     cy.get(projectCardCss).each(card => cy.wrap(card).contains("Project change request queried"))
 
     // unselect checkbox again
     cy.getByLabel("PCR's being queried").click();
+  })
+
+  it("should have a claims to review filter", () => {
+    cy.getByLabel("Claims to review").click();
+
+    cy.get(projectCardCss).each(card => cy.wrap(card).contains("Claims to review"))
+
+    // unselect checkbox again
+    cy.getByLabel("Claims to review").click();
   })
 
   it("should have a filter search button that will filter the projects", () => {

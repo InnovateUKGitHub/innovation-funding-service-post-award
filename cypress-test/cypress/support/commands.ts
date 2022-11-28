@@ -50,9 +50,14 @@ const getByLabel = (label: string) => {
     .then((id) => {
       cy.get('#' + id)
     })
-  }
+}
 
+const getByQA = (tag: string) => {
+  cy.log('**getByQA**')
+  cy.get(`[data-qa="${tag}"]`)
+}
 
 Cypress.Commands.add("getByLabel", getByLabel)
+Cypress.Commands.add("getByQA", getByQA)
 
 

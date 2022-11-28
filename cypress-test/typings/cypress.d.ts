@@ -10,6 +10,10 @@ declare global {
      * element linked to the label
      */
         getByLabel(label: string): Chainable<Element>
+        /**
+         * Gets an element based on QA data tag
+         */
+        getByQA(tag:string): Chainable<Element>
       }
     }
   }
