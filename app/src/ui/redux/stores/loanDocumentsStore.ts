@@ -58,7 +58,7 @@ export class LoanDocumentsStore extends DocumentsStoreBase {
       dto,
       () => this.validateMultipleDocumentsDto(dto, false, true),
       p => apiClient.documents.deleteLoanDocument({ projectId, loanId, documentId: document.id, ...p }),
-      () => this.afterUpdate(key, message, onComplete),
+      () => this.afterUpdate(key, message, true, onComplete),
     );
   }
 }

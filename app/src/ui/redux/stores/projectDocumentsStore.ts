@@ -56,7 +56,7 @@ export class ProjectDocumentsStore extends DocumentsStoreBase {
       dto,
       () => this.validateMultipleDocumentsDto(dto, false, true),
       p => apiClient.documents.deleteProjectDocument({ documentId: document.id, projectId, ...p }),
-      () => this.afterUpdate(key, message, onComplete),
+      () => this.afterUpdate(key, message, true, onComplete),
     );
   }
 
@@ -75,7 +75,7 @@ export class ProjectDocumentsStore extends DocumentsStoreBase {
       dto,
       () => this.validateMultipleDocumentsDto(dto, false, true),
       p => apiClient.documents.deletePartnerDocument({ projectId, partnerId, documentId: document.id, ...p }),
-      () => this.afterUpdate(key, message, onComplete),
+      () => this.afterUpdate(key, message, true, onComplete),
     );
   }
 }

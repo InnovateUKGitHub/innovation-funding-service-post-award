@@ -24,6 +24,7 @@ import {
 import { DocumentSummaryDto } from "@framework/dtos/documentDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { DataLoadAction, TransitionActions } from "../actions/common";
+import { DeveloperUser } from "@framework/dtos/developerUser";
 
 export interface IDataStore<T> {
   status: LoadingStatus;
@@ -81,6 +82,7 @@ const reducers = {
   costsSummary: dataStoreReducer<CostsSummaryForPeriodDto[]>("costsSummary"),
   costCategories: dataStoreReducer<CostCategoryDto[]>("costCategories"),
   contacts: dataStoreReducer<IContact[]>("contacts"),
+  developerUsers: dataStoreReducer<DeveloperUser[]>("developerUsers"),
   documents: dataStoreReducer<DocumentSummaryDto[]>("documents"),
   financialVirement: dataStoreReducer<FinancialVirementDto>("financialVirement"),
   financialLoanVirement: dataStoreReducer<FinancialLoanVirementDto>("financialLoanVirement"),

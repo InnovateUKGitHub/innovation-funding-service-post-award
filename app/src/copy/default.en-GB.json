@@ -15,6 +15,9 @@
       "explainCookies": "GOV.UK uses cookies to make the site simpler.",
       "externalLinkText": "All content is available under the <0>Open Government Licence v3.0</0>, except where otherwise stated",
       "crownCopyright": "\u00a9 Crown copyright"
+    },
+    "developer": {
+      "heading": "IFS PA Developer & Testing Tools"
     }
   },
   "example": {
@@ -130,12 +133,17 @@
       "projectDropdownPlaceholder": "-- Select a project --",
       "contactDropdownPlaceholder": "-- Select a contact --",
       "contactListEmpty": "There are no contacts to select for this project",
-      "changeUserMessage": "Change user",
-      "resetUserMessage": "Revert to System User",
+      "switchAndHome": "Go to home",
+      "switchAndStay": "Stay on page",
+      "manualSwitchAndHome": "Switch user and go to home",
+      "manualSwitchAndStay": "Switch user and stay on page",
+      "resetAndHome": "Revert to System User and go home",
+      "resetAndStay": "Revert to System User and stay on page",
       "invalidUserMessage": "You have authenticated as an invalid user. Please enter the E-Mail address of the valid user, or press the \"Revert to System User\" button to re-authenticate as the system user.",
       "tableHeaderMonitoringOfficer": "MO",
       "tableHeaderProjectManager": "PM",
-      "tableHeaderFinancialContact": "FC"
+      "tableHeaderFinancialContact": "FC",
+      "tableHeaderSwitchOptions": "After changing..."
     }
   },
   "pages": {
@@ -417,7 +425,8 @@
       "forecastCosts": "Forecast costs",
       "difference": "Difference",
       "addCost": "Add a cost",
-      "additionalInfo": "Additional info"
+      "additionalInfo": "Additional info",
+      "setToZeroToRemove": "You can only remove claim line items you created. For other claim line items you want to remove, set the value to zero and save."
     },
     "claimPrepare": {
       "title": "Costs to be claimed",
@@ -1078,7 +1087,9 @@
     "status": "Status",
     "fundingType": "Funding status",
     "partnerPostcode": "Location",
-    "contactEmail": "Email",
+    "contactEmail": "Project Contact Link Email",
+    "contactInternalUsername": "Internal Username",
+    "contactExternalUsername": "External Username",
     "nonFundedLabel": "Non-funded",
     "fundedLabel": "Funded",
     "noContactsMessage": "No contacts exist."

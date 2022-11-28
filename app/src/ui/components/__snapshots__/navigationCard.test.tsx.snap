@@ -1,0 +1,274 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<NavigationCardsGrid> should render child components 1`] = `
+NodeList [
+  <div
+    class="govuk-grid-row card-link-grid"
+  >
+    <div
+      class="card-link"
+      data-qa="stub-0-qa"
+    >
+      <a
+        class="govuk-link card-link__link"
+        href="/stub-0-path"
+      >
+        <h2
+          class="card-link__title"
+          data-qa="navigation-card-label"
+        >
+          stub-0-content
+        </h2>
+        <div
+          class="card-link__messages"
+          data-qa="navigation-card-list"
+        >
+          <p
+            class="card-link__message govuk-body"
+            data-qa="stub-0-message-qa-1"
+          >
+            stub-0-message-1
+          </p>
+          <p
+            class="card-link__message govuk-body"
+            data-qa="stub-0-message-qa-2"
+          >
+            stub-0-message-2
+          </p>
+        </div>
+      </a>
+    </div>
+    <div
+      class="card-link"
+      data-qa="stub-1-qa"
+    >
+      <a
+        class="govuk-link card-link__link"
+        href="/stub-1-path"
+      >
+        <h2
+          class="card-link__title"
+          data-qa="navigation-card-label"
+        >
+          stub-1-content
+        </h2>
+        <div
+          class="card-link__messages"
+          data-qa="navigation-card-list"
+        >
+          <p
+            class="card-link__message govuk-body"
+            data-qa="stub-1-message-qa-1"
+          >
+            stub-1-message-1
+          </p>
+          <p
+            class="card-link__message govuk-body"
+            data-qa="stub-1-message-qa-2"
+          >
+            stub-1-message-2
+          </p>
+        </div>
+      </a>
+    </div>
+    <div
+      class="card-link"
+      data-qa="stub-2-qa"
+    >
+      <a
+        class="govuk-link card-link__link"
+        href="/stub-2-path"
+      >
+        <h2
+          class="card-link__title"
+          data-qa="navigation-card-label"
+        >
+          stub-2-content
+        </h2>
+        <div
+          class="card-link__messages"
+          data-qa="navigation-card-list"
+        >
+          <p
+            class="card-link__message govuk-body"
+            data-qa="stub-2-message-qa-1"
+          >
+            stub-2-message-1
+          </p>
+          <p
+            class="card-link__message govuk-body"
+            data-qa="stub-2-message-qa-2"
+          >
+            stub-2-message-2
+          </p>
+        </div>
+      </a>
+    </div>
+    <div
+      class="card-link"
+      data-qa="stub-3-qa"
+    >
+      <a
+        class="govuk-link card-link__link"
+        href="/stub-3-path"
+      >
+        <h2
+          class="card-link__title"
+          data-qa="navigation-card-label"
+        >
+          stub-3-content
+        </h2>
+        <div
+          class="card-link__messages"
+          data-qa="navigation-card-list"
+        >
+          <p
+            class="card-link__message govuk-body"
+            data-qa="stub-3-message-qa-1"
+          >
+            stub-3-message-1
+          </p>
+          <p
+            class="card-link__message govuk-body"
+            data-qa="stub-3-message-qa-2"
+          >
+            stub-3-message-2
+          </p>
+        </div>
+      </a>
+    </div>
+    <div
+      class="card-link"
+      data-qa="stub-4-qa"
+    >
+      <a
+        class="govuk-link card-link__link"
+        href="/stub-4-path"
+      >
+        <h2
+          class="card-link__title"
+          data-qa="navigation-card-label"
+        >
+          stub-4-content
+        </h2>
+        <div
+          class="card-link__messages"
+          data-qa="navigation-card-list"
+        >
+          <p
+            class="card-link__message govuk-body"
+            data-qa="stub-4-message-qa-1"
+          >
+            stub-4-message-1
+          </p>
+          <p
+            class="card-link__message govuk-body"
+            data-qa="stub-4-message-qa-2"
+          >
+            stub-4-message-2
+          </p>
+        </div>
+      </a>
+    </div>
+    <div
+      class="card-link"
+      data-qa="stub-5-qa"
+    >
+      <a
+        class="govuk-link card-link__link"
+        href="/stub-5-path"
+      >
+        <h2
+          class="card-link__title"
+          data-qa="navigation-card-label"
+        >
+          stub-5-content
+        </h2>
+        <div
+          class="card-link__messages"
+          data-qa="navigation-card-list"
+        >
+          <p
+            class="card-link__message govuk-body"
+            data-qa="stub-5-message-qa-1"
+          >
+            stub-5-message-1
+          </p>
+          <p
+            class="card-link__message govuk-body"
+            data-qa="stub-5-message-qa-2"
+          >
+            stub-5-message-2
+          </p>
+        </div>
+      </a>
+    </div>
+    <div
+      class="card-link"
+      data-qa="stub-6-qa"
+    >
+      <a
+        class="govuk-link card-link__link"
+        href="/stub-6-path"
+      >
+        <h2
+          class="card-link__title"
+          data-qa="navigation-card-label"
+        >
+          stub-6-content
+        </h2>
+        <div
+          class="card-link__messages"
+          data-qa="navigation-card-list"
+        >
+          <p
+            class="card-link__message govuk-body"
+            data-qa="stub-6-message-qa-1"
+          >
+            stub-6-message-1
+          </p>
+          <p
+            class="card-link__message govuk-body"
+            data-qa="stub-6-message-qa-2"
+          >
+            stub-6-message-2
+          </p>
+        </div>
+      </a>
+    </div>
+    <div
+      class="card-link"
+      data-qa="stub-7-qa"
+    >
+      <a
+        class="govuk-link card-link__link"
+        href="/stub-7-path"
+      >
+        <h2
+          class="card-link__title"
+          data-qa="navigation-card-label"
+        >
+          stub-7-content
+        </h2>
+        <div
+          class="card-link__messages"
+          data-qa="navigation-card-list"
+        >
+          <p
+            class="card-link__message govuk-body"
+            data-qa="stub-7-message-qa-1"
+          >
+            stub-7-message-1
+          </p>
+          <p
+            class="card-link__message govuk-body"
+            data-qa="stub-7-message-qa-2"
+          >
+            stub-7-message-2
+          </p>
+        </div>
+      </a>
+    </div>
+  </div>,
+]
+`;

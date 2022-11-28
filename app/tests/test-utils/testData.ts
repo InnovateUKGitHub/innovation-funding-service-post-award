@@ -266,6 +266,7 @@ export class TestData {
       },
       Acc_UserId__r: {
         Name: "Mr Internal Contact",
+        Username: `projectcontact${seed}@login.com.bjssdev`,
       },
       Acc_Role__c: role,
       RoleName: roleName,
@@ -549,6 +550,9 @@ export class TestData {
       Acc_ProjectPeriodStartDate__c: "2018-01-02",
       Acc_ProjectPeriodEndDate__c: "2018-03-04",
       Acc_ReasonForDifference__c: "comments",
+      Owner: {
+        Email: "content.solution@iuk.ukri.org",
+      },
     };
 
     if (update) {
@@ -579,6 +583,9 @@ export class TestData {
       Acc_LineItemDescription__c: "We hired a person to do a thing",
       LastModifiedDate: "2018-03-04T12:00:00.000+00",
       RecordTypeId: "Claims Line Item",
+      Owner: {
+        Email: "peter.potter@hedgeshedges.co.uk",
+      },
     };
 
     if (update) {

@@ -15,8 +15,8 @@ import { diffAsPercentage, sumBy } from "@framework/util/numberHelper";
 import { Pending } from "@shared/pending";
 import { range } from "@shared/range";
 import * as ACC from "@ui/components";
-import { UL } from "@ui/components";
 import { AwardRateOverridesMessage } from "@ui/components/claims/AwardRateOverridesMessage";
+import { createTypedForm, UL } from "@ui/components";
 import { EditorStatus } from "@ui/constants/enums";
 import { BaseProps, ContainerBaseWithState, ContainerProps, defineRoute } from "@ui/containers/containerBase";
 import { MountedHoc, useMounted } from "@ui/features";
@@ -57,7 +57,14 @@ export interface EditClaimLineItemsCallbacks {
   onUpdate: (saving: boolean, dto: ClaimDetailsDto, goToUpload?: boolean) => void;
 }
 
-const LineItemForm = ACC.createTypedForm<ClaimDetailsDto>();
+const LineItemForm = createTypedForm<ClaimDetailsDto>();
+const DeleteByEnteringZero = () => (
+  <ACC.ValidationMessage
+    messageType="info"
+    qa="claim-warning"
+    message={<ACC.Content value={x => x.pages.editClaimLineItems.setToZeroToRemove} />}
+  />
+);
 
 export class EditClaimLineItemsComponent extends ContainerBaseWithState<
   EditClaimDetailsParams,
@@ -138,6 +145,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
           isNonFec={project.isNonFec}
         />
         {this.renderNegativeClaimWarning(editor.data)}
+        {(!claimDetails.isAuthor || editor.data.lineItems.some(x => !x.isAuthor)) && <DeleteByEnteringZero />}
 
         <>
           {isCombinationOfSBRI ? (
@@ -206,6 +214,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
         id: "",
         value: claimDetails.value,
         lastModifiedDate: new Date(),
+        isAuthor: true,
       },
     ];
 
@@ -298,19 +307,19 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
               qa="cost-last-updated"
               value={x => x.lastModifiedDate}
             />
-            {this.state.showAddRemove ? (
-              <LineItemTable.Custom
-                header={x => x.pages.editClaimLineItems.headerAction}
-                hideHeader
-                qa="remove"
-                value={(x, i) => (
+            <LineItemTable.Custom
+              header={x => x.pages.editClaimLineItems.headerAction}
+              hideHeader
+              qa="remove"
+              value={(x, i) =>
+                x.isAuthor && (
                   <a href="" className="govuk-link" role="button" onClick={e => this.removeItem(x, i, e, editor)}>
                     <ACC.Content value={y => y.pages.editClaimLineItems.buttonRemove} />
                   </a>
-                )}
-                width={1}
-              />
-            ) : null}
+                )
+              }
+              width={1}
+            />
           </LineItemTable.Table>
         </LineItemForm.Fieldset>
 
@@ -523,6 +532,7 @@ export class EditClaimLineItemsComponent extends ContainerBaseWithState<
       partnerId: this.props.partnerId,
       periodId: this.props.periodId,
       costCategoryId: this.props.costCategoryId,
+      isAuthor: true,
     } as ClaimLineItemDto);
     this.props.onUpdate(false, dto);
   }
@@ -694,6 +704,7 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
             description: "",
             value: null as unknown as number,
             lastModifiedDate: null as unknown as Date,
+            isAuthor: true,
           }));
           dto.lineItems.push(...extraLineItems);
         },

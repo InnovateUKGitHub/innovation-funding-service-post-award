@@ -36,6 +36,7 @@ const stubContent = {
       difference: "stub-difference",
       addCost: "stub-addCost",
       additionalInfo: "stub-additionalInfo",
+      setToZeroToRemove: "stub-setToZeroToRemove",
     },
   },
   claimsMessages: {

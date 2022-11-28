@@ -44,6 +44,7 @@ export class GetClaimDetailsQuery extends QueryBase<ClaimDetailsDto> {
         periodEnd: null,
         value: 0,
         comments: null,
+        isAuthor: false,
         lineItems: [], // @TODO move client-side logic here?
       };
     }

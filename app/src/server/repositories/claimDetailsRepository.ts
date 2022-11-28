@@ -16,6 +16,9 @@ export interface ISalesforceClaimDetails {
   Acc_ProjectPeriodStartDate__c: string;
   Acc_ProjectPeriodEndDate__c: string;
   Acc_ReasonForDifference__c: string | null;
+  Owner: {
+    Email: string;
+  };
 }
 
 export interface IClaimDetailsRepository {
@@ -58,6 +61,7 @@ export class ClaimDetailsRepository
     "Acc_ProjectPeriodStartDate__c",
     "Acc_ProjectPeriodEndDate__c",
     "Acc_ReasonForDifference__c",
+    "Owner.Email",
   ];
 
   getAllByPartnerForPeriod(partnerId: string, periodId: number): Promise<ISalesforceClaimDetails[]> {

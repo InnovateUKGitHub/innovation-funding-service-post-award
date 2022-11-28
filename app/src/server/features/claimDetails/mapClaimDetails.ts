@@ -15,6 +15,9 @@ export function mapClaimDetailsSummary(
     costCategoryId: salesforceClaimDetails.Acc_CostCategory__c,
     value: salesforceClaimDetails.Acc_PeriodCostCategoryTotal__c,
     comments: salesforceClaimDetails.Acc_ReasonForDifference__c,
+    isAuthor:
+      context.user.email === context.config.salesforceServiceUser.serviceUsername ||
+      salesforceClaimDetails.Owner.Email === context.user.email,
   };
 }
 

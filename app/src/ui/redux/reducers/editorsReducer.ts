@@ -110,6 +110,7 @@ export const editorsReducer =
       const newEditor: IEditorStore<TDto, TValidator> = {
         ...result[action.payload?.id],
         data: action.payload?.dto as TDto,
+        validator: action.payload.validator as TValidator,
         status: EditorStatus.Editing,
       };
 

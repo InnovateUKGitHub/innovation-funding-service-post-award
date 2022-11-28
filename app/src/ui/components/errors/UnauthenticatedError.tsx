@@ -1,7 +1,7 @@
 import { PageTitle } from "@ui/features/page-title";
 import { Page, Section, Content } from "@ui/components";
 import { ExternalLink, SimpleString } from "@ui/components/renderers";
-import { UserChanger } from "@ui/containers/developer/UserChanger";
+import { UserSwitcher } from "@ui/containers/developer/UserSwitcher";
 import { useStores } from "@ui/redux";
 
 export const UnauthenticatedError = () => {
@@ -23,8 +23,6 @@ export const UnauthenticatedError = () => {
           />
         </SimpleString>
       </Section>
-
-      {!ssoEnabled && <UserChanger />}
     </Page>
   );
 };

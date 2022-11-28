@@ -272,7 +272,17 @@ export class StoreBase {
     );
   }
 
-  protected resetEditor<T extends EditorStateKeys, K extends string, TDto>(store: T, key: K, newDto: TDto) {
-    this.queue(resetEditor<TDto>(key, store as string, newDto));
+  protected resetEditor<
+    T extends EditorStateKeys,
+    K extends string,
+    TDto extends InferEditorStoreDto<EditorState[T][K]>,
+    TVal extends InferEditorStoreValidator<EditorState[T][K]>,
+  >(store: T, key: K, newDto: TDto, getValidator: () => Pending<TVal> | TVal) {
+    const valResult = getValidator();
+    const validation = valResult instanceof Pending ? valResult.data : valResult;
+
+    if (!validation) throw new Error("Could not create new validator to reset editor.");
+
+    this.queue(resetEditor<TDto>(key, store as string, newDto, validation));
   }
 }

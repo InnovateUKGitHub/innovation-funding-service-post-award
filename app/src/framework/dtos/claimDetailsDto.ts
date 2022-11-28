@@ -8,6 +8,7 @@ export interface ClaimDetailsSummaryDto {
   periodEnd: Date | null;
   value: number;
   comments: string | null;
+  isAuthor: boolean;
 }
 
 export interface ClaimDetailsDto extends ClaimDetailsSummaryDto {

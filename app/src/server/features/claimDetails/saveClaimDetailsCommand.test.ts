@@ -14,6 +14,7 @@ const createNewLineItemDto = (detail: ClaimDetailsDto, value?: number, descripti
   value: value || 100,
   description: description || "A description",
   lastModifiedDate: new Date(),
+  isAuthor: true,
 });
 
 const createNewDto = (partner: Partner, periodId: number, costCategory: CostCategory): ClaimDetailsDto => ({
@@ -23,6 +24,7 @@ const createNewDto = (partner: Partner, periodId: number, costCategory: CostCate
   costCategoryId: costCategory.id,
   value: 0,
   periodId,
+  isAuthor: true,
   periodStart: new Date(),
   periodEnd: new Date(),
 });

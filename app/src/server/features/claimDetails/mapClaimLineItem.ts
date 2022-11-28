@@ -10,4 +10,7 @@ export default (context: IContext) =>
     periodId: item.Acc_ProjectPeriodNumber__c,
     costCategoryId: item.Acc_CostCategory__c,
     lastModifiedDate: context.clock.parseRequiredSalesforceDateTime(item.LastModifiedDate),
+    isAuthor:
+      context.user.email === context.config.salesforceServiceUser.serviceUsername ||
+      item.Owner.Email === context.user.email,
   });

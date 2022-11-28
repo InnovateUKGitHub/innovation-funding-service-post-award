@@ -1,7 +1,7 @@
 import { scrollToTheTopSmoothly } from "@framework/util";
-import { DocumentUploadDtoValidator, MultipleDocumentUploadDtoValidator } from "@ui/validators";
+import { MultipleDocumentUploadDtoValidator } from "@ui/validators";
 import { IClientUser } from "@framework/types";
-import { DocumentUploadDto, MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
+import { MultipleDocumentUploadDto } from "@framework/dtos/documentUploadDto";
 import { messageSuccess } from "../actions";
 import { StoreBase } from "./storeBase";
 
@@ -10,12 +10,18 @@ export abstract class DocumentsStoreBase extends StoreBase {
     return new MultipleDocumentUploadDtoValidator(dto, this.getState().config.options, filesRequired, showErrors, null);
   }
 
-  protected validateDocumentUploadDto(dto: DocumentUploadDto, showErrors: boolean) {
-    return new DocumentUploadDtoValidator(dto, this.getState().config.options, showErrors);
-  }
+  protected afterUpdate(
+    key: string,
+    message: string | undefined,
+    filesRequired: boolean,
+    onComplete: (() => void) | undefined,
+  ) {
+    const newDto = { files: [] };
 
-  protected afterUpdate(key: string, message: string | undefined, onComplete: (() => void) | undefined) {
-    this.resetEditor("multipleDocuments", key, { files: [] });
+    // Create a reset call, initialising the key to an empty DTO and a hidden validator.
+    this.resetEditor("multipleDocuments", key, newDto, () =>
+      this.validateMultipleDocumentsDto(newDto, false, filesRequired),
+    );
 
     // Reload both documents and partnerDocuments
     this.markStale("documents", key, undefined);
@@ -57,7 +63,7 @@ export abstract class DocumentsStoreBase extends StoreBase {
       dto,
       show => this.validateMultipleDocumentsDto(dto, show, filesRequired),
       p => (dto.files.length ? callUpdateApi({ documents: dto, ...p }) : Promise.resolve(null)),
-      () => this.afterUpdate(key, dto.files.length ? message : undefined, onComplete),
+      () => this.afterUpdate(key, dto.files.length ? message : undefined, filesRequired, onComplete),
       () => this.afterError(key),
     );
   }

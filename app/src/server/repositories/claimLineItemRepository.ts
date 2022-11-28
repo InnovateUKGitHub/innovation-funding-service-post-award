@@ -12,6 +12,9 @@ export interface ISalesforceClaimLineItem {
   Acc_ProjectParticipant__c: string;
   LastModifiedDate: string;
   RecordTypeId: string;
+  Owner: {
+    Email: string;
+  };
 }
 
 export interface IClaimLineItemRepository {
@@ -51,6 +54,7 @@ export class ClaimLineItemRepository
     "Acc_CostCategory__c",
     "Acc_ProjectPeriodNumber__c",
     "Acc_ProjectParticipant__c",
+    "Owner.Email",
     "LastModifiedDate",
   ];
 
