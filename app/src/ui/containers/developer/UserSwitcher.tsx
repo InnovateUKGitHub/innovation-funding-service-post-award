@@ -128,10 +128,10 @@ const UserSwitcherProjectSelectorPartnerSelector = ({
                 name="user"
                 value={() => x.user.externalUsername || x.user.internalUsername || x.user.email}
               />
-              <SelectContactForm.Button name="home" styling="Link" className="govuk-!-font-size-19">
+              <SelectContactForm.Button name="home" styling="Link" className="govuk-!-font-size-19" qa="btn-home">
                 {getContent(x => x.components.userChanger.switchAndHome)}
               </SelectContactForm.Button>
-              <SelectContactForm.Button name="stay" styling="Link" className="govuk-!-font-size-19">
+              <SelectContactForm.Button name="stay" styling="Link" className="govuk-!-font-size-19" qa="btn-stay">
                 {getContent(x => x.components.userChanger.switchAndStay)}
               </SelectContactForm.Button>
             </SelectContactForm.Form>
@@ -227,10 +227,12 @@ const UserSwitcherReset = () => {
     <ResetUserForm.Form data="" action="/">
       <ResetUserForm.Hidden name="current_url" value={() => returnLocation} />
       <ResetUserForm.Hidden name="reset" value={() => ""} />
-      <ResetUserForm.Button name="stay" styling="Primary">
+      <ResetUserForm.Button name="stay" styling="Primary" qa="reset-and-stay">
         {getContent(x => x.components.userChanger.resetAndStay)}
       </ResetUserForm.Button>
-      <ResetUserForm.Button name="home">{getContent(x => x.components.userChanger.resetAndHome)}</ResetUserForm.Button>
+      <ResetUserForm.Button name="home" qa="reset-and-home">
+        {getContent(x => x.components.userChanger.resetAndHome)}
+      </ResetUserForm.Button>
     </ResetUserForm.Form>
   );
 };
@@ -254,16 +256,17 @@ const UserSwitcherManualEmailEntry = () => {
       <ManuallyEnterUserForm.String
         label="user"
         name="user"
+        id="user-switcher-manual-input"
         labelHidden
         value={x => x.email}
         update={(x, v) => (x.email = v || "")}
       />
 
       <ManuallyEnterUserForm.Hidden name="current_url" value={() => returnLocation} />
-      <ManuallyEnterUserForm.Button name="stay" styling="Primary">
+      <ManuallyEnterUserForm.Button name="stay" styling="Primary" qa="manual-change-and-stay">
         {getContent(x => x.components.userChanger.manualSwitchAndStay)}
       </ManuallyEnterUserForm.Button>
-      <ManuallyEnterUserForm.Button name="home">
+      <ManuallyEnterUserForm.Button name="home" qa="manual-change-and-home">
         {getContent(x => x.components.userChanger.manualSwitchAndHome)}
       </ManuallyEnterUserForm.Button>
     </ManuallyEnterUserForm.Form>
@@ -284,7 +287,7 @@ const UserSwitcher = () => (
 /**
  * A development user switching interface, hidden behind an info-box.
  *
- * @param props.isOnUnauthenticatedPage If the page you are currrently on is the "Unauthenticated" page. Disables page returns.
+ * @param props.isOnUnauthenticatedPage If the page you are currently on is the "Unauthenticated" page. Disables page returns.
  * @returns A React Component
  */
 const HiddenUserSwitcher = () => {

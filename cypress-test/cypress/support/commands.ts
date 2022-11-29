@@ -37,12 +37,6 @@
 //   }
 // }
 
-/**
- * Gets an element by following the label attribute.
- * 
- * Pass in a string for the label name, and it will return the
- * element linked to the label
- */
 const getByLabel = (label: string) => {
   cy.log('**getByLabel**')
   cy.contains('label', label)
@@ -57,7 +51,18 @@ const getByQA = (tag: string) => {
   cy.get(`[data-qa="${tag}"]`)
 }
 
-Cypress.Commands.add("getByLabel", getByLabel)
-Cypress.Commands.add("getByQA", getByQA)
+const switchUserTo = (email: string, goHome: boolean = false) => {
+  cy.contains("User Switcher").click();
+  cy.get('input#user-switcher-manual-input').clear().type(email);
+  cy.getByQA(`manual-change-and-${goHome? "home" : "stay"}`).click();
+}
 
+const resetUser = (goHome: boolean = false) => {
+  cy.getByQA(`reset-and-${goHome ? "home" : "stay"}`).click();
+}
+
+Cypress.Commands.add("getByLabel", getByLabel);
+Cypress.Commands.add("getByQA", getByQA);
+Cypress.Commands.add("switchUserTo", switchUserTo);
+Cypress.Commands.add("resetUser", resetUser);
 

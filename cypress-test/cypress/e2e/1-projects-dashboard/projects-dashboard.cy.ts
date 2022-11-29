@@ -1,4 +1,5 @@
 import { visitApp } from "../../common/visit";
+
 const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
 const testProjectName = "__CYPRUS_TEST__";
 
@@ -48,7 +49,7 @@ describe("projects dashboard", () => {
     cy.get(`${projectCardCss} a`).wait(500).contains(testProjectName).click();
 
     cy.get("h1").contains("Project overview");
-    cy.get('[data-qa="page-title"').should("contain.text", testProjectName);
+    cy.getByQA("page-title").should("contain.text", testProjectName);
   });
 
   const expectedProjectCards = [
