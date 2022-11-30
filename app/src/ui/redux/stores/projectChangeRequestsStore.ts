@@ -19,7 +19,6 @@ import {
   TypeOfAid,
 } from "@framework/constants";
 import { storeKeys } from "@ui/redux/stores/storeKeys";
-import { ConfigStore } from "@ui/redux/stores/configStore";
 import { PCRSpendProfileCostDto } from "@framework/dtos/pcrSpendProfileDto";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { PCRSpendProfileCostDtoValidator } from "@ui/validators/pcrSpendProfileDtoValidator";
@@ -31,7 +30,6 @@ import { StoreBase } from "./storeBase";
 export class ProjectChangeRequestStore extends StoreBase {
   constructor(
     private readonly projectStore: ProjectsStore,
-    private readonly configStore: ConfigStore,
     getState: () => RootState,
     queue: (action: RootActionsOrThunk) => void,
   ) {

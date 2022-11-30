@@ -9,27 +9,52 @@ import { NotFoundError } from "@shared/appError";
 import { serverRender } from "@server/serverRender";
 import { componentGuideRender } from "@server/componentGuideRender";
 import { isAccDevOrDemo, isLocalDevelopment } from "@shared/isEnv";
+import { getGraphQLRoutes } from "@gql/getGraphQLExpressRoutes";
+import { getSalesforceAccessToken } from "./repositories/salesforceConnection";
+import { configuration } from "./features/common";
+import { Connection } from "@gql/sfdc-graphql-endpoint/src/sfdc/connection";
+import { Api } from "@gql/sfdc-graphql-endpoint/src/sfdc/api";
+import { getGraphQLSchema } from "@gql/getGraphQLSchema";
 
 export const noAuthRouter = Router();
 
 // Support routes
 noAuthRouter.use("/api/health", healthRouter);
 
-export const router = Router();
+const getServerRoutes = async () => {
+  const router = Router();
 
-const csrfProtection = csrf();
+  const csrfProtection = csrf();
 
-// App routes
-router.use("/api", apiRoutes);
+  // Obtain a Salesforce access token and URL
+  const { accessToken, url } = await getSalesforceAccessToken({
+    clientId: configuration.salesforceServiceUser.clientId,
+    connectionUrl: configuration.salesforceServiceUser.connectionUrl,
+    currentUsername: configuration.salesforceServiceUser.serviceUsername,
+  });
 
-// Only enable the components page if we're in development mode.
-if (isAccDevOrDemo || isLocalDevelopment) {
-  router.use("/components", csrfProtection, componentGuideRender);
-}
+  // Create a new Connection and API object to fetch Salesforce data from.
+  const connection = new Connection({ instanceUrl: url, accessToken });
+  const api = new Api({ connection });
+  const schema = await getGraphQLSchema({ connection, api });
 
-// Form posts
-router.post("*", configureFormRouter(csrfProtection));
-router.get("*", csrfProtection, (req, res) => serverRender(req, res));
+  // App routes
+  router.use("/api", apiRoutes);
+  router.use(await getGraphQLRoutes({ schema, connection, api }));
 
-// Fallback route
-router.all("*", (req, res) => serverRender(req, res, new NotFoundError()));
+  // Only enable the components page if we're in development mode.
+  if (isAccDevOrDemo || isLocalDevelopment) {
+    router.use("/components", csrfProtection, componentGuideRender);
+  }
+
+  // Form posts
+  router.post("*", configureFormRouter({ schema })(csrfProtection));
+  router.get("*", csrfProtection, (req, res) => serverRender({ schema })(req, res));
+
+  // Fallback route
+  router.all("*", (req, res) => serverRender({ schema })(req, res, new NotFoundError()));
+
+  return router;
+};
+
+export { getServerRoutes };

@@ -2,12 +2,12 @@ import { IAppError } from "@framework/types";
 import { ErrorPayload, createErrorPayload } from "@shared/create-error-payload";
 import { ContentProvider } from "@ui/redux/contentProvider";
 import { PageTitleProvider } from "@ui/features/page-title";
-import { useStores } from "@ui/redux";
 import { MountedProvider } from "@ui/features";
 import { useInitContent } from "@ui/features/use-initial-content";
 import { FullHeight, GovWidthContainer, Header } from "@ui/components";
 import { errorPages, internalErrorFallback, InternalErrorTypes } from "./error.config";
 import { FallbackProps } from "react-error-boundary";
+import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 
 export type ErrorContainerProps = ErrorPayload["params"] & { from?: string };
 
@@ -27,10 +27,10 @@ export const ErrorContainer = (props: ErrorContainerProps) => {
  * Requires Providers and page layout because fallback lies outside main react component tree
  */
 export function ErrorBoundaryFallback({ error }: FallbackProps) {
-  const stores = useStores();
   const errorPayload = createErrorPayload(error as unknown as IAppError, false);
   const content = useInitContent();
-  const config = stores.config.getConfig();
+  const { data } = useClientOptionsQuery();
+
   return (
     <MountedProvider>
       <ContentProvider value={content}>
@@ -39,7 +39,7 @@ export function ErrorBoundaryFallback({ error }: FallbackProps) {
             <a href="#main-content" className="govuk-skip-link">
               Skip to main content
             </a>
-            <Header headingLink={`${config.ifsRoot}/competition/search`} />
+            <Header headingLink={`${data.clientConfig.ifsRoot}/competition/search`} />
             <FullHeight.Content>
               <GovWidthContainer>
                 <ErrorContainer {...errorPayload.params} />

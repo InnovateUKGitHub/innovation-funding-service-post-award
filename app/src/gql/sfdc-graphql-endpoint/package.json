@@ -1,0 +1,38 @@
+{
+    "name": "sfdc-graphql",
+    "version": "0.0.1",
+    "description": "",
+    "type": "module",
+    "scripts": {
+        "clean": "rm -rf dist/",
+        "lint": "eslint src/",
+        "format": "prettier src/ --write",
+        "build": "tsc -b",
+        "start": "npx nodemon --no-warnings ./dist/http/server.js",
+        "test:integration": "node --experimental-vm-modules  --no-warnings ./node_modules/.bin/jest --config ./integration/jest.config.json"
+    },
+    "keywords": [
+        "Salesforce",
+        "SFDC",
+        "GraphQL"
+    ],
+    "author": "Pierre-Marie Dartus <pm@dartus.fr>",
+    "license": "MIT",
+    "dependencies": {
+        "fastify": "^3.25.2",
+        "fastify-plugin": "^3.0.0",
+        "graphql": "^16.2.0",
+        "undici": "^4.12.1"
+    },
+    "devDependencies": {
+        "@types/jest": "^27.4.0",
+        "@types/node": "^16.0.0",
+        "@typescript-eslint/eslint-plugin": "^5.8.1",
+        "@typescript-eslint/parser": "^5.8.1",
+        "eslint": "^8.6.0",
+        "jest": "^27.4.5",
+        "prettier": "^2.5.1",
+        "ts-jest": "^27.1.2",
+        "typescript": "^4.5.4"
+    }
+}

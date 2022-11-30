@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/naming-convention */
 
+const { execSync } = require("child_process");
 const { program } = require("commander");
 const { build } = require("esbuild");
 const ESBuildConfiguration = require("./scripts/esbuild/ESBuildConfiguration");
@@ -14,6 +15,7 @@ const shouldEnableDevTools = /^acc-dev|^acc-demo/.test(process.env.ENV_NAME) || 
 
 if (opts.watch) {
   esbuildConfig.withWatch();
+  execSync("npm run relay", { stdio: "inherit" });
 }
 
 if (opts.tsc) {

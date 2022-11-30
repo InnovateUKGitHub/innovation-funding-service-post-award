@@ -4,8 +4,8 @@ export interface IAppOptions {
   /**
    * @deprecated since ACC-7394
    */
-  readonly permittedFileTypes: string[];
-  readonly permittedTypes: Record<string, string[]>;
+  readonly permittedFileTypes: readonly string[];
+  readonly permittedTypes: Record<string, readonly string[]>;
   readonly bankCheckValidationRetries: number;
   readonly bankCheckAddressScorePass: number;
   readonly bankCheckCompanyNameScorePass: number;

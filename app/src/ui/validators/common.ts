@@ -319,7 +319,12 @@ export function optionalChild<T, U extends Results<ResultBase>>(
 /**
  * Validating all values match against list of permitted values
  */
-export function permittedValues<T>(results: Results<ResultBase>, value: T, permitted: T[], message?: string) {
+export function permittedValues<T>(
+  results: Results<ResultBase>,
+  value: T,
+  permitted: T[] | Readonly<T[]>,
+  message?: string,
+) {
   return isTrue(results, permitted.indexOf(value) >= 0, message || "Value is not permitted");
 }
 

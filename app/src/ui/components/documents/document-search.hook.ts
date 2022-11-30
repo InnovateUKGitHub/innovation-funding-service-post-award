@@ -2,11 +2,11 @@ import { useCallback, useEffect, useState } from "react";
 import Fuse from "fuse.js";
 
 import { useMounted } from "@ui/features";
-import { useStores } from "@ui/redux";
 import { formatDate, getFileSize } from "@framework/util";
 import { DateFormat } from "@framework/constants/enums";
 
 import { DocumentSummaryDto } from "@framework/dtos";
+import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 
 /**
  * Perform a fuzzy search on a list of items.
@@ -60,13 +60,13 @@ const filterItems = <T extends DocumentSummaryDto>(valueToSearch: string, items:
  * hook to handle document search functionality
  */
 export function useDocumentSearch<T extends DocumentSummaryDto>(disableSearch: boolean, originalDocuments: T[]) {
-  const { features } = useStores().config.getConfig();
+  const { data } = useClientOptionsQuery();
   const { isClient } = useMounted();
 
   const [filterValue, setFilterValue] = useState<string>("");
   const [documents, setDocuments] = useState<T[]>(originalDocuments);
 
-  const minDocsForSearch = originalDocuments.length >= features.searchDocsMinThreshold;
+  const minDocsForSearch = originalDocuments.length >= data.clientConfig.features.searchDocsMinThreshold;
   const enableFilter = isClient && !disableSearch;
 
   const hasDocuments = documents.length > 0;

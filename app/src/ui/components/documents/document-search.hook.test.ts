@@ -1,19 +1,14 @@
 import { renderHook, act } from "@testing-library/react";
 import { v4 as uuid } from "uuid";
 
-import { hookTestBed, TestBedStore } from "@shared/TestBed";
+import { hookTestBed, HookTestBedProps } from "@shared/TestBed";
 import { useDocumentSearch } from "@ui/components/documents/document-search.hook";
 import { DocumentsBase } from "@ui/components/documents/documents.interface";
+import { DocumentSummaryDto } from "@framework/dtos";
 
 describe("useDocumentSearch()", () => {
-  const setup = (
-    disableSearch: boolean,
-    originalDocuments: DocumentsBase["documents"],
-    options?: {
-      isServer?: boolean;
-      stores?: TestBedStore;
-    },
-  ) => renderHook(() => useDocumentSearch(disableSearch, originalDocuments), hookTestBed({ ...options }));
+  const setup = (disableSearch: boolean, originalDocuments: DocumentsBase["documents"], options?: HookTestBedProps) =>
+    renderHook(() => useDocumentSearch(disableSearch, originalDocuments), hookTestBed({ ...options }));
 
   const stubBaseDocument: DocumentsBase["documents"][0] = {
     fileName: "stub-filename",
@@ -34,50 +29,29 @@ describe("useDocumentSearch()", () => {
       });
 
       describe("with document threshold", () => {
-        it("when document length is below threshold", () => {
-          const stubStores = {
-            config: {
-              getConfig: () => ({
-                features: {
-                  searchDocsMinThreshold: 1,
+        it.each`
+          name       | documents                               | shown
+          ${"below"} | ${[]}                                   | ${false}
+          ${"equal"} | ${[stubBaseDocument]}                   | ${true}
+          ${"above"} | ${[stubBaseDocument, stubBaseDocument]} | ${true}
+        `(
+          "when document length is $name threshold",
+          ({ documents, shown }: { documents: DocumentSummaryDto[]; shown: boolean }) => {
+            const { result } = setup(false, documents, {
+              overlayGraph: {
+                data: {
+                  clientConfig: {
+                    features: {
+                      searchDocsMinThreshold: 1,
+                    },
+                  },
                 },
-              }),
-            },
-          } as TestBedStore;
-          const { result } = setup(false, [], { stores: stubStores });
+              },
+            });
 
-          expect(result.current.displaySearch).toBeFalsy();
-        });
-
-        it("when document length equals threshold", () => {
-          const stubStores = {
-            config: {
-              getConfig: () => ({
-                features: {
-                  searchDocsMinThreshold: 1,
-                },
-              }),
-            },
-          } as TestBedStore;
-          const { result } = setup(false, [stubBaseDocument], { stores: stubStores });
-
-          expect(result.current.displaySearch).toBeTruthy();
-        });
-
-        it("when document length is above threshold", () => {
-          const stubStores = {
-            config: {
-              getConfig: () => ({
-                features: {
-                  searchDocsMinThreshold: 1,
-                },
-              }),
-            },
-          } as TestBedStore;
-          const { result } = setup(false, [stubBaseDocument, stubBaseDocument], { stores: stubStores });
-
-          expect(result.current.displaySearch).toBeTruthy();
-        });
+            expect(result.current.displaySearch).toEqual(shown);
+          },
+        );
       });
     });
 

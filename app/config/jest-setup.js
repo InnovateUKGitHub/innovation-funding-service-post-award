@@ -2,6 +2,9 @@
 require("@testing-library/jest-dom");
 require("@testing-library/jest-dom/extend-expect");
 
+const React = require("react");
+global.React = React;
+
 const ReactTestingLibrary = require("@testing-library/react");
 
 ReactTestingLibrary.configure({ testIdAttribute: "data-qa" });

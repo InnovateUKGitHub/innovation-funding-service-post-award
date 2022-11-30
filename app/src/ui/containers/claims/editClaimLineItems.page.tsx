@@ -24,6 +24,7 @@ import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { IEditorStore, useStores } from "@ui/redux";
 import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators/claimDetailsValidator";
 import { useNavigate } from "react-router-dom";
+import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 
 export interface EditClaimDetailsParams {
   projectId: string;
@@ -670,6 +671,7 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
   const stores = useStores();
   const { isClient } = useMounted();
   const navigate = useNavigate();
+  const { data } = useClientOptionsQuery();
 
   return (
     <EditClaimLineItemsComponent
@@ -693,7 +695,7 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
         (dto: ClaimDetailsDto) => {
           if (isClient) return;
           const currentItemsLength = dto.lineItems.length;
-          const maximumItemsLength = stores.config.getConfig().options.nonJsMaxClaimLineItems;
+          const maximumItemsLength = data.clientConfig.options.nonJsMaxClaimLineItems;
           const extraRows = maximumItemsLength - currentItemsLength;
 
           const extraLineItems: ClaimLineItemDto[] = range(extraRows).map(() => ({
@@ -720,7 +722,7 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
           () => navigate(getDestination(props, goToUpload).path),
         )
       }
-      maxClaimLineItems={stores.config.getConfig().options.maxClaimLineItems} // TODO when this is refactored to a function component, we can replace this param with useStores inside the component
+      maxClaimLineItems={data.clientConfig.options.maxClaimLineItems} // TODO when this is refactored to a function component, we can replace this param with useStores inside the component
     />
   );
 };
