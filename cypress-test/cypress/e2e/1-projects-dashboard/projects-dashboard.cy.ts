@@ -1,4 +1,5 @@
 import { visitApp } from "../../common/visit";
+import { shouldNavigateToProjectDashboard } from "./steps";
 
 const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
 const testProjectName = "__CYPRUS_TEST__";
@@ -12,10 +13,7 @@ describe("projects dashboard", () => {
     cy.get(".card-link").should("have.length", 2);
   });
 
-  it('should navigate to project dashboard when the "Projects" card is selected', () => {
-    cy.contains("Projects").click();
-    cy.get("h1").contains("Dashboard");
-  });
+  it('should navigate to project dashboard when the "Projects" card is selected', shouldNavigateToProjectDashboard);
 
   it("should show a list of project cards", () => {
     cy.get(projectCardCss).should("have.length.greaterThan", 5);
