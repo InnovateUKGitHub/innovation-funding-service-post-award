@@ -5,7 +5,7 @@ import crypto from "crypto";
 
 import { router as authRouter } from "@server/auth";
 import { router as cspRouter } from "@server/csp";
-import { noAuthRouter, getServerRoutes } from "@server/router";
+import { getServerRoutes, noAuthRouter } from "@server/router";
 import { useBasicAuth } from "./basicAuth";
 
 import { allowCache, noCache, setOwaspHeaders, setBasicAuth } from "@server/cacheHeaders";
