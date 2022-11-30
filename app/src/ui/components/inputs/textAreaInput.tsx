@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import cx from "classnames";
-import { useDebounce, useUpdateStateValueOnPropsChange, useResetValueOnNameChange } from "./input-utils";
+import { useDebounce, useResetValueOnNameChange } from "./input-utils";
 import { InputProps } from "./common";
 import { CharacterCount, CharacterTypes } from "./CharacterCount";
 
