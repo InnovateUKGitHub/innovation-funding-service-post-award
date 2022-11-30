@@ -1,6 +1,6 @@
 import { visitApp } from "../../common/visit";
 import { testEach } from "../../support/methods";
-import { logInAsUserAndNavigateToProject, monitoringReportCardShouldNotExist } from "./steps";
+import { logInAsUserAndNavigateToProject, monitoringReportCardShouldNotExist, shouldFindMatchingProjectCard } from "./steps";
 
 const projectManagerFinanceContactEmail = "james.black@euimeabs.test";
 
@@ -18,9 +18,7 @@ testEach([
   "Documents",
   "Project details",
   "Finance summary",
-])("should show the \"$0\" Link", (projectCard) => {
-  cy.get(".card-link h2").contains(projectCard);
-})
+])("should show the \"$0\" Link", shouldFindMatchingProjectCard)
 
   it("should not show the Monitoring Reports card to combined Project Manager/Finance Contact", monitoringReportCardShouldNotExist);
 });
