@@ -39,7 +39,6 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.194.0",
     "@babel/runtime": "^7.19.4",
-    "@graphiql/toolkit": "^0.8.0",
     "babel": "^6.23.0",
     "bytes": "^3.1.2",
     "caniuse-lite": "^1.0.30001332",
@@ -54,7 +53,6 @@
     "fuse.js": "^6.6.2",
     "graphql": "^16.6.0",
     "graphql-http": "^1.8.0",
-    "graphql-playground-react": "^1.7.28",
     "i18next": "^22.0.2",
     "isomorphic-dompurify": "^0.23.0",
     "isomorphic-fetch": "^3.0.0",
