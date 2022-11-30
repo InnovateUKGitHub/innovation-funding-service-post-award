@@ -1,4 +1,4 @@
-import { useSiteOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
+import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 import { Content, Info } from "@ui/components";
 import { useContent } from "@ui/hooks";
 import bytes from "bytes";
@@ -10,7 +10,7 @@ import bytes from "bytes";
  */
 const DocumentGuidance = () => {
   const { getContent } = useContent();
-  const { data } = useSiteOptionsQuery();
+  const { data } = useClientOptionsQuery();
 
   return (
     <Info summary={getContent(x => x.components.documentGuidance.header)}>

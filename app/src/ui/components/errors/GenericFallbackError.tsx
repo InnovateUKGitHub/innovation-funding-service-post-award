@@ -7,12 +7,12 @@ import { H2 } from "../typography";
 import { ExternalLink } from "../renderers";
 import { SimpleString } from "../renderers/simpleString";
 import { Content } from "../content";
-import { useSiteOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
+import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 
 export type GenericFallbackErrorProps = ErrorPayload["params"];
 
 export const GenericFallbackError = ({ errorStack, errorMessage }: GenericFallbackErrorProps) => {
-  const { data } = useSiteOptionsQuery();
+  const { data } = useClientOptionsQuery();
 
   const goToDashboardLink = <ExternalLink href="/projects/dashboard"> </ExternalLink>;
 

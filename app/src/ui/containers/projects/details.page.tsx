@@ -1,5 +1,5 @@
 import { getAuthRoles, PartnerDto, ProjectContactDto, ProjectDto, ProjectRole } from "@framework/types";
-import { useSiteOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
+import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 import { Pending } from "@shared/pending";
 import {
   PartnerContactRoleTable,
@@ -42,7 +42,7 @@ type ProjectContactRole = ProjectContactDto["role"];
 
 const useRoles = () => {
   const primaryRoles: ProjectContactRole[] = ["Monitoring officer", "Project Manager"];
-  const { data } = useSiteOptionsQuery();
+  const { data } = useClientOptionsQuery();
 
   if (data.clientConfig.features.displayOtherContacts) {
     primaryRoles.push("Innovation lead", "IPM");
@@ -59,7 +59,7 @@ const useRoles = () => {
 
 const OtherContactProjectDetailsComponent = ({ contacts }: ContactsProps) => {
   const { excludedOtherRoles } = useRoles();
-  const { data } = useSiteOptionsQuery();
+  const { data } = useClientOptionsQuery();
 
   if (!data.clientConfig.features.displayOtherContacts) return null;
 

@@ -7,7 +7,7 @@ import { useInitContent } from "@ui/features/use-initial-content";
 import { FullHeight, GovWidthContainer, Header } from "@ui/components";
 import { errorPages, internalErrorFallback, InternalErrorTypes } from "./error.config";
 import { FallbackProps } from "react-error-boundary";
-import { useSiteOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
+import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 
 export type ErrorContainerProps = ErrorPayload["params"] & { from?: string };
 
@@ -29,7 +29,7 @@ export const ErrorContainer = (props: ErrorContainerProps) => {
 export function ErrorBoundaryFallback({ error }: FallbackProps) {
   const errorPayload = createErrorPayload(error as unknown as IAppError, false);
   const content = useInitContent();
-  const { data } = useSiteOptionsQuery();
+  const { data } = useClientOptionsQuery();
 
   return (
     <MountedProvider>

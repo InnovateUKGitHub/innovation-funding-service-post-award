@@ -28,7 +28,7 @@ import { useAppMount } from "./app/app-mount.hook";
 import { ErrorPayload } from "@shared/create-error-payload";
 import { DeveloperSection } from "@ui/components/layout/DeveloperSection";
 import RelayModernEnvironment from "relay-runtime/lib/store/RelayModernEnvironment";
-import { useSiteOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
+import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 
 interface IAppProps {
   dispatch: Dispatch;
@@ -54,7 +54,7 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
   const content = useInitContent(params);
   const modalRegister = useModal();
   const auth = stores.users.getCurrentUserAuthorisation();
-  const { data } = useSiteOptionsQuery();
+  const { data } = useClientOptionsQuery();
   const messages = stores.messages.messages();
 
   // Note: We treat no invocation as valid

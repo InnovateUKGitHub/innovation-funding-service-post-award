@@ -3,7 +3,7 @@ import { useContent, useGovFrontend } from "@ui/hooks";
 
 import { GovWidthContainer } from "./GovWidthContainer";
 import { Logo } from "./Logo";
-import { useSiteOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
+import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 
 export interface HeaderProps {
   headingLink: string;
@@ -14,7 +14,7 @@ export const Header = ({ showMenu = true, headingLink }: HeaderProps) => {
   const { getContent } = useContent();
   const { setRef } = useGovFrontend("Header");
 
-  const { data } = useSiteOptionsQuery();
+  const { data } = useClientOptionsQuery();
 
   const menuItems = useMemo(
     () =>

@@ -24,7 +24,7 @@ import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
 import { IEditorStore, useStores } from "@ui/redux";
 import { ClaimDetailsValidator, ClaimLineItemDtoValidator } from "@ui/validators/claimDetailsValidator";
 import { useNavigate } from "react-router-dom";
-import { useSiteOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
+import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 
 export interface EditClaimDetailsParams {
   projectId: string;
@@ -671,7 +671,7 @@ const EditClaimLineItemsContainer = (props: EditClaimDetailsParams & BaseProps) 
   const stores = useStores();
   const { isClient } = useMounted();
   const navigate = useNavigate();
-  const { data } = useSiteOptionsQuery();
+  const { data } = useClientOptionsQuery();
 
   return (
     <EditClaimLineItemsComponent

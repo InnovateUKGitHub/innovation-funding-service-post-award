@@ -6,7 +6,7 @@ import { formatDate, getFileSize } from "@framework/util";
 import { DateFormat } from "@framework/constants/enums";
 
 import { DocumentSummaryDto } from "@framework/dtos";
-import { useSiteOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
+import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 
 /**
  * Perform a fuzzy search on a list of items.
@@ -60,7 +60,7 @@ const filterItems = <T extends DocumentSummaryDto>(valueToSearch: string, items:
  * hook to handle document search functionality
  */
 export function useDocumentSearch<T extends DocumentSummaryDto>(disableSearch: boolean, originalDocuments: T[]) {
-  const { data } = useSiteOptionsQuery();
+  const { data } = useClientOptionsQuery();
   const { isClient } = useMounted();
 
   const [filterValue, setFilterValue] = useState<string>("");
