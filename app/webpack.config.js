@@ -7,7 +7,7 @@ const path = require("path");
 const TsConfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-const { NormalModuleReplacementPlugin } = require("webpack");
+const { NormalModuleReplacementPlugin, ProvidePlugin } = require("webpack");
 const nodeExternals = require("webpack-node-externals");
 
 /**
@@ -67,7 +67,7 @@ const configGenerator = ({ env = "production", devtools = false }) => {
       rules: [
         {
           test: /\.tsx?$/,
-          loader: "ts-loader",
+          loader: "babel-loader",
         },
         {
           test: /\.css$/i,
@@ -135,6 +135,7 @@ const configGenerator = ({ env = "production", devtools = false }) => {
       new MiniCssExtractPlugin({
         filename: "styles.css",
       }),
+      new ProvidePlugin({ React: "react" }),
     ],
     target: "web",
   };
@@ -153,6 +154,7 @@ const configGenerator = ({ env = "production", devtools = false }) => {
       filename: "index.js",
       path: getPath("dist/src/server"),
     },
+    plugins: [new ProvidePlugin({ React: "react" })],
     target: "node",
     externals: [nodeExternals()],
   };

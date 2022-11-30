@@ -1,5 +1,5 @@
 import { LogLevel } from "@framework/constants";
-import { parseLogLevel } from "@framework/types/logLevel";
+import { getLogLevelNumber, parseLogLevel } from "@framework/types/logLevel";
 
 enum LogMethod {
   TELETYPE,
@@ -223,7 +223,7 @@ export class Logger implements ILogger {
    * @param params Any associated data to pretty-print alongside the message.
    */
   private log(level: LogLevel, message: string, ...params: unknown[]) {
-    if (level >= this.getLogLevel()) {
+    if (getLogLevelNumber(level) >= getLogLevelNumber(this.getLogLevel())) {
       switch (Logger.logMethod) {
         case LogMethod.TELETYPE:
           return this.logWithTeletype(level, message, ...params);

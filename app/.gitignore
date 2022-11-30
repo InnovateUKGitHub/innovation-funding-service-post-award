@@ -16,3 +16,5 @@ test-report.html
 
 # Generated files
 /dashboard/
+__generated__
+schema.gql

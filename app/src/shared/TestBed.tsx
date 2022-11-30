@@ -5,6 +5,8 @@ import { mountedContext } from "@ui/features";
 import { PageTitleProvider } from "@ui/features/page-title";
 import { Copy } from "@copy/Copy";
 import { ContentProvider, IStores, StoresProvider } from "@ui/redux";
+import { RelayEnvironmentProvider } from "relay-hooks";
+import { getStubGraphQLEnvironment, stubGraphQLGraph } from "@gql/StubGraphQLEnvironment";
 
 export type TestBedStore = Partial<IStores>;
 
@@ -21,6 +23,7 @@ export interface ITestBedProps {
    * in to enable building.
    */
   shouldOmitRouterProvider?: boolean;
+  overlayGraph?: RecursivePartial<typeof stubGraphQLGraph>;
 }
 
 /**
@@ -35,22 +38,11 @@ export function TestBed({
   children,
   pageTitle = "stub-displayTitle",
   shouldOmitRouterProvider,
+  overlayGraph,
 }: ITestBedProps) {
   const stubStores = {
     users: {
       getCurrentUser: () => ({ csrf: "stub-csrf" }),
-    },
-    config: {
-      getConfig: () => ({
-        options: {
-          maxClaimLineItems: 120,
-          maxFileSize: 1024,
-        },
-        features: {
-          contentHint: false,
-          searchDocsMinThreshold: 5,
-        },
-      }),
     },
     navigation: {
       getPageTitle: () => ({
@@ -67,13 +59,15 @@ export function TestBed({
   const history = createMemoryHistory();
 
   const Providers = (
-    <mountedContext.Provider value={testBedMountState}>
-      <PageTitleProvider title={pageTitle}>
-        <StoresProvider value={storesValue}>
-          <ContentProvider value={new Copy(competitionType)}>{children}</ContentProvider>
-        </StoresProvider>
-      </PageTitleProvider>
-    </mountedContext.Provider>
+    <RelayEnvironmentProvider environment={getStubGraphQLEnvironment(overlayGraph)}>
+      <mountedContext.Provider value={testBedMountState}>
+        <PageTitleProvider title={pageTitle}>
+          <StoresProvider value={storesValue}>
+            <ContentProvider value={new Copy(competitionType)}>{children}</ContentProvider>
+          </StoresProvider>
+        </PageTitleProvider>
+      </mountedContext.Provider>
+    </RelayEnvironmentProvider>
   );
 
   return shouldOmitRouterProvider ? (
@@ -85,7 +79,7 @@ export function TestBed({
   );
 }
 
-type HookTestBedProps = Omit<ITestBedProps, "children">;
+export type HookTestBedProps = Omit<ITestBedProps, "children">;
 
 export const hookTestBed = (props: HookTestBedProps) => ({
   wrapper: (wrapperProps: ITestBedProps) => <TestBed {...props} {...wrapperProps} />,

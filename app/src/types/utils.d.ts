@@ -17,3 +17,8 @@ declare type ResultBase = AnyObject | null;
 declare type NoUndefinedField<T> = {
   [P in keyof T]-?: NoUndefinedField<NonNullable<T[P]>>;
 };
+
+// https://stackoverflow.com/a/47914631
+type RecursivePartial<T> = {
+  [P in keyof T]?: RecursivePartial<T[P]>;
+};

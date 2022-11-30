@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/naming-convention */
 
+const { execSync } = require("child_process");
 const { program } = require("commander");
 const { build } = require("esbuild");
 const ESBuildConfiguration = require("./scripts/esbuild/ESBuildConfiguration");
@@ -23,6 +24,8 @@ if (opts.tsc) {
 if (opts.devtools || shouldEnableDevTools) {
   esbuildConfig.withComponentLibrary().withSourceMap();
 }
+
+execSync("npm run relay", { stdio: "inherit" });
 
 // Build and bundle the server
 build(esbuildConfig.getServerConfig())

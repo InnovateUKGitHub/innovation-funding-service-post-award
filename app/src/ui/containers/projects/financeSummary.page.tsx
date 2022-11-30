@@ -202,7 +202,7 @@ class FinanceSummaryComponent extends ContainerBase<Params, Data> {
           {this.props.content.totalsFooterLabel}
         </th>
 
-        {...footerColumns}
+        {footerColumns}
       </tr>,
     ];
   }
