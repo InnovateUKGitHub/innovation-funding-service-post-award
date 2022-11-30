@@ -1,24 +1,13 @@
 import { Authorisation } from "@framework/types";
+import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 import { Content, H1, NavigationCard, NavigationCardsGrid, Page } from "@ui/components";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 
-import { graphql } from "react-relay";
-import { useQuery } from "relay-hooks";
-import { homeSiteOptionsQuery } from "./__generated__/homeSiteOptionsQuery.graphql";
-
-const SiteOptionsQuery = graphql`
-  query homeSiteOptionsQuery {
-    clientConfig {
-      ifsRoot
-    }
-  }
-`;
-
 const DeveloperHomePage = (props: BaseProps) => {
   const { getContent } = useContent();
-  const { data } = useQuery<homeSiteOptionsQuery>(SiteOptionsQuery, {});
+  const { data } = useClientOptionsQuery();
 
   console.log(data?.clientConfig.ifsRoot);
 
