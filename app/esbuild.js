@@ -26,7 +26,6 @@ if (opts.devtools || shouldEnableDevTools) {
   esbuildConfig.withComponentLibrary().withSourceMap();
 }
 
-
 // Build and bundle the server
 build(esbuildConfig.getServerConfig())
   .then(() => {
