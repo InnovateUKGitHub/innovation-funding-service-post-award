@@ -9,8 +9,6 @@ const DeveloperHomePage = (props: BaseProps) => {
   const { getContent } = useContent();
   const { data } = useClientOptionsQuery();
 
-  console.log(data?.clientConfig.ifsRoot);
-
   return (
     <Page pageTitle={<H1>{data?.clientConfig.ifsRoot ?? "Home"}</H1>}>
       <NavigationCardsGrid>

@@ -18,13 +18,21 @@ let isAccDevOrDemo: boolean;
  */
 let isLocalDevelopment: boolean;
 
+/**
+ * Whether the NODE_ENV is development.
+ */
+let isDevelopment: boolean = false;
+
 if (typeof process !== "undefined") {
-  isAccDev = process.env.ENV_NAME ? /^acc-dev/.test(process.env.ENV_NAME) : false;
-  isAccDemo = process.env.ENV_NAME ? /^acc-demo/.test(process.env.ENV_NAME) : false;
-  isAccDevOrDemo = isAccDev || isAccDemo;
-  isLocalDevelopment = process.env.SERVER_URL
-    ? process.env.SERVER_URL.includes("localhost") || /127(.\d{1,3}){3}/.test(process.env.SERVER_URL)
-    : false;
+  isDevelopment = process.env.NODE_ENV === "development";
+  isAccDev = isDevelopment || process.env.ENV_NAME ? /^acc-dev/.test(process.env.ENV_NAME) : false;
+  isAccDemo = isDevelopment || process.env.ENV_NAME ? /^acc-demo/.test(process.env.ENV_NAME) : false;
+  isAccDevOrDemo = isDevelopment || isAccDev || isAccDemo;
+  isLocalDevelopment =
+    isDevelopment ||
+    (process.env.SERVER_URL
+      ? process.env.SERVER_URL.includes("localhost") || /127(.\d{1,3}){3}/.test(process.env.SERVER_URL)
+      : false);
 }
 
 if (typeof window !== "undefined") {
@@ -34,4 +42,4 @@ if (typeof window !== "undefined") {
   isLocalDevelopment = window.location.hostname === "localhost" || /^127(.\d{1,3}){3}$/.test(window.location.hostname);
 }
 
-export { isAccDev, isAccDemo, isAccDevOrDemo, isLocalDevelopment };
+export { isAccDev, isAccDemo, isAccDevOrDemo, isLocalDevelopment, isDevelopment };
