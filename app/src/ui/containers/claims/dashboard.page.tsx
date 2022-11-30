@@ -1,8 +1,8 @@
-import { ClaimDto, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
+import { ClaimDto, DateFormat, PartnerDto, ProjectDto, ProjectRole } from "@framework/types";
 import { DateTime } from "luxon";
 import { getClaimDetailsLinkType } from "@ui/components/claims/claimDetailsLink";
 import { useStores } from "@ui/redux";
-import { roundCurrency } from "@framework/util";
+import { formatDate, roundCurrency } from "@framework/util";
 import { ProjectParticipantsHoc } from "@ui/features/project-participants";
 import { Pending } from "../../../shared/pending";
 import { BaseProps, ContainerBase, defineRoute } from "../containerBase";
@@ -86,7 +86,9 @@ class Component extends ContainerBase<ClaimDashboardPageParams, Data> {
     }
     return (
       <Acc.Renderers.SimpleString>
-        <Acc.Content value={x => x.claimsMessages.noOpenClaims(date)} />
+        <Acc.Content
+          value={x => x.claimsMessages.noOpenClaims({ nextClaimStartDate: formatDate(date, DateFormat.FULL_DATE) })}
+        />
       </Acc.Renderers.SimpleString>
     );
   }
