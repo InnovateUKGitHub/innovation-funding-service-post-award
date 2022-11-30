@@ -15,6 +15,7 @@ const shouldEnableDevTools = /^acc-dev|^acc-demo/.test(process.env.ENV_NAME) || 
 
 if (opts.watch) {
   esbuildConfig.withWatch();
+  execSync("npm run relay", { stdio: "inherit" });
 }
 
 if (opts.tsc) {
@@ -25,7 +26,6 @@ if (opts.devtools || shouldEnableDevTools) {
   esbuildConfig.withComponentLibrary().withSourceMap();
 }
 
-execSync("npm run relay", { stdio: "inherit" });
 
 // Build and bundle the server
 build(esbuildConfig.getServerConfig())
