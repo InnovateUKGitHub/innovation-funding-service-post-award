@@ -1,4 +1,5 @@
 import { visitApp } from "../../common/visit";
+import { testEach } from "../../support/methods";
 import { logInAsUserAndNavigateToProject, monitoringReportCardShouldNotExist } from "./steps";
 
 const projectManagerFinanceContactEmail = "james.black@euimeabs.test";
@@ -10,19 +11,16 @@ describe("project dashboard as Project Manager - Finance Contact", () => {
     logInAsUserAndNavigateToProject(projectManagerFinanceContactEmail);
   });
 
-  const expectedProjectCards = [
-    "Claims",
-    "Forecast",
-    "Project change requests",
-    "Documents",
-    "Project details",
-    "Finance summary",
-  ];
-  expectedProjectCards.forEach(projectCard => {
-    it(`should show the "${projectCard}" Link`, () => {
-      cy.get(".card-link h2").contains(projectCard);
-    });
-  });
+testEach([
+  "Claims",
+  "Forecast",
+  "Project change requests",
+  "Documents",
+  "Project details",
+  "Finance summary",
+])("should show the \"$0\" Link", (projectCard) => {
+  cy.get(".card-link h2").contains(projectCard);
+})
 
   it("should not show the Monitoring Reports card to combined Project Manager/Finance Contact", monitoringReportCardShouldNotExist);
 });

@@ -53,7 +53,7 @@ const getByQA = (tag: string) => {
 
 const switchUserTo = (email: string, goHome: boolean = false) => {
   cy.contains("User Switcher").click();
-  cy.get('input#user-switcher-manual-input').clear().type(email);
+  cy.get('input#user-switcher-manual-input').scrollIntoView().clear().type(email);
   cy.getByQA(`manual-change-and-${goHome? "home" : "stay"}`).click();
 }
 
