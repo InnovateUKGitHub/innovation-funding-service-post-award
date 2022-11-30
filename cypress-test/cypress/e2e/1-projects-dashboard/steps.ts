@@ -1,5 +1,5 @@
 const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
-const testProjectName = "__CYPRUS_TEST__";
+const testProjectName = "CYPRESS";
 
 export const logInAsUserAndNavigateToProject = (email: string) => {
   cy.switchUserTo(email, true);
