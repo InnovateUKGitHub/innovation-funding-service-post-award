@@ -152,7 +152,7 @@ export class FileDtoValidator extends Results<IFileWrapper> {
 function validateFileExtension<T extends Results<ResultBase>>(
   results: T,
   file: IFileWrapper | null,
-  permittedFileTypes: string[],
+  permittedFileTypes: Readonly<string[]>,
 ): Result {
   const fileName = file ? file.fileName : "";
   return Validation.permittedValues(

@@ -14,7 +14,6 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
   const claims = new Stores.ClaimsStore(costsSummaries, claimDocuments, partners, getState, dispatch);
   const claimOverrides = new Stores.ClaimOverridesStore(getState, dispatch);
   const claimDetails = new Stores.ClaimsDetailsStore(getState, dispatch);
-  const config = new Stores.ConfigStore(getState, dispatch);
   const forecastGolCosts = new Stores.ForecastGolCostsStore(getState, dispatch);
   const companies = new Stores.CompaniesStore(getState, dispatch);
 
@@ -30,7 +29,6 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
     claims,
     claimOverrides,
     companies,
-    config: new Stores.ConfigStore(getState, dispatch),
     contacts: new Stores.ContactsStore(getState, dispatch),
     developerUsers: new Stores.DeveloperUsersStore(getState, dispatch),
     costCategories,
@@ -51,7 +49,7 @@ export const createStores = (getState: () => RootState, dispatch: (action: RootA
     messages: new Stores.MessagesStore(getState, dispatch),
     monitoringReports: new Stores.MonitoringReportsStore(projects, getState, dispatch),
     projectChangeRequestDocuments: new Stores.ProjectChangeRequestDocumentsStore(getState, dispatch),
-    projectChangeRequests: new Stores.ProjectChangeRequestStore(projects, config, getState, dispatch),
+    projectChangeRequests: new Stores.ProjectChangeRequestStore(projects, getState, dispatch),
     projectDocuments: new Stores.ProjectDocumentsStore(getState, dispatch),
     partnerDocuments: new Stores.PartnerDocumentsStore(getState, dispatch),
     projects,

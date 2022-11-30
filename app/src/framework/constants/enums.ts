@@ -93,11 +93,11 @@ export enum DateFormat {
 }
 
 export enum LogLevel {
-  VERBOSE = 1,
-  DEBUG,
-  INFO,
-  WARN,
-  ERROR,
+  VERBOSE = "VERBOSE",
+  DEBUG = "DEBUG",
+  INFO = "INFO",
+  WARN = "WARN",
+  ERROR = "ERROR",
 }
 
 export enum LoadingStatus {

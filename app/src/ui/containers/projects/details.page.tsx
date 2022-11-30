@@ -1,4 +1,5 @@
 import { getAuthRoles, PartnerDto, ProjectContactDto, ProjectDto, ProjectRole } from "@framework/types";
+import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 import { Pending } from "@shared/pending";
 import {
   PartnerContactRoleTable,
@@ -40,10 +41,10 @@ interface ContactsProps {
 type ProjectContactRole = ProjectContactDto["role"];
 
 const useRoles = () => {
-  const stores = useStores();
   const primaryRoles: ProjectContactRole[] = ["Monitoring officer", "Project Manager"];
+  const { data } = useClientOptionsQuery();
 
-  if (stores.config.getConfig().features.displayOtherContacts) {
+  if (data.clientConfig.features.displayOtherContacts) {
     primaryRoles.push("Innovation lead", "IPM");
   }
 
@@ -57,10 +58,10 @@ const useRoles = () => {
 };
 
 const OtherContactProjectDetailsComponent = ({ contacts }: ContactsProps) => {
-  const stores = useStores();
   const { excludedOtherRoles } = useRoles();
+  const { data } = useClientOptionsQuery();
 
-  if (!stores.config.getConfig().features.displayOtherContacts) return null;
+  if (!data.clientConfig.features.displayOtherContacts) return null;
 
   const otherContacts = contacts.filter(x => excludedOtherRoles.indexOf(x.role) === -1);
 

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention, @typescript-eslint/no-var-requires */
 /** @typedef {import('child_process').ChildProcess} ChildProcess */
-const { spawn } = require("child_process");
+const { spawn, spawnSync } = require("child_process");
 const fetch = require("isomorphic-fetch");
 
 class Restarter {

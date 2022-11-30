@@ -6,7 +6,7 @@ export interface IClientConfig {
   features: IFeatureFlags;
   options: IAppOptions;
   ssoEnabled: boolean;
-  logLevel: LogLevel;
+  logLevel: LogLevel | string;
 }
 
 export const configReducer = (state: IClientConfig = {} as IClientConfig) => {

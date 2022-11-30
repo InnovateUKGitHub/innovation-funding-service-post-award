@@ -9,6 +9,7 @@ import { ValidationSummary } from "../validationSummary";
 import { ValidationMessage } from "../validationMessage";
 import { ProjectInactive } from "../ProjectInactive";
 import { Section } from "./section";
+import { GovWidthContainer } from ".";
 
 export type PageValidationProjectStatus = ProjectDto["status"];
 export type PageValidationPartnerStatus = PartnerDto["partnerStatus"];
@@ -44,12 +45,13 @@ export interface PageProps {
   project?: ProjectDto;
   partner?: PartnerDto;
   qa?: string;
+  className?: string;
 }
 
 /**
  * Page Component
  */
-export function Page({ pageTitle, backLink, error, children, project, partner, validator, qa }: PageProps) {
+export function Page({ pageTitle, backLink, error, children, project, partner, validator, qa, className }: PageProps) {
   const validation = validator && Array.isArray(validator) ? new CombinedResultsValidator(...validator) : validator;
   const displayAriaLive: boolean = !!error || !!validation;
 
@@ -59,7 +61,7 @@ export function Page({ pageTitle, backLink, error, children, project, partner, v
   const displayActiveUi: boolean = projectState.overrideAccess || projectState.isActive;
 
   return (
-    <div data-qa={qa}>
+    <GovWidthContainer qa={qa} className={className}>
       {backLink && (
         <div className="govuk-grid-row">
           <div className="govuk-grid-column-full" data-qa="page-backlink">
@@ -92,6 +94,6 @@ export function Page({ pageTitle, backLink, error, children, project, partner, v
           <ProjectInactive />
         )}
       </main>
-    </div>
+    </GovWidthContainer>
   );
 }

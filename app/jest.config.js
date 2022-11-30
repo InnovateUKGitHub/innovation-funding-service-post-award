@@ -1,7 +1,5 @@
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 
-const isolatedModules = process.env.TS_JEST_ISOLATED_MODULES || false;
-
 const abstractFiles = ["commandBase.ts"];
 
 module.exports = {
@@ -11,14 +9,6 @@ module.exports = {
   maxWorkers: 4,
   testEnvironmentOptions: {
     url: "http://localhost",
-  },
-  globals: {
-    "ts-jest": {
-      isolatedModules,
-      tsconfig: {
-        target: "ES2015",
-      },
-    },
   },
   setupFilesAfterEnv: ["<rootDir>/config/jest-setup.js"],
   coveragePathIgnorePatterns: ["/node_modules/", "\\.(test|spec)\\.", "stubDtos", "\\.page\\.", ...abstractFiles],
@@ -34,11 +24,7 @@ module.exports = {
     "src/ui/redux/**/*.{ts,tsx}",
     "src/ui/validators/**/*.{ts,tsx}",
   ],
-  preset: "ts-jest",
   coverageReporters: ["text", "html", "lcov"],
-  transform: {
-    "^.+\\.(t|j)sx?$": "ts-jest",
-  },
   transformIgnorePatterns: ["/node_modules/(?!uuid)"],
   testRegex: "/src/.*\\.(test|spec)\\.tsx?$",
   moduleFileExtensions: ["ts", "tsx", "js"],
@@ -51,6 +37,7 @@ module.exports = {
     "@ui/(.*)": "<rootDir>/src/ui/$1",
     "@util/(.*)": "<rootDir>/src/util/$1",
     "@copy/(.*)": "<rootDir>/src/copy/$1",
+    "@gql/(.*)": "<rootDir>/src/gql/$1",
     "@tests/(.*)": "<rootDir>/tests/$1",
   },
 };

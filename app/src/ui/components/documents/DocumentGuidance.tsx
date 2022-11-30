@@ -1,6 +1,6 @@
-import { Info, Content } from "@ui/components";
+import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
+import { Content, Info } from "@ui/components";
 import { useContent } from "@ui/hooks";
-import { useStores } from "@ui/redux";
 import bytes from "bytes";
 
 /**
@@ -10,12 +10,24 @@ import bytes from "bytes";
  */
 const DocumentGuidance = () => {
   const { getContent } = useContent();
-  const stores = useStores();
-  const { maxFileSize } = stores.config.getConfig().options;
+  const { data } = useClientOptionsQuery();
 
   return (
     <Info summary={getContent(x => x.components.documentGuidance.header)}>
-      <Content markdown value={x => x.components.documentGuidance.message({ maxFileSize: bytes(maxFileSize) })} />
+      <Content
+        markdown
+        value={x =>
+          x.components.documentGuidance.message({
+            documentCount: data.clientConfig.options.maxUploadFileCount,
+            maxFileSize: bytes(data.clientConfig.options.maxFileSize),
+            documentFormats: data.clientConfig.options.permittedTypes.pdfTypes,
+            textFormats: data.clientConfig.options.permittedTypes.textTypes,
+            presentationFormats: data.clientConfig.options.permittedTypes.presentationTypes,
+            spreadsheetFormats: data.clientConfig.options.permittedTypes.spreadsheetTypes,
+            imageFormats: data.clientConfig.options.permittedTypes.imageTypes,
+          })
+        }
+      />
     </Info>
   );
 };

@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import { useContent, useGovFrontend } from "@ui/hooks";
-import { useStores } from "@ui/redux";
 
 import { GovWidthContainer } from "./GovWidthContainer";
 import { Logo } from "./Logo";
+import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 
 export interface HeaderProps {
   headingLink: string;
@@ -11,11 +11,10 @@ export interface HeaderProps {
 }
 
 export const Header = ({ showMenu = true, headingLink }: HeaderProps) => {
-  const stores = useStores();
   const { getContent } = useContent();
   const { setRef } = useGovFrontend("Header");
 
-  const config = stores.config.getConfig();
+  const { data } = useClientOptionsQuery();
 
   const menuItems = useMemo(
     () =>
@@ -23,12 +22,12 @@ export const Header = ({ showMenu = true, headingLink }: HeaderProps) => {
         ? [
             {
               qa: "nav-dashboard",
-              href: `${config.ifsRoot}/dashboard-selection`,
+              href: `${data.clientConfig.ifsRoot}/dashboard-selection`,
               text: getContent(x => x.site.header.navigation.dashboard),
             },
             {
               qa: "nav-profile",
-              href: `${config.ifsRoot}/profile/view`,
+              href: `${data.clientConfig.ifsRoot}/profile/view`,
               text: getContent(x => x.site.header.navigation.profile),
             },
             {
@@ -38,7 +37,7 @@ export const Header = ({ showMenu = true, headingLink }: HeaderProps) => {
             },
           ]
         : [],
-    [showMenu, config.ifsRoot, getContent],
+    [showMenu, data, getContent],
   );
 
   return (

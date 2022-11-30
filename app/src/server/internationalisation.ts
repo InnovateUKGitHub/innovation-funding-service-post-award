@@ -11,8 +11,9 @@ export const initInternationalisation = async () => {
     defaultNS: CopyNamespaces.DEFAULT,
     fallbackNS: CopyNamespaces.DEFAULT,
     interpolation: {
-      format: (value: string, format) => {
-        if (format === "lowercase") return value.toLocaleLowerCase();
+      format: (value, format) => {
+        if (typeof value === "string" && format === "lowercase") return value.toLocaleLowerCase();
+        if (Array.isArray(value) && format === "arrayJoin") return value.join(", ");
         return value;
       },
     },
