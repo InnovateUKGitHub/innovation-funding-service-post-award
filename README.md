@@ -81,7 +81,7 @@ This section will install the following programs. Skip non-required sections as 
 | [Firefox](#google-chrome-and-mozilla-firefox)       | [x]              | Web browser                                  | Some extensions may be blocked. See more info in install section                   |
 | [ShareX](#sharex)                                   | [ ]              | Screenshot/Screen video recorder             |                                                                                    |
 | [GraphQL Playground](#graphql-playground)           | [ ]              | A place to try out GraphQL queries           |                                                                                    |
-| [Cypress](#)                                        | [x]              | Automated browser regression testing         |                                                                                    |
+| [Cypress](#cypress)                                 | [x]              | Automated browser regression testing         |                                                                                    |
 
 <small>(N.B. **It is not possible** to download some of these from the Microsoft Store, as it has been disabled by UKRI.)</small>
 
@@ -355,6 +355,7 @@ When running `npm run start`, the server process is available to be attached to 
 To enable automatically attaching in Visual Studio Code...
 
 1. In the command palette, run...
+
    ```
    > Debug: Toggle Auto Attach
    ```
