@@ -15,7 +15,7 @@ describe("Document upload validator", () => {
         ${"lowercase characters"} | ${"abc"}
         ${"uppercase characters"} | ${"ABC"}
         ${"digits"}               | ${"0123"}
-        ${"whitepsace"}           | ${"abc abc"}
+        ${"whitespace"}           | ${"abc abc"}
         ${"backslash"}            | ${"abc\\abc"}
         ${"dot"}                  | ${"abc.abc"}
         ${"underscore"}           | ${"_"}
@@ -28,21 +28,20 @@ describe("Document upload validator", () => {
         expect(validator.isValid).toBe(true);
       });
     });
+  });
 
-    const invalidNameCharacters = "!'@£$%^&{}[]`~;#";
+  const invalidNameCharacters = "!'@£$%^&{}[]`~;#";
 
-    describe("invalid file names", () => {
-      const invalidList = invalidNameCharacters.split("");
-      invalidList.forEach(invalidChar => {
-        test("containing invalid character: " + invalidChar, () => {
-          const file = createFile("doc", 10000, "invalid_file_name" + invalidChar);
-
-          const validator = new FileDtoValidator(file, configuration.options, false);
-          expect(validator.errors).toHaveLength(1);
-          expect(validator.errors[0].errorMessage).toBe(
-            `You cannot upload '${file.fileName}' because it contains forbidden characters.`,
-          );
-        });
+  describe("invalid file names", () => {
+    const invalidList = invalidNameCharacters.split("");
+    invalidList.forEach(invalidChar => {
+      test("containing invalid character: " + invalidChar, () => {
+        const file = createFile("doc", 10000, "invalid_file_name" + invalidChar);
+        const validator = new FileDtoValidator(file, configuration.options, false);
+        expect(validator.errors).toHaveLength(1);
+        expect(validator.errors[0].errorMessage).toBe(
+          `Your document '${file.fileName}' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot.`,
+        );
       });
     });
   });
