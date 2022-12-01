@@ -25,8 +25,8 @@ let isDevelopment: boolean = false;
 
 if (typeof process !== "undefined") {
   isDevelopment = process.env.NODE_ENV === "development";
-  isAccDev = isDevelopment || process.env.ENV_NAME ? /^acc-dev/.test(process.env.ENV_NAME) : false;
-  isAccDemo = isDevelopment || process.env.ENV_NAME ? /^acc-demo/.test(process.env.ENV_NAME) : false;
+  isAccDev = isDevelopment || (process.env.ENV_NAME ? /^acc-dev/.test(process.env.ENV_NAME) : false);
+  isAccDemo = isDevelopment || (process.env.ENV_NAME ? /^acc-demo/.test(process.env.ENV_NAME) : false);
   isAccDevOrDemo = isDevelopment || isAccDev || isAccDemo;
   isLocalDevelopment =
     isDevelopment ||
