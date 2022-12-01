@@ -31,7 +31,7 @@ if (typeof process !== "undefined") {
   isLocalDevelopment =
     isDevelopment ||
     (process.env.SERVER_URL
-      ? process.env.SERVER_URL.includes("localhost") || /127(.\d{1,3}){3}/.test(process.env.SERVER_URL)
+      ? process.env.SERVER_URL.includes("localhost") || /127(\.\d{1,3}){3}/.test(process.env.SERVER_URL)
       : false);
 }
 
@@ -39,7 +39,7 @@ if (typeof window !== "undefined") {
   isAccDev = window.location.host.startsWith("www-acc-dev") && window.location.host.endsWith(".innovateuk.ukri.org");
   isAccDemo = window.location.host.startsWith("www-acc-demo") && window.location.host.endsWith(".innovateuk.ukri.org");
   isAccDevOrDemo = isAccDev || isAccDemo;
-  isLocalDevelopment = window.location.hostname === "localhost" || /^127(.\d{1,3}){3}$/.test(window.location.hostname);
+  isLocalDevelopment = window.location.hostname === "localhost" || /^127(\.\d{1,3}){3}$/.test(window.location.hostname);
 }
 
 export { isAccDev, isAccDemo, isAccDevOrDemo, isLocalDevelopment, isDevelopment };
