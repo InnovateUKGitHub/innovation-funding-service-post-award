@@ -83,13 +83,13 @@ This section will install the following programs. Skip non-required sections as 
 | [GraphQL Playground](#graphql-playground)           | [ ]              | A place to try out GraphQL queries           |                                                                                    |
 | [Cypress](#cypress)                                 | [x]              | Automated browser regression testing         |                                                                                    |
 
-<small>(N.B. **It is not possible** to download some of these from the Microsoft Store, as it has been disabled by UKRI.)</small>
+(N.B. **It is not possible** to download some of these from the Microsoft Store, as it has been disabled by UKRI.)
 
 #### Windows Terminal
 
-| Download Link                                  | Note                                              |
-| ---------------------------------------------- | ------------------------------------------------- |
-| https://github.com/microsoft/terminal/releases | Don't accidentally install the Windows 11 version |
+| Download Link                                  | Note                                                                                                                                           |
+| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| https://github.com/microsoft/terminal/releases | Don't accidentally install the Windows 11 version. Do not attempt to install the Microsoft Store version. The store has been disabled by UKRI. |
 
 Double click the `.msixbundle` file to install. You do not need to be an administrator.
 
