@@ -1,5 +1,4 @@
 import { Authorisation } from "@framework/types";
-import { useClientOptionsQuery } from "@gql/hooks/useSiteOptionsQuery";
 import { Content, H1, NavigationCard, NavigationCardsGrid, Page } from "@ui/components";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks";
@@ -7,10 +6,9 @@ import { IClientConfig } from "@ui/redux/reducers/configReducer";
 
 const DeveloperHomePage = (props: BaseProps) => {
   const { getContent } = useContent();
-  const { data } = useClientOptionsQuery();
 
   return (
-    <Page pageTitle={<H1>{data?.clientConfig.ifsRoot ?? "Home"}</H1>}>
+    <Page pageTitle={<H1>{getContent(x => x.pages.home.title)}</H1>}>
       <NavigationCardsGrid>
         <NavigationCard
           label={<Content value={x => x.pages.home.projectsHeading} />}
