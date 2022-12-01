@@ -21,7 +21,7 @@ let isLocalDevelopment: boolean;
 /**
  * Whether the NODE_ENV is development.
  */
-let isDevelopment: boolean = false;
+let isDevelopment = false;
 
 if (typeof process !== "undefined") {
   isDevelopment = process.env.NODE_ENV === "development";
