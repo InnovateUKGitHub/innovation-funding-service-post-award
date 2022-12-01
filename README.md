@@ -1,9 +1,6 @@
 # Innovation Funding Service (Post Award)
 
-## Installation
-
-<details>
-<summary>Arch Linux</summary>
+## Installation on Arch Linux
 
 ### Prerequisites
 
@@ -20,10 +17,7 @@
 yay -S git firefox visual-studio-code-bin nvm google-chrome
 ```
 
-</details>
-
-<details>
-<summary>For UKSBS/UKRI/InnovateUK provided Windows laptops</summary>
+## Installation on UKSBS/UKRI/InnovateUK Windows Laptops
 
 Unfortunately, UKSBS provided Windows laptops are very restrictive in terms of permissions; you
 will need to work around these restrictions with a series of intricate bodges.
@@ -271,8 +265,6 @@ Before running `npm i` within the `/cypress-test` folder, set the following [env
 ```
 CYPRESS_CACHE_FOLDER=C:\Program Files\IFSPA\cypress
 ```
-
-</details>
 
 ## Clone the repository
 
