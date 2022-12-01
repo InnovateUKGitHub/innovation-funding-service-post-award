@@ -178,7 +178,7 @@ Some extensions may be disabled on UKRI laptops. To temporarily remove this bloc
 2. Delete the following record that currently has the following value...
 
 ```reg
-Computer\HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome\ExtensionInstallBlocklist\1
+HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome\ExtensionInstallBlocklist\1
 ```
 
 ```
