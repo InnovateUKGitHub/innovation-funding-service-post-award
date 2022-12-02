@@ -5,7 +5,7 @@ import { Provider } from "react-redux";
 import { StaticRouter } from "react-router-dom/server";
 import { Request, Response } from "express";
 import { getParamsFromUrl } from "@ui/helpers/make-url";
-import { routeConfig, matchRoute } from "@ui/routing";
+import { matchRoute } from "@ui/routing";
 import { ErrorCode, IAppError, IClientUser, IContext, Authorisation } from "@framework/types";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import * as Actions from "@ui/redux/actions";
@@ -37,6 +37,7 @@ import {
 } from "@gql/ServerGraphQLEnvironment";
 import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
 import { loadQuery } from "relay-hooks";
+import { GraphQLSchema } from "graphql";
 import { clientConfigQueryQuery } from "@gql/query/clientConfigQuery";
 
 interface IServerApp {
@@ -62,110 +63,112 @@ const ServerApp = ({ requestUrl, store, stores, modalRegister, relayEnvironment 
 /**
  * The main server side process handled here.
  */
-const serverRender = async (req: Request, res: Response, error?: IAppError): Promise<void> => {
-  const { nonce } = res.locals;
-  const middleware = setupServerMiddleware();
-  const context = contextProvider.start({ user: req.session?.user });
-  const clientConfig = getClientConfig(context);
-  const modalRegister = new ModalRegister();
-  const relayEnvironment = await getServerGraphQLEnvironment();
-  const preloadedQuery = loadQuery();
+const serverRender =
+  ({ schema }: { schema: GraphQLSchema }) =>
+  async (req: Request, res: Response, error?: IAppError): Promise<void> => {
+    const { nonce } = res.locals;
+    const middleware = setupServerMiddleware();
+    const context = contextProvider.start({ user: req.session?.user });
+    const clientConfig = getClientConfig(context);
+    const modalRegister = new ModalRegister();
+    const relayEnvironment = await getServerGraphQLEnvironment({ schema });
+    const preloadedQuery = loadQuery();
 
-  // Pre-load site configuration options
-  await preloadedQuery.next(relayEnvironment, clientConfigQueryQuery, {});
+    // Pre-load site configuration options
+    await preloadedQuery.next(relayEnvironment, clientConfigQueryQuery, {});
 
-  try {
-    let auth: Authorisation;
-    let user: IClientUser;
-    let statusCode = 200;
+    try {
+      let auth: Authorisation;
+      let user: IClientUser;
+      let statusCode = 200;
 
-    if (error && !(error instanceof FormHandlerError)) {
-      auth = new Authorisation({});
-      user = {
-        roleInfo: auth.permissions,
-        email: "",
-        csrf: req.csrfToken(),
-        projectId: req.session?.user.projectId,
-      };
-    } else {
-      auth = await context.runQuery(new GetAllProjectRolesForUser());
-      user = {
-        roleInfo: auth.permissions,
-        email: req.session?.user.email,
-        projectId: req.session?.user.projectId,
-        csrf: req.csrfToken(),
-      };
-    }
-
-    const initialState = setupInitialState(user, clientConfig);
-    const store = createStore(rootReducer, initialState, middleware);
-
-    const stores = createStores(
-      () => store.getState(),
-      action => process.nextTick(() => store.dispatch(action as AnyAction)),
-    );
-
-    if (error) {
-      if (error instanceof FormHandlerError) {
-        if (error?.code === ErrorCode.VALIDATION_ERROR) {
-          // We've got some kind of validation error, so let the user know that happened.
-          store.dispatch(
-            Actions.updateEditorAction(error.key, error.store, error.dto, error.error.results as Results<any>),
-          );
-        } else if (error) {
-          // Some other validation error occurred, so we need to add it into store as actual error.
-          // Need to pair with the submit action to keep count in sync.
-          store.dispatch(Actions.handleEditorSubmit(error.key, error.store, error.dto, error.result));
-          store.dispatch(
-            Actions.handleEditorError({
-              id: error.key,
-              dto: error.dto,
-              error: error.error,
-              store: error.store,
-              scrollToTop: false,
-            }),
-          );
-        }
+      if (error && !(error instanceof FormHandlerError)) {
+        auth = new Authorisation({});
+        user = {
+          roleInfo: auth.permissions,
+          email: "",
+          csrf: req.csrfToken(),
+          projectId: req.session?.user.projectId,
+        };
       } else {
-        // We cannot handle these beautifully.
-        statusCode = getErrorStatus(error);
-        const errorPayload = createErrorPayload(error, false).params;
-        store.dispatch(Actions.setError(errorPayload));
+        auth = await context.runQuery(new GetAllProjectRolesForUser());
+        user = {
+          roleInfo: auth.permissions,
+          email: req.session?.user.email,
+          projectId: req.session?.user.projectId,
+          csrf: req.csrfToken(),
+        };
       }
+
+      const initialState = setupInitialState(user, clientConfig);
+      const store = createStore(rootReducer, initialState, middleware);
+
+      const stores = createStores(
+        () => store.getState(),
+        action => process.nextTick(() => store.dispatch(action as AnyAction)),
+      );
+
+      if (error) {
+        if (error instanceof FormHandlerError) {
+          if (error?.code === ErrorCode.VALIDATION_ERROR) {
+            // We've got some kind of validation error, so let the user know that happened.
+            store.dispatch(
+              Actions.updateEditorAction(error.key, error.store, error.dto, error.error.results as Results<any>),
+            );
+          } else if (error) {
+            // Some other validation error occurred, so we need to add it into store as actual error.
+            // Need to pair with the submit action to keep count in sync.
+            store.dispatch(Actions.handleEditorSubmit(error.key, error.store, error.dto, error.result));
+            store.dispatch(
+              Actions.handleEditorError({
+                id: error.key,
+                dto: error.dto,
+                error: error.error,
+                store: error.store,
+                scrollToTop: false,
+              }),
+            );
+          }
+        } else {
+          // We cannot handle these beautifully.
+          statusCode = getErrorStatus(error);
+          const errorPayload = createErrorPayload(error, false).params;
+          store.dispatch(Actions.setError(errorPayload));
+        }
+      }
+
+      const matched = matchRoute(req.url);
+      const { params } = getParamsFromUrl(matched.routePath, req.url);
+
+      if (matched.accessControl?.(auth, params as any, clientConfig) === false) {
+        throw new ForbiddenError();
+      }
+
+      // Note: Keep resolving app queries + actions until completion for final render below
+      await loadAllData(store, () => {
+        renderApp({ requestUrl: req.url, nonce, store, stores, modalRegister, relayEnvironment });
+      });
+
+      // Wait until all Relay queries have been made.
+      const relayData = await relayServerSSR.getCache();
+      const finalRelayEnvironment = getServerGraphQLFinalRenderEnvironment(relayData);
+
+      res.status(statusCode).send(
+        renderApp({
+          requestUrl: req.url,
+          nonce,
+          store,
+          stores,
+          modalRegister,
+          relayEnvironment: finalRelayEnvironment,
+          relayData,
+        }),
+      );
+    } catch (renderError: unknown) {
+      // If an error occured, re-do our render with an error message instead.
+      serverRender({ schema })(req, res, renderError as IAppError);
     }
-
-    const matched = matchRoute(req.url);
-    const { params } = getParamsFromUrl(matched.routePath, req.url);
-
-    if (matched.accessControl?.(auth, params as any, clientConfig) === false) {
-      throw new ForbiddenError();
-    }
-
-    // Note: Keep resolving app queries + actions until completion for final render below
-    await loadAllData(store, () => {
-      renderApp({ requestUrl: req.url, nonce, store, stores, modalRegister, relayEnvironment });
-    });
-
-    // Wait until all Relay queries have been made.
-    const relayData = await relayServerSSR.getCache();
-    const finalRelayEnvironment = getServerGraphQLFinalRenderEnvironment(relayData);
-
-    res.status(statusCode).send(
-      renderApp({
-        requestUrl: req.url,
-        nonce,
-        store,
-        stores,
-        modalRegister,
-        relayEnvironment: finalRelayEnvironment,
-        relayData,
-      }),
-    );
-  } catch (renderError: unknown) {
-    // If an error occured, re-do our render with an error message instead.
-    serverRender(req, res, renderError as IAppError);
-  }
-};
+  };
 
 /**
  * Populates the redux store before being added as preloaded state
