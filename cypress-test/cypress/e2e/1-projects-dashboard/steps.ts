@@ -51,20 +51,6 @@ export const shouldNavigateToProjectOverview = () => {
   cy.getByQA("page-title").should("contain.text", testProjectName);
 };
 
-export const shouldHaveShowAllAccordion = () => {
-  cy.get("span.govuk-accordion__show-all-text").contains("Show all sections").click()
-};
-
 export const shouldShowProjectTitle = () => {
   cy.getByQA("page-title-caption").should("contain.text", 'CYPRESS')
-};
-
-export const shouldShowCostCatTable = () => {
-  cy.get("thead.govuk-table__head")
-  cy.get("tr.govuk-table__row")
-  cy.get("th.govuk-table__header").contains("Category")
-  cy.get("th.govuk-table__header.govuk-table__header--numeric").contains("Total eligible costs")
-  cy.get("th.govuk-table__header.govuk-table__header--numeric").contains("Eligible costs claimed to date")
-  cy.get("th.govuk-table__header.govuk-table__header--numeric").contains("Costs claimed this period")
-  cy.get("th.govuk-table__header.govuk-table__header--numeric").contains("Remaining eligible costs")
 };
