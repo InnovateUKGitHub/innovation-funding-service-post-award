@@ -4,12 +4,12 @@
   "includes": ["src/**"],
   "extensions": {
     "endpoints": {
-      "ACC-9049": {
-        "url": "https://www-acc-dev9049.apps.ocp4.innovateuk.ukri.org/graphql",
-        "introspect": true
-      },
       "localhost": {
         "url": "http://localhost:8080/graphql",
+        "introspect": true
+      },
+      "ACC-9049": {
+        "url": "https://www-acc-dev9049.apps.ocp4.innovateuk.ukri.org/graphql",
         "introspect": true
       },
       "acc-dev": {

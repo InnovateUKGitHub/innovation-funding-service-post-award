@@ -10,6 +10,11 @@ import { serverRender } from "@server/serverRender";
 import { componentGuideRender } from "@server/componentGuideRender";
 import { isAccDevOrDemo, isLocalDevelopment } from "@shared/isEnv";
 import { getGraphQLRoutes } from "@gql/getGraphQLExpressRoutes";
+import { getSalesforceAccessToken } from "./repositories/salesforceConnection";
+import { configuration } from "./features/common";
+import { Connection } from "@gql/sfdc-graphql-endpoint/src/sfdc/connection";
+import { Api } from "@gql/sfdc-graphql-endpoint/src/sfdc/api";
+import { getGraphQLSchema } from "@gql/getGraphQLSchema";
 
 export const noAuthRouter = Router();
 
@@ -21,9 +26,21 @@ const getServerRoutes = async () => {
 
   const csrfProtection = csrf();
 
+  // Obtain a Salesforce access token and URL
+  const { accessToken, url } = await getSalesforceAccessToken({
+    clientId: configuration.salesforceServiceUser.clientId,
+    connectionUrl: configuration.salesforceServiceUser.connectionUrl,
+    currentUsername: configuration.salesforceServiceUser.serviceUsername,
+  });
+
+  // Create a new Connection and API object to fetch Salesforce data from.
+  const connection = new Connection({ instanceUrl: url, accessToken });
+  const api = new Api({ connection });
+  const schema = await getGraphQLSchema({ connection, api });
+
   // App routes
   router.use("/api", apiRoutes);
-  router.use(await getGraphQLRoutes());
+  router.use(await getGraphQLRoutes({ schema, connection, api }));
 
   // Only enable the components page if we're in development mode.
   if (isAccDevOrDemo || isLocalDevelopment) {
@@ -31,11 +48,11 @@ const getServerRoutes = async () => {
   }
 
   // Form posts
-  router.post("*", configureFormRouter(csrfProtection));
-  router.get("*", csrfProtection, (req, res) => serverRender(req, res));
+  router.post("*", configureFormRouter({ schema })(csrfProtection));
+  router.get("*", csrfProtection, (req, res) => serverRender({ schema })(req, res));
 
   // Fallback route
-  router.all("*", (req, res) => serverRender(req, res, new NotFoundError()));
+  router.all("*", (req, res) => serverRender({ schema })(req, res, new NotFoundError()));
 
   return router;
 };

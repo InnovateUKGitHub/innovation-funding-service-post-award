@@ -70,4 +70,4 @@ const getStubGraphQLEnvironment = (overlayGraph: RecursivePartial<typeof stubGra
 };
 
 export { getStubGraphQLEnvironment };
-export type { stubGraphQLGraph };
+export { stubGraphQLGraph };
