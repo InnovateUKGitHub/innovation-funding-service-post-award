@@ -17,8 +17,13 @@ declare global {
       getByQA(tag: string): Chainable<Element>;
 
       /**
+       * Gets an element based on the aria-label
+       */
+      getByAriaLabel(label: string): Chainable<Element>;
+
+      /**
        * Uses the dev tools to switch to a different named user,
-       * to enable testing with different access rights. 
+       * to enable testing with different access rights.
        * It appears to be more stable if done from the home page, before navigating away
        */
       switchUserTo(email: string, goHome?: boolean): void;
@@ -26,7 +31,17 @@ declare global {
       /**
        * Uses dev tools to reset user to system user
        */
-      resetUser(goHome?: boolean): void
+      resetUser(goHome?: boolean): void;
+
+      /**
+       * Gets the back link element
+       */
+      backLink(): Chainable<Element>;
+
+      /**
+       * Gets the submit button with the matching name
+       */
+      submitButton(name: string): Chainable<Element>;
     }
   }
 }

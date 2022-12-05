@@ -19,5 +19,5 @@ describe("project dashboard as Monitoring Officer", () => {
     "Documents",
     "Project details",
     "Finance summary",
-  ])("should show the \"$0\" Link", shouldFindMatchingProjectCard)
+  ])('should show the "$0" Link', shouldFindMatchingProjectCard);
 });
