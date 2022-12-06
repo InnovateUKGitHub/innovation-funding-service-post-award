@@ -16,7 +16,6 @@ interface InnerProps {
   documents: DocumentSummaryDto[];
 }
 
-const HiddenForm = ACC.createTypedForm<PCRSpendProfileOverheadsCostDto>();
 const Form = ACC.createTypedForm<PCRSpendProfileOverheadsCostDto>();
 
 const SpendProfileCostForm = ({
@@ -114,22 +113,22 @@ const SpendProfileCostForm = ({
         />
 
         {displayHiddenForm && (
-          <HiddenForm.Fieldset>
+          <Form.Fieldset>
             <ACC.Renderers.SimpleString>
               <ACC.Content value={x => x.spendProfileMessages.calculatedGuidanceOverheads} />
             </ACC.Renderers.SimpleString>
-            <HiddenForm.Button
+            <Form.Button
               name="calculateOverheadsDocuments"
               onClick={() => props.onSave(editor.data, getUploadDocumentsLink())}
             >
               <ACC.Content value={x => x.pcrSpendProfileLabels.overheads.linkDocumentsUpload} />
-            </HiddenForm.Button>
+            </Form.Button>
 
             <ACC.Section qa="overheads-form-section">
               <ACC.DocumentView hideHeader qa="overheads-documents" documents={documents} />
             </ACC.Section>
 
-            <HiddenForm.Numeric
+            <Form.Numeric
               label={x => x.pcrSpendProfileLabels.overheads.calculatedCost}
               width="one-quarter"
               name="value"
@@ -137,7 +136,7 @@ const SpendProfileCostForm = ({
               update={(dto, val) => (dto.value = val)}
               validation={validator && validator.value}
             />
-          </HiddenForm.Fieldset>
+          </Form.Fieldset>
         )}
 
         {isClient && (
