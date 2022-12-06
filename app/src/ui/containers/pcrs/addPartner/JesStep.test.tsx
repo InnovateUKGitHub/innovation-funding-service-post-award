@@ -179,7 +179,6 @@ describe("<JesStepUI />", () => {
             fileSize: 279611,
             dateCreated: new Date(),
             uploadedBy: "Innovate UK",
-            uploadedByPartnerName: "",
             isOwner: false,
           };
 

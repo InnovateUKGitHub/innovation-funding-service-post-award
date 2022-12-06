@@ -303,13 +303,6 @@ class DocumentsTestRepository
         Owner: {
           Username: "aUserName",
         },
-        LastModifiedBy: {
-          Contact: {
-            Account: {
-              Name: "Hedge's Hedges",
-            },
-          },
-        },
       },
     ]);
     return newDocumentId;

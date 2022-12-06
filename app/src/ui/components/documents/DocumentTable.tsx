@@ -62,11 +62,11 @@ export const DocumentTable = <T extends DocumentSummaryDto>({
         value={x => getFileSize(x.fileSize)}
       />
 
-      <ProjectDocumentsTable.Custom
+      <ProjectDocumentsTable.String
         sortByKey="uploadedBy"
         header="Uploaded by"
         qa="uploadedBy"
-        value={x => `${x.uploadedBy}${x.uploadedByPartnerName ? ` of ${x.uploadedByPartnerName}` : ""}`}
+        value={x => x.uploadedBy}
       />
 
       {customContent ? customContent(ProjectDocumentsTable) : null}

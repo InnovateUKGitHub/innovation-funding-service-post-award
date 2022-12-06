@@ -19,7 +19,6 @@ export interface DocumentSummaryDto {
   fileSize: number;
   dateCreated: Date;
   uploadedBy: string;
-  uploadedByPartnerName: string | null;
   isOwner: boolean;
 }
 

@@ -61,18 +61,9 @@ describe("GetProjectDocumentSummaryQuery", () => {
     const project = context.testData.createProject();
 
     const documents = context.testData.range(3, i => {
-      return context.testData.createDocument(
-        project.Id,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        x => {
-          x.CreatedDate = DateTime.local().minus({ days: 1 }).plus({ hours: i }).toISO();
-        },
-      );
+      return context.testData.createDocument(project.Id, undefined, undefined, undefined, undefined, undefined, x => {
+        x.CreatedDate = DateTime.local().minus({ days: 1 }).plus({ hours: i }).toISO();
+      });
     });
 
     const query = new GetProjectDocumentSummaryQuery(project.Id);
