@@ -29,7 +29,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
 
     expect(result).not.toBeNull();
     expect(result.fileName).toBe("PCR Document.txt");
-    expect(result.contentLength).toBe("Why I want more money".length);
+    expect(result.contentLength).toBe("Jackie's Jacks".length);
     expect(result.stream).not.toBeNull();
   });
 
@@ -53,7 +53,7 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentQuery", () => {
     expect(result).not.toBeNull();
     expect(result.fileName).toBe("PCR Document.txt");
     expect(result.fileType).toBe("txt");
-    expect(result.contentLength).toBe("Why I want more money".length);
+    expect(result.contentLength).toBe("Paul's Paul Emporium".length);
     expect(result.stream).not.toBeNull();
   });
 

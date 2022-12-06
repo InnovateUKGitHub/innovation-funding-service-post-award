@@ -15,7 +15,6 @@ describe("DeleteClaimDetailDocumentCommand", () => {
       "hello",
       undefined,
       undefined,
-      undefined,
       x => (x.Acc_UploadedByMe__c = true),
     );
     expect(context.repositories.documents.Items).toHaveLength(1);

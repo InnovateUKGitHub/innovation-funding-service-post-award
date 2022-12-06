@@ -19,7 +19,6 @@ export class SalesforceDocumentMapper extends SalesforceBaseMapper<ISalesforceDo
       description: new DocumentDescriptionMapper().mapFromSalesforceDocumentDescription(x.Description),
       createdDate: this.clock.parseRequiredSalesforceDateTime(x.CreatedDate),
       lastModifiedBy: x.Acc_LastModifiedByAlias__c,
-      lastModifiedByPartnerName: x.LastModifiedBy.Contact?.Account?.Name || null,
       isOwner: x.Acc_UploadedByMe__c,
     };
   }

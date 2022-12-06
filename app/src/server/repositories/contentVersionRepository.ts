@@ -23,13 +23,6 @@ export interface ISalesforceDocument {
   Owner: {
     Username: string;
   };
-  LastModifiedBy: {
-    Contact: {
-      Account: null | {
-        Name: string;
-      };
-    };
-  };
 }
 
 export interface IContentVersionRepository {
@@ -55,7 +48,6 @@ export class ContentVersionRepository
     "Description",
     "CreatedDate",
     "Acc_LastModifiedByAlias__c",
-    "LastModifiedBy.Contact.Account.Name",
     "Acc_UploadedByMe__c",
     "Owner.Username",
   ];
