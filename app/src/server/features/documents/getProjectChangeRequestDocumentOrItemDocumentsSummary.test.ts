@@ -76,7 +76,6 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery", () => {
     const expectedFileName = "PCR1";
     const expectedExtension = "txt";
     const expectedUploadedBy = "Indiana Jones";
-    const expectedUploadedByPartner = "UK Government";
     const expectedContent = "Expected content";
     const expectedDescription = "Evidence";
 
@@ -85,7 +84,6 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery", () => {
       expectedFileName,
       expectedExtension,
       expectedUploadedBy,
-      expectedUploadedByPartner,
       expectedContent,
       expectedDescription,
     );
@@ -97,7 +95,6 @@ describe("GetProjectChangeRequestDocumentOrItemDocumentsSummaryQuery", () => {
     expect(result.fileName).toBe(`${expectedFileName}.${expectedExtension}`);
     expect(result.fileSize).toBe(document.ContentSize);
     expect(result.uploadedBy).toBe(document.Acc_LastModifiedByAlias__c);
-    expect(result.uploadedByPartnerName).toBe(document.LastModifiedBy.Contact?.Account?.Name);
     expect(result.description).toBe(DocumentDescription.Evidence);
   });
 

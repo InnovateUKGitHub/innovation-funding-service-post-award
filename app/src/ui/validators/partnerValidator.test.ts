@@ -121,7 +121,6 @@ describe("Partner Validator", () => {
         id: "",
         dateCreated: new Date(),
         uploadedBy: "",
-        uploadedByPartnerName: "",
         isOwner: false,
       };
       expect(validate([document]).bankDetailsTaskStatus.isValid).toBe(false);
@@ -151,7 +150,6 @@ describe("Partner Validator", () => {
         id: "",
         dateCreated: new Date(),
         uploadedBy: "",
-        uploadedByPartnerName: "",
         isOwner: false,
       };
       expect(validate([document]).bankDetailsTaskStatus.isValid).toBe(false);

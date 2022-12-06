@@ -325,7 +325,6 @@ Object {
         "Description",
         "CreatedDate",
         "Acc_LastModifiedByAlias__c",
-        "LastModifiedBy.Contact.Account.Name",
         "Acc_UploadedByMe__c",
         "Owner.Username",
       ],

@@ -61,7 +61,6 @@ describe("<DocumentView />", () => {
         fileSize: 1024,
         dateCreated: new Date(Date.UTC(2021, 10, 1)),
         uploadedBy: "stub-uploadedBy",
-        uploadedByPartnerName: "stub-uploadedByPartnerName",
         isOwner: true,
       };
 
