@@ -81,7 +81,7 @@
     },
     "reportForm": {
       "reportMessage": "Each report refers to a period of the project. You may have more than one report per period.",
-      "questionScoreMessage": "For each question score the project against the criteria from 1 to 5, providing a comment explaining your reason. The report will be returned to you otherwise.",
+      "questionScoreMessage": "For each section score the project against the criteria from 1 to 5, providing a comment explaining your reason. The report will be returned to you otherwise.",
       "continueText": "Continue",
       "saveAndReturnText": "Save and return to monitoring reports"
     },
