@@ -55,7 +55,7 @@ describe("Editing a claim by accessing cost categories", () => {
 
   it("Should navigate to files upload area", () => {
     //cy.intercept("POST", "/api/claim-details/*").as("uploadArea");
-    cy.getByQA("button_upload-qa").click();
+    cy.submitButton("Upload and remove documents").click();
     cy.wait(7000);
   });
 

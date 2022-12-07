@@ -33,7 +33,7 @@ export const newCostCatLineItem = () => {
 export const allowFileUpload = () => {
   cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
   //cy.intercept("POST", "/api/documents/claim-details/*").as("uploadDocuments");
-  cy.getByQA("button_default-qa").click();
+  cy.submitButton("Upload documents").click();
   cy.wait(7000);
   cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
 };

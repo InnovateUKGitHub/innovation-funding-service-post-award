@@ -28,17 +28,17 @@ describe("project dashboard as Finance Contact", () => {
         it("Displays the cost category table", shouldShowCostCatTable);
 
         it("Should have continue to claims documents button", () => {
-          cy.getByQA("button_default-qa");
+          cy.submitButton("Continue to claims documents");
         });
 
         it("Should have a save and return to claims button", () => {
-          cy.getByQA("button_save-qa");
+          cy.submitButton("Save and return to claims");
         });
 
         it("Should show accordions", shouldShowAllAccordion);
 
         it("The Continue to claims button should direct you to the next page", () => {
-          cy.getByQA("button_default-qa").click();
+          cy.submitButton("Continue to claims documents").click();
         });
       });
     });
