@@ -2,6 +2,7 @@ import * as ACC from "@ui/components";
 import * as Dtos from "@framework/dtos";
 import { MonitoringReportDtoValidator } from "@ui/validators";
 import { IEditorStore } from "@ui/redux";
+import { H3 } from "@ui/components";
 
 interface Props {
   questionNumber: number;
@@ -37,6 +38,13 @@ const MonitoringReportQuestionStep = ({ editor, questionNumber, onChange, onSave
     <ACC.Section title={title} qa="period-information">
       <ACC.Section>
         <ReportForm.Form editor={editor} onChange={dto => onChange(dto)} qa="monitoringReportQuestionForm">
+          <H3>
+            <ACC.Content
+              value={x =>
+                x.pages.monitoringReportsQuestionStep.counter({ current: i + 1, total: data.questions.length })
+              }
+            />
+          </H3>
           <ReportForm.Fieldset heading={q.title}>
             <ACC.Renderers.SimpleString className="govuk-hint">{q.description}</ACC.Renderers.SimpleString>
             <ReportForm.Hidden name={"questionDisplayOrder"} value={() => questionNumber} />

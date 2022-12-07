@@ -614,7 +614,8 @@
     "monitoringReportsQuestionStep": {
       "buttonContinue": "Continue",
       "buttonSaveAndReturn": "Save and return to summary",
-      "commentLabel": "Comment"
+      "commentLabel": "Comment",
+      "counter": "Section {{ current }} of {{ total }}"
     },
     "partnerDetails": {
       "title": {
