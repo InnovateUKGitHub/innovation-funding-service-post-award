@@ -325,7 +325,7 @@
       "loanDeclarationTitle": "Now send your request",
       "loanDeclaration": "By submitting this drawdown request I confirm that the amount requested is in line with forecast eligible project costs and that this has been approved by an authorised signatory of the business. I understand and accept that if I knowingly submit a drawdown request without appropriate approvals or provide false or misleading information, this may result in my drawdown being rejected, termination of the loan, recovery of loan proceeds and outstanding interest, civil action and where there is evidence of fraud, criminal prosecution.",
       "loanSubmitButton": "Accept and send",
-      "loanDocumentsUploaded_one": "{{count}} file have been uploaded",
+      "loanDocumentsUploaded_one": "{{firstFileName}} file has been uploaded",
       "loanDocumentsUploaded_other": "{{count}} files have been uploaded",
       "loanDocumentsRemoved": "{{fileName}} has been removed."
     },
