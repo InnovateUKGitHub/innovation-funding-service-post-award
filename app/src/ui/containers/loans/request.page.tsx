@@ -183,7 +183,7 @@ const LoansRequestContainer = (props: BaseProps & LoansRequestParams) => {
           }}
           onDocsDelete={(dto, document) => {
             const removedMessage = getContent(x =>
-              x.pages.loansRequest.loanDocumentsRemoved({ filename: document.fileName }),
+              x.pages.loansRequest.loanDocumentsRemoved({ fileName: document.fileName }),
             );
 
             stores.loanDocuments.deleteLoanDocument(props.projectId, props.loanId, dto, document, removedMessage);
@@ -193,7 +193,7 @@ const LoansRequestContainer = (props: BaseProps & LoansRequestParams) => {
 
             const uploadedMessage = getContent(x =>
               x.pages.loansRequest.loanDocumentsUploaded({
-                firstName: dto.files.find(file => file.fileName),
+                firstName: dto.files[0]?.fileName,
                 count: dto.files.length,
               }),
             );
