@@ -191,7 +191,12 @@ const LoansRequestContainer = (props: BaseProps & LoansRequestParams) => {
           onDocsChange={(saving, dto) => {
             stores.messages.clearMessages();
 
-            const uploadedMessage = getContent(x => x.pages.loansRequest.loanDocumentsUploaded({ count: dto.files }));
+            const uploadedMessage = getContent(x =>
+              x.pages.loansRequest.loanDocumentsUploaded({
+                firstName: dto.files.find(file => file.fileName),
+                count: dto.files.length,
+              }),
+            );
 
             stores.loanDocuments.updateLoanDocumentsEditor(saving, props.projectId, props.loanId, dto, uploadedMessage);
           }}
