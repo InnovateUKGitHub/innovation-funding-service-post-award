@@ -24,7 +24,7 @@
     "update-govfrontend": "node ./scripts/update-govfrontend",
     "update": "npm-check -u",
     "prepare": "cd .. && husky install",
-    "cy": "cd ../cypress-test && npm run test",
+    "cy": "cd ../cypress-test && npm start",
     "relay": "relay-compiler"
   },
   "author": "BJSS Ltd",

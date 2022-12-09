@@ -4,7 +4,10 @@
   "description": "cypress test package",
   "main": "index.js",
   "scripts": {
-    "test": "cross-env ELECTRON_EXTRA_LAUNCH_ARGS=--no-sandbox cypress open",
+    "cypress": "cross-env ELECTRON_EXTRA_LAUNCH_ARGS=--no-sandbox cypress",
+    "start": "npm run cypress -- open",
+    "test": "npm run cypress -- run",
+    "test:headed": "npm run cypress -- run --headed",
     "prettier": "prettier . --write"
   },
   "author": "",
