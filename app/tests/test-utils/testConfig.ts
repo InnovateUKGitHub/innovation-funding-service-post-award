@@ -23,6 +23,8 @@ export class TestConfig implements IConfig {
     shibboleth: "./shibboleth.cert",
   };
 
+  public basicAuth = { credentials: ["bananaman:hello"] };
+
   public features = {
     changePeriodLengthWorkflow: false,
     contentHint: true,

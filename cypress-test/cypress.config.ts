@@ -1,3 +1,4 @@
+require("dotenv").config();
 import { defineConfig } from "cypress";
 
 export default defineConfig({
@@ -7,5 +8,8 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
+    env: {
+      BASIC_AUTH: process.env.BASIC_AUTH 
+    }
   },
 });

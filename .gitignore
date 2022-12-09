@@ -10,4 +10,5 @@ Vagrantfile
 provision.sh
 .credentials
 /testframework/screenCaptures/
-/app/security
+app/security
+.env

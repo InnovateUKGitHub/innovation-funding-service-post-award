@@ -6,8 +6,9 @@ import crypto from "crypto";
 import { router as authRouter } from "@server/auth";
 import { router as cspRouter } from "@server/csp";
 import { noAuthRouter, router } from "@server/router";
+import { useBasicAuth } from "./basicAuth";
 
-import { allowCache, noCache, setOwaspHeaders } from "@server/cacheHeaders";
+import { allowCache, noCache, setOwaspHeaders, setBasicAuth } from "@server/cacheHeaders";
 import { configuration } from "@server/features/common";
 import { contextProvider } from "@server/features/common/contextProvider";
 import { InitialiseContentCommand } from "@server/features/general/initialiseContentCommand";
@@ -127,7 +128,8 @@ export class Server {
 
   private routing(): void {
     this.app.use(this.setNonceValue);
-    this.app.use(setOwaspHeaders, allowCache, express.static("public"));
+    this.app.use(setOwaspHeaders, allowCache, setBasicAuth, express.static("public"));
+    this.app.use(useBasicAuth);
     this.app.use(noCache, noAuthRouter);
     this.app.use(noCache, cspRouter);
     this.app.use(authRouter);
