@@ -1,7 +1,17 @@
+import { visitApp } from "../../common/visit";
+
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
 
 export const backToProject = () => {
   cy.get("a.govuk-back-link").contains("Back to project");
+};
+
+export const backToRequest = () => {
+  cy.get("a.govuk-back-link").contains("Back to project change requests");
+};
+
+export const backToSummary = () => {
+  cy.get("a.govuk-back-link").contains("Back to summary");
 };
 
 export const shouldShowProjectTitle = () => {
@@ -26,24 +36,27 @@ export const explainPCRTypes = () => {
   cy.getByQA("form-guidance-list").contains("Put a project on hold");
 };
 
-/**
- * Can probably use .dbl.click for this function to click and unclick but it's much prettier on the page when performed this way
- */
 export const pcrCheckBoxes = () => {
-  cy.get("input#types_60.govuk-checkboxes__input").click();
-  cy.get("input#types_30.govuk-checkboxes__input").click();
-  cy.get("input#types_20.govuk-checkboxes__input").click();
-  cy.get("input#types_80.govuk-checkboxes__input").click();
-  cy.get("input#types_90.govuk-checkboxes__input").click();
-  cy.get("input#types_10.govuk-checkboxes__input").click();
-  cy.get("input#types_40.govuk-checkboxes__input").click();
-  cy.get("input#types_60.govuk-checkboxes__input").click();
-  cy.get("input#types_30.govuk-checkboxes__input").click();
-  cy.get("input#types_20.govuk-checkboxes__input").click();
-  cy.get("input#types_80.govuk-checkboxes__input").click();
-  cy.get("input#types_90.govuk-checkboxes__input").click();
-  cy.get("input#types_10.govuk-checkboxes__input").click();
-  cy.get("input#types_40.govuk-checkboxes__input").click();
+  /**
+   * Check each check box can be selected
+   */
+  cy.clickCheckBox("Reallocate project costs");
+  cy.clickCheckBox("Remove a partner");
+  cy.clickCheckBox("Add a partner");
+  cy.clickCheckBox("Change project scope");
+  cy.clickCheckBox("Change project duration");
+  cy.clickCheckBox("Change a partner's name");
+  cy.clickCheckBox("Put project on hold");
+  /**
+   * Check that each check box can be unselected
+   */
+  cy.clickCheckBox("Reallocate project costs", true);
+  cy.clickCheckBox("Remove a partner", true);
+  cy.clickCheckBox("Add a partner", true);
+  cy.clickCheckBox("Change project scope", true);
+  cy.clickCheckBox("Change project duration", true);
+  cy.clickCheckBox("Change a partner's name", true);
+  cy.clickCheckBox("Put project on hold", true);
 };
 
 export const beforeYouSubmit = () => {
@@ -63,4 +76,10 @@ export const characterCount = () => {
 
 export const backToPCRs = () => {
   cy.get("a.govuk-back-link").contains("Back to project change requests");
+};
+
+export const deletePcr = () => {
+  visitApp("projects/a0E2600000kSotUEAS/pcrs/dashboard");
+  cy.getByQA("pcrDeleteLink").contains("Delete").click();
+  cy.getByQA("button_delete-qa").click();
 };

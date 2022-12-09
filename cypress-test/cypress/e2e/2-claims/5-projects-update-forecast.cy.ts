@@ -37,18 +37,12 @@ describe("Updating forecasts after claim costs and document upload", () => {
   it("Should contain the correct cost categories", forecastCostCats);
 
   /**
-   * Need to create a getByAriaLabel command to avoid using IDs as this will only reference an individual project and is not sustainable.
-   *
-   * Ideally, we'd like to test several cells and check calculations are happening
-   */
-
-  /**
    * Please note below that as projects progress through different periods, the below period categories may need to be adjusted accordingly when testing.
    * If using a project that's currently in 'Period 2' you would need to update 'Period 3' and so on. Cannot update forecasts for period you're in.
    */
   it("Should accept input and calculate the figures accordingly", () => {
     cy.getByAriaLabel("Labour Period 2").clear().type("1000");
-    cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£1,000.00");
+    cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£1,100.00");
     cy.getByAriaLabel("Overheads Period 2").clear().type("1000");
   });
 

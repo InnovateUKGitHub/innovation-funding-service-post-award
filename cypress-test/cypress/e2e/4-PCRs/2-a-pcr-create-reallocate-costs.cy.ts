@@ -1,5 +1,12 @@
 import { visitApp } from "../../common/visit";
-import { backToProject, characterCount, pcrCommentBox, shouldShowAllAccordion, shouldShowProjectTitle } from "./steps";
+import {
+  backToProject,
+  characterCount,
+  deletePcr,
+  pcrCommentBox,
+  shouldShowAllAccordion,
+  shouldShowProjectTitle,
+} from "./steps";
 
 describe("Creating Reallocate Project Costs PCR", () => {
   before(() => {
@@ -7,8 +14,10 @@ describe("Creating Reallocate Project Costs PCR", () => {
     visitApp("projects/a0E2600000kSotUEAS/pcrs/create");
   });
 
+  after(deletePcr);
+
   it("Should select 'Reallocate project costs' checkbox", () => {
-    cy.get("input#types_60.govuk-checkboxes__input").scrollIntoView().click({ force: true });
+    cy.clickCheckBox("Reallocate project costs");
   });
 
   it("Will click Create request button and proceed to next page", () => {
@@ -72,10 +81,6 @@ describe("Creating Reallocate Project Costs PCR", () => {
   });
 
   it("Should have a 'Delete request' button", () => {
-    cy.get("a.govuk-link").contains("Delete").click();
-  });
-
-  it("Should have a 'Delete request' button", () => {
-    cy.getByQA("button_delete-qa").click();
+    cy.get("a.govuk-link").contains("Delete");
   });
 });

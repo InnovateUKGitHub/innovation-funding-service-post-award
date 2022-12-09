@@ -9,19 +9,19 @@ export const shouldShowAllAccordion = () => {
 export const shouldShowCostCatTable = () => {
   cy.get("thead.govuk-table__head");
   cy.get("tr.govuk-table__row");
-  cy.get("th.govuk-table__header").contains("Category");
-  cy.get("th.govuk-table__header.govuk-table__header--numeric").contains("Total eligible costs");
-  cy.get("th.govuk-table__header.govuk-table__header--numeric").contains("Eligible costs claimed to date");
-  cy.get("th.govuk-table__header.govuk-table__header--numeric").contains("Costs claimed this period");
-  cy.get("th.govuk-table__header.govuk-table__header--numeric").contains("Remaining eligible costs");
+  cy.tableHeader("Category");
+  cy.tableHeader("Total eligible costs");
+  cy.tableHeader("Eligible costs claimed to date");
+  cy.tableHeader("Costs claimed this period");
+  cy.tableHeader("Remaining eligible costs");
 };
 
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
 
 export const correctTableHeaders = () => {
-  cy.get("thead.govuk-table__head").contains("Description");
-  cy.get("thead.govuk-table__head").contains("Cost (£)");
-  cy.get("thead.govuk-table__head").contains("Last updated");
+  cy.tableHeader("Description");
+  cy.tableHeader("Cost (£)");
+  cy.tableHeader("Last updated");
 };
 
 export const newCostCatLineItem = () => {
@@ -84,27 +84,27 @@ export const selectFileDescription = () => {
 export const claimsDocUpload = () => {
   cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
   cy.wait(3000);
-  cy.getByQA("button_upload-qa").click();
+  cy.getByQA("button_upload-qa").contains("Upload documents").click();
   cy.wait(3000);
 };
 
 export const claimsFileTable = () => {
-  cy.get("th.govuk-table__header").contains("File name");
-  cy.get("th.govuk-table__header").contains("Type");
-  cy.get("th.govuk-table__header").contains("Date uploaded");
-  cy.get("th.govuk-table__header").contains("Uploaded by");
+  cy.tableHeader("File name");
+  cy.tableHeader("Type");
+  cy.tableHeader("Date uploaded");
+  cy.tableHeader("Uploaded by");
 };
 
 export const forecastHeaders = () => {
-  cy.get("th.govuk-table__header").contains("Period");
-  cy.get("th.govuk-table__header").contains("1");
-  cy.get("th.govuk-table__header").contains("2");
-  cy.get("th.govuk-table__header").contains("3");
-  cy.get("th.govuk-table__header").contains("4");
-  cy.get("th.govuk-table__header").contains("IAR Due");
-  cy.get("th.govuk-table__header").contains("No");
-  cy.get("th.govuk-table__header").contains("Month");
-  cy.get("th.govuk-table__header").contains("2022");
+  cy.tableHeader("Period");
+  cy.tableHeader("1");
+  cy.tableHeader("2");
+  cy.tableHeader("3");
+  cy.tableHeader("4");
+  cy.tableHeader("IAR Due");
+  cy.tableHeader("No");
+  cy.tableHeader("Month");
+  cy.tableHeader("2022");
 };
 
 export const displayForecastTable = () => {
@@ -113,19 +113,18 @@ export const displayForecastTable = () => {
 };
 
 export const forecastCostCats = () => {
-  const tableCell = cy.get("td.govuk-table__cell.sticky-col.sticky-col-left-1");
-  tableCell.contains("Labour");
-  tableCell.contains("Overheads");
-  tableCell.contains("Materials");
-  tableCell.contains("Capital usage");
-  tableCell.contains("Subcontracting");
-  tableCell.contains("Travel and subsistence");
-  tableCell.contains("Other costs");
-  tableCell.contains("Other Costs 2");
-  tableCell.contains("Other Costs 3");
-  tableCell.contains("Other Costs 4");
-  tableCell.contains("Other Costs 5");
-  tableCell.contains("Total");
+  cy.tableHeader("Labour");
+  cy.tableHeader("Overheads");
+  cy.tableHeader("Materials");
+  cy.tableHeader("Capital usage");
+  cy.tableHeader("Subcontracting");
+  cy.tableHeader("Travel and subsistence");
+  cy.tableHeader("Other costs");
+  cy.tableHeader("Other Costs 2");
+  cy.tableHeader("Other Costs 3");
+  cy.tableHeader("Other Costs 4");
+  cy.tableHeader("Other Costs 5");
+  cy.tableHeader("Total");
 };
 
 export const accessOpenClaim = () => {
@@ -152,6 +151,6 @@ export const learnFiles = () => {
 
 export const savedFromPrev = () => {
   cy.getByAriaLabel("Labour Period 2").should("contain.value", "1000");
-  cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£1,000.00");
+  cy.get("td.govuk-table__cell.sticky-col.sticky-col-right-3.govuk-table__cell--numeric").contains("£1,100.00");
   cy.getByAriaLabel("Overheads Period 2").should("contain.value", "1000");
 };

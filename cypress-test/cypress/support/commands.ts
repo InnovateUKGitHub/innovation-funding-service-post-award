@@ -35,6 +35,35 @@ const submitButton = (name: string) => {
   cy.get('button[type="submit"]').contains(name);
 };
 
+/**
+ * Note that this upload button is different to the one contained within Claims documents upload which is button_upload-qa
+ */
+const uploadButton = (name: string) => {
+  cy.get('button[type="submit"]').contains(name);
+};
+
+const tableCell = (name: string) => {
+  cy.get("td.govuk-table__cell");
+};
+
+const tableHeader = (name: string) => {
+  cy.get("th.govuk-table__header");
+};
+
+const assertPcrCompletionStatus = (pcrType: string, status: string) => {
+  cy.log("**assertPcrCompletionStatus**");
+  cy.get("li").contains(pcrType).get("strong").contains(status);
+};
+
+const clickCheckBox = (label: string, uncheck?: boolean) => {
+  cy.log("**clickCheckBox**");
+  if (uncheck) {
+    cy.getByLabel(label).scrollIntoView().wait(500).uncheck();
+  } else {
+    cy.getByLabel(label).scrollIntoView().wait(500).check();
+  }
+};
+
 Cypress.Commands.add("getByLabel", getByLabel);
 Cypress.Commands.add("getByQA", getByQA);
 Cypress.Commands.add("getByAriaLabel", getByAriaLabel);
@@ -42,3 +71,8 @@ Cypress.Commands.add("switchUserTo", switchUserTo);
 Cypress.Commands.add("resetUser", resetUser);
 Cypress.Commands.add("backLink", backLink);
 Cypress.Commands.add("submitButton", submitButton);
+Cypress.Commands.add("uploadButton", uploadButton);
+Cypress.Commands.add("tableCell", tableCell);
+Cypress.Commands.add("tableHeader", tableHeader);
+Cypress.Commands.add("assertPcrCompletionStatus", assertPcrCompletionStatus);
+Cypress.Commands.add("clickCheckBox", clickCheckBox);

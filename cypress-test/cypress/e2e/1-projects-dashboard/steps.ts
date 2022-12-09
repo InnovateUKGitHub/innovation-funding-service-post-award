@@ -40,8 +40,7 @@ export const shouldFilterProjectsUsingCheckboxes = ([label, expectedText]) => {
 
 export const shouldFilterProjectsUsingSearchFilter = () => {
   cy.get("input#search").type(testProjectName);
-
-  cy.get(projectCardCss).should("have.length", 1);
+  cy.get(projectCardCss).each(card => cy.wrap(card).contains(testProjectName));
 };
 
 export const shouldNavigateToProjectOverview = () => {

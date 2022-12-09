@@ -1,6 +1,10 @@
 import { visitApp } from "../../common/visit";
 import { backToProject, shouldShowProjectTitle } from "./steps";
 
+/**
+ * Note there is a requirement for a PCR to be in a draft state prior to this script being run - potentially add that step at the beginning of this
+ */
+
 describe("PCRs in Draft status can be deleted", () => {
   before(() => {
     visitApp("projects/a0E2600000kSotUEAS/pcrs/dashboard");

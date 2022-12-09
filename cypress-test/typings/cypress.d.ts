@@ -12,6 +12,11 @@ declare global {
       getByLabel(label: string): Chainable<Element>;
 
       /**
+       * Get the text value of the completion status on the PCR details page e.g. 'To do'
+       */
+      assertPcrCompletionStatus(pcrType: string, status: string): boolean;
+
+      /**
        * Gets an element based on QA data tag
        */
       getByQA(tag: string): Chainable<Element>;
@@ -42,6 +47,27 @@ declare global {
        * Gets the submit button with the matching name
        */
       submitButton(name: string): Chainable<Element>;
+
+      /**
+       *
+       *Gets the button with the matching name
+       */
+      uploadButton(name: string): Chainable<Element>;
+
+      /**
+       * Gets a table cell with matching name
+       */
+      tableCell(name: string): Chainable<Element>;
+
+      /**
+       * Gets table header with matching name
+       */
+      tableHeader(name: string): Chainable<Element>;
+
+      /**
+       * Clicks checkbox with matching label, scrolls into view and waits before checking
+       */
+      clickCheckBox(label: string, uncheck?: boolean): void;
     }
   }
 }
