@@ -1,6 +1,7 @@
 import { LogLevel } from "@framework/constants";
 import { buildSchema, registerEnumType } from "type-graphql";
 import { ClientConfigResolver } from "./resolver/ClientConfigResolver";
+import { CurrentUserResolver } from "./resolver/CurrentUserResolver";
 
 registerEnumType(LogLevel, {
   name: "LogLevel",
@@ -9,7 +10,7 @@ registerEnumType(LogLevel, {
 
 const getTypeGraphQLSchema = async () => {
   const schema = await buildSchema({
-    resolvers: [ClientConfigResolver] as const,
+    resolvers: [ClientConfigResolver, CurrentUserResolver] as const,
   });
 
   return schema;

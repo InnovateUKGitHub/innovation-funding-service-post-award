@@ -64,14 +64,18 @@ const ServerApp = ({ requestUrl, store, stores, modalRegister, relayEnvironment 
  * The main server side process handled here.
  */
 const serverRender =
-  ({ schema }: { schema: GraphQLSchema }) =>
+  ({ schema, errorCount = 0 }: { schema: GraphQLSchema; errorCount?: number }) =>
   async (req: Request, res: Response, error?: IAppError): Promise<void> => {
+    // If we've already tried to render the page 5 other times,
+    // throw it.
+    if (errorCount >= 5) throw error;
+
     const { nonce } = res.locals;
     const middleware = setupServerMiddleware();
     const context = contextProvider.start({ user: req.session?.user });
     const clientConfig = getClientConfig(context);
     const modalRegister = new ModalRegister();
-    const relayEnvironment = await getServerGraphQLEnvironment({ schema });
+    const relayEnvironment = await getServerGraphQLEnvironment({ req, res, error, schema });
     const preloadedQuery = loadQuery();
 
     // Pre-load site configuration options
@@ -166,7 +170,7 @@ const serverRender =
       );
     } catch (renderError: unknown) {
       // If an error occured, re-do our render with an error message instead.
-      serverRender({ schema })(req, res, renderError as IAppError);
+      serverRender({ schema, errorCount: errorCount + 1 })(req, res, renderError as IAppError);
     }
   };
 
