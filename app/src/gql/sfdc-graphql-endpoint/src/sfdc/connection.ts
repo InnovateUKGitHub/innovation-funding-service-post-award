@@ -1,7 +1,5 @@
-import { URL } from 'url';
 import fetch from 'isomorphic-fetch';
-import { Logger } from '../utils/logger';
-import { ISalesforceError } from '../utils/ISalesforceError';
+import { URL } from 'url';
 
 interface ConnectionConfig {
     instanceUrl: string;

@@ -7,8 +7,11 @@ import { useMounted } from "@ui/features";
 import { useContent } from "@ui/hooks";
 import { useStores } from "@ui/redux";
 import { useState } from "react";
+import { graphql } from "react-relay";
 import { useLocation } from "react-router-dom";
 import { DeveloperUserSwitcherPage } from "./UserSwitcher.page";
+import { useQuery } from "relay-hooks";
+import { UserSwitcherCurrentUserQuery } from "./__generated__/UserSwitcherCurrentUserQuery.graphql";
 
 /**
  * Get the link to the current page
@@ -40,6 +43,22 @@ const ResetUserForm = createTypedForm<string>();
 const ManuallyEnterUserForm = createTypedForm<UserSwitcherEmailFormInput>();
 const SelectProjectForm = createTypedForm<UserSwitcherFormInputs>();
 const SelectContactForm = createTypedForm<string>();
+
+const UserSwitcherCurrentUser = () => {
+  const { data, isLoading } = useQuery<UserSwitcherCurrentUserQuery>(graphql`
+    query UserSwitcherCurrentUserQuery {
+      currentUser
+    }
+  `);
+
+  if (isLoading) return null;
+
+  return (
+    <>
+      <p>Currently logged in as: {data?.currentUser ? data.currentUser : "Invalid User"}</p>
+    </>
+  );
+};
 
 const UserSwitcherProjectSelectorPartnerSelector = ({
   users,
@@ -284,6 +303,7 @@ const UserSwitcherManualEmailEntry = () => {
  */
 const UserSwitcher = () => (
   <Section title={x => x.components.userChanger.sectionTitle}>
+    <UserSwitcherCurrentUser />
     <UserSwitcherReset />
     <UserSwitcherProjectLoader />
     <UserSwitcherManualEmailEntry />

@@ -1,5 +1,4 @@
 import { existsSync, readFileSync, writeFileSync } from "fs";
-import { printSchema } from "graphql/utilities";
 import { resolvers } from "./sfdc-graphql-endpoint/src/graphql/resolvers";
 import { entitiesToSchema } from "./sfdc-graphql-endpoint/src/graphql/schema";
 import { Api } from "./sfdc-graphql-endpoint/src/sfdc/api";
