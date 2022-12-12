@@ -10722,6 +10722,7 @@ type Query {
   workThanks(limit: Int, offset: Int, where: workThanksWhere, orderBy: [workThanksOrderBy]): [workThanks]
   workThanksById(id: ID): workThanks
   clientConfig: ClientConfigObject!
+  currentUser: String
 }
 
 input accBatchSettingsCustomWhere {
