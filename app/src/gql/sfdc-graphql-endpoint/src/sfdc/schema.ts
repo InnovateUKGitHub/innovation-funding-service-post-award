@@ -4,7 +4,7 @@ import {
     SObjectChildRelationship,
     SObjectField,
     SObjectFieldType,
-} from './types/describe-sobject.js';
+} from './types/describe-sobject';
 
 export interface SfdcSchema {
     entities: { [name: string]: Entity };
