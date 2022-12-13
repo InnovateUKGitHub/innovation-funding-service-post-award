@@ -10,9 +10,12 @@ import { useContent } from "@ui/hooks";
 import { ErrorSummary } from "@ui/components/errorSummary";
 import { ErrorContainer } from "@ui/components/errors";
 import { SimpleString } from "@ui/components/renderers";
+import { GovWidthContainer } from "@ui/components/layout";
 
 export interface LoadingProps<T> {
   pending: Pending<T>;
+  page?: boolean;
+
   // TODO: Investigate a stricter type which has to return an element / null
   render: (data: T, loading?: boolean) => React.ReactNode;
   renderError?: (error: IAppError) => JSX.Element;
@@ -22,7 +25,7 @@ export interface LoadingProps<T> {
 /**
  * Loader component handles the loading status and changes to the UI for different loading states
  */
-export function Loader<T>({ pending, render, renderError, renderLoading }: LoadingProps<T>) {
+export function Loader<T>({ pending, render, renderError, renderLoading, page = false }: LoadingProps<T>) {
   const fallbackPendingError = new AppError(ErrorCode.UNKNOWN_ERROR, "An error has occurred while fetching data.");
 
   const handleWaiting = () => {
@@ -40,11 +43,13 @@ export function Loader<T>({ pending, render, renderError, renderLoading }: Loadi
   switch (pending.state) {
     case LoadingStatus.Failed:
       pendingElement = handleError(pending.error);
+      if (page) pendingElement = <GovWidthContainer>{pendingElement}</GovWidthContainer>;
       break;
 
     case LoadingStatus.Stale:
     case LoadingStatus.Loading:
       pendingElement = handleWaiting();
+      if (page) pendingElement = <GovWidthContainer>{pendingElement}</GovWidthContainer>;
       break;
 
     case LoadingStatus.Done:
@@ -75,7 +80,10 @@ export const LoadingMessage = () => {
 };
 
 /**
- * PageLoader component will show error container if there is an error, otherwise the Loader component will be rendered
+ * Displays a loading screen as a page-sized form factor.
+ * - shows the content of `render` if the `pending` succeeds.
+ * - shows an error if the `pending` errors.
+ * - shows a loading page while the `pending` is loading.
  */
 export function PageLoader<T>(props: LoadingProps<T>) {
   const handleError: LoadingProps<T>["renderError"] = renderError => {
@@ -90,5 +98,5 @@ export function PageLoader<T>(props: LoadingProps<T>) {
     return <ErrorContainer from="PageLoader" {...error} />;
   };
 
-  return <Loader renderError={handleError} {...props} />;
+  return <Loader page={true} renderError={handleError} {...props} />;
 }
