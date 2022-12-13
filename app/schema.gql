@@ -10721,7 +10721,7 @@ type Query {
   workBadgeDefinitionById(id: ID): workBadgeDefinition
   workThanks(limit: Int, offset: Int, where: workThanksWhere, orderBy: [workThanksOrderBy]): [workThanks]
   workThanksById(id: ID): workThanks
-  clientConfig: ClientConfigObject!
+  clientConfig: jc!
   currentUser: String
 }
 
@@ -12359,15 +12359,15 @@ input userProvisioningRequestOrderBy {
   parentId: [userProvisioningRequestOrderBy]
 }
 
-type ClientConfigObject {
-  features: ClientConfigFeaturesObject!
-  options: ClientConfigAppOptionsObject!
+type jc {
+  features: ac!
+  options: Ds!
   ifsRoot: String!
   ssoEnabled: Boolean!
   logLevel: LogLevel!
 }
 
-type ClientConfigFeaturesObject {
+type ac {
   changePeriodLengthWorkflow: Boolean!
   contentHint: Boolean!
   customContent: Boolean!
@@ -12376,11 +12376,11 @@ type ClientConfigFeaturesObject {
   futureTimeExtensionInYears: Int!
 }
 
-type ClientConfigAppOptionsObject {
+type Ds {
   maxFileSize: Int!
   maxUploadFileCount: Int!
   permittedFileTypes: [String!]!
-  permittedTypes: ClientConfigAppOptionsPermittedFileTypesObject!
+  permittedTypes: Yi!
   bankCheckValidationRetries: Int!
   bankCheckAddressScorePass: Int!
   bankCheckCompanyNameScorePass: Int!
@@ -12390,7 +12390,7 @@ type ClientConfigAppOptionsObject {
   nonJsMaxClaimLineItems: Int!
 }
 
-type ClientConfigAppOptionsPermittedFileTypesObject {
+type Yi {
   pdfTypes: [String!]!
   textTypes: [String!]!
   presentationTypes: [String!]!
