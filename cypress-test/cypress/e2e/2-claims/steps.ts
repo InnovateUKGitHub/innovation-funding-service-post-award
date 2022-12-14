@@ -120,10 +120,10 @@ export const forecastCostCats = () => {
   cy.tableHeader("Subcontracting");
   cy.tableHeader("Travel and subsistence");
   cy.tableHeader("Other costs");
-  cy.tableHeader("Other Costs 2");
-  cy.tableHeader("Other Costs 3");
-  cy.tableHeader("Other Costs 4");
-  cy.tableHeader("Other Costs 5");
+  cy.tableHeader("Other costs 2");
+  cy.tableHeader("Other costs 3");
+  cy.tableHeader("Other costs 4");
+  cy.tableHeader("Other costs 5");
   cy.tableHeader("Total");
 };
 
