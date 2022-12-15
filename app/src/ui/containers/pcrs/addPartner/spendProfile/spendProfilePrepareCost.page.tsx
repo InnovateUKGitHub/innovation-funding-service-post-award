@@ -166,7 +166,7 @@ class Component extends ContainerBase<PcrAddSpendProfileCostParams, Data, Callba
 
   private getBackLink(cost: PCRSpendProfileCostDto, pcrDto: PCRDto) {
     // If on the overheads costs page then jump straight back to the add partner spend profile step
-    if (cost.costCategory === CostCategoryType.Overheads) {
+    if (cost?.costCategory === CostCategoryType.Overheads) {
       const pcrItem = pcrDto.items.find(x => x.type === PCRItemType.PartnerAddition) as PCRItemForPartnerAdditionDto;
       return this.props.routes.pcrPrepareItem.getLink({
         itemId: pcrItem.id,
