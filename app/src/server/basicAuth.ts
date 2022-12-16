@@ -15,6 +15,11 @@ export const useBasicAuth = (req: Express.Request, res: Express.Response, next: 
       return next();
     }
 
+    const localhostNames = [/localhost/, /127\.0\.0\.1/];
+    if (localhostNames.some(hostname => hostname.test(req.hostname))) {
+      return next();
+    }
+
     // reject if missing authorisation header
     if (!req.headers.authorization || req.headers.authorization.indexOf("Basic ") === -1) {
       return res.status(401).json({ message: "Missing Authorization Header " });
