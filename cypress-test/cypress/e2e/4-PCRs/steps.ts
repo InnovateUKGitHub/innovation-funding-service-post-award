@@ -2,18 +2,6 @@ import { visitApp } from "../../common/visit";
 
 export const standardComments = "This is a standard message for use in a text box. I am 74 characters long.";
 
-export const backToProject = () => {
-  cy.get("a.govuk-back-link").contains("Back to project");
-};
-
-export const backToRequest = () => {
-  cy.get("a.govuk-back-link").contains("Back to project change requests");
-};
-
-export const backToSummary = () => {
-  cy.get("a.govuk-back-link").contains("Back to summary");
-};
-
 export const shouldShowProjectTitle = () => {
   cy.getByQA("page-title-caption").should("contain.text", "CYPRESS");
 };
@@ -72,10 +60,6 @@ export const pcrCommentBox = () => {
 
 export const characterCount = () => {
   cy.get("p.character-count.character-count--default.govuk-body").contains("You have 926 characters remaining");
-};
-
-export const backToPCRs = () => {
-  cy.get("a.govuk-back-link").contains("Back to project change requests");
 };
 
 export const deletePcr = () => {

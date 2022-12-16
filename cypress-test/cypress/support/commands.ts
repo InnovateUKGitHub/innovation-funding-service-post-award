@@ -19,6 +19,11 @@ const getByAriaLabel = (label: string) => {
   cy.get(`[aria-label="${label}"`);
 };
 
+const getByName = (label: string) => {
+  cy.log("**getByName**");
+  cy.get(`[name="${label}"`);
+};
+
 const switchUserTo = (email: string, goHome: boolean = false) => {
   cy.contains("User Switcher").click();
   cy.get("input#user-switcher-manual-input").scrollIntoView().clear().type(email);
@@ -29,8 +34,9 @@ const resetUser = (goHome: boolean = false) => {
   cy.getByQA(`reset-and-${goHome ? "home" : "stay"}`).click();
 };
 
-const backLink = () => {
-  cy.get("a.govuk-back-link");
+const backLink = (name: string) => {
+  cy.log("**backLink**");
+  cy.get("a.govuk-back-link").contains(name);
 };
 
 const submitButton = (name: string) => {
@@ -78,3 +84,4 @@ Cypress.Commands.add("tableCell", tableCell);
 Cypress.Commands.add("tableHeader", tableHeader);
 Cypress.Commands.add("assertPcrCompletionStatus", assertPcrCompletionStatus);
 Cypress.Commands.add("clickCheckBox", clickCheckBox);
+Cypress.Commands.add("getByName", getByName);

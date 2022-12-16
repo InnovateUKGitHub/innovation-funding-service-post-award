@@ -7,7 +7,7 @@ describe("Updating forecasts after claim costs and document upload", () => {
   });
 
   it("Should have a back option", () => {
-    cy.get(".govuk-back-link").contains("Back to update forecast");
+    cy.backLink("Back to update forecast");
   });
 
   it("Should have correct project title", shouldShowProjectTitle);

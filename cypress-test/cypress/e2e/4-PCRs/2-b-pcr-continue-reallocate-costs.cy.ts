@@ -1,5 +1,5 @@
 import { visitApp } from "../../common/visit";
-import { backToRequest, deletePcr, shouldShowProjectTitle } from "./steps";
+import { deletePcr, shouldShowProjectTitle } from "./steps";
 
 describe("Continues Reallocate costs to the costs tables page to access each partner", () => {
   before(() => {
@@ -21,7 +21,9 @@ describe("Continues Reallocate costs to the costs tables page to access each par
     cy.get("h1").should("contain.text", "Request");
   });
 
-  it("Should show back to request link", backToRequest);
+  it("Should have a back option", () => {
+    cy.backLink("Back to project change requests");
+  });
 
   it("Should show the project title", shouldShowProjectTitle);
 

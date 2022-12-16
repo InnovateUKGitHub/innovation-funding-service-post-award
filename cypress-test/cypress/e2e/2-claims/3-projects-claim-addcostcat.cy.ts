@@ -20,7 +20,7 @@ describe("Editing a claim by accessing cost categories", () => {
   });
 
   it("Should have a back option", () => {
-    cy.backLink().contains("Back to claims");
+    cy.backLink("Back to claims");
   });
 
   it("Should have the cost category table", shouldShowCostCatTable);
@@ -56,7 +56,7 @@ describe("Editing a claim by accessing cost categories", () => {
   it("Should navigate to files upload area", () => {
     //cy.intercept("POST", "/api/claim-details/*").as("uploadArea");
     cy.submitButton("Upload and remove documents").click();
-    cy.wait(7000);
+    cy.wait(5000);
   });
 
   it("Should allow a file to be uploaded", allowFileUpload);
@@ -68,7 +68,7 @@ describe("Editing a claim by accessing cost categories", () => {
   it("Should contain additional information heading and messaging", additionalInformationHeading);
 
   it("Has an area for writing free-text comments", () => {
-    cy.get("textarea#comments").type(standardComments);
+    cy.getByName("comments").clear().type(standardComments);
   });
 
   it("Should count how many characters you have used", () => {
@@ -76,7 +76,7 @@ describe("Editing a claim by accessing cost categories", () => {
   });
 
   it("Should save and return to the first claims screen", () => {
-    cy.getByQA("button_default-qa").click();
+    cy.submitButton("Save and return to claims").click();
     cy.wait(5000);
   });
 

@@ -1,5 +1,5 @@
 import { visitApp } from "../../common/visit";
-import { backToProject, shouldShowProjectTitle, shouldShowAllAccordion, pcrCommentBox, characterCount } from "./steps";
+import { shouldShowProjectTitle, shouldShowAllAccordion, pcrCommentBox, characterCount } from "./steps";
 
 describe("Creating Remove a partner PCR", () => {
   before(() => {
@@ -16,7 +16,9 @@ describe("Creating Remove a partner PCR", () => {
     cy.get("h1").should("contain.text", "Request");
   });
 
-  it("Should show back to project link", backToProject);
+  it("Should have a back option", () => {
+    cy.backLink("Back to summary");
+  });
 
   it("Should show the project title", shouldShowProjectTitle);
 

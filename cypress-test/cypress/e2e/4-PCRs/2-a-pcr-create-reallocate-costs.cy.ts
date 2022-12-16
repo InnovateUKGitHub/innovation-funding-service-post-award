@@ -1,12 +1,5 @@
 import { visitApp } from "../../common/visit";
-import {
-  backToProject,
-  characterCount,
-  deletePcr,
-  pcrCommentBox,
-  shouldShowAllAccordion,
-  shouldShowProjectTitle,
-} from "./steps";
+import { characterCount, deletePcr, pcrCommentBox, shouldShowAllAccordion, shouldShowProjectTitle } from "./steps";
 
 describe("Creating Reallocate Project Costs PCR", () => {
   before(() => {
@@ -27,7 +20,9 @@ describe("Creating Reallocate Project Costs PCR", () => {
     cy.get("h1").should("contain.text", "Request");
   });
 
-  it("Should show back to project link", backToProject);
+  it("Should have a back option", () => {
+    cy.backLink("Back to project");
+  });
 
   it("Should show the project title", shouldShowProjectTitle);
 

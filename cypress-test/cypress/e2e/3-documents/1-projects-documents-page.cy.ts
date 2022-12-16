@@ -21,7 +21,7 @@ describe("Project Documents page", () => {
   });
 
   it("Should show back to project link", () => {
-    cy.get("a.govuk-back-link").contains("Back to project");
+    cy.backLink("Back to project");
   });
 
   it("Should display correct project name", shouldShowProjectTitle);

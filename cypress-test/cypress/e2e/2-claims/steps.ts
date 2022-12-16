@@ -25,22 +25,23 @@ export const correctTableHeaders = () => {
 };
 
 export const newCostCatLineItem = () => {
-  cy.get("a.govuk-link").contains("Add a cost").click();
-  cy.get("input#description0.govuk-input").clear().type("Test line item");
-  cy.get("input#value0.govuk-input.govuk-table__cell--numeric").clear().type("1000");
+  cy.get("a").contains("Add a cost").click();
+  cy.getByName("description0").clear().type("Test line item");
+  cy.getByName("value0").clear().type("1000");
 };
 
 export const allowFileUpload = () => {
   cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
   //cy.intercept("POST", "/api/documents/claim-details/*").as("uploadDocuments");
   cy.submitButton("Upload documents").click();
-  cy.wait(7000);
+  cy.wait(5000);
   cy.getByQA("validation-message-content").contains("Your document has been uploaded.");
 };
 
 export const reflectCostAdded = () => {
   cy.get("tr.govuk-table__row").contains("Labour");
   cy.get("span.currency").contains("£1,000.00");
+  cy.wait(500);
 };
 
 export const clearUpCostCat = () => {
@@ -67,24 +68,24 @@ export const additionalInformationHeading = () => {
 
 export const returnToCostCatPage = () => {
   //cy.intercept("POST", "api/claim-details/*/1/*").as("saveToCostCat");
-  cy.getByQA("button_default-qa").click();
+  cy.submitButton("Save and return to claims").click();
   cy.wait(10000);
 };
 
 export const selectFileDescription = () => {
-  cy.get("select#description.govuk-select").select("10");
-  cy.get("select#description.govuk-select").select("30");
-  cy.get("select#description.govuk-select").select("60");
-  cy.get("select#description.govuk-select").select("110");
-  cy.get("select#description.govuk-select").select("120");
-  cy.get("select#description.govuk-select").select("210");
-  cy.get("select#description.govuk-select").select("220");
+  cy.get("select#description").select("10");
+  cy.get("select#description").select("30");
+  cy.get("select#description").select("60");
+  cy.get("select#description").select("110");
+  cy.get("select#description").select("120");
+  cy.get("select#description").select("210");
+  cy.get("select#description").select("220");
 };
 
 export const claimsDocUpload = () => {
-  cy.get("input#attachment.govuk-file-upload").selectFile("cypress/common/testfile.doc");
+  cy.get("input#attachment").selectFile("cypress/common/testfile.doc");
   cy.wait(3000);
-  cy.getByQA("button_upload-qa").contains("Upload documents").click();
+  cy.uploadButton("Upload documents").click();
   cy.wait(3000);
 };
 
@@ -141,12 +142,13 @@ export const forecastView = () => {
 
 export const claimCommentBox = () => {
   cy.get("h2").contains("Add comments");
-  cy.get("textarea#comments.govuk-textarea").clear().type(standardComments);
+  cy.getByName("comments").clear().type(standardComments);
 };
 
 export const learnFiles = () => {
-  cy.get("span.govuk-details__summary-text").contains("Learn more about files you can upload").click();
-  cy.get("span.govuk-body.markdown").contains("You can upload");
+  cy.get("span").contains("Learn more about files you can upload").click();
+  cy.get("p").contains("You can upload");
+  cy.get("p").contains("There is no limit");
 };
 
 export const savedFromPrev = () => {

@@ -12,7 +12,7 @@ describe("project dashboard as Finance Contact", () => {
     });
 
     it("Should have a back option", () => {
-      cy.get(".govuk-back-link").contains("Back to project");
+      cy.backLink("Back to project");
     });
 
     it("Should have the project name displayed", shouldShowProjectTitle);

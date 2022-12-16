@@ -11,6 +11,6 @@ export default defineConfig({
     env: {
       BASIC_AUTH: process.env.BASIC_AUTH,
     },
-    testIsolation: false
+    testIsolation: false,
   },
 });
