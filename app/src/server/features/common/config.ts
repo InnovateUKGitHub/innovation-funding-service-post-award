@@ -1,4 +1,5 @@
 import bytes from "bytes";
+import fs from "fs";
 import { parseLogLevel } from "@framework/types/logLevel";
 import { IAppOptions } from "@framework/types/IAppOptions";
 import { IFeatureFlags, LogLevel } from "@framework/types";
@@ -85,6 +86,10 @@ export interface IConfig {
     contentBucket: string;
     customContentPath: string;
   };
+
+  readonly basicAuth: {
+    credentials: string[];
+  };
 }
 
 const build = process.env.BUILD || `${Date.now()}`;
@@ -138,6 +143,14 @@ const sso = {
   providerUrl: process.env.SSO_PROVIDER_URL ?? "",
   signoutUrl: process.env.SSO_SIGNOUT_URL ?? "",
 };
+
+const credentials: string[] = (process.env.BASIC_AUTH || "")
+  .trim()
+  .split(/[\|\n]/)
+  .map(x => x.trim())
+  .filter(x => x);
+
+const basicAuth = { credentials };
 
 const urls = {
   ifsRoot: process.env.IFS_ROOT || "https://apply-for-innovation-funding.service.gov.uk",
@@ -221,6 +234,7 @@ export const configuration: IConfig = {
   cookieKey,
   timeouts,
   certificates,
+  basicAuth,
   features,
   logLevel,
   options,

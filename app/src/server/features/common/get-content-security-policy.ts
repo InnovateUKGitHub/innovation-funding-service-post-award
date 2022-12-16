@@ -48,6 +48,9 @@ export const policyConfig = (nonce: string): Record<CspPolicySources, (string | 
   "report-uri": ["/api/csp/violation-report"],
 });
 
+/**
+ * returns CSP configured with the passed in nonce
+ */
 export function getContentSecurityPolicy(nonceValue: string): string {
   const policyKeyDelimiter = "; ";
   const cspConfig = policyConfig(nonceValue);

@@ -4,6 +4,6 @@ import { Results } from "@ui/validation/results";
 export interface IAppError {
   code: ErrorCode;
   message: string;
-  results?: Results<any> | null;
+  results?: Results<ResultBase> | null;
   stack?: string;
 }

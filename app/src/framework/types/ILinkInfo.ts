@@ -4,6 +4,6 @@ import { IClientUser } from "./IUser";
 export interface ILinkInfo {
   path: string;
   routeName: string;
-  routeParams: any;
+  routeParams: AnyObject;
   accessControl: (user: IClientUser, config: IClientConfig) => boolean;
 }

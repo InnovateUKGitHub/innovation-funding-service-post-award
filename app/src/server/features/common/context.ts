@@ -206,7 +206,7 @@ export class Context implements Framework.IContext {
     const timer = this.startTimer(runnable.constructor.name);
     try {
       return runnable.run(this);
-    } catch (e: any) {
+    } catch (e: unknown) {
       this.logger.warn("Failed query", runnable.logMessage(), e);
       throw constructErrorResponse(e);
     } finally {
@@ -215,13 +215,13 @@ export class Context implements Framework.IContext {
   }
 
   public runQuery<TResult>(query: Common.QueryBase<TResult>): Promise<TResult> {
-    const runnable = query as any as Framework.IAsyncRunnable<TResult>;
+    const runnable = query as unknown as Framework.IAsyncRunnable<TResult>;
     this.logger.info("Running async query", runnable.logMessage());
     return this.runAsync(runnable);
   }
 
   public runSyncQuery<TResult>(query: Common.SyncQueryBase<TResult>): TResult {
-    const runnable = query as any as Framework.ISyncRunnable<TResult>;
+    const runnable = query as unknown as Framework.ISyncRunnable<TResult>;
     this.logger.info("Running sync query", runnable.logMessage());
     return this.runSync(runnable);
   }
@@ -229,13 +229,13 @@ export class Context implements Framework.IContext {
   public runCommand<TResult>(
     command: Common.CommandBase<TResult> | Common.NonAuthorisedCommandBase<TResult>,
   ): Promise<TResult> {
-    const runnable = command as any as Framework.IAsyncRunnable<TResult>;
+    const runnable = command as unknown as Framework.IAsyncRunnable<TResult>;
     this.logger.info("Running async command", ...runnable.logMessage());
     return this.runAsync(runnable);
   }
 
   public runSyncCommand<TResult>(command: Common.SyncCommandBase<TResult>): TResult {
-    const runnable = command as any as Framework.ISyncRunnable<TResult>;
+    const runnable = command as unknown as Framework.ISyncRunnable<TResult>;
     this.logger.info("Running sync command", runnable.logMessage());
     return this.runSync(runnable);
   }

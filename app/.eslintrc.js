@@ -76,7 +76,7 @@ module.exports = {
         "jsdoc/require-returns": "off",
         "@typescript-eslint/no-explicit-any": "warn",
         "@typescript-eslint/ban-types": "warn",
-        "jest/no-standalone-expect": "warn",
+        "jest/no-standalone-expect": ["warn", { additionalTestBlockFunctions: ["testCases"] }],
         "jest/no-conditional-expect": "warn",
         "jest/valid-expect": "warn",
         "jest/no-identical-title": "warn",

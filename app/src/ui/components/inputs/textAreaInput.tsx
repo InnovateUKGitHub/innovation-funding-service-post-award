@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import cx from "classnames";
-import { useDebounce, useResetValueOnNameChange } from "./input-utils";
+import { useDebounce, useUpdateStateValueOnPropsChange } from "./input-utils";
 import { InputProps } from "./common";
 import { CharacterCount, CharacterTypes } from "./CharacterCount";
 
@@ -15,7 +15,8 @@ export const TextAreaInput = (props: TextAreaInputProps) => {
   // Controlled state value.
   const [state, setState] = useState<{ value: string }>({ value: props.value ?? "" });
 
-  useResetValueOnNameChange(setState, props.name);
+  // If our input prop changes, change our controlled value.
+  useUpdateStateValueOnPropsChange(props.value ?? "", setState);
 
   const debouncedOnChange = useDebounce(props.onChange, props.debounce);
 

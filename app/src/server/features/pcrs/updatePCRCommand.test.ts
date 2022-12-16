@@ -678,8 +678,8 @@ describe("UpdatePCRCommand", () => {
         );
         const item = dto.items[0] as PCRItemForScopeChangeDto;
 
-        item.publicDescription = null as any;
-        item.projectSummary = null as any;
+        item.publicDescription = null;
+        item.projectSummary = null;
         await expect(
           context.runCommand(new UpdatePCRCommand(project.Id, projectChangeRequest.id, dto)),
         ).rejects.toThrow(ValidationError);

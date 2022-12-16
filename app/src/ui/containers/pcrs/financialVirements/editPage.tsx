@@ -15,6 +15,7 @@ import { createDto } from "@framework/util/dtoHelpers";
 import { roundCurrency, sumBy } from "@framework/util";
 import { CostCategoryDto } from "@framework/dtos/costCategoryDto";
 import { checkProjectCompetition } from "@ui/helpers/check-competition-type";
+import { capitalizeFirstWord } from "@shared/string-helpers";
 import { useContent } from "@ui/hooks";
 import { getAuthRoles } from "@framework/types";
 import { EditorStatus } from "@ui/constants/enums";
@@ -254,7 +255,7 @@ const EditPage = ({
                   key="costCategory"
                   qa="costCategory"
                   header={content.costCategoryName}
-                  value={x => x.costCategory.name}
+                  value={x => capitalizeFirstWord(x.costCategory.name)}
                   footer={content.partnerTotals}
                 />,
                 <VirementTable.Currency

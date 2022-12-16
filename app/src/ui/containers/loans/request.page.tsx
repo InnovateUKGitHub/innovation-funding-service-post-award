@@ -193,7 +193,7 @@ const LoansRequestContainer = (props: BaseProps & LoansRequestParams) => {
 
             const uploadedMessage = getContent(x =>
               x.pages.loansRequest.loanDocumentsUploaded({
-                firstName: dto.files[0]?.fileName,
+                firstFileName: dto.files[0]?.fileName,
                 count: dto.files.length,
               }),
             );

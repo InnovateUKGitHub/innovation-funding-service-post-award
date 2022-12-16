@@ -34,7 +34,7 @@ import { renderHtml } from "./html";
 /**
  * The main server side process handled here.
  */
-export async function serverRender(req: Request, res: Response, error?: IAppError): Promise<void> {
+export async function serverRender(req: Request, res: Response, error?: IAppError | Error): Promise<void> {
   const { nonce } = res.locals;
   const middleware = setupServerMiddleware();
   const context = contextProvider.start({ user: req.session?.user });

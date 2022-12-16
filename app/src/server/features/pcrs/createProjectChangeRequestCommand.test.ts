@@ -115,7 +115,7 @@ describe("Create PCR Command", () => {
       projectId: project.Id,
       status: PCRStatus.Draft,
       reasoningStatus: PCRItemStatus.ToDo,
-    } as any as PCRDto);
+    } as unknown as PCRDto);
 
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
@@ -128,7 +128,7 @@ describe("Create PCR Command", () => {
       projectId: project.Id,
       status: PCRStatus.Draft,
       reasoningStatus: PCRItemStatus.Complete,
-    } as any as PCRDto);
+    } as unknown as PCRDto);
 
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
@@ -141,7 +141,7 @@ describe("Create PCR Command", () => {
       projectId: project.Id,
       status: PCRStatus.Approved,
       reasoningStatus: PCRItemStatus.ToDo,
-    } as any as PCRDto);
+    } as unknown as PCRDto);
 
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
@@ -168,7 +168,7 @@ describe("Create PCR Command", () => {
           partnerId: partner.id,
         },
       ],
-    } as any as PCRDto);
+    } as unknown as PCRDto);
 
     await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
   });
@@ -194,7 +194,7 @@ describe("Create PCR Command", () => {
           partnerId: partner.id,
         },
       ],
-    } as any as PCRDto);
+    } as unknown as PCRDto);
 
     const id = await context.runCommand(command);
     const newPCR = context.repositories.projectChangeRequests.Items.find(x => x.id === id);
@@ -232,7 +232,7 @@ describe("Create PCR Command", () => {
           recordTypeId: recordTypes[0].id,
         },
       ],
-    } as any as PCRDto);
+    } as unknown as PCRDto);
     const auth = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.ProjectManager,
@@ -257,7 +257,7 @@ describe("Create PCR Command", () => {
           recordTypeId: recordTypes[0].id,
         },
       ],
-    } as any as PCRDto);
+    } as unknown as PCRDto);
     const auth = new Authorisation({
       [project.Id]: {
         projectRoles: ProjectRole.FinancialContact | ProjectRole.MonitoringOfficer | ProjectRole.Unknown,

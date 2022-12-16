@@ -38,7 +38,7 @@ export class Results<T> implements IValidationResult {
 }
 
 export class CombinedResultsValidator extends Results<ResultBase> {
-  constructor(...vals: Results<AnyObject>[]) {
+  constructor(...vals: Results<ResultBase>[]) {
     const errors = vals.reduce<Result[]>((a, b) => a.concat(b.errors), []);
     super(
       {},

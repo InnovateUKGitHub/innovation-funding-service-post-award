@@ -12,7 +12,7 @@ import * as Validation from "./common";
 import { Logger } from "@shared/developmentLogger";
 
 const invalidCharacterInFileName = (fileName: string) => {
-  return `You cannot upload '${fileName}' because it contains forbidden characters.`;
+  return `Your document '${fileName}' has failed due to the use of forbidden characters, please rename your document using only alphanumerics and a single dot.`;
 };
 
 const permittedFileTypeErrorMessage = (file: IFileWrapper | null) => {
@@ -167,7 +167,6 @@ function validateFileExtension<T extends Results<ResultBase>>(
  * validates file name
  */
 function validateFileName<T extends Results<ResultBase>>(results: T, file: IFileWrapper | null): Result {
-  // TODO: this needs to be moved to config
   const validCharacters = /^[\w\d\s\\.\-()]+$/;
 
   if (!file) {

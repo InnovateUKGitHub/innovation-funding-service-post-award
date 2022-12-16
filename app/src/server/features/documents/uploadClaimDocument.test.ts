@@ -57,8 +57,8 @@ describe("UploadClaimDocumentCommand", () => {
         partnerId: claim.Acc_ProjectParticipant__r.Id,
         periodId: claim.Acc_ProjectPeriodNumber__c,
       };
-
-      const command = new UploadClaimDocumentCommand(claimKey, badFile as any);
+      // @ts-expect-error invalid file object
+      const command = new UploadClaimDocumentCommand(claimKey, badFile);
       await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     });
 
@@ -126,7 +126,8 @@ describe("UploadClaimDocumentCommand", () => {
       };
       const notValidDescription: DocumentUploadDto = {
         file: context.testData.createFile("test", "file.csv"),
-        description: "invalid" as any as number,
+        // @ts-expect-error invalid document description
+        description: "invalid",
       };
       await expect(context.runCommand(new UploadClaimDocumentCommand(claimKey, validDescription))).resolves.toBe("1");
       await expect(context.runCommand(new UploadClaimDocumentCommand(claimKey, notValidDescription))).rejects.toThrow(

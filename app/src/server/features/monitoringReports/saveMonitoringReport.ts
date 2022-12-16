@@ -72,7 +72,7 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
       Acc_QuestionComments__c: insertDto.comments,
     }));
 
-    await Promise.all<{}>([
+    await Promise.all<AnyObject>([
       context.repositories.monitoringReportResponse.update(updateItems),
       context.repositories.monitoringReportResponse.insert(insertItems),
       context.repositories.monitoringReportResponse.delete(deleteItems),
@@ -95,7 +95,7 @@ export class SaveMonitoringReport extends CommandBase<boolean> {
     }
 
     // as we can save a queried by IUK report should this be dependent on the status of the report?
-    // discussed with Jamie and so unliklly not something to consider at the moment
+    // discussed with Jamie and it is unlikely -  not something to consider at the moment
     // user can always create a new report to sort this!
     const questions = await context.runQuery(new GetMonitoringReportActiveQuestions());
     const project = await context.runQuery(new GetByIdQuery(this.monitoringReportDto.projectId));

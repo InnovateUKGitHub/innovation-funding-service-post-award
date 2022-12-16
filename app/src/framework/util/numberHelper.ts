@@ -24,7 +24,10 @@ export function roundCurrency(value: number) {
   return roundedValue / 100;
 }
 
-export function diffAsPercentage<T extends number>(startingValue: T, secondValue: T) {
+/**
+ * returns difference between two numbers as a percentage to two decimal points
+ */
+export function diffAsPercentage(startingValue: number, secondValue: number) {
   if (startingValue === 0) return 0;
 
   const roundedStarting = roundCurrency(startingValue);

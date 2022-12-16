@@ -16,7 +16,7 @@ const mapProfileValue = (item: ISalesforceProfileDetails, value?: number): Forec
 });
 
 describe("UpdateInitialForecastDetailsCommand", () => {
-  it("when id not set expect validation exception", async () => {
+  it("throws an error when a project is inactive", async () => {
     const context = new TestContext();
 
     const project = context.testData.createProject(x => (x.Acc_ProjectStatus__c = "On Hold"));
@@ -24,13 +24,13 @@ describe("UpdateInitialForecastDetailsCommand", () => {
     const profileDetail = context.testData.createProfileDetail(undefined, partner);
     const dto: ForecastDetailsDTO[] = [
       {
-        id: null,
+        id: "123",
         costCategoryId: profileDetail.Acc_CostCategory__c,
         periodId: parseInt(profileDetail.Acc_CostCategory__c, 10),
         periodStart: new Date(profileDetail.Acc_ProjectPeriodStartDate__c),
         periodEnd: new Date(profileDetail.Acc_ProjectPeriodEndDate__c),
         value: 123,
-      } as any,
+      },
     ];
 
     const command = new UpdateInitialForecastDetailsCommand(project.Id, partner.id, dto, false);
@@ -45,13 +45,14 @@ describe("UpdateInitialForecastDetailsCommand", () => {
     const profileDetail = context.testData.createProfileDetail(undefined, partner);
     const dto: ForecastDetailsDTO[] = [
       {
+        // @ts-expect-error invalid id scenario
         id: null,
         costCategoryId: profileDetail.Acc_CostCategory__c,
         periodId: parseInt(profileDetail.Acc_CostCategory__c, 10),
         periodStart: new Date(profileDetail.Acc_ProjectPeriodStartDate__c),
         periodEnd: new Date(profileDetail.Acc_ProjectPeriodEndDate__c),
         value: 123,
-      } as any,
+      },
     ];
 
     const command = new UpdateInitialForecastDetailsCommand(project.Id, partner.id, dto, false);

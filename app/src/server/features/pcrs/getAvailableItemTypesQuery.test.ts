@@ -76,7 +76,7 @@ describe("authorisation", () => {
       },
     });
 
-    expect(context.runAccessControl(auth, query)).resolves.toBe(false);
+    await expect(context.runAccessControl(auth, query)).resolves.toBe(false);
   });
 
   test.each`
@@ -84,7 +84,7 @@ describe("authorisation", () => {
     ${"as financial contact"}  | ${ProjectRole.FinancialContact}
     ${"as monitoring officer"} | ${ProjectRole.MonitoringOfficer}
     ${"as project manager"}    | ${ProjectRole.ProjectManager}
-  `("$name", ({ projectRole }) => {
+  `("$name", async ({ projectRole }) => {
     const context = new TestContext();
     const project = context.testData.createProject();
     context.testData.createPartner(project);
@@ -97,6 +97,6 @@ describe("authorisation", () => {
       },
     });
 
-    expect(context.runAccessControl(auth, query)).resolves.toBe(true);
+    await expect(context.runAccessControl(auth, query)).resolves.toBe(true);
   });
 });

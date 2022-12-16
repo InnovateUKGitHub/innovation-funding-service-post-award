@@ -98,6 +98,9 @@ describe("createMonitoringReports", () => {
   });
 });
 
+/**
+ * helper function that returns a Monitoring Report Dto promise
+ */
 async function getCreateDto(context: TestContext, startDate?: string, endDate?: string): Promise<MonitoringReportDto> {
   const questions = await context.runQuery(new GetMonitoringReportActiveQuestions());
   const project = context.testData.createProject(x => {

@@ -4,6 +4,9 @@ interface ListWithPeriodId {
   periodId: number;
 }
 
+/**
+ * creates stub data with incrementing period
+ */
 function createIncrementingPeriodData(totalStubCount: number): ListWithPeriodId[] {
   const arr = [] as ListWithPeriodId[];
 

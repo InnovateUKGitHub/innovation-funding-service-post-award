@@ -12,7 +12,7 @@ describe("constructErrorResponse", () => {
   test.each`
     name            | error
     ${"NotFound"}   | ${new NotFoundError()}
-    ${"Validation"} | ${new ValidationError({} as unknown as Results<any>)}
+    ${"Validation"} | ${new ValidationError({} as Results<AnyObject>)}
     ${"Forbidden"}  | ${new ForbiddenError()}
     ${"BadRequest"} | ${new BadRequestError()}
   `("should return the $nameError unchanged", ({ error }: { error: Error }) => {

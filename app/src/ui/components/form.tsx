@@ -147,6 +147,7 @@ export const createTypedForm = <T,>() => {
     name: string;
     validation?: Result;
     placeholder?: string;
+    id?: string;
   }
 
   // TODO: Check accessibility - label + hint being required
@@ -447,6 +448,7 @@ export const createTypedForm = <T,>() => {
           <TextInput
             width={props.width}
             name={props.name}
+            id={props.id}
             value={props.value(formData, disabled)}
             onChange={handleChange}
             placeholder={props.placeholder}

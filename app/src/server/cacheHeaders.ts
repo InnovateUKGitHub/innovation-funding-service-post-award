@@ -29,3 +29,11 @@ export const setOwaspHeaders = (_req: Express.Request, res: Express.Response, ne
 
   return next();
 };
+
+export const setBasicAuth = (req: Express.Request, res: Express.Response, next: Express.NextFunction) => {
+  if (!configuration.sso.enabled) {
+    res.setHeader("WWW-Authenticate", 'Basic realm="User Visible Realm", charset="UTF-8"');
+  }
+
+  return next();
+};

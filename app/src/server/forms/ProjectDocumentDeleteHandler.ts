@@ -1,5 +1,4 @@
 import { IContext, ILinkInfo } from "@framework/types";
-import { MultipleDocumentUploadDto } from "@framework/dtos";
 
 import { configuration } from "@server/features/common";
 import { IFormBody, IFormButton, StandardFormHandlerBase } from "@server/forms/formHandlerBase";

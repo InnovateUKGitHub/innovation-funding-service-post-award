@@ -3,14 +3,14 @@ import { DocumentSummaryDto, PartnerDocumentSummaryDto } from "@framework/dtos/d
 import { getAuthRoles } from "@framework/types";
 import { getFileSize } from "@framework/util/files";
 import { Content } from "@ui/components/content";
-import { ITypedTable, TypedTable } from "@ui/components/table";
+import { ITypedTable, TableChild, TypedTable } from "@ui/components/table";
 import { createTypedForm } from "../form";
 import { DocumentsBase } from "./documents.interface";
 import { DocumentsUnavailable } from "./DocumentsUnavailable";
 import { ProjectPartnerDocumentEditProps } from "./DocumentView";
 
 export interface DocumentTableProps<T extends DocumentSummaryDto> extends DocumentsBase<T> {
-  customContent?: (table: ITypedTable<T>) => any;
+  customContent?: (table: ITypedTable<T>) => TableChild<T> | TableChild<T>[] | null;
 }
 
 const Form = createTypedForm<DocumentSummaryDto[]>();
@@ -165,7 +165,7 @@ export const PartnerDocumentTableWithDelete: React.FunctionComponent<
                 >
                   Remove
                 </Form.Button>
-                <Form.Hidden name="partnerId" value={_ => x.partnerId} />
+                <Form.Hidden name="partnerId" value={() => x.partnerId} />
               </Form.Form>
             );
           }}

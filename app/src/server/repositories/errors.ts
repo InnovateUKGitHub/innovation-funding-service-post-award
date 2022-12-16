@@ -33,3 +33,15 @@ export class SalesforceTokenError extends Error {
     super("AUTHENTICATION_ERROR");
   }
 }
+
+export class SalesforceErrorResponse extends Error {
+  constructor(public errorCode: string) {
+    super();
+  }
+}
+
+export const isSalesforceTokenError = (err: unknown): err is SalesforceTokenError =>
+  typeof err === "object" && err !== null && "message" in err && "tokenError" in err;
+
+export const isSalesforceErrorResponse = (err: unknown): err is SalesforceErrorResponse =>
+  typeof err === "object" && err !== null && "message" in err && "errorCode" in err;

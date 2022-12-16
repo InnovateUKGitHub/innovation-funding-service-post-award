@@ -55,6 +55,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       expect(insertedSpendProfileCost.costCategoryId).toBe(cost.costCategoryId);
       expect(insertedSpendProfileCost.description).toBe(cost.description);
     });
+
     it("should save multiple academic costs with different categories", async () => {
       const { context, project, pcrItem, spendProfileDto } = await setup();
       const directlyIncurredCostCategory = context.testData.createCostCategory({
@@ -101,6 +102,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       expect(item2.costCategoryId).toBe(exceptionsEquipmentCost.costCategoryId);
       expect(item2.description).toBe(exceptionsEquipmentCost.description);
     });
+
     it("should return a validation error if there is more than one academic cost of a given category", async () => {
       const { context, project, pcrItem, spendProfileDto } = await setup();
       const someCostCategory = context.testData.createCostCategory({
@@ -126,6 +128,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       const command = new UpdatePCRSpendProfileCommand(project.Id, pcrItem.id, spendProfileDto);
       await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     });
+
     it("should return a validation error if a value is specified but is not a currency", async () => {
       const { context, project, pcrItem, spendProfileDto } = await setup();
       const someCostCategory = context.testData.createCostCategory({
@@ -134,7 +137,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       });
       const cost: PCRSpendProfileAcademicCostDto = {
         id: "",
-        value: "not a currency value" as any as number,
+        value: "not a currency value" as unknown as number,
         costCategoryId: someCostCategory.id,
         costCategory: CostCategoryType.Academic,
         description: someCostCategory.description,
@@ -144,6 +147,7 @@ describe("UpdatePCRSpendProfileCommand", () => {
       const command = new UpdatePCRSpendProfileCommand(project.Id, pcrItem.id, spendProfileDto);
       await expect(context.runCommand(command)).rejects.toThrow(ValidationError);
     });
+
     it("should allow an academic cost with zero value", async () => {
       const { context, project, pcrItem, spendProfileDto } = await setup();
       const someCostCategory = context.testData.createCostCategory({
@@ -160,8 +164,9 @@ describe("UpdatePCRSpendProfileCommand", () => {
       spendProfileDto.costs = [cost];
 
       const command = new UpdatePCRSpendProfileCommand(project.Id, pcrItem.id, spendProfileDto);
-      await context.runCommand(command);
+      await expect(context.runCommand(command)).resolves.toEqual(true);
     });
+
     it("should allow an academic cost with null value", async () => {
       const { context, project, pcrItem, spendProfileDto } = await setup();
       const directlyIncurredCostCategory = context.testData.createCostCategory({

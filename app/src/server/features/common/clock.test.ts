@@ -86,16 +86,4 @@ describe("Clock class", () => {
       expect(() => clock.parseRequiredSalesforceDateTime(null)).toThrow("Invalid DateTime: empty");
     });
   });
-
-  // commented out because the time is resolving differently between when running locally and when running in the pipeline
-  // TODO: make this test consistent
-  // describe("parse", () => {
-  //   it("should return a jsDate from a valid string and formatter", () => {
-  //     expect(clock.parse(sfDate, "yyyy-MM-dd")).toEqual(jsDate);
-  //   });
-
-  //   it("should return null if no value passed in", () => {
-  //     expect(clock.parse("", "yyyy-MM-dd")).toBeNull();
-  //   });
-  // });
 });
