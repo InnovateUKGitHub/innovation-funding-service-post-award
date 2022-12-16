@@ -2,7 +2,7 @@ import { renderHook, render, screen } from "@testing-library/react";
 import { noop } from "@ui/helpers/noop";
 import { useState } from "react";
 
-import { useDebounce, useUpdateStateValueOnPropsChange } from "./input-utils";
+import { useDebounce, useUpdateStateValueOnPropsChange, useResetValueOnNameChange } from "./input-utils";
 
 describe("useDebounce", () => {
   afterEach(jest.clearAllMocks);
@@ -68,5 +68,23 @@ describe("useUpdateStateValueFromProps", () => {
     expect(screen.getByTestId("hook-test")).toHaveTextContent("0");
     rerender(<TestComponent value={1} />);
     expect(screen.getByTestId("hook-test")).toHaveTextContent("1");
+  });
+});
+
+describe("useResetValueOnNameChange", () => {
+  afterEach(jest.clearAllMocks);
+
+  const TestComponent = ({ name }: { name: string }) => {
+    const [state, setState] = useState<{ value: string }>({ value: "test value 1" });
+    useResetValueOnNameChange(setState, name);
+    return <h1 data-qa="hook-test">{state.value}</h1>;
+  };
+
+  it("should reset the state if the name changes, but not on the initial render", () => {
+    const { rerender } = render(<TestComponent name="test-name-one" />);
+
+    expect(screen.getByTestId("hook-test")).toHaveTextContent("test value 1");
+    rerender(<TestComponent name="test-name-two" />);
+    expect(screen.getByTestId("hook-test")).toHaveTextContent("");
   });
 });
