@@ -8,7 +8,7 @@ describe("Claims documents upload screen", () => {
   });
 
   it("Should have a back option", () => {
-    cy.get(".govuk-back-link").contains("Back to costs to be claimed");
+    cy.backLink("Back to costs to be claimed");
   });
 
   it("Should still display the project title", shouldShowProjectTitle);

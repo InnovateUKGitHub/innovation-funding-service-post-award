@@ -13,7 +13,7 @@ describe("Updating forecasts after claim costs and document upload", () => {
   });
 
   it("Should have a back option", () => {
-    cy.get(".govuk-back-link").contains("Back to costs to be claimed");
+    cy.backLink("Back to costs to be claimed");
   });
 
   it("Should let you navigate from the documents screen to forecasts", () => {

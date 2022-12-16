@@ -15,7 +15,7 @@ describe("project dashboard as Finance Contact", () => {
       it("Displays a claim in draft state", accessOpenClaim);
 
       it("Should have a back option", () => {
-        cy.get(".govuk-back-link").contains("Back to claims");
+        cy.backLink("Back to claims");
       });
 
       describe("The edit claims screen should show the following", () => {

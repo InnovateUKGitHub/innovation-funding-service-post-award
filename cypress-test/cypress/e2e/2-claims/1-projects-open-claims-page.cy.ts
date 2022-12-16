@@ -11,7 +11,7 @@ describe("project dashboard as Finance Contact", () => {
       cy.get("h2.card-link__title").contains("Claims").click();
     });
     it("Should have a back option", () => {
-      cy.get(".govuk-back-link").contains("Back to project");
+      cy.backLink("Back to project");
     });
     it("Should have the project name displayed", shouldShowProjectTitle);
 

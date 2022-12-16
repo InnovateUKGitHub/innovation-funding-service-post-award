@@ -1,19 +1,14 @@
 import { visitApp } from "../../common/visit";
-import {
-  backToProject,
-  beforeYouSubmit,
-  createRequestButton,
-  explainPCRTypes,
-  pcrCheckBoxes,
-  shouldShowProjectTitle,
-} from "./steps";
+import { beforeYouSubmit, createRequestButton, explainPCRTypes, pcrCheckBoxes, shouldShowProjectTitle } from "./steps";
 
 describe("Project Change Request front page", () => {
   before(() => {
     visitApp("projects/a0E2600000kSotUEAS/pcrs/dashboard");
   });
 
-  it("Should show back to project link", backToProject);
+  it("Should have a back option", () => {
+    cy.backLink("Back to project");
+  });
 
   it("Should show the project title", shouldShowProjectTitle);
 

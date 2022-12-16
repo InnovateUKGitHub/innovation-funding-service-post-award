@@ -1,9 +1,13 @@
 import { visitApp } from "../../common/visit";
-import { backToSummary, shouldShowProjectTitle } from "./steps";
+import { deletePcr, shouldShowProjectTitle } from "./steps";
 
 describe("Continues Reallocate costs to the costs tables page to access each partner", () => {
   before(() => {
     visitApp("projects/a0E2600000kSotUEAS/pcrs/create");
+  });
+
+  after(() => {
+    deletePcr();
   });
 
   it("Should select 'Reallocate project costs' checkbox", () => {
@@ -36,7 +40,9 @@ describe("Continues Reallocate costs to the costs tables page to access each par
     cy.wait(5000);
   });
 
-  it("Should show back to summary link", backToSummary);
+  it("Should have a back option", () => {
+    cy.backLink("Back to summary");
+  });
 
   it("Should show the project title", shouldShowProjectTitle);
 
@@ -59,7 +65,7 @@ describe("Continues Reallocate costs to the costs tables page to access each par
     cy.tableCell("Materials");
     cy.tableCell("Capital usage");
     cy.tableCell("Subcontracting");
-    cy.tableCell("Tracel and subsistence");
+    cy.tableCell("Travel and subsistence");
     cy.tableCell("Other costs");
     cy.tableCell("Other costs 2");
     cy.tableCell("Other costs 3");
