@@ -166,8 +166,13 @@ const UserSwitcherProjectSelector = ({ projects }: { projects: ProjectDto[] }) =
   // Create options for dropdown to select a project.
   const projectOptions: DropdownListOption[] = projects
     .sort((a, b) => {
-      const competitionCompare = a.competitionType.localeCompare(b.competitionType);
-      const nameCompare = a.title.localeCompare(b.title);
+      const compA = a.competitionType ?? "";
+      const compB = b.competitionType ?? "";
+      const titleA = a.title ?? "";
+      const titleB = b.title ?? "";
+
+      const competitionCompare = compA.localeCompare(compB);
+      const nameCompare = titleA.localeCompare(titleB);
 
       if (competitionCompare) return competitionCompare;
       return nameCompare;
@@ -175,7 +180,7 @@ const UserSwitcherProjectSelector = ({ projects }: { projects: ProjectDto[] }) =
     .map(p => ({
       id: p.id,
       value: p.id,
-      displayName: `[${p.competitionType}] ${p.title}`,
+      displayName: `[${p.competitionType ?? "Unknown"}] ${p.title ?? "Untitled"}`,
       qa: p.id,
     }));
 
