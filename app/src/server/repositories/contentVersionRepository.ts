@@ -32,6 +32,8 @@ export interface IContentVersionRepository {
   insertDocument(file: IFileWrapper, description: string): Promise<string>;
 }
 
+const BATCH_LIMIT = 200;
+
 export class ContentVersionRepository
   extends SalesforceRepositoryBase<ISalesforceDocument>
   implements IContentVersionRepository
@@ -52,12 +54,30 @@ export class ContentVersionRepository
     "Owner.Username",
   ];
 
-  public getDocuments(contentDocumentIds: string[], filter?: DocumentFilter): Promise<ISalesforceDocument[]> {
-    let queryString = `ContentDocumentId IN ('${contentDocumentIds.map(sss).join("', '")}') AND IsLatest = true`;
-    if (filter && filter.description) {
-      queryString += ` AND Description = '${sss(filter.description)}'`;
+  public async getDocuments(contentDocumentIds: string[], filter?: DocumentFilter): Promise<ISalesforceDocument[]> {
+    // Collate a list of all Salesforce fetches.
+    const promises = [];
+
+    // For each 200 documents...
+    for (let i = 0; i < contentDocumentIds.length; i += BATCH_LIMIT) {
+      // Make a query for the ContentDocument for all of the documents.
+      let queryString = `ContentDocumentId IN ('${contentDocumentIds
+        .slice(i, i + BATCH_LIMIT)
+        .map(sss)
+        .join("', '")}') AND IsLatest = true`;
+      if (filter && filter.description) {
+        queryString += ` AND Description = '${sss(filter.description)}'`;
+      }
+
+      // Add the promise for the 200 documents into the promise list.
+      promises.push(super.where(queryString));
     }
-    return super.where(queryString);
+
+    // Get an array of arrays of all ContentDocument.
+    const results = await Promise.all(promises);
+
+    // Flatten the array of arrays.
+    return results.flat();
   }
 
   public getDocument(versionId: string): Promise<ISalesforceDocument> {
