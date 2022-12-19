@@ -1099,7 +1099,7 @@
     "status": "Status",
     "fundingType": "Funding status",
     "partnerPostcode": "Location",
-    "contactEmail": "Project Contact Link Email",
+    "contactEmail": "Email",
     "contactInternalUsername": "Internal Username",
     "contactExternalUsername": "External Username",
     "nonFundedLabel": "Non-funded",
