@@ -18,8 +18,9 @@ export function useAppMount(params: Params): void {
     stores.partners.getPartnersForProject(projectId);
   }
 
+  const pathname = typeof window !== "undefined" ? window?.location?.pathname : "";
   // Note: Refactored from <Link /> - keep scroll position on page loads
   useEffect(() => {
     scrollToTheTopInstantly();
-  }, []);
+  }, [pathname]);
 }
