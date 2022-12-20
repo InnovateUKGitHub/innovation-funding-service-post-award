@@ -90,7 +90,7 @@ const OtherSourcesOfFunding = ({
             <button
               data-module="govuk-button"
               data-qa="add-fund"
-              className="govuk-link"
+              className="govuk-link govuk-!-font-size-19"
               onClick={e => addItem(e, pcrItemDto)}
             >
               <ACC.Content value={x => x.pages.pcrAddPartnerOtherFundingSources.buttonAdd} />
@@ -203,7 +203,7 @@ const OtherSourcesOfFunding = ({
                   <button
                     data-module="govuk-button"
                     data-qa="remove-fund"
-                    className="govuk-link"
+                    className="govuk-link govuk-!-font-size-19"
                     onClick={e => removeItem(e, pcrItem, dto)}
                   >
                     <ACC.Content value={x => x.pages.pcrAddPartnerOtherFundingSources.buttonRemove} />
