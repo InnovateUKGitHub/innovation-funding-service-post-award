@@ -4403,6 +4403,7 @@ type accProjectCustom implements Entity {
   recordActions(limit: Int, offset: Int, where: recordActionWhere, orderBy: [recordActionOrderBy]): [recordAction]
   tasks(limit: Int, offset: Int, where: taskWhere, orderBy: [taskOrderBy]): [task]
   topicAssignments(limit: Int, offset: Int, where: topicAssignmentWhere, orderBy: [topicAssignmentOrderBy]): [topicAssignment]
+  roles: GqlProjectRoles
 }
 
 input caseWhere {
@@ -4521,6 +4522,20 @@ input caseOrderBy {
   accProjectCustom: [accProjectCustomOrderBy]
   competitionNameCustom: OrderByEnum
   competitionTypeCustom: OrderByEnum
+}
+
+type GqlProjectRoles {
+  """Whether the currently logged in user is a 'Monitoring Officer'"""
+  isMo: Boolean
+
+  """Whether the currently logged in user is a 'Financial Contact'"""
+  isFc: Boolean
+
+  """Whether the currently logged in user is a 'Project Manager'"""
+  isPm: Boolean
+
+  """Whether the currently logged in user is the System User"""
+  isSu: Boolean
 }
 
 type accProjectChangeRequestCustom implements Entity {
@@ -10501,228 +10516,228 @@ type workThanks implements Entity {
 }
 
 type Query {
-  accBatchSettingsCustom(limit: Int, offset: Int, where: accBatchSettingsCustomWhere, orderBy: [accBatchSettingsCustomOrderBy]): [accBatchSettingsCustom]
+  accBatchSettingsCustom(limit: Int, offset: Int, where: accBatchSettingsCustomWhere, orderBy: [accBatchSettingsCustomOrderBy]): [accBatchSettingsCustom!]!
   accBatchSettingsCustomById(id: ID): accBatchSettingsCustom
-  accBroadcastMessageCustom(limit: Int, offset: Int, where: accBroadcastMessageCustomWhere, orderBy: [accBroadcastMessageCustomOrderBy]): [accBroadcastMessageCustom]
+  accBroadcastMessageCustom(limit: Int, offset: Int, where: accBroadcastMessageCustomWhere, orderBy: [accBroadcastMessageCustomOrderBy]): [accBroadcastMessageCustom!]!
   accBroadcastMessageCustomById(id: ID): accBroadcastMessageCustom
-  accClaimsCustom(limit: Int, offset: Int, where: accClaimsCustomWhere, orderBy: [accClaimsCustomOrderBy]): [accClaimsCustom]
+  accClaimsCustom(limit: Int, offset: Int, where: accClaimsCustomWhere, orderBy: [accClaimsCustomOrderBy]): [accClaimsCustom!]!
   accClaimsCustomById(id: ID): accClaimsCustom
-  accCostCategoryCustom(limit: Int, offset: Int, where: accCostCategoryCustomWhere, orderBy: [accCostCategoryCustomOrderBy]): [accCostCategoryCustom]
+  accCostCategoryCustom(limit: Int, offset: Int, where: accCostCategoryCustomWhere, orderBy: [accCostCategoryCustomOrderBy]): [accCostCategoryCustom!]!
   accCostCategoryCustomById(id: ID): accCostCategoryCustom
-  accDocumentTypeCustom(limit: Int, offset: Int, where: accDocumentTypeCustomWhere, orderBy: [accDocumentTypeCustomOrderBy]): [accDocumentTypeCustom]
+  accDocumentTypeCustom(limit: Int, offset: Int, where: accDocumentTypeCustomWhere, orderBy: [accDocumentTypeCustomOrderBy]): [accDocumentTypeCustom!]!
   accDocumentTypeCustomById(id: ID): accDocumentTypeCustom
-  accEmailSendersCustom(limit: Int, offset: Int, where: accEmailSendersCustomWhere, orderBy: [accEmailSendersCustomOrderBy]): [accEmailSendersCustom]
+  accEmailSendersCustom(limit: Int, offset: Int, where: accEmailSendersCustomWhere, orderBy: [accEmailSendersCustomOrderBy]): [accEmailSendersCustom!]!
   accEmailSendersCustomById(id: ID): accEmailSendersCustom
-  accIfsSpendProfileCustom(limit: Int, offset: Int, where: accIfsSpendProfileCustomWhere, orderBy: [accIfsSpendProfileCustomOrderBy]): [accIfsSpendProfileCustom]
+  accIfsSpendProfileCustom(limit: Int, offset: Int, where: accIfsSpendProfileCustomWhere, orderBy: [accIfsSpendProfileCustomOrderBy]): [accIfsSpendProfileCustom!]!
   accIfsSpendProfileCustomById(id: ID): accIfsSpendProfileCustom
-  accMonitoringAnswerCustom(limit: Int, offset: Int, where: accMonitoringAnswerCustomWhere, orderBy: [accMonitoringAnswerCustomOrderBy]): [accMonitoringAnswerCustom]
+  accMonitoringAnswerCustom(limit: Int, offset: Int, where: accMonitoringAnswerCustomWhere, orderBy: [accMonitoringAnswerCustomOrderBy]): [accMonitoringAnswerCustom!]!
   accMonitoringAnswerCustomById(id: ID): accMonitoringAnswerCustom
-  accMonitoringQuestionCustom(limit: Int, offset: Int, where: accMonitoringQuestionCustomWhere, orderBy: [accMonitoringQuestionCustomOrderBy]): [accMonitoringQuestionCustom]
+  accMonitoringQuestionCustom(limit: Int, offset: Int, where: accMonitoringQuestionCustomWhere, orderBy: [accMonitoringQuestionCustomOrderBy]): [accMonitoringQuestionCustom!]!
   accMonitoringQuestionCustomById(id: ID): accMonitoringQuestionCustom
-  accPrepaymentCustom(limit: Int, offset: Int, where: accPrepaymentCustomWhere, orderBy: [accPrepaymentCustomOrderBy]): [accPrepaymentCustom]
+  accPrepaymentCustom(limit: Int, offset: Int, where: accPrepaymentCustomWhere, orderBy: [accPrepaymentCustomOrderBy]): [accPrepaymentCustom!]!
   accPrepaymentCustomById(id: ID): accPrepaymentCustom
-  accProfileCustom(limit: Int, offset: Int, where: accProfileCustomWhere, orderBy: [accProfileCustomOrderBy]): [accProfileCustom]
+  accProfileCustom(limit: Int, offset: Int, where: accProfileCustomWhere, orderBy: [accProfileCustomOrderBy]): [accProfileCustom!]!
   accProfileCustomById(id: ID): accProfileCustom
-  accProgrammeCustom(limit: Int, offset: Int, where: accProgrammeCustomWhere, orderBy: [accProgrammeCustomOrderBy]): [accProgrammeCustom]
+  accProgrammeCustom(limit: Int, offset: Int, where: accProgrammeCustomWhere, orderBy: [accProgrammeCustomOrderBy]): [accProgrammeCustom!]!
   accProgrammeCustomById(id: ID): accProgrammeCustom
-  accProjectCustom(limit: Int, offset: Int, where: accProjectCustomWhere, orderBy: [accProjectCustomOrderBy]): [accProjectCustom]
+  accProjectCustom(limit: Int, offset: Int, where: accProjectCustomWhere, orderBy: [accProjectCustomOrderBy]): [accProjectCustom!]!
   accProjectCustomById(id: ID): accProjectCustom
-  accProjectChangeRequestCustom(limit: Int, offset: Int, where: accProjectChangeRequestCustomWhere, orderBy: [accProjectChangeRequestCustomOrderBy]): [accProjectChangeRequestCustom]
+  accProjectChangeRequestCustom(limit: Int, offset: Int, where: accProjectChangeRequestCustomWhere, orderBy: [accProjectChangeRequestCustomOrderBy]): [accProjectChangeRequestCustom!]!
   accProjectChangeRequestCustomById(id: ID): accProjectChangeRequestCustom
-  accProjectContactLinkCustom(limit: Int, offset: Int, where: accProjectContactLinkCustomWhere, orderBy: [accProjectContactLinkCustomOrderBy]): [accProjectContactLinkCustom]
+  accProjectContactLinkCustom(limit: Int, offset: Int, where: accProjectContactLinkCustomWhere, orderBy: [accProjectContactLinkCustomOrderBy]): [accProjectContactLinkCustom!]!
   accProjectContactLinkCustomById(id: ID): accProjectContactLinkCustom
-  accProjectParticipantCustom(limit: Int, offset: Int, where: accProjectParticipantCustomWhere, orderBy: [accProjectParticipantCustomOrderBy]): [accProjectParticipantCustom]
+  accProjectParticipantCustom(limit: Int, offset: Int, where: accProjectParticipantCustomWhere, orderBy: [accProjectParticipantCustomOrderBy]): [accProjectParticipantCustom!]!
   accProjectParticipantCustomById(id: ID): accProjectParticipantCustom
-  accStatusChangeCustom(limit: Int, offset: Int, where: accStatusChangeCustomWhere, orderBy: [accStatusChangeCustomOrderBy]): [accStatusChangeCustom]
+  accStatusChangeCustom(limit: Int, offset: Int, where: accStatusChangeCustomWhere, orderBy: [accStatusChangeCustomOrderBy]): [accStatusChangeCustom!]!
   accStatusChangeCustomById(id: ID): accStatusChangeCustom
-  accVirementsCustom(limit: Int, offset: Int, where: accVirementsCustomWhere, orderBy: [accVirementsCustomOrderBy]): [accVirementsCustom]
+  accVirementsCustom(limit: Int, offset: Int, where: accVirementsCustomWhere, orderBy: [accVirementsCustomOrderBy]): [accVirementsCustom!]!
   accVirementsCustomById(id: ID): accVirementsCustom
-  account(limit: Int, offset: Int, where: accountWhere, orderBy: [accountOrderBy]): [account]
+  account(limit: Int, offset: Int, where: accountWhere, orderBy: [accountOrderBy]): [account!]!
   accountById(id: ID): account
-  accountBrand(limit: Int, offset: Int, where: accountBrandWhere, orderBy: [accountBrandOrderBy]): [accountBrand]
+  accountBrand(limit: Int, offset: Int, where: accountBrandWhere, orderBy: [accountBrandOrderBy]): [accountBrand!]!
   accountBrandById(id: ID): accountBrand
-  accountContactRelation(limit: Int, offset: Int, where: accountContactRelationWhere, orderBy: [accountContactRelationOrderBy]): [accountContactRelation]
+  accountContactRelation(limit: Int, offset: Int, where: accountContactRelationWhere, orderBy: [accountContactRelationOrderBy]): [accountContactRelation!]!
   accountContactRelationById(id: ID): accountContactRelation
-  accountContactRole(limit: Int, offset: Int, where: accountContactRoleWhere, orderBy: [accountContactRoleOrderBy]): [accountContactRole]
+  accountContactRole(limit: Int, offset: Int, where: accountContactRoleWhere, orderBy: [accountContactRoleOrderBy]): [accountContactRole!]!
   accountContactRoleById(id: ID): accountContactRole
-  agChangeRequestLogCustom(limit: Int, offset: Int, where: agChangeRequestLogCustomWhere, orderBy: [agChangeRequestLogCustomOrderBy]): [agChangeRequestLogCustom]
+  agChangeRequestLogCustom(limit: Int, offset: Int, where: agChangeRequestLogCustomWhere, orderBy: [agChangeRequestLogCustomOrderBy]): [agChangeRequestLogCustom!]!
   agChangeRequestLogCustomById(id: ID): agChangeRequestLogCustom
-  approverMatrixCustom(limit: Int, offset: Int, where: approverMatrixCustomWhere, orderBy: [approverMatrixCustomOrderBy]): [approverMatrixCustom]
+  approverMatrixCustom(limit: Int, offset: Int, where: approverMatrixCustomWhere, orderBy: [approverMatrixCustomOrderBy]): [approverMatrixCustom!]!
   approverMatrixCustomById(id: ID): approverMatrixCustom
-  assessorProfileCustom(limit: Int, offset: Int, where: assessorProfileCustomWhere, orderBy: [assessorProfileCustomOrderBy]): [assessorProfileCustom]
+  assessorProfileCustom(limit: Int, offset: Int, where: assessorProfileCustomWhere, orderBy: [assessorProfileCustomOrderBy]): [assessorProfileCustom!]!
   assessorProfileCustomById(id: ID): assessorProfileCustom
-  assessorSkillCustom(limit: Int, offset: Int, where: assessorSkillCustomWhere, orderBy: [assessorSkillCustomOrderBy]): [assessorSkillCustom]
+  assessorSkillCustom(limit: Int, offset: Int, where: assessorSkillCustomWhere, orderBy: [assessorSkillCustomOrderBy]): [assessorSkillCustom!]!
   assessorSkillCustomById(id: ID): assessorSkillCustom
-  asset(limit: Int, offset: Int, where: assetWhere, orderBy: [assetOrderBy]): [asset]
+  asset(limit: Int, offset: Int, where: assetWhere, orderBy: [assetOrderBy]): [asset!]!
   assetById(id: ID): asset
-  assetRelationship(limit: Int, offset: Int, where: assetRelationshipWhere, orderBy: [assetRelationshipOrderBy]): [assetRelationship]
+  assetRelationship(limit: Int, offset: Int, where: assetRelationshipWhere, orderBy: [assetRelationshipOrderBy]): [assetRelationship!]!
   assetRelationshipById(id: ID): assetRelationship
-  bidsCustom(limit: Int, offset: Int, where: bidsCustomWhere, orderBy: [bidsCustomOrderBy]): [bidsCustom]
+  bidsCustom(limit: Int, offset: Int, where: bidsCustomWhere, orderBy: [bidsCustomOrderBy]): [bidsCustom!]!
   bidsCustomById(id: ID): bidsCustom
-  businessCaseCustom(limit: Int, offset: Int, where: businessCaseCustomWhere, orderBy: [businessCaseCustomOrderBy]): [businessCaseCustom]
+  businessCaseCustom(limit: Int, offset: Int, where: businessCaseCustomWhere, orderBy: [businessCaseCustomOrderBy]): [businessCaseCustom!]!
   businessCaseCustomById(id: ID): businessCaseCustom
-  campaign(limit: Int, offset: Int, where: campaignWhere, orderBy: [campaignOrderBy]): [campaign]
+  campaign(limit: Int, offset: Int, where: campaignWhere, orderBy: [campaignOrderBy]): [campaign!]!
   campaignById(id: ID): campaign
-  campaignMember(limit: Int, offset: Int, where: campaignMemberWhere, orderBy: [campaignMemberOrderBy]): [campaignMember]
+  campaignMember(limit: Int, offset: Int, where: campaignMemberWhere, orderBy: [campaignMemberOrderBy]): [campaignMember!]!
   campaignMemberById(id: ID): campaignMember
-  candidateProjectCustom(limit: Int, offset: Int, where: candidateProjectCustomWhere, orderBy: [candidateProjectCustomOrderBy]): [candidateProjectCustom]
+  candidateProjectCustom(limit: Int, offset: Int, where: candidateProjectCustomWhere, orderBy: [candidateProjectCustomOrderBy]): [candidateProjectCustom!]!
   candidateProjectCustomById(id: ID): candidateProjectCustom
-  case(limit: Int, offset: Int, where: caseWhere, orderBy: [caseOrderBy]): [case]
+  case(limit: Int, offset: Int, where: caseWhere, orderBy: [caseOrderBy]): [case!]!
   caseById(id: ID): case
-  caseContactRole(limit: Int, offset: Int, where: caseContactRoleWhere, orderBy: [caseContactRoleOrderBy]): [caseContactRole]
+  caseContactRole(limit: Int, offset: Int, where: caseContactRoleWhere, orderBy: [caseContactRoleOrderBy]): [caseContactRole!]!
   caseContactRoleById(id: ID): caseContactRole
-  chatterActivity(limit: Int, offset: Int, where: chatterActivityWhere, orderBy: [chatterActivityOrderBy]): [chatterActivity]
+  chatterActivity(limit: Int, offset: Int, where: chatterActivityWhere, orderBy: [chatterActivityOrderBy]): [chatterActivity!]!
   chatterActivityById(id: ID): chatterActivity
-  collaborationGroup(limit: Int, offset: Int, where: collaborationGroupWhere, orderBy: [collaborationGroupOrderBy]): [collaborationGroup]
+  collaborationGroup(limit: Int, offset: Int, where: collaborationGroupWhere, orderBy: [collaborationGroupOrderBy]): [collaborationGroup!]!
   collaborationGroupById(id: ID): collaborationGroup
-  collaborationGroupMember(limit: Int, offset: Int, where: collaborationGroupMemberWhere, orderBy: [collaborationGroupMemberOrderBy]): [collaborationGroupMember]
+  collaborationGroupMember(limit: Int, offset: Int, where: collaborationGroupMemberWhere, orderBy: [collaborationGroupMemberOrderBy]): [collaborationGroupMember!]!
   collaborationGroupMemberById(id: ID): collaborationGroupMember
-  competitionCustom(limit: Int, offset: Int, where: competitionCustomWhere, orderBy: [competitionCustomOrderBy]): [competitionCustom]
+  competitionCustom(limit: Int, offset: Int, where: competitionCustomWhere, orderBy: [competitionCustomOrderBy]): [competitionCustom!]!
   competitionCustomById(id: ID): competitionCustom
-  contact(limit: Int, offset: Int, where: contactWhere, orderBy: [contactOrderBy]): [contact]
+  contact(limit: Int, offset: Int, where: contactWhere, orderBy: [contactOrderBy]): [contact!]!
   contactById(id: ID): contact
-  contactNoteCustom(limit: Int, offset: Int, where: contactNoteCustomWhere, orderBy: [contactNoteCustomOrderBy]): [contactNoteCustom]
+  contactNoteCustom(limit: Int, offset: Int, where: contactNoteCustomWhere, orderBy: [contactNoteCustomOrderBy]): [contactNoteCustom!]!
   contactNoteCustomById(id: ID): contactNoteCustom
-  contentVersion(limit: Int, offset: Int, where: contentVersionWhere, orderBy: [contentVersionOrderBy]): [contentVersion]
+  contentVersion(limit: Int, offset: Int, where: contentVersionWhere, orderBy: [contentVersionOrderBy]): [contentVersion!]!
   contentVersionById(id: ID): contentVersion
-  contract(limit: Int, offset: Int, where: contractWhere, orderBy: [contractOrderBy]): [contract]
+  contract(limit: Int, offset: Int, where: contractWhere, orderBy: [contractOrderBy]): [contract!]!
   contractById(id: ID): contract
-  contractContactRole(limit: Int, offset: Int, where: contractContactRoleWhere, orderBy: [contractContactRoleOrderBy]): [contractContactRole]
+  contractContactRole(limit: Int, offset: Int, where: contractContactRoleWhere, orderBy: [contractContactRoleOrderBy]): [contractContactRole!]!
   contractContactRoleById(id: ID): contractContactRole
-  disableTriggersCustom(limit: Int, offset: Int, where: disableTriggersCustomWhere, orderBy: [disableTriggersCustomOrderBy]): [disableTriggersCustom]
+  disableTriggersCustom(limit: Int, offset: Int, where: disableTriggersCustomWhere, orderBy: [disableTriggersCustomOrderBy]): [disableTriggersCustom!]!
   disableTriggersCustomById(id: ID): disableTriggersCustom
-  duplicateRecordItem(limit: Int, offset: Int, where: duplicateRecordItemWhere, orderBy: [duplicateRecordItemOrderBy]): [duplicateRecordItem]
+  duplicateRecordItem(limit: Int, offset: Int, where: duplicateRecordItemWhere, orderBy: [duplicateRecordItemOrderBy]): [duplicateRecordItem!]!
   duplicateRecordItemById(id: ID): duplicateRecordItem
-  duplicateRecordSet(limit: Int, offset: Int, where: duplicateRecordSetWhere, orderBy: [duplicateRecordSetOrderBy]): [duplicateRecordSet]
+  duplicateRecordSet(limit: Int, offset: Int, where: duplicateRecordSetWhere, orderBy: [duplicateRecordSetOrderBy]): [duplicateRecordSet!]!
   duplicateRecordSetById(id: ID): duplicateRecordSet
-  emailMessage(limit: Int, offset: Int, where: emailMessageWhere, orderBy: [emailMessageOrderBy]): [emailMessage]
+  emailMessage(limit: Int, offset: Int, where: emailMessageWhere, orderBy: [emailMessageOrderBy]): [emailMessage!]!
   emailMessageById(id: ID): emailMessage
-  event(limit: Int, offset: Int, where: eventWhere, orderBy: [eventOrderBy]): [event]
+  event(limit: Int, offset: Int, where: eventWhere, orderBy: [eventOrderBy]): [event!]!
   eventById(id: ID): event
-  exceptionCustom(limit: Int, offset: Int, where: exceptionCustomWhere, orderBy: [exceptionCustomOrderBy]): [exceptionCustom]
+  exceptionCustom(limit: Int, offset: Int, where: exceptionCustomWhere, orderBy: [exceptionCustomOrderBy]): [exceptionCustom!]!
   exceptionCustomById(id: ID): exceptionCustom
-  externalIdCustom(limit: Int, offset: Int, where: externalIdCustomWhere, orderBy: [externalIdCustomOrderBy]): [externalIdCustom]
+  externalIdCustom(limit: Int, offset: Int, where: externalIdCustomWhere, orderBy: [externalIdCustomOrderBy]): [externalIdCustom!]!
   externalIdCustomById(id: ID): externalIdCustom
-  feedItem(limit: Int, offset: Int, where: feedItemWhere, orderBy: [feedItemOrderBy]): [feedItem]
+  feedItem(limit: Int, offset: Int, where: feedItemWhere, orderBy: [feedItemOrderBy]): [feedItem!]!
   feedItemById(id: ID): feedItem
-  forecastingAdjustment(limit: Int, offset: Int, where: forecastingAdjustmentWhere, orderBy: [forecastingAdjustmentOrderBy]): [forecastingAdjustment]
+  forecastingAdjustment(limit: Int, offset: Int, where: forecastingAdjustmentWhere, orderBy: [forecastingAdjustmentOrderBy]): [forecastingAdjustment!]!
   forecastingAdjustmentById(id: ID): forecastingAdjustment
-  forecastingCategoryMapping(limit: Int, offset: Int, where: forecastingCategoryMappingWhere, orderBy: [forecastingCategoryMappingOrderBy]): [forecastingCategoryMapping]
+  forecastingCategoryMapping(limit: Int, offset: Int, where: forecastingCategoryMappingWhere, orderBy: [forecastingCategoryMappingOrderBy]): [forecastingCategoryMapping!]!
   forecastingCategoryMappingById(id: ID): forecastingCategoryMapping
-  forecastingOwnerAdjustment(limit: Int, offset: Int, where: forecastingOwnerAdjustmentWhere, orderBy: [forecastingOwnerAdjustmentOrderBy]): [forecastingOwnerAdjustment]
+  forecastingOwnerAdjustment(limit: Int, offset: Int, where: forecastingOwnerAdjustmentWhere, orderBy: [forecastingOwnerAdjustmentOrderBy]): [forecastingOwnerAdjustment!]!
   forecastingOwnerAdjustmentById(id: ID): forecastingOwnerAdjustment
-  forecastingQuota(limit: Int, offset: Int, where: forecastingQuotaWhere, orderBy: [forecastingQuotaOrderBy]): [forecastingQuota]
+  forecastingQuota(limit: Int, offset: Int, where: forecastingQuotaWhere, orderBy: [forecastingQuotaOrderBy]): [forecastingQuota!]!
   forecastingQuotaById(id: ID): forecastingQuota
-  forecastingTypeToCategory(limit: Int, offset: Int, where: forecastingTypeToCategoryWhere, orderBy: [forecastingTypeToCategoryOrderBy]): [forecastingTypeToCategory]
+  forecastingTypeToCategory(limit: Int, offset: Int, where: forecastingTypeToCategoryWhere, orderBy: [forecastingTypeToCategoryOrderBy]): [forecastingTypeToCategory!]!
   forecastingTypeToCategoryById(id: ID): forecastingTypeToCategory
-  idea(limit: Int, offset: Int, where: ideaWhere, orderBy: [ideaOrderBy]): [idea]
+  idea(limit: Int, offset: Int, where: ideaWhere, orderBy: [ideaOrderBy]): [idea!]!
   ideaById(id: ID): idea
-  individual(limit: Int, offset: Int, where: individualWhere, orderBy: [individualOrderBy]): [individual]
+  individual(limit: Int, offset: Int, where: individualWhere, orderBy: [individualOrderBy]): [individual!]!
   individualById(id: ID): individual
-  innovateApiOrgSettingsCustom(limit: Int, offset: Int, where: innovateApiOrgSettingsCustomWhere, orderBy: [innovateApiOrgSettingsCustomOrderBy]): [innovateApiOrgSettingsCustom]
+  innovateApiOrgSettingsCustom(limit: Int, offset: Int, where: innovateApiOrgSettingsCustomWhere, orderBy: [innovateApiOrgSettingsCustomOrderBy]): [innovateApiOrgSettingsCustom!]!
   innovateApiOrgSettingsCustomById(id: ID): innovateApiOrgSettingsCustom
-  lead(limit: Int, offset: Int, where: leadWhere, orderBy: [leadOrderBy]): [lead]
+  lead(limit: Int, offset: Int, where: leadWhere, orderBy: [leadOrderBy]): [lead!]!
   leadById(id: ID): lead
-  loanCustom(limit: Int, offset: Int, where: loanCustomWhere, orderBy: [loanCustomOrderBy]): [loanCustom]
+  loanCustom(limit: Int, offset: Int, where: loanCustomWhere, orderBy: [loanCustomOrderBy]): [loanCustom!]!
   loanCustomById(id: ID): loanCustom
-  loanNotificationCustom(limit: Int, offset: Int, where: loanNotificationCustomWhere, orderBy: [loanNotificationCustomOrderBy]): [loanNotificationCustom]
+  loanNotificationCustom(limit: Int, offset: Int, where: loanNotificationCustomWhere, orderBy: [loanNotificationCustomOrderBy]): [loanNotificationCustom!]!
   loanNotificationCustomById(id: ID): loanNotificationCustom
-  loansGlobalSettingsCustom(limit: Int, offset: Int, where: loansGlobalSettingsCustomWhere, orderBy: [loansGlobalSettingsCustomOrderBy]): [loansGlobalSettingsCustom]
+  loansGlobalSettingsCustom(limit: Int, offset: Int, where: loansGlobalSettingsCustomWhere, orderBy: [loansGlobalSettingsCustomOrderBy]): [loansGlobalSettingsCustom!]!
   loansGlobalSettingsCustomById(id: ID): loansGlobalSettingsCustom
-  loansPartBSurveyMdt(limit: Int, offset: Int, where: loansPartBSurveyMdtWhere, orderBy: [loansPartBSurveyMdtOrderBy]): [loansPartBSurveyMdt]
+  loansPartBSurveyMdt(limit: Int, offset: Int, where: loansPartBSurveyMdtWhere, orderBy: [loansPartBSurveyMdtOrderBy]): [loansPartBSurveyMdt!]!
   loansPartBSurveyMdtById(id: ID): loansPartBSurveyMdt
-  lotCustom(limit: Int, offset: Int, where: lotCustomWhere, orderBy: [lotCustomOrderBy]): [lotCustom]
+  lotCustom(limit: Int, offset: Int, where: lotCustomWhere, orderBy: [lotCustomOrderBy]): [lotCustom!]!
   lotCustomById(id: ID): lotCustom
-  lotApplicationCustom(limit: Int, offset: Int, where: lotApplicationCustomWhere, orderBy: [lotApplicationCustomOrderBy]): [lotApplicationCustom]
+  lotApplicationCustom(limit: Int, offset: Int, where: lotApplicationCustomWhere, orderBy: [lotApplicationCustomOrderBy]): [lotApplicationCustom!]!
   lotApplicationCustomById(id: ID): lotApplicationCustom
-  lotMemberCustom(limit: Int, offset: Int, where: lotMemberCustomWhere, orderBy: [lotMemberCustomOrderBy]): [lotMemberCustom]
+  lotMemberCustom(limit: Int, offset: Int, where: lotMemberCustomWhere, orderBy: [lotMemberCustomOrderBy]): [lotMemberCustom!]!
   lotMemberCustomById(id: ID): lotMemberCustom
-  macro(limit: Int, offset: Int, where: macroWhere, orderBy: [macroOrderBy]): [macro]
+  macro(limit: Int, offset: Int, where: macroWhere, orderBy: [macroOrderBy]): [macro!]!
   macroById(id: ID): macro
-  macroInstruction(limit: Int, offset: Int, where: macroInstructionWhere, orderBy: [macroInstructionOrderBy]): [macroInstruction]
+  macroInstruction(limit: Int, offset: Int, where: macroInstructionWhere, orderBy: [macroInstructionOrderBy]): [macroInstruction!]!
   macroInstructionById(id: ID): macroInstruction
-  moCertificateCustom(limit: Int, offset: Int, where: moCertificateCustomWhere, orderBy: [moCertificateCustomOrderBy]): [moCertificateCustom]
+  moCertificateCustom(limit: Int, offset: Int, where: moCertificateCustomWhere, orderBy: [moCertificateCustomOrderBy]): [moCertificateCustom!]!
   moCertificateCustomById(id: ID): moCertificateCustom
-  moProjectParticipantCustom(limit: Int, offset: Int, where: moProjectParticipantCustomWhere, orderBy: [moProjectParticipantCustomOrderBy]): [moProjectParticipantCustom]
+  moProjectParticipantCustom(limit: Int, offset: Int, where: moProjectParticipantCustomWhere, orderBy: [moProjectParticipantCustomOrderBy]): [moProjectParticipantCustom!]!
   moProjectParticipantCustomById(id: ID): moProjectParticipantCustom
-  moProjectSkillCustom(limit: Int, offset: Int, where: moProjectSkillCustomWhere, orderBy: [moProjectSkillCustomOrderBy]): [moProjectSkillCustom]
+  moProjectSkillCustom(limit: Int, offset: Int, where: moProjectSkillCustomWhere, orderBy: [moProjectSkillCustomOrderBy]): [moProjectSkillCustom!]!
   moProjectSkillCustomById(id: ID): moProjectSkillCustom
-  moResourceSkillCustom(limit: Int, offset: Int, where: moResourceSkillCustomWhere, orderBy: [moResourceSkillCustomOrderBy]): [moResourceSkillCustom]
+  moResourceSkillCustom(limit: Int, offset: Int, where: moResourceSkillCustomWhere, orderBy: [moResourceSkillCustomOrderBy]): [moResourceSkillCustom!]!
   moResourceSkillCustomById(id: ID): moResourceSkillCustom
-  moSkillInnovateCustom(limit: Int, offset: Int, where: moSkillInnovateCustomWhere, orderBy: [moSkillInnovateCustomOrderBy]): [moSkillInnovateCustom]
+  moSkillInnovateCustom(limit: Int, offset: Int, where: moSkillInnovateCustomWhere, orderBy: [moSkillInnovateCustomOrderBy]): [moSkillInnovateCustom!]!
   moSkillInnovateCustomById(id: ID): moSkillInnovateCustom
-  networkMember(limit: Int, offset: Int, where: networkMemberWhere, orderBy: [networkMemberOrderBy]): [networkMember]
+  networkMember(limit: Int, offset: Int, where: networkMemberWhere, orderBy: [networkMemberOrderBy]): [networkMember!]!
   networkMemberById(id: ID): networkMember
-  objectsFieldTrackingCustom(limit: Int, offset: Int, where: objectsFieldTrackingCustomWhere, orderBy: [objectsFieldTrackingCustomOrderBy]): [objectsFieldTrackingCustom]
+  objectsFieldTrackingCustom(limit: Int, offset: Int, where: objectsFieldTrackingCustomWhere, orderBy: [objectsFieldTrackingCustomOrderBy]): [objectsFieldTrackingCustom!]!
   objectsFieldTrackingCustomById(id: ID): objectsFieldTrackingCustom
-  opportunity(limit: Int, offset: Int, where: opportunityWhere, orderBy: [opportunityOrderBy]): [opportunity]
+  opportunity(limit: Int, offset: Int, where: opportunityWhere, orderBy: [opportunityOrderBy]): [opportunity!]!
   opportunityById(id: ID): opportunity
-  opportunityCompetitor(limit: Int, offset: Int, where: opportunityCompetitorWhere, orderBy: [opportunityCompetitorOrderBy]): [opportunityCompetitor]
+  opportunityCompetitor(limit: Int, offset: Int, where: opportunityCompetitorWhere, orderBy: [opportunityCompetitorOrderBy]): [opportunityCompetitor!]!
   opportunityCompetitorById(id: ID): opportunityCompetitor
-  opportunityContactRole(limit: Int, offset: Int, where: opportunityContactRoleWhere, orderBy: [opportunityContactRoleOrderBy]): [opportunityContactRole]
+  opportunityContactRole(limit: Int, offset: Int, where: opportunityContactRoleWhere, orderBy: [opportunityContactRoleOrderBy]): [opportunityContactRole!]!
   opportunityContactRoleById(id: ID): opportunityContactRole
-  opportunityLineItem(limit: Int, offset: Int, where: opportunityLineItemWhere, orderBy: [opportunityLineItemOrderBy]): [opportunityLineItem]
+  opportunityLineItem(limit: Int, offset: Int, where: opportunityLineItemWhere, orderBy: [opportunityLineItemOrderBy]): [opportunityLineItem!]!
   opportunityLineItemById(id: ID): opportunityLineItem
-  order(limit: Int, offset: Int, where: orderWhere, orderBy: [orderOrderBy]): [order]
+  order(limit: Int, offset: Int, where: orderWhere, orderBy: [orderOrderBy]): [order!]!
   orderById(id: ID): order
-  orderItem(limit: Int, offset: Int, where: orderItemWhere, orderBy: [orderItemOrderBy]): [orderItem]
+  orderItem(limit: Int, offset: Int, where: orderItemWhere, orderBy: [orderItemOrderBy]): [orderItem!]!
   orderItemById(id: ID): orderItem
-  partnerRole(limit: Int, offset: Int, where: partnerRoleWhere, orderBy: [partnerRoleOrderBy]): [partnerRole]
+  partnerRole(limit: Int, offset: Int, where: partnerRoleWhere, orderBy: [partnerRoleOrderBy]): [partnerRole!]!
   partnerRoleById(id: ID): partnerRole
-  personalInformationCustom(limit: Int, offset: Int, where: personalInformationCustomWhere, orderBy: [personalInformationCustomOrderBy]): [personalInformationCustom]
+  personalInformationCustom(limit: Int, offset: Int, where: personalInformationCustomWhere, orderBy: [personalInformationCustomOrderBy]): [personalInformationCustom!]!
   personalInformationCustomById(id: ID): personalInformationCustom
-  pricebookTwo(limit: Int, offset: Int, where: pricebookTwoWhere, orderBy: [pricebookTwoOrderBy]): [pricebookTwo]
+  pricebookTwo(limit: Int, offset: Int, where: pricebookTwoWhere, orderBy: [pricebookTwoOrderBy]): [pricebookTwo!]!
   pricebookTwoById(id: ID): pricebookTwo
-  pricebookEntry(limit: Int, offset: Int, where: pricebookEntryWhere, orderBy: [pricebookEntryOrderBy]): [pricebookEntry]
+  pricebookEntry(limit: Int, offset: Int, where: pricebookEntryWhere, orderBy: [pricebookEntryOrderBy]): [pricebookEntry!]!
   pricebookEntryById(id: ID): pricebookEntry
-  productTwo(limit: Int, offset: Int, where: productTwoWhere, orderBy: [productTwoOrderBy]): [productTwo]
+  productTwo(limit: Int, offset: Int, where: productTwoWhere, orderBy: [productTwoOrderBy]): [productTwo!]!
   productTwoById(id: ID): productTwo
-  profileSkill(limit: Int, offset: Int, where: profileSkillWhere, orderBy: [profileSkillOrderBy]): [profileSkill]
+  profileSkill(limit: Int, offset: Int, where: profileSkillWhere, orderBy: [profileSkillOrderBy]): [profileSkill!]!
   profileSkillById(id: ID): profileSkill
-  quickText(limit: Int, offset: Int, where: quickTextWhere, orderBy: [quickTextOrderBy]): [quickText]
+  quickText(limit: Int, offset: Int, where: quickTextWhere, orderBy: [quickTextOrderBy]): [quickText!]!
   quickTextById(id: ID): quickText
-  quote(limit: Int, offset: Int, where: quoteWhere, orderBy: [quoteOrderBy]): [quote]
+  quote(limit: Int, offset: Int, where: quoteWhere, orderBy: [quoteOrderBy]): [quote!]!
   quoteById(id: ID): quote
-  quoteLineItem(limit: Int, offset: Int, where: quoteLineItemWhere, orderBy: [quoteLineItemOrderBy]): [quoteLineItem]
+  quoteLineItem(limit: Int, offset: Int, where: quoteLineItemWhere, orderBy: [quoteLineItemOrderBy]): [quoteLineItem!]!
   quoteLineItemById(id: ID): quoteLineItem
-  recordAction(limit: Int, offset: Int, where: recordActionWhere, orderBy: [recordActionOrderBy]): [recordAction]
+  recordAction(limit: Int, offset: Int, where: recordActionWhere, orderBy: [recordActionOrderBy]): [recordAction!]!
   recordActionById(id: ID): recordAction
-  recordType(limit: Int, offset: Int, where: recordTypeWhere, orderBy: [recordTypeOrderBy]): [recordType]
+  recordType(limit: Int, offset: Int, where: recordTypeWhere, orderBy: [recordTypeOrderBy]): [recordType!]!
   recordTypeById(id: ID): recordType
-  scorecard(limit: Int, offset: Int, where: scorecardWhere, orderBy: [scorecardOrderBy]): [scorecard]
+  scorecard(limit: Int, offset: Int, where: scorecardWhere, orderBy: [scorecardOrderBy]): [scorecard!]!
   scorecardById(id: ID): scorecard
-  scorecardAssociation(limit: Int, offset: Int, where: scorecardAssociationWhere, orderBy: [scorecardAssociationOrderBy]): [scorecardAssociation]
+  scorecardAssociation(limit: Int, offset: Int, where: scorecardAssociationWhere, orderBy: [scorecardAssociationOrderBy]): [scorecardAssociation!]!
   scorecardAssociationById(id: ID): scorecardAssociation
-  scorecardMetric(limit: Int, offset: Int, where: scorecardMetricWhere, orderBy: [scorecardMetricOrderBy]): [scorecardMetric]
+  scorecardMetric(limit: Int, offset: Int, where: scorecardMetricWhere, orderBy: [scorecardMetricOrderBy]): [scorecardMetric!]!
   scorecardMetricById(id: ID): scorecardMetric
-  site(limit: Int, offset: Int, where: siteWhere, orderBy: [siteOrderBy]): [site]
+  site(limit: Int, offset: Int, where: siteWhere, orderBy: [siteOrderBy]): [site!]!
   siteById(id: ID): site
-  socialPersona(limit: Int, offset: Int, where: socialPersonaWhere, orderBy: [socialPersonaOrderBy]): [socialPersona]
+  socialPersona(limit: Int, offset: Int, where: socialPersonaWhere, orderBy: [socialPersonaOrderBy]): [socialPersona!]!
   socialPersonaById(id: ID): socialPersona
-  socialPost(limit: Int, offset: Int, where: socialPostWhere, orderBy: [socialPostOrderBy]): [socialPost]
+  socialPost(limit: Int, offset: Int, where: socialPostWhere, orderBy: [socialPostOrderBy]): [socialPost!]!
   socialPostById(id: ID): socialPost
-  solution(limit: Int, offset: Int, where: solutionWhere, orderBy: [solutionOrderBy]): [solution]
+  solution(limit: Int, offset: Int, where: solutionWhere, orderBy: [solutionOrderBy]): [solution!]!
   solutionById(id: ID): solution
-  streamingChannel(limit: Int, offset: Int, where: streamingChannelWhere, orderBy: [streamingChannelOrderBy]): [streamingChannel]
+  streamingChannel(limit: Int, offset: Int, where: streamingChannelWhere, orderBy: [streamingChannelOrderBy]): [streamingChannel!]!
   streamingChannelById(id: ID): streamingChannel
-  task(limit: Int, offset: Int, where: taskWhere, orderBy: [taskOrderBy]): [task]
+  task(limit: Int, offset: Int, where: taskWhere, orderBy: [taskOrderBy]): [task!]!
   taskById(id: ID): task
-  topic(limit: Int, offset: Int, where: topicWhere, orderBy: [topicOrderBy]): [topic]
+  topic(limit: Int, offset: Int, where: topicWhere, orderBy: [topicOrderBy]): [topic!]!
   topicById(id: ID): topic
-  topicAssignment(limit: Int, offset: Int, where: topicAssignmentWhere, orderBy: [topicAssignmentOrderBy]): [topicAssignment]
+  topicAssignment(limit: Int, offset: Int, where: topicAssignmentWhere, orderBy: [topicAssignmentOrderBy]): [topicAssignment!]!
   topicAssignmentById(id: ID): topicAssignment
-  triggersCustom(limit: Int, offset: Int, where: triggersCustomWhere, orderBy: [triggersCustomOrderBy]): [triggersCustom]
+  triggersCustom(limit: Int, offset: Int, where: triggersCustomWhere, orderBy: [triggersCustomOrderBy]): [triggersCustom!]!
   triggersCustomById(id: ID): triggersCustom
-  userProvisioningRequest(limit: Int, offset: Int, where: userProvisioningRequestWhere, orderBy: [userProvisioningRequestOrderBy]): [userProvisioningRequest]
+  userProvisioningRequest(limit: Int, offset: Int, where: userProvisioningRequestWhere, orderBy: [userProvisioningRequestOrderBy]): [userProvisioningRequest!]!
   userProvisioningRequestById(id: ID): userProvisioningRequest
-  workBadge(limit: Int, offset: Int, where: workBadgeWhere, orderBy: [workBadgeOrderBy]): [workBadge]
+  workBadge(limit: Int, offset: Int, where: workBadgeWhere, orderBy: [workBadgeOrderBy]): [workBadge!]!
   workBadgeById(id: ID): workBadge
-  workBadgeDefinition(limit: Int, offset: Int, where: workBadgeDefinitionWhere, orderBy: [workBadgeDefinitionOrderBy]): [workBadgeDefinition]
+  workBadgeDefinition(limit: Int, offset: Int, where: workBadgeDefinitionWhere, orderBy: [workBadgeDefinitionOrderBy]): [workBadgeDefinition!]!
   workBadgeDefinitionById(id: ID): workBadgeDefinition
-  workThanks(limit: Int, offset: Int, where: workThanksWhere, orderBy: [workThanksOrderBy]): [workThanks]
+  workThanks(limit: Int, offset: Int, where: workThanksWhere, orderBy: [workThanksOrderBy]): [workThanks!]!
   workThanksById(id: ID): workThanks
-  clientConfig: jc!
-  currentUser: String
+  clientConfig: ClientConfigObject!
+  currentUser: CurrentUserObject!
 }
 
 input accBatchSettingsCustomWhere {
@@ -12359,15 +12374,15 @@ input userProvisioningRequestOrderBy {
   parentId: [userProvisioningRequestOrderBy]
 }
 
-type jc {
-  features: ac!
-  options: Ds!
+type ClientConfigObject {
+  features: ClientConfigFeaturesObject!
+  options: ClientConfigAppOptionsObject!
   ifsRoot: String!
   ssoEnabled: Boolean!
   logLevel: LogLevel!
 }
 
-type ac {
+type ClientConfigFeaturesObject {
   changePeriodLengthWorkflow: Boolean!
   contentHint: Boolean!
   customContent: Boolean!
@@ -12376,11 +12391,11 @@ type ac {
   futureTimeExtensionInYears: Int!
 }
 
-type Ds {
+type ClientConfigAppOptionsObject {
   maxFileSize: Int!
   maxUploadFileCount: Int!
   permittedFileTypes: [String!]!
-  permittedTypes: Yi!
+  permittedTypes: ClientConfigAppOptionsPermittedFileTypesObject!
   bankCheckValidationRetries: Int!
   bankCheckAddressScorePass: Int!
   bankCheckCompanyNameScorePass: Int!
@@ -12390,7 +12405,7 @@ type Ds {
   nonJsMaxClaimLineItems: Int!
 }
 
-type Yi {
+type ClientConfigAppOptionsPermittedFileTypesObject {
   pdfTypes: [String!]!
   textTypes: [String!]!
   presentationTypes: [String!]!
@@ -12405,4 +12420,9 @@ enum LogLevel {
   INFO
   WARN
   ERROR
+}
+
+type CurrentUserObject {
+  email: String
+  isSystemUser: Boolean!
 }

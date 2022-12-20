@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, ReactNode, Suspense } from "react";
 
 import { AppError } from "@shared/appError";
 import { createErrorPayload } from "@shared/create-error-payload";
@@ -11,6 +11,8 @@ import { ErrorSummary } from "@ui/components/errorSummary";
 import { ErrorContainer } from "@ui/components/errors";
 import { SimpleString } from "@ui/components/renderers";
 import { GovWidthContainer } from "@ui/components/layout";
+import { useQuery } from "relay-hooks";
+import { OperationType } from "relay-runtime";
 
 export interface LoadingProps<T> {
   pending: Pending<T>;
@@ -100,3 +102,40 @@ export function PageLoader<T>(props: LoadingProps<T>) {
 
   return <Loader page={true} renderError={handleError} {...props} />;
 }
+
+const SuspensePageLoader = ({ children }: { children: ReactNode }) => (
+  <Suspense fallback={<LoadingMessage />}>{children}</Suspense>
+);
+
+type graphqlLoadingAndErrorType<T extends OperationType> = ReturnType<typeof useQuery<T>>;
+
+const isGraphQLLoading = <T extends OperationType>(
+  data: graphqlLoadingAndErrorType<T>["data"],
+  error: graphqlLoadingAndErrorType<T>["error"],
+  isLoading: graphqlLoadingAndErrorType<T>["isLoading"],
+): data is null | undefined => {
+  if (isLoading || error) return true;
+  return false;
+};
+
+const GraphQLLoader = <T extends OperationType>(props: Pick<graphqlLoadingAndErrorType<T>, "error" | "isLoading">) => {
+  if (props.isLoading) {
+    return <LoadingMessage />;
+  }
+
+  if (props.error) {
+    const error = createErrorPayload(
+      {
+        code: ErrorCode.UNKNOWN_ERROR,
+        message: props.error.message,
+      },
+      true,
+    ).params;
+
+    return <ErrorContainer from="PageLoader" {...error} />;
+  }
+
+  return null;
+};
+
+export { SuspensePageLoader, isGraphQLLoading, GraphQLLoader };

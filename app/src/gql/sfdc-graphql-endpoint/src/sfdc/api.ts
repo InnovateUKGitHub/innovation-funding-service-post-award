@@ -17,7 +17,7 @@ export class Api {
         );
     }
 
-    async executeSOQL(query: string): Promise<SOQLResult> {
+    async executeSOQL(query: string): Promise<SOQLResult<AnyObject>> {
         return this.connection.fetch(`/services/data/${this.version}/query/`, {
             searchParams: {
                 q: query,
