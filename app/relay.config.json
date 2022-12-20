@@ -1,5 +1,0 @@
-{
-  "src": "./src/",
-  "schema": "./schema.gql",
-  "language": "typescript"
-}

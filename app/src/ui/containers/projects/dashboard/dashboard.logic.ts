@@ -1,189 +1,207 @@
-import {
-  getAuthRoles,
-  PartnerClaimStatus,
-  PartnerDto,
-  PartnerStatus,
-  ProjectDto,
-  ProjectStatus,
-} from "@framework/types";
-import { projectPriorityComparator } from "@framework/util";
-
-import { CuratedSection, CuratedSections, ProjectData, Section, FilterOptions } from "./Dashboard.interface";
-
-function filterReducer(
-  types: FilterOptions[],
-  sectionState: Section,
-  project: ProjectDto,
-  partner: PartnerDto | undefined,
-): boolean {
-  if (!types.length) return true;
-
-  // Note: Hide anything that does not match a filter
-  let matchesFilter = false;
-
-  const state = new Set(types);
-  const { isFc, isMo, isPm } = getAuthRoles(project.roles);
-
-  if (isPm && state.has("PCRS_QUERIED")) {
-    matchesFilter ||= project.pcrsQueried > 0;
-  }
-
-  if (isMo && state.has("CLAIMS_TO_REVIEW")) {
-    matchesFilter ||= project.claimsToReview > 0;
-  }
-
-  if (isMo && state.has("PCRS_TO_REVIEW")) {
-    matchesFilter ||= project.pcrsToReview > 0;
-  }
-
-  if (isFc && state.has("SETUP_REQUIRED")) {
-    matchesFilter ||= sectionState === "pending";
-  }
-
-  if (isFc && partner) {
-    if (state.has("CLAIMS_TO_RESPOND")) {
-      matchesFilter ||= partner.claimStatus === PartnerClaimStatus.ClaimQueried;
-    }
-
-    if (state.has("CLAIMS_TO_SUBMIT")) {
-      matchesFilter ||= partner.claimStatus === PartnerClaimStatus.ClaimDue;
-    }
-
-    if (state.has("CLAIMS_TO_UPLOAD_REPORT")) {
-      matchesFilter ||= partner.claimStatus === PartnerClaimStatus.IARRequired;
-    }
-  }
-
-  return matchesFilter;
-}
-
-interface ProjectFilterOption {
-  id: FilterOptions;
-  label: string;
-}
-
-const projectFilters: Record<"fc" | "mo" | "pm", ProjectFilterOption[]> = {
-  pm: [{ id: "PCRS_QUERIED", label: "PCR's being queried" }],
-  mo: [
-    { id: "CLAIMS_TO_REVIEW", label: "Claims to review" },
-    { id: "PCRS_TO_REVIEW", label: "PCR's to review" },
-  ],
-  fc: [
-    { id: "SETUP_REQUIRED", label: "Not completed setup" },
-    { id: "CLAIMS_TO_SUBMIT", label: "Claims to submit" },
-    { id: "CLAIMS_TO_UPLOAD_REPORT", label: "Claims missing documents" },
-    { id: "CLAIMS_TO_RESPOND", label: "Claims needing responses" },
-  ],
-};
-
-export function getAvailableProjectFilters(projects: ProjectDto[]): ProjectFilterOption[] {
-  if (!projects.length) return [];
-
-  // Note: If the first role is a super admin then all projects are the same
-  const { isSuperAdmin } = getAuthRoles(projects[0].roles);
-
-  if (isSuperAdmin) {
-    return [...projectFilters.pm, ...projectFilters.mo, ...projectFilters.fc];
-  }
-
-  let filters: ProjectFilterOption[] = [];
-
-  if (projects.find(x => getAuthRoles(x.roles).isPm)) filters = [...filters, ...projectFilters.pm];
-  if (projects.find(x => getAuthRoles(x.roles).isMo)) filters = [...filters, ...projectFilters.mo];
-  if (projects.find(x => getAuthRoles(x.roles).isFc)) filters = [...filters, ...projectFilters.fc];
-
-  return filters;
-}
-
-export function generateFilteredProjects(filters: FilterOptions[], projects: ProjectDto[], partners: PartnerDto[]) {
-  let totalProjects: number = 0;
-
-  // TODO: Refactor to use a template literal interface when TSC 4.1 has been upgraded = [key in ${CuratedSections}Total]
-  const curatedTotals: CuratedSection<number> = {
-    open: 0,
-    pending: 0,
-    upcoming: 0,
-    archived: 0,
-  };
-
-  const curatedProjects: CuratedSection<ProjectData[]> = {
-    open: [],
-    pending: [],
-    upcoming: [],
-    archived: [],
-  };
-
-  for (const project of projects) {
-    const projectPartner = getPartnerOnProject(project, partners);
-
-    const curatedSection = getProjectSection(project, projectPartner);
-    const canFilterProject = filterReducer(filters, curatedSection, project, projectPartner);
-
-    if (!canFilterProject) continue;
-
-    // Note: Only allow curated keys, not all sections match ui sections
-    const key: CuratedSections = curatedSection === "awaiting" ? "open" : curatedSection;
-
-    curatedProjects[key].push({ curatedSection, project, partner: projectPartner });
-    curatedTotals[key] += 1;
-    totalProjects += 1;
-  }
-
-  // Note: Sort only open projects
-  curatedProjects.open.sort((a, b) => projectPriorityComparator(a.project, b.project));
-
-  return {
-    totalProjects,
-    curatedTotals,
-    curatedProjects,
-  };
-}
+import { fuzzySearch } from "@framework/util/fuzzySearch";
+import { AllRoles, useProjectRolesFragment } from "@gql/hooks/useProjectRolesQuery";
+import { SelectOption } from "@ui/components";
+import { useContent } from "@ui/hooks";
+import { IPartner, IProject } from "./Dashboard.interface";
+import { getProjectSection, IDashboardProjectData } from "./DashboardProject";
 
 /**
- * @description MO's do not have roles partners only projects - we only get FC/PM/PM & FC
+ * Get the filter options to allow a user to filter projects.
+ * Filter options depend on the roles that a user has.
+ *
+ * @author Leondro Lio <leondro.lio@iuk.ukri.org>
+ * @returns The checkbox options a user can use to filter projects
  */
-export function getPartnerOnProject(project: ProjectDto, partners: PartnerDto[]): PartnerDto | undefined {
-  const { isPm } = getAuthRoles(project.roles);
+const getFilterOptions = ({
+  projects,
+  roles,
+}: {
+  projects: IDashboardProjectData[];
+  roles: ReturnType<typeof useProjectRolesFragment>;
+}): SelectOption[] => {
+  // Start off with no options
+  const filterOptions: SelectOption[] = [];
 
-  return partners.find(partner => {
-    if (partner.projectId !== project.id) return false;
+  const isAnyMo = projects.some(x => roles[x.project.id]?.projectRoles.isMo);
+  const isAnyFc = projects.some(x => roles[x.project.id]?.projectRoles.isFc);
+  const isAnyPm = projects.some(x => roles[x.project.id]?.projectRoles.isPm);
 
-    return isPm ? partner.isLead : getAuthRoles(partner.roles).isFc;
-  });
-}
+  // PCRS
+  if (isAnyMo) filterOptions.push({ id: "PCRS_TO_REVIEW", value: "PCR's to review" });
+  if (isAnyPm) filterOptions.push({ id: "PCRS_QUERIED", value: "PCR's being queried" });
 
-export function getProjectSection(project: ProjectDto, partner?: PartnerDto): Section {
-  // Note: Pending participant are always prioritised - check project status
-  if (partner?.partnerStatus === PartnerStatus.Pending && getAuthRoles(partner.roles).isFc) {
-    return "pending";
+  // Claims, then Setup Required
+  if (isAnyMo) filterOptions.push({ id: "CLAIMS_TO_REVIEW", value: "Claims to review" });
+  if (isAnyFc)
+    filterOptions.push(
+      { id: "CLAIMS_TO_SUBMIT", value: "Claims to submit" },
+      { id: "CLAIMS_TO_UPLOAD_REPORT", value: "Claims missing documents" },
+      { id: "CLAIMS_TO_RESPOND", value: "Claims needing responses" },
+      { id: "SETUP_REQUIRED", value: "Not completed setup" },
+    );
+
+  return filterOptions;
+};
+
+/**
+ * Filter and sort projects.
+ *
+ * @author Leondro Lio <leondro.lio@iuk.ukri.org>
+ * @returns A set of filtered projects, ordered into categories.
+ */
+const getFilteredProjects = ({
+  searchQuery,
+  pcrsQueried,
+  claimsToReview,
+  pcrsToReview,
+  setupRequired,
+  claimsToSubmit,
+  claimsToUploadReport,
+  claimsToRespond,
+  projects,
+  roles,
+}: {
+  searchQuery: string;
+  pcrsQueried: boolean;
+  claimsToReview: boolean;
+  pcrsToReview: boolean;
+  setupRequired: boolean;
+  claimsToSubmit: boolean;
+  claimsToUploadReport: boolean;
+  claimsToRespond: boolean;
+  projects: IDashboardProjectData[];
+  roles: ReturnType<typeof useProjectRolesFragment>;
+}) => {
+  // Only display "filtering" messages if any filter options are enabled.
+  const isFiltering =
+    pcrsQueried ||
+    claimsToReview ||
+    pcrsToReview ||
+    setupRequired ||
+    claimsToSubmit ||
+    claimsToUploadReport ||
+    claimsToRespond;
+
+  // If filters are enabled, perform filtering.
+  // Otherwise, if all filters are missing, use all projects.
+  const filteredProjects = isFiltering
+    ? projects.filter(({ project, partner, projectSection }) => {
+        if (pcrsQueried && project.accPcRsUnderQueryCustom! > 0) return true;
+        if (claimsToReview && project.accClaimsForReviewCustom! > 0) return true;
+        if (pcrsToReview && project.accPcRsForReviewCustom! > 0) return true;
+        if (setupRequired && projectSection === "pending") return true;
+
+        const role = roles[project.id];
+        if (role?.projectRoles.isFc && partner) {
+          if (claimsToRespond && partner.accTrackingClaimsCustom === "Claim Queried") return true;
+          if (claimsToSubmit && partner.accTrackingClaimsCustom === "Claim Due") return true;
+          if (claimsToRespond && partner.accTrackingClaimsCustom === "Awaiting IAR") return true;
+        }
+
+        return false;
+      })
+    : projects;
+
+  const searchedProjects = searchQuery
+    ? fuzzySearch(searchQuery.trim(), filteredProjects, [
+        "project.accProjectTitleCustom",
+        "project.accProjectNumberCustom",
+        "partner.accAccountIdCustom.name",
+      ]).map(x => x.item)
+    : filteredProjects;
+
+  const currentProjects = searchedProjects.filter(x => ["open", "pending", "awaiting"].includes(x.projectSection));
+  const openAndAwaitingProjects = searchedProjects.filter(x => ["open", "awaiting"].includes(x.projectSection));
+  const pendingProjects = searchedProjects.filter(x => ["pending"].includes(x.projectSection));
+  const upcomingProjects = searchedProjects.filter(x => ["upcoming"].includes(x.projectSection));
+  const archivedProjects = searchedProjects.filter(x => ["archived"].includes(x.projectSection));
+
+  return {
+    currentProjects,
+    openAndAwaitingProjects,
+    pendingProjects,
+    upcomingProjects,
+    archivedProjects,
+    isFiltering,
+  };
+};
+
+const useProjectActions = ({
+  project,
+  partner,
+  roles,
+  projectSection,
+}: {
+  project: IProject;
+  partner?: IPartner;
+  roles: AllRoles;
+  projectSection: ReturnType<typeof getProjectSection>;
+}): string[] => {
+  const { getContent } = useContent();
+  const isMo = roles[project.id]?.projectRoles.isMo ?? false;
+  const isFc = roles[project.id]?.projectRoles.isFc ?? false;
+  const isPm = roles[project.id]?.projectRoles.isPm ?? false;
+
+  const messages: string[] = [];
+
+  if (projectSection === "pending") {
+    messages.push(getContent(x => x.projectMessages.pendingProject));
   }
 
-  const { isFc, isPmOrMo } = getAuthRoles(project.roles);
-
-  switch (project.status) {
-    case ProjectStatus.Live:
-    case ProjectStatus.FinalClaim:
-    case ProjectStatus.OnHold:
-      if (project.periodId === 0) {
-        return "upcoming";
-      }
-
-      if (isPmOrMo) {
-        return project.numberOfOpenClaims > 0 ? "open" : "awaiting";
-      }
-
-      if (isFc && partner) {
-        const hasNoClaimsDue = partner.claimStatus === PartnerClaimStatus.NoClaimsDue;
-        return hasNoClaimsDue ? "awaiting" : "open";
-      }
-
-      return "upcoming";
-
-    case ProjectStatus.Closed:
-    case ProjectStatus.Terminated:
-      return "archived";
-
-    default:
-      return "upcoming";
+  if (projectSection === "archived") {
+    messages.push(project.accProjectStatusCustom!);
   }
-}
+
+  if (["open", "awaiting"].includes(projectSection)) {
+    const isProjectOnHold = project.accProjectStatusCustom! === "On Hold";
+    const hasQueriedPcrs = project.accPcRsUnderQueryCustom! > 0;
+
+    if (isProjectOnHold) {
+      messages.push(getContent(x => x.projectMessages.projectOnHold));
+    }
+
+    if (isFc && partner) {
+      if (partner.accNewForecastNeededCustom) {
+        messages.push(getContent(x => x.projectMessages.checkForecast));
+      }
+
+      switch (partner.accTrackingClaimsCustom) {
+        case "Claim Due":
+          messages.push(getContent(x => x.projectMessages.claimToSubmitMessage));
+          break;
+        case "Claims Overdue":
+          messages.push(getContent(x => x.projectMessages.claimOverdueMessage));
+          break;
+        case "Claim Queried":
+          messages.push(getContent(x => x.projectMessages.claimQueriedMessage));
+          break;
+        case "Awaiting IAR":
+          messages.push(getContent(x => x.projectMessages.claimRequestMissingDocument));
+          break;
+      }
+    }
+
+    if (isMo) {
+      if (project.accClaimsForReviewCustom) {
+        messages.push(
+          getContent(x => x.projectMessages.claimsToReviewMessage({ count: project.accClaimsForReviewCustom })),
+        );
+      }
+      if (project.accClaimsOverdueCustom) {
+        const content = getContent(x => x.projectMessages.claimOverdueMessage);
+        if (!messages.includes(content)) messages.push(content);
+      }
+      if (project.accPcRsForReviewCustom) {
+        messages.push(getContent(x => x.projectMessages.pcrsToReview({ count: project.accPcRsForReviewCustom })));
+      }
+    }
+
+    if (isPm && hasQueriedPcrs) {
+      messages.push(getContent(x => x.projectMessages.pcrQueried));
+    }
+  }
+
+  return messages;
+};
+
+export { getFilterOptions, getFilteredProjects, useProjectActions };

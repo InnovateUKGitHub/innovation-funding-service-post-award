@@ -1,11 +1,16 @@
 import { GraphQLContext } from "@gql/GraphQLContext";
+import { configuration } from "@server/features/common";
 import { Ctx, Query, Resolver } from "type-graphql";
+import { CurrentUserObject } from "../object/CurrentUserObject";
 
 @Resolver()
 class CurrentUserResolver {
-  @Query(() => String, { nullable: true })
-  currentUser(@Ctx() ctx: GraphQLContext): string | null {
-    return ctx.email;
+  @Query(() => CurrentUserObject)
+  currentUser(@Ctx() ctx: GraphQLContext): CurrentUserObject {
+    return {
+      email: ctx.email,
+      isSystemUser: ctx.email === configuration.salesforceServiceUser.serviceUsername,
+    };
   }
 }
 
