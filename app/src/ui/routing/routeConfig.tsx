@@ -1,4 +1,7 @@
 import * as Containers from "@ui/containers";
+import { DeveloperHomePage } from "@ui/containers/developer/home.page";
+import { DeveloperProjectCreatorPage } from "@ui/containers/developer/ProjectCreator.page";
+import { DeveloperUserSwitcherPage } from "@ui/containers/developer/UserSwitcher.page";
 
 export type IRoutes = typeof routeConfig;
 export type RouteKeys = keyof IRoutes;
@@ -17,7 +20,9 @@ export const routeConfig = {
   errorNotFound: Containers.ErrorNotFoundRoute,
   financeSummary: Containers.FinanceSummaryRoute,
   failedBankCheckConfirmation: Containers.FailedBankCheckConfirmationRoute,
-  home: Containers.HomeRoute,
+  home: DeveloperHomePage,
+  developerUserSwitcherPage: DeveloperUserSwitcherPage,
+  developerProjectCreatorPage: DeveloperProjectCreatorPage,
   monitoringReportCreate: Containers.MonitoringReportCreateRoute,
   monitoringReportDashboard: Containers.MonitoringReportDashboardRoute,
   monitoringReportDelete: Containers.MonitoringReportDeleteRoute,

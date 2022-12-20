@@ -1,4 +1,4 @@
-import { parseSfLongTextArea, sss } from "@server/util/salesforce-string-helpers";
+import { apex, parseSfLongTextArea, sss } from "@server/util/salesforce-string-helpers";
 
 describe("SalesForce string helpers", () => {
   describe("parseSfLongTextArea()", () => {
@@ -38,6 +38,23 @@ describe("SalesForce string helpers", () => {
       const parsedValue = sss(input);
 
       expect(parsedValue).toStrictEqual(expected);
+    });
+  });
+
+  describe("apex (JavaScript Apex Variable Injector)", () => {
+    const testString = "stub-string";
+    const testNumber = 321;
+    const testDate = new Date("2022-04-11T23:00:00.000Z");
+
+    test.each`
+      name                            | input                                       | expected
+      ${"no injection"}               | ${apex`The quick brown fox`}                | ${"The quick brown fox"}
+      ${"string"}                     | ${apex`${testString}`}                      | ${"'stub-string'"}
+      ${"number"}                     | ${apex`${testNumber}`}                      | ${"321"}
+      ${"testDate"}                   | ${apex`${testDate}`}                        | ${"date.valueOf('2022-04-11 23:00:00')"}
+      ${"string around other string"} | ${apex`String testString = ${testString};`} | ${"String testString = 'stub-string';"}
+    `("properly injects with $name input(s)", ({ input, expected }) => {
+      expect(input.trim()).toBe(expected);
     });
   });
 });

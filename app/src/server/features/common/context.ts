@@ -161,7 +161,7 @@ export class Context implements Framework.IContext {
 
   private readonly salesforceConnectionDetails: Salesforce.ISalesforceConnectionDetails;
 
-  private getSalesforceConnection() {
+  public getSalesforceConnection() {
     return Salesforce.salesforceConnectionWithToken(this.salesforceConnectionDetails);
   }
 

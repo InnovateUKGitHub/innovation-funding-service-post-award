@@ -144,6 +144,17 @@
       "tableHeaderProjectManager": "PM",
       "tableHeaderFinancialContact": "FC",
       "tableHeaderSwitchOptions": "After changing..."
+    },
+    "projectCreator": {
+      "sectionTitle": "Project Creator",
+      "placeholderProjectCreatorProjectName": "Project name",
+      "placeholderProjectCreatorCompetitionType": "Competition type",
+      "placeholderProjectCreatorClaimFrequency": "Claim frequency",
+      "placeholderProjectCreatorProjectDuration": "Project duration",
+      "placeholderProjectParticipantType": "Participant type",
+      "placeholderProjectParticipantOrgType": "Participant organisation type",
+      "placeholderProjectCreatorProjectId": "Project ID",
+      "placeholderProjectCreatorCompetitionCode": "Competition Code"
     }
   },
   "pages": {
@@ -1279,5 +1290,31 @@
   "taskList": {
     "giveUsInfoSectionTitle": "Give us information",
     "explainSectionTitle": "Explain why you want to make the changes"
+  },
+  "enums": {
+    "competitionTypes": {
+      "crnd": "CR&D",
+      "contracts": "Contract",
+      "sbri": "SBRI",
+      "sbriIfs": "SBRI IFS",
+      "ktp": "KTP",
+      "catapults": "Catapult",
+      "loans": "Loans",
+      "edge": "EDGE",
+      "horizonEurope": "Horizon Europe"
+    },
+    "projectParticipantTypes": {
+      "business": "Business",
+      "knowledgeBase": "Knowledge base",
+      "research": "Research",
+      "rto": "Research and Technology Organisation (RTO)",
+      "other": "Other",
+      "academic": "Academic",
+      "industrial": "Industrial"
+    },
+    "projectParticipantOrganisationTypes": {
+      "academic": "Academic",
+      "industrial": "Industrial"
+    }
   }
 }

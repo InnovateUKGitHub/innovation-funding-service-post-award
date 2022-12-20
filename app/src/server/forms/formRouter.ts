@@ -67,6 +67,7 @@ import { ProjectSetupBankDetailsHandler } from "./project/setup/ProjectSetupBank
 import { ProjectSetupBankDetailsVerifyHandler } from "./project/setup/ProjectSetupBankDetailsVerifyHandler";
 import { ProjectSetupBankStatementHandler } from "./project/setup/ProjectSetupBankStatementHandler";
 import { GraphQLSchema } from "graphql";
+import { DeveloperProjectCreatorHandler } from "./developerProjectCreatorHandler";
 
 export const standardFormHandlers: StandardFormHandlerBase<AnyObject, EditorStateKeys>[] = [
   new ClaimForecastFormHandler(),
@@ -182,7 +183,15 @@ export const configureFormRouter =
 
     if (!configuration.sso.enabled) {
       const homeFormHandler = new DeveloperUserSwitcherHandler();
-      result.post(getRoute(homeFormHandler), csrfProtection, homeFormHandler.handle, handleError);
+      const developerProjectCreatorHandler = new DeveloperProjectCreatorHandler();
+      result
+        .post(getRoute(homeFormHandler), csrfProtection, homeFormHandler.handle, handleError)
+        .post(
+          getRoute(developerProjectCreatorHandler),
+          csrfProtection,
+          developerProjectCreatorHandler.handle,
+          handleError,
+        );
     }
 
     result.post("*", badRequestHandler.handle, handleError);

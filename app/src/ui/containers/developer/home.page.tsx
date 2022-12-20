@@ -4,7 +4,7 @@ import { BaseProps, defineRoute } from "@ui/containers/containerBase";
 import { useContent } from "@ui/hooks";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 
-const DeveloperHomePage = (props: BaseProps) => {
+const DeveloperHomePageContainer = (props: BaseProps) => {
   const { getContent } = useContent();
 
   return (
@@ -21,7 +21,7 @@ const DeveloperHomePage = (props: BaseProps) => {
         />
         <NavigationCard
           label={<Content value={x => x.example.contentTitle} />}
-          route={HomeRoute.getLink({})}
+          route={DeveloperHomePage.getLink({})}
           qa="example-content"
           key="example-content"
           messages={[{ message: getContent(x => x.example.content), qa: "example-content-label" }]}
@@ -31,10 +31,10 @@ const DeveloperHomePage = (props: BaseProps) => {
   );
 };
 
-export const HomeRoute = defineRoute({
+export const DeveloperHomePage = defineRoute({
   routeName: "home",
   routePath: "/",
-  container: DeveloperHomePage,
+  container: DeveloperHomePageContainer,
   getParams: () => ({}),
   accessControl: (auth: Authorisation, params: EmptyObject, config: IClientConfig) => !config.ssoEnabled,
   getTitle: ({ content }) => content.getTitleCopy(x => x.pages.home.title),

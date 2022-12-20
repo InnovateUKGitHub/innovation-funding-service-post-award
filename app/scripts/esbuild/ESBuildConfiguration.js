@@ -54,6 +54,9 @@ class ESBuildConfiguration {
       tsconfig: path.join(dirname, "tsconfig.json"),
       logLevel: "info",
       plugins: [nodeExternalsPlugin(), replaceGraphqlRelayPlugin],
+      loader: {
+        ".apex": "text",
+      },
     };
 
     this.clientBuild = {

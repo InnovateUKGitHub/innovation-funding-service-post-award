@@ -91,6 +91,10 @@ const configGenerator = ({ env = "production", devtools = false }) => {
             },
           ],
         },
+        {
+          test: /\.apex$/i,
+          type: "asset/source",
+        },
       ],
     },
     resolve: {

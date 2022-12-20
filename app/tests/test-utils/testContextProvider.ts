@@ -3,6 +3,7 @@ import { ValidationError } from "@server/features/common";
 import { CommandBase, NonAuthorisedCommandBase, SyncCommandBase } from "@server/features/common/commandBase";
 import { QueryBase, SyncQueryBase } from "@server/features/common/queryBase";
 import { Logger } from "@shared/developmentLogger";
+import { Connection } from "jsforce";
 import { TestCaches } from "./testCaches";
 import { TestClock } from "./testClock";
 import { TestConfig } from "./testConfig";
@@ -81,5 +82,9 @@ export class TestContext implements IContext {
 
   public asBankDetailsValidationUser() {
     return this;
+  }
+
+  public getSalesforceConnection(): Promise<Connection> {
+    throw new Error("noop");
   }
 }

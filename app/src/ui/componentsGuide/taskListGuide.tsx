@@ -5,9 +5,9 @@ import { createMemoryHistory } from "history";
 
 import { Result } from "@ui/validation";
 import { Task, TaskListSection, OL } from "@ui/components";
-import { HomeRoute } from "@ui/containers";
 import { rootReducer } from "@ui/redux";
 import { IGuide } from "@framework/types";
+import { DeveloperHomePage } from "@ui/containers/developer/home.page";
 
 const history = createMemoryHistory();
 
@@ -50,13 +50,13 @@ export const taskListGuide: IGuide = {
           <Router location={history.location} navigator={history}>
             <OL className="app-task-list">
               <TaskListSection step={1} title={"Scope Change"}>
-                <Task name="View files" status="Complete" route={HomeRoute.getLink({})} />
-                <Task name="View rationale" status="Incomplete" route={HomeRoute.getLink({})} />
-                <Task name="View reasoning" status="To do" route={HomeRoute.getLink({})} />
+                <Task name="View files" status="Complete" route={DeveloperHomePage.getLink({})} />
+                <Task name="View rationale" status="Incomplete" route={DeveloperHomePage.getLink({})} />
+                <Task name="View reasoning" status="To do" route={DeveloperHomePage.getLink({})} />
               </TaskListSection>
 
               <TaskListSection step={2} title={"Partner change"}>
-                <Task name="View files" status="To do" route={HomeRoute.getLink({})} />
+                <Task name="View files" status="To do" route={DeveloperHomePage.getLink({})} />
               </TaskListSection>
             </OL>
           </Router>
@@ -90,7 +90,7 @@ export const taskListGuide: IGuide = {
                 title={"Scope Change"}
                 validation={[new Result(null, true, false, "You must upload a file plz", false)]}
               >
-                <Task name="View files" status="To do" route={HomeRoute.getLink({})} />
+                <Task name="View files" status="To do" route={DeveloperHomePage.getLink({})} />
               </TaskListSection>
             </OL>
           </Router>
