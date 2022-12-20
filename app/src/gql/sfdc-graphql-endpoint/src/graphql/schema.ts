@@ -74,7 +74,7 @@ export function entitiesToSchema<ExecContext>(config: SchemaConfig<ExecContext>)
 }
 
 function createGraphQLEntityType(ctx: SchemaGenerationContext, entity: Entity): GraphQLObjectType {
-    const { normalisedName, fields, childRelationships } = entity;
+    const { normalisedName, fields, childRelationships, additionalFields } = entity;
 
     return new GraphQLObjectType({
         name: normalisedName,
@@ -90,8 +90,13 @@ function createGraphQLEntityType(ctx: SchemaGenerationContext, entity: Entity): 
                     createGraphQLEntityRelationships(ctx, relationship),
                 ])
                 .filter(([, value]) => value !== undefined);
+            const graphQLExtraFields = additionalFields?.map((field) => [field.name, field.field]) ?? [];
 
-            return Object.fromEntries([...graphQLFields, ...graphQLRelationships]);
+            return Object.fromEntries([
+                ...graphQLFields,
+                ...graphQLRelationships,
+                ...graphQLExtraFields,
+            ]);
         },
     });
 }
@@ -99,9 +104,9 @@ function createGraphQLEntityType(ctx: SchemaGenerationContext, entity: Entity): 
 function createGraphQLEntityField(
     ctx: SchemaGenerationContext,
     field: Field,
-): GraphQLFieldConfig<SOQLRecord, unknown> {
+): GraphQLFieldConfig<SOQLRecord<AnyObject>, unknown> {
     let type: GraphQLOutputType;
-    let resolve: GraphQLFieldResolver<SOQLRecord, unknown> = (source) => {
+    let resolve: GraphQLFieldResolver<SOQLRecord<AnyObject>, unknown> = (source) => {
         return source[field.salesforceName];
     };
 
@@ -136,7 +141,7 @@ function createGraphQLEntityField(
 function createGraphQLEntityRelationships(
     ctx: SchemaGenerationContext,
     relationship: ChildRelationship,
-): GraphQLFieldConfig<SOQLRecord, unknown> | undefined {
+): GraphQLFieldConfig<SOQLRecord<AnyObject>, unknown> | undefined {
     const { salesforceName, entity } = relationship;
 
     // Ignore all the children relationships that aren't part of the SFDC graph. While it's possible
@@ -151,9 +156,9 @@ function createGraphQLEntityRelationships(
     return {
         args,
         type: new GraphQLList(type),
-        resolve(source: SOQLRecord) {
-            const subQueryResults = source[salesforceName] as SOQLResult;
-            return subQueryResults.records;
+        resolve(source: SOQLRecord<AnyObject>) {
+            const subQueryResults = source[salesforceName] as SOQLResult<AnyObject>;
+            return subQueryResults?.records ?? [];
         },
     };
 }
@@ -194,11 +199,14 @@ function createEntityQueries<ExecContext>(
     };
 
     return {
+        // The value is never null, and the items in the array are never null
         [normalisedName]: {
             args: queryManyArgs,
-            type: new GraphQLList(type),
+            type: new GraphQLNonNull(new GraphQLList(new GraphQLNonNull(type))),
             resolve: resolvers.queryMany?.(entity, sfdcSchema),
         },
+
+        // Can be either `type` or `null`
         [`${normalisedName}ById`]: {
             args: querySingleArgs,
             type: type,

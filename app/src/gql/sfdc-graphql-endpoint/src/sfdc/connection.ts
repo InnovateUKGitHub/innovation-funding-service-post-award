@@ -4,15 +4,18 @@ import { URL } from 'url';
 interface ConnectionConfig {
     instanceUrl: string;
     accessToken: string;
+    email: string | null;
 }
 
 export class Connection {
     private instanceUrl;
     private accessToken;
+    public email;
 
-    constructor({ instanceUrl, accessToken }: ConnectionConfig) {
+    constructor({ instanceUrl, accessToken, email }: ConnectionConfig) {
         this.instanceUrl = instanceUrl;
         this.accessToken = accessToken;
+        this.email = email;
     }
 
     async fetch<T>(

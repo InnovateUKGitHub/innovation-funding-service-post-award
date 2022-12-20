@@ -23,6 +23,7 @@ noAuthRouter.use("/api/health", healthRouter);
 
 const getServerRoutes = async () => {
   const router = Router();
+  const logger = new Logger("Router");
 
   const csrfProtection = csrf();
 
@@ -34,7 +35,11 @@ const getServerRoutes = async () => {
   });
 
   // Create a new Connection and API object to fetch Salesforce data from.
-  const adminConnection = new Connection({ instanceUrl: url, accessToken });
+  const adminConnection = new Connection({
+    instanceUrl: url,
+    accessToken,
+    email: configuration.salesforceServiceUser.serviceUsername,
+  });
   const adminApi = new Api({ connection: adminConnection });
   const schema = await getGraphQLSchema({ connection: adminConnection, api: adminApi });
 
@@ -47,14 +52,16 @@ const getServerRoutes = async () => {
         currentUsername: req.session?.user.email,
       });
 
+      const email = req.session?.user.email ?? null;
+
       // Create a new Connection and API object to fetch Salesforce data from.
-      const connection = new Connection({ instanceUrl: url, accessToken });
+      const connection = new Connection({ instanceUrl: url, accessToken, email });
       const api = new Api({ connection });
 
       res.locals.connection = connection;
       res.locals.api = api;
       res.locals.schema = schema;
-      res.locals.email = req.session?.user.email ?? null;
+      res.locals.email = email;
     } catch {
       res.locals.schema = schema;
       res.locals.email = null;
@@ -66,6 +73,18 @@ const getServerRoutes = async () => {
   // App routes
   router.use("/api", apiRoutes);
   router.use("/graphql", (req, res, next) => {
+    logger.debug("Executing GraphQL", res.locals.email);
+
+    // Allow the override of the user email if `sudo` is included.
+    if (!configuration.sso.enabled && typeof req.query.sudo === "string") {
+      res.locals.email = req.query.sudo;
+      const connection = new Connection({ instanceUrl: url, accessToken, email: req.query.sudo });
+      const api = new Api({ connection });
+
+      res.locals.connection = connection;
+      res.locals.api = api;
+    }
+
     createHandler({
       schema: schema,
       context: createContext({ logger: new Logger("Client GraphQL"), res }),

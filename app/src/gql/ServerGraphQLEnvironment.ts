@@ -8,8 +8,6 @@ import { RelayNetworkLayer } from "react-relay-network-modern/node8";
 import { Environment, RecordSource, Store } from "relay-runtime";
 import { createContext } from "./GraphQLContext";
 
-const relayServerSSR = new RelayServerSSR();
-
 const getServerGraphQLFinalRenderEnvironment = (relayData: SSRCache) => {
   // Create a client that takes in server cache
   const relayClientSSR = new RelayClientSSR(relayData);
@@ -26,7 +24,7 @@ const getServerGraphQLFinalRenderEnvironment = (relayData: SSRCache) => {
   return ServerGraphQLEnvironment;
 };
 
-const getServerGraphQLEnvironment = async ({
+const getServerGraphQLEnvironment = ({
   res,
   schema,
 }: {
@@ -35,6 +33,7 @@ const getServerGraphQLEnvironment = async ({
   error?: IAppError;
   schema: GraphQLSchema;
 }) => {
+  const relayServerSSR = new RelayServerSSR();
   const source = new RecordSource();
   const store = new Store(source);
 
@@ -50,7 +49,7 @@ const getServerGraphQLEnvironment = async ({
     store,
   });
 
-  return ServerGraphQLEnvironment;
+  return { ServerGraphQLEnvironment, relayServerSSR };
 };
 
-export { getServerGraphQLEnvironment, getServerGraphQLFinalRenderEnvironment, relayServerSSR };
+export { getServerGraphQLEnvironment, getServerGraphQLFinalRenderEnvironment };

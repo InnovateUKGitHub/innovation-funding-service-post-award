@@ -1,8 +1,10 @@
 import { DateFormat } from "@framework/constants";
 import { DateTime } from "luxon";
 
-export const convertDateAndTime = (jsDate: Date | null): DateTime | null => {
-  return jsDate && DateTime.fromJSDate(jsDate).setZone("Europe/London");
+export type DateConvertable = Date | string | null;
+export const convertDateAndTime = (date: DateConvertable): DateTime | null => {
+  if (typeof date === "string") return DateTime.fromFormat(date, "yyyy-MM-dd");
+  return date && DateTime.fromJSDate(date);
 };
 
 const appendMeridian = (date: DateTime, format: string) => format + (date.hour >= 12 ? "'pm'" : "'am'");

@@ -1,39 +1,57 @@
-import { memo } from "react";
-
-import { getAuthRoles, PartnerClaimStatus, ProjectStatus } from "@framework/types";
-import * as ACC from "@ui/components";
+import type { AllRoles } from "@gql/hooks/useProjectRolesQuery";
+import { Content, H4, Link, ListItem, Renderers } from "@ui/components";
+import { SimpleString } from "@ui/components/renderers";
 import { useContent } from "@ui/hooks";
+import { ProjectOverviewRoute } from "../overview.page";
+import { ProjectSetupRoute } from "../setup";
+import { IDashboardProjectData, IPartner, IProject } from "./Dashboard.interface";
+import { useProjectActions } from "./dashboard.logic";
 
-import { DashboardProjectProps, ProjectProps } from "./Dashboard.interface";
-
-const getProjectNotes = ({ section, project, partner }: ProjectProps): JSX.Element[] => {
-  const isNotAvailable = !["open", "awaiting"].includes(section);
-  const isPartnerWithdrawn = !!partner?.isWithdrawn;
+const getProjectNotes = ({
+  project,
+  partner,
+  projectSection,
+}: {
+  project: IProject;
+  partner?: IPartner;
+  projectSection: ReturnType<typeof getProjectSection>;
+}) => {
+  const isNotAvailable = !["open", "awaiting"].includes(projectSection);
+  const isPartnerWithdrawn = ["Involuntary Withdrawal", "Voluntary Withdrawal", "Migrated - Withdrawn"].includes(
+    partner?.accParticipantStatusCustom ?? "",
+  );
 
   const messages: JSX.Element[] = [];
 
   // The lead partner will never have status === withdrawn,
   // so it doesn't matter that "withdrawn" is not getting appended to leadPartnerName
   // Caveat: they will be withdrawn for a few minutes while another lead partner is set, but we're not worrying about this
-  messages.push(<>{project.leadPartnerName}</>);
-
-  if (section === "upcoming") {
-    const upcomingMessage = <ACC.Renderers.ShortDateRange start={project.startDate} end={project.endDate} />;
-
-    messages.push(upcomingMessage);
-  }
+  messages.push(<>{project.accLeadParticipantNameCustom}</>);
 
   // Note: If project is not available then just bail early!
   if (isNotAvailable) return messages;
 
-  if (project.isPastEndDate || isPartnerWithdrawn) {
-    messages.push(<ACC.Content value={x => x.projectMessages.projectEndedMessage} />);
+  if (projectSection === "upcoming") {
+    const upcomingMessage = (
+      <Renderers.ShortDateRange start={project.accStartDateCustom} end={project.accEndDateCustom} />
+    );
+    messages.push(upcomingMessage);
+  }
+
+  // TODO: Ensure Salesforce dates are not nillable.
+  if (new Date(project.accEndDateCustom!) < new Date() || isPartnerWithdrawn) {
+    messages.push(<Content value={x => x.projectMessages.projectEndedMessage} />);
   } else {
-    const projectDate = <ACC.Renderers.ShortDateRange start={project.periodStartDate} end={project.periodEndDate} />;
+    const projectDate = (
+      <Renderers.ShortDateRange
+        start={project.accCurrentPeriodStartDateCustom}
+        end={project.accCurrentPeriodEndDateCustom}
+      />
+    );
 
     messages.push(
       <>
-        Period {project.periodId} of {project.numberOfPeriods} ({projectDate})
+        Period {project.accCurrentPeriodNumberCustom} of {project.accNumberofPeriodsCustom} ({projectDate})
       </>,
     );
   }
@@ -41,100 +59,128 @@ const getProjectNotes = ({ section, project, partner }: ProjectProps): JSX.Eleme
   return messages;
 };
 
-const useProjectActions = ({ section, project, partner }: ProjectProps): string[] => {
-  const { getContent } = useContent();
-  const { isMo, isFc, isPm } = getAuthRoles(project.roles);
+const DashboardProjectTitle = ({
+  project,
+  partner,
+  projectSection,
+}: {
+  project: IProject;
+  partner?: IPartner;
+  projectSection: ReturnType<typeof getProjectSection>;
+}) => {
+  const titleContent = `${project.accProjectNumberCustom}: ${project.accProjectTitleCustom}`;
 
-  const messages: string[] = [];
+  if (projectSection === "upcoming") return <>{titleContent}</>;
 
-  if (section === "pending") {
-    messages.push(getContent(x => x.projectMessages.pendingProject));
-  }
-
-  if (section === "archived") {
-    messages.push(project.statusName);
-  }
-
-  if (["open", "awaiting"].includes(section)) {
-    const isProjectOnHold = project.status === ProjectStatus.OnHold;
-    const hasQueriedPcrs = project.pcrsQueried > 0;
-
-    if (isProjectOnHold) {
-      messages.push(getContent(x => x.projectMessages.projectOnHold));
-    }
-
-    if (isFc && partner) {
-      if (partner.newForecastNeeded) {
-        messages.push(getContent(x => x.projectMessages.checkForecast));
-      }
-
-      switch (partner.claimStatus) {
-        case PartnerClaimStatus.ClaimDue:
-          messages.push(getContent(x => x.projectMessages.claimToSubmitMessage));
-          break;
-        case PartnerClaimStatus.ClaimsOverdue:
-          messages.push(getContent(x => x.projectMessages.claimOverdueMessage));
-          break;
-        case PartnerClaimStatus.ClaimQueried:
-          messages.push(getContent(x => x.projectMessages.claimQueriedMessage));
-          break;
-        case PartnerClaimStatus.IARRequired:
-          messages.push(getContent(x => x.projectMessages.claimRequestMissingDocument));
-          break;
-      }
-    }
-
-    if (isMo) {
-      if (project.claimsToReview) {
-        messages.push(getContent(x => x.projectMessages.claimsToReviewMessage({ count: project.claimsToReview })));
-      }
-      if (project.claimsOverdue) {
-        const content = getContent(x => x.projectMessages.claimOverdueMessage);
-        if (!messages.includes(content)) messages.push(content);
-      }
-      if (project.pcrsToReview) {
-        messages.push(getContent(x => x.projectMessages.pcrsToReview({ count: project.pcrsToReview })));
-      }
-    }
-
-    if (isPm && hasQueriedPcrs) {
-      messages.push(getContent(x => x.projectMessages.pcrQueried));
-    }
-  }
-
-  return messages;
-};
-
-const doesNotRequireAction = ({ section }: ProjectProps) => section === "archived" || section === "upcoming";
-
-const generateTitle = ({ project, partner, section, routes }: DashboardProjectProps): string | JSX.Element => {
-  const titleContent = `${project.projectNumber}: ${project.title}`;
-
-  if (section === "upcoming") return titleContent;
-
-  const projectNotSetup = partner && section === "pending";
+  const projectNotSetup = partner && projectSection === "pending";
 
   const route = projectNotSetup
-    ? routes.projectSetup.getLink({ projectId: project.id, partnerId: partner!.id }) // TODO: Remove non-null after TSC 4.4
-    : routes.projectOverview.getLink({ projectId: project.id });
+    ? ProjectSetupRoute.getLink({ projectId: project.id, partnerId: partner.id })
+    : ProjectOverviewRoute.getLink({ projectId: project.id });
 
-  return <ACC.Link route={route}>{titleContent}</ACC.Link>;
+  return <Link route={route}>{titleContent}</Link>;
 };
 
-function DashboardProject(props: DashboardProjectProps) {
-  const titleValue = generateTitle(props);
+const getPartnerOnProject = ({ project, roles }: { project: IProject; roles: AllRoles }) => {
+  const projectRole = roles[project.id];
 
-  const projectActions = useProjectActions(props);
-  const projectNotes = getProjectNotes(props);
+  if (projectRole) {
+    const { projectRoles, partnerRoles } = projectRole;
+    const isPm = projectRoles.isPm ?? false;
 
-  const displayAction = projectActions.length > 0 && !doesNotRequireAction(props);
+    if (project.accProjectParticipantsProjectReference) {
+      // Do two loops of the Project Participants, first by finding the lead partner,
+      // then through other partners.
+      //
+      // For the Salesforce System User, this means that the project partner is the
+      // lead partner.
+      for (const partner of project.accProjectParticipantsProjectReference) {
+        // Find the lead partner...
+        if (partner?.accAccountIdCustom?.id === project.accLeadParticipantIdCustom) {
+          // If the user is a PM, the project partner is the lead partner.
+          if (isPm) return partner;
+
+          // If the user is an FC of the lead partner, the project partner is the lead partner.
+          const partnerRole = partnerRoles[partner.accAccountIdCustom.id];
+          if (partnerRole?.isFc) return partner;
+        }
+      }
+
+      // If the user is an FC of a non-lead partner, the project partner is that partner.
+      for (const partner of project.accProjectParticipantsProjectReference) {
+        if (partner) {
+          const partnerRole = partnerRoles[partner.accAccountIdCustom.id];
+          if (partnerRole?.isFc) return partner;
+        }
+      }
+    }
+  }
+
+  return undefined;
+};
+
+const getProjectSection = ({ project, partner, roles }: { project: IProject; partner?: IPartner; roles: AllRoles }) => {
+  if (
+    partner?.accParticipantStatusCustom === "Pending" &&
+    roles[project.id]?.partnerRoles[partner.accAccountIdCustom.id]?.isFc
+  ) {
+    return "pending";
+  }
+
+  const isMo = roles[project.id]?.projectRoles.isMo ?? false;
+  const isFc = roles[project.id]?.projectRoles.isFc ?? false;
+  const isPm = roles[project.id]?.projectRoles.isPm ?? false;
+
+  switch (project.accProjectStatusCustom) {
+    case "Live":
+    case "Final Claim":
+    case "On Hold":
+      if (project.accCurrentPeriodNumberCustom === 0) {
+        return "upcoming";
+      }
+
+      if (isPm || isMo) {
+        return project.accNumberOfOpenClaimsCustom! > 0 ? "open" : "awaiting";
+      }
+
+      if (isFc && partner) {
+        const hasNoClaimsDue = partner.accTrackingClaimsCustom === "No Claims Due";
+        return hasNoClaimsDue ? "awaiting" : "open";
+      }
+
+      return "upcoming";
+
+    case "Closed":
+    case "Terminated":
+      return "archived";
+
+    default:
+      return "upcoming";
+  }
+};
+
+const DashboardProject = ({
+  projectData,
+  roles,
+  displaySections = [],
+}: {
+  projectData: IDashboardProjectData;
+  roles: AllRoles;
+  displaySections: ReturnType<typeof getProjectSection>[];
+}) => {
+  const { project, partner, projectSection } = projectData;
+  const projectNotes = getProjectNotes({ project, partner, projectSection });
+  const projectActions = useProjectActions({ project, partner, roles, projectSection });
+
+  if (!displaySections.includes(projectSection)) return null;
+
   return (
-    <ACC.ListItem key={props.project.id} actionRequired={displayAction} qa={`project-${props.project.projectNumber}`}>
+    <ListItem actionRequired={projectActions.length > 0} qa={`project-${project.accProjectNumberCustom}`}>
       <div className="govuk-grid-column-two-thirds" style={{ display: "inline-flex", alignItems: "center" }}>
         <div>
-          <ACC.H4 as="h3" className="govuk-!-margin-bottom-2">
-            {titleValue}
-          </ACC.H4>
+          <H4 as="h3" className="govuk-!-margin-bottom-2">
+            <DashboardProjectTitle project={project} partner={partner} projectSection={projectSection} />
+          </H4>
 
           {projectNotes.map((note, i) => (
             <div key={i} className="govuk-body-s govuk-!-margin-bottom-0">
@@ -151,8 +197,62 @@ function DashboardProject(props: DashboardProjectProps) {
           </div>
         ))}
       </div>
-    </ACC.ListItem>
+    </ListItem>
   );
-}
+};
 
-export const MemoizedDashboardProject = memo(DashboardProject);
+const DashboardProjectList = ({
+  projectsData,
+  roles,
+  displaySection,
+  isFiltering,
+}: {
+  projectsData: IDashboardProjectData[];
+  roles: AllRoles;
+  displaySection: "live" | "upcoming" | "archived";
+  isFiltering: boolean;
+}) => {
+  const { getContent } = useContent();
+  let noCompetitionsMessage: string;
+  let displaySections: ReturnType<typeof getProjectSection>[];
+
+  switch (displaySection) {
+    case "live":
+      noCompetitionsMessage = getContent(x =>
+        isFiltering ? x.pages.projectsDashboard.noLiveMatchingMessage : x.pages.projectsDashboard.noLiveProjectsMessage,
+      );
+      displaySections = ["open", "pending", "awaiting"];
+      break;
+    case "upcoming":
+      noCompetitionsMessage = getContent(x =>
+        isFiltering
+          ? x.pages.projectsDashboard.noUpcomingMatchingMessage
+          : x.pages.projectsDashboard.noUpcomingProjectsMessage,
+      );
+      displaySections = ["upcoming"];
+      break;
+    case "archived":
+      noCompetitionsMessage = getContent(x =>
+        isFiltering
+          ? x.pages.projectsDashboard.noArchivedMatchingMessage
+          : x.pages.projectsDashboard.noArchivedProjectsMessage,
+      );
+      displaySections = ["archived"];
+      break;
+  }
+
+  if (!projectsData.length) {
+    return <SimpleString>{noCompetitionsMessage}</SimpleString>;
+  }
+
+  return (
+    <>
+      {projectsData.map((item, i) => (
+        <DashboardProject key={i} projectData={item} displaySections={displaySections} roles={roles} />
+      ))}
+    </>
+  );
+};
+
+export { DashboardProject, DashboardProjectList, getPartnerOnProject, getProjectSection };
+export type { IDashboardProjectData };

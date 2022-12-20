@@ -47,7 +47,10 @@ const SelectContactForm = createTypedForm<string>();
 const UserSwitcherCurrentUser = () => {
   const { data, isLoading } = useQuery<UserSwitcherCurrentUserQuery>(graphql`
     query UserSwitcherCurrentUserQuery {
-      currentUser
+      currentUser {
+        email
+        isSystemUser
+      }
     }
   `);
 
@@ -55,7 +58,10 @@ const UserSwitcherCurrentUser = () => {
 
   return (
     <>
-      <p>Currently logged in as: {data?.currentUser ? data.currentUser : "Invalid User"}</p>
+      <p>
+        Currently logged in as:{" "}
+        {data?.currentUser.isSystemUser ? "System User" : data?.currentUser.email ?? "Invalid User"}
+      </p>
     </>
   );
 };

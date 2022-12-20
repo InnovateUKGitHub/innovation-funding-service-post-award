@@ -104,13 +104,14 @@ export const resolvers: Resolvers<ResolverContext> = {
             const fieldType = parentType.getFields()[info.fieldName];
             const objectType = unwrapObjectType(fieldType.type);
 
-            const selects = resolveSelection(
+            const selects = resolveSelection({
                 info,
                 entity,
                 objectType,
                 sfdcSchema,
-                info.fieldNodes[0].selectionSet!,
-            );
+                context,
+                selectionSet: info.fieldNodes[0].selectionSet!,
+            });
 
             const queryString = queryToString({
                 selects,
@@ -143,13 +144,14 @@ export const resolvers: Resolvers<ResolverContext> = {
             )!;
 
             const objectType = unwrapObjectType(fieldType.type);
-            const selects = resolveSelection(
+            const selects = resolveSelection({
                 info,
                 entity,
                 objectType,
                 sfdcSchema,
-                info.fieldNodes[0].selectionSet!,
-            );
+                context,
+                selectionSet: info.fieldNodes[0].selectionSet!,
+            });
 
             const soqlArgs = resolveQueryManyArgs(info, entity, fieldType, fieldAstNode);
 
@@ -326,7 +328,7 @@ function resolveOrderBy(
 
             if (typeof fieldValue === 'string') {
                 return {
-                    field: columnPrefix + fieldName,
+                    field: columnPrefix + entityField.salesforceName,
                     order: GRAPHQL_SORTING_ORDER_SOQL_MAPPING[fieldValue],
                 };
             } else {
@@ -346,13 +348,21 @@ function resolveOrderBy(
     );
 }
 
-function resolveSelection(
-    info: GraphQLResolveInfo,
-    entity: Entity,
-    objectType: GraphQLObjectType,
-    sfdcSchema: SfdcSchema,
-    selectionSet: SelectionSetNode,
-): SOQLSelect[] {
+function resolveSelection({
+    info,
+    entity,
+    objectType,
+    sfdcSchema,
+    selectionSet,
+    context,
+}: {
+    info: GraphQLResolveInfo;
+    entity: Entity;
+    objectType: GraphQLObjectType;
+    sfdcSchema: SfdcSchema;
+    selectionSet: SelectionSetNode;
+    context: ResolverContext;
+}): SOQLSelect[] {
     const soqlSelects: SOQLSelect[] = [];
 
     for (const selection of selectionSet.selections) {
@@ -364,6 +374,7 @@ function resolveSelection(
                     objectType,
                     sfdcSchema,
                     selection,
+                    context,
                 );
 
                 if (select !== undefined) {
@@ -380,13 +391,14 @@ function resolveSelection(
                         objectType,
                         sfdcSchema,
                         selection,
+                        context,
                     ),
                 );
                 break;
             }
 
             case Kind.FRAGMENT_SPREAD: {
-                soqlSelects.push(...resolveFragmentSelection(info, sfdcSchema, selection));
+                soqlSelects.push(...resolveFragmentSelection(info, sfdcSchema, selection, context));
                 break;
             }
         }
@@ -401,6 +413,7 @@ function resolveFieldSelection(
     objectType: GraphQLObjectType<any, any>,
     sfdcSchema: SfdcSchema,
     selection: FieldNode,
+    context: ResolverContext,
 ): SOQLSelect | undefined {
     const fieldName = selection.name.value;
 
@@ -418,6 +431,7 @@ function resolveFieldSelection(
     const entityRelationship = entity.childRelationships.find(
         (relation) => relation.normalisedName === fieldName,
     );
+    const additionalField = entity.additionalFields.find((x) => x.name === fieldName);
 
     if (entityField) {
         if (isScalarField(entityField)) {
@@ -429,13 +443,14 @@ function resolveFieldSelection(
             const referenceEntity = entityField.referencedEntity!;
             const referenceObjectType = unwrapObjectType(fieldType.type);
 
-            const selects = resolveSelection(
+            const selects = resolveSelection({
                 info,
-                referenceEntity,
-                referenceObjectType,
+                entity: referenceEntity,
+                objectType: referenceObjectType,
                 sfdcSchema,
-                selection.selectionSet,
-            );
+                context,
+                selectionSet: selection.selectionSet,
+            });
 
             return {
                 type: SOQLFieldType.REFERENCE,
@@ -449,13 +464,14 @@ function resolveFieldSelection(
         const relationshipEntity = entityRelationship.entity!;
         const relationshipType = unwrapObjectType(fieldType.type);
 
-        const selects = resolveSelection(
+        const selects = resolveSelection({
             info,
-            relationshipEntity,
-            relationshipType,
+            entity: relationshipEntity,
+            objectType: relationshipType,
             sfdcSchema,
-            selection.selectionSet!,
-        );
+            context,
+            selectionSet: selection.selectionSet!,
+        });
 
         const queryArgs = resolveQueryManyArgs(info, entity, fieldType, selection);
 
@@ -465,6 +481,10 @@ function resolveFieldSelection(
             selects,
             ...queryArgs,
         };
+    } else if (additionalField) {
+        console.log(additionalField);
+
+        return additionalField.select(context);
     } else {
         assert.fail(
             `Can't find field or relationship named "${fieldName}" on "${entity.normalisedName}"`,
@@ -478,6 +498,7 @@ function resolveInlineFragmentSelection(
     objectType: GraphQLObjectType<any, any>,
     sfdcSchema: SfdcSchema,
     selection: InlineFragmentNode,
+    context: ResolverContext,
 ): SOQLSelect[] {
     let fragmentEntity = entity;
     let fragmentObjectType = objectType;
@@ -489,19 +510,21 @@ function resolveInlineFragmentSelection(
         fragmentObjectType = assertObjectType(info.schema.getType(entityName));
     }
 
-    return resolveSelection(
+    return resolveSelection({
         info,
-        fragmentEntity,
-        fragmentObjectType,
+        entity: fragmentEntity,
+        objectType: fragmentObjectType,
         sfdcSchema,
-        selection.selectionSet,
-    );
+        context,
+        selectionSet: selection.selectionSet,
+    });
 }
 
 function resolveFragmentSelection(
     info: GraphQLResolveInfo,
     sfdcSchema: SfdcSchema,
     selection: FragmentSpreadNode,
+    context: ResolverContext,
 ): SOQLSelect[] {
     const fragmentName = selection.name.value;
     const fragment = info.fragments[fragmentName];
@@ -512,13 +535,14 @@ function resolveFragmentSelection(
         sfdcSchema.entities[fieldNameNormalise(entityName, { pascalCase: true })];
     const fragmentObjectType = assertObjectType(info.schema.getType(entityName));
 
-    return resolveSelection(
+    return resolveSelection({
         info,
-        fragmentEntity,
-        fragmentObjectType,
+        entity: fragmentEntity,
+        objectType: fragmentObjectType,
         sfdcSchema,
-        fragment.selectionSet,
-    );
+        context,
+        selectionSet: fragment.selectionSet,
+    });
 }
 
 /**

@@ -85,7 +85,8 @@ export interface SOQLOrderByItem {
 }
 
 export function queryToString(query: SOQLQuery): string {
-    let res = `SELECT ${selectsToString(query.selects).join(', ')}`;
+    const columns = [...new Set(selectsToString(query.selects))];
+    let res = `SELECT ${columns.join(', ')}`;
     res += ` FROM ${query.table}`;
 
     if (query.where) {

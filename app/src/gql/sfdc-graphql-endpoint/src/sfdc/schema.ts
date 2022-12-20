@@ -5,6 +5,10 @@ import {
     SObjectField,
     SObjectFieldType,
 } from './types/describe-sobject';
+import { GraphQLFieldConfig } from 'graphql';
+import { SOQLRecord } from './types/soql';
+import { SOQLSelect } from './soql';
+import { ResolverContext } from '../graphql/resolvers';
 
 export interface SfdcSchema {
     entities: { [name: string]: Entity };
@@ -16,6 +20,13 @@ export interface Entity {
     config: EntityConfig;
     fields: Field[];
     childRelationships: ChildRelationship[];
+    additionalFields: AdditionalEntity[];
+}
+
+export interface AdditionalEntity {
+    name: string;
+    field: GraphQLFieldConfig<SOQLRecord<any>, ResolverContext>;
+    select: (context: ResolverContext) => SOQLSelect;
 }
 
 export interface ChildRelationship {
@@ -142,19 +153,26 @@ const SOBJECT_FIELD_SCALAR_TYPE_MAPPING: {
     location: FieldType.LOCATION,
 };
 
-export function createSfdcSchema(config: { sObjects: DescribeSObjectResult[] }): SfdcSchema {
+export function createSfdcSchema({
+    sObjects,
+    additionalEntities,
+}: {
+    sObjects: DescribeSObjectResult[];
+    additionalEntities: { [name: string]: AdditionalEntity[] };
+}): SfdcSchema {
     const schema: SfdcSchema = { entities: {} };
 
-    for (const sObject of config.sObjects) {
-        const entity = createEntity(schema, sObject);
+    for (const sObject of sObjects) {
+        const entity = createEntity(schema, sObject, additionalEntities);
         schema.entities[fieldNameNormalise(entity.normalisedName, { pascalCase: true })] = entity;
     }
 
     return schema;
 }
 
-function createEntity(schema: SfdcSchema, sObject: DescribeSObjectResult): Entity {
+function createEntity(schema: SfdcSchema, sObject: DescribeSObjectResult, additionalEntities: { [name: string]: AdditionalEntity[] }): Entity {
     const { name, createable, updateable, deletable, queryable } = sObject;
+    const normalisedName = fieldNameNormalise(name);
 
     const fields = sObject.fields
         .map((field) => createField(schema, field))
@@ -164,9 +182,11 @@ function createEntity(schema: SfdcSchema, sObject: DescribeSObjectResult): Entit
         .map((relationship) => createChildRelationShip(schema, relationship))
         .filter((rel): rel is ChildRelationship => rel !== undefined);
 
+    const additionalFields = additionalEntities[normalisedName] ?? [];
+
     return {
         salesforceName: name,
-        normalisedName: fieldNameNormalise(name),
+        normalisedName,
         config: {
             createable,
             updateable,
@@ -175,6 +195,7 @@ function createEntity(schema: SfdcSchema, sObject: DescribeSObjectResult): Entit
         },
         fields,
         childRelationships,
+        additionalFields,
     };
 }
 

@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet";
-import { renderToString } from "react-dom/server";
+import { renderToPipeableStream, renderToString } from "react-dom/server";
 import { AnyAction, createStore, Store } from "redux";
 import { Provider } from "react-redux";
 import { StaticRouter } from "react-router-dom/server";
@@ -30,11 +30,7 @@ import { GetAllProjectRolesForUser } from "./features/projects/getAllProjectRole
 import { getErrorStatus } from "./errorHandlers";
 import { renderHtml } from "./html";
 import RelayModernEnvironment from "relay-runtime/lib/store/RelayModernEnvironment";
-import {
-  getServerGraphQLEnvironment,
-  getServerGraphQLFinalRenderEnvironment,
-  relayServerSSR,
-} from "@gql/ServerGraphQLEnvironment";
+import { getServerGraphQLEnvironment, getServerGraphQLFinalRenderEnvironment } from "@gql/ServerGraphQLEnvironment";
 import { SSRCache } from "react-relay-network-modern-ssr/lib/server";
 import { loadQuery } from "relay-hooks";
 import { GraphQLSchema } from "graphql";
@@ -75,11 +71,11 @@ const serverRender =
     const context = contextProvider.start({ user: req.session?.user });
     const clientConfig = getClientConfig(context);
     const modalRegister = new ModalRegister();
-    const relayEnvironment = await getServerGraphQLEnvironment({ req, res, error, schema });
+    const { ServerGraphQLEnvironment, relayServerSSR } = getServerGraphQLEnvironment({ req, res, error, schema });
     const preloadedQuery = loadQuery();
 
     // Pre-load site configuration options
-    await preloadedQuery.next(relayEnvironment, clientConfigQueryQuery, {});
+    await preloadedQuery.next(ServerGraphQLEnvironment, clientConfigQueryQuery, {});
 
     try {
       let auth: Authorisation;
@@ -150,7 +146,14 @@ const serverRender =
 
       // Note: Keep resolving app queries + actions until completion for final render below
       await loadAllData(store, () => {
-        renderApp({ requestUrl: req.url, nonce, store, stores, modalRegister, relayEnvironment });
+        renderApp({
+          requestUrl: req.url,
+          nonce,
+          store,
+          stores,
+          modalRegister,
+          relayEnvironment: ServerGraphQLEnvironment,
+        });
       });
 
       // Wait until all Relay queries have been made.

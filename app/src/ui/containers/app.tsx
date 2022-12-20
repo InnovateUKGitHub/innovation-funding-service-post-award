@@ -17,7 +17,15 @@ import { PageTitleProvider } from "@ui/features/page-title";
 import { ProjectParticipantProvider } from "@ui/features/project-participants";
 import { useInitContent } from "@ui/features/use-initial-content";
 
-import { Footer, FullHeight, GovWidthContainer, Header, PhaseBanner, PrivateModal } from "@ui/components";
+import {
+  Footer,
+  FullHeight,
+  GovWidthContainer,
+  Header,
+  PhaseBanner,
+  PrivateModal,
+  SuspensePageLoader,
+} from "@ui/components";
 import { ErrorBoundaryFallback, ErrorContainer } from "@ui/components/errors";
 import { MountedProvider } from "@ui/features";
 import { getParamsFromUrl } from "@ui/helpers/make-url";
@@ -111,18 +119,20 @@ function AppView({ currentRoute, dispatch }: IAppProps) {
                 <PhaseBanner />
               </GovWidthContainer>
 
-              {hasAccess ? (
-                <ProjectParticipantProvider projectId={routePathParams.projectId as string}>
-                  <ProjectStatusCheck
-                    projectId={routePathParams.projectId as string}
-                    overrideAccess={!!currentRoute.allowRouteInActiveAccess}
-                  >
-                    <PageContainer {...baseProps} />
-                  </ProjectStatusCheck>
-                </ProjectParticipantProvider>
-              ) : (
-                <ErrorContainer from="app" {...(params as ErrorPayload["params"])} />
-              )}
+              <SuspensePageLoader>
+                {hasAccess ? (
+                  <ProjectParticipantProvider projectId={routePathParams.projectId as string}>
+                    <ProjectStatusCheck
+                      projectId={routePathParams.projectId as string}
+                      overrideAccess={!!currentRoute.allowRouteInActiveAccess}
+                    >
+                      <PageContainer {...baseProps} />
+                    </ProjectStatusCheck>
+                  </ProjectParticipantProvider>
+                ) : (
+                  <ErrorContainer from="app" {...(params as ErrorPayload["params"])} />
+                )}
+              </SuspensePageLoader>
             </FullHeight.Content>
 
             {!data.clientConfig.ssoEnabled && <DeveloperSection />}
