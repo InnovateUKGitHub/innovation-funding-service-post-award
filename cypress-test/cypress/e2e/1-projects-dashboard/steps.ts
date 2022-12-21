@@ -1,11 +1,10 @@
 const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
-const testProjectName = "ACC-9055 🛑 DO NOT TOUCH 🛑 CYPRESS";
 
 export const logInAsUserAndNavigateToProject = (email: string) => {
   cy.switchUserTo(email, true);
 
   cy.contains("Projects").click({ force: true });
-  cy.get(`${projectCardCss} a`).wait(1000).contains(testProjectName).click();
+  cy.get(`${projectCardCss} a`).wait(1000).contains("CYPRESS_DO_NOT_USE").click();
 };
 
 export const monitoringReportCardShouldNotExist = () => {
@@ -39,15 +38,16 @@ export const shouldFilterProjectsUsingCheckboxes = ([label, expectedText]: [stri
 };
 
 export const shouldFilterProjectsUsingSearchFilter = () => {
-  cy.get("input#search").type(testProjectName);
-  cy.get(projectCardCss).each(card => cy.wrap(card).contains(testProjectName));
+  cy.get("input#search").type("CYPRESS");
+  cy.get(projectCardCss).each(card => cy.wrap(card).contains("CYPRESS"));
+  cy.get("input#search").clear();
 };
 
 export const shouldNavigateToProjectOverview = () => {
-  cy.get(`${projectCardCss} a`).wait(500).contains(testProjectName).click();
+  cy.get(`${projectCardCss} a`).wait(500).contains("CYPRESS_DO_NOT_USE").click();
 
   cy.get("h1").contains("Project overview");
-  cy.getByQA("page-title").should("contain.text", testProjectName);
+  cy.getByQA("page-title").should("contain.text", "CYPRESS_DO_NOT_USE");
 };
 
 export const shouldShowProjectTitle = () => {
