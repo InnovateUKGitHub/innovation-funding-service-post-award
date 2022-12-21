@@ -1,4 +1,3 @@
-import { scrollToTheTopSmoothly } from "@framework/util";
 import { apiClient } from "@ui/apiClient";
 import { Pending } from "@shared/pending";
 import { MonitoringReportDto, MonitoringReportSummaryDto } from "@framework/dtos";
@@ -118,8 +117,6 @@ export class MonitoringReportsStore extends StoreBase {
         this.queue(dataLoadAction("monitoringReport", result.headerId, LoadingStatus.Updated, result));
 
         this.markStale("monitoringReports", projectId, undefined);
-
-        scrollToTheTopSmoothly();
 
         if (onComplete) {
           onComplete(result);
