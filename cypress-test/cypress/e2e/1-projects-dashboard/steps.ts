@@ -1,5 +1,5 @@
 const projectCardCss = '[data-qa="pending-and-open-projects"] .acc-list-item';
-const testProjectName = "CYPRESS";
+const testProjectName = "ACC-9055 🛑 DO NOT TOUCH 🛑 CYPRESS";
 
 export const logInAsUserAndNavigateToProject = (email: string) => {
   cy.switchUserTo(email, true);
@@ -13,7 +13,7 @@ export const monitoringReportCardShouldNotExist = () => {
 };
 
 export const shouldNavigateToProjectDashboard = () => {
-  cy.contains("Projects").click();
+  cy.get("h2").contains("Projects").click();
   cy.get("h1").contains("Dashboard");
 };
 

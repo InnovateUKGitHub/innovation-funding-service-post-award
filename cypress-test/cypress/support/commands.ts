@@ -1,3 +1,5 @@
+import "@testing-library/cypress/add-commands";
+
 const getByLabel = (label: string) => {
   cy.log("**getByLabel**");
   cy.contains("label", label)
