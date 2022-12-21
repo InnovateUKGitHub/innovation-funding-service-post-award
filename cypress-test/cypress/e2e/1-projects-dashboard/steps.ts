@@ -17,7 +17,7 @@ export const shouldNavigateToProjectDashboard = () => {
   cy.get("h1").contains("Dashboard");
 };
 
-export const shouldFindMatchingProjectCard = projectCard => {
+export const shouldFindMatchingProjectCard = (projectCard: string) => {
   cy.get(".card-link h2").contains(projectCard);
 };
 
@@ -29,7 +29,7 @@ export const shouldShowAListOfProjectCards = () => {
   cy.get(projectCardCss).should("have.length.greaterThan", 5);
 };
 
-export const shouldFilterProjectsUsingCheckboxes = ([label, expectedText]) => {
+export const shouldFilterProjectsUsingCheckboxes = ([label, expectedText]: [string, string]) => {
   cy.getByLabel(label).click();
 
   cy.get(projectCardCss).each(card => cy.wrap(card).contains(expectedText));

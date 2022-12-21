@@ -43,11 +43,11 @@ const uploadButton = (name: string) => {
 };
 
 const tableCell = (name: string) => {
-  cy.get("td.govuk-table__cell");
+  cy.get("td.govuk-table__cell").contains(name);
 };
 
 const tableHeader = (name: string) => {
-  cy.get("th.govuk-table__header");
+  cy.get("th.govuk-table__header").contains(name);
 };
 
 const assertPcrCompletionStatus = (pcrType: string, status: string) => {

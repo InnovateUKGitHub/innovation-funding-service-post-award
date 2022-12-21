@@ -1,4 +1,4 @@
-const replaceTitleTemplateWithArg = <T>(title: string, args: any): string =>
+const replaceTitleTemplateWithArg = (title: string, args: any): string =>
   /(.*)(\$\d+)(\.*)/.test(title)
     ? replaceTitleTemplateWithArg(
         title.replace(/(.*)(\$\d+)(\.*)/, function (m, p1, p2, p3) {
@@ -12,6 +12,7 @@ const replaceTitleTemplateWithArg = <T>(title: string, args: any): string =>
 
 export const testEach =
   <T>(testArray: T[]) =>
+  // eslint-disable-next-line no-unused-vars
   (title: string, fn: (args: T) => void) => {
     testArray.forEach(element => {
       it(replaceTitleTemplateWithArg(title, element), () => fn(element));
