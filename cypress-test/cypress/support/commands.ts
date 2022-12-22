@@ -19,11 +19,6 @@ const getByAriaLabel = (label: string) => {
   cy.get(`[aria-label="${label}"`);
 };
 
-const getByName = (label: string) => {
-  cy.log("**getByName**");
-  cy.get(`[name="${label}"`);
-};
-
 const switchUserTo = (email: string, goHome: boolean = false) => {
   cy.contains("User Switcher").click();
   cy.get("input#user-switcher-manual-input").scrollIntoView().clear().type(email);
@@ -84,4 +79,3 @@ Cypress.Commands.add("tableCell", tableCell);
 Cypress.Commands.add("tableHeader", tableHeader);
 Cypress.Commands.add("assertPcrCompletionStatus", assertPcrCompletionStatus);
 Cypress.Commands.add("clickCheckBox", clickCheckBox);
-Cypress.Commands.add("getByName", getByName);

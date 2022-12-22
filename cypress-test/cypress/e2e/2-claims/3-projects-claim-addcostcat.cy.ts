@@ -68,7 +68,7 @@ describe("Editing a claim by accessing cost categories", () => {
   it("Should contain additional information heading and messaging", additionalInformationHeading);
 
   it("Has an area for writing free-text comments", () => {
-    cy.getByName("comments").clear().type(standardComments);
+    cy.getByQA("info-text-area").clear().type(standardComments);
   });
 
   it("Should count how many characters you have used", () => {

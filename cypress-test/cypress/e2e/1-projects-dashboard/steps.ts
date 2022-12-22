@@ -13,7 +13,7 @@ export const monitoringReportCardShouldNotExist = () => {
 
 export const shouldNavigateToProjectDashboard = () => {
   cy.get("h2").contains("Projects").click();
-  cy.get("h1").contains("Dashboard");
+  cy.get("h1", { timeout: 10000 }).contains("Dashboard");
 };
 
 export const shouldFindMatchingProjectCard = (projectCard: string) => {

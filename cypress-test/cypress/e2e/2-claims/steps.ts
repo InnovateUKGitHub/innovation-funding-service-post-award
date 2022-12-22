@@ -26,8 +26,8 @@ export const correctTableHeaders = () => {
 
 export const newCostCatLineItem = () => {
   cy.get("a").contains("Add a cost").click();
-  cy.getByName("description0").clear().type("Test line item");
-  cy.getByName("value0").clear().type("1000");
+  cy.getByAriaLabel("description of claim line item 1").clear().type("Test line item");
+  cy.getByAriaLabel("value of claim line item 1").clear().type("1000");
 };
 
 export const allowFileUpload = () => {
@@ -142,7 +142,7 @@ export const forecastView = () => {
 
 export const claimCommentBox = () => {
   cy.get("h2").contains("Add comments");
-  cy.getByName("comments").clear().type(standardComments);
+  cy.getByQA("info-text-area").clear().type(standardComments);
 };
 
 export const learnFiles = () => {

@@ -69,12 +69,6 @@ declare global {
        * Clicks checkbox with matching label, scrolls into view and waits before checking
        */
       clickCheckBox(label: string, uncheck?: boolean): void;
-
-      /**
-       * Gets an input or element by matching name
-       */
-
-      getByName(label: string): Chainable<Element>;
     }
   }
 }
