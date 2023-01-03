@@ -14,7 +14,7 @@ class ESBuildConfiguration {
    * A server configuration for production builds.
    * Extensible to make suitable for development/watch modes.
    *
-   * @type {Partial<BuildOptions>}
+   * @type {BuildOptions}
    */
   serverBuild;
 
@@ -22,7 +22,7 @@ class ESBuildConfiguration {
    * A client configuration for production builds.
    * Extensible to make suitable for development/watch modes.
    *
-   * @type {Partial<BuildOptions>}
+   * @type {BuildOptions}
    */
   clientBuild;
 
