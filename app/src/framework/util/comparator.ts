@@ -39,9 +39,18 @@ export const dayComparator: IComparer<Date> = (a, b) => {
  * @example projects.open.sort(projectPriorityComparator)
  */
 export const projectPriorityComparator: IComparer<ProjectSortableFragment$data> = (a, b) => {
-  const claimsForReviewComparison = nullableNumberComparator(b.accClaimsForReviewCustom, a.accClaimsForReviewCustom);
-  const pcrsForReviewComparison = nullableNumberComparator(b.accPcRsForReviewCustom, a.accPcRsForReviewCustom);
-  const pcrsUnderQueryComparison = nullableNumberComparator(b.accPcRsUnderQueryCustom, a.accPcRsUnderQueryCustom);
+  const claimsForReviewComparison = nullableNumberComparator(
+    b.Acc_ClaimsForReview__c?.value,
+    a.Acc_ClaimsForReview__c?.value,
+  );
+  const pcrsForReviewComparison = nullableNumberComparator(
+    b.Acc_PCRsForReview__c?.value,
+    a.Acc_PCRsForReview__c?.value,
+  );
+  const pcrsUnderQueryComparison = nullableNumberComparator(
+    b.Acc_PCRsUnderQuery__c?.value,
+    a.Acc_PCRsUnderQuery__c?.value,
+  );
 
   return claimsForReviewComparison || pcrsForReviewComparison || pcrsUnderQueryComparison;
 };

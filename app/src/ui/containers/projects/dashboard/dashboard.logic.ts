@@ -1,5 +1,4 @@
 import { fuzzySearch } from "@framework/util/fuzzySearch";
-import { AllRoles, useProjectRolesFragment } from "@gql/hooks/useProjectRolesQuery";
 import { SelectOption } from "@ui/components";
 import { useContent } from "@ui/hooks";
 import { IPartner, IProject } from "./Dashboard.interface";
@@ -12,19 +11,13 @@ import { getProjectSection, IDashboardProjectData } from "./DashboardProject";
  * @author Leondro Lio <leondro.lio@iuk.ukri.org>
  * @returns The checkbox options a user can use to filter projects
  */
-const getFilterOptions = ({
-  projects,
-  roles,
-}: {
-  projects: IDashboardProjectData[];
-  roles: ReturnType<typeof useProjectRolesFragment>;
-}): SelectOption[] => {
+const getFilterOptions = ({ projects }: { projects: IDashboardProjectData[] }): SelectOption[] => {
   // Start off with no options
   const filterOptions: SelectOption[] = [];
 
-  const isAnyMo = projects.some(x => roles[x.project.id]?.projectRoles.isMo);
-  const isAnyFc = projects.some(x => roles[x.project.id]?.projectRoles.isFc);
-  const isAnyPm = projects.some(x => roles[x.project.id]?.projectRoles.isPm);
+  const isAnyMo = projects.some(x => x.project.roles.isMo);
+  const isAnyFc = projects.some(x => x.project.roles.isFc);
+  const isAnyPm = projects.some(x => x.project.roles.isPm);
 
   // PCRS
   if (isAnyMo) filterOptions.push({ id: "PCRS_TO_REVIEW", value: "PCR's to review" });
@@ -59,7 +52,6 @@ const getFilteredProjects = ({
   claimsToUploadReport,
   claimsToRespond,
   projects,
-  roles,
 }: {
   searchQuery: string;
   pcrsQueried: boolean;
@@ -70,7 +62,6 @@ const getFilteredProjects = ({
   claimsToUploadReport: boolean;
   claimsToRespond: boolean;
   projects: IDashboardProjectData[];
-  roles: ReturnType<typeof useProjectRolesFragment>;
 }) => {
   // Only display "filtering" messages if any filter options are enabled.
   const isFiltering =
@@ -86,16 +77,16 @@ const getFilteredProjects = ({
   // Otherwise, if all filters are missing, use all projects.
   const filteredProjects = isFiltering
     ? projects.filter(({ project, partner, projectSection }) => {
-        if (pcrsQueried && project.accPcRsUnderQueryCustom! > 0) return true;
-        if (claimsToReview && project.accClaimsForReviewCustom! > 0) return true;
-        if (pcrsToReview && project.accPcRsForReviewCustom! > 0) return true;
+        if (pcrsQueried && project.Acc_PCRsUnderQuery__c!.value! > 0) return true;
+        if (claimsToReview && project.Acc_ClaimsForReview__c!.value! > 0) return true;
+        if (pcrsToReview && project.Acc_PCRsForReview__c!.value! > 0) return true;
         if (setupRequired && projectSection === "pending") return true;
 
-        const role = roles[project.id];
-        if (role?.projectRoles.isFc && partner) {
-          if (claimsToRespond && partner.accTrackingClaimsCustom === "Claim Queried") return true;
-          if (claimsToSubmit && partner.accTrackingClaimsCustom === "Claim Due") return true;
-          if (claimsToRespond && partner.accTrackingClaimsCustom === "Awaiting IAR") return true;
+        const { isFc } = project.roles;
+        if (isFc && partner) {
+          if (claimsToRespond && partner.Acc_TrackingClaims__c?.value === "Claim Queried") return true;
+          if (claimsToSubmit && partner.Acc_TrackingClaims__c?.value === "Claim Due") return true;
+          if (claimsToRespond && partner.Acc_TrackingClaims__c?.value === "Awaiting IAR") return true;
         }
 
         return false;
@@ -104,9 +95,9 @@ const getFilteredProjects = ({
 
   const searchedProjects = searchQuery
     ? fuzzySearch(searchQuery.trim(), filteredProjects, [
-        "project.accProjectTitleCustom",
-        "project.accProjectNumberCustom",
-        "partner.accAccountIdCustom.name",
+        "project.Acc_ProjectTitle__c.value",
+        "project.Acc_ProjectNumber__c.value",
+        "partner.Acc_AccountId__r.Name.value",
       ]).map(x => x.item)
     : filteredProjects;
 
@@ -129,18 +120,14 @@ const getFilteredProjects = ({
 const useProjectActions = ({
   project,
   partner,
-  roles,
   projectSection,
 }: {
   project: IProject;
-  partner?: IPartner;
-  roles: AllRoles;
+  partner?: IPartner | null;
   projectSection: ReturnType<typeof getProjectSection>;
 }): string[] => {
   const { getContent } = useContent();
-  const isMo = roles[project.id]?.projectRoles.isMo ?? false;
-  const isFc = roles[project.id]?.projectRoles.isFc ?? false;
-  const isPm = roles[project.id]?.projectRoles.isPm ?? false;
+  const { isMo, isFc, isPm } = project.roles;
 
   const messages: string[] = [];
 
@@ -149,23 +136,23 @@ const useProjectActions = ({
   }
 
   if (projectSection === "archived") {
-    messages.push(project.accProjectStatusCustom!);
+    messages.push(project.Acc_ProjectStatus__c!.value!);
   }
 
   if (["open", "awaiting"].includes(projectSection)) {
-    const isProjectOnHold = project.accProjectStatusCustom! === "On Hold";
-    const hasQueriedPcrs = project.accPcRsUnderQueryCustom! > 0;
+    const isProjectOnHold = project.Acc_ProjectStatus__c?.value === "On Hold";
+    const hasQueriedPcrs = project.Acc_PCRsUnderQuery__c!.value! > 0;
 
     if (isProjectOnHold) {
       messages.push(getContent(x => x.projectMessages.projectOnHold));
     }
 
     if (isFc && partner) {
-      if (partner.accNewForecastNeededCustom) {
+      if (partner.Acc_NewForecastNeeded__c?.value) {
         messages.push(getContent(x => x.projectMessages.checkForecast));
       }
 
-      switch (partner.accTrackingClaimsCustom) {
+      switch (partner.Acc_TrackingClaims__c?.value) {
         case "Claim Due":
           messages.push(getContent(x => x.projectMessages.claimToSubmitMessage));
           break;
@@ -182,17 +169,17 @@ const useProjectActions = ({
     }
 
     if (isMo) {
-      if (project.accClaimsForReviewCustom) {
+      if (project.Acc_ClaimsForReview__c?.value) {
         messages.push(
-          getContent(x => x.projectMessages.claimsToReviewMessage({ count: project.accClaimsForReviewCustom })),
+          getContent(x => x.projectMessages.claimsToReviewMessage({ count: project.Acc_ClaimsForReview__c?.value })),
         );
       }
-      if (project.accClaimsOverdueCustom) {
+      if (project.Acc_ClaimsOverdue__c?.value) {
         const content = getContent(x => x.projectMessages.claimOverdueMessage);
         if (!messages.includes(content)) messages.push(content);
       }
-      if (project.accPcRsForReviewCustom) {
-        messages.push(getContent(x => x.projectMessages.pcrsToReview({ count: project.accPcRsForReviewCustom })));
+      if (project.Acc_PCRsForReview__c?.value) {
+        messages.push(getContent(x => x.projectMessages.pcrsToReview({ count: project.Acc_PCRsForReview__c?.value })));
       }
     }
 

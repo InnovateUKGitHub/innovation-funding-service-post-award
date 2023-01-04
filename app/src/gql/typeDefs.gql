@@ -1,0 +1,168 @@
+# Salesforce GraphQL API extensions
+interface Ext_Roles {
+  isMo: Boolean!
+  isFc: Boolean!
+  isPm: Boolean!
+  isSalesforceSystemUser: Boolean!
+}
+
+type Ext_Partner_Roles implements Ext_Roles {
+  isMo: Boolean!
+  isFc: Boolean!
+  isPm: Boolean!
+  isSalesforceSystemUser: Boolean!
+  partnerId: ID!
+}
+
+type Ext_Project_Roles implements Ext_Roles {
+  isMo: Boolean!
+  isFc: Boolean!
+  isPm: Boolean!
+  isSalesforceSystemUser: Boolean!
+  partnerRoles: [Ext_Partner_Roles!]!
+}
+
+extend type Acc_Project__c {
+  roles: Ext_Project_Roles!
+}
+
+# 
+# The following type definitions fixes non-compliant Salesforce GraphQL types.
+# These would otherwise cause GraphQL/Relay compiler to complain about an invalid schema.
+#
+
+type AttachedContentNoteConnection {
+  stubObjectPleaseIgnore: String
+}
+
+type AttachedContentNote implements Record {
+  Id: ID!
+  ApiName: String!
+  WeakEtag: Long!
+  DisplayValue: String
+  LastModifiedById: IDValue
+  LastModifiedDate: DateTimeValue
+  SystemModstamp: DateTimeValue
+  RecordTypeId(
+    """
+    Controls whether the UIAPI fallback behavior will be used when determining the RecordTypeId.
+    """
+    fallback: Boolean
+  ): IDValue
+}
+
+type Exception_Log__e implements Record {
+  Id: ID!
+  ApiName: String!
+  WeakEtag: Long!
+  DisplayValue: String
+  LastModifiedById: IDValue
+  LastModifiedDate: DateTimeValue
+  SystemModstamp: DateTimeValue
+  RecordTypeId(
+    """
+    Controls whether the UIAPI fallback behavior will be used when determining the RecordTypeId.
+    """
+    fallback: Boolean
+  ): IDValue
+}
+
+type MO_Account_Share__e implements Record {
+  Id: ID!
+  ApiName: String!
+  WeakEtag: Long!
+  DisplayValue: String
+  LastModifiedById: IDValue
+  LastModifiedDate: DateTimeValue
+  SystemModstamp: DateTimeValue
+  RecordTypeId(
+    """
+    Controls whether the UIAPI fallback behavior will be used when determining the RecordTypeId.
+    """
+    fallback: Boolean
+  ): IDValue
+}
+
+type MO_Live_Projects_Count__e implements Record {
+  Id: ID!
+  ApiName: String!
+  WeakEtag: Long!
+  DisplayValue: String
+  LastModifiedById: IDValue
+  LastModifiedDate: DateTimeValue
+  SystemModstamp: DateTimeValue
+  RecordTypeId(
+    """
+    Controls whether the UIAPI fallback behavior will be used when determining the RecordTypeId.
+    """
+    fallback: Boolean
+  ): IDValue
+}
+
+type MO_New_Register__e implements Record {
+  Id: ID!
+  ApiName: String!
+  WeakEtag: Long!
+  DisplayValue: String
+  LastModifiedById: IDValue
+  LastModifiedDate: DateTimeValue
+  SystemModstamp: DateTimeValue
+  RecordTypeId(
+    """
+    Controls whether the UIAPI fallback behavior will be used when determining the RecordTypeId.
+    """
+    fallback: Boolean
+  ): IDValue
+}
+
+type MO_Post_Community_Group__e implements Record {
+  Id: ID!
+  ApiName: String!
+  WeakEtag: Long!
+  DisplayValue: String
+  LastModifiedById: IDValue
+  LastModifiedDate: DateTimeValue
+  SystemModstamp: DateTimeValue
+  RecordTypeId(
+    """
+    Controls whether the UIAPI fallback behavior will be used when determining the RecordTypeId.
+    """
+    fallback: Boolean
+  ): IDValue
+}
+
+type nbavs__CTIDeviceUpdateEvent__e implements Record {
+  Id: ID!
+  ApiName: String!
+  WeakEtag: Long!
+  DisplayValue: String
+  LastModifiedById: IDValue
+  LastModifiedDate: DateTimeValue
+  SystemModstamp: DateTimeValue
+  RecordTypeId(
+    """
+    Controls whether the UIAPI fallback behavior will be used when determining the RecordTypeId.
+    """
+    fallback: Boolean
+  ): IDValue
+}
+
+type nbavs__LogoutEvent__e implements Record {
+  Id: ID!
+  ApiName: String!
+  WeakEtag: Long!
+  DisplayValue: String
+  LastModifiedById: IDValue
+  LastModifiedDate: DateTimeValue
+  SystemModstamp: DateTimeValue
+  RecordTypeId(
+    """
+    Controls whether the UIAPI fallback behavior will be used when determining the RecordTypeId.
+    """
+    fallback: Boolean
+  ): IDValue
+}
+
+type JSONValue implements FieldValue {
+  displayValue: String
+}

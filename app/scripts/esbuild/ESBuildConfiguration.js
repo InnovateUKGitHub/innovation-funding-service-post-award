@@ -7,7 +7,6 @@ const { typecheckPlugin } = require("@jgoz/esbuild-plugin-typecheck");
 const replaceModulesPlugin = require("./replaceModulesPlugin");
 const replaceGraphqlRelayPlugin = require("./replaceGraphqlRelayPlugin");
 const Restarter = require("./Restarter");
-const { execSync } = require("child_process");
 
 class ESBuildConfiguration {
   /**
@@ -56,6 +55,7 @@ class ESBuildConfiguration {
       plugins: [nodeExternalsPlugin(), replaceGraphqlRelayPlugin],
       loader: {
         ".apex": "text",
+        ".gql": "text",
       },
     };
 
@@ -71,6 +71,9 @@ class ESBuildConfiguration {
       plugins: [replaceModulesPlugin, replaceGraphqlRelayPlugin],
       external: ["*.png", "*.woff2", "*.woff"],
       logLevel: "info",
+      loader: {
+        ".gql": "text",
+      },
     };
   }
 
@@ -91,9 +94,6 @@ class ESBuildConfiguration {
     Object.assign(this.clientBuild, {
       watch: {
         onRebuild: () => {
-          // Run relay
-          execSync("npm run relay", { stdio: "inherit" });
-
           // On a rebuild, tell the client to reload.
           this.getRestarter().refreshClient();
         },

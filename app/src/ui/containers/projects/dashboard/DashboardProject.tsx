@@ -1,4 +1,4 @@
-import type { AllRoles } from "@gql/hooks/useProjectRolesQuery";
+import { toDefinedArray } from "@shared/toArray";
 import { Content, H4, Link, ListItem, Renderers } from "@ui/components";
 import { SimpleString } from "@ui/components/renderers";
 import { useContent } from "@ui/hooks";
@@ -13,12 +13,12 @@ const getProjectNotes = ({
   projectSection,
 }: {
   project: IProject;
-  partner?: IPartner;
+  partner?: IPartner | null;
   projectSection: ReturnType<typeof getProjectSection>;
 }) => {
   const isNotAvailable = !["open", "awaiting"].includes(projectSection);
   const isPartnerWithdrawn = ["Involuntary Withdrawal", "Voluntary Withdrawal", "Migrated - Withdrawn"].includes(
-    partner?.accParticipantStatusCustom ?? "",
+    partner?.Acc_ParticipantStatus__c?.value ?? "",
   );
 
   const messages: JSX.Element[] = [];
@@ -26,32 +26,32 @@ const getProjectNotes = ({
   // The lead partner will never have status === withdrawn,
   // so it doesn't matter that "withdrawn" is not getting appended to leadPartnerName
   // Caveat: they will be withdrawn for a few minutes while another lead partner is set, but we're not worrying about this
-  messages.push(<>{project.accLeadParticipantNameCustom}</>);
+  messages.push(<>{project.Acc_LeadParticipantName__c?.value}</>);
 
   // Note: If project is not available then just bail early!
   if (isNotAvailable) return messages;
 
   if (projectSection === "upcoming") {
     const upcomingMessage = (
-      <Renderers.ShortDateRange start={project.accStartDateCustom} end={project.accEndDateCustom} />
+      <Renderers.ShortDateRange start={project.Acc_StartDate__c?.value} end={project.Acc_EndDate__c?.value} />
     );
     messages.push(upcomingMessage);
   }
 
   // TODO: Ensure Salesforce dates are not nillable.
-  if (new Date(project.accEndDateCustom!) < new Date() || isPartnerWithdrawn) {
+  if (new Date(project.Acc_EndDate__c!.value!) < new Date() || isPartnerWithdrawn) {
     messages.push(<Content value={x => x.projectMessages.projectEndedMessage} />);
   } else {
     const projectDate = (
       <Renderers.ShortDateRange
-        start={project.accCurrentPeriodStartDateCustom}
-        end={project.accCurrentPeriodEndDateCustom}
+        start={project.Acc_CurrentPeriodStartDate__c?.value}
+        end={project.Acc_CurrentPeriodEndDate__c?.value}
       />
     );
 
     messages.push(
       <>
-        Period {project.accCurrentPeriodNumberCustom} of {project.accNumberofPeriodsCustom} ({projectDate})
+        Period {project.Acc_CurrentPeriodNumber__c?.value} of {project.Acc_NumberofPeriods__c?.value} ({projectDate})
       </>,
     );
   }
@@ -65,53 +65,49 @@ const DashboardProjectTitle = ({
   projectSection,
 }: {
   project: IProject;
-  partner?: IPartner;
+  partner?: IPartner | null;
   projectSection: ReturnType<typeof getProjectSection>;
 }) => {
-  const titleContent = `${project.accProjectNumberCustom}: ${project.accProjectTitleCustom}`;
+  const titleContent = `${project.Acc_ProjectNumber__c?.value}: ${project.Acc_ProjectTitle__c?.value}`;
 
   if (projectSection === "upcoming") return <>{titleContent}</>;
 
   const projectNotSetup = partner && projectSection === "pending";
 
   const route = projectNotSetup
-    ? ProjectSetupRoute.getLink({ projectId: project.id, partnerId: partner.id })
-    : ProjectOverviewRoute.getLink({ projectId: project.id });
+    ? ProjectSetupRoute.getLink({ projectId: project.Id, partnerId: partner.Id })
+    : ProjectOverviewRoute.getLink({ projectId: project.Id });
 
   return <Link route={route}>{titleContent}</Link>;
 };
 
-const getPartnerOnProject = ({ project, roles }: { project: IProject; roles: AllRoles }) => {
-  const projectRole = roles[project.id];
+const getPartnerOnProject = ({ project }: { project: IProject }) => {
+  const { isPm, isSalesforceSystemUser, partnerRoles } = project.roles;
 
-  if (projectRole) {
-    const { projectRoles, partnerRoles } = projectRole;
-    const isPm = projectRoles.isPm ?? false;
+  if (project.Acc_ProjectParticipantsProject__r?.edges) {
+    // Do two loops of the Project Participants, first by finding the lead partner,
+    // then through other partners.
+    //
+    // For the Salesforce System User, this means that the project partner is the
+    // lead partner.
+    for (const { node: partner } of toDefinedArray(project.Acc_ProjectParticipantsProject__r.edges)) {
+      // Find the lead partner...
+      if (partner?.Acc_AccountId__r?.Id === project.Acc_LeadParticipantID__c?.value) {
+        // If the user is a PM, the project partner is the lead partner.
+        if (isPm || isSalesforceSystemUser) return partner;
 
-    if (project.accProjectParticipantsProjectReference) {
-      // Do two loops of the Project Participants, first by finding the lead partner,
-      // then through other partners.
-      //
-      // For the Salesforce System User, this means that the project partner is the
-      // lead partner.
-      for (const partner of project.accProjectParticipantsProjectReference) {
-        // Find the lead partner...
-        if (partner?.accAccountIdCustom?.id === project.accLeadParticipantIdCustom) {
-          // If the user is a PM, the project partner is the lead partner.
-          if (isPm) return partner;
-
-          // If the user is an FC of the lead partner, the project partner is the lead partner.
-          const partnerRole = partnerRoles[partner.accAccountIdCustom.id];
-          if (partnerRole?.isFc) return partner;
-        }
+        // If the user is an FC of the lead partner, the project partner is the lead partner.
+        const partnerRole = partnerRoles.find(x => x.partnerId === partner?.Acc_AccountId__r?.Id);
+        if (partnerRole?.isFc) return partner;
+        break;
       }
+    }
 
-      // If the user is an FC of a non-lead partner, the project partner is that partner.
-      for (const partner of project.accProjectParticipantsProjectReference) {
-        if (partner) {
-          const partnerRole = partnerRoles[partner.accAccountIdCustom.id];
-          if (partnerRole?.isFc) return partner;
-        }
+    // If the user is an FC of a non-lead partner, the project partner is that partner.
+    for (const { node: partner } of toDefinedArray(project.Acc_ProjectParticipantsProject__r.edges)) {
+      if (partner) {
+        const partnerRole = partnerRoles.find(x => x.partnerId === partner?.Acc_AccountId__r?.Id);
+        if (partnerRole?.isFc) return partner;
       }
     }
   }
@@ -119,32 +115,30 @@ const getPartnerOnProject = ({ project, roles }: { project: IProject; roles: All
   return undefined;
 };
 
-const getProjectSection = ({ project, partner, roles }: { project: IProject; partner?: IPartner; roles: AllRoles }) => {
+const getProjectSection = ({ project, partner }: { project: IProject; partner?: IPartner | null }) => {
   if (
-    partner?.accParticipantStatusCustom === "Pending" &&
-    roles[project.id]?.partnerRoles[partner.accAccountIdCustom.id]?.isFc
+    partner?.Acc_ParticipantStatus__c?.value === "Pending" &&
+    project.roles.partnerRoles.find(x => x.partnerId === partner.Acc_AccountId__r?.Id)?.isFc
   ) {
     return "pending";
   }
 
-  const isMo = roles[project.id]?.projectRoles.isMo ?? false;
-  const isFc = roles[project.id]?.projectRoles.isFc ?? false;
-  const isPm = roles[project.id]?.projectRoles.isPm ?? false;
+  const { isMo, isFc, isPm } = project.roles;
 
-  switch (project.accProjectStatusCustom) {
+  switch (project.Acc_ProjectStatus__c?.value) {
     case "Live":
     case "Final Claim":
     case "On Hold":
-      if (project.accCurrentPeriodNumberCustom === 0) {
+      if (project.Acc_CurrentPeriodNumber__c?.value === 0) {
         return "upcoming";
       }
 
       if (isPm || isMo) {
-        return project.accNumberOfOpenClaimsCustom! > 0 ? "open" : "awaiting";
+        return project.Acc_NumberOfOpenClaims__c!.value! > 0 ? "open" : "awaiting";
       }
 
       if (isFc && partner) {
-        const hasNoClaimsDue = partner.accTrackingClaimsCustom === "No Claims Due";
+        const hasNoClaimsDue = partner.Acc_TrackingClaims__c?.value === "No Claims Due";
         return hasNoClaimsDue ? "awaiting" : "open";
       }
 
@@ -161,21 +155,19 @@ const getProjectSection = ({ project, partner, roles }: { project: IProject; par
 
 const DashboardProject = ({
   projectData,
-  roles,
   displaySections = [],
 }: {
   projectData: IDashboardProjectData;
-  roles: AllRoles;
   displaySections: ReturnType<typeof getProjectSection>[];
 }) => {
   const { project, partner, projectSection } = projectData;
   const projectNotes = getProjectNotes({ project, partner, projectSection });
-  const projectActions = useProjectActions({ project, partner, roles, projectSection });
+  const projectActions = useProjectActions({ project, partner, projectSection });
 
   if (!displaySections.includes(projectSection)) return null;
 
   return (
-    <ListItem actionRequired={projectActions.length > 0} qa={`project-${project.accProjectNumberCustom}`}>
+    <ListItem actionRequired={projectActions.length > 0} qa={`project-${project.Acc_ProjectNumber__c?.value}`}>
       <div className="govuk-grid-column-two-thirds" style={{ display: "inline-flex", alignItems: "center" }}>
         <div>
           <H4 as="h3" className="govuk-!-margin-bottom-2">
@@ -203,12 +195,10 @@ const DashboardProject = ({
 
 const DashboardProjectList = ({
   projectsData,
-  roles,
   displaySection,
   isFiltering,
 }: {
   projectsData: IDashboardProjectData[];
-  roles: AllRoles;
   displaySection: "live" | "upcoming" | "archived";
   isFiltering: boolean;
 }) => {
@@ -248,7 +238,7 @@ const DashboardProjectList = ({
   return (
     <>
       {projectsData.map((item, i) => (
-        <DashboardProject key={i} projectData={item} displaySections={displaySections} roles={roles} />
+        <DashboardProject key={i} projectData={item} displaySections={displaySections} />
       ))}
     </>
   );

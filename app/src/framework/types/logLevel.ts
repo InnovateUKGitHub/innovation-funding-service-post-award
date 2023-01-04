@@ -8,6 +8,9 @@ import { LogLevel } from "@framework/constants";
  */
 export function parseLogLevel(value?: string | LogLevel): LogLevel {
   switch ((value || "").toUpperCase()) {
+    case "TRACE":
+    case LogLevel.TRACE:
+      return LogLevel.TRACE;
     case "VERBOSE":
     case LogLevel.VERBOSE:
       return LogLevel.VERBOSE;
@@ -29,6 +32,8 @@ export function parseLogLevel(value?: string | LogLevel): LogLevel {
 
 export function getLogLevelNumber(value: LogLevel) {
   switch (value) {
+    case LogLevel.TRACE:
+      return 0;
     case LogLevel.VERBOSE:
       return 1;
     case LogLevel.DEBUG:

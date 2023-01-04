@@ -1,9 +1,10 @@
 import { DateFormat } from "@framework/constants";
 import { DateTime } from "luxon";
 
-export type DateConvertable = Date | string | null;
+export type DateConvertable = Date | string | null | undefined;
 export const convertDateAndTime = (date: DateConvertable): DateTime | null => {
   if (typeof date === "string") return DateTime.fromFormat(date, "yyyy-MM-dd");
+  if (typeof date === "undefined") return null;
   return date && DateTime.fromJSDate(date);
 };
 

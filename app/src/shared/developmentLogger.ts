@@ -76,6 +76,7 @@ interface LoggerOptions {
 }
 
 export interface ILogger {
+  trace(location: string, ...params: unknown[]): void;
   debug(location: string, ...params: unknown[]): void;
   info(location: string, ...params: unknown[]): void;
   warn(location: string, ...params: unknown[]): void;
@@ -153,6 +154,16 @@ export class Logger implements ILogger {
     }
 
     this.options.prefixLines = options?.prefixLines ?? Logger.defaultOptions.prefixLines;
+  }
+
+  /**
+   * Print a trace 🐈 message to the console.
+   *
+   * @param message The message to print. Keep it short and to a single line, without any newlines.
+   * @param params Any associated data to pretty-print alongside the message.
+   */
+  trace(message: string, ...params: unknown[]) {
+    this.log(LogLevel.TRACE, message, ...params);
   }
 
   /**
@@ -277,7 +288,12 @@ export class Logger implements ILogger {
       case LogLevel.VERBOSE:
         fg = ForegroundColourCode.BLUE;
         bg = BackgroundColourCode.BLUE;
-        logLevelName = "Trace  🐥 ";
+        logLevelName = "Verbose🐥 ";
+        break;
+      case LogLevel.TRACE:
+        fg = ForegroundColourCode.BLUE;
+        bg = BackgroundColourCode.BLUE;
+        logLevelName = "Trace  🐈 ";
         break;
       default:
         fg = ForegroundColourCode.DEFAULT;
@@ -370,7 +386,11 @@ export class Logger implements ILogger {
         break;
       case LogLevel.VERBOSE:
         logLevelCSS += "color: BLUE;";
-        logLevelName = "Trace 🐥";
+        logLevelName = "Verbose 🐥";
+        break;
+      case LogLevel.TRACE:
+        logLevelCSS += "color: BLUE;";
+        logLevelName = "Trace 🐈";
         break;
       default:
         logLevelName = "Default";
