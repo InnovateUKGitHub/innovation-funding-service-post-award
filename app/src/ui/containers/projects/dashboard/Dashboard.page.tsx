@@ -1,4 +1,4 @@
-import { useProjectRolesFragment } from "@gql/hooks/useProjectRolesQuery";
+import { getDefinedEdges } from "@shared/toArray";
 import {
   Accordion,
   AccordionItem,
@@ -18,9 +18,9 @@ import { noop } from "@ui/helpers/noop";
 import { useEffect, useState } from "react";
 import { useLazyLoadQuery } from "react-relay";
 import { useNavigate } from "react-router-dom";
-import { graphql } from "relay-hooks";
 import { BroadcastsViewer } from "../Broadcast/BroadcastsViewer";
 import { getFilteredProjects, getFilterOptions } from "./dashboard.logic";
+import { projectDashboardQuery } from "./Dashboard.query";
 import {
   DashboardProjectList,
   getPartnerOnProject,
@@ -29,57 +29,6 @@ import {
 } from "./DashboardProject";
 import { DashboardProjectCount } from "./DashboardProjectCount";
 import { DashboardProjectDashboardQuery } from "./__generated__/DashboardProjectDashboardQuery.graphql";
-
-const query = graphql`
-  query DashboardProjectDashboardQuery {
-    accProjectCustom(
-      orderBy: [
-        { accClaimsForReviewCustom: DESC_NULLS_LAST }
-        { accPcRsForReviewCustom: DESC_NULLS_LAST }
-        { accPcRsUnderQueryCustom: DESC_NULLS_LAST }
-        { accProjectTitleCustom: ASC_NULLS_LAST }
-      ]
-    ) {
-      ...ProjectSortableFragment
-      id
-      accProjectNumberCustom
-      accProjectTitleCustom
-      accLeadParticipantNameCustom
-      accLeadParticipantIdCustom
-      accNumberofPeriodsCustom
-      accCurrentPeriodNumberCustom
-      accStartDateCustom
-      accEndDateCustom
-      accClaimsForReviewCustom
-      accPcRsForReviewCustom
-      accPcRsUnderQueryCustom
-      accClaimsOverdueCustom
-      accClaimsUnderQueryCustom
-      accNumberOfOpenClaimsCustom
-      accProjectStatusCustom
-      accCurrentPeriodStartDateCustom
-      accCurrentPeriodEndDateCustom
-      accProjectParticipantsProjectReference {
-        accAccountIdCustom {
-          name
-          id
-        }
-        id
-        accNewForecastNeededCustom
-        accParticipantStatusCustom
-        accTrackingClaimsCustom
-        accOpenClaimStatusCustom
-      }
-    }
-    clientConfig {
-      ifsRoot
-      ssoEnabled
-      options {
-        numberOfProjectsToSearch
-      }
-    }
-  }
-`;
 
 type filterKeys =
   | "PCRS_QUERIED"
@@ -104,8 +53,7 @@ const Form = createTypedForm<null>();
  * @returns Project Dashboard Page
  */
 const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) => {
-  const roles = useProjectRolesFragment();
-  const data = useLazyLoadQuery<DashboardProjectDashboardQuery>(query, {});
+  const data = useLazyLoadQuery<DashboardProjectDashboardQuery>(projectDashboardQuery, {});
 
   const { isServer } = useMountedState();
 
@@ -170,15 +118,14 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
     navigate,
   ]);
 
-  const allProjects = [...data.accProjectCustom]
-    .map(project => {
-      const partner = getPartnerOnProject({ project, roles });
-      const projectSection = getProjectSection({ project, partner, roles });
+  const allProjects = getDefinedEdges(data.uiapi.query.Acc_Project__c?.edges)
+    .map(({ node: project }) => {
+      const partner = getPartnerOnProject({ project });
+      const projectSection = getProjectSection({ project, partner });
 
       const data: IDashboardProjectData = {
         project,
         partner,
-        roles,
         projectSection,
       };
 
@@ -193,7 +140,9 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
     });
 
   // Only display the search bar if there's enough projects.
-  const displaySearch = data.accProjectCustom.length >= data.clientConfig.options.numberOfProjectsToSearch;
+  const displaySearch =
+    getDefinedEdges(data.uiapi.query.Acc_Project__c?.edges).length >=
+    data.clientConfig.options.numberOfProjectsToSearch;
 
   const { currentProjects, upcomingProjects, archivedProjects, openAndAwaitingProjects, pendingProjects, isFiltering } =
     getFilteredProjects({
@@ -206,7 +155,6 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
       claimsToUploadReport,
       claimsToRespond,
       projects: allProjects,
-      roles,
     });
 
   return (
@@ -249,7 +197,7 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
             <Form.Checkboxes
               hint="You can select more than one."
               name="arrayFilters"
-              options={getFilterOptions({ projects: allProjects, roles })}
+              options={getFilterOptions({ projects: allProjects })}
               value={() => {
                 const options: SelectOption[] = [];
 
@@ -290,31 +238,16 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
       />
 
       <Section qa="pending-and-open-projects">
-        <DashboardProjectList
-          isFiltering={isFiltering}
-          displaySection="live"
-          projectsData={currentProjects}
-          roles={roles}
-        />
+        <DashboardProjectList isFiltering={isFiltering} displaySection="live" projectsData={currentProjects} />
       </Section>
 
       <Accordion>
         <AccordionItem title="Upcoming" qa="upcoming-projects">
-          <DashboardProjectList
-            isFiltering={isFiltering}
-            displaySection="upcoming"
-            projectsData={upcomingProjects}
-            roles={roles}
-          />
+          <DashboardProjectList isFiltering={isFiltering} displaySection="upcoming" projectsData={upcomingProjects} />
         </AccordionItem>
 
         <AccordionItem title="Archived" qa="archived-projects">
-          <DashboardProjectList
-            isFiltering={isFiltering}
-            displaySection="archived"
-            projectsData={archivedProjects}
-            roles={roles}
-          />
+          <DashboardProjectList isFiltering={isFiltering} displaySection="archived" projectsData={archivedProjects} />
         </AccordionItem>
       </Accordion>
     </Page>

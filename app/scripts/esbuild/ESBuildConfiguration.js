@@ -54,6 +54,9 @@ class ESBuildConfiguration {
       tsconfig: path.join(dirname, "tsconfig.json"),
       logLevel: "info",
       plugins: [nodeExternalsPlugin(), replaceGraphqlRelayPlugin],
+      loader: {
+        ".gql": "text",
+      },
     };
 
     this.clientBuild = {
@@ -68,6 +71,9 @@ class ESBuildConfiguration {
       plugins: [replaceModulesPlugin, replaceGraphqlRelayPlugin],
       external: ["*.png", "*.woff2", "*.woff"],
       logLevel: "info",
+      loader: {
+        ".gql": "text",
+      },
     };
   }
 
@@ -88,9 +94,6 @@ class ESBuildConfiguration {
     Object.assign(this.clientBuild, {
       watch: {
         onRebuild: () => {
-          // Run relay
-          execSync("npm run relay", { stdio: "inherit" });
-
           // On a rebuild, tell the client to reload.
           this.getRestarter().refreshClient();
         },
