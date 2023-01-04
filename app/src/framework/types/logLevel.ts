@@ -32,6 +32,8 @@ export function parseLogLevel(value?: string | LogLevel): LogLevel {
 
 export function getLogLevelNumber(value: LogLevel) {
   switch (value) {
+    case LogLevel.TRACE:
+      return 0;
     case LogLevel.VERBOSE:
       return 1;
     case LogLevel.DEBUG:

@@ -1,3 +1,36 @@
+# Salesforce GraphQL API extensions
+interface Ext_Roles {
+  isMo: Boolean!
+  isFc: Boolean!
+  isPm: Boolean!
+  isSalesforceSystemUser: Boolean!
+}
+
+type Ext_Partner_Roles implements Ext_Roles {
+  isMo: Boolean!
+  isFc: Boolean!
+  isPm: Boolean!
+  isSalesforceSystemUser: Boolean!
+  partnerId: ID!
+}
+
+type Ext_Project_Roles implements Ext_Roles {
+  isMo: Boolean!
+  isFc: Boolean!
+  isPm: Boolean!
+  isSalesforceSystemUser: Boolean!
+  partnerRoles: [Ext_Partner_Roles!]!
+}
+
+extend type Acc_Project__c {
+  roles: Ext_Project_Roles!
+}
+
+# 
+# The following type definitions fixes non-compliant Salesforce GraphQL types.
+# These would otherwise cause GraphQL/Relay compiler to complain about an invalid schema.
+#
+
 type AttachedContentNoteConnection {
   stubObjectPleaseIgnore: String
 }
@@ -132,31 +165,4 @@ type nbavs__LogoutEvent__e implements Record {
 
 type JSONValue implements FieldValue {
   displayValue: String
-}
-
-interface Ext_Roles {
-  isMo: Boolean!
-  isFc: Boolean!
-  isPm: Boolean!
-  isSalesforceSystemUser: Boolean!
-}
-
-type Ext_Partner_Roles implements Ext_Roles {
-  isMo: Boolean!
-  isFc: Boolean!
-  isPm: Boolean!
-  isSalesforceSystemUser: Boolean!
-  partnerId: ID!
-}
-
-type Ext_Project_Roles implements Ext_Roles {
-  isMo: Boolean!
-  isFc: Boolean!
-  isPm: Boolean!
-  isSalesforceSystemUser: Boolean!
-  partnerRoles: [Ext_Partner_Roles!]!
-}
-
-extend type Acc_Project__c {
-  roles: Ext_Project_Roles!
 }

@@ -95,9 +95,9 @@ const getFilteredProjects = ({
 
   const searchedProjects = searchQuery
     ? fuzzySearch(searchQuery.trim(), filteredProjects, [
-        "project.accProjectTitleCustom",
-        "project.accProjectNumberCustom",
-        "partner.accAccountIdCustom.name",
+        "project.Acc_ProjectTitle__c.value",
+        "project.Acc_ProjectNumber__c.value",
+        "partner.Acc_AccountId__r.Name.value",
       ]).map(x => x.item)
     : filteredProjects;
 
