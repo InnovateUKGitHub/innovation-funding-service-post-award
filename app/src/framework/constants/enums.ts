@@ -93,6 +93,7 @@ export enum DateFormat {
 }
 
 export enum LogLevel {
+  TRACE = "TRACE",
   VERBOSE = "VERBOSE",
   DEBUG = "DEBUG",
   INFO = "INFO",

@@ -2,16 +2,25 @@ import { BaseProps } from "@ui/containers/containerBase";
 import { PartnerDto, ProjectDto } from "@framework/dtos";
 import { DashboardProjectDashboardQuery$data } from "./__generated__/DashboardProjectDashboardQuery.graphql";
 import { getPartnerOnProject, getProjectSection } from "./DashboardProject";
-import { useProjectRolesFragment } from "@gql/hooks/useProjectRolesQuery";
 
 export type Section = "archived" | "open" | "awaiting" | "upcoming" | "pending";
 
 export type CuratedSections = Exclude<Section, "awaiting">;
 export type CuratedSection<T> = { [key in CuratedSections]: T };
 
+export type IProject = NonNullable<
+  NonNullable<
+    UnwrapArray<
+      NonNullable<NonNullable<DashboardProjectDashboardQuery$data["uiapi"]["query"]["Acc_Project__c"]>["edges"]>
+    >
+  >["node"]
+>;
+export type IPartner = NonNullable<
+  NonNullable<UnwrapArray<NonNullable<IProject["Acc_ProjectParticipantsProject__r"]>["edges"]>>["node"]
+>;
 export interface ProjectProps {
   section: Section;
-  project: DashboardProjectDashboardQuery$data["accProjectCustom"];
+  project: IProject;
   partner?: PartnerDto;
 }
 
@@ -27,12 +36,9 @@ export interface ProjectData {
   curatedSection: Section;
 }
 
-export type IProject = UnwrapArray<DashboardProjectDashboardQuery$data["accProjectCustom"]>;
-export type IPartner = UnwrapArray<IProject["accProjectParticipantsProjectReference"]>;
 export interface IDashboardProjectData {
   project: IProject;
   partner: ReturnType<typeof getPartnerOnProject>;
-  roles: ReturnType<typeof useProjectRolesFragment>;
   projectSection: ReturnType<typeof getProjectSection>;
 }
 

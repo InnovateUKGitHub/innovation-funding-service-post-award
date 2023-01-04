@@ -70,57 +70,54 @@ describe("nullableNumberComparator", () => {
 describe("projectPriorityComparator", () => {
   describe("@returns", () => {
     const noClaimsAndReviewsOrQueries = {
-      accClaimsForReviewCustom: 0,
-      accPcRsForReviewCustom: 0,
-      accPcRsUnderQueryCustom: 0,
+      Acc_ClaimsForReview__c: { value: 0 },
+      Acc_PCRsForReview__c: { value: 0 },
+      Acc_PCRsUnderQuery__c: { value: 0 },
     } as const;
     const noClaimsAndReviewsOrQueriesAgain = {
-      accClaimsForReviewCustom: 0,
-      accPcRsForReviewCustom: 0,
-      accPcRsUnderQueryCustom: 0,
+      Acc_ClaimsForReview__c: { value: 0 },
+      Acc_PCRsForReview__c: { value: 0 },
+      Acc_PCRsUnderQuery__c: { value: 0 },
     } as const;
-
     const claimsNoReviewSingle = {
-      accClaimsForReviewCustom: 1,
-      accPcRsForReviewCustom: 0,
-      accPcRsUnderQueryCustom: 0,
+      Acc_ClaimsForReview__c: { value: 1 },
+      Acc_PCRsForReview__c: { value: 0 },
+      Acc_PCRsUnderQuery__c: { value: 0 },
     } as const;
     const claimsNoReviewMany = {
-      accClaimsForReviewCustom: 4,
-      accPcRsForReviewCustom: 0,
-      accPcRsUnderQueryCustom: 0,
+      Acc_ClaimsForReview__c: { value: 4 },
+      Acc_PCRsForReview__c: { value: 0 },
+      Acc_PCRsUnderQuery__c: { value: 0 },
     } as const;
-
     const reviewNoClaimsSingle = {
-      accClaimsForReviewCustom: 0,
-      accPcRsForReviewCustom: 1,
-      accPcRsUnderQueryCustom: 0,
+      Acc_ClaimsForReview__c: { value: 0 },
+      Acc_PCRsForReview__c: { value: 1 },
+      Acc_PCRsUnderQuery__c: { value: 0 },
     } as const;
     const reviewNoClaimsMany = {
-      accClaimsForReviewCustom: 0,
-      accPcRsForReviewCustom: 4,
-      accPcRsUnderQueryCustom: 0,
+      Acc_ClaimsForReview__c: { value: 0 },
+      Acc_PCRsForReview__c: { value: 4 },
+      Acc_PCRsUnderQuery__c: { value: 0 },
     } as const;
     const queriesNoClaimsSingle = {
-      accClaimsForReviewCustom: 0,
-      accPcRsForReviewCustom: 0,
-      accPcRsUnderQueryCustom: 1,
+      Acc_ClaimsForReview__c: { value: 0 },
+      Acc_PCRsForReview__c: { value: 0 },
+      Acc_PCRsUnderQuery__c: { value: 1 },
     } as const;
     const queriesNoClaimsMany = {
-      accClaimsForReviewCustom: 0,
-      accPcRsForReviewCustom: 0,
-      accPcRsUnderQueryCustom: 4,
+      Acc_ClaimsForReview__c: { value: 0 },
+      Acc_PCRsForReview__c: { value: 0 },
+      Acc_PCRsUnderQuery__c: { value: 4 },
     } as const;
-
     const claimWithReview = {
-      accClaimsForReviewCustom: 1,
-      accPcRsForReviewCustom: 1,
-      accPcRsUnderQueryCustom: 1,
+      Acc_ClaimsForReview__c: { value: 1 },
+      Acc_PCRsForReview__c: { value: 1 },
+      Acc_PCRsUnderQuery__c: { value: 1 },
     } as const;
     const claimsWithReviews = {
-      accClaimsForReviewCustom: 2,
-      accPcRsForReviewCustom: 2,
-      accPcRsUnderQueryCustom: 2,
+      Acc_ClaimsForReview__c: { value: 2 },
+      Acc_PCRsForReview__c: { value: 2 },
+      Acc_PCRsUnderQuery__c: { value: 2 },
     } as const;
 
     describe("@returns singular comparisons", () => {

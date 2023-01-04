@@ -1,7 +1,6 @@
 import { getGraphQLSchema } from "@gql/getGraphQLSchema";
 import { createContext } from "@gql/GraphQLContext";
-import { Api } from "@gql/sfdc-graphql-endpoint/src/sfdc/api";
-import { Connection } from "@gql/sfdc-graphql-endpoint/src/sfdc/connection";
+import { Api } from "@gql/sf/Api";
 import { router as apiRoutes } from "@server/apis";
 import { componentGuideRender } from "@server/componentGuideRender";
 import { configureFormRouter } from "@server/forms/formRouter";
@@ -14,7 +13,6 @@ import csrf from "csurf";
 import { Router } from "express";
 import { createHandler } from "graphql-http/lib/use/express";
 import { configuration } from "./features/common";
-import { getSalesforceAccessToken } from "./repositories/salesforceConnection";
 
 export const noAuthRouter = Router();
 
@@ -27,43 +25,21 @@ const getServerRoutes = async () => {
 
   const csrfProtection = csrf();
 
-  // Obtain a Salesforce access token and URL
-  const { accessToken, url } = await getSalesforceAccessToken({
-    clientId: configuration.salesforceServiceUser.clientId,
-    connectionUrl: configuration.salesforceServiceUser.connectionUrl,
-    currentUsername: configuration.salesforceServiceUser.serviceUsername,
-  });
-
-  // Create a new Connection and API object to fetch Salesforce data from.
-  const adminConnection = new Connection({
-    instanceUrl: url,
-    accessToken,
-    email: configuration.salesforceServiceUser.serviceUsername,
-  });
-  const adminApi = new Api({ connection: adminConnection });
-  const schema = await getGraphQLSchema({ connection: adminConnection, api: adminApi });
+  const adminApi = await Api.asSystemUser();
+  const schema = await getGraphQLSchema({ api: adminApi });
 
   router.use(async (req, res, next) => {
     // Obtain a Salesforce access token and URL
     try {
-      const { accessToken, url } = await getSalesforceAccessToken({
-        clientId: configuration.salesforceServiceUser.clientId,
-        connectionUrl: configuration.salesforceServiceUser.connectionUrl,
-        currentUsername: req.session?.user.email,
-      });
-
       const email = req.session?.user.email ?? null;
 
-      // Create a new Connection and API object to fetch Salesforce data from.
-      const connection = new Connection({ instanceUrl: url, accessToken, email });
-      const api = new Api({ connection });
+      if (email) {
+        const api = await Api.asUser(email);
 
-      res.locals.connection = connection;
-      res.locals.api = api;
-      res.locals.schema = schema;
-      res.locals.email = email;
+        res.locals.api = api;
+        res.locals.email = email;
+      }
     } catch {
-      res.locals.schema = schema;
       res.locals.email = null;
     }
 
@@ -72,18 +48,15 @@ const getServerRoutes = async () => {
 
   // App routes
   router.use("/api", apiRoutes);
-  router.use("/graphql", (req, res, next) => {
-    logger.debug("Executing GraphQL", res.locals.email);
-
+  router.use("/graphql", async (req, res, next) => {
     // Allow the override of the user email if `sudo` is included.
     if (!configuration.sso.enabled && typeof req.query.sudo === "string") {
       res.locals.email = req.query.sudo;
-      const connection = new Connection({ instanceUrl: url, accessToken, email: req.query.sudo });
-      const api = new Api({ connection });
-
-      res.locals.connection = connection;
+      const api = await Api.asUser(req.query.sudo);
       res.locals.api = api;
     }
+
+    logger.debug("Executing GraphQL", res.locals.email);
 
     createHandler({
       schema: schema,
