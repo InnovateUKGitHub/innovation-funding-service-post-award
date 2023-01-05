@@ -68,6 +68,15 @@ export const getSalesforceAccessToken = async (config: ISalesforceTokenDetails):
   };
 };
 
+export const getCachedSalesforceAccessToken = async (
+  salesforceDetails: ISalesforceConnectionDetails,
+): Promise<ITokenInfo> => {
+  const fetchToken = async () => await getSalesforceAccessToken(salesforceDetails);
+  const signedToken = await tokenCache.fetchAsync(salesforceDetails.currentUsername, fetchToken);
+
+  return signedToken;
+};
+
 export const salesforceConnectionWithToken = async (
   salesforceDetails: ISalesforceTokenDetails,
 ): Promise<jsforce.Connection> => {
