@@ -16,12 +16,14 @@ const ProjectCreatorForm = createTypedForm();
 const ProjectCreator = () => {
   const { getContent } = useContent();
 
-  const competitionTypeOptions = allSalesforceCompetitionTypes.map(([key, value]) => ({
-    id: value,
-    value,
-    displayName: getContent(x => x.enums.competitionTypes[key]),
-    qa: `project_creator_competition_type_${key}`,
-  }));
+  const competitionTypeOptions = allSalesforceCompetitionTypes
+    .filter(([key]) => key !== "sbri" && key !== "sbriIfs")
+    .map(([key, value]) => ({
+      id: value,
+      value,
+      displayName: getContent(x => x.enums.competitionTypes[key]),
+      qa: `project_creator_competition_type_${key}`,
+    }));
 
   const claimFrequencyOptions = [
     {
@@ -38,12 +40,14 @@ const ProjectCreator = () => {
     },
   ];
 
-  const participantTypeOptions = allProjectParticipantTypes.map(([key, value]) => ({
-    id: key,
-    value,
-    displayName: getContent(x => x.enums.projectParticipantTypes[key]),
-    qa: `project_creator_participant_type_${key}`,
-  }));
+  const participantTypeOptions = allProjectParticipantTypes
+    .filter(([key]) => key !== "knowledgeBase" && key !== "rto" && key !== "other")
+    .map(([key, value]) => ({
+      id: key,
+      value,
+      displayName: getContent(x => x.enums.projectParticipantTypes[key]),
+      qa: `project_creator_participant_type_${key}`,
+    }));
 
   const participantOrgTypeOptions = allProjectParticipantOrganisationTypes.map(([key, value]) => ({
     id: key,
