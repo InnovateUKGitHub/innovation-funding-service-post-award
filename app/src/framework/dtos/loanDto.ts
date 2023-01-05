@@ -6,7 +6,7 @@ export interface LoanDto {
   status: LoanStatus;
   amount: number;
   forecastAmount: number;
-  requestDate: Date;
+  requestDate: Date | null;
   comments: string;
 
   // Note: Pulled from project table

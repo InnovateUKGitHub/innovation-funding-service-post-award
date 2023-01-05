@@ -12,7 +12,7 @@ export class LoanMapper extends SalesforceBaseMapper<ISalesforceLoan, LoanDto> {
   }
 
   public map(item: ISalesforceLoan): LoanDto {
-    const requestDate = this.clock.parseRequiredSalesforceDateTime(item.Loan_PlannedDateForDrawdown__c);
+    const requestDate = this.clock.parseOptionalSalesforceDateTime(item.Loan_PlannedDateForDrawdown__c);
     const comments = item.Loan_UserComments__c || "";
 
     return {
