@@ -57646,6 +57646,7 @@ type CurrentUserObject {
   isSystemUser: Boolean!
 }
 
+"""Salesforce GraphQL API extensions"""
 interface Ext_Roles {
   isMo: Boolean!
   isFc: Boolean!

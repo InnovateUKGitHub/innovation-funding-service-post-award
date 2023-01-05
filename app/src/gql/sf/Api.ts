@@ -1,6 +1,10 @@
 import type { ExecutionRequest } from "@graphql-tools/utils/typings";
 import { configuration } from "@server/features/common";
-import { getSalesforceAccessToken } from "@server/repositories/salesforceConnection";
+import {
+  getCachedSalesforceAccessToken,
+  getSalesforceAccessToken,
+  salesforceConnectionWithToken,
+} from "@server/repositories/salesforceConnection";
 import { Logger } from "@shared/developmentLogger";
 import { print } from "graphql";
 import fetch from "isomorphic-fetch";
@@ -9,11 +13,16 @@ interface FetcherConfiguration extends RequestInit {
   searchParams?: Record<string, string>;
 }
 
+/**
+ * User-specific connection to the Salesforce API.
+ * Initialise by creating a connection `asUser` or `asSystemUser`.
+ *
+ * @author Leondro Lio <leondro.lio@iuk.ukri.org>
+ */
 export class Api {
   private readonly version: string;
   private readonly instanceUrl: string;
   private readonly accessToken: string;
-  private readonly logger: Logger;
   public readonly email: string;
 
   private constructor({
@@ -32,13 +41,19 @@ export class Api {
     this.instanceUrl = instanceUrl;
     this.accessToken = accessToken;
     this.email = email;
-    this.logger = new Logger("SfGqlApi", { prefixLines: [email] });
   }
 
+  /**
+   * Connect to Salesforce with a username
+   *
+   * @param email The username/email address of the user.
+   * @returns A user-specific connection to the Salesforce API.
+   */
   public static async asUser(email: string) {
-    const { accessToken, url } = await getSalesforceAccessToken({
+    const { accessToken, url } = await getCachedSalesforceAccessToken({
       clientId: configuration.salesforceServiceUser.clientId,
       connectionUrl: configuration.salesforceServiceUser.connectionUrl,
+      serviceUsername: configuration.salesforceServiceUser.serviceUsername,
       currentUsername: email,
     });
 
@@ -49,6 +64,11 @@ export class Api {
     });
   }
 
+  /**
+   * Connect to Salesforce as the Salesforce System user
+   *
+   * @returns A connection to the Salesforce API as a system user.
+   */
   public static asSystemUser() {
     return Api.asUser(configuration.salesforceServiceUser.serviceUsername);
   }
@@ -81,6 +101,11 @@ export class Api {
     return res;
   }
 
+  /**
+   * Execute a GraphQL Query AST via the Salesforce GraphQL API.
+   *
+   * @returns GraphQL Result - Is typed as `any` because the result may vary, including potential errors.
+   */
   public executeGraphQL({ document, variables }: ExecutionRequest) {
     const query = print(document);
     return this.fetch(`/services/data/${this.version}/graphql`, {
