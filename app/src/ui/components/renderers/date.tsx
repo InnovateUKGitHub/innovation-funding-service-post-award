@@ -1,6 +1,6 @@
 import React from "react";
 import { DateTime } from "luxon";
-import { convertDateAndTime, DateConvertable, formatDate } from "@framework/util";
+import { convertDateAndTime, DateConvertible, formatDate } from "@framework/util";
 import { DateFormat } from "@framework/constants";
 
 const render = (value: Date | null, format: DateFormat) => {
@@ -34,15 +34,15 @@ const renderDateRange = (start: DateTime | null, end: DateTime | null, format: s
   );
 };
 
-export const CondensedDateRange: React.FunctionComponent<{ start: DateConvertable; end: DateConvertable }> = props => {
+export const CondensedDateRange: React.FunctionComponent<{ start: DateConvertible; end: DateConvertible }> = props => {
   return renderDateRange(convertDateAndTime(props.start), convertDateAndTime(props.end), "MMM", true);
 };
 
-export const LongDateRange: React.FunctionComponent<{ start: DateConvertable; end: DateConvertable }> = props => {
+export const LongDateRange: React.FunctionComponent<{ start: DateConvertible; end: DateConvertible }> = props => {
   return renderDateRange(convertDateAndTime(props.start), convertDateAndTime(props.end), "d MMMM");
 };
 
-export const ShortDateRange: React.FunctionComponent<{ start: DateConvertable; end: DateConvertable }> = props => {
+export const ShortDateRange: React.FunctionComponent<{ start: DateConvertible; end: DateConvertible }> = props => {
   return renderDateRange(convertDateAndTime(props.start), convertDateAndTime(props.end), "d MMM");
 };
 
@@ -82,7 +82,7 @@ export const ShortDateTime: React.FunctionComponent<{ value: Date | null }> = ({
   return render(value, DateFormat.SHORT_DATE_TIME);
 };
 
-export const Duration: React.FunctionComponent<{ startDate: DateConvertable; endDate: DateConvertable }> = props => {
+export const Duration: React.FunctionComponent<{ startDate: DateConvertible; endDate: DateConvertible }> = props => {
   const startDateLuxon = convertDateAndTime(props.startDate);
   const endDateLuxon = convertDateAndTime(props.endDate);
 
@@ -106,7 +106,7 @@ export const Months: React.FunctionComponent<{ months: number | null }> = props 
   return null;
 };
 
-export const ShortDateRangeFromDuration = (props: { startDate: DateConvertable; months: number | null }) => {
+export const ShortDateRangeFromDuration = (props: { startDate: DateConvertible; months: number | null }) => {
   const startDateLuxon = convertDateAndTime(props.startDate);
   const isValidDuration = props.months && Number.isInteger(props.months);
   const endDate =
