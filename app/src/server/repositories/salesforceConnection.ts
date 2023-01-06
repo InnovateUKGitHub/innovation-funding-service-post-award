@@ -1,5 +1,5 @@
 import jsforce from "jsforce";
-import jwt, { Algorithm } from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
 
 import { SalesforceTokenError } from "@server/repositories/errors";
 import { Cache } from "@server/features/common/cache";
@@ -43,11 +43,11 @@ export const tokenCache = new Cache<ITokenInfo>(configuration.timeouts.token);
 export const getSalesforceAccessToken = async (config: ISalesforceTokenDetails): Promise<ITokenInfo> => {
   const privateKey = readFile(configuration.certificates.salesforce);
   const jwtPayload = { prn: config.currentUsername };
-  const jwtOptions = {
+  const jwtOptions: SignOptions = {
     issuer: config.clientId,
     audience: config.connectionUrl,
     expiresIn: 10,
-    algorithm: "RS256" as Algorithm,
+    algorithm: "RS256",
   };
 
   const jwtToken = jwt.sign(jwtPayload, privateKey, jwtOptions);
@@ -74,6 +74,7 @@ export const getCachedSalesforceAccessToken = async (
   const fetchToken = async () => await getSalesforceAccessToken(salesforceDetails);
   const signedToken = await tokenCache.fetchAsync(salesforceDetails.currentUsername, fetchToken);
 
+  console.log("signedToken", signedToken);
   return signedToken;
 };
 

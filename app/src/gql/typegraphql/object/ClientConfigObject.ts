@@ -1,5 +1,5 @@
 import { LogLevel } from "@framework/types";
-import { IAppOptions } from "@framework/types/IAppOptions";
+import type { IAppOptions } from "@framework/types/IAppOptions";
 import { IClientConfig } from "@ui/redux/reducers/configReducer";
 import { Field, ObjectType } from "type-graphql";
 import { ClientConfigAppOptionsObject } from "./ClientConfigAppOptionsObject";

@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import { useLazyLoadQuery } from "react-relay";
+import { useNavigate } from "react-router-dom";
 import { getDefinedEdges } from "@shared/toArray";
 import {
   Accordion,
@@ -11,13 +14,10 @@ import {
   SelectOption,
 } from "@ui/components";
 import { BaseProps, defineRoute } from "@ui/containers/containerBase";
-import { HomeRoute } from "@ui/containers/developer/home.page";
+import { DeveloperHomePage } from "@ui/containers/developer/home.page";
 import { useMountedState } from "@ui/features";
 import { PageTitle } from "@ui/features/page-title";
 import { noop } from "@ui/helpers/noop";
-import { useEffect, useState } from "react";
-import { useLazyLoadQuery } from "react-relay";
-import { useNavigate } from "react-router-dom";
 import { BroadcastsViewer } from "../Broadcast/BroadcastsViewer";
 import { getFilteredProjects, getFilterOptions } from "./dashboard.logic";
 import { projectDashboardQuery } from "./Dashboard.query";
@@ -30,7 +30,7 @@ import {
 import { DashboardProjectCount } from "./DashboardProjectCount";
 import { DashboardProjectDashboardQuery } from "./__generated__/DashboardProjectDashboardQuery.graphql";
 
-type filterKeys =
+type FilterKey =
   | "PCRS_QUERIED"
   | "CLAIMS_TO_REVIEW"
   | "PCRS_TO_REVIEW"
@@ -41,16 +41,13 @@ type filterKeys =
 
 interface ProjectDashboardParams {
   search?: string | number;
-  arrayFilters?: filterKeys[];
+  arrayFilters?: FilterKey[];
 }
 
 const Form = createTypedForm<null>();
 
 /**
  * Project Dashboard Page
- *
- * @author Leondro Lio <leondro.lio@iuk.ukri.org>
- * @returns Project Dashboard Page
  */
 const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) => {
   const data = useLazyLoadQuery<DashboardProjectDashboardQuery>(projectDashboardQuery, {});
@@ -58,7 +55,7 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
   const { isServer } = useMountedState();
 
   // Filtering options
-  // Automatically initialises to the search parameter values
+  // Automatically initializes to the search parameter values
   const [searchQuery, setSearchQuery] = useState<string>(String(props.search ?? "").trim());
   const [pcrsQueried, setPcrsQueried] = useState<boolean>(props.arrayFilters?.includes("PCRS_QUERIED") ?? false);
   const [claimsToReview, setClaimsToReview] = useState<boolean>(
@@ -81,7 +78,7 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
   useEffect(() => {
     // When the search filters are adjusted...
     // Collate the params
-    const arrayFilters: filterKeys[] = [];
+    const arrayFilters: FilterKey[] = [];
     if (pcrsQueried) arrayFilters.push("PCRS_QUERIED");
     if (claimsToReview) arrayFilters.push("CLAIMS_TO_REVIEW");
     if (pcrsToReview) arrayFilters.push("PCRS_TO_REVIEW");
@@ -167,7 +164,7 @@ const ProjectDashboardContainer = (props: ProjectDashboardParams & BaseProps) =>
             <Content value={x => x.pages.projectsDashboard.backToDashboard} />
           </a>
         ) : (
-          <BackLink route={HomeRoute.getLink({})}>
+          <BackLink route={DeveloperHomePage.getLink({})}>
             <Content value={x => x.pages.projectsDashboard.backToHomepage} />
           </BackLink>
         )

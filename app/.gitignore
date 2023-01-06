@@ -17,4 +17,5 @@ test-report.html
 # Generated files
 /dashboard/
 __generated__
-/schema.json
+ocdata/schema.json
+ocdata/schema.graphql

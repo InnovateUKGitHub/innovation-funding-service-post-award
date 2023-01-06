@@ -2,10 +2,10 @@ import type { ExecutionRequest } from "@graphql-tools/utils/typings";
 import { configuration } from "@server/features/common";
 import {
   getCachedSalesforceAccessToken,
-  getSalesforceAccessToken,
-  salesforceConnectionWithToken,
+  // getSalesforceAccessToken,
+  // salesforceConnectionWithToken,
 } from "@server/repositories/salesforceConnection";
-import { Logger } from "@shared/developmentLogger";
+// import { Logger } from "@shared/developmentLogger";
 import { print } from "graphql";
 import fetch from "isomorphic-fetch";
 
@@ -25,7 +25,7 @@ export class Api {
   private readonly accessToken: string;
   public readonly email: string;
 
-  private constructor({
+  constructor({
     version = "v56.0",
     instanceUrl,
     accessToken,
@@ -51,6 +51,7 @@ export class Api {
    */
   public static async asUser(email: string) {
     const { accessToken, url } = await getCachedSalesforceAccessToken({
+      // const { accessToken, url } = await getSalesforceAccessToken({
       clientId: configuration.salesforceServiceUser.clientId,
       connectionUrl: configuration.salesforceServiceUser.connectionUrl,
       serviceUsername: configuration.salesforceServiceUser.serviceUsername,
